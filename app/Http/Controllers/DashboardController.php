@@ -1,0 +1,226 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\DetallePedido;
+use App\Models\Pago;
+use App\Models\Pedido;
+use App\Models\User;
+use Carbon\Carbon;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+
+class DashboardController extends Controller
+{
+    public function index()
+    {
+        $mytime = Carbon::now('America/Lima');
+        $afecha = $mytime->year;
+        $mfecha = $mytime->month;
+        $dfecha = $mytime->day;
+        
+        //DASHBOARD ADMINISTRADOR
+            $pedidoxmes_total = User::select(DB::raw('sum(users.meta_pedido) as total'))
+                ->where('users.rol', "ENCARGADO")
+                ->where('users.estado', '1')
+                /* ->whereMonth('pedidos.created_at', $mfecha) */
+                ->get();
+            $pagoxmes_total = Pedido::join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
+                ->join('users as u', 'pedidos.user_id', 'u.id')
+                ->select(DB::raw('count(dp.id) as pedidos'))
+                ->where('u.rol', "ASESOR")
+                ->whereMonth('dp.created_at', $mfecha)
+                ->get();
+            $montopedidoxmes_total = User::select(DB::raw('sum(users.meta_cobro) as total'))
+            ->where('users.rol', "ENCARGADO")
+            ->where('users.estado', '1')
+            /* ->whereMonth('pedidos.created_at', $mfecha) */
+            ->get();
+            $montopagoxmes_total = Pago::
+                join('detalle_pagos as dpa', 'pagos.id', 'dpa.pago_id')
+                ->select(DB::raw('sum(dpa.monto) as total'))
+                ->where('pagos.estado', '1')
+                ->where('dpa.estado', '1')
+                ->whereMonth('dpa.created_at', $mfecha)
+                ->get();
+            //PEDIDOS POR ASESOR EN EL MES
+            $pedidosxasesor = Pedido::join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
+                ->join('users as u', 'pedidos.user_id', 'u.id')
+                ->select('u.identificador as users', DB::raw('count(dp.id) as pedidos'))
+                ->whereMonth('dp.created_at', $mfecha)
+                ->groupBy('u.identificador')
+                ->orderBy((DB::raw('count(dp.id)')), 'DESC')
+                ->get();
+            //MONTO DE PAGO X CLIENTE EN EL MES TOP 30
+            $pagosxmes = Pago::join('clientes as c', 'pagos.cliente_id', 'c.id')
+                ->select('c.nombre as cliente', DB::raw('sum(pagos.total_cobro) as pagos'))
+                ->where('pagos.estado', '1')
+                ->whereMonth('pagos.created_at', $mfecha)
+                ->groupBy('c.nombre')
+                ->offset(0)
+                ->limit(30)
+                ->get();
+            //PEDIDOS POR ASESOR EN EL DIA
+            $pedidosxasesorxdia = Pedido::join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
+                ->join('users as u', 'pedidos.user_id', 'u.id')
+                ->select('u.name as users', DB::raw('count(dp.id) as pedidos'))
+                ->whereDay('dp.created_at', $dfecha)
+                ->groupBy('u.name')
+                ->orderBy((DB::raw('count(dp.id)')), 'DESC')                
+                ->get();
+        //DASHBOARD ENCARGADO
+            $meta_pedidoencargado = Pedido::join('users as u', 'pedidos.user_id', 'u.id')
+                ->where('u.supervisor', Auth::user()->id)
+                ->where('pedidos.estado', '1')
+                ->whereMonth('pedidos.created_at', $mfecha)
+                ->count();
+             $meta_pagoencargado = Pago::join('users as u', 'pagos.user_id', 'u.id')
+                ->join('detalle_pagos as dpa', 'pagos.id', 'dpa.pago_id')
+                ->select(DB::raw('sum(dpa.monto) as pagos'))
+                ->where('u.supervisor', Auth::user()->id)
+                ->where('pagos.estado', '1')
+                ->whereMonth('pagos.created_at', $mfecha)
+                ->first();
+            //PEDIDOS DE MIS ASESORES EN EL MES
+            $pedidosxasesor_encargado = Pedido::join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
+                ->join('users as u', 'pedidos.user_id', 'u.id')
+                ->select('u.name as users', DB::raw('count(dp.id) as pedidos'))
+                ->where('u.supervisor', Auth::user()->id)
+                ->whereMonth('dp.created_at', $mfecha)
+                ->groupBy('u.name')
+                ->orderBy((DB::raw('count(dp.id)')), 'DESC')
+                ->get();
+            //HISTORIAL DE PEDIDOS DE MIS ASESORES EN LOS ULTIMOS 3 MES
+            $pedidosxasesor_3meses_encargado = Pedido::join('users as u', 'pedidos.user_id', 'u.id')
+                ->select('u.name as users', DB::raw('count(pedidos.id) as pedidos'), DB::raw('DATE(pedidos.created_at) as fecha'))
+                ->where('u.supervisor', Auth::user()->id)
+                ->whereDay('pedidos.created_at', $dfecha)
+                ->WhereIn(DB::raw('DATE_FORMAT(pedidos.created_at, "%m")'),[$mfecha, $mfecha-1, $mfecha-2])
+                ->whereYear('pedidos.created_at', $afecha)
+                ->groupBy('u.name', 'u.id', DB::raw('DATE(pedidos.created_at)'))
+                ->orderBy('u.id', 'ASC')
+                ->get();
+            //MONTO DE PAGO X CLIENTE DE MIS ASESORES EN EL MES TOP 30
+            $pagosxmes_encargado = Pago::join('clientes as c', 'pagos.cliente_id', 'c.id')
+                ->join('users as u', 'pagos.user_id', 'u.id')
+                ->select('c.nombre as cliente', DB::raw('sum(pagos.total_cobro) as pagos'))
+                ->where('u.supervisor', Auth::user()->id)
+                ->where('pagos.estado', '1')
+                ->whereMonth('pagos.created_at', $mfecha)
+                ->groupBy('c.nombre')
+                ->offset(0)
+                ->limit(30)
+                ->get();
+            //PEDIDOS DE MIS ASESORES EN EL DIA
+            $pedidosxasesorxdia_encargado = Pedido::join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
+                ->join('users as u', 'pedidos.user_id', 'u.id')
+                ->select('u.name as users', DB::raw('count(dp.id) as pedidos'))
+                ->where('u.supervisor', Auth::user()->id)
+                ->whereDay('dp.created_at', $dfecha)
+                ->groupBy('u.name')
+                ->orderBy((DB::raw('count(dp.id)')), 'DESC')                
+                ->get();
+        //DASHBOARD ASESOR
+            $meta_pedidoasesor = Pedido::join('users as u', 'pedidos.user_id', 'u.id')
+                ->where('u.id', Auth::user()->id)
+                ->where('pedidos.estado', '1')
+                ->whereMonth('pedidos.created_at', $mfecha)
+                ->whereYear('pedidos.created_at', $afecha)
+                ->count();
+            $meta_pagoasesor = Pago::join('users as u', 'pagos.user_id', 'u.id')
+                ->join('detalle_pagos as dpa', 'pagos.id', 'dpa.pago_id')
+                ->select(DB::raw('sum(dpa.monto) as pagos'))
+                ->where('u.id', Auth::user()->id)
+                ->where('pagos.estado', '1')
+                ->where('dpa.estado', '1')
+                ->whereMonth('pagos.created_at', $mfecha)
+                ->whereYear('pagos.created_at', $afecha)
+                ->first();
+            $pagosobservados_cantidad = Pago::where('user_id', Auth::user()->id)
+                ->where('estado', '1')
+                ->where('condicion', 'OBSERVADO')
+                ->count();
+            //HISTORIAL DE MIS PEDIDOS EN EL MES
+            $pedidosxasesorxdia_asesor = Pedido::join('users as u', 'pedidos.user_id', 'u.id')
+                ->select('u.name as users', DB::raw('count(pedidos.id) as pedidos'), DB::raw('DATE(pedidos.created_at) as fecha'))
+                ->where('u.id', Auth::user()->id)
+                ->whereMonth('pedidos.created_at', $mfecha)
+                ->whereYear('pedidos.created_at', $afecha)
+                ->groupBy('u.name', DB::raw('DATE(pedidos.created_at)'))
+                ->orderBy(DB::raw('DATE(pedidos.created_at)'), 'ASC')
+                ->get();
+            //ALERTA DE PEDIDOS SIN PAGOS
+            $pedidossinpagos = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')
+                ->join('users as u', 'pedidos.user_id', 'u.id')
+                ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
+                ->select(
+                    'pedidos.id',
+                    'c.nombre as nombres',
+                    'c.celular as celulares',
+                    'u.name as users',
+                    'dp.codigo as codigos',
+                    'dp.nombre_empresa as empresas',
+                    DB::raw('sum(dp.total) as total'),
+                    'pedidos.condicion as condiciones',
+                    'pedidos.created_at as fecha'
+                )
+                ->where('pedidos.estado', '1')
+                ->where('dp.estado', '1')
+                ->where('u.id', Auth::user()->id)
+                ->where('pedidos.pago', '0')
+                ->groupBy(
+                    'pedidos.id',
+                    'c.nombre',
+                    'c.celular',
+                    'u.name',
+                    'dp.codigo',
+                    'dp.nombre_empresa',
+                    'pedidos.condicion',
+                    'pedidos.created_at')
+                ->orderBy('pedidos.created_at', 'DESC')
+                ->get();
+        //DASHBOARD OPERACION
+            $pedidoxatender = Pedido::where('condicion', 'REGISTRADO')
+                ->where('pedidos.estado', '1')
+                ->count();
+            $pedidoenatencion = Pedido::where('condicion', 'EN PROCESO ATENCION')
+                ->where('pedidos.estado', '1')
+                ->count();
+        //DASHBOARD ADMINISTRACION
+            $pagosxrevisar_administracion = Pago::where('estado', '1')
+                ->where('condicion', 'PAGO')
+                ->count();
+            $pagosobservados_administracion = Pago::where('estado', '1')
+                ->where('condicion', 'OBSERVADO')
+                ->count();
+
+            $conteo = count(auth()->user()->unreadNotifications);
+
+        return view('dashboard.dashboard', compact('pedidoxmes_total', 
+                                                    'pagoxmes_total',
+                                                    'montopedidoxmes_total',
+                                                    'montopagoxmes_total', 
+                                                    'pedidossinpagos',
+                                                    'pedidosxasesor',
+                                                    'pagosxmes',
+                                                    'pedidosxasesorxdia',
+                                                    'meta_pedidoencargado',
+                                                    'meta_pagoencargado',
+                                                    'pedidosxasesor_encargado',
+                                                    'pedidosxasesor_3meses_encargado',
+                                                    'pagosxmes_encargado',
+                                                    'pedidosxasesorxdia_encargado',
+                                                    'meta_pedidoasesor',
+                                                    'meta_pagoasesor',
+                                                    'pagosobservados_cantidad',
+                                                    'pedidosxasesorxdia_asesor',
+                                                    'pedidoxatender',
+                                                    'pedidoenatencion',
+                                                    'pagosxrevisar_administracion',
+                                                    'pagosobservados_administracion',
+                                                    'conteo'
+                                                    )
+                    );
+    }
+}
