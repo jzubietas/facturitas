@@ -79,16 +79,20 @@
               <td>{{ $pedido->fecha_recepcion }}</td>
               <td>{{ $pedido->destino }}</td>
               <td>
-                @if($pedido->destino == 'LIMA')
+                {{-- @if($pedido->destino == 'LIMA') --}}
                   @if($pedido->direccion == '0')
                     <span class="badge badge-danger">REGISTRE DIRECCION</span>
-                  @else
+                  @elseif($pedido->destino == 'LIMA')
                   <a href="" data-target="#modal-verdireccion-{{ $pedido->id }}" data-toggle="modal"><button class="btn btn-primary btn-sm"><i class="fas fa-eye"></i> Ver</button></a>
-                  <a href="" data-target="#modal-editdireccion-{{ $pedido->id }}" data-toggle="modal"><button class="btn btn-dark btn-sm"><i class="fas fa-pen"></i> Editar</button></a>
+                  {{-- <a href="" data-target="#modal-editdireccion-{{ $pedido->id }}" data-toggle="modal"><button class="btn btn-dark btn-sm"><i class="fas fa-pen"></i> Editar</button></a> --}}
+                  @elseif($pedido->destino == 'PROVINCIA')
+                    <span class="badge badge-info">ENVIO A PROVINCIA</span>
+                  @else
+                    <span class="badge badge-info">PROBLEMAS CON REGISTRO DE DESTINO</span>
                   @endif
-                @else
+                {{-- @else
                   <span class="badge badge-info">ENVIO A PROVINCIA</span>
-                @endif
+                @endif --}}
               </td>
               <td>{{ $pedido->condicion_envio }}</td>
               <td>
@@ -105,17 +109,16 @@
                   <a href="" data-target="#modal-recibir-{{ $pedido->id }}" data-toggle="modal"><button class="btn btn-warning btn-sm"><i class="fas fa-check-circle"></i> Recibido</button></a>
                   @endif
                 @endcan
-                @if($pedido->destino == null && $pedido->direccion == '0' && $pedido->envio == '2')
-                  <a href="" data-target="#modal-destino-{{ $pedido->id }}" data-toggle="modal"><button class="btn btn-outline-dark btn-sm"><i class="fas fa-map"></i> Destino</button></a>
+                @if($pedido->destino == null && $pedido->direccion == '0' && ($pedido->envio)*1 > 0)
+                  {{-- <a href="" data-target="#modal-destino-{{ $pedido->id }}" data-toggle="modal"><button class="btn btn-outline-dark btn-sm"><i class="fas fa-map"></i> Destino</button></a> --}}
+                  <a href="{{ route('envios.createdireccion', $pedido) }}" class="btn btn-dark btn-sm"><i class="fas fa-map"></i> Destino</a>
                 @endif
-                @if($pedido->destino == 'LIMA' && $pedido->direccion == '0')
-                  {{-- <a href="" data-target="#modal-direccion-{{ $pedido->id }}" data-toggle="modal"><button class="btn btn-dark btn-sm">Dirección</button></a> --}}
+                {{-- @if($pedido->destino == 'LIMA' && $pedido->direccion == '0')                  
                   <a href="{{ route('envios.createdireccion', $pedido) }}" class="btn btn-dark btn-sm"><i class="fas fa-motorcycle"></i> Direccion</a>
                 @endif
-                @if($pedido->destino == 'PROVINCIA' && $pedido->direccion == '0')
-                  {{-- <a href="" data-target="#modal-direccion-{{ $pedido->id }}" data-toggle="modal"><button class="btn btn-dark btn-sm">Dirección</button></a> --}}
+                @if($pedido->destino == 'PROVINCIA' && $pedido->direccion == '0')                  
                   <a href="#" class="btn btn-secondary btn-sm"><i class="fas fa-bus"></i> Provincia</a>
-                @endif
+                @endif --}}
               </td>
             </tr>
             @include('pedidos.modal.enviar')

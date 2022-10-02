@@ -12,12 +12,14 @@
       <th style="background-color: #4c5eaf; text-align: center; color: #ffff;">IMPORTE (S/)</th>
       <th style="background-color: #4c5eaf; text-align: center; color: #ffff;">TIPO</th>
       <th style="background-color: #4c5eaf; text-align: center; color: #ffff;">PORCENTAJE</th>
+      <th style="background-color: #4c5eaf; text-align: center; color: #ffff;">COURIER (S/)</th>
       <th style="background-color: #4c5eaf; text-align: center; color: #ffff;">TOTAL (S/)</th>
+      <th style="background-color: #4c5eaf; text-align: center; color: #ffff;">DIFERENCIA (S/)</th>
       <th style="background-color: #4c5eaf; text-align: center; color: #ffff;">ESTADO DE PEDIDO</th>
       <th style="background-color: #4c5eaf; text-align: center; color: #ffff;">ESTADO DE PAGO</th>
+      <th style="background-color: #4c5eaf; text-align: center; color: #ffff;">ESTADO DE ENVIO</th>
       <th style="background-color: #4c5eaf; text-align: center; color: #ffff;">FECHA DE MODIFICACION</th>
       <th style="background-color: #4c5eaf; text-align: center; color: #ffff;">MODIFICADOR</th>
-
     </tr>
   </thead>
   <tbody>
@@ -43,9 +45,12 @@
         <td>{{ $pedido->cantidad }}</td>
         <td>{{ $pedido->tipo_banca }}</td>
         <td>{{ $pedido->porcentaje }}</td>
+        <td>{{ $pedido->courier }}</td>
         <td>{{ $pedido->total }}</td>
+        <td>{{ $pedido->diferencia }}</td>
         <td>{{ $pedido->condiciones }}</td>
         <td>{{ $pedido->condicion_pa }}</td>
+        <td>{{ $pedido->condicion_env }}</td>
         <td>{{ $pedido->fecha_mod }}</td>
         <td>{{ $pedido->modificador }}</td>
       </tr>
@@ -72,9 +77,12 @@
           <td>{{ $pedido->cantidad }}</td>
           <td>{{ $pedido->tipo_banca }}</td>
           <td>{{ $pedido->porcentaje }}</td>
+          <td>{{ $pedido->courier }}</td>
+          <td>{{ $pedido->total }}</td>
           <td>{{ $pedido->total }}</td>
           <td>{{ $pedido->condiciones }}</td>
           <td>SIN PAGO</td>
+          <td>{{ $pedido->condicion_env }}</td>
           <td>{{ $pedido->fecha_mod }}</td>
           <td>{{ $pedido->modificador }}</td>
         </tr>

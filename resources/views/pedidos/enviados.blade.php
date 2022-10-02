@@ -117,7 +117,7 @@
               </td>
             </tr>
             @include('pedidos.modal.editenviar')
-            @include('pedidos.modal.atender')
+            {{-- @include('pedidos.modal.atender') --}}
             @include('pedidos.modal.verenvio')
             @include('pedidos.modal.imagen')
             @include('pedidos.modal.imagen2')

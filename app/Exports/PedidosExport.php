@@ -33,12 +33,16 @@ class PedidosExport implements FromView
                 'dp.cantidad',
                 'dp.tipo_banca',
                 'dp.porcentaje',
+                'dp.courier',
+                'pedidos.condicion_envio as condicion_env',
                 'pedidos.condicion as condiciones',
                 'pa.condicion as condicion_pa',
                 'pedidos.motivo',
                 'pedidos.responsable',
-                'pedidos.created_at as fecha',
-                'pedidos.updated_at as fecha_mod',
+                /* 'pedidos.created_at as fecha', */
+                DB::raw('DATE_FORMAT(pedidos.created_at, "%d/%m/%Y") as fecha'),
+                /* 'pedidos.updated_at as fecha_mod', */
+                DB::raw('DATE_FORMAT(pedidos.updated_at, "%d/%m/%Y") as fecha_mod'),
                 'pedidos.modificador',
                 'pa.diferencia',                
                 'pedidos.estado'
@@ -58,6 +62,8 @@ class PedidosExport implements FromView
                 'dp.cantidad',
                 'dp.tipo_banca',
                 'dp.porcentaje',
+                'dp.courier',
+                'pedidos.condicion_envio',
                 'pedidos.condicion',
                 'pa.condicion',
                 'pedidos.motivo',
@@ -86,11 +92,15 @@ class PedidosExport implements FromView
                 'dp.cantidad',
                 'dp.tipo_banca',
                 'dp.porcentaje',
+                'dp.courier',
+                'pedidos.condicion_envio as condicion_env',
                 'pedidos.condicion as condiciones',
                 'pedidos.motivo',
                 'pedidos.responsable',
-                'pedidos.created_at as fecha',
-                'pedidos.updated_at as fecha_mod',
+                /* 'pedidos.created_at as fecha', */
+                DB::raw('DATE_FORMAT(pedidos.created_at, "%d/%m/%Y") as fecha'),
+                /* 'pedidos.updated_at as fecha_mod', */
+                DB::raw('DATE_FORMAT(pedidos.updated_at, "%d/%m/%Y") as fecha_mod'),
                 'pedidos.modificador',
                 'pedidos.estado'
             )
@@ -109,6 +119,8 @@ class PedidosExport implements FromView
                 'dp.cantidad',
                 'dp.tipo_banca',
                 'dp.porcentaje',
+                'dp.courier',
+                'pedidos.condicion_envio',
                 'pedidos.condicion',
                 'pedidos.motivo',
                 'pedidos.responsable',

@@ -16,6 +16,7 @@ class CreateRucsTable extends Migration
         Schema::create('rucs', function (Blueprint $table) {
             $table->id();            
             $table->unsignedBigInteger('user_id');//ASIGNAR A ASESOR
+            $table->unsignedBigInteger('cliente_id');//ASIGNAR A CLIENTE
             $table->string('num_ruc')->unique();//NUMERO DE RUC
             $table->string('empresa')->nullable();
             $table->integer('estado')->nullable();
@@ -23,6 +24,7 @@ class CreateRucsTable extends Migration
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('cliente_id')->references('id')->on('clientes');
         });
     }
 

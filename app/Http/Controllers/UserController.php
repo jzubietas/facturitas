@@ -17,7 +17,20 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::all();
+        if(Auth::user()->rol == "Encargado"){
+            $users = User::where('users.supervisor', Auth::user()->id)
+                            ->where('users.rol', 'Asesor')
+                            ->get();
+        }
+        else if(Auth::user()->rol == "Jefe de operaciones"){
+            $users = User::where('users.jefe', Auth::user()->id)
+                            ->where('users.rol', 'Operario')
+                            ->get();
+        }
+        else{
+            $users = User::all();
+        }
+
         $superasesor = User::where('rol', 'Super asesor')->count();
 
         return view('usuarios.index', compact('users', 'superasesor'));
@@ -274,7 +287,7 @@ class UserController extends Controller
     public function MisOperarios()
     {
         $users = User::where('rol', 'Operario')
-                    ->where('supervisor', Auth::user()->id)
+                    ->where('jefe', Auth::user()->id)
                     ->where('estado', '1')
                     ->get();
         $superasesor = User::where('rol', 'Super asesor')->count();

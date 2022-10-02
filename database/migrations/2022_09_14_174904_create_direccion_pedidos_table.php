@@ -17,6 +17,7 @@ class CreateDireccionPedidosTable extends Migration
             $table->id();
             $table->unsignedBigInteger('direccion_id');
             $table->unsignedBigInteger('pedido_id');
+            $table->integer('estado')->nullable();   
 
             $table->timestamps();
 

@@ -17,6 +17,7 @@ class CreatePedidosTable extends Migration
             $table->id();
             $table->unsignedBigInteger('cliente_id');
             $table->unsignedBigInteger('user_id');
+            $table->string('creador');//USUARIO CREADOR
             $table->integer('pago')->nullable();// 0 - 1
             $table->integer('pagado')->nullable();// 0 - 1
             $table->integer('envio')->nullable();// 0 - 1

@@ -38,6 +38,8 @@ Route::post('basefriacliente/{cliente}', [ClienteController::class, 'updatebf'])
 Route::get('clientes.editbf/{cliente}/edit2', [ClienteController::class, 'editbf'])->name('clientes.editbf');
 
 Route::resource('pedidos', PedidoController::class)->names('pedidos');
+Route::get('ruc', [PedidoController::class, 'ruc'])->name('cargar.ruc');
+Route::get('cliente', [PedidoController::class, 'cliente'])->name('cargar.cliente');
 Route::get('tipobanca', [PedidoController::class, 'tipobanca'])->name('cargar.tipobanca');
 Route::post('pedidos.agregarruc', [PedidoController::class, 'AgregarRuc'])->name('pedidos.agregarruc');
 Route::get('pedidos.mispedidos', [PedidoController::class, 'MisPedidos'])->name('pedidos.mispedidos');
@@ -60,7 +62,7 @@ Route::get('pedidos/{adjunto}/descargaradjunto', [PedidoController::class, 'Desc
 Route::get('envios.index', [PedidoController::class, 'Envios'])->name('envios.index');
 Route::post('envios.recibir/{pedido}', [PedidoController::class, 'Recibir'])->name('envios.recibir');
 Route::post('envios.enviar/{pedido}', [PedidoController::class, 'EnviarPedido'])->name('envios.enviar');
-Route::post('envios.direccion/{pedido}', [PedidoController::class, 'DireccionEnvio'])->name('envios.direccion');
+Route::post('envios.direccion', [PedidoController::class, 'DireccionEnvio'])->name('envios.direccion');
 Route::get('envios.createdireccion/{pedido}', [PedidoController::class, 'createDireccion'])->name('envios.createdireccion');
 Route::post('envios.updatedireccion/{direccion}', [PedidoController::class, 'UpdateDireccionEnvio'])->name('envios.updatedireccion');
 Route::get('envios.enviados', [PedidoController::class, 'Enviados'])->name('envios.enviados');
@@ -126,7 +128,7 @@ Route::post('/mark-as-read', [NotificationsController::class, 'markNotification'
 //EXCEL EXPORTABLES
     //MODULO PERSONAS
     Route::get('clientesExcel', [ExcelController::class, 'clientesExcel'])->name('clientesExcel');
-    Route::get('clientespedidosExcel', [ExcelController::class, 'clientespedidosExcel'])->name('clientespedidosExcel');
+    Route::post('clientespedidosExcel', [ExcelController::class, 'clientespedidosExcel'])->name('clientespedidosExcel');
     Route::get('basefriaExcel', [ExcelController::class, 'basefriaExcel'])->name('basefriaExcel');
     Route::post('basefriaporasesorExcel', [ExcelController::class, 'basefriaporasesorExcel'])->name('basefriaporasesorExcel');
     //MODULO ADMINISTRACION

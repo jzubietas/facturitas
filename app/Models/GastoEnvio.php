@@ -8,4 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class GastoEnvio extends Model
 {
     use HasFactory;
+
+    protected $guarded = ['id'];
+    
 }

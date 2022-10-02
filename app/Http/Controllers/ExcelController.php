@@ -40,9 +40,18 @@ class ExcelController extends Controller
         return Excel::download(new ClientesExport, 'Lista de Clientes.xlsx');
     }
 
-    public function clientespedidosExcel()
+    public function clientespedidosExcel(Request $request)
     {
-        return Excel::download(new ClientesPedidosExport, 'Lista de Clientes_pedidos.xlsx');
+        ini_set('memory_limit', '-1');
+        set_time_limit(3000000);
+
+        return (new ClientesPedidosExport)
+                ->clientes($request)
+                ->anioa($request)
+                ->aniop($request)
+                ->download('Lista de Clientes_pedidos_'.$request->anio.'.xlsx');
+
+        /* return Excel::download(new ClientesPedidosExport, 'Lista de Clientes_pedidos.xlsx'); */
     }
 
     public function basefriaExcel()

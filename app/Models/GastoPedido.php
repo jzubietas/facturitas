@@ -8,4 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class GastoPedido extends Model
 {
     use HasFactory;
+
+    protected $guarded = ['id'];
+    
 }

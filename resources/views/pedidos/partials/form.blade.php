@@ -66,12 +66,14 @@
             {!! Form::select('panio', $anios , '2022', ['class' => 'form-control selectpicker border border-secondary', 'data-live-search' => 'true', 'placeholder' => '---- SELECCIONE ----']) !!}
           </div>
           <div class="form-group col-lg-2">            
-            {!! Form::label('pruc', 'RUC') !!} <a href="" data-target="#modal-add-ruc" data-toggle="modal">(Agregar +)</a><br>
+            {!! Form::label('pruc', 'RUC') !!} <a href="" data-target="#modal-add-ruc" id= "btn_agregar_ruc" data-toggle="modal">(Agregar +)</a><br>
             @error('num_ruc')
               <small class="text-danger" style="font-size: 16px">{{ $message }}</small>
             @enderror
-            {{-- <input type="number" name="pruc" id="pruc" step="1" min="0" max="99999999999" maxlength="11" oninput="maxLengthCheck(this)" class="form-control" placeholder="RUC..."> --}}
-            {!! Form::select('pruc', $rucs , null, ['class' => 'form-control selectpicker border border-secondary', 'data-live-search' => 'true', 'placeholder' => '---- SELECCIONE ----']) !!}
+            {{-- {!! Form::select('pruc', $rucs , null, ['class' => 'form-control selectpicker border border-secondary', 'data-live-search' => 'true', 'placeholder' => '---- SELECCIONE ----']) !!} --}}
+            <select name="pruc" id="pruc" class="border form-control border-secondary">
+              <option value="">---- SELECCIONE ----</option>
+            </select>
           </div>
           <div class="form-group col-lg-2">
             {!! Form::label('pcantidad', 'Cantidad') !!}<!-- , 'id' => 'celular', 'min' =>'0', 'max' => '999999999', 'maxlength' => '9', 'oninput' => 'maxLengthCheck(this)'-->

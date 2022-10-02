@@ -15,6 +15,7 @@ class CreateDireccionEnviosTable extends Migration
     {
         Schema::create('direccion_envios', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('cliente_id');//ASIGNAR A CLIENTE
             $table->string('departamento')->nullable();
             $table->string('provincia')->nullable();
             $table->string('distrito')->nullable();
@@ -25,6 +26,8 @@ class CreateDireccionEnviosTable extends Migration
             $table->integer('estado')->nullable();
 
             $table->timestamps();
+
+            $table->foreign('cliente_id')->references('id')->on('clientes');
         });
     }
 

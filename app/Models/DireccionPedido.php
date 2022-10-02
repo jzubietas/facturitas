@@ -8,4 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class DireccionPedido extends Model
 {
     use HasFactory;
+
+    protected $guarded = ['id'];
+    
 }

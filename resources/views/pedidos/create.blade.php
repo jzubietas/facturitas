@@ -75,6 +75,28 @@
         object.value = object.value.slice(0, object.maxLength)
     }
 
+    // CARGAR RUCS DE CLIENTE SELECCIONADO
+    $("#cliente_id").change(function() {
+      $.ajax({
+        url: "{{ route('cargar.ruc') }}?cliente_id=" + $(this).val(),
+        method: 'GET',
+        success: function(data) {
+          $('#pruc').html(data.html);
+        }
+      });
+    });
+
+    // CARGAR CLIENTES DE ASESOR
+    $("#btn_agregar_ruc").click(function() {
+      $.ajax({
+        url: "{{ route('cargar.cliente') }}",
+        method: 'GET',
+        success: function(data) {
+          $('#cliente_id_ruc').html(data.html);
+        }
+      });
+    });
+    
     // CARGAR TIPO DE COMPROBANTE Y BANCA/PORCENTAJES DE CLIENTE SELECCIONADO
     $("#cliente_id").change(function() {
       $.ajax({

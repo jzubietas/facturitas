@@ -8,17 +8,24 @@
 
 @section('content')
   <div class="card">
-    {!! Form::open(['route' => 'pagos.store','enctype'=>'multipart/form-data', 'id'=>'formulario','files'=>true]) !!}
-    <div class="border rounded card-body border-secondary">
-      <div class="form-row">
-        <div class="form-group col-lg-6">
-          {!! Form::label('user_id', 'Asesor') !!}
-          <input type="hidden" name="user_id" requerid value="{{ Auth::user()->id }}" class="form-control">
-          <input type="text" name="user_name" value="{{ Auth::user()->name }}" class="form-control" disabled>
-        </div>
-        <div class="form-group col-lg-6">
-          {!! Form::label('cliente_id', 'Cliente*') !!}
-          {!! Form::text('cliente_id', $clientes->nombre, ['class' => 'form-control', 'id' => 'cliente_id', 'disabled']) !!}
+    {!! Form::open(['route' => 'envios.direccion','enctype'=>'multipart/form-data', 'id'=>'formulario','files'=>true]) !!}
+    <div class="card-header">      
+      <div class="border rounded card-body border-secondary">
+        <div class="form-row">
+          <div class="form-group col-lg-4">
+            {!! Form::label('user_id', 'Asesor') !!}
+            <input type="hidden" name="user_id" requerid value="{{ Auth::user()->id }}" class="form-control">
+            <input type="text" name="user_name" value="{{ Auth::user()->name }}" class="form-control" disabled>
+          </div>
+          <div class="form-group col-lg-4">
+            {!! Form::label('cliente_id', 'Cliente') !!}
+            <input type="hidden" name="cliente_id" requerid value="{{ $clientes->id }}" class="form-control">
+            {!! Form::text('cliente_id', $clientes->nombre, ['class' => 'form-control', 'id' => 'cliente_id', 'disabled']) !!}
+          </div>
+          <div class="form-group col-lg-4">
+            {!! Form::label('destino', 'Destino*') !!}
+            {!! Form::select('destino', $destinos, null, ['class' => 'form-control', 'id' => 'destino', 'placeholder' => '-----SELECCIONE------']) !!}
+          </div>
         </div>
       </div>
     </div>
@@ -40,28 +47,83 @@
                   <th scope="col">ITEM</th>
                   <th scope="col">PEDIDO</th>
                   <th scope="col">CODIGO</th>
-                  <th scope="col">MONTO</th>
                   <th scope="col">ACCIÓN</th>
                 </tr>
               </thead>
-              <tfoot>
-                <th style="text-align: center">TOTAL</th>
-                <th></th>
-                <th></th>
-                <th><h4 id="total_pedido">S/. 0.00</h4></th>
-                <th><input type="hidden" name="total_pedido_pagar" requerid value="" id="total_pedido_pagar" class="form-control"></th>              
-              </tfoot>
               <tbody>
               </tbody>
+              <tfoot>            
+              </tfoot>              
             </table>
           </div>
         </div>
-        <div class="form-group col-lg-6">
-
+        <div id="lima" class="form-group col-lg-6">
+          <div class="card">
+            <div class="border rounded card-body border-secondary">
+              <div class="form-row">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="text-align: center; font-weight: bold;">
+                  <p>Ingrese la dirección de envío - LIMA</p>
+                </div>
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                  {!! Form::label('nombre', 'Nombre de quien recibe el sobre') !!}                   
+                  {!! Form::text('nombre', null, ['class' => 'form-control', 'placeholder' => 'Nombre']) !!}
+                </div>
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                  {!! Form::label('celular', 'Número de contacto') !!}                     
+                  {!! Form::number('celular', null, ['class' => 'form-control', 'id' => 'celular', 'min' =>'0', 'max' => '999999999', 'maxlength' => '9', 'oninput' => 'maxLengthCheck(this)']) !!}
+                </div>
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                  {!! Form::label('distrito', 'Distrito') !!}                      
+                  {!! Form::select('distrito', $distritos , null, ['class' => 'form-control border border-secondary', 'data-live-search' => 'true', 'placeholder' => '---- SELECCIONE ----']) !!}
+                </div>
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                  {!! Form::label('direccion', 'Dirección') !!}                      
+                  {!! Form::text('direccion', null, ['class' => 'form-control', 'placeholder' => 'Dirección']) !!}
+                </div>
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                  {!! Form::label('referencia', 'Referencia') !!}                      
+                  {!! Form::text('referencia', null, ['class' => 'form-control', 'placeholder' => 'Referencia']) !!}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="provincia" class="form-group col-lg-6">
+          <div class="card">
+            <div class="border rounded card-body border-secondary">
+              <div class="form-row">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="text-align: center; font-weight: bold;">
+                  <p>Ingrese datos del envío - PROVINCIA</p>
+                </div>
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                  {!! Form::label('tracking', 'Número de tracking') !!}                   
+                  {!! Form::text('tracking', null, ['class' => 'form-control', 'placeholder' => 'tracking']) !!}
+                </div>
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                  {!! Form::label('registro', 'Número de registro') !!}                     
+                  {!! Form::number('registro', null, ['class' => 'form-control', 'placeholder' => 'Número de registro', 'id' => 'registro', 'min' =>'0', 'max' => '999999999999999', 'maxlength' => '15', 'oninput' => 'maxLengthCheck(this)']) !!}
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                  {!! Form::label('foto', 'Foto') !!}     
+                  @csrf                
+                  {!! Form::file('foto', ['class' => 'form-control-file', 'accept' => 'image/*']) !!}
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                  <div class="image-wrapper">
+                    <img id="picture" src="{{asset('imagenes/logo_facturas.png')}}" alt="Imagen del gasto" height="200px" width="200px">
+                  </div>
+                </div>
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                  {!! Form::label('importe', 'Importe(S/.)') !!}
+                  {!! Form::text('importe', null, ['class' => 'form-control number', 'placeholder' => 'Importe pagado', 'id' => 'importe']) !!}
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
       {{-- MODALS --}}
-      @include('pagos.modals.AddPedidos')
+      @include('pedidos.modal.AddPedidos')
     </div>
     <div class="card-footer">
       <div class="form-row">
@@ -83,36 +145,31 @@
   <script>  
 
     $("#guardar").hide();
-    /* $("#addpedido").hide(); */
-    $("#pcliente_id").change(mostrarBotones);
+    $("#addpedido").hide();
+    $("#lima").hide();
+    $("#provincia").hide();
+    $("#destino").change(mostrarBotones);
 
     function mostrarBotones() {
+      destino = document.getElementById('destino').value
+
       $("#addpedido").show();
-      $("#addpago").show();
-    }    
-
-    // CARGAR PEDIDOS DE CLIENTE SELECCIONADO
-    $("#pcliente_id").change(function() {
-      datosCliente = document.getElementById('pcliente_id').value.split('_');
-
-      cliente_id = datosCliente[0];
-      saldo = datosCliente[1];
-
-      $("#cliente_id").val(cliente_id);
-      $("#saldo").val(saldo);      
-
-      $.ajax({
-        url: "{{ route('cargar.pedidoscliente') }}?cliente_id=" + $(this).val(),
-        method: 'GET',
-        success: function(data) {
-          $('#ppedido_id').html(data.html);
-        }
-      });
-    });
+      if(destino == "LIMA"){
+        $("#lima").show();
+        $("#provincia").hide();
+      }
+      if(destino == "PROVINCIA"){
+        $("#provincia").show();
+        $("#lima").hide();
+      }
+    }  
     
-    //VALIDAR CAMPO FECHAS MAX DIA ACTUAL
-    var today = new Date().toISOString().split('T')[0];
-    document.getElementsByName("pfecha")[0].setAttribute('max', today);
+    //VALIDAR CAMPO CELULAR
+    function maxLengthCheck(object)
+    {
+      if (object.value.length > object.maxLength)
+        object.value = object.value.slice(0, object.maxLength)
+    }
 
     // AGREGANDO PEDIDOS
     $('#add_pedido').click(function() {
@@ -131,30 +188,23 @@
 
     function agregarPedido() {
       datosPedido = document.getElementById('ppedido_id').value.split('_');
-      Pedido_delete = document.getElementById('ppedido_id').value
+      Pedido_delete = document.getElementById('ppedido_id').value;
 
       pedido_id = datosPedido[0];
       codigo = datosPedido[1];
-      monto = datosPedido[2];
 
       if (pedido_id != "") {
-        subtotal_pedido[contPe] = monto*1;
-        total_pedido = total_pedido + subtotal_pedido[contPe];
 
         var filasPe = '<tr class="selected" id="filasPe' + contPe + '">' +
           '<td>' + contPe + '</td>' +
           '<td style="display:none;" ><input type="hidden" name="pedido_id[]" value="' + pedido_id + '">' + pedido_id + '</td>' +
           '<td><input type="hidden" name="" value="">PED000' + pedido_id + '</td>' +
           '<td><input type="hidden" name="" value="">' + codigo + '</td>' +
-          '<td><input type="hidden" name="" id= "numbermonto" value="">S/' + monto + '</td>' +
           '<td><button type="button" class="btn btn-danger btn-sm" onclick="eliminarPe(' + contPe + ')"><i class="fas fa-trash-alt"></i></button></td>' +
           '</tr>';
         contPe++;
         limpiarPe();
-        $("#total_pedido").html("S/. " + total_pedido.toLocaleString("en-US"));
-        $("#total_pedido_pagar").val(total_pedido.toLocaleString("en-US"));
         evaluarPe();
-        diferenciaFaltante();
         $('#tabla_pedidos').append(filasPe);
         Remove_options(Pedido_delete);
       } else {
@@ -171,16 +221,11 @@
     }
 
     function evaluarPe() {
-      if (total_pedido > 0 && total_pago > 0) {
+      if (contPe > 1) {
         $("#guardar").show();
       } else {
         $("#guardar").hide();
       }
-    }
-
-    function diferenciaFaltante() {
-      diferencia = total_pedido - total_pago;
-      $("#diferencia").val(diferencia.toLocaleString("en-US"));
     }
 
     function eliminarPe(index) {
@@ -189,6 +234,20 @@
       $("#total_pedido_pagar").val(total_pedido);
       $("#filasPe" + index).remove();
       evaluarPe();
+    }
+    
+    //CAMBIAR IMAGEN
+    document.getElementById("foto").addEventListener('change', cambiarImagen);
+
+    function cambiarImagen(event){
+        var file = event.target.files[0];
+
+        var reader = new FileReader();
+        reader.onload = (event) => {
+            document.getElementById("picture").setAttribute('src', event.target.result);
+        };
+
+        reader.readAsDataURL(file);
     }
 
     //VALIDAR CAMPOS NUMERICO DE MONTO EN PAGOS
@@ -208,183 +267,6 @@
     });
     });
 
-    //VALIDANDO CAMPOS DE PAGOS
-    $(document).ready(function() {
-      $('#add_pago').click(function() {
-        if ($('#pmonto').val() == '') {
-          Swal.fire(
-            'Error',
-            'Ingrese monto',
-            'warning'
-          )
-        }
-        else if ($('#pbanco').val() == ''){
-          Swal.fire(
-            'Error',
-            'Seleccione banco ',
-            'warning'
-          )
-        }
-        else if ($('#pfecha').val() == ''){
-          Swal.fire(
-            'Error',
-            'Seleccione la fecha',
-            'warning'
-          )
-        }
-        else {
-          deuda = !isNaN($('#pcantidad').val()) ? parseInt($('#pcantidad').val(), 10) : 0;
-          pagado = !isNaN($('#pstock').val()) ? parseInt($('#pstock').val(), 10) : 0;
-
-          agregarPago();
-        }
-      })
-    });
-    // CAMBIAR IMAGEN
-    /* document.getElementById("imagen").addEventListener('change', cambiarImagen());
-
-    function cambiarImagen(event){
-        var file = event.target.files[0];
-
-        var reader = new FileReader();
-        reader.onload = (event) => {
-            document.getElementById("picture").setAttribute('src', event.target.result);
-        };
-
-        reader.readAsDataURL(file);
-    } */
-
-    total_pago = 0;
-    subtotal_pago = [];
-    var contPa = 0;
-
-    // AGREGANDO PAGOS
-    function agregarPago() {
-      var strEx = $("#pmonto").val();//1,000.00
-      //primer paso: fuera coma
-      strEx = strEx.replace(",","");//1000.00
-      var numFinal = parseFloat(strEx);
-      monto = numFinal;
-      banco = $('#pbanco option:selected').val();
-      fecha = $("#pfecha").val();
-      /* imagen = $("#pimagen").val(); */
-
-
-      if (monto != ""  && banco != "" && fecha != ""/*  && imagen != "" */) {
-        subtotal_pago[contPa] = monto*1;
-        total_pago = total_pago + subtotal_pago[contPa];
-
-        var filasPa = '<tr class="selected" id="filasPa' + contPa + '">' +
-          '<td>' + (contPa + 1) + '</td>' +          
-          '<td><input type="hidden" name="banco[]" value="' + banco + '">' + banco + '</td>' +
-          '<td><input type="hidden" name="fecha[]" value="' + fecha + '">' + fecha + '</td>' +
-          '<td>@csrf<input type="file" id="imagen" name="imagen[]" accept= "image/*" /></td>' + 
-            /* <img id="picture" src="{{asset('imagenes/logo_facturas.png')}}" alt="Imagen del pago" height="100px" width="100px"> */        
-          '<td><input type="hidden" name="monto[]" value="' + monto + '">' + monto + '</td>' +
-          '<td><button type="button" class="btn btn-danger btn-sm" onclick="eliminarPa(' + contPa + ')"><i class="fas fa-trash-alt"></i></button></td>' +
-          '</tr>';
-          
-
-        contPa++;
-        limpiarPa();
-        $("#total_pago").html("S/. " + total_pago.toLocaleString("en-US"));
-        $("#total_pago_pagar").val(total_pago.toLocaleString("en-US"));
-        evaluarPa();
-        diferenciaFaltante();
-        $('#tabla_pagos').append(filasPa);
-      } else {
-        Swal.fire(
-          'Error!',
-          'Información faltante del pago',
-          'warning')
-      }
-    }
-
-    function limpiarPa() {
-      $("#pmonto").val("");
-      $("#pbanco").val('').change();
-      $("#pfecha").val("");
-      $("#pimagen").val("");
-    }
-
-    function evaluarPa() {
-      if (total_pedido > 0 && total_pago > 0) {
-        $("#guardar").show();
-      } else {
-        $("#guardar").hide();
-      }
-    }
-
-    function eliminarPa(index) {
-      total_pago = total_pago - subtotal_pago[index];
-      $("#total_pago").html("S/. " + total_pago.toLocaleString("en-US"));
-      $("#total_pago_pagar").val(total_pago);
-      $("#filasPa" + index).remove();
-      evaluarPa();
-    }
-
-  //VALIDAR ANTES DE ENVIAR
-  document.addEventListener("DOMContentLoaded", function() {
-  document.getElementById("formulario").addEventListener('submit', validarFormulario); 
-    });
-
-    function validarFormulario(evento) {
-      evento.preventDefault();      
-      var total_pedido_pagar = document.getElementById('total_pedido_pagar').value;
-      var total_pedido = document.getElementById('total_pedido').value;
-      var total_pago_pagar = document.getElementById('total_pago_pagar').value;
-      var total_pago = document.getElementById('total_pago').value;
-      /* var imagen = document.getElementById('imagen').value; */
-
-      //Obtengo todos los campos con el nombre cantidad[]
-      imagen = document.getElementsByName("imagen[]");
-
-      //Creo el arreglo donde almaceno sus valores
-      var img = [];
-
-      //Recorro todos los nodos que encontre que coinciden con ese nombre
-      for(var i=0;i<imagen.length;i++){
-      //Añado el valor que contienen los campos
-          img.push(imagen[i].value);
-      }
-
-      /* console.info(img.includes('')); */
-
-      //valido si hay una imagen vacia
-      if(img.includes('') == true)
-      {
-        Swal.fire(
-            'Error',
-            'Seleccione una imagen para cada pago agregado',
-            'warning'
-          )
-      }
-      else if (total_pedido_pagar*1 < total_pago_pagar*1 ) {
-          Swal.fire(
-            'Error',
-            'No se puede ingresar un pago mayor a la deuda que tiene el cliente',
-            'warning'
-          )
-      }
-      else if(total_pedido_pagar - total_pago_pagar > 1) {
-          Swal.fire({
-            title: 'Estás seguro?',
-            text: "Vas a guardar un pago menor a la deuda del cliente!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Sí, guardar!'
-          }).then((result) => {
-            if (result.isConfirmed) {
-              this.submit();
-            }
-          })
-      }
-      else {
-          this.submit();
-      }      
-    }
   </script>
 
 @stop

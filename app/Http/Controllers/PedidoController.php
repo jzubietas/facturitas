@@ -10,7 +10,10 @@ use App\Models\Departamento;
 use App\Models\DetallePago;
 use App\Models\DetallePedido;
 use App\Models\DireccionEnvio;
+use App\Models\DireccionPedido;
 use App\Models\Distrito;
+use App\Models\GastoEnvio;
+use App\Models\GastoPedido;
 use App\Models\ImagenAtencion;
 use App\Models\ImagenPedido;
 use App\Models\User;
@@ -21,6 +24,7 @@ use App\Models\Ruc;
 use App\Notifications\PedidoNotification;
 use Carbon\Carbon;
 use Exception;
+use Facade\FlareClient\Http\Client;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -50,7 +54,7 @@ class PedidoController extends Controller
                 'pedidos.id',
                 'c.nombre as nombres',
                 'c.celular as celulares',
-                'u.name as users',
+                'u.identificador as users',
                 'pedidos.codigo as codigos',
                 'dp.nombre_empresa as empresas',
                 /* DB::raw('sum(dp.cantidad*dp.porcentaje) as total'),*/
@@ -74,7 +78,7 @@ class PedidoController extends Controller
                 'pedidos.id',
                 'c.nombre',
                 'c.celular',
-                'u.name',
+                'u.identificador',
                 'pedidos.codigo',
                 'dp.nombre_empresa',
                 'dp.total',
@@ -97,7 +101,7 @@ class PedidoController extends Controller
                 'pedidos.id',
                 'c.nombre as nombres',
                 'c.celular as celulares',
-                'u.name as users',
+                'u.identificador as users',
                 'pedidos.codigo as codigos',
                 'dp.nombre_empresa as empresas',
                 /* DB::raw('sum(dp.cantidad*dp.porcentaje) as total'),*/
@@ -119,7 +123,7 @@ class PedidoController extends Controller
                 'pedidos.id',
                 'c.nombre',
                 'c.celular',
-                'u.name',
+                'u.identificador',
                 'pedidos.codigo',
                 'dp.nombre_empresa',
                 'dp.total',
@@ -250,6 +254,23 @@ class PedidoController extends Controller
                                 ->where('tipo', '1')
                                 ->where('deuda', '1')
                                 ->get();
+
+            $clientes_ruc = Cliente:://TODOS LOS CLIENTES
+                        where('clientes.estado','1')
+                        ->where('clientes.tipo','1')
+                        ->where('clientes.user_id', Auth::user()->id)
+                        ->groupBy(
+                            'clientes.id',
+                            'clientes.nombre',
+                            'clientes.celular', 
+                            'clientes.estado'
+                        )
+                        ->get(['clientes.id', 
+                                'clientes.nombre', 
+                                'clientes.celular', 
+                                'clientes.estado'
+                                ]);
+
         }else if(Auth::user()->rol == "Super asesor"){
             $clientes1 = Cliente:://CLIENTES CON PEDIDOS CON DEUDA
                 join('users as u', 'clientes.user_id', 'u.id')
@@ -350,6 +371,22 @@ class PedidoController extends Controller
                                 ->where('tipo', '1')
                                 ->where('deuda', '1')
                                 ->get();
+
+            $clientes_ruc = Cliente:://TODOS LOS CLIENTES
+                        where('clientes.estado','1')
+                        ->where('clientes.tipo','1')
+                        ->where('clientes.user_id', Auth::user()->id)
+                        ->groupBy(
+                            'clientes.id',
+                            'clientes.nombre',
+                            'clientes.celular', 
+                            'clientes.estado'
+                        )
+                        ->get(['clientes.id', 
+                                'clientes.nombre', 
+                                'clientes.celular', 
+                                'clientes.estado'
+                                ]);
         }else{
             $clientes1 = Cliente::where('estado', '1')
                                 ->where('tipo', '1')
@@ -360,6 +397,20 @@ class PedidoController extends Controller
                                 ->where('tipo', '1')
                                 ->where('deuda', '1')
                                 ->get();
+            $clientes_ruc = Cliente:://TODOS LOS CLIENTES
+                            where('clientes.estado','1')
+                            ->where('clientes.tipo','1')
+                            ->groupBy(
+                                'clientes.id',
+                                'clientes.nombre',
+                                'clientes.celular', 
+                                'clientes.estado'
+                            )
+                            ->get(['clientes.id', 
+                                    'clientes.nombre', 
+                                    'clientes.celular', 
+                                    'clientes.estado'
+                                    ]);
         }
                             
         $meses = [
@@ -410,7 +461,7 @@ class PedidoController extends Controller
                     ->count();
         $numped = $numped + 1;
         
-        return view('pedidos.create', compact('users', 'clientes1', 'clientes2', 'clientes3', 'dateM', 'dateY','deudores', 'meses', 'anios', 'rucs', 'fecha', 'numped'));
+        return view('pedidos.create', compact('users', 'clientes1', 'clientes2', 'clientes3', 'dateM', 'dateY','deudores', 'meses', 'anios', 'rucs', 'fecha', 'numped', 'clientes_ruc'));
     }
 
     /**
@@ -419,6 +470,32 @@ class PedidoController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
+
+    public function ruc(Request $request)//rucs
+    {
+        if (!$request->cliente_id) {
+            $html = '<option value="">' . trans('---- SELECCIONE ----') . '</option>';
+        } else {
+            $html = '<option value="">' . trans('---- SELECCIONE ----') . '</option>';
+            $rucs = Ruc::where('rucs.cliente_id', $request->cliente_id)->get();        
+            foreach ($rucs as $ruc) {
+                $html .= '<option value="' . $ruc->num_ruc . '">' . $ruc->num_ruc . '</option>';
+            }
+        }
+        return response()->json(['html' => $html]);
+    }
+
+    public function cliente()//clientes
+    {        
+        $html = '<option value="">' . trans('---- SELECCIONE ----') . '</option>';
+        $clientes = Cliente::where('clientes.user_id', Auth::user()->id)
+                            ->where('clientes.tipo', '1')
+                            ->get();        
+        foreach ($clientes as $cliente) {
+            $html .= '<option value="' . $cliente->id . '">' . $cliente->celular. '-' . $cliente->nombre . '</option>';
+        }
+        return response()->json(['html' => $html]);
+    }
 
     public function tipobanca(Request $request)//pedidoscliente
     {
@@ -458,6 +535,7 @@ class PedidoController extends Controller
             $ruc = Ruc::create([
                 'num_ruc' => $request->agregarruc,
                 'user_id' => Auth::user()->id,
+                'cliente_id' => $request->cliente_id_ruc,
                 'estado' => '1'
             ]);        
 
@@ -476,6 +554,7 @@ class PedidoController extends Controller
             $pedido = Pedido::create([
                 'cliente_id' => $request->cliente_id,
                 'user_id' => $request->user_id, //usuario que registra
+                'creador_id' => 'USER0'.Auth::user()->id,
                 'condicion' => 'POR ATENDER',
                 'pago' => '0',
                 'envio' => '0',
@@ -483,7 +562,7 @@ class PedidoController extends Controller
                 'estado' => '1',
                 'codigo' => $request->codigo[0],
                 'notificacion' => 'Nuevo pedido creado',
-                'modificador' => 'USER'.Auth::user()->id,
+                'modificador' => 'USER0'.Auth::user()->id,
                 'pagado' => '0',
                 'direccion' => '0'
             ]);
@@ -899,6 +978,9 @@ class PedidoController extends Controller
 
     public function MisPedidos()
     {   
+        $dateMin = Carbon::now()->subDays(4)->format('d/m/Y');
+        $dateMax = Carbon::now()->format('d/m/Y');
+
         $destinos = [
             "LIMA" => 'LIMA',
             "PROVINCIA" => 'PROVINCIA'
@@ -919,6 +1001,7 @@ class PedidoController extends Controller
                     'dp.nombre_empresa as empresas',
                     /* DB::raw('sum(dp.total) as total') */
                     'dp.total as total',
+                    'pedidos.condicion_envio as condicion_env',
                     'pedidos.condicion as condiciones',
                     'pedidos.envio',
                     'pedidos.direccion',
@@ -926,7 +1009,8 @@ class PedidoController extends Controller
                     'pedidos.motivo',
                     'pedidos.responsable',
                     'pa.condicion as condicion_pa',
-                    'pedidos.created_at as fecha',
+                    /* 'pedidos.created_at as fecha', */
+                    DB::raw('DATE_FORMAT(pedidos.created_at, "%d/%m/%Y") as fecha'),
                     'pa.diferencia'
                 )
                 ->where('pedidos.estado', '1')
@@ -942,6 +1026,7 @@ class PedidoController extends Controller
                     'dp.codigo',
                     'dp.nombre_empresa',
                     'dp.total',
+                    'pedidos.condicion_envio',
                     'pedidos.condicion',
                     'pedidos.envio',
                     'pedidos.direccion',
@@ -967,13 +1052,15 @@ class PedidoController extends Controller
                     /* DB::raw('sum(dp.cantidad*dp.porcentaje) as total'),*/
                     /* DB::raw('sum(dp.total) as total'), */
                     'dp.total as total',
+                    'pedidos.condicion_envio as condicion_env',
                     'pedidos.condicion as condiciones',
                     'pedidos.envio',
                     'pedidos.direccion',
                     'pedidos.destino',
                     'pedidos.motivo',
                     'pedidos.responsable',
-                    'pedidos.created_at as fecha'
+                    /* 'pedidos.created_at as fecha' */
+                    DB::raw('DATE_FORMAT(pedidos.created_at, "%d/%m/%Y") as fecha')
                 )
                 ->where('pedidos.estado', '1')
                 ->where('dp.estado', '1')
@@ -988,6 +1075,7 @@ class PedidoController extends Controller
                     'dp.codigo',
                     'dp.nombre_empresa',
                     'dp.total',
+                    'pedidos.condicion_envio',
                     'pedidos.condicion',
                     'pedidos.envio',
                     'pedidos.direccion',
@@ -1012,6 +1100,7 @@ class PedidoController extends Controller
                     'dp.nombre_empresa as empresas',
                     /* DB::raw('sum(dp.total) as total'), */
                     'dp.total as total',
+                    'pedidos.condicion_envio as condicion_env',
                     'pedidos.condicion as condiciones',
                     'pedidos.envio',
                     'pedidos.direccion',
@@ -1019,7 +1108,8 @@ class PedidoController extends Controller
                     'pedidos.motivo',
                     'pedidos.responsable',
                     'pa.condicion as condicion_pa',
-                    'pedidos.created_at as fecha',
+                    /* 'pedidos.created_at as fecha', */
+                    DB::raw('DATE_FORMAT(pedidos.created_at, "%d/%m/%Y") as fecha'),
                     'pa.diferencia'
                 )
                 ->where('pedidos.estado', '1')
@@ -1034,6 +1124,7 @@ class PedidoController extends Controller
                     'dp.codigo',
                     'dp.nombre_empresa',
                     'dp.total',
+                    'pedidos.condicion_envio',
                     'pedidos.condicion',
                     'pedidos.envio',
                     'pedidos.direccion',
@@ -1058,13 +1149,15 @@ class PedidoController extends Controller
                     'dp.nombre_empresa as empresas',
                     /* DB::raw('sum(dp.total) as total'), */
                     'dp.total as total',
+                    'pedidos.condicion_envio as condicion_env',
                     'pedidos.condicion as condiciones',
                     'pedidos.envio',
                     'pedidos.direccion',
                     'pedidos.destino',
                     'pedidos.motivo',
                     'pedidos.responsable',
-                    'pedidos.created_at as fecha'
+                    /* 'pedidos.created_at as fecha' */
+                    DB::raw('DATE_FORMAT(pedidos.created_at, "%d/%m/%Y") as fecha')
                 )
                 ->where('pedidos.estado', '1')
                 ->where('dp.estado', '1')
@@ -1079,6 +1172,7 @@ class PedidoController extends Controller
                     'dp.codigo',
                     'dp.nombre_empresa',
                     'dp.total',
+                    'pedidos.condicion_envio',
                     'pedidos.condicion',
                     'pedidos.envio',
                     'pedidos.direccion',
@@ -1103,6 +1197,7 @@ class PedidoController extends Controller
                     'dp.nombre_empresa as empresas',
                     /* DB::raw('sum(dp.total) as total'), */
                     'dp.total as total',
+                    'pedidos.condicion_envio as condicion_env',
                     'pedidos.condicion as condiciones',
                     'pedidos.envio',
                     'pedidos.direccion',
@@ -1110,7 +1205,8 @@ class PedidoController extends Controller
                     'pedidos.motivo',
                     'pedidos.responsable',
                     'pa.condicion as condicion_pa',
-                    'pedidos.created_at as fecha',
+                    /* 'pedidos.created_at as fecha', */
+                    DB::raw('DATE_FORMAT(pedidos.created_at, "%d/%m/%Y") as fecha'),
                     'pa.diferencia'
                 )
                 ->where('pedidos.estado', '1')
@@ -1125,6 +1221,7 @@ class PedidoController extends Controller
                     'dp.codigo',
                     'dp.nombre_empresa',
                     'dp.total',
+                    'pedidos.condicion_envio',
                     'pedidos.condicion',
                     'pedidos.envio',
                     'pedidos.direccion',
@@ -1152,11 +1249,13 @@ class PedidoController extends Controller
                     /* DB::raw('sum(dp.cantidad*dp.porcentaje) as total'),*/
                     /* DB::raw('sum(dp.total) as total') */
                     'dp.total as total',
+                    'pedidos.condicion_envio as condicion_env',
                     'pedidos.condicion as condiciones',
                     'pedidos.envio',
                     'pedidos.direccion',
                     'pedidos.destino',
-                    'pedidos.created_at as fecha'
+                    /* 'pedidos.created_at as fecha' */
+                    DB::raw('DATE_FORMAT(pedidos.created_at, "%d/%m/%Y") as fecha')
                 )
                 ->where('pedidos.estado', '1')
                 ->where('dp.estado', '1')
@@ -1171,6 +1270,7 @@ class PedidoController extends Controller
                     'dp.codigo',
                     'dp.nombre_empresa',
                     'dp.total',
+                    'pedidos.condicion_envio',
                     'pedidos.condicion',
                     'pedidos.envio',
                     'pedidos.direccion',
@@ -1184,7 +1284,7 @@ class PedidoController extends Controller
 
         $superasesor = User::where('rol', 'Super asesor')->count();
 
-        return view('pedidos.misPedidos', compact('pedidos', 'pedidos2', 'destinos', 'superasesor'));
+        return view('pedidos.misPedidos', compact('pedidos', 'pedidos2', 'destinos', 'superasesor', 'dateMin', 'dateMax'));
     }
 
     public function Pagados()
@@ -1212,7 +1312,7 @@ class PedidoController extends Controller
             ->where('pedidos.estado', '1')
             ->where('dp.estado', '1')
             ->where('u.id', Auth::user()->id)
-            ->where('pa.condicion', 'ABONADO')
+            ->where('pa.condicion', 'PAGO')
             ->groupBy(
                 'pedidos.id',
                 'c.nombre',
@@ -2164,7 +2264,7 @@ class PedidoController extends Controller
             'modificador' => 'USER'.Auth::user()->id
         ]);
 
-        return redirect()->route('operaciones.atendidos')->with('info','actualizado');
+        return redirect()->route('envios.index')->with('info','actualizado');
     }
 
     public function SinEnviar(Pedido $pedido)
@@ -2447,8 +2547,25 @@ class PedidoController extends Controller
                 ->get();
         }
 
-        $direcciones = DireccionEnvio::where('estado', '1')
+        $direcciones = DireccionEnvio::join('direccion_pedidos as dp', 'direccion_envios.id', 'dp.direccion_id')
+                            /* ->join('pedidos as p', 'dp.pedido_id', 'p.id') */
+                            ->select('direccion_envios.id',
+                                    'direccion_envios.distrito',
+                                    'direccion_envios.direccion',
+                                    'direccion_envios.referencia',
+                                    'direccion_envios.nombre',
+                                    'direccion_envios.celular',
+                                    'dp.pedido_id as pedido_id',
+                                    )
+                            ->where('direccion_envios.estado', '1')
+                            ->where('dp.estado', '1')
+                            /* ->where('p.estado', '1') */
                             /* ->whereIn('pedido_id', $pedidos->id) */
+                            /* ->groupBy(
+                                'direccion_envios.id',
+                                'dp.id',
+                                'p.id'
+                            ) */
                             ->get();
 
         $superasesor = User::where('rol', 'Super asesor')->count();
@@ -2539,41 +2656,144 @@ class PedidoController extends Controller
 
         return redirect()->route('envios.index')->with('info','actualizado');
     }
-
-    public function DireccionEnvio(Request $request, Pedido $pedido)
-    {
-        $direccion = DireccionEnvio::create([
-            /* 'departamento' => $request->departamento,
-            'provincia' => $request->provincia, */
-            'pedido_id' => $pedido->id,
-            'distrito' => $request->distrito,
-            'direccion' => $request->direccion,
-            'referencia' => $request->referencia,
-            'nombre' => $request->nombre,
-            'celular' => $request->celular,
-            'estado' => '1'
-        ]);
-
-        $pedido->update([
-            'direccion' => '1'
-        ]);
-
-        return redirect()->route('envios.index')->with('info','actualizado');
-    }
     
     public function createDireccion(Pedido $pedido)
     {
+        $destinos = [
+            "LIMA" => 'LIMA',
+            "PROVINCIA" => 'PROVINCIA'
+        ];
+
+        $distritos = Distrito::whereIn('provincia', ['LIMA', 'CALLAO'])
+                            ->where('estado', '1')
+                            ->pluck('distrito', 'distrito');
+
         $clientes = Cliente::where('estado', '1')
                             ->where('id', $pedido->user_id)
                             ->first();
         $pedidos = Pedido::join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
                             ->select('pedidos.id', 
                                     'dp.codigo')
+                            ->where('pedidos.cliente_id', $pedido->cliente_id)
+                            ->where('pedidos.destino', null)
+                            ->where('pedidos.direccion', '0')
+                            ->where('pedidos.envio', '>', '0')
                             ->where('pedidos.estado', '1')
-                            ->where('pedidos.pago', '0')
                             ->get();
-        
-        return view('pedidos.createDireccion', compact('clientes', 'pedidos'));
+
+        return view('pedidos.createDireccion', compact('destinos', 'distritos', 'clientes', 'pedidos'));
+    }
+
+    public function DireccionEnvio(Request $request)
+    {
+        if ($request->destino == "LIMA")
+        {
+            try {
+                DB::beginTransaction();
+                
+                $direccionLima = DireccionEnvio::create([
+                    'cliente_id' => $request->cliente_id,
+                    'distrito' => $request->distrito,
+                    'direccion' => $request->direccion,
+                    'referencia' => $request->referencia,
+                    'nombre' => $request->nombre,
+                    'celular' => $request->celular,
+                    'estado' => '1'
+                ]);
+                    
+                // ALMACENANDO DIRECCION-PEDIDOS
+                $pedido_id = $request->pedido_id;
+                $contPe = 0;
+    
+                while ($contPe < count((array)$pedido_id)) {
+    
+                    $direccionPedido = DireccionPedido::create([
+                            'direccion_id' => $direccionLima->id,
+                            'pedido_id' => $pedido_id[$contPe],
+                            'estado' => '1'
+                        ]);
+    
+                    //INDICADOR DE PAGOS
+                    $pedido = Pedido::find($pedido_id[$contPe]);
+    
+                    $pedido->update([
+                        'destino' => $request->destino,
+                        'direccion' => '1',
+                    ]);
+    
+                    $contPe++;
+                }
+                DB::commit();
+            } catch (\Throwable $th) {
+                throw $th;
+                /*DB::rollback();
+                dd($th);*/
+            }
+
+        }
+
+        if ($request->destino == "PROVINCIA")
+        {
+            try {
+                DB::beginTransaction();
+
+                //IMPORTE
+                $importe = $request->importe;
+                $importe=str_replace(',','',$importe);
+
+                //FOTO
+                $files = $request->file('foto');
+                $destinationPath = base_path('public/storage/gastos/');
+
+                if(isset($files)){
+                    $file_name = Carbon::now()->second.$files->getClientOriginalName();
+                    $files->move($destinationPath , $file_name);
+                }
+                else{
+                    $file_name = 'logo_facturas.png';
+                }
+
+                $gastoProvincia = GastoEnvio::create([
+                    'cliente_id' => $request->cliente_id,
+                    'user_id' => Auth::user()->id,
+                    'tracking' => $request->tracking,
+                    'registro' => $request->registro,
+                    'foto' => $file_name,
+                    'importe' => $importe,
+                    'estado' => '1'
+                ]);
+
+                // ALMACENANDO DIRECCION-PEDIDOS
+                $pedido_id = $request->pedido_id;
+                $contPe = 0;
+
+                while ($contPe < count((array)$pedido_id)) {
+
+                    $gastoPedido = GastoPedido::create([
+                            'gasto_id' => $gastoProvincia->id,
+                            'pedido_id' => $pedido_id[$contPe],
+                            'estado' => '1'
+                        ]);
+
+                    //INDICADOR DE PAGOS
+                    $pedido = Pedido::find($pedido_id[$contPe]);
+
+                    $pedido->update([
+                        'destino' => $request->destino,
+                        'direccion' => '1',
+                    ]);
+
+                    $contPe++;
+                }
+                DB::commit();
+            } catch (\Throwable $th) {
+                throw $th;
+                /*DB::rollback();
+                dd($th);*/
+            }
+        }
+
+        return redirect()->route('envios.index')->with('info','actualizado');
     }
 
     public function UpdateDireccionEnvio(Request $request, DireccionEnvio $direccion)
@@ -2834,10 +3054,10 @@ class PedidoController extends Controller
             ->get();
         }
 
-        $imagenes = ImagenAtencion::where('estado', '1')->get();
+        /* $imagenes = ImagenAtencion::where('estado', '1')->get(); */
         $superasesor = User::where('rol', 'Super asesor')->count();
 
-        return view('pedidos.enviados', compact('dateMin', 'dateMax', 'pedidos', 'condiciones', 'imagenes', 'superasesor'));
+        return view('pedidos.enviados', compact('dateMin', 'dateMax', 'pedidos', 'condiciones', 'superasesor'));//'imagenes',
     }
 
     public function DescargarImagen($imagen)

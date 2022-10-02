@@ -21,34 +21,36 @@ class DashboardController extends Controller
         $dfecha = $mytime->day;
         
         //DASHBOARD ADMINISTRADOR
-            $pedidoxmes_total = User::select(DB::raw('sum(users.meta_pedido) as total'))
+            $pedidoxmes_total = User::select(DB::raw('sum(users.meta_pedido) as total'))//META PEDIDOS
                 ->where('users.rol', "ENCARGADO")
                 ->where('users.estado', '1')
                 /* ->whereMonth('pedidos.created_at', $mfecha) */
                 ->get();
-            $pagoxmes_total = Pedido::join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
+            $pagoxmes_total = Pedido::join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')//CANTIDAD DE PEDIDOS DEL MES
                 ->join('users as u', 'pedidos.user_id', 'u.id')
                 ->select(DB::raw('count(dp.id) as pedidos'))
                 ->where('u.rol', "ASESOR")
                 ->whereMonth('dp.created_at', $mfecha)
+                ->whereYear('dp.created_at', $afecha)
                 ->get();
-            $montopedidoxmes_total = User::select(DB::raw('sum(users.meta_cobro) as total'))
+            $montopedidoxmes_total = User::select(DB::raw('sum(users.meta_cobro) as total'))//META COBRANZAS
             ->where('users.rol', "ENCARGADO")
             ->where('users.estado', '1')
             /* ->whereMonth('pedidos.created_at', $mfecha) */
             ->get();
-            $montopagoxmes_total = Pago::
-                join('detalle_pagos as dpa', 'pagos.id', 'dpa.pago_id')
+            $montopagoxmes_total = Pago::join('detalle_pagos as dpa', 'pagos.id', 'dpa.pago_id')//CANTIDAD DE PAGOS DEL MES
                 ->select(DB::raw('sum(dpa.monto) as total'))
                 ->where('pagos.estado', '1')
                 ->where('dpa.estado', '1')
                 ->whereMonth('dpa.created_at', $mfecha)
+                ->whereYear('dpa.created_at', $afecha)
                 ->get();
             //PEDIDOS POR ASESOR EN EL MES
             $pedidosxasesor = Pedido::join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
                 ->join('users as u', 'pedidos.user_id', 'u.id')
                 ->select('u.identificador as users', DB::raw('count(dp.id) as pedidos'))
                 ->whereMonth('dp.created_at', $mfecha)
+                ->whereYear('dp.created_at', $afecha)
                 ->groupBy('u.identificador')
                 ->orderBy((DB::raw('count(dp.id)')), 'DESC')
                 ->get();
@@ -57,7 +59,9 @@ class DashboardController extends Controller
                 ->select('c.nombre as cliente', DB::raw('sum(pagos.total_cobro) as pagos'))
                 ->where('pagos.estado', '1')
                 ->whereMonth('pagos.created_at', $mfecha)
+                ->whereYear('pagos.created_at', $afecha)
                 ->groupBy('c.nombre')
+                ->orderBy(DB::raw('sum(pagos.total_cobro)'), 'DESC')
                 ->offset(0)
                 ->limit(30)
                 ->get();
@@ -66,6 +70,8 @@ class DashboardController extends Controller
                 ->join('users as u', 'pedidos.user_id', 'u.id')
                 ->select('u.name as users', DB::raw('count(dp.id) as pedidos'))
                 ->whereDay('dp.created_at', $dfecha)
+                ->whereMonth('dp.created_at', $mfecha)
+                ->whereYear('dp.created_at', $afecha)
                 ->groupBy('u.name')
                 ->orderBy((DB::raw('count(dp.id)')), 'DESC')                
                 ->get();
@@ -74,6 +80,7 @@ class DashboardController extends Controller
                 ->where('u.supervisor', Auth::user()->id)
                 ->where('pedidos.estado', '1')
                 ->whereMonth('pedidos.created_at', $mfecha)
+                ->whereYear('pedidos.created_at', $afecha)
                 ->count();
              $meta_pagoencargado = Pago::join('users as u', 'pagos.user_id', 'u.id')
                 ->join('detalle_pagos as dpa', 'pagos.id', 'dpa.pago_id')
@@ -81,6 +88,7 @@ class DashboardController extends Controller
                 ->where('u.supervisor', Auth::user()->id)
                 ->where('pagos.estado', '1')
                 ->whereMonth('pagos.created_at', $mfecha)
+                ->whereYear('pagos.created_at', $afecha)
                 ->first();
             //PEDIDOS DE MIS ASESORES EN EL MES
             $pedidosxasesor_encargado = Pedido::join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
@@ -88,6 +96,7 @@ class DashboardController extends Controller
                 ->select('u.name as users', DB::raw('count(dp.id) as pedidos'))
                 ->where('u.supervisor', Auth::user()->id)
                 ->whereMonth('dp.created_at', $mfecha)
+                ->whereYear('dp.created_at', $afecha)
                 ->groupBy('u.name')
                 ->orderBy((DB::raw('count(dp.id)')), 'DESC')
                 ->get();
@@ -108,6 +117,7 @@ class DashboardController extends Controller
                 ->where('u.supervisor', Auth::user()->id)
                 ->where('pagos.estado', '1')
                 ->whereMonth('pagos.created_at', $mfecha)
+                ->whereYear('pagos.created_at', $afecha)
                 ->groupBy('c.nombre')
                 ->offset(0)
                 ->limit(30)
@@ -118,6 +128,8 @@ class DashboardController extends Controller
                 ->select('u.name as users', DB::raw('count(dp.id) as pedidos'))
                 ->where('u.supervisor', Auth::user()->id)
                 ->whereDay('dp.created_at', $dfecha)
+                ->whereMonth('dp.created_at', $mfecha)
+                ->whereYear('dp.created_at', $afecha)
                 ->groupBy('u.name')
                 ->orderBy((DB::raw('count(dp.id)')), 'DESC')                
                 ->get();

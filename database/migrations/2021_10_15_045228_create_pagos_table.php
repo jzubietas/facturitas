@@ -25,6 +25,7 @@ class CreatePagosTable extends Migration
             $table->string('notificacion')->nullable();
             /* $table->decimal('saldo',10,2)->nullable(); */
             $table->decimal('diferencia',10,2)->nullable();
+            $table->date('fecha_aprobacion')->nullable();//CUANDO APRUEBAN EL PAGO
             $table->integer('estado');
 
             $table->timestamps();

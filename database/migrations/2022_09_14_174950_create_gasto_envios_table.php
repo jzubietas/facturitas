@@ -15,7 +15,7 @@ class CreateGastoEnviosTable extends Migration
     {
         Schema::create('gasto_envios', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('pedido_id');
+            $table->unsignedBigInteger('cliente_id');//ASIGNAR A CLIENTE
             $table->unsignedBigInteger('user_id');
             $table->string('tracking')->nullable();//NUMERO DE TRECKING
             $table->string('registro')->nullable();//NUMERO DE REGISTRO
@@ -25,7 +25,7 @@ class CreateGastoEnviosTable extends Migration
 
             $table->timestamps();
 
-            $table->foreign('pedido_id')->references('id')->on('pedidos');
+            $table->foreign('cliente_id')->references('id')->on('clientes');
             $table->foreign('user_id')->references('id')->on('users');
         });
     }

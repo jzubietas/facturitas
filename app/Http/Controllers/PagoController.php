@@ -843,6 +843,8 @@ class PagoController extends Controller
     public function updateRevisar(Request $request, Pago $pago)
     
     {   
+        $fecha_aprobacion = Carbon::now()->format('d/m/Y');
+
         try {
             DB::beginTransaction();           
 
@@ -853,6 +855,12 @@ class PagoController extends Controller
                 'condicion' => $condicion,
             ]);
 
+            if($condicion == "ABONADO")
+            {
+                $pago->update([
+                    'fecha_aprobacion' => $fecha_aprobacion,
+                ]);
+            }
             //INDICADOR DE DEUDA EN CLIENTE
             /* if($condicion == "ABONADO")
             {

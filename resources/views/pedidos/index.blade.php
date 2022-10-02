@@ -27,8 +27,6 @@
     </h1>
   </div>
   @endif
-
-  @include('pedidos.modal.AddRuc')
 @stop
 
 @section('content')
@@ -86,8 +84,8 @@
                 <td>{{ $pedido->condicion_pa }}</td>
                 <td>{{ $pedido->condicion_envio }}</td>
                 <td>@php echo '<span class="badge badge-success">Activo</span>';@endphp</td>
-                @if($pedido->diferencia>0)<td style="background: #ca3a3a; color:#ffffff; text-align: center">{{ $pedido->diferencia }}</td>
-                @else<td style="background: #44c24b; text-align: center">{{ $pedido->diferencia }}</td>
+                @if($pedido->diferencia>0)<td style="background: #ca3a3a; color:#ffffff; text-align: center;font-weight: bold;">{{ $pedido->diferencia }}</td>
+                @else<td style="background: #44c24b; text-align: center;font-weight: bold;">{{ $pedido->diferencia }}</td>
                 @endif
                 <td>
                   @can('pedidos.pedidosPDF')
@@ -125,8 +123,8 @@
                 <td>Responsable: {{ $pedido->responsable }}</td>
                 <td>{{ $pedido->condicion_envio }}</td>
                 <td>@php echo '<span class="badge badge-danger">Anulado</span>';@endphp</td>
-                @if($pedido->diferencia>0)<td style="background: #ca3a3a; color:#ffffff; text-align: center">{{ $pedido->diferencia }}</td>
-                @else<td style="background: #44c24b; text-align: center">{{ $pedido->diferencia }}</td>
+                @if($pedido->diferencia>0)<td style="background: #ca3a3a; color:#ffffff; text-align: center;font-weight: bold;">{{ $pedido->diferencia }}</td>
+                @else<td style="background: #44c24b; text-align: center;font-weight: bold;">{{ $pedido->diferencia }}</td>
                 @endif
                 <td>
                   @can('pedidos.pedidosPDF')
@@ -169,7 +167,7 @@
                 <td>SIN PAGOS REGISTRADOS</td>
                 <td>{{ $pedido->condicion_envio }}</td>
                 <td>@php echo '<span class="badge badge-success">Activo</span>';@endphp</td>
-                <td style="background: #ca3a3a; color: white">SIN ABONOS</td>
+                <td style="background: #ca3a3a; color: white; text-align: center;font-weight: bold;">@php echo number_format($pedido->total,2) @endphp</td>
                 <td>
                   @can('pedidos.pedidosPDF')
                     <a href="{{ route('pedidosPDF', $pedido) }}" class="btn btn-primary btn-sm" target="_blank"><i class="fa fa-file-pdf"></i> PDF</a>
@@ -206,7 +204,7 @@
                 <td>Responsable: {{ $pedido->responsable }}</td>
                 <td>{{ $pedido->condicion_envio }}</td>
                 <td>@php echo '<span class="badge badge-danger">Anulado</span>';@endphp</td>
-                <td style="background: #ca3a3a; color: white">SIN ABONOS</td>
+                <td style="background: #ca3a3a; color: white; text-align: center;font-weight: bold;">@php echo number_format($pedido->total,2) @endphp</td>
                 <td>
                   @can('pedidos.pedidosPDF')
                     <a href="{{ route('pedidosPDF', $pedido) }}" class="btn btn-primary btn-sm" target="_blank"><i class="fa fa-file-pdf"></i> PDF</a>

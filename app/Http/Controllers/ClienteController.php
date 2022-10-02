@@ -24,6 +24,21 @@ class ClienteController extends Controller
         $dateM = Carbon::now()->format('m');
         $dateY = Carbon::now()->format('Y');
 
+        $anios = [
+            "2020" => '2020 - 2021',
+            "2021" => '2021 - 2022',
+            "2022" => '2022 - 2023',
+            "2023" => '2023 - 2024',
+            "2024" => '2024 - 2025',
+            "2025" => '2025 - 2026',
+            "2026" => '2026 - 2027',
+            "2027" => '2027 - 2028',
+            "2028" => '2028 - 2029',
+            "2029" => '2029 - 2030',
+            "2030" => '2030 - 2031',
+            "2031" => '2031 - 2032',
+        ];
+
         if (Auth::user()->rol == "Asesor"){
             $clientes1 = Cliente:://CLIENTES CON PEDIDOS CON DEUDA
                 join('users as u', 'clientes.user_id', 'u.id')
@@ -405,7 +420,7 @@ class ClienteController extends Controller
 
         $superasesor = User::where('rol', 'Super asesor')->count();
 
-        return view('clientes.index', compact('clientes1', 'clientes2', 'clientes3', 'dateM', 'dateY', 'superasesor'));
+        return view('clientes.index', compact('clientes1', 'clientes2', 'clientes3', 'anios', 'dateM', 'dateY', 'superasesor'));
     }
 
     /**

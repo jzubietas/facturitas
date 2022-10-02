@@ -22,9 +22,21 @@
                       @error('num_ruc')
                         <small class="text-danger" style="font-size: 16px">{{ $message }}</small>
                       @enderror                 
-                      <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                          {!! Form::label('agregarruc', 'Numero de RUC  a registrar') !!}
-                          <input type="number" name="agregarruc" id="agregarruc" step="1" min="0" max="99999999999" maxlength="11" oninput="maxLengthCheck(this)" class="form-control" placeholder="RUC..." required>
+                      <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                        {!! Form::label('agregarruc', 'Numero de RUC  a registrar') !!}
+                        <input type="number" name="agregarruc" id="agregarruc" step="1" min="0" max="99999999999" maxlength="11" oninput="maxLengthCheck(this)" class="form-control" placeholder="RUC..." required>
+                      </div>
+                      <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                        {!! Form::label('cliente_id_ruc', 'cliente') !!}
+                        <select name="cliente_id_ruc" class="border form-control selectpicker border-secondary" id="cliente_id" data-live-search="true" required>
+                          <option value="">---- SELECCIONE CLIENTE ----</option>
+                            @foreach($clientes_ruc as $cliente)
+                              <option value="{{ $cliente->id }}">{{$cliente->celular}} - {{$cliente->nombre}}</option>   
+                            @endforeach
+                        </select>
+                        {{-- <select name="cliente_id_ruc" id="cliente_id_ruc" class="border form-control selectpicker border-secondary" data-live-search="true">
+                          <option value="">---- SELECCIONE ----</option>
+                        </select> --}}
                       </div>
                     </div>
                   </div>

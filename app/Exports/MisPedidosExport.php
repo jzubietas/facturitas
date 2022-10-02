@@ -15,53 +15,118 @@ class MisPedidosExport implements FromView
      */
     public function view(): View
     {
-        $pedidos = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')
+        $pedidos = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')//PEDIDOS CON PAGOS
             ->join('users as u', 'pedidos.user_id', 'u.id')
             ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
             ->join('pago_pedidos as pp', 'pedidos.id','pp.pedido_id')
             ->join('pagos as pa', 'pp.pago_id', 'pa.id')
             ->select(
                 'pedidos.id',
+                'pedidos.creador',
+                DB::raw('DATE_FORMAT(pedidos.updated_at, "%d/%m/%Y") as fecha_mod'),
+                'pedidos.modificador',
+                'u.nombre as asesor_nombre',
+                'u.identificador as asesor_identificador',
+                DB::raw('DATE_FORMAT(pedidos.created_at, "%d/%m/%Y") as fecha'),
+                'pedidos.codigo as codigos',
                 'c.nombre as nombres',
                 'c.celular as celulares',
-                'u.name as users',
-                'dp.codigo as codigos',
                 'dp.nombre_empresa as empresas',
-                DB::raw('sum(dp.total) as total'),
-                'pedidos.condicion as condiciones',
-                'pa.condicion as condicion_pa',
-                'pedidos.created_at as fecha'
+                'dp.mes',
+                'dp.ruc',
+                'dp.cantidad',
+                'dp.tipo_banca',
+                'dp.porcentaje',
+                DB::raw('sum(dp.cantidad*dp.porcentaje) as importe'),
+                'dp.courier',
+                'dp.total as total',
+                'dp.cant_compro',
+                'u.operario',
+                'pedidos.condicion as estado_pedido',
+                'pedidos.condicion_envio as estado_envio',
+                'pa.id as pago_id',
+                'pa.created_at as fecha_pago',
+                'pa.condicion as estado_pago',
+                'pa.diferencia',  
+                'pa.fecha_aprobacion',
+                'pedidos.responsable',
+                'pedidos.motivo',
+                'pedidos.estado'
+                /* 'pedidos.created_at as fecha', */
+                /* DB::raw('sum(dp.cantidad*dp.porcentaje) as total'),*/
+                /* DB::raw('sum(dp.total) as total'), */
+                /* 'pedidos.updated_at as fecha_mod', */
             )
             ->where('pedidos.estado', '1')
             ->where('dp.estado', '1')
+            ->where('pedidos.pago', '1')
+            ->where('pa.estado', '1')
             ->where('u.id', Auth::user()->id)
             ->groupBy(
                 'pedidos.id',
+                'pedidos.creador',
+                'pedidos.updated_at',
+                'pedidos.modificador',
+                'u.nombre',
+                'u.identificador',
+                'pedidos.created_at',
+                'pedidos.codigo',
                 'c.nombre',
                 'c.celular',
-                'u.name',
-                'dp.codigo',
                 'dp.nombre_empresa',
+                'dp.mes',
+                'dp.ruc',
+                'dp.cantidad',
+                'dp.tipo_banca',
+                'dp.porcentaje',
+                'dp.courier',
+                'dp.total',
+                'dp.cant_compro',
+                'u.operario',
                 'pedidos.condicion',
+                'pedidos.condicion_envio',
+                'pa.id',
+                'pa.created_at',
                 'pa.condicion',
-                'pedidos.created_at')
+                'pa.diferencia',  
+                'pa.fecha_aprobacion',
+                'pedidos.responsable',
+                'pedidos.motivo',
+                'pedidos.estado'
+                )
             ->orderBy('pedidos.created_at', 'DESC')
             ->get();
 
-        $pedidos2 = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')
+            $pedidos2 = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')//PEDIDOS SIN PAGOS
             ->join('users as u', 'pedidos.user_id', 'u.id')
             ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
             ->select(
                 'pedidos.id',
+                'pedidos.creador',
+                DB::raw('DATE_FORMAT(pedidos.updated_at, "%d/%m/%Y") as fecha_mod'),
+                'pedidos.modificador',
+                'u.nombre as asesor_nombre',
+                'u.identificador as asesor_identificador',
+                DB::raw('DATE_FORMAT(pedidos.created_at, "%d/%m/%Y") as fecha'),
+                'pedidos.codigo as codigos',
                 'c.nombre as nombres',
                 'c.celular as celulares',
-                'u.name as users',
-                'dp.codigo as codigos',
                 'dp.nombre_empresa as empresas',
-                /* DB::raw('sum(dp.cantidad*dp.porcentaje) as total'),*/
-                DB::raw('sum(dp.total) as total'),
-                'pedidos.condicion as condiciones',
-                'pedidos.created_at as fecha'
+                'dp.mes',
+                'dp.ruc',
+                'dp.cantidad',
+                'dp.tipo_banca',
+                'dp.porcentaje',
+                DB::raw('sum(dp.cantidad*dp.porcentaje) as importe'),
+                'dp.courier',
+                'dp.total as total',
+                'dp.cant_compro',
+                'u.operario',
+                'pedidos.condicion as estado_pedido',
+                'pedidos.condicion_envio as estado_envio',
+                'pedidos.responsable',
+                'pedidos.motivo',
+                'pedidos.estado'
             )
             ->where('pedidos.estado', '1')
             ->where('dp.estado', '1')
@@ -70,13 +135,31 @@ class MisPedidosExport implements FromView
             ->where('pedidos.pago', '0')
             ->groupBy(
                 'pedidos.id',
+                'pedidos.creador',
+                'pedidos.updated_at',
+                'pedidos.modificador',
+                'u.nombre',
+                'u.identificador',
+                'pedidos.created_at',
+                'pedidos.codigo',
                 'c.nombre',
                 'c.celular',
-                'u.name',
-                'dp.codigo',
                 'dp.nombre_empresa',
+                'dp.mes',
+                'dp.ruc',
+                'dp.cantidad',
+                'dp.tipo_banca',
+                'dp.porcentaje',
+                'dp.courier',
+                'dp.total',
+                'dp.cant_compro',
+                'u.operario',
                 'pedidos.condicion',
-                'pedidos.created_at')
+                'pedidos.condicion_envio',                
+                'pedidos.responsable',
+                'pedidos.motivo',
+                'pedidos.estado'
+                )
             ->orderBy('pedidos.created_at', 'DESC')
             ->get();
 
