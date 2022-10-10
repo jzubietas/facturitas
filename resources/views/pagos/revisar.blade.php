@@ -27,7 +27,7 @@
                   <th scope="col" class="col-lg-2" style="text-align: right;">CLIENTE:</th>
                   <th scope="col">{{ $pagos->celular }} - {{ $pagos->nombre }}</th>
                 </td>
-                <td>
+                {{-- <td>
                   <th scope="col" colspan="" class="col-lg-2" style="text-align: right;">ESTADO:</th>
                   <th scope="col">
                     <select name="condicion" class="border form-control selectpicker border-secondary" id="condicion" data-live-search="true">
@@ -37,7 +37,7 @@
                         @endforeach
                     </select>
                   </th>
-                </td>
+                </td> --}}
               </tr>
             </thead>
           </table>
@@ -157,11 +157,23 @@
                   @endforeach
                 </tbody>
                 <tfoot>
-                  <th style="text-align: center">TOTAL</th>
+                  <th style="text-align: center">TOTAL:</th>
                   <th></th>
                   <th></th>
                   <th><h4><?php echo number_format($sumPa, 2, '.', ' ')?></h4></th>
                   <th></th>  
+                  <th></th>
+                  <th></th>
+                  <th></th>
+                  <th style="text-align: center">ESTADO:</th>
+                  <th>
+                    <select name="condicion" class="border form-control selectpicker border-secondary" id="condicion" data-live-search="true">
+                      <option value="">---- SELECCIONE ----</option>
+                      @foreach($condiciones as $condicion)
+                      <option value="{{ $condicion }}" {{ ($condicion == $pagos->condicion ? "selected" : "") }}>{{$condicion}}</option>
+                      @endforeach
+                    </select>
+                </th>
                 </tfoot>
               </table>
             </div>

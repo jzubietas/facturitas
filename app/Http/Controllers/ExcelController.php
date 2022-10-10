@@ -7,6 +7,7 @@ use App\Exports\BaseFriaPorAsesorExport;
 use App\Exports\BasesFriasExport;
 use App\Exports\ClientesExport;
 use App\Exports\ClientesPedidosExport;
+use App\Exports\EntregadosPorFechasExport;
 use App\Exports\MisPagosExport;
 use App\Exports\MisPedidosExport;
 use App\Exports\PagosAprobadosExport;
@@ -148,12 +149,12 @@ class ExcelController extends Controller
                 ->download('Lista de pedidos operaciones.xlsx');
     }
 
-    public function pedidosporfechasExcel(Request $request)
+    public function entregadosporfechasexcel(Request $request)//ENTREGADOS POR FECHAS
     {
-        return (new PedidosPorFechasExport)
-                ->pedidos($request)
-                ->pedidos2($request)
-                ->download('reporte pedidos y pagos.xlsx');
+        return (new EntregadosPorFechasExport)
+                ->pedidosLima($request)
+                ->pedidosProvincia($request)
+                ->download('reporte pedidos entregados.xlsx');
     }
     public function pagosporasesorExcel(Request $request)
     {

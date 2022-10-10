@@ -5,7 +5,7 @@
       <th style="background-color: #D9D9D9; text-align: center; color: #000000;">ID</th>
       <th style="background-color: #D9D9D9; text-align: center; color: #000000;">USUARIO QUE CREO EL PEDIDO</th>
       <th style="background-color: #D9D9D9; text-align: center; color: #000000;">FECHA DE ÚLTIMA MODIFIACIÓN</th>
-      <th style="background-color: #D9D9D9; text-align: center; color: #000000;">USUARIO DE ÚLTIMA MODIFIACIÓN</th>
+      <th style="background-color: #D9D9D9; text-align: center; color: #000000;">USUARIO DE ÚLTIMA MODIFICACIÓN</th>
       <th style="background-color: #D9D9D9; text-align: center; color: #000000;">ASESOR NOMBRE</th>
       <th style="background-color: #D9D9D9; text-align: center; color: #000000;">ASESOR IDENTIFICADOR</th>
       <th style="background-color: #D9D9D9; text-align: center; color: #000000;">FECHA DE PEDIDO</th>
@@ -25,10 +25,10 @@
       <th style="background-color: #D9D9D9; text-align: center; color: #000000;">OPERARIO QUE EMITIO LA FACTURA</th>
       <th style="background-color: #FFFF00; text-align: center; color: #000000;">ESTADO DE PEDIDO</th>
       <th style="background-color: #FFFF00; text-align: center; color: #000000;">ESTADO DE SOBRE</th>
-      <th style="background-color: #FFC000; text-align: center; color: #000000;">FECHA DE REGISTRO DE PAGO</th>
-      <th style="background-color: #FFC000; text-align: center; color: #000000;">FECHA DE VOUCHER</th>
+      <th style="background-color: #FFC000; text-align: center; color: #000000;">FECHA DE CANCELACION DE PAGO</th>
+      {{-- <th style="background-color: #FFC000; text-align: center; color: #000000;">FECHA DE VOUCHER</th>
       <th style="background-color: #FFC000; text-align: center; color: #000000;">IMPORTE PAGADO</th>
-      <th style="background-color: #FFC000; text-align: center; color: #000000;">BANCO</th>
+      <th style="background-color: #FFC000; text-align: center; color: #000000;">BANCO</th> --}}
       <th style="background-color: #FFC000; text-align: center; color: #000000;">ESTADO DE PAGO</th>
       <th style="background-color: #FF0000; text-align: center; color: #000000;">DIFERENCIA</th>
       <th style="background-color: #92D050; text-align: center; color: #000000;">FECHA DE APROBACIÓN DE PAGO</th>
@@ -51,7 +51,7 @@
         @else
           <td>PED0{{ $pedido->id }}</td>
         @endif
-        <td></td>{{-- CREADOR --}}
+        <td>{{ $pedido->creador }}</td>{{-- CREADOR --}}
         <td>{{ $pedido->fecha_mod }}</td>{{-- FECHA MODIFICACION --}}
         <td>{{ $pedido->modificador }}</td>{{-- USUARIO MODIFICADOR --}}
         <td>{{ $pedido->asesor_nombre }}</td>{{-- ASESOR NOMBRE --}}
@@ -61,28 +61,30 @@
         <td>{{ $pedido->nombres }}</td>{{-- NOMBRE CLIENTE --}}
         <td>{{ $pedido->celulares }}</td>{{-- TELEFONO CLIENTE --}}
         <td>{{ $pedido->empresas }}</td>{{-- RAZON SOCIAL --}}
-        <td></td>{{-- MES --}}
-        <td></td>{{-- RUC --}}
-        <td></td>{{-- CANTIDAD PEDIDO --}}
-        <td></td>{{-- TIPO --}}
-        <td></td>{{-- PORCENTAJE --}}
-        <td></td>{{-- IMPORTE A PAGAR --}}
+        <td>{{ $pedido->mes }}</td>{{-- MES --}}
+        <td>{{ $pedido->ruc }}</td>{{-- RUC --}}
+        <td>{{ $pedido->cantidad }}</td>{{-- CANTIDAD PEDIDO --}}
+        <td>{{ $pedido->tipo }}</td>{{-- TIPO --}}
+        <td>{{ $pedido->porcentaje }}</td>{{-- PORCENTAJE --}}
+        <td>{{ $pedido->importe }}</td>{{-- IMPORTE A PAGAR --}}
         <td>{{ $pedido->courier }}</td>{{-- COURIER --}}
         <td>{{ $pedido->total }}</td>{{-- TOTAL A PAGAR --}}
-        <td></td>{{-- CANTIDAD COMPROBANTES --}}
-        <td></td>{{-- OPERARIO EMITIO FACTURA --}}        
-        <td>{{ $pedido->condiciones }}</td>{{-- ESTADO PEDIDO --}}
-        <td></td>{{-- ESTADO SOBRE --}}
-        <td></td>{{-- FECHA DE PAGO --}}
-        <td></td>{{-- FECHA DE VOUCHER --}}
-        <td></td>{{-- IMPORTE PAGADO --}}
-        <td></td>{{-- BANCO --}}
-        <td>{{ $pedido->condicion_pa }}</td>{{-- ESTADO PAGO --}}
+        <td>
+            {{ $pedido->cant_compro }}
+        </td>{{-- CANTIDAD COMPROBANTES --}}
+        <td>USER0{{ $pedido->operario }}</td>{{-- OPERARIO EMITIO FACTURA --}}        
+        <td>{{ $pedido->estado_pedido }}</td>{{-- ESTADO PEDIDO --}}
+        <td>{{ $pedido->estado_envio }}</td>{{-- ESTADO SOBRE --}}
+        <td>{{ $pedido->fecha_ult_pago }}</td>{{-- FECHA CANCELACION DE PAGO --}}
+        {{-- FECHA DE VOUCHER --}}
+        {{-- IMPORTE PAGADO --}}
+        {{-- BANCO --}}
+        <td>{{ $pedido->estado_pago }}</td>{{-- ESTADO PAGO --}}
         <td>{{ $pedido->diferencia }}</td>{{-- DIFERENCIA --}}
-        <td></td>{{-- FECHA APROBACION PAGO --}}
+        <td>{{ $pedido->fecha_aprobacion }}</td>{{-- FECHA APROBACION PAGO --}}
         <td></td>
-        <td></td>{{-- RESPONSABLE --}}
-        <td></td>{{-- MOTIVO ANULACION --}}
+        <td>{{ $pedido->responsable }}</td>{{-- RESPONSABLE --}}
+        <td>{{ $pedido->motivo }}</td>{{-- MOTIVO ANULACION --}}
       </tr>
       <?php $cont++; ?>
     @endforeach
@@ -98,38 +100,40 @@
         @else
           <td>PED0{{ $pedido->id }}</td>
         @endif
-        <td></td>{{-- CREADOR --}}
+        <td>{{ $pedido->creador }}</td>{{-- CREADOR --}}
         <td>{{ $pedido->fecha_mod }}</td>{{-- FECHA MODIFICACION --}}
         <td>{{ $pedido->modificador }}</td>{{-- USUARIO MODIFICADOR --}}
-        <td></td>{{-- ASESOR NOMBRE --}}
-        <td>{{ $pedido->users }}</td>{{-- ASESOR IDENTIFICADOR --}}
+        <td>{{ $pedido->asesor_nombre }}</td>{{-- ASESOR NOMBRE --}}
+        <td>{{ $pedido->asesor_identificador }}</td>{{-- ASESOR IDENTIFICADOR --}}
         <td>{{ $pedido->fecha }}</td>{{-- FECHA PEDIDO --}}
         <td>{{ $pedido->codigos }}</td>{{-- CODIGO PEDIDO --}}
         <td>{{ $pedido->nombres }}</td>{{-- NOMBRE CLIENTE --}}
         <td>{{ $pedido->celulares }}</td>{{-- TELEFONO CLIENTE --}}
         <td>{{ $pedido->empresas }}</td>{{-- RAZON SOCIAL --}}
-        <td></td>{{-- MES --}}
-        <td></td>{{-- RUC --}}
-        <td></td>{{-- CANTIDAD PEDIDO --}}
-        <td></td>{{-- TIPO --}}
-        <td></td>{{-- PORCENTAJE --}}
-        <td></td>{{-- IMPORTE A PAGAR --}}
+        <td>{{ $pedido->mes }}</td>{{-- MES --}}
+        <td>{{ $pedido->ruc }}</td>{{-- RUC --}}
+        <td>{{ $pedido->cantidad }}</td>{{-- CANTIDAD PEDIDO --}}
+        <td>{{ $pedido->tipo }}</td>{{-- TIPO --}}
+        <td>{{ $pedido->porcentaje }}</td>{{-- PORCENTAJE --}}
+        <td>{{ $pedido->importe }}</td>{{-- IMPORTE A PAGAR --}}
         <td>{{ $pedido->courier }}</td>{{-- COURIER --}}
         <td>{{ $pedido->total }}</td>{{-- TOTAL A PAGAR --}}
-        <td></td>{{-- CANTIDAD COMPROBANTES --}}
-        <td></td>{{-- OPERARIO EMITIO FACTURA --}}        
-        <td>{{ $pedido->condiciones }}</td>{{-- ESTADO PEDIDO --}}
-        <td></td>{{-- ESTADO SOBRE --}}
-        <td></td>{{-- FECHA DE PAGO --}}
-        <td></td>{{-- FECHA DE VOUCHER --}}
-        <td></td>{{-- IMPORTE PAGADO --}}
-        <td></td>{{-- BANCO --}}
-        <td>SIN PAGOS</td>{{-- ESTADO PAGO --}}
+        <td>
+            {{ $pedido->cant_compro }}
+        </td>{{-- CANTIDAD COMPROBANTES --}}
+        <td>USER0{{ $pedido->operario }}</td>{{-- OPERARIO EMITIO FACTURA --}}        
+        <td>{{ $pedido->estado_pedido }}</td>{{-- ESTADO PEDIDO --}}
+        <td>{{ $pedido->estado_envio }}</td>{{-- ESTADO SOBRE --}}
+        <td style="color: #FF0000">SIN PAGOS</td>{{-- FECHA CANCELACION DE PAGO --}}
+        {{-- FECHA DE VOUCHER --}}
+        {{-- IMPORTE PAGADO --}}
+        {{-- BANCO --}}
+        <td style="color: #FF0000">SIN PAGOS</td>{{-- ESTADO PAGO --}}
         <td>{{ $pedido->total }}</td>{{-- DIFERENCIA --}}
-        <td></td>{{-- FECHA APROBACION PAGO --}}
+        <td style="color: #FF0000">SIN PAGOS</td>{{-- FECHA APROBACION PAGO --}}
         <td></td>
-        <td></td>{{-- RESPONSABLE --}}
-        <td></td>{{-- MOTIVO ANULACION --}}
+        <td>{{ $pedido->responsable }}</td>{{-- RESPONSABLE --}}
+        <td>{{ $pedido->motivo }}</td>{{-- MOTIVO ANULACION --}}
       </tr>
       <?php $cont++; ?>
     @endforeach

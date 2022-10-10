@@ -1,9 +1,9 @@
 @extends('adminlte::page')
 
-@section('title', 'Lista de pedidos pagados')
+@section('title', 'Lista de pedidos entregados')
 
 @section('content_header')
-  <h1>Lista de pedidos enviados - ENVIOS
+  <h1>Lista de pedidos entregados - ENVIOS
     {{-- <div class="float-right btn-group dropleft">
       <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         Exportar
@@ -12,6 +12,17 @@
         <a href="{{ route('pedidosporatenderExcel') }}" class="dropdown-item"><img src="{{ asset('imagenes/icon-excel.png') }}"> EXCEL</a>
       </div>
     </div> --}}
+    {{-- @can('clientes.exportar') --}}
+    <div class="float-right btn-group dropleft">
+      <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        Exportar
+      </button>
+      <div class="dropdown-menu">
+        <a href="" data-target="#modal-exportar" data-toggle="modal" class="dropdown-item" target="blank_"><img src="{{ asset('imagenes/icon-excel.png') }}"> Excel</a>
+      </div>
+    </div>
+    @include('pedidos.modal.exportar')
+    {{-- @endcan --}}
   </h1>
   @if($superasesor > 0)
   <br>

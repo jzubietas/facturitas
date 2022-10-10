@@ -64,6 +64,7 @@
 @stop
 
 @section('js')
+  <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script>
     //VALIDAR CAMPO CELULAR
     function maxLengthCheck(object)
@@ -88,24 +89,37 @@
             'Seleccione asesor para el cliente',
             'warning'
           )
-        }
-        else if (celular == ''){
-          Swal.fire(
-            'Error',
-            'Agregue número celular del cliente',
-            'warning'
-          )
-        }
-        else if (celular.length != 9){
-          Swal.fire(
-            'Error',
-            'Número celular del cliente debe tener 9 dígitos',
-            'warning'
-          )
-        }
-        else {
-          this.submit();
-        }      
+      }
+      else if (celular == ''){
+        Swal.fire(
+          'Error',
+          'Agregue número celular del cliente',
+          'warning'
+        )
+      }
+      else if (celular.length != 9){
+        Swal.fire(
+          'Error',
+          'Número celular del cliente debe tener 9 dígitos',
+          'warning'
+        )
+      }
+      else {
+        //this.submit();
+        Swal.fire({
+            icon: 'warning',
+            title: '¿Estás seguro?',
+            text: "Vas a guardar el número: " + celular + " como base fría",            
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sí, guardar!'
+          }).then((result) => {
+            if (result.isConfirmed) {
+              this.submit();
+            }
+          })
+      }      
     }
   </script>
 @stop

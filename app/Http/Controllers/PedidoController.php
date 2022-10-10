@@ -388,11 +388,97 @@ class PedidoController extends Controller
                                 'clientes.estado'
                                 ]);
         }else{
-            $clientes1 = Cliente::where('estado', '1')
-                                ->where('tipo', '1')
-                                ->get();
-            $clientes2 = [];
-            $clientes3 = [];
+            $clientes1 = Cliente:://CLIENTES CON PEDIDOS CON DEUDA
+                join('users as u', 'clientes.user_id', 'u.id')
+                ->join('pedidos as p', 'clientes.id', 'p.cliente_id')
+                ->where('clientes.estado','1')
+                ->where('clientes.tipo','1')
+                ->where('clientes.pidio','1')
+                ->where('clientes.deuda', '1')
+                ->groupBy(
+                    'clientes.id',
+                    'clientes.nombre',
+                    'clientes.celular', 
+                    'clientes.estado', 
+                    'u.name',
+                    'u.identificador',
+                    'clientes.provincia',
+                    'clientes.distrito',
+                    'clientes.direccion'
+                )
+                ->get(['clientes.id', 
+                        'clientes.nombre', 
+                        'clientes.celular', 
+                        'clientes.estado', 
+                        'u.name as user',
+                        'u.identificador',
+                        'clientes.provincia',
+                        'clientes.distrito',
+                        'clientes.direccion',
+                        DB::raw('count(p.created_at) as cantidad'),
+                        DB::raw('MAX(p.created_at) as fecha'),
+                        DB::raw('MAX(DATE_FORMAT(p.created_at, "%d")) as dia'),
+                        DB::raw('MAX(DATE_FORMAT(p.created_at, "%m")) as mes'),
+                        DB::raw('MAX(DATE_FORMAT(p.created_at, "%Y")) as anio')
+                        ]);
+            $clientes2 = Cliente:://CLIENTES CON PEDIDOS SIN DEUDA
+                join('users as u', 'clientes.user_id', 'u.id')
+                ->join('pedidos as p', 'clientes.id', 'p.cliente_id')
+                ->where('clientes.estado','1')
+                ->where('clientes.tipo','1')
+                ->where('clientes.pidio','1')
+                ->where('clientes.deuda', '0')
+                ->groupBy(
+                    'clientes.id',
+                    'clientes.nombre',
+                    'clientes.celular', 
+                    'clientes.estado', 
+                    'u.name',
+                    'u.identificador',
+                    'clientes.provincia',
+                    'clientes.distrito',
+                    'clientes.direccion'
+                )
+                ->get(['clientes.id', 
+                        'clientes.nombre', 
+                        'clientes.celular', 
+                        'clientes.estado', 
+                        'u.name as user',
+                        'u.identificador',
+                        'clientes.provincia',
+                        'clientes.distrito',
+                        'clientes.direccion',
+                        DB::raw('MAX(p.created_at) as fecha'),
+                        DB::raw('MAX(DATE_FORMAT(p.created_at, "%d")) as dia'),
+                        DB::raw('MAX(DATE_FORMAT(p.created_at, "%m")) as mes'),
+                        DB::raw('MAX(DATE_FORMAT(p.created_at, "%Y")) as anio')
+                        ]);
+            $clientes3 = Cliente:://CLIENTES SIN PEDIDOS
+                join('users as u', 'clientes.user_id', 'u.id')
+                ->where('clientes.estado','1')
+                ->where('clientes.tipo','1')
+                ->where('clientes.pidio','0')
+                ->groupBy(
+                    'clientes.id',
+                    'clientes.nombre',
+                    'clientes.celular', 
+                    'clientes.estado', 
+                    'u.name',
+                    'u.identificador',
+                    'clientes.provincia',
+                    'clientes.distrito',
+                    'clientes.direccion'
+                )
+                ->get(['clientes.id', 
+                        'clientes.nombre', 
+                        'clientes.celular', 
+                        'clientes.estado', 
+                        'u.name as user',
+                        'u.identificador',
+                        'clientes.provincia',
+                        'clientes.distrito',
+                        'clientes.direccion'
+                        ]);
             $deudores = Cliente::where('estado', '1')
                                 ->where('tipo', '1')
                                 ->where('deuda', '1')
@@ -730,8 +816,8 @@ class PedidoController extends Controller
             ->orderBy('pedidos.created_at', 'DESC')
             ->get();
 
-        $imagenes = ImagenPedido::where('imagen_pedidos.pedido_id', $pedido->id)->get();
-        $imagenesatencion = ImagenAtencion::where('imagen_atencions.pedido_id', $pedido->id)->get();
+        $imagenes = ImagenPedido::where('imagen_pedidos.pedido_id', $pedido->id)->where('estado', '1')->get();
+        $imagenesatencion = ImagenAtencion::where('imagen_atencions.pedido_id', $pedido->id)->where('estado', '1')->get();
 
         return view('pedidos.show', compact('pedidos', 'imagenes', 'imagenesatencion'));
     }
@@ -987,7 +1073,7 @@ class PedidoController extends Controller
         ];
 
         if(Auth::user()->rol == "Asesor" || Auth::user()->rol == "Super asesor"){
-            $pedidos = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')
+            $pedidos = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')//PEDIDOS CON PAGOS
                 ->join('users as u', 'pedidos.user_id', 'u.id')
                 ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
                 ->join('pago_pedidos as pp', 'pedidos.id','pp.pedido_id')
@@ -1008,10 +1094,11 @@ class PedidoController extends Controller
                     'pedidos.destino',
                     'pedidos.motivo',
                     'pedidos.responsable',
+                    'pa.total_cobro',
+                    'pa.total_pagado',
+                    'pa.diferencia',
                     'pa.condicion as condicion_pa',
-                    /* 'pedidos.created_at as fecha', */
-                    DB::raw('DATE_FORMAT(pedidos.created_at, "%d/%m/%Y") as fecha'),
-                    'pa.diferencia'
+                    DB::raw('DATE_FORMAT(pedidos.created_at, "%d/%m/%Y") as fecha')                    
                 )
                 ->where('pedidos.estado', '1')
                 ->where('dp.estado', '1')
@@ -1033,13 +1120,16 @@ class PedidoController extends Controller
                     'pedidos.destino',
                     'pedidos.motivo',
                     'pedidos.responsable',
+                    'pa.total_cobro',
+                    'pa.total_pagado',
                     'pa.condicion',
                     'pedidos.created_at',
-                    'pa.diferencia')
+                    'pa.diferencia'
+                    )
                 ->orderBy('pedidos.created_at', 'DESC')
                 ->get();
 
-            $pedidos2 = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')
+            $pedidos2 = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')//PEDIDOS SIN PAGOS
                 ->join('users as u', 'pedidos.user_id', 'u.id')
                 ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
                 ->select(
@@ -1059,7 +1149,6 @@ class PedidoController extends Controller
                     'pedidos.destino',
                     'pedidos.motivo',
                     'pedidos.responsable',
-                    /* 'pedidos.created_at as fecha' */
                     DB::raw('DATE_FORMAT(pedidos.created_at, "%d/%m/%Y") as fecha')
                 )
                 ->where('pedidos.estado', '1')
@@ -1086,7 +1175,7 @@ class PedidoController extends Controller
                 ->orderBy('pedidos.created_at', 'DESC')
                 ->get();
         }else if(Auth::user()->rol == "Encargado"){
-                $pedidos = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')
+                $pedidos = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')//PEDIDOS CON PAGOS
                 ->join('users as u', 'pedidos.user_id', 'u.id')
                 ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
                 ->join('pago_pedidos as pp', 'pedidos.id','pp.pedido_id')
@@ -1107,8 +1196,9 @@ class PedidoController extends Controller
                     'pedidos.destino',
                     'pedidos.motivo',
                     'pedidos.responsable',
+                    'pa.total_cobro',
+                    'pa.total_pagado',
                     'pa.condicion as condicion_pa',
-                    /* 'pedidos.created_at as fecha', */
                     DB::raw('DATE_FORMAT(pedidos.created_at, "%d/%m/%Y") as fecha'),
                     'pa.diferencia'
                 )
@@ -1131,13 +1221,15 @@ class PedidoController extends Controller
                     'pedidos.destino',
                     'pedidos.motivo',
                     'pedidos.responsable',
+                    'pa.total_cobro',
+                    'pa.total_pagado',
                     'pa.condicion',
                     'pedidos.created_at',
                     'pa.diferencia')
                 ->orderBy('pedidos.created_at', 'DESC')
                 ->get();
 
-            $pedidos2 = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')
+            $pedidos2 = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')//PEDIDOS SIN PAGOS
                 ->join('users as u', 'pedidos.user_id', 'u.id')
                 ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
                 ->select(
@@ -1156,7 +1248,6 @@ class PedidoController extends Controller
                     'pedidos.destino',
                     'pedidos.motivo',
                     'pedidos.responsable',
-                    /* 'pedidos.created_at as fecha' */
                     DB::raw('DATE_FORMAT(pedidos.created_at, "%d/%m/%Y") as fecha')
                 )
                 ->where('pedidos.estado', '1')
@@ -1183,7 +1274,7 @@ class PedidoController extends Controller
                 ->orderBy('pedidos.created_at', 'DESC')
                 ->get();
         }else{
-                $pedidos = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')
+                $pedidos = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')//PEDIDOS CON PAGOS
                 ->join('users as u', 'pedidos.user_id', 'u.id')
                 ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
                 ->join('pago_pedidos as pp', 'pedidos.id','pp.pedido_id')
@@ -1204,8 +1295,9 @@ class PedidoController extends Controller
                     'pedidos.destino',
                     'pedidos.motivo',
                     'pedidos.responsable',
+                    'pa.total_cobro',
+                    'pa.total_pagado',
                     'pa.condicion as condicion_pa',
-                    /* 'pedidos.created_at as fecha', */
                     DB::raw('DATE_FORMAT(pedidos.created_at, "%d/%m/%Y") as fecha'),
                     'pa.diferencia'
                 )
@@ -1228,13 +1320,14 @@ class PedidoController extends Controller
                     'pedidos.destino',
                     'pedidos.motivo',
                     'pedidos.responsable',
+                    'pa.total_cobro',
+                    'pa.total_pagado',
                     'pa.condicion',
                     'pedidos.created_at',
                     'pa.diferencia')
                 ->orderBy('pedidos.created_at', 'DESC')
                 ->get();
-
-            $pedidos2 = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')
+            $pedidos2 = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')//PEDIDOS SIN PAGOS
                 ->join('users as u', 'pedidos.user_id', 'u.id')
                 ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
                 ->select(
@@ -1254,7 +1347,6 @@ class PedidoController extends Controller
                     'pedidos.envio',
                     'pedidos.direccion',
                     'pedidos.destino',
-                    /* 'pedidos.created_at as fecha' */
                     DB::raw('DATE_FORMAT(pedidos.created_at, "%d/%m/%Y") as fecha')
                 )
                 ->where('pedidos.estado', '1')
@@ -1289,6 +1381,9 @@ class PedidoController extends Controller
 
     public function Pagados()
     {
+        $dateMin = Carbon::now()->subDays(4)->format('d/m/Y');
+        $dateMax = Carbon::now()->format('d/m/Y');
+
         $pedidos = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')
             ->join('users as u', 'pedidos.user_id', 'u.id')
             ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
@@ -1307,7 +1402,8 @@ class PedidoController extends Controller
                 'pedidos.motivo',
                 'pedidos.responsable',
                 'pa.condicion as condicion_pa',
-                'pedidos.created_at as fecha'
+                /* 'pedidos.created_at as fecha' */
+                DB::raw('DATE_FORMAT(pedidos.created_at, "%d/%m/%Y") as fecha')
             )
             ->where('pedidos.estado', '1')
             ->where('dp.estado', '1')
@@ -1331,7 +1427,7 @@ class PedidoController extends Controller
 
         $superasesor = User::where('rol', 'Super asesor')->count();
 
-        return view('pedidos.pagados', compact('pedidos', 'superasesor'));
+        return view('pedidos.pagados', compact('pedidos', 'superasesor', 'dateMin', 'dateMax'));
     }
 
     public function SinPagos()
@@ -2706,18 +2802,19 @@ class PedidoController extends Controller
                 $contPe = 0;
     
                 while ($contPe < count((array)$pedido_id)) {
-    
+                    
                     $direccionPedido = DireccionPedido::create([
                             'direccion_id' => $direccionLima->id,
                             'pedido_id' => $pedido_id[$contPe],
                             'estado' => '1'
                         ]);
     
-                    //INDICADOR DE PAGOS
+                    //INDICADOR DE DIRECCION
                     $pedido = Pedido::find($pedido_id[$contPe]);
     
                     $pedido->update([
                         'destino' => $request->destino,
+                        'condicion_envio' => 'EN REPARTO',//AL REGISTRAR DIRECCION PASA A ESTADO  EN REPARTO
                         'direccion' => '1',
                     ]);
     
@@ -2837,19 +2934,17 @@ class PedidoController extends Controller
                     /* DB::raw('sum(dp.total) as total'), */
                     'dp.total as total',
                     'pedidos.condicion',
-                    /* 'pedidos.created_at as fecha', */
                     DB::raw('DATE_FORMAT(pedidos.created_at, "%d/%m/%Y") as fecha'),
                     'pedidos.condicion_envio',
                     'pedidos.envio',
                     'pedidos.destino',
                     'dp.envio_doc',
-                    'dp.fecha_envio_doc',
+                    DB::raw('DATE_FORMAT(dp.fecha_envio_doc, "%d/%m/%Y") as fecha_envio_doc'),
                     'dp.cant_compro',
-                    /* 'dp.fecha_envio_doc_fis', */
                     DB::raw('DATE_FORMAT(dp.fecha_envio_doc_fis, "%d/%m/%Y") as fecha_envio_doc_fis'),
                     'dp.foto1',
                     'dp.foto2',
-                    'dp.fecha_recepcion'
+                    DB::raw('DATE_FORMAT(dp.fecha_recepcion, "%d/%m/%Y") as fecha_recepcion')
                 )
                 ->where('pedidos.estado', '1')
                 ->where('dp.estado', '1')
@@ -2894,19 +2989,17 @@ class PedidoController extends Controller
                     /* DB::raw('sum(dp.total) as total'), */
                     'dp.total as total',
                     'pedidos.condicion',
-                    /* 'pedidos.created_at as fecha', */
                     DB::raw('DATE_FORMAT(pedidos.created_at, "%d/%m/%Y") as fecha'),
                     'pedidos.condicion_envio',
                     'pedidos.envio',
                     'pedidos.destino',
                     'dp.envio_doc',
-                    'dp.fecha_envio_doc',
+                    DB::raw('DATE_FORMAT(dp.fecha_envio_doc, "%d/%m/%Y") as fecha_envio_doc'),
                     'dp.cant_compro',
-                    /* 'dp.fecha_envio_doc_fis', */
                     DB::raw('DATE_FORMAT(dp.fecha_envio_doc_fis, "%d/%m/%Y") as fecha_envio_doc_fis'),
                     'dp.foto1',
                     'dp.foto2',
-                    'dp.fecha_recepcion'
+                    DB::raw('DATE_FORMAT(dp.fecha_recepcion, "%d/%m/%Y") as fecha_recepcion')
                 )
                 ->where('pedidos.estado', '1')
                 ->where('dp.estado', '1')
@@ -2951,19 +3044,17 @@ class PedidoController extends Controller
                     /* DB::raw('sum(dp.total) as total'), */
                     'dp.total as total',
                     'pedidos.condicion',
-                    /* 'pedidos.created_at as fecha', */
                     DB::raw('DATE_FORMAT(pedidos.created_at, "%d/%m/%Y") as fecha'),
                     'pedidos.condicion_envio',
                     'pedidos.envio',
                     'pedidos.destino',
                     'dp.envio_doc',
-                    'dp.fecha_envio_doc',
+                    DB::raw('DATE_FORMAT(dp.fecha_envio_doc, "%d/%m/%Y") as fecha_envio_doc'),
                     'dp.cant_compro',
-                    /* 'dp.fecha_envio_doc_fis', */
                     DB::raw('DATE_FORMAT(dp.fecha_envio_doc_fis, "%d/%m/%Y") as fecha_envio_doc_fis'),
                     'dp.foto1',
                     'dp.foto2',
-                    'dp.fecha_recepcion'
+                    DB::raw('DATE_FORMAT(dp.fecha_recepcion, "%d/%m/%Y") as fecha_recepcion')
                 )
                 ->where('pedidos.estado', '1')
                 ->where('dp.estado', '1')
@@ -3008,20 +3099,17 @@ class PedidoController extends Controller
                 /* DB::raw('sum(dp.total) as total'), */
                 'dp.total as total',
                 'pedidos.condicion',
-                /* 'pedidos.created_at as fecha', */
                 DB::raw('DATE_FORMAT(pedidos.created_at, "%d/%m/%Y") as fecha'),
                 'pedidos.condicion_envio',
                 'pedidos.envio',
                 'pedidos.destino',
                 'dp.envio_doc',
-                'dp.fecha_envio_doc',
+                DB::raw('DATE_FORMAT(dp.fecha_envio_doc, "%d/%m/%Y") as fecha_envio_doc'),
                 'dp.cant_compro',
-                /* 'dp.fecha_envio_doc_fis', */
-                DB::raw('DATE_FORMAT(dp.fecha_envio_doc_fis, "%Y-%m-%d") as fecha_envio_doc_fis'),
+                DB::raw('DATE_FORMAT(dp.fecha_envio_doc_fis, "%d/%m/%Y") as fecha_envio_doc_fis'),
                 'dp.foto1',
                 'dp.foto2',
-                /* 'dp.fecha_recepcion', */
-                DB::raw('DATE_FORMAT(dp.fecha_recepcion, "%Y-%m-%d") as fecha_recepcion'),
+                DB::raw('DATE_FORMAT(dp.fecha_recepcion, "%d/%m/%Y") as fecha_recepcion'),
                 'pedidos.trecking'
             )
             ->where('pedidos.estado', '1')

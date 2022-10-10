@@ -20,7 +20,7 @@
               {!! Form::select('pbanco', $bancos , '0', ['class' => 'form-control selectpicker border border-secondary', 'data-live-search' => 'true', 'placeholder' => '---- SELECCIONE ----']) !!}
             </div>
             <div class="form-group col lg-4">
-              {!! Form::label('pfecha', 'Fecha de pago') !!}
+              {!! Form::label('pfecha', 'Fecha de voucher') !!}
               {!! Form::date('pfecha', \Carbon\Carbon::now(), ['class' => 'form-control']) !!}
               {{-- <input name="pfecha" type="date" class="form-control"> --}}
             </div>

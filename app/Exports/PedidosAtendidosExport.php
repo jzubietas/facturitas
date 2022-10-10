@@ -20,36 +20,39 @@ class PedidosAtendidosExport implements FromView
             ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
             ->select(
                 'pedidos.id',
-                'c.nombre as nombres',
-                'c.celular as celulares',
-                'u.name as users',
-                'dp.codigo as codigos',
-                'dp.nombre_empresa as empresas',
-                DB::raw('sum(dp.total) as total'),
-                'pedidos.condicion',
-                'pedidos.created_at as fecha',
-                'dp.envio_doc',
-                'dp.fecha_envio_doc',
-                'dp.cant_compro',
-                'dp.fecha_envio_doc_fis',
-                'dp.fecha_recepcion'
+                'u.jefe as jefe',
+                'u.identificador as id_asesor',
+                'dp.codigo as codigo_pedido',
+                'dp.nombre_empresa as empresa',
+                'dp.ruc as ruc',
+                'dp.mes as mes',
+                'dp.tipo_banca as tipo',
+                'dp.cantidad as cantidad',
+                'u.operario as operario',
+                'dp.cant_compro as cant_doc',
+                'pedidos.condicion as estado_pedido',
+                DB::raw('DATE_FORMAT(pedidos.created_at, "%d/%m/%Y") as fecha_registro'),
+                DB::raw('DATE_FORMAT(dp.fecha_envio_doc, "%d/%m/%Y") as fecha_elaboracion'),
+                DB::raw('DATE_FORMAT(dp.fecha_recepcion, "%d/%m/%Y") as fecha_finalizacion')
             )
             ->where('pedidos.estado', '1')
             ->where('dp.estado', '1')
             ->where('pedidos.condicion', 'ATENDIDO')
             ->groupBy(
                 'pedidos.id',
-                'c.nombre',
-                'c.celular',
-                'u.name',
+                'u.jefe',
+                'u.identificador',
                 'dp.codigo',
                 'dp.nombre_empresa',
+                'dp.ruc',
+                'dp.mes',
+                'dp.tipo_banca',
+                'dp.cantidad',
+                'u.operario',
+                'dp.cant_compro',
                 'pedidos.condicion',
                 'pedidos.created_at',
-                'dp.envio_doc',
                 'dp.fecha_envio_doc',
-                'dp.cant_compro',
-                'dp.fecha_envio_doc_fis',
                 'dp.fecha_recepcion'
             )
             ->orderBy('pedidos.created_at', 'DESC')

@@ -9,7 +9,7 @@
               <input type="hidden" name="user_id" requerid value="{{ Auth::user()->id }}" class="form-control">
               <input type="text" name="user_name" value="{{ Auth::user()->name }}" class="form-control" disabled>
             @else
-              {!! Form::select('user_id', $users, null, ['class' => 'form-control selectpicker border border-secondary', 'data-live-search' => 'true', 'placeholder' => '---- SELECCIONE ASESOR ----']) !!}
+              {!! Form::select('user_id', $users, null, ['class' => 'form-control border selectpicker border-secondary', 'data-live-search' => 'true', 'placeholder' => '---- SELECCIONE ASESOR ----']) !!}
             @endif
           </div>
           <div class="form-group col-lg-6">
@@ -17,14 +17,17 @@
             @if(0 < count((array)$deudores))
             <a href="" data-target="#modal-historial" data-toggle="modal"><button class="btn btn-danger btn-sm">Deudores</button></a>
             @endif
-              <select name="cliente_id" class="border form-control selectpicker border-secondary" id="cliente_id" data-live-search="true">
+              <select name="cliente_id" class="border form-control border-secondary" id="cliente_id" data-live-search="true" style="height: 100% !important;">{{-- selectpicker lang="es" --}}
                 <option value="">---- SELECCIONE CLIENTE ----</option>
                   @foreach($clientes1 as $cliente)
                     @if($cliente->cantidad > 0 && $dateM == $cliente->mes && $dateY == $cliente->anio)
-                      <option style="background: #4ac4e2" value="{{ $cliente->id }}">{{$cliente->nombre}} - {{$cliente->celular}}</option>
+                      <option style="background: #4ac4e2; color:#ffffff" value="{{ $cliente->id }}">{{$cliente->nombre}} - {{$cliente->celular}}</option>
                     @elseif($cliente->cantidad > 0 && (($dateM*1)-($cliente->mes*1)) > 0 && (($dateY*1)-($cliente->anio*1)) == 0)
-                      @if(Auth::user()->rol == 'Super asesor')
-                        <option style="background: #e73d3d" value="{{ $cliente->id }}">{{$cliente->nombre}} - {{$cliente->celular}}</option>
+                      @if(Auth::user()->rol != 'Asesor' )
+                        <option id="deudor" style="background: #e73d3d; color:#ffffff" value="{{ $cliente->id }}">{{$cliente->nombre}} - {{$cliente->celular}}</option>
+                      @endif
+                      @if(Auth::user()->rol == 'Asesor')
+                        <option id="deudor" style="background: #e73d3d; color:#5e5c5c" value="{{ $cliente->id }}" disabled>{{$cliente->nombre}} - {{$cliente->celular}} **CLIENTE CON DEUDA**</option>
                       @endif
                     @else
                       <option value="{{ $cliente->id }}">{{$cliente->nombre}} - {{$cliente->celular}}</option>
@@ -58,12 +61,12 @@
           </div>
           <div class="form-group col-lg-3">
             {!! Form::label('pmes', 'Mes') !!}
-            {!! Form::select('pmes', $meses , '0', ['class' => 'form-control selectpicker border border-secondary', 'data-live-search' => 'true', 'placeholder' => '---- SELECCIONE ----']) !!}
+            {!! Form::select('pmes', $meses , '0', ['class' => 'form-control border selectpicker border-secondary', 'data-live-search' => 'true', 'placeholder' => '---- SELECCIONE ----']) !!} {{--  --}}
           </div>
           <div class="form-group col-lg-3">
             {!! Form::label('panio', 'Año') !!}
             {{-- {!! Form::number('panio', 2022, ['class' => 'form-control', 'id' => 'panio', 'min' =>'0']) !!} --}}
-            {!! Form::select('panio', $anios , '2022', ['class' => 'form-control selectpicker border border-secondary', 'data-live-search' => 'true', 'placeholder' => '---- SELECCIONE ----']) !!}
+            {!! Form::select('panio', $anios , '2022', ['class' => 'form-control border selectpicker border-secondary', 'data-live-search' => 'true', 'placeholder' => '---- SELECCIONE ----']) !!} {{--  --}}
           </div>
           <div class="form-group col-lg-2">            
             {!! Form::label('pruc', 'RUC') !!} <a href="" data-target="#modal-add-ruc" id= "btn_agregar_ruc" data-toggle="modal">(Agregar +)</a><br>

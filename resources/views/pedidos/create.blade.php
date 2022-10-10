@@ -6,7 +6,7 @@
   <h1>Agregar pedidos</h1>
   {{-- @error('num_ruc')
     <small class="text-danger" style="font-size: 16px">{{ $message }}</small>
-  @enderror --}}
+  @enderror --}}  
 @stop
 
 @section('content')
@@ -26,12 +26,14 @@
 @stop
 
 @section('css')
-
+  {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" /> --}}
+  <link rel="stylesheet" href="{{ asset('css/select2.css') }}">
 @stop
 
 @section('js')
   <script src="{{ asset('js/datatables.js') }}"></script>
-
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
+  
   @if (session('info') == 'registrado')
     <script>
       Swal.fire(
@@ -41,6 +43,22 @@
       )
     </script>
   @endif
+
+  <script>
+    $('#cliente_id').select2({    
+      language: {
+
+        noResults: function() {
+
+          return "No se encontró al cliente” ";        
+        },
+        searching: function() {
+
+          return "Buscando..";
+        }
+      }
+    });
+  </script>
 
   <script>
     $(document).ready(function() {

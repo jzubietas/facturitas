@@ -32,6 +32,17 @@
 
   <div class="card">
     <div class="card-body">
+      <table cellspacing="5" cellpadding="5" class="table-responsive">
+        <tbody>
+          <tr>
+            <td>Fecha Minima:</td>
+            <td><input type="text" value={{ $dateMin }} id="min" name="min" class="form-control"></td>
+            <td> </td>
+            <td>Fecha Máxima:</td>
+            <td><input type="text" value={{ $dateMax }} id="max" name="max"  class="form-control"></td>
+          </tr>
+        </tbody>
+      </table><br>
       <table id="tablaPrincipal" class="table table-striped">
         <thead>
           <tr>
@@ -92,7 +103,9 @@
 @stop
 
 @section('css')
-  <link rel="stylesheet" href="../css/admin_custom.css">
+  {{-- <link rel="stylesheet" href="../css/admin_custom.css"> --}}
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+
   <style>
     .bg-4{
       background: linear-gradient(to right, rgb(240, 152, 25), rgb(237, 222, 93));
@@ -148,4 +161,43 @@
     </script>
   @endif
 
+  <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+
+  <script>
+    window.onload = function () {      
+      $('#tablaPrincipal').DataTable().draw();
+    }
+  </script>
+
+  <script>
+    /* Custom filtering function which will search data in column four between two values */
+        $(document).ready(function () { 
+        
+            $.fn.dataTable.ext.search.push(
+                function (settings, data, dataIndex) {
+                    var min = $('#min').datepicker("getDate");
+                    var max = $('#max').datepicker("getDate");
+                    // need to change str order before making  date obect since it uses a new Date("mm/dd/yyyy") format for short date.
+                    var d = data[5].split("/");
+                    var startDate = new Date(d[1]+ "/" +  d[0] +"/" + d[2]);
+
+                    if (min == null && max == null) { return true; }
+                    if (min == null && startDate <= max) { return true;}
+                    if(max == null && startDate >= min) {return true;}
+                    if (startDate <= max && startDate >= min) { return true; }
+                    return false;
+                }
+            );
+
+      
+            $("#min").datepicker({ onSelect: function () { table.draw(); }, changeMonth: true, changeYear: true , dateFormat:"dd/mm/yy"});
+            $("#max").datepicker({ onSelect: function () { table.draw(); }, changeMonth: true, changeYear: true, dateFormat:"dd/mm/yy" });
+            var table = $('#tablaPrincipal').DataTable();
+
+            // Event listener to the two range filtering inputs to redraw on input
+            $('#min, #max').change(function () {
+                table.draw();
+            });
+        });
+  </script>
 @stop

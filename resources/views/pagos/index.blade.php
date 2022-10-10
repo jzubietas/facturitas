@@ -3,7 +3,15 @@
 @section('title', 'Lista de Pagos')
 
 @section('content_header')
-  <h1>Lista de pagos
+  <h1>Lista de pagos 
+    @if($pagosobservados_cantidad > 0)
+    <div class="small-box bg-danger" style="text-align: center">
+      <div class="inner">
+        <h3>{{ $pagosobservados_cantidad }}</h3>
+        <p>PAGOS OBSERVADOS</p>
+      </div>
+    </div>
+    @endif
     @can('pagos.create')
       <a href="{{ route('pagos.create') }}" class="btn btn-info"><i class="fas fa-plus-circle"></i> Agregar</a>
     @endcan
@@ -18,6 +26,7 @@
     </div>
     @endcan
   </h1>
+
   @if($superasesor > 0)
   <br>
   <div class="bg-4">

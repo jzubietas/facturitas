@@ -4,6 +4,14 @@
 
 @section('content_header')
   <h1>Lista mis de pagos incompletos: {{ Auth::user()->name }}
+    @if($pagosobservados_cantidad > 0)
+    <div class="small-box bg-danger" style="text-align: center">
+      <div class="inner">
+        <h3>{{ $pagosobservados_cantidad }}</h3>
+        <p>PAGOS OBSERVADOS</p>
+      </div>
+    </div>
+    @endif
     @can('pagos.create')
       <a href="{{ route('pagos.create') }}" class="btn btn-info"><i class="fas fa-plus-circle"></i> Agregar</a>
     @endcan

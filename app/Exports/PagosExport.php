@@ -20,23 +20,29 @@ class PagosExport implements FromView
             ->join('pedidos as p', 'pp.pedido_id', 'p.id')
             ->join('detalle_pedidos as dpe', 'p.id', 'dpe.pedido_id')
             ->select('pagos.id', 
-                    'dpe.codigo as codigos', 
-                    'u.name as users', 
+                    'u.identificador as id_asesor', 
+                    'u.name as nombre_asesor', 
+                    'dpe.codigo as codigo_pedido',                    
                     'pagos.observacion', 
                     'dpe.total as total_deuda', 
                     DB::raw('sum(dpa.monto) as total_pago'), 
-                    'pagos.condicion',                   
+                    'pagos.diferencia as diferencia',
+                    'pagos.condicion as estado_pago',                   
                     'pagos.created_at as fecha'
                     )
             ->where('pagos.estado', '1')
             ->where('dpe.estado', '1')
             ->where('dpa.estado', '1')
             ->groupBy('pagos.id', 
-                    'dpe.codigo', 
+                    'u.identificador',
                     'u.name', 
-                    'pagos.observacion', 'dpe.total',
+                    'dpe.codigo',                    
+                    'pagos.observacion', 
+                    'dpe.total',
                     'pagos.condicion', 
-                    'pagos.created_at')
+                    'pagos.created_at',
+                    'pagos.diferencia'
+                    )
             ->get();
         return view('pagos.excel.pagos', compact('pagos'));
     }

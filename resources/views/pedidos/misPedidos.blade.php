@@ -96,8 +96,8 @@
               <td>{{ $pedido->condicion_env }}</td>
               <td>{{ $pedido->destino }}</td>
               {{-- <td>{{ $pedido->diferencia }}</td> --}}
-              @if($pedido->diferencia>0)<td style="background: #ca3a3a; color:#ffffff; text-align: center;font-weight: bold;">{{ $pedido->diferencia }}</td>
-              @else<td style="background: #44c24b; text-align: center;font-weight: bold;">{{ $pedido->diferencia }}</td>
+              @if(($pedido->total_cobro-$pedido->total_pagado)>3)<td style="background: #ca3a3a; color:#ffffff; text-align: center;font-weight: bold;">{{ $pedido->total_cobro-$pedido->total_pagado }}</td>
+              @else<td style="background: #44c24b; text-align: center;font-weight: bold;">{{ $pedido->total_cobro-$pedido->total_pagado }}</td>
               @endif
               <td>
                 @can('pedidos.pedidosPDF')

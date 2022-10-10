@@ -388,6 +388,8 @@
       var total_pedido = document.getElementById('total_pedido').value;
       var total_pago_pagar = document.getElementById('total_pago_pagar').value;
       var total_pago = document.getElementById('total_pago').value;
+      var falta = total_pedido_pagar - total_pago_pagar;
+      falta = falta.toFixed(2);
       /* var imagen = document.getElementById('imagen').value; */
 
       //Obtengo todos los campos con el nombre cantidad[]
@@ -422,9 +424,9 @@
       }
       else if(total_pedido_pagar - total_pago_pagar > 1) {
           Swal.fire({
-            title: 'Estás seguro?',
-            text: "Vas a guardar un pago menor a la deuda del cliente!",
             icon: 'warning',
+            title: 'Pago incompleto ¿Estás seguro?',
+            text: "Falta S/" + falta + " para cancelar",            
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
             cancelButtonColor: '#d33',

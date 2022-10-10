@@ -1,9 +1,17 @@
 @extends('adminlte::page')
 
-@section('title', 'Lista de Pagos')
+@section('title', 'Lista de mis Pagos')
 
 @section('content_header')
   <h1>Lista mis de pagos registrados: {{ Auth::user()->name }}
+    @if($pagosobservados_cantidad > 0)
+    <div class="small-box bg-danger" style="text-align: center">
+      <div class="inner">
+        <h3>{{ $pagosobservados_cantidad }}</h3>
+        <p>PAGOS OBSERVADOS</p>
+      </div>
+    </div>
+    @endif
     @can('pagos.create')
       <a href="{{ route('pagos.create') }}" class="btn btn-info"><i class="fas fa-plus-circle"></i> Agregar</a>
     @endcan
@@ -32,15 +40,28 @@
 
   <div class="card">
     <div class="card-body">
+      <table cellspacing="5" cellpadding="5" class="table-responsive">
+        <tbody>
+          <tr>
+            <td>Fecha Minima:</td>
+            <td><input type="text" value={{ $dateMin }} id="min" name="min" class="form-control"></td>
+            <td> </td>
+            <td>Fecha Máxima:</td>
+            <td><input type="text" value={{ $dateMax }} id="max" name="max"  class="form-control"></td>
+          </tr>
+        </tbody>
+      </table><br>
       <table id="tablaPrincipal" class="table table-striped">
         <thead>
           <tr>
             <th scope="col">COD.</th>
             <th scope="col">Codigo pedido</th>
             <th scope="col">Asesor</th>
+            <th scope="col">Cliente</th>
             <th scope="col">Observacion</th>
             <th scope="col">Total cobro</th>
             <th scope="col">Total pagado</th>
+            <th scope="col">fecha</th>
             <th scope="col">Estado</th>
             <th scope="col">Acciones</th>
           </tr>
@@ -51,9 +72,11 @@
               <td>PAG000{{ $pago->id }}</td>
               <td>{{ $pago->codigos }}</td>
               <td>{{ $pago->users }}</td>
+              <td>{{ $pago->celular }}</td>
               <td>{{ $pago->observacion }}</td>
               <td>@php echo number_format($pago->total_deuda,2) @endphp</td>
               <td>@php echo number_format($pago->total_pago,2) @endphp</td>
+              <td>{{ $pago->fecha }}</td>
               <td>{{ $pago->condicion }}</td>
               <td>                
                 @can('pagos.show')
@@ -77,7 +100,8 @@
 @stop
 
 @section('css')
-  <link rel="stylesheet" href="../css/admin_custom.css">
+  {{-- <link rel="stylesheet" href="../css/admin_custom.css"> --}}
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">  
   <style>
     .bg-4{
       background: linear-gradient(to right, rgb(240, 152, 25), rgb(237, 222, 93));
@@ -133,5 +157,45 @@
       )
     </script>
   @endif
+
+  <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+
+  <script>
+    window.onload = function () {      
+      $('#tablaPrincipal').DataTable().draw();
+    }
+  </script>
+
+  <script>
+    /* Custom filtering function which will search data in column four between two values */
+        $(document).ready(function () { 
+        
+            $.fn.dataTable.ext.search.push(
+                function (settings, data, dataIndex) {
+                    var min = $('#min').datepicker("getDate");
+                    var max = $('#max').datepicker("getDate");
+                    // need to change str order before making  date obect since it uses a new Date("mm/dd/yyyy") format for short date.
+                    var d = data[7].split("/");
+                    var startDate = new Date(d[1]+ "/" +  d[0] +"/" + d[2]);
+
+                    if (min == null && max == null) { return true; }
+                    if (min == null && startDate <= max) { return true;}
+                    if(max == null && startDate >= min) {return true;}
+                    if (startDate <= max && startDate >= min) { return true; }
+                    return false;
+                }
+            );
+
+      
+            $("#min").datepicker({ onSelect: function () { table.draw(); }, changeMonth: true, changeYear: true , dateFormat:"dd/mm/yy"});
+            $("#max").datepicker({ onSelect: function () { table.draw(); }, changeMonth: true, changeYear: true, dateFormat:"dd/mm/yy" });
+            var table = $('#tablaPrincipal').DataTable();
+
+            // Event listener to the two range filtering inputs to redraw on input
+            $('#min, #max').change(function () {
+                table.draw();
+            });
+        });
+  </script>
 
 @stop
