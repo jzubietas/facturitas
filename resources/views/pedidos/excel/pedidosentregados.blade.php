@@ -1,7 +1,7 @@
 <table>
   <thead>
     <tr>
-      <th colspan="12" style="background-color: #4c5eaf; text-align: center; color: #ffff;"></th>
+      <th colspan="12" style="background-color: #4c5eaf; text-align: center; color: #ffff;">DATOS DEL PEDIDO</th>
       <th colspan="6" style="background-color: #306138; text-align: center; color: #ffff;">LIMA</th>
       <th colspan="3" style="background-color: #0831ff; text-align: center; color: #ffff;">PROVINCIA</th>
     </tr>
