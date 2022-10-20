@@ -40,6 +40,28 @@ class ClienteController extends Controller
         ];
 
         if (Auth::user()->rol == "Asesor"){
+
+            /**/ 
+
+            $basefria = Cliente::
+                join('users as u', 'clientes.user_id', 'u.id')
+                ->select('clientes.id', 
+                        'clientes.nombre', 
+                        'clientes.celular', 
+                        'clientes.estado', 
+                        'u.name as user',
+                        'u.identificador')
+                ->where('clientes.estado','1')
+                ->where('clientes.tipo','0')
+                ->where('clientes.user_id', Auth::user()->id)
+                ->get();
+                return DataTables::of($basefria)
+                ->addColumn('actions', 'clientes.action')
+                ->rawColumns(['actions'])
+                ->make(true);
+
+
+
             $clientes1 = Cliente:://CLIENTES CON PEDIDOS CON DEUDA
                 join('users as u', 'clientes.user_id', 'u.id')
                 ->join('pedidos as p', 'clientes.id', 'p.cliente_id')
@@ -569,7 +591,6 @@ class ClienteController extends Controller
         
         return redirect()->route('clientes.index')->with('info','eliminado');
     }
-
 
     public function indexbf()
     {

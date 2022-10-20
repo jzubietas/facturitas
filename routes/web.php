@@ -9,6 +9,7 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\PedidoController;
 use App\Http\Controllers\NotificationsController;
+use App\Http\Controllers\BasefriaController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -31,7 +32,11 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
 
 Route::resource('clientes', ClienteController::class)->names('clientes');
-Route::get('basefria', [ClienteController::class, 'indexbf'])->name('basefria');
+Route::get('basefria', [ClienteController::class, 'index'])->name('basefria');
+//Route::post('basefriadatatable', [BasefriaController::class, 'index'])->name('basefria');
+Route::resource('basefriadatatable', BasefriaController::class);
+///Route::resource('basefria', ClienteController::class);//agregado serverside datatable basefria
+//Route::resource('basefria', BasefController::class);
 Route::get('clientes.createbf', [ClienteController::class, 'createbf'])->name('clientes.createbf');
 Route::post('clientes.storebf', [ClienteController::class, 'storebf'])->name('clientes.storebf');
 Route::post('basefriacliente/{cliente}', [ClienteController::class, 'updatebf'])->name('updatebf');

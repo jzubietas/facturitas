@@ -640,7 +640,7 @@ class PedidoController extends Controller
             $pedido = Pedido::create([
                 'cliente_id' => $request->cliente_id,
                 'user_id' => $request->user_id, //usuario que registra
-                'creador_id' => 'USER0'.Auth::user()->id,
+                'creador_id' => 'USER0'.Auth::user()->id,//aqui una observacion, en el migrate la columna en tabla pedido tenia nombre creador y resulto ser creador_id
                 'condicion' => 'POR ATENDER',
                 'pago' => '0',
                 'envio' => '0',
@@ -1073,6 +1073,7 @@ class PedidoController extends Controller
         ];
 
         if(Auth::user()->rol == "Asesor" || Auth::user()->rol == "Super asesor"){
+            //requerimiento cambiar el nombre apellidos del asesor por el identificador en el listado datatable
             $pedidos = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')//PEDIDOS CON PAGOS
                 ->join('users as u', 'pedidos.user_id', 'u.id')
                 ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
@@ -1093,7 +1094,7 @@ class PedidoController extends Controller
                     'pedidos.direccion',
                     'pedidos.destino',
                     'pedidos.motivo',
-                    'pedidos.responsable',
+                    'pedidos.responsable',//cambio de nombre responsable por identificador de usuario asesor
                     'pa.total_cobro',
                     'pa.total_pagado',
                     'pa.diferencia',

@@ -696,6 +696,7 @@ class PagoController extends Controller
         return view('pagos.pagosincompletos', compact('pagos', 'superasesor'));
     }
 
+    //funcion pagos observados * 
     public function PagosObservados()
     {
         $pagos = Pago::join('users as u', 'pagos.user_id', 'u.id')
@@ -706,7 +707,8 @@ class PagoController extends Controller
             ->select('pagos.id', 
                     'dpe.codigo as codigos', 
                     'u.name as users', 
-                    'pagos.observacion', 
+                    //'pagos.observacion', cambio 19/10/2022 08.55am anterior * zubieta - a solicitud de ruben
+                    'dpa.observacion', //cambio 19/10/2022 08.55am nuevo * zubieta - a solicitud de ruben
                     'dpe.total as total_deuda',
                     DB::raw('sum(dpa.monto) as total_pago'), 
                     'pagos.condicion',                   
@@ -720,7 +722,9 @@ class PagoController extends Controller
             ->groupBy('pagos.id', 
                     'dpe.codigo', 
                     'u.name',
-                    'pagos.observacion', 'dpe.total',
+                    //'pagos.observacion', cambio 19/10/2022 08.55am anterior * zubieta - a solicitud de ruben
+                    'dpa.observacion', //cambio 19/10/2022 08.55am nuevo * zubieta - a solicitud de ruben
+                    'dpe.total',
                     'pagos.total_cobro',
                     'pagos.condicion', 
                     'pagos.created_at')

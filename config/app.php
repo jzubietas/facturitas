@@ -180,6 +180,8 @@ return [
         App\Providers\FortifyServiceProvider::class,
         App\Providers\JetstreamServiceProvider::class,
 
+        //Laravel Datatables
+        Yajra\DataTables\DataTablesServiceProvider::class,//para datatables server side
     ],
 
     /*
@@ -208,6 +210,7 @@ return [
         'Crypt' => Illuminate\Support\Facades\Crypt::class,
         'Date' => Illuminate\Support\Facades\Date::class,
         'DB' => Illuminate\Support\Facades\DB::class,
+        
         'Eloquent' => Illuminate\Database\Eloquent\Model::class,
         'Event' => Illuminate\Support\Facades\Event::class,
         'File' => Illuminate\Support\Facades\File::class,
@@ -236,6 +239,7 @@ return [
         'PDF' => Barryvdh\DomPDF\Facade::class,
         'Excel' => Maatwebsite\Excel\Facades\Excel::class,
 
+        'DataTables' => Yajra\DataTables\Facades\DataTables::class,//nuevo para datatables serverside
     ],
 
 ];
