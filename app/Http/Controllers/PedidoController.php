@@ -712,6 +712,7 @@ class PedidoController extends Controller
                     'ft' => ($cantidad[$contP]*$porcentaje[$contP])/100,
                     'courier' => $courier[$contP],
                     'total' => (($cantidad[$contP]*$porcentaje[$contP])/100)+$courier[$contP],
+                    'saldo' => (($cantidad[$contP]*$porcentaje[$contP])/100)+$courier[$contP],
                     'descripcion' => $descripcion[$contP],
                     'nota' => $nota[$contP],
                     'estado' => '1'

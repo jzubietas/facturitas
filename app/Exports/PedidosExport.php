@@ -39,14 +39,12 @@ class PedidosExport implements FromView
                 'pa.condicion as condicion_pa',
                 'pedidos.motivo',
                 'pedidos.responsable',
-                /* 'pedidos.created_at as fecha', */
                 DB::raw('DATE_FORMAT(pedidos.created_at, "%d/%m/%Y") as fecha'),
-                /* 'pedidos.updated_at as fecha_mod', */
                 DB::raw('DATE_FORMAT(pedidos.updated_at, "%d/%m/%Y") as fecha_mod'),
                 'pedidos.modificador',
-                'pa.diferencia',                
+                'pa.diferencia',
                 'pedidos.estado'
-            )
+                )
             /* ->where('pedidos.estado', '1')
             ->where('dp.estado', '1') */
             ->where('pedidos.pago', '1')
@@ -97,9 +95,7 @@ class PedidosExport implements FromView
                 'pedidos.condicion as condiciones',
                 'pedidos.motivo',
                 'pedidos.responsable',
-                /* 'pedidos.created_at as fecha', */
                 DB::raw('DATE_FORMAT(pedidos.created_at, "%d/%m/%Y") as fecha'),
-                /* 'pedidos.updated_at as fecha_mod', */
                 DB::raw('DATE_FORMAT(pedidos.updated_at, "%d/%m/%Y") as fecha_mod'),
                 'pedidos.modificador',
                 'pedidos.estado'

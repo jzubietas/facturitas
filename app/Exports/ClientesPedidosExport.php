@@ -32,7 +32,8 @@ class ClientesPedidosExport implements FromView, ShouldAutoSize
                             'clientes.referencia',
                             'clientes.estado',
                             'clientes.deuda',
-                            DB::raw('MAX(DATE_FORMAT(p.created_at, "%d/%m/%Y")) as fecha'),//DB::raw('MAX(p.created_at) as fecha'),
+                            DB::raw('DATE_FORMAT(MAX(p.created_at), "%d/%m/%Y") as fecha'),
+                            /* DB::raw('MAX(DATE_FORMAT(p.created_at, "%d/%m/%Y")) as fecha'), *///DB::raw('MAX(p.created_at) as fecha'),
                             /* DB::raw('MAX(DATE_FORMAT(p.created_at, "%d")) as dia'), */
                             DB::raw('DATE_FORMAT(MAX(p.created_at), "%m") as mes'),/* DB::raw('MAX(DATE_FORMAT(p.created_at, "%m")) as mes'), */
                             DB::raw('DATE_FORMAT(MAX(p.created_at), "%Y") as anio')/* DB::raw('MAX(DATE_FORMAT(p.created_at, "%Y")) as anio') */

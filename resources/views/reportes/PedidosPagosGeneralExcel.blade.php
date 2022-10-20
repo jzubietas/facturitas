@@ -35,7 +35,7 @@
         <td>{{ $cont + 1 }}</td>
         <td>{{ $pedido->users }}</td>
         <td>USER{{ $pedido->user_id }}</td>
-        <td>{{ $pedido->user_identificador }}</td>
+        <td>{{ $pedido->asesor_identificador }}</td>
         <td>{{ $pedido->codigos }}</td>
         <td>{{ $pedido->celulares }}</td>
         <td>{{ $pedido->empresas }}</td>
@@ -64,7 +64,7 @@
           <td>{{ $cont + 1 }}</td>
           <td>{{ $pedido->users }}</td>
           <td>USER{{ $pedido->user_id }}</td>
-          <td>{{ $pedido->user_identificador }}</td>
+          <td>{{ $pedido->asesor_identificador }}</td>
           <td>{{ $pedido->codigos }}</td>
           <td>{{ $pedido->celulares }}</td>
           <td>{{ $pedido->empresas }}</td>
@@ -80,11 +80,11 @@
           <td>{{ $pedido->cant_compro }}</td>
           <td>{{ $pedido->fecha_envio_doc_fis }}</td>
           <td>{{ $pedido->fecha_recepcion }}</td>
-          <td>{{ $pedido->total_pago }}</td>
-          <td>{{ $pedido->banco }}</td>
-          <td>{{ $pedido->fecha_pago }}</td>
+          <td>-</td>
+          <td>-</td>
+          <td>-</td>
           <td>SIN PAGO REGISTRADO</td>
-          <td>{{ $pedido->titular }}</td>          
+          <td>-</td>          
         </tr>
         <?php $cont++; ?>
     @endforeach

@@ -27,7 +27,8 @@ class CreateDetallePedidosTable extends Migration
             $table->decimal('porcentaje',2,1);
             $table->decimal('ft',10,2);//cantidad*porcentaje//subtotal
             $table->decimal('courier',10,2);
-            $table->decimal('total',10,2);
+            $table->decimal('total',10,2)->nullable();
+            $table->decimal('saldo',10,2)->nullable();
             $table->string('descripcion')->nullable();//foto o PDF(select)
             $table->string('nota')->nullable();//foto o PDF(select)
             $table->string('envio_doc')->nullable();//foto o PDF(select)
