@@ -1,13 +1,48 @@
 $(document).ready(function () {
-   
 
-  $('.basefria_table').DataTable({
+
+            // init datatable.
+    $('#tablaserverside').DataTable({
+        processing: true,
+        serverSide: true,
+        ajax: "{{ route('basefriatabla') }}",
+        columns: [
+            {data: 'id', name: 'id'},
+            {data: 'nombre', name: 'nombre'},
+            {data: 'celular', name: 'celular'},
+            {data: 'action', name: 'action', orderable: false, searchable: false},
+        ]
+    });
+    /*var dataTable = $('#tablaPrincipal').DataTable({
+        processing: true,
+        serverSide: true,
+        autoWidth: false,
+        pageLength: 5,
+        // scrollX: true,
+        "order": [[ 0, "desc" ]],
+        ajax: {
+            url: "{{route('basefrialista')}}",
+                data: function (d) {
+                d.celular = $('input[name=celular]').val();
+                //d.userid = $('input[name=userid]').val();
+            }
+        },
+        columns: [
+            {data: 'id', name: 'id'},
+            {data: 'nombre', name: 'nombre'},
+            {data: 'celular', name: 'celular'},
+            {data: 'Actions', name: 'Actions',orderable:false,serachable:false,sClass:'text-center'},
+        ]
+    });*/
+      
+
+  /*$('#tablaPrincipal').DataTable({
             processing: true,
             serverSide: true,
             responsive: true,
             ajax: "{{route('basefria')}}",
             dataType: 'json',
-            type: "GET",
+            type: "POST",
             columns: [
                 {
                     data: 'id',
@@ -49,7 +84,7 @@ $(document).ready(function () {
                     searchable: false,
                     orderable: false
                 }*/
-            ],
-        })
+           /* ],
+        })*/
 
 });
