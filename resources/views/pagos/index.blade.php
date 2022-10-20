@@ -47,9 +47,11 @@
             <th scope="col">COD.</th>
             <th scope="col">Codigo pedido</th>
             <th scope="col">Asesor</th>
+            <th scope="col">Cliente</th>
             <th scope="col">Observacion</th>
             <th scope="col">Total cobro</th>
             <th scope="col">Total pagado</th>
+            <th scope="col">Fecha</th>
             <th scope="col">Estado</th>
             <th scope="col">Acciones</th>
           </tr>
@@ -60,9 +62,11 @@
               <td>PAG000{{ $pago->id }}</td>
               <td>{{ $pago->codigos }}</td>
               <td>{{ $pago->users }}</td>
+              <td>{{ $pago->celular }}</td>
               <td>{{ $pago->observacion }}</td>
               <td>@php echo number_format($pago->total_deuda,2) @endphp</td>
               <td>@php echo number_format($pago->total_pago,2) @endphp</td>
+              <td>{{ $pago->fecha }}</td>
               <td>{{ $pago->condicion }}</td>
               <td>
                 @can('pagos.show')

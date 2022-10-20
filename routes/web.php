@@ -130,11 +130,6 @@ Route::post('/mark-as-read', [NotificationsController::class, 'markNotification'
     Route::post('reporte/pagosporasesores', [PdfController::class, 'PagosPorAsesores'])->name('pagosporasesores');
     Route::get('imprimir/venta/{venta}', [PdfController::class, 'ticketVentaPDF'])->name('ticketVentaPDF');
 
-
-
-
-
-
 //EXCEL EXPORTABLES
     //MODULO PERSONAS
     Route::get('clientesExcel', [ExcelController::class, 'clientesExcel'])->name('clientesExcel');
@@ -167,11 +162,7 @@ Route::post('/mark-as-read', [NotificationsController::class, 'markNotification'
     Route::post('reporte/pagosporasesorexcel', [ExcelController::class, 'pagosporasesorExcel'])->name('pagosporasesorexcel');
     Route::post('reporte/pagosporasesoresexcel', [ExcelController::class, 'pagosporasesoresExcel'])->name('pagosporasesoresexcel');
 
-    
 /* Route::group(['middleware' => ['permission:pedidos.index']], function () {
     Route::get('pedidos.index', [PedidoController::class, 'index']);
 }); */
-
-    
-
 });

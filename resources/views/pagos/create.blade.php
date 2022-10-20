@@ -46,11 +46,13 @@
                   <th scope="col">PEDIDO</th>
                   <th scope="col">CODIGO</th>
                   <th scope="col">MONTO</th>
+                  <th scope="col">SALDO</th>
                   <th scope="col">ACCIÓN</th>
                 </tr>
               </thead>
               <tfoot>
                 <th style="text-align: center">TOTAL</th>
+                <th></th>
                 <th></th>
                 <th></th>
                 <th><h4 id="total_pedido">S/. 0.00</h4></th>
@@ -190,9 +192,10 @@
       pedido_id = datosPedido[0];
       codigo = datosPedido[1];
       monto = datosPedido[2];
+      saldo = datosPedido[3];
 
       if (pedido_id != "") {
-        subtotal_pedido[contPe] = monto*1;
+        subtotal_pedido[contPe] = saldo*1;
         total_pedido = total_pedido + subtotal_pedido[contPe];
 
         var filasPe = '<tr class="selected" id="filasPe' + contPe + '">' +
@@ -201,6 +204,7 @@
           '<td><input type="hidden" name="" value="">PED000' + pedido_id + '</td>' +
           '<td><input type="hidden" name="" value="">' + codigo + '</td>' +
           '<td><input type="hidden" name="" id= "numbermonto" value="">S/' + monto + '</td>' +
+          '<td><input type="hidden" name="" id= "numbersaldo" value="">S/' + saldo + '</td>' +
           '<td><button type="button" class="btn btn-danger btn-sm" onclick="eliminarPe(' + contPe + ')"><i class="fas fa-trash-alt"></i></button></td>' +
           '</tr>';
         contPe++;

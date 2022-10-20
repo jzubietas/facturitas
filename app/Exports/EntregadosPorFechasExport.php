@@ -32,7 +32,7 @@ class EntregadosPorFechasExport implements FromView, ShouldAutoSize
                 'c.celular as celular_cliente',
                 'dp.nombre_empresa as empresa',
                 'dp.cantidad as cantidad',
-                'dp.fecha_envio_doc as fecha_elaboracion',                
+                'dp.fecha_envio_doc as fecha_elaboracion',
                 'die.distrito as distrito',
                 'die.direccion as direccion',
                 'die.referencia as referencia',
