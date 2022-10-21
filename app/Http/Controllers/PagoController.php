@@ -157,11 +157,15 @@ class PagoController extends Controller
                 ->where('dp.estado', '1')                
                 ->get();
             
+                $contPe = 0;
             foreach ($pedidos as $pedido) {
                 $html .= '<option value="' . $pedido->id . '_' . $pedido->codigo . '_' . $pedido->total . '_' . $pedido->saldo . '">Código: ' . $pedido->codigo . ' - Total: S/' . $pedido->total . ' - Saldo: S/' . $pedido->saldo . '</option>';
+
+                $tabla = '<tr class="selected" id="filasPe' . $contPe . '"><td>' . $contPe+1 . '</td><td style="display:none;" ><input type="hidden" name="pedido_id[]" value="' . $pedido->id . '">' . $pedido->id . '</td><td><input type="hidden" name="" value="">PED000' . $pedido->id . '</td><td><input type="hidden" name="" value="">' . $pedido->codigo . '</td><td><input type="hidden" name="" id= "numbermonto" value="">S/' . $pedido->total . '</td><td><input type="hidden" name="" id= "numbersaldo" value="">S/' . $pedido->saldo . '</td><td><input type="checkbox" id="cbox1" value="0"></td><td><input type="checkbox" id="cbox1" value="1"></td></tr>';
             }
         }
-        return response()->json(['html' => $html]);
+        //return response()->json(['html' => $html]);
+        return response()->json(['html' => $tabla]);
     }
 
     public function store(Request $request)

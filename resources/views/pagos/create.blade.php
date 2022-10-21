@@ -77,11 +77,11 @@
               <h2>PEDIDOS A PAGAR</h2>
             </div>
             <div class="form-group col-lg-6">
-              <a data-target="#modal-add-pedidos" id="addpedido" data-toggle="modal"><button class="btn btn-info"><i class="fas fa-plus-circle"></i></button></a>  
+              {{-- <a data-target="#modal-add-pedidos" id="addpedido" data-toggle="modal"><button class="btn btn-info"><i class="fas fa-plus-circle"></i></button></a> --}}  
             </div>
           </div>
           <div class="table-responsive">
-            <table id="tabla_pedidos" class="table table-striped">
+            <table id="tabla_pedidos" class="table table-striped" style="text-align: center">
               <thead class="bg-info">
                 <tr>
                   <th scope="col">ITEM</th>
@@ -89,9 +89,13 @@
                   <th scope="col">CODIGO</th>
                   <th scope="col">MONTO</th>
                   <th scope="col">SALDO</th>
-                  <th scope="col">ACCIÓN</th>
+                  {{-- <th scope="col">ACCIÓN</th> --}}
+                  <th scope="col">TOTAL</th>
+                  <th scope="col">ADELANTO</th>
                 </tr>
               </thead>
+              <tbody style="text-align: center">
+              </tbody>
               <tfoot>
                 <th style="text-align: center">TOTAL</th>
                 <th></th>
@@ -99,9 +103,7 @@
                 <th></th>
                 <th><h4 id="total_pedido">S/. 0.00</h4></th>
                 <th><input type="hidden" name="total_pedido_pagar" requerid value="" id="total_pedido_pagar" class="form-control"></th>              
-              </tfoot>
-              <tbody>
-              </tbody>
+              </tfoot>              
             </table>
           </div>
         </div>
@@ -167,7 +169,8 @@
         url: "{{ route('cargar.pedidoscliente') }}?cliente_id=" + $(this).val(),
         method: 'GET',
         success: function(data) {
-          $('#ppedido_id').html(data.html);
+          //$('#ppedido_id').html(data.html);
+          $('#tabla_pedidos').append(data.html);
         }
       });
     });
@@ -234,13 +237,13 @@
       $("#total_pedido").val("");
     }
 
-    function evaluarPe() {
+    /* function evaluarPe() {
       if (total_pedido > 0 && total_pago > 0) {
         $("#guardar").show();
       } else {
         $("#guardar").hide();
       }
-    }
+    } */
 
     function diferenciaFaltante() {
       diferencia = total_pedido - total_pago;
@@ -372,7 +375,7 @@
     }
 
     function evaluarPa() {
-      if (total_pedido > 0 && total_pago > 0) {
+      if (total_pago > 0) {//total_pedido > 0 && 
         $("#guardar").show();
       } else {
         $("#guardar").hide();
