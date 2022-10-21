@@ -119,9 +119,16 @@ class ExcelController extends Controller
         return Excel::download(new PedidosAtendidosExport, 'Lista de Pedidos Atendidos.xlsx');
     }
 
-    public function pedidosporenviarExcel()
+    // public function pedidosporenviarExcel()
+    // {
+    //     return Excel::download(new PedidosPorEnviarExport, 'Lista de Pedidos por Enviar.xlsx');
+    // }
+    public function pedidosporenviarExcel(Request $request)
     {
-        return Excel::download(new PedidosPorEnviarExport, 'Lista de Pedidos por Enviar.xlsx');
+        return (new PedidosPorEnviarExport)
+                ->pedidosLima($request)
+                ->pedidosProvincia($request)
+                ->download('Lista de Pedidos por Enviar.xlsx');
     }
 
     //REPORTES

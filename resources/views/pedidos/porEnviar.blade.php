@@ -4,14 +4,25 @@
 
 @section('content_header')
   <h1>Lista de pedidos por enviar - ENVIOS
-    <div class="float-right btn-group dropleft">
+    {{-- <div class="float-right btn-group dropleft">
       <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         Exportar
       </button>
       <div class="dropdown-menu">
         <a href="{{ route('pedidosporenviarExcel') }}" class="dropdown-item"><img src="{{ asset('imagenes/icon-excel.png') }}"> EXCEL</a>
       </div>
+    </div> --}}
+    {{-- @can('clientes.exportar') --}}
+    <div class="float-right btn-group dropleft">
+      <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        Exportar
+      </button>
+      <div class="dropdown-menu">
+        <a href="" data-target="#modal-exportar" data-toggle="modal" class="dropdown-item" target="blank_"><img src="{{ asset('imagenes/icon-excel.png') }}"> Excel</a>
+      </div>
     </div>
+    @include('pedidos.modal.exportar', ['title' => 'Exportar pedidos POR ENVIAR', 'key' => '1'])
+    {{-- @endcan --}}
   </h1>
   @if($superasesor > 0)
   <br>
