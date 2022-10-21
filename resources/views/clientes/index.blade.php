@@ -48,11 +48,11 @@
             <th scope="col">Direccion</th>
             <th scope="col">Asesor asignado</th>
             <th scope="col">Cantidad</th>
-            <th scope="col">Año actual</th>
+            <!--<th scope="col">Año actual</th>
             <th scope="col">Mes actual</th>
             <th scope="col">anio pedido</th>
             <th scope="col">mes pedido</th>
-            <th scope="col">Deuda</th>
+            <th scope="col">Deuda</th>-->
             <th scope="col">Acciones</th>
           </tr>
         </thead>
@@ -159,11 +159,11 @@ $(document).ready(function () {
         {data: 'distrito', name: 'distrito'},
         {data: 'direccion', name: 'direccion'},
         {data: 'cantidad', name: 'cantidad'},
-        {data: 'dateY', name: 'dateY'},
-        {data: 'dateM', name: 'dateM'},
-        {data: 'anio', name: 'anio'},
-        {data: 'mes', name: 'mes'},
-        {data: 'deuda', name: 'deuda'},
+        //{data: 'dateY', name: 'dateY'},
+        //{data: 'dateM', name: 'dateM'},
+        //{data: 'anio', name: 'anio'},
+        //{data: 'mes', name: 'mes'},
+        //{data: 'deuda', name: 'deuda'},
         {data: 'action', name: 'action', orderable: false, searchable: false,sWidth:'20%'},
         ],
         "createdRow": function( row, data, dataIndex){
