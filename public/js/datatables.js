@@ -1,5 +1,6 @@
 $(document).ready(function () {
     $('#tablaPrincipal').DataTable({
+      destroy: true,//agregado para evitar adventencia de creacion
       language: {
         "decimal": "",
         "emptyTable": "No hay información",
@@ -22,4 +23,6 @@ $(document).ready(function () {
       },
       "order": [[ 1, "desc" ]]
     });
-  });
+
+
+});

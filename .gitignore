@@ -13,3 +13,5 @@ npm-debug.log
 yarn-error.log
 /.idea
 /.vscode
+resources/views/base_fria/action.blade
+resources/views/base_fria/action.blade.php

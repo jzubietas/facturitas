@@ -1,4 +1,4 @@
-@extends('adminlte::page')
+﻿@extends('adminlte::page')
 
 @section('title', 'Lista de pedidos por enviar')
 
@@ -103,12 +103,16 @@
                 @endif
               </td>
               <td>
-                @can('envios.enviar')
-                  <a href="" data-target="#modal-enviar-{{ $pedido->id }}" data-toggle="modal"><button class="btn btn-success btn-sm"><i class="fas fa-envelope"></i> Entregado</button></a>
-                  @if($pedido->envio == '1')
-                  <a href="" data-target="#modal-recibir-{{ $pedido->id }}" data-toggle="modal"><button class="btn btn-warning btn-sm"><i class="fas fa-check-circle"></i> Recibido</button></a>
-                  @endif
-                @endcan
+              
+                @if($ver_botones_accion > 0)
+                  @can('envios.enviar')
+                    <a href="" data-target="#modal-enviar-{{ $pedido->id }}" data-toggle="modal"><button class="btn btn-success btn-sm"><i class="fas fa-envelope"></i> Entregado</button></a>
+                    @if($pedido->envio == '1')
+                      <a href="" data-target="#modal-recibir-{{ $pedido->id }}" data-toggle="modal"><button class="btn btn-warning btn-sm"><i class="fas fa-check-circle"></i> Recibido</button></a>
+                    @endif
+                  @endcan
+                @endif
+
                 @if($pedido->destino == null && $pedido->direccion == '0' && ($pedido->envio)*1 > 0)
                   {{-- <a href="" data-target="#modal-destino-{{ $pedido->id }}" data-toggle="modal"><button class="btn btn-outline-dark btn-sm"><i class="fas fa-map"></i> Destino</button></a> --}}
                   <a href="{{ route('envios.createdireccion', $pedido) }}" class="btn btn-dark btn-sm"><i class="fas fa-map"></i> Destino</a>

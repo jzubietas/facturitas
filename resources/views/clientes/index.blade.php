@@ -186,7 +186,7 @@
 @stop
 
 @section('css')
-  <link rel="stylesheet" href="../css/admin_custom.css">
+  <!--<link rel="stylesheet" href="../css/admin_custom.css">-->
   <style>
     .bg-4{
       background: linear-gradient(to right, rgb(240, 152, 25), rgb(237, 222, 93));

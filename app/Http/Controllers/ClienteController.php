@@ -11,6 +11,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+//para datatable en cliente
+//use App/Controller/ClienteDataTable;
 
 class ClienteController extends Controller
 {
@@ -40,6 +42,28 @@ class ClienteController extends Controller
         ];
 
         if (Auth::user()->rol == "Asesor"){
+
+            /**/ 
+
+            /*$basefria = Cliente::
+                join('users as u', 'clientes.user_id', 'u.id')
+                ->select('clientes.id', 
+                        'clientes.nombre', 
+                        'clientes.celular', 
+                        'clientes.estado', 
+                        'u.name as user',
+                        'u.identificador')
+                ->where('clientes.estado','1')
+                ->where('clientes.tipo','0')
+                ->where('clientes.user_id', Auth::user()->id)
+                ->get();
+                return DataTables::of($basefria)
+                ->addColumn('actions', 'clientes.action')
+                ->rawColumns(['actions'])
+                ->make(true);*/
+
+
+
             $clientes1 = Cliente:://CLIENTES CON PEDIDOS CON DEUDA
                 join('users as u', 'clientes.user_id', 'u.id')
                 ->join('pedidos as p', 'clientes.id', 'p.cliente_id')
@@ -570,9 +594,82 @@ class ClienteController extends Controller
         return redirect()->route('clientes.index')->with('info','eliminado');
     }
 
-
+    //para datatable serverside
+    /*public function indexbfdata(ClienteDataTable $dataTable)
+    { */
+       // return $dataTable->render('users.index');
+        /*$dataserverside=null;
+        if ($request->ajax()) {
+            $totalFilteredRecord = $totalDataRecord = $draw_val = "";
+            $columns_list = array(
+                0 =>'id',
+                //1 =>'user_id',
+                1=> 'nombre',
+                2=> 'celular',
+                //4=> 'tipo',
+            );
+        
+            $totalDataRecord = Cliente::count();
+        
+            $totalFilteredRecord = $totalDataRecord;
+        
+            $limit_val = $request->input('length');
+            $start_val = $request->input('start');
+            $order_val = $columns_list[$request->input('order.0.column')];
+            $dir_val = $request->input('order.0.dir');
+        
+            if(empty($request->input('search.value')))
+            {
+                $post_data = Cliente::offset($start_val)
+                ->limit($limit_val)
+                ->orderBy($order,$dir_val)
+                ->get();
+            }
+            else {
+                $search_text = $request->input('search.value');
+                
+                $post_data =  Cliente::where('id','LIKE',"%{$search_text}%")
+                    ->orWhere('nombre', 'LIKE',"%{$search_text}%")
+                    ->offset($start_val)
+                    ->limit($limit_val)
+                    ->orderBy($order,$dir_val)
+                    ->get();
+                
+                $totalFilteredRecord = Cliente::where('id','LIKE',"%{$search_text}%")
+                ->orWhere('nombre', 'LIKE',"%{$search_text}%")
+                ->count();
+            }
+        
+            $data_val = array();
+            if(!empty($post_data))
+            {
+                foreach ($post_data as $post_val)
+                {
+                    $datashow =  route('posts_table.show',$post_val->id);
+                    $dataedit =  route('posts_table.edit',$post_val->id);
+                    
+                    $postnestedData['id'] = $post_val->id;
+                    $postnestedData['nombre'] = $post_val->nombre;
+                    $postnestedData['celular'] = $post_val->celular;//substr(strip_tags($post_val->body),0,50).".....";
+                    //$postnestedData['created_at'] = date('j M Y h:i a',strtotime($post_val->created_at));
+                    $postnestedData['options'] = "&emsp;<a href='{$datashow}'class='showdata' title='SHOW DATA' ><span class='showdata glyphicon glyphicon-list'></span></a>&emsp;<a href='{$dataedit}' class='editdata' title='EDIT DATA' ><span class='editdata glyphicon glyphicon-edit'></span></a>";
+                    $data_val[] = $postnestedData;
+                }
+            }
+            $draw_val = $request->input('draw');
+            $get_json_data = array(
+                "draw"            => intval($draw_val),
+                "recordsTotal"    => intval($totalDataRecord),
+                "recordsFiltered" => intval($totalFilteredRecord),
+                "data"            => $data_val
+            );
+        
+            echo json_encode($get_json_data);
+        }//fin ajax
+        */
+    //}
     public function indexbf()
-    {
+    {   
         if (Auth::user()->rol == "Asesor"){
             $clientes = Cliente::
             join('users as u', 'clientes.user_id', 'u.id')
