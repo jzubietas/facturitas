@@ -1,5 +1,5 @@
   <!-- Modal -->
-  <div class="modal fade" id="modal-convertir-{{ $cliente->id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal fade" id="modal-convertir" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" style="max-width: 1000px!important;">
       <div class="modal-content">
         <div class="modal-header bg-info">
@@ -8,9 +8,13 @@
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
-        {{ Form::Open(['route' => ['updatebf', $cliente], 'id' => 'formulario']) }}
+        
+        
+        <form id="formconvertir" name="formconvertir">
+        <input type="text" id="hiddenId" name="hiddenID" class="form-control"> 
         <div class="modal-body">
-          <p>Confirme si desea <strong>PASAR DE BASE FRIA A CLIENTE</strong> a: <br> <strong>BF00{{ $cliente->id }} - {{ $cliente->celular }}</strong></p>
+          <p>Confirme si desea <strong>PASAR DE BASE FRIA A CLIENTE</strong> a: <br> <strong class="textcode">BF00 id - celular</strong></p>
+          
         </div>
         <div style="margin: 10px">
           <div class="card">
@@ -24,7 +28,7 @@
                       </div>
                       <div class="form-group col-lg-6">
                         {!! Form::label('nombre', 'Nombre*') !!}
-                        {!! Form::text('nombre', $cliente->nombre, ['class' => 'form-control', 'id' => 'nombre', 'required']) !!}
+                        {!! Form::text('nombre', 'nombre', ['class' => 'form-control', 'id' => 'nombre', 'required']) !!}
                         @error('nombre')
                           <small class="text-danger">{{ $message }}</small>
                         @enderror
@@ -38,7 +42,7 @@
                       </div>
                       <div class="form-group col-lg-3">
                         {!! Form::label('celular', 'Celular*') !!}
-                        {!! Form::number('celular', $cliente->celular, ['class' => 'form-control', 'id' => 'celular', 'min' =>'0', 'max' => '999999999', 'maxlength' => '9', 'oninput' => 'maxLengthCheck(this)', 'required']) !!}
+                        {!! Form::number('celular', 'celular', ['class' => 'form-control', 'id' => 'celular', 'min' =>'0', 'max' => '999999999', 'maxlength' => '9', 'oninput' => 'maxLengthCheck(this)', 'required']) !!}
                         @error('celular')
                           <small class="text-danger">{{ $message }}</small>
                         @enderror
@@ -138,9 +142,11 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-          <button type="submit" class="btn btn-info">Confirmar</button>
+          <button type="submit" id="submit" class="btn btn-info">Confirmar</button>
         </div>
-        {{ Form::Close() }}
+
+        </form>
+        
       </div>
     </div>
   </div>

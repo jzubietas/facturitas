@@ -42,10 +42,16 @@ Route::get('basefriatabla', [BasefriaController::class, 'index'])->name('basefri
 Route::get('clientes.createbf', [ClienteController::class, 'createbf'])->name('clientes.createbf');
 Route::post('clientes.storebf', [ClienteController::class, 'storebf'])->name('clientes.storebf');
 Route::post('basefriacliente/{cliente}', [ClienteController::class, 'updatebf'])->name('updatebf');
+
+Route::post('basefriaclienteRequest', [ClienteController::class, 'updatebfpost'])->name('basefriaRequest.post');
+
 Route::get('clientes.editbf/{cliente}/edit2', [ClienteController::class, 'editbf'])->name('clientes.editbf');
 
 Route::resource('pedidos', PedidoController::class)->names('pedidos');
 Route::get('ruc', [PedidoController::class, 'ruc'])->name('cargar.ruc');
+
+Route::get('basefria.cargarid', [BasefriaController::class, 'cargarid'])->name('basefria.cargarid');
+
 Route::get('cliente', [PedidoController::class, 'cliente'])->name('cargar.cliente');
 Route::get('tipobanca', [PedidoController::class, 'tipobanca'])->name('cargar.tipobanca');
 Route::post('pedidos.agregarruc', [PedidoController::class, 'AgregarRuc'])->name('pedidos.agregarruc');

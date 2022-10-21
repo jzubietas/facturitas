@@ -757,6 +757,59 @@ class ClienteController extends Controller
         return view('base_fria.edit', compact('cliente', 'users'));
     }
 
+    public function updatebfpost(Request $request)
+    {
+        $request->validate([
+            'nombre' => 'required',
+            'dni' => 'required',
+            'celular' => 'required',
+            'provincia' => 'required',
+            'distrito' => 'required',
+            'direccion' => 'required',
+            'referencia' => 'required',
+            'porcentaje' => 'required',
+        ]);
+        //$id=null;
+        //Selection::whereId($id)->update($request->all());
+        $cliente = Cliente::where('clientes.id',$request->hiddenID)->update([
+            'nombre' => $request->nombre,
+            'dni' => $request->dni,
+            'celular' => $request->celular,
+            'provincia' => $request->provincia,
+            'distrito' => $request->distrito,
+            'direccion' => $request->direccion,
+            'referencia' => $request->referencia,
+            'deuda' => '0',
+            'pidio' => '0',
+            'tipo' => '1'
+        ]);
+
+        try {
+            DB::beginTransaction();
+            
+        // ALMACENANDO PAGO-PEDIDOS
+        $nombreporcentaje = $request->nombreporcentaje;
+        $valoresporcentaje = $request->porcentaje;
+        $cont = 0;
+
+        /* return $porcentaje; */
+        while ($cont < count((array)$nombreporcentaje)) {
+
+            Porcentaje::create([
+                    'cliente_id' => $request->hiddenID,//$cliente->id,//
+                    'nombre' => $nombreporcentaje[$cont],
+                    'porcentaje' => $valoresporcentaje[$cont],
+                ]);
+                $cont++;
+            }
+        DB::commit();
+        } catch (\Throwable $th) {
+            throw $th;            
+        }
+
+        //return redirect()->route('clientes.index')->with('info','registrado');
+    }
+
     public function updatebf(Request $request, Cliente $cliente)
     {
         $request->validate([
