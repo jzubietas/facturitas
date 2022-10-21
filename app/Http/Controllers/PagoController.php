@@ -152,7 +152,7 @@ class PagoController extends Controller
                         'dp.saldo')
                 ->where('pedidos.cliente_id', $request->cliente_id)
                 /* ->where('pedidos.pago', '0') */
-                ->where('pedidos.pagado', '0')
+                ->where('pedidos.pagado', '<>', '2')
                 ->where('pedidos.estado', '1')
                 ->where('dp.estado', '1')                
                 ->get();
@@ -166,6 +166,11 @@ class PagoController extends Controller
 
     public function store(Request $request)
     {
+        //ESTADOS PARA CAMPO "PAGADO" EN PEDIDOS
+        //0: DEBE
+        //1: ADELANTO
+        //2: PAGADO
+
         $request->validate([
             'imagen' => 'required',
         ]);
@@ -203,7 +208,7 @@ class PagoController extends Controller
                         'estado' => '1'
                     ]);
 
-                //INDICADOR DE PAGOS
+                //INDICADOR DE PAGOS Y ESTADO DE PAGADO EN EL PEDIDO
                 $pedido = Pedido::find($pagoPedido->pedido_id);
 
                 $pedido->update([
@@ -211,20 +216,36 @@ class PagoController extends Controller
                 ]);
 
                 $detalle_pedido = DetallePedido::where('pedido_id', $pedido->id)->first();
-                if($monto_pagado_a_favor > $detalle_pedido->total){
+                if($monto_pagado_a_favor >= $detalle_pedido->total){
                     $pedido->update([
-                        'pagado' => '1'
+                        'pagado' => '2'//PAGADO
                     ]);
                     $detalle_pedido->update([
                         'saldo' => '0'
                     ]);
-                    $monto_pagado_a_favor = $monto_pagado_a_favor - $detalle_pedido->total;
-                }else{
-                    $detalle_pedido->update([
-                        'saldo' => ($detalle_pedido->total)*1-($monto_pagado_a_favor)*1
+                    $pagoPedido->update([
+                        'pagado' => '2'//PAGADO
                     ]);
+                    $monto_pagado_a_favor = ($monto_pagado_a_favor)*1 - ($detalle_pedido->total)*1;
+                }else{
+                    $pedido->update([
+                        'pagado' => '1'//ADELANTO
+                    ]);
+                    $pagoPedido->update([
+                        'pagado' => '1'//ADELANTO
+                    ]);
+                    $detalle_pedido->update([
+                        'saldo' => ($detalle_pedido->total)*1 - ($monto_pagado_a_favor)*1                        
+                    ]);
+                    if($detalle_pedido->total - $monto_pagado_a_favor <= 3){//SI EL MONTO ES IGUAL O MENOR A 3, SE PERDONA LA DEUDA
+                        $pedido->update([
+                            'pagado' => '2'//PAGADO
+                        ]);
+                        $pagoPedido->update([
+                            'pagado' => '2'//PAGADO
+                        ]);
+                    }
                 }
-
                 $contPe++;
             }
 
@@ -276,31 +297,27 @@ class PagoController extends Controller
             }
 
             //ACTUALIZAR PEDIDOS A PAGADOS
-
-
-
-
-            if($deuda_total - $pagado <= 3){
+            //if($deuda_total - $pagado <= 3){
                 $pago->update([
                     'condicion' => 'PAGO',
                     'notificacion' => 'Nuevo pago registrado',
-                    'diferencia' => '0'//ACTUALIZAR LA DEUDA EN EL PAGO
+                    'diferencia' => $deuda_total - $pagado//'diferencia' => '0'//ACTUALIZAR LA DEUDA EN EL PAGO
                 ]);
 
                 //ACTUALIZAR QUE CLIENTE NO DEBE
                 $cliente = Cliente::find($request->cliente_id);
 
-                $pedido_deuda = Pedido::where('cliente_id', $request->cliente_id)
+                $pedido_deuda = Pedido::where('cliente_id', $request->cliente_id)//CONTAR LA CANTIDAD DE PEDIDOS QUE DEBE
                                         ->where('pagado', '0')
                                         ->count();
-                if($pedido_deuda == 0){
+                if($pedido_deuda == 0){//SINO DEBE NINGUN PEDIDO EL ESTADO DEL CLIENTE PASA A NO DEUDA(CERO)
                     $cliente->update([
                         'deuda' => '0',
                     ]);
                 }                
 
                 event(new PagoEvent($pago));
-            }
+            /* }
             else
             {
                 //ACTUALIZAR LA DEUDA EN EL PAGO
@@ -308,7 +325,7 @@ class PagoController extends Controller
                     'condicion' => 'ADELANTO',
                     'diferencia' => $deuda_total - $pagado
                 ]);
-            }
+            } */
             
             //ACTUALIZAR SALDO A FAVOR
             $cliente = Cliente::find($request->cliente_id);
@@ -370,7 +387,8 @@ class PagoController extends Controller
                     'pagos.observacion', 
                     'pagos.condicion', 
                     'pagos.estado', 
-                    'pagos.created_at')
+                    'pagos.created_at'
+                    )
             ->first();
         
         $pagoPedidos = PagoPedido::join('pedidos as p', 'pago_pedidos.pedido_id', 'p.id')
@@ -379,7 +397,10 @@ class PagoController extends Controller
                     'dp.codigo',
                     'p.id as pedidos',
                     'p.condicion',
-                    'dp.total')
+                    'dp.total',
+                    'pago_pedidos.pagado',
+                    'pago_pedidos.abono'
+                    )
             ->where('pago_pedidos.estado', '1')
             ->where('p.estado', '1')
             ->where('dp.estado', '1')
@@ -463,7 +484,9 @@ class PagoController extends Controller
                     'dp.codigo',
                     'p.id as pedidos',
                     'p.condicion',
-                    'dp.total')
+                    'dp.total',
+                    'pago_pedidos.pagado'
+                    )
             ->where('pago_pedidos.estado', '1')
             ->where('p.estado', '1')
             ->where('dp.estado', '1')
@@ -828,7 +851,7 @@ class PagoController extends Controller
                     'dpe.codigo as codigos', 
                     'u.name as users', 
                     'pagos.observacion', 
-                    'pagos.saldo',
+                    //'pagos.saldo',
                     'dpe.total as total_deuda',
                     DB::raw('sum(dpa.monto) as total_pago'), 
                     'pagos.condicion',                   
@@ -842,7 +865,7 @@ class PagoController extends Controller
                     'dpe.codigo', 
                     'u.name', 
                     'pagos.observacion', 
-                    'pagos.saldo',
+                    //'pagos.saldo',
                     'dpe.total',
                     'pagos.condicion', 
                     'pagos.created_at')
@@ -897,7 +920,6 @@ class PagoController extends Controller
             ->first();
         
         $pagoPedidos = PagoPedido::join('pedidos as p', 'pago_pedidos.pedido_id', 'p.id')
-            /* ->join('clientes as c', 'p.user_id', 'c.id') */
             ->join('detalle_pedidos as dp', 'p.id', 'dp.pedido_id')
             ->select('pago_pedidos.id', 
                     /* 'c.celular', //cliente
@@ -905,7 +927,10 @@ class PagoController extends Controller
                     'dp.codigo',
                     'p.id as pedidos',
                     'p.condicion',
-                    'dp.total')
+                    'dp.total',
+                    'pago_pedidos.pagado',
+                    'pago_pedidos.abono'
+                    )
             ->where('pago_pedidos.estado', '1')
             ->where('p.estado', '1')
             ->where('dp.estado', '1')
