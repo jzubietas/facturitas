@@ -20,21 +20,18 @@
               <select name="cliente_id" class="border form-control border-secondary" id="cliente_id" data-live-search="true" style="height: 100% !important;">{{-- selectpicker lang="es" --}}
                 <option value="">---- SELECCIONE CLIENTE ----</option>
                   @foreach($clientes1 as $cliente)
-                        @if($cliente->deuda == "0")
-                            <option style="color:#000" value="{{ $cliente->id }}">{{$cliente->nombre}} - {{$cliente->celular}}</option>
-                        @else
-                            @if($dateY == $cliente->anio)
-                                @if($dateM == $cliente->mes)
-                                    <option style="color:#000" value="{{ $cliente->id }}">{{$cliente->nombre}} - {{$cliente->celular}}</option>
-                                @else
-                                    <option disabled style="color:red;" value="{{ $cliente->id }}">{{$cliente->nombre}} - {{$cliente->celular}} **CLIENTE CON DEUDA**</option>
-                                @endif
-                            @else
-                                <option disabled style="color:red" value="{{ $cliente->id }}">{{$cliente->nombre}} - {{$cliente->celular}} **CLIENTE CON DEUDA**</option>
-                            @endif  
-                        @endif  
-                      
-                    
+                    @if($cliente->deuda > 0 && $dateM == $cliente->mes && $dateY == $cliente->anio)
+                      <option style="background: #4ac4e2; color:#ffffff" value="{{ $cliente->id }}">{{$cliente->nombre}} - {{$cliente->celular}} - {{$cliente->deuda}} -{{$dateY}}-{{$dateM}}-{{$cliente->anio}}-{{$cliente->mes}}</option>
+                    @elseif($cliente->cantidad > 0 && (($dateM*1)-($cliente->mes*1)) > 0 && (($dateY*1)-($cliente->anio*1)) == 0)
+                      @if(Auth::user()->rol != 'Asesor' )
+                        <option id="deudor" style="background: #e73d3d; color:#ffffff" value="{{ $cliente->id }}">{{$cliente->nombre}} - {{$cliente->celular}}</option>
+                      @endif
+                      @if(Auth::user()->rol == 'Asesor')
+                        <option id="deudor" style="background: #e73d3d; color:#5e5c5c" value="{{ $cliente->id }}" disabled>{{$cliente->nombre}} - {{$cliente->celular}} **CLIENTE CON DEUDA**</option>
+                      @endif
+                    @else
+                      <option value="{{ $cliente->id }}">{{$cliente->nombre}} - {{$cliente->celular}}</option>
+                    @endif   
                   @endforeach
                   
               </select>              

@@ -19,7 +19,7 @@ class BasesFriasExport implements FromView
                 'clientes.nombre', 
                 'clientes.celular', 
                 'clientes.estado', 
-                'u.name as users')
+                'u.identificador as users')
         ->where('clientes.estado','1')
         ->where('clientes.tipo','0')
         ->get();

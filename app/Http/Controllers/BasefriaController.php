@@ -33,7 +33,7 @@ class BasefriaController extends Controller
                     'clientes.celular', 
                     //'clientes.estado', 
                     //'u.name as user',
-                    'u.name as identificador'
+                    'u.identificador as identificador'
                     )
             ->where('clientes.estado','1')
             ->where('clientes.tipo','0')

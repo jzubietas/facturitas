@@ -160,8 +160,8 @@ class PedidoController extends Controller
                 ->join('pedidos as p', 'clientes.id', 'p.cliente_id')
                 ->where('clientes.estado','1')
                 ->where('clientes.tipo','1')
-                ->where('clientes.pidio','1')
-                ->where('clientes.deuda', '1')
+                //->where('clientes.pidio','1')
+                //->where('clientes.deuda', '1')
                 ->where('clientes.user_id', Auth::user()->id)
                 ->groupBy(
                     'clientes.id',
@@ -172,7 +172,9 @@ class PedidoController extends Controller
                     'u.identificador',
                     'clientes.provincia',
                     'clientes.distrito',
-                    'clientes.direccion'
+                    'clientes.direccion',
+                    'clientes.pidio',
+                    'clientes.deuda'
                 )
                 ->get(['clientes.id', 
                         'clientes.nombre', 
@@ -183,13 +185,15 @@ class PedidoController extends Controller
                         'clientes.provincia',
                         'clientes.distrito',
                         'clientes.direccion',
+                        'clientes.pidio',
+                        'clientes.deuda',
                         DB::raw('count(p.created_at) as cantidad'),
                         DB::raw('MAX(p.created_at) as fecha'),
                         DB::raw('MAX(DATE_FORMAT(p.created_at, "%d")) as dia'),
                         DB::raw('MAX(DATE_FORMAT(p.created_at, "%m")) as mes'),
                         DB::raw('MAX(DATE_FORMAT(p.created_at, "%Y")) as anio')
                         ]);
-            $clientes2 = Cliente:://CLIENTES CON PEDIDOS SIN DEUDA
+            /*$clientes2 = Cliente:://CLIENTES CON PEDIDOS SIN DEUDA
                 join('users as u', 'clientes.user_id', 'u.id')
                 ->join('pedidos as p', 'clientes.id', 'p.cliente_id')
                 ->where('clientes.estado','1')
@@ -221,8 +225,8 @@ class PedidoController extends Controller
                         DB::raw('MAX(DATE_FORMAT(p.created_at, "%d")) as dia'),
                         DB::raw('MAX(DATE_FORMAT(p.created_at, "%m")) as mes'),
                         DB::raw('MAX(DATE_FORMAT(p.created_at, "%Y")) as anio')
-                        ]);
-            $clientes3 = Cliente:://CLIENTES SIN PEDIDOS
+                        ]);*/
+            /*$clientes3 = Cliente:://CLIENTES SIN PEDIDOS
                 join('users as u', 'clientes.user_id', 'u.id')
                 ->where('clientes.estado','1')
                 ->where('clientes.tipo','1')
@@ -248,7 +252,7 @@ class PedidoController extends Controller
                         'clientes.provincia',
                         'clientes.distrito',
                         'clientes.direccion'
-                        ]);
+                        ]);*/
             $deudores = Cliente::where('estado', '1')
                                 ->where('user_id', Auth::user()->id)
                                 ->where('tipo', '1')
@@ -277,8 +281,8 @@ class PedidoController extends Controller
                 ->join('pedidos as p', 'clientes.id', 'p.cliente_id')
                 ->where('clientes.estado','1')
                 ->where('clientes.tipo','1')
-                ->where('clientes.pidio','1')
-                ->where('clientes.deuda', '1')
+                //->where('clientes.pidio','1')
+                //->where('clientes.deuda', '1')
                 ->where('clientes.user_id', Auth::user()->id)
                 ->groupBy(
                     'clientes.id',
@@ -289,7 +293,9 @@ class PedidoController extends Controller
                     'u.identificador',
                     'clientes.provincia',
                     'clientes.distrito',
-                    'clientes.direccion'
+                    'clientes.direccion',
+                    'clientes.pidio',
+                    'clientes.deuda'
                 )
                 ->get(['clientes.id', 
                         'clientes.nombre', 
@@ -300,13 +306,15 @@ class PedidoController extends Controller
                         'clientes.provincia',
                         'clientes.distrito',
                         'clientes.direccion',
+                        'clientes.pidio',
+                        'clientes.deuda',
                         DB::raw('count(p.created_at) as cantidad'),
                         DB::raw('MAX(p.created_at) as fecha'),
                         DB::raw('MAX(DATE_FORMAT(p.created_at, "%d")) as dia'),
                         DB::raw('MAX(DATE_FORMAT(p.created_at, "%m")) as mes'),
                         DB::raw('MAX(DATE_FORMAT(p.created_at, "%Y")) as anio')
                         ]);
-            $clientes2 = Cliente:://CLIENTES CON PEDIDOS SIN DEUDA
+            /*$clientes2 = Cliente:://CLIENTES CON PEDIDOS SIN DEUDA
                 join('users as u', 'clientes.user_id', 'u.id')
                 ->join('pedidos as p', 'clientes.id', 'p.cliente_id')
                 ->where('clientes.estado','1')
@@ -338,8 +346,8 @@ class PedidoController extends Controller
                         DB::raw('MAX(DATE_FORMAT(p.created_at, "%d")) as dia'),
                         DB::raw('MAX(DATE_FORMAT(p.created_at, "%m")) as mes'),
                         DB::raw('MAX(DATE_FORMAT(p.created_at, "%Y")) as anio')
-                        ]);
-            $clientes3 = Cliente:://CLIENTES SIN PEDIDOS
+                        ]);*/
+            /*$clientes3 = Cliente:://CLIENTES SIN PEDIDOS
                 join('users as u', 'clientes.user_id', 'u.id')
                 ->where('clientes.estado','1')
                 ->where('clientes.tipo','1')
@@ -365,7 +373,7 @@ class PedidoController extends Controller
                         'clientes.provincia',
                         'clientes.distrito',
                         'clientes.direccion'
-                        ]);
+                        ]);*/
             $deudores = Cliente::where('estado', '1')
                                 ->where('user_id', Auth::user()->id)
                                 ->where('tipo', '1')
@@ -393,8 +401,8 @@ class PedidoController extends Controller
                 ->join('pedidos as p', 'clientes.id', 'p.cliente_id')
                 ->where('clientes.estado','1')
                 ->where('clientes.tipo','1')
-                ->where('clientes.pidio','1')
-                ->where('clientes.deuda', '1')
+                //->where('clientes.pidio','1')
+                //->where('clientes.deuda', '1')
                 ->groupBy(
                     'clientes.id',
                     'clientes.nombre',
@@ -404,7 +412,9 @@ class PedidoController extends Controller
                     'u.identificador',
                     'clientes.provincia',
                     'clientes.distrito',
-                    'clientes.direccion'
+                    'clientes.direccion',
+                    'clientes.pidio',
+                    'clientes.deuda'
                 )
                 ->get(['clientes.id', 
                         'clientes.nombre', 
@@ -415,13 +425,15 @@ class PedidoController extends Controller
                         'clientes.provincia',
                         'clientes.distrito',
                         'clientes.direccion',
+                        'clientes.pidio',
+                        'clientes.deuda',
                         DB::raw('count(p.created_at) as cantidad'),
                         DB::raw('MAX(p.created_at) as fecha'),
                         DB::raw('MAX(DATE_FORMAT(p.created_at, "%d")) as dia'),
                         DB::raw('MAX(DATE_FORMAT(p.created_at, "%m")) as mes'),
                         DB::raw('MAX(DATE_FORMAT(p.created_at, "%Y")) as anio')
                         ]);
-            $clientes2 = Cliente:://CLIENTES CON PEDIDOS SIN DEUDA
+            /*$clientes2 = Cliente:://CLIENTES CON PEDIDOS SIN DEUDA
                 join('users as u', 'clientes.user_id', 'u.id')
                 ->join('pedidos as p', 'clientes.id', 'p.cliente_id')
                 ->where('clientes.estado','1')
@@ -452,8 +464,8 @@ class PedidoController extends Controller
                         DB::raw('MAX(DATE_FORMAT(p.created_at, "%d")) as dia'),
                         DB::raw('MAX(DATE_FORMAT(p.created_at, "%m")) as mes'),
                         DB::raw('MAX(DATE_FORMAT(p.created_at, "%Y")) as anio')
-                        ]);
-            $clientes3 = Cliente:://CLIENTES SIN PEDIDOS
+                        ]);*/
+            /*$clientes3 = Cliente:://CLIENTES SIN PEDIDOS
                 join('users as u', 'clientes.user_id', 'u.id')
                 ->where('clientes.estado','1')
                 ->where('clientes.tipo','1')
@@ -478,7 +490,7 @@ class PedidoController extends Controller
                         'clientes.provincia',
                         'clientes.distrito',
                         'clientes.direccion'
-                        ]);
+                        ]);*/
             $deudores = Cliente::where('estado', '1')
                                 ->where('tipo', '1')
                                 ->where('deuda', '1')
@@ -547,7 +559,7 @@ class PedidoController extends Controller
                     ->count();
         $numped = $numped + 1;
         
-        return view('pedidos.create', compact('users', 'clientes1', 'clientes2', 'clientes3', 'dateM', 'dateY','deudores', 'meses', 'anios', 'rucs', 'fecha', 'numped', 'clientes_ruc'));
+        return view('pedidos.create', compact('users', 'clientes1', 'dateM', 'dateY','deudores', 'meses', 'anios', 'rucs', 'fecha', 'numped', 'clientes_ruc'));
     }
 
     /**

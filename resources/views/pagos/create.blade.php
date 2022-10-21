@@ -29,41 +29,8 @@
     </div>
     <div class="card-body">
       <div class="form-row">
-        <div class="form-group col-lg-6">
-          <div class="form-row">
-            <div class="form-group col-lg-6">
-              <h2>PEDIDOS A PAGAR</h2>
-            </div>
-            <div class="form-group col-lg-6">
-              <a data-target="#modal-add-pedidos" id="addpedido" data-toggle="modal"><button class="btn btn-info"><i class="fas fa-plus-circle"></i></button></a>  
-            </div>
-          </div>
-          <div class="table-responsive">
-            <table id="tabla_pedidos" class="table table-striped">
-              <thead class="bg-info">
-                <tr>
-                  <th scope="col">ITEM</th>
-                  <th scope="col">PEDIDO</th>
-                  <th scope="col">CODIGO</th>
-                  <th scope="col">MONTO</th>
-                  <th scope="col">SALDO</th>
-                  <th scope="col">ACCIÓN</th>
-                </tr>
-              </thead>
-              <tfoot>
-                <th style="text-align: center">TOTAL</th>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th><h4 id="total_pedido">S/. 0.00</h4></th>
-                <th><input type="hidden" name="total_pedido_pagar" requerid value="" id="total_pedido_pagar" class="form-control"></th>              
-              </tfoot>
-              <tbody>
-              </tbody>
-            </table>
-          </div>
-        </div>
-        <div class="form-group col-lg-6">
+
+      <div class="form-group col-lg-6">
           <div class="form-row" style="margin:-2px">
             <div class="form-group col-lg-6">
               <h2>PAGOS - <b style="font-size:20px"> {!! Form::label('saldo', 'Saldo a favor') !!}</b></h2>
@@ -103,6 +70,45 @@
             </table>
           </div>
         </div>
+        
+        <div class="form-group col-lg-6">
+          <div class="form-row">
+            <div class="form-group col-lg-6">
+              <h2>PEDIDOS A PAGAR</h2>
+            </div>
+            <div class="form-group col-lg-6">
+              <a data-target="#modal-add-pedidos" id="addpedido" data-toggle="modal"><button class="btn btn-info"><i class="fas fa-plus-circle"></i></button></a>  
+            </div>
+          </div>
+          <div class="table-responsive">
+            <table id="tabla_pedidos" class="table table-striped">
+              <thead class="bg-info">
+                <tr>
+                  <th scope="col">ITEM</th>
+                  <th scope="col">PEDIDO</th>
+                  <th scope="col">CODIGO</th>
+                  <th scope="col">MONTO</th>
+                  <th scope="col">SALDO</th>
+                  <th scope="col">ACCIÓN</th>
+                </tr>
+              </thead>
+              <tfoot>
+                <th style="text-align: center">TOTAL</th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th><h4 id="total_pedido">S/. 0.00</h4></th>
+                <th><input type="hidden" name="total_pedido_pagar" requerid value="" id="total_pedido_pagar" class="form-control"></th>              
+              </tfoot>
+              <tbody>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        
+
+
       </div>
       {{-- MODALS --}}
       @include('pagos.modals.AddPedidos')
