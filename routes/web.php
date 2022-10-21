@@ -149,6 +149,8 @@ Route::post('/mark-as-read', [NotificationsController::class, 'markNotification'
     Route::get('pedidosatendidosExcel', [ExcelController::class, 'pedidosatendidosExcel'])->name('pedidosatendidosExcel');
     //MODULO ENVIOS
     Route::get('pedidosporenviarExcel', [ExcelController::class, 'pedidosporenviarExcel'])->name('pedidosporenviarExcel');
+    Route::post('reporte/pedidosporenviarporfechasexcel', [ExcelController::class, 'pedidosporenviarporfechasexcel'])->name('pedidosporenviarporfechasexcel');
+
     //MODULO PEDIDOS
     Route::get('pedidosExcel', [ExcelController::class, 'pedidosExcel'])->name('pedidosExcel');
     Route::get('mispedidosExcel', [ExcelController::class, 'mispedidosExcel'])->name('mispedidosExcel');

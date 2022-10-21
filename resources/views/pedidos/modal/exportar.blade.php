@@ -3,12 +3,19 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header bg-success">
-        <h5 class="modal-title" id="exampleModalLabel">Exportar pedidos ENTREGADOS</h5>
+        <!-- <h5 class="modal-title" id="exampleModalLabel">Exportar pedidos ENTREGADOS</h5> -->
+        <h5 class="modal-title" id="exampleModalLabel">{{ $title }}</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      {!! Form::open(['route' => ['entregadosporfechasexcel'], 'method' => 'POST', 'target' => 'blanck_']) !!}
+      
+      @if($key === '1')
+        {!! Form::open(['route' => ['pedidosporenviarporfechasexcel'], 'method' => 'POST', 'target' => 'blanck_']) !!}
+      @elseif($key === '2')
+        {!! Form::open(['route' => ['entregadosporfechasexcel'], 'method' => 'POST', 'target' => 'blanck_']) !!}
+      @endif
+      
             <div class="card-body">
               <div class="form-row">
                 <div class="form-group col-lg-12" style="text-align: center; font-size:16px">                  
