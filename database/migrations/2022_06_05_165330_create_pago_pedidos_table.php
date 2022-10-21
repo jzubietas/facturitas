@@ -17,6 +17,8 @@ class CreatePagoPedidosTable extends Migration
             $table->id();
             $table->unsignedBigInteger('pago_id');
             $table->unsignedBigInteger('pedido_id');
+            $table->integer('pagado')->nullable();//ESTADO DEL PAGO DEL PEDIDO
+            $table->decimal('abono',2,1)->nullable();//CANTIDAD ABONADA EN ESTE PAGO
             $table->integer('estado');
 
             $table->timestamps();

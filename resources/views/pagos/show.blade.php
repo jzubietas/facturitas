@@ -44,9 +44,10 @@
                   <th scope="col">ITEM</th>
                   <th scope="col">PEDIDO</th>
                   <th scope="col">CODIGO</th>
-                  {{-- <th scope="col">CLIENTE</th>     --}}            
+                  <th scope="col">ESTADO DE PAGO</th>
                   <th scope="col">ESTADO</th>
-                  <th scope="col">MONTO</th>
+                  <th scope="col">MONTO TOTAL</th>
+                  <th scope="col">ABONADO</th>
                 </tr>
               </thead>
               <tbody>
@@ -59,9 +60,14 @@
                     <td>{{ $contPe + 1 }}</td>
                     <td>PED000{{ $pagoPedido->pedidos }}</td>
                     <td>{{ $pagoPedido->codigo }}</td>
-                    {{-- <td>{{ $pagoPedido->celular }} - {{ $pagoPedido->nombre }}</td>  --}}                 
+                      @if($pagoPedido->pagado == 1)
+                      <td>ADELANTO</td>
+                      @else
+                      <td>PAGADO</td>
+                      @endif
                     <td>{{ $pagoPedido->condicion }}</td>
                     <td>{{ $pagoPedido->total }}</td>
+                    <td></td>
                   </tr>
                   @php
                     $sumPe = $sumPe + $pagoPedido->total;
@@ -71,10 +77,11 @@
               </tbody>
               <tfoot>
                 <tr>
-                  <td>TOTAL</td>
+                  <td>TOTAL ABONADO</td>
                   <td></td>
                   <td></td>
-                  {{-- <td></td> --}}
+                  <td></td>
+                  <td></td>
                   <td></td>
                   <td><?php echo number_format($sumPe, 2, '.', ' ')?></td>
                 </tr>
