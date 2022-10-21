@@ -89,21 +89,47 @@ class ExcelController extends Controller
         return Excel::download(new PagosObservadosExport, 'Lista de Pagos Observados.xlsx');
     }
 
-    public function pedidosExcel()
+    // public function pedidosExcel()
+    // {
+    //     return Excel::download(new PedidosExport, 'Lista de Pedidos.xlsx');
+    // }
+    // public function mispedidosExcel()
+    // {
+    //     return Excel::download(new MisPedidosExport, 'Lista de Mis Pedidos.xlsx');
+    // }
+    // public function pedidospagadosExcel()
+    // {
+    //     return Excel::download(new PedidosPagadosExport, 'Lista de Pedidos Pagados.xlsx');
+    // }
+    // public function pedidossinpagosExcel()
+    // {
+    //     return Excel::download(new PedidosSinPagosExport, 'Lista de Pedidos Sin Pagos.xlsx');
+    // }
+    public function pedidosExcel(Request $request)
     {
-        return Excel::download(new PedidosExport, 'Lista de Pedidos.xlsx');
+        return (new PedidosExport)
+                ->pedidos($request)
+                ->pedidos2($request)
+                ->download('Lista de Pedidos.xlsx');
     }
-    public function mispedidosExcel()
+    public function mispedidosExcel(Request $request)
     {
-        return Excel::download(new MisPedidosExport, 'Lista de Mis Pedidos.xlsx');
+        return (new MisPedidosExport)
+                ->pedidos($request)
+                ->pedidos2($request)
+                ->download('Lista de Mis Pedidos.xlsx');
     }
-    public function pedidospagadosExcel()
+    public function pedidospagadosExcel(Request $request)
     {
-        return Excel::download(new PedidosPagadosExport, 'Lista de Pedidos Pagados.xlsx');
+        return (new PedidosPagadosExport)
+                ->pedidos($request)
+                ->download('Lista de Pedidos Pagados.xlsx');
     }
-    public function pedidossinpagosExcel()
+    public function pedidossinpagosExcel(Request $request)
     {
-        return Excel::download(new PedidosSinPagosExport, 'Lista de Pedidos Sin Pagos.xlsx');
+        return (new PedidosSinPagosExport)
+                ->pedidos($request)
+                ->download('Lista de Pedidos Sin Pagos.xlsx');
     }
 
     public function pedidosporatenderExcel()

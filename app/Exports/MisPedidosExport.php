@@ -3,18 +3,19 @@
 namespace App\Exports;
 
 use App\Models\Pedido;
+use Carbon\Carbon;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Concerns\FromView;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Concerns\Exportable;
+use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 
-class MisPedidosExport implements FromView
+class MisPedidosExport implements FromView, ShouldAutoSize
 {
-    /**
-     * @return \Illuminate\Support\Collection
-     */
-    public function view(): View
-    {
+    use Exportable;
+
+    public function pedidos($request) {
         $pedidos = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')//PEDIDOS CON PAGOS
             ->join('users as u', 'pedidos.user_id', 'u.id')
             ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
@@ -64,6 +65,7 @@ class MisPedidosExport implements FromView
             ->where('pedidos.pago', '1')
             ->where('pa.estado', '1')
             ->where('u.id', Auth::user()->id)
+            ->whereBetween(DB::raw('DATE(dp.fecha_recepcion)'), [$request->desde, $request->hasta]) //rango de fechas
             ->groupBy(
                 'pedidos.id',
                 'pedidos.creador',
@@ -98,8 +100,12 @@ class MisPedidosExport implements FromView
                 )
             ->orderBy('pedidos.created_at', 'DESC')
             ->get();
+        $this->pedidos = $pedidos;
+        return $this;
+    }
 
-            $pedidos2 = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')//PEDIDOS SIN PAGOS
+    public function pedidos2($request) {    
+        $pedidos2 = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')//PEDIDOS SIN PAGOS
             ->join('users as u', 'pedidos.user_id', 'u.id')
             ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
             ->select(
@@ -135,6 +141,7 @@ class MisPedidosExport implements FromView
             ->where('u.id', Auth::user()->id)
             ->whereIn('pedidos.condicion', ['POR ATENDER', 'EN PROCESO ATENCION', 'ATENDIDO'])
             ->where('pedidos.pago', '0')
+            ->whereBetween(DB::raw('DATE(dp.fecha_recepcion)'), [$request->desde, $request->hasta]) //rango de fechas
             ->groupBy(
                 'pedidos.id',
                 'pedidos.creador',
@@ -165,6 +172,14 @@ class MisPedidosExport implements FromView
             ->orderBy('pedidos.created_at', 'DESC')
             ->get();
 
-        return view('pedidos.excel.mispedidos', compact('pedidos', 'pedidos2'));
+        $this->pedidos2 = $pedidos2;
+        return $this;
     }
+
+    public function view(): View {
+        return view('pedidos.excel.mispedidos', [
+            'pedidos'=> $this->pedidos,
+            'pedidos2' => $this->pedidos2
+        ]);
+    }    
 }
