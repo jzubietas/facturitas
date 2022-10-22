@@ -132,17 +132,35 @@ class ExcelController extends Controller
                 ->download('Lista de Pedidos Sin Pagos.xlsx');
     }
 
-    public function pedidosporatenderExcel()
+    // public function pedidosporatenderExcel()
+    // {
+    //     return Excel::download(new PedidosPorAtenderExport, 'Lista de Pedidos por Atender.xlsx');
+    // }
+    // public function pedidosenatencionExcel()
+    // {
+    //     return Excel::download(new PedidosEnAtencionExport, 'Lista de Pedidos en Atencion.xlsx');
+    // }
+    // public function pedidosatendidosExcel()
+    // {
+    //     return Excel::download(new PedidosAtendidosExport, 'Lista de Pedidos Atendidos.xlsx');
+    // }
+    public function pedidosporatenderExcel(Request $request)
     {
-        return Excel::download(new PedidosPorAtenderExport, 'Lista de Pedidos por Atender.xlsx');
+        return (new PedidosPorAtenderExport)
+                ->pedidos($request)
+                ->download('Lista de Pedidos por Atender.xlsx');        
     }
-    public function pedidosenatencionExcel()
+    public function pedidosenatencionExcel(Request $request)
     {
-        return Excel::download(new PedidosEnAtencionExport, 'Lista de Pedidos en Atencion.xlsx');
+        return (new PedidosEnAtencionExport)
+                ->pedidos($request)
+                ->download('Lista de Pedidos en Atencion.xlsx');          
     }
-    public function pedidosatendidosExcel()
+    public function pedidosatendidosExcel(Request $request)
     {
-        return Excel::download(new PedidosAtendidosExport, 'Lista de Pedidos Atendidos.xlsx');
+        return (new PedidosAtendidosExport)
+                ->pedidos($request)
+                ->download('Lista de Pedidos Atendidos.xlsx');          
     }
 
     // public function pedidosporenviarExcel()

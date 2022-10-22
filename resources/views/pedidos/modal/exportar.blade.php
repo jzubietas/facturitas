@@ -22,6 +22,12 @@
         {!! Form::open(['route' => ['pedidospagadosExcel'], 'method' => 'POST', 'target' => 'blanck_']) !!}
       @elseif($key === '6')
         {!! Form::open(['route' => ['pedidossinpagosExcel'], 'method' => 'POST', 'target' => 'blanck_']) !!}
+      @elseif($key === '7')
+        {!! Form::open(['route' => ['pedidosporatenderExcel'], 'method' => 'POST', 'target' => 'blanck_']) !!}
+      @elseif($key === '8')
+        {!! Form::open(['route' => ['pedidosenatencionExcel'], 'method' => 'POST', 'target' => 'blanck_']) !!}
+      @elseif($key === '9')
+        {!! Form::open(['route' => ['pedidosatendidosExcel'], 'method' => 'POST', 'target' => 'blanck_']) !!}
       @endif
             <div class="card-body">
               <div class="form-row">
