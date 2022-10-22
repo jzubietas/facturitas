@@ -65,7 +65,7 @@ class MisPedidosExport implements FromView, ShouldAutoSize
             ->where('pedidos.pago', '1')
             ->where('pa.estado', '1')
             ->where('u.id', Auth::user()->id)
-            ->whereBetween(DB::raw('DATE(dp.fecha_recepcion)'), [$request->desde, $request->hasta]) //rango de fechas
+            ->whereBetween(DB::raw('DATE(pedidos.created_at)'), [$request->desde, $request->hasta]) //rango de fechas
             ->groupBy(
                 'pedidos.id',
                 'pedidos.creador',
@@ -141,7 +141,7 @@ class MisPedidosExport implements FromView, ShouldAutoSize
             ->where('u.id', Auth::user()->id)
             ->whereIn('pedidos.condicion', ['POR ATENDER', 'EN PROCESO ATENCION', 'ATENDIDO'])
             ->where('pedidos.pago', '0')
-            ->whereBetween(DB::raw('DATE(dp.fecha_recepcion)'), [$request->desde, $request->hasta]) //rango de fechas
+            ->whereBetween(DB::raw('DATE(pedidos.created_at)'), [$request->desde, $request->hasta]) //rango de fechas
             ->groupBy(
                 'pedidos.id',
                 'pedidos.creador',

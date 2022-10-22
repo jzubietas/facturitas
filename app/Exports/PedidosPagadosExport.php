@@ -37,7 +37,7 @@ class PedidosPagadosExport implements FromView, ShouldAutoSize
             ->where('dp.estado', '1')
             ->where('u.id', Auth::user()->id)
             ->where('pa.condicion', 'ABONADO')
-            ->whereBetween(DB::raw('DATE(dp.fecha_recepcion)'), [$request->desde, $request->hasta]) //rango de fechas
+            ->whereBetween(DB::raw('DATE(pedidos.created_at)'), [$request->desde, $request->hasta]) //rango de fechas
             ->groupBy(
                 'pedidos.id',
                 'c.nombre',

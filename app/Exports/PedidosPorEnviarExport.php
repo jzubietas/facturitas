@@ -49,7 +49,7 @@ class PedidosPorEnviarExport implements FromView, ShouldAutoSize
             ->where('pedidos.destino', 'LIMA')
             ->where('di.provincia', 'LIMA')
             ->whereIn('pedidos.condicion_envio', ['EN REPARTO'])//'PENDIENTE DE ENVIO',
-            ->whereBetween(DB::raw('DATE(dp.fecha_recepcion)'), [$request->desde, $request->hasta]) //rango de fechas
+            ->whereBetween(DB::raw('DATE(pedidos.created_at)'), [$request->desde, $request->hasta]) //rango de fechas
             ->groupBy(
                 'pedidos.id',
                 'u.identificador',
@@ -106,7 +106,7 @@ class PedidosPorEnviarExport implements FromView, ShouldAutoSize
             ->where('pedidos.direccion', '1')
             ->where('pedidos.destino', 'PROVINCIA')
             ->whereIn('pedidos.condicion_envio', ['EN REPARTO'])//'PENDIENTE DE ENVIO',
-            ->whereBetween(DB::raw('DATE(dp.fecha_recepcion)'), [$request->desde, $request->hasta]) //rango de fechas
+            ->whereBetween(DB::raw('DATE(pedidos.created_at)'), [$request->desde, $request->hasta]) //rango de fechas
             ->groupBy(
                 'pedidos.id',
                 'u.identificador',

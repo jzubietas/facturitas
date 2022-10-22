@@ -39,7 +39,7 @@ class PedidosPorAtenderExport implements FromView, ShouldAutoSize
             ->where('pedidos.estado', '1')
             ->where('dp.estado', '1')
             ->where('pedidos.condicion', 'POR ATENDER')
-            ->whereBetween(DB::raw('DATE(dp.fecha_recepcion)'), [$request->desde, $request->hasta]) //rango de fechas
+            ->whereBetween(DB::raw('DATE(pedidos.created_at)'), [$request->desde, $request->hasta]) //rango de fechas
             ->groupBy(
                 'pedidos.id',
                 'u.jefe',

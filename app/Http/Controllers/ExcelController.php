@@ -67,26 +67,56 @@ class ExcelController extends Controller
                 ->download('Lista Base Fria por Asesor - USER'.$request->user_id.'.xlsx');
     }
 
-    public function pagosaprobadosExcel()
+    // public function pagosaprobadosExcel()
+    // {
+    //     return Excel::download(new PagosAprobadosExport, 'Lista de Pagos Aprobados.xlsx');
+    // }
+    public function pagosaprobadosExcel(Request $request)
     {
-        return Excel::download(new PagosAprobadosExport, 'Lista de Pagos Aprobados.xlsx');
+        return (new PagosAprobadosExport)
+                ->pagos($request)
+                ->download('Lista de Pagos Aprobados.xlsx');         
     }
 
-    public function pagosExcel()
+    // public function pagosExcel()
+    // {
+    //     return Excel::download(new PagosExport, 'Lista de Pagos.xlsx');
+    // }
+    // public function mispagosExcel()
+    // {
+    //     return Excel::download(new MisPagosExport, 'Lista de Mis Pagos.xlsx');
+    // }
+    // public function pagosincompletosExcel()
+    // {
+    //     return Excel::download(new PagosIncompletosExport, 'Lista de Pagos Incompletos.xlsx');
+    // }
+    // public function pagosobservadosExcel()
+    // {
+    //     return Excel::download(new PagosObservadosExport, 'Lista de Pagos Observados.xlsx');
+    // }
+    public function pagosExcel(Request $request)
     {
-        return Excel::download(new PagosExport, 'Lista de Pagos.xlsx');
+        return (new PagosExport)
+                ->pagos($request)
+                ->download('Lista de Pagos.xlsx');        
     }
-    public function mispagosExcel()
+    public function mispagosExcel(Request $request)
     {
-        return Excel::download(new MisPagosExport, 'Lista de Mis Pagos.xlsx');
+        return (new MisPagosExport)
+                ->pagos($request)
+                ->download('Lista de Mis Pagos.xlsx');          
     }
-    public function pagosincompletosExcel()
+    public function pagosincompletosExcel(Request $request)
     {
-        return Excel::download(new PagosIncompletosExport, 'Lista de Pagos Incompletos.xlsx');
+        return (new PagosIncompletosExport)
+                ->pagos($request)
+                ->download('Lista de Pagos Incompletos.xlsx');          
     }
-    public function pagosobservadosExcel()
+    public function pagosobservadosExcel(Request $request)
     {
-        return Excel::download(new PagosObservadosExport, 'Lista de Pagos Observados.xlsx');
+        return (new PagosObservadosExport)
+                ->pagos($request)
+                ->download('Lista de Pagos Observados.xlsx');          
     }
 
     // public function pedidosExcel()
