@@ -265,7 +265,7 @@
                 return '<span class="badge badge-success">Enviado</span><br>'+
                         '<span class="badge badge-warning">Por confirmar recepcion</span>';
               }else if(row.envio=='2'){
-                return '<span class="badge badge-success">Enviado</span>'+
+                return '<span class="badge badge-success">Enviado</span><br>'+
                         '<span class="badge badge-info">Recibido</span>';
               }else{
                 return '<span class="badge badge-danger">Pendiente</span>';
