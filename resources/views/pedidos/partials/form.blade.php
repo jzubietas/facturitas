@@ -23,15 +23,21 @@
                         @if($cliente->deuda == "0")
                             <option style="color:#000" value="{{ $cliente->id }}">{{$cliente->nombre}} - {{$cliente->celular}}</option>
                         @else
-                            @if($dateY == $cliente->anio)
-                                @if($dateM == $cliente->mes)
-                                    <option style="color:#000" value="{{ $cliente->id }}">{{$cliente->nombre}} - {{$cliente->celular}}</option>
+                          @if(Auth::user()->rol == 'Asesor')
+                              @if($dateY == $cliente->anio)
+                                    @if($dateM == $cliente->mes)
+                                        <option style="color:#000" value="{{ $cliente->id }}">{{$cliente->nombre}} - {{$cliente->celular}}</option>
+                                    @else
+                                        <option disabled style="color:red;" value="{{ $cliente->id }}">{{$cliente->nombre}} - {{$cliente->celular}} **CLIENTE CON DEUDA**</option>
+                                    @endif
                                 @else
-                                    <option disabled style="color:red;" value="{{ $cliente->id }}">{{$cliente->nombre}} - {{$cliente->celular}} **CLIENTE CON DEUDA**</option>
-                                @endif
-                            @else
-                                <option disabled style="color:red" value="{{ $cliente->id }}">{{$cliente->nombre}} - {{$cliente->celular}} **CLIENTE CON DEUDA**</option>
-                            @endif  
+                                    <option disabled style="color:red" value="{{ $cliente->id }}">{{$cliente->nombre}} - {{$cliente->celular}} **CLIENTE CON DEUDA**</option>
+                                @endif  
+                          @else
+                            <option style="color:#000" value="{{ $cliente->id }}">{{$cliente->nombre}} - {{$cliente->celular}}</option>
+                          @endif 
+
+                            
                         @endif  
                       
                     

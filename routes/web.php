@@ -48,9 +48,12 @@ Route::post('basefriaclienteRequest', [ClienteController::class, 'updatebfpost']
 Route::get('clientes.editbf/{cliente}/edit2', [ClienteController::class, 'editbf'])->name('clientes.editbf');
 
 Route::resource('pedidos', PedidoController::class)->names('pedidos');
+Route::get('pedidostabla', [PedidoController::class, 'indextabla'])->name('pedidostabla');//actualizado para serverside
 Route::get('ruc', [PedidoController::class, 'ruc'])->name('cargar.ruc');
 
 Route::get('basefria.cargarid', [BasefriaController::class, 'cargarid'])->name('basefria.cargarid');
+//Route::get('pedidos.destroyid', [PedidoController::class, 'destroyid'])->name('pedidos.destroyid');
+Route::post('pedidodeleteRequest', [PedidoController::class, 'destroyid'])->name('pedidodeleteRequest.post');
 
 Route::get('cliente', [PedidoController::class, 'cliente'])->name('cargar.cliente');
 Route::get('tipobanca', [PedidoController::class, 'tipobanca'])->name('cargar.tipobanca');

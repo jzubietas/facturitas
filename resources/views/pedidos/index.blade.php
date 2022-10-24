@@ -53,179 +53,24 @@
             <th scope="col">Asesor</th>
             <th scope="col">Fecha de registro</th>
             <th scope="col">Total (S/)</th>
-            <th scope="col">Estado de pedido</th>
-            <th scope="col">Estado de pago</th>
-            <th scope="col">Estado de envío</th>
+            <th scope="col">Est. pedido</th>
+            <th scope="col">Est. pago</th>
+            <th scope="col">Est. sobre</th>
+            <!--<th scope="col">Est. envío</th>
+            <th scope="col">Cond. Pago</th>-->
+            <th scope="col">Est. Envio</th>
             <th scope="col">Estado</th>
             <th scope="col">Diferencia</th>
+            {{--<th scope="col">Resp. Pedido</th>--}}
             <th scope="col">Acciones</th>
           </tr>
         </thead>
         <tbody>
-          @foreach ($pedidos as $pedido)
-            @if($pedido->estado == 1)
-              <tr>
-                @if ($pedido->id < 10)
-                  <td>PED000{{ $pedido->id }}</td>
-                @elseif($pedido->id < 100)
-                  <td>PED00{{ $pedido->id }}</td>
-                @elseif($pedido->id < 1000)
-                  <td>PED0{{ $pedido->id }}</td>
-                @else
-                  <td>PED{{ $pedido->id }}</td>
-                @endif
-                <td>{{ $pedido->codigos }}</td>
-                <td>{{ $pedido->celulares }} - {{ $pedido->nombres }}</td>
-                <td>{{ $pedido->empresas }}</td>
-                <td>{{ $pedido->users }}</td>              
-                <td>{{ $pedido->fecha }}</td>
-                <td>@php echo number_format($pedido->total,2) @endphp</td>
-                <td>{{ $pedido->condiciones }}</td>
-                <td>{{ $pedido->condicion_pa }}</td>
-                <td>{{ $pedido->condicion_envio }}</td>
-                <td>@php echo '<span class="badge badge-success">Activo</span>';@endphp</td>
-                @if($pedido->diferencia>0)<td style="background: #ca3a3a; color:#ffffff; text-align: center;font-weight: bold;">{{ $pedido->diferencia }}</td>
-                @else<td style="background: #44c24b; text-align: center;font-weight: bold;">{{ $pedido->diferencia }}</td>
-                @endif
-                <td>
-                  @can('pedidos.pedidosPDF')
-                    <a href="{{ route('pedidosPDF', $pedido) }}" class="btn btn-primary btn-sm" target="_blank"><i class="fa fa-file-pdf"></i> PDF</a>
-                  @endcan
-                  @can('pedidos.show')
-                    <a href="{{ route('pedidos.show', $pedido) }}" class="btn btn-info btn-sm"><i class="fas fa-eye"></i> Ver</a>
-                  @endcan
-                  @can('pedidos.edit')
-                    <a href="{{ route('pedidos.edit', $pedido->id) }}" class="btn btn-warning btn-sm">Editar</a>
-                  @endcan
-                  @can('pedidos.destroy')
-                    <a href="" data-target="#modal-delete-{{ $pedido->id }}" data-toggle="modal"><button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i> Anular</button></a>
-                  @endcan
-                </td>
-              </tr>
-            @else
-              <tr style="color:#fcd00e">
-                @if ($pedido->id < 10)
-                  <td>PED000{{ $pedido->id }}</td>
-                @elseif($pedido->id < 100)
-                  <td>PED00{{ $pedido->id }}</td>
-                @elseif($pedido->id < 1000)
-                  <td>PED0{{ $pedido->id }}</td>
-                @else
-                  <td>PED{{ $pedido->id }}</td>
-                @endif
-                <td>{{ $pedido->codigos }}</td>
-                <td>{{ $pedido->celulares }} - {{ $pedido->nombres }}</td>
-                <td>{{ $pedido->empresas }}</td>
-                <td>{{ $pedido->users }}</td>              
-                <td>{{ $pedido->fecha }}</td>
-                <td>@php echo number_format($pedido->total,2) @endphp</td>
-                <td>Motivo: {{ $pedido->motivo }}</td>
-                <td>Responsable: {{ $pedido->responsable }}</td>
-                <td>{{ $pedido->condicion_envio }}</td>
-                <td>@php echo '<span class="badge badge-danger">Anulado</span>';@endphp</td>
-                @if($pedido->diferencia>0)<td style="background: #ca3a3a; color:#ffffff; text-align: center;font-weight: bold;">{{ $pedido->diferencia }}</td>
-                @else<td style="background: #44c24b; text-align: center;font-weight: bold;">{{ $pedido->diferencia }}</td>
-                @endif
-                <td>
-                  @can('pedidos.pedidosPDF')
-                    <a href="{{ route('pedidosPDF', $pedido) }}" class="btn btn-primary btn-sm" target="_blank"><i class="fa fa-file-pdf"></i> PDF</a>
-                  @endcan
-                  @can('pedidos.show')
-                    <a href="{{ route('pedidos.show', $pedido) }}" class="btn btn-info btn-sm"><i class="fas fa-eye"></i> Ver</a>
-                  @endcan
-                  @can('pedidos.edit')
-                    <a href="{{ route('pedidos.edit', $pedido->id) }}" class="btn btn-warning btn-sm">Editar</a>
-                  @endcan
-                  @can('pedidos.destroy')
-                    <a href="" data-target="#modal-restaurar-{{ $pedido->id }}" data-toggle="modal"><button class="btn btn-success btn-sm"><i class="fas fa-check"></i> Restaurar</button></a>
-                  @endcan
-                </td>
-              </tr>
-            @endif
-            @include('pedidos.modal')
-            @include('pedidos.modal.restaurar')
-          @endforeach
-          @foreach ($pedidos2 as $pedido)
-            @if($pedido->estado == 1)
-              <tr>
-                @if ($pedido->id < 10)
-                  <td>PED000{{ $pedido->id }}</td>
-                @elseif($pedido->id < 100)
-                  <td>PED00{{ $pedido->id }}</td>
-                @elseif($pedido->id < 1000)
-                  <td>PED0{{ $pedido->id }}</td>
-                @else
-                  <td>PED{{ $pedido->id }}</td>
-                @endif
-                <td>{{ $pedido->codigos }}</td>
-                <td>{{ $pedido->celulares }} - {{ $pedido->nombres }}</td>
-                <td>{{ $pedido->empresas }}</td>
-                <td>{{ $pedido->users }}</td>              
-                <td>{{ $pedido->fecha }}</td>
-                <td>@php echo number_format($pedido->total,2) @endphp</td>
-                <td>{{ $pedido->condiciones }}</td>
-                <td>SIN PAGOS REGISTRADOS</td>
-                <td>{{ $pedido->condicion_envio }}</td>
-                <td>@php echo '<span class="badge badge-success">Activo</span>';@endphp</td>
-                <td style="background: #ca3a3a; color: white; text-align: center;font-weight: bold;">@php echo number_format($pedido->total,2) @endphp</td>
-                <td>
-                  @can('pedidos.pedidosPDF')
-                    <a href="{{ route('pedidosPDF', $pedido) }}" class="btn btn-primary btn-sm" target="_blank"><i class="fa fa-file-pdf"></i> PDF</a>
-                  @endcan
-                  @can('pedidos.show')
-                    <a href="{{ route('pedidos.show', $pedido) }}" class="btn btn-info btn-sm"><i class="fas fa-eye"></i> Ver</a>
-                  @endcan
-                  @can('pedidos.edit')
-                    <a href="{{ route('pedidos.edit', $pedido->id) }}" class="btn btn-warning btn-sm">Editar</a>
-                  @endcan
-                  @can('pedidos.destroy')
-                    <a href="" data-target="#modal-delete-{{ $pedido->id }}" data-toggle="modal"><button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i> Anular</button></a>
-                  @endcan
-                </td>
-              </tr>
-            @else
-              <tr style="color:#fcd00e">
-                @if ($pedido->id < 10)
-                  <td>PED000{{ $pedido->id }}</td>
-                @elseif($pedido->id < 100)
-                  <td>PED00{{ $pedido->id }}</td>
-                @elseif($pedido->id < 1000)
-                  <td>PED0{{ $pedido->id }}</td>
-                @else
-                  <td>PED{{ $pedido->id }}</td>
-                @endif
-                <td>{{ $pedido->codigos }}</td>
-                <td>{{ $pedido->celulares }} - {{ $pedido->nombres }}</td>
-                <td>{{ $pedido->empresas }}</td>
-                <td>{{ $pedido->users }}</td>              
-                <td>{{ $pedido->fecha }}</td>
-                <td>@php echo number_format($pedido->total,2) @endphp</td>
-                <td>Motivo: {{ $pedido->motivo }}</td>
-                <td>Responsable: {{ $pedido->responsable }}</td>
-                <td>{{ $pedido->condicion_envio }}</td>
-                <td>@php echo '<span class="badge badge-danger">Anulado</span>';@endphp</td>
-                <td style="background: #ca3a3a; color: white; text-align: center;font-weight: bold;">@php echo number_format($pedido->total,2) @endphp</td>
-                <td>
-                  @can('pedidos.pedidosPDF')
-                    <a href="{{ route('pedidosPDF', $pedido) }}" class="btn btn-primary btn-sm" target="_blank"><i class="fa fa-file-pdf"></i> PDF</a>
-                  @endcan
-                  @can('pedidos.show')
-                    <a href="{{ route('pedidos.show', $pedido) }}" class="btn btn-info btn-sm"><i class="fas fa-eye"></i> Ver</a>
-                  @endcan
-                  @can('pedidos.edit')
-                    <a href="{{ route('pedidos.edit', $pedido->id) }}" class="btn btn-warning btn-sm">Editar</a>
-                  @endcan
-                  @can('pedidos.destroy')
-                    <a href="" data-target="#modal-restaurar-{{ $pedido->id }}" data-toggle="modal"><button class="btn btn-success btn-sm"><i class="fas fa-check"></i> Restaurar</button></a>
-                  @endcan
-                </td>
-              </tr>
-            @endif
-            @include('pedidos.modal')
-            @include('pedidos.modal.restaurar')
-          @endforeach          
         </tbody>
       </table>
+      @include('pedidos.modalid')
+      @include('pedidos.modal.restaurarid')
+
     </div>
   </div>
 @stop
@@ -235,6 +80,19 @@
   <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">  
 
   <style>
+
+    .yellow {
+      /*background-color: yellow !important;*/
+      color:#fcd00e !important;
+    }
+    .red {
+        background-color: red !important;
+      }
+      
+      .white {
+        background-color: white !important;
+      }
+      
     .bg-4{
       background: linear-gradient(to right, rgb(240, 152, 25), rgb(237, 222, 93));
     }
@@ -277,30 +135,198 @@
 @stop
 
 @section('js')
-  <script src="{{ asset('js/datatables.js') }}"></script>
+<script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
 
-  @if (session('info') == 'registrado' || session('info') == 'actualizado' || session('info') == 'eliminado' || session('info') == 'restaurado')
-    <script>
-      Swal.fire(
-        'Pedido {{ session('info') }} correctamente',
-        '',
-        'success'
-      )
-    </script>
-  @endif
+<!--  <script src="{{ asset('js/datatables.js') }}"></script>-->
 
-  <script>
-    //VALIDAR ANTES DE ENVIAR
-    document.addEventListener("DOMContentLoaded", function() {
-    document.getElementById("formulario").addEventListener('submit', validarFormulario); 
+<script>
+  $(document).ready(function () {
+
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
     });
 
-    function validarFormulario(evento) {
+    $('#modal-delete').on('show.bs.modal', function (event) {
+      //cuando abre el form de anular pedido
+      var button = $(event.relatedTarget) 
+      var idunico = button.data('delete')//id  basefria
+      //console.log(idunico);
+      $("#hiddenId").val(idunico);
+      if(idunico<10){
+        idunico='PED000'+idunico;
+      }else if(row.id<100){
+        idunico= 'PED00'+idunico;
+      }else if(row.id<1000){
+        idunico='PED0'+idunico;
+      }else{
+        idunico='PED'+idunico;
+      } 
+      //solo completo datos
+      //hiddenId
+
+      $(".textcode").html(idunico);
+      $("#motivo").val('');
+      $("#responsable").val('');
+
+    });
+    
+
+    $('#tablaPrincipal').DataTable({
+        processing: true,
+        serverSide: true,
+        ajax: "{{ route('pedidostabla') }}",
+        "createdRow": function( row, data, dataIndex){
+            if(data["estado"] == "1")
+            {
+            }else{
+              $(row).addClass('yellow');
+            }           
+        },
+        rowCallback: function (row, data, index) {
+              var pedidodiferencia=data.diferencia;
+              pedidodiferencia=0;
+              if(pedidodiferencia>0){
+                $('td:eq(12)', row).css('background', '#ca3a3a').css('color','#ffffff').css('text-align','center').css('font-weight','bold');
+              }else{
+                $('td:eq(12)', row).css('background', '#44c24b').css('text-align','center').css('font-weight','bold');
+              }
+        },
+        columns: [
+        {//15 columnas
+            data: 'id', 
+            name: 'id',
+            render: function ( data, type, row, meta ) {
+              if(row.id<10){
+                return 'PED000'+row.id;
+              }else if(row.id<100){
+                return 'PED00'+row.id;
+              }else if(row.id<1000){
+                return 'PED0'+row.id;
+              }else{
+                return 'PED'+row.id;
+              } 
+            }
+        },
+        {data: 'codigos', name: 'codigos', },
+        {
+            data: 'nombres', 
+            name: 'nombres',
+            render: function ( data, type, row, meta ) {
+              return row.celulares+' - '+row.nombres
+            }           
+        },
+        {data: 'empresas', name: 'empresas', },
+        {data: 'users', name: 'users', },
+        {data: 'fecha', name: 'fecha', },
+        {
+          data: 'total', 
+          name: 'total', 
+          render: $.fn.dataTable.render.number(',', '.', 2, '')
+        },
+        {
+          data: 'condiciones', 
+          name: 'condiciones', 
+          render: function ( data, type, row, meta ) {
+              return data;
+          }
+        },//estado de pedido
+        {
+          data: 'condicion_pa', 
+          name: 'condicion_pa', 
+          render: function ( data, type, row, meta ) {
+            if(row.condicion_pa==null){
+              return 'SIN PAGO REGISTRADO';
+            }else{
+              return data;
+            }              
+          }
+        },//estado de pago
+        {
+          //estado del sobre
+          data: 'envio', 
+          name: 'envio', 
+          render: function ( data, type, row, meta ) {
+            if(row.envio==null){
+              return '';
+            }else{
+              if(row.envio=='1'){
+                return '<span class="badge badge-success">Enviado</span><br>'+
+                        '<span class="badge badge-warning">Por confirmar recepcion</span>';
+              }else if(row.envio=='2'){
+                return '<span class="badge badge-success">Enviado</span>'+
+                        '<span class="badge badge-info">Recibido</span>';
+              }else{
+                return '<span class="badge badge-danger">Pendiente</span>';
+              }
+
+            }
+          }
+        },
+        //{data: 'responsable', name: 'responsable', },//estado de envio
+        
+        //{data: 'condicion_pa', name: 'condicion_pa', },//ss
+        {data: 'condicion_envio', name: 'condicion_envio', },//
+        {
+          data: 'estado',
+          name: 'estado',
+          render: function ( data, type, row, meta ) {
+              if(row.estado==1){
+                return '<span class="badge badge-success">Activo</span>';
+              }else{
+                return '<span class="badge badge-danger">Anulado</span>';
+              }
+            }
+        },
+        {
+          data: 'diferencia', 
+          name: 'diferencia',
+          render: function ( data, type, row, meta ) {
+            if(row.diferencia==null){
+              return 'NO REGISTRA PAGO';
+            }else{
+              if(row.diferencia>0){
+                return row.diferencia;
+              }else{
+                return row.diferencia;
+              }
+            }            
+          }
+        },
+        //{data: 'responsable', name: 'responsable', },
+        {data: 'action', name: 'action', orderable: false, searchable: false,sWidth:'20%'},
+        ],
+        language: {
+        "decimal": "",
+        "emptyTable": "No hay informaciÃ³n",
+        "info": "Mostrando del _START_ al _END_ de _TOTAL_ Entradas",
+        "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
+        "infoFiltered": "(Filtrado de _MAX_ total entradas)",
+        "infoPostFix": "",
+        "thousands": ",",
+        "lengthMenu": "Mostrar _MENU_ Entradas",
+        "loadingRecords": "Cargando...",
+        "processing": "Procesando...",
+        "search": "Buscar:",
+        "zeroRecords": "Sin resultados encontrados",
+        "paginate": {
+          "first": "Primero",
+          "last": "Ultimo",
+          "next": "Siguiente",
+          "previous": "Anterior"
+        }
+      },
+    });
+
+    $(document).on("submit", "#formdelete", function (evento) {
       evento.preventDefault();
-      var motivo = document.getElementById('motivo').value;
-      var responsable = document.getElementById('responsable').value;
+      console.log("validar delete");
+      var motivo = $("#motivo").val();
+      var responsable = $("#responsable").val();
    
-      if (motivo.val().length < 1) {
+      if (motivo.length < 1) {
         Swal.fire(
           'Error',
           'Ingrese el motivo para anular el pedido',
@@ -315,9 +341,65 @@
         )
       }
       else {
-      this.submit();
+      //this.submit();
+        clickformdelete();
       }     
+
+      /*var oForm = $(this);
+      var formId = oForm.attr("id");
+      var firstValue = oForm.find("input").first().val();
+      alert("Form '" + formId + " is being submitted, value of first input is: " + firstValue);
+      // Do stuff 
+      return false;*/
+  })
+
+  });
+</script>
+
+<script>
+  function resetearcamposdelete(){
+      $('#motivo').val("");
+      $('#responsable').val("");      
     }
+
+  function clickformdelete()
+    {
+      console.log("action delete action")
+      var formData = $("#formdelete").serialize();
+      console.log(formData);
+      $.ajax({
+        type:'POST',
+        url:"{{ route('pedidodeleteRequest.post') }}",
+        data:formData,
+      }).done(function (data) {
+        $("#modal-delete").modal("hide");
+        resetearcamposdelete();          
+        $('#tablaPrincipal').DataTable().ajax.reload();      
+      });
+    }
+
+    /*function clickformdelete(){
+      $("#modal-delete").modal("show");
+    }*/
+
+</script>
+
+  @if (session('info') == 'registrado' || session('info') == 'actualizado' || session('info') == 'eliminado' || session('info') == 'restaurado')
+    <script>
+      Swal.fire(
+        'Pedido {{ session('info') }} correctamente',
+        '',
+        'success'
+      )
+    </script>
+  @endif
+
+  <script>
+    //VALIDAR ANTES DE ENVIAR
+    /*document.addEventListener("DOMContentLoaded", function() {
+      document.getElementById("formdelete").addEventListener('submit', validarFormularioDelete); 
+    });*/
+
   </script>
 
   <script>
@@ -364,9 +446,9 @@
   <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
 
   <script>
-    window.onload = function () {      
+    /*window.onload = function () {      
       $('#tablaPrincipal').DataTable().draw();
-    }
+    }*/
   </script>
 
   <script>

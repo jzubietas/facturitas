@@ -397,6 +397,7 @@ class PdfController extends Controller
 
     public function pedidosPDF(Pedido $pedido)
     {
+        //para pedidos anulados y activos
         $fecha = Carbon::now('America/Lima')->format('Y-m-d');
 
         $pedidos = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')
@@ -423,9 +424,9 @@ class PdfController extends Controller
                 'pedidos.condicion as condiciones',
                 'pedidos.created_at as fecha'
             )
-            ->where('pedidos.estado', '1')
+            //->where('pedidos.estado', '1')
             ->where('pedidos.id', $pedido->id)
-            ->where('dp.estado', '1')
+            //->where('dp.estado', '1')
             ->groupBy(
                 'pedidos.id',
                 'c.nombre',
