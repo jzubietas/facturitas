@@ -67,61 +67,142 @@ class ExcelController extends Controller
                 ->download('Lista Base Fria por Asesor - USER'.$request->user_id.'.xlsx');
     }
 
-    public function pagosaprobadosExcel()
+    // public function pagosaprobadosExcel()
+    // {
+    //     return Excel::download(new PagosAprobadosExport, 'Lista de Pagos Aprobados.xlsx');
+    // }
+    public function pagosaprobadosExcel(Request $request)
     {
-        return Excel::download(new PagosAprobadosExport, 'Lista de Pagos Aprobados.xlsx');
+        return (new PagosAprobadosExport)
+                ->pagos($request)
+                ->download('Lista de Pagos Aprobados.xlsx');         
     }
 
-    public function pagosExcel()
+    // public function pagosExcel()
+    // {
+    //     return Excel::download(new PagosExport, 'Lista de Pagos.xlsx');
+    // }
+    // public function mispagosExcel()
+    // {
+    //     return Excel::download(new MisPagosExport, 'Lista de Mis Pagos.xlsx');
+    // }
+    // public function pagosincompletosExcel()
+    // {
+    //     return Excel::download(new PagosIncompletosExport, 'Lista de Pagos Incompletos.xlsx');
+    // }
+    // public function pagosobservadosExcel()
+    // {
+    //     return Excel::download(new PagosObservadosExport, 'Lista de Pagos Observados.xlsx');
+    // }
+    public function pagosExcel(Request $request)
     {
-        return Excel::download(new PagosExport, 'Lista de Pagos.xlsx');
+        return (new PagosExport)
+                ->pagos($request)
+                ->download('Lista de Pagos.xlsx');        
     }
-    public function mispagosExcel()
+    public function mispagosExcel(Request $request)
     {
-        return Excel::download(new MisPagosExport, 'Lista de Mis Pagos.xlsx');
+        return (new MisPagosExport)
+                ->pagos($request)
+                ->download('Lista de Mis Pagos.xlsx');          
     }
-    public function pagosincompletosExcel()
+    public function pagosincompletosExcel(Request $request)
     {
-        return Excel::download(new PagosIncompletosExport, 'Lista de Pagos Incompletos.xlsx');
+        return (new PagosIncompletosExport)
+                ->pagos($request)
+                ->download('Lista de Pagos Incompletos.xlsx');          
     }
-    public function pagosobservadosExcel()
+    public function pagosobservadosExcel(Request $request)
     {
-        return Excel::download(new PagosObservadosExport, 'Lista de Pagos Observados.xlsx');
-    }
-
-    public function pedidosExcel()
-    {
-        return Excel::download(new PedidosExport, 'Lista de Pedidos.xlsx');
-    }
-    public function mispedidosExcel()
-    {
-        return Excel::download(new MisPedidosExport, 'Lista de Mis Pedidos.xlsx');
-    }
-    public function pedidospagadosExcel()
-    {
-        return Excel::download(new PedidosPagadosExport, 'Lista de Pedidos Pagados.xlsx');
-    }
-    public function pedidossinpagosExcel()
-    {
-        return Excel::download(new PedidosSinPagosExport, 'Lista de Pedidos Sin Pagos.xlsx');
-    }
-
-    public function pedidosporatenderExcel()
-    {
-        return Excel::download(new PedidosPorAtenderExport, 'Lista de Pedidos por Atender.xlsx');
-    }
-    public function pedidosenatencionExcel()
-    {
-        return Excel::download(new PedidosEnAtencionExport, 'Lista de Pedidos en Atencion.xlsx');
-    }
-    public function pedidosatendidosExcel()
-    {
-        return Excel::download(new PedidosAtendidosExport, 'Lista de Pedidos Atendidos.xlsx');
+        return (new PagosObservadosExport)
+                ->pagos($request)
+                ->download('Lista de Pagos Observados.xlsx');          
     }
 
-    public function pedidosporenviarExcel()
+    // public function pedidosExcel()
+    // {
+    //     return Excel::download(new PedidosExport, 'Lista de Pedidos.xlsx');
+    // }
+    // public function mispedidosExcel()
+    // {
+    //     return Excel::download(new MisPedidosExport, 'Lista de Mis Pedidos.xlsx');
+    // }
+    // public function pedidospagadosExcel()
+    // {
+    //     return Excel::download(new PedidosPagadosExport, 'Lista de Pedidos Pagados.xlsx');
+    // }
+    // public function pedidossinpagosExcel()
+    // {
+    //     return Excel::download(new PedidosSinPagosExport, 'Lista de Pedidos Sin Pagos.xlsx');
+    // }
+    public function pedidosExcel(Request $request)
     {
-        return Excel::download(new PedidosPorEnviarExport, 'Lista de Pedidos por Enviar.xlsx');
+        return (new PedidosExport)
+                ->pedidos($request)
+                ->pedidos2($request)
+                ->download('Lista de Pedidos.xlsx');
+    }
+    public function mispedidosExcel(Request $request)
+    {
+        return (new MisPedidosExport)
+                ->pedidos($request)
+                ->pedidos2($request)
+                ->download('Lista de Mis Pedidos.xlsx');
+    }
+    public function pedidospagadosExcel(Request $request)
+    {
+        return (new PedidosPagadosExport)
+                ->pedidos($request)
+                ->download('Lista de Pedidos Pagados.xlsx');
+    }
+    public function pedidossinpagosExcel(Request $request)
+    {
+        return (new PedidosSinPagosExport)
+                ->pedidos($request)
+                ->download('Lista de Pedidos Sin Pagos.xlsx');
+    }
+
+    // public function pedidosporatenderExcel()
+    // {
+    //     return Excel::download(new PedidosPorAtenderExport, 'Lista de Pedidos por Atender.xlsx');
+    // }
+    // public function pedidosenatencionExcel()
+    // {
+    //     return Excel::download(new PedidosEnAtencionExport, 'Lista de Pedidos en Atencion.xlsx');
+    // }
+    // public function pedidosatendidosExcel()
+    // {
+    //     return Excel::download(new PedidosAtendidosExport, 'Lista de Pedidos Atendidos.xlsx');
+    // }
+    public function pedidosporatenderExcel(Request $request)
+    {
+        return (new PedidosPorAtenderExport)
+                ->pedidos($request)
+                ->download('Lista de Pedidos por Atender.xlsx');        
+    }
+    public function pedidosenatencionExcel(Request $request)
+    {
+        return (new PedidosEnAtencionExport)
+                ->pedidos($request)
+                ->download('Lista de Pedidos en Atencion.xlsx');          
+    }
+    public function pedidosatendidosExcel(Request $request)
+    {
+        return (new PedidosAtendidosExport)
+                ->pedidos($request)
+                ->download('Lista de Pedidos Atendidos.xlsx');          
+    }
+
+    // public function pedidosporenviarExcel()
+    // {
+    //     return Excel::download(new PedidosPorEnviarExport, 'Lista de Pedidos por Enviar.xlsx');
+    // }
+    public function pedidosporenviarExcel(Request $request)
+    {
+        return (new PedidosPorEnviarExport)
+                ->pedidosLima($request)
+                ->pedidosProvincia($request)
+                ->download('Lista de Pedidos por Enviar.xlsx');
     }
 
     //REPORTES

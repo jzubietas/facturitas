@@ -7,7 +7,7 @@
     @can('pagos.create')
       <a href="{{ route('pagos.create') }}" class="btn btn-info"><i class="fas fa-plus-circle"></i> Agregar</a>
     @endcan
-    @can('pagos.exportar')
+    {{-- @can('pagos.exportar')
     <div class="float-right btn-group dropleft">
       <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         Exportar
@@ -16,7 +16,16 @@
         <a href="{{ route('pagosincompletosExcel') }}" class="dropdown-item"><img src="{{ asset('imagenes/icon-excel.png') }}"> EXCEL</a>
       </div>
     </div>
-    @endcan
+    @endcan --}}
+    <div class="float-right btn-group dropleft">
+      <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        Exportar
+      </button>
+      <div class="dropdown-menu">
+        <a href="" data-target="#modal-exportar" data-toggle="modal" class="dropdown-item" target="blank_"><img src="{{ asset('imagenes/icon-excel.png') }}"> Excel</a>
+      </div>
+    </div>
+    @include('pagos.modals.exportar', ['title' => 'Exportar Lista de pagos incompletos', 'key' => '3'])       
   </h1>
   @if($superasesor > 0)
   <br>

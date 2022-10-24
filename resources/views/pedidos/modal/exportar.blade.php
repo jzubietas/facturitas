@@ -3,12 +3,32 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header bg-success">
-        <h5 class="modal-title" id="exampleModalLabel">Exportar pedidos ENTREGADOS</h5>
+        {{-- <h5 class="modal-title" id="exampleModalLabel">Exportar pedidos ENTREGADOS</h5> --}}
+        <h5 class="modal-title" id="exampleModalLabel">{{ $title }}</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      {!! Form::open(['route' => ['entregadosporfechasexcel'], 'method' => 'POST', 'target' => 'blanck_']) !!}
+      {{-- {!! Form::open(['route' => ['entregadosporfechasexcel'], 'method' => 'POST', 'target' => 'blanck_']) !!} --}}
+      @if($key === '1')
+        {!! Form::open(['route' => ['pedidosporenviarExcel'], 'method' => 'POST', 'target' => 'blanck_']) !!}
+      @elseif($key === '2')
+        {!! Form::open(['route' => ['entregadosporfechasexcel'], 'method' => 'POST', 'target' => 'blanck_']) !!}
+      @elseif($key === '3')
+        {!! Form::open(['route' => ['pedidosExcel'], 'method' => 'POST', 'target' => 'blanck_']) !!}
+      @elseif($key === '4')
+        {!! Form::open(['route' => ['mispedidosExcel'], 'method' => 'POST', 'target' => 'blanck_']) !!}
+      @elseif($key === '5')
+        {!! Form::open(['route' => ['pedidospagadosExcel'], 'method' => 'POST', 'target' => 'blanck_']) !!}
+      @elseif($key === '6')
+        {!! Form::open(['route' => ['pedidossinpagosExcel'], 'method' => 'POST', 'target' => 'blanck_']) !!}
+      @elseif($key === '7')
+        {!! Form::open(['route' => ['pedidosporatenderExcel'], 'method' => 'POST', 'target' => 'blanck_']) !!}
+      @elseif($key === '8')
+        {!! Form::open(['route' => ['pedidosenatencionExcel'], 'method' => 'POST', 'target' => 'blanck_']) !!}
+      @elseif($key === '9')
+        {!! Form::open(['route' => ['pedidosatendidosExcel'], 'method' => 'POST', 'target' => 'blanck_']) !!}
+      @endif
             <div class="card-body">
               <div class="form-row">
                 <div class="form-group col-lg-12" style="text-align: center; font-size:16px">                  

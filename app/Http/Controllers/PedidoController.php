@@ -157,7 +157,7 @@ class PedidoController extends Controller
         if(Auth::user()->rol == "Asesor"){
             $clientes1 = Cliente:://CLIENTES CON PEDIDOS CON DEUDA
                 join('users as u', 'clientes.user_id', 'u.id')
-                ->join('pedidos as p', 'clientes.id', 'p.cliente_id')
+                ->leftjoin('pedidos as p', 'clientes.id', 'p.cliente_id')
                 ->where('clientes.estado','1')
                 ->where('clientes.tipo','1')
                 //->where('clientes.pidio','1')
@@ -278,7 +278,7 @@ class PedidoController extends Controller
         }else if(Auth::user()->rol == "Super asesor"){
             $clientes1 = Cliente:://CLIENTES CON PEDIDOS CON DEUDA
                 join('users as u', 'clientes.user_id', 'u.id')
-                ->join('pedidos as p', 'clientes.id', 'p.cliente_id')
+                ->leftjoin('pedidos as p', 'clientes.id', 'p.cliente_id')
                 ->where('clientes.estado','1')
                 ->where('clientes.tipo','1')
                 //->where('clientes.pidio','1')
@@ -398,7 +398,7 @@ class PedidoController extends Controller
         }else{
             $clientes1 = Cliente:://CLIENTES CON PEDIDOS CON DEUDA
                 join('users as u', 'clientes.user_id', 'u.id')
-                ->join('pedidos as p', 'clientes.id', 'p.cliente_id')
+                ->leftjoin('pedidos as p', 'clientes.id', 'p.cliente_id')
                 ->where('clientes.estado','1')
                 ->where('clientes.tipo','1')
                 //->where('clientes.pidio','1')

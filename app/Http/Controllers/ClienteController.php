@@ -452,7 +452,7 @@ class ClienteController extends Controller
                 ->join('pedidos as p', 'clientes.id', 'p.cliente_id')
                 ->where('clientes.estado','1')
                 ->where('clientes.tipo','1')
-                ->where('clientes.pidio','1')
+                //->where('clientes.pidio','1')
                 //->where('clientes.deuda', '1')
                 ->groupBy(
                     'clientes.id',
@@ -464,7 +464,8 @@ class ClienteController extends Controller
                     'clientes.provincia',
                     'clientes.distrito',
                     'clientes.direccion',
-                    'clientes.deuda'
+                    'clientes.deuda',
+                    'clientes.pidio'
                 )
                 ->get(['clientes.id', 
                         'clientes.nombre', 
@@ -475,6 +476,7 @@ class ClienteController extends Controller
                         'clientes.provincia',
                         'clientes.distrito',
                         'clientes.direccion',
+                        'clientes.pidio',
                         DB::raw('count(p.created_at) as cantidad'),
                         DB::raw('MAX(p.created_at) as fecha'),
                         DB::raw('MAX(DATE_FORMAT(p.created_at, "%d")) as dia'),
@@ -781,7 +783,9 @@ class ClienteController extends Controller
             'referencia' => $request->referencia,
             'deuda' => '0',
             'pidio' => '0',
-            'tipo' => '1'
+            'tipo' => '1',
+            'saldo' => '0'
+
         ]);
 
         try {

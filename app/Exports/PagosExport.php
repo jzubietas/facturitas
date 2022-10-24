@@ -3,17 +3,18 @@
 namespace App\Exports;
 
 use App\Models\Pago;
+use Carbon\Carbon;
 use Illuminate\Contracts\View\View;
 use Maatwebsite\Excel\Concerns\FromView;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Concerns\Exportable;
+use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 
-class PagosExport implements FromView
+class PagosExport implements FromView, ShouldAutoSize
 {
-    /**
-     * @return \Illuminate\Support\Collection
-     */
-    public function view(): View
-    {
+    use Exportable;
+
+    public function pagos($request) {
         $pagos = Pago::join('users as u', 'pagos.user_id', 'u.id')
             ->join('detalle_pagos as dpa', 'pagos.id', 'dpa.pago_id')
             ->join('pago_pedidos as pp', 'pagos.id', 'pp.pago_id')
@@ -33,6 +34,7 @@ class PagosExport implements FromView
             ->where('pagos.estado', '1')
             ->where('dpe.estado', '1')
             ->where('dpa.estado', '1')
+            ->whereBetween(DB::raw('DATE(pagos.created_at)'), [$request->desde, $request->hasta]) //rango de fechas
             ->groupBy('pagos.id', 
                     'u.identificador',
                     'u.name', 
@@ -44,6 +46,13 @@ class PagosExport implements FromView
                     'pagos.diferencia'
                     )
             ->get();
-        return view('pagos.excel.pagos', compact('pagos'));
-    }
+        $this->pagos = $pagos;
+        return $this;
+    }            
+
+    public function view(): View {
+        return view('pagos.excel.pagos', [
+            'pagos'=> $this->pagos
+        ]);
+    }  
 }
