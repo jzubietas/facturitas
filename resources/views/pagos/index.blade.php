@@ -57,26 +57,30 @@
           </tr>
         </thead>
         <tbody>
-          @foreach ($pagos as $pago)
+          @foreach ($pagoList as $pago)
             <tr>
-              <td>PAG000{{ $pago->id }}</td>
-              <td>{{ $pago->codigos }}</td>
-              <td>{{ $pago->users }}</td>
-              <td>{{ $pago->celular }}</td>
-              <td>{{ $pago->observacion }}</td>
-              <td>@php echo number_format($pago->total_deuda,2) @endphp</td>
-              <td>@php echo number_format($pago->total_pago,2) @endphp</td>
-              <td>{{ $pago->fecha }}</td>
-              <td>{{ $pago->condicion }}</td>
+              <td>PAG000{{ $pago['id'] }}</td>
+              <td>
+                @foreach ($pago['codigos'] as $codigos)
+                  {{ $codigos->codigos }}<br>
+                @endforeach
+              </td>
+              <td>{{ $pago['users'] }}</td>
+              <td>{{ $pago['celular'] }}</td>
+              <td>{{ $pago['observacion'] }}</td>
+              <td>@php echo number_format($pago['total_deuda'],2) @endphp</td>
+              <td>@php echo number_format($pago['total_pago'],2) @endphp</td>
+              <td>{{ $pago['fecha'] }}</td>
+              <td>{{ $pago['condicion'] }}</td>
               <td>
                 @can('pagos.show')
-                  <a href="{{ route('pagos.show', $pago) }}" class="btn btn-info btn-sm">Ver</a>
+                  <a href="{{ route('pagos.show', $pago['id']) }}" class="btn btn-info btn-sm">Ver</a>
                 @endcan
                 @can('pagos.edit')
-                  <a href="{{ route('pagos.edit', $pago) }}" class="btn btn-warning btn-sm">Editar</a>
+                  <a href="{{ route('pagos.edit', $pago['id']) }}" class="btn btn-warning btn-sm">Editar</a>
                 @endcan
                 @can('pagos.destroy')
-                  <a href="" data-target="#modal-delete-{{ $pago->id }}" data-toggle="modal"><button class="btn btn-danger btn-sm">Eliminar</button></a>
+                  <a href="" data-target="#modal-delete-{{ $pago['id'] }}" data-toggle="modal"><button class="btn btn-danger btn-sm">Eliminar</button></a>
                 @endcan
               </td>
             </tr>

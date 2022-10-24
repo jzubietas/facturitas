@@ -32,16 +32,14 @@ class PagoController extends Controller
                 ->join('pago_pedidos as pp', 'pagos.id', 'pp.pago_id')
                 ->rightjoin('pedidos as p', 'pp.pedido_id', 'p.id')
                 ->rightjoin('detalle_pedidos as dpe', 'p.id', 'dpe.pedido_id')
-                ->select('pagos.id',
-                        'dpe.codigo as codigos',
+                ->select('pagos.id as id',
                         'u.name as users',
                         'c.celular',
-                        'pagos.observacion',
-                        'dpe.total as total_deuda',
+                        'pagos.observacion',                        
                         'pagos.total_cobro',
-                        DB::raw('sum(dpa.monto) as total_pago'),
+                        DB::raw('sum(dpe.total) as total_deuda'),
+                        DB::raw('sum(pp.abono) as total_pago'),
                         'pagos.condicion',
-                        /* 'pagos.created_at as fecha' */
                         DB::raw('DATE_FORMAT(pagos.created_at, "%d/%m/%Y") as fecha')
                         )
                 ->where('u.supervisor', Auth::user()->id)
@@ -65,30 +63,57 @@ class PagoController extends Controller
                 ->join('pago_pedidos as pp', 'pagos.id', 'pp.pago_id')
                 ->rightjoin('pedidos as p', 'pp.pedido_id', 'p.id')
                 ->rightjoin('detalle_pedidos as dpe', 'p.id', 'dpe.pedido_id')
-                ->select('pagos.id',
-                        'dpe.codigo as codigos',
+                ->select('pagos.id as id',
                         'u.name as users',
                         'c.celular',
-                        'pagos.observacion',
-                        'dpe.total as total_deuda',
+                        'pagos.observacion',                        
                         'pagos.total_cobro',
-                        DB::raw('sum(dpa.monto) as total_pago'),
+                        DB::raw('sum(dpe.total) as total_deuda'),
+                        DB::raw('sum(pp.abono) as total_pago'),
                         'pagos.condicion',
-                        /* 'pagos.created_at as fecha' */
                         DB::raw('DATE_FORMAT(pagos.created_at, "%d/%m/%Y") as fecha')
                         )
                 ->where('pagos.estado', '1')
-                ->where('dpe.estado', '1')
+                ->where('p.estado', '1')
                 ->where('dpa.estado', '1')                
                 ->groupBy('pagos.id',
-                        'dpe.codigo',
                         'u.name',
                         'c.celular',
-                        'pagos.observacion','dpe.total',
+                        'pagos.observacion',
                         'pagos.total_cobro',
                         'pagos.condicion',
-                        'pagos.created_at')
+                        'pagos.created_at'
+                        )
+                ->get();                
+        }
+
+        $pagoList = [];
+        $cont = 0;
+        
+        foreach ($pagos as $pago){
+            $pago_pedidos = PagoPedido::
+                select('pedido_id as id')
+                ->where('pago_pedidos.pago_id', $pago->id)
                 ->get();
+
+            $pedidos = Pedido::select('codigo as codigos')
+                ->whereIn('id', $pago_pedidos)
+                ->get();
+
+                $pagoList[$cont] = array(
+                'id' => $pago->id,
+                'codigos' => $pedidos,
+                'users' => $pago->users,
+                'celular' => $pago->celular,
+                'observacion' => $pago->observacion,
+                'total_cobro' => $pago->total_cobro,
+                'total_pago' => $pago->total_pago,
+                'total_deuda' => $pago->total_deuda,
+                'fecha' => $pago->fecha,
+                'condicion' => $pago->condicion
+            );
+
+            $cont++;
         }
 
         $pagosobservados_cantidad = Pago::where('user_id', Auth::user()->id)//PAGOS OBSERVADOS
@@ -98,7 +123,7 @@ class PagoController extends Controller
         
         $superasesor = User::where('rol', 'Super asesor')->count();
 
-        return view('pagos.index', compact('pagos', 'pagosobservados_cantidad', 'superasesor'));
+        return view('pagos.index', compact('pagoList', 'pagosobservados_cantidad', 'superasesor'));
     }
 
     /**
@@ -649,8 +674,9 @@ class PagoController extends Controller
         return redirect()->route('pagos.edit', compact('pago'))->with('info', 'Eliminado');
     }
     
-    public function destroy(Pago $pago)    
+    public function destroy($pago_id)    
     {   
+        $pago = Pago::where('id', $pago_id)->first();
         $detallePago = DetallePago::where('pago_id', $pago->id)->get();
         $pagoPedido = PagoPedido::where('pago_id', $pago->id)->get();
 
@@ -973,9 +999,11 @@ class PagoController extends Controller
 
             // ACTUALIZANDO CABECERA PAGOS
             $condicion = $request->condicion;
+            $observacion = $request->observacion;
 
             $pago->update([
                 'condicion' => $condicion,
+                'observacion' => $observacion
             ]);
 
             if($condicion == "ABONADO")
@@ -995,7 +1023,7 @@ class PagoController extends Controller
             
             // ACTUALIZANDO DETALLE PAGOS
             $detalle_id = $request->detalle_id;
-            $observacion = $request->observacion;
+            //$observacion = $request->observacion;
             $cuenta = $request->cuenta;
             $titular = $request->titular;
             $fecha_deposito = $request->fecha_deposito;
@@ -1004,7 +1032,7 @@ class PagoController extends Controller
             while ($cont < count((array)$detalle_id)) {
 
                 DetallePago::where('id', $detalle_id[$cont])
-                        ->update(array('observacion' => $observacion[$cont],
+                        ->update(array(//'observacion' => $observacion[$cont],
                                         'cuenta' => $cuenta[$cont],
                                         'titular' => $titular[$cont],
                                         'fecha_deposito' => $fecha_deposito[$cont],

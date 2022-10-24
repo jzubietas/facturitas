@@ -120,8 +120,7 @@
                     <th scope="col">FECHA</th>
                     <th scope="col">CUENTA DESTINO</th>
                     <th scope="col">TITULAR</th>
-                    <th scope="col">FECHA DEPOSITO</th>
-                    <th scope="col">OBSERVACION</th>
+                    <th scope="col">FECHA DEPOSITO</th>                    
                     <th scope="col">IMAGEN</th>
                   </tr>
                 </thead>
@@ -148,9 +147,6 @@
                         {!! Form::date('fecha_deposito[]', $detallePago->fecha_deposito, ['class' => 'form-control', 'id' => 'fecha_deposito']) !!}
                       </td>
                       <td>
-                        {!! Form::textarea('observacion[]', $detallePago->observacion, ['class' => 'form-control', 'rows' => '7', 'placeholder' => 'Ingrese observaciones']) !!}
-                      </td>
-                      <td>
                         <a href="" data-target="#modal-imagen-{{ $detallePago->id }}" data-toggle="modal">
                           <img src="{{ asset('storage/pagos/' . $detallePago->imagen) }}" alt="{{ $detallePago->imagen }}" height="200px" width="200px" class="img-thumbnail">
                         </a>  
@@ -165,23 +161,30 @@
                   @endforeach
                 </tbody>
                 <tfoot>
-                  <th style="text-align: center">TOTAL:</th>
-                  <th></th>
-                  <th></th>
-                  <th><h4><?php echo number_format($sumPa, 2, '.', ' ')?></h4></th>
-                  <th></th>  
-                  <th></th>
-                  <th></th>
-                  <th></th>
-                  <th style="text-align: center">ESTADO:</th>
-                  <th>
-                    <select name="condicion" class="border form-control selectpicker border-secondary" id="condicion" data-live-search="true">
-                      <option value="">---- SELECCIONE ----</option>
-                      @foreach($condiciones as $condicion)
-                      <option value="{{ $condicion }}" {{ ($condicion == $pagos->condicion ? "selected" : "") }}>{{$condicion}}</option>
-                      @endforeach
-                    </select>
-                </th>
+                  <tr>
+                    <td colspan="6" style="text-align: center; padding-top: 5%;"><b>OBSERVACION</b></td>
+                    <td colspan="3">
+                      {!! Form::textarea('observacion', $pagos->observacion, ['class' => 'form-control', 'rows' => '7', 'placeholder' => 'Ingrese observaciones']) !!}
+                    </td>
+                  </tr>
+                  <tr>
+                    <th style="text-align: center">TOTAL:</th>
+                    <th></th>
+                    <th></th>
+                    <th><h4><?php echo number_format($sumPa, 2, '.', ' ')?></h4></th>
+                    <th></th> 
+                    <th></th>
+                    <th></th>
+                    <th style="text-align: center">ESTADO:</th>
+                    <th>
+                      <select name="condicion" class="border form-control selectpicker border-secondary" id="condicion" data-live-search="true">
+                        <option value="">---- SELECCIONE ----</option>
+                        @foreach($condiciones as $condicion)
+                        <option value="{{ $condicion }}" {{ ($condicion == $pagos->condicion ? "selected" : "") }}>{{$condicion}}</option>
+                        @endforeach
+                      </select>
+                    </th>
+                  </tr>                  
                 </tfoot>
               </table>
             </div>
