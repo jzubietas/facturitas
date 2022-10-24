@@ -940,7 +940,7 @@ class PagoController extends Controller
             "PAGO" => 'PAGO',
             "OBSERVADO" => 'OBSERVADO',
             "ABONADO" => 'ABONADO',
-            "ABONADOPARCIAL" => 'ABONADOPARCIAL'
+            "ABONADO_PARCIAL" => 'ABONADO_PARCIAL'
         ];
 
         $cuentas = [
