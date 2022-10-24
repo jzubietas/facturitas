@@ -3,18 +3,19 @@
 namespace App\Exports;
 
 use App\Models\Pedido;
+use Carbon\Carbon;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Concerns\FromView;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Concerns\Exportable;
+use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 
-class PedidosAtendidosExport implements FromView
+class PedidosAtendidosExport implements FromView, ShouldAutoSize
 {
-    /**
-     * @return \Illuminate\Support\Collection
-     */
-    public function view(): View
-    {
+    use Exportable;
+    
+    public function pedidos($request) {
         $pedidos = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')
             ->join('users as u', 'pedidos.user_id', 'u.id')
             ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
@@ -38,6 +39,7 @@ class PedidosAtendidosExport implements FromView
             ->where('pedidos.estado', '1')
             ->where('dp.estado', '1')
             ->where('pedidos.condicion', 'ATENDIDO')
+            ->whereBetween(DB::raw('DATE(pedidos.created_at)'), [$request->desde, $request->hasta]) //rango de fechas
             ->groupBy(
                 'pedidos.id',
                 'u.jefe',
@@ -57,7 +59,14 @@ class PedidosAtendidosExport implements FromView
             )
             ->orderBy('pedidos.created_at', 'DESC')
             ->get();
+        $this->pedidos = $pedidos;
+        return $this;
+    } 
 
-        return view('pedidos.excel.pedidosatendidos', compact('pedidos'));
-    }
+    public function view(): View {
+        return view('pedidos.excel.pedidosatendidos', [
+            'pedidos'=> $this->pedidos
+        ]);
+    } 
+
 }

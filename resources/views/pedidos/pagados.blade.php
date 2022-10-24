@@ -7,7 +7,7 @@
     {{-- @can('pedidos.create')
       <a href="{{ route('pedidos.create') }}" class="btn btn-info"><i class="fas fa-plus-circle"></i> Agregar</a>
     @endcan --}}
-    @can('pedidos.exportar')
+    {{-- @can('pedidos.exportar')
     <div class="float-right btn-group dropleft">
       <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         Exportar
@@ -16,7 +16,16 @@
         <a href="{{ route('pedidospagadosExcel') }}" class="dropdown-item"><img src="{{ asset('imagenes/icon-excel.png') }}"> EXCEL</a>
       </div>
     </div>
-    @endcan
+    @endcan --}}
+    <div class="float-right btn-group dropleft">
+      <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        Exportar
+      </button>
+      <div class="dropdown-menu">
+        <a href="" data-target="#modal-exportar" data-toggle="modal" class="dropdown-item" target="blank_"><img src="{{ asset('imagenes/icon-excel.png') }}"> Excel</a>
+      </div>
+    </div>
+    @include('pedidos.modal.exportar', ['title' => 'Exportar Lista de pedidos pagados', 'key' => '5'])    
   </h1>
   @if($superasesor > 0)
   <br>

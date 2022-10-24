@@ -3,18 +3,19 @@
 namespace App\Exports;
 
 use App\Models\Pago;
+use Carbon\Carbon;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Concerns\FromView;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Concerns\Exportable;
+use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 
-class PagosIncompletosExport implements FromView
+class PagosIncompletosExport implements FromView, ShouldAutoSize
 {
-    /**
-     * @return \Illuminate\Support\Collection
-     */
-    public function view(): View
-    {
+    use Exportable;
+
+    public function pagos($request) {
         $pagos = Pago::join('users as u', 'pagos.user_id', 'u.id')
             ->join('detalle_pagos as dpa', 'pagos.id', 'dpa.pago_id')
             ->join('pago_pedidos as pp', 'pagos.id', 'pp.pago_id')
@@ -34,6 +35,7 @@ class PagosIncompletosExport implements FromView
             ->where('dpa.estado', '1')
             ->where('u.id', Auth::user()->id)
             ->where('pagos.condicion', 'ADELANTO')
+            ->whereBetween(DB::raw('DATE(pagos.created_at)'), [$request->desde, $request->hasta]) //rango de fechas
             ->groupBy('pagos.id', 
                     'dpe.codigo', 
                     'u.name',
@@ -42,7 +44,14 @@ class PagosIncompletosExport implements FromView
                     'pagos.condicion', 
                     'pagos.created_at')
             ->get();
+        $this->pagos = $pagos;
+        return $this;
+    }            
 
-        return view('pagos.excel.pagosincompletos', compact('pagos'));
+    public function view(): View {
+        return view('pagos.excel.pagosincompletos', [
+            'pagos'=> $this->pagos
+        ]);
     }
+
 }
