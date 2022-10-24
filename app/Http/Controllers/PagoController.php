@@ -939,13 +939,15 @@ class PagoController extends Controller
         $condiciones = [
             "PAGO" => 'PAGO',
             "OBSERVADO" => 'OBSERVADO',
-            "ABONADO" => 'ABONADO'
+            "ABONADO" => 'ABONADO',
+            "ABONADOPARCIAL" => 'ABONADOPARCIAL'
         ];
 
         $cuentas = [
             "BCP" => 'BCP',
             "BBVA" => 'BBVA',
-            "YAPE" => 'YAPE'
+            "YAPE" => 'YAPE',
+            "INTERBANK" => 'INTERBANK'
         ];
 
         $titulares = [

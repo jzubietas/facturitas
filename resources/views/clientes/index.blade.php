@@ -48,9 +48,9 @@
             <th scope="col">Direccion</th>
             <th scope="col">Asesor asignado</th>
             <th scope="col">Cantidad</th>
-            <!--<th scope="col">Año actual</th>
-            <th scope="col">Mes actual</th>
-            <th scope="col">anio pedido</th>
+            {{--<th scope="col">Año actual</th>--}}
+            {{--<th scope="col">Mes actual</th>--}}
+            {{--<th scope="col">anio pedido</th>--}}
             <th scope="col">mes pedido</th>
             <th scope="col">Deuda</th>-->
             <th scope="col">Acciones</th>
