@@ -143,7 +143,8 @@ Route::post('/mark-as-read', [NotificationsController::class, 'markNotification'
 
 //EXCEL EXPORTABLES
     //MODULO PERSONAS
-    Route::get('clientesExcel', [ExcelController::class, 'clientesExcel'])->name('clientesExcel');
+    // Route::get('clientesExcel', [ExcelController::class, 'clientesExcel'])->name('clientesExcel');
+    Route::post('clientesExcel', [ExcelController::class, 'clientesExcel'])->name('clientesExcel');
     Route::post('clientespedidosExcel', [ExcelController::class, 'clientespedidosExcel'])->name('clientespedidosExcel');
     Route::get('basefriaExcel', [ExcelController::class, 'basefriaExcel'])->name('basefriaExcel');
     Route::post('basefriaporasesorExcel', [ExcelController::class, 'basefriaporasesorExcel'])->name('basefriaporasesorExcel');

@@ -37,9 +37,16 @@ use Illuminate\Support\Facades\DB;
 
 class ExcelController extends Controller
 {   
-    public function clientesExcel()
+    // public function clientesExcel()
+    // {
+    //     return Excel::download(new ClientesExport, 'Lista de Clientes.xlsx');
+    // }
+    public function clientesExcel(Request $request)
     {
-        return Excel::download(new ClientesExport, 'Lista de Clientes.xlsx');
+        return (new ClientesExport)
+                ->clientes1($request)
+                ->clientes2($request)
+                ->download('Lista de Clientes.xlsx');           
     }
 
     public function clientespedidosExcel(Request $request)
