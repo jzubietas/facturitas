@@ -26,6 +26,7 @@ class BasefriaController extends Controller
         //
         //return $dataTable->render('base_fria.index');
         //if ($request->ajax()) {
+            
             $data = Cliente::
             join('users as u', 'clientes.user_id', 'u.id')
             ->select('clientes.id', 
@@ -33,7 +34,8 @@ class BasefriaController extends Controller
                     'clientes.celular', 
                     //'clientes.estado', 
                     //'u.name as user',
-                    'u.name as identificador'
+                    'u.identificador as identificador',
+                    'u.rol'
                     )
             ->where('clientes.estado','1')
             ->where('clientes.tipo','0')
@@ -55,6 +57,29 @@ class BasefriaController extends Controller
                     ->rawColumns(['action'])
                     ->make(true);
         //}
+    }
+
+    public function cargarid(Request $request)
+    {
+        if (!$request->basefria_id) {
+            $html='';
+        } else {
+            $data = Cliente::
+            join('users as u', 'clientes.user_id', 'u.id')
+            ->select('clientes.id', 
+                    'clientes.nombre', 
+                    'clientes.celular', 
+                    'u.identificador as identificador',
+                    'u.rol'
+                    )
+            ->where('clientes.estado','1')
+            ->where('clientes.tipo','0')
+            ->where('clientes.id',$request->basefria_id)
+            ->get();
+
+            $html=$data;
+        }
+        return response()->json(['html' => $html]);
     }
 
     /**

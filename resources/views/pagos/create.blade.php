@@ -29,41 +29,8 @@
     </div>
     <div class="card-body">
       <div class="form-row">
-        <div class="form-group col-lg-6">
-          <div class="form-row">
-            <div class="form-group col-lg-6">
-              <h2>PEDIDOS A PAGAR</h2>
-            </div>
-            <div class="form-group col-lg-6">
-              <a data-target="#modal-add-pedidos" id="addpedido" data-toggle="modal"><button class="btn btn-info"><i class="fas fa-plus-circle"></i></button></a>  
-            </div>
-          </div>
-          <div class="table-responsive">
-            <table id="tabla_pedidos" class="table table-striped">
-              <thead class="bg-info">
-                <tr>
-                  <th scope="col">ITEM</th>
-                  <th scope="col">PEDIDO</th>
-                  <th scope="col">CODIGO</th>
-                  <th scope="col">MONTO</th>
-                  <th scope="col">SALDO</th>
-                  <th scope="col">ACCIÓN</th>
-                </tr>
-              </thead>
-              <tfoot>
-                <th style="text-align: center">TOTAL</th>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th><h4 id="total_pedido">S/. 0.00</h4></th>
-                <th><input type="hidden" name="total_pedido_pagar" requerid value="" id="total_pedido_pagar" class="form-control"></th>              
-              </tfoot>
-              <tbody>
-              </tbody>
-            </table>
-          </div>
-        </div>
-        <div class="form-group col-lg-6">
+
+      <div class="form-group col-lg-6">
           <div class="form-row" style="margin:-2px">
             <div class="form-group col-lg-6">
               <h2>PAGOS - <b style="font-size:20px"> {!! Form::label('saldo', 'Saldo a favor') !!}</b></h2>
@@ -103,6 +70,63 @@
             </table>
           </div>
         </div>
+        
+        <div class="form-group col-lg-6">
+          <div class="form-row">
+            <div class="form-group col-lg-6">
+              <h2>PEDIDOS A PAGAR</h2>
+            </div>
+            <div class="form-group col-lg-6">
+              {{-- <a data-target="#modal-add-pedidos" id="addpedido" data-toggle="modal"><button class="btn btn-info"><i class="fas fa-plus-circle"></i></button></a> --}}  
+            </div>
+          </div>
+          <div class="table-responsive">
+            <table id="tabla_pedidos" class="table table-striped" style="text-align: center">
+              <thead class="bg-info">
+                <tr>
+                  <th scope="col">ITEM</th>
+                  {{-- <th scope="col">PEDIDO</th> --}}
+                  <th scope="col">CODIGO</th>
+                  <th scope="col">MONTO</th>
+                  <th scope="col">SALDO</th>
+                  {{-- <th scope="col">ACCIÓN</th> --}}
+                  {{-- <th scope="col">TOTAL</th> --}}
+                    {{-- <th scope="col">ADELANTO</th> --}}
+                    <th>TOTAL</th>
+                    <th>ADELANTO</th>
+                </tr>
+              </thead>
+              <tfoot>
+                <tr>
+                  <td>{{--ITEM--}}</td>
+                  <td>{{--CODIGO--}}</td>
+                  <td>TOTAL MONTO</td>
+                  <td>TOTAL SALDO</td>
+                  {{--<td>ACCION</td>--}}
+                  {{--<td>TOTAL</td>--}}
+                  {{--<td>ADELANTO</td>--}}
+                  <td></td>
+                  <td></td>
+                </tr>
+              </tfoot>
+              <tbody style="text-align: center">
+              </tbody>
+              {{-- <tfoot>
+                <th style="text-align: center">TOTAL</th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th><h4 id="total_pedido">S/. 0.00</h4></th>
+                <th><input type="hidden" name="total_pedido_pagar" requerid value="" id="total_pedido_pagar" class="form-control"></th>              
+              </tfoot> 
+              --}}             
+            </table>
+          </div>
+        </div>
+
+        
+
+
       </div>
       {{-- MODALS --}}
       @include('pagos.modals.AddPedidos')
@@ -123,7 +147,7 @@
         <div class="form-group col-lg-3"></div>
         <div class="form-group col-lg-4" style="text-align: center;">
           <div class="input-group">            
-            <input type="text" name="" value="DIFERENCIA FALTANTE S/:" disabled class="form-control" style="color: red; font-weight:bold; font-weight: 900; font-size:21px">
+            <input type="text" name="" value="SALDO S/:" disabled class="form-control" style="color: red; font-weight:bold; font-weight: 900; font-size:21px">
             <input type="text" name="diferencia" value="" disabled id="diferencia" class="form-control" style="color: red; font-weight:bold; font-weight: 900; font-size:21px">   
           </div>
         </div>
@@ -133,8 +157,21 @@
   </div>
 @stop
 
+@section('css')
+<style>
+tfoot tr, thead tr {
+	background: lightblue;
+}
+tfoot td {
+	font-weight:bold;
+}
+</style>
+@stop
+
 @section('js')
   <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
   <script>  
 
     $("#guardar").hide();
@@ -148,23 +185,82 @@
     }    
 
     // CARGAR PEDIDOS DE CLIENTE SELECCIONADO
-    $("#pcliente_id").change(function() {
-      datosCliente = document.getElementById('pcliente_id').value.split('_');
 
-      cliente_id = datosCliente[0];
-      saldo = datosCliente[1];
+    var tabla_pedidos=null;
+    //$(document).ready(function () {
+        
+        $("#pcliente_id").change(function() {
+          
+          $('#tabla_pedidos').DataTable().clear().destroy();
 
-      $("#cliente_id").val(cliente_id);
-      $("#saldo").val(saldo);      
+          datosCliente = document.getElementById('pcliente_id').value.split('_');
 
-      $.ajax({
-        url: "{{ route('cargar.pedidoscliente') }}?cliente_id=" + $(this).val(),
-        method: 'GET',
-        success: function(data) {
-          $('#ppedido_id').html(data.html);
-        }
+          cliente_id = datosCliente[0];
+          saldo = datosCliente[1];
+          
+          //$("#diferencia").prop("disabled",null)
+          //diferencia=$("#diferencia").val();
+          //$("#diferencia").prop("disabled",true)
+          console.log("diferencia en change pcliente_id");
+          console.log(diferencia);
+          $("#diferencia").prop("disabled",false);
+          let diferenciaval=$("#diferencia").val();
+          console.log(diferenciaval);
+          $("#cliente_id").val(cliente_id);
+          $("#saldo").val(saldo);
+          tabla_pedidos=$('#tabla_pedidos').DataTable({
+            "bPaginate": false,
+            "bFilter": false,
+            "bInfo": false,
+            'ajax': {
+              url:"{{ route('cargar.pedidoscliente') }}",					
+              'data': { "cliente_id": $(this).val(),"diferencia":diferenciaval}, 
+              "type": "get",
+              },
+            columns: [
+              {data: 'id', name: 'id',},
+              {data: 'codigo', name: 'codigo',},
+              {data: 'total', name: 'total',},
+              {data: 'saldo', name: 'saldo',},
+              {
+                  "data": null,
+                  "render": function ( data, type, row, meta ) {
+                      //para total pago
+                      return '<input type="radio" class="form-control" name="totaladelanto">';//row.Firstname + ' ' + row.Lastname;  // Column will display firstname lastname
+          
+                  }
+              },
+              {
+                  "data": null,
+                  "render": function ( data, type, row, meta ) {
+                      //para adelanto
+                    return '<input type="radio" class="form-control" name="totaladelanto">'//row.Firstname + ' ' + row.Lastname;  // Column will display firstname lastname
+          
+                  }
+              }
+            ],
+            "footerCallback": function ( row, data, start, end, display ) {
+              var api = this.api();
+              nb_cols = 4;api.columns().nodes().length;
+              var j = 2;
+              while(j < nb_cols){
+                var pageTotal = api
+                      .column( j, { page: 'current'} )
+                      .data()
+                      .reduce( function (a, b) {
+                          return Number(a) + Number(b);
+                      }, 0 );
+                // Update footer
+                $( api.column( j ).footer() ).html(pageTotal);
+                j++;
+              } 
+            }
+          });
+        
       });
-    });
+    //});
+
+    
     
     //VALIDAR CAMPO FECHAS MAX DIA ACTUAL
     var today = new Date().toISOString().split('T')[0];
@@ -181,6 +277,7 @@
     }
 
     diferencia = 0;
+    console.log("diferencia inicial 0")
     total_pedido = 0;
     subtotal_pedido = [];
     var contPe = 1;
@@ -215,6 +312,7 @@
         diferenciaFaltante();
         $('#tabla_pedidos').append(filasPe);
         Remove_options(Pedido_delete);
+
       } else {
         Swal.fire(
           'Error!',
@@ -228,16 +326,20 @@
       $("#total_pedido").val("");
     }
 
-    function evaluarPe() {
+    /* function evaluarPe() {
       if (total_pedido > 0 && total_pago > 0) {
         $("#guardar").show();
       } else {
         $("#guardar").hide();
       }
-    }
+    } */
 
     function diferenciaFaltante() {
-      diferencia = total_pedido - total_pago;
+      //diferencia = total_pedido - total_pago;
+      diferencia = total_pago - total_pedido;
+      console.log('diferencia en fx diferenciaFaltante');
+      console.log(diferencia);
+      tabla_pedidos.ajax.reload();
       $("#diferencia").val(diferencia.toLocaleString("en-US"));
     }
 
@@ -316,8 +418,28 @@
     subtotal_pago = [];
     var contPa = 0;
 
+    //eventos de datatable
+    $("#tabla_pedidos").on( 'click', 'input', function () {
+      let filedata=tabla_pedidos.row($(this).closest('tr')).data();
+      let idfila=filedata.id;
+      let idcodigo=filedata.codigo;
+      let idtotal=filedata.total;
+      let idsaldo=filedata.saldo;
+      console.log(idcodigo);
+      console.log(idtotal);
+      console.log(idsaldo);
+      //console.log(idfila);
+      //tabla_pedidos.row($(this).closest('tr')).data().cant = $(this).val()
+      console.log("click item" + idfila)
+    });
+
     // AGREGANDO PAGOS
     function agregarPago() {
+
+      //valor de datatable la suma de columna total y columna saldo
+
+      
+      //var sumatotal=$("#tabla_pedidos").
       var strEx = $("#pmonto").val();//1,000.00
       //primer paso: fuera coma
       strEx = strEx.replace(",","");//1000.00
@@ -350,6 +472,9 @@
         evaluarPa();
         diferenciaFaltante();
         $('#tabla_pagos').append(filasPa);
+        //$("#diferencia")
+        console.log("pago "+'pago');
+        
       } else {
         Swal.fire(
           'Error!',
@@ -366,7 +491,7 @@
     }
 
     function evaluarPa() {
-      if (total_pedido > 0 && total_pago > 0) {
+      if (total_pago > 0) {//total_pedido > 0 && 
         $("#guardar").show();
       } else {
         $("#guardar").hide();

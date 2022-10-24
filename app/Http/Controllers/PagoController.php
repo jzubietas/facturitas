@@ -15,6 +15,7 @@ use Illuminate\Auth\Events\Validated;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use DataTables;
 
 class PagoController extends Controller
 {
@@ -32,16 +33,14 @@ class PagoController extends Controller
                 ->join('pago_pedidos as pp', 'pagos.id', 'pp.pago_id')
                 ->rightjoin('pedidos as p', 'pp.pedido_id', 'p.id')
                 ->rightjoin('detalle_pedidos as dpe', 'p.id', 'dpe.pedido_id')
-                ->select('pagos.id',
-                        'dpe.codigo as codigos',
+                ->select('pagos.id as id',
                         'u.name as users',
                         'c.celular',
-                        'pagos.observacion',
-                        'dpe.total as total_deuda',
+                        'pagos.observacion',                        
                         'pagos.total_cobro',
-                        DB::raw('sum(dpa.monto) as total_pago'),
+                        DB::raw('sum(dpe.total) as total_deuda'),
+                        DB::raw('sum(pp.abono) as total_pago'),
                         'pagos.condicion',
-                        /* 'pagos.created_at as fecha' */
                         DB::raw('DATE_FORMAT(pagos.created_at, "%d/%m/%Y") as fecha')
                         )
                 ->where('u.supervisor', Auth::user()->id)
@@ -65,30 +64,57 @@ class PagoController extends Controller
                 ->join('pago_pedidos as pp', 'pagos.id', 'pp.pago_id')
                 ->rightjoin('pedidos as p', 'pp.pedido_id', 'p.id')
                 ->rightjoin('detalle_pedidos as dpe', 'p.id', 'dpe.pedido_id')
-                ->select('pagos.id',
-                        'dpe.codigo as codigos',
+                ->select('pagos.id as id',
                         'u.name as users',
                         'c.celular',
-                        'pagos.observacion',
-                        'dpe.total as total_deuda',
+                        'pagos.observacion',                        
                         'pagos.total_cobro',
-                        DB::raw('sum(dpa.monto) as total_pago'),
+                        DB::raw('sum(dpe.total) as total_deuda'),
+                        DB::raw('sum(pp.abono) as total_pago'),
                         'pagos.condicion',
-                        /* 'pagos.created_at as fecha' */
                         DB::raw('DATE_FORMAT(pagos.created_at, "%d/%m/%Y") as fecha')
                         )
                 ->where('pagos.estado', '1')
-                ->where('dpe.estado', '1')
+                ->where('p.estado', '1')
                 ->where('dpa.estado', '1')                
                 ->groupBy('pagos.id',
-                        'dpe.codigo',
                         'u.name',
                         'c.celular',
-                        'pagos.observacion','dpe.total',
+                        'pagos.observacion',
                         'pagos.total_cobro',
                         'pagos.condicion',
-                        'pagos.created_at')
+                        'pagos.created_at'
+                        )
+                ->get();                
+        }
+
+        $pagoList = [];
+        $cont = 0;
+        
+        foreach ($pagos as $pago){
+            $pago_pedidos = PagoPedido::
+                select('pedido_id as id')
+                ->where('pago_pedidos.pago_id', $pago->id)
                 ->get();
+
+            $pedidos = Pedido::select('codigo as codigos')
+                ->whereIn('id', $pago_pedidos)
+                ->get();
+
+                $pagoList[$cont] = array(
+                'id' => $pago->id,
+                'codigos' => $pedidos,
+                'users' => $pago->users,
+                'celular' => $pago->celular,
+                'observacion' => $pago->observacion,
+                'total_cobro' => $pago->total_cobro,
+                'total_pago' => $pago->total_pago,
+                'total_deuda' => $pago->total_deuda,
+                'fecha' => $pago->fecha,
+                'condicion' => $pago->condicion
+            );
+
+            $cont++;
         }
 
         $pagosobservados_cantidad = Pago::where('user_id', Auth::user()->id)//PAGOS OBSERVADOS
@@ -98,7 +124,7 @@ class PagoController extends Controller
         
         $superasesor = User::where('rol', 'Super asesor')->count();
 
-        return view('pagos.index', compact('pagos', 'pagosobservados_cantidad', 'superasesor'));
+        return view('pagos.index', compact('pagoList', 'pagosobservados_cantidad', 'superasesor'));
     }
 
     /**
@@ -141,27 +167,53 @@ class PagoController extends Controller
 
     public function pedidoscliente(Request $request)
     {
+        //cliente id quitar el guion bajo
+        
         if (!$request->cliente_id) {
-            $html = '<option value="">' . trans('---- SELECCIONE ----') . '</option>';
+            //$html = '<option value="">' . trans('---- SELECCIONE11 ----') . '</option>';
+            
         } else {
-            $html = '<option value="">' . trans('---- SELECCIONE ----') . '</option>';
+
+            $idrequest=explode("_",$request->cliente_id)[0];
+            //$html = '<option value="">' . trans('---- SELECCIONE2 ----') . '</option>';
             $pedidos = Pedido::join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
                 ->select('pedidos.id', 
                         'dp.codigo',
                         'dp.total',
                         'dp.saldo')
-                ->where('pedidos.cliente_id', $request->cliente_id)
+                ->where('pedidos.cliente_id', $idrequest)
                 /* ->where('pedidos.pago', '0') */
                 ->where('pedidos.pagado', '<>', '2')
                 ->where('pedidos.estado', '1')
                 ->where('dp.estado', '1')                
                 ->get();
             
-            foreach ($pedidos as $pedido) {
-                $html .= '<option value="' . $pedido->id . '_' . $pedido->codigo . '_' . $pedido->total . '_' . $pedido->saldo . '">Código: ' . $pedido->codigo . ' - Total: S/' . $pedido->total . ' - Saldo: S/' . $pedido->saldo . '</option>';
-            }
+            //$contPe = 0;
+            
+            return Datatables::of($pedidos)
+                    ->addIndexColumn()
+                    /*->addColumn('action', function($row){     
+                           $btn = '<a href="" data-target="#modal-convertir" data-toggle="modal" data-opcion="'.$row->id.'"><button class="btn btn-info btn-sm">Convertir a cliente</button></a>';
+                           //$btn = '<a href="" data-target="#modal-convertir-'.$row->id.'" data-toggle="modal" data-opcion="'.$row->id.'"><button class="btn btn-info btn-sm">Convertir a cliente</button></a>';
+
+                           $btn = $btn.'<a href="'.route('clientes.editbf', $row).'" class="btn btn-warning btn-sm"><i class="fas fa-edit"></i> Editar</a>';
+                           $btn = $btn.'<a href="" data-target="#modal-delete" data-toggle="modal" data-opcion="'.$row->id.'"><button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i> Eliminar</button></a>';
+                           //$btn = $btn.'<a href="" data-target="#modal-delete-'.$row->id.'" data-toggle="modal"><button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i> Eliminar</button></a>';
+       
+                            return $btn;
+                    })
+                    ->rawColumns(['action'])*/
+                    ->make(true);
+
+            /*foreach ($pedidos as $pedido) {
+                //$html .= '<option value="' . $pedido->id . '_' . $pedido->codigo . '_' . $pedido->total . '_' . $pedido->saldo . '">Código: ' . $pedido->codigo . ' - Total: S/' . $pedido->total . ' - Saldo: S/' . $pedido->saldo . '</option>';
+
+                $tabla = '<tr class="selected" id="filasPe' . $contPe . '"><td>' . $contPe+1 . '</td><td style="display:none;" ><input type="hidden" name="pedido_id[]" value="' . $pedido->id . '">' . $pedido->id . '</td><td><input type="hidden" name="" value="">PED000' . $pedido->id . '</td><td><input type="hidden" name="" value="">' . $pedido->codigo . '</td><td><input type="hidden" name="" id= "numbermonto" value="">S/' . $pedido->total . '</td><td><input type="hidden" name="" id= "numbersaldo" value="">S/' . $pedido->saldo . '</td><td><input type="checkbox" id="cbox1" value="0"></td><td><input type="checkbox" id="cbox1" value="1"></td></tr>';
+            }*/
+
         }
-        return response()->json(['html' => $html]);
+        //return response()->json(['html' => $html]);
+        //return response()->json(['html' => $tabla]);
     }
 
     public function store(Request $request)
@@ -645,8 +697,9 @@ class PagoController extends Controller
         return redirect()->route('pagos.edit', compact('pago'))->with('info', 'Eliminado');
     }
     
-    public function destroy(Pago $pago)    
+    public function destroy($pago_id)    
     {   
+        $pago = Pago::where('id', $pago_id)->first();
         $detallePago = DetallePago::where('pago_id', $pago->id)->get();
         $pagoPedido = PagoPedido::where('pago_id', $pago->id)->get();
 
@@ -969,9 +1022,11 @@ class PagoController extends Controller
 
             // ACTUALIZANDO CABECERA PAGOS
             $condicion = $request->condicion;
+            $observacion = $request->observacion;
 
             $pago->update([
                 'condicion' => $condicion,
+                'observacion' => $observacion
             ]);
 
             if($condicion == "ABONADO")
@@ -991,7 +1046,7 @@ class PagoController extends Controller
             
             // ACTUALIZANDO DETALLE PAGOS
             $detalle_id = $request->detalle_id;
-            $observacion = $request->observacion;
+            //$observacion = $request->observacion;
             $cuenta = $request->cuenta;
             $titular = $request->titular;
             $fecha_deposito = $request->fecha_deposito;
@@ -1000,7 +1055,7 @@ class PagoController extends Controller
             while ($cont < count((array)$detalle_id)) {
 
                 DetallePago::where('id', $detalle_id[$cont])
-                        ->update(array('observacion' => $observacion[$cont],
+                        ->update(array(//'observacion' => $observacion[$cont],
                                         'cuenta' => $cuenta[$cont],
                                         'titular' => $titular[$cont],
                                         'fecha_deposito' => $fecha_deposito[$cont],

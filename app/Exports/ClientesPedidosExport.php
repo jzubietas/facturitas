@@ -20,7 +20,7 @@ class ClientesPedidosExport implements FromView, ShouldAutoSize
 
             $clientes = Cliente::
                     join('users as u', 'clientes.user_id', 'u.id')
-                    ->join('pedidos as p', 'clientes.id', 'p.cliente_id')
+                    ->rightJoin('pedidos as p', 'clientes.id', 'p.cliente_id')
                     ->select('clientes.id',
                             'u.identificador as asesor',
                             'clientes.nombre',
@@ -32,7 +32,10 @@ class ClientesPedidosExport implements FromView, ShouldAutoSize
                             'clientes.referencia',
                             'clientes.estado',
                             'clientes.deuda',
-                            DB::raw('DATE_FORMAT(MAX(p.created_at), "%d/%m/%Y") as fecha'),
+                            'clientes.pidio',
+                            //DB::raw('DATE_FORMAT(MAX(p.created_at), "%d-%b-%Y") as fecha')
+                            //DB::raw('DATE_FORMAT(MAX(p.created_at), "%d/%m/%Y") as fecha'),
+                            DB::raw("DATE_FORMAT(MAX(p.created_at), '%d-%m-%Y %h:%i:%s') as fecha"),
                             /* DB::raw('MAX(DATE_FORMAT(p.created_at, "%d/%m/%Y")) as fecha'), *///DB::raw('MAX(p.created_at) as fecha'),
                             /* DB::raw('MAX(DATE_FORMAT(p.created_at, "%d")) as dia'), */
                             DB::raw('DATE_FORMAT(MAX(p.created_at), "%m") as mes'),/* DB::raw('MAX(DATE_FORMAT(p.created_at, "%m")) as mes'), */
@@ -52,7 +55,8 @@ class ClientesPedidosExport implements FromView, ShouldAutoSize
                         'clientes.direccion',
                         'clientes.referencia',
                         'clientes.estado',
-                        'clientes.deuda'
+                        'clientes.deuda',
+                        'clientes.pidio'
                     )
                     ->get();
 
@@ -232,12 +236,34 @@ class ClientesPedidosExport implements FromView, ShouldAutoSize
 
                 $dateM = Carbon::now()->format('m');
                 $dateY = Carbon::now()->format('Y');
+                
+                if($cliente->pidio==0 || $cliente->pidio=='0' || $cliente->pidio==null  || $cliente->pidio=='null' ){
+                    $estadopedido = 'SIN PEDIDO';
+                }else{
+                    if(  (($dateY*1)-($cliente->anio*1)) == 0)
+                    {
+                        //año actual
+                        
+                        if( (($dateM*1)-($cliente->mes*1)) >= 0 && (($dateM*1)-($cliente->mes*1))<2)
+                        {
+                            $estadopedido = 'RECURRENTE';
+                        }
+                        /*else{
+                            $estadopedido = 'ABANDONO';
+                        }*/
 
-                if( (($dateM*1)-($cliente->mes*1)) >= 0 && (($dateM*1)-($cliente->mes*1))<3 && (($dateY*1)-($cliente->anio*1)) == 0){
+                    }else{
+                        //año anterior
+                        $estadopedido = 'ABANDONO';
+                    }
+                }
+                
+
+                /*if( (($dateM*1)-($cliente->mes*1)) >= 0 && (($dateM*1)-($cliente->mes*1))<3 && (($dateY*1)-($cliente->anio*1)) == 0){
                     $estadopedido = 'RECURRENTE';
                 }else{
                     $estadopedido = 'ABANDONO';
-                }
+                }*/
 
                 $cliente_list[$cont] = array(
                     'id' => $cliente->id,
@@ -255,13 +281,19 @@ class ClientesPedidosExport implements FromView, ShouldAutoSize
                     'porcentajeeb' => $porcentajeeb,
                     'deuda' => $cliente->deuda,
                     'deposito' => $deposito,
-                    'fecha' => $cliente->fecha,
+                    //'fecha' => date('d-m-Y h:i:s', strtotime($cliente->fecha)),
+                    'fecha' => ($cliente->fecha),
                     'dia' => $cliente->dia,
                     'mes' => $cliente->mes,
                     'anio' => $cliente->anio,
                     /* 'dateM' => Carbon::now()->format('m'),
                     'dateY' => Carbon::now()->format('Y'), */
                     'estadopedido' => $estadopedido,
+                    'pidio' => $cliente->pidio,
+                    //
+                    //'dateY' => $dateY,
+                    //'dateM' => $dateM,
+                    //
                     'estado' => $cliente->estado,
                     'eneroa' => $eneroa,
                     'enerop' => $enerop,

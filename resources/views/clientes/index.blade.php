@@ -2,6 +2,10 @@
 
 @section('title', 'Lista de Clientes')
 
+@section('style')
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css">
+@endsection
+
 @section('content_header')
   <h1>Lista de clientes
     @can('clientes.create')
@@ -43,141 +47,17 @@
             <th scope="col">Celular</th>
             <th scope="col">Direccion</th>
             <th scope="col">Asesor asignado</th>
+            <th scope="col">Cantidad</th>
+            <!--<th scope="col">Año actual</th>
+            <th scope="col">Mes actual</th>
+            <th scope="col">anio pedido</th>
+            <th scope="col">mes pedido</th>
+            <th scope="col">Deuda</th>-->
             <th scope="col">Acciones</th>
           </tr>
         </thead>
         <tbody>
-          @foreach ($clientes1 as $cliente)
-            {{-- @if($cliente->cantidad > 0 && (($dateM*1)-($cliente->mes*1)) == 0 && (($dateY*1)-($cliente->anio*1)) == 0) --}}
-            @if($cliente->cantidad > 0 && $dateM == $cliente->mes && $dateY == $cliente->anio)
-            {{-- @if($cliente->cantidad > 0) --}}
-              <tr style="background: #4ac4e2; color:#ffffff">
-                @if ($cliente->id < 10)
-                  <td>CL{{ $cliente->identificador }}000{{ $cliente->id }}</td>
-                @elseif($cliente->id < 100)
-                  <td>CL{{ $cliente->identificador }}00{{ $cliente->id }}</td>
-                @elseif($cliente->id < 1000)
-                  <td>CL{{ $cliente->identificador }}0{{ $cliente->id }}</td>
-                @else
-                  <td>CL{{ $cliente->identificador }}{{ $cliente->id }}</td>
-                @endif
-                <td>{{ $cliente->nombre }} - {{($dateM*1)-($cliente->mes*1)}}</td>
-                <td>{{ $cliente->celular }}</td>
-                <td>{{ $cliente->direccion }} - {{ $cliente->provincia }} - {{ $cliente->distrito }}</td>
-                <td>{{ $cliente->user }}</td>
-                <td>
-                  @can('clientes.edit')
-                    <a href="{{ route('clientes.edit', $cliente) }}" class="btn btn-warning btn-sm"><i class="fas fa-edit"></i> Editar</a>
-                  @endcan
-                  @can('clientes.destroy')
-                    <a href="" data-target="#modal-delete-{{ $cliente->id }}" data-toggle="modal"><button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i> Eliminar</button></a>
-                  @endcan
-                </td>
-              </tr>
-            @elseif($cliente->cantidad > 0 && (($dateM*1)-($cliente->mes*1)) > 0 && (($dateY*1)-($cliente->anio*1)) == 0)
-              {{-- <td style="background: #e73d3d">ABANDONO</td> --}}
-              <tr style="background: #e73d3d">
-                @if ($cliente->id < 10)
-                  <td>CL{{ $cliente->identificador }}000{{ $cliente->id }}</td>
-                @elseif($cliente->id < 100)
-                  <td>CL{{ $cliente->identificador }}00{{ $cliente->id }}</td>
-                @elseif($cliente->id < 1000)
-                  <td>CL{{ $cliente->identificador }}0{{ $cliente->id }}</td>
-                @else
-                  <td>CL{{ $cliente->identificador }}{{ $cliente->id }}</td>
-                @endif
-                <td>{{ $cliente->nombre }}</td>
-                <td>{{ $cliente->celular }}</td>
-                <td>{{ $cliente->direccion }} - {{ $cliente->provincia }} - {{ $cliente->distrito }}</td>
-                <td>{{ $cliente->user }}</td>
-                <td>
-                  @can('clientes.edit')
-                    <a href="{{ route('clientes.edit', $cliente) }}" class="btn btn-warning btn-sm"><i class="fas fa-edit"></i> Editar</a>
-                  @endcan
-                  @can('clientes.destroy')
-                    <a href="" data-target="#modal-delete-{{ $cliente->id }}" data-toggle="modal"><button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i> Eliminar</button></a>
-                  @endcan
-                </td>
-              </tr>
-            @else
-              <tr>
-                @if ($cliente->id < 10)
-                  <td>CL{{ $cliente->identificador }}000{{ $cliente->id }}</td>
-                @elseif($cliente->id < 100)
-                  <td>CL{{ $cliente->identificador }}00{{ $cliente->id }}</td>
-                @elseif($cliente->id < 1000)
-                  <td>CL{{ $cliente->identificador }}0{{ $cliente->id }}</td>
-                @else
-                  <td>CL{{ $cliente->identificador }}{{ $cliente->id }}</td>
-                @endif
-                <td>{{ $cliente->nombre }}</td>
-                <td>{{ $cliente->celular }}</td>
-                <td>{{ $cliente->direccion }} - {{ $cliente->provincia }} - {{ $cliente->distrito }}</td>
-                <td>{{ $cliente->user }}</td>
-                <td>
-                  @can('clientes.edit')
-                    <a href="{{ route('clientes.edit', $cliente) }}" class="btn btn-warning btn-sm"><i class="fas fa-edit"></i> Editar</a>
-                  @endcan
-                  @can('clientes.destroy')
-                    <a href="" data-target="#modal-delete-{{ $cliente->id }}" data-toggle="modal"><button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i> Eliminar</button></a>
-                  @endcan
-                </td>
-              </tr>
-            @endif            
-            @include('clientes.modal')
-          @endforeach
-          @foreach ($clientes2 as $cliente)
-            <tr>
-              @if ($cliente->id < 10)
-                <td>CL{{ $cliente->identificador }}000{{ $cliente->id }}</td>
-              @elseif($cliente->id < 100)
-                <td>CL{{ $cliente->identificador }}00{{ $cliente->id }}</td>
-              @elseif($cliente->id < 1000)
-                <td>CL{{ $cliente->identificador }}0{{ $cliente->id }}</td>
-              @else
-                <td>CL{{ $cliente->identificador }}{{ $cliente->id }}</td>
-              @endif
-              <td>{{ $cliente->nombre }}</td>
-              <td>{{ $cliente->celular }}</td>
-              <td>{{ $cliente->direccion }} - {{ $cliente->provincia }} - {{ $cliente->distrito }}</td>
-              <td>{{ $cliente->user }}</td>
-              <td>
-                @can('clientes.edit')
-                  <a href="{{ route('clientes.edit', $cliente) }}" class="btn btn-warning btn-sm"><i class="fas fa-edit"></i> Editar</a>
-                @endcan
-                @can('clientes.destroy')
-                  <a href="" data-target="#modal-delete-{{ $cliente->id }}" data-toggle="modal"><button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i> Eliminar</button></a>
-                @endcan
-              </td>
-            </tr>
-            @include('clientes.modal')
-          @endforeach
-          @foreach ($clientes3 as $cliente) {{-- CLIENTES SIN PEDIDOS --}}
-            <tr>
-              @if ($cliente->id < 10)
-                <td>CL{{ $cliente->identificador }}000{{ $cliente->id }}</td>
-              @elseif($cliente->id < 100)
-                <td>CL{{ $cliente->identificador }}00{{ $cliente->id }}</td>
-              @elseif($cliente->id < 1000)
-                <td>CL{{ $cliente->identificador }}0{{ $cliente->id }}</td>
-              @else
-                <td>CL{{ $cliente->identificador }}{{ $cliente->id }}</td>
-              @endif
-              <td>{{ $cliente->nombre }}</td>
-              <td>{{ $cliente->celular }}</td>
-              <td>{{ $cliente->direccion }} - {{ $cliente->provincia }} - {{ $cliente->distrito }}</td>
-              <td>{{ $cliente->user }}</td>
-              <td>
-                @can('clientes.edit')
-                  <a href="{{ route('clientes.edit', $cliente) }}" class="btn btn-warning btn-sm"><i class="fas fa-edit"></i> Editar</a>
-                @endcan
-                @can('clientes.destroy')
-                  <a href="" data-target="#modal-delete-{{ $cliente->id }}" data-toggle="modal"><button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i> Eliminar</button></a>
-                @endcan
-              </td>
-            </tr>
-            @include('clientes.modal')
-          @endforeach
+          
         </tbody>
       </table>
     </div>
@@ -188,6 +68,18 @@
 @section('css')
   <!--<link rel="stylesheet" href="../css/admin_custom.css">-->
   <style>
+
+  .red {
+    background-color: red !important;
+  }
+  
+  .white {
+    background-color: white !important;
+  }
+  
+  .lighblue {
+    background-color: #4ac4e2 !important;
+  }
     .bg-4{
       background: linear-gradient(to right, rgb(240, 152, 25), rgb(237, 222, 93));
     }
@@ -231,7 +123,96 @@
 
 @section('js')
 
-  <script src="{{ asset('js/datatables.js') }}"></script>
+<script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+<script>
+$(document).ready(function () {
+
+    $('#tablaPrincipal').DataTable({
+        processing: true,
+        responsive:true,
+        autowidth:true,
+        serverSide: true,
+        ajax: "{{ route('clientestabla') }}",
+        columns: [
+        {
+            data: 'id', 
+            name: 'id',
+            render: function ( data, type, row, meta ) {
+                if(row.id<10){
+                    return 'CL'+row.identificador+'000'+row.id;
+                }else if(row.id<100){
+                    return 'CL'+row.identificador+'00'+row.id;
+                }else if(row.id<1000){
+                    return 'CL'+row.identificador+'00'+row.id;
+                }else{
+                    return 'CL'+row.identificador+''+row.id;
+                }
+            }
+        },
+        {data: 'nombre', name: 'nombre'},
+        {data: 'celular', name: 'celular'},
+        //{data: 'estado', name: 'estado'},
+        //{data: 'user', name: 'user'},
+        //{data: 'identificador', name: 'identificador'},
+        //{data: 'provincia', name: 'provincia'},
+        {data: 'distrito', name: 'distrito'},
+        {data: 'direccion', name: 'direccion'},
+        {data: 'cantidad', name: 'cantidad'},
+        //{data: 'dateY', name: 'dateY'},
+        //{data: 'dateM', name: 'dateM'},
+        //{data: 'anio', name: 'anio'},
+        //{data: 'mes', name: 'mes'},
+        //{data: 'deuda', name: 'deuda'},
+        {data: 'action', name: 'action', orderable: false, searchable: false,sWidth:'20%'},
+        ],
+        "createdRow": function( row, data, dataIndex){
+            if(data["deuda"] == "0")
+            {
+                //sin deuda
+                $(row).addClass('white');
+            }else{
+                if(data["dateY"] == data["anio"])
+                {
+                    if(data["dateM"] == data["mes"])
+                    {
+                        $(row).addClass('lighblue'); 
+                    }else{
+                        $(row).addClass('red'); 
+                    }
+                }else{
+                     $(row).addClass('red'); 
+                }
+            }
+            
+            
+        },
+        language: {
+        "decimal": "",
+        "emptyTable": "No hay informaciÃ³n",
+        "info": "Mostrando del _START_ al _END_ de _TOTAL_ Entradas",
+        "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
+        "infoFiltered": "(Filtrado de _MAX_ total entradas)",
+        "infoPostFix": "",
+        "thousands": ",",
+        "lengthMenu": "Mostrar _MENU_ Entradas",
+        "loadingRecords": "Cargando...",
+        "processing": "Procesando...",
+        "search": "Buscar:",
+        "zeroRecords": "Sin resultados encontrados",
+        "paginate": {
+          "first": "Primero",
+          "last": "Ultimo",
+          "next": "Siguiente",
+          "previous": "Anterior"
+        }
+      },
+
+    });
+});
+</script>
+
+  <!--<script src="{{ asset('js/datatables.js') }}"></script>-->
 
   @if (session('info') == 'registrado' || session('info') == 'actualizado' || session('info') == 'eliminado')
     <script>
