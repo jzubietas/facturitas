@@ -186,6 +186,7 @@
     $('#tablaPrincipal').DataTable({
         processing: true,
         serverSide: true,
+        searching: true,
         ajax: "{{ route('pedidostabla') }}",
         "createdRow": function( row, data, dataIndex){
             if(data["estado"] == "1")
@@ -196,12 +197,17 @@
         },
         rowCallback: function (row, data, index) {
               var pedidodiferencia=data.diferencia;
-              pedidodiferencia=0;
-              if(pedidodiferencia>0){
+              //pedidodiferencia=0;
+              if(pedidodiferencia==null){
                 $('td:eq(12)', row).css('background', '#ca3a3a').css('color','#ffffff').css('text-align','center').css('font-weight','bold');
               }else{
-                $('td:eq(12)', row).css('background', '#44c24b').css('text-align','center').css('font-weight','bold');
-              }
+                if(pedidodiferencia>3){
+                  $('td:eq(12)', row).css('background', '#ca3a3a').css('color','#ffffff').css('text-align','center').css('font-weight','bold');
+                }else{
+                  $('td:eq(12)', row).css('background', '#44c24b').css('text-align','center').css('font-weight','bold');
+                }
+              }    
+              
         },
         columns: [
         {//15 columnas
@@ -221,11 +227,12 @@
         },
         {data: 'codigos', name: 'codigos', },
         {
-            data: 'nombres', 
-            name: 'nombres',
+            data: 'celulares', 
+            name: 'celulares',
             render: function ( data, type, row, meta ) {
               return row.celulares+' - '+row.nombres
-            }           
+            },
+            //searchable: true
         },
         {data: 'empresas', name: 'empresas', },
         {data: 'users', name: 'users', },

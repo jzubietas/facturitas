@@ -134,10 +134,21 @@ class PagoController extends Controller
      */
     public function create()
     {
-        $clientes = Cliente::where('estado', '1')
+        $clientes=null;
+        if(Auth::user()->rol == "Administrador"){
+            $clientes = Cliente::where('estado', '1')
+            //->where('user_id', Auth::user()->id)
+            ->where('tipo', '1')
+            ->get();
+        }
+        else{
+            $clientes = Cliente::where('estado', '1')
                             ->where('user_id', Auth::user()->id)
                             ->where('tipo', '1')
                             ->get();
+
+        }
+        
         $pedidos = Pedido::join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
                             ->select('pedidos.id', 
                                     'dp.codigo')
@@ -167,54 +178,53 @@ class PagoController extends Controller
 
     public function pedidoscliente(Request $request)
     {
-        //cliente id quitar el guion bajo
-        
         if (!$request->cliente_id) {
-            //$html = '<option value="">' . trans('---- SELECCIONE11 ----') . '</option>';
-            
+            $html = '<option value="">' . trans('---- SELECCIONE ----') . '</option>';
         } else {
-
-            $idrequest=explode("_",$request->cliente_id)[0];
-            //$html = '<option value="">' . trans('---- SELECCIONE2 ----') . '</option>';
+            $html = '<option value="">' . trans('---- SELECCIONE ----') . '</option>';
             $pedidos = Pedido::join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
                 ->select('pedidos.id', 
                         'dp.codigo',
                         'dp.total',
                         'dp.saldo')
-                ->where('pedidos.cliente_id', $idrequest)
+                ->where('pedidos.cliente_id', $request->cliente_id)
                 /* ->where('pedidos.pago', '0') */
                 ->where('pedidos.pagado', '<>', '2')
                 ->where('pedidos.estado', '1')
                 ->where('dp.estado', '1')                
                 ->get();
             
-            //$contPe = 0;
+            foreach ($pedidos as $pedido) {
+                $saldo_mostrar = $pedido->saldo;
+                $saldo_mostrar=str_replace(',','.',$saldo_mostrar);
+                $html .= '<option value="' . $pedido->id . '_' . $pedido->codigo . '_' . $pedido->total . '_' . $pedido->saldo . '">Código: ' . $pedido->codigo . ' - Total: S/' . $pedido->total . ' - Saldo: S/' . $pedido->saldo . '</option>';
+            }
+        }
+        return response()->json(['html' => $html]);
+    }
+
+    /*public function pedidoscliente(Request $request)
+    {        
+        $pedidos=null;
+        if (!$request->cliente_id) {            
+        } else {
+            $idrequest=explode("_",$request->cliente_id);           
+            $pedidos = Pedido::join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
+                ->select('pedidos.id', 
+                        'dp.codigo',
+                        'dp.total',
+                        'dp.saldo')
+                ->where('pedidos.cliente_id', $idrequest)
+                ->where('pedidos.pagado', '<>', '2')
+                ->where('pedidos.estado', '1')
+                ->where('dp.estado', '1')                
+                ->get();
             
             return Datatables::of($pedidos)
-                    ->addIndexColumn()
-                    /*->addColumn('action', function($row){     
-                           $btn = '<a href="" data-target="#modal-convertir" data-toggle="modal" data-opcion="'.$row->id.'"><button class="btn btn-info btn-sm">Convertir a cliente</button></a>';
-                           //$btn = '<a href="" data-target="#modal-convertir-'.$row->id.'" data-toggle="modal" data-opcion="'.$row->id.'"><button class="btn btn-info btn-sm">Convertir a cliente</button></a>';
-
-                           $btn = $btn.'<a href="'.route('clientes.editbf', $row).'" class="btn btn-warning btn-sm"><i class="fas fa-edit"></i> Editar</a>';
-                           $btn = $btn.'<a href="" data-target="#modal-delete" data-toggle="modal" data-opcion="'.$row->id.'"><button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i> Eliminar</button></a>';
-                           //$btn = $btn.'<a href="" data-target="#modal-delete-'.$row->id.'" data-toggle="modal"><button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i> Eliminar</button></a>';
-       
-                            return $btn;
-                    })
-                    ->rawColumns(['action'])*/
+                    ->addIndexColumn()                  
                     ->make(true);
-
-            /*foreach ($pedidos as $pedido) {
-                //$html .= '<option value="' . $pedido->id . '_' . $pedido->codigo . '_' . $pedido->total . '_' . $pedido->saldo . '">Código: ' . $pedido->codigo . ' - Total: S/' . $pedido->total . ' - Saldo: S/' . $pedido->saldo . '</option>';
-
-                $tabla = '<tr class="selected" id="filasPe' . $contPe . '"><td>' . $contPe+1 . '</td><td style="display:none;" ><input type="hidden" name="pedido_id[]" value="' . $pedido->id . '">' . $pedido->id . '</td><td><input type="hidden" name="" value="">PED000' . $pedido->id . '</td><td><input type="hidden" name="" value="">' . $pedido->codigo . '</td><td><input type="hidden" name="" id= "numbermonto" value="">S/' . $pedido->total . '</td><td><input type="hidden" name="" id= "numbersaldo" value="">S/' . $pedido->saldo . '</td><td><input type="checkbox" id="cbox1" value="0"></td><td><input type="checkbox" id="cbox1" value="1"></td></tr>';
-            }*/
-
-        }
-        //return response()->json(['html' => $html]);
-        //return response()->json(['html' => $tabla]);
-    }
+        }       
+    }*/
 
     public function store(Request $request)
     {

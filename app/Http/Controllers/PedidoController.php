@@ -84,6 +84,7 @@ class PedidoController extends Controller
             )
             /* ->where('pedidos.estado', '1') */
             /* ->where('dp.estado', '1') */
+            ->where('pp.estado', '1')
             //->where('pedidos.pago', '1') 0 sin pago  1 con pago
             ->whereIn('pedidos.condicion', ['POR ATENDER', 'EN PROCESO ATENCION', 'ATENDIDO', 'ANULADO'])//agregado para regularizar
             //->where('pa.estado', '1') 0 sin pago 1 con pago
@@ -137,6 +138,7 @@ class PedidoController extends Controller
             /* ->where('pedidos.estado', '1') */
             /* ->where('dp.estado', '1') */
             //->where('pedidos.pago', '1') 0 sin pago  1 con pago
+            ->where('pp.estado', '1')
             ->whereIn('pedidos.condicion', ['POR ATENDER', 'EN PROCESO ATENCION', 'ATENDIDO', 'ANULADO'])//agregado para regularizar
             //->where('pa.estado', '1') 0 sin pago 1 con pago
             ->groupBy(
@@ -190,6 +192,7 @@ class PedidoController extends Controller
             /* ->where('pedidos.estado', '1') */
             /* ->where('dp.estado', '1') */
             //->where('pedidos.pago', '1') 0 sin pago  1 con pago
+            ->where('pp.estado', '1')
             ->whereIn('pedidos.condicion', ['POR ATENDER', 'EN PROCESO ATENCION', 'ATENDIDO', 'ANULADO'])//agregado para regularizar
             //->where('pa.estado', '1') 0 sin pago 1 con pago
             ->groupBy(
