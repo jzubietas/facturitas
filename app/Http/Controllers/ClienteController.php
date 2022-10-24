@@ -430,6 +430,8 @@ class ClienteController extends Controller
         $dateM = Carbon::now()->format('m');
         $dateY = Carbon::now()->format('Y');
 
+        $data=null;
+
         $anios = [
             "2020" => '2020 - 2021',
             "2021" => '2021 - 2022',
@@ -444,9 +446,132 @@ class ClienteController extends Controller
             "2030" => '2030 - 2031',
             "2031" => '2031 - 2032',
         ];
-        
-        //return $dataTable->render('base_fria.index');
-        //if ($request->ajax()) {
+
+        if (Auth::user()->rol == "Asesor"){
+            $data = Cliente:://CLIENTES SIN PEDIDOS
+                join('users as u', 'clientes.user_id', 'u.id')
+                ->join('pedidos as p', 'clientes.id', 'p.cliente_id')
+                ->where('clientes.estado','1')
+                ->where('clientes.tipo','1')
+                ->where('clientes.user_id', Auth::user()->id)
+                //->where('clientes.pidio','1')
+                //->where('clientes.deuda', '1')
+                ->groupBy(
+                    'clientes.id',
+                    'clientes.nombre',
+                    'clientes.celular', 
+                    'clientes.estado', 
+                    'u.name',
+                    'u.identificador',
+                    'clientes.provincia',
+                    'clientes.distrito',
+                    'clientes.direccion',
+                    'clientes.deuda',
+                    'clientes.pidio'
+                )
+                ->get(['clientes.id', 
+                        'clientes.nombre', 
+                        'clientes.celular', 
+                        'clientes.estado', 
+                        'u.name as user',
+                        'u.identificador',
+                        'clientes.provincia',
+                        'clientes.distrito',
+                        'clientes.direccion',
+                        'clientes.pidio',
+                        DB::raw('count(p.created_at) as cantidad'),
+                        DB::raw('MAX(p.created_at) as fecha'),
+                        DB::raw('MAX(DATE_FORMAT(p.created_at, "%d")) as dia'),
+                        DB::raw('MAX(DATE_FORMAT(p.created_at, "%m")) as mes'),
+                        DB::raw('MAX(DATE_FORMAT(p.created_at, "%Y")) as anio'),
+                        DB::raw('MONTH(CURRENT_DATE()) as dateM'),
+                        DB::raw('YEAR(CURRENT_DATE()) as dateY'),
+                        'clientes.deuda',
+                        ]);
+
+        }else if (Auth::user()->rol == "Super asesor"){
+            $data = Cliente:://CLIENTES SIN PEDIDOS
+                join('users as u', 'clientes.user_id', 'u.id')
+                ->join('pedidos as p', 'clientes.id', 'p.cliente_id')
+                ->where('clientes.estado','1')
+                ->where('clientes.tipo','1')
+                //->where('clientes.pidio','1')
+                //->where('clientes.deuda', '1')
+                ->where('clientes.user_id', Auth::user()->id)
+                ->groupBy(
+                    'clientes.id',
+                    'clientes.nombre',
+                    'clientes.celular', 
+                    'clientes.estado', 
+                    'u.name',
+                    'u.identificador',
+                    'clientes.provincia',
+                    'clientes.distrito',
+                    'clientes.direccion',
+                    'clientes.deuda',
+                    'clientes.pidio'
+                )
+                ->get(['clientes.id', 
+                        'clientes.nombre', 
+                        'clientes.celular', 
+                        'clientes.estado', 
+                        'u.name as user',
+                        'u.identificador',
+                        'clientes.provincia',
+                        'clientes.distrito',
+                        'clientes.direccion',
+                        'clientes.pidio',
+                        DB::raw('count(p.created_at) as cantidad'),
+                        DB::raw('MAX(p.created_at) as fecha'),
+                        DB::raw('MAX(DATE_FORMAT(p.created_at, "%d")) as dia'),
+                        DB::raw('MAX(DATE_FORMAT(p.created_at, "%m")) as mes'),
+                        DB::raw('MAX(DATE_FORMAT(p.created_at, "%Y")) as anio'),
+                        DB::raw('MONTH(CURRENT_DATE()) as dateM'),
+                        DB::raw('YEAR(CURRENT_DATE()) as dateY'),
+                        'clientes.deuda',
+                        ]);
+        }else if (Auth::user()->rol == "Encargado"){
+            $data = Cliente:://CLIENTES SIN PEDIDOS
+                join('users as u', 'clientes.user_id', 'u.id')
+                ->join('pedidos as p', 'clientes.id', 'p.cliente_id')
+                ->where('clientes.estado','1')
+                ->where('clientes.tipo','1')
+                //->where('clientes.user_id', Auth::user()->id)//corregir aqui los usuarios que sean asesores
+                //->where('clientes.pidio','1')
+                //->where('clientes.deuda', '1')
+                ->groupBy(
+                    'clientes.id',
+                    'clientes.nombre',
+                    'clientes.celular', 
+                    'clientes.estado', 
+                    'u.name',
+                    'u.identificador',
+                    'clientes.provincia',
+                    'clientes.distrito',
+                    'clientes.direccion',
+                    'clientes.deuda',
+                    'clientes.pidio'
+                )
+                ->get(['clientes.id', 
+                        'clientes.nombre', 
+                        'clientes.celular', 
+                        'clientes.estado', 
+                        'u.name as user',
+                        'u.identificador',
+                        'clientes.provincia',
+                        'clientes.distrito',
+                        'clientes.direccion',
+                        'clientes.pidio',
+                        DB::raw('count(p.created_at) as cantidad'),
+                        DB::raw('MAX(p.created_at) as fecha'),
+                        DB::raw('MAX(DATE_FORMAT(p.created_at, "%d")) as dia'),
+                        DB::raw('MAX(DATE_FORMAT(p.created_at, "%m")) as mes'),
+                        DB::raw('MAX(DATE_FORMAT(p.created_at, "%Y")) as anio'),
+                        DB::raw('MONTH(CURRENT_DATE()) as dateM'),
+                        DB::raw('YEAR(CURRENT_DATE()) as dateY'),
+                        'clientes.deuda',
+                        ]);
+        }else{
             $data = Cliente:://CLIENTES SIN PEDIDOS
                 join('users as u', 'clientes.user_id', 'u.id')
                 ->join('pedidos as p', 'clientes.id', 'p.cliente_id')
@@ -486,6 +611,11 @@ class ClienteController extends Controller
                         DB::raw('YEAR(CURRENT_DATE()) as dateY'),
                         'clientes.deuda',
                         ]);
+        }
+        
+        //return $dataTable->render('base_fria.index');
+        //if ($request->ajax()) {
+           
 
             return Datatables::of($data)
                     ->addIndexColumn()

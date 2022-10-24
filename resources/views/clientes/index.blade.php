@@ -47,12 +47,12 @@
             <th scope="col">Celular</th>
             <th scope="col">Direccion</th>
             <th scope="col">Asesor asignado</th>
-            <th scope="col">Cantidad</th>
+            {{--<th scope="col">Cantidad</th>--}}
             {{--<th scope="col">Año actual</th>--}}
             {{--<th scope="col">Mes actual</th>--}}
             {{--<th scope="col">anio pedido</th>--}}
-            <th scope="col">mes pedido</th>
-            <th scope="col">Deuda</th>-->
+            {{--<th scope="col">mes pedido</th>--}}
+            {{--<th scope="col">Deuda</th>--}}
             <th scope="col">Acciones</th>
           </tr>
         </thead>
@@ -156,9 +156,16 @@ $(document).ready(function () {
         //{data: 'user', name: 'user'},
         //{data: 'identificador', name: 'identificador'},
         //{data: 'provincia', name: 'provincia'},
-        {data: 'distrito', name: 'distrito'},
-        {data: 'direccion', name: 'direccion'},
-        {data: 'cantidad', name: 'cantidad'},
+        {
+          data: 'direccion', 
+          name: 'direccion',
+          render: function ( data, type, row, meta ) {
+            return row.direccion+' - '+row.provincia+' ('+row.distrito+')';
+          }
+        },
+        //{data: 'direccion', name: 'direccion'},
+        {data: 'identificador', name: 'identificador'},
+        //{data: 'cantidad', name: 'cantidad'},
         //{data: 'dateY', name: 'dateY'},
         //{data: 'dateM', name: 'dateM'},
         //{data: 'anio', name: 'anio'},
