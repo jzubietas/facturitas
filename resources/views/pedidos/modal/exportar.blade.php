@@ -9,6 +9,7 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
+
       {{-- {!! Form::open(['route' => ['entregadosporfechasexcel'], 'method' => 'POST', 'target' => 'blanck_']) !!} --}}
       @if($key === '1')
         {!! Form::open(['route' => ['pedidosporenviarExcel'], 'method' => 'POST', 'target' => 'blanck_']) !!}
@@ -29,6 +30,7 @@
       @elseif($key === '9')
         {!! Form::open(['route' => ['pedidosatendidosExcel'], 'method' => 'POST', 'target' => 'blanck_']) !!}
       @endif
+
             <div class="card-body">
               <div class="form-row">
                 <div class="form-group col-lg-12" style="text-align: center; font-size:16px">                  
