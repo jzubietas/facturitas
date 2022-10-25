@@ -71,118 +71,7 @@
             <th scope="col">Acciones</th>
           </tr>
         </thead>
-        <tbody>          
-          @foreach ($pedidos as $pedido)
-            <tr>
-              @if ($pedido->id < 10)
-                <td>PED000{{ $pedido->id }}</td>
-              @elseif($pedido->id < 100)
-                <td>PED00{{ $pedido->id }}</td>
-              @elseif($pedido->id < 1000)
-                <td>PED0{{ $pedido->id }}</td>
-              @else
-                <td>PED{{ $pedido->id }}</td>
-              @endif
-              <td>{{ $pedido->codigos }}</td>
-              <td>{{ $pedido->celulares }} - {{ $pedido->nombres }}</td>
-              <td>{{ $pedido->empresas }}</td>
-              <td>{{ $pedido->users }}</td>              
-              <td>{{ $pedido->fecha }}</td>
-              <td>@php echo number_format($pedido->total,2) @endphp</td>
-              <td>{{ $pedido->condiciones }}</td>
-              <td>{{ $pedido->condicion_pa }}</td>
-              <td>
-                @if ($pedido->envio == '1')
-                  <span class="badge badge-success">Enviado</span>
-                  <span class="badge badge-warning">Por confirmar recepcion</span>
-                @elseif ($pedido->envio == '2')
-                  <span class="badge badge-success">Enviado</span>
-                  <span class="badge badge-info">Recibido</span>
-                @else
-                  <span class="badge badge-danger">Pendiente</span>
-                @endif
-              </td>
-              <td>{{ $pedido->condicion_env }}</td>
-              <td>{{ $pedido->destino }}</td>
-              {{-- <td>{{ $pedido->diferencia }}</td> --}}
-              @if(($pedido->total_cobro-$pedido->total_pagado)>3)<td style="background: #ca3a3a; color:#ffffff; text-align: center;font-weight: bold;">{{ $pedido->total_cobro-$pedido->total_pagado }}</td>
-              @else<td style="background: #44c24b; text-align: center;font-weight: bold;">{{ $pedido->total_cobro-$pedido->total_pagado }}</td>
-              @endif
-              <td>
-                @can('pedidos.pedidosPDF')
-                  <a href="{{ route('pedidosPDF', $pedido) }}" class="btn btn-primary btn-sm" target="_blank"><i class="fa fa-file-pdf"></i> PDF</a>
-                @endcan
-                @can('pedidos.show')
-                  <a href="{{ route('pedidos.show', $pedido) }}" class="btn btn-info btn-sm"><i class="fas fa-eye"></i> Ver</a>
-                @endcan
-                @can('pedidos.edit')
-                  <a href="{{ route('pedidos.edit', $pedido->id) }}" class="btn btn-warning btn-sm">Editar</a>
-                @endcan
-                @can('pedidos.destroy')
-                  <a href="" data-target="#modal-delete-{{ $pedido->id }}" data-toggle="modal"><button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i> Eliminar</button></a>
-                @endcan
-                @if($pedido->destino == null && $pedido->direccion == '0' && ($pedido->envio)*1 > 0)
-                {{-- <a href="" data-target="#modal-destino-{{ $pedido->id }}" data-toggle="modal"><button class="btn btn-outline-dark btn-sm"><i class="fas fa-map"></i> Destino</button></a> --}}
-                  <a href="{{ route('envios.createdireccion', $pedido) }}" class="btn btn-dark btn-sm"><i class="fas fa-map"></i> Destino</a>
-                @endif
-              </td>
-            </tr>
-          @endforeach
-          @foreach ($pedidos2 as $pedido)
-            <tr>
-              @if ($pedido->id < 10)
-                <td>PED000{{ $pedido->id }}</td>
-              @elseif($pedido->id < 100)
-                <td>PED00{{ $pedido->id }}</td>
-              @elseif($pedido->id < 1000)
-                <td>PED0{{ $pedido->id }}</td>
-              @else
-                <td>PED{{ $pedido->id }}</td>
-              @endif
-              <td>{{ $pedido->codigos }}</td>
-              <td>{{ $pedido->celulares }} - {{ $pedido->nombres }}</td>
-              <td>{{ $pedido->empresas }}</td>
-              <td>{{ $pedido->users }}</td>              
-              <td>{{ $pedido->fecha }}</td>
-              <td>@php echo number_format($pedido->total,2) @endphp</td>
-              <td>{{ $pedido->condiciones }}</td>
-              <td>SIN PAGOS REGISTRADOS</td>
-              <td>
-                @if ($pedido->envio == '1')
-                  <span class="badge badge-success">Enviado</span>
-                  <span class="badge badge-warning">Por confirmar recepcion</span>
-                @elseif ($pedido->envio == '2')
-                  <span class="badge badge-success">Enviado</span>
-                  <span class="badge badge-info">Recibido</span>
-                @else
-                  <span class="badge badge-danger">Pendiente</span>
-                @endif
-              </td>
-              <td>{{ $pedido->condicion_env }}</td>
-              <td>{{ $pedido->destino }}</td>
-              <td style="background: #ca3a3a; color:#ffffff; text-align: center;font-weight: bold;">@php echo number_format($pedido->total,2) @endphp</td>
-              <td>
-                @can('pedidos.pedidosPDF')
-                  <a href="{{ route('pedidosPDF', $pedido) }}" class="btn btn-primary btn-sm" target="_blank"><i class="fa fa-file-pdf"></i> PDF</a>
-                @endcan
-                @can('pedidos.show')
-                  <a href="{{ route('pedidos.show', $pedido) }}" class="btn btn-info btn-sm"><i class="fas fa-eye"></i> Ver</a>
-                @endcan
-                @can('pedidos.edit')
-                  <a href="{{ route('pedidos.edit', $pedido->id) }}" class="btn btn-warning btn-sm">Editar</a>
-                @endcan
-                @can('pedidos.destroy')
-                  <a href="" data-target="#modal-delete-{{ $pedido->id }}" data-toggle="modal"><button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i> Eliminar</button></a>
-                @endcan
-                @if($pedido->destino == null && $pedido->direccion == '0' && ($pedido->envio)*1 > 0)
-                {{-- <a href="" data-target="#modal-destino-{{ $pedido->id }}" data-toggle="modal"><button class="btn btn-outline-dark btn-sm"><i class="fas fa-map"></i> Destino</button></a> --}}
-                  <a href="{{ route('envios.createdireccion', $pedido) }}" class="btn btn-dark btn-sm"><i class="fas fa-map"></i> Destino</a>
-                @endif
-              </td>
-            </tr>
-            @include('pedidos.modal')
-            @include('pedidos.modal.destino')
-          @endforeach    
+        <tbody>
         </tbody>
       </table>
     </div>
@@ -195,6 +84,17 @@
   <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">  
 
   <style>
+    .yellow {
+      /*background-color: yellow !important;*/
+      color:#fcd00e !important;
+    }
+    .red {
+      background-color: red !important;
+    }
+    
+    .white {
+      background-color: white !important;
+    }
     .bg-4{
       background: linear-gradient(to right, rgb(240, 152, 25), rgb(237, 222, 93));
     }
@@ -237,7 +137,174 @@
 @stop
 
 @section('js')
-  <script src="{{ asset('js/datatables.js') }}"></script>
+  <!--<script src="{{ asset('js/datatables.js') }}"></script>-->
+  <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+
+  <script>
+  $(document).ready(function () {
+
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+
+    $('#tablaPrincipal').DataTable({
+        processing: true,
+        serverSide: true,
+        searching: true,
+        ajax: "{{ route('mispedidostabla') }}",
+        "createdRow": function( row, data, dataIndex){
+            if(data["estado"] == "1")
+            {
+            }else{
+              $(row).addClass('yellow');
+            }           
+        },
+        rowCallback: function (row, data, index) {
+              var pedidodiferencia=data.diferencia;
+              //pedidodiferencia=0;
+              if(pedidodiferencia==null){
+                $('td:eq(12)', row).css('background', '#ca3a3a').css('color','#ffffff').css('text-align','center').css('font-weight','bold');
+              }else{
+                if(pedidodiferencia>3){
+                  $('td:eq(12)', row).css('background', '#ca3a3a').css('color','#ffffff').css('text-align','center').css('font-weight','bold');
+                }else{
+                  $('td:eq(12)', row).css('background', '#44c24b').css('text-align','center').css('font-weight','bold');
+                }
+              }    
+              
+        },
+        columns: [
+        {//15 columnas
+            data: 'id', 
+            name: 'id',
+            render: function ( data, type, row, meta ) {
+              if(row.id<10){
+                return 'PED000'+row.id;
+              }else if(row.id<100){
+                return 'PED00'+row.id;
+              }else if(row.id<1000){
+                return 'PED0'+row.id;
+              }else{
+                return 'PED'+row.id;
+              } 
+            }
+        },
+        {data: 'codigos', name: 'codigos', },
+        {
+            data: 'celulares', 
+            name: 'celulares',
+            render: function ( data, type, row, meta ) {
+              return row.celulares+' - '+row.nombres
+            },
+            //searchable: true
+        },
+        {data: 'empresas', name: 'empresas', },
+        {data: 'users', name: 'users', },
+        {data: 'fecha', name: 'fecha', },
+        {
+          data: 'total', 
+          name: 'total', 
+          render: $.fn.dataTable.render.number(',', '.', 2, '')
+        },
+        {
+          data: 'condiciones', 
+          name: 'condiciones', 
+          render: function ( data, type, row, meta ) {
+              return data;
+          }
+        },//estado de pedido
+        {
+          data: 'condicion_pa', 
+          name: 'condicion_pa', 
+          render: function ( data, type, row, meta ) {
+            if(row.condicion_pa==null){
+              return 'SIN PAGO REGISTRADO';
+            }else{
+              return data;
+            }              
+          }
+        },//estado de pago
+        {
+          //estado del sobre
+          data: 'envio', 
+          name: 'envio', 
+          render: function ( data, type, row, meta ) {
+            if(row.envio==null){
+              return '';
+            }else{
+              if(row.envio=='1'){
+                return '<span class="badge badge-success">Enviado</span><br>'+
+                        '<span class="badge badge-warning">Por confirmar recepcion</span>';
+              }else if(row.envio=='2'){
+                return '<span class="badge badge-success">Enviado</span><br>'+
+                        '<span class="badge badge-info">Recibido</span>';
+              }else{
+                return '<span class="badge badge-danger">Pendiente</span>';
+              }
+
+            }
+          }
+        },
+        //{data: 'responsable', name: 'responsable', },//estado de envio
+        
+        //{data: 'condicion_pa', name: 'condicion_pa', },//ss
+        {data: 'condicion_env', name: 'condicion_envio', },//
+        {
+          data: 'envio',
+          name: 'envio',
+          render: function ( data, type, row, meta ) {
+              if(row.envio==1){
+                return '<span class="badge badge-success">ENVIADO</span>';
+              }else{
+                return '<span class="badge badge-danger">NO ENVIADO</span>';
+              }
+            }
+        },
+        {
+          data: 'diferencia', 
+          name: 'diferencia',
+          render: function ( data, type, row, meta ) {
+            if(row.diferencia==null){
+              return 'NO REGISTRA PAGO';
+            }else{
+              if(row.diferencia>0){
+                return row.diferencia;
+              }else{
+                return row.diferencia;
+              }
+            }            
+          }
+        },
+        //{data: 'responsable', name: 'responsable', },
+        {data: 'action', name: 'action', orderable: false, searchable: false,sWidth:'20%'},
+        ],
+        language: {
+        "decimal": "",
+        "emptyTable": "No hay informaciÃ³n",
+        "info": "Mostrando del _START_ al _END_ de _TOTAL_ Entradas",
+        "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
+        "infoFiltered": "(Filtrado de _MAX_ total entradas)",
+        "infoPostFix": "",
+        "thousands": ",",
+        "lengthMenu": "Mostrar _MENU_ Entradas",
+        "loadingRecords": "Cargando...",
+        "processing": "Procesando...",
+        "search": "Buscar:",
+        "zeroRecords": "Sin resultados encontrados",
+        "paginate": {
+          "first": "Primero",
+          "last": "Ultimo",
+          "next": "Siguiente",
+          "previous": "Anterior"
+        }
+      },
+    });
+  });
+  </script>
+
 
   @if (session('info') == 'registrado' || session('info') == 'actualizado' || session('info') == 'eliminado')
     <script>
@@ -252,9 +319,9 @@
   <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
 
   <script>
-    window.onload = function () {      
+    /*window.onload = function () {      
       $('#tablaPrincipal').DataTable().draw();
-    }
+    }*/
   </script>
 
   <script>

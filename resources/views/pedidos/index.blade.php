@@ -181,7 +181,6 @@
       $("#responsable").val('');
 
     });
-    
 
     $('#tablaPrincipal').DataTable({
         processing: true,

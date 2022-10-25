@@ -192,7 +192,7 @@ class PedidoController extends Controller
             /* ->where('pedidos.estado', '1') */
             /* ->where('dp.estado', '1') */
             //->where('pedidos.pago', '1') 0 sin pago  1 con pago
-            ->where('pp.estado', '1')
+            //->where('pp.estado', '1')
             ->whereIn('pedidos.condicion', ['POR ATENDER', 'EN PROCESO ATENCION', 'ATENDIDO', 'ANULADO'])//agregado para regularizar
             //->where('pa.estado', '1') 0 sin pago 1 con pago
             ->groupBy(
@@ -1228,40 +1228,48 @@ class PedidoController extends Controller
             "PROVINCIA" => 'PROVINCIA'
         ];
 
-        if(Auth::user()->rol == "Asesor" || Auth::user()->rol == "Super asesor"){
-            //requerimiento cambiar el nombre apellidos del asesor por el identificador en el listado datatable
+        $superasesor = User::where('rol', 'Super asesor')->count();
+
+        return view('pedidos.misPedidos', compact('destinos', 'superasesor', 'dateMin', 'dateMax'));
+    }
+    
+    public function mispedidostabla(Request $request)
+    {
+        if(Auth::user()->rol == "Asesor"){
             $pedidos = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')//PEDIDOS CON PAGOS
                 ->join('users as u', 'pedidos.user_id', 'u.id')
                 ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
-                ->join('pago_pedidos as pp', 'pedidos.id','pp.pedido_id')
-                ->join('pagos as pa', 'pp.pago_id', 'pa.id')
+                ->leftjoin('pago_pedidos as pp', 'pedidos.id','pp.pedido_id')
+                ->leftjoin('pagos as pa', 'pp.pago_id', 'pa.id')
                 ->select(
                     'pedidos.id',
                     'c.nombre as nombres',
                     'c.celular as celulares',
                     'u.identificador as users',
-                    'dp.codigo as codigos',
+                    'dp.codigo as codigos',//tiene diferencia con bandeja de pedidos
                     'dp.nombre_empresa as empresas',
-                    /* DB::raw('sum(dp.total) as total') */
                     'dp.total as total',
                     'pedidos.condicion_envio as condicion_env',
                     'pedidos.condicion as condiciones',
+                    'pa.condicion as condicion_pa',//para pedido con pago
                     'pedidos.envio',
                     'pedidos.direccion',
                     'pedidos.destino',
                     'pedidos.motivo',
-                    'pedidos.responsable',//cambio de nombre responsable por identificador de usuario asesor
+                    'pedidos.responsable',
                     'pa.total_cobro',
                     'pa.total_pagado',
-                    'pa.diferencia',
                     'pa.condicion as condicion_pa',
-                    DB::raw('DATE_FORMAT(pedidos.created_at, "%d/%m/%Y") as fecha')                    
+                    DB::raw('DATE_FORMAT(pedidos.created_at, "%d/%m/%Y") as fecha'),
+                    'pa.diferencia',//para pedido con pago
+                    'pedidos.estado'
                 )
                 ->where('pedidos.estado', '1')
                 ->where('dp.estado', '1')
                 ->where('pedidos.pago', '1')
-                ->where('pa.estado', '1')
-                ->where('u.id', Auth::user()->id)
+                ->where('u.id', Auth::user()->id)// no para administrador
+                ->whereIn('pedidos.condicion', ['POR ATENDER', 'EN PROCESO ATENCION', 'ATENDIDO', 'ANULADO'])
+                //->where('pa.estado', '1') 0 sin pago 1 con pago
                 ->groupBy(
                     'pedidos.id',
                     'c.nombre',
@@ -1272,6 +1280,7 @@ class PedidoController extends Controller
                     'dp.total',
                     'pedidos.condicion_envio',
                     'pedidos.condicion',
+                    'pa.condicion',//para pedido con pago
                     'pedidos.envio',
                     'pedidos.direccion',
                     'pedidos.destino',
@@ -1281,73 +1290,28 @@ class PedidoController extends Controller
                     'pa.total_pagado',
                     'pa.condicion',
                     'pedidos.created_at',
-                    'pa.diferencia'
+                    'pa.diferencia',//para pedido con pago
+                    'pedidos.estado'
                     )
                 ->orderBy('pedidos.created_at', 'DESC')
                 ->get();
-
-            $pedidos2 = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')//PEDIDOS SIN PAGOS
+        }else if(Auth::user()->rol == "Super asesor"){
+            $pedidos = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')//PEDIDOS CON PAGOS
                 ->join('users as u', 'pedidos.user_id', 'u.id')
                 ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
+                ->leftjoin('pago_pedidos as pp', 'pedidos.id','pp.pedido_id')
+                ->leftjoin('pagos as pa', 'pp.pago_id', 'pa.id')
                 ->select(
                     'pedidos.id',
                     'c.nombre as nombres',
                     'c.celular as celulares',
                     'u.identificador as users',
-                    'dp.codigo as codigos',
+                    'dp.codigo as codigos',//tiene diferencia con bandeja de pedidos
                     'dp.nombre_empresa as empresas',
-                    /* DB::raw('sum(dp.cantidad*dp.porcentaje) as total'),*/
-                    /* DB::raw('sum(dp.total) as total'), */
                     'dp.total as total',
                     'pedidos.condicion_envio as condicion_env',
                     'pedidos.condicion as condiciones',
-                    'pedidos.envio',
-                    'pedidos.direccion',
-                    'pedidos.destino',
-                    'pedidos.motivo',
-                    'pedidos.responsable',
-                    DB::raw('DATE_FORMAT(pedidos.created_at, "%d/%m/%Y") as fecha')
-                )
-                ->where('pedidos.estado', '1')
-                ->where('dp.estado', '1')
-                ->where('pedidos.pago', '0')
-                ->where('u.id', Auth::user()->id)
-                ->whereIn('pedidos.condicion', ['POR ATENDER', 'EN PROCESO ATENCION', 'ATENDIDO', 'ANULADO'])                
-                ->groupBy(
-                    'pedidos.id',
-                    'c.nombre',
-                    'c.celular',
-                    'u.identificador',
-                    'dp.codigo',
-                    'dp.nombre_empresa',
-                    'dp.total',
-                    'pedidos.condicion_envio',
-                    'pedidos.condicion',
-                    'pedidos.envio',
-                    'pedidos.direccion',
-                    'pedidos.destino',
-                    'pedidos.motivo',
-                    'pedidos.responsable',
-                    'pedidos.created_at')
-                ->orderBy('pedidos.created_at', 'DESC')
-                ->get();
-        }else if(Auth::user()->rol == "Encargado"){
-                $pedidos = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')//PEDIDOS CON PAGOS
-                ->join('users as u', 'pedidos.user_id', 'u.id')
-                ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
-                ->join('pago_pedidos as pp', 'pedidos.id','pp.pedido_id')
-                ->join('pagos as pa', 'pp.pago_id', 'pa.id')
-                ->select(
-                    'pedidos.id',
-                    'c.nombre as nombres',
-                    'c.celular as celulares',
-                    'u.identificador as users',
-                    'dp.codigo as codigos',
-                    'dp.nombre_empresa as empresas',
-                    /* DB::raw('sum(dp.total) as total'), */
-                    'dp.total as total',
-                    'pedidos.condicion_envio as condicion_env',
-                    'pedidos.condicion as condiciones',
+                    'pa.condicion as condicion_pa',//para pedido con pago
                     'pedidos.envio',
                     'pedidos.direccion',
                     'pedidos.destino',
@@ -1357,12 +1321,15 @@ class PedidoController extends Controller
                     'pa.total_pagado',
                     'pa.condicion as condicion_pa',
                     DB::raw('DATE_FORMAT(pedidos.created_at, "%d/%m/%Y") as fecha'),
-                    'pa.diferencia'
+                    'pa.diferencia',//para pedido con pago
+                    'pedidos.estado'
                 )
                 ->where('pedidos.estado', '1')
                 ->where('dp.estado', '1')
                 ->where('pedidos.pago', '1')
-                ->where('u.supervisor', Auth::user()->id)
+                ->where('u.id', Auth::user()->id)// no para administrador
+                ->whereIn('pedidos.condicion', ['POR ATENDER', 'EN PROCESO ATENCION', 'ATENDIDO', 'ANULADO'])
+                //->where('pa.estado', '1') 0 sin pago 1 con pago
                 ->groupBy(
                     'pedidos.id',
                     'c.nombre',
@@ -1373,6 +1340,7 @@ class PedidoController extends Controller
                     'dp.total',
                     'pedidos.condicion_envio',
                     'pedidos.condicion',
+                    'pa.condicion',//para pedido con pago
                     'pedidos.envio',
                     'pedidos.direccion',
                     'pedidos.destino',
@@ -1382,73 +1350,28 @@ class PedidoController extends Controller
                     'pa.total_pagado',
                     'pa.condicion',
                     'pedidos.created_at',
-                    'pa.diferencia')
-                ->orderBy('pedidos.created_at', 'DESC')
-                ->get();
-
-            $pedidos2 = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')//PEDIDOS SIN PAGOS
-                ->join('users as u', 'pedidos.user_id', 'u.id')
-                ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
-                ->select(
-                    'pedidos.id',
-                    'c.nombre as nombres',
-                    'c.celular as celulares',
-                    'u.identificador as users',
-                    'dp.codigo as codigos',
-                    'dp.nombre_empresa as empresas',
-                    /* DB::raw('sum(dp.total) as total'), */
-                    'dp.total as total',
-                    'pedidos.condicion_envio as condicion_env',
-                    'pedidos.condicion as condiciones',
-                    'pedidos.envio',
-                    'pedidos.direccion',
-                    'pedidos.destino',
-                    'pedidos.motivo',
-                    'pedidos.responsable',
-                    DB::raw('DATE_FORMAT(pedidos.created_at, "%d/%m/%Y") as fecha')
-                )
-                ->where('pedidos.estado', '1')
-                ->where('dp.estado', '1')
-                ->where('u.supervisor', Auth::user()->id)
-                ->whereIn('pedidos.condicion', ['POR ATENDER', 'EN PROCESO ATENCION', 'ATENDIDO', 'ANULADO'])
-                ->where('pedidos.pago', '0')
-                ->groupBy(
-                    'pedidos.id',
-                    'c.nombre',
-                    'c.celular',
-                    'u.identificador',
-                    'dp.codigo',
-                    'dp.nombre_empresa',
-                    'dp.total',
-                    'pedidos.condicion_envio',
-                    'pedidos.condicion',
-                    'pedidos.envio',
-                    'pedidos.direccion',
-                    'pedidos.destino',
-                    'pedidos.motivo',
-                    'pedidos.responsable',
-                    'pedidos.created_at')
+                    'pa.diferencia',//para pedido con pago
+                    'pedidos.estado'
+                    )
                 ->orderBy('pedidos.created_at', 'DESC')
                 ->get();
         }else{
-            //esto es para administrador o cualquier otro rol distinto de asesor,superasesor,encargado
-
-                $pedidos = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')//PEDIDOS CON PAGOS
+            $pedidos = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')//PEDIDOS CON PAGOS
                 ->join('users as u', 'pedidos.user_id', 'u.id')
                 ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
-                ->join('pago_pedidos as pp', 'pedidos.id','pp.pedido_id')
-                ->join('pagos as pa', 'pp.pago_id', 'pa.id')
+                ->leftjoin('pago_pedidos as pp', 'pedidos.id','pp.pedido_id')
+                ->leftjoin('pagos as pa', 'pp.pago_id', 'pa.id')
                 ->select(
                     'pedidos.id',
                     'c.nombre as nombres',
                     'c.celular as celulares',
                     'u.identificador as users',
-                    'dp.codigo as codigos',
+                    'dp.codigo as codigos',//tiene diferencia con bandeja de pedidos
                     'dp.nombre_empresa as empresas',
-                    /* DB::raw('sum(dp.total) as total'), */
                     'dp.total as total',
                     'pedidos.condicion_envio as condicion_env',
                     'pedidos.condicion as condiciones',
+                    'pa.condicion as condicion_pa',//para pedido con pago
                     'pedidos.envio',
                     'pedidos.direccion',
                     'pedidos.destino',
@@ -1458,12 +1381,15 @@ class PedidoController extends Controller
                     'pa.total_pagado',
                     'pa.condicion as condicion_pa',
                     DB::raw('DATE_FORMAT(pedidos.created_at, "%d/%m/%Y") as fecha'),
-                    'pa.diferencia'
+                    'pa.diferencia',//para pedido con pago
+                    'pedidos.estado'
                 )
-                ->where('pedidos.estado', '1')
+                //->where('pedidos.estado', '1')
                 ->where('dp.estado', '1')
                 ->where('pedidos.pago', '1')
                 //->where('u.id', Auth::user()->id)// no para administrador
+                ->whereIn('pedidos.condicion', ['POR ATENDER', 'EN PROCESO ATENCION', 'ATENDIDO', 'ANULADO'])
+                //->where('pa.estado', '1') 0 sin pago 1 con pago
                 ->groupBy(
                     'pedidos.id',
                     'c.nombre',
@@ -1474,6 +1400,7 @@ class PedidoController extends Controller
                     'dp.total',
                     'pedidos.condicion_envio',
                     'pedidos.condicion',
+                    'pa.condicion',//para pedido con pago
                     'pedidos.envio',
                     'pedidos.direccion',
                     'pedidos.destino',
@@ -1483,59 +1410,29 @@ class PedidoController extends Controller
                     'pa.total_pagado',
                     'pa.condicion',
                     'pedidos.created_at',
-                    'pa.diferencia')
-                ->orderBy('pedidos.created_at', 'DESC')
-                ->get();
-            $pedidos2 = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')//PEDIDOS SIN PAGOS
-                ->join('users as u', 'pedidos.user_id', 'u.id')
-                ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
-                ->select(
-                    'pedidos.id',
-                    'c.nombre as nombres',
-                    'c.celular as celulares',
-                    'u.identificador as users',
-                    'dp.codigo as codigos',
-                    'pedidos.motivo',
-                    'pedidos.responsable',
-                    'dp.nombre_empresa as empresas',
-                    /* DB::raw('sum(dp.cantidad*dp.porcentaje) as total'),*/
-                    /* DB::raw('sum(dp.total) as total') */
-                    'dp.total as total',
-                    'pedidos.condicion_envio as condicion_env',
-                    'pedidos.condicion as condiciones',
-                    'pedidos.envio',
-                    'pedidos.direccion',
-                    'pedidos.destino',
-                    DB::raw('DATE_FORMAT(pedidos.created_at, "%d/%m/%Y") as fecha')
-                )
-                ->where('pedidos.estado', '1')
-                ->where('dp.estado', '1')
-                //->where('u.id', Auth::user()->id)// no para administrador
-                ->whereIn('pedidos.condicion', ['POR ATENDER', 'EN PROCESO ATENCION', 'ATENDIDO', 'ANULADO'])
-                ->where('pedidos.pago', '0')
-                ->groupBy(
-                    'pedidos.id',
-                    'c.nombre',
-                    'c.celular',
-                    'u.identificador',
-                    'dp.codigo',
-                    'dp.nombre_empresa',
-                    'dp.total',
-                    'pedidos.condicion_envio',
-                    'pedidos.condicion',
-                    'pedidos.envio',
-                    'pedidos.direccion',
-                    'pedidos.destino',
-                    'pedidos.motivo',
-                    'pedidos.responsable',
-                    'pedidos.created_at')
+                    'pa.diferencia',//para pedido con pago
+                    'pedidos.estado'
+                    )
                 ->orderBy('pedidos.created_at', 'DESC')
                 ->get();
         }
 
-        $superasesor = User::where('rol', 'Super asesor')->count();
+        return Datatables::of($pedidos)
+                    ->addIndexColumn()
+                    ->addColumn('action', function($pedido){     
 
-        return view('pedidos.misPedidos', compact('pedidos', 'pedidos2', 'destinos', 'superasesor', 'dateMin', 'dateMax'));
+                        $btn='<a href="'.route('pedidosPDF', $pedido).'" class="btn btn-primary btn-sm" target="_blank"><i class="fa fa-file-pdf"></i> PDF</a>';
+                        $btn=$btn.'<a href="'.route('pedidos.show', $pedido).'" class="btn btn-info btn-sm"><i class="fas fa-eye"></i> VER</a>';
+
+                        if($pedido->estado>0){
+                            $btn=$btn.'<a href="'.route('pedidos.edit', $pedido->id).'" class="btn btn-warning btn-sm">Editar</a>';
+                            $btn = $btn.'<a href="" data-target="#modal-delete" data-toggle="modal" data-delete="'.$pedido->id.'"><button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i> Anular</button></a>';                                                     
+                        }
+
+                        return $btn;
+                    })
+                    ->rawColumns(['action'])
+                    ->make(true);
     }
 
     public function Pagados()

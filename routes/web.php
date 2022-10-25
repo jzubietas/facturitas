@@ -49,11 +49,13 @@ Route::get('clientes.editbf/{cliente}/edit2', [ClienteController::class, 'editbf
 
 Route::resource('pedidos', PedidoController::class)->names('pedidos');
 Route::get('pedidostabla', [PedidoController::class, 'indextabla'])->name('pedidostabla');//actualizado para serverside
+Route::get('mispedidostabla', [PedidoController::class, 'mispedidostabla'])->name('mispedidostabla');//actualizado para serverside
 Route::get('ruc', [PedidoController::class, 'ruc'])->name('cargar.ruc');
 
 Route::get('basefria.cargarid', [BasefriaController::class, 'cargarid'])->name('basefria.cargarid');
 //Route::get('pedidos.destroyid', [PedidoController::class, 'destroyid'])->name('pedidos.destroyid');
 Route::post('pedidodeleteRequest', [PedidoController::class, 'destroyid'])->name('pedidodeleteRequest.post');
+
 
 Route::get('cliente', [PedidoController::class, 'cliente'])->name('cargar.cliente');
 Route::get('tipobanca', [PedidoController::class, 'tipobanca'])->name('cargar.tipobanca');
@@ -87,7 +89,10 @@ Route::post('pedidos/eliminarFoto2/{pedido}', [PedidoController::class, 'elimina
 Route::get('envios/{imagen}/descargarimagen', [PedidoController::class, 'DescargarImagen'])->name('envios.descargarimagen');
 
 Route::resource('pagos', PagoController::class)->names('pagos');
+Route::get('pagostabla', [PagoController::class, 'indextabla'])->name('pagostabla');//actualizado para serverside
 Route::get('pedidoscliente', [PagoController::class, 'pedidoscliente'])->name('cargar.pedidoscliente');
+Route::get('pedidosclientetabla', [PagoController::class, 'pedidosclientetabla'])->name('cargar.pedidosclientetabla');
+Route::post('pagodeleteRequest', [PagoController::class, 'destroyid'])->name('pagodeleteRequest.post');
 Route::post('pago/eliminarPedido/{id}/{pago}', [PagoController::class, 'eliminarPedido'])->name('pago.eliminarPedido');
 Route::post('pago/eliminarPago/{id}/{pago}', [PagoController::class, 'eliminarPago'])->name('pago.eliminarPago');
 Route::get('pagos.mispagos', [PagoController::class, 'MisPagos'])->name('pagos.mispagos');

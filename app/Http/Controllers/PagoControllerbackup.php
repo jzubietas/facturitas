@@ -26,19 +26,6 @@ class PagoController extends Controller
      */
     public function index()
     {
-        $pagosobservados_cantidad = Pago::where('user_id', Auth::user()->id)//PAGOS OBSERVADOS
-                ->where('estado', '1')
-                ->where('condicion', 'OBSERVADO')
-                ->count();
-        
-        $superasesor = User::where('rol', 'Super asesor')->count();
-
-        return view('pagos.index', compact('pagosobservados_cantidad', 'superasesor'));
-    }
-
-    public function indextabla(Request $request)
-    {
-        $pagos=null;
         if(Auth::user()->rol == "Encargado"){
             $pagos = Pago::join('users as u', 'pagos.user_id', 'u.id')
                 ->join('clientes as c', 'pagos.cliente_id', 'c.id')
@@ -47,7 +34,7 @@ class PagoController extends Controller
                 ->rightjoin('pedidos as p', 'pp.pedido_id', 'p.id')
                 ->rightjoin('detalle_pedidos as dpe', 'p.id', 'dpe.pedido_id')
                 ->select('pagos.id as id',
-                        'u.identificador as users',
+                        'u.name as users',
                         'c.celular',
                         'pagos.observacion',                        
                         'pagos.total_cobro',
@@ -62,7 +49,7 @@ class PagoController extends Controller
                 ->where('dpa.estado', '1')
                 ->groupBy('pagos.id',
                         'dpe.codigo',
-                        'u.identificador',
+                        'u.name',
                         'c.celular',
                         'pagos.observacion','dpe.total',
                         'pagos.total_cobro',
@@ -78,7 +65,7 @@ class PagoController extends Controller
                 ->rightjoin('pedidos as p', 'pp.pedido_id', 'p.id')
                 ->rightjoin('detalle_pedidos as dpe', 'p.id', 'dpe.pedido_id')
                 ->select('pagos.id as id',
-                        'u.identificador as users',
+                        'u.name as users',
                         'c.celular',
                         'pagos.observacion',                        
                         'pagos.total_cobro',
@@ -91,7 +78,111 @@ class PagoController extends Controller
                 ->where('p.estado', '1')
                 ->where('dpa.estado', '1')                
                 ->groupBy('pagos.id',
-                        'u.identificador',
+                        'u.name',
+                        'c.celular',
+                        'pagos.observacion',
+                        'pagos.total_cobro',
+                        'pagos.condicion',
+                        'pagos.created_at'
+                        )
+                ->get();                
+        }
+
+        $pagoList = [];
+        $cont = 0;
+        
+        foreach ($pagos as $pago){
+            $pago_pedidos = PagoPedido::
+                select('pedido_id as id')
+                ->where('pago_pedidos.pago_id', $pago->id)
+                ->get();
+
+            $pedidos = Pedido::select('codigo as codigos')
+                ->whereIn('id', $pago_pedidos)
+                ->get();
+
+                $pagoList[$cont] = array(
+                'id' => $pago->id,
+                'codigos' => $pedidos,
+                'users' => $pago->users,
+                'celular' => $pago->celular,
+                'observacion' => $pago->observacion,
+                'total_cobro' => $pago->total_cobro,
+                'total_pago' => $pago->total_pago,
+                'total_deuda' => $pago->total_deuda,
+                'fecha' => $pago->fecha,
+                'condicion' => $pago->condicion
+            );
+
+            $cont++;
+        }
+
+        $pagosobservados_cantidad = Pago::where('user_id', Auth::user()->id)//PAGOS OBSERVADOS
+                ->where('estado', '1')
+                ->where('condicion', 'OBSERVADO')
+                ->count();
+        
+        $superasesor = User::where('rol', 'Super asesor')->count();
+
+        return view('pagos.index', compact('pagoList', 'pagosobservados_cantidad', 'superasesor'));
+    }
+
+    public function indextabla(Request $request)
+    {
+        $pagos=null;
+        if(Auth::user()->rol == "Encargado"){
+            $pagos = Pago::join('users as u', 'pagos.user_id', 'u.id')
+                ->join('clientes as c', 'pagos.cliente_id', 'c.id')
+                ->join('detalle_pagos as dpa', 'pagos.id', 'dpa.pago_id') 
+                ->join('pago_pedidos as pp', 'pagos.id', 'pp.pago_id')
+                ->rightjoin('pedidos as p', 'pp.pedido_id', 'p.id')
+                ->rightjoin('detalle_pedidos as dpe', 'p.id', 'dpe.pedido_id')
+                ->select('pagos.id as id',
+                        'u.name as users',
+                        'c.celular',
+                        'pagos.observacion',                        
+                        'pagos.total_cobro',
+                        DB::raw('sum(dpe.total) as total_deuda'),
+                        DB::raw('sum(pp.abono) as total_pago'),
+                        'pagos.condicion',
+                        DB::raw('DATE_FORMAT(pagos.created_at, "%d/%m/%Y") as fecha')
+                        )
+                ->where('u.supervisor', Auth::user()->id)
+                ->where('pagos.estado', '1')
+                ->where('dpe.estado', '1')
+                ->where('dpa.estado', '1')
+                ->groupBy('pagos.id',
+                        'dpe.codigo',
+                        'u.name',
+                        'c.celular',
+                        'pagos.observacion','dpe.total',
+                        'pagos.total_cobro',
+                        'pagos.condicion',
+                        'pagos.created_at'
+                        )
+                ->get();
+        }else{
+            $pagos = Pago::join('users as u', 'pagos.user_id', 'u.id')
+                ->join('clientes as c', 'pagos.cliente_id', 'c.id')
+                ->join('detalle_pagos as dpa', 'pagos.id', 'dpa.pago_id') 
+                ->join('pago_pedidos as pp', 'pagos.id', 'pp.pago_id')
+                ->rightjoin('pedidos as p', 'pp.pedido_id', 'p.id')
+                ->rightjoin('detalle_pedidos as dpe', 'p.id', 'dpe.pedido_id')
+                ->select('pagos.id as id',
+                        'u.name as users',
+                        'c.celular',
+                        'pagos.observacion',                        
+                        'pagos.total_cobro',
+                        DB::raw('sum(dpe.total) as total_deuda'),
+                        DB::raw('sum(pp.abono) as total_pago'),
+                        'pagos.condicion',
+                        DB::raw('DATE_FORMAT(pagos.created_at, "%d/%m/%Y") as fecha')
+                        )
+                ->where('pagos.estado', '1')
+                ->where('p.estado', '1')
+                ->where('dpa.estado', '1')                
+                ->groupBy('pagos.id',
+                        'u.name',
                         'c.celular',
                         'pagos.observacion',
                         'pagos.total_cobro',
@@ -127,32 +218,8 @@ class PagoController extends Controller
 
             $cont++;
         }
-        return Datatables::of($pagoList)
-                    ->addIndexColumn()
-                    ->addColumn('action', function($pago){     
-                        $btn='';
-                        if(Auth::user()->rol == "Administrador"){
-                            $btn=$btn.'<a href="'.route('pagos.show', $pago['id']).'" class="btn btn-info btn-sm">Ver</a>';
-                            $btn=$btn.'<a href="'.route('pagos.edit', $pago['id']).'" class="btn btn-warning btn-sm">Editar</a>';
-                            $btn = $btn.'<a href="" data-target="#modal-delete" data-toggle="modal" data-delete="'.$pago['id'].'"><button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i> Eliminar</button></a>';
-                        }else if(Auth::user()->rol == "Encargado"){
-                            $btn=$btn.'<a href="'.route('pagos.show', $pago['id']).'" class="btn btn-info btn-sm">Ver</a>';
-                            $btn=$btn.'<a href="'.route('pagos.edit', $pago['id']).'" class="btn btn-warning btn-sm">Editar</a>';
-                            $btn = $btn.'<a href="" data-target="#modal-delete" data-toggle="modal" data-delete="'.$pago['id'].'"><button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i> Eliminar</button></a>';
-                        }else if(Auth::user()->rol == "Asesor"){
-                            $btn=$btn.'<a href="'.route('pagos.show', $pago['id']).'" class="btn btn-info btn-sm">Ver</a>';
-                            $btn=$btn.'<a href="'.route('pagos.edit', $pago['id']).'" class="btn btn-warning btn-sm">Editar</a>';
-                            $btn = $btn.'<a href="" data-target="#modal-delete" data-toggle="modal" data-delete="'.$pago['id'].'"><button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i> Eliminar</button></a>';
-                        }else{
-                            $btn=$btn.'<a href="'.route('pagos.show', $pago['id']).'" class="btn btn-info btn-sm">Ver</a>';
-                            $btn=$btn.'<a href="'.route('pagos.edit', $pago['id']).'" class="btn btn-warning btn-sm">Editar</a>';
-                            $btn = $btn.'<a href="" data-target="#modal-delete" data-toggle="modal" data-delete="'.$pago['id'].'"><button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i> Eliminar</button></a>';
-                        }
-                        
-                        return $btn;
-                    })
-                    ->rawColumns(['action'])
-                    ->make(true);
+
+
     }
 
     /**
@@ -231,7 +298,7 @@ class PagoController extends Controller
         return response()->json(['html' => $html]);
     }
 
-    public function pedidosclientetabla(Request $request)
+    /*public function pedidoscliente(Request $request)
     {        
         $pedidos=null;
         if (!$request->cliente_id) {            
@@ -252,7 +319,7 @@ class PagoController extends Controller
                     ->addIndexColumn()                  
                     ->make(true);
         }       
-    }
+    }*/
 
     public function store(Request $request)
     {
@@ -766,106 +833,6 @@ class PagoController extends Controller
         }
 
         return redirect()->route('pagos.index')->with('info', 'eliminado');        
-    }
-
-    public function destroyid(Request $request)
-    {
-        //modificar primero
-        if (!$request->hiddenID) {
-            $html='';
-        } else {
-            //$pago_id=;
-            $html='';
-            $pago = Pago::where('id', $request->hiddenID)
-                        ->where('estado', '1')
-                        ->first();//solo 1
-            $detallePago = DetallePago::where('pago_id', $pago->id)
-                            ->where('estado', '1')
-                            ->get();//mas de 1
-            $pagoPedido = PagoPedido::where('pago_id', $pago->id)
-                            ->where('estado', '1')
-                            ->get();//mas de 1 saco a pedidos
-            //de aqui saldran los pedidos
-
-            $pago->update([            
-                'estado' => '0'
-                //,'condicion'=>'por considerar'//analizar
-                //,'notificacion'=>''//analizar
-                //,'saldo'=>''//analizar
-                //,'diferencia'=>''//analizar
-                //,'updated_at'=>''//analizar
-            ]);
-
-            foreach ($detallePago as $detalleP) {
-                DetallePago::where('id', $detalleP->id)
-                ->update([
-                    'estado' => '0'
-                    //,'updated_at'=>''//analizar
-                ]);
-            }
-
-            /*$abonoTotalPedidos=PagoPedido::sum('abono')
-                                    ->where('pago_id', $pagoP->id)
-                                    ->where('estado', '1')
-                                    ->groupBy('pedido_id,')
-                                    ->get();*/
-            
-            $abonoTotalPedidos = //Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')
-            PagoPedido::select(
-                    'pago_pedidos.pago_id',
-                    'pago_pedidos.pedido_id',
-                    DB::raw('sum(pago_pedidos.abono) as abono')
-                )
-                ->where('pago_id', $pago->id)
-                ->where('estado', '1')
-                ->groupBy(
-                    'pago_pedidos.pago_id',
-                    'pago_pedidos.pedido_id'
-                )
-                ->get();
-
-            /*
-            pago id 1-> pedido id 11  pagado 1  abono 10  estado 1
-            */
-            
-            foreach ($pagoPedido as $pagoP) {
-                //por cada pedido
-                ///cuanto revertir a saldo
-                //Categoria::sum('cantidad')->groupBy('categoria')->get();
-
-                PagoPedido::where('id', $pagoP->id)
-                ->where('estado', '1')
-                ->where('pagado', '<>', '0')
-                ->update([
-                    'estado' => '0',
-                    'pagado' => '0'
-                    //'abono'=>0//es cuanto voy a revertir
-                ]);
-                //cambiar un pagopedido where pago id para el update, mas rapido
-    
-                $pedido = Pedido::find($pagoP->pedido_id);//muchos recorridos para actualizar pedido
-    
-                $pedido->update([
-                    'pago' => '0',
-                    'pagado' => '0'
-                ]);  
-            }
-
-            foreach ($abonoTotalPedidos as $abonoP) {
-                /* revisar correctamente esta data */
-                $detallePedido=DetallePedido::where('id', $abonoP->pedido_id)->first();;//::find($abonoP->pedido_id);
-                            
-                //decidir si cambiar el estado de detalle pedido o hacer alguna modificacion o reversion
-                $detallePedido->update([
-                    'saldo' => $detallePedido->saldo + $abonoP->abono
-                ]);
-                /* revisar correctamente esta data */
-                
-            }
-
-            $html=$abonoTotalPedidos;
-        }
-        return response()->json(['html' => $html]);
     }
 
     public function MisPagos()
