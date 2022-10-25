@@ -218,7 +218,15 @@
             data: 'id', 
             name: 'id',
             render: function ( data, type, row, meta ) {             
-              return row.id;
+              if(row.id<10){
+                return 'PAG000'+row.id;
+              }else if(row.id<100){
+                return 'PAG00'+row.id;
+              }else if(row.id<1000){
+                return 'PAG0'+row.id;
+              }else{
+                return 'PAG'+row.id;
+              } 
             }
         },
         {
