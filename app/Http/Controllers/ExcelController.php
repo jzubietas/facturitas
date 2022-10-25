@@ -63,9 +63,15 @@ class ExcelController extends Controller
         /* return Excel::download(new ClientesPedidosExport, 'Lista de Clientes_pedidos.xlsx'); */
     }
 
-    public function basefriaExcel()
+    // public function basefriaExcel()
+    // {
+    //     return Excel::download(new BasesFriasExport, 'Lista Base Fria.xlsx');
+    // }
+    public function basefriaExcel(Request $request)
     {
-        return Excel::download(new BasesFriasExport, 'Lista Base Fria.xlsx');
+        return (new BasesFriasExport)
+                ->base_fria($request)
+                ->download('Lista Base Fria.xlsx');              
     }
 
     public function basefriaporasesorExcel(Request $request)

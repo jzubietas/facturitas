@@ -23,8 +23,8 @@
         <a href="" data-target="#modal-exportar2" data-toggle="modal" class="dropdown-item" target="blank_"><img src="{{ asset('imagenes/icon-excel.png') }}"> Clientes - Pedidos</a>
       </div>
     </div>
-    @include('clientes.modal.exportar') {{--Modal Clientes--}}
-    @include('clientes.modal.exportar2') {{-- Modal Clientes-Pedidos --}}
+    @include('clientes.modal.exportar') {{-- Modal Clientes - Pedidos --}}
+    @include('clientes.modal.exportar2') {{-- Modal Clientes --}}
     @endcan
   </h1>
   @if($superasesor > 0)

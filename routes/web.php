@@ -151,7 +151,8 @@ Route::post('/mark-as-read', [NotificationsController::class, 'markNotification'
     // Route::get('clientesExcel', [ExcelController::class, 'clientesExcel'])->name('clientesExcel');
     Route::post('clientesExcel', [ExcelController::class, 'clientesExcel'])->name('clientesExcel');
     Route::post('clientespedidosExcel', [ExcelController::class, 'clientespedidosExcel'])->name('clientespedidosExcel');
-    Route::get('basefriaExcel', [ExcelController::class, 'basefriaExcel'])->name('basefriaExcel');
+    // Route::get('basefriaExcel', [ExcelController::class, 'basefriaExcel'])->name('basefriaExcel');
+    Route::post('basefriaExcel', [ExcelController::class, 'basefriaExcel'])->name('basefriaExcel');
     Route::post('basefriaporasesorExcel', [ExcelController::class, 'basefriaporasesorExcel'])->name('basefriaporasesorExcel');
     //MODULO ADMINISTRACION
     // Route::get('pagosaprobadosExcel', [ExcelController::class, 'pagosaprobadosExcel'])->name('pagosaprobadosExcel');

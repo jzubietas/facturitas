@@ -17,7 +17,7 @@
                       {!! Form::label('anio', 'Elija el rango de fechas del reporte') !!} <br><br>
                       <div class="form-row">
                         <div class="col-lg-6">
-                          <label>Fecha inicial&nbsp;</label>
+                          <label>Fecha iniciala&nbsp;</label>
                           {!! Form::date('desde', \Carbon\Carbon::now(), ['class' => 'form-control']); !!}
                         </div>
                         <div class="col-lg-6">
