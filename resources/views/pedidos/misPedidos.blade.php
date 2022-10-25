@@ -154,6 +154,7 @@
         processing: true,
         serverSide: true,
         searching: true,
+        "order": [[ 0, "desc" ]],
         ajax: "{{ route('mispedidostabla') }}",
         "createdRow": function( row, data, dataIndex){
             if(data["estado"] == "1")

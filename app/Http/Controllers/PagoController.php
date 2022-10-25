@@ -57,7 +57,7 @@ class PagoController extends Controller
                         DB::raw('DATE_FORMAT(pagos.created_at, "%d/%m/%Y") as fecha')
                         )
                 ->where('u.supervisor', Auth::user()->id)
-                ->where('pagos.estado', '1')
+                //->where('pagos.estado', '1')
                 ->where('dpe.estado', '1')
                 ->where('dpa.estado', '1')
                 ->groupBy('pagos.id',
@@ -69,6 +69,7 @@ class PagoController extends Controller
                         'pagos.condicion',
                         'pagos.created_at'
                         )
+                ->orderBy('pagos.created_at', 'DESC')
                 ->get();
         }else{
             $pagos = Pago::join('users as u', 'pagos.user_id', 'u.id')
@@ -87,7 +88,7 @@ class PagoController extends Controller
                         'pagos.condicion',
                         DB::raw('DATE_FORMAT(pagos.created_at, "%d/%m/%Y") as fecha')
                         )
-                ->where('pagos.estado', '1')
+                //->where('pagos.estado', '1')
                 ->where('p.estado', '1')
                 ->where('dpa.estado', '1')                
                 ->groupBy('pagos.id',
@@ -98,6 +99,7 @@ class PagoController extends Controller
                         'pagos.condicion',
                         'pagos.created_at'
                         )
+                //->orderBy('pagos.created_at', 'DESC')
                 ->get();                
         }
         $pagoList = [];
@@ -245,7 +247,9 @@ class PagoController extends Controller
                 ->where('pedidos.cliente_id', $idrequest)
                 ->where('pedidos.pagado', '<>', '2')
                 ->where('pedidos.estado', '1')
-                ->where('dp.estado', '1')                
+                ->where('dp.estado', '1')
+                ->where('dp.total','>', '0')
+                ->where('dp.saldo','>', '0')
                 ->get();
             
             return Datatables::of($pedidos)

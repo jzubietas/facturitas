@@ -208,6 +208,7 @@
         processing: true,
         serverSide: true,
         searching: true,
+        "order": [[ 0, "desc" ]],
         ajax: "{{ route('pagostabla') }}",
         createdRow: function( row, data, dataIndex){           
         },

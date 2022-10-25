@@ -213,7 +213,7 @@ tfoot td {
             "bFilter": false,
             "bInfo": false,
             'ajax': {
-              url:"{{ route('cargar.pedidoscliente') }}",					
+              url:"{{ route('cargar.pedidosclientetabla') }}",					
               'data': { "cliente_id": $(this).val(),"diferencia":diferenciaval}, 
               "type": "get",
               },
