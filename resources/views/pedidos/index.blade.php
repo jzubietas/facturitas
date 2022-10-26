@@ -256,7 +256,19 @@
             if(row.condicion_pa==null){
               return 'SIN PAGO REGISTRADO';
             }else{
-              return data;
+              if(row.condicion_pa=='0'){
+                return '<p>SIN PAGO REGISTRADO</p>'
+              }
+              if(row.condicion_pa=='1'){
+                return '<p>ADELANTO</p>'
+              }
+              if(row.condicion_pa=='2'){
+                return '<p>PAGO</p>'
+              }
+              if(row.condicion_pa=='3'){
+                return '<p>ABONADO</p>'
+              }
+              //return data;
             }              
           }
         },//estado de pago

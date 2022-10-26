@@ -22,6 +22,8 @@ class RoleSeeder extends Seeder
         $operario = Role::create(['name' => 'Operario']);
         $jefe = Role::create(['name' => 'Jefe de operaciones']);
         $administracion = Role::create(['name' => 'Administracion']);
+        $logistica = Role::create(['name' => 'Logística']);
+        $jefellamadas = Role::create(['name' => 'Jefe de llamadas']);
 
         //MODULO PEDIDOS
         Permission::create(['name' => 'pedidos.modulo', 'description' => 'MODULO PEDIDOS', 'modulo' => 'moduloPedidos'])->assignRole($admin);
