@@ -1245,8 +1245,8 @@ class PedidoController extends Controller
             $pedidos = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')//PEDIDOS CON PAGOS
                 ->join('users as u', 'pedidos.user_id', 'u.id')
                 ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
-                ->leftjoin('pago_pedidos as pp', 'pedidos.id','pp.pedido_id')
-                ->leftjoin('pagos as pa', 'pp.pago_id', 'pa.id')
+                //->leftjoin('pago_pedidos as pp', 'pedidos.id','pp.pedido_id')
+                //->leftjoin('pagos as pa', 'pp.pago_id', 'pa.id')
                 ->select(
                     'pedidos.id',
                     'c.nombre as nombres',
@@ -1263,8 +1263,8 @@ class PedidoController extends Controller
                     'pedidos.destino',
                     'pedidos.motivo',
                     'pedidos.responsable',
-                    'pa.total_cobro',
-                    'pa.total_pagado',
+                    //'pa.total_cobro',
+                    //'pa.total_pagado',
                     'dp.saldo as diferencia',//'pa.diferencia',
                     'pedidos.pagado as condicion_pa',//'pa.condicion as condicion_pa',
                     DB::raw('DATE_FORMAT(pedidos.created_at, "%d/%m/%Y") as fecha')                    
@@ -1291,11 +1291,11 @@ class PedidoController extends Controller
                     'pedidos.destino',
                     'pedidos.motivo',
                     'pedidos.responsable',
-                    'pa.total_cobro',
-                    'pa.total_pagado',
-                    'pa.condicion',
+                    //'pa.total_cobro',
+                    //'pa.total_pagado',
+                    //'pa.condicion',
                     'pedidos.created_at',
-                    'pa.diferencia',
+                    //'pa.diferencia',
                     'dp.saldo',
                     'pedidos.pagado'
                     )
@@ -1305,8 +1305,8 @@ class PedidoController extends Controller
             $pedidos = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')//PEDIDOS CON PAGOS
                 ->join('users as u', 'pedidos.user_id', 'u.id')
                 ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
-                ->leftjoin('pago_pedidos as pp', 'pedidos.id','pp.pedido_id')
-                ->leftjoin('pagos as pa', 'pp.pago_id', 'pa.id')
+                //->leftjoin('pago_pedidos as pp', 'pedidos.id','pp.pedido_id')
+                //->leftjoin('pagos as pa', 'pp.pago_id', 'pa.id')
                 ->select(
                     'pedidos.id',
                     'c.nombre as nombres',
@@ -1323,8 +1323,8 @@ class PedidoController extends Controller
                     'pedidos.destino',
                     'pedidos.motivo',
                     'pedidos.responsable',
-                    'pa.total_cobro',
-                    'pa.total_pagado',
+                    //'pa.total_cobro',
+                    //'pa.total_pagado',
                     DB::raw('DATE_FORMAT(pedidos.created_at, "%d/%m/%Y") as fecha'),
                     'dp.saldo as diferencia',//'pa.diferencia',
                     'pedidos.pagado as condicion_pa',//'pa.condicion as condicion_pa',
@@ -1345,17 +1345,17 @@ class PedidoController extends Controller
                     'dp.total',
                     'pedidos.condicion_envio',
                     'pedidos.condicion',
-                    'pa.condicion',//para pedido con pago
+                    //'pa.condicion',//para pedido con pago
                     'pedidos.envio',
                     'pedidos.direccion',
                     'pedidos.destino',
                     'pedidos.motivo',
                     'pedidos.responsable',
-                    'pa.total_cobro',
-                    'pa.total_pagado',
-                    'pa.condicion',
+                    //'pa.total_cobro',
+                    //'pa.total_pagado',
+                    //'pa.condicion',
                     'pedidos.created_at',
-                    'pa.diferencia',
+                    //'pa.diferencia',
                     'dp.saldo',
                     'pedidos.pagado'
                     )
@@ -1410,8 +1410,8 @@ class PedidoController extends Controller
             $pedidos = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')//PEDIDOS CON PAGOS
                 ->join('users as u', 'pedidos.user_id', 'u.id')
                 ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
-                ->leftjoin('pago_pedidos as pp', 'pedidos.id','pp.pedido_id')
-                ->leftjoin('pagos as pa', 'pp.pago_id', 'pa.id')
+                //->leftjoin('pago_pedidos as pp', 'pedidos.id','pp.pedido_id')
+                //->leftjoin('pagos as pa', 'pp.pago_id', 'pa.id')
                 ->select(
                     'pedidos.id',
                     'c.nombre as nombres',
@@ -1428,8 +1428,8 @@ class PedidoController extends Controller
                     'pedidos.destino',
                     'pedidos.motivo',
                     'pedidos.responsable',
-                    'pa.total_cobro',
-                    'pa.total_pagado',
+                    //'pa.total_cobro',
+                    //'pa.total_pagado',
                     DB::raw('DATE_FORMAT(pedidos.created_at, "%d/%m/%Y") as fecha'),
                     'dp.saldo as diferencia',//'pa.diferencia',
                     'pedidos.pagado as condicion_pa',//'pa.condicion as condicion_pa',
@@ -1450,17 +1450,17 @@ class PedidoController extends Controller
                     'dp.total',
                     'pedidos.condicion_envio',
                     'pedidos.condicion',
-                    'pa.condicion',//para pedido con pago
+                    //'pa.condicion',//para pedido con pago
                     'pedidos.envio',
                     'pedidos.direccion',
                     'pedidos.destino',
                     'pedidos.motivo',
                     'pedidos.responsable',
-                    'pa.total_cobro',
-                    'pa.total_pagado',
-                    'pa.condicion',
+                    //'pa.total_cobro',
+                    //'pa.total_pagado',
+                    //'pa.condicion',
                     'pedidos.created_at',
-                    'pa.diferencia',
+                    //'pa.diferencia',
                     'dp.saldo',
                     'pedidos.pagado'
                     )
