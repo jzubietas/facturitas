@@ -75,20 +75,32 @@
         <td>USER0{{ $pedido->operario }}</td>{{-- OPERARIO EMITIO FACTURA --}}        
         <td>{{ $pedido->estado_pedido }}</td>{{-- ESTADO PEDIDO --}}
         <td>{{ $pedido->estado_envio }}</td>{{-- ESTADO SOBRE --}}
-        <td>{{ $pedido->fecha_ult_pago }}</td>{{-- FECHA CANCELACION DE PAGO --}}
+        @if($pedido->fecha_ult_pago == null){{-- FECHA CANCELACION DE PAGO --}}
+          <td style="color: #FF0000">SIN PAGOS</td>
+        @else
+          <td>{{ $pedido->fecha_ult_pago }}</td>
+        @endif
         {{-- FECHA DE VOUCHER --}}
         {{-- IMPORTE PAGADO --}}
         {{-- BANCO --}}
-        <td>{{ $pedido->estado_pago }}</td>{{-- ESTADO PAGO --}}
+        @if($pedido->estado_pago==null){{-- ESTADO PAGO --}}
+          <td style="color: #FF0000">SIN PAGOS</td>
+        @else
+          <td>{{ $pedido->estado_pago }}</td>
+        @endif        
         <td>{{ $pedido->diferencia }}</td>{{-- DIFERENCIA --}}
-        <td>{{ $pedido->fecha_aprobacion }}</td>{{-- FECHA APROBACION PAGO --}}
+        @if($pedido->fecha_aprobacion==null){{-- FECHA APROBACION PAGO --}}
+          <td style="color: #FF0000">SIN APROBACION</td>
+        @else
+          <td>{{ $pedido->fecha_aprobacion }}</td>
+        @endif        
         <td></td>
         <td>{{ $pedido->responsable }}</td>{{-- RESPONSABLE --}}
         <td>{{ $pedido->motivo }}</td>{{-- MOTIVO ANULACION --}}
       </tr>
       <?php $cont++; ?>
     @endforeach
-    @foreach ($pedidos2 as $pedido)
+    {{-- @foreach ($pedidos2 as $pedido)
       <tr>
         <td>{{ $cont + 1 }}</td>
         @if ($pedido->id < 10)
@@ -100,42 +112,38 @@
         @else
           <td>PED0{{ $pedido->id }}</td>
         @endif
-        <td>{{ $pedido->creador }}</td>{{-- CREADOR --}}
-        <td>{{ $pedido->fecha_mod }}</td>{{-- FECHA MODIFICACION --}}
-        <td>{{ $pedido->modificador }}</td>{{-- USUARIO MODIFICADOR --}}
-        <td>{{ $pedido->asesor_nombre }}</td>{{-- ASESOR NOMBRE --}}
-        <td>{{ $pedido->asesor_identificador }}</td>{{-- ASESOR IDENTIFICADOR --}}
-        <td>{{ $pedido->fecha }}</td>{{-- FECHA PEDIDO --}}
-        <td>{{ $pedido->codigos }}</td>{{-- CODIGO PEDIDO --}}
-        <td>{{ $pedido->nombres }}</td>{{-- NOMBRE CLIENTE --}}
-        <td>{{ $pedido->celulares }}</td>{{-- TELEFONO CLIENTE --}}
-        <td>{{ $pedido->empresas }}</td>{{-- RAZON SOCIAL --}}
-        <td>{{ $pedido->mes }}</td>{{-- MES --}}
-        <td>{{ $pedido->ruc }}</td>{{-- RUC --}}
-        <td>{{ $pedido->cantidad }}</td>{{-- CANTIDAD PEDIDO --}}
-        <td>{{ $pedido->tipo }}</td>{{-- TIPO --}}
-        <td>{{ $pedido->porcentaje }}</td>{{-- PORCENTAJE --}}
-        <td>{{ $pedido->importe }}</td>{{-- IMPORTE A PAGAR --}}
-        <td>{{ $pedido->courier }}</td>{{-- COURIER --}}
-        <td>{{ $pedido->total }}</td>{{-- TOTAL A PAGAR --}}
+        <td>{{ $pedido->creador }}</td>
+        <td>{{ $pedido->fecha_mod }}</td>
+        <td>{{ $pedido->modificador }}</td>
+        <td>{{ $pedido->asesor_nombre }}</td>
+        <td>{{ $pedido->asesor_identificador }}</td>
+        <td>{{ $pedido->fecha }}</td>
+        <td>{{ $pedido->codigos }}</td>
+        <td>{{ $pedido->nombres }}</td>
+        <td>{{ $pedido->celulares }}</td>
+        <td>{{ $pedido->empresas }}</td>
+        <td>{{ $pedido->mes }}</td>
+        <td>{{ $pedido->ruc }}</td>
+        <td>{{ $pedido->cantidad }}</td>
+        <td>{{ $pedido->tipo }}</td>
+        <td>{{ $pedido->porcentaje }}</td>
+        <td>{{ $pedido->importe }}</td>
+        <td>{{ $pedido->courier }}</td>
+        <td>{{ $pedido->total }}</td>
         <td>
             {{ $pedido->cant_compro }}
-        </td>{{-- CANTIDAD COMPROBANTES --}}
-        <td>USER0{{ $pedido->operario }}</td>{{-- OPERARIO EMITIO FACTURA --}}        
-        <td>{{ $pedido->estado_pedido }}</td>{{-- ESTADO PEDIDO --}}
-        <td>{{ $pedido->estado_envio }}</td>{{-- ESTADO SOBRE --}}
-        <td style="color: #FF0000">SIN PAGOS</td>{{-- FECHA CANCELACION DE PAGO --}}
-        {{-- FECHA DE VOUCHER --}}
-        {{-- IMPORTE PAGADO --}}
-        {{-- BANCO --}}
-        <td style="color: #FF0000">SIN PAGOS</td>{{-- ESTADO PAGO --}}
-        <td>{{ $pedido->total }}</td>{{-- DIFERENCIA --}}
-        <td style="color: #FF0000">SIN PAGOS</td>{{-- FECHA APROBACION PAGO --}}
+        </td>
+        <td>USER0{{ $pedido->operario }}</td>   
+        <td>{{ $pedido->estado_pedido }}</td>
+        <td>{{ $pedido->estado_envio }}</td>
+        <td style="color: #FF0000">SIN PAGOS</td>
+        <td style="color: #FF0000">SIN PAGOS</td>
+        <td>{{ $pedido->total }}</td>
+        <td style="color: #FF0000">SIN PAGOS</td>
         <td></td>
-        <td>{{ $pedido->responsable }}</td>{{-- RESPONSABLE --}}
-        <td>{{ $pedido->motivo }}</td>{{-- MOTIVO ANULACION --}}
+        <td>{{ $pedido->responsable }}</td>
+        <td>{{ $pedido->motivo }}</td>
       </tr>
-      <?php $cont++; ?>
-    @endforeach
+    @endforeach --}}
   </tbody>
 </table>

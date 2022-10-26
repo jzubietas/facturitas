@@ -153,14 +153,14 @@ class ExcelController extends Controller
     {
         return (new PedidosExport)
                 ->pedidos($request)
-                ->pedidos2($request)
+                /* ->pedidos2($request) */
                 ->download('Lista de Pedidos.xlsx');
     }
     public function mispedidosExcel(Request $request)
     {
         return (new MisPedidosExport)
                 ->pedidos($request)
-                ->pedidos2($request)
+                /* ->pedidos2($request) */
                 ->download('Lista de Mis Pedidos.xlsx');
     }
     public function pedidospagadosExcel(Request $request)

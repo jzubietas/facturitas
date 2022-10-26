@@ -49,14 +49,28 @@
         <td>{{ $pedido->total }}</td>
         <td>{{ $pedido->diferencia }}</td>
         <td>{{ $pedido->condiciones }}</td>
-        <td>{{ $pedido->condicion_pa }}</td>
+        <td>
+          @if($pedido->condicion_pa == null)
+            SIN PAGO REGISTRADO
+          @else
+            @if($pedido->condicion_pa == 0)
+              SIN PAGO REGISTRADO
+            @endif
+            @if($pedido->condicion_pa == 1)
+              ADELANTO
+            @endif
+            @if($pedido->condicion_pa == 2)
+              PAGADO
+            @endif
+          @endif
+        </td>
         <td>{{ $pedido->condicion_env }}</td>
         <td>{{ $pedido->fecha_mod }}</td>
         <td>{{ $pedido->modificador }}</td>
       </tr>
       <?php $cont++; ?>
     @endforeach
-    @foreach ($pedidos2 as $pedido)
+    {{-- @foreach ($pedidos2 as $pedido)
         <tr>
           <td>{{ $cont + 1 }}</td>
           @if ($pedido->id < 10)
@@ -86,7 +100,6 @@
           <td>{{ $pedido->fecha_mod }}</td>
           <td>{{ $pedido->modificador }}</td>
         </tr>
-        <?php $cont++; ?>
-    @endforeach
+    @endforeach --}}
   </tbody>
 </table>

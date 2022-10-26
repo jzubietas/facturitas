@@ -75,8 +75,22 @@
               <td>{{ $pedido->fecha }}</td>
               <td>@php echo number_format($pedido->total,2) @endphp</td>
               <td>{{ $pedido->condiciones }}</td>
-              <td>SIN PAGOS REGISTRADOS</td>
               <td>
+                @if($pedido->condicion_pa == null)
+                  SIN PAGO REGISTRADO
+                @else
+                  @if($pedido->condicion_pa == 0)
+                    SIN PAGO REGISTRADO
+                  @endif
+                  @if($pedido->condicion_pa == 1)
+                    ADELANTO
+                  @endif
+                @endif
+              </td>
+              <td>
+                @can('pagos.create')
+                  <a href="#" class="btn btn-success btn-sm"><i class="fas fa-plus-circle"></i> Pago</a>{{-- {{ route('pagos.create') }} --}}
+                @endcan
                 @can('pedidos.pedidosPDF')
                   <a href="{{ route('pedidosPDF', $pedido) }}" class="btn btn-primary btn-sm" target="_blank"><i class="fa fa-file-pdf"></i> PDF</a>
                 @endcan
@@ -85,6 +99,9 @@
                 @endcan
                 @can('pedidos.edit')
                   <a href="{{ route('pedidos.edit', $pedido->id) }}" class="btn btn-warning btn-sm">Editar</a>
+                @endcan
+                @can('pagos.create')
+                  <a href="{{ route('pagos.create', ['id' => $pedido->cliente_id])}}" class="btn btn-success btn-sm">Pagar</a>
                 @endcan
                 @can('pedidos.destroy')
                   <a href="" data-target="#modal-delete-{{ $pedido->id }}" data-toggle="modal"><button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i> Eliminar</button></a>

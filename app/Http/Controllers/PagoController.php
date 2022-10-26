@@ -166,17 +166,33 @@ class PagoController extends Controller
     {
         $clientes=null;
         if(Auth::user()->rol == "Administrador"){
-            $clientes = Cliente::where('estado', '1')
-            //->where('user_id', Auth::user()->id)
-            ->where('tipo', '1')
-            ->get();
+            // Parámetro id de cliente
+            if (request()->get('id')) {
+                $clientes = Cliente::where('estado', '1')
+                ->where('id', request()->id)
+                ->where('tipo', '1')
+                ->get();
+            } else {
+                $clientes = Cliente::where('estado', '1')
+                //->where('user_id', Auth::user()->id)
+                ->where('tipo', '1')
+                ->get();
+            }
         }
         else{
-            $clientes = Cliente::where('estado', '1')
-                            ->where('user_id', Auth::user()->id)
-                            ->where('tipo', '1')
-                            ->get();
-
+            // Parámetro id de cliente
+            if (request()->get('id')) {
+                $clientes = Cliente::where('estado', '1')
+                ->where('user_id', Auth::user()->id)
+                ->where('id', request()->id)
+                ->where('tipo', '1')
+                ->get();
+            } else {
+                $clientes = Cliente::where('estado', '1')
+                ->where('user_id', Auth::user()->id)
+                ->where('tipo', '1')
+                ->get();
+            }
         }
         
         $pedidos = Pedido::join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
@@ -196,6 +212,7 @@ class PagoController extends Controller
             "TUNKI" => 'TUNKI',
             "SALDO ANTERIOR" => 'SALDO ANTERIOR'
         ];
+
         return view('pagos.create', compact('clientes', 'pedidos', 'bancos'));
     }
 
