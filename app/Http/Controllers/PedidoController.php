@@ -1493,6 +1493,7 @@ class PedidoController extends Controller
             ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
             ->select(
                 'pedidos.id',
+                'c.id as cliente_id',
                 'c.nombre as nombres',
                 'c.celular as celulares',
                 'u.identificador as users',
@@ -1511,6 +1512,7 @@ class PedidoController extends Controller
             ->where('pedidos.pago', '0')
             ->groupBy(
                 'pedidos.id',
+                'c.id',
                 'c.nombre',
                 'c.celular',
                 'u.identificador',

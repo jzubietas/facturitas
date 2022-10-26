@@ -86,6 +86,9 @@
                 @can('pedidos.edit')
                   <a href="{{ route('pedidos.edit', $pedido->id) }}" class="btn btn-warning btn-sm">Editar</a>
                 @endcan
+                @can('pagos.create')
+                  <a href="{{ route('pagos.create', ['id' => $pedido->cliente_id])}}" class="btn btn-success btn-sm">Pagar</a>
+                @endcan
                 @can('pedidos.destroy')
                   <a href="" data-target="#modal-delete-{{ $pedido->id }}" data-toggle="modal"><button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i> Eliminar</button></a>
                 @endcan
