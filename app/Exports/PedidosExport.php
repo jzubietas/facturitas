@@ -19,7 +19,7 @@ class PedidosExport implements FromView, ShouldAutoSize
         $pedidos = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')//PEDIDOS CON PAGOS
             ->join('users as u', 'pedidos.user_id', 'u.id')
             ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
-            ->leftjoin('pago_pedidos as pp', 'pedidos.id','pp.pedido_id')
+            //->leftjoin('pago_pedidos as pp', 'pedidos.id','pp.pedido_id')
             //->leftjoin('pagos as pa', 'pp.pago_id', 'pa.id')
             ->select(
                 'pedidos.id',
