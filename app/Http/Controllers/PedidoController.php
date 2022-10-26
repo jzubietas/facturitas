@@ -1191,7 +1191,8 @@ class PedidoController extends Controller
                 'estado' => '0'
             ]);
 
-            $detalle_pedidos = DetallePedido::find($request->hiddenID);            
+            //$detalle_pedidos = DetallePedido::find($request->hiddenID);            
+            $detalle_pedidos = DetallePedido::where('pedido_id',$request->hiddenID)->first() ;          
            
             $detalle_pedidos->update([
                 'estado' => '0'
