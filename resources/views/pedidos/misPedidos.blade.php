@@ -161,7 +161,7 @@
             {
             }else{
               $(row).addClass('yellow');
-            }           
+            }          
         },
         rowCallback: function (row, data, index) {
               var pedidodiferencia=data.diferencia;
