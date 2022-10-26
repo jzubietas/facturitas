@@ -33,10 +33,10 @@
       <div class="form-group col-lg-6">
           <div class="form-row" style="margin:-2px">
             <div class="form-group col-lg-6">
-              <h2>PAGOS - <b style="font-size:20px"> {!! Form::label('saldo', 'Saldo a favor') !!}</b></h2>
+              <h2>PAGOS  <b style="font-size:20px"> {!! Form::label('', '') !!}</b></h2>
             </div>
             <div class="form-group col-lg-4">
-              <input type="text" name="saldo" id="saldo" class="form-control number" placeholder="Saldo a favor...">
+              <input type="hidden" name="saldo" id="saldo" class="form-control number" placeholder="Saldo a favor...">
             </div>
             <div class="form-group col-lg-2">
               <a data-target="#modal-add-pagos" id="addpago" data-toggle="modal"><button class="btn btn-primary"><i class="fas fa-plus-circle"></i></button></a>
@@ -321,19 +321,19 @@ tfoot td {
                     return;
                   }
 
-                  montopagos=(montopagos+pedidosaldo).toFixed(2);
+                  montopagos=parseFloat(montopagos+pedidosaldo);
                   console.log("diferencia "+montopagos);
-                  $("#diferencia").val(montopagos);
+                  $("#diferencia").val(montopagos.toFixed(2));
                   $(this).closest('tr').find(".radioadelanto").prop("disabled",false);
                   $('#tabla_pedidos > tbody  > tr').each(function(index,tr) {
                       console.log(index+" posicion");
                       console.log("aca valido check en total y check en saldo");
                       var idfila=$(this).find("td").eq(0).html();//fila idpedido
-                      if(idfila!=filedata.id)
+                      //if(idfila!=filedata.id)
                       {
                         console.log("id no es el mismo que acabo de ejecutar")
                         
-                        var saldofila=$(this).find("td").eq(3).html();//saldo
+                        var saldofila=parseFloat($(this).find("td").eq(3).html());//saldo
                         console.log("saldo fila "+idfila+" es "+saldofila);
                         var radiototalfila=$(this).find("td").eq(4).find("input").prop("checked");//check radiototal
                         console.log("checktotal fila "+idfila+" es "+( (radiototalfila)? 'si':'no') );
@@ -344,14 +344,15 @@ tfoot td {
                           console.log("radiofila  "+index+" total o saldo esta checkedado")
                         }
                         if(!radiototalfila && !radiosaldofila){
+                          console.log("saldofila = "+saldofila + " y montopagos="+montopagos);//600/100
                           console.log("radiofila "+index+" total o saldo no estan checkedado")                          
                           if(saldofila<=montopagos)
                           {
-                            console.log("saldo menor igual a monto, bloqueo saldo");
+                            console.log("saldo "+saldofila+" es menor igual a monto "+montopagos+", bloqueo saldo");
                             $(this).find("td").eq(4).find("input").prop("disabled",false);
-                            $(this).find("td").eq(5).find("input").prop("disabled",false);
+                            $(this).find("td").eq(5).find("input").prop("disabled",true);
                           }else{
-                            console.log("saldo mayor monto, bloqueo total,activo saldo");
+                            console.log("saldo "+saldofila+" es mayor a monto "+montopagos+", bloqueo total,activo saldo");
                             $(this).find("td").eq(4).find("input").prop("disabled",true);
                             $(this).find("td").eq(5).find("input").prop("disabled",false);
                           }
@@ -386,9 +387,9 @@ tfoot td {
                   if(montopagos>=pedidosaldo)
                   {
                     $(this).prop("checked",true)////aqui valida
-                    montopagos=(montopagos-pedidosaldo).toFixed(2);
+                    montopagos=parseFloat(montopagos-pedidosaldo);
                     console.log("diferencia "+montopagos);
-                    $("#diferencia").val(montopagos);
+                    $("#diferencia").val(montopagos.toFixed(2));
                     $(this).closest('tr').find(".radioadelanto").prop("disabled",true);
                     console.log("nuevo montogeneral "+$("#diferencia").val());
                     $('#tabla_pedidos > tbody  > tr').each(function(index,tr) {
@@ -399,7 +400,7 @@ tfoot td {
                       {
                         console.log("id no es el mismo que acabo de ejecutar")
                         
-                        var saldofila=$(this).find("td").eq(3).html();//saldo
+                        var saldofila=parseFloat($(this).find("td").eq(3).html());//saldo
                         console.log("saldo fila "+idfila+" es "+saldofila);
                         var radiototalfila=$(this).find("td").eq(4).find("input").prop("checked");//check radiototal
                         console.log("checktotal fila "+idfila+" es "+( (radiototalfila)? 'si':'no') );
@@ -410,12 +411,13 @@ tfoot td {
                           console.log("radiofila  "+index+" total o saldo esta checkedado")
                         }
                         if(!radiototalfila && !radiosaldofila){
+                          console.log("saldofila = "+saldofila + " y montopagos="+montopagos);
                           console.log("radiofila "+index+" total o saldo no estan checkedado")                          
                           if(saldofila<=montopagos)
                           {
                             console.log("saldo menor igual a monto, bloqueo saldo");
                             $(this).find("td").eq(4).find("input").prop("disabled",false);
-                            $(this).find("td").eq(5).find("input").prop("disabled",false);
+                            $(this).find("td").eq(5).find("input").prop("disabled",true);
                           }else{
                             console.log("saldo mayor monto, bloqueo total,activo saldo");
                             $(this).find("td").eq(4).find("input").prop("disabled",true);
@@ -441,20 +443,22 @@ tfoot td {
             if($(this).prop("checked") == true){
               console.log("marcado")
               $(this).prop("checked",false)//////revertir              
-                  let montopagos=parseFloat($("#diferencia").val().replace(",", ""));
-                  if(montopagos==0 || montopagos==null || isNaN(montopagos)){
+                  let montopagos=parseFloat($("#diferencia").val().replace(",", ""));//0
+                  /*if(montopagos==0 || montopagos==null || isNaN(montopagos)){
                     console.log("no hay pagos ingresados");
                     return;
-                  }
+                  }*/
                   let filedata=tabla_pedidos.row($(this).closest('tr')).data();
                   let pedidosaldo=parseFloat(filedata.saldo);
                   if(pedidosaldo==null || isNaN(pedidosaldo)){
                     console.log("no hay saldo ingresado");
                     return;
                   }
-                  montopagos=(montopagos+pedidosaldo).toFixed(2);
+                  //551.20---356.00
+                  console.log("guardasaldo "+guardasaldo);
+                  montopagos=(guardasaldo);
                   $("#diferencia").val(montopagos);
-                  $(this).closest('tr').find(".radioadelanto").prop("disabled",false);
+                  //$(this).closest('tr').find(".radioadelanto").prop("disabled",false);
 
                   //revertir pago reviso todo otra vez
                   $('#tabla_pedidos > tbody  > tr').each(function(index,tr) {
@@ -465,13 +469,13 @@ tfoot td {
                       {
                         console.log("id no es el mismo que acabo de ejecutar")
                         
-                        var saldofila=$(this).find("td").eq(3).html();//saldo
-                        console.log("saldo fila "+idfila+" es "+saldofila);
+                        var saldofila=$(this).find("td").eq(3).html();//saldo/551.20
+                        console.log("saldo fila "+idfila+" es "+saldofila);//551.20
                         var radiototalfila=$(this).find("td").eq(4).find("input").prop("checked");//check radiototal
-                        console.log("checktotal fila "+idfila+" es "+( (radiototalfila)? 'si':'no') );
+                        console.log("checktotal fila "+idfila+" es "+( (radiototalfila)? 'si':'no') );//
                         var radiosaldofila=$(this).find("td").eq(5).find("input").prop("checked");
                         console.log("checksaldo fila "+idfila+" es "+( (radiosaldofila)? 'si':'no') );
-                        if(radiototalfila || radiosaldofila)
+                        /*if(radiototalfila || radiosaldofila)
                         {
                           console.log("radiofila  "+index+" total o saldo esta checkedado")
                         }
@@ -487,14 +491,14 @@ tfoot td {
                             $(this).find("td").eq(4).find("input").prop("disabled",true);
                             $(this).find("td").eq(5).find("input").prop("disabled",false);
                           }
-                        }
+                        }*/
                       }
                       
                     });
               //fin revertir
 
             }else if($(this).prop("checked") == false){
-              console.log("no marcado");///aca falla cuando el monto es menor que el saldo
+              console.log("no marcado adelanto");///aca falla cuando el monto es menor que el saldo
                   let montopagos=parseFloat($("#diferencia").val().replace(",", ""));
                   if(montopagos==0 || montopagos==null || isNaN(montopagos)){
                     console.log("no hay pagos ingresados");
@@ -506,13 +510,15 @@ tfoot td {
                     console.log("no hay saldo ingresado");
                     return;
                   }
-                  if(montopagos>=pedidosaldo)
+                  //sol si saldo es mayor al monto
+                  if(montopagos<pedidosaldo)
                   {
                     $(this).prop("checked",true)////aqui valida
-                    montopagos=(montopagos-pedidosaldo).toFixed(2);
+                    guardasaldo=$("#diferencia").val();//356 guardo
+                    montopagos=(0).toFixed(2);
                     console.log("diferencia "+montopagos);
                     $("#diferencia").val(montopagos);
-                    $(this).closest('tr').find(".radioadelanto").prop("disabled",true);
+                    //$(this).closest('tr').find(".radioatotal").prop("disabled",true);
                     //recorido defilas distintas al actual
                     $('#tabla_pedidos > tbody  > tr').each(function(index,tr) {
                       console.log(index+" posicion");
@@ -550,10 +556,7 @@ tfoot td {
                     });
                     
                   }
-                  if(montopagos<pedidosaldo)
-                  {
-                    
-                  }
+                  
               //fin validar
 
             }
@@ -961,6 +964,7 @@ tfoot td {
 
         //variables de calculos pedidos y pagos
         diferencia = 0;
+        guardasaldo=0;
         console.log("diferencia inicial 0")
         total_pedido = 0;
         subtotal_pedido = [];
