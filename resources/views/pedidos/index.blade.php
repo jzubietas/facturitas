@@ -163,7 +163,7 @@
       var button = $(event.relatedTarget) 
       var idunico = button.data('delete')//id  basefria
       //console.log(idunico);
-      $("#hiddenId").val(idunico);
+      $("#hiddenIDdelete").val(idunico);
       if(idunico<10){
         idunico='PED000'+idunico;
       }else if(idunico<100){
@@ -179,6 +179,25 @@
       $(".textcode").html(idunico);
       $("#motivo").val('');
       $("#responsable").val('');
+
+    });
+
+    $('#modal-restaurar').on('show.bs.modal', function (event) {
+      var button = $(event.relatedTarget) 
+      var idunico = button.data('restaurar')
+      console.log("unico "+idunico)
+      $("#hiddenIDrestaurar").val(idunico);
+      if(idunico<10){
+        idunico='PED000'+idunico;
+      }else if(idunico<100){
+        idunico= 'PED00'+idunico;
+      }else if(idunico<1000){
+        idunico='PED0'+idunico;
+      }else{
+        idunico='PED'+idunico;
+      } 
+     
+      $(".textcode").html(idunico);
 
     });
 
@@ -379,7 +398,12 @@
       alert("Form '" + formId + " is being submitted, value of first input is: " + firstValue);
       // Do stuff 
       return false;*/
-  })
+   })
+
+   $(document).on("submit", "#formrestaurar", function (evento) {
+      evento.preventDefault();
+      clickformrestaurar();     
+   });
 
   });
 </script>
@@ -402,6 +426,20 @@
       }).done(function (data) {
         $("#modal-delete").modal("hide");
         resetearcamposdelete();          
+        $('#tablaPrincipal').DataTable().ajax.reload();      
+      });
+    }
+
+    function clickformrestaurar()
+    {
+      var formData = $("#formrestaurar").serialize();
+      $.ajax({
+        type:'POST',
+        url:"{{ route('pedidorestaurarRequest.post') }}",
+        data:formData,
+      }).done(function (data) {
+        $("#modal-restaurar").modal("hide");
+        //resetearcamposdelete();          
         $('#tablaPrincipal').DataTable().ajax.reload();      
       });
     }

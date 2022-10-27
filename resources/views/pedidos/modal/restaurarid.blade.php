@@ -10,6 +10,7 @@
       </div>
       
       <form id="formrestaurar" name="formrestaurar">
+      <input type="hidden" id="hiddenIDrestaurar" name="hiddenID" class="form-control">
       <div class="modal-body">
         <p>Confirme si desea <strong>RESTAURAR</strong> el pedido: <strong class="textcode">PED000</strong></p>
       </div>

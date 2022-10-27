@@ -55,7 +55,7 @@ class PagoController extends Controller
                         DB::raw('sum(pp.abono) as total_pago'),
                         'pagos.condicion',
                         DB::raw('DATE_FORMAT(pagos.created_at, "%d/%m/%Y") as fecha'),
-                        DB::raw('group_concat(p.codigo) as codigos')
+                        DB::raw('group_concat(distinct p.codigo) as codigos')
                         )
                 ->where('u.supervisor', Auth::user()->id)
                 //->where('pagos.estado', '1')
@@ -88,7 +88,7 @@ class PagoController extends Controller
                         DB::raw('sum(pp.abono) as total_pago'),
                         'pagos.condicion',
                         DB::raw('DATE_FORMAT(pagos.created_at, "%d/%m/%Y") as fecha'),
-                        DB::raw('group_concat(p.codigo) as codigos')
+                        DB::raw('group_concat(distinct p.codigo) as codigos')
                         )
                 //->where('pagos.estado', '1')
                 ->where('p.estado', '1')
@@ -99,7 +99,7 @@ class PagoController extends Controller
                         'pagos.observacion',
                         'pagos.total_cobro',
                         'pagos.condicion',
-                        'pagos.created_at'
+                        'pagos.created_at',
                         )
                 //->orderBy('pagos.created_at', 'DESC')
                 ->get();                
@@ -315,6 +315,7 @@ class PagoController extends Controller
 
     public function store(Request $request)
     {
+        return $request->all();
         //ESTADOS PARA CAMPO "PAGADO" EN PEDIDOS
         //0: DEBE
         //1: ADELANTO

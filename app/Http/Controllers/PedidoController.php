@@ -232,21 +232,29 @@ class PedidoController extends Controller
                         $btn=$btn.'<a href="'.route('pedidos.show', $pedido).'" class="btn btn-info btn-sm"><i class="fas fa-eye"></i> VER</a>';
 
                         if($pedido->estado>0){
-                            $btn=$btn.'<a href="'.route('pedidos.edit', $pedido->id).'" class="btn btn-warning btn-sm">Editar</a>';
+
+                            if(Auth::user()->rol == "Super asesor" || Auth::user()->rol =="Administrador" || Auth::user()->rol == "Encargado")
+                            {
+                                $btn=$btn.'<a href="'.route('pedidos.edit', $pedido->id).'" class="btn btn-warning btn-sm">Editar</a>';
+                            }                            
 
                             //if($pedido->diferencia >3)
                             //{
-                                //if(Auth::user()->rol =='Administrador')
-                                //{
+                                if(Auth::user()->rol =='Administrador')
+                                {
                                     $btn = $btn.'<a href="" data-target="#modal-delete" data-toggle="modal" data-delete="'.$pedido->id.'"><button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i> Anular</button></a>';
-                                //}
+                                }
                             //}                            
                         }
 
-                        /*if($pedido->estado==0){
-                            $btn = $btn.'<a href="" data-target="#modal-restaurar" data-toggle="modal" data-restaurar="'.$pedido->id.'"><button class="btn btn-success btn-sm"><i class="fas fa-check"></i> Restaurar</button></a>';
+                        if($pedido->estado==0){
+                            if(Auth::user()->rol =='Administrador')
+                            {
+                                $btn = $btn.'<a href="" data-target="#modal-restaurar" data-toggle="modal" data-restaurar="'.$pedido->id.'"><button class="btn btn-success btn-sm"><i class="fas fa-check"></i> Restaurar</button></a>';
+                            }
+                            
 
-                        }*/
+                        }
                         
                         /*if($pedido->estado==1){
                             if($pedido->diferencia <= 3)
@@ -1221,6 +1229,27 @@ class PedidoController extends Controller
         return redirect()->route('pedidos.index')->with('info','restaurado');
     }
 
+    public function Restaurarid(Request $request)
+    {
+        if (!$request->hiddenID) {
+            $html='';
+        } else {
+            Pedido::find($request->hiddenID)->update([
+                'condicion' => 'POR ATENDER',
+                'modificador' => 'USER'.Auth::user()->id,
+                'estado' => '1'
+            ]);
+            $detalle_pedidos = DetallePedido::where('pedido_id',$request->hiddenID)->first();
+
+            $detalle_pedidos->update([
+                'estado' => '1',
+            ]);
+            $html=$detalle_pedidos;
+        }
+
+        return response()->json(['html' => $html]);
+    }
+
     public function viewVentas()
     {
         return view('ventas.reportes.index');
@@ -1270,7 +1299,8 @@ class PedidoController extends Controller
                     //'pa.total_pagado',
                     'dp.saldo as diferencia',//'pa.diferencia',
                     'pedidos.pagado as condicion_pa',//'pa.condicion as condicion_pa',
-                    DB::raw('DATE_FORMAT(pedidos.created_at, "%d/%m/%Y") as fecha')                    
+                    DB::raw('DATE_FORMAT(pedidos.created_at, "%d/%m/%Y") as fecha'),
+                    'pedidos.estado'                  
                 )
                 ->where('pedidos.estado', '1')
                 ->where('dp.estado', '1')
@@ -1300,7 +1330,8 @@ class PedidoController extends Controller
                     'pedidos.created_at',
                     //'pa.diferencia',
                     'dp.saldo',
-                    'pedidos.pagado'
+                    'pedidos.pagado',
+                    'pedidos.estado'
                     )
                 ->orderBy('pedidos.created_at', 'DESC')
                 ->get();
@@ -1330,7 +1361,8 @@ class PedidoController extends Controller
                     //'pa.total_pagado',
                     'dp.saldo as diferencia',//'pa.diferencia',
                     'pedidos.pagado as condicion_pa',//'pa.condicion as condicion_pa',
-                    DB::raw('DATE_FORMAT(pedidos.created_at, "%d/%m/%Y") as fecha')                    
+                    DB::raw('DATE_FORMAT(pedidos.created_at, "%d/%m/%Y") as fecha'),
+                    'pedidos.estado'                
                 )
                 ->where('pedidos.estado', '1')
                 ->where('dp.estado', '1')
@@ -1360,7 +1392,8 @@ class PedidoController extends Controller
                     'pedidos.created_at',
                     //'pa.diferencia',
                     'dp.saldo',
-                    'pedidos.pagado'
+                    'pedidos.pagado',
+                    'pedidos.estado'
                     )
                 ->orderBy('pedidos.created_at', 'DESC')
                 ->get();
@@ -1390,7 +1423,8 @@ class PedidoController extends Controller
                     //'pa.total_pagado',
                     'dp.saldo as diferencia',//'pa.diferencia',
                     'pedidos.pagado as condicion_pa',//'pa.condicion as condicion_pa',
-                    DB::raw('DATE_FORMAT(pedidos.created_at, "%d/%m/%Y") as fecha')                    
+                    DB::raw('DATE_FORMAT(pedidos.created_at, "%d/%m/%Y") as fecha') ,
+                    'pedidos.estado'                   
                 )
                 ->where('pedidos.estado', '1')
                 ->where('dp.estado', '1')
@@ -1420,7 +1454,8 @@ class PedidoController extends Controller
                     'pedidos.created_at',
                     //'pa.diferencia',
                     'dp.saldo',
-                    'pedidos.pagado'
+                    'pedidos.pagado',
+                    'pedidos.estado'
                     )
                 ->orderBy('pedidos.created_at', 'DESC')
                 ->get();
@@ -1434,8 +1469,18 @@ class PedidoController extends Controller
                         $btn=$btn.'<a href="'.route('pedidos.show', $pedido).'" class="btn btn-info btn-sm"><i class="fas fa-eye"></i> VER</a>';
 
                         if($pedido->estado>0){
-                            $btn=$btn.'<a href="'.route('pedidos.edit', $pedido->id).'" class="btn btn-warning btn-sm">Editar</a>';
-                            $btn = $btn.'<a href="" data-target="#modal-delete" data-toggle="modal" data-delete="'.$pedido->id.'"><button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i> Anular</button></a>';                                                     
+
+                            if(Auth::user()->rol == "Super asesor" || Auth::user()->rol =="Administrador")
+                            {
+                                $btn=$btn.'<a href="'.route('pedidos.edit', $pedido->id).'" class="btn btn-warning btn-sm">Editar</a>';
+                            }
+
+                            if(Auth::user()->rol =="Administrador")
+                            {
+                                $btn = $btn.'<a href="" data-target="#modal-delete" data-toggle="modal" data-delete="'.$pedido->id.'"><button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i> Anular</button></a>';                                                     
+                            }
+                            
+                            
                         }
 
                         return $btn;

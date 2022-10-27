@@ -273,7 +273,7 @@ tfoot td {
                     "render": function ( data, type, row, meta ) {
                         //para total pago
                         //return '<input type="checkbox" onclick="onclickradiototal('+row.id+')" class="form-control radiototal" name="totaladelanto">';//row.Firstname + ' ' + row.Lastname;  // Column will display firstname lastname
-                        return '<input type="checkbox" disabled class="form-control radiototal" name="checktotal[]">';//row.Firstname + ' ' + row.Lastname;  // Column will display firstname lastname
+                        return '<input type="checkbox" disabled class="form-control radiototal" name="checktotal['+row.id+']" value="true">';//row.Firstname + ' ' + row.Lastname;  // Column will display firstname lastname
             
                     }
                 },
@@ -282,7 +282,7 @@ tfoot td {
                     "render": function ( data, type, row, meta ) {
                         //para adelanto
                       //return '<input type="checkbox" onclick="onclickradioadelanto('+row.id+')" class="form-control radioadelanto" name="totaladelanto">'//row.Firstname + ' ' + row.Lastname;  // Column will display firstname lastname
-                      return '<input type="checkbox" disabled class="form-control radioadelanto" name="checkadelanto[]">'//row.Firstname + ' ' + row.Lastname;  // Column will display firstname lastname
+                      return '<input type="checkbox" disabled class="form-control radioadelanto" name="checkadelanto['+row.id+']" value="true">'//row.Firstname + ' ' + row.Lastname;  // Column will display firstname lastname
             
                     }
                 }

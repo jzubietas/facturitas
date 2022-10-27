@@ -55,6 +55,8 @@ Route::get('ruc', [PedidoController::class, 'ruc'])->name('cargar.ruc');
 Route::get('basefria.cargarid', [BasefriaController::class, 'cargarid'])->name('basefria.cargarid');
 //Route::get('pedidos.destroyid', [PedidoController::class, 'destroyid'])->name('pedidos.destroyid');
 Route::post('pedidodeleteRequest', [PedidoController::class, 'destroyid'])->name('pedidodeleteRequest.post');
+Route::post('pedidorestaurarRequest', [PedidoController::class, 'Restaurarid'])->name('pedidorestaurarRequest.post');
+Route::post('pedidos.restaurar/{pedido}', [PedidoController::class, 'Restaurar'])->name('pedidos.restaurar');
 
 
 Route::get('cliente', [PedidoController::class, 'cliente'])->name('cargar.cliente');
@@ -75,7 +77,7 @@ Route::post('pedidos/eliminarAdjunto/{id}', [PedidoController::class, 'eliminarA
 Route::post('pedidos.envio/{pedido}', [PedidoController::class, 'Enviar'])->name('pedidos.envio');
 Route::post('pedidos.destino/{pedido}', [PedidoController::class, 'Destino'])->name('pedidos.destino');
 Route::post('operaciones.sinenvio/{pedido}', [PedidoController::class, 'SinEnviar'])->name('operaciones.sinenvio');
-Route::post('pedidos.restaurar/{pedido}', [PedidoController::class, 'Restaurar'])->name('pedidos.restaurar');
+
 Route::get('pedidos/{adjunto}/descargaradjunto', [PedidoController::class, 'DescargarAdjunto'])->name('pedidos.descargaradjunto');
 Route::get('envios.index', [PedidoController::class, 'Envios'])->name('envios.index');
 Route::post('envios.recibir/{pedido}', [PedidoController::class, 'Recibir'])->name('envios.recibir');

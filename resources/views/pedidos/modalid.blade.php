@@ -10,7 +10,7 @@
       </div>
      
       <form id="formdelete" name="formdelete">
-        <input type="hidden" id="hiddenId" name="hiddenID" class="form-control"> 
+        <input type="hidden" id="hiddenIDdelete" name="hiddenID" class="form-control"> 
       <div class="modal-body">
         {{-- <div class="form-row"> --}}
           <div class="form-group col-lg-12">
