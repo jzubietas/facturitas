@@ -655,7 +655,7 @@ tfoot td {
          
           $('#tabla_pedidos > tbody  > tr').each(function(index,tr) {
             console.log(index+" posicion");
-            var saldofila=$(this).find("td").eq(3).html();
+            var saldofila=$(this).find("td").eq(3).find(":input").val();
             console.log(saldofila)
             
             console.log("resta1 "+diferencia);
