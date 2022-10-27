@@ -45,6 +45,7 @@
             <th scope="col">COD.</th>
             <th scope="col">Cliente</th>
             <th scope="col">Codigo pedido</th>
+            <th scope="col">Fecha Pago</th>
             <th scope="col">Asesor</th>
             <th scope="col">Observacion</th>
             <th scope="col">Total cobro</th>
@@ -244,6 +245,7 @@
               //return data;
             }
           },
+          { data: 'fecha', name: 'fecha' },////asesor
           { data: 'users', name: 'users' },////asesor
           { data: 'observacion', name: 'observacion'},//observacion
           { data: 'total_deuda', name: 'total_deuda'},//total_deuda

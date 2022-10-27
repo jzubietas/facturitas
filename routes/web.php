@@ -101,6 +101,7 @@ Route::get('pagos.pagosobservados', [PagoController::class, 'PagosObservados'])-
 Route::get('administracion.porrevisar', [PagoController::class, 'PorRevisar'])->name('administracion.porrevisar');
 Route::get('administracion.porrevisartabla', [PagoController::class, 'PorRevisartabla'])->name('administracion.porrevisartabla');//agregado para serverside
 Route::get('administracion.aprobados', [PagoController::class, 'Aprobados'])->name('administracion.aprobados');
+Route::get('administracion.aprobadostabla', [PagoController::class, 'Aprobadostabla'])->name('administracion.aprobadostabla');//agregado por zubieta
 Route::get('administracion.revisar/{pago}', [PagoController::class, 'Revisar'])->name('administracion.revisar');
 Route::get('administracion.revisarpago', [PagoController::class, 'Revisarpago'])->name('administracion.revisarpago');//agregado para detalle de revisar
 

@@ -13,8 +13,9 @@
   <div class="card">
       
     {{--!! Form::model($pago, ['route' => ['administracion.updaterevisar', $pago],'enctype'=>'multipart/form-data', 'id'=>'formulario','files'=>true]) !!--}}
+
     <form id="formulario">
-        <input id="hiddenID" name="hiddenID" value="{{$hiddenID}}" type="hidden">
+        <input id="pago_id" name="pago_id" value="{{$pago_id}}" type="hidden">
     <div class="card-body">
       <div class="border rounded card-body border-secondary">
         <div class="form-row">
@@ -290,7 +291,8 @@
                 url:"{{ route('administracion.updaterevisar.post') }}",
                 data:formData,
             }).done(function (data) {
-
+              //window.location.href="http://ojoceleste.com/administracion.porrevisar";
+              //http://ojoceleste.com/administracion.porrevisar
                 //location.href
 
                 //$("#modal-convertir").modal("hide");

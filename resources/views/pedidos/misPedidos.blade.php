@@ -157,11 +157,11 @@
         "order": [[ 0, "desc" ]],
         ajax: "{{ route('mispedidostabla') }}",
         "createdRow": function( row, data, dataIndex){
-            if(data["estado"] == "1")
+            /*if(data["estado"] == "1")
             {
             }else{
               $(row).addClass('yellow');
-            }          
+            } */         
         },
         rowCallback: function (row, data, index) {
               var pedidodiferencia=data.diferencia;

@@ -296,7 +296,7 @@ class PagoController extends Controller
             $html = '<option value="">' . trans('---- SELECCIONE ----') . '</option>';
         } else*/
         {
-            $html = '<option value="">' . trans('---- SELECCIONE ----') . '</option>';
+            $html = '<option value="">' . trans('---- SELECCIONAR TODOS ----') . '</option>';
             $users = User::whereIn('rol', ['Asesor','Super asesor'])//where('rol', 'Asesor')
                     ->where('estado', '1')
                     ->get();
@@ -1097,6 +1097,7 @@ class PagoController extends Controller
         $pagos=null;
         //$request->asesores
         //$request->search["value"]
+        //solo pagos
         if (!$request->asesores) {
             if(Auth::user()->rol == "Encargado"){
                 $pagos = Pago::join('users as u', 'pagos.user_id', 'u.id')
@@ -1120,6 +1121,7 @@ class PagoController extends Controller
                     //->where('pagos.estado', '1')
                     ->where('dpe.estado', '1')
                     ->where('dpa.estado', '1')
+                    ->where('pagos.condicion', 'PAGO')  
                     ->groupBy('pagos.id',
                             'dpe.codigo',
                             'u.identificador',
@@ -1151,7 +1153,8 @@ class PagoController extends Controller
                             )
                     //->where('pagos.estado', '1')
                     ->where('p.estado', '1')
-                    ->where('dpa.estado', '1')                
+                    ->where('dpa.estado', '1')
+                    ->where('pagos.condicion', 'PAGO')                
                     ->groupBy('pagos.id',
                             'u.identificador',
                             'c.celular',
@@ -1188,6 +1191,7 @@ class PagoController extends Controller
                     ->where('dpe.estado', '1')
                     ->where('dpa.estado', '1')
                     ->where('p.user_id',$request->asesores)
+                    ->where('pagos.condicion', 'PAGO')  
                     ->groupBy('pagos.id',
                             'dpe.codigo',
                             'u.identificador',
@@ -1220,7 +1224,8 @@ class PagoController extends Controller
                     //->where('pagos.estado', '1')
                     ->where('p.estado', '1')
                     ->where('dpa.estado', '1')
-                    ->where('p.user_id',$request->asesores)             
+                    ->where('p.user_id',$request->asesores) 
+                    ->where('pagos.condicion', 'PAGO')            
                     ->groupBy('pagos.id',
                             'u.identificador',
                             'c.celular',
@@ -1271,7 +1276,10 @@ class PagoController extends Controller
 
                 if(Auth::user()->rol == "Administrador"){
                     $btn=$btn.'<a href="'.route('pagos.show', $pago['id']).'" class="btn btn-info btn-sm">Ver</a>';
-                    $btn=$btn.'<a href="'.route('administracion.revisarpago').'?pago_id='.$pago['id'].'" class="btn btn-success btn-sm">Revisar</a>';
+
+                    $btn=$btn.'<a href="'.route('administracion.revisar', $pago).'" class="btn btn-success btn-sm">Revisar</a>';
+
+                    //$btn=$btn.'<a href="'.route('administracion.revisarpago').'?pago_id='.$pago['id'].'" class="btn btn-success btn-sm">Revisar</a>';
                     $btn = $btn.'<a href="" data-target="#modal-delete" data-toggle="modal" data-delete="'.$pago['id'].'"><button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i> Eliminar</button></a>';
                 }/*else if(Auth::user()->rol == "Encargado"){
                     $btn=$btn.'<a href="'.route('pagos.show', $pago['id']).'" class="btn btn-info btn-sm">Ver</a>';
@@ -1329,6 +1337,37 @@ class PagoController extends Controller
 
         return view('pagos.aprobados', compact('pagos', 'superasesor'));
     }
+    /*tabla para aprobados*/
+    /*public function Aprobadostabla()
+    {
+        $pagos = Pago::join('users as u', 'pagos.user_id', 'u.id')
+            ->join('detalle_pagos as dpa', 'pagos.id', 'dpa.pago_id')
+            ->join('pago_pedidos as pp', 'pagos.id', 'pp.pago_id')
+            ->join('pedidos as p', 'pp.pedido_id', 'p.id')
+            ->join('detalle_pedidos as dpe', 'p.id', 'dpe.pedido_id')
+            ->select('pagos.id', 
+                    'dpe.codigo as codigos', 
+                    'u.name as users', 
+                    'pagos.observacion', 
+                    'dpe.total as total_deuda',
+                    DB::raw('sum(dpa.monto) as total_pago'), 
+                    'pagos.condicion',                   
+                    'pagos.created_at as fecha'
+                    )
+            ->where('pagos.estado', '1')
+            ->where('dpe.estado', '1')
+            ->where('dpa.estado', '1')
+            ->where('pagos.condicion', 'ABONADO')
+            ->groupBy('pagos.id', 
+                    'dpe.codigo', 
+                    'u.name', 
+                    'pagos.observacion', 
+                    'dpe.total',
+                    'pagos.condicion', 
+                    'pagos.created_at')
+            ->get();
+
+    }*/
 
     //public function Revisar(Pago $pago) 
     public function Revisar(Pago $pago)    
@@ -1416,6 +1455,7 @@ class PagoController extends Controller
     {
         //$request->pago_id
         $hiddenID=$request->pago_id;
+        $pago_id=$request->pago_id;
         $condiciones = [
             "PAGO" => 'PAGO',
             "OBSERVADO" => 'OBSERVADO',
@@ -1491,7 +1531,7 @@ class PagoController extends Controller
             ->get();
         //DB::raw('sum(detalle_pagos.monto) as total')
 
-        return view('pagos.revisarpago', compact('condiciones', 'cuentas', 'titulares', 'pagos', 'pagoPedidos', 'detallePagos','hiddenID'));
+        return view('pagos.revisarpago', compact('condiciones', 'cuentas', 'titulares', 'pagos', 'pagoPedidos', 'detallePagos','hiddenID','pago_id'));
     }
 
     public function updateRevisar(Request $request, Pago $pago)    
@@ -1561,30 +1601,19 @@ class PagoController extends Controller
 
         try {
             DB::beginTransaction();           
-
-            // ACTUALIZANDO CABECERA PAGOS
             $condicion = $request->condicion;
-            $observacion = $request->observacion;
-
-            
+            $observacion = $request->observacion;            
             $pago=Pago::where('pagos.id',$request->hiddenID)->update([
                 'condicion' => $condicion,
                 'observacion' => $observacion
             ]);
-
             if($condicion == "ABONADO")
             {
                 Pago::where('pagos.id',$request->hiddenID)->update([
                     'fecha_aprobacion' => $fecha_aprobacion,
-                ]);
-                /*$pago->update([
-                    'fecha_aprobacion' => $fecha_aprobacion,
-                ]);*/
-            }
-            
-            // ACTUALIZANDO DETALLE PAGOS
+                ]);               
+            }            
             $detalle_id = $request->detalle_id;
-            //$observacion = $request->observacion;
             $cuenta = $request->cuenta;
             $titular = $request->titular;
             $fecha_deposito = $request->fecha_deposito;
@@ -1593,7 +1622,7 @@ class PagoController extends Controller
             while ($cont < count((array)$detalle_id)) {
 
                 DetallePago::where('id', $detalle_id[$cont])
-                        ->update(array(//'observacion' => $observacion[$cont],
+                        ->update(array(
                                         'cuenta' => $cuenta[$cont],
                                         'titular' => $titular[$cont],
                                         'fecha_deposito' => $fecha_deposito[$cont],
@@ -1609,7 +1638,7 @@ class PagoController extends Controller
             throw $th;
         }
 
-        return redirect()->route('administracion.porrevisar')->with('info', 'actualizado');
+        //return redirect()->route('administracion.porrevisar')->with('info', 'actualizado');
     }
 
     public function DescargarImagen($imagen)
