@@ -14,7 +14,7 @@
       <th style="background-color: #1538d4; text-align: center; color: #ffff;">CANTIDAD DE DOCUMENTOS</th>
       <th style="background-color: #1538d4; text-align: center; color: #ffff;">FECHA DE ENVIO</th>
       <th style="background-color: #1538d4; text-align: center; color: #ffff;">FECHA DE REPARTO</th>
-      <th style="background-color: #1538d4; text-align: center; color: #ffff;">SALDO</th>
+      <!-- <th style="background-color: #1538d4; text-align: center; color: #ffff;">SALDO</th> -->
       <th style="background-color: #1538d4; text-align: center; color: #ffff;">OBSERVACION</th>
     </tr>
   </thead>
@@ -35,7 +35,7 @@
         <td>{{ $pedido->cant_compro }}</td>
         <td>{{ $pedido->fecha_envio_doc_fis }}</td>
         <td>{{ $pedido->fecha_recepcion }}</td>
-        <td>{{ ($pedido->total_cobro)-($pedido->total_pagado) }}</td>
+        <!-- <td>{{ ($pedido->total_cobro)-($pedido->total_pagado) }}</td> -->
         <td>{{ $pedido->descripcion }}</td>
       </tr>
     <?php $cont++; ?>
@@ -55,7 +55,7 @@
         <td>{{ $pedido->cant_compro }}</td>
         <td>{{ $pedido->fecha_envio_doc_fis }}</td>
         <td>{{ $pedido->fecha_recepcion }}</td>
-        <td>SIN PAGOS REGISTRADOS</td>
+        <!-- <td>SIN PAGOS REGISTRADOS</td> -->
         <td>{{ $pedido->descripcion }}</td>
       </tr>
     <?php $cont++; ?>
