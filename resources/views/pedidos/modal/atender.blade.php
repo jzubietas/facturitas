@@ -60,7 +60,7 @@
                             {{-- {!! Form::text('condicion', $pedido->condicion, ['class' => 'form-control', 'id' => 'condicion']) !!}
                             {!! Form::select('pcondicion', $condiciones, $pedido->condicion, ['class' => 'form-control selectpicker border border-secondary', 'id'=>'pcondicion','data-live-search' => 'true', 'placeholder' => '---- SELECCIONE ----']) !!} --}}
                             <select name="condicion" class="form-control" id="condicion">
-                              <option value="POR ATENDER"  {{ ($pedido->condicion == "POR ATENDER" ? "selected" : "") }}>POR ATENDER</option>
+                              <!-- <option value="POR ATENDER"  {{ ($pedido->condicion == "POR ATENDER" ? "selected" : "") }}>POR ATENDER</option> -->
                               <option value="EN PROCESO ATENCION" {{ ($pedido->condicion == "EN PROCESO ATENCION" ? "selected" : "") }}>EN PROCESO ATENCION</option>
                               <option value="ATENDIDO" {{ ($pedido->condicion == "ATENDIDO" ? "selected" : "") }}>ATENDIDO</option>
                             </select>
