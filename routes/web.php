@@ -212,6 +212,4 @@ Route::post('/mark-as-read', [NotificationsController::class, 'markNotification'
     Route::get('pedidos.index', [PedidoController::class, 'index']);
 }); */
 
-    
-
 });
