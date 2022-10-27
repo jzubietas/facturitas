@@ -60,7 +60,7 @@ class PedidoController extends Controller
             ->join('users as u', 'pedidos.user_id', 'u.id')
             ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
             ->leftjoin('pago_pedidos as pp', 'pedidos.id','pp.pedido_id')
-            ->leftjoin('pagos as pa', 'pp.pago_id', 'pa.id')
+            //->leftjoin('pagos as pa', 'pp.pago_id', 'pa.id')
             ->select(
                 'pedidos.id',
                 'c.nombre as nombres',
@@ -98,12 +98,12 @@ class PedidoController extends Controller
                 'dp.total',
                 'pedidos.condicion',
                 'pedidos.condicion_envio',
-                'pa.condicion',
+                //'pa.condicion',
                 'pedidos.pagado',
                 'pedidos.motivo',
                 'pedidos.responsable',
                 'pedidos.created_at',
-                'pa.diferencia',
+                //'pa.diferencia',
                 'dp.saldo',
                 'pedidos.estado',
                 'pedidos.envio'
@@ -115,7 +115,7 @@ class PedidoController extends Controller
             ->join('users as u', 'pedidos.user_id', 'u.id')
             ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
             ->leftjoin('pago_pedidos as pp', 'pedidos.id','pp.pedido_id')
-            ->leftjoin('pagos as pa', 'pp.pago_id', 'pa.id')
+            //->leftjoin('pagos as pa', 'pp.pago_id', 'pa.id')
             ->select(
                 'pedidos.id',
                 'c.nombre as nombres',
@@ -153,12 +153,12 @@ class PedidoController extends Controller
                 'dp.total',
                 'pedidos.condicion',
                 'pedidos.condicion_envio',
-                'pa.condicion',
+                //'pa.condicion',
                 'pedidos.pagado',
                 'pedidos.motivo',
                 'pedidos.responsable',
                 'pedidos.created_at',
-                'pa.diferencia',
+                //'pa.diferencia',
                 'dp.saldo',
                 'pedidos.estado',
                 'pedidos.envio'
@@ -171,7 +171,7 @@ class PedidoController extends Controller
             ->join('users as u', 'pedidos.user_id', 'u.id')
             ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
             ->leftjoin('pago_pedidos as pp', 'pedidos.id','pp.pedido_id')
-            ->leftjoin('pagos as pa', 'pp.pago_id', 'pa.id')
+            //->leftjoin('pagos as pa', 'pp.pago_id', 'pa.id')
             ->select(
                 'pedidos.id',
                 'c.nombre as nombres',
@@ -209,12 +209,12 @@ class PedidoController extends Controller
                 'dp.total',
                 'pedidos.condicion',
                 'pedidos.condicion_envio',
-                'pa.condicion',
+                //'pa.condicion',
                 'pedidos.pagado',
                 'pedidos.motivo',
                 'pedidos.responsable',
                 'pedidos.created_at',
-                'pa.diferencia',
+                //'pa.diferencia',
                 'dp.saldo',
                 'pedidos.estado',
                 'pedidos.envio'
