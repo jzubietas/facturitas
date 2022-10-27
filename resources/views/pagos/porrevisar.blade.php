@@ -16,6 +16,15 @@
       </div> --}}
     </div>
   </h1>
+
+  <div class="form-group col-lg-6">
+    
+      <select name="asesores_pago" class="border form-control selectpicker border-secondary" id="asesores_pago" data-live-search="true">
+        <option value="">---- SELECCIONE ASESOR ----</option>         
+      </select>
+  </div>
+
+
   @if($superasesor > 0)
   <br>
   <div class="bg-4">
@@ -34,6 +43,7 @@
         <thead>
           <tr>
             <th scope="col">COD.</th>
+            <th scope="col">Cliente</th>
             <th scope="col">Codigo pedido</th>
             <th scope="col">Asesor</th>
             <th scope="col">Observacion</th>
@@ -44,31 +54,9 @@
           </tr>
         </thead>
         <tbody>
-          @foreach ($pagos as $pago)
-            <tr>
-              <td>PAG000{{ $pago->id }}</td>
-              <td>{{ $pago->codigos }}</td>
-              <td>{{ $pago->users }}</td>
-              <td>{{ $pago->observacion }}</td>
-              <td>@php echo number_format($pago->total_deuda,2) @endphp</td>
-              <td>@php echo number_format($pago->total_pago,2) @endphp</td>
-              <td>{{ $pago->condicion }}</td>
-              <td>
-                @can('administracion.show')
-                  <a href="{{ route('pagos.show', $pago) }}" class="btn btn-info btn-sm">Ver</a>
-                @endcan
-                @can('administracion.revisar')
-                  <a href="{{ route('administracion.revisar', $pago) }}" class="btn btn-success btn-sm">Revisar</a>
-                @endcan                
-                @can('administracion.destroy')
-                  <a href="" data-target="#modal-delete-{{ $pago->id }}" data-toggle="modal"><button class="btn btn-danger btn-sm">Eliminar</button></a>
-                @endcan
-              </td>
-            </tr>
-            @include('pagos.modals.modalDelete')
-          @endforeach
         </tbody>
       </table>
+      @include('pagos.modals.modalDeleteId')
     </div>
   </div>
 
@@ -77,6 +65,17 @@
 @section('css')
   <link rel="stylesheet" href="../css/admin_custom.css">
   <style>
+    .yellow {
+      color:#fcd00e !important;
+    }
+    .red {
+      background-color: red !important;
+    }
+      
+    .white {
+      background-color: white !important;
+    }
+
     .bg-4{
       background: linear-gradient(to right, rgb(240, 152, 25), rgb(237, 222, 93));
     }
@@ -120,7 +119,172 @@
 
 @section('js')
 
-  <script src="{{ asset('js/datatables.js') }}"></script>
+  <!--<script src="{{ asset('js/datatables.js') }}"></script>--> 
+  <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+
+  <script>
+    function clickformdelete()
+    {
+      console.log("action delete action")
+      var formData = $("#formdelete").serialize();
+      console.log(formData);
+      $.ajax({
+        type:'POST',
+        url:"{{ route('pagodeleteRequest.post') }}",
+        data:formData,
+      }).done(function (data) {
+        $("#modal-delete").modal("hide");
+        resetearcamposdelete();          
+        $('#tablaPrincipal').DataTable().ajax.reload();      
+      });
+    }
+  </script>
+
+<script>
+  $(document).ready(function () {
+
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+
+    //$('#asesorespago').change(function(){
+
+      $.ajax({
+        url: "{{ route('asesorespago') }}",
+        method: 'GET',
+        success: function(data) {
+          console.log(data.html);
+          $('#asesores_pago').html(data.html);
+          $('#asesores_pago').selectpicker('refresh');
+        }
+      });
+
+      $(document).on("change","#asesores_pago",function(){
+
+        $('#tablaPrincipal').DataTable().ajax.reload();
+
+      });
+
+    //});
+
+    //para opcion eliminar  pagos
+    $('#modal-delete').on('show.bs.modal', function (event) {     
+      var button = $(event.relatedTarget) 
+      var idunico = button.data('delete')      
+      $("#hiddenId").val(idunico);
+      if(idunico<10){
+        idunico='PAG000'+idunico;
+      }else if(idunico<100){
+        idunico= 'PAG00'+idunico;
+      }else if(idunico<1000){
+        idunico='PAG0'+idunico;
+      }else{
+        idunico='PAG'+idunico;
+      }
+      $(".textcode").html(idunico);
+    });
+
+    $(document).on("submit", "#formdelete", function (evento) {
+      evento.preventDefault();
+      console.log("validar delete");
+      clickformdelete();
+    })
+
+
+    //administracion.porrevisartabla
+    $('#tablaPrincipal').DataTable({
+        processing: true,
+        serverSide: true,
+        searching: true,
+        "order": [[ 0, "desc" ]],
+        ajax: {
+          url: "{{ route('administracion.porrevisartabla') }}",
+          data: function (d) {
+            d.asesores = $("#asesores_pago").val();
+            // d.custom = $('#myInput').val();
+            // etc
+          },
+        },
+        
+        /*createdRow: function( row, data, dataIndex){           
+        },*/
+        /*rowCallback: function (row, data, index) {           
+        },*/
+        columns: [
+          {
+              data: 'id', 
+              name: 'id',
+              render: function ( data, type, row, meta ) {             
+                if(row.id<10){
+                  return 'PAG000'+row.id;
+                }else if(row.id<100){
+                  return 'PAG00'+row.id;
+                }else if(row.id<1000){
+                  return 'PAG0'+row.id;
+                }else{
+                  return 'PAG'+row.id;
+                } 
+              }
+          },
+          {data: 'celular', name: 'celular'},
+          {
+            data: 'codigos'
+            , name: 'codigos' 
+            , render: function ( data, type, row, meta ) {
+              /*var jsonArray = JSON.parse(JSON.stringify(data));*/
+              var returndata='';
+              var jsonArray=data.split(",");
+              $.each(jsonArray, function(i, item) {
+                  returndata+=item+'<br>';
+              });
+              return returndata;
+              //return data;
+            }
+          },
+          { data: 'users', name: 'users' },////asesor
+          { data: 'observacion', name: 'observacion'},//observacion
+          { data: 'total_deuda', name: 'total_deuda'},//total_deuda
+          { data: 'total_pago', name: 'total_pago'},//total_pago
+          {
+            data: 'condicion', 
+            name: 'condicion', 
+            render: function ( data, type, row, meta ) {            
+              return data;             
+            }
+          },//estado
+          {data: 'action', name: 'action', orderable: false, searchable: false,sWidth:'20%'},
+      ],
+      language: {
+        "decimal": "",
+        "emptyTable": "No hay informaciÃ³n",
+        "info": "Mostrando del _START_ al _END_ de _TOTAL_ Entradas",
+        "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
+        "infoFiltered": "(Filtrado de _MAX_ total entradas)",
+        "infoPostFix": "",
+        "thousands": ",",
+        "lengthMenu": "Mostrar _MENU_ Entradas",
+        "loadingRecords": "Cargando...",
+        "processing": "Procesando...",
+        "search": "Buscar:",
+        "zeroRecords": "Sin resultados encontrados",
+        "paginate": {
+          "first": "Primero",
+          "last": "Ultimo",
+          "next": "Siguiente",
+          "previous": "Anterior"
+        }
+      },
+
+    });
+        
+
+
+
+  });
+</script>
 
   @if (session('info') == 'registrado' || session('info') == 'eliminado' || session('info') == 'actualizado')
     <script>

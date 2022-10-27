@@ -166,9 +166,9 @@
       $("#hiddenId").val(idunico);
       if(idunico<10){
         idunico='PED000'+idunico;
-      }else if(row.id<100){
+      }else if(idunico<100){
         idunico= 'PED00'+idunico;
-      }else if(row.id<1000){
+      }else if(idunico<1000){
         idunico='PED0'+idunico;
       }else{
         idunico='PED'+idunico;

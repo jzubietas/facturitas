@@ -99,10 +99,20 @@ Route::get('pagos.mispagos', [PagoController::class, 'MisPagos'])->name('pagos.m
 Route::get('pagos.pagosincompletos', [PagoController::class, 'PagosIncompletos'])->name('pagos.pagosincompletos');
 Route::get('pagos.pagosobservados', [PagoController::class, 'PagosObservados'])->name('pagos.pagosobservados');
 Route::get('administracion.porrevisar', [PagoController::class, 'PorRevisar'])->name('administracion.porrevisar');
+Route::get('administracion.porrevisartabla', [PagoController::class, 'PorRevisartabla'])->name('administracion.porrevisartabla');//agregado para serverside
 Route::get('administracion.aprobados', [PagoController::class, 'Aprobados'])->name('administracion.aprobados');
 Route::get('administracion.revisar/{pago}', [PagoController::class, 'Revisar'])->name('administracion.revisar');
+Route::get('administracion.revisarpago', [PagoController::class, 'Revisarpago'])->name('administracion.revisarpago');//agregado para detalle de revisar
+
+
 Route::post('administracion.updaterevisar/{pago}', [PagoController::class, 'updateRevisar'])->name('administracion.updaterevisar');
+Route::post('administracion.updaterevisar.post', [PagoController::class, 'updateRevisarpost'])->name('administracion.updaterevisar.post');
+
+
+
 Route::get('pagos/{imagen}/descargarimagen', [PagoController::class, 'DescargarImagen'])->name('pagos.descargarimagen');
+
+Route::get('asesorespago', [PagoController::class, 'asesorespago'])->name('asesorespago');
 
 Route::resource('users', UserController::class)->names('users');
 Route::post('reset/{user}', [UserController::class, 'reset'])->name('user.reset');

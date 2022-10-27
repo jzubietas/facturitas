@@ -234,13 +234,19 @@
           data: 'codigos'
           , name: 'codigos' 
           , render: function ( data, type, row, meta ) {            
-            var jsonArray = JSON.parse(JSON.stringify(data));
+            /*var jsonArray = JSON.parse(JSON.stringify(data));
             var returndata='';
             $.each(jsonArray, function(i, item) {
                 returndata+=item.codigos+'<br>';
             });
 
-            return returndata;
+            return returndata;*/
+            var returndata='';
+              var jsonArray=data.split(",");
+              $.each(jsonArray, function(i, item) {
+                  returndata+=item+'<br>';
+              });
+              return returndata;
           }
         },
         {//asesor

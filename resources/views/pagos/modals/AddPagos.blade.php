@@ -10,6 +10,21 @@
         </div>
         {{-- {{ Form::Open(['route' => ['clientes.destroy', $cliente], 'method' => 'delete']) }} --}}
         <div class="modal-body">
+
+          <div class="form-row">
+            <div class="form-group col-lg-4">
+
+              {!! Form::label('tipotransferencia', 'Tipo Movimiento') !!}              
+              {!! Form::select('tipotransferencia[]', $tipotransferencia, '', ['class' => 'form-control selectpicker border border-secondary', 'id'=>'tipotransferencia','data-live-search' => 'true', 'placeholder' => '---- SELECCIONE ----']) !!}  
+
+            </div>
+            <div class="form-group col-lg-4">
+              {!! Form::label('titulares', 'Titulares') !!}
+              {!! Form::select('titulares', $titulares , '0', ['class' => 'form-control selectpicker border border-secondary', 'data-live-search' => 'true', 'placeholder' => '---- SELECCIONE ----']) !!}
+            </div>
+            
+          </div>
+          
           <div class="form-row">
             <div class="form-group col-lg-4">
               {!! Form::label('pmonto', 'Monto pagado') !!}
@@ -34,6 +49,8 @@
               </div>
             </div> --}}
           </div>
+
+
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
