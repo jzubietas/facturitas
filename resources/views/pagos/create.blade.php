@@ -220,18 +220,48 @@ tfoot td {
                 url:"{{ route('cargar.pedidosclientetabla') }}",					
                 'data': { "cliente_id": $(this).val(),"diferencia":$("#diferencia").val()}, 
                 "type": "get",
-                },
+              },
+              "fnCreatedRow": function( nRow, aData, iDataIndex ) {
+                  $(nRow).attr('id', aData["id"]);
+              },
               columns: [
-                {data: 'id', name: 'id',},
+                {
+                  data: 'id', 
+                  name: 'id',
+                  render:function(data,type,row,meta){
+                    if(row.id<10){
+                      return '<input type="hidden" name="pedido_id[]" value="' + data + '">PED000' + data + '</td>';
+                    }else if(row.id<100){
+                      return '<input type="hidden" name="pedido_id[]" value="' + data + '">PED00' + data + '</td>';
+                    }else if(row.id<1000){
+                      return '<input type="hidden" name="pedido_id[]" value="' + data + '">PED0' + data + '</td>';
+                    }else{
+                      return '<input type="hidden" name="pedido_id[]" value="' + data + '">PED' + data + '</td>';
+                    } 
+                    //return '<input type="hidden" name="pedido_id[]" value="' + data + '">PED000' + data + '</td>';
+                  }
+                },
                 {data: 'codigo', name: 'codigo',},
-                {data: 'total', name: 'total',},
-                {data: 'saldo', name: 'saldo',},
+                {
+                  data: 'total', 
+                  name: 'total',
+                  render:function(data,type,row,meta){
+                      return '<input type="hidden" name="numbermonto[]" value="' + data + '">' + data + '</td>';
+                  }
+                },
+                {
+                  data: 'saldo', 
+                  name: 'saldo',
+                  render:function(data,type,row,meta){
+                      return '<input type="hidden" name="numbersaldo[]" value="' + data + '">' + data + '</td>';
+                  }
+                },
                 {
                     "data": null,
                     "render": function ( data, type, row, meta ) {
                         //para total pago
                         //return '<input type="checkbox" onclick="onclickradiototal('+row.id+')" class="form-control radiototal" name="totaladelanto">';//row.Firstname + ' ' + row.Lastname;  // Column will display firstname lastname
-                        return '<input type="checkbox" disabled class="form-control radiototal" name="totaladelanto">';//row.Firstname + ' ' + row.Lastname;  // Column will display firstname lastname
+                        return '<input type="checkbox" disabled class="form-control radiototal" name="checktotal[]">';//row.Firstname + ' ' + row.Lastname;  // Column will display firstname lastname
             
                     }
                 },
@@ -240,7 +270,7 @@ tfoot td {
                     "render": function ( data, type, row, meta ) {
                         //para adelanto
                       //return '<input type="checkbox" onclick="onclickradioadelanto('+row.id+')" class="form-control radioadelanto" name="totaladelanto">'//row.Firstname + ' ' + row.Lastname;  // Column will display firstname lastname
-                      return '<input type="checkbox" disabled class="form-control radioadelanto" name="totaladelanto">'//row.Firstname + ' ' + row.Lastname;  // Column will display firstname lastname
+                      return '<input type="checkbox" disabled class="form-control radioadelanto" name="checkadelanto[]">'//row.Firstname + ' ' + row.Lastname;  // Column will display firstname lastname
             
                     }
                 }
@@ -249,17 +279,37 @@ tfoot td {
                 var api = this.api();
                 nb_cols = 4;api.columns().nodes().length;
                 var j = 2;
-                while(j < nb_cols){
+
+                //para footer  monto
+                var pageTotal = api
+                      .column( 2, { page: 'current'} )
+                      .data()
+                      .reduce( function (a, b) {
+                          return Number(a) + Number(b);
+                      }, 0 );
+                // Update footer
+                $( api.column( 2 ).footer() ).html('<input type="hidden" name="total_pedido" id="total_pedido" value="'+pageTotal+'"/>'+pageTotal);
+
+                var pageSaldo = api
+                      .column( 3, { page: 'current'} )
+                      .data()
+                      .reduce( function (a, b) {
+                          return Number(a) + Number(b);
+                      }, 0 );
+                // Update footer
+                $( api.column( 3 ).footer() ).html('<input type="hidden" name="total_pedido_pagar" id="total_pedido_pagar" value="'+pageSaldo+'" />'+pageSaldo);
+
+                //para footer saldo
+                /*while(j < nb_cols){
                   var pageTotal = api
                         .column( j, { page: 'current'} )
                         .data()
                         .reduce( function (a, b) {
                             return Number(a) + Number(b);
                         }, 0 );
-                  // Update footer
                   $( api.column( j ).footer() ).html(pageTotal);
                   j++;
-                } 
+                } */
               },
               
             });

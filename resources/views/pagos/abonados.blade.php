@@ -3,7 +3,7 @@
 @section('title', 'Lista de Pagos')
 
 @section('content_header')
-  <h1>Lista de pagos POR REVISAR
+  <h1>Lista de pagos ABONADOS
     @can('pagos.create')
       <a href="{{ route('pagos.create') }}" class="btn btn-info"><i class="fas fa-plus-circle"></i> Agregar</a>
     @endcan
@@ -193,16 +193,14 @@
       console.log("validar delete");
       clickformdelete();
     })
-
-
-    //administracion.porrevisartabla
+    
     $('#tablaPrincipal').DataTable({
         processing: true,
         serverSide: true,
         searching: true,
         "order": [[ 0, "desc" ]],
         ajax: {
-          url: "{{ route('administracion.porrevisartabla') }}",
+          url: "{{ route('administracion.abonadostabla') }}",
           data: function (d) {
             d.asesores = $("#asesores_pago").val();
             // d.custom = $('#myInput').val();

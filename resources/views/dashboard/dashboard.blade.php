@@ -266,7 +266,7 @@
           <div class="small-box bg-danger">
             <div class="inner">
               @foreach ($montopagoxmes_total as $cxm)
-                <h3>S/@php echo number_format($cxm->total,2) @endphp</h3>
+                <h3>S/@php echo number_format( ($cxm->total)/1000 ,2) @endphp k</h3>
               @endforeach
               <p>COBRANZAS DEL MES</p>
             </div>

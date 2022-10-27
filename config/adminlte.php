@@ -411,6 +411,20 @@ return [
                     'active' => ['pagos por revisar*'],
                 ],
                 [
+                    'text' => 'Pagos observados',
+                    'route'  => 'administracion.observados',
+                    'can' => 'administracion.porrevisar',
+                    'icon'   => 'fas fa-check-circle',
+                    'active' => ['pagos observados*'],
+                ],
+                [
+                    'text' => 'Pagos con abono parcial',
+                    'route'  => 'administracion.abonados',
+                    'can' => 'administracion.porrevisar',
+                    'icon'   => 'fas fa-check-circle',
+                    'active' => ['pagos abonados*'],
+                ],
+                [
                     'text' => 'Pagos aprobados',
                     'route'  => 'administracion.aprobados',
                     'can' => 'administracion.aprobados',

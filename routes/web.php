@@ -100,6 +100,12 @@ Route::get('pagos.pagosincompletos', [PagoController::class, 'PagosIncompletos']
 Route::get('pagos.pagosobservados', [PagoController::class, 'PagosObservados'])->name('pagos.pagosobservados');
 Route::get('administracion.porrevisar', [PagoController::class, 'PorRevisar'])->name('administracion.porrevisar');
 Route::get('administracion.porrevisartabla', [PagoController::class, 'PorRevisartabla'])->name('administracion.porrevisartabla');//agregado para serverside
+//
+Route::get('administracion.observados', [PagoController::class, 'Observados'])->name('administracion.observados');//de pagos por revisar index
+Route::get('administracion.observadostabla', [PagoController::class, 'Observadostabla'])->name('administracion.observadostabla');//agregado para serverside
+Route::get('administracion.abonados', [PagoController::class, 'Abonados'])->name('administracion.abonados');//de pagos por revisar index
+Route::get('administracion.abonadostabla', [PagoController::class, 'Abonadostabla'])->name('administracion.abonadostabla');//agregado para serverside
+//
 Route::get('administracion.aprobados', [PagoController::class, 'Aprobados'])->name('administracion.aprobados');
 Route::get('administracion.aprobadostabla', [PagoController::class, 'Aprobadostabla'])->name('administracion.aprobadostabla');//agregado por zubieta
 Route::get('administracion.revisar/{pago}', [PagoController::class, 'Revisar'])->name('administracion.revisar');
