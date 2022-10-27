@@ -273,7 +273,9 @@ class PagoController extends Controller
                 ->select('pedidos.id', 
                         'dp.codigo',
                         'dp.total',
-                        'dp.saldo')
+                        'dp.saldo',
+                        'dp.saldo as diferencia'
+                        )
                 ->where('pedidos.cliente_id', $idrequest)
                 ->where('pedidos.pagado', '<>', '2')
                 ->where('pedidos.estado', '1')

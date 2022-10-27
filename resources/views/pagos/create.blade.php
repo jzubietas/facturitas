@@ -91,8 +91,9 @@
                   <th scope="col">ITEM</th>
                   {{-- <th scope="col">PEDIDO</th> --}}
                   <th scope="col">CODIGO</th>
-                  <th scope="col">MONTO</th>
+                  {{--<th scope="col">MONTO</th>--}}
                   <th scope="col">SALDO</th>
+                  <th scope="col">DIFERENCIA</th>
                   {{-- <th scope="col">ACCIÓN</th> --}}
                   {{-- <th scope="col">TOTAL</th> --}}
                     {{-- <th scope="col">ADELANTO</th> --}}
@@ -104,8 +105,9 @@
                 <tr>
                   <td>{{--ITEM--}}</td>
                   <td>{{--CODIGO--}}</td>
-                  <td>TOTAL MONTO</td>
+                  {{--<td>TOTAL MONTO</td>--}}
                   <td>TOTAL SALDO</td>
+                  <td>TOTAL DIFERENCIA</td>
                   {{--<td>ACCION</td>--}}
                   {{--<td>TOTAL</td>--}}
                   {{--<td>ADELANTO</td>--}}
@@ -242,19 +244,29 @@ tfoot td {
                   }
                 },
                 {data: 'codigo', name: 'codigo',},
-                {
+                /*{
                   data: 'total', 
                   name: 'total',
                   render:function(data,type,row,meta){
                       return '<input type="hidden" name="numbermonto[]" value="' + data + '">' + data + '</td>';
-                  }
-                },
+                  },
+                  "visible": true
+                },*/
                 {
                   data: 'saldo', 
                   name: 'saldo',
                   render:function(data,type,row,meta){
-                      return '<input type="hidden" name="numbersaldo[]" value="' + data + '">' + data + '</td>';
-                  }
+                      return '<input type="hidden" name="numbersaldo[]" value="' + data + '"><span class="numbersaldo">' + data + '</span></td>';
+                  },
+                  "visible": true
+                },
+                {
+                  data: 'diferencia', 
+                  name: 'diferencia',
+                  render:function(data,type,row,meta){
+                      return '<input type="hidden" name="numberdiferencia[]" value="' + data + '"><span class="numberdiferencia">' + data + '</span></td>';
+                  },
+                  "visible": true
                 },
                 {
                     "data": null,
@@ -375,19 +387,27 @@ tfoot td {
                     return;
                   }
 
+                  console.log("desmarco saldo "+pedidosaldo+" monto "+montopagos)
+
                   montopagos=parseFloat(montopagos+pedidosaldo);
                   console.log("diferencia "+montopagos);
-                  $("#diferencia").val(montopagos.toFixed(2));
+                  $("#diferencia").val(montopagos);
+                  
+                  $(this).closest('tr').find("td").eq(3).find(":input").val(pedidosaldo.toFixed(2));
+                  $(this).closest('tr').find("td").eq(3).find(".numberdiferencia").text(pedidosaldo.toFixed(2));
+
                   $(this).closest('tr').find(".radioadelanto").prop("disabled",false);
                   $('#tabla_pedidos > tbody  > tr').each(function(index,tr) {
                       console.log(index+" posicion");
                       console.log("aca valido check en total y check en saldo");
-                      var idfila=$(this).find("td").eq(0).html();//fila idpedido
+                      //var idfila=$(this).find("td").eq(0).html();//fila idpedido
+                      var idfila=$(this).find("td").eq(0).find(":input").val();//fila idpedido
                       //if(idfila!=filedata.id)
                       {
                         console.log("id no es el mismo que acabo de ejecutar")
                         
-                        var saldofila=parseFloat($(this).find("td").eq(3).html());//saldo
+                        //var saldofila=parseFloat($(this).find("td").eq(3).html());//saldo
+                        var saldofila=parseFloat($(this).find("td").eq(2).find(":input").val());
                         console.log("saldo fila "+idfila+" es "+saldofila);
                         var radiototalfila=$(this).find("td").eq(4).find("input").prop("checked");//check radiototal
                         console.log("checktotal fila "+idfila+" es "+( (radiototalfila)? 'si':'no') );
@@ -440,21 +460,31 @@ tfoot td {
 
                   if(montopagos>=pedidosaldo)
                   {
-                    $(this).prop("checked",true)////aqui valida
+                    $(this).prop("checked",true)////aqui valida////////data aqui checkpara diferencia
                     montopagos=parseFloat(montopagos-pedidosaldo);
                     console.log("diferencia "+montopagos);
                     $("#diferencia").val(montopagos.toFixed(2));
+                    /////
+                    console.log("aqui debo cambiar el valor de input y span de columna diferencia");
+                    $(this).closest('tr').find("td").eq(3).find(":input").val("0.00");
+                    $(this).closest('tr').find("td").eq(3).find(".numberdiferencia").text("0.00");
+                    //$(this).closest('tr').find(".numberdiferencia").text("0.00");
+                    //$(this).find("td").eq(3).find(":input").val("0.00");///aqui me quede
+                    //$(this).find("td").eq(3).find("span").text("0.00");///aqui me quede
+
                     $(this).closest('tr').find(".radioadelanto").prop("disabled",true);
                     console.log("nuevo montogeneral "+$("#diferencia").val());
                     $('#tabla_pedidos > tbody  > tr').each(function(index,tr) {
                       console.log(index+" posicion");
                       console.log("aca valido check en total y check en saldo");
-                      var idfila=$(this).find("td").eq(0).html();//fila idpedido
+                      //var idfila=$(this).find("td").eq(0).html();//fila idpedido
+                      var idfila=$(this).find("td").eq(0).find(":input").val();//fila idpedido
                       if(idfila!=filedata.id)
                       {
                         console.log("id no es el mismo que acabo de ejecutar")
                         
-                        var saldofila=parseFloat($(this).find("td").eq(3).html());//saldo
+                        //var saldofila=parseFloat($(this).find("td").eq(3).html());//saldo
+                        var saldofila=parseFloat($(this).find("td").eq(2).find(":input").val());//saldo
                         console.log("saldo fila "+idfila+" es "+saldofila);
                         var radiototalfila=$(this).find("td").eq(4).find("input").prop("checked");//check radiototal
                         console.log("checktotal fila "+idfila+" es "+( (radiototalfila)? 'si':'no') );
@@ -508,22 +538,33 @@ tfoot td {
                     console.log("no hay saldo ingresado");
                     return;
                   }
+
+                  console.log("desmarco saldo "+pedidosaldo+" monto "+montopagos);
+
+                  /////falta aqui analizis
+                  //montopagos=parseFloat(montopagos+pedidosaldo);
+
                   //551.20---356.00
                   console.log("guardasaldo "+guardasaldo);
                   montopagos=(guardasaldo);
                   $("#diferencia").val(montopagos);
+
+                  $(this).closest('tr').find("td").eq(3).find(":input").val(pedidosaldo.toFixed(2));
+                  $(this).closest('tr').find("td").eq(3).find(".numberdiferencia").text(pedidosaldo.toFixed(2));
                   //$(this).closest('tr').find(".radioadelanto").prop("disabled",false);
 
                   //revertir pago reviso todo otra vez
                   $('#tabla_pedidos > tbody  > tr').each(function(index,tr) {
                       console.log(index+" posicion");
                       console.log("aca valido check en total y check en saldo");
-                      var idfila=$(this).find("td").eq(0).html();//fila idpedido
+                      //var idfila=$(this).find("td").eq(0).html();//fila idpedido
+                      var idfila=$(this).find("td").eq(0).find(":input").val();//fila idpedido
                       if(idfila!=filedata.id)
                       {
                         console.log("id no es el mismo que acabo de ejecutar")
                         
-                        var saldofila=$(this).find("td").eq(3).html();//saldo/551.20
+                        //var saldofila=$(this).find("td").eq(3).html();//saldo/551.20
+                        var saldofila=parseFloat($(this).find("td").eq(2).find(":input").val());
                         console.log("saldo fila "+idfila+" es "+saldofila);//551.20
                         var radiototalfila=$(this).find("td").eq(4).find("input").prop("checked");//check radiototal
                         console.log("checktotal fila "+idfila+" es "+( (radiototalfila)? 'si':'no') );//
@@ -569,20 +610,31 @@ tfoot td {
                   {
                     $(this).prop("checked",true)////aqui valida
                     guardasaldo=$("#diferencia").val();//356 guardo
+                    let montopagosante=montopagos;
                     montopagos=(0).toFixed(2);
                     console.log("diferencia "+montopagos);
                     $("#diferencia").val(montopagos);
+
+                    console.log("aqui cuando es adelanto y la diferencia debe ser 0 y guardarlo");
+                    console.log("pedidosaldo "+pedidosaldo+" montopagos saldo "+montopagosante);
+                    //restar saldo menos monto que queda general
+                    let montoqueda=parseFloat(pedidosaldo-montopagosante);
+                    console.log("montoqueda "+montoqueda)
+                    $(this).closest('tr').find("td").eq(3).find(":input").val(montoqueda.toFixed(2));///diferencia
+                    $(this).closest('tr').find("td").eq(3).find(".numberdiferencia").text(montoqueda.toFixed(2));///diferencia
                     //$(this).closest('tr').find(".radioatotal").prop("disabled",true);
                     //recorido defilas distintas al actual
                     $('#tabla_pedidos > tbody  > tr').each(function(index,tr) {
                       console.log(index+" posicion");
                       console.log("aca valido check en total y check en saldo");
-                      var idfila=$(this).find("td").eq(0).html();//fila idpedido
+                      //var idfila=$(this).find("td").eq(0).html();//fila idpedido
+                      var idfila=$(this).find("td").eq(0).find(":input").val();//fila idpedido
                       if(idfila!=filedata.id)
                       {
                         console.log("id no es el mismo que acabo de ejecutar")
                         
-                        var saldofila=$(this).find("td").eq(3).html();//saldo
+                        //var saldofila=$(this).find("td").eq(3).html();//saldo
+                        var saldofila=parseFloat($(this).find("td").eq(2).find(":input").val());
                         console.log("saldo fila "+idfila+" es "+saldofila);
                         var radiototalfila=$(this).find("td").eq(4).find("input").prop("checked");//check radiototal
                         console.log("checktotal fila "+idfila+" es "+( (radiototalfila)? 'si':'no') );
@@ -655,12 +707,13 @@ tfoot td {
          
           $('#tabla_pedidos > tbody  > tr').each(function(index,tr) {
             console.log(index+" posicion");
-            var saldofila=$(this).find("td").eq(3).find(":input").val();
+            //var saldofila=$(this).find("td").eq(3).html();
+            var saldofila=parseFloat($(this).find("td").eq(2).find(":input").val());
             console.log(saldofila)
             
             console.log("resta1 "+diferencia);
             console.log("resta2 "+saldofila);
-            let restogeneral=(parseFloat(diferencia)-parseFloat(saldofila).toFixed(2));
+            let restogeneral=(parseFloat(diferencia)-parseFloat(saldofila)).toFixed(2);
             console.log("diferencia por fila "+restogeneral);
             if(restogeneral>0){
               console.log("bloqueo  1")
@@ -679,6 +732,16 @@ tfoot td {
           $("#filasPe" + index).remove();
           evaluarPe();
         }
+
+        ////////
+        function eliminarPa(index) {
+          total_pago = total_pago - subtotal_pago[index];
+          $("#total_pago").html("S/. " + total_pago.toLocaleString("en-US"));
+          $("#total_pago_pagar").val(total_pago);
+          $("#filasPa" + index).remove();
+          evaluarPa();
+        }
+        ///////
 
         $(document).on("keyup",'input.number',function(event){
           if(event.which >= 37 && event.which <= 40){
@@ -1053,15 +1116,7 @@ tfoot td {
             $("#guardar").hide();
           }
         }
-        ////////
-        function eliminarPa(index) {
-          total_pago = total_pago - subtotal_pago[index];
-          $("#total_pago").html("S/. " + total_pago.toLocaleString("en-US"));
-          $("#total_pago_pagar").val(total_pago);
-          $("#filasPa" + index).remove();
-          evaluarPa();
-        }
-        ///////
+        
 
 
 
