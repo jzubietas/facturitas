@@ -49,7 +49,9 @@
             <table id="tabla_pagos" class="table table-striped">
               <thead class="bg-primary">
                 <tr>
-                  <th scope="col">ITEM</th>                
+                  <th scope="col">ITEM</th> 
+                  <th scope="col">TIPO MOVIMIENTO</th>
+                  <th scope="col">TITULAR</th>               
                   <th scope="col">BANCO</th>
                   <th scope="col">FECHA</th>
                   <th scope="col">IMAGEN</th>
@@ -62,7 +64,9 @@
                 <th></th>
                 <th></th>
                 <th></th>
-                <th><h4 id="total_pago">S/. 0.00</h4></th>
+                <th></th>
+                <!--<th></th>-->
+                <th colspan="2" style="text-align: right"><h4 id="total_pago">S/. 0.00</h4></th>
                 <th><input type="hidden" name="total_pago_pagar" requerid value="" id="total_pago_pagar" class="form-control"></th>  
               </tfoot>
               <tbody>
@@ -647,7 +651,19 @@ tfoot td {
 
 
         $('#add_pago').click(function() {
-          if ($('#pmonto').val() == '') {
+          if ($('#tipotransferencia').val() == '') {
+            Swal.fire(
+              'Error',
+              'Seleccione tipo de transferencia',
+              'warning'
+            )
+          }else if ($('#titulares').val() == '') {
+            Swal.fire(
+              'Error',
+              'Seleccione titular',
+              'warning'
+            )
+          }else if ($('#pmonto').val() == '') {
             Swal.fire(
               'Error',
               'Ingrese monto',
@@ -887,6 +903,36 @@ tfoot td {
         });*/
         //////
         // AGREGANDO PAGOS
+
+        function separateComma(val) {
+          // remove sign if negative
+          var sign = 1;
+          if (val < 0) {
+            sign = -1;
+            val = -val;
+          }
+          // trim the number decimal point if it exists
+          let num = val.toString().includes('.') ? val.toString().split('.')[0] : val.toString();
+          let len = num.toString().length;
+          let result = '';
+          let count = 1;
+
+          for (let i = len - 1; i >= 0; i--) {
+            result = num.toString()[i] + result;
+            if (count % 3 === 0 && count !== 0 && i !== 0) {
+              result = ',' + result;
+            }
+            count++;
+          }
+
+          // add number after decimal point
+          if (val.toString().includes('.')) {
+            result = result + '.' + val.toString().split('.')[1];
+          }
+          // return result with - sign if negative
+          return sign < 0 ? '-' + result : result;
+        }
+
         function agregarPago() {
 
           //valor de datatable la suma de columna total y columna saldo
@@ -898,6 +944,10 @@ tfoot td {
           strEx = strEx.replace(",","");//1000.00
           var numFinal = parseFloat(strEx);
           monto = numFinal;
+
+          tipomovimiento = $('#tipotransferencia option:selected').val();//agregados
+          titular = $('#titulares option:selected').val();//agregados
+
           banco = $('#pbanco option:selected').val();
           fecha = $("#pfecha").val();
           /* imagen = $("#pimagen").val(); */
@@ -905,13 +955,15 @@ tfoot td {
 
           if (monto != ""  && banco != "" && fecha != ""/*  && imagen != "" */) {
             subtotal_pago[contPa] = monto*1;
-            total_pago = total_pago + subtotal_pago[contPa];
+            total_pago = parseFloat(total_pago + subtotal_pago[contPa]).toFixed(2);
 
             var filasPa = '<tr class="selected" id="filasPa' + contPa + '">' +
-              '<td>' + (contPa + 1) + '</td>' +          
+              '<td>' + (contPa + 1) + '</td>' +
+              '<td><input type="hidden" name="tipomovimiento[]" value="' + tipomovimiento + '">' + tipomovimiento + '</td>' +
+              '<td><input type="hidden" name="titular[]" value="' + titular + '">' + titular + '</td>' +
               '<td><input type="hidden" name="banco[]" value="' + banco + '">' + banco + '</td>' +
               '<td><input type="hidden" name="fecha[]" value="' + fecha + '">' + fecha + '</td>' +
-              '<td>@csrf<input type="file" id="imagen" name="imagen[]" accept= "image/*" /></td>' + 
+              '<td>@csrf<input type="file" id="imagen" name="imagen[]" accept= "image/*" style="width:150px;"/></td>' + 
                 /* <img id="picture" src="{{asset('imagenes/logo_facturas.png')}}" alt="Imagen del pago" height="100px" width="100px"> */        
               '<td><input type="hidden" name="monto[]" value="' + monto + '">' + monto + '</td>' +
               '<td><button type="button" class="btn btn-danger btn-sm" onclick="eliminarPa(' + contPa + ')"><i class="fas fa-trash-alt"></i></button></td>' +
@@ -920,7 +972,8 @@ tfoot td {
 
             contPa++;
             limpiarPa();
-            $("#total_pago").html("S/. " + total_pago.toLocaleString("en-US"));
+            console.log(total_pago);
+            $("#total_pago").html("S/. " + separateComma(total_pago).toLocaleString("en-US"));
             $("#total_pago_pagar").val(total_pago.toLocaleString("en-US"));
             evaluarPa();
             diferenciaFaltante();
