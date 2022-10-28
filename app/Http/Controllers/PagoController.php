@@ -529,17 +529,6 @@ class PagoController extends Controller
             //return $pedidos_pagados_parcial;
             //return key(array $pedidos_pagados_parcial);
             //$contPa < count((array)$monto)
-
-            /*if(count((array)$pedidos_pagados_total)>0)
-            {
-                while ($contPT < count((array)$pedidos_pagados_total)) {
-                    //$pedido_a_pago_total = key($pedidos_pagados_total);
-                    array_push($pedido_a_pago_total, key($pedidos_pagados_total));
-                    next($pedidos_pagados_total);
-
-                    $contPT++;
-                }
-            }*/
             
             if(count((array)$pedidos_pagados_total)>0)
             {
@@ -574,17 +563,11 @@ class PagoController extends Controller
             {
                 while ($contPP < count((array)$pedidos_pagados_parcial)) {
                     //$pedido_a_pago_adelanto = key($pedidos_pagados_parcial);
-                    $difgg=$
                     array_push($pedido_a_pago_adelanto, key($pedidos_pagados_parcial));
                     next($pedidos_pagados_parcial);
 
                     $contPP++;
                 }
-            }
-
-            if(count((array)$pedidos_pagados_parcial)>0)
-            {
-                
                 //return $pago_pedido_update_adelanto;
                 $contPP_update = 0;
                 while ($contPP_update < count((array)$pedido_a_pago_adelanto)) {
