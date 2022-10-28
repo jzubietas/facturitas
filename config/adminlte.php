@@ -431,6 +431,13 @@ return [
                     'icon'   => 'fas fa-check-circle',
                     'active' => ['pagos por revisar*'],
                 ],
+                [
+                    'text' => 'Movimientos bancarios',
+                    'route'  => 'administracion.aprobados',
+                    //'can' => 'administracion.aprobados',
+                    'icon'   => 'fas fa-check-circle',
+                    'active' => ['movimientos bancarios*'],
+                ],
             ],
         ],
 

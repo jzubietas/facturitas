@@ -1184,6 +1184,18 @@ class PedidoController extends Controller
             'estado' => '0'
         ]);
 
+        //ACTUALIZAR QUE CLIENTE NO DEBE
+        $cliente = Cliente::find($pedido->cliente_id);
+
+        $pedido_deuda = Pedido::where('cliente_id', $pedido->cliente_id)//CONTAR LA CANTIDAD DE PEDIDOS QUE DEBE
+                                ->where('pagado', '0')
+                                ->count();
+        if($pedido_deuda == 0){//SINO DEBE NINGUN PEDIDO EL ESTADO DEL CLIENTE PASA A NO DEUDA(CERO)
+            $cliente->update([
+                'deuda' => '0'
+            ]);
+        }   
+
         return redirect()->route('pedidos.index')->with('info', 'eliminado');
     }
 
