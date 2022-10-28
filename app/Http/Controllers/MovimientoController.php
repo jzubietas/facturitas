@@ -26,7 +26,30 @@ class MovimientoController extends Controller
         
         $superasesor = User::where('rol', 'Super asesor')->count();
 
-        return view('movimientos.index', compact('pagosobservados_cantidad', 'superasesor'));
+        $bancos = [
+            "BCP" => 'BCP',
+            "BBVA" => 'BBVA',
+            "INTERBANK" => 'INTERBANK',
+            "SCOTIABANK" => 'SCOTIABANK',
+            "PICHINCHA" => 'PICHINCHA',
+        ];
+
+        $tipotransferencia = [
+            "INTERBANCARIO" => 'INTERBANCARIO',
+            "DEPOSITO" => 'DEPOSITO',
+            "GIRO" => 'GIRO',
+            "TRANSFERENCIA" => 'TRANSFERENCIA',
+            "YAPE" => 'YAPE',
+            "PLIN" => 'PLIN',
+            "TUNKI" => 'TUNKI',
+        ];
+
+        $titulares = [
+            "EPIFANIO HUAMAN SOLANO" => 'EPIFANIO HUAMAN SOLANO',
+            "NIKSER DENIS ORE RIVEROS" => 'NIKSER DENIS ORE RIVEROS'
+        ];
+
+        return view('movimientos.index', compact('pagosobservados_cantidad', 'superasesor', 'bancos', 'tipotransferencia', 'titulares'));
     }
 
     public function indextabla(Request $request)
@@ -39,7 +62,7 @@ class MovimientoController extends Controller
                     ->addIndexColumn()
                     ->addColumn('action', function($movimiento){     
                         $btn='';
-                        /* if(Auth::user()->rol == "Administrador"){ */
+                        /* if(Auth::user()->rol == "Administrador"){
                             $btn=$btn.'<a href="'.route('movimientos.show', $movimiento['id']).'" class="btn btn-info btn-sm">Ver</a>';
                             $btn=$btn.'<a href="'.route('movimientos.edit', $movimiento['id']).'" class="btn btn-warning btn-sm">Editar</a>';
                             $btn = $btn.'<a href="" data-target="#modal-delete" data-toggle="modal" data-delete="'.$movimiento['id'].'"><button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i> Eliminar</button></a>';
@@ -81,7 +104,21 @@ class MovimientoController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $monto = $request->monto;
+        $monto=str_replace(',','',$monto);
+
+        //return $request->all();
+
+        $movimientos = MovimientoBancario::create([
+            'banco' => $request->banco,
+            'titular' => $request->titulares,
+            'importe' => $request->monto,
+            'tipo' => $request->tipotransferencia,
+            'fecha' => $request->fecha,
+            'estado' => '1'
+        ]);
+
+        return redirect()->route('movimientos.index')->with('info', 'registrado');
     }
 
     /**

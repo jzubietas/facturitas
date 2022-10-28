@@ -12,9 +12,9 @@
       </div>
     </div>
     @endif
-    @can('movimientos.create')
-      <a href="{{ route('pagos.create') }}" class="btn btn-info"><i class="fas fa-plus-circle"></i> Agregar</a>
-    @endcan
+    {{-- @can('movimientos.create') --}}
+      <a href="" data-target="#modal-add-movimientos" data-toggle="modal"><button class="btn btn-info btn-sm"><i class="fas fa-plus-circle"></i> Agregar</button></a>
+    {{-- @endcan --}}
     {{-- @can('pagos.exportar')
     <div class="float-right btn-group dropleft">
       <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -34,6 +34,7 @@
       </div>
     </div>
     @include('pagos.modals.exportar', ['title' => 'Exportar Lista de pagos', 'key' => '1']) --}}    
+    @include('movimientos.modals.addMovimientos')
   </h1>
 
   @if($superasesor > 0)
@@ -264,6 +265,25 @@
     }
 
     
+  </script>
+
+  <script>  
+    //VALIDAR CAMPOS NUMERICO DE MONTO EN PAGOS
+    
+    $('input.number').keyup(function(event) {
+
+    if(event.which >= 37 && event.which <= 40){
+      event.preventDefault();
+    }
+
+    $(this).val(function(index, value) {
+      return value
+        .replace(/\D/g, "")
+        .replace(/([0-9])([0-9]{2})$/, '$1.$2')  
+        .replace(/\B(?=(\d{3})+(?!\d)\.?)/g, ",")
+      ;
+    });
+    });
   </script>
 
   @if (session('info') == 'registrado' || session('info') == 'eliminado' || session('info') == 'renovado')
