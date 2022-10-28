@@ -195,6 +195,29 @@ tfoot td {
     var tabla_pedidos=null;
     //$(document).ready(function () {
 
+      function eliminarPa(index) {
+        total_pago = total_pago - subtotal_pago[index];
+        $("#total_pago").html("S/. " + total_pago.toLocaleString("en-US"));
+        $("#total_pago_pagar").val(total_pago);
+        $("#filasPa" + index).remove();
+        evaluarPa();
+      }
+
+      function limpiarPa() {
+        $("#pmonto").val("");
+        $("#pbanco").val('').change();
+        $("#pfecha").val("");
+        $("#pimagen").val("");
+      }
+
+      function evaluarPa() {
+          if (total_pago > 0) {//total_pedido > 0 && 
+            $("#guardar").show();
+          } else {
+            $("#guardar").hide();
+          }
+        }
+
       $(document).ready(function() {
 
         $(document).on("change","#pcliente_id",function(){
@@ -376,7 +399,7 @@ tfoot td {
               $(this).prop("checked",false).val("0")////
               //revertir
                   let montopagos=parseFloat($("#diferencia").val().replace(",", ""));
-                  if(montopagos==0 || montopagos==null || isNaN(montopagos)){
+                  if(montopagos==null || isNaN(montopagos)){
                     console.log("no hay pagos ingresados");
                     return;
                   }
@@ -447,7 +470,7 @@ tfoot td {
               
               //validar si sumar depende el saldo y monto
                   let montopagos=parseFloat($("#diferencia").val().replace(",", ""));
-                  if(montopagos==0 || montopagos==null || isNaN(montopagos)){
+                  if(montopagos==null || isNaN(montopagos)){
                     console.log("no hay pagos ingresados");
                     return;
                   }
@@ -489,7 +512,7 @@ tfoot td {
                       console.log("aca valido check en total y check en saldo");
                       //var idfila=$(this).find("td").eq(0).html();//fila idpedido
                       var idfila=$(this).find("td").eq(0).find(":input").val();//fila idpedido
-                      if(idfila!=filedata.id)
+                      //if(idfila!=filedata.id)
                       {
                         console.log("id no es el mismo que acabo de ejecutar")
                         
@@ -609,7 +632,7 @@ tfoot td {
             }else if($(this).prop("checked") == false){
               console.log("no marcado adelanto");///aca falla cuando el monto es menor que el saldo
                   let montopagos=parseFloat($("#diferencia").val().replace(",", ""));
-                  if(montopagos==0 || montopagos==null || isNaN(montopagos)){
+                  if(montopagos==null || isNaN(montopagos)){
                     console.log("no hay pagos ingresados");
                     return;
                   }
@@ -733,10 +756,17 @@ tfoot td {
             console.log("resta2 "+saldofila);
             let restogeneral=(parseFloat(diferencia)-parseFloat(saldofila)).toFixed(2);
             console.log("diferencia por fila "+restogeneral);
-            if(restogeneral>0){
+            if(saldofila<=total_pago)
+            {
+              $(this).find("td").eq(4).find("input").prop("disabled",false);
+            }else{
+              $(this).find("td").eq(5).find("input").prop("disabled",false);
+            }
+
+            /*if(restogeneral>0){
               console.log("bloqueo  1")
               $(this).find("td").eq(4).find("input").prop("disabled",false);
-            } 
+            }*/
           });
 
           //tabla_pedidos.ajax.reload();
@@ -752,13 +782,7 @@ tfoot td {
         }
 
         ////////
-        function eliminarPa(index) {
-          total_pago = total_pago - subtotal_pago[index];
-          $("#total_pago").html("S/. " + total_pago.toLocaleString("en-US"));
-          $("#total_pago_pagar").val(total_pago);
-          $("#filasPa" + index).remove();
-          evaluarPa();
-        }
+        
         ///////
 
         $(document).on("keyup",'input.number',function(event){
@@ -1086,7 +1110,7 @@ tfoot td {
 
           if (monto != ""  && banco != "" && fecha != ""/*  && imagen != "" */) {
             subtotal_pago[contPa] = monto*1;
-            total_pago = parseFloat(total_pago + subtotal_pago[contPa]).toFixed(2);
+            total_pago = parseFloat(total_pago*1 + subtotal_pago[contPa]*1).toFixed(2);
 
             var filasPa = '<tr class="selected" id="filasPa' + contPa + '">' +
               '<td>' + (contPa + 1) + '</td>' +
@@ -1120,20 +1144,9 @@ tfoot td {
           }
         }
         //////
-        function limpiarPa() {
-          $("#pmonto").val("");
-          $("#pbanco").val('').change();
-          $("#pfecha").val("");
-          $("#pimagen").val("");
-        }
+        
 
-        function evaluarPa() {
-          if (total_pago > 0) {//total_pedido > 0 && 
-            $("#guardar").show();
-          } else {
-            $("#guardar").hide();
-          }
-        }
+        
         
 
 
