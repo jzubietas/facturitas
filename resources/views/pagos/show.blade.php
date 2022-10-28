@@ -67,10 +67,10 @@
                       @endif
                     <td>{{ $pagoPedido->condicion }}</td>
                     <td>{{ $pagoPedido->total }}</td>
-                    <td></td>
+                    <td>{{ $pagoPedido->abono }}</td>
                   </tr>
                   @php
-                    $sumPe = $sumPe + $pagoPedido->total;
+                    $sumPe = $sumPe + $pagoPedido->abono;
                     $contPe++;
                   @endphp
                 @endforeach
