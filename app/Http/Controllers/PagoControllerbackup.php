@@ -322,7 +322,7 @@ class PagoController extends Controller
     }*/
 
     public function store(Request $request)
-    {
+    { return $request->all();
         //ESTADOS PARA CAMPO "PAGADO" EN PEDIDOS
         //0: DEBE
         //1: ADELANTO

@@ -9,131 +9,131 @@
 @section('content')
   <div class="card">
     {!! Form::open(['route' => 'pagos.store','enctype'=>'multipart/form-data', 'id'=>'formulario','files'=>true]) !!}
-    <div class="border rounded card-body border-secondary">
-      <div class="form-row">
-        <div class="form-group col-lg-6">
-          {!! Form::label('user_id', 'Asesor') !!}
-          <input type="hidden" name="user_id" requerid value="{{ Auth::user()->id }}" class="form-control">
-          <input type="text" name="user_name" value="{{ Auth::user()->name }}" class="form-control" disabled>
-        </div>
-        <div class="form-group col-lg-6">
-          {!! Form::label('cliente_id', 'Cliente*') !!}{!! Form::hidden('cliente_id', '',['id' => 'cliente_id']) !!}
-            <select name="pcliente_id" class="border form-control selectpicker border-secondary" id="pcliente_id" data-live-search="true">
-              <option value="">---- SELECCIONE CLIENTE ----</option>
-                @foreach($clientes as $cliente)
-                  <option value="{{ $cliente->id }}_{{ $cliente->saldo }}">{{$cliente->nombre}} - {{$cliente->celular}}</option>
-              @endforeach
-            </select>
+      <div class="border rounded card-body border-secondary" style="margin: 1%">
+        <div class="form-row">
+          <div class="form-group col-lg-6">
+            {!! Form::label('user_id', 'Asesor') !!}
+            <input type="hidden" name="user_id" requerid value="{{ Auth::user()->id }}" class="form-control">
+            <input type="text" name="user_name" value="{{ Auth::user()->name }}" class="form-control" disabled>
+          </div>
+          <div class="form-group col-lg-6">
+            {!! Form::label('cliente_id', 'Cliente*') !!}{!! Form::hidden('cliente_id', '',['id' => 'cliente_id']) !!}
+              <select name="pcliente_id" class="border form-control selectpicker border-secondary" id="pcliente_id" data-live-search="true">
+                <option value="">---- SELECCIONE CLIENTE ----</option>
+                  @foreach($clientes as $cliente)
+                    <option value="{{ $cliente->id }}_{{ $cliente->saldo }}">{{$cliente->nombre}} - {{$cliente->celular}}</option>
+                @endforeach
+              </select>
+          </div>
         </div>
       </div>
-    </div>
-    <div class="card-body">
-      <div class="form-row">
+      <div class="card-body">
+        <div class="form-row">
 
-      <div class="form-group col-lg-6">
-          <div class="form-row" style="margin:-2px">
-            <div class="form-group col-lg-6">
-              <h2>PAGOS  <b style="font-size:20px"> {!! Form::label('', '') !!}</b></h2>
-            </div>
-            <div class="form-group col-lg-4">
-              <input type="hidden" name="saldo" id="saldo" class="form-control number" placeholder="Saldo a favor...">
-            </div>
-            <div class="form-group col-lg-2">
-              <a data-target="#modal-add-pagos" id="addpago" data-toggle="modal"><button class="btn btn-primary"><i class="fas fa-plus-circle"></i></button></a>
-            </div>
-          </div>          
-            @error('imagen')
-              <small class="text-danger">{{$message}}</small>
-            @enderror
-          <div class="table-responsive">
-            <table id="tabla_pagos" class="table table-striped">
-              <thead class="bg-primary">
-                <tr>
-                  <th scope="col">ITEM</th> 
-                  <th scope="col">TIPO MOVIMIENTO</th>
-                  <th scope="col">TITULAR</th>               
-                  <th scope="col">BANCO</th>
-                  <th scope="col">FECHA</th>
-                  <th scope="col">IMAGEN</th>
-                  <th scope="col">MONTO</th>
-                  <th scope="col">ACCIÓN</th>
-                </tr>
-              </thead>
-              <tfoot>
-                <th style="text-align: center">TOTAL</th>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th></th>
-                <!--<th></th>-->
-                <th colspan="2" style="text-align: right"><h4 id="total_pago">S/. 0.00</h4></th>
-                <th><input type="hidden" name="total_pago_pagar" requerid value="" id="total_pago_pagar" class="form-control"></th>  
-              </tfoot>
-              <tbody>
-              </tbody>
-            </table>
-          </div>
-        </div>
-        
         <div class="form-group col-lg-6">
-          <div class="form-row">
-            <div class="form-group col-lg-6">
-              <h2>PEDIDOS A PAGAR</h2>
-            </div>
-            <div class="form-group col-lg-6">
-              {{-- <a data-target="#modal-add-pedidos" id="addpedido" data-toggle="modal"><button class="btn btn-info"><i class="fas fa-plus-circle"></i></button></a> --}}  
+            <div class="form-row" style="margin:-2px">
+              <div class="form-group col-lg-6">
+                <h2>PAGOS  <b style="font-size:20px"> {!! Form::label('', '') !!}</b></h2>
+              </div>
+              <div class="form-group col-lg-4">
+                <input type="hidden" name="saldo" id="saldo" class="form-control number" placeholder="Saldo a favor...">
+              </div>
+              <div class="form-group col-lg-2">
+                <a data-target="#modal-add-pagos" id="addpago" data-toggle="modal"><button class="btn btn-primary"><i class="fas fa-plus-circle"></i></button></a>
+              </div>
+            </div>          
+              @error('imagen')
+                <small class="text-danger">{{$message}}</small>
+              @enderror
+            <div class="table-responsive">
+              <table id="tabla_pagos" class="table table-striped">
+                <thead class="bg-primary">
+                  <tr>
+                    <th scope="col">ITEM</th> 
+                    <th scope="col">TIPO MOVIMIENTO</th>
+                    <th scope="col">TITULAR</th>               
+                    <th scope="col">BANCO</th>
+                    <th scope="col">FECHA</th>
+                    <th scope="col">IMAGEN</th>
+                    <th scope="col">MONTO</th>
+                    <th scope="col">ACCIÓN</th>
+                  </tr>
+                </thead>
+                <tfoot>
+                  <th style="text-align: center">TOTAL</th>
+                  <th></th>
+                  <th></th>
+                  <th></th>
+                  <th></th>
+                  <!--<th></th>-->
+                  <th colspan="2" style="text-align: right"><h4 id="total_pago">S/. 0.00</h4></th>
+                  <th><input type="hidden" name="total_pago_pagar" requerid value="" id="total_pago_pagar" class="form-control"></th>  
+                </tfoot>
+                <tbody>
+                </tbody>
+              </table>
             </div>
           </div>
-          <div class="table-responsive">
-            <table id="tabla_pedidos" class="table table-striped" style="text-align: center">
-              <thead class="bg-info">
-                <tr>
-                  <th scope="col">ITEM</th>
-                  {{-- <th scope="col">PEDIDO</th> --}}
-                  <th scope="col">CODIGO</th>
-                  {{--<th scope="col">MONTO</th>--}}
-                  <th scope="col">SALDO</th>
-                  <th scope="col">DIFERENCIA</th>
-                  {{-- <th scope="col">ACCIÓN</th> --}}
-                  {{-- <th scope="col">TOTAL</th> --}}
-                    {{-- <th scope="col">ADELANTO</th> --}}
-                    <th>TOTAL</th>
-                    <th>ADELANTO</th>
-                </tr>
-              </thead>
-              <tfoot>
-                <tr>
-                  <td>{{--ITEM--}}</td>
-                  <td>{{--CODIGO--}}</td>
-                  {{--<td>TOTAL MONTO</td>--}}
-                  <td>TOTAL SALDO</td>
-                  <td>TOTAL DIFERENCIA</td>
-                  {{--<td>ACCION</td>--}}
-                  {{--<td>TOTAL</td>--}}
-                  {{--<td>ADELANTO</td>--}}
-                  <td></td>
-                  <td></td>
-                </tr>
-              </tfoot>
-              <tbody style="text-align: center">
-              </tbody>
-              {{-- <tfoot>
-                <th style="text-align: center">TOTAL</th>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th><h4 id="total_pedido">S/. 0.00</h4></th>
-                <th><input type="hidden" name="total_pedido_pagar" requerid value="" id="total_pedido_pagar" class="form-control"></th>              
-              </tfoot> 
-              --}}             
-            </table>
+          
+          <div class="form-group col-lg-6">
+            <div class="form-row">
+              <div class="form-group col-lg-6">
+                <h2>PEDIDOS A PAGAR</h2>
+              </div>
+              <div class="form-group col-lg-6">
+                {{-- <a data-target="#modal-add-pedidos" id="addpedido" data-toggle="modal"><button class="btn btn-info"><i class="fas fa-plus-circle"></i></button></a> --}}  
+              </div>
+            </div>
+            <div class="table-responsive">
+              <table id="tabla_pedidos" class="table table-striped" style="text-align: center">
+                <thead class="bg-info">
+                  <tr>
+                    <th scope="col">ITEM</th>
+                    {{-- <th scope="col">PEDIDO</th> --}}
+                    <th scope="col">CODIGO</th>
+                    {{--<th scope="col">MONTO</th>--}}
+                    <th scope="col">SALDO</th>
+                    <th scope="col">DIFERENCIA</th>
+                    {{-- <th scope="col">ACCIÓN</th> --}}
+                    {{-- <th scope="col">TOTAL</th> --}}
+                      {{-- <th scope="col">ADELANTO</th> --}}
+                      <th>TOTAL</th>
+                      <th>ADELANTO</th>
+                  </tr>
+                </thead>
+                <tfoot>
+                  <tr>
+                    <td>{{--ITEM--}}</td>
+                    <td>{{--CODIGO--}}</td>
+                    {{--<td>TOTAL MONTO</td>--}}
+                    <td>TOTAL SALDO</td>
+                    <td>TOTAL DIFERENCIA</td>
+                    {{--<td>ACCION</td>--}}
+                    {{--<td>TOTAL</td>--}}
+                    {{--<td>ADELANTO</td>--}}
+                    <td></td>
+                    <td></td>
+                  </tr>
+                </tfoot>
+                <tbody style="text-align: center">
+                </tbody>
+                {{-- <tfoot>
+                  <th style="text-align: center">TOTAL</th>
+                  <th></th>
+                  <th></th>
+                  <th></th>
+                  <th><h4 id="total_pedido">S/. 0.00</h4></th>
+                  <th><input type="hidden" name="total_pedido_pagar" requerid value="" id="total_pedido_pagar" class="form-control"></th>              
+                </tfoot> 
+                --}}             
+              </table>
+            </div>
           </div>
+
+          
+
+
         </div>
-
-        
-
-
-      </div>
       {{-- MODALS --}}
       @include('pagos.modals.AddPedidos')
       @include('pagos.modals.AddPagos')
@@ -274,7 +274,7 @@ tfoot td {
                         //para total pago
                         //return '<input type="checkbox" onclick="onclickradiototal('+row.id+')" class="form-control radiototal" name="totaladelanto">';//row.Firstname + ' ' + row.Lastname;  // Column will display firstname lastname
                         return '<input type="checkbox" disabled class="form-control radiototal" name="checktotal['+row.id+']" value="0">';//row.Firstname + ' ' + row.Lastname;  // Column will display firstname lastname
-            
+                        //'+row.id+'
                     }
                 },
                 {
@@ -283,7 +283,7 @@ tfoot td {
                         //para adelanto
                       //return '<input type="checkbox" onclick="onclickradioadelanto('+row.id+')" class="form-control radioadelanto" name="totaladelanto">'//row.Firstname + ' ' + row.Lastname;  // Column will display firstname lastname
                       return '<input type="checkbox" disabled class="form-control radioadelanto" name="checkadelanto['+row.id+']" value="0">'//row.Firstname + ' ' + row.Lastname;  // Column will display firstname lastname
-            
+                      //'+row.id+'
                     }
                 }
               ],
@@ -461,7 +461,7 @@ tfoot td {
 
                   if(montopagos>=pedidosaldo)
                   {
-                    $(this).prop("checked",true).val("1")////aqui valida////////data aqui checkpara diferencia
+                    $(this).prop("checked",true).val("1")////aqui valida////////data aqui check para diferencia
                     montopagos=parseFloat(montopagos-pedidosaldo);
                     console.log("diferencia "+montopagos);
                     $("#diferencia").val(montopagos.toFixed(2));

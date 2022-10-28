@@ -222,8 +222,8 @@ class PagoController extends Controller
         ];
 
         $titulares = [
-            "EPIFANIO HUAMAN SOLANO" => 'EPIFANIO',
-            "NIKSER DENIS ORE RIVEROS" => 'DENIS'
+            "EPIFANIO HUAMAN SOLANO" => 'EPIFANIO HUAMAN SOLANO',
+            "NIKSER DENIS ORE RIVEROS" => 'NIKSER DENIS ORE RIVEROS'
         ];
 
         return view('pagos.create', compact('clientes', 'pedidos', 'bancos','tipotransferencia','titulares'));
@@ -315,7 +315,7 @@ class PagoController extends Controller
 
     public function store(Request $request)
     {
-        return $request->all();
+        //return $request->all();
         //ESTADOS PARA CAMPO "PAGADO" EN PEDIDOS
         //0: DEBE
         //1: ADELANTO
@@ -339,14 +339,19 @@ class PagoController extends Controller
                 'cliente_id' => $request->cliente_id,
                 'total_cobro' => $deuda_total,//total_pedido_pagar
                 'total_pagado' => $pagado,//total_pago_pagar
-                'condicion' => "ADELANTO",
+                'condicion' => "PAGO",//ADELANTO
+                'notificacion' => 'Nuevo pago registrado',
                 /* 'saldo' => '1',
                 'diferencia' => '1', */
                 'estado' => '1'
             ]);
 
+            event(new PagoEvent($pago));
+
             // ALMACENANDO PAGO-PEDIDOS
             $pedido_id = $request->pedido_id;
+            $monto_actual = $request->numbersaldo;
+            $saldo = $request->numberdiferencia;
             $contPe = 0;
             $monto_pagado_a_favor = $pagado;
 
@@ -355,6 +360,7 @@ class PagoController extends Controller
                 $pagoPedido = PagoPedido::create([
                         'pago_id' => $pago->id,
                         'pedido_id' => $pedido_id[$contPe],
+                        'abono' => $monto_actual[$contPe]-$saldo[$contPe],
                         'estado' => '1'
                     ]);
 
@@ -362,11 +368,15 @@ class PagoController extends Controller
                 $pedido = Pedido::find($pagoPedido->pedido_id);
 
                 $pedido->update([
-                    'pago' => '1'
+                    'pago' => '1'//REGISTRAMOS QUE YA CUENTA CON UN PAGO
                 ]);
 
                 $detalle_pedido = DetallePedido::where('pedido_id', $pedido->id)->first();
-                if($monto_pagado_a_favor >= $detalle_pedido->total){
+
+                $detalle_pedido->update([
+                    'saldo' => $saldo[$contPe]//ACTUALIZAR SALDO - EN LA VISTA ES LA COLUMNA DIFERENCIA
+                ]);
+                /* if($monto_pagado_a_favor >= $detalle_pedido->total){
                     $pedido->update([
                         'pagado' => '2'//PAGADO
                     ]);
@@ -395,11 +405,13 @@ class PagoController extends Controller
                             'pagado' => '2'//PAGADO
                         ]);
                     }
-                }
+                } */
                 $contPe++;
             }
 
             // ALMACENANDO DETALLE DE PAGOS
+            $tipomovimiento = $request->tipomovimiento;
+            $titular = $request->titular;
             $monto = $request->monto;            
             $banco = $request->banco;
             $fecha = $request->fecha;
@@ -426,47 +438,52 @@ class PagoController extends Controller
                 if(isset($fileList[$contPa]['file_name'])){ 
                     DetallePago::create([
                         'pago_id' => $pago->id,
+                        'cuenta' => $tipomovimiento[$contPa],
+                        'titular' => $titular[$contPa],
                         'monto' => $monto[$contPa],
                         'banco' => $banco[$contPa],
                         'fecha' => $fecha[$contPa],
+                        'fecha_deposito' => $fecha[$contPa],
                         'imagen' => $fileList[$contPa]['file_name'],
                         'estado' => '1'
                     ]);  
                 }else{
                     DetallePago::create([
                         'pago_id' => $pago->id,
+                        'cuenta' => $tipomovimiento[$contPa],
+                        'titular' => $titular[$contPa],
                         'monto' => $monto[$contPa],
                         'banco' => $banco[$contPa],
                         'fecha' => $fecha[$contPa],
+                        'fecha_deposito' => $fecha[$contPa],
                         'imagen' => 'logo_facturas.png',
                         'estado' => '1'
-                ]);
+                    ]);
                 }
-
                 $contPa++;
             }
 
             //ACTUALIZAR PEDIDOS A PAGADOS
             //if($deuda_total - $pagado <= 3){
-                $pago->update([
+                /* $pago->update([
                     'condicion' => 'PAGO',
                     'notificacion' => 'Nuevo pago registrado',
                     'diferencia' => $deuda_total - $pagado//'diferencia' => '0'//ACTUALIZAR LA DEUDA EN EL PAGO
+                ]); */
+
+            //ACTUALIZAR QUE CLIENTE NO DEBE
+            $cliente = Cliente::find($request->cliente_id);
+
+            $pedido_deuda = Pedido::where('cliente_id', $request->cliente_id)//CONTAR LA CANTIDAD DE PEDIDOS QUE DEBE
+                                    ->where('pagado', '0')
+                                    ->count();
+            if($pedido_deuda == 0){//SINO DEBE NINGUN PEDIDO EL ESTADO DEL CLIENTE PASA A NO DEUDA(CERO)
+                $cliente->update([
+                    'deuda' => '0'
                 ]);
+            }                
 
-                //ACTUALIZAR QUE CLIENTE NO DEBE
-                $cliente = Cliente::find($request->cliente_id);
-
-                $pedido_deuda = Pedido::where('cliente_id', $request->cliente_id)//CONTAR LA CANTIDAD DE PEDIDOS QUE DEBE
-                                        ->where('pagado', '0')
-                                        ->count();
-                if($pedido_deuda == 0){//SINO DEBE NINGUN PEDIDO EL ESTADO DEL CLIENTE PASA A NO DEUDA(CERO)
-                    $cliente->update([
-                        'deuda' => '0',
-                    ]);
-                }                
-
-                event(new PagoEvent($pago));
+            /* event(new PagoEvent($pago)); */
             /* }
             else
             {
@@ -477,8 +494,8 @@ class PagoController extends Controller
                 ]);
             } */
             
-            //ACTUALIZAR SALDO A FAVOR
-            $cliente = Cliente::find($request->cliente_id);
+            //ACTUALIZAR SALDO A FAVOR**************************EVALUAR NUEVA FORMA DE SALDO A FAVOR Y REEMBOLSO
+            /* $cliente = Cliente::find($request->cliente_id);
 
             $saldo = $request->saldo;
             $saldo=str_replace(',','',$saldo);
@@ -497,6 +514,78 @@ class PagoController extends Controller
                 $pago->update([
                     'saldo' => '0',
                 ]);
+            } */
+
+            //DATOS PARA ACTUALIZAR PAGO PARCIAL O TOTAL
+            $pedidos_pagados_total = $request->checktotal;
+            $pedidos_pagados_parcial = $request->checkadelanto;
+            //return count((array)$pedidos_pagados_total);
+            //return count((array)$pedidos_pagados_parcial);
+            $contPT = 0;
+            $contPP = 0;
+             
+            $pedido_a_pago_total = [];
+            $pedido_a_pago_adelanto = [];
+            //return $pedidos_pagados_parcial;
+            //return key(array $pedidos_pagados_parcial);
+            //$contPa < count((array)$monto)
+            
+            if(count((array)$pedidos_pagados_total)>0)
+            {
+                while ($contPT < count((array)$pedidos_pagados_total)) {
+                    //$pedido_a_pago_total = key($pedidos_pagados_total);
+                    array_push($pedido_a_pago_total, key($pedidos_pagados_total));
+                    next($pedidos_pagados_total);
+
+                    $contPT++;
+                }
+                //return $pedido_a_pago_total;
+                $contPT_update = 0;
+                while ($contPT_update < count((array)$pedido_a_pago_total)) {
+                    $pago_pedido_update_total = PagoPedido::where('pago_id', $pago->id)
+                                                    ->where('pedido_id', $pedido_a_pago_total[$contPT_update])
+                                                    ->first();
+                    //return $pago_pedido_update_total;
+                    $pago_pedido_update_total->update([
+                        'pagado' => '2'
+                    ]);
+
+                    $pedido_update_total = Pedido::find($pedido_a_pago_total[$contPT_update]);
+                    $pedido_update_total->update([
+                        'pagado' => '2'
+                    ]);
+
+                    $contPT_update++;
+                }
+            }
+
+            if(count((array)$pedidos_pagados_parcial)>0)
+            {
+                while ($contPP < count((array)$pedidos_pagados_parcial)) {
+                    //$pedido_a_pago_adelanto = key($pedidos_pagados_parcial);
+                    array_push($pedido_a_pago_adelanto, key($pedidos_pagados_parcial));
+                    next($pedidos_pagados_parcial);
+
+                    $contPP++;
+                }
+                //return $pago_pedido_update_adelanto;
+                $contPP_update = 0;
+                while ($contPP_update < count((array)$pedido_a_pago_adelanto)) {
+                    $pago_pedido_update_adelanto = PagoPedido::where('pago_id', $pago->id)
+                                                    ->where('pedido_id', $pedido_a_pago_adelanto[$contPP_update])
+                                                    ->first();
+                    //return $pago_pedido_update;
+                    $pago_pedido_update_adelanto->update([
+                        'pagado' => '1'
+                    ]);
+
+                    $pedido_update_adelanto = Pedido::find($pedido_a_pago_adelanto[$contPP_update]);
+                    $pedido_update_adelanto->update([
+                        'pagado' => '1'
+                    ]);
+
+                    $contPP_update++;
+                }
             }
 
             DB::commit();
