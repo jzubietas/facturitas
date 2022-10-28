@@ -273,7 +273,7 @@ tfoot td {
                     "render": function ( data, type, row, meta ) {
                         //para total pago
                         //return '<input type="checkbox" onclick="onclickradiototal('+row.id+')" class="form-control radiototal" name="totaladelanto">';//row.Firstname + ' ' + row.Lastname;  // Column will display firstname lastname
-                        return '<input type="checkbox" disabled class="form-control radiototal" name="checktotal['+row.id+']" value="true">';//row.Firstname + ' ' + row.Lastname;  // Column will display firstname lastname
+                        return '<input type="checkbox" disabled class="form-control radiototal" name="checktotal['+row.id+']" value="0">';//row.Firstname + ' ' + row.Lastname;  // Column will display firstname lastname
             
                     }
                 },
@@ -282,7 +282,7 @@ tfoot td {
                     "render": function ( data, type, row, meta ) {
                         //para adelanto
                       //return '<input type="checkbox" onclick="onclickradioadelanto('+row.id+')" class="form-control radioadelanto" name="totaladelanto">'//row.Firstname + ' ' + row.Lastname;  // Column will display firstname lastname
-                      return '<input type="checkbox" disabled class="form-control radioadelanto" name="checkadelanto['+row.id+']" value="true">'//row.Firstname + ' ' + row.Lastname;  // Column will display firstname lastname
+                      return '<input type="checkbox" disabled class="form-control radioadelanto" name="checkadelanto['+row.id+']" value="0">'//row.Firstname + ' ' + row.Lastname;  // Column will display firstname lastname
             
                     }
                 }
@@ -359,6 +359,7 @@ tfoot td {
               return false;
               
           });*/
+
           $(document).on("click",".radiototal",function(event){
             event.preventDefault();
           });
@@ -371,7 +372,7 @@ tfoot td {
             event.preventDefault();
             if($(this).prop("checked") == true){
               console.log("marcado")
-              $(this).prop("checked",false)////
+              $(this).prop("checked",false).val("0")////
               //revertir
                   let montopagos=parseFloat($("#diferencia").val().replace(",", ""));
                   if(montopagos==0 || montopagos==null || isNaN(montopagos)){
@@ -460,7 +461,7 @@ tfoot td {
 
                   if(montopagos>=pedidosaldo)
                   {
-                    $(this).prop("checked",true)////aqui valida////////data aqui checkpara diferencia
+                    $(this).prop("checked",true).val("1")////aqui valida////////data aqui checkpara diferencia
                     montopagos=parseFloat(montopagos-pedidosaldo);
                     console.log("diferencia "+montopagos);
                     $("#diferencia").val(montopagos.toFixed(2));
@@ -526,7 +527,7 @@ tfoot td {
             event.preventDefault();
             if($(this).prop("checked") == true){
               console.log("marcado")
-              $(this).prop("checked",false)//////revertir              
+              $(this).prop("checked",false).val("0")//////revertir              
                   let montopagos=parseFloat($("#diferencia").val().replace(",", ""));//0
                   /*if(montopagos==0 || montopagos==null || isNaN(montopagos)){
                     console.log("no hay pagos ingresados");
@@ -608,7 +609,7 @@ tfoot td {
                   //sol si saldo es mayor al monto
                   if(montopagos<pedidosaldo)
                   {
-                    $(this).prop("checked",true)////aqui valida
+                    $(this).prop("checked",true).val("1")////aqui valida
                     guardasaldo=$("#diferencia").val();//356 guardo
                     let montopagosante=montopagos;
                     montopagos=(0).toFixed(2);
