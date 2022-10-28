@@ -784,7 +784,7 @@ class PedidoController extends Controller
             $pedido = Pedido::create([
                 'cliente_id' => $request->cliente_id,
                 'user_id' => $request->user_id, //usuario que registra
-                'creador_id' => 'USER0'.Auth::user()->id,//aqui una observacion, en el migrate la columna en tabla pedido tenia nombre creador y resulto ser creador_id
+                'creador' => 'USER0'.Auth::user()->id,//aqui una observacion, en el migrate la columna en tabla pedido tenia nombre creador y resulto ser creador_id
                 'condicion' => 'POR ATENDER',
                 'pago' => '0',
                 'envio' => '0',

@@ -19,6 +19,7 @@ class CreateMovimientoBancariosTable extends Migration
             $table->string('titular')->nullable();
             $table->decimal('importe',10,2)->nullable();
             $table->string('tipo')->nullable();//TIPO DE MOVIMIENTO
+            $table->date('fecha')->nullable();//FECHA DE DEPOSITO
             $table->integer('pago')->nullable();//ENLAZADO CON PAGO
             $table->integer('estado')->nullable();
 

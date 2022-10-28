@@ -433,7 +433,7 @@ return [
                 ],
                 [
                     'text' => 'Movimientos bancarios',
-                    'route'  => 'administracion.aprobados',
+                    'route'  => 'movimientos.index',
                     //'can' => 'administracion.aprobados',
                     'icon'   => 'fas fa-check-circle',
                     'active' => ['movimientos bancarios*'],
