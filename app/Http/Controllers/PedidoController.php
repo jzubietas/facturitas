@@ -1928,6 +1928,7 @@ class PedidoController extends Controller
                     'dp.envio_doc',
                     'dp.fecha_envio_doc',
                     'dp.cant_compro',
+                    'dp.atendido_por',
                     /* 'dp.fecha_envio_doc_fis', */
                     DB::raw('DATE_FORMAT(dp.fecha_envio_doc_fis, "%d/%m/%Y") as fecha_envio_doc_fis'),
                     'dp.fecha_recepcion'
@@ -1951,6 +1952,7 @@ class PedidoController extends Controller
                     'dp.envio_doc',
                     'dp.fecha_envio_doc',
                     'dp.cant_compro',
+                    'dp.atendido_por',
                     'dp.fecha_envio_doc_fis',
                     'dp.fecha_recepcion'
                 )
@@ -1979,6 +1981,7 @@ class PedidoController extends Controller
                     'dp.envio_doc',
                     'dp.fecha_envio_doc',
                     'dp.cant_compro',
+                    'dp.atendido_por',
                     /* 'dp.fecha_envio_doc_fis', */
                     DB::raw('DATE_FORMAT(dp.fecha_envio_doc_fis, "%d/%m/%Y") as fecha_envio_doc_fis'),
                     'dp.fecha_recepcion'
@@ -2003,6 +2006,7 @@ class PedidoController extends Controller
                     'dp.envio_doc',
                     'dp.fecha_envio_doc',
                     'dp.cant_compro',
+                    'dp.atendido_por',
                     'dp.fecha_envio_doc_fis',
                     'dp.fecha_recepcion'
                 )
@@ -2025,6 +2029,7 @@ class PedidoController extends Controller
                     'dp.envio_doc',
                     'dp.fecha_envio_doc',
                     'dp.cant_compro',
+                    'dp.atendido_por',
                     /* 'dp.fecha_envio_doc_fis', */
                     DB::raw('DATE_FORMAT(dp.fecha_envio_doc_fis, "%d/%m/%Y") as fecha_envio_doc_fis'),
                     'dp.fecha_recepcion'
@@ -2045,6 +2050,7 @@ class PedidoController extends Controller
                     'dp.envio_doc',
                     'dp.fecha_envio_doc',
                     'dp.cant_compro',
+                    'dp.atendido_por',
                     'dp.fecha_envio_doc_fis',
                     'dp.fecha_recepcion'
                 )

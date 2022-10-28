@@ -59,6 +59,7 @@
             <th scope="col">Fecha de registro</th>
             <th scope="col">Destino</th>
             <th scope="col">Estado</th>
+            <th scope="col">Atendido por</th>
             <th scope="col">Estado de sobre</th>
             <th scope="col">Acciones</th>
           </tr>
@@ -81,6 +82,7 @@
               <td>{{ $pedido->fecha }}</td>
               <td>{{ $pedido->destino }}</td>
               <td>{{ $pedido->condicion }}</td>   
+              <td>{{ $pedido->atendido_por }}</td>   
               <td>
                 @if ($pedido->envio == '1')
                   <span class="badge badge-success">Enviado</span>
