@@ -316,6 +316,50 @@ class PagoController extends Controller
     public function store(Request $request)
     {
         //return $request->all();
+        
+        $contPedidos=0;
+        $contPedidosfor=0;
+        $pedido_id = $request->pedido_id;
+        $pedidos_pagados_total=$request->checktotal;
+        $pedidos_pagados_parcial=$request->checkadelanto;
+        $saldo = $request->numberdiferencia;
+        if(count((array)$pedido_id)>0){
+            while ($contPedidos < count((array)$pedido_id)) {
+                //4 pedidos  4  total 4 adelanto
+                
+                if (array_key_exists( $pedido_id[$contPedidos] , $pedidos_pagados_parcial)) {
+                    $pedidos_pagados_parcial[$pedido_id[$contPedidos]]=1;
+                }else{
+                    $pedidos_pagados_parcial[$pedido_id[$contPedidos]]=0;
+                }
+
+                if (array_key_exists( $pedido_id[$contPedidos] , $pedidos_pagados_parcial)) {
+                    $pedidos_pagados_parcial[$pedido_id[$contPedidos]]=1;
+                }else{
+                    $pedidos_pagados_parcial[$pedido_id[$contPedidos]]=0;
+                }
+                
+                $contPedidos++;
+            }
+
+            while ($contPedidosfor < count((array)$pedido_id)) {
+                //la diferencia menor igual a 3 y modifico los check
+
+                if($saldo[$contPedidosfor]<=3){
+                    //muevo los check y regularizo para condonar deuda
+                    $pedidos_pagados_total[$pedido_id[$contPedidosfor]]=1;
+                    $pedidos_pagados_parcial[$pedido_id[$contPedidosfor]]=0;
+                }
+                //$pedido_id[$contPedidosfor]
+
+                $contPedidosfor++;
+            }
+        }
+
+        //return $request->all();
+
+
+        //return $pedidos_pagados_total;
         //ESTADOS PARA CAMPO "PAGADO" EN PEDIDOS
         //0: DEBE
         //1: ADELANTO
@@ -408,6 +452,11 @@ class PagoController extends Controller
                 } */
                 $contPe++;
             }
+
+            
+
+            
+            
 
             // ALMACENANDO DETALLE DE PAGOS
             $tipomovimiento = $request->tipomovimiento;
@@ -517,10 +566,11 @@ class PagoController extends Controller
             } */
 
             //DATOS PARA ACTUALIZAR PAGO PARCIAL O TOTAL
-            $pedidos_pagados_total = $request->checktotal;
-            $pedidos_pagados_parcial = $request->checkadelanto;
+            /* $pedidos_pagados_total = $request->checktotal;
+            $pedidos_pagados_parcial = $request->checkadelanto; */
             //return count((array)$pedidos_pagados_total);
             //return count((array)$pedidos_pagados_parcial);
+            $contPedidos = 0;
             $contPT = 0;
             $contPP = 0;
              
@@ -529,6 +579,16 @@ class PagoController extends Controller
             //return $pedidos_pagados_parcial;
             //return key(array $pedidos_pagados_parcial);
             //$contPa < count((array)$monto)
+
+            //reprocesar array de check total y adelanto //$request->checktotal;// checkadelanto
+
+            /*
+            pedido_id   3794    4316
+            */
+            
+            
+            
+            ///
             
             if(count((array)$pedidos_pagados_total)>0)
             {
@@ -559,31 +619,51 @@ class PagoController extends Controller
                 }
             }
 
+
+            //para cambiar array de check de adelantos
+            /*if(count((array)$pedidos_pagados_parcial)>0)
+            {
+                while ($contPP < count((array)$pedidos_pagados_parcial)) {
+
+                }
+            }*/
+
+            $pedido_pago_parcial_x = [];
+            //$contppx = 0;
+
             if(count((array)$pedidos_pagados_parcial)>0)
             {
                 while ($contPP < count((array)$pedidos_pagados_parcial)) {
                     //$pedido_a_pago_adelanto = key($pedidos_pagados_parcial);
                     array_push($pedido_a_pago_adelanto, key($pedidos_pagados_parcial));
+
+                    $pedido_pago_parcial_x[$contPP] = array(
+                        'pedido' => key($pedidos_pagados_parcial),
+                        'estado' => $pedidos_pagados_parcial[$pedido_id[$contPP]]
+                    ); 
+
                     next($pedidos_pagados_parcial);
 
                     $contPP++;
+                    //$contppx++;
                 }
-                //return $pago_pedido_update_adelanto;
+                //return $pedido_pago_parcial_x;////////******************** */
                 $contPP_update = 0;
-                while ($contPP_update < count((array)$pedido_a_pago_adelanto)) {
+                while ($contPP_update < count((array)$pedido_pago_parcial_x)) {
                     $pago_pedido_update_adelanto = PagoPedido::where('pago_id', $pago->id)
-                                                    ->where('pedido_id', $pedido_a_pago_adelanto[$contPP_update])
+                                                    ->where('pedido_id', $pedido_pago_parcial_x[$contPP_update])
                                                     ->first();
                     //return $pago_pedido_update;
-                    $pago_pedido_update_adelanto->update([
-                        'pagado' => '1'
-                    ]);
+                    if( $pedido_pago_parcial_x[$contPP_update]['estado'] == 1){
+                        $pago_pedido_update_adelanto->update([
+                            'pagado' => '1'
+                        ]);
 
-                    $pedido_update_adelanto = Pedido::find($pedido_a_pago_adelanto[$contPP_update]);
-                    $pedido_update_adelanto->update([
-                        'pagado' => '1'
-                    ]);
-
+                        $pedido_update_adelanto = Pedido::find($pedido_pago_parcial_x[$contPP_update]);
+                        $pedido_update_adelanto->update([
+                            'pagado' => '1'
+                        ]);
+                    }
                     $contPP_update++;
                 }
             }

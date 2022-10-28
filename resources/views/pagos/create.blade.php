@@ -264,7 +264,8 @@ tfoot td {
                   data: 'diferencia', 
                   name: 'diferencia',
                   render:function(data,type,row,meta){
-                      return '<input type="hidden" name="numberdiferencia[]" value="' + data + '"><span class="numberdiferencia">' + data + '</span></td>';
+                      return '<input type="hidden" name="numberdiferencia[]" value="' + data + '"><span class="numberdiferencia">' + data + '</span></td>'+
+                       '<input type="hidden" name="numbertotal[]" value="' + data + '"><span class="numbertotal"></span></td>';
                   },
                   "visible": true
                 },
@@ -396,6 +397,10 @@ tfoot td {
                   
                   $(this).closest('tr').find("td").eq(3).find(":input").val(pedidosaldo.toFixed(2));
                   $(this).closest('tr').find("td").eq(3).find(".numberdiferencia").text(pedidosaldo.toFixed(2));
+                  let totalafterdifer1=$(this).closest('tr').find("td").eq(2).find(".numbersaldo").val();
+                  let totalafterdifer2=$(this).closest('tr').find("td").eq(3).find(".numberdiferencia").val();
+                  let totalafterdifer=parseFloat(totalafterdifer1-totalafterdifer2);
+                  $(this).closest('tr').find("td").eq(3).find(".numbertotal").val(totalafterdifer);
 
                   $(this).closest('tr').find(".radioadelanto").prop("disabled",false);
                   $('#tabla_pedidos > tbody  > tr').each(function(index,tr) {
@@ -469,6 +474,10 @@ tfoot td {
                     console.log("aqui debo cambiar el valor de input y span de columna diferencia");
                     $(this).closest('tr').find("td").eq(3).find(":input").val("0.00");
                     $(this).closest('tr').find("td").eq(3).find(".numberdiferencia").text("0.00");
+                    let totalafterdifer1=$(this).closest('tr').find("td").eq(2).find(".numbersaldo").val();
+                    let totalafterdifer2=$(this).closest('tr').find("td").eq(3).find(".numberdiferencia").val();
+                    let totalafterdifer=parseFloat(totalafterdifer1-totalafterdifer2);
+                    $(this).closest('tr').find("td").eq(3).find(".numbertotal").val(totalafterdifer);
                     //$(this).closest('tr').find(".numberdiferencia").text("0.00");
                     //$(this).find("td").eq(3).find(":input").val("0.00");///aqui me quede
                     //$(this).find("td").eq(3).find("span").text("0.00");///aqui me quede
@@ -552,6 +561,10 @@ tfoot td {
 
                   $(this).closest('tr').find("td").eq(3).find(":input").val(pedidosaldo.toFixed(2));
                   $(this).closest('tr').find("td").eq(3).find(".numberdiferencia").text(pedidosaldo.toFixed(2));
+                  let totalafterdifer1=$(this).closest('tr').find("td").eq(2).find(".numbersaldo").val();
+                  let totalafterdifer2=$(this).closest('tr').find("td").eq(3).find(".numberdiferencia").val();
+                  let totalafterdifer=parseFloat(totalafterdifer1-totalafterdifer2);
+                  $(this).closest('tr').find("td").eq(3).find(".numbertotal").val(totalafterdifer);
                   //$(this).closest('tr').find(".radioadelanto").prop("disabled",false);
 
                   //revertir pago reviso todo otra vez
@@ -623,6 +636,10 @@ tfoot td {
                     console.log("montoqueda "+montoqueda)
                     $(this).closest('tr').find("td").eq(3).find(":input").val(montoqueda.toFixed(2));///diferencia
                     $(this).closest('tr').find("td").eq(3).find(".numberdiferencia").text(montoqueda.toFixed(2));///diferencia
+                    let totalafterdifer1=$(this).closest('tr').find("td").eq(2).find(".numbersaldo").val();
+                    let totalafterdifer2=$(this).closest('tr').find("td").eq(3).find(".numberdiferencia").val();
+                    let totalafterdifer=parseFloat(totalafterdifer1-totalafterdifer2);
+                    $(this).closest('tr').find("td").eq(3).find(".numbertotal").val(totalafterdifer);
                     //$(this).closest('tr').find(".radioatotal").prop("disabled",true);
                     //recorido defilas distintas al actual
                     $('#tabla_pedidos > tbody  > tr').each(function(index,tr) {
