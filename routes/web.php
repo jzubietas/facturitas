@@ -10,6 +10,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\PedidoController;
 use App\Http\Controllers\NotificationsController;
 use App\Http\Controllers\BasefriaController;//datatable serverside
+use App\Http\Controllers\MovimientoController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -113,6 +114,8 @@ Route::get('administracion.aprobadostabla', [PagoController::class, 'Aprobadosta
 Route::get('administracion.revisar/{pago}', [PagoController::class, 'Revisar'])->name('administracion.revisar');
 Route::get('administracion.revisarpago', [PagoController::class, 'Revisarpago'])->name('administracion.revisarpago');//agregado para detalle de revisar
 
+Route::resource('movimientos', MovimientoController::class)->names('movimientos');
+Route::get('movimientostabla', [MovimientoController::class, 'indextabla'])->name('movimientostabla');//actualizado para serverside
 
 Route::post('administracion.updaterevisar/{pago}', [PagoController::class, 'updateRevisar'])->name('administracion.updaterevisar');
 Route::post('administracion.updaterevisar.post', [PagoController::class, 'updateRevisarpost'])->name('administracion.updaterevisar.post');
