@@ -44,6 +44,7 @@ class PedidosOperacionesExport implements FromView, ShouldAutoSize
             ->where('dpe.estado', '1')
             ->where('pedidos.pago', '1')
             ->where('pedidos.condicion', 'ATENDIDO')
+            ->where('u.jefe', Auth::user()->id) // Filtrar por operarios a cargo del jefe actual
             ->whereBetween(DB::raw('DATE(pedidos.created_at)'), [$request->desde, $request->hasta]) //rango de fechas
             ->groupBy(
                 'pedidos.id',
@@ -98,6 +99,7 @@ class PedidosOperacionesExport implements FromView, ShouldAutoSize
             ->where('dpe.estado', '1')
             ->where('pedidos.pago', '0')
             ->where('pedidos.condicion', 'ATENDIDO')
+            ->where('u.jefe', Auth::user()->id) // Filtrar por operarios a cargo del jefe actual
             ->whereBetween(DB::raw('DATE(pedidos.created_at)'), [$request->desde, $request->hasta]) //rango de fechas
             ->groupBy(
                 'pedidos.id',
