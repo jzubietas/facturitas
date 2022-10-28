@@ -823,7 +823,22 @@ class PagoController extends Controller
             ->where('pago_id', $pago->id)
             ->get();
 
-        return view('pagos.edit', compact('pago', 'pagos', 'clientes', 'pedidos', 'bancos', 'listaPedidos', 'listaPagos'));
+        $tipotransferencia = [
+            "INTERBANCARIO" => 'INTERBANCARIO',
+            "DEPOSITO" => 'DEPOSITO',
+            "GIRO" => 'GIRO',
+            "TRANSFERENCIA" => 'TRANSFERENCIA',
+            "YAPE" => 'YAPE',
+            "PLIN" => 'PLIN',
+            "TUNKI" => 'TUNKI',
+        ];
+
+        $titulares = [
+            "EPIFANIO HUAMAN SOLANO" => 'EPIFANIO HUAMAN SOLANO',
+            "NIKSER DENIS ORE RIVEROS" => 'NIKSER DENIS ORE RIVEROS'
+        ];
+
+        return view('pagos.edit', compact('pago', 'pagos', 'clientes', 'pedidos', 'bancos', 'listaPedidos', 'listaPagos', 'tipotransferencia', 'titulares'));
     }
 
     /**
@@ -968,7 +983,9 @@ class PagoController extends Controller
     {   
         $pago = Pago::where('id', $pago_id)->first();
         $detallePago = DetallePago::where('pago_id', $pago->id)->get();
-        $pagoPedido = PagoPedido::where('pago_id', $pago->id)->get();
+        $pagoPedido = PagoPedido::where('pago_id', $pago->id)
+                                ->where('estado', '1')
+                                ->get();
 
         $pago->update([            
             'estado' => '0'
@@ -988,10 +1005,28 @@ class PagoController extends Controller
             ]);
 
             $pedido = Pedido::find($pagoP->pedido_id);
-
-            $pedido->update([
-                'pago' => '0'
+            $detalle_pedido = DetallePedido::where('pedido_id', $pedido->id)
+                                            //->where()
+                                            ->where('estado', '1')
+                                            ->get();
+            //ACTUALIZA SALDO
+            $detalle_pedido->update([
+                //'pago' => '0',
+                'saldo' => $detalle_pedido->saldo + $pagoP->abono                
             ]);
+
+            //ACTUALIZO SI PEDIDO TIENE PAGO
+            if($detalle_pedido->saldo == $detalle_pedido->total){
+                $pedido->update([
+                    'pago' => 0,
+                    'pagado' => 0
+                ]);                
+            }else{
+                $pedido->update([
+                    'pago' => 1,
+                    'pagado' => 1
+                ]);  
+            }
         }
 
         return redirect()->route('pagos.index')->with('info', 'eliminado');        
