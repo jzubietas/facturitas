@@ -450,7 +450,7 @@ class ClienteController extends Controller
         if (Auth::user()->rol == "Asesor"){
             $data = Cliente:://CLIENTES SIN PEDIDOS
                 join('users as u', 'clientes.user_id', 'u.id')
-                ->join('pedidos as p', 'clientes.id', 'p.cliente_id')
+                ->leftjoin('pedidos as p', 'clientes.id', 'p.cliente_id')
                 ->where('clientes.estado','1')
                 ->where('clientes.tipo','1')
                 ->where('clientes.user_id', Auth::user()->id)
@@ -492,7 +492,7 @@ class ClienteController extends Controller
         }else if (Auth::user()->rol == "Super asesor"){
             $data = Cliente:://CLIENTES SIN PEDIDOS
                 join('users as u', 'clientes.user_id', 'u.id')
-                ->join('pedidos as p', 'clientes.id', 'p.cliente_id')
+                ->leftjoin('pedidos as p', 'clientes.id', 'p.cliente_id')
                 ->where('clientes.estado','1')
                 ->where('clientes.tipo','1')
                 //->where('clientes.pidio','1')
@@ -533,7 +533,7 @@ class ClienteController extends Controller
         }else if (Auth::user()->rol == "Encargado"){
             $data = Cliente:://CLIENTES SIN PEDIDOS
                 join('users as u', 'clientes.user_id', 'u.id')
-                ->join('pedidos as p', 'clientes.id', 'p.cliente_id')
+                ->leftjoin('pedidos as p', 'clientes.id', 'p.cliente_id')
                 ->where('clientes.estado','1')
                 ->where('clientes.tipo','1')
                 //->where('clientes.user_id', Auth::user()->id)//corregir aqui los usuarios que sean asesores
@@ -574,7 +574,7 @@ class ClienteController extends Controller
         }else{
             $data = Cliente:://CLIENTES SIN PEDIDOS
                 join('users as u', 'clientes.user_id', 'u.id')
-                ->join('pedidos as p', 'clientes.id', 'p.cliente_id')
+                ->leftjoin('pedidos as p', 'clientes.id', 'p.cliente_id')
                 ->where('clientes.estado','1')
                 ->where('clientes.tipo','1')
                 //->where('clientes.pidio','1')

@@ -255,13 +255,13 @@ tfoot td {
                   name: 'id',
                   render:function(data,type,row,meta){
                     if(row.id<10){
-                      return '<input type="hidden" name="pedido_id[]" value="' + data + '">PED000' + data + '</td>';
+                      return '<input type="hidden" name="pedido_id['+row.id+']" value="' + data + '">PED000' + data + '</td>';
                     }else if(row.id<100){
-                      return '<input type="hidden" name="pedido_id[]" value="' + data + '">PED00' + data + '</td>';
+                      return '<input type="hidden" name="pedido_id['+row.id+']" value="' + data + '">PED00' + data + '</td>';
                     }else if(row.id<1000){
-                      return '<input type="hidden" name="pedido_id[]" value="' + data + '">PED0' + data + '</td>';
+                      return '<input type="hidden" name="pedido_id['+row.id+']" value="' + data + '">PED0' + data + '</td>';
                     }else{
-                      return '<input type="hidden" name="pedido_id[]" value="' + data + '">PED' + data + '</td>';
+                      return '<input type="hidden" name="pedido_id['+row.id+']" value="' + data + '">PED' + data + '</td>';
                     } 
                     //return '<input type="hidden" name="pedido_id[]" value="' + data + '">PED000' + data + '</td>';
                   }
@@ -279,7 +279,7 @@ tfoot td {
                   data: 'saldo', 
                   name: 'saldo',
                   render:function(data,type,row,meta){
-                      return '<input type="hidden" name="numbersaldo[]" value="' + data + '"><span class="numbersaldo">' + data + '</span></td>';
+                      return '<input type="hidden" name="numbersaldo['+row.id+']" value="' + data + '"><span class="numbersaldo">' + data + '</span></td>';
                   },
                   "visible": true
                 },
@@ -287,8 +287,8 @@ tfoot td {
                   data: 'diferencia', 
                   name: 'diferencia',
                   render:function(data,type,row,meta){
-                      return '<input type="hidden" name="numberdiferencia[]" value="' + data + '"><span class="numberdiferencia">' + data + '</span></td>'+
-                       '<input type="hidden" name="numbertotal[]" value="' + data + '"><span class="numbertotal"></span></td>';
+                      return '<input type="hidden" name="numberdiferencia['+row.id+']" value="' + data + '"><span class="numberdiferencia">' + data + '</span></td>'+
+                       '<input type="hidden" name="numbertotal['+row.id+']" value="' + data + '"><span class="numbertotal"></span></td>';
                   },
                   "visible": true
                 },

@@ -325,40 +325,66 @@ class PagoController extends Controller
         $pedidos_pagados_parcial=$request->checkadelanto;
         $pedidos_pagados_parcial_ar = array();
         $saldo = $request->numberdiferencia;
+        //return $pedido_id;
         if(count((array)$pedido_id)>0){
-            while ($contPedidos < count((array)$pedido_id)) {
-                //4 pedidos  4  total 4 adelanto
-                
-                if(count((array)$pedidos_pagados_parcial)>0){
-                    if (array_key_exists( $pedido_id[$contPedidos] , $pedidos_pagados_parcial)) {
-                        $pedidos_pagados_parcial_ar[$pedido_id[$contPedidos]]["checked"]=1;
-                        $pedidos_pagados_parcial_ar[$pedido_id[$contPedidos]]["pedido_id"]=$pedido_id[$contPedidos];
+            
+            //programacion totales check
+            foreach($pedido_id as $pedido_id_key =>$pedido_id_value)
+            {                
+                if(count((array)$pedidos_pagados_total))
+                {
+                    if (array_key_exists( $pedido_id_value , $pedidos_pagados_total)) {
+                        $pedidos_pagados_total_ar[ $pedido_id_value ]["checked"]=1;
+                        $pedidos_pagados_total_ar[ $pedido_id_value ]["pedido_id"]=$pedido_id[$pedido_id_key];
+                        $pedidos_pagados_total_ar[ $pedido_id_value ]["total_parcial"]='total';
                     }else{
-                        $pedidos_pagados_parcial_ar[$pedido_id[$contPedidos]]["checked"]=0;
-                        $pedidos_pagados_parcial_ar[$pedido_id[$contPedidos]]["pedido_id"]=$pedido_id[$contPedidos];
+                        $pedidos_pagados_total_ar[ $pedido_id_value ]["checked"]=0;
+                        $pedidos_pagados_total_ar[ $pedido_id_value ]["pedido_id"]=$pedido_id[$pedido_id_key];
+                        $pedidos_pagados_total_ar[ $pedido_id_value ]["total_parcial"]='total';
                     }
-                }else{
-                    //$pedidos_pagados_parcial
-                    $pedidos_pagados_parcial_ar[$pedido_id[$contPedidos]]["checked"]=0;
-                    $pedidos_pagados_parcial_ar[$pedido_id[$contPedidos]]["pedido_id"]=$pedido_id[$contPedidos];
                 }
+                else{
+                    $pedidos_pagados_total_ar[ $pedido_id_value ]["checked"]=0;
+                    $pedidos_pagados_total_ar[ $pedido_id_value ]["pedido_id"]=$pedido_id[$pedido_id_key];
+                    $pedidos_pagados_total_ar[ $pedido_id_value ]["total_parcial"]='total';
+                }
+            }
+            //return $pedidos_pagados_total_ar;
+            //programacion totales check
+
+            //programacion parciales check
+            foreach($pedido_id as $pedido_id_key =>$pedido_id_value)
+            {
                 
-                if(count((array)$pedidos_pagados_total)>0){
-                    if (array_key_exists( $pedido_id[$contPedidos] , $pedidos_pagados_total)) {
-                        $pedidos_pagados_total_ar[$pedido_id[$contPedidos]]["checked"]=1;
-                        $pedidos_pagados_total_ar[$pedido_id[$contPedidos]]["pedido_id"]=$pedido_id[$contPedidos];
+                if(count((array)$pedidos_pagados_parcial))
+                {
+                    if (array_key_exists( $pedido_id_value , $pedidos_pagados_parcial)) {
+                        $pedidos_pagados_parcial_ar[ $pedido_id_value ]["checked"]=1;
+                        $pedidos_pagados_parcial_ar[ $pedido_id_value ]["pedido_id"]=$pedido_id[$pedido_id_key];
+                        $pedidos_pagados_parcial_ar[ $pedido_id_value ]["total_parcial"]='parcial';
                     }else{
-                        $pedidos_pagados_total_ar[$pedido_id[$contPedidos]]["checked"]=0;
-                        $pedidos_pagados_total_ar[$pedido_id[$contPedidos]]["pedido_id"]=$pedido_id[$contPedidos];
+                        $pedidos_pagados_parcial_ar[ $pedido_id_value ]["checked"]=0;
+                        $pedidos_pagados_parcial_ar[ $pedido_id_value ]["pedido_id"]=$pedido_id[$pedido_id_key];
+                        $pedidos_pagados_parcial_ar[ $pedido_id_value ]["total_parcial"]='parcial';
                     }
-                }else{
-                    //$pedidos_pagados_parcial
-                    $pedidos_pagados_total_ar[$pedido_id[$contPedidos]]["checked"]=0;
-                    $pedidos_pagados_total_ar[$pedido_id[$contPedidos]]["pedido_id"]=$pedido_id[$contPedidos];
                 }
-                
-                
-                $contPedidos++;
+                else{
+                    $pedidos_pagados_parcial_ar[ $pedido_id_value ]["checked"]=0;
+                    $pedidos_pagados_parcial_ar[ $pedido_id_value ]["pedido_id"]=$pedido_id[$pedido_id_key];
+                    $pedidos_pagados_parcial_ar[ $pedido_id_value ]["total_parcial"]='parcial';
+                }
+            }
+            //programacion parciales check
+
+            //return $pedidos_pagados_parcial_ar;
+            /////
+            
+            return $saldo;
+            foreach($pedido_id as $pedido_id_key =>$pedido_id_value)
+            {
+                $pedidos_pagados_parcial_ar[ $pedido_id_value ]["checked"]=0;
+                $pedidos_pagados_total_ar[ $pedido_id_value ]["checked"]=1;
+
             }
 
             while ($contPedidosfor < count((array)$pedido_id)) {
@@ -367,7 +393,7 @@ class PagoController extends Controller
                 if($saldo[$contPedidosfor]<=3){
                     //muevo los check y regularizo para condonar deuda
                     $pedidos_pagados_parcial_ar[$pedido_id[$contPedidosfor]]["checked"]="1";
-                    $pedidos_pagados_parcial[$pedido_id[$contPedidosfor]]["checked"]="0";
+                    $pedidos_pagados_total_ar[$pedido_id[$contPedidosfor]]["checked"]="0";
                 }
                 //$pedido_id[$contPedidosfor]
 
@@ -377,7 +403,7 @@ class PagoController extends Controller
             $pedidos_pagados_parcial=$pedidos_pagados_parcial_ar;
             $pedidos_pagados_total=$pedidos_pagados_total_ar;
         }
-        //return $pedidos_pagados_total;
+        return $pedidos_pagados_total;
         //return $request->all();
 
 
@@ -616,10 +642,41 @@ class PagoController extends Controller
                     $pedidos_pagados_total_ar[$pedido_id[$contPedidos]]["checked"]="0";
                     $pedidos_pagados_total[$pedido_id[$contPedidos]]["pedido_id"]=$pedido_id[$contPedidos];
             */
-            
+            //return $pedidos_pagados_total;
+
             if(count((array)$pedidos_pagados_total)>0)
             {
-                while ($contPT < count((array)$pedidos_pagados_total)) {
+                //return "aaa";
+                foreach($pedidos_pagados_total as $pedidos_pagados_total_index => $pedidos_pagados_total_index_valor ){
+                    //return $pedidos_pagados_total_index_valor["pedido_id"];
+                    $pedido_a_pago_total[ $pedidos_pagados_total_index ]["pedido_id"]=$pedidos_pagados_total_index_valor["pedido_id"];
+                    $pedido_a_pago_total[ $pedidos_pagados_total_index ]["pago_id"] = $pago->id;
+                    $pedido_a_pago_total[ $pedidos_pagados_total_index ]["pagado"] = '2';
+                    /*array(
+                        'pago_id' => $pago->id,
+                        'pagado' => '2'
+                    );*/
+                }
+                /*while ($contPT < count((array)$pedidos_pagados_total)) {
+                    array_push($pedido_a_pago_total, ($pedidos_pagados_total[ $pedido_id[$contPT]]["pedido_id"]));
+
+                    $pedido_a_pago_total[ $pedido_id[$contPT] ] = array(
+                        'pago_id' => $pago->id,
+                        'pagado' => '2'
+                    ); 
+
+                    next($pedidos_pagados_total);
+
+                    $contPT++;
+                }*/
+            }
+            return $pedidos_pagados_total;
+            return $pedido_a_pago_total;
+
+            if(count((array)$pedidos_pagados_total)>0)
+            {
+                //foreach($pedidos_pagados_total)
+                /*while ($contPT < count((array)$pedidos_pagados_total)) {
                     //$pedido_a_pago_total = key($pedidos_pagados_total);
                     array_push($pedido_a_pago_total, ($pedidos_pagados_total[ $pedido_id[$contPT]]["pedido_id"]));
 
@@ -632,8 +689,8 @@ class PagoController extends Controller
                     next($pedidos_pagados_total);
 
                     $contPT++;
-                }
-                return $pedido_a_pago_total;
+                }*/
+                //return $pedido_a_pago_total;
                 $contPT_update = 0;
                 while ($contPT_update < count((array)$pedido_a_pago_total)) {
                     $pago_pedido_update_total = PagoPedido::where('pago_id', $pago->id)

@@ -224,6 +224,14 @@
             if(row.condicion_pa==null){
               return 'SIN PAGO REGISTRADO';
             }else{
+              if(row.condicion_pa=="0"){
+                return 'SIN PAGO REGISTRADO';
+              }else if(row.condicion_pa=="1"){
+                return 'ADELANTO';
+              }
+              else if(row.condicion_pa=="2"){
+                return 'PAGO';
+              }
               return data;
             }              
           }
