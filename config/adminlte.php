@@ -397,7 +397,6 @@ return [
                 ],
             ],
         ],
-
         [
             'text'    => 'Administracion',
             'icon'    => 'fa fa-comments-dollar',

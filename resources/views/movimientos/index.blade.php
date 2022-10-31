@@ -34,7 +34,7 @@
       </div>
     </div>
     @include('pagos.modals.exportar', ['title' => 'Exportar Lista de pagos', 'key' => '1']) --}}    
-    @include('movimientos.modals.addMovimientos')
+    @include('movimientos.modals.AddMovimientos')
   </h1>
 
   @if($superasesor > 0)
@@ -67,7 +67,7 @@
         <tbody>
         </tbody>
       </table>
-      @include('pagos.modals.modalDeleteId')
+      @include('movimientos.modals.modalDeleteId')
     </div>
   </div>
 
@@ -153,11 +153,31 @@
   <script>
   $(document).ready(function () {
 
+    //$("#banco").val("").html("");
+    $("#tipotransferencia").html("");
+    $("#tipotransferencia").selectpicker("refresh");
+
     $.ajaxSetup({
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
     });
+
+    $(document).on("change","#banco",function(event){
+
+      console.log("banco change");
+      $.ajax({
+        url: "{{ route('cargar.tipomovimiento') }}?banco=" + $(this).val(),
+        method: 'GET',
+        success: function(data) {
+          //carga ajax a combo
+          $('#tipotransferencia').html(data.html);
+          $("#tipotransferencia").selectpicker("refresh");
+        }
+      });
+    });
+
+   
 
     //para opcion eliminar  pagos
     /* $('#modal-delete').on('show.bs.modal', function (event) {     

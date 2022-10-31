@@ -13,7 +13,11 @@
         <div class="modal-body">
 
           <div class="form-row">
-            <div class="form-group col-lg-12" style="font-size: 18px">
+          <div class="form-group col-lg-6" style="font-size: 18px">
+              {!! Form::label('banco', 'Banco') !!}
+              {!! Form::select('banco', $bancos , '0', ['class' => 'form-control selectpicker border border-secondary', 'data-live-search' => 'true', 'placeholder' => '---- SELECCIONE ----']) !!}
+            </div>
+            <div class="form-group col-lg-6" style="font-size: 18px">
               {!! Form::label('tipotransferencia', 'Tipo Movimiento') !!}              
               {!! Form::select('tipotransferencia', $tipotransferencia, '', ['class' => 'form-control selectpicker border border-secondary', 'id'=>'tipotransferencia','data-live-search' => 'true', 'placeholder' => '---- SELECCIONE ----']) !!}  
             </div>
@@ -23,15 +27,12 @@
             </div>            
           </div>          
           <div class="form-row">
-            <div class="form-group col-lg-12" style="font-size: 18px">
+            <div class="form-group col-lg-6" style="font-size: 18px">
               {!! Form::label('monto', 'Monto pagado') !!}
               <input type="text" name="monto" id="monto" class="form-control number" placeholder="Monto pagado...">
             </div>
-            <div class="form-group col-lg-12" style="font-size: 18px">
-              {!! Form::label('banco', 'Banco') !!}
-              {!! Form::select('banco', $bancos , '0', ['class' => 'form-control selectpicker border border-secondary', 'data-live-search' => 'true', 'placeholder' => '---- SELECCIONE ----']) !!}
-            </div>
-            <div class="form-group col lg-12" style="font-size: 18px">
+            
+            <div class="form-group col lg-6" style="font-size: 18px">
               {!! Form::label('fecha', 'Fecha de voucher') !!}
               {!! Form::date('fecha', \Carbon\Carbon::now(), ['class' => 'form-control']) !!}
               {{-- <input name="pfecha" type="date" class="form-control"> --}}

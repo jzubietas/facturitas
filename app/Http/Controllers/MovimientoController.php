@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\MovimientoBancario;
 use App\Models\Pago;
 use App\Models\User;
+use App\Models\TipoMovimiento;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -29,9 +30,9 @@ class MovimientoController extends Controller
         $bancos = [
             "BCP" => 'BCP',
             "BBVA" => 'BBVA',
-            "INTERBANK" => 'INTERBANK',
-            "SCOTIABANK" => 'SCOTIABANK',
-            "PICHINCHA" => 'PICHINCHA',
+            "IBK" => 'INTERBANK',
+            /*"SCOTIABANK" => 'SCOTIABANK',
+            "PICHINCHA" => 'PICHINCHA',*/
         ];
 
         $tipotransferencia = [
@@ -52,6 +53,8 @@ class MovimientoController extends Controller
         return view('movimientos.index', compact('pagosobservados_cantidad', 'superasesor', 'bancos', 'tipotransferencia', 'titulares'));
     }
 
+
+
     public function indextabla(Request $request)
     {
         $movimientos = null;
@@ -62,7 +65,7 @@ class MovimientoController extends Controller
                     ->addIndexColumn()
                     ->addColumn('action', function($movimiento){     
                         $btn='';
-                        /* if(Auth::user()->rol == "Administrador"){
+                        /* if(Auth::user()->rol == "Administrador"){*/
                             $btn=$btn.'<a href="'.route('movimientos.show', $movimiento['id']).'" class="btn btn-info btn-sm">Ver</a>';
                             $btn=$btn.'<a href="'.route('movimientos.edit', $movimiento['id']).'" class="btn btn-warning btn-sm">Editar</a>';
                             $btn = $btn.'<a href="" data-target="#modal-delete" data-toggle="modal" data-delete="'.$movimiento['id'].'"><button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i> Eliminar</button></a>';
@@ -84,6 +87,20 @@ class MovimientoController extends Controller
                     })
                     ->rawColumns(['action'])
                     ->make(true);
+    }
+
+    public function tipomovimiento(Request $request)//tipo movimiento
+    {
+        if (!$request->banco) {
+            $html = '<option value="">' . trans('---- SELECCIONE ----') . '</option>';
+        } else {
+            $html = '<option value="">' . trans('---- SELECCIONE ----') . '</option>';
+            $tiposmovimientos = TipoMovimiento::where('tipo_movimientos.banco', $request->banco)->get();        
+            foreach ($tiposmovimientos as $tiposmovimiento) {
+                $html .= '<option value="' . $tiposmovimiento->descripcion . '">' . $tiposmovimiento->descripcion . '</option>';
+            }
+        }
+        return response()->json(['html' => $html]);
     }
 
     /**
@@ -129,7 +146,9 @@ class MovimientoController extends Controller
      */
     public function show($id)
     {
+        $movimientos = MovimientoBancario::where('id', $id)->first();
         //
+        return view('movimientos.show', compact('movimientos'));
     }
 
     /**
