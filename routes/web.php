@@ -32,6 +32,11 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
 
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
 
+
+//Route::get('image-upload-preview', [PagoController::class, 'indexpreview'])->name('image-upload-preview');
+//Route::post('upload-image', [PagoController::class, 'storeimage'])->name('upload-image');
+
+
 Route::resource('clientes', ClienteController::class)->names('clientes');
 Route::get('clientestabla', [ClienteController::class, 'indextabla'])->name('clientestabla');
 

@@ -193,6 +193,7 @@ tfoot td {
     // CARGAR PEDIDOS DE CLIENTE SELECCIONADO
 
     var tabla_pedidos=null;
+    var tabla_pagos=null;
     //$(document).ready(function () {
 
       function eliminarPa(index) {
@@ -218,26 +219,277 @@ tfoot td {
           }
         }
 
+        $(document).ready(function (e) {
+ 
+   
+          $('#pimagen').change(function(){
+                    
+            let reader = new FileReader();
+
+            reader.onload = (e) => { 
+
+              $('#picture').attr('src', e.target.result); 
+            }
+
+            reader.readAsDataURL(this.files[0]); 
+          
+          });
+      
+
+          /*$(document).on("click",".eliminarpa",function(event){
+              var obtenerindex=1
+            tabla_pagos.row.del("");
+
+
+          });*/
+
+          $(document).on("click",".eliminarpa",function(event){
+
+            let montofilapago=$(this).parents('tr').find(".montopago").html();
+            console.log("mont "+montofilapago);
+            let calcu_=  $("#diferencia").val()*1- montofilapago*1;
+            $("#diferencia").val(calcu_);
+            tabla_pagos
+                .row( $(this).parents('tr') )
+                .remove()
+                .draw();
+              //restar a saldo pagos
+          });
+         
+          
+          /*function eliminarPa(index) {
+            total_pago = total_pago - subtotal_pago[index];
+            $("#total_pago").html("S/. " + total_pago.toLocaleString("en-US"));
+            $("#total_pago_pagar").val(total_pago);
+            $("#filasPa" + index).remove();
+            evaluarPa();
+          }*/
+          
+        });
+
       $(document).ready(function() {
+
+        /* codigo para cargar pagos datatable
+        
+        */
+        var counter_pagos = 1;
+
+        tabla_pagos=$('#tabla_pagos').DataTable({
+            scrollY: '200px',
+            scrollCollapse: true,
+            paging: false,
+            fixedHeader: true,
+            "bPaginate": false,
+            "bFilter": false,
+            "bInfo": false,
+            /*columns: [
+              {
+                data: null,
+                render: function ( data, type, row ) {
+                    return '';
+                }
+              },
+              {
+                data: null,
+                render: function ( data, type, row ) {
+                  return '';
+                }
+              },{
+                data: null,
+                render: function ( data, type, row ) {
+                  return '';
+                }
+              },{
+                data: null,
+                render: function ( data, type, row ) {
+                  return '';
+                }
+              },{
+                data: null,
+                render: function ( data, type, row ) {
+                  return '';
+                }
+              },{
+                data: null,
+                render: function ( data, type, row ) {
+                  return '';
+                }
+              },{
+                data: null,
+                render: function ( data, type, row ) {
+                  return '';
+                }
+              },{
+                data: null,
+                render: function ( data, type, row ) {
+                  return '';
+                }
+              },
+            ],*/
+            "footerCallback": function ( row, data, start, end, display ) {
+                var api = this.api();
+                nb_cols = 4;api.columns().nodes().length;
+                var j = 2;
+
+                /*var pageTotal = api
+                      .column( 6, { page: 'current'} )
+                      .data()
+                      .reduce( function (a, b) {
+                          return Number(a) + Number(b);
+                      }, 0 );*/
+                
+                //$( api.column( 7 ).footer() ).html('<input type="text" name="total_pago" id="total_pago" value="'+pageTotal+'"/>'+pageTotal);
+
+                /*var pageSaldo = api
+                      .column( 3, { page: 'current'} )
+                      .data()
+                      .reduce( function (a, b) {
+                          return Number(a) + Number(b);
+                      }, 0 );
+                $( api.column( 3 ).footer() ).html('<input type="text" name="total_pago_pagar" id="total_pago_pagar" value="'+pageSaldo+'" />'+pageSaldo);
+                     */ 
+              },
+
+        });
+
+        $(document).on("click","#add_pago",function(event){
+
+          if ($('#tipotransferencia').val() == '') {
+            Swal.fire(
+              'Error',
+              'Seleccione tipo de transferencia',
+              'warning'
+            )
+          }else if ($('#titulares').val() == '') {
+            Swal.fire(
+              'Error',
+              'Seleccione titular',
+              'warning'
+            )
+          }else if ($('#pmonto').val() == '') {
+            Swal.fire(
+              'Error',
+              'Ingrese monto',
+              'warning'
+            )
+          }
+          else if ($('#pbanco').val() == ''){
+            Swal.fire(
+              'Error',
+              'Seleccione banco ',
+              'warning'
+            )
+          }
+          else if ($('#pfecha').val() == ''){
+            Swal.fire(
+              'Error',
+              'Seleccione la fecha',
+              'warning'
+            )
+          }
+          else if ($('#pimagen').val() == ''){
+            Swal.fire(
+              'Error',
+              'Seleccione la imagen',
+              'warning'
+            )
+          }
+          else {
+
+            var strEx = $("#pmonto").val();
+            strEx = strEx.replace(",","");
+            var numFinal = parseFloat(strEx);
+            monto = numFinal;
+            tipomovimiento = $('#tipotransferencia option:selected').val();
+            titular = $('#titulares option:selected').val();
+            banco = $('#pbanco option:selected').val();
+            fecha = $("#pfecha").val();
+            imagen = $("#pimagen").val();
+
+            if (monto != ""  && banco != "" && fecha != ""  && imagen != "" && tipomovimiento != "" && titular != "" ) 
+            {
+              /*subtotal_pago[counter_pagos] = monto*1;
+              total_pago = parseFloat(total_pago*1 + subtotal_pago[counter_pagos]*1).toFixed(2);
+
+              total_pago*/
+
+              console.log($('#pimagen').val());
+            
+              deuda = !isNaN($('#pcantidad').val()) ? parseInt($('#pcantidad').val(), 10) : 0;
+              pagado = !isNaN($('#pstock').val()) ? parseInt($('#pstock').val(), 10) : 0;
+
+              console.log("aaaaa");
+
+              var col1=(counter_pagos + 1);
+              var col2='<input type="hidden" name="tipomovimiento[]" value="'+tipomovimiento+'" ><span class="tipomovimiento">'+tipomovimiento+'</span>';
+              var col3='<input type="hidden" name="titular[]" value="'+titular+'"><span class="titular">'+titular+'</span>';
+              var col4='<input type="hidden" name="banco[]" value="'+banco+'"><span class="banco">'+banco+'</span>';
+              var col5='<input type="hidden" name="fecha[]" value="'+fecha+'"><span class="fecha">'+fecha+'</span>';
+              var col6= '<img id="picture'+(counter_pagos+1)+'" src="'+imagen+'" alt="Imagen del pago" height="100px" width="100px">';
+              var col7 = '<input type="hidden" name="monto[]" value="'+monto+'"><span class="montopago">'+monto+'</span>';
+              var col8 = '<button type="button" class="btn btn-danger btn-sm eliminarpa"><i class="fas fa-trash-alt"></i></button>'
+
+              tabla_pagos.row.add([col1,col2,col3,col4,col5,col6,col7,col8]).draw(false);    
+              counter_pagos++;
+
+              let calcu_=  $("#diferencia").val()*1+ monto*1;
+              $("#diferencia").val(calcu_);
+              var montofila=0;
+              $('#tabla_pagos > tbody  > tr').each(function(index,tr) {
+                console.log(index+" posicion");
+                aa1=($(this).find("td").eq(6).find(".montopago").text());
+                montofila=montofila*1+aa1*1;
+                console.log(montofila)
+                $("#total_pago").text(montofila).html(montofila);
+
+
+               // $(tfoot).find('input').eq(0).val(data);
+               
+              });
+
+              $("#tabla_pagos tfoot").find('tr').eq(6).find(":h4").html("44");
+
+              //$("#total_pago").text("123").html("123");
+              //.text($(e.currentTarget).data('text'));
+              //$("#total_pago_pagar").val(montofila.toLocaleString("en-US"));
+
+
+              //console.log("agregando fila a la tabla del formulario modal agregar pago")
+
+            }
+
+
+            
+          }
+
+          
+
+
+
+        });
+        /*$('#addRow').on('click', function () {
+            
+        });*/
+
+
 
         $(document).on("change","#pcliente_id",function(){
           $('#tabla_pedidos').DataTable().clear().destroy();
           datosCliente = document.getElementById('pcliente_id').value.split('_');
           cliente_id = datosCliente[0];
           saldo = datosCliente[1];
-          //$("#diferencia").prop("disabled",null)
-          //diferencia=$("#diferencia").val();
-          //$("#diferencia").prop("disabled",true)
           console.log("diferencia en change pcliente_id");
           console.log(diferencia);
           $("#diferencia").prop("disabled",false);
           let diferenciaval=$("#diferencia").val();
           console.log(diferenciaval);
           $("#cliente_id").val(cliente_id);
-          $("#saldo").val(saldo);
-          
+          $("#saldo").val(saldo);          
           
           tabla_pedidos=$('#tabla_pedidos').DataTable({
+            scrollY: '200px',
+            scrollCollapse: true,
+            paging: false,
               "bPaginate": false,
               "bFilter": false,
               "bInfo": false,
@@ -267,14 +519,6 @@ tfoot td {
                   }
                 },
                 {data: 'codigo', name: 'codigo',},
-                /*{
-                  data: 'total', 
-                  name: 'total',
-                  render:function(data,type,row,meta){
-                      return '<input type="hidden" name="numbermonto[]" value="' + data + '">' + data + '</td>';
-                  },
-                  "visible": true
-                },*/
                 {
                   data: 'saldo', 
                   name: 'saldo',
@@ -332,398 +576,50 @@ tfoot td {
                       .reduce( function (a, b) {
                           return Number(a) + Number(b);
                       }, 0 );
-                // Update footer
                 $( api.column( 3 ).footer() ).html('<input type="hidden" name="total_pedido_pagar" id="total_pedido_pagar" value="'+pageSaldo+'" />'+pageSaldo);
 
-                //para footer saldo
-                /*while(j < nb_cols){
-                  var pageTotal = api
-                        .column( j, { page: 'current'} )
-                        .data()
-                        .reduce( function (a, b) {
-                            return Number(a) + Number(b);
-                        }, 0 );
-                  $( api.column( j ).footer() ).html(pageTotal);
-                  j++;
-                } */
               },
               
-            });
-
-            /*$(document).on('.radiototal','click', function (e) {
-              console.log("aaaa")
-            });*/
-
-
-            /*$(document).on('.radiototal','mousedown', function (e) {
-              e.preventDefefault();
-              console.log("aaaa")              
-            });*/
-            /*$(document).on("mousedown",'#tabla_pedidos input[type="checkbox"]', function (event) {
-              event.preventDefault();
-              event.stopPropagation();
-              console.log("checkBox");
-              
-              var cell = $(this).closest('td');
-              
-              var data = tabla_pedidos.row( cell ).data();
-              console.log('Using TD:', data)
-
-              var cell = $(this).parent();
-              
-              var data = tabla_pedidos.row( cell ).data();
-              console.log('Using Parent:', data)
-
-              var row = $(this).closest('tr');
-              
-              var data = tabla_pedidos.row( row ).data();
-              console.log('Using TR:', data)
-              
-              console.log('Checked name from TR:', data[0]);
-              return false;
-              
-          });*/
-
-          $(document).on("click",".radiototal",function(event){
-            event.preventDefault();
-          });
-
-          $(document).on("click",".radioadelanto",function(event){
-            event.preventDefault();
-          });
-
-          $(document).on("mousedown",".radiototal",function(event){
-            event.preventDefault();
-            if($(this).prop("checked") == true){
-              console.log("marcado")
-              $(this).prop("checked",false).val("0")////
-              //revertir
-                  let montopagos=parseFloat($("#diferencia").val().replace(",", ""));
-                  if(montopagos==null || isNaN(montopagos)){
-                    console.log("no hay pagos ingresados");
-                    return;
-                  }
-
-                  let filedata=tabla_pedidos.row($(this).closest('tr')).data();
-                  console.log(filedata)
-                  let pedidosaldo=parseFloat(filedata.saldo);
-                  if(pedidosaldo==null || isNaN(pedidosaldo)){
-                    console.log("no hay saldo ingresado");
-                    return;
-                  }
-
-                  console.log("desmarco saldo "+pedidosaldo+" monto "+montopagos)
-
-                  montopagos=parseFloat(montopagos+pedidosaldo);
-                  console.log("diferencia "+montopagos);
-                  $("#diferencia").val(montopagos);
-                  
-                  $(this).closest('tr').find("td").eq(3).find(":input").val(pedidosaldo.toFixed(2));
-                  $(this).closest('tr').find("td").eq(3).find(".numberdiferencia").text(pedidosaldo.toFixed(2));
-                  let totalafterdifer1=$(this).closest('tr').find("td").eq(2).find(".numbersaldo").val();
-                  let totalafterdifer2=$(this).closest('tr').find("td").eq(3).find(".numberdiferencia").val();
-                  let totalafterdifer=parseFloat(totalafterdifer1-totalafterdifer2);
-                  $(this).closest('tr').find("td").eq(3).find(".numbertotal").val(totalafterdifer);
-
-                  $(this).closest('tr').find(".radioadelanto").prop("disabled",false);
-                  $('#tabla_pedidos > tbody  > tr').each(function(index,tr) {
-                      console.log(index+" posicion");
-                      console.log("aca valido check en total y check en saldo");
-                      //var idfila=$(this).find("td").eq(0).html();//fila idpedido
-                      var idfila=$(this).find("td").eq(0).find(":input").val();//fila idpedido
-                      //if(idfila!=filedata.id)
-                      {
-                        console.log("id no es el mismo que acabo de ejecutar")
-                        
-                        //var saldofila=parseFloat($(this).find("td").eq(3).html());//saldo
-                        var saldofila=parseFloat($(this).find("td").eq(2).find(":input").val());
-                        console.log("saldo fila "+idfila+" es "+saldofila);
-                        var radiototalfila=$(this).find("td").eq(4).find("input").prop("checked");//check radiototal
-                        console.log("checktotal fila "+idfila+" es "+( (radiototalfila)? 'si':'no') );
-                        var radiosaldofila=$(this).find("td").eq(5).find("input").prop("checked");
-                        console.log("checksaldo fila "+idfila+" es "+( (radiosaldofila)? 'si':'no') );
-                        if(radiototalfila || radiosaldofila)
-                        {
-                          console.log("radiofila  "+index+" total o saldo esta checkedado")
-                        }
-                        if(!radiototalfila && !radiosaldofila){
-                          console.log("saldofila = "+saldofila + " y montopagos="+montopagos);//600/100
-                          console.log("radiofila "+index+" total o saldo no estan checkedado")                          
-                          if(saldofila<=montopagos)
-                          {
-                            console.log("saldo "+saldofila+" es menor igual a monto "+montopagos+", bloqueo saldo");
-                            $(this).find("td").eq(4).find("input").prop("disabled",false);
-                            $(this).find("td").eq(5).find("input").prop("disabled",true);
-                          }else{
-                            console.log("saldo "+saldofila+" es mayor a monto "+montopagos+", bloqueo total,activo saldo");
-                            $(this).find("td").eq(4).find("input").prop("disabled",true);
-                            $(this).find("td").eq(5).find("input").prop("disabled",false);
-                          }
-                        }
-                      }
-                      
-                    });
-              //fin revertir
-
-            }else if($(this).prop("checked") == false){
-              console.log("no marcado");///aca falla cuando el monto es menor que el saldo
-              
-              //validar si sumar depende el saldo y monto
-                  let montopagos=parseFloat($("#diferencia").val().replace(",", ""));
-                  if(montopagos==null || isNaN(montopagos)){
-                    console.log("no hay pagos ingresados");
-                    return;
-                  }
-
-                  console.log("monto es "+montopagos)
-
-                  let filedata=tabla_pedidos.row($(this).closest('tr')).data();
-                  console.log(filedata)
-                  let pedidosaldo=parseFloat(filedata.saldo);
-                  if(pedidosaldo==null || isNaN(pedidosaldo)){
-                    console.log("no hay saldo ingresado");
-                    return;
-                  }
-
-                  console.log("saldo es "+pedidosaldo)
-
-                  if(montopagos>=pedidosaldo)
-                  {
-                    $(this).prop("checked",true).val("1")////aqui valida////////data aqui check para diferencia
-                    montopagos=parseFloat(montopagos-pedidosaldo);
-                    console.log("diferencia "+montopagos);
-                    $("#diferencia").val(montopagos.toFixed(2));
-                    /////
-                    console.log("aqui debo cambiar el valor de input y span de columna diferencia");
-                    $(this).closest('tr').find("td").eq(3).find(":input").val("0.00");
-                    $(this).closest('tr').find("td").eq(3).find(".numberdiferencia").text("0.00");
-                    let totalafterdifer1=$(this).closest('tr').find("td").eq(2).find(".numbersaldo").val();
-                    let totalafterdifer2=$(this).closest('tr').find("td").eq(3).find(".numberdiferencia").val();
-                    let totalafterdifer=parseFloat(totalafterdifer1-totalafterdifer2);
-                    $(this).closest('tr').find("td").eq(3).find(".numbertotal").val(totalafterdifer);
-                    //$(this).closest('tr').find(".numberdiferencia").text("0.00");
-                    //$(this).find("td").eq(3).find(":input").val("0.00");///aqui me quede
-                    //$(this).find("td").eq(3).find("span").text("0.00");///aqui me quede
-
-                    $(this).closest('tr').find(".radioadelanto").prop("disabled",true);
-                    console.log("nuevo montogeneral "+$("#diferencia").val());
-                    $('#tabla_pedidos > tbody  > tr').each(function(index,tr) {
-                      console.log(index+" posicion");
-                      console.log("aca valido check en total y check en saldo");
-                      //var idfila=$(this).find("td").eq(0).html();//fila idpedido
-                      var idfila=$(this).find("td").eq(0).find(":input").val();//fila idpedido
-                      //if(idfila!=filedata.id)
-                      {
-                        console.log("id no es el mismo que acabo de ejecutar")
-                        
-                        //var saldofila=parseFloat($(this).find("td").eq(3).html());//saldo
-                        var saldofila=parseFloat($(this).find("td").eq(2).find(":input").val());//saldo
-                        console.log("saldo fila "+idfila+" es "+saldofila);
-                        var radiototalfila=$(this).find("td").eq(4).find("input").prop("checked");//check radiototal
-                        console.log("checktotal fila "+idfila+" es "+( (radiototalfila)? 'si':'no') );
-                        var radiosaldofila=$(this).find("td").eq(5).find("input").prop("checked");
-                        console.log("checksaldo fila "+idfila+" es "+( (radiosaldofila)? 'si':'no') );
-                        if(radiototalfila || radiosaldofila)
-                        {
-                          console.log("radiofila  "+index+" total o saldo esta checkedado")
-                        }
-                        if(!radiototalfila && !radiosaldofila){
-                          console.log("saldofila = "+saldofila + " y montopagos="+montopagos);
-                          console.log("radiofila "+index+" total o saldo no estan checkedado")                          
-                          if(saldofila<=montopagos)
-                          {
-                            console.log("saldo menor igual a monto, bloqueo saldo");
-                            $(this).find("td").eq(4).find("input").prop("disabled",false);
-                            $(this).find("td").eq(5).find("input").prop("disabled",true);
-                          }else{
-                            console.log("saldo mayor monto, bloqueo total,activo saldo");
-                            $(this).find("td").eq(4).find("input").prop("disabled",true);
-                            $(this).find("td").eq(5).find("input").prop("disabled",false);
-                          }
-                        }
-                      }
-                      
-                    });
-                    
-                  }
-              //fin validar
-
-            }
-            return;
-           
-          });
-
-          //para saldo
-          //inicio
-          $(document).on("mousedown",".radioadelanto",function(event){
-            event.preventDefault();
-            if($(this).prop("checked") == true){
-              console.log("marcado")
-              $(this).prop("checked",false).val("0")//////revertir              
-                  let montopagos=parseFloat($("#diferencia").val().replace(",", ""));//0
-                  /*if(montopagos==0 || montopagos==null || isNaN(montopagos)){
-                    console.log("no hay pagos ingresados");
-                    return;
-                  }*/
-                  let filedata=tabla_pedidos.row($(this).closest('tr')).data();
-                  let pedidosaldo=parseFloat(filedata.saldo);
-                  if(pedidosaldo==null || isNaN(pedidosaldo)){
-                    console.log("no hay saldo ingresado");
-                    return;
-                  }
-
-                  console.log("desmarco saldo "+pedidosaldo+" monto "+montopagos);
-
-                  /////falta aqui analizis
-                  //montopagos=parseFloat(montopagos+pedidosaldo);
-
-                  //551.20---356.00
-                  console.log("guardasaldo "+guardasaldo);
-                  montopagos=(guardasaldo);
-                  $("#diferencia").val(montopagos);
-
-                  $(this).closest('tr').find("td").eq(3).find(":input").val(pedidosaldo.toFixed(2));
-                  $(this).closest('tr').find("td").eq(3).find(".numberdiferencia").text(pedidosaldo.toFixed(2));
-                  let totalafterdifer1=$(this).closest('tr').find("td").eq(2).find(".numbersaldo").val();
-                  let totalafterdifer2=$(this).closest('tr').find("td").eq(3).find(".numberdiferencia").val();
-                  let totalafterdifer=parseFloat(totalafterdifer1-totalafterdifer2);
-                  $(this).closest('tr').find("td").eq(3).find(".numbertotal").val(totalafterdifer);
-                  //$(this).closest('tr').find(".radioadelanto").prop("disabled",false);
-
-                  //revertir pago reviso todo otra vez
-                  $('#tabla_pedidos > tbody  > tr').each(function(index,tr) {
-                      console.log(index+" posicion");
-                      console.log("aca valido check en total y check en saldo");
-                      //var idfila=$(this).find("td").eq(0).html();//fila idpedido
-                      var idfila=$(this).find("td").eq(0).find(":input").val();//fila idpedido
-                      if(idfila!=filedata.id)
-                      {
-                        console.log("id no es el mismo que acabo de ejecutar")
-                        
-                        //var saldofila=$(this).find("td").eq(3).html();//saldo/551.20
-                        var saldofila=parseFloat($(this).find("td").eq(2).find(":input").val());
-                        console.log("saldo fila "+idfila+" es "+saldofila);//551.20
-                        var radiototalfila=$(this).find("td").eq(4).find("input").prop("checked");//check radiototal
-                        console.log("checktotal fila "+idfila+" es "+( (radiototalfila)? 'si':'no') );//
-                        var radiosaldofila=$(this).find("td").eq(5).find("input").prop("checked");
-                        console.log("checksaldo fila "+idfila+" es "+( (radiosaldofila)? 'si':'no') );
-                        /*if(radiototalfila || radiosaldofila)
-                        {
-                          console.log("radiofila  "+index+" total o saldo esta checkedado")
-                        }
-                        if(!radiototalfila && !radiosaldofila){
-                          console.log("radiofila "+index+" total o saldo no estan checkedado")                          
-                          if(saldofila<=montopagos)
-                          {
-                            console.log("saldo menor igual a monto, bloqueo saldo");
-                            $(this).find("td").eq(4).find("input").prop("disabled",false);
-                            $(this).find("td").eq(5).find("input").prop("disabled",false);
-                          }else{
-                            console.log("saldo mayor monto, bloqueo total,activo saldo");
-                            $(this).find("td").eq(4).find("input").prop("disabled",true);
-                            $(this).find("td").eq(5).find("input").prop("disabled",false);
-                          }
-                        }*/
-                      }
-                      
-                    });
-              //fin revertir
-
-            }else if($(this).prop("checked") == false){
-              console.log("no marcado adelanto");///aca falla cuando el monto es menor que el saldo
-                  let montopagos=parseFloat($("#diferencia").val().replace(",", ""));
-                  if(montopagos==null || isNaN(montopagos)){
-                    console.log("no hay pagos ingresados");
-                    return;
-                  }
-                  let filedata=tabla_pedidos.row($(this).closest('tr')).data();
-                  let pedidosaldo=parseFloat(filedata.saldo);
-                  if(pedidosaldo==null || isNaN(pedidosaldo)){
-                    console.log("no hay saldo ingresado");
-                    return;
-                  }
-                  //sol si saldo es mayor al monto
-                  if(montopagos<pedidosaldo)
-                  {
-                    $(this).prop("checked",true).val("1")////aqui valida
-                    guardasaldo=$("#diferencia").val();//356 guardo
-                    let montopagosante=montopagos;
-                    montopagos=(0).toFixed(2);
-                    console.log("diferencia "+montopagos);
-                    $("#diferencia").val(montopagos);
-
-                    console.log("aqui cuando es adelanto y la diferencia debe ser 0 y guardarlo");
-                    console.log("pedidosaldo "+pedidosaldo+" montopagos saldo "+montopagosante);
-                    //restar saldo menos monto que queda general
-                    let montoqueda=parseFloat(pedidosaldo-montopagosante);
-                    console.log("montoqueda "+montoqueda)
-                    $(this).closest('tr').find("td").eq(3).find(":input").val(montoqueda.toFixed(2));///diferencia
-                    $(this).closest('tr').find("td").eq(3).find(".numberdiferencia").text(montoqueda.toFixed(2));///diferencia
-                    let totalafterdifer1=$(this).closest('tr').find("td").eq(2).find(".numbersaldo").val();
-                    let totalafterdifer2=$(this).closest('tr').find("td").eq(3).find(".numberdiferencia").val();
-                    let totalafterdifer=parseFloat(totalafterdifer1-totalafterdifer2);
-                    $(this).closest('tr').find("td").eq(3).find(".numbertotal").val(totalafterdifer);
-                    //$(this).closest('tr').find(".radioatotal").prop("disabled",true);
-                    //recorido defilas distintas al actual
-                    $('#tabla_pedidos > tbody  > tr').each(function(index,tr) {
-                      console.log(index+" posicion");
-                      console.log("aca valido check en total y check en saldo");
-                      //var idfila=$(this).find("td").eq(0).html();//fila idpedido
-                      var idfila=$(this).find("td").eq(0).find(":input").val();//fila idpedido
-                      if(idfila!=filedata.id)
-                      {
-                        console.log("id no es el mismo que acabo de ejecutar")
-                        
-                        //var saldofila=$(this).find("td").eq(3).html();//saldo
-                        var saldofila=parseFloat($(this).find("td").eq(2).find(":input").val());
-                        console.log("saldo fila "+idfila+" es "+saldofila);
-                        var radiototalfila=$(this).find("td").eq(4).find("input").prop("checked");//check radiototal
-                        console.log("checktotal fila "+idfila+" es "+( (radiototalfila)? 'si':'no') );
-                        var radiosaldofila=$(this).find("td").eq(5).find("input").prop("checked");
-                        console.log("checksaldo fila "+idfila+" es "+( (radiosaldofila)? 'si':'no') );
-                        if(radiototalfila || radiosaldofila)
-                        {
-                          console.log("radiofila  "+index+" total o saldo esta checkedado")
-                        }
-                        if(!radiototalfila && !radiosaldofila){
-                          console.log("radiofila "+index+" total o saldo no estan checkedado")                          
-                          if(saldofila<=montopagos)
-                          {
-                            console.log("saldo menor igual a monto, bloqueo saldo");
-                            $(this).find("td").eq(4).find("input").prop("disabled",false);
-                            $(this).find("td").eq(5).find("input").prop("disabled",false);
-                          }else{
-                            console.log("saldo mayor monto, bloqueo total,activo saldo");
-                            $(this).find("td").eq(4).find("input").prop("disabled",true);
-                            $(this).find("td").eq(5).find("input").prop("disabled",false);
-                          }
-                        }
-                      }
-                      
-                    });
-                    
-                  }
-                  
-              //fin validar
-
-            }
-            return;
-           
-          });
-
-          //fin checkbox salo
-
-
+            });//fin datatable
 
         });
+      });//fin ready
 
-        ///para saldo
+  </script>
+    <script src="{{ asset('js/createpago_radiototal.js') }}"></script>
+    <script src="{{ asset('js/createpago_radioadelanto.js') }}"></script>
+  <script>
+      $(document).ready(function() {
 
+        function separateComma(val) {
+          // remove sign if negative
+          var sign = 1;
+          if (val < 0) {
+            sign = -1;
+            val = -val;
+          }
+          // trim the number decimal point if it exists
+          let num = val.toString().includes('.') ? val.toString().split('.')[0] : val.toString();
+          let len = num.toString().length;
+          let result = '';
+          let count = 1;
 
-        /*$("#pcliente_id").change(function() {
-          
-        });*/
+          for (let i = len - 1; i >= 0; i--) {
+            result = num.toString()[i] + result;
+            if (count % 3 === 0 && count !== 0 && i !== 0) {
+              result = ',' + result;
+            }
+            count++;
+          }
 
+          // add number after decimal point
+          if (val.toString().includes('.')) {
+            result = result + '.' + val.toString().split('.')[1];
+          }
+          // return result with - sign if negative
+          return sign < 0 ? '-' + result : result;
+        }
+         
         $(document).on("change",'#diferencia',function(e){
           console.log("logica de diferencia");
           console.log($(this).val());
@@ -732,7 +628,6 @@ tfoot td {
 
         $(document).on("click",'#add_pedido',function(){
           agregarPedido();
-
         });
 
         function Remove_options(Pedido_delete)
@@ -805,7 +700,7 @@ tfoot td {
         }
 
 
-        $('#add_pago').click(function() {
+        /*$(document).on("click","#add_pago",function(event){
           if ($('#tipotransferencia').val() == '') {
             Swal.fire(
               'Error',
@@ -839,254 +734,31 @@ tfoot td {
               'warning'
             )
           }
+          else if ($('#pimagen').val() == ''){
+            Swal.fire(
+              'Error',
+              'Seleccione la imagen',
+              'warning'
+            )
+          }
           else {
+
+            console.log($('#pimagen').val());
+            
             deuda = !isNaN($('#pcantidad').val()) ? parseInt($('#pcantidad').val(), 10) : 0;
             pagado = !isNaN($('#pstock').val()) ? parseInt($('#pstock').val(), 10) : 0;
 
             agregarPago();
+            
           }
-        });
-        ///
-        /*$(document).on("click","#tabla_pedidos input.radiototal",function(e){
-          e.preventDefault();
-          console.log("aaaa");
-          var checked=$(this).is('checked');
-          if(checked)
-          {
-            console.log("marcado");
-          }else{
-            console.log("desmarcado");
-          }
-
         });*/
+
         
-        /*$("").click(function(){
-          var checked=$(this).is('checked');
-          if(checked)
-          {
-            console.log("marcado");
-          }else{
-            console.log("desmarcado");
-          }
-        });*/
-
-          //eventos de datatable
-        /*$(document).on('click','.radiototal', function(e){
-          e.preventDefault();
-        });*/
-
-        /*$(document).on('mousedown keydown ','.radiototal', function(e){
-          e.preventDefault();
-          e.stopPropagation();
-
-          $checktotal=$(this);
-          var checked=$(this).is('checked');
-          if(checked){
-            console.log("checked");
-            $(this).trigger("change");
-          }else{
-            console.log("no");
-            $(this).trigger("change");
-            
-          }
-        });*/
-
-          /*$checktotal=$(this);
-          var checked=$(this).is('checked');
-          if(checked){
-            console.log("checked")
-          }else{
-            console.log("no")
-
-            $checktotal.prop('checked', true);
-
-            let montopagos=parseFloat($("#diferencia").val().replace(",", ""));
-            if(montopagos==0 || montopagos==null || isNaN(montopagos)){
-              console.log("no hay pagos ingresados");
-              return false;
-            }
-
-            console.log("estaba sin marcar");
-            console.log("no estaba marcado radiototal");            
-
-            let filedata=tabla_pedidos.row($(this).closest('tr')).data();
-            console.log(filedata)
-            let pedidosaldo=parseFloat(filedata.saldo);
-            console.log("saldo "+pedidosaldo);
-            console.log("montopagos "+montopagos);
-            
-            if(pedidosaldo<=montopagos)
-            {
-              console.log("pedido "+pedidosaldo+"   < pago "+montopagos);
-              montopagos=(montopagos-pedidosaldo).toFixed(2);
-              console.log("diferencia "+montopagos);
-              $("#diferencia").val(montopagos);
-              
-              $(this).closest('tr').find(".radioadelanto").prop("disabled",true);
-            }
-          }
-          return false;
-          let montopagos=parseFloat($("#diferencia").val().replace(",", ""));
-          if(montopagos==0 || montopagos==null || isNaN(montopagos)){
-            console.log("no hay pagos ingresados");
-            return false;
-          }
-          console.log("monto "+montopagos)
-          if(checked){            
-            console.log("estaba marcado");
-            $checktotal=$(this);
-
-            let filedata=tabla_pedidos.row($(this).closest('tr')).data();
-            console.log(filedata)
-            let pedidosaldo=parseFloat(filedata.saldo);
-            console.log("saldo "+pedidosaldo);
-            console.log("montopagos "+montopagos);
-            console.log("revertir");
-            {              
-              montopagos=(montopagos+pedidosaldo).toFixed(2);
-              console.log("diferencia "+montopagos);
-              $("#diferencia").val(montopagos);
-              $(this).closest('tr').find(".radioadelanto").prop("disabled",false);
-              $checktotal.prop("checked",false).attr("checked", false).removeAttr('checked');
-            }
-
-          }else{
-            console.log("estaba sin marcar");
-            console.log("no estaba marcado radiototal");
-            $checktotal=$(this);
-
-            let filedata=tabla_pedidos.row($(this).closest('tr')).data();
-            console.log(filedata)
-            let pedidosaldo=parseFloat(filedata.saldo);
-            console.log("saldo "+pedidosaldo);
-            console.log("montopagos "+montopagos);
-
-            if(pedidosaldo<=montopagos)
-            {
-              console.log("pedido "+pedidosaldo+"   < pago "+montopagos);
-              montopagos=(montopagos-pedidosaldo).toFixed(2);
-              console.log("diferencia "+montopagos);
-              $("#diferencia").val(montopagos);
-              $(this).closest('tr').find(".radioadelanto").prop("disabled",true);
-            }
-
-          }
-
-        });*/
-
-    
-        /*$(document).on( 'click', '#tabla_pedidos input.radiototal', function (e) {
-          e.preventDefault();
-          var checked=$(this).is('checked');
-          let montopagos=parseFloat($("#diferencia").val().replace(",", ""));
-          if(montopagos==0 || montopagos==null || isNaN(montopagos)){
-            console.log("no hay pagos ingresados");
-            return false;
-          }
-          console.log("monto "+montopagos)
-          if(checked){
-            
-            console.log("estaba marcado");
-            $checktotal=$(this);
-
-            let filedata=tabla_pedidos.row($(this).closest('tr')).data();
-            console.log(filedata)
-            let pedidosaldo=parseFloat(filedata.saldo);
-            console.log("saldo "+pedidosaldo);
-            console.log("montopagos "+montopagos);
-            console.log("revertir");
-
-            
-            {
-              
-              montopagos=(montopagos+pedidosaldo).toFixed(2);
-              console.log("diferencia "+montopagos);
-              $("#diferencia").val(montopagos);
-              $(this).closest('tr').find(".radioadelanto").prop("disabled",false);
-              $checktotal.prop("checked",false).attr("checked", false).removeAttr('checked');
-            }
-
-          }else{
-            console.log("estaba sin marcar");
-            console.log("no estaba marcado radiototal");
-            $checktotal=$(this);
-
-            let filedata=tabla_pedidos.row($(this).closest('tr')).data();
-            console.log(filedata)
-            let pedidosaldo=parseFloat(filedata.saldo);
-            console.log("saldo "+pedidosaldo);
-            console.log("montopagos "+montopagos);
-
-            if(pedidosaldo<=montopagos)
-            {
-              console.log("pedido "+pedidosaldo+"   < pago "+montopagos);
-              montopagos=(montopagos-pedidosaldo).toFixed(2);
-              console.log("diferencia "+montopagos);
-              $("#diferencia").val(montopagos);
-              $(this).closest('tr').find(".radioadelanto").prop("disabled",true);
-
-            }
-
-          }
-          return false;
-          
-
-
-        });*/
-
-        ////
-        /*$("#tabla_pedidos").on( 'click', 'input.radioadelanto', function (e) {
-
-          let montopagos=$("#diferencia").val().replace(",", "");
-          if(montopagos==0 || montopagos==null){
-
-            return false;
-          }else{
-            if($(this).is(':checked') )
-            {
-              console.log("no estaba marcado radioadelanto")
-              $(this).closest('tr').find(".radiototal").prop("disabled",true);
-
-            }else{
-              console.log("si se encuentra marcado radioadelanto")
-              $(this).closest('tr').find(".radiototal").prop("disabled",false);
-              
-            }
-            return true;
-          }
-
-        });*/
-        //////
         // AGREGANDO PAGOS
 
-        function separateComma(val) {
-          // remove sign if negative
-          var sign = 1;
-          if (val < 0) {
-            sign = -1;
-            val = -val;
-          }
-          // trim the number decimal point if it exists
-          let num = val.toString().includes('.') ? val.toString().split('.')[0] : val.toString();
-          let len = num.toString().length;
-          let result = '';
-          let count = 1;
+        var imgtemporal='';
 
-          for (let i = len - 1; i >= 0; i--) {
-            result = num.toString()[i] + result;
-            if (count % 3 === 0 && count !== 0 && i !== 0) {
-              result = ',' + result;
-            }
-            count++;
-          }
-
-          // add number after decimal point
-          if (val.toString().includes('.')) {
-            result = result + '.' + val.toString().split('.')[1];
-          }
-          // return result with - sign if negative
-          return sign < 0 ? '-' + result : result;
-        }
+        
 
         function agregarPago() {
 
@@ -1105,10 +777,9 @@ tfoot td {
 
           banco = $('#pbanco option:selected').val();
           fecha = $("#pfecha").val();
-          /* imagen = $("#pimagen").val(); */
+          imagen = $("#pimagen").val();
 
-
-          if (monto != ""  && banco != "" && fecha != ""/*  && imagen != "" */) {
+          if (monto != ""  && banco != "" && fecha != ""  && imagen != "" ) {
             subtotal_pago[contPa] = monto*1;
             total_pago = parseFloat(total_pago*1 + subtotal_pago[contPa]*1).toFixed(2);
 
@@ -1118,23 +789,40 @@ tfoot td {
               '<td><input type="hidden" name="titular[]" value="' + titular + '">' + titular + '</td>' +
               '<td><input type="hidden" name="banco[]" value="' + banco + '">' + banco + '</td>' +
               '<td><input type="hidden" name="fecha[]" value="' + fecha + '">' + fecha + '</td>' +
-              '<td>@csrf<input type="file" id="imagen" name="imagen[]" accept= "image/*" style="width:150px;"/></td>' + 
-                /* <img id="picture" src="{{asset('imagenes/logo_facturas.png')}}" alt="Imagen del pago" height="100px" width="100px"> */        
+              '<td>@csrf<input type="file" id="imagen'+(contPa+1)+'" name="imagen[]" accept= "image/*" style="width:150px;" src="'+imagen+'"/>' + 
+                 '<img id="picture'+(contPa+1)+'" src="{{asset('imagenes/logo_facturas.png')}}" alt="Imagen del pago" height="100px" width="100px">'+
+              '</td>'+
               '<td><input type="hidden" name="monto[]" value="' + monto + '">' + monto + '</td>' +
               '<td><button type="button" class="btn btn-danger btn-sm" onclick="eliminarPa(' + contPa + ')"><i class="fas fa-trash-alt"></i></button></td>' +
               '</tr>';
-              
 
             contPa++;
             limpiarPa();
             console.log(total_pago);
-            $("#total_pago").html("S/. " + separateComma(total_pago).toLocaleString("en-US"));
+            $("#total_pago").html("S/. " + (total_pago).toLocaleString("en-US"));
+            //$("#total_pago").html("S/. " + separateComma(total_pago).toLocaleString("en-US"));
             $("#total_pago_pagar").val(total_pago.toLocaleString("en-US"));
             evaluarPa();
-            diferenciaFaltante();
+            //diferenciaFaltante();
             $('#tabla_pagos').append(filasPa);
+
+            //agregar imagen src 
+            //let nuevosrcimg=$("#pimagen").attr('src');
+            //console.log(nuevosrcimg);
+          
+            //$("#imagen"+contPa).attr("src",nuevosrcimg);
+
+            ///
+            $imgsrc = $('#picture').attr('src');
+            console.log($imgsrc);
+            console.log(contPa+" contador");
+
+            $("#imagen"+contPa).attr("src",$imgsrc).hide();
+            $("#picture"+contPa).attr("src",$imgsrc);
+            //////
+            
             //$("#diferencia")
-            console.log("pago "+'pago');
+            ////console.log("pago "+'pago');
             
           } else {
             Swal.fire(
