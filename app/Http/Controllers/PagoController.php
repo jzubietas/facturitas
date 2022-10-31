@@ -337,22 +337,26 @@ class PagoController extends Controller
                         $pedidos_pagados_total_ar[ $pedido_id_value ]["checked"]=1;
                         $pedidos_pagados_total_ar[ $pedido_id_value ]["pedido_id"]=$pedido_id[$pedido_id_key];
                         $pedidos_pagados_total_ar[ $pedido_id_value ]["total_parcial"]='total';
+                        $pedidos_pagados_total_ar[ $pedido_id_value ]["saldo"]=$saldo[$pedido_id_value];
                     }else{
                         $pedidos_pagados_total_ar[ $pedido_id_value ]["checked"]=0;
                         $pedidos_pagados_total_ar[ $pedido_id_value ]["pedido_id"]=$pedido_id[$pedido_id_key];
                         $pedidos_pagados_total_ar[ $pedido_id_value ]["total_parcial"]='total';
+                        $pedidos_pagados_total_ar[ $pedido_id_value ]["saldo"]=$saldo[$pedido_id_value];
                     }
                 }
                 else{
                     $pedidos_pagados_total_ar[ $pedido_id_value ]["checked"]=0;
                     $pedidos_pagados_total_ar[ $pedido_id_value ]["pedido_id"]=$pedido_id[$pedido_id_key];
                     $pedidos_pagados_total_ar[ $pedido_id_value ]["total_parcial"]='total';
+                    $pedidos_pagados_total_ar[ $pedido_id_value ]["saldo"]=$saldo[$pedido_id_value];
                 }
             }
             //return $pedidos_pagados_total_ar;
             //programacion totales check
 
             //programacion parciales check
+            //return $saldo;
             foreach($pedido_id as $pedido_id_key =>$pedido_id_value)
             {
                 
@@ -362,16 +366,19 @@ class PagoController extends Controller
                         $pedidos_pagados_parcial_ar[ $pedido_id_value ]["checked"]=1;
                         $pedidos_pagados_parcial_ar[ $pedido_id_value ]["pedido_id"]=$pedido_id[$pedido_id_key];
                         $pedidos_pagados_parcial_ar[ $pedido_id_value ]["total_parcial"]='parcial';
+                        $pedidos_pagados_parcial_ar[ $pedido_id_value ]["saldo"]=$saldo[$pedido_id_value];
                     }else{
                         $pedidos_pagados_parcial_ar[ $pedido_id_value ]["checked"]=0;
                         $pedidos_pagados_parcial_ar[ $pedido_id_value ]["pedido_id"]=$pedido_id[$pedido_id_key];
                         $pedidos_pagados_parcial_ar[ $pedido_id_value ]["total_parcial"]='parcial';
+                        $pedidos_pagados_parcial_ar[ $pedido_id_value ]["saldo"]=$saldo[$pedido_id_value];
                     }
                 }
                 else{
                     $pedidos_pagados_parcial_ar[ $pedido_id_value ]["checked"]=0;
                     $pedidos_pagados_parcial_ar[ $pedido_id_value ]["pedido_id"]=$pedido_id[$pedido_id_key];
                     $pedidos_pagados_parcial_ar[ $pedido_id_value ]["total_parcial"]='parcial';
+                    $pedidos_pagados_parcial_ar[ $pedido_id_value ]["saldo"]=$saldo[$pedido_id_value];
                 }
             }
             //programacion parciales check
@@ -382,42 +389,27 @@ class PagoController extends Controller
             //return $saldo;
             foreach($pedido_id as $pedido_id_key =>$pedido_id_value)
             {
-                $pedidos_pagados_parcial_ar[ $pedido_id_value ]["checked"]=0;
-                $pedidos_pagados_total_ar[ $pedido_id_value ]["checked"]=1;
-
-            }
-            return $pedidos_pagados_parcial_ar;
-            foreach($pedido_id as $pedido_id_key =>$pedido_id_value)
-            {
-                if($saldo[$pedido_id_key]<=3){
-                    //$pedidos_pagados_parcial_ar[ $pedido_id_key[] ]
+                if($saldo[$pedido_id_key]<=3)
+                {
+                    $pedidos_pagados_total_ar[ $pedido_id_value ]["checked"]=1;
+                    $pedidos_pagados_parcial_ar[ $pedido_id_value ]["checked"]=0;
                 }
+
             }
-
-            while ($contPedidosfor < count((array)$pedido_id)) {
-                //la diferencia menor igual a 3 y modifico los check
-
-                if($saldo[$contPedidosfor]<=3){
-                    //muevo los check y regularizo para condonar deuda
-                    $pedidos_pagados_parcial_ar[$pedido_id[$contPedidosfor]]["checked"]="1";
-                    $pedidos_pagados_total_ar[$pedido_id[$contPedidosfor]]["checked"]="0";
-                }
-                //$pedido_id[$contPedidosfor]
-
-                $contPedidosfor++;
-            }
-
+            //return $pedidos_pagados_parcial_ar;
+            
             $pedidos_pagados_parcial=$pedidos_pagados_parcial_ar;
             $pedidos_pagados_total=$pedidos_pagados_total_ar;
         }
-        return $pedidos_pagados_total;
+        //return $pedidos_pagados_parcial;
+        //return $request->monto;
         //return $request->all();
-
 
         //return $pedidos_pagados_total;
         //ESTADOS PARA CAMPO "PAGADO" EN PEDIDOS
         //0: DEBE
         //1: ADELANTO
+        
         //2: PAGADO
 
         $request->validate([
@@ -453,18 +445,21 @@ class PagoController extends Controller
             $saldo = $request->numberdiferencia;
             $contPe = 0;
             $monto_pagado_a_favor = $pagado;
+            //return $pedido_id;
 
-            while ($contPe < count((array)$pedido_id)) {
+            foreach($pedido_id as $pedido_id_key =>$pedido_id_value)
+            {
+                //$pedido_id_value
 
                 $pagoPedido = PagoPedido::create([
-                        'pago_id' => $pago->id,
-                        'pedido_id' => $pedido_id[$contPe],
-                        'abono' => $monto_actual[$contPe]-$saldo[$contPe],
-                        'estado' => '1'
-                    ]);
+                    'pago_id' => $pago->id,
+                    'pedido_id' => $pedido_id_value,
+                    'abono' => $monto_actual[$pedido_id_value]-$saldo[$pedido_id_value],
+                    'estado' => '1'
+                ]);
 
                 //INDICADOR DE PAGOS Y ESTADO DE PAGADO EN EL PEDIDO
-                $pedido = Pedido::find($pagoPedido->pedido_id);
+                $pedido = Pedido::find($pagoPedido->pedido_id);//->first();
 
                 $pedido->update([
                     'pago' => '1'//REGISTRAMOS QUE YA CUENTA CON UN PAGO
@@ -473,50 +468,15 @@ class PagoController extends Controller
                 $detalle_pedido = DetallePedido::where('pedido_id', $pedido->id)->first();
 
                 $detalle_pedido->update([
-                    'saldo' => $saldo[$contPe]//ACTUALIZAR SALDO - EN LA VISTA ES LA COLUMNA DIFERENCIA
-                ]);
-                /* if($monto_pagado_a_favor >= $detalle_pedido->total){
-                    $pedido->update([
-                        'pagado' => '2'//PAGADO
-                    ]);
-                    $detalle_pedido->update([
-                        'saldo' => '0'
-                    ]);
-                    $pagoPedido->update([
-                        'pagado' => '2'//PAGADO
-                    ]);
-                    $monto_pagado_a_favor = ($monto_pagado_a_favor)*1 - ($detalle_pedido->total)*1;
-                }else{
-                    $pedido->update([
-                        'pagado' => '1'//ADELANTO
-                    ]);
-                    $pagoPedido->update([
-                        'pagado' => '1'//ADELANTO
-                    ]);
-                    $detalle_pedido->update([
-                        'saldo' => ($detalle_pedido->total)*1 - ($monto_pagado_a_favor)*1                        
-                    ]);
-                    if($detalle_pedido->total - $monto_pagado_a_favor <= 3){//SI EL MONTO ES IGUAL O MENOR A 3, SE PERDONA LA DEUDA
-                        $pedido->update([
-                            'pagado' => '2'//PAGADO
-                        ]);
-                        $pagoPedido->update([
-                            'pagado' => '2'//PAGADO
-                        ]);
-                    }
-                } */
-                $contPe++;
+                    'saldo' => $saldo[$pedido_id_value]//ACTUALIZAR SALDO - EN LA VISTA ES LA COLUMNA DIFERENCIA
+                ]);               
+
             }
-
             
-
-            
-            
-
             // ALMACENANDO DETALLE DE PAGOS
             $tipomovimiento = $request->tipomovimiento;
             $titular = $request->titular;
-            $monto = $request->monto;            
+            $monto = $request->monto;
             $banco = $request->banco;
             $fecha = $request->fecha;
             
@@ -526,56 +486,121 @@ class PagoController extends Controller
             $cont = 0;
             $fileList = [];
 
-            foreach ($files as $file){
-                $file_name = Carbon::now()->second.$file->getClientOriginalName(); //Get file original name
-                $fileList[$cont] = array(
+            foreach ($files as $file_key => $file_value ){
+                $file_name = Carbon::now()->second.$file_value->getClientOriginalName(); //Get file original name
+                $fileList[$file_key] = array(
                     'file_name' => $file_name,
                 );
-                $file->move($destinationPath , $file_name);
-
-                $cont++;
+                $file_value->move($destinationPath , $file_name);
+                //$cont++;
             }
 
             $contPa = 0;
 
-            while ($contPa < count((array)$monto)) {
-                if(isset($fileList[$contPa]['file_name'])){ 
+            foreach($monto as $monto_key =>$monto_value)
+            {
+                if(isset($fileList[$monto_key]['file_name']))
+                {
                     DetallePago::create([
                         'pago_id' => $pago->id,
-                        'cuenta' => $tipomovimiento[$contPa],
-                        'titular' => $titular[$contPa],
-                        'monto' => $monto[$contPa],
-                        'banco' => $banco[$contPa],
-                        'fecha' => $fecha[$contPa],
-                        'fecha_deposito' => $fecha[$contPa],
-                        'imagen' => $fileList[$contPa]['file_name'],
+                        'cuenta' => $tipomovimiento[$monto_key],
+                        'titular' => $titular[$monto_key],
+                        'monto' => $monto[$monto_key],
+                        'banco' => $banco[$monto_key],
+                        'fecha' => $fecha[$monto_key],
+                        'fecha_deposito' => $fecha[$monto_key],
+                        'imagen' => $fileList[$monto_key]['file_name'],
                         'estado' => '1'
-                    ]);  
+                    ]); 
+
                 }else{
                     DetallePago::create([
                         'pago_id' => $pago->id,
-                        'cuenta' => $tipomovimiento[$contPa],
-                        'titular' => $titular[$contPa],
-                        'monto' => $monto[$contPa],
-                        'banco' => $banco[$contPa],
-                        'fecha' => $fecha[$contPa],
-                        'fecha_deposito' => $fecha[$contPa],
+                        'cuenta' => $tipomovimiento[$monto_key],
+                        'titular' => $titular[$monto_key],
+                        'monto' => $monto[$monto_key],
+                        'banco' => $banco[$monto_key],
+                        'fecha' => $fecha[$monto_key],
+                        'fecha_deposito' => $fecha[$monto_key],
                         'imagen' => 'logo_facturas.png',
                         'estado' => '1'
                     ]);
                 }
-                $contPa++;
+
+            }
+            
+            $contPedidos = 0;
+            $contPT = 0;
+            $contPP = 0;
+             
+            $pedido_a_pago_total = [];
+            $pedido_a_pago_adelanto = [];
+            
+            if(count((array)$pedidos_pagados_total)>0)
+            {
+                //return "aaa";
+                foreach($pedidos_pagados_total as $pedidos_pagados_total_index => $pedidos_pagados_total_index_valor ){
+                    $pedidos_pagados_total[ $pedidos_pagados_total_index ]["pedido_id"]=$pedidos_pagados_total_index_valor["pedido_id"];
+                    $pedidos_pagados_total[ $pedidos_pagados_total_index ]["pago_id"] = $pago->id;
+                    $pedidos_pagados_total[ $pedidos_pagados_total_index ]["pagado"] = '2';
+                    $pedidos_pagados_total[ $pedidos_pagados_total_index ]["estado"] = $pedidos_pagados_total_index_valor["checked"];
+                }
+
+                foreach($pedidos_pagados_total as $pedidos_pagados_total_index => $pedidos_pagados_total_index_valor )
+                {
+                    $pago_pedido_update_total = PagoPedido::where('pago_id', $pago->id)
+                                                    ->where('pedido_id', $pedidos_pagados_total_index_valor["pedido_id"] )
+                                                    ->first();
+                    if( $pedidos_pagados_total_index_valor['estado'] == 1)
+                    {
+                        $pago_pedido_update_total->update([
+                            'pagado' => '2'
+                        ]);
+                        $pedido_update_total = Pedido::find( $pedidos_pagados_total_index_valor["pedido_id"] );
+                        $pedido_update_total->update([
+                            'pagado' => '2'
+                        ]);
+                    }
+                    
+                }
+
+
+            }
+            
+            //$pedido_pago_parcial_x = [];
+            //$contppx = 0;
+            //return $pedidos_pagados_parcial;
+
+            if(count((array)$pedidos_pagados_parcial)>0)
+            {
+                foreach($pedidos_pagados_parcial as $pedidos_pagados_parcial_index => $pedidos_pagados_parcial_index_valor )
+                {
+                    $pedidos_pagados_parcial[ $pedidos_pagados_parcial_index ]["pedido_id"]=$pedidos_pagados_parcial_index_valor["pedido_id"];
+                    $pedidos_pagados_parcial[ $pedidos_pagados_parcial_index ]["pago_id"] = $pago->id;
+                    $pedidos_pagados_parcial[ $pedidos_pagados_parcial_index ]["pagado"] = '1';
+                    $pedidos_pagados_parcial[ $pedidos_pagados_parcial_index ]["estado"] = $pedidos_pagados_parcial_index_valor["checked"];
+                }
+                
+                foreach($pedidos_pagados_parcial as $pedidos_pagados_parcial_index => $pedidos_pagados_parcial_index_valor )
+                {
+                    $pago_pedido_update_adelanto = PagoPedido::where('pago_id', $pago->id)
+                        ->where('pedido_id', $pedidos_pagados_parcial_index_valor["pedido_id"] )
+                        ->first();
+                    if( $pedidos_pagados_parcial_index_valor['estado'] == 1){
+                        $pago_pedido_update_adelanto->update([
+                            'pagado' => '1'
+                        ]);
+
+                        $pedido_update_adelanto = Pedido::find( $pedidos_pagados_parcial_index_valor["pedido_id"] );
+                        $pedido_update_adelanto->update([
+                            'pagado' => '1'
+                        ]);
+                    }
+
+                }
+
             }
 
-            //ACTUALIZAR PEDIDOS A PAGADOS
-            //if($deuda_total - $pagado <= 3){
-                /* $pago->update([
-                    'condicion' => 'PAGO',
-                    'notificacion' => 'Nuevo pago registrado',
-                    'diferencia' => $deuda_total - $pagado//'diferencia' => '0'//ACTUALIZAR LA DEUDA EN EL PAGO
-                ]); */
-
-            //ACTUALIZAR QUE CLIENTE NO DEBE
             $cliente = Cliente::find($request->cliente_id);
 
             $pedido_deuda = Pedido::where('cliente_id', $request->cliente_id)//CONTAR LA CANTIDAD DE PEDIDOS QUE DEBE
@@ -585,186 +610,8 @@ class PagoController extends Controller
                 $cliente->update([
                     'deuda' => '0'
                 ]);
-            }                
-
-            /* event(new PagoEvent($pago)); */
-            /* }
-            else
-            {
-                //ACTUALIZAR LA DEUDA EN EL PAGO
-                $pago->update([
-                    'condicion' => 'ADELANTO',
-                    'diferencia' => $deuda_total - $pagado
-                ]);
-            } */
-            
-            //ACTUALIZAR SALDO A FAVOR**************************EVALUAR NUEVA FORMA DE SALDO A FAVOR Y REEMBOLSO
-            /* $cliente = Cliente::find($request->cliente_id);
-
-            $saldo = $request->saldo;
-            $saldo=str_replace(',','',$saldo);
-
-            if ($request->saldo != null && $request->saldo != 0 ){
-                $cliente->update([
-                    'saldo' => $saldo,
-                ]);
-                $pago->update([
-                    'saldo' => $saldo,
-                ]);
-            }else{
-                $cliente->update([
-                    'saldo' => '0',
-                ]);
-                $pago->update([
-                    'saldo' => '0',
-                ]);
-            } */
-
-            //DATOS PARA ACTUALIZAR PAGO PARCIAL O TOTAL
-            /* $pedidos_pagados_total = $request->checktotal;
-            $pedidos_pagados_parcial = $request->checkadelanto; */
-            //return count((array)$pedidos_pagados_total);
-            //return count((array)$pedidos_pagados_parcial);
-            $contPedidos = 0;
-            $contPT = 0;
-            $contPP = 0;
-             
-            $pedido_a_pago_total = [];
-            $pedido_a_pago_adelanto = [];
-            //return $pedidos_pagados_parcial;
-            //return key(array $pedidos_pagados_parcial);
-            //$contPa < count((array)$monto)
-
-            //reprocesar array de check total y adelanto //$request->checktotal;// checkadelanto
-
-            /*
-            pedido_id   3794    4316
-            */
-            
-            
-            
-            ///
-
-            /*
-                    $pedidos_pagados_total_ar[$pedido_id[$contPedidos]]["checked"]="0";
-                    $pedidos_pagados_total[$pedido_id[$contPedidos]]["pedido_id"]=$pedido_id[$contPedidos];
-            */
-            //return $pedidos_pagados_total;
-
-            if(count((array)$pedidos_pagados_total)>0)
-            {
-                //return "aaa";
-                foreach($pedidos_pagados_total as $pedidos_pagados_total_index => $pedidos_pagados_total_index_valor ){
-                    //return $pedidos_pagados_total_index_valor["pedido_id"];
-                    $pedido_a_pago_total[ $pedidos_pagados_total_index ]["pedido_id"]=$pedidos_pagados_total_index_valor["pedido_id"];
-                    $pedido_a_pago_total[ $pedidos_pagados_total_index ]["pago_id"] = $pago->id;
-                    $pedido_a_pago_total[ $pedidos_pagados_total_index ]["pagado"] = '2';
-                    /*array(
-                        'pago_id' => $pago->id,
-                        'pagado' => '2'
-                    );*/
-                }
-                /*while ($contPT < count((array)$pedidos_pagados_total)) {
-                    array_push($pedido_a_pago_total, ($pedidos_pagados_total[ $pedido_id[$contPT]]["pedido_id"]));
-
-                    $pedido_a_pago_total[ $pedido_id[$contPT] ] = array(
-                        'pago_id' => $pago->id,
-                        'pagado' => '2'
-                    ); 
-
-                    next($pedidos_pagados_total);
-
-                    $contPT++;
-                }*/
             }
-            return $pedidos_pagados_total;
-            return $pedido_a_pago_total;
-
-            if(count((array)$pedidos_pagados_total)>0)
-            {
-                //foreach($pedidos_pagados_total)
-                /*while ($contPT < count((array)$pedidos_pagados_total)) {
-                    //$pedido_a_pago_total = key($pedidos_pagados_total);
-                    array_push($pedido_a_pago_total, ($pedidos_pagados_total[ $pedido_id[$contPT]]["pedido_id"]));
-
-                    ///agregado
-                    $pedido_a_pago_total[ $pedido_id[$contPT] ] = array(
-                        'pago_id' => $pago->id,
-                        'pagado' => '2'
-                    ); 
-
-                    next($pedidos_pagados_total);
-
-                    $contPT++;
-                }*/
-                //return $pedido_a_pago_total;
-                $contPT_update = 0;
-                while ($contPT_update < count((array)$pedido_a_pago_total)) {
-                    $pago_pedido_update_total = PagoPedido::where('pago_id', $pago->id)
-                                                    ->where('pedido_id', $pedido_a_pago_total[ $pedido_id[$contPT_update] ])
-                                                    ->first();
-                    //return $pago_pedido_update_total;
-                    $pago_pedido_update_total->update([
-                        'pagado' => '2'
-                    ]);
-
-                    $pedido_update_total = Pedido::find($pedido_a_pago_total[ $pedido_id[$contPT_update] ]);
-                    $pedido_update_total->update([
-                        'pagado' => '2'
-                    ]);
-
-                    $contPT_update++;
-                }
-            }
-
-
-            //para cambiar array de check de adelantos
-            /*if(count((array)$pedidos_pagados_parcial)>0)
-            {
-                while ($contPP < count((array)$pedidos_pagados_parcial)) {
-
-                }
-            }*/
-
-            $pedido_pago_parcial_x = [];
-            //$contppx = 0;
-
-            if(count((array)$pedidos_pagados_parcial)>0)
-            {
-                while ($contPP < count((array)$pedidos_pagados_parcial)) {
-                    //$pedido_a_pago_adelanto = key($pedidos_pagados_parcial);
-                    array_push($pedido_a_pago_adelanto, key($pedidos_pagados_parcial));
-
-                    $pedido_pago_parcial_x[ $pedido_id[$contPP] ] = array(
-                        'pedido' => key($pedidos_pagados_parcial),
-                        'estado' => $pedidos_pagados_parcial[$pedido_id[$contPP]]
-                    ); 
-
-                    next($pedidos_pagados_parcial);
-
-                    $contPP++;
-                    //$contppx++;
-                }
-                //return $pedido_pago_parcial_x;////////******************** */
-                $contPP_update = 0;
-                while ($contPP_update < count((array)$pedido_pago_parcial_x)) {
-                    $pago_pedido_update_adelanto = PagoPedido::where('pago_id', $pago->id)
-                                                    ->where('pedido_id', $pedido_pago_parcial_x[ $pedido_id[$contPP_update] ])
-                                                    ->first();
-                    //return $pago_pedido_update;
-                    if( $pedido_pago_parcial_x[  $pedido_id[$contPP_update] ]['estado'] == 1){
-                        $pago_pedido_update_adelanto->update([
-                            'pagado' => '1'
-                        ]);
-
-                        $pedido_update_adelanto = Pedido::find($pedido_pago_parcial_x[ $pedido_id[$contPP_update] ]);
-                        $pedido_update_adelanto->update([
-                            'pagado' => '1'
-                        ]);
-                    }
-                    $contPP_update++;
-                }
-            }
+            //validar esto al final
 
             DB::commit();
         } catch (\Throwable $th) {

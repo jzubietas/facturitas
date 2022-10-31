@@ -13,23 +13,24 @@
 
           <div class="form-row">
             <div class="form-group col-lg-6">
+              {!! Form::label('pbanco', 'Banco') !!}
+              {!! Form::select('pbanco', $bancos , '0', ['class' => 'form-control selectpicker border border-secondary', 'data-live-search' => 'true', 'placeholder' => '---- SELECCIONE ----']) !!}
+            </div>
+            <div class="form-group col-lg-6">
               {!! Form::label('tipotransferencia', 'Tipo Movimiento') !!}              
               {!! Form::select('tipotransferencia[]', $tipotransferencia, '', ['class' => 'form-control selectpicker border border-secondary', 'id'=>'tipotransferencia','data-live-search' => 'true', 'placeholder' => '---- SELECCIONE ----']) !!}  
             </div>
-            <div class="form-group col-lg-6">
+            <div class="form-group col-lg-12">
               {!! Form::label('titulares', 'Titulares') !!}
               {!! Form::select('titulares', $titulares , '0', ['class' => 'form-control selectpicker border border-secondary', 'data-live-search' => 'true', 'placeholder' => '---- SELECCIONE ----']) !!}
-            </div>            
-          </div>          
+            </div>
+          </div>
           <div class="form-row">
             <div class="form-group col-lg-4">
               {!! Form::label('pmonto', 'Monto pagado') !!}
               <input type="text" name="pmonto" id="pmonto" class="form-control number" placeholder="Monto pagado...">
             </div>
-            <div class="form-group col-lg-4">
-              {!! Form::label('pbanco', 'Banco') !!}
-              {!! Form::select('pbanco', $bancos , '0', ['class' => 'form-control selectpicker border border-secondary', 'data-live-search' => 'true', 'placeholder' => '---- SELECCIONE ----']) !!}
-            </div>
+            
             <div class="form-group col lg-4">
               {!! Form::label('pfecha', 'Fecha de voucher') !!}
               {!! Form::date('pfecha', \Carbon\Carbon::now(), ['class' => 'form-control']) !!}

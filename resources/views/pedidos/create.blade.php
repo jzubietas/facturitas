@@ -100,6 +100,8 @@
         method: 'GET',
         success: function(data) {
           $('#pruc').html(data.html);
+          $("#pruc").selectpicker("refresh");
+
         }
       });
     });

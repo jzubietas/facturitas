@@ -185,10 +185,10 @@ class MovimientoController extends Controller
     {
         //modificar primero
         if (!$request->hiddenIDdelete) {
-            $html='';
+            $html='no hay';
         } else {
             //$pago_id=;
-            $html='';
+            $html='si hay';
             $movimiento_id=$request->hiddenIDdelete;
             /*$pago = Pago::where('id', $request->hiddenID)
                         ->where('estado', '1')
@@ -202,9 +202,12 @@ class MovimientoController extends Controller
                 $movimiento->update([            
                     'estado' => '0'
                 ]);
+
+                $html="eliminado";
             }
             catch (\Throwable $th) {
                 throw $th;
+                $html="error";
                 /*DB::rollback();
                 dd($th);*/
             }

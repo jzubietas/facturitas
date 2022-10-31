@@ -195,12 +195,12 @@
     });
 
     //submit para form eliminar pago
-    /* $(document).on("submit", "#formdelete", function (evento) {
+     $(document).on("submit", "#formdelete", function (evento) {
       evento.preventDefault();
       console.log("validar delete");
         clickformdelete();
 
-    }) */
+    })
 
     $('#tablaPrincipal').DataTable({
         processing: true,
@@ -264,9 +264,9 @@
             @can('movimientos.edit')
               data = data+'<a href="'+urledit+'" class="btn btn-info btn-sm">Ver</a>';
             @endcan
-            @can('movimientos.destroy')
+           
               data = data+'<a href="" data-target="#modal-delete" data-toggle="modal" data-delete="'+row.id+'"><button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i> Eliminar</button></a>';
-            @endcan
+           
 
             return data;             
           }
