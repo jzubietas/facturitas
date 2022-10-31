@@ -46,8 +46,6 @@ class PedidoController extends Controller
         $dateMin = Carbon::now()->subDays(4)->format('d/m/Y');
         $dateMax = Carbon::now()->format('d/m/Y');
 
-        
-
         $superasesor = User::where('rol', 'Super asesor')->count();
 
         return view('pedidos.index', compact('dateMin', 'dateMax', 'superasesor'));
