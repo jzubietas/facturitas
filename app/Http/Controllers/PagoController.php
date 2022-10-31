@@ -379,12 +379,19 @@ class PagoController extends Controller
             //return $pedidos_pagados_parcial_ar;
             /////
             
-            return $saldo;
+            //return $saldo;
             foreach($pedido_id as $pedido_id_key =>$pedido_id_value)
             {
                 $pedidos_pagados_parcial_ar[ $pedido_id_value ]["checked"]=0;
                 $pedidos_pagados_total_ar[ $pedido_id_value ]["checked"]=1;
 
+            }
+            return $pedidos_pagados_parcial_ar;
+            foreach($pedido_id as $pedido_id_key =>$pedido_id_value)
+            {
+                if($saldo[$pedido_id_key]<=3){
+                    //$pedidos_pagados_parcial_ar[ $pedido_id_key[] ]
+                }
             }
 
             while ($contPedidosfor < count((array)$pedido_id)) {
