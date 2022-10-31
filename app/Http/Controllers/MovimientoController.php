@@ -66,9 +66,9 @@ class MovimientoController extends Controller
                     ->addColumn('action', function($movimiento){     
                         $btn='';
                         /* if(Auth::user()->rol == "Administrador"){*/
-                            $btn=$btn.'<a href="'.route('movimientos.show', $movimiento['id']).'" class="btn btn-info btn-sm">Ver</a>';
-                            $btn=$btn.'<a href="'.route('movimientos.edit', $movimiento['id']).'" class="btn btn-warning btn-sm">Editar</a>';
-                            $btn = $btn.'<a href="" data-target="#modal-delete" data-toggle="modal" data-delete="'.$movimiento['id'].'"><button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i> Eliminar</button></a>';
+                            //$btn=$btn.'<a href="'.route('movimientos.show', $movimiento['id']).'" class="btn btn-info btn-sm">Ver</a>';
+                            //$btn=$btn.'<a href="'.route('movimientos.edit', $movimiento['id']).'" class="btn btn-warning btn-sm">Editar</a>';
+                            //$btn = $btn.'<a href="" data-target="#modal-delete" data-toggle="modal" data-delete="'.$movimiento['id'].'"><button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i> Eliminar</button></a>';
                         /* }else if(Auth::user()->rol == "Encargado"){
                             $btn=$btn.'<a href="'.route('pagos.show', $pago['id']).'" class="btn btn-info btn-sm">Ver</a>';
                             $btn=$btn.'<a href="'.route('pagos.edit', $pago['id']).'" class="btn btn-warning btn-sm">Editar</a>';
@@ -132,6 +132,7 @@ class MovimientoController extends Controller
             'importe' => $request->monto,
             'tipo' => $request->tipotransferencia,
             'fecha' => $request->fecha,
+            'pedido' => '0',
             'estado' => '1'
         ]);
 
@@ -146,9 +147,9 @@ class MovimientoController extends Controller
      */
     public function show($id)
     {
-        $movimientos = MovimientoBancario::where('id', $id)->first();
+        $movimiento = MovimientoBancario::where('id', $id)->first();
         //
-        return view('movimientos.show', compact('movimientos'));
+        return view('movimientos.show', compact('movimiento'));
     }
 
     /**
@@ -180,8 +181,36 @@ class MovimientoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroyid(Request $request)
     {
-        //
+        //modificar primero
+        if (!$request->hiddenIDdelete) {
+            $html='';
+        } else {
+            //$pago_id=;
+            $html='';
+            $movimiento_id=$request->hiddenIDdelete;
+            /*$pago = Pago::where('id', $request->hiddenID)
+                        ->where('estado', '1')
+                        ->first();//solo 1*/
+            
+            $movimiento = MovimientoBancario::where('id', $movimiento_id)->first();
+
+            try {
+                DB::beginTransaction();
+
+                $movimiento->update([            
+                    'estado' => '0'
+                ]);
+            }
+            catch (\Throwable $th) {
+                throw $th;
+                /*DB::rollback();
+                dd($th);*/
+            }
+            
+            
+        }
+        return response()->json(['html' => $html]);
     }
 }

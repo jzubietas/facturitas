@@ -133,7 +133,7 @@
   <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
   <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
 
-  {{-- <script>
+  <script>
     function clickformdelete()
     {
       console.log("action delete action")
@@ -141,7 +141,7 @@
       console.log(formData);
       $.ajax({
         type:'POST',
-        url:"{{ route('pagodeleteRequest.post') }}",
+        url:"{{ route('movimientodeleteRequest.post') }}",
         data:formData,
       }).done(function (data) {
         $("#modal-delete").modal("hide");
@@ -149,7 +149,7 @@
         $('#tablaPrincipal').DataTable().ajax.reload();      
       });
     }
-  </script> --}}
+  </script>
   <script>
   $(document).ready(function () {
 
@@ -177,24 +177,22 @@
       });
     });
 
-   
-
-    //para opcion eliminar  pagos
-    /* $('#modal-delete').on('show.bs.modal', function (event) {     
+    //para opcion eliminar  movimientos
+     $('#modal-delete').on('show.bs.modal', function (event) {     
       var button = $(event.relatedTarget) 
       var idunico = button.data('delete')      
-      $("#hiddenId").val(idunico);
+      $("#hiddenIDdelete").val(idunico);
       if(idunico<10){
-        idunico='PAG000'+idunico;
+        idunico='MOV000'+idunico;
       }else if(idunico<100){
-        idunico= 'PAG00'+idunico;
+        idunico= 'MOV00'+idunico;
       }else if(idunico<1000){
-        idunico='PAG0'+idunico;
+        idunico='MOV0'+idunico;
       }else{
-        idunico='PAG'+idunico;
+        idunico='MOV'+idunico;
       }
       $(".textcode").html(idunico);
-    }); */
+    });
 
     //submit para form eliminar pago
     /* $(document).on("submit", "#formdelete", function (evento) {
@@ -249,7 +247,30 @@
             return data;             
           }
         },//estado de pago
-        {data: 'action', name: 'action', orderable: false, searchable: false,sWidth:'20%'},
+        {
+          data: 'action', 
+          name: 'action', 
+          orderable: false, 
+          searchable: false,
+          sWidth:'20%',
+          render: function ( data, type, row, meta ) {
+            var urlcreate = '{{ route("movimientos.show", ":id") }}';
+            var urledit = '{{ route("movimientos.edit", ":id") }}';
+            urlcreate = urlcreate.replace(':id', row.id);
+            urledit = urledit.replace(':id', row.id);
+            @can('movimientos.create')
+              data = data+'<a href="'+urlcreate+'" class="btn btn-info btn-sm">Ver</a>';
+            @endcan
+            @can('movimientos.edit')
+              data = data+'<a href="'+urledit+'" class="btn btn-info btn-sm">Ver</a>';
+            @endcan
+            @can('movimientos.destroy')
+              data = data+'<a href="" data-target="#modal-delete" data-toggle="modal" data-delete="'+row.id+'"><button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i> Eliminar</button></a>';
+            @endcan
+
+            return data;             
+          }
+        },
         ],
         language: {
         "decimal": "",
