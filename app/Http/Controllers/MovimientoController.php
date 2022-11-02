@@ -129,7 +129,7 @@ class MovimientoController extends Controller
         $movimientos = MovimientoBancario::create([
             'banco' => $request->banco,
             'titular' => $request->titulares,
-            'importe' => $request->monto,
+            'importe' => $monto,
             'tipo' => $request->tipotransferencia,
             'fecha' => $request->fecha,
             'pedido' => '0',
