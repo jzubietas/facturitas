@@ -37,16 +37,16 @@
               {{-- <input name="pfecha" type="date" class="form-control"> --}}
             </div>
              
-            <div class="form-group col-lg-6">
+            {{--<div class="form-group col-lg-6">
               <div class="image-wrapper">
                 <img id="picture" src="{{asset('imagenes/logo_facturas.png')}}" alt="Imagen del pago" width="250px">
               </div>
-            </div>
+            </div>--}}
 
-            <div class="form-group col-lg-6">
+            {{--<div class="form-group col-lg-6">
               {!! Form::label('pimagen', 'Imagen') !!}
               {!! Form::file('pimagen', ['class' => 'form-control-file', 'accept' => 'image/*']) !!}
-            </div>
+            </div>--}}
             
           </div>
 

@@ -326,6 +326,7 @@ class PagoController extends Controller
         $pedidos_pagados_parcial_ar = array();
         $saldo = $request->numberdiferencia;
         //return $pedido_id;
+        //return $saldo;
         if(count((array)$pedido_id)>0){
             
             //programacion totales check
@@ -389,7 +390,7 @@ class PagoController extends Controller
             //return $saldo;
             foreach($pedido_id as $pedido_id_key =>$pedido_id_value)
             {
-                if($saldo[$pedido_id_key]<=3)
+                if($saldo[$pedido_id_value]<=3)
                 {
                     $pedidos_pagados_total_ar[ $pedido_id_value ]["checked"]=1;
                     $pedidos_pagados_parcial_ar[ $pedido_id_value ]["checked"]=0;
@@ -401,6 +402,8 @@ class PagoController extends Controller
             $pedidos_pagados_parcial=$pedidos_pagados_parcial_ar;
             $pedidos_pagados_total=$pedidos_pagados_total_ar;
         }
+
+        //return $pedidos_pagados_parcial;
         //return $pedidos_pagados_parcial;
         //return $request->monto;
         //return $request->all();
