@@ -35,6 +35,14 @@
     </div>
     @include('pagos.modals.exportar', ['title' => 'Exportar Lista de pagos observados', 'key' => '4'])
   </h1>
+
+  <div class="form-group col-lg-6">
+    
+      <select name="asesores_observado" class="border form-control selectpicker border-secondary" id="asesores_observado" data-live-search="true">
+        <option value="">---- SELECCIONE ASESOR ----</option>         
+      </select>
+  </div>
+
   @if($superasesor > 0)
   <br>
   <div class="bg-4">

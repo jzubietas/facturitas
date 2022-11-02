@@ -985,10 +985,12 @@ class PagoController extends Controller
         //modificar primero
         if (!$request->hiddenID) {
             $html='';
+            return 'nada';
         } else {
             //$pago_id=;
             $html='';
             $pago_id=$request->hiddenID;
+            //return $pago_id;
             /*$pago = Pago::where('id', $request->hiddenID)
                         ->where('estado', '1')
                         ->first();//solo 1*/
@@ -1786,36 +1788,158 @@ class PagoController extends Controller
         return view('pagos.aprobados', compact('pagos', 'superasesor'));
     }
     /*tabla para aprobados*/
-    /*public function Aprobadostabla()
+    public function Aprobadostabla(Request $request)
     {
-        $pagos = Pago::join('users as u', 'pagos.user_id', 'u.id')
-            ->join('detalle_pagos as dpa', 'pagos.id', 'dpa.pago_id')
-            ->join('pago_pedidos as pp', 'pagos.id', 'pp.pago_id')
-            ->join('pedidos as p', 'pp.pedido_id', 'p.id')
-            ->join('detalle_pedidos as dpe', 'p.id', 'dpe.pedido_id')
-            ->select('pagos.id', 
-                    'dpe.codigo as codigos', 
-                    'u.name as users', 
-                    'pagos.observacion', 
-                    'dpe.total as total_deuda',
-                    DB::raw('sum(dpa.monto) as total_pago'), 
-                    'pagos.condicion',                   
-                    'pagos.created_at as fecha'
-                    )
-            ->where('pagos.estado', '1')
-            ->where('dpe.estado', '1')
-            ->where('dpa.estado', '1')
-            ->where('pagos.condicion', 'ABONADO')
-            ->groupBy('pagos.id', 
-                    'dpe.codigo', 
-                    'u.name', 
-                    'pagos.observacion', 
-                    'dpe.total',
-                    'pagos.condicion', 
-                    'pagos.created_at')
-            ->get();
+        $pagos=null;
+        if (!$request->asesores) {
+            if(Auth::user()->rol == "Encargado"){
+                $pagos = Pago::join('users as u', 'pagos.user_id', 'u.id')
+                    ->join('clientes as c', 'pagos.cliente_id', 'c.id')
+                    ->join('detalle_pagos as dpa', 'pagos.id', 'dpa.pago_id') 
+                    ->join('pago_pedidos as pp', 'pagos.id', 'pp.pago_id')
+                    ->rightjoin('pedidos as p', 'pp.pedido_id', 'p.id')
+                    ->rightjoin('detalle_pedidos as dpe', 'p.id', 'dpe.pedido_id')
+                    ->select('pagos.id as id',
+                            'u.identificador as users',
+                            'c.celular',
+                            'pagos.observacion',                        
+                            'pagos.total_cobro',
+                            DB::raw('sum(dpe.total) as total_deuda'),
+                            DB::raw('sum(pp.abono) as total_pago'),
+                            'pagos.condicion',
+                            DB::raw('DATE_FORMAT(dpa.fecha, "%d/%m/%Y") as fecha'),
+                            DB::raw('group_concat(p.codigo) as codigos')
+                            )
+                    ->where('u.supervisor', Auth::user()->id)
+                    ->where('dpe.estado', '1')
+                    ->where('dpa.estado', '1')
+                    ->where('pagos.condicion', 'ABONADO')  
+                    ->groupBy('pagos.id',
+                            'dpe.codigo',
+                            'u.identificador',
+                            'c.celular',
+                            'pagos.observacion','dpe.total',
+                            'pagos.total_cobro',
+                            'pagos.condicion',
+                            'dpa.fecha'
+                            )
+                    ->orderBy('pagos.created_at', 'DESC')
+                    ->get();
+            }else{
+                $pagos = Pago::join('users as u', 'pagos.user_id', 'u.id')
+                    ->join('clientes as c', 'pagos.cliente_id', 'c.id')
+                    ->join('detalle_pagos as dpa', 'pagos.id', 'dpa.pago_id') 
+                    ->join('pago_pedidos as pp', 'pagos.id', 'pp.pago_id')
+                    ->rightjoin('pedidos as p', 'pp.pedido_id', 'p.id')
+                    ->rightjoin('detalle_pedidos as dpe', 'p.id', 'dpe.pedido_id')
+                    ->select('pagos.id as id',
+                            'u.identificador as users',
+                            'c.celular',
+                            'pagos.observacion',                        
+                            'pagos.total_cobro',
+                            DB::raw('sum(dpe.total) as total_deuda'),
+                            DB::raw('sum(pp.abono) as total_pago'),
+                            'pagos.condicion',
+                            DB::raw('DATE_FORMAT(dpa.fecha, "%d/%m/%Y") as fecha'),
+                            DB::raw('group_concat(p.codigo) as codigos')
+                            )
+                    ->where('p.estado', '1')
+                    ->where('dpa.estado', '1')
+                    ->where('pagos.condicion', 'ABONADO')                
+                    ->groupBy('pagos.id',
+                            'u.identificador',
+                            'c.celular',
+                            'pagos.observacion',
+                            'pagos.total_cobro',
+                            'pagos.condicion',
+                            'dpa.fecha'
+                            )
+                    ->get();
+            }
+        }else{
+            if(Auth::user()->rol == "Encargado"){
+                $pagos = Pago::join('users as u', 'pagos.user_id', 'u.id')
+                    ->join('clientes as c', 'pagos.cliente_id', 'c.id')
+                    ->join('detalle_pagos as dpa', 'pagos.id', 'dpa.pago_id') 
+                    ->join('pago_pedidos as pp', 'pagos.id', 'pp.pago_id')
+                    ->rightjoin('pedidos as p', 'pp.pedido_id', 'p.id')
+                    ->rightjoin('detalle_pedidos as dpe', 'p.id', 'dpe.pedido_id')
+                    ->select('pagos.id as id',
+                            'u.identificador as users',
+                            'c.celular',
+                            'pagos.observacion',                        
+                            'pagos.total_cobro',
+                            DB::raw('sum(dpe.total) as total_deuda'),
+                            DB::raw('sum(pp.abono) as total_pago'),
+                            'pagos.condicion',
+                            DB::raw('DATE_FORMAT(dpa.fecha, "%d/%m/%Y") as fecha'),
+                            DB::raw('group_concat(p.codigo) as codigos')
+                            )
+                    ->where('u.supervisor', Auth::user()->id)
+                    ->where('dpe.estado', '1')
+                    ->where('dpa.estado', '1')
+                    ->where('p.user_id',$request->asesores)
+                    ->where('pagos.condicion', 'ABONADO')  
+                    ->groupBy('pagos.id',
+                            'dpe.codigo',
+                            'u.identificador',
+                            'c.celular',
+                            'pagos.observacion','dpe.total',
+                            'pagos.total_cobro',
+                            'pagos.condicion',
+                            'dpa.fecha'
+                            )
+                    ->orderBy('pagos.created_at', 'DESC')
+                    ->get();
+            }else{
+                $pagos = Pago::join('users as u', 'pagos.user_id', 'u.id')
+                    ->join('clientes as c', 'pagos.cliente_id', 'c.id')
+                    ->join('detalle_pagos as dpa', 'pagos.id', 'dpa.pago_id') 
+                    ->join('pago_pedidos as pp', 'pagos.id', 'pp.pago_id')
+                    ->rightjoin('pedidos as p', 'pp.pedido_id', 'p.id')
+                    ->rightjoin('detalle_pedidos as dpe', 'p.id', 'dpe.pedido_id')
+                    ->select('pagos.id as id',
+                            'u.identificador as users',
+                            'c.celular',
+                            'pagos.observacion',                        
+                            'pagos.total_cobro',
+                            DB::raw('sum(dpe.total) as total_deuda'),
+                            DB::raw('sum(pp.abono) as total_pago'),
+                            'pagos.condicion',
+                            DB::raw('DATE_FORMAT(dpa.fecha, "%d/%m/%Y") as fecha'),
+                            DB::raw('group_concat(p.codigo) as codigos')
+                            )
+                    ->where('p.estado', '1')
+                    ->where('dpa.estado', '1')
+                    ->where('p.user_id',$request->asesores) 
+                    ->where('pagos.condicion', 'ABONADO')            
+                    ->groupBy('pagos.id',
+                            'u.identificador',
+                            'c.celular',
+                            'pagos.observacion',
+                            'pagos.total_cobro',
+                            'pagos.condicion',
+                            'dpa.fecha'
+                            )
+                    ->get();                
+            }
 
-    }*/
+        }
+        
+        return Datatables::of($pagos)
+            ->addIndexColumn()
+            ->addColumn('action', function($pago){     
+                $btn='';
+                if(Auth::user()->rol == "Administrador"){
+                    $btn=$btn.'<a href="'.route('pagos.show', $pago['id']).'" class="btn btn-info btn-sm">Ver</a>';
+                    $btn=$btn.'<a href="'.route('administracion.revisar', $pago).'" class="btn btn-success btn-sm">Editar</a>';
+                    $btn = $btn.'<a href="" data-target="#modal-delete" data-toggle="modal" data-delete="'.$pago['id'].'"><button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i> Eliminar</button></a>';
+                }
+                return $btn;
+            })
+            ->rawColumns(['action'])
+            ->make(true);
+    }
 
     //public function Revisar(Pago $pago) 
     public function Revisar(Pago $pago)    

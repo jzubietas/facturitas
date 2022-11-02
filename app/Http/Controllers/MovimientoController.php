@@ -46,7 +46,7 @@ class MovimientoController extends Controller
         ];
 
         $titulares = [
-            "EPIFANIO HUAMAN SOLANO" => 'EPIFANIO HUAMAN SOLANO',
+            "EPIFANIO SOLANO HUAMAN" => 'EPIFANIO SOLANO HUAMAN',
             "NIKSER DENIS ORE RIVEROS" => 'NIKSER DENIS ORE RIVEROS'
         ];
 
@@ -59,8 +59,28 @@ class MovimientoController extends Controller
     {
         $movimientos = null;
 
-        $movimientos = MovimientoBancario::where('estado', '1')->get();
-        
+        $movimientos = MovimientoBancario::where('estado', '1');//->get();
+        $buscar_banco=$request->banco;
+        $buscar_tipo=$request->tipo;
+        $buscar_titular=$request->titular;
+        //return $buscar_banco;
+        if($buscar_banco)
+        {
+            $movimientos = $movimientos->where('banco','like','%'.$buscar_banco.'%');
+        }
+
+        if($buscar_tipo)
+        {
+            $movimientos = $movimientos->where('tipo','like','%'.$buscar_tipo.'%');
+        }
+
+        if($buscar_titular)
+        {
+            $movimientos = $movimientos->where('titular','like','%'.$buscar_titular.'%');
+        }
+
+        $movimientos = $movimientos->get();
+
         return Datatables::of($movimientos)
                     ->addIndexColumn()
                     ->addColumn('action', function($movimiento){     
@@ -122,6 +142,7 @@ class MovimientoController extends Controller
     public function store(Request $request)
     {
         $monto = $request->monto;
+        $descrip_otros = $request->descrip_otros;
         $monto=str_replace(',','',$monto);
 
         //return $request->all();
@@ -133,7 +154,8 @@ class MovimientoController extends Controller
             'tipo' => $request->tipotransferencia,
             'fecha' => $request->fecha,
             'pedido' => '0',
-            'estado' => '1'
+            'estado' => '1',
+            'descripcion_otros' =>$descrip_otros 
         ]);
 
         return redirect()->route('movimientos.index')->with('info', 'registrado');
@@ -185,31 +207,30 @@ class MovimientoController extends Controller
     {
         //modificar primero
         if (!$request->hiddenIDdelete) {
-            $html='no hay';
+            $html=$request->hiddenIDdelete."--";
         } else {
-            //$pago_id=;
-            $html='si hay';
-            $movimiento_id=$request->hiddenIDdelete;
-            /*$pago = Pago::where('id', $request->hiddenID)
-                        ->where('estado', '1')
-                        ->first();//solo 1*/
             
-            $movimiento = MovimientoBancario::where('id', $movimiento_id)->first();
+            $html=$request->hiddenIDdelete." id";
+            $movimiento_id=$request->hiddenIDdelete;
+            
+            //Cliente::where('clientes.id',$request->hiddenID)
+            $movimiento = MovimientoBancario::where('movimiento_bancarios.id', $movimiento_id);//->first();
 
             try {
                 DB::beginTransaction();
 
                 $movimiento->update([            
-                    'estado' => '0'
+                    'estado' => 0
                 ]);
 
-                $html="eliminado";
+                DB::commit();
+
+                $html="eliminado ".$request->hiddenIDdelete;
             }
             catch (\Throwable $th) {
                 throw $th;
                 $html="error";
-                /*DB::rollback();
-                dd($th);*/
+              
             }
             
             

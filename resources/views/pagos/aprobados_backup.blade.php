@@ -53,9 +53,7 @@
         <thead>
           <tr>
             <th scope="col">COD.</th>
-            <th scope="col">Cliente</th>
             <th scope="col">Codigo pedido</th>
-            <th scope="col">Fecha Voucher</th>
             <th scope="col">Asesor</th>
             <th scope="col">Observacion</th>
             <th scope="col">Total cobro</th>
@@ -64,10 +62,32 @@
             <th scope="col">Acciones</th>
           </tr>
         </thead>
-        <tbody>          
+        <tbody>
+          @foreach ($pagos as $pago)
+            <tr>
+              <td>PAG000{{ $pago->id }}</td>
+              <td>{{ $pago->codigos }}</td>
+              <td>{{ $pago->users }}</td>
+              <td>{{ $pago->observacion }}</td>
+              <td>@php echo number_format($pago->total_deuda,2) @endphp</td>
+              <td>@php echo number_format($pago->total_pago,2) @endphp</td>
+              <td>{{ $pago->condicion }}</td>
+              <td>
+                @can('administracion.show')
+                  <a href="{{ route('pagos.show', $pago) }}" class="btn btn-info btn-sm">Ver</a>
+                @endcan
+                @can('administracion.editpago')
+                <a href="{{ route('administracion.revisar', $pago) }}" class="btn btn-success btn-sm">Editar</a>
+                @endcan
+                @can('administracion.destroy')
+                  <a href="" data-target="#modal-delete-{{ $pago->id }}" data-toggle="modal"><button class="btn btn-danger btn-sm">Eliminar</button></a>
+                @endcan
+              </td>
+            </tr>
+            @include('pagos.modals.modalDelete')
+          @endforeach
         </tbody>
       </table>
-      @include('pagos.modals.modalDeleteId')
     </div>
   </div>
 
@@ -141,32 +161,10 @@
       }
     });
 
-    $(document).on("change","#asesores_aprobado",function(){
+    $(document).on("change","#asesores_pago",function(){
 
       $('#tablaPrincipal').DataTable().ajax.reload();
 
-    });
-
-    $(document).on("submit", "#formdelete", function (evento) {
-      evento.preventDefault();
-      console.log("validar delete");
-      clickformdelete();
-    })
-
-    $('#modal-delete').on('show.bs.modal', function (event) {     
-      var button = $(event.relatedTarget) 
-      var idunico = button.data('delete')      
-      $("#hiddenId").val(idunico);
-      if(idunico<10){
-        idunico='PAG000'+idunico;
-      }else if(idunico<100){
-        idunico= 'PAG00'+idunico;
-      }else if(idunico<1000){
-        idunico='PAG0'+idunico;
-      }else{
-        idunico='PAG'+idunico;
-      }
-      $(".textcode").html(idunico);
     });
 
     $('#tablaPrincipal').DataTable({

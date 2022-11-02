@@ -21,6 +21,10 @@
               {!! Form::label('tipotransferencia', 'Tipo Movimiento') !!}              
               {!! Form::select('tipotransferencia', $tipotransferencia, '', ['class' => 'form-control selectpicker border border-secondary', 'id'=>'tipotransferencia','data-live-search' => 'true', 'placeholder' => '---- SELECCIONE ----']) !!}  
             </div>
+            <div class="form-group col lg-12 descrip_otros" style="font-size: 18px">
+              {!! Form::label('descrip_otros', 'Ingrese la descripcion para Movimiento Otros (Max. 250 caracteres)') !!}
+              {!! Form::textarea('descrip_otros', '', ['class' => 'form-control', 'rows' => '4', 'placeholder' => 'Descripcion Otros']) !!} {{--, 'required' => 'required'--}}
+            </div>
             <div class="form-group col-lg-12" style="font-size: 18px">
               {!! Form::label('titulares', 'Titulares') !!}
               {!! Form::select('titulares', $titulares , '0', ['class' => 'form-control selectpicker border border-secondary', 'data-live-search' => 'true', 'placeholder' => '---- SELECCIONE ----']) !!}

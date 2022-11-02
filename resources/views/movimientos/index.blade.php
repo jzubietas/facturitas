@@ -36,6 +36,32 @@
     @include('pagos.modals.exportar', ['title' => 'Exportar Lista de pagos', 'key' => '1']) --}}    
     @include('movimientos.modals.AddMovimientos')
   </h1>
+<br>
+  <div class="row">
+    <div class=" col-lg-4">
+        <select name="banco_movimientos" class="border form-control selectpicker border-secondary" id="banco_movimientos" data-live-search="true">
+        <option value="">---- SELECCIONE BANCO ----</option>
+          <option value="BCP">BCP</option>          
+          <option value="BBVA">BBVA</option>
+          <option value="IBK">INTERBANK</option>
+        </select>
+    </div>
+    <div class="col-lg-4">
+        <select name="tipo_movimientos" class="border form-control selectpicker border-secondary" id="tipo_movimientos" data-live-search="true">
+          <option value="">---- SELECCIONE TIPO MOVIMIENTO ----</option>
+        </select>
+    </div>
+    <div class=" col-lg-4">
+        <select name="titular_movimientos" class="border form-control selectpicker border-secondary" id="titular_movimientos" data-live-search="true">
+          <option value="">---- SELECCIONE TITULAR ----</option>
+          <option value="EPIFANIO SOLANO HUAMAN">EPIFANIO SOLANO HUAMAN</option>
+          <option value="NIKSER DENIS ORE RIVEROS">NIKSER DENIS ORE RIVEROS</option>
+          
+        </select>
+    </div>
+    
+  </div>
+  
 
   @if($superasesor > 0)
   <br>
@@ -151,6 +177,91 @@
     }
   </script>
   <script>
+
+  document.addEventListener("DOMContentLoaded", function() {
+    document.getElementById("formulario").addEventListener('submit', validarFormulario); 
+  });
+
+    function validarFormulario(evento)
+    {
+      evento.preventDefault();
+      let banco = $("#banco").val();
+      let tipotrans = $("#tipotransferencia").val();
+      let descrip_otros = $("#descrip_otros").val();
+      let titular = $("#titulares").val();
+      let monto = $("#monto").val();
+      let fecha = $("#fecha").val();
+
+      if(tipotrans=='')
+      {
+        Swal.fire(
+            'Error',
+            'Elija el banco',
+            'warning'
+          )
+          return;
+      }else{
+        if(tipotrans=='OTROS')
+        {
+          if(descrip_otros=='')
+          {
+            Swal.fire(
+            'Error',
+            'Ingrese la descripcion para el movimiento OTROS',
+            'warning'
+          )
+          return;
+          }
+        }
+      }
+
+      if(banco=='')
+      {
+        Swal.fire(
+            'Error',
+            'Elija el banco',
+            'warning'
+          )
+          return;
+      }else if(tipotrans=='')
+      {
+        Swal.fire(
+            'Error',
+            'Elija el movimiento',
+            'warning'
+          )
+          return;
+      }else if(titular=='')
+      {
+        Swal.fire(
+            'Error',
+            'Elija al titular',
+            'warning'
+          )
+          return;
+      }else if(monto=='')
+      {
+        Swal.fire(
+            'Error',
+            'Ingrese el monto',
+            'warning'
+          )
+          return;
+      }else if(fecha=='')
+      {
+        Swal.fire(
+            'Error',
+            'Seleccione la fecha',
+            'warning'
+          )
+          return;
+      }else{
+        this.submit();
+      }
+
+    }
+
+
   $(document).ready(function () {
 
     //$("#banco").val("").html("");
@@ -162,6 +273,52 @@
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
     });
+
+    
+
+    $(document).on("submit", "#formulario", function (event) {
+      event.preventDefault();
+      
+      //var total_pedido_pagar = document.getElementById('total_pedido_pagar').value;
+
+      
+    });
+
+    /*function validarFormulario(evento) {
+      evento.preventDefault();
+      
+
+    }*/
+    
+
+    /*$.ajax({
+      url: "{{ route('asesorespago') }}",
+      method: 'GET',
+      success: function(data) {
+        console.log(data.html);
+        $('#banco_movimientos').html(data.html);
+        $('#banco_movimientos').selectpicker('refresh');
+      }
+    });*/
+    /*$.ajax({
+      url: "{{ route('asesorespago') }}",
+      method: 'GET',
+      success: function(data) {
+        console.log(data.html);
+        $('#tipo_movimientos').html(data.html);
+        $('#tipo_movimientos').selectpicker('refresh');
+      }
+    });*/
+    /*$.ajax({
+      url: "{{ route('asesorespago') }}",
+      method: 'GET',
+      success: function(data) {
+        console.log(data.html);
+        $('#titular_movimientos').html(data.html);
+        $('#titular_movimientos').selectpicker('refresh');
+      }
+    });*/
+    
 
     $(document).on("change","#banco",function(event){
 
@@ -175,6 +332,40 @@
           $("#tipotransferencia").selectpicker("refresh");
         }
       });
+    });
+
+    $(".descrip_otros").hide();
+
+    $(document).on("change","#tipotransferencia",function(event){
+      console.log($(this).val());
+      if($(this).val()=='OTROS'){
+        //$("#descrip_otros").prop("visibled",none);
+        $(".descrip_otros").show();
+      }else{
+        $(".descrip_otros").hide();
+      }
+    });
+
+    $(document).on("change","#banco_movimientos",function(event){
+
+      console.log("banco_movimientos change");
+      $.ajax({
+        url: "{{ route('cargar.tipomovimiento') }}?banco=" + $(this).val(),
+        method: 'GET',
+        success: function(data) {
+          //carga ajax a combo
+          $('#tipo_movimientos').html(data.html);
+          $("#tipo_movimientos").selectpicker("refresh");
+          $('#tablaPrincipal').DataTable().ajax.reload();
+        }
+      });
+    });
+
+    $(document).on("change","#tipo_movimientos",function(event){
+      $('#tablaPrincipal').DataTable().ajax.reload();
+    });
+    $(document).on("change","#titular_movimientos",function(event){
+      $('#tablaPrincipal').DataTable().ajax.reload();
     });
 
     //para opcion eliminar  movimientos
@@ -207,7 +398,15 @@
         serverSide: true,
         searching: true,
         "order": [[ 0, "desc" ]],
-        ajax: "{{ route('movimientostabla') }}",
+        ajax: {
+          url: "{{ route('movimientostabla') }}",
+          data: function (d) {
+            d.banco = $("#banco_movimientos").val();
+            d.tipo = $("#tipo_movimientos").val();
+            d.titular = $("#titular_movimientos").val();
+          },
+        },
+        //ajax: "{{ route('movimientostabla') }}",
         createdRow: function( row, data, dataIndex){           
         },
         rowCallback: function (row, data, index) {           
@@ -235,7 +434,16 @@
         {//cliente
           data: 'importe',  name: 'importe' },
         {//observacion
-          data: 'tipo', name: 'tipo'
+          data: 'tipo', 
+          name: 'tipo',
+          render: function ( data, type, row, meta ) { 
+            if(row.descripcion_otros==null)
+            {
+              return data;
+            }else{
+              return data+'<br>('+row.descripcion_otros+')';
+            }
+          }
         },
         {//totalcobro
           data: 'fecha', name: 'fecha'
