@@ -19,7 +19,7 @@
       <div class="dropdown-menu">
         {{-- <a href="{{ route('clientesExcel') }}" class="dropdown-item" target="blank_"><img src="{{ asset('imagenes/icon-excel.png') }}"> Clientes</a> --}}
         <a href="" data-target="#modal-exportar" data-toggle="modal" class="dropdown-item" target="blank_"><img src="{{ asset('imagenes/icon-excel.png') }}"> Clientes</a>
-        {{-- <a href="{{ route('clientespedidosExcel') }}" class="dropdown-item" target="blank_"><img src="{{ asset('imagenes/icon-excel.png') }}"> Clientes - Pedidos</a> --}}
+        {{--<a href="{{ route('clientespedidosExcel') }}" class="dropdown-item" target="blank_"><img src="{{ asset('imagenes/icon-excel.png') }}"> Clientes - Pedidos</a> --
         <a href="" data-target="#modal-exportar2" data-toggle="modal" class="dropdown-item" target="blank_"><img src="{{ asset('imagenes/icon-excel.png') }}"> Clientes - Pedidos</a>
       </div>
     </div>
@@ -50,11 +50,11 @@
             <th scope="col">Direccion</th>
             <th scope="col">Asesor asignado</th>
             {{--<th scope="col">Cantidad</th>--}}
-            {{--<th scope="col">Año actual</th>--}}
-            {{--<th scope="col">Mes actual</th>--}}
-            {{--<th scope="col">anio pedido</th>--}}
-            {{--<th scope="col">mes pedido</th>--}}
-            {{--<th scope="col">Deuda</th>--}}
+            {{--<th scope="col">Año actual</th>
+            <th scope="col">Mes actual</th>
+            <th scope="col">anio pedido</th>
+            <th scope="col">mes pedido</th>
+            <th scope="col">Deuda</th>--}}
             <th scope="col">Acciones</th>
           </tr>
         </thead>
@@ -173,28 +173,56 @@ $(document).ready(function () {
         //{data: 'anio', name: 'anio'},
         //{data: 'mes', name: 'mes'},
         //{data: 'deuda', name: 'deuda'},
-        {data: 'action', name: 'action', orderable: false, searchable: false,sWidth:'20%'},
+        {
+          data: 'action', 
+          name: 'action', 
+          orderable: false, 
+          searchable: false,
+          sWidth:'20%',
+          render: function ( data, type, row, meta ) {
+            var urledit = '{{ route("clientes.edit", ":id") }}';
+            urledit = urledit.replace(':id', row.id);
+
+            @can('clientes.edit')
+              data = data+'<a href="'+urledit+'" class="btn btn-warning btn-sm"><i class="fas fa-edit"></i> Editar</a>';
+            @endcan
+
+            @can('clientes.destroy')
+              data = data+'<a href="" data-target="#modal-delete" data-toggle="modal" data-opcion="'+row.id+'"><button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i> Eliminar</button></a>'; 
+
+            @endcan
+            return data;
+          }
+        },
         ],
         "createdRow": function( row, data, dataIndex){
-            if(data["deuda"] == "0")
+            if(data["pedidos_mes_deuda"] >0 && data["pedidos_mes_deuda_antes"] == 0 )
             {
-                //sin deuda
+              $(row).addClass('lighblue');
+            }
+            else if(data["pedidos_mes_deuda"] >0 && data["pedidos_mes_deuda_antes"]  >0 )
+            {
+              $(row).addClass('red');
+            }else if(data["pedidos_mes_deuda"] == 0 && data["pedidos_mes_deuda_antes"] >0 )
+            {
+              $(row).addClass('red');
+            }
+            /*if(data["deuda"] == "0")
+            {
                 $(row).addClass('white');
             }else{
-                if(data["dateY"] == data["anio"])
+              if ( (data["dateY"] - data["anio"]) == 0 )
+              {
+                if(   (data["dateM"] - data["mes"]) >= 0 &&  (data["dateM"] - data["mes"]) <2 )
                 {
-                    if(data["dateM"] == data["mes"])
-                    {
-                        $(row).addClass('lighblue'); 
-                    }else{
-                        $(row).addClass('red'); 
-                    }
+                  $(row).addClass('lighblue');
                 }else{
-                     $(row).addClass('red'); 
+                  $(row).addClass('red');
                 }
-            }
-            
-            
+              }else{
+                $(row).addClass('red');
+              }
+            }*/
         },
         language: {
         "decimal": "",

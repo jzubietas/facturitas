@@ -58,10 +58,7 @@
                         <tbody>
                         </tbody>
                     </table>
-
-                    
-                    @include('base_fria.modal.convertirid')
-                    
+                    @include('base_fria.modal.convertirid')                    
                 </div>
             </div>
     
@@ -163,7 +160,33 @@ $(document).ready(function () {
             data: 'identificador', 
             name: 'Asesor',            
         },
-        {data: 'action', name: 'action', orderable: false, searchable: false,sWidth:'20%'},
+        {
+          data: 'action', 
+          name: 'action', 
+          orderable: false, 
+          searchable: false,
+          sWidth:'20%',
+          render: function ( data, type, row, meta ) {
+            var urledit = '{{ route("clientes.editbf", ":id") }}';
+            urledit = urledit.replace(':id', row.id);
+
+            @can('base_fria.updatebf')
+              data = data+'<a href="" data-target="#modal-convertir" data-toggle="modal" data-opcion="'+row.id+'"><button class="btn btn-info btn-sm">Convertir a cliente</button></a>';              
+            @endcan
+            @can('base_fria.edit')
+              data = data+'<a href="'+urledit+'" class="btn btn-warning btn-sm"><i class="fas fa-edit"></i> Editar</a>';
+
+              //$btn = $btn.'<a href="'.route('clientes.editbf', $row).'" class="btn btn-warning btn-sm"><i class="fas fa-edit"></i> Editar</a>'
+
+            @endcan
+            
+            //@can('clientes.destroy')
+              //data = data+'<a href="" data-target="#modal-delete" data-toggle="modal" data-opcion="'+row.id+'"><button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i> Eliminar</button></a>';  
+            //@endcan
+
+            return data;             
+          }
+        },
         ],
         language: {
         "decimal": "",

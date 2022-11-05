@@ -44,12 +44,12 @@ class BasefriaController extends Controller
             return Datatables::of($data)
                     ->addIndexColumn()
                     ->addColumn('action', function($row){
-     
-                           $btn = '<a href="" data-target="#modal-convertir" data-toggle="modal" data-opcion="'.$row->id.'"><button class="btn btn-info btn-sm">Convertir a cliente</button></a>';
+                            $btn="";
+                           //$btn = '<a href="" data-target="#modal-convertir" data-toggle="modal" data-opcion="'.$row->id.'"><button class="btn btn-info btn-sm">Convertir a cliente</button></a>';
                            //$btn = '<a href="" data-target="#modal-convertir-'.$row->id.'" data-toggle="modal" data-opcion="'.$row->id.'"><button class="btn btn-info btn-sm">Convertir a cliente</button></a>';
 
-                           $btn = $btn.'<a href="'.route('clientes.editbf', $row).'" class="btn btn-warning btn-sm"><i class="fas fa-edit"></i> Editar</a>';
-                           $btn = $btn.'<a href="" data-target="#modal-delete" data-toggle="modal" data-opcion="'.$row->id.'"><button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i> Eliminar</button></a>';
+                           //$btn = $btn.'<a href="'.route('clientes.editbf', $row).'" class="btn btn-warning btn-sm"><i class="fas fa-edit"></i> Editar</a>';
+                           //$btn = $btn.'<a href="" data-target="#modal-delete" data-toggle="modal" data-opcion="'.$row->id.'"><button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i> Eliminar</button></a>';
                            //$btn = $btn.'<a href="" data-target="#modal-delete-'.$row->id.'" data-toggle="modal"><button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i> Eliminar</button></a>';
        
                             return $btn;

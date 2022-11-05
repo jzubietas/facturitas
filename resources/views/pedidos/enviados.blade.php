@@ -91,8 +91,12 @@
                     <img src="{{ asset('storage/entregas/' . $pedido->foto1) }}" alt="{{ $pedido->foto1 }}" height="200px" width="200px" class="img-thumbnail">
                   </a>                
                   <p>
+
                     <a href="{{ route('envios.descargarimagen', $pedido->foto1) }}">Descargar </a>
-                    <a href="" data-target="#modal-delete-foto1-{{ $pedido->id }}" data-toggle="modal">  <button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i></button></a>
+
+                    @if (Auth::user()->rol == "Asesor")
+                      <a href="" data-target="#modal-delete-foto1-{{ $pedido->id }}" data-toggle="modal">  <button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i></button></a>
+                    @endif
                   </p>
                 @elseif($pedido->envio == '3')
                   <span class="badge badge-dark">Sin envio</span>
@@ -104,10 +108,14 @@
                 @if($pedido->foto2 != null)
                   <a href="" data-target="#modal-imagen2-{{ $pedido->id }}" data-toggle="modal">
                     <img src="{{ asset('storage/entregas/' . $pedido->foto2) }}" alt="{{ $pedido->foto2 }}" height="200px" width="200px" class="img-thumbnail">                
-                  </a>                
+                  </a>
+                  
+                  
                   <p>
                     <a href="{{ route('envios.descargarimagen', $pedido->foto2) }}">Descargar </a>
-                    <a href="" data-target="#modal-delete-foto2-{{ $pedido->id }}" data-toggle="modal">  <button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i></button></a>
+                    @if (Auth::user()->rol == "Asesor")
+                      <a href="" data-target="#modal-delete-foto2-{{ $pedido->id }}" data-toggle="modal">  <button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i></button></a>
+                    @endif
                   </p>
                 @elseif($pedido->envio == '3')
                   <span class="badge badge-dark">Sin envio</span>

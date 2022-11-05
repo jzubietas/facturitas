@@ -7,20 +7,14 @@
 @stop
 
 @section('content')
-
-
   <div class="card">
-    {{--  {!! Form::open(['route' => 'pagos.store','enctype'=>'multipart/form-data', 'id'=>'formulario','files'=>true]) !!} --}}
-    <form id="formulario" name="formulario" enctype="multipart/form-data">
+    {!! Form::open(['route' => 'pagos.store','enctype'=>'multipart/form-data', 'id'=>'formulario','files'=>true]) !!}
       <div class="border rounded card-body border-secondary" style="margin: 1%">
         <div class="form-row">
           <div class="form-group col-lg-6">
             {!! Form::label('user_id', 'Asesor') !!}
-            {{--<input type="hidden" name="user_id" requerid value="{{ Auth::user()->id }}" class="form-control">--}}
-            {{--<input type="text" name="user_name" value="{{ Auth::user()->name }}" class="form-control" disabled>--}}
-
-            {!! Form::select('user_id', $users, null, ['class' => 'form-control border selectpicker border-secondary', 'data-live-search' => 'true', 'placeholder' => '---- SELECCIONE ASESOR ----']) !!}
-
+            <input type="hidden" name="user_id" requerid value="{{ Auth::user()->id }}" class="form-control">
+            <input type="text" name="user_name" value="{{ Auth::user()->name }}" class="form-control" disabled>
           </div>
           <div class="form-group col-lg-6">
             {!! Form::label('cliente_id', 'Cliente*') !!}{!! Form::hidden('cliente_id', '',['id' => 'cliente_id']) !!}
@@ -163,6 +157,10 @@
             <input type="text" name="diferencia" value="" disabled id="diferencia" class="form-control" style="color: red; font-weight:bold; font-weight: 900; font-size:21px">   
           </div>
         </div>
+        <div class="form-group col-lg-4" style="text-align:center;">
+            <a class="btn btn-danger" href="#"><i class="fas fa-times-circle"></i> Saldo</a>
+            <a class="btn btn-danger" href="#"><i class="fas fa-times-circle"></i> Devolucion</a>
+        </div>
       </div>
     </div>
     {!! Form::close() !!}
@@ -176,22 +174,6 @@ tfoot tr, thead tr {
 }
 tfoot td {
 	font-weight:bold;
-}
-
-select option:disabled {
-    color: #000;
-    font-weight: bold;
-}
-
-.bootstrap-select .dropdown-menu li .dropdown-item
-{
-  color: #000 !important;
-  /*style="color: rgb(255, 255, 255);"*/
-}
-.bootstrap-select .dropdown-menu li .dropdown-item.disabled
-{
-  color: red !important;
-  /*style="color: rgb(255, 255, 255);"*/
 }
 </style>
 @stop
@@ -210,131 +192,14 @@ select option:disabled {
     function mostrarBotones() {
       $("#addpedido").show();
       $("#addpago").show();
-    }
-
-    $( "#user_id" ).change(function() {
-      console.log("link asesor")
-      var uid=$(this).val();
-      $.ajax({
-          url: "{{ route('cargar.clientedeasesorparapagos') }}?user_id=" + uid,
-          method: 'GET',
-          success: function(data) {
-            console.log(data.html);
-            $('#pcliente_id').html(data.html);
-            $("#pcliente_id").selectpicker("refresh");
-
-          }
-        });
-    });
+    }    
 
     // CARGAR PEDIDOS DE CLIENTE SELECCIONADO
 
     var tabla_pedidos=null;
+    var total_pedido=0.00;
+    var total_pago=0.00;
     //$(document).ready(function () {
-
-      $("#formulario").submit(function(event){
-        event.preventDefault();
-        console.log("abrir")
-       
-       var fd = new FormData();
-
-       //general
-       fd.append("user_id", $("#user_id").val() );
-       fd.append("cliente_id", $("#cliente_id").val() );
-       fd.append("pcliente_id", $("#pcliente_id").val() );
-       fd.append("saldo", $("#saldo").val() );
-       fd.append("total_pago_pagar", $("#total_pago_pagar").val() );
-       fd.append("total_pedido", $("#total_pedido").val() );
-       fd.append("total_pedido_pagar", $("#total_pedido_pagar").val() );
-       fd.append("ppedido_id", $("#ppedido_id").val() );
-       fd.append("pbanco", $("#pbanco").val() );
-       $('input[name="tipotransferencia[]"]').each(function(){
-         fd.append("tipotransferencia[]", this.value);
-       });
-       fd.append("titulares", $("#titulares").val() );
-       fd.append("pmonto", $("#pmonto").val() );
-       fd.append("pfecha", $("#pfecha").val() );
-       fd.append("diferencia", $("#diferencia").val() );
-
-       //pagos
-       $('input[name="tipomovimiento[]"]').each(function(){
-         fd.append("tipomovimiento[]", this.value);
-       });
-       $('input[name="titular[]"]').each(function(){
-         fd.append("titular[]", this.value);
-       });
-       $('input[name="banco[]"]').each(function(){
-         fd.append("banco[]", this.value);
-       });
-       $('input[name="fecha[]"]').each(function(){
-         fd.append("fecha[]", this.value);
-       });      
-       $('input[name="monto[]"]').each(function(){
-         fd.append("monto[]", this.value);
-       });
-
-       //pedidos
-       $('input[name="pedido_id[]"]').each(function(){
-         fd.append("pedido_id[]", this.value);
-       });
-       $('input[name="numbersaldo[]"]').each(function(){
-         fd.append("numbersaldo[]", this.value);
-       });
-       $('input[name="numberdiferencia[]"]').each(function(){
-         fd.append("numberdiferencia[]", this.value);
-       });
-       $('input[name="numbertotal[]"]').each(function(){
-         fd.append("numbertotal[]", this.value);
-       });
-       
-       $('input[name="checktotal[]"]').each(function(){
-         fd.append("checktotal[]", this.value);
-       });
-       $('input[name="checkadelanto[]"]').each(function(){
-         fd.append("checkadelanto[]", this.value);
-       });
-
-       //adjuntos
-       let files=$('input[name="imagen"]');
-       console.log("files "+files.length)
-       if(files.length == 0)
-       {
-         Swal.fire(
-             'Error',
-             'Debe ingresar el detalle del pedido',
-             'warning'
-           )
-           return false;
-        }else{
-         //
-         console.log(files.length);//this.files.length
-         var totalfilescarga = $('input[name="imagen"]').files.length;
-         console.log("totalfilescarga "+totalfilescarga);
-         
-         if(files.length!=totalfilescarga)
-         {
-           Swal.fire(
-             'Error',
-             'Debe ingresar los adjuntos del pago',
-             'warning'
-           )
-           return false;
-         }else{
-           for (let i = 0; i < files.length; i++) {
-             fd.append('imagen['+i+']', files[i]);
-           }
-         }
-
-         console.log(fd);
-
-       }
-
-       ///final de validacion registro pago
-
-
-
-      });
-      ////submitpagos
 
       function eliminarPa(index) {
         total_pago = total_pago - subtotal_pago[index];
@@ -360,6 +225,175 @@ select option:disabled {
         }
 
       $(document).ready(function() {
+
+        /* inicio mi carga de table  sin datos*/
+        $('#tabla_pagos').DataTable().clear().destroy();
+
+        tabla_pagos=$('#tabla_pagos').DataTable({
+            "bPaginate": false,
+              "bFilter": false,
+              "bInfo": false,
+              columns: 
+              [
+                {
+                  data: 'item', 
+                  name: 'item',
+                  sWidth:'10%', 
+                },
+                {
+                  data: 'movimiento', 
+                  name: 'movimiento',
+                  sWidth:'10%', 
+                  render: function ( data, type, row, meta ) {
+                    return '<input type="hidden" name="tipomovimiento['+row.item+']" value="' + data + '"><span class="tipomovimiento">' + data + '</span></td>';
+                  }
+                },
+                {
+                  data: 'titular', 
+                  name: 'titular',
+                  sWidth:'10%',
+                  render: function ( data, type, row, meta ) {
+                    return '<input type="hidden" name="titular['+row.item+']" value="' + data + '"><span class="titular">' + data + '</span></td>';
+                  }
+                },
+                {
+                  data: 'banco', 
+                  name: 'banco',
+                  sWidth:'10%', 
+                  render: function ( data, type, row, meta ) {
+                    return '<input type="hidden" name="banco['+row.item+']" value="' + data + '"><span class="banco">' + data + '</span></td>';
+                  }
+                },
+                {
+                  data: 'fecha', 
+                  name: 'fecha',
+                  sWidth:'10%', 
+                  render: function ( data, type, row, meta ) {
+                    return '<input type="hidden" name="fecha['+row.item+']" value="' + data + '"><span class="fecha">' + data + '</span></td>';
+                  }
+                },
+                {
+                  data: 'imagen', 
+                  name: 'imagen',
+                  sWidth:'10%', 
+                  render: function ( data, type, row, meta ) {
+                    //return '<input type="hidden" name="fecha['+row.item+']" value="' + data + '"><span class="fecha">' + data + '</span></td>';
+                    //<input type="file" id="imagen" name="imagen[]" accept= "image/*" style="width:150px;"/>
+                    //<input type="file" id="imagen" name="imagen[]" accept= "image/*" style="width:150px;"/>
+                    var str="storage/adjuntos/"+data;
+                    var urlimage = '{{ asset(":id") }}';
+
+                    urlimage = urlimage.replace(':id', str);
+                    data = '<img src="'+urlimage+'" alt="'+urlimage+'" height="200px" width="200px" class="img-thumbnail">';
+                          //'<input type="file" id="imagen'+row.item+'" name="imagen['+row.item+']" accept="image/*" style="width:150px;">';
+                    return data
+
+                  }
+                },
+                {
+                  data: 'monto', 
+                  name: 'monto',
+                  sWidth:'10%', 
+                  render: function ( data, type, row, meta ) {
+                    return '<input type="hidden" name="monto['+row.item+']" value="' + data + '"><span class="monto">' + data + '</span></td>';
+                  }
+                },
+                {
+                  data: 'accion', 
+                  name: 'accion',
+                  sWidth:'10%', 
+                  render: function ( data, type, row, meta ) {
+                    return '<button type="button" class="btn btn-danger btn-sm remove"><i class="fas fa-trash-alt"></i>'+row.item+'</button>';
+                  }
+                },
+              ],
+              "footerCallback": function ( row, data, start, end, display ) {
+                var api = this.api();
+                nb_cols = 4;api.columns().nodes().length;
+                var j = 2;
+
+                //para footer  monto
+                var pageTotal = api
+                      .column( 6, { page: 'current'} )
+                      .data()
+                      .reduce( function (a, b) {
+                          return Number(a) + Number(b);
+                      }, 0 );
+                // Update footer
+                $( api.column( 6 ).footer() ).html('<input type="hidden" name="total_pago" id="total_pago" value="'+pageTotal+'"/>'+pageTotal);
+
+                console.log("sumar nuevamente para total en pagos");
+                console.log("habia en diferencia "+$("#diferencia").val() );
+                console.log("sumare "+pageTotal);
+                $("#diferencia").val(pageTotal);
+                //calcular
+                diferenciaFaltante();
+
+                //para footer saldo
+                /*while(j < nb_cols){
+                  var pageTotal = api
+                        .column( j, { page: 'current'} )
+                        .data()
+                        .reduce( function (a, b) {
+                            return Number(a) + Number(b);
+                        }, 0 );
+                  $( api.column( j ).footer() ).html(pageTotal);
+                  j++;
+                } */
+              },
+              language: {
+                "decimal": "",
+                "emptyTable": "No hay informaciÃ³n",
+                "info": "Mostrando del _START_ al _END_ de _TOTAL_ Entradas",
+                "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
+                "infoFiltered": "(Filtrado de _MAX_ total entradas)",
+                "infoPostFix": "",
+                "thousands": ",",
+                "lengthMenu": "Mostrar _MENU_ Entradas",
+                "loadingRecords": "Cargando...",
+                "processing": "Procesando...",
+                "search": "Buscar:",
+                "zeroRecords": "Sin resultados encontrados",
+                "paginate": {
+                "first": "Primero",
+                "last": "Ultimo",
+                "next": "Siguiente",
+                "previous": "Anterior"
+                }
+            },
+
+        });
+
+
+        $('#tabla_pagos').on('click', '.remove', function() {
+          var table = $('#tabla_pagos').DataTable();
+          var row = $(this).parents('tr');
+          var subtotal=row.find("td").eq("6").find("span.monto").text();
+          console.log(subtotal);
+          let diff=$("#diferencia").val();
+      
+          if ($(row).hasClass('child')) {
+            table.row($(row).prev('tr')).remove().draw();
+          } else {
+            table
+              .row($(this).parents('tr'))
+              .remove()
+              .draw();
+
+              total_pago = diff*1 - subtotal*1;
+              console.log(total_pago);
+              $("#total_pago").html("S/. " + total_pago.toLocaleString("en-US"));
+              $("#total_pago_pagar").val(total_pago);
+              
+              evaluarPa();
+            
+          }
+      
+        });
+              
+
+
+
 
         $(document).on("change","#pcliente_id",function(){
           $('#tabla_pedidos').DataTable().clear().destroy();
@@ -488,6 +522,26 @@ select option:disabled {
                   j++;
                 } */
               },
+              language: {
+                "decimal": "",
+                "emptyTable": "No hay informaciÃ³n",
+                "info": "Mostrando del _START_ al _END_ de _TOTAL_ Entradas",
+                "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
+                "infoFiltered": "(Filtrado de _MAX_ total entradas)",
+                "infoPostFix": "",
+                "thousands": ",",
+                "lengthMenu": "Mostrar _MENU_ Entradas",
+                "loadingRecords": "Cargando...",
+                "processing": "Procesando...",
+                "search": "Buscar:",
+                "zeroRecords": "Sin resultados encontrados",
+                "paginate": {
+                "first": "Primero",
+                "last": "Ultimo",
+                "next": "Siguiente",
+                "previous": "Anterior"
+                }
+            },
               
             });
 
@@ -777,6 +831,7 @@ select option:disabled {
                     console.log("no hay pagos ingresados");
                     return;
                   }
+                  console.log("montopagos "+montopagos);
                   let filedata=tabla_pedidos.row($(this).closest('tr')).data();
                   let pedidosaldo=parseFloat(filedata.saldo);
                   if(pedidosaldo==null || isNaN(pedidosaldo)){
@@ -946,47 +1001,78 @@ select option:disabled {
         }
 
 
-        $('#add_pago').click(function() {
-          if ($('#tipotransferencia').val() == '') {
-            Swal.fire(
-              'Error',
-              'Seleccione tipo de transferencia',
-              'warning'
-            )
-          }else if ($('#titulares').val() == '') {
-            Swal.fire(
-              'Error',
-              'Seleccione titular',
-              'warning'
-            )
-          }else if ($('#pmonto').val() == '') {
-            Swal.fire(
-              'Error',
-              'Ingrese monto',
-              'warning'
-            )
-          }
-          else if ($('#pbanco').val() == ''){
-            Swal.fire(
-              'Error',
-              'Seleccione banco ',
-              'warning'
-            )
-          }
-          else if ($('#pfecha').val() == ''){
-            Swal.fire(
-              'Error',
-              'Seleccione la fecha',
-              'warning'
-            )
-          }
-          else {
-            deuda = !isNaN($('#pcantidad').val()) ? parseInt($('#pcantidad').val(), 10) : 0;
-            pagado = !isNaN($('#pstock').val()) ? parseInt($('#pstock').val(), 10) : 0;
+      $(document).ready(function () {
 
-            agregarPago();
+        $.ajaxSetup({
+          headers: {
+              'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
           }
+      });
+
+        
+        $(document).on("click","#add_pago",function(){
+              if ($('#pbanco').val() == ''){
+                  Swal.fire(
+                    'Error',
+                    'Seleccione banco ',
+                    'warning'
+                  )
+              }else if ($('#tipotransferencia').val() == '') {
+                Swal.fire(
+                  'Error',
+                  'Seleccione tipo de transferencia',
+                  'warning'
+                )
+              }else if ($('#titulares').val() == '') {
+                Swal.fire(
+                  'Error',
+                  'Seleccione titular',
+                  'warning'
+                )
+              }else if ($('#pmonto').val() == '') {
+                Swal.fire(
+                  'Error',
+                  'Ingrese monto',
+                  'warning'
+                )
+              }
+              else if ($('#pfecha').val() == ''){
+                Swal.fire(
+                  'Error',
+                  'Seleccione la fecha',
+                  'warning'
+                )
+              }
+              else {
+
+                //validar imagen cargada
+                let files=$('#pimagen');
+                var totalfilescarga = $('#pimagen').get(0).files.length;
+
+                if(files.length!=totalfilescarga)
+                {
+                  Swal.fire(
+                    'Error',
+                    'Debe ingresar la imagen adjunta',
+                    'warning'
+                  )
+                  return false;
+                }else{
+                  //imagen cargada
+                  deuda = !isNaN($('#pcantidad').val()) ? parseInt($('#pcantidad').val(), 10) : 0;
+                  pagado = !isNaN($('#pstock').val()) ? parseInt($('#pstock').val(), 10) : 0;
+
+                  agregarPago();
+                }
+              }
         });
+
+        
+
+        /*$('#add_pago').click(function() {
+          
+        });*/
+      });
         ///
         /*$(document).on("click","#tabla_pedidos input.radiototal",function(e){
           e.preventDefault();
@@ -1229,7 +1315,161 @@ select option:disabled {
           return sign < 0 ? '-' + result : result;
         }
 
-        function agregarPago() {
+        $(document).ready(function () {
+
+          window.agregarPago = function(){  
+            //alert('lol');
+            console.log("en pagos")
+            var strEx = $("#pmonto").val();
+            strEx = strEx.replace(",","");
+            var numFinal = parseFloat(strEx);
+            monto = numFinal;
+            tipomovimiento = $('#tipotransferencia option:selected').val();
+            titular = $('#titulares option:selected').val();
+            banco = $('#pbanco option:selected').val();
+            fecha = $("#pfecha").val();
+
+            if (monto != ""  && banco != "" && fecha != ""/*  && imagen != "" */) {
+              subtotal_pago[contPa] = monto*1;
+              total_pago = parseFloat(total_pago*1 + subtotal_pago[contPa]*1).toFixed(2);
+
+              //var filasPa = ;
+
+              //const tr = filasPa;//$("<tr><td>1</td><td>2</td></tr>");
+              //ajax carga imagen de pago temporal
+
+              //let files=$('#pimagen');
+              //var totalfilescarga = $('#pimagen').get(0).files.length;
+              var fd2 = new FormData();
+
+              //let files=$('#pimagen');
+              let files=$('input[name="pimagen')
+              console.log(files.length);//1
+             {
+                //
+                //var totalfilescarga = $('#pimagen').get(0).files.length;
+                var totalfilescarga = $('input[name="pimagen"]').get(0).files.length;
+                //var totalfilescarga = $('input[name="adjunto[]"]').get(0).files.length;
+                console.log("totalfilescarga "+totalfilescarga);
+                console.log(files.get(0).files[0]);
+                {
+                  console.log("cargo inputs y len "+files.length)
+                  for (let i = 0; i < files.length; i++) {
+                    fd2.append('adjunto', $('input[type=file][name="pimagen"]')[0].files[0]);
+                  }
+                  //console.log(fd2);
+
+                  $.ajax({
+                    data: fd2,
+                    processData: false,
+                    contentType: false,
+                    type: 'POST',
+                    url:"{{ route('pagos.addImgTemp') }}",
+                    success:function(data){
+                      console.log(data);
+                      if(data.html=='0'){
+
+                        }else{
+                          /*var urlpdf = '{{ route("pedidosPDF", ":id") }}';           
+                          urlpdf = urlpdf.replace(':id', data.html);
+                          window.open(urlpdf, '_blank');
+
+                          $("#modal-copiar .textcode").text(data.html);
+                          $("#modal-copiar").modal("show");*/
+
+
+                          tabla_pagos.row.add( {
+                              "item":       (contPa + 1),
+                              "movimiento":   tipomovimiento,
+                              "titular":     titular,
+                              "banco": banco,
+                              "fecha":     fecha,
+                              "imagen":       data.html,
+                              "monto":      monto,
+                              "accion":      (contPa + 1)
+                          } ).draw();
+
+                          const fileInput = $("#pimagen");
+                          const fileInputdestino = $("#imagen"+(contPa + 1));//aca que se carga la imagen
+                          const myFile = new File(['Hello World!'], 'myFile.txt', {
+                              type: 'text/plain',
+                              lastModified: new Date(),
+                          });
+
+                          const dataTransfer = new DataTransfer();
+                          dataTransfer.items.add(myFile);
+                          fileInputdestino.files = dataTransfer.files;
+
+                          //ahora cerrar modal
+                          $("#modal-add-pagos").modal("hide");
+
+                          //$("#diferencia").val();
+
+                          contPa++;
+                          limpiarPa();
+                          $("#total_pago").html("S/. " + separateComma(total_pago).toLocaleString("en-US"));
+                          $("#total_pago_pagar").val(total_pago.toLocaleString("en-US"));
+                          evaluarPa();
+                          diferenciaFaltante();
+
+
+
+                        }
+                    }
+                  });
+
+
+                }
+
+              }
+
+              
+              //////
+               
+              
+           
+
+              /*tabla_pagos.row.add(
+                '<tr class="selected" id="filasPa' + contPa + '">' +
+                '<td>' + (contPa + 1) + '</td>' +
+                '<td><input type="hidden" name="tipomovimiento[]" value="' + tipomovimiento + '">' + tipomovimiento + '</td>' +
+                '<td><input type="hidden" name="titular[]" value="' + titular + '">' + titular + '</td>' +
+                '<td><input type="hidden" name="banco[]" value="' + banco + '">' + banco + '</td>' +
+                '<td><input type="hidden" name="fecha[]" value="' + fecha + '">' + fecha + '</td>' +
+                '<td>@csrf<input type="file" id="imagen" name="imagen[]" accept= "image/*" style="width:150px;"/></td>' +      
+                '<td><input type="hidden" name="monto[]" value="' + monto + '">' + monto + '</td>' +
+                '<td><button type="button" class="btn btn-danger btn-sm" onclick="eliminarPa(' + contPa + ')"><i class="fas fa-trash-alt"></i></button></td>' +
+                '</tr>'
+              ).draw();*/
+              //$(row).addClass("label-warning");
+
+
+              //agregar fila al datatable
+              /*contPa++;
+              limpiarPa();
+              console.log(total_pago);
+              $("#total_pago").html("S/. " + separateComma(total_pago).toLocaleString("en-US"));
+              $("#total_pago_pagar").val(total_pago.toLocaleString("en-US"));
+              evaluarPa();
+              diferenciaFaltante();*/
+              //$('#tabla_pagos').append(filasPa);
+
+            }else {
+              Swal.fire(
+                'Error!',
+                'Información faltante del pago',
+                'warning')
+            }
+
+
+
+          }
+
+        });
+
+
+        function agregarPago1() {
+          console.log("agrega pago javascript")
 
           //valor de datatable la suma de columna total y columna saldo
 
@@ -1255,14 +1495,14 @@ select option:disabled {
 
             var filasPa = '<tr class="selected" id="filasPa' + contPa + '">' +
               '<td>' + (contPa + 1) + '</td>' +
-              '<td><input type="hidden" name="tipomovimiento['+(contPa + 1)+']" value="' + tipomovimiento + '">' + tipomovimiento + '</td>' +
-              '<td><input type="hidden" name="titular['+(contPa + 1)+']" value="' + titular + '">' + titular + '</td>' +
-              '<td><input type="hidden" name="banco['+(contPa + 1)+']" value="' + banco + '">' + banco + '</td>' +
-              '<td><input type="hidden" name="fecha['+(contPa + 1)+']" value="' + fecha + '">' + fecha + '</td>' +
-              '<td>@csrf<input type="file" id="imagen" name="imagen" accept= "image/*" style="width:150px;"/></td>' + 
+              '<td><input type="hidden" name="tipomovimiento[]" value="' + tipomovimiento + '">' + tipomovimiento + '</td>' +
+              '<td><input type="hidden" name="titular[]" value="' + titular + '">' + titular + '</td>' +
+              '<td><input type="hidden" name="banco[]" value="' + banco + '">' + banco + '</td>' +
+              '<td><input type="hidden" name="fecha[]" value="' + fecha + '">' + fecha + '</td>' +
+              '<td>@csrf<input type="file" id="imagen" name="imagen[]" accept= "image/*" style="width:150px;"/></td>' + 
                 /* <img id="picture" src="{{asset('imagenes/logo_facturas.png')}}" alt="Imagen del pago" height="100px" width="100px"> */        
-              '<td><input type="hidden" name="monto['+(contPa + 1)+']" value="' + monto + '">' + monto + '</td>' +
-              '<td><button type="button" class="btn btn-danger btn-sm d-none" onclick="eliminarPa(' + contPa + ')"><i class="fas fa-trash-alt"></i></button></td>' +
+              '<td><input type="hidden" name="monto[]" value="' + monto + '">' + monto + '</td>' +
+              '<td><button type="button" class="btn btn-danger btn-sm" onclick="eliminarPa(' + contPa + ')"><i class="fas fa-trash-alt"></i></button></td>' +
               '</tr>';
               
 
@@ -1485,7 +1725,22 @@ select option:disabled {
         reader.readAsDataURL(file);
     } */
 
-    
+    $(document).ready(function() {
+
+      $(document).on("change","#pimagen",function(event){
+        console.log("cambe image")
+        var file = event.target.files[0];
+        var reader = new FileReader();
+        reader.onload = (event) => {
+          //$("#picture").attr("src",event.target.result);
+            document.getElementById("picture").setAttribute('src', event.target.result);
+        };
+        reader.readAsDataURL(file);
+
+      });
+        
+
+    });
   
 
     

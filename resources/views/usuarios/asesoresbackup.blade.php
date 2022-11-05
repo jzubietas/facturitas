@@ -30,17 +30,54 @@
             <th scope="col">CORREO</th>
             <th scope="col">ENCARGADO</th>
             <th scope="col">OPERARIO</th>
-            <th scope="col">LLAMADA</th>
             <th scope="col">ESTADO</th>
             <th scope="col">ACCIONES</th>
           </tr>
         </thead>
         <tbody>
+          @foreach ($users as $user)
+            <tr>
+              <td>USER{{ $user->id }}</td>
+              <td>{{ $user->name }}</td>
+              <td>{{ $user->email }}</td>
+              <td>
+                @php
+                if ($user->supervisor == null) {
+                  echo '<span class="badge badge-danger">Por asignar</span>';  
+                  
+                } else {
+                  echo 'USER'.$user->supervisor;
+                  /* if($user->supervisor == $users->id){echo $user->name;} */
+                }
+                @endphp
+              </td>
+              <td>
+                @php
+                if ($user->operario == null) {
+                  echo '<span class="badge badge-danger">Por asignar</span>';  
+                  
+                } else {
+                  echo 'USER'.$user->operario;  
+                }
+                @endphp
+              </td>
+              
+              <td>
+                {{-- @can('users.asignarsupervisor') --}}
+                  <a href="" data-target="#modal-asignarsupervisor-{{ $user->id }}" data-toggle="modal"><button class="btn btn-info btn-sm">Asignar encargado</button></a>
+                {{-- @endcan --}}
+                  <a href="" data-target="#modal-asignaroperario-{{ $user->id }}" data-toggle="modal"><button class="btn btn-warning btn-sm">Asignar operario</button></a>
+                  
+              </td>
+            </tr>
+            
+          @endforeach
         </tbody>
-      </table>     
+      </table>
+      {{--@include('usuarios.modal.asignarsupervisor')
+      @include('usuarios.modal.asignaroperario')--}}
       @include('usuarios.modal.asignarencargado')
-      @include('usuarios.modal.asignaroperario')
-      @include('usuarios.modal.asignarllamada')
+      @include('usuarios.modal.asignarasesor')
     </div>
   </div>
 
@@ -147,23 +184,6 @@
               
         });
 
-        $('#modal-asignarllamadas').on('show.bs.modal', function (event) {     
-                var button = $(event.relatedTarget) 
-                var idunico = button.data('llamadas')      
-                $("#hiddenIdllamadas").val(idunico);
-                if(idunico<10){
-                    idunico='USER000'+idunico;
-                }else if(idunico<100){
-                    idunico= 'USER00'+idunico;
-                }else if(idunico<1000){
-                    idunico='USER0'+idunico;
-                }else{
-                    idunico='USER'+idunico;
-                }
-                $(".textcode").html(idunico);
-              
-        });
-
         $(document).on("submit", "#formencargado", function (evento) {
             evento.preventDefault();
             var formData = $("#formencargado").serialize();
@@ -177,8 +197,7 @@
                     '',
                     'success'
                 )
-                $("#modal-asignareencargado").modal("hide"); 
-                $('#tablaPrincipal').DataTable().ajax.reload();     
+                $("#modal-asignareencargado").modal("hide");      
             });
         });
         $(document).on("submit", "#formoperario", function (evento) {
@@ -194,8 +213,7 @@
                         '',
                         'success'
                     )
-                    $("#modal-asignaroperario").modal("hide");
-                    $('#tablaPrincipal').DataTable().ajax.reload();          
+                    $("#modal-asignaroperario").modal("hide");          
             });
         });
         $(document).on("submit", "#formasesor", function (evento) {
@@ -211,25 +229,7 @@
                         '',
                         'success'
                     )
-                    $("#modal-asignarasesor").modal("hide"); 
-                    $('#tablaPrincipal').DataTable().ajax.reload();         
-            });
-        });
-        $(document).on("submit", "#formllamadas", function (evento) {
-            evento.preventDefault();
-            var formData = $("#formllamadas").serialize();
-            $.ajax({
-                type:'POST',
-                url:"{{ route('users.asignarllamadaspost') }}",
-                data:formData,
-            }).done(function (data) {
-                Swal.fire(
-                        'Usuario asignado correctamente',
-                        '',
-                        'success'
-                    )
-                    $("#modal-asignarllamadas").modal("hide"); 
-                    $('#tablaPrincipal').DataTable().ajax.reload();         
+                    $("#modal-asignarasesor").modal("hide");          
             });
         });
 
@@ -271,8 +271,8 @@
               {data: 'name', name: 'name', },
               {data: 'email', name: 'email', },
               {
-                  data: 'encargado', 
-                  name: 'encargado', 
+                  data: 'supervisor', 
+                  name: 'supervisor', 
                   render: function ( data, type, row, meta ) {
                       if(data==null)
                       {
@@ -285,19 +285,6 @@
               {
                   data: 'operario', 
                   name: 'operario',
-                  sWidth:'20%',
-                  render: function ( data, type, row, meta ) {
-                      if(data==null)
-                      {
-                          return 'SIN ASIGNAR';
-                      }else{
-                          return data;
-                      }
-                  }
-              },
-              {
-                  data: 'llamada', 
-                  name: 'llamada',
                   render: function ( data, type, row, meta ) {
                       if(data==null)
                       {
@@ -326,6 +313,7 @@
                   searchable: false,
                   sWidth:'20%',
                   render: function ( data, type, row, meta ) {
+                    
                       return data;             
                   }
               },

@@ -10,7 +10,7 @@
   <style>
     #tabla {
       width: 100%;
-      /*border: 2px #000000 solid;*/
+      border: 2px #000000 solid;
       border-collapse: collapse;
       font-family: Arial, Helvetica, sans-serif;
       table-layout:fixed;
@@ -21,7 +21,7 @@
       width: 100%;
       text-align: center;
       vertical-align: top;
-      /*border: 1px solid #000;*/
+      border: 1px solid #000;
       font-size:20px;    
       table-layout:fixed;  
     }
@@ -40,11 +40,11 @@
 
 <body>
   {{-- <h1 id="title">PEDIDO</h1> --}}
-  <table id="tabla" class="table ">
+  <table id="tabla" class="table table-bordered">
     @foreach ($pedidos as $pedido)          
       <thead>
         <tr>
-          <th colspan="2" style="background: white"><h2>PEDIDO</h2></th>
+          <th colspan="2" style="background: #44A3CA"><h2>PEDIDO</h2></th>
         </tr>
       </thead>
       <tbody>
@@ -79,13 +79,13 @@
           <td><br>{{ $pedido->tipo_banca }}<br><br></td>
         </tr>
         <tr>
-          <th colspan="2" style="background: white">DESCRIPCIÓN</th>
+          <th colspan="2" style="background: #44A3CA">DESCRIPCIÓN</th>
         </tr>
         <tr>
           <td colspan="2"><p>{{ $pedido->descripcion }}</div></p></td>
         </tr>
         <tr>
-          <th colspan="2" style="background: white">NOTA</th>
+          <th colspan="2" style="background: #44A3CA">NOTA</th>
         </tr>
         <tr>
           <td colspan="2"><p>{{ $pedido->nota }}</p></td>

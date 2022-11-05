@@ -5,30 +5,46 @@
         <div class="form-row">
           <div class="form-group col-lg-6">
             {!! Form::label('user_id', 'Asesor') !!}
-            {{--@if (Auth::user()->rol == 'Asesor' || Auth::user()->rol == 'Super asesor')--}}
-              {{--<input type="hidden" name="user_id" requerid value="{{ Auth::user()->id }}" class="form-control">
-              <input type="text" name="user_name" value="{{ Auth::user()->name }}" class="form-control" disabled>--}}
-            
+            @if (Auth::user()->rol == 'Asesor' || Auth::user()->rol == 'Super asesor')
+              <input type="hidden" name="user_id" requerid value="{{ Auth::user()->id }}" class="form-control">
+              <input type="text" name="user_name" value="{{ Auth::user()->name }}" class="form-control" disabled>
+            @else
               {!! Form::select('user_id', $users, null, ['class' => 'form-control border selectpicker border-secondary', 'data-live-search' => 'true', 'placeholder' => '---- SELECCIONE ASESOR ----']) !!}
-            
+            @endif
           </div>
-
-
           <div class="form-group col-lg-6">
             {!! Form::label('cliente_id', 'Cliente*') !!} &nbsp; &nbsp; &nbsp; 
-            
-            {{--coindice con contadore de dedores al hacer clikc seleccionando asesor de pantalla index--}}
+            @if(0 < count((array)$deudores))
             <a href="" data-target="#modal-historial" data-toggle="modal"><button class="btn btn-danger btn-sm">Deudores</button></a>
-
-            
-            @if($mirol =='Administrador')
-              <a href="" data-target="#modal-activartiempo" data-toggle="modal"><button class="btn btn-warning btn-sm">Activar temporal a cliente</button></a>
             @endif
-           
-              <select name="cliente_id" class="border form-control  border-secondary selectpicker" id="cliente_id" data-live-search="true" >{{-- selectpicker lang="es" --}}
-                <option value="">---- SELECCIONE CLIENTE ----</option>                  
+              <select name="cliente_id" class="border form-control border-secondary" id="cliente_id" data-live-search="true" style="height: 100% !important;">{{-- selectpicker lang="es" --}}
+                <option value="">---- SELECCIONE CLIENTE ----</option>
+                  @foreach($clientes1 as $cliente)
+                        @if($cliente->deuda == "0")
+                            <option style="color:#000" value="{{ $cliente->id }}">{{$cliente->nombre}} - {{$cliente->celular}}</option>
+                        @else
+                          @if(Auth::user()->rol == 'Asesor')
+                              @if($dateY == $cliente->anio)
+                                    @if($dateM == $cliente->mes)
+                                        <option style="color:#000" value="{{ $cliente->id }}">{{$cliente->nombre}} - {{$cliente->celular}}</option>
+                                    @else
+                                        <option disabled style="color:red;" value="{{ $cliente->id }}">{{$cliente->nombre}} - {{$cliente->celular}} **CLIENTE CON DEUDA**</option>
+                                    @endif
+                                @else
+                                    <option disabled style="color:red" value="{{ $cliente->id }}">{{$cliente->nombre}} - {{$cliente->celular}} **CLIENTE CON DEUDA**</option>
+                                @endif  
+                          @else
+                            <option style="color:#000" value="{{ $cliente->id }}">{{$cliente->nombre}} - {{$cliente->celular}}</option>
+                          @endif 
+
+                            
+                        @endif  
+                      
+                    
+                  @endforeach
+                  
               </select>              
-              
+              @include('pedidos.modal.historial')
           </div>
         </div>  
       </div>
@@ -38,68 +54,33 @@
 
     <div class="border rounded card-body border-secondary" id="vertabla">
       <div class="card-body">
-
-      <div class="form-row">
+        <div class="form-row">
           <div class="form-group col-lg-2">
-          {!! Form::label('pruc', 'RUC *') !!} &nbsp; &nbsp; &nbsp; 
-            
-            <a href="" data-target="#modal-add-ruc" id= "btn_agregar_ruc" data-toggle="modal" class="btn btn-info btn-sm">AGREGAR RUC Y R.S.</a>
-          
-            <select name="pruc" class="border form-control border-secondary selectpicker" id="pruc" data-live-search="true" style="height: 100% !important;">
-              <option value="">---- SELECCIONE ----</option>                  
-            </select>  
+            {!! Form::label('pcodigo', 'Codigo') !!}
+              <input type="text" name="pcodigo" id="pcodigo" value="{{ Auth::user()->identificador }}-{{ $fecha }}-{{ $numped}}" class="form-control" disabled>
           </div>
-
-          @error('num_ruc')
-            <small class="text-danger" style="font-size: 16px">{{ $message }}</small>
-          @enderror
-
+          <div class="form-group col-lg-4">
+            {!! Form::label('pempresa', 'Nombre de empresa') !!}
+              <input type="text" name="pempresa" id="pempresa" class="form-control" placeholder="Nombre de empresa...">
+          </div>
           <div class="form-group col-lg-3">
-           {!! Form::label('pempresa', 'Nombre de empresa') !!} 
-             <input type="text" name="pempresa" id="pempresa" class="form-control" placeholder="Nombre de empresa..." disabled>
-         </div>
-
-          <div class="form-group col-lg-2">
-          {!! Form::label('pmes', 'Mes') !!}
-          {!! Form::select('pmes', $meses , '0', ['class' => 'form-control border selectpicker border-secondary', 'data-live-search' => 'true', 'placeholder' => '---- SELECCIONE ----']) !!}
+            {!! Form::label('pmes', 'Mes') !!}
+            {!! Form::select('pmes', $meses , '0', ['class' => 'form-control border selectpicker border-secondary', 'data-live-search' => 'true', 'placeholder' => '---- SELECCIONE ----']) !!} {{--  --}}
           </div>
-
-          <div class="form-group col-lg-2">
-          {!! Form::label('panio', 'Año') !!}
-          {!! Form::select('panio', $anios , '2022', ['class' => 'form-control border selectpicker border-secondary', 'data-live-search' => 'true', 'placeholder' => '---- SELECCIONE ----']) !!}
+          <div class="form-group col-lg-3">
+            {!! Form::label('panio', 'Año') !!}
+            {{-- {!! Form::number('panio', 2022, ['class' => 'form-control', 'id' => 'panio', 'min' =>'0']) !!} --}}
+            {!! Form::select('panio', $anios , '2022', ['class' => 'form-control border selectpicker border-secondary', 'data-live-search' => 'true', 'placeholder' => '---- SELECCIONE ----']) !!} {{--  --}}
           </div>
+          <div class="form-group col-lg-2">            
 
-          <div class="form-group col-lg-3 d-flex justify-content-center">
-            <a href="" data-target="#modal-historial-2" data-toggle="modal"><button class="btn btn-danger btn-md">Historial</button></a>
+            {!! Form::label('pruc', 'RUC') !!} <a href="" data-target="#modal-add-ruc" id= "btn_agregar_ruc" data-toggle="modal" class="btn btn-info btn-sm">(Agregar +)</a><br>
+            @error('num_ruc')
+              <small class="text-danger" style="font-size: 16px">{{ $message }}</small>
+            @enderror
+             {!! Form::select('pruc', $rucs , null, ['class' => 'form-control selectpicker border border-secondary', 'data-live-search' => 'true', 'placeholder' => '---- SELECCIONE ----']) !!}
+            
           </div>
-
-
-
-
-      </div>
-
-        <div class="form-row">
-        <div class="form-group col-lg-2">            
-        
-         
-
-        </div>
-
-          {{-- <div class="form-group col-lg-2">--}}
-            {{--  {!! Form::label('pcodigo', 'Codigo') !!}   --}}
-              <input type="hidden" name="pcodigo" id="pcodigo" value="{{ Auth::user()->identificador }}-{{ $fecha }}-{{ $numped}}" class="form-control" readonly>
-          {{--</div>--}}
-          {{--<div class="form-group col-lg-4">--}}
-            {{-- {!! Form::label('pempresa', 'Nombre de empresa') !!} --}}
-              {{--<input type="text" name="pempresa" id="pempresa" class="form-control" placeholder="Nombre de empresa...">--}}
-          {{--</div>--}}
-          
-          
-
-          
-        </div>
-        <div class="form-row">
-          
           <div class="form-group col-lg-2">
             {!! Form::label('pcantidad', 'Cantidad') !!}<!-- , 'id' => 'celular', 'min' =>'0', 'max' => '999999999', 'maxlength' => '9', 'oninput' => 'maxLengthCheck(this)'-->
               {{-- <input type="number" name="pcantidad" id="pcantidad" step="0.01" min="0" class="form-control" placeholder="Cantidad..."> --}}
@@ -143,7 +124,7 @@
                 <table id="detalles" class="table table-striped table-bordered table-condensed table-hover">
                   <thead style="background-color: #A9D0F5">
                     <th>Opciones</th>
-                    {{--<th>Código</th>--}}
+                    <th>Código</th>
                     <th>Empresa</th>
                     <th>Mes</th>
                     <th>Año</th>
@@ -159,7 +140,7 @@
                   </thead>
                   <tfoot>
                     <th style="text-align: center">TOTAL</th>
-                    {{--<th></th>--}}
+                    <th></th>
                     <th></th>
                     <th></th>
                     <th></th>

@@ -549,6 +549,13 @@ return [
                     'icon'   => 'fas fa-check-circle',
                     'active' => ['mis operarios'],
                 ],
+                [
+                    'text' => 'Llamadas',
+                    'route'  => 'users.llamadas',
+                    'can' => 'users.misoperarios',
+                    'icon'   => 'fas fa-check-circle',
+                    'active' => ['mis llamadas'],
+                ],
             ],
         ],        
     ],

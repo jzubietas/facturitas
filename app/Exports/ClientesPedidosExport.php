@@ -235,7 +235,7 @@ class ClientesPedidosExport implements FromView, ShouldAutoSize
                 }
 
                 $dateM = Carbon::now()->format('m');
-                $dateY = Carbon::now()->format('Y');
+                $dateY = Carbon::now()->format('Y');//2022
                 
                 if($cliente->pidio==0 || $cliente->pidio=='0' || $cliente->pidio==null  || $cliente->pidio=='null' ){
                     $estadopedido = 'SIN PEDIDO';
@@ -243,14 +243,14 @@ class ClientesPedidosExport implements FromView, ShouldAutoSize
                     if(  (($dateY*1)-($cliente->anio*1)) == 0)
                     {
                         //año actual
-                        
-                        if( (($dateM*1)-($cliente->mes*1)) >= 0 && (($dateM*1)-($cliente->mes*1))<2)
+                        //27-08-2022--     (11-8) 3  >=  0   (11-8)  3   <2
+                        if( (($dateM*1)-($cliente->mes*1)) >= 0 && (($dateM*1)-($cliente->mes*1) )<2)
                         {
                             $estadopedido = 'RECURRENTE';
                         }
-                        /*else{
+                        else{
                             $estadopedido = 'ABANDONO';
-                        }*/
+                        }
 
                     }else{
                         //año anterior

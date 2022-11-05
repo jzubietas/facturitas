@@ -54,9 +54,16 @@ Route::post('basefriaclienteRequest', [ClienteController::class, 'updatebfpost']
 Route::get('clientes.editbf/{cliente}/edit2', [ClienteController::class, 'editbf'])->name('clientes.editbf');
 
 Route::resource('pedidos', PedidoController::class)->names('pedidos');
+Route::post('pedidoss.store', [PedidoController::class, 'pedidosstore'])->name('pedidoss.store');//actualizado para serverside
 Route::get('pedidostabla', [PedidoController::class, 'indextabla'])->name('pedidostabla');//actualizado para serverside
+Route::get('pedidostablahistorial', [PedidoController::class, 'indextablahistorial'])->name('pedidostablahistorial');//actualizado para serverside
+Route::get('deudoresoncreate', [PedidoController::class, 'deudoresoncreate'])->name('deudoresoncreate');//actualizado para serverside
 Route::get('mispedidostabla', [PedidoController::class, 'mispedidostabla'])->name('mispedidostabla');//actualizado para serverside
 Route::get('ruc', [PedidoController::class, 'ruc'])->name('cargar.ruc');
+Route::get('rucnombreempresa', [PedidoController::class, 'rucnombreempresa'])->name('rucnombreempresa');
+Route::post('pedidos.infopdf', [PedidoController::class, 'infopdf'])->name('pedidos.infopdf');
+
+
 
 Route::get('basefria.cargarid', [BasefriaController::class, 'cargarid'])->name('basefria.cargarid');
 //Route::get('pedidos.destroyid', [PedidoController::class, 'destroyid'])->name('pedidos.destroyid');
@@ -66,6 +73,12 @@ Route::post('pedidos.restaurar/{pedido}', [PedidoController::class, 'Restaurar']
 
 
 Route::get('cliente', [PedidoController::class, 'cliente'])->name('cargar.cliente');
+Route::get('clientedeasesor', [PedidoController::class, 'clientedeasesor'])->name('cargar.clientedeasesor');
+Route::get('asesortiempo', [PedidoController::class, 'asesortiempo'])->name('asesortiempo');
+Route::get('clientedeasesorparapagos', [PedidoController::class, 'clientedeasesorparapagos'])->name('cargar.clientedeasesorparapagos');
+Route::get('clientedeasesordeuda', [PedidoController::class, 'clientedeasesordeuda'])->name('cargar.clientedeasesordeuda');
+Route::get('clientedeudaparaactivar', [PedidoController::class, 'clientedeudaparaactivar'])->name('cargar.clientedeudaparaactivar');
+
 Route::get('tipobanca', [PedidoController::class, 'tipobanca'])->name('cargar.tipobanca');
 Route::post('pedidos.agregarruc', [PedidoController::class, 'AgregarRuc'])->name('pedidos.agregarruc');
 Route::get('pedidos.mispedidos', [PedidoController::class, 'MisPedidos'])->name('pedidos.mispedidos');
@@ -101,6 +114,11 @@ Route::get('pagostabla', [PagoController::class, 'indextabla'])->name('pagostabl
 Route::get('pedidoscliente', [PagoController::class, 'pedidoscliente'])->name('cargar.pedidoscliente');
 Route::get('pedidosclientetabla', [PagoController::class, 'pedidosclientetabla'])->name('cargar.pedidosclientetabla');
 Route::post('pagodeleteRequest', [PagoController::class, 'destroyid'])->name('pagodeleteRequest.post');
+Route::post('validarrelacionruc', [PedidoController::class, 'validarrelacionruc'])->name('validarrelacionruc');
+Route::post('pedidostiempo', [ClienteController::class, 'pedidostiempo'])->name('pedidostiempo');
+
+Route::post('pagos.addImgTemp', [PagoController::class, 'addImgTemp'])->name('pagos.addImgTemp');//actualizado para serverside
+
 Route::post('pago/eliminarPedido/{id}/{pago}', [PagoController::class, 'eliminarPedido'])->name('pago.eliminarPedido');
 Route::post('pago/eliminarPago/{id}/{pago}', [PagoController::class, 'eliminarPago'])->name('pago.eliminarPago');
 Route::get('pagos.mispagos', [PagoController::class, 'MisPagos'])->name('pagos.mispagos');
@@ -122,6 +140,7 @@ Route::get('administracion.revisarpago', [PagoController::class, 'Revisarpago'])
 Route::resource('movimientos', MovimientoController::class)->names('movimientos');
 Route::get('movimientostabla', [MovimientoController::class, 'indextabla'])->name('movimientostabla');//actualizado para serverside
 Route::get('tipomovimiento', [MovimientoController::class, 'tipomovimiento'])->name('cargar.tipomovimiento');
+Route::get('validar_repetido', [MovimientoController::class, 'repeat'])->name('validar_repetido');
 Route::post('movimientodeleteRequest', [MovimientoController::class, 'destroyid'])->name('movimientodeleteRequest.post');
 
 Route::post('administracion.updaterevisar/{pago}', [PagoController::class, 'updateRevisar'])->name('administracion.updaterevisar');
@@ -137,8 +156,23 @@ Route::resource('users', UserController::class)->names('users');
 Route::post('reset/{user}', [UserController::class, 'reset'])->name('user.reset');
 Route::resource('roles', RoleController::class)->names('roles');
 Route::get('users.asesores', [UserController::class, 'Asesores'])->name('users.asesores');
+Route::get('users.asesorestabla', [UserController::class, 'Asesorestabla'])->name('users.asesorestabla');////asesores
+
+Route::get('users.llamadas', [UserController::class, 'Llamadas'])->name('users.llamadas');////llamadas
+Route::get('users.llamadastabla', [UserController::class, 'Llamadastabla'])->name('users.llamadastabla');////llamadas
+
 Route::post('users.asignarsupervisor/{user}', [UserController::class, 'AsignarSupervisor'])->name('users.asignarsupervisor');
+Route::post('users.asignarencargadopost', [UserController::class, 'AsignarEncargadopost'])->name('users.asignarencargadopost');////
+Route::post('users.asignarjefellamadaspost', [UserController::class, 'AsignarJefellamadaspost'])->name('users.asignarjefellamadaspost');////
+Route::post('users.asignarllamadaspost', [UserController::class, 'AsignarLlamadaspost'])->name('users.asignarllamadaspost');
+
+
 Route::post('users.asignaroperario/{user}', [UserController::class, 'AsignarOperario'])->name('users.asignaroperario');
+Route::post('users.asignaroperariopost', [UserController::class, 'AsignarOperariopost'])->name('users.asignaroperariopost');
+
+Route::post('users.asignarsupervisorpost', [UserController::class, 'AsignarSupervisorpost'])->name('users.asignarsupervisorpost');
+Route::post('users.asignarasesorpost', [UserController::class, 'AsignarAsesorpost'])->name('users.asignarasesorpost');////
+
 Route::post('users.asignarjefe/{user}', [UserController::class, 'AsignarJefe'])->name('users.asignarjefe');
 Route::get('users.misasesores', [UserController::class, 'MisAsesores'])->name('users.misasesores');
 Route::post('users.asignarmetaasesor/{user}', [UserController::class, 'AsignarMetaAsesor'])->name('users.asignarmetaasesor');

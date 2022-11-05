@@ -16,10 +16,24 @@
                   <tr>
                     <th scope="col">item</th>
                     <th scope="col">Cliente</th>
+                    {{-- <th scope="col">Comentario</th> --}}
                     <th scope="col">Estado</th>
                   </tr>
                 </thead>
+                @php
+                $cont = 0;
+                @endphp
                 <tbody>
+                  @foreach ($deudores as $deuda)
+                  <tr>
+                    <td>{{ $cont+1 }}</td>
+                    <td>{{ $deuda->celular }} - {{ $deuda->nombre }}</td>
+                    <td><span class="badge badge-danger">Deudor</span></td>
+                  </tr>
+                  @php
+                  $cont++;
+                  @endphp
+                  @endforeach
                 </tbody>
               </table>
             </div>   

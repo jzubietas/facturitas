@@ -144,9 +144,7 @@ class MovimientoController extends Controller
         $monto = $request->monto;
         $descrip_otros = $request->descrip_otros;
         $monto=str_replace(',','',$monto);
-
-        //return $request->all();
-
+ 
         $movimientos = MovimientoBancario::create([
             'banco' => $request->banco,
             'titular' => $request->titulares,
@@ -158,7 +156,45 @@ class MovimientoController extends Controller
             'descripcion_otros' =>$descrip_otros 
         ]);
 
+        //return redirect()->route('movimientos.index')->with('info', 'registrado');
         return redirect()->route('movimientos.index')->with('info', 'registrado');
+    }
+
+    public function repeat(Request $request)
+    {
+        $monto = $request->monto;
+        //$descrip_otros = $request->descrip_otros;
+        $monto=str_replace(',','',$monto);
+        $monto=str_replace('.00','',$monto);
+        //$titular=explode('%20',$request->titulares);
+        $titular = $request->titulares;
+        $titular=str_replace('%20',' ',$titular);
+
+        $movimiento_repeat=MovimientoBancario::where('banco',$request->banco)
+                            ->where('titular',$titular)
+                            ->where('importe',$monto)
+                            ->where('tipo',$request->tipo)
+                            ->where('fecha',$request->fecha)
+                            ->where('estado',"1")->count();
+        if($movimiento_repeat == 0)
+        {
+            $html="sigue|0";
+            
+        }else{
+            $movimiento_repeat_select=MovimientoBancario::where('banco',$request->banco)
+                            ->where('titular',$titular)
+                            ->where('importe',$monto)
+                            ->where('tipo',$request->tipo)
+                            ->where('fecha',$request->fecha)
+                            ->where('estado',"1")->first();
+            $repetido=$movimiento_repeat_select->id;
+            $html="bloqueo|".$repetido;
+
+            
+        }
+        //$html=$titular;
+        //$html=var_dump($request);
+        return response()->json(['html' => $html]);
     }
 
     /**

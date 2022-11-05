@@ -59,10 +59,31 @@
         <td>{{ $dato['distrito'] }}</td>
         <td>{{ $dato['direccion'] }}</td>
         <td>{{ $dato['referencia'] }}</td>
-        <td>{{ $dato['porcentajefsb']['porcentaje'] }}</td>
-        <td>{{ $dato['porcentajefb']['porcentaje'] }}</td>
-        <td>{{ $dato['porcentajeesb']['porcentaje'] }}</td>
-        <td>{{ $dato['porcentajeeb']['porcentaje'] }}</td>
+
+        <?php if($dato['porcentajefsb']!=null){ ?>
+            <td>{{ $dato['porcentajefsb']['porcentaje'] }}</td>
+        <?php }else{ ?>
+            <td></td>
+        <?php } ?>
+
+        <?php if($dato['porcentajefb']!=null){ ?>
+            <td>{{ $dato['porcentajefb']['porcentaje'] }}</td>
+        <?php }else{ ?>
+            <td></td>
+        <?php } ?>
+
+        <?php if($dato['porcentajeesb']!=null){ ?>
+            <td>{{ $dato['porcentajeesb']['porcentaje'] }}</td>
+        <?php }else{ ?>
+            <td></td>
+        <?php } ?>
+
+        <?php if($dato['porcentajeeb']!=null){ ?>
+            <td>{{ $dato['porcentajeeb']['porcentaje'] }}</td>
+        <?php }else{ ?>
+            <td></td>
+        <?php } ?>
+        
         <td>{{ $dato['deposito'] }}</td>
         <td>{{ $dato['fecha'] }}</td>
         @if($dato['estadopedido'] == 'RECURRENTE')

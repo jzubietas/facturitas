@@ -178,17 +178,24 @@
   </script>
   <script>
 
-  document.addEventListener("DOMContentLoaded", function() {
+    /*$(document).on("submit","#formulario",function(e){
+      e.preventDefault();
+      validarFormulario();
+    });/*
+  /*document.addEventListener("DOMContentLoaded", function() {
     document.getElementById("formulario").addEventListener('submit', validarFormulario); 
-  });
+  });*/
 
-    function validarFormulario(evento)
+    function validarFormulario()
     {
-      evento.preventDefault();
+      //var submitevent=this;
+      //evento.preventDefault();
       let banco = $("#banco").val();
+
       let tipotrans = $("#tipotransferencia").val();
       let descrip_otros = $("#descrip_otros").val();
       let titular = $("#titulares").val();
+      console.log("t "+titular);
       let monto = $("#monto").val();
       let fecha = $("#fecha").val();
 
@@ -256,13 +263,124 @@
           )
           return;
       }else{
-        this.submit();
+        //validar repetido
+
+        $.ajax({
+          //async:false,
+          url: "{{ route('validar_repetido') }}",
+          data:({"banco":banco,"tipo":tipotrans,"titulares":titular,"monto":monto,"fecha":fecha}),
+          method: 'GET',
+          success: function(data) {
+            console.log(data.html);
+            var dataresponse=data.html.split("|");
+
+            if(dataresponse[0]=="bloqueo")
+            {
+              let movim=dataresponse[1];
+              if(movim<10){
+                movim='MOV000'+movim;
+              }else if(movim<100){
+                movim= 'MOV00'+movim;
+              }else if(movim<1000){
+                movim='MOV0'+movim;
+              }else{
+                movim='MOV'+movim;
+              }
+
+              Swal.fire({
+                title: "Deseas continuar con el registro?",
+                text: 'La misma informacion se encuentra registrado en el movimiento '+movim,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Si, continuar!'
+              }).then((result) => {
+                console.log(result);
+                if (result.value==true) {
+                  $("#formulario").trigger("submit")
+                  //console.log("aaaaaaa")
+                  /*Swal.fire(
+                    'Deleted!',
+                    'Your file has been deleted.',
+                    'success'
+                  )*/
+                }else{
+                  //console.log("cancel")
+                  //$("#modal-add-movimientos").hide();
+                  //limpiar campos
+                  $("#banco").val("").selectpicker('refresh');
+                  $("#tipotransferencia").val("").selectpicker('refresh');
+                  $("#descrip_otros").val("").html("");
+                  $("#titulares").val("").selectpicker('refresh');
+                  $("#monto").val("");
+                  $("#fecha").val("");
+                  
+                  $("#modal-add-movimientos").modal("hide");
+                }
+              })
+
+              /*swal({
+                  title: "Seguro de continar?",
+                  text: 'La misma informacion se encuentra registrado en el movimiento '+movim+'\n Deseas continar con el registro?',
+                  icon: "warning",
+                  buttons: true,
+                  dangerMode: true,
+              })
+                .then((willDelete) => {
+                  if (willDelete) {
+                    swal("Poof! Your imaginary file has been deleted!", {
+                      icon: "success",
+                    });
+                  } else {
+                    swal("Your imaginary file is safe!");
+                  }
+                });*/
+
+              /*Swal.fire({
+                title: 'La misma informacion se encuentra registrado en el movimiento '+movim+'\n Deseas continar con el registro?',
+                showDenyButton: true,
+                showCancelButton: true,
+                confirmButtonText: 'Grabar',
+                denyButtonText: `Cancelar`,
+              }).then((result) => {
+                if (result.isConfirmed) {
+                  $("#modal-add-movimientos").hide();
+                  console.log("confirm")
+                } else if (result.isDenied) {
+                  console.log("denied")
+                  $("#modal-add-movimientos").hide();
+                }
+              });  */            
+            }else  if(dataresponse[0]=="sigue")
+            {
+              $("#formulario").trigger("submit")
+              //$("#formulario").submit();
+            }            
+          }
+        });
+
+
+        
       }
 
     }
 
 
   $(document).ready(function () {
+
+
+    $(document).on("click", "#registrar_movimientos", function (e) {
+      e.preventDefault();
+      console.log("log");
+      validarFormulario();
+       // var oForm = $(this);
+        //var formId = oForm.attr("id");
+        //var firstValue = oForm.find("input").first().val();
+        //alert("Form '" + formId + " is being submitted, value of first input is: " + firstValue);
+        // Do stuff 
+        //return false;
+    })
 
     //$("#banco").val("").html("");
     $("#tipotransferencia").html("");
@@ -276,13 +394,13 @@
 
     
 
-    $(document).on("submit", "#formulario", function (event) {
-      event.preventDefault();
+    //$(document).on("submit", "#formulario", function (event) {
+      //event.preventDefault();
       
       //var total_pedido_pagar = document.getElementById('total_pedido_pagar').value;
 
       
-    });
+    //});
 
     /*function validarFormulario(evento) {
       evento.preventDefault();
@@ -338,7 +456,7 @@
 
     $(document).on("change","#tipotransferencia",function(event){
       console.log($(this).val());
-      if($(this).val()=='OTROS'){
+      if($(this).val()=='OTROS' || $(this).val()=='YAPE'  || $(this).val()=='PAGO YAPE' || $(this).val()=='ABON YAPE'){
         //$("#descrip_otros").prop("visibled",none);
         $(".descrip_otros").show();
       }else{
@@ -430,7 +548,19 @@
         {
           data: 'banco' , name: 'banco' },
         {//asesor
-          data: 'titular', name: 'titular' },
+          data: 'titular', 
+          name: 'titular',
+          render: function ( data, type, row, meta ) {
+            if(data=='EPIFANIO SOLANO HUAMAN'){
+              data='EPIFANIO';
+            }else if(data=='NIKSER DENIS ORE RIVEROS'){
+              data='DENIS';
+            }else{
+              data='';
+            }
+            return data;
+          }
+        },
         {//cliente
           data: 'importe',  name: 'importe' },
         {//observacion

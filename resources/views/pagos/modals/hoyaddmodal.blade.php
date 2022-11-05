@@ -8,6 +8,7 @@
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
+        {{--{!! Form::open(['route' => 'pagos.store','enctype'=>'multipart/form-data', 'id'=>'formulario','files'=>true]) !!}--}}
         {{-- {{ Form::Open(['route' => ['clientes.destroy', $cliente], 'method' => 'delete']) }} --}}
         <div class="modal-body">
 
@@ -37,23 +38,25 @@
               {{-- <input name="pfecha" type="date" class="form-control"> --}}
             </div>
              
-            {{--<div class="form-group col-lg-6">
+            <div class="form-group col-lg-6">
               <div class="image-wrapper">
                 <img id="picture" src="{{asset('imagenes/logo_facturas.png')}}" alt="Imagen del pago" width="250px">
               </div>
-            </div>--}}
+            </div>
 
-            {{--<div class="form-group col-lg-6">
+            <div class="form-group col-lg-6">
               {!! Form::label('pimagen', 'Imagen') !!}
+              {{--<input type="file" id="pimagen" name="pimagen[]" multiple=""/>--}}
+              
               {!! Form::file('pimagen', ['class' => 'form-control-file', 'accept' => 'image/*']) !!}
-            </div>--}}
+            </div>
             
           </div>
 
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
-          <button type="button" class="btn btn-info" id="add_pago" data-dismiss="modal">Agregar</button>
+          <button type="button" class="btn btn-info" id="add_pago" >Agregar</button>
         </div>
         {{-- {{ Form::Close() }} --}}
       </div>

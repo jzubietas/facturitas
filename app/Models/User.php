@@ -39,6 +39,7 @@ class User extends Authenticatable
         'meta_cobro',
         'supervisor',
         'operario',
+        'llamada',
         'jefe',
         'celular',
         'provincia',

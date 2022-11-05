@@ -225,11 +225,10 @@
                 }else{
                   $('td:eq(12)', row).css('background', '#44c24b').css('text-align','center').css('font-weight','bold');
                 }
-              }    
-              
+              }
         },
         columns: [
-        {//15 columnas
+        {
             data: 'id', 
             name: 'id',
             render: function ( data, type, row, meta ) {

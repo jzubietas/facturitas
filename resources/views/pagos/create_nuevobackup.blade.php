@@ -7,20 +7,14 @@
 @stop
 
 @section('content')
-
-
   <div class="card">
-    {{--  {!! Form::open(['route' => 'pagos.store','enctype'=>'multipart/form-data', 'id'=>'formulario','files'=>true]) !!} --}}
-    <form id="formulario" name="formulario" enctype="multipart/form-data">
+    {!! Form::open(['route' => 'pagos.store','enctype'=>'multipart/form-data', 'id'=>'formulario','files'=>true]) !!}
       <div class="border rounded card-body border-secondary" style="margin: 1%">
         <div class="form-row">
           <div class="form-group col-lg-6">
             {!! Form::label('user_id', 'Asesor') !!}
-            {{--<input type="hidden" name="user_id" requerid value="{{ Auth::user()->id }}" class="form-control">--}}
-            {{--<input type="text" name="user_name" value="{{ Auth::user()->name }}" class="form-control" disabled>--}}
-
-            {!! Form::select('user_id', $users, null, ['class' => 'form-control border selectpicker border-secondary', 'data-live-search' => 'true', 'placeholder' => '---- SELECCIONE ASESOR ----']) !!}
-
+            <input type="hidden" name="user_id" requerid value="{{ Auth::user()->id }}" class="form-control">
+            <input type="text" name="user_name" value="{{ Auth::user()->name }}" class="form-control" disabled>
           </div>
           <div class="form-group col-lg-6">
             {!! Form::label('cliente_id', 'Cliente*') !!}{!! Form::hidden('cliente_id', '',['id' => 'cliente_id']) !!}
@@ -177,22 +171,6 @@ tfoot tr, thead tr {
 tfoot td {
 	font-weight:bold;
 }
-
-select option:disabled {
-    color: #000;
-    font-weight: bold;
-}
-
-.bootstrap-select .dropdown-menu li .dropdown-item
-{
-  color: #000 !important;
-  /*style="color: rgb(255, 255, 255);"*/
-}
-.bootstrap-select .dropdown-menu li .dropdown-item.disabled
-{
-  color: red !important;
-  /*style="color: rgb(255, 255, 255);"*/
-}
 </style>
 @stop
 
@@ -210,131 +188,12 @@ select option:disabled {
     function mostrarBotones() {
       $("#addpedido").show();
       $("#addpago").show();
-    }
-
-    $( "#user_id" ).change(function() {
-      console.log("link asesor")
-      var uid=$(this).val();
-      $.ajax({
-          url: "{{ route('cargar.clientedeasesorparapagos') }}?user_id=" + uid,
-          method: 'GET',
-          success: function(data) {
-            console.log(data.html);
-            $('#pcliente_id').html(data.html);
-            $("#pcliente_id").selectpicker("refresh");
-
-          }
-        });
-    });
+    }    
 
     // CARGAR PEDIDOS DE CLIENTE SELECCIONADO
 
     var tabla_pedidos=null;
     //$(document).ready(function () {
-
-      $("#formulario").submit(function(event){
-        event.preventDefault();
-        console.log("abrir")
-       
-       var fd = new FormData();
-
-       //general
-       fd.append("user_id", $("#user_id").val() );
-       fd.append("cliente_id", $("#cliente_id").val() );
-       fd.append("pcliente_id", $("#pcliente_id").val() );
-       fd.append("saldo", $("#saldo").val() );
-       fd.append("total_pago_pagar", $("#total_pago_pagar").val() );
-       fd.append("total_pedido", $("#total_pedido").val() );
-       fd.append("total_pedido_pagar", $("#total_pedido_pagar").val() );
-       fd.append("ppedido_id", $("#ppedido_id").val() );
-       fd.append("pbanco", $("#pbanco").val() );
-       $('input[name="tipotransferencia[]"]').each(function(){
-         fd.append("tipotransferencia[]", this.value);
-       });
-       fd.append("titulares", $("#titulares").val() );
-       fd.append("pmonto", $("#pmonto").val() );
-       fd.append("pfecha", $("#pfecha").val() );
-       fd.append("diferencia", $("#diferencia").val() );
-
-       //pagos
-       $('input[name="tipomovimiento[]"]').each(function(){
-         fd.append("tipomovimiento[]", this.value);
-       });
-       $('input[name="titular[]"]').each(function(){
-         fd.append("titular[]", this.value);
-       });
-       $('input[name="banco[]"]').each(function(){
-         fd.append("banco[]", this.value);
-       });
-       $('input[name="fecha[]"]').each(function(){
-         fd.append("fecha[]", this.value);
-       });      
-       $('input[name="monto[]"]').each(function(){
-         fd.append("monto[]", this.value);
-       });
-
-       //pedidos
-       $('input[name="pedido_id[]"]').each(function(){
-         fd.append("pedido_id[]", this.value);
-       });
-       $('input[name="numbersaldo[]"]').each(function(){
-         fd.append("numbersaldo[]", this.value);
-       });
-       $('input[name="numberdiferencia[]"]').each(function(){
-         fd.append("numberdiferencia[]", this.value);
-       });
-       $('input[name="numbertotal[]"]').each(function(){
-         fd.append("numbertotal[]", this.value);
-       });
-       
-       $('input[name="checktotal[]"]').each(function(){
-         fd.append("checktotal[]", this.value);
-       });
-       $('input[name="checkadelanto[]"]').each(function(){
-         fd.append("checkadelanto[]", this.value);
-       });
-
-       //adjuntos
-       let files=$('input[name="imagen"]');
-       console.log("files "+files.length)
-       if(files.length == 0)
-       {
-         Swal.fire(
-             'Error',
-             'Debe ingresar el detalle del pedido',
-             'warning'
-           )
-           return false;
-        }else{
-         //
-         console.log(files.length);//this.files.length
-         var totalfilescarga = $('input[name="imagen"]').files.length;
-         console.log("totalfilescarga "+totalfilescarga);
-         
-         if(files.length!=totalfilescarga)
-         {
-           Swal.fire(
-             'Error',
-             'Debe ingresar los adjuntos del pago',
-             'warning'
-           )
-           return false;
-         }else{
-           for (let i = 0; i < files.length; i++) {
-             fd.append('imagen['+i+']', files[i]);
-           }
-         }
-
-         console.log(fd);
-
-       }
-
-       ///final de validacion registro pago
-
-
-
-      });
-      ////submitpagos
 
       function eliminarPa(index) {
         total_pago = total_pago - subtotal_pago[index];
@@ -1255,14 +1114,14 @@ select option:disabled {
 
             var filasPa = '<tr class="selected" id="filasPa' + contPa + '">' +
               '<td>' + (contPa + 1) + '</td>' +
-              '<td><input type="hidden" name="tipomovimiento['+(contPa + 1)+']" value="' + tipomovimiento + '">' + tipomovimiento + '</td>' +
-              '<td><input type="hidden" name="titular['+(contPa + 1)+']" value="' + titular + '">' + titular + '</td>' +
-              '<td><input type="hidden" name="banco['+(contPa + 1)+']" value="' + banco + '">' + banco + '</td>' +
-              '<td><input type="hidden" name="fecha['+(contPa + 1)+']" value="' + fecha + '">' + fecha + '</td>' +
-              '<td>@csrf<input type="file" id="imagen" name="imagen" accept= "image/*" style="width:150px;"/></td>' + 
+              '<td><input type="hidden" name="tipomovimiento[]" value="' + tipomovimiento + '">' + tipomovimiento + '</td>' +
+              '<td><input type="hidden" name="titular[]" value="' + titular + '">' + titular + '</td>' +
+              '<td><input type="hidden" name="banco[]" value="' + banco + '">' + banco + '</td>' +
+              '<td><input type="hidden" name="fecha[]" value="' + fecha + '">' + fecha + '</td>' +
+              '<td>@csrf<input type="file" id="imagen" name="imagen[]" accept= "image/*" style="width:150px;"/></td>' + 
                 /* <img id="picture" src="{{asset('imagenes/logo_facturas.png')}}" alt="Imagen del pago" height="100px" width="100px"> */        
-              '<td><input type="hidden" name="monto['+(contPa + 1)+']" value="' + monto + '">' + monto + '</td>' +
-              '<td><button type="button" class="btn btn-danger btn-sm d-none" onclick="eliminarPa(' + contPa + ')"><i class="fas fa-trash-alt"></i></button></td>' +
+              '<td><input type="hidden" name="monto[]" value="' + monto + '">' + monto + '</td>' +
+              '<td><button type="button" class="btn btn-danger btn-sm" onclick="eliminarPa(' + contPa + ')"><i class="fas fa-trash-alt"></i></button></td>' +
               '</tr>';
               
 

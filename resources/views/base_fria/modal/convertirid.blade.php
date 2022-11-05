@@ -11,7 +11,7 @@
         
         
         <form id="formconvertir" name="formconvertir">
-        <input type="text" id="hiddenId" name="hiddenID" class="form-control"> 
+        <input type="hidden" id="hiddenId" name="hiddenID" class="form-control"> 
         <div class="modal-body">
           <p>Confirme si desea <strong>PASAR DE BASE FRIA A CLIENTE</strong> a: <br> <strong class="textcode">BF00 id - celular</strong></p>
           

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 /* use Validator; */
 use App\Models\Cliente;
+use App\Models\Pedido;
 use App\Models\Porcentaje;
 use App\Models\User;
 use Carbon\Carbon;
@@ -572,11 +573,40 @@ class ClienteController extends Controller
                         'clientes.deuda',
                         ]);
         }else{
+            //$mesactual = Carbon::now()->month;//11
+            //return $mesactual;
+            //Carbon::now()->subMonth()->endOfMonth()->toDateString()
+            //$date_menor=Carbon::now()->month($mesactual)->subDays(30)->endOfMonth()->format('d/m/Y');
+            /*$date_menos=Carbon::now()->subMonth(1)->endOfMonth()->toDateString();
+            //return $date_menos;
+
+            $ped1 = Pedido::select(['cliente_id'])->whereIn('pago',['0','1'] )->whereIn('pagado',['0','1'] )->where('pedidos.created_at','>=','2022-11-01 00:00:00');
+            //$ped2 = Pedido::select(['cliente_id'])->whereIn('pago',['0','1'] )->whereIn('pagad', ['0','1'] )->where('pedidos.created_at','<=','2022-10-31 00:00:00');
+            $count = Cliente::join('users as u', 'clientes.user_id', 'u.id')
+                    ->where('clientes.estado','1')
+                    ->where('clientes.tipo','1')
+                    ->get([
+                        'clientes.id',
+                        DB::raw('count(p.created_at) as cantidad'),
+                        /*$ped1.' as ped2'*/
+                      /*  ]
+                        );*/
+           /* return $count;*/
+
+            /*$count = DB::table( DB::raw("({$ped1->toSql()}) as sub") )
+                ->mergeBindings($ped1->getQuery()) 
+                ->count();
+            return $count;*/
+
             $data = Cliente:://CLIENTES SIN PEDIDOS
                 join('users as u', 'clientes.user_id', 'u.id')
                 ->leftjoin('pedidos as p', 'clientes.id', 'p.cliente_id')
+                //->whereIn('p.pago', ['0', '1'])
+                //->whereIn('p.pagado', ['0', '1'])
+                //->where('p.created_at','<',$date_menos)
                 ->where('clientes.estado','1')
                 ->where('clientes.tipo','1')
+                
                 //->where('clientes.pidio','1')
                 //->where('clientes.deuda', '1')
                 ->groupBy(
@@ -609,8 +639,11 @@ class ClienteController extends Controller
                         DB::raw('MAX(DATE_FORMAT(p.created_at, "%Y")) as anio'),
                         DB::raw('MONTH(CURRENT_DATE()) as dateM'),
                         DB::raw('YEAR(CURRENT_DATE()) as dateY'),
+                        DB::raw(" (select count(ped.id) from pedidos ped where ped.cliente_id=clientes.id and ped.pago in (0,1) and ped.pagado in (0,1) and ped.created_at >='2022-11-01 00:00:00') as pedidos_mes_deuda "),
+                        DB::raw(" (select count(ped2.id) from pedidos ped2 where ped2.cliente_id=clientes.id and ped2.pago in (0,1) and ped2.pagado in (0,1) and ped2.created_at <='2022-10-31 00:00:00') as pedidos_mes_deuda_antes "),
                         'clientes.deuda',
                         ]);
+                       // return $data;
         }
         
         //return $dataTable->render('base_fria.index');
@@ -622,9 +655,9 @@ class ClienteController extends Controller
                     ->addColumn('action', function($row){
      
                            //$btn = '<a href="" data-target="#modal-convertir" data-toggle="modal" data-opcion="'.$row->id.'"><button class="btn btn-info btn-sm">Convertir a cliente</button></a>';
-                          
-                           $btn='<a href="'.route('clientes.edit', $row).'" class="btn btn-warning btn-sm"><i class="fas fa-edit"></i> Editar</a>';
-                           $btn = $btn.'<a href="" data-target="#modal-delete" data-toggle="modal" data-opcion="'.$row->id.'"><button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i> Eliminar</button></a>';
+                        $btn="";
+                           //$btn='<a href="'.route('clientes.edit', $row).'" class="btn btn-warning btn-sm"><i class="fas fa-edit"></i> Editar</a>';
+                           //$btn = $btn.'<a href="" data-target="#modal-delete" data-toggle="modal" data-opcion="'.$row->id.'"><button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i> Eliminar</button></a>';
                            
                             return $btn;
                     })
@@ -638,6 +671,33 @@ class ClienteController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+    public function pedidostiempo(Request $request)
+    {
+        if (!$request->cliente_id_tiempo) {
+            $html="";
+
+        }else{
+            $cliente_id_tiempo=$request->cliente_id_tiempo;
+            $pcantidad_pedido=$request->pcantidad_pedido;
+            $pcantidad_tiempo=$request->pcantidad_tiempo;
+
+            $html=$cliente_id_tiempo."|".$pcantidad_pedido."|".$pcantidad_tiempo;
+            $user=Cliente::find($request->cliente_id_tiempo);
+            //$jefe = User::find($request->asesor, ['jefe']);
+            $user->update([
+                'deuda' => "0",
+                'crea_temporal' => "1",
+                'activado_tiempo' => $pcantidad_tiempo,
+                'activado_pedido' => $pcantidad_pedido
+            ]);
+
+        }
+        
+        return response()->json(['html' => $html]);
+        //return redirect()->route('users.asesores')->with('info', 'asignado');
+    }
+
     public function create()
     {
         $users = User::where('users.estado','1')

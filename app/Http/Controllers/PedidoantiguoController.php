@@ -51,56 +51,8 @@ class PedidoController extends Controller
         return view('pedidos.index', compact('dateMin', 'dateMax', 'superasesor'));
     }
 
-    public function indextablahistorial(Request $request)
-    {
-        //return $request->buscarpedidocliente;
-        if (!$request->buscarpedidocliente && !$request->buscarpedidoruc ) {
-            $pedidos=Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')
-                ->join('users as u', 'pedidos.user_id', 'u.id')
-                ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
-                ->join('imagen_pedidos as ip', 'pedidos.id', 'ip.pedido_id')
-                ->select(
-                    'pedidos.id',
-                    'dp.descripcion',
-                    'dp.nota',
-                    'ip.adjunto'
-                )
-                ->where('dp.estado', '3')
-                ->where('pedidos.estado', '1')
-                //->where('pedidos.cliente_id',$request->buscarpedidocliente)
-                //->where('dp.ruc',$request->buscarpedidoruc)
-                ->orderBy('pedidos.created_at', 'DESC')
-                ->get();
-                return Datatables::of($pedidos)
-                ->addIndexColumn()
-                ->make(true);
-        }else{
-            $pedidos=Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')
-            ->join('users as u', 'pedidos.user_id', 'u.id')
-            ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
-            ->join('imagen_pedidos as ip', 'pedidos.id', 'ip.pedido_id')
-            ->select(
-                'pedidos.id',
-                'dp.descripcion',
-                'dp.nota',
-                'ip.adjunto'
-            )
-            ->where('dp.estado', '1')
-            ->where('pedidos.estado', '1')
-            ->where('pedidos.cliente_id',$request->buscarpedidocliente)
-            ->where('dp.ruc',$request->buscarpedidoruc)
-            ->orderBy('pedidos.created_at', 'DESC')
-            ->get();
-
-        return Datatables::of($pedidos)
-                ->addIndexColumn()
-                ->make(true);
-        }
-    }
-
     public function indextabla(Request $request)
     {
-        
         if(Auth::user()->rol == "Asesor"){
             $pedidos = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')//PEDIDOS CON PAGOS
             ->join('users as u', 'pedidos.user_id', 'u.id')
@@ -326,26 +278,46 @@ class PedidoController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    public function deudoresoncreate(Request $request){
+    public function deudoresoncreate(){
         $deudores = Cliente::where('estado', '1')
-                                //->where('user_id', Auth::user()->id)
+                                ->where('user_id', Auth::user()->id)
                                 ->where('tipo', '1')
                                 ->where('deuda', '1')
                                 ->get();
-
-        return Datatables::of($deudores)
-            ->addIndexColumn()
-            ->make(true);
-        
-        //return response()->json($deudores);                                
     }
 
-    public function clientesenpedidos(Request $request){       
-        $clientes1 = Cliente::
+    public function create()
+    {   
+        $dateM = Carbon::now()->format('m');
+        $dateY = Carbon::now()->format('Y');
+
+        $mirol=Auth::user()->rol;//
+         if($mirol=='Llamadas')
+        {
+            
+            //$users = User::where('estado', '1')->pluck('identificador', 'id');
+            $users = User:: where('users.rol', 'Asesor')//join("users as asesores","asesores.id","users.llamada")
+                //->join("users as asesores","asesores.id","users.supervisor")
+                //-> where('users.rol', 'Asesor')
+                -> where('users.estado', '1')
+                -> where('users.llamada', Auth::user()->id)
+                ->pluck('users.identificador', 'users.id');
+        }else{
+
+            $users = User::where('estado', '1')->pluck('identificador', 'id');
+        }
+
+        /*$users = User::where('estado', '1')
+                ->pluck('identificador', 'id');*/
+
+        if(Auth::user()->rol == "Asesor"){
+            $clientes1 = Cliente:://CLIENTES CON PEDIDOS CON DEUDA
                 join('users as u', 'clientes.user_id', 'u.id')
                 ->leftjoin('pedidos as p', 'clientes.id', 'p.cliente_id')
                 ->where('clientes.estado','1')
-                ->where('clientes.tipo','1')              
+                ->where('clientes.tipo','1')
+                //->where('clientes.pidio','1')
+                //->where('clientes.deuda', '1')
                 ->where('clientes.user_id', Auth::user()->id)
                 ->groupBy(
                     'clientes.id',
@@ -377,12 +349,14 @@ class PedidoController extends Controller
                         DB::raw('MAX(DATE_FORMAT(p.created_at, "%m")) as mes'),
                         DB::raw('MAX(DATE_FORMAT(p.created_at, "%Y")) as anio')
                         ]);
+            
+            $deudores = Cliente::where('estado', '1')
+                                ->where('user_id', Auth::user()->id)
+                                ->where('tipo', '1')
+                                ->where('deuda', '1')
+                                ->get();
 
-        return response()->json($clientes1);
-    }
-
-    public function clientesenruconcreate(Request $request){
-        $clientes_ruc = Cliente::
+            $clientes_ruc = Cliente:://TODOS LOS CLIENTES
                         where('clientes.estado','1')
                         ->where('clientes.tipo','1')
                         ->where('clientes.user_id', Auth::user()->id)
@@ -398,112 +372,126 @@ class PedidoController extends Controller
                                 'clientes.estado'
                                 ]);
 
-        return response()->json($clientes_ruc);
-    }
+        }else if(Auth::user()->rol == "Super asesor"){
+            $clientes1 = Cliente:://CLIENTES CON PEDIDOS CON DEUDA
+                join('users as u', 'clientes.user_id', 'u.id')
+                ->leftjoin('pedidos as p', 'clientes.id', 'p.cliente_id')
+                ->where('clientes.estado','1')
+                ->where('clientes.tipo','1')
+                //->where('clientes.pidio','1')
+                //->where('clientes.deuda', '1')
+                ->where('clientes.user_id', Auth::user()->id)
+                ->groupBy(
+                    'clientes.id',
+                    'clientes.nombre',
+                    'clientes.celular', 
+                    'clientes.estado', 
+                    'u.name',
+                    'u.identificador',
+                    'clientes.provincia',
+                    'clientes.distrito',
+                    'clientes.direccion',
+                    'clientes.pidio',
+                    'clientes.deuda'
+                )
+                ->get(['clientes.id', 
+                        'clientes.nombre', 
+                        'clientes.celular', 
+                        'clientes.estado', 
+                        'u.name as user',
+                        'u.identificador',
+                        'clientes.provincia',
+                        'clientes.distrito',
+                        'clientes.direccion',
+                        'clientes.pidio',
+                        'clientes.deuda',
+                        DB::raw('count(p.created_at) as cantidad'),
+                        DB::raw('MAX(p.created_at) as fecha'),
+                        DB::raw('MAX(DATE_FORMAT(p.created_at, "%d")) as dia'),
+                        DB::raw('MAX(DATE_FORMAT(p.created_at, "%m")) as mes'),
+                        DB::raw('MAX(DATE_FORMAT(p.created_at, "%Y")) as anio')
+                        ]);
+            
+            $deudores = Cliente::where('estado', '1')
+                                ->where('user_id', Auth::user()->id)
+                                ->where('tipo', '1')
+                                ->where('deuda', '1')
+                                ->get();
 
-    public function pedidostiempo(Request $request)
-    {
-        //cliente_id_tiempo//pcantidad_tiempo//pcantidad_pedido
-        if (!$request->cliente_id_tiempo) {
-            $html="";
-
+            $clientes_ruc = Cliente:://TODOS LOS CLIENTES
+                        where('clientes.estado','1')
+                        ->where('clientes.tipo','1')
+                        ->where('clientes.user_id', Auth::user()->id)
+                        ->groupBy(
+                            'clientes.id',
+                            'clientes.nombre',
+                            'clientes.celular', 
+                            'clientes.estado'
+                        )
+                        ->get(['clientes.id', 
+                                'clientes.nombre', 
+                                'clientes.celular', 
+                                'clientes.estado'
+                                ]);
         }else{
-            if (!$request->pcantidad_tiempo && !$request->pcantidad_pedido) 
-            {
-
-            }else{
-
-                $cliente_id_tiempo=$request->cliente_id_tiempo;
-                $pcantidad_tiempo=$request->pcantidad_tiempo;
-                $pcantidad_pedido=$request->pcantidad_pedido;
-
-            }
-          
-
-            $html=$cliente_id_tiempo."|".$pcantidad_tiempo."|".$pcantidad_pedido;
-            $cliente=Cliente::find($cliente_id_tiempo);
-            $cliente->update([
-                'activado_tiempo' => $request->asesor,
-                'activado_pedido' => $pcantidad_pedido
-            ]);
-
-            /*$jefe = User::find($request->asesor, ['jefe']);
-            $user->update([
-                'operario' => $request->asesor,
-                'jefe' => $jefe->jefe
-            ]);*/
-
+            $clientes1 = Cliente:://CLIENTES CON PEDIDOS CON DEUDA
+                join('users as u', 'clientes.user_id', 'u.id')
+                ->leftjoin('pedidos as p', 'clientes.id', 'p.cliente_id')
+                ->where('clientes.estado','1')
+                ->where('clientes.tipo','1')
+                //->where('clientes.pidio','1')
+                //->where('clientes.deuda', '1')
+                ->groupBy(
+                    'clientes.id',
+                    'clientes.nombre',
+                    'clientes.celular', 
+                    'clientes.estado', 
+                    'u.name',
+                    'u.identificador',
+                    'clientes.provincia',
+                    'clientes.distrito',
+                    'clientes.direccion',
+                    'clientes.pidio',
+                    'clientes.deuda'
+                )
+                ->get(['clientes.id', 
+                        'clientes.nombre', 
+                        'clientes.celular', 
+                        'clientes.estado', 
+                        'u.name as user',
+                        'u.identificador',
+                        'clientes.provincia',
+                        'clientes.distrito',
+                        'clientes.direccion',
+                        'clientes.pidio',
+                        'clientes.deuda',
+                        DB::raw('count(p.created_at) as cantidad'),
+                        DB::raw('MAX(p.created_at) as fecha'),
+                        DB::raw('MAX(DATE_FORMAT(p.created_at, "%d")) as dia'),
+                        DB::raw('MAX(DATE_FORMAT(p.created_at, "%m")) as mes'),
+                        DB::raw('MAX(DATE_FORMAT(p.created_at, "%Y")) as anio')
+                        ]);
+           
+            $deudores = Cliente::where('estado', '1')
+                                ->where('tipo', '1')
+                                ->where('deuda', '1')
+                                ->get();
+            $clientes_ruc = Cliente:://TODOS LOS CLIENTES
+                            where('clientes.estado','1')
+                            ->where('clientes.tipo','1')
+                            ->groupBy(
+                                'clientes.id',
+                                'clientes.nombre',
+                                'clientes.celular', 
+                                'clientes.estado'
+                            )
+                            ->get(['clientes.id', 
+                                    'clientes.nombre', 
+                                    'clientes.celular', 
+                                    'clientes.estado'
+                                    ]);
         }
-        
-        return response()->json(['html' => $html]);
-        //return redirect()->route('users.asesores')->with('info', 'asignado');
-    }
-
-    public function asesortiempo(Request $request)//clientes
-    {
-        $mirol=Auth::user()->rol;
-        $html = '<option value="">' . trans('---- SELECCIONE ASESOR ----') . '</option>';
-
-        if($mirol=='Llamadas')
-        {   
-            $asesores = Users::where('users.rol', "Asesor")
-                                -> where('users.estado', '1')
-                -> where('users.llamada', Auth::user()->id)  
-                ->get();
-        }else if($mirol=='Jefe de llamadas'){
-            $asesores = User:: where('users.rol', 'Asesor')
-                -> where('users.estado', '1')
-                -> where('users.llamada', Auth::user()->id)
-                ->get();
-        }else if($mirol=='Asesor'){
-            $asesores = User:: where('users.rol', 'Asesor')
-                    -> where('users.estado', '1')
-                    -> where('users.id', Auth::user()->id)
-                    ->get();
-        }else{
-            $asesores=User:: where('users.rol', 'Asesor')
-                    -> where('users.estado', '1')
-                    ->get();
-        }
-    
-        foreach ($asesores as $asesor) {
-            $html .= '<option style="color:#fff" value="' . $asesor->id . '">' . $asesor->identificador. '</option>';
-        }
-        
-        return response()->json(['html' => $html]);
-    }
-
-
-
-    public function create()
-    {   
-        $dateM = Carbon::now()->format('m');
-        $dateY = Carbon::now()->format('Y');
-
-        $mirol=Auth::user()->rol;//
-        if($mirol=='Llamadas')
-        {
-            $users = User:: where('users.rol', 'Asesor')
-                -> where('users.estado', '1')
-                -> where('users.llamada', Auth::user()->id)
-                ->pluck('users.identificador', 'users.id');
-
-        }else if($mirol=='Jefe de llamadas'){
-
-            $users = User:: where('users.rol', 'Asesor')
-                -> where('users.estado', '1')
-                -> where('users.llamada', Auth::user()->id)
-                ->pluck('users.identificador', 'users.id');
-        }else if($mirol=='Asesor'){
-
-                $users = User:: where('users.rol', 'Asesor')
-                    -> where('users.estado', '1')
-                    -> where('users.id', Auth::user()->id)
-                    ->pluck('users.identificador', 'users.id');
-        }else{
-            $users = User::where('estado', '1')->pluck('identificador', 'id');
-        }
-
+                            
         $meses = [
             "ENERO" => 'ENERO',
             "FEBRERO" => 'FEBRERO',
@@ -534,22 +522,27 @@ class PedidoController extends Controller
             "2031" => '2031',
         ];
 
-        /*$rucs = Ruc::where('user_id', Auth::user()->id)
+        $rucs = Ruc::where('user_id', Auth::user()->id)
                     ->where('estado', '1')
-                    ->pluck('num_ruc', 'num_ruc');*/
+                    ->pluck('num_ruc', 'num_ruc');
 
         $fecha = Carbon::now()->format('dm');
         $dia = Carbon::now()->toDateString();
-
+        /* $numped = DetallePedido:://CAMBIAR A PEDIDO
+                    join('pedidos as p', 'detalle_pedidos.pedido_id', 'p.id')                    
+                    ->where(DB::raw('Date(detalle_pedidos.created_at)'), $dia)
+                    ->where('p.user_id', Auth::user()->id)
+                    ->groupBy(DB::raw('Date(detalle_pedidos.created_at)'))
+                    ->count(); */
         $numped = Pedido::where(DB::raw('Date(created_at)'), $dia)
                     ->where('user_id', Auth::user()->id)
                     ->groupBy(DB::raw('Date(created_at)'))
                     ->count();
         $numped = $numped + 1;
 
-        $mirol=Auth::user()->rol;
+        $mirol=Auth::user()->rol;//mi rol
         
-        return view('pedidos.create', compact('users', 'dateM', 'dateY', 'meses', 'anios',  'fecha', 'numped','mirol'));
+        return view('pedidos.create', compact('users', 'clientes1', 'dateM', 'dateY','deudores', 'meses', 'anios', 'rucs', 'fecha', 'numped', 'clientes_ruc','mirol'));
     }
 
     /**
@@ -559,101 +552,21 @@ class PedidoController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    public function validarrelacionruc(Request $request)
-    {
-
-        $ruc_repetido=Ruc::where('rucs.num_ruc',$request->agregarruc)
-                            ->count();
-        if($ruc_repetido>0)
-        {
-            //ya existe, actualizar y buscar relacion
-            //busco relacion si es correcta
-            $ruc = Ruc::where('num_ruc', $request->agregarruc)->first();
-            $cliente_repetido=Ruc::where('rucs.cliente_id',$ruc->cliente_id_ruc)
-                            ->where('rucs.num_ruc',$request->agregarruc)
-                            ->count();
-            if($cliente_repetido>0)
-            {
-                //si hay relacion
-                //asociacion con el asesor
-                //$user = User::where('id', $ruc->user_id)->first();
-                $html="1";
-            }else{
-                //si es del mismo asesor devolver el cliente
-                //si es de otro asesor  indicar quien es el asesor
-                $asesordelruc= User::where("users.id",$ruc->user_id)->first();///$request->user_id                
-                if($asesordelruc->id != $request->user_id)
-                {
-                    $html="1|A|".$asesordelruc->identificador;
-                }else{
-                    //si es del mismo asesor devolver el cliente que esta relacionado
-                    $cliente=Cliente::where("clientes.id",$ruc->cliente_id)->first();
-                    $html="1|C|".$cliente->nombre;
-                }
-                
-
-            }
-        }else{
-            //no existe ,registrare
-            $html="1";
-
-        }
-        return response()->json(['html' => $html]);
-    }
-
     public function ruc(Request $request)//rucs
     {
-        if (!$request->cliente_id || $request->cliente_id=='') {
+        if (!$request->cliente_id) {
             $html = '<option value="">' . trans('---- SELECCIONE ----') . '</option>';
         } else {
             $html = '<option value="">' . trans('---- SELECCIONE ----') . '</option>';
             $rucs = Ruc::join('clientes as c', 'rucs.cliente_id', 'c.id')
-                ->select('rucs.num_ruc as num_ruc','rucs.empresa')
+                ->select('rucs.num_ruc as num_ruc','c.nombre')
                 ->where('rucs.cliente_id', $request->cliente_id)
                 ->get();
             foreach ($rucs as $ruc) {
-                $html .= '<option value="' . $ruc->num_ruc . '">' . $ruc->num_ruc."  ".$ruc->empresa . '</option>';
+                $html .= '<option value="' . $ruc->num_ruc . '">' . $ruc->num_ruc."-".$ruc->nombre . '</option>';
             }
         }
         return response()->json(['html' => $html]);
-    }
-
-    public function rucnombreempresa(Request $request)//rucs
-    {
-        if (!$request->ruc || $request->ruc=='') {
-            $html = '<option value="">' . trans('---- SELECCIONE ----') . '</option>';
-        } else {
-            $html = '<option value="">' . trans('---- SELECCIONE ----') . '</option>';
-            $rucs = Ruc::where('rucs.num_ruc', $request->ruc)
-                ->first();
-            $html=$rucs->empresa;
-            
-        }
-        return response()->json(['html' => $html]);
-    }
-
-    public function infopdf(Request $request)//rucs
-    {
-        if (!$request->infocopiar) {
-            $html = '<option value="">' . trans('---- SELECCIONE ----') . '</option>';
-            $pedido="";
-        } else {
-            $html = '<option value="">' . trans('---- SELECCIONE ----') . '</option>';
-            $pedido = Pedido::join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
-                        ->select(
-                            'pedidos.id',
-                            'dp.cantidad',
-                            'dp.porcentaje',
-                            'dp.ft',
-                            'dp.courier',
-                            'dp.total',
-                        )
-                        ->where('pedidos.id', $request->infocopiar)
-                        ->first();
-            //$html=$pedido->id;
-            
-        }
-        return response()->json($pedido);
     }
 
     /*
@@ -674,7 +587,7 @@ class PedidoController extends Controller
 
     public function cliente()//clientes
     {        
-        $html = '<option value="">' . trans('---- SELECCIONE CLIENTE ----') . '</option>';
+        $html = '<option value="">' . trans('---- SELECCIONE ----') . '</option>';
         $clientes = Cliente::where('clientes.user_id', Auth::user()->id)
                             ->where('clientes.tipo', '1')
                             ->get();        
@@ -686,107 +599,16 @@ class PedidoController extends Controller
 
     public function clientedeasesor(Request $request)//clientes
     {
-        if (!$request->user_id  || $request->user_id=='') {
-            $html = '<option value="">' . trans('---- SELECCIONE CLIENTE ----') . '</option>';
+        if (!$request->user_id) {
+            $html = '<option value="">' . trans('---- SELECCIONE ----') . '</option>';
         }else{
-
-            $html = '<option value="">' . trans('---- SELECCIONE CLIENTE ----') . '</option>';
+            $html = '<option value="">' . trans('---- SELECCIONE ----') . '</option>';
             $clientes = Cliente::where('clientes.user_id', $request->user_id)
                                 ->where('clientes.tipo', '1')
                                 ->get();        
             foreach ($clientes as $cliente) {
-                if($cliente->deuda=="0")
-                {
-                    $html .= '<option style="color:#000" value="' . $cliente->id . '">' . $cliente->celular. '  -  ' . $cliente->nombre . '</option>';
-                }else{
-                    if( Auth::user()->rol=='Asesor' )
-                    {
-                        $html .= '<option disabled style="color:#fff" value="' . $cliente->id . '">' . $cliente->celular. '  -  ' . $cliente->nombre . '**CLIENTE CON DEUDA**</option>';
-                    }else if( Auth::user()->rol=='Llamadas' ){
-                        $html .= '<option disabled style="color:#fff" value="' . $cliente->id . '">' . $cliente->celular. '  -  ' . $cliente->nombre . '**CLIENTE CON DEUDA**</option>';
-                    }else if( Auth::user()->rol=='Jefe de lamadas' ){
-                        $html .= '<option disabled style="color:#fff" value="' . $cliente->id . '">' . $cliente->celular. '  -  ' . $cliente->nombre . '**CLIENTE CON DEUDA**</option>';
-                    }else{
-                        $html .= '<option disabled style="color:#fff" value="' . $cliente->id . '">' . $cliente->celular. '  -  ' . $cliente->nombre . '</option>';
-                    }
-
-                }
-                //$html .= '<option value="' . $cliente->id . '">' . $cliente->celular. '  -  ' . $cliente->nombre . '</option>';
+                $html .= '<option value="' . $cliente->id . '">' . $cliente->celular. '-' . $cliente->nombre . '</option>';
             }
-        }
-        
-        return response()->json(['html' => $html]);
-    }
-
-    public function clientedeasesorparapagos(Request $request)//clientes
-    {
-        if (!$request->user_id  || $request->user_id=='') {
-            $html = '<option value="">' . trans('---- SELECCIONE CLIENTE ----') . '</option>';
-        }else{
-
-            $html = '<option value="">' . trans('---- SELECCIONE CLIENTE ----') . '</option>';
-            $clientes = Cliente::where('clientes.user_id', $request->user_id)
-                                ->where('clientes.tipo', '1')
-                                ->get();        
-            foreach ($clientes as $cliente) {
-                if($cliente->deuda=="0")
-                {
-                    $html .= '<option disabled style="color:#000" value="' . $cliente->id . '">' . $cliente->celular. '  -  ' . $cliente->nombre . '</option>';
-                }else{
-                    if( Auth::user()->rol=='Asesor' )
-                    {
-                        $html .= '<option   style="color:#fff" value="' . $cliente->id . '">' . $cliente->celular. '  -  ' . $cliente->nombre . '**CLIENTE CON DEUDA**</option>';
-                    }else if( Auth::user()->rol=='Llamadas' ){
-                        $html .= '<option   style="color:#fff" value="' . $cliente->id . '">' . $cliente->celular. '  -  ' . $cliente->nombre . '**CLIENTE CON DEUDA**</option>';
-                    }else if( Auth::user()->rol=='Jefe de lamadas' ){
-                        $html .= '<option  style="color:#fff" value="' . $cliente->id . '">' . $cliente->celular. '  -  ' . $cliente->nombre . '**CLIENTE CON DEUDA**</option>';
-                    }else{
-                        $html .= '<option  style="color:#fff" value="' . $cliente->id . '">' . $cliente->celular. '  -  ' . $cliente->nombre . '</option>';
-                    }
-
-                }
-                //$html .= '<option value="' . $cliente->id . '">' . $cliente->celular. '  -  ' . $cliente->nombre . '</option>';
-            }
-        }
-        
-        return response()->json(['html' => $html]);
-    }
-
-    public function clientedeudaparaactivar(Request $request)//clientes
-    {
-        if (!$request->user_id  || $request->user_id=='') {
-            $html = '<option value="">' . trans('---- SELECCIONE CLIENTE ----') . '</option>';
-        }else{
-            $html = '<option value="">' . trans('---- SELECCIONE CLIENTE ----') . '</option>';
-            $clientes = Cliente::where('clientes.tipo', '1')
-                ->where('clientes.user_id', $request->user_id)
-                ->where('clientes.deuda', '1')
-                ->where('clientes.estado', '1')
-                ->get(); 
-            foreach ($clientes as $cliente) {
-                $html .= '<option value="' . $cliente->id . '">' . $cliente->celular. '  -  ' . $cliente->nombre . '</option>';
-            }
-
-        }        
-        
-        return response()->json(['html' => $html]);
-    }
-
-    public function clientedeasesordeuda(Request $request)//clientes
-    {
-        if (!$request->user_id  || $request->user_id=='') {
-            $html = '<option value="">' . trans('---- SELECCIONE CLIENTE ----') . '</option>';
-        }else{
-            $html = '<option value="">' . trans('---- SELECCIONE CLIENTE ----') . '</option>';
-            $clientes = Cliente::where('clientes.user_id', $request->user_id)
-                                ->where('clientes.tipo', '1')
-                                ->where('clientes.deuda', '1')
-                                ->where('clientes.estado', '1')
-                                ->get();        
-            foreach ($clientes as $cliente) {
-                $html .= '<option value="' . $cliente->id . '">' . $cliente->celular. '  -  ' . $cliente->nombre . '</option>';
-            }
-
         }
         
         return response()->json(['html' => $html]);
@@ -794,7 +616,7 @@ class PedidoController extends Controller
 
     public function tipobanca(Request $request)//pedidoscliente
     {
-        if (!$request->cliente_id || $request->cliente_id=='') {
+        if (!$request->cliente_id) {
             $html = '<option value="">' . trans('---- SELECCIONE ----') . '</option>';
         } else {
             $html = '<option value="">' . trans('---- SELECCIONE ----') . '</option>';
@@ -808,8 +630,7 @@ class PedidoController extends Controller
 
     public function AgregarRuc(Request $request)
     {
-        $ruc = Ruc::where('num_ruc', $request->agregarruc)->first();
-    
+        $ruc = Ruc::where('num_ruc', $request->agregarruc)->first();        
         if($ruc !== null){
             $user = User::where('id', $ruc->user_id)->first();
             
@@ -821,239 +642,29 @@ class PedidoController extends Controller
                 'num_ruc' => 'required|unique:rucs',
             ], $messages);
      
-            /*if ($validator->fails()) {
+            if ($validator->fails()) {
                 return redirect('pedidos/create')
                             ->withErrors($validator)
                             ->withInput();
-            }*/
-            $ruc->update([
-                'empresa' => $request->pempresaruc
-            ]);
+            } 
+        }
 
-            $html="false";
-        }else{
             $ruc = Ruc::create([
                 'num_ruc' => $request->agregarruc,
                 'user_id' => Auth::user()->id,
                 'cliente_id' => $request->cliente_id_ruc,
-                'empresa' => $request->pempresaruc,
                 'estado' => '1'
-            ]);
-            $html="true";
-        }
-        
+            ]);        
 
-        return response()->json(['html' => $html]);
-       
+        return redirect()->route('pedidos.create')->with('info', 'registrado');
     }
-    public function pedidosstore(Request $request)
-    {
-        $numped="";
-        $mirol=Auth::user()->rol;//
-        $codigo="";
-        if($mirol=='Llamadas')
-        {
-            $identi_asesor=User::where("id",$request->user_id)->first();
-            $fecha = Carbon::now()->format('dm');
-            $dia = Carbon::now()->toDateString();
-            $numped = Pedido::where(DB::raw('Date(created_at)'), $dia)
-                    ->where('user_id', $request->user_id)//identificador de asesor relacionado a este usuario llamada
-                    ->groupBy(DB::raw('Date(created_at)'))
-                    ->count();
-            $numped=$numped+1;
 
-            $codigo=$identi_asesor->identificador."-".$fecha."-".$numped;
-        }else{
-            $identi_=User::where("id", Auth::user()->id)->first();
-            $fecha = Carbon::now()->format('dm');
-            $dia = Carbon::now()->toDateString();
-            $numped = Pedido::where(DB::raw('Date(created_at)'), $dia)
-                    ->where('user_id', Auth::user()->id)
-                    ->groupBy(DB::raw('Date(created_at)'))
-                    ->count();
-            $numped=$numped+1;
-
-            $codigo=$identi_->identificador."-".$fecha."-".$numped;
-        }
-        //return $codigo;
-        $request->validate([
-            'cliente_id' => 'required',
-        ]);
-        try {
-            DB::beginTransaction();
-
-            $pedido = Pedido::create([
-                'cliente_id' => $request->cliente_id,
-                'user_id' => $request->user_id, //usuario que registra
-                'creador' => 'USER0'.Auth::user()->id,//aqui una observacion, en el migrate la columna en tabla pedido tenia nombre creador y resulto ser creador_id
-                'condicion' => 'POR ATENDER',
-                'pago' => '0',
-                'envio' => '0',
-                'condicion_envio' => 'PENDIENTE DE ENVIO',
-                'estado' => '1',
-                'codigo' => $codigo,
-                'notificacion' => 'Nuevo pedido creado',
-                'modificador' => 'USER0'.Auth::user()->id,
-                'pagado' => '0',
-                'direccion' => '0'
-            ]);
-
-            // ALMACENANDO DETALLES
-            $codigo = $codigo;//$request->codigo; actualizado para codigo autogenerado
-            $codigo_generado=$codigo;
-            $nombre_empresa = $request->nombre_empresa;
-            $mes = $request->mes;
-            $anio = $request->anio;
-            $ruc = $request->ruc;
-            $cantidad = $request->cantidad;
-            $tipo_banca = $request->tipo_banca;
-            $porcentaje = $request->porcentaje;
-            $courier = $request->courier;
-            $descripcion = $request->descripcion;
-            $nota = $request->nota;
-
-            $files = $request->file('adjunto');
-            //$files = $request->adjunto;
-            $destinationPath = base_path('public/storage/adjuntos/');
-
-            $cont = 0;
-            $fileList = [];
-
-            if(isset($files)){
-                foreach ($files as $filekey =>$file){
-                    //return $file->getClientOriginalName();
-                    $file_name = Carbon::now()->second.$file->getClientOriginalName(); //Get file original name
-                     $fileList[$filekey] = array(
-                        'file_name' => $file_name,
-                    ); 
-                    $file->move($destinationPath , $file_name);
-
-                    ImagenPedido::create([
-                        'pedido_id' => $pedido->id,
-                        'adjunto' => $file_name,
-                        'estado' => '1'
-                    ]);
-
-                    //$cont++;
-                }
-            }
-            else{
-                ImagenPedido::create([
-                    'pedido_id' => $pedido->id,
-                    'adjunto' => 'logo_facturas.png',
-                    'estado' => '1'
-                ]);
-            }
-            $contP = 0;
-
-            while ($contP < count((array)$codigo)) {
-
-            $detallepedido = DetallePedido::create([
-                    'pedido_id' => $pedido->id,
-                    'codigo' => $codigo_generado,//$codigo[$contP],
-                    'nombre_empresa' => $nombre_empresa[$contP],
-                    'mes' => $mes[$contP],
-                    'anio' => $anio[$contP],
-                    'ruc' => $ruc[$contP],
-                    'cantidad' => $cantidad[$contP],
-                    'tipo_banca' => $tipo_banca[$contP],
-                    'porcentaje' => $porcentaje[$contP],
-                    'ft' => ($cantidad[$contP]*$porcentaje[$contP])/100,
-                    'courier' => $courier[$contP],
-                    'total' => (($cantidad[$contP]*$porcentaje[$contP])/100)+$courier[$contP],
-                    'saldo' => (($cantidad[$contP]*$porcentaje[$contP])/100)+$courier[$contP],
-                    'descripcion' => $descripcion[$contP],
-                    'nota' => $nota[$contP],
-                    'estado' => '1'
-                ]);             
-            
-                $contP++;
-
-                //ACTUALIZAR DEUDA
-                $cliente = Cliente::find($request->cliente_id);  
-                
-                $fecha = Carbon::now()->format('dm');
-                $dia = Carbon::now()->toDateString();
-                //
-                $dateMinWhere = Carbon::now()->subDays(60)->format('d/m/Y');
-                $dateMin = Carbon::now()->subDays(30)->format('d/m/Y');
-                $dateMax = Carbon::now()->format('d/m/Y');
-
-                $valido_deudas_mes=Pedido::where("pedidos.cliente_id",$request->cliente_id)
-                        ->where("pedidos.estado","1")
-                        ->where("pedidos.pago","0")
-                        //->between("pedidos.estado","1")
-                        ->whereBetween('pedidos.created_at', [$dateMinWhere, $dateMax])
-                        ->where("pedidos.created_at","<",$dateMin)->count();
-                if($valido_deudas_mes>0)
-                {
-                    $cliente->update([
-                        'deuda' => '1',
-                        'pidio' => '1'
-                    ]);
-
-                }else{
-                    $cliente->update([
-                        'deuda' => '0',
-                        'pidio' => '1'
-                    ]);
-                }
-
-
-                
-
-
-                
-            }
-            DB::commit();
-            $html=$pedido->id;
-        } catch (\Throwable $th) {
-            throw $th;
-            $html="0";
-            /* DB::rollback();
-            dd($th); */
-        }
-        return response()->json(['html' => $html]); 
-        //return redirect()->route('pedidosPDF', $pedido)->with('info', 'registrado');
-    }
-    
     public function store(Request $request)
     {
+
+        //pempresa
+        //pcodigo
         return $request->all();
-
-        $files = $request->file('adjunto');
-
-        $numped="";
-        $mirol=Auth::user()->rol;
-        $codigo="";
-        //return $mirol;
-        if($mirol=='Llamadas')
-        {
-            $identi_asesor=User::where("id",$request->user_id)->first();
-            $fecha = Carbon::now()->format('dm');
-            $dia = Carbon::now()->toDateString();
-            $numped = Pedido::where(DB::raw('Date(created_at)'), $dia)
-                    ->where('user_id', Auth::user()->id)
-                    ->groupBy(DB::raw('Date(created_at)'))
-                    ->count();
-            $numped=$numped+1;
-
-            $codigo=$identi_asesor->identificador."-".$fecha."-".$numped;
-        }else{
-            $identi_asesor=User::where("id",$request->user_id)->first();
-            $fecha = Carbon::now()->format('dm');
-            $dia = Carbon::now()->toDateString();
-            $numped = Pedido::where(DB::raw('Date(created_at)'), $dia)
-                    ->where('user_id', Auth::user()->id)
-                    ->groupBy(DB::raw('Date(created_at)'))
-                    ->count();
-            $numped=$numped+1;
-
-            $codigo=$identi_asesor->identificador."-".$fecha."-".$numped;
-
-        }
-        //return $codigo;//21-0311-1
-
         $request->validate([
             'cliente_id' => 'required',
         ]);
@@ -1070,16 +681,14 @@ class PedidoController extends Controller
                 'envio' => '0',
                 'condicion_envio' => 'PENDIENTE DE ENVIO',
                 'estado' => '1',
-                'codigo' => $codigo,
+                'codigo' => $request->codigo[0],
                 'notificacion' => 'Nuevo pedido creado',
                 'modificador' => 'USER0'.Auth::user()->id,
                 'pagado' => '0',
                 'direccion' => '0'
             ]);
-
             // ALMACENANDO DETALLES
-            $codigo = $codigo;//$request->codigo; actualizado para codigo autogenerado
-            $codigo_generado=$codigo;
+            $codigo = $request->codigo;
             $nombre_empresa = $request->nombre_empresa;
             $mes = $request->mes;
             $anio = $request->anio;
@@ -1127,7 +736,7 @@ class PedidoController extends Controller
 
             $detallepedido = DetallePedido::create([
                     'pedido_id' => $pedido->id,
-                    'codigo' => $codigo_generado,//$codigo[$contP],
+                    'codigo' => $codigo[$contP],
                     'nombre_empresa' => $nombre_empresa[$contP],
                     'mes' => $mes[$contP],
                     'anio' => $anio[$contP],
@@ -1154,25 +763,22 @@ class PedidoController extends Controller
                     ]);
             }            
             DB::commit();
-            $html="true";
         } catch (\Throwable $th) {
             throw $th;
-            $html="false";
             /* DB::rollback();
             dd($th); */
         }
-        return response()->json(['html' => $html]); 
 
         //NOTIFICATION
-        /*event(new PedidoEvent($pedido));
+        event(new PedidoEvent($pedido));
 
         if(Auth::user()->rol == "Asesor"){
-           
+            /* return redirect()->route('pedidos.mispedidos')->with('info', 'registrado'); */
             return redirect()->route('pedidosPDF', $pedido)->with('info', 'registrado');
         }
         else 
-            
-            return redirect()->route('pedidosPDF', $pedido)->with('info', 'registrado');*/
+            /* return redirect()->route('pedidos.index')->with('info', 'registrado'); */
+            return redirect()->route('pedidosPDF', $pedido)->with('info', 'registrado');
     }
 
     /**
