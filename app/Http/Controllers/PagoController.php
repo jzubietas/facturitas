@@ -174,22 +174,24 @@ class PagoController extends Controller
             $users = User:: where('users.rol', 'Asesor')
                 -> where('users.estado', '1')
                 -> where('users.llamada', Auth::user()->id)
-                ->pluck('users.identificador', 'users.id');
-
+                ->get();
+                //->pluck('users.identificador', 'users.id');
         }else if($mirol=='Jefe de llamadas'){
 
             $users = User:: where('users.rol', 'Asesor')
                 -> where('users.estado', '1')
                 -> where('users.llamada', Auth::user()->id)
-                ->pluck('users.identificador', 'users.id');
+                ->get();
+                //->pluck('users.identificador', 'users.id');
         }else if($mirol=='Asesor'){
 
             $users = User:: where('users.rol', 'Asesor')
                 -> where('users.estado', '1')
                 -> where('users.id', Auth::user()->id)
-                ->pluck('users.identificador', 'users.id');
+                ->get();
+                //->pluck('users.identificador', 'users.id');
         }else{
-            $users = User::where('estado', '1')->pluck('identificador', 'id');
+            $users = User::where('estado', '1')->get();//->pluck('identificador', 'id');
         }
 
 
@@ -322,11 +324,8 @@ class PagoController extends Controller
 
 
     public function asesorespago(Request $request)
-    {
+    {       
         
-        /*if (!$request->cliente_id) {
-            $html = '<option value="">' . trans('---- SELECCIONE ----') . '</option>';
-        } else*/
         {
             $html = '<option value="">' . trans('---- SELECCIONAR TODOS ----') . '</option>';
             $users = User::whereIn('rol', ['Asesor','Super asesor'])//where('rol', 'Asesor')
@@ -334,10 +333,50 @@ class PagoController extends Controller
                     ->get();
             
             foreach ($users as $user) {
-                //$saldo_mostrar = $pedido->saldo;
-                //$saldo_mostrar=str_replace(',','.',$saldo_mostrar);
-                //$html .= '<option value="' . $pedido->id . '_' . $pedido->codigo . '_' . $pedido->total . '_' . $pedido->saldo . '">Código: ' . $pedido->codigo . ' - Total: S/' . $pedido->total . ' - Saldo: S/' . $pedido->saldo . '</option>';
                 $html .= '<option value="' . $user->id . '">Asesor: ' . $user->identificador . ' - '.$user->name.'</option>';
+            }
+        }
+        return response()->json(['html' => $html]);
+    }
+
+    public function clientescreatepago(Request $request)
+    {       
+        
+        {
+            //return request()->get('user_id');
+            $html = '<option value="">' . trans('---- SELECCIONAR TODOS ----') . '</option>';
+
+            if(Auth::user()->rol == "Administrador"){
+                // Parámetro id de cliente
+                if (request()->get('user_id')) {
+                    $clientes = Cliente::where('estado', '1')
+                    ->where('user_id', request()->get('user_id'))
+                    ->where('tipo', '1')
+                    ->get();
+                } else {
+                    $clientes = Cliente::where('estado', '1')
+                    //->where('user_id', Auth::user()->id)
+                    ->where('tipo', '1')
+                    ->get();
+                }
+            }           
+            else{
+                if (request()->get('user_id')) {
+                    $clientes = Cliente::where('estado', '1')
+                    //->where('user_id', Auth::user()->id)
+                    ->where('user_id', request()->get('user_id'))
+                    ->where('tipo', '1')
+                    ->get();
+                } else {
+                    $clientes = Cliente::where('estado', '1')
+                    ->where('user_id', Auth::user()->id)
+                    ->where('tipo', '1')
+                    ->get();
+                }
+            }
+            
+            foreach ($clientes as $cliente) {
+                $html .= '<option value="' . $cliente->id."_".$cliente->saldo. '">Cliente: ' . $cliente->nombre . ' - '.$cliente->celular.' Saldo: '.$cliente->saldo.'</option>';
             }
         }
         return response()->json(['html' => $html]);

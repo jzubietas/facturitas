@@ -151,6 +151,7 @@ Route::post('administracion.updaterevisar.post', [PagoController::class, 'update
 Route::get('pagos/{imagen}/descargarimagen', [PagoController::class, 'DescargarImagen'])->name('pagos.descargarimagen');
 
 Route::get('asesorespago', [PagoController::class, 'asesorespago'])->name('asesorespago');
+Route::get('clientescreatepago', [PagoController::class, 'clientescreatepago'])->name('clientescreatepago');
 
 Route::resource('users', UserController::class)->names('users');
 Route::post('reset/{user}', [UserController::class, 'reset'])->name('user.reset');
