@@ -403,7 +403,7 @@ return [
             'can' => 'administracion.modulo',
             'submenu' => [
                 [
-                    'text' => 'Pagos por revisar',
+                    'text' => 'Voucher por revisar',
                     'route'  => 'administracion.porrevisar',
                     'can' => 'administracion.porrevisar',
                     'icon'   => 'fas fa-check-circle',

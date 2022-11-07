@@ -16,12 +16,23 @@
       </div> --}}
     </div>
   </h1>
-
-  <div class="form-group col-lg-6">
-    
+  
+  <div class="row">
+    <div class="col-lg-6">
       <select name="asesores_pago" class="border form-control selectpicker border-secondary" id="asesores_pago" data-live-search="true">
         <option value="">---- SELECCIONE ASESOR ----</option>         
       </select>
+    </div>
+    <div class="col-lg-3">
+      <input type="date" value="" id="min" name="min" class="form-control">
+    </div>
+    <div class="col-lg-3">
+      <input type="date" value="" id="max" name="max" class="form-control">
+    </div>
+  </div>
+  <div class="form-group col-lg-2">
+    
+      
   </div>
 
 
@@ -123,8 +134,12 @@
   <!--<script src="{{ asset('js/datatables.js') }}"></script>--> 
   <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
   <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+  <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
 
   <script>
+    //$("#min").datepicker({ onSelect: function () { table.draw(); }, changeMonth: true, changeYear: true , dateFormat:"dd/mm/yy"});
+    //$("#max").datepicker({ onSelect: function () { table.draw(); }, changeMonth: true, changeYear: true, dateFormat:"dd/mm/yy" });
+
     function clickformdelete()
     {
       console.log("action delete action")
@@ -193,6 +208,9 @@
       console.log("validar delete");
       clickformdelete();
     })
+
+    
+
     
     $('#tablaPrincipal').DataTable({
         processing: true,
@@ -203,6 +221,8 @@
           url: "{{ route('administracion.observadostabla') }}",
           data: function (d) {
             d.asesores = $("#asesores_pago").val();
+            d.min = $("#min").val();
+            d.max = $("#max").val();
             // d.custom = $('#myInput').val();
             // etc
           },

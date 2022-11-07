@@ -294,6 +294,98 @@
       <script>
         $(document).ready(function() {
 
+          $(document).on("submit","#formulario",function(event){
+        event.preventDefault();
+        console.log("abrir")
+       
+       var fd = new FormData();
+
+       $('input[name="nombre_empresa[]"]').each(function(){
+         fd.append("nombre_empresa[]", this.value);
+       });        
+       $('input[name="mes[]"]').each(function(){
+         fd.append("mes[]", this.value);
+       });
+       $('input[name="anio[]"]').each(function(){
+         fd.append("anio[]", this.value);
+       });
+       $('input[name="ruc[]"]').each(function(){
+         fd.append("ruc[]", this.value);
+       });
+       $('input[name="cantidad[]"]').each(function(){
+         fd.append("cantidad[]", this.value);
+       });
+       $('input[name="tipo_banca[]"]').each(function(){
+         fd.append("tipo_banca[]", this.value);
+       });
+       $('input[name="porcentaje[]"]').each(function(){
+         fd.append("porcentaje[]", this.value);
+       });
+       $('input[name="courier[]"]').each(function(){
+         fd.append("courier[]", this.value);
+       });
+       $('input[name="descripcion[]"]').each(function(){
+         fd.append("descripcion[]", this.value);
+       });
+       $('input[name="nota[]"]').each(function(){
+         fd.append("nota[]", this.value);
+       });       
+       let files=$('input[name="adjunto[]');
+       if(files.length == 0)
+       {
+         Swal.fire(
+             'Error',
+             'Debe ingresar el detalle del pedido',
+             'warning'
+           )
+           return false;
+       }else{
+         //
+         var totalfilescarga = $('input[name="adjunto[]"]').get(0).files.length;
+         console.log("totalfilescarga "+totalfilescarga);
+         
+
+         if(files.length!=totalfilescarga)
+         {
+           Swal.fire(
+             'Error',
+             'Debe ingresar los adjuntos del pedido',
+             'warning'
+           )
+           return false;
+         }else{
+           for (let i = 0; i < files.length; i++) {
+             fd.append('adjunto['+i+']', files[i]);
+           }
+         }
+
+       }
+       
+       fd.append( 'user_id', $("#user_id").val() );
+       fd.append( 'cliente_id', $("#cliente_id").val() );
+
+       $.ajax({
+           data: fd,
+           processData: false,
+           contentType: false,
+           type: 'POST',
+           url:"{{ route('pedidoss.store') }}",
+           success:function(data){
+             console.log(data);
+             if(data.html=='0'){
+
+               }else{
+                 var urlpdf = '{{ route("pedidosPDF", ":id") }}';           
+                 urlpdf = urlpdf.replace(':id', data.html);
+                 window.open(urlpdf, '_blank');
+
+                 $("#modal-copiar .textcode").text(data.html);
+                 $("#modal-copiar").modal("show");
+               }
+           }
+         });
+      });
+
           $(document).on("change","#user_id",function(){
             console.log("link asesor")
             var uid=$(this).val();
@@ -806,98 +898,7 @@
               });
       });
 
-      $("#formulario").submit(function(event){
-        event.preventDefault();
-        console.log("abrir")
-       
-       var fd = new FormData();
-
-       $('input[name="nombre_empresa[]"]').each(function(){
-         fd.append("nombre_empresa[]", this.value);
-       });        
-       $('input[name="mes[]"]').each(function(){
-         fd.append("mes[]", this.value);
-       });
-       $('input[name="anio[]"]').each(function(){
-         fd.append("anio[]", this.value);
-       });
-       $('input[name="ruc[]"]').each(function(){
-         fd.append("ruc[]", this.value);
-       });
-       $('input[name="cantidad[]"]').each(function(){
-         fd.append("cantidad[]", this.value);
-       });
-       $('input[name="tipo_banca[]"]').each(function(){
-         fd.append("tipo_banca[]", this.value);
-       });
-       $('input[name="porcentaje[]"]').each(function(){
-         fd.append("porcentaje[]", this.value);
-       });
-       $('input[name="courier[]"]').each(function(){
-         fd.append("courier[]", this.value);
-       });
-       $('input[name="descripcion[]"]').each(function(){
-         fd.append("descripcion[]", this.value);
-       });
-       $('input[name="nota[]"]').each(function(){
-         fd.append("nota[]", this.value);
-       });       
-       let files=$('input[name="adjunto[]');
-       if(files.length == 0)
-       {
-         Swal.fire(
-             'Error',
-             'Debe ingresar el detalle del pedido',
-             'warning'
-           )
-           return false;
-       }else{
-         //
-         var totalfilescarga = $('input[name="adjunto[]"]').get(0).files.length;
-         console.log("totalfilescarga "+totalfilescarga);
-         
-
-         if(files.length!=totalfilescarga)
-         {
-           Swal.fire(
-             'Error',
-             'Debe ingresar los adjuntos del pedido',
-             'warning'
-           )
-           return false;
-         }else{
-           for (let i = 0; i < files.length; i++) {
-             fd.append('adjunto['+i+']', files[i]);
-           }
-         }
-
-       }
-       
-       fd.append( 'user_id', $("#user_id").val() );
-       fd.append( 'cliente_id', $("#cliente_id").val() );
-
-       $.ajax({
-           data: fd,
-           processData: false,
-           contentType: false,
-           type: 'POST',
-           url:"{{ route('pedidoss.store') }}",
-           success:function(data){
-             console.log(data);
-             if(data.html=='0'){
-
-               }else{
-                 var urlpdf = '{{ route("pedidosPDF", ":id") }}';           
-                 urlpdf = urlpdf.replace(':id', data.html);
-                 window.open(urlpdf, '_blank');
-
-                 $("#modal-copiar .textcode").text(data.html);
-                 $("#modal-copiar").modal("show");
-               }
-           }
-         });
-
-      });
+      
 
 
       $("#formulario2").submit(function(event){

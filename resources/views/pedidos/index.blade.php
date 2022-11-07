@@ -94,6 +94,9 @@
       /*background-color: yellow !important;*/
       color:#fcd00e !important;
     }
+    .textred{
+      color: red !important;
+    }
     .red {
         background-color: red !important;
       }
@@ -211,7 +214,7 @@
             if(data["estado"] == "1")
             {
             }else{
-              $(row).addClass('yellow');
+              $(row).addClass('textred');
             }           
         },
         rowCallback: function (row, data, index) {

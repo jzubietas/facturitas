@@ -75,7 +75,11 @@
                         @if($pagoPedido->pagado == 1)
                         <td>ADELANTO</td>
                         @else
-                        <td>PAGADO {{$pagoPedido->pagado}}</td>
+                        <td>
+                          @if ($pagoPedido->pagado==2)
+                            PAGADO
+                          @endif  
+                        </td>
                         @endif                
                       <td>{{ $pagoPedido->condicion }}</td>
                       <td>{{ $pagoPedido->total }}</td>
@@ -104,11 +108,16 @@
         </div>
       </div>
     </div>
+
+    @include('pagos.movimientos')
     <div class="card-body">
       <div class="border rounded card-body border-secondary">
         <div class="form-row">
           <div class="form-group col-lg-12">
-            <h3 style="text-align: center"><strong>PAGOS REALIZADOS POR EL CLIENTE</strong> @if($pagos->saldo>0) SALDO A FAVOR DEL CLIENTE: {{ $pagos->saldo }}@endif</h3> 
+            <h3 style="text-align: center"><strong>PAGOS REALIZADOS POR EL CLIENTE</strong> @if($pagos->saldo>0) SALDO A FAVOR DEL CLIENTE: {{ $pagos->saldo }}@endif</h3>
+            
+            <a href="" data-target="#modal-movimientos-get" data-toggle="modal"><button class="btn btn-danger btn-sm">Movimientos</button></a>
+
             <div class="table-responsive">
               <table class="table table-striped">
                 <thead>
@@ -136,6 +145,7 @@
                       <td>{{ $detallePago->banco }}</td>                  
                       <td>{{ $detallePago->monto }}</td>
                       <td>{{ $detallePago->fecha }}</td>
+                      
                       <td>
                         {!! Form::select('cuenta[]', $cuentas, $detallePago->cuenta, ['class' => 'form-control selectpicker border border-secondary', 'id'=>'cuenta','data-live-search' => 'true', 'placeholder' => '---- SELECCIONE ----']) !!}  
                       </td>                  
