@@ -254,6 +254,32 @@ tfoot td {
 
       $(document).ready(function() {
 
+        $(".banco_procedencia").hide();
+        $(".banco_procedencia_otro").hide();
+
+        $(document).on("change","#tipotransferencia",function(event){
+          console.log($(this).val());
+          if($(this).val()=='INTERBANCARIO'){
+            $("#pbancoprocedencia").val("").selectpicker("refresh");
+            $("#otro_bancoprocedencia").val("");
+            $(".banco_procedencia").show();
+            $(".banco_procedencia_otro").hide();           
+          }else{
+            $(".banco_procedencia").hide();
+            $(".banco_procedencia_otro").hide();
+          }
+        });
+
+        $(document).on("change","#pbancoprocedencia",function(event){
+          console.log($(this).val());
+          if($(this).val()=='OTROS'){
+            $("#otro_bancoprocedencia").val("");
+            $(".banco_procedencia_otro").show();           
+          }else{
+            $(".banco_procedencia_otro").hide();
+          }
+        });
+
         /* inicio mi carga de table  sin datos*/
         $('#tabla_pagos').DataTable().clear().destroy();
 
@@ -1433,6 +1459,24 @@ tfoot td {
                   'Seleccione tipo de transferencia',
                   'warning'
                 )
+              }else if ($('#tipotransferencia').val() == 'INTERBANCARIO') {
+                if ($('#pbancoprocedencia').val() == '') {
+                  Swal.fire(
+                    'Error',
+                    'Seleccione Banco de procedencia',
+                    'warning'
+                  )
+                }else if ($('#pbancoprocedencia').val() == 'OTROS') {
+                  if ($('#otro_bancoprocedencia').val() == '') 
+                  {
+                    Swal.fire(
+                      'Error',
+                      'Seleccione Banco de procedencia',
+                      'warning'
+                    )
+                  }
+
+                }
               }else if ($('#titulares').val() == '') {
                 Swal.fire(
                   'Error',

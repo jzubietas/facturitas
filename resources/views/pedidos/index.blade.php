@@ -345,7 +345,36 @@
           }
         },
         //{data: 'responsable', name: 'responsable', },
-        {data: 'action', name: 'action', orderable: false, searchable: false,sWidth:'20%'},
+        {
+          data: 'action', 
+          name: 'action', 
+          orderable: false, 
+          searchable: false,
+          sWidth:'20%',
+          render: function ( data, type, row, meta ) {
+            var urlpdf = '{{ route("pedidosPDF", ":id") }}';
+            urlpdf = urlpdf.replace(':id', row.id);
+            var urlshow = '{{ route("pedidos.show", ":id") }}';
+            urlshow = urlshow.replace(':id', row.id);
+            var urledit = '{{ route("pedidos.edit", ":id") }}';
+            urledit = urledit.replace(':id', row.id);
+
+            @can('pedidos.pedidosPDF')
+              data = data+'<a href="'+urlpdf+'" class="btn btn-info btn-sm" target="_blank"><i class="fa fa-file-pdf"></i> PDF</a>';
+            @endcan
+            @can('pedidos.show')
+              data = data+'<a href="'+urlshow+'" class="btn btn-info btn-sm"><i class="fas fa-eye"></i> VER</a>';
+            @endcan
+            @can('pedidos.edit')
+                data = data+'<a href="'+urledit+'" class="btn btn-warning btn-sm"> Editar</a>';
+            @endcan
+            @can('pedidos.destroy')
+                data = data+'<a href="" data-target="#modal-delete" data-toggle="modal" data-delete="'+row.id+'"><button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i> Anular</button></a>';
+            @endcan           
+
+            return data;             
+          }
+        },
         ],
         language: {
         "decimal": "",

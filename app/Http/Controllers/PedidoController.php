@@ -100,8 +100,103 @@ class PedidoController extends Controller
 
     public function indextabla(Request $request)
     {
+        $mirol=Auth::user()->rol;
         
-        if(Auth::user()->rol == "Asesor"){
+        if(Auth::user()->rol == "Llamadas"){
+            $pedidos = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')
+            ->join('users as u', 'pedidos.user_id', 'u.id')
+            ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
+            ->leftjoin('pago_pedidos as pp', 'pedidos.id','pp.pedido_id')
+            ->select(
+                'pedidos.id',
+                'c.nombre as nombres',
+                'c.celular as celulares',
+                'u.identificador as users',
+                'pedidos.codigo as codigos',
+                'dp.nombre_empresa as empresas',
+                'dp.total as total',
+                'pedidos.condicion_envio',
+                'pedidos.condicion as condiciones',
+                'pedidos.pagado as condicion_pa',
+                'pedidos.motivo',
+                'pedidos.responsable',
+                DB::raw('DATE_FORMAT(pedidos.created_at, "%d/%m/%Y") as fecha'),
+                'dp.saldo as diferencia',
+                'pedidos.estado',
+                'pedidos.envio',
+            )
+            ->where('pp.estado', '1')
+            ->where('u.llamada', Auth::user()->id)
+            ->whereIn('pedidos.condicion', ['POR ATENDER', 'EN PROCESO ATENCION', 'ATENDIDO', 'ANULADO'])
+            ->groupBy(
+                'pedidos.id',
+                'c.nombre',
+                'c.celular',
+                'u.identificador',
+                'pedidos.codigo',
+                'dp.nombre_empresa',
+                'dp.total',
+                'pedidos.condicion',
+                'pedidos.condicion_envio',
+                'pedidos.pagado',
+                'pedidos.motivo',
+                'pedidos.responsable',
+                'pedidos.created_at',
+                'dp.saldo',
+                'pedidos.estado',
+                'pedidos.envio'
+                )
+            ->orderBy('pedidos.created_at', 'DESC')
+            ->get();
+        }
+        else if(Auth::user()->rol == "Jefe de llamadas"){
+            $pedidos = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')
+            ->join('users as u', 'pedidos.user_id', 'u.id')
+            ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
+            ->leftjoin('pago_pedidos as pp', 'pedidos.id','pp.pedido_id')
+            ->select(
+                'pedidos.id',
+                'c.nombre as nombres',
+                'c.celular as celulares',
+                'u.identificador as users',
+                'pedidos.codigo as codigos',
+                'dp.nombre_empresa as empresas',
+                'dp.total as total',
+                'pedidos.condicion_envio',
+                'pedidos.condicion as condiciones',
+                'pedidos.pagado as condicion_pa',
+                'pedidos.motivo',
+                'pedidos.responsable',
+                DB::raw('DATE_FORMAT(pedidos.created_at, "%d/%m/%Y") as fecha'),
+                'dp.saldo as diferencia',
+                'pedidos.estado',
+                'pedidos.envio',
+            )
+            ->where('pp.estado', '1')
+            ->where('u.llamada', Auth::user()->id)
+            ->whereIn('pedidos.condicion', ['POR ATENDER', 'EN PROCESO ATENCION', 'ATENDIDO', 'ANULADO'])
+            ->groupBy(
+                'pedidos.id',
+                'c.nombre',
+                'c.celular',
+                'u.identificador',
+                'pedidos.codigo',
+                'dp.nombre_empresa',
+                'dp.total',
+                'pedidos.condicion',
+                'pedidos.condicion_envio',
+                'pedidos.pagado',
+                'pedidos.motivo',
+                'pedidos.responsable',
+                'pedidos.created_at',
+                'dp.saldo',
+                'pedidos.estado',
+                'pedidos.envio'
+                )
+            ->orderBy('pedidos.created_at', 'DESC')
+            ->get();
+        }
+        else if(Auth::user()->rol == "Asesor"){
             $pedidos = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')//PEDIDOS CON PAGOS
             ->join('users as u', 'pedidos.user_id', 'u.id')
             ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
@@ -273,34 +368,32 @@ class PedidoController extends Controller
         return Datatables::of($pedidos)
                     ->addIndexColumn()
                     ->addColumn('action', function($pedido){     
+                        $btn='';
+                        //$btn='<a href="'.route('pedidosPDF', $pedido).'" class="btn btn-primary btn-sm" target="_blank"><i class="fa fa-file-pdf"></i> PDF</a>';
+                        //$btn=$btn.'<a href="'.route('pedidos.show', $pedido).'" class="btn btn-info btn-sm"><i class="fas fa-eye"></i> VER</a>';
 
-                        $btn='<a href="'.route('pedidosPDF', $pedido).'" class="btn btn-primary btn-sm" target="_blank"><i class="fa fa-file-pdf"></i> PDF</a>';
-                        $btn=$btn.'<a href="'.route('pedidos.show', $pedido).'" class="btn btn-info btn-sm"><i class="fas fa-eye"></i> VER</a>';
-
-                        if($pedido->estado>0){
+                        /*if($pedido->estado>0){
 
                             if(Auth::user()->rol == "Super asesor" || Auth::user()->rol =="Administrador" || Auth::user()->rol == "Encargado")
                             {
                                 $btn=$btn.'<a href="'.route('pedidos.edit', $pedido->id).'" class="btn btn-warning btn-sm">Editar</a>';
                             }                            
 
-                            //if($pedido->diferencia >3)
-                            //{
                                 if(Auth::user()->rol =='Administrador')
                                 {
                                     $btn = $btn.'<a href="" data-target="#modal-delete" data-toggle="modal" data-delete="'.$pedido->id.'"><button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i> Anular</button></a>';
                                 }
-                            //}                            
-                        }
+                                                    
+                        }*/
 
-                        if($pedido->estado==0){
+                        /*if($pedido->estado==0){
                             if(Auth::user()->rol =='Administrador')
                             {
                                 $btn = $btn.'<a href="" data-target="#modal-restaurar" data-toggle="modal" data-restaurar="'.$pedido->id.'"><button class="btn btn-success btn-sm"><i class="fas fa-check"></i> Restaurar</button></a>';
                             }
                             
 
-                        }
+                        }*/
                         
                         /*if($pedido->estado==1){
                             if($pedido->diferencia <= 3)

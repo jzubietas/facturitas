@@ -447,8 +447,91 @@ class ClienteController extends Controller
             "2030" => '2030 - 2031',
             "2031" => '2031 - 2032',
         ];
-
-        if (Auth::user()->rol == "Asesor"){
+        if (Auth::user()->rol == "Llamadas"){
+            $data = Cliente::
+                join('users as u', 'clientes.user_id', 'u.id')
+                ->leftjoin('pedidos as p', 'clientes.id', 'p.cliente_id')
+                ->where('clientes.estado','1')
+                ->where('clientes.tipo','1')
+                ->where('u.llamada', Auth::user()->id)
+                ->groupBy(
+                    'clientes.id',
+                    'clientes.nombre',
+                    'clientes.celular', 
+                    'clientes.estado', 
+                    'u.name',
+                    'u.identificador',
+                    'clientes.provincia',
+                    'clientes.distrito',
+                    'clientes.direccion',
+                    'clientes.deuda',
+                    'clientes.pidio'
+                )
+                ->get(['clientes.id', 
+                        'clientes.nombre', 
+                        'clientes.celular', 
+                        'clientes.estado', 
+                        'u.name as user',
+                        'u.identificador',
+                        'clientes.provincia',
+                        'clientes.distrito',
+                        'clientes.direccion',
+                        'clientes.pidio',
+                        DB::raw('count(p.created_at) as cantidad'),
+                        DB::raw('MAX(p.created_at) as fecha'),
+                        DB::raw('MAX(DATE_FORMAT(p.created_at, "%d")) as dia'),
+                        DB::raw('MAX(DATE_FORMAT(p.created_at, "%m")) as mes'),
+                        DB::raw('MAX(DATE_FORMAT(p.created_at, "%Y")) as anio'),
+                        DB::raw('MONTH(CURRENT_DATE()) as dateM'),
+                        DB::raw('YEAR(CURRENT_DATE()) as dateY'),
+                        DB::raw(" (select count(ped.id) from pedidos ped where ped.cliente_id=clientes.id and ped.pago in (0,1) and ped.pagado in (0,1) and ped.created_at >='2022-11-01 00:00:00') as pedidos_mes_deuda "),
+                        DB::raw(" (select count(ped2.id) from pedidos ped2 where ped2.cliente_id=clientes.id and ped2.pago in (0,1) and ped2.pagado in (0,1) and ped2.created_at <='2022-10-31 00:00:00') as pedidos_mes_deuda_antes "),
+                        'clientes.deuda',
+                        ]);
+        }
+        else if (Auth::user()->rol == "Jefe de llamadas"){
+            $data = Cliente::
+                join('users as u', 'clientes.user_id', 'u.id')
+                ->leftjoin('pedidos as p', 'clientes.id', 'p.cliente_id')
+                ->where('clientes.estado','1')
+                ->where('clientes.tipo','1')
+                ->where('u.llamada', Auth::user()->id)
+                ->groupBy(
+                    'clientes.id',
+                    'clientes.nombre',
+                    'clientes.celular', 
+                    'clientes.estado', 
+                    'u.name',
+                    'u.identificador',
+                    'clientes.provincia',
+                    'clientes.distrito',
+                    'clientes.direccion',
+                    'clientes.deuda',
+                    'clientes.pidio'
+                )
+                ->get(['clientes.id', 
+                        'clientes.nombre', 
+                        'clientes.celular', 
+                        'clientes.estado', 
+                        'u.name as user',
+                        'u.identificador',
+                        'clientes.provincia',
+                        'clientes.distrito',
+                        'clientes.direccion',
+                        'clientes.pidio',
+                        DB::raw('count(p.created_at) as cantidad'),
+                        DB::raw('MAX(p.created_at) as fecha'),
+                        DB::raw('MAX(DATE_FORMAT(p.created_at, "%d")) as dia'),
+                        DB::raw('MAX(DATE_FORMAT(p.created_at, "%m")) as mes'),
+                        DB::raw('MAX(DATE_FORMAT(p.created_at, "%Y")) as anio'),
+                        DB::raw('MONTH(CURRENT_DATE()) as dateM'),
+                        DB::raw('YEAR(CURRENT_DATE()) as dateY'),
+                        DB::raw(" (select count(ped.id) from pedidos ped where ped.cliente_id=clientes.id and ped.pago in (0,1) and ped.pagado in (0,1) and ped.created_at >='2022-11-01 00:00:00') as pedidos_mes_deuda "),
+                        DB::raw(" (select count(ped2.id) from pedidos ped2 where ped2.cliente_id=clientes.id and ped2.pago in (0,1) and ped2.pagado in (0,1) and ped2.created_at <='2022-10-31 00:00:00') as pedidos_mes_deuda_antes "),
+                        'clientes.deuda',
+                        ]);
+        }
+        elseif (Auth::user()->rol == "Asesor"){
             $data = Cliente:://CLIENTES SIN PEDIDOS
                 join('users as u', 'clientes.user_id', 'u.id')
                 ->leftjoin('pedidos as p', 'clientes.id', 'p.cliente_id')

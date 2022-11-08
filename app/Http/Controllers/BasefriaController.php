@@ -26,37 +26,87 @@ class BasefriaController extends Controller
         //
         //return $dataTable->render('base_fria.index');
         //if ($request->ajax()) {
-            
+
+        if(Auth::user()->rol == 'Llamadas')
+        {
             $data = Cliente::
-            join('users as u', 'clientes.user_id', 'u.id')
-            ->select('clientes.id', 
-                    'clientes.nombre', 
-                    'clientes.celular', 
-                    //'clientes.estado', 
-                    //'u.name as user',
-                    'u.identificador as identificador',
-                    'u.rol'
-                    )
-            ->where('clientes.estado','1')
-            ->where('clientes.tipo','0')
-            ->get();
+                join('users as u', 'clientes.user_id', 'u.id')
+                ->select('clientes.id', 
+                        'clientes.nombre', 
+                        'clientes.celular', 
+                        'u.identificador as identificador',
+                        'u.rol'
+                        )
+                ->where('clientes.estado','1')
+                ->where('clientes.tipo','0')
+                ->where('u.llamada', Auth::user()->id)
+                ->get();
+        }else if(Auth::user()->rol == 'Jefe de llamadas')
+        {
+            $data = Cliente::
+                join('users as u', 'clientes.user_id', 'u.id')
+                ->select('clientes.id', 
+                        'clientes.nombre', 
+                        'clientes.celular', 
+                        'u.identificador as identificador',
+                        'u.rol'
+                        )
+                ->where('clientes.estado','1')
+                ->where('clientes.tipo','0')
+                ->where('u.llamada', Auth::user()->id)
+                ->get();
+        }else if(Auth::user()->rol == 'Asesor')
+        {
+            $data = Cliente::
+                join('users as u', 'clientes.user_id', 'u.id')
+                ->select('clientes.id', 
+                        'clientes.nombre', 
+                        'clientes.celular', 
+                        'u.identificador as identificador',
+                        'u.rol'
+                        )
+                ->where('clientes.estado','1')
+                ->where('clientes.tipo','0')
+                //->where('u.llamada', Auth::user()->id)
+                -> where('u.id', Auth::user()->id)
+                ->get();
+        }else if(Auth::user()->rol == 'Encargado')
+        {
+            $data = Cliente::
+                join('users as u', 'clientes.user_id', 'u.id')
+                ->select('clientes.id', 
+                        'clientes.nombre', 
+                        'clientes.celular', 
+                        'u.identificador as identificador',
+                        'u.rol'
+                        )
+                ->where('clientes.estado','1')
+                ->where('clientes.tipo','0')
+                //->where('u.llamada', Auth::user()->id)
+                ->where('u.supervisor', Auth::user()->id)
+                ->get();
+        }else{
+            $data = Cliente::
+                join('users as u', 'clientes.user_id', 'u.id')
+                ->select('clientes.id', 
+                        'clientes.nombre', 
+                        'clientes.celular', 
+                        'u.identificador as identificador',
+                        'u.rol'
+                        )
+                ->where('clientes.estado','1')
+                ->where('clientes.tipo','0')
+                ->get();
+        }
 
             return Datatables::of($data)
                     ->addIndexColumn()
                     ->addColumn('action', function($row){
                             $btn="";
-                           //$btn = '<a href="" data-target="#modal-convertir" data-toggle="modal" data-opcion="'.$row->id.'"><button class="btn btn-info btn-sm">Convertir a cliente</button></a>';
-                           //$btn = '<a href="" data-target="#modal-convertir-'.$row->id.'" data-toggle="modal" data-opcion="'.$row->id.'"><button class="btn btn-info btn-sm">Convertir a cliente</button></a>';
-
-                           //$btn = $btn.'<a href="'.route('clientes.editbf', $row).'" class="btn btn-warning btn-sm"><i class="fas fa-edit"></i> Editar</a>';
-                           //$btn = $btn.'<a href="" data-target="#modal-delete" data-toggle="modal" data-opcion="'.$row->id.'"><button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i> Eliminar</button></a>';
-                           //$btn = $btn.'<a href="" data-target="#modal-delete-'.$row->id.'" data-toggle="modal"><button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i> Eliminar</button></a>';
-       
                             return $btn;
                     })
                     ->rawColumns(['action'])
                     ->make(true);
-        //}
     }
 
     public function cargarid(Request $request)

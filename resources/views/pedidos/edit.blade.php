@@ -86,7 +86,7 @@
                 </div>
                 <div class="form-group col-lg-2">
                   {!! Form::label('pporcentaje', 'Porcentaje(%)') !!}
-                    <input type="number" name="pporcentaje" id="pporcentaje" value="{{ $pedido->porcentaje}}" step="0.1" min="0" class="form-control" placeholder="Porcentaje...">
+                    <input type="number" name="pporcentaje" id="pporcentaje" value="{{ $pedido->porcentaje}}" step="0.1" min="0" class="form-control" placeholder="Porcentaje..." readonly="readonly">
                 </div>
                 <div class="form-group col-lg-3">
                   {!! Form::label('pcourier', 'Courier(S/)') !!}

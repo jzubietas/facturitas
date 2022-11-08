@@ -3,28 +3,20 @@
 @section('title', 'Lista de Pagos')
 
 @section('content_header')
-  <h1>Lista de pagos POR REVISAR
+  <h1>Lista de Voucher POR REVISAR
     @can('pagos.create')
       {{--<a href="{{ route('pagos.create') }}" class="btn btn-info"><i class="fas fa-plus-circle"></i> Agregar</a>--}}
     @endcan
     <div class="float-right btn-group dropleft">
-      {{-- <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         Exportar
-      </button> --}}
-      {{-- <div class="dropdown-menu">
-        <a href="{{ route('excelContratos') }}" class="dropdown-item"><img src="{{ asset('img/icon-excel.png') }}"> EXCEL</a>
-      </div> --}}
+      </button>
+       <div class="dropdown-menu">
+        <a href="{{ route('porrevisarExcel') }}" class="dropdown-item"><img src="{{ asset('imagenes/icon-excel.png') }}"> EXCEL</a>
+      </div> 
     </div>
   </h1>
-
-  <div class="form-group col-lg-6">
-    
-      <select name="asesores_pago" class="border form-control selectpicker border-secondary" id="asesores_pago" data-live-search="true">
-        <option value="">---- SELECCIONE ASESOR ----</option>         
-      </select>
-  </div>
-
-
+  
   @if($superasesor > 0)
   <br>
   <div class="bg-4">
@@ -39,16 +31,36 @@
 
   <div class="card">
     <div class="card-body">
+      <div class="form-group col-lg-6">
+      
+        <select name="asesores_pago" class="border form-control selectpicker border-secondary" id="asesores_pago" data-live-search="true">
+          <option value="">---- SELECCIONE ASESOR ----</option>         
+        </select>
+      </div>
+
+      <table cellspacing="5" cellpadding="5" class="table-responsive">
+        <tbody>
+          <tr>
+            <td>Fecha Minima:</td>
+            <td><input type="text" value={{ $dateMin }} id="min" name="min" class="form-control"></td>
+            <td> </td>
+            <td>Fecha Máxima:</td>
+            <td><input type="text" value={{ $dateMax }} id="max" name="max"  class="form-control"></td>
+          </tr>
+        </tbody>
+      </table>
+      <br>
       <table id="tablaPrincipal" class="table table-striped">
         <thead>
           <tr>
+          <th scope="col">COD.</th>
             <th scope="col">COD.</th>
             <th scope="col">Cliente</th>
             <th scope="col">Codigo pedido</th>
             <th scope="col">Fecha Voucher</th>
             <th scope="col">Asesor</th>
             <th scope="col">Observacion</th>
-            <th scope="col">Total cobro</th>
+            {{--<th scope="col">Total cobro</th>--}}
             <th scope="col">Total pagado</th>
             <th scope="col">Estado</th>
             <th scope="col">Acciones</th>
@@ -64,7 +76,8 @@
 @stop
 
 @section('css')
-  <link rel="stylesheet" href="../css/admin_custom.css">
+  {{-- <link rel="stylesheet" href="../css/admin_custom.css">--}}
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">  
   <style>
     .yellow {
       color:#fcd00e !important;
@@ -142,8 +155,14 @@
     }
   </script>
 
+<script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.4/moment.min.js" type="text/javascript"></script>
+<script src="//cdn.datatables.net/plug-ins/1.10.15/sorting/datetime-moment.js" type="text/javascript"></script>
+
 <script>
   $(document).ready(function () {
+
+    $.fn.dataTable.moment( 'DD/MM/YYYY' );
+    
 
     $.ajaxSetup({
         headers: {
@@ -194,6 +213,8 @@
       clickformdelete();
     })
 
+    //$.fn.dataTable.ext
+    
 
     //administracion.porrevisartabla
     $('#tablaPrincipal').DataTable({
@@ -205,16 +226,23 @@
           url: "{{ route('administracion.porrevisartabla') }}",
           data: function (d) {
             d.asesores = $("#asesores_pago").val();
+            d.min = $("#min").val();
+            d.max = $("#max").val();
             // d.custom = $('#myInput').val();
             // etc
           },
         },
-        
         /*createdRow: function( row, data, dataIndex){           
         },*/
         /*rowCallback: function (row, data, index) {           
         },*/
+        //"columnDefs": [{"targets":3,"type":"date-eu"}],
         columns: [
+          {
+              data:'fecha_timestamp',
+              name:'fecha_timestamp',
+              //"visible": false
+          },
           {
               data: 'id', 
               name: 'id',
@@ -240,10 +268,16 @@
             , render: function ( data, type, row, meta ) {
               /*var jsonArray = JSON.parse(JSON.stringify(data));*/
               var returndata='';
-              var jsonArray=data.split(",");
-              $.each(jsonArray, function(i, item) {
-                  returndata+=item+'<br>';
-              });
+              if(data==null)
+              {
+                return "SIN PEDIDOS";
+              }else{
+                var jsonArray=data.split(",");
+                $.each(jsonArray, function(i, item) {
+                    returndata+=item+'<br>';
+                });
+              }
+              
               return returndata;
               //return data;
             }
@@ -251,7 +285,7 @@
           { data: 'fecha', name: 'fecha' },////asesor
           { data: 'users', name: 'users' },////asesor
           { data: 'observacion', name: 'observacion'},//observacion
-          { data: 'total_deuda', name: 'total_deuda'},//total_deuda
+          //{ data: 'total_deuda', name: 'total_deuda'},//total_deuda
           { data: 'total_pago', name: 'total_pago'},//total_pago
           {
             data: 'condicion', 
@@ -286,8 +320,25 @@
     });
         
 
+    
+
+  });
+</script>
+{{--<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.4/moment.min.js"></script>--}}
+{{--<script src="https://cdn.datatables.net/plug-ins/1.10.25/sorting/datetime-moment.js"></script>--}}
 
 
+
+<script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+
+<script>
+  $(document).ready(function () { 
+
+    //$.fn.dataTable.moment( 'DD/MM/YYYY' );
+
+    $("#min").datepicker({ onSelect: function () { /*table.draw();*/ }, changeMonth: true, changeYear: true , dateFormat:"dd/mm/yy"});
+      
+    $("#max").datepicker({ onSelect: function () { /*table.draw();*/ }, changeMonth: true, changeYear: true, dateFormat:"dd/mm/yy" });
   });
 </script>
 

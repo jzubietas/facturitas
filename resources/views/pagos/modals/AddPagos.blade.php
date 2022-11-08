@@ -21,6 +21,17 @@
               {!! Form::label('tipotransferencia', 'Tipo Movimiento') !!}              
               {!! Form::select('tipotransferencia[]', $tipotransferencia, '', ['class' => 'form-control selectpicker border border-secondary', 'id'=>'tipotransferencia','data-live-search' => 'true', 'placeholder' => '---- SELECCIONE ----']) !!}  
             </div>
+
+            <div class="form-group col-lg-6 banco_procedencia">
+              {!! Form::label('pbancoprocedencia', 'Banco Procedencia') !!}
+              {!! Form::select('pbancoprocedencia', $bancos_procedencia , '0', ['class' => 'form-control selectpicker border border-secondary', 'data-live-search' => 'true', 'placeholder' => '---- SELECCIONE ----']) !!}
+            </div>
+
+            <div class="form-group col lg-6 banco_procedencia_otro" style="font-size: 18px">
+              {!! Form::label('otro_bancoprocedencia', 'Otro Banco') !!}
+              {!! Form::textarea('otro_bancoprocedencia', '', ['class' => 'form-control', 'rows' => '1', 'placeholder' => 'Otro banco de procedencia']) !!} {{--, 'required' => 'required'--}}
+            </div>
+
             <div class="form-group col-lg-12">
               {!! Form::label('titulares', 'Titulares') !!}
               {!! Form::select('titulares', $titulares , '0', ['class' => 'form-control selectpicker border border-secondary', 'data-live-search' => 'true', 'placeholder' => '---- SELECCIONE ----']) !!}

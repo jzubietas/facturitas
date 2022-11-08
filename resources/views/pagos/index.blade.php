@@ -58,7 +58,7 @@
             <th scope="col">Asesor</th>
             <th scope="col">Cliente</th>
             <th scope="col">Observacion</th>
-            <th scope="col">Total cobro</th>
+            {{--<th scope="col">Total cobro</th>--}}
             <th scope="col">Total pagado</th>
             <th scope="col">Fecha</th>
             <th scope="col">Estado</th>
@@ -233,20 +233,17 @@
         {
           data: 'codigos'
           , name: 'codigos' 
-          , render: function ( data, type, row, meta ) {            
-            /*var jsonArray = JSON.parse(JSON.stringify(data));
-            var returndata='';
-            $.each(jsonArray, function(i, item) {
-                returndata+=item.codigos+'<br>';
-            });
-
-            return returndata;*/
-            var returndata='';
+          , render: function ( data, type, row, meta ) {    
+            if(data==null){
+              return 'SIN PEDIDOS';
+            }else{
+              var returndata='';
               var jsonArray=data.split(",");
               $.each(jsonArray, function(i, item) {
                   returndata+=item+'<br>';
               });
               return returndata;
+            }  
           }
         },
         {//asesor
@@ -261,9 +258,9 @@
         {//observacion
           data: 'observacion', name: 'observacion'
         },
-        {//totalcobro
+        /*{
           data: 'total_cobro', name: 'total_cobro'
-        },
+        },*/
         {//totalpagado
           data: 'total_pago', name: 'total_pago'
         },

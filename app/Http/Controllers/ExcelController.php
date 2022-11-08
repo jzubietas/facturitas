@@ -29,7 +29,9 @@ use App\Exports\PedidosPorAtenderExport;
 use App\Exports\PedidosPorEnviarExport;
 use App\Exports\PedidosPorFechasExport;
 use App\Exports\PedidosSinPagosExport;
+use App\Exports\PagosPorRevisarExport;
 use App\Models\Pedido;
+use App\Models\Pago;
 use Carbon\Carbon;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Http\Request;
@@ -41,6 +43,22 @@ class ExcelController extends Controller
     // {
     //     return Excel::download(new ClientesExport, 'Lista de Clientes.xlsx');
     // }
+    public function porrevisarExcel(Request $request)
+    {
+        ini_set('memory_limit', '-1');
+        set_time_limit(3000000);
+        return (new PagosPorRevisarExport)
+                ->pagos($request)
+                ->download('Lista de pagos por por revisar.xlsx');
+    }
+
+    /*public function porrevisarExcel(Request $request)
+    {
+        return (new PagosIncompletosExport)
+                ->pagos($request)
+                ->download('Lista de Pagos Incompletos.xlsx');          
+    }*/
+
     public function clientesExcel(Request $request)
     {
         return (new ClientesExport)
@@ -270,4 +288,8 @@ class ExcelController extends Controller
                 ->pagos($request)
                 ->download('Lista de pagos por asesores.xlsx');
     }
+
+    
+
+    
 }
