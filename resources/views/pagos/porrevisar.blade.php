@@ -7,14 +7,16 @@
     @can('pagos.create')
       {{--<a href="{{ route('pagos.create') }}" class="btn btn-info"><i class="fas fa-plus-circle"></i> Agregar</a>--}}
     @endcan
+    
     <div class="float-right btn-group dropleft">
       <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         Exportar
       </button>
-       <div class="dropdown-menu">
-        <a href="{{ route('porrevisarExcel') }}" class="dropdown-item"><img src="{{ asset('imagenes/icon-excel.png') }}"> EXCEL</a>
-      </div> 
+      <div class="dropdown-menu">
+        <a href="" data-target="#modal-exportar" data-toggle="modal" class="dropdown-item" target="blank_"><img src="{{ asset('imagenes/icon-excel.png') }}"> Excel</a>
+      </div>
     </div>
+    @include('pagos.modals.exportar', ['title' => 'Exportar Lista de pagos', 'key' => '6'])  
   </h1>
   
   @if($superasesor > 0)
@@ -53,7 +55,7 @@
       <table id="tablaPrincipal" class="table table-striped">
         <thead>
           <tr>
-          <th scope="col">COD.</th>
+            <th scope="col">COD.</th>
             <th scope="col">COD.</th>
             <th scope="col">Cliente</th>
             <th scope="col">Codigo pedido</th>
@@ -221,7 +223,7 @@
         processing: true,
         serverSide: true,
         searching: true,
-        "order": [[ 0, "desc" ]],
+        "order": [[ 0, "asc" ]],
         ajax: {
           url: "{{ route('administracion.porrevisartabla') }}",
           data: function (d) {
@@ -241,7 +243,7 @@
           {
               data:'fecha_timestamp',
               name:'fecha_timestamp',
-              //"visible": false
+              "visible": false
           },
           {
               data: 'id', 

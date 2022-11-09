@@ -25,6 +25,7 @@ class ClienteController extends Controller
     {
         $dateM = Carbon::now()->format('m');
         $dateY = Carbon::now()->format('Y');
+        $mirol=Auth::user()->rol;
 
         $anios = [
             "2020" => '2020 - 2021',
@@ -422,7 +423,7 @@ class ClienteController extends Controller
 
         $superasesor = User::where('rol', 'Super asesor')->count();
 
-        return view('clientes.index', compact('clientes1', 'clientes2', 'clientes3', 'anios', 'dateM', 'dateY', 'superasesor'));
+        return view('clientes.index', compact('clientes1', 'clientes2', 'clientes3', 'anios', 'dateM', 'dateY', 'superasesor','mirol'));
     }
     
     public function indextabla(Request $request)
@@ -852,9 +853,15 @@ class ClienteController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Cliente $cliente)
     {
-        //
+        //return $cliente;
+        $users = User::where('users.estado','1')
+        ->where('users.rol', 'Asesor')
+        ->pluck('name', 'id');
+        $porcentajes = Porcentaje::where('cliente_id', $cliente->id)->get();
+
+        return view('clientes.show', compact('cliente', 'users', 'porcentajes'));
     }
 
     /**

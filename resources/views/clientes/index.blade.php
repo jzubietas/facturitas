@@ -183,9 +183,16 @@ $(document).ready(function () {
             var urledit = '{{ route("clientes.edit", ":id") }}';
             urledit = urledit.replace(':id', row.id);
 
+            var urlshow = '{{ route("clientes.show", ":id") }}';
+            urlshow = urlshow.replace(':id', row.id);
+
             @can('clientes.edit')
               data = data+'<a href="'+urledit+'" class="btn btn-warning btn-sm"><i class="fas fa-edit"></i> Editar</a>';
             @endcan
+
+            @if($mirol !='Administradorsdsd')
+              data = data+'<a href="'+urlshow+'" class="btn btn-info btn-sm"><i class="fas fa-edit"></i> Ver</a>';
+            @endif
 
             @can('clientes.destroy')
               data = data+'<a href="" data-target="#modal-delete" data-toggle="modal" data-opcion="'+row.id+'"><button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i> Eliminar</button></a>'; 

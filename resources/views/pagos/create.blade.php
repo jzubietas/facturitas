@@ -443,7 +443,7 @@ tfoot td {
                     //return '<input type="hidden" name="fecha['+row.item+']" value="' + data + '"><span class="fecha">' + data + '</span></td>';
                     //<input type="file" id="imagen" name="imagen[]" accept= "image/*" style="width:150px;"/>
                     //<input type="file" id="imagen" name="imagen[]" accept= "image/*" style="width:150px;"/>
-                    var str="storage/adjuntos/"+data;
+                    var str="storage/pagos/"+data;
                     var urlimage = '{{ asset(":id") }}';
 
                     urlimage = urlimage.replace(':id', str);
@@ -1130,7 +1130,7 @@ tfoot td {
                   sWidth:'10%', 
                   render: function ( data, type, row, meta ) {
                    
-                    var str="storage/adjuntos/"+data;
+                    var str="storage/pagos/"+data;
                     var urlimage = '{{ asset(":id") }}';
 
                     urlimage = urlimage.replace(':id', str);

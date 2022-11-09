@@ -339,8 +339,8 @@
              'warning'
            )
            return false;
-       }else{
-         //
+       }/*else{
+         
          var totalfilescarga = $('input[name="adjunto[]"]').get(0).files.length;
          console.log("totalfilescarga "+totalfilescarga);
          
@@ -359,7 +359,7 @@
            }
          }
 
-       }
+       }*/
        
        fd.append( 'user_id', $("#user_id").val() );
        fd.append( 'cliente_id', $("#cliente_id").val() );

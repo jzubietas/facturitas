@@ -139,6 +139,7 @@ Route::get('administracion.revisarpago', [PagoController::class, 'Revisarpago'])
 
 Route::resource('movimientos', MovimientoController::class)->names('movimientos');
 Route::get('movimientostabla', [MovimientoController::class, 'indextabla'])->name('movimientostabla');//actualizado para serverside
+Route::get('movimientostablaconciliar', [MovimientoController::class, 'indextablaconciliar'])->name('movimientostablaconciliar');//actualizado para serverside
 Route::get('tipomovimiento', [MovimientoController::class, 'tipomovimiento'])->name('cargar.tipomovimiento');
 Route::get('validar_repetido', [MovimientoController::class, 'repeat'])->name('validar_repetido');
 Route::post('movimientodeleteRequest', [MovimientoController::class, 'destroyid'])->name('movimientodeleteRequest.post');

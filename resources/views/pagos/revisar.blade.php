@@ -10,6 +10,8 @@
 
 @section('content')
 
+@include('pagos.movimientos')
+
   <div class="card">
       
     {!! Form::model($pago, ['route' => ['administracion.updaterevisar', $pago],'enctype'=>'multipart/form-data', 'id'=>'formulario','files'=>true]) !!}
@@ -108,15 +110,17 @@
         </div>
       </div>
     </div>
+    
+    {{--@include('pagos.conciliar')--}}
 
-    @include('pagos.movimientos')
+    
     <div class="card-body">
       <div class="border rounded card-body border-secondary">
         <div class="form-row">
           <div class="form-group col-lg-12">
             <h3 style="text-align: center"><strong>PAGOS REALIZADOS POR EL CLIENTE</strong> @if($pagos->saldo>0) SALDO A FAVOR DEL CLIENTE: {{ $pagos->saldo }}@endif</h3>
             
-            <a href="" data-target="#modal-movimientos-get" data-toggle="modal"><button class="btn btn-danger btn-sm">Movimientos</button></a>
+            {{--<a href="" data-target="#modal-movimientos-get" data-toggle="modal"><button class="btn btn-danger btn-sm">Movimientos</button></a>--}}
 
             <div class="table-responsive">
               <table class="table table-striped">
@@ -155,12 +159,19 @@
                       <td>
                         {{-- <input type="text" class="form-control" value={{$detallePago->fecha_deposito}} name="fecha_deposito[]" id="fecha_deposito"> --}}
                         {!! Form::date('fecha_deposito[]', $detallePago->fecha_deposito, ['class' => 'form-control', 'id' => 'fecha_deposito']) !!}
+                        <p>
+                          <br>
+                          <a href="" data-target="#modal-conciliar-get" data-toggle="modal" data-conciliar="{{ $detallePago->id }}"><button class="btn btn-danger btn-sm">Conciliar</button></a>
+                        </p>
                       </td>
                       <td>
                         <a href="" data-target="#modal-imagen-{{ $detallePago->id }}" data-toggle="modal">
                           <img src="{{ asset('storage/pagos/' . $detallePago->imagen) }}" alt="{{ $detallePago->imagen }}" height="200px" width="200px" class="img-thumbnail">
-                        </a>  
-                        <p><br><a href="{{ route('pagos.descargarimagen', $detallePago->imagen) }}"><button type="button" class="btn btn-secondary"> Descargar</button></a></p>
+                        </a>
+                        <p>
+                          <br>
+                          <a href="{{ route('pagos.descargarimagen', $detallePago->imagen) }}"><button type="button" class="btn btn-secondary"> Descargar</button></a>
+                        </p>
                       </td>
                     </tr>
                     @php
@@ -194,7 +205,7 @@
                         @endforeach
                       </select>
                     </th>
-                  </tr>                  
+                  </tr>
                 </tfoot>
               </table>
             </div>
@@ -212,7 +223,152 @@
 
 @section('js')
 
-  <script src="{{ asset('js/datatables.js') }}"></script>
+  {{--<script src="{{ asset('js/datatables.js') }}"></script>--}}
+  <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+  <script>
+    var tableconciliar=null;
+    $(document).ready(function() {
+
+      tableconciliar=$('#tablaPrincipalConciliar').DataTable({
+          "bPaginate": false,
+          "bFilter": false,
+          "bInfo": false,
+          columns: 
+          [
+            {
+              data: 'titular'
+            },
+            {
+              data: 'banco'
+            },
+            {
+              data: 'fecha'
+            },
+            {
+              data: 'movimiento'
+            },
+            {
+              data: 'monto'
+            }
+          ],
+          language: {
+            "decimal": "",
+            "emptyTable": "No hay informaciÃ³n",
+            "info": "Mostrando del _START_ al _END_ de _TOTAL_ Entradas",
+            "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
+            "infoFiltered": "(Filtrado de _MAX_ total entradas)",
+            "infoPostFix": "",
+            "thousands": ",",
+            "lengthMenu": "Mostrar _MENU_ Entradas",
+            "loadingRecords": "Cargando...",
+            "processing": "Procesando...",
+            "search": "Buscar:",
+            "zeroRecords": "Sin resultados encontrados",
+            "paginate": {
+            "first": "Primero",
+            "last": "Ultimo",
+            "next": "Siguiente",
+            "previous": "Anterior"
+            }
+          }
+        });
+
+      $('#modal-conciliar-get').on('show.bs.modal', function (event) {
+       
+        console.log("aa")
+        var button = $(event.relatedTarget) 
+        var idunico = button.data('conciliar')
+        console.log(idunico);
+
+        //var obtener_detpag='191';
+        tableconciliar.destroy();
+
+        tableconciliar=$('#tablaPrincipalConciliar').DataTable({
+          "bPaginate": true,
+          "bFilter": true,
+          "bInfo": true,
+          "bAutoWidth": false,
+          //"order": [[ 0, "desc" ]],
+          'ajax': {
+            url:"{{ route('movimientostablaconciliar') }}",					
+            'data': { "conciliar":idunico}, 
+            "type": "get",
+          },
+          columns: 
+          [
+            {
+              data: 'titular', 
+              name: 'titular',
+              sWidth:'30%',
+              render: function ( data, type, row, meta ) {
+                return '<span class="titular">' + data + '</span>';
+              }
+            },
+            {
+              data: 'banco', 
+              name: 'banco',
+              sWidth:'15%', 
+              render: function ( data, type, row, meta ) {
+                return '<span class="banco">' + data + '</span>';
+              }
+            },
+            {
+              data: 'fecha', 
+              name: 'fecha',
+              sWidth:'10%', 
+              render: function ( data, type, row, meta ) {
+                return '<span class="fecha">' + data + '</span>';
+              }
+            },
+            {
+              data: 'tipo', 
+              name: 'tipo',
+              sWidth:'20%', 
+              render: function ( data, type, row, meta ) {
+                return '<span class="tipomovimiento">' + data + '</span>';
+              }
+            },
+            {
+              data: 'importe', 
+              name: 'importe',
+              sWidth:'10%', 
+              render: function ( data, type, row, meta ) {
+                return '<span class="monto">' + data + '</span>';
+              }
+            },
+          ],
+          language: {
+            "decimal": "",
+            "emptyTable": "No hay informaciÃ³n",
+            "info": "Mostrando del _START_ al _END_ de _TOTAL_ Entradas",
+            "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
+            "infoFiltered": "(Filtrado de _MAX_ total entradas)",
+            "infoPostFix": "",
+            "thousands": ",",
+            "lengthMenu": "Mostrar _MENU_ Entradas",
+            "loadingRecords": "Cargando...",
+            "processing": "Procesando...",
+            "search": "Buscar:",
+            "zeroRecords": "Sin resultados encontrados",
+            "paginate": {
+            "first": "Primero",
+            "last": "Ultimo",
+            "next": "Siguiente",
+            "previous": "Anterior"
+            }
+          },
+        });
+
+
+      });
+
+    });
+
+        
+  </script>
+
+
   <script>
     //VALIDAR ANTES DE ENVIAR
     document.addEventListener("DOMContentLoaded", function() {

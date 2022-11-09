@@ -46,9 +46,11 @@ class PedidoController extends Controller
         $dateMin = Carbon::now()->subDays(4)->format('d/m/Y');
         $dateMax = Carbon::now()->format('d/m/Y');
 
+        $mirol=Auth::user()->rol;
+
         $superasesor = User::where('rol', 'Super asesor')->count();
 
-        return view('pedidos.index', compact('dateMin', 'dateMax', 'superasesor'));
+        return view('pedidos.index', compact('dateMin', 'dateMax', 'superasesor','mirol'));
     }
 
     public function indextablahistorial(Request $request)
@@ -101,8 +103,18 @@ class PedidoController extends Controller
     public function indextabla(Request $request)
     {
         $mirol=Auth::user()->rol;
-        
+        //return Auth::user()->rol ;
+        //return Auth::user()->id;
         if(Auth::user()->rol == "Llamadas"){
+            $usersasesores = User::where('users.rol', 'Asesor')
+                -> where('users.estado', '1')
+                -> where('users.llamada', Auth::user()->id)
+                ->select(
+                    DB::raw("users.id as id")
+                )
+                ->pluck('users.id');            
+            
+
             $pedidos = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')
             ->join('users as u', 'pedidos.user_id', 'u.id')
             ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
@@ -125,9 +137,8 @@ class PedidoController extends Controller
                 'pedidos.estado',
                 'pedidos.envio',
             )
-            ->where('pp.estado', '1')
-            ->where('u.llamada', Auth::user()->id)
             ->whereIn('pedidos.condicion', ['POR ATENDER', 'EN PROCESO ATENCION', 'ATENDIDO', 'ANULADO'])
+            ->WhereIn('pedidos.user_id',$usersasesores)
             ->groupBy(
                 'pedidos.id',
                 'c.nombre',
@@ -150,6 +161,14 @@ class PedidoController extends Controller
             ->get();
         }
         else if(Auth::user()->rol == "Jefe de llamadas"){
+            $usersasesores = User::where('users.rol', 'Asesor')
+                -> where('users.estado', '1')
+                -> where('users.llamada', Auth::user()->id)
+                ->select(
+                    DB::raw("users.id as id")
+                )
+                ->pluck('users.id');
+
             $pedidos = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')
             ->join('users as u', 'pedidos.user_id', 'u.id')
             ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
@@ -172,9 +191,8 @@ class PedidoController extends Controller
                 'pedidos.estado',
                 'pedidos.envio',
             )
-            ->where('pp.estado', '1')
-            ->where('u.llamada', Auth::user()->id)
             ->whereIn('pedidos.condicion', ['POR ATENDER', 'EN PROCESO ATENCION', 'ATENDIDO', 'ANULADO'])
+            ->WhereIn('pedidos.user_id',$usersasesores)
             ->groupBy(
                 'pedidos.id',
                 'c.nombre',
@@ -225,7 +243,7 @@ class PedidoController extends Controller
             )
             /* ->where('pedidos.estado', '1') */
             /* ->where('dp.estado', '1') */
-            ->where('pp.estado', '1')
+            //->where('pp.estado', '1')
             //->where('pedidos.pago', '1') 0 sin pago  1 con pago
             ->whereIn('pedidos.condicion', ['POR ATENDER', 'EN PROCESO ATENCION', 'ATENDIDO', 'ANULADO'])//agregado para regularizar
             //->where('pa.estado', '1') 0 sin pago 1 con pago
@@ -281,7 +299,7 @@ class PedidoController extends Controller
             /* ->where('pedidos.estado', '1') */
             /* ->where('dp.estado', '1') */
             //->where('pedidos.pago', '1') 0 sin pago  1 con pago
-            ->where('pp.estado', '1')
+            //->where('pp.estado', '1')
             ->whereIn('pedidos.condicion', ['POR ATENDER', 'EN PROCESO ATENCION', 'ATENDIDO', 'ANULADO'])//agregado para regularizar
             //->where('pa.estado', '1') 0 sin pago 1 con pago
             ->groupBy(
@@ -779,16 +797,71 @@ class PedidoController extends Controller
 
     public function clientedeasesor(Request $request)//clientes
     {
+        
         if (!$request->user_id  || $request->user_id=='') {
             $html = '<option value="">' . trans('---- SELECCIONE CLIENTE ----') . '</option>';
         }else{
 
             $html = '<option value="">' . trans('---- SELECCIONE CLIENTE ----') . '</option>';
+
             $clientes = Cliente::where('clientes.user_id', $request->user_id)
-                                ->where('clientes.tipo', '1')
-                                ->get();        
+                            ->where('clientes.tipo', '1')
+                            ->get([
+                                'clientes.id',
+                                'clientes.crea_temporal',
+                                'clientes.activado_tiempo',
+                                'clientes.activado_pedido',
+                                'clientes.temporal_update',
+                                'clientes.celular',
+                                'clientes.nombre',
+                                DB::raw(" (select count(ped.id) from pedidos ped where ped.cliente_id=clientes.id and ped.pago in (0,1) and ped.pagado in (0,1) and ped.created_at >='2022-11-01 00:00:00') as pedidos_mes_deuda "),
+                                DB::raw(" (select count(ped2.id) from pedidos ped2 where ped2.cliente_id=clientes.id and ped2.pago in (0,1) and ped2.pagado in (0,1) and ped2.created_at <='2022-10-31 00:00:00') as pedidos_mes_deuda_antes "),
+                            ]);
+                                //->get();  
+                                //'deuda' => "0",
+                /*'crea_temporal' => "1",
+                'activado_tiempo' => $pcantidad_tiempo,
+                'activado_pedido' => $pcantidad_pedido*/  
+            
             foreach ($clientes as $cliente) {
-                if($cliente->deuda=="0")
+                //////
+                if($cliente->crea_temporal==1)
+                {
+                    if($cliente->activado_tiempo>0)
+                    {
+                        {
+                            $fecha_compa=Carbon($cliente->temporal_update.tostring())->addMinutes($cliente->activado_tiempo);                            
+                            $ahora = Carbon::now();
+                            if($fecha_compa<$ahora)
+                            {
+                                $html .= '<option style="color:white" value="' . $cliente->id . '">' . $cliente->celular. '  -  ' . $cliente->nombre . '</option>';
+                            }else{
+                                //update
+                                
+                                $html .= '<option disabled style="color:red" value="' . $cliente->id . '">' . $cliente->celular. '  -  ' . $cliente->nombre . '**CLIENTE CON DEUDA**</option>';
+                            }
+                        }
+                    }
+
+                    //$html .= '<option style="color:white" value="' . $cliente->id . '">' . $cliente->celular. '  -  ' . $cliente->nombre . '</option>';
+                }else{
+                    if($cliente->pedidos_mes_deuda>0 && $cliente->pedidos_mes_deuda_antes==0)
+                    {
+                        $html .= '<option style="color:lightblue" value="' . $cliente->id . '">' . $cliente->celular. '  -  ' . $cliente->nombre . '</option>';
+    
+                    }else if($cliente->pedidos_mes_deuda>0 && $cliente->pedidos_mes_deuda_antes>0)
+                    {
+                        $html .= '<option disabled style="color:red" value="' . $cliente->id . '">' . $cliente->celular. '  -  ' . $cliente->nombre . '**CLIENTE CON DEUDA**</option>';
+                    }else if($cliente->pedidos_mes_deuda==0 && $cliente->pedidos_mes_deuda_antes>0)
+                    {
+                        $html .= '<option disabled style="color:red" value="' . $cliente->id . '">' . $cliente->celular. '  -  ' . $cliente->nombre . '**CLIENTE CON DEUDA**</option>';
+                    }else{
+                        $html .= '<option style="color:white" value="' . $cliente->id . '">' . $cliente->celular. '  -  ' . $cliente->nombre . '</option>';
+                    }
+                }
+                
+
+                /*if($cliente->deuda=="0")
                 {
                     $html .= '<option style="color:#000" value="' . $cliente->id . '">' . $cliente->celular. '  -  ' . $cliente->nombre . '</option>';
                 }else{
@@ -803,8 +876,8 @@ class PedidoController extends Controller
                         $html .= '<option disabled style="color:#fff" value="' . $cliente->id . '">' . $cliente->celular. '  -  ' . $cliente->nombre . '</option>';
                     }
 
-                }
-                //$html .= '<option value="' . $cliente->id . '">' . $cliente->celular. '  -  ' . $cliente->nombre . '</option>';
+                }*/
+                
             }
         }
         
@@ -1650,6 +1723,8 @@ class PedidoController extends Controller
         $dateMin = Carbon::now()->subDays(4)->format('d/m/Y');
         $dateMax = Carbon::now()->format('d/m/Y');
 
+        $mirol=Auth::user()->rol;
+
         $destinos = [
             "LIMA" => 'LIMA',
             "PROVINCIA" => 'PROVINCIA'
@@ -1657,7 +1732,7 @@ class PedidoController extends Controller
 
         $superasesor = User::where('rol', 'Super asesor')->count();
 
-        return view('pedidos.misPedidos', compact('destinos', 'superasesor', 'dateMin', 'dateMax'));
+        return view('pedidos.misPedidos', compact('destinos', 'superasesor', 'dateMin', 'dateMax','mirol'));
     }
     
     public function mispedidostabla(Request $request)

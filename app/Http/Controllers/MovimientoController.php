@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\MovimientoBancario;
 use App\Models\Pago;
+use App\Models\DetallePago;
 use App\Models\User;
 use App\Models\TipoMovimiento;
 use Illuminate\Http\Request;
@@ -85,24 +86,54 @@ class MovimientoController extends Controller
                     ->addIndexColumn()
                     ->addColumn('action', function($movimiento){     
                         $btn='';
-                        /* if(Auth::user()->rol == "Administrador"){*/
-                            //$btn=$btn.'<a href="'.route('movimientos.show', $movimiento['id']).'" class="btn btn-info btn-sm">Ver</a>';
-                            //$btn=$btn.'<a href="'.route('movimientos.edit', $movimiento['id']).'" class="btn btn-warning btn-sm">Editar</a>';
-                            //$btn = $btn.'<a href="" data-target="#modal-delete" data-toggle="modal" data-delete="'.$movimiento['id'].'"><button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i> Eliminar</button></a>';
-                        /* }else if(Auth::user()->rol == "Encargado"){
-                            $btn=$btn.'<a href="'.route('pagos.show', $pago['id']).'" class="btn btn-info btn-sm">Ver</a>';
-                            $btn=$btn.'<a href="'.route('pagos.edit', $pago['id']).'" class="btn btn-warning btn-sm">Editar</a>';
-                            $btn = $btn.'<a href="" data-target="#modal-delete" data-toggle="modal" data-delete="'.$pago['id'].'"><button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i> Eliminar</button></a>';
-                        }else if(Auth::user()->rol == "Asesor"){
-                            $btn=$btn.'<a href="'.route('pagos.show', $pago['id']).'" class="btn btn-info btn-sm">Ver</a>';
-                            $btn=$btn.'<a href="'.route('pagos.edit', $pago['id']).'" class="btn btn-warning btn-sm">Editar</a>';
-                            $btn = $btn.'<a href="" data-target="#modal-delete" data-toggle="modal" data-delete="'.$pago['id'].'"><button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i> Eliminar</button></a>';
-                        }else{
-                            $btn=$btn.'<a href="'.route('pagos.show', $pago['id']).'" class="btn btn-info btn-sm">Ver</a>';
-                            $btn=$btn.'<a href="'.route('pagos.edit', $pago['id']).'" class="btn btn-warning btn-sm">Editar</a>';
-                            $btn = $btn.'<a href="" data-target="#modal-delete" data-toggle="modal" data-delete="'.$pago['id'].'"><button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i> Eliminar</button></a>';
-                        } */
-                        
+                        return $btn;
+                    })
+                    ->rawColumns(['action'])
+                    ->make(true);
+    }
+
+    public function indextablaconciliar(Request $request)
+    {
+        $movimientos = null;
+
+        $conciliar=$request->conciliar;
+
+        $comparar=DetallePago::where('id',$conciliar)->first();
+
+        /**/
+        $banco_compara=$comparar->banco;
+        return $comparar;
+        $monto_compara=$comparar->importe;
+        $titular_compara=$comparar->titular;
+        $fecha_compara=$comparar->fecha;
+        /**/
+
+        $movimientos = MovimientoBancario::where('estado', '1');//->get();
+        $buscar_banco=$banco_compara;
+        //$buscar_tipo=$request->tipo;
+        $buscar_titular=$titular_compara;
+        //return $buscar_banco;
+        if($buscar_banco)
+        {
+            $movimientos = $movimientos->where('banco','like','%'.$buscar_banco.'%');
+        }
+
+        /*if($buscar_tipo)
+        {
+            $movimientos = $movimientos->where('tipo','like','%'.$buscar_tipo.'%');
+        }*/
+
+        if($buscar_titular)
+        {
+            $movimientos = $movimientos->where('titular','like','%'.$buscar_titular.'%');
+        }
+
+        $movimientos = $movimientos->get();
+
+        return Datatables::of($movimientos)
+                    ->addIndexColumn()
+                    ->addColumn('action', function($movimiento){     
+                        $btn='';
                         return $btn;
                     })
                     ->rawColumns(['action'])

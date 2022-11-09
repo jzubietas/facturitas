@@ -43,12 +43,13 @@
         <thead>
           <tr>
             <th scope="col">COD.</th>
+            <th scope="col">COD.</th>
             <th scope="col">Cliente</th>
             <th scope="col">Codigo pedido</th>
             <th scope="col">Fecha Voucher</th>
             <th scope="col">Asesor</th>
             <th scope="col">Observacion</th>
-            <th scope="col">Total cobro</th>
+            {{--<th scope="col">Total cobro</th>--}}
             <th scope="col">Total pagado</th>
             <th scope="col">Estado</th>
             <th scope="col">Acciones</th>
@@ -198,7 +199,7 @@
         processing: true,
         serverSide: true,
         searching: true,
-        "order": [[ 0, "desc" ]],
+        "order": [[ 0, "asc" ]],
         ajax: {
           url: "{{ route('administracion.abonadostabla') }}",
           data: function (d) {
@@ -213,6 +214,11 @@
         /*rowCallback: function (row, data, index) {           
         },*/
         columns: [
+          {
+              data:'fecha_timestamp',
+              name:'fecha_timestamp',
+              "visible": false
+          },
           {
               data: 'id', 
               name: 'id',
@@ -233,20 +239,26 @@
             data: 'codigos'
             , name: 'codigos' 
             , render: function ( data, type, row, meta ) {
-              /*var jsonArray = JSON.parse(JSON.stringify(data));*/
-              var returndata='';
-              var jsonArray=data.split(",");
-              $.each(jsonArray, function(i, item) {
-                  returndata+=item+'<br>';
-              });
-              return returndata;
-              //return data;
+              if(data==null)
+              {
+                return "SIN PEDIDOS";
+              }else{
+                /*var jsonArray = JSON.parse(JSON.stringify(data));*/
+                var returndata='';
+                var jsonArray=data.split(",");
+                $.each(jsonArray, function(i, item) {
+                    returndata+=item+'<br>';
+                });
+                return returndata;
+                //return data;
+              }
+              
             }
           },
           { data: 'fecha', name: 'fecha' },////asesor
           { data: 'users', name: 'users' },////asesor
           { data: 'observacion', name: 'observacion'},//observacion
-          { data: 'total_deuda', name: 'total_deuda'},//total_deuda
+          //{ data: 'total_deuda', name: 'total_deuda'},//total_deuda
           { data: 'total_pago', name: 'total_pago'},//total_pago
           {
             data: 'condicion', 
