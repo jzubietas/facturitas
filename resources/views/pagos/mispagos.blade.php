@@ -68,7 +68,7 @@
             <th scope="col">Asesor</th>
             <th scope="col">Cliente</th>
             <th scope="col">Observacion</th>
-            <th scope="col">Total cobro</th>
+            {{--<th scope="col">Total cobro</th>--}}
             <th scope="col">Total pagado</th>
             <th scope="col">fecha</th>
             <th scope="col">Estado</th>
@@ -76,31 +76,7 @@
           </tr>
         </thead>
         <tbody>
-          @foreach ($pagos as $pago)
-            <tr>
-              <td>PAG000{{ $pago->id }}</td>
-              <td>{{ $pago->codigos }}</td>
-              <td>{{ $pago->users }}</td>
-              <td>{{ $pago->celular }}</td>
-              <td>{{ $pago->observacion }}</td>
-              <td>@php echo number_format($pago->total_deuda,2) @endphp</td>
-              <td>@php echo number_format($pago->total_pago,2) @endphp</td>
-              <td>{{ $pago->fecha }}</td>
-              <td>{{ $pago->condicion }}</td>
-              <td>                
-                @can('pagos.show')
-                  <a href="{{ route('pagos.show', $pago) }}" class="btn btn-info btn-sm">Ver</a>
-                @endcan
-                @can('pagos.edit')
-                  <a href="{{ route('pagos.edit', $pago) }}" class="btn btn-warning btn-sm">Editar</a>
-                @endcan
-                @can('pagos.destroy')
-                  <a href="" data-target="#modal-delete-{{ $pago->id }}" data-toggle="modal"><button class="btn btn-danger btn-sm">Eliminar</button></a>
-                @endcan                
-              </td>
-            </tr>
-            @include('pagos.modals.modalDelete')
-          @endforeach
+         
         </tbody>
       </table>
     </div>
@@ -155,7 +131,159 @@
 
 @section('js')
 
-  <script src="{{ asset('js/datatables.js') }}"></script>
+  <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+
+  <script>
+  $(document).ready(function () {
+
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+
+    $('#tablaPrincipal').DataTable({
+        processing: true,
+        serverSide: true,
+        searching: true,
+        "order": [[ 0, "desc" ]],
+        ajax: "{{ route('MisPagosTabla') }}",
+        createdRow: function( row, data, dataIndex){           
+        },
+        rowCallback: function (row, data, index) {           
+        },
+        columns: [
+        {
+            data: 'id', 
+            name: 'id',
+            render: function ( data, type, row, meta ) {   
+              var cantidadvoucher=row.cantidad_voucher;
+              var cantidadpedido=row.cantidad_pedido;
+              var unido= ( (cantidadvoucher>1)? 'V':'I' )+''+( (cantidadpedido>1)? 'V':'I' );
+              if(row.id<10){
+                return 'PAG'+row.users+unido+'000'+row.id;
+              }else if(row.id<100){
+                return 'PAG00'+row.users+unido+''+row.id;
+              }else if(row.id<1000){
+                return 'PAG0'+row.users+unido+''+row.id;
+              }else{
+                return 'PAG'+row.users+unido+''+row.id;
+              }
+
+              /*if(row.id<10){
+                return 'PAG000'+row.id;
+              }else if(row.id<100){
+                return 'PAG00'+row.id;
+              }else if(row.id<1000){
+                return 'PAG0'+row.id;
+              }else{
+                return 'PAG'+row.id;
+              } */
+            }
+        },
+        {
+          data: 'codigos'
+          , name: 'codigos' 
+          , render: function ( data, type, row, meta ) {    
+            if(data==null){
+              return 'SIN PEDIDOS';
+            }else{
+              var returndata='';
+              var jsonArray=data.split(",");
+              $.each(jsonArray, function(i, item) {
+                  returndata+=item+'<br>';
+              });
+              return returndata;
+            }  
+          }
+        },
+        {//asesor
+          data: 'users', name: 'users' },
+        {//cliente
+          data: 'celular', 
+            name: 'celular',
+            render: function ( data, type, row, meta ) {
+              return row.celular;
+            },
+        },
+        {//observacion
+          data: 'observacion', name: 'observacion'
+        },
+        /*{
+          data: 'total_cobro', name: 'total_cobro'
+        },*/
+        {//totalpagado
+          data: 'total_pago', name: 'total_pago'
+        },
+        {//fecha
+          data: 'fecha', 
+          name: 'fecha', 
+          render: function ( data, type, row, meta ) {
+              return data;
+          }
+        },//estado de pedido
+        {
+          data: 'condicion', 
+          name: 'condicion', 
+          render: function ( data, type, row, meta ) {            
+            return data;             
+          }
+        },//estado de pago
+        //{data: 'action', name: 'action', orderable: false, searchable: false,sWidth:'20%'},
+        {
+          data: 'action', 
+          name: 'action', 
+          orderable: false, 
+          searchable: false,
+          sWidth:'20%',
+          render: function ( data, type, row, meta ) {
+           
+            var urlshow = '{{ route("pagos.show", ":id") }}';
+            urlshow = urlshow.replace(':id', row.id);
+
+            var urledit = '{{ route("pagos.edit", ":id") }}';
+            urledit = urledit.replace(':id', row.id);
+            
+            @can('pagos.show')
+              data = data+'<a href="'+urlshow+'" class="btn btn-info btn-sm"><i class="fas fa-eye"></i> VER</a>';
+            @endcan
+            @can('pagos.edit')
+                data = data+'<a href="'+urledit+'" class="btn btn-warning btn-sm"> Editar</a>';
+            @endcan
+            @can('pagos.destroy')
+                //data = data+'<a href="" data-target="#modal-delete" data-toggle="modal" data-delete="'+row.id+'"><button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i> Anular</button></a>';
+            @endcan
+
+            return data;             
+          }
+        },
+        ],
+        language: {
+        "decimal": "",
+        "emptyTable": "No hay informaciÃ³n",
+        "info": "Mostrando del _START_ al _END_ de _TOTAL_ Entradas",
+        "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
+        "infoFiltered": "(Filtrado de _MAX_ total entradas)",
+        "infoPostFix": "",
+        "thousands": ",",
+        "lengthMenu": "Mostrar _MENU_ Entradas",
+        "loadingRecords": "Cargando...",
+        "processing": "Procesando...",
+        "search": "Buscar:",
+        "zeroRecords": "Sin resultados encontrados",
+        "paginate": {
+          "first": "Primero",
+          "last": "Ultimo",
+          "next": "Siguiente",
+          "previous": "Anterior"
+        }
+      },
+    });
+
+
+  });
+  </script>
 
   @if (session('info') == 'registrado' || session('info') == 'eliminado' || session('info') == 'renovado')
     <script>
@@ -170,9 +298,9 @@
   <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
 
   <script>
-    window.onload = function () {      
+    /*window.onload = function () {      
       $('#tablaPrincipal').DataTable().draw();
-    }
+    }*/
   </script>
 
   <script>

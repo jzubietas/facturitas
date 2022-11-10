@@ -795,15 +795,15 @@ tfoot td {
                   return;
                 }
 
-                console.log("montopagos "+montopagos+"  saldo es "+pedidosaldo)
+                console.log("montopagos 1: "+montopagos+"  saldo es "+pedidosaldo)
 
                 if(montopagos>=pedidosaldo)
                 {
                   //acaqueda el codigo
                   $(this).prop("checked",true).val("1")
-                  montopagos=parseFloat(montopagos-pedidosaldo);
-                  console.log("diferencia "+montopagos);
-                  $("#diferencia").val(montopagos.toFixed(2));
+                  montopagos=parseFloat(montopagos-pedidosaldo).toFixed(2);
+                  console.log("diferencia 1: "+montopagos);
+                  $("#diferencia").val(montopagos);
                   
                   console.log("aqui debo cambiar el valor de input y span de columna diferencia - radiototal");
                   $(this).closest('tr').find("td").eq(3).find(":input").val("0.00");
@@ -983,7 +983,7 @@ tfoot td {
                   console.log("no hay pagos ingresados");
                   return;
                 }
-                console.log("montopagos "+montopagos);
+                console.log("montopagos 2: "+montopagos);
                 let filedata=tabla_pedidos.row($(this).closest('tr')).data();
                 let pedidosaldo=parseFloat(filedata.saldo);
                 if(pedidosaldo==null || isNaN(pedidosaldo)){

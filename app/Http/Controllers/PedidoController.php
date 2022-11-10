@@ -534,8 +534,10 @@ class PedidoController extends Controller
             $html=$cliente_id_tiempo."|".$pcantidad_tiempo."|".$pcantidad_pedido;
             $cliente=Cliente::find($cliente_id_tiempo);
             $cliente->update([
-                'activado_tiempo' => $request->asesor,
-                'activado_pedido' => $pcantidad_pedido
+                'crea_temporal' => '1',
+                'activado_tiempo' => $pcantidad_tiempo,
+                'activado_pedido' => $pcantidad_pedido,
+                'temporal_update' => Carbon::now()
             ]);
 
             /*$jefe = User::find($request->asesor, ['jefe']);
@@ -806,8 +808,10 @@ class PedidoController extends Controller
 
             $clientes = Cliente::where('clientes.user_id', $request->user_id)
                             ->where('clientes.tipo', '1')
+                            //->where('clientes.celular','967767676')
                             ->get([
                                 'clientes.id',
+                                'clientes.deuda',
                                 'clientes.crea_temporal',
                                 'clientes.activado_tiempo',
                                 'clientes.activado_pedido',
@@ -824,8 +828,8 @@ class PedidoController extends Controller
                 'activado_pedido' => $pcantidad_pedido*/  
             
             foreach ($clientes as $cliente) {
-                //////
-                if($cliente->crea_temporal==1)
+                
+                /*if($cliente->crea_temporal==1)
                 {
                     if($cliente->activado_tiempo>0)
                     {
@@ -836,14 +840,11 @@ class PedidoController extends Controller
                             {
                                 $html .= '<option style="color:white" value="' . $cliente->id . '">' . $cliente->celular. '  -  ' . $cliente->nombre . '</option>';
                             }else{
-                                //update
                                 
                                 $html .= '<option disabled style="color:red" value="' . $cliente->id . '">' . $cliente->celular. '  -  ' . $cliente->nombre . '**CLIENTE CON DEUDA**</option>';
                             }
                         }
                     }
-
-                    //$html .= '<option style="color:white" value="' . $cliente->id . '">' . $cliente->celular. '  -  ' . $cliente->nombre . '</option>';
                 }else{
                     if($cliente->pedidos_mes_deuda>0 && $cliente->pedidos_mes_deuda_antes==0)
                     {
@@ -858,25 +859,25 @@ class PedidoController extends Controller
                     }else{
                         $html .= '<option style="color:white" value="' . $cliente->id . '">' . $cliente->celular. '  -  ' . $cliente->nombre . '</option>';
                     }
-                }
+                }*/
                 
 
-                /*if($cliente->deuda=="0")
+                if($cliente->deuda=="0")
                 {
-                    $html .= '<option style="color:#000" value="' . $cliente->id . '">' . $cliente->celular. '  -  ' . $cliente->nombre . '</option>';
+                    $html .= '<option style="color:#000" value="' . $cliente->id . '">' . $cliente->celular. '  -  ' . $cliente->nombre. '</option>';
                 }else{
                     if( Auth::user()->rol=='Asesor' )
                     {
                         $html .= '<option disabled style="color:#fff" value="' . $cliente->id . '">' . $cliente->celular. '  -  ' . $cliente->nombre . '**CLIENTE CON DEUDA**</option>';
                     }else if( Auth::user()->rol=='Llamadas' ){
-                        $html .= '<option disabled style="color:#fff" value="' . $cliente->id . '">' . $cliente->celular. '  -  ' . $cliente->nombre . '**CLIENTE CON DEUDA**</option>';
+                        $html .= '<option disabled style="color:#fff" value="' . $cliente->id . '">' . $cliente->celular. '  -  ' . $cliente->nombre. '**CLIENTE CON DEUDA**</option>';
                     }else if( Auth::user()->rol=='Jefe de lamadas' ){
-                        $html .= '<option disabled style="color:#fff" value="' . $cliente->id . '">' . $cliente->celular. '  -  ' . $cliente->nombre . '**CLIENTE CON DEUDA**</option>';
+                        $html .= '<option disabled style="color:#fff" value="' . $cliente->id . '">' . $cliente->celular. '  -  ' . $cliente->nombre  . '**CLIENTE CON DEUDA**</option>';
                     }else{
                         $html .= '<option disabled style="color:#fff" value="' . $cliente->id . '">' . $cliente->celular. '  -  ' . $cliente->nombre . '</option>';
                     }
 
-                }*/
+                }
                 
             }
         }

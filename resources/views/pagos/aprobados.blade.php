@@ -58,7 +58,7 @@
             <th scope="col">Fecha Voucher</th>
             <th scope="col">Asesor</th>
             <th scope="col">Observacion</th>
-            <th scope="col">Total cobro</th>
+            {{--<th scope="col">Total cobro</th>--}}
             <th scope="col">Total pagado</th>
             <th scope="col">Estado</th>
             <th scope="col">Acciones</th>
@@ -212,7 +212,7 @@
           { data: 'fecha', name: 'fecha' },////asesor
           { data: 'users', name: 'users' },////asesor
           { data: 'observacion', name: 'observacion'},//observacion
-          { data: 'total_deuda', name: 'total_deuda'},//total_deuda
+          //{ data: 'total_deuda', name: 'total_deuda'},//total_deuda
           { data: 'total_pago', name: 'total_pago'},//total_pago
           {
             data: 'condicion', 
