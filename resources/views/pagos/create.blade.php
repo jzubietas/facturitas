@@ -1838,13 +1838,7 @@ tfoot td {
                       if(data.html=='0'){
 
                         }else{
-                          /*var urlpdf = '{{ route("pedidosPDF", ":id") }}';           
-                          urlpdf = urlpdf.replace(':id', data.html);
-                          window.open(urlpdf, '_blank');
-
-                          $("#modal-copiar .textcode").text(data.html);
-                          $("#modal-copiar").modal("show");*/
-
+                         
                           document.getElementById("picture").setAttribute('src', "{{asset('imagenes/logo_facturas.png')}}");
                           tabla_pagos.row.add( {
                               "item":       (contPa + 1),

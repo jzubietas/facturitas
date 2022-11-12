@@ -30,6 +30,7 @@ use App\Exports\PedidosPorEnviarExport;
 use App\Exports\PedidosPorFechasExport;
 use App\Exports\PedidosSinPagosExport;
 use App\Exports\PagosPorRevisarExport;
+use App\Exports\UsuariosExport;
 use App\Models\Pedido;
 use App\Models\Pago;
 use Carbon\Carbon;
@@ -58,6 +59,14 @@ class ExcelController extends Controller
                 ->pagos($request)
                 ->download('Lista de Pagos Incompletos.xlsx');          
     }*/
+
+    public function usuariosExcel(Request $request)
+    {
+        return (new UsuariosExport)
+                //->clientes1($request)
+                ->usuarios1($request)
+                ->download('Lista de Usuarios.xlsx');           
+    }
 
     public function clientesExcel(Request $request)
     {

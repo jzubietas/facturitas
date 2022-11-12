@@ -325,6 +325,60 @@ class PedidoController extends Controller
             ->orderBy('pedidos.created_at', 'DESC')
             ->get();
 
+        }else if(Auth::user()->rol == "Encargado"){
+            $usersasesores = User::where('users.rol', 'Asesor')
+                -> where('users.estado', '1')
+                -> where('users.supervisor', Auth::user()->id)
+                ->select(
+                    DB::raw("users.id as id")
+                )
+                ->pluck('users.id');  
+
+            $pedidos = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')
+            ->join('users as u', 'pedidos.user_id', 'u.id')
+            ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
+            ->leftjoin('pago_pedidos as pp', 'pedidos.id','pp.pedido_id')
+            ->select(
+                'pedidos.id',
+                'c.nombre as nombres',
+                'c.celular as celulares',
+                'u.identificador as users',
+                'pedidos.codigo as codigos',
+                'dp.nombre_empresa as empresas',
+                'dp.total as total',
+                'pedidos.condicion_envio',
+                'pedidos.condicion as condiciones',
+                'pedidos.pagado as condicion_pa',
+                'pedidos.motivo',
+                'pedidos.responsable',
+                DB::raw('DATE_FORMAT(pedidos.created_at, "%d/%m/%Y") as fecha'),
+                'dp.saldo as diferencia',
+                'pedidos.estado',
+                'pedidos.envio'
+            )
+            ->whereIn('pedidos.condicion', ['POR ATENDER', 'EN PROCESO ATENCION', 'ATENDIDO', 'ANULADO'])
+            ->WhereIn('pedidos.user_id',$usersasesores)
+            ->groupBy(
+                'pedidos.id',
+                'c.nombre',
+                'c.celular',
+                'u.identificador',
+                'pedidos.codigo',
+                'dp.nombre_empresa',
+                'dp.total',
+                'pedidos.condicion',
+                'pedidos.condicion_envio',
+                'pedidos.pagado',
+                'pedidos.motivo',
+                'pedidos.responsable',
+                'pedidos.created_at',
+                'dp.saldo',
+                'pedidos.estado',
+                'pedidos.envio'
+                )
+            ->orderBy('pedidos.created_at', 'DESC')
+            ->get();
+
         }else{
             $pedidos = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')//PEDIDOS CON PAGOS
             ->join('users as u', 'pedidos.user_id', 'u.id')

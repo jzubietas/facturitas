@@ -37,6 +37,51 @@ class PagoController extends Controller
         return view('pagos.index', compact('pagosobservados_cantidad', 'superasesor'));
     }
 
+    public function indextablahistorial(Request $request)
+    {
+        $query = null;
+        $pedido=$request->pedido;
+        $query=Pago::join('users as u', 'pagos.user_id', 'u.id')
+                ->join('clientes as c', 'pagos.cliente_id', 'c.id')
+                ->select('pagos.id as id',
+                        'u.identificador as users',
+                        'c.celular',
+                        'pagos.observacion',                        
+                        'pagos.total_cobro',
+                        'pagos.condicion',
+                        DB::raw('(select DATE_FORMAT( MIN(dpa.fecha), "%d/%m/%Y %H:%i:%s")   from detalle_pagos dpa where dpa.pago_id=pagos.id and dpa.estado=1) as fecha'),
+                        DB::raw('(select UNIX_TIMESTAMP(MIN(dpa.fecha))   from detalle_pagos dpa where dpa.pago_id=pagos.id and dpa.estado=1) as fecha_timestamp'),
+                        DB::raw(" (select count(dpago.id) from detalle_pagos dpago where dpago.pago_id=pagos.id and dpago.estado in (1) ) as cantidad_voucher "),
+                        DB::raw(" (select count(ppedidos.id) from pago_pedidos ppedidos where ppedidos.pago_id=pagos.id and ppedidos.estado in (1)  ) as cantidad_pedido "),
+                        DB::raw(" ( select GROUP_CONCAT(ppp.codigo) from pago_pedidos ped inner join pedidos ppp on ped.pedido_id =ppp.id where pagos.id=ped.pago_id and ped.estado=1 and ppp.estado=1 and ped.pagado in (1,2)) as codigos "),
+                        //DB::raw(" ( select GROUP_CONCAT(ppp.codigo) from pago_pedidos ped inner join pedidos ppp on ped.pedido_id =ppp.id where pagos.id=ped.pago_id and ped.estado=1 and ped.pagado in (1,2)) as codigos "),
+                        DB::raw(" (select sum(ped2.abono) from pago_pedidos ped2 where ped2.pago_id =pagos.id and ped2.estado=1 and ped2.pagado in (1,2) ) as total_pago ")   
+                        )
+                ->whereIn('pagos.condicion', ['PAGO','ADELANTO','ABONADO'])
+                ->where('pagos.estado', '1');
+
+        /*if ($pedido!='' || is_null($pedido) ) {
+            $query->where('( select GROUP_CONCAT(ppp.codigo) from pago_pedidos ped inner join pedidos ppp on ped.pedido_id =ppp.id where pagos.id=ped.pago_id and ped.estado=1 and ppp.estado=1 and ped.pagado in (1,2))','LIKE','%'.$pedido.'%');
+            
+        }*/
+
+        $pagos = $query->get();
+
+        
+        return Datatables::of($pagos)
+            ->addIndexColumn()
+            ->addColumn('action', function($pago){     
+                $btn='';
+                
+                $btn=$btn.'<a href="'.route('pagos.show', $pago['id']).'" class="btn btn-info btn-sm">Ver</a>';
+                  
+                
+                return $btn;
+            })
+            ->rawColumns(['action'])
+            ->make(true);
+    }
+
     public function indextabla(Request $request)
     {
         $pagos=null;
@@ -264,7 +309,7 @@ class PagoController extends Controller
         ];
 
         $titulares = [
-            "EPIFANIO HUAMAN SOLANO" => 'EPIFANIO HUAMAN SOLANO',
+            "EPIFANIO SOLANO HUAMAN" => 'EPIFANIO SOLANO HUAMAN',
             "NIKSER DENIS ORE RIVEROS" => 'NIKSER DENIS ORE RIVEROS'
         ];
 
@@ -1518,6 +1563,34 @@ class PagoController extends Controller
             );
             $file->move($destinationPath , $file_name);
             $html=$file_name;
+        }else{
+            $html="";
+        }            
+
+        return response()->json(['html' => $html]); 
+        //return redirect()->route('pedidosPDF', $pedido)->with('info', 'registrado');
+    }
+
+    public function changeImg(Request $request)
+    {
+        $dp=$request->DPConciliar;
+        $file = $request->file('adjunto'); 
+        if(isset($file)){                   
+            $destinationPath = base_path('public/storage/pagos/');
+            $cont = 0;       
+            $file_name = Carbon::now()->second.$file->getClientOriginalName();
+            $fileList[$cont] = array(
+                'file_name' => $file_name,
+            );
+            $file->move($destinationPath , $file_name);
+            $html=$file_name;
+            //update imagen en dp
+
+            DetallePago::where('id', $dp)
+                ->update([
+                    'imagen' => $file_name
+                ]);
+
         }else{
             $html="";
         }            

@@ -12,6 +12,9 @@
 
 @include('pagos.movimientos')
 
+@include('pagos.modals.revisarhistorial')
+@include('pagos.modals.CambiarImagen')
+
   <div class="card">
       
     {!! Form::model($pago, ['route' => ['administracion.updaterevisar', $pago],'enctype'=>'multipart/form-data', 'id'=>'formulario','files'=>true]) !!}
@@ -63,6 +66,7 @@
                     <th scope="col">MONTO TOTAL</th>
                     <th scope="col">ABONADO</th>
                     <th scope="col"><span style="color:red;">DIFERENCIA</span></th>
+                    <th scope="col">Historial</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -76,19 +80,38 @@
                       <td>{{ $contPe + 1 }}</td>
                       <td>PED000{{ $pagoPedido->pedidos }}<input type="hidden" name="pedido_id[]" id="pedido_id" value="{{ $pagoPedido->pedidos }}"></td>
                       <td>{{ $pagoPedido->codigo }}</td>
-                        @if($pagoPedido->pagado == 1)
-                        <td>ADELANTO</td>
-                        @else
-                        <td>
-                          @if ($pagoPedido->pagado==2)
-                            PAGO
-                          @endif  
-                        </td>
-                        @endif                
+                        
+                      @if($pagos->condicion=='ABONADO')
+                          @if($pagoPedido->pagado == 1)
+                          <td>ADELANTO ABONADO</td>
+                          @else
+                          <td>PAGADO ABONADO</td>
+                          @endif
+                      @elseif($pagos->condicion=='OBSERVADO')
+                          @if($pagoPedido->pagado == 1)
+                          <td>ADELANTO OBSERVADO</td>
+                          @else
+                          <td>PAGADO OBSERVADO</td>
+                          @endif
+                      @elseif($pagos->condicion=='PAGO')
+                          @if($pagoPedido->pagado == 1)
+                          <td>ADELANTO PAGO</td>
+                          @else
+                          <td>PAGADO PAGO</td>
+                          @endif
+                      @endif
+
                       <td>{{ $pagoPedido->condicion }}</td>
                       <td>{{ $pagoPedido->total }}</td>
                       <td>{{ $pagoPedido->abono }}</td>
-                      <td><span style="color:red;">{{ number_format($pagoPedido->total - $pagoPedido->abono, 2, '.', ' ') }}</span></td>
+                      @if ($pagoPedido->total - $pagoPedido->abono < 3)
+                        <td><span style="color:black;">{{ number_format($pagoPedido->total - $pagoPedido->abono, 2, '.', ' ') }}</span></td>
+                      @else
+                        <td><span style="color:red;">{{ number_format($pagoPedido->total - $pagoPedido->abono, 2, '.', ' ') }}</span></td>
+                      @endif
+                      <td>
+                        <a href="" data-target="#modal-historial-pagos-pedido" data-toggle="modal" data-pedido="{{ $pagoPedido->codigo }}"><button class="btn btn-danger btn-sm">Historial</button></a>
+                      </td>
                     </tr>
                     @php
                       $sumPe = $sumPe + $pagoPedido->abono;
@@ -152,7 +175,7 @@
                     $sumPa = 0;
                   @endphp
                   @foreach ($detallePagos as $detallePago)
-                    <tr class="nohide">
+                    <tr class="nohide_{{ $contPa + 1 }}">
                       <td>{{ $contPa + 1 }}</td>
                       <td>DETPAG00{{ $detallePago->id }}<input type="hidden" name="detalle_id[]" value="{{ $detallePago->id }}" class="form-control"></td>
                       <td>{{ $detallePago->banco }}</td>                  
@@ -167,21 +190,23 @@
                         
                         <p>
                           <br><a href="" data-target="#modal-imagen-{{ $detallePago->id }}" data-toggle="modal">
-                          <img src="{{ asset('storage/pagos/' . $detallePago->imagen) }}" alt="{{ $detallePago->imagen }}" height="200px" width="200px" class="img-thumbnail">
+                          <img src="{{ asset('storage/pagos/' . $detallePago->imagen) }}" alt="{{ $detallePago->imagen }}" height="200px" width="200px" class="img-thumbnail" id="imagen_{{ $contPa + 1 }}">
                         </a>
                           
                         </p>
-                        <input type="text" value="" name="conciliar[]" class="conciliar_count" id="conciliar_{{ $contPa + 1 }}" > 
+                        <a href="" data-target="#modal-cambiar-imagen" data-toggle="modal" data-imagen="{{ $detallePago->imagen }}" data-conciliar="{{ $detallePago->id }}" data-item="{{ $contPa + 1 }}"><button class="btn btn-danger btn-md">Cambiar</button></a>
+                        <input type="hidden" value="" name="conciliar[]" class="conciliar_count" id="conciliar_{{ $contPa + 1 }}" > 
                       </td>
                       <td>
                         
                         <p>
                           <br>
-                          <a href="{{ route('pagos.descargarimagen', $detallePago->imagen) }}"><button type="button" class="btn btn-secondary btn-md"> Descargar</button></a>
+                          <a href="{{ route('pagos.descargarimagen', $detallePago->imagen) }}" class="text-center"><button type="button" class="btn btn-secondary btn-md"> Descargar</button></a>
 
                           <a href="" data-target="#modal-conciliar-get" data-toggle="modal" data-conciliar="{{ $detallePago->id }}" data-item="{{ $contPa + 1 }}"><button class="btn btn-danger btn-md">Conciliar</button></a>
                         </p>
                       </td>
+                      
                     </tr>
                     @php
                       $sumPa = $sumPa + $detallePago->monto;
@@ -246,16 +271,25 @@
     var tableconciliar=null;
     $(document).ready(function() {
 
+      $.ajaxSetup({
+          headers: {
+              'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+          }
+      });
+
       $(document).on("click",".button_conciliar",function(event){
 
         var iconciliar = $(this).data('conciliar')
         var iitem = $(this).data('item')
         
         $(".hide_"+iitem).remove();
+        console.log("fila "+iitem);
+        console.log("agregando fila")
+        console.log($(this).data('banco'));
 
           if($(this).data('banco')=='BCP')
           {
-            $('.table_pagos_realizados tbody tr').filter(':nth-child('+iitem+')').after(
+            $('.table_pagos_realizados tbody tr.nohide_'+iitem).after(
               '<tr style="background-color:#ff7800;" class="hide_'+iitem+' oculto">'+
               '<td class="text-light">'+iitem+'</td><td class="text-light"> </td>'+
               '<td class="text-light">'+$(this).data('banco')+'</td>'+
@@ -267,7 +301,7 @@
 
           }else if($(this).data('banco')=='BBVA')
           {
-            $('.table_pagos_realizados tbody tr').filter(':nth-child('+iitem+')').after(
+            $('.table_pagos_realizados tbody tr.nohide_'+iitem).after(
             '<tr style="background-color:#1973B8;" class="hide_'+iitem+' oculto">'+
             '<td class="text-light">'+iitem+'</td><td class="text-light"> </td>'+
               '<td class="text-light">'+$(this).data('banco')+'</td>'+
@@ -279,7 +313,7 @@
 
           }else if ($(this).data('banco')=='INTERBANK')
           {
-            $('.table_pagos_realizados tbody tr').filter(':nth-child('+iitem+')').after(
+            $('.table_pagos_realizados tbody tr.nohide_'+iitem).after(
             '<tr class="bg-success hide_'+iitem+' oculto">'+
             '<td class="text-light">'+iitem+'</td><td class="text-light"> </td>'+
               '<td class="text-light">'+$(this).data('banco')+'</td>'+
@@ -291,7 +325,7 @@
 
           }else if ($(this).data('banco')=='YAPE')
           {
-            $('.table_pagos_realizados tbody tr').filter(':nth-child('+iitem+')').after(
+            $('.table_pagos_realizados tbody tr.nohide_'+iitem).after(
             '<tr style="background-color:#6f42c1;" class="hide_'+iitem+' oculto">'+
             '<td class="text-light">'+iitem+'</td><td class="text-light"> </td>'+
               '<td class="text-light">'+$(this).data('banco')+'</td>'+
@@ -303,7 +337,7 @@
             
           }else if ($(this).data('banco')=='PLIN')
           {
-            $('.table_pagos_realizados tbody tr').filter(':nth-child('+iitem+')').after(
+            $('.table_pagos_realizados tbody tr.nohide_'+iitem).after(
             '<tr style="background-color:#0693e3;" class="hide_'+iitem+' oculto" >'+
             '<td class="text-light">'+iitem+'</td><td class="text-light"> </td>'+
               '<td class="text-light">'+$(this).data('banco')+'</td>'+
@@ -369,9 +403,91 @@
           }
         });
 
+      $('#modal-cambiar-imagen').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget) 
+        var imagen = button.data('imagen');
+        var conciliar = button.data('conciliar');
+        var itemcount = button.data('item');
+
+        console.log("imagen "+imagen);
+        console.log("conciliar "+conciliar);
+        console.log("itemcount "+itemcount);
+
+        $("#DPConciliar").val(conciliar);
+        $("#DPitem").val(itemcount);
+
+
+        var urlimg = "{{asset('imagenes/logo_facturas.png')}}";
+        urlimg = urlimg.replace('imagenes/', 'storage/pagos/');
+        
+        urlimg = urlimg.replace('logo_facturas.png', imagen);
+        urlimg = urlimg.replace(' ', '%20');
+        console.log(urlimg)
+
+        $("#picture").attr("src", urlimg );
+
+      });
+
+      $(document).on("click","#change_imagen",function(){
+        var fd2 = new FormData();
+        //agregados el id pago
+        let files=$('input[name="pimagen')
+        var fileitem=$("#DPitem").val();
+
+        fd2.append("DPConciliar",$("#DPConciliar").val() )
+        for (let i = 0; i < files.length; i++) {
+          fd2.append('adjunto', $('input[type=file][name="pimagen"]')[0].files[0]);
+        }
+        $.ajax({
+          data: fd2,
+          processData: false,
+          contentType: false,
+          type: 'POST',
+          url:"{{ route('pagos.changeImg') }}",
+          success:function(data){
+            if(data.html=='0')
+            {
+
+            }else{
+              $("#modal-cambiar-imagen").modal("hide");
+
+              var urlimg = "{{asset('imagenes/logo_facturas.png')}}";
+              urlimg = urlimg.replace('imagenes/', 'storage/pagos/');
+              
+              urlimg = urlimg.replace('logo_facturas.png', data.html);
+              urlimg = urlimg.replace(' ', '%20');
+              console.log(urlimg);
+
+              $("#imagen_"+fileitem).attr("src", urlimg );
+
+              //$("#picture").attr("src", urlimg );
+
+            }
+          }
+        });
+
+
+      });
+
+
+
+      $(document).on("change","#pimagen",function(event){
+        console.log("cambe image")
+        var file = event.target.files[0];
+        var reader = new FileReader();
+        reader.onload = (event) => {
+          //$("#picture").attr("src",event.target.result);
+            document.getElementById("picture").setAttribute('src', event.target.result);
+        };
+        reader.readAsDataURL(file);
+
+      });
+  
+
+
+
       $('#modal-conciliar-get').on('show.bs.modal', function (event) {
        
-        console.log("aa")
         var button = $(event.relatedTarget) 
         var idunico = button.data('conciliar')
         var iditem = button.data('item');
@@ -380,11 +496,13 @@
         $('input[name="conciliar[]').each(function(){
           if(this.value!='')
             excluir.push(this.value)
-            //excluir=excluir+''+this.value+',';
+            //xcluir=excluir+''+this.value+',';
        });     
        //excluir=excluir.substring(0, excluir.length - 1);
        console.log(excluir);
 
+       var pasarExclusiones=excluir.join(',');
+       console.log(pasarExclusiones)
         //var 
         //var inputt=("#conciliar_"+iditem).val();
         console.log(idunico);
@@ -398,14 +516,23 @@
           "bInfo": true,
           "bAutoWidth": false,
            "pageLength":5,
-          //"order": [[ 0, "desc" ]],
+          "order": [[ 0, "asc" ]],
           'ajax': {
             url:"{{ route('movimientostablaconciliar') }}",					
-            'data': { "conciliar":idunico,"excluir":JSON.stringify(excluir) }, 
+            'data': { "conciliar":idunico,"excluir":pasarExclusiones }, 
             "type": "get",
           },
           columns: 
           [
+            {
+              data: 'id', 
+              name: 'id',
+              "visible":false
+              /*sWidth:'30%',
+              render: function ( data, type, row, meta ) {
+                return '<span class="id">' + data + '</span>';
+              }*/
+            },
             {
               data: 'titular', 
               name: 'titular',
@@ -484,6 +611,133 @@
 
 
       });
+
+      $('#modal-historial-pagos-pedido').on('show.bs.modal', function (event) {
+       
+       console.log("aa")
+       var button = $(event.relatedTarget) 
+       var pedido = button.data('pedido')
+
+       tableconciliar.destroy();
+
+       tableconciliar=$('#tablapagospedidoshistorial').DataTable({
+         "bPaginate": true,
+         "bFilter": true,
+         "bInfo": true,
+         "bAutoWidth": false,
+          "pageLength":5,
+         "order": [[ 0, "asc" ]],
+         'ajax': {
+           url:"{{ route('pagostablahistorial') }}",					
+           'data': { "pedido":pedido }, 
+           "type": "get",
+         },
+         "search": {
+            "search": pedido
+          },
+         columns: [
+        {
+            data: 'id', 
+            name: 'id',
+            render: function ( data, type, row, meta ) {   
+              var cantidadvoucher=row.cantidad_voucher;
+              var cantidadpedido=row.cantidad_pedido;
+              var unido= ( (cantidadvoucher>1)? 'V':'I' )+''+( (cantidadpedido>1)? 'V':'I' );
+              if(row.id<10){
+                return 'PAG'+row.users+unido+'000'+row.id;
+              }else if(row.id<100){
+                return 'PAG00'+row.users+unido+''+row.id;
+              }else if(row.id<1000){
+                return 'PAG0'+row.users+unido+''+row.id;
+              }else{
+                return 'PAG'+row.users+unido+''+row.id;
+              }
+
+              /*if(row.id<10){
+                return 'PAG000'+row.id;
+              }else if(row.id<100){
+                return 'PAG00'+row.id;
+              }else if(row.id<1000){
+                return 'PAG0'+row.id;
+              }else{
+                return 'PAG'+row.id;
+              } */
+            }
+        },
+        {
+          data: 'codigos'
+          , name: 'codigos' 
+          , render: function ( data, type, row, meta ) {    
+            if(data==null){
+              return 'SIN PEDIDOS';
+            }else{
+              var returndata='';
+              var jsonArray=data.split(",");
+              $.each(jsonArray, function(i, item) {
+                  returndata+=item+'<br>';
+              });
+              return returndata;
+            }  
+          }
+        },
+        {//asesor
+          data: 'users', name: 'users' },
+        {//cliente
+          data: 'celular', 
+            name: 'celular',
+            render: function ( data, type, row, meta ) {
+              return row.celular;
+            },
+        },
+        {//observacion
+          data: 'observacion', name: 'observacion'
+        },
+        /*{
+          data: 'total_cobro', name: 'total_cobro'
+        },*/
+        {//totalpagado
+          data: 'total_pago', name: 'total_pago'
+        },
+        {//fecha
+          data: 'fecha', 
+          name: 'fecha', 
+          render: function ( data, type, row, meta ) {
+              return data;
+          }
+        },//estado de pedido
+        {
+          data: 'condicion', 
+          name: 'condicion', 
+          render: function ( data, type, row, meta ) {            
+            return data;             
+          }
+        },//estado de pago
+        {data: 'action', name: 'action', orderable: false, searchable: false,sWidth:'20%'},
+        ],
+         language: {
+           "decimal": "",
+           "emptyTable": "No hay informaciÃ³n",
+           "info": "Mostrando del _START_ al _END_ de _TOTAL_ Entradas",
+           "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
+           "infoFiltered": "(Filtrado de _MAX_ total entradas)",
+           "infoPostFix": "",
+           "thousands": ",",
+           "lengthMenu": "Mostrar _MENU_ Entradas",
+           "loadingRecords": "Cargando...",
+           "processing": "Procesando...",
+           "search": "Buscar:",
+           "zeroRecords": "Sin resultados encontrados",
+           "paginate": {
+           "first": "Primero",
+           "last": "Ultimo",
+           "next": "Siguiente",
+           "previous": "Anterior"
+           }
+         },
+       });
+
+
+     });
 
       $(document).on("click","#aprobarrbtn",function(){
         console.log("aprobar");

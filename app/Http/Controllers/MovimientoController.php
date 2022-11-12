@@ -112,6 +112,7 @@ class MovimientoController extends Controller
 
         $conciliar=$request->conciliar;
         $excluir=$request->excluir;
+        //return $excluir;
         //return $conciliar;//2218
 
         //reques conciliar 
@@ -120,6 +121,10 @@ class MovimientoController extends Controller
         $banco_compara=$comparar->banco;
 
         if ($banco_compara!='' and !is_null($banco_compara) ) {
+            if($banco_compara=='YAPE')
+            {
+                $banco_compara='BCP';
+            }
             $query->where('banco','LIKE','%'.$banco_compara.'%');
         }
         //monto_compara=$comparar->monto;
@@ -131,24 +136,27 @@ class MovimientoController extends Controller
 
         $titular_compara=$comparar->titular;
 
-        if ($titular_compara!='' and is_null($titular_compara) ) {
+        if ($titular_compara!='' || is_null($titular_compara) ) {
             $query->where('titular','LIKE','%'.$titular_compara.'%');
         }
 
         $fecha_compra=$comparar->fecha;
+        //return $fecha_compra;
 
-        if ($fecha_compra!='' and is_null($fecha_compra) ) {
-            $query->where('fecha','>',''.$fecha_compra.'');        }
+        if ($fecha_compra!='' || is_null($fecha_compra) ) {
+            $query->whereDate('fecha','>',''.$fecha_compra.'');        }
         //return $fecha_compra;
         //return $request->excluir;
 
-        if ($excluir!='' and is_null($excluir) ) {
-            return "aaa";
-            $query->whereNotIn('id',$excluir); 
+        if ($excluir!='' || is_null($excluir) ) {
+
+            $array_excluir=explode(",",$excluir);
+            //return $array_excluir;
+            $query->whereNotIn('id',$array_excluir); 
             //whereNotIn('book_price', [100,200]
                }
         
-        $movimientos = $query->get();
+        $movimientos = $query->orderBy('fecha', 'ASC')->get();
 
         return Datatables::of($movimientos)
                     ->addIndexColumn()

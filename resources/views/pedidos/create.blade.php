@@ -642,11 +642,7 @@
             }
           });*/
       });
-
-
       
-
-
       $('#modal-add-ruc').on('show.bs.modal', function (event) {
 
         $("#agregarruc").val("");

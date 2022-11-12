@@ -111,6 +111,7 @@ Route::get('envios/{imagen}/descargarimagen', [PedidoController::class, 'Descarg
 
 Route::resource('pagos', PagoController::class)->names('pagos');
 Route::get('pagostabla', [PagoController::class, 'indextabla'])->name('pagostabla');//actualizado para serverside
+Route::get('pagostablahistorial', [PagoController::class, 'indextablahistorial'])->name('pagostablahistorial');//actualizado para serverside
 Route::get('MisPagosTabla', [PagoController::class, 'MisPagosTabla'])->name('MisPagosTabla');//actualizado para serverside
 Route::get('pedidoscliente', [PagoController::class, 'pedidoscliente'])->name('cargar.pedidoscliente');
 Route::get('pedidosclientetabla', [PagoController::class, 'pedidosclientetabla'])->name('cargar.pedidosclientetabla');
@@ -119,6 +120,7 @@ Route::post('validarrelacionruc', [PedidoController::class, 'validarrelacionruc'
 Route::post('pedidostiempo', [ClienteController::class, 'pedidostiempo'])->name('pedidostiempo');
 
 Route::post('pagos.addImgTemp', [PagoController::class, 'addImgTemp'])->name('pagos.addImgTemp');//actualizado para serverside
+Route::post('pagos.changeImg', [PagoController::class, 'changeImg'])->name('pagos.changeImg');
 
 Route::post('pago/eliminarPedido/{id}/{pago}', [PagoController::class, 'eliminarPedido'])->name('pago.eliminarPedido');
 Route::post('pago/eliminarPago/{id}/{pago}', [PagoController::class, 'eliminarPago'])->name('pago.eliminarPago');
@@ -215,6 +217,7 @@ Route::post('/mark-as-read', [NotificationsController::class, 'markNotification'
 //EXCEL EXPORTABLES
     //MODULO PERSONAS
     // Route::get('clientesExcel', [ExcelController::class, 'clientesExcel'])->name('clientesExcel');
+    Route::post('usuariosExcel', [ExcelController::class, 'usuariosExcel'])->name('usuariosExcel');
     Route::post('clientesExcel', [ExcelController::class, 'clientesExcel'])->name('clientesExcel');
     Route::post('clientespedidosExcel', [ExcelController::class, 'clientespedidosExcel'])->name('clientespedidosExcel');
     // Route::get('basefriaExcel', [ExcelController::class, 'basefriaExcel'])->name('basefriaExcel');

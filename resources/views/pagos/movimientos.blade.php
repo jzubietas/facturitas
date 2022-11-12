@@ -17,6 +17,7 @@
                 <table id="tablaPrincipalConciliar" class="table table-striped" >
                   <thead><h4 style="text-align: center"><strong>Listado de la movimientos para conciliar con los pagos</strong></h4>
                     <tr>
+                      <th scope="col">ID</th>
                       <th scope="col">Titular</th>
                       <th scope="col">Banco</th>
                       <th scope="col">Fecha</th>
