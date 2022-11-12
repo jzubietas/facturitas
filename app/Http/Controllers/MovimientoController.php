@@ -80,7 +80,19 @@ class MovimientoController extends Controller
             $movimientos = $movimientos->where('titular','like','%'.$buscar_titular.'%');
         }
 
-        $movimientos = $movimientos->get();
+        $movimientos = $movimientos->get([
+            'movimiento_bancarios.id',
+            'movimiento_bancarios.banco',
+            'movimiento_bancarios.titular',
+            'movimiento_bancarios.importe',
+            'movimiento_bancarios.tipo',
+            'movimiento_bancarios.descripcion_otros',
+            'movimiento_bancarios.fecha',
+            DB::raw("(CASE WHEN movimiento_bancarios.pago =0 THEN 'SIN CONCILIAR' ELSE 'CONCILIACION' END) AS pago"),
+            //"case when movimiento_bancarios.pago=0 then 'SIN CONCILIAR' else 'CONCILIACION' END",
+            'movimiento_bancarios.estado',
+            'movimiento_bancarios.created_at',
+        ]);
 
         return Datatables::of($movimientos)
                     ->addIndexColumn()
@@ -94,41 +106,49 @@ class MovimientoController extends Controller
 
     public function indextablaconciliar(Request $request)
     {
-        $movimientos = null;
+        //return $request->all();
+        $query = null;
+        $query = MovimientoBancario::where('estado', '1')->where("pago",'0');//->get();
 
         $conciliar=$request->conciliar;
+        $excluir=$request->excluir;
+        //return $conciliar;//2218
 
-        $comparar=DetallePago::where('id',$conciliar)->first();
-
-        /**/
+        //reques conciliar 
+        $comparar=DetallePago::where('id',$conciliar)->where('id',$conciliar)->first();
+        //return $comparar;
         $banco_compara=$comparar->banco;
-        return $comparar;
-        $monto_compara=$comparar->importe;
-        $titular_compara=$comparar->titular;
-        $fecha_compara=$comparar->fecha;
-        /**/
 
-        $movimientos = MovimientoBancario::where('estado', '1');//->get();
-        $buscar_banco=$banco_compara;
-        //$buscar_tipo=$request->tipo;
-        $buscar_titular=$titular_compara;
-        //return $buscar_banco;
-        if($buscar_banco)
-        {
-            $movimientos = $movimientos->where('banco','like','%'.$buscar_banco.'%');
+        if ($banco_compara!='' and !is_null($banco_compara) ) {
+            $query->where('banco','LIKE','%'.$banco_compara.'%');
         }
+        //monto_compara=$comparar->monto;
+        //return  $monto_compara;
 
-        /*if($buscar_tipo)
-        {
-            $movimientos = $movimientos->where('tipo','like','%'.$buscar_tipo.'%');
+        /*if ($monto_compara!='' and is_null($monto_compara) ) {
+            $query->where('importee',$monto_compara.'%');
         }*/
 
-        if($buscar_titular)
-        {
-            $movimientos = $movimientos->where('titular','like','%'.$buscar_titular.'%');
+        $titular_compara=$comparar->titular;
+
+        if ($titular_compara!='' and is_null($titular_compara) ) {
+            $query->where('titular','LIKE','%'.$titular_compara.'%');
         }
 
-        $movimientos = $movimientos->get();
+        $fecha_compra=$comparar->fecha;
+
+        if ($fecha_compra!='' and is_null($fecha_compra) ) {
+            $query->where('fecha','>',''.$fecha_compra.'');        }
+        //return $fecha_compra;
+        //return $request->excluir;
+
+        if ($excluir!='' and is_null($excluir) ) {
+            return "aaa";
+            $query->whereNotIn('id',$excluir); 
+            //whereNotIn('book_price', [100,200]
+               }
+        
+        $movimientos = $query->get();
 
         return Datatables::of($movimientos)
                     ->addIndexColumn()

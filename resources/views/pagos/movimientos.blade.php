@@ -2,7 +2,7 @@
   <div class="modal fade" id="modal-conciliar-get" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
-        <div class="modal-header bg-danger">
+        <div class="modal-header bg-grey">
           <h5 class="modal-title" id="exampleModalLabel"><b>Conciliar</b></h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
@@ -21,7 +21,8 @@
                       <th scope="col">Banco</th>
                       <th scope="col">Fecha</th>
                       <th scope="col">Movimiento</th>
-                      <th scope="col">Importe</th>                   
+                      <th scope="col">Importe</th>
+                      <th scope="col">Conciliar</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -38,3 +39,5 @@
       </div>
     </div>
   </div>
+
+  

@@ -60,11 +60,27 @@
                     <td>{{ $contPe + 1 }}</td>
                     <td>PED000{{ $pagoPedido->pedidos }}</td>
                     <td>{{ $pagoPedido->codigo }}</td>
-                      @if($pagoPedido->pagado == 1)
-                      <td>ADELANTO</td>
-                      @else
-                      <td>PAGADO</td>
-                      @endif
+
+                    @if($pagos->condicion=='ABONADO')
+                        @if($pagoPedido->pagado == 1)
+                        <td>ADELANTO ABONADO</td>
+                        @else
+                        <td>PAGADO ABONADO</td>
+                        @endif
+                    @elseif($pagos->condicion=='OBSERVADO')
+                        @if($pagoPedido->pagado == 1)
+                        <td>ADELANTO OBSERVADO</td>
+                        @else
+                        <td>PAGADO OBSERVADO</td>
+                        @endif
+                    @elseif($pagos->condicion=='PAGO')
+                        @if($pagoPedido->pagado == 1)
+                        <td>ADELANTO PAGO</td>
+                        @else
+                        <td>PAGADO PAGO</td>
+                        @endif
+                    @endif
+                      
                     <td>{{ $pagoPedido->condicion }}</td>
                     <td>{{ $pagoPedido->total }}</td>
                     <td>{{ $pagoPedido->abono }}</td>

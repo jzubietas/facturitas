@@ -86,7 +86,7 @@
             <th scope="col">Importe</th>
             <th scope="col">Tipo de movimiento</th>
             <th scope="col">Fecha</th>
-            <th scope="col">Estado</th>
+            <th scope="col">Conciliacion</th>
             <th scope="col">Acciones</th>
           </tr>
         </thead>
@@ -525,7 +525,8 @@
           },
         },
         //ajax: "{{ route('movimientostabla') }}",
-        createdRow: function( row, data, dataIndex){           
+        createdRow: function( row, data, dataIndex){  
+
         },
         rowCallback: function (row, data, index) {           
         },
@@ -579,9 +580,15 @@
           data: 'fecha', name: 'fecha'
         },
         {
-          data: 'estado', 
-          name: 'estado', 
-          render: function ( data, type, row, meta ) {            
+          data: 'pago', 
+          name: 'pago', 
+          render: function ( data, type, row, meta ) {  
+            /*if(data==null || data==0 || data=='0')
+            {
+              return 'SIN CONCILIAR';
+            }else{
+              return "CONCILIADO";
+            }*/
             return data;             
           }
         },//estado de pago

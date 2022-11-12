@@ -872,12 +872,13 @@ class ClienteController extends Controller
      */
     public function edit(Cliente $cliente)
     {
+        $mirol=Auth::user()->rol;
         $users = User::where('users.estado','1')
         ->where('users.rol', 'Asesor')
         ->pluck('name', 'id');
         $porcentajes = Porcentaje::where('cliente_id', $cliente->id)->get();
-
-        return view('clientes.edit', compact('cliente', 'users', 'porcentajes'));
+        
+        return view('clientes.edit', compact('cliente', 'users', 'porcentajes','mirol'));
     }
 
     /**

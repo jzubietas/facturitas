@@ -120,8 +120,9 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
+        $mirol=Auth::user()->rol;
         $roles = Role::get();
-        return view('usuarios.edit', compact('user', 'roles'));
+        return view('usuarios.edit', compact('user', 'roles','mirol'));
     }
 
     /**

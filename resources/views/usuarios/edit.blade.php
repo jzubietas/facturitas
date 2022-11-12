@@ -1,6 +1,6 @@
 @extends('adminlte::page')
 
-@section('title', 'Registro de Usuarios')
+@section('title', 'Actualizacion de Usuarios')
 
 @section('content_header')
   <h1>Actualizar Usuario</h1>
@@ -13,8 +13,15 @@
     <div class="card-body">
       <div class="form-row">
         <div class="form-group col-lg-6">
-          {!! Form::label('name', 'Nombres y Apellidos') !!}
-          {!! Form::text('name', null, ['class' => 'form-control', 'id' => 'name', 'placeholder' => 'Ingrese nombres completos']) !!}
+
+          @if($mirol =='Administrador')
+            {!! Form::label('name', 'Nombres y Apellidos') !!}
+            {!! Form::text('name', null, ['class' => 'form-control', 'id' => 'name', 'placeholder' => 'Ingrese nombres completos']) !!}
+          @else 
+            {!! Form::label('name', 'Nombres y Apellidos') !!}
+            {!! Form::text('name', null, ['class' => 'form-control', 'id' => 'name', 'placeholder' => 'Ingrese nombres completos']) !!}
+          @endif
+
           @error('name')
             <small class="text-danger">{{ $message }}</small>
           @enderror
@@ -24,13 +31,25 @@
           {!! Form::text('rol', null, ['class' => 'form-control', 'placeholder' => 'Ingrese nombres completos', 'disabled']) !!}
         </div>
         <div class="form-group col-lg-3">
-          {!! Form::label('role_id', 'Nuevo Rol') !!}
-          <select name="prole_id" id="prole_id" class="form-control">
-            <option value=" ">----SELECCIONE----</option>
-            @foreach ($roles as $role)
-              <option value="{{ $role->id }}_{{ $role->name }}">{{ $role->name }}</option>
-            @endforeach
-          </select>
+          @if($mirol =='Administrador')
+            {!! Form::label('role_id', 'Nuevo Rol') !!}
+            <select name="prole_id" id="prole_id" class="form-control" >
+              <option value=" ">----SELECCIONE----</option>
+              @foreach ($roles as $role)
+                <option value="{{ $role->id }}_{{ $role->name }}">{{ $role->name }}</option>
+              @endforeach
+            </select>
+          @else
+            {!! Form::label('role_id', 'Nuevo Rol') !!}
+            <select name="prole_id" id="prole_id" class="form-control" readonly disabled>
+              <option value=" ">----SELECCIONE----</option>
+              @foreach ($roles as $role)
+                <option value="{{ $role->id }}_{{ $role->name }}">{{ $role->name }}</option>
+              @endforeach
+            </select>
+          @endif
+
+          
           @error('prole_id')
             <small class="text-danger">{{ $message }}</small>
           @enderror
@@ -38,15 +57,27 @@
           {!! Form::hidden('role_name', null, ['id' => 'role_name']) !!}
         </div>
         <div class="form-group col-lg-2">
+        @if($mirol =='Administrador')
           {!! Form::label('identificador', 'Identificador') !!}
           {!! Form::text('identificador', null, ['class' => 'form-control', 'id' => 'identificador', 'placeholder' => 'Ingrese identificador']) !!}
+        @else
+          {!! Form::label('identificador', 'Identificador') !!}
+          {!! Form::text('identificador', null, ['class' => 'form-control', 'id' => 'identificador', 'placeholder' => 'Ingrese identificador','readonly']) !!}
+        @endif
+          
           @error('identificador')
             <small class="text-danger">{{ $message }}</small>
           @enderror
         </div>
         <div class="form-group col-lg-5">
-          {!! Form::label('email', 'Correo Electrónico') !!}
-          {!! Form::email('email', null, ['class' => 'form-control', 'id' => 'email', 'placeholder' => 'Ingrese correo electrónico']) !!}
+          @if($mirol =='Administrador')
+            {!! Form::label('email', 'Correo Electrónico') !!}
+            {!! Form::email('email', null, ['class' => 'form-control', 'id' => 'email', 'placeholder' => 'Ingrese correo electrónico']) !!}
+          @else
+            {!! Form::label('email', 'Correo Electrónico') !!}
+            {!! Form::email('email', null, ['class' => 'form-control', 'id' => 'email', 'placeholder' => 'Ingrese correo electrónico','readonly']) !!}
+          @endif
+          
           @error('email')
             <small class="text-danger">{{ $message }}</small>
           @enderror

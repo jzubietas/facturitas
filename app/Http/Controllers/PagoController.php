@@ -6,6 +6,7 @@ use App\Events\PagoEvent;
 use App\Models\Cliente;
 use App\Models\DetallePago;
 use App\Models\DetallePedido;
+use App\Models\MovimientoBancario;
 use App\Models\Pago;
 use App\Models\PagoPedido;
 use App\Models\Pedido;
@@ -723,16 +724,16 @@ class PagoController extends Controller
 
             }
 
-            $cliente = Cliente::find($request->cliente_id);
+           
 
-            $pedido_deuda = Pedido::where('cliente_id', $request->cliente_id)//CONTAR LA CANTIDAD DE PEDIDOS QUE DEBE
-                                    ->where('pagado', '0')
-                                    ->count();
-            if($pedido_deuda == 0){//SINO DEBE NINGUN PEDIDO EL ESTADO DEL CLIENTE PASA A NO DEUDA(CERO)
+
+            /*if($pedido_deuda == 0){//SINO DEBE NINGUN PEDIDO EL ESTADO DEL CLIENTE PASA A NO DEUDA(CERO)
                 $cliente->update([
                     'deuda' => '0'
                 ]);
-            }
+            }*/
+            //
+        
             //validar esto al final
 
             DB::commit();
@@ -740,7 +741,40 @@ class PagoController extends Controller
             throw $th;
             /*DB::rollback();
             dd($th);*/
-        }        
+        }  
+        
+        $cliente = Cliente::find($request->cliente_id);
+
+        $cliente_deuda=Cliente::where("id",$request->cliente_id)
+                ->get([
+                    'clientes.id',
+                    DB::raw(" (select count(ped.id) from pedidos ped where ped.cliente_id=clientes.id and ped.pago in (0,1) and ped.pagado in (0,1) and ped.created_at >='2022-11-01 00:00:00' and ped.estado=1) as pedidos_mes_deuda "),
+                    DB::raw(" (select count(ped2.id) from pedidos ped2 where ped2.cliente_id=clientes.id and ped2.pago in (0,1) and ped2.pagado in (0,1) and ped2.created_at <='2022-10-31 00:00:00'  and ped2.estado=1) as pedidos_mes_deuda_antes ")
+                    ]
+                );
+
+        $pedido_deuda = Pedido::where('cliente_id', $request->cliente_id)//CONTAR LA CANTIDAD DE PEDIDOS QUE DEBE
+                                ->where('pagado', '0')
+                                ->count();
+
+        if($cliente_deuda->pedidos_mes_deuda>0 && $cliente_deuda->pedidos_mes_deuda_antes==0)
+        {
+            $cliente->update([
+                'deuda' => '0'
+            ]);
+
+        }else if($cliente_deuda->pedidos_mes_deuda>0 && $cliente_deuda->pedidos_mes_deuda_antes>0)
+        {
+            $cliente->update([
+                'deuda' => '1'
+            ]);
+
+        }else if($cliente_deuda->pedidos_mes_deuda==0 && $cliente_deuda->pedidos_mes_deuda_antes>0)
+        {
+            $cliente->update([
+                'deuda' => '1'
+            ]);
+        }
 
         return redirect()->route('pagos.index')->with('info', 'registrado');
         
@@ -2250,10 +2284,10 @@ class PagoController extends Controller
         //DB::raw('sum(detalle_pagos.monto) as total')
 
         $condiciones = [
-            "PAGO" => 'PAGO',
+            //"PAGO" => 'PAGO',
             "OBSERVADO" => 'OBSERVADO',
             "ABONADO" => 'ABONADO',
-            "ABONADO_PARCIAL" => 'ABONADO_PARCIAL'
+            //"ABONADO_PARCIAL" => 'ABONADO_PARCIAL'
         ];
 
         return view('pagos.revisar', compact('pago', 'condiciones', 'cuentas', 'titulares', 'pagos', 'pagoPedidos', 'detallePagos'));
@@ -2344,17 +2378,21 @@ class PagoController extends Controller
 
     public function updateRevisar(Request $request, Pago $pago)    
     {   
+        /**  idpago  3028  userid 3  clienteid  1232 */
+        //return $pago;
         $fecha_aprobacion = Carbon::now()->format('Y-m-d');
-
+        //return $request->all();
         try {
             DB::beginTransaction();           
 
             // ACTUALIZANDO CABECERA PAGOS
+            //$condicion = $request->condicion;
+            /*  if pagado  a abonado   si adelanto   adelanto aprobado **/
             $condicion = $request->condicion;
             $observacion = $request->observacion;
 
             $pago->update([
-                'condicion' => $condicion,
+                'condicion' => $condicion,//$condicion,
                 'observacion' => $observacion
             ]);
 
@@ -2364,6 +2402,10 @@ class PagoController extends Controller
                     'fecha_aprobacion' => $fecha_aprobacion,
                 ]);
             }
+
+            //conciliacion
+
+            
             //INDICADOR DE DEUDA EN CLIENTE
             /* if($condicion == "ABONADO")
             {
@@ -2372,19 +2414,30 @@ class PagoController extends Controller
                         'deuda' => '0',
                     ]);
             } */
-            
-            // ACTUALIZANDO DETALLE PAGOS
-            $detalle_id = $request->detalle_id;
-            //$observacion = $request->observacion;
+
+
+            //return $request->all();
+            $detalle_id = $request->conciliar;
             $cuenta = $request->cuenta;
             $titular = $request->titular;
             $fecha_deposito = $request->fecha_deposito;
             $cont = 0;
 
-            while ($cont < count((array)$detalle_id)) {
+            while ($cont < count((array)$detalle_id)) 
+            {
+                $movimiento=MovimientoBancario::where("id",$detalle_id[$cont]);
+
+                $movimiento->update([            
+                    'pago' => 1
+                ]);
+                $cont++;
+
+            }
+
+            /*while ($cont < count((array)$detalle_id)) {
 
                 DetallePago::where('id', $detalle_id[$cont])
-                        ->update(array(//'observacion' => $observacion[$cont],
+                        ->update(array(
                                         'cuenta' => $cuenta[$cont],
                                         'titular' => $titular[$cont],
                                         'fecha_deposito' => $fecha_deposito[$cont],
@@ -2392,7 +2445,7 @@ class PagoController extends Controller
                                 );
 
                 $cont++;
-            }     
+            }*/
 
             DB::commit();
         } catch (\Throwable $th) {
