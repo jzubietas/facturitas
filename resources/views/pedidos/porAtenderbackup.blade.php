@@ -3,14 +3,14 @@
 @section('title', 'Lista de pedidos pagados')
 
 @section('content_header')
-  <h1>Lista de pedidos ATENDIDOS - OPERACIONES
+  <h1>Lista de pedidos por atender - OPERACIONES
     {{-- @can('pedidos.exportar')
     <div class="float-right btn-group dropleft">
       <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         Exportar
       </button>
       <div class="dropdown-menu">
-        <a href="{{ route('pedidosatendidosExcel') }}" class="dropdown-item"><img src="{{ asset('imagenes/icon-excel.png') }}"> EXCEL</a>
+        <a href="{{ route('pedidosporatenderExcel') }}" class="dropdown-item"><img src="{{ asset('imagenes/icon-excel.png') }}"> EXCEL</a>
       </div>
     </div>
     @endcan --}}
@@ -22,7 +22,7 @@
         <a href="" data-target="#modal-exportar" data-toggle="modal" class="dropdown-item" target="blank_"><img src="{{ asset('imagenes/icon-excel.png') }}"> Excel</a>
       </div>
     </div>
-    @include('pedidos.modal.exportar', ['title' => 'Exportar pedidos atendidos', 'key' => '9'])       
+    @include('pedidos.modal.exportar', ['title' => 'Exportar pedidos por atender', 'key' => '7'])    
   </h1>
   @if($superasesor > 0)
   <br>
@@ -49,7 +49,7 @@
           </tr>
         </tbody>
       </table><br>
-      <table id="tablaPrincipal" class="table table-striped" style="width:100%">
+      <table id="tablaPrincipal" class="table table-striped">
         <thead>
           <tr>
             <th scope="col">Item</th>
@@ -57,11 +57,8 @@
             <th scope="col">Razón social</th>
             <th scope="col">Asesor</th>
             <th scope="col">Fecha de registro</th>
-            <th scope="col">Destino</th>
+            <th scope="col">Adjuntos</th>
             <th scope="col">Estado</th>
-            <th scope="col">Atendido por</th>
-            <th scope="col">Jefe</th>
-            <th scope="col">Estado de sobre</th>
             <th scope="col">Acciones</th>
           </tr>
         </thead>
@@ -81,45 +78,22 @@
               <td>{{ $pedido->empresas }}</td>
               <td>{{ $pedido->users }}</td>              
               <td>{{ $pedido->fecha }}</td>
-              <td>{{ $pedido->destino }}</td>
-              <td>{{ $pedido->condicion }}</td>   
-              <td>{{ $pedido->atendido_por }}</td>
-              @if ($pedido->jefe)
-                <td>USER0{{ $pedido->jefe }}</td>
-              @else
-                <td></td>
-              @endif
+              <td style="text-align: center">
+                <a href="" data-target="#modal-veradjunto-{{ $pedido->id }}" data-toggle="modal"><button class="btn btn-primary btn-sm"><i class="fas fa-eye"></i> Ver</button></a>
+              </td>
+              <td>{{ $pedido->condicion }}</td>
               <td>
-                @if ($pedido->envio == '1')
-                  <span class="badge badge-success">Enviado</span>
-                  <span class="badge badge-warning">Por confirmar recepcion</span>
-                @elseif ($pedido->envio == '2')
-                  <span class="badge badge-success">Enviado</span>
-                  <span class="badge badge-info">Recibido</span>
-                @elseif ($pedido->envio == '3')
-                  <span class="badge badge-dark">Sin envio</span>
-                @else
-                  <span class="badge badge-danger">por enviar</span>
-                @endif
-              </td>           
-              <td>
-                <a href="{{ route('operaciones.showatender', $pedido) }}" class="btn btn-primary btn-sm"><i class="fas fa-eye"></i> Ver</a>
-                @can('operacion.editatender')
-                  <a href="{{ route('operaciones.editatender', $pedido) }}" class="btn btn-warning btn-sm"><i class=""></i> Editar atención</a>
+                @can('operacion.atender')
+                  <a href="" data-target="#modal-atender-{{ $pedido->id }}" data-toggle="modal"><button class="btn btn-success btn-sm">Atender</button></a>
                 @endcan
                 @can('operacion.PDF')
-                  <a href="{{ route('pedidosPDF', $pedido) }}" class="btn btn-danger btn-sm" target="_blank"><i class="fa fa-file-pdf"></i> PDF</a>
-                @endcan
-                @can('operacion.enviar')
-                  @if ($pedido->envio == '0')
-                    <a href="" data-target="#modal-envio-{{ $pedido->id }}" data-toggle="modal"><button class="btn btn-success btn-sm">Enviar</button></a>
-                    <a href="" data-target="#modal-sinenvio-{{ $pedido->id }}" data-toggle="modal"><button class="btn btn-dark btn-sm">Sin envío</button></a>
-                  @endif
+                  <a href="{{ route('pedidosPDF', $pedido) }}" class="btn btn-primary btn-sm" target="_blank"><i class="fa fa-file-pdf"></i> PDF</a>
                 @endcan
               </td>
             </tr>
-            @include('pedidos.modal.envio')
-            @include('pedidos.modal.sinenvio')
+            @include('pedidos.modal')
+            @include('pedidos.modal.atender')
+            @include('pedidos.modal.veradjunto')
           @endforeach
         </tbody>
       </table>
@@ -170,13 +144,97 @@
         transition: all 0.5s ease;
         text-shadow: 10px 2px #6ac7c2;
     }
+
   </style>
 @stop
 
 @section('js')
   {{--<script src="{{ asset('js/datatables.js') }}"></script>--}}
+
   <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
   <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+
+  <script>
+    $(document).ready(function () {
+
+      $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+      });
+
+      $('#tablaPrincipal').DataTable({
+        processing: true,
+        serverSide: true,
+        searching: true,
+        "order": [[ 0, "desc" ]],
+        ajax: "{{ route('operaciones.poratendertabla') }}",
+        columns: [
+          {
+              data: 'id', 
+              name: 'id',
+              render: function ( data, type, row, meta ) {
+                if(row.id<10){
+                  return 'PED000'+row.id;
+                }else if(row.id<100){
+                  return 'PED00'+row.id;
+                }else if(row.id<1000){
+                  return 'PED0'+row.id;
+                }else{
+                  return 'PED'+row.id;
+                } 
+              }
+          },
+          {data: 'codigos', name: 'codigos', },
+          {data: 'empresas', name: 'empresas', },
+          {data: 'users', name: 'users', },
+          {data: 'fecha', name: 'fecha', },          
+          {
+            data: 'action', 
+            name: 'action', 
+            orderable: false, 
+            searchable: false,
+            sWidth:'20%',
+            render: function ( data, type, row, meta ) {
+              data = data+'<a href="" data-target="#modal-veradjunto-'+row.id+'" data-toggle="modal" ><button class="btn btn-primary btn-sm"><i class="fas fa-eye"></i> Ver</button></a>';
+
+              @include('pedidos.modal')
+              @include('pedidos.modal.atender')
+              @include('pedidos.modal.veradjunto')
+
+              return data;                          
+            }
+          },
+          {data: 'condicion', name: 'condicion', },
+          {
+            data: 'action2', 
+            name: 'action2', 
+            orderable: false, 
+            searchable: false,
+            sWidth:'20%',
+            render: function ( data, type, row, meta ) {
+              
+              var urlpdf = '{{ route("pedidosPDF", ":id") }}';
+              urlpdf = urlpdf.replace(':id', row.id);
+              
+              @can('operacion.atender')
+                data = data+'<a href="" data-target="#modal-atender-'+row.id+'" data-toggle="modal" ><button class="btn btn-success btn-sm">Atender</button></a>';
+                //<a href="" data-target="#modal-atender-{{ $pedido->id }}" data-toggle="modal"><button class="btn btn-success btn-sm">Atender</button></a>
+              @endcan
+              @can('operacion.PDF')
+                data = data+'<a href="'+urlpdf+'" class="btn btn-primary btn-sm" target="_blank"><i class="fa fa-file-pdf"></i> PDF</a>';
+                <a href="{{ route('pedidosPDF', $pedido) }}" class="btn btn-primary btn-sm" target="_blank"><i class="fa fa-file-pdf"></i> PDF</a>
+              @endcan
+
+              return data;
+                         
+            }
+          },
+        ]
+      });
+
+    });
+  </script>
 
   <script>
     $("#penvio_doc").change(mostrarValores1);
@@ -190,7 +248,7 @@
     function mostrarValores2() {
       $("#condicion").val($("#pcondicion option:selected").text());
     }
-  </script>
+  </script>  
 
   @if (session('info') == 'registrado' || session('info') == 'actualizado' || session('info') == 'eliminado')
     <script>
@@ -200,15 +258,53 @@
         'success'
       )
     </script>
-  @endif  
+  @endif
 
-  <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
-  
   <script>
-    window.onload = function () {      
-      $('#tablaPrincipal').DataTable().draw();
+    //VALIDAR CAMPOS ANTES DE ENVIAR
+    document.addEventListener("DOMContentLoaded", function() {
+    document.getElementById("formulario").addEventListener('submit', validarFormulario); 
+    });
+
+    function validarFormulario(evento) {
+      evento.preventDefault();
+      var adjunto = document.getElementById('adjunto').value;
+      var cant_compro = document.getElementById('cant_compro').value;
+      
+      if (adjunto == '') {
+          Swal.fire(
+            'Error',
+            'Debe registrar almenos un documento adjunto',
+            'warning'
+          )
+        }
+        else if (cant_compro == '0'){
+          Swal.fire(
+            'Error',
+            'Cantidad de comprobantes enviados debe ser diferente de 0 (cero)',
+            'warning'
+          )
+        }
+        else if (cant_compro == '') {
+          Swal.fire(
+            'Error',
+            'Ingrese cantidad de comprobantes enviados',
+            'warning'
+          )
+        }
+        else {
+          this.submit();
+        }      
     }
   </script>
+
+<script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+  
+<script>
+  window.onload = function () {      
+    $('#tablaPrincipal').DataTable().draw();
+  }
+</script>
 
   <script>
     /* Custom filtering function which will search data in column four between two values */
@@ -241,4 +337,5 @@
             });
         });
   </script>
+  
 @stop

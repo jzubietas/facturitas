@@ -165,6 +165,7 @@
       //cuando abre el form de anular pedido
       var button = $(event.relatedTarget) 
       var idunico = button.data('delete')//id  basefria
+      var idresponsable = button.data('responsable')//id  basefria
       //console.log(idunico);
       $("#hiddenIDdelete").val(idunico);
       if(idunico<10){
@@ -178,10 +179,12 @@
       } 
       //solo completo datos
       //hiddenId
+      //
+      $
 
       $(".textcode").html(idunico);
       $("#motivo").val('');
-      $("#responsable").val('');
+      $("#responsable").val( idresponsable );
 
     });
 
@@ -366,10 +369,16 @@
               data = data+'<a href="'+urlshow+'" class="btn btn-info btn-sm"><i class="fas fa-eye"></i> VER</a>';
             @endcan
             @can('pedidos.edit')
+              if(row.condicion_pa==0)
+              {
                 data = data+'<a href="'+urledit+'" class="btn btn-warning btn-sm"> Editar</a>';
+              } 
             @endcan
             @can('pedidos.destroy')
-                data = data+'<a href="" data-target="#modal-delete" data-toggle="modal" data-delete="'+row.id+'"><button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i> Anular</button></a>';
+              if(row.condicion_pa==0)
+              {
+                data = data+'<a href="" data-target="#modal-delete" data-toggle="modal" data-delete="'+row.id+'" data-responsable="{{ $miidentificador }}"><button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i> Anular</button></a>';
+              }
             @endcan           
 
             return data;             

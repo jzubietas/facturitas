@@ -8,17 +8,19 @@
       <a href="{{ route('users.create') }}" class="btn btn-info"><i class="fas fa-plus-circle"></i> Agregar</a>
     @endcan
 
-    @can('clientes.exportar')
-    <div class="float-right btn-group dropleft">
-      <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        Exportar
-      </button>
-      <div class="dropdown-menu">
-        <a href="" data-target="#modal-exportar-2" data-toggle="modal" class="dropdown-item" target="blank_"><img src="{{ asset('imagenes/icon-excel.png') }}"> Usuarios</a>
-      </div>
-    </div>
-    @include('usuarios.modal.exportar2', ['title' => 'Exportar Lista de Usuarios', 'key' => '1'])  
-    @endcan
+    @if($mirol=='Administrador')
+      @can('clientes.exportar')
+        <div class="float-right btn-group dropleft">
+          <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Exportar
+          </button>
+          <div class="dropdown-menu">
+            <a href="" data-target="#modal-exportar-2" data-toggle="modal" class="dropdown-item" target="blank_"><img src="{{ asset('imagenes/icon-excel.png') }}"> Usuarios</a>
+          </div>
+        </div>
+        @include('usuarios.modal.exportar2', ['title' => 'Exportar Lista de Usuarios', 'key' => '1'])  
+      @endcan
+    @endif
 
   </h1>
   @if($superasesor > 0)

@@ -145,7 +145,10 @@
 @stop
 
 @section('js')
-  <script src="{{ asset('js/datatables.js') }}"></script>
+  {{--<script src="{{ asset('js/datatables.js') }}"></script>--}}
+
+  <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
 
   <script>
     /* $(document).ready(function() {

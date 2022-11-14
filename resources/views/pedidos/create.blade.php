@@ -354,13 +354,18 @@
            )
            return false;
          }else{
-           for (let i = 0; i < files.length; i++) {
+          */
+          for (let i = 0; i < files.length; i++) {
+            fd.append('adjunto', $('input[type=file][name="adjunto[]"]')[0].files[0]);
+          }
+
+           /*for (let i = 0; i < files.length; i++) {
              fd.append('adjunto['+i+']', files[i]);
-           }
-         }
+           }*/
+         /*}
 
        }*/
-       
+       $("#btnImprimir").prop( "disabled", true );
        fd.append( 'user_id', $("#user_id").val() );
        fd.append( 'cliente_id', $("#cliente_id").val() );
 
@@ -372,7 +377,21 @@
            url:"{{ route('pedidoss.store') }}",
            success:function(data){
              console.log(data);
-             if(data.html=='0'){
+             if(data.html=='|2')
+             {
+                    Swal.fire(
+                      'Error',
+                      'Cliente supero el limite de pedidos (3) en el mes.',
+                      'warning'
+                    )
+
+             }else if(data.html=='|0'){
+                    Swal.fire(
+                      'Error',
+                      'Cliente mantiene deudas meses atras.',
+                      'warning'
+                    )
+
 
                }else{
                  var urlpdf = '{{ route("pedidosPDF", ":id") }}';           
@@ -380,6 +399,7 @@
                  window.open(urlpdf, '_blank');
 
                  $("#modal-copiar .textcode").text(data.html);
+                 
                  $("#modal-copiar").modal("show");
                }
            }
@@ -759,6 +779,7 @@
                         "*ES IMPORTANTE PAGAR EL ENVIO* \n";
 
             $("#pedido_copiar").val(copydata);
+            $("#pedido_copiar_2").val(copydata).removeClass("d-none");
 
             const textarea = document.createElement('textarea');
             document.body.appendChild(textarea);
@@ -782,6 +803,7 @@
             $("#user_id").selectpicker("refresh");
             //$("#cliente_id").selectpicker("refresh");
             $("#pruc").selectpicker("refresh");
+            $("#pedido_copiar_2").val(copydata);
             cont--;
             evaluar();
 
@@ -967,7 +989,7 @@
                 );
               }else if(sese[1]=="C"){
                 Swal.fire(
-                    'El ruc ya se encuentra relacionado en el cliente '+sese[2],
+                    'El ruc ya se encuentra relacionado con el cliente '+sese[2],
                     '',
                     'warning'
                 );

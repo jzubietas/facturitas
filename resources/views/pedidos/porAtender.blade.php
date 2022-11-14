@@ -62,39 +62,7 @@
             <th scope="col">Acciones</th>
           </tr>
         </thead>
-        <tbody>
-          @foreach ($pedidos as $pedido)
-            <tr>
-              @if ($pedido->id < 10)
-                <td>PED000{{ $pedido->id }}</td>
-              @elseif($pedido->id < 100)
-                <td>PED00{{ $pedido->id }}</td>
-              @elseif($pedido->id < 1000)
-                <td>PED0{{ $pedido->id }}</td>
-              @else
-                <td>PED{{ $pedido->id }}</td>
-              @endif
-              <td>{{ $pedido->codigos }}</td>
-              <td>{{ $pedido->empresas }}</td>
-              <td>{{ $pedido->users }}</td>              
-              <td>{{ $pedido->fecha }}</td>
-              <td style="text-align: center">
-                <a href="" data-target="#modal-veradjunto-{{ $pedido->id }}" data-toggle="modal"><button class="btn btn-primary btn-sm"><i class="fas fa-eye"></i> Ver</button></a>
-              </td>
-              <td>{{ $pedido->condicion }}</td>
-              <td>
-                @can('operacion.atender')
-                  <a href="" data-target="#modal-atender-{{ $pedido->id }}" data-toggle="modal"><button class="btn btn-success btn-sm">Atender</button></a>
-                @endcan
-                @can('operacion.PDF')
-                  <a href="{{ route('pedidosPDF', $pedido) }}" class="btn btn-primary btn-sm" target="_blank"><i class="fa fa-file-pdf"></i> PDF</a>
-                @endcan
-              </td>
-            </tr>
-            @include('pedidos.modal')
-            @include('pedidos.modal.atender')
-            @include('pedidos.modal.veradjunto')
-          @endforeach
+        <tbody>          
         </tbody>
       </table>
     </div>
@@ -149,7 +117,90 @@
 @stop
 
 @section('js')
-  <script src="{{ asset('js/datatables.js') }}"></script>
+  {{--<script src="{{ asset('js/datatables.js') }}"></script>--}}
+
+  <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+
+  <script>
+    $(document).ready(function () {
+
+      $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+      });
+
+      $('#tablaPrincipal').DataTable({
+        processing: true,
+        serverSide: true,
+        searching: true,
+        "order": [[ 0, "desc" ]],
+        ajax: "{{ route('operaciones.poratendertabla') }}",
+        columns: [
+          {
+              data: 'id', 
+              name: 'id',
+              render: function ( data, type, row, meta ) {
+                if(row.id<10){
+                  return 'PED000'+row.id;
+                }else if(row.id<100){
+                  return 'PED00'+row.id;
+                }else if(row.id<1000){
+                  return 'PED0'+row.id;
+                }else{
+                  return 'PED'+row.id;
+                } 
+              }
+          },
+          {data: 'codigos', name: 'codigos', },
+          {data: 'empresas', name: 'empresas', },
+          {data: 'users', name: 'users', },
+          {data: 'fecha', name: 'fecha', },          
+          {
+            data: 'action', 
+            name: 'action', 
+            orderable: false, 
+            searchable: false,
+            sWidth:'20%',
+            render: function ( data, type, row, meta ) {
+              data = data+'<a href="" data-target="#modal-veradjunto-'+row.id+'" data-toggle="modal" ><button class="btn btn-primary btn-sm"><i class="fas fa-eye"></i> Ver</button></a>';
+
+              
+
+              return data;                          
+            }
+          },
+          {data: 'condicion', name: 'condicion', },
+          {
+            data: 'action2', 
+            name: 'action2', 
+            orderable: false, 
+            searchable: false,
+            sWidth:'20%',
+            render: function ( data, type, row, meta ) {
+              
+              var urlpdf = '{{ route("pedidosPDF", ":id") }}';
+              urlpdf = urlpdf.replace(':id', row.id);
+
+              @can('operacion.atender')
+                data = data+'<a href="" data-target="#modal-atender-'+row.id+'" data-toggle="modal" ><button class="btn btn-success btn-sm">Atender</button></a>';
+                @include('pedidos.modal.atender')
+              @endcan
+              @can('operacion.PDF')
+                data = data+'<a href="'+urlpdf+'" class="btn btn-primary btn-sm" target="_blank"><i class="fa fa-file-pdf"></i> PDF</a>';
+                <a href="{{ route('pedidosPDF', $pedido) }}" class="btn btn-primary btn-sm" target="_blank"><i class="fa fa-file-pdf"></i> PDF</a>
+              @endcan
+
+              return data;
+                         
+            }
+          },
+        ]
+      });
+
+    });
+  </script>
 
   <script>
     $("#penvio_doc").change(mostrarValores1);

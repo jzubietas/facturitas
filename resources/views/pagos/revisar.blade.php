@@ -311,12 +311,12 @@
               '</tr>'
           );
 
-          }else if ($(this).data('banco')=='INTERBANK')
+          }else if ($(this).data('banco')=='INTERBANK' || $(this).data('banco')=='IBK')
           {
             $('.table_pagos_realizados tbody tr.nohide_'+iitem).after(
             '<tr class="bg-success hide_'+iitem+' oculto">'+
             '<td class="text-light">'+iitem+'</td><td class="text-light"> </td>'+
-              '<td class="text-light">'+$(this).data('banco')+'</td>'+
+              '<td class="text-light">'+'INTERBANK'+'</td>'+
               '<td class="text-light">'+$(this).data('importe')+'</td>'+
               '<td class="text-light">'+$(this).data('titular')+'</td>'+
               '<td class="text-light">'+$(this).data('fecha')+'</td>'+
@@ -447,7 +447,6 @@
           success:function(data){
             if(data.html=='0')
             {
-
             }else{
               $("#modal-cambiar-imagen").modal("hide");
 
@@ -774,6 +773,7 @@
                   'No existen conciliaciones relacionadas',
                   'warning'
                 )
+                return false;
             }else{
 
               //$('.conciliar_count').
@@ -794,6 +794,7 @@
                   'Faltan conciliar pagos',
                   'warning'
                 )
+                return false;
                   
               }
             }

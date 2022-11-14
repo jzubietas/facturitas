@@ -18,6 +18,7 @@ class UserController extends Controller
      */
     public function index()
     {
+        $mirol=Auth::user()->rol;
         if(Auth::user()->rol == "Encargado"){
             $users = User::where('users.supervisor', Auth::user()->id)
                             ->where('users.rol', 'Asesor')
@@ -39,7 +40,7 @@ class UserController extends Controller
 
         $superasesor = User::where('rol', 'Super asesor')->count();
 
-        return view('usuarios.index', compact('users', 'superasesor'));
+        return view('usuarios.index', compact('users', 'superasesor','mirol'));
     }
 
     /**

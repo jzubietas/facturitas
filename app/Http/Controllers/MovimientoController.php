@@ -116,9 +116,14 @@ class MovimientoController extends Controller
         //return $conciliar;//2218
 
         //reques conciliar 
-        $comparar=DetallePago::where('id',$conciliar)->where('id',$conciliar)->first();
+        $comparar=DetallePago::where('id',$conciliar)->first();
         //return $comparar;
         $banco_compara=$comparar->banco;
+
+        if($banco_compara=='INTERBANK')
+        {
+            $banco_compara='IBK';
+        }
 
         if ($banco_compara!='' and !is_null($banco_compara) ) {
             if($banco_compara=='YAPE')
@@ -127,6 +132,8 @@ class MovimientoController extends Controller
             }
             $query->where('banco','LIKE','%'.$banco_compara.'%');
         }
+
+        
         //monto_compara=$comparar->monto;
         //return  $monto_compara;
 
@@ -143,8 +150,9 @@ class MovimientoController extends Controller
         $fecha_compra=$comparar->fecha;
         //return $fecha_compra;
 
-        if ($fecha_compra!='' || is_null($fecha_compra) ) {
-            $query->whereDate('fecha','>',''.$fecha_compra.'');        }
+        /*if ($fecha_compra!='' || is_null($fecha_compra) ) {
+            $query->whereDate('fecha','>',''.$fecha_compra.'');
+        }*/
         //return $fecha_compra;
         //return $request->excluir;
 
@@ -212,6 +220,7 @@ class MovimientoController extends Controller
             'fecha' => $request->fecha,
             'pedido' => '0',
             'estado' => '1',
+            'pago' => '0',
             'descripcion_otros' =>$descrip_otros 
         ]);
 

@@ -18,11 +18,11 @@
       </button>
       <div class="dropdown-menu">
         {{-- <a href="{{ route('basefriaExcel') }}" class="dropdown-item" target="blank_"><img src="{{ asset('imagenes/icon-excel.png') }}"> Base fría - Total</a> --}}
-        <a href="" data-target="#modal-exportar" data-toggle="modal" class="dropdown-item" target="blank_"><img src="{{ asset('imagenes/icon-excel.png') }}"> Clientes</a>
+        {{--<a href="" data-target="#modal-exportar" data-toggle="modal" class="dropdown-item" target="blank_"><img src="{{ asset('imagenes/icon-excel.png') }}"> Clientes</a>--}}
         <a href="" data-target="#modal-exportar2" data-toggle="modal" class="dropdown-item" target="blank_"><img src="{{ asset('imagenes/icon-excel.png') }}"> Base fría por asesor</a>
       </div>
     </div>
-    @include('base_fria.modal.exportar')
+    {{-- @include('base_fria.modal.exportar') --}}
     @include('base_fria.modal.exportar2')
     @endcan
   </h1>

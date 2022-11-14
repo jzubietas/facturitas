@@ -646,6 +646,8 @@ class PagoController extends Controller
             $titular = $request->titular;
             $monto = $request->monto;
             $banco = $request->banco;
+            $bancop = $request->bancop;
+            $obanco = $request->obanco;
             $fecha = $request->fecha;
             
             $files = $request->file('imagen');
@@ -675,6 +677,8 @@ class PagoController extends Controller
                         'titular' => $titular[$monto_key],
                         'monto' => $monto[$monto_key],
                         'banco' => $banco[$monto_key],
+                        'bancop' => $bancop[$monto_key],
+                        'obanco' => $obanco[$monto_key],
                         'fecha' => $fecha[$monto_key],
                         'fecha_deposito' => $fecha[$monto_key],
                         'imagen' => $fileList[$monto_key]['file_name'],
@@ -688,6 +692,8 @@ class PagoController extends Controller
                         'titular' => $titular[$monto_key],
                         'monto' => $monto[$monto_key],
                         'banco' => $banco[$monto_key],
+                        'bancop' => $bancop[$monto_key],
+                        'obanco' => $obanco[$monto_key],
                         'fecha' => $fecha[$monto_key],
                         'fecha_deposito' => $fecha[$monto_key],
                         'imagen' => 'logo_facturas.png',
@@ -796,7 +802,7 @@ class PagoController extends Controller
                     DB::raw(" (select count(ped.id) from pedidos ped where ped.cliente_id=clientes.id and ped.pago in (0,1) and ped.pagado in (0,1) and ped.created_at >='2022-11-01 00:00:00' and ped.estado=1) as pedidos_mes_deuda "),
                     DB::raw(" (select count(ped2.id) from pedidos ped2 where ped2.cliente_id=clientes.id and ped2.pago in (0,1) and ped2.pagado in (0,1) and ped2.created_at <='2022-10-31 00:00:00'  and ped2.estado=1) as pedidos_mes_deuda_antes ")
                     ]
-                );
+                )->first();
 
         $pedido_deuda = Pedido::where('cliente_id', $request->cliente_id)//CONTAR LA CANTIDAD DE PEDIDOS QUE DEBE
                                 ->where('pagado', '0')
@@ -821,7 +827,7 @@ class PagoController extends Controller
             ]);
         }
 
-        return redirect()->route('pagos.index')->with('info', 'registrado');
+        return redirect()->route('pagos.mispagos')->with('info', 'registrado');
         
     }
 
@@ -1639,7 +1645,7 @@ class PagoController extends Controller
                         'estado' => '0'
                     ]);
                 }
-
+                $html="";
                 foreach ($pagoPedido as $pagoP) {
                     //$html.="<br>pagopedidos id ".$pagoP->id."  a estado 0";
                     PagoPedido::where('id', $pagoP->id)
@@ -1647,19 +1653,30 @@ class PagoController extends Controller
                         'estado' => '0'
                     ]);
         
-                    $pedido = Pedido::find($pagoP->pedido_id);
+                    $pedido = Pedido::where("id",$pagoP->pedido_id)->first();
                     //$html.="<br> el pedido ".$pagoP->pedido_id;
                     $detalle_pedido = DetallePedido::where('pedido_id', $pedido->id)
                                                     ->where('estado', '1')
                                                     ->first();
                     
                     $detalle_pedido_saldo= $detalle_pedido->saldo*1;
-                    $detalle_pedido_total= $detalle_pedido->total*1;
+                    $detalle_pedido_total= $detalle_pedido->total*1;//780
                     
                     //$html.="<br> actualizo saldo ".$detalle_pedido_saldo." -> ".($pagoP->abono*1)." -> ".($detalle_pedido_saldo + $pagoP->abono*1)."a detallepedido ".$pedido->id;
                     $detalle_pedido->update([
                         'saldo' => $detalle_pedido_saldo + $pagoP->abono*1                
                     ]);
+
+                    $detalle_pedido_saldo= $detalle_pedido->saldo*1;
+
+                    //$html.= "<br>pedidoid ".$pedido->id." saldonuevo ". $detalle_pedido_saldo."     total ".$detalle_pedido_total."<br>";
+                    /*
+                    pedidoid 3964 saldonuevo 662 total 662
+                    pedidoid 4246 saldonuevo 650 total 650
+                    pedidoid 4577 saldonuevo 650 total 650
+                    pedidoid 4695 saldonuevo 1170 total 1170
+                    pedidoid 5111 saldonuevo 780 total 780  
+                    */ 
                     
                     if($detalle_pedido_saldo == $detalle_pedido_total){
                         $pedido->update([
@@ -1673,6 +1690,7 @@ class PagoController extends Controller
                         ]);  
                     }
                 }
+                //return  $html;
 
                 DB::commit();
 

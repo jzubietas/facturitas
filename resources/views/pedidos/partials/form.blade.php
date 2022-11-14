@@ -177,6 +177,8 @@
                     
                   </tbody>
                 </table>
+                <br>
+                <textarea class="form-control d-none" rows="6" placeholder="Descripcion Otros" name="pedido_copiar_2" cols="50" id="pedido_copiar_2"></textarea>
             </div>
           </div>
         </div>

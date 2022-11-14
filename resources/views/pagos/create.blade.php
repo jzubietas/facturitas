@@ -60,6 +60,8 @@
                     <th scope="col">T.MOV.</th>
                     <th scope="col">TITULAR</th>               
                     <th scope="col">BANCO</th>
+                    <th scope="col">BANCO P</th>
+                    <th scope="col">O BANCO</th>
                     <th scope="col">FECHA</th>
                     <th scope="col">IMAGEN</th>
                     <th scope="col">MONTO</th>
@@ -68,6 +70,8 @@
                 </thead>
                 <tfoot>
                   <th style="text-align: center">TOTAL</th>
+                  <th></th>
+                  <th></th>
                   <th></th>
                   <th></th>
                   <th></th>
@@ -428,6 +432,24 @@ tfoot td {
                   }
                 },
                 {
+                  data: 'bancop', 
+                  name: 'bancop',
+                  sWidth:'10%', 
+                  render: function ( data, type, row, meta ) {
+                    return '<input type="hidden" name="bancop['+row.item+']" value="' + data + '"><span class="bancop">' + data + '</span></td>';
+                  },
+                  "visible": false,
+                },
+                {
+                  data: 'obanco', 
+                  name: 'obanco',
+                  sWidth:'10%', 
+                  render: function ( data, type, row, meta ) {
+                    return '<input type="hidden" name="obanco['+row.item+']" value="' + data + '"><span class="obanco">' + data + '</span></td>';
+                  },
+                  "visible": false,
+                },
+                {
                   data: 'fecha', 
                   name: 'fecha',
                   sWidth:'10%', 
@@ -477,15 +499,15 @@ tfoot td {
 
                 //para footer  monto
                 var pageTotal = api
-                      .column( 6, { page: 'current'} )
+                      .column( 8, { page: 'current'} )
                       .data()
                       .reduce( function (a, b) {
                           return Number(a) + Number(b);
                       }, 0 );
                 // Update footer
-                $( api.column( 6 ).footer() ).html('<input type="hidden" name="total_pago" id="total_pago" value="'+pageTotal.toFixed(2)+'"/>'+pageTotal.toFixed(2));
+                $( api.column( 8 ).footer() ).html('<input type="hidden" name="total_pago" id="total_pago" value="'+pageTotal.toFixed(2)+'"/>'+pageTotal.toFixed(2));
 
-                $( api.column( 7 ).footer() ).html('<input type="hidden" name="total_pago_pagar" id="total_pago_pagar" value="'+pageTotal.toFixed(2)+'" />'+pageTotal.toFixed(2));
+                $( api.column( 9 ).footer() ).html('<input type="hidden" name="total_pago_pagar" id="total_pago_pagar" value="'+pageTotal.toFixed(2)+'" />'+pageTotal.toFixed(2));
 
                 //console.log("sumar nuevamente para total en pagos");
                 //console.log("habia en diferencia "+$("#diferencia").val() );
@@ -535,14 +557,14 @@ tfoot td {
           var nuevosuma=parseFloat(0.00);
 
           $('#tabla_pagos > tbody  > tr').each(function(index,tr) {
-              console.log(index+" posicion");
-              console.log(tr+" tr");
+              //console.log(index+" posicion");
+              //console.log(tr+" tr");
               //var idfila=$(this).find("td").eq(0).html();//fila idpedido
-              console.log( $(this).find("td").eq(6).html()) ;
-              nuevosuma=parseFloat($(this).find("td").eq(6).find(".monto").text());
-              console.log("nuevosuma "+nuevosuma)
+              //console.log( $(this).find("td").eq(6).html()) ;
+              nuevosuma=parseFloat($(this).find("td").eq(8).find(".monto").text());
+              //console.log("nuevosuma "+nuevosuma)
               sisuma=(sisuma)+(nuevosuma);
-              console.log("sumo "+sisuma)
+              //console.log("sumo "+sisuma)
 
           });
           return sisuma
@@ -581,7 +603,7 @@ tfoot td {
           //si elimino pago, recargo datatable pedidos y diferencia vuelvo a calcular con la suma de pagos
           var table = $('#tabla_pagos').DataTable();
           var row = $(this).parents('tr');
-          var subtotal=row.find("td").eq("6").find("span.monto").text();
+          var subtotal=row.find("td").eq("8").find("span.monto").text();
           console.log(subtotal);
           let diff=$("#diferencia").val();
       
@@ -1117,6 +1139,24 @@ tfoot td {
                   }
                 },
                 {
+                  data: 'bancop', 
+                  name: 'bancop',
+                  sWidth:'10%', 
+                  render: function ( data, type, row, meta ) {
+                    return '<input type="hidden" name="bancop['+row.item+']" value="' + data + '"><span class="bancop">' + data + '</span></td>';
+                  },
+                  "visible": false,
+                },
+                {
+                  data: 'obanco', 
+                  name: 'obanco',
+                  sWidth:'10%', 
+                  render: function ( data, type, row, meta ) {
+                    return '<input type="hidden" name="obanco['+row.item+']" value="' + data + '"><span class="obanco">' + data + '</span></td>';
+                  },
+                  "visible": false,
+                },
+                {
                   data: 'fecha', 
                   name: 'fecha',
                   sWidth:'10%', 
@@ -1164,15 +1204,15 @@ tfoot td {
 
                 //para footer  monto
                 var pageTotal = api
-                      .column( 6, { page: 'current'} )
+                      .column( 8, { page: 'current'} )
                       .data()
                       .reduce( function (a, b) {
                           return Number(a) + Number(b);
                       }, 0 );
                 // Update footer
-                $( api.column( 6 ).footer() ).html('<input type="hidden" name="total_pago" id="total_pago" value="'+pageTotal+'"/>'+pageTotal);
+                $( api.column( 8 ).footer() ).html('<input type="hidden" name="total_pago" id="total_pago" value="'+pageTotal+'"/>'+pageTotal);
 
-                $( api.column( 7 ).footer() ).html('<input type="hidden" name="total_pago_pagar" id="total_pago_pagar" value="'+pageTotal+'" />'+pageTotal);
+                $( api.column( 9 ).footer() ).html('<input type="hidden" name="total_pago_pagar" id="total_pago_pagar" value="'+pageTotal+'" />'+pageTotal);
 
               },
               "initComplete": function(settings, json) {
@@ -1443,74 +1483,98 @@ tfoot td {
           headers: {
               'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
           }
-      });
+        });
 
         
         $(document).on("click","#add_pago",function(){
-              if ($('#pbanco').val() == ''){
-                  Swal.fire(
-                    'Error',
-                    'Seleccione banco ',
-                    'warning'
-                  )
-              }else if ($('#tipotransferencia').val() == '') {
+          console.log("click addpago");
+          if ($('#pbanco').val() == '')
+          {
+            Swal.fire(
+              'Error',
+              'Seleccione banco ',
+              'warning'
+            );
+          }else if ($('#tipotransferencia').val() == '')
+          {
+            Swal.fire(
+              'Error',
+              'Seleccione tipo de transferencia',
+              'warning'
+            )
+          }else if ($('#titulares').val() == '')
+          {
+            Swal.fire(
+              'Error',
+              'Seleccione titular',
+              'warning'
+            )
+          }else if ($('#pmonto').val() == '')
+          {
+            Swal.fire(
+              'Error',
+              'Ingrese monto',
+              'warning'
+                )
+          }else if ($('#pfecha').val() == '')
+          {
+            Swal.fire(
+              'Error',
+              'Seleccione la fecha',
+              'warning'
+            )
+          }else {
+            console.log("empieza logica 2");
+            if ($('#tipotransferencia').val() == 'INTERBANCARIO')
+            {
+              console.log("INTERBANCARIO")
+              if ($('#pbancoprocedencia').val() == '')
+              {
+                console.log("pbancoprocedencia vacio")
                 Swal.fire(
                   'Error',
-                  'Seleccione tipo de transferencia',
+                  'Seleccione Banco de procedencia',
                   'warning'
                 )
-              }else if ($('#tipotransferencia').val() == 'INTERBANCARIO') {
-                if ($('#pbancoprocedencia').val() == '') {
+              }else if ($('#pbancoprocedencia').val() == 'OTROS')
+              {
+                console.log("pbancoprocedencia OTROS")
+                if ($('#otro_bancoprocedencia').val() == '')
+                {
                   Swal.fire(
                     'Error',
                     'Seleccione Banco de procedencia',
                     'warning'
                   )
-                }else if ($('#pbancoprocedencia').val() == 'OTROS') {
-                  if ($('#otro_bancoprocedencia').val() == '') 
+                }else{
+                  /**/
+                  console.log("aca");
+                  $("#tabla_pedidos tbody tr .radiototal").prop("checked",false).trigger("change");
+                  $("#tabla_pedidos tbody tr .radioadelanto").prop("checked",false).trigger("change");
+                  let files=$('#pimagen');
+                  var totalfilescarga = $('#pimagen').get(0).files.length;
+                  if(files.length!=totalfilescarga)
                   {
                     Swal.fire(
                       'Error',
-                      'Seleccione Banco de procedencia',
+                      'Debe ingresar la imagen adjunta',
                       'warning'
                     )
+                    return false;
+                  }else{
+                    deuda = !isNaN($('#pcantidad').val()) ? parseInt($('#pcantidad').val(), 10) : 0;
+                    pagado = !isNaN($('#pstock').val()) ? parseInt($('#pstock').val(), 10) : 0;
+                    agregarPago();                  
                   }
-
+                  /**/
                 }
-              }else if ($('#titulares').val() == '') {
-                Swal.fire(
-                  'Error',
-                  'Seleccione titular',
-                  'warning'
-                )
-              }else if ($('#pmonto').val() == '') {
-                Swal.fire(
-                  'Error',
-                  'Ingrese monto',
-                  'warning'
-                )
-              }
-              else if ($('#pfecha').val() == ''){
-                Swal.fire(
-                  'Error',
-                  'Seleccione la fecha',
-                  'warning'
-                )
-              }
-              else {
-                //$("#pcliente_id").trigger("change");
-                //desmarcar total y adelanto
+              }else{
+                /**/
+                console.log("aca");
                 $("#tabla_pedidos tbody tr .radiototal").prop("checked",false).trigger("change");
                 $("#tabla_pedidos tbody tr .radioadelanto").prop("checked",false).trigger("change");
-                //$("#tabla_pedidos tbody tr td .radiototal").reset();
-                //$("#tabla_pedidos tbody tr .radioadelanto").prop("checked",false).checkboxradio('refresh');
-                //$("#tabla_pedidos tbody tr td .radioadelanto").reset();
-
-                //cargar table de
-                //validar imagen cargada
                 let files=$('#pimagen');
                 var totalfilescarga = $('#pimagen').get(0).files.length;
-
                 if(files.length!=totalfilescarga)
                 {
                   Swal.fire(
@@ -1520,18 +1584,35 @@ tfoot td {
                   )
                   return false;
                 }else{
-                  //imagen cargada
                   deuda = !isNaN($('#pcantidad').val()) ? parseInt($('#pcantidad').val(), 10) : 0;
                   pagado = !isNaN($('#pstock').val()) ? parseInt($('#pstock').val(), 10) : 0;
-
-                  //img src resetear
-                  //$("#picture").
-                  
-
-                  agregarPago();
-                  
+                  agregarPago();                  
                 }
+                /**/
               }
+            }else
+            {
+              console.log("aca");
+              $("#tabla_pedidos tbody tr .radiototal").prop("checked",false).trigger("change");
+              $("#tabla_pedidos tbody tr .radioadelanto").prop("checked",false).trigger("change");
+              let files=$('#pimagen');
+              var totalfilescarga = $('#pimagen').get(0).files.length;
+              if(files.length!=totalfilescarga)
+              {
+                Swal.fire(
+                  'Error',
+                  'Debe ingresar la imagen adjunta',
+                  'warning'
+                )
+                return false;
+              }else{
+                deuda = !isNaN($('#pcantidad').val()) ? parseInt($('#pcantidad').val(), 10) : 0;
+                pagado = !isNaN($('#pstock').val()) ? parseInt($('#pstock').val(), 10) : 0;
+                agregarPago();
+                
+              }
+            }
+          }
         });
 
         
@@ -1794,6 +1875,8 @@ tfoot td {
             tipomovimiento = $('#tipotransferencia option:selected').val();
             titular = $('#titulares option:selected').val();
             banco = $('#pbanco option:selected').val();
+            bancop =$("#pbancoprocedencia option:selected").val();
+            otherbanco  =$("#otro_bancoprocedencia").val();
             fecha = $("#pfecha").val();
 
             if (monto != ""  && banco != "" && fecha != ""/*  && imagen != "" */) {
@@ -1836,15 +1919,15 @@ tfoot td {
                     success:function(data){
                       console.log(data);
                       if(data.html=='0'){
-
                         }else{
-                         
                           document.getElementById("picture").setAttribute('src', "{{asset('imagenes/logo_facturas.png')}}");
                           tabla_pagos.row.add( {
                               "item":       (contPa + 1),
                               "movimiento":   tipomovimiento,
                               "titular":     titular,
                               "banco": banco,
+                              "bancop": bancop,
+                              "obanco": otherbanco,
                               "fecha":     fecha,
                               "imagen":       data.html,
                               "monto":      monto,

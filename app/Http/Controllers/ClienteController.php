@@ -977,10 +977,22 @@ class ClienteController extends Controller
 
         $superasesor = User::where('rol', 'Super asesor')->count();
 
-        $users = User::
-            where('estado', '1')    
-            ->whereIn('rol', ['Asesor', 'Super asesor'])        
-            ->pluck('name', 'id');
+        if (Auth::user()->rol == "Llamadas" || Auth::user()->rol == "Llamadas")
+        {
+            $users = User::
+                where('estado', '1')    
+                ->whereIn('rol', ['Asesor', 'Super asesor']) 
+                ->where('users.llamada', Auth::user()->id)
+                ->pluck('identificador', 'id');
+        }else{
+            $users = User::
+                where('estado', '1')    
+                ->whereIn('rol', ['Asesor', 'Super asesor'])
+                //->where('users.llamada', Auth::user()->id)
+                ->pluck('identificador', 'id');
+        }
+        
+        
 
         return view('base_fria.index', compact('clientes', 'superasesor', 'users'));
     }

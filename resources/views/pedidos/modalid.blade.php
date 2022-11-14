@@ -22,7 +22,7 @@
           </div>
           <div class="form-group col lg-12">
             {!! Form::label('responsable', 'Responsable de la anulación') !!}
-            {!! Form::text('responsable', '', ['class' => 'form-control', 'placeholder' => 'Responsable', 'required' => 'required']) !!}
+            {!! Form::text('responsable', '', ['class' => 'form-control', 'placeholder' => 'Responsable', 'required' => 'required','readonly']) !!}
           </div>
         {{-- </div> --}}
       </div>

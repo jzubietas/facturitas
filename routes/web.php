@@ -85,8 +85,11 @@ Route::get('pedidos.mispedidos', [PedidoController::class, 'MisPedidos'])->name(
 Route::get('pedidos.pagados', [PedidoController::class, 'Pagados'])->name('pedidos.pagados');
 Route::get('pedidos.sinpagos', [PedidoController::class, 'SinPagos'])->name('pedidos.sinpagos');
 Route::get('operaciones.poratender', [PedidoController::class, 'PorAtender'])->name('operaciones.poratender');
+Route::get('operaciones.poratendertabla', [PedidoController::class, 'PorAtendertabla'])->name('operaciones.poratendertabla');
 Route::get('operaciones.enatencion', [PedidoController::class, 'EnAtencion'])->name('operaciones.enatencion');
+Route::get('operaciones.enatenciontabla', [PedidoController::class, 'EnAtenciontabla'])->name('operaciones.enatenciontabla');
 Route::get('operaciones.atendidos', [PedidoController::class, 'Atendidos'])->name('operaciones.atendidos');
+Route::get('operaciones.atendidostabla', [PedidoController::class, 'Atendidostabla'])->name('operaciones.atendidostabla');
 Route::get('datatable.cargaratendidos', [PedidoController::class, 'cargarAtendidos'])->name('datatable.cargaratendidos');
 Route::post('pedidos.atender/{pedido}', [PedidoController::class, 'Atender'])->name('pedidos.atender');
 Route::get('operaciones.editatender/{pedido}', [PedidoController::class, 'editAtender'])->name('operaciones.editatender');
