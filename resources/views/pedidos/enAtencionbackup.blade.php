@@ -54,6 +54,7 @@
           <tr>
             <th scope="col">Item</th>
             <th scope="col">Código</th>
+            {{-- <th scope="col">Cliente</th> --}}
             <th scope="col">Razón social</th>
             <th scope="col">Asesor</th>
             <th scope="col">Fecha de registro</th>
@@ -62,10 +63,36 @@
           </tr>
         </thead>
         <tbody>
+          @foreach ($pedidos as $pedido)
+            <tr>
+              @if ($pedido->id < 10)
+                <td>PED000{{ $pedido->id }}</td>
+              @elseif($pedido->id < 100)
+                <td>PED00{{ $pedido->id }}</td>
+              @elseif($pedido->id < 1000)
+                <td>PED0{{ $pedido->id }}</td>
+              @else
+                <td>PED{{ $pedido->id }}</td>
+              @endif
+              <td>{{ $pedido->codigos }}</td>
+              <td>{{ $pedido->empresas }}</td>
+              <td>{{ $pedido->users }}</td>              
+              <td>{{ $pedido->fecha }}</td>
+              <td>{{ $pedido->condicion }}</td>
+              <td>
+                @can('operacion.atender')
+                  <a href="" data-target="#modal-atender-{{ $pedido->id }}" data-toggle="modal" id=""><button class="btn btn-success btn-sm">Atender</button></a>
+                @endcan
+                @can('operacion.PDF')
+                  <a href="{{ route('pedidosPDF', $pedido) }}" class="btn btn-primary btn-sm" target="_blank"><i class="fa fa-file-pdf"></i> PDF</a>
+                @endcan                
+              </td>
+            </tr>
+            @include('pedidos.modal')
+            @include('pedidos.modal.atender')
+          @endforeach
         </tbody>
       </table>
-      @include('pedidos.modalid')
-      @include('pedidos.modal.atenderid')
     </div>
   </div>
 
@@ -124,90 +151,6 @@
   <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
 
   <script>
-    $(document).ready(function () {
-      $.ajaxSetup({
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        }
-      });
-
-      $('#modal-delete').on('show.bs.modal', function (event) {
-        var button = $(event.relatedTarget) 
-        var idunico = button.data('delete')
-        var idresponsable = button.data('responsable')
-        $("#hiddenIDdelete").val(idunico);
-        if(idunico<10){
-          idunico='PED000'+idunico;
-        }else if(idunico<100){
-          idunico= 'PED00'+idunico;
-        }else if(idunico<1000){
-          idunico='PED0'+idunico;
-        }else{
-          idunico='PED'+idunico;
-        } 
-        
-        $(".textcode").html(idunico);
-        $("#motivo").val('');
-        $("#responsable").val( idresponsable );
-      });
-
-      $('#tablaPrincipal').DataTable({
-        processing: true,
-        serverSide: true,
-        searching: true,
-        "order": [[ 0, "desc" ]],
-        ajax: "{{ route('operaciones.enatenciontabla') }}",
-        createdRow: function( row, data, dataIndex){
-          //console.log(row);          
-        },
-        rowCallback: function (row, data, index) {           
-        },
-        columns: [
-          {
-              data: 'id', 
-              name: 'id',
-              render: function ( data, type, row, meta ) {
-                if(row.id<10){
-                  return 'PED000'+row.id;
-                }else if(row.id<100){
-                  return 'PED00'+row.id;
-                }else if(row.id<1000){
-                  return 'PED0'+row.id;
-                }else{
-                  return 'PED'+row.id;
-                } 
-              }
-          },
-          {data: 'codigos', name: 'codigos', },
-          {data: 'empresas', name: 'empresas', },
-          {data: 'users', name: 'users', },
-          {data: 'fecha', name: 'fecha', },
-          {data: 'condicion', name: 'condicion', },
-          {
-            data: 'action', 
-            name: 'action', 
-            orderable: false, 
-            searchable: false,
-            sWidth:'20%',
-            render: function ( data, type, row, meta ) {
-              var urlpdf = '{{ route("pedidosPDF", ":id") }}';
-              urlpdf = urlpdf.replace(':id', row.id);              
-              @can('operacion.atender')
-                data = data+'<a href="" data-target="#modal-atender-'+row.id+'" data-toggle="modal" ><button class="btn btn-success btn-sm">Atender</button></a>';                
-              @endcan
-              @can('operacion.PDF')
-                data = data+'<a href="'+urlpdf+'" class="btn btn-primary btn-sm" target="_blank"><i class="fa fa-file-pdf"></i> PDF</a>';                
-              @endcan
-              return data;
-            }
-          },
-        ]
-
-      });
-    });
-  </script>
-
-  <script>
     /* $(document).ready(function() {
         $('#atender').click(function() {
           if ($('#penvio_doc').val() == '') {
@@ -260,9 +203,9 @@
   <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
   
   <script>
-    /*window.onload = function () {      
+    window.onload = function () {      
       $('#tablaPrincipal').DataTable().draw();
-    }*/
+    }
   </script>
 
   <script>

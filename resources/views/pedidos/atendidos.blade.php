@@ -66,63 +66,10 @@
           </tr>
         </thead>
         <tbody>
-          @foreach ($pedidos as $pedido)
-            <tr>
-              @if ($pedido->id < 10)
-                <td>PED000{{ $pedido->id }}</td>
-              @elseif($pedido->id < 100)
-                <td>PED00{{ $pedido->id }}</td>
-              @elseif($pedido->id < 1000)
-                <td>PED0{{ $pedido->id }}</td>
-              @else
-                <td>PED{{ $pedido->id }}</td>
-              @endif
-              <td>{{ $pedido->codigos }}</td>
-              <td>{{ $pedido->empresas }}</td>
-              <td>{{ $pedido->users }}</td>              
-              <td>{{ $pedido->fecha }}</td>
-              <td>{{ $pedido->destino }}</td>
-              <td>{{ $pedido->condicion }}</td>   
-              <td>{{ $pedido->atendido_por }}</td>
-              @if ($pedido->jefe)
-                <td>USER0{{ $pedido->jefe }}</td>
-              @else
-                <td></td>
-              @endif
-              <td>
-                @if ($pedido->envio == '1')
-                  <span class="badge badge-success">Enviado</span>
-                  <span class="badge badge-warning">Por confirmar recepcion</span>
-                @elseif ($pedido->envio == '2')
-                  <span class="badge badge-success">Enviado</span>
-                  <span class="badge badge-info">Recibido</span>
-                @elseif ($pedido->envio == '3')
-                  <span class="badge badge-dark">Sin envio</span>
-                @else
-                  <span class="badge badge-danger">por enviar</span>
-                @endif
-              </td>           
-              <td>
-                <a href="{{ route('operaciones.showatender', $pedido) }}" class="btn btn-primary btn-sm"><i class="fas fa-eye"></i> Ver</a>
-                @can('operacion.editatender')
-                  <a href="{{ route('operaciones.editatender', $pedido) }}" class="btn btn-warning btn-sm"><i class=""></i> Editar atención</a>
-                @endcan
-                @can('operacion.PDF')
-                  <a href="{{ route('pedidosPDF', $pedido) }}" class="btn btn-danger btn-sm" target="_blank"><i class="fa fa-file-pdf"></i> PDF</a>
-                @endcan
-                @can('operacion.enviar')
-                  @if ($pedido->envio == '0')
-                    <a href="" data-target="#modal-envio-{{ $pedido->id }}" data-toggle="modal"><button class="btn btn-success btn-sm">Enviar</button></a>
-                    <a href="" data-target="#modal-sinenvio-{{ $pedido->id }}" data-toggle="modal"><button class="btn btn-dark btn-sm">Sin envío</button></a>
-                  @endif
-                @endcan
-              </td>
-            </tr>
-            @include('pedidos.modal.envio')
-            @include('pedidos.modal.sinenvio')
-          @endforeach
         </tbody>
       </table>
+      @include('pedidos.modal.envioid')
+      @include('pedidos.modal.sinenvioid')
     </div>
   </div>
 
@@ -179,6 +126,135 @@
   <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
 
   <script>
+    $(document).ready(function () {
+      $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+      });
+
+      $('#modal-delete').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget) 
+        var idunico = button.data('delete')
+        var idresponsable = button.data('responsable')
+        $("#hiddenIDdelete").val(idunico);
+        if(idunico<10){
+          idunico='PED000'+idunico;
+        }else if(idunico<100){
+          idunico= 'PED00'+idunico;
+        }else if(idunico<1000){
+          idunico='PED0'+idunico;
+        }else{
+          idunico='PED'+idunico;
+        }        
+        $(".textcode").html(idunico);
+        $("#motivo").val('');
+        $("#responsable").val( idresponsable );
+      });
+
+      $('#tablaPrincipal').DataTable({
+        processing: true,
+        serverSide: true,
+        searching: true,
+        "order": [[ 0, "desc" ]],
+        ajax: {
+          url: "{{ route('operaciones.atendidostabla') }}",
+          data: function (d) {
+            //d.asesores = $("#asesores_pago").val();
+            d.min = $("#min").val();
+            d.max = $("#max").val();           
+            
+          },
+        },
+        createdRow: function( row, data, dataIndex){
+          //console.log(row);          
+        },
+        rowCallback: function (row, data, index) {           
+        },
+        columns: [
+          {
+              data: 'id', 
+              name: 'id',
+              render: function ( data, type, row, meta ) {
+                if(row.id<10){
+                  return 'PED000'+row.id;
+                }else if(row.id<100){
+                  return 'PED00'+row.id;
+                }else if(row.id<1000){
+                  return 'PED0'+row.id;
+                }else{
+                  return 'PED'+row.id;
+                } 
+              }
+          },
+          {data: 'codigos', name: 'codigos', },
+          {data: 'empresas', name: 'empresas', },
+          {data: 'users', name: 'users', },
+          {data: 'fecha', name: 'fecha', },
+          {data: 'destino', name: 'destino', },
+          {data: 'condicion', name: 'condicion', },
+          {data: 'atendido_por', name: 'atendido_por', },
+          {data: 'jefe', name: 'jefe', },
+          {
+              data: 'envio',
+              name: 'envio',
+              render: function ( data, type, row, meta ) {
+                if(row.envio==1){
+                  return '<span class="badge badge-success">Enviado</span>'+
+                        '<span class="badge badge-warning">Por confirmar recepcion</span>';
+                }else if(row.envio==2){
+                  return '<span class="badge badge-success">Enviado</span>'+
+                          '<span class="badge badge-info">Recibido</span>';
+                }else if(row.envio==3){
+                  return '<span class="badge badge-dark">Sin envio</span>';
+                }else{
+                  return '<span class="badge badge-danger">por enviar</span>';
+                } 
+              }
+          },
+          {
+            data: 'action', 
+            name: 'action', 
+            orderable: false, 
+            searchable: false,
+            sWidth:'20%',
+            render: function ( data, type, row, meta ) {
+
+              var urlver = '{{ route("operaciones.showatender", ":id") }}';
+              urlver = urlver.replace(':id', row.id);
+              data = data+'<a href="'+urlver+'" class="btn btn-primary btn-sm" target="_blank"><i class="fas fa-eye"></i> Ver</a>';
+
+              var urledit = '{{ route("operaciones.editatender", ":id") }}';
+              urledit = urledit.replace(':id', row.id);
+              @can('operacion.editatender')
+                data = data+'<a href="'+urledit+'" class="btn btn-warning btn-sm"><i class=""></i> Editar atención</a>';
+              @endcan
+              var urlpdf = '{{ route("pedidosPDF", ":id") }}';
+              urlpdf = urlpdf.replace(':id', row.id);  
+              @can('operacion.PDF')
+                data = data+'<a href="'+urlpdf+'" class="btn btn-primary btn-sm" target="_blank"><i class="fa fa-file-pdf"></i> PDF</a>';                
+              @endcan
+
+              @can('operacion.enviar')
+                if (row.envio == '0')
+                {
+                  data = data+'<a href="" data-target="#modal-envio-'+row.id+'" data-toggle="modal" ><button class="btn btn-success btn-sm">Enviar</button></a>'; 
+                  data = data+'<a href="" data-target="#modal-sinenvio-'+row.id+'" data-toggle="modal" ><button class="btn btn-dark btn-sm">Sin envío</button></a>'; 
+                }
+              @endcan
+              
+              return data;
+            }
+          },
+        ]
+
+      });
+
+
+    });
+  </script>
+
+  <script>
     $("#penvio_doc").change(mostrarValores1);
 
     function mostrarValores1() {
@@ -205,9 +281,9 @@
   <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
   
   <script>
-    window.onload = function () {      
+    /*window.onload = function () {      
       $('#tablaPrincipal').DataTable().draw();
-    }
+    }*/
   </script>
 
   <script>

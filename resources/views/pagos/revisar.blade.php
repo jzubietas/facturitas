@@ -177,7 +177,9 @@
                   @foreach ($detallePagos as $detallePago)
                     <tr class="nohide_{{ $contPa + 1 }}">
                       <td>{{ $contPa + 1 }}</td>
-                      <td>DETPAG00{{ $detallePago->id }}<input type="hidden" name="detalle_id[]" value="{{ $detallePago->id }}" class="form-control"></td>
+                      <td>DETPAG00{{ $detallePago->id }}
+                      
+                      <input type="hidden" name="detalle_id[]" value="{{ $detallePago->id }}" class="form-control"></td>
                       <td>{{ $detallePago->banco }}</td>                  
                       <td>{{ $detallePago->monto }}</td>
                       

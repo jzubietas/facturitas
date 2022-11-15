@@ -65,6 +65,9 @@
         <tbody>          
         </tbody>
       </table>
+      @include('pedidos.modalid')
+      @include('pedidos.modal.atenderid')
+      @include('pedidos.modal.veradjuntoid')
     </div>
   </div>
 
@@ -131,12 +134,37 @@
         }
       });
 
+      $('#modal-delete').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget) 
+        var idunico = button.data('delete')
+        var idresponsable = button.data('responsable')
+        $("#hiddenIDdelete").val(idunico);
+        if(idunico<10){
+          idunico='PED000'+idunico;
+        }else if(idunico<100){
+          idunico= 'PED00'+idunico;
+        }else if(idunico<1000){
+          idunico='PED0'+idunico;
+        }else{
+          idunico='PED'+idunico;
+        } 
+        
+        $(".textcode").html(idunico);
+        $("#motivo").val('');
+        $("#responsable").val( idresponsable );
+      });
+
       $('#tablaPrincipal').DataTable({
         processing: true,
         serverSide: true,
         searching: true,
         "order": [[ 0, "desc" ]],
         ajax: "{{ route('operaciones.poratendertabla') }}",
+        createdRow: function( row, data, dataIndex){
+          //console.log(row);          
+        },
+        rowCallback: function (row, data, index) {           
+        },
         columns: [
           {
               data: 'id', 
@@ -166,8 +194,6 @@
             render: function ( data, type, row, meta ) {
               data = data+'<a href="" data-target="#modal-veradjunto-'+row.id+'" data-toggle="modal" ><button class="btn btn-primary btn-sm"><i class="fas fa-eye"></i> Ver</button></a>';
 
-              
-
               return data;                          
             }
           },
@@ -178,22 +204,16 @@
             orderable: false, 
             searchable: false,
             sWidth:'20%',
-            render: function ( data, type, row, meta ) {
-              
+            render: function ( data, type, row, meta ) {              
               var urlpdf = '{{ route("pedidosPDF", ":id") }}';
               urlpdf = urlpdf.replace(':id', row.id);
-
               @can('operacion.atender')
-                data = data+'<a href="" data-target="#modal-atender-'+row.id+'" data-toggle="modal" ><button class="btn btn-success btn-sm">Atender</button></a>';
-                @include('pedidos.modal.atender')
+                data = data+'<a href="" data-target="#modal-atender-'+row.id+'" data-toggle="modal" ><button class="btn btn-success btn-sm">Atender</button></a>';                
               @endcan
               @can('operacion.PDF')
-                data = data+'<a href="'+urlpdf+'" class="btn btn-primary btn-sm" target="_blank"><i class="fa fa-file-pdf"></i> PDF</a>';
-                <a href="{{ route('pedidosPDF', $pedido) }}" class="btn btn-primary btn-sm" target="_blank"><i class="fa fa-file-pdf"></i> PDF</a>
+                data = data+'<a href="'+urlpdf+'" class="btn btn-primary btn-sm" target="_blank"><i class="fa fa-file-pdf"></i> PDF</a>';                
               @endcan
-
-              return data;
-                         
+              return data;                         
             }
           },
         ]
@@ -227,10 +247,17 @@
   @endif
 
   <script>
-    //VALIDAR CAMPOS ANTES DE ENVIAR
-    document.addEventListener("DOMContentLoaded", function() {
-    document.getElementById("formulario").addEventListener('submit', validarFormulario); 
+    $(document).ready(function () {
+      $(document).on("submit","#formulario",function(event){
+        event.preventDefault();
+        validarFormulario();
+      });
     });
+
+    //VALIDAR CAMPOS ANTES DE ENVIAR
+    /*document.addEventListener("DOMContentLoaded", function() {
+    document.getElementById("formulario").addEventListener('submit', validarFormulario); 
+    });*/
 
     function validarFormulario(evento) {
       evento.preventDefault();
@@ -267,9 +294,9 @@
 <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
   
 <script>
-  window.onload = function () {      
+  /*window.onload = function () {      
     $('#tablaPrincipal').DataTable().draw();
-  }
+  }*/
 </script>
 
   <script>

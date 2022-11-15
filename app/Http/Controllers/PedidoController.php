@@ -2769,6 +2769,20 @@ class PedidoController extends Controller
 
     public function Atendidostabla(Request $request)
     {
+        /*$query = null;
+        $query = Pedido::where('estado', '1');
+
+        $min=$request->min;
+        $max=$request->max;*/
+
+        //>whereBetween('pedidos.created_at', [$dateMinWhere, $dateMax])
+        /*$dateMinWhere = Carbon::now()->subDays(60)->format('d/m/Y');
+        $dateMin = Carbon::now()->subDays(30)->format('d/m/Y');
+        $dateMax = Carbon::now()->format('d/m/Y');*/
+
+        //$query->whereNotIn('id',$array_excluir); 
+
+
         if(Auth::user()->rol == "Operario"){
             $pedidos = Pedido::/* join('clientes as c', 'pedidos.cliente_id', 'c.id')
                 -> */join('users as u', 'pedidos.user_id', 'u.id')

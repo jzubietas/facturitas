@@ -122,6 +122,24 @@
 <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
 
+<script>
+    function clickformdelete()
+    {
+      console.log("action delete action")
+      var formData = $("#formdelete").serialize();
+      console.log(formData);
+      $.ajax({
+        type:'POST',
+        url:"{{ route('pagodeleteRequest.post') }}",
+        data:formData,
+      }).done(function (data) {
+        $("#modal-delete").modal("hide");
+        //resetearcamposdelete();          
+        $('#tablaPrincipal').DataTable().ajax.reload();      
+      });
+    }
+  </script>
+
 {{--<script src="{{ asset('js/datatables.js') }}"></script>--}}
 
 <script>

@@ -145,7 +145,7 @@
                       <td>{{ $detallePago->fecha_deposito }}</td>
                       <td>{{ $detallePago->observacion }}</td>
                       <td><a href="" data-target="#modal-imagen-{{ $detallePago->id }}" data-toggle="modal">
-                          <img src="{{ asset('storage/adjuntos/' . $detallePago->imagen) }}" alt="{{ $detallePago->imagen }}" height="200px" width="200px" class="img-thumbnail"></a>
+                          <img src="{{ asset('storage/pagos/' . $detallePago->imagen) }}" alt="{{ $detallePago->imagen }}" height="200px" width="200px" class="img-thumbnail"></a>
                         <p><br><a href="{{ route('pagos.descargarimagen', $detallePago->imagen) }}"><button type="button" class="btn btn-secondary"> Descargar</button></a></p>
                       </td>
                     </tr>

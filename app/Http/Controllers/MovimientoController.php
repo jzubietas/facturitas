@@ -221,6 +221,8 @@ class MovimientoController extends Controller
             'pedido' => '0',
             'estado' => '1',
             'pago' => '0',
+            'detpago' => '',
+            'cabpago' => '',
             'descripcion_otros' =>$descrip_otros 
         ]);
 

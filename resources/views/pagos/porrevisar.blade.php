@@ -151,7 +151,7 @@
         data:formData,
       }).done(function (data) {
         $("#modal-delete").modal("hide");
-        resetearcamposdelete();          
+        //resetearcamposdelete();          
         $('#tablaPrincipal').DataTable().ajax.reload();      
       });
     }

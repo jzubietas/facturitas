@@ -2002,6 +2002,13 @@ class PagoController extends Controller
 
     public function PorRevisartabla(Request $request)
     {
+        //$query = null;
+        //$query = Pago::where('estado', '1');
+
+        //$min=$request->min;
+        //$max=$request->max;
+
+
         $pagos=null;
        
         if(!$request->asesores)
@@ -2508,18 +2515,21 @@ class PagoController extends Controller
 
 
             //return $request->all();
-            $detalle_id = $request->conciliar;
+            $detalle_list = $request->detalle_id;
+            $conciliar_list = $request->conciliar;
             $cuenta = $request->cuenta;
             $titular = $request->titular;
             $fecha_deposito = $request->fecha_deposito;
             $cont = 0;
 
-            while ($cont < count((array)$detalle_id)) 
+            while ($cont < count((array)$conciliar_list)) 
             {
-                $movimiento=MovimientoBancario::where("id",$detalle_id[$cont]);
+                $movimiento=MovimientoBancario::where("id",$conciliar_list[$cont]);
 
                 $movimiento->update([            
-                    'pago' => 1
+                    'pago' => 1,
+                    'detpago' => $detalle_list[$cont],
+                    'cabpago' => $pago->id
                 ]);
                 $cont++;
 
