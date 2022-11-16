@@ -21,9 +21,7 @@
                       <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="text-align: center">
                         {!! Form::label('envio_doc', 'Documento(s) adjuntado(s) del pedido') !!}
                          
-                                <p>
-                                  <a href=""></a>
-                                </p>
+                            <div id="imagenes_adjunto"></div>
                               
                       </div>
                     </div>

@@ -3,7 +3,7 @@
 @section('title', 'Lista de pedidos pagados')
 
 @section('content_header')
-  <h1>Lista de pedidos ATENDIDOS - OPERACIONES
+  <h1>Lista de pedidos ENTREGADOS - OPERACIONES
     {{-- @can('pedidos.exportar')
     <div class="float-right btn-group dropleft">
       <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -133,14 +133,6 @@
         }
       });
 
-      $('#modal-envio').on('show.bs.modal', function (event) {
-        //cuando abre el form de anular pedido
-        var button = $(event.relatedTarget) 
-        var idunico = button.data('atender')
-        $(".textcode").html("PED"+idunico);
-        $("#hiddenEnviar").val(idunico);
-      });
-
       $('#modal-delete').on('show.bs.modal', function (event) {
         var button = $(event.relatedTarget) 
         var idunico = button.data('delete')
@@ -166,7 +158,7 @@
         searching: true,
         "order": [[ 0, "desc" ]],
         ajax: {
-          url: "{{ route('operaciones.atendidostabla') }}",
+          url: "{{ route('operaciones.entregadostabla') }}",
           data: function (d) {
             //d.asesores = $("#asesores_pago").val();
             d.min = $("#min").val();

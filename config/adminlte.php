@@ -323,16 +323,23 @@ return [
                     'icon'   => 'fas fa-check-circle',
                     'active' => ['pedidos por atender'],
                 ],
-                [
+                /*[
                     'text' => 'Pedidos en atención',
                     'route'  => 'operaciones.enatencion',
                     'can' => 'operacion.enatencion',
                     'icon'   => 'fas fa-check-circle',
                     'active' => ['pedidos en atención'],
-                ],
+                ],*/
                 [
                     'text' => 'Pedidos atendidos',
                     'route'  => 'operaciones.atendidos',
+                    'can' => 'operacion.atendidos',
+                    'icon'   => 'fas fa-check-circle',
+                    'active' => ['pedidos atendidos'],
+                ],
+                [
+                    'text' => 'Pedidos entregados',
+                    'route'  => 'operaciones.entregados',
                     'can' => 'operacion.atendidos',
                     'icon'   => 'fas fa-check-circle',
                     'active' => ['pedidos atendidos'],
@@ -416,13 +423,13 @@ return [
                     'icon'   => 'fas fa-check-circle',
                     'active' => ['pagos observados*'],
                 ],
-                [
+                /*[
                     'text' => 'Voucher con abono parcial',
                     'route'  => 'administracion.abonados',
                     'can' => 'administracion.porrevisar',
                     'icon'   => 'fas fa-check-circle',
                     'active' => ['pagos abonados*'],
-                ],
+                ],*/
                 [
                     'text' => 'Voucher aprobados',
                     'route'  => 'administracion.aprobados',

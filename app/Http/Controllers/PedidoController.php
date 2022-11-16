@@ -133,9 +133,11 @@ class PedidoController extends Controller
                 'pedidos.condicion_envio',
                 'pedidos.condicion as condiciones',
                 'pedidos.pagado as condicion_pa',
+                DB::raw('(select pago.condicion from pago_pedidos pagopedido inner join pedidos pedido on pedido.id=pagopedido.pedido_id and pedido.id=pedidos.id inner join pagos pago on pagopedido.pago_id=pago.id where pagopedido.estado=1 and pago.estado=1 order by pagopedido.created_at desc limit 1) as condiciones_aprobado'),
                 'pedidos.motivo',
                 'pedidos.responsable',
-                DB::raw('DATE_FORMAT(pedidos.created_at, "%d/%m/%Y") as fecha'),
+                DB::raw('DATE_FORMAT(pedidos.created_at, "%d/%m/%Y") as fecha2'),
+                DB::raw('DATE_FORMAT(pedidos.created_at, "%Y-%m-%d %H:%i:%s") as fecha'),
                 'dp.saldo as diferencia',
                 'pedidos.estado',
                 'pedidos.envio',
@@ -187,9 +189,11 @@ class PedidoController extends Controller
                 'pedidos.condicion_envio',
                 'pedidos.condicion as condiciones',
                 'pedidos.pagado as condicion_pa',
+                DB::raw('(select pago.condicion from pago_pedidos pagopedido inner join pedidos pedido on pedido.id=pagopedido.pedido_id and pedido.id=pedidos.id inner join pagos pago on pagopedido.pago_id=pago.id where pagopedido.estado=1 and pago.estado=1 order by pagopedido.created_at desc limit 1) as condiciones_aprobado'),
                 'pedidos.motivo',
                 'pedidos.responsable',
-                DB::raw('DATE_FORMAT(pedidos.created_at, "%d/%m/%Y") as fecha'),
+                DB::raw('DATE_FORMAT(pedidos.created_at, "%d/%m/%Y") as fecha2'),
+                DB::raw('DATE_FORMAT(pedidos.created_at, "%Y-%m-%d %H:%i:%s") as fecha'),
                 'dp.saldo as diferencia',
                 'pedidos.estado',
                 'pedidos.envio',
@@ -236,10 +240,12 @@ class PedidoController extends Controller
                 'pedidos.condicion_envio',
                 'pedidos.condicion as condiciones',
                 'pedidos.pagado as condicion_pa',//'pa.condicion as condicion_pa',//para pedido con pago
+                DB::raw('(select pago.condicion from pago_pedidos pagopedido inner join pedidos pedido on pedido.id=pagopedido.pedido_id and pedido.id=pedidos.id inner join pagos pago on pagopedido.pago_id=pago.id where pagopedido.estado=1 and pago.estado=1 order by pagopedido.created_at desc limit 1) as condiciones_aprobado'),
                 'pedidos.motivo',
                 'pedidos.responsable',
                 /*'pedidos.created_at as fecha',*/
-                DB::raw('DATE_FORMAT(pedidos.created_at, "%d/%m/%Y") as fecha'),
+                DB::raw('DATE_FORMAT(pedidos.created_at, "%d/%m/%Y") as fecha2'),
+                DB::raw('DATE_FORMAT(pedidos.created_at, "%Y-%m-%d %H:%i:%s") as fecha'),
                 'dp.saldo as diferencia',//'pa.diferencia',//para pedido con pago
                 'pedidos.estado',
                 'pedidos.envio',
@@ -291,10 +297,12 @@ class PedidoController extends Controller
                 'pedidos.condicion_envio',
                 'pedidos.condicion as condiciones',
                 'pedidos.pagado as condicion_pa',//'pa.condicion as condicion_pa',//para pedido con pago
+                DB::raw('(select pago.condicion from pago_pedidos pagopedido inner join pedidos pedido on pedido.id=pagopedido.pedido_id and pedido.id=pedidos.id inner join pagos pago on pagopedido.pago_id=pago.id where pagopedido.estado=1 and pago.estado=1 order by pagopedido.created_at desc limit 1) as condiciones_aprobado'),
                 'pedidos.motivo',
                 'pedidos.responsable',
                 /*'pedidos.created_at as fecha',*/
-                DB::raw('DATE_FORMAT(pedidos.created_at, "%d/%m/%Y") as fecha'),
+                DB::raw('DATE_FORMAT(pedidos.created_at, "%d/%m/%Y") as fecha2'),
+                DB::raw('DATE_FORMAT(pedidos.created_at, "%Y-%m-%d %H:%i:%s") as fecha'),
                 'dp.saldo as diferencia',//'pa.diferencia',//para pedido con pago
                 'pedidos.estado',
                 'pedidos.envio'
@@ -352,9 +360,11 @@ class PedidoController extends Controller
                 'pedidos.condicion_envio',
                 'pedidos.condicion as condiciones',
                 'pedidos.pagado as condicion_pa',
+                DB::raw('(select pago.condicion from pago_pedidos pagopedido inner join pedidos pedido on pedido.id=pagopedido.pedido_id and pedido.id=pedidos.id inner join pagos pago on pagopedido.pago_id=pago.id where pagopedido.estado=1 and pago.estado=1 order by pagopedido.created_at desc limit 1) as condiciones_aprobado'),
                 'pedidos.motivo',
                 'pedidos.responsable',
-                DB::raw('DATE_FORMAT(pedidos.created_at, "%d/%m/%Y") as fecha'),
+                DB::raw('DATE_FORMAT(pedidos.created_at, "%d/%m/%Y") as fecha2'),
+                DB::raw('DATE_FORMAT(pedidos.created_at, "%Y-%m-%d %H:%i:%s") as fecha'),
                 'dp.saldo as diferencia',
                 'pedidos.estado',
                 'pedidos.envio'
@@ -401,10 +411,12 @@ class PedidoController extends Controller
                 'pedidos.condicion_envio',
                 'pedidos.condicion as condiciones',
                 'pedidos.pagado as condicion_pa',//'pa.condicion as condicion_pa',//para pedido con pago
+                DB::raw('(select pago.condicion from pago_pedidos pagopedido inner join pedidos pedido on pedido.id=pagopedido.pedido_id and pedido.id=pedidos.id inner join pagos pago on pagopedido.pago_id=pago.id where pagopedido.estado=1 and pago.estado=1 order by pagopedido.created_at desc limit 1) as condiciones_aprobado'),
                 'pedidos.motivo',
                 'pedidos.responsable',
                 /*'pedidos.created_at as fecha',*/
-                DB::raw('DATE_FORMAT(pedidos.created_at, "%d/%m/%Y") as fecha'),
+                DB::raw('DATE_FORMAT(pedidos.created_at, "%d/%m/%Y") as fecha2'),
+                DB::raw('DATE_FORMAT(pedidos.created_at, "%Y-%m-%d %H:%i:%s") as fecha'),
                 'dp.saldo as diferencia',//'pa.diferencia',//para pedido con pago
                 'pedidos.estado',
                 'pedidos.envio'
@@ -771,6 +783,29 @@ class PedidoController extends Controller
         
     }
 
+    public function pedidoobteneradjuntoRequest(Request $request)
+    {
+        $buscar_pedido=$request->pedido;
+        
+        $cont_imagen=ImagenPedido::where('pedido_id',$buscar_pedido)->count();
+        $array_html=[];
+        if($cont_imagen>0)
+        {            
+            $imagenes=ImagenPedido::where('pedido_id',$buscar_pedido)
+                ->where("estado","1")
+                ->whereNotIn("adjunto",['logo_facturas.png'])
+                ->orderBy('created_at', 'DESC')->get();
+            foreach ($imagenes as $imagen) {
+                $array_html[]=$imagen->adjunto;
+            }
+            $html=implode("|",$array_html);
+            return response()->json(['html' => $html,'cantidad'=>$cont_imagen]);
+        }else{
+            $html="0";
+            return response()->json(['html' => $html,'cantidad'=>$cont_imagen]);
+        }
+    }
+
     public function ruc(Request $request)//rucs
     {
         if (!$request->cliente_id || $request->cliente_id=='') {
@@ -891,15 +926,19 @@ class PedidoController extends Controller
                     if($cliente->activado_tiempo>0)
                     {
                         {
-                            $fecha_compa=Carbon($cliente->temporal_update.tostring())->addMinutes($cliente->activado_tiempo);                            
-                            $ahora = Carbon::now();
-                            if($fecha_compa<$ahora)
+                            //$fecha_compa = Carbon::parse($cliente->temporal_update)->timestamp
+                            //$fecha_compa = date('Y-m-d H:i:s', strtotime($cliente->temporal_update));
+                            //$fecha_compa = Carbon::createFromFormat('d/m/Y H:i:s',  $cliente->temporal_update)->addMinutes($cliente->activado_tiempo);
+                            //$dateMin = Carbon::now()->subDays(4)->format('d/m/Y');
+                            //$fecha_compa= Carbon($cliente->temporal_update.tostring())->addMinutes($cliente->activado_tiempo);                            
+                            //$ahora = Carbon::now();
+                            /*if($fecha_compa<$ahora)*/
                             {
                                 $html .= '<option style="color:white" value="' . $cliente->id . '">' . $cliente->celular. '  -  ' . $cliente->nombre . '</option>';
-                            }else{
+                            }/*else{
                                 
                                 $html .= '<option disabled style="color:red" value="' . $cliente->id . '">' . $cliente->celular. '  -  ' . $cliente->nombre . '**CLIENTE CON DEUDA**</option>';
-                            }
+                            }*/
                         }
                     }
                 }else{
@@ -1126,7 +1165,7 @@ class PedidoController extends Controller
                 $html="|2";
                 if($mirol!='Administrador')
                 {
-                    return response()->json(['html' => $html]); 
+                    //return response()->json(['html' => $html]); 
                 }                
             }else{
 
@@ -1135,12 +1174,12 @@ class PedidoController extends Controller
         }else if($cliente_deuda->pedidos_mes_deuda>0 && $cliente_deuda->pedidos_mes_deuda_antes>0)
         {
            $html="|0";
-           return response()->json(['html' => $html]); 
+           //return response()->json(['html' => $html]); 
 
         }else if($cliente_deuda->pedidos_mes_deuda==0 && $cliente_deuda->pedidos_mes_deuda_antes>0)
         {
             $html="|0";
-            return response()->json(['html' => $html]); 
+            //return response()->json(['html' => $html]); 
         }
 
 
@@ -1538,6 +1577,7 @@ class PedidoController extends Controller
      */
     public function edit(Pedido $pedido)
     {
+        $mirol=Auth::user()->rol;
         $meses = [
             "ENERO" => 'ENERO',
             "FEBRERO" => 'FEBRERO',
@@ -1626,7 +1666,7 @@ class PedidoController extends Controller
         
         $imagenes = ImagenPedido::where('imagen_pedidos.pedido_id', $pedido->id)->get();
 
-        return view('pedidos.edit', compact('pedido', 'pedidos', 'meses', 'anios','porcentajes', 'imagenes'));
+        return view('pedidos.edit', compact('pedido', 'pedidos', 'meses', 'anios','porcentajes', 'imagenes','mirol'));
     }
 
     /**
@@ -2178,7 +2218,7 @@ class PedidoController extends Controller
                 'pedidos.id',
                 'c.nombre as nombres',
                 'c.celular as celulares',
-                'u.name as users',
+                'u.identificador as users',
                 'dp.codigo as codigos',
                 'dp.nombre_empresa as empresas',
                 /* DB::raw('sum(dp.total) as total'), */
@@ -2190,17 +2230,19 @@ class PedidoController extends Controller
                 'dp.fecha_envio_doc',
                 'dp.cant_compro',
                 'dp.fecha_envio_doc_fis',
-                'dp.fecha_recepcion'
+                'dp.fecha_recepcion',
+                DB::raw(" ( select count(ip.id) from imagen_pedidos ip inner join pedidos pedido on pedido.id=ip.pedido_id and pedido.id=pedidos.id where ip.estado=1 and ip.adjunto not in ('logo_facturas.png') ) as imagenes ")
             )
             ->where('pedidos.estado', '1')
             ->where('dp.estado', '1')
             ->where('u.operario', Auth::user()->id)
-            ->where('pedidos.condicion', 'POR ATENDER')
+            //->where('pedidos.condicion', 'POR ATENDER')
+            ->whereIn('pedidos.condicion', ['POR ATENDER','EN PROCESO ATENCION'])
             ->groupBy(
                 'pedidos.id',
                 'c.nombre',
                 'c.celular',
-                'u.name',
+                'u.identificador',
                 'dp.codigo',
                 'dp.nombre_empresa',
                 'dp.total',
@@ -2222,7 +2264,7 @@ class PedidoController extends Controller
                 'pedidos.id',
                 'c.nombre as nombres',
                 'c.celular as celulares',
-                'u.name as users',
+                'u.identificador as users',
                 'dp.codigo as codigos',
                 'dp.nombre_empresa as empresas',
                 /* DB::raw('sum(dp.total) as total'), */
@@ -2234,17 +2276,18 @@ class PedidoController extends Controller
                 'dp.fecha_envio_doc',
                 'dp.cant_compro',
                 'dp.fecha_envio_doc_fis',
-                'dp.fecha_recepcion'
+                'dp.fecha_recepcion',
+                DB::raw(" ( select count(ip.id) from imagen_pedidos ip inner join pedidos pedido on pedido.id=ip.pedido_id and pedido.id=pedidos.id where ip.estado=1 and ip.adjunto not in ('logo_facturas.png') ) as imagenes ")
             )
             ->where('pedidos.estado', '1')
             ->where('dp.estado', '1')
             ->where('u.jefe', Auth::user()->id)
-            ->where('pedidos.condicion', 'POR ATENDER')
+            ->whereIn('pedidos.condicion', ['POR ATENDER','EN PROCESO ATENCION'])
             ->groupBy(
                 'pedidos.id',
                 'c.nombre',
                 'c.celular',
-                'u.name',
+                'u.identificador',
                 'dp.codigo',
                 'dp.nombre_empresa',
                 'dp.total',
@@ -2267,7 +2310,7 @@ class PedidoController extends Controller
                 'pedidos.id',
                 'c.nombre as nombres',
                 'c.celular as celulares',
-                'u.name as users',
+                'u.identificador as users',
                 'dp.codigo as codigos',
                 'dp.nombre_empresa as empresas',
                 /* DB::raw('sum(dp.total) as total'), */
@@ -2279,16 +2322,17 @@ class PedidoController extends Controller
                 'dp.fecha_envio_doc',
                 'dp.cant_compro',
                 'dp.fecha_envio_doc_fis',
-                'dp.fecha_recepcion'
+                'dp.fecha_recepcion',
+                DB::raw(" ( select count(ip.id) from imagen_pedidos ip inner join pedidos pedido on pedido.id=ip.pedido_id and pedido.id=pedidos.id where ip.estado=1 and ip.adjunto not in ('logo_facturas.png') ) as imagenes ")
             )
             ->where('pedidos.estado', '1')
             ->where('dp.estado', '1')
-            ->where('pedidos.condicion', 'POR ATENDER')
+            ->whereIn('pedidos.condicion', ['POR ATENDER','EN PROCESO ATENCION'])
             ->groupBy(
                 'pedidos.id',
                 'c.nombre',
                 'c.celular',
-                'u.name',
+                'u.identificador',
                 'dp.codigo',
                 'dp.nombre_empresa',
                 'dp.total',
@@ -2481,7 +2525,7 @@ class PedidoController extends Controller
                     'pedidos.id',
                     'c.nombre as nombres',
                     'c.celular as celulares',
-                    'u.name as users',
+                    'u.identificador as users',
                     'dp.codigo as codigos',
                     'dp.nombre_empresa as empresas',
                     /* DB::raw('sum(dp.total) as total'), */
@@ -2503,7 +2547,7 @@ class PedidoController extends Controller
                     'pedidos.id',
                     'c.nombre',
                     'c.celular',
-                    'u.name',
+                    'u.identificador',
                     'dp.codigo',
                     'dp.nombre_empresa',
                     'dp.total',
@@ -2525,7 +2569,7 @@ class PedidoController extends Controller
                     'pedidos.id',
                     'c.nombre as nombres',
                     'c.celular as celulares',
-                    'u.name as users',
+                    'u.identificador as users',
                     'dp.codigo as codigos',
                     'dp.nombre_empresa as empresas',
                     /* DB::raw('sum(dp.total) as total'), */
@@ -2547,7 +2591,7 @@ class PedidoController extends Controller
                     'pedidos.id',
                     'c.nombre',
                     'c.celular',
-                    'u.name',
+                    'u.identificador',
                     'dp.codigo',
                     'dp.nombre_empresa',
                     'dp.total',
@@ -2569,7 +2613,7 @@ class PedidoController extends Controller
                     'pedidos.id',
                     'c.nombre as nombres',
                     'c.celular as celulares',
-                    'u.name as users',
+                    'u.identificador as users',
                     'dp.codigo as codigos',
                     'dp.nombre_empresa as empresas',
                     /* DB::raw('sum(dp.total) as total'), */
@@ -2590,7 +2634,7 @@ class PedidoController extends Controller
                     'pedidos.id',
                     'c.nombre',
                     'c.celular',
-                    'u.name',
+                    'u.identificador',
                     'dp.codigo',
                     'dp.nombre_empresa',
                     'dp.total',
@@ -2769,33 +2813,16 @@ class PedidoController extends Controller
 
     public function Atendidostabla(Request $request)
     {
-        /*$query = null;
-        $query = Pedido::where('estado', '1');
-
-        $min=$request->min;
-        $max=$request->max;*/
-
-        //>whereBetween('pedidos.created_at', [$dateMinWhere, $dateMax])
-        /*$dateMinWhere = Carbon::now()->subDays(60)->format('d/m/Y');
-        $dateMin = Carbon::now()->subDays(30)->format('d/m/Y');
-        $dateMax = Carbon::now()->format('d/m/Y');*/
-
-        //$query->whereNotIn('id',$array_excluir); 
-
-
+        
         if(Auth::user()->rol == "Operario"){
-            $pedidos = Pedido::/* join('clientes as c', 'pedidos.cliente_id', 'c.id')
-                -> */join('users as u', 'pedidos.user_id', 'u.id')
+            $pedidos = Pedido::join('users as u', 'pedidos.user_id', 'u.id')
                 ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
                 ->select(
                     'pedidos.id',
-                    /* 'c.nombre as nombres', */
-                    /* 'c.celular as celulares', */
                     'u.name as users',
                     'dp.codigo as codigos',
                     'dp.nombre_empresa as empresas',
                     'pedidos.condicion',
-                    /* 'pedidos.created_at as fecha', */
                     DB::raw('DATE_FORMAT(pedidos.created_at, "%d/%m/%Y") as fecha'),
                     'pedidos.envio',
                     'pedidos.destino',
@@ -2804,7 +2831,6 @@ class PedidoController extends Controller
                     'dp.fecha_envio_doc',
                     'dp.cant_compro',
                     'dp.atendido_por',
-                    /* 'dp.fecha_envio_doc_fis', */
                     DB::raw('DATE_FORMAT(dp.fecha_envio_doc_fis, "%d/%m/%Y") as fecha_envio_doc_fis'),
                     'dp.fecha_recepcion'
                 )
@@ -2812,10 +2838,9 @@ class PedidoController extends Controller
                 ->where('dp.estado', '1')
                 ->where('u.operario', Auth::user()->id)
                 ->where('pedidos.condicion', 'ATENDIDO')
+                ->whereIn('pedidos.envio', ['0'])
                 ->groupBy(
                     'pedidos.id',
-                    /* 'c.nombre', */
-                    /* 'c.celular', */
                     'u.name',
                     'dp.codigo',
                     'dp.nombre_empresa',
@@ -2835,20 +2860,14 @@ class PedidoController extends Controller
                 /* ->take('200') */
                 ->get();
         }else if(Auth::user()->rol == "Jefe de operaciones"){
-            $pedidos = Pedido::/* join('clientes as c', 'pedidos.cliente_id', 'c.id')
-                -> */join('users as u', 'pedidos.user_id', 'u.id')
+            $pedidos = Pedido::join('users as u', 'pedidos.user_id', 'u.id')
                 ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
                 ->select(
                     'pedidos.id',
-                    /* 'c.nombre as nombres',
-                    'c.celular as celulares', */
                     'u.name as users',
                     'dp.codigo as codigos',
                     'dp.nombre_empresa as empresas',
-                    /* DB::raw('sum(dp.total) as total'), */
-                    /* 'dp.total as total', */
                     'pedidos.condicion',
-                    /* 'pedidos.created_at as fecha', */
                     DB::raw('DATE_FORMAT(pedidos.created_at, "%d/%m/%Y") as fecha'),
                     'pedidos.envio',
                     'pedidos.destino',
@@ -2857,7 +2876,6 @@ class PedidoController extends Controller
                     'dp.fecha_envio_doc',
                     'dp.cant_compro',
                     'dp.atendido_por',
-                    /* 'dp.fecha_envio_doc_fis', */
                     DB::raw('DATE_FORMAT(dp.fecha_envio_doc_fis, "%d/%m/%Y") as fecha_envio_doc_fis'),
                     'dp.fecha_recepcion'
                 )
@@ -2865,14 +2883,12 @@ class PedidoController extends Controller
                 ->where('dp.estado', '1')
                 ->where('u.jefe', Auth::user()->id)
                 ->where('pedidos.condicion', 'ATENDIDO')
+                ->whereIn('pedidos.envio', ['0'])
                 ->groupBy(
                     'pedidos.id',
-                    /* 'c.nombre',
-                    'c.celular', */
                     'u.name',
                     'dp.codigo',
                     'dp.nombre_empresa',
-                    /* 'dp.total', */
                     'pedidos.condicion',
                     'pedidos.created_at',
                     'pedidos.envio',
@@ -2906,13 +2922,13 @@ class PedidoController extends Controller
                     'dp.cant_compro',
                     'dp.atendido_por',
                     'u.jefe',
-                    /* 'dp.fecha_envio_doc_fis', */
                     DB::raw('DATE_FORMAT(dp.fecha_envio_doc_fis, "%d/%m/%Y") as fecha_envio_doc_fis'),
                     'dp.fecha_recepcion'
                 )
                 ->where('pedidos.estado', '1')
                 ->where('dp.estado', '1')
                 ->where('pedidos.condicion', 'ATENDIDO')
+                ->whereIn('pedidos.envio', ['0'])
                 ->groupBy(
                     'pedidos.id',
                     'u.name',
@@ -2959,24 +2975,45 @@ class PedidoController extends Controller
             "ATENDIDO" => 'ATENDIDO'
         ];
 
-        /* $destinos = [
-            "LIMA" => 'LIMA',
-            "PROVINCIA" => 'PROVINCIA'
-        ]; */
+        
 
+        $imagenes = ImagenAtencion::where('estado', '1')->get();
+        $superasesor = User::where('rol', 'Super asesor')->count();
+
+        return view('pedidos.atendidos', compact('dateMin', 'dateMax', 'condiciones', 'superasesor'));//, 'imagenes'
+    }
+
+    public function Entregados()
+    {
+        $dateMin = Carbon::now()->subDays(4)->format('d/m/Y');
+        $dateMax = Carbon::now()->format('d/m/Y');
+
+        $condiciones = [
+            "POR ATENDER" => 'POR ATENDER',
+            "EN PROCESO ATENCION" => 'EN PROCESO ATENCION',
+            "ATENDIDO" => 'ATENDIDO'
+        ];
+
+        
+
+        $imagenes = ImagenAtencion::where('estado', '1')->get();
+        $superasesor = User::where('rol', 'Super asesor')->count();
+
+        return view('pedidos.entregados', compact('dateMin', 'dateMax', 'condiciones', 'superasesor'));//, 'imagenes'
+    }
+
+    public function Entregadostabla(Request $request)
+    {
+        
         if(Auth::user()->rol == "Operario"){
-            $pedidos = Pedido::/* join('clientes as c', 'pedidos.cliente_id', 'c.id')
-                -> */join('users as u', 'pedidos.user_id', 'u.id')
+            $pedidos = Pedido::join('users as u', 'pedidos.user_id', 'u.id')
                 ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
                 ->select(
                     'pedidos.id',
-                    /* 'c.nombre as nombres', */
-                    /* 'c.celular as celulares', */
                     'u.name as users',
                     'dp.codigo as codigos',
                     'dp.nombre_empresa as empresas',
                     'pedidos.condicion',
-                    /* 'pedidos.created_at as fecha', */
                     DB::raw('DATE_FORMAT(pedidos.created_at, "%d/%m/%Y") as fecha'),
                     'pedidos.envio',
                     'pedidos.destino',
@@ -2985,18 +3022,16 @@ class PedidoController extends Controller
                     'dp.fecha_envio_doc',
                     'dp.cant_compro',
                     'dp.atendido_por',
-                    /* 'dp.fecha_envio_doc_fis', */
                     DB::raw('DATE_FORMAT(dp.fecha_envio_doc_fis, "%d/%m/%Y") as fecha_envio_doc_fis'),
                     'dp.fecha_recepcion'
                 )
                 ->where('pedidos.estado', '1')
                 ->where('dp.estado', '1')
                 ->where('u.operario', Auth::user()->id)
-                ->where('pedidos.condicion', 'ATENDIDO')
+                ->where('pedidos.condicion', 'ATENDIDO')//
+                ->whereNotIn('pedidos.envio', ['0'])
                 ->groupBy(
                     'pedidos.id',
-                    /* 'c.nombre', */
-                    /* 'c.celular', */
                     'u.name',
                     'dp.codigo',
                     'dp.nombre_empresa',
@@ -3016,20 +3051,14 @@ class PedidoController extends Controller
                 /* ->take('200') */
                 ->get();
         }else if(Auth::user()->rol == "Jefe de operaciones"){
-            $pedidos = Pedido::/* join('clientes as c', 'pedidos.cliente_id', 'c.id')
-                -> */join('users as u', 'pedidos.user_id', 'u.id')
+            $pedidos = Pedido::join('users as u', 'pedidos.user_id', 'u.id')
                 ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
                 ->select(
                     'pedidos.id',
-                    /* 'c.nombre as nombres',
-                    'c.celular as celulares', */
                     'u.name as users',
                     'dp.codigo as codigos',
                     'dp.nombre_empresa as empresas',
-                    /* DB::raw('sum(dp.total) as total'), */
-                    /* 'dp.total as total', */
                     'pedidos.condicion',
-                    /* 'pedidos.created_at as fecha', */
                     DB::raw('DATE_FORMAT(pedidos.created_at, "%d/%m/%Y") as fecha'),
                     'pedidos.envio',
                     'pedidos.destino',
@@ -3038,7 +3067,6 @@ class PedidoController extends Controller
                     'dp.fecha_envio_doc',
                     'dp.cant_compro',
                     'dp.atendido_por',
-                    /* 'dp.fecha_envio_doc_fis', */
                     DB::raw('DATE_FORMAT(dp.fecha_envio_doc_fis, "%d/%m/%Y") as fecha_envio_doc_fis'),
                     'dp.fecha_recepcion'
                 )
@@ -3046,14 +3074,12 @@ class PedidoController extends Controller
                 ->where('dp.estado', '1')
                 ->where('u.jefe', Auth::user()->id)
                 ->where('pedidos.condicion', 'ATENDIDO')
+                ->whereNotIn('pedidos.envio', ['0'])
                 ->groupBy(
                     'pedidos.id',
-                    /* 'c.nombre',
-                    'c.celular', */
                     'u.name',
                     'dp.codigo',
                     'dp.nombre_empresa',
-                    /* 'dp.total', */
                     'pedidos.condicion',
                     'pedidos.created_at',
                     'pedidos.envio',
@@ -3087,13 +3113,13 @@ class PedidoController extends Controller
                     'dp.cant_compro',
                     'dp.atendido_por',
                     'u.jefe',
-                    /* 'dp.fecha_envio_doc_fis', */
                     DB::raw('DATE_FORMAT(dp.fecha_envio_doc_fis, "%d/%m/%Y") as fecha_envio_doc_fis'),
                     'dp.fecha_recepcion'
                 )
                 ->where('pedidos.estado', '1')
                 ->where('dp.estado', '1')
                 ->where('pedidos.condicion', 'ATENDIDO')
+                ->whereNotIn('pedidos.envio', ['0'])
                 ->groupBy(
                     'pedidos.id',
                     'u.name',
@@ -3116,12 +3142,17 @@ class PedidoController extends Controller
                 /*->take('200')*/
                 ->get();
                 /*->simplePaginate(1000);*/
-            } 
+            }
 
-        $imagenes = ImagenAtencion::where('estado', '1')->get();
-        $superasesor = User::where('rol', 'Super asesor')->count();
+        return Datatables::of($pedidos)
+            ->addIndexColumn()
+            ->addColumn('action', function($pedido){     
+                $btn='';
 
-        return view('pedidos.atendidos', compact('dateMin', 'dateMax', 'pedidos', 'condiciones', 'superasesor'));//, 'imagenes'
+                return $btn;
+            })
+            ->rawColumns(['action'])
+            ->make(true);
     }
 
     public function cargarAtendidos(Request $request)//pedidoscliente
@@ -3245,6 +3276,93 @@ class PedidoController extends Controller
             }
 
         //return datatables($pedidos)->toJson();
+    }
+
+    public function Atenderid(Request $request)
+    {
+        $hiddenAtender=$request->hiddenAtender;
+        $detalle_pedidos = DetallePedido::where('pedido_id',$hiddenAtender)->first();        
+        $fecha = Carbon::now();
+
+        $pedido=Pedido::where("id",$hiddenAtender)->first();
+        $pedido->update([
+            'condicion' => $request->condicion,
+            'modificador' => 'USER'.Auth::user()->id
+        ]);
+
+        if ($request->condicion == "ATENDIDO")
+        {
+            $pedido->update([
+                'notificacion' => 'Pedido atendido'
+            ]);
+
+            event(new PedidoAtendidoEvent($pedido));
+        }
+
+        $files = $request->file('adjunto');
+        $destinationPath = base_path('public/storage/adjuntos/');
+
+        $cont = 0;
+
+        if(isset($files)){
+            $destinationPath = base_path('public/storage/adjuntos/');
+            $cont = 0;
+            $file_name = Carbon::now()->second.$files->getClientOriginalName();
+            $fileList[$cont] = array(
+                'file_name' => $file_name,
+            );
+            $files->move($destinationPath , $file_name);
+
+            ImagenAtencion::create([
+                'pedido_id' => $pedido->id,
+                'adjunto' => $file_name,
+                'estado' => '1'
+            ]);
+
+                //$cont++;
+            //}
+        }
+
+
+
+        /*if(isset($files)){
+            foreach ($files as $file){
+                $file_name = Carbon::now()->second.$file->getClientOriginalName();
+                $file->move($destinationPath , $file_name);
+
+                ImagenAtencion::create([                    
+                    'pedido_id' => $pedido->id,
+                    'adjunto' => $file_name,
+                    'estado' => '1'
+                ]);
+
+                $cont++;
+            }
+        }*/      
+
+        $detalle_pedidos->update([
+            'envio_doc' => '1',
+            'fecha_envio_doc' => $fecha,
+            'cant_compro' => $request->cant_compro,
+        ]);
+
+        /* if ($request->hasFile('envio_doc')){
+            $file_name = Carbon::now()->second.$files->getClientOriginalName();
+            $files->move($destinationPath , $file_name);
+            
+            $detalle_pedidos->update([
+                'envio_doc' => $file_name,
+                'fecha_envio_doc' => $fecha,
+                'cant_compro' => $request->cant_compro,
+            ]);
+        }
+        else{
+            $detalle_pedidos->update([
+                'cant_compro' => $request->cant_compro,
+            ]);
+        } */        
+
+        return redirect()->route('operaciones.poratender')->with('info','actualizado');
     }
 
     public function Atender(Request $request, Pedido $pedido)

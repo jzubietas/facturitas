@@ -41,6 +41,10 @@ class PagoController extends Controller
     {
         $query = null;
         $pedido=$request->pedido;
+        $pagoid=$request->pago;
+        $aray_pago=[];
+        $array_pago[]=($pagoid);
+        //return $array_pago;
         $query=Pago::join('users as u', 'pagos.user_id', 'u.id')
                 ->join('clientes as c', 'pagos.cliente_id', 'c.id')
                 ->select('pagos.id as id',
@@ -54,16 +58,11 @@ class PagoController extends Controller
                         DB::raw(" (select count(dpago.id) from detalle_pagos dpago where dpago.pago_id=pagos.id and dpago.estado in (1) ) as cantidad_voucher "),
                         DB::raw(" (select count(ppedidos.id) from pago_pedidos ppedidos where ppedidos.pago_id=pagos.id and ppedidos.estado in (1)  ) as cantidad_pedido "),
                         DB::raw(" ( select GROUP_CONCAT(ppp.codigo) from pago_pedidos ped inner join pedidos ppp on ped.pedido_id =ppp.id where pagos.id=ped.pago_id and ped.estado=1 and ppp.estado=1 and ped.pagado in (1,2)) as codigos "),
-                        //DB::raw(" ( select GROUP_CONCAT(ppp.codigo) from pago_pedidos ped inner join pedidos ppp on ped.pedido_id =ppp.id where pagos.id=ped.pago_id and ped.estado=1 and ped.pagado in (1,2)) as codigos "),
                         DB::raw(" (select sum(ped2.abono) from pago_pedidos ped2 where ped2.pago_id =pagos.id and ped2.estado=1 and ped2.pagado in (1,2) ) as total_pago ")   
                         )
                 ->whereIn('pagos.condicion', ['PAGO','ADELANTO','ABONADO'])
+                ->whereNotIn('pagos.id',$array_pago)
                 ->where('pagos.estado', '1');
-
-        /*if ($pedido!='' || is_null($pedido) ) {
-            $query->where('( select GROUP_CONCAT(ppp.codigo) from pago_pedidos ped inner join pedidos ppp on ped.pedido_id =ppp.id where pagos.id=ped.pago_id and ped.estado=1 and ppp.estado=1 and ped.pagado in (1,2))','LIKE','%'.$pedido.'%');
-            
-        }*/
 
         $pagos = $query->get();
 
@@ -1644,6 +1643,13 @@ class PagoController extends Controller
                     ->update([
                         'estado' => '0'
                     ]);
+
+                    MovimientoBancario::where("detpago",$detalleP->id)->where("cabpago",$pago_id)
+                    ->update([
+                        'detpago'=>"0",
+                        'cabpago'=>"0",
+                        'pago'=>"0"
+                    ]);
                 }
                 $html="";
                 foreach ($pagoPedido as $pagoP) {
@@ -1721,15 +1727,17 @@ class PagoController extends Controller
                     'pagos.total_cobro',
                     'pagos.condicion',
                     DB::raw('(select DATE_FORMAT( MIN(dpa.fecha), "%d/%m/%Y %H:%i:%s")   from detalle_pagos dpa where dpa.pago_id=pagos.id and dpa.estado=1) as fecha'),
+                    DB::raw('(select DATE_FORMAT( MIN(dpa.fecha), "%Y-%m-%d")   from detalle_pagos dpa where dpa.pago_id=pagos.id and dpa.estado=1) as fecha2'),
                     DB::raw('(select UNIX_TIMESTAMP(MIN(dpa.fecha))   from detalle_pagos dpa where dpa.pago_id=pagos.id and dpa.estado=1) as fecha_timestamp'),
                     DB::raw(" (select count(dpago.id) from detalle_pagos dpago where dpago.pago_id=pagos.id and dpago.estado in (1) ) as cantidad_voucher "),
                     DB::raw(" (select count(ppedidos.id) from pago_pedidos ppedidos where ppedidos.pago_id=pagos.id and ppedidos.estado in (1)  ) as cantidad_pedido "),
                     DB::raw(" ( select GROUP_CONCAT(ppp.codigo) from pago_pedidos ped inner join pedidos ppp on ped.pedido_id =ppp.id where pagos.id=ped.pago_id and ped.estado=1 and ppp.estado=1 and ped.pagado in (1,2)) as codigos "),
-                    //DB::raw(" ( select GROUP_CONCAT(ppp.codigo) from pago_pedidos ped inner join pedidos ppp on ped.pedido_id =ppp.id where pagos.id=ped.pago_id and ped.estado=1 and ped.pagado in (1,2)) as codigos "),
                     DB::raw(" (select sum(ped2.abono) from pago_pedidos ped2 where ped2.pago_id =pagos.id and ped2.estado=1 and ped2.pagado in (1,2) ) as total_pago ")   
                     )
             //->where('pagos.user_id',$request->asesores) 
             ->whereIn('pagos.condicion', ['PAGO','ADELANTO','ABONADO'])
+            ->where('pagos.estado', '1') 
+            //->whereBetween(DB::raw('( (select DATE( MIN(dpa.fecha))   from detalle_pagos dpa where dpa.pago_id=pagos.id and dpa.estado=1)  )'), [$min, $max]) //rango de fechas
             //->where('u.llamada', Auth::user()->id)
             ->where('u.id', Auth::user()->id)
             ->get();
@@ -1744,14 +1752,15 @@ class PagoController extends Controller
                     'pagos.total_cobro',
                     'pagos.condicion',
                     DB::raw('(select DATE_FORMAT( MIN(dpa.fecha), "%d/%m/%Y %H:%i:%s")   from detalle_pagos dpa where dpa.pago_id=pagos.id and dpa.estado=1) as fecha'),
+                    DB::raw('(select DATE_FORMAT( MIN(dpa.fecha), "%Y-%m-%d")   from detalle_pagos dpa where dpa.pago_id=pagos.id and dpa.estado=1) as fecha2'),
                     DB::raw('(select UNIX_TIMESTAMP(MIN(dpa.fecha))   from detalle_pagos dpa where dpa.pago_id=pagos.id and dpa.estado=1) as fecha_timestamp'),
                     DB::raw(" (select count(dpago.id) from detalle_pagos dpago where dpago.pago_id=pagos.id and dpago.estado in (1) ) as cantidad_voucher "),
                     DB::raw(" (select count(ppedidos.id) from pago_pedidos ppedidos where ppedidos.pago_id=pagos.id and ppedidos.estado in (1)  ) as cantidad_pedido "),
                     DB::raw(" ( select GROUP_CONCAT(ppp.codigo) from pago_pedidos ped inner join pedidos ppp on ped.pedido_id =ppp.id where pagos.id=ped.pago_id and ped.estado=1 and ppp.estado=1 and ped.pagado in (1,2)) as codigos "),
-                    //DB::raw(" ( select GROUP_CONCAT(ppp.codigo) from pago_pedidos ped inner join pedidos ppp on ped.pedido_id =ppp.id where pagos.id=ped.pago_id and ped.estado=1 and ped.pagado in (1,2)) as codigos "),
                     DB::raw(" (select sum(ped2.abono) from pago_pedidos ped2 where ped2.pago_id =pagos.id and ped2.estado=1 and ped2.pagado in (1,2) ) as total_pago ")   
                     )
-            ->whereIn('pagos.condicion', ['PAGO','ADELANTO'])
+            ->whereIn('pagos.condicion', ['PAGO','ADELANTO','ABONADO'])
+            ->where('pagos.estado', '1')
             //->where('u.llamada', Auth::user()->id)
             ->where('u.id', Auth::user()->id)
             ->get();
@@ -1769,11 +1778,11 @@ class PagoController extends Controller
                     DB::raw(" (select count(dpago.id) from detalle_pagos dpago where dpago.pago_id=pagos.id and dpago.estado in (1) ) as cantidad_voucher "),
                     DB::raw(" (select count(ppedidos.id) from pago_pedidos ppedidos where ppedidos.pago_id=pagos.id and ppedidos.estado in (1)  ) as cantidad_pedido "),
                     DB::raw(" ( select GROUP_CONCAT(ppp.codigo) from pago_pedidos ped inner join pedidos ppp on ped.pedido_id =ppp.id where pagos.id=ped.pago_id and ped.estado=1 and ppp.estado=1 and ped.pagado in (1,2)) as codigos "),
-                    //DB::raw(" ( select GROUP_CONCAT(ppp.codigo) from pago_pedidos ped inner join pedidos ppp on ped.pedido_id =ppp.id where pagos.id=ped.pago_id and ped.estado=1 and ped.pagado in (1,2)) as codigos "),
                     DB::raw(" (select sum(ped2.abono) from pago_pedidos ped2 where ped2.pago_id =pagos.id and ped2.estado=1 and ped2.pagado in (1,2) ) as total_pago ")   
                     )
             ->whereIn('pagos.condicion', ['PAGO','ADELANTO','ABONADO'])
-            //->where('u.supervisor', Auth::user()->id)
+            ->where('pagos.estado', '1')
+            //->whereBetween(DB::raw('( (select DATE( MIN(dpa.fecha))   from detalle_pagos dpa where dpa.pago_id=pagos.id and dpa.estado=1)  )'), [$min, $max]) //rango de fechas
             ->where('u.id', Auth::user()->id)
             ->get();
 
@@ -1787,14 +1796,16 @@ class PagoController extends Controller
                     'pagos.total_cobro',
                     'pagos.condicion',
                     DB::raw('(select DATE_FORMAT( MIN(dpa.fecha), "%d/%m/%Y %H:%i:%s")   from detalle_pagos dpa where dpa.pago_id=pagos.id and dpa.estado=1) as fecha'),
+                    DB::raw('(select DATE_FORMAT( MIN(dpa.fecha), "%Y-%m-%d")   from detalle_pagos dpa where dpa.pago_id=pagos.id and dpa.estado=1) as fecha2'),
                     DB::raw('(select UNIX_TIMESTAMP(MIN(dpa.fecha))   from detalle_pagos dpa where dpa.pago_id=pagos.id and dpa.estado=1) as fecha_timestamp'),
                     DB::raw(" (select count(dpago.id) from detalle_pagos dpago where dpago.pago_id=pagos.id and dpago.estado in (1) ) as cantidad_voucher "),
                     DB::raw(" (select count(ppedidos.id) from pago_pedidos ppedidos where ppedidos.pago_id=pagos.id and ppedidos.estado in (1)  ) as cantidad_pedido "),
                     DB::raw(" ( select GROUP_CONCAT(ppp.codigo) from pago_pedidos ped inner join pedidos ppp on ped.pedido_id =ppp.id where pagos.id=ped.pago_id and ped.estado=1 and ppp.estado=1 and ped.pagado in (1,2)) as codigos "),
-                    //DB::raw(" ( select GROUP_CONCAT(ppp.codigo) from pago_pedidos ped inner join pedidos ppp on ped.pedido_id =ppp.id where pagos.id=ped.pago_id and ped.estado=1 and ped.pagado in (1,2)) as codigos "),
                     DB::raw(" (select sum(ped2.abono) from pago_pedidos ped2 where ped2.pago_id =pagos.id and ped2.estado=1 and ped2.pagado in (1,2) ) as total_pago ")   
                     )
             ->whereIn('pagos.condicion', ['PAGO','ADELANTO','ABONADO'])
+            ->where('pagos.estado', '1')
+            //->whereBetween(DB::raw('( (select DATE( MIN(dpa.fecha))   from detalle_pagos dpa where dpa.pago_id=pagos.id and dpa.estado=1)  )'), [$min, $max]) //rango de fechas
             ->where('u.id', Auth::user()->id)
             ->get();
 
@@ -1831,6 +1842,7 @@ class PagoController extends Controller
 
     public function MisPagos()
     {
+        $mirol=Auth::user()->rol;
         $dateMin = Carbon::now()->subDays(4)->format('d/m/Y');
         $dateMax = Carbon::now()->format('d/m/Y');
 
@@ -1872,7 +1884,7 @@ class PagoController extends Controller
         
         $superasesor = User::where('rol', 'Super asesor')->count();
 
-        return view('pagos.mispagos', compact('pagos', 'pagosobservados_cantidad', 'superasesor', 'dateMin', 'dateMax'));
+        return view('pagos.mispagos', compact('pagos', 'pagosobservados_cantidad', 'superasesor', 'dateMin', 'dateMax','mirol'));
     }
 
 
@@ -1961,39 +1973,23 @@ class PagoController extends Controller
         return view('ingresos.reportes.index');        
     }
 
-    public function PorRevisar()
+    public function PorRevisar(Request $request)
     {
-        /*$pagos = Pago::join('users as u', 'pagos.user_id', 'u.id')
-            ->join('detalle_pagos as dpa', 'pagos.id', 'dpa.pago_id')
-            ->join('pago_pedidos as pp', 'pagos.id', 'pp.pago_id')
-            ->join('pedidos as p', 'pp.pedido_id', 'p.id')
-            ->join('detalle_pedidos as dpe', 'p.id', 'dpe.pedido_id')
-            ->select('pagos.id', 
-                    'dpe.codigo as codigos', 
-                    'u.name as users', 
-                    'pagos.observacion',
-                    //'pagos.saldo',
-                    'dpe.total as total_deuda', 
-                    DB::raw('sum(dpa.monto) as total_pago'), 
-                    'pagos.condicion',                   
-                    'pagos.created_at as fecha'
-                    )
-            ->where('pagos.estado', '1')
-            ->where('dpe.estado', '1')
-            ->where('dpa.estado', '1')
-            ->whereIn('pagos.condicion', ['PAGO','OBSERVADO'])
-            ->groupBy('pagos.id', 
-                    'dpe.codigo', 
-                    'u.name', 
-                    'pagos.observacion', 
-                    //'pagos.saldo',
-                    'dpe.total',
-                    'pagos.total_cobro',
-                    'pagos.condicion', 
-                    'pagos.created_at')
-            ->get();*/
-        $dateMin = Carbon::now()->subDays(4)->format('d/m/Y');
-        $dateMax = Carbon::now()->format('d/m/Y');
+        //$q1 = Carbon::createFromFormat('d/m/Y', $request->q1)->format('Y-m-d');
+        //$q2 = Carbon::createFromFormat('d/m/Y', $request->q2)->format('Y-m-d');
+
+        if(!$request->q1)
+        {
+            $dateMin = Carbon::now()->subDays(24)->format('d/m/Y');
+        }else{
+            $dateMin = Carbon::createFromFormat('d/m/Y', $request->q1)->format('d/m/Y');
+        }
+        if(!$request->q2)
+        {
+            $dateMax = Carbon::now()->format('d/m/Y');
+        }else{
+            $dateMax = Carbon::createFromFormat('d/m/Y', $request->q2)->format('d/m/Y');
+        }
 
         $superasesor = User::where('rol', 'Super asesor')->count();
 
@@ -2002,12 +1998,9 @@ class PagoController extends Controller
 
     public function PorRevisartabla(Request $request)
     {
-        //$query = null;
-        //$query = Pago::where('estado', '1');
 
-        //$min=$request->min;
-        //$max=$request->max;
-
+        $min = Carbon::createFromFormat('d/m/Y', $request->min)->format('Y-m-d');
+        $max = Carbon::createFromFormat('d/m/Y', $request->max)->format('Y-m-d');
 
         $pagos=null;
        
@@ -2021,16 +2014,19 @@ class PagoController extends Controller
                         'pagos.observacion',                        
                         'pagos.total_cobro',
                         'pagos.condicion',
-                        DB::raw('(select DATE_FORMAT( MIN(dpa.fecha), "%d/%m/%Y %H:%i:%s")   from detalle_pagos dpa where dpa.pago_id=pagos.id and dpa.estado=1) as fecha'),
+                        'pagos.created_at',
+                        DB::raw('(select DATE_FORMAT( MIN(dpa.fecha), "%Y-%m-%d")   from detalle_pagos dpa where dpa.pago_id=pagos.id and dpa.estado=1) as fecha'),
+                        DB::raw('(select DATE_FORMAT( MIN(dpa.fecha), "%d/%m/%Y %H:%i:%s")   from detalle_pagos dpa where dpa.pago_id=pagos.id and dpa.estado=1) as fecha2'),
                         DB::raw('(select UNIX_TIMESTAMP(MIN(dpa.fecha))   from detalle_pagos dpa where dpa.pago_id=pagos.id and dpa.estado=1) as fecha_timestamp'),
                         DB::raw(" (select count(dpago.id) from detalle_pagos dpago where dpago.pago_id=pagos.id and dpago.estado in (1) ) as cantidad_voucher "),
                         DB::raw(" (select count(ppedidos.id) from pago_pedidos ppedidos where ppedidos.pago_id=pagos.id and ppedidos.estado in (1)  ) as cantidad_pedido "),
                         DB::raw(" ( select GROUP_CONCAT(ppp.codigo) from pago_pedidos ped inner join pedidos ppp on ped.pedido_id =ppp.id where pagos.id=ped.pago_id and ped.estado=1 and ppp.estado=1 and ped.pagado in (1,2)) as codigos "),
                         DB::raw(" (select sum(ped2.abono) from pago_pedidos ped2 where ped2.pago_id =pagos.id and ped2.estado=1 and ped2.pagado in (1,2) ) as total_pago ")   
-                        )                
+                        )
                 ->whereIn('pagos.condicion', ['PAGO','ADELANTO']) 
-                ->where('pagos.estado', '1')                
-                ->get();                
+                ->where('pagos.estado', '1')  
+                ->whereBetween(DB::raw('( (select DATE( MIN(dpa.fecha))   from detalle_pagos dpa where dpa.pago_id=pagos.id and dpa.estado=1)  )'), [$min, $max]) //rango de fechas
+                ->get();
         }else{
             $pagos = Pago::join('users as u', 'pagos.user_id', 'u.id')
             ->join('clientes as c', 'pagos.cliente_id', 'c.id')
@@ -2040,7 +2036,10 @@ class PagoController extends Controller
                     'pagos.observacion',                        
                     'pagos.total_cobro',
                     'pagos.condicion',
-                    DB::raw('(select DATE_FORMAT( MIN(dpa.fecha), "%d/%m/%Y %H:%i:%s")   from detalle_pagos dpa where dpa.pago_id=pagos.id and dpa.estado=1) as fecha'),
+                    'pagos.created_at',
+                    //DB::raw('(select DATE_FORMAT( MIN(dpa.fecha), "%d/%m/%Y %H:%i:%s")   from detalle_pagos dpa where dpa.pago_id=pagos.id and dpa.estado=1) as fecha'),
+                    DB::raw('(select DATE_FORMAT( MIN(dpa.fecha), "%Y-%m-%d")   from detalle_pagos dpa where dpa.pago_id=pagos.id and dpa.estado=1) as fecha'),
+                    DB::raw('(select DATE_FORMAT( MIN(dpa.fecha), "%d/%m/%Y %H:%i:%s")   from detalle_pagos dpa where dpa.pago_id=pagos.id and dpa.estado=1) as fecha2'),
                     DB::raw('(select UNIX_TIMESTAMP(MIN(dpa.fecha))   from detalle_pagos dpa where dpa.pago_id=pagos.id and dpa.estado=1) as fecha_timestamp'),
                     DB::raw(" (select count(dpago.id) from detalle_pagos dpago where dpago.pago_id=pagos.id and dpago.estado in (1) ) as cantidad_voucher "),
                     DB::raw(" (select count(ppedidos.id) from pago_pedidos ppedidos where ppedidos.pago_id=pagos.id and ppedidos.estado in (1)  ) as cantidad_pedido "),
@@ -2049,7 +2048,8 @@ class PagoController extends Controller
                     )
             ->where('pagos.user_id',$request->asesores) 
             ->whereIn('pagos.condicion', ['PAGO','ADELANTO'])
-            ->where('pagos.estado', '1') 
+            ->where('pagos.estado', '1')
+            ->whereBetween(DB::raw('( (select DATE( MIN(dpa.fecha))   from detalle_pagos dpa where dpa.pago_id=pagos.id and dpa.estado=1)  )'), [$min, $max]) //rango de fechas
             ->get(); 
         }  
         
@@ -2477,6 +2477,7 @@ class PagoController extends Controller
     public function updateRevisar(Request $request, Pago $pago)    
     {   
         /**  idpago  3028  userid 3  clienteid  1232 */
+        //return $request->all();
         //return $pago;
         $fecha_aprobacion = Carbon::now()->format('Y-m-d');
         //return $request->all();
@@ -2513,8 +2514,42 @@ class PagoController extends Controller
                     ]);
             } */
 
-
+            $abono=0.00;
             //return $request->all();
+            $pedido_list = $request->pedido_id;
+            $pedido_id_abono = $request->pedido_id_abono;
+            $contpedido = 0;
+            while ($contpedido < count((array)$pedido_list)) 
+            {
+                $abono_ =$pedido_id_abono[$contpedido];
+                if($abono ==0.00)
+                {
+                    $pedido_ = Pedido::where("id",$pedido_list[$contpedido]);
+                    $pedido_->update([
+                        'pago'=>0,
+                        'pagado'=>0,
+                    ]);
+                    $detallepedido_ = DetallePedido::where("id",$pedido_list[$contpedido]);
+                    $detallepedido_g = $detallepedido_->first()->total;
+                    $detallepedido_->update([
+                        'saldo'=>$detallepedido_g
+                    ]);
+
+
+                    $pagopedidos_ = PagoPedido::where("pedido_id",$pedido_list[$contpedido])->where("pago_id",$pago->id)->where("abono","0.00")->first();
+                    if($pagopedidos_!=null)
+                    {
+                        $pagopedidos_->update([
+                            'estado'=>"0"
+                        ]);
+                    }
+                    
+
+                }
+                $contpedido++;
+            }
+
+
             $detalle_list = $request->detalle_id;
             $conciliar_list = $request->conciliar;
             $cuenta = $request->cuenta;
@@ -2554,7 +2589,8 @@ class PagoController extends Controller
             throw $th;
         }
         
-        return redirect()->route('administracion.porrevisar')->with('info', 'actualizado');
+        return redirect()->route('administracion.porrevisar',['q1'=>'12/11/2022','q2'=>'15/11/2022'])->with('info', 'actualizado');
+        //return redirect()->route('postSearch', ['q' => 4]);
     }
 
     public function updateRevisarpost(Request $request)

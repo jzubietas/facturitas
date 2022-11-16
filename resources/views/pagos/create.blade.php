@@ -557,12 +557,15 @@ tfoot td {
           var nuevosuma=parseFloat(0.00);
 
           $('#tabla_pagos > tbody  > tr').each(function(index,tr) {
-              //console.log(index+" posicion");
-              //console.log(tr+" tr");
+              
+              console.log(  $.trim( $(this).find("td").eq(6).find(".monto").html())  )
               //var idfila=$(this).find("td").eq(0).html();//fila idpedido
-              //console.log( $(this).find("td").eq(6).html()) ;
-              nuevosuma=parseFloat($(this).find("td").eq(8).find(".monto").text());
-              //console.log("nuevosuma "+nuevosuma)
+              //console.log( $(this).find("td").html()) ;
+              
+              nuevosuma =  parseFloat( $.trim( $(this).find("td").eq(6).find(".monto").html()) );
+
+              //nuevosuma=parseFloat($(this).find("td").eq(8).find(".monto").text());
+              console.log("nuevosuma1  "+nuevosuma)
               sisuma=(sisuma)+(nuevosuma);
               //console.log("sumo "+sisuma)
 

@@ -103,14 +103,14 @@
 
                       <td>{{ $pagoPedido->condicion }}</td>
                       <td>{{ $pagoPedido->total }}</td>
-                      <td>{{ $pagoPedido->abono }}</td>
+                      <td><input type="hidden" name="pedido_id_abono[]" id="pedido_id_abono" value="{{ $pagoPedido->abono }}">{{ $pagoPedido->abono }}</td>
                       @if ($pagoPedido->total - $pagoPedido->abono < 3)
                         <td><span style="color:black;">{{ number_format($pagoPedido->total - $pagoPedido->abono, 2, '.', ' ') }}</span></td>
                       @else
                         <td><span style="color:red;">{{ number_format($pagoPedido->total - $pagoPedido->abono, 2, '.', ' ') }}</span></td>
                       @endif
                       <td>
-                        <a href="" data-target="#modal-historial-pagos-pedido" data-toggle="modal" data-pedido="{{ $pagoPedido->codigo }}"><button class="btn btn-danger btn-sm">Historial</button></a>
+                        <a href="" data-target="#modal-historial-pagos-pedido" data-toggle="modal" data-pedido="{{ $pagoPedido->codigo }}" data-pago="{{$pago->id}}"><button class="btn btn-danger btn-sm">Historial</button></a>
                       </td>
                     </tr>
                     @php
@@ -618,6 +618,7 @@
        console.log("aa")
        var button = $(event.relatedTarget) 
        var pedido = button.data('pedido')
+       var pago = button.data('pago')
 
        tableconciliar.destroy();
 
@@ -630,7 +631,7 @@
          "order": [[ 0, "asc" ]],
          'ajax': {
            url:"{{ route('pagostablahistorial') }}",					
-           'data': { "pedido":pedido }, 
+           'data': { "pedido":pedido,"pago":pago }, 
            "type": "get",
          },
          "search": {
@@ -767,44 +768,47 @@
 
             var filas_pagos=$(".table_pagos_realizados tbody tr.nohide").length;
 
-            var inputconciliar=$(".conciliar_count").length;
-            if(inputconciliar==0)
+            var campo_condicion = $("#condicion").val();
+            var inputconciliar=0
+            if(campo_condicion=='ABONADO')
             {
-              Swal.fire(
-                  'Error',
-                  'No existen conciliaciones relacionadas',
-                  'warning'
-                )
-                return false;
-            }else{
-
-              //$('.conciliar_count').
-              var estadovacioconciliar=0;
-              $('.conciliar_count').each(function(){
-                if(this.value==0)
-                {
-                  estadovacioconciliar=1;
-                  return false;
-                }
-                  
-              });
-              if(estadovacioconciliar==1)
+              inputconciliar=$(".conciliar_count").length;
+              if(inputconciliar==0)
               {
-                
                 Swal.fire(
-                  'Error',
-                  'Faltan conciliar pagos',
-                  'warning'
-                )
-                return false;
+                    'Error',
+                    'No existen conciliaciones relacionadas',
+                    'warning'
+                  )
+                  return false;
+              }else{
+
+                //$('.conciliar_count').
+                var estadovacioconciliar=0;
+                $('.conciliar_count').each(function(){
+                  if(this.value==0)
+                  {
+                    estadovacioconciliar=1;
+                    return false;
+                  }
+                    
+                });
+                if(estadovacioconciliar==1)
+                {
                   
+                  Swal.fire(
+                    'Error',
+                    'Faltan conciliar pagos',
+                    'warning'
+                  )
+                  return false;
+                    
+                }
               }
             }
 
-            
 
-            //console.log(filas_pagos)
-            //return false; 
+            
 
             var cuent = [];
             var tit = [];
@@ -819,57 +823,9 @@
             console.info(cuent);
             console.info(tit);
             console.info(fec);
-            //return false;
-
-            //$("#condicion").val("PAGO").selectpicker("refresh");
-
-            /*Swal.fire({
-              title: "Esta seguro que desea continuar?",
-              text: '',
-              icon: 'warning',
-              showCancelButton: true,
-              confirmButtonColor: '#3085d6',
-              cancelButtonColor: '#d33',
-              confirmButtonText: 'Si, continuar!'
-            }).then((result) => {
-              console.log(result);
-              if (result.value==true) 
-              {
-                tthis.submit();
-              }
-            });*/
-
-            //seguro que desea continuar
-
-            /*if (condicion == "ABONADO") {
-              if (cuent.includes('') == true) {
-                  Swal.fire(
-                    'Error',
-                    'Completar la cuenta en todos los pagos',
-                    'warning'
-                  )
-                }
-                else  if (tit.includes('') == true) {
-                  Swal.fire(
-                    'Error',
-                    'Completar el titular de la cuenta en todos los pagos',
-                    'warning'
-                  )
-                }
-                else  if (fec.includes('') == true) {
-                  Swal.fire(
-                    'Error',
-                    'Completar la fecha de deposito en todos los pagos',
-                    'warning'
-                  )
-                }
-                else {
-                  this.submit();
-                }  
-            }
-            else*/ {
+            {
               tthis.submit();
-                }   
+            }   
       });
 
 

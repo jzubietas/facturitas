@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Concerns\Exportable;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 
-class PagosObservadosExport implements FromView, ShouldAutoSize
+class PagosAbonadosExport implements FromView, ShouldAutoSize
 {
     use Exportable;
 
@@ -41,7 +41,7 @@ class PagosObservadosExport implements FromView, ShouldAutoSize
                 DB::raw(" (select sum(ped2.abono) from pago_pedidos ped2 where ped2.pago_id =pagos.id and ped2.estado=1 and ped2.pagado in (1,2) ) as total_pago ")   ,
                 DB::raw(" (select sum(ped3.abono) from pago_pedidos ped3 where ped3.pago_id =pagos.id and ped3.estado in (0) and ped3.pagado in (1,2) ) as total_pago_anulados ")   
                 )
-        ->whereIn('pagos.condicion', ['OBSERVADO'])
+        ->whereIn('pagos.condicion', ['ABONADO_PARCIAL'])
         ->where('pagos.estado', '1')
         ->whereBetween(DB::raw('( (select DATE( MIN(dpa.fecha))   from detalle_pagos dpa where dpa.pago_id=pagos.id and dpa.estado=1)  )'), [$request->desde, $request->hasta])
         //->whereBetween(DB::raw('DATE(pagos.created_at)'), [$request->desde, $request->hasta]) //rango de fechas
@@ -52,7 +52,7 @@ class PagosObservadosExport implements FromView, ShouldAutoSize
     }
 
     public function view(): View {
-        return view('pagos.excel.pagosobservados', [
+        return view('pagos.excel.pagosabonados', [
             'pagos'=> $this->pagos
         ]);
     }

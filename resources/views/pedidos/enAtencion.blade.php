@@ -193,7 +193,7 @@
               var urlpdf = '{{ route("pedidosPDF", ":id") }}';
               urlpdf = urlpdf.replace(':id', row.id);              
               @can('operacion.atender')
-                data = data+'<a href="" data-target="#modal-atender-'+row.id+'" data-toggle="modal" ><button class="btn btn-success btn-sm">Atender</button></a>';                
+                data = data+'<a href="" data-target="#modal-atender" data-atender='+row.id+' data-toggle="modal" ><button class="btn btn-success btn-sm">Atender</button></a>';                
               @endcan
               @can('operacion.PDF')
                 data = data+'<a href="'+urlpdf+'" class="btn btn-primary btn-sm" target="_blank"><i class="fa fa-file-pdf"></i> PDF</a>';                

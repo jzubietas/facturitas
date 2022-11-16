@@ -9,7 +9,8 @@
           </button>
         </div>
         {{-- Form::Open(['route' => ['pedidos.atender', $pedido],'enctype'=>'multipart/form-data', 'id'=>'formulario','files'=>true]) --}}
-        <form id="formulario" name="formulario">
+        <form id="formularioatender" name="formularioatender" enctype="multipart/form-data">
+          <input type="text" id="hiddenAtender" name="hiddenAtender">
         <div class="modal-body">
           <p>Complete los siguientes datos para pasar a estado <strong>ATENDIDO</strong> el pedido: <strong class="textcode">PED00</strong></p>
         </div>
@@ -26,40 +27,24 @@
                       <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                         <div class="row">
                           
-                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
-                              {!! Form::label('envio_doc', 'Documento adjuntado') !!}
-                              
-                                  <p><a href=""></a></p>
-                              
-                            </div>                          
-                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
-                                {!! Form::label('envio_doc', 'Documento enviado') !!}
-                                @csrf
-                                {!! Form::file('adjunto[]', ['class' => 'form-control-file', 'id'=>'adjunto', 'multiple']) !!}
-                                {{-- <td>@csrf<input type="file" id="adjunto" name="adjunto[]" multiple=""/></td> --}}
-                            </div>
-                          
-                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
-                                {!! Form::label('envio_doc', 'Documento enviado') !!}
-                                @csrf
-                                {!! Form::file('adjunto[]', ['class' => 'form-control-file', 'id'=>'adjunto', 'multiple', 'required'=>'required']) !!}
-                                {{-- <td>@csrf<input type="file" id="adjunto" name="adjunto[]" multiple=""/></td> --}}
-                            </div>
-                          
+                                                  
                           <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
-                              {!! Form::label('fecha_envio_doc', 'Fecha de envío') !!}
-                              
+                              {!! Form::label('envio_doc', 'Documento enviado') !!}
+                              @csrf
+                              {!! Form::file('adjunto[]', ['class' => 'form-control-file', 'id'=>'adjunto', 'multiple']) !!}
+                              {{-- <td>@csrf<input type="file" id="adjunto" name="adjunto[]" multiple=""/></td> --}}
                           </div>
+                          
                           <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
                               {!! Form::label('cant_compro', 'Cantidad de comprobantes enviados') !!}
+                              {!! Form::number('cant_compro', '', ['class' => 'form-control', 'id' => 'cant_compro', 'step'=>'1', 'min' => '0']) !!}
                               
                           </div>
                           <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
                             {!! Form::label('condicion', 'Estado') !!}
                             
                             
-                            <select name="condicion" class="form-control" id="condicion">
-                              
+                            <select name="condicion" class="form-control" id="condicion">                              
                               <option value="EN PROCESO ATENCION">EN PROCESO ATENCION</option>
                               <option value="ATENDIDO" >ATENDIDO</option>
                             </select>

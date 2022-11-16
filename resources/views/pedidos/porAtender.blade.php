@@ -38,17 +38,7 @@
 
   <div class="card">
     <div class="card-body">
-      <table cellspacing="5" cellpadding="5">
-        <tbody>
-          <tr>
-            <td>Minimum date:</td>
-            <td><input type="text" value={{ $dateMin }} id="min" name="min" class="form-control"></td>
-            <td> </td>
-            <td>Maximum date:</td>
-            <td><input type="text" value={{ $dateMax }} id="max" name="max"  class="form-control"></td>
-          </tr>
-        </tbody>
-      </table><br>
+      <br>
       <table id="tablaPrincipal" class="table table-striped">
         <thead>
           <tr>
@@ -134,6 +124,96 @@
         }
       });
 
+      $(document).on("submit", "#formularioatender", function (evento) {
+        evento.preventDefault();
+
+        var fd = new FormData();
+        let files=$('input[name="adjunto[]');
+        if(files.length == 0)
+        {
+          Swal.fire(
+              'Error',
+              'Debe ingresar el detalle del pedido',
+              'warning'
+            )
+            return false;
+        }
+
+        for (let i = 0; i < files.length; i++) {
+          fd.append('adjunto', $('input[type=file][name="adjunto[]"]')[0].files[0]);
+        }
+        fd.append( 'cant_compro', $("#cant_compro").val() );
+        fd.append( 'condicion', $("#condicion").val() );
+        fd.append( 'hiddenAtender', $("#hiddenAtender").val() );
+
+        $.ajax({
+           data: fd,
+           processData: false,
+           contentType: false,
+           type: 'POST',
+           url:"{{ route('pedidos.atenderid') }}",
+           success:function(data)
+           {
+            console.log(data);
+            $("#modal-atender .textcode").text('');
+            $("#modal-atender").modal("hide");
+            $('#tablaPrincipal').DataTable().ajax.reload();
+
+           }
+
+        });
+
+        console.log(fd);
+
+
+      });
+
+      $('#modal-atender').on('show.bs.modal', function (event) {
+        //cuando abre el form de anular pedido
+        var button = $(event.relatedTarget) 
+        var idunico = button.data('atender')
+        $(".textcode").html("PED"+idunico);
+        $("#hiddenAtender").val(idunico);
+      });
+
+      $('#modal-veradjunto').on('show.bs.modal', function (event) {
+        //cuando abre el form de anular pedido
+        var button = $(event.relatedTarget) 
+        var idunico = button.data('adjunto')
+        $(".textcode").html("PED"+idunico);
+
+        //consulta de imagenes
+          $.ajax({
+            type:'POST',
+            url:"{{ route('pedidoobteneradjuntoRequest') }}",
+            data:{"pedido":idunico},
+          }).done(function (data) {
+            //console.log(data.html);
+            console.log(data.cantidad);
+            if(data.cantidad>0)
+            {
+              ////recorrer y poner imagenes en div con router
+              var adjuntos = data.html.split('|');
+              //console.log(adjuntos);
+              var urladjunto="";
+              var datal="";
+              $.each(adjuntos, function( index, value ) {
+                urladjunto = '{{ route("pedidos.descargaradjunto", ":id") }}';
+                urladjunto = urladjunto.replace(':id', value);
+                datal = datal+'<p><a href="'+urladjunto+'">'+value+'</a><p>';
+                //console.log(datal);
+                //console.log( index + ": " + value );
+              });
+              $("#imagenes_adjunto").html(datal)
+              return datal;
+              //console.log(data.html)
+            }else{
+              console.log("sin imagenes");
+            }
+          });
+
+      });
+
       $('#modal-delete').on('show.bs.modal', function (event) {
         var button = $(event.relatedTarget) 
         var idunico = button.data('delete')
@@ -186,15 +266,25 @@
           {data: 'users', name: 'users', },
           {data: 'fecha', name: 'fecha', },          
           {
-            data: 'action', 
-            name: 'action', 
+            data: 'imagenes', 
+            name: 'imagenes', 
             orderable: false, 
             searchable: false,
             sWidth:'20%',
             render: function ( data, type, row, meta ) {
-              data = data+'<a href="" data-target="#modal-veradjunto-'+row.id+'" data-toggle="modal" ><button class="btn btn-primary btn-sm"><i class="fas fa-eye"></i> Ver</button></a>';
-
-              return data;                          
+              if(data==null)
+              {
+                return '';
+              }else{
+                if(data>0)
+                {
+                  data = '<a href="" data-target="#modal-veradjunto" data-adjunto='+row.id+' data-toggle="modal" ><button class="btn btn-primary btn-sm"><i class="fas fa-eye"></i> Ver</button></a>';
+                  return data;
+                }else{
+                  return '';
+                }
+              }
+              
             }
           },
           {data: 'condicion', name: 'condicion', },
@@ -208,7 +298,7 @@
               var urlpdf = '{{ route("pedidosPDF", ":id") }}';
               urlpdf = urlpdf.replace(':id', row.id);
               @can('operacion.atender')
-                data = data+'<a href="" data-target="#modal-atender-'+row.id+'" data-toggle="modal" ><button class="btn btn-success btn-sm">Atender</button></a>';                
+                data = data+'<a href="" data-target="#modal-atender" data-atender='+row.id+' data-toggle="modal" ><button class="btn btn-success btn-sm">Atender</button></a>';                
               @endcan
               @can('operacion.PDF')
                 data = data+'<a href="'+urlpdf+'" class="btn btn-primary btn-sm" target="_blank"><i class="fa fa-file-pdf"></i> PDF</a>';                

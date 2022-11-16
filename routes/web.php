@@ -90,8 +90,11 @@ Route::get('operaciones.enatencion', [PedidoController::class, 'EnAtencion'])->n
 Route::get('operaciones.enatenciontabla', [PedidoController::class, 'EnAtenciontabla'])->name('operaciones.enatenciontabla');
 Route::get('operaciones.atendidos', [PedidoController::class, 'Atendidos'])->name('operaciones.atendidos');
 Route::get('operaciones.atendidostabla', [PedidoController::class, 'Atendidostabla'])->name('operaciones.atendidostabla');
+Route::get('operaciones.entregados', [PedidoController::class, 'Entregados'])->name('operaciones.entregados');
+Route::get('operaciones.entregadostabla', [PedidoController::class, 'Entregadostabla'])->name('operaciones.entregadostabla');
 Route::get('datatable.cargaratendidos', [PedidoController::class, 'cargarAtendidos'])->name('datatable.cargaratendidos');
 Route::post('pedidos.atender/{pedido}', [PedidoController::class, 'Atender'])->name('pedidos.atender');
+Route::post('pedidos.atenderid', [PedidoController::class, 'Atenderid'])->name('pedidos.atenderid');
 Route::get('operaciones.editatender/{pedido}', [PedidoController::class, 'editAtender'])->name('operaciones.editatender');
 Route::post('operaciones.updateatender/{pedido}', [PedidoController::class, 'updateAtender'])->name('operaciones.updateatender');
 Route::get('operaciones.showatender/{pedido}', [PedidoController::class, 'showAtender'])->name('operaciones.showatender');
@@ -121,6 +124,7 @@ Route::get('pedidosclientetabla', [PagoController::class, 'pedidosclientetabla']
 Route::post('pagodeleteRequest', [PagoController::class, 'destroyid'])->name('pagodeleteRequest.post');
 Route::post('validarrelacionruc', [PedidoController::class, 'validarrelacionruc'])->name('validarrelacionruc');
 Route::post('pedidostiempo', [ClienteController::class, 'pedidostiempo'])->name('pedidostiempo');
+Route::post('pedidoobteneradjuntoRequest', [PedidoController::class, 'pedidoobteneradjuntoRequest'])->name('pedidoobteneradjuntoRequest');
 
 Route::post('pagos.addImgTemp', [PagoController::class, 'addImgTemp'])->name('pagos.addImgTemp');//actualizado para serverside
 Route::post('pagos.changeImg', [PagoController::class, 'changeImg'])->name('pagos.changeImg');
@@ -221,6 +225,7 @@ Route::post('/mark-as-read', [NotificationsController::class, 'markNotification'
     //MODULO PERSONAS
     // Route::get('clientesExcel', [ExcelController::class, 'clientesExcel'])->name('clientesExcel');
     Route::post('usuariosExcel', [ExcelController::class, 'usuariosExcel'])->name('usuariosExcel');
+    Route::post('movimientosExcel', [ExcelController::class, 'movimientosExcel'])->name('movimientosExcel');
     Route::post('clientesExcel', [ExcelController::class, 'clientesExcel'])->name('clientesExcel');
     Route::post('clientespedidosExcel', [ExcelController::class, 'clientespedidosExcel'])->name('clientespedidosExcel');
     // Route::get('basefriaExcel', [ExcelController::class, 'basefriaExcel'])->name('basefriaExcel');
@@ -238,6 +243,7 @@ Route::post('/mark-as-read', [NotificationsController::class, 'markNotification'
     Route::post('mispagosExcel', [ExcelController::class, 'mispagosExcel'])->name('mispagosExcel');
     Route::post('pagosincompletosExcel', [ExcelController::class, 'pagosincompletosExcel'])->name('pagosincompletosExcel');
     Route::post('pagosobservadosExcel', [ExcelController::class, 'pagosobservadosExcel'])->name('pagosobservadosExcel');
+    Route::post('pagosabonadosExcel', [ExcelController::class, 'pagosabonadosExcel'])->name('pagosabonadosExcel');
 
     Route::post('porrevisarExcel', [ExcelController::class, 'porrevisarExcel'])->name('porrevisarExcel');
     //MODULO OPERACION

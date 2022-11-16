@@ -15,6 +15,7 @@ use App\Exports\PagosAprobadosExport;
 use App\Exports\PagosExport;
 use App\Exports\PagosIncompletosExport;
 use App\Exports\PagosObservadosExport;
+use App\Exports\PagosAbonadosExport;
 use App\Exports\PagosPorAsesoresExport;
 use App\Exports\PagosPorAsesorExport;
 use App\Exports\PedidosAtendidosExport;
@@ -31,6 +32,7 @@ use App\Exports\PedidosPorFechasExport;
 use App\Exports\PedidosSinPagosExport;
 use App\Exports\PagosPorRevisarExport;
 use App\Exports\UsuariosExport;
+use App\Exports\MovimientosExport;
 use App\Models\Pedido;
 use App\Models\Pago;
 use Carbon\Carbon;
@@ -66,6 +68,14 @@ class ExcelController extends Controller
                 //->clientes1($request)
                 ->usuarios1($request)
                 ->download('Lista de Usuarios.xlsx');           
+    }
+
+    public function movimientosExcel(Request $request)
+    {
+        return (new MovimientosExport)
+                //->clientes1($request)
+                ->movimientos1($request)
+                ->download('Lista de Movimientos.xlsx');           
     }
 
     public function clientesExcel(Request $request)
@@ -158,6 +168,13 @@ class ExcelController extends Controller
         return (new PagosObservadosExport)
                 ->pagos($request)
                 ->download('Lista de Pagos Observados.xlsx');          
+    }
+
+    public function pagosabonadosExcel(Request $request)
+    {
+        return (new PagosAbonadosExport)
+                ->pagos($request)
+                ->download('Lista de Pagos Abonado Parcial.xlsx');          
     }
 
     // public function pedidosExcel()

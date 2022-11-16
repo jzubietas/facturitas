@@ -238,7 +238,7 @@
           <div class="small-box bg-success">
             <div class="inner">
               @foreach ($montopedidoxmes_total as $mcxm)
-                <h3>S/@php echo number_format($mcxm->total,2) @endphp</h3>
+                <h3>S/@php echo number_format( ($mcxm->total)/1000 ,2) @endphp </h3>
               @endforeach
               <p>META DE COBRANZAS DEL MES</p>
             </div>
@@ -266,7 +266,7 @@
           <div class="small-box bg-danger">
             <div class="inner">
               @foreach ($montopagoxmes_total as $cxm)
-                <h3>S/@php echo number_format( ($cxm->total)/1000 ,2) @endphp k</h3>
+                <h3>S/@php echo number_format( ($cxm->total)/1000 ,2) @endphp </h3>
               @endforeach
               <p>COBRANZAS DEL MES</p>
             </div>
@@ -381,7 +381,8 @@
       <div class="col-lg-5 col-5">
         <div class="small-box bg-danger">
           <div class="inner">
-              <h3>S/{{ $meta_pagoencargado->pagos }}</h3>
+              <h3>S/@php echo number_format( ($meta_pagoencargado->pagos)/1000 ,2) @endphp </h3>
+              
             <p>MIS COBRANZAS DEL MES</p>
           </div>
           <div class="icon">
@@ -523,7 +524,7 @@
       <div class="col-lg-5 col-5">
         <div class="small-box bg-warning">
           <div class="inner">
-              <h3>S/{{ $meta_pagoasesor->pagos }}</h3>
+              <h3>S/@php echo number_format( ($meta_pagoasesor->pagos)/1000 ,2) @endphp </h3>
             <p>MIS COBRANZAS DEL MES</p>
           </div>
           <div class="icon">

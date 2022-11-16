@@ -134,10 +134,15 @@
 @stop
 
 @section('js')
+  
+    
 
   <!--<script src="{{ asset('js/datatables.js') }}"></script>--> 
   <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
   <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+
+  <script src="https://momentjs.com/downloads/moment.js"></script>
+  <script src="https://cdn.datatables.net/plug-ins/1.11.4/dataRender/datetime.js"></script>
 
   <script>
     function clickformdelete()
@@ -157,13 +162,12 @@
     }
   </script>
 
-<script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.4/moment.min.js" type="text/javascript"></script>
-<script src="//cdn.datatables.net/plug-ins/1.10.15/sorting/datetime-moment.js" type="text/javascript"></script>
+
 
 <script>
   $(document).ready(function () {
 
-    $.fn.dataTable.moment( 'DD/MM/YYYY' );
+    //$.fn.dataTable.moment( 'DD/MM/YYYY' );
     
 
     $.ajaxSetup({
@@ -173,7 +177,7 @@
     });
 
     //$('#asesorespago').change(function(){
-
+    
       $.ajax({
         url: "{{ route('asesorespago') }}",
         method: 'GET',
@@ -181,14 +185,27 @@
           console.log(data.html);
           $('#asesores_pago').html(data.html);
           $('#asesores_pago').selectpicker('refresh');
+
+          if (localStorage.getItem('asesor') )
+          {
+            $('#asesores_pago').val( localStorage.getItem('asesor') );
+            $('#asesores_pago').selectpicker("refresh").trigger("change"); 
+          }
+
         }
       });
 
       $(document).on("change","#asesores_pago",function(){
-
+        localStorage.setItem('asesor', $(this).val() ); 
         $('#tablaPrincipal').DataTable().ajax.reload();
-
       });
+
+      /*$(document).on("change","#min",function(){
+        $('#tablaPrincipal').DataTable().ajax.reload();
+      });
+      $(document).on("change","#max",function(){
+        $('#tablaPrincipal').DataTable().ajax.reload();
+      });*/
 
     //});
 
@@ -284,7 +301,11 @@
               //return data;
             }
           },
-          { data: 'fecha', name: 'fecha' },////asesor
+          { 
+            data: 'fecha', 
+            name: 'fecha',
+            render: $.fn.dataTable.render.moment( 'DD/MM/YYYY' )
+           },////asesor
           { data: 'users', name: 'users' },////asesor
           { data: 'observacion', name: 'observacion'},//observacion
           //{ data: 'total_deuda', name: 'total_deuda'},//total_deuda
@@ -338,11 +359,49 @@
 
     //$.fn.dataTable.moment( 'DD/MM/YYYY' );
 
-    $("#min").datepicker({ onSelect: function () { /*table.draw();*/ }, changeMonth: true, changeYear: true , dateFormat:"dd/mm/yy"});
+    $("#min").datepicker({ 
+      onSelect: function () { 
+        $('#tablaPrincipal').DataTable().ajax.reload(); 
+        console.log("minimo "+$(this).val());
+        //localStorage.setItem('dateMin', $(this).datepicker('getDate') ); 
+        localStorage.setItem('dateMin', $(this).val() ); 
+      }, changeMonth: true, changeYear: true , dateFormat:"dd/mm/yy"
+    });
       
-    $("#max").datepicker({ onSelect: function () { /*table.draw();*/ }, changeMonth: true, changeYear: true, dateFormat:"dd/mm/yy" });
+    $("#max").datepicker({ 
+      onSelect: function () { 
+        $('#tablaPrincipal').DataTable().ajax.reload(); 
+        console.log("maximo "+$(this).val());
+        //console.log("maximo "+$(this).datepicker('getDate'));
+        //localStorage.setItem('dateMax', $(this).datepicker('getDate')  ); 
+        localStorage.setItem('dateMax', $(this).val() ); 
+      }, changeMonth: true, changeYear: true, dateFormat:"dd/mm/yy" 
+    });
   });
 </script>
+
+<script>
+    
+    if (localStorage.getItem('dateMin') )
+    {
+      $( "#min" ).val(localStorage.getItem('dateMin')).trigger("change");        
+    }else{
+      localStorage.setItem('dateMin', "{{$dateMin}}" );
+    }
+    if (localStorage.getItem('dateMax') )
+    { 
+      $( "#max" ).val(localStorage.getItem('dateMax')).trigger("change");
+    }else{
+      localStorage.setItem('dateMax', "{{$dateMax}}" );
+    }
+
+    //if( localstorage.getItem() )
+    
+    
+    //localStorage.setItem('dateMax', "{{$dateMax}}" );
+    console.log(localStorage.getItem('dateMin'));
+    console.log(localStorage.getItem('dateMax'));
+  </script>
 
   @if (session('info') == 'registrado' || session('info') == 'eliminado' || session('info') == 'actualizado')
     <script>

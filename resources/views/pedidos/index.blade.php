@@ -60,10 +60,11 @@
             <th scope="col">Cliente</th>
             <th scope="col">Razón social</th>
             <th scope="col">Asesor</th>
-            <th scope="col">Fecha de registro</th>
+            <th scope="col">F. Registro</th>
             <th scope="col">Total (S/)</th>
             <th scope="col">Est. pedido</th>
             <th scope="col">Est. pago</th>
+            <th scope="col">Con. pago</th>
             <th scope="col">Est. sobre</th>
             <!--<th scope="col">Est. envío</th>
             <th scope="col">Cond. Pago</th>-->
@@ -147,13 +148,27 @@
 @stop
 
 @section('js')
+
+
 <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+
+
+{{--<script type="text/javascript" src="https://cdn.datatables.net/searchbuilder/1.0.1/js/dataTables.searchBuilder.min.js"></script>--}}
+{{--<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.4/moment.min.js"></script>--}}
+{{--<script type="text/javascript" src="//cdn.datatables.net/plug-ins/1.10.24/sorting/datetime-moment.js"></script>--}}
+
+<script src="https://momentjs.com/downloads/moment.js"></script>
+<script src="https://cdn.datatables.net/plug-ins/1.11.4/dataRender/datetime.js"></script>
 
 <!--  <script src="{{ asset('js/datatables.js') }}"></script>-->
 
 <script>
   $(document).ready(function () {
+
+    //moment.updateLocale(moment.locale(), { invalidDate: "Invalid Date Example" });
+    //$.fn.dataTable.moment('DD-MMM-Y HH:mm:ss');
+    //$.fn.dataTable.moment('DD/MM/YYYY');
 
     $.ajaxSetup({
         headers: {
@@ -247,7 +262,8 @@
               }else{
                 return 'PED'+row.id;
               } 
-            }
+            },
+            "visible":false,
         },
         {data: 'codigos', name: 'codigos', },
         {
@@ -260,7 +276,11 @@
         },
         {data: 'empresas', name: 'empresas', },
         {data: 'users', name: 'users', },
-        {data: 'fecha', name: 'fecha', },
+        {
+          data: 'fecha', 
+          name: 'fecha', 
+          //render: $.fn.dataTable.render.moment( 'DD-MMM-YYYY HH:mm:ss' )
+        },
         {
           data: 'total', 
           name: 'total', 
@@ -277,25 +297,43 @@
           data: 'condicion_pa', 
           name: 'condicion_pa', 
           render: function ( data, type, row, meta ) {
-            if(row.condicion_pa==null){
-              return 'SIN PAGO REGISTRADO';
+            if(row.condiciones=='ANULADO'){
+                return 'ANULADO';
             }else{
-              if(row.condicion_pa=='0'){
-                return '<p>SIN PAGO REGISTRADO</p>'
+              if(row.condicion_pa==null){
+                return 'SIN PAGO REGISTRADO';
+              }else{
+                if(row.condicion_pa=='0'){
+                  return '<p>SIN PAGO REGISTRADO</p>'
+                }
+                if(row.condicion_pa=='1'){
+                  return '<p>ADELANTO</p>'
+                }
+                if(row.condicion_pa=='2'){
+                  return '<p>PAGO</p>'
+                }
+                if(row.condicion_pa=='3'){
+                  return '<p>ABONADO</p>'
+                }
+                //return data;
               }
-              if(row.condicion_pa=='1'){
-                return '<p>ADELANTO</p>'
-              }
-              if(row.condicion_pa=='2'){
-                return '<p>PAGO</p>'
-              }
-              if(row.condicion_pa=='3'){
-                return '<p>ABONADO</p>'
-              }
-              //return data;
-            }              
+            }
+            
           }
         },//estado de pago
+        {
+          data: 'condiciones_aprobado', 
+          name: 'condiciones_aprobado', 
+          render: function ( data, type, row, meta ) {
+            if(data!=null)
+            {
+              return data;
+            }else{
+              return 'SIN REVISAR';
+            }
+              
+          }
+        },
         {
           //estado del sobre
           data: 'envio', 
@@ -304,15 +342,18 @@
             if(row.envio==null){
               return '';
             }else{
-              if(row.envio=='1'){
-                return '<span class="badge badge-success">Enviado</span><br>'+
-                        '<span class="badge badge-warning">Por confirmar recepcion</span>';
-              }else if(row.envio=='2'){
-                return '<span class="badge badge-success">Enviado</span><br>'+
-                        '<span class="badge badge-info">Recibido</span>';
-              }else{
-                return '<span class="badge badge-danger">Pendiente</span>';
+              {
+                if(row.envio=='1'){
+                  return '<span class="badge badge-success">Enviado</span><br>'+
+                          '<span class="badge badge-warning">Por confirmar recepcion</span>';
+                }else if(row.envio=='2'){
+                  return '<span class="badge badge-success">Enviado</span><br>'+
+                          '<span class="badge badge-info">Recibido</span>';
+                }else{
+                  return '<span class="badge badge-danger">Pendiente</span>';
+                }
               }
+              
 
             }
           }
@@ -320,7 +361,17 @@
         //{data: 'responsable', name: 'responsable', },//estado de envio
         
         //{data: 'condicion_pa', name: 'condicion_pa', },//ss
-        {data: 'condicion_envio', name: 'condicion_envio', },//
+        {
+          data: 'condicion_envio', 
+          name: 'condicion_envio',
+          render: function ( data, type, row, meta ) {
+            if(row.condiciones=='ANULADO'){
+                return 'ANULADO';
+            }else{
+              return data;
+            }
+          }
+        },//
         {
           data: 'estado',
           name: 'estado',
@@ -363,24 +414,30 @@
             urledit = urledit.replace(':id', row.id);
 
             @can('pedidos.pedidosPDF')
-              data = data+'<a href="'+urlpdf+'" class="btn btn-info btn-sm" target="_blank"><i class="fa fa-file-pdf"></i> PDF</a>';
+              data = data+'<a href="'+urlpdf+'" class="btn btn-info btn-sm" target="_blank"><i class="fa fa-file-pdf"></i> PDF</a><br>';
             @endcan
             @can('pedidos.show')
-              data = data+'<a href="'+urlshow+'" class="btn btn-info btn-sm"><i class="fas fa-eye"></i> VER</a>';
+              data = data+'<a href="'+urlshow+'" class="btn btn-info btn-sm"><i class="fas fa-eye"></i> VER</a><br>';
             @endcan
             @can('pedidos.edit')
               if(row.condicion_pa==0)
               {
-                data = data+'<a href="'+urledit+'" class="btn btn-warning btn-sm"> Editar</a>';
+                data = data+'<a href="'+urledit+'" class="btn btn-warning btn-sm"> Editar</a><br>';
               } 
             @endcan
             @can('pedidos.destroy')
+            if(row.estado==0)
+            {
+              data = data+'<a href="" data-target="#modal-restaurar" data-toggle="modal" data-restaurar="'+row.id+'" ><button class="btn btn-success btn-sm"><i class="fas fa-check"></i> Restaurar</button></a><br>';
+            }else{
               if(row.condicion_pa==0)
               {
                 data = data+'<a href="" data-target="#modal-delete" data-toggle="modal" data-delete="'+row.id+'" data-responsable="{{ $miidentificador }}"><button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i> Anular</button></a>';
-              }
-            @endcan           
-
+              }              
+            }
+              
+            @endcan     
+                
             return data;             
           }
         },

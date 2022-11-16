@@ -15,25 +15,18 @@
     @can('pagos.create')
       <a href="{{ route('pagos.create') }}" class="btn btn-info"><i class="fas fa-plus-circle"></i> Agregar</a>
     @endcan
-    {{-- @can('pagos.exportar')
-    <div class="float-right btn-group dropleft">
-      <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        Exportar
-      </button>
-      <div class="dropdown-menu">
-        <a href="{{ route('mispagosExcel') }}" class="dropdown-item"><img src="{{ asset('imagenes/icon-excel.png') }}"> EXCEL</a>
+    
+    @if ($mirol=='Administrador')
+      <div class="float-right btn-group dropleft">
+        <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Exportar
+        </button>
+        <div class="dropdown-menu">
+          <a href="" data-target="#modal-exportar" data-toggle="modal" class="dropdown-item" target="blank_"><img src="{{ asset('imagenes/icon-excel.png') }}"> Mis Pagos</a>
+        </div>
       </div>
-    </div>
-    @endcan --}}
-    <div class="float-right btn-group dropleft">
-      <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        Exportar
-      </button>
-      <div class="dropdown-menu">
-        <a href="" data-target="#modal-exportar" data-toggle="modal" class="dropdown-item" target="blank_"><img src="{{ asset('imagenes/icon-excel.png') }}"> Excel</a>
-      </div>
-    </div>
-    @include('pagos.modals.exportar', ['title' => 'Exportar Lista de mis pagos', 'key' => '2'])    
+      @include('pagos.modals.exportar', ['title' => 'Exportar Lista de mis pagos', 'key' => '2'])
+    @endif
   </h1>
   @if($superasesor > 0)
   <br>

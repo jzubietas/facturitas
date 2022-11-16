@@ -7,6 +7,7 @@ use App\Models\Pago;
 use App\Models\DetallePago;
 use App\Models\User;
 use App\Models\TipoMovimiento;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -119,6 +120,7 @@ class MovimientoController extends Controller
         $comparar=DetallePago::where('id',$conciliar)->first();
         //return $comparar;
         $banco_compara=$comparar->banco;
+        //return $banco_compara; //BBVA
 
         if($banco_compara=='INTERBANK')
         {
@@ -142,9 +144,18 @@ class MovimientoController extends Controller
         }*/
 
         $titular_compara=$comparar->titular;
+        //return $titular_compara;
 
         if ($titular_compara!='' || is_null($titular_compara) ) {
-            $query->where('titular','LIKE','%'.$titular_compara.'%');
+
+            if($titular_compara=='EPIFANIO HUAMAN SOLANO' || $titular_compara=='EPIFANIO SOLANO HUAMAN')
+            {
+                $query->where('titular','LIKE','%'.'EPIFANIO'.'%');
+            }else{
+                $query->where('titular','LIKE','%'.$titular_compara.'%');
+            }
+
+            
         }
 
         $fecha_compra=$comparar->fecha;
@@ -217,12 +228,12 @@ class MovimientoController extends Controller
             'titular' => $request->titulares,
             'importe' => $monto,
             'tipo' => $request->tipotransferencia,
-            'fecha' => $request->fecha,
+            'fecha' => Carbon::parse($request->fecha),
             'pedido' => '0',
             'estado' => '1',
             'pago' => '0',
-            'detpago' => '',
-            'cabpago' => '',
+            'detpago' => '0',
+            'cabpago' => '0',
             'descripcion_otros' =>$descrip_otros 
         ]);
 

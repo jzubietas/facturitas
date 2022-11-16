@@ -42,6 +42,9 @@ class PagosPorRevisarExport implements FromView, ShouldAutoSize
                 DB::raw(" (select sum(ped3.abono) from pago_pedidos ped3 where ped3.pago_id =pagos.id and ped3.estado in (0) and ped3.pagado in (1,2) ) as total_pago_anulados ")   
                 )
         ->whereIn('pagos.condicion', ['PAGO','ADELANTO'])
+        ->where('pagos.estado', '1')
+        ->whereBetween(DB::raw('( (select DATE( MIN(dpa.fecha))   from detalle_pagos dpa where dpa.pago_id=pagos.id and dpa.estado=1)  )'), [$request->desde, $request->hasta])
+        //->whereBetween(DB::raw('DATE(pagos.created_at)'), [$request->desde, $request->hasta]) //rango de fechas
         //->orderBy('(select UNIX_TIMESTAMP(MIN(dpa.fecha))   from detalle_pagos dpa where dpa.pago_id=pagos.id and dpa.estado=1)', 'DESC')
         ->get();
         $this->pagos = $pagos;

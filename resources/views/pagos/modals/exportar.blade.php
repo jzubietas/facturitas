@@ -21,6 +21,8 @@
           {!! Form::open(['route' => ['pagosaprobadosExcel'], 'method' => 'POST', 'target' => 'blanck_']) !!}
           @elseif($key === '6')
           {!! Form::open(['route' => ['porrevisarExcel'], 'method' => 'POST', 'target' => 'blanck_']) !!}
+          @elseif($key === '7')
+          {!! Form::open(['route' => ['pagosabonadosExcel'], 'method' => 'POST', 'target' => 'blanck_']) !!}
         @endif
               <div class="card-body">
                 <div class="form-row">

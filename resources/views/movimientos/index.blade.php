@@ -15,25 +15,18 @@
     {{-- @can('movimientos.create') --}}
       <a href="" data-target="#modal-add-movimientos" data-toggle="modal"><button class="btn btn-info btn-sm"><i class="fas fa-plus-circle"></i> Agregar</button></a>
     {{-- @endcan --}}
-    {{-- @can('pagos.exportar')
+    {{-- @can('pagos.exportar')--}}
     <div class="float-right btn-group dropleft">
-      <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        Exportar
-      </button>
-      <div class="dropdown-menu">
-        <a href="{{ route('pagosExcel') }}" class="dropdown-item"><img src="{{ asset('imagenes/icon-excel.png') }}"> EXCEL</a>
-      </div>
-    </div>
-    @endcan --}}
-    {{-- <div class="float-right btn-group dropleft">
-      <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        Exportar
-      </button>
-      <div class="dropdown-menu">
-        <a href="" data-target="#modal-exportar" data-toggle="modal" class="dropdown-item" target="blank_"><img src="{{ asset('imagenes/icon-excel.png') }}"> Excel</a>
-      </div>
-    </div>
-    @include('pagos.modals.exportar', ['title' => 'Exportar Lista de pagos', 'key' => '1']) --}}    
+          <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Exportar
+          </button>
+          <div class="dropdown-menu">
+            <a href="" data-target="#modal-exportar-2" data-toggle="modal" class="dropdown-item" target="blank_"><img src="{{ asset('imagenes/icon-excel.png') }}"> Movimientos</a>
+          </div>
+        </div>
+        @include('movimientos.modals.exportar2', ['title' => 'Exportar Lista de Movimientos', 'key' => '1'])
+    {{--@endcan --}}
+   
     @include('movimientos.modals.AddMovimientos')
   </h1>
 <br>
