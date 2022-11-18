@@ -198,7 +198,14 @@
             data: 'celulares', 
             name: 'celulares',
             render: function ( data, type, row, meta ) {
-              return row.celulares+' - '+row.nombres
+              if(row.icelulares!=null)
+              {
+                return row.celulares+'-'+row.icelulares+' - '+row.nombres;
+
+              }else{
+                return row.celulares+' - '+row.nombres;
+              }
+              
             },
             //searchable: true
         },

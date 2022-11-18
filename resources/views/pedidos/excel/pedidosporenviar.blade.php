@@ -39,7 +39,7 @@
         <td>{{ $pedido->codigo }}</td>
         <td>{{ $pedido->fecha_registro }}</td>
         <td>{{ $pedido->nombre_cliente }}</td>
-        <td>{{ $pedido->celular_cliente }}</td>
+        <td>{{ $pedido->celular_cliente }}-{{ $pedido->icelular_cliente }}</td>
         <td>{{ $pedido->empresa }}</td>  
         <td>{{ $pedido->cantidad }}</td>      
         <td>{{ $pedido->fecha_elaboracion }}</td>{{-- FECHA ELABORACION --}}        

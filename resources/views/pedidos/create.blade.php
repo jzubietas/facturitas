@@ -2,8 +2,11 @@
 
 @section('title', 'Agregar pedidos')
 
+
+
 @section('content_header')
   <h1>Agregar pedidos</h1>
+
   {{-- @error('num_ruc')
     <small class="text-danger" style="font-size: 16px">{{ $message }}</small>
   @enderror --}}  
@@ -35,23 +38,19 @@
 
 @section('css')
   {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" /> --}}
-  <link rel="stylesheet" href="{{ asset('css/select2.css') }}">
+  
 <style>
   select option:disabled {
     color: #000;
     font-weight: bold;
 }
 
-.bootstrap-select .dropdown-menu li .dropdown-item
-{
-  color: #000 !important;
-  /*style="color: rgb(255, 255, 255);"*/
-}
-.bootstrap-select .dropdown-menu li .dropdown-item.disabled
-{
-  color: red !important;
-  /*style="color: rgb(255, 255, 255);"*/
-}
+.highlight
+  {
+    color:red !important;
+    background:white !important;
+  }
+
 </style>
 @stop
 
@@ -393,7 +392,7 @@
                     )
 
 
-               }else{
+              }else{
                  var urlpdf = '{{ route("pedidosPDF", ":id") }}';           
                  urlpdf = urlpdf.replace(':id', data.html);
                  window.open(urlpdf, '_blank');
@@ -407,7 +406,7 @@
       });
 
           $(document).on("change","#user_id",function(){
-            console.log("link asesor")
+            console.log("link asesor "+$(this).val())
             var uid=$(this).val();
               //if($(this).val()!='')
               $.ajax({
@@ -643,12 +642,12 @@
           //var userid=$("#user_id").val();
 
           $.ajax({
-            url: "{{ route('asesortiempo') }}",
-            method: 'GET',
+            url: "{{ route('asesorcombo') }}",
+            method: 'POST',
             success: function(data) {
               console.log(data.html);
               $('#user_id_tiempo').html(data.html);
-              $("#user_id_tiempo").selectpicker("refresh");
+              $("#user_id_tiempo").selectpicker("refresh").trigger("change");
             }
           });
           
@@ -852,7 +851,7 @@
                     return 'PED'+row.id;
                   } 
                 }
-            },             
+            },
               {data: 'descripcion', name: 'descripcion',sWidth:'70%', },
               {data: 'nota', name: 'nota', },
               {
@@ -891,11 +890,6 @@
             },
         });
       });
-
-      /*$("#formulariotiempo").submit(function(event){
-        
-      });*/
-
 
       $(document).on("submit", "#formulariotiempo", function (evento) {
           event.preventDefault();
@@ -1009,9 +1003,6 @@
         }
       });
 
-      
-
-
         });
         
       </script>
@@ -1020,15 +1011,38 @@
 <script>
   $(document).ready(function() {
 
-      $('#user_id option').attr("disabled", true);
+      /*$('#user_id option').attr("disabled", true);
       $('#user_id option[value="{{ Auth::user()->id }}"]').attr("disabled",false);
       $("#user_id").val("{{ Auth::user()->id }}").trigger("change");
+*/
+
+
 
       
   });
 </script>
 @endif
 
+  <script>
+  $(document).ready(function() {
+
+    $.ajax({
+        type:'POST',
+        url:"{{ route('asesorcombo') }}",
+    }).done(function (data) {
+      console.log(data);
+      $("#user_id").html('');
+      $("#user_id").html(data.html);      
+
+      $("#user_id").selectpicker("refresh").trigger("change");
+
+      
+    });
+    
+
+
+  });
+  </script>
   
 
 

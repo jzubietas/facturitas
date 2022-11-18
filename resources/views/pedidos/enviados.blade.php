@@ -4,15 +4,7 @@
 
 @section('content_header')
   <h1>Lista de pedidos entregados - ENVIOS
-    {{-- <div class="float-right btn-group dropleft">
-      <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        Exportar
-      </button>
-      <div class="dropdown-menu">
-        <a href="{{ route('pedidosporatenderExcel') }}" class="dropdown-item"><img src="{{ asset('imagenes/icon-excel.png') }}"> EXCEL</a>
-      </div>
-    </div> --}}
-    {{-- @can('clientes.exportar') --}}
+       
     <div class="float-right btn-group dropleft">
       <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         Exportar
@@ -22,7 +14,7 @@
       </div>
     </div>
     @include('pedidos.modal.exportar', ['title' => 'Exportar pedidos ENTREGADOS', 'key' => '2'])
-    {{-- @endcan --}}
+    
   </h1>
   @if($superasesor > 0)
   <br>
@@ -63,88 +55,21 @@
             <th scope="col">Foto 1</th>
             <th scope="col">Foto 2</th>
             <th scope="col">Estado de envio</th>
-            <th scope="col">Acciones</th>
+            
           </tr>
         </thead>
         <tbody>
-          @foreach ($pedidos as $pedido)
-            <tr>
-              @if ($pedido->id < 10)
-                <td>PED000{{ $pedido->id }}</td>
-              @elseif($pedido->id < 100)
-                <td>PED00{{ $pedido->id }}</td>
-              @elseif($pedido->id < 1000)
-                <td>PED0{{ $pedido->id }}</td>
-              @else
-                <td>PED{{ $pedido->id }}</td>
-              @endif
-              <td>{{ $pedido->codigos }}</td>
-              <td>{{ $pedido->users }}</td> 
-              <td>{{ $pedido->celulares }} - {{ $pedido->nombres }}</td>
-              <td>{{ $pedido->empresas }}</td>                           
-              <td>{{ $pedido->fecha_envio_doc }}</td>
-              <td>{{ $pedido->fecha_envio_doc_fis }}</td>
-              <td>{{ $pedido->fecha_recepcion }}</td>
-              <td>
-                @if($pedido->foto1 != null)
-                  <a href="" data-target="#modal-imagen-{{ $pedido->id }}" data-toggle="modal">
-                    <img src="{{ asset('storage/entregas/' . $pedido->foto1) }}" alt="{{ $pedido->foto1 }}" height="200px" width="200px" class="img-thumbnail">
-                  </a>                
-                  <p>
-
-                    <a href="{{ route('envios.descargarimagen', $pedido->foto1) }}">Descargar </a>
-
-                    @if (Auth::user()->rol == "Asesor")
-                      <a href="" data-target="#modal-delete-foto1-{{ $pedido->id }}" data-toggle="modal">  <button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i></button></a>
-                    @endif
-                  </p>
-                @elseif($pedido->envio == '3')
-                  <span class="badge badge-dark">Sin envio</span>
-                @else
-                  <span class="badge badge-danger">Sin foto</span>
-                @endif
-              </td>
-              <td>
-                @if($pedido->foto2 != null)
-                  <a href="" data-target="#modal-imagen2-{{ $pedido->id }}" data-toggle="modal">
-                    <img src="{{ asset('storage/entregas/' . $pedido->foto2) }}" alt="{{ $pedido->foto2 }}" height="200px" width="200px" class="img-thumbnail">                
-                  </a>
-                  
-                  
-                  <p>
-                    <a href="{{ route('envios.descargarimagen', $pedido->foto2) }}">Descargar </a>
-                    @if (Auth::user()->rol == "Asesor")
-                      <a href="" data-target="#modal-delete-foto2-{{ $pedido->id }}" data-toggle="modal">  <button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i></button></a>
-                    @endif
-                  </p>
-                @elseif($pedido->envio == '3')
-                  <span class="badge badge-dark">Sin envio</span>
-                @else
-                  <span class="badge badge-danger">Sin foto</span>
-                @endif
-              </td>
-              <td>{{ $pedido->condicion_envio }}</td>
-              <td>
-                @can('envios.verenvio')
-                  <a href="" data-target="#modal-verenvio-{{ $pedido->id }}" data-toggle="modal"><button class="btn btn-primary btn-sm">Ver</button></a>
-                @endcan
-                @can('envios.enviar')
-                  @if($pedido->envio <> '3')
-                  <a href="" data-target="#modal-editenviar-{{ $pedido->id }}" data-toggle="modal"><button class="btn btn-warning btn-sm">Editar Entrega</button></a>
-                  @endif
-                @endcan
-              </td>
-            </tr>
-            @include('pedidos.modal.editenviar')
-            {{-- @include('pedidos.modal.atender') --}}
-            @include('pedidos.modal.verenvio')
-            @include('pedidos.modal.imagen')
-            @include('pedidos.modal.imagen2')
-            @include('pedidos.modal.DeleteFoto1')
-            @include('pedidos.modal.DeleteFoto2')
-          @endforeach
         </tbody>
       </table>
+      @include('pedidos.modal.editenviarid')
+      @include('pedidos.modal.verenvioid')      
+      @include('pedidos.modal.imagenid')
+      @include('pedidos.modal.imagen2id')
+      @include('pedidos.modal.atenderid')
+      @include('pedidos.modal.DeleteFoto1id')
+      @include('pedidos.modal.DeleteFoto2id')
+      @include('pedidos.modal.CambiarImagen')
+      @include('pedidos.modal.CambiarImagen2')
     </div>
   </div>
 
@@ -211,7 +136,283 @@
   }
 </script>
 
-  <script src="{{ asset('js/datatables.js') }}"></script>
+  
+  <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+
+  <script>
+    $(document).ready(function () {
+
+      $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+      });
+
+      $('#modal-imagen').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget) 
+        var idunico = button.data('imagen');
+        var str="storage/entregas/"+idunico;
+        var urlimage = '{{ asset(":id") }}';
+        urlimage = urlimage.replace(':id', str);
+        $("#modal-imagen .img-thumbnail").attr("src",urlimage);        
+      });
+
+      $('#modal-cambiar-imagen').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget) 
+        var imagen = button.data('imagen');
+        var pedido = button.data('pedido');
+        var item = button.data('item');
+        
+        var str="storage/entregas/"+imagen;
+        var urlimage = '{{ asset(":id") }}';
+        urlimage = urlimage.replace(':id', str);
+        urlimage = urlimage.replace(' ', '%20');
+        console.log(urlimage)
+        $("#picture").attr("src",urlimage); //cambiar imnagen
+        //campos ocultos
+        $("#cambiapedido").val(pedido);
+        $("#cambiaitem").val(item);
+      });
+
+
+      
+
+      $('#modal-imagen2').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget) 
+        var idunico = button.data('imagen');
+        var str="storage/entregas/"+idunico;
+        var urlimage = '{{ asset(":id") }}';
+
+        urlimage = urlimage.replace(':id', str);
+        $("#modal-imagen2 .img-thumbnail").attr("src",urlimage);        
+      });
+      
+
+      $(document).on("submit", "#formulario", function (evento) {
+        evento.preventDefault();
+        var fd = new FormData();
+      });
+
+      /*$('#modal-verenvio').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget) 
+        var idunico = button.data('verenvio')
+        $("#modal-verenvio .textcode").html("PED"+idunico);
+        $("#hiddenVerenvio").val(idunico);
+        $("#fecha_envio_doc_fis").val("");
+        $("#fecha_recepcion").val("");
+        $("#condicion").val("");
+      });*/
+
+      $('#modal-editenviar').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget) 
+        var idunico = button.data('editenviar')
+        $("#modal-editenviar .textcode").html("PED"+idunico);
+        $("#hiddenEditenviar").val(idunico);
+
+        //ajax para obtener los datos
+      });
+
+      $(document).on("submit", "#formularioVerenvio", function (evento) {
+        evento.preventDefault();
+        let item=$("#hiddenVerenvio").val();
+        //console.log(item)
+      });
+
+      $(document).on("submit", "#formularioEditenviar", function (evento) {
+        evento.preventDefault();
+        let item=$("#hiddenEditenviar").val();
+        //console.log(item);
+      });
+
+      $(document).on("click","#change_imagen",function(){
+        var fd2 = new FormData();
+        //agregados el id pago
+        let files=$('input[name="pimagen')
+        var cambiaitem=$("#cambiaitem").val();
+        var cambiapedido=$("#cambiapedido").val();        
+
+        fd2.append("item",cambiaitem )
+        fd2.append("pedido",cambiapedido )
+        for (let i = 0; i < files.length; i++) {
+          fd2.append('adjunto', $('input[type=file][name="pimagen"]')[0].files[0]);
+        }
+
+        $.ajax({
+          data: fd2,
+          processData: false,
+          contentType: false,
+          type: 'POST',
+          url:"{{ route('envios.changeImg') }}",
+          success:function(data){
+            console.log(data);
+            if(data.html=='0')
+            {
+            }else{
+              $("#modal-cambiar-imagen").modal("hide");
+              var urlimg = "{{asset('imagenes/logo_facturas.png')}}";
+              urlimg = urlimg.replace('imagenes/', 'storage/entregas/');
+              urlimg = urlimg.replace('logo_facturas.png', data.html);
+              urlimg = urlimg.replace(' ', '%20');
+              console.log(urlimg);
+              $("#imagen_"+cambiapedido+'-'+cambiaitem).attr("src", urlimg );
+            }
+          }
+        });
+
+      });
+
+      $(document).on("change","#pimagen",function(event){
+        console.log("cambe image")
+        var file = event.target.files[0];
+        var reader = new FileReader();
+        reader.onload = (event) => {
+          //$("#picture").attr("src",event.target.result);
+            document.getElementById("picture").setAttribute('src', event.target.result);
+        };
+        reader.readAsDataURL(file);
+
+      });
+
+
+      $('#tablaPrincipal').DataTable({
+        processing: true,
+        serverSide: true,
+        searching: true,
+        "order": [[ 0, "desc" ]],
+        ajax: "{{ route('envios.enviadostabla') }}",
+        createdRow: function( row, data, dataIndex){
+          //console.log(row);          
+        },
+        rowCallback: function (row, data, index) {           
+        },
+        columns: [
+          {
+              data: 'id', 
+              name: 'id',
+              render: function ( data, type, row, meta ) {
+                if(row.id<10){
+                  return 'PED000'+row.id;
+                }else if(row.id<100){
+                  return 'PED00'+row.id;
+                }else if(row.id<1000){
+                  return 'PED0'+row.id;
+                }else{
+                  return 'PED'+row.id;
+                } 
+              }
+          },
+          {data: 'codigos', name: 'codigos', },
+          {data: 'users', name: 'users', },
+          {
+            data: 'celulares', 
+            name: 'celulares',
+            render: function ( data, type, row, meta ) {
+              return row.celulares+' - '+row.nombres
+            },
+            //searchable: true
+        },
+          {data: 'empresas', name: 'empresas', },
+          {data: 'fecha_envio_doc', name: 'fecha_envio_doc', },
+          {data: 'fecha_envio_doc_fis', name: 'fecha_envio_doc_fis', },
+          {data: 'fecha_recepcion', name: 'fecha_recepcion', },
+          {
+            data: 'foto1', 
+            name: 'foto1',
+            render: function ( data, type, row, meta ) {
+              datass=''
+              if(data!=null)
+              {
+                var urlimagen1 = '{{ asset("storage/entregas/:id") }}';
+                urlimagen1 = urlimagen1.replace(':id', data);
+                datass=datass+'<a href="" data-target="#modal-imagen" data-toggle="modal" data-imagen="'+data+'">'+
+                    '<img src="'+urlimagen1+'" alt="'+data+'" height="200px" width="200px" id="imagen_'+row.id+'-1" class="img-thumbnail">'+
+                    '</a>';
+                urldescargar = '{{ route("envios.descargarimagen", ":id") }}';
+                urldescargar = urldescargar.replace(':id', data);
+
+                datass=datass+'<a href="'+urldescargar+'" class="text-center"><button type="button" class="btn btn-secondary btn-md"> Descargar</button> </a>';
+
+                datass=datass+'<a href="" data-target="#modal-cambiar-imagen" data-toggle="modal" data-item="1" data-imagen="'+data+'" data-pedido="'+row.id+'">'+
+                                  '<button class="btn btn-danger btn-md">Cambiar</button>'+
+                                  '</a>';
+
+                @if (Auth::user()->rol == "Asesor")
+                    datass=datass+'<a href="" data-target="#modal-delete-foto1" data-toggle="modal" data-deletefoto1="'+row.id+'">'+
+                      '<button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i></button>'+
+                      '</a>';
+                @endif 
+                return datass;
+
+              }else if(row.envio == '3'){
+                return '<span class="badge badge-dark">Sin envio</span>';
+              }else{
+                return '<span class="badge badge-danger">Sin foto</span>';
+              }
+            },
+          },
+          {
+            data: 'foto2', 
+            name: 'foto2',
+            render: function ( data, type, row, meta ) {
+              datass=''
+              if(data!=null)
+              {
+                var urlimagen2 = '{{ asset("storage/entregas/:id") }}';
+                urlimagen2 = urlimagen2.replace(':id', data);
+                datass=datass+'<a href="" data-target="#modal-imagen2" data-toggle="modal" data-imagen="'+data+'">'+
+                    '<img src="'+urlimagen2+'" alt="'+data+'" height="200px" width="200px" id="imagen_'+row.id+'-2" class="img-thumbnail">'+
+                    '</a>';
+                urldescargar = '{{ route("envios.descargarimagen", ":id") }}';
+                urldescargar = urldescargar.replace(':id', data);
+
+                datass=datass+'<a href="'+urldescargar+'" class="text-center"><button type="button" class="btn btn-secondary btn-md"> Descargar</button> </a>';
+
+                datass=datass+'<a href="" data-target="#modal-cambiar-imagen" data-toggle="modal" data-item="2" data-imagen="'+data+'" data-pedido="'+row.id+'">'+
+                                  '<button class="btn btn-danger btn-md">Cambiar</button>'+
+                                  '</a>';
+
+                @if (Auth::user()->rol == "Asesor")
+                    datass=datass+'<a href="" data-target="#modal-delete-foto1" data-toggle="modal" data-deletefoto2="'+row.id+'">'+
+                      '<button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i></button>'+
+                      '</a>';
+                @endif 
+                return datass;
+
+              }else if(row.envio == '3'){
+                return '<span class="badge badge-dark">Sin envio</span>';
+              }else{
+                return '<span class="badge badge-danger">Sin foto</span>';
+              }
+            },
+          },
+          {data: 'condicion_envio', name: 'condicion_envio', },
+          
+        ],
+        language: {
+          "decimal": "",
+          "emptyTable": "No hay informaciÃ³n",
+          "info": "Mostrando del _START_ al _END_ de _TOTAL_ Entradas",
+          "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
+          "infoFiltered": "(Filtrado de _MAX_ total entradas)",
+          "infoPostFix": "",
+          "thousands": ",",
+          "lengthMenu": "Mostrar _MENU_ Entradas",
+          "loadingRecords": "Cargando...",
+          "processing": "Procesando...",
+          "search": "Buscar:",
+          "zeroRecords": "Sin resultados encontrados",
+          "paginate": {
+            "first": "Primero",
+            "last": "Ultimo",
+            "next": "Siguiente",
+            "previous": "Anterior"
+          }
+        },
+      });
+
+    });
+  </script>
 
   @if (session('info') == 'registrado' || session('info') == 'actualizado' || session('info') == 'eliminado')
     <script>

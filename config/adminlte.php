@@ -295,8 +295,8 @@ return [
                     'active' => ['mis pedidos'],
                 ],
                 [
-                    'text' => 'Pedidos pagados',
-                    'route'  => 'pedidos.pagados',
+                    'text' => 'Sobres por enviar',
+                    'route'  => 'sobres.porenviar',
                     'can' => 'pedidos.pagados',
                     'icon'   => 'fas fa-check-circle',
                     'active' => ['pedidos pagados'],
@@ -338,7 +338,7 @@ return [
                     'active' => ['pedidos atendidos'],
                 ],
                 [
-                    'text' => 'Pedidos entregados',
+                    'text' => 'Sobres terminados',
                     'route'  => 'operaciones.entregados',
                     'can' => 'operacion.atendidos',
                     'icon'   => 'fas fa-check-circle',
@@ -352,6 +352,13 @@ return [
             'icon'    => 'fas fa-people-carry',
             'can'     => 'envios.modulo',
             'submenu' => [
+                [
+                    'text' => 'Sobres por recibir',
+                    'route'  => 'envios.porrecibir',
+                    'can' => 'envios.index',
+                    'icon'   => 'fas fa-check-circle',
+                    'active' => ['envios'],
+                ],
                 [
                     'text' => 'Bandeja de envios',
                     'route'  => 'envios.index',

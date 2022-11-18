@@ -39,7 +39,7 @@
           <td>PED0{{ $pedido->id }}</td>
         @endif
         <td>{{ $pedido->codigos }}</td>
-        <td>{{ $pedido->celulares }}</td>
+        <td>{{ $pedido->celulares }}-{{ $pedido->icelulares }}</td>
         <td>{{ $pedido->nombres }}</td>
         <td>{{ $pedido->empresas }}</td>
         <td>{{ $pedido->users }}</td>

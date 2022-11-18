@@ -70,81 +70,14 @@
           </tr>
         </thead>
         <tbody>
-          @foreach ($pedidos as $pedido)
-            <tr>
-              @if ($pedido->id < 10)
-                <td>PED000{{ $pedido->id }}</td>
-              @elseif($pedido->id < 100)
-                <td>PED00{{ $pedido->id }}</td>
-              @elseif($pedido->id < 1000)
-                <td>PED0{{ $pedido->id }}</td>
-              @else
-                <td>PED{{ $pedido->id }}</td>
-              @endif
-              <td>{{ $pedido->codigos }}</td>
-              <td>{{ $pedido->users }}</td> 
-              <td>{{ $pedido->celulares }} - {{ $pedido->nombres }}</td>
-              <td>{{ $pedido->empresas }}</td>                           
-              <td>{{ $pedido->fecha_envio_doc }}</td>
-              <td>{{ $pedido->fecha_envio_doc_fis }}</td>
-              <td>{{ $pedido->fecha_recepcion }}</td>
-              <td>{{ $pedido->destino }}</td>
-              <td>
-                {{-- @if($pedido->destino == 'LIMA') --}}
-                  @if($pedido->direccion == '0')
-                    <span class="badge badge-danger">REGISTRE DIRECCION</span>
-                  @elseif($pedido->destino == 'LIMA')
-                  <a href="" data-target="#modal-verdireccion-{{ $pedido->id }}" data-toggle="modal"><button class="btn btn-primary btn-sm"><i class="fas fa-eye"></i> Ver</button></a>
-                  {{-- <a href="" data-target="#modal-editdireccion-{{ $pedido->id }}" data-toggle="modal"><button class="btn btn-dark btn-sm"><i class="fas fa-pen"></i> Editar</button></a> --}}
-                  @elseif($pedido->destino == 'PROVINCIA')
-                    <span class="badge badge-info">ENVIO A PROVINCIA</span>
-                  @else
-                    <span class="badge badge-info">PROBLEMAS CON REGISTRO DE DESTINO</span>
-                  @endif
-                {{-- @else
-                  <span class="badge badge-info">ENVIO A PROVINCIA</span>
-                @endif --}}
-              </td>
-              <td>{{ $pedido->condicion_envio }}</td>
-              <td>
-                @if ($pedido->envio == '1')
-                  <span class="badge badge-danger">Por confirmar recepcion</span>
-                @else
-                  <span class="badge badge-info">Recibido</span>
-                @endif
-              </td>
-              <td>
-              
-                @if($ver_botones_accion > 0)
-                  @can('envios.enviar')
-                    <a href="" data-target="#modal-enviar-{{ $pedido->id }}" data-toggle="modal"><button class="btn btn-success btn-sm"><i class="fas fa-envelope"></i> Entregado</button></a>
-                    @if($pedido->envio == '1')
-                      <a href="" data-target="#modal-recibir-{{ $pedido->id }}" data-toggle="modal"><button class="btn btn-warning btn-sm"><i class="fas fa-check-circle"></i> Recibido</button></a>
-                    @endif
-                  @endcan
-                @endif
-
-                @if($pedido->destino == null && $pedido->direccion == '0' && ($pedido->envio)*1 > 0)
-                  {{-- <a href="" data-target="#modal-destino-{{ $pedido->id }}" data-toggle="modal"><button class="btn btn-outline-dark btn-sm"><i class="fas fa-map"></i> Destino</button></a> --}}
-                  <a href="{{ route('envios.createdireccion', $pedido) }}" class="btn btn-dark btn-sm"><i class="fas fa-map"></i> Destino</a>
-                @endif
-                {{-- @if($pedido->destino == 'LIMA' && $pedido->direccion == '0')                  
-                  <a href="{{ route('envios.createdireccion', $pedido) }}" class="btn btn-dark btn-sm"><i class="fas fa-motorcycle"></i> Direccion</a>
-                @endif
-                @if($pedido->destino == 'PROVINCIA' && $pedido->direccion == '0')                  
-                  <a href="#" class="btn btn-secondary btn-sm"><i class="fas fa-bus"></i> Provincia</a>
-                @endif --}}
-              </td>
-            </tr>
-            @include('pedidos.modal.enviar')
-            @include('pedidos.modal.recibir')
-            @include('pedidos.modal.direccion')
-            @include('pedidos.modal.verdireccion')
-            @include('pedidos.modal.editdireccion')
-            @include('pedidos.modal.destino')
-          @endforeach
         </tbody>
       </table>
+      @include('pedidos.modal.enviarid')
+      @include('pedidos.modal.recibirid')
+      @include('pedidos.modal.direccionid')
+      @include('pedidos.modal.verdireccionid')
+      @include('pedidos.modal.editdireccionid')
+      @include('pedidos.modal.destinoid')
     </div>
   </div>
 
@@ -198,7 +131,247 @@
 @stop
 
 @section('js')
-  <script src="{{ asset('js/datatables.js') }}"></script>
+  {{--<script src="{{ asset('js/datatables.js') }}"></script>--}}
+  <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+
+  <script>
+    $(document).ready(function () {
+
+      $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+      });
+
+      $(document).on("submit", "#formulario", function (evento) {
+        evento.preventDefault();
+        var fd = new FormData();
+      });
+
+      $('#modal-enviar').on('show.bs.modal', function (event) {
+        //cuando abre el form de anular pedido
+        var button = $(event.relatedTarget) 
+        var idunico = button.data('enviar')//pedido
+        $("#hiddenEnviar").val(idunico)
+        if(idunico<10){
+          idunico='PED000'+idunico;
+        }else if(idunico<100){
+          idunico= 'PED00'+idunico;
+        }else if(idunico<1000){
+          idunico='PED0'+idunico;
+        }else{
+          idunico='PED'+idunico;
+        } 
+        $("#modal-enviar .textcode").html(idunico);
+        
+      });
+
+      $('#modal-recibir').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget) 
+        var idunico = button.data('recibir')//pedido
+        $("#hiddenRecibir").val(idunico)
+        if(idunico<10){
+          idunico='PED000'+idunico;
+        }else if(idunico<100){
+          idunico= 'PED00'+idunico;
+        }else if(idunico<1000){
+          idunico='PED0'+idunico;
+        }else{
+          idunico='PED'+idunico;
+        } 
+        $("#modal-recibir .textcode").html(idunico);
+
+
+      });
+
+      $(document).on("submit", "#formularioenviar", function (evento) {
+        evento.preventDefault();
+        console.log("form enviarid")
+        //validacion
+
+        var fd2 = new FormData();
+        let files=$('input[name="pimagen')
+        var fileitem=$("#DPitem").val();
+        
+        fd2.append('hiddenEnviar', $('#hiddenEnviar').val() );
+        fd2.append('fecha_envio_doc_fis', $('#fecha_envio_doc_fis').val() );
+        fd2.append('fecha_recepcion', $('#fecha_recepcion').val() );
+        fd2.append('foto1', $('input[type=file][id="foto1"]')[0].files[0]);
+        fd2.append('foto2', $('input[type=file][id="foto2"]')[0].files[0]);
+        fd2.append('condicion', $('#condicion').val() );
+        
+        $.ajax({
+          data: fd2,
+          processData: false,
+          contentType: false,
+          type: 'POST',
+          url:"{{ route('envios.enviarid') }}",
+          success:function(data){
+            $("#modal-enviar").modal("hide");
+            $('#tablaPrincipal').DataTable().ajax.reload();
+
+          }
+        });
+
+
+      });
+
+      $(document).on("submit", "#formulariorecibir", function (evento) {
+        evento.preventDefault();
+      });
+      
+
+      /*$('#modal-atender').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget) 
+        var idunico = button.data('atender')
+        $(".textcode").html("PED"+idunico);
+        $("#hiddenAtender").val(idunico);
+      });*/
+
+      $('#tablaPrincipal').DataTable({
+        processing: true,
+        serverSide: true,
+        searching: true,
+        "order": [[ 0, "desc" ]],
+        ajax: "{{ route('envios.indextabla') }}",
+        createdRow: function( row, data, dataIndex){
+          //console.log(row);          
+        },
+        rowCallback: function (row, data, index) {           
+        },
+        columns: [
+          {
+              data: 'id', 
+              name: 'id',
+              render: function ( data, type, row, meta ) {
+                if(row.id<10){
+                  return 'PED000'+row.id;
+                }else if(row.id<100){
+                  return 'PED00'+row.id;
+                }else if(row.id<1000){
+                  return 'PED0'+row.id;
+                }else{
+                  return 'PED'+row.id;
+                } 
+              }
+          },
+          {data: 'codigos', name: 'codigos', },
+          {data: 'users', name: 'users', },
+          {
+            data: 'celulares', 
+            name: 'celulares',
+            render: function ( data, type, row, meta ) {
+              return row.celulares+' - '+row.nombres
+            },
+            //searchable: true
+        },
+          {data: 'empresas', name: 'empresas', },
+          {data: 'fecha_envio_doc', name: 'fecha_envio_doc', },
+          {data: 'fecha_envio_doc_fis', name: 'fecha_envio_doc_fis', },
+          {data: 'fecha_recepcion', name: 'fecha_recepcion', },
+          {data: 'destino', name: 'destino', },
+          {
+            data:'direccion',
+            name:'direccion',
+            render: function ( data, type, row, meta ) {
+              //console.log(data);
+              datas='';
+              if(data!=null)
+              {
+                if(data=='0')
+                {
+                  return '<span class="badge badge-danger">REGISTRE DIRECCION</span>';
+                }else if(data=='LIMA')
+                {
+                  var urlshow = '{{ route("pedidos.show", ":id") }}';
+                  urlshow = urlshow.replace(':id', row.id);
+
+                  return '<a href="" data-target="#modal-verdireccion" data-toggle="modal" data-dirreccion="'+row.id+'"><button class="btn btn-primary btn-sm"><i class="fas fa-eye"></i> Ver</button></a>';
+                }
+                else if(data=='PROVINCIA')
+                {
+                  return '<span class="badge badge-info">ENVIO A PROVINCIA</span>';
+                }else{
+                  return '<span class="badge badge-info">PROBLEMAS CON REGISTRO DE DESTINO</span>';
+                }
+
+                //return datas;
+
+              }else{
+                return '';
+              }
+              return 'REGISTRE DIRECCION';
+            },
+          },
+          {data: 'condicion_envio', name: 'condicion_envio', },
+          {
+            data: 'envio', 
+            name: 'envio',
+            render: function ( data, type, row, meta ) {
+              if(row.envio=='1')
+              {
+                return '<span class="badge badge-danger">Por confirmar recepcion</span>';
+              }else{
+                return '<span class="badge badge-info">Recibido</span>';
+              }
+            }, 
+          },
+          {
+            data: 'action', 
+            name: 'action', 
+            orderable: false, 
+            searchable: false,
+            sWidth:'20%',
+            render: function ( data, type, row, meta ) {   
+              datass='';
+              @if($ver_botones_accion > 0)
+                @can('envios.enviar')
+                  datass=datass+'<a href="" data-target="#modal-enviar" data-toggle="modal" data-enviar="'+row.id+'"><button class="btn btn-success btn-sm"><i class="fas fa-envelope"></i> Entregado</button></a>';  
+                  if(row.envio=='1')
+                  {
+                    datass = datass+ '<a href="" data-target="#modal-recibir" data-toggle="modal" data-recibir="'+row.id+'"><button class="btn btn-warning btn-sm"><i class="fas fa-check-circle"></i> Recibido</button></a>'; 
+                  }
+                @endcan
+              @endif
+              
+              if(row.destino == null && row.direccion =='0' && (row.envio*1) >0)
+              {
+                var urldireccion = '{{ route("envios.createdireccion", ":id") }}';
+                urldireccion = urldireccion.replace(':id', row.id);
+                data = data+'<a href="'+urldireccion+'" class="btn btn-dark btn-sm"><i class="fas fa-map"></i> Destino</a><br>';
+              }
+              
+              return datass;                    
+            }
+          },
+        ],
+        language: {
+          "decimal": "",
+          "emptyTable": "No hay informaciÃ³n",
+          "info": "Mostrando del _START_ al _END_ de _TOTAL_ Entradas",
+          "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
+          "infoFiltered": "(Filtrado de _MAX_ total entradas)",
+          "infoPostFix": "",
+          "thousands": ",",
+          "lengthMenu": "Mostrar _MENU_ Entradas",
+          "loadingRecords": "Cargando...",
+          "processing": "Procesando...",
+          "search": "Buscar:",
+          "zeroRecords": "Sin resultados encontrados",
+          "paginate": {
+            "first": "Primero",
+            "last": "Ultimo",
+            "next": "Siguiente",
+            "previous": "Anterior"
+          }
+        },
+      });
+
+
+
+    });
+  </script>
 
   @if (session('info') == 'registrado' || session('info') == 'actualizado' || session('info') == 'eliminado')
     <script>
@@ -220,9 +393,9 @@
     }
     
     //VALIDAR ANTES DE ENVIAR
-    document.addEventListener("DOMContentLoaded", function() {
+    /*document.addEventListener("DOMContentLoaded", function() {
     document.getElementById("formulario").addEventListener('submit', validarFormulario); 
-    });
+    });*/
 
     function validarFormulario(evento) {
       evento.preventDefault();

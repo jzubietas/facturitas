@@ -22,7 +22,7 @@ class PagosPorAsesoresExport implements FromView, ShouldAutoSize
         ->join('detalle_pedidos as dpe', 'p.id', 'dpe.pedido_id')
         ->select('pagos.id', 
                 'dpe.codigo as codigos', 
-                'u.name as users', 
+                'u.identificador as users', 
                 'pagos.observacion', 
                 'dpe.total as total_deuda',
                 DB::raw('sum(dpa.monto) as total_pago'), 
@@ -35,7 +35,7 @@ class PagosPorAsesoresExport implements FromView, ShouldAutoSize
         ->whereIn('u.id', [$request->user_id1, $request->user_id2, $request->user_id3, $request->user_id4])
         ->groupBy('pagos.id', 
                 'dpe.codigo', 
-                'u.name',
+                'u.identificador',
                 'pagos.observacion', 'dpe.total',
                 'pagos.total_cobro',
                 'pagos.condicion', 

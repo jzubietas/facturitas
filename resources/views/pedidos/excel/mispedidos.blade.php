@@ -59,7 +59,7 @@
         <td>{{ $pedido->fecha }}</td>{{-- FECHA PEDIDO --}}
         <td>{{ $pedido->codigos }}</td>{{-- CODIGO PEDIDO --}}
         <td>{{ $pedido->nombres }}</td>{{-- NOMBRE CLIENTE --}}
-        <td>{{ $pedido->celulares }}</td>{{-- TELEFONO CLIENTE --}}
+        <td>{{ $pedido->celulares }}-{{ $pedido->icelulares }}</td>{{-- TELEFONO CLIENTE --}}
         <td>{{ $pedido->empresas }}</td>{{-- RAZON SOCIAL --}}
         <td>{{ $pedido->mes }}</td>{{-- MES --}}
         <td>{{ $pedido->ruc }}</td>{{-- RUC --}}

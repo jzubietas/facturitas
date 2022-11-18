@@ -26,7 +26,7 @@
                         <div class="row">
                           <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
                             {!! Form::label('fecha_envio_doc_fis', 'Fecha de envío') !!}
-                            {!! Form::date('fecha_envio_doc_fis', $pedido->fecha_envio_doc_fis, ['class' => 'form-control', 'id' => 'fecha_envio_doc_fis', 'disabled']) !!}
+                            {!! Form::date('fecha_envio_doc_fis', '', ['class' => 'form-control', 'id' => 'fecha_envio_doc_fis', 'disabled']) !!}
                           </div>
                           <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
                             {!! Form::label('fecha_recepcion', 'Fecha de entrega') !!}

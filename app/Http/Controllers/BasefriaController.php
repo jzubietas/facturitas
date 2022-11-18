@@ -33,6 +33,7 @@ class BasefriaController extends Controller
                 join('users as u', 'clientes.user_id', 'u.id')
                 ->select('clientes.id', 
                         'clientes.nombre', 
+                        'clientes.icelular', 
                         'clientes.celular', 
                         'u.identificador as identificador',
                         'u.rol'
@@ -47,6 +48,7 @@ class BasefriaController extends Controller
                 join('users as u', 'clientes.user_id', 'u.id')
                 ->select('clientes.id', 
                         'clientes.nombre', 
+                        'clientes.icelular', 
                         'clientes.celular', 
                         'u.identificador as identificador',
                         'u.rol'
@@ -61,6 +63,7 @@ class BasefriaController extends Controller
                 join('users as u', 'clientes.user_id', 'u.id')
                 ->select('clientes.id', 
                         'clientes.nombre', 
+                        'clientes.icelular', 
                         'clientes.celular', 
                         'u.identificador as identificador',
                         'u.rol'
@@ -76,6 +79,7 @@ class BasefriaController extends Controller
                 join('users as u', 'clientes.user_id', 'u.id')
                 ->select('clientes.id', 
                         'clientes.nombre', 
+                        'clientes.icelular', 
                         'clientes.celular', 
                         'u.identificador as identificador',
                         'u.rol'
@@ -90,6 +94,7 @@ class BasefriaController extends Controller
                 join('users as u', 'clientes.user_id', 'u.id')
                 ->select('clientes.id', 
                         'clientes.nombre', 
+                        'clientes.icelular', 
                         'clientes.celular', 
                         'u.identificador as identificador',
                         'u.rol'

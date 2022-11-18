@@ -27,12 +27,14 @@ class User extends Authenticatable
      *
      * @var string[]
      */
+
     protected $fillable = [
         'name',
         'email',
         'password',
         'rol',
         'identificador',
+        'exidentificador',
         'estado',
         'equipo',
         'meta_pedido',
@@ -76,8 +78,9 @@ class User extends Authenticatable
      * @var array
      */
     protected $appends = [
-        'profile_photo_url',
+        'profile_photo_url'
     ];
+
 
     public function adminlte_desc()
     {

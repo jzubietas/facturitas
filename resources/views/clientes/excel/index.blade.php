@@ -28,7 +28,7 @@
         <td>{{ $cont + 1 }}</td>
         <td>CLI00{{ $cliente->id }}</td>
         <td>{{ $cliente->nombre }}</td>
-        <td>{{ $cliente->celular }}</td>
+        <td>{{ $cliente->celular }}-$cliente->icelular</td>
         <td>{{ $cliente->provincia }}</td>
         <td>{{ $cliente->distrito }}</td>
         <td>{{ $cliente->direccion }}</td>

@@ -265,7 +265,13 @@
           data: 'celular', 
             name: 'celular',
             render: function ( data, type, row, meta ) {
-              return row.celular;
+              if(row.icelular!=null)
+              {
+                return row.celular+'-'+row.icelular;
+              }else{
+                return row.celular;
+              }
+              
             },
         },
         {//observacion

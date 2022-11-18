@@ -24,7 +24,7 @@ class PedidosOperacionesExport implements FromView, ShouldAutoSize
             ->select(
                 'pedidos.id',
                 'dpe.fecha_envio_doc_fis',
-                'u.name as users',
+                'u.identificador as users',
                 'dpe.codigo as codigos',
                 'dpe.nombre_empresa as empresas',
                 'dpe.ruc',
@@ -49,7 +49,7 @@ class PedidosOperacionesExport implements FromView, ShouldAutoSize
             ->groupBy(
                 'pedidos.id',
                 'dpe.fecha_envio_doc_fis',
-                'u.name',
+                'u.identificador',
                 'dpe.codigo',
                 'dpe.nombre_empresa',
                 'dpe.ruc',
@@ -81,7 +81,7 @@ class PedidosOperacionesExport implements FromView, ShouldAutoSize
             ->select(
                 'pedidos.id',
                 'dpe.fecha_envio_doc_fis',
-                'u.name as users',
+                'u.identificador as users',
                 'dpe.codigo as codigos',
                 'dpe.nombre_empresa as empresas',
                 'dpe.ruc',
@@ -104,7 +104,7 @@ class PedidosOperacionesExport implements FromView, ShouldAutoSize
             ->groupBy(
                 'pedidos.id',
                 'dpe.fecha_envio_doc_fis',
-                'u.name',
+                'u.identificador',
                 'dpe.codigo',
                 'dpe.nombre_empresa',
                 'dpe.ruc',

@@ -45,6 +45,10 @@ Route::get('clientestabla', [ClienteController::class, 'indextabla'])->name('cli
 Route::get('basefria', [ClienteController::class, 'indexbf'])->name('basefria');//actualizado para serverside
 Route::get('basefriatabla', [BasefriaController::class, 'index'])->name('basefriatabla');//actualizado para serverside
 
+Route::post('asesorcombo', [UserController::class, 'Asesorcombo'])->name('asesorcombo');
+Route::post('asesorcombopago', [UserController::class, 'Asesorcombopago'])->name('asesorcombopago');
+
+
 Route::get('clientes.createbf', [ClienteController::class, 'createbf'])->name('clientes.createbf');
 Route::post('clientes.storebf', [ClienteController::class, 'storebf'])->name('clientes.storebf');
 Route::post('basefriacliente/{cliente}', [ClienteController::class, 'updatebf'])->name('updatebf');
@@ -73,9 +77,9 @@ Route::post('pedidos.restaurar/{pedido}', [PedidoController::class, 'Restaurar']
 
 
 Route::get('cliente', [PedidoController::class, 'cliente'])->name('cargar.cliente');
-Route::get('clientedeasesor', [PedidoController::class, 'clientedeasesor'])->name('cargar.clientedeasesor');
+Route::get('clientedeasesor', [ClienteController::class, 'clientedeasesor'])->name('cargar.clientedeasesor');
 Route::get('asesortiempo', [PedidoController::class, 'asesortiempo'])->name('asesortiempo');
-Route::get('clientedeasesorparapagos', [PedidoController::class, 'clientedeasesorparapagos'])->name('cargar.clientedeasesorparapagos');
+Route::get('clientedeasesorparapagos', [ClienteController::class, 'clientedeasesor'])->name('cargar.clientedeasesorparapagos');
 Route::get('clientedeasesordeuda', [PedidoController::class, 'clientedeasesordeuda'])->name('cargar.clientedeasesordeuda');
 Route::get('clientedeudaparaactivar', [PedidoController::class, 'clientedeudaparaactivar'])->name('cargar.clientedeudaparaactivar');
 
@@ -83,7 +87,9 @@ Route::get('tipobanca', [PedidoController::class, 'tipobanca'])->name('cargar.ti
 Route::post('pedidos.agregarruc', [PedidoController::class, 'AgregarRuc'])->name('pedidos.agregarruc');
 Route::get('pedidos.mispedidos', [PedidoController::class, 'MisPedidos'])->name('pedidos.mispedidos');
 Route::get('pedidos.pagados', [PedidoController::class, 'Pagados'])->name('pedidos.pagados');
+Route::get('pedidos.pagadostabla', [PedidoController::class, 'Pagadostabla'])->name('pedidos.pagadostabla');
 Route::get('pedidos.sinpagos', [PedidoController::class, 'SinPagos'])->name('pedidos.sinpagos');
+Route::get('pedidos.sinpagostabla', [PedidoController::class, 'SinPagostabla'])->name('pedidos.sinpagostabla');
 Route::get('operaciones.poratender', [PedidoController::class, 'PorAtender'])->name('operaciones.poratender');
 Route::get('operaciones.poratendertabla', [PedidoController::class, 'PorAtendertabla'])->name('operaciones.poratendertabla');
 Route::get('operaciones.enatencion', [PedidoController::class, 'EnAtencion'])->name('operaciones.enatencion');
@@ -100,17 +106,37 @@ Route::post('operaciones.updateatender/{pedido}', [PedidoController::class, 'upd
 Route::get('operaciones.showatender/{pedido}', [PedidoController::class, 'showAtender'])->name('operaciones.showatender');
 Route::post('pedidos/eliminarAdjunto/{id}', [PedidoController::class, 'eliminarAdjunto'])->name('pedidos.eliminarAdjunto');
 Route::post('pedidos.envio/{pedido}', [PedidoController::class, 'Enviar'])->name('pedidos.envio');
+Route::post('pedidos.envioid', [PedidoController::class, 'Enviarid'])->name('pedidos.envioid');
+Route::post('pedidos.revertirenvioid', [PedidoController::class, 'Revertirenvio'])->name('pedidos.revertirenvioid');
+
+
 Route::post('pedidos.destino/{pedido}', [PedidoController::class, 'Destino'])->name('pedidos.destino');
 Route::post('operaciones.sinenvio/{pedido}', [PedidoController::class, 'SinEnviar'])->name('operaciones.sinenvio');
+Route::post('operaciones.sinenvioid', [PedidoController::class, 'SinEnviarid'])->name('operaciones.sinenvioid');
 
 Route::get('pedidos/{adjunto}/descargaradjunto', [PedidoController::class, 'DescargarAdjunto'])->name('pedidos.descargaradjunto');
+
+/////////
+
+Route::get('sobres.porenviar', [PedidoController::class, 'Sobresporenviar'])->name('sobres.porenviar');
+Route::get('sobres.porenviartabla', [PedidoController::class, 'Sobresporenviartabla'])->name('sobres.porenviartabla');
+
+Route::get('envios.porrecibir', [PedidoController::class, 'Enviosporrecibir'])->name('envios.porrecibir');
+Route::get('envios.porrecibirtabla', [PedidoController::class, 'Enviosporrecibirtabla'])->name('envios.porrecibirtabla');
 Route::get('envios.index', [PedidoController::class, 'Envios'])->name('envios.index');
+Route::get('envios.indextabla', [PedidoController::class, 'Enviostabla'])->name('envios.indextabla');
+Route::get('envios.enviados', [PedidoController::class, 'Enviados'])->name('envios.enviados');
+Route::get('envios.enviadostabla', [PedidoController::class, 'Enviadostabla'])->name('envios.enviadostabla');
+/////////
+
 Route::post('envios.recibir/{pedido}', [PedidoController::class, 'Recibir'])->name('envios.recibir');
+Route::post('envios.recibirid', [PedidoController::class, 'Recibirid'])->name('envios.recibirid');
 Route::post('envios.enviar/{pedido}', [PedidoController::class, 'EnviarPedido'])->name('envios.enviar');
+Route::post('envios.enviarid', [PedidoController::class, 'EnviarPedidoid'])->name('envios.enviarid');
 Route::post('envios.direccion', [PedidoController::class, 'DireccionEnvio'])->name('envios.direccion');
 Route::get('envios.createdireccion/{pedido}', [PedidoController::class, 'createDireccion'])->name('envios.createdireccion');
 Route::post('envios.updatedireccion/{direccion}', [PedidoController::class, 'UpdateDireccionEnvio'])->name('envios.updatedireccion');
-Route::get('envios.enviados', [PedidoController::class, 'Enviados'])->name('envios.enviados');
+
 Route::post('pedidos/eliminarFoto1/{pedido}', [PedidoController::class, 'eliminarFoto1'])->name('pedidos.eliminarFoto1');
 Route::post('pedidos/eliminarFoto2/{pedido}', [PedidoController::class, 'eliminarFoto2'])->name('pedidos.eliminarFoto2');
 Route::get('envios/{imagen}/descargarimagen', [PedidoController::class, 'DescargarImagen'])->name('envios.descargarimagen');
@@ -128,6 +154,10 @@ Route::post('pedidoobteneradjuntoRequest', [PedidoController::class, 'pedidoobte
 
 Route::post('pagos.addImgTemp', [PagoController::class, 'addImgTemp'])->name('pagos.addImgTemp');//actualizado para serverside
 Route::post('pagos.changeImg', [PagoController::class, 'changeImg'])->name('pagos.changeImg');
+
+Route::post('envios.changeImg', [PedidoController::class, 'changeImg'])->name('envios.changeImg');
+
+Route::post('pago/create/{id}', [PagoController::class, 'create'])->name('pago.create');
 
 Route::post('pago/eliminarPedido/{id}/{pago}', [PagoController::class, 'eliminarPedido'])->name('pago.eliminarPedido');
 Route::post('pago/eliminarPago/{id}/{pago}', [PagoController::class, 'eliminarPago'])->name('pago.eliminarPago');
@@ -162,7 +192,7 @@ Route::post('administracion.updaterevisar.post', [PagoController::class, 'update
 Route::get('pagos/{imagen}/descargarimagen', [PagoController::class, 'DescargarImagen'])->name('pagos.descargarimagen');
 
 Route::get('asesorespago', [PagoController::class, 'asesorespago'])->name('asesorespago');
-Route::get('clientescreatepago', [PagoController::class, 'clientescreatepago'])->name('clientescreatepago');
+Route::get('clientescreatepago', [ClienteController::class, 'clientedeasesorpagos'])->name('clientescreatepago');
 
 Route::resource('users', UserController::class)->names('users');
 Route::post('reset/{user}', [UserController::class, 'reset'])->name('user.reset');
@@ -253,6 +283,7 @@ Route::post('/mark-as-read', [NotificationsController::class, 'markNotification'
     Route::post('pedidosporatenderExcel', [ExcelController::class, 'pedidosporatenderExcel'])->name('pedidosporatenderExcel');
     Route::post('pedidosenatencionExcel', [ExcelController::class, 'pedidosenatencionExcel'])->name('pedidosenatencionExcel');
     Route::post('pedidosatendidosExcel', [ExcelController::class, 'pedidosatendidosExcel'])->name('pedidosatendidosExcel');
+    Route::post('pedidosentregadosExcel', [ExcelController::class, 'pedidosentregadosExcel'])->name('pedidosentregadosExcel');
     //MODULO ENVIOS
 
     // Route::get('pedidosporenviarExcel', [ExcelController::class, 'pedidosporenviarExcel'])->name('pedidosporenviarExcel');

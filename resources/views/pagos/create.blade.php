@@ -16,16 +16,23 @@
             {!! Form::label('user_id', 'Asesor') !!}
             {{--<input type="hidden" name="user_id" requerid value="{{ Auth::user()->id }}" class="form-control">--}}
             {{--<input type="text" name="user_name" value="{{ Auth::user()->name }}" class="form-control" disabled>--}}
-            <select name="user_id" class="border form-control selectpicker border-secondary" id="user_id" data-live-search="true">
-              {{--<option value="">---- SELECCIONE ASESOR ----</option>--}}
-              @foreach($users as $user)
-                <option value="{{ $user->id }}">{{$user->identificador}} - {{$user->name}}</option>
-              @endforeach
+            
+            <select name="user_id" class="border form-control  border-secondary selectpicker" id="user_id" data-live-search="true" >
+                <option value="">---- SELECCIONE ASESOR ----</option> 
+              </select>
 
-            </select>
+
+              
           </div>
           <div class="form-group col-lg-6">
+
             {!! Form::label('cliente_id', 'Cliente*') !!}{!! Form::hidden('cliente_id', '',['id' => 'cliente_id']) !!}
+              <div class="pr-2 btn border-0 rounded text-right">
+                <small class="rounded mb-2 bg-danger text-white" style="font-size: 16px">Sin Deuda</small>
+                <small class="rounded mb-2 bg-info text-white" style="font-size: 16px">Deuda reciente</small>
+                <small class="rounded mb-2 bg-dark text-white" style="font-size: 16px">Deudas</small>
+              </div>
+
               <select name="pcliente_id" class="border form-control selectpicker border-secondary" id="pcliente_id" data-live-search="true">
                 {{--<option value="">---- SELECCIONE CLIENTE ----</option>
                   @foreach($clientes as $cliente)
@@ -629,6 +636,7 @@ tfoot td {
             $("#total_pago_pagar").val(sumapago);
             $("#diferencia").val(sumapago);
             $("#pcliente_id").trigger("change");
+            console.log("b")
 
               //total_pago = diff*1 - subtotal*1;
               //console.log(total_pago);
@@ -692,12 +700,22 @@ tfoot td {
           console.log("123");
           var uid=$(this).val();
           $.ajax({
+              async:true,
                 url: "{{ route('clientescreatepago') }}?user_id=" + uid,
                 method: 'GET',
                 success: function(data) {
                   console.log(data.html);
                   $('#pcliente_id').html(data.html);
                   $("#pcliente_id").selectpicker("refresh");//addClass("your-custom-class")
+                  console.log("c")
+
+
+                  /*setTimeout(function(){
+                    $("#pcliente_id").val({{ $idcliente_request }}).trigger("change");
+                }, 10000);*/
+                  
+
+                  
 
 
                 }
@@ -705,7 +723,7 @@ tfoot td {
 
         });
 
-        $("#user_id").trigger("change");
+        //$("#user_id").trigger("change");
 
         $(document).on("click",".radiototal",function(event){
           event.preventDefault();
@@ -1104,6 +1122,7 @@ tfoot td {
         });
 
         $(document).on("change","#pcliente_id",function(){
+          console.log("d")
 
           $('#tabla_pagos').DataTable().clear().destroy();
           tabla_pagos=$('#tabla_pagos').DataTable({
@@ -1482,11 +1501,7 @@ tfoot td {
 
       $(document).ready(function () {
 
-        $.ajaxSetup({
-          headers: {
-              'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-          }
-        });
+        
 
         
         $(document).on("click","#add_pago",function(){
@@ -2242,6 +2257,43 @@ tfoot td {
   
 
     
+  </script>
+
+<script>
+  $(document).ready(function() {
+
+    $.ajaxSetup({
+          headers: {
+              'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+          }
+      });
+
+    $.ajax({
+        type:'POST',
+        url:"{{ route('asesorcombopago') }}",
+    }).done(function (data) {
+      $("#user_id").html('');
+      $("#user_id").html(data.html);      
+
+      $("#user_id").selectpicker("refresh").trigger("change");
+      
+      
+      $("#pcliente_id").val( {{ $idcliente_request }} ).trigger("change");
+        
+      
+
+
+      
+      
+    });
+
+    
+
+    
+   
+
+
+  });
   </script>
 
 @stop

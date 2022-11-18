@@ -231,6 +231,10 @@ class DashboardController extends Controller
             $pagosobservados_administracion = Pago::where('estado', '1')
                 ->where('condicion', 'OBSERVADO')
                 ->count();
+        //DASHBOARD Logística
+                    //sobres por enviar
+                    //sobres por recibir
+                    
 
             $conteo = count(auth()->user()->unreadNotifications);
 

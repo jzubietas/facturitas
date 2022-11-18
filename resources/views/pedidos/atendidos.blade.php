@@ -38,7 +38,7 @@
 
   <div class="card">
     <div class="card-body">
-      <table cellspacing="5" cellpadding="5">
+      <table cellspacing="5" cellpadding="5" class="d-none">
         <tbody>
           <tr>
             <td>Minimum date:</td>
@@ -136,9 +136,58 @@
       $('#modal-envio').on('show.bs.modal', function (event) {
         //cuando abre el form de anular pedido
         var button = $(event.relatedTarget) 
-        var idunico = button.data('atender')
+        var idunico = button.data('envio')
         $(".textcode").html("PED"+idunico);
-        $("#hiddenEnviar").val(idunico);
+        $("#hiddenEnvio").val(idunico);
+      });
+
+      $('#modal-sinenvio').on('show.bs.modal', function (event) {
+        //cuando abre el form de anular pedido
+        var button = $(event.relatedTarget) 
+        var idunico = button.data('sinenvio')
+        $(".textcode").html("PED"+idunico);
+        $("#hiddenSinenvio").val(idunico);
+      });
+
+      $(document).on("submit", "#formularioenvio", function (evento) {
+        evento.preventDefault();
+        var fd = new FormData();
+        fd.append( 'hiddenEnvio', $("#hiddenEnvio").val() );
+
+        $.ajax({
+           data: fd,
+           processData: false,
+           contentType: false,
+           type: 'POST',
+           url:"{{ route('pedidos.envioid') }}",
+           success:function(data)
+           {
+            console.log(data);
+            $("#modal-envio .textcode").text('');
+            $("#modal-envio").modal("hide");
+            $('#tablaPrincipal').DataTable().ajax.reload();
+           }
+        });
+      });
+
+      $(document).on("submit", "#formulariosinenvio", function (evento) {
+        evento.preventDefault();
+        var fd = new FormData();
+        fd.append( 'hiddenSinenvio', $("#hiddenSinenvio").val() );
+        $.ajax({
+           data: fd,
+           processData: false,
+           contentType: false,
+           type: 'POST',
+           url:"{{ route('operaciones.sinenvioid') }}",
+           success:function(data)
+           {
+            console.log(data);
+            $("#modal-sinenvio .textcode").text('');
+            $("#modal-sinenvio").modal("hide");
+            $('#tablaPrincipal').DataTable().ajax.reload();
+           }
+        });
       });
 
       $('#modal-delete').on('show.bs.modal', function (event) {
@@ -199,7 +248,7 @@
           {data: 'empresas', name: 'empresas', },
           {data: 'users', name: 'users', },
           {data: 'fecha', name: 'fecha', },
-          {data: 'destino', name: 'destino', },
+          {data: 'destino', name: 'destino',"visible":false },
           {data: 'condicion', name: 'condicion', },
           {data: 'atendido_por', name: 'atendido_por', },
           {data: 'jefe', name: 'jefe', },
@@ -254,7 +303,27 @@
               return data;
             }
           },
-        ]
+        ],
+        language: {
+          "decimal": "",
+          "emptyTable": "No hay informaciÃ³n",
+          "info": "Mostrando del _START_ al _END_ de _TOTAL_ Entradas",
+          "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
+          "infoFiltered": "(Filtrado de _MAX_ total entradas)",
+          "infoPostFix": "",
+          "thousands": ",",
+          "lengthMenu": "Mostrar _MENU_ Entradas",
+          "loadingRecords": "Cargando...",
+          "processing": "Procesando...",
+          "search": "Buscar:",
+          "zeroRecords": "Sin resultados encontrados",
+          "paginate": {
+            "first": "Primero",
+            "last": "Ultimo",
+            "next": "Siguiente",
+            "previous": "Anterior"
+          }
+        },
 
       });
 

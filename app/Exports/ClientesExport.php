@@ -23,6 +23,7 @@ class ClientesExport implements FromView, ShouldAutoSize
         ->join('pedidos as p', 'clientes.id', 'p.cliente_id')
         ->select('clientes.id',
                 'clientes.nombre',
+                'clientes.icelular', 
                 'clientes.celular', 
                 'clientes.estado', 
                 'u.identificador as id_asesor',
@@ -45,6 +46,7 @@ class ClientesExport implements FromView, ShouldAutoSize
         ->groupBy(
             'clientes.id',
             'clientes.nombre',
+            'clientes.icelular', 
             'clientes.celular', 
             'clientes.estado', 
             'u.identificador',

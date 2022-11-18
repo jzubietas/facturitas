@@ -22,7 +22,7 @@
         <a href="" data-target="#modal-exportar" data-toggle="modal" class="dropdown-item" target="blank_"><img src="{{ asset('imagenes/icon-excel.png') }}"> Excel</a>
       </div>
     </div>
-    @include('pedidos.modal.exportar', ['title' => 'Exportar pedidos atendidos', 'key' => '9'])       
+    @include('pedidos.modal.exportar', ['title' => 'Exportar pedidos entregados', 'key' => '10'])       
   </h1>
   @if($superasesor > 0)
   <br>
@@ -70,6 +70,7 @@
       </table>
       @include('pedidos.modal.envioid')
       @include('pedidos.modal.sinenvioid')
+      @include('pedidos.modal.revertirporenviar')
     </div>
   </div>
 
@@ -133,6 +134,35 @@
         }
       });
 
+      $('#modal-revertir').on('show.bs.modal', function (event) {
+        //cuando abre el form de anular pedido
+        var button = $(event.relatedTarget) 
+        var idunico = button.data('revertir')
+        $(".textcode").html("PED"+idunico);
+        $("#hiddenRevertirpedido").val(idunico);
+      });
+
+      $(document).on("submit", "#formulariorevertir", function (evento) {
+        evento.preventDefault();
+        var fd = new FormData();
+        fd.append( 'hiddenRevertirpedido', $("#hiddenRevertirpedido").val() );
+
+        $.ajax({
+           data: fd,
+           processData: false,
+           contentType: false,
+           type: 'POST',
+           url:"{{ route('pedidos.revertirenvioid') }}",
+           success:function(data)
+           {
+            console.log(data);
+            $("#modal-revertir .textcode").text('');
+            $("#modal-revertir").modal("hide");
+            $('#tablaPrincipal').DataTable().ajax.reload();
+           }
+        });
+      });
+
       $('#modal-delete').on('show.bs.modal', function (event) {
         var button = $(event.relatedTarget) 
         var idunico = button.data('delete')
@@ -191,7 +221,7 @@
           {data: 'empresas', name: 'empresas', },
           {data: 'users', name: 'users', },
           {data: 'fecha', name: 'fecha', },
-          {data: 'destino', name: 'destino', },
+          {data: 'destino', name: 'destino',"visible":false },
           {data: 'condicion', name: 'condicion', },
           {data: 'atendido_por', name: 'atendido_por', },
           {data: 'jefe', name: 'jefe', },
@@ -222,31 +252,56 @@
 
               var urlver = '{{ route("operaciones.showatender", ":id") }}';
               urlver = urlver.replace(':id', row.id);
-              data = data+'<a href="'+urlver+'" class="btn btn-primary btn-sm" target="_blank"><i class="fas fa-eye"></i> Ver</a>';
+              data = data+'<a href="'+urlver+'" class="btn btn-primary btn-sm" target="_blank"><i class="fas fa-eye"></i> Ver</a><br>';
 
               var urledit = '{{ route("operaciones.editatender", ":id") }}';
               urledit = urledit.replace(':id', row.id);
               @can('operacion.editatender')
-                data = data+'<a href="'+urledit+'" class="btn btn-warning btn-sm"><i class=""></i> Editar atención</a>';
+                data = data+'<a href="'+urledit+'" class="btn btn-warning btn-sm"><i class=""></i> Editar atención</a><br>';
               @endcan
               var urlpdf = '{{ route("pedidosPDF", ":id") }}';
               urlpdf = urlpdf.replace(':id', row.id);  
               @can('operacion.PDF')
-                data = data+'<a href="'+urlpdf+'" class="btn btn-primary btn-sm" target="_blank"><i class="fa fa-file-pdf"></i> PDF</a>';                
+                data = data+'<a href="'+urlpdf+'" class="btn btn-primary btn-sm" target="_blank"><i class="fa fa-file-pdf"></i> PDF</a><br>';                
               @endcan
 
               @can('operacion.enviar')
                 if (row.envio == '0')
                 {
-                  data = data+'<a href="" data-target="#modal-envio" data-envio='+row.id+' data-toggle="modal" ><button class="btn btn-success btn-sm">Enviar</button></a>'; 
-                  data = data+'<a href="" data-target="#modal-sinenvio" data-sinenvio='+row.id+' data-toggle="modal" ><button class="btn btn-dark btn-sm">Sin envío</button></a>'; 
+                  data = data+'<a href="" data-target="#modal-envio" data-envio='+row.id+' data-toggle="modal" ><button class="btn btn-success btn-sm">Enviar</button></a><br>'; 
+                  data = data+'<a href="" data-target="#modal-sinenvio" data-sinenvio='+row.id+' data-toggle="modal" ><button class="btn btn-dark btn-sm">Sin envío</button></a><br>'; 
                 }
               @endcan
+
+              if(row.envio=='3')
+              {
+                data = data+'<a href="" data-target="#modal-revertir" data-revertir='+row.id+' data-toggle="modal" ><button class="btn btn-success btn-sm">Revertir</button></a>'; 
+              }
               
               return data;
             }
           },
-        ]
+        ],
+        language: {
+          "decimal": "",
+          "emptyTable": "No hay informaciÃ³n",
+          "info": "Mostrando del _START_ al _END_ de _TOTAL_ Entradas",
+          "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
+          "infoFiltered": "(Filtrado de _MAX_ total entradas)",
+          "infoPostFix": "",
+          "thousands": ",",
+          "lengthMenu": "Mostrar _MENU_ Entradas",
+          "loadingRecords": "Cargando...",
+          "processing": "Procesando...",
+          "search": "Buscar:",
+          "zeroRecords": "Sin resultados encontrados",
+          "paginate": {
+            "first": "Primero",
+            "last": "Ultimo",
+            "next": "Siguiente",
+            "previous": "Anterior"
+          }
+        },
 
       });
 
@@ -290,11 +345,11 @@
     /* Custom filtering function which will search data in column four between two values */
         $(document).ready(function () { 
         
-            $.fn.dataTable.ext.search.push(
+            /*$.fn.dataTable.ext.search.push(
                 function (settings, data, dataIndex) {
                     var min = $('#min').datepicker("getDate");
                     var max = $('#max').datepicker("getDate");
-                    // need to change str order before making  date obect since it uses a new Date("mm/dd/yyyy") format for short date.
+                    
                     var d = data[4].split("/");
                     var startDate = new Date(d[1]+ "/" +  d[0] +"/" + d[2]);
 
@@ -304,17 +359,46 @@
                     if (startDate <= max && startDate >= min) { return true; }
                     return false;
                 }
-            );
+            );*/
 
+            $("#min").datepicker({ 
+              onSelect: function () { 
+                $('#tablaPrincipal').DataTable().ajax.reload(); 
+                localStorage.setItem('dateMin', $(this).val() ); 
+              }, changeMonth: true, changeYear: true , dateFormat:"dd/mm/yy"
+            });
+              
+            $("#max").datepicker({ 
+              onSelect: function () { 
+                $('#tablaPrincipal').DataTable().ajax.reload(); 
+                localStorage.setItem('dateMax', $(this).val() ); 
+              }, changeMonth: true, changeYear: true, dateFormat:"dd/mm/yy" 
+            });
       
-            $("#min").datepicker({ onSelect: function () { table.draw(); }, changeMonth: true, changeYear: true , dateFormat:"dd/mm/yy"});
-            $("#max").datepicker({ onSelect: function () { table.draw(); }, changeMonth: true, changeYear: true, dateFormat:"dd/mm/yy" });
-            var table = $('#tablaPrincipal').DataTable();
+            //$("#min").datepicker({ onSelect: function () { table.draw(); }, changeMonth: true, changeYear: true , dateFormat:"dd/mm/yy"});
+            //$("#max").datepicker({ onSelect: function () { table.draw(); }, changeMonth: true, changeYear: true, dateFormat:"dd/mm/yy" });
+            //var table = $('#tablaPrincipal').DataTable();
 
             // Event listener to the two range filtering inputs to redraw on input
-            $('#min, #max').change(function () {
+            /*$('#min, #max').change(function () {
                 table.draw();
-            });
+            });*/
         });
+  </script>
+  <script>
+    if (localStorage.getItem('dateMin') )
+    {
+      $( "#min" ).val(localStorage.getItem('dateMin')).trigger("change");        
+    }else{
+      localStorage.setItem('dateMin', "{{$dateMin}}" );
+    }
+    if (localStorage.getItem('dateMax') )
+    { 
+      $( "#max" ).val(localStorage.getItem('dateMax')).trigger("change");
+    }else{
+      localStorage.setItem('dateMax', "{{$dateMax}}" );
+    }
+    console.log(localStorage.getItem('dateMin'));
+    console.log(localStorage.getItem('dateMax'));
   </script>
 @stop

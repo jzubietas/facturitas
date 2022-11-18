@@ -153,7 +153,18 @@ $(document).ready(function () {
             }
         },
         {data: 'nombre', name: 'nombre'},
-        {data: 'celular', name: 'celular'},
+        {
+          data: 'celular', 
+          name: 'celular',
+          render: function ( data, type, row, meta ) {
+            if(row.icelular!=null)
+            {
+              return row.celular+'-'+row.icelular;
+            }else{
+              return row.celular;
+            }            
+          }
+        },
         //{data: 'estado', name: 'estado'},
         //{data: 'user', name: 'user'},
         //{data: 'identificador', name: 'identificador'},

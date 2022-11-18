@@ -19,6 +19,7 @@ use App\Exports\PagosAbonadosExport;
 use App\Exports\PagosPorAsesoresExport;
 use App\Exports\PagosPorAsesorExport;
 use App\Exports\PedidosAtendidosExport;
+use App\Exports\PedidosEntregadosExport;
 use App\Exports\PedidosEnAtencionExport;
 use App\Exports\PedidosExport;
 use App\Exports\PedidosOperacionesExport;
@@ -249,6 +250,12 @@ class ExcelController extends Controller
         return (new PedidosAtendidosExport)
                 ->pedidos($request)
                 ->download('Lista de Pedidos Atendidos.xlsx');          
+    }
+    public function pedidosentregadosExcel(Request $request)
+    {
+        return (new PedidosEntregadosExport)
+                ->pedidos($request)
+                ->download('Lista de Pedidos Entregados.xlsx');          
     }
 
     // public function pedidosporenviarExcel()

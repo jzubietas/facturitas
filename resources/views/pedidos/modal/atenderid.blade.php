@@ -10,7 +10,7 @@
         </div>
         {{-- Form::Open(['route' => ['pedidos.atender', $pedido],'enctype'=>'multipart/form-data', 'id'=>'formulario','files'=>true]) --}}
         <form id="formularioatender" name="formularioatender" enctype="multipart/form-data">
-          <input type="text" id="hiddenAtender" name="hiddenAtender">
+          <input type="hidden" id="hiddenAtender" name="hiddenAtender">
         <div class="modal-body">
           <p>Complete los siguientes datos para pasar a estado <strong>ATENDIDO</strong> el pedido: <strong class="textcode">PED00</strong></p>
         </div>

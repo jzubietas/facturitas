@@ -42,388 +42,10 @@ class ClienteController extends Controller
             "2031" => '2031 - 2032',
         ];
 
-        if (Auth::user()->rol == "Asesor"){
-            $clientes1 = Cliente:://CLIENTES CON PEDIDOS CON DEUDA
-                join('users as u', 'clientes.user_id', 'u.id')
-                ->join('pedidos as p', 'clientes.id', 'p.cliente_id')
-                ->where('clientes.estado','1')
-                ->where('clientes.tipo','1')
-                ->where('clientes.pidio','1')
-                ->where('clientes.deuda', '1')
-                ->where('clientes.user_id', Auth::user()->id)
-                ->groupBy(
-                    'clientes.id',
-                    'clientes.nombre',
-                    'clientes.celular', 
-                    'clientes.estado', 
-                    'u.name',
-                    'u.identificador',
-                    'clientes.provincia',
-                    'clientes.distrito',
-                    'clientes.direccion'
-                )
-                ->get(['clientes.id', 
-                        'clientes.nombre', 
-                        'clientes.celular', 
-                        'clientes.estado', 
-                        'u.name as user',
-                        'u.identificador',
-                        'clientes.provincia',
-                        'clientes.distrito',
-                        'clientes.direccion',
-                        DB::raw('count(p.created_at) as cantidad'),
-                        DB::raw('MAX(p.created_at) as fecha'),
-                        DB::raw('MAX(DATE_FORMAT(p.created_at, "%d")) as dia'),
-                        DB::raw('MAX(DATE_FORMAT(p.created_at, "%m")) as mes'),
-                        DB::raw('MAX(DATE_FORMAT(p.created_at, "%Y")) as anio')
-                        ]);
-            $clientes2 = Cliente:://CLIENTES CON PEDIDOS SIN DEUDA
-                join('users as u', 'clientes.user_id', 'u.id')
-                ->join('pedidos as p', 'clientes.id', 'p.cliente_id')
-                ->where('clientes.estado','1')
-                ->where('clientes.tipo','1')
-                ->where('clientes.pidio','1')
-                ->where('clientes.deuda', '0')
-                ->where('clientes.user_id', Auth::user()->id)
-                ->groupBy(
-                    'clientes.id',
-                    'clientes.nombre',
-                    'clientes.celular', 
-                    'clientes.estado', 
-                    'u.name',
-                    'u.identificador',
-                    'clientes.provincia',
-                    'clientes.distrito',
-                    'clientes.direccion'
-                )
-                ->get(['clientes.id', 
-                        'clientes.nombre', 
-                        'clientes.celular', 
-                        'clientes.estado', 
-                        'u.name as user',
-                        'u.identificador',
-                        'clientes.provincia',
-                        'clientes.distrito',
-                        'clientes.direccion',
-                        DB::raw('MAX(p.created_at) as fecha'),
-                        DB::raw('MAX(DATE_FORMAT(p.created_at, "%d")) as dia'),
-                        DB::raw('MAX(DATE_FORMAT(p.created_at, "%m")) as mes'),
-                        DB::raw('MAX(DATE_FORMAT(p.created_at, "%Y")) as anio')
-                        ]);
-            $clientes3 = Cliente:://CLIENTES SIN PEDIDOS
-                join('users as u', 'clientes.user_id', 'u.id')
-                ->where('clientes.estado','1')
-                ->where('clientes.tipo','1')
-                ->where('clientes.pidio','0')
-                ->where('clientes.user_id', Auth::user()->id)
-                ->groupBy(
-                    'clientes.id',
-                    'clientes.nombre',
-                    'clientes.celular', 
-                    'clientes.estado', 
-                    'u.name',
-                    'u.identificador',
-                    'clientes.provincia',
-                    'clientes.distrito',
-                    'clientes.direccion'
-                )
-                ->get(['clientes.id', 
-                        'clientes.nombre', 
-                        'clientes.celular', 
-                        'clientes.estado', 
-                        'u.name as user',
-                        'u.identificador',
-                        'clientes.provincia',
-                        'clientes.distrito',
-                        'clientes.direccion'
-                        ]);
-        }else if (Auth::user()->rol == "Super asesor"){
-            $clientes1 = Cliente:://CLIENTES CON PEDIDOS CON DEUDA
-                join('users as u', 'clientes.user_id', 'u.id')
-                ->join('pedidos as p', 'clientes.id', 'p.cliente_id')
-                ->where('clientes.estado','1')
-                ->where('clientes.tipo','1')
-                ->where('clientes.pidio','1')
-                ->where('clientes.deuda', '1')
-                ->where('clientes.user_id', Auth::user()->id)
-                ->groupBy(
-                    'clientes.id',
-                    'clientes.nombre',
-                    'clientes.celular', 
-                    'clientes.estado', 
-                    'u.name',
-                    'u.identificador',
-                    'clientes.provincia',
-                    'clientes.distrito',
-                    'clientes.direccion'
-                )
-                ->get(['clientes.id', 
-                        'clientes.nombre', 
-                        'clientes.celular', 
-                        'clientes.estado', 
-                        'u.name as user',
-                        'u.identificador',
-                        'clientes.provincia',
-                        'clientes.distrito',
-                        'clientes.direccion',
-                        DB::raw('count(p.created_at) as cantidad'),
-                        DB::raw('MAX(p.created_at) as fecha'),
-                        DB::raw('MAX(DATE_FORMAT(p.created_at, "%d")) as dia'),
-                        DB::raw('MAX(DATE_FORMAT(p.created_at, "%m")) as mes'),
-                        DB::raw('MAX(DATE_FORMAT(p.created_at, "%Y")) as anio')
-                        ]);
-            $clientes2 = Cliente:://CLIENTES CON PEDIDOS SIN DEUDA
-                join('users as u', 'clientes.user_id', 'u.id')
-                ->join('pedidos as p', 'clientes.id', 'p.cliente_id')
-                ->where('clientes.estado','1')
-                ->where('clientes.tipo','1')
-                ->where('clientes.pidio','1')
-                ->where('clientes.deuda', '0')
-                ->where('clientes.user_id', Auth::user()->id)
-                ->groupBy(
-                    'clientes.id',
-                    'clientes.nombre',
-                    'clientes.celular', 
-                    'clientes.estado', 
-                    'u.name',
-                    'u.identificador',
-                    'clientes.provincia',
-                    'clientes.distrito',
-                    'clientes.direccion'
-                )
-                ->get(['clientes.id', 
-                        'clientes.nombre', 
-                        'clientes.celular', 
-                        'clientes.estado', 
-                        'u.name as user',
-                        'u.identificador',
-                        'clientes.provincia',
-                        'clientes.distrito',
-                        'clientes.direccion',
-                        DB::raw('MAX(p.created_at) as fecha'),
-                        DB::raw('MAX(DATE_FORMAT(p.created_at, "%d")) as dia'),
-                        DB::raw('MAX(DATE_FORMAT(p.created_at, "%m")) as mes'),
-                        DB::raw('MAX(DATE_FORMAT(p.created_at, "%Y")) as anio')
-                        ]);
-            $clientes3 = Cliente:://CLIENTES SIN PEDIDOS
-                join('users as u', 'clientes.user_id', 'u.id')
-                ->where('clientes.estado','1')
-                ->where('clientes.tipo','1')
-                ->where('clientes.pidio','0')
-                ->where('clientes.user_id', Auth::user()->id)
-                ->groupBy(
-                    'clientes.id',
-                    'clientes.nombre',
-                    'clientes.celular', 
-                    'clientes.estado', 
-                    'u.name',
-                    'u.identificador',
-                    'clientes.provincia',
-                    'clientes.distrito',
-                    'clientes.direccion'
-                )
-                ->get(['clientes.id', 
-                        'clientes.nombre', 
-                        'clientes.celular', 
-                        'clientes.estado', 
-                        'u.name as user',
-                        'u.identificador',
-                        'clientes.provincia',
-                        'clientes.distrito',
-                        'clientes.direccion'
-                        ]);
-        }else if (Auth::user()->rol == "Encargado"){
-            $clientes1 = Cliente:://CLIENTES CON PEDIDOS CON DEUDA
-                join('users as u', 'clientes.user_id', 'u.id')
-                ->join('pedidos as p', 'clientes.id', 'p.cliente_id')
-                ->where('clientes.estado','1')
-                ->where('clientes.tipo','1')
-                ->where('clientes.pidio','1')
-                ->where('clientes.deuda', '1')
-                ->where('u.supervisor', Auth::user()->id)
-                ->groupBy(
-                    'clientes.id',
-                    'clientes.nombre',
-                    'clientes.celular', 
-                    'clientes.estado', 
-                    'u.name',
-                    'u.identificador',
-                    'clientes.provincia',
-                    'clientes.distrito',
-                    'clientes.direccion'
-                )
-                ->get(['clientes.id', 
-                        'clientes.nombre', 
-                        'clientes.celular', 
-                        'clientes.estado', 
-                        'u.name as user',
-                        'u.identificador',
-                        'clientes.provincia',
-                        'clientes.distrito',
-                        'clientes.direccion',
-                        DB::raw('count(p.created_at) as cantidad'),
-                        DB::raw('MAX(p.created_at) as fecha'),
-                        DB::raw('MAX(DATE_FORMAT(p.created_at, "%d")) as dia'),
-                        DB::raw('MAX(DATE_FORMAT(p.created_at, "%m")) as mes'),
-                        DB::raw('MAX(DATE_FORMAT(p.created_at, "%Y")) as anio')
-                        ]);
-            $clientes2 = Cliente:://CLIENTES CON PEDIDOS SIN DEUDA
-                join('users as u', 'clientes.user_id', 'u.id')
-                ->join('pedidos as p', 'clientes.id', 'p.cliente_id')
-                ->where('clientes.estado','1')
-                ->where('clientes.tipo','1')
-                ->where('clientes.pidio','1')
-                ->where('clientes.deuda', '0')
-                ->where('u.supervisor', Auth::user()->id)
-                ->groupBy(
-                    'clientes.id',
-                    'clientes.nombre',
-                    'clientes.celular', 
-                    'clientes.estado', 
-                    'u.name',
-                    'u.identificador',
-                    'clientes.provincia',
-                    'clientes.distrito',
-                    'clientes.direccion'
-                )
-                ->get(['clientes.id', 
-                        'clientes.nombre', 
-                        'clientes.celular', 
-                        'clientes.estado', 
-                        'u.name as user',
-                        'u.identificador',
-                        'clientes.provincia',
-                        'clientes.distrito',
-                        'clientes.direccion',
-                        DB::raw('MAX(p.created_at) as fecha'),
-                        DB::raw('MAX(DATE_FORMAT(p.created_at, "%d")) as dia'),
-                        DB::raw('MAX(DATE_FORMAT(p.created_at, "%m")) as mes'),
-                        DB::raw('MAX(DATE_FORMAT(p.created_at, "%Y")) as anio')
-                        ]);
-            $clientes3 = Cliente:://CLIENTES SIN PEDIDOS
-                join('users as u', 'clientes.user_id', 'u.id')
-                ->where('clientes.estado','1')
-                ->where('clientes.tipo','1')
-                ->where('clientes.pidio','0')
-                ->where('u.supervisor', Auth::user()->id)
-                ->groupBy(
-                    'clientes.id',
-                    'clientes.nombre',
-                    'clientes.celular', 
-                    'clientes.estado', 
-                    'u.name',
-                    'u.identificador',
-                    'clientes.provincia',
-                    'clientes.distrito',
-                    'clientes.direccion'
-                )
-                ->get(['clientes.id', 
-                        'clientes.nombre', 
-                        'clientes.celular', 
-                        'clientes.estado', 
-                        'u.name as user',
-                        'u.identificador',
-                        'clientes.provincia',
-                        'clientes.distrito',
-                        'clientes.direccion'
-                        ]);
-        }else{
-            $clientes1 = Cliente:://CLIENTES CON PEDIDOS CON DEUDA
-                join('users as u', 'clientes.user_id', 'u.id')
-                ->join('pedidos as p', 'clientes.id', 'p.cliente_id')
-                ->where('clientes.estado','1')
-                ->where('clientes.tipo','1')
-                ->where('clientes.pidio','1')
-                ->where('clientes.deuda', '1')
-                ->groupBy(
-                    'clientes.id',
-                    'clientes.nombre',
-                    'clientes.celular', 
-                    'clientes.estado', 
-                    'u.name',
-                    'u.identificador',
-                    'clientes.provincia',
-                    'clientes.distrito',
-                    'clientes.direccion'
-                )
-                ->get(['clientes.id', 
-                        'clientes.nombre', 
-                        'clientes.celular', 
-                        'clientes.estado', 
-                        'u.name as user',
-                        'u.identificador',
-                        'clientes.provincia',
-                        'clientes.distrito',
-                        'clientes.direccion',
-                        DB::raw('count(p.created_at) as cantidad'),
-                        DB::raw('MAX(p.created_at) as fecha'),
-                        DB::raw('MAX(DATE_FORMAT(p.created_at, "%d")) as dia'),
-                        DB::raw('MAX(DATE_FORMAT(p.created_at, "%m")) as mes'),
-                        DB::raw('MAX(DATE_FORMAT(p.created_at, "%Y")) as anio')
-                        ]);
-            $clientes2 = Cliente:://CLIENTES CON PEDIDOS SIN DEUDA
-                join('users as u', 'clientes.user_id', 'u.id')
-                ->join('pedidos as p', 'clientes.id', 'p.cliente_id')
-                ->where('clientes.estado','1')
-                ->where('clientes.tipo','1')
-                ->where('clientes.pidio','1')
-                ->where('clientes.deuda', '0')
-                ->groupBy(
-                    'clientes.id',
-                    'clientes.nombre',
-                    'clientes.celular', 
-                    'clientes.estado', 
-                    'u.name',
-                    'u.identificador',
-                    'clientes.provincia',
-                    'clientes.distrito',
-                    'clientes.direccion'
-                )
-                ->get(['clientes.id', 
-                        'clientes.nombre', 
-                        'clientes.celular', 
-                        'clientes.estado', 
-                        'u.name as user',
-                        'u.identificador',
-                        'clientes.provincia',
-                        'clientes.distrito',
-                        'clientes.direccion',
-                        DB::raw('MAX(p.created_at) as fecha'),
-                        DB::raw('MAX(DATE_FORMAT(p.created_at, "%d")) as dia'),
-                        DB::raw('MAX(DATE_FORMAT(p.created_at, "%m")) as mes'),
-                        DB::raw('MAX(DATE_FORMAT(p.created_at, "%Y")) as anio')
-                        ]);
-            $clientes3 = Cliente:://CLIENTES SIN PEDIDOS
-                join('users as u', 'clientes.user_id', 'u.id')
-                ->where('clientes.estado','1')
-                ->where('clientes.tipo','1')
-                ->where('clientes.pidio','0')
-                ->groupBy(
-                    'clientes.id',
-                    'clientes.nombre',
-                    'clientes.celular', 
-                    'clientes.estado', 
-                    'u.name',
-                    'u.identificador',
-                    'clientes.provincia',
-                    'clientes.distrito',
-                    'clientes.direccion'
-                )
-                ->get(['clientes.id', 
-                        'clientes.nombre', 
-                        'clientes.celular', 
-                        'clientes.estado', 
-                        'u.name as user',
-                        'u.identificador',
-                        'clientes.provincia',
-                        'clientes.distrito',
-                        'clientes.direccion'
-                        ]);
-        }
-
+        
         $superasesor = User::where('rol', 'Super asesor')->count();
 
-        return view('clientes.index', compact('clientes1', 'clientes2', 'clientes3', 'anios', 'dateM', 'dateY', 'superasesor','mirol'));
+        return view('clientes.index', compact( 'anios', 'dateM', 'dateY', 'superasesor','mirol'));
     }
     
     public function indextabla(Request $request)
@@ -458,6 +80,7 @@ class ClienteController extends Controller
                 ->groupBy(
                     'clientes.id',
                     'clientes.nombre',
+                    'clientes.icelular', 
                     'clientes.celular', 
                     'clientes.estado', 
                     'u.name',
@@ -470,6 +93,7 @@ class ClienteController extends Controller
                 )
                 ->get(['clientes.id', 
                         'clientes.nombre', 
+                        'clientes.icelular', 
                         'clientes.celular', 
                         'clientes.estado', 
                         'u.name as user',
@@ -500,6 +124,7 @@ class ClienteController extends Controller
                 ->groupBy(
                     'clientes.id',
                     'clientes.nombre',
+                    'clientes.icelular', 
                     'clientes.celular', 
                     'clientes.estado', 
                     'u.name',
@@ -512,6 +137,7 @@ class ClienteController extends Controller
                 )
                 ->get(['clientes.id', 
                         'clientes.nombre', 
+                        'clientes.icelular', 
                         'clientes.celular', 
                         'clientes.estado', 
                         'u.name as user',
@@ -544,6 +170,7 @@ class ClienteController extends Controller
                 ->groupBy(
                     'clientes.id',
                     'clientes.nombre',
+                    'clientes.icelular', 
                     'clientes.celular', 
                     'clientes.estado', 
                     'u.name',
@@ -556,6 +183,7 @@ class ClienteController extends Controller
                 )
                 ->get(['clientes.id', 
                         'clientes.nombre', 
+                        'clientes.icelular', 
                         'clientes.celular', 
                         'clientes.estado', 
                         'u.name as user',
@@ -586,6 +214,7 @@ class ClienteController extends Controller
                 ->groupBy(
                     'clientes.id',
                     'clientes.nombre',
+                    'clientes.icelular', 
                     'clientes.celular', 
                     'clientes.estado', 
                     'u.name',
@@ -598,6 +227,7 @@ class ClienteController extends Controller
                 )
                 ->get(['clientes.id', 
                         'clientes.nombre', 
+                        'clientes.icelular', 
                         'clientes.celular', 
                         'clientes.estado', 
                         'u.name as user',
@@ -627,6 +257,7 @@ class ClienteController extends Controller
                 ->groupBy(
                     'clientes.id',
                     'clientes.nombre',
+                    'clientes.icelular', 
                     'clientes.celular', 
                     'clientes.estado', 
                     'u.name',
@@ -639,6 +270,7 @@ class ClienteController extends Controller
                 )
                 ->get(['clientes.id', 
                         'clientes.nombre', 
+                        'clientes.icelular', 
                         'clientes.celular', 
                         'clientes.estado', 
                         'u.name as user',
@@ -657,30 +289,7 @@ class ClienteController extends Controller
                         'clientes.deuda',
                         ]);
         }else{
-            //$mesactual = Carbon::now()->month;//11
-            //return $mesactual;
-            //Carbon::now()->subMonth()->endOfMonth()->toDateString()
-            //$date_menor=Carbon::now()->month($mesactual)->subDays(30)->endOfMonth()->format('d/m/Y');
-            /*$date_menos=Carbon::now()->subMonth(1)->endOfMonth()->toDateString();
-            //return $date_menos;
-
-            $ped1 = Pedido::select(['cliente_id'])->whereIn('pago',['0','1'] )->whereIn('pagado',['0','1'] )->where('pedidos.created_at','>=','2022-11-01 00:00:00');
-            //$ped2 = Pedido::select(['cliente_id'])->whereIn('pago',['0','1'] )->whereIn('pagad', ['0','1'] )->where('pedidos.created_at','<=','2022-10-31 00:00:00');
-            $count = Cliente::join('users as u', 'clientes.user_id', 'u.id')
-                    ->where('clientes.estado','1')
-                    ->where('clientes.tipo','1')
-                    ->get([
-                        'clientes.id',
-                        DB::raw('count(p.created_at) as cantidad'),
-                        /*$ped1.' as ped2'*/
-                      /*  ]
-                        );*/
-           /* return $count;*/
-
-            /*$count = DB::table( DB::raw("({$ped1->toSql()}) as sub") )
-                ->mergeBindings($ped1->getQuery()) 
-                ->count();
-            return $count;*/
+            
 
             $data = Cliente:://CLIENTES SIN PEDIDOS
                 join('users as u', 'clientes.user_id', 'u.id')
@@ -696,6 +305,7 @@ class ClienteController extends Controller
                 ->groupBy(
                     'clientes.id',
                     'clientes.nombre',
+                    'clientes.icelular', 
                     'clientes.celular', 
                     'clientes.estado', 
                     'u.name',
@@ -708,6 +318,7 @@ class ClienteController extends Controller
                 )
                 ->get(['clientes.id', 
                         'clientes.nombre', 
+                        'clientes.icelular', 
                         'clientes.celular', 
                         'clientes.estado', 
                         'u.name as user',
@@ -730,19 +341,10 @@ class ClienteController extends Controller
                        // return $data;
         }
         
-        //return $dataTable->render('base_fria.index');
-        //if ($request->ajax()) {
-           
-
             return Datatables::of($data)
                     ->addIndexColumn()
-                    ->addColumn('action', function($row){
-     
-                           //$btn = '<a href="" data-target="#modal-convertir" data-toggle="modal" data-opcion="'.$row->id.'"><button class="btn btn-info btn-sm">Convertir a cliente</button></a>';
-                        $btn="";
-                           //$btn='<a href="'.route('clientes.edit', $row).'" class="btn btn-warning btn-sm"><i class="fas fa-edit"></i> Editar</a>';
-                           //$btn = $btn.'<a href="" data-target="#modal-delete" data-toggle="modal" data-opcion="'.$row->id.'"><button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i> Eliminar</button></a>';
-                           
+                    ->addColumn('action', function($row){     
+                        $btn="";                          
                             return $btn;
                     })
                     ->rawColumns(['action'])
@@ -770,11 +372,15 @@ class ClienteController extends Controller
             $user=Cliente::find($request->cliente_id_tiempo);
             //$jefe = User::find($request->asesor, ['jefe']);
             $user->update([
-                'deuda' => "0",
+                //'deuda' => "0",
                 'crea_temporal' => "1",
                 'activado_tiempo' => $pcantidad_tiempo,
-                'activado_pedido' => $pcantidad_pedido
+                'activado_pedido' => $pcantidad_pedido,
+                'temporal_update' => Carbon::now()->addMinutes($pcantidad_tiempo)
             ]);
+            //intval($pcantidad_tiempo)
+            //Carbon::now()->addMinutes(5);
+            //$user->timestamp('temporal_update')->useCurrent();
 
         }
         
@@ -1158,5 +764,170 @@ class ClienteController extends Controller
         }
 
         return redirect()->route('clientes.index')->with('info','registrado');
+    }
+
+
+    public function clientedeasesor(Request $request)
+    {
+        //ahora con el identificador de  Usuarios
+        $mirol=Auth::user()->rol;
+        $clientes = null;
+        $clientes = Cliente::join('users as u', 'clientes.user_id', 'u.id')->where('clientes.estado', '1')->where("clientes.tipo","1");
+        $html="";
+
+        //valida deuda excepto para administrador o por tener tiempo temporal
+
+        if (!$request->user_id  || $request->user_id=='')
+        {
+            $clientes = $clientes;
+        }else{
+            $clientes = $clientes->where('u.identificador', $request->user_id );
+        }
+        $clientes=$clientes->orderBy('id', 'ASC')
+            ->get([
+                'clientes.id',
+                'clientes.deuda',
+                'clientes.crea_temporal',
+                'clientes.activado_tiempo',
+                'clientes.activado_pedido',
+                'clientes.temporal_update',
+                'clientes.icelular',
+                'clientes.celular',
+                'clientes.nombre',
+                DB::raw(" (select count(ped.id) from pedidos ped where ped.cliente_id=clientes.id and ped.pago in (0,1) and ped.pagado in (0,1) and ped.created_at >='2022-11-01 00:00:00' and ped.estado=1) as pedidos_mes_deuda "),
+                DB::raw(" (select count(ped2.id) from pedidos ped2 where ped2.cliente_id=clientes.id and ped2.pago in (0,1) and ped2.pagado in (0,1) and ped2.created_at <='2022-10-31 00:00:00' and ped2.estado=1) as pedidos_mes_deuda_antes "),
+            ]);
+        
+        $html = '<option value="">' . trans('---- SELECCIONE CLIENTE ----') . '</option>';
+
+        foreach ($clientes as $cliente) 
+        {
+            //Auth::user()->rol=='Administrador'
+            if($mirol=='Administrador')
+            {
+                $html .= '<option style="color:black" value="' . $cliente->id . '">' . $cliente->celular.  ( ($cliente->icelular!=null)? '-'.$cliente->icelular :''  ) .'  -  ' . $cliente->nombre . '</option>';
+            }else{
+                if($cliente->crea_temporal==1)
+                {
+                    //falta considerar el tiempo ahora menos el tiempo activado temporal
+                    $html .= '<option style="color:black" value="' . $cliente->id . '">' . $cliente->celular.'-'.$cliente->icelular. '  -  ' . $cliente->nombre . '</option>';
+                }else{
+                    //considerar deuda real
+                    if($cliente->pedidos_mes_deuda>0 && $cliente->pedidos_mes_deuda_antes==0)
+                    {
+                        $html .= '<option style="color:lightblue" value="' . $cliente->id . '">' . $cliente->celular.'-'.$cliente->icelular. '  -  ' . $cliente->nombre . '</option>';    
+                    }else if($cliente->pedidos_mes_deuda>0 && $cliente->pedidos_mes_deuda_antes>0)
+                    {
+                        $html .= '<option disabled style="color:red" value="' . $cliente->id . '">' . $cliente->celular.'-'.$cliente->icelular. '  -  ' . $cliente->nombre . '**CLIENTE CON DEUDA**</option>';
+                    }else if($cliente->pedidos_mes_deuda==0 && $cliente->pedidos_mes_deuda_antes>0)
+                    {
+                        $html .= '<option disabled style="color:red" value="' . $cliente->id . '">' . $cliente->celular.'-'.$cliente->icelular. '  -  ' . $cliente->nombre . '**CLIENTE CON DEUDA**</option>';
+                    }else{
+                        $html .= '<option style="color:black" value="' . $cliente->id . '">' . $cliente->celular.'-'.$cliente->icelular. '  -  ' . $cliente->nombre . '</option>';
+                    }
+                }
+            }
+        }
+        
+        return response()->json(['html' => $html]);
+    }
+
+    public function clientedeasesorpagos(Request $request)
+    {
+        //ahora con el identificador de  Usuarios
+        $mirol=Auth::user()->rol;
+        $clientes = null;
+        $clientes = Cliente::join('users as u', 'clientes.user_id', 'u.id')->where('clientes.estado', '1')->where("clientes.tipo","1");
+        $html="";
+
+        //valida deuda excepto para administrador o por tener tiempo temporal
+
+        if (!$request->user_id  || $request->user_id=='')
+        {
+            $clientes = $clientes;
+        }else{
+            $clientes = $clientes->where('u.identificador', $request->user_id );
+        }
+        $clientes=$clientes->orderBy('id', 'ASC')
+            ->get([
+                'clientes.id',
+                'clientes.deuda',
+                'clientes.crea_temporal',
+                'clientes.activado_tiempo',
+                'clientes.activado_pedido',
+                'clientes.temporal_update',
+                'clientes.icelular',
+                'clientes.celular',
+                'clientes.nombre',
+                DB::raw(" (select count(ped.id) from pedidos ped where ped.cliente_id=clientes.id and ped.pago in (0,1) and ped.pagado in (0,1) and ped.created_at >='2022-11-01 00:00:00' and ped.estado=1) as pedidos_mes_deuda "),
+                DB::raw(" (select count(ped2.id) from pedidos ped2 where ped2.cliente_id=clientes.id and ped2.pago in (0,1) and ped2.pagado in (0,1) and ped2.created_at <='2022-10-31 00:00:00' and ped2.estado=1) as pedidos_mes_deuda_antes "),
+            ]);
+        
+        $html = '<option value="">' . trans('---- SELECCIONE CLIENTE ----') . '</option>';
+
+        foreach ($clientes as $cliente) 
+        {
+            //Auth::user()->rol=='Administrador'
+            if($mirol=='Administrador')
+            {
+                $html .= '<option style="color:black" value="' . $cliente->id . '">' . $cliente->celular.  ( ($cliente->icelular!=null)? '-'.$cliente->icelular :''  ) .'  -  ' . $cliente->nombre . '</option>';
+            }else{
+                /*if($cliente->crea_temporal==1)
+                {
+                    $html .= '<option style="color:black" value="' . $cliente->id . '">' . $cliente->celular.'-'.$cliente->icelular. '  -  ' . $cliente->nombre . '</option>';
+                }else*/
+                {
+                    //considerar deuda real
+                    if($cliente->pedidos_mes_deuda>0 && $cliente->pedidos_mes_deuda_antes==0)
+                    {
+                        $html .= '<option style="color:lightblue" value="' . $cliente->id . '">' . $cliente->celular.'-'.$cliente->icelular. '  -  ' . $cliente->nombre . '</option>';    
+                    }else if($cliente->pedidos_mes_deuda>0 && $cliente->pedidos_mes_deuda_antes>0)
+                    {
+                        $html .= '<option style="color:black" value="' . $cliente->id . '">' . $cliente->celular.'-'.$cliente->icelular. '  -  ' . $cliente->nombre . '**CLIENTE CON DEUDA**</option>';
+                    }else if($cliente->pedidos_mes_deuda==0 && $cliente->pedidos_mes_deuda_antes>0)
+                    {
+                        $html .= '<option style="color:black" value="' . $cliente->id . '">' . $cliente->celular.'-'.$cliente->icelular. '  -  ' . $cliente->nombre . '**CLIENTE CON DEUDA**</option>';
+                    }else{
+                        $html .= '<option disabled style="color:red" value="' . $cliente->id . '">' . $cliente->celular.'-'.$cliente->icelular. '  -  ' . $cliente->nombre . '</option>';
+                    }
+                }
+            }
+        }
+        
+        return response()->json(['html' => $html]);
+    }
+
+
+    public function clientedeasesorparapagos(Request $request)
+    {
+        if (!$request->user_id  || $request->user_id=='') {
+            $html = '<option value="">' . trans('---- SELECCIONE CLIENTE ----') . '</option>';
+        }else{
+
+            $html = '<option value="">' . trans('---- SELECCIONE CLIENTE ----') . '</option>';
+            $clientes = Cliente::where('clientes.user_id', $request->user_id)
+                                ->where('clientes.tipo', '1')
+                                ->get();        
+            foreach ($clientes as $cliente) {
+                if($cliente->deuda=="0")
+                {
+                    $html .= '<option disabled style="color:#000" value="' . $cliente->id . '">' . $cliente->celular. '  -  ' . $cliente->nombre . '</option>';
+                }else{
+                    if( Auth::user()->rol=='Asesor' )
+                    {
+                        $html .= '<option   style="color:#fff" value="' . $cliente->id . '">' . $cliente->celular. '  -  ' . $cliente->nombre . '**CLIENTE CON DEUDA**</option>';
+                    }else if( Auth::user()->rol=='Llamadas' ){
+                        $html .= '<option   style="color:#fff" value="' . $cliente->id . '">' . $cliente->celular. '  -  ' . $cliente->nombre . '**CLIENTE CON DEUDA**</option>';
+                    }else if( Auth::user()->rol=='Jefe de lamadas' ){
+                        $html .= '<option  style="color:#fff" value="' . $cliente->id . '">' . $cliente->celular. '  -  ' . $cliente->nombre . '**CLIENTE CON DEUDA**</option>';
+                    }else{
+                        $html .= '<option  style="color:#fff" value="' . $cliente->id . '">' . $cliente->celular. '  -  ' . $cliente->nombre . '</option>';
+                    }
+                }
+                
+            }
+        }
+        
+        return response()->json(['html' => $html]);
     }
 }

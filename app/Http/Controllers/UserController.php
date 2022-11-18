@@ -242,6 +242,86 @@ class UserController extends Controller
                     ->make(true);
     }
 
+    public function Asesorcombo(Request $request)
+    {   
+        $mirol=Auth::user()->rol;
+        $users = null;
+        $users = User::where('estado', '1')->where("rol","Asesor");
+
+        if($mirol=='Llamadas')
+        {
+            $users = $users->where('llamada',Auth::user()->id)->where("rol","Asesor");
+        }else if($mirol=='Jefe de llamadas'){
+            $users = $users->where('llamada',Auth::user()->id)->where("rol","Asesor");
+        }else if($mirol=='Asesor'){
+            $users = $users->where('id',Auth::user()->id)->where("rol","Asesor");
+        }else{
+            $usersB=User::where("identificador","B")->where("rol","Administrador");
+            $users = $usersB->union($users);
+        }
+        $users=$users->orderBy('exidentificador', 'ASC')->get();
+        $html="";
+        //$html = '<option value="">' . trans('---- SELECCIONE ASESOR ----') . '</option>';
+        foreach ($users as $user) 
+        {
+            if($user->identificador=='B')
+            {
+                $html .= '<option style="color:black" value="' . $user->identificador . '">' . $user->identificador. '</option>';
+            }else{
+                if(intval($user->exidentificador)%2==0)
+                {
+                    $html .= '<option disabled style="color:red" value="' . $user->identificador . '">' . $user->identificador.  ( ($user->exidentificador!=null)? '  (' . $user->exidentificador.')':'' )  . '</option>';
+                }else{
+                    $html .= '<option style="color:black" value="' . $user->identificador . '">' . $user->identificador. ( ($user->exidentificador!=null)? '  (' . $user->exidentificador.')':'' ) . '</option>';
+                }
+            }
+        }
+        
+        return response()->json(['html' => $html]);
+
+        //return response()->json($users);
+    }
+
+    public function Asesorcombopago(Request $request)
+    {   
+        $mirol=Auth::user()->rol;
+        $users = null;
+        $users = User::where('estado', '1')->where("rol","Asesor");
+
+        if($mirol=='Llamadas')
+        {
+            $users = $users->where('llamada',Auth::user()->id)->where("rol","Asesor");
+        }else if($mirol=='Jefe de llamadas'){
+            $users = $users->where('llamada',Auth::user()->id)->where("rol","Asesor");
+        }else if($mirol=='Asesor'){
+            $users = $users->where('id',Auth::user()->id)->where("rol","Asesor");
+        }else{
+            $usersB=User::where("identificador","B")->where("rol","Administrador");
+            $users = $usersB->union($users);
+        }
+        $users=$users->orderBy('exidentificador', 'ASC')->get();
+        $html="";
+        //$html = '<option value="">' . trans('---- SELECCIONE ASESOR ----') . '</option>';
+        foreach ($users as $user) 
+        {
+            if($user->identificador=='B')
+            {
+                $html .= '<option style="color:black" value="' . $user->identificador . '">' . $user->identificador. '</option>';
+            }else{
+                if(intval($user->exidentificador)%2==0)
+                {
+                    $html .= '<option style="color:red" value="' . $user->identificador . '">' . $user->identificador.  ( ($user->exidentificador!=null)? '  (' . $user->exidentificador.')':'' )  . '</option>';
+                }else{
+                    $html .= '<option style="color:black" value="' . $user->identificador . '">' . $user->identificador. ( ($user->exidentificador!=null)? '  (' . $user->exidentificador.')':'' ) . '</option>';
+                }
+            }
+        }
+        
+        return response()->json(['html' => $html]);
+
+        //return response()->json($users);
+    }
+
     public function Asesores()
     {   
         $users = User::where('rol', 'Asesor')

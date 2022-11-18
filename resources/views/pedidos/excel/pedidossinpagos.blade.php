@@ -20,7 +20,7 @@
         <td>{{ $cont + 1 }}</td>
         <td>PED00{{ $pedido->id }}</td>
         <td>{{ $pedido->codigos }}</td>
-        <td>{{ $pedido->celulares }} - {{ $pedido->nombres }}</td>
+        <td>{{ $pedido->celulares }}-{{ $pedido->icelulares }} - {{ $pedido->nombres }}</td>
         <td>{{ $pedido->empresas }}</td>
         <td>{{ $pedido->users }}</td>
         <td>{{ $pedido->fecha }}</td>

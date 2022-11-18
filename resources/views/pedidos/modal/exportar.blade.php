@@ -29,6 +29,8 @@
         {!! Form::open(['route' => ['pedidosenatencionExcel'], 'method' => 'POST', 'target' => 'blanck_']) !!}
       @elseif($key === '9')
         {!! Form::open(['route' => ['pedidosatendidosExcel'], 'method' => 'POST', 'target' => 'blanck_']) !!}
+      @elseif($key === '10')
+        {!! Form::open(['route' => ['pedidosentregadosExcel'], 'method' => 'POST', 'target' => 'blanck_']) !!}
       @endif
 
             <div class="card-body">

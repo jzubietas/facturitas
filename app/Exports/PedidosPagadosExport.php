@@ -24,8 +24,9 @@ class PedidosPagadosExport implements FromView, ShouldAutoSize
             ->select(
                 'pedidos.id',
                 'c.nombre as nombres',
+                'c.icelular as icelulares',
                 'c.celular as celulares',
-                'u.name as users',
+                'u.identificador as users',
                 'dp.codigo as codigos',
                 'dp.nombre_empresa as empresas',
                 DB::raw('sum(dp.total) as total'),
@@ -41,8 +42,9 @@ class PedidosPagadosExport implements FromView, ShouldAutoSize
             ->groupBy(
                 'pedidos.id',
                 'c.nombre',
+                'c.icelular',
                 'c.celular',
-                'u.name',
+                'u.identificador',
                 'dp.codigo',
                 'dp.nombre_empresa',
                 'pedidos.condicion',

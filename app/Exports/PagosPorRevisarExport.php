@@ -20,6 +20,7 @@ class PagosPorRevisarExport implements FromView, ShouldAutoSize
         ->join('clientes as c', 'pagos.cliente_id', 'c.id')
         ->select('pagos.id as id',
                 'u.identificador as users',
+                'c.icelular',
                 'c.celular',
                 'pagos.observacion',                        
                 'pagos.total_cobro',

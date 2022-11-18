@@ -21,6 +21,7 @@ class BaseFriaPorAsesorExport implements FromView, ShouldAutoSize
         join('users as u', 'clientes.user_id', 'u.id')
         ->select('clientes.id', 
                 'clientes.nombre', 
+                'clientes.icelular', 
                 'clientes.celular', 
                 'clientes.estado', 
                 'u.identificador as users')

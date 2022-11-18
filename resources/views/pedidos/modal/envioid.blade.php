@@ -8,8 +8,9 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <form id="formulario" name="formulario" enctype="multipart/form-data">
+      <form id="formularioenvio" name="formularioenvio" enctype="multipart/form-data">
       {{-- Form::Open(['route' => ['pedidos.envio', $pedido],'enctype'=>'multipart/form-data', 'id'=>'formulario','files'=>true]) --}}
+      <input type="hidden" id="hiddenEnvio" name="hiddenEnvio">
       <div class="modal-body">
         <p>Confirme si desea enviar el pedido <strong class="textcode">PED000</strong> al área de ENVIOS</p>
       </div>

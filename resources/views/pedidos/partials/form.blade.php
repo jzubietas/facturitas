@@ -9,21 +9,29 @@
               {{--<input type="hidden" name="user_id" requerid value="{{ Auth::user()->id }}" class="form-control">
               <input type="text" name="user_name" value="{{ Auth::user()->name }}" class="form-control" disabled>--}}
             
-              {!! Form::select('user_id', $users, null, ['class' => 'form-control border selectpicker border-secondary', 'data-live-search' => 'true', 'placeholder' => '---- SELECCIONE ASESOR ----']) !!}
-            
+              
+
+              <select name="user_id" class="border form-control  border-secondary selectpicker" id="user_id" data-live-search="true" >
+                <option value="">---- SELECCIONE ASESOR ----</option> 
+              </select>
+
           </div>
 
 
           <div class="form-group col-lg-6">
             {!! Form::label('cliente_id', 'Cliente*') !!} &nbsp; &nbsp; &nbsp; 
             
-            {{--coindice con contadore de dedores al hacer clikc seleccionando asesor de pantalla index--}}
             <a href="" data-target="#modal-historial" data-toggle="modal"><button class="btn btn-danger btn-sm">Deudores</button></a>
 
-            
             @if($mirol =='Administrador')
               <a href="" data-target="#modal-activartiempo" data-toggle="modal"><button class="btn btn-warning btn-sm">Activar temporal a cliente</button></a>
             @endif
+            <div class="pr-2 btn border-0 rounded text-right">
+              <small class="rounded mb-2 bg-danger text-white" style="font-size: 16px">Desactivado</small>
+              <small class="rounded mb-2 bg-info text-white" style="font-size: 16px">Permitido</small>
+              <small class="rounded mb-2 bg-dark text-white" style="font-size: 16px">Normal</small>
+            </div>
+            
            
               <select name="cliente_id" class="border form-control  border-secondary selectpicker" id="cliente_id" data-live-search="true" >{{-- selectpicker lang="es" --}}
                 <option value="">---- SELECCIONE CLIENTE ----</option>                  

@@ -23,7 +23,7 @@ class MisPagosExport implements FromView, ShouldAutoSize
             ->join('detalle_pedidos as dpe', 'p.id', 'dpe.pedido_id')
             ->select('pagos.id', 
                     'dpe.codigo as codigos', 
-                    'u.name as users', 
+                    'u.identificador as users', 
                     'pagos.observacion', 
                     'dpe.total as total_deuda', 
                     DB::raw('sum(dpa.monto) as total_pago'), 
@@ -37,7 +37,7 @@ class MisPagosExport implements FromView, ShouldAutoSize
             ->whereBetween(DB::raw('DATE(pagos.created_at)'), [$request->desde, $request->hasta]) //rango de fechas
             ->groupBy('pagos.id', 
                     'dpe.codigo', 
-                    'u.name',
+                    'u.identificador',
                     'pagos.observacion', 'dpe.total',
                     'pagos.total_cobro',
                     'pagos.condicion', 
