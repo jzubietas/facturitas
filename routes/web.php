@@ -116,6 +116,8 @@ Route::post('operaciones.sinenvioid', [PedidoController::class, 'SinEnviarid'])-
 
 Route::get('pedidos/{adjunto}/descargaradjunto', [PedidoController::class, 'DescargarAdjunto'])->name('pedidos.descargaradjunto');
 
+Route::get('pedidos/{adjunto}/descargargastos', [PedidoController::class, 'DescargarGastos'])->name('pedidos.descargargastos');
+
 /////////
 
 Route::get('sobres.porenviar', [PedidoController::class, 'Sobresporenviar'])->name('sobres.porenviar');
@@ -123,6 +125,10 @@ Route::get('sobres.porenviartabla', [PedidoController::class, 'Sobresporenviarta
 
 Route::get('envios.porrecibir', [PedidoController::class, 'Enviosporrecibir'])->name('envios.porrecibir');
 Route::get('envios.porrecibirtabla', [PedidoController::class, 'Enviosporrecibirtabla'])->name('envios.porrecibirtabla');
+
+Route::get('envios.rutaenvio', [PedidoController::class, 'Enviosrutaenvio'])->name('envios.rutaenvio');
+Route::get('envios.rutaenviotabla', [PedidoController::class, 'Enviosrutaenviotabla'])->name('envios.rutaenviotabla');
+
 Route::get('envios.index', [PedidoController::class, 'Envios'])->name('envios.index');
 Route::get('envios.indextabla', [PedidoController::class, 'Enviostabla'])->name('envios.indextabla');
 Route::get('envios.enviados', [PedidoController::class, 'Enviados'])->name('envios.enviados');
@@ -147,6 +153,9 @@ Route::get('pagostablahistorial', [PagoController::class, 'indextablahistorial']
 Route::get('MisPagosTabla', [PagoController::class, 'MisPagosTabla'])->name('MisPagosTabla');//actualizado para serverside
 Route::get('pedidoscliente', [PagoController::class, 'pedidoscliente'])->name('cargar.pedidoscliente');
 Route::get('pedidosclientetabla', [PagoController::class, 'pedidosclientetabla'])->name('cargar.pedidosclientetabla');
+
+Route::get('pedidosenvioclientetabla', [ClienteController::class, 'pedidosenvioclientetabla'])->name('cargar.pedidosenvioclientetabla');
+
 Route::post('pagodeleteRequest', [PagoController::class, 'destroyid'])->name('pagodeleteRequest.post');
 Route::post('validarrelacionruc', [PedidoController::class, 'validarrelacionruc'])->name('validarrelacionruc');
 Route::post('pedidostiempo', [ClienteController::class, 'pedidostiempo'])->name('pedidostiempo');

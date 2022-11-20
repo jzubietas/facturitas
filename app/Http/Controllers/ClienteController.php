@@ -369,7 +369,7 @@ class ClienteController extends Controller
             $pcantidad_tiempo=$request->pcantidad_tiempo;
 
             $html=$cliente_id_tiempo."|".$pcantidad_pedido."|".$pcantidad_tiempo;
-            $user=Cliente::find($request->cliente_id_tiempo);
+            $user=Cliente::where("celular",$request->cliente_id_tiempo);
             //$jefe = User::find($request->asesor, ['jefe']);
             $user->update([
                 //'deuda' => "0",
@@ -929,5 +929,35 @@ class ClienteController extends Controller
         }
         
         return response()->json(['html' => $html]);
+    }
+
+    public function pedidosenvioclientetabla(Request $request)
+    {        
+        $pedidos=null;
+        if (!$request->cliente_id) {            
+        } else {
+            
+            $idrequest=$request->cliente_id;       
+            $pedidos = Pedido::join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
+                ->select('pedidos.id', 
+                        'dp.codigo',
+                        'dp.nombre_empresa',
+                        //DB::raw(" (select dd.nombre_empresa from detalle_pedidos de where de.pedido_id=direcion_grupos.id) as clientes "),                     
+                        )
+                ->where('pedidos.cliente_id', $idrequest)
+                ->where('pedidos.estado', '1')
+                ->where('dp.estado', '1')
+                //->where('pedidos.envio', '1')
+                ->where('pedidos.condicion_envio', 'PENDIENTE DE ENVIO')
+                ->get();
+
+                
+                
+
+            
+            return Datatables::of($pedidos)
+                    ->addIndexColumn()                  
+                    ->make(true);
+        }       
     }
 }

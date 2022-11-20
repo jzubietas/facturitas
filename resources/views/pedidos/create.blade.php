@@ -626,6 +626,7 @@
       $(document).on("change","#user_id_tiempo",function(){
         //al cambiar el ruc que hacer
          let userid=$(this).val();
+         console.log(userid)
           $.ajax({
             url: "{{ route('cargar.clientedeudaparaactivar') }}?user_id=" + userid,
             method: 'GET',

@@ -1,9 +1,9 @@
 @extends('adminlte::page')
 
-@section('title', 'Lista de pedidos por recibir')
+@section('title', 'Rutas de Envio')
 
 @section('content_header')
-  <h1>Lista de pedidos por recibir - ENVIOS
+  <h1>Rutas de envio - ENVIOS
     {{-- <div class="float-right btn-group dropleft">
       <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         Exportar
@@ -55,17 +55,15 @@
         <thead>
           <tr>
             <th scope="col">Item</th>
-            <th scope="col">Código</th>
             <th scope="col">Asesor</th>
             <th scope="col">Cliente</th>
-            <th scope="col">Razón social</th>            
-            <th scope="col">Fecha de registro</th>
-            <th scope="col">Fecha de envio</th>
-            <th scope="col">Fecha de entrega</th>
-            <th scope="col">Destino</th>
-            <th scope="col">Dirección de envío</th>
-            <th scope="col">Estado de envio</th>
-            <th scope="col">Estado de sobre</th>
+            <th scope="col">Cantidad</th>
+            <th scope="col">Codigos</th>
+            <th scope="col">Producto</th>            
+            <th scope="col">Direccion</th>
+            <th scope="col">Referencia</th>
+            <th scope="col">Observacion</th>
+            <th scope="col">Distrito</th>
             <th scope="col">Acciones</th>
           </tr>
         </thead>
@@ -213,128 +211,140 @@
       });
       
 
-      /*$('#modal-atender').on('show.bs.modal', function (event) {
-        var button = $(event.relatedTarget) 
-        var idunico = button.data('atender')
-        $(".textcode").html("PED"+idunico);
-        $("#hiddenAtender").val(idunico);
-      });*/
-
       $('#tablaPrincipal').DataTable({
         processing: true,
         serverSide: true,
         searching: true,
         "order": [[ 0, "desc" ]],
-        ajax: "{{ route('envios.porrecibirtabla') }}",
-        createdRow: function( row, data, dataIndex){
-          //console.log(row);          
-        },
-        rowCallback: function (row, data, index) {           
+        ajax: "{{ route('envios.rutaenviotabla') }}",
+        rowCallback: function (row, data, index) {
+            console.log(data.destino)
+              if(data.destino=='LIMA'){
+                $('td:eq(0)', row).css('color','#000').css('text-align','center').css('font-weight','bold');
+                $('td:eq(1)', row).css('color','#000').css('text-align','center').css('font-weight','bold');
+                $('td:eq(2)', row).css('color','#000').css('text-align','center').css('font-weight','bold');
+                $('td:eq(3)', row).css('color','#000').css('text-align','center').css('font-weight','bold');
+                $('td:eq(4)', row).css('color','#000').css('text-align','center').css('font-weight','bold');
+                $('td:eq(5)', row).css('color','#000').css('text-align','center').css('font-weight','bold');
+                $('td:eq(6)', row).css('color','#000').css('text-align','center').css('font-weight','bold');
+                $('td:eq(7)', row).css('color','#000').css('text-align','center').css('font-weight','bold');
+              }else if(data.destino=='PROVINCIA'){                
+                $('td:eq(0)', row).css('color','red').css('text-align','center').css('font-weight','bold');
+                $('td:eq(1)', row).css('color','red').css('text-align','center').css('font-weight','bold');
+                $('td:eq(2)', row).css('color','red').css('text-align','center').css('font-weight','bold');
+                $('td:eq(3)', row).css('color','red').css('text-align','center').css('font-weight','bold');
+                $('td:eq(4)', row).css('color','red').css('text-align','center').css('font-weight','bold');
+                $('td:eq(5)', row).css('color','red').css('text-align','center').css('font-weight','bold');
+                $('td:eq(6)', row).css('color','red').css('text-align','center').css('font-weight','bold');
+                $('td:eq(7)', row).css('color','red').css('text-align','center').css('font-weight','bold');
+                
+              }
         },
         columns: [
           {
               data: 'id', 
-              name: 'id',
+              name: 'id',"visible":true,
               render: function ( data, type, row, meta ) {
                 if(row.id<10){
-                  return 'PED000'+row.id;
+                  return 'ENV000'+row.id;
                 }else if(row.id<100){
-                  return 'PED00'+row.id;
+                  return 'ENV00'+row.id;
                 }else if(row.id<1000){
-                  return 'PED0'+row.id;
+                  return 'ENV0'+row.id;
                 }else{
-                  return 'PED'+row.id;
+                  return 'ENV'+row.id;
                 } 
               }
           },
-          {data: 'codigos', name: 'codigos', },
-          {data: 'users', name: 'users', },
+          {data: 'identificador', name: 'identificador', },
+          //{data: 'codigos', name: 'codigos', },
+          //{data: 'users', name: 'users', },
           {
-            data: 'celulares', 
-            name: 'celulares',
+            data: 'celular', 
+            name: 'celular',
             render: function ( data, type, row, meta ) {
-              return row.celulares+' - '+row.nombres
+              return row.celular+' - '+row.nombre
             },
-            "visible":false
             //searchable: true
         },
-          {data: 'empresas', name: 'empresas'},
-          {data: 'fecha_envio_doc', name: 'fecha_envio_doc', "visible":false},
-          {data: 'fecha_envio_doc_fis', name: 'fecha_envio_doc_fis', },
-          {data: 'fecha_recepcion', name: 'fecha_recepcion',"visible":false },
-          {data: 'destino', name: 'destino',"visible":false },
+        {data: 'cantidad', name: 'cantidad', },
           {
-            data:'direccion',
-            name:'direccion',"visible":false,
+            data: 'codigos', 
+            name: 'codigos', 
+            render: function ( data, type, row, meta ) {    
+              if(data==null){
+                return 'SIN PEDIDOS';
+              }else{
+                var returndata='';
+                var jsonArray=data.split(",");
+                $.each(jsonArray, function(i, item) {
+                    returndata+=item+'<br>';
+                });
+                return returndata;
+              }  
+            }
+          },
+          {
+            data: 'producto', 
+            name: 'producto',
+            render: function ( data, type, row, meta ) {    
+              if(data==null){
+                return 'SIN RUCS';
+              }else{
+                var numm=0;
+                var returndata='';
+                var jsonArray=data.split(",");
+                $.each(jsonArray, function(i, item) {
+                    numm++;
+                    returndata+=numm+": "+item+'<br>';
+                    
+                });
+                return returndata;
+              }  
+            }
+           },
+          {data: 'direccion', name: 'direccion', },
+          {
+            data: 'referencia', 
+            name: 'referencia',
             render: function ( data, type, row, meta ) {
-              //console.log(data);
-              datas='';
+              var datal="";
+              if(row.destino=='LIMA')
+              {
+                return data;
+              
+              }else if(row.destino=='PROVINCIA'){
+                urladjunto = '{{ route("pedidos.descargargastos", ":id") }}';
+                urladjunto = urladjunto.replace(':id', data);
+                datal = datal+'<p><a href="'+urladjunto+'">'+data+'</a><p>';
+                  return datal;
+              }
+            }
+          },
+          {data: 'observacion', name: 'observacion', },
+          {
+            data: 'distrito', 
+            name: 'distrito',
+            render: function ( data, type, row, meta ) {
               if(data!=null)
               {
                 return data;
-                /*if(data=='0')
-                {
-                  return '<span class="badge badge-danger">REGISTRE DIRECCION</span>';
-                }else if(data=='LIMA')
-                {
-                  var urlshow = '{{ route("pedidos.show", ":id") }}';
-                  urlshow = urlshow.replace(':id', row.id);
-
-                  return '<a href="" data-target="#modal-verdireccion" data-toggle="modal" data-dirreccion="'+row.id+'"><button class="btn btn-primary btn-sm"><i class="fas fa-eye"></i> Ver</button></a>';
-                }
-                else if(data=='PROVINCIA')
-                {
-                  return '<span class="badge badge-info">ENVIO A PROVINCIA</span>';
-                }else{
-                  return '<span class="badge badge-info">PROBLEMAS CON REGISTRO DE DESTINO</span>';
-                }
-*/
-                //return datas;
-
               }else{
-                return 'REGISTRE DIRECCION';
+                return '';
               }
-              //return 'REGISTRE DIRECCION';
-            },
-          },
-          {data: 'condicion_envio', name: 'condicion_envio', },
-          {
-            data: 'envio', 
-            name: 'envio',
-            render: function ( data, type, row, meta ) {
-              if(row.envio=='1')
-              {
-                return '<span class="badge badge-danger">Por confirmar recepcion</span>';
-              }else{
-                return '<span class="badge badge-info">Recibido</span>';
-              }
-            }, 
+            }
           },
           {
             data: 'action', 
             name: 'action', 
             orderable: false, 
             searchable: false,
+            "visible":true,
             sWidth:'20%',
-            render: function ( data, type, row, meta ) {   
-              datass='';
-              @if($ver_botones_accion > 0)
-                @can('envios.enviar')
-                  if(row.envio=='1')
-                  {
-                    datass = datass+ '<a href="" data-target="#modal-recibir" data-toggle="modal" data-recibir="'+row.id+'"><button class="btn btn-warning btn-sm"><i class="fas fa-check-circle"></i> Recibido</button></a>'; 
-                  }
-                @endcan
-              @endif
-              
-              if(row.destino == null && row.direccion =='0' && (row.envio*1) >0)
-              {
-                var urldireccion = '{{ route("envios.createdireccion", ":id") }}';
-                urldireccion = urldireccion.replace(':id', row.id);
-                data = data+'<a href="'+urldireccion+'" class="btn btn-dark btn-sm"><i class="fas fa-map"></i> Destino</a><br>';
-              }
-              
-              return datass;                    
+            render: function ( data, type, row, meta ) {  
+              datass="";
+              datass = datass+ '<a href="" data-target="#modal-revertir" data-toggle="modal" data-recibir="'+row.id+'"><button class="btn btn-info btn-sm"><i class="fas fa-trash"></i> REVERTIR</button></a>'; 
+              return datass;                               
             }
           },
         ],

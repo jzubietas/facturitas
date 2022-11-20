@@ -360,6 +360,13 @@ return [
                     'active' => ['envios'],
                 ],
                 [
+                    'text' => 'Rutas de Envio',
+                    'route'  => 'envios.rutaenvio',
+                    'can' => 'envios.index',
+                    'icon'   => 'fas fa-check-circle',
+                    'active' => ['envios'],
+                ],
+                [
                     'text' => 'Bandeja de envios',
                     'route'  => 'envios.index',
                     'can' => 'envios.index',
