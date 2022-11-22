@@ -39,19 +39,20 @@
           <option value="IBK">INTERBANK</option>
         </select>
     </div>
+    <div class=" col-lg-4">
+      <select name="titular_movimientos" class="border form-control selectpicker border-secondary" id="titular_movimientos" data-live-search="true">
+        <option value="">---- SELECCIONE TITULAR ----</option>
+        <option value="EPIFANIO SOLANO HUAMAN">EPIFANIO SOLANO HUAMAN</option>
+        <option value="NIKSER DENIS ORE RIVEROS">NIKSER DENIS ORE RIVEROS</option>
+        
+      </select>
+  </div>
     <div class="col-lg-4">
         <select name="tipo_movimientos" class="border form-control selectpicker border-secondary" id="tipo_movimientos" data-live-search="true">
           <option value="">---- SELECCIONE TIPO MOVIMIENTO ----</option>
         </select>
     </div>
-    <div class=" col-lg-4">
-        <select name="titular_movimientos" class="border form-control selectpicker border-secondary" id="titular_movimientos" data-live-search="true">
-          <option value="">---- SELECCIONE TITULAR ----</option>
-          <option value="EPIFANIO SOLANO HUAMAN">EPIFANIO SOLANO HUAMAN</option>
-          <option value="NIKSER DENIS ORE RIVEROS">NIKSER DENIS ORE RIVEROS</option>
-          
-        </select>
-    </div>
+    
     
   </div>
   
@@ -78,7 +79,7 @@
             <th scope="col">Titular</th>
             <th scope="col">Importe</th>
             <th scope="col">Tipo de movimiento</th>
-            <th scope="col">Fecha</th>
+            <th scope="col">Fecha de movimiento</th>
             <th scope="col">Conciliacion</th>
             <th scope="col">Acciones</th>
           </tr>
@@ -145,6 +146,162 @@
     }
 
   </style>
+  <style>
+    
+h2 {
+    margin: 0;
+}
+#multi-step-form-container {
+    /*margin-top: 5rem;*/
+}
+.text-center {
+    text-align: center;
+}
+.mx-auto {
+    margin-left: auto;
+    margin-right: auto;
+}
+.pl-0 {
+    padding-left: 0;
+}
+.button {
+    padding: 1.5rem;
+    border: 1px solid #4361ee;
+    background-color: #4361ee;
+    color: #fff;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.submit-btn {
+    border: 1px solid #0e9594;
+    background-color: #0e9594;
+}
+.mt-3 {
+    margin-top: 2rem;
+}
+.d-none {
+    display: none;
+}
+.form-step {
+    /*border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 20px;
+    padding: 3rem;*/
+}
+.font-normal {
+    font-weight: normal;
+}
+ul.form-stepper {
+    counter-reset: section;
+    margin-bottom: 3rem;
+}
+ul.form-stepper .form-stepper-circle {
+    position: relative;
+}
+ul.form-stepper .form-stepper-circle span {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translateY(-50%) translateX(-50%);
+}
+.form-stepper-horizontal {
+    position: relative;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: justify;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+}
+ul.form-stepper > li:not(:last-of-type) {
+    margin-bottom: 0.625rem;
+    -webkit-transition: margin-bottom 0.4s;
+    -o-transition: margin-bottom 0.4s;
+    transition: margin-bottom 0.4s;
+}
+.form-stepper-horizontal > li:not(:last-of-type) {
+    margin-bottom: 0 !important;
+}
+.form-stepper-horizontal li {
+    position: relative;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-flex: 1;
+    -ms-flex: 1;
+    flex: 1;
+    -webkit-box-align: start;
+    -ms-flex-align: start;
+    align-items: start;
+    -webkit-transition: 0.5s;
+    transition: 0.5s;
+}
+.form-stepper-horizontal li:not(:last-child):after {
+    position: relative;
+    -webkit-box-flex: 1;
+    -ms-flex: 1;
+    flex: 1;
+    height: 1px;
+    content: "";
+    top: 32%;
+}
+.form-stepper-horizontal li:after {
+    background-color: #dee2e6;
+}
+.form-stepper-horizontal li.form-stepper-completed:after {
+    background-color: #4da3ff;
+}
+.form-stepper-horizontal li:last-child {
+    flex: unset;
+}
+ul.form-stepper li a .form-stepper-circle {
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    margin-right: 0;
+    line-height: 1.7rem;
+    text-align: center;
+    background: rgba(0, 0, 0, 0.38);
+    border-radius: 50%;
+}
+.form-stepper .form-stepper-active .form-stepper-circle {
+    background-color: #4361ee !important;
+    color: #fff;
+}
+.form-stepper .form-stepper-active .label {
+    color: #4361ee !important;
+}
+.form-stepper .form-stepper-active .form-stepper-circle:hover {
+    background-color: #4361ee !important;
+    color: #fff !important;
+}
+.form-stepper .form-stepper-unfinished .form-stepper-circle {
+    background-color: #f8f7ff;
+}
+.form-stepper .form-stepper-completed .form-stepper-circle {
+    background-color: #0e9594 !important;
+    color: #fff;
+}
+.form-stepper .form-stepper-completed .label {
+    color: #0e9594 !important;
+}
+.form-stepper .form-stepper-completed .form-stepper-circle:hover {
+    background-color: #0e9594 !important;
+    color: #fff !important;
+}
+.form-stepper .form-stepper-active span.text-muted {
+    color: #fff !important;
+}
+.form-stepper .form-stepper-completed span.text-muted {
+    color: #fff !important;
+}
+.form-stepper .label {
+    font-size: 1rem;
+    margin-top: 0.5rem;
+}
+.form-stepper a {
+    cursor: default;
+}
+  </style>
 @stop
 
 @section('js')
@@ -183,12 +340,37 @@
     {
       //var submitevent=this;
       //evento.preventDefault();
-      let banco = $("#banco").val();
+      
+
+    }
+
+
+  $(document).ready(function () {
+
+
+    $(document).on("click", "#registrar_movimientos", function (e) {
+      e.preventDefault();
+      console.log("log");
+      //validarFormulario();
+
+
+      let bancoe=$("#banco").prop("disabled",false).selectpicker("refresh"); 
+      let banco=bancoe.val();
+      //$("#banco").prop('disabled', true).selectpicker("refresh");
+      //let banco = $("#banco").removeAttr('disabled').selectpicker("refresh").val();
+      console.log("banco "+banco);
+
+      //return false;
 
       let tipotrans = $("#tipotransferencia").val();
       let descrip_otros = $("#descrip_otros").val();
-      let titular = $("#titulares").val();
-      console.log("t "+titular);
+
+      let titulare=$("#titulares").prop("disabled",false).selectpicker("refresh"); 
+      let titular=titulare.val();
+      //$("#titulares").prop('disabled', true).selectpicker("refresh");
+      //console.log(titular)
+      
+      //return false;
       let monto = $("#monto").val();
       let fecha = $("#fecha").val();
 
@@ -347,6 +529,7 @@
               });  */            
             }else  if(dataresponse[0]=="sigue")
             {
+              
               $("#formulario").trigger("submit")
               //$("#formulario").submit();
             }            
@@ -356,17 +539,6 @@
 
         
       }
-
-    }
-
-
-  $(document).ready(function () {
-
-
-    $(document).on("click", "#registrar_movimientos", function (e) {
-      e.preventDefault();
-      console.log("log");
-      validarFormulario();
        // var oForm = $(this);
         //var formId = oForm.attr("id");
         //var firstValue = oForm.find("input").first().val();
@@ -517,11 +689,11 @@
             d.titular = $("#titular_movimientos").val();
           },
         },
-        //ajax: "{{ route('movimientostabla') }}",
-        createdRow: function( row, data, dataIndex){  
-
-        },
-        rowCallback: function (row, data, index) {           
+        rowCallback: function (row, data, index) {
+            //console.log(data.pago)
+              if(data.pago=="SIN CONCILIAR"){
+                $('td:eq(6)', row).css('color','red');
+              }
         },
         columns: [
         {
@@ -674,5 +846,124 @@
       )
     </script>
   @endif
+
+  <script>
+    /**
+ * Define a function to navigate betweens form steps.
+ * It accepts one parameter. That is - step number.
+ */
+const navigateToFormStep = (stepNumber) => {
+    /**
+     * Hide all form steps.
+     */
+    document.querySelectorAll(".form-step").forEach((formStepElement) => {
+        formStepElement.classList.add("d-none");
+    });
+    /**
+     * Mark all form steps as unfinished.
+     */
+    document.querySelectorAll(".form-stepper-list").forEach((formStepHeader) => {
+        formStepHeader.classList.add("form-stepper-unfinished");
+        formStepHeader.classList.remove("form-stepper-active", "form-stepper-completed");
+    });
+    /**
+     * Show the current form step (as passed to the function).
+     */
+    document.querySelector("#step-" + stepNumber).classList.remove("d-none");
+    /**
+     * Select the form step circle (progress bar).
+     */
+    const formStepCircle = document.querySelector('li[step="' + stepNumber + '"]');
+    /**
+     * Mark the current form step as active.
+     */
+    formStepCircle.classList.remove("form-stepper-unfinished", "form-stepper-completed");
+    formStepCircle.classList.add("form-stepper-active");
+    /**
+     * Loop through each form step circles.
+     * This loop will continue up to the current step number.
+     * Example: If the current step is 3,
+     * then the loop will perform operations for step 1 and 2.
+     */
+    for (let index = 0; index < stepNumber; index++) {
+        /**
+         * Select the form step circle (progress bar).
+         */
+        const formStepCircle = document.querySelector('li[step="' + index + '"]');
+        /**
+         * Check if the element exist. If yes, then proceed.
+         */
+        if (formStepCircle) {
+            /**
+             * Mark the form step as completed.
+             */
+            formStepCircle.classList.remove("form-stepper-unfinished", "form-stepper-active");
+            formStepCircle.classList.add("form-stepper-completed");
+        }
+    }
+};
+/**
+ * Select all form navigation buttons, and loop through them.
+ */
+let stepper_banco="";
+let stepper_titular="";
+document.querySelectorAll(".btn-navigate-form-step").forEach((formNavigationBtn) => {
+    /**
+     * Add a click event listener to the button.
+     */
+    formNavigationBtn.addEventListener("click", () => {
+        /**
+         * Get the value of the step.
+         */
+        const stepNumber = parseInt(formNavigationBtn.getAttribute("step_number"));
+
+        navigateToFormStep(stepNumber);
+    });
+});
+
+
+
+
+$(document).ready(function () {
+
+  $(document).on("click",'.btn-navigate-titular',function(e){
+
+    let  stepNumberb = parseInt($(this).attr("step_number"));
+    console.log(stepNumberb)
+
+    if(stepNumberb==2)
+    {
+      //guardar banco
+      stepper_titular= $(this).attr("titular");
+      $("#titulares").val(stepper_titular).selectpicker("refresh").trigger("change");
+      //console.log(stepper_titular);
+    }
+
+    navigateToFormStep(stepNumberb);
+
+  });
+
+  $(document).on("click",'.btn-navigate-banco',function(e){
+
+    let  stepNumberc = parseInt($(this).attr("step_number"));
+    //console.log(stepNumberc)
+
+    if(stepNumberc==3)
+    {
+      stepper_banco= $(this).attr("banco");
+      console.log(stepper_banco);
+      $("#banco").val(stepper_banco).selectpicker("refresh").trigger("change");
+
+      $("#banco").prop('disabled', true).selectpicker("refresh");
+      $("#titulares").prop('disabled', true).selectpicker("refresh");
+      //automarcar opciones en readonly
+    }
+    navigateToFormStep(stepNumberc);
+    //navigateToFormStep(stepNumberb);
+
+    });
+
+});
+  </script>
 
 @stop

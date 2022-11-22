@@ -699,6 +699,7 @@ tfoot td {
         $(document).on("change","#user_id",function(){
           console.log("123");
           var uid=$(this).val();
+          console.log({{ $idcliente_request }});
           $.ajax({
               async:true,
                 url: "{{ route('clientescreatepago') }}?user_id=" + uid,
@@ -707,8 +708,14 @@ tfoot td {
                   console.log(data.html);
                   $('#pcliente_id').html(data.html);
                   $("#pcliente_id").selectpicker("refresh");//addClass("your-custom-class")
-                  console.log("c")
+                  console.log("c");
+                  //de localstorage
 
+                  if (!localStorage.getItem('clickpagar')) 
+                  {
+                    $("#pcliente_id").val(localStorage.getItem('clickpagar'));
+                    $("#pcliente_id").selectpicker("refresh");
+                  }
 
                   /*setTimeout(function(){
                     $("#pcliente_id").val({{ $idcliente_request }}).trigger("change");
@@ -2278,12 +2285,8 @@ tfoot td {
       $("#user_id").selectpicker("refresh").trigger("change");
       
       
-      $("#pcliente_id").val( {{ $idcliente_request }} ).trigger("change");
+      //$("#pcliente_id").val(  ).trigger("change");
         
-      
-
-
-      
       
     });
 

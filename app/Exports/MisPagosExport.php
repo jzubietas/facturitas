@@ -21,7 +21,7 @@ class MisPagosExport implements FromView, ShouldAutoSize
             ->join('pago_pedidos as pp', 'pagos.id', 'pp.pago_id')
             ->join('pedidos as p', 'pp.pedido_id', 'p.id')
             ->join('detalle_pedidos as dpe', 'p.id', 'dpe.pedido_id')
-            ->select('pagos.id', 
+            ->select('pagos.id',
                     'dpe.codigo as codigos', 
                     'u.identificador as users', 
                     'pagos.observacion', 

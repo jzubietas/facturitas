@@ -32,7 +32,7 @@ class MovimientoController extends Controller
         $bancos = [
             "BCP" => 'BCP',
             "BBVA" => 'BBVA',
-            "IBK" => 'INTERBANK',
+            "INTERBANK" => 'INTERBANK',
             /*"SCOTIABANK" => 'SCOTIABANK',
             "PICHINCHA" => 'PICHINCHA',*/
         ];
@@ -88,8 +88,8 @@ class MovimientoController extends Controller
             'movimiento_bancarios.importe',
             'movimiento_bancarios.tipo',
             'movimiento_bancarios.descripcion_otros',
-            'movimiento_bancarios.fecha',
-            DB::raw("(CASE WHEN movimiento_bancarios.pago =0 THEN 'SIN CONCILIAR' ELSE 'CONCILIACION' END) AS pago"),
+            DB::raw('DATE_FORMAT(movimiento_bancarios.fecha, "%d/%m/%Y") as fecha'),
+            DB::raw("(CASE WHEN movimiento_bancarios.pago =0 THEN 'SIN CONCILIAR' ELSE 'CONCILIADO' END) AS pago"),
             //"case when movimiento_bancarios.pago=0 then 'SIN CONCILIAR' else 'CONCILIACION' END",
             'movimiento_bancarios.estado',
             'movimiento_bancarios.created_at',
@@ -109,10 +109,21 @@ class MovimientoController extends Controller
     {
         //return $request->all();
         $query = null;
-        $query = MovimientoBancario::where('estado', '1')->where("pago",'0');//->get();
+        $query = MovimientoBancario::where('estado', '1')->where("pago",'0')
+            ->select(
+                'movimiento_bancarios.id',
+                'movimiento_bancarios.banco',
+                'movimiento_bancarios.titular',
+                'movimiento_bancarios.importe',
+                DB::raw('DATE_FORMAT(fecha, "%d/%m/%Y") as fecha'),
+                //'movimiento_bancarios.fecha',
+                'movimiento_bancarios.tipo',
+
+            );//->get();
 
         $conciliar=$request->conciliar;
         $excluir=$request->excluir;
+        $fechadeposito=$request->fechadeposito;
         //return $excluir;
         //return $conciliar;//2218
 
@@ -124,7 +135,7 @@ class MovimientoController extends Controller
 
         if($banco_compara=='INTERBANK')
         {
-            $banco_compara='IBK';
+            //$banco_compara='IBK';
         }
 
         if ($banco_compara!='' and !is_null($banco_compara) ) {
@@ -143,6 +154,7 @@ class MovimientoController extends Controller
             $query->where('importee',$monto_compara.'%');
         }*/
 
+
         $titular_compara=$comparar->titular;
         //return $titular_compara;
 
@@ -159,11 +171,16 @@ class MovimientoController extends Controller
         }
 
         $fecha_compra=$comparar->fecha;
+        //$min=$request->de;
+
+        $fechadeposito=$fechadeposito;//04/10/2022
+        //return $fechadeposito;
+
         //return $fecha_compra;
 
-        /*if ($fecha_compra!='' || is_null($fecha_compra) ) {
-            $query->whereDate('fecha','>',''.$fecha_compra.'');
-        }*/
+        if ($fechadeposito!='' || !is_null($fechadeposito) ) {
+            $query->whereDate('fecha','>',''.$fechadeposito.'');
+        }
         //return $fecha_compra;
         //return $request->excluir;
 

@@ -3,7 +3,7 @@
 @section('title', 'Agregar Cliente')
 
 @section('content_header')
-  <h1>Agregar base fría</h1>
+  <h1>Agregar base fríasss</h1>
 @stop
 
 @section('content')
@@ -24,7 +24,7 @@
           <div class="form-group col-lg-6">
             {!! Form::label('user_id', 'Asesor*') !!}
             @if(Auth::user()->rol == "Asesor")
-            {!! Form::text('muser_id', Auth::user()->identificador, ['class' => 'form-control', 'id' => 'muser_id', 'disabled']) !!}
+            {!! Form::text('muser_id', Auth::user()->identificador.' '.Auth::user()->exidentificador, ['class' => 'form-control', 'id' => 'muser_id', 'disabled']) !!}
             {!! Form::hidden('user_id', Auth::user()->id, ['class' => 'form-control', 'id' => 'user_id']) !!}
             @else
             {!! Form::select('user_id', $users, null, ['class' => 'form-control selectpicker border border-secondary', 'id' => 'user_id','data-live-search' => 'true', 'placeholder' => '---- SELECCIONE USUARIO ----']) !!}

@@ -578,15 +578,38 @@ class PedidoController extends Controller
         }else{
             //return $request->user_id;
             $html = '<option value="">' . trans('---- SELECCIONE CLIENTE ----') . '</option>';
+
+
+
+            /*$cliente_deuda=Cliente::where("id",$request->cliente_id)
+                ->get([
+                    'clientes.id',
+                    'clientes.crea_temporal',
+                    'clientes.activado_tiempo',
+                    'clientes.activado_pedido',
+                    'clientes.temporal_update',
+                    DB::raw(" (select count(ped.id) from pedidos ped where ped.cliente_id=clientes.id and ped.pago in (0,1) and ped.pagado in (0,1) and ped.created_at >='2022-11-01 00:00:00' and ped.estado=1) as pedidos_mes_deuda "),
+                    DB::raw(" (select count(ped2.id) from pedidos ped2 where ped2.cliente_id=clientes.id and ped2.pago in (0,1) and ped2.pagado in (0,1) and ped2.created_at <='2022-10-31 00:00:00'  and ped2.estado=1) as pedidos_mes_deuda_antes ")
+                    ]
+                )->first();*/
+
+
             $clientes = Cliente::join('users as u', 'clientes.user_id', 'u.id')->where('clientes.tipo', '1')//->where('clientes.celular','925549426')
                 ->where('u.identificador', $request->user_id)
-                ->where('clientes.deuda', '1')
+                //->where('clientes.deuda', '1')
                 ->where('clientes.estado', '1')
                 ->get([
-                    'clientes.celular','clientes.icelular','clientes.nombre'
+                    'clientes.celular','clientes.icelular','clientes.nombre', 'clientes.crea_temporal','clientes.activado_tiempo','clientes.activado_pedido','clientes.temporal_update',
+                    DB::raw(" (select count(ped.id) from pedidos ped where ped.cliente_id=clientes.id and ped.pago in (0,1) and ped.pagado in (0,1) and ped.created_at >='2022-11-01 00:00:00' and ped.estado=1) as pedidos_mes_deuda "),
+                    DB::raw(" (select count(ped2.id) from pedidos ped2 where ped2.cliente_id=clientes.id and ped2.pago in (0,1) and ped2.pagado in (0,1) and ped2.created_at <='2022-10-31 00:00:00'  and ped2.estado=1) as pedidos_mes_deuda_antes ")
+
                 ]); 
             foreach ($clientes as $cliente) {
-                $html .= '<option style="color:black" value="' . $cliente->celular . '">' . $cliente->celular.  ( ($cliente->icelular!=null)? '-'.$cliente->icelular :''  ) .'  -  ' . $cliente->nombre . '</option>';
+                if( $cliente->pedidos_mes_deuda>0  || $cliente->pedidos_mes_deuda_antes>0)
+                {
+                    $html .= '<option style="color:black" value="' . $cliente->celular . '">' . $cliente->celular.  ( ($cliente->icelular!=null)? '-'.$cliente->icelular :''  ) .'  -  ' . $cliente->nombre . '</option>';
+                }
+                
                 //$html .= '<option value="' . $cliente->id . '">' . $cliente->celular. '  -  ' . $cliente->nombre . '</option>';
             }
 
@@ -3447,7 +3470,8 @@ class PedidoController extends Controller
                 ->where('pedidos.estado', '1')
                 //->where('dp.estado', '1')
                 ->where('pedidos.envio', '<>', '1')
-                ->where('pedidos.condicion_envio', '<>', 'ENTREGADO');
+                ->where('pedidos.condicion_envio', '<>', 'ENTREGADO')
+                ->where('pedidos.condicion_envio', 'EN REPARTO');
                 /*->groupBy(
                     'pedidos.id',
                     'pedidos.cliente_id',
@@ -3555,7 +3579,7 @@ class PedidoController extends Controller
         return response()->json(['html' => $html]); 
     }
 
-    public function Envios()//BANDEJA DE ENVIOS
+    public function Envios()//SOBRES EN REPARTO
     {
         $condiciones = [
             "PENDIENTE DE ENVIO" => 'PENDIENTE DE ENVIO',
@@ -3950,7 +3974,7 @@ class PedidoController extends Controller
                             ->where('dp.estado', '1')
                            
                             ->get();        
-
+           
         $superasesor = User::where('rol', 'Super asesor')->count();
         
         $ver_botones_accion = 1;
@@ -3966,19 +3990,23 @@ class PedidoController extends Controller
             $ver_botones_accion = 1;
         }
 
-        return view('pedidos.rutaenvio', compact('condiciones', 'distritos', 'direcciones', 'destinos', 'superasesor','ver_botones_accion','departamento'));
+        $dateMin = Carbon::now()/*->subDays(4)*/->format('d/m/Y');
+
+        return view('pedidos.rutaenvio', compact('condiciones', 'distritos', 'direcciones', 'destinos', 'superasesor','ver_botones_accion','departamento','dateMin'));
     }
     public function Enviosrutaenviotabla(Request $request)
     {
-        $pedidos=null;
+        $pedidos=null;//21/11/2022
+        $min = Carbon::createFromFormat('d/m/Y', $request->desde)->format('Y-m-d');
 
         $pedidos_lima = DireccionGrupo::join('direccion_envios as de','direccion_grupos.id','de.direcciongrupo')
                                     ->join('clientes as c', 'c.id', 'de.cliente_id')
                                     ->join('users as u', 'u.id', 'c.user_id')
-                                    ->where("direccion_grupos.estado","1")
+                                    ->where('direccion_grupos.estado','1')
+                                    ->where(DB::raw('DATE(direccion_grupos.created_at)'), $min)
                                     ->select(
                                         'direccion_grupos.id',
-                                        'u.identificador',
+                                        'u.identificador as identificador',
                                         DB::raw(" (select 'LIMA') as destino "),
                                         'de.celular',
                                         'de.nombre',
@@ -3987,18 +4015,20 @@ class PedidoController extends Controller
                                         DB::raw(" (select group_concat(ab.empresa) from direccion_pedidos ab where ab.direcciongrupo=direccion_grupos.id) as producto "),
                                         'de.direccion',
                                         'de.referencia',
-                                        'de.observacion',
-                                        'de.distrito'
+                                        'de.observacion',                                        
+                                        'de.distrito',
+                                        'direccion_grupos.created_at as fecha'
                                     );
            
         
         $pedidos_provincia = DireccionGrupo::join('gasto_envios as de','direccion_grupos.id','de.direcciongrupo')
                                     ->join('clientes as c', 'c.id', 'de.cliente_id')
                                     ->join('users as u', 'u.id', 'c.user_id')
-                                    ->where("direccion_grupos.estado","1")
+                                    ->where('direccion_grupos.estado','1')
+                                    ->where(DB::raw('DATE(direccion_grupos.created_at)'), $min)
                                     ->select(
                                         'direccion_grupos.id',
-                                        'u.identificador',
+                                        'u.identificador as identificador',
                                         DB::raw(" (select 'PROVINCIA') as destino "),
                                         DB::raw(" (select '') as celular "),
                                         DB::raw(" (select '') as nombre "),
@@ -4008,11 +4038,12 @@ class PedidoController extends Controller
                                         'de.tracking as direccion',
                                         'de.foto as referencia',
                                         DB::raw(" (select '') as observacion "),
-                                        DB::raw(" (select '') as distrito ")
+                                        DB::raw(" (select '') as distrito "),
+                                        'direccion_grupos.created_at as fecha'
                                     );
-           
 
         $pedidos = $pedidos_lima->union($pedidos_provincia);
+        //$pedidos=$pedidos->where(DB::raw('DATE(direccion_grupos.created_at)'), $request->desde);
         $pedidos=$pedidos->get();
         //$pedidos=$pedidos_provincia;
 

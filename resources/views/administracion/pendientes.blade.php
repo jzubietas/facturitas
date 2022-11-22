@@ -1,11 +1,11 @@
 @extends('adminlte::page')
 
-@section('title', 'Lista de Pagos Observados')
+@section('title', 'Lista de Voucher Pendientes')
 
 @section('content_header')
-  <h1>Lista de pagos OBSERVADOS
+  <h1>Lista de Voucher PENDIENTES
     @can('pagos.create')
-      <a href="{{ route('pagos.create') }}" class="btn btn-info"><i class="fas fa-plus-circle"></i> Agregar</a>
+      {{--<a href="{{ route('pagos.create') }}" class="btn btn-info"><i class="fas fa-plus-circle"></i> Agregar</a>--}}
     @endcan
     
     <div class="float-right btn-group dropleft">
@@ -16,29 +16,9 @@
         <a href="" data-target="#modal-exportar" data-toggle="modal" class="dropdown-item" target="blank_"><img src="{{ asset('imagenes/icon-excel.png') }}"> Excel</a>
       </div>
     </div>
-    @include('pagos.modals.exportar', ['title' => 'Exportar Lista de pagos', 'key' => '4']) 
-
+    @include('pagos.modals.exportar', ['title' => 'Exportar Lista de pagos', 'key' => '6'])  
   </h1>
   
-  <div class="row">
-    <div class="col-lg-6">
-      <select name="asesores_pago" class="border form-control selectpicker border-secondary" id="asesores_pago" data-live-search="true">
-        <option value="">---- SELECCIONE ASESOR ----</option>         
-      </select>
-    </div>
-    <div class="col-lg-3">
-      <input type="date" value="" id="min" name="min" class="form-control">
-    </div>
-    <div class="col-lg-3">
-      <input type="date" value="" id="max" name="max" class="form-control">
-    </div>
-  </div>
-  <div class="form-group col-lg-2">
-    
-      
-  </div>
-
-
   @if($superasesor > 0)
   <br>
   <div class="bg-4">
@@ -53,6 +33,25 @@
 
   <div class="card">
     <div class="card-body">
+      <div class="form-group col-lg-6">
+      
+        <select name="asesores_pago" class="border form-control selectpicker border-secondary" id="asesores_pago" data-live-search="true">
+          <option value="">---- SELECCIONE ASESOR ----</option>         
+        </select>
+      </div>
+
+      <table cellspacing="5" cellpadding="5" class="table-responsive">
+        <tbody>
+          <tr>
+            <td>Fecha Minima:</td>
+            <td><input type="text" value={{ $dateMin }} id="min" name="min" class="form-control"></td>
+            <td> </td>
+            <td>Fecha Máxima:</td>
+            <td><input type="text" value={{ $dateMax }} id="max" name="max"  class="form-control"></td>
+          </tr>
+        </tbody>
+      </table>
+      <br>
       <table id="tablaPrincipal" class="table table-striped">
         <thead>
           <tr>
@@ -79,7 +78,8 @@
 @stop
 
 @section('css')
-  <link rel="stylesheet" href="../css/admin_custom.css">
+  {{-- <link rel="stylesheet" href="../css/admin_custom.css">--}}
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">  
   <style>
     .yellow {
       color:#fcd00e !important;
@@ -134,35 +134,41 @@
 @stop
 
 @section('js')
+  
+    
 
   <!--<script src="{{ asset('js/datatables.js') }}"></script>--> 
   <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
   <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
-  <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+
+  <script src="https://momentjs.com/downloads/moment.js"></script>
+  <script src="https://cdn.datatables.net/plug-ins/1.11.4/dataRender/datetime.js"></script>
 
   <script>
-    //$("#min").datepicker({ onSelect: function () { table.draw(); }, changeMonth: true, changeYear: true , dateFormat:"dd/mm/yy"});
-    //$("#max").datepicker({ onSelect: function () { table.draw(); }, changeMonth: true, changeYear: true, dateFormat:"dd/mm/yy" });
-
     function clickformdelete()
     {
-      console.log("action delete action")
+      //console.log("action delete action")
       var formData = $("#formdelete").serialize();
-      console.log(formData);
+      //console.log(formData);
       $.ajax({
         type:'POST',
         url:"{{ route('pagodeleteRequest.post') }}",
         data:formData,
       }).done(function (data) {
         $("#modal-delete").modal("hide");
-        resetearcamposdelete();          
+        //resetearcamposdelete();          
         $('#tablaPrincipal').DataTable().ajax.reload();      
       });
     }
   </script>
 
+
+
 <script>
   $(document).ready(function () {
+
+    //$.fn.dataTable.moment( 'DD/MM/YYYY' );
+    
 
     $.ajaxSetup({
         headers: {
@@ -171,22 +177,35 @@
     });
 
     //$('#asesorespago').change(function(){
-
+    
       $.ajax({
         url: "{{ route('asesorespago') }}",
         method: 'GET',
         success: function(data) {
-          console.log(data.html);
+          //console.log(data.html);
           $('#asesores_pago').html(data.html);
           $('#asesores_pago').selectpicker('refresh');
+
+          if (localStorage.getItem('asesor') )
+          {
+            $('#asesores_pago').val( localStorage.getItem('asesor') );
+            $('#asesores_pago').selectpicker("refresh").trigger("change"); 
+          }
+
         }
       });
 
       $(document).on("change","#asesores_pago",function(){
-
+        localStorage.setItem('asesor', $(this).val() ); 
         $('#tablaPrincipal').DataTable().ajax.reload();
-
       });
+
+      /*$(document).on("change","#min",function(){
+        $('#tablaPrincipal').DataTable().ajax.reload();
+      });
+      $(document).on("change","#max",function(){
+        $('#tablaPrincipal').DataTable().ajax.reload();
+      });*/
 
     //});
 
@@ -213,16 +232,17 @@
       clickformdelete();
     })
 
+    //$.fn.dataTable.ext
     
 
-    
+    //administracion.porrevisartabla
     $('#tablaPrincipal').DataTable({
         processing: true,
         serverSide: true,
         searching: true,
         "order": [[ 0, "asc" ]],
         ajax: {
-          url: "{{ route('administracion.observadostabla') }}",
+          url: "{{ route('administracion.pendientestabla') }}",
           data: function (d) {
             d.asesores = $("#asesores_pago").val();
             d.min = $("#min").val();
@@ -231,11 +251,11 @@
             // etc
           },
         },
-        
         /*createdRow: function( row, data, dataIndex){           
         },*/
         /*rowCallback: function (row, data, index) {           
         },*/
+        //"columnDefs": [{"targets":3,"type":"date-eu"}],
         columns: [
           {
               data:'fecha_timestamp',
@@ -245,7 +265,7 @@
           {
               data: 'id', 
               name: 'id',
-              render: function ( data, type, row, meta ) {             
+              render: function ( data, type, row, meta ) {  
                 var cantidadvoucher=row.cantidad_voucher;
                 var cantidadpedido=row.cantidad_pedido;
                 var unido= ( (cantidadvoucher>1)? 'V':'I' )+''+( (cantidadpedido>1)? 'V':'I' );
@@ -265,21 +285,27 @@
             data: 'codigos'
             , name: 'codigos' 
             , render: function ( data, type, row, meta ) {
-              if(data==null){
+              /*var jsonArray = JSON.parse(JSON.stringify(data));*/
+              var returndata='';
+              if(data==null)
+              {
                 return "SIN PEDIDOS";
               }else{
-                /*var jsonArray = JSON.parse(JSON.stringify(data));*/
-                var returndata='';
                 var jsonArray=data.split(",");
                 $.each(jsonArray, function(i, item) {
                     returndata+=item+'<br>';
                 });
-                return returndata;
-                //return data;
-              }              
+              }
+              
+              return returndata;
+              //return data;
             }
           },
-          { data: 'fecha', name: 'fecha' },////asesor
+          { 
+            data: 'fecha', 
+            name: 'fecha',
+            render: $.fn.dataTable.render.moment( 'DD/MM/YYYY' )
+           },////asesor
           { data: 'users', name: 'users' },////asesor
           { data: 'observacion', name: 'observacion'},//observacion
           //{ data: 'total_deuda', name: 'total_deuda'},//total_deuda
@@ -317,10 +343,65 @@
     });
         
 
-
+    
 
   });
 </script>
+{{--<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.4/moment.min.js"></script>--}}
+{{--<script src="https://cdn.datatables.net/plug-ins/1.10.25/sorting/datetime-moment.js"></script>--}}
+
+
+
+<script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+
+<script>
+  $(document).ready(function () { 
+
+    //$.fn.dataTable.moment( 'DD/MM/YYYY' );
+
+    $("#min").datepicker({ 
+      onSelect: function () { 
+        $('#tablaPrincipal').DataTable().ajax.reload(); 
+        //console.log("minimo "+$(this).val());
+        //localStorage.setItem('dateMin', $(this).datepicker('getDate') ); 
+        localStorage.setItem('dateMin', $(this).val() ); 
+      }, changeMonth: true, changeYear: true , dateFormat:"dd/mm/yy"
+    });
+      
+    $("#max").datepicker({ 
+      onSelect: function () { 
+        $('#tablaPrincipal').DataTable().ajax.reload(); 
+        //console.log("maximo "+$(this).val());
+        //console.log("maximo "+$(this).datepicker('getDate'));
+        //localStorage.setItem('dateMax', $(this).datepicker('getDate')  ); 
+        localStorage.setItem('dateMax', $(this).val() ); 
+      }, changeMonth: true, changeYear: true, dateFormat:"dd/mm/yy" 
+    });
+  });
+</script>
+
+<script>
+    
+    if (localStorage.getItem('dateMin') )
+    {
+      $( "#min" ).val(localStorage.getItem('dateMin')).trigger("change");        
+    }else{
+      localStorage.setItem('dateMin', "{{$dateMin}}" );
+    }
+    if (localStorage.getItem('dateMax') )
+    { 
+      $( "#max" ).val(localStorage.getItem('dateMax')).trigger("change");
+    }else{
+      localStorage.setItem('dateMax', "{{$dateMax}}" );
+    }
+
+    //if( localstorage.getItem() )
+    
+    
+    //localStorage.setItem('dateMax', "{{$dateMax}}" );
+    //console.log(localStorage.getItem('dateMin'));
+    //console.log(localStorage.getItem('dateMax'));
+  </script>
 
   @if (session('info') == 'registrado' || session('info') == 'eliminado' || session('info') == 'actualizado')
     <script>

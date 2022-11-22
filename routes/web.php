@@ -67,11 +67,14 @@ Route::get('ruc', [PedidoController::class, 'ruc'])->name('cargar.ruc');
 Route::get('rucnombreempresa', [PedidoController::class, 'rucnombreempresa'])->name('rucnombreempresa');
 Route::post('pedidos.infopdf', [PedidoController::class, 'infopdf'])->name('pedidos.infopdf');
 
-
-
 Route::get('basefria.cargarid', [BasefriaController::class, 'cargarid'])->name('basefria.cargarid');
 //Route::get('pedidos.destroyid', [PedidoController::class, 'destroyid'])->name('pedidos.destroyid');
 Route::post('pedidodeleteRequest', [PedidoController::class, 'destroyid'])->name('pedidodeleteRequest.post');
+
+
+
+
+
 Route::post('pedidorestaurarRequest', [PedidoController::class, 'Restaurarid'])->name('pedidorestaurarRequest.post');
 Route::post('pedidos.restaurar/{pedido}', [PedidoController::class, 'Restaurar'])->name('pedidos.restaurar');
 
@@ -148,6 +151,8 @@ Route::post('pedidos/eliminarFoto2/{pedido}', [PedidoController::class, 'elimina
 Route::get('envios/{imagen}/descargarimagen', [PedidoController::class, 'DescargarImagen'])->name('envios.descargarimagen');
 
 Route::resource('pagos', PagoController::class)->names('pagos');
+//Route::get('pagos/create/{cliente}', [PagoController::class, 'create'])->name('pagos.create');
+
 Route::get('pagostabla', [PagoController::class, 'indextabla'])->name('pagostabla');//actualizado para serverside
 Route::get('pagostablahistorial', [PagoController::class, 'indextablahistorial'])->name('pagostablahistorial');//actualizado para serverside
 Route::get('MisPagosTabla', [PagoController::class, 'MisPagosTabla'])->name('MisPagosTabla');//actualizado para serverside
@@ -155,6 +160,9 @@ Route::get('pedidoscliente', [PagoController::class, 'pedidoscliente'])->name('c
 Route::get('pedidosclientetabla', [PagoController::class, 'pedidosclientetabla'])->name('cargar.pedidosclientetabla');
 
 Route::get('pedidosenvioclientetabla', [ClienteController::class, 'pedidosenvioclientetabla'])->name('cargar.pedidosenvioclientetabla');
+
+
+Route::post('pagodetalleUpdate', [PagoController::class, 'pagodetalleUpdate'])->name('pagodetalleUpdate');
 
 Route::post('pagodeleteRequest', [PagoController::class, 'destroyid'])->name('pagodeleteRequest.post');
 Route::post('validarrelacionruc', [PedidoController::class, 'validarrelacionruc'])->name('validarrelacionruc');
@@ -166,7 +174,7 @@ Route::post('pagos.changeImg', [PagoController::class, 'changeImg'])->name('pago
 
 Route::post('envios.changeImg', [PedidoController::class, 'changeImg'])->name('envios.changeImg');
 
-Route::post('pago/create/{id}', [PagoController::class, 'create'])->name('pago.create');
+//Route::post('pago/create/{id}', [PagoController::class, 'create2'])->name('pago.create');
 
 Route::post('pago/eliminarPedido/{id}/{pago}', [PagoController::class, 'eliminarPedido'])->name('pago.eliminarPedido');
 Route::post('pago/eliminarPago/{id}/{pago}', [PagoController::class, 'eliminarPago'])->name('pago.eliminarPago');
@@ -176,6 +184,9 @@ Route::get('pagos.pagosobservados', [PagoController::class, 'PagosObservados'])-
 Route::get('administracion.porrevisar', [PagoController::class, 'PorRevisar'])->name('administracion.porrevisar');
 Route::get('administracion.porrevisartabla', [PagoController::class, 'PorRevisartabla'])->name('administracion.porrevisartabla');//agregado para serverside
 //
+Route::get('administracion.pendientes', [PagoController::class, 'Administracionpendientes'])->name('administracion.pendientes');
+Route::get('administracion.pendientestabla', [PagoController::class, 'Administracionpendientestabla'])->name('administracion.pendientestabla');
+
 Route::get('administracion.observados', [PagoController::class, 'Observados'])->name('administracion.observados');//de pagos por revisar index
 Route::get('administracion.observadostabla', [PagoController::class, 'Observadostabla'])->name('administracion.observadostabla');//agregado para serverside
 Route::get('administracion.abonados', [PagoController::class, 'Abonados'])->name('administracion.abonados');//de pagos por revisar index
@@ -184,6 +195,7 @@ Route::get('administracion.abonadostabla', [PagoController::class, 'Abonadostabl
 Route::get('administracion.aprobados', [PagoController::class, 'Aprobados'])->name('administracion.aprobados');
 Route::get('administracion.aprobadostabla', [PagoController::class, 'Aprobadostabla'])->name('administracion.aprobadostabla');//agregado por zubieta
 Route::get('administracion.revisar/{pago}', [PagoController::class, 'Revisar'])->name('administracion.revisar');
+Route::get('administracion.revisarpendiente/{pago}', [PagoController::class, 'Revisarpendiente'])->name('administracion.revisarpendiente');
 Route::get('administracion.revisarpago', [PagoController::class, 'Revisarpago'])->name('administracion.revisarpago');//agregado para detalle de revisar
 
 Route::resource('movimientos', MovimientoController::class)->names('movimientos');
@@ -298,6 +310,8 @@ Route::post('/mark-as-read', [NotificationsController::class, 'markNotification'
     // Route::get('pedidosporenviarExcel', [ExcelController::class, 'pedidosporenviarExcel'])->name('pedidosporenviarExcel');
     Route::post('pedidosporenviarExcel', [ExcelController::class, 'pedidosporenviarExcel'])->name('pedidosporenviarExcel');
 
+    Route::post('sobresRutaEnvioExcel', [ExcelController::class, 'sobresRutaEnvioExcel'])->name('sobresRutaEnvioExcel');
+
     //MODULO PEDIDOS
     // Route::get('pedidosExcel', [ExcelController::class, 'pedidosExcel'])->name('pedidosExcel');
     // Route::get('mispedidosExcel', [ExcelController::class, 'mispedidosExcel'])->name('mispedidosExcel');
@@ -316,6 +330,7 @@ Route::post('/mark-as-read', [NotificationsController::class, 'markNotification'
     Route::post('reporte/pagosporasesoresexcel', [ExcelController::class, 'pagosporasesoresExcel'])->name('pagosporasesoresexcel');
     
     Route::post('reporte/entregadosporfechasexcel', [ExcelController::class, 'entregadosporfechasexcel'])->name('entregadosporfechasexcel');
+
     
 /* Route::group(['middleware' => ['permission:pedidos.index']], function () {
     Route::get('pedidos.index', [PedidoController::class, 'index']);

@@ -3,7 +3,7 @@
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header bg-primary">
-          <h5 class="modal-title" id="exampleModalLabel">Agregar Pagos</h5>
+          <h5 class="modal-title" id="exampleModalLabel">Cambiar Imagen</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
@@ -13,8 +13,8 @@
         
         <div class="modal-body">
 
-        <input type="text" value="" name="DPConciliar" id="DPConciliar">
-        <input type="text" value="" name="DPitem" id="DPitem">
+        <input type="hidden" value="" name="DPConciliar" id="DPConciliar">
+        <input type="hidden" value="" name="DPitem" id="DPitem">
 
           <div class="form-row">
             

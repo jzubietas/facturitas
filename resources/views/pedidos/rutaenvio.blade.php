@@ -4,15 +4,7 @@
 
 @section('content_header')
   <h1>Rutas de envio - ENVIOS
-    {{-- <div class="float-right btn-group dropleft">
-      <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        Exportar
-      </button>
-      <div class="dropdown-menu">
-        <a href="{{ route('pedidosporenviarExcel') }}" class="dropdown-item"><img src="{{ asset('imagenes/icon-excel.png') }}"> EXCEL</a>
-      </div>
-    </div> --}}
-    {{-- @can('clientes.exportar') --}}
+    
     <div class="float-right btn-group dropleft">
       <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         Exportar
@@ -21,7 +13,8 @@
         <a href="" data-target="#modal-exportar" data-toggle="modal" class="dropdown-item" target="blank_"><img src="{{ asset('imagenes/icon-excel.png') }}"> Excel</a>
       </div>
     </div>
-    @include('pedidos.modal.exportar', ['title' => 'Exportar pedidos POR ENVIAR', 'key' => '1'])
+    @include('sobres.modal.exportar', ['title' => 'Exportar RUTAS DE ENVIAR', 'key' => '1'])
+  
     {{-- @endcan --}}
   </h1>
   @if($superasesor > 0)
@@ -38,6 +31,15 @@
 
   <div class="card">
     <div class="card-body">
+      <table cellspacing="5" cellpadding="5" class="table-responsive">
+        <tbody>
+          <tr>
+            <td>Fecha</td>
+            <td><input type="text" value={{ $dateMin }} id="min" name="min" class="form-control"></td>
+            
+          </tr>
+        </tbody>
+      </table><br>
       {{-- <table cellspacing="5" cellpadding="5">
         <tbody>
           <tr>
@@ -54,17 +56,18 @@
       <table id="tablaPrincipal" class="table table-striped">
         <thead>
           <tr>
-            <th scope="col">Item</th>
-            <th scope="col">Asesor</th>
-            <th scope="col">Cliente</th>
-            <th scope="col">Cantidad</th>
-            <th scope="col">Codigos</th>
-            <th scope="col">Producto</th>            
-            <th scope="col">Direccion</th>
-            <th scope="col">Referencia</th>
-            <th scope="col">Observacion</th>
-            <th scope="col">Distrito</th>
-            <th scope="col">Acciones</th>
+            <th scope="col" class="text-center">Item</th>
+            <th scope="col" class="text-center">Asesor</th>
+            <th scope="col" class="text-center">Cliente</th>
+            <th scope="col" class="text-center">Nombre</th>
+            <th scope="col" class="text-center">Cantidad</th>
+            <th scope="col" class="text-center">Codigos</th>
+            <th scope="col" class="text-center">Producto</th>            
+            <th scope="col" class="text-center">Direccion</th>
+            <th scope="col" class="text-center">Referencia</th>
+            <th scope="col" class="text-center">Observacion</th>
+            <th scope="col" class="text-center">Distrito</th>
+            <th scope="col" class="text-center">Acciones</th>
           </tr>
         </thead>
         <tbody>
@@ -83,6 +86,7 @@
 
 @section('css')
   <link rel="stylesheet" href="/css/admin_custom.css">
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">  
   <style>
     img:hover{
       transform: scale(1.2)
@@ -132,6 +136,9 @@
   {{--<script src="{{ asset('js/datatables.js') }}"></script>--}}
   <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
   <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+
+  <script src="https://momentjs.com/downloads/moment.js"></script>
+  <script src="https://cdn.datatables.net/plug-ins/1.11.4/dataRender/datetime.js"></script>
 
   <script>
     $(document).ready(function () {
@@ -216,28 +223,21 @@
         serverSide: true,
         searching: true,
         "order": [[ 0, "desc" ]],
-        ajax: "{{ route('envios.rutaenviotabla') }}",
+        ajax: {
+          url: "{{ route('envios.rutaenviotabla') }}",
+          data: function (d) {
+            //d.asesores = $("#asesores_pago").val();
+            d.desde = $("#min").val();
+          },
+        },
         rowCallback: function (row, data, index) {
             console.log(data.destino)
               if(data.destino=='LIMA'){
-                $('td:eq(0)', row).css('color','#000').css('text-align','center').css('font-weight','bold');
-                $('td:eq(1)', row).css('color','#000').css('text-align','center').css('font-weight','bold');
-                $('td:eq(2)', row).css('color','#000').css('text-align','center').css('font-weight','bold');
-                $('td:eq(3)', row).css('color','#000').css('text-align','center').css('font-weight','bold');
-                $('td:eq(4)', row).css('color','#000').css('text-align','center').css('font-weight','bold');
-                $('td:eq(5)', row).css('color','#000').css('text-align','center').css('font-weight','bold');
-                $('td:eq(6)', row).css('color','#000').css('text-align','center').css('font-weight','bold');
-                $('td:eq(7)', row).css('color','#000').css('text-align','center').css('font-weight','bold');
-              }else if(data.destino=='PROVINCIA'){                
-                $('td:eq(0)', row).css('color','red').css('text-align','center').css('font-weight','bold');
-                $('td:eq(1)', row).css('color','red').css('text-align','center').css('font-weight','bold');
-                $('td:eq(2)', row).css('color','red').css('text-align','center').css('font-weight','bold');
-                $('td:eq(3)', row).css('color','red').css('text-align','center').css('font-weight','bold');
-                $('td:eq(4)', row).css('color','red').css('text-align','center').css('font-weight','bold');
-                $('td:eq(5)', row).css('color','red').css('text-align','center').css('font-weight','bold');
-                $('td:eq(6)', row).css('color','red').css('text-align','center').css('font-weight','bold');
-                $('td:eq(7)', row).css('color','red').css('text-align','center').css('font-weight','bold');
-                
+                $('td', row).css('color','#000').css('text-align','center')
+                //$('td:eq(0)', row).css('color','#000').css('text-align','center');
+              }else if(data.destino=='PROVINCIA'){
+                $('td', row).css('color','red').css('text-align','center')
+                //$('td:eq(0)', row).css('color','red').css('text-align','center');//.css('font-weight','bold');
               }
         },
         columns: [
@@ -256,7 +256,7 @@
                 } 
               }
           },
-          {data: 'identificador', name: 'identificador', },
+          {data: 'identificador', name: 'identificador',sWidth:'5%' },
           //{data: 'codigos', name: 'codigos', },
           //{data: 'users', name: 'users', },
           {
@@ -266,8 +266,17 @@
               return row.celular+' - '+row.nombre
             },
             //searchable: true
-        },
-        {data: 'cantidad', name: 'cantidad', },
+          },
+          {
+            data: 'nombre', 
+            name: 'nombre',
+            "visible":false,
+            render: function ( data, type, row, meta ) {
+              return data;
+            },
+            //searchable: true
+          },
+        {data: 'cantidad', name: 'cantidad',sWidth:'5%' },
           {
             data: 'codigos', 
             name: 'codigos', 
@@ -307,6 +316,7 @@
           {
             data: 'referencia', 
             name: 'referencia',
+            sWidth:'10%',
             render: function ( data, type, row, meta ) {
               var datal="";
               if(row.destino=='LIMA')
@@ -340,7 +350,7 @@
             orderable: false, 
             searchable: false,
             "visible":true,
-            sWidth:'20%',
+            //sWidth:'20%',
             render: function ( data, type, row, meta ) {  
               datass="";
               datass = datass+ '<a href="" data-target="#modal-revertir" data-toggle="modal" data-recibir="'+row.id+'"><button class="btn btn-info btn-sm"><i class="fas fa-trash"></i> REVERTIR</button></a>'; 
@@ -437,18 +447,39 @@
   <script>
     /* Custom filtering function which will search data in column four between two values */
         $(document).ready(function () { 
+
+          
+          $("#min").datepicker({ 
+            onSelect: function () { 
+              $('#tablaPrincipal').DataTable().ajax.reload(); 
+              console.log("minimo "+$(this).val());
+              //localStorage.setItem('dateMin', $(this).datepicker('getDate') ); 
+              localStorage.setItem('dateMin', $(this).val() ); 
+            }, changeMonth: true, changeYear: true , dateFormat:"dd/mm/yy"
+          });
         
 
-            $("#destino", this).on( 'keyup change', function () {
+            /*$("#destino", this).on( 'keyup change', function () {
               if ( table.column(i).search() !== this.value ) {
                   table
                       .column(8)
                       .search( this.value )
                       .draw();
                 }
-            } );
+            } );*/
 
         });
+  </script>
+  <script>
+    if (localStorage.getItem('dateMin') )
+    {
+      $( "#min" ).val(localStorage.getItem('dateMin')).trigger("change");        
+    }else{
+      localStorage.setItem('dateMin', "{{$dateMin}}" );
+    }
+
+    console.log(localStorage.getItem('dateMin'));
+
   </script>
 
 @stop

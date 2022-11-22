@@ -34,6 +34,7 @@ use App\Exports\PedidosSinPagosExport;
 use App\Exports\PagosPorRevisarExport;
 use App\Exports\UsuariosExport;
 use App\Exports\MovimientosExport;
+use App\Exports\SobresRutaEnvioExport;
 use App\Models\Pedido;
 use App\Models\Pago;
 use Carbon\Carbon;
@@ -47,6 +48,14 @@ class ExcelController extends Controller
     // {
     //     return Excel::download(new ClientesExport, 'Lista de Clientes.xlsx');
     // }
+
+    public function sobresRutaEnvioExcel(Request $request)
+    {
+        return (new SobresRutaEnvioExport)
+                ->pedidos($request)
+                ->download('Lista de Sobres - Ruta de Envio.xlsx');
+    }
+
     public function porrevisarExcel(Request $request)
     {
         ini_set('memory_limit', '-1');

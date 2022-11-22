@@ -112,6 +112,21 @@
         text-shadow: 10px 2px #6ac7c2;
     }
   </style>
+  <style>
+        #canvas_container {
+            width: 200px !important;
+            height: 400px !important;
+            overflow: auto;
+        }
+    #canvas_container {
+        background: #333;
+        text-align: center;
+        border: solid 3px;
+    }
+    .modal-lg {
+    max-width: 80%;
+}
+    </style>
 @stop
 
 @section('js')
@@ -131,13 +146,82 @@
           currentPage: 1,
           zoom: 1
       }
-   
-      // more code here
+    
+  var currPage=0;
 
-  </script>
+  var tabla_pedidos=null;
+
+</script>
+<script>
+  $(document).ready(function () {
+
+    $(document).on("click","#go_previous",function(e){
+      e.preventDefault();
+      if(myState.pdf == null || myState.currentPage == 1) 
+      {
+        console.log("atras")
+        return false;
+      }
+            myState.currentPage -= 1;
+            $("#current_page").val(myState.currentPage);
+            render();
+    });
+
+    $(document).on("click","#go_next",function(e){
+      e.preventDefault();
+      console.log("numpages "+myState.pdf._pdfInfo.numPages);
+      console.log("currentpage "+myState.currentPage)
+        if(myState.pdf == null || myState.currentPage == myState.pdf._pdfInfo.numPages) 
+        {
+          console.log("next")
+          return false;
+        }
+                
+          
+              myState.currentPage += 1;
+              $("#current_page").val(myState.currentPage);
+              if(myState.currentPage == myState.pdf._pdfInfo.numPages)
+              {
+                $("#go_next").addClass("d-none");
+              }
+              render();
+    });
+
+    $(document).on("keypress","#current_page",function(e){
+          if(myState.pdf == null) return;
+            
+            // Get key code
+            var code = (e.keyCode ? e.keyCode : e.which);
+        
+            // If key code matches that of the Enter key
+            if(code == 13) {
+                var desiredPage = document.getElementById('current_page').valueAsNumber;
+                                
+                if(desiredPage >= 1 && desiredPage <= myState.pdf._pdfInfo.numPages) {
+                        myState.currentPage = desiredPage;
+                        document.getElementById("current_page").value = desiredPage;
+                        render();
+                }
+            }
+    });
+
+    $(document).on("click","#zoom_in",function(e){
+        if(myState.pdf == null) return;
+            myState.zoom += 0.5;
+            render();
+    });
+
+    $(document).on("click","#zoom_out",function(e){
+        if(myState.pdf == null) return;
+            myState.zoom -= 0.5;
+            render();
+    });
+
+  });
+</script>
 
   <script>
-    var tabla_pedidos=null;
+    
   </script>
 
   <script>
@@ -183,15 +267,82 @@
       $(document).on("change","#rotulo",function(event){
         console.log("cambe rotulo")
         var file = event.target.files[0];
+        console.log(file);
         var reader = new FileReader();
         reader.onload = (event) => {
 
-          //pdfjsLib.getDocument(event.target.result).then((pdf) => {          });
+          pdfjsLib.getDocument(event.target.result).then((pdf) => {   
+            $("#my_pdf_viewer").removeClass("d-none");
+            //cargar frame
+            myState.pdf = pdf;
+            render();
+            thePDF=pdf;
+            numPages=pdf.numPages;
+            myState.currentPage=1;
+            $("#current_page").val(myState.currentPage)
+            pdf.getPage(1).then(handlePages);
+
+            if(myState.currentPage == myState.pdf._pdfInfo.numPages)
+            {
+              
+              $("#go_next").addClass("d-none");
+              $("#go_previous").addClass("d-none");
+              $("#current_page").addClass("d-none");
+            }else{
+              $("#go_next").removeClass("d-none");
+              $("#go_previous").removeClass("d-none");
+              $("#current_page").removeClass("d-none");
+            }
+
+            
+
+
+          });
           
         };
         reader.readAsDataURL(file);
 
       });
+
+      window.render=function()
+      {
+        myState.pdf.getPage(myState.currentPage).then((page) => {
+          var canvas = document.getElementById("pdf_renderer");
+          var ctx = canvas.getContext('2d');
+          var viewport = page.getViewport(myState.zoom);
+          canvas.width = viewport.width;//viewport.width;
+          canvas.height = viewport.height;//viewport.height;
+          page.render({
+              canvasContext: ctx,
+              viewport: viewport
+          });
+
+        });
+      }
+
+      window.handlePages=function(page)
+      {
+        var viewport = page.getViewport( 1 );
+        //We'll create a canvas for each page to draw it on
+        var canvas = document.createElement( "canvas" );
+        canvas.style.display = "block";
+        var context = canvas.getContext('2d');
+        canvas.height = viewport.height;
+        canvas.width = viewport.width;
+
+        //Draw it on the canvas
+        page.render({canvasContext: context, viewport: viewport});
+
+        //Add it to the web page
+        document.body.appendChild( canvas );
+
+        //Move to next page
+        currPage++;
+        if ( thePDF !== null && currPage <= numPages )
+        {
+            thePDF.getPage( currPage ).then( handlePages );
+        }
+      }
 
       $('#celular').on('input', function () { 
         this.value = this.value.replace(/[^0-9]/g,'');
@@ -808,14 +959,17 @@
         $(document).ready(function () { 
         
 
-            $("#destino", this).on( 'keyup change', function () {
+            /*$("#destino", this).on( 'keyup change', function () {
               if ( table.column(i).search() !== this.value ) {
                   table
                       .column(8)
                       .search( this.value )
                       .draw();
-                }
-            } );
+                }*/
+              //} );
+
+          
+            
 
         });
   </script>

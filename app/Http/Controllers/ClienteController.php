@@ -597,17 +597,20 @@ class ClienteController extends Controller
                 //->where('users.llamada', Auth::user()->id)
                 ->pluck('identificador', 'id');
         }
-        
-        
 
         return view('base_fria.index', compact('clientes', 'superasesor', 'users'));
     }
 
     public function createbf()
     {
-        $users = User::where('users.estado','1')
-        ->where('users.rol', 'Asesor')
-        ->pluck('identificador', 'id');
+        $users=User::select(
+                    DB::raw("CONCAT(identificador,' (ex ',IFNULL(exidentificador,''),')') AS identificador"),'id'
+                    )
+                    ->where('users.rol', 'Asesor')
+                    ->where('users.estado','1')
+            ->pluck('identificador', 'id');
+
+
 
         return view('base_fria.create', compact('users'));
     }

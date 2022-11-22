@@ -279,7 +279,8 @@
               datas='';
               if(data!=null)
               {
-                if(data=='0')
+                return data;
+                /*if(data=='0')
                 {
                   return '<span class="badge badge-danger">REGISTRE DIRECCION</span>';
                 }else if(data=='LIMA')
@@ -294,14 +295,14 @@
                   return '<span class="badge badge-info">ENVIO A PROVINCIA</span>';
                 }else{
                   return '<span class="badge badge-info">PROBLEMAS CON REGISTRO DE DESTINO</span>';
-                }
+                }*/
 
                 //return datas;
 
               }else{
-                return '';
+                return '<span class="badge badge-info">REGISTRE DIRECCION</span>';
               }
-              return 'REGISTRE DIRECCION';
+              return '';
             },
           },
           {data: 'condicion_envio', name: 'condicion_envio', },

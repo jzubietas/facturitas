@@ -1,7 +1,7 @@
 <!-- Modal -->
 <div class="modal fade" id="modal-direccion" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog  modal-lg" >
-    <div class="modal-content" style="width:1100px;margin:0 auto;">
+    <div class="modal-content">
       <div class="modal-header bg-success">
         <h5 class="modal-title" id="exampleModalLabel">Dirección de envío</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -31,6 +31,33 @@
                 <tbody>
                 </tbody>
               </table>
+
+              <div class="row">
+                <div class="col">
+                  
+                                     
+
+                  <div id="my_pdf_viewer" class="d-none">
+                    <div id="navigation_controls" class="row">
+                        <button id="go_previous" class="btn btn-xs btn-info col">Atras</button>
+                        <input id="current_page" class="form-control col" value="1" type="number"/>
+                        <button id="go_next" class="btn btn-xs  btn-info col">Siguiente</button>
+                    </div> 
+                    
+                    <div id="canvas_container">
+                        <canvas id="pdf_renderer"></canvas>
+                    </div>
+                      
+                    <div id="zoom_controls" class="d-none">  
+                        <button id="zoom_in">+</button>
+                        <button id="zoom_out">-</button>
+                    </div>
+                  </div>
+
+
+                </div>
+              </div>
+              
   
   
             </div>

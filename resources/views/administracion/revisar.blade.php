@@ -3,7 +3,7 @@
 @section('title', 'Detalle de pagos')
 
 @section('content_header')
-  <h1>DETALLE DEL <b>PAGO</b>:PAG{{ $pagos->users }}-{{$pagos->cantidad_voucher}}{{$pagos->cantidad_pedido}}-{{ $pagos->id }}</h1>
+  <h1>DETALLE DEL <b>PAGO</b>: PAG000{{ $pagos->id }}</h1>
      {{-- <a href="" data-target="#modal-historial-{{ $pago->id }}" data-toggle="modal"><button class="btn btn-info btn-sm">Historial</button></a> --}}
   {{-- @include('contratos.modals.modalHistorial') --}}  
 @stop
@@ -14,7 +14,6 @@
 
 @include('pagos.modals.revisarhistorial')
 @include('pagos.modals.CambiarImagen')
-@include('pagos.modals.EditarDetallepago')
 
   <div class="card">
       
@@ -93,6 +92,12 @@
                           <td>ADELANTO OBSERVADO</td>
                           @else
                           <td>PAGADO OBSERVADO</td>
+                          @endif
+                    @elseif($pagos->condicion=='PENDIENTE')
+                          @if($pagoPedido->pagado == 1)
+                          <td>ADELANTO PENDUIENTE</td>
+                          @else
+                          <td>PAGADO PENDUIENTE</td>
                           @endif
                       @elseif($pagos->condicion=='PAGO')
                           @if($pagoPedido->pagado == 1)
@@ -181,14 +186,14 @@
                       <td>DETPAG00{{ $detallePago->id }}
                       
                       <input type="hidden" name="detalle_id[]" value="{{ $detallePago->id }}" class="form-control"></td>
-                      <td class="banco_{{ $contPa + 1 }}">{{ $detallePago->banco }}</td>                  
+                      <td>{{ $detallePago->banco }}</td>                  
                       <td>{{ $detallePago->monto }}</td>
                       
                       
                      
-                      <td class="titular_{{ $contPa + 1 }}">{{ $detallePago->titular }}</td>
+                      <td>{{ $detallePago->titular }}</td>
                      
-                      <td class="fechadeposito_{{ $contPa + 1 }}">{{ $detallePago->fecha_deposito }}</td>
+                      <td>{{ $detallePago->fecha_deposito }}</td>
                       <td>
                         
                         <p>
@@ -206,8 +211,7 @@
                           <br>
                           <a href="{{ route('pagos.descargarimagen', $detallePago->imagen) }}" class="text-center"><button type="button" class="btn btn-secondary btn-md"> Descargar</button></a>
 
-                          <a href="" data-target="#modal-conciliar-get" data-fechadeposito="{{ $detallePago->fecha_deposito }}" data-toggle="modal" data-conciliar="{{ $detallePago->id }}" data-item="{{ $contPa + 1 }}"><button class="btn btn-danger btn-md">Conciliar</button></a>
-                          <a href="" data-target="#modal-editar-get" data-toggle="modal" data-pbanco="{{ $detallePago->banco }}" data-titulares="{{ $detallePago->titular }}" data-fecha="{{ $detallePago->fecha_deposito_change }}" data-conciliar="{{ $detallePago->id }}" data-item="{{ $contPa + 1 }}"><button class="btn btn-warning btn-md">Editar</button></a>
+                          <a href="" data-target="#modal-conciliar-get" data-toggle="modal" data-conciliar="{{ $detallePago->id }}" data-item="{{ $contPa + 1 }}"><button class="btn btn-danger btn-md">Conciliar</button></a>
                         </p>
                       </td>
                       
@@ -255,8 +259,8 @@
     </div>
     <div class="card-footer text-center" id="guardar">
       <button type="button" id="aprobarrbtn" class="btn btn-success btn-lg"><i class="fas fa-save"></i> APROBAR</button>
-      <button type="button" id="observarbtn" class="btn btn-danger btn-lg"><i class="fas fa-save"></i> OBSERVAR</button>
-      <button type="button" id="pendientebtn" class="btn btn-warning btn-lg"><i class="fas fa-save"></i> PENDIENTE</button>
+      <button type="button" id="observarbtn" class="btn btn-info btn-lg"><i class="fas fa-save"></i> OBSERVAR</button>
+      
      
     </div>
     <div class="card-footer" >
@@ -272,10 +276,6 @@
   {{--<script src="{{ asset('js/datatables.js') }}"></script>--}}
   <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
   <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
-
-  <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
-
-
   <script>
     var tableconciliar=null;
     $(document).ready(function() {
@@ -499,7 +499,6 @@
         var button = $(event.relatedTarget) 
         var idunico = button.data('conciliar')
         var iditem = button.data('item');
-        var fechadeposito = button.data('fechadeposito');
         //incluir todos los conciliar
         var excluir=[];
         $('input[name="conciliar[]').each(function(){
@@ -528,7 +527,7 @@
           "order": [[ 0, "asc" ]],
           'ajax': {
             url:"{{ route('movimientostablaconciliar') }}",					
-            'data': { "conciliar":idunico,"excluir":pasarExclusiones ,"fechadeposito":fechadeposito}, 
+            'data': { "conciliar":idunico,"excluir":pasarExclusiones }, 
             "type": "get",
           },
           columns: 
@@ -617,98 +616,6 @@
             }
           },
         });
-
-
-      });
-
-      $('#modal-editar-get').on('show.bs.modal', function (event) {
-        var button = $(event.relatedTarget) 
-        var pbanco = button.data('pbanco')
-        var titulares = button.data('titulares')
-        var fecha = button.data('fecha')
-        var conciliar = button.data('conciliar')
-        var nitem = button.data('item')
-
-        //var fecha=$.datepicker.formatDate( "dd-mm-yy", new Date(fecha));
-        $("#conciliarupdate").val(conciliar)
-        $("#itemupdate").val(nitem)
-        $("#pbanco").val(pbanco).selectpicker("refresh");
-        $("#titulares").val(titulares).selectpicker("refresh");
-        console.log(fecha);
-        $("#pfecha").val(fecha);
-
-      });
-
-      $(document).on("click","#edit_dp",function(e){
-        e.preventDefault();
-        if ($('#pbanco').val() == '')
-        {
-          Swal.fire(
-            'Error',
-            'Seleccione banco ',
-            'warning'
-          );
-          return false;
-        }else if ($('#titulares').val() == '')
-        {
-          Swal.fire(
-            'Error',
-            'Seleccione titular',
-            'warning'
-          )
-          return false;
-        }else if ($('#pfecha').val() == '')
-        {
-          Swal.fire(
-            'Error',
-            'Seleccione la fecha',
-            'warning'
-          )
-          return false;
-        }else{
-          conciliar=$("#conciliarupdate").val();
-          item=$("#itemupdate").val();
-          titular = $('#titulares option:selected').val();
-          banco = $('#pbanco option:selected').val();
-          fecha = $("#pfecha").val();
-
-          var formd = new FormData();
-
-          //formData.append("item",cambiaitem )
-          formd.append("conciliar",conciliar)
-          formd.append("item",item)
-          formd.append("titular",titular)
-          formd.append("banco",banco)
-
-
-          formd.append("fecha",fecha)
-
-
-          $.ajax({
-            type:'POST',
-            url:"{{ route('pagodetalleUpdate') }}",
-            data:formd,
-            processData: false,
-            contentType: false,
-          }).done(function (data) {
-            $("#modal-editar-get").modal("hide");
-
-            $(".banco_"+item).html(banco);
-            $(".titular_"+item).html(titular);
-            $(".fechadeposito_"+item).html(banco);
-            
-            //$('#tablaPrincipal').DataTable().ajax.reload();  
-
-            //location.reload();
-          });
-
-
-        }
-
-
-
-        let tipotrans = $("#pbanco").val();
-        let descrip_otros = $("#descrip_otros").val();
 
 
       });
@@ -853,12 +760,7 @@
         $("#condicion").val("OBSERVADO").selectpicker("refresh");
         $("#formulario").submit();
       });
-
-      $(document).on("click","#pendientebtn",function(){
-        console.log("pendiente")
-        $("#condicion").val("PENDIENTE").selectpicker("refresh");
-        $("#formulario").submit();
-      });
+     
 
       $(document).on("submit","#formulario",function(event){
             event.preventDefault();   

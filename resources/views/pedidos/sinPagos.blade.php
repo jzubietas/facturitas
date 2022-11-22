@@ -287,7 +287,7 @@
 
                 console.log(varcreate);
 
-                data = data+'<a href="'+varcreate+'" class="btn btn-success btn-sm"> Pagar</a><br>';
+                data = data+'<a class="clickpagar" href="'+varcreate+'" class="btn btn-success btn-sm" data-pagar="'+row.cliente_id+'"> Pagar</a><br>';
 
             @endcan 
 
@@ -298,6 +298,12 @@
 
       ],
 
+      });
+
+      $(document).on("click",".clickpagar",function(){
+        var button = $(event.relatedTarget) 
+        var idunico = button.data('pagar')   
+        localStorage.setItem('clickpagar', idunico);
       });
     });
 

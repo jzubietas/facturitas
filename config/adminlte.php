@@ -367,14 +367,14 @@ return [
                     'active' => ['envios'],
                 ],
                 [
-                    'text' => 'Bandeja de envios',
+                    'text' => 'Sobres en reparto',
                     'route'  => 'envios.index',
                     'can' => 'envios.index',
                     'icon'   => 'fas fa-check-circle',
                     'active' => ['envios'],
                 ],
                 [
-                    'text' => 'Entregados',
+                    'text' => 'Bandeja de envios',
                     'route'  => 'envios.enviados',
                     'can' => 'envios.enviados',
                     'icon'   => 'fas fa-check-circle',
@@ -426,6 +426,13 @@ return [
                 [
                     'text' => 'Voucher por revisar',
                     'route'  => 'administracion.porrevisar',
+                    'can' => 'administracion.porrevisar',
+                    'icon'   => 'fas fa-check-circle',
+                    'active' => ['pagos por revisar*'],
+                ],
+                [
+                    'text' => 'Voucher pendientes',
+                    'route'  => 'administracion.pendientes',
                     'can' => 'administracion.porrevisar',
                     'icon'   => 'fas fa-check-circle',
                     'active' => ['pagos por revisar*'],
