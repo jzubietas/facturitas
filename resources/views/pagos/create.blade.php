@@ -318,13 +318,31 @@ tfoot td {
           var items_pedidos = $('#tabla_pedidos').DataTable().data().count();
           var items_pagos = $('#tabla_pagos').DataTable().data().count();
 
-          console.log("pedidos "+items_pedidos)
-          console.log("pagos "+items_pagos)
+          //pedidos marcados
+          var total_check_count=$(".radiototal").length;
+          var saldo_check_count=$(".radioadelanto").length;
+          console.log("total_check_count "+total_check_count)
+          console.log("saldo_check_count "+saldo_check_count)
+
+          
+
+          var total_check_si = $('.radiototal').filter(':checked').length;
+          var saldo_check_si = $('.radioadelanto').filter(':checked').length;
+          console.log("total_check_si "+total_check_si);
+          console.log("saldo_check_si "+saldo_check_si);
+
+          var marcados=total_check_si+saldo_check_si;
+          console.log("marcados "+marcados)
+
+          console.log("items_pedidos "+items_pedidos)
+          console.log("items_pagos "+items_pagos)
 
           console.log(total_pago_pagar+" "+total_pedido_pagar  )
           console.log(total_pago_pagar-total_pedido_pagar)
+
+          var difdiftotales=total_pago_pagar-total_pedido_pagar;
           
-          //return;
+          //return false;
           //marcar minimo un pedido
 
           if(items_pedidos==0)
@@ -334,18 +352,29 @@ tfoot td {
                 'No se puede ingresar un pago sin cargar pedidos',
                 'warning'
               )
+              return false;
+          }else if(marcados==0)
+          {
+            Swal.fire(
+                'Error',
+                'No se puede ingresar un pago sin marcar algun pedido',
+                'warning'
+              )
+              return false;
           }else if(items_pagos==0){
             Swal.fire(
                 'Error',
                 'No se puede ingresar un pago sin voucher',
                 'warning'
               )
-          }else if(total_pago_pagar  - total_pedido_pagar >= 10) {
+              return false;
+          }else if(difdiftotales > 3) {
               Swal.fire(
                 'Error',
-                'No se puede ingresar un pago mayor a la deuda (diferencia mayor a 10) que tiene el cliente',
+                'No se puede ingresar un pago mayor a la deuda (diferencia mayor a 3) que tiene el cliente',
                 'warning'
               )
+              return false;
           }
           else {
               this.submit();
@@ -487,6 +516,11 @@ tfoot td {
                   name: 'monto',
                   sWidth:'10%', 
                   render: function ( data, type, row, meta ) {
+
+                    //$( api.column( 2 ).footer() ).html('<input type="hidden" name="total_pedido" id="total_pedido" value="'+pageTotal.toFixed(2)+'"/>'+
+                    //'S/. '+separateComma(pageTotal.toFixed(2)).toLocaleString("en-US")  );
+
+
                     return '<input type="hidden" name="monto['+row.item+']" value="' + data + '"><span class="monto">' + data + '</span></td>';
                   }
                 },
@@ -512,9 +546,12 @@ tfoot td {
                           return Number(a) + Number(b);
                       }, 0 );
                 // Update footer
-                $( api.column( 8 ).footer() ).html('<input type="hidden" name="total_pago" id="total_pago" value="'+pageTotal.toFixed(2)+'"/>'+pageTotal.toFixed(2));
 
-                $( api.column( 9 ).footer() ).html('<input type="hidden" name="total_pago_pagar" id="total_pago_pagar" value="'+pageTotal.toFixed(2)+'" />'+pageTotal.toFixed(2));
+                $( api.column( 8 ).footer() ).html('<input type="hidden" name="total_pago" id="total_pago" value="'+pageTotal.toFixed(2)+'"/>'+
+                    'S/. '+separateComma(pageTotal.toFixed(2)).toLocaleString("en-US") );
+
+                $( api.column( 9 ).footer() ).html('<input type="hidden" name="total_pago_pagar" id="total_pago_pagar" value="'+pageTotal.toFixed(2)+'" />'+
+                    'S/.'+separateComma(pageTotal.toFixed(2)).toLocaleString("en-US") );
 
                 //console.log("sumar nuevamente para total en pagos");
                 //console.log("habia en diferencia "+$("#diferencia").val() );
@@ -632,7 +669,9 @@ tfoot td {
             
             console.log("sumapagos v2 "+sumapago)
 
-            $("#total_pago").html("S/. " + sumapago.toLocaleString("en-US"));
+            
+
+            $("#total_pago").html("S/. " + separateComma(sumapago).toLocaleString("en-US"));
             $("#total_pago_pagar").val(sumapago);
             $("#diferencia").val(sumapago);
             $("#pcliente_id").trigger("change");
@@ -1239,9 +1278,11 @@ tfoot td {
                           return Number(a) + Number(b);
                       }, 0 );
                 // Update footer
-                $( api.column( 8 ).footer() ).html('<input type="hidden" name="total_pago" id="total_pago" value="'+pageTotal+'"/>'+pageTotal);
 
-                $( api.column( 9 ).footer() ).html('<input type="hidden" name="total_pago_pagar" id="total_pago_pagar" value="'+pageTotal+'" />'+pageTotal);
+                
+                $( api.column( 8 ).footer() ).html('<input type="hidden" name="total_pago" id="total_pago" value="'+pageTotal+'"/>'+'S/.'+separateComma(pageTotal) );
+
+                $( api.column( 9 ).footer() ).html('<input type="hidden" name="total_pago_pagar" id="total_pago_pagar" value="'+pageTotal+'" />'+'S/.'+separateComma(pageTotal) ) ;
 
               },
               "initComplete": function(settings, json) {
@@ -1372,7 +1413,14 @@ tfoot td {
                         return Number(a) + Number(b);
                     }, 0 );
               // Update footer
-              $( api.column( 2 ).footer() ).html('<input type="hidden" name="total_pedido" id="total_pedido" value="'+pageTotal.toFixed(2)+'"/>'+pageTotal.toFixed(2));
+
+              //$("#total_pago").html("S/. " + separateComma(total_pago).toLocaleString("en-US"));
+        
+              //$("#total_pedido").html("S/. " + total_pedido.toLocaleString("en-US"));
+
+
+              $( api.column( 2 ).footer() ).html('<input type="hidden" name="total_pedido" id="total_pedido" value="'+pageTotal.toFixed(2)+'"/>'+
+                    'S/. '+separateComma(pageTotal.toFixed(2)).toLocaleString("en-US")  );
 
               var pageSaldo = api
                     .column( 3, { page: 'current'} )
@@ -1381,7 +1429,8 @@ tfoot td {
                         return Number(a) + Number(b);
                     }, 0 );
               // Update footer
-              $( api.column( 3 ).footer() ).html('<input type="hidden" name="total_pedido_pagar" id="total_pedido_pagar" value="'+pageSaldo.toFixed(2)+'" />'+pageSaldo.toFixed(2));
+              $( api.column( 3 ).footer() ).html('<input type="hidden" name="total_pedido_pagar" id="total_pedido_pagar" value="'+pageSaldo.toFixed(2)+'" />'+
+                  'S/.'+separateComma(pageSaldo.toFixed(2)).toLocaleString("en-US")  );
 
             },
             "initComplete": function(settings, json) {
@@ -2194,6 +2243,9 @@ tfoot td {
           '</tr>';
         contPe++;
         limpiarPe();
+
+        $("#total_pago").html("S/. " + separateComma(total_pago).toLocaleString("en-US"));
+
         $("#total_pedido").html("S/. " + total_pedido.toLocaleString("en-US"));
         $("#total_pedido_pagar").val(total_pedido.toLocaleString("en-US"));
         evaluarPe();

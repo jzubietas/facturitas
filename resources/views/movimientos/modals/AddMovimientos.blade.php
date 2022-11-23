@@ -1,4 +1,4 @@
-<div class="modal fade" id="modal-add-movimientos" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="modal-add-movimientos" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header bg-primary">
@@ -8,7 +8,6 @@
         </button>
       </div>
 
-      
       {!! Form::open(['route' => 'movimientos.store','enctype'=>'multipart/form-data', 'id'=>'formulario','files'=>true]) !!}
 
       <div class="modal-body">
@@ -54,7 +53,12 @@
 
                     <div class="btn-group " role="group" aria-label="Basic example">
                       @foreach($titulares as $titular)
-                        <button class="button mx-2 p-2 btn-navigate-titular"  type="button" step_number="2" titular="{{$titular}}">{{$titular}}</button>
+                        @if($titular=='EPIFANIO SOLANO HUAMAN')
+                          <button class="button mx-2 p-2 btn-navigate-titular" style="background-color: blue;" type="button" step_number="2" titular="{{$titular}}">{{$titular}}</button>
+                        @elseif($titular=='NIKSER DENIS ORE RIVEROS')
+                          <button class="button mx-2 p-2 btn-navigate-titular" style="background-color: #ffc107;" type="button" step_number="2" titular="{{$titular}}">{{$titular}}</button>
+                        @endif
+                        
                       @endforeach
                       
                     </div>
@@ -73,11 +77,28 @@
 
           <div class="form-row">
 
-              <div class="form-group col-lg-12" style="font-size: 18px">
+              <div class="form-group col-lg-12 mx-auto text-center" style="font-size: 18px">
 
-                <div class="btn-group " role="group" aria-label="Basic example">
+                <div class="btn-group mx-auto text-center " role="group" aria-label="Basic example">
                   @foreach($bancos as $banco)
-                    <button class="button mx-2 p-3 btn-navigate-banco"  type="button" step_number="3" banco="{{$banco}}">{{$banco}}</button>
+                    @if($banco=='BCP')
+
+                      <button class="button ml-1 mr-1 m p-3 btn-navigate-banco btn" style="background-color: transparent;" type="button" step_number="3" banco="{{$banco}}">
+                        <img src="{{ asset('storage/bancos/bcp.jpg') }}" alt="{{$banco}}" width="160">
+                      </button>
+
+                    @elseif($banco=='INTERBANK')
+                      <button class="button ml-1 mr-1 m p-3 btn-navigate-banco btn" style="background-color: transparent;" type="button" step_number="3" banco="{{$banco}}">
+                        <img src="{{ asset('storage/bancos/interbank.svg') }}" alt="{{$banco}}" width="160">
+                      </button>
+
+                    @elseif($banco=='BBVA')
+                      <button class="button ml-1 mr-1 m p-3 btn-navigate-banco btn" style="background-color: transparent;" type="button" step_number="3" banco="{{$banco}}">
+                        <img src="{{ asset('storage/bancos/bbva.png') }}" alt="{{$banco}}" width="160">
+                      </button>
+                      
+                    @endif
+                    
                   @endforeach
                   
                 </div>
@@ -86,8 +107,8 @@
 
           </div>
 
-          <div class="mt-3">
-              <button class="button btn-navigate-form-step d-none" type="button" step_number="1">Atras</button>
+          <div class="mt-3 mx-auto text-center">
+              <button class="button  btn-navigate-form-step " style="background-color: #17a2b8;" type="button" step_number="1">Atras</button>
               <button class="button btn-navigate-form-step btn-navigate-banco d-none" type="button" step_number="3">Siguiente</button>
           </div>
         </section>

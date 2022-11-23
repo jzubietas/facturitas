@@ -31,15 +31,15 @@
   </h1>
 <br>
   <div class="row">
-    <div class=" col-lg-4">
+    <div class=" col-lg-2">
         <select name="banco_movimientos" class="border form-control selectpicker border-secondary" id="banco_movimientos" data-live-search="true">
         <option value="">---- SELECCIONE BANCO ----</option>
           <option value="BCP">BCP</option>          
           <option value="BBVA">BBVA</option>
-          <option value="IBK">INTERBANK</option>
+          <option value="INTERBANK">INTERBANK</option>
         </select>
     </div>
-    <div class=" col-lg-4">
+    <div class=" col-lg-2">
       <select name="titular_movimientos" class="border form-control selectpicker border-secondary" id="titular_movimientos" data-live-search="true">
         <option value="">---- SELECCIONE TITULAR ----</option>
         <option value="EPIFANIO SOLANO HUAMAN">EPIFANIO SOLANO HUAMAN</option>
@@ -47,7 +47,7 @@
         
       </select>
   </div>
-    <div class="col-lg-4">
+    <div class="col-lg-4 d-none">
         <select name="tipo_movimientos" class="border form-control selectpicker border-secondary" id="tipo_movimientos" data-live-search="true">
           <option value="">---- SELECCIONE TIPO MOVIMIENTO ----</option>
         </select>
@@ -75,11 +75,12 @@
         <thead>
           <tr>
             <th scope="col">COD.</th>
+            <th scope="col">COD.</th>
             <th scope="col">Banco</th>
             <th scope="col">Titular</th>
-            <th scope="col">Importe</th>
-            <th scope="col">Tipo de movimiento</th>
             <th scope="col">Fecha de movimiento</th>
+            <th scope="col">Tipo de movimiento</th>
+            <th scope="col">Importe</th>
             <th scope="col">Conciliacion</th>
             <th scope="col">Acciones</th>
           </tr>
@@ -309,6 +310,9 @@ ul.form-stepper li a .form-stepper-circle {
   <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
   <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
 
+  <script src="https://momentjs.com/downloads/moment.js"></script>
+  <script src="https://cdn.datatables.net/plug-ins/1.11.4/dataRender/datetime.js"></script>
+
   <script>
     function clickformdelete()
     {
@@ -462,9 +466,12 @@ ul.form-stepper li a .form-stepper-circle {
                 movim='MOV'+movim;
               }
 
+              var htmlContent = "<input placeholder='text' class='swal2-input' id='swal-input1'>" +
+                     "<input placeholder='link' class='swal2-input' id='swal-input2'>"
+
               Swal.fire({
                 title: "Deseas continuar con el registro?",
-                text: 'La misma informacion se encuentra registrado en el movimiento '+movim,
+                html: 'La misma informacion se encuentra registrado en el movimiento <b>'+movim+'</b>',
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
@@ -473,17 +480,8 @@ ul.form-stepper li a .form-stepper-circle {
               }).then((result) => {
                 console.log(result);
                 if (result.value==true) {
-                  $("#formulario").trigger("submit")
-                  //console.log("aaaaaaa")
-                  /*Swal.fire(
-                    'Deleted!',
-                    'Your file has been deleted.',
-                    'success'
-                  )*/
-                }else{
-                  //console.log("cancel")
-                  //$("#modal-add-movimientos").hide();
-                  //limpiar campos
+                  $("#formulario").trigger("submit")                  
+                }else{                 
                   $("#banco").val("").selectpicker('refresh');
                   $("#tipotransferencia").val("").selectpicker('refresh');
                   $("#descrip_otros").val("").html("");
@@ -493,45 +491,10 @@ ul.form-stepper li a .form-stepper-circle {
                   
                   $("#modal-add-movimientos").modal("hide");
                 }
-              })
-
-              /*swal({
-                  title: "Seguro de continar?",
-                  text: 'La misma informacion se encuentra registrado en el movimiento '+movim+'\n Deseas continar con el registro?',
-                  icon: "warning",
-                  buttons: true,
-                  dangerMode: true,
-              })
-                .then((willDelete) => {
-                  if (willDelete) {
-                    swal("Poof! Your imaginary file has been deleted!", {
-                      icon: "success",
-                    });
-                  } else {
-                    swal("Your imaginary file is safe!");
-                  }
-                });*/
-
-              /*Swal.fire({
-                title: 'La misma informacion se encuentra registrado en el movimiento '+movim+'\n Deseas continar con el registro?',
-                showDenyButton: true,
-                showCancelButton: true,
-                confirmButtonText: 'Grabar',
-                denyButtonText: `Cancelar`,
-              }).then((result) => {
-                if (result.isConfirmed) {
-                  $("#modal-add-movimientos").hide();
-                  console.log("confirm")
-                } else if (result.isDenied) {
-                  console.log("denied")
-                  $("#modal-add-movimientos").hide();
-                }
-              });  */            
+              })      
             }else  if(dataresponse[0]=="sigue")
-            {
-              
+            {              
               $("#formulario").trigger("submit")
-              //$("#formulario").submit();
             }            
           }
         });
@@ -712,6 +675,11 @@ ul.form-stepper li a .form-stepper-circle {
             }
         },
         {
+            data: 'id2', 
+            name: 'id2',
+            "visible":false,
+        },
+        {
           data: 'banco' , name: 'banco' },
         {//asesor
           data: 'titular', 
@@ -727,8 +695,11 @@ ul.form-stepper li a .form-stepper-circle {
             return data;
           }
         },
-        {//cliente
-          data: 'importe',  name: 'importe' },
+        {
+          data: 'fecha', 
+          name: 'fecha',
+          render: $.fn.dataTable.render.moment( 'DD/MM/YYYY' )
+        },
         {//observacion
           data: 'tipo', 
           name: 'tipo',
@@ -741,9 +712,9 @@ ul.form-stepper li a .form-stepper-circle {
             }
           }
         },
-        {//totalcobro
-          data: 'fecha', name: 'fecha'
-        },
+        
+        {//cliente
+          data: 'importe',  name: 'importe' },
         {
           data: 'pago', 
           name: 'pago', 
@@ -766,18 +737,24 @@ ul.form-stepper li a .form-stepper-circle {
           render: function ( data, type, row, meta ) {
             var urlcreate = '{{ route("movimientos.show", ":id") }}';
             var urledit = '{{ route("movimientos.edit", ":id") }}';
+            var urlshow = '{{ route("movimientos.show", ":id") }}';
             urlcreate = urlcreate.replace(':id', row.id);
             urledit = urledit.replace(':id', row.id);
+            urlshow = urlshow.replace(':id', row.id);
             @can('movimientos.create')
-              data = data+'<a href="'+urlcreate+'" class="btn btn-info btn-sm">Ver</a>';
+              data = data+'<a href="'+urlcreate+'" class="btn btn-info btn-sm">Crear</a>';
             @endcan
             @can('movimientos.edit')
-              data = data+'<a href="'+urledit+'" class="btn btn-info btn-sm">Ver</a>';
+              data = data+'<a href="'+urledit+'" class="btn btn-info btn-sm">Editar</a>';
             @endcan
-           
-              data = data+'<a href="" data-target="#modal-delete" data-toggle="modal" data-delete="'+row.id+'"><button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i> Eliminar</button></a>';
-           
 
+            data = data+'<a href="'+urlshow+'" class="btn btn-info btn-sm">Ver</a>';
+
+            if(row.pago=='SIN CONCILIAR')
+            {
+              data = data+'<a href="" data-target="#modal-delete" data-toggle="modal" data-delete="'+row.id+'"><button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i> Eliminar</button></a>';
+            }
+           
             return data;             
           }
         },

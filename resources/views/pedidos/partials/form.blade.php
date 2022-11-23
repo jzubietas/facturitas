@@ -77,40 +77,29 @@
           {!! Form::select('panio', $anios , '2022', ['class' => 'form-control border selectpicker border-secondary', 'data-live-search' => 'true', 'placeholder' => '---- SELECCIONE ----']) !!}
           </div>
 
-          <div class="form-group col-lg-3 d-flex justify-content-center">
-            <a href="" data-target="#modal-historial-2" data-toggle="modal"><button class="btn btn-danger btn-md">Historial</button></a>
+          <div class="form-group col-lg-3 d-flex justify-content-center align-items-center">
+            <a href="" data-target="#modal-historial-2" data-toggle="modal">
+              <button class="btn btn-danger btn-lg ">Historial</button>
+            </a><!--align-items-stretch-->
           </div>
 
-
-
+          
 
       </div>
 
         <div class="form-row">
         <div class="form-group col-lg-2">            
         
-         
-
         </div>
 
-          {{-- <div class="form-group col-lg-2">--}}
-            {{--  {!! Form::label('pcodigo', 'Codigo') !!}   --}}
               <input type="hidden" name="pcodigo" id="pcodigo" value="{{ Auth::user()->identificador }}-{{ $fecha }}-{{ $numped}}" class="form-control" readonly>
-          {{--</div>--}}
-          {{--<div class="form-group col-lg-4">--}}
-            {{-- {!! Form::label('pempresa', 'Nombre de empresa') !!} --}}
-              {{--<input type="text" name="pempresa" id="pempresa" class="form-control" placeholder="Nombre de empresa...">--}}
-          {{--</div>--}}
-          
-          
-
+         
           
         </div>
         <div class="form-row">
           
           <div class="form-group col-lg-2">
-            {!! Form::label('pcantidad', 'Cantidad') !!}<!-- , 'id' => 'celular', 'min' =>'0', 'max' => '999999999', 'maxlength' => '9', 'oninput' => 'maxLengthCheck(this)'-->
-              {{-- <input type="number" name="pcantidad" id="pcantidad" step="0.01" min="0" class="form-control" placeholder="Cantidad..."> --}}
+            {!! Form::label('pcantidad', 'Cantidad') !!}
               <input type="text" name="pcantidad" id="pcantidad" step="0.01" min="0" class="form-control number" placeholder="Cantidad...">
           </div>       
           <div class="form-group col-lg-3">
@@ -123,28 +112,37 @@
             {!! Form::label('pporcentaje', 'Porcentaje(%)') !!}
               <input type="number" name="pporcentaje" id="pporcentaje" step="0.1" min="0" class="form-control" placeholder="Porcentaje..." disabled>
           </div>
-          <div class="form-group col-lg-3">
+          <div class="form-group col-lg-2">
             {!! Form::label('pcourier', 'Courier(S/)') !!}
               {{-- <input type="number" name="pcourier" id="pcourier" step="0.01" min="0" class="form-control" placeholder="Courier..."> --}}
               <input type="text" name="pcourier" id="pcourier" step="0.01" min="0" class="form-control number" placeholder="Courier...">
           </div>
+          <div class="form-group col-lg-3 d-flex justify-content-center align-items-center">
+
+              <a href="{{ route("pedidosPDFpreview") }}" class="btn btn-info btn-lg" target="_blank">Previsualizar</a>
+          </div>
+          <div class="form-group col-lg-2">
+
+          </div>
+        </div>
+        <div class="form-row">
           <div class="form-group col-lg-5">
             {!! Form::label('pdescripcion', 'Descripción') !!}
               <input type="text" name="pdescripcion" id="pdescripcion" class="form-control" placeholder="Descripción...">
           </div>
-          <div class="form-group col-lg-5">
+          <div class="form-group col-lg-4">
             {!! Form::label('pnota', 'Nota') !!}
               <input type="text" name="pnota" id="pnota" class="form-control" placeholder="Nota...">
           </div>
-          {{-- <div class="form-group col-lg-3">
-            {!! Form::label('padjunto', 'Adjunto') !!}
-            {!! Form::file('pimagen', ['class' => 'form-control-file', 'accept' => '/zip']) !!}
-          </div> --}}
-          <div class="form-group col-lg-2" style="margin-top: 30px;text-align: center;">
-            <div class="form-group">
-              <button type="button" id="bt_add" class="btn btn-primary"><i class="fas fa-plus-circle"></i> Agregar</button>
-            </div>
+         
+          <div class="form-group col-lg-3 d-flex justify-content-center align-items-center">
+            
+            <button type="button" id="bt_add" class="btn btn-primary btn-lg"><i class="fas fa-plus-circle"></i> Agregar</button>
+
           </div>
+          
+        </div>
+        <div class="row">
 
           <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12" style="text-align: center">
             <div class="table-responsive">

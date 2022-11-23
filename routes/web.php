@@ -8,9 +8,11 @@ use App\Http\Controllers\PdfController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\PedidoController;
+use App\Http\Controllers\EnvioController;
 use App\Http\Controllers\NotificationsController;
-use App\Http\Controllers\BasefriaController;//datatable serverside
+use App\Http\Controllers\BasefriaController;
 use App\Http\Controllers\MovimientoController;
+use App\Http\Controllers\SobreController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -123,14 +125,14 @@ Route::get('pedidos/{adjunto}/descargargastos', [PedidoController::class, 'Desca
 
 /////////
 
-Route::get('sobres.porenviar', [PedidoController::class, 'Sobresporenviar'])->name('sobres.porenviar');
-Route::get('sobres.porenviartabla', [PedidoController::class, 'Sobresporenviartabla'])->name('sobres.porenviartabla');
+Route::get('sobres.porenviar', [SobreController::class, 'Sobresporenviar'])->name('sobres.porenviar');
+Route::get('sobres.porenviartabla', [SobreController::class, 'Sobresporenviartabla'])->name('sobres.porenviartabla');
 
-Route::get('envios.porrecibir', [PedidoController::class, 'Enviosporrecibir'])->name('envios.porrecibir');
-Route::get('envios.porrecibirtabla', [PedidoController::class, 'Enviosporrecibirtabla'])->name('envios.porrecibirtabla');
+Route::get('envios.porrecibir', [EnvioController::class, 'Enviosporrecibir'])->name('envios.porrecibir');
+Route::get('envios.porrecibirtabla', [EnvioController::class, 'Enviosporrecibirtabla'])->name('envios.porrecibirtabla');
 
-Route::get('envios.rutaenvio', [PedidoController::class, 'Enviosrutaenvio'])->name('envios.rutaenvio');
-Route::get('envios.rutaenviotabla', [PedidoController::class, 'Enviosrutaenviotabla'])->name('envios.rutaenviotabla');
+Route::get('envios.rutaenvio', [EnvioController::class, 'Enviosrutaenvio'])->name('envios.rutaenvio');
+Route::get('envios.rutaenviotabla', [EnvioController::class, 'Enviosrutaenviotabla'])->name('envios.rutaenviotabla');
 
 Route::get('envios.index', [PedidoController::class, 'Envios'])->name('envios.index');
 Route::get('envios.indextabla', [PedidoController::class, 'Enviostabla'])->name('envios.indextabla');
@@ -201,6 +203,11 @@ Route::get('administracion.revisarpago', [PagoController::class, 'Revisarpago'])
 Route::resource('movimientos', MovimientoController::class)->names('movimientos');
 Route::get('movimientostabla', [MovimientoController::class, 'indextabla'])->name('movimientostabla');//actualizado para serverside
 Route::get('movimientostablaconciliar', [MovimientoController::class, 'indextablaconciliar'])->name('movimientostablaconciliar');//actualizado para serverside
+
+
+Route::get('sobreenvioshistorial', [SobreController::class, 'sobreenvioshistorial'])->name('sobreenvioshistorial');
+
+
 Route::get('tipomovimiento', [MovimientoController::class, 'tipomovimiento'])->name('cargar.tipomovimiento');
 Route::get('validar_repetido', [MovimientoController::class, 'repeat'])->name('validar_repetido');
 Route::post('movimientodeleteRequest', [MovimientoController::class, 'destroyid'])->name('movimientodeleteRequest.post');
@@ -262,6 +269,7 @@ Route::post('/mark-as-read', [NotificationsController::class, 'markNotification'
 //PDF
     //MODULO PEDIDOS
     Route::get('PDF/{pedido}/pedido', [PdfController::class, 'pedidosPDF'])->name('pedidosPDF');
+    Route::get('pedidosPDFpreview', [PdfController::class, 'pedidosPDFpreview'])->name('pedidosPDFpreview');
     //MODULO REPORTES    
     Route::post('reporte/pedidosporfechas', [PdfController::class, 'PedidosPorFechas'])->name('pedidosporfechas');
     Route::post('reporte/pedidosporasesor', [PdfController::class, 'PedidosPorAsesor'])->name('pedidosporasesor');
@@ -272,6 +280,7 @@ Route::post('/mark-as-read', [NotificationsController::class, 'markNotification'
     Route::get('imprimir/venta/{venta}', [PdfController::class, 'ticketVentaPDF'])->name('ticketVentaPDF');
 
 
+    
 //EXCEL EXPORTABLES
     //MODULO PERSONAS
     // Route::get('clientesExcel', [ExcelController::class, 'clientesExcel'])->name('clientesExcel');

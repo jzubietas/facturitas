@@ -395,8 +395,24 @@ class PdfController extends Controller
         return view('ventas.reportes.ticketPDF', compact('ventas', 'detalleVentas', 'fecha'));
     }
 
+    public function pedidosPDFpreview(Request $request)
+    {
+        $mirol=Auth::user()->rol;
+        $identificador=Auth::user()->identificador;
+        $fecha = Carbon::now('America/Lima')->format('Y-m-d');
+        
+        $pdf = PDF::loadView('pedidos.reportes.pedidosPDFpreview', compact('fecha','mirol','identificador'))
+            ->setPaper('a4', 'portrait');
+        return $pdf->stream('pedido ' . 'id' . '.pdf');
+
+
+    }
+
     public function pedidosPDF(Pedido $pedido)
     {
+        $mirol=Auth::user()->rol;
+        $identificador=Auth::user()->identificador;
+
         //para pedidos anulados y activos
         $fecha = Carbon::now('America/Lima')->format('Y-m-d');
 
@@ -450,8 +466,11 @@ class PdfController extends Controller
             )
             ->orderBy('pedidos.created_at', 'DESC')
             ->get();
-
-        $pdf = PDF::loadView('pedidos.reportes.pedidosPDF', compact('pedidos', 'fecha'))->setPaper('a4', 'portrait');
+                
+        $pdf = PDF::loadView('pedidos.reportes.pedidosPDF', compact('pedidos', 'fecha','mirol','identificador'))
+            ->setPaper('a4', 'portrait');
+        //$canvas = PDF::getDomPDF(); 
+        //return $canvas;
         return $pdf->stream('pedido ' . $pedido->id . '.pdf');
     }
 }

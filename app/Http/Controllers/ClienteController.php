@@ -540,46 +540,7 @@ class ClienteController extends Controller
 
     public function indexbf()
     {
-        if (Auth::user()->rol == "Asesor"){
-            $clientes = Cliente::
-            join('users as u', 'clientes.user_id', 'u.id')
-            ->select('clientes.id', 
-                    'clientes.nombre', 
-                    'clientes.celular', 
-                    'clientes.estado', 
-                    'u.name as user',
-                    'u.identificador')
-            ->where('clientes.estado','1')
-            ->where('clientes.tipo','0')
-            ->where('clientes.user_id', Auth::user()->id)
-            ->get();            
-
-        }else if (Auth::user()->rol == "Super asesor"){
-            $clientes = Cliente::
-            join('users as u', 'clientes.user_id', 'u.id')
-            ->select('clientes.id', 
-                    'clientes.nombre', 
-                    'clientes.celular', 
-                    'clientes.estado', 
-                    'u.name as user',
-                    'u.identificador')
-            ->where('clientes.estado','1')
-            ->where('clientes.tipo','0')
-            ->where('clientes.user_id', Auth::user()->id)
-            ->get();
-        }else{
-            $clientes = Cliente::
-            join('users as u', 'clientes.user_id', 'u.id')
-            ->select('clientes.id', 
-                    'clientes.nombre', 
-                    'clientes.celular', 
-                    'clientes.estado', 
-                    'u.name as user',
-                    'u.identificador')
-            ->where('clientes.estado','1')
-            ->where('clientes.tipo','0')
-            ->get();
-        }
+        
 
         $superasesor = User::where('rol', 'Super asesor')->count();
 
@@ -598,7 +559,7 @@ class ClienteController extends Controller
                 ->pluck('identificador', 'id');
         }
 
-        return view('base_fria.index', compact('clientes', 'superasesor', 'users'));
+        return view('base_fria.index', compact( 'superasesor', 'users'));
     }
 
     public function createbf()

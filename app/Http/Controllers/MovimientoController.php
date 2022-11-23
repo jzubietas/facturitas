@@ -61,6 +61,9 @@ class MovimientoController extends Controller
     {
         $movimientos = null;
 
+        //$min = Carbon::createFromFormat('d/m/Y', $request->min)->format('Y-m-d');
+        //$max = Carbon::createFromFormat('d/m/Y', $request->max)->format('Y-m-d');
+
         $movimientos = MovimientoBancario::where('estado', '1');//->get();
         $buscar_banco=$request->banco;
         $buscar_tipo=$request->tipo;
@@ -82,18 +85,25 @@ class MovimientoController extends Controller
         }
 
         $movimientos = $movimientos->get([
-            'movimiento_bancarios.id',
+            'movimiento_bancarios.id',           
+            DB::raw(" (CASE WHEN movimiento_bancarios.id<10 THEN concat('MOV000',movimiento_bancarios.id) 
+                            WHEN movimiento_bancarios.id<100  THEN concat('MOV00',movimiento_bancarios.id) 
+                            WHEN movimiento_bancarios.id<1000  THEN concat('MOV0',movimiento_bancarios.id) 
+                            ELSE concat('MOV',movimiento_bancarios.id) END) AS id2"),
             'movimiento_bancarios.banco',
             'movimiento_bancarios.titular',
             'movimiento_bancarios.importe',
             'movimiento_bancarios.tipo',
             'movimiento_bancarios.descripcion_otros',
-            DB::raw('DATE_FORMAT(movimiento_bancarios.fecha, "%d/%m/%Y") as fecha'),
+            //'movimiento_bancarios.created_at as fecha',
+            DB::raw('(select DATE_FORMAT(dpa.fecha, "%Y-%m-%d")  from movimiento_bancarios dpa where dpa.id=movimiento_bancarios.id and dpa.estado=1) as fecha'),
             DB::raw("(CASE WHEN movimiento_bancarios.pago =0 THEN 'SIN CONCILIAR' ELSE 'CONCILIADO' END) AS pago"),
             //"case when movimiento_bancarios.pago=0 then 'SIN CONCILIAR' else 'CONCILIACION' END",
             'movimiento_bancarios.estado',
             'movimiento_bancarios.created_at',
         ]);
+
+        
 
         return Datatables::of($movimientos)
                     ->addIndexColumn()
@@ -304,8 +314,19 @@ class MovimientoController extends Controller
     public function show($id)
     {
         $movimiento = MovimientoBancario::where('id', $id)->first();
+
+        $pago=Pago::join('users as u', 'pagos.user_id', 'u.id')
+                    ->where("pagos.id",$movimiento->cabpago)
+            ->select(
+                'pagos.id as id',
+                'u.identificador as users',
+                DB::raw(" (CASE WHEN (select count(dpago.id) from detalle_pagos dpago where dpago.pago_id=pagos.id and dpago.estado in (1) )>1 then 'V' else 'I' end) as cantidad_voucher "),
+                DB::raw(" (CASE WHEN (select count(ppedidos.id) from pago_pedidos ppedidos where ppedidos.pago_id=pagos.id and ppedidos.estado in (1)  )>1 then 'V' else 'I' end) as cantidad_pedido "),
+            )
+            ->first(); 
+        $detallepago=DetallePago::where("id",$movimiento->detpago)->first(); 
         //
-        return view('movimientos.show', compact('movimiento'));
+        return view('movimientos.show', compact('movimiento','pago','detallepago'));
     }
 
     /**

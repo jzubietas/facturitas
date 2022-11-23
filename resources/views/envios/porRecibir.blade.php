@@ -74,7 +74,7 @@
       </table>
       @include('pedidos.modal.enviarid')
       @include('pedidos.modal.recibirid')
-      @include('pedidos.modal.direccionid')
+      
       @include('pedidos.modal.verdireccionid')
       @include('pedidos.modal.editdireccionid')
       @include('pedidos.modal.destinoid')

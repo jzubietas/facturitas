@@ -74,9 +74,19 @@ class SobresRutaEnvioExport implements FromView, ShouldAutoSize
         return $this;
     }
 
+    /*public function fecha() 
+    {
+        $fecha= Carbon::now()->addDate(1).toString();
+        $this->fecha = $fecha;
+        return $this;
+    }*/
+
+
+
     public function view(): View {
         return view('sobres.excel.sobresRutaEnvio', [
             'pedidos'=> $this->pedidos
+            //'fecha' => $this->fecha
         ]);
     }
 

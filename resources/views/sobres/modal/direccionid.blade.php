@@ -1,9 +1,9 @@
 <!-- Modal -->
-<div class="modal fade" id="modal-direccion" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="modal-direccion" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog  modal-lg" >
     <div class="modal-content">
       <div class="modal-header bg-success">
-        <h5 class="modal-title" id="exampleModalLabel">Dirección de envío</h5>
+        <h5 class="modal-title" id="exampleModalLabel">Dirección de envío para cliente </h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -11,16 +11,16 @@
 
       <form id="formdireccion" name="formdireccion">
       <div class="modal-body">
-        <p>Ingrese la dirección de envío del pedido: <strong class="textcode">PED000</strong></p>
+        <p class="d-none">Ingrese la dirección de envío del pedido: <strong class="textcode">PED000</strong></p>
 
         <input id="cliente_id" name="cliente_id" value="" type="hidden">
 
         <div class="row">
-          <div class="col">
+          <div class="col-4  contenedor-tabla"><!--tabla-->
   
             <div class="table-responsive">
   
-              <table id="tablaPrincipalpedidosagregar" class="table table-striped">
+              <table id="tablaPrincipalpedidosagregar" class="table table-striped display" style="width:100%">
                 <thead>
                   <tr>
                     <th scope="col">Item</th>
@@ -32,38 +32,11 @@
                 </tbody>
               </table>
 
-              <div class="row">
-                <div class="col">
-                  
-                                     
-
-                  <div id="my_pdf_viewer" class="d-none">
-                    <div id="navigation_controls" class="row">
-                        <button id="go_previous" class="btn btn-xs btn-info col">Atras</button>
-                        <input id="current_page" class="form-control col" value="1" type="number"/>
-                        <button id="go_next" class="btn btn-xs  btn-info col">Siguiente</button>
-                    </div> 
-                    
-                    <div id="canvas_container">
-                        <canvas id="pdf_renderer"></canvas>
-                    </div>
-                      
-                    <div id="zoom_controls" class="d-none">  
-                        <button id="zoom_in">+</button>
-                        <button id="zoom_out">-</button>
-                    </div>
-                  </div>
-
-
-                </div>
-              </div>
-              
-  
   
             </div>
   
           </div>
-          <div class="col">
+          <div class="col-4 contenedor-formulario"><!--formulario-->
             <div class="row">
               <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 {!! Form::label('limaprovincia', 'Seleccione') !!} 
@@ -80,7 +53,19 @@
   
                   <div class="row">
                     <div class="col">
-                      <h1>LIMA</h1>
+                      
+                        <h1>LIMA</h1>
+                       
+                        <a id="modal-historial-lima-a" href="" data-target="#modal-historial-lima" data-toggle="modal" data-cliente="">
+                          <button class="btn btn-info btn-sm">
+                            <i class="fas fa-envelope"></i> 
+                            Historial
+                          </button>
+                        </a>
+                      
+                      
+
+                      
 
                       <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                         {!! Form::label('nombre', 'Nombre') !!}                   
@@ -89,7 +74,7 @@
 
                   
                       <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                        {!! Form::label('celular', 'Número de contacto') !!}                     
+                        {!! Form::label('celular', 'Número de contacto del que recibe') !!}                     
                         {!! Form::number('celular', null, ['class' => 'form-control', 'id' => 'celular', 'min' =>'0', 'max' => '999999999', 'maxlength' => '9', 'oninput' => 'maxLengthCheck(this)']) !!}
                       </div>
   
@@ -113,6 +98,17 @@
                         {!! Form::label('observacion', 'Observacion') !!}                   
                         {!! Form::text('observacion', null, ['class' => 'form-control', 'placeholder' => 'Nombre', 'required' => 'required']) !!}
                       </div>
+
+                      {{--<button type="button" id="saveHistoricoLima" class="btn btn-danger btn-md"><i class="fa"></i>GRABA HISTORICO</button>--}}
+                      <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <br>
+                        <div class="form-check form-switch">
+                          <input class="form-check-input" type="checkbox" id="saveHistoricoLima">
+                          <label class="form-check-label" for="saveHistoricoLima">GRABA HISTORICO</label>
+                        </div>
+
+                      </div>
+                      
                       
                     </div>
                   </div>
@@ -126,12 +122,20 @@
               <div class="row">
                 <div class="col">
                   <h1>PROVINCIA</h1>
-                  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+
+                  <a id="modal-historial-provincia-a" href="" data-target="#modal-historial-provincia" data-toggle="modal" data-cliente="">
+                    <button class="btn btn-info btn-sm">
+                      <i class="fas fa-envelope"></i> 
+                      Historial
+                    </button>
+                  </a>
+
+                  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 d-none">
                     {!! Form::label('departamento', 'departamento') !!} 
                     {!! Form::select('departamento', $departamento  , null, ['class' => 'form-control selectpicker border border-secondary', 'data-live-search' => 'true', 'placeholder' => '---- SELECCIONE ----']) !!}   
                   </div>
       
-                  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 d-none">
                     {!! Form::label('oficina', 'Oficina') !!} 
                     {!! Form::text('oficina', null, ['class' => 'form-control', 'placeholder' => 'Nombre', 'required' => 'required']) !!}
                   </div>
@@ -142,21 +146,71 @@
                   </div>
   
                   <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                    {!! Form::label('numregistro', 'numregistro') !!}                   
+                    {!! Form::label('numregistro', 'Numero de Registro') !!}                   
                     {!! Form::text('numregistro', null, ['class' => 'form-control', 'placeholder' => 'Nombre', 'required' => 'required']) !!}
                   </div>
   
-                  <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
-                    {!! Form::label('rotulo', 'Rotulo') !!}
-                    @csrf
-                    {!! Form::file('rotulo', ['class' => 'form-control-file', 'accept' =>'pdf/*']) !!}  
+                  <div class="col-lg-12 col-md-6 col-sm-6 col-xs-6">
+                    <div class="row">
+                      <div class="col-10">
+                        {!! Form::label('rotulo', 'Rotulo') !!}                     
+                        @csrf
+                        {!! Form::file('rotulo', ['class' => 'form-control-file', 'accept' =>'pdf/*']) !!}
+                      </div>
+                      <div class="col-2 d-none justify-content-center align-items-center drop-rotulo">
+                        <button type="button" id="droprotulo" class="btn btn-danger btn-md"><i class="fa fa-trash"></i></button> 
+                      </div>
+                    </div>
+                    
+                    {{----}}
+                    
+                    <br> 
+                    
+                  </div>
+
+                  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <br>
+                    <div class="form-check form-switch">
+                      <input class="form-check-input" type="checkbox" id="saveHistoricoProvincia"><!--checked-->
+                      <label class="form-check-label" for="saveHistoricoProvincia">GRABA HISTORICO</label>
+                    </div>
+
                   </div>
       
-                 
+                    {{--<button type="button" id="saveHistoricoProvincia" class="btn btn-danger btn-md"><i class="fa"></i>GRABA HISTORICO</button>--}}
                 </div>
               </div>
             </div>
   
+          </div>
+
+          <div class="col-lg-4 viewpdf d-none contenedor-pdf border border-primary"><!--PDF-->
+            <div class="row ">
+              <div class="col">
+                
+                <div id="my_pdf_viewer" class="d-none">
+
+                  
+                  <div id="navigation_controls" class="row">
+                      <button id="go_previous" class="btn btn-xs btn-info col">Atras</button>
+                      <input id="current_page" class="form-control col" value="1" type="number"/>
+                      <button id="go_next" class="btn btn-xs  btn-info col">Siguiente</button>
+                  </div> 
+                  
+                  
+                    
+                  <div id="zoom_controls" class="d-none">  
+                      <button id="zoom_in">+</button>
+                      <button id="zoom_out">-</button>
+                  </div>
+                </div>
+                <div id="canvas_container">
+                      <canvas id="pdf_renderer"></canvas>
+                  </div>
+
+
+              </div>
+            </div>
           </div>
         </div>
       </div>

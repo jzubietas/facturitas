@@ -82,10 +82,13 @@ class ExcelController extends Controller
 
     public function movimientosExcel(Request $request)
     {
-        return (new MovimientosExport)
+        return (new MovimientosExport)->movimientos1($request)->download('invoices.xlsx');
+
+
+        //return (new MovimientosExport)
                 //->clientes1($request)
-                ->movimientos1($request)
-                ->download('Lista de Movimientos.xlsx');           
+                //->movimientos1($request)
+          //      ->download('Lista de Movimientos.xlsx');           
     }
 
     public function clientesExcel(Request $request)

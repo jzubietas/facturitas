@@ -27,82 +27,70 @@ class BasefriaController extends Controller
         //return $dataTable->render('base_fria.index');
         //if ($request->ajax()) {
 
+        $data = Cliente::
+            join('users as u', 'clientes.user_id', 'u.id')
+            ->select('clientes.id', 
+                    'clientes.nombre', 
+                    'clientes.icelular', 
+                    'clientes.celular', 
+                    'u.identificador as identificador',
+                    'u.rol'
+                    )
+            ->where('clientes.estado','1')
+            ->where('clientes.tipo','0');
+            //->get();
+
         if(Auth::user()->rol == 'Llamadas')
         {
-            $data = Cliente::
-                join('users as u', 'clientes.user_id', 'u.id')
-                ->select('clientes.id', 
-                        'clientes.nombre', 
-                        'clientes.icelular', 
-                        'clientes.celular', 
-                        'u.identificador as identificador',
-                        'u.rol'
-                        )
-                ->where('clientes.estado','1')
-                ->where('clientes.tipo','0')
-                ->where('u.llamada', Auth::user()->id)
-                ->get();
+            $usersasesores = User::where('users.rol', 'Asesor')
+                -> where('users.estado', '1')
+                -> where('users.llamada', Auth::user()->id)
+                ->select(
+                    DB::raw("users.id as id")
+                )
+                ->pluck('users.id');
+
+            $data=$data->WhereIn('u.id',$usersasesores); 
+
         }else if(Auth::user()->rol == 'Jefe de llamadas')
         {
-            $data = Cliente::
-                join('users as u', 'clientes.user_id', 'u.id')
-                ->select('clientes.id', 
-                        'clientes.nombre', 
-                        'clientes.icelular', 
-                        'clientes.celular', 
-                        'u.identificador as identificador',
-                        'u.rol'
-                        )
-                ->where('clientes.estado','1')
-                ->where('clientes.tipo','0')
-                ->where('u.llamada', Auth::user()->id)
-                ->get();
+            $usersasesores = User::where('users.rol', 'Asesor')
+                -> where('users.estado', '1')
+                -> where('users.llamada', Auth::user()->id)
+                ->select(
+                    DB::raw("users.id as id")
+                )
+                ->pluck('users.id');
+                
+            $data=$data->WhereIn('u.id',$usersasesores);
+
         }else if(Auth::user()->rol == 'Asesor')
         {
-            $data = Cliente::
-                join('users as u', 'clientes.user_id', 'u.id')
-                ->select('clientes.id', 
-                        'clientes.nombre', 
-                        'clientes.icelular', 
-                        'clientes.celular', 
-                        'u.identificador as identificador',
-                        'u.rol'
-                        )
-                ->where('clientes.estado','1')
-                ->where('clientes.tipo','0')
-                //->where('u.llamada', Auth::user()->id)
-                -> where('u.id', Auth::user()->id)
-                ->get();
+            $usersasesores = User::where('users.rol', 'Asesor')
+                -> where('users.estado', '1')
+                -> where('users.identificador', Auth::user()->identificador)
+                ->select(
+                    DB::raw("users.id as id")
+                )
+                ->pluck('users.id');
+
+            $data=$data->WhereIn('u.id',$usersasesores);
+
         }else if(Auth::user()->rol == 'Encargado')
         {
-            $data = Cliente::
-                join('users as u', 'clientes.user_id', 'u.id')
-                ->select('clientes.id', 
-                        'clientes.nombre', 
-                        'clientes.icelular', 
-                        'clientes.celular', 
-                        'u.identificador as identificador',
-                        'u.rol'
-                        )
-                ->where('clientes.estado','1')
-                ->where('clientes.tipo','0')
-                //->where('u.llamada', Auth::user()->id)
-                ->where('u.supervisor', Auth::user()->id)
-                ->get();
+            $usersasesores = User::where('users.rol', 'Asesor')
+                -> where('users.estado', '1')
+                -> where('users.supervisor', Auth::user()->id)
+                ->select(
+                    DB::raw("users.id as id")
+                )
+                ->pluck('users.id');
+
+            $data=$data->WhereIn('u.id',$usersasesores);
         }else{
-            $data = Cliente::
-                join('users as u', 'clientes.user_id', 'u.id')
-                ->select('clientes.id', 
-                        'clientes.nombre', 
-                        'clientes.icelular', 
-                        'clientes.celular', 
-                        'u.identificador as identificador',
-                        'u.rol'
-                        )
-                ->where('clientes.estado','1')
-                ->where('clientes.tipo','0')
-                ->get();
+            $data=$data;
         }
+        $data=$data->get();
 
             return Datatables::of($data)
                     ->addIndexColumn()

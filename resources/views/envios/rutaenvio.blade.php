@@ -36,6 +36,15 @@
           <tr>
             <td>Fecha</td>
             <td><input type="text" value={{ $dateMin }} id="min" name="min" class="form-control"></td>
+            <td></td>
+            <td>Buscar General</td>
+            <td>
+              <div class="form-group col-lg-12">
+                {!! Form::label('general', 'Buscador General') !!} 
+                  <input type="text" name="general" id="general" class="form-control" placeholder="Busqueda General..." >
+              </div>
+            
+            </td>
             
           </tr>
         </tbody>
@@ -60,6 +69,7 @@
             <th scope="col" class="text-center">Asesor</th>
             <th scope="col" class="text-center">Cliente</th>
             <th scope="col" class="text-center">Nombre</th>
+            <th scope="col" class="text-center">Fecha</th>
             <th scope="col" class="text-center">Cantidad</th>
             <th scope="col" class="text-center">Codigos</th>
             <th scope="col" class="text-center">Producto</th>            
@@ -74,8 +84,7 @@
         </tbody>
       </table>
       @include('pedidos.modal.enviarid')
-      @include('pedidos.modal.recibirid')
-      @include('pedidos.modal.direccionid')
+      @include('pedidos.modal.recibirid')      
       @include('pedidos.modal.verdireccionid')
       @include('pedidos.modal.editdireccionid')
       @include('pedidos.modal.destinoid')
@@ -228,6 +237,7 @@
           data: function (d) {
             //d.asesores = $("#asesores_pago").val();
             d.desde = $("#min").val();
+            d.general = $("#general").val();
           },
         },
         rowCallback: function (row, data, index) {
@@ -276,6 +286,7 @@
             },
             //searchable: true
           },
+          {data: 'fecha', name: 'fecha',sWidth:'5%' },
         {data: 'cantidad', name: 'cantidad',sWidth:'5%' },
           {
             data: 'codigos', 
@@ -446,8 +457,25 @@
   
   <script>
     /* Custom filtering function which will search data in column four between two values */
-        $(document).ready(function () { 
+        $(document).ready(function () {
 
+
+
+          $(document).on("keyup","#general",function(){
+            console.log($(this).val())
+            if($(this).val()=='')
+            {
+              
+
+            }else{
+              $("#min").val("");
+              //busca en general
+              $('#tablaPrincipal').DataTable().ajax.reload(); 
+              
+            }
+
+            $('#tablaPrincipal').DataTable().ajax.reload();
+          });
           
           $("#min").datepicker({ 
             onSelect: function () { 

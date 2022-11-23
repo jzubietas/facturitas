@@ -1242,7 +1242,7 @@ class PagoController extends Controller
             dd($th);*/
         }        
 
-        return redirect()->route('pagos.index')->with('info', 'registrado');
+        return redirect()->route('pagos.mispagos')->with('info', 'registrado');
         
     }
     
