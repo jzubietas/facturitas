@@ -80,7 +80,7 @@ Route::get('basefria.cargarid', [BasefriaController::class, 'cargarid'])->name('
 //Route::get('pedidos.destroyid', [PedidoController::class, 'destroyid'])->name('pedidos.destroyid');
 Route::post('pedidodeleteRequest', [PedidoController::class, 'destroyid'])->name('pedidodeleteRequest.post');
 
-
+Route::post('clientedeleteRequest', [ClienteController::class, 'destroyid'])->name('clientedeleteRequest.post');
 
 
 

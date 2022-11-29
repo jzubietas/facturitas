@@ -266,17 +266,98 @@
       </div>  
     </div>
     <div class="card-footer text-center" id="guardar">
-      <button type="button" id="aprobarrbtn" class="btn btn-success btn-lg"><i class="fas fa-save"></i> APROBAR</button>
-      <button type="button" id="observarbtn" class="btn btn-danger btn-lg"><i class="fas fa-save"></i> OBSERVADO</button>
-      <button type="button" id="pendientebtn" class="btn btn-warning btn-lg"><i class="fas fa-save"></i> PENDIENTE</button>
+      <div class="row">
+        <div class="col-2 text-left">
+          
+
+          <a href="{{ route('administracion.porrevisar') }}" class="btn btn-danger btn-lg"><i class="fas fa-times-circle"></i> Atras</a>
+        </div>
+        <div class="col-10">
+          <button type="button" id="aprobarrbtn" class="btn btn-success btn-lg"><i class="fas fa-save"></i> APROBAR</button>
+          <button type="button" id="observarbtn" class="btn btn-danger btn-lg"><i class="fas fa-save"></i> OBSERVADO</button>
+          <button type="button" id="pendientebtn" class="btn btn-warning btn-lg"><i class="fas fa-save"></i> PENDIENTE</button>
+        </div>
+      </div>
+      
      
     </div>
     <div class="card-footer" >
       <button type="submit" class="btn btn-success btn-lg d-none"><i class="fas fa-save"></i> GUARDAR</button>
-      <a href="{{ route('administracion.porrevisar') }}" class="btn btn-danger btn-lg d-none"><i class="fas fa-times-circle"></i> CANCELAR</a>
+      
     </div>
     {!! Form::close() !!}
   </div>
+@stop
+
+@section('css')
+  <style>
+   .modal.left .modal-dialog,
+	.modal.right .modal-dialog {
+		position: fixed;
+		margin: auto;
+		width: 320px;
+		height: 100%;
+		-webkit-transform: translate3d(0%, 0, 0);
+		    -ms-transform: translate3d(0%, 0, 0);
+		     -o-transform: translate3d(0%, 0, 0);
+		        transform: translate3d(0%, 0, 0);
+	}
+
+	.modal.left .modal-content,
+	.modal.right .modal-content {
+		height: 100%;
+		overflow-y: auto;
+	}
+	
+	.modal.left .modal-body,
+	.modal.right .modal-body {
+		padding: 15px 15px 80px;
+	}
+
+/*Left*/
+	
+	
+	.modal.left.fade.in .modal-dialog{
+		left: 0;
+	}
+        
+/*Right*/
+	
+	.modal.right.fade.in .modal-dialog {
+		right: 0;
+	}
+  .modal.right .modal-dialog {
+		right: 0;
+	}
+
+/* ----- MODAL STYLE ----- */
+	.modal-content {
+		border-radius: 0;
+		border: none;
+	}
+
+	.modal-header {
+		border-bottom-color: #EEEEEE;
+		background-color: #FAFAFA;
+	}
+
+  .modal-dialog{
+    right:0;
+    padding-right: 0 !important;
+    margin-right: 0 !important;
+  }
+
+  /*@media (min-width: 576px)
+  {
+    .modal-dialog
+    {
+      margin:inherit;
+      padding-right: 0 !important;
+       margin-right: 0 !important;
+
+    }
+  }*/
+  </style>
 @stop
 
 @section('js')
@@ -915,110 +996,108 @@
             event.preventDefault();   
             console.log("form submit");
 
-            var cont_conciliacion={{$contPa}};
-            console.log("total detalles para conciliar: "+cont_conciliacion);
-
-            //estan todos conciliados
-
-            //let total_conciliados=$(".hide_"+ir).length
-
-            for(var ir = 1; ir < cont_conciliacion+1; ir++)
-            {
-              var existe_r=$(".hide_"+ir).length;
-              if(existe_r==1)
-              {
-                //buscar importe y comparar
-                let imp_t_h=$(".hide_"+ir).find("td").html();
-                let imp_t_5_h=$(".hide_"+ir).find("td").eq(5).html();
-                console.log(imp_t_h)
-                console.log(imp_t_5_h)
-
-              }else{
-                console.log("no existe "+ir);
-              }
-
-              //console.log(ir+" -- "+existe_r );
-            }
-            return false;     
-
-
-
-            //return false;
-            //validar  detalle pago con conciliaciones  que coincida los importes
-            
-            /* var cuenta = document.getElementById('cuenta').value; */
-            cuenta = document.getElementsByName("cuenta[]");
-            /* var titular = document.getElementById('titular').value; */
-            titular = document.getElementsByName("titular[]");
-            /* var fecha_deposito = document.getElementById('fecha_deposito').value; */
-            fecha_deposito = document.getElementsByName("fecha_deposito[]");
-            var condicion = document.getElementById('condicion').value;
-
-            var filas_pagos=$(".table_pagos_realizados tbody tr.nohide").length;
-
             var campo_condicion = $("#condicion").val();
             var inputconciliar=0
             if(campo_condicion=='ABONADO')
             {
-              inputconciliar=$(".conciliar_count").length;
-              if(inputconciliar==0)
-              {
-                Swal.fire(
-                    'Error',
-                    'No existen conciliaciones relacionadas',
-                    'warning'
-                  )
-                  return false;
-              }else{
-
-                //$('.conciliar_count').
-                var estadovacioconciliar=0;
-                $('.conciliar_count').each(function(){
-                  if(this.value==0)
-                  {
-                    estadovacioconciliar=1;
-                    return false;
-                  }
+                    var total_conciliar={{$contPa}};
+                    console.log("total detalles para conciliar: "+total_conciliar);
+                    var exxxxx=$(".hide_"+total_conciliar).length;
+                    if(exxxxx!=total_conciliar)
+                    {
+                      Swal.fire(
+                        'Error',
+                        'Faltan conciliaciones',
+                        'warning'
+                      )
+                      return false;
+                    }
                     
-                });
-                if(estadovacioconciliar==1)
-                {
-                  
-                  Swal.fire(
-                    'Error',
-                    'Faltan conciliar pagos',
-                    'warning'
-                  )
-                  return false;
+                    var error_conciliar=true;
+                    var existe_r=null;
+
+                    for(var ir = 1; ir < total_conciliar+1; ir++)
+                    {
+                      existe_r=$(".hide_"+ir).length;
+                      if(existe_r==0)
+                      {
+                      }else{
+                        console.log("fila "+ir)
+                        let html_importe_dpa=$(".nohide_"+ir).find("td").html();
+                        let html_importe_con=$(".hide_"+ir).find("td").html();
+                        console.log(" pago "+html_importe_dpa)
+                        console.log(" mov  "+html_importe_con)
+                        //comparar importe
+                        let importe_dpa=$(".nohide_"+ir).find("td").eq(3).html();
+                        let importe_con=$(".hide_"+ir).find("td").eq(3).html();
+                        console.log("importe dpa "+importe_dpa)
+                        console.log("importe con "+importe_con)
+
+                        if(importe_dpa!=importe_con)
+                        {
+                          Swal.fire(
+                            'Error',
+                            'Existen pagos que no coinciden en importe',
+                            'warning'
+                          )
+                          error_conciliar=false;
+                          return false; 
+                        }
+
+                      }
+
+                    }
+
                     
-                }
-                
+                    if(error_conciliar===false)
+                    {
+                      
+                      Swal.fire(
+                        'Error',
+                        'Existen comprobantes sin conciliar o el importe no coincide con el movimiento',
+                        'warning'
+                      )
+                      return false; 
+                    }
+
+                    this.submit();
+            }else{
+
+  //validar  detalle pago con conciliaciones  que coincida los importes
+              
+              /* var cuenta = document.getElementById('cuenta').value; */
+              cuenta = document.getElementsByName("cuenta[]");
+              /* var titular = document.getElementById('titular').value; */
+              titular = document.getElementsByName("titular[]");
+              /* var fecha_deposito = document.getElementById('fecha_deposito').value; */
+              fecha_deposito = document.getElementsByName("fecha_deposito[]");
+              var condicion = document.getElementById('condicion').value;
+
+              var filas_pagos=$(".table_pagos_realizados tbody tr.nohide").length;
 
 
+              var cuent = [];
+              var tit = [];
+              var fec = [];
 
-
+              for(var i=0;i<cuenta.length;i++){
+                  cuent.push(cuenta[i].value);
+                  tit.push(titular[i].value);
+                  fec.push(fecha_deposito[i].value);
               }
-            }
+              var tthis=this;
+              console.info(cuent);
+              console.info(tit);
+              console.info(fec);
+              {
+                tthis.submit();
+              } 
 
+            }
 
             
 
-            var cuent = [];
-            var tit = [];
-            var fec = [];
-
-            for(var i=0;i<cuenta.length;i++){
-                cuent.push(cuenta[i].value);
-                tit.push(titular[i].value);
-                fec.push(fecha_deposito[i].value);
-            }
-            var tthis=this;
-            console.info(cuent);
-            console.info(tit);
-            console.info(fec);
-            {
-              tthis.submit();
-            }   
+              
       });
 
 

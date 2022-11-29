@@ -576,6 +576,16 @@ class ClienteController extends Controller
         return redirect()->route('clientes.index')->with('info','eliminado');
     }
 
+    public function destroyid(Request $request)
+    {
+        $cliente->where("id",$request->clienteId)
+            ->update([
+            'estado' => '0'
+        ]);
+        
+        return redirect()->route('clientes.index')->with('info','eliminado');
+    }
+
 
     public function indexbf()
     {
@@ -908,7 +918,8 @@ class ClienteController extends Controller
             }else{
                 /*if($cliente->crea_temporal==1)
                 {
-                    $html .= '<option style="color:black" value="' . $cliente->id . '">' . $cliente->celular.'-'.$cliente->icelular. '  -  ' . $cliente->nombre . '</option>';
+                    //falta considerar el tiempo ahora menos el tiempo activado temporal
+                    $html .= '<option style="color:yellow" value="' . $cliente->id . '">' . $cliente->celular.'-'.$cliente->icelular. '  -  ' . $cliente->nombre . '</option>'; 
                 }else*/
                 {
                     //considerar deuda real
@@ -922,7 +933,7 @@ class ClienteController extends Controller
                     {
                         $html .= '<option style="color:black" value="' . $cliente->id . '">' . $cliente->celular.'-'.$cliente->icelular. '  -  ' . $cliente->nombre . '**CLIENTE CON DEUDA**</option>';
                     }else{
-                        $html .= '<option disabled style="color:red" value="' . $cliente->id . '">' . $cliente->celular.'-'.$cliente->icelular. '  -  ' . $cliente->nombre . '</option>';
+                        $html .= '<option  style="color:red" value="' . $cliente->id . '">' . $cliente->celular.'-'.$cliente->icelular. '  -  ' . $cliente->nombre . '</option>';
                     }
                 }
             }

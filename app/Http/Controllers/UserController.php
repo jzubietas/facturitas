@@ -291,11 +291,15 @@ class UserController extends Controller
         if($mirol=='Llamadas')
         {
             $users = $users->where('llamada',Auth::user()->id)->where("rol","Asesor");
+
         }else if($mirol=='Jefe de llamadas'){
+
             $users = $users->where('llamada',Auth::user()->id)->where("rol","Asesor");
         }else if($mirol=='Asesor'){
+
             $users = $users->where('id',Auth::user()->id)->where("rol","Asesor");
         }else{
+            
             $usersB=User::where("identificador","B")->where("rol","Administrador");
             $users = $usersB->union($users);
         }

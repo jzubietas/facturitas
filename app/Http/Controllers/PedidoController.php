@@ -124,7 +124,7 @@ class PedidoController extends Controller
         $pedidos = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')
             ->join('users as u', 'pedidos.user_id', 'u.id')
             ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
-            ->leftjoin('pago_pedidos as pp', 'pedidos.id','pp.pedido_id')
+            //->leftjoin('pago_pedidos as pp', 'pedidos.id','pp.pedido_id')
             ->select(
                 'pedidos.id',
                 'c.nombre as nombres',
@@ -137,7 +137,14 @@ class PedidoController extends Controller
                 'pedidos.condicion_envio',
                 'pedidos.condicion as condiciones',
                 'pedidos.pagado as condicion_pa',
-                DB::raw('(select pago.condicion from pago_pedidos pagopedido inner join pedidos pedido on pedido.id=pagopedido.pedido_id and pedido.id=pedidos.id inner join pagos pago on pagopedido.pago_id=pago.id where pagopedido.estado=1 and pago.estado=1 order by pagopedido.created_at desc limit 1) as condiciones_aprobado'),
+                DB::raw("
+                    concat( 
+                        (case when pedidos.pago=1 and pedidos.pagado=1 then 'ADELANTO' when pedidos.pago=1 and pedidos.pagado=2 then 'PAGO' else '' end),
+                        ' ',
+                        (
+                            select pago.condicion from pago_pedidos pagopedido inner join pedidos pedido on pedido.id=pagopedido.pedido_id and pedido.id=pedidos.id inner join pagos pago on pagopedido.pago_id=pago.id where pagopedido.estado=1 and pago.estado=1 order by pagopedido.created_at desc limit 1
+                        )
+                    )  as condiciones_aprobado"),
                 'pedidos.motivo',
                 'pedidos.responsable',
                 DB::raw('DATE_FORMAT(pedidos.created_at, "%d/%m/%Y") as fecha2'),
@@ -146,8 +153,8 @@ class PedidoController extends Controller
                 'pedidos.estado',
                 'pedidos.envio'
             )
-            ->whereIn('pedidos.condicion', ['POR ATENDER', 'EN PROCESO ATENCION', 'ATENDIDO', 'ANULADO'])
-            ->groupBy(
+            ->whereIn('pedidos.condicion', ['POR ATENDER', 'EN PROCESO ATENCION', 'ATENDIDO', 'ANULADO']);
+            /*->groupBy(
                 'pedidos.id',
                 'c.nombre',
                 'c.icelular',
@@ -165,7 +172,7 @@ class PedidoController extends Controller
                 'dp.saldo',
                 'pedidos.estado',
                 'pedidos.envio'
-            );
+            );*/
             //->orderBy('pedidos.created_at', 'DESC')
             //->get();
 

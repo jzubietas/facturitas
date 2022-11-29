@@ -1,6 +1,6 @@
 @extends('adminlte::page')
 
-@section('title', 'Lista de sobres por enviar')
+@section('title', 'Pedidos | Sobres por enviar')
 
 @section('content_header')
   <h1>Lista de sobres por enviar - ENVIOS

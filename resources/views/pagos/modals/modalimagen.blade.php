@@ -1,5 +1,5 @@
   <!-- Modal -->
-  <div class="modal fade" id="modal-imagen-{{ $detallePago->id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal right fade" id="modal-imagen-{{ $detallePago->id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header bg-success">

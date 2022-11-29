@@ -44,10 +44,13 @@
         <tbody>
           <tr>
             <td>Fecha Minima:</td>
-            <td><input type="text" value={{ $dateMin }} id="min" name="min" class="form-control"></td>
+            <td>
+              
+              <input type="date" value={{ $dateMin }} id="min" name="min" class="form-control">
+            </td>
             <td> </td>
             <td>Fecha Máxima:</td>
-            <td><input type="text" value={{ $dateMax }} id="max" name="max"  class="form-control"></td>
+            <td><input type="date" value={{ $dateMax }} id="max" name="max"  class="form-control"></td>
           </tr>
         </tbody>
       </table>
@@ -55,7 +58,7 @@
       <table id="tablaPrincipal" class="table table-striped">
         <thead>
           <tr>
-            <th scope="col">COD.</th>
+            {{--<th scope="col">COD.</th>--}}
             <th scope="col">COD.</th>
             <th scope="col">COD2</th>
             <th scope="col">Cliente</th>
@@ -262,11 +265,11 @@
               }
         },
         columns: [
-          {
+          /*{
               data:'fecha_timestamp',
               name:'fecha_timestamp',
               "visible": false
-          },
+          },*/
           {
               data: 'id', 
               name: 'id',
@@ -413,12 +416,14 @@
     
     if (localStorage.getItem('dateMin') )
     {
+      console.log(" if lo "+localStorage.getItem('dateMin'));
       $( "#min" ).val(localStorage.getItem('dateMin')).trigger("change");        
     }else{
       localStorage.setItem('dateMin', "{{$dateMin}}" );
     }
     if (localStorage.getItem('dateMax') )
-    { 
+    {
+      console.log(" if lo "+localStorage.getItem('dateMax'));
       $( "#max" ).val(localStorage.getItem('dateMax')).trigger("change");
     }else{
       localStorage.setItem('dateMax', "{{$dateMax}}" );

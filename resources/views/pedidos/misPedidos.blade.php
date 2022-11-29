@@ -1,6 +1,6 @@
 @extends('adminlte::page')
 
-@section('title', 'Lista de mis pedidos')
+@section('title', 'Pedidos | Mis pedidos')
 
 @section('content_header')
   <h1>Lista de mis pedidos

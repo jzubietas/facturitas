@@ -1,6 +1,6 @@
 @extends('adminlte::page')
 
-@section('title', 'Lista de pedidos pagados')
+@section('title', 'Operaciones | Sobres terminados')
 
 @section('content_header')
   <h1>Lista de pedidos ENTREGADOS - OPERACIONES

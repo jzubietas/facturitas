@@ -130,6 +130,48 @@
 <script>
 $(document).ready(function () {
 
+  $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+
+    $(document).on("click","#delete",function(){
+      
+      console.log("action delete action")
+      var formData = $("#formdelete").serialize();
+      console.log(formData);
+      $.ajax({
+        type:'POST',
+        url:"{{ route('clientedeleteRequest.post') }}",
+        data:formData,
+      }).done(function (data) {
+        $("#modal-delete").modal("hide");
+        resetearcamposdelete();          
+        $('#tablaPrincipal').DataTable().ajax.reload();      
+      });
+
+    });
+
+  $('#modal-delete').on('show.bs.modal', function (event) {     
+      var button = $(event.relatedTarget) 
+      var idunico = button.data('delete')      
+      $("#hiddenClienteId").val(idunico);
+      if(idunico<10){
+        idunico='PAG000'+idunico;
+      }else if(idunico<100){
+        idunico= 'PAG00'+idunico;
+      }else if(idunico<1000){
+        idunico='PAG0'+idunico;
+      }else{
+        idunico='PAG'+idunico;
+      }
+      $(".textcode").html(idunico);
+
+    });
+
+    
+
     $('#tablaPrincipal').DataTable({
         processing: true,
         responsive:true,

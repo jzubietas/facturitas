@@ -1,6 +1,6 @@
 @extends('adminlte::page')
 
-@section('title', 'Lista de Movimientos')
+@section('title', 'Administracion | Movimientos Bancarios')
 
 @section('content_header')
   <h1>Lista de movimientos
