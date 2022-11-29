@@ -272,6 +272,13 @@ return [
             'icon'    => 'far fa-id-card',
             'active' => ['registrar pagos*'],
         ],
+        [
+            'text' => 'Perdonar curier',
+            'route'  => 'pedidosperdonarcurrier',
+            'can' => 'pagos.perdonarcourier',
+            'icon'   => 'fas fa-check-circle',
+            'active' => ['pagos perdonar courier'],
+        ],
         
         ['header' => 'MÓDULOS'],
 
@@ -355,14 +362,14 @@ return [
                 [
                     'text' => 'Sobres por recibir',
                     'route'  => 'envios.porrecibir',
-                    'can' => 'envios.index',
+                    'can' => 'envios.porrecibir',
                     'icon'   => 'fas fa-check-circle',
                     'active' => ['envios'],
                 ],
                 [
                     'text' => 'Rutas de Envio',
                     'route'  => 'envios.rutaenvio',
-                    'can' => 'envios.index',
+                    'can' => 'envios.rutaenvio',
                     'icon'   => 'fas fa-check-circle',
                     'active' => ['envios'],
                 ],
@@ -372,9 +379,16 @@ return [
                     'can' => 'envios.index',
                     'icon'   => 'fas fa-check-circle',
                     'active' => ['envios'],
+                ],                
+                [
+                    'text' => 'Seguimiento provincia',
+                    'route'  => 'envios.seguimientoprovincia',
+                    'can' => 'envios.seguimientoprovincia',
+                    'icon'   => 'fas fa-check-circle',
+                    'active' => ['enviados'],
                 ],
                 [
-                    'text' => 'Bandeja de envios',
+                    'text' => 'Sobre entregados',
                     'route'  => 'envios.enviados',
                     'can' => 'envios.enviados',
                     'icon'   => 'fas fa-check-circle',
@@ -424,23 +438,23 @@ return [
             'can' => 'administracion.modulo',
             'submenu' => [
                 [
-                    'text' => 'Voucher por revisar',
+                    'text' => 'Compr. Por revisar',
                     'route'  => 'administracion.porrevisar',
                     'can' => 'administracion.porrevisar',
                     'icon'   => 'fas fa-check-circle',
                     'active' => ['pagos por revisar*'],
                 ],
                 [
-                    'text' => 'Voucher pendientes',
+                    'text' => 'Compr pendientes',
                     'route'  => 'administracion.pendientes',
-                    'can' => 'administracion.porrevisar',
+                    'can' => 'administracion.pendientes',
                     'icon'   => 'fas fa-check-circle',
                     'active' => ['pagos por revisar*'],
                 ],
                 [
-                    'text' => 'Voucher observados',
+                    'text' => 'Compr observados',
                     'route'  => 'administracion.observados',
-                    'can' => 'administracion.porrevisar',
+                    'can' => 'administracion.observados',
                     'icon'   => 'fas fa-check-circle',
                     'active' => ['pagos observados*'],
                 ],
@@ -452,7 +466,7 @@ return [
                     'active' => ['pagos abonados*'],
                 ],*/
                 [
-                    'text' => 'Voucher aprobados',
+                    'text' => 'Abonados',
                     'route'  => 'administracion.aprobados',
                     'can' => 'administracion.aprobados',
                     'icon'   => 'fas fa-check-circle',
@@ -461,7 +475,7 @@ return [
                 [
                     'text' => 'Movimientos bancarios',
                     'route'  => 'movimientos.index',
-                    //'can' => 'administracion.aprobados',
+                    'can' => 'administracion.movimientos',
                     'icon'   => 'fas fa-check-circle',
                     'active' => ['movimientos bancarios*'],
                 ],
@@ -501,12 +515,12 @@ return [
                     'can' => 'reportes.index',
                     'icon'   => 'fas fa-check-circle',
                 ], 
-                [
+                /*[
                     'text' => 'Reportes mis asesores',
                     'route'  => 'reportes.misasesores',
                     'can' => 'reportes.misasesores',
                     'icon'   => 'fas fa-check-circle',
-                ],
+                ],*/
                 [
                     'text' => 'Reportes de operaciones',
                     'route'  => 'reportes.operaciones',
@@ -580,7 +594,7 @@ return [
                 [
                     'text' => 'Llamadas',
                     'route'  => 'users.llamadas',
-                    'can' => 'users.misoperarios',
+                    'can' => 'users.llamadas',
                     'icon'   => 'fas fa-check-circle',
                     'active' => ['mis llamadas'],
                 ],

@@ -28,6 +28,7 @@
     {{--@endcan --}}
    
     @include('movimientos.modals.AddMovimientos')
+    @include('movimientos.modals.EditMovimientos')
   </h1>
 <br>
   <div class="row">
@@ -71,7 +72,7 @@
 
   <div class="card">
     <div class="card-body">
-      <table id="tablaPrincipal" class="table table-striped">
+      <table id="tablaPrincipal" style="width:100%;" class="table table-striped">
         <thead>
           <tr>
             <th scope="col">COD.</th>
@@ -79,6 +80,7 @@
             <th scope="col">Banco</th>
             <th scope="col">Titular</th>
             <th scope="col">Fecha de movimiento</th>
+            {{--<th scope="col">Fecha2</th>--}}
             <th scope="col">Tipo de movimiento</th>
             <th scope="col">Importe</th>
             <th scope="col">Conciliacion</th>
@@ -166,11 +168,11 @@ h2 {
     padding-left: 0;
 }
 .button {
-    padding: 1.5rem;
-    border: 1px solid #4361ee;
-    background-color: #4361ee;
-    color: #fff;
-    border-radius: 5px;
+    /*padding: 1.5rem;*/
+    /*border: 1px solid #4361ee;*/
+    /*background-color: #4361ee;*/
+    /*color: #fff;*/
+    /*border-radius: 5px;*/
     cursor: pointer;
 }
 .submit-btn {
@@ -372,7 +374,7 @@ ul.form-stepper li a .form-stepper-circle {
       let titulare=$("#titulares").prop("disabled",false).selectpicker("refresh"); 
       let titular=titulare.val();
       //$("#titulares").prop('disabled', true).selectpicker("refresh");
-      //console.log(titular)
+      console.log(titular)
       
       //return false;
       let monto = $("#monto").val();
@@ -447,8 +449,8 @@ ul.form-stepper li a .form-stepper-circle {
         $.ajax({
           //async:false,
           url: "{{ route('validar_repetido') }}",
-          data:({"banco":banco,"tipo":tipotrans,"titulares":titular,"monto":monto,"fecha":fecha}),
-          method: 'GET',
+          data:{"banco":banco,"tipo":tipotrans,"titulares":titular,"monto":monto,"fecha":fecha},
+          method: 'POST',
           success: function(data) {
             console.log(data.html);
             var dataresponse=data.html.split("|");
@@ -480,21 +482,71 @@ ul.form-stepper li a .form-stepper-circle {
               }).then((result) => {
                 console.log(result);
                 if (result.value==true) {
-                  $("#formulario").trigger("submit")                  
+                  //$("#formulario").trigger("submit");
+                  
+                  
+                  $.ajax({
+                    //async:false,
+                    url: "{{ route('register_movimiento') }}",
+                    data:{"banco":banco,"tipo":tipotrans,"titulares":titular,"monto":monto,"fecha":fecha,"descrip_otros":descrip_otros},
+                    method: 'POST',
+                    success: function(data) {
+                      console.log("ejecutar pago");
+                      $("#monto").val("");
+                      $("#fecha").val("");
+                      $("#tipotransferencia").html("");
+                      $("#tipotransferencia").selectpicker("refresh");
+                      $('#tablaPrincipal').DataTable().ajax.reload(); 
+                      $("#banco").trigger("change");
+                      Swal.fire(
+                        'Pago registrado correctamente',
+                        '',
+                        'success'
+                      )
+                    }
+
+                  });
+
+                  //$("#registrar_movimientos").prop("")
+                  //$("#registrar_movimientos").prop( "disabled", true );
+                  //$("#modal-add-movimientos").modal("hide");
+
                 }else{                 
-                  $("#banco").val("").selectpicker('refresh');
-                  $("#tipotransferencia").val("").selectpicker('refresh');
+                  //$("#banco").val("").selectpicker('refresh');
+                  //$("#tipotransferencia").val("").selectpicker('refresh');
                   $("#descrip_otros").val("").html("");
-                  $("#titulares").val("").selectpicker('refresh');
+                  //$("#titulares").val("").selectpicker('refresh');
                   $("#monto").val("");
                   $("#fecha").val("");
                   
-                  $("#modal-add-movimientos").modal("hide");
+                  //$("#modal-add-movimientos").modal("hide");
                 }
               })      
             }else  if(dataresponse[0]=="sigue")
             {              
-              $("#formulario").trigger("submit")
+              $.ajax({
+                //async:false,
+                url: "{{ route('register_movimiento') }}",
+                data:{"banco":banco,"tipo":tipotrans,"titulares":titular,"monto":monto,"fecha":fecha,"descrip_otros":descrip_otros},
+                method: 'POST',
+                success: function(data) {
+                  console.log("ejecutar pago");
+                  $("#monto").val("");
+                  $("#fecha").val("");
+                  $("#tipotransferencia").html("");
+                  $("#tipotransferencia").selectpicker("refresh");
+                  $('#tablaPrincipal').DataTable().ajax.reload(); 
+                  $("#banco").trigger("change");
+                  Swal.fire(
+                    'Pago registrado correctamente',
+                    '',
+                    'success'
+                  )
+                }
+
+              });
+
+              //$("#formulario").trigger("submit")
             }            
           }
         });
@@ -614,6 +666,54 @@ ul.form-stepper li a .form-stepper-circle {
       $('#tablaPrincipal').DataTable().ajax.reload();
     });
 
+
+    $(document).on("click",".btn-navigate-titular",function(){
+      let titular__=$(this).attr("titular");
+      console.log(titular__);
+      localStorage.setItem('titular', titular__ ); 
+    });
+
+    $(document).on("click",".btn-navigate-banco",function(e){
+      //e.preventDefault();
+      let banco__=$(this).attr("banco");
+      console.log(banco__);
+      localStorage.setItem('banco', banco__ ); 
+      //return true;
+    });
+
+    $('#modal-add-movimientos').on('show.bs.modal', function (event) {   
+      navigateToFormStep(1);
+      $("#registrar_movimientos").prop( "disabled", false );
+      
+
+      //let temp_titular=null;
+      //let temp_banco=null;
+      
+      /*if (localStorage.getItem('titular')=== null )
+      {
+        temp_titular="";
+      }else{
+        temp_titular=localStorage.getItem('titular');
+      }*/
+
+      /*if (localStorage.getItem('banco')=== null )
+      {
+        temp_banco="";        
+      }else{
+        temp_banco=localStorage.getItem('banco')
+      }*/
+
+      //console.log(temp_titular+" -- "+temp_banco)
+
+      /*if(temp_titular!='' && temp_banco!='')
+      {
+        $("#banco").trigger("change")
+        navigateToFormStep(3);
+        $("#monto").val("");
+      }*/
+
+    });
+
     //para opcion eliminar  movimientos
      $('#modal-delete').on('show.bs.modal', function (event) {     
       var button = $(event.relatedTarget) 
@@ -700,6 +800,11 @@ ul.form-stepper li a .form-stepper-circle {
           name: 'fecha',
           render: $.fn.dataTable.render.moment( 'DD/MM/YYYY' )
         },
+        /*{
+          data: 'fecha2', 
+          name: 'fecha2',"visible":false
+          //render: $.fn.dataTable.render.moment( 'DD/MM/YYYY' )
+        },*/
         {//observacion
           data: 'tipo', 
           name: 'tipo',
@@ -752,7 +857,8 @@ ul.form-stepper li a .form-stepper-circle {
 
             if(row.pago=='SIN CONCILIAR')
             {
-              data = data+'<a href="" data-target="#modal-delete" data-toggle="modal" data-delete="'+row.id+'"><button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i> Eliminar</button></a>';
+              //data = data+'<a href="" data-target="#modal-update" data-toggle="modal" data-update="'+row.id+'"><button class="btn btn-warning btn-sm"><i class="fas fa-trash-alt"></i> Editar</button></a><br><br>';
+              data = data+'<a href="" data-target="#modal-delete" data-toggle="modal" data-delete="'+row.id+'"><button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i> Eliminar</button></a>';              
             }
            
             return data;             
@@ -825,6 +931,13 @@ ul.form-stepper li a .form-stepper-circle {
   @endif
 
   <script>
+
+$(document).ready(function () {
+  /*btn-navigate-titular*/
+});
+
+
+
     /**
  * Define a function to navigate betweens form steps.
  * It accepts one parameter. That is - step number.

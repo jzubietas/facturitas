@@ -57,6 +57,7 @@
           <tr>
             <th scope="col">COD.</th>
             <th scope="col">COD.</th>
+            <th scope="col">COD2.</th>
             <th scope="col">Cliente</th>
             <th scope="col">Codigo pedido</th>
             <th scope="col">Fecha Voucher</th>
@@ -280,6 +281,10 @@
                 } 
               }
           },
+          {
+          data: 'id2'
+          , name: 'id2' ,"visible":false
+        },
           {data: 'celular', name: 'celular'},
           {
             data: 'codigos'

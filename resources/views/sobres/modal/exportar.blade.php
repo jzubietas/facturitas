@@ -8,9 +8,17 @@
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
-  
+        
         @if($key === '1')
-          {!! Form::open(['route' => ['sobresRutaEnvioExcel'], 'method' => 'POST', 'target' => 'blanck_']) !!}        
+          {!! Form::open(['route' => ['sobresRutaEnvioExcel'], 'method' => 'POST', 'target' => 'blanck_']) !!}
+        @elseif($key === '2')
+          {!! Form::open(['route' => ['sobresRutaEnvioProvinciaExcel'], 'method' => 'POST', 'target' => 'blanck_']) !!}
+        @elseif($key === '3')
+          {!! Form::open(['route' => ['sobresRutaEnvioLimaNorteExcel'], 'method' => 'POST', 'target' => 'blanck_']) !!}
+        @elseif($key === '4')
+          {!! Form::open(['route' => ['sobresRutaEnvioLimaCentroExcel'], 'method' => 'POST', 'target' => 'blanck_']) !!}
+        @elseif($key === '5')
+          {!! Form::open(['route' => ['sobresRutaEnvioLimaSurExcel'], 'method' => 'POST', 'target' => 'blanck_']) !!}
         @endif
   
               <div class="card-body">

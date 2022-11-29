@@ -6,9 +6,11 @@
   <h1>Lista de pedidos entregados - ENVIOS
        
     <div class="float-right btn-group dropleft">
+      <?php if(Auth::user()->rol=='Administrador' || Auth::user()->rol=='Logística'){ ?>
       <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         Exportar
       </button>
+      <?php } ?>
       <div class="dropdown-menu">
         <a href="" data-target="#modal-exportar" data-toggle="modal" class="dropdown-item" target="blank_"><img src="{{ asset('imagenes/icon-excel.png') }}"> Excel</a>
       </div>
@@ -41,21 +43,17 @@
           </tr>
         </tbody>
       </table><br>
-      <table id="tablaPrincipal" class="table table-striped table-responsive">
+      <table id="tablaPrincipal" style="width:100%;" class="table table-striped">
         <thead>
           <tr>
             <th scope="col">Item</th>
             <th scope="col">Código</th>
             <th scope="col">Asesor</th>
             <th scope="col">Cliente</th>
-            <th scope="col">Razón social</th>            
-            <th scope="col">Fecha de registro</th>
-            <th scope="col">Fecha de envio</th>
-            <th scope="col">Fecha de entrega</th>
+            <th scope="col">Razón social</th>
             <th scope="col">Foto 1</th>
             <th scope="col">Foto 2</th>
-            <th scope="col">Estado de envio</th>
-            
+            <th scope="col">Estado de envio</th>            
           </tr>
         </thead>
         <tbody>
@@ -68,8 +66,8 @@
       @include('pedidos.modal.atenderid')
       @include('pedidos.modal.DeleteFoto1id')
       @include('pedidos.modal.DeleteFoto2id')
-      @include('pedidos.modal.CambiarImagen')
-      @include('pedidos.modal.CambiarImagen2')
+      @include('envios.modal.CambiarImagen')
+      @include('envios.modal.CambiarImagen2')
     </div>
   </div>
 
@@ -274,7 +272,6 @@
 
       });
 
-
       $('#tablaPrincipal').DataTable({
         processing: true,
         serverSide: true,
@@ -284,7 +281,26 @@
         createdRow: function( row, data, dataIndex){
           //console.log(row);          
         },
-        rowCallback: function (row, data, index) {           
+        rowCallback: function (row, data, index) {
+            console.log(data.destino2)
+              if(data.destino2=='PROVINCIA'){
+                $('td', row).css('color','red')                
+              }else if(data.destino2=='LIMA'){
+                if(data.distribucion!=null)
+                {
+                  if(data.distribucion=='NORTE')
+                  {
+                    //$('td', row).css('color','blue')
+                  }else if(data.distribucion=='CENTRO')
+                  {
+                    //$('td', row).css('color','yellow')
+                  }else if(data.distribucion=='SUR')
+                  {
+                    //$('td', row).css('color','green')
+                  }                  
+                }else{                  
+                }
+              }
         },
         columns: [
           {
@@ -292,30 +308,62 @@
               name: 'id',
               render: function ( data, type, row, meta ) {
                 if(row.id<10){
-                  return 'PED000'+row.id;
+                  return 'ENV000'+row.id;
                 }else if(row.id<100){
-                  return 'PED00'+row.id;
+                  return 'ENV00'+row.id;
                 }else if(row.id<1000){
-                  return 'PED0'+row.id;
+                  return 'ENV0'+row.id;
                 }else{
-                  return 'PED'+row.id;
+                  return 'ENV'+row.id;
                 } 
               }
           },
-          {data: 'codigos', name: 'codigos', },
-          {data: 'users', name: 'users', },
           {
-            data: 'celulares', 
-            name: 'celulares',
+            data: 'codigos', 
+            name: 'codigos', 
+            render: function ( data, type, row, meta ) {    
+              if(data==null){
+                return 'SIN PEDIDOS';
+              }else{
+                var returndata='';
+                var jsonArray=data.split(",");
+                $.each(jsonArray, function(i, item) {
+                    returndata+=item+'<br>';
+                });
+                return returndata;
+              }  
+            }
+          },
+          {
+            data: 'identificador', 
+            name: 'identificador',
+          },
+          {
+            data: 'celular', 
+            name: 'celular',
             render: function ( data, type, row, meta ) {
-              return row.celulares+' - '+row.nombres
+              return row.celular+' - '+row.nombre
             },
-            //searchable: true
-        },
-          {data: 'empresas', name: 'empresas', },
-          {data: 'fecha_envio_doc', name: 'fecha_envio_doc', },
-          {data: 'fecha_envio_doc_fis', name: 'fecha_envio_doc_fis', },
-          {data: 'fecha_recepcion', name: 'fecha_recepcion', },
+          },
+          {
+            data: 'producto', 
+            name: 'producto',
+            render: function ( data, type, row, meta ) {    
+              if(data==null){
+                return 'SIN RUCS';
+              }else{
+                var numm=0;
+                var returndata='';
+                var jsonArray=data.split(",");
+                $.each(jsonArray, function(i, item) {
+                    numm++;
+                    returndata+=numm+": "+item+'<br>';
+                    
+                });
+                return returndata;
+              }  
+            }
+          },          
           {
             data: 'foto1', 
             name: 'foto1',
@@ -347,7 +395,7 @@
               }else if(row.envio == '3'){
                 return '<span class="badge badge-dark">Sin envio</span>';
               }else{
-                return '<span class="badge badge-danger">Sin foto</span>';
+                return '<span class="badge badge-dark">Sin envio</span>';
               }
             },
           },
@@ -382,12 +430,24 @@
               }else if(row.envio == '3'){
                 return '<span class="badge badge-dark">Sin envio</span>';
               }else{
-                return '<span class="badge badge-danger">Sin foto</span>';
+                return '<span class="badge badge-dark">Sin envio</span>';
               }
             },
           },
-          {data: 'condicion_envio', name: 'condicion_envio', },
-          
+          {
+            data: 'condicion_envio', 
+            name: 'condicion_envio',
+            render: function ( data, type, row, meta ) 
+            {
+              if(row.subcondicion_envio==null)
+              {
+                return row.condicion_envio;
+              }else{
+                return '('+row.subcondicion_envio+') '+ row.condicion_envio;
+              }
+              
+            }
+          },          
         ],
         language: {
           "decimal": "",

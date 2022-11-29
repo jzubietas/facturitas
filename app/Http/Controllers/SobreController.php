@@ -105,17 +105,17 @@ class SobreController extends Controller
                     'dp.fecha_envio_doc_fis',
                     'dp.foto1',
                     'dp.foto2',
-                    'dp.fecha_recepcion'
+                    'dp.fecha_recepcion',
+                    'pedidos.devuelto',
+                    'pedidos.cant_devuelto',
+                    'pedidos.returned_at',
+                    'pedidos.observacion_devuelto',
                 )
                 ->where('pedidos.estado', '1')
+                ->where('pedidos.envio', '1')
                 ->where('dp.estado', '1')
-                //->whereIn('pedidos.envio',  ['1','2'])
-                //->where('pedidos.condicion_envio', '<>', 'ENTREGADO')
-                ->whereIn('pedidos.condicion_envio',['PENDIENTE DE ENVIO'])
-                //->where('pedidos.direccion')
-                //->whereNull('pedidos.direccion')
-                //->whereNotIn('pedidos.direccion',['ACTUALIZACION DE DATOS'])
-                ->groupBy(
+                ->whereIn('pedidos.condicion_envio',['PENDIENTE DE ENVIO']);
+                /*->groupBy(
                     'pedidos.id',
                     'pedidos.cliente_id',
                     'c.nombre',
@@ -137,7 +137,7 @@ class SobreController extends Controller
                     'dp.foto1',
                     'dp.foto2',
                     'dp.fecha_recepcion'
-                );
+                );*/
         if(Auth::user()->rol == "Operario"){
             $asesores = User::where('users.rol', 'Asesor')
                 -> where('users.estado', '1')
@@ -177,7 +177,16 @@ class SobreController extends Controller
 
         }
         else if(Auth::user()->rol == "Encargado"){
-            $pedidos=$pedidos->Where('u.supervisor',Auth::user()->identificador);
+
+            $usersasesores = User::where('users.rol', 'Asesor')
+                -> where('users.estado', '1')
+                -> where('users.supervisor', Auth::user()->id)
+                ->select(
+                    DB::raw("users.identificador as identificador")
+                )
+                ->pluck('users.identificador');
+
+            $pedidos=$pedidos->WhereIn('u.identificador',$usersasesores);   
         }
         else{
             $pedidos=$pedidos;

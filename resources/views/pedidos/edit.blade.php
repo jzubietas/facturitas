@@ -87,7 +87,7 @@
                 <div class="form-group col-lg-2">
                   {!! Form::label('pporcentaje', 'Porcentaje(%)') !!}
 
-                  @if ($mirol =='Administrador')
+                  @if ($mirol =='Administrador' || $mirol =='Jefe de llamadas')
                     <input type="number" name="pporcentaje" id="pporcentaje" value="{{ $pedido->porcentaje}}" step="0.1" min="0" class="form-control" placeholder="Porcentaje...">
                   @else 
                     <input type="number" name="pporcentaje" id="pporcentaje" value="{{ $pedido->porcentaje}}" step="0.1" min="0" class="form-control" placeholder="Porcentaje..." readonly="readonly">

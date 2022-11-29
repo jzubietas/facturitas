@@ -7,6 +7,9 @@ use App\Models\Cliente;
 use App\Models\DetallePago;
 use App\Models\DetallePedido;
 use App\Models\MovimientoBancario;
+use App\Models\EntidadBancaria;
+use App\Models\CuentaBancaria;
+use App\Models\Titular;
 use App\Models\Pago;
 use App\Models\PagoPedido;
 use App\Models\Pedido;
@@ -85,9 +88,60 @@ class PagoController extends Controller
     {
         $pagos=null;
 
+        $pagos = Pago::join('users as u', 'pagos.user_id', 'u.id')
+            ->join('clientes as c', 'pagos.cliente_id', 'c.id')
+            ->select('pagos.id as id',
+
+            DB::raw(" (CASE WHEN pagos.id<10 THEN concat('PAG',u.identificador,'-',
+                                IF ( (select count(dpago.id) from detalle_pagos dpago where dpago.pago_id=pagos.id and dpago.estado in (1) )>1,'V','I' )  ,
+                                IF ( (select count(ppedidos.id) from pago_pedidos ppedidos where ppedidos.pago_id=pagos.id and ppedidos.estado in (1) ) >1,'V','I' ),
+                                '-',pagos.id
+                                ) 
+                            WHEN pagos.id<100  THEN concat('PAG',u.identificador,'-',
+                                IF ( (select count(dpago.id) from detalle_pagos dpago where dpago.pago_id=pagos.id and dpago.estado in (1) )>1,'V','I' )  ,
+                                IF ( (select count(ppedidos.id) from pago_pedidos ppedidos where ppedidos.pago_id=pagos.id and ppedidos.estado in (1) ) >1,'V','I' ),
+                                '-',pagos.id) 
+                            WHEN pagos.id<1000  THEN concat('PAG',u.identificador,'-',
+                                IF ( (select count(dpago.id) from detalle_pagos dpago where dpago.pago_id=pagos.id and dpago.estado in (1) )>1,'V','I' )  ,
+                                IF ( (select count(ppedidos.id) from pago_pedidos ppedidos where ppedidos.pago_id=pagos.id and ppedidos.estado in (1) ) >1,'V','I' ),
+                                '-',pagos.id) 
+                            ELSE concat('PAG',u.identificador,'-',
+                                IF ( (select count(dpago.id) from detalle_pagos dpago where dpago.pago_id=pagos.id and dpago.estado in (1) )>1,'V','I' )  ,
+                                IF ( (select count(ppedidos.id) from pago_pedidos ppedidos where ppedidos.pago_id=pagos.id and ppedidos.estado in (1) ) >1,'V','I' ),
+                                '-',pagos.id) END) AS id2"),
+
+
+                    'u.identificador as users',
+                    'c.icelular',
+                    'c.celular',
+                    'pagos.observacion',                        
+                    'pagos.total_cobro',
+                    'pagos.condicion',
+                    DB::raw('(select DATE_FORMAT( MIN(dpa.fecha), "%d/%m/%Y %H:%i:%s")   from detalle_pagos dpa where dpa.pago_id=pagos.id and dpa.estado=1) as fecha'),
+                    DB::raw('(select UNIX_TIMESTAMP(MIN(dpa.fecha))   from detalle_pagos dpa where dpa.pago_id=pagos.id and dpa.estado=1) as fecha_timestamp'),
+                    DB::raw(" (select count(dpago.id) from detalle_pagos dpago where dpago.pago_id=pagos.id and dpago.estado in (1) ) as cantidad_voucher "),
+                    DB::raw(" (select count(ppedidos.id) from pago_pedidos ppedidos where ppedidos.pago_id=pagos.id and ppedidos.estado in (1)  ) as cantidad_pedido "),
+                    DB::raw(" ( select GROUP_CONCAT(ppp.codigo) from pago_pedidos ped inner join pedidos ppp on ped.pedido_id =ppp.id where pagos.id=ped.pago_id and ped.estado=1 and ppp.estado=1 and ped.pagado in (1,2)) as codigos "),
+                    DB::raw(" (select sum(ped2.abono) from pago_pedidos ped2 where ped2.pago_id =pagos.id and ped2.estado=1 and ped2.pagado in (1,2) ) as total_pago "),
+                   
+                    )
+            ->whereIn('pagos.condicion', ['PAGO','ADELANTO','ABONADO'])
+            ->where('pagos.estado', '1');
+            //->get();
+
         if(Auth::user()->rol == 'Llamadas')
         {
-            $pagos = Pago::join('users as u', 'pagos.user_id', 'u.id')
+            $usersasesores = User::where('users.rol', 'Asesor')
+                -> where('users.estado', '1')
+                -> where('users.llamada', Auth::user()->id)
+                ->select(
+                    DB::raw("users.identificador as identificador")
+                )
+                ->pluck('users.identificador');
+
+            $pagos=$pagos->WhereIn('u.identificador',$usersasesores);   
+
+            /*$pagos = Pago::join('users as u', 'pagos.user_id', 'u.id')
             ->join('clientes as c', 'pagos.cliente_id', 'c.id')
             ->select('pagos.id as id',
                     'u.identificador as users',
@@ -100,40 +154,41 @@ class PagoController extends Controller
                     DB::raw('(select UNIX_TIMESTAMP(MIN(dpa.fecha))   from detalle_pagos dpa where dpa.pago_id=pagos.id and dpa.estado=1) as fecha_timestamp'),
                     DB::raw(" (select count(dpago.id) from detalle_pagos dpago where dpago.pago_id=pagos.id and dpago.estado in (1) ) as cantidad_voucher "),
                     DB::raw(" (select count(ppedidos.id) from pago_pedidos ppedidos where ppedidos.pago_id=pagos.id and ppedidos.estado in (1)  ) as cantidad_pedido "),
-                    //DB::raw(" ( select GROUP_CONCAT(ppp.codigo) from pago_pedidos ped inner join pedidos ppp on ped.pedido_id =ppp.id where pagos.id=ped.pago_id and ped.estado=1 and ped.pagado in (1,2)) as codigos "),
+                    
                     DB::raw(" ( select GROUP_CONCAT(ppp.codigo) from pago_pedidos ped inner join pedidos ppp on ped.pedido_id =ppp.id where pagos.id=ped.pago_id and ped.estado=1 and ppp.estado=1 and ped.pagado in (1,2)) as codigos "),
                     DB::raw(" (select sum(ped2.abono) from pago_pedidos ped2 where ped2.pago_id =pagos.id and ped2.estado=1 and ped2.pagado in (1,2) ) as total_pago ")   
                     )
-            //->where('pagos.user_id',$request->asesores) 
+            
             ->whereIn('pagos.condicion', ['PAGO','ADELANTO','ABONADO'])
             ->where('u.llamada', Auth::user()->id)
             ->where('pagos.estado', '1')
-            ->get();
+            ->get();*/
         }else if(Auth::user()->rol == 'Jefe de llamadas')
         {
-            $pagos = Pago::join('users as u', 'pagos.user_id', 'u.id')
-            ->join('clientes as c', 'pagos.cliente_id', 'c.id')
-            ->select('pagos.id as id',
-                    'u.identificador as users',
-                    'c.icelular',
-                    'c.celular',
-                    'pagos.observacion',                        
-                    'pagos.total_cobro',
-                    'pagos.condicion',
-                    DB::raw('(select DATE_FORMAT( MIN(dpa.fecha), "%d/%m/%Y %H:%i:%s")   from detalle_pagos dpa where dpa.pago_id=pagos.id and dpa.estado=1) as fecha'),
-                    DB::raw('(select UNIX_TIMESTAMP(MIN(dpa.fecha))   from detalle_pagos dpa where dpa.pago_id=pagos.id and dpa.estado=1) as fecha_timestamp'),
-                    DB::raw(" (select count(dpago.id) from detalle_pagos dpago where dpago.pago_id=pagos.id and dpago.estado in (1) ) as cantidad_voucher "),
-                    DB::raw(" (select count(ppedidos.id) from pago_pedidos ppedidos where ppedidos.pago_id=pagos.id and ppedidos.estado in (1)  ) as cantidad_pedido "),
-                    DB::raw(" ( select GROUP_CONCAT(ppp.codigo) from pago_pedidos ped inner join pedidos ppp on ped.pedido_id =ppp.id where pagos.id=ped.pago_id and ped.estado=1 and ppp.estado=1 and ped.pagado in (1,2)) as codigos "),
-                    //DB::raw(" ( select GROUP_CONCAT(ppp.codigo) from pago_pedidos ped inner join pedidos ppp on ped.pedido_id =ppp.id where pagos.id=ped.pago_id and ped.estado=1 and ped.pagado in (1,2)) as codigos "),
-                    DB::raw(" (select sum(ped2.abono) from pago_pedidos ped2 where ped2.pago_id =pagos.id and ped2.estado=1 and ped2.pagado in (1,2) ) as total_pago ")   
-                    )
-            ->whereIn('pagos.condicion', ['PAGO','ADELANTO'])
-            ->where('u.llamada', Auth::user()->id)
-            ->where('pagos.estado', '1')
-            ->get();
+            /*$usersasesores = User::where('users.rol', 'Asesor')
+                -> where('users.estado', '1')
+                -> where('users.llamada', Auth::user()->id)
+                ->select(
+                    DB::raw("users.identificador as identificador")
+                )
+                ->pluck('users.identificador');
+
+            $pagos=$pagos->WhereIn('u.identificador',$usersasesores); */
+            $pagos=$pagos->where('u.identificador','<>','B');
+
         }else if(Auth::user()->rol == "Encargado"){
-            $pagos = Pago::join('users as u', 'pagos.user_id', 'u.id')
+
+            $usersasesores = User::where('users.rol', 'Asesor')
+                -> where('users.estado', '1')
+                -> where('users.supervisor', Auth::user()->id)
+                ->select(
+                    DB::raw("users.identificador as identificador")
+                )
+                ->pluck('users.identificador');
+
+            $pagos=$pagos->WhereIn('u.identificador',$usersasesores); 
+
+            /*$pagos = Pago::join('users as u', 'pagos.user_id', 'u.id')
             ->join('clientes as c', 'pagos.cliente_id', 'c.id')
             ->select('pagos.id as id',
                     'u.identificador as users',
@@ -147,16 +202,18 @@ class PagoController extends Controller
                     DB::raw(" (select count(dpago.id) from detalle_pagos dpago where dpago.pago_id=pagos.id and dpago.estado in (1) ) as cantidad_voucher "),
                     DB::raw(" (select count(ppedidos.id) from pago_pedidos ppedidos where ppedidos.pago_id=pagos.id and ppedidos.estado in (1)  ) as cantidad_pedido "),
                     DB::raw(" ( select GROUP_CONCAT(ppp.codigo) from pago_pedidos ped inner join pedidos ppp on ped.pedido_id =ppp.id where pagos.id=ped.pago_id and ped.estado=1 and ppp.estado=1 and ped.pagado in (1,2)) as codigos "),
-                    //DB::raw(" ( select GROUP_CONCAT(ppp.codigo) from pago_pedidos ped inner join pedidos ppp on ped.pedido_id =ppp.id where pagos.id=ped.pago_id and ped.estado=1 and ped.pagado in (1,2)) as codigos "),
+                    
                     DB::raw(" (select sum(ped2.abono) from pago_pedidos ped2 where ped2.pago_id =pagos.id and ped2.estado=1 and ped2.pagado in (1,2) ) as total_pago ")   
                     )
             ->whereIn('pagos.condicion', ['PAGO','ADELANTO','ABONADO'])
             ->where('u.supervisor', Auth::user()->id)
             ->where('pagos.estado', '1')
-            ->get();
+            ->get();*/
 
         }else{
-            $pagos = Pago::join('users as u', 'pagos.user_id', 'u.id')
+            $pagos=$pagos;
+
+            /*$pagos = Pago::join('users as u', 'pagos.user_id', 'u.id')
             ->join('clientes as c', 'pagos.cliente_id', 'c.id')
             ->select('pagos.id as id',
                     'u.identificador as users',
@@ -170,15 +227,13 @@ class PagoController extends Controller
                     DB::raw(" (select count(dpago.id) from detalle_pagos dpago where dpago.pago_id=pagos.id and dpago.estado in (1) ) as cantidad_voucher "),
                     DB::raw(" (select count(ppedidos.id) from pago_pedidos ppedidos where ppedidos.pago_id=pagos.id and ppedidos.estado in (1)  ) as cantidad_pedido "),
                     DB::raw(" ( select GROUP_CONCAT(ppp.codigo) from pago_pedidos ped inner join pedidos ppp on ped.pedido_id =ppp.id where pagos.id=ped.pago_id and ped.estado=1 and ppp.estado=1 and ped.pagado in (1,2)) as codigos "),
-                    //DB::raw(" ( select GROUP_CONCAT(ppp.codigo) from pago_pedidos ped inner join pedidos ppp on ped.pedido_id =ppp.id where pagos.id=ped.pago_id and ped.estado=1 and ped.pagado in (1,2)) as codigos "),
                     DB::raw(" (select sum(ped2.abono) from pago_pedidos ped2 where ped2.pago_id =pagos.id and ped2.estado=1 and ped2.pagado in (1,2) ) as total_pago ")   
                     )
             ->whereIn('pagos.condicion', ['PAGO','ADELANTO','ABONADO'])
             ->where('pagos.estado', '1')
-            ->get();
-
-            
+            ->get();*/            
         }
+        $pagos=$pagos->get();
        
         return Datatables::of($pagos)
                     ->addIndexColumn()
@@ -381,8 +436,28 @@ class PagoController extends Controller
                 ->where('pedidos.estado', '1')
                 ->where('dp.estado', '1')
                 ->where('dp.total','>', '0')
-                ->where('dp.saldo','>', '0')
-                ->get();
+                ->where('dp.saldo','>', '0');
+                //->get();
+            //return $request->perdonar_deuda;
+            if(!$request->perdonar_deuda){
+
+            }else{
+                $pedidos->where("pedidos.pago","1")
+                        ->where("pedidos.pagado","1");
+
+            }
+
+            if(!$request->perdonar_currier){
+
+            }else{
+                
+                $pedidos->where("pedidos.pago","1")
+                        ->where("pedidos.pagado","1")
+                        ->WhereBetween("dp.saldo", ['11', '13'])
+                        ->orWhereBetween("dp.saldo", ['17', '19']);
+            }
+
+            $pedidos=$pedidos->get();
             
             return Datatables::of($pedidos)
                     ->addIndexColumn()                  
@@ -849,398 +924,653 @@ class PagoController extends Controller
     public function store(Request $request)
     {
         //return $request->all();
-        
-        $contPedidos=0;
-        $contPedidosfor=0;
-        $pedido_id = $request->pedido_id;
-        $pedidos_pagados_total=$request->checktotal;
-        $pedidos_pagados_total_ar = array();
-        $pedidos_pagados_parcial=$request->checkadelanto;
-        $pedidos_pagados_parcial_ar = array();
-        $saldo = $request->numberdiferencia;
-        //return $pedido_id;
-        //return $saldo;
-        if(count((array)$pedido_id)>0){
+
+        if($request->accion_perdonar=="1")
+        {
+            $contPedidos=0;
+            $contPedidosfor=0;
+            $pedido_id = $request->pedido_id;
+            $pedidos_pagados_total=$request->checktotal;
+            $pedidos_pagados_total_ar = array();
+            $pedidos_pagados_parcial=$request->checkadelanto;
+            $pedidos_pagados_parcial_ar = array();
+            $saldo = $request->numberdiferencia;
             
-            //programacion totales check
-            foreach($pedido_id as $pedido_id_key =>$pedido_id_value)
-            {                
-                if(count((array)$pedidos_pagados_total))
+            if(count((array)$pedido_id)>0){
+                
+                foreach($pedido_id as $pedido_id_key =>$pedido_id_value)
                 {
-                    if (array_key_exists( $pedido_id_value , $pedidos_pagados_total)) {
-                        $pedidos_pagados_total_ar[ $pedido_id_value ]["checked"]=1;
-                        $pedidos_pagados_total_ar[ $pedido_id_value ]["pedido_id"]=$pedido_id[$pedido_id_key];
-                        $pedidos_pagados_total_ar[ $pedido_id_value ]["total_parcial"]='total';
-                        $pedidos_pagados_total_ar[ $pedido_id_value ]["saldo"]=$saldo[$pedido_id_value];
-                    }else{
+                    if(count((array)$pedidos_pagados_total))
+                    {
+                        if (array_key_exists( $pedido_id_value , $pedidos_pagados_total)) {
+                            $pedidos_pagados_total_ar[ $pedido_id_value ]["checked"]=1;
+                            $pedidos_pagados_total_ar[ $pedido_id_value ]["pedido_id"]=$pedido_id[$pedido_id_key];
+                            $pedidos_pagados_total_ar[ $pedido_id_value ]["total_parcial"]='total';
+                            $pedidos_pagados_total_ar[ $pedido_id_value ]["saldo"]=$saldo[$pedido_id_value];
+                        }else{
+                            $pedidos_pagados_total_ar[ $pedido_id_value ]["checked"]=0;
+                            $pedidos_pagados_total_ar[ $pedido_id_value ]["pedido_id"]=$pedido_id[$pedido_id_key];
+                            $pedidos_pagados_total_ar[ $pedido_id_value ]["total_parcial"]='total';
+                            $pedidos_pagados_total_ar[ $pedido_id_value ]["saldo"]=$saldo[$pedido_id_value];
+                        }
+                    }
+                    else{
                         $pedidos_pagados_total_ar[ $pedido_id_value ]["checked"]=0;
                         $pedidos_pagados_total_ar[ $pedido_id_value ]["pedido_id"]=$pedido_id[$pedido_id_key];
                         $pedidos_pagados_total_ar[ $pedido_id_value ]["total_parcial"]='total';
                         $pedidos_pagados_total_ar[ $pedido_id_value ]["saldo"]=$saldo[$pedido_id_value];
                     }
                 }
-                else{
-                    $pedidos_pagados_total_ar[ $pedido_id_value ]["checked"]=0;
-                    $pedidos_pagados_total_ar[ $pedido_id_value ]["pedido_id"]=$pedido_id[$pedido_id_key];
-                    $pedidos_pagados_total_ar[ $pedido_id_value ]["total_parcial"]='total';
-                    $pedidos_pagados_total_ar[ $pedido_id_value ]["saldo"]=$saldo[$pedido_id_value];
-                }
-            }
-            //return $pedidos_pagados_total_ar;
-            //programacion totales check
-
-            //programacion parciales check
-            //return $saldo;
-            foreach($pedido_id as $pedido_id_key =>$pedido_id_value)
-            {
                 
-                if(count((array)$pedidos_pagados_parcial))
+                foreach($pedido_id as $pedido_id_key =>$pedido_id_value)
                 {
-                    if (array_key_exists( $pedido_id_value , $pedidos_pagados_parcial)) {
-                        $pedidos_pagados_parcial_ar[ $pedido_id_value ]["checked"]=1;
-                        $pedidos_pagados_parcial_ar[ $pedido_id_value ]["pedido_id"]=$pedido_id[$pedido_id_key];
-                        $pedidos_pagados_parcial_ar[ $pedido_id_value ]["total_parcial"]='parcial';
-                        $pedidos_pagados_parcial_ar[ $pedido_id_value ]["saldo"]=$saldo[$pedido_id_value];
-                    }else{
+                    
+                    if(count((array)$pedidos_pagados_parcial))
+                    {
+                        if (array_key_exists( $pedido_id_value , $pedidos_pagados_parcial)) {
+                            $pedidos_pagados_parcial_ar[ $pedido_id_value ]["checked"]=1;
+                            $pedidos_pagados_parcial_ar[ $pedido_id_value ]["pedido_id"]=$pedido_id[$pedido_id_key];
+                            $pedidos_pagados_parcial_ar[ $pedido_id_value ]["total_parcial"]='parcial';
+                            $pedidos_pagados_parcial_ar[ $pedido_id_value ]["saldo"]=$saldo[$pedido_id_value];
+                        }else{
+                            $pedidos_pagados_parcial_ar[ $pedido_id_value ]["checked"]=0;
+                            $pedidos_pagados_parcial_ar[ $pedido_id_value ]["pedido_id"]=$pedido_id[$pedido_id_key];
+                            $pedidos_pagados_parcial_ar[ $pedido_id_value ]["total_parcial"]='parcial';
+                            $pedidos_pagados_parcial_ar[ $pedido_id_value ]["saldo"]=$saldo[$pedido_id_value];
+                        }
+                    }
+                    else{
                         $pedidos_pagados_parcial_ar[ $pedido_id_value ]["checked"]=0;
                         $pedidos_pagados_parcial_ar[ $pedido_id_value ]["pedido_id"]=$pedido_id[$pedido_id_key];
                         $pedidos_pagados_parcial_ar[ $pedido_id_value ]["total_parcial"]='parcial';
                         $pedidos_pagados_parcial_ar[ $pedido_id_value ]["saldo"]=$saldo[$pedido_id_value];
                     }
                 }
-                else{
-                    $pedidos_pagados_parcial_ar[ $pedido_id_value ]["checked"]=0;
-                    $pedidos_pagados_parcial_ar[ $pedido_id_value ]["pedido_id"]=$pedido_id[$pedido_id_key];
-                    $pedidos_pagados_parcial_ar[ $pedido_id_value ]["total_parcial"]='parcial';
-                    $pedidos_pagados_parcial_ar[ $pedido_id_value ]["saldo"]=$saldo[$pedido_id_value];
-                }
-            }
-            //programacion parciales check
-
-            //return $pedidos_pagados_parcial_ar;
-            /////
-            
-            //return $saldo;
-            foreach($pedido_id as $pedido_id_key =>$pedido_id_value)
-            {
-                if($saldo[$pedido_id_value]<=3)
+                
+                foreach($pedido_id as $pedido_id_key =>$pedido_id_value)
                 {
-                    $pedidos_pagados_total_ar[ $pedido_id_value ]["checked"]=1;
-                    $pedidos_pagados_parcial_ar[ $pedido_id_value ]["checked"]=0;
+                    if($saldo[$pedido_id_value]<=3)
+                    {
+                        $pedidos_pagados_total_ar[ $pedido_id_value ]["checked"]=1;
+                        $pedidos_pagados_parcial_ar[ $pedido_id_value ]["checked"]=0;
+                    }
+
+                }
+                
+                $pedidos_pagados_parcial=$pedidos_pagados_parcial_ar;
+                $pedidos_pagados_total=$pedidos_pagados_total_ar;
+            }
+
+            /*$request->validate([
+                'imagen' => 'required',
+            ]);*/
+
+            try {
+                DB::beginTransaction();
+                $deuda_total = $request->total_pedido_pagar;
+                $deuda_total=str_replace(',','',$deuda_total);
+                $pagado = $request->total_pago_pagar;
+                $pagado=str_replace(',','',$pagado);
+
+                $identi_asesor=User::where("identificador", $request->user_id)->where("unificado","NO")->first();
+
+                $pago = Pago::create([                
+                    'user_id' => $identi_asesor->id,
+                    'cliente_id' => $request->cliente_id,
+                    'total_cobro' => $deuda_total,
+                    'total_pagado' => $pagado,
+                    'condicion' => "PAGO",
+                    'notificacion' => 'Nuevo pago registrado',
+                    'estado' => '1',
+                    'subcondicion' => 'DEUDA PERDONADA'
+                ]);
+
+                event(new PagoEvent($pago));
+
+                $pedido_id = $request->pedido_id;
+                $monto_actual = $request->numbersaldo;
+                $saldo = $request->numberdiferencia;
+                $contPe = 0;
+                $monto_pagado_a_favor = $pagado;
+
+                foreach($pedido_id as $pedido_id_key =>$pedido_id_value)
+                {
+                   
+                    if(count((array)$pedidos_pagados_total)>0)
+                    {
+                        if( $pedidos_pagados_total[ $pedido_id_value ]["checked"]==1 )
+                        {
+                            $pagoPedido = PagoPedido::create([
+                                'pago_id' => $pago->id,
+                                'pedido_id' => $pedido_id_value,
+                                'abono' => $monto_actual[$pedido_id_value]-$saldo[$pedido_id_value],
+                                'estado' => '1'
+                            ]);
+                            $pedido = Pedido::find($pagoPedido->pedido_id);
+                            $pedido->update([
+                                'pago' => '1'
+                            ]);
+                            $detalle_pedido = DetallePedido::where('pedido_id', $pedido->id)->first();
+
+                            $detalle_pedido->update([
+                                'saldo' => $saldo[$pedido_id_value]
+                            ]);
+
+                        }
+                    }
+                    if(count((array)$pedidos_pagados_parcial)>0)
+                    {
+                        if( $pedidos_pagados_parcial[ $pedido_id_value ]["checked"]==1 )
+                        {
+                            $pagoPedido = PagoPedido::create([
+                                'pago_id' => $pago->id,
+                                'pedido_id' => $pedido_id_value,
+                                'abono' => $monto_actual[$pedido_id_value]-$saldo[$pedido_id_value],
+                                'estado' => '1'
+                            ]);
+                            $pedido = Pedido::find($pagoPedido->pedido_id);
+                            $pedido->update([
+                                'pago' => '1'
+                            ]);
+                            $detalle_pedido = DetallePedido::where('pedido_id', $pedido->id)->first();
+
+                            $detalle_pedido->update([
+                                'saldo' => $saldo[$pedido_id_value]
+                            ]);
+
+                        }
+                    }
+
+                }
+                
+                $tipomovimiento = $request->tipomovimiento;
+                $titular = $request->titular;
+                $monto = $request->monto;
+                $imagen = $request->imagen;
+                $banco = $request->banco;
+                $fecha = $request->fecha;
+                
+                $files = $request->file('imagen');
+                $destinationPath = base_path('public/storage/pagos/');
+
+                $cont = 0;
+                $fileList = [];
+
+                $contPa = 0;
+
+                foreach($monto as $monto_key =>$monto_value)
+                {
+                    $file_name=$imagen[$monto_key];
+                    $fileList[$monto_key] = array(
+                        'file_name' => $file_name,
+                    );
                 }
 
-            }
-            //return $pedidos_pagados_parcial_ar;
-            
-            $pedidos_pagados_parcial=$pedidos_pagados_parcial_ar;
-            $pedidos_pagados_total=$pedidos_pagados_total_ar;
-        }
+                foreach($monto as $monto_key =>$monto_value)
+                {
+                    if(isset($fileList[$monto_key]['file_name']))
+                    {
+                        DetallePago::create([
+                            'pago_id' => $pago->id,
+                            'cuenta' => $tipomovimiento[$monto_key],
+                            'titular' => $titular[$monto_key],
+                            'monto' => $monto[$monto_key],
+                            'banco' => $banco[$monto_key],
+                            'fecha' => $fecha[$monto_key],
+                            'fecha_deposito' => $fecha[$monto_key],
+                            'imagen' => $fileList[$monto_key]['file_name'],
+                            'estado' => '1'
+                        ]); 
 
-        //return $pedidos_pagados_parcial;
-        //return $pedidos_pagados_parcial;
-        //return $request->monto;
-        //return $request->all();
+                    }else{
+                        DetallePago::create([
+                            'pago_id' => $pago->id,
+                            'cuenta' => $tipomovimiento[$monto_key],
+                            'titular' => $titular[$monto_key],
+                            'monto' => $monto[$monto_key],
+                            'banco' => $banco[$monto_key],
+                            'fecha' => $fecha[$monto_key],
+                            'fecha_deposito' => $fecha[$monto_key],
+                            'imagen' => 'logo_facturas.png',
+                            'estado' => '1'
+                        ]);
+                    }
 
-        //return $pedidos_pagados_total;
-        //ESTADOS PARA CAMPO "PAGADO" EN PEDIDOS
-        //0: DEBE
-        //1: ADELANTO
-        
-        //2: PAGADO
-
-        $request->validate([
-            'imagen' => 'required',
-        ]);
-
-        try {
-            DB::beginTransaction();
-            //MONTO A PAGAR - TOTAL DE LOS PEDIDOS
-            $deuda_total = $request->total_pedido_pagar;
-            $deuda_total=str_replace(',','',$deuda_total);
-            //MONTO TOTAL PAGADO - SUMA DE PAGOS
-            $pagado = $request->total_pago_pagar;
-            $pagado=str_replace(',','',$pagado);
-
-            $identi_asesor=User::where("identificador", $request->user_id)->where("unificado","NO")->first();
-
-            $pago = Pago::create([                
-                'user_id' => $identi_asesor->id,
-                'cliente_id' => $request->cliente_id,
-                'total_cobro' => $deuda_total,//total_pedido_pagar
-                'total_pagado' => $pagado,//total_pago_pagar
-                'condicion' => "PAGO",//ADELANTO
-                'notificacion' => 'Nuevo pago registrado',
-                /* 'saldo' => '1',
-                'diferencia' => '1', */
-                'estado' => '1'
-            ]);
-
-            event(new PagoEvent($pago));
-
-            // ALMACENANDO PAGO-PEDIDOS
-            $pedido_id = $request->pedido_id;
-            $monto_actual = $request->numbersaldo;
-            $saldo = $request->numberdiferencia;
-            $contPe = 0;
-            $monto_pagado_a_favor = $pagado;
-            //return $pedido_id;
-
-            foreach($pedido_id as $pedido_id_key =>$pedido_id_value)
-            {
-                //$pedido_id_value
-                //solo si marcado  check en total o en adelanto
-
-                //total
+                }
+                
+                $contPedidos = 0;
+                $contPT = 0;
+                $contPP = 0;
+                
+                $pedido_a_pago_total = [];
+                $pedido_a_pago_adelanto = [];
+                
                 if(count((array)$pedidos_pagados_total)>0)
                 {
-                    if( $pedidos_pagados_total[ $pedido_id_value ]["checked"]==1 )
-                    {
-                        $pagoPedido = PagoPedido::create([
-                            'pago_id' => $pago->id,
-                            'pedido_id' => $pedido_id_value,
-                            'abono' => $monto_actual[$pedido_id_value]-$saldo[$pedido_id_value],
-                            'estado' => '1'
-                        ]);
-                        //INDICADOR DE PAGOS Y ESTADO DE PAGADO EN EL PEDIDO
-                        $pedido = Pedido::find($pagoPedido->pedido_id);//->first();
-                        $pedido->update([
-                            'pago' => '1'//REGISTRAMOS QUE YA CUENTA CON UN PAGO
-                        ]);
-                        $detalle_pedido = DetallePedido::where('pedido_id', $pedido->id)->first();
-
-                        $detalle_pedido->update([
-                            'saldo' => $saldo[$pedido_id_value]//ACTUALIZAR SALDO - EN LA VISTA ES LA COLUMNA DIFERENCIA
-                        ]);
-
-
-
+                    foreach($pedidos_pagados_total as $pedidos_pagados_total_index => $pedidos_pagados_total_index_valor ){
+                        $pedidos_pagados_total[ $pedidos_pagados_total_index ]["pedido_id"]=$pedidos_pagados_total_index_valor["pedido_id"];
+                        $pedidos_pagados_total[ $pedidos_pagados_total_index ]["pago_id"] = $pago->id;
+                        $pedidos_pagados_total[ $pedidos_pagados_total_index ]["pagado"] = '2';
+                        $pedidos_pagados_total[ $pedidos_pagados_total_index ]["estado"] = $pedidos_pagados_total_index_valor["checked"];
                     }
+
+                    foreach($pedidos_pagados_total as $pedidos_pagados_total_index => $pedidos_pagados_total_index_valor )
+                    {
+                        $pago_pedido_update_total = PagoPedido::where('pago_id', $pago->id)
+                                                        ->where('pedido_id', $pedidos_pagados_total_index_valor["pedido_id"] )
+                                                        ->first();
+                        if( $pedidos_pagados_total_index_valor['estado'] == 1)
+                        {
+                            $pago_pedido_update_total->update([
+                                'pagado' => '2'
+                            ]);
+                            $pedido_update_total = Pedido::find( $pedidos_pagados_total_index_valor["pedido_id"] );
+                            $pedido_update_total->update([
+                                'pagado' => '2'
+                            ]);
+                        }
+                        
+                    }
+
+
                 }
+                
                 if(count((array)$pedidos_pagados_parcial)>0)
                 {
-                    if( $pedidos_pagados_parcial[ $pedido_id_value ]["checked"]==1 )
+                    foreach($pedidos_pagados_parcial as $pedidos_pagados_parcial_index => $pedidos_pagados_parcial_index_valor )
                     {
-                        $pagoPedido = PagoPedido::create([
-                            'pago_id' => $pago->id,
-                            'pedido_id' => $pedido_id_value,
-                            'abono' => $monto_actual[$pedido_id_value]-$saldo[$pedido_id_value],
-                            'estado' => '1'
-                        ]);
-                        //INDICADOR DE PAGOS Y ESTADO DE PAGADO EN EL PEDIDO
-                        $pedido = Pedido::find($pagoPedido->pedido_id);//->first();
-                        $pedido->update([
-                            'pago' => '1'//REGISTRAMOS QUE YA CUENTA CON UN PAGO
-                        ]);
-                        $detalle_pedido = DetallePedido::where('pedido_id', $pedido->id)->first();
+                        $pedidos_pagados_parcial[ $pedidos_pagados_parcial_index ]["pedido_id"]=$pedidos_pagados_parcial_index_valor["pedido_id"];
+                        $pedidos_pagados_parcial[ $pedidos_pagados_parcial_index ]["pago_id"] = $pago->id;
+                        $pedidos_pagados_parcial[ $pedidos_pagados_parcial_index ]["pagado"] = '1';
+                        $pedidos_pagados_parcial[ $pedidos_pagados_parcial_index ]["estado"] = $pedidos_pagados_parcial_index_valor["checked"];
+                    }
+                    
+                    foreach($pedidos_pagados_parcial as $pedidos_pagados_parcial_index => $pedidos_pagados_parcial_index_valor )
+                    {
+                        $pago_pedido_update_adelanto = PagoPedido::where('pago_id', $pago->id)
+                            ->where('pedido_id', $pedidos_pagados_parcial_index_valor["pedido_id"] )
+                            ->first();
+                        if( $pedidos_pagados_parcial_index_valor['estado'] == 1){
+                            $pago_pedido_update_adelanto->update([
+                                'pagado' => '1'
+                            ]);
 
-                        $detalle_pedido->update([
-                            'saldo' => $saldo[$pedido_id_value]//ACTUALIZAR SALDO - EN LA VISTA ES LA COLUMNA DIFERENCIA
-                        ]);
-
-
+                            $pedido_update_adelanto = Pedido::find( $pedidos_pagados_parcial_index_valor["pedido_id"] );
+                            $pedido_update_adelanto->update([
+                                'pagado' => '1'
+                            ]);
+                        }
 
                     }
+
                 }
 
+                $cliente = Cliente::find($request->cliente_id)->first();
 
+                $cliente_deuda=Cliente::where("id",$request->cliente_id)
+                        ->get([
+                            'clientes.id',
+                            DB::raw(" (select count(ped.id) from pedidos ped where ped.cliente_id=clientes.id and ped.pago in (0,1) and ped.pagado in (0,1) and ped.created_at >='2022-11-01 00:00:00' and ped.estado=1) as pedidos_mes_deuda "),
+                            DB::raw(" (select count(ped2.id) from pedidos ped2 where ped2.cliente_id=clientes.id and ped2.pago in (0,1) and ped2.pagado in (0,1) and ped2.created_at <='2022-10-31 00:00:00'  and ped2.estado=1) as pedidos_mes_deuda_antes ")
+                            ]
+                        )->first();
 
-                
+                $pedido_deuda = Pedido::where('cliente_id', $request->cliente_id)
+                                        ->where('pagado', '0')
+                                        ->count();
 
-            }
-            
-            // ALMACENANDO DETALLE DE PAGOS
-            $tipomovimiento = $request->tipomovimiento;
-            $titular = $request->titular;
-            $monto = $request->monto;
-            $imagen = $request->imagen;
-            $banco = $request->banco;
-            $fecha = $request->fecha;
-            
-            $files = $request->file('imagen');
-            $destinationPath = base_path('public/storage/pagos/');
-
-            $cont = 0;
-            $fileList = [];
-
-            /*foreach ($files as $file_key => $file_value ){
-                $file_name = Carbon::now()->second.$file_value->getClientOriginalName(); 
-                $fileList[$file_key] = array(
-                    'file_name' => $file_name,
-                );
-                $file_value->move($destinationPath , $file_name);
-                
-            }*/
-
-            $contPa = 0;
-
-            //recorrer pagos
-
-            foreach($monto as $monto_key =>$monto_value)
-            {
-                //recorro pagos agregados por boton +
-                $file_name=$imagen[$monto_key];
-                $fileList[$monto_key] = array(
-                    'file_name' => $file_name,
-                );
-            }
-
-            foreach($monto as $monto_key =>$monto_value)
-            {
-                if(isset($fileList[$monto_key]['file_name']))
+                if($cliente_deuda->pedidos_mes_deuda>0 && $cliente_deuda->pedidos_mes_deuda_antes==0)
                 {
-                    DetallePago::create([
-                        'pago_id' => $pago->id,
-                        'cuenta' => $tipomovimiento[$monto_key],
-                        'titular' => $titular[$monto_key],
-                        'monto' => $monto[$monto_key],
-                        'banco' => $banco[$monto_key],
-                        'fecha' => $fecha[$monto_key],
-                        'fecha_deposito' => $fecha[$monto_key],
-                        'imagen' => $fileList[$monto_key]['file_name'],
-                        'estado' => '1'
-                    ]); 
+                    $cliente->update([
+                        'deuda' => '0'
+                    ]);
 
-                }else{
-                    DetallePago::create([
-                        'pago_id' => $pago->id,
-                        'cuenta' => $tipomovimiento[$monto_key],
-                        'titular' => $titular[$monto_key],
-                        'monto' => $monto[$monto_key],
-                        'banco' => $banco[$monto_key],
-                        'fecha' => $fecha[$monto_key],
-                        'fecha_deposito' => $fecha[$monto_key],
-                        'imagen' => 'logo_facturas.png',
-                        'estado' => '1'
+                }else if($cliente_deuda->pedidos_mes_deuda>0 && $cliente_deuda->pedidos_mes_deuda_antes>0)
+                {
+                    $cliente->update([
+                        'deuda' => '1'
+                    ]);
+
+                }else if($cliente_deuda->pedidos_mes_deuda==0 && $cliente_deuda->pedidos_mes_deuda_antes>0)
+                {
+                    $cliente->update([
+                        'deuda' => '1'
                     ]);
                 }
 
-            }
-            
-            $contPedidos = 0;
-            $contPT = 0;
-            $contPP = 0;
-             
-            $pedido_a_pago_total = [];
-            $pedido_a_pago_adelanto = [];
-            
-            if(count((array)$pedidos_pagados_total)>0)
-            {
-                //return "aaa";
-                foreach($pedidos_pagados_total as $pedidos_pagados_total_index => $pedidos_pagados_total_index_valor ){
-                    $pedidos_pagados_total[ $pedidos_pagados_total_index ]["pedido_id"]=$pedidos_pagados_total_index_valor["pedido_id"];
-                    $pedidos_pagados_total[ $pedidos_pagados_total_index ]["pago_id"] = $pago->id;
-                    $pedidos_pagados_total[ $pedidos_pagados_total_index ]["pagado"] = '2';
-                    $pedidos_pagados_total[ $pedidos_pagados_total_index ]["estado"] = $pedidos_pagados_total_index_valor["checked"];
-                }
 
-                foreach($pedidos_pagados_total as $pedidos_pagados_total_index => $pedidos_pagados_total_index_valor )
+
+                DB::commit();
+            } catch (\Throwable $th) {
+                throw $th;
+                /*DB::rollback();
+                dd($th);*/
+            }  
+
+
+        }else{
+        
+            $contPedidos=0;
+            $contPedidosfor=0;
+            $pedido_id = $request->pedido_id;
+            $pedidos_pagados_total=$request->checktotal;
+            $pedidos_pagados_total_ar = array();
+            $pedidos_pagados_parcial=$request->checkadelanto;
+            $pedidos_pagados_parcial_ar = array();
+            $saldo = $request->numberdiferencia;
+            
+            if(count((array)$pedido_id)>0){
+                
+                foreach($pedido_id as $pedido_id_key =>$pedido_id_value)
                 {
-                    $pago_pedido_update_total = PagoPedido::where('pago_id', $pago->id)
-                                                    ->where('pedido_id', $pedidos_pagados_total_index_valor["pedido_id"] )
-                                                    ->first();
-                    if( $pedidos_pagados_total_index_valor['estado'] == 1)
+                    if(count((array)$pedidos_pagados_total))
                     {
-                        $pago_pedido_update_total->update([
-                            'pagado' => '2'
-                        ]);
-                        $pedido_update_total = Pedido::find( $pedidos_pagados_total_index_valor["pedido_id"] );
-                        $pedido_update_total->update([
-                            'pagado' => '2'
-                        ]);
+                        if (array_key_exists( $pedido_id_value , $pedidos_pagados_total)) {
+                            $pedidos_pagados_total_ar[ $pedido_id_value ]["checked"]=1;
+                            $pedidos_pagados_total_ar[ $pedido_id_value ]["pedido_id"]=$pedido_id[$pedido_id_key];
+                            $pedidos_pagados_total_ar[ $pedido_id_value ]["total_parcial"]='total';
+                            $pedidos_pagados_total_ar[ $pedido_id_value ]["saldo"]=$saldo[$pedido_id_value];
+                        }else{
+                            $pedidos_pagados_total_ar[ $pedido_id_value ]["checked"]=0;
+                            $pedidos_pagados_total_ar[ $pedido_id_value ]["pedido_id"]=$pedido_id[$pedido_id_key];
+                            $pedidos_pagados_total_ar[ $pedido_id_value ]["total_parcial"]='total';
+                            $pedidos_pagados_total_ar[ $pedido_id_value ]["saldo"]=$saldo[$pedido_id_value];
+                        }
                     }
-                    
-                }
-
-
-            }
-            
-            //$pedido_pago_parcial_x = [];
-            //$contppx = 0;
-            //return $pedidos_pagados_parcial;
-
-            if(count((array)$pedidos_pagados_parcial)>0)
-            {
-                foreach($pedidos_pagados_parcial as $pedidos_pagados_parcial_index => $pedidos_pagados_parcial_index_valor )
-                {
-                    $pedidos_pagados_parcial[ $pedidos_pagados_parcial_index ]["pedido_id"]=$pedidos_pagados_parcial_index_valor["pedido_id"];
-                    $pedidos_pagados_parcial[ $pedidos_pagados_parcial_index ]["pago_id"] = $pago->id;
-                    $pedidos_pagados_parcial[ $pedidos_pagados_parcial_index ]["pagado"] = '1';
-                    $pedidos_pagados_parcial[ $pedidos_pagados_parcial_index ]["estado"] = $pedidos_pagados_parcial_index_valor["checked"];
+                    else{
+                        $pedidos_pagados_total_ar[ $pedido_id_value ]["checked"]=0;
+                        $pedidos_pagados_total_ar[ $pedido_id_value ]["pedido_id"]=$pedido_id[$pedido_id_key];
+                        $pedidos_pagados_total_ar[ $pedido_id_value ]["total_parcial"]='total';
+                        $pedidos_pagados_total_ar[ $pedido_id_value ]["saldo"]=$saldo[$pedido_id_value];
+                    }
                 }
                 
-                foreach($pedidos_pagados_parcial as $pedidos_pagados_parcial_index => $pedidos_pagados_parcial_index_valor )
+                foreach($pedido_id as $pedido_id_key =>$pedido_id_value)
                 {
-                    $pago_pedido_update_adelanto = PagoPedido::where('pago_id', $pago->id)
-                        ->where('pedido_id', $pedidos_pagados_parcial_index_valor["pedido_id"] )
-                        ->first();
-                    if( $pedidos_pagados_parcial_index_valor['estado'] == 1){
-                        $pago_pedido_update_adelanto->update([
-                            'pagado' => '1'
-                        ]);
+                    
+                    if(count((array)$pedidos_pagados_parcial))
+                    {
+                        if (array_key_exists( $pedido_id_value , $pedidos_pagados_parcial)) {
+                            $pedidos_pagados_parcial_ar[ $pedido_id_value ]["checked"]=1;
+                            $pedidos_pagados_parcial_ar[ $pedido_id_value ]["pedido_id"]=$pedido_id[$pedido_id_key];
+                            $pedidos_pagados_parcial_ar[ $pedido_id_value ]["total_parcial"]='parcial';
+                            $pedidos_pagados_parcial_ar[ $pedido_id_value ]["saldo"]=$saldo[$pedido_id_value];
+                        }else{
+                            $pedidos_pagados_parcial_ar[ $pedido_id_value ]["checked"]=0;
+                            $pedidos_pagados_parcial_ar[ $pedido_id_value ]["pedido_id"]=$pedido_id[$pedido_id_key];
+                            $pedidos_pagados_parcial_ar[ $pedido_id_value ]["total_parcial"]='parcial';
+                            $pedidos_pagados_parcial_ar[ $pedido_id_value ]["saldo"]=$saldo[$pedido_id_value];
+                        }
+                    }
+                    else{
+                        $pedidos_pagados_parcial_ar[ $pedido_id_value ]["checked"]=0;
+                        $pedidos_pagados_parcial_ar[ $pedido_id_value ]["pedido_id"]=$pedido_id[$pedido_id_key];
+                        $pedidos_pagados_parcial_ar[ $pedido_id_value ]["total_parcial"]='parcial';
+                        $pedidos_pagados_parcial_ar[ $pedido_id_value ]["saldo"]=$saldo[$pedido_id_value];
+                    }
+                }
+                
+                foreach($pedido_id as $pedido_id_key =>$pedido_id_value)
+                {
+                    if($saldo[$pedido_id_value]<=3)
+                    {
+                        $pedidos_pagados_total_ar[ $pedido_id_value ]["checked"]=1;
+                        $pedidos_pagados_parcial_ar[ $pedido_id_value ]["checked"]=0;
+                    }
 
-                        $pedido_update_adelanto = Pedido::find( $pedidos_pagados_parcial_index_valor["pedido_id"] );
-                        $pedido_update_adelanto->update([
-                            'pagado' => '1'
+                }
+                
+                $pedidos_pagados_parcial=$pedidos_pagados_parcial_ar;
+                $pedidos_pagados_total=$pedidos_pagados_total_ar;
+            }
+
+            $request->validate([
+                'imagen' => 'required',
+            ]);
+
+            try {
+                DB::beginTransaction();
+                $deuda_total = $request->total_pedido_pagar;
+                $deuda_total=str_replace(',','',$deuda_total);
+                $pagado = $request->total_pago_pagar;
+                $pagado=str_replace(',','',$pagado);
+
+                $identi_asesor=User::where("identificador", $request->user_id)->where("unificado","NO")->first();
+
+                $pago = Pago::create([                
+                    'user_id' => $identi_asesor->id,
+                    'cliente_id' => $request->cliente_id,
+                    'total_cobro' => $deuda_total,//total_pedido_pagar
+                    'total_pagado' => $pagado,//total_pago_pagar
+                    'condicion' => "PAGO",//ADELANTO
+                    'notificacion' => 'Nuevo pago registrado',
+                    'estado' => '1'
+                ]);
+
+                event(new PagoEvent($pago));
+
+                $pedido_id = $request->pedido_id;
+                $monto_actual = $request->numbersaldo;
+                $saldo = $request->numberdiferencia;
+                $contPe = 0;
+                $monto_pagado_a_favor = $pagado;
+
+                foreach($pedido_id as $pedido_id_key =>$pedido_id_value)
+                {
+                    if(count((array)$pedidos_pagados_total)>0)
+                    {
+                        if( $pedidos_pagados_total[ $pedido_id_value ]["checked"]==1 )
+                        {
+                            $pagoPedido = PagoPedido::create([
+                                'pago_id' => $pago->id,
+                                'pedido_id' => $pedido_id_value,
+                                'abono' => $monto_actual[$pedido_id_value]-$saldo[$pedido_id_value],
+                                'estado' => '1'
+                            ]);
+                            
+                            $pedido = Pedido::find($pagoPedido->pedido_id);
+                            $pedido->update([
+                                'pago' => '1'
+                            ]);
+                            $detalle_pedido = DetallePedido::where('pedido_id', $pedido->id)->first();
+
+                            $detalle_pedido->update([
+                                'saldo' => $saldo[$pedido_id_value]
+                            ]);
+
+                        }
+                    }
+                    if(count((array)$pedidos_pagados_parcial)>0)
+                    {
+                        if( $pedidos_pagados_parcial[ $pedido_id_value ]["checked"]==1 )
+                        {
+                            $pagoPedido = PagoPedido::create([
+                                'pago_id' => $pago->id,
+                                'pedido_id' => $pedido_id_value,
+                                'abono' => $monto_actual[$pedido_id_value]-$saldo[$pedido_id_value],
+                                'estado' => '1'
+                            ]);
+                            
+                            $pedido = Pedido::find($pagoPedido->pedido_id);
+                            $pedido->update([
+                                'pago' => '1'
+                            ]);
+                            $detalle_pedido = DetallePedido::where('pedido_id', $pedido->id)->first();
+
+                            $detalle_pedido->update([
+                                'saldo' => $saldo[$pedido_id_value]
+                            ]);
+
+                        }
+                    }
+
+                }
+                
+                $tipomovimiento = $request->tipomovimiento;
+                $titular = $request->titular;
+                $monto = $request->monto;
+                $imagen = $request->imagen;
+                $banco = $request->banco;
+                $fecha = $request->fecha;
+                
+                $files = $request->file('imagen');
+                $destinationPath = base_path('public/storage/pagos/');
+
+                $cont = 0;
+                $fileList = [];
+
+                $contPa = 0;
+
+                foreach($monto as $monto_key =>$monto_value)
+                {
+                    $file_name=$imagen[$monto_key];
+                    $fileList[$monto_key] = array(
+                        'file_name' => $file_name,
+                    );
+                }
+
+                foreach($monto as $monto_key =>$monto_value)
+                {
+                    if(isset($fileList[$monto_key]['file_name']))
+                    {
+                        DetallePago::create([
+                            'pago_id' => $pago->id,
+                            'cuenta' => $tipomovimiento[$monto_key],
+                            'titular' => $titular[$monto_key],
+                            'monto' => $monto[$monto_key],
+                            'banco' => $banco[$monto_key],
+                            'fecha' => $fecha[$monto_key],
+                            'fecha_deposito' => $fecha[$monto_key],
+                            'imagen' => $fileList[$monto_key]['file_name'],
+                            'estado' => '1'
+                        ]); 
+
+                    }else{
+                        DetallePago::create([
+                            'pago_id' => $pago->id,
+                            'cuenta' => $tipomovimiento[$monto_key],
+                            'titular' => $titular[$monto_key],
+                            'monto' => $monto[$monto_key],
+                            'banco' => $banco[$monto_key],
+                            'fecha' => $fecha[$monto_key],
+                            'fecha_deposito' => $fecha[$monto_key],
+                            'imagen' => 'logo_facturas.png',
+                            'estado' => '1'
                         ]);
                     }
 
                 }
+                
+                $contPedidos = 0;
+                $contPT = 0;
+                $contPP = 0;
+                
+                $pedido_a_pago_total = [];
+                $pedido_a_pago_adelanto = [];
+                
+                if(count((array)$pedidos_pagados_total)>0)
+                {
+                    foreach($pedidos_pagados_total as $pedidos_pagados_total_index => $pedidos_pagados_total_index_valor ){
+                        $pedidos_pagados_total[ $pedidos_pagados_total_index ]["pedido_id"]=$pedidos_pagados_total_index_valor["pedido_id"];
+                        $pedidos_pagados_total[ $pedidos_pagados_total_index ]["pago_id"] = $pago->id;
+                        $pedidos_pagados_total[ $pedidos_pagados_total_index ]["pagado"] = '2';
+                        $pedidos_pagados_total[ $pedidos_pagados_total_index ]["estado"] = $pedidos_pagados_total_index_valor["checked"];
+                    }
 
-            }
-
-            /*$cliente = Cliente::find($request->cliente_id);
-
-            $pedido_deuda = Pedido::where('cliente_id', $request->cliente_id)
-                                    ->where('pagado', '0')
-                                    ->count();
-            if($pedido_deuda == 0){
-                $cliente->update([
-                    'deuda' => '0'
-                ]);
-            }*/
-            //validar esto al final
-
-            $cliente = Cliente::find($request->cliente_id)->first();
-
-            $cliente_deuda=Cliente::where("id",$request->cliente_id)
-                    ->get([
-                        'clientes.id',
-                        DB::raw(" (select count(ped.id) from pedidos ped where ped.cliente_id=clientes.id and ped.pago in (0,1) and ped.pagado in (0,1) and ped.created_at >='2022-11-01 00:00:00' and ped.estado=1) as pedidos_mes_deuda "),
-                        DB::raw(" (select count(ped2.id) from pedidos ped2 where ped2.cliente_id=clientes.id and ped2.pago in (0,1) and ped2.pagado in (0,1) and ped2.created_at <='2022-10-31 00:00:00'  and ped2.estado=1) as pedidos_mes_deuda_antes ")
-                        ]
-                    )->first();
-
-            $pedido_deuda = Pedido::where('cliente_id', $request->cliente_id)//CONTAR LA CANTIDAD DE PEDIDOS QUE DEBE
-                                    ->where('pagado', '0')
-                                    ->count();
-
-            if($cliente_deuda->pedidos_mes_deuda>0 && $cliente_deuda->pedidos_mes_deuda_antes==0)
-            {
-                $cliente->update([
-                    'deuda' => '0'
-                ]);
-
-            }else if($cliente_deuda->pedidos_mes_deuda>0 && $cliente_deuda->pedidos_mes_deuda_antes>0)
-            {
-                $cliente->update([
-                    'deuda' => '1'
-                ]);
-
-            }else if($cliente_deuda->pedidos_mes_deuda==0 && $cliente_deuda->pedidos_mes_deuda_antes>0)
-            {
-                $cliente->update([
-                    'deuda' => '1'
-                ]);
-            }
+                    foreach($pedidos_pagados_total as $pedidos_pagados_total_index => $pedidos_pagados_total_index_valor )
+                    {
+                        $pago_pedido_update_total = PagoPedido::where('pago_id', $pago->id)
+                                                        ->where('pedido_id', $pedidos_pagados_total_index_valor["pedido_id"] )
+                                                        ->first();
+                        if( $pedidos_pagados_total_index_valor['estado'] == 1)
+                        {
+                            $pago_pedido_update_total->update([
+                                'pagado' => '2'
+                            ]);
+                            $pedido_update_total = Pedido::find( $pedidos_pagados_total_index_valor["pedido_id"] );
+                            $pedido_update_total->update([
+                                'pagado' => '2'
+                            ]);
+                        }
+                        
+                    }
 
 
+                }
+                
+                if(count((array)$pedidos_pagados_parcial)>0)
+                {
+                    foreach($pedidos_pagados_parcial as $pedidos_pagados_parcial_index => $pedidos_pagados_parcial_index_valor )
+                    {
+                        $pedidos_pagados_parcial[ $pedidos_pagados_parcial_index ]["pedido_id"]=$pedidos_pagados_parcial_index_valor["pedido_id"];
+                        $pedidos_pagados_parcial[ $pedidos_pagados_parcial_index ]["pago_id"] = $pago->id;
+                        $pedidos_pagados_parcial[ $pedidos_pagados_parcial_index ]["pagado"] = '1';
+                        $pedidos_pagados_parcial[ $pedidos_pagados_parcial_index ]["estado"] = $pedidos_pagados_parcial_index_valor["checked"];
+                    }
+                    
+                    foreach($pedidos_pagados_parcial as $pedidos_pagados_parcial_index => $pedidos_pagados_parcial_index_valor )
+                    {
+                        $pago_pedido_update_adelanto = PagoPedido::where('pago_id', $pago->id)
+                            ->where('pedido_id', $pedidos_pagados_parcial_index_valor["pedido_id"] )
+                            ->first();
+                        if( $pedidos_pagados_parcial_index_valor['estado'] == 1){
+                            $pago_pedido_update_adelanto->update([
+                                'pagado' => '1'
+                            ]);
 
-            DB::commit();
-        } catch (\Throwable $th) {
-            throw $th;
-            /*DB::rollback();
-            dd($th);*/
-        }        
+                            $pedido_update_adelanto = Pedido::find( $pedidos_pagados_parcial_index_valor["pedido_id"] );
+                            $pedido_update_adelanto->update([
+                                'pagado' => '1'
+                            ]);
+                        }
+
+                    }
+
+                }
+
+                $cliente = Cliente::find($request->cliente_id)->first();
+
+                $cliente_deuda=Cliente::where("id",$request->cliente_id)
+                        ->get([
+                            'clientes.id',
+                            DB::raw(" (select count(ped.id) from pedidos ped where ped.cliente_id=clientes.id and ped.pago in (0,1) and ped.pagado in (0,1) and ped.created_at >='2022-11-01 00:00:00' and ped.estado=1) as pedidos_mes_deuda "),
+                            DB::raw(" (select count(ped2.id) from pedidos ped2 where ped2.cliente_id=clientes.id and ped2.pago in (0,1) and ped2.pagado in (0,1) and ped2.created_at <='2022-10-31 00:00:00'  and ped2.estado=1) as pedidos_mes_deuda_antes ")
+                            ]
+                        )->first();
+
+                $pedido_deuda = Pedido::where('cliente_id', $request->cliente_id)
+                                        ->where('pagado', '0')
+                                        ->count();
+
+                if($cliente_deuda->pedidos_mes_deuda>0 && $cliente_deuda->pedidos_mes_deuda_antes==0)
+                {
+                    $cliente->update([
+                        'deuda' => '0'
+                    ]);
+
+                }else if($cliente_deuda->pedidos_mes_deuda>0 && $cliente_deuda->pedidos_mes_deuda_antes>0)
+                {
+                    $cliente->update([
+                        'deuda' => '1'
+                    ]);
+
+                }else if($cliente_deuda->pedidos_mes_deuda==0 && $cliente_deuda->pedidos_mes_deuda_antes>0)
+                {
+                    $cliente->update([
+                        'deuda' => '1'
+                    ]);
+                }
+
+
+
+                DB::commit();
+            } catch (\Throwable $th) {
+                throw $th;
+                /*DB::rollback();
+                dd($th);*/
+            } 
+        
+        }
 
         return redirect()->route('pagos.mispagos')->with('info', 'registrado');
         
@@ -1609,6 +1939,45 @@ class PagoController extends Controller
         return redirect()->route('pagos.index')->with('info', 'eliminado');        
     }
 
+    public function addImgTempPagoPerdonar(Request $request)
+    {
+        $file1 = $request->file('adjunto1');
+        $file2 = $request->file('adjunto2');
+        $file3 = $request->file('adjunto3');
+        if(isset($file1)){                   
+            $destinationPath = base_path('public/storage/pagos/');
+            $cont = 0;       
+            $file_name = Carbon::now()->second.$file1->getClientOriginalName();
+            /*$fileList[$cont] = array(
+                'file_name' => $file_name,
+            );*/
+            $file1->move($destinationPath , $file_name);
+            $html=$file_name;
+        }
+        if(isset($file2)){                   
+            $destinationPath = base_path('public/storage/pagos/');
+            $cont = 0;       
+            $file_name = Carbon::now()->second.$file2->getClientOriginalName();
+            /*$fileList[$cont] = array(
+                'file_name' => $file_name,
+            );*/
+            $file2->move($destinationPath , $file_name);
+            $html=$file_name;
+        }  
+        if(isset($file3)){                   
+            $destinationPath = base_path('public/storage/pagos/');
+            $cont = 0;       
+            $file_name = Carbon::now()->second.$file3->getClientOriginalName();
+            /*$fileList[$cont] = array(
+                'file_name' => $file_name,
+            );*/
+            $file3->move($destinationPath , $file_name);
+            $html=$file_name;
+        }  
+
+        return response()->json(['html' => $html]);
+    }
+
     public function addImgTemp(Request $request)
     {
         $file = $request->file('adjunto'); 
@@ -1625,8 +1994,7 @@ class PagoController extends Controller
             $html="";
         }            
 
-        return response()->json(['html' => $html]); 
-        //return redirect()->route('pedidosPDF', $pedido)->with('info', 'registrado');
+        return response()->json(['html' => $html]);
     }
 
     public function changeImg(Request $request)
@@ -1766,6 +2134,41 @@ class PagoController extends Controller
         return response()->json(['html' => $html]);
     }
 
+    public function desabonarid(Request $request)
+    {
+        //modificar primero
+        if (!$request->hiddenDesabonar) {
+            $html='';
+            return 'nada';
+        } else {
+            //$pago_id=;
+            $html='';//3840
+            $pago_id=$request->hiddenDesabonar;
+
+            
+            try {
+                DB::beginTransaction();
+
+                MovimientoBancario::Where("cabpago",$pago_id)
+                    ->update([
+                        'detpago'=>"0",
+                        'cabpago'=>"0",
+                        'pago'=>"0"
+                    ]);
+
+                DB::commit();
+
+            }
+            catch (\Throwable $th) {
+                throw $th;
+                $html="error";
+              
+            }
+            
+        }
+        return response()->json(['html' => $html]);
+    }
+
     public function pagodetalleUpdate(Request $request)
     {
         //modificar primero
@@ -1793,10 +2196,17 @@ class PagoController extends Controller
                         'fecha' => $fecha,
                         'fecha_deposito' => $fecha
                     ]);
+                $detallepago=DetallePago::where('id',$detalle)
+                    ->select(
+                        'banco','titular',
+                        DB::raw('DATE_FORMAT(fecha, "%d/%m/%Y") as fecha'),
+                        DB::raw('DATE_FORMAT(fecha, "%Y-%m-%d") as fecha_conciliar'),
+                    )
+                    ->first();
 
 
                 DB::commit();
-                $html=$detalle;
+                $html=$detallepago;
 
             }
             catch (\Throwable $th) {
@@ -2051,6 +2461,23 @@ class PagoController extends Controller
         $pagos = Pago::join('users as u', 'pagos.user_id', 'u.id')
                 ->join('clientes as c', 'pagos.cliente_id', 'c.id')
                 ->select('pagos.id as id',
+                            DB::raw(" (CASE WHEN pagos.id<10 THEN concat('PAG',u.identificador,'-',
+                                IF ( (select count(dpago.id) from detalle_pagos dpago where dpago.pago_id=pagos.id and dpago.estado in (1) )>1,'V','I' )  ,
+                                IF ( (select count(ppedidos.id) from pago_pedidos ppedidos where ppedidos.pago_id=pagos.id and ppedidos.estado in (1) ) >1,'V','I' ),
+                                '-',pagos.id
+                                ) 
+                            WHEN pagos.id<100  THEN concat('PAG',u.identificador,'-',
+                                IF ( (select count(dpago.id) from detalle_pagos dpago where dpago.pago_id=pagos.id and dpago.estado in (1) )>1,'V','I' )  ,
+                                IF ( (select count(ppedidos.id) from pago_pedidos ppedidos where ppedidos.pago_id=pagos.id and ppedidos.estado in (1) ) >1,'V','I' ),
+                                '-',pagos.id) 
+                            WHEN pagos.id<1000  THEN concat('PAG',u.identificador,'-',
+                                IF ( (select count(dpago.id) from detalle_pagos dpago where dpago.pago_id=pagos.id and dpago.estado in (1) )>1,'V','I' )  ,
+                                IF ( (select count(ppedidos.id) from pago_pedidos ppedidos where ppedidos.pago_id=pagos.id and ppedidos.estado in (1) ) >1,'V','I' ),
+                                '-',pagos.id) 
+                            ELSE concat('PAG',u.identificador,'-',
+                                IF ( (select count(dpago.id) from detalle_pagos dpago where dpago.pago_id=pagos.id and dpago.estado in (1) )>1,'V','I' )  ,
+                                IF ( (select count(ppedidos.id) from pago_pedidos ppedidos where ppedidos.pago_id=pagos.id and ppedidos.estado in (1) ) >1,'V','I' ),
+                                '-',pagos.id) END) AS id2"),
                         'u.identificador as users',
                         'c.celular',
                         'pagos.observacion',                        
@@ -2130,17 +2557,40 @@ class PagoController extends Controller
         $max = Carbon::createFromFormat('d/m/Y', $request->max)->format('Y-m-d');
 
         $pagos=null;
+
+        
        
         if(!$request->asesores)
         {
             $pagos = Pago::join('users as u', 'pagos.user_id', 'u.id')
                 ->join('clientes as c', 'pagos.cliente_id', 'c.id')
                 ->select('pagos.id as id',
+                DB::raw(" (CASE WHEN pagos.id<10 THEN concat('PAG',u.identificador,'-',
+                                IF ( (select count(dpago.id) from detalle_pagos dpago where dpago.pago_id=pagos.id and dpago.estado in (1) )>1,'V','I' )  ,
+                                IF ( (select count(ppedidos.id) from pago_pedidos ppedidos where ppedidos.pago_id=pagos.id and ppedidos.estado in (1) ) >1,'V','I' ),
+                                '-',pagos.id
+                                ) 
+                            WHEN pagos.id<100  THEN concat('PAG',u.identificador,'-',
+                                IF ( (select count(dpago.id) from detalle_pagos dpago where dpago.pago_id=pagos.id and dpago.estado in (1) )>1,'V','I' )  ,
+                                IF ( (select count(ppedidos.id) from pago_pedidos ppedidos where ppedidos.pago_id=pagos.id and ppedidos.estado in (1) ) >1,'V','I' ),
+                                '-',pagos.id) 
+                            WHEN pagos.id<1000  THEN concat('PAG',u.identificador,'-',
+                                IF ( (select count(dpago.id) from detalle_pagos dpago where dpago.pago_id=pagos.id and dpago.estado in (1) )>1,'V','I' )  ,
+                                IF ( (select count(ppedidos.id) from pago_pedidos ppedidos where ppedidos.pago_id=pagos.id and ppedidos.estado in (1) ) >1,'V','I' ),
+                                '-',pagos.id) 
+                            ELSE concat('PAG',u.identificador,'-',
+                                IF ( (select count(dpago.id) from detalle_pagos dpago where dpago.pago_id=pagos.id and dpago.estado in (1) )>1,'V','I' )  ,
+                                IF ( (select count(ppedidos.id) from pago_pedidos ppedidos where ppedidos.pago_id=pagos.id and ppedidos.estado in (1) ) >1,'V','I' ),
+                                '-',pagos.id) END) AS id2"),
                         'u.identificador as users',
                         'c.celular',
-                        'pagos.observacion',                        
+                        'c.icelular',
+                        DB::raw(" (CASE WHEN pagos.subcondicion='COURIER PERDONADO' THEN 'COURIER PERDONADO'
+                                    else CONCAT(c.celular,IF(ISNULL(c.icelular),'',CONCAT('-',c.icelular) )) end) as cliente "),
+                        'pagos.observacion',
                         'pagos.total_cobro',
                         'pagos.condicion',
+                        'pagos.subcondicion',
                         'pagos.created_at',
                         DB::raw('(select DATE_FORMAT( MIN(dpa.fecha), "%Y-%m-%d")   from detalle_pagos dpa where dpa.pago_id=pagos.id and dpa.estado=1) as fecha'),
                         DB::raw('(select DATE_FORMAT( MIN(dpa.fecha), "%d/%m/%Y %H:%i:%s")   from detalle_pagos dpa where dpa.pago_id=pagos.id and dpa.estado=1) as fecha2'),
@@ -2158,11 +2608,32 @@ class PagoController extends Controller
             $pagos = Pago::join('users as u', 'pagos.user_id', 'u.id')
             ->join('clientes as c', 'pagos.cliente_id', 'c.id')
             ->select('pagos.id as id',
+                    DB::raw(" (CASE WHEN pagos.id<10 THEN concat('PAG',u.identificador,'-',
+                                IF ( (select count(dpago.id) from detalle_pagos dpago where dpago.pago_id=pagos.id and dpago.estado in (1) )>1,'V','I' )  ,
+                                IF ( (select count(ppedidos.id) from pago_pedidos ppedidos where ppedidos.pago_id=pagos.id and ppedidos.estado in (1) ) >1,'V','I' ),
+                                '-',pagos.id
+                                ) 
+                            WHEN pagos.id<100  THEN concat('PAG',u.identificador,'-',
+                                IF ( (select count(dpago.id) from detalle_pagos dpago where dpago.pago_id=pagos.id and dpago.estado in (1) )>1,'V','I' )  ,
+                                IF ( (select count(ppedidos.id) from pago_pedidos ppedidos where ppedidos.pago_id=pagos.id and ppedidos.estado in (1) ) >1,'V','I' ),
+                                '-',pagos.id) 
+                            WHEN pagos.id<1000  THEN concat('PAG',u.identificador,'-',
+                                IF ( (select count(dpago.id) from detalle_pagos dpago where dpago.pago_id=pagos.id and dpago.estado in (1) )>1,'V','I' )  ,
+                                IF ( (select count(ppedidos.id) from pago_pedidos ppedidos where ppedidos.pago_id=pagos.id and ppedidos.estado in (1) ) >1,'V','I' ),
+                                '-',pagos.id) 
+                            ELSE concat('PAG',u.identificador,'-',
+                                IF ( (select count(dpago.id) from detalle_pagos dpago where dpago.pago_id=pagos.id and dpago.estado in (1) )>1,'V','I' )  ,
+                                IF ( (select count(ppedidos.id) from pago_pedidos ppedidos where ppedidos.pago_id=pagos.id and ppedidos.estado in (1) ) >1,'V','I' ),
+                                '-',pagos.id) END) AS id2"),
                     'u.identificador as users',
                     'c.celular',
+                    'c.icelular',
+                    DB::raw(" (CASE WHEN pagos.subcondicion='COURIER PERDONADO' THEN 'COURIER PERDONADO'
+                                    else CONCAT(c.celular,IF(ISNULL(c.icelular),'',CONCAT('-',c.icelular) )) end) as cliente "),
                     'pagos.observacion',                        
                     'pagos.total_cobro',
                     'pagos.condicion',
+                    'pagos.subcondicion',
                     'pagos.created_at',
                     //DB::raw('(select DATE_FORMAT( MIN(dpa.fecha), "%d/%m/%Y %H:%i:%s")   from detalle_pagos dpa where dpa.pago_id=pagos.id and dpa.estado=1) as fecha'),
                     DB::raw('(select DATE_FORMAT( MIN(dpa.fecha), "%Y-%m-%d")   from detalle_pagos dpa where dpa.pago_id=pagos.id and dpa.estado=1) as fecha'),
@@ -2218,8 +2689,27 @@ class PagoController extends Controller
             $pagos = Pago::join('users as u', 'pagos.user_id', 'u.id')
                 ->join('clientes as c', 'pagos.cliente_id', 'c.id')
                 ->select('pagos.id as id',
+                            DB::raw(" (CASE WHEN pagos.id<10 THEN concat('PAG',u.identificador,'-',
+                                IF ( (select count(dpago.id) from detalle_pagos dpago where dpago.pago_id=pagos.id and dpago.estado in (1) )>1,'V','I' )  ,
+                                IF ( (select count(ppedidos.id) from pago_pedidos ppedidos where ppedidos.pago_id=pagos.id and ppedidos.estado in (1) ) >1,'V','I' ),
+                                '-',pagos.id
+                                ) 
+                            WHEN pagos.id<100  THEN concat('PAG',u.identificador,'-',
+                                IF ( (select count(dpago.id) from detalle_pagos dpago where dpago.pago_id=pagos.id and dpago.estado in (1) )>1,'V','I' )  ,
+                                IF ( (select count(ppedidos.id) from pago_pedidos ppedidos where ppedidos.pago_id=pagos.id and ppedidos.estado in (1) ) >1,'V','I' ),
+                                '-',pagos.id) 
+                            WHEN pagos.id<1000  THEN concat('PAG',u.identificador,'-',
+                                IF ( (select count(dpago.id) from detalle_pagos dpago where dpago.pago_id=pagos.id and dpago.estado in (1) )>1,'V','I' )  ,
+                                IF ( (select count(ppedidos.id) from pago_pedidos ppedidos where ppedidos.pago_id=pagos.id and ppedidos.estado in (1) ) >1,'V','I' ),
+                                '-',pagos.id) 
+                            ELSE concat('PAG',u.identificador,'-',
+                                IF ( (select count(dpago.id) from detalle_pagos dpago where dpago.pago_id=pagos.id and dpago.estado in (1) )>1,'V','I' )  ,
+                                IF ( (select count(ppedidos.id) from pago_pedidos ppedidos where ppedidos.pago_id=pagos.id and ppedidos.estado in (1) ) >1,'V','I' ),
+                                '-',pagos.id) END) AS id2"),
                         'u.identificador as users',
                         'c.celular',
+                        'c.icelular',
+                        DB::raw(" CONCAT(c.celular,IF(ISNULL(c.icelular),'',CONCAT('-',c.icelular) )) as cliente"),
                         'pagos.observacion',                        
                         'pagos.total_cobro',
                         'pagos.condicion',
@@ -2239,6 +2729,8 @@ class PagoController extends Controller
             ->select('pagos.id as id',
                     'u.identificador as users',
                     'c.celular',
+                    'c.icelular',
+                    DB::raw(" CONCAT(c.celular,IF(ISNULL(c.icelular),'',CONCAT('-',c.icelular) )) as cliente"),
                     'pagos.observacion',                        
                     'pagos.total_cobro',
                     'pagos.condicion',
@@ -2381,6 +2873,23 @@ class PagoController extends Controller
             $pagos = Pago::join('users as u', 'pagos.user_id', 'u.id')
                 ->join('clientes as c', 'pagos.cliente_id', 'c.id')
                 ->select('pagos.id as id',
+                        DB::raw(" (CASE WHEN pagos.id<10 THEN concat('PAG',u.identificador,'-',
+                                IF ( (select count(dpago.id) from detalle_pagos dpago where dpago.pago_id=pagos.id and dpago.estado in (1) )>1,'V','I' )  ,
+                                IF ( (select count(ppedidos.id) from pago_pedidos ppedidos where ppedidos.pago_id=pagos.id and ppedidos.estado in (1) ) >1,'V','I' ),
+                                '-',pagos.id
+                                ) 
+                            WHEN pagos.id<100  THEN concat('PAG',u.identificador,'-',
+                                IF ( (select count(dpago.id) from detalle_pagos dpago where dpago.pago_id=pagos.id and dpago.estado in (1) )>1,'V','I' )  ,
+                                IF ( (select count(ppedidos.id) from pago_pedidos ppedidos where ppedidos.pago_id=pagos.id and ppedidos.estado in (1) ) >1,'V','I' ),
+                                '-',pagos.id) 
+                            WHEN pagos.id<1000  THEN concat('PAG',u.identificador,'-',
+                                IF ( (select count(dpago.id) from detalle_pagos dpago where dpago.pago_id=pagos.id and dpago.estado in (1) )>1,'V','I' )  ,
+                                IF ( (select count(ppedidos.id) from pago_pedidos ppedidos where ppedidos.pago_id=pagos.id and ppedidos.estado in (1) ) >1,'V','I' ),
+                                '-',pagos.id) 
+                            ELSE concat('PAG',u.identificador,'-',
+                                IF ( (select count(dpago.id) from detalle_pagos dpago where dpago.pago_id=pagos.id and dpago.estado in (1) )>1,'V','I' )  ,
+                                IF ( (select count(ppedidos.id) from pago_pedidos ppedidos where ppedidos.pago_id=pagos.id and ppedidos.estado in (1) ) >1,'V','I' ),
+                                '-',pagos.id) END) AS id2"),
                         'u.identificador as users',
                         'c.celular',
                         'pagos.observacion',                        
@@ -2424,8 +2933,8 @@ class PagoController extends Controller
                 $btn='';
                 if(Auth::user()->rol == "Administrador"){
                     $btn=$btn.'<a href="'.route('pagos.show', $pago['id']).'" class="btn btn-info btn-sm">Ver</a>';
-                    $btn=$btn.'<a href="'.route('administracion.revisar', $pago).'" class="btn btn-success btn-sm">Editar</a>';
-                    //$btn = $btn.'<a href="" data-target="#modal-delete" data-toggle="modal" data-delete="'.$pago['id'].'"><button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i> Eliminar</button></a>';
+                    $btn=$btn.'<a href="'.route('administracion.revisar', $pago).'" class="btn btn-success btn-sm">Editar</a>';                    
+                    $btn = $btn.'<a href="" data-target="#modal-desabonar" data-toggle="modal" data-desabonar="'.$pago['id'].'" data-pago="'.$pago['id2'].'"><button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i> Desabonar</button></a>';
                 }
                 return $btn;
             })
@@ -2741,7 +3250,7 @@ class PagoController extends Controller
                     ]);
             } */
 
-            $abono=0.00;
+            $abono_=0.00;
             //return $request->all();
             $pedido_list = $request->pedido_id;
             $pedido_id_abono = $request->pedido_id_abono;
@@ -2749,7 +3258,7 @@ class PagoController extends Controller
             while ($contpedido < count((array)$pedido_list)) 
             {
                 $abono_ =$pedido_id_abono[$contpedido];
-                if($abono ==0.00)
+                if($abono_ ==0.00)
                 {
                     $pedido_ = Pedido::where("id",$pedido_list[$contpedido]);
                     $pedido_->update([
@@ -2873,4 +3382,125 @@ class PagoController extends Controller
 
         return response()->download($destinationPath);
     }
+
+    public function perdonardeuda(Request $request)
+    {
+        //return $request->all();
+        $pedidos=$request->pedidos;
+        if(!$request->pedidos)
+        {
+            return '0';
+        }
+        else{
+            $array_pedidos=explode(",",$pedidos);  
+
+            $rol=Auth::user()->rol;
+
+            $user_id=null;
+
+            try {
+                DB::beginTransaction();
+
+                $cliente_perdondarcourier = Cliente::where("nombre","PERDONAR COURIER")->first();
+
+                //return $cliente_perdondarcourier;
+
+                $pago = Pago::create([                
+                    'user_id' => $cliente_perdondarcourier->user_id,
+                    'cliente_id' => $cliente_perdondarcourier->id,
+                    'total_cobro' => '0',
+                    'total_pagado' => '0',
+                    'condicion' => "PAGO",
+                    'notificacion' => 'Nuevo pago registrado',
+                    'estado' => '1',
+                    'observacion' => $request->observacion,
+                    'subcondicion' => 'COURIER PERDONADO'
+                ]);
+
+                $saldos=0.00;
+
+                foreach($array_pedidos as $pedido_id)
+                {
+                    $pedido = Pedido::find($pedido_id);
+
+                    $pedido->update([
+                        'pagado' => '2',
+                    ]);
+                    
+                    $detallePedido=DetallePedido::where("pedido_id",$pedido_id)->first();
+
+                    $saldos=$saldos+($detallePedido->saldo*1);
+                    
+                    $pagoPedido = PagoPedido::create([
+                        'pago_id' => $pago->id,
+                        'pedido_id' => $pedido_id,
+                        'abono' => ($detallePedido->saldo),
+                        'estado' => '1',
+                        'pagado' => '2'
+                    ]);
+
+                    $detallePedido->update([
+                        'saldo'=>'0'
+                    ]);
+                    
+                }
+
+                DetallePago::create([
+                    'pago_id' => $pago->id,
+                    'cuenta' => '',
+                    'titular' => '',
+                    'monto' => $saldos,
+                    'banco' => '',
+                    'bancop' => '',
+                    'obanco' => '',
+                    'fecha' => Carbon::now(),
+                    'fecha_deposito' => Carbon::now(),
+                    'imagen' => '',
+                    'estado' => '1'
+                ]); 
+
+                
+                DB::commit();
+            } catch (\Throwable $th) {
+                throw $th;
+                /*DB::rollback();
+                dd($th);*/
+            }
+
+            return response()->json(['html' => $pago->id]);
+          
+
+        }
+        
+    }
+
+    public function TitularesBanco(Request $request)
+    {
+        $titulares_a=null;
+        if(!$request->banco)
+        {
+
+        }else{
+
+            $titulares_a=CuentaBancaria::join('titulares as t', 't.id', 'cuenta_bancarias.titular')
+                    ->join('entidad_bancarias as b', 'b.id', 'cuenta_bancarias.banco')
+                    ->where('cuenta_bancarias.estado','1')
+                    ->where('cuenta_bancarias.tipo','AHORROS')
+                    ->where('b.nombre',$request->banco)
+                    ->select(
+                        't.nombre',
+                        'cuenta_bancarias.numero'
+                    );
+
+            
+
+        }
+        $titulares_a=$titulares_a->get();
+        
+        return response()->json(['html' => $titulares_a]);
+
+    }
+
+
+
 }

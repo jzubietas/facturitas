@@ -54,6 +54,7 @@
             <th scope="col">Dirección de envío</th>
             <th scope="col">Estado de envio</th>
             <th scope="col">Estado de sobre</th>
+            <th scope="col">Observacion Devolucion</th>
             <th scope="col">Acciones</th>
           </tr>
         </thead>
@@ -974,14 +975,19 @@
             'data': { "cliente_id": cliente}, 
             "type": "get",
           },
-         
+          'columnDefs': [ {
+            'targets': [0], /* column index */
+            'orderable': false, /* true or false */
+          }],
           columns:[
             {
                 "data": "id",
-                'targets': 0,
+                'targets': [0],
                 'checkboxes': {                        
                     'selectRow': true
-                }
+                },
+                defaultContent: '',
+                orderable: false, 
             },
             {data: 'codigo', name: 'codigo',},
             {
@@ -994,7 +1000,8 @@
             },
           ],
           'select': {
-              'style': 'multi'
+              'style': 'multi',
+              selector: 'td:first-child'
           },
         });
 
@@ -1140,7 +1147,11 @@
         createdRow: function( row, data, dataIndex){
           //console.log(row);          
         },
-        rowCallback: function (row, data, index) {           
+        rowCallback: function (row, data, index) {
+              console.log(data);
+              if( data.devuelto!=null ){
+                $('td', row).css('color','#cf0a0a');
+              }
         },
         columns: [
           {
@@ -1218,6 +1229,19 @@
             "visible":false
           },
           {
+            data: 'observacion_devuelto', 
+            name: 'observacion_devuelto',
+            render: function ( data, type, row, meta ) {
+              if(data!=null)
+              {
+                return data;
+              }else{
+                return ''
+              }
+            },
+            "visible":true
+          },
+          {
             data: 'action', 
             name: 'action', 
             orderable: false, 
@@ -1225,7 +1249,11 @@
             sWidth:'20%',
             render: function ( data, type, row, meta ) {   
               datass='';
-              datass=datass+'<a href="" data-target="#modal-direccion" data-toggle="modal" data-cliente="'+row.cliente_id+'" data-direccion="'+row.id+'"><button class="btn btn-info btn-sm"><i class="fas fa-envelope"></i> Direccion</button></a>';  
+
+              @if (Auth::user()->rol == "Asesor" || Auth::user()->rol == "Administrador")
+                datass=datass+'<a href="" data-target="#modal-direccion" data-toggle="modal" data-cliente="'+row.cliente_id+'" data-direccion="'+row.id+'"><button class="btn btn-info btn-sm"><i class="fas fa-envelope"></i> Direccion</button></a>';  
+              @endif
+              
 
               @if($ver_botones_accion > 2)
                 @can('envios.enviar')

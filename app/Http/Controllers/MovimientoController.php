@@ -74,18 +74,21 @@ class MovimientoController extends Controller
             $movimientos = $movimientos->where('banco','like','%'.$buscar_banco.'%');
         }
 
-        if($buscar_tipo)
+        /*if($buscar_tipo)
         {
             $movimientos = $movimientos->where('tipo','like','%'.$buscar_tipo.'%');
-        }
+        }*/
 
         if($buscar_titular)
         {
             $movimientos = $movimientos->where('titular','like','%'.$buscar_titular.'%');
         }
 
-        $movimientos = $movimientos->get([
-            'movimiento_bancarios.id',           
+        //return $request->all();
+
+        $movimientos = $movimientos->select(
+            'movimiento_bancarios.id',
+            //'movimiento_bancarios.id as id2',
             DB::raw(" (CASE WHEN movimiento_bancarios.id<10 THEN concat('MOV000',movimiento_bancarios.id) 
                             WHEN movimiento_bancarios.id<100  THEN concat('MOV00',movimiento_bancarios.id) 
                             WHEN movimiento_bancarios.id<1000  THEN concat('MOV0',movimiento_bancarios.id) 
@@ -95,14 +98,18 @@ class MovimientoController extends Controller
             'movimiento_bancarios.importe',
             'movimiento_bancarios.tipo',
             'movimiento_bancarios.descripcion_otros',
-            //'movimiento_bancarios.created_at as fecha',
-            DB::raw('(select DATE_FORMAT(dpa.fecha, "%Y-%m-%d")  from movimiento_bancarios dpa where dpa.id=movimiento_bancarios.id and dpa.estado=1) as fecha'),
+            DB::raw('(DATE_FORMAT(movimiento_bancarios.fecha, "%Y-%m-%d")) as fecha'),
+            //DB::raw('(DATE_FORMAT(movimiento_bancarios.fecha, "%d/%m/%Y")) as fecha2'),
             DB::raw("(CASE WHEN movimiento_bancarios.pago =0 THEN 'SIN CONCILIAR' ELSE 'CONCILIADO' END) AS pago"),
-            //"case when movimiento_bancarios.pago=0 then 'SIN CONCILIAR' else 'CONCILIACION' END",
             'movimiento_bancarios.estado',
             'movimiento_bancarios.created_at',
-        ]);
+        );
+        $movimientos=$movimientos->get();
 
+        /*->where(function ($query) {
+            $query->where('c', '=', 1)
+                  ->orWhere('d', '=', 1);
+*/
         
 
         return Datatables::of($movimientos)
@@ -125,11 +132,14 @@ class MovimientoController extends Controller
                 'movimiento_bancarios.banco',
                 'movimiento_bancarios.titular',
                 'movimiento_bancarios.importe',
-                DB::raw('DATE_FORMAT(fecha, "%d/%m/%Y") as fecha'),
+                DB::raw('DATE_FORMAT(movimiento_bancarios.fecha, "%Y-%m-%d") as fecha'),
+                //DB::raw('DATE_FORMAT(fecha, "%d/%m/%Y") as fecha'),
                 //'movimiento_bancarios.fecha',
                 'movimiento_bancarios.tipo',
 
             );//->get();
+
+
 
         $conciliar=$request->conciliar;
         $excluir=$request->excluir;
@@ -184,12 +194,18 @@ class MovimientoController extends Controller
         //$min=$request->de;
 
         $fechadeposito=$fechadeposito;//04/10/2022
+
+        $fechadeposito = Carbon::createFromFormat('d/m/Y', $fechadeposito)->format('Y-m-d');
+        //return $fechadeposito;
+
+
         //return $fechadeposito;
 
         //return $fecha_compra;
 
         if ($fechadeposito!='' || !is_null($fechadeposito) ) {
-            $query->whereDate('fecha','>',''.$fechadeposito.'');
+            //DB::raw('DATE(pagos.created_at)')
+            $query->where(DB::raw('DATE(movimiento_bancarios.fecha)'),'>=',''.$fechadeposito.'');
         }
         //return $fecha_compra;
         //return $request->excluir;
@@ -270,6 +286,8 @@ class MovimientoController extends Controller
 
     public function repeat(Request $request)
     {
+        // $request->all();
+        //return $request->titulares;
         $monto = $request->monto;
         //$descrip_otros = $request->descrip_otros;
         $monto=str_replace(',','',$monto);
@@ -278,11 +296,14 @@ class MovimientoController extends Controller
         $titular = $request->titulares;
         $titular=str_replace('%20',' ',$titular);
 
+        //return "banco ".$request->banco." titular ".$titular." importe ".$monto." tipo ".$request->tipo." fecha ".$request->fecha;
+
         $movimiento_repeat=MovimientoBancario::where('banco',$request->banco)
                             ->where('titular',$titular)
                             ->where('importe',$monto)
                             ->where('tipo',$request->tipo)
-                            ->where('fecha',$request->fecha)
+                            ->where(DB::raw('CAST(fecha as date)'), '=', $request->fecha)
+                            //->where('fecha',$request->fecha)
                             ->where('estado',"1")->count();
         if($movimiento_repeat == 0)
         {
@@ -302,6 +323,35 @@ class MovimientoController extends Controller
         }
         //$html=$titular;
         //$html=var_dump($request);
+        return response()->json(['html' => $html]);
+    }
+
+    public function register(Request $request)
+    {
+        $monto = $request->monto;
+        $monto=str_replace(',','',$monto);
+        $monto=str_replace('.00','',$monto);
+        $titular = $request->titulares;
+        $titular=str_replace('%20',' ',$titular);
+        $descrip_otros=$request->descrip_otros;
+
+        $movimientos = MovimientoBancario::create([
+            'banco' => $request->banco,
+            'titular' => $titular,
+            'importe' => $monto,
+            'tipo' => $request->tipo,
+            'fecha' => Carbon::parse($request->fecha),
+            'pedido' => '0',
+            'estado' => '1',
+            'pago' => '0',
+            'detpago' => '0',
+            'cabpago' => '0',
+            'descripcion_otros' =>$descrip_otros 
+        ]);
+
+        
+        $html="ok|0";
+        
         return response()->json(['html' => $html]);
     }
 
@@ -338,6 +388,18 @@ class MovimientoController extends Controller
     public function edit($id)
     {
         //
+        $movimiento = MovimientoBancario::where('id', $id)->first();
+        $pago=Pago::join('users as u', 'pagos.user_id', 'u.id')
+                    ->where("pagos.id",$movimiento->cabpago)
+            ->select(
+                'pagos.id as id',
+                'u.identificador as users',
+                DB::raw(" (CASE WHEN (select count(dpago.id) from detalle_pagos dpago where dpago.pago_id=pagos.id and dpago.estado in (1) )>1 then 'V' else 'I' end) as cantidad_voucher "),
+                DB::raw(" (CASE WHEN (select count(ppedidos.id) from pago_pedidos ppedidos where ppedidos.pago_id=pagos.id and ppedidos.estado in (1)  )>1 then 'V' else 'I' end) as cantidad_pedido "),
+            )
+            ->first(); 
+        $detallepago=DetallePago::where("id",$movimiento->detpago)->first(); 
+
     }
 
     /**
@@ -350,6 +412,51 @@ class MovimientoController extends Controller
     public function update(Request $request, $id)
     {
         //
+
+        $monto = $request->monto;
+        $descrip_otros = $request->descrip_otros;
+        $monto=str_replace(',','',$monto);
+ 
+        $movimientos = MovimientoBancario::create([
+            'banco' => $request->banco,
+            'titular' => $request->titulares,
+            'importe' => $monto,
+            'tipo' => $request->tipotransferencia,
+            'fecha' => Carbon::parse($request->fecha),
+            'pedido' => '0',
+            'estado' => '1',
+            'pago' => '0',
+            'detpago' => '0',
+            'cabpago' => '0',
+            'descripcion_otros' =>$descrip_otros 
+        ]);
+
+        
+    }
+
+    public function actualiza(Request $request)
+    {
+        //
+
+        $monto = $request->monto;
+        $descrip_otros = $request->descrip_otros;
+        $monto=str_replace(',','',$monto);
+ 
+        $movimientos = MovimientoBancario::create([
+            'banco' => $request->banco,
+            'titular' => $request->titulares,
+            'importe' => $monto,
+            'tipo' => $request->tipotransferencia,
+            'fecha' => Carbon::parse($request->fecha),
+            'pedido' => '0',
+            'estado' => '1',
+            'pago' => '0',
+            'detpago' => '0',
+            'cabpago' => '0',
+            'descripcion_otros' =>$descrip_otros 
+        ]);
+
+        
     }
 
     /**

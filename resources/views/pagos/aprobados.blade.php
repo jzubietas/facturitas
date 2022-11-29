@@ -53,6 +53,7 @@
         <thead>
           <tr>
             <th scope="col">COD.</th>
+            <th scope="col">COD2.</th>
             <th scope="col">Cliente</th>
             <th scope="col">Codigo pedido</th>
             <th scope="col">Fecha Voucher</th>
@@ -68,6 +69,8 @@
         </tbody>
       </table>
       @include('pagos.modals.modalDeleteId')
+      @include('pagos.modals.modalDesabonar')
+
     </div>
   </div>
 
@@ -138,6 +141,22 @@
         $('#tablaPrincipal').DataTable().ajax.reload();      
       });
     }
+
+    function clickformdesabonar()
+    {
+      
+      var formData = $("#formdesabonar").serialize();
+      console.log(formData);
+      $.ajax({
+        type:'POST',
+        url:"{{ route('pagodesabonarRequest.post') }}",
+        data:formData,
+      }).done(function (data) {
+        $("#modal-desabonar").modal("hide");
+        //resetearcamposdelete();          
+        $('#tablaPrincipal').DataTable().ajax.reload();      
+      });
+    }
   </script>
 
 {{--<script src="{{ asset('js/datatables.js') }}"></script>--}}
@@ -171,6 +190,12 @@
       clickformdelete();
     })
 
+    $(document).on("submit", "#formdesabonar", function (evento) {
+      evento.preventDefault();
+      console.log("validar delete");
+      clickformdesabonar();
+    })
+
     $('#modal-delete').on('show.bs.modal', function (event) {     
       var button = $(event.relatedTarget) 
       var idunico = button.data('delete')      
@@ -185,6 +210,15 @@
         idunico='PAG'+idunico;
       }
       $(".textcode").html(idunico);
+    });
+
+    $('#modal-desabonar').on('show.bs.modal', function (event) {     
+      var button = $(event.relatedTarget) 
+      var idunico = button.data('desabonar') 
+      var textpago = button.data('pago')      
+      $("#hiddenDesabonar").val(idunico);
+      
+      $("#modal-desabonar .textcode").html(textpago);
     });
 
     $('#tablaPrincipal').DataTable({
@@ -209,13 +243,17 @@
                 if(row.id<10){
                   return 'PAG'+row.users+'-'+unido+'-'+row.id;
                 }else if(row.id<100){
-                  return 'PAG00'+row.users+'-'+unido+'-'+row.id;
+                  return 'PAG'+row.users+'-'+unido+'-'+row.id;
                 }else if(row.id<1000){
-                  return 'PAG0'+row.users+'-'+unido+'-'+row.id;
+                  return 'PAG'+row.users+'-'+unido+'-'+row.id;
                 }else{
                   return 'PAG'+row.users+'-'+unido+'-'+row.id;
                 } 
               }
+          },
+          {
+            data: 'id2'
+            , name: 'id2' ,"visible":false
           },
           {data: 'celular', name: 'celular'},
           {
@@ -269,11 +307,8 @@
         
 
 
-
   });
 </script>
-
-  });
 
   @if (session('info') == 'registrado' || session('info') == 'eliminado' || session('info') == 'renovado')
     <script>

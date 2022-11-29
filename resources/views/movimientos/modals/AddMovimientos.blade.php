@@ -54,9 +54,9 @@
                     <div class="btn-group " role="group" aria-label="Basic example">
                       @foreach($titulares as $titular)
                         @if($titular=='EPIFANIO SOLANO HUAMAN')
-                          <button class="button mx-2 p-2 btn-navigate-titular" style="background-color: blue;" type="button" step_number="2" titular="{{$titular}}">{{$titular}}</button>
+                          <button class="button mx-2 p-2 btn-navigate-titular btn btn-primary btn-lg rounded text-white" type="button" step_number="2" titular="{{$titular}}">{{$titular}}</button>
                         @elseif($titular=='NIKSER DENIS ORE RIVEROS')
-                          <button class="button mx-2 p-2 btn-navigate-titular" style="background-color: #ffc107;" type="button" step_number="2" titular="{{$titular}}">{{$titular}}</button>
+                          <button class="button mx-2 p-2 btn-navigate-titular btn btn-warning btn-lg rounded text-white" type="button" step_number="2" titular="{{$titular}}">{{$titular}}</button>
                         @endif
                         
                       @endforeach
@@ -108,7 +108,10 @@
           </div>
 
           <div class="mt-3 mx-auto text-center">
-              <button class="button  btn-navigate-form-step " style="background-color: #17a2b8;" type="button" step_number="1">Atras</button>
+
+            
+
+              <button class="button btn-navigate-form-step btn btn-info btn-lg rounded text-white" type="button" step_number="1">Atras</button>
               <button class="button btn-navigate-form-step btn-navigate-banco d-none" type="button" step_number="3">Siguiente</button>
           </div>
         </section>
@@ -150,12 +153,10 @@
             </div>
 
             
-              
-
           </div>
           <div class="mt-3">
-              <button class="button btn-navigate-form-step" type="button" step_number="2">Atras</button>
-              <button id="registrar_movimientos" type="button" class="btn btn-success button  submit-btn"><i class="fas fa-save"></i> Guardar</button>
+              <button class="button btn-navigate-form-step btn btn-info btn-lg rounded text-white" type="button" step_number="2">Atras</button>
+              <button id="registrar_movimientos" type="button" class="btn btn-success button btn-lg  submit-btn"><i class="fas fa-save"></i> Guardar</button>
           </div>
         </section>
 

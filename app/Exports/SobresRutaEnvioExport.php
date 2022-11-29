@@ -30,6 +30,7 @@ class SobresRutaEnvioExport implements FromView, ShouldAutoSize
                                     ->join('clientes as c', 'c.id', 'de.cliente_id')
                                     ->join('users as u', 'u.id', 'c.user_id')
                                     ->where("direccion_grupos.estado","1")
+                                    ->whereNull('direccion_grupos.condicion_sobre') 
                                     ->where(DB::raw('DATE(direccion_grupos.created_at)'), $min)
                                     ->select(
                                         'direccion_grupos.id',
@@ -44,13 +45,16 @@ class SobresRutaEnvioExport implements FromView, ShouldAutoSize
                                         'de.referencia',
                                         'de.observacion',                                        
                                         'de.distrito',
-                                        'direccion_grupos.created_at as fecha'
+                                        'direccion_grupos.created_at as fecha',
+                                        'direccion_grupos.destino as destino2',
+                                        'direccion_grupos.distribucion as distribucion'
                                     );//->get();
 
         $pedidosProvincia = DireccionGrupo::join('gasto_envios as de','direccion_grupos.id','de.direcciongrupo')
                                     ->join('clientes as c', 'c.id', 'de.cliente_id')
                                     ->join('users as u', 'u.id', 'c.user_id')
                                     ->where("direccion_grupos.estado","1")
+                                    ->whereNull('direccion_grupos.condicion_sobre') 
                                     ->where(DB::raw('DATE(direccion_grupos.created_at)'), $min)
                                     ->select(
                                         'direccion_grupos.id',
@@ -65,7 +69,9 @@ class SobresRutaEnvioExport implements FromView, ShouldAutoSize
                                         'de.foto as referencia',
                                         DB::raw(" (select '') as observacion "),
                                         DB::raw(" (select '') as distrito "),
-                                        'direccion_grupos.created_at as fecha'
+                                        'direccion_grupos.created_at as fecha',
+                                        'direccion_grupos.destino as destino2',
+                                        'direccion_grupos.distribucion as distribucion'
                                     );//->get();                                    
         $pedidos = $pedidosLima->union($pedidosProvincia);
         $pedidos=$pedidos->get();

@@ -22,13 +22,12 @@ use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 use Maatwebsite\Excel\Concerns\WithColumnFormatting;
 use Maatwebsite\LaravelNovaExcel\Actions\DownloadExcel;
 
-class MovimientosExport implements FromQuery, ShouldAutoSize,WithMapping ,WithColumnFormatting//WithHeadings
+class MovimientosExport implements FromView, ShouldAutoSize//FromQuery, ShouldAutoSize,WithMapping ,WithColumnFormatting//WithHeadings
 {
     use Exportable;
 
-
-    public function query() {//$request
-        $movimientos1 = MovimientoBancario::leftjoin("pagos as p","movimiento_bancarios.cabpago","p.id")            
+    public function movimientos($request) {
+        $movimientos = MovimientoBancario::leftjoin("pagos as p","movimiento_bancarios.cabpago","p.id")            
             ->select(
                 'movimiento_bancarios.id',
                 'movimiento_bancarios.banco',
@@ -36,7 +35,35 @@ class MovimientosExport implements FromQuery, ShouldAutoSize,WithMapping ,WithCo
                 'movimiento_bancarios.importe',
                 'movimiento_bancarios.tipo',
                 'movimiento_bancarios.descripcion_otros as otros',
-                DB::raw('(select DATE_FORMAT(dpa.fecha, "%Y-%m-%d")  from movimiento_bancarios dpa where dpa.id=movimiento_bancarios.id) as fecha'),
+                DB::raw('(select DATE_FORMAT(dpa.fecha, "%d-%m-%Y")  from movimiento_bancarios dpa where dpa.id=movimiento_bancarios.id) as fecha'),
+                'movimiento_bancarios.pago',
+                'p.id as pagoid',
+                DB::raw(" (select (us.identificador) from users us where us.id=p.user_id) as users "),
+                DB::raw(" (CASE WHEN (select count(dpago.id) from detalle_pagos dpago where dpago.pago_id=p.id and dpago.estado in (1) )>1 then 'V' else 'I' end) as cantidad_voucher "),
+
+                DB::raw(" (CASE WHEN (select count(ppedidos.id) from pago_pedidos ppedidos where ppedidos.pago_id=p.id and ppedidos.estado in (1)  )>1 then 'V' else 'I' end) as cantidad_pedido "),
+                DB::raw(" (select count(dp.id) from detalle_pagos dp where dp.pago_id=p.id) as cant "),
+            )
+            ->whereBetween(DB::raw('DATE(movimiento_bancarios.fecha)'), [$request->desde, $request->hasta]) 
+            ->orderBy('movimiento_bancarios.fecha', 'DESC')
+            ->get();
+
+        $this->movimientos = $movimientos;
+        return $this;
+
+    }
+
+
+    /*public function query() {
+        $movimientos = MovimientoBancario::leftjoin("pagos as p","movimiento_bancarios.cabpago","p.id")            
+            ->select(
+                'movimiento_bancarios.id',
+                'movimiento_bancarios.banco',
+                'movimiento_bancarios.titular',
+                'movimiento_bancarios.importe',
+                'movimiento_bancarios.tipo',
+                'movimiento_bancarios.descripcion_otros as otros',
+                DB::raw('(select DATE_FORMAT(dpa.fecha, "%d-%m-%Y")  from movimiento_bancarios dpa where dpa.id=movimiento_bancarios.id) as fecha'),
                 'movimiento_bancarios.pago',
                 'p.id as pagoid',
                 DB::raw(" (select (us.identificador) from users us where us.id=p.user_id) as users "),
@@ -48,9 +75,9 @@ class MovimientosExport implements FromQuery, ShouldAutoSize,WithMapping ,WithCo
             //->whereBetween(DB::raw('DATE(movimiento_bancarios.fecha)'), [$request->desde, $request->hasta]) 
             ->get();
 
-        $this->movimientos1 = $movimientos1;
+        $this->movimientos = $movimientos;
         return $this;
-    }
+    }*/
 
     /*public function collection()
     {
@@ -58,7 +85,7 @@ class MovimientosExport implements FromQuery, ShouldAutoSize,WithMapping ,WithCo
 
     }*/
 
-    public function headings(): array
+    /*public function headings(): array
     {
         return [
           'ITEM',
@@ -72,9 +99,9 @@ class MovimientosExport implements FromQuery, ShouldAutoSize,WithMapping ,WithCo
           'CODIGO DE VOUCHER',
           'CANT.DE VOUCHER'
         ];
-    }
+    }*/
 
-    public function map($row): array{
+    /*public function map($row): array{
         return [
             $row->id,
             $row->banco,
@@ -90,14 +117,14 @@ class MovimientosExport implements FromQuery, ShouldAutoSize,WithMapping ,WithCo
             $row->cantidad_pedido,
             $row->cant,            
         ];
-    }
+    }*/
 
-    public function columnFormats(): array
+    /*public function columnFormats(): array
     {
         return [
             'G' => NumberFormat::FORMAT_DATE_DDMMYYYY,
         ];
-    }
+    }*/
 
     /*public function view(): View {
         return view('movimientos.excel.index', [
@@ -112,4 +139,9 @@ class MovimientosExport implements FromQuery, ShouldAutoSize,WithMapping ,WithCo
     ];
 }*/
 
+        public function view(): View {
+            return view('movimientos.excel.index', [
+                'movimientos1'=> $this->movimientos
+            ]);
+        } 
 }

@@ -178,7 +178,19 @@
                   @foreach ($detallePagos as $detallePago)
                     <tr class="nohide_{{ $contPa + 1 }}">
                       <td>{{ $contPa + 1 }}</td>
-                      <td>DETPAG00{{ $detallePago->id }}
+
+                      <td>
+                        <?php 
+                          if($detallePago->id<10){ ?>
+                            COMPR000{{ $detallePago->id }}
+                          <?php }else if($detallePago->id<100){ ?>
+                            COMPR00{{ $detallePago->id }}
+                          <?php }else if($detallePago->id<1000){ ?>
+                            COMPR0{{ $detallePago->id }}
+                          <?php }else{ ?>
+                            COMPR{{ $detallePago->id }}
+                          <?php } ?>  
+                          
                       
                       <input type="hidden" name="detalle_id[]" value="{{ $detallePago->id }}" class="form-control"></td>
                       <td class="banco_{{ $contPa + 1 }}">{{ $detallePago->banco }}</td>                  
@@ -206,7 +218,7 @@
                           <br>
                           <a href="{{ route('pagos.descargarimagen', $detallePago->imagen) }}" class="text-center"><button type="button" class="btn btn-secondary btn-md"> Descargar</button></a>
 
-                          <a href="" data-target="#modal-conciliar-get" data-fechadeposito="{{ $detallePago->fecha_deposito }}" data-toggle="modal" data-conciliar="{{ $detallePago->id }}" data-item="{{ $contPa + 1 }}"><button class="btn btn-danger btn-md">Conciliar</button></a>
+                          <a href="" data-target="#modal-conciliar-get" class="modal-conciliar-get" data-fechadeposito="{{ $detallePago->fecha_deposito }}" data-toggle="modal" data-conciliar="{{ $detallePago->id }}" data-item="{{ $contPa + 1 }}"><button class="btn btn-danger btn-md">Conciliar</button></a>
                           <a href="" data-target="#modal-editar-get" data-toggle="modal" data-pbanco="{{ $detallePago->banco }}" data-titulares="{{ $detallePago->titular }}" data-fecha="{{ $detallePago->fecha_deposito_change }}" data-conciliar="{{ $detallePago->id }}" data-item="{{ $contPa + 1 }}"><button class="btn btn-warning btn-md">Editar</button></a>
                         </p>
                       </td>
@@ -255,7 +267,7 @@
     </div>
     <div class="card-footer text-center" id="guardar">
       <button type="button" id="aprobarrbtn" class="btn btn-success btn-lg"><i class="fas fa-save"></i> APROBAR</button>
-      <button type="button" id="observarbtn" class="btn btn-danger btn-lg"><i class="fas fa-save"></i> OBSERVAR</button>
+      <button type="button" id="observarbtn" class="btn btn-danger btn-lg"><i class="fas fa-save"></i> OBSERVADO</button>
       <button type="button" id="pendientebtn" class="btn btn-warning btn-lg"><i class="fas fa-save"></i> PENDIENTE</button>
      
     </div>
@@ -272,6 +284,9 @@
   {{--<script src="{{ asset('js/datatables.js') }}"></script>--}}
   <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
   <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+
+  <script src="https://momentjs.com/downloads/moment.js"></script>
+  <script src="https://cdn.datatables.net/plug-ins/1.11.4/dataRender/datetime.js"></script>
 
   <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
 
@@ -490,16 +505,33 @@
         reader.readAsDataURL(file);
 
       });
-  
-
-
 
       $('#modal-conciliar-get').on('show.bs.modal', function (event) {
        
         var button = $(event.relatedTarget) 
+
         var idunico = button.data('conciliar')
         var iditem = button.data('item');
-        var fechadeposito = button.data('fechadeposito');
+
+        //var fechadeposito = button.data('fechadeposito');
+        let row_conciliar=button.closest("tr");
+        var fechadeposito=  row_conciliar.find("td").eq(5).html();
+        console.log(fechadeposito)
+
+        
+        //console.log(bb_banco)
+
+        //cambiar logica de campos obtener ahora de tabla datos
+         /*let row_conciliar=button.closest("tr");
+         bb_banco=row_conciliar.find("td").eq(2).html();//banco
+         bb_titular=row_conciliar.find("td").eq(4).html();//titular
+         bb_fecha=row_conciliar.find("td").eq(5).html();//fecha
+
+         
+         console.log(bb_banco)
+         console.log(bb_titular)
+         console.log(bb_fecha)*/
+         
         //incluir todos los conciliar
         var excluir=[];
         $('input[name="conciliar[]').each(function(){
@@ -508,13 +540,13 @@
             //xcluir=excluir+''+this.value+',';
        });     
        //excluir=excluir.substring(0, excluir.length - 1);
-       console.log(excluir);
+       //console.log(excluir);
 
        var pasarExclusiones=excluir.join(',');
-       console.log(pasarExclusiones)
+       //console.log(pasarExclusiones)
         //var 
         //var inputt=("#conciliar_"+iditem).val();
-        console.log(idunico);
+        //console.log(idunico);
 
         //var obtener_detpag='191';
         tableconciliar.destroy();
@@ -562,9 +594,10 @@
               data: 'fecha', 
               name: 'fecha',
               sWidth:'10%', 
-              render: function ( data, type, row, meta ) {
+              render: $.fn.dataTable.render.moment( 'DD/MM/YYYY' )
+              /*render: function ( data, type, row, meta ) {
                 return '<span class="fecha">' + data + '</span>';
-              }
+              }*/
             },
             {
               data: 'tipo', 
@@ -692,10 +725,28 @@
             contentType: false,
           }).done(function (data) {
             $("#modal-editar-get").modal("hide");
+            console.log(data.html)
+            console.log(data.html.banco);
+            //console.log("banco a "+banco)
+            //console.log("titular a "+titular)
+            //console.log("titular a "+titular)
 
-            $(".banco_"+item).html(banco);
-            $(".titular_"+item).html(titular);
-            $(".fechadeposito_"+item).html(banco);
+            $(".banco_"+item).html(data.html.banco);
+            $(".titular_"+item).html(data.html.titular);
+            $(".fechadeposito_"+item).html(data.html.fecha);
+
+            //let bb_modal=
+            $('a.modal-conciliar-get[data-item="1"]').attr('data-fechadeposito', data.html.fecha);
+
+            //let row_conciliar=button.closest("tr");
+            //bb_modal=data_conciliar_row.find("td").eq(7).find('.modal-conciliar-get');
+            //bb_modal.attr("data-fechadeposito",data.html.fecha_conciliar);
+            /*bb_banco=row_conciliar.find("td").eq(2).html();//banco
+            bb_titular=row_conciliar.find("td").eq(4).html();//titular
+            bb_fecha=row_conciliar.find("td").eq(5).html();//fecha*/
+
+            
+            //console.log(bb_banco)
             
             //$('#tablaPrincipal').DataTable().ajax.reload();  
 
@@ -862,7 +913,38 @@
 
       $(document).on("submit","#formulario",function(event){
             event.preventDefault();   
-            console.log("form submit")  ;
+            console.log("form submit");
+
+            var cont_conciliacion={{$contPa}};
+            console.log("total detalles para conciliar: "+cont_conciliacion);
+
+            //estan todos conciliados
+
+            //let total_conciliados=$(".hide_"+ir).length
+
+            for(var ir = 1; ir < cont_conciliacion+1; ir++)
+            {
+              var existe_r=$(".hide_"+ir).length;
+              if(existe_r==1)
+              {
+                //buscar importe y comparar
+                let imp_t_h=$(".hide_"+ir).find("td").html();
+                let imp_t_5_h=$(".hide_"+ir).find("td").eq(5).html();
+                console.log(imp_t_h)
+                console.log(imp_t_5_h)
+
+              }else{
+                console.log("no existe "+ir);
+              }
+
+              //console.log(ir+" -- "+existe_r );
+            }
+            return false;     
+
+
+
+            //return false;
+            //validar  detalle pago con conciliaciones  que coincida los importes
             
             /* var cuenta = document.getElementById('cuenta').value; */
             cuenta = document.getElementsByName("cuenta[]");
@@ -910,6 +992,11 @@
                   return false;
                     
                 }
+                
+
+
+
+
               }
             }
 

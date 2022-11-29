@@ -1,7 +1,14 @@
-<h1 style="text-align:center;">
-  ENVIOS DE FECHA  {{  \Carbon\Carbon::now()->addDays(1)->format('d-m-Y') }}
-</h1>
+
 <br><br>
+<table>
+  <tbody>
+    <tr colspan="8">
+        <h1 style="text-align:center;">
+          ENVIOS DE FECHA  {{  \Carbon\Carbon::now()->addDays(1)->format('d-m-Y') }}
+        </h1>
+    </tr>
+  </tbody>
+</table>
 <table>
     <thead>
       <tr>
@@ -21,6 +28,7 @@
     <tbody>
       <?php $cont = 0; ?>
       <?php $contproducto = 0; ?>
+      
       @foreach ($pedidos as $plima)
         <tr>
           {{--<td>{{ $cont + 1 }}</td>--}}
@@ -29,7 +37,7 @@
           <td>{{ $plima->identificador }}</td>--}}
           <td>{{ $plima->celular }}-{{ $plima->nombre }}</td>
 
-          @if ($plima->destino== 'PROVINCIA')
+          @if ($plima->destino2== 'PROVINCIA')
             <td style="color:red;">
           @else 
             <td>
@@ -37,7 +45,7 @@
             {{ $plima->cantidad }}
           </td>
 
-          @if ($plima->destino== 'PROVINCIA')
+          @if ($plima->destino2== 'PROVINCIA')
             <td style="color:red;">
           @else 
             <td>
@@ -48,7 +56,7 @@
             @endforeach
 
           </td>
-          @if ($plima->destino== 'PROVINCIA')
+          @if ($plima->destino2== 'PROVINCIA')
             <td style="color:red;">
           @else 
             <td>
@@ -72,7 +80,7 @@
 
             </td>
 
-          @if ($plima->destino== 'PROVINCIA')
+          @if ($plima->destino2== 'PROVINCIA')
             <td style="color:red;">
           @else 
             <td>
@@ -82,13 +90,34 @@
           </td>
           <td>
 
-            @if ($plima->destino== 'LIMA')
+            @if ($plima->destino2== 'LIMA')
                 {{ $plima->referencia }}
             @endif
           
             </td>
           <td>{{ $plima->observacion }}</td>
-          <td>{{ $plima->distrito }}</td>
+
+            
+
+            @if($plima->distribucion!='')
+                @if($plima->distribucion=='NORTE')
+                  <td style="background-color:#A5F1E9">
+                    {{$plima->distrito}}
+                @elseif($plima->distribucion=="CENTRO")
+                  <td style="background-color:#F0FF42">
+                    {{$plima->distrito}}
+                @elseif($plima->distribucion=="SUR")
+                  <td style="background-color:#B6E2A1">
+                    {{$plima->distrito}}
+                @else
+                  <td>
+                @endif
+            
+            @else
+
+              <td>
+            @endif
+           <td></td>
         </tr>
         <?php $cont++; ?>
       @endforeach

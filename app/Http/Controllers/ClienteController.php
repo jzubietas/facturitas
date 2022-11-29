@@ -390,9 +390,16 @@ class ClienteController extends Controller
 
     public function create()
     {
-        $users = User::where('users.estado','1')
+        /*$users = User::where('users.estado','1')
         ->whereIn('users.rol', ['Asesor', 'Super asesor'])
-        ->pluck('identificador', 'id');
+        ->pluck('identificador', 'id');*/
+
+        $users=User::select(
+            DB::raw("CONCAT(identificador,' (ex ',IFNULL(exidentificador,''),')') AS identificador"),'id'
+            )
+            ->where('users.rol', 'Asesor')
+            ->where('users.estado','1')
+    ->pluck('identificador', 'id');
 
         return view('clientes.create', compact('users'));
     }
@@ -426,6 +433,38 @@ class ClienteController extends Controller
             'pidio' => '0',
             'estado' => '1'
             ]);
+
+            $user = User::where('id', $request->user_id)->first();
+
+            if(     $user->exidentificador =='01' || 
+                    $user->exidentificador =='03' ||
+                    $user->exidentificador =='05' ||
+                    $user->exidentificador =='07' ||
+                    $user->exidentificador =='09' ||
+                    $user->exidentificador =='11' ||
+                    $user->exidentificador =='13' ||
+                    $user->exidentificador =='15' ||
+                    $user->exidentificador =='17' ||
+                    $user->exidentificador =='19'
+            )
+                    {
+                        $letra="A";
+                    }
+
+            if(     $user->exidentificador =='02' || 
+                    $user->exidentificador =='04' ||
+                    $user->exidentificador =='06' ||
+                    $user->exidentificador =='08' ||
+                    $user->exidentificador =='10' ||
+                    $user->exidentificador =='12' ||
+                    $user->exidentificador =='14' ||
+                    $user->exidentificador =='16' ||
+                    $user->exidentificador =='18' ||
+                    $user->exidentificador =='20'
+            )
+                    {
+                        $letra="B";
+                    }
 
             // ALMACENANDO PORCENTAJES
             $nombreporcentaje = $request->nombreporcentaje;
@@ -571,8 +610,6 @@ class ClienteController extends Controller
                     ->where('users.estado','1')
             ->pluck('identificador', 'id');
 
-
-
         return view('base_fria.create', compact('users'));
     }
 
@@ -581,13 +618,45 @@ class ClienteController extends Controller
         /* $request->validate([
                 'celular' => 'required|unique:clientes',*/
 
-        $cliente = Cliente::where('celular', $request->celular)->first();        
+        $cliente = Cliente::where('celular', $request->celular)->first();  
+        $letra="";      
         if($cliente !== null){
             $user = User::where('id', $cliente->user_id)->first();
             
             $messages = [
                 'unique' => 'EL CELULAR INGRESADO SE ENCUENTA ASIGNADO AL ASESOR '.$user->identificador,
             ];
+            
+
+            if(     $user->exidentificador =='01' || 
+                    $user->exidentificador =='03' ||
+                    $user->exidentificador =='05' ||
+                    $user->exidentificador =='07' ||
+                    $user->exidentificador =='09' ||
+                    $user->exidentificador =='11' ||
+                    $user->exidentificador =='13' ||
+                    $user->exidentificador =='15' ||
+                    $user->exidentificador =='17' ||
+                    $user->exidentificador =='19'
+            )
+                    {
+                        $letra="A";
+                    }
+
+            if(     $user->exidentificador =='02' || 
+                    $user->exidentificador =='04' ||
+                    $user->exidentificador =='06' ||
+                    $user->exidentificador =='08' ||
+                    $user->exidentificador =='10' ||
+                    $user->exidentificador =='12' ||
+                    $user->exidentificador =='14' ||
+                    $user->exidentificador =='16' ||
+                    $user->exidentificador =='18' ||
+                    $user->exidentificador =='20'
+            )
+                    {
+                        $letra="B";
+                    }
     
             $validator = Validator::make($request->all(), [
                 'celular' => 'required|unique:clientes',
@@ -607,7 +676,8 @@ class ClienteController extends Controller
             'tipo' => $request->tipo,
             'deuda' => '0',
             'pidio' => '0',
-            'estado' => '1'
+            'estado' => '1',
+            'icelular' => $letra
             ]);
 
         return redirect()->route('basefria')->with('info','registrado');        

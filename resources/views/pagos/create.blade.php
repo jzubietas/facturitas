@@ -46,13 +46,28 @@
       <div class="card-body">
         <div class="form-row">
 
+
+
         <div class="form-group col-lg-6">
             <div class="form-row" >
-              <div class="form-group col-lg-10">
+              <div class="form-group col-lg-2">
                 <h2>PAGOS  <b style="font-size:20px"> {!! Form::label('', '') !!}</b></h2>
+
+                <input type="hidden" id="accion_perdonar" name="accion_perdonar" value="">
+
+              </div>
+
+              <div class="form-group col-lg-3">
+                @if (Auth::user()->rol == "Administrador")
+                <button class="btn btn-info" id="btn-perdonar-deuda" type="button">PERDONAR DEUDA</button>
+                @endif
+              </div>
+
+              <div class="form-group col-lg-3">
+                <button class="btn btn-warning" id="btn-accion-perdonar-currier" type="button">AGREGAR IMPORTE</button>
               </div>
               
-              <div class="form-group col-lg-2">
+              <div class="form-group col-lg-4 text-center">
                 <a data-target="#modal-add-pagos" id="addpago" data-toggle="modal"><button class="btn btn-primary"><i class="fas fa-plus-circle"></i></button></a>
               </div>
             </div>          
@@ -147,6 +162,7 @@
       {{-- MODALS --}}
       @include('pagos.modals.AddPedidos')
       @include('pagos.modals.AddPagos')
+      @include('pagos.modals.AddPerdonarDeuda')
     </div>
     <div class="card-footer">
       <div class="form-row">
@@ -224,11 +240,17 @@ tfoot td {
     $("#guardar").hide();
     $("#addpedido").hide();
     $("#addpago").hide();
+    $("#btn-accion-perdonar-currier").hide();
+    $("#btn-perdonar-deuda").hide();
     $("#pcliente_id").change(mostrarBotones);
 
     function mostrarBotones() {
       $("#addpedido").show();
       $("#addpago").show();
+
+      $("#btn-perdonar-currier").show();
+      $("#btn-perdonar-deuda").show();
+
     }    
 
     // CARGAR PEDIDOS DE CLIENTE SELECCIONADO
@@ -253,6 +275,14 @@ tfoot td {
         $("#pimagen").val("");
       }
 
+      function limpiarPaPerdonar() {
+        $("#pmontoperdonar").val("");
+        $("#pfechaperdonar").val("");
+        $("#pimagen1").val("");
+        $("#pimagen2").val("");
+        $("#pimagen3").val("");
+      }
+
       /*function evaluarPa() {
           if (total_pago > 0) {//total_pedido > 0 && 
             $("#guardar").show();
@@ -264,6 +294,161 @@ tfoot td {
        
 
       $(document).ready(function() {
+
+
+        $(document).on("change","#pbanco",function(){
+          if($(this).val()!='')
+          $.ajax({
+              type:'POST',
+              url:"{{ route('titulares.banco') }}",
+              data: {"banco" : $(this).val()},
+          }).done(function (data) {
+            console.log(data)
+
+
+            //$("#user_id").html('');
+            //$("#user_id").html(data.html);      
+
+            //$("#user_id").selectpicker("refresh").trigger("change");
+            
+          });
+
+
+        });
+        $(document).on("click","#btn-perdonar-deuda",function(){
+
+          $("#btn-accion-perdonar-currier").show();
+          $("#addpago").hide();
+
+          console.log("btn-perdonar-deuda")
+          tabla_pedidos.destroy();
+
+          tabla_pedidos=$('#tabla_pedidos').DataTable({
+            "bPaginate": false,
+            "bFilter": false,
+            "bInfo": false,
+            'ajax': {
+              url:"{{ route('cargar.pedidosclientetabla') }}",					
+              'data': { "cliente_id": $("#pcliente_id").val(),"diferencia":$("#diferencia").val(),"perdonar_deuda":1}, 
+              "type": "get",
+            },
+            "fnCreatedRow": function( nRow, aData, iDataIndex ) {
+                $(nRow).attr('id', aData["id"]);
+            },
+            columns: [
+              {
+                data: 'id', 
+                name: 'id',
+                render:function(data,type,row,meta){
+                  if(row.id<10){
+                    return '<input type="hidden" name="pedido_id['+data+']" value="' + data + '">PED000' + data + '</td>';
+                  }else if(row.id<100){
+                    return '<input type="hidden" name="pedido_id['+data+']" value="' + data + '">PED00' + data + '</td>';
+                  }else if(row.id<1000){
+                    return '<input type="hidden" name="pedido_id['+data+']" value="' + data + '">PED0' + data + '</td>';
+                  }else{
+                    return '<input type="hidden" name="pedido_id['+data+']" value="' + data + '">PED' + data + '</td>';
+                  } 
+                }
+              },
+              {data: 'codigo', name: 'codigo',},
+              
+              {
+                data: 'saldo', 
+                name: 'saldo',
+                render:function(data,type,row,meta){
+                    return '<input type="hidden" name="numbersaldo['+row.id+']" value="' + data + '"><span class="numbersaldo">' + data + '</span></td>';
+                },
+                "visible": true
+              },
+              {
+                data: 'diferencia', 
+                name: 'diferencia',
+                render:function(data,type,row,meta){
+                    return '<input type="hidden" name="numberdiferencia['+row.id+']" value="' + data + '"><span class="numberdiferencia">' + data + '</span></td>'+
+                      '<input type="hidden" name="numbertotal['+row.id+']" value="' + data + '"><span class="numbertotal"></span></td>';
+                },
+                "visible": true
+              },
+              {
+                  "data": null,
+                  "render": function ( data, type, row, meta ) {                      
+                      return '<input type="checkbox" disabled class="form-control radiototal" name="checktotal['+row.id+']" value="0">';
+                  }
+              },
+              {
+                  "data": null,
+                  "render": function ( data, type, row, meta ) {                    
+                    return '<input type="checkbox" disabled class="form-control radioadelanto" name="checkadelanto['+row.id+']" value="0">';
+                  }
+              }
+            ],
+            "footerCallback": function ( row, data, start, end, display ) {
+              var api = this.api();
+              nb_cols = 4;api.columns().nodes().length;
+              var j = 2;
+
+              var pageTotal = api
+                    .column( 2, { page: 'current'} )
+                    .data()
+                    .reduce( function (a, b) {
+                        return Number(a) + Number(b);
+                    }, 0 );
+
+              $( api.column( 2 ).footer() ).html('<input type="hidden" name="total_pedido" id="total_pedido" value="'+pageTotal.toFixed(2)+'"/>'+
+                    'S/. '+separateComma(pageTotal.toFixed(2)).toLocaleString("en-US")  );
+
+              var pageSaldo = api
+                    .column( 3, { page: 'current'} )
+                    .data()
+                    .reduce( function (a, b) {
+                        return Number(a) + Number(b);
+                    }, 0 );
+              // Update footer
+              $( api.column( 3 ).footer() ).html('<input type="hidden" name="total_pedido_pagar" id="total_pedido_pagar" value="'+pageSaldo.toFixed(2)+'" />'+
+                  'S/.'+separateComma(pageSaldo.toFixed(2)).toLocaleString("en-US")  );
+
+            },
+            "initComplete": function(settings, json) {
+              total_pedido=sumatotalpedidos();
+              console.log("total_pedido "+total_pedido);
+            },
+            language: {
+              "decimal": "",
+              "emptyTable": "No hay informaciÃ³n",
+              "info": "Mostrando del _START_ al _END_ de _TOTAL_ Entradas",
+              "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
+              "infoFiltered": "(Filtrado de _MAX_ total entradas)",
+              "infoPostFix": "",
+              "thousands": ",",
+              "lengthMenu": "Mostrar _MENU_ Entradas",
+              "loadingRecords": "Cargando...",
+              "processing": "Procesando...",
+              "search": "Buscar:",
+              "zeroRecords": "Sin resultados encontrados",
+              "paginate": {
+              "first": "Primero",
+              "last": "Ultimo",
+              "next": "Siguiente",
+              "previous": "Anterior"
+              }
+            },
+            
+          });//fin datatable
+
+        });
+
+
+
+        $(document).on("click","#btn-accion-perdonar-currier",function(){
+          console.log("btn-perdonar-currier")
+
+          $("#modal-add-perdonar-deuda").modal("show");
+
+          
+         
+
+        });
 
         $(".banco_procedencia").hide();
         $(".banco_procedencia_otro").hide();
@@ -308,6 +493,9 @@ tfoot td {
           event.preventDefault();
           console.log("nuevo formulario")
           //validarFormulario();
+
+          var accion_perdonar=$("#accion_perdonar").val();
+
           var total_pedido_pagar = document.getElementById('total_pedido_pagar').value.replace(",", "");
           var total_pedido = document.getElementById('total_pedido').value.replace(",", "");
           var total_pago_pagar = document.getElementById('total_pago_pagar').value.replace(",", "");
@@ -1557,7 +1745,63 @@ tfoot td {
 
       $(document).ready(function () {
 
-        
+        $(document).on("click","#add_pago_perdonar",function(){
+          if ($('#pmontoperdonar').val() == '')
+          {
+            Swal.fire(
+              'Error',
+              'Ingrese monto a perdonar',
+              'warning'
+                )
+          }else if ($('#pfechaperdonar').val() == '')
+          {
+            Swal.fire(
+              'Error',
+              'Seleccione la fecha a perdonar',
+              'warning'
+            )
+          }else{
+
+            $("#tabla_pedidos tbody tr .radiototal").prop("checked",false).trigger("change");
+            $("#tabla_pedidos tbody tr .radioadelanto").prop("checked",false).trigger("change");
+
+
+            let files1=$('input[name="pimagen1');//total de imagen 1
+            let files2=$('input[name="pimagen2');//total de imagen 2
+            let files3=$('input[name="pimagen3');//total de imagen 3
+            var totalfilescarga1 = $('#pimagen1').get(0).files.length;
+            var totalfilescarga2 = $('#pimagen2').get(0).files.length;
+            var totalfilescarga3 = $('#pimagen3').get(0).files.length;
+            //fd2.append('adjunto', $('input[type=file][name="pimagen"]')[0].files[0]);
+
+            
+            /*for (let i = 0; i < files.length; i++) {
+              fd4.append('pimagen1', $('input[type=file][name="pimagen1"]')[0].files[0]);
+            }*/
+            
+            if(totalfilescarga1>0 && totalfilescarga2>0   && totalfilescarga3>0 )
+            {
+
+              agregarPagoPerdonar();
+
+
+              
+
+            }else{
+              Swal.fire(
+                  'Error',
+                  'Ingrese las imagenes por favor',
+                  'warning'
+                )
+                return false;
+            }
+            
+
+
+          }
+
+
+        });
 
         
         $(document).on("click","#add_pago",function(){
@@ -1939,8 +2183,82 @@ tfoot td {
 
         $(document).ready(function () {
 
+          window.agregarPagoPerdonar = function(){
+            var strExPerdonar = $("#pmontoperdonar").val();
+            strExPerdonar = strExPerdonar.replace(",","");
+            var numFinalPerdonar = parseFloat(strExPerdonar);
+            monto = numFinalPerdonar;
+            tipomovimiento='';
+            titular=''
+            banco=''
+            bancop=''
+            otherbanco=''
+            fecha = $("#pfechaperdonar").val();
+
+            var fd4 = new FormData();
+
+            for (let ii = 1; ii < 4; ii++) {
+              fd4.append('adjunto'+ii, $('input[type=file][name="pimagen'+ii+'"]')[0].files[0]);
+            }
+            
+            $.ajax({
+              data: fd4,
+              processData: false,
+              contentType: false,
+              type: 'POST',
+              url:"{{ route('pagos.addImgTempPagoPerdonar') }}",
+              success:function(data)
+              {
+                console.log(data);
+                //$("#modal-direccion").modal("hide");
+                //$("#tablaPrincipal").DataTable().ajax.reload();
+
+                document.getElementById("picture1").setAttribute('src', "{{asset('imagenes/logo_facturas.png')}}");
+                document.getElementById("picture2").setAttribute('src', "{{asset('imagenes/logo_facturas.png')}}");
+                document.getElementById("picture3").setAttribute('src', "{{asset('imagenes/logo_facturas.png')}}");
+                tabla_pagos.row.add( {
+                    "item":       (contPa + 1),
+                    "movimiento":   tipomovimiento,
+                    "titular":     titular,
+                    "banco": banco,
+                    "bancop": bancop,
+                    "obanco": otherbanco,
+                    "fecha":     fecha,
+                    "imagen":       data.html,
+                    "monto":      monto,
+                    "accion":      (contPa + 1)
+                } ).draw();
+
+                $("#modal-add-perdonar-deuda").modal("hide");
+
+                //
+                $("#btn-accion-perdonar-currier").hide();
+                $("#addpago").show();
+
+                //
+                contPa++;
+
+                console.log("sumatotalpagos <4")
+                total_pago = sumatotalpagos();
+
+                limpiarPaPerdonar();
+                $("#total_pago").html("S/. " + separateComma(total_pago).toLocaleString("en-US"));
+                $("#total_pago_pagar").val(total_pago.toLocaleString("en-US"));
+                evaluarPa();
+                console.log("total_pago 1 "+total_pago);
+                diferenciaFaltante();
+
+                $("#accion_perdonar").val("1");
+
+              }
+            });
+
+
+          }
+
           window.agregarPago = function(){  
             //alert('lol');
+            $("#accion_perdonar").val("");
             console.log("en pagos")
             var strEx = $("#pmonto").val();
             strEx = strEx.replace(",","");
@@ -2309,6 +2627,34 @@ tfoot td {
         };
         reader.readAsDataURL(file);
 
+      });
+
+
+      $(document).on("change","#pimagen1",function(event){
+        var file = event.target.files[0];
+        var reader = new FileReader();
+        reader.onload = (event) => {
+            document.getElementById("picture1").setAttribute('src', event.target.result);
+        };
+        reader.readAsDataURL(file);
+      });
+
+      $(document).on("change","#pimagen2",function(event){
+        var file = event.target.files[0];
+        var reader = new FileReader();
+        reader.onload = (event) => {
+            document.getElementById("picture2").setAttribute('src', event.target.result);
+        };
+        reader.readAsDataURL(file);
+      });
+
+      $(document).on("change","#pimagen3",function(event){
+        var file = event.target.files[0];
+        var reader = new FileReader();
+        reader.onload = (event) => {
+            document.getElementById("picture3").setAttribute('src', event.target.result);
+        };
+        reader.readAsDataURL(file);
       });
         
 

@@ -295,7 +295,7 @@
 
           $(document).on("submit","#formulario",function(event){
         event.preventDefault();
-        console.log("abrir")
+        //console.log("abrir")
        
        var fd = new FormData();
 
@@ -375,7 +375,7 @@
            type: 'POST',
            url:"{{ route('pedidoss.store') }}",
            success:function(data){
-             console.log(data);
+             //console.log(data);
              if(data.html=='|2')
              {
                     Swal.fire(
@@ -406,20 +406,20 @@
       });
 
           $(document).on("change","#user_id",function(){
-            console.log("link asesor "+$(this).val())
+            //console.log("link asesor "+$(this).val())
             var uid=$(this).val();
               //if($(this).val()!='')
               $.ajax({
                 url: "{{ route('cargar.clientedeasesor') }}?user_id=" + uid,
                 method: 'GET',
                 success: function(data) {
-                  console.log(data.html);
+                  //console.log(data.html);
                   $('#cliente_id').html(data.html);
                   $("#cliente_id").selectpicker("refresh");//addClass("your-custom-class")
 
                   $('#cliente_id_ruc').html(data.html);
                   let c_cliente_id=$('#cliente_id').val();
-                  console.log(c_cliente_id);
+                  //console.log(c_cliente_id);
                   
                   $('#cliente_id_ruc').selectpicker('refresh');
                   $('#cliente_id_ruc').val(c_cliente_id);
@@ -626,12 +626,12 @@
       $(document).on("change","#user_id_tiempo",function(){
         //al cambiar el ruc que hacer
          let userid=$(this).val();
-         console.log(userid)
+         //console.log(userid)
           $.ajax({
             url: "{{ route('cargar.clientedeudaparaactivar') }}?user_id=" + userid,
             method: 'GET',
             success: function(data) {
-              console.log(data.html);
+              //console.log(data.html);
               $('#cliente_id_tiempo').html(data.html);
               $("#cliente_id_tiempo").selectpicker("refresh");
             }
@@ -646,7 +646,7 @@
             url: "{{ route('asesorcombo') }}",
             method: 'POST',
             success: function(data) {
-              console.log(data.html);
+              //console.log(data.html);
               $('#user_id_tiempo').html(data.html);
               $("#user_id_tiempo").selectpicker("refresh").trigger("change");
             }
@@ -672,7 +672,7 @@
         //limpiar datos
 
         let c_cliente_id=$('#cliente_id').val();//
-        console.log(c_cliente_id+"id carga cliente para ruc");
+        //console.log(c_cliente_id+"id carga cliente para ruc");
 
 
         $('#cliente_id_ruc').val(c_cliente_id);
@@ -758,7 +758,7 @@
         //cargar informacion para copiar del pedido
         //consulta traer datos
         let string_copiar=$("#modal-copiar .textcode").html();
-        console.log(string_copiar)
+        //console.log(string_copiar)
         var fd = new FormData();
         fd.append( 'infocopiar', string_copiar );//4721
         //fd.append("infocopiar", string_copiar);
@@ -894,7 +894,7 @@
 
       $(document).on("submit", "#formulariotiempo", function (evento) {
           event.preventDefault();
-              console.log("sssss");
+              
               var formData = $("#formulariotiempo").serialize();
               $.ajax({
                   type:'POST',
@@ -916,7 +916,7 @@
 
       $("#formulario2").submit(function(event){
         event.preventDefault();
-        console.log("fdormulario 2")
+        //console.log("fdormulario 2")
         var agregarruc = $("#agregarruc").val();
         if (agregarruc == '') {
             Swal.fire(
@@ -942,7 +942,7 @@
               url:"{{ route('validarrelacionruc') }}",
               data:formData+'&user_id='+$("#user_id").val(),
           }).done(function (data) {
-            console.log(data.html);
+            //console.log(data.html);
             var sese=data.html.split("|");
             if(sese[0]=='1'){
                 $.ajax({
@@ -950,7 +950,7 @@
                     url:"{{ route('pedidos.agregarruc') }}",
                     data:formData,
                 }).done(function (data) {
-                  console.log(data.html);
+                 // console.log(data.html);
                   if(data.html=='true'){
                     //ya paso
                     Swal.fire(
@@ -1031,7 +1031,7 @@
         type:'POST',
         url:"{{ route('asesorcombo') }}",
     }).done(function (data) {
-      console.log(data);
+      //console.log(data);
       $("#user_id").html('');
       $("#user_id").html(data.html);      
 

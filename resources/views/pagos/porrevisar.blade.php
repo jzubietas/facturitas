@@ -57,6 +57,7 @@
           <tr>
             <th scope="col">COD.</th>
             <th scope="col">COD.</th>
+            <th scope="col">COD2</th>
             <th scope="col">Cliente</th>
             <th scope="col">Codigo pedido</th>
             <th scope="col">Fecha Voucher</th>
@@ -65,6 +66,7 @@
             {{--<th scope="col">Total cobro</th>--}}
             <th scope="col">Total pagado</th>
             <th scope="col">Estado</th>
+            <th scope="col">Subcondicion</th>
             <th scope="col">Acciones</th>
           </tr>
         </thead>
@@ -251,11 +253,14 @@
             // etc
           },
         },
-        /*createdRow: function( row, data, dataIndex){           
-        },*/
-        /*rowCallback: function (row, data, index) {           
-        },*/
-        //"columnDefs": [{"targets":3,"type":"date-eu"}],
+        rowCallback: function (row, data, index) {
+              console.log(data);
+              if( data.subcondicion!=null && data.subcondicion=='COURIER PERDONADO'){
+                $('td', row).css('color','#cf0a0a');
+              }else if( data.subcondicion!=null && data.subcondicion=='DEUDA PERDONADA'){
+                $('td', row).css('color','#cf0a0a');
+              }
+        },
         columns: [
           {
               data:'fecha_timestamp',
@@ -280,7 +285,18 @@
                 } 
               }
           },
-          {data: 'celular', name: 'celular'},
+          {
+              data: 'id2', 
+              name: 'id2',"visible":false
+          },
+          {//cliente
+            data: 'cliente', 
+            name: 'cliente',
+            render: function ( data, type, row, meta ) {
+             return data;
+              
+            },
+        },
           {
             data: 'codigos'
             , name: 'codigos' 
@@ -313,10 +329,23 @@
           {
             data: 'condicion', 
             name: 'condicion', 
+            render: function ( data, type, row, meta ) {   
+              if(row.subcondicion!=null)
+              {
+                return '<span class="badge badge-dark">'+row.subcondicion+'</span>'+data;
+              }else{
+                return data;
+              }
+     
+            }
+          },//estado
+          {
+            data: 'subcondicion', 
+            name: 'subcondicion', "visible":false,
             render: function ( data, type, row, meta ) {            
               return data;             
             }
-          },//estado
+          },
           {data: 'action', name: 'action', orderable: false, searchable: false,sWidth:'20%'},
       ],
       language: {

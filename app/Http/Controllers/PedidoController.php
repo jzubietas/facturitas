@@ -55,6 +55,19 @@ class PedidoController extends Controller
         return view('pedidos.index', compact('dateMin', 'dateMax', 'superasesor','mirol','miidentificador'));
     }
 
+    public function indexperdonarcurrier()
+    {
+        $dateMin = Carbon::now()->subDays(4)->format('d/m/Y');
+        $dateMax = Carbon::now()->format('d/m/Y');
+
+        $mirol=Auth::user()->rol;
+        $miidentificador=Auth::user()->name;
+
+        $superasesor = User::where('rol', 'Super asesor')->count();
+
+        return view('pedidos.perdonarCurrier', compact('dateMin', 'dateMax', 'superasesor','mirol','miidentificador'));
+    }
+
     public function indextablahistorial(Request $request)
     {
         //return $request->buscarpedidocliente;
@@ -168,6 +181,153 @@ class PedidoController extends Controller
             $pedidos=$pedidos->WhereIn('u.identificador',$usersasesores);            
         }
         else if(Auth::user()->rol == "Jefe de llamadas"){
+            /*$usersasesores = User::where('users.rol', 'Asesor')
+                -> where('users.estado', '1')
+                -> where('users.llamada', Auth::user()->id)
+                ->select(
+                    DB::raw("users.identificador as identificador")
+                )
+                ->pluck('users.identificador');
+
+            $pedidos=$pedidos->WhereIn('u.identificador',$usersasesores); */  
+            $pedidos=$pedidos->where('u.identificador','<>','B');          
+        }
+        else if(Auth::user()->rol == "Asesor"){
+            $usersasesores = User::where('users.rol', 'Asesor')
+                -> where('users.estado', '1')
+                -> where('users.identificador', Auth::user()->identificador)
+                ->select(
+                    DB::raw("users.identificador as identificador")
+                )
+                ->pluck('users.identificador');
+
+            $pedidos=$pedidos->WhereIn('u.identificador',$usersasesores);
+
+        }else if(Auth::user()->rol == "Super asesor"){
+            $usersasesores = User::where('users.rol', 'Asesor')
+                -> where('users.estado', '1')
+                -> where('users.identificador', Auth::user()->identificador)
+                ->select(
+                    DB::raw("users.identificador as identificador")
+                )
+                ->pluck('users.identificador');
+
+            $pedidos=$pedidos->WhereIn('u.identificador',$usersasesores);
+
+        }else if(Auth::user()->rol == "Encargado"){
+
+            $usersasesores = User::where('users.rol', 'Asesor')
+                -> where('users.estado', '1')
+                -> where('users.supervisor', Auth::user()->id)
+                ->select(
+                    DB::raw("users.identificador as identificador")
+                )
+                ->pluck('users.identificador');
+
+            $pedidos=$pedidos->WhereIn('u.identificador',$usersasesores); 
+        }else{
+            $pedidos=$pedidos;
+        }
+        $pedidos=$pedidos->get();
+
+        return Datatables::of($pedidos)
+                    ->addIndexColumn()
+                    ->addColumn('action', function($pedido){     
+                        $btn='';
+                        
+                        return $btn;
+                    })
+                    ->rawColumns(['action'])
+                    ->make(true);
+    }
+
+
+    public function indexperdonarcurriertabla(Request $request)
+    {
+        $mirol=Auth::user()->rol;
+        $pedidos=null;
+        
+        $pedidos = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')
+            ->join('users as u', 'pedidos.user_id', 'u.id')
+            ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
+            ->select(
+                'pedidos.id',
+                'c.nombre as nombres',
+                'c.icelular as icelulares',
+                'c.celular as celulares',
+                'u.identificador as users',
+                'pedidos.codigo as codigos',
+                'dp.nombre_empresa as empresas',
+                'dp.total as total',
+                'pedidos.condicion_envio',
+                'pedidos.condicion as condiciones',
+                'pedidos.pagado as condicion_pa',
+                DB::raw('(select pago.condicion from pago_pedidos pagopedido inner join pedidos pedido on pedido.id=pagopedido.pedido_id and pedido.id=pedidos.id inner join pagos pago on pagopedido.pago_id=pago.id where pagopedido.estado=1 and pago.estado=1 order by pagopedido.created_at desc limit 1) as condiciones_aprobado'),
+                'pedidos.motivo',
+                'pedidos.responsable',
+                DB::raw('DATE_FORMAT(pedidos.created_at, "%d/%m/%Y") as fecha2'),
+                DB::raw('DATE_FORMAT(pedidos.created_at, "%Y-%m-%d %H:%i:%s") as fecha'),
+                'dp.saldo as diferencia',
+                'pedidos.estado',
+                'pedidos.pago',
+                'pedidos.pagado',
+                'pedidos.envio'
+            )
+            ->whereIn('pedidos.condicion', ['POR ATENDER', 'EN PROCESO ATENCION', 'ATENDIDO', 'ANULADO'])
+            ->whereIn('pedidos.pagado', ['1'])
+            ->whereIn('pedidos.pago',['1'])
+            ->whereNotIn("pedidos.envio",['3'])
+            ->where('dp.saldo','>=',11)->where('dp.saldo','<=',13);
+
+        $pedidos2 = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')
+            ->join('users as u', 'pedidos.user_id', 'u.id')
+            ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
+            ->select(
+                'pedidos.id',
+                'c.nombre as nombres',
+                'c.icelular as icelulares',
+                'c.celular as celulares',
+                'u.identificador as users',
+                'pedidos.codigo as codigos',
+                'dp.nombre_empresa as empresas',
+                'dp.total as total',
+                'pedidos.condicion_envio',
+                'pedidos.condicion as condiciones',
+                'pedidos.pagado as condicion_pa',
+                DB::raw('(select pago.condicion from pago_pedidos pagopedido inner join pedidos pedido on pedido.id=pagopedido.pedido_id and pedido.id=pedidos.id inner join pagos pago on pagopedido.pago_id=pago.id where pagopedido.estado=1 and pago.estado=1 order by pagopedido.created_at desc limit 1) as condiciones_aprobado'),
+                'pedidos.motivo',
+                'pedidos.responsable',
+                DB::raw('DATE_FORMAT(pedidos.created_at, "%d/%m/%Y") as fecha2'),
+                DB::raw('DATE_FORMAT(pedidos.created_at, "%Y-%m-%d %H:%i:%s") as fecha'),
+                'dp.saldo as diferencia',
+                'pedidos.estado',
+                'pedidos.pago',
+                'pedidos.pagado',
+                'pedidos.envio'
+            )
+            ->whereIn('pedidos.condicion', ['POR ATENDER', 'EN PROCESO ATENCION', 'ATENDIDO', 'ANULADO'])
+            ->whereIn('pedidos.pagado', ['1'])
+            ->whereIn('pedidos.pago',['1'])
+            ->whereNotIn("pedidos.envio",['3'])
+            ->Where('dp.saldo','>=',17)->where('dp.saldo','<=',19);
+
+        $pedidos = $pedidos->union($pedidos2);
+            //->WhereBetween("dp.saldo", ['11', '13'])
+            //->orWhereBetween("dp.saldo", ['17', '19']);
+           
+
+        if(Auth::user()->rol == "Llamadas"){
+            $usersasesores = User::where('users.rol', 'Asesor')
+                -> where('users.estado', '1')
+                -> where('users.llamada', Auth::user()->id)
+                ->select(
+                    DB::raw("users.identificador as identificador")
+                )
+                ->pluck('users.identificador');
+                
+            $pedidos=$pedidos->WhereIn('u.identificador',$usersasesores);            
+        }
+        else if(Auth::user()->rol == "Jefe de llamadas"){
             $usersasesores = User::where('users.rol', 'Asesor')
                 -> where('users.estado', '1')
                 -> where('users.llamada', Auth::user()->id)
@@ -201,6 +361,7 @@ class PedidoController extends Controller
             $pedidos=$pedidos->WhereIn('u.identificador',$usersasesores);
 
         }else if(Auth::user()->rol == "Encargado"){
+
             $usersasesores = User::where('users.rol', 'Asesor')
                 -> where('users.estado', '1')
                 -> where('users.supervisor', Auth::user()->id)
@@ -209,9 +370,7 @@ class PedidoController extends Controller
                 )
                 ->pluck('users.identificador');
 
-            $pedidos=$pedidos->WhereIn('u.identificador',$usersasesores);
-
-
+            $pedidos=$pedidos->WhereIn('u.identificador',$usersasesores); 
         }else{
             $pedidos=$pedidos;
         }
@@ -785,8 +944,8 @@ class PedidoController extends Controller
             }else{
                 if($cliente_deuda->pedidos_mes_deuda>0 && $cliente_deuda->pedidos_mes_deuda_antes==0)
                 {
-                    if($cliente_deuda->pedidos_mes_deuda>2){
-                        $html="|2";
+                    if($cliente_deuda->pedidos_mes_deuda>4){
+                        $html="|4";
                         return response()->json(['html' => $html]); 
                     }
                 }else if($cliente_deuda->pedidos_mes_deuda>0 && $cliente_deuda->pedidos_mes_deuda_antes>0)
@@ -1186,10 +1345,22 @@ class PedidoController extends Controller
             ->orderBy('pedidos.created_at', 'DESC')
             ->get();
 
+        $cotizacion = Pedido::join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
+            ->select(
+                'pedidos.id',
+                'dp.cantidad',
+                'dp.porcentaje',
+                'dp.ft',
+                'dp.courier',
+                'dp.total',
+            )
+            ->where('pedidos.id', $pedido->id)
+            ->first();
+
         $imagenes = ImagenPedido::where('imagen_pedidos.pedido_id', $pedido->id)->where('estado', '1')->get();
         $imagenesatencion = ImagenAtencion::where('imagen_atencions.pedido_id', $pedido->id)->where('estado', '1')->get();
 
-        return view('pedidos.show', compact('pedidos', 'imagenes', 'imagenesatencion'));
+        return view('pedidos.show', compact('pedidos', 'imagenes', 'imagenesatencion','cotizacion'));
     }
 
     /**
@@ -1776,7 +1947,7 @@ class PedidoController extends Controller
             ->where('dp.estado', '1')
             //->where('u.id', Auth::user()->id)
             ->where('pedidos.pagado', '<>', '2')
-            ->groupBy(
+            /*->groupBy(
                 'pedidos.id',
                 'c.id',
                 'c.nombre',
@@ -1791,9 +1962,56 @@ class PedidoController extends Controller
                 'pedidos.responsable',
                 'pedidos.created_at',
                 'pedidos.pagado'
+                )*/
+            ->orderBy('pedidos.created_at', 'DESC');
+            //->get();
+        if(Auth::user()->rol == "Operario"){
+            $asesores = User::where('users.rol', 'Asesor')
+                -> where('users.estado', '1')
+                -> Where('users.operario',Auth::user()->id)
+                ->select(
+                    DB::raw("users.identificador as identificador")
                 )
-            ->orderBy('pedidos.created_at', 'DESC')
-            ->get();
+                ->pluck('users.identificador');
+            $pedidos=$pedidos->WhereIn('u.identificador',$asesores);
+
+        }else if(Auth::user()->rol == "Jefe de operaciones"){
+            $operarios = User::where('users.rol', 'Operario')
+                -> where('users.estado', '1')
+                -> where('users.jefe', Auth::user()->id)
+                ->select(
+                    DB::raw("users.id as id")
+                )
+                ->pluck('users.id');
+            $asesores = User::where('users.rol', 'Asesor')
+                -> where('users.estado', '1')
+                ->WhereIn('users.operario',$operarios)
+                ->select(
+                    DB::raw("users.identificador as identificador")
+                )
+                ->pluck('users.identificador');
+            $pedidos=$pedidos->WhereIn('u.identificador',$asesores);
+
+        }else if(Auth::user()->rol == "Asesor"){
+            $pedidos=$pedidos->Where('u.identificador',Auth::user()->identificador);
+        }else if(Auth::user()->rol == "Super asesor"){
+            $pedidos=$pedidos->Where('u.identificador',Auth::user()->identificador);
+
+        }else if(Auth::user()->rol == "Encargado"){
+            $usersasesores = User::where('users.rol', 'Asesor')
+                -> where('users.estado', '1')
+                -> where('users.supervisor', Auth::user()->id)
+                ->select(
+                    DB::raw("users.identificador as identificador")
+                )
+                ->pluck('users.identificador');
+
+            $pedidos=$pedidos->WhereIn('u.identificador',$usersasesores); 
+
+        }else{
+            $pedidos=$pedidos;
+        }
+        $pedidos=$pedidos->get();
 
         return Datatables::of($pedidos)
             ->addIndexColumn()
@@ -1811,35 +2029,24 @@ class PedidoController extends Controller
     {
         $mirol=Auth::user()->rol;
 
-        if(Auth::user()->rol == "Operario"){
-
-            $asesores = User::whereIN('users.rol', ['Asesor','Administrador'])
-                -> where('users.estado', '1')
-                -> Where('users.operario',Auth::user()->id)
-                ->select(
-                    DB::raw("users.identificador as identificador")
-                )/*->union(
-                    User::where("id","33")
-                        ->select(
-                            DB::raw("users.identificador as identificador")
-                        ) )*/
-                ->pluck('users.identificador');
-
-            $pedidos = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')
+        $pedidos = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')
             ->join('users as u', 'pedidos.user_id', 'u.id')
             ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
             ->select(
                 'pedidos.id',
+                DB::raw(" (CASE WHEN pedidos.id<10 THEN concat('PED000',pedidos.id)
+                                WHEN pedidos.id<100 THEN concat('PED00',pedidos.id)
+                                WHEN pedidos.id<1000 THEN concat('PED0',pedidos.id)
+                                ELSE concat('PED',pedidos.id) END) AS id2"),
                 'c.nombre as nombres',
                 'c.celular as celulares',
                 'u.identificador as users',
                 'dp.codigo as codigos',
                 'dp.nombre_empresa as empresas',
-                /* DB::raw('sum(dp.total) as total'), */
                 'dp.total as total',
                 'pedidos.condicion',
-                /* 'pedidos.created_at as fecha', */
-                DB::raw('DATE_FORMAT(pedidos.created_at, "%d/%m/%Y") as fecha'),
+                DB::raw('(DATE_FORMAT(pedidos.created_at, "%Y-%m-%d")) as fecha'),
+                //DB::raw('DATE_FORMAT(pedidos.created_at, "%d/%m/%Y") as fecha'),
                 'dp.envio_doc',
                 'dp.fecha_envio_doc',
                 'dp.cant_compro',
@@ -1849,11 +2056,8 @@ class PedidoController extends Controller
             )
             ->where('pedidos.estado', '1')
             ->where('dp.estado', '1')
-            //->where('u.operario', Auth::user()->id)
-            ->WhereIn('u.identificador',$asesores)
-            //->where('pedidos.condicion', 'POR ATENDER')
-            ->whereIn('pedidos.condicion', ['POR ATENDER','EN PROCESO ATENCION'])
-            ->groupBy(
+            ->whereIn('pedidos.condicion', ['POR ATENDER','EN PROCESO ATENCION']);
+            /*->groupBy(
                 'pedidos.id',
                 'c.nombre',
                 'c.celular',
@@ -1868,9 +2072,41 @@ class PedidoController extends Controller
                 'dp.cant_compro',
                 'dp.fecha_envio_doc_fis',
                 'dp.fecha_recepcion'
-            )
-            ->orderBy('pedidos.created_at', 'DESC')
-            ->get(); 
+            );*/
+            //->orderBy('pedidos.created_at', 'DESC')
+            //->get();
+        //$pedidos=$pedidos->get();
+
+        /*return Datatables::of($pedidos)
+                    ->addIndexColumn()
+                    ->addColumn('action', function($pedido){     
+                        $btn='';
+                        return $btn;
+                    })
+                    ->addColumn('action2', function($pedido){     
+                        $btn='';
+                        return $btn;
+                    })
+                    ->rawColumns(['action','action2'])
+                    ->make(true);*/
+
+
+        if(Auth::user()->rol == "Operario"){
+
+            $asesores = User::whereIN('users.rol', ['Asesor','Administrador'])
+                -> where('users.estado', '1')
+                -> Where('users.operario',Auth::user()->id)
+                ->select(
+                    DB::raw("users.identificador as identificador")
+                )/*->union(
+                    User::where("id","33")
+                        ->select(
+                            DB::raw("users.identificador as identificador")
+                        ) )*/
+                ->pluck('users.identificador');
+                $pedidos=$pedidos->WhereIn('u.identificador',$asesores);
+
+           
         }else if(Auth::user()->rol == "Jefe de operaciones"){
 
             $operarios = User::where('users.rol', 'Operario')
@@ -1893,97 +2129,12 @@ class PedidoController extends Controller
                         ) )*/
                 ->pluck('users.identificador');
 
-            $pedidos = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')
-            ->join('users as u', 'pedidos.user_id', 'u.id')
-            ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
-            ->select(
-                'pedidos.id',
-                'c.nombre as nombres',
-                'c.celular as celulares',
-                'u.identificador as users',
-                'dp.codigo as codigos',
-                'dp.nombre_empresa as empresas',
-                /* DB::raw('sum(dp.total) as total'), */
-                'dp.total as total',
-                'pedidos.condicion',
-                /* 'pedidos.created_at as fecha', */
-                DB::raw('DATE_FORMAT(pedidos.created_at, "%d/%m/%Y") as fecha'),
-                'dp.envio_doc',
-                'dp.fecha_envio_doc',
-                'dp.cant_compro',
-                'dp.fecha_envio_doc_fis',
-                'dp.fecha_recepcion',
-                DB::raw(" ( select count(ip.id) from imagen_pedidos ip inner join pedidos pedido on pedido.id=ip.pedido_id and pedido.id=pedidos.id where ip.estado=1 and ip.adjunto not in ('logo_facturas.png') ) as imagenes ")
-            )
-            ->where('pedidos.estado', '1')
-            ->where('dp.estado', '1')
-            ->WhereIn('u.identificador',$asesores)
-            //->where('u.jefe', Auth::user()->id)
-            ->whereIn('pedidos.condicion', ['POR ATENDER','EN PROCESO ATENCION'])
-            ->groupBy(
-                'pedidos.id',
-                'c.nombre',
-                'c.celular',
-                'u.identificador',
-                'dp.codigo',
-                'dp.nombre_empresa',
-                'dp.total',
-                'pedidos.condicion',
-                'pedidos.created_at',
-                'dp.envio_doc',
-                'dp.fecha_envio_doc',
-                'dp.cant_compro',
-                'dp.fecha_envio_doc_fis',
-                'dp.fecha_recepcion'
-            )
-            ->orderBy('pedidos.created_at', 'DESC')
-            ->get(); 
+                $pedidos=$pedidos->WhereIn('u.identificador',$asesores);
         }
         else{
-            $pedidos = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')
-            ->join('users as u', 'pedidos.user_id', 'u.id')
-            ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
-            ->select(
-                'pedidos.id',
-                'c.nombre as nombres',
-                'c.celular as celulares',
-                'u.identificador as users',
-                'dp.codigo as codigos',
-                'dp.nombre_empresa as empresas',
-                /* DB::raw('sum(dp.total) as total'), */
-                'dp.total as total',
-                'pedidos.condicion',
-                /* 'pedidos.created_at as fecha', */
-                DB::raw('DATE_FORMAT(pedidos.created_at, "%d/%m/%Y") as fecha'),
-                'dp.envio_doc',
-                'dp.fecha_envio_doc',
-                'dp.cant_compro',
-                'dp.fecha_envio_doc_fis',
-                'dp.fecha_recepcion',
-                DB::raw(" ( select count(ip.id) from imagen_pedidos ip inner join pedidos pedido on pedido.id=ip.pedido_id and pedido.id=pedidos.id where ip.estado=1 and ip.adjunto not in ('logo_facturas.png') ) as imagenes ")
-            )
-            ->where('pedidos.estado', '1')
-            ->where('dp.estado', '1')
-            ->whereIn('pedidos.condicion', ['POR ATENDER','EN PROCESO ATENCION'])
-            ->groupBy(
-                'pedidos.id',
-                'c.nombre',
-                'c.celular',
-                'u.identificador',
-                'dp.codigo',
-                'dp.nombre_empresa',
-                'dp.total',
-                'pedidos.condicion',
-                'pedidos.created_at',
-                'dp.envio_doc',
-                'dp.fecha_envio_doc',
-                'dp.cant_compro',
-                'dp.fecha_envio_doc_fis',
-                'dp.fecha_recepcion'
-            )
-            ->orderBy('pedidos.created_at', 'DESC')
-            ->get();
+            $pedidos=$pedidos;
         }
+        $pedidos=$pedidos->get();
         
         return Datatables::of($pedidos)
                     ->addIndexColumn()
@@ -2596,8 +2747,6 @@ class PedidoController extends Controller
             "ATENDIDO" => 'ATENDIDO'
         ];
 
-        
-
         $imagenes = ImagenAtencion::where('estado', '1')->get();
         $superasesor = User::where('rol', 'Super asesor')->count();
 
@@ -2609,22 +2758,8 @@ class PedidoController extends Controller
         $min = Carbon::createFromFormat('d/m/Y', $request->min)->format('Y-m-d');
         $max = Carbon::createFromFormat('d/m/Y', $request->max)->format('Y-m-d');
         $pedidos=null;
-        
-        if(Auth::user()->rol == "Operario"){
 
-            $asesores = User::whereIN('users.rol', ['Asesor','Administrador'])
-                -> where('users.estado', '1')
-                -> Where('users.operario',Auth::user()->id)
-                ->select(
-                    DB::raw("users.identificador as identificador")
-                )/*->union(
-                    User::where("id","33")
-                        ->select(
-                            DB::raw("users.identificador as identificador")
-                        ) )*/
-                ->pluck('users.identificador');
-
-            $pedidos = Pedido::join('users as u', 'pedidos.user_id', 'u.id')
+        $pedidos = Pedido::join('users as u', 'pedidos.user_id', 'u.id')
                 ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
                 ->select(
                     'pedidos.id',
@@ -2641,41 +2776,37 @@ class PedidoController extends Controller
                     'dp.cant_compro',
                     'dp.atendido_por',
                     'dp.atendido_por_id',
-                    //'u.jefe',
                     DB::raw(" (select u2.name from users u2 where u2.id=u.jefe) as jefe "),
                     DB::raw('DATE_FORMAT(dp.fecha_envio_doc_fis, "%d/%m/%Y") as fecha_envio_doc_fis'),
-                    'dp.fecha_recepcion'
+                    'dp.fecha_recepcion',
+                    DB::raw("  (select IFNULL(count(b1.pedido_id),0) from direccion_pedidos b1 where b1.pedido_id=pedidos.id) as envios_lima "),
+                    DB::raw("  (select IFNULL(count(b2.pedido_id),0) from gasto_pedidos b2 where b2.pedido_id=pedidos.id) as envios_provincia "),
+                    DB::raw("  (CASE  when ((select IFNULL(count(b1.pedido_id),0) from direccion_pedidos b1 where b1.pedido_id=pedidos.id)+(select IFNULL(count(b2.pedido_id),0) from gasto_pedidos b2 where b2.pedido_id=pedidos.id))>0 then '1' else '0' end  )  as revierte ")
+
                 )
                 ->where('pedidos.estado', '1')
                 ->where('dp.estado', '1')
-                ->WhereIn('u.identificador',$asesores)
-                //->where('u.operario', Auth::user()->id)
-                ->where('pedidos.condicion', 'ATENDIDO')//
-                ->whereNotIn('pedidos.envio', ['0'])
-                //->whereBetween(DB::raw('( (select DATE( MIN(dpa.fecha))   from detalle_pagos dpa where dpa.pago_id=pagos.id and dpa.estado=1)  )'), [$min, $max])
-                ->whereBetween( 'pedidos.created_at', [$min, $max])
-                ->groupBy(
-                    'pedidos.id',
-                    'u.identificador',
-                    'dp.codigo',
-                    'dp.nombre_empresa',
-                    'pedidos.condicion',
-                    'pedidos.created_at',
-                    'pedidos.envio',
-                    'pedidos.destino',
-                    'pedidos.condicion_envio',
-                    'dp.envio_doc',
-                    'dp.fecha_envio_doc',
-                    'dp.cant_compro',
-                    'dp.atendido_por',
-                    'dp.atendido_por_id',
-                    'u.jefe',
-                    'dp.fecha_envio_doc_fis',
-                    'dp.fecha_recepcion'
-                )
-                ->orderBy('pedidos.created_at', 'DESC')
-                /* ->take('200') */
-                ->get();
+                ->where('pedidos.condicion', 'ATENDIDO')
+                //->whereNotIn('pedidos.envio', ['0'])
+                ->whereBetween( 'pedidos.created_at', [$min, $max]);
+                       
+        if(Auth::user()->rol == "Operario"){
+
+            $asesores = User::whereIN('users.rol', ['Asesor','Administrador'])
+                -> where('users.estado', '1')
+                -> Where('users.operario',Auth::user()->id)
+                ->select(
+                    DB::raw("users.identificador as identificador")
+                )/*->union(
+                    User::where("id","33")
+                        ->select(
+                            DB::raw("users.identificador as identificador")
+                        ) )*/
+                ->pluck('users.identificador');
+
+            $pedidos->WhereIn('u.identificador',$asesores);
+
+            
         }else if(Auth::user()->rol == "Jefe de operaciones"){
             $operarios = User::where('users.rol', 'Operario')
                 -> where('users.estado', '1')
@@ -2697,109 +2828,13 @@ class PedidoController extends Controller
                         ) )*/
                 ->pluck('users.identificador');
 
-            $pedidos = Pedido::join('users as u', 'pedidos.user_id', 'u.id')
-                ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
-                ->select(
-                    'pedidos.id',
-                    'u.identificador as users',
-                    'dp.codigo as codigos',
-                    'dp.nombre_empresa as empresas',
-                    'pedidos.condicion',
-                    DB::raw('DATE_FORMAT(pedidos.created_at, "%d/%m/%Y") as fecha'),
-                    'pedidos.envio',
-                    'pedidos.destino',
-                    'pedidos.condicion_envio',
-                    'dp.envio_doc',
-                    'dp.fecha_envio_doc',
-                    'dp.cant_compro',
-                    'dp.atendido_por',
-                    'dp.atendido_por_id',
-                    //'u.jefe',
-                    DB::raw(" (select u2.name from users u2 where u2.id=u.jefe) as jefe "),
-                    DB::raw('DATE_FORMAT(dp.fecha_envio_doc_fis, "%d/%m/%Y") as fecha_envio_doc_fis'),
-                    'dp.fecha_recepcion'
-                )
-                ->where('pedidos.estado', '1')
-                ->where('dp.estado', '1')
-                ->WhereIn('u.identificador',$asesores)
-                //->where('u.jefe', Auth::user()->id)
-                ->where('pedidos.condicion', 'ATENDIDO')
-                ->whereNotIn('pedidos.envio', ['0'])
-                ->whereBetween( 'pedidos.created_at', [$min, $max])
-                ->groupBy(
-                    'pedidos.id',
-                    'u.identificador',
-                    'dp.codigo',
-                    'dp.nombre_empresa',
-                    'pedidos.condicion',
-                    'pedidos.created_at',
-                    'pedidos.envio',
-                    'pedidos.destino',
-                    'pedidos.condicion_envio',
-                    'dp.envio_doc',
-                    'dp.fecha_envio_doc',
-                    'dp.cant_compro',
-                    'dp.atendido_por',
-                    'dp.atendido_por_id',
-                    'u.jefe',
-                    'dp.fecha_envio_doc_fis',
-                    'dp.fecha_recepcion'
-                )
-                ->orderBy('pedidos.created_at', 'DESC')
-                /* ->take('300') */
-                ->get();
+            $pedidos->WhereIn('u.identificador',$asesores);
+
+            
         }else{
-            $pedidos = Pedido::join('users as u', 'pedidos.user_id', 'u.id')
-                ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
-                ->select(
-                    'pedidos.id',
-                    'u.identificador as users',
-                    'dp.codigo as codigos',
-                    'dp.nombre_empresa as empresas',
-                    'pedidos.condicion',
-                    DB::raw('DATE_FORMAT(pedidos.created_at, "%d/%m/%Y") as fecha'),
-                    'pedidos.envio',
-                    'pedidos.destino',
-                    'pedidos.condicion_envio',
-                    'dp.envio_doc',
-                    'dp.fecha_envio_doc',
-                    'dp.cant_compro',
-                    'dp.atendido_por',
-                    'dp.atendido_por_id',
-                    //'u.jefe',
-                    DB::raw(" (select u2.name from users u2 where u2.id=u.jefe) as jefe "),
-                    DB::raw('DATE_FORMAT(dp.fecha_envio_doc_fis, "%d/%m/%Y") as fecha_envio_doc_fis'),
-                    'dp.fecha_recepcion'
-                )
-                ->where('pedidos.estado', '1')
-                ->where('dp.estado', '1')
-                ->where('pedidos.condicion', 'ATENDIDO')
-                ->whereNotIn('pedidos.envio', ['0'])
-                ->whereBetween( 'pedidos.created_at', [$min, $max])
-                ->groupBy(
-                    'pedidos.id',
-                    'u.identificador',
-                    'dp.codigo',
-                    'dp.nombre_empresa',
-                    'pedidos.condicion',
-                    'pedidos.created_at',
-                    'pedidos.envio',
-                    'pedidos.destino',
-                    'pedidos.condicion_envio',
-                    'dp.envio_doc',
-                    'dp.fecha_envio_doc',
-                    'dp.cant_compro',
-                    'dp.atendido_por',
-                    'dp.atendido_por_id',
-                    'u.jefe',
-                    'dp.fecha_envio_doc_fis',
-                    'dp.fecha_recepcion'
-                )
-                ->orderBy('pedidos.created_at', 'DESC')
-                /*->take('200')*/
-                ->get();
-                /*->simplePaginate(1000);*/
-            }
+            $pedidos=$pedidos;
+        }
+        $pedidos=$pedidos->get();
 
         return Datatables::of($pedidos)
             ->addIndexColumn()
@@ -3408,6 +3443,42 @@ class PedidoController extends Controller
             'atendido_por_id' => Auth::user()->id,
         ]);
 
+        /**/
+        $cliente=Cliente::where("id",$pedido->cliente_id)->first();
+
+        $direcciongrupo=DireccionGrupo::create([
+                'estado'=>'1',
+                'destino' => 'LIMA',
+                'distribucion'=> '',
+                'condicion_envio' => 'ENTREGADO',
+                'condicion_sobre' => 'SIN ENVIO',
+            ]);
+
+        $direccionLima = DireccionEnvio::create([
+            'cliente_id' => $pedido->cliente_id,
+            'distrito' => 'LIMA',
+            'direccion' => '',
+            'referencia' => '',
+            'nombre' => $cliente->nombre,
+            'celular' => $cliente->celular,
+            'observacion' => '',
+            'direcciongrupo' => $direcciongrupo->id,
+            'cantidad' => 1,
+            'destino'=>'LIMA',
+            'estado' => '1',
+            "salvado"=> "0"
+        ]);
+
+
+        $direccionPedido = DireccionPedido::create([
+                'direccion_id' => $direccionLima->id,
+                'pedido_id' => $pedido->id,
+                'codigo_pedido' => $detalle_pedidos->codigo,
+                'direcciongrupo' => $direcciongrupo->id,
+                'empresa' => $detalle_pedidos->nombre_empresa,
+                'estado' => '1'
+            ]);
+
         return response()->json(['html' => $pedido->id]);
         //return redirect()->route('operaciones.atendidos')->with('info','actualizado');
     }
@@ -3425,131 +3496,6 @@ class PedidoController extends Controller
         $destinationPath = base_path("public/storage/gastos/".$adjunto);
 
         return response()->download($destinationPath);
-    }
-
-    public function Enviostabla(Request $request)
-    {
-        $pedidos=null;
-
-        $pedidos = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')
-                ->join('users as u', 'pedidos.user_id', 'u.id')
-                //->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
-                ->select(
-                    'pedidos.id',
-                    'pedidos.cliente_id',
-                    'c.nombre as nombres',
-                    'c.celular as celulares',
-                    'u.identificador as users',
-                    DB::raw(" (select dp.codigo from detalle_pedidos dp where dp.pedido_id=pedidos.id) as codigos "),
-                    //'dp.codigo as codigos',
-                    DB::raw(" (select dp.nombre_empresa from detalle_pedidos dp where dp.pedido_id=pedidos.id) as empresas "),
-                    //'dp.nombre_empresa as empresas',
-                    //'dp.total as total',
-                    DB::raw(" (select dp.total from detalle_pedidos dp where dp.pedido_id=pedidos.id) as total "),
-                    'pedidos.condicion',
-                    'pedidos.created_at as fecha',
-                    'pedidos.condicion_envio',
-                    'pedidos.envio',
-                    'pedidos.destino',
-                    'pedidos.direccion',
-                    DB::raw(" (select dp.envio_doc from detalle_pedidos dp where dp.pedido_id=pedidos.id) as envio_doc "),
-                    DB::raw(" (select dp.fecha_envio_doc from detalle_pedidos dp where dp.pedido_id=pedidos.id) as fecha_envio_doc "),
-                    DB::raw(" (select dp.cant_compro from detalle_pedidos dp where dp.pedido_id=pedidos.id) as cant_compro "),
-                    DB::raw(" (select dp.fecha_envio_doc_fis from detalle_pedidos dp where dp.pedido_id=pedidos.id) as fecha_envio_doc_fis "),
-                    DB::raw(" (select dp.foto1 from detalle_pedidos dp where dp.pedido_id=pedidos.id) as foto1 "),
-                    DB::raw(" (select dp.foto2 from detalle_pedidos dp where dp.pedido_id=pedidos.id) as foto2 "),
-                    DB::raw(" (select dp.fecha_recepcion from detalle_pedidos dp where dp.pedido_id=pedidos.id) as fecha_recepcion "),
-                    /*'dp.envio_doc',
-                    'dp.fecha_envio_doc',
-                    'dp.cant_compro',
-                    'dp.fecha_envio_doc_fis',
-                    'dp.foto1',
-                    'dp.foto2',
-                    'dp.fecha_recepcion'*/                    
-                )
-                ->where('pedidos.estado', '1')
-                //->where('dp.estado', '1')
-                ->where('pedidos.envio', '<>', '1')
-                ->where('pedidos.condicion_envio', '<>', 'ENTREGADO')
-                ->where('pedidos.condicion_envio', 'EN REPARTO');
-                /*->groupBy(
-                    'pedidos.id',
-                    'pedidos.cliente_id',
-                    'c.nombre',
-                    'c.celular',
-                    'u.identificador',
-                    'dp.codigo',
-                    'dp.nombre_empresa',
-                    'dp.total',
-                    'pedidos.condicion',
-                    'pedidos.created_at',
-                    'pedidos.condicion_envio',
-                    'pedidos.envio',
-                    'pedidos.destino',
-                    'pedidos.direccion',
-                    'dp.envio_doc',
-                    'dp.fecha_envio_doc',
-                    'dp.cant_compro',
-                    'dp.fecha_envio_doc_fis',
-                    'dp.foto1',
-                    'dp.foto2',
-                    'dp.fecha_recepcion'
-                )*/
-        if(Auth::user()->rol == "Operario"){
-            $asesores = User::where('users.rol', 'Asesor')
-                -> where('users.estado', '1')
-                -> Where('users.operario',Auth::user()->id)
-                ->select(
-                    DB::raw("users.identificador as identificador")
-                )
-                ->pluck('users.identificador');
-
-            $pedidos=$pedidos->WhereIn('u.identificador',$asesores);
-            
-        }else if(Auth::user()->rol == "Jefe de operaciones"){
-            $operarios = User::where('users.rol', 'Operario')
-                -> where('users.estado', '1')
-                -> where('users.jefe', Auth::user()->id)
-                ->select(
-                    DB::raw("users.id as id")
-                )
-                ->pluck('users.id');
-
-            $asesores = User::where('users.rol', 'Asesor')
-                -> where('users.estado', '1')
-                ->WhereIn('users.operario',$operarios)
-                ->select(
-                    DB::raw("users.identificador as identificador")
-                )
-                ->pluck('users.identificador');
-
-            $pedidos=$pedidos->WhereIn('u.identificador',$asesores);
-
-        }else if(Auth::user()->rol == "Asesor"){
-            $pedidos=$pedidos->Where('u.identificador',Auth::user()->identificador);
-            
-        }
-        else if(Auth::user()->rol == "Super asesor"){
-            $pedidos=$pedidos->Where('u.identificador',Auth::user()->identificador);
-
-        }
-        else if(Auth::user()->rol == "Encargado"){
-            $pedidos=$pedidos->Where('u.supervisor',Auth::user()->identificador);
-        }
-        else{
-            $pedidos=$pedidos;
-        }
-        $pedidos=$pedidos->get();
-        
-        return Datatables::of($pedidos)
-                    ->addIndexColumn()
-                    ->addColumn('action', function($pedido){     
-                        $btn='';                         
-                        return $btn;
-                    })
-                    ->rawColumns(['action'])
-                    ->make(true);
-
     }
 
     public function changeImg(Request $request)
@@ -3579,57 +3525,7 @@ class PedidoController extends Controller
         return response()->json(['html' => $html]); 
     }
 
-    public function Envios()//SOBRES EN REPARTO
-    {
-        $condiciones = [
-            "PENDIENTE DE ENVIO" => 'PENDIENTE DE ENVIO',
-            "EN REPARTO" => 'EN REPARTO',
-            "ENTREGADO" => 'ENTREGADO'
-        ];
-
-        $destinos = [
-            "LIMA" => 'LIMA',
-            "PROVINCIA" => 'PROVINCIA'
-        ];
-
-        $distritos = Distrito::whereIn('provincia', ['LIMA', 'CALLAO'])
-                            ->where('estado', '1')
-                            ->pluck('distrito', 'distrito');
-
-        $departamento = Departamento::where('estado', "1")
-                            ->pluck('departamento', 'departamento');                              
-
-        $direcciones = DireccionEnvio::join('direccion_pedidos as dp', 'direccion_envios.id', 'dp.direccion_id')
-                            ->select('direccion_envios.id',
-                                    'direccion_envios.distrito',
-                                    'direccion_envios.direccion',
-                                    'direccion_envios.referencia',
-                                    'direccion_envios.nombre',
-                                    'direccion_envios.celular',
-                                    'dp.pedido_id as pedido_id',
-                                    )
-                            ->where('direccion_envios.estado', '1')
-                            ->where('dp.estado', '1')
-                           
-                            ->get();        
-
-        $superasesor = User::where('rol', 'Super asesor')->count();
-        
-        $ver_botones_accion = 1;
-        
-        if(Auth::user()->rol == "Asesor")
-        {
-            $ver_botones_accion = 0;
-        }else if(Auth::user()->rol == "Super asesor"){
-            $ver_botones_accion = 0;
-        }else if(Auth::user()->rol == "Encargado"){
-            $ver_botones_accion = 1;
-        }else{
-            $ver_botones_accion = 1;
-        }
-
-        return view('pedidos.porEnviar', compact('condiciones', 'distritos', 'direcciones', 'destinos', 'superasesor','ver_botones_accion','departamento'));
-    }
+    
 
     
 
@@ -3736,93 +3632,7 @@ class PedidoController extends Controller
         return redirect()->route('envios.index')->with('info','actualizado');
     }
 
-    public function EnviarPedidoid(Request $request)
-    {
-        //hiddenEnviar  pedido
-        //fecha_envio_doc_fis
-        //fecha_recepcion
-        //adjunto
-        //adjunto2
-        //condicion
-        $pedido=Pedido::where("id",$request->hiddenEnviar)->first();
-
-        $detalle_pedidos = DetallePedido::where('pedido_id',$pedido->id)->first();
-
-        $pedido->update([
-            'condicion_envio' => $request->condicion,
-            //'trecking' => $request->trecking,
-            'modificador' => 'USER'.Auth::user()->id
-        ]);
-
-        if ($request->condicion == "ENTREGADO")
-        {
-            $pedido->update([
-                'notificacion' => 'Pedido entregado'
-            ]);
-
-            //event(new PedidoEntregadoEvent($pedido));
-        }
-
-        $files = $request->file('foto1');
-        $files2 = $request->file('foto2');
-
-        $destinationPath = base_path('public/storage/entregas/');
-
-        if ($request->hasFile('foto1') && $request->hasFile('foto2')){
-            $file_name = Carbon::now()->second.$files->getClientOriginalName();
-            $file_name2 = Carbon::now()->second.$files2->getClientOriginalName();
-            
-            $files->move($destinationPath , $file_name);
-            $files2->move($destinationPath , $file_name2);
-            
-            $detalle_pedidos->update([
-                'foto1' => $file_name,
-                'foto2' => $file_name2,
-                'fecha_recepcion' => $request->fecha_recepcion,
-                'atendido_por' => Auth::user()->name,
-                'atendido_por_id' => Auth::user()->id,
-            ]);
-        }
-        else if ($request->hasFile('foto1') && $request->foto2 == null){
-            $file_name = Carbon::now()->second.$files->getClientOriginalName();
-            $files->move($destinationPath , $file_name);
-
-            $detalle_pedidos->update([
-                'foto1' => $file_name,
-                'fecha_recepcion' => $request->fecha_recepcion,
-                'atendido_por' => Auth::user()->name,
-                'atendido_por_id' => Auth::user()->id,
-            ]);
-        }  
-        else if ($request->foto1 == null && $request->hasFile('foto2')){
-            $file_name2 = Carbon::now()->second.$files2->getClientOriginalName();
-            $files2->move($destinationPath , $file_name2);
-
-            $detalle_pedidos->update([
-                'foto2' => $file_name2,
-                'fecha_recepcion' => $request->fecha_recepcion,
-                'atendido_por' => Auth::user()->name,
-                'atendido_por_id' => Auth::user()->id,
-            ]);    
-        }
-        else
-        {
-            $detalle_pedidos->update([
-                'fecha_recepcion' => $request->fecha_recepcion,
-                'atendido_por' => Auth::user()->name,
-                'atendido_por_id' => Auth::user()->id,
-            ]);
-        }
-
-        return response()->json(['html' => $request->hiddenEnviar]);
-
-        /*if($request->vista == 'ENTREGADOS')
-        {
-            return redirect()->route('envios.enviados')->with('info','actualizado');
-        }*/
-
-        //return redirect()->route('envios.index')->with('info','actualizado');
-    }
+    
     
     public function createDireccion(Pedido $pedido)
     {
@@ -3864,8 +3674,15 @@ class PedidoController extends Controller
 
             //return var_dump($array_pedidos);
 
+            //cliente
+            $cliente=Cliente::where("id",$request->cliente_id)->first();
+
             $direcciongrupo=DireccionGrupo::create([
-                'estado'=>'1'
+                'estado'=>'1',
+                'destino' => $request->destino,
+                'distribucion'=> ( ($request->destino=='PROVINCIA')? 'NORTE':''),
+                'nombre_cliente'=> ( ($request->destino=='LIMA')? $request->nombre : $cliente->nombre  ),  
+                'celular_cliente'=> ( ($request->destino=='LIMA')? $request->contacto : $cliente->celular."-".$cliente->icelular ),
             ]);
 
             $count_pedidos=count((array)$array_pedidos);
@@ -3891,6 +3708,7 @@ class PedidoController extends Controller
                         'estado' => '1',
                         "salvado"=> "0"
                     ]);
+
                         
                     // ALMACENANDO DIRECCION-PEDIDOS
                     $pedido_id = $request->pedido_id;
@@ -4056,383 +3874,6 @@ class PedidoController extends Controller
         ]);
 
         return redirect()->route('envios.index')->with('info','actualizado');
-    }
-
-    public function Enviadostabla()//ENTREGADOS
-    {
-        $mirol=Auth::user()->rol;
-
-        if(Auth::user()->rol == "Operario"){
-
-            $asesores = User::where('users.rol', 'Asesor')
-                -> where('users.estado', '1')
-                -> Where('users.operario',Auth::user()->id)
-                ->select(
-                    DB::raw("users.id as id")
-                )
-                ->pluck('users.id');
-
-
-            $pedidos = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')
-                ->join('users as u', 'pedidos.user_id', 'u.id')
-                ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
-                ->select(
-                    'pedidos.id',
-                    'c.nombre as nombres',
-                    'c.celular as celulares',
-                    'u.identificador as users',
-                    'dp.codigo as codigos',
-                    'dp.nombre_empresa as empresas',
-                    'dp.total as total',
-                    'pedidos.condicion',
-                    DB::raw('DATE_FORMAT(pedidos.created_at, "%d/%m/%Y") as fecha'),
-                    'pedidos.condicion_envio',
-                    'pedidos.envio',
-                    'pedidos.destino',
-                    'dp.envio_doc',
-                    DB::raw('DATE_FORMAT(dp.fecha_envio_doc, "%d/%m/%Y") as fecha_envio_doc'),
-                    'dp.cant_compro',
-                    DB::raw('DATE_FORMAT(dp.fecha_envio_doc_fis, "%d/%m/%Y") as fecha_envio_doc_fis'),
-                    'dp.foto1',
-                    'dp.foto2',
-                    DB::raw('DATE_FORMAT(dp.fecha_recepcion, "%d/%m/%Y") as fecha_recepcion')
-                )
-                ->where('pedidos.estado', '1')
-                ->where('dp.estado', '1')
-                ->where('pedidos.envio', '1')
-                ->WhereIn('pedidos.user_id',$asesores)
-                ->where('pedidos.condicion_envio', 'ENTREGADO')
-                ->groupBy(
-                    'pedidos.id',
-                    'c.nombre',
-                    'c.celular',
-                    'u.identificador',
-                    'dp.codigo',
-                    'dp.nombre_empresa',
-                    'dp.total',
-                    'pedidos.condicion',
-                    'pedidos.created_at',
-                    'pedidos.condicion_envio',
-                    'pedidos.envio',
-                    'pedidos.destino',
-                    'dp.envio_doc',
-                    'dp.fecha_envio_doc',
-                    'dp.cant_compro',
-                    'dp.fecha_envio_doc_fis',
-                    'dp.foto1',
-                    'dp.foto2',
-                    'dp.fecha_recepcion'
-                )
-                ->orderBy('pedidos.created_at', 'DESC')
-                ->get();
-        }else if(Auth::user()->rol == "Jefe de operaciones"){
-
-            $operarios = User::where('users.rol', 'Operario')
-                -> where('users.estado', '1')
-                -> where('users.jefe', Auth::user()->id)
-                ->select(
-                    DB::raw("users.id as id")
-                )
-                ->pluck('users.id');
-
-            $asesores = User::where('users.rol', 'Asesor')
-                -> where('users.estado', '1')
-                ->WhereIn('users.operario',$operarios)
-                ->select(
-                    DB::raw("users.id as id")
-                )
-                ->pluck('users.id');
-
-            $pedidos = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')
-                ->join('users as u', 'pedidos.user_id', 'u.id')
-                ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
-                ->select(
-                    'pedidos.id',
-                    'c.nombre as nombres',
-                    'c.celular as celulares',
-                    'u.identificador as users',
-                    'dp.codigo as codigos',
-                    'dp.nombre_empresa as empresas',
-                    'dp.total as total',
-                    'pedidos.condicion',
-                    DB::raw('DATE_FORMAT(pedidos.created_at, "%d/%m/%Y") as fecha'),
-                    'pedidos.condicion_envio',
-                    'pedidos.envio',
-                    'pedidos.destino',
-                    'dp.envio_doc',
-                    DB::raw('DATE_FORMAT(dp.fecha_envio_doc, "%d/%m/%Y") as fecha_envio_doc'),
-                    'dp.cant_compro',
-                    DB::raw('DATE_FORMAT(dp.fecha_envio_doc_fis, "%d/%m/%Y") as fecha_envio_doc_fis'),
-                    'dp.foto1',
-                    'dp.foto2',
-                    DB::raw('DATE_FORMAT(dp.fecha_recepcion, "%d/%m/%Y") as fecha_recepcion')
-                )
-                ->where('pedidos.estado', '1')
-                ->where('dp.estado', '1')
-                ->where('pedidos.envio', '1')
-                ->WhereIn('pedidos.user_id',$asesores)
-                ->where('pedidos.condicion_envio', 'ENTREGADO')
-                ->groupBy(
-                    'pedidos.id',
-                    'c.nombre',
-                    'c.celular',
-                    'u.identificador',
-                    'dp.codigo',
-                    'dp.nombre_empresa',
-                    'dp.total',
-                    'pedidos.condicion',
-                    'pedidos.created_at',
-                    'pedidos.condicion_envio',
-                    'pedidos.envio',
-                    'pedidos.destino',
-                    'dp.envio_doc',
-                    'dp.fecha_envio_doc',
-                    'dp.cant_compro',
-                    'dp.fecha_envio_doc_fis',
-                    'dp.foto1',
-                    'dp.foto2',
-                    'dp.fecha_recepcion'
-                )
-                ->orderBy('pedidos.created_at', 'DESC')
-                ->get();
-        }else if(Auth::user()->rol == "Asesor"){
-            $pedidos = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')
-                ->join('users as u', 'pedidos.user_id', 'u.id')
-                ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
-                ->select(
-                    'pedidos.id',
-                    'c.nombre as nombres',
-                    'c.celular as celulares',
-                    'u.identificador as users',
-                    'dp.codigo as codigos',
-                    'dp.nombre_empresa as empresas',
-                    'dp.total as total',
-                    'pedidos.condicion',
-                    DB::raw('DATE_FORMAT(pedidos.created_at, "%d/%m/%Y") as fecha'),
-                    'pedidos.condicion_envio',
-                    'pedidos.envio',
-                    'pedidos.destino',
-                    'dp.envio_doc',
-                    DB::raw('DATE_FORMAT(dp.fecha_envio_doc, "%d/%m/%Y") as fecha_envio_doc'),
-                    'dp.cant_compro',
-                    DB::raw('DATE_FORMAT(dp.fecha_envio_doc_fis, "%d/%m/%Y") as fecha_envio_doc_fis'),
-                    'dp.foto1',
-                    'dp.foto2',
-                    DB::raw('DATE_FORMAT(dp.fecha_recepcion, "%d/%m/%Y") as fecha_recepcion')
-                )
-                ->where('pedidos.estado', '1')
-                ->where('dp.estado', '1')
-                ->where('pedidos.envio', '1')
-                ->where('u.id', Auth::user()->id) 
-                ->where('pedidos.condicion_envio', 'ENTREGADO')
-                ->groupBy(
-                    'pedidos.id',
-                    'c.nombre',
-                    'c.celular',
-                    'u.identificador',
-                    'dp.codigo',
-                    'dp.nombre_empresa',
-                    'dp.total',
-                    'pedidos.condicion',
-                    'pedidos.created_at',
-                    'pedidos.condicion_envio',
-                    'pedidos.envio',
-                    'pedidos.destino',
-                    'dp.envio_doc',
-                    'dp.fecha_envio_doc',
-                    'dp.cant_compro',
-                    'dp.fecha_envio_doc_fis',
-                    'dp.foto1',
-                    'dp.foto2',
-                    'dp.fecha_recepcion'
-                )
-                ->orderBy('pedidos.created_at', 'DESC')
-                ->get();
-        }else if(Auth::user()->rol == "Super asesor"){
-            $pedidos = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')
-                ->join('users as u', 'pedidos.user_id', 'u.id')
-                ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
-                ->select(
-                    'pedidos.id',
-                    'c.nombre as nombres',
-                    'c.celular as celulares',
-                    'u.identificador as users',
-                    'dp.codigo as codigos',
-                    'dp.nombre_empresa as empresas',
-                    'dp.total as total',
-                    'pedidos.condicion',
-                    DB::raw('DATE_FORMAT(pedidos.created_at, "%d/%m/%Y") as fecha'),
-                    'pedidos.condicion_envio',
-                    'pedidos.envio',
-                    'pedidos.destino',
-                    'dp.envio_doc',
-                    DB::raw('DATE_FORMAT(dp.fecha_envio_doc, "%d/%m/%Y") as fecha_envio_doc'),
-                    'dp.cant_compro',
-                    DB::raw('DATE_FORMAT(dp.fecha_envio_doc_fis, "%d/%m/%Y") as fecha_envio_doc_fis'),
-                    'dp.foto1',
-                    'dp.foto2',
-                    DB::raw('DATE_FORMAT(dp.fecha_recepcion, "%d/%m/%Y") as fecha_recepcion')
-                )
-                ->where('pedidos.estado', '1')
-                ->where('dp.estado', '1')
-                ->where('pedidos.envio', '1')
-                ->where('u.id', Auth::user()->id)
-                ->where('pedidos.condicion_envio', 'ENTREGADO')
-                ->groupBy(
-                    'pedidos.id',
-                    'c.nombre',
-                    'c.celular',
-                    'u.identificador',
-                    'dp.codigo',
-                    'dp.nombre_empresa',
-                    'dp.total',
-                    'pedidos.condicion',
-                    'pedidos.created_at',
-                    'pedidos.condicion_envio',
-                    'pedidos.envio',
-                    'pedidos.destino',
-                    'dp.envio_doc',
-                    'dp.fecha_envio_doc',
-                    'dp.cant_compro',
-                    'dp.fecha_envio_doc_fis',
-                    'dp.foto1',
-                    'dp.foto2',
-                    'dp.fecha_recepcion'
-                )
-                ->orderBy('pedidos.created_at', 'DESC')
-                ->get();
-        }else if(Auth::user()->rol == "Encargado"){
-            $pedidos = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')
-                ->join('users as u', 'pedidos.user_id', 'u.id')
-                ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
-                ->select(
-                    'pedidos.id',
-                    'c.nombre as nombres',
-                    'c.celular as celulares',
-                    'u.identificador as users',
-                    'dp.codigo as codigos',
-                    'dp.nombre_empresa as empresas',
-                    'dp.total as total',
-                    'pedidos.condicion',
-                    DB::raw('DATE_FORMAT(pedidos.created_at, "%d/%m/%Y") as fecha'),
-                    'pedidos.condicion_envio',
-                    'pedidos.envio',
-                    'pedidos.destino',
-                    'dp.envio_doc',
-                    DB::raw('DATE_FORMAT(dp.fecha_envio_doc, "%d/%m/%Y") as fecha_envio_doc'),
-                    'dp.cant_compro',
-                    DB::raw('DATE_FORMAT(dp.fecha_envio_doc_fis, "%d/%m/%Y") as fecha_envio_doc_fis'),
-                    'dp.foto1',
-                    'dp.foto2',
-                    DB::raw('DATE_FORMAT(dp.fecha_recepcion, "%d/%m/%Y") as fecha_recepcion')
-                )
-                ->where('pedidos.estado', '1')
-                ->where('dp.estado', '1')
-                ->where('pedidos.envio', '1')
-                ->where('u.supervisor', Auth::user()->id)
-                ->where('pedidos.condicion_envio', 'ENTREGADO')
-                ->groupBy(
-                    'pedidos.id',
-                    'c.nombre',
-                    'c.celular',
-                    'u.identificador',
-                    'dp.codigo',
-                    'dp.nombre_empresa',
-                    'dp.total',
-                    'pedidos.condicion',
-                    'pedidos.created_at',
-                    'pedidos.condicion_envio',
-                    'pedidos.envio',
-                    'pedidos.destino',
-                    'dp.envio_doc',
-                    'dp.fecha_envio_doc',
-                    'dp.cant_compro',
-                    'dp.fecha_envio_doc_fis',
-                    'dp.foto1',
-                    'dp.foto2',
-                    'dp.fecha_recepcion'
-                )
-                ->orderBy('pedidos.created_at', 'DESC')
-                ->get();
-        }else{
-            $pedidos = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')
-                ->join('users as u', 'pedidos.user_id', 'u.id')
-                ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
-                ->select(
-                    'pedidos.id',
-                    'c.nombre as nombres',
-                    'c.celular as celulares',
-                    'u.identificador as users',
-                    'dp.codigo as codigos',
-                    'dp.nombre_empresa as empresas',
-                    'dp.total as total',
-                    'pedidos.condicion',
-                    DB::raw('DATE_FORMAT(pedidos.created_at, "%d/%m/%Y") as fecha'),
-                    'pedidos.condicion_envio',
-                    'pedidos.envio',
-                    'pedidos.destino',
-                    'dp.envio_doc',
-                    DB::raw('DATE_FORMAT(dp.fecha_envio_doc, "%d/%m/%Y") as fecha_envio_doc'),
-                    'dp.cant_compro',
-                    DB::raw('DATE_FORMAT(dp.fecha_envio_doc_fis, "%d/%m/%Y") as fecha_envio_doc_fis'),
-                    'dp.foto1',
-                    'dp.foto2',
-                    DB::raw('DATE_FORMAT(dp.fecha_recepcion, "%d/%m/%Y") as fecha_recepcion')
-                )
-                ->where('pedidos.estado', '1')
-                ->where('dp.estado', '1')
-                //->where('pedidos.envio', '1')
-                ->where('pedidos.condicion_envio', 'ENTREGADO')
-                ->groupBy(
-                    'pedidos.id',
-                    'c.nombre',
-                    'c.celular',
-                    'u.identificador',
-                    'dp.codigo',
-                    'dp.nombre_empresa',
-                    'dp.total',
-                    'pedidos.condicion',
-                    'pedidos.created_at',
-                    'pedidos.condicion_envio',
-                    'pedidos.envio',
-                    'pedidos.destino',
-                    'dp.envio_doc',
-                    'dp.fecha_envio_doc',
-                    'dp.cant_compro',
-                    'dp.fecha_envio_doc_fis',
-                    'dp.foto1',
-                    'dp.foto2',
-                    'dp.fecha_recepcion'
-                )
-                ->orderBy('pedidos.created_at', 'DESC')
-                ->get();
-        }
-        
-        return Datatables::of($pedidos)
-                    ->addIndexColumn()
-                    ->addColumn('action', function($pedido){     
-                        $btn='';
-                        return $btn;
-                    })
-                    ->rawColumns(['action'])
-                    ->make(true);
-
-    }
-
-    public function Enviados()//ENTREGADOS
-    {
-        $dateMin = Carbon::now()->subDays(4)->format('d/m/Y');
-        $dateMax = Carbon::now()->format('d/m/Y');
-
-        $condiciones = [
-            "PENDIENTE DE ENVIO" => 'PENDIENTE DE ENVIO',
-            "EN REPARTO" => 'EN REPARTO',
-            "ENTREGADO" => 'ENTREGADO'
-        ];
-
-        $superasesor = User::where('rol', 'Super asesor')->count();
-
-        return view('pedidos.enviados', compact('dateMin', 'dateMax', 'condiciones', 'superasesor'));
     }
 
     public function DescargarImagen($imagen)

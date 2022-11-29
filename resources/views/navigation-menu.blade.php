@@ -8,7 +8,7 @@
                 {{ __('Dashboard') }}
             </x-jet-responsive-nav-link> --}}
         </div>
-ssss
+
         <!-- Responsive Settings Options -->
         <div class="pt-4 pb-1 border-t border-gray-200">
             <div class="flex items-center px-4">

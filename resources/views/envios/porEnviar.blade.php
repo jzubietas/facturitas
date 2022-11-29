@@ -51,33 +51,32 @@
           </tr>
         </tbody>
       </table><br> --}}
-      <table id="tablaPrincipal" class="table table-striped">
+      <table id="tablaPrincipal" style="width:100%;" class="table table-striped">
         <thead>
           <tr>
             <th scope="col">Item</th>
             <th scope="col">Código</th>
             <th scope="col">Asesor</th>
             <th scope="col">Cliente</th>
-            <th scope="col">Razón social</th>            
-            <th scope="col">Fecha de registro</th>
-            <th scope="col">Fecha de envio</th>
-            <th scope="col">Fecha de entrega</th>
+            <th scope="col">Fecha de Envio</th>
+            <th scope="col">Razón social</th>     
             <th scope="col">Destino</th>
             <th scope="col">Dirección de envío</th>
-            <th scope="col">Estado de envio</th>
-            <th scope="col">Estado de sobre</th>
+            <th scope="col">Referencia</th>
+            <th scope="col">Estado de envio</th><!--ENTREGADO - RECIBIDO-->
             <th scope="col">Acciones</th>
           </tr>
         </thead>
         <tbody>
         </tbody>
       </table>
-      @include('pedidos.modal.enviarid')
+      @include('envios.modal.enviarid')
       @include('pedidos.modal.recibirid')
-      @include('pedidos.modal.direccionid')
+      @include('sobres.modal.direccionid')
       @include('pedidos.modal.verdireccionid')
       @include('pedidos.modal.editdireccionid')
       @include('pedidos.modal.destinoid')
+      @include('envios.modal.distribuir')
     </div>
   </div>
 
@@ -135,6 +134,9 @@
   <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
   <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
 
+  <script src="https://momentjs.com/downloads/moment.js"></script>
+  <script src="https://cdn.datatables.net/plug-ins/1.11.4/dataRender/datetime.js"></script>
+
   <script>
     $(document).ready(function () {
 
@@ -164,8 +166,38 @@
           idunico='PED'+idunico;
         } 
         $("#modal-enviar .textcode").html(idunico);
+
+
+
         
       });
+
+      
+
+      $(document).on("change","#foto1",function(event){
+          console.log("cambe image")
+          var file = event.target.files[0];
+          var reader = new FileReader();
+          reader.onload = (event) => {
+            //$("#picture").attr("src",event.target.result);
+              document.getElementById("picture1").setAttribute('src', event.target.result);
+          };
+          reader.readAsDataURL(file);
+
+      });
+
+      $(document).on("change","#foto2",function(event){
+          console.log("cambe image")
+          var file = event.target.files[0];
+          var reader = new FileReader();
+          reader.onload = (event) => {
+            //$("#picture").attr("src",event.target.result);
+              document.getElementById("picture2").setAttribute('src', event.target.result);
+          };
+          reader.readAsDataURL(file);
+
+      });
+      
 
       $('#modal-recibir').on('show.bs.modal', function (event) {
         var button = $(event.relatedTarget) 
@@ -217,6 +249,8 @@
 
       });
 
+      
+
       $(document).on("submit", "#formulariorecibir", function (evento) {
         evento.preventDefault();
       });
@@ -238,38 +272,98 @@
         createdRow: function( row, data, dataIndex){
           //console.log(row);          
         },
-        rowCallback: function (row, data, index) {           
+        rowCallback: function (row, data, index) {
+            console.log(data.destino2)
+              if(data.destino2=='PROVINCIA'){
+                $('td', row).css('color','red')
+                
+              }else if(data.destino2=='LIMA'){
+                if(data.distribucion!=null)
+                {
+                  if(data.distribucion=='NORTE')
+                  {
+                    //$('td', row).css('color','blue')
+                  }else if(data.distribucion=='CENTRO')
+                  {
+                    //$('td', row).css('color','yellow')
+                  }else if(data.distribucion=='SUR')
+                  {
+                    //$('td', row).css('color','green')
+                  }
+                  
+                }else{
+                  
+                }
+
+                
+
+              }
         },
         columns: [
           {
               data: 'id', 
               name: 'id',
+              "visible":false,
               render: function ( data, type, row, meta ) {
                 if(row.id<10){
-                  return 'PED000'+row.id;
+                  return 'ENV000'+row.id;
                 }else if(row.id<100){
-                  return 'PED00'+row.id;
+                  return 'ENV00'+row.id;
                 }else if(row.id<1000){
-                  return 'PED0'+row.id;
+                  return 'ENV0'+row.id;
                 }else{
-                  return 'PED'+row.id;
+                  return 'ENV'+row.id;
                 } 
               }
           },
-          {data: 'codigos', name: 'codigos', },
-          {data: 'users', name: 'users', },
           {
-            data: 'celulares', 
-            name: 'celulares',
+            data: 'codigos', 
+            name: 'codigos',
             render: function ( data, type, row, meta ) {
-              return row.celulares+' - '+row.nombres
+              if(data==null){
+                return 'SIN PEDIDOS';
+              }else{
+                var returndata='';
+                var jsonArray=data.split(",");
+                $.each(jsonArray, function(i, item) {
+                    returndata+=item+'<br>';
+                });
+                return returndata;
+              }  
             },
-            //searchable: true
-        },
-          {data: 'empresas', name: 'empresas', },
-          {data: 'fecha_envio_doc', name: 'fecha_envio_doc', },
-          {data: 'fecha_envio_doc_fis', name: 'fecha_envio_doc_fis', },
-          {data: 'fecha_recepcion', name: 'fecha_recepcion', },
+          },
+          {data: 'identificador', name: 'identificador', },
+          {
+            data: 'celular', 
+            name: 'celular',
+            render: function ( data, type, row, meta ) {
+              return row.celular+'<br>'+row.nombre
+            },
+          },
+          { 
+            data: 'fecha', 
+            name: 'fecha',
+            render: $.fn.dataTable.render.moment( 'DD/MM/YYYY' )
+           },
+          {
+            data: 'producto', 
+            name: 'producto',
+            render: function ( data, type, row, meta ) {
+              if(data==null){
+                return 'SIN RUCS';
+              }else{
+                var numm=0;
+                var returndata='';
+                var jsonArray=data.split(",");
+                $.each(jsonArray, function(i, item) {
+                    numm++;
+                    returndata+=numm+": "+item+'<br>';
+                    
+                });
+                return returndata;
+              }
+            }
+          },
           {data: 'destino', name: 'destino', },
           {
             data:'direccion',
@@ -305,33 +399,44 @@
               return '';
             },
           },
-          {data: 'condicion_envio', name: 'condicion_envio', },
           {
-            data: 'envio', 
-            name: 'envio',
+            data: 'referencia', 
+            name: 'referencia',
+            sWidth:'10%',
             render: function ( data, type, row, meta ) {
-              if(row.envio=='1')
+              var datal="";
+              if(row.destino=='LIMA')
               {
-                return '<span class="badge badge-danger">Por confirmar recepcion</span>';
-              }else{
-                return '<span class="badge badge-info">Recibido</span>';
+                return data;
+              
+              }else if(row.destino=='PROVINCIA'){
+                urladjunto = '{{ route("pedidos.descargargastos", ":id") }}';
+                urladjunto = urladjunto.replace(':id', data);
+                datal = datal+'<p><a href="'+urladjunto+'">'+data+'</a><p>';
+                  return datal;
               }
-            }, 
+            }
           },
+          {data: 'condicion_envio', name: 'condicion_envio', },
           {
             data: 'action', 
             name: 'action', 
             orderable: false, 
             searchable: false,
-            sWidth:'20%',
+            sWidth:'10%',
             render: function ( data, type, row, meta ) {   
               datass='';
+
+              
+              
               @if($ver_botones_accion > 0)
                 @can('envios.enviar')
-                  datass=datass+'<a href="" data-target="#modal-enviar" data-toggle="modal" data-enviar="'+row.id+'"><button class="btn btn-success btn-sm"><i class="fas fa-envelope"></i> Entregado</button></a>';  
+                  datass=datass+'<a href="" data-target="#modal-enviar" data-toggle="modal" data-enviar="'+row.id+'">'+
+                    '<button class="btn btn-success btn-sm"><i class="fas fa-envelope"></i> Entregado</button></a>';
                   if(row.envio=='1')
                   {
-                    datass = datass+ '<a href="" data-target="#modal-recibir" data-toggle="modal" data-recibir="'+row.id+'"><button class="btn btn-warning btn-sm"><i class="fas fa-check-circle"></i> Recibido</button></a>'; 
+                    datass = datass+ '<a href="" data-target="#modal-recibir" data-toggle="modal" data-recibir="'+row.id+'">'+
+                      '<button class="btn btn-warning btn-sm"><i class="fas fa-check-circle"></i> Recibido</button></a>';
                   }
                 @endcan
               @endif

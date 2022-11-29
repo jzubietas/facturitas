@@ -35,6 +35,11 @@ use App\Exports\PagosPorRevisarExport;
 use App\Exports\UsuariosExport;
 use App\Exports\MovimientosExport;
 use App\Exports\SobresRutaEnvioExport;
+use App\Exports\EnviosLimaExport;
+use App\Exports\EnviosLima1Export;
+//use App\Exports\EnviosLimanorteExport;
+//use App\Exports\EnviosLimacentroExport;
+//use App\Exports\EnviosLimasurExport;
 use App\Models\Pedido;
 use App\Models\Pago;
 use Carbon\Carbon;
@@ -49,6 +54,35 @@ class ExcelController extends Controller
     //     return Excel::download(new ClientesExport, 'Lista de Clientes.xlsx');
     // }
 
+    public function sobresRutaEnvioLimaNorteExcel(Request $request)
+    {
+        return (new SobresRutaEnvioExport)
+                ->pedidos($request)
+                ->download('Lista de Sobres - Ruta de Envio Lima Norte.xlsx');
+    }
+
+    public function sobresRutaEnvioLimaCentroExcel(Request $request)
+    {
+        return (new SobresRutaEnvioExport)
+                ->pedidos($request)
+                ->download('Lista de Sobres - Ruta de Envio Lima Centro.xlsx');
+    }
+
+    public function sobresRutaEnvioLimaSurExcel(Request $request)
+    {
+        return (new SobresRutaEnvioExport)
+                ->pedidos($request)
+                ->download('Lista de Sobres - Ruta de Envio Lima Sur.xlsx');
+    }
+
+    public function sobresRutaEnvioProvinciaExcel(Request $request)
+    {
+        return (new SobresRutaEnvioExport)
+                ->pedidos($request)
+                ->download('Lista de Sobres - Ruta de Envio Provincia.xlsx');
+    }
+
+    
     public function sobresRutaEnvioExcel(Request $request)
     {
         return (new SobresRutaEnvioExport)
@@ -82,13 +116,13 @@ class ExcelController extends Controller
 
     public function movimientosExcel(Request $request)
     {
-        return (new MovimientosExport)->movimientos1($request)->download('invoices.xlsx');
+        //return (new MovimientosExport)->movimientos($request)->download('Movimientos.xlsx');
 
 
-        //return (new MovimientosExport)
+        return (new MovimientosExport)
                 //->clientes1($request)
-                //->movimientos1($request)
-          //      ->download('Lista de Movimientos.xlsx');           
+                ->movimientos($request)
+                ->download('Lista de Movimientos.xlsx');           
     }
 
     public function clientesExcel(Request $request)

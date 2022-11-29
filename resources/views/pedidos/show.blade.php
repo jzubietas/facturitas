@@ -83,9 +83,9 @@
                     {{-- <td><a href="{{ route('pedidos.descargaradjunto', $pedido->adjunto) }}">{{ $pedido->adjunto }}</a></td> --}}
                     <td>@php echo number_format($pedido->ft,2) @endphp</td>
                     <td>
-                      @can('pedidos.edit')
+                      {{--@can('pedidos.edit')
                         <a href="{{ route('pedidos.edit', $pedido) }}" class="btn btn-warning btn-sm">Editar</a>
-                      @endcan
+                      @endcan--}}
                     </td>
                   </tr>
               </tbody>
@@ -144,6 +144,13 @@
             </table>
           </div>
         @endif
+
+
+        <textarea class="form-control" rows="6" placeholder="Cotizacion" name="copiar_cotizacion" cols="50" id="copiar_cotizacion">
+        
+        </textarea>
+
+
         <br>
         <a href="{{ route('pedidos.index', $pedido) }}" class="btn btn-danger btn-sm">Cancelar</a>
       </div>
@@ -158,5 +165,23 @@
 @section('js')
 
   <script src="{{ asset('js/datatables.js') }}"></script>
+  <script>
+
+  let copydata="*S/."+"{{$cotizacion->cantidad}}"+" * "+"{{$cotizacion->porcentaje}}" +"% = S/."+"{{$cotizacion->ft}}"+"*\n"+
+              "*ENVIO = S/."+"{{$cotizacion->courier}}"+"*\n"+
+              "*TOTAL = S/."+"{{$cotizacion->total}}"+"*\n\n"+
+              "*ES IMPORTANTE PAGAR EL ENVIO* \n";
+
+              $("#copiar_cotizacion").val(copydata);
+
+  </script>
+
+
+  <script>
+  
+
+  
+
+  </script>
 
 @stop

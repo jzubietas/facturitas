@@ -72,7 +72,7 @@
         <tbody>
         </tbody>
       </table>
-      @include('pedidos.modal.enviarid')
+      @include('envios.modal.enviarid')
       @include('pedidos.modal.recibirid')
       
       @include('pedidos.modal.verdireccionid')

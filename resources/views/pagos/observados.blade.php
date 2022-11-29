@@ -58,6 +58,7 @@
           <tr>
             <th scope="col">COD.</th>
             <th scope="col">COD.</th>
+            <th scope="col">COD2.</th>
             <th scope="col">Cliente</th>
             <th scope="col">Codigo pedido</th>
             <th scope="col">Fecha Voucher</th>
@@ -252,13 +253,17 @@
                 if(row.id<10){
                   return 'PAG'+row.users+'-'+unido+'-'+row.id;
                 }else if(row.id<100){
-                  return 'PAG00'+row.users+'-'+unido+'-'+row.id;
+                  return 'PAG'+row.users+'-'+unido+'-'+row.id;
                 }else if(row.id<1000){
-                  return 'PAG0'+row.users+'-'+unido+'-'+row.id;
+                  return 'PAG'+row.users+'-'+unido+'-'+row.id;
                 }else{
                   return 'PAG'+row.users+'-'+unido+'-'+row.id;
                 } 
               }
+          },
+          {
+            data: 'id2'
+            , name: 'id2' ,"visible":false
           },
           {data: 'celular', name: 'celular'},
           {

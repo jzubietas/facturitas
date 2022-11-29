@@ -35,6 +35,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
 
 
+
 //Route::get('image-upload-preview', [PagoController::class, 'indexpreview'])->name('image-upload-preview');
 //Route::post('upload-image', [PagoController::class, 'storeimage'])->name('upload-image');
 
@@ -50,6 +51,8 @@ Route::get('basefriatabla', [BasefriaController::class, 'index'])->name('basefri
 Route::post('asesorcombo', [UserController::class, 'Asesorcombo'])->name('asesorcombo');
 Route::post('asesorcombopago', [UserController::class, 'Asesorcombopago'])->name('asesorcombopago');
 
+Route::post('titulares.banco', [PagoController::class, 'TitularesBanco'])->name('titulares.banco');
+
 
 Route::get('clientes.createbf', [ClienteController::class, 'createbf'])->name('clientes.createbf');
 Route::post('clientes.storebf', [ClienteController::class, 'storebf'])->name('clientes.storebf');
@@ -62,6 +65,10 @@ Route::get('clientes.editbf/{cliente}/edit2', [ClienteController::class, 'editbf
 Route::resource('pedidos', PedidoController::class)->names('pedidos');
 Route::post('pedidoss.store', [PedidoController::class, 'pedidosstore'])->name('pedidoss.store');//actualizado para serverside
 Route::get('pedidostabla', [PedidoController::class, 'indextabla'])->name('pedidostabla');//actualizado para serverside
+
+Route::get('pedidosperdonarcurrier', [PedidoController::class, 'indexperdonarcurrier'])->name('pedidosperdonarcurrier');
+Route::get('pedidosperdonarcurriertabla', [PedidoController::class, 'indexperdonarcurriertabla'])->name('pedidosperdonarcurriertabla');//actualizado para serverside
+
 Route::get('pedidostablahistorial', [PedidoController::class, 'indextablahistorial'])->name('pedidostablahistorial');//actualizado para serverside
 Route::get('deudoresoncreate', [PedidoController::class, 'deudoresoncreate'])->name('deudoresoncreate');//actualizado para serverside
 Route::get('mispedidostabla', [PedidoController::class, 'mispedidostabla'])->name('mispedidostabla');//actualizado para serverside
@@ -115,6 +122,10 @@ Route::post('pedidos.envioid', [PedidoController::class, 'Enviarid'])->name('ped
 Route::post('pedidos.revertirenvioid', [PedidoController::class, 'Revertirenvio'])->name('pedidos.revertirenvioid');
 
 
+Route::post('pagos.perdonardeuda', [PagoController::class, 'perdonardeuda'])->name('pagos.perdonardeuda');
+
+
+
 Route::post('pedidos.destino/{pedido}', [PedidoController::class, 'Destino'])->name('pedidos.destino');
 Route::post('operaciones.sinenvio/{pedido}', [PedidoController::class, 'SinEnviar'])->name('operaciones.sinenvio');
 Route::post('operaciones.sinenvioid', [PedidoController::class, 'SinEnviarid'])->name('operaciones.sinenvioid');
@@ -134,16 +145,21 @@ Route::get('envios.porrecibirtabla', [EnvioController::class, 'Enviosporrecibirt
 Route::get('envios.rutaenvio', [EnvioController::class, 'Enviosrutaenvio'])->name('envios.rutaenvio');
 Route::get('envios.rutaenviotabla', [EnvioController::class, 'Enviosrutaenviotabla'])->name('envios.rutaenviotabla');
 
-Route::get('envios.index', [PedidoController::class, 'Envios'])->name('envios.index');
-Route::get('envios.indextabla', [PedidoController::class, 'Enviostabla'])->name('envios.indextabla');
-Route::get('envios.enviados', [PedidoController::class, 'Enviados'])->name('envios.enviados');
-Route::get('envios.enviadostabla', [PedidoController::class, 'Enviadostabla'])->name('envios.enviadostabla');
+Route::get('envios.index', [EnvioController::class, 'Envios'])->name('envios.index');
+Route::get('envios.indextabla', [EnvioController::class, 'Enviostabla'])->name('envios.indextabla');
+Route::get('envios.enviados', [EnvioController::class, 'Enviados'])->name('envios.enviados');
+Route::get('envios.enviadostabla', [EnvioController::class, 'Enviadostabla'])->name('envios.enviadostabla');
 /////////
+
+Route::get('envios.seguimientoprovincia', [EnvioController::class, 'Seguimientoprovincia'])->name('envios.seguimientoprovincia');
+Route::get('envios.seguimientoprovinciatabla', [EnvioController::class, 'Seguimientoprovinciatabla'])->name('envios.seguimientoprovinciatabla');
+
 
 Route::post('envios.recibir/{pedido}', [PedidoController::class, 'Recibir'])->name('envios.recibir');
 Route::post('envios.recibirid', [PedidoController::class, 'Recibirid'])->name('envios.recibirid');
 Route::post('envios.enviar/{pedido}', [PedidoController::class, 'EnviarPedido'])->name('envios.enviar');
-Route::post('envios.enviarid', [PedidoController::class, 'EnviarPedidoid'])->name('envios.enviarid');
+Route::post('envios.enviarid', [EnvioController::class, 'EnviarPedidoid'])->name('envios.enviarid');
+Route::post('envios.distribuirid', [EnvioController::class, 'DistribuirEnvioid'])->name('envios.distribuirid');
 Route::post('envios.direccion', [PedidoController::class, 'DireccionEnvio'])->name('envios.direccion');
 Route::get('envios.createdireccion/{pedido}', [PedidoController::class, 'createDireccion'])->name('envios.createdireccion');
 Route::post('envios.updatedireccion/{direccion}', [PedidoController::class, 'UpdateDireccionEnvio'])->name('envios.updatedireccion');
@@ -154,6 +170,8 @@ Route::get('envios/{imagen}/descargarimagen', [PedidoController::class, 'Descarg
 
 Route::resource('pagos', PagoController::class)->names('pagos');
 //Route::get('pagos/create/{cliente}', [PagoController::class, 'create'])->name('pagos.create');
+
+
 
 Route::get('pagostabla', [PagoController::class, 'indextabla'])->name('pagostabla');//actualizado para serverside
 Route::get('pagostablahistorial', [PagoController::class, 'indextablahistorial'])->name('pagostablahistorial');//actualizado para serverside
@@ -167,6 +185,7 @@ Route::get('pedidosenvioclientetabla', [ClienteController::class, 'pedidosenvioc
 Route::post('pagodetalleUpdate', [PagoController::class, 'pagodetalleUpdate'])->name('pagodetalleUpdate');
 
 Route::post('pagodeleteRequest', [PagoController::class, 'destroyid'])->name('pagodeleteRequest.post');
+Route::post('pagodesabonarRequest', [PagoController::class, 'desabonarid'])->name('pagodesabonarRequest.post');
 Route::post('validarrelacionruc', [PedidoController::class, 'validarrelacionruc'])->name('validarrelacionruc');
 Route::post('pedidostiempo', [ClienteController::class, 'pedidostiempo'])->name('pedidostiempo');
 Route::post('pedidoobteneradjuntoRequest', [PedidoController::class, 'pedidoobteneradjuntoRequest'])->name('pedidoobteneradjuntoRequest');
@@ -174,7 +193,9 @@ Route::post('pedidoobteneradjuntoRequest', [PedidoController::class, 'pedidoobte
 Route::post('pagos.addImgTemp', [PagoController::class, 'addImgTemp'])->name('pagos.addImgTemp');//actualizado para serverside
 Route::post('pagos.changeImg', [PagoController::class, 'changeImg'])->name('pagos.changeImg');
 
-Route::post('envios.changeImg', [PedidoController::class, 'changeImg'])->name('envios.changeImg');
+Route::post('pagos.addImgTempPagoPerdonar', [PagoController::class, 'addImgTempPagoPerdonar'])->name('pagos.addImgTempPagoPerdonar');
+
+Route::post('envios.changeImg', [EnvioController::class, 'changeImg'])->name('envios.changeImg');
 
 //Route::post('pago/create/{id}', [PagoController::class, 'create2'])->name('pago.create');
 
@@ -201,6 +222,9 @@ Route::get('administracion.revisarpendiente/{pago}', [PagoController::class, 'Re
 Route::get('administracion.revisarpago', [PagoController::class, 'Revisarpago'])->name('administracion.revisarpago');//agregado para detalle de revisar
 
 Route::resource('movimientos', MovimientoController::class)->names('movimientos');
+
+
+Route::get('movimientos.actualiza', [MovimientoController::class, 'actualiza'])->name('movimientos.actualiza');
 Route::get('movimientostabla', [MovimientoController::class, 'indextabla'])->name('movimientostabla');//actualizado para serverside
 Route::get('movimientostablaconciliar', [MovimientoController::class, 'indextablaconciliar'])->name('movimientostablaconciliar');//actualizado para serverside
 
@@ -209,7 +233,9 @@ Route::get('sobreenvioshistorial', [SobreController::class, 'sobreenvioshistoria
 
 
 Route::get('tipomovimiento', [MovimientoController::class, 'tipomovimiento'])->name('cargar.tipomovimiento');
-Route::get('validar_repetido', [MovimientoController::class, 'repeat'])->name('validar_repetido');
+Route::post('validar_repetido', [MovimientoController::class, 'repeat'])->name('validar_repetido');
+Route::post('register_movimiento', [MovimientoController::class, 'register'])->name('register_movimiento');
+
 Route::post('movimientodeleteRequest', [MovimientoController::class, 'destroyid'])->name('movimientodeleteRequest.post');
 
 Route::post('administracion.updaterevisar/{pago}', [PagoController::class, 'updateRevisar'])->name('administracion.updaterevisar');
@@ -320,6 +346,12 @@ Route::post('/mark-as-read', [NotificationsController::class, 'markNotification'
     Route::post('pedidosporenviarExcel', [ExcelController::class, 'pedidosporenviarExcel'])->name('pedidosporenviarExcel');
 
     Route::post('sobresRutaEnvioExcel', [ExcelController::class, 'sobresRutaEnvioExcel'])->name('sobresRutaEnvioExcel');
+    Route::post('sobresRutaEnvioLimaNorteExcel', [ExcelController::class, 'sobresRutaEnvioLimaNorteExcel'])->name('sobresRutaEnvioLimaNorteExcel');
+    Route::post('sobresRutaEnvioLimaCentroExcel', [ExcelController::class, 'sobresRutaEnvioLimaCentroExcel'])->name('sobresRutaEnvioLimaCentroExcel');
+    Route::post('sobresRutaEnvioLimaSurExcel', [ExcelController::class, 'sobresRutaEnvioLimaSurExcel'])->name('sobresRutaEnvioLimaSurExcel');
+    Route::post('sobresRutaEnvioProvinciaExcel', [ExcelController::class, 'sobresRutaEnvioProvinciaExcel'])->name('sobresRutaEnvioProvinciaExcel');
+    
+    //Route::post('sobresRutaEnviov2Excel', [ExcelController::class, 'sobresRutaEnviov2Excel'])->name('sobresRutaEnviov2Excel');
 
     //MODULO PEDIDOS
     // Route::get('pedidosExcel', [ExcelController::class, 'pedidosExcel'])->name('pedidosExcel');

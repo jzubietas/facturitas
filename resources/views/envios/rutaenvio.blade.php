@@ -6,14 +6,30 @@
   <h1>Rutas de envio - ENVIOS
     
     <div class="float-right btn-group dropleft">
+
+      <?php if(Auth::user()->rol=='Administrador' || Auth::user()->rol=='Logística'){ ?>
       <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         Exportar
       </button>
+      <?php } ?>
+
+
       <div class="dropdown-menu">
         <a href="" data-target="#modal-exportar" data-toggle="modal" class="dropdown-item" target="blank_"><img src="{{ asset('imagenes/icon-excel.png') }}"> Excel</a>
+
+        {{--<a href="" data-target="#modal-exportar2" data-toggle="modal" class="dropdown-item" target="blank_"><img src="{{ asset('imagenes/icon-excel.png') }}"> Clientes - Pedidos</a>
+
+        <a href="" data-target="#modal-exportar" data-toggle="modal" class="dropdown-item" target="blank_"><img src="{{ asset('imagenes/icon-excel.png') }}"> Provincia</a>
+        <a href="" data-target="#modal-exportar" data-toggle="modal" class="dropdown-item" target="blank_"><img src="{{ asset('imagenes/icon-excel.png') }}"> Lima Norte</a>
+        <a href="" data-target="#modal-exportar" data-toggle="modal" class="dropdown-item" target="blank_"><img src="{{ asset('imagenes/icon-excel.png') }}"> Lima Centro</a>
+        <a href="" data-target="#modal-exportar" data-toggle="modal" class="dropdown-item" target="blank_"><img src="{{ asset('imagenes/icon-excel.png') }}"> Lima Sur</a>--}}
       </div>
     </div>
     @include('sobres.modal.exportar', ['title' => 'Exportar RUTAS DE ENVIAR', 'key' => '1'])
+    {{--@include('sobres.modal.exportar', ['title' => 'Exportar RUTAS DE ENVIAR PROVINCIA', 'key' => '2'])
+    @include('sobres.modal.exportar', ['title' => 'Exportar RUTAS DE ENVIAR LIMA NORTE', 'key' => '3'])
+    @include('sobres.modal.exportar', ['title' => 'Exportar RUTAS DE ENVIAR LIMA CENTRO', 'key' => '4'])
+    @include('sobres.modal.exportar', ['title' => 'Exportar RUTAS DE ENVIAR LIMA SUR', 'key' => '5'])--}}
   
     {{-- @endcan --}}
   </h1>
@@ -62,7 +78,7 @@
           </tr>
         </tbody>
       </table><br> --}}
-      <table id="tablaPrincipal" class="table table-striped">
+      <table id="tablaPrincipal" style="width:100%;" class="table table-striped">
         <thead>
           <tr>
             <th scope="col" class="text-center">Item</th>
@@ -70,24 +86,26 @@
             <th scope="col" class="text-center">Cliente</th>
             <th scope="col" class="text-center">Nombre</th>
             <th scope="col" class="text-center">Fecha</th>
-            <th scope="col" class="text-center">Cantidad</th>
+            <th scope="col" class="text-center">QTY</th>
             <th scope="col" class="text-center">Codigos</th>
             <th scope="col" class="text-center">Producto</th>            
             <th scope="col" class="text-center">Direccion</th>
             <th scope="col" class="text-center">Referencia</th>
             <th scope="col" class="text-center">Observacion</th>
             <th scope="col" class="text-center">Distrito</th>
+            <th scope="col" class="text-center">Destino</th>
             <th scope="col" class="text-center">Acciones</th>
           </tr>
         </thead>
         <tbody>
         </tbody>
       </table>
-      @include('pedidos.modal.enviarid')
+      @include('envios.modal.enviarid')
       @include('pedidos.modal.recibirid')      
       @include('pedidos.modal.verdireccionid')
       @include('pedidos.modal.editdireccionid')
       @include('pedidos.modal.destinoid')
+      @include('envios.modal.distribuir')
     </div>
   </div>
 
@@ -161,6 +179,39 @@
       $(document).on("submit", "#formulario", function (evento) {
         evento.preventDefault();
         var fd = new FormData();
+      });
+
+      $('#modal-distribuir').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget) 
+        var idunico = button.data('distribuir')
+        console.log("distribuir "+ idunico);
+        $("#modal-distribuir #hiddenDistribuir").val(idunico);
+      });
+
+      $(document).on("submit", "#formulariodistribuir", function (evento) {
+        evento.preventDefault();
+        console.log("form distribuir")
+        //validacion
+
+        var fd2 = new FormData();
+        
+        fd2.append('hiddenDistribuir', $('#hiddenDistribuir').val() );        
+        fd2.append('distribuir', $('#distribuir').val() );
+        
+        $.ajax({
+          data: fd2,
+          processData: false,
+          contentType: false,
+          type: 'POST',
+          url:"{{ route('envios.distribuirid') }}",
+          success:function(data){
+            $("#modal-distribuir").modal("hide");
+            $('#tablaPrincipal').DataTable().ajax.reload();
+
+          }
+        });
+
+
       });
 
       $('#modal-enviar').on('show.bs.modal', function (event) {
@@ -241,19 +292,41 @@
           },
         },
         rowCallback: function (row, data, index) {
-            console.log(data.destino)
-              if(data.destino=='LIMA'){
-                $('td', row).css('color','#000').css('text-align','center')
-                //$('td:eq(0)', row).css('color','#000').css('text-align','center');
-              }else if(data.destino=='PROVINCIA'){
-                $('td', row).css('color','red').css('text-align','center')
-                //$('td:eq(0)', row).css('color','red').css('text-align','center');//.css('font-weight','bold');
+            console.log(data.destino2)
+              if(data.destino2=='PROVINCIA'){
+                $('td', row).css('color','red')
+                
+              }else if(data.destino2=='LIMA'){
+                if(data.distribucion!=null)
+                {
+                  if(data.distribucion=='NORTE')
+                  
+                  {
+                    //$('td', row).css('color','blue')
+                    $('td:eq(9)', row).css('background', '#A5F1E9');
+                  }else if(data.distribucion=='CENTRO')
+                  {
+                    //$('td', row).css('color','yellow')
+                    $('td:eq(9)', row).css('background', '#F0FF42');
+                  }else if(data.distribucion=='SUR')
+                  {
+                    //$('td', row).css('color','green')
+                    $('td:eq(9)', row).css('background', '#B6E2A1');
+                  }
+                  
+                }else{
+                  
+                }
+
+                
+
               }
+
         },
         columns: [
           {
               data: 'id', 
-              name: 'id',"visible":true,
+              name: 'id',"visible":false,
               render: function ( data, type, row, meta ) {
                 if(row.id<10){
                   return 'ENV000'+row.id;
@@ -266,16 +339,13 @@
                 } 
               }
           },
-          {data: 'identificador', name: 'identificador',sWidth:'5%' },
-          //{data: 'codigos', name: 'codigos', },
-          //{data: 'users', name: 'users', },
+          {data: 'identificador', name: 'identificador',sWidth:'5%' },          
           {
             data: 'celular', 
             name: 'celular',
             render: function ( data, type, row, meta ) {
               return row.celular+' - '+row.nombre
             },
-            //searchable: true
           },
           {
             data: 'nombre', 
@@ -284,7 +354,6 @@
             render: function ( data, type, row, meta ) {
               return data;
             },
-            //searchable: true
           },
           {data: 'fecha', name: 'fecha',sWidth:'5%' },
         {data: 'cantidad', name: 'cantidad',sWidth:'5%' },
@@ -342,10 +411,26 @@
               }
             }
           },
-          {data: 'observacion', name: 'observacion', },
+          {
+            data: 'observacion', 
+            name: 'observacion',
+            sWidth:'10%',
+          },
           {
             data: 'distrito', 
-            name: 'distrito',
+            name: 'distrito',"visible":true,
+            render: function ( data, type, row, meta ) {
+              if(data!=null)
+              {
+                return data;
+              }else{
+                return '';
+              }
+            }
+          },
+          {
+            data: 'destino2', 
+            name: 'destino2',"visible":false,
             render: function ( data, type, row, meta ) {
               if(data!=null)
               {
@@ -364,7 +449,22 @@
             //sWidth:'20%',
             render: function ( data, type, row, meta ) {  
               datass="";
-              datass = datass+ '<a href="" data-target="#modal-revertir" data-toggle="modal" data-recibir="'+row.id+'"><button class="btn btn-info btn-sm"><i class="fas fa-trash"></i> REVERTIR</button></a>'; 
+
+              //si es lima
+
+              if ("{{$rol}}" =='Administrador' || "{{$rol}}" =='Logística')
+              {
+                if(row.destino=='LIMA')
+                datass=datass+'<a href="#" data-target="#modal-distribuir" data-toggle="modal" data-distribuir="'+row.id+'">'+
+                    '<button class="btn btn-warning btn-sm"><i class="fas fa-envelope"></i> Distribuir</button></a><br>';
+
+                datass = datass+ '<a href="" data-target="#modal-revertir" data-toggle="modal" data-recibir="'+row.id+'"><button class="btn btn-info btn-sm"><i class="fas fa-trash"></i> REVERTIR</button></a>'; 
+
+              }
+
+              
+              
+              
               return datass;                               
             }
           },

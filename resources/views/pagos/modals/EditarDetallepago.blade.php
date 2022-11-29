@@ -37,7 +37,7 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
-          <button type="button" class="btn btn-info" id="edit_dp" >Agregar</button>
+          <button type="button" class="btn btn-info" id="edit_dp" >Actualizar</button>
         </div>
         {{-- {{ Form::Close() }} --}}
       </div>

@@ -1,10 +1,10 @@
 <x-jet-form-section submit="updatePassword">
     <x-slot name="title">
-        {{ __('Update Password') }}
+        {{ __('Actualiza la contraseña') }}
     </x-slot>
 
     <x-slot name="description">
-        {{ __('Ensure your account is using a long, random password to stay secure.') }}
+        {{ __('Asegúrese de que su cuenta esté usando una contraseña larga y aleatoria para mantenerse seguro.') }}
     </x-slot>
 
     <x-slot name="form">
@@ -29,11 +29,21 @@
 
     <x-slot name="actions">
         <x-jet-action-message class="mr-3" on="saved">
-            <p style="color: red; font-text: 20px">{{ __('Saved.') }}</p>
+            <p style="color: red; font-text: 20px">{{ __('Registrado.') }}</p>
         </x-jet-action-message>
 
         <x-jet-button  style="background: black">
-            {{ __('Save') }}
+            {{ __('Grabar') }}
         </x-jet-button>
     </x-slot>
 </x-jet-form-section>
+
+
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<script>
+    Swal.fire(
+      'Pedido {{ session('info') }} correctamente',
+      '',
+      'success'
+    )
+  </script>

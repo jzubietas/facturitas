@@ -273,7 +273,7 @@
                 }
               @endcan
 
-              if(row.envio=='3')
+              if(row.envio=='3' || row.envio=='1')
               {
                 data = data+'<a href="" data-target="#modal-revertir" data-revertir='+row.id+' data-toggle="modal" ><button class="btn btn-success btn-sm">Revertir</button></a>'; 
               }

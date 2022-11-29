@@ -3,7 +3,7 @@
     <div class="modal-dialog" style="max-width: 900px!important;">
       <div class="modal-content">
         <div class="modal-header bg-success">
-          <h5 class="modal-title" id="exampleModalLabel">Entregar pedidos</h5>
+          <h5 class="modal-title" id="exampleModalLabel">Entregar Envios</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
@@ -12,7 +12,7 @@
         <form id="formularioenviar" name="formularioenviar" enctype="multipart/form-data">
           <input type="hidden" id="hiddenEnviar" name="hiddenEnviar">
           <div class="modal-body">
-            <p>Complete los siguientes datos del envío del pedido: <strong class="textcode">PED00</strong></p>
+            <p class="d-none">Complete los siguientes datos del envío del pedido: <strong class="textcode">PED00</strong></p>
           </div>
           <div style="margin: 10px">
             <div class="card">
@@ -43,20 +43,39 @@
                               {!! Form::file('foto1', ['class' => 'form-control-file', 'accept' =>'image/*']) !!}  
                             </div>
 
+                            
+
                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
                               {!! Form::label('foto2', 'Foto de recibido 2') !!}
                               @csrf
                               {!! Form::file('foto2', ['class' => 'form-control-file', 'accept' =>'image/*']) !!}  
                             </div>
 
+                            <div class="form-group col-lg-6">
+                              <div class="image-wrapper">
+                                <img id="picture1" src="{{asset('imagenes/logo_facturas.png')}}" alt="Imagen del pago" width="150px">
+                              </div>
+                            </div>
+
+                            <div class="form-group col-lg-6">
+                              <div class="image-wrapper">
+                                <img id="picture2" src="{{asset('imagenes/logo_facturas.png')}}" alt="Imagen del pago" width="150px">
+                              </div>
+                            </div>
+
 
                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
                               {!! Form::label('condicion', 'Estado') !!}
                               <select name="condicion" class="form-control" id="condicion" readonly>
+                                <option value="REGISTRADO">REGISTRADO</option>
+                                <option value="EN CAMINO">EN CAMINO</option>
+                                <option value="EN TIENDA/AGENTE">EN TIENDA/AGENTE</option>
                                 <option value="ENTREGADO">ENTREGADO</option>
+                                <option value="NO ENTREGADO">NO ENTREGADO</option>
                               </select>
 
                             </div>
+                            
 
                           </div>
 
