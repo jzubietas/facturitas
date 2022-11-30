@@ -15,6 +15,7 @@
 @include('pagos.modals.revisarhistorial')
 @include('pagos.modals.CambiarImagen')
 @include('pagos.modals.EditarDetallepago')
+{{--@include('pagos.modals.modalImagenId')--}}
 
   <div class="card">
       
@@ -157,14 +158,14 @@
               <table class="table table-striped table_pagos_realizados">
                 <thead>
                   <tr>
-                    <th scope="col">ITEM</th>
-                    <th scope="col">PAGO</th>
-                    <th scope="col">BANCO</th>                
-                    <th scope="col">MONTO</th>
+                    <th width='50px' scope="col">ITEM</th>
+                    <th width='80px' scope="col">PAGO</th>
+                    <th width='80px' scope="col">BANCO</th>                
+                    <th width='80px' scope="col">MONTO</th>
                     {{--<th scope="col">FECHA</th>--}}
                     {{--<th scope="col">CUENTA DESTINO</th>--}}
-                    <th scope="col">TITULAR</th>
-                    <th scope="col">FECHA DEPOSITO</th>                    
+                    <th width='250px' scope="col">TITULAR</th>
+                    <th width='80px' scope="col">FECHA DEPOSITO</th>                    
                     
                     <th scope="col">IMAGEN</th>
                     <th scope="col">ACCION</th>
@@ -180,7 +181,7 @@
                       <td>{{ $contPa + 1 }}</td>
 
                       <td>
-                        <?php 
+                       <span><?php 
                           if($detallePago->id<10){ ?>
                             COMPR000{{ $detallePago->id }}
                           <?php }else if($detallePago->id<100){ ?>
@@ -189,7 +190,7 @@
                             COMPR0{{ $detallePago->id }}
                           <?php }else{ ?>
                             COMPR{{ $detallePago->id }}
-                          <?php } ?>  
+                          <?php } ?>  </span>
                           
                       
                       <input type="hidden" name="detalle_id[]" value="{{ $detallePago->id }}" class="form-control"></td>
@@ -270,7 +271,7 @@
         <div class="col-2 text-left">
           
 
-          <a href="{{ route('administracion.porrevisar') }}" class="btn btn-danger btn-lg"><i class="fas fa-times-circle"></i> Atras</a>
+          <a href="{{ route('administracion.porrevisar') }}" class="btn btn-danger btn-lg"><i class="fas fa-arrow-left"></i> ATRAS</a>
         </div>
         <div class="col-10">
           <button type="button" id="aprobarrbtn" class="btn btn-success btn-lg"><i class="fas fa-save"></i> APROBAR</button>
@@ -290,74 +291,74 @@
 @stop
 
 @section('css')
-  <style>
-   .modal.left .modal-dialog,
-	.modal.right .modal-dialog {
-		position: fixed;
-		margin: auto;
-		width: 320px;
-		height: 100%;
-		-webkit-transform: translate3d(0%, 0, 0);
-		    -ms-transform: translate3d(0%, 0, 0);
-		     -o-transform: translate3d(0%, 0, 0);
-		        transform: translate3d(0%, 0, 0);
-	}
+<style>
+  .modal.verimagen.left .modal-dialog,
+ .modal.verimagen.right .modal-dialog {
+   position: fixed;
+   margin: auto;
+   width: 320px;
+   height: 100%;
+   -webkit-transform: translate3d(0%, 0, 0);
+       -ms-transform: translate3d(0%, 0, 0);
+        -o-transform: translate3d(0%, 0, 0);
+           transform: translate3d(0%, 0, 0);
+ }
 
-	.modal.left .modal-content,
-	.modal.right .modal-content {
-		height: 100%;
-		overflow-y: auto;
-	}
-	
-	.modal.left .modal-body,
-	.modal.right .modal-body {
-		padding: 15px 15px 80px;
-	}
+ .modal.verimagen.left .modal-content,
+ .modal.verimagen.right .modal-content {
+   height: 100%;
+   overflow-y: auto;
+ }
+ 
+ .modal.verimagen.left .modal-body,
+ .modal.verimagen.right .modal-body {
+   padding: 15px 15px 80px;
+ }
 
 /*Left*/
-	
-	
-	.modal.left.fade.in .modal-dialog{
-		left: 0;
-	}
-        
+ 
+ 
+ .modal.verimagen.left.fade.in .modal-dialog{
+   left: 0;
+ }
+       
 /*Right*/
-	
-	.modal.right.fade.in .modal-dialog {
-		right: 0;
-	}
-  .modal.right .modal-dialog {
-		right: 0;
-	}
+ 
+ .modal.verimagen.right.fade.in .modal-dialog {
+   right: 0;
+ }
+ .modal.verimagen.right .modal-dialog {
+   right: 0;
+ }
 
 /* ----- MODAL STYLE ----- */
-	.modal-content {
-		border-radius: 0;
-		border: none;
-	}
+ .modal-content {
+   border-radius: 0;
+   border: none;
+ }
 
-	.modal-header {
-		border-bottom-color: #EEEEEE;
-		background-color: #FAFAFA;
-	}
+ .modal-header {
+   border-bottom-color: #EEEEEE;
+   background-color: #FAFAFA;
+ }
 
-  .modal-dialog{
-    right:0;
-    padding-right: 0 !important;
-    margin-right: 0 !important;
-  }
+ .modal-dialog{
+   right:0;
+   padding-right: 0 !important;
+   margin-right: 0 !important;
+ }
 
-  /*@media (min-width: 576px)
-  {
-    .modal-dialog
-    {
-      margin:inherit;
-      padding-right: 0 !important;
-       margin-right: 0 !important;
+ /*@media (min-width: 576px)
+ {
+   .modal-dialog
+   {
+     margin:inherit;
+     padding-right: 0 !important;
+      margin-right: 0 !important;
 
-    }
-  }*/
-  </style>
+   }
+ }*/
+ </style>
 @stop
 
 @section('js')
@@ -395,7 +396,7 @@
           if($(this).data('banco')=='BCP')
           {
             $('.table_pagos_realizados tbody tr.nohide_'+iitem).after(
-              '<tr style="background-color:#ff7800;" class="hide_'+iitem+' oculto">'+
+              '<tr style="background-color:#ff7800;" class="hide_'+iitem+' hide_conciliar oculto">'+
               '<td class="text-light">'+iitem+'</td><td class="text-light"> </td>'+
               '<td class="text-light">'+$(this).data('banco')+'</td>'+
               '<td class="text-light">'+$(this).data('importe')+'</td>'+
@@ -407,7 +408,7 @@
           }else if($(this).data('banco')=='BBVA')
           {
             $('.table_pagos_realizados tbody tr.nohide_'+iitem).after(
-            '<tr style="background-color:#1973B8;" class="hide_'+iitem+' oculto">'+
+            '<tr style="background-color:#1973B8;" class="hide_'+iitem+' hide_conciliar oculto">'+
             '<td class="text-light">'+iitem+'</td><td class="text-light"> </td>'+
               '<td class="text-light">'+$(this).data('banco')+'</td>'+
               '<td class="text-light">'+$(this).data('importe')+'</td>'+
@@ -419,7 +420,7 @@
           }else if ($(this).data('banco')=='INTERBANK' || $(this).data('banco')=='IBK')
           {
             $('.table_pagos_realizados tbody tr.nohide_'+iitem).after(
-            '<tr class="bg-success hide_'+iitem+' oculto">'+
+            '<tr class="bg-success hide_'+iitem+' hide_conciliar oculto">'+
             '<td class="text-light">'+iitem+'</td><td class="text-light"> </td>'+
               '<td class="text-light">'+'INTERBANK'+'</td>'+
               '<td class="text-light">'+$(this).data('importe')+'</td>'+
@@ -431,7 +432,7 @@
           }else if ($(this).data('banco')=='YAPE')
           {
             $('.table_pagos_realizados tbody tr.nohide_'+iitem).after(
-            '<tr style="background-color:#6f42c1;" class="hide_'+iitem+' oculto">'+
+            '<tr style="background-color:#6f42c1;" class="hide_'+iitem+' hide_conciliar oculto">'+
             '<td class="text-light">'+iitem+'</td><td class="text-light"> </td>'+
               '<td class="text-light">'+$(this).data('banco')+'</td>'+
               '<td class="text-light">'+$(this).data('importe')+'</td>'+
@@ -443,7 +444,7 @@
           }else if ($(this).data('banco')=='PLIN')
           {
             $('.table_pagos_realizados tbody tr.nohide_'+iitem).after(
-            '<tr style="background-color:#0693e3;" class="hide_'+iitem+' oculto" >'+
+            '<tr style="background-color:#0693e3;" class="hide_'+iitem+' hide_conciliar oculto" >'+
             '<td class="text-light">'+iitem+'</td><td class="text-light"> </td>'+
               '<td class="text-light">'+$(this).data('banco')+'</td>'+
               '<td class="text-light">'+$(this).data('importe')+'</td>'+
@@ -513,6 +514,22 @@
         var imagen = button.data('imagen');
         var conciliar = button.data('conciliar');
         var itemcount = button.data('item');
+//#modal-imagen-4359 modalimagen_item
+        let item_modalimagen=$(".nohide_"+itemcount).find("td").eq(0).html();
+        let pago_modalimagen=$.trim($(".nohide_"+itemcount).find("td").eq(1).find("span").html());
+        let banco_modalimagen=$(".nohide_"+itemcount).find("td").eq(2).html();
+        let monto_modalimagen=$(".nohide_"+itemcount).find("td").eq(3).html();
+        let titular_modalimagen=$(".nohide_"+itemcount).find("td").eq(4).html();
+        let fecha_modalimagen=$(".nohide_"+itemcount).find("td").eq(5).html();
+        console.log(pago_modalimagen);
+        console.log("#modal-cambiar-"+conciliar+" .modalimagen_item")
+        $("#modal-cambiar-imagen .modalimagen_item").val(item_modalimagen);
+        $("#modal-cambiar-imagen .modalimagen_pago").val(pago_modalimagen);
+        $("#modal-cambiar-imagen .modalimagen_banco").val(banco_modalimagen);
+        $("#modal-cambiar-imagen .modalimagen_monto").val(monto_modalimagen);
+        $("#modal-cambiar-imagen .modalimagen_titular").val(titular_modalimagen);
+        $("#modal-cambiar-imagen .modalimagen_fecha").val(fecha_modalimagen);
+        
 
         console.log("imagen "+imagen);
         console.log("conciliar "+conciliar);
@@ -593,6 +610,23 @@
 
         var idunico = button.data('conciliar')
         var iditem = button.data('item');
+
+        //
+        let item_modalimagen=$(".nohide_"+iditem).find("td").eq(0).html();
+        let pago_modalimagen=$.trim($(".nohide_"+iditem).find("td").eq(1).find("span").html());
+        let banco_modalimagen=$(".nohide_"+iditem).find("td").eq(2).html();
+        let monto_modalimagen=$(".nohide_"+iditem).find("td").eq(3).html();
+        let titular_modalimagen=$(".nohide_"+iditem).find("td").eq(4).html();
+        let fecha_modalimagen=$(".nohide_"+iditem).find("td").eq(5).html();
+        //console.log(pago_modalimagen);
+        //console.log("#modal-cambiar-"+conciliar+" .modalimagen_item")
+        $("#modal-conciliar-get .modalimagen_item").val(item_modalimagen);
+        $("#modal-conciliar-get .modalimagen_pago").val(pago_modalimagen);
+        $("#modal-conciliar-get .modalimagen_banco").val(banco_modalimagen);
+        $("#modal-conciliar-get .modalimagen_monto").val(monto_modalimagen);
+        $("#modal-conciliar-get .modalimagen_titular").val(titular_modalimagen);
+        $("#modal-conciliar-get .modalimagen_fecha").val(fecha_modalimagen);
+        //
 
         //var fechadeposito = button.data('fechadeposito');
         let row_conciliar=button.closest("tr");
@@ -1002,12 +1036,13 @@
             {
                     var total_conciliar={{$contPa}};
                     console.log("total detalles para conciliar: "+total_conciliar);
-                    var exxxxx=$(".hide_"+total_conciliar).length;
+                    var exxxxx=$(".hide_conciliar").length;
+                    console.log("cont debo conciliar "+exxxxx)
                     if(exxxxx!=total_conciliar)
                     {
                       Swal.fire(
                         'Error',
-                        'Faltan conciliaciones',
+                        'Faltan conciliaciones 1',
                         'warning'
                       )
                       return false;

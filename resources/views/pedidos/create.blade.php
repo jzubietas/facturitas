@@ -330,15 +330,15 @@
          fd.append("nota[]", this.value);
        });       
        let files=$('input[name="adjunto[]');
-       if(files.length == 0)
+       /*if(files.length == 0)
        {
          Swal.fire(
              'Error',
-             'Debe ingresar el detalle del pedido',
+             'Debe ingresar el  adjunto del pedido',
              'warning'
            )
            return false;
-       }/*else{
+       }*//*else{
          
          var totalfilescarga = $('input[name="adjunto[]"]').get(0).files.length;
          console.log("totalfilescarga "+totalfilescarga);
@@ -354,9 +354,13 @@
            return false;
          }else{
           */
-          for (let i = 0; i < files.length; i++) {
-            fd.append('adjunto', $('input[type=file][name="adjunto[]"]')[0].files[0]);
-          }
+         if(files.length>0)
+         {
+              for (let i = 0; i < files.length; i++) {
+                fd.append('adjunto', $('input[type=file][name="adjunto[]"]')[0].files[0]);
+              }
+         }
+          
 
            /*for (let i = 0; i < files.length; i++) {
              fd.append('adjunto['+i+']', files[i]);

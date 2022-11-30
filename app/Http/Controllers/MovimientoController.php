@@ -52,6 +52,9 @@ class MovimientoController extends Controller
             "NIKSER DENIS ORE RIVEROS" => 'NIKSER DENIS ORE RIVEROS'
         ];
 
+        //$titulares = CuentaBancaria::join('bancos b');join('users as u', 'pagos.user_id', 'u.id')
+        ////
+
         return view('movimientos.index', compact('pagosobservados_cantidad', 'superasesor', 'bancos', 'tipotransferencia', 'titulares'));
     }
 
@@ -139,8 +142,6 @@ class MovimientoController extends Controller
 
             );//->get();
 
-
-
         $conciliar=$request->conciliar;
         $excluir=$request->excluir;
         $fechadeposito=$request->fechadeposito;
@@ -174,6 +175,17 @@ class MovimientoController extends Controller
             $query->where('importee',$monto_compara.'%');
         }*/
 
+        //$monto_compara=
+
+        /*if($request->monto){
+            $query=$query;
+        }
+        else{
+            $fechadeposito = Carbon::createFromFormat('d/m/Y', $request->fechadeposito)->format('Y-m-d');
+            $query->where('movimiento_bancarios.importe',$monto.'%');
+
+        }*/
+
 
         $titular_compara=$comparar->titular;
         //return $titular_compara;
@@ -193,9 +205,18 @@ class MovimientoController extends Controller
         $fecha_compra=$comparar->fecha;
         //$min=$request->de;
 
-        $fechadeposito=$fechadeposito;//04/10/2022
+        if($request->fechadeposito){
+            $query=$query;
+        }
+        else{
+            $fechadeposito = Carbon::createFromFormat('d/m/Y', $request->fechadeposito)->format('Y-m-d');
+            $query->where(DB::raw('DATE(movimiento_bancarios.fecha)'),'>=',''.$fechadeposito.'');
+        }
 
-        $fechadeposito = Carbon::createFromFormat('d/m/Y', $fechadeposito)->format('Y-m-d');
+        //$fechadeposito=$request->fechadeposito;
+        //$fechadeposito=$fechadeposito;//04/10/2022
+
+        //$fechadeposito = Carbon::createFromFormat('d/m/Y', $fechadeposito)->format('Y-m-d');
         //return $fechadeposito;
 
 
@@ -203,10 +224,10 @@ class MovimientoController extends Controller
 
         //return $fecha_compra;
 
-        if ($fechadeposito!='' || !is_null($fechadeposito) ) {
-            //DB::raw('DATE(pagos.created_at)')
+        /*if ($fechadeposito!='' || !is_null($fechadeposito) ) {
+            
             $query->where(DB::raw('DATE(movimiento_bancarios.fecha)'),'>=',''.$fechadeposito.'');
-        }
+        }*/
         //return $fecha_compra;
         //return $request->excluir;
 

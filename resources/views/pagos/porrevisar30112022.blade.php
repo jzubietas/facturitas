@@ -44,10 +44,13 @@
         <tbody>
           <tr>
             <td>Fecha Minima:</td>
-            <td><input type="text" value={{ $dateMin }} id="min" name="min" class="form-control"></td>
+            <td>
+              
+              <input type="date" value={{ $dateMin }} id="min" name="min" class="form-control">
+            </td>
             <td> </td>
             <td>Fecha Máxima:</td>
-            <td><input type="text" value={{ $dateMax }} id="max" name="max"  class="form-control"></td>
+            <td><input type="date" value={{ $dateMax }} id="max" name="max"  class="form-control"></td>
           </tr>
         </tbody>
       </table>
@@ -55,7 +58,7 @@
       <table id="tablaPrincipal" class="table table-striped">
         <thead>
           <tr>
-            <th scope="col">COD.</th>
+            {{--<th scope="col">COD.</th>--}}
             <th scope="col">COD.</th>
             <th scope="col">COD2</th>
             <th scope="col">Cliente</th>
@@ -145,8 +148,6 @@
 
   <script src="https://momentjs.com/downloads/moment.js"></script>
   <script src="https://cdn.datatables.net/plug-ins/1.11.4/dataRender/datetime.js"></script>
-
-  <script src="https://rawgit.com/digitalBush/jquery.maskedinput/master/dist/jquery.maskedinput.min.js"></script>
 
   <script>
     function clickformdelete()
@@ -264,11 +265,11 @@
               }
         },
         columns: [
-          {
+          /*{
               data:'fecha_timestamp',
               name:'fecha_timestamp',
               "visible": false
-          },
+          },*/
           {
               data: 'id', 
               name: 'id',
@@ -395,16 +396,9 @@
         $('#tablaPrincipal').DataTable().ajax.reload(); 
         console.log("minimo "+$(this).val());
         //localStorage.setItem('dateMin', $(this).datepicker('getDate') ); 
-        //localStorage.setItem('dateMin', $(this).val() ); 
-      },
-      onFocus: function(){
-        var me = $("#date");
-        me.mask('99/99/9999');
-      }
-      ,changeMonth: true, changeYear: true , dateFormat:"dd/mm/yy",
+        localStorage.setItem('dateMin', $(this).val() ); 
+      }, changeMonth: true, changeYear: true , dateFormat:"dd/mm/yy"
     });
-      
-    //});
       
     $("#max").datepicker({ 
       onSelect: function () { 
@@ -412,7 +406,7 @@
         console.log("maximo "+$(this).val());
         //console.log("maximo "+$(this).datepicker('getDate'));
         //localStorage.setItem('dateMax', $(this).datepicker('getDate')  ); 
-        //localStorage.setItem('dateMax', $(this).val() ); 
+        localStorage.setItem('dateMax', $(this).val() ); 
       }, changeMonth: true, changeYear: true, dateFormat:"dd/mm/yy" 
     });
   });
@@ -420,25 +414,27 @@
 
 <script>
     
-    /*if (localStorage.getItem('dateMin') )
+    if (localStorage.getItem('dateMin') )
     {
+      console.log(" if lo "+localStorage.getItem('dateMin'));
       $( "#min" ).val(localStorage.getItem('dateMin')).trigger("change");        
     }else{
       localStorage.setItem('dateMin', "{{$dateMin}}" );
     }
     if (localStorage.getItem('dateMax') )
-    { 
+    {
+      console.log(" if lo "+localStorage.getItem('dateMax'));
       $( "#max" ).val(localStorage.getItem('dateMax')).trigger("change");
     }else{
       localStorage.setItem('dateMax', "{{$dateMax}}" );
-    }*/
+    }
 
     //if( localstorage.getItem() )
     
     
     //localStorage.setItem('dateMax', "{{$dateMax}}" );
-    //console.log(localStorage.getItem('dateMin'));
-    //console.log(localStorage.getItem('dateMax'));
+    console.log(localStorage.getItem('dateMin'));
+    console.log(localStorage.getItem('dateMax'));
   </script>
 
   @if (session('info') == 'registrado' || session('info') == 'eliminado' || session('info') == 'actualizado')

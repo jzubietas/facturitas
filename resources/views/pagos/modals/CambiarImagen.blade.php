@@ -16,6 +16,38 @@
         <input type="hidden" value="" name="DPConciliar" id="DPConciliar">
         <input type="hidden" value="" name="DPitem" id="DPitem">
 
+        <div class="form-row">
+
+          <div class="col">
+            Titular
+            <input type="text" class="form-control modalimagen_titular bg-primary" readonly>
+          </div>
+          <div class="col">
+            Banco
+            <input type="text" class="form-control modalimagen_banco bg-primary" readonly>
+          </div>
+          <div class="col">
+            Fecha
+            <input type="text" class="form-control modalimagen_fecha bg-primary" readonly>
+          </div>
+          <div class="col">
+            Monto
+            <input type="text" class="form-control modalimagen_monto bg-primary" readonly>
+          </div>
+
+
+          <div class="col d-none">
+            item
+            <input type="text" class="form-control modalimagen_item" readonly>
+          </div>
+          <div class="col d-none">
+            pago
+            <input type="text" class="form-control modalimagen_pago" readonly>
+          </div>
+          
+        </div>
+        <br>
+
           <div class="form-row">
             
             <div class="form-group col-lg-6">

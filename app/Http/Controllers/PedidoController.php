@@ -1024,6 +1024,15 @@ class PedidoController extends Controller
                 $file->move($destinationPath , $file_name);
             }*/
 
+            /*if(isset($files))
+            {
+return $files;
+            }else{
+return ' no imagen ';
+            }
+
+            return '';*/
+
             if(isset($files)){
                 $destinationPath = base_path('public/storage/adjuntos/');
                 $cont = 0;
@@ -1048,6 +1057,11 @@ class PedidoController extends Controller
                     'adjunto' => 'logo_facturas.png',
                     'estado' => '1'
                 ]);
+                $cont = 0;
+                $fileList[$cont] = array(
+                    'file_name' => 'logo_facturas.png',
+                );
+
             }
             $contP = 0;
 
@@ -1069,7 +1083,8 @@ class PedidoController extends Controller
                     'saldo' => (($cantidad[$contP]*$porcentaje[$contP])/100)+$courier[$contP],
                     'descripcion' => $descripcion[$contP],
                     'nota' => $nota[$contP],
-                    'estado' => '1'
+                    'estado' => '1',//,
+                    'adjunto'=>$fileList[$contP]['file_name']
                 ]);             
             
                 $contP++;
@@ -2788,7 +2803,10 @@ class PedidoController extends Controller
                     'dp.fecha_recepcion',
                     DB::raw("  (select IFNULL(count(b1.pedido_id),0) from direccion_pedidos b1 where b1.pedido_id=pedidos.id) as envios_lima "),
                     DB::raw("  (select IFNULL(count(b2.pedido_id),0) from gasto_pedidos b2 where b2.pedido_id=pedidos.id) as envios_provincia "),
-                    DB::raw("  (CASE  when ((select IFNULL(count(b1.pedido_id),0) from direccion_pedidos b1 where b1.pedido_id=pedidos.id)+(select IFNULL(count(b2.pedido_id),0) from gasto_pedidos b2 where b2.pedido_id=pedidos.id))>0 then '1' else '0' end  )  as revierte ")
+                    DB::raw("  (CASE  when ((select IFNULL(count(b1.pedido_id),0) from direccion_pedidos b1 where b1.pedido_id=pedidos.id)+(select IFNULL(count(b2.pedido_id),0) from gasto_pedidos b2 where b2.pedido_id=pedidos.id))>0 then '1' else '0' end  )  as revierte "),
+                    DB::raw("  (CASE  when pedidos.destino='LIMA' then (select gg.created_at from direccion_pedidos gg where gg.pedido_id=pedidos.id) ".
+                                    "when pedidos.destino='PROVINCIA' then (select g.created_at from gasto_pedidos g where g.pedido_id=pedidos.id) ".
+                                    "else '' end) as fecha_envio_sobre "),
 
                 )
                 ->where('pedidos.estado', '1')
@@ -3729,10 +3747,15 @@ class PedidoController extends Controller
                             'destino' => $request->destino,
                             'condicion_envio' => 'EN REPARTO',//AL REGISTRAR DIRECCION PASA A ESTADO  EN REPARTO
                             'direccion' => $request->direccion,
+                            
                         ]);
 
                         
                         $dp_empresa=DetallePedido::where("pedido_id",$pedido_id)->first();
+                            /*->update([
+                                'fecha_envio_doc_fis'=>Carbon()::now()
+                            ]);*/
+                        
 
                         $direccionPedido = DireccionPedido::create([
                                 'direccion_id' => $direccionLima->id,
@@ -3820,6 +3843,11 @@ class PedidoController extends Controller
                         ]);
 
                         $dp_empresa=DetallePedido::where("pedido_id",$pedido_id)->first();
+
+                        /*$dp_empresa=DetallePedido::where("pedido_id",$pedido_id)->first()
+                            ->update([
+                                'fecha_envio_doc_fis'=>Carbon()::now()
+                            ]);*/
 
                         $gastoPedido = GastoPedido::create([
                             'gasto_id' => $gastoProvincia->id,

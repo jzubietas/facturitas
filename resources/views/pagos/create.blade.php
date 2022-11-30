@@ -2522,8 +2522,8 @@ tfoot td {
 
     
     //VALIDAR CAMPO FECHAS MAX DIA ACTUAL
-    var today = new Date().toISOString().split('T')[0];
-    document.getElementsByName("pfecha")[0].setAttribute('max', today);
+    //var today = new Date().toISOString().split('T')[0];
+    //document.getElementsByName("pfecha")[0].setAttribute('max', today);
 
     //VALIDAR ANTES DE ENVIAR
     /*document.addEventListener("DOMContentLoaded", function() {

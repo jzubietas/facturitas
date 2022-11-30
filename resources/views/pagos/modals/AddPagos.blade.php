@@ -51,8 +51,8 @@
             
             <div class="form-group col lg-4">
               {!! Form::label('pfecha', 'Fecha de voucher') !!}
-              {!! Form::date('pfecha', \Carbon\Carbon::now(), ['class' => 'form-control']) !!}
-              {{-- <input name="pfecha" type="date" class="form-control"> --}}
+              {!! Form::date('pfecha', '', ['class' => 'form-control']) !!}
+              {{-- <input name="pfecha" type="date" class="form-control">      \Carbon\Carbon::now()  --}}
             </div>
              
             <div class="form-group col-lg-6">

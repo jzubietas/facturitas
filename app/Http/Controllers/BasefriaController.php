@@ -46,23 +46,26 @@ class BasefriaController extends Controller
                 -> where('users.estado', '1')
                 -> where('users.llamada', Auth::user()->id)
                 ->select(
-                    DB::raw("users.id as id")
+                    DB::raw("users.identificador as identificador")
                 )
-                ->pluck('users.id');
-
-            $data=$data->WhereIn('u.id',$usersasesores); 
+                ->pluck('users.identificador');
+            $data=$data->WhereIn("u.identificador",$usersasesores);
 
         }else if(Auth::user()->rol == 'Jefe de llamadas')
         {
+
+
             $usersasesores = User::where('users.rol', 'Asesor')
                 -> where('users.estado', '1')
                 -> where('users.llamada', Auth::user()->id)
                 ->select(
-                    DB::raw("users.id as id")
+                    DB::raw("users.identificador as identificador")
                 )
-                ->pluck('users.id');
-                
-            $data=$data->WhereIn('u.id',$usersasesores);
+                ->pluck('users.identificador');
+
+            $data=$data->WhereIn("u.identificador",$usersasesores);
+
+
 
         }else if(Auth::user()->rol == 'Asesor')
         {
@@ -78,15 +81,17 @@ class BasefriaController extends Controller
 
         }else if(Auth::user()->rol == 'Encargado')
         {
+
             $usersasesores = User::where('users.rol', 'Asesor')
                 -> where('users.estado', '1')
                 -> where('users.supervisor', Auth::user()->id)
                 ->select(
-                    DB::raw("users.id as id")
+                    DB::raw("users.identificador as identificador")
                 )
-                ->pluck('users.id');
+                ->pluck('users.identificador');
 
-            $data=$data->WhereIn('u.id',$usersasesores);
+            $data=$data->WhereIn("u.identificador",$usersasesores);
+
         }else{
             $data=$data;
         }
