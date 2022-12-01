@@ -136,6 +136,7 @@ class MovimientoController extends Controller
                 'movimiento_bancarios.titular',
                 'movimiento_bancarios.importe',
                 DB::raw('DATE_FORMAT(movimiento_bancarios.fecha, "%Y-%m-%d") as fecha'),
+                DB::raw('DATE_FORMAT(movimiento_bancarios.fecha, "%d/%m/%Y") as fechamodal'),
                 //DB::raw('DATE_FORMAT(fecha, "%d/%m/%Y") as fecha'),
                 //'movimiento_bancarios.fecha',
                 'movimiento_bancarios.tipo',

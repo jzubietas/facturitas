@@ -38,6 +38,15 @@
                         {!! Form::label('pempresaruc', 'Nombre de empresa') !!}
                           <input autocomplete="off" type="text" name="pempresaruc" id="pempresaruc" class="form-control" placeholder="Nombre de empresa...">
                       </div>
+                      
+                      @if (Auth::user()->rol == "Administrador" || Auth::user()->rol == "Apoyo administrativo")
+                      <div class="form-group col-lg-12">
+                        {!! Form::label('porcentajeruc', 'Porcentaje') !!}
+                        <input type="number" step="0.1" name="porcentajeruc" id="porcentajeruc" value="0" min="0" class="form-control">
+                      </div>
+                      @endif
+
+                      
                     </div>
                   </div>
                 </div>

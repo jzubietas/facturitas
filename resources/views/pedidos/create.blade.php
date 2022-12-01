@@ -24,7 +24,9 @@
           <a class="btn btn-danger" href="{{ route('pedidos.mispedidos') }}"><i class="fas fa-times-circle"></i> Cancelar</a>
         @else
           <a href="{{ route('pedidos.index') }}" class="btn btn-danger"><i class="fas fa-times-circle"></i> Cancelar</a>
-        @endif        
+        @endif  
+        
+        
       </div>
     {!! Form::close() !!}
   @include('pedidos.modal.AddRuc')
@@ -34,7 +36,11 @@
   @include('pedidos.modal.historial2')
   @include('pedidos.modal.activartiempo')
 
+  
 @stop
+
+
+
 
 @section('css')
   {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" /> --}}
@@ -671,6 +677,7 @@
 
         $("#agregarruc").val("");
         $("#pempresaruc").val("");
+        $("#porcentajeruc").val("");
         
 
         //limpiar datos

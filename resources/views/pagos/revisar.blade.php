@@ -271,7 +271,7 @@
         <div class="col-2 text-left">
           
 
-          <a href="{{ route('administracion.porrevisar') }}" class="btn btn-danger btn-lg"><i class="fas fa-arrow-left"></i> ATRAS</a>
+          <a href="{{ url()->previous() }}" class="btn btn-danger btn-lg"><i class="fas fa-arrow-left"></i> ATRAS</a>
         </div>
         <div class="col-10">
           <button type="button" id="aprobarrbtn" class="btn btn-success btn-lg"><i class="fas fa-save"></i> APROBAR</button>
@@ -738,7 +738,7 @@
             sWidth:'20%',
             render: function ( data, type, row, meta ) {
               data = data+''+
-                            '<button class="btn btn-danger btn-sm button_conciliar" data-conciliar="'+row.id+'" data-item="'+iditem+'" data-importe="'+row.importe+'" data-titular='+row.titular+' data-banco="'+row.banco+'" data-fecha="'+row.fecha+'" data-fecha="'+row.fecha+'" data-tipo="'+row.tipo+'"><i class="fas fa-check-circle"></i></button>'+
+                            '<button class="btn btn-danger btn-sm button_conciliar" data-conciliar="'+row.id+'" data-item="'+iditem+'" data-importe="'+row.importe+'" data-titular='+row.titular+' data-banco="'+row.banco+'" data-fecha="'+row.fechamodal+'" data-tipo="'+row.tipo+'"><i class="fas fa-check-circle"></i></button>'+
                           '';
               return data;             
             },
@@ -1073,6 +1073,22 @@
                           Swal.fire(
                             'Error',
                             'Existen pagos que no coinciden en importe',
+                            'warning'
+                          )
+                          error_conciliar=false;
+                          return false; 
+                        }
+
+                        let fecha_dpa=$(".nohide_"+ir).find("td").eq(5).html();
+                        let fecha_con=$(".hide_"+ir).find("td").eq(5).html();
+                        console.log("fecha_dpa "+fecha_dpa)
+                        console.log("fecha_con "+fecha_con)
+
+                        if(fecha_dpa!=fecha_con)
+                        {
+                          Swal.fire(
+                            'Error',
+                            'Existen pagos que no coinciden en fecha',
                             'warning'
                           )
                           error_conciliar=false;

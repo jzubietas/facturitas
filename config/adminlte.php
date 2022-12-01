@@ -449,7 +449,7 @@ return [
                     'route'  => 'administracion.pendientes',
                     'can' => 'administracion.pendientes',
                     'icon'   => 'fas fa-check-circle',
-                    'active' => ['pagos por revisar*'],
+                    'active' => ['pagos pendientes*'],
                 ],
                 [
                     'text' => 'Compr observados',
@@ -470,7 +470,7 @@ return [
                     'route'  => 'administracion.aprobados',
                     'can' => 'administracion.aprobados',
                     'icon'   => 'fas fa-check-circle',
-                    'active' => ['pagos por revisar*'],
+                    'active' => ['pagos aprobados*'],
                 ],
                 [
                     'text' => 'Movimientos bancarios',

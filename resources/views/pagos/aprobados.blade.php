@@ -52,7 +52,6 @@
       <table id="tablaPrincipal" class="table table-striped">
         <thead>
           <tr>
-            <th scope="col">F.Aprobacion</th>
             <th scope="col">COD.</th>
             <th scope="col">COD2.</th>
             <th scope="col">Cliente</th>
@@ -63,7 +62,6 @@
             {{--<th scope="col">Total cobro</th>--}}
             <th scope="col">Total pagado</th>
             <th scope="col">Estado</th>
-            
             <th scope="col">Acciones</th>
           </tr>
         </thead>
@@ -126,9 +124,6 @@
 
 <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
-
-<script src="https://momentjs.com/downloads/moment.js"></script>
-<script src="https://cdn.datatables.net/plug-ins/1.11.4/dataRender/datetime.js"></script>
 
 <script>
     function clickformdelete()
@@ -238,11 +233,6 @@
           },
         },
         columns: [
-          { 
-            data: 'fech_aprobacion', 
-            name: 'fech_aprobacion',
-            render: $.fn.dataTable.render.moment( 'DD/MM/YYYY' )
-          },
           {
               data: 'id', 
               name: 'id',

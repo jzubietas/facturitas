@@ -849,6 +849,7 @@ class PedidoController extends Controller
                 'user_id' => Auth::user()->id,
                 'cliente_id' => $request->cliente_id_ruc,
                 'empresa' => $request->pempresaruc,
+                'porcentaje' => ( (!$request->porcentajeruc)? 0.0: $request->porcentajeruc),
                 'estado' => '1'
             ]);
             $html="true";

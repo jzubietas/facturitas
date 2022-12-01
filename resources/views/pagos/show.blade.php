@@ -171,9 +171,9 @@
     </div>
     <div class="card-footer">
       @if (Auth::user()->rol == "Asesor")
-        <a href="{{ route('pagos.mispagos') }}" class="btn btn-danger"><i class="fas fas fa-arrow-left"></i>Volver</a>
+        <a href="{{ url()->previous() }}" class="btn btn-danger"><i class="fas fas fa-arrow-left"></i>Volver</a>
       @else
-        <a href="{{ route('pagos.index') }}" class="btn btn-danger"><i class="fas fas fa-arrow-left"></i>Volver</a>
+        <a href="{{ url()->previous() }}" class="btn btn-danger"><i class="fas fas fa-arrow-left"></i>Volver</a>
       @endif
     </div>
   </div>  
