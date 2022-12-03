@@ -257,10 +257,10 @@ class PagoController extends Controller
                             
                         }
 
-                        if($pago["condicion"]=='PAGO')
+                        /*if($pago["condicion"]=='PAGO')
                         {
                             $btn = $btn.'<a href="" data-target="#modal-delete" data-toggle="modal" data-delete="'.$pago['id'].'"><button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i> Eliminar</button></a>';
-                        }
+                        }*/
                         
                         return $btn;
                     })
@@ -1005,6 +1005,10 @@ class PagoController extends Controller
                 'imagen' => 'required',
             ]);*/
 
+            //return $request->all();
+
+            $pagado = $request->total_pago_pagar;
+
             try {
                 DB::beginTransaction();
                 $deuda_total = $request->total_pedido_pagar;
@@ -1085,10 +1089,14 @@ class PagoController extends Controller
                 
                 $tipomovimiento = $request->tipomovimiento;
                 $titular = $request->titular;
+                $descripcion = $request->descripcion;
                 $monto = $request->monto;
                 $imagen = $request->imagen;
                 $banco = $request->banco;
                 $fecha = $request->fecha;
+
+                $operacion = $request->operacion;
+                $nota = $request->nota;
                 
                 $files = $request->file('imagen');
                 $destinationPath = base_path('public/storage/pagos/');
@@ -1114,6 +1122,8 @@ class PagoController extends Controller
                             'pago_id' => $pago->id,
                             'cuenta' => $tipomovimiento[$monto_key],
                             'titular' => $titular[$monto_key],
+                            'operacion' => $operacion[$monto_key],
+                            'observacion' => $nota[$monto_key],
                             'monto' => $monto[$monto_key],
                             'banco' => $banco[$monto_key],
                             'fecha' => $fecha[$monto_key],
@@ -1127,6 +1137,8 @@ class PagoController extends Controller
                             'pago_id' => $pago->id,
                             'cuenta' => $tipomovimiento[$monto_key],
                             'titular' => $titular[$monto_key],
+                            'operacion' => $operacion[$monto_key],
+                            'observacion' => $nota[$monto_key],
                             'monto' => $monto[$monto_key],
                             'banco' => $banco[$monto_key],
                             'fecha' => $fecha[$monto_key],
@@ -2157,6 +2169,11 @@ class PagoController extends Controller
                     ]);
 
                 DB::commit();
+
+                Pago::where("id",$pago_id)
+                    ->update([
+                        'condicion'=>'PAGO'
+                    ]);
 
             }
             catch (\Throwable $th) {

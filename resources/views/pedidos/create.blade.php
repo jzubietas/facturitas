@@ -394,6 +394,14 @@
                       'warning'
                     )
 
+             }else if(data.html=='|4')
+             {
+                    Swal.fire(
+                      'Error',
+                      'Cliente supero el limite de pedidos (5) en el mes.',
+                      'warning'
+                    )
+
              }else if(data.html=='|0'){
                     Swal.fire(
                       'Error',
@@ -921,9 +929,6 @@
                   $("#user_id").trigger("change");     
               });
       });
-
-      
-
 
       $("#formulario2").submit(function(event){
         event.preventDefault();

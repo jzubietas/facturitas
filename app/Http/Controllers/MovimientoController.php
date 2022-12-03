@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\MovimientoBancario;
 use App\Models\Pago;
+use App\Models\PagoPedido;
 use App\Models\DetallePago;
 use App\Models\User;
 use App\Models\TipoMovimiento;
@@ -392,13 +393,32 @@ class MovimientoController extends Controller
             ->select(
                 'pagos.id as id',
                 'u.identificador as users',
+                'pagos.condicion as condicion',
                 DB::raw(" (CASE WHEN (select count(dpago.id) from detalle_pagos dpago where dpago.pago_id=pagos.id and dpago.estado in (1) )>1 then 'V' else 'I' end) as cantidad_voucher "),
                 DB::raw(" (CASE WHEN (select count(ppedidos.id) from pago_pedidos ppedidos where ppedidos.pago_id=pagos.id and ppedidos.estado in (1)  )>1 then 'V' else 'I' end) as cantidad_pedido "),
             )
-            ->first(); 
+            ->first();
+
+        $pagoPedidos = PagoPedido::join('pedidos as p', 'pago_pedidos.pedido_id', 'p.id')
+            ->join('detalle_pedidos as dp', 'p.id', 'dp.pedido_id')
+            ->select('pago_pedidos.id', 
+                    'dp.codigo',
+                    'p.id as pedidos',
+                    'p.condicion',
+                    'dp.total',
+                    'pago_pedidos.pagado',
+                    'pago_pedidos.abono'
+                    )
+            ->where('pago_pedidos.estado', '1')
+            ->where('p.estado', '1')
+            ->where('dp.estado', '1')
+            ->where('pago_pedidos.pago_id', $movimiento->cabpago)
+            ->get();
+
+        
         $detallepago=DetallePago::where("id",$movimiento->detpago)->first(); 
         //
-        return view('movimientos.show', compact('movimiento','pago','detallepago'));
+        return view('movimientos.show', compact('movimiento','pago','detallepago','pagoPedidos'));
     }
 
     /**

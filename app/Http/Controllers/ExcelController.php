@@ -321,7 +321,6 @@ class ExcelController extends Controller
     {
         return (new PedidosPagosGeneralExport)
                 ->pedidos($request)
-                ->pedidos2($request)
                 ->download('reporte general de pedidos y pagos.xlsx');
     }
     
@@ -337,7 +336,6 @@ class ExcelController extends Controller
     {
         return (new PedidosOperacionesExport)
                 ->pedidos($request)
-                ->pedidos2($request)
                 ->download('Lista de pedidos operaciones.xlsx');
     }
     // NUEVO: PEDIDOS POR ENVIAR POR FECHAS

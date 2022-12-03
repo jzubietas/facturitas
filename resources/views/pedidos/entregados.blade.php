@@ -364,14 +364,14 @@
             $("#min").datepicker({ 
               onSelect: function () { 
                 $('#tablaPrincipal').DataTable().ajax.reload(); 
-                localStorage.setItem('dateMin', $(this).val() ); 
+                //localStorage.setItem('dateMin', $(this).val() ); 
               }, changeMonth: true, changeYear: true , dateFormat:"dd/mm/yy"
             });
               
             $("#max").datepicker({ 
               onSelect: function () { 
                 $('#tablaPrincipal').DataTable().ajax.reload(); 
-                localStorage.setItem('dateMax', $(this).val() ); 
+                //localStorage.setItem('dateMax', $(this).val() ); 
               }, changeMonth: true, changeYear: true, dateFormat:"dd/mm/yy" 
             });
       
@@ -386,7 +386,7 @@
         });
   </script>
   <script>
-    if (localStorage.getItem('dateMin') )
+    /*if (localStorage.getItem('dateMin') )
     {
       $( "#min" ).val(localStorage.getItem('dateMin')).trigger("change");        
     }else{
@@ -397,8 +397,8 @@
       $( "#max" ).val(localStorage.getItem('dateMax')).trigger("change");
     }else{
       localStorage.setItem('dateMax', "{{$dateMax}}" );
-    }
-    console.log(localStorage.getItem('dateMin'));
-    console.log(localStorage.getItem('dateMax'));
+    }*/
+    //console.log(localStorage.getItem('dateMin'));
+    //console.log(localStorage.getItem('dateMax'));
   </script>
 @stop

@@ -44,26 +44,28 @@
             
           </div>
           <div class="form-row">
-            <div class="form-group col-lg-4">
+            <div class="form-group col-lg-3">
               {!! Form::label('pmonto', 'Monto pagado') !!}
               <input type="text" name="pmonto" id="pmonto" class="form-control number" placeholder="Monto pagado...">
             </div>
             
-            <div class="form-group col lg-4">
+            <div class="form-group col lg-3">
               {!! Form::label('pfecha', 'Fecha de voucher') !!}
               {!! Form::date('pfecha', '', ['class' => 'form-control']) !!}
               {{-- <input name="pfecha" type="date" class="form-control">      \Carbon\Carbon::now()  --}}
             </div>
 
             <div class="form-group col-lg-6">
-              {!! Form::label('poperacion', 'Operacion') !!}
-                <input type="text" name="poperacion" id="poperacion" class="form-control" placeholder="Operacion...">
+              {!! Form::label('operacion', 'Operacion') !!}
+                <input type="text" name="operacion" id="operacion" class="form-control" placeholder="Operacion...">
             </div>
 
             <div class="form-group col-lg-12">
-              {!! Form::label('pnota', 'Nota') !!}
-                <input type="text" name="pnota" id="pnota" class="form-control" placeholder="Nota...">
+              {!! Form::label('nota', 'Nota') !!}
+                <input type="text" name="nota" id="nota" class="form-control" placeholder="Nota...">
             </div>
+          </div>
+          <div class="form-row">
              
             <div class="form-group col-lg-6">
               <div class="image-wrapper">
