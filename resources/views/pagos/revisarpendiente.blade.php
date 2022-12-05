@@ -82,6 +82,7 @@
                       <td>{{ $contPe + 1 }}</td>
                       <td>PED000{{ $pagoPedido->pedidos }}<input type="hidden" name="pedido_id[]" id="pedido_id" value="{{ $pagoPedido->pedidos }}"></td>
                       <td>{{ $pagoPedido->codigo }}</td>
+                      <
                         
                       @if($pagos->condicion=='ABONADO')
                           @if($pagoPedido->pagado == 1)
@@ -95,6 +96,10 @@
                           @else
                           <td>PAGADO OBSERVADO</td>
                           @endif
+                      @elseif($pagos->condicion=='PENDIENTE')
+                          
+                          <td>PENDIENTE</td>
+                          
                       @elseif($pagos->condicion=='PAGO')
                           @if($pagoPedido->pagado == 1)
                           <td>ADELANTO PAGO</td>
@@ -276,7 +281,7 @@
         <div class="col-10">
           <button type="button" id="aprobarrbtn" class="btn btn-success btn-lg"><i class="fas fa-save"></i> APROBAR</button>
           <button type="button" id="observarbtn" class="btn btn-danger btn-lg"><i class="fas fa-save"></i> OBSERVADO</button>
-          <button type="button" id="pendientebtn" class="btn btn-warning btn-lg"><i class="fas fa-save"></i> PENDIENTE</button>
+          {{--<button type="button" id="pendientebtn" class="btn btn-warning btn-lg"><i class="fas fa-save"></i> PENDIENTE</button>--}}
         </div>
       </div>
       
