@@ -3247,7 +3247,7 @@ class PagoController extends Controller
         /**  idpago  3028  userid 3  clienteid  1232 */
         //return $request->all();
         //return $pago;
-        $fecha_aprobacion = Carbon::now()->format('Y-m-d');
+        $fecha_aprobacion = Carbon::now()->format('Y-m-d H:i:s');
         //return $request->all();
         try {
             DB::beginTransaction();           
@@ -3332,7 +3332,8 @@ class PagoController extends Controller
                 $movimiento->update([            
                     'pago' => 1,
                     'detpago' => $detalle_list[$cont],
-                    'cabpago' => $pago->id
+                    'cabpago' => $pago->id,
+                    'updated_at' => $fecha_aprobacion//actualizacion para pagos movimientos
                 ]);
                 $cont++;
 

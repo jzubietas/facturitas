@@ -61,6 +61,9 @@
             <th scope="col">Razón social</th>
             <th scope="col">Asesor</th>
             <th scope="col">F. Registro</th>
+
+            <th scope="col">F. Actualizacion</th>
+           
             <th scope="col">Total (S/)</th>
             <th scope="col">Est. pedido</th>
             <th scope="col">Est. pago</th>
@@ -285,6 +288,12 @@
         {
           data: 'fecha', 
           name: 'fecha', 
+          //render: $.fn.dataTable.render.moment( 'DD-MMM-YYYY HH:mm:ss' )
+        },
+        {
+          data: 'fecha_up', 
+          name: 'fecha_up', 
+          "visible":false,
           //render: $.fn.dataTable.render.moment( 'DD-MMM-YYYY HH:mm:ss' )
         },
         {

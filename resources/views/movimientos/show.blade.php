@@ -17,6 +17,8 @@
 @stop
 
 @section('content')
+
+@include('pagos.modals.revisarhistorial')
   
     <div class="card">
       <div class="card-body">
@@ -63,6 +65,87 @@
                 <h1>Pago Conciliado</h1><br>
 
                 <h1>PAG{{$pago->users}}-{{$pago->cantidad_voucher}}{{$pago->cantidad_pedido}}-{{$pago->id}}</h1>
+
+                <div class="table-responsive">
+                  <table class="table table-striped">
+                    <thead>
+                      <tr>
+                        <th scope="col">ITEM</th>
+                        <th scope="col">PEDIDO</th>
+                        <th scope="col">CODIGO</th>
+                        <th scope="col">ESTADO DE PAGO</th>
+                        <th scope="col">ESTADO</th>
+                        <th scope="col">MONTO TOTAL</th>
+                        <th scope="col">ABONADO</th>
+                        <th scope="col"><span style="color:red;">DIFERENCIA</span></th>
+                        <th scope="col">Historial</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      @php
+                        $contPe = 0;
+                        $sumPe = 0;
+                        $sumPe2 = 0;
+                      @endphp
+                      @foreach ($pagoPedidos as $pagoPedido)
+                        <tr>
+                          <td>{{ $contPe + 1 }}</td>
+                          <td>PED000{{ $pagoPedido->pedidos }}<input type="hidden" name="pedido_id[]" id="pedido_id" value="{{ $pagoPedido->pedidos }}"></td>
+                          <td>{{ $pagoPedido->codigo }}</td>
+                            
+                          @if($pago->condicion=='ABONADO')
+                              @if($pagoPedido->pagado == 1)
+                              <td>ADELANTO ABONADO</td>
+                              @else
+                              <td>PAGADO ABONADO</td>
+                              @endif
+                          @elseif($pago->condicion=='OBSERVADO')
+                              @if($pagoPedido->pagado == 1)
+                              <td>ADELANTO OBSERVADO</td>
+                              @else
+                              <td>PAGADO OBSERVADO</td>
+                              @endif
+                          @elseif($pago->condicion=='PAGO')
+                              @if($pagoPedido->pagado == 1)
+                              <td>ADELANTO PAGO</td>
+                              @else
+                              <td>PAGADO PAGO</td>
+                              @endif
+                          @endif
+    
+                          <td>{{ $pagoPedido->condicion }}</td>
+                          <td>{{ $pagoPedido->total }}</td>
+                          <td><input type="hidden" name="pedido_id_abono[]" id="pedido_id_abono" value="{{ $pagoPedido->abono }}">{{ $pagoPedido->abono }}</td>
+                          @if ($pagoPedido->total - $pagoPedido->abono < 3)
+                            <td><span style="color:black;">{{ number_format($pagoPedido->total - $pagoPedido->abono, 2, '.', ' ') }}</span></td>
+                          @else
+                            <td><span style="color:red;">{{ number_format($pagoPedido->total - $pagoPedido->abono, 2, '.', ' ') }}</span></td>
+                          @endif
+                          <td>
+                            <a href="" data-target="#modal-historial-pagos-pedido" data-toggle="modal" data-pedido="{{ $pagoPedido->codigo }}" data-pago="{{$pago->id}}"><button class="btn btn-danger btn-sm">Historial</button></a>
+                          </td>
+                        </tr>
+                        @php
+                          $sumPe = $sumPe + $pagoPedido->abono;
+                          $sumPe2 = $sumPe2 + ($pagoPedido->total - $pagoPedido->abono );
+                          $contPe++;
+                        @endphp
+                      @endforeach
+                    </tbody>
+                    <tfoot>
+                      <tr>
+                        <td>TOTAL ABONADO</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td><?php echo number_format($sumPe, 2, '.', ' ')?></td>
+                        <td><span style="color:red;"><?php echo number_format($sumPe2, 2, '.', ' ')?></span></td>
+                      </tr>
+                    </tfoot>
+                  </table>
+                </div>
 
                 <br><br>
 

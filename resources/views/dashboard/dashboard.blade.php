@@ -288,10 +288,49 @@
         </div>
         <div class="col-lg-6 col-sm-6 col-md-6 col-xs-12">
           <br>
+          <h4>CANTIDAD DIARIA DE PEDIDOS POR ASESOR</h4>
+
+          <table >
+            <span>Setiembre</span>
+            <thead>
+              <th>Asesor</th>
+              <th>Cantidad</th>
+            </thead>
+            <tbody>
+              
+            </tbody>
+          </table>
+
+          <table >
+            <span>Octubre</span>
+            <thead>
+              <th>Asesor</th>
+              <th>Cantidad</th>
+            </thead>
+            <tbody>
+              
+            </tbody>
+          </table>
+
+          <table >
+            <span>Noviembre</span>
+            <thead>
+              <th>Asesor</th>
+              <th>Cantidad</th>
+            </thead>
+            <tbody>
+              
+            </tbody>
+          </table>
+
+
           <div class="table-responsive">
-            <table class="table table-striped table-bordered table-condensed table-hover"><br><h4>CANTIDAD DIARIA DE PEDIDOS POR ASESOR</h4>
+            <table class="table table-striped table-bordered table-condensed table-hover"><br>
               <div id="pedidosxasesorxdia" style="width: 100%; height: 500px;"></div>
             </table>
+
+            
+            
           </div>
       </div>
     <div class="container-fluid">
