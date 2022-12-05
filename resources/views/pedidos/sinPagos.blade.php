@@ -287,7 +287,7 @@
 
                 console.log(varcreate);
 
-                data = data+'<a class="clickpagar" href="'+varcreate+'" class="btn btn-success btn-sm" data-pagar="'+row.cliente_id+'"> Pagar</a><br>';
+                data = data+'<a class="clickpagar" href="'+varcreate+'" class="btn btn-success btn-sm" data-pagar="'+row.cliente_id+'"><button class="btn btn-success btn-sm"><i class="fas fa-check"></i> Pagar</button></a><br>';
 
             @endcan 
 

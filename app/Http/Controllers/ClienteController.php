@@ -269,7 +269,8 @@ class ClienteController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {   
+    {    
+      
         $request->validate([
             'celular' => 'required|unique:clientes',            
         ]);
@@ -280,6 +281,7 @@ class ClienteController extends Controller
             $cliente = Cliente::create([            
             'nombre' => $request->nombre,
             'celular' => $request->celular,
+            /*'icelular'=> $request->icelular,*/
             'user_id' => $request->user_id,
             'tipo' => $request->tipo,
             'provincia' => $request->provincia,
@@ -336,6 +338,7 @@ class ClienteController extends Controller
                     'cliente_id' => $cliente->id,
                     'nombre' => $nombreporcentaje[$cont],
                     'porcentaje' => $valoresporcentaje[$cont],
+                  
                 ]);
                 $cont++;
             }
@@ -489,6 +492,7 @@ class ClienteController extends Controller
         $cliente = Cliente::where('celular', $request->celular)->first();  
         $letra="";      
         if($cliente !== null){
+            
             $user = User::where('id', $cliente->user_id)->first();
             
             $messages = [
@@ -545,7 +549,7 @@ class ClienteController extends Controller
             'deuda' => '0',
             'pidio' => '0',
             'estado' => '1',
-            'icelular' => $letra
+            'icelular' => $letra,
             ]);
 
         return redirect()->route('basefria')->with('info','registrado');        

@@ -112,7 +112,7 @@ class SobreController extends Controller
                     'pedidos.observacion_devuelto',
                 )
                 ->where('pedidos.estado', '1')
-                ->where('pedidos.envio', '1')
+                ->whereIn('pedidos.envio', ['1','2']) // ENVIADO CONFIRMAR RECEPCION Y ENVIADO RECIBIDO 
                 ->where('dp.estado', '1')
                 ->whereIn('pedidos.condicion_envio',['PENDIENTE DE ENVIO']);
                 /*->groupBy(
@@ -457,6 +457,115 @@ class SobreController extends Controller
             $html=$detalle_pedidos;
         }
         return response()->json(['html' => $html]);
+    }
+    public function pedidosgrupotabla(Request $request)
+    {        
+        $pedidos=null;
+        if (!$request->direcciongrupo) {            
+        } else {
+            //$idrequest=explode("_",$request->direcciongrupo);        
+            
+            $direcciongrupo = DireccionGrupo::find($request->direcciongrupo);
+            $destino = $direcciongrupo->destino;
+            
+            if($destino=='LIMA'){
+                $pedidos =  DireccionPedido::where("direcciongrupo",$request->direcciongrupo)
+                 ->where("estado",'1');
+            }else if($destino=='PROVINCIA'){
+                $pedidos =  GastoPedido::where("direcciongrupo",$request->direcciongrupo)
+                ->where("estado",'1');
+            }
+
+            $pedidos=$pedidos->get();
+            
+            return Datatables::of($pedidos)
+                    ->addIndexColumn()                  
+                    ->make(true);
+        }       
+    }
+
+    public function EnvioDesvincular(Request $request)
+    {
+        //return $request->all();
+        $pedidos=$request->pedidos;
+        $direcciongrupo=$request->direcciongrupo;
+        $observaciongrupo=$request->observaciongrupo;
+        if(!$request->pedidos)
+        {
+            return '0';
+        }
+        else{
+            $array_pedidos=explode(",",$pedidos);  
+
+            //return var_dump($array_pedidos);
+
+            $direcciongrupolist = DireccionGrupo::find($request->direcciongrupo);
+            //return $direcciongrupo;
+            $destino = $direcciongrupolist->destino;
+
+            if($destino == "LIMA"){
+                foreach($array_pedidos as $pedido_id)
+                {
+                    $data = DireccionPedido::where("pedido_id",$pedido_id)
+                    ->where("direcciongrupo",$direcciongrupo)->first();
+                    $data->update([
+                        "estado"=>'0'
+                    ]);
+                    $pedido = Pedido::where("id",$pedido_id)->first();
+                    $pedido->update([
+                        "condicion_envio"=>'PENDIENTE DE ENVIO',
+                        "envio"=>'1',
+                        "observacion_devuelto"=>$observaciongrupo
+                    ]);
+                }
+                $direccionpedido = DireccionPedido::where("direcciongrupo",$direcciongrupo)->where("estado",'1')->get()->count();
+                if($direccionpedido==0){
+                    $direcciongrupo = DireccionGrupo::where("id",$direcciongrupo)->first();
+                    $direcciongrupo->update([
+                        "estado"=>'0'
+                    ]);
+                }
+            }else if($destino = "PROVINCIA"){
+                foreach($array_pedidos as $pedido_id)
+                {
+                    $data = GastoPedido::where("pedido_id",$pedido_id)->where("direcciongrupo",$direcciongrupo)->first();
+                    $data->update([
+                        "estado"=>'0'
+                    ]);
+                    //return $pedido_id;
+                    $pedido = Pedido::where("id",$pedido_id)->first();
+                    $pedido->update([
+                        "condicion_envio"=>'PENDIENTE DE ENVIO',
+                        "envio"=>'1',
+                        "observacion_devuelto"=>$observaciongrupo
+                    ]);
+                }
+                $direccionpedido = GastoPedido::where("direcciongrupo",$direcciongrupo)->where("estado",'1')->get()->count();
+                if($direccionpedido==0){
+                    $direcciongrupo = DireccionGrupo::where("id",$direcciongrupo)->first();
+                    $direcciongrupo->update([
+                        "estado"=>'0'
+                    ]);
+                }
+            }
+
+          
+            
+
+          
+
+            return response()->json(['html' => $array_pedidos]);
+          
+
+        }
+        
+        
+        //$pedido=Pedido::where("id",$request->)
+        
+
+        
+
+        //return redirect()->route('envios.index')->with('info','actualizado');
     }
 
    

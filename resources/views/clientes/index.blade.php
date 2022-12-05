@@ -244,7 +244,7 @@ $(document).ready(function () {
             @endcan
 
             @if($mirol !='Administradorsdsd')
-              data = data+'<a href="'+urlshow+'" class="btn btn-info btn-sm"><i class="fas fa-edit"></i> Ver</a>';
+              data = data+'<a href="'+urlshow+'" class="btn btn-info btn-sm"><i class="fas fa-eye"></i> Ver</a>';
             @endif
 
             @can('clientes.destroy')

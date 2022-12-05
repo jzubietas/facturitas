@@ -119,7 +119,7 @@
           </div>
           <div class="form-group col-lg-3 d-flex justify-content-center align-items-center">
 
-              <a href="{{ route("pedidosPDFpreview") }}" class="btn btn-info btn-lg" target="_blank">Previsualizar</a>
+              <a href="{{ route("pedidosPDFpreview2") }}" class="btn btn-info btn-lg" id="prev" name = "prev" target="_blank">Previsualizar</a>
           </div>
           <div class="form-group col-lg-2">
 

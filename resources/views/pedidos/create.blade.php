@@ -1050,8 +1050,24 @@
 
       
     });
-    
 
+$(document).on("click","#prev",function(e){
+e.preventDefault()
+
+  let pruc=$('#pruc').val();
+  let pempresa=$('#pempresa').val();
+  let pmes=$('#pmes').val();
+  let panio=$('#panio').val();
+  let pcantidad=$('#pcantidad').val();
+  let ptipo_banca=$('#ptipo_banca').val();
+  let pdescripcion=$('#pdescripcion').val();
+  let pnota=$('#pnota').val();
+
+  window.open("https://localhost/proyectos/sisFacturas/public/pedidosPDFpreview2?pruc="+pruc+"&pempresa="+pempresa+"&pmes="+pmes+"&panio="+panio+"&pcantidad="+pcantidad+"&ptipo_banca="+ptipo_banca+"&pdescripcion="+pdescripcion+"&pnota="+pnota+"&fff=1")
+
+  localStorage.setItem('pmes', $(this).val());
+  console.log(localStorage.getItem('pmes'));
+})
 
   });
   </script>

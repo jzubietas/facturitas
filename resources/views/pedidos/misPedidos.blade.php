@@ -41,7 +41,7 @@
 
   <div class="card">
     <div class="card-body">
-      <table cellspacing="5" cellpadding="5" class="table-responsive">
+      <!--<table cellspacing="5" cellpadding="5" class="table-responsive">
         <tbody>
           <tr>
             <td>Fecha Minima:</td>
@@ -51,7 +51,7 @@
             <td><input type="text" value={{ $dateMax }} id="max" name="max"  class="form-control"></td>
           </tr>
         </tbody>
-      </table><br>
+      </table><br>-->
       <table id="tablaPrincipal" class="table table-striped">
         <thead>
           <tr>
@@ -64,9 +64,9 @@
             <th scope="col">Total (S/)</th>
             <th scope="col">Estado de pedido</th>
             <th scope="col">Estado de pago</th>
-            <th scope="col">Estado de sobre</th>
+            <!--<th scope="col">Estado de sobre</th>-->
             <th scope="col">Estado de envío</th>
-            <th scope="col">Destino</th>
+            <!--<th scope="col">Destino</th>-->
             <th scope="col">Diferencia</th>
             <th scope="col">Acciones</th>
           </tr>
@@ -243,7 +243,7 @@
             }              
           }
         },//estado de pago
-        {
+        /*{
           //estado del sobre
           data: 'envio', 
           name: 'envio', 
@@ -263,12 +263,12 @@
 
             }
           }
-        },
+        },*/
         //{data: 'responsable', name: 'responsable', },//estado de envio
         
         //{data: 'condicion_pa', name: 'condicion_pa', },//ss
         {data: 'condicion_env', name: 'condicion_envio', },//
-        {
+        /*{
           data: 'envio',
           name: 'envio',
           render: function ( data, type, row, meta ) {
@@ -278,7 +278,7 @@
                 return '<span class="badge badge-danger">NO ENVIADO</span>';
               }
             }
-        },
+        },*/
         {
           data: 'diferencia', 
           name: 'diferencia',

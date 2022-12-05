@@ -1,4 +1,4 @@
-@extends('adminlte::page')
+@extends('adminlte::page')modal
 
 @section('title', 'Rutas de Envio')
 
@@ -90,7 +90,7 @@
             <th scope="col" class="text-center">Codigos</th>
             <th scope="col" class="text-center">Producto</th>            
             <th scope="col" class="text-center">Direccion</th>
-            <th scope="col" class="text-center">Referencia</th>
+            <th width="5px" scope="col" class="text-center">Referencia</th>
             <th scope="col" class="text-center">Observacion</th>
             <th scope="col" class="text-center">Distrito</th>
             <th scope="col" class="text-center">Destino</th>
@@ -106,6 +106,7 @@
       @include('pedidos.modal.editdireccionid')
       @include('pedidos.modal.destinoid')
       @include('envios.modal.distribuir')
+      @include('envios.modal.desvincularpedidos')
     </div>
   </div>
 
@@ -166,8 +167,10 @@
 
   <script src="https://momentjs.com/downloads/moment.js"></script>
   <script src="https://cdn.datatables.net/plug-ins/1.11.4/dataRender/datetime.js"></script>
+  <script src="https://gyrocode.github.io/jquery-datatables-checkboxes/1.2.12/js/dataTables.checkboxes.min.js"></script>
 
   <script>
+    var tabla_pedidos=null;
     $(document).ready(function () {
 
       $.ajaxSetup({
@@ -175,6 +178,45 @@
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
       });
+
+      tabla_pedidos=$('#tablaPrincipalpedidosagregar').DataTable({
+          responsive: true,
+          "bPaginate": false,
+          "bFilter": false,
+          "bInfo": false,
+          columns: 
+          [
+            {
+              data: 'id'
+            },
+            {
+              data: 'codigo'
+            },
+            {
+              data: 'saldo'
+            }
+          ],
+          language: {
+            "decimal": "",
+            "emptyTable": "No hay informaciÃ³n",
+            "info": "Mostrando del _START_ al _END_ de _TOTAL_ Entradas",
+            "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
+            "infoFiltered": "(Filtrado de _MAX_ total entradas)",
+            "infoPostFix": "",
+            "thousands": ",",
+            "lengthMenu": "Mostrar _MENU_ Entradas",
+            "loadingRecords": "Cargando...",
+            "processing": "Procesando...",
+            "search": "Buscar:",
+            "zeroRecords": "Sin resultados encontrados",
+            "paginate": {
+            "first": "Primero",
+            "last": "Ultimo",
+            "next": "Siguiente",
+            "previous": "Anterior"
+            }
+          }
+        });
 
       $(document).on("submit", "#formulario", function (evento) {
         evento.preventDefault();
@@ -459,6 +501,7 @@
                     '<button class="btn btn-warning btn-sm"><i class="fas fa-envelope"></i> Distribuir</button></a><br>';
 
                 datass = datass+ '<a href="" data-target="#modal-revertir" data-toggle="modal" data-recibir="'+row.id+'"><button class="btn btn-info btn-sm"><i class="fas fa-trash"></i> REVERTIR</button></a>'; 
+                datass = datass+ '<a href="" data-target="#modal-desvincular" data-toggle="modal" data-desvincular="'+row.id+'"><button class="btn btn-danger btn-sm"><i class="fas fa-trash"></i> DESVINCULAR</button></a>'; 
 
               }
 
@@ -491,6 +534,111 @@
         },
       });
 
+
+$(document).on("click","#desvincularConfirmar",function(event){
+
+        var rows_selected = tabla_pedidos.column(0).checkboxes.selected();
+        var $direcciongrupo = $("#direcciongrupo").val();
+        var $observaciongrupo = $("#observaciongrupo").val();
+        var pedidos=[];
+        $.each(rows_selected, function(index, rowId){
+              console.log("ID PEDIDO  es "+  rowId);
+              pedidos.push(rowId);             
+          });
+
+
+          var let_pedidos=pedidos.length;
+
+        if(let_pedidos==0)
+        {
+          Swal.fire(
+              'Error',
+              'Debe elegir un pedido',
+              'warning'
+            )
+            return;
+        }
+        $pedidos=pedidos.join(',');
+        console.log($pedidos);
+        console.log($direcciongrupo);
+        console.log($observaciongrupo);
+        var fd2=new FormData();
+        let direcciongrupo=$("#direcciongrupo").val();
+        let observaciongrupo=$("#observaciongrupo").val();
+        fd2.append('direcciongrupo', direcciongrupo);
+        fd2.append('observaciongrupo', observaciongrupo);
+        /*fd2.append('observaciongrupo', $('#observaciongrupo').val() );*/
+        fd2.append('pedidos', $pedidos);
+        
+
+        $.ajax({
+          data: fd2,
+          processData: false,
+          contentType: false,
+          type: 'POST',
+          url:"{{ route('sobres.desvinculargrupo') }}",
+          success:function(data)
+          {
+            console.log(data);
+            $("#modal-desvincular").modal("hide");
+            $("#tablaPrincipal").DataTable().ajax.reload();
+          }
+        });
+      })
+
+
+$('#modal-desvincular').on('show.bs.modal', function (event) {
+
+var button = $(event.relatedTarget) 
+var direcciongrupo = button.data('desvincular');
+$("#direcciongrupo").val(direcciongrupo);
+//$("#observaciongrupo").val(observaciongrupo);
+tabla_pedidos.destroy();
+
+
+tabla_pedidos=$('#tablaPrincipalpedidosagregar').DataTable({
+  responsive: true,
+  "bPaginate": false,
+  "bFilter": false,
+  "bInfo": false,
+  'ajax': {
+    url:"{{ route('cargar.pedidosgrupotabla') }}",					
+    'data': { "direcciongrupo": direcciongrupo}, 
+    "type": "get",
+  },
+  'columnDefs': [ {
+    'targets': [0], 
+    'orderable': false, 
+  }],
+  columns:[
+    {
+        "data": "pedido_id",
+        'targets': [0],
+        'checkboxes': {                        
+            'selectRow': true
+        },
+        defaultContent: '',
+        orderable: false, 
+    },
+    {data: 'codigo_pedido', name: 'codigo_pedido',},
+    {
+        "data": 'empresa',
+        "name": 'empresa',
+        "render": function ( data, type, row, meta ) {      
+          return data;                
+            
+        }
+    },
+  ],
+  'select': {
+      'style': 'multi',
+      selector: 'td:first-child'
+  },
+});
+
+//$("#limaprovincia").val("").trigger("change");
+
+});
 
 
     });
@@ -582,7 +730,7 @@
               $('#tablaPrincipal').DataTable().ajax.reload(); 
               console.log("minimo "+$(this).val());
               //localStorage.setItem('dateMin', $(this).datepicker('getDate') ); 
-              localStorage.setItem('dateMin', $(this).val() ); 
+              //localStorage.setItem('dateMin', $(this).val() ); 
             }, changeMonth: true, changeYear: true , dateFormat:"dd/mm/yy"
           });
         
@@ -597,16 +745,19 @@
             } );*/
 
         });
+
+    
+
   </script>
   <script>
-    if (localStorage.getItem('dateMin') )
+    /*if (localStorage.getItem('dateMin') )
     {
       $( "#min" ).val(localStorage.getItem('dateMin')).trigger("change");        
     }else{
       localStorage.setItem('dateMin', "{{$dateMin}}" );
-    }
+    }*/
 
-    console.log(localStorage.getItem('dateMin'));
+    //console.log(localStorage.getItem('dateMin'));
 
   </script>
 

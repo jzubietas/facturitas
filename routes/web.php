@@ -139,10 +139,16 @@ Route::get('pedidos/{adjunto}/descargargastos', [PedidoController::class, 'Desca
 Route::get('sobres.porenviar', [SobreController::class, 'Sobresporenviar'])->name('sobres.porenviar');
 Route::get('sobres.porenviartabla', [SobreController::class, 'Sobresporenviartabla'])->name('sobres.porenviartabla');
 
+
+
+
+Route::get('pedidosgrupotabla', [SobreController::class, 'pedidosgrupotabla'])->name('cargar.pedidosgrupotabla');
+Route::post('sobres.desvinculargrupo', [SobreController::class, 'EnvioDesvincular'])->name('sobres.desvinculargrupo');
+Route::get('envios.rutaenvio', [EnvioController::class, 'Enviosrutaenvio'])->name('envios.rutaenvio');
+
 Route::get('envios.porrecibir', [EnvioController::class, 'Enviosporrecibir'])->name('envios.porrecibir');
 Route::get('envios.porrecibirtabla', [EnvioController::class, 'Enviosporrecibirtabla'])->name('envios.porrecibirtabla');
 
-Route::get('envios.rutaenvio', [EnvioController::class, 'Enviosrutaenvio'])->name('envios.rutaenvio');
 Route::get('envios.rutaenviotabla', [EnvioController::class, 'Enviosrutaenviotabla'])->name('envios.rutaenviotabla');
 
 Route::get('envios.index', [EnvioController::class, 'Envios'])->name('envios.index');
@@ -161,6 +167,7 @@ Route::post('envios.enviar/{pedido}', [PedidoController::class, 'EnviarPedido'])
 Route::post('envios.enviarid', [EnvioController::class, 'EnviarPedidoid'])->name('envios.enviarid');
 Route::post('envios.distribuirid', [EnvioController::class, 'DistribuirEnvioid'])->name('envios.distribuirid');
 Route::post('envios.direccion', [PedidoController::class, 'DireccionEnvio'])->name('envios.direccion');
+Route::post('envios.desvincular', [PedidoController::class, 'EnvioDesvincular'])->name('envios.desvincular');
 Route::get('envios.createdireccion/{pedido}', [PedidoController::class, 'createDireccion'])->name('envios.createdireccion');
 Route::post('envios.updatedireccion/{direccion}', [PedidoController::class, 'UpdateDireccionEnvio'])->name('envios.updatedireccion');
 
@@ -249,6 +256,8 @@ Route::get('asesorespago', [PagoController::class, 'asesorespago'])->name('aseso
 Route::get('clientescreatepago', [ClienteController::class, 'clientedeasesorpagos'])->name('clientescreatepago');
 
 Route::resource('users', UserController::class)->names('users');
+/*Route::resource('users.mipersonal',[UserController::class, 'MiPersonal'])->names('users.mipersonal');*/
+
 Route::post('reset/{user}', [UserController::class, 'reset'])->name('user.reset');
 Route::resource('roles', RoleController::class)->names('roles');
 Route::get('users.asesores', [UserController::class, 'Asesores'])->name('users.asesores');
@@ -296,6 +305,8 @@ Route::post('/mark-as-read', [NotificationsController::class, 'markNotification'
     //MODULO PEDIDOS
     Route::get('PDF/{pedido}/pedido', [PdfController::class, 'pedidosPDF'])->name('pedidosPDF');
     Route::get('pedidosPDFpreview', [PdfController::class, 'pedidosPDFpreview'])->name('pedidosPDFpreview');
+
+    Route::get('pedidosPDFpreview2', [PdfController::class, 'pedidosPDFpreview'])->name('pedidosPDFpreview2');
     //MODULO REPORTES    
     Route::post('reporte/pedidosporfechas', [PdfController::class, 'PedidosPorFechas'])->name('pedidosporfechas');
     Route::post('reporte/pedidosporasesor', [PdfController::class, 'PedidosPorAsesor'])->name('pedidosporasesor');

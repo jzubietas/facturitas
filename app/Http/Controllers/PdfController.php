@@ -400,11 +400,19 @@ class PdfController extends Controller
         $mirol=Auth::user()->rol;
         $identificador=Auth::user()->identificador;
         $fecha = Carbon::now('America/Lima')->format('Y-m-d');
-        
-        $pdf = PDF::loadView('pedidos.reportes.pedidosPDFpreview', compact('fecha','mirol','identificador'))
+
+        $pruc=$request->pruc;
+        $pempresa=$request->pempresa;
+        $pmes=$request->pmes;
+        $panio=$request->panio;
+        $pcantidad=$request->pcantidad;
+        $ptipo_banca=$request->ptipo_banca;
+        $pdescripcion=$request->pdescripcion;
+        $pnota=$request->pnota;
+
+        $pdf = PDF::loadView('pedidos.reportes.pedidosPDFpreview', compact('fecha','mirol','identificador','pruc','pempresa','pmes','panio','pcantidad','ptipo_banca','pdescripcion','pnota'))
             ->setPaper('a4', 'portrait');
         return $pdf->stream('pedido ' . 'id' . '.pdf');
-
 
     }
 

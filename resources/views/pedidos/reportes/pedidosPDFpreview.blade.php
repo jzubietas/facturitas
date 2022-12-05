@@ -68,97 +68,88 @@
         </tr>
       </thead>
       <tbody>
-        <tr class="noselect">
-
-        @if ( ($mirol=="Asesor") && ($identificador=="06" || $identificador=="07" || $identificador=="08" || $identificador=="09" || $identificador=="10" ) )
-            <td><br>CODIGOS<br><br></td>
-        @else
-            <th scope="row"><br><span class="textLayer">CODIGO</span><br><br></th>
-            <td><br><span class="textLayer">CODIGOS</span><br><br></td>
-        @endif 
-        </tr>
         <tr>
           @if ( ($mirol=="Asesor") && ($identificador=="06" || $identificador=="07" || $identificador=="08" || $identificador=="09" || $identificador=="10" ) )
-            <td>
-              <br>@php echo number_format(0.00,2) @endphp<br><br>
+            <td style="font-weight: bolder;">
+              <br>{{$pcantidad}}<br><br>
             </td>
           @else
             <th scope="row"><br>CANTIDAD<br><br></th>
-            <td>
-              <br>@php echo number_format(0.00,2) @endphp<br><br>
+            <td style="font-weight: bolder;">
+              <br>{{$pcantidad}}<br><br>
             </td>
           @endif
         </tr>
         <tr>
           @if ( ($mirol=="Asesor") && ($identificador=="06" || $identificador=="07" || $identificador=="08" || $identificador=="09" || $identificador=="10" ) )
-            <td><br>RUC<br><br></td>
+            <td><br>{{$pruc}}<br><br></td>
           @else
             <th scope="row"><br>RUC<br><br></th>
-            <td><br>RUC<br><br></td>
+            <td><br>{{$pruc}}<br><br></td>
           @endif
           
         </tr>
         <tr>
           @if ( ($mirol=="Asesor") && ($identificador=="06" || $identificador=="07" || $identificador=="08" || $identificador=="09" || $identificador=="10" ) )
-            <td><br>EMPRESAS<br><br></td>
+            <td style="font-weight: bolder;"><br>{{$pempresa}}<br><br></td>
           @else
             <th scope="row"><br>RAZON SOCIAL<br><br></th>
-            <td><br>EMPRESAS<br><br></td>
+            <td style="font-weight: bolder;"><br>{{$pempresa}}<br><br></td>
           @endif
 
           
         </tr>
         <tr>
           @if ( ($mirol=="Asesor") && ($identificador=="06" || $identificador=="07" || $identificador=="08" || $identificador=="09" || $identificador=="10" ) )
-            <td><br>MES<br><br></td>
+            <td style="font-weight: bolder;"><br>{{$pmes}}<br><br></td>
           @else
             <th scope="row"><br>MES<br><br></th>
-            <td><br>MES<br><br></td>
+            <td style="font-weight: bolder;"><br>{{$pmes}}<br><br></td>
           @endif
           
         </tr>
         <tr>
           @if ( ($mirol=="Asesor") && ($identificador=="06" || $identificador=="07" || $identificador=="08" || $identificador=="09" || $identificador=="10" ) )
-            <td><br>ANIO<br><br></td>
+            <td><br>{{$panio}}<br><br></td>
           @else
             <th scope="row"><br>AÑO<br><br></th>
-            <td><br>ANIO<br><br></td>
+            <td><br>{{$panio}}<br><br></td>
           @endif
           
         </tr>
         <tr>
           @if ( ($mirol=="Asesor") && ($identificador=="06" || $identificador=="07" || $identificador=="08" || $identificador=="09" || $identificador=="10" ) )
-            <td><br>TIPO BANCA<br><br></td>
+            <td><br>{{$ptipo_banca}}<br><br></td>
           @else
             <th scope="row"><br>FISICO O ELECTRONICO<br><br></th>
-            <td><br>TIPO BANCA<br><br></td>
+            <td><br>{{$ptipo_banca}}<br><br></td>
           @endif
           
         </tr>
 
         @if ( ($mirol=="Asesor") && ($identificador=="06" || $identificador=="07" || $identificador=="08" || $identificador=="09" || $identificador=="10" ) )
           <tr>
-            <td colspan="2"><p>DESCRIPCION</div></p></td>
+            <td colspan="2"><p>{{$pdescripcion}}</div></p></td> 
           </tr>
         @else
           <tr>
             <th colspan="2" style="background: white">DESCRIPCIÓN</th>
           </tr>
           <tr>
-            <td colspan="2"><p>DESCRIPCION</div></p></td>
+            <td colspan="2"><p>{{$pdescripcion}}</div></p></td>
           </tr>
         @endif
         
         @if ( ($mirol=="Asesor") && ($identificador=="06" || $identificador=="07" || $identificador=="08" || $identificador=="09" || $identificador=="10" ) )
           <tr>
-            <td colspan="2"><p>NOTA</p></td>
+            <td colspan="2"><p>{{$pnota}}</p></td> 
           </tr>
         @else
           <tr>
             <th colspan="2" style="background: white">NOTA</th>
           </tr>
           <tr>
-            <td colspan="2"><p>NOTA</p></td>
+            <td colspan="2"><p>{{$pnota}}</p></td>
           </tr>
         @endif
 
@@ -169,6 +160,11 @@
       </tfoot> 
     
   </table>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+  
+ 
 </body>
+
 
 </html>

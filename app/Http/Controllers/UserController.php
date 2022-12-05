@@ -568,6 +568,35 @@ class UserController extends Controller
         return redirect()->route('users.misasesores')->with('info', 'asignado');
     }
 
+    public function MiPersonal()
+    {
+            $encargados = User::where('rol', 'Encargado')
+                        ->where('estado', '1')
+                        ->pluck('name', 'id');
+            $asesores = User::where('rol', 'Asesor')
+                        ->where('estado', '1')
+                        ->get();       
+            $jefellamadas = User::whereIn('rol', 'Jefe de llamadas')
+                        ->where('estado', '1')
+                        ->get();    
+            $llamadas = User::whereIn('rol', 'Llamadas')
+                        ->where('estado', '1')
+                        ->get(); 
+            $jefeoperarios = User::where('rol', 'Jefe de operaciones')
+                        ->where('estado', '1')
+                        ->get();
+            $operarios = User::where('rol', 'Operario')
+                        ->where('estado', '1')
+                        ->get();
+                        /*->pluck('name', 'id');*/
+            /*$llamadas = User::whereIn('rol', ['Llamadas', 'Jefe de llamadas'])
+                        ->where('estado', '1')
+                        ->pluck('name', 'id');*/
+            $superasesor = User::where('rol', 'Super asesor')->count();
+            
+            return view('usuarios.mipersonal', compact('encargados', 'asesores', 'jefellamadas', 'llamadas', 'jefeoperarios','operarios','superasesor'));
+    }
+
     public function Encargados()
     {
         $users = User::where('rol', 'Encargado')

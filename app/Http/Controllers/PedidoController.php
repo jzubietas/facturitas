@@ -1721,7 +1721,7 @@ return ' no imagen ';
                     'dp.total as total',
                     'pedidos.condicion_envio as condicion_env',
                     'pedidos.condicion as condiciones',
-                    'pedidos.envio',
+                    /*'pedidos.envio',*/
                     'pedidos.direccion',
                     'pedidos.destino',
                     'pedidos.motivo',
@@ -1745,7 +1745,7 @@ return ' no imagen ';
                     'dp.total',
                     'pedidos.condicion_envio',
                     'pedidos.condicion',
-                    'pedidos.envio',
+                    /*'pedidos.envio',*/
                     'pedidos.direccion',
                     'pedidos.destino',
                     'pedidos.motivo',

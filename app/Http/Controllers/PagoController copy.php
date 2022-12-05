@@ -923,6 +923,7 @@ class PagoController extends Controller
 
     public function store(Request $request)
     {
+        
         //return $request->all();
 
         if($request->accion_perdonar=="1")
@@ -1006,8 +1007,13 @@ class PagoController extends Controller
             ]);*/
 
             //return $request->all();
+            //return $request->user_id;
+            //$identi_asesor=User::where("identificador", $request->user_id)->where("unificado","NO")->first();
+//return $identi_asesor;
 
             $pagado = $request->total_pago_pagar;
+
+            //return $identi_asesor;
 
             try {
                 DB::beginTransaction();
@@ -1015,6 +1021,8 @@ class PagoController extends Controller
                 $deuda_total=str_replace(',','',$deuda_total);
                 $pagado = $request->total_pago_pagar;
                 $pagado=str_replace(',','',$pagado);
+
+                
 
                 $identi_asesor=User::where("identificador", $request->user_id)->where("unificado","NO")->first();
 
@@ -1219,6 +1227,11 @@ class PagoController extends Controller
 
                 $cliente = Cliente::find($request->cliente_id)->first();
 
+                if(!$request->diferencia){
+                $cliente->update([
+                    'saldo' => $request->diferencia
+                ]);
+               }
                 $cliente_deuda=Cliente::where("id",$request->cliente_id)
                         ->get([
                             'clientes.id',
@@ -1261,7 +1274,7 @@ class PagoController extends Controller
 
 
         }else{
-        
+        //no perdonar saldo
             $contPedidos=0;
             $contPedidosfor=0;
             $pedido_id = $request->pedido_id;
@@ -1336,9 +1349,12 @@ class PagoController extends Controller
                 $pedidos_pagados_total=$pedidos_pagados_total_ar;
             }
 
-            $request->validate([
+            /*$request->validate([
                 'imagen' => 'required',
-            ]);
+            ]);*/
+
+            //$identi_asesor=User::where("identificador", $request->user_id)->where("unificado","NO")->first();
+        //return "aaa";
 
             try {
                 DB::beginTransaction();
@@ -1349,6 +1365,24 @@ class PagoController extends Controller
 
                 $identi_asesor=User::where("identificador", $request->user_id)->where("unificado","NO")->first();
 
+
+
+                
+                    $cliente_saldo = Cliente::where('id', $request->cliente_id)->first();
+                    //return $cliente_saldo;
+                    $saldocliente=str_replace(',','',$request->diferencia);
+
+                    $cliente_saldo->update([
+                        'saldo' => $saldocliente
+                    ]);
+
+
+
+                
+
+
+
+
                 $pago = Pago::create([                
                     'user_id' => $identi_asesor->id,
                     'cliente_id' => $request->cliente_id,
@@ -1358,19 +1392,6 @@ class PagoController extends Controller
                     'notificacion' => 'Nuevo pago registrado',
                     'estado' => '1'
                 ]);
-
-                $diferenciasaldocliente=str_replace(',','',$request->diferencia);
-                $clientesaldo=Cliente::where("id",$request->cliente_id)->first();
-                if(!$request->diferencia){
-                    
-                   
-                }else{
-                    if($diferenciasaldocliente>3){
-                        $clientesaldo->update([
-                            'saldo' => $diferenciasaldocliente
-                        ]);
-                    }
-                }
 
                 event(new PagoEvent($pago));
 
@@ -1555,7 +1576,12 @@ class PagoController extends Controller
 
                 $cliente = Cliente::find($request->cliente_id)->first();
 
-                
+
+                if(!$request->diferencia){
+                    $cliente->update([
+                        'saldo' => $request->diferencia
+                    ]);
+                }
 
                 $cliente_deuda=Cliente::where("id",$request->cliente_id)
                         ->get([

@@ -78,6 +78,7 @@
               <table id="tabla_pagos" class="table table-striped">
                 <thead class="bg-primary">
                   <tr>
+                    <th scope="col">ACCIÓN</th>
                     <th scope="col">#</th> 
                     <th scope="col">T.MOV.</th>
                     <th scope="col">TITULAR</th>               
@@ -87,7 +88,9 @@
                     <th scope="col">FECHA</th>
                     <th scope="col">IMAGEN</th>
                     <th scope="col">MONTO</th>
-                    <th scope="col">ACCIÓN</th>
+                    <th scope="col">OPERACION</th>
+                    <th scope="col">NOTA</th>
+                    
                   </tr>
                 </thead>
                 <tfoot>
@@ -98,9 +101,11 @@
                   <th></th>
                   <th></th>
                   <th></th>
-                  <!--<th></th>-->
-                  <th colspan="2" style="text-align: right"><h4 id="total_pago">S/. 0.00</h4></th>
-                  <th><input type="text" name="total_pago_pagar" requerid value="" id="total_pago_pagar" class="form-control"></th>  
+                  <th></th>
+                  <th></th>
+                  <th></th>
+                  <th ></th>
+                  <th><input type="hidden" name="total_pago_pagar" requerid value="" id="total_pago_pagar" class="form-control"></th>  
                 </tfoot>
                 <tbody>
                 </tbody>
@@ -204,7 +209,7 @@
 
         <div class="form-group col-lg-1" style="text-align:center;">
           <div id="considerasaldo" class="d-none">
-            <a class="btn btn-danger" disabled href="#"><i class="fas fa-times-circle"></i> Saldo</a>
+            <button class="btn btn-danger" type = "button" id="btnSaldo"> Saldo</button>
           </div>
         </div>
 
@@ -487,8 +492,6 @@ tfoot td {
           $("#pmonto").val("");
         });
 
-        
-
         $(document).on("submit","#formulario",function(event){
           event.preventDefault();
           console.log("nuevo formulario")
@@ -499,9 +502,15 @@ tfoot td {
           var total_pedido_pagar = document.getElementById('total_pedido_pagar').value.replace(",", "");
           var total_pedido = document.getElementById('total_pedido').value.replace(",", "");
           var total_pago_pagar = document.getElementById('total_pago_pagar').value.replace(",", "");
+
+          console.log("total_pago_pagar "+total_pago_pagar);
+          //return false;
           var total_pago = document.getElementById('total_pago').value.replace(",", "");
           var falta = total_pedido_pagar - total_pago_pagar;
           falta = falta.toFixed(2);
+
+          var faltainput=document.getElementById("diferencia").value.replace(",","");
+          console.log("faltainput "+faltainput)
 
           var items_pedidos = $('#tabla_pedidos').DataTable().data().count();
           var items_pagos = $('#tabla_pagos').DataTable().data().count();
@@ -529,6 +538,11 @@ tfoot td {
           console.log(total_pago_pagar-total_pedido_pagar)
 
           var difdiftotales=total_pago_pagar-total_pedido_pagar;
+          console.log("falta "+falta);
+
+          faltainput=parseFloat(faltainput);
+
+          console.log(" faltainput2 "+faltainput)
           
           //return false;
           //marcar minimo un pedido
@@ -556,7 +570,7 @@ tfoot td {
                 'warning'
               )
               return false;
-          }else if(difdiftotales > 3) {
+          }else if(faltainput > 3) {
               Swal.fire(
                 'Error',
                 'No se puede ingresar un pago mayor a la deuda (diferencia mayor a 3) que tiene el cliente',
@@ -626,6 +640,14 @@ tfoot td {
               "bInfo": false,
               columns: 
               [
+                {
+                  data: 'accion', 
+                  name: 'accion',
+                  sWidth:'10%', 
+                  render: function ( data, type, row, meta ) {
+                    return '<button type="button" class="btn btn-danger btn-sm remove" item="'+row.item+'"><i class="fas fa-trash-alt"></i>'+row.item+'</button>';
+                  }
+                },
                 {
                   data: 'item', 
                   name: 'item',
@@ -713,13 +735,24 @@ tfoot td {
                   }
                 },
                 {
-                  data: 'accion', 
-                  name: 'accion',
+                  data: 'operacion', 
+                  name: 'operacion',
                   sWidth:'10%', 
                   render: function ( data, type, row, meta ) {
-                    return '<button type="button" class="btn btn-danger btn-sm remove"><i class="fas fa-trash-alt"></i>'+row.item+'</button>';
-                  }
+                    return '<input type="hidden" name="operacion['+row.item+']" value="' + data + '"><span class="operacion">' + data + '</span></td>';
+                  },
+                  "visible": false,
                 },
+                {
+                  data: 'nota', 
+                  name: 'nota',
+                  sWidth:'10%', 
+                  render: function ( data, type, row, meta ) {
+                    return '<input type="hidden" name="nota['+row.item+']" value="' + data + '"><span class="nota">' + data + '</span></td>';
+                  },
+                  "visible": false,
+                },
+                
               ],
               "footerCallback": function ( row, data, start, end, display ) {
                 var api = this.api();
@@ -738,8 +771,8 @@ tfoot td {
                 $( api.column( 8 ).footer() ).html('<input type="hidden" name="total_pago" id="total_pago" value="'+pageTotal.toFixed(2)+'"/>'+
                     'S/. '+separateComma(pageTotal.toFixed(2)).toLocaleString("en-US") );
 
-                $( api.column( 9 ).footer() ).html('<input type="hidden" name="total_pago_pagar" id="total_pago_pagar" value="'+pageTotal.toFixed(2)+'" />'+
-                    'S/.'+separateComma(pageTotal.toFixed(2)).toLocaleString("en-US") );
+                //$( api.column( 9 ).footer() ).html('<input type="hidden" name="total_pago_pagar" id="total_pago_pagar" value="'+pageTotal.toFixed(2)+'" />'+
+                    //'S/.'+separateComma(pageTotal.toFixed(2)).toLocaleString("en-US") );
 
                 //console.log("sumar nuevamente para total en pagos");
                 //console.log("habia en diferencia "+$("#diferencia").val() );
@@ -794,7 +827,7 @@ tfoot td {
               //var idfila=$(this).find("td").eq(0).html();//fila idpedido
               //console.log( $(this).find("td").html()) ;
               
-              nuevosuma =  parseFloat( $.trim( $(this).find("td").eq(6).find(".monto").html()) );
+              nuevosuma =  parseFloat( $.trim( $(this).find("td").eq(7).find(".monto").html()) );
 
               //nuevosuma=parseFloat($(this).find("td").eq(8).find(".monto").text());
               console.log("nuevosuma1  "+nuevosuma)
@@ -838,16 +871,20 @@ tfoot td {
           //si elimino pago, recargo datatable pedidos y diferencia vuelvo a calcular con la suma de pagos
           var table = $('#tabla_pagos').DataTable();
           var row = $(this).parents('tr');
+          var item = $(this).attr('item');
           var subtotal=row.find("td").eq("8").find("span.monto").text();
           console.log(subtotal);
+          console.log("item es "+item)
           let diff=$("#diferencia").val();
       
           if ($(row).hasClass('child')) {
+            console.log("eliminar")
             table.row($(row).prev('tr')).remove().draw();
             console.log("sumatotalpagos >2")
             var sumapago=sumatotalpagos();
             console.log("sumapagos v1 "+sumapago)
           } else {
+            console.log("eliminar eliminar")
             table
               .row($(this).parents('tr'))
               .remove()
@@ -1050,6 +1087,7 @@ tfoot td {
                     }
                     
                   });
+                  validar_marca_saldo_devolucion();
             //fin revertir
 
           }else if($(this).prop("checked") == false){
@@ -1150,12 +1188,18 @@ tfoot td {
                   console.log("si monto es menor a pedidos")
                   $(this).prop("checked",true).val("1");
                 }
+
+                validar_marca_saldo_devolucion();
             //fin validar
+
+
 
           }
           return;
            
         });
+
+        
 
         $(document).on("mousedown",".radioadelanto",function(event){
           event.preventDefault();
@@ -1366,6 +1410,14 @@ tfoot td {
               columns: 
               [
                 {
+                  data: 'accion', 
+                  name: 'accion',
+                  sWidth:'10%', 
+                  render: function ( data, type, row, meta ) {
+                    return '<button type="button" class="btn btn-danger btn-sm remove" item="'+row.item+'"><i class="fas fa-trash-alt"></i>'+row.item+'</button>';
+                  }
+                },
+                {
                   data: 'item', 
                   name: 'item',
                   sWidth:'10%', 
@@ -1445,13 +1497,24 @@ tfoot td {
                   }
                 },
                 {
-                  data: 'accion', 
-                  name: 'accion',
+                  data: 'operacion', 
+                  name: 'operacion',
                   sWidth:'10%', 
                   render: function ( data, type, row, meta ) {
-                    return '<button type="button" class="btn btn-danger btn-sm remove"><i class="fas fa-trash-alt"></i>'+row.item+'</button>';
-                  }
+                    return '<input type="hidden" name="operacion['+row.item+']" value="' + data + '"><span class="operacion">' + data + '</span></td>';
+                  },
+                  "visible": true,
                 },
+                {
+                  data: 'nota', 
+                  name: 'nota',
+                  sWidth:'10%', 
+                  render: function ( data, type, row, meta ) {
+                    return '<input type="hidden" name="nota['+row.item+']" value="' + data + '"><span class="nota">' + data + '</span></td>';
+                  },
+                  "visible": true,
+                },
+                
               ],
               "footerCallback": function ( row, data, start, end, display ) {
                 var api = this.api();
@@ -1460,17 +1523,19 @@ tfoot td {
 
                 //para footer  monto
                 var pageTotal = api
-                      .column( 8, { page: 'current'} )
+                      .column( 9, { page: 'current'} )
                       .data()
                       .reduce( function (a, b) {
                           return Number(a) + Number(b);
                       }, 0 );
                 // Update footer
 
+                console.log("pageTotal "+pageTotal)
+
                 
                 $( api.column( 8 ).footer() ).html('<input type="hidden" name="total_pago" id="total_pago" value="'+pageTotal+'"/>'+'S/.'+separateComma(pageTotal) );
 
-                $( api.column( 9 ).footer() ).html('<input type="hidden" name="total_pago_pagar" id="total_pago_pagar" value="'+pageTotal+'" />'+'S/.'+separateComma(pageTotal) ) ;
+                $( api.column( 9 ).footer() ).html('<input type="hidden" name="total_pago_pagar" id="total_pago_pagara" value="'+pageTotal+'" />'+'S/.'+separateComma(pageTotal) ) ;
 
               },
               "initComplete": function(settings, json) {
@@ -2183,6 +2248,42 @@ tfoot td {
 
         $(document).ready(function () {
 
+          window.validar_marca_saldo_devolucion=function(){
+            var total_check_count__=$(".radiototal").length;
+            var total_check_si_ = $('.radiototal').filter(':checked').length;
+
+            if(total_check_count__!=total_check_si_)
+            {
+              if (!$("#considerasaldo").hasClass("d-none")) 
+                {
+                  $("#considerasaldo").addClass("d-none");
+                }
+
+                if (!$("#consideradevolucion").hasClass("d-none")) 
+                {
+                  $("#consideradevolucion").addClass("d-none");
+                }
+              /*Swal.fire(
+                'Error!',
+                'Información faltante del pago',
+                'warning')*/
+            }else{
+//$("#form").trigger("submit")
+              if(total_check_count__>0){
+                if ($("#considerasaldo").hasClass("d-none")) 
+                {
+                  $("#considerasaldo").removeClass("d-none");
+                }
+
+                if ($("#consideradevolucion").hasClass("d-none")) 
+                {
+                  $("#consideradevolucion").removeClass("d-none");
+                }
+                
+              }
+            }
+          }
+
           window.agregarPagoPerdonar = function(){
             var strExPerdonar = $("#pmontoperdonar").val();
             strExPerdonar = strExPerdonar.replace(",","");
@@ -2256,6 +2357,42 @@ tfoot td {
 
           }
 
+          $(document).on("click","#btnSaldo",function(){
+
+            let dddd=$("#diferencia").val();
+            if(dddd>3)
+            {
+              //$("#formulario").submit();
+              //$("#formulario").trigger("submit")
+
+                  var formDataSaldo = $("#formulario").serialize();
+
+                  $.ajax({
+                    data: formDataSaldo,
+                    //processData: false,
+                    //contentType: false,
+                    type: 'POST',
+                    url:"{{ route('pagos.store') }}",
+                    success:function(data){
+                      console.log("grabado");
+                      window.location.href = "{{ route('pagos.mispagos')}}";
+
+                    }})
+
+
+                
+
+
+            }else{
+              Swal.fire(
+                'Error!',
+                'No puede generar saldo cuando la diferencia es menor a 3',
+                'warning')
+            }
+            
+          });
+           //$("#btnSaldo")
+
           window.agregarPago = function(){  
             //alert('lol');
             $("#accion_perdonar").val("");
@@ -2270,6 +2407,8 @@ tfoot td {
             bancop =$("#pbancoprocedencia option:selected").val();
             otherbanco  =$("#otro_bancoprocedencia").val();
             fecha = $("#pfecha").val();
+            operacion = $("#poperacion").val();
+            nota = $("#pnota").val();
 
             if (monto != ""  && banco != "" && fecha != ""/*  && imagen != "" */) {
               subtotal_pago[contPa] = monto*1;
@@ -2314,6 +2453,7 @@ tfoot td {
                         }else{
                           document.getElementById("picture").setAttribute('src', "{{asset('imagenes/logo_facturas.png')}}");
                           tabla_pagos.row.add( {
+                              "accion":      (contPa + 1),
                               "item":       (contPa + 1),
                               "movimiento":   tipomovimiento,
                               "titular":     titular,
@@ -2323,7 +2463,8 @@ tfoot td {
                               "fecha":     fecha,
                               "imagen":       data.html,
                               "monto":      monto,
-                              "accion":      (contPa + 1)
+                              "operacion":      operacion,
+                              "nota":      nota,
                           } ).draw();
 
                           const fileInput = $("#pimagen");
