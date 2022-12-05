@@ -115,7 +115,7 @@
         </div>
         <div class="modal-footer">
           <button type="submit" class="btn btn-success" id="atender">Confirmar</button>
-          <a href="{{ route('operaciones.atendidos') }}" class="btn btn-danger">Cancelar</a>
+          <a href="{{ route('operaciones.atendidos') }}" class="btn btn-danger">ATRAS</a>
         </div>        
       </div>
     </div>

@@ -171,9 +171,9 @@
     </div>
     <div class="card-footer">
       @if (Auth::user()->rol == "Asesor")
-        <a href="{{ url()->previous() }}" class="btn btn-danger"><i class="fas fas fa-arrow-left"></i>Volver</a>
+        <a href="{{ url()->previous() }}" class="btn btn-danger"><i class="fas fas fa-arrow-left"></i>ATRAS</a>
       @else
-        <a href="{{ url()->previous() }}" class="btn btn-danger"><i class="fas fas fa-arrow-left"></i>Volver</a>
+        <a href="{{ url()->previous() }}" class="btn btn-danger"><i class="fas fas fa-arrow-left"></i>ATRAS</a>
       @endif
     </div>
   </div>  

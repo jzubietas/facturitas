@@ -166,7 +166,7 @@
       </div>
       <div class="card-footer" id=guardar>
         <button type="submit" class="btn btn-success btn-sm"><i class="fas fa-save"></i> Guardar</button>
-        <a href="{{ route('pedidos.index') }}" class="btn btn-danger btn-sm"><i class="fas fa-times-circle"></i> Cancelar</a>
+        <a href="{{ route('pedidos.index') }}" class="btn btn-danger btn-sm"><i class="fas fa-times-circle"></i> ATRAS</a>
       </div>
     {{-- </div> --}}
     {!! Form::close() !!}

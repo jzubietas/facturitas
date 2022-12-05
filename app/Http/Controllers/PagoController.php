@@ -2355,7 +2355,7 @@ class PagoController extends Controller
             ->where('pagos.estado', '1')
             ->where('dpe.estado', '1')
             ->where('dpa.estado', '1')
-            ->where('u.id', Auth::user()->id)
+            ->where('u.identificador', Auth::user()->identificador)
             ->groupBy('pagos.id', 
                     'dpe.codigo', 
                     'u.name',

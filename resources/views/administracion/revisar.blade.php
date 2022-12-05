@@ -265,7 +265,7 @@
     </div>
     <div class="card-footer" >
       <button type="submit" class="btn btn-success btn-lg d-none"><i class="fas fa-save"></i> GUARDAR</button>
-      <a href="{{ route('administracion.porrevisar') }}" class="btn btn-danger btn-lg d-none"><i class="fas fa-times-circle"></i> CANCELAR</a>
+      <a href="{{ route('administracion.porrevisar') }}" class="btn btn-danger btn-lg d-none"><i class="fas fa-times-circle"></i> ATRAS</a>
     </div>
     {!! Form::close() !!}
   </div>

@@ -257,6 +257,13 @@
         /*rowCallback: function (row, data, index) {           
         },*/
         //"columnDefs": [{"targets":3,"type":"date-eu"}],
+        initComplete:function(settings,json){          
+          if (localStorage. getItem("search_tabla") === null) {
+            //no existe
+          }else{
+            $('#tablaPrincipal_filter label input').val(localStorage.getItem("search_tabla") ).change();            
+          }          
+        },
         columns: [
           {
               data:'fecha_timestamp',
@@ -345,6 +352,15 @@
         }
       },
 
+    });
+
+    $('#tablaPrincipal_filter label input').on('paste', function(e) {
+      var pasteData = e.originalEvent.clipboardData.getData('text')
+      localStorage.setItem("search_tabla",pasteData);
+    });
+    $(document).on("keypress",'#tablaPrincipal_filter label input',function(){      
+      localStorage.setItem("search_tabla",$(this).val());
+      console.log( "search_tabla es "+localStorage.getItem("search_tabla") );
     });
         
 
