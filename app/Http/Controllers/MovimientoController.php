@@ -107,7 +107,8 @@ class MovimientoController extends Controller
             DB::raw("(CASE WHEN movimiento_bancarios.pago =0 THEN 'SIN CONCILIAR' ELSE 'CONCILIADO' END) AS pago"),
             'movimiento_bancarios.estado',
             'movimiento_bancarios.created_at',
-        );
+        )
+        ->orderBy('updated_at','desc');//actualizacion de orden para movimientos
         $movimientos=$movimientos->get();
 
         /*->where(function ($query) {
