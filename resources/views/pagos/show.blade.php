@@ -7,6 +7,7 @@
 @stop
 
 @section('content')
+@include('pagos.modals.revisarhistorial')
 
   <div class="card">
     <div class="card-body">
@@ -48,6 +49,7 @@
                   <th scope="col">ESTADO</th>
                   <th scope="col">MONTO TOTAL</th>
                   <th scope="col">ABONADO</th>
+                  <th scope="col">HISTORIAL</th>
                 </tr>
               </thead>
               <tbody>
@@ -83,7 +85,7 @@
                       
                     <td>{{ $pagoPedido->condicion }}</td>
                     <td>{{ $pagoPedido->total }}</td>
-                    <td>{{ $pagoPedido->abono }}</td>
+                    <td style='font-weight: bolder;'>{{ $pagoPedido->abono }}</td>
                   </tr>
                   @php
                     $sumPe = $sumPe + $pagoPedido->abono;
@@ -94,7 +96,8 @@
               <tfoot>
                 <tr>
                   <td>TOTAL ABONADO</td>
-                  <td></td>
+                  <td><a href="" data-target="#modal-historial-pagos-pedido" data-toggle="modal" data-pedido="{{ $pagoPedido->codigo }}" data-pago="{{$pago->id}}"><button class="btn btn-danger btn-sm">Historial</button></a>   
+                  </td>
                   <td></td>
                   <td></td>
                   <td></td>
@@ -147,6 +150,7 @@
                       <td><a href="" data-target="#modal-imagen-{{ $detallePago->id }}" data-toggle="modal">
                           <img src="{{ asset('storage/pagos/' . $detallePago->imagen) }}" alt="{{ $detallePago->imagen }}" height="200px" width="200px" class="img-thumbnail"></a>
                         <p><br><a href="{{ route('pagos.descargarimagen', $detallePago->imagen) }}"><button type="button" class="btn btn-secondary"> Descargar</button></a></p>
+                        <a href="" data-target="#modal-conciliar-get" data-toggle="modal" data-conciliar="{{ $detallePago->id }}" data-item="{{ $contPa + 1 }}"><button class="btn btn-danger btn-md">Conciliar</button></a>
                       </td>
                     </tr>
                     @php

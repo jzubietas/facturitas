@@ -167,12 +167,12 @@
               var pedidodiferencia=data.diferencia;
               //pedidodiferencia=0;
               if(pedidodiferencia==null){
-                $('td:eq(12)', row).css('background', '#ca3a3a').css('color','#ffffff').css('text-align','center').css('font-weight','bold');
+                $('td:eq(10)', row).css('background', '#ca3a3a').css('color','#ffffff').css('text-align','center').css('font-weight','bold');
               }else{
                 if(pedidodiferencia>3){
-                  $('td:eq(12)', row).css('background', '#ca3a3a').css('color','#ffffff').css('text-align','center').css('font-weight','bold');
+                  $('td:eq(10)', row).css('background', '#ca3a3a').css('color','#ffffff').css('text-align','center').css('font-weight','bold');
                 }else{
-                  $('td:eq(12)', row).css('background', '#44c24b').css('text-align','center').css('font-weight','bold');
+                  $('td:eq(10)', row).css('background', '#44c24b').css('text-align','center').css('font-weight','bold');
                 }
               }    
               
