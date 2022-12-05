@@ -104,7 +104,7 @@
 
         
         <br>
-        <a href="{{ route('movimientos.index') }}" class="btn btn-danger btn-sm">ATRAS</a>
+        <a href="{{ url()->previous() }}" class="btn btn-danger btn-sm">ATRAS</a>
       </div>
     </div>
   

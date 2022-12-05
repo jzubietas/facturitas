@@ -13,7 +13,7 @@
     @include('clientes.partials.form')
     <div class="card-footer" id="guardar">
       <button id="crear" type="submit" class="btn btn-success"><i class="fas fa-save"></i> Guardar</button>
-      <a href="{{ route('clientes.index') }}" class="btn btn-danger"><i class="fas fa-times-circle"></i> ATRAS</a>
+      <a href="{{ url()->previous() }}" class="btn btn-danger"><i class="fas fa-times-circle"></i> ATRAS</a>
     </div>
     {!! Form::close() !!}
   </div>

@@ -21,9 +21,9 @@
 
 
         @if (Auth::user()->rol == "Asesor" || Auth::user()->rol == "Super asesor")
-          <a class="btn btn-danger" href="{{ route('pedidos.mispedidos') }}"><i class="fas fa-times-circle"></i> ATRAS</a>
+          <a class="btn btn-danger" href="{{ url()->previous() }}"><i class="fas fa-times-circle"></i> ATRAS</a>
         @else
-          <a href="{{ route('pedidos.index') }}" class="btn btn-danger"><i class="fas fa-times-circle"></i> ATRAS</a>
+          <a href="{{ url()->previous() }}" class="btn btn-danger"><i class="fas fa-times-circle"></i> ATRAS</a>
         @endif  
         
         

@@ -49,6 +49,7 @@
                   <th scope="col">ESTADO</th>
                   <th scope="col">MONTO TOTAL</th>
                   <th scope="col">ABONADO</th>
+                  <th scope="col"><span style="color:red;">DIFERENCIA</span></th>
                   <th scope="col">HISTORIAL</th>
                 </tr>
               </thead>
@@ -56,6 +57,7 @@
                 @php
                   $contPe = 0;
                   $sumPe = 0;
+                  $sumPe2 = 0;
                 @endphp
                 @foreach ($pagoPedidos as $pagoPedido)
                   <tr>
@@ -86,6 +88,11 @@
                     <td>{{ $pagoPedido->condicion }}</td>
                     <td>{{ $pagoPedido->total }}</td>
                     <td style='font-weight: bolder;'>{{ $pagoPedido->abono }}</td>
+                      @if ($pagoPedido->total - $pagoPedido->abono < 3)
+                        <td><span style="color:black;">{{ number_format($pagoPedido->total - $pagoPedido->abono, 2, '.', ' ') }}</span></td>
+                      @else
+                        <td><span style="color:red;">{{ number_format($pagoPedido->total - $pagoPedido->abono, 2, '.', ' ') }}</span></td>
+                      @endif
                     <td><a href="" data-target="#modal-historial-pagos-pedido" data-toggle="modal" data-pedido="{{ $pagoPedido->codigo }}" data-pago="{{$pago->id}}"><button class="btn btn-danger btn-sm">Historial</button></a>   
                     </td>
                   </tr>
@@ -104,6 +111,7 @@
                   <td></td>
                   <td></td>
                   <td><?php echo number_format($sumPe, 2, '.', ' ')?></td>
+                  <td><span style="color:red;"><?php echo number_format($sumPe2, 2, '.', ' ')?></span></td>
                 </tr>
               </tfoot>
             </table>

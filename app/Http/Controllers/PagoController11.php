@@ -2355,7 +2355,7 @@ class PagoController extends Controller
             ->where('pagos.estado', '1')
             ->where('dpe.estado', '1')
             ->where('dpa.estado', '1')
-            ->where('u.id', Auth::user()->id)
+            ->where('u.identificador', Auth::user()->identificador)
             ->groupBy('pagos.id', 
                     'dpe.codigo', 
                     'u.name',
@@ -3247,7 +3247,7 @@ class PagoController extends Controller
         /**  idpago  3028  userid 3  clienteid  1232 */
         //return $request->all();
         //return $pago;
-        $fecha_aprobacion = Carbon::now()->format('Y-m-d');
+        $fecha_aprobacion = Carbon::now()->format('Y-m-d H:i:s');
         //return $request->all();
         try {
             DB::beginTransaction();           
@@ -3332,7 +3332,8 @@ class PagoController extends Controller
                 $movimiento->update([            
                     'pago' => 1,
                     'detpago' => $detalle_list[$cont],
-                    'cabpago' => $pago->id
+                    'cabpago' => $pago->id,
+                    'updated_at' => $fecha_aprobacion//actualizacion para pagos movimientos
                 ]);
                 $cont++;
 
