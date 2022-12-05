@@ -95,6 +95,9 @@
                           @else
                           <td>PAGADO OBSERVADO</td>
                           @endif
+                      @elseif($pagos->condicion=='PENDIENTE')
+                          
+                          <td>PENDIENTE</td>
                       @elseif($pagos->condicion=='PAGO')
                           @if($pagoPedido->pagado == 1)
                           <td>ADELANTO PAGO</td>
