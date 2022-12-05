@@ -95,9 +95,9 @@
                           @endif
                     @elseif($pagos->condicion=='PENDIENTE')
                           @if($pagoPedido->pagado == 1)
-                          <td>ADELANTO PENDUIENTE</td>
+                          <td>ADELANTO PENDIENTE</td>
                           @else
-                          <td>PAGADO PENDUIENTE</td>
+                          <td>PAGADO PENDIENTE</td>
                           @endif
                       @elseif($pagos->condicion=='PAGO')
                           @if($pagoPedido->pagado == 1)
@@ -202,16 +202,16 @@
                         </a>
                           
                         </p>
-                        <a href="" data-target="#modal-cambiar-imagen" data-toggle="modal" data-imagen="{{ $detallePago->imagen }}" data-conciliar="{{ $detallePago->id }}" data-item="{{ $contPa + 1 }}"><button class="btn btn-danger btn-md">Cambiar</button></a>
+                        <a href="" data-target="#modal-cambiar-imagen" data-toggle="modal" data-imagen="{{ $detallePago->imagen }}" data-conciliar="{{ $detallePago->id }}" data-item="{{ $contPa + 1 }}"><button class="btn btn-danger btn-md accion-cambiar-imagen">Cambiar</button></a>
                         <input type="hidden" value="" name="conciliar[]" class="conciliar_count" id="conciliar_{{ $contPa + 1 }}" > 
                       </td>
                       <td>
                         
                         <p>
                           <br>
-                          <a href="{{ route('pagos.descargarimagen', $detallePago->imagen) }}" class="text-center"><button type="button" class="btn btn-secondary btn-md"> Descargar</button></a>
+                          <a href="{{ route('pagos.descargarimagen', $detallePago->imagen) }}" class="text-center"><button type="button" class="btn btn-secondary btn-md accion-descargar"> Descargar</button></a>
 
-                          <a href="" data-target="#modal-conciliar-get" data-toggle="modal" data-conciliar="{{ $detallePago->id }}" data-item="{{ $contPa + 1 }}"><button class="btn btn-danger btn-md">Conciliar</button></a>
+                          <a href="" data-target="#modal-conciliar-get" data-toggle="modal" data-conciliar="{{ $detallePago->id }}" data-item="{{ $contPa + 1 }}"><button class="btn btn-danger btn-md accion_conciliar">Conciliar</button></a>
                         </p>
                       </td>
                       
@@ -414,13 +414,31 @@
 
       $('#modal-cambiar-imagen').on('show.bs.modal', function (event) {
         var button = $(event.relatedTarget) 
+        console.log(button)
         var imagen = button.data('imagen');
         var conciliar = button.data('conciliar');
+        console.log("conciliar "+conciliar)
         var itemcount = button.data('item');
 
-        console.log("imagen "+imagen);
-        console.log("conciliar "+conciliar);
-        console.log("itemcount "+itemcount);
+        var rowcambiarimagen=$(button).parents('tr');
+        var titularcambiarimagen=rowcambiarimagen.find('td').eq(4).html();
+        var bancocambiarimagen=rowcambiarimagen.find('td').eq(2).html();
+        var fechacambiarimagen=rowcambiarimagen.find('td').eq(5).html();
+        var montocambiarimagen=rowcambiarimagen.find('td').eq(3).html();
+
+        $("#modal-cambiar-imagen .modalimagen_titular").val(titularcambiarimagen);
+        $("#modal-cambiar-imagen .modalimagen_banco").val(bancocambiarimagen);
+        $("#modal-cambiar-imagen .modalimagen_fecha ").val(fechacambiarimagen);
+        $("#modal-cambiar-imagen .modalimagen_monto ").val(montocambiarimagen);
+
+
+        //console.log(titularcambiarimagen);
+        //console.log(" ---"+rowcambiarimagen)
+        //var rowimagen=$(this).closest('tr').find("td").eq(3).find(":input").val(pedidosaldo.toFixed(2));
+
+        //console.log("imagen "+imagen);
+        //console.log("conciliar "+conciliar);
+        //console.log("itemcount "+itemcount);
 
         $("#DPConciliar").val(conciliar);
         $("#DPitem").val(itemcount);
@@ -498,7 +516,21 @@
        
         var button = $(event.relatedTarget) 
         var idunico = button.data('conciliar')
+        console.log("idunico "+idunico)
         var iditem = button.data('item');
+        console.log("item "+iditem)
+
+        var rowcambiarimagen=$(button).parents('tr');
+        var titularcambiarimagen=rowcambiarimagen.find('td').eq(4).html();
+        var bancocambiarimagen=rowcambiarimagen.find('td').eq(2).html();
+        var fechacambiarimagen=rowcambiarimagen.find('td').eq(5).html();
+        var montocambiarimagen=rowcambiarimagen.find('td').eq(3).html();
+
+        $("#modal-conciliar-get .modalimagen_titular").val(titularcambiarimagen);
+        $("#modal-conciliar-get .modalimagen_banco").val(bancocambiarimagen);
+        $("#modal-conciliar-get .modalimagen_fecha ").val(fechacambiarimagen);
+        $("#modal-conciliar-get .modalimagen_monto ").val(montocambiarimagen);
+
         //incluir todos los conciliar
         var excluir=[];
         $('input[name="conciliar[]').each(function(){
@@ -507,13 +539,13 @@
             //xcluir=excluir+''+this.value+',';
        });     
        //excluir=excluir.substring(0, excluir.length - 1);
-       console.log(excluir);
+       //console.log(excluir);
 
        var pasarExclusiones=excluir.join(',');
        console.log(pasarExclusiones)
         //var 
         //var inputt=("#conciliar_"+iditem).val();
-        console.log(idunico);
+        //console.log(idunico);
 
         //var obtener_detpag='191';
         tableconciliar.destroy();

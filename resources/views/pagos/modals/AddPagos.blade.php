@@ -55,12 +55,14 @@
               {{-- <input name="pfecha" type="date" class="form-control">      \Carbon\Carbon::now()  --}}
             </div>
 
-            <div class="form-group col-lg-6">
-              {!! Form::label('poperacion', 'Operacion') !!}
+            <div class="form-group col-lg-4 operacion_contenedor">
+              {!! Form::label('poperacion', 'Núm. operación') !!}
                 <input type="text" name="poperacion" id="poperacion" class="form-control" placeholder="Operacion...">
             </div>
+          </div>
+          <div class="form-row">
 
-            <div class="form-group col-lg-12">
+            <div class="form-group col-lg-12 ">
               {!! Form::label('pnota', 'Nota') !!}
                 <input type="text" name="pnota" id="pnota" class="form-control" placeholder="Nota...">
             </div>

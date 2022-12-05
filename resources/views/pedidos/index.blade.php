@@ -169,6 +169,8 @@
 <script>
   $(document).ready(function () {
 
+
+
     //moment.updateLocale(moment.locale(), { invalidDate: "Invalid Date Example" });
     //$.fn.dataTable.moment('DD-MMM-Y HH:mm:ss');
     //$.fn.dataTable.moment('DD/MM/YYYY');
@@ -178,6 +180,14 @@
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
     });
+
+    if (localStorage.getItem("search_tabla") === null) {
+      //...
+
+    }else{
+      //si existe la variable  localstorage
+
+    }
 
     $('#modal-delete').on('show.bs.modal', function (event) {
       //cuando abre el form de anular pedido
@@ -225,7 +235,7 @@
 
     });
 
-    $('#tablaPrincipal').DataTable({
+    var tablaPrincipal=$('#tablaPrincipal').DataTable({
         processing: true,
         serverSide: true,
         searching: true,
@@ -250,6 +260,13 @@
                   $('td:eq(12)', row).css('background', '#44c24b').css('text-align','center').css('font-weight','bold');
                 }
               }
+        },
+        initComplete:function(settings,json){          
+          if (localStorage. getItem("search_tabla") === null) {
+            //no existe
+          }else{
+            $('#tablaPrincipal_filter label input').val(localStorage.getItem("search_tabla") ).change();            
+          }          
         },
         columns: [
         {
@@ -478,6 +495,41 @@
         }
       },
     });
+
+    $(document).on("keypress",'#tablaPrincipal_filter label input',function(){
+      console.log("aaaaa")
+      
+      localStorage.setItem("search_tabla",$(this).val());
+      console.log( "search_tabla es "+localStorage.getItem("search_tabla") );
+
+    });
+
+    $('#tablaPrincipal_filter label input').on('paste', function(e) {
+      var pasteData = e.originalEvent.clipboardData.getData('text')
+      localStorage.setItem("search_tabla",pasteData);
+    });
+
+    console.log(localStorage.getItem("search_tabla"))
+    
+
+    
+
+    //$('#myInput').val( ... ).change();
+
+
+
+    /*$.fn.dataTable.ext.search.push(function (settings, data, dataIndex) {
+      console.log("data" +data);
+    });*/
+
+   /* $(document).on("change","search.dt",function(){
+      console.log("aaaaa")
+    });
+*/
+
+    /*$("").on( 'search.dt', function () {
+    $('#filterInfo').html( 'Currently applied global search: '+table.search() );
+} );*/
 
     $(document).on("submit", "#formdelete", function (evento) {
       evento.preventDefault();

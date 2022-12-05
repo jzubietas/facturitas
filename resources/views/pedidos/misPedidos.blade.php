@@ -167,15 +167,22 @@
               var pedidodiferencia=data.diferencia;
               //pedidodiferencia=0;
               if(pedidodiferencia==null){
-                $('td:eq(12)', row).css('background', '#ca3a3a').css('color','#ffffff').css('text-align','center').css('font-weight','bold');
+                $('td:eq(10)', row).css('background', '#ca3a3a').css('color','#ffffff').css('text-align','center').css('font-weight','bold');
               }else{
                 if(pedidodiferencia>3){
-                  $('td:eq(12)', row).css('background', '#ca3a3a').css('color','#ffffff').css('text-align','center').css('font-weight','bold');
+                  $('td:eq(10)', row).css('background', '#ca3a3a').css('color','#ffffff').css('text-align','center').css('font-weight','bold');
                 }else{
-                  $('td:eq(12)', row).css('background', '#44c24b').css('text-align','center').css('font-weight','bold');
+                  $('td:eq(10)', row).css('background', '#44c24b').css('text-align','center').css('font-weight','bold');
                 }
               }    
               
+        },
+        initComplete:function(settings,json){          
+          if (localStorage. getItem("search_tabla") === null) {
+            //no existe
+          }else{
+            $('#tablaPrincipal_filter label input').val(localStorage.getItem("search_tabla") ).change();            
+          }          
         },
         columns: [
         {//15 columnas
@@ -318,7 +325,18 @@
         }
       },
     });
+    $('#tablaPrincipal_filter label input').on('paste', function(e) {
+      var pasteData = e.originalEvent.clipboardData.getData('text')
+      localStorage.setItem("search_tabla",pasteData);
+    });
+    $(document).on("keypress",'#tablaPrincipal_filter label input',function(){      
+      localStorage.setItem("search_tabla",$(this).val());
+      console.log( "search_tabla es "+localStorage.getItem("search_tabla") );
+    });
   });
+  
+
+
   </script>
 
 

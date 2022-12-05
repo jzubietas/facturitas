@@ -178,6 +178,13 @@ $(document).ready(function () {
         autowidth:true,
         serverSide: true,
         ajax: "{{ route('clientestabla') }}",
+        initComplete:function(settings,json){          
+          if (localStorage. getItem("search_tabla") === null) {
+            //no existe
+          }else{
+            $('#tablaPrincipal_filter label input').val(localStorage.getItem("search_tabla") ).change();            
+          }          
+        },
         columns: [
         {
             data: 'id', 
@@ -305,6 +312,19 @@ $(document).ready(function () {
         }
       },
 
+    });
+
+    $(document).on("keypress",'#tablaPrincipal_filter label input',function(){
+      console.log("aaaaa")
+      
+      localStorage.setItem("search_tabla",$(this).val());
+      console.log( "search_tabla es "+localStorage.getItem("search_tabla") );
+
+    });
+
+    $('#tablaPrincipal_filter label input').on('paste', function(e) {
+      var pasteData = e.originalEvent.clipboardData.getData('text')
+      localStorage.setItem("search_tabla",pasteData);
     });
 });
 </script>

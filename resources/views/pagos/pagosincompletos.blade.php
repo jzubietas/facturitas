@@ -125,6 +125,7 @@
         transition: all 0.5s ease;
         text-shadow: 10px 2px #6ac7c2;
     }
+    
 
   </style>
 @stop

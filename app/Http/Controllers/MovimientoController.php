@@ -208,7 +208,8 @@ class MovimientoController extends Controller
         $fecha_compra=$comparar->fecha;
         //$min=$request->de;
 
-        if($request->fechadeposito){
+        //return 'a';
+        if(!$request->fechadeposito){
             $query=$query;
         }
         else{

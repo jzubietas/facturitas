@@ -219,8 +219,13 @@
                           <br>
                           <a href="{{ route('pagos.descargarimagen', $detallePago->imagen) }}" class="text-center"><button type="button" class="btn btn-secondary btn-md"> Descargar</button></a>
 
-                          <a href="" data-target="#modal-conciliar-get" class="modal-conciliar-get" data-fechadeposito="{{ $detallePago->fecha_deposito }}" data-toggle="modal" data-conciliar="{{ $detallePago->id }}" data-item="{{ $contPa + 1 }}"><button class="btn btn-danger btn-md">Conciliar</button></a>
-                          <a href="" data-target="#modal-editar-get" data-toggle="modal" data-pbanco="{{ $detallePago->banco }}" data-titulares="{{ $detallePago->titular }}" data-fecha="{{ $detallePago->fecha_deposito_change }}" data-conciliar="{{ $detallePago->id }}" data-item="{{ $contPa + 1 }}"><button class="btn btn-warning btn-md">Editar</button></a>
+                          @if(!$pagos->condicion=='ABONADO')   
+                            <a href="" data-target="#modal-conciliar-get" class="modal-conciliar-get" data-fechadeposito="{{ $detallePago->fecha_deposito }}" data-toggle="modal" data-conciliar="{{ $detallePago->id }}" data-item="{{ $contPa + 1 }}"><button class="btn btn-danger btn-md">Conciliar</button></a>
+                          @endif
+                          @if(!$pagos->condicion=='ABONADO')   
+                            <a href="" data-target="#modal-editar-get" data-toggle="modal" data-pbanco="{{ $detallePago->banco }}" data-titulares="{{ $detallePago->titular }}" data-fecha="{{ $detallePago->fecha_deposito_change }}" data-conciliar="{{ $detallePago->id }}" data-item="{{ $contPa + 1 }}"><button class="btn btn-warning btn-md">Editar</button></a>
+                          @endif
+                          
                         </p>
                       </td>
                       
@@ -274,9 +279,12 @@
           <a href="{{ url()->previous() }}" class="btn btn-danger btn-lg"><i class="fas fa-arrow-left"></i> ATRAS</a>
         </div>
         <div class="col-10">
-          <button type="button" id="aprobarrbtn" class="btn btn-success btn-lg"><i class="fas fa-save"></i> APROBAR</button>
-          <button type="button" id="observarbtn" class="btn btn-danger btn-lg"><i class="fas fa-save"></i> OBSERVADO</button>
-          <button type="button" id="pendientebtn" class="btn btn-warning btn-lg"><i class="fas fa-save"></i> PENDIENTE</button>
+
+          @if(!$pagos->condicion=='ABONADO')                         
+            <button type="button" id="aprobarrbtn" class="btn btn-success btn-lg"><i class="fas fa-save"></i> APROBAR</button>
+            <button type="button" id="observarbtn" class="btn btn-danger btn-lg"><i class="fas fa-save"></i> OBSERVADO</button>
+            <button type="button" id="pendientebtn" class="btn btn-warning btn-lg"><i class="fas fa-save"></i> PENDIENTE</button>
+          @endif
         </div>
       </div>
       
