@@ -121,9 +121,9 @@
         </div>
         <div class="form-group col-lg-1">
           @if (Auth::user()->rol == "Asesor")
-            <a class="btn btn-danger" href="{{ route('pagos.mispagos') }}"><i class="fas fa-times-circle"></i> ATRAS</a>
+            <a class="btn btn-danger" href="{{ url()->previous() }}"><i class="fas fa-times-circle"></i> ATRAS</a>
           @else
-            <a class="btn btn-danger" href="{{ route('pagos.index') }}"><i class="fas fa-times-circle"></i> ATRAS</a>
+            <a class="btn btn-danger" href="{{ url()->previous() }}"><i class="fas fa-times-circle"></i> ATRAS</a>
           @endif
         </div>
         <div class="form-group col-lg-3"></div>

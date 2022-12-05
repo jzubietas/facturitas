@@ -180,9 +180,9 @@
 
         <div class="form-group col-lg-1">
           @if (Auth::user()->rol == "Asesor")
-            <a class="btn btn-danger" href="{{ route('pagos.mispagos') }}"><i class="fas fa-times-circle"></i> ATRAS</a>
+            <a class="btn btn-danger" href="{{ url()->previous() }}"><i class="fas fa-times-circle"></i> ATRAS</a>
           @else
-            <a class="btn btn-danger" href="{{ route('pagos.index') }}"><i class="fas fa-times-circle"></i> ATRAS</a>
+            <a class="btn btn-danger" href="{{ url()->previous() }}"><i class="fas fa-times-circle"></i> ATRAS</a>
           @endif
         </div>
 
@@ -468,15 +468,6 @@ tfoot td {
           }else{
             $(".banco_procedencia").hide();
             $(".banco_procedencia_otro").hide();
-
-            if($(this).val()=='PLIN' || $(this).val()=='YAPE')
-            {
-              console.log("PLIN o YAPE");
-              $(".operacion_contenedor").hide();
-            }else{
-              console.log("no es PLIN o YAPE");
-              $(".operacion_contenedor").show();
-            }
           }
         });
 
@@ -1916,41 +1907,6 @@ tfoot td {
               'warning'
             )
           }else {
-
-            if( $('#tipotransferencia').val()=='PLIN' || $('#tipotransferencia').val()=='YAPE')
-            {
-              if( $("#pnota").val()=='' )
-              {
-                Swal.fire(
-                  'Error',
-                  'Ingrese la nota.',
-                  'warning'
-                )
-                return false;
-              }
-            }else{
-              if( $("#poperacion").val()=='' )
-              {
-                Swal.fire(
-                  'Error',
-                  'Ingrese la operacion.',
-                  'warning'
-                )
-                return false;
-              }
-            }
-
-
-            /*if($("#poperacion").val=='')
-            {
-              Swal.fire(
-                  'Error',
-                  'Ingrese el número de operacion.',
-                  'warning'
-                )
-              return false;
-            }else if{}*/
-
             console.log("empieza logica 2");
             if ($('#tipotransferencia').val() == 'INTERBANCARIO')
             {

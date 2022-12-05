@@ -110,7 +110,7 @@
 
     <div class="card-footer">
       {{--<button type="submit" class="btn btn-success"><i class="fas fa-save"></i> Guardar</button>--}}
-      <a href="{{ route('clientes.index') }}" class="btn btn-danger"><i class="fas fa-times-circle"></i> Atras</a>
+      <a href="{{ url()->previous() }}" class="btn btn-danger"><i class="fas fa-times-circle"></i> Atras</a>
     </div>
     
   </div>
