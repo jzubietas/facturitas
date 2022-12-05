@@ -131,7 +131,7 @@
           <button id="registrar_pagos" type="submit" class="btn btn-success"><i class="fas fa-save"></i> Guardar</button>
         </div>
         <div class="form-group col-lg-1">
-            <a class="btn btn-danger" href="{{ route('envios.index') }}"><i class="fas fa-times-circle"></i> Cancelar</a>
+            <a class="btn btn-danger" href="{{ route('envios.index') }}"><i class="fas fa-times-circle"></i> ATRAS</a>
         </div>
         <div class="form-group col-lg-3"></div>
       </div>

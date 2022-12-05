@@ -894,19 +894,6 @@ ul.form-stepper li a .form-stepper-circle {
       },
     });
 
-    $(document).on("keypress",'#tablaPrincipal_filter label input',function(){
-      console.log("aaaaa")
-      
-      localStorage.setItem("search_tabla",$(this).val());
-      console.log( "search_tabla es "+localStorage.getItem("search_tabla") );
-
-    });
-
-    $('#tablaPrincipal_filter label input').on('paste', function(e) {
-      var pasteData = e.originalEvent.clipboardData.getData('text')
-      localStorage.setItem("search_tabla",pasteData);
-    });
-
     
 
   });

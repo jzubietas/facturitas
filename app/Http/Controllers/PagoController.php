@@ -1665,7 +1665,7 @@ class PagoController extends Controller
             ->where('pago_id', $pago->id)
             ->get();
         //DB::raw('sum(detalle_pagos.monto) as total')
-        return view('pagos.show', compact('pagos', 'pagoPedidos', 'detallePagos'));
+        return view('pagos.show', compact('pagos', 'pagoPedidos', 'detallePagos','pago'));
     }
 
     /**
@@ -2355,7 +2355,7 @@ class PagoController extends Controller
             ->where('pagos.estado', '1')
             ->where('dpe.estado', '1')
             ->where('dpa.estado', '1')
-            ->where('u.id', Auth::user()->id)
+            ->where('u.identificador', Auth::user()->identificador)
             ->groupBy('pagos.id', 
                     'dpe.codigo', 
                     'u.name',

@@ -7,6 +7,7 @@
 @stop
 
 @section('content')
+@include('pagos.modals.revisarhistorial')
 
   <div class="card">
     <div class="card-body">
@@ -48,6 +49,7 @@
                   <th scope="col">ESTADO</th>
                   <th scope="col">MONTO TOTAL</th>
                   <th scope="col">ABONADO</th>
+                  <th scope="col">HISTORIAL</th>
                 </tr>
               </thead>
               <tbody>
@@ -83,7 +85,9 @@
                       
                     <td>{{ $pagoPedido->condicion }}</td>
                     <td>{{ $pagoPedido->total }}</td>
-                    <td>{{ $pagoPedido->abono }}</td>
+                    <td style='font-weight: bolder;'>{{ $pagoPedido->abono }}</td>
+                    <td><a href="" data-target="#modal-historial-pagos-pedido" data-toggle="modal" data-pedido="{{ $pagoPedido->codigo }}" data-pago="{{$pago->id}}"><button class="btn btn-danger btn-sm">Historial</button></a>   
+                    </td>
                   </tr>
                   @php
                     $sumPe = $sumPe + $pagoPedido->abono;
@@ -147,7 +151,7 @@
                       <td><a href="" data-target="#modal-imagen-{{ $detallePago->id }}" data-toggle="modal">
                           <img src="{{ asset('storage/pagos/' . $detallePago->imagen) }}" alt="{{ $detallePago->imagen }}" height="200px" width="200px" class="img-thumbnail"></a>
                         <p><br><a href="{{ route('pagos.descargarimagen', $detallePago->imagen) }}"><button type="button" class="btn btn-secondary"> Descargar</button></a></p>
-                      </td>
+                       </td>
                     </tr>
                     @php
                       $sumPa = $sumPa + $detallePago->monto;
@@ -171,9 +175,9 @@
     </div>
     <div class="card-footer">
       @if (Auth::user()->rol == "Asesor")
-        <a href="{{ url()->previous() }}" class="btn btn-danger"><i class="fas fas fa-arrow-left"></i>Volver</a>
+        <a href="{{ url()->previous() }}" class="btn btn-danger"><i class="fas fas fa-arrow-left"></i>ATRAS</a>
       @else
-        <a href="{{ url()->previous() }}" class="btn btn-danger"><i class="fas fas fa-arrow-left"></i>Volver</a>
+        <a href="{{ url()->previous() }}" class="btn btn-danger"><i class="fas fas fa-arrow-left"></i>ATRAS</a>
       @endif
     </div>
   </div>  
@@ -242,5 +246,192 @@
 @section('js')
 
   <script src="{{ asset('js/datatables.js') }}"></script>
+  <script>
+    var tableconciliar=null;
+    $(document).ready(function() {
+
+      $.ajaxSetup({
+          headers: {
+              'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+          }
+      });
+
+      tableconciliar=$('#tablaPrincipalConciliar').DataTable({
+          "bPaginate": false,
+          "bFilter": false,
+          "bInfo": false,
+          "length": 3,
+          columns: 
+          [
+            {
+              data: 'titular'
+            },
+            {
+              data: 'banco'
+            },
+            {
+              data: 'fecha'
+            },
+            {
+              data: 'movimiento'
+            },
+            {
+              data: 'monto'
+            }
+          ],
+          language: {
+            "decimal": "",
+            "emptyTable": "No hay informaciÃ³n",
+            "info": "Mostrando del _START_ al _END_ de _TOTAL_ Entradas",
+            "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
+            "infoFiltered": "(Filtrado de _MAX_ total entradas)",
+            "infoPostFix": "",
+            "thousands": ",",
+            "lengthMenu": "Mostrar _MENU_ Entradas",
+            "loadingRecords": "Cargando...",
+            "processing": "Procesando...",
+            "search": "Buscar:",
+            "zeroRecords": "Sin resultados encontrados",
+            "paginate": {
+            "first": "Primero",
+            "last": "Ultimo",
+            "next": "Siguiente",
+            "previous": "Anterior"
+            }
+          }
+        });
+
+      $('#modal-historial-pagos-pedido').on('show.bs.modal', function (event) {
+       
+       console.log("aa")
+       var button = $(event.relatedTarget) 
+       var pedido = button.data('pedido')
+       var pago = button.data('pago')
+
+       tableconciliar.destroy();
+
+       tableconciliar=$('#tablapagospedidoshistorial').DataTable({
+         "bPaginate": true,
+         "bFilter": true,
+         "bInfo": true,
+         "bAutoWidth": false,
+          "pageLength":5,
+         "order": [[ 0, "asc" ]],
+         'ajax': {
+           url:"{{ route('pagostablahistorial') }}",					
+           'data': { "pedido":pedido,"pago":pago }, 
+           "type": "get",
+         },
+         "search": {
+            "search": pedido
+          },
+         columns: [
+        {
+            data: 'id', 
+            name: 'id',
+            render: function ( data, type, row, meta ) {   
+              var cantidadvoucher=row.cantidad_voucher;
+              var cantidadpedido=row.cantidad_pedido;
+              var unido= ( (cantidadvoucher>1)? 'V':'I' )+''+( (cantidadpedido>1)? 'V':'I' );
+              if(row.id<10){
+                return 'PAG'+row.users+unido+'000'+row.id;
+              }else if(row.id<100){
+                return 'PAG00'+row.users+unido+''+row.id;
+              }else if(row.id<1000){
+                return 'PAG0'+row.users+unido+''+row.id;
+              }else{
+                return 'PAG'+row.users+unido+''+row.id;
+              }
+
+              /*if(row.id<10){
+                return 'PAG000'+row.id;
+              }else if(row.id<100){
+                return 'PAG00'+row.id;
+              }else if(row.id<1000){
+                return 'PAG0'+row.id;
+              }else{
+                return 'PAG'+row.id;
+              } */
+            }
+        },
+        {
+          data: 'codigos'
+          , name: 'codigos' 
+          , render: function ( data, type, row, meta ) {    
+            if(data==null){
+              return 'SIN PEDIDOS';
+            }else{
+              var returndata='';
+              var jsonArray=data.split(",");
+              $.each(jsonArray, function(i, item) {
+                  returndata+=item+'<br>';
+              });
+              return returndata;
+            }  
+          }
+        },
+        {//asesor
+          data: 'users', name: 'users' },
+        {//cliente
+          data: 'celular', 
+            name: 'celular',
+            render: function ( data, type, row, meta ) {
+              return row.celular;
+            },
+        },
+        {//observacion
+          data: 'observacion', name: 'observacion'
+        },
+        /*{
+          data: 'total_cobro', name: 'total_cobro'
+        },*/
+        {//totalpagado
+          data: 'total_pago', name: 'total_pago'
+        },
+        {//fecha
+          data: 'fecha', 
+          name: 'fecha', 
+          render: function ( data, type, row, meta ) {
+              return data;
+          }
+        },//estado de pedido
+        {
+          data: 'condicion', 
+          name: 'condicion', 
+          render: function ( data, type, row, meta ) {            
+            return data;             
+          }
+        },//estado de pago
+        {data: 'action', name: 'action', orderable: false, searchable: false,sWidth:'20%'},
+        ],
+         language: {
+           "decimal": "",
+           "emptyTable": "No hay informaciÃ³n",
+           "info": "Mostrando del _START_ al _END_ de _TOTAL_ Entradas",
+           "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
+           "infoFiltered": "(Filtrado de _MAX_ total entradas)",
+           "infoPostFix": "",
+           "thousands": ",",
+           "lengthMenu": "Mostrar _MENU_ Entradas",
+           "loadingRecords": "Cargando...",
+           "processing": "Procesando...",
+           "search": "Buscar:",
+           "zeroRecords": "Sin resultados encontrados",
+           "paginate": {
+           "first": "Primero",
+           "last": "Ultimo",
+           "next": "Siguiente",
+           "previous": "Anterior"
+           }
+         },
+       });
+
+
+     });
+
+    });
+
+
+      </script>
 
 @stop

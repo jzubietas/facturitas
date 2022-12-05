@@ -64,7 +64,7 @@
                     <th scope="col">ESTADO DE PAGO</th>
                     <th scope="col">ESTADO</th>
                     <th scope="col">MONTO TOTAL</th>
-                    <th scope="col">ABONADO</th>
+                    <th style='font-weight: bolder;' scope="col">ABONADO</th>
                     <th scope="col"><span style="color:red;">DIFERENCIA</span></th>
                     <th scope="col">Historial</th>
                   </tr>
@@ -83,9 +83,9 @@
                         
                       @if($pagos->condicion=='ABONADO')
                           @if($pagoPedido->pagado == 1)
-                          <td>ADELANTO ABONADO</td>
+                          <td style='font-weight: bolder;'>ADELANTO ABONADO</td>
                           @else
-                          <td>PAGADO ABONADO</td>
+                          <td style='font-weight: bolder;'>PAGADO ABONADO</td>
                           @endif
                       @elseif($pagos->condicion=='OBSERVADO')
                           @if($pagoPedido->pagado == 1)
@@ -128,7 +128,7 @@
                 </tbody>
                 <tfoot>
                   <tr>
-                    <td>TOTAL ABONADO</td>
+                    <td style='font-weight: bolder;'>TOTAL ABONADO</td>
                     <td></td>
                     <td></td>
                     <td></td>
@@ -265,7 +265,7 @@
     </div>
     <div class="card-footer" >
       <button type="submit" class="btn btn-success btn-lg d-none"><i class="fas fa-save"></i> GUARDAR</button>
-      <a href="{{ route('administracion.porrevisar') }}" class="btn btn-danger btn-lg d-none"><i class="fas fa-times-circle"></i> CANCELAR</a>
+      <a href="{{ route('administracion.porrevisar') }}" class="btn btn-danger btn-lg d-none"><i class="fas fa-times-circle"></i> ATRAS</a>
     </div>
     {!! Form::close() !!}
   </div>
