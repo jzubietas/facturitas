@@ -126,6 +126,9 @@
   <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
   <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
 
+  <script src="https://momentjs.com/downloads/moment.js"></script>
+  <script src="https://cdn.datatables.net/plug-ins/1.11.4/dataRender/datetime.js"></script>
+
   <script>
     $(document).ready(function () {
       $.ajaxSetup({
@@ -227,7 +230,12 @@
           {data: 'codigos', name: 'codigos', },
           {data: 'empresas', name: 'empresas', },
           {data: 'users', name: 'users', },
-          {data: 'fecha', name: 'fecha', },
+          {
+            data: 'fecha', 
+            name: 'fecha', 
+            render:$.fn.dataTable.render.moment('YYYY-MM-DD HH:mm:ss', 'DD/MM/YYYY HH:mm:ss' ),
+            "visible":true,
+          },
           {data: 'destino', name: 'destino',"visible":false },
           {data: 'condicion', name: 'condicion', },
           {data: 'atendido_por', name: 'atendido_por', },

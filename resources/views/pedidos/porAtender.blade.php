@@ -46,7 +46,7 @@
             <th scope="col">Código</th>
             <th scope="col">Razón social</th>
             <th scope="col">Asesor</th>
-            <th scope="col">Fecha de registro</th>
+            <th scope="col">Fecha de registro</th>{{--fecha hora--}}
             <th scope="col">Adjuntos</th>
             <th scope="col">Estado</th>
             <th scope="col">Acciones</th>
@@ -114,6 +114,9 @@
 
   <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
   <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+
+  <script src="https://momentjs.com/downloads/moment.js"></script>
+  <script src="https://cdn.datatables.net/plug-ins/1.11.4/dataRender/datetime.js"></script>
 
   <script>
     $(document).ready(function () {
@@ -264,7 +267,12 @@
           {data: 'codigos', name: 'codigos', },
           {data: 'empresas', name: 'empresas', },
           {data: 'users', name: 'users', },
-          {data: 'fecha', name: 'fecha', },          
+          {
+            data: 'fecha', 
+            name: 'fecha', 
+            render:$.fn.dataTable.render.moment('YYYY-MM-DD HH:mm:ss', 'DD/MM/YYYY HH:mm:ss' )
+            //render: $.fn.dataTable.render.moment( 'DD/MM/YYYY' ).format('HH:mm:ss'),
+          },
           {
             data: 'imagenes', 
             name: 'imagenes', 
