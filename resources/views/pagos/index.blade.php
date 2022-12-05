@@ -58,9 +58,9 @@
             <th scope="col">Codigo pedido</th>
             <th scope="col">Asesor</th>
             <th scope="col">Cliente</th>
-            <th scope="col">Observacion</th>
+            {{--<th scope="col">Observacion</th>--}}
             {{--<th scope="col">Total cobro</th>--}}
-            <th scope="col">Total pagado</th>
+            {{--<th scope="col">Total pagado</th>--}}
             <th scope="col">Fecha</th>
             <th scope="col">Estado</th>
             <th scope="col">Acciones</th>
@@ -286,15 +286,15 @@
               
             },
         },
-        {//observacion
+        /*{//observacion
           data: 'observacion', name: 'observacion'
-        },
+        },*/
         /*{
           data: 'total_cobro', name: 'total_cobro'
         },*/
-        {//totalpagado
+        /*{//totalpagado
           data: 'total_pago', name: 'total_pago'
-        },
+        },*/
         {//fecha
           data: 'fecha', 
           name: 'fecha', 
