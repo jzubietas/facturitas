@@ -155,7 +155,8 @@ class PedidoController extends Controller
                 'pedidos.estado',
                 'pedidos.envio'
             )
-            ->whereIn('pedidos.condicion', ['POR ATENDER', 'EN PROCESO ATENCION', 'ATENDIDO', 'ANULADO']);
+            //->whereIn('pedidos.condicion', ['POR ATENDER', 'EN PROCESO ATENCION', 'ATENDIDO', 'ANULADO']);
+            ->whereIn('pedidos.condicion_int', ['0', '1', '2', '3']);
             /*->groupBy(
                 'pedidos.id',
                 'c.nombre',

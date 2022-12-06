@@ -14,6 +14,7 @@ use App\Http\Controllers\BasefriaController;
 use App\Http\Controllers\MovimientoController;
 use App\Http\Controllers\SobreController;
 use App\Http\Controllers\OperacionController;
+use App\Http\Controllers\AdministracionController;
 use Illuminate\Support\Facades\Route;
 
 /*
