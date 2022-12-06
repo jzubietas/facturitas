@@ -373,6 +373,12 @@
               </div>
             </table>
           </div>
+          <div class="table-responsive">
+            <table class="table table-striped table-bordered table-condensed table-hover">
+              <div class="chart tab-pane active" id="cobranzaxmes" style="width: 100%; height: 550px;">
+              </div>
+            </table>
+          </div>
         </div>
       </div>
     </div>
