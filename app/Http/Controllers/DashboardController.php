@@ -45,11 +45,12 @@ class DashboardController extends Controller
             //$montopedidoxmes_total = User::select(DB::raw('sum(users.meta_cobro) as total'))//META COBRANZAS
                 $montopedidoxmes_total =Pedido::join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
                 ->join('users', 'pedidos.user_id', 'users.id')
-                ->select(DB::raw('(sum(dp.total)/count(dp.id)) as total'))
+                ->select(DB::raw('(sum(dp.total))/(count(dp.pedido_id)) as total'))
                 ->where('users.rol', "ASESOR")
                 ->where('users.estado', '1')
-                /* ->whereMonth('pedidos.created_at', $mfecha) */
-            ->get();
+                ->where('pedidos.created_at', $mfecha)
+                ->whereYear('pedidos.created_at', $afecha)
+                ->get();
             //return $montopedidoxmes_total;
             if(Auth::user()->id == "33"){
                 $montopagoxmes_total = Pago::join('detalle_pagos as dpa', 'pagos.id', 'dpa.pago_id')//CANTIDAD DE PAGOS DEL MES
@@ -74,12 +75,12 @@ class DashboardController extends Controller
             $cobranzaxmes = Pedido::join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
                 ->join('users as u', 'pedidos.user_id', 'u.id')
                 ->select(
-                    'u.identificador as users',
-                    DB::raw('(sum(dp.total)/count(dp.id)) as total'))
-                //->whereIn('u.rol', ['ASESOR', 'Super asesor'])
+                    'u.identificador as usuarios',
+                    DB::raw('((sum(dp.total)/count(dp.id))) as total'))
+                //->whereIn('u.rol', ['ENCARGADO', 'Super asesor','ASESOR'])
                 ->whereMonth('dp.created_at', $mfecha)
                 ->whereYear('dp.created_at', $afecha)
-                ->groupBy('u.identificador')
+                ->groupBy('pedidos.id')
                 //->orderBy((DB::raw('count(dp.id)')), 'DESC')
                 ->get();
                 //return $cobranzaxmes;

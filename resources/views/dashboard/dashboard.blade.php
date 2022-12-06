@@ -8,6 +8,15 @@
     <!-- Right navbar links -->
   </div>
 
+
+  
+
+
+
+      
+
+      
+  <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
   <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
   <!--ADMINISTRADOR-->
     <script type="text/javascript">
@@ -36,8 +45,37 @@
         chart.draw(data, google.charts.Bar.convertOptions(options));
       };
     </script>
+        
+        
+<script type="text/javascript">
+  google.charts.load('current', {packages: ['corechart', 'bar']});
+google.charts.setOnLoadCallback(drawBasic);
+      
 
-    <script type="text/javascript">
+      function drawBasic() {
+        var data = new google.visualization.arrayToDataTable([
+          ['Cobranza', 'Pedidos'],
+          @foreach ($cobranzaxmes as $vxax)
+            ['{{ $vxax->usuarios }}', {{ $vxax->total }}],
+          @endforeach
+        ]);
+
+        var options = {
+          chart: {
+            title: 'COBRANZA POR MES',
+            subtitle: 'COBRANZA/PEDIDOS'
+          }
+        };
+
+        var chart = new google.visualization.BarChart(document.getElementById('cobranzaxmes'));
+        chart.draw(data, options);
+      };
+    </script>
+        
+
+
+
+    <!--<script type="text/javascript">
       google.charts.load('current', {
         'packages': ['bar']
       });
@@ -61,8 +99,7 @@
         var chart = new google.charts.Bar(document.getElementById('cobranzaxmes'));
         chart.draw(data, google.charts.Bar.convertOptions(options));
       };
-    </script>
-
+    </script>-->
 
 
     <script type="text/javascript">
@@ -268,7 +305,7 @@
           <div class="small-box bg-success">
             <div class="inner">
               @foreach ($montopedidoxmes_total as $mcxm)
-                <h3>@php echo number_format( ($mcxm->total)/1000 ,2) @endphp %</h3>
+                <h3>@php echo number_format( ($mcxm->total)/10 ,2) @endphp %</h3>
               @endforeach
               <p>META DE COBRANZAS DEL MES</p>
             </div>
