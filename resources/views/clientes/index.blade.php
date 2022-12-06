@@ -49,6 +49,7 @@
             <th scope="col">Celular</th>
             <th scope="col">Direccion</th>
             <th scope="col">Asesor asignado</th>
+            <th scope="col">Situacion</th>
             {{--<th scope="col">Cantidad</th>--}}
             {{--<th scope="col">Año actual</th>
             <th scope="col">Mes actual</th>
@@ -227,6 +228,7 @@ $(document).ready(function () {
         },
         //{data: 'direccion', name: 'direccion'},
         {data: 'identificador', name: 'identificador'},
+        {data: 'situacion', name: 'situacion'},
         //{data: 'cantidad', name: 'cantidad'},
         //{data: 'dateY', name: 'dateY'},
         //{data: 'dateM', name: 'dateM'},

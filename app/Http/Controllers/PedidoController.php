@@ -1028,14 +1028,14 @@ class PedidoController extends Controller
                 $file->move($destinationPath , $file_name);
             }*/
 
-            /*if(isset($files))
+            if(isset($files))
             {
 return $files;
             }else{
 return ' no imagen ';
             }
 
-            return '';*/
+            return '';
 
             if(isset($files)){
                 $destinationPath = base_path('public/storage/adjuntos/');
