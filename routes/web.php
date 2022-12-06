@@ -357,6 +357,8 @@ Route::post('/mark-as-read', [NotificationsController::class, 'markNotification'
     Route::post('usuariosExcel', [ExcelController::class, 'usuariosExcel'])->name('usuariosExcel');
     Route::post('movimientosExcel', [ExcelController::class, 'movimientosExcel'])->name('movimientosExcel');
     Route::post('clientesExcel', [ExcelController::class, 'clientesExcel'])->name('clientesExcel');
+    Route::post('clientesv2Excel', [ExcelController::class, 'clientesv2Excel'])->name('clientesv2Excel');
+
     Route::post('clientespedidosExcel', [ExcelController::class, 'clientespedidosExcel'])->name('clientespedidosExcel');
 
     Route::post('clientesabandonoExcel', [ExcelController::class, 'clientesabandonoExcel'])->name('clientesabandonoExcel');
