@@ -255,7 +255,7 @@
               data = data+'<a href="'+urlshow+'" class="btn btn-info btn-sm"><i class="fas fa-eye"></i> VER</a>';
             @endcan
             @can('pagos.edit')
-                data = data+'<a href="'+urledit+'" class="btn btn-warning btn-sm"> Editar</a>';
+                //data = data+'<a href="'+urledit+'" class="btn btn-warning btn-sm"> Editar</a>';
             @endcan
             @can('pagos.destroy')
                 //data = data+'<a href="" data-target="#modal-delete" data-toggle="modal" data-delete="'+row.id+'"><button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i> Anular</button></a>';

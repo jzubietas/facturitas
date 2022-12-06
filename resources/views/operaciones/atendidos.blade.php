@@ -53,6 +53,7 @@
         <thead>
           <tr>
             <th scope="col">Item</th>
+            <th scope="col">Item</th>
             <th scope="col">Código</th>
             <th scope="col">Razón social</th>
             <th scope="col">Asesor</th>
@@ -255,6 +256,10 @@
                 } 
               }
           },
+          {
+            data: 'id2'
+            , name: 'id2' ,"visible":false
+          },
           {data: 'codigos', name: 'codigos', },
           {data: 'empresas', name: 'empresas', },
           {data: 'users', name: 'users', },
@@ -301,7 +306,7 @@
 
               var urlver = '{{ route("operaciones.showatender", ":id") }}';
               urlver = urlver.replace(':id', row.id);
-              data = data+'<a href="'+urlver+'" class="btn btn-primary btn-sm" target="_blank"><i class="fas fa-eye"></i> Ver</a>';
+              data = data+'<a href="'+urlver+'" class="btn btn-primary btn-sm" ><i class="fas fa-eye"></i> Ver</a>';
 
               var urledit = '{{ route("operaciones.editatender", ":id") }}';
               urledit = urledit.replace(':id', row.id);
@@ -317,8 +322,12 @@
               @can('operacion.enviar')
                 if (row.envio == '0')
                 {
-                  data = data+'<a href="" data-target="#modal-envio" data-envio='+row.id+' data-toggle="modal" ><button class="btn btn-success btn-sm">Enviar</button></a>'; 
-                  data = data+'<a href="" data-target="#modal-sinenvio" data-sinenvio='+row.id+' data-toggle="modal" ><button class="btn btn-dark btn-sm">Sin envío</button></a>'; 
+                  @if (Auth::user()->rol == "Jefe de operaciones" || Auth::user()->rol == "Administrador")
+                  
+                    data = data+'<a href="" data-target="#modal-envio" data-envio='+row.id+' data-toggle="modal" ><button class="btn btn-success btn-sm">Enviar</button></a>'; 
+                    data = data+'<a href="" data-target="#modal-sinenvio" data-sinenvio='+row.id+' data-toggle="modal" ><button class="btn btn-dark btn-sm">Sin envío</button></a>'; 
+                  @endif
+                  
                 }
               @endcan
               

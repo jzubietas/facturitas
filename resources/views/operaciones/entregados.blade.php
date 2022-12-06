@@ -267,7 +267,7 @@
 
               var urlver = '{{ route("operaciones.showatender", ":id") }}';
               urlver = urlver.replace(':id', row.id);
-              data = data+'<a href="'+urlver+'" class="btn btn-primary btn-sm" target="_blank"><i class="fas fa-eye"></i> Ver</a><br>';
+              data = data+'<a href="'+urlver+'" class="btn btn-primary btn-sm" ><i class="fas fa-eye"></i> Ver</a><br>';
 
               var urledit = '{{ route("operaciones.editatender", ":id") }}';
               urledit = urledit.replace(':id', row.id);
@@ -283,8 +283,12 @@
               @can('operacion.enviar')
                 if (row.envio == '0')
                 {
-                  data = data+'<a href="" data-target="#modal-envio" data-envio='+row.id+' data-toggle="modal" ><button class="btn btn-success btn-sm">Enviar</button></a><br>'; 
-                  data = data+'<a href="" data-target="#modal-sinenvio" data-sinenvio='+row.id+' data-toggle="modal" ><button class="btn btn-dark btn-sm">Sin envío</button></a><br>'; 
+                  @if (Auth::user()->rol == "Jefe de operaciones" || Auth::user()->rol == "Administrador")
+                  
+                    data = data+'<a href="" data-target="#modal-envio" data-envio='+row.id+' data-toggle="modal" ><button class="btn btn-success btn-sm">Enviar</button></a><br>'; 
+                    data = data+'<a href="" data-target="#modal-sinenvio" data-sinenvio='+row.id+' data-toggle="modal" ><button class="btn btn-dark btn-sm">Sin envío</button></a><br>'; 
+                  @endif
+                  
                 }
               @endcan
 

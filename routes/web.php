@@ -13,6 +13,7 @@ use App\Http\Controllers\NotificationsController;
 use App\Http\Controllers\BasefriaController;
 use App\Http\Controllers\MovimientoController;
 use App\Http\Controllers\SobreController;
+use App\Http\Controllers\OperacionController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -102,14 +103,34 @@ Route::get('pedidos.pagados', [PedidoController::class, 'Pagados'])->name('pedid
 Route::get('pedidos.pagadostabla', [PedidoController::class, 'Pagadostabla'])->name('pedidos.pagadostabla');
 Route::get('pedidos.sinpagos', [PedidoController::class, 'SinPagos'])->name('pedidos.sinpagos');
 Route::get('pedidos.sinpagostabla', [PedidoController::class, 'SinPagostabla'])->name('pedidos.sinpagostabla');
-Route::get('operaciones.poratender', [PedidoController::class, 'PorAtender'])->name('operaciones.poratender');
-Route::get('operaciones.poratendertabla', [PedidoController::class, 'PorAtendertabla'])->name('operaciones.poratendertabla');
+
+
+/*Envios */
+Route::get('envios.porrecibir', [EnvioController::class, 'Enviosporrecibir'])->name('envios.porrecibir');
+Route::get('envios.porrecibirtabla', [EnvioController::class, 'Enviosporrecibirtabla'])->name('envios.porrecibirtabla');
+Route::get('envios.rutaenvio', [EnvioController::class, 'Enviosrutaenvio'])->name('envios.rutaenvio');
+Route::get('envios.rutaenviotabla', [EnvioController::class, 'Enviosrutaenviotabla'])->name('envios.rutaenviotabla');
+Route::get('envios.index', [EnvioController::class, 'Envios'])->name('envios.index');
+Route::get('envios.indextabla', [EnvioController::class, 'Enviostabla'])->name('envios.indextabla');
+Route::get('envios.seguimientoprovincia', [EnvioController::class, 'Seguimientoprovincia'])->name('envios.seguimientoprovincia');
+Route::get('envios.seguimientoprovinciatabla', [EnvioController::class, 'Seguimientoprovinciatabla'])->name('envios.seguimientoprovinciatabla');
+Route::get('envios.enviados', [EnvioController::class, 'Enviados'])->name('envios.enviados');
+Route::get('envios.enviadostabla', [EnvioController::class, 'Enviadostabla'])->name('envios.enviadostabla');
+/*Envios */
+
+/*Operaciones*/
+Route::get('operaciones.poratender', [OperacionController::class, 'PorAtender'])->name('operaciones.poratender');
+Route::get('operaciones.poratendertabla', [OperacionController::class, 'PorAtendertabla'])->name('operaciones.poratendertabla');
+Route::get('operaciones.atendidos', [OperacionController::class, 'Atendidos'])->name('operaciones.atendidos');
+Route::get('operaciones.atendidostabla', [OperacionController::class, 'Atendidostabla'])->name('operaciones.atendidostabla');
+Route::get('operaciones.entregados', [OperacionController::class, 'Entregados'])->name('operaciones.entregados');
+Route::get('operaciones.entregadostabla', [OperacionController::class, 'Entregadostabla'])->name('operaciones.entregadostabla');
+/*Operaciones*/
+
 Route::get('operaciones.enatencion', [PedidoController::class, 'EnAtencion'])->name('operaciones.enatencion');
 Route::get('operaciones.enatenciontabla', [PedidoController::class, 'EnAtenciontabla'])->name('operaciones.enatenciontabla');
-Route::get('operaciones.atendidos', [PedidoController::class, 'Atendidos'])->name('operaciones.atendidos');
-Route::get('operaciones.atendidostabla', [PedidoController::class, 'Atendidostabla'])->name('operaciones.atendidostabla');
-Route::get('operaciones.entregados', [PedidoController::class, 'Entregados'])->name('operaciones.entregados');
-Route::get('operaciones.entregadostabla', [PedidoController::class, 'Entregadostabla'])->name('operaciones.entregadostabla');
+
+
 Route::get('datatable.cargaratendidos', [PedidoController::class, 'cargarAtendidos'])->name('datatable.cargaratendidos');
 Route::post('pedidos.atender/{pedido}', [PedidoController::class, 'Atender'])->name('pedidos.atender');
 Route::post('pedidos.atenderid', [PedidoController::class, 'Atenderid'])->name('pedidos.atenderid');
@@ -144,21 +165,22 @@ Route::get('sobres.porenviartabla', [SobreController::class, 'Sobresporenviartab
 
 Route::get('pedidosgrupotabla', [SobreController::class, 'pedidosgrupotabla'])->name('cargar.pedidosgrupotabla');
 Route::post('sobres.desvinculargrupo', [SobreController::class, 'EnvioDesvincular'])->name('sobres.desvinculargrupo');
-Route::get('envios.rutaenvio', [EnvioController::class, 'Enviosrutaenvio'])->name('envios.rutaenvio');
 
-Route::get('envios.porrecibir', [EnvioController::class, 'Enviosporrecibir'])->name('envios.porrecibir');
-Route::get('envios.porrecibirtabla', [EnvioController::class, 'Enviosporrecibirtabla'])->name('envios.porrecibirtabla');
 
-Route::get('envios.rutaenviotabla', [EnvioController::class, 'Enviosrutaenviotabla'])->name('envios.rutaenviotabla');
 
-Route::get('envios.index', [EnvioController::class, 'Envios'])->name('envios.index');
-Route::get('envios.indextabla', [EnvioController::class, 'Enviostabla'])->name('envios.indextabla');
-Route::get('envios.enviados', [EnvioController::class, 'Enviados'])->name('envios.enviados');
-Route::get('envios.enviadostabla', [EnvioController::class, 'Enviadostabla'])->name('envios.enviadostabla');
+
+
+
+
+
+
+
+
+
 /////////
 
-Route::get('envios.seguimientoprovincia', [EnvioController::class, 'Seguimientoprovincia'])->name('envios.seguimientoprovincia');
-Route::get('envios.seguimientoprovinciatabla', [EnvioController::class, 'Seguimientoprovinciatabla'])->name('envios.seguimientoprovinciatabla');
+
+
 
 
 Route::post('envios.recibir/{pedido}', [PedidoController::class, 'Recibir'])->name('envios.recibir');
@@ -211,24 +233,26 @@ Route::post('pago/eliminarPago/{id}/{pago}', [PagoController::class, 'eliminarPa
 Route::get('pagos.mispagos', [PagoController::class, 'MisPagos'])->name('pagos.mispagos');
 Route::get('pagos.pagosincompletos', [PagoController::class, 'PagosIncompletos'])->name('pagos.pagosincompletos');
 Route::get('pagos.pagosobservados', [PagoController::class, 'PagosObservados'])->name('pagos.pagosobservados');
-Route::get('administracion.porrevisar', [PagoController::class, 'PorRevisar'])->name('administracion.porrevisar');
-Route::get('administracion.porrevisartabla', [PagoController::class, 'PorRevisartabla'])->name('administracion.porrevisartabla');//agregado para serverside
-Route::get('administracion.revisar/{pago}', [PagoController::class, 'Revisar'])->name('administracion.revisar');
-//
-Route::get('administracion.pendientes', [PagoController::class, 'Administracionpendientes'])->name('administracion.pendientes');
-Route::get('administracion.pendientestabla', [PagoController::class, 'Administracionpendientestabla'])->name('administracion.pendientestabla');
-Route::get('administracion.revisarpendiente/{pago}', [PagoController::class, 'Revisarpendiente'])->name('administracion.revisarpendiente');
 
-Route::get('administracion.observados', [PagoController::class, 'Observados'])->name('administracion.observados');//de pagos por revisar index
-Route::get('administracion.observadostabla', [PagoController::class, 'Observadostabla'])->name('administracion.observadostabla');//agregado para serverside
-Route::get('administracion.revisarobservado/{pago}', [PagoController::class, 'Revisarobservado'])->name('administracion.revisarobservado');
+/* Administracion */
+Route::get('administracion.porrevisar', [AdministracionController::class, 'PorRevisar'])->name('administracion.porrevisar');
+Route::get('administracion.porrevisartabla', [AdministracionController::class, 'PorRevisartabla'])->name('administracion.porrevisartabla');//agregado para serverside
+Route::get('administracion.revisar/{pago}', [AdministracionController::class, 'Revisar'])->name('administracion.revisar');
 
-Route::get('administracion.abonados', [PagoController::class, 'Abonados'])->name('administracion.abonados');//de pagos por revisar index
-Route::get('administracion.abonadostabla', [PagoController::class, 'Abonadostabla'])->name('administracion.abonadostabla');//agregado para serverside
-//
-Route::get('administracion.aprobados', [PagoController::class, 'Aprobados'])->name('administracion.aprobados');
-Route::get('administracion.aprobadostabla', [PagoController::class, 'Aprobadostabla'])->name('administracion.aprobadostabla');//agregado por zubieta
+Route::get('administracion.pendientes', [AdministracionController::class, 'Administracionpendientes'])->name('administracion.pendientes');
+Route::get('administracion.pendientestabla', [AdministracionController::class, 'Administracionpendientestabla'])->name('administracion.pendientestabla');
+Route::get('administracion.revisarpendiente/{pago}', [AdministracionController::class, 'Revisarpendiente'])->name('administracion.revisarpendiente');
 
+Route::get('administracion.observados', [AdministracionController::class, 'Observados'])->name('administracion.observados');//de pagos por revisar index
+Route::get('administracion.observadostabla', [AdministracionController::class, 'Observadostabla'])->name('administracion.observadostabla');//agregado para serverside
+Route::get('administracion.revisarobservado/{pago}', [AdministracionController::class, 'Revisarobservado'])->name('administracion.revisarobservado');
+
+Route::get('administracion.abonados', [AdministracionController::class, 'Abonados'])->name('administracion.abonados');//de pagos por revisar index
+Route::get('administracion.abonadostabla', [AdministracionController::class, 'Abonadostabla'])->name('administracion.abonadostabla');//agregado para serverside
+
+Route::get('administracion.aprobados', [AdministracionController::class, 'Aprobados'])->name('administracion.aprobados');
+Route::get('administracion.aprobadostabla', [AdministracionController::class, 'Aprobadostabla'])->name('administracion.aprobadostabla');//agregado por zubieta
+/* Administracion */
 
 Route::get('administracion.revisarpago', [PagoController::class, 'Revisarpago'])->name('administracion.revisarpago');//agregado para detalle de revisar
 
