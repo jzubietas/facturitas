@@ -594,7 +594,7 @@ class UserController extends Controller
                         ->pluck('name', 'id');*/
             $superasesor = User::where('rol', 'Super asesor')->count();
             
-            return view('usuarios.mipersonal', compact('encargados', 'asesores', 'jefellamadas', 'llamadas', 'jefeoperarios','operarios','superasesor'));
+            return view('usuarios.mipersonal', compact('users','encargados', 'asesores', 'jefellamadas', 'llamadas', 'jefeoperarios','operarios','superasesor'));
     }
 
     public function Encargados()

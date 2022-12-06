@@ -599,6 +599,13 @@ return [
                     'active' => ['mis operarios'],
                 ],
                 [
+                    'text' => 'Mi personal',
+                    'route'  => 'users.mipersonal',
+                    'can' => 'users.misoperarios',
+                    'icon'   => 'fas fa-check-circle',
+                    'active' => ['mi personal'],
+                ],
+                [
                     'text' => 'Llamadas',
                     'route'  => 'users.llamadas',
                     'can' => 'users.llamadas',
