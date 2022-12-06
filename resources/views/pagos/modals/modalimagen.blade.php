@@ -12,7 +12,7 @@
           
           <div class="form-row">
             <div class="form-group col-lg-12" style="text-align: center">
-              <img src="{{ asset('storage/pagos/' . $detallePago->imagen) }}" alt="{{ $detallePago->imagen }}" height="500px" width="500px" class="img-thumbnail">
+              <img src="{{ asset('storage/pagos/' . $detallePago->imagen) }}" alt="{{ $detallePago->imagen }}" height="800px" width="800px" class="img-thumbnail">
             </div>
           </div>
         </div>        
