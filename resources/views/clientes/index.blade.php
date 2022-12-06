@@ -22,7 +22,7 @@
         {{--<a href="{{ route('clientespedidosExcel') }}" class="dropdown-item" target="blank_"><img src="{{ asset('imagenes/icon-excel.png') }}"> Clientes - Pedidos</a> --}}
         <a href="" data-target="#modal-exportar2" data-toggle="modal" class="dropdown-item" target="blank_"><img src="{{ asset('imagenes/icon-excel.png') }}"> Clientes - Pedidos</a>
 
-        <a href="" data-target="#modal-exportar-v2" data-toggle="modal" class="dropdown-item" target="blank_"><img src="{{ asset('imagenes/icon-excel.png') }}"> Clientes - V2</a>
+        <a href="" data-target="#modal-exportar-v2" data-toggle="modal" class="dropdown-item" target="blank_"><img src="{{ asset('imagenes/icon-excel.png') }}"> Clientes - Situacion</a>
       </div>
     </div>
     @include('clientes.modal.exportar') {{-- Modal Clientes - Pedidos --}}
@@ -44,7 +44,7 @@
 
   <div class="card">
     <div class="card-body">
-      <table id="tablaPrincipal" class="table table-striped">
+      <table id="tablaPrincipal" style="width:100%;" class="table table-striped">
         <thead>
           <tr>
             <th scope="col">COD.</th>
@@ -231,6 +231,7 @@ $(document).ready(function () {
         },
         //{data: 'direccion', name: 'direccion'},
         {data: 'identificador', name: 'identificador'},
+        {data: 'situacion', name: 'situacion'},
         //{data: 'cantidad', name: 'cantidad'},
         //{data: 'dateY', name: 'dateY'},
         //{data: 'dateM', name: 'dateM'},

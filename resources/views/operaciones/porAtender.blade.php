@@ -274,10 +274,7 @@
             render:$.fn.dataTable.render.moment('YYYY-MM-DD HH:mm:ss', 'DD/MM/YYYY HH:mm:ss' )
             //render: $.fn.dataTable.render.moment( 'DD/MM/YYYY' ).format('HH:mm:ss'),
           },
-          {
-            data: 'tipo_banca', 
-            name: 'tipo_banca', 
-          },
+        
           {
             data: 'imagenes', 
             name: 'imagenes', 
