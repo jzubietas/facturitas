@@ -6,6 +6,7 @@ use App\Exports\ArticulosExport;
 use App\Exports\BaseFriaPorAsesorExport;
 use App\Exports\BasesFriasExport;
 use App\Exports\ClientesExport;
+use App\Exports\Clientesv2Export;
 use App\Exports\ClientesPedidosExport;
 use App\Exports\ClientesAbandonosExport;
 use App\Exports\PedidosPorEnviarPorFechasExport;
@@ -132,6 +133,13 @@ class ExcelController extends Controller
                 ->clientes1($request)
                 ->clientes2($request)
                 ->download('Lista de Clientes.xlsx');           
+    }
+
+    public function clientesv2Excel(Request $request)
+    {
+        return (new Clientesv2Export)
+                ->clientes1($request)
+                ->download('Lista de Clientes Situacion.xlsx');           
     }
 
     public function clientesabandonoExcel(Request $request)
