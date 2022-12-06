@@ -495,6 +495,13 @@ return [
                     'active' => ['clientes'],
                 ],
                 [
+                    'text' => 'Clientes Abandono',
+                    'route'  => 'clientesabandono',
+                    'can' => 'clientes.abandono',
+                    'icon'   => 'fas fa-check-circle',
+                    'active' => ['clientes'],
+                ],
+                [
                     'text' => 'Base fría',
                     'route'  => 'basefria',
                     'can' => 'base_fria.index',

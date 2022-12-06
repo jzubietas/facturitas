@@ -45,8 +45,8 @@
             <th scope="col">Item</th>
             <th scope="col">Código</th>
             <th scope="col">Asesor</th>
-            <th scope="col">Cliente</th>
-            <th scope="col">Razón social</th>            
+            {{-- <th scope="col">Cliente</th> --}}
+            {{-- <th scope="col">Razón social</th>             --}}
             <th scope="col">Fecha de registro</th>
             <th scope="col">Fecha de envio</th>
             <th scope="col">Fecha de entrega</th>
@@ -1171,14 +1171,14 @@
           },
           {data: 'codigos', name: 'codigos', },
           {data: 'users', name: 'users', },
-          {
-            data: 'celulares', 
-            name: 'celulares',
-            render: function ( data, type, row, meta ) {
-              return row.celulares+' - '+row.nombres
-            },
-        },
-          {data: 'empresas', name: 'empresas', },
+          // {
+          //   data: 'celulares', 
+          //   name: 'celulares',
+          //   render: function ( data, type, row, meta ) {
+          //     return row.celulares+' - '+row.nombres
+          //   },
+          // },
+          // {data: 'empresas', name: 'empresas', },
           {data: 'fecha_envio_doc', name: 'fecha_envio_doc',"visible":false },
           {data: 'fecha_envio_doc_fis', name: 'fecha_envio_doc_fis', },
           {data: 'fecha_recepcion', name: 'fecha_recepcion',"visible":false },

@@ -7,6 +7,7 @@ use App\Exports\BaseFriaPorAsesorExport;
 use App\Exports\BasesFriasExport;
 use App\Exports\ClientesExport;
 use App\Exports\ClientesPedidosExport;
+use App\Exports\ClientesAbandonosExport;
 use App\Exports\PedidosPorEnviarPorFechasExport;
 use App\Exports\EntregadosPorFechasExport;
 use App\Exports\MisPagosExport;
@@ -131,6 +132,20 @@ class ExcelController extends Controller
                 ->clientes1($request)
                 ->clientes2($request)
                 ->download('Lista de Clientes.xlsx');           
+    }
+
+    public function clientesabandonoExcel(Request $request)
+    {
+        ini_set('memory_limit', '-1');
+        set_time_limit(3000000);
+
+        return (new ClientesAbandonosExport)
+                ->clientes($request)
+                ->anioa($request)
+                ->aniop($request)
+                ->download('Lista de Clientes_abandonos_'.$request->anio.'.xlsx');
+
+        /* return Excel::download(new ClientesPedidosExport, 'Lista de Clientes_pedidos.xlsx'); */
     }
 
     public function clientespedidosExcel(Request $request)

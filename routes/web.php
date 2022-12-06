@@ -45,6 +45,9 @@ Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard
 Route::resource('clientes', ClienteController::class)->names('clientes');
 Route::get('clientestabla', [ClienteController::class, 'indextabla'])->name('clientestabla');
 
+Route::get('clientesabandono', [ClienteController::class, 'indexabandono'])->name('clientesabandono');
+Route::get('clientesabandonotabla', [ClienteController::class, 'indexabandonotabla'])->name('clientesabandonotabla');
+
 //Route::get('basefria', [ClienteController::class, 'indexbf'])->name('basefria');
 //Route::resource('basefriadatatable', BasefriaController::class);
 Route::get('basefria', [ClienteController::class, 'indexbf'])->name('basefria');//actualizado para serverside
@@ -354,6 +357,9 @@ Route::post('/mark-as-read', [NotificationsController::class, 'markNotification'
     Route::post('movimientosExcel', [ExcelController::class, 'movimientosExcel'])->name('movimientosExcel');
     Route::post('clientesExcel', [ExcelController::class, 'clientesExcel'])->name('clientesExcel');
     Route::post('clientespedidosExcel', [ExcelController::class, 'clientespedidosExcel'])->name('clientespedidosExcel');
+
+    Route::post('clientesabandonoExcel', [ExcelController::class, 'clientesabandonoExcel'])->name('clientesabandonoExcel');
+
     // Route::get('basefriaExcel', [ExcelController::class, 'basefriaExcel'])->name('basefriaExcel');
     Route::post('basefriaExcel', [ExcelController::class, 'basefriaExcel'])->name('basefriaExcel');
     Route::post('basefriaporasesorExcel', [ExcelController::class, 'basefriaporasesorExcel'])->name('basefriaporasesorExcel');
