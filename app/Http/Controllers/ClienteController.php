@@ -89,7 +89,6 @@ class ClienteController extends Controller
                     'clientes.direccion',
                     'clientes.deuda',
                     'clientes.pidio'
-                    //'clientes.situacion'
                 )
                 ->select('clientes.id', 
                         'clientes.nombre', 
@@ -163,7 +162,6 @@ class ClienteController extends Controller
                     'clientes.direccion',
                     'clientes.deuda',
                     'clientes.pidio'
-                    //'clientes.situacion'
                 )
                 ->get(['clientes.id', 
                         'clientes.nombre', 
@@ -184,8 +182,6 @@ class ClienteController extends Controller
                         DB::raw('MONTH(CURRENT_DATE()) as dateM'),
                         DB::raw('YEAR(CURRENT_DATE()) as dateY'),
                         'clientes.deuda',
-                        //'clientes.situacion'
-                        DB::raw(" (select lr.s_2022_11 from clientes c inner join listado_resultado lr on c.id=lr.id limit 1")
                         ]);
 
         }else if (Auth::user()->rol == "Encargado"){
