@@ -73,13 +73,16 @@ class DashboardController extends Controller
             //COBRANZA POR MES
             $cobranzaxmes = Pedido::join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
                 ->join('users as u', 'pedidos.user_id', 'u.id')
-                ->select('u.identificador as users', DB::raw('(sum(dp.total)/count(dp.id)) as total'))
+                ->select(
+                    'u.identificador as users',
+                    DB::raw('(sum(dp.total)/count(dp.id)) as total'))
                 //->whereIn('u.rol', ['ASESOR', 'Super asesor'])
                 ->whereMonth('dp.created_at', $mfecha)
                 ->whereYear('dp.created_at', $afecha)
                 ->groupBy('u.identificador')
-                ->orderBy((DB::raw('count(dp.id)')), 'DESC')
+                //->orderBy((DB::raw('count(dp.id)')), 'DESC')
                 ->get();
+                //return $cobranzaxmes;
             //PEDIDOS POR ASESOR EN EL MES
             $pedidosxasesor = Pedido::join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
                 ->join('users as u', 'pedidos.user_id', 'u.id')

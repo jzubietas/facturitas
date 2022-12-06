@@ -17,6 +17,7 @@
       google.charts.setOnLoadCallback(drawStuff);
 
       function drawStuff() {
+        console.log("1454588");
         var data = new google.visualization.arrayToDataTable([
           ['Asesores', 'Pedidos'],
           @foreach ($pedidosxasesor as $vxa)
@@ -46,7 +47,7 @@
         var data = new google.visualization.arrayToDataTable([
           ['Cobranza', 'Pedidos'],
           @foreach ($cobranzaxmes as $vxax)
-            ['{{ $vxax->users }}', {{ $vxax->pedidos }}],
+            ['{{ $vxax->users }}', {{ $vxax->total }}],
           @endforeach
         ]);
 
@@ -267,7 +268,7 @@
           <div class="small-box bg-success">
             <div class="inner">
               @foreach ($montopedidoxmes_total as $mcxm)
-                <h3>S/@php echo number_format( ($mcxm->total)/1000 ,2) @endphp </h3>
+                <h3>@php echo number_format( ($mcxm->total)/1000 ,2) @endphp %</h3>
               @endforeach
               <p>META DE COBRANZAS DEL MES</p>
             </div>
