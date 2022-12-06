@@ -3,7 +3,7 @@
 @section('title', 'Detalle de pagos')
 
 @section('content_header')
-  <h1>DETALLE DEL <b>PAGO</b>:PAG{{ $pagos->users }}-{{$pagos->cantidad_voucher}}{{$pagos->cantidad_pedido}}-{{ $pagos->id }}</h1>
+  <h1>DETALLE DEL <b>PAGO</b>: PAG000{{ $pagos->id }}</h1>
      {{-- <a href="" data-target="#modal-historial-{{ $pago->id }}" data-toggle="modal"><button class="btn btn-info btn-sm">Historial</button></a> --}}
   {{-- @include('contratos.modals.modalHistorial') --}}  
 @stop
@@ -14,8 +14,6 @@
 
 @include('pagos.modals.revisarhistorial')
 @include('pagos.modals.CambiarImagen')
-@include('pagos.modals.EditarDetallepago')
-{{--@include('pagos.modals.modalImagenId')--}}
 
   <div class="card">
       
@@ -95,9 +93,12 @@
                           @else
                           <td>PAGADO OBSERVADO</td>
                           @endif
-                      @elseif($pagos->condicion=='PENDIENTE')
-                          
-                          <td>PENDIENTE</td>
+                    @elseif($pagos->condicion=='PENDIENTE')
+                          @if($pagoPedido->pagado == 1)
+                          <td>ADELANTO PENDUIENTE</td>
+                          @else
+                          <td>PAGADO PENDUIENTE</td>
+                          @endif
                       @elseif($pagos->condicion=='PAGO')
                           @if($pagoPedido->pagado == 1)
                           <td>ADELANTO PAGO</td>
@@ -161,14 +162,14 @@
               <table class="table table-striped table_pagos_realizados">
                 <thead>
                   <tr>
-                    <th width='50px' scope="col">ITEM</th>
-                    <th width='80px' scope="col">PAGO</th>
-                    <th width='80px' scope="col">BANCO</th>                
-                    <th width='80px' scope="col">MONTO</th>
+                    <th scope="col">ITEM</th>
+                    <th scope="col">PAGO</th>
+                    <th scope="col">BANCO</th>                
+                    <th scope="col">MONTO</th>
                     {{--<th scope="col">FECHA</th>--}}
                     {{--<th scope="col">CUENTA DESTINO</th>--}}
-                    <th width='250px' scope="col">TITULAR</th>
-                    <th width='80px' scope="col">FECHA DEPOSITO</th>                    
+                    <th scope="col">TITULAR</th>
+                    <th scope="col">FECHA DEPOSITO</th>                    
                     
                     <th scope="col">IMAGEN</th>
                     <th scope="col">ACCION</th>
@@ -182,29 +183,17 @@
                   @foreach ($detallePagos as $detallePago)
                     <tr class="nohide_{{ $contPa + 1 }}">
                       <td>{{ $contPa + 1 }}</td>
-
-                      <td>
-                       <span><?php 
-                          if($detallePago->id<10){ ?>
-                            COMPR000{{ $detallePago->id }}
-                          <?php }else if($detallePago->id<100){ ?>
-                            COMPR00{{ $detallePago->id }}
-                          <?php }else if($detallePago->id<1000){ ?>
-                            COMPR0{{ $detallePago->id }}
-                          <?php }else{ ?>
-                            COMPR{{ $detallePago->id }}
-                          <?php } ?>  </span>
-                          
+                      <td>DETPAG00{{ $detallePago->id }}
                       
                       <input type="hidden" name="detalle_id[]" value="{{ $detallePago->id }}" class="form-control"></td>
-                      <td class="banco_{{ $contPa + 1 }}">{{ $detallePago->banco }}</td>                  
+                      <td>{{ $detallePago->banco }}</td>                  
                       <td>{{ $detallePago->monto }}</td>
                       
                       
                      
-                      <td class="titular_{{ $contPa + 1 }}">{{ $detallePago->titular }}</td>
+                      <td>{{ $detallePago->titular }}</td>
                      
-                      <td class="fechadeposito_{{ $contPa + 1 }}">{{ $detallePago->fecha_deposito }}</td>
+                      <td>{{ $detallePago->fecha_deposito }}</td>
                       <td>
                         
                         <p>
@@ -213,17 +202,16 @@
                         </a>
                           
                         </p>
-                        <a href="" data-target="#modal-cambiar-imagen" data-toggle="modal" data-imagen="{{ $detallePago->imagen }}" data-conciliar="{{ $detallePago->id }}" data-item="{{ $contPa + 1 }}"><button class="btn btn-danger btn-md">Cambiar</button></a>
+                        <a href="" data-target="#modal-cambiar-imagen" data-toggle="modal" data-imagen="{{ $detallePago->imagen }}" data-conciliar="{{ $detallePago->id }}" data-item="{{ $contPa + 1 }}"><button class="btn btn-danger btn-md accion-cambiar-imagen">Cambiar</button></a>
                         <input type="hidden" value="" name="conciliar[]" class="conciliar_count" id="conciliar_{{ $contPa + 1 }}" > 
                       </td>
                       <td>
                         
                         <p>
                           <br>
-                          <a href="{{ route('pagos.descargarimagen', $detallePago->imagen) }}" class="text-center"><button type="button" class="btn btn-secondary btn-md"> Descargar</button></a>
+                          <a href="{{ route('pagos.descargarimagen', $detallePago->imagen) }}" class="text-center"><button type="button" class="btn btn-secondary btn-md accion-descargar"> Descargar</button></a>
 
-                          <a href="" data-target="#modal-conciliar-get" class="modal-conciliar-get" data-fechadeposito="{{ $detallePago->fecha_deposito }}" data-toggle="modal" data-conciliar="{{ $detallePago->id }}" data-item="{{ $contPa + 1 }}"><button class="btn btn-danger btn-md">Conciliar</button></a>
-                          <a href="" data-target="#modal-editar-get" data-toggle="modal" data-pbanco="{{ $detallePago->banco }}" data-titulares="{{ $detallePago->titular }}" data-fecha="{{ $detallePago->fecha_deposito_change }}" data-conciliar="{{ $detallePago->id }}" data-item="{{ $contPa + 1 }}"><button class="btn btn-warning btn-md">Editar</button></a>
+                          <a href="" data-target="#modal-conciliar-get" data-toggle="modal" data-conciliar="{{ $detallePago->id }}" data-item="{{ $contPa + 1 }}"><button class="btn btn-danger btn-md accion_conciliar">Conciliar</button></a>
                         </p>
                       </td>
                       
@@ -270,98 +258,17 @@
       </div>  
     </div>
     <div class="card-footer text-center" id="guardar">
-      <div class="row">
-        <div class="col-2 text-left">
-          
-
-          <a href="{{ url()->previous() }}" class="btn btn-danger btn-lg"><i class="fas fa-arrow-left"></i> ATRAS</a>
-        </div>
-        <div class="col-10">
-          <button type="button" id="aprobarrbtn" class="btn btn-success btn-lg"><i class="fas fa-save"></i> APROBAR</button>
-          <button type="button" id="observarbtn" class="btn btn-danger btn-lg"><i class="fas fa-save"></i> OBSERVADO</button>
-          <button type="button" id="pendientebtn" class="btn btn-warning btn-lg"><i class="fas fa-save"></i> PENDIENTE</button>
-        </div>
-      </div>
+      <button type="button" id="aprobarrbtn" class="btn btn-success btn-lg"><i class="fas fa-save"></i> APROBAR</button>
+      <button type="button" id="observarbtn" class="btn btn-info btn-lg"><i class="fas fa-save"></i> OBSERVAR</button>
       
      
     </div>
     <div class="card-footer" >
       <button type="submit" class="btn btn-success btn-lg d-none"><i class="fas fa-save"></i> GUARDAR</button>
-      
+      <a href="{{ route('administracion.porrevisar') }}" class="btn btn-danger btn-lg d-none"><i class="fas fa-times-circle"></i> CANCELAR</a>
     </div>
     {!! Form::close() !!}
   </div>
-@stop
-
-@section('css')
-<style>
-  .modal.verimagen.left .modal-dialog,
- .modal.verimagen.right .modal-dialog {
-   position: fixed;
-   margin: auto;
-   width: 320px;
-   height: 100%;
-   -webkit-transform: translate3d(0%, 0, 0);
-       -ms-transform: translate3d(0%, 0, 0);
-        -o-transform: translate3d(0%, 0, 0);
-           transform: translate3d(0%, 0, 0);
- }
-
- .modal.verimagen.left .modal-content,
- .modal.verimagen.right .modal-content {
-   height: 100%;
-   overflow-y: auto;
- }
- 
- .modal.verimagen.left .modal-body,
- .modal.verimagen.right .modal-body {
-   padding: 15px 15px 80px;
- }
-
-/*Left*/
- 
- 
- .modal.verimagen.left.fade.in .modal-dialog{
-   left: 0;
- }
-       
-/*Right*/
- 
- .modal.verimagen.right.fade.in .modal-dialog {
-   right: 0;
- }
- .modal.verimagen.right .modal-dialog {
-   right: 0;
- }
-
-/* ----- MODAL STYLE ----- */
- .modal-content {
-   border-radius: 0;
-   border: none;
- }
-
- .modal-header {
-   border-bottom-color: #EEEEEE;
-   background-color: #FAFAFA;
- }
-
- .modal-dialog{
-   right:0;
-   padding-right: 0 !important;
-   margin-right: 0 !important;
- }
-
- /*@media (min-width: 576px)
- {
-   .modal-dialog
-   {
-     margin:inherit;
-     padding-right: 0 !important;
-      margin-right: 0 !important;
-
-   }
- }*/
- </style>
 @stop
 
 @section('js')
@@ -369,13 +276,6 @@
   {{--<script src="{{ asset('js/datatables.js') }}"></script>--}}
   <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
   <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
-
-  <script src="https://momentjs.com/downloads/moment.js"></script>
-  <script src="https://cdn.datatables.net/plug-ins/1.11.4/dataRender/datetime.js"></script>
-
-  <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
-
-
   <script>
     var tableconciliar=null;
     $(document).ready(function() {
@@ -399,7 +299,7 @@
           if($(this).data('banco')=='BCP')
           {
             $('.table_pagos_realizados tbody tr.nohide_'+iitem).after(
-              '<tr style="background-color:#ff7800;" class="hide_'+iitem+' hide_conciliar oculto">'+
+              '<tr style="background-color:#ff7800;" class="hide_'+iitem+' oculto">'+
               '<td class="text-light">'+iitem+'</td><td class="text-light"> </td>'+
               '<td class="text-light">'+$(this).data('banco')+'</td>'+
               '<td class="text-light">'+$(this).data('importe')+'</td>'+
@@ -411,7 +311,7 @@
           }else if($(this).data('banco')=='BBVA')
           {
             $('.table_pagos_realizados tbody tr.nohide_'+iitem).after(
-            '<tr style="background-color:#1973B8;" class="hide_'+iitem+' hide_conciliar oculto">'+
+            '<tr style="background-color:#1973B8;" class="hide_'+iitem+' oculto">'+
             '<td class="text-light">'+iitem+'</td><td class="text-light"> </td>'+
               '<td class="text-light">'+$(this).data('banco')+'</td>'+
               '<td class="text-light">'+$(this).data('importe')+'</td>'+
@@ -423,7 +323,7 @@
           }else if ($(this).data('banco')=='INTERBANK' || $(this).data('banco')=='IBK')
           {
             $('.table_pagos_realizados tbody tr.nohide_'+iitem).after(
-            '<tr class="bg-success hide_'+iitem+' hide_conciliar oculto">'+
+            '<tr class="bg-success hide_'+iitem+' oculto">'+
             '<td class="text-light">'+iitem+'</td><td class="text-light"> </td>'+
               '<td class="text-light">'+'INTERBANK'+'</td>'+
               '<td class="text-light">'+$(this).data('importe')+'</td>'+
@@ -435,7 +335,7 @@
           }else if ($(this).data('banco')=='YAPE')
           {
             $('.table_pagos_realizados tbody tr.nohide_'+iitem).after(
-            '<tr style="background-color:#6f42c1;" class="hide_'+iitem+' hide_conciliar oculto">'+
+            '<tr style="background-color:#6f42c1;" class="hide_'+iitem+' oculto">'+
             '<td class="text-light">'+iitem+'</td><td class="text-light"> </td>'+
               '<td class="text-light">'+$(this).data('banco')+'</td>'+
               '<td class="text-light">'+$(this).data('importe')+'</td>'+
@@ -447,7 +347,7 @@
           }else if ($(this).data('banco')=='PLIN')
           {
             $('.table_pagos_realizados tbody tr.nohide_'+iitem).after(
-            '<tr style="background-color:#0693e3;" class="hide_'+iitem+' hide_conciliar oculto" >'+
+            '<tr style="background-color:#0693e3;" class="hide_'+iitem+' oculto" >'+
             '<td class="text-light">'+iitem+'</td><td class="text-light"> </td>'+
               '<td class="text-light">'+$(this).data('banco')+'</td>'+
               '<td class="text-light">'+$(this).data('importe')+'</td>'+
@@ -514,29 +414,35 @@
 
       $('#modal-cambiar-imagen').on('show.bs.modal', function (event) {
         var button = $(event.relatedTarget) 
+        console.log(button)
         var imagen = button.data('imagen');
         var conciliar = button.data('conciliar');
+        console.log("conciliar "+conciliar)
         var itemcount = button.data('item');
-//#modal-imagen-4359 modalimagen_item
-        let item_modalimagen=$(".nohide_"+itemcount).find("td").eq(0).html();
-        let pago_modalimagen=$.trim($(".nohide_"+itemcount).find("td").eq(1).find("span").html());
-        let banco_modalimagen=$(".nohide_"+itemcount).find("td").eq(2).html();
-        let monto_modalimagen=$(".nohide_"+itemcount).find("td").eq(3).html();
-        let titular_modalimagen=$(".nohide_"+itemcount).find("td").eq(4).html();
-        let fecha_modalimagen=$(".nohide_"+itemcount).find("td").eq(5).html();
-        console.log(pago_modalimagen);
-        console.log("#modal-cambiar-"+conciliar+" .modalimagen_item")
-        $("#modal-cambiar-imagen .modalimagen_item").val(item_modalimagen);
-        $("#modal-cambiar-imagen .modalimagen_pago").val(pago_modalimagen);
-        $("#modal-cambiar-imagen .modalimagen_banco").val(banco_modalimagen);
-        $("#modal-cambiar-imagen .modalimagen_monto").val(monto_modalimagen);
-        $("#modal-cambiar-imagen .modalimagen_titular").val(titular_modalimagen);
-        $("#modal-cambiar-imagen .modalimagen_fecha").val(fecha_modalimagen);
-        
 
-        console.log("imagen "+imagen);
-        console.log("conciliar "+conciliar);
-        console.log("itemcount "+itemcount);
+        var rowcambiarimagen=$(button).parents('tr');
+        var titularcambiarimagen=rowcambiarimagen.find('td').eq(4).html();
+        var bancocambiarimagen=rowcambiarimagen.find('td').eq(2).html();
+        var fechacambiarimagen=rowcambiarimagen.find('td').eq(5).html();
+        var montocambiarimagen=rowcambiarimagen.find('td').eq(3).html();
+
+        console.log("bancocambiarimagen "+bancocambiarimagen);
+
+        $("#modal-cambiar-imagen .modal-header ")
+
+        $("#modal-cambiar-imagen .modalimagen_titular").val(titularcambiarimagen);
+        $("#modal-cambiar-imagen .modalimagen_banco").val(bancocambiarimagen);
+        $("#modal-cambiar-imagen .modalimagen_fecha ").val(fechacambiarimagen);
+        $("#modal-cambiar-imagen .modalimagen_monto ").val(montocambiarimagen);
+
+
+        //console.log(titularcambiarimagen);
+        //console.log(" ---"+rowcambiarimagen)
+        //var rowimagen=$(this).closest('tr').find("td").eq(3).find(":input").val(pedidosaldo.toFixed(2));
+
+        //console.log("imagen "+imagen);
+        //console.log("conciliar "+conciliar);
+        //console.log("itemcount "+itemcount);
 
         $("#DPConciliar").val(conciliar);
         $("#DPitem").val(itemcount);
@@ -606,50 +512,29 @@
         reader.readAsDataURL(file);
 
       });
+  
+
+
 
       $('#modal-conciliar-get').on('show.bs.modal', function (event) {
        
         var button = $(event.relatedTarget) 
-
         var idunico = button.data('conciliar')
+        console.log("idunico "+idunico)
         var iditem = button.data('item');
+        console.log("item "+iditem)
 
-        //
-        let item_modalimagen=$(".nohide_"+iditem).find("td").eq(0).html();
-        let pago_modalimagen=$.trim($(".nohide_"+iditem).find("td").eq(1).find("span").html());
-        let banco_modalimagen=$(".nohide_"+iditem).find("td").eq(2).html();
-        let monto_modalimagen=$(".nohide_"+iditem).find("td").eq(3).html();
-        let titular_modalimagen=$(".nohide_"+iditem).find("td").eq(4).html();
-        let fecha_modalimagen=$(".nohide_"+iditem).find("td").eq(5).html();
-        //console.log(pago_modalimagen);
-        //console.log("#modal-cambiar-"+conciliar+" .modalimagen_item")
-        $("#modal-conciliar-get .modalimagen_item").val(item_modalimagen);
-        $("#modal-conciliar-get .modalimagen_pago").val(pago_modalimagen);
-        $("#modal-conciliar-get .modalimagen_banco").val(banco_modalimagen);
-        $("#modal-conciliar-get .modalimagen_monto").val(monto_modalimagen);
-        $("#modal-conciliar-get .modalimagen_titular").val(titular_modalimagen);
-        $("#modal-conciliar-get .modalimagen_fecha").val(fecha_modalimagen);
-        //
+        var rowcambiarimagen=$(button).parents('tr');
+        var titularcambiarimagen=rowcambiarimagen.find('td').eq(4).html();
+        var bancocambiarimagen=rowcambiarimagen.find('td').eq(2).html();
+        var fechacambiarimagen=rowcambiarimagen.find('td').eq(5).html();
+        var montocambiarimagen=rowcambiarimagen.find('td').eq(3).html();
 
-        //var fechadeposito = button.data('fechadeposito');
-        let row_conciliar=button.closest("tr");
-        var fechadeposito=  row_conciliar.find("td").eq(5).html();
-        console.log(fechadeposito)
+        $("#modal-conciliar-get .modalimagen_titular").val(titularcambiarimagen);
+        $("#modal-conciliar-get .modalimagen_banco").val(bancocambiarimagen);
+        $("#modal-conciliar-get .modalimagen_fecha ").val(fechacambiarimagen);
+        $("#modal-conciliar-get .modalimagen_monto ").val(montocambiarimagen);
 
-        
-        //console.log(bb_banco)
-
-        //cambiar logica de campos obtener ahora de tabla datos
-         /*let row_conciliar=button.closest("tr");
-         bb_banco=row_conciliar.find("td").eq(2).html();//banco
-         bb_titular=row_conciliar.find("td").eq(4).html();//titular
-         bb_fecha=row_conciliar.find("td").eq(5).html();//fecha
-
-         
-         console.log(bb_banco)
-         console.log(bb_titular)
-         console.log(bb_fecha)*/
-         
         //incluir todos los conciliar
         var excluir=[];
         $('input[name="conciliar[]').each(function(){
@@ -661,7 +546,7 @@
        //console.log(excluir);
 
        var pasarExclusiones=excluir.join(',');
-       //console.log(pasarExclusiones)
+       console.log(pasarExclusiones)
         //var 
         //var inputt=("#conciliar_"+iditem).val();
         //console.log(idunico);
@@ -678,7 +563,7 @@
           "order": [[ 0, "asc" ]],
           'ajax': {
             url:"{{ route('movimientostablaconciliar') }}",					
-            'data': { "conciliar":idunico,"excluir":pasarExclusiones ,"fechadeposito":fechadeposito}, 
+            'data': { "conciliar":idunico,"excluir":pasarExclusiones }, 
             "type": "get",
           },
           columns: 
@@ -712,10 +597,9 @@
               data: 'fecha', 
               name: 'fecha',
               sWidth:'10%', 
-              render: $.fn.dataTable.render.moment( 'DD/MM/YYYY' )
-              /*render: function ( data, type, row, meta ) {
+              render: function ( data, type, row, meta ) {
                 return '<span class="fecha">' + data + '</span>';
-              }*/
+              }
             },
             {
               data: 'tipo', 
@@ -741,7 +625,7 @@
             sWidth:'20%',
             render: function ( data, type, row, meta ) {
               data = data+''+
-                            '<button class="btn btn-danger btn-sm button_conciliar" data-conciliar="'+row.id+'" data-item="'+iditem+'" data-importe="'+row.importe+'" data-titular='+row.titular+' data-banco="'+row.banco+'" data-fecha="'+row.fechamodal+'" data-tipo="'+row.tipo+'"><i class="fas fa-check-circle"></i></button>'+
+                            '<button class="btn btn-danger btn-sm button_conciliar" data-conciliar="'+row.id+'" data-item="'+iditem+'" data-importe="'+row.importe+'" data-titular='+row.titular+' data-banco="'+row.banco+'" data-fecha="'+row.fecha+'" data-fecha="'+row.fecha+'" data-tipo="'+row.tipo+'"><i class="fas fa-check-circle"></i></button>'+
                           '';
               return data;             
             },
@@ -768,116 +652,6 @@
             }
           },
         });
-
-
-      });
-
-      $('#modal-editar-get').on('show.bs.modal', function (event) {
-        var button = $(event.relatedTarget) 
-        var pbanco = button.data('pbanco')
-        var titulares = button.data('titulares')
-        var fecha = button.data('fecha')
-        var conciliar = button.data('conciliar')
-        var nitem = button.data('item')
-
-        //var fecha=$.datepicker.formatDate( "dd-mm-yy", new Date(fecha));
-        $("#conciliarupdate").val(conciliar)
-        $("#itemupdate").val(nitem)
-        $("#pbanco").val(pbanco).selectpicker("refresh");
-        $("#titulares").val(titulares).selectpicker("refresh");
-        console.log(fecha);
-        $("#pfecha").val(fecha);
-
-      });
-
-      $(document).on("click","#edit_dp",function(e){
-        e.preventDefault();
-        if ($('#pbanco').val() == '')
-        {
-          Swal.fire(
-            'Error',
-            'Seleccione banco ',
-            'warning'
-          );
-          return false;
-        }else if ($('#titulares').val() == '')
-        {
-          Swal.fire(
-            'Error',
-            'Seleccione titular',
-            'warning'
-          )
-          return false;
-        }else if ($('#pfecha').val() == '')
-        {
-          Swal.fire(
-            'Error',
-            'Seleccione la fecha',
-            'warning'
-          )
-          return false;
-        }else{
-          conciliar=$("#conciliarupdate").val();
-          item=$("#itemupdate").val();
-          titular = $('#titulares option:selected').val();
-          banco = $('#pbanco option:selected').val();
-          fecha = $("#pfecha").val();
-
-          var formd = new FormData();
-
-          //formData.append("item",cambiaitem )
-          formd.append("conciliar",conciliar)
-          formd.append("item",item)
-          formd.append("titular",titular)
-          formd.append("banco",banco)
-
-
-          formd.append("fecha",fecha)
-
-
-          $.ajax({
-            type:'POST',
-            url:"{{ route('pagodetalleUpdate') }}",
-            data:formd,
-            processData: false,
-            contentType: false,
-          }).done(function (data) {
-            $("#modal-editar-get").modal("hide");
-            console.log(data.html)
-            console.log(data.html.banco);
-            //console.log("banco a "+banco)
-            //console.log("titular a "+titular)
-            //console.log("titular a "+titular)
-
-            $(".banco_"+item).html(data.html.banco);
-            $(".titular_"+item).html(data.html.titular);
-            $(".fechadeposito_"+item).html(data.html.fecha);
-
-            //let bb_modal=
-            $('a.modal-conciliar-get[data-item="1"]').attr('data-fechadeposito', data.html.fecha);
-
-            //let row_conciliar=button.closest("tr");
-            //bb_modal=data_conciliar_row.find("td").eq(7).find('.modal-conciliar-get');
-            //bb_modal.attr("data-fechadeposito",data.html.fecha_conciliar);
-            /*bb_banco=row_conciliar.find("td").eq(2).html();//banco
-            bb_titular=row_conciliar.find("td").eq(4).html();//titular
-            bb_fecha=row_conciliar.find("td").eq(5).html();//fecha*/
-
-            
-            //console.log(bb_banco)
-            
-            //$('#tablaPrincipal').DataTable().ajax.reload();  
-
-            //location.reload();
-          });
-
-
-        }
-
-
-
-        let tipotrans = $("#pbanco").val();
-        let descrip_otros = $("#descrip_otros").val();
 
 
       });
@@ -1022,136 +796,80 @@
         $("#condicion").val("OBSERVADO").selectpicker("refresh");
         $("#formulario").submit();
       });
-
-      $(document).on("click","#pendientebtn",function(){
-        console.log("pendiente")
-        $("#condicion").val("PENDIENTE").selectpicker("refresh");
-        $("#formulario").submit();
-      });
+     
 
       $(document).on("submit","#formulario",function(event){
             event.preventDefault();   
-            console.log("form submit");
+            console.log("form submit")  ;
+            
+            /* var cuenta = document.getElementById('cuenta').value; */
+            cuenta = document.getElementsByName("cuenta[]");
+            /* var titular = document.getElementById('titular').value; */
+            titular = document.getElementsByName("titular[]");
+            /* var fecha_deposito = document.getElementById('fecha_deposito').value; */
+            fecha_deposito = document.getElementsByName("fecha_deposito[]");
+            var condicion = document.getElementById('condicion').value;
+
+            var filas_pagos=$(".table_pagos_realizados tbody tr.nohide").length;
 
             var campo_condicion = $("#condicion").val();
             var inputconciliar=0
             if(campo_condicion=='ABONADO')
             {
-                    var total_conciliar={{$contPa}};
-                    console.log("total detalles para conciliar: "+total_conciliar);
-                    var exxxxx=$(".hide_conciliar").length;
-                    console.log("cont debo conciliar "+exxxxx)
-                    if(exxxxx!=total_conciliar)
-                    {
-                      Swal.fire(
-                        'Error',
-                        'Faltan conciliaciones 1',
-                        'warning'
-                      )
-                      return false;
-                    }
-                    
-                    var error_conciliar=true;
-                    var existe_r=null;
-
-                    for(var ir = 1; ir < total_conciliar+1; ir++)
-                    {
-                      existe_r=$(".hide_"+ir).length;
-                      if(existe_r==0)
-                      {
-                      }else{
-                        console.log("fila "+ir)
-                        let html_importe_dpa=$(".nohide_"+ir).find("td").html();
-                        let html_importe_con=$(".hide_"+ir).find("td").html();
-                        console.log(" pago "+html_importe_dpa)
-                        console.log(" mov  "+html_importe_con)
-                        //comparar importe
-                        let importe_dpa=$(".nohide_"+ir).find("td").eq(3).html();
-                        let importe_con=$(".hide_"+ir).find("td").eq(3).html();
-                        console.log("importe dpa "+importe_dpa)
-                        console.log("importe con "+importe_con)
-
-                        if(importe_dpa!=importe_con)
-                        {
-                          Swal.fire(
-                            'Error',
-                            'Existen pagos que no coinciden en importe',
-                            'warning'
-                          )
-                          error_conciliar=false;
-                          return false; 
-                        }
-
-                        let fecha_dpa=$(".nohide_"+ir).find("td").eq(5).html();
-                        let fecha_con=$(".hide_"+ir).find("td").eq(5).html();
-                        console.log("fecha_dpa "+fecha_dpa)
-                        console.log("fecha_con "+fecha_con)
-
-                        if(fecha_dpa!=fecha_con)
-                        {
-                          Swal.fire(
-                            'Error',
-                            'Existen pagos que no coinciden en fecha',
-                            'warning'
-                          )
-                          error_conciliar=false;
-                          return false; 
-                        }
-
-                      }
-
-                    }
-
-                    
-                    if(error_conciliar===false)
-                    {
-                      
-                      Swal.fire(
-                        'Error',
-                        'Existen comprobantes sin conciliar o el importe no coincide con el movimiento',
-                        'warning'
-                      )
-                      return false; 
-                    }
-
-                    this.submit();
-            }else{
-
-  //validar  detalle pago con conciliaciones  que coincida los importes
-              
-              /* var cuenta = document.getElementById('cuenta').value; */
-              cuenta = document.getElementsByName("cuenta[]");
-              /* var titular = document.getElementById('titular').value; */
-              titular = document.getElementsByName("titular[]");
-              /* var fecha_deposito = document.getElementById('fecha_deposito').value; */
-              fecha_deposito = document.getElementsByName("fecha_deposito[]");
-              var condicion = document.getElementById('condicion').value;
-
-              var filas_pagos=$(".table_pagos_realizados tbody tr.nohide").length;
-
-
-              var cuent = [];
-              var tit = [];
-              var fec = [];
-
-              for(var i=0;i<cuenta.length;i++){
-                  cuent.push(cuenta[i].value);
-                  tit.push(titular[i].value);
-                  fec.push(fecha_deposito[i].value);
-              }
-              var tthis=this;
-              console.info(cuent);
-              console.info(tit);
-              console.info(fec);
+              inputconciliar=$(".conciliar_count").length;
+              if(inputconciliar==0)
               {
-                tthis.submit();
-              } 
+                Swal.fire(
+                    'Error',
+                    'No existen conciliaciones relacionadas',
+                    'warning'
+                  )
+                  return false;
+              }else{
 
+                //$('.conciliar_count').
+                var estadovacioconciliar=0;
+                $('.conciliar_count').each(function(){
+                  if(this.value==0)
+                  {
+                    estadovacioconciliar=1;
+                    return false;
+                  }
+                    
+                });
+                if(estadovacioconciliar==1)
+                {
+                  
+                  Swal.fire(
+                    'Error',
+                    'Faltan conciliar pagos',
+                    'warning'
+                  )
+                  return false;
+                    
+                }
+              }
             }
+
 
             
 
-              
+            var cuent = [];
+            var tit = [];
+            var fec = [];
+
+            for(var i=0;i<cuenta.length;i++){
+                cuent.push(cuenta[i].value);
+                tit.push(titular[i].value);
+                fec.push(fecha_deposito[i].value);
+            }
+            var tthis=this;
+            console.info(cuent);
+            console.info(tit);
+            console.info(fec);
+            {
+              tthis.submit();
+            }   
       });
 
 

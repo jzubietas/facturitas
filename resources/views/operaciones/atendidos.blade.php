@@ -1,9 +1,9 @@
 @extends('adminlte::page')
 
-@section('title', 'Operaciones | Sobres terminados')
+@section('title', 'Operaciones | Pedidos atendidos')
 
 @section('content_header')
-  <h1>Lista de pedidos ENTREGADOS - OPERACIONES
+  <h1>Lista de pedidos ATENDIDOS - OPERACIONES
     {{-- @can('pedidos.exportar')
     <div class="float-right btn-group dropleft">
       <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -22,7 +22,7 @@
         <a href="" data-target="#modal-exportar" data-toggle="modal" class="dropdown-item" target="blank_"><img src="{{ asset('imagenes/icon-excel.png') }}"> Excel</a>
       </div>
     </div>
-    @include('pedidos.modal.exportar', ['title' => 'Exportar pedidos entregados', 'key' => '10'])       
+    @include('pedidos.modal.exportar', ['title' => 'Exportar pedidos atendidos', 'key' => '9'])       
   </h1>
   @if($superasesor > 0)
   <br>
@@ -38,7 +38,7 @@
 
   <div class="card">
     <div class="card-body">
-      <table cellspacing="5" cellpadding="5">
+      <table cellspacing="5" cellpadding="5" class="d-none">
         <tbody>
           <tr>
             <td>Minimum date:</td>
@@ -53,10 +53,12 @@
         <thead>
           <tr>
             <th scope="col">Item</th>
+            <th scope="col">Item</th>
             <th scope="col">Código</th>
             <th scope="col">Razón social</th>
             <th scope="col">Asesor</th>
             <th scope="col">Fecha de registro</th>
+            <th scope="col">Fecha de atención</th>
             <th scope="col">Destino</th>
             <th scope="col">Estado</th>
             <th scope="col">Atendido por</th>
@@ -70,7 +72,6 @@
       </table>
       @include('pedidos.modal.envioid')
       @include('pedidos.modal.sinenvioid')
-      @include('pedidos.modal.revertirporenviar')
     </div>
   </div>
 
@@ -137,30 +138,58 @@
         }
       });
 
-      $('#modal-revertir').on('show.bs.modal', function (event) {
+      $('#modal-envio').on('show.bs.modal', function (event) {
         //cuando abre el form de anular pedido
         var button = $(event.relatedTarget) 
-        var idunico = button.data('revertir')
+        var idunico = button.data('envio')
         $(".textcode").html("PED"+idunico);
-        $("#hiddenRevertirpedido").val(idunico);
+        $("#hiddenEnvio").val(idunico);
       });
 
-      $(document).on("submit", "#formulariorevertir", function (evento) {
+      $('#modal-sinenvio').on('show.bs.modal', function (event) {
+        //cuando abre el form de anular pedido
+        var button = $(event.relatedTarget) 
+        var idunico = button.data('sinenvio')
+        $(".textcode").html("PED"+idunico);
+        $("#hiddenSinenvio").val(idunico);
+      });
+
+      $(document).on("submit", "#formularioenvio", function (evento) {
         evento.preventDefault();
         var fd = new FormData();
-        fd.append( 'hiddenRevertirpedido', $("#hiddenRevertirpedido").val() );
+        fd.append( 'hiddenEnvio', $("#hiddenEnvio").val() );
 
         $.ajax({
            data: fd,
            processData: false,
            contentType: false,
            type: 'POST',
-           url:"{{ route('pedidos.revertirenvioid') }}",
+           url:"{{ route('pedidos.envioid') }}",
            success:function(data)
            {
             console.log(data);
-            $("#modal-revertir .textcode").text('');
-            $("#modal-revertir").modal("hide");
+            $("#modal-envio .textcode").text('');
+            $("#modal-envio").modal("hide");
+            $('#tablaPrincipal').DataTable().ajax.reload();
+           }
+        });
+      });
+
+      $(document).on("submit", "#formulariosinenvio", function (evento) {
+        evento.preventDefault();
+        var fd = new FormData();
+        fd.append( 'hiddenSinenvio', $("#hiddenSinenvio").val() );
+        $.ajax({
+           data: fd,
+           processData: false,
+           contentType: false,
+           type: 'POST',
+           url:"{{ route('operaciones.sinenvioid') }}",
+           success:function(data)
+           {
+            console.log(data);
+            $("#modal-sinenvio .textcode").text('');
+            $("#modal-sinenvio").modal("hide");
             $('#tablaPrincipal').DataTable().ajax.reload();
            }
         });
@@ -191,7 +220,7 @@
         searching: true,
         "order": [[ 0, "desc" ]],
         ajax: {
-          url: "{{ route('operaciones.entregadostabla') }}",
+          url: "{{ route('operaciones.atendidostabla') }}",
           data: function (d) {
             //d.asesores = $("#asesores_pago").val();
             d.min = $("#min").val();
@@ -227,14 +256,24 @@
                 } 
               }
           },
+          {
+            data: 'id2'
+            , name: 'id2' ,"visible":false
+          },
           {data: 'codigos', name: 'codigos', },
           {data: 'empresas', name: 'empresas', },
           {data: 'users', name: 'users', },
+          //{data: 'fecha', name: 'fecha', },
           {
             data: 'fecha', 
             name: 'fecha', 
             render:$.fn.dataTable.render.moment('YYYY-MM-DD HH:mm:ss', 'DD/MM/YYYY HH:mm:ss' ),
-            "visible":true,
+            "visible":false,
+          },
+          {
+            data: 'fecha_envio_doc', 
+            name: 'fecha_envio_doc', 
+            render:$.fn.dataTable.render.moment('YYYY-MM-DD HH:mm:ss', 'DD/MM/YYYY HH:mm:ss' )
           },
           {data: 'destino', name: 'destino',"visible":false },
           {data: 'condicion', name: 'condicion', },
@@ -267,31 +306,30 @@
 
               var urlver = '{{ route("operaciones.showatender", ":id") }}';
               urlver = urlver.replace(':id', row.id);
-              data = data+'<a href="'+urlver+'" class="btn btn-primary btn-sm"><i class="fas fa-eye"></i> Ver</a><br>';
+              data = data+'<a href="'+urlver+'" class="btn btn-primary btn-sm"><i class="fas fa-eye"></i> Ver</a>';
 
               var urledit = '{{ route("operaciones.editatender", ":id") }}';
               urledit = urledit.replace(':id', row.id);
               @can('operacion.editatender')
-                data = data+'<a href="'+urledit+'" class="btn btn-warning btn-sm"><i class=""></i> Editar atención</a><br>';
+                data = data+'<a href="'+urledit+'" class="btn btn-warning btn-sm"><i class=""></i> Editar atención</a>';
               @endcan
               var urlpdf = '{{ route("pedidosPDF", ":id") }}';
               urlpdf = urlpdf.replace(':id', row.id);  
               @can('operacion.PDF')
-                data = data+'<a href="'+urlpdf+'" class="btn btn-primary btn-sm" target="_blank"><i class="fa fa-file-pdf"></i> PDF</a><br>';                
+                data = data+'<a href="'+urlpdf+'" class="btn btn-primary btn-sm" target="_blank"><i class="fa fa-file-pdf"></i> PDF</a>';                
               @endcan
 
               @can('operacion.enviar')
                 if (row.envio == '0')
                 {
-                  data = data+'<a href="" data-target="#modal-envio" data-envio='+row.id+' data-toggle="modal" ><button class="btn btn-success btn-sm">Enviar</button></a><br>'; 
-                  data = data+'<a href="" data-target="#modal-sinenvio" data-sinenvio='+row.id+' data-toggle="modal" ><button class="btn btn-dark btn-sm">Sin envío</button></a><br>'; 
+                  @if (Auth::user()->rol == "Jefe de operaciones" || Auth::user()->rol == "Administrador")
+                  
+                    data = data+'<a href="" data-target="#modal-envio" data-envio='+row.id+' data-toggle="modal" ><button class="btn btn-success btn-sm">Enviar</button></a>'; 
+                    data = data+'<a href="" data-target="#modal-sinenvio" data-sinenvio='+row.id+' data-toggle="modal" ><button class="btn btn-dark btn-sm">Sin envío</button></a>'; 
+                  @endif
+                  
                 }
               @endcan
-
-              if(row.envio=='3' || row.envio=='1')
-              {
-                data = data+'<a href="" data-target="#modal-revertir" data-revertir='+row.id+' data-toggle="modal" ><button class="btn btn-success btn-sm">Revertir</button></a>'; 
-              }
               
               return data;
             }
@@ -320,7 +358,7 @@
 
       });
 
-      $('#tablaPrincipal_filter label input').on('paste', function(e) {
+     $('#tablaPrincipal_filter label input').on('paste', function(e) {
       var pasteData = e.originalEvent.clipboardData.getData('text')
       localStorage.setItem("search_tabla",pasteData);
     });
@@ -328,6 +366,7 @@
       localStorage.setItem("search_tabla",$(this).val());
       console.log( "search_tabla es "+localStorage.getItem("search_tabla") );
     });
+
 
     });
   </script>
@@ -368,11 +407,11 @@
     /* Custom filtering function which will search data in column four between two values */
         $(document).ready(function () { 
         
-            /*$.fn.dataTable.ext.search.push(
+            $.fn.dataTable.ext.search.push(
                 function (settings, data, dataIndex) {
                     var min = $('#min').datepicker("getDate");
                     var max = $('#max').datepicker("getDate");
-                    
+                    // need to change str order before making  date obect since it uses a new Date("mm/dd/yyyy") format for short date.
                     var d = data[4].split("/");
                     var startDate = new Date(d[1]+ "/" +  d[0] +"/" + d[2]);
 
@@ -382,46 +421,17 @@
                     if (startDate <= max && startDate >= min) { return true; }
                     return false;
                 }
-            );*/
+            );
 
-            $("#min").datepicker({ 
-              onSelect: function () { 
-                $('#tablaPrincipal').DataTable().ajax.reload(); 
-                //localStorage.setItem('dateMin', $(this).val() ); 
-              }, changeMonth: true, changeYear: true , dateFormat:"dd/mm/yy"
-            });
-              
-            $("#max").datepicker({ 
-              onSelect: function () { 
-                $('#tablaPrincipal').DataTable().ajax.reload(); 
-                //localStorage.setItem('dateMax', $(this).val() ); 
-              }, changeMonth: true, changeYear: true, dateFormat:"dd/mm/yy" 
-            });
       
-            //$("#min").datepicker({ onSelect: function () { table.draw(); }, changeMonth: true, changeYear: true , dateFormat:"dd/mm/yy"});
-            //$("#max").datepicker({ onSelect: function () { table.draw(); }, changeMonth: true, changeYear: true, dateFormat:"dd/mm/yy" });
-            //var table = $('#tablaPrincipal').DataTable();
+            $("#min").datepicker({ onSelect: function () { table.draw(); }, changeMonth: true, changeYear: true , dateFormat:"dd/mm/yy"});
+            $("#max").datepicker({ onSelect: function () { table.draw(); }, changeMonth: true, changeYear: true, dateFormat:"dd/mm/yy" });
+            var table = $('#tablaPrincipal').DataTable();
 
             // Event listener to the two range filtering inputs to redraw on input
-            /*$('#min, #max').change(function () {
+            $('#min, #max').change(function () {
                 table.draw();
-            });*/
+            });
         });
-  </script>
-  <script>
-    /*if (localStorage.getItem('dateMin') )
-    {
-      $( "#min" ).val(localStorage.getItem('dateMin')).trigger("change");        
-    }else{
-      localStorage.setItem('dateMin', "{{$dateMin}}" );
-    }
-    if (localStorage.getItem('dateMax') )
-    { 
-      $( "#max" ).val(localStorage.getItem('dateMax')).trigger("change");
-    }else{
-      localStorage.setItem('dateMax', "{{$dateMax}}" );
-    }*/
-    //console.log(localStorage.getItem('dateMin'));
-    //console.log(localStorage.getItem('dateMax'));
   </script>
 @stop
