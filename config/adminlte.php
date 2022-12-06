@@ -486,7 +486,7 @@ return [
             'text'    => 'Personas',
             'icon'    => 'fas fa-users',
             'can' => 'personas.modulo',
-            'submenu' => [
+            'submenu' => [                
                 [
                     'text' => 'Clientes',
                     'route'  => 'clientes.index',
@@ -496,11 +496,11 @@ return [
                 ],
                 [
                     'text' => 'Clientes Abandono',
-                    'route'  => 'clientesabandono',
-                    'can' => 'clientes.abandono',
+                    'route'  => 'clientes.abandono',
+                    'can' => 'clientes.index',
                     'icon'   => 'fas fa-check-circle',
                     'active' => ['clientes'],
-                ],
+                ],            
                 [
                     'text' => 'Base fría',
                     'route'  => 'basefria',
@@ -508,27 +508,27 @@ return [
                     'icon'   => 'fas fa-check-circle',
                     'active' => ['base fria'],
                 ],
-                [
+                /*[
                     'text' => 'Clientes Recurrentes',
                     'route'  => 'clientes.recurrentes',
-                    'can' => 'clientes.recurrentes',
+                    'can' => 'clientes.index',
                     'icon'   => 'fas fa-check-circle',
                     'active' => ['clientes'],
                 ],
                 [
                     'text' => 'Clientes Nuevos',
                     'route'  => 'clientes.nuevos',
-                    'can' => 'clientes.nuevos',
+                    'can' => 'clientes.index',
                     'icon'   => 'fas fa-check-circle',
                     'active' => ['clientes'],
                 ],
                 [
                     'text' => 'Clientes Recuperados',
                     'route'  => 'clientes.recuperados',
-                    'can' => 'clientes.recuperados',
+                    'can' => 'clientes.index',
                     'icon'   => 'fas fa-check-circle',
                     'active' => ['clientes'],
-                ],
+                ],*/
             ],
         ],
         

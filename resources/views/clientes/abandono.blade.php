@@ -1,15 +1,15 @@
 @extends('adminlte::page')
 
-@section('title', 'Abandono - Lista de Clientes')
+@section('title', 'Lista de Clientes')
 
 @section('style')
 <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css">
 @endsection
 
 @section('content_header')
-  <h1>Lista de clientes en abandono
+  <h1>Lista de clientes
     @can('clientes.create')
-      {{--<a href="{{ route('clientes.create') }}" class="btn btn-info"><i class="fas fa-plus-circle"></i> Agregar</a>--}}
+      <a href="{{ route('clientes.create') }}" class="btn btn-info"><i class="fas fa-plus-circle"></i> Agregar</a>
     @endcan
     @can('clientes.exportar')
     <div class="float-right btn-group dropleft">
@@ -17,12 +17,17 @@
         Exportar
       </button>
       <div class="dropdown-menu">
-        
-        <a href="" data-target="#modal-exportar-unico" data-toggle="modal" class="dropdown-item" target="blank_"><img src="{{ asset('imagenes/icon-excel.png') }}"> Clientes - Abandonos</a>
+        {{-- <a href="{{ route('clientesExcel') }}" class="dropdown-item" target="blank_"><img src="{{ asset('imagenes/icon-excel.png') }}"> Clientes</a> --}}
+        {{-- <a href="" data-target="#modal-exportar" data-toggle="modal" class="dropdown-item" target="blank_"><img src="{{ asset('imagenes/icon-excel.png') }}"> Clientes</a>--}}
+        {{--<a href="{{ route('clientespedidosExcel') }}" class="dropdown-item" target="blank_"><img src="{{ asset('imagenes/icon-excel.png') }}"> Clientes - Pedidos</a> --}}
+        <a href="" data-target="#modal-exportar2" data-toggle="modal" class="dropdown-item" target="blank_"><img src="{{ asset('imagenes/icon-excel.png') }}"> Clientes - Pedidos</a>
+
+        <a href="" data-target="#modal-exportar-v2" data-toggle="modal" class="dropdown-item d-none" target="blank_"><img src="{{ asset('imagenes/icon-excel.png') }}"> Clientes - Situacion</a>
       </div>
     </div>
-    {{--@include('clientes.modal.exportar_unico')--}} {{-- Modal Clientes --}}
-    @include('clientes.modal.exportar_unico', ['title' => 'Exportar Lista de clientes en abandono', 'key' => '1'])  
+    @include('clientes.modal.exportar') {{-- Modal Clientes - Pedidos --}}
+    @include('clientes.modal.exportar2') {{-- Modal Clientes --}}
+    @include('clientes.modal.exportarv2')
     @endcan
   </h1>
   @if($superasesor > 0)
@@ -39,7 +44,7 @@
 
   <div class="card">
     <div class="card-body">
-      <table id="tablaPrincipal" class="table table-striped">
+      <table id="tablaPrincipal" style="width:100%;" class="table table-striped">
         <thead>
           <tr>
             <th scope="col">COD.</th>
@@ -169,12 +174,14 @@ $(document).ready(function () {
 
     });
 
+    
+
     $('#tablaPrincipal').DataTable({
         processing: true,
         responsive:true,
         autowidth:true,
         serverSide: true,
-        ajax: "{{ route('clientesabandonotabla') }}",
+        ajax: "{{ route('clientestabla') }}",
         initComplete:function(settings,json){          
           if (localStorage. getItem("search_tabla") === null) {
             //no existe
