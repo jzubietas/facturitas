@@ -44,7 +44,7 @@
 
   <div class="card">
     <div class="card-body">
-      <table id="tablaPrincipal" class="table table-striped">
+      <table id="tablaPrincipal" style="width:100%;" class="table table-striped">
         <thead>
           <tr>
             <th scope="col">COD.</th>
@@ -231,6 +231,7 @@ $(document).ready(function () {
         },
         //{data: 'direccion', name: 'direccion'},
         {data: 'identificador', name: 'identificador'},
+        {data: 'situacion', name: 'situacion'},
         //{data: 'cantidad', name: 'cantidad'},
         //{data: 'dateY', name: 'dateY'},
         //{data: 'dateM', name: 'dateM'},
