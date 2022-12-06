@@ -35,6 +35,35 @@
         chart.draw(data, google.charts.Bar.convertOptions(options));
       };
     </script>
+
+    <script type="text/javascript">
+      google.charts.load('current', {
+        'packages': ['bar']
+      });
+      google.charts.setOnLoadCallback(drawStuff);
+
+      function drawStuff() {
+        var data = new google.visualization.arrayToDataTable([
+          ['Cobranza', 'Pedidos'],
+          @foreach ($cobranzaxmes as $vxax)
+            ['{{ $vxax->users }}', {{ $vxax->pedidos }}],
+          @endforeach
+        ]);
+
+        var options = {
+          chart: {
+            title: 'COBRANZA POR MES',
+            subtitle: 'COBRANZA/PEDIDOS'
+          }
+        };
+
+        var chart = new google.charts.Bar(document.getElementById('cobranzaxmes'));
+        chart.draw(data, google.charts.Bar.convertOptions(options));
+      };
+    </script>
+
+
+
     <script type="text/javascript">
       google.charts.load('current', {
         'packages': ['bar']

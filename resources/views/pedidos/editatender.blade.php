@@ -113,9 +113,9 @@
             </div>
           </div>                    
         </div>
-        <div class="modal-footer">
+        <div class="col-2 text-left" class="modal-footer">
           <button type="submit" class="btn btn-success" id="atender">Confirmar</button>
-          <a href="{{ url()->previous() }}" class="btn btn-danger">ATRAS</a>
+          <a href="{{ url()->previous() }}" class="btn btn-danger"><i class="fas fa-arrow-left"></i>ATRAS</a>
         </div>        
       </div>
     </div>

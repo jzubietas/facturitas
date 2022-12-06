@@ -395,7 +395,7 @@ class EnvioController extends Controller
 
         $pedidos = $pedidos_lima->union($pedidos_provincia);
         //$pedidos=$pedidos->where(DB::raw('DATE(direccion_grupos.created_at)'), $request->desde);
-        $pedidos=$pedidos->get();
+        //$pedidos=$pedidos->get();
 
 
         if(Auth::user()->rol == "Operario"){
@@ -407,6 +407,7 @@ class EnvioController extends Controller
                     DB::raw("users.id as id")
                 )
                 ->pluck('users.id');
+                $pedidos=$pedidos->Where('u.identificador',Auth::user()->identificador);
             
         }else if(Auth::user()->rol == "Jefe de operaciones"){
 
@@ -425,17 +426,19 @@ class EnvioController extends Controller
                     DB::raw("users.id as id")
                 )
                 ->pluck('users.id');
+                $pedidos=$pedidos->Where('u.identificador',Auth::user()->identificador);
 
             
         }else if(Auth::user()->rol == "Asesor"){
-            
-        }else if(Auth::user()->rol == "Super asesor"){
-            
-        }else if(Auth::user()->rol == "Encargado"){
+           
+                $pedidos=$pedidos->Where('u.identificador',Auth::user()->identificador);
+    
+       }else if(Auth::user()->rol == "Encargado"){
             
         }else{
            
         }
+        $pedidos=$pedidos->get();
         
         return Datatables::of($pedidos)
                     ->addIndexColumn()

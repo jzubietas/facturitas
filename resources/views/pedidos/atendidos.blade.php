@@ -301,7 +301,7 @@
 
               var urlver = '{{ route("operaciones.showatender", ":id") }}';
               urlver = urlver.replace(':id', row.id);
-              data = data+'<a href="'+urlver+'" class="btn btn-primary btn-sm" target="_blank"><i class="fas fa-eye"></i> Ver</a>';
+              data = data+'<a href="'+urlver+'" class="btn btn-primary btn-sm"><i class="fas fa-eye"></i> Ver</a>';
 
               var urledit = '{{ route("operaciones.editatender", ":id") }}';
               urledit = urledit.replace(':id', row.id);

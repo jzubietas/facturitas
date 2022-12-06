@@ -52,12 +52,12 @@
                 @endphp
               </td>
               <td>
-                {{-- @can('users.asignarsupervisor') --}}
+               
                   <a href="" data-target="#modal-asignarmetaasesor-{{ $user->id }}" data-toggle="modal"><button class="btn btn-info btn-sm">Asignar metas del mes</button></a>
-                {{-- @endcan --}}
+                
               </td>
             </tr>
-            {{-- @include('usuarios.modal.asignarmetaasesor') --}}
+            @include('usuarios.modal.asignarmetaasesor') 
           @endforeach
         </tbody>
       </table>
