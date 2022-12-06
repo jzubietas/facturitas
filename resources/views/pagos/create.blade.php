@@ -467,12 +467,10 @@ tfoot td {
             $(".banco_procedencia_otro").hide();           
           }else if($(this).val()=='YAPE'){
             $(".operacion_contenedor").hide();
-            $("#poperacion").prop("required",false);
             //$("#poperacion").hide(); 
             //$("#poperacion").prop("disabled",true);          
           }else if($(this).val()=='PLIN'){
             $(".operacion_contenedor").hide();
-            $("#poperacion").prop("required",false);
             //$("#poperacion").hide(); 
             //$("#poperacion").prop("disabled",true);          
           }else{
@@ -1866,9 +1864,6 @@ tfoot td {
 
               agregarPagoPerdonar();
 
-
-              
-
             }else{
               Swal.fire(
                   'Error',
@@ -1878,8 +1873,6 @@ tfoot td {
                 return false;
             }
             
-
-
           }
 
 
@@ -1888,6 +1881,12 @@ tfoot td {
         
         $(document).on("click","#add_pago",function(){
           console.log("click addpago");
+
+         var cantidad= $('#poperacion').val().length;
+         var nota = $('#pnota').val();
+         console.log(cantidad);
+
+         
           if ($('#pbanco').val() == '')
           {
             Swal.fire(
@@ -1932,11 +1931,21 @@ tfoot td {
               'warning'
             )
           }
-          else if ($('#poperacion').length <= 11)
-          {
-            $("#pnota").prop("required",true);
-          }
+          
           else {
+
+          if(cantidad <= 11){
+            if(nota == '')
+               {
+                console.log("aqui");
+                Swal.fire(
+                'Error',
+                'Debe Ingresar Nota',
+                'warning'
+              );}
+           
+              else{
+                
             console.log("empieza logica 2");
             if ($('#tipotransferencia').val() == 'INTERBANCARIO')
             {
@@ -2025,6 +2034,99 @@ tfoot td {
                 
               }
             }
+              }
+          }else{
+
+            console.log("empieza logica 2");
+            if ($('#tipotransferencia').val() == 'INTERBANCARIO')
+            {
+              console.log("INTERBANCARIO")
+              if ($('#pbancoprocedencia').val() == '')
+              {
+                console.log("pbancoprocedencia vacio")
+                Swal.fire(
+                  'Error',
+                  'Seleccione Banco de procedencia',
+                  'warning'
+                )
+              }else if ($('#pbancoprocedencia').val() == 'OTROS')
+              {
+                console.log("pbancoprocedencia OTROS")
+                if ($('#otro_bancoprocedencia').val() == '')
+                {
+                  Swal.fire(
+                    'Error',
+                    'Seleccione Banco de procedencia',
+                    'warning'
+                  )
+                }else{
+                  /**/
+                  console.log("aca");
+                  $("#tabla_pedidos tbody tr .radiototal").prop("checked",false).trigger("change");
+                  $("#tabla_pedidos tbody tr .radioadelanto").prop("checked",false).trigger("change");
+                  let files=$('#pimagen');
+                  var totalfilescarga = $('#pimagen').get(0).files.length;
+                  if(files.length!=totalfilescarga)
+                  {
+                    Swal.fire(
+                      'Error',
+                      'Debe ingresar la imagen adjunta',
+                      'warning'
+                    )
+                    return false;
+                  }else{
+                    deuda = !isNaN($('#pcantidad').val()) ? parseInt($('#pcantidad').val(), 10) : 0;
+                    pagado = !isNaN($('#pstock').val()) ? parseInt($('#pstock').val(), 10) : 0;
+                    agregarPago();                  
+                  }
+                  /**/
+                }
+              }else{
+                /**/
+                console.log("aca");
+                $("#tabla_pedidos tbody tr .radiototal").prop("checked",false).trigger("change");
+                $("#tabla_pedidos tbody tr .radioadelanto").prop("checked",false).trigger("change");
+                let files=$('#pimagen');
+                var totalfilescarga = $('#pimagen').get(0).files.length;
+                if(files.length!=totalfilescarga)
+                {
+                  Swal.fire(
+                    'Error',
+                    'Debe ingresar la imagen adjunta',
+                    'warning'
+                  )
+                  return false;
+                }else{
+                  deuda = !isNaN($('#pcantidad').val()) ? parseInt($('#pcantidad').val(), 10) : 0;
+                  pagado = !isNaN($('#pstock').val()) ? parseInt($('#pstock').val(), 10) : 0;
+                  agregarPago();                  
+                }
+                /**/
+              }
+            }else
+            {
+              console.log("aca");
+              $("#tabla_pedidos tbody tr .radiototal").prop("checked",false).trigger("change");
+              $("#tabla_pedidos tbody tr .radioadelanto").prop("checked",false).trigger("change");
+              let files=$('#pimagen');
+              var totalfilescarga = $('#pimagen').get(0).files.length;
+              if(files.length!=totalfilescarga)
+              {
+                Swal.fire(
+                  'Error',
+                  'Debe ingresar la imagen adjunta',
+                  'warning'
+                )
+                return false;
+              }else{
+                deuda = !isNaN($('#pcantidad').val()) ? parseInt($('#pcantidad').val(), 10) : 0;
+                pagado = !isNaN($('#pstock').val()) ? parseInt($('#pstock').val(), 10) : 0;
+                agregarPago();
+                
+              }
+            }
+          }
+
           }
         });
 

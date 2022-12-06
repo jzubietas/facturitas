@@ -44,9 +44,10 @@
           <tr>
             <th scope="col">Item</th>
             <th scope="col">Código</th>
-            <th scope="col">Razón social</th>
+            {{-- <th scope="col">Razón social</th> --}}
             <th scope="col">Asesor</th>
             <th scope="col">Fecha de registro</th>{{--fecha hora--}}
+            <th scope="col">Tipo de Banca</th>
             <th scope="col">Adjuntos</th>
             <th scope="col">Estado</th>
             <th scope="col">Acciones</th>
@@ -265,13 +266,17 @@
               }
           },
           {data: 'codigos', name: 'codigos', },
-          {data: 'empresas', name: 'empresas', },
+          //{data: 'empresas', name: 'empresas', },
           {data: 'users', name: 'users', },
           {
             data: 'fecha', 
             name: 'fecha', 
             render:$.fn.dataTable.render.moment('YYYY-MM-DD HH:mm:ss', 'DD/MM/YYYY HH:mm:ss' )
             //render: $.fn.dataTable.render.moment( 'DD/MM/YYYY' ).format('HH:mm:ss'),
+          },
+          {
+            data: 'tipo_banca', 
+            name: 'tipo_banca', 
           },
           {
             data: 'imagenes', 

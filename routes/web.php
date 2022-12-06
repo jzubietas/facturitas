@@ -288,7 +288,7 @@ Route::get('asesorespago', [PagoController::class, 'asesorespago'])->name('aseso
 Route::get('clientescreatepago', [ClienteController::class, 'clientedeasesorpagos'])->name('clientescreatepago');
 
 Route::resource('users', UserController::class)->names('users');
-/*Route::resource('users.mipersonal',[UserController::class, 'MiPersonal'])->names('users.mipersonal');*/
+
 
 Route::post('reset/{user}', [UserController::class, 'reset'])->name('user.reset');
 Route::resource('roles', RoleController::class)->names('roles');
@@ -318,6 +318,7 @@ Route::post('users.asignarmetaencargado/{user}', [UserController::class, 'Asigna
 Route::get('users.operarios', [UserController::class, 'Operarios'])->name('users.operarios');
 Route::get('users.misoperarios', [UserController::class, 'MisOperarios'])->name('users.misoperarios');
 Route::get('users.jefes', [UserController::class, 'Jefes'])->name('users.jefes');
+Route::get('users.mipersonal',[UserController::class, 'MiPersonal'])->name('users.mipersonal');
 
 Route::post('VentaPorFechas', [PdfController::class, 'VentaPorFechas'])->name('VentaPorFechas');
 Route::post('IngresoPorFechas', [PdfController::class, 'IngresoPorFechas'])->name('IngresoPorFechas');
