@@ -465,11 +465,28 @@ tfoot td {
             $("#otro_bancoprocedencia").val("");
             $(".banco_procedencia").show();
             $(".banco_procedencia_otro").hide();           
+          }else if($(this).val()=='YAPE'){
+            $(".operacion_contenedor").hide();
+            $("#poperacion").prop("required",false);
+            //$("#poperacion").hide(); 
+            //$("#poperacion").prop("disabled",true);          
+          }else if($(this).val()=='PLIN'){
+            $(".operacion_contenedor").hide();
+            $("#poperacion").prop("required",false);
+            //$("#poperacion").hide(); 
+            //$("#poperacion").prop("disabled",true);          
           }else{
+            $("#poperacion").prop("required",true);
+            $(".operacion_contenedor").show();
             $(".banco_procedencia").hide();
             $(".banco_procedencia_otro").hide();
           }
         });
+
+        $(document).on("change","#tipotransferencia",function(event){
+
+        });
+
 
         $(document).on("change","#pbancoprocedencia",function(event){
           console.log($(this).val());
@@ -1906,7 +1923,20 @@ tfoot td {
               'Seleccione la fecha',
               'warning'
             )
-          }else {
+          }
+          else if ($('#poperacion').val() == '')
+          {
+            Swal.fire(
+              'Error',
+              'Ingrese un Núm. de la operacion',
+              'warning'
+            )
+          }
+          else if ($('#poperacion').length <= 11)
+          {
+            $("#pnota").prop("required",true);
+          }
+          else {
             console.log("empieza logica 2");
             if ($('#tipotransferencia').val() == 'INTERBANCARIO')
             {

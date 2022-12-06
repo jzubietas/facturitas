@@ -42,11 +42,12 @@ class DashboardController extends Controller
                     ->whereYear('dp.created_at', $afecha)
                     ->get();
             }
-            //$montopedidoxmes_total = User::select(DB::raw('sum(users.meta_cobro) as total'))//META COBRANZAS
+            //$montopedidoxmes_total = User::select(DB::raw('sum(users.meta_cobro) as total'))
+            //META DE COBRANZAS DEL MES
                 $montopedidoxmes_total =Pedido::join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
                 ->join('users', 'pedidos.user_id', 'users.id')
                 ->select(DB::raw('(sum(dp.total))/(count(dp.pedido_id)) as total'))
-                ->where('users.rol', "ASESOR")
+                //->where('users.rol', "ASESOR")
                 ->where('users.estado', '1')
                 ->where('pedidos.created_at', $mfecha)
                 ->whereYear('pedidos.created_at', $afecha)
@@ -71,7 +72,7 @@ class DashboardController extends Controller
                     ->whereYear('dpa.created_at', $afecha)
                     ->get();
             }
-            //COBRANZA POR MES
+            //GRAFICO DE BARRAS IMPORTE/PEDIDOS
             $cobranzaxmes = Pedido::join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
                 ->join('users as u', 'pedidos.user_id', 'u.id')
                 ->select(
@@ -80,7 +81,7 @@ class DashboardController extends Controller
                 //->whereIn('u.rol', ['ENCARGADO', 'Super asesor','ASESOR'])
                 ->whereMonth('dp.created_at', $mfecha)
                 ->whereYear('dp.created_at', $afecha)
-                ->groupBy('pedidos.id')
+                ->groupBy('u.identificador')
                 //->orderBy((DB::raw('count(dp.id)')), 'DESC')
                 ->get();
                 //return $cobranzaxmes;

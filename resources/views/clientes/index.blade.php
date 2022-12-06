@@ -231,7 +231,6 @@ $(document).ready(function () {
         },
         //{data: 'direccion', name: 'direccion'},
         {data: 'identificador', name: 'identificador'},
-        {data: 'situacion', name: 'situacion'},
         //{data: 'cantidad', name: 'cantidad'},
         //{data: 'dateY', name: 'dateY'},
         //{data: 'dateM', name: 'dateM'},
