@@ -766,7 +766,7 @@ class EnvioController extends Controller
                 )
                 ->where('pedidos.estado', '1')
                 ->where('dp.estado', '1')
-                ->whereIn('pedidos.envio',  ['1','2']);
+                ->where('pedidos.envio', '1');
                 //->where('pedidos.condicion_envio', '<>', 'ENTREGADO');
                 
         if(Auth::user()->rol == "Operario"){

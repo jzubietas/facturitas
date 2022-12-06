@@ -1058,4 +1058,65 @@ class ClienteController extends Controller
                     ->make(true);
         //}
     }
+
+    public function Recurrentes()
+    {
+        $superasesor = User::where('rol', 'Super asesor')->count();
+        if (Auth::user()->rol == "Llamadas" || Auth::user()->rol == "Llamadas")
+        {
+            $users = User::
+                where('estado', '1')    
+                ->whereIn('rol', ['Asesor', 'Super asesor']) 
+                ->where('users.llamada', Auth::user()->id)
+                ->pluck('identificador', 'id');
+        }else{
+            $users = User::
+                where('estado', '1')    
+                ->whereIn('rol', ['Asesor', 'Super asesor'])
+                //->where('users.llamada', Auth::user()->id)
+                ->pluck('identificador', 'id');
+        }
+        return view('clientes.recurrentes', compact( 'superasesor', 'users'));
+    }
+
+    public function Nuevos()
+    {
+        $superasesor = User::where('rol', 'Super asesor')->count();
+        if (Auth::user()->rol == "Llamadas" || Auth::user()->rol == "Llamadas")
+        {
+            $users = User::
+                where('estado', '1')    
+                ->whereIn('rol', ['Asesor', 'Super asesor']) 
+                ->where('users.llamada', Auth::user()->id)
+                ->pluck('identificador', 'id');
+        }else{
+            $users = User::
+                where('estado', '1')    
+                ->whereIn('rol', ['Asesor', 'Super asesor'])
+                //->where('users.llamada', Auth::user()->id)
+                ->pluck('identificador', 'id');
+        }
+        return view('clientes.nuevos', compact( 'superasesor', 'users'));
+    }
+
+    public function Recuperados()
+    {
+        $superasesor = User::where('rol', 'Super asesor')->count();
+        if (Auth::user()->rol == "Llamadas" || Auth::user()->rol == "Llamadas")
+        {
+            $users = User::
+                where('estado', '1')    
+                ->whereIn('rol', ['Asesor', 'Super asesor']) 
+                ->where('users.llamada', Auth::user()->id)
+                ->pluck('identificador', 'id');
+        }else{
+            $users = User::
+                where('estado', '1')    
+                ->whereIn('rol', ['Asesor', 'Super asesor'])
+                //->where('users.llamada', Auth::user()->id)
+                ->pluck('identificador', 'id');
+        }
+        return view('clientes.recuperados', compact( 'superasesor', 'users'));
+    }
+
 }

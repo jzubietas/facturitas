@@ -508,6 +508,27 @@ return [
                     'icon'   => 'fas fa-check-circle',
                     'active' => ['base fria'],
                 ],
+                [
+                    'text' => 'Clientes Recurrentes',
+                    'route'  => 'clientes.recurrentes',
+                    'can' => 'clientes.recurrentes',
+                    'icon'   => 'fas fa-check-circle',
+                    'active' => ['clientes'],
+                ],
+                [
+                    'text' => 'Clientes Nuevos',
+                    'route'  => 'clientes.nuevos',
+                    'can' => 'clientes.nuevos',
+                    'icon'   => 'fas fa-check-circle',
+                    'active' => ['clientes'],
+                ],
+                [
+                    'text' => 'Clientes Recuperados',
+                    'route'  => 'clientes.recuperados',
+                    'can' => 'clientes.recuperados',
+                    'icon'   => 'fas fa-check-circle',
+                    'active' => ['clientes'],
+                ],
             ],
         ],
         

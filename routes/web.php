@@ -40,6 +40,16 @@ Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard
 
 //Route::get('image-upload-preview', [PagoController::class, 'indexpreview'])->name('image-upload-preview');
 //Route::post('upload-image', [PagoController::class, 'storeimage'])->name('upload-image');
+/*Route::resource('clientes.recurrentes', [ClienteController::class, 'Recurrentes'])->name('clientes.recurrentes');
+Route::get('recurrentestabla', [ClienteController::class, 'tablarecurrentes'])->name('recurrentestabla');
+
+Route::resource('clientes.nuevos', [ClienteController::class, 'Nuevos'])->name('clientes.nuevos');
+Route::get('nuevostabla', [ClienteController::class, 'tablanuevos'])->name('nuevostabla');
+
+Route::resource('clientes.recuperados', [ClienteController::class, 'Recuperados'])->name('clientes.recuperados');
+Route::get('recuperadostabla', [ClienteController::class, 'tablarecuperados'])->name('recuperadostabla');
+*/
+
 
 
 Route::resource('clientes', ClienteController::class)->names('clientes');
