@@ -163,6 +163,7 @@ class ExcelController extends Controller
 
         return (new ClientesPedidosExport)
                 ->clientes($request)
+                ->resumenes($request)
                 ->anioa($request)
                 ->aniop($request)
                 ->download('Lista de Clientes_pedidos_'.$request->anio.'.xlsx');
