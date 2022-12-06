@@ -65,7 +65,7 @@
             <th scope="col">F. Actualizacion</th>
            
             <th scope="col">Total (S/)</th>
-            <th scope="col">Est. pedido</th>
+            <!--<th scope="col">Est. pedido</th>
             <th scope="col">Est. pago</th>
             <th scope="col">Con. pago</th>
             <th scope="col">Est. sobre</th>

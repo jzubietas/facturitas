@@ -57,7 +57,7 @@
 
             <div class="form-group col-lg-4 operacion_contenedor">
               {!! Form::label('poperacion', 'Núm. operación') !!}
-                <input type="text" name="poperacion" id="poperacion" class="form-control" placeholder="Operacion...">
+                <input type="text" name="poperacion" id="poperacion" class="form-control" placeholder="Operacion..." required>
             </div>
           </div>
           <div class="form-row">

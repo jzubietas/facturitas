@@ -353,16 +353,16 @@ class PagoController extends Controller
             "BCP" => 'BCP',
             "BBVA" => 'BBVA',
             "INTERBANK" => 'INTERBANK',
-            "SCOTIABANK" => 'SCOTIABANK',
-            "PICHINCHA" => 'PICHINCHA',
+            //"SCOTIABANK" => 'SCOTIABANK',
+            //"PICHINCHA" => 'PICHINCHA',
         ];
 
         $bancos_procedencia = [
             "BCP" => 'BCP',
             "BBVA" => 'BBVA',
             "INTERBANK" => 'INTERBANK',
-            "SCOTIABANK" => 'SCOTIABANK',
-            "PICHINCHA" => 'PICHINCHA',
+            //"SCOTIABANK" => 'SCOTIABANK',
+            //"PICHINCHA" => 'PICHINCHA',
             "OTROS" => 'OTROS',
         ];
 
