@@ -47,12 +47,15 @@ Route::get('clientestabla', [ClienteController::class, 'indextabla'])->name('cli
 Route::get('clientes.abandono', [ClienteController::class, 'indexabandono'])->name('clientes.abandono');
 Route::get('clientesabandonotabla', [ClienteController::class, 'indexabandonotabla'])->name('clientesabandonotabla');
 
-Route::resource('clientes.nuevo', [ClienteController::class, 'indexnuevo'])->name('clientes.nuevo');
+Route::get('clientes.recurrentes', [ClienteController::class, 'indexrecurrente'])->name('clientes.recurrentes');
+Route::get('clientesrecurrentetabla', [ClienteController::class, 'indexrecurrentetabla'])->name('clientesrecurrentetabla');
+
+Route::get('clientes.nuevos', [ClienteController::class, 'indexnuevo'])->name('clientes.nuevos');
 Route::get('clientesnuevotabla', [ClienteController::class, 'indexnuevotabla'])->name('clientesnuevotabla');
 
-Route::resource('clientes.recuperado', [ClienteController::class, 'indexrecuperado'])->name('clientes.recuperado');
+Route::get('clientes.recuperados', [ClienteController::class, 'indexrecuperado'])->name('clientes.recuperados');
 Route::get('recuperadostabla', [ClienteController::class, 'indexrecuperadotabla'])->name('recuperadostabla');
-/*
+
 
 //Route::get('basefria', [ClienteController::class, 'indexbf'])->name('basefria');
 //Route::resource('basefriadatatable', BasefriaController::class);
