@@ -9,7 +9,7 @@
           </button>
         </div>
         <form id="formdelete" name="formdelete">
-        <input type="hidden" id="hiddenId" name="hiddenID" class="form-control"> 
+        <input type="hidden" id="hiddenId" name="hiddenID" class="form-control">
         <!--{{-- Form::Open(['route' => ['pagos.destroy', $pago['id']], 'method' => 'delete']) --}}-->
         <div class="modal-body">
           <p>Confirme si desea <strong>ELIMINAR</strong> pago: <strong class="textcode"></strong></p>
@@ -18,7 +18,7 @@
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
           <button type="submit" class="btn btn-danger">Confirmar</button>
         </div>
-        <!--{{ Form::Close() }}-->
+        <!--{{-- Form::Close() --}}-->
         </form>
       </div>
     </div>

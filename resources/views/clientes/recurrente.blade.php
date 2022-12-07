@@ -17,12 +17,10 @@
         Exportar
       </button>
       <div class="dropdown-menu">
-        <a href="" data-target="#modal-exportar2" data-toggle="modal" class="dropdown-item" target="blank_"><img src="{{ asset('imagenes/icon-excel.png') }}"> Clientes - Pedidos</a>
-
+       
         <a href="" data-target="#modal-exportar-v2" data-toggle="modal" class="dropdown-item d-none" target="blank_"><img src="{{ asset('imagenes/icon-excel.png') }}"> Clientes - Situacion</a>
       </div>
     </div>
-    
     @include('clientes.modal.exportarv2')
     @endcan
   </h1>
@@ -177,7 +175,7 @@ $(document).ready(function () {
         responsive:true,
         autowidth:true,
         serverSide: true,
-        ajax: "{{ route('clientesnuevotabla') }}",
+        ajax: "{{ route('clientesrecurrentetabla') }}",
         initComplete:function(settings,json){          
           if (localStorage. getItem("search_tabla") === null) {
             //no existe

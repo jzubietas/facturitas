@@ -924,7 +924,7 @@ class ClienteController extends Controller
                 ->leftjoin('pedidos as p', 'clientes.id', 'p.cliente_id')
                 ->where('clientes.estado','1')
                 ->where('clientes.tipo','1')
-                ->where('clientes.situacion','ABANDONO')
+                ->whereIn('clientes.situacion',['ABANDONO RECIENTE','ABANDONO PERMANENTE'])
                 ->groupBy(
                     'clientes.id',
                     'clientes.nombre',
@@ -937,7 +937,8 @@ class ClienteController extends Controller
                     'clientes.distrito',
                     'clientes.direccion',
                     'clientes.deuda',
-                    'clientes.pidio'
+                    'clientes.pidio',
+                    'clientes.situacion'
                 )
                 ->select('clientes.id', 
                         'clientes.nombre', 
@@ -950,6 +951,7 @@ class ClienteController extends Controller
                         'clientes.distrito',
                         'clientes.direccion',
                         'clientes.pidio',
+                        'clientes.situacion',
                         DB::raw('count(p.created_at) as cantidad'),
                         DB::raw('MAX(p.created_at) as fecha'),
                         DB::raw('MAX(DATE_FORMAT(p.created_at, "%d")) as dia'),
@@ -1062,6 +1064,23 @@ class ClienteController extends Controller
 
     public function indexrecurrente()
     {
+        $anios = [
+            "2020" => '2020 - 2021',
+            "2021" => '2021 - 2022',
+            "2022" => '2022 - 2023',
+            "2023" => '2023 - 2024',
+            "2024" => '2024 - 2025',
+            "2025" => '2025 - 2026',
+            "2026" => '2026 - 2027',
+            "2027" => '2027 - 2028',
+            "2028" => '2028 - 2029',
+            "2029" => '2029 - 2030',
+            "2030" => '2030 - 2031',
+            "2031" => '2031 - 2032',
+        ];
+        $dateM = Carbon::now()->format('m');
+        $dateY = Carbon::now()->format('Y');
+        $mirol=Auth::user()->rol;
         $superasesor = User::where('rol', 'Super asesor')->count();
         if (Auth::user()->rol == "Llamadas" || Auth::user()->rol == "Llamadas")
         {
@@ -1077,11 +1096,29 @@ class ClienteController extends Controller
                 //->where('users.llamada', Auth::user()->id)
                 ->pluck('identificador', 'id');
         }
-        return view('clientes.index', compact( 'superasesor', 'users'));
+        return view('clientes.recurrente', compact( 'superasesor', 'users','anios','dateM','dateY','mirol'));
     }
 
     public function indexnuevo()
     {
+        $dateM = Carbon::now()->format('m');
+        $dateY = Carbon::now()->format('Y');
+        $mirol=Auth::user()->rol;
+
+        $anios = [
+            "2020" => '2020 - 2021',
+            "2021" => '2021 - 2022',
+            "2022" => '2022 - 2023',
+            "2023" => '2023 - 2024',
+            "2024" => '2024 - 2025',
+            "2025" => '2025 - 2026',
+            "2026" => '2026 - 2027',
+            "2027" => '2027 - 2028',
+            "2028" => '2028 - 2029',
+            "2029" => '2029 - 2030',
+            "2030" => '2030 - 2031',
+            "2031" => '2031 - 2032',
+        ];
         $superasesor = User::where('rol', 'Super asesor')->count();
         if (Auth::user()->rol == "Llamadas" || Auth::user()->rol == "Llamadas")
         {
@@ -1097,11 +1134,30 @@ class ClienteController extends Controller
                 //->where('users.llamada', Auth::user()->id)
                 ->pluck('identificador', 'id');
         }
-        return view('clientes.nuevos', compact( 'superasesor', 'users'));
+        return view('clientes.nuevo', compact( 'superasesor', 'users','dateM','dateY','mirol','anios'));
     }
 
     public function indexrecuperado()
     {
+        $dateM = Carbon::now()->format('m');
+        $dateY = Carbon::now()->format('Y');
+
+        $anios = [
+            "2020" => '2020 - 2021',
+            "2021" => '2021 - 2022',
+            "2022" => '2022 - 2023',
+            "2023" => '2023 - 2024',
+            "2024" => '2024 - 2025',
+            "2025" => '2025 - 2026',
+            "2026" => '2026 - 2027',
+            "2027" => '2027 - 2028',
+            "2028" => '2028 - 2029',
+            "2029" => '2029 - 2030',
+            "2030" => '2030 - 2031',
+            "2031" => '2031 - 2032',
+        ];
+        $mirol=Auth::user()->rol;
+
         $superasesor = User::where('rol', 'Super asesor')->count();
         if (Auth::user()->rol == "Llamadas" || Auth::user()->rol == "Llamadas")
         {
@@ -1117,7 +1173,7 @@ class ClienteController extends Controller
                 //->where('users.llamada', Auth::user()->id)
                 ->pluck('identificador', 'id');
         }
-        return view('clientes.recuperados', compact( 'superasesor', 'users'));
+        return view('clientes.recuperado', compact( 'superasesor', 'users','dateM','dateY','anios','mirol'));
     }
 
 
@@ -1149,6 +1205,7 @@ class ClienteController extends Controller
                 ->leftjoin('pedidos as p', 'clientes.id', 'p.cliente_id')
                 ->where('clientes.estado','1')
                 ->where('clientes.tipo','1')
+                ->where('clientes.situacion','NUEVO')
                 ->groupBy(
                     'clientes.id',
                     'clientes.nombre',
@@ -1161,7 +1218,8 @@ class ClienteController extends Controller
                     'clientes.distrito',
                     'clientes.direccion',
                     'clientes.deuda',
-                    'clientes.pidio'
+                    'clientes.pidio',
+                    'clientes.situacion'
                 )
                 ->select('clientes.id', 
                         'clientes.nombre', 
@@ -1184,8 +1242,8 @@ class ClienteController extends Controller
                         DB::raw(" (select count(ped.id) from pedidos ped where ped.cliente_id=clientes.id and ped.pago in (0,1) and ped.pagado in (0,1) and ped.created_at >='2022-11-01 00:00:00' and ped.estado=1) as pedidos_mes_deuda "),
                         DB::raw(" (select count(ped2.id) from pedidos ped2 where ped2.cliente_id=clientes.id and ped2.pago in (0,1) and ped2.pagado in (0,1) and ped2.created_at <='2022-10-31 00:00:00'  and ped2.estado=1) as pedidos_mes_deuda_antes "),
                         'clientes.deuda',
-                        DB::raw(" (select lr.s_2022_11 from clientes c inner join listado_resultados lr on c.id=lr.id limit 1) as situacion")
-                        //'clientes.situacion'
+                        //DB::raw(" (select lr.s_2022_11 from clientes c inner join listado_resultados lr on c.id=lr.id limit 1) as situacion")
+                        'clientes.situacion'
                         );
 
         if (Auth::user()->rol == "Llamadas"){
@@ -1313,6 +1371,7 @@ class ClienteController extends Controller
                 ->leftjoin('pedidos as p', 'clientes.id', 'p.cliente_id')
                 ->where('clientes.estado','1')
                 ->where('clientes.tipo','1')
+                ->where('clientes.situacion','RECURRENTE')
                 ->groupBy(
                     'clientes.id',
                     'clientes.nombre',
@@ -1325,7 +1384,8 @@ class ClienteController extends Controller
                     'clientes.distrito',
                     'clientes.direccion',
                     'clientes.deuda',
-                    'clientes.pidio'
+                    'clientes.pidio',
+                    'clientes.situacion'
                 )
                 ->select('clientes.id', 
                         'clientes.nombre', 
@@ -1348,8 +1408,8 @@ class ClienteController extends Controller
                         DB::raw(" (select count(ped.id) from pedidos ped where ped.cliente_id=clientes.id and ped.pago in (0,1) and ped.pagado in (0,1) and ped.created_at >='2022-11-01 00:00:00' and ped.estado=1) as pedidos_mes_deuda "),
                         DB::raw(" (select count(ped2.id) from pedidos ped2 where ped2.cliente_id=clientes.id and ped2.pago in (0,1) and ped2.pagado in (0,1) and ped2.created_at <='2022-10-31 00:00:00'  and ped2.estado=1) as pedidos_mes_deuda_antes "),
                         'clientes.deuda',
-                        DB::raw(" (select lr.s_2022_11 from clientes c inner join listado_resultados lr on c.id=lr.id limit 1) as situacion")
-                        //'clientes.situacion'
+                        //DB::raw(" (select lr.s_2022_11 from clientes c inner join listado_resultados lr on c.id=lr.id limit 1) as situacion"),
+                        'clientes.situacion'
                         );
 
         if (Auth::user()->rol == "Llamadas"){
@@ -1477,6 +1537,7 @@ class ClienteController extends Controller
                 ->leftjoin('pedidos as p', 'clientes.id', 'p.cliente_id')
                 ->where('clientes.estado','1')
                 ->where('clientes.tipo','1')
+                ->where('clientes.situacion','RECUPERADO')
                 ->groupBy(
                     'clientes.id',
                     'clientes.nombre',
@@ -1489,7 +1550,8 @@ class ClienteController extends Controller
                     'clientes.distrito',
                     'clientes.direccion',
                     'clientes.deuda',
-                    'clientes.pidio'
+                    'clientes.pidio',
+                    'clientes.situacion'
                 )
                 ->select('clientes.id', 
                         'clientes.nombre', 
@@ -1512,8 +1574,8 @@ class ClienteController extends Controller
                         DB::raw(" (select count(ped.id) from pedidos ped where ped.cliente_id=clientes.id and ped.pago in (0,1) and ped.pagado in (0,1) and ped.created_at >='2022-11-01 00:00:00' and ped.estado=1) as pedidos_mes_deuda "),
                         DB::raw(" (select count(ped2.id) from pedidos ped2 where ped2.cliente_id=clientes.id and ped2.pago in (0,1) and ped2.pagado in (0,1) and ped2.created_at <='2022-10-31 00:00:00'  and ped2.estado=1) as pedidos_mes_deuda_antes "),
                         'clientes.deuda',
-                        DB::raw(" (select lr.s_2022_11 from clientes c inner join listado_resultados lr on c.id=lr.id limit 1) as situacion")
-                        //'clientes.situacion'
+                        //DB::raw(" (select lr.s_2022_11 from clientes c inner join listado_resultados lr on c.id=lr.id limit 1) as situacion")
+                        'clientes.situacion'
                         );
 
         if (Auth::user()->rol == "Llamadas"){

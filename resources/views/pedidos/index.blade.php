@@ -61,18 +61,16 @@
             <th scope="col">Razón social</th>
             <th scope="col">Asesor</th>
             <th scope="col">F. Registro</th>
-
-            <th scope="col">F. Actualizacion</th>
-           
+            <th scope="col">F. Actualizacion</th> 
             <th scope="col">Total (S/)</th>
-            <!--<th scope="col">Est. pedido</th>
+            <th scope="col">Est. pedido</th>
+            
             <th scope="col">Est. pago</th>
             <th scope="col">Con. pago</th>
             <th scope="col">Est. sobre</th>
-            <!--<th scope="col">Est. envío</th>
-            <th scope="col">Cond. Pago</th>-->
-            <th scope="col">Est. Envio</th>
-            <th scope="col">Estado</th>
+           <th scope="col">Est. envío</th>
+            <th scope="col">Cond. Pago</th>
+            <!--<th scope="col">Estado</th>-->
             <th scope="col">Diferencia</th>
             {{--<th scope="col">Resp. Pedido</th>--}}
             <th scope="col">Acciones</th>
@@ -168,9 +166,6 @@
 
 <script>
   $(document).ready(function () {
-
-
-
     //moment.updateLocale(moment.locale(), { invalidDate: "Invalid Date Example" });
     //$.fn.dataTable.moment('DD-MMM-Y HH:mm:ss');
     //$.fn.dataTable.moment('DD/MM/YYYY');
@@ -269,6 +264,7 @@
           }          
         },
         columns: [
+          //ID
         {
             data: 'id', 
             name: 'id',
@@ -285,6 +281,7 @@
             },
             "visible":false,
         },
+        // CODIGO
         {data: 'codigos', name: 'codigos', },
         {
             data: 'celulares', 
@@ -300,8 +297,11 @@
             },
             //searchable: true
         },
+        //EMPRESAS
         {data: 'empresas', name: 'empresas', },
+        //USUARIOS
         {data: 'users', name: 'users', },
+        //FECHA
         {
           data: 'fecha', 
           name: 'fecha', 
@@ -442,6 +442,9 @@
             urlpdf = urlpdf.replace(':id', row.id);
             var urlshow = '{{ route("pedidos.show", ":id") }}';
             urlshow = urlshow.replace(':id', row.id);
+            //Guardamos el ID
+            localStorage.setItem('PreviousID', row.id);
+
             var urledit = '{{ route("pedidos.edit", ":id") }}';
             urledit = urledit.replace(':id', row.id);
 
@@ -495,6 +498,8 @@
         }
       },
     });
+
+
     $('#tablaPrincipal_filter label input').on('paste', function(e) {
       var pasteData = e.originalEvent.clipboardData.getData('text')
       localStorage.setItem("search_tabla",pasteData);
@@ -504,9 +509,7 @@
       console.log( "search_tabla es "+localStorage.getItem("search_tabla") );
     });
 
-    $(document).on("keypress",'#tablaPrincipal_filter label input',function(){
-      console.log("aaaaa")
-      
+    $(document).on("blur",'#tablaPrincipal_filter label input',function(){
       localStorage.setItem("search_tabla",$(this).val());
       console.log( "search_tabla es "+localStorage.getItem("search_tabla") );
 
@@ -517,7 +520,6 @@
       localStorage.setItem("search_tabla",pasteData);
     });
 
-    console.log(localStorage.getItem("search_tabla"))
     
 
     
