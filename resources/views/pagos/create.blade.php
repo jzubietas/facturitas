@@ -455,6 +455,7 @@ tfoot td {
 
         });
 
+
         $(".banco_procedencia").hide();
         $(".banco_procedencia_otro").hide();
 
@@ -1880,13 +1881,14 @@ tfoot td {
 
         });
 
-        
+       
+
         $(document).on("click","#add_pago",function(){
           console.log("click addpago");
 
-         var cantidad= $('#poperacion').val().length;
+         //var cantidad= $('#poperacion').val().length;
          var nota = $('#pnota').val();
-         console.log(cantidad);
+         //console.log(cantidad);
 
          
           if ($('#pbanco').val() == '')
@@ -1925,6 +1927,7 @@ tfoot td {
               'warning'
             )
           }
+         /*
           else if ($('#poperacion').val() == '')
           {
             Swal.fire(
@@ -1933,9 +1936,13 @@ tfoot td {
               'warning'
             )
           }
-          
+          if($("#tipotransferencia").val()=='PLIN'){
+                    $("#poperacion").val("");
+          }else if($("#tipotransferencia").val()=='YAPE'){
+                    $("#poperacion").val("");
+          }  
           else {
-
+           
           if(cantidad <= 11){
             if(nota == '')
                {
@@ -1945,7 +1952,10 @@ tfoot td {
                 'Debe Ingresar Nota',
                 'warning'
               );}
-           
+
+              
+
+
               else{
                 
             console.log("empieza logica 2");
@@ -1971,7 +1981,7 @@ tfoot td {
                     'warning'
                   )
                 }else{
-                  /**/
+                
                   console.log("aca");
                   $("#tabla_pedidos tbody tr .radiototal").prop("checked",false).trigger("change");
                   $("#tabla_pedidos tbody tr .radioadelanto").prop("checked",false).trigger("change");
@@ -1990,10 +2000,10 @@ tfoot td {
                     pagado = !isNaN($('#pstock').val()) ? parseInt($('#pstock').val(), 10) : 0;
                     agregarPago();                  
                   }
-                  /**/
+                  
                 }
               }else{
-                /**/
+               
                 console.log("aca");
                 $("#tabla_pedidos tbody tr .radiototal").prop("checked",false).trigger("change");
                 $("#tabla_pedidos tbody tr .radioadelanto").prop("checked",false).trigger("change");
@@ -2012,7 +2022,7 @@ tfoot td {
                   pagado = !isNaN($('#pstock').val()) ? parseInt($('#pstock').val(), 10) : 0;
                   agregarPago();                  
                 }
-                /**/
+                
               }
             }else
             {
@@ -2037,7 +2047,16 @@ tfoot td {
               }
             }
               }
-          }else{
+          }*/
+          
+          
+          
+          
+          
+          
+          
+          
+          else{
 
             console.log("empieza logica 2");
             if ($('#tipotransferencia').val() == 'INTERBANCARIO')
@@ -2129,7 +2148,7 @@ tfoot td {
             }
           }
 
-          }
+          //}
         });
 
         
