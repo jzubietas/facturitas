@@ -474,8 +474,12 @@ class PdfController extends Controller
             )
             ->orderBy('pedidos.created_at', 'DESC')
             ->get();
+
+
+            $codigo_barras = Pedido::find($pedido->id)->codigo;   
+            $codigo_barras_img = generate_bar_code($codigo_barras);
                 
-        $pdf = PDF::loadView('pedidos.reportes.pedidosPDF', compact('pedidos', 'fecha','mirol','identificador'))
+        $pdf = PDF::loadView('pedidos.reportes.pedidosPDF', compact('pedidos', 'fecha','mirol','identificador', 'codigo_barras_img'))
             ->setPaper('a4', 'portrait');
         //$canvas = PDF::getDomPDF(); 
         //return $canvas;
