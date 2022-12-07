@@ -41,7 +41,7 @@
               <div class="form-group col-lg-2">
                 <a data-target="#modal-add-pagos" id="addpago" data-toggle="modal"><button class="btn btn-primary"><i class="fas fa-plus-circle"></i></button></a>
               </div>
-            </div>          
+            </div>
               @error('imagen')
                 <small class="text-danger">{{$message}}</small>
               @enderror
@@ -49,9 +49,9 @@
               <table id="tabla_pagos" class="table table-striped">
                 <thead class="bg-primary">
                   <tr>
-                    <th scope="col">ITEM</th> 
+                    <th scope="col">ITEM</th>
                     <th scope="col">TIPO MOVIMIENTO</th>
-                    <th scope="col">TITULAR</th>               
+                    <th scope="col">TITULAR</th>
                     <th scope="col">BANCO</th>
                     <th scope="col">FECHA</th>
                     <th scope="col">IMAGEN</th>
@@ -67,21 +67,21 @@
                   <th></th>
                   <!--<th></th>-->
                   <th colspan="2" style="text-align: right"><h4 id="total_pago">S/. 0.00</h4></th>
-                  <th><input type="hidden" name="total_pago_pagar" requerid value="" id="total_pago_pagar" class="form-control"></th>  
+                  <th><input type="hidden" name="total_pago_pagar" requerid value="" id="total_pago_pagar" class="form-control"></th>
                 </tfoot>
                 <tbody>
                 </tbody>
               </table>
             </div>
           </div>
-          
+
           <div class="form-group col-lg-6">
             <div class="form-row">
               <div class="form-group col-lg-6">
                 <h2>PEDIDOS A PAGAR</h2>
               </div>
               <div class="form-group col-lg-6">
-                {{-- <a data-target="#modal-add-pedidos" id="addpedido" data-toggle="modal"><button class="btn btn-info"><i class="fas fa-plus-circle"></i></button></a> --}}  
+                {{-- <a data-target="#modal-add-pedidos" id="addpedido" data-toggle="modal"><button class="btn btn-info"><i class="fas fa-plus-circle"></i></button></a> --}}
               </div>
             </div>
             <div class="table-responsive">
@@ -123,14 +123,14 @@
                   <th></th>
                   <th></th>
                   <th><h4 id="total_pedido">S/. 0.00</h4></th>
-                  <th><input type="hidden" name="total_pedido_pagar" requerid value="" id="total_pedido_pagar" class="form-control"></th>              
-                </tfoot> 
-                --}}             
+                  <th><input type="hidden" name="total_pedido_pagar" requerid value="" id="total_pedido_pagar" class="form-control"></th>
+                </tfoot>
+                --}}
               </table>
             </div>
           </div>
 
-          
+
 
 
         </div>
@@ -152,9 +152,9 @@
         </div>
         <div class="form-group col-lg-3"></div>
         <div class="form-group col-lg-4" style="text-align: center;">
-          <div class="input-group">            
+          <div class="input-group">
             <input type="text" name="" value="SALDO S/:" disabled class="form-control" style="color: red; font-weight:bold; font-weight: 900; font-size:21px">
-            <input type="text" name="diferencia" value="" disabled id="diferencia" class="form-control" style="color: red; font-weight:bold; font-weight: 900; font-size:21px">   
+            <input type="text" name="diferencia" value="" disabled id="diferencia" class="form-control" style="color: red; font-weight:bold; font-weight: 900; font-size:21px">
           </div>
         </div>
         <div class="form-group col-lg-4" style="text-align:center;">
@@ -182,7 +182,7 @@ tfoot td {
   <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
-  <script>  
+  <script>
 
     $("#guardar").hide();
     $("#addpedido").hide();
@@ -192,7 +192,7 @@ tfoot td {
     function mostrarBotones() {
       $("#addpedido").show();
       $("#addpago").show();
-    }    
+    }
 
     // CARGAR PEDIDOS DE CLIENTE SELECCIONADO
 
@@ -217,7 +217,7 @@ tfoot td {
       }
 
       function evaluarPa() {
-          if (total_pago > 0) {//total_pedido > 0 && 
+          if (total_pago > 0) {//total_pedido > 0 &&
             $("#guardar").show();
           } else {
             $("#guardar").hide();
@@ -233,23 +233,23 @@ tfoot td {
             "bPaginate": false,
               "bFilter": false,
               "bInfo": false,
-              columns: 
+              columns:
               [
                 {
-                  data: 'item', 
+                  data: 'item',
                   name: 'item',
-                  sWidth:'10%', 
+                  sWidth:'10%',
                 },
                 {
-                  data: 'movimiento', 
+                  data: 'movimiento',
                   name: 'movimiento',
-                  sWidth:'10%', 
+                  sWidth:'10%',
                   render: function ( data, type, row, meta ) {
                     return '<input type="hidden" name="tipomovimiento['+row.item+']" value="' + data + '"><span class="tipomovimiento">' + data + '</span></td>';
                   }
                 },
                 {
-                  data: 'titular', 
+                  data: 'titular',
                   name: 'titular',
                   sWidth:'10%',
                   render: function ( data, type, row, meta ) {
@@ -257,25 +257,25 @@ tfoot td {
                   }
                 },
                 {
-                  data: 'banco', 
+                  data: 'banco',
                   name: 'banco',
-                  sWidth:'10%', 
+                  sWidth:'10%',
                   render: function ( data, type, row, meta ) {
                     return '<input type="hidden" name="banco['+row.item+']" value="' + data + '"><span class="banco">' + data + '</span></td>';
                   }
                 },
                 {
-                  data: 'fecha', 
+                  data: 'fecha',
                   name: 'fecha',
-                  sWidth:'10%', 
+                  sWidth:'10%',
                   render: function ( data, type, row, meta ) {
                     return '<input type="hidden" name="fecha['+row.item+']" value="' + data + '"><span class="fecha">' + data + '</span></td>';
                   }
                 },
                 {
-                  data: 'imagen', 
+                  data: 'imagen',
                   name: 'imagen',
-                  sWidth:'10%', 
+                  sWidth:'10%',
                   render: function ( data, type, row, meta ) {
                     //return '<input type="hidden" name="fecha['+row.item+']" value="' + data + '"><span class="fecha">' + data + '</span></td>';
                     //<input type="file" id="imagen" name="imagen[]" accept= "image/*" style="width:150px;"/>
@@ -291,17 +291,17 @@ tfoot td {
                   }
                 },
                 {
-                  data: 'monto', 
+                  data: 'monto',
                   name: 'monto',
-                  sWidth:'10%', 
+                  sWidth:'10%',
                   render: function ( data, type, row, meta ) {
                     return '<input type="hidden" name="monto['+row.item+']" value="' + data + '"><span class="monto">' + data + '</span></td>';
                   }
                 },
                 {
-                  data: 'accion', 
+                  data: 'accion',
                   name: 'accion',
-                  sWidth:'10%', 
+                  sWidth:'10%',
                   render: function ( data, type, row, meta ) {
                     return '<button type="button" class="btn btn-danger btn-sm remove"><i class="fas fa-trash-alt"></i>'+row.item+'</button>';
                   }
@@ -343,7 +343,7 @@ tfoot td {
               },
               language: {
                 "decimal": "",
-                "emptyTable": "No hay informaciÃ³n",
+                "emptyTable": "No hay información",
                 "info": "Mostrando del _START_ al _END_ de _TOTAL_ Entradas",
                 "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
                 "infoFiltered": "(Filtrado de _MAX_ total entradas)",
@@ -371,7 +371,7 @@ tfoot td {
           var subtotal=row.find("td").eq("6").find("span.monto").text();
           console.log(subtotal);
           let diff=$("#diferencia").val();
-      
+
           if ($(row).hasClass('child')) {
             table.row($(row).prev('tr')).remove().draw();
           } else {
@@ -384,13 +384,13 @@ tfoot td {
               console.log(total_pago);
               $("#total_pago").html("S/. " + total_pago.toLocaleString("en-US"));
               $("#total_pago_pagar").val(total_pago);
-              
+
               evaluarPa();
-            
+
           }
-      
+
         });
-              
+
 
 
 
@@ -410,15 +410,15 @@ tfoot td {
           console.log(diferenciaval);
           $("#cliente_id").val(cliente_id);
           $("#saldo").val(saldo);
-          
-          
+
+
           tabla_pedidos=$('#tabla_pedidos').DataTable({
               "bPaginate": false,
               "bFilter": false,
               "bInfo": false,
               'ajax': {
-                url:"{{ route('cargar.pedidosclientetabla') }}",					
-                'data': { "cliente_id": $(this).val(),"diferencia":$("#diferencia").val()}, 
+                url:"{{ route('cargar.pedidosclientetabla') }}",
+                'data': { "cliente_id": $(this).val(),"diferencia":$("#diferencia").val()},
                 "type": "get",
               },
               "fnCreatedRow": function( nRow, aData, iDataIndex ) {
@@ -426,7 +426,7 @@ tfoot td {
               },
               columns: [
                 {
-                  data: 'id', 
+                  data: 'id',
                   name: 'id',
                   render:function(data,type,row,meta){
                     if(row.id<10){
@@ -437,13 +437,13 @@ tfoot td {
                       return '<input type="hidden" name="pedido_id['+data+']" value="' + data + '">PED0' + data + '</td>';
                     }else{
                       return '<input type="hidden" name="pedido_id['+data+']" value="' + data + '">PED' + data + '</td>';
-                    } 
+                    }
                     //return '<input type="hidden" name="pedido_id[]" value="' + data + '">PED000' + data + '</td>';
                   }
                 },
                 {data: 'codigo', name: 'codigo',},
                 /*{
-                  data: 'total', 
+                  data: 'total',
                   name: 'total',
                   render:function(data,type,row,meta){
                       return '<input type="hidden" name="numbermonto[]" value="' + data + '">' + data + '</td>';
@@ -451,7 +451,7 @@ tfoot td {
                   "visible": true
                 },*/
                 {
-                  data: 'saldo', 
+                  data: 'saldo',
                   name: 'saldo',
                   render:function(data,type,row,meta){
                       return '<input type="hidden" name="numbersaldo['+row.id+']" value="' + data + '"><span class="numbersaldo">' + data + '</span></td>';
@@ -459,7 +459,7 @@ tfoot td {
                   "visible": true
                 },
                 {
-                  data: 'diferencia', 
+                  data: 'diferencia',
                   name: 'diferencia',
                   render:function(data,type,row,meta){
                       return '<input type="hidden" name="numberdiferencia['+row.id+']" value="' + data + '"><span class="numberdiferencia">' + data + '</span></td>'+
@@ -524,7 +524,7 @@ tfoot td {
               },
               language: {
                 "decimal": "",
-                "emptyTable": "No hay informaciÃ³n",
+                "emptyTable": "No hay información",
                 "info": "Mostrando del _START_ al _END_ de _TOTAL_ Entradas",
                 "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
                 "infoFiltered": "(Filtrado de _MAX_ total entradas)",
@@ -542,7 +542,7 @@ tfoot td {
                 "previous": "Anterior"
                 }
             },
-              
+
             });
 
             /*$(document).on('.radiototal','click', function (e) {
@@ -552,31 +552,31 @@ tfoot td {
 
             /*$(document).on('.radiototal','mousedown', function (e) {
               e.preventDefefault();
-              console.log("aaaa")              
+              console.log("aaaa")
             });*/
             /*$(document).on("mousedown",'#tabla_pedidos input[type="checkbox"]', function (event) {
               event.preventDefault();
               event.stopPropagation();
               console.log("checkBox");
-              
+
               var cell = $(this).closest('td');
-              
+
               var data = tabla_pedidos.row( cell ).data();
               console.log('Using TD:', data)
 
               var cell = $(this).parent();
-              
+
               var data = tabla_pedidos.row( cell ).data();
               console.log('Using Parent:', data)
 
               var row = $(this).closest('tr');
-              
+
               var data = tabla_pedidos.row( row ).data();
               console.log('Using TR:', data)
-              
+
               console.log('Checked name from TR:', data[0]);
               return false;
-              
+
           });*/
 
           $(document).on("click",".radiototal",function(event){
@@ -612,7 +612,7 @@ tfoot td {
                   montopagos=parseFloat(montopagos+pedidosaldo);
                   console.log("diferencia "+montopagos);
                   $("#diferencia").val(montopagos);
-                  
+
                   $(this).closest('tr').find("td").eq(3).find(":input").val(pedidosaldo.toFixed(2));
                   $(this).closest('tr').find("td").eq(3).find(".numberdiferencia").text(pedidosaldo.toFixed(2));
                   let totalafterdifer1=$(this).closest('tr').find("td").eq(2).find(".numbersaldo").val();
@@ -629,7 +629,7 @@ tfoot td {
                       //if(idfila!=filedata.id)
                       {
                         console.log("id no es el mismo que acabo de ejecutar")
-                        
+
                         //var saldofila=parseFloat($(this).find("td").eq(3).html());//saldo
                         var saldofila=parseFloat($(this).find("td").eq(2).find(":input").val());
                         console.log("saldo fila "+idfila+" es "+saldofila);
@@ -643,7 +643,7 @@ tfoot td {
                         }
                         if(!radiototalfila && !radiosaldofila){
                           console.log("saldofila = "+saldofila + " y montopagos="+montopagos);//600/100
-                          console.log("radiofila "+index+" total o saldo no estan checkedado")                          
+                          console.log("radiofila "+index+" total o saldo no estan checkedado")
                           if(saldofila<=montopagos)
                           {
                             console.log("saldo "+saldofila+" es menor igual a monto "+montopagos+", bloqueo saldo");
@@ -656,13 +656,13 @@ tfoot td {
                           }
                         }
                       }
-                      
+
                     });
               //fin revertir
 
             }else if($(this).prop("checked") == false){
               console.log("no marcado");///aca falla cuando el monto es menor que el saldo
-              
+
               //validar si sumar depende el saldo y monto
                   let montopagos=parseFloat($("#diferencia").val().replace(",", ""));
                   if(montopagos==null || isNaN(montopagos)){
@@ -710,7 +710,7 @@ tfoot td {
                       //if(idfila!=filedata.id)
                       {
                         console.log("id no es el mismo que acabo de ejecutar")
-                        
+
                         //var saldofila=parseFloat($(this).find("td").eq(3).html());//saldo
                         var saldofila=parseFloat($(this).find("td").eq(2).find(":input").val());//saldo
                         console.log("saldo fila "+idfila+" es "+saldofila);
@@ -724,7 +724,7 @@ tfoot td {
                         }
                         if(!radiototalfila && !radiosaldofila){
                           console.log("saldofila = "+saldofila + " y montopagos="+montopagos);
-                          console.log("radiofila "+index+" total o saldo no estan checkedado")                          
+                          console.log("radiofila "+index+" total o saldo no estan checkedado")
                           if(saldofila<=montopagos)
                           {
                             console.log("saldo menor igual a monto, bloqueo saldo");
@@ -737,15 +737,15 @@ tfoot td {
                           }
                         }
                       }
-                      
+
                     });
-                    
+
                   }
               //fin validar
 
             }
             return;
-           
+
           });
 
           //para saldo
@@ -754,7 +754,7 @@ tfoot td {
             event.preventDefault();
             if($(this).prop("checked") == true){
               console.log("marcado")
-              $(this).prop("checked",false).val("0")//////revertir              
+              $(this).prop("checked",false).val("0")//////revertir
                   let montopagos=parseFloat($("#diferencia").val().replace(",", ""));//0
                   /*if(montopagos==0 || montopagos==null || isNaN(montopagos)){
                     console.log("no hay pagos ingresados");
@@ -794,7 +794,7 @@ tfoot td {
                       if(idfila!=filedata.id)
                       {
                         console.log("id no es el mismo que acabo de ejecutar")
-                        
+
                         //var saldofila=$(this).find("td").eq(3).html();//saldo/551.20
                         var saldofila=parseFloat($(this).find("td").eq(2).find(":input").val());
                         console.log("saldo fila "+idfila+" es "+saldofila);//551.20
@@ -807,7 +807,7 @@ tfoot td {
                           console.log("radiofila  "+index+" total o saldo esta checkedado")
                         }
                         if(!radiototalfila && !radiosaldofila){
-                          console.log("radiofila "+index+" total o saldo no estan checkedado")                          
+                          console.log("radiofila "+index+" total o saldo no estan checkedado")
                           if(saldofila<=montopagos)
                           {
                             console.log("saldo menor igual a monto, bloqueo saldo");
@@ -820,7 +820,7 @@ tfoot td {
                           }
                         }*/
                       }
-                      
+
                     });
               //fin revertir
 
@@ -869,7 +869,7 @@ tfoot td {
                       if(idfila!=filedata.id)
                       {
                         console.log("id no es el mismo que acabo de ejecutar")
-                        
+
                         //var saldofila=$(this).find("td").eq(3).html();//saldo
                         var saldofila=parseFloat($(this).find("td").eq(2).find(":input").val());
                         console.log("saldo fila "+idfila+" es "+saldofila);
@@ -882,7 +882,7 @@ tfoot td {
                           console.log("radiofila  "+index+" total o saldo esta checkedado")
                         }
                         if(!radiototalfila && !radiosaldofila){
-                          console.log("radiofila "+index+" total o saldo no estan checkedado")                          
+                          console.log("radiofila "+index+" total o saldo no estan checkedado")
                           if(saldofila<=montopagos)
                           {
                             console.log("saldo menor igual a monto, bloqueo saldo");
@@ -895,16 +895,16 @@ tfoot td {
                           }
                         }
                       }
-                      
+
                     });
-                    
+
                   }
-                  
+
               //fin validar
 
             }
             return;
-           
+
           });
 
           //fin checkbox salo
@@ -917,7 +917,7 @@ tfoot td {
 
 
         /*$("#pcliente_id").change(function() {
-          
+
         });*/
 
         $(document).on("change",'#diferencia',function(e){
@@ -941,13 +941,13 @@ tfoot td {
           diferencia = total_pago - total_pedido;
           console.log('diferencia en fx diferenciaFaltante');
           console.log(diferencia);
-         
+
           $('#tabla_pedidos > tbody  > tr').each(function(index,tr) {
             console.log(index+" posicion");
             //var saldofila=$(this).find("td").eq(3).html();
             var saldofila=parseFloat($(this).find("td").eq(2).find(":input").val());
             console.log(saldofila)
-            
+
             console.log("resta1 "+diferencia);
             console.log("resta2 "+saldofila);
             let restogeneral=(parseFloat(diferencia)-parseFloat(saldofila)).toFixed(2);
@@ -978,7 +978,7 @@ tfoot td {
         }
 
         ////////
-        
+
         ///////
 
         $(document).on("keyup",'input.number',function(event){
@@ -988,7 +988,7 @@ tfoot td {
           $(this).val(function(index, value) {
             return value
               .replace(/\D/g, "")
-              .replace(/([0-9])([0-9]{2})$/, '$1.$2')  
+              .replace(/([0-9])([0-9]{2})$/, '$1.$2')
               .replace(/\B(?=(\d{3})+(?!\d)\.?)/g, ",")
             ;
           });
@@ -1009,7 +1009,7 @@ tfoot td {
           }
       });
 
-        
+
         $(document).on("click","#add_pago",function(){
               if ($('#pbanco').val() == ''){
                   Swal.fire(
@@ -1067,10 +1067,10 @@ tfoot td {
               }
         });
 
-        
+
 
         /*$('#add_pago').click(function() {
-          
+
         });*/
       });
         ///
@@ -1086,7 +1086,7 @@ tfoot td {
           }
 
         });*/
-        
+
         /*$("").click(function(){
           var checked=$(this).is('checked');
           if(checked)
@@ -1114,7 +1114,7 @@ tfoot td {
           }else{
             console.log("no");
             $(this).trigger("change");
-            
+
           }
         });*/
 
@@ -1134,21 +1134,21 @@ tfoot td {
             }
 
             console.log("estaba sin marcar");
-            console.log("no estaba marcado radiototal");            
+            console.log("no estaba marcado radiototal");
 
             let filedata=tabla_pedidos.row($(this).closest('tr')).data();
             console.log(filedata)
             let pedidosaldo=parseFloat(filedata.saldo);
             console.log("saldo "+pedidosaldo);
             console.log("montopagos "+montopagos);
-            
+
             if(pedidosaldo<=montopagos)
             {
               console.log("pedido "+pedidosaldo+"   < pago "+montopagos);
               montopagos=(montopagos-pedidosaldo).toFixed(2);
               console.log("diferencia "+montopagos);
               $("#diferencia").val(montopagos);
-              
+
               $(this).closest('tr').find(".radioadelanto").prop("disabled",true);
             }
           }
@@ -1159,7 +1159,7 @@ tfoot td {
             return false;
           }
           console.log("monto "+montopagos)
-          if(checked){            
+          if(checked){
             console.log("estaba marcado");
             $checktotal=$(this);
 
@@ -1169,7 +1169,7 @@ tfoot td {
             console.log("saldo "+pedidosaldo);
             console.log("montopagos "+montopagos);
             console.log("revertir");
-            {              
+            {
               montopagos=(montopagos+pedidosaldo).toFixed(2);
               console.log("diferencia "+montopagos);
               $("#diferencia").val(montopagos);
@@ -1201,7 +1201,7 @@ tfoot td {
 
         });*/
 
-    
+
         /*$(document).on( 'click', '#tabla_pedidos input.radiototal', function (e) {
           e.preventDefault();
           var checked=$(this).is('checked');
@@ -1212,7 +1212,7 @@ tfoot td {
           }
           console.log("monto "+montopagos)
           if(checked){
-            
+
             console.log("estaba marcado");
             $checktotal=$(this);
 
@@ -1223,9 +1223,9 @@ tfoot td {
             console.log("montopagos "+montopagos);
             console.log("revertir");
 
-            
+
             {
-              
+
               montopagos=(montopagos+pedidosaldo).toFixed(2);
               console.log("diferencia "+montopagos);
               $("#diferencia").val(montopagos);
@@ -1256,7 +1256,7 @@ tfoot td {
 
           }
           return false;
-          
+
 
 
         });*/
@@ -1277,7 +1277,7 @@ tfoot td {
             }else{
               console.log("si se encuentra marcado radioadelanto")
               $(this).closest('tr').find(".radiototal").prop("disabled",false);
-              
+
             }
             return true;
           }
@@ -1317,7 +1317,7 @@ tfoot td {
 
         $(document).ready(function () {
 
-          window.agregarPago = function(){  
+          window.agregarPago = function(){
             //alert('lol');
             console.log("en pagos")
             var strEx = $("#pmonto").val();
@@ -1370,7 +1370,7 @@ tfoot td {
                       if(data.html=='0'){
 
                         }else{
-                          /*var urlpdf = '{{ route("pedidosPDF", ":id") }}';           
+                          /*var urlpdf = '{{ route("pedidosPDF", ":id") }}';
                           urlpdf = urlpdf.replace(':id', data.html);
                           window.open(urlpdf, '_blank');
 
@@ -1423,11 +1423,11 @@ tfoot td {
 
               }
 
-              
+
               //////
-               
-              
-           
+
+
+
 
               /*tabla_pagos.row.add(
                 '<tr class="selected" id="filasPa' + contPa + '">' +
@@ -1436,7 +1436,7 @@ tfoot td {
                 '<td><input type="hidden" name="titular[]" value="' + titular + '">' + titular + '</td>' +
                 '<td><input type="hidden" name="banco[]" value="' + banco + '">' + banco + '</td>' +
                 '<td><input type="hidden" name="fecha[]" value="' + fecha + '">' + fecha + '</td>' +
-                '<td>@csrf<input type="file" id="imagen" name="imagen[]" accept= "image/*" style="width:150px;"/></td>' +      
+                '<td>@csrf<input type="file" id="imagen" name="imagen[]" accept= "image/*" style="width:150px;"/></td>' +
                 '<td><input type="hidden" name="monto[]" value="' + monto + '">' + monto + '</td>' +
                 '<td><button type="button" class="btn btn-danger btn-sm" onclick="eliminarPa(' + contPa + ')"><i class="fas fa-trash-alt"></i></button></td>' +
                 '</tr>'
@@ -1499,12 +1499,12 @@ tfoot td {
               '<td><input type="hidden" name="titular[]" value="' + titular + '">' + titular + '</td>' +
               '<td><input type="hidden" name="banco[]" value="' + banco + '">' + banco + '</td>' +
               '<td><input type="hidden" name="fecha[]" value="' + fecha + '">' + fecha + '</td>' +
-              '<td>@csrf<input type="file" id="imagen" name="imagen[]" accept= "image/*" style="width:150px;"/></td>' + 
-                /* <img id="picture" src="{{asset('imagenes/logo_facturas.png')}}" alt="Imagen del pago" height="100px" width="100px"> */        
+              '<td>@csrf<input type="file" id="imagen" name="imagen[]" accept= "image/*" style="width:150px;"/></td>' +
+                /* <img id="picture" src="{{asset('imagenes/logo_facturas.png')}}" alt="Imagen del pago" height="100px" width="100px"> */
               '<td><input type="hidden" name="monto[]" value="' + monto + '">' + monto + '</td>' +
               '<td><button type="button" class="btn btn-danger btn-sm" onclick="eliminarPa(' + contPa + ')"><i class="fas fa-trash-alt"></i></button></td>' +
               '</tr>';
-              
+
 
             contPa++;
             limpiarPa();
@@ -1516,7 +1516,7 @@ tfoot td {
             $('#tabla_pagos').append(filasPa);
             //$("#diferencia")
             console.log("pago "+'pago');
-            
+
           } else {
             Swal.fire(
               'Error!',
@@ -1525,10 +1525,10 @@ tfoot td {
           }
         }
         //////
-        
 
-        
-        
+
+
+
 
 
 
@@ -1550,7 +1550,7 @@ tfoot td {
         });*/
 
         function validarFormulario(evento) {
-          evento.preventDefault();      
+          evento.preventDefault();
           var total_pedido_pagar = document.getElementById('total_pedido_pagar').value;
           var total_pedido = document.getElementById('total_pedido').value;
           var total_pago_pagar = document.getElementById('total_pago_pagar').value;
@@ -1593,7 +1593,7 @@ tfoot td {
               Swal.fire({
                 icon: 'warning',
                 title: 'Pago incompleto ¿Estás seguro?',
-                text: "Falta S/" + falta + " para cancelar",            
+                text: "Falta S/" + falta + " para cancelar",
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '#d33',
@@ -1606,7 +1606,7 @@ tfoot td {
           }
           else {
               this.submit();
-          }      
+          }
         }
         //////
 
@@ -1629,26 +1629,26 @@ tfoot td {
       //}
 
 
-      
+
 
     //});
 
-    
+
     //VALIDAR CAMPO FECHAS MAX DIA ACTUAL
     var today = new Date().toISOString().split('T')[0];
     document.getElementsByName("pfecha")[0].setAttribute('max', today);
 
     //VALIDAR ANTES DE ENVIAR
     /*document.addEventListener("DOMContentLoaded", function() {
-      document.getElementById("formulario").addEventListener('submit', validarFormulario); 
+      document.getElementById("formulario").addEventListener('submit', validarFormulario);
     });*/
 
     // AGREGANDO PEDIDOS
-    
 
-    
 
-    
+
+
+
 
     /*function agregarPedido() {
       datosPedido = document.getElementById('ppedido_id').value.split('_');
@@ -1688,7 +1688,7 @@ tfoot td {
           'warning')
       }
     }*/
-    
+
 
     /* function evaluarPe() {
       if (total_pedido > 0 && total_pago > 0) {
@@ -1698,13 +1698,13 @@ tfoot td {
       }
     } */
 
-    
 
-    
+
+
 
     //VALIDAR CAMPOS NUMERICO DE MONTO EN PAGOS
-    
-    
+
+
 
     //VALIDANDO CAMPOS DE PAGOS
     /*$(document).ready(function() {
@@ -1738,12 +1738,12 @@ tfoot td {
         reader.readAsDataURL(file);
 
       });
-        
+
 
     });
-  
 
-    
+
+
   </script>
 
 @stop
