@@ -26,7 +26,7 @@ return [
          * Wild card will add "%" in between every characters of the keyword.
          * SQL: column LIKE "%k%e%y%w%o%r%d%"
          */
-        'use_wildcards'    => false,
+        'use_wildcards'    => true,
 
         /*
          * Perform a search which starts with the given keyword.

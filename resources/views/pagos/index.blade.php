@@ -222,7 +222,11 @@
                     if (localStorage.getItem("search_tabla") === null) {
                         //no existe
                     } else {
-                        $('#tablaPrincipal_filter label input').val(localStorage.getItem("search_tabla")).change();
+                        var termino_recuperado=localStorage.getItem("search_tabla");
+                        if(termino_recuperado) {
+                            $('#tablaPrincipal_filter label input').val(termino_recuperado).change();
+                            $('#tablaPrincipal').DataTable().search(termino_recuperado).draw();
+                        }
                     }
                 },
                 columns: [
@@ -279,7 +283,10 @@
                         data: 'users', name: 'users'
                     },
                     {//cliente
-                        data: 'celular',
+
+                        data: 'ccliente',
+                        name: 'ccliente',
+                        /*data: 'celular',
                         name: 'celular',
                         render: function (data, type, row, meta) {
                             if (row.icelular != null) {
@@ -288,7 +295,7 @@
                                 return row.celular;
                             }
 
-                        },
+                        },*/
                     },
                     /*{//observacion
                       data: 'observacion', name: 'observacion'
