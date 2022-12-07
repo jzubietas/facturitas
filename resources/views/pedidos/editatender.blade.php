@@ -88,7 +88,10 @@
                   @if ($img->pedido_id == $pedido->id)
                     <p>
                       <a href="{{ route('pedidos.descargaradjunto', $img->adjunto) }}">{{ $img->adjunto }}</a>
-                      <a href="" data-target="#modal-delete-adjunto" data-toggle="modal" data_imgid="{{ $img->id }}">  <button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i></button></a>
+                      <a href="" data-target="#modal-delete-adjunto" data-toggle="modal" data_imgid="{{ $img->id }}">  
+                        <button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i></button></a>
+                      <!--<a href="" data-target="#modal-delete-adjunto-{{ $img->id }}" data-toggle="modal">  
+                        <button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i></button></a>-->
                     </p>
                   @endif
                   @include('pedidos.modal.DeleteAdjuntoid')
@@ -129,3 +132,4 @@
 @section('js')
 
 @stop
+

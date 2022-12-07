@@ -568,34 +568,7 @@ class UserController extends Controller
         return redirect()->route('users.misasesores')->with('info', 'asignado');
     }
 
-    public function MiPersonal()
-    {
-            $encargados = User::where('rol', 'Encargado')
-                        ->where('estado', '1')
-                        ->pluck('name', 'id');
-            $asesores = User::where('rol', 'Asesor')
-                        ->where('estado', '1')
-                        ->get();       
-            $jefellamadas = User::whereIn('rol', 'Jefe de llamadas')
-                        ->where('estado', '1')
-                        ->get();    
-            $llamadas = User::whereIn('rol', 'Llamadas')
-                        ->where('estado', '1')
-                        ->get(); 
-            $jefeoperarios = User::where('rol', 'Jefe de operaciones')
-                        ->where('estado', '1')
-                        ->get();
-            $operarios = User::where('rol', 'Operario')
-                        ->where('estado', '1')
-                        ->get();
-                        /*->pluck('name', 'id');*/
-            /*$llamadas = User::whereIn('rol', ['Llamadas', 'Jefe de llamadas'])
-                        ->where('estado', '1')
-                        ->pluck('name', 'id');*/
-            $superasesor = User::where('rol', 'Super asesor')->count();
-            
-            return view('usuarios.mipersonal', compact('users','encargados', 'asesores', 'jefellamadas', 'llamadas', 'jefeoperarios','operarios','superasesor'));
-    }
+    
 
     public function Encargados()
     {
@@ -652,5 +625,73 @@ class UserController extends Controller
         ]);
 
         return redirect()->route('users.encargados')->with('info', 'asignado');
+    }
+
+
+    public function MiPersonal()
+    {       
+            $users = User::where('rol', 'Administrador')
+                        ->where('estado', '1')
+                        ->get();
+            $encargados = User::where('rol', 'Encargado')
+                        ->where('estado', '1')
+                        ->get(); 
+            $asesores = User::where('rol', 'Asesor')
+                        ->where('estado', '1')
+                        ->get();       
+            $jefellamadas = User::whereIn('rol', 'Jefe de llamadas')
+                        ->where('estado', '1')
+                        ->get();    
+            $llamadas = User::whereIn('rol', 'Llamadas')
+                        ->where('estado', '1')
+                        ->get(); 
+            $jefeoperarios = User::where('rol', 'Jefe de operaciones')
+                        ->where('estado', '1')
+                        ->get();
+            $operarios = User::where('rol', 'Operario')
+                        ->where('estado', '1')
+                        ->get();
+                        /*->pluck('name', 'id');*/
+            /*$llamadas = User::whereIn('rol', ['Llamadas', 'Jefe de llamadas'])
+                        ->where('estado', '1')
+                        ->pluck('name', 'id');*/
+            $superasesor = User::where('rol', 'Super asesor')->count();
+            
+            return view('usuarios.mipersonal', compact('users','encargados', 'asesores', 'jefellamadas', 'llamadas', 'jefeoperarios','operarios','superasesor'));
+    }
+
+    public function indextablapersonal(Request $request)
+    {
+        $users = User::where('rol', 'Asesor')
+                    ->where('estado', '1')
+                    ->get();
+
+        $users = User::select('users.id',
+            'users.name',
+            'users.email',
+            'users.rol',
+            'users.estado'
+                //DB::raw('DATE_FORMAT(users.created_at, "%d/%m/%Y") as fecha'),
+            )
+            ->where('users.rol', 'Asesor')
+            ->where('users.estado', '1')
+            ->groupBy(
+                'users.id',
+                'users.name',
+                'users.email',
+                'users.rol',
+                'users.estado'
+            )
+            //->orderBy('users.created_at', 'DESC')
+            ->get();
+            
+        return Datatables::of($users)
+                ->addIndexColumn()
+                ->addColumn('action', function($user){     
+                    $btn="";
+                    return $btn;
+                })
+                ->rawColumns(['action'])
+                ->make(true);
     }
 }
