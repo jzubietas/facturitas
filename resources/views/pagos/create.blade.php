@@ -467,14 +467,16 @@ tfoot td {
             $(".banco_procedencia_otro").hide();           
           }else if($(this).val()=='YAPE'){
             $(".operacion_contenedor").hide();
+            $("#poperacion").val("");
             //$("#poperacion").hide(); 
             //$("#poperacion").prop("disabled",true);          
           }else if($(this).val()=='PLIN'){
             $(".operacion_contenedor").hide();
+            $("#poperacion").val("");
             //$("#poperacion").hide(); 
             //$("#poperacion").prop("disabled",true);          
           }else{
-            $("#poperacion").prop("required",true);
+            //$("#poperacion").prop("required",true);
             $(".operacion_contenedor").show();
             $(".banco_procedencia").hide();
             $(".banco_procedencia_otro").hide();
