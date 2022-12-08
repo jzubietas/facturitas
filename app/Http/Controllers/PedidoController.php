@@ -921,6 +921,9 @@ class PedidoController extends Controller
         $cliente_AB=Cliente::where("id",$request->cliente_id)->first();
         $codigo=( ($identi_asesor->identificador=='B' )?  $identi_asesor->identificador : intval($identi_asesor->identificador)). ( ($cliente_AB->icelular!=null)? $cliente_AB->icelular:'' )  ."-".$fecha."-".$numped;
         //return $codigo;
+
+
+
         $request->validate([
             'cliente_id' => 'required',
         ]);
@@ -977,6 +980,7 @@ class PedidoController extends Controller
 
 
         try {
+
             DB::beginTransaction();
 
             $pedido = Pedido::create([
@@ -994,6 +998,21 @@ class PedidoController extends Controller
                 'pagado' => '0',
                 'direccion' => '0'
             ]);
+
+
+
+            if($cliente_AB->situacion == 'ABANDONO RECIENTE'){
+                $cliente_AB->update([
+                    'situacion' => 'RECURRENTE',
+                ]);
+            }else if($cliente_AB->situacion == 'ABANDONO PERMANENTE'){
+                $cliente_AB->update([
+                    'situacion' => 'RECUPERADO'
+                ]);
+            }
+            
+
+            
 
             // ALMACENANDO DETALLES
             $codigo = $codigo;//$request->codigo; actualizado para codigo autogenerado
