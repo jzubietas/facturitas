@@ -12,7 +12,7 @@
               
 
               <select name="user_id" class="border form-control  border-secondary selectpicker" id="user_id" data-live-search="true" >
-                <option value="">---- SELECCIONE ASESOR ----</option> 
+                <option value="0" class="ob" data-type="select" data-msj="Seleccione un Asesor">---- SELECCIONE ASESOR ----</option> 
               </select>
 
           </div>
@@ -34,7 +34,7 @@
             
            
               <select name="cliente_id" class="border form-control  border-secondary selectpicker" id="cliente_id" data-live-search="true" >{{-- selectpicker lang="es" --}}
-                <option value="">---- SELECCIONE CLIENTE ----</option>                  
+                <option>---- SELECCIONE CLIENTE ----</option>                  
               </select>              
               
           </div>
@@ -100,7 +100,7 @@
           
           <div class="form-group col-lg-2">
             {!! Form::label('pcantidad', 'Cantidad') !!}
-              <input type="text" name="pcantidad" id="pcantidad" step="0.01" min="0" class="form-control number" placeholder="Cantidad...">
+              <input type="text" name="pcantidad" id="pcantidad" step="0.01" min="0" class="form-control number ob" data-type="text" data-msj="Ingrese una cantidad" placeholder="Cantidad...">
           </div>       
           <div class="form-group col-lg-3">
             {!! Form::label('ptipo_banca', 'Tipo de comprobante y banca') !!}
@@ -115,11 +115,11 @@
           <div class="form-group col-lg-2">
             {!! Form::label('pcourier', 'Courier(S/)') !!}
               {{-- <input type="number" name="pcourier" id="pcourier" step="0.01" min="0" class="form-control" placeholder="Courier..."> --}}
-              <input type="text" name="pcourier" id="pcourier" step="0.01" min="0" class="form-control number" placeholder="Courier...">
+              <input type="text" name="pcourier" id="pcourier" step="0.01" min="0" class="form-control number" value="0" placeholder="Courier...">
           </div>
           <div class="form-group col-lg-3 d-flex justify-content-center align-items-center">
 
-              <a href="{{ route("pedidosPDFpreview2") }}" class="btn btn-info btn-lg" id="prev" name = "prev" target="_blank">Previsualizar</a>
+              <a href="#" class="btn btn-info btn-lg" id="prev" name = "prev" target="_blank">Previsualizar</a>
           </div>
           <div class="form-group col-lg-2">
 
@@ -128,11 +128,11 @@
         <div class="form-row">
           <div class="form-group col-lg-5">
             {!! Form::label('pdescripcion', 'Descripción') !!}
-              <input type="text" name="pdescripcion" id="pdescripcion" class="form-control" placeholder="Descripción...">
+              <input type="text" name="pdescripcion OB" type="text" data-msj="ingrese 9 digitos" id="pdescripcion" class="form-control" placeholder="Descripción..." value="Sin descripción">
           </div>
           <div class="form-group col-lg-4">
             {!! Form::label('pnota', 'Nota') !!}
-              <input type="text" name="pnota" id="pnota" class="form-control" placeholder="Nota...">
+              <input type="text" name="pnota" id="pnota" class="form-control" placeholder="Nota..." value="Sin notas">
           </div>
          
           <div class="form-group col-lg-3 d-flex justify-content-center align-items-center">

@@ -181,7 +181,7 @@ $(document).ready(function () {
         responsive:true,
         autowidth:true,
         serverSide: true,
-        ajax: "{{ route('clientesabandonotabla') }}",
+        ajax: "{{ route('clientestabla') }}",
         initComplete:function(settings,json){          
           if (localStorage. getItem("search_tabla") === null) {
             //no existe
