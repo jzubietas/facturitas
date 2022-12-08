@@ -384,10 +384,8 @@ class PagoController extends Controller
 
     public function pedidoscliente(Request $request)
     {
-        if (!$request->cliente_id) {
-            $html = '<option value="">' . trans('---- SELECCIONE ----') . '</option>';
-        } else {
-            $html = '<option value="">' . trans('---- SELECCIONE ----') . '</option>';
+        $html = '<option value="">' . trans('---- SELECCIONE ----') . '</option>';
+        if ($request->cliente_id) {
             $pedidos = Pedido::join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
                 ->select('pedidos.id',
                     'dp.codigo',
@@ -540,21 +538,15 @@ class PagoController extends Controller
                 if (count((array)$pedidos_pagados_total)) {
                     if (array_key_exists($pedido_id_value, $pedidos_pagados_total)) {
                         $pedidos_pagados_total_ar[$pedido_id_value]["checked"] = 1;
-                        $pedidos_pagados_total_ar[$pedido_id_value]["pedido_id"] = $pedido_id[$pedido_id_key];
-                        $pedidos_pagados_total_ar[$pedido_id_value]["total_parcial"] = 'total';
-                        $pedidos_pagados_total_ar[$pedido_id_value]["saldo"] = $saldo[$pedido_id_value];
                     } else {
                         $pedidos_pagados_total_ar[$pedido_id_value]["checked"] = 0;
-                        $pedidos_pagados_total_ar[$pedido_id_value]["pedido_id"] = $pedido_id[$pedido_id_key];
-                        $pedidos_pagados_total_ar[$pedido_id_value]["total_parcial"] = 'total';
-                        $pedidos_pagados_total_ar[$pedido_id_value]["saldo"] = $saldo[$pedido_id_value];
                     }
                 } else {
                     $pedidos_pagados_total_ar[$pedido_id_value]["checked"] = 0;
-                    $pedidos_pagados_total_ar[$pedido_id_value]["pedido_id"] = $pedido_id[$pedido_id_key];
-                    $pedidos_pagados_total_ar[$pedido_id_value]["total_parcial"] = 'total';
-                    $pedidos_pagados_total_ar[$pedido_id_value]["saldo"] = $saldo[$pedido_id_value];
                 }
+                $pedidos_pagados_total_ar[$pedido_id_value]["pedido_id"] = $pedido_id[$pedido_id_key];
+                $pedidos_pagados_total_ar[$pedido_id_value]["total_parcial"] = 'total';
+                $pedidos_pagados_total_ar[$pedido_id_value]["saldo"] = $saldo[$pedido_id_value];
             }
             //return $pedidos_pagados_total_ar;
             //programacion totales check
@@ -899,15 +891,12 @@ class PagoController extends Controller
                     if (count((array)$pedidos_pagados_total)) {
                         if (array_key_exists($pedido_id_value, $pedidos_pagados_total)) {
                             $pedidos_pagados_total_ar[$pedido_id_value]["checked"] = 1;
-                            $pedidos_pagados_total_ar[$pedido_id_value]["pedido_id"] = $pedido_id[$pedido_id_key];
-                            $pedidos_pagados_total_ar[$pedido_id_value]["total_parcial"] = 'total';
-                            $pedidos_pagados_total_ar[$pedido_id_value]["saldo"] = $saldo[$pedido_id_value];
                         } else {
                             $pedidos_pagados_total_ar[$pedido_id_value]["checked"] = 0;
-                            $pedidos_pagados_total_ar[$pedido_id_value]["pedido_id"] = $pedido_id[$pedido_id_key];
-                            $pedidos_pagados_total_ar[$pedido_id_value]["total_parcial"] = 'total';
-                            $pedidos_pagados_total_ar[$pedido_id_value]["saldo"] = $saldo[$pedido_id_value];
                         }
+                        $pedidos_pagados_total_ar[$pedido_id_value]["pedido_id"] = $pedido_id[$pedido_id_key];
+                        $pedidos_pagados_total_ar[$pedido_id_value]["total_parcial"] = 'total';
+                        $pedidos_pagados_total_ar[$pedido_id_value]["saldo"] = $saldo[$pedido_id_value];
                     } else {
                         $pedidos_pagados_total_ar[$pedido_id_value]["checked"] = 0;
                         $pedidos_pagados_total_ar[$pedido_id_value]["pedido_id"] = $pedido_id[$pedido_id_key];
@@ -921,15 +910,12 @@ class PagoController extends Controller
                     if (count((array)$pedidos_pagados_parcial)) {
                         if (array_key_exists($pedido_id_value, $pedidos_pagados_parcial)) {
                             $pedidos_pagados_parcial_ar[$pedido_id_value]["checked"] = 1;
-                            $pedidos_pagados_parcial_ar[$pedido_id_value]["pedido_id"] = $pedido_id[$pedido_id_key];
-                            $pedidos_pagados_parcial_ar[$pedido_id_value]["total_parcial"] = 'parcial';
-                            $pedidos_pagados_parcial_ar[$pedido_id_value]["saldo"] = $saldo[$pedido_id_value];
                         } else {
                             $pedidos_pagados_parcial_ar[$pedido_id_value]["checked"] = 0;
-                            $pedidos_pagados_parcial_ar[$pedido_id_value]["pedido_id"] = $pedido_id[$pedido_id_key];
-                            $pedidos_pagados_parcial_ar[$pedido_id_value]["total_parcial"] = 'parcial';
-                            $pedidos_pagados_parcial_ar[$pedido_id_value]["saldo"] = $saldo[$pedido_id_value];
                         }
+                        $pedidos_pagados_parcial_ar[$pedido_id_value]["pedido_id"] = $pedido_id[$pedido_id_key];
+                        $pedidos_pagados_parcial_ar[$pedido_id_value]["total_parcial"] = 'parcial';
+                        $pedidos_pagados_parcial_ar[$pedido_id_value]["saldo"] = $saldo[$pedido_id_value];
                     } else {
                         $pedidos_pagados_parcial_ar[$pedido_id_value]["checked"] = 0;
                         $pedidos_pagados_parcial_ar[$pedido_id_value]["pedido_id"] = $pedido_id[$pedido_id_key];
@@ -962,7 +948,6 @@ class PagoController extends Controller
                 DB::beginTransaction();
                 $deuda_total = $request->total_pedido_pagar;
                 $deuda_total = str_replace(',', '', $deuda_total);
-                $pagado = $request->total_pago_pagar;
                 $pagado = str_replace(',', '', $pagado);
 
                 $identi_asesor = User::where("identificador", $request->user_id)->where("unificado", "NO")->first();
@@ -1208,15 +1193,12 @@ class PagoController extends Controller
                     if (count((array)$pedidos_pagados_total)) {
                         if (array_key_exists($pedido_id_value, $pedidos_pagados_total)) {
                             $pedidos_pagados_total_ar[$pedido_id_value]["checked"] = 1;
-                            $pedidos_pagados_total_ar[$pedido_id_value]["pedido_id"] = $pedido_id[$pedido_id_key];
-                            $pedidos_pagados_total_ar[$pedido_id_value]["total_parcial"] = 'total';
-                            $pedidos_pagados_total_ar[$pedido_id_value]["saldo"] = $saldo[$pedido_id_value];
                         } else {
                             $pedidos_pagados_total_ar[$pedido_id_value]["checked"] = 0;
-                            $pedidos_pagados_total_ar[$pedido_id_value]["pedido_id"] = $pedido_id[$pedido_id_key];
-                            $pedidos_pagados_total_ar[$pedido_id_value]["total_parcial"] = 'total';
-                            $pedidos_pagados_total_ar[$pedido_id_value]["saldo"] = $saldo[$pedido_id_value];
                         }
+                        $pedidos_pagados_total_ar[$pedido_id_value]["pedido_id"] = $pedido_id[$pedido_id_key];
+                        $pedidos_pagados_total_ar[$pedido_id_value]["total_parcial"] = 'total';
+                        $pedidos_pagados_total_ar[$pedido_id_value]["saldo"] = $saldo[$pedido_id_value];
                     } else {
                         $pedidos_pagados_total_ar[$pedido_id_value]["checked"] = 0;
                         $pedidos_pagados_total_ar[$pedido_id_value]["pedido_id"] = $pedido_id[$pedido_id_key];
@@ -1230,15 +1212,12 @@ class PagoController extends Controller
                     if (count((array)$pedidos_pagados_parcial)) {
                         if (array_key_exists($pedido_id_value, $pedidos_pagados_parcial)) {
                             $pedidos_pagados_parcial_ar[$pedido_id_value]["checked"] = 1;
-                            $pedidos_pagados_parcial_ar[$pedido_id_value]["pedido_id"] = $pedido_id[$pedido_id_key];
-                            $pedidos_pagados_parcial_ar[$pedido_id_value]["total_parcial"] = 'parcial';
-                            $pedidos_pagados_parcial_ar[$pedido_id_value]["saldo"] = $saldo[$pedido_id_value];
                         } else {
                             $pedidos_pagados_parcial_ar[$pedido_id_value]["checked"] = 0;
-                            $pedidos_pagados_parcial_ar[$pedido_id_value]["pedido_id"] = $pedido_id[$pedido_id_key];
-                            $pedidos_pagados_parcial_ar[$pedido_id_value]["total_parcial"] = 'parcial';
-                            $pedidos_pagados_parcial_ar[$pedido_id_value]["saldo"] = $saldo[$pedido_id_value];
                         }
+                        $pedidos_pagados_parcial_ar[$pedido_id_value]["pedido_id"] = $pedido_id[$pedido_id_key];
+                        $pedidos_pagados_parcial_ar[$pedido_id_value]["total_parcial"] = 'parcial';
+                        $pedidos_pagados_parcial_ar[$pedido_id_value]["saldo"] = $saldo[$pedido_id_value];
                     } else {
                         $pedidos_pagados_parcial_ar[$pedido_id_value]["checked"] = 0;
                         $pedidos_pagados_parcial_ar[$pedido_id_value]["pedido_id"] = $pedido_id[$pedido_id_key];
@@ -1959,12 +1938,11 @@ class PagoController extends Controller
     public function destroyid(Request $request)
     {
         //modificar primero
+        $html = '';
         if (!$request->hiddenID) {
-            $html = '';
             return 'nada';
         } else {
             //$pago_id=;
-            $html = '';
             $pago_id = $request->hiddenID;
             //return $pago_id;
             /*$pago = Pago::where('id', $request->hiddenID)
@@ -2067,12 +2045,12 @@ class PagoController extends Controller
     public function desabonarid(Request $request)
     {
         //modificar primero
+        $html = '';
         if (!$request->hiddenDesabonar) {
-            $html = '';
             return 'nada';
         } else {
             //$pago_id=;
-            $html = '';//3840
+            //3840
             $pago_id = $request->hiddenDesabonar;
 
 
@@ -2094,8 +2072,8 @@ class PagoController extends Controller
                     ]);
 
             } catch (\Throwable $th) {
-                throw $th;
                 $html = "error";
+                throw $th;
 
             }
 
