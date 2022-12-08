@@ -14,7 +14,7 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-          <button type="submit" class="btn btn-danger">Confirmar</button>
+          <button type="submit" class="btn btn-danger" id="borrate">Confirmar</button>
         </div>
         {{ Form::Close() }}
       </div>

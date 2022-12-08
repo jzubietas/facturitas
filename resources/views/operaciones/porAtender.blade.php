@@ -57,8 +57,8 @@
         </tbody>
       </table>
       @include('pedidos.modalid')
-      @include('pedidos.modal.atenderid')
-      @include('pedidos.modal.veradjuntoid')
+      @include('operaciones.modal.atenderid')
+      @include('operaciones.modal.veradjuntoid')
     </div>
   </div>
 
@@ -130,9 +130,16 @@
 
       $(document).on("submit", "#formularioatender", function (evento) {
         evento.preventDefault();
+        let files=$('input[name="adjunto[]');
+        //console.log(files)
+
+        var imagen = $('input[type=file][name="adjunto[]"]')[0].files[0];
+       // console.log(imagen)
+
+        //return false;
 
         var fd = new FormData();
-        let files=$('input[name="adjunto[]');
+        
         if(files.length == 0)
         {
           Swal.fire(
@@ -146,6 +153,9 @@
         for (let i = 0; i < files.length; i++) {
           fd.append('adjunto', $('input[type=file][name="adjunto[]"]')[0].files[0]);
         }
+        //console.log(files);
+        //return false;
+
         fd.append( 'cant_compro', $("#cant_compro").val() );
         fd.append( 'condicion', $("#condicion").val() );
         fd.append( 'hiddenAtender', $("#hiddenAtender").val() );
@@ -274,7 +284,7 @@
             render:$.fn.dataTable.render.moment('YYYY-MM-DD HH:mm:ss', 'DD/MM/YYYY HH:mm:ss' )
             //render: $.fn.dataTable.render.moment( 'DD/MM/YYYY' ).format('HH:mm:ss'),
           },
-        
+          {data: 'tipo_banca', name: 'tipo_banca', },
           {
             data: 'imagenes', 
             name: 'imagenes', 

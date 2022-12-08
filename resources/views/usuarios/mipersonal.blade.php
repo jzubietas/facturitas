@@ -29,8 +29,6 @@
             <th scope="col">NOMBRES Y APELLIDOS</th>
             <th scope="col">CORREO</th>
             <th scope="col">CARGO</th>
-            <th scope="col">NOMBRE DEL ASIGNADO</th>
-            <th scope="col">ROL DEL ASIGNADO</th>
             <th scope="col">ESTADO</th>
           </tr>
         </thead>
@@ -41,8 +39,7 @@
               <td>{{ $user->name }}</td>
               <td>{{ $user->email }}</td>
               <td>{{ $user->rol }}</td>
-              <td>{{ $user->name }}</td>
-              <td>{{ $user->rol }}</td>
+              <td>{{ $user->estado }}</td>
               <td>
                 @php
                   if ($user->estado == '1') {
@@ -135,5 +132,71 @@
       ;
     });
     });
+
+    $('#tablaPrincipal').DataTable({
+        processing: true,
+        responsive:true,
+        autowidth:true,
+        serverSide: true,
+        ajax: "{{ route('indextablapersonal') }}",
+        initComplete:function(settings,json){          
+          if (localStorage. getItem("search_tabla") === null) {
+            //no existe
+          }else{
+            $('#tablaPrincipal_filter label input').val(localStorage.getItem("search_tabla") ).change();            
+          }          
+        },
+        columns: [
+        {
+            data: 'id', 
+            name: 'id',
+        },
+        {data: 'name', name: 'name'},
+        {
+          data: 'email', 
+          name: 'email',
+        },
+        {
+          data: 'rol', 
+          name: 'rol',
+        },
+        {data: 'estado', name: 'estado'},
+        ],
+
+        language: {
+        "decimal": "",
+        "emptyTable": "No hay informaciÃ³n",
+        "info": "Mostrando del _START_ al _END_ de _TOTAL_ Entradas",
+        "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
+        "infoFiltered": "(Filtrado de _MAX_ total entradas)",
+        "infoPostFix": "",
+        "thousands": ",",
+        "lengthMenu": "Mostrar _MENU_ Entradas",
+        "loadingRecords": "Cargando...",
+        "processing": "Procesando...",
+        "search": "Buscar:",
+        "zeroRecords": "Sin resultados encontrados",
+        "paginate": {
+          "first": "Primero",
+          "last": "Ultimo",
+          "next": "Siguiente",
+          "previous": "Anterior"
+        }
+      },
+
+    });
+    $(document).on("keypress",'#tablaPrincipal_filter label input',function(){
+      console.log("aaaaa")
+      
+      localStorage.setItem("search_tabla",$(this).val());
+      console.log( "search_tabla es "+localStorage.getItem("search_tabla") );
+
+    });
+    $('#tablaPrincipal_filter label input').on('paste', function(e) {
+      var pasteData = e.originalEvent.clipboardData.getData('text')
+      localStorage.setItem("search_tabla",pasteData);
+    });
+
+
   </script>
 @stop

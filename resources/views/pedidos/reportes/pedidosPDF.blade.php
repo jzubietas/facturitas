@@ -64,6 +64,12 @@
     @foreach ($pedidos as $pedido)          
       <thead class="noselect">
         <tr >
+          <th colspan="2" style="background: white">
+            <span>{{ $pedido->codigos }}</span><br>
+            <img src="@php echo $codigo_barras_img @endphp" width="300">
+          </th>
+        </tr>
+        <tr >
           <th colspan="2" style="background: white"><h2>PEDIDO</h2></th>
         </tr>
       </thead>
