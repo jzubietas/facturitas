@@ -21,32 +21,32 @@ class PagosIncompletosExport implements FromView, ShouldAutoSize
             ->join('pago_pedidos as pp', 'pagos.id', 'pp.pago_id')
             ->join('pedidos as p', 'pp.pedido_id', 'p.id')
             ->join('detalle_pedidos as dpe', 'p.id', 'dpe.pedido_id')
-            ->select('pagos.id', 
-                    'dpe.codigo as codigos', 
-                    'u.identificador as users', 
-                    'pagos.observacion', 
+            ->select('pagos.id',
+                    'dpe.codigo as codigos',
+                    'u.identificador as users',
+                    'pagos.observacion',
                     'dpe.total as total_deuda',
-                    DB::raw('sum(dpa.monto) as total_pago'), 
-                    'pagos.condicion',                   
+                    DB::raw('sum(dpa.monto) as total_pago'),
+                    'pagos.condicion',
                     'pagos.created_at as fecha'
                     )
             ->where('pagos.estado', '1')
             ->where('dpe.estado', '1')
             ->where('dpa.estado', '1')
             ->where('u.identificador', Auth::user()->identificador)
-            ->where('pagos.condicion', 'ADELANTO')
+            ->where('pagos.condicion',  Pago::ADELANTO)
             ->whereBetween(DB::raw('DATE(pagos.created_at)'), [$request->desde, $request->hasta]) //rango de fechas
-            ->groupBy('pagos.id', 
-                    'dpe.codigo', 
+            ->groupBy('pagos.id',
+                    'dpe.codigo',
                     'u.identificador',
                     'pagos.observacion', 'dpe.total',
                     'pagos.total_cobro',
-                    'pagos.condicion', 
+                    'pagos.condicion',
                     'pagos.created_at')
             ->get();
         $this->pagos = $pagos;
         return $this;
-    }            
+    }
 
     public function view(): View {
         return view('pagos.excel.pagosincompletos', [
