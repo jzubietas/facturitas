@@ -149,6 +149,8 @@ Route::get('datatable.cargaratendidos', [PedidoController::class, 'cargarAtendid
 Route::post('pedidos.atender/{pedido}', [PedidoController::class, 'Atender'])->name('pedidos.atender');
 Route::post('pedidos.atenderid', [PedidoController::class, 'Atenderid'])->name('pedidos.atenderid');
 Route::get('operaciones.editatender/{pedido}', [PedidoController::class, 'editAtender'])->name('operaciones.editatender');
+Route::post('operaciones.eliminaradjunto', [PedidoController::class, 'eliminarAdjuntoOperaciones'])->name('operaciones.eliminaradjunto');
+
 Route::post('operaciones.updateatender/{pedido}', [PedidoController::class, 'updateAtender'])->name('operaciones.updateatender');
 Route::get('operaciones.showatender/{pedido}', [PedidoController::class, 'showAtender'])->name('operaciones.showatender');
 Route::post('pedidos/eliminarAdjunto/{id}', [PedidoController::class, 'eliminarAdjunto'])->name('pedidos.eliminarAdjunto');

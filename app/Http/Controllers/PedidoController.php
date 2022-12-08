@@ -1035,22 +1035,14 @@ class PedidoController extends Controller
                 $file->move($destinationPath , $file_name);
             }*/
 
-<<<<<<< HEAD
             /*if(isset($files))
-=======
-           /* if(isset($files))
->>>>>>> main
             {
 return $files;
             }else{
 return ' no imagen ';
             }*/
 
-<<<<<<< HEAD
             //return '';
-=======
-            return '';*/
->>>>>>> main
 
             if(isset($files)){
                 $destinationPath = base_path('public/storage/adjuntos/');
@@ -2924,13 +2916,22 @@ return ' no imagen ';
         return view('pedidos.showAtender', compact('pedidos', 'imagenes', 'imagenesatencion'));
     }
 
-    public function eliminarAdjunto($id)
+
+
+    public function eliminarAdjuntoOperaciones(Request $request)
     {
-        $imagenes = ImagenAtencion::find($id);
-        $imagenes->update([
-            'estado' => '0'
-        ]);
-        return redirect()->route('operaciones.atendidos')->with('info', 'actualizado');
+        $id = $request->eliminar_pedido_id;
+        $imagen = $request->eliminar_pedido_id_imagen;
+        $imagenatencion = ImagenAtencion::where("pedido_id",$id)
+        ->where("adjunto",$imagen)->first();
+
+        if($imagenatencion != NULL){
+            $imagenatencion->update([
+                'estado' => '0'
+            ]);
+        }
+        
+        return response()->json(['html' => $imagenatencion]);
     }
 
     public function Enviar(Request $request, Pedido $pedido)
