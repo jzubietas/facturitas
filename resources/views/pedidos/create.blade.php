@@ -130,6 +130,78 @@
                 $("#pporcentaje").val(datosTipoBanca[1]);
             }
 
+            function ValidarDatosPedido(){
+                //ASESOR
+                asesor_ide = $("#user_id option:selected").val();
+
+                //CLIENTE
+                cliente_ide = $("#cliente_id option:selected").val();
+
+                //MES 
+                mes = $("#pmes").val();
+                
+                //AÑO
+                anio = $("#panio").val();
+
+                // CANTIDAD
+                var cant_strEx = $("#pcantidad").val(); //1,000.00
+                cant_strEx = cant_strEx.replace(",", ""); //1000.00
+                var can_numFinal = parseFloat(cant_strEx);
+
+                // BANCA
+                datosTipoBanca = document.getElementById('ptipo_banca').value.split('_');
+                tipo_banca = datosTipoBanca[0];
+
+                // PORCENTAJE
+                porcentaje = $("#pporcentaje").val();
+
+                // COURIER
+                var strEx = $("#pcourier").val(); //1,000.00
+                strEx = strEx.replace(",", ""); //1000.00
+                var numFinal = parseFloat(strEx);
+                courier = numFinal * 1;
+
+                var respuesta_validacion = "";
+
+
+                $.ajax({
+                        data: {
+                            asesor : asesor_ide,
+                            cliente : cliente_ide,
+                            mes : mes,
+                            ano : anio,
+                            cantidad : cantidad,
+                            banca : tipo_banca,
+                            porcentaje : porcentaje,
+                            courier : courier
+                        },
+                        type: 'POST',
+                        url: "{{ route('validarpedido') }}",
+                        success: function(data) {
+                            console.log(data.html);
+
+                            if(data.html == 0){
+                                agregar();
+                            }else{
+
+                                Swal.fire({
+                                icon: 'warning',
+                                title: 'Advertencia',
+                                text: 'Este pedido ya se encuentra regitrado con los mismos datos',
+                                showDenyButton: true,
+                                confirmButtonText: 'Estoy de acuerdo',
+                                denyButtonText: 'Cancelar',
+                                }).then((result) => {
+                                if (result.isConfirmed) {
+                                    agregar();
+                                }
+                                })
+                            }
+                        }
+                    });
+                    return false;
+            };
+
             function agregar() {
                 datosTipoBanca = document.getElementById('ptipo_banca').value.split('_');
                 datosCodigo = document.getElementById('pcodigo').value.split('-');
@@ -550,7 +622,7 @@
                         )
                     } else {
                         cantidad = !isNaN($('#pcantidad').val()) ? parseInt($('#pcantidad').val(), 10) : 0;
-                        agregar();
+                        ValidarDatosPedido();
                     }
                 });
 
@@ -790,6 +862,7 @@
                         evaluar();
 
                         $('#cerrar-modal-copiar').on('click', function() {
+                            console.log("Test");
                             location.reload();
                         });
 

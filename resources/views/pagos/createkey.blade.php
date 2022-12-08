@@ -8,7 +8,7 @@
 
 @section('content')
   <div class="card">
-     {!! Form::open(['route' => 'pagos.store','enctype'=>'multipart/form-data', 'id'=>'formulario','files'=>true]) !!}
+     {!! Form::open(['route' => 'pagos.store','enctype'=>'multipart/form-data', 'id'=>'formulario','files'=>true]) !!} 
     {{--<form id="formulario" name="formulario" enctype="multipart/form-data">--}}
       <div class="border rounded card-body border-secondary" style="margin: 1%">
         <div class="form-row">
@@ -16,13 +16,13 @@
             {!! Form::label('user_id', 'Asesor') !!}
             {{--<input type="hidden" name="user_id" requerid value="{{ Auth::user()->id }}" class="form-control">--}}
             {{--<input type="text" name="user_name" value="{{ Auth::user()->name }}" class="form-control" disabled>--}}
-
+            
             <select name="user_id" class="border form-control  border-secondary selectpicker" id="user_id" data-live-search="true" >
-                <option value="">---- SELECCIONE ASESOR ----</option>
+                <option value="">---- SELECCIONE ASESOR ----</option> 
               </select>
 
 
-
+              
           </div>
           <div class="form-group col-lg-6">
 
@@ -66,11 +66,11 @@
               <div class="form-group col-lg-3">
                 <button class="btn btn-warning" id="btn-accion-perdonar-currier" type="button">AGREGAR IMPORTE</button>
               </div>
-
+              
               <div class="form-group col-lg-4 text-center">
                 <a data-target="#modal-add-pagos" id="addpago" data-toggle="modal"><button class="btn btn-primary"><i class="fas fa-plus-circle"></i></button></a>
               </div>
-            </div>
+            </div>          
               @error('imagen')
                 <small class="text-danger">{{$message}}</small>
               @enderror
@@ -79,9 +79,9 @@
                 <thead class="bg-primary">
                   <tr>
                     <th scope="col">ACCIÓN</th>
-                    <th scope="col">#</th>
+                    <th scope="col">#</th> 
                     <th scope="col">T.MOV.</th>
-                    <th scope="col">TITULAR</th>
+                    <th scope="col">TITULAR</th>               
                     <th scope="col">BANCO</th>
                     <th scope="col">BANCO P</th>
                     <th scope="col">O BANCO</th>
@@ -90,7 +90,7 @@
                     <th scope="col">MONTO</th>
                     <th scope="col">OPERACION</th>
                     <th scope="col">NOTA</th>
-
+                    
                   </tr>
                 </thead>
                 <tfoot>
@@ -105,21 +105,21 @@
                   <th></th>
                   <th></th>
                   <th ></th>
-                  <th><input type="hidden" name="total_pago_pagar" requerid value="" id="total_pago_pagar" class="form-control"></th>
+                  <th><input type="hidden" name="total_pago_pagar" requerid value="" id="total_pago_pagar" class="form-control"></th>  
                 </tfoot>
                 <tbody>
                 </tbody>
               </table>
             </div>
           </div>
-
+          
           <div class="form-group col-lg-6">
             <div class="form-row">
               <div class="form-group col-lg-6">
                 <h2>PEDIDOS A PAGAR</h2>
               </div>
               <div class="form-group col-lg-6">
-                {{-- <a data-target="#modal-add-pedidos" id="addpedido" data-toggle="modal"><button class="btn btn-info"><i class="fas fa-plus-circle"></i></button></a> --}}
+                {{-- <a data-target="#modal-add-pedidos" id="addpedido" data-toggle="modal"><button class="btn btn-info"><i class="fas fa-plus-circle"></i></button></a> --}}  
               </div>
             </div>
             <div class="table-responsive">
@@ -155,12 +155,12 @@
                 </tfoot>
                 <tbody style="text-align: center">
                 </tbody>
-
+                
               </table>
             </div>
           </div>
 
-
+          
 
 
         </div>
@@ -171,7 +171,7 @@
     </div>
     <div class="card-footer">
       <div class="form-row">
-
+        
         <div class="form-group col-lg-1">
           <div id="guardar">
             <button id="registrar_pagos" type="submit" class="btn btn-success"><i class="fas fa-save"></i> Guardar</button>
@@ -194,11 +194,11 @@
         </div>
 
         <div class="form-group col-lg-1 text-left">
-          <input type="text" name="diferencia" value="" disabled id="diferencia" class="form-control" style="color: red; font-weight:bold;  font-size:21px" readonly="readonly">
+          <input type="text" name="diferencia" value="" disabled id="diferencia" class="form-control" style="color: red; font-weight:bold;  font-size:21px" readonly="readonly"> 
 
-          <input type="hidden" name="diferenciaantes" value="" disabled id="diferenciaantes" class="form-control" style="color: blue; font-weight:bold;  font-size:21px">
+          <input type="hidden" name="diferenciaantes" value="" disabled id="diferenciaantes" class="form-control" style="color: blue; font-weight:bold;  font-size:21px"> 
         </div>
-
+        
         <div class="form-group col-lg-1">
           <input type="hidden" name="saldo" id="saldo" class="form-control number" placeholder="Saldo a favor...">
         </div>
@@ -240,7 +240,7 @@ tfoot td {
   <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
-  <script>
+  <script>  
 
     $("#guardar").hide();
     $("#addpedido").hide();
@@ -256,7 +256,7 @@ tfoot td {
       $("#btn-perdonar-currier").show();
       $("#btn-perdonar-deuda").show();
 
-    }
+    }    
 
     // CARGAR PEDIDOS DE CLIENTE SELECCIONADO
 
@@ -289,14 +289,14 @@ tfoot td {
       }
 
       /*function evaluarPa() {
-          if (total_pago > 0) {//total_pedido > 0 &&
+          if (total_pago > 0) {//total_pedido > 0 && 
             $("#guardar").show();
           } else {
             $("#guardar").hide();
           }
         }*/
 
-
+       
 
       $(document).ready(function() {
 
@@ -312,10 +312,10 @@ tfoot td {
 
 
             //$("#user_id").html('');
-            //$("#user_id").html(data.html);
+            //$("#user_id").html(data.html);      
 
             //$("#user_id").selectpicker("refresh").trigger("change");
-
+            
           });
 
 
@@ -333,8 +333,8 @@ tfoot td {
             "bFilter": false,
             "bInfo": false,
             'ajax': {
-              url:"{{ route('cargar.pedidosclientetabla') }}",
-              'data': { "cliente_id": $("#pcliente_id").val(),"diferencia":$("#diferencia").val(),"perdonar_deuda":1},
+              url:"{{ route('cargar.pedidosclientetabla') }}",					
+              'data': { "cliente_id": $("#pcliente_id").val(),"diferencia":$("#diferencia").val(),"perdonar_deuda":1}, 
               "type": "get",
             },
             "fnCreatedRow": function( nRow, aData, iDataIndex ) {
@@ -342,7 +342,7 @@ tfoot td {
             },
             columns: [
               {
-                data: 'id',
+                data: 'id', 
                 name: 'id',
                 render:function(data,type,row,meta){
                   if(row.id<10){
@@ -353,13 +353,13 @@ tfoot td {
                     return '<input type="hidden" name="pedido_id['+data+']" value="' + data + '">PED0' + data + '</td>';
                   }else{
                     return '<input type="hidden" name="pedido_id['+data+']" value="' + data + '">PED' + data + '</td>';
-                  }
+                  } 
                 }
               },
               {data: 'codigo', name: 'codigo',},
-
+              
               {
-                data: 'saldo',
+                data: 'saldo', 
                 name: 'saldo',
                 render:function(data,type,row,meta){
                     return '<input type="hidden" name="numbersaldo['+row.id+']" value="' + data + '"><span class="numbersaldo">' + data + '</span></td>';
@@ -367,7 +367,7 @@ tfoot td {
                 "visible": true
               },
               {
-                data: 'diferencia',
+                data: 'diferencia', 
                 name: 'diferencia',
                 render:function(data,type,row,meta){
                     return '<input type="hidden" name="numberdiferencia['+row.id+']" value="' + data + '"><span class="numberdiferencia">' + data + '</span></td>'+
@@ -377,13 +377,13 @@ tfoot td {
               },
               {
                   "data": null,
-                  "render": function ( data, type, row, meta ) {
+                  "render": function ( data, type, row, meta ) {                      
                       return '<input type="checkbox" disabled class="form-control radiototal" name="checktotal['+row.id+']" value="0">';
                   }
               },
               {
                   "data": null,
-                  "render": function ( data, type, row, meta ) {
+                  "render": function ( data, type, row, meta ) {                    
                     return '<input type="checkbox" disabled class="form-control radioadelanto" name="checkadelanto['+row.id+']" value="0">';
                   }
               }
@@ -420,7 +420,7 @@ tfoot td {
             },
             language: {
               "decimal": "",
-              "emptyTable": "No hay información",
+              "emptyTable": "No hay informaciÃ³n",
               "info": "Mostrando del _START_ al _END_ de _TOTAL_ Entradas",
               "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
               "infoFiltered": "(Filtrado de _MAX_ total entradas)",
@@ -438,7 +438,7 @@ tfoot td {
               "previous": "Anterior"
               }
             },
-
+            
           });//fin datatable
 
         });
@@ -450,8 +450,8 @@ tfoot td {
 
           $("#modal-add-perdonar-deuda").modal("show");
 
-
-
+          
+         
 
         });
 
@@ -464,7 +464,7 @@ tfoot td {
             $("#pbancoprocedencia").val("").selectpicker("refresh");
             $("#otro_bancoprocedencia").val("");
             $(".banco_procedencia").show();
-            $(".banco_procedencia_otro").hide();
+            $(".banco_procedencia_otro").hide();           
           }else{
             $(".banco_procedencia").hide();
             $(".banco_procedencia_otro").hide();
@@ -475,7 +475,7 @@ tfoot td {
           console.log($(this).val());
           if($(this).val()=='OTROS'){
             $("#otro_bancoprocedencia").val("");
-            $(".banco_procedencia_otro").show();
+            $(".banco_procedencia_otro").show();           
           }else{
             $(".banco_procedencia_otro").hide();
           }
@@ -521,7 +521,7 @@ tfoot td {
           console.log("total_check_count "+total_check_count)
           console.log("saldo_check_count "+saldo_check_count)
 
-
+          
 
           var total_check_si = $('.radiototal').filter(':checked').length;
           var saldo_check_si = $('.radioadelanto').filter(':checked').length;
@@ -543,7 +543,7 @@ tfoot td {
           faltainput=parseFloat(faltainput);
 
           console.log(" faltainput2 "+faltainput)
-
+          
           //return false;
           //marcar minimo un pedido
 
@@ -581,7 +581,7 @@ tfoot td {
           else {
               this.submit();
               //$("#formulario").trigger("submit");
-          }
+          }  
           //aqui
         });
 
@@ -603,9 +603,9 @@ tfoot td {
           falta = falta.toFixed(2);
           imagen = document.getElementsByName("imagen[]");
           var img = [];
-
+         
           let files=$('input[name="adjunto[]');
-
+         
           for(var i=0;i<imagen.length;i++){
               img.push(imagen[i].value);
           }
@@ -630,7 +630,7 @@ tfoot td {
 
           event.preventDefault();
           console.log("abrir")
-
+        
         var fd = new FormData();
         }*/
 
@@ -638,31 +638,31 @@ tfoot td {
             "bPaginate": false,
               "bFilter": false,
               "bInfo": false,
-              columns:
+              columns: 
               [
                 {
-                  data: 'accion',
+                  data: 'accion', 
                   name: 'accion',
-                  sWidth:'10%',
+                  sWidth:'10%', 
                   render: function ( data, type, row, meta ) {
                     return '<button type="button" class="btn btn-danger btn-sm remove" item="'+row.item+'"><i class="fas fa-trash-alt"></i>'+row.item+'</button>';
                   }
                 },
                 {
-                  data: 'item',
+                  data: 'item', 
                   name: 'item',
-                  sWidth:'10%',
+                  sWidth:'10%', 
                 },
                 {
-                  data: 'movimiento',
+                  data: 'movimiento', 
                   name: 'movimiento',
-                  sWidth:'10%',
+                  sWidth:'10%', 
                   render: function ( data, type, row, meta ) {
                     return '<input type="hidden" name="tipomovimiento['+row.item+']" value="' + data + '"><span class="tipomovimiento">' + data + '</span></td>';
                   }
                 },
                 {
-                  data: 'titular',
+                  data: 'titular', 
                   name: 'titular',
                   sWidth:'10%',
                   render: function ( data, type, row, meta ) {
@@ -670,43 +670,43 @@ tfoot td {
                   }
                 },
                 {
-                  data: 'banco',
+                  data: 'banco', 
                   name: 'banco',
-                  sWidth:'10%',
+                  sWidth:'10%', 
                   render: function ( data, type, row, meta ) {
                     return '<input type="hidden" name="banco['+row.item+']" value="' + data + '"><span class="banco">' + data + '</span></td>';
                   }
                 },
                 {
-                  data: 'bancop',
+                  data: 'bancop', 
                   name: 'bancop',
-                  sWidth:'10%',
+                  sWidth:'10%', 
                   render: function ( data, type, row, meta ) {
                     return '<input type="hidden" name="bancop['+row.item+']" value="' + data + '"><span class="bancop">' + data + '</span></td>';
                   },
                   "visible": false,
                 },
                 {
-                  data: 'obanco',
+                  data: 'obanco', 
                   name: 'obanco',
-                  sWidth:'10%',
+                  sWidth:'10%', 
                   render: function ( data, type, row, meta ) {
                     return '<input type="hidden" name="obanco['+row.item+']" value="' + data + '"><span class="obanco">' + data + '</span></td>';
                   },
                   "visible": false,
                 },
                 {
-                  data: 'fecha',
+                  data: 'fecha', 
                   name: 'fecha',
-                  sWidth:'10%',
+                  sWidth:'10%', 
                   render: function ( data, type, row, meta ) {
                     return '<input type="hidden" name="fecha['+row.item+']" value="' + data + '"><span class="fecha">' + data + '</span></td>';
                   }
                 },
                 {
-                  data: 'imagen',
+                  data: 'imagen', 
                   name: 'imagen',
-                  sWidth:'10%',
+                  sWidth:'10%', 
                   render: function ( data, type, row, meta ) {
                     //return '<input type="hidden" name="fecha['+row.item+']" value="' + data + '"><span class="fecha">' + data + '</span></td>';
                     //<input type="file" id="imagen" name="imagen[]" accept= "image/*" style="width:150px;"/>
@@ -722,9 +722,9 @@ tfoot td {
                   }
                 },
                 {
-                  data: 'monto',
+                  data: 'monto', 
                   name: 'monto',
-                  sWidth:'10%',
+                  sWidth:'10%', 
                   render: function ( data, type, row, meta ) {
 
                     //$( api.column( 2 ).footer() ).html('<input type="hidden" name="total_pedido" id="total_pedido" value="'+pageTotal.toFixed(2)+'"/>'+
@@ -735,24 +735,24 @@ tfoot td {
                   }
                 },
                 {
-                  data: 'operacion',
+                  data: 'operacion', 
                   name: 'operacion',
-                  sWidth:'10%',
+                  sWidth:'10%', 
                   render: function ( data, type, row, meta ) {
                     return '<input type="hidden" name="operacion['+row.item+']" value="' + data + '"><span class="operacion">' + data + '</span></td>';
                   },
                   "visible": false,
                 },
                 {
-                  data: 'nota',
+                  data: 'nota', 
                   name: 'nota',
-                  sWidth:'10%',
+                  sWidth:'10%', 
                   render: function ( data, type, row, meta ) {
                     return '<input type="hidden" name="nota['+row.item+']" value="' + data + '"><span class="nota">' + data + '</span></td>';
                   },
                   "visible": false,
                 },
-
+                
               ],
               "footerCallback": function ( row, data, start, end, display ) {
                 var api = this.api();
@@ -795,7 +795,7 @@ tfoot td {
               },
               language: {
                 "decimal": "",
-                "emptyTable": "No hay información",
+                "emptyTable": "No hay informaciÃ³n",
                 "info": "Mostrando del _START_ al _END_ de _TOTAL_ Entradas",
                 "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
                 "infoFiltered": "(Filtrado de _MAX_ total entradas)",
@@ -822,11 +822,11 @@ tfoot td {
           var nuevosuma=parseFloat(0.00);
 
           $('#tabla_pagos > tbody  > tr').each(function(index,tr) {
-
+              
               console.log(  $.trim( $(this).find("td").eq(6).find(".monto").html())  )
               //var idfila=$(this).find("td").eq(0).html();//fila idpedido
               //console.log( $(this).find("td").html()) ;
-
+              
               nuevosuma =  parseFloat( $.trim( $(this).find("td").eq(7).find(".monto").html()) );
 
               //nuevosuma=parseFloat($(this).find("td").eq(8).find(".monto").text());
@@ -859,7 +859,7 @@ tfoot td {
           console.log("sumatotalpagos >1")
           var total_pago=sumatotalpagos();
           console.log("evaluarPa "+total_pago)
-          if (total_pago > 0) {//total_pedido > 0 &&
+          if (total_pago > 0) {//total_pedido > 0 && 
             $("#guardar").show();
           } else {
             $("#guardar").hide();
@@ -876,7 +876,7 @@ tfoot td {
           console.log(subtotal);
           console.log("item es "+item)
           let diff=$("#diferencia").val();
-
+      
           if ($(row).hasClass('child')) {
             console.log("eliminar")
             table.row($(row).prev('tr')).remove().draw();
@@ -891,10 +891,10 @@ tfoot td {
               .draw();
             console.log("sumatotalpagos <3")
             var sumapago=sumatotalpagos();
-
+            
             console.log("sumapagos v2 "+sumapago)
 
-
+            
 
             $("#total_pago").html("S/. " + separateComma(sumapago).toLocaleString("en-US"));
             $("#total_pago_pagar").val(sumapago);
@@ -906,19 +906,19 @@ tfoot td {
               //console.log(total_pago);
               //$("#total_pago").html("S/. " + total_pago.toLocaleString("en-US"));
               //$("#total_pago_pagar").val(total_pago);
-
+              
               evaluarPa();
-
+            
           }
-
+      
         });
-
+              
 
         tabla_pedidos=$('#tabla_pedidos').DataTable({
           "bPaginate": false,
               "bFilter": false,
               "bInfo": false,
-          columns:
+          columns: 
           [
             {
               data: 'id'
@@ -940,7 +940,7 @@ tfoot td {
           ],
           language: {
                 "decimal": "",
-                "emptyTable": "No hay información",
+                "emptyTable": "No hay informaciÃ³n",
                 "info": "Mostrando del _START_ al _END_ de _TOTAL_ Entradas",
                 "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
                 "infoFiltered": "(Filtrado de _MAX_ total entradas)",
@@ -975,7 +975,7 @@ tfoot td {
                   console.log("c");
                   //de localstorage
 
-                  if (!localStorage.getItem('clickpagar'))
+                  if (!localStorage.getItem('clickpagar')) 
                   {
                     $("#pcliente_id").val(localStorage.getItem('clickpagar'));
                     $("#pcliente_id").selectpicker("refresh");
@@ -984,9 +984,9 @@ tfoot td {
                   /*setTimeout(function(){
                     $("#pcliente_id").val({{ $idcliente_request }}).trigger("change");
                 }, 10000);*/
+                  
 
-
-
+                  
 
 
                 }
@@ -1029,7 +1029,7 @@ tfoot td {
                 montopagos=parseFloat(montopagos+pedidosaldo);
                 console.log("diferencia "+montopagos);
                 $("#diferencia").val(montopagos);
-
+                
                 $(this).closest('tr').find("td").eq(3).find(":input").val(pedidosaldo.toFixed(2));
                 $(this).closest('tr').find("td").eq(3).find(".numberdiferencia").text(pedidosaldo.toFixed(2));
                 let totalafterdifer1=$(this).closest('tr').find("td").eq(2).find(".numbersaldo").val();
@@ -1040,7 +1040,7 @@ tfoot td {
                 $(this).closest('tr').find(".radioadelanto").prop("disabled",false);
                 var idfila=$(this).closest('tr').find("td").eq(0).find(":input").val();
                 $('#tabla_pedidos > tbody  > tr').each(function(index,tr) {
-                    var index1=$(this).find("td").eq(0).find(":input").val();
+                    var index1=$(this).find("td").eq(0).find(":input").val();                      
                     console.log("idfila "+idfila+" index "+index1)
 
                     if(montopagos==0)
@@ -1067,9 +1067,9 @@ tfoot td {
                           }
 
                           if(radiototalfila || radiosaldofila)
-                          {
+                          {                             
                           }
-
+                          
                         }else{
                           if(!radiototalfila && !radiosaldofila)
                           {
@@ -1078,21 +1078,21 @@ tfoot td {
                           }
 
                           if(radiototalfila || radiosaldofila)
-                          {
+                          {                            
                           }
-
+                          
                         }
                       }
 
                     }
-
+                    
                   });
                   validar_marca_saldo_devolucion();
             //fin revertir
 
           }else if($(this).prop("checked") == false){
             console.log("no estuvo marcado total");///aca falla cuando el monto es menor que el saldo
-
+            
             //validar si sumar depende el saldo y monto
                 let montopagos=parseFloat($("#diferencia").val().replace(",", ""));
                 if(montopagos==null || isNaN(montopagos)){
@@ -1119,20 +1119,20 @@ tfoot td {
                   montopagos=parseFloat(montopagos-pedidosaldo).toFixed(2);
                   console.log("diferencia 1: "+montopagos);
                   $("#diferencia").val(montopagos);
-
+                  
                   console.log("aqui debo cambiar el valor de input y span de columna diferencia - radiototal");
                   $(this).closest('tr').find("td").eq(3).find(":input").val("0.00");
                   $(this).closest('tr').find("td").eq(3).find(".numberdiferencia").text("0.00");
                   let totalafterdifer1=$(this).closest('tr').find("td").eq(2).find(".numbersaldo").val();
                   let totalafterdifer2=$(this).closest('tr').find("td").eq(3).find(".numberdiferencia").val();
                   let totalafterdifer=parseFloat(totalafterdifer1-totalafterdifer2);
-                  $(this).closest('tr').find("td").eq(3).find(".numbertotal").val(totalafterdifer);
-
+                  $(this).closest('tr').find("td").eq(3).find(".numbertotal").val(totalafterdifer);                   
+                  
                   $(this).closest('tr').find(".radioadelanto").prop("disabled",true);
                   console.log("nuevo montogeneral "+$("#diferencia").val());
-                  var idfila=$(this).closest('tr').find("td").eq(0).find(":input").val();
+                  var idfila=$(this).closest('tr').find("td").eq(0).find(":input").val(); 
                   $('#tabla_pedidos > tbody  > tr').each(function(index,tr) {
-                    var index1=$(this).find("td").eq(0).find(":input").val();
+                    var index1=$(this).find("td").eq(0).find(":input").val();                      
                     console.log("idfila "+idfila+" index "+index1)
                     var saldofila=parseFloat($(this).find("td").eq(2).find(":input").val());
                     var radiototalfila=$(this).find("td").eq(4).find("input").prop("checked");
@@ -1151,7 +1151,7 @@ tfoot td {
                       //analizo si queda en total o adelanto dependiente la diferencia
                       if(idfila!=index1)
                       {
-
+                        
                         if(montopagos>=saldofila)
                         {
                           if(!radiototalfila && !radiosaldofila)
@@ -1161,9 +1161,9 @@ tfoot td {
                           }
 
                           if(radiototalfila || radiosaldofila)
-                          {
+                          {                             
                           }
-
+                          
                         }else{
                           if(!radiototalfila && !radiosaldofila)
                           {
@@ -1172,18 +1172,18 @@ tfoot td {
                           }
 
                           if(radiototalfila || radiosaldofila)
-                          {
+                          {                            
                           }
-
+                          
                         }
 
                       }
 
                     }
-
-
+                    
+                    
                   });
-
+                  
                 }else{
                   console.log("si monto es menor a pedidos")
                   $(this).prop("checked",true).val("1");
@@ -1196,10 +1196,10 @@ tfoot td {
 
           }
           return;
-
+           
         });
 
-
+        
 
         $(document).on("mousedown",".radioadelanto",function(event){
           event.preventDefault();
@@ -1207,7 +1207,7 @@ tfoot td {
           //var esteadelanto=$(this);
           if($(this).prop("checked") == true){
             console.log("marcado")
-            $(this).prop("checked",false).val("0")//////revertir
+            $(this).prop("checked",false).val("0")//////revertir              
                 let montopagos=parseFloat($("#diferencia").val().replace(",", ""));//0
                 /*if(montopagos==0 || montopagos==null || isNaN(montopagos)){
                   console.log("no hay pagos ingresados");
@@ -1231,7 +1231,7 @@ tfoot td {
                 let diferenciaantes=parseFloat($("#diferenciaantes").val().replace(",", ""));
                 let diferencia1=parseFloat($("#diferencia").val().replace(",", ""));
                 $("#diferencia").val(diferenciaantes+diferencia1);
-
+                
                 //$("#diferenciaantes").val(montopagosante);
 
                 $(this).closest('tr').find("td").eq(3).find(":input").val(pedidosaldo.toFixed(2));
@@ -1244,7 +1244,7 @@ tfoot td {
                 var idfila=$(this).closest('tr').find("td").eq(0).find(":input").val();
                 //revertir pago reviso todo otra vez
                 $('#tabla_pedidos > tbody  > tr').each(function(index,tr) {
-                    var index1=$(this).find("td").eq(0).find(":input").val();
+                    var index1=$(this).find("td").eq(0).find(":input").val();                      
                     console.log("idfila "+idfila+" index "+index1)
                     var saldofila=parseFloat($(this).find("td").eq(2).find(":input").val());
                     var radiototalfila=$(this).find("td").eq(4).find("input").prop("checked");
@@ -1263,7 +1263,7 @@ tfoot td {
                       //analizo si queda en total o adelanto dependiente la diferencia
                       if(idfila!=index1)
                       {
-
+                        
                         if(montopagos>=saldofila)
                         {
                           if(!radiototalfila && !radiosaldofila)
@@ -1273,9 +1273,9 @@ tfoot td {
                           }
 
                           if(radiototalfila || radiosaldofila)
-                          {
+                          {                             
                           }
-
+                          
                         }else{
                           if(!radiototalfila && !radiosaldofila)
                           {
@@ -1284,16 +1284,16 @@ tfoot td {
                           }
 
                           if(radiototalfila || radiosaldofila)
-                          {
+                          {                            
                           }
-
+                          
                         }
 
                       }
 
                     }
-
-
+                    
+                    
                   });
             //fin revertir
 
@@ -1315,7 +1315,7 @@ tfoot td {
                 console.log(montopagos +" < "+pedidosaldo )
                 if(montopagos<pedidosaldo)
                 {
-
+                  
                   console.log("marco el check adelanto")
                   //guardasaldo=$("#diferencia").val();
                   let montopagosante=montopagos;
@@ -1326,7 +1326,7 @@ tfoot td {
 
                   console.log("aqui cuando es adelanto y la diferencia debe ser 0 y guardarlo");
                   console.log("pedidosaldo "+pedidosaldo+" montopagos saldo "+montopagosante);
-
+                
                   let montoqueda=parseFloat(pedidosaldo-montopagosante);
                   console.log("montoqueda "+montoqueda)
                   $(this).closest('tr').find("td").eq(3).find(":input").val(montoqueda.toFixed(2));
@@ -1334,8 +1334,8 @@ tfoot td {
                   let totalafterdifer1=$(this).closest('tr').find("td").eq(2).find(".numbersaldo").val();
                   let totalafterdifer2=$(this).closest('tr').find("td").eq(3).find(".numberdiferencia").val();
                   let totalafterdifer=parseFloat(totalafterdifer1-totalafterdifer2);
-                  $(this).closest('tr').find("td").eq(3).find(".numbertotal").val(totalafterdifer);
-
+                  $(this).closest('tr').find("td").eq(3).find(".numbertotal").val(totalafterdifer);  
+                  
                   var idfila=$(this).closest('tr').find("td").eq(0).find(":input").val();
                   console.log($(this).closest('tr').find("td").eq(5).find(".radioadelanto").html());
                   $(this).closest('tr').find("td").eq(5).find(".radioadelanto").prop("checked",true).val("1");
@@ -1343,15 +1343,15 @@ tfoot td {
                   //esteadelanto.prop("checked",true);
                   $(this).prop("checked",true).val("1")
                   $('#tabla_pedidos > tbody  > tr').each(function(index,tr) {
-                    var index1=$(this).find("td").eq(0).find(":input").val();
-
+                    var index1=$(this).find("td").eq(0).find(":input").val(); 
+                    
                     console.log("idfila "+idfila+" index "+index1)
                     console.log(montopagos+" montopagos")
                     var saldofila=parseFloat($(this).find("td").eq(2).find(":input").val());
                     var radiototalfila=$(this).find("td").eq(4).find("input").prop("checked");
                     var radiosaldofila=$(this).find("td").eq(5).find("input").prop("checked");
                     if(montopagos==0)
-                    {
+                    {                        
                       if(idfila!=index1)
                       {
                         if(!radiototalfila && !radiosaldofila)
@@ -1360,11 +1360,11 @@ tfoot td {
                           $(this).find("td").eq(4).find("input").prop("disabled",true);
                           $(this).find("td").eq(5).find("input").prop("disabled",true);
                         }
-
+                        
                       }
-                    }else{
+                    }else{                        
                       //if(idfila!=index1)
-                      {
+                      {                          
                         if(montopagos>=saldofila)
                         {
                           if(!radiototalfila && !radiosaldofila)
@@ -1372,7 +1372,7 @@ tfoot td {
                             $(this).find("td").eq(4).find("input").prop("disabled",false);
                             $(this).find("td").eq(5).find("input").prop("disabled",true);
                           }
-
+                          
                         }else{
                           if(!radiototalfila && !radiosaldofila)
                           {
@@ -1380,23 +1380,23 @@ tfoot td {
                             $(this).find("td").eq(4).find("input").prop("disabled",true);
                             $(this).find("td").eq(5).find("input").prop("disabled",false);
                           }
-
+                          
                         }
 
                       }
 
                     }
-
-
+                    
+                    
                   });
-
+                  
                 }
-
+                
             //fin validar
 
           }
           return;
-
+          
         });
 
         $(document).on("change","#pcliente_id",function(){
@@ -1407,31 +1407,31 @@ tfoot td {
             "bPaginate": false,
               "bFilter": false,
               "bInfo": false,
-              columns:
+              columns: 
               [
                 {
-                  data: 'accion',
+                  data: 'accion', 
                   name: 'accion',
-                  sWidth:'10%',
+                  sWidth:'10%', 
                   render: function ( data, type, row, meta ) {
                     return '<button type="button" class="btn btn-danger btn-sm remove" item="'+row.item+'"><i class="fas fa-trash-alt"></i>'+row.item+'</button>';
                   }
                 },
                 {
-                  data: 'item',
+                  data: 'item', 
                   name: 'item',
-                  sWidth:'10%',
+                  sWidth:'10%', 
                 },
                 {
-                  data: 'movimiento',
+                  data: 'movimiento', 
                   name: 'movimiento',
-                  sWidth:'10%',
+                  sWidth:'10%', 
                   render: function ( data, type, row, meta ) {
                     return '<input type="hidden" name="tipomovimiento['+row.item+']" value="' + data + '"><span class="tipomovimiento">' + data + '</span></td>';
                   }
                 },
                 {
-                  data: 'titular',
+                  data: 'titular', 
                   name: 'titular',
                   sWidth:'10%',
                   render: function ( data, type, row, meta ) {
@@ -1439,45 +1439,45 @@ tfoot td {
                   }
                 },
                 {
-                  data: 'banco',
+                  data: 'banco', 
                   name: 'banco',
-                  sWidth:'10%',
+                  sWidth:'10%', 
                   render: function ( data, type, row, meta ) {
                     return '<input type="hidden" name="banco['+row.item+']" value="' + data + '"><span class="banco">' + data + '</span></td>';
                   }
                 },
                 {
-                  data: 'bancop',
+                  data: 'bancop', 
                   name: 'bancop',
-                  sWidth:'10%',
+                  sWidth:'10%', 
                   render: function ( data, type, row, meta ) {
                     return '<input type="hidden" name="bancop['+row.item+']" value="' + data + '"><span class="bancop">' + data + '</span></td>';
                   },
                   "visible": false,
                 },
                 {
-                  data: 'obanco',
+                  data: 'obanco', 
                   name: 'obanco',
-                  sWidth:'10%',
+                  sWidth:'10%', 
                   render: function ( data, type, row, meta ) {
                     return '<input type="hidden" name="obanco['+row.item+']" value="' + data + '"><span class="obanco">' + data + '</span></td>';
                   },
                   "visible": false,
                 },
                 {
-                  data: 'fecha',
+                  data: 'fecha', 
                   name: 'fecha',
-                  sWidth:'10%',
+                  sWidth:'10%', 
                   render: function ( data, type, row, meta ) {
                     return '<input type="hidden" name="fecha['+row.item+']" value="' + data + '"><span class="fecha">' + data + '</span></td>';
                   }
                 },
                 {
-                  data: 'imagen',
+                  data: 'imagen', 
                   name: 'imagen',
-                  sWidth:'10%',
+                  sWidth:'10%', 
                   render: function ( data, type, row, meta ) {
-
+                   
                     var str="storage/pagos/"+data;
                     var urlimage = '{{ asset(":id") }}';
 
@@ -1489,32 +1489,32 @@ tfoot td {
                   }
                 },
                 {
-                  data: 'monto',
+                  data: 'monto', 
                   name: 'monto',
-                  sWidth:'10%',
+                  sWidth:'10%', 
                   render: function ( data, type, row, meta ) {
                     return '<input type="hidden" name="monto['+row.item+']" value="' + data + '"><span class="monto">' + data + '</span></td>';
                   }
                 },
                 {
-                  data: 'operacion',
+                  data: 'operacion', 
                   name: 'operacion',
-                  sWidth:'10%',
+                  sWidth:'10%', 
                   render: function ( data, type, row, meta ) {
                     return '<input type="hidden" name="operacion['+row.item+']" value="' + data + '"><span class="operacion">' + data + '</span></td>';
                   },
                   "visible": true,
                 },
                 {
-                  data: 'nota',
+                  data: 'nota', 
                   name: 'nota',
-                  sWidth:'10%',
+                  sWidth:'10%', 
                   render: function ( data, type, row, meta ) {
                     return '<input type="hidden" name="nota['+row.item+']" value="' + data + '"><span class="nota">' + data + '</span></td>';
                   },
                   "visible": true,
                 },
-
+                
               ],
               "footerCallback": function ( row, data, start, end, display ) {
                 var api = this.api();
@@ -1532,7 +1532,7 @@ tfoot td {
 
                 console.log("pageTotal "+pageTotal)
 
-
+                
                 $( api.column( 8 ).footer() ).html('<input type="hidden" name="total_pago" id="total_pago" value="'+pageTotal+'"/>'+'S/.'+separateComma(pageTotal) );
 
                 $( api.column( 9 ).footer() ).html('<input type="hidden" name="total_pago_pagar" id="total_pago_pagara" value="'+pageTotal+'" />'+'S/.'+separateComma(pageTotal) ) ;
@@ -1555,13 +1555,13 @@ tfoot td {
                 let uncliente=$("#pcliente_id").val();
                 if(uncliente!='')
                 {
-
+                 
                 }
                 diferenciaFaltante();
               },
               language: {
                 "decimal": "",
-                "emptyTable": "No hay información",
+                "emptyTable": "No hay informaciÃ³n",
                 "info": "Mostrando del _START_ al _END_ de _TOTAL_ Entradas",
                 "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
                 "infoFiltered": "(Filtrado de _MAX_ total entradas)",
@@ -1581,26 +1581,26 @@ tfoot td {
             },
 
           });
-
+       
           tabla_pedidos.destroy();
-
+        
           datosCliente = $(this).val().split('-');
           cliente_id = datosCliente[0];
           saldo = datosCliente[1];
-
+         
           $("#diferencia").prop("disabled",false);
           let diferenciaval=$("#diferencia").val();
-
+         
           $("#cliente_id").val(cliente_id);
           $("#saldo").val(saldo);
-
+                    
           tabla_pedidos=$('#tabla_pedidos').DataTable({
             "bPaginate": false,
             "bFilter": false,
             "bInfo": false,
             'ajax': {
-              url:"{{ route('cargar.pedidosclientetabla') }}",
-              'data': { "cliente_id": $(this).val(),"diferencia":$("#diferencia").val()},
+              url:"{{ route('cargar.pedidosclientetabla') }}",					
+              'data': { "cliente_id": $(this).val(),"diferencia":$("#diferencia").val()}, 
               "type": "get",
             },
             "fnCreatedRow": function( nRow, aData, iDataIndex ) {
@@ -1608,7 +1608,7 @@ tfoot td {
             },
             columns: [
               {
-                data: 'id',
+                data: 'id', 
                 name: 'id',
                 render:function(data,type,row,meta){
                   if(row.id<10){
@@ -1619,13 +1619,13 @@ tfoot td {
                     return '<input type="hidden" name="pedido_id['+data+']" value="' + data + '">PED0' + data + '</td>';
                   }else{
                     return '<input type="hidden" name="pedido_id['+data+']" value="' + data + '">PED' + data + '</td>';
-                  }
+                  } 
                 }
               },
               {data: 'codigo', name: 'codigo',},
-
+              
               {
-                data: 'saldo',
+                data: 'saldo', 
                 name: 'saldo',
                 render:function(data,type,row,meta){
                     return '<input type="hidden" name="numbersaldo['+row.id+']" value="' + data + '"><span class="numbersaldo">' + data + '</span></td>';
@@ -1633,7 +1633,7 @@ tfoot td {
                 "visible": true
               },
               {
-                data: 'diferencia',
+                data: 'diferencia', 
                 name: 'diferencia',
                 render:function(data,type,row,meta){
                     return '<input type="hidden" name="numberdiferencia['+row.id+']" value="' + data + '"><span class="numberdiferencia">' + data + '</span></td>'+
@@ -1643,13 +1643,13 @@ tfoot td {
               },
               {
                   "data": null,
-                  "render": function ( data, type, row, meta ) {
+                  "render": function ( data, type, row, meta ) {                      
                       return '<input type="checkbox" disabled class="form-control radiototal" name="checktotal['+row.id+']" value="0">';
                   }
               },
               {
                   "data": null,
-                  "render": function ( data, type, row, meta ) {
+                  "render": function ( data, type, row, meta ) {                    
                     return '<input type="checkbox" disabled class="form-control radioadelanto" name="checkadelanto['+row.id+']" value="0">';
                   }
               }
@@ -1668,7 +1668,7 @@ tfoot td {
               // Update footer
 
               //$("#total_pago").html("S/. " + separateComma(total_pago).toLocaleString("en-US"));
-
+        
               //$("#total_pedido").html("S/. " + total_pedido.toLocaleString("en-US"));
 
 
@@ -1692,7 +1692,7 @@ tfoot td {
             },
             language: {
               "decimal": "",
-              "emptyTable": "No hay información",
+              "emptyTable": "No hay informaciÃ³n",
               "info": "Mostrando del _START_ al _END_ de _TOTAL_ Entradas",
               "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
               "infoFiltered": "(Filtrado de _MAX_ total entradas)",
@@ -1710,7 +1710,7 @@ tfoot td {
               "previous": "Anterior"
               }
             },
-
+            
           });
 
         });
@@ -1719,7 +1719,7 @@ tfoot td {
 
 
         /*$("#pcliente_id").change(function() {
-
+          
         });*/
 
         $(document).on("change",'#diferencia',function(e){
@@ -1742,19 +1742,19 @@ tfoot td {
           //diferencia = total_pedido - total_pago;
           //desmarcar todos los check total y adelanto
           //change del cliente
-
+          
           console.log("total_pago "+total_pago+"  total_pedido "+total_pedido)
           diferencia = total_pago ;//- total_pedido;
           console.log('diferencia en fx diferenciaFaltante');
           console.log(diferencia);
-
+         
           $('#tabla_pedidos > tbody  > tr').each(function(index,tr) {
             console.log(index+" posicion");
             //var saldofila=$(this).find("td").eq(3).html();
             console.log(  $(this).find("td").eq(2).html()  )
             var saldofila=parseFloat($(this).find("td").eq(2).find(":input").val());
             console.log(saldofila)
-
+            
             console.log("resta1 "+diferencia);
             console.log("resta2 "+saldofila);
             let restogeneral=(parseFloat(diferencia)-parseFloat(saldofila)).toFixed(2);
@@ -1785,7 +1785,7 @@ tfoot td {
         }
 
         ////////
-
+        
         ///////
 
         $(document).on("keyup",'input.number',function(event){
@@ -1795,7 +1795,7 @@ tfoot td {
           $(this).val(function(index, value) {
             return value
               .replace(/\D/g, "")
-              .replace(/([0-9])([0-9]{2})$/, '$1.$2')
+              .replace(/([0-9])([0-9]{2})$/, '$1.$2')  
               .replace(/\B(?=(\d{3})+(?!\d)\.?)/g, ",")
             ;
           });
@@ -1839,18 +1839,18 @@ tfoot td {
             var totalfilescarga3 = $('#pimagen3').get(0).files.length;
             //fd2.append('adjunto', $('input[type=file][name="pimagen"]')[0].files[0]);
 
-
+            
             /*for (let i = 0; i < files.length; i++) {
               fd4.append('pimagen1', $('input[type=file][name="pimagen1"]')[0].files[0]);
             }*/
-
+            
             if(totalfilescarga1>0 && totalfilescarga2>0   && totalfilescarga3>0 )
             {
 
               agregarPagoPerdonar();
 
 
-
+              
 
             }else{
               Swal.fire(
@@ -1860,7 +1860,7 @@ tfoot td {
                 )
                 return false;
             }
-
+            
 
 
           }
@@ -1868,7 +1868,7 @@ tfoot td {
 
         });
 
-
+        
         $(document).on("click","#add_pago",function(){
           console.log("click addpago");
           if ($('#pbanco').val() == '')
@@ -1947,7 +1947,7 @@ tfoot td {
                   }else{
                     deuda = !isNaN($('#pcantidad').val()) ? parseInt($('#pcantidad').val(), 10) : 0;
                     pagado = !isNaN($('#pstock').val()) ? parseInt($('#pstock').val(), 10) : 0;
-                    agregarPago();
+                    agregarPago();                  
                   }
                   /**/
                 }
@@ -1969,7 +1969,7 @@ tfoot td {
                 }else{
                   deuda = !isNaN($('#pcantidad').val()) ? parseInt($('#pcantidad').val(), 10) : 0;
                   pagado = !isNaN($('#pstock').val()) ? parseInt($('#pstock').val(), 10) : 0;
-                  agregarPago();
+                  agregarPago();                  
                 }
                 /**/
               }
@@ -1992,16 +1992,16 @@ tfoot td {
                 deuda = !isNaN($('#pcantidad').val()) ? parseInt($('#pcantidad').val(), 10) : 0;
                 pagado = !isNaN($('#pstock').val()) ? parseInt($('#pstock').val(), 10) : 0;
                 agregarPago();
-
+                
               }
             }
           }
         });
 
-
+        
 
         /*$('#add_pago').click(function() {
-
+          
         });*/
       });
         ///
@@ -2017,7 +2017,7 @@ tfoot td {
           }
 
         });*/
-
+        
         /*$("").click(function(){
           var checked=$(this).is('checked');
           if(checked)
@@ -2045,7 +2045,7 @@ tfoot td {
           }else{
             console.log("no");
             $(this).trigger("change");
-
+            
           }
         });*/
 
@@ -2065,21 +2065,21 @@ tfoot td {
             }
 
             console.log("estaba sin marcar");
-            console.log("no estaba marcado radiototal");
+            console.log("no estaba marcado radiototal");            
 
             let filedata=tabla_pedidos.row($(this).closest('tr')).data();
             console.log(filedata)
             let pedidosaldo=parseFloat(filedata.saldo);
             console.log("saldo "+pedidosaldo);
             console.log("montopagos "+montopagos);
-
+            
             if(pedidosaldo<=montopagos)
             {
               console.log("pedido "+pedidosaldo+"   < pago "+montopagos);
               montopagos=(montopagos-pedidosaldo).toFixed(2);
               console.log("diferencia "+montopagos);
               $("#diferencia").val(montopagos);
-
+              
               $(this).closest('tr').find(".radioadelanto").prop("disabled",true);
             }
           }
@@ -2090,7 +2090,7 @@ tfoot td {
             return false;
           }
           console.log("monto "+montopagos)
-          if(checked){
+          if(checked){            
             console.log("estaba marcado");
             $checktotal=$(this);
 
@@ -2100,7 +2100,7 @@ tfoot td {
             console.log("saldo "+pedidosaldo);
             console.log("montopagos "+montopagos);
             console.log("revertir");
-            {
+            {              
               montopagos=(montopagos+pedidosaldo).toFixed(2);
               console.log("diferencia "+montopagos);
               $("#diferencia").val(montopagos);
@@ -2132,7 +2132,7 @@ tfoot td {
 
         });*/
 
-
+    
         /*$(document).on( 'click', '#tabla_pedidos input.radiototal', function (e) {
           e.preventDefault();
           var checked=$(this).is('checked');
@@ -2143,7 +2143,7 @@ tfoot td {
           }
           console.log("monto "+montopagos)
           if(checked){
-
+            
             console.log("estaba marcado");
             $checktotal=$(this);
 
@@ -2154,9 +2154,9 @@ tfoot td {
             console.log("montopagos "+montopagos);
             console.log("revertir");
 
-
+            
             {
-
+              
               montopagos=(montopagos+pedidosaldo).toFixed(2);
               console.log("diferencia "+montopagos);
               $("#diferencia").val(montopagos);
@@ -2187,7 +2187,7 @@ tfoot td {
 
           }
           return false;
-
+          
 
 
         });*/
@@ -2208,7 +2208,7 @@ tfoot td {
             }else{
               console.log("si se encuentra marcado radioadelanto")
               $(this).closest('tr').find(".radiototal").prop("disabled",false);
-
+              
             }
             return true;
           }
@@ -2254,12 +2254,12 @@ tfoot td {
 
             if(total_check_count__!=total_check_si_)
             {
-              if (!$("#considerasaldo").hasClass("d-none"))
+              if (!$("#considerasaldo").hasClass("d-none")) 
                 {
                   $("#considerasaldo").addClass("d-none");
                 }
 
-                if (!$("#consideradevolucion").hasClass("d-none"))
+                if (!$("#consideradevolucion").hasClass("d-none")) 
                 {
                   $("#consideradevolucion").addClass("d-none");
                 }
@@ -2270,16 +2270,16 @@ tfoot td {
             }else{
 //$("#form").trigger("submit")
               if(total_check_count__>0){
-                if ($("#considerasaldo").hasClass("d-none"))
+                if ($("#considerasaldo").hasClass("d-none")) 
                 {
                   $("#considerasaldo").removeClass("d-none");
                 }
 
-                if ($("#consideradevolucion").hasClass("d-none"))
+                if ($("#consideradevolucion").hasClass("d-none")) 
                 {
                   $("#consideradevolucion").removeClass("d-none");
                 }
-
+                
               }
             }
           }
@@ -2301,7 +2301,7 @@ tfoot td {
             for (let ii = 1; ii < 4; ii++) {
               fd4.append('adjunto'+ii, $('input[type=file][name="pimagen'+ii+'"]')[0].files[0]);
             }
-
+            
             $.ajax({
               data: fd4,
               processData: false,
@@ -2370,11 +2370,11 @@ tfoot td {
                 'No puede generar saldo cuando la diferencia es menor a 3',
                 'warning')
             }
-
+            
           });
            //$("#btnSaldo")
 
-          window.agregarPago = function(){
+          window.agregarPago = function(){  
             //alert('lol');
             $("#accion_perdonar").val("");
             console.log("en pagos")
@@ -2394,7 +2394,7 @@ tfoot td {
             if (monto != ""  && banco != "" && fecha != ""/*  && imagen != "" */) {
               subtotal_pago[contPa] = monto*1;
               total_pago = parseFloat(total_pago*1 + subtotal_pago[contPa]*1).toFixed(2);
-
+              
 
               //var filasPa = ;
 
@@ -2487,11 +2487,11 @@ tfoot td {
 
               }
 
-
+              
               //////
-
-
-
+               
+              
+           
 
               /*tabla_pagos.row.add(
                 '<tr class="selected" id="filasPa' + contPa + '">' +
@@ -2500,7 +2500,7 @@ tfoot td {
                 '<td><input type="hidden" name="titular[]" value="' + titular + '">' + titular + '</td>' +
                 '<td><input type="hidden" name="banco[]" value="' + banco + '">' + banco + '</td>' +
                 '<td><input type="hidden" name="fecha[]" value="' + fecha + '">' + fecha + '</td>' +
-                '<td>@csrf<input type="file" id="imagen" name="imagen[]" accept= "image/*" style="width:150px;"/></td>' +
+                '<td>@csrf<input type="file" id="imagen" name="imagen[]" accept= "image/*" style="width:150px;"/></td>' +      
                 '<td><input type="hidden" name="monto[]" value="' + monto + '">' + monto + '</td>' +
                 '<td><button type="button" class="btn btn-danger btn-sm" onclick="eliminarPa(' + contPa + ')"><i class="fas fa-trash-alt"></i></button></td>' +
                 '</tr>'
@@ -2563,12 +2563,12 @@ tfoot td {
               '<td><input type="hidden" name="titular[]" value="' + titular + '">' + titular + '</td>' +
               '<td><input type="hidden" name="banco[]" value="' + banco + '">' + banco + '</td>' +
               '<td><input type="hidden" name="fecha[]" value="' + fecha + '">' + fecha + '</td>' +
-              '<td>@csrf<input type="file" id="imagen" name="imagen[]" accept= "image/*" style="width:150px;"/></td>' +
-                /* <img id="picture" src="{{asset('imagenes/logo_facturas.png')}}" alt="Imagen del pago" height="100px" width="100px"> */
+              '<td>@csrf<input type="file" id="imagen" name="imagen[]" accept= "image/*" style="width:150px;"/></td>' + 
+                /* <img id="picture" src="{{asset('imagenes/logo_facturas.png')}}" alt="Imagen del pago" height="100px" width="100px"> */        
               '<td><input type="hidden" name="monto[]" value="' + monto + '">' + monto + '</td>' +
               '<td><button type="button" class="btn btn-danger btn-sm" onclick="eliminarPa(' + contPa + ')"><i class="fas fa-trash-alt"></i></button></td>' +
               '</tr>';
-
+              
 
             contPa++;
             limpiarPa();
@@ -2580,7 +2580,7 @@ tfoot td {
             $('#tabla_pagos').append(filasPa);
             //$("#diferencia")
             console.log("pago "+'pago');
-
+            
           } else {
             Swal.fire(
               'Error!',
@@ -2589,10 +2589,10 @@ tfoot td {
           }
         }
         //////
+        
 
-
-
-
+        
+        
 
 
 
@@ -2614,8 +2614,8 @@ tfoot td {
         });*/
 
         function validarFormulario() {
-          //evento.preventDefault();
-
+          //evento.preventDefault();      
+              
         }
         //////
 
@@ -2638,26 +2638,26 @@ tfoot td {
       //}
 
 
-
+      
 
     //});
 
-
+    
     //VALIDAR CAMPO FECHAS MAX DIA ACTUAL
     //var today = new Date().toISOString().split('T')[0];
     //document.getElementsByName("pfecha")[0].setAttribute('max', today);
 
     //VALIDAR ANTES DE ENVIAR
     /*document.addEventListener("DOMContentLoaded", function() {
-      document.getElementById("formulario").addEventListener('submit', validarFormulario);
+      document.getElementById("formulario").addEventListener('submit', validarFormulario); 
     });*/
 
     // AGREGANDO PEDIDOS
+    
 
+    
 
-
-
-
+    
 
     /*function agregarPedido() {
       datosPedido = document.getElementById('ppedido_id').value.split('_');
@@ -2700,7 +2700,7 @@ tfoot td {
           'warning')
       }
     }*/
-
+    
 
     /* function evaluarPe() {
       if (total_pedido > 0 && total_pago > 0) {
@@ -2710,13 +2710,13 @@ tfoot td {
       }
     } */
 
+    
 
-
-
+    
 
     //VALIDAR CAMPOS NUMERICO DE MONTO EN PAGOS
-
-
+    
+    
 
     //VALIDANDO CAMPOS DE PAGOS
     /*$(document).ready(function() {
@@ -2778,12 +2778,12 @@ tfoot td {
         };
         reader.readAsDataURL(file);
       });
-
+        
 
     });
+  
 
-
-
+    
   </script>
 
 <script>
@@ -2800,20 +2800,20 @@ tfoot td {
         url:"{{ route('asesorcombopago') }}",
     }).done(function (data) {
       $("#user_id").html('');
-      $("#user_id").html(data.html);
+      $("#user_id").html(data.html);      
 
       $("#user_id").selectpicker("refresh").trigger("change");
-
-
+      
+      
       //$("#pcliente_id").val(  ).trigger("change");
-
-
+        
+      
     });
 
+    
 
-
-
-
+    
+   
 
 
   });

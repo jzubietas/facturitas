@@ -5,7 +5,7 @@
 @section('content_header')
   <h1>DETALLE DEL <b>PAGO</b>:PAG{{ $pagos->users }}-{{$pagos->cantidad_voucher}}{{$pagos->cantidad_pedido}}-{{ $pagos->id }}</h1>
      {{-- <a href="" data-target="#modal-historial-{{ $pago->id }}" data-toggle="modal"><button class="btn btn-info btn-sm">Historial</button></a> --}}
-  {{-- @include('contratos.modals.modalHistorial') --}}
+  {{-- @include('contratos.modals.modalHistorial') --}}  
 @stop
 
 @section('content')
@@ -18,7 +18,7 @@
 {{--@include('pagos.modals.modalImagenId')--}}
 
   <div class="card">
-
+      
     {!! Form::model($pago, ['route' => ['administracion.updaterevisar', $pago],'enctype'=>'multipart/form-data', 'id'=>'formulario','files'=>true]) !!}
     <div class="card-body">
       <div class="border rounded card-body border-secondary">
@@ -83,7 +83,7 @@
                       <td>PED000{{ $pagoPedido->pedidos }}<input type="hidden" name="pedido_id[]" id="pedido_id" value="{{ $pagoPedido->pedidos }}"></td>
                       <td>{{ $pagoPedido->codigo }}</td>
                       <
-
+                        
                       @if($pagos->condicion=='ABONADO')
                           @if($pagoPedido->pagado == 1)
                           <td>ADELANTO ABONADO</td>
@@ -97,9 +97,9 @@
                           <td>PAGADO OBSERVADO</td>
                           @endif
                       @elseif($pagos->condicion=='PENDIENTE')
-
+                          
                           <td>PENDIENTE</td>
-
+                          
                       @elseif($pagos->condicion=='PAGO')
                           @if($pagoPedido->pagado == 1)
                           <td>ADELANTO PAGO</td>
@@ -141,22 +141,22 @@
                 </tfoot>
               </table>
             </div>
-          </div>
+          </div>          
         </div>
       </div>
     </div>
-
+    
     {{--@include('pagos.conciliar')--}}
 
-
+    
     <div class="card-body">
       <div class="border rounded card-body border-secondary">
         <div class="form-row">
           <div class="form-group col-lg-12">
             <h3 style="text-align: center"><strong>PAGOS REALIZADOS POR EL CLIENTE</strong> @if($pagos->saldo>0) SALDO A FAVOR DEL CLIENTE: {{ $pagos->saldo }}@endif</h3>
-
+            
             {{--<a href="" data-target="#modal-movimientos-get" data-toggle="modal"><button class="btn btn-danger btn-sm">Movimientos</button></a>--}}
-
+            
             {{--@include('pagos.modals.modalDeleteConciliar')--}}
 
             <div class="table-responsive">
@@ -165,13 +165,13 @@
                   <tr>
                     <th width='50px' scope="col">ITEM</th>
                     <th width='80px' scope="col">PAGO</th>
-                    <th width='80px' scope="col">BANCO</th>
+                    <th width='80px' scope="col">BANCO</th>                
                     <th width='80px' scope="col">MONTO</th>
                     {{--<th scope="col">FECHA</th>--}}
                     {{--<th scope="col">CUENTA DESTINO</th>--}}
                     <th width='250px' scope="col">TITULAR</th>
-                    <th width='80px' scope="col">FECHA DEPOSITO</th>
-
+                    <th width='80px' scope="col">FECHA DEPOSITO</th>                    
+                    
                     <th scope="col">IMAGEN</th>
                     <th scope="col">ACCION</th>
                   </tr>
@@ -186,7 +186,7 @@
                       <td>{{ $contPa + 1 }}</td>
 
                       <td>
-                       <span><?php
+                       <span><?php 
                           if($detallePago->id<10){ ?>
                             COMPR000{{ $detallePago->id }}
                           <?php }else if($detallePago->id<100){ ?>
@@ -196,30 +196,30 @@
                           <?php }else{ ?>
                             COMPR{{ $detallePago->id }}
                           <?php } ?>  </span>
-
-
+                          
+                      
                       <input type="hidden" name="detalle_id[]" value="{{ $detallePago->id }}" class="form-control"></td>
-                      <td class="banco_{{ $contPa + 1 }}">{{ $detallePago->banco }}</td>
+                      <td class="banco_{{ $contPa + 1 }}">{{ $detallePago->banco }}</td>                  
                       <td>{{ $detallePago->monto }}</td>
-
-
-
+                      
+                      
+                     
                       <td class="titular_{{ $contPa + 1 }}">{{ $detallePago->titular }}</td>
-
+                     
                       <td class="fechadeposito_{{ $contPa + 1 }}">{{ $detallePago->fecha_deposito }}</td>
                       <td>
-
+                        
                         <p>
                           <br><a href="" data-target="#modal-imagen-{{ $detallePago->id }}" data-toggle="modal">
                           <img src="{{ asset('storage/pagos/' . $detallePago->imagen) }}" alt="{{ $detallePago->imagen }}" height="200px" width="200px" class="img-thumbnail" id="imagen_{{ $contPa + 1 }}">
                         </a>
-
+                          
                         </p>
                         <a href="" data-target="#modal-cambiar-imagen" data-toggle="modal" data-imagen="{{ $detallePago->imagen }}" data-conciliar="{{ $detallePago->id }}" data-item="{{ $contPa + 1 }}"><button class="btn btn-danger btn-md">Cambiar</button></a>
-                        <input type="hidden" value="" name="conciliar[]" class="conciliar_count" id="conciliar_{{ $contPa + 1 }}" >
+                        <input type="hidden" value="" name="conciliar[]" class="conciliar_count" id="conciliar_{{ $contPa + 1 }}" > 
                       </td>
                       <td>
-
+                        
                         <p>
                           <br>
                           <a href="{{ route('pagos.descargarimagen', $detallePago->imagen) }}" class="text-center"><button type="button" class="btn btn-secondary btn-md"> Descargar</button></a>
@@ -228,7 +228,7 @@
                           <a href="" data-target="#modal-editar-get" data-toggle="modal" data-pbanco="{{ $detallePago->banco }}" data-titulares="{{ $detallePago->titular }}" data-fecha="{{ $detallePago->fecha_deposito_change }}" data-conciliar="{{ $detallePago->id }}" data-item="{{ $contPa + 1 }}"><button class="btn btn-warning btn-md">Editar</button></a>
                         </p>
                       </td>
-
+                      
                     </tr>
                     @php
                       $sumPa = $sumPa + $detallePago->monto;
@@ -247,14 +247,14 @@
                   <tr>
                     <th style="text-align: center">TOTAL:</th>
                     <th></th>
-
+                    
                     <th><h4><?php echo number_format($sumPa, 2, '.', ' ')?></h4></th>
-                    <th></th>
+                    <th></th> 
                     <th></th>
                     <th></th>
                     <th style="text-align: center"></th>
                     <th>
-
+                      
                       <select name="condicion" class="border form-control selectpicker border-secondary d-none" id="condicion" data-live-search="true" >
                         <option value="">---- SELECCIONE ----</option>
                         @foreach($condiciones as $condicion)
@@ -269,12 +269,12 @@
             </div>
           </div>
         </div>
-      </div>
+      </div>  
     </div>
     <div class="card-footer text-center" id="guardar">
       <div class="row">
         <div class="col-2 text-left">
-
+          
 
           <a href="{{ url()->previous() }}" class="btn btn-danger btn-lg"><i class="fas fa-arrow-left"></i> ATRAS</a>
         </div>
@@ -284,12 +284,12 @@
           {{--<button type="button" id="pendientebtn" class="btn btn-warning btn-lg"><i class="fas fa-save"></i> PENDIENTE</button>--}}
         </div>
       </div>
-
-
+      
+     
     </div>
     <div class="card-footer" >
       <button type="submit" class="btn btn-success btn-lg d-none"><i class="fas fa-save"></i> GUARDAR</button>
-
+      
     </div>
     {!! Form::close() !!}
   </div>
@@ -314,21 +314,21 @@
    height: 100%;
    overflow-y: auto;
  }
-
+ 
  .modal.verimagen.left .modal-body,
  .modal.verimagen.right .modal-body {
    padding: 15px 15px 80px;
  }
 
 /*Left*/
-
-
+ 
+ 
  .modal.verimagen.left.fade.in .modal-dialog{
    left: 0;
  }
-
+       
 /*Right*/
-
+ 
  .modal.verimagen.right.fade.in .modal-dialog {
    right: 0;
  }
@@ -392,7 +392,7 @@
 
         var iconciliar = $(this).data('conciliar')
         var iitem = $(this).data('item')
-
+        
         $(".hide_"+iitem).remove();
         console.log("fila "+iitem);
         console.log("agregando fila")
@@ -445,7 +445,7 @@
               '<td class="text-light">'+$(this).data('fecha')+'</td>'+
               '</tr>'
           );
-
+            
           }else if ($(this).data('banco')=='PLIN')
           {
             $('.table_pagos_realizados tbody tr.nohide_'+iitem).after(
@@ -457,24 +457,24 @@
               '<td class="text-light">'+$(this).data('fecha')+'</td>'+
               '</tr>'
           );
-
+          
         }
 
-
+        
         $("#conciliar_"+iitem).val(iconciliar);
-
+        
         console.log(iconciliar)
         //$(".textcode").html(idunico);
         //$(".textimporte").html(importemodal);
         $("#modal-conciliar-get").modal("hide");
       });
-
+      
       tableconciliar=$('#tablaPrincipalConciliar').DataTable({
           "bPaginate": false,
           "bFilter": false,
           "bInfo": false,
           "length": 3,
-          columns:
+          columns: 
           [
             {
               data: 'titular'
@@ -494,7 +494,7 @@
           ],
           language: {
             "decimal": "",
-            "emptyTable": "No hay información",
+            "emptyTable": "No hay informaciÃ³n",
             "info": "Mostrando del _START_ al _END_ de _TOTAL_ Entradas",
             "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
             "infoFiltered": "(Filtrado de _MAX_ total entradas)",
@@ -515,7 +515,7 @@
         });
 
       $('#modal-cambiar-imagen').on('show.bs.modal', function (event) {
-        var button = $(event.relatedTarget)
+        var button = $(event.relatedTarget) 
         var imagen = button.data('imagen');
         var conciliar = button.data('conciliar');
         var itemcount = button.data('item');
@@ -534,7 +534,7 @@
         $("#modal-cambiar-imagen .modalimagen_monto").val(monto_modalimagen);
         $("#modal-cambiar-imagen .modalimagen_titular").val(titular_modalimagen);
         $("#modal-cambiar-imagen .modalimagen_fecha").val(fecha_modalimagen);
-
+        
 
         console.log("imagen "+imagen);
         console.log("conciliar "+conciliar);
@@ -546,7 +546,7 @@
 
         var urlimg = "{{asset('imagenes/logo_facturas.png')}}";
         urlimg = urlimg.replace('imagenes/', 'storage/pagos/');
-
+        
         urlimg = urlimg.replace('logo_facturas.png', imagen);
         urlimg = urlimg.replace(' ', '%20');
         console.log(urlimg)
@@ -579,7 +579,7 @@
 
               var urlimg = "{{asset('imagenes/logo_facturas.png')}}";
               urlimg = urlimg.replace('imagenes/', 'storage/pagos/');
-
+              
               urlimg = urlimg.replace('logo_facturas.png', data.html);
               urlimg = urlimg.replace(' ', '%20');
               console.log(urlimg);
@@ -610,8 +610,8 @@
       });
 
       $('#modal-conciliar-get').on('show.bs.modal', function (event) {
-
-        var button = $(event.relatedTarget)
+       
+        var button = $(event.relatedTarget) 
 
         var idunico = button.data('conciliar')
         var iditem = button.data('item');
@@ -638,7 +638,7 @@
         var fechadeposito=  row_conciliar.find("td").eq(5).html();
         console.log(fechadeposito)
 
-
+        
         //console.log(bb_banco)
 
         //cambiar logica de campos obtener ahora de tabla datos
@@ -647,24 +647,24 @@
          bb_titular=row_conciliar.find("td").eq(4).html();//titular
          bb_fecha=row_conciliar.find("td").eq(5).html();//fecha
 
-
+         
          console.log(bb_banco)
          console.log(bb_titular)
          console.log(bb_fecha)*/
-
+         
         //incluir todos los conciliar
         var excluir=[];
         $('input[name="conciliar[]').each(function(){
           if(this.value!='')
             excluir.push(this.value)
             //xcluir=excluir+''+this.value+',';
-       });
+       });     
        //excluir=excluir.substring(0, excluir.length - 1);
        //console.log(excluir);
 
        var pasarExclusiones=excluir.join(',');
        //console.log(pasarExclusiones)
-        //var
+        //var 
         //var inputt=("#conciliar_"+iditem).val();
         //console.log(idunico);
 
@@ -679,14 +679,14 @@
            "pageLength":5,
           "order": [[ 0, "asc" ]],
           'ajax': {
-            url:"{{ route('movimientostablaconciliar') }}",
-            'data': { "conciliar":idunico,"excluir":pasarExclusiones ,"fechadeposito":fechadeposito},
+            url:"{{ route('movimientostablaconciliar') }}",					
+            'data': { "conciliar":idunico,"excluir":pasarExclusiones ,"fechadeposito":fechadeposito}, 
             "type": "get",
           },
-          columns:
+          columns: 
           [
             {
-              data: 'id',
+              data: 'id', 
               name: 'id',
               "visible":false
               /*sWidth:'30%',
@@ -695,7 +695,7 @@
               }*/
             },
             {
-              data: 'titular',
+              data: 'titular', 
               name: 'titular',
               sWidth:'30%',
               render: function ( data, type, row, meta ) {
@@ -703,55 +703,55 @@
               }
             },
             {
-              data: 'banco',
+              data: 'banco', 
               name: 'banco',
-              sWidth:'15%',
+              sWidth:'15%', 
               render: function ( data, type, row, meta ) {
                 return '<span class="banco">' + data + '</span>';
               }
             },
             {
-              data: 'fecha',
+              data: 'fecha', 
               name: 'fecha',
-              sWidth:'10%',
+              sWidth:'10%', 
               render: $.fn.dataTable.render.moment( 'DD/MM/YYYY' )
               /*render: function ( data, type, row, meta ) {
                 return '<span class="fecha">' + data + '</span>';
               }*/
             },
             {
-              data: 'tipo',
+              data: 'tipo', 
               name: 'tipo',
-              sWidth:'20%',
+              sWidth:'20%', 
               render: function ( data, type, row, meta ) {
                 return '<span class="tipomovimiento">' + data + '</span>';
               }
             },
             {
-              data: 'importe',
+              data: 'importe', 
               name: 'importe',
-              sWidth:'10%',
+              sWidth:'10%', 
               render: function ( data, type, row, meta ) {
                 return '<span class="monto">' + data + '</span>';
               }
             },
             {
-            data: 'action',
-            name: 'action',
-            orderable: false,
+            data: 'action', 
+            name: 'action', 
+            orderable: false, 
             searchable: false,
             sWidth:'20%',
             render: function ( data, type, row, meta ) {
               data = data+''+
                             '<button class="btn btn-danger btn-sm button_conciliar" data-conciliar="'+row.id+'" data-item="'+iditem+'" data-importe="'+row.importe+'" data-titular='+row.titular+' data-banco="'+row.banco+'" data-fecha="'+row.fechamodal+'" data-tipo="'+row.tipo+'"><i class="fas fa-check-circle"></i></button>'+
                           '';
-              return data;
+              return data;             
             },
           }
           ],
           language: {
             "decimal": "",
-            "emptyTable": "No hay información",
+            "emptyTable": "No hay informaciÃ³n",
             "info": "Mostrando del _START_ al _END_ de _TOTAL_ Entradas",
             "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
             "infoFiltered": "(Filtrado de _MAX_ total entradas)",
@@ -775,7 +775,7 @@
       });
 
       $('#modal-editar-get').on('show.bs.modal', function (event) {
-        var button = $(event.relatedTarget)
+        var button = $(event.relatedTarget) 
         var pbanco = button.data('pbanco')
         var titulares = button.data('titulares')
         var fecha = button.data('fecha')
@@ -865,10 +865,10 @@
             bb_titular=row_conciliar.find("td").eq(4).html();//titular
             bb_fecha=row_conciliar.find("td").eq(5).html();//fecha*/
 
-
+            
             //console.log(bb_banco)
-
-            //$('#tablaPrincipal').DataTable().ajax.reload();
+            
+            //$('#tablaPrincipal').DataTable().ajax.reload();  
 
             //location.reload();
           });
@@ -885,9 +885,9 @@
       });
 
       $('#modal-historial-pagos-pedido').on('show.bs.modal', function (event) {
-
+       
        console.log("aa")
-       var button = $(event.relatedTarget)
+       var button = $(event.relatedTarget) 
        var pedido = button.data('pedido')
        var pago = button.data('pago')
 
@@ -901,8 +901,8 @@
           "pageLength":5,
          "order": [[ 0, "asc" ]],
          'ajax': {
-           url:"{{ route('pagostablahistorial') }}",
-           'data': { "pedido":pedido,"pago":pago },
+           url:"{{ route('pagostablahistorial') }}",					
+           'data': { "pedido":pedido,"pago":pago }, 
            "type": "get",
          },
          "search": {
@@ -910,9 +910,9 @@
           },
          columns: [
         {
-            data: 'id',
+            data: 'id', 
             name: 'id',
-            render: function ( data, type, row, meta ) {
+            render: function ( data, type, row, meta ) {   
               var cantidadvoucher=row.cantidad_voucher;
               var cantidadpedido=row.cantidad_pedido;
               var unido= ( (cantidadvoucher>1)? 'V':'I' )+''+( (cantidadpedido>1)? 'V':'I' );
@@ -939,8 +939,8 @@
         },
         {
           data: 'codigos'
-          , name: 'codigos'
-          , render: function ( data, type, row, meta ) {
+          , name: 'codigos' 
+          , render: function ( data, type, row, meta ) {    
             if(data==null){
               return 'SIN PEDIDOS';
             }else{
@@ -950,13 +950,13 @@
                   returndata+=item+'<br>';
               });
               return returndata;
-            }
+            }  
           }
         },
         {//asesor
           data: 'users', name: 'users' },
         {//cliente
-          data: 'celular',
+          data: 'celular', 
             name: 'celular',
             render: function ( data, type, row, meta ) {
               return row.celular;
@@ -972,24 +972,24 @@
           data: 'total_pago', name: 'total_pago'
         },
         {//fecha
-          data: 'fecha',
-          name: 'fecha',
+          data: 'fecha', 
+          name: 'fecha', 
           render: function ( data, type, row, meta ) {
               return data;
           }
         },//estado de pedido
         {
-          data: 'condicion',
-          name: 'condicion',
-          render: function ( data, type, row, meta ) {
-            return data;
+          data: 'condicion', 
+          name: 'condicion', 
+          render: function ( data, type, row, meta ) {            
+            return data;             
           }
         },//estado de pago
         {data: 'action', name: 'action', orderable: false, searchable: false,sWidth:'20%'},
         ],
          language: {
            "decimal": "",
-           "emptyTable": "No hay información",
+           "emptyTable": "No hay informaciÃ³n",
            "info": "Mostrando del _START_ al _END_ de _TOTAL_ Entradas",
            "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
            "infoFiltered": "(Filtrado de _MAX_ total entradas)",
@@ -1032,7 +1032,7 @@
       });
 
       $(document).on("submit","#formulario",function(event){
-            event.preventDefault();
+            event.preventDefault();   
             console.log("form submit");
 
             var campo_condicion = $("#condicion").val();
@@ -1052,7 +1052,7 @@
                       )
                       return false;
                     }
-
+                    
                     var error_conciliar=true;
                     var existe_r=null;
 
@@ -1081,7 +1081,7 @@
                             'warning'
                           )
                           error_conciliar=false;
-                          return false;
+                          return false; 
                         }
 
                         let fecha_dpa=$(".nohide_"+ir).find("td").eq(5).html();
@@ -1097,30 +1097,30 @@
                             'warning'
                           )
                           error_conciliar=false;
-                          return false;
+                          return false; 
                         }
 
                       }
 
                     }
 
-
+                    
                     if(error_conciliar===false)
                     {
-
+                      
                       Swal.fire(
                         'Error',
                         'Existen comprobantes sin conciliar o el importe no coincide con el movimiento',
                         'warning'
                       )
-                      return false;
+                      return false; 
                     }
 
                     this.submit();
             }else{
 
   //validar  detalle pago con conciliaciones  que coincida los importes
-
+              
               /* var cuenta = document.getElementById('cuenta').value; */
               cuenta = document.getElementsByName("cuenta[]");
               /* var titular = document.getElementById('titular').value; */
@@ -1147,30 +1147,30 @@
               console.info(fec);
               {
                 tthis.submit();
-              }
+              } 
 
             }
 
+            
 
-
-
+              
       });
 
 
     });
 
-
+        
   </script>
 
 
   <script>
     //VALIDAR ANTES DE ENVIAR
     /*document.addEventListener("DOMContentLoaded", function() {
-    document.getElementById("formulssario").addEventListener('submit', validarFormulario);
+    document.getElementById("formulssario").addEventListener('submit', validarFormulario); 
     });*/
 
     function validarFormulario(evento) {
-      evento.preventDefault();
+      evento.preventDefault();      
       /* var cuenta = document.getElementById('cuenta').value; */
       cuenta = document.getElementsByName("cuenta[]");
       /* var titular = document.getElementById('titular').value; */
@@ -1205,7 +1205,7 @@
         confirmButtonText: 'Si, continuar!'
       }).then((result) => {
         console.log(result);
-        if (result.value==true)
+        if (result.value==true) 
         {
           tthis.submit();
         }
@@ -1237,11 +1237,11 @@
           }
           else {
             this.submit();
-          }
+          }  
       }
       else*/ {
-
-          }
+            
+          }   
     }
   </script>
 @stop

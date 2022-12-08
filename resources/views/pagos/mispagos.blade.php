@@ -15,7 +15,7 @@
     @can('pagos.create')
       <a href="{{ route('pagos.create') }}" class="btn btn-info"><i class="fas fa-plus-circle"></i> Agregar</a>
     @endcan
-
+    
     @if ($mirol=='Administrador')
       <div class="float-right btn-group dropleft">
         <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -69,7 +69,7 @@
           </tr>
         </thead>
         <tbody>
-
+         
         </tbody>
       </table>
     </div>
@@ -79,7 +79,7 @@
 
 @section('css')
   {{-- <link rel="stylesheet" href="../css/admin_custom.css"> --}}
-  <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">  
   <style>
     .bg-4{
       background: linear-gradient(to right, rgb(240, 152, 25), rgb(237, 222, 93));
@@ -142,22 +142,22 @@
         searching: true,
         "order": [[ 0, "desc" ]],
         ajax: "{{ route('MisPagosTabla') }}",
-        createdRow: function( row, data, dataIndex){
+        createdRow: function( row, data, dataIndex){           
         },
-        rowCallback: function (row, data, index) {
+        rowCallback: function (row, data, index) {           
         },
-        initComplete:function(settings,json){
+        initComplete:function(settings,json){          
           if (localStorage. getItem("search_tabla") === null) {
             //no existe
           }else{
-            $('#tablaPrincipal_filter label input').val(localStorage.getItem("search_tabla") ).change();
-          }
+            $('#tablaPrincipal_filter label input').val(localStorage.getItem("search_tabla") ).change();            
+          }          
         },
         columns: [
         {
-            data: 'id',
+            data: 'id', 
             name: 'id',
-            render: function ( data, type, row, meta ) {
+            render: function ( data, type, row, meta ) {   
               var cantidadvoucher=row.cantidad_voucher;
               var cantidadpedido=row.cantidad_pedido;
               var unido= ( (cantidadvoucher>1)? 'V':'I' )+''+( (cantidadpedido>1)? 'V':'I' );
@@ -184,8 +184,8 @@
         },
         {
           data: 'codigos'
-          , name: 'codigos'
-          , render: function ( data, type, row, meta ) {
+          , name: 'codigos' 
+          , render: function ( data, type, row, meta ) {    
             if(data==null){
               return 'SIN PEDIDOS';
             }else{
@@ -195,13 +195,13 @@
                   returndata+=item+'<br>';
               });
               return returndata;
-            }
+            }  
           }
         },
         {//asesor
           data: 'users', name: 'users' },
         {//cliente
-          data: 'celular',
+          data: 'celular', 
             name: 'celular',
             render: function ( data, type, row, meta ) {
               if(row.icelular!=null)
@@ -210,7 +210,7 @@
               }else{
                 return row.celular;
               }
-
+              
             },
         },
         {//observacion
@@ -223,34 +223,34 @@
           data: 'total_pago', name: 'total_pago'
         },
         {//fecha
-          data: 'fecha',
-          name: 'fecha',
+          data: 'fecha', 
+          name: 'fecha', 
           render: function ( data, type, row, meta ) {
               return data;
           }
         },//estado de pedido
         {
-          data: 'condicion',
-          name: 'condicion',
-          render: function ( data, type, row, meta ) {
-            return data;
+          data: 'condicion', 
+          name: 'condicion', 
+          render: function ( data, type, row, meta ) {            
+            return data;             
           }
         },//estado de pago
         //{data: 'action', name: 'action', orderable: false, searchable: false,sWidth:'20%'},
         {
-          data: 'action',
-          name: 'action',
-          orderable: false,
+          data: 'action', 
+          name: 'action', 
+          orderable: false, 
           searchable: false,
           sWidth:'20%',
           render: function ( data, type, row, meta ) {
-
+           
             var urlshow = '{{ route("pagos.show", ":id") }}';
             urlshow = urlshow.replace(':id', row.id);
 
             var urledit = '{{ route("pagos.edit", ":id") }}';
             urledit = urledit.replace(':id', row.id);
-
+            
             @can('pagos.show')
               data = data+'<a href="'+urlshow+'" class="btn btn-info btn-sm"><i class="fas fa-eye"></i> VER</a>';
             @endcan
@@ -261,13 +261,13 @@
                 //data = data+'<a href="" data-target="#modal-delete" data-toggle="modal" data-delete="'+row.id+'"><button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i> Anular</button></a>';
             @endcan
 
-            return data;
+            return data;             
           }
         },
         ],
         language: {
         "decimal": "",
-        "emptyTable": "No hay información",
+        "emptyTable": "No hay informaciÃ³n",
         "info": "Mostrando del _START_ al _END_ de _TOTAL_ Entradas",
         "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
         "infoFiltered": "(Filtrado de _MAX_ total entradas)",
@@ -289,7 +289,7 @@
 
     $(document).on("keypress",'#tablaPrincipal_filter label input',function(){
       console.log("aaaaa")
-
+      
       localStorage.setItem("search_tabla",$(this).val());
       console.log( "search_tabla es "+localStorage.getItem("search_tabla") );
 
@@ -317,15 +317,15 @@
   <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
 
   <script>
-    /*window.onload = function () {
+    /*window.onload = function () {      
       $('#tablaPrincipal').DataTable().draw();
     }*/
   </script>
 
   <script>
     /* Custom filtering function which will search data in column four between two values */
-        $(document).ready(function () {
-
+        $(document).ready(function () { 
+        
             $.fn.dataTable.ext.search.push(
                 function (settings, data, dataIndex) {
                     var min = $('#min').datepicker("getDate");
@@ -342,7 +342,7 @@
                 }
             );
 
-
+      
             $("#min").datepicker({ onSelect: function () { table.draw(); }, changeMonth: true, changeYear: true , dateFormat:"dd/mm/yy"});
             $("#max").datepicker({ onSelect: function () { table.draw(); }, changeMonth: true, changeYear: true, dateFormat:"dd/mm/yy" });
             var table = $('#tablaPrincipal').DataTable();

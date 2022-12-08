@@ -174,6 +174,8 @@
   <script src="{{ asset('js/datatables.js') }}"></script>
   <script>
 
+    console.log(localStorage.getItem("search_tabla"));
+
   let copydata="*S/."+"{{$cotizacion->cantidad}}"+" * "+"{{$cotizacion->porcentaje}}" +"% = S/."+"{{$cotizacion->ft}}"+"*\n"+
               "*ENVIO = S/."+"{{$cotizacion->courier}}"+"*\n"+
               "*TOTAL = S/."+"{{$cotizacion->total}}"+"*\n\n"+
