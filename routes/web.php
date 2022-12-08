@@ -213,7 +213,7 @@ Route::get('envios/{imagen}/descargarimagen', [PedidoController::class, 'Descarg
 Route::resource('pagos', PagoController::class)->names('pagos');
 //Route::get('pagos/create/{cliente}', [PagoController::class, 'create'])->name('pagos.create');
 
-
+//
 
 Route::get('pagostabla', [PagoController::class, 'indextabla'])->name('pagostabla');//actualizado para serverside
 Route::get('pagostablahistorial', [PagoController::class, 'indextablahistorial'])->name('pagostablahistorial');//actualizado para serverside
