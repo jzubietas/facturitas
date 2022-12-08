@@ -279,14 +279,14 @@ return [
             'icon'   => 'fas fa-check-circle',
             'active' => ['pagos perdonar courier'],
         ],
-        
+
         ['header' => 'MÓDULOS'],
 
         [
             'text'    => 'Pedidos',
             'icon'    => 'fa fa-file',
             'can' => 'pedidos.modulo',
-            'submenu' => [                
+            'submenu' => [
                 [
                     'text' => 'Bandeja de pedidos',
                     'route'  => 'pedidos.index',
@@ -379,7 +379,7 @@ return [
                     'can' => 'envios.index',
                     'icon'   => 'fas fa-check-circle',
                     'active' => ['envios'],
-                ],                
+                ],
                 [
                     'text' => 'Seguimiento provincia',
                     'route'  => 'envios.seguimientoprovincia',
@@ -409,13 +409,13 @@ return [
                     'icon'   => 'fas fa-check-circle',
                     'active' => ['pagos'],
                 ],
-                [
+                /*[
                     'text' => 'Mis pagos',
                     'route'  => 'pagos.mispagos',
                     'can' => 'pagos.mispagos',
                     'icon'   => 'fas fa-check-circle',
                     'active' => ['mis pagos'],
-                ],
+                ],*/
                 [
                     'text' => 'Pagos incompletos',
                     'route'  => 'pagos.pagosincompletos',
@@ -493,7 +493,7 @@ return [
                     'can' => 'base_fria.index',
                     'icon'   => 'fas fa-check-circle',
                     'active' => ['base fria'],
-                ],                
+                ],
                 [
                     'text' => 'Clientes',
                     'route'  => 'clientes.index',
@@ -531,7 +531,7 @@ return [
                 ],
             ],
         ],
-        
+
         [
             'text'    => 'Reportes',
             'icon'    => 'fas fa-chart-bar',
@@ -542,7 +542,7 @@ return [
                     'route'  => 'reportes.index',
                     'can' => 'reportes.index',
                     'icon'   => 'fas fa-check-circle',
-                ], 
+                ],
                 /*[
                     'text' => 'Reportes mis asesores',
                     'route'  => 'reportes.misasesores',
@@ -557,7 +557,7 @@ return [
                 ],
             ],
         ],
-        
+
         [
             'text'    => 'Accesos y permisos',
             'icon'    => 'fas fa-cogs',
@@ -634,7 +634,7 @@ return [
                     'active' => ['mis llamadas'],
                 ],
             ],
-        ],        
+        ],
     ],
 
     /*
