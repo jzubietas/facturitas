@@ -29,12 +29,13 @@
     @include('pedidos.modal.exportar', ['title' => 'Exportar Lista de pedidos', 'key' => '3'])    
   </h1>
   {{--@if($superasesor > 0)--}}
+  {{--
   <br>
   <div class="bg-4">
     <h1 class="t-stroke t-shadow-halftone2" style="text-align: center">
       asesores con privilegios superiores: {{ $superasesor }}
     </h1>
-  </div>
+  </div>--}}
   {{--@endif--}}
 @stop
 
