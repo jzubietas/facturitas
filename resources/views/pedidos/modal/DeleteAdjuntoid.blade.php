@@ -10,8 +10,13 @@
         </div>
         {{--{{ Form::Open(['route' => ['pedidos.eliminarAdjunto', $img->id]]) }}--}}
         <Form id="formdeleteadjunto" name ="formdeleteadjunto">
+<<<<<<< Updated upstream
           <input type="hidden" id="eliminar_pedido_id" name="eliminar_pedido_id" >
           <input type="hidden" id="eliminar_pedido_id_imagen" name="eliminar_pedido_id_imagen">
+=======
+          <input id="eliminar_pedido_id" name="eliminar_pedido_id">
+          <input id="eliminar_pedido_adjunto" name="eliminar_pedido_adjunto">
+>>>>>>> Stashed changes
         <div class="modal-body">
           <p>Confirme si desea <strong>ELIMINAR</strong> archivo adjunto</p>
         </div>

@@ -3510,6 +3510,7 @@ return ' no imagen ';
         return redirect()->route('envios.enviados')->with('info', 'actualizado');
     }
 
+<<<<<<< Updated upstream
     public function validadContenidoPedido(Request $request)
     {
 
@@ -3547,6 +3548,27 @@ return ' no imagen ';
                 $html="0";
                 return response()->json(['html' => $html]);
             }
+=======
+    public function eliminaradjunto(Request $request)
+    
+    {
+        //$eliminar_pedido_id = ImagenAtencion::find($eliminar_pedido_id);
+        //$eliminar_pedido_adjunto = ImagenAtencion::find($eliminar_pedido_adjunto);
+        if (!$request->hiddenID) {
+            $html='';
+        } else {
+            ImagenAtencion::find($request->hiddenID)->update([
+                'estado' => '0'
+            ]);
+
+            //$detalle_pedidos = DetallePedido::find($request->hiddenID);            
+            //$eliminar_pedido_id = ImagenAtencion::where('pedido_id',$request->hiddenID)->first() ;          
+           
+
+            $html=$request;
+        }
+        return response()->json(['html' => $html]);
+>>>>>>> Stashed changes
     }
 
 }
