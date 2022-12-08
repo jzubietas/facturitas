@@ -260,7 +260,7 @@
                     },
                     {
                         data: 'id2',
-                        name: 'id2',
+                        name: 'id',
                         visible: false
                     },
                     {

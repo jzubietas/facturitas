@@ -18,4 +18,8 @@ class Pago extends Model
 
     protected $guarded = ['id'];
 
+    public function pedidos()
+    {
+
+    }
 }
