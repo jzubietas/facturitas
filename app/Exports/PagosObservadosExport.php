@@ -22,7 +22,7 @@ class PagosObservadosExport implements FromView, ShouldAutoSize
                 'u.identificador as users',
                 'c.icelular',
                 'c.celular',
-                'pagos.observacion',                        
+                'pagos.observacion',
                 'pagos.total_cobro',
                 'pagos.condicion',
                 DB::raw('(select DATE_FORMAT( MIN(dpa.fecha), "%d/%m/%Y %H:%i:%s")   from detalle_pagos dpa where dpa.pago_id=pagos.id and dpa.estado=1) as fecha'),
@@ -30,7 +30,7 @@ class PagosObservadosExport implements FromView, ShouldAutoSize
                 DB::raw(" (select count(dpago.id) from detalle_pagos dpago where dpago.pago_id=pagos.id and dpago.estado in (1) ) as cantidad_voucher "),
                 DB::raw(" (select count(ppedidos.id) from pago_pedidos ppedidos where ppedidos.pago_id=pagos.id and ppedidos.estado in (1)  ) as cantidad_pedido "),
                 DB::raw(" ( select GROUP_CONCAT(ppp.codigo) from pago_pedidos ped inner join pedidos ppp on ped.pedido_id =ppp.id where pagos.id=ped.pago_id and ped.estado=1 and ppp.estado=1 and ped.pagado in (1,2)) as codigos "),
-                
+
                 DB::raw(" ( select GROUP_CONCAT(ppp2.codigo) from pago_pedidos ped2 inner join pedidos ppp2 on ped2.pedido_id =ppp2.id where pagos.id=ped2.pago_id and ped2.estado in (0) and ppp2.estado=1 and ped2.pagado in (1,2)) as codigos_anulados_1 "),
                 DB::raw(" ( select GROUP_CONCAT(ppp3.codigo) from pago_pedidos ped2 inner join pedidos ppp3 on ped2.pedido_id =ppp3.id where pagos.id=ped2.pago_id and ped2.estado in (1) and ppp3.estado=0 and ped2.pagado in (1,2)) as codigos_anulados_2 "),
                 DB::raw(" ( select GROUP_CONCAT(ppp4.codigo) from pago_pedidos ped2 inner join pedidos ppp4 on ped2.pedido_id =ppp4.id where pagos.id=ped2.pago_id and ped2.estado in (0) and ppp4.estado=0 and ped2.pagado in (1,2)) as codigos_anulados_3 "),
@@ -40,9 +40,9 @@ class PagosObservadosExport implements FromView, ShouldAutoSize
                 DB::raw(" ( select GROUP_CONCAT(ppp8.codigo) from pago_pedidos ped2 inner join pedidos ppp8 on ped2.pedido_id =ppp8.id where pagos.id=ped2.pago_id and ped2.estado in (1) and ppp8.estado=1 and ped2.pagado in (0)) as codigos_anulados_7 "),
 
                 DB::raw(" (select sum(ped2.abono) from pago_pedidos ped2 where ped2.pago_id =pagos.id and ped2.estado=1 and ped2.pagado in (1,2) ) as total_pago ")   ,
-                DB::raw(" (select sum(ped3.abono) from pago_pedidos ped3 where ped3.pago_id =pagos.id and ped3.estado in (0) and ped3.pagado in (1,2) ) as total_pago_anulados ")   
+                DB::raw(" (select sum(ped3.abono) from pago_pedidos ped3 where ped3.pago_id =pagos.id and ped3.estado in (0) and ped3.pagado in (1,2) ) as total_pago_anulados ")
                 )
-        ->whereIn('pagos.condicion', ['OBSERVADO'])
+        ->whereIn('pagos.condicion', [Pago::OBSERVADO])
         ->where('pagos.estado', '1')
         ->whereBetween(DB::raw('( (select DATE( MIN(dpa.fecha))   from detalle_pagos dpa where dpa.pago_id=pagos.id and dpa.estado=1)  )'), [$request->desde, $request->hasta])
         //->whereBetween(DB::raw('DATE(pagos.created_at)'), [$request->desde, $request->hasta]) //rango de fechas
