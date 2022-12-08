@@ -28,7 +28,7 @@
         
         
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+          <button type="button" id="cerrar-modal-copiar" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
           {{--<button type="button" id="btncopiar" class="btn btn-info">Copiar</button>--}}
         </div>
 

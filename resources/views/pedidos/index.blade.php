@@ -41,20 +41,6 @@
 @section('content')
   <div class="card">
     <div class="card-body">
-      <div class="loader-sistema" style="
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      background-color: white;
-      top: 0;
-      left: 0;
-      z-index: 9;
-      display:none;">
-      <p style="
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);">Cargando Busqueda...</p></div>
       <table cellspacing="5" cellpadding="5" class="table-responsive">
         <tbody>
           <tr>
@@ -245,22 +231,6 @@
     });
 
     var tablaPrincipal=$('#tablaPrincipal').DataTable({
-      "fnInitComplete": function(oSettings, json) {
-
-        var termino_recuperado = localStorage.getItem('search_tabla');
-        if(termino_recuperado != ""){
-            setTimeout(() => {
-              $('#tablaPrincipal').DataTable().search(termino_recuperado).draw();
-            }, 200);
-        }
-
-        setTimeout(() => {
-          $('#tablaPrincipal').DataTable().search(termino_recuperado).draw();
-        }, 200);
-
-        
-
-      },
         processing: true,
         serverSide: true,
         searching: true,

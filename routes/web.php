@@ -44,7 +44,7 @@ Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard
 Route::resource('clientes', ClienteController::class)->names('clientes');
 Route::get('clientestabla', [ClienteController::class, 'indextabla'])->name('clientestabla');
 
-Route::get('clientes.abandonos', [ClienteController::class, 'indexabandono'])->name('clientes.abandonos');
+Route::get('clientes.abandono', [ClienteController::class, 'indexabandono'])->name('clientes.abandono');
 Route::get('clientesabandonotabla', [ClienteController::class, 'indexabandonotabla'])->name('clientesabandonotabla');
 
 Route::get('clientes.recurrentes', [ClienteController::class, 'indexrecurrente'])->name('clientes.recurrentes');
@@ -54,7 +54,7 @@ Route::get('clientes.nuevos', [ClienteController::class, 'indexnuevo'])->name('c
 Route::get('clientesnuevotabla', [ClienteController::class, 'indexnuevotabla'])->name('clientesnuevotabla');
 
 Route::get('clientes.recuperados', [ClienteController::class, 'indexrecuperado'])->name('clientes.recuperados');
-Route::get('recuperadostabla', [ClienteController::class, 'indexrecuperadotabla'])->name('clientesrecuperadotabla');
+Route::get('recuperadostabla', [ClienteController::class, 'indexrecuperadotabla'])->name('recuperadostabla');
 
 
 //Route::get('basefria', [ClienteController::class, 'indexbf'])->name('basefria');
@@ -79,6 +79,7 @@ Route::get('clientes.editbf/{cliente}/edit2', [ClienteController::class, 'editbf
 Route::resource('pedidos', PedidoController::class)->names('pedidos');
 Route::post('pedidoss.store', [PedidoController::class, 'pedidosstore'])->name('pedidoss.store');//actualizado para serverside
 Route::get('pedidostabla', [PedidoController::class, 'indextabla'])->name('pedidostabla');//actualizado para serverside
+Route::post('validarpedido', [PedidoController::class, 'validadContenidoPedido'])->name('validarpedido');
 
 Route::get('pedidosperdonarcurrier', [PedidoController::class, 'indexperdonarcurrier'])->name('pedidosperdonarcurrier');
 Route::get('pedidosperdonarcurriertabla', [PedidoController::class, 'indexperdonarcurriertabla'])->name('pedidosperdonarcurriertabla');//actualizado para serverside
