@@ -88,8 +88,11 @@
                   @if ($img->pedido_id == $pedido->id)
                     <p>
                       <a href="{{ route('pedidos.descargaradjunto', $img->adjunto) }}">{{ $img->adjunto }}</a>
-                      <a href="" data-target="#modal-delete-adjunto" data-toggle="modal" data_imgid="{{ $img->id }}">  
-                        <button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i></button></a>
+                      <a href="#" data-target="#modal-delete-adjunto" data-toggle="modal" data-imgid="{{ $img->pedido_id }}" data-imgadjunto="{{ $img->adjunto }}">  
+                        <button class="btn btn-danger btn-sm" data-imgid="{{ $img->pedido_id }}" data-imgadjunto="{{ $img->adjunto }}">
+                          <i class="fas fa-trash-alt"></i>
+                        </button>
+                      </a>
                       <!--<a href="" data-target="#modal-delete-adjunto-{{ $img->id }}" data-toggle="modal">  
                         <button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i></button></a>-->
                     </p>
@@ -118,7 +121,7 @@
         </div>
         <div class="col-2 text-left" class="modal-footer">
           <button type="submit" class="btn btn-success" id="atender">Confirmar</button>
-          <a href="{{ url()->previous() }}" class="btn btn-danger"><i class="fas fa-arrow-left"></i>ATRAS</a>
+          <button type = "button" onClick="history.back()" class="btn btn-danger"><i class="fas fa-arrow-left"></i>ATRAS</button>
         </div>        
       </div>
     </div>
@@ -131,5 +134,66 @@
 
 @section('js')
 
+<script>
+
+        $(document).ready(function() 
+        {
+          
+          $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+          });
+          console.log("aa");
+          $('#modal-delete-adjunto').on('shown.bs.modal', function (event) {
+            console.log("aa");
+            var button = $(event.relatedTarget) 
+            var pedido_id = button.data('imgid')
+            var imgname = button.data('imgadjunto')
+
+
+            $("#eliminar_pedido_id").val(pedido_id);
+            $("#eliminar_pedido_id_imagen").val(imgname);
+            //campo oculto pedido id
+            //campo oculto imagname
+
+
+            //
+
+          });
+
+          $(document).on("submit", "#formdeleteadjunto", function (evento) {
+            evento.preventDefault();
+            //let eliminar_pedido_id=$("#eliminar_pedido_id").val()
+            //let eliminar_pedido_id_imagen=$("#eliminar_pedido_id_imagen").val()
+
+                
+                var formData = $("#formdeleteadjunto").serialize();
+                $.ajax({
+                    type:'POST',
+                    url:"{{ route('operaciones.eliminaradjunto') }}",
+                    data:formData,
+                }).done(function (data) {
+                    /*Swal.fire(
+                        'Operacion realizada',
+                        '',
+                        'success'
+                    )
+                    $("modal-delete-adjunto").modal("hide");*/  
+                    //$("#user_id").trigger("change");   
+                    location.reload();
+                    console.log(data);
+                });
+          });
+
+        });
+</script>
+
+
+
+
 @stop
+
+
+
 

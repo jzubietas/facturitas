@@ -25,13 +25,13 @@
         <a href="" data-target="#modal-exportar" data-toggle="modal" class="dropdown-item" target="blank_"><img src="{{ asset('imagenes/icon-excel.png') }}"> Excel</a>
       </div>
     </div>
-    @include('pagos.modals.exportar', ['title' => 'Exportar Lista de pagos aprobados', 'key' => '5'])
+    @include('pagos.modals.exportar', ['title' => 'Exportar Lista de pagos aprobados', 'key' => '5'])       
   </h1>
 
   <div class="form-group col-lg-6">
-
+    
       <select name="asesores_aprobado" class="border form-control selectpicker border-secondary" id="asesores_aprobado" data-live-search="true">
-        <option value="">---- SELECCIONE ASESOR ----</option>
+        <option value="">---- SELECCIONE ASESOR ----</option>         
       </select>
   </div>
 
@@ -175,14 +175,14 @@
         ajax: {
           url: "{{ route('administracion.aprobadostabla') }}",
           data: function (d) {
-            d.asesores = $("#asesores_aprobado").val();
+            d.asesores = $("#asesores_aprobado").val();           
           },
         },
         columns: [
           {
-              data: 'id',
+              data: 'id', 
               name: 'id',
-              render: function ( data, type, row, meta ) {
+              render: function ( data, type, row, meta ) {             
                 if(row.id<10){
                   return 'PAG000'+row.id;
                 }else if(row.id<100){
@@ -191,13 +191,13 @@
                   return 'PAG0'+row.id;
                 }else{
                   return 'PAG'+row.id;
-                }
+                } 
               }
           },
           {data: 'celular', name: 'celular'},
           {
             data: 'codigos'
-            , name: 'codigos'
+            , name: 'codigos' 
             , render: function ( data, type, row, meta ) {
               var returndata='';
               var jsonArray=data.split(",");
@@ -213,17 +213,17 @@
           { data: 'total_deuda', name: 'total_deuda'},//total_deuda
           { data: 'total_pago', name: 'total_pago'},//total_pago
           {
-            data: 'condicion',
-            name: 'condicion',
-            render: function ( data, type, row, meta ) {
-              return data;
+            data: 'condicion', 
+            name: 'condicion', 
+            render: function ( data, type, row, meta ) {            
+              return data;             
             }
           },//estado
           {data: 'action', name: 'action', orderable: false, searchable: false,sWidth:'20%'},
       ],
       language: {
         "decimal": "",
-        "emptyTable": "No hay información",
+        "emptyTable": "No hay informaciÃ³n",
         "info": "Mostrando del _START_ al _END_ de _TOTAL_ Entradas",
         "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
         "infoFiltered": "(Filtrado de _MAX_ total entradas)",
@@ -243,7 +243,7 @@
       },
 
     });
-
+        
 
 
 
