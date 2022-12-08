@@ -227,7 +227,6 @@ class PagoController extends Controller
             ->get();*/
         }
 
-       //return ->get();
         //$pagos = $pagos->get();
         return datatables()->query(DB::table($pagos))
             ->addIndexColumn()
@@ -259,7 +258,7 @@ class PagoController extends Controller
                 return $btn;
             })
             ->rawColumns(['action'])
-            ->make(true);
+            ->toJson();
     }
 
     /**

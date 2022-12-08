@@ -182,11 +182,7 @@
       </div>
     </div>
     <div class="card-footer">
-      @if (Auth::user()->rol == "Asesor")
-        <a href="{{ url()->previous() }}" class="btn btn-danger"><i class="fas fas fa-arrow-left"></i>ATRAS</a>
-      @else
-        <a href="{{ url()->previous() }}" class="btn btn-danger"><i class="fas fas fa-arrow-left"></i>ATRAS</a>
-      @endif
+       <buttom onclick="history.back()" class="btn btn-danger"><i class="fas fas fa-arrow-left"></i>ATRAS</buttom>
     </div>
   </div>
 @stop
