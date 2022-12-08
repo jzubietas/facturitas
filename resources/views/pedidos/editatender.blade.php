@@ -88,8 +88,11 @@
                   @if ($img->pedido_id == $pedido->id)
                     <p>
                       <a href="{{ route('pedidos.descargaradjunto', $img->adjunto) }}">{{ $img->adjunto }}</a>
-                      <a href="" data-target="#modal-delete-adjunto" data-toggle="modal" data_imgid="{{ $img->id }}">  
-                        <button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i></button></a>
+                      <a href="" data-target="#modal-delete-adjunto" data-toggle="modal" data-imgid="{{ $img->id }}" data-imgadjunto="{{ $img->adjunto }}">  
+                        <button class="btn btn-danger btn-sm" data-imgid="{{ $img->id }}" data-imgadjunto="{{ $img->adjunto }}">
+                          <i class="fas fa-trash-alt"></i>
+                        </button>
+                      </a>
                       <!--<a href="" data-target="#modal-delete-adjunto-{{ $img->id }}" data-toggle="modal">  
                         <button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i></button></a>-->
                     </p>
@@ -130,6 +133,52 @@
 @stop
 
 @section('js')
+
+<script>
+        $(document).ready(function() 
+        {
+
+          $('#modal-delete-adjunto').on('show.bs.modal', function (event) {
+
+            //var button = $(event.relatedTarget) 
+            //var pedido_id = button.data('imgid')
+            //var imgname = button.data('imgid')
+
+            //campo oculto pedido id
+            //campo oculto imagname
+
+
+            //
+
+          });
+
+          $(document).on("submit", "#formdeleteadjunto", function (evento) {
+            event.preventDefault();
+            //let eliminar_pedido_id=$("#eliminar_pedido_id").val()
+            //let eliminar_pedido_id_imagen=$("#eliminar_pedido_id_imagen").val()
+
+                
+                var formData = $("#formdeleteadjunto").serialize();
+                $.ajax({
+                    type:'POST',
+                    url:"{{ route('pedidostiempo') }}",
+                    data:formData,
+                }).done(function (data) {
+                    Swal.fire(
+                        'Activacion temporal realizada',
+                        '',
+                        'success'
+                    )
+                    $("#modal-activartiempo").modal("hide");  
+                    $("#user_id").trigger("change");     
+                });
+          });
+
+        });
+
+
+
+
 
 @stop
 

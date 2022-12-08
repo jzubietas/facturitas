@@ -1646,6 +1646,27 @@ return ' no imagen ';
         return response()->json(['html' => $html]);
     }
 
+    public function destroyidpedidoadjuntooperaciones(Request $request)
+    {
+        if (!$request->hiddenID) {
+            $html='';
+        } else {
+            ImagenAtencion::where("pedido_id",$request->hiddenID)->update([
+                'estado' => '0'
+            ]);
+
+            //$detalle_pedidos = DetallePedido::find($request->hiddenID);            
+            //$detalle_pedidos = DetallePedido::where('pedido_id',$request->hiddenID)->first() ;          
+           
+            /*$detalle_pedidos->update([
+                'estado' => '0'
+            ]);*/
+
+            $html=$request;
+        }
+        return response()->json(['html' => $html]);
+    }
+
     public function Restaurar(Pedido $pedido)
     {
         $detalle_pedidos = DetallePedido::where('pedido_id',$pedido->id)->first();
