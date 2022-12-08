@@ -25,14 +25,14 @@ class CreateUsersTable extends Migration
             $table->string('supervisor')->nullable();//asignar supervisor
             $table->string('operario')->nullable();//asignar operario
             $table->string('jefe')->nullable();//asignar operario
-            $table->string('identificador')->nullable();//identificador            
+            $table->string('identificador')->nullable();//identificador
             $table->string('meta_pedido')->nullable();//meta de pedidos por mes
             $table->string('meta_cobro')->nullable();//meta de cobros por mes
-            $table->integer('celular')->nullable();     
+            $table->integer('celular')->nullable();
             $table->string('provincia')->nullable();
             $table->string('distrito')->nullable();
             $table->string('direccion')->nullable();
-            $table->string('referencia')->nullable(); 
+            $table->string('referencia')->nullable();
             $table->foreignId('current_team_id')->nullable();
             $table->string('profile_photo_path', 2048)->nullable();
             $table->timestamps();
