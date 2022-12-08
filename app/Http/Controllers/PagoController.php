@@ -85,6 +85,7 @@ class PagoController extends Controller
 
     public function indextabla(Request $request)
     {
+
         $pagos = Pago::join('users as u', 'pagos.user_id', 'u.id')
             ->join('clientes as c', 'pagos.cliente_id', 'c.id')
             ->select('pagos.id as id',
@@ -225,26 +226,27 @@ class PagoController extends Controller
             ->where('pagos.estado', '1')
             ->get();*/
         }
-        $pagos = $pagos->get();
 
-        return Datatables::of($pagos)
+       //return ->get();
+        //$pagos = $pagos->get();
+        return datatables()->query(DB::table($pagos))
             ->addIndexColumn()
             ->addColumn('action', function ($pago) {
                 $btn = '';
                 if (Auth::user()->rol == "Administrador") {
-                    $btn = $btn . '<a href="' . route('pagos.show', $pago['id']) . '" class="btn btn-info btn-sm">Ver</a>';
+                    $btn = $btn . '<a href="' . route('pagos.show', data_get($pago,'id')) . '" class="btn btn-info btn-sm">Ver</a>';
                     //$btn=$btn.'<a href="'.route('pagos.edit', $pago['id']).'" class="btn btn-warning btn-sm">Editar</a>';
 
                 } else if (Auth::user()->rol == "Encargado") {
-                    $btn = $btn . '<a href="' . route('pagos.show', $pago['id']) . '" class="btn btn-info btn-sm">Ver</a>';
+                    $btn = $btn . '<a href="' . route('pagos.show', data_get($pago,'id')) . '" class="btn btn-info btn-sm">Ver</a>';
                     //$btn=$btn.'<a href="'.route('pagos.edit', $pago['id']).'" class="btn btn-warning btn-sm">Editar</a>';
 
                 } else if (Auth::user()->rol == "Asesor") {
-                    $btn = $btn . '<a href="' . route('pagos.show', $pago['id']) . '" class="btn btn-info btn-sm">Ver</a>';
+                    $btn = $btn . '<a href="' . route('pagos.show', data_get($pago,'id')) . '" class="btn btn-info btn-sm">Ver</a>';
                     //$btn=$btn.'<a href="'.route('pagos.edit', $pago['id']).'" class="btn btn-warning btn-sm">Editar</a>';
 
                 } else {
-                    $btn = $btn . '<a href="' . route('pagos.show', $pago['id']) . '" class="btn btn-info btn-sm">Ver</a>';
+                    $btn = $btn . '<a href="' . route('pagos.show', data_get($pago,'id')) . '" class="btn btn-info btn-sm">Ver</a>';
                     //$btn=$btn.'<a href="'.route('pagos.edit', $pago['id']).'" class="btn btn-warning btn-sm">Editar</a>';
 
                 }

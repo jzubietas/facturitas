@@ -225,7 +225,6 @@
                         var termino_recuperado=localStorage.getItem("search_tabla");
                         if(termino_recuperado) {
                             $('#tablaPrincipal_filter label input').val(termino_recuperado).change();
-                            $('#tablaPrincipal').DataTable().search(termino_recuperado).draw();
                         }
                     }
                 },
@@ -260,7 +259,7 @@
                     },
                     {
                         data: 'id2',
-                        name: 'id',
+                        name: 'id2',
                         visible: false
                     },
                     {
