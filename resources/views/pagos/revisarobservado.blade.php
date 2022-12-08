@@ -84,23 +84,23 @@
                       <td>{{ $pagoPedido->codigo }}</td>
                       <
 
-                      @if($pagos->condicion=='ABONADO')
+                      @if($pagos->condicion==\App\Models\Pago::ABONADO)
                           @if($pagoPedido->pagado == 1)
                           <td>ADELANTO ABONADO</td>
                           @else
                           <td>PAGADO ABONADO</td>
                           @endif
-                      @elseif($pagos->condicion=='OBSERVADO')
+                      @elseif($pagos->condicion==\App\Models\Pago::OBSERVADO)
                           @if($pagoPedido->pagado == 1)
                           <td>ADELANTO OBSERVADO</td>
                           @else
                           <td>PAGADO OBSERVADO</td>
                           @endif
-                      @elseif($pagos->condicion=='PENDIENTE')
+                      @elseif($pagos->condicion==\App\Models\Pago::PENDIENTE)
 
                           <td>PENDIENTE</td>
 
-                      @elseif($pagos->condicion=='PAGO')
+                      @elseif($pagos->condicion==\App\Models\Pago::PAGO)
                           @if($pagoPedido->pagado == 1)
                           <td>ADELANTO PAGO</td>
                           @else
@@ -1027,7 +1027,7 @@
 
       $(document).on("click","#pendientebtn",function(){
         console.log("pendiente")
-        $("#condicion").val("PENDIENTE").selectpicker("refresh");
+        $("#condicion").val("{{\App\Models\Pago::PENDIENTE}}").selectpicker("refresh");
         $("#formulario").submit();
       });
 
@@ -1037,7 +1037,7 @@
 
             var campo_condicion = $("#condicion").val();
             var inputconciliar=0
-            if(campo_condicion=='ABONADO')
+            if(campo_condicion=='{{\App\Models\Pago::ABONADO}}')
             {
                     var total_conciliar={{$contPa}};
                     console.log("total detalles para conciliar: "+total_conciliar);

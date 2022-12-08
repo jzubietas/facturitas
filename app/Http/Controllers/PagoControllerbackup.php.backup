@@ -1042,10 +1042,10 @@ class PagoController extends Controller
     
     {
         $condiciones = [
-            "PAGO" => 'PAGO',
-            "OBSERVADO" => 'OBSERVADO',
-            "ABONADO" => 'ABONADO',
-            "ABONADO_PARCIAL" => 'ABONADO_PARCIAL'
+            "PAGO" => Pago::PAGO,
+            "OBSERVADO" => Pago::OBSERVADO,
+            "ABONADO" => Pago::ABONADO,
+            "ABONADO_PARCIAL" => Pago::ABONADO_PARCIAL
         ];
 
         $cuentas = [

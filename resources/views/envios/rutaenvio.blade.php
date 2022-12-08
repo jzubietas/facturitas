@@ -4,7 +4,7 @@
 
 @section('content_header')
   <h1>Rutas de envio - ENVIOS
-    
+
     <div class="float-right btn-group dropleft">
 
       <?php if(Auth::user()->rol=='Administrador' || Auth::user()->rol=='Logística'){ ?>
@@ -30,7 +30,7 @@
     @include('sobres.modal.exportar', ['title' => 'Exportar RUTAS DE ENVIAR LIMA NORTE', 'key' => '3'])
     @include('sobres.modal.exportar', ['title' => 'Exportar RUTAS DE ENVIAR LIMA CENTRO', 'key' => '4'])
     @include('sobres.modal.exportar', ['title' => 'Exportar RUTAS DE ENVIAR LIMA SUR', 'key' => '5'])--}}
-  
+
     {{-- @endcan --}}
   </h1>
   @if($superasesor > 0)
@@ -56,12 +56,12 @@
             <td>Buscar General</td>
             <td>
               <div class="form-group col-lg-12">
-                {!! Form::label('general', 'Buscador General') !!} 
+                {!! Form::label('general', 'Buscador General') !!}
                   <input type="text" name="general" id="general" class="form-control" placeholder="Busqueda General..." >
               </div>
-            
+
             </td>
-            
+
           </tr>
         </tbody>
       </table><br>
@@ -88,7 +88,7 @@
             <th scope="col" class="text-center">Fecha</th>
             <th scope="col" class="text-center">QTY</th>
             <th scope="col" class="text-center">Codigos</th>
-            <th scope="col" class="text-center">Producto</th>            
+            <th scope="col" class="text-center">Producto</th>
             <th scope="col" class="text-center">Direccion</th>
             <th width="5px" scope="col" class="text-center">Referencia</th>
             <th scope="col" class="text-center">Observacion</th>
@@ -101,7 +101,7 @@
         </tbody>
       </table>
       @include('envios.modal.enviarid')
-      @include('pedidos.modal.recibirid')      
+      @include('pedidos.modal.recibirid')
       @include('pedidos.modal.verdireccionid')
       @include('pedidos.modal.editdireccionid')
       @include('pedidos.modal.destinoid')
@@ -114,7 +114,7 @@
 
 @section('css')
   <link rel="stylesheet" href="/css/admin_custom.css">
-  <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">  
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
   <style>
     img:hover{
       transform: scale(1.2)
@@ -184,7 +184,7 @@
           "bPaginate": false,
           "bFilter": false,
           "bInfo": false,
-          columns: 
+          columns:
           [
             {
               data: 'id'
@@ -198,7 +198,7 @@
           ],
           language: {
             "decimal": "",
-            "emptyTable": "No hay informaciÃ³n",
+            "emptyTable": "No hay información",
             "info": "Mostrando del _START_ al _END_ de _TOTAL_ Entradas",
             "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
             "infoFiltered": "(Filtrado de _MAX_ total entradas)",
@@ -224,7 +224,7 @@
       });
 
       $('#modal-distribuir').on('show.bs.modal', function (event) {
-        var button = $(event.relatedTarget) 
+        var button = $(event.relatedTarget)
         var idunico = button.data('distribuir')
         console.log("distribuir "+ idunico);
         $("#modal-distribuir #hiddenDistribuir").val(idunico);
@@ -236,10 +236,10 @@
         //validacion
 
         var fd2 = new FormData();
-        
-        fd2.append('hiddenDistribuir', $('#hiddenDistribuir').val() );        
+
+        fd2.append('hiddenDistribuir', $('#hiddenDistribuir').val() );
         fd2.append('distribuir', $('#distribuir').val() );
-        
+
         $.ajax({
           data: fd2,
           processData: false,
@@ -258,7 +258,7 @@
 
       $('#modal-enviar').on('show.bs.modal', function (event) {
         //cuando abre el form de anular pedido
-        var button = $(event.relatedTarget) 
+        var button = $(event.relatedTarget)
         var idunico = button.data('enviar')//pedido
         $("#hiddenEnviar").val(idunico)
         if(idunico<10){
@@ -269,13 +269,13 @@
           idunico='PED0'+idunico;
         }else{
           idunico='PED'+idunico;
-        } 
+        }
         $("#modal-enviar .textcode").html(idunico);
-        
+
       });
 
       $('#modal-recibir').on('show.bs.modal', function (event) {
-        var button = $(event.relatedTarget) 
+        var button = $(event.relatedTarget)
         var idunico = button.data('recibir')//pedido
         $("#hiddenRecibir").val(idunico)
         if(idunico<10){
@@ -286,7 +286,7 @@
           idunico='PED0'+idunico;
         }else{
           idunico='PED'+idunico;
-        } 
+        }
         $("#modal-recibir .textcode").html(idunico);
 
 
@@ -313,12 +313,12 @@
 
             }
             /*
-            //resetearcamposdelete();     
-             */     
+            //resetearcamposdelete();
+             */
         });
 
       });
-      
+
 
       $('#tablaPrincipal').DataTable({
         processing: true,
@@ -337,12 +337,12 @@
             console.log(data.destino2)
               if(data.destino2=='PROVINCIA'){
                 $('td', row).css('color','red')
-                
+
               }else if(data.destino2=='LIMA'){
                 if(data.distribucion!=null)
                 {
                   if(data.distribucion=='NORTE')
-                  
+
                   {
                     //$('td', row).css('color','blue')
                     $('td:eq(9)', row).css('background', '#A5F1E9');
@@ -355,19 +355,19 @@
                     //$('td', row).css('color','green')
                     $('td:eq(9)', row).css('background', '#B6E2A1');
                   }
-                  
+
                 }else{
-                  
+
                 }
 
-                
+
 
               }
 
         },
         columns: [
           {
-              data: 'id', 
+              data: 'id',
               name: 'id',"visible":false,
               render: function ( data, type, row, meta ) {
                 if(row.id<10){
@@ -378,19 +378,19 @@
                   return 'ENV0'+row.id;
                 }else{
                   return 'ENV'+row.id;
-                } 
+                }
               }
           },
-          {data: 'identificador', name: 'identificador',sWidth:'5%' },          
+          {data: 'identificador', name: 'identificador',sWidth:'5%' },
           {
-            data: 'celular', 
+            data: 'celular',
             name: 'celular',
             render: function ( data, type, row, meta ) {
               return row.celular+' - '+row.nombre
             },
           },
           {
-            data: 'nombre', 
+            data: 'nombre',
             name: 'nombre',
             "visible":false,
             render: function ( data, type, row, meta ) {
@@ -400,9 +400,9 @@
           {data: 'fecha', name: 'fecha',sWidth:'5%' },
         {data: 'cantidad', name: 'cantidad',sWidth:'5%' },
           {
-            data: 'codigos', 
-            name: 'codigos', 
-            render: function ( data, type, row, meta ) {    
+            data: 'codigos',
+            name: 'codigos',
+            render: function ( data, type, row, meta ) {
               if(data==null){
                 return 'SIN PEDIDOS';
               }else{
@@ -412,13 +412,13 @@
                     returndata+=item+'<br>';
                 });
                 return returndata;
-              }  
+              }
             }
           },
           {
-            data: 'producto', 
+            data: 'producto',
             name: 'producto',
-            render: function ( data, type, row, meta ) {    
+            render: function ( data, type, row, meta ) {
               if(data==null){
                 return 'SIN RUCS';
               }else{
@@ -428,15 +428,15 @@
                 $.each(jsonArray, function(i, item) {
                     numm++;
                     returndata+=numm+": "+item+'<br>';
-                    
+
                 });
                 return returndata;
-              }  
+              }
             }
            },
           {data: 'direccion', name: 'direccion', },
           {
-            data: 'referencia', 
+            data: 'referencia',
             name: 'referencia',
             sWidth:'10%',
             render: function ( data, type, row, meta ) {
@@ -444,7 +444,7 @@
               if(row.destino=='LIMA')
               {
                 return data;
-              
+
               }else if(row.destino=='PROVINCIA'){
                 urladjunto = '{{ route("pedidos.descargargastos", ":id") }}';
                 urladjunto = urladjunto.replace(':id', data);
@@ -454,12 +454,12 @@
             }
           },
           {
-            data: 'observacion', 
+            data: 'observacion',
             name: 'observacion',
             sWidth:'10%',
           },
           {
-            data: 'distrito', 
+            data: 'distrito',
             name: 'distrito',"visible":true,
             render: function ( data, type, row, meta ) {
               if(data!=null)
@@ -471,7 +471,7 @@
             }
           },
           {
-            data: 'destino2', 
+            data: 'destino2',
             name: 'destino2',"visible":false,
             render: function ( data, type, row, meta ) {
               if(data!=null)
@@ -483,13 +483,13 @@
             }
           },
           {
-            data: 'action', 
-            name: 'action', 
-            orderable: false, 
+            data: 'action',
+            name: 'action',
+            orderable: false,
             searchable: false,
             "visible":true,
             //sWidth:'20%',
-            render: function ( data, type, row, meta ) {  
+            render: function ( data, type, row, meta ) {
               datass="";
 
               //si es lima
@@ -500,21 +500,21 @@
                 datass=datass+'<a href="#" data-target="#modal-distribuir" data-toggle="modal" data-distribuir="'+row.id+'">'+
                     '<button class="btn btn-warning btn-sm"><i class="fas fa-envelope"></i> Distribuir</button></a><br>';
 
-                datass = datass+ '<a href="" data-target="#modal-revertir" data-toggle="modal" data-recibir="'+row.id+'"><button class="btn btn-info btn-sm"><i class="fas fa-trash"></i> REVERTIR</button></a>'; 
-                datass = datass+ '<a href="" data-target="#modal-desvincular" data-toggle="modal" data-desvincular="'+row.id+'"><button class="btn btn-danger btn-sm"><i class="fas fa-trash"></i> DESVINCULAR</button></a>'; 
+                datass = datass+ '<a href="" data-target="#modal-revertir" data-toggle="modal" data-recibir="'+row.id+'"><button class="btn btn-info btn-sm"><i class="fas fa-trash"></i> REVERTIR</button></a>';
+                datass = datass+ '<a href="" data-target="#modal-desvincular" data-toggle="modal" data-desvincular="'+row.id+'"><button class="btn btn-danger btn-sm"><i class="fas fa-trash"></i> DESVINCULAR</button></a>';
 
               }
 
-              
-              
-              
-              return datass;                               
+
+
+
+              return datass;
             }
           },
         ],
         language: {
           "decimal": "",
-          "emptyTable": "No hay informaciÃ³n",
+          "emptyTable": "No hay información",
           "info": "Mostrando del _START_ al _END_ de _TOTAL_ Entradas",
           "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
           "infoFiltered": "(Filtrado de _MAX_ total entradas)",
@@ -543,7 +543,7 @@ $(document).on("click","#desvincularConfirmar",function(event){
         var pedidos=[];
         $.each(rows_selected, function(index, rowId){
               console.log("ID PEDIDO  es "+  rowId);
-              pedidos.push(rowId);             
+              pedidos.push(rowId);
           });
 
 
@@ -569,7 +569,7 @@ $(document).on("click","#desvincularConfirmar",function(event){
         fd2.append('observaciongrupo', observaciongrupo);
         /*fd2.append('observaciongrupo', $('#observaciongrupo').val() );*/
         fd2.append('pedidos', $pedidos);
-        
+
 
         $.ajax({
           data: fd2,
@@ -589,7 +589,7 @@ $(document).on("click","#desvincularConfirmar",function(event){
 
 $('#modal-desvincular').on('show.bs.modal', function (event) {
 
-var button = $(event.relatedTarget) 
+var button = $(event.relatedTarget)
 var direcciongrupo = button.data('desvincular');
 $("#direcciongrupo").val(direcciongrupo);
 //$("#observaciongrupo").val(observaciongrupo);
@@ -602,31 +602,31 @@ tabla_pedidos=$('#tablaPrincipalpedidosagregar').DataTable({
   "bFilter": false,
   "bInfo": false,
   'ajax': {
-    url:"{{ route('cargar.pedidosgrupotabla') }}",					
-    'data': { "direcciongrupo": direcciongrupo}, 
+    url:"{{ route('cargar.pedidosgrupotabla') }}",
+    'data': { "direcciongrupo": direcciongrupo},
     "type": "get",
   },
   'columnDefs': [ {
-    'targets': [0], 
-    'orderable': false, 
+    'targets': [0],
+    'orderable': false,
   }],
   columns:[
     {
         "data": "pedido_id",
         'targets': [0],
-        'checkboxes': {                        
+        'checkboxes': {
             'selectRow': true
         },
         defaultContent: '',
-        orderable: false, 
+        orderable: false,
     },
     {data: 'codigo_pedido', name: 'codigo_pedido',},
     {
         "data": 'empresa',
         "name": 'empresa',
-        "render": function ( data, type, row, meta ) {      
-          return data;                
-            
+        "render": function ( data, type, row, meta ) {
+          return data;
+
         }
     },
   ],
@@ -662,10 +662,10 @@ tabla_pedidos=$('#tablaPrincipalpedidosagregar').DataTable({
       if (object.value.length > object.maxLength)
         object.value = object.value.slice(0, object.maxLength)
     }
-    
+
     //VALIDAR ANTES DE ENVIAR
     /*document.addEventListener("DOMContentLoaded", function() {
-    document.getElementById("formulario").addEventListener('submit', validarFormulario); 
+    document.getElementById("formulario").addEventListener('submit', validarFormulario);
     });*/
 
     function validarFormulario(evento) {
@@ -693,16 +693,16 @@ tabla_pedidos=$('#tablaPrincipalpedidosagregar').DataTable({
         }
         else {
         this.submit();
-        } 
+        }
       }
       else {
         this.submit();
-      }      
+      }
     }
   </script>
-  
+
   <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
-  
+
   <script>
     /* Custom filtering function which will search data in column four between two values */
         $(document).ready(function () {
@@ -713,27 +713,27 @@ tabla_pedidos=$('#tablaPrincipalpedidosagregar').DataTable({
             console.log($(this).val())
             if($(this).val()=='')
             {
-              
+
 
             }else{
               $("#min").val("");
               //busca en general
-              $('#tablaPrincipal').DataTable().ajax.reload(); 
-              
+              $('#tablaPrincipal').DataTable().ajax.reload();
+
             }
 
             $('#tablaPrincipal').DataTable().ajax.reload();
           });
-          
-          $("#min").datepicker({ 
-            onSelect: function () { 
-              $('#tablaPrincipal').DataTable().ajax.reload(); 
+
+          $("#min").datepicker({
+            onSelect: function () {
+              $('#tablaPrincipal').DataTable().ajax.reload();
               console.log("minimo "+$(this).val());
-              //localStorage.setItem('dateMin', $(this).datepicker('getDate') ); 
-              //localStorage.setItem('dateMin', $(this).val() ); 
+              //localStorage.setItem('dateMin', $(this).datepicker('getDate') );
+              //localStorage.setItem('dateMin', $(this).val() );
             }, changeMonth: true, changeYear: true , dateFormat:"dd/mm/yy"
           });
-        
+
 
             /*$("#destino", this).on( 'keyup change', function () {
               if ( table.column(i).search() !== this.value ) {
@@ -746,13 +746,13 @@ tabla_pedidos=$('#tablaPrincipalpedidosagregar').DataTable({
 
         });
 
-    
+
 
   </script>
   <script>
     /*if (localStorage.getItem('dateMin') )
     {
-      $( "#min" ).val(localStorage.getItem('dateMin')).trigger("change");        
+      $( "#min" ).val(localStorage.getItem('dateMin')).trigger("change");
     }else{
       localStorage.setItem('dateMin', "{{$dateMin}}" );
     }*/

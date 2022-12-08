@@ -65,19 +65,19 @@
                     <td>PED000{{ $pagoPedido->pedidos }}</td>
                     <td>{{ $pagoPedido->codigo }}</td>
 
-                    @if($pagos->condicion=='ABONADO')
+                    @if($pagos->condicion==\App\Models\Pago::ABONADO)
                         @if($pagoPedido->pagado == 1)
                         <td>ADELANTO ABONADO</td>
                         @else
                         <td>PAGADO ABONADO</td>
                         @endif
-                    @elseif($pagos->condicion=='OBSERVADO')
+                    @elseif($pagos->condicion==\App\Models\Pago::OBSERVADO)
                         @if($pagoPedido->pagado == 1)
                         <td>ADELANTO OBSERVADO</td>
                         @else
                         <td>PAGADO OBSERVADO</td>
                         @endif
-                    @elseif($pagos->condicion=='PAGO')
+                    @elseif($pagos->condicion==\App\Models\Pago::PAGO)
                         @if($pagoPedido->pagado == 1)
                         <td>ADELANTO PAGO</td>
                         @else

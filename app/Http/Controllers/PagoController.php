@@ -2440,12 +2440,12 @@ class PagoController extends Controller
         //$request->pago_id
         $hiddenID = $request->pago_id;
         $pago_id = $request->pago_id;
-        $condiciones = [
+        $condiciones = array_flip([
             "PAGO" => Pago::PAGO,
             "OBSERVADO" => Pago::OBSERVADO,
             "ABONADO" => Pago::ABONADO,
             "ABONADO_PARCIAL" => Pago::ABONADO_PARCIAL
-        ];
+        ]);
 
         $cuentas = [
             "BCP" => 'BCP',

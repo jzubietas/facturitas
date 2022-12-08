@@ -9,7 +9,7 @@
 
   {{-- @error('num_ruc')
     <small class="text-danger" style="font-size: 16px">{{ $message }}</small>
-  @enderror --}}  
+  @enderror --}}
 @stop
 
 @section('content')
@@ -24,9 +24,9 @@
           <a class="btn btn-danger" href="{{ url()->previous() }}"><i class="fas fa-times-circle"></i> ATRAS</a>
         @else
           <a href="{{ url()->previous() }}" class="btn btn-danger"><i class="fas fa-times-circle"></i> ATRAS</a>
-        @endif  
-        
-        
+        @endif
+
+
       </div>
     {!! Form::close() !!}
   @include('pedidos.modal.AddRuc')
@@ -36,7 +36,7 @@
   @include('pedidos.modal.historial2')
   @include('pedidos.modal.activartiempo')
 
-  
+
 @stop
 
 
@@ -44,7 +44,7 @@
 
 @section('css')
   {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" /> --}}
-  
+
 <style>
   select option:disabled {
     color: #000;
@@ -71,7 +71,7 @@
     var tabladeudores=null;
     var tablahistorial=null;
   </script>
-  
+
   @if (session('info') == 'registrado')
     <script>
       Swal.fire(
@@ -82,15 +82,15 @@
     </script>
   @endif
 
-  
+
 
   <script>
-    /*$('#cliente_id').select2({    
+    /*$('#cliente_id').select2({
       language: {
 
         noResults: function() {
 
-          return "No se encontró al cliente” ";        
+          return "No se encontró al cliente” ";
         },
         searching: function() {
 
@@ -101,11 +101,11 @@
   </script>
 
   <script>
-    
+
     ///fin
 
     //VALIDAR CAMPOS NUMERICO DE MONTO EN PAGOS
-    
+
     $('input.number').keyup(function(event) {
 
       if(event.which >= 37 && event.which <= 40){
@@ -115,7 +115,7 @@
       $(this).val(function(index, value) {
         return value
           .replace(/\D/g, "")
-          .replace(/([0-9])([0-9]{2})$/, '$1.$2')  
+          .replace(/([0-9])([0-9]{2})$/, '$1.$2')
           .replace(/\B(?=(\d{3})+(?!\d)\.?)/g, ",")
         ;
       });
@@ -129,16 +129,16 @@
     }
 
     // CARGAR RUCS DE CLIENTE SELECCIONADO
-    
+
 
     // CARGAR CLIENTES DE ASESOR
-   
-    
+
+
     // CARGAR TIPO DE COMPROBANTE Y BANCA/PORCENTAJES DE CLIENTE SELECCIONADO
-    
+
 
     //VALIDACION DE CAMPOS
-    
+
 
     var cont = 0;
     total = 0;
@@ -187,22 +187,22 @@
         var fila = '<tr class="selected" id="fila' + cont + '"><td><button type="button" class="btn btn-warning" onclick="eliminar(' + cont + ');">X</button></td>' +
           //'<td><input type="hidden" name="codigo[]" value="' + codigo + '">' + codigo + '</td>' +
           '<td><input type="hidden" name="nombre_empresa[]" value="' + nombre_empresa + '">' + nombre_empresa + '</td>' +
-          '<td><input type="hidden" name="mes[]" value="' + mes + '">' + mes + '</td>' + 
+          '<td><input type="hidden" name="mes[]" value="' + mes + '">' + mes + '</td>' +
           '<td><input type="hidden" name="anio[]" value="' + anio + '">' + anio + '</td>' +
-          '<td><input type="hidden" name="ruc[]" value="' + ruc + '">' + ruc + '</td>' + 
-          '<td><input type="hidden" name="cantidad[]" value="' + cantidad + '">' + cantidad.toLocaleString("en-US") + '</td>' + 
-          '<td><input type="hidden" name="tipo_banca[]" value="' + tipo_banca + '">' + tipo_banca + '</td>' + 
-          '<td><input type="hidden" name="porcentaje[]" value="' + porcentaje + '">' + porcentaje + '</td>' + 
+          '<td><input type="hidden" name="ruc[]" value="' + ruc + '">' + ruc + '</td>' +
+          '<td><input type="hidden" name="cantidad[]" value="' + cantidad + '">' + cantidad.toLocaleString("en-US") + '</td>' +
+          '<td><input type="hidden" name="tipo_banca[]" value="' + tipo_banca + '">' + tipo_banca + '</td>' +
+          '<td><input type="hidden" name="porcentaje[]" value="' + porcentaje + '">' + porcentaje + '</td>' +
           '<td><input type="hidden" name="courier[]" value="' + courier + '">' + courier + '</td>' +
-          '<td><input type="hidden" name="descripcion[]" value="' + descripcion + '">' + descripcion + '</td>' + 
-          '<td><input type="hidden" name="nota[]" value="' + nota + '">' + nota + '</td>' + 
-          '<td>@csrf<input type="file" id="adjunto" name="adjunto[]" multiple=""/></td>' + 
+          '<td><input type="hidden" name="descripcion[]" value="' + descripcion + '">' + descripcion + '</td>' +
+          '<td><input type="hidden" name="nota[]" value="' + nota + '">' + nota + '</td>' +
+          '<td>@csrf<input type="file" id="adjunto" name="adjunto[]" multiple=""/></td>' +
           '<td>' + subtotal[cont].toLocaleString("en-US") + '</td></tr>';
-        cont++; //accept= ".zip, .rar" 
+        cont++; //accept= ".zip, .rar"
         limpiar();
         $("#total").html("S/. " + total.toLocaleString("en-US"));
         evaluar();
-        $('#detalles').append(fila);        
+        $('#detalles').append(fila);
       } else {
         alert("error al ingresar el detalle del pedido, revise los datos");
       }
@@ -249,12 +249,12 @@
   <script>
     //VALIDAR ANTES DE ENVIAR
     /*document.addEventListener("DOMContentLoaded", function() {
-    document.getElementById("formulario").addEventListener('submit', validarFormulario); 
+    document.getElementById("formulario").addEventListener('submit', validarFormulario);
     });*/
 
     /*function validarFormulario(evento) {
       evento.preventDefault();
-        
+
         window.open('https://sistema.ojoceleste.com/pedidos.mispedidos', '_blank');//CAMBIAR A LINK DE PRODUCCION//************
         this.submit();
     }*/
@@ -262,12 +262,12 @@
 
   <script>
     //VALIDAR ANTES DE ENVIAR 2
-    /*document.addEventListener("DOMContentLoaded", function() {    
+    /*document.addEventListener("DOMContentLoaded", function() {
     var form = document.getElementById("formulario2")
       if(form)
       {
-        form.addEventListener('submit', validarFormulario2); 
-      }    
+        form.addEventListener('submit', validarFormulario2);
+      }
     });*/
 
     /*function validarFormulario2(evento) {
@@ -302,12 +302,12 @@
           $(document).on("submit","#formulario",function(event){
         event.preventDefault();
         //console.log("abrir")
-       
+
        var fd = new FormData();
 
        $('input[name="nombre_empresa[]"]').each(function(){
          fd.append("nombre_empresa[]", this.value);
-       });        
+       });
        $('input[name="mes[]"]').each(function(){
          fd.append("mes[]", this.value);
        });
@@ -334,7 +334,7 @@
        });
        $('input[name="nota[]"]').each(function(){
          fd.append("nota[]", this.value);
-       });       
+       });
        let files=$('input[name="adjunto[]');
        /*if(files.length == 0)
        {
@@ -345,10 +345,10 @@
            )
            return false;
        }*//*else{
-         
+
          var totalfilescarga = $('input[name="adjunto[]"]').get(0).files.length;
          console.log("totalfilescarga "+totalfilescarga);
-         
+
 
          if(files.length!=totalfilescarga)
          {
@@ -366,7 +366,7 @@
                 fd.append('adjunto', $('input[type=file][name="adjunto[]"]')[0].files[0]);
               }
          }
-          
+
 
            /*for (let i = 0; i < files.length; i++) {
              fd.append('adjunto['+i+']', files[i]);
@@ -411,12 +411,12 @@
 
 
               }else{
-                 var urlpdf = '{{ route("pedidosPDF", ":id") }}';           
+                 var urlpdf = '{{ route("pedidosPDF", ":id") }}';
                  urlpdf = urlpdf.replace(':id', data.html);
                  window.open(urlpdf, '_blank');
 
                  $("#modal-copiar .textcode").text(data.html);
-                 
+
                  $("#modal-copiar").modal("show");
                }
            }
@@ -438,13 +438,13 @@
                   $('#cliente_id_ruc').html(data.html);
                   let c_cliente_id=$('#cliente_id').val();
                   //console.log(c_cliente_id);
-                  
+
                   $('#cliente_id_ruc').selectpicker('refresh');
                   $('#cliente_id_ruc').val(c_cliente_id);
 
                 }
               });
-            
+
           });
 
           /*console.log(" {{ Auth::user()->id }} ")
@@ -508,7 +508,7 @@
                       'Número de RUC debe teber máximo 11 dígitos',
                       'warning'
                     )
-                  }    
+                  }
                   else if ($('#pcantidad').val() == '') {
                     Swal.fire(
                       'Error',
@@ -603,7 +603,7 @@
             });
 
             $(document).on("change","#cliente_id",function(){
-              
+
                 $.ajax({
                   url: "{{ route('cargar.ruc') }}?cliente_id=" + $(this).val(),
                   method: 'GET',
@@ -627,7 +627,7 @@
       //$("#user_id").selectpicker("refresh");
 
 
-      
+
 
       $(document).on("change","#pruc",function(){
         //al cambiar el ruc que hacer
@@ -669,7 +669,7 @@
               $("#user_id_tiempo").selectpicker("refresh").trigger("change");
             }
           });
-          
+
           /*$.ajax({
             url: "{{ route('cargar.clientedeudaparaactivar') }}?user_id=" + userid,
             method: 'GET',
@@ -680,13 +680,13 @@
             }
           });*/
       });
-      
+
       $('#modal-add-ruc').on('show.bs.modal', function (event) {
 
         $("#agregarruc").val("");
         $("#pempresaruc").val("");
         $("#porcentajeruc").val("");
-        
+
 
         //limpiar datos
 
@@ -717,39 +717,39 @@
               data: function (d) {
                 //d.buscarpedidocliente = c_cliente_id;
                 //d.buscarpedidoruc = c_ruc;
-              
+
               },
             },
             "createdRow": function( row, data, dataIndex){
             },
             "autoWidth": false,
-            rowCallback: function (row, data, index) {                 
+            rowCallback: function (row, data, index) {
             },
-            columns: 
+            columns:
             [
               {
-                data: 'DT_RowIndex', 
+                data: 'DT_RowIndex',
                 name: 'DT_RowIndex',
-                sWidth:'10%', 
-              },        
+                sWidth:'10%',
+              },
               {
-                data: 'celular', 
+                data: 'celular',
                 name: 'celular',sWidth:'70%',
                 render: function ( data, type, row, meta ) {
                     return row.celular+" - "+row.nombre;
                   }
                },
               {
-                data: 'estado', 
+                data: 'estado',
                 name: 'estado',sWidth:'20%',
                 render: function ( data, type, row, meta ) {
                   return '<span class="badge badge-danger">Deudor</span>';
-                } 
+                }
               },
             ],
             language: {
               "decimal": "",
-              "emptyTable": "No hay informaciÃ³n",
+              "emptyTable": "No hay información",
               "info": "Mostrando del _START_ al _END_ de _TOTAL_ Entradas",
               "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
               "infoFiltered": "(Filtrado de _MAX_ total entradas)",
@@ -830,10 +830,10 @@
           });
       });
 
-      $('#modal-historial-2').on('show.bs.modal', function (event) {        
+      $('#modal-historial-2').on('show.bs.modal', function (event) {
         let c_cliente_id=$('#cliente_id').val();//
         let c_ruc=$('#pruc').val();
-        
+
         $('#tablaPrincipalHistorial').DataTable().clear().destroy();
         $('#tablaPrincipalHistorial').DataTable({
             processing: true,
@@ -845,19 +845,19 @@
               data: function (d) {
                 d.buscarpedidocliente = c_cliente_id;
                 d.buscarpedidoruc = c_ruc;
-              
+
               },
             },
             "createdRow": function( row, data, dataIndex){
             },
             "autoWidth": false,
-            rowCallback: function (row, data, index) {                 
+            rowCallback: function (row, data, index) {
             },
-            columns: 
+            columns:
             [
-              {data: 'DT_RowIndex', name: 'DT_RowIndex',sWidth:'10%', }, 
+              {data: 'DT_RowIndex', name: 'DT_RowIndex',sWidth:'10%', },
               {
-                data: 'id', 
+                data: 'id',
                 name: 'id',
                 "visible": false,
                 render: function ( data, type, row, meta ) {
@@ -869,13 +869,13 @@
                     return 'PED0'+row.id;
                   }else{
                     return 'PED'+row.id;
-                  } 
+                  }
                 }
             },
               {data: 'descripcion', name: 'descripcion',sWidth:'70%', },
               {data: 'nota', name: 'nota', },
               {
-                data: 'adjunto', 
+                data: 'adjunto',
                 name: 'adjunto',
                 render: function ( data, type, row, meta ) {
                   var str="storage/pagos/"+data;
@@ -885,12 +885,12 @@
                   data = '<img src="'+urlimage+'" alt="'+urlimage+'" height="200px" width="200px" class="img-thumbnail">';
                   return data
                 }
-              
+
               },
             ],
             language: {
               "decimal": "",
-              "emptyTable": "No hay informaciÃ³n",
+              "emptyTable": "No hay información",
               "info": "Mostrando del _START_ al _END_ de _TOTAL_ Entradas",
               "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
               "infoFiltered": "(Filtrado de _MAX_ total entradas)",
@@ -913,7 +913,7 @@
 
       $(document).on("submit", "#formulariotiempo", function (evento) {
           event.preventDefault();
-              
+
               var formData = $("#formulariotiempo").serialize();
               $.ajax({
                   type:'POST',
@@ -925,8 +925,8 @@
                       '',
                       'success'
                   )
-                  $("#modal-activartiempo").modal("hide");  
-                  $("#user_id").trigger("change");     
+                  $("#modal-activartiempo").modal("hide");
+                  $("#user_id").trigger("change");
               });
       });
 
@@ -975,7 +975,7 @@
                         'success'
                     );
                     $("#cliente_id").trigger("change");
-                    $("#modal-add-ruc").modal("hide"); 
+                    $("#modal-add-ruc").modal("hide");
                   }else if(data.html=='false'){
                     Swal.fire(
                         'Se actualizo razon social',
@@ -983,7 +983,7 @@
                         'success'
                     );
                     $("#cliente_id").trigger("change");
-                    $("#modal-add-ruc").modal("hide"); 
+                    $("#modal-add-ruc").modal("hide");
                     //no paso
                   }
 
@@ -1005,14 +1005,14 @@
                     'warning'
                 );
               }
-              
+
             }
 
           });
 
 
       });
-      
+
 
       $("form").keypress(function(e) {
         if (e.which == 13) {
@@ -1021,9 +1021,9 @@
       });
 
         });
-        
+
       </script>
-      
+
 @if (Auth::user()->rol == 'Asesor' || Auth::user()->rol =='Encargado')
 <script>
   $(document).ready(function() {
@@ -1035,7 +1035,7 @@
 
 
 
-      
+
   });
 </script>
 @endif
@@ -1049,11 +1049,11 @@
     }).done(function (data) {
       //console.log(data);
       $("#user_id").html('');
-      $("#user_id").html(data.html);      
+      $("#user_id").html(data.html);
 
       $("#user_id").selectpicker("refresh").trigger("change");
 
-      
+
     });
 
 $(document).on("click","#prev",function(e){
@@ -1076,7 +1076,7 @@ e.preventDefault()
 
   });
   </script>
-  
+
 
 
 @stop

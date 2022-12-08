@@ -37,7 +37,7 @@
         </thead>
         <tbody>
         </tbody>
-      </table>     
+      </table>
       @include('usuarios.modal.asignarencargado')
       @include('usuarios.modal.asignaroperario')
       @include('usuarios.modal.asignarllamada')
@@ -98,9 +98,9 @@
 
   <script>
     $(document).ready(function(){
-        $('#modal-asignarencargado').on('show.bs.modal', function (event) {     
-            var button = $(event.relatedTarget) 
-            var idunico = button.data('encargado')      
+        $('#modal-asignarencargado').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget)
+            var idunico = button.data('encargado')
             $("#hiddenIdencargado").val(idunico);
             if(idunico<10){
                 idunico='USER000'+idunico;
@@ -114,9 +114,9 @@
             $(".textcode").html(idunico);
         });
 
-        $('#modal-asignaroperario').on('show.bs.modal', function (event) {     
-                var button = $(event.relatedTarget) 
-                var idunico = button.data('operario')      
+        $('#modal-asignaroperario').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget)
+                var idunico = button.data('operario')
                 $("#hiddenIdoperario").val(idunico);
                 if(idunico<10){
                     idunico='USER000'+idunico;
@@ -127,12 +127,12 @@
                 }else{
                     idunico='USER'+idunico;
                 }
-                $(".textcode").html(idunico);              
+                $(".textcode").html(idunico);
         });
 
-        $('#modal-asignarasesor').on('show.bs.modal', function (event) {     
-                var button = $(event.relatedTarget) 
-                var idunico = button.data('asesor')      
+        $('#modal-asignarasesor').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget)
+                var idunico = button.data('asesor')
                 $("#hiddenIdasesor").val(idunico);
                 if(idunico<10){
                     idunico='USER000'+idunico;
@@ -144,12 +144,12 @@
                     idunico='USER'+idunico;
                 }
                 $(".textcode").html(idunico);
-              
+
         });
 
-        $('#modal-asignarllamadas').on('show.bs.modal', function (event) {     
-                var button = $(event.relatedTarget) 
-                var idunico = button.data('llamadas')      
+        $('#modal-asignarllamadas').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget)
+                var idunico = button.data('llamadas')
                 $("#hiddenIdllamadas").val(idunico);
                 if(idunico<10){
                     idunico='USER000'+idunico;
@@ -161,7 +161,7 @@
                     idunico='USER'+idunico;
                 }
                 $(".textcode").html(idunico);
-              
+
         });
 
         $(document).on("submit", "#formencargado", function (evento) {
@@ -177,8 +177,8 @@
                     '',
                     'success'
                 )
-                $("#modal-asignareencargado").modal("hide"); 
-                $('#tablaPrincipal').DataTable().ajax.reload();     
+                $("#modal-asignareencargado").modal("hide");
+                $('#tablaPrincipal').DataTable().ajax.reload();
             });
         });
         $(document).on("submit", "#formoperario", function (evento) {
@@ -195,7 +195,7 @@
                         'success'
                     )
                     $("#modal-asignaroperario").modal("hide");
-                    $('#tablaPrincipal').DataTable().ajax.reload();          
+                    $('#tablaPrincipal').DataTable().ajax.reload();
             });
         });
         $(document).on("submit", "#formasesor", function (evento) {
@@ -211,8 +211,8 @@
                         '',
                         'success'
                     )
-                    $("#modal-asignarasesor").modal("hide"); 
-                    $('#tablaPrincipal').DataTable().ajax.reload();         
+                    $("#modal-asignarasesor").modal("hide");
+                    $('#tablaPrincipal').DataTable().ajax.reload();
             });
         });
         $(document).on("submit", "#formllamadas", function (evento) {
@@ -228,15 +228,15 @@
                         '',
                         'success'
                     )
-                    $("#modal-asignarllamadas").modal("hide"); 
-                    $('#tablaPrincipal').DataTable().ajax.reload();         
+                    $("#modal-asignarllamadas").modal("hide");
+                    $('#tablaPrincipal').DataTable().ajax.reload();
             });
         });
 
       });
 
       $(document).ready(function () {
-    
+
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -249,9 +249,9 @@
           searching: true,
           "order": [[ 0, "desc" ]],
           ajax: "{{ route('users.asesorestabla') }}",
-          "createdRow": function( row, data, dataIndex){        
+          "createdRow": function( row, data, dataIndex){
           },
-        
+
           columns: [
               {
                   data: 'id',
@@ -271,8 +271,8 @@
               {data: 'name', name: 'name', },
               {data: 'email', name: 'email', },
               {
-                  data: 'encargado', 
-                  name: 'encargado', 
+                  data: 'encargado',
+                  name: 'encargado',
                   render: function ( data, type, row, meta ) {
                       if(data==null)
                       {
@@ -283,7 +283,7 @@
                   }
               },
               {
-                  data: 'operario', 
+                  data: 'operario',
                   name: 'operario',
                   sWidth:'20%',
                   render: function ( data, type, row, meta ) {
@@ -296,7 +296,7 @@
                   }
               },
               {
-                  data: 'llamada', 
+                  data: 'llamada',
                   name: 'llamada',
                   render: function ( data, type, row, meta ) {
                       if(data==null)
@@ -320,19 +320,19 @@
                   },
               },
               {
-                  data: 'action', 
-                  name: 'action', 
-                  orderable: false, 
+                  data: 'action',
+                  name: 'action',
+                  orderable: false,
                   searchable: false,
                   sWidth:'20%',
                   render: function ( data, type, row, meta ) {
-                      return data;             
+                      return data;
                   }
               },
           ],
           language: {
               "decimal": "",
-              "emptyTable": "No hay informaciÃ³n",
+              "emptyTable": "No hay información",
               "info": "Mostrando del _START_ al _END_ de _TOTAL_ Entradas",
               "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
               "infoFiltered": "(Filtrado de _MAX_ total entradas)",
