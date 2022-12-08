@@ -10,6 +10,8 @@
         </div>
         {{--{{ Form::Open(['route' => ['pedidos.eliminarAdjunto', $img->id]]) }}--}}
         <Form id="formdeleteadjunto" name ="formdeleteadjunto">
+        <input id="eliminar_pedido_id" name="eliminar_pedido_id">
+        <input id="eliminar_pedido_adjunto" name="eliminar_pedido_id">
         <div class="modal-body">
           <p>Confirme si desea <strong>ELIMINAR</strong> archivo adjunto</p>
         </div>
@@ -18,6 +20,7 @@
           <button type="submit" class="btn btn-danger">Confirmar</button>
         </div>
         {{ Form::Close() }}
+        <Form>
       </div>
     </div>
   </div>
