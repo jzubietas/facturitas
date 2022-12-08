@@ -57,8 +57,8 @@
         </tbody>
       </table>
       @include('pedidos.modalid')
-      @include('pedidos.modal.atenderid')
-      @include('pedidos.modal.veradjuntoid')
+      @include('operaciones.modal.atenderid')
+      @include('operaciones.modal.veradjuntoid')
     </div>
   </div>
 
