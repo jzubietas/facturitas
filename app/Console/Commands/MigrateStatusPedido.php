@@ -53,9 +53,22 @@ class MigrateStatusPedido extends Command
                 "condicion" => $value
             ]);
         }
+
         \Schema::table('pagos', function (Blueprint $table) {
             $table->integer('condicion')->nullable()->change();
         });
+
+        \Schema::create('devolucions', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedInteger("pago_id");
+            $table->unsignedInteger("client_id");
+            $table->unsignedInteger("asesor_id")->comment("id usuario asesor");
+            $table->float("amount")->comment("monto a devolver");
+            $table->integer("status")->default(\App\Models\Devolucion::PENDIENTE);
+            $table->text("voucher_path")->nullable();
+            $table->timestamps();
+        });
+
         return 0;
     }
 }

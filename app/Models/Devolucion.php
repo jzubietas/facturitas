@@ -29,6 +29,12 @@ class Devolucion extends Model
         'amount'=>'double'
     ];
 
+    public function getAmountFormatAttribute($value)
+    {
+        $a = new \NumberFormatter("es-PE", \NumberFormatter::CURRENCY);
+        return $a->formatCurrency($this->getAttribute("amount"), "PEN");
+    }
+
     public function scopeNoAtendidos($query){
         $query->where('status','=',self::PENDIENTE);
     }
@@ -36,7 +42,7 @@ class Devolucion extends Model
         return $this->belongsTo(Pago::class);
     }
     public function cliente(){
-        return $this->belongsTo(Cliente::class);
+        return $this->belongsTo(Cliente::class,'client_id');
     }
     public function asesor(){
         return $this->belongsTo(User::class);

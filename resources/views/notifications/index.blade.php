@@ -16,18 +16,23 @@
                     <div class="card-body">
 
                         @if (auth()->user())
-                            {{--
                             @foreach($devoluciones as $notification)
                                 <div class="alert alert-default-warning">
-                                    Asunto: Pago por devolver a {{$notification->cliente->nombre}} <br>
+                                    Asunto: <a href="{{route('pagos.show',$notification->pago)}}" target="_blank"
+                                               class="text-info">Pago</a>
+                                    por devolver a <a href="{{route('clientes.show',$notification->cliente)}}"
+                                                      target="_blank"
+                                                      class="text-info">{{$notification->cliente->nombre}}</a>
+                                    un valor de <b>{{$notification->amount_format}}</b>
 
+                                    <a href="{{route('pagos.devolucion',$notification)}}"
+                                       class="ml-4 btn btn-dark">Gestionar</a>
+
+                                    <br>
                                 </div>
-                                @if ($loop->last)
-                                    <a href="{{ route('markAsRead') }}" id="mark-all">Marcar todas como leídas</a>
-                                @endif
                             @endforeach
-                            --}}
-                        @forelse ($postNotifications as $notification)
+
+                            @forelse ($postNotifications as $notification)
                                 <div class="alert alert-default-warning">
                                     Asunto: {{ $notification->data['asunto'] }} <br>
                                     {{ $notification->data['tipo'] }} <br>
@@ -42,9 +47,10 @@
                                 @endif
 
                             @empty
-                                Usted no notificationes sin leer
+                                @if(count($devoluciones)==0)
+                                    Usted no notificationes sin leer
+                                @endif
                             @endforelse
-
 
                         @endif
 
