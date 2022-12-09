@@ -26,27 +26,27 @@
                       </div><br><br>
                       <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                         <div class="row">
-                          
-                                                  
+
+
                           <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
                               {!! Form::label('envio_doc', 'Documento enviado') !!}
                               @csrf
                               {!! Form::file('adjunto[]', ['class' => 'form-control-file', 'id'=>'adjunto', 'multiple']) !!}
                               {{-- <td>@csrf<input type="file" id="adjunto" name="adjunto[]" multiple=""/></td> --}}
                           </div>
-                          
+
                           <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
                               {!! Form::label('cant_compro', 'Cantidad de comprobantes enviados') !!}
                               {!! Form::number('cant_compro', '', ['class' => 'form-control', 'id' => 'cant_compro', 'step'=>'1', 'min' => '0']) !!}
-                              
+
                           </div>
                           <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
                             {!! Form::label('condicion', 'Estado') !!}
-                            
-                            
-                            <select name="condicion" class="form-control" id="condicion">                              
-                              <option value="EN PROCESO ATENCION">EN PROCESO ATENCION</option>
-                              <option value="ATENDIDO" >ATENDIDO</option>
+
+
+                            <select name="condicion" class="form-control" id="condicion">
+                              <option value="2">EN PROCESO ATENCION</option>
+                              <option value="3" >ATENDIDO</option>
                             </select>
                           </div>
                         </div>

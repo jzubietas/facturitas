@@ -36,7 +36,7 @@ use DataTables;
 
 class PedidoController extends Controller
 {
-    
+
     /**
      * Display a listing of the resource.
      *
@@ -115,12 +115,12 @@ class PedidoController extends Controller
         }
     }
 
-    
+
 
     public function indextabla(Request $request)
     {
         $mirol=Auth::user()->rol;
-        
+
         $pedidos = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')
             ->join('users as u', 'pedidos.user_id', 'u.id')
             ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
@@ -138,7 +138,7 @@ class PedidoController extends Controller
                 'pedidos.condicion as condiciones',
                 'pedidos.pagado as condicion_pa',
                 DB::raw("
-                    concat( 
+                    concat(
                         (case when pedidos.pago=1 and pedidos.pagado=1 then 'ADELANTO' when pedidos.pago=1 and pedidos.pagado=2 then 'PAGO' else '' end),
                         ' ',
                         (
@@ -155,7 +155,7 @@ class PedidoController extends Controller
                 'pedidos.estado',
                 'pedidos.envio'
             )
-            //->whereIn('pedidos.condicion', ['POR ATENDER', 'EN PROCESO ATENCION', 'ATENDIDO', 'ANULADO']);
+            //->whereIn('pedidos.condicion', [1, 2, 3, 'ANULADO']);
             ->whereIn('pedidos.condicion_int', ['0', '1', '2', '3']);
             /*->groupBy(
                 'pedidos.id',
@@ -187,8 +187,8 @@ class PedidoController extends Controller
                     DB::raw("users.identificador as identificador")
                 )
                 ->pluck('users.identificador');
-                
-            $pedidos=$pedidos->WhereIn('u.identificador',$usersasesores);            
+
+            $pedidos=$pedidos->WhereIn('u.identificador',$usersasesores);
         }
         else if(Auth::user()->rol == "Jefe de llamadas"){
             /*$usersasesores = User::where('users.rol', 'Asesor')
@@ -199,8 +199,8 @@ class PedidoController extends Controller
                 )
                 ->pluck('users.identificador');
 
-            $pedidos=$pedidos->WhereIn('u.identificador',$usersasesores); */  
-            $pedidos=$pedidos->where('u.identificador','<>','B');          
+            $pedidos=$pedidos->WhereIn('u.identificador',$usersasesores); */
+            $pedidos=$pedidos->where('u.identificador','<>','B');
         }
         else if(Auth::user()->rol == "Asesor"){
             $usersasesores = User::where('users.rol', 'Asesor')
@@ -234,7 +234,7 @@ class PedidoController extends Controller
                 )
                 ->pluck('users.identificador');
 
-            $pedidos=$pedidos->WhereIn('u.identificador',$usersasesores); 
+            $pedidos=$pedidos->WhereIn('u.identificador',$usersasesores);
         }else{
             $pedidos=$pedidos;
         }
@@ -242,9 +242,9 @@ class PedidoController extends Controller
 
         return Datatables::of($pedidos)
                     ->addIndexColumn()
-                    ->addColumn('action', function($pedido){     
+                    ->addColumn('action', function($pedido){
                         $btn='';
-                        
+
                         return $btn;
                     })
                     ->rawColumns(['action'])
@@ -256,7 +256,7 @@ class PedidoController extends Controller
     {
         $mirol=Auth::user()->rol;
         $pedidos=null;
-        
+
         $pedidos = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')
             ->join('users as u', 'pedidos.user_id', 'u.id')
             ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
@@ -283,7 +283,7 @@ class PedidoController extends Controller
                 'pedidos.pagado',
                 'pedidos.envio'
             )
-            ->whereIn('pedidos.condicion', ['POR ATENDER', 'EN PROCESO ATENCION', 'ATENDIDO', 'ANULADO'])
+            ->whereIn('pedidos.condicion', [1, 2, 3, 'ANULADO'])
             ->whereIn('pedidos.pagado', ['1'])
             ->whereIn('pedidos.pago',['1'])
             ->whereNotIn("pedidos.envio",['3'])
@@ -315,7 +315,7 @@ class PedidoController extends Controller
                 'pedidos.pagado',
                 'pedidos.envio'
             )
-            ->whereIn('pedidos.condicion', ['POR ATENDER', 'EN PROCESO ATENCION', 'ATENDIDO', 'ANULADO'])
+            ->whereIn('pedidos.condicion', [1, 2, 3, 'ANULADO'])
             ->whereIn('pedidos.pagado', ['1'])
             ->whereIn('pedidos.pago',['1'])
             ->whereNotIn("pedidos.envio",['3'])
@@ -324,7 +324,7 @@ class PedidoController extends Controller
         $pedidos = $pedidos->union($pedidos2);
             //->WhereBetween("dp.saldo", ['11', '13'])
             //->orWhereBetween("dp.saldo", ['17', '19']);
-           
+
 
         if(Auth::user()->rol == "Llamadas"){
             $usersasesores = User::where('users.rol', 'Asesor')
@@ -334,8 +334,8 @@ class PedidoController extends Controller
                     DB::raw("users.identificador as identificador")
                 )
                 ->pluck('users.identificador');
-                
-            $pedidos=$pedidos->WhereIn('u.identificador',$usersasesores);            
+
+            $pedidos=$pedidos->WhereIn('u.identificador',$usersasesores);
         }
         else if(Auth::user()->rol == "Jefe de llamadas"){
             $usersasesores = User::where('users.rol', 'Asesor')
@@ -346,7 +346,7 @@ class PedidoController extends Controller
                 )
                 ->pluck('users.identificador');
 
-            $pedidos=$pedidos->WhereIn('u.identificador',$usersasesores);              
+            $pedidos=$pedidos->WhereIn('u.identificador',$usersasesores);
         }
         else if(Auth::user()->rol == "Asesor"){
             $usersasesores = User::where('users.rol', 'Asesor')
@@ -380,7 +380,7 @@ class PedidoController extends Controller
                 )
                 ->pluck('users.identificador');
 
-            $pedidos=$pedidos->WhereIn('u.identificador',$usersasesores); 
+            $pedidos=$pedidos->WhereIn('u.identificador',$usersasesores);
         }else{
             $pedidos=$pedidos;
         }
@@ -388,9 +388,9 @@ class PedidoController extends Controller
 
         return Datatables::of($pedidos)
                     ->addIndexColumn()
-                    ->addColumn('action', function($pedido){     
+                    ->addColumn('action', function($pedido){
                         $btn='';
-                        
+
                         return $btn;
                     })
                     ->rawColumns(['action'])
@@ -413,22 +413,22 @@ class PedidoController extends Controller
         return Datatables::of($deudores)
             ->addIndexColumn()
             ->make(true);
-        
-        //return response()->json($deudores);                                
+
+        //return response()->json($deudores);
     }
 
-    public function clientesenpedidos(Request $request){       
+    public function clientesenpedidos(Request $request){
         $clientes1 = Cliente::
                 join('users as u', 'clientes.user_id', 'u.id')
                 ->leftjoin('pedidos as p', 'clientes.id', 'p.cliente_id')
                 ->where('clientes.estado','1')
-                ->where('clientes.tipo','1')              
+                ->where('clientes.tipo','1')
                 ->where('clientes.user_id', Auth::user()->id)
                 ->groupBy(
                     'clientes.id',
                     'clientes.nombre',
-                    'clientes.celular', 
-                    'clientes.estado', 
+                    'clientes.celular',
+                    'clientes.estado',
                     'u.name',
                     'u.identificador',
                     'clientes.provincia',
@@ -437,10 +437,10 @@ class PedidoController extends Controller
                     'clientes.pidio',
                     'clientes.deuda'
                 )
-                ->get(['clientes.id', 
-                        'clientes.nombre', 
-                        'clientes.celular', 
-                        'clientes.estado', 
+                ->get(['clientes.id',
+                        'clientes.nombre',
+                        'clientes.celular',
+                        'clientes.estado',
                         'u.name as user',
                         'u.identificador',
                         'clientes.provincia',
@@ -466,12 +466,12 @@ class PedidoController extends Controller
                         ->groupBy(
                             'clientes.id',
                             'clientes.nombre',
-                            'clientes.celular', 
+                            'clientes.celular',
                             'clientes.estado'
                         )
-                        ->get(['clientes.id', 
-                                'clientes.nombre', 
-                                'clientes.celular', 
+                        ->get(['clientes.id',
+                                'clientes.nombre',
+                                'clientes.celular',
                                 'clientes.estado'
                                 ]);
 
@@ -484,10 +484,10 @@ class PedidoController extends Controller
         $html = '<option value="">' . trans('---- SELECCIONE ASESOR ----') . '</option>';
 
         if($mirol=='Llamadas')
-        {   
+        {
             $asesores = Users::where('users.rol', "Asesor")
                                 -> where('users.estado', '1')
-                -> where('users.llamada', Auth::user()->id)  
+                -> where('users.llamada', Auth::user()->id)
                 ->get();
         }else if($mirol=='Jefe de llamadas'){
             $asesores = User:: where('users.rol', 'Asesor')
@@ -504,16 +504,16 @@ class PedidoController extends Controller
                     -> where('users.estado', '1')
                     ->get();
         }
-    
+
         foreach ($asesores as $asesor) {
             $html .= '<option style="color:#000" value="' . $asesor->id . '">' . $asesor->identificador. '</option>';
         }
-        
+
         return response()->json(['html' => $html]);
     }
 
     public function create()
-    {   
+    {
         $dateM = Carbon::now()->format('m');
         $dateY = Carbon::now()->format('Y');
 
@@ -579,7 +579,7 @@ class PedidoController extends Controller
         $numped = $numped + 1;
 
         $mirol=Auth::user()->rol;
-        
+
         return view('pedidos.create', compact('users', 'dateM', 'dateY', 'meses', 'anios',  'fecha', 'numped','mirol'));
     }
 
@@ -616,7 +616,7 @@ class PedidoController extends Controller
                     $html="0|A|".$asesordelruc->name;
                     return response()->json(['html' => $html]);
                 }
-                //$html="1";                
+                //$html="1";
             }else{
                 //$asesordelruc= User::where("users.id",$ruc->user_id)->first();
                 $cliente=Cliente::where("clientes.id",$ruc->cliente_id)->first();
@@ -629,17 +629,17 @@ class PedidoController extends Controller
             $html="1";
             return response()->json(['html' => $html]);
         }
-        
+
     }
 
     public function pedidoobteneradjuntoRequest(Request $request)
     {
         $buscar_pedido=$request->pedido;
-        
+
         $cont_imagen=ImagenPedido::where('pedido_id',$buscar_pedido)->count();
         $array_html=[];
         if($cont_imagen>0)
-        {            
+        {
             $imagenes=ImagenPedido::where('pedido_id',$buscar_pedido)
                 ->where("estado","1")
                 ->whereNotIn("adjunto",['logo_facturas.png'])
@@ -688,7 +688,7 @@ class PedidoController extends Controller
             $rucs = Ruc::where('rucs.num_ruc', $request->ruc)
                 ->first();
             $html=$rucs->empresa;
-            
+
         }
         return response()->json(['html' => $html]);
     }
@@ -712,7 +712,7 @@ class PedidoController extends Controller
                         ->where('pedidos.id', $request->infocopiar)
                         ->first();
             //$html=$pedido->id;
-            
+
         }
         return response()->json($pedido);
     }
@@ -725,7 +725,7 @@ class PedidoController extends Controller
         } else {
             $html = '<option value="">' . trans('---- SELECCIONE ----') . '</option>';
             $rucs = Ruc::where('rucs.cliente_id', $request->cliente_id)
-                ->get();        
+                ->get();
             foreach ($rucs as $ruc) {
                 $html .= '<option value="' . $ruc->num_ruc . '">' . $ruc->num_ruc . '</option>';
             }
@@ -734,18 +734,18 @@ class PedidoController extends Controller
     } */
 
     public function cliente()//clientes
-    {        
+    {
         $html = '<option value="">' . trans('---- SELECCIONE CLIENTE ----') . '</option>';
         $clientes = Cliente::where('clientes.user_id', Auth::user()->id)
                             ->where('clientes.tipo', '1')
-                            ->get();        
+                            ->get();
         foreach ($clientes as $cliente) {
             $html .= '<option value="' . $cliente->id . '">' . $cliente->celular. '-' . $cliente->nombre . '</option>';
         }
         return response()->json(['html' => $html]);
     }
 
-    
+
 
     public function clientedeudaparaactivar(Request $request)//clientes
     {
@@ -779,18 +779,18 @@ class PedidoController extends Controller
                     DB::raw(" (select count(ped.id) from pedidos ped where ped.cliente_id=clientes.id and ped.pago in (0,1) and ped.pagado in (0,1) and ped.created_at >='2022-12-01 00:00:00' and ped.estado=1) as pedidos_mes_deuda "),
                     DB::raw(" (select count(ped2.id) from pedidos ped2 where ped2.cliente_id=clientes.id and ped2.pago in (0,1) and ped2.pagado in (0,1) and ped2.created_at <='2022-11-30 00:00:00'  and ped2.estado=1) as pedidos_mes_deuda_antes ")
 
-                ]); 
+                ]);
             foreach ($clientes as $cliente) {
                 if( $cliente->pedidos_mes_deuda>0  || $cliente->pedidos_mes_deuda_antes>0)
                 {
                     $html .= '<option style="color:black" value="' . $cliente->celular . '">' . $cliente->celular.  ( ($cliente->icelular!=null)? '-'.$cliente->icelular :''  ) .'  -  ' . $cliente->nombre . '</option>';
                 }
-                
+
                 //$html .= '<option value="' . $cliente->id . '">' . $cliente->celular. '  -  ' . $cliente->nombre . '</option>';
             }
 
-        }        
-        
+        }
+
         return response()->json(['html' => $html]);
     }
 
@@ -804,23 +804,23 @@ class PedidoController extends Controller
                                 ->where('clientes.tipo', '1')
                                 ->where('clientes.deuda', '1')
                                 ->where('clientes.estado', '1')
-                                ->get();        
+                                ->get();
             foreach ($clientes as $cliente) {
                 $html .= '<option value="' . $cliente->id . '">' . $cliente->celular. '  -  ' . $cliente->nombre . '</option>';
             }
 
         }
-        
+
         return response()->json(['html' => $html]);
     }
 
-    public function tipobanca(Request $request)//pedidoscliente 
+    public function tipobanca(Request $request)//pedidoscliente
     {
         if (!$request->cliente_id || $request->cliente_id=='') {
             $html = '<option value="">' . trans('---- SELECCIONE ----') . '</option>';
         } else {
             $html = '<option value="">' . trans('---- SELECCIONE ----') . '</option>';
-            $porcentajes = Porcentaje::where('porcentajes.cliente_id', $request->cliente_id)->get();        
+            $porcentajes = Porcentaje::where('porcentajes.cliente_id', $request->cliente_id)->get();
             foreach ($porcentajes as $porcentaje) {
                 $html .= '<option value="' . $porcentaje->nombre . '_' . $porcentaje->porcentaje . '">' . $porcentaje->nombre . '</option>';
             }
@@ -831,18 +831,18 @@ class PedidoController extends Controller
     public function AgregarRuc(Request $request)
     {
         $ruc = Ruc::where('num_ruc', $request->agregarruc)->first();
-    
+
         if($ruc !== null){
             $user = User::where('id', $ruc->user_id)->first();
-            
+
             $messages = [
                 'required' => 'EL RUC INGRESADO ESTA ASIGNADO AL ASESOR '.$user->identificador,
             ];
-    
+
             $validator = Validator::make($request->all(), [
                 'num_ruc' => 'required|unique:rucs',
             ], $messages);
-     
+
             /*if ($validator->fails()) {
                 return redirect('pedidos/create')
                             ->withErrors($validator)
@@ -864,10 +864,10 @@ class PedidoController extends Controller
             ]);
             $html="true";
         }
-        
+
 
         return response()->json(['html' => $html]);
-       
+
     }
     public function pedidosstore(Request $request)
     {
@@ -891,7 +891,7 @@ class PedidoController extends Controller
                     ->groupBy(DB::raw('Date(pedidos.created_at)'))
                     ->count();
             $numped=$numped+1;
-            
+
         }else if($mirol=='Jefe de llamadas')
         {
             $identi_asesor=User::where("identificador",$request->user_id)->where("unificado","NO")->first();
@@ -967,7 +967,7 @@ class PedidoController extends Controller
                 {
                     if($cliente_deuda->pedidos_mes_deuda>4){
                         $html="|4";
-                        return response()->json(['html' => $html]); 
+                        return response()->json(['html' => $html]);
                     }
                 }else if($cliente_deuda->pedidos_mes_deuda>0 && $cliente_deuda->pedidos_mes_deuda_antes>0)
                 {
@@ -976,11 +976,11 @@ class PedidoController extends Controller
                 }else if($cliente_deuda->pedidos_mes_deuda==0 && $cliente_deuda->pedidos_mes_deuda_antes>0)
                 {
                     $html="|0";
-                    return response()->json(['html' => $html]); 
+                    return response()->json(['html' => $html]);
                 }
             }
 
-            
+
         }
 
         //return $cliente_deuda->pedidos_mes_deuda;
@@ -994,10 +994,10 @@ class PedidoController extends Controller
                 'cliente_id' => $request->cliente_id,
                 'user_id' => $identi_asesor->id, //usuario que registra
                 'creador' => 'USER0'.Auth::user()->id,//aqui una observacion, en el migrate la columna en tabla pedido tenia nombre creador y resulto ser creador_id
-                'condicion' => 'POR ATENDER',
+                'condicion' => 1,
                 'pago' => '0',
                 'envio' => '0',
-                'condicion_envio' => 'PENDIENTE DE ENVIO',
+                'condicion_envio' => 1,
                 'estado' => '1',
                 'codigo' => $codigo,
                 'notificacion' => 'Nuevo pedido creado',
@@ -1017,9 +1017,9 @@ class PedidoController extends Controller
                     'situacion' => 'RECUPERADO'
                 ]);
             }
-            
 
-            
+
+
 
             // ALMACENANDO DETALLES
             $codigo = $codigo;//$request->codigo; actualizado para codigo autogenerado
@@ -1115,13 +1115,13 @@ return ' no imagen ';
                     'nota' => $nota[$contP],
                     'estado' => '1',//,
                     'adjunto'=>$fileList[$contP]['file_name']
-                ]);             
-            
+                ]);
+
                 $contP++;
 
                 //ACTUALIZAR DEUDA
-                $cliente = Cliente::find($request->cliente_id);  
-                
+                $cliente = Cliente::find($request->cliente_id);
+
                 $fecha = Carbon::now()->format('dm');
                 $dia = Carbon::now()->toDateString();
                 //
@@ -1157,10 +1157,10 @@ return ' no imagen ';
             /* DB::rollback();
             dd($th); */
         }
-        return response()->json(['html' => $html]); 
+        return response()->json(['html' => $html]);
         //return redirect()->route('pedidosPDF', $pedido)->with('info', 'registrado');
     }
-    
+
     public function store(Request $request)
     {
         return $request->all();
@@ -1201,7 +1201,7 @@ return ' no imagen ';
         $request->validate([
             'cliente_id' => 'required',
         ]);
-        
+
         try {
             DB::beginTransaction();
 
@@ -1209,10 +1209,10 @@ return ' no imagen ';
                 'cliente_id' => $request->cliente_id,
                 'user_id' => $request->user_id, //usuario que registra
                 'creador' => 'USER0'.Auth::user()->id,//aqui una observacion, en el migrate la columna en tabla pedido tenia nombre creador y resulto ser creador_id
-                'condicion' => 'POR ATENDER',
+                'condicion' => 1,
                 'pago' => '0',
                 'envio' => '0',
-                'condicion_envio' => 'PENDIENTE DE ENVIO',
+                'condicion_envio' => 1,
                 'estado' => '1',
                 'codigo' => $codigo,
                 'notificacion' => 'Nuevo pedido creado',
@@ -1286,17 +1286,17 @@ return ' no imagen ';
                     'descripcion' => $descripcion[$contP],
                     'nota' => $nota[$contP],
                     'estado' => '1'
-                ]);             
-            
+                ]);
+
                 $contP++;
 
                 //ACTUALIZAR DEUDA
-                $cliente = Cliente::find($request->cliente_id);                
+                $cliente = Cliente::find($request->cliente_id);
                 $cliente->update([
                         'deuda' => '1',
                         'pidio' => '1'
                     ]);
-            }            
+            }
             DB::commit();
             $html="true";
         } catch (\Throwable $th) {
@@ -1305,17 +1305,17 @@ return ' no imagen ';
             /* DB::rollback();
             dd($th); */
         }
-        return response()->json(['html' => $html]); 
+        return response()->json(['html' => $html]);
 
         //NOTIFICATION
         /*event(new PedidoEvent($pedido));
 
         if(Auth::user()->rol == "Asesor"){
-           
+
             return redirect()->route('pedidosPDF', $pedido)->with('info', 'registrado');
         }
-        else 
-            
+        else
+
             return redirect()->route('pedidosPDF', $pedido)->with('info', 'registrado');*/
     }
 
@@ -1503,7 +1503,7 @@ return ' no imagen ';
             )
             ->orderBy('pedidos.created_at', 'DESC')
             ->get();
-        
+
         $imagenes = ImagenPedido::where('imagen_pedidos.pedido_id', $pedido->id)->get();
 
         return view('pedidos.edit', compact('pedido', 'pedidos', 'meses', 'anios','porcentajes', 'imagenes','mirol'));
@@ -1572,9 +1572,9 @@ return ' no imagen ';
                         'descripcion' => $descripcion[$contP],
                         'nota' => $nota[$contP]
                     ]);
-                    
+
                     $contP++;
-                }     
+                }
 
                 //ACTUALIZAR PORCENTAJE EN CLIENTE
                 $porcentaje = Porcentaje::where('cliente_id', $pedido->cliente_id)
@@ -1587,7 +1587,7 @@ return ' no imagen ';
                 $pedido->update([
                     'modificador' => 'USER'.Auth::user()->id
                 ]);
-            
+
             DB::commit();
             }
         catch (\Throwable $th) {
@@ -1599,10 +1599,10 @@ return ' no imagen ';
         if(Auth::user()->rol == "Asesor"){
             return redirect()->route('pedidos.mispedidos')->with('info', 'actualizado');
         }
-        else 
+        else
             return redirect()->route('pedidos.index')->with('info', 'actualizado');
 
-        
+
     }
 
     /**
@@ -1636,7 +1636,7 @@ return ' no imagen ';
             $cliente->update([
                 'deuda' => '0'
             ]);
-        }   
+        }
 
         return redirect()->route('pedidos.index')->with('info', 'eliminado');
     }
@@ -1654,9 +1654,9 @@ return ' no imagen ';
                 'estado' => '0'
             ]);
 
-            //$detalle_pedidos = DetallePedido::find($request->hiddenID);            
-            $detalle_pedidos = DetallePedido::where('pedido_id',$request->hiddenID)->first() ;          
-           
+            //$detalle_pedidos = DetallePedido::find($request->hiddenID);
+            $detalle_pedidos = DetallePedido::where('pedido_id',$request->hiddenID)->first() ;
+
             $detalle_pedidos->update([
                 'estado' => '0'
             ]);
@@ -1675,9 +1675,9 @@ return ' no imagen ';
                 'estado' => '0'
             ]);
 
-            //$detalle_pedidos = DetallePedido::find($request->hiddenID);            
-            //$detalle_pedidos = DetallePedido::where('pedido_id',$request->hiddenID)->first() ;          
-           
+            //$detalle_pedidos = DetallePedido::find($request->hiddenID);
+            //$detalle_pedidos = DetallePedido::where('pedido_id',$request->hiddenID)->first() ;
+
             /*$detalle_pedidos->update([
                 'estado' => '0'
             ]);*/
@@ -1691,8 +1691,8 @@ return ' no imagen ';
     {
         $detalle_pedidos = DetallePedido::where('pedido_id',$pedido->id)->first();
 
-        $pedido->update([            
-            'condicion' => 'POR ATENDER',
+        $pedido->update([
+            'condicion' => 1,
             'modificador' => 'USER'.Auth::user()->id,
             'estado' => '1'
         ]);
@@ -1710,7 +1710,7 @@ return ' no imagen ';
             $html='';
         } else {
             Pedido::find($request->hiddenID)->update([
-                'condicion' => 'POR ATENDER',
+                'condicion' => 1,
                 'modificador' => 'USER'.Auth::user()->id,
                 'estado' => '1'
             ]);
@@ -1731,7 +1731,7 @@ return ' no imagen ';
     }
 
     public function MisPedidos()
-    {   
+    {
         $dateMin = Carbon::now()->subDays(4)->format('d/m/Y');
         $dateMax = Carbon::now()->format('d/m/Y');
 
@@ -1746,7 +1746,7 @@ return ' no imagen ';
 
         return view('pedidos.misPedidos', compact('destinos', 'superasesor', 'dateMin', 'dateMax','mirol'));
     }
-    
+
     public function mispedidostabla(Request $request)
     {
         $pedidos=null;
@@ -1773,11 +1773,11 @@ return ' no imagen ';
                     'dp.saldo as diferencia',
                     'pedidos.pagado as condicion_pa',
                     DB::raw('DATE_FORMAT(pedidos.created_at, "%d/%m/%Y") as fecha') ,
-                    'pedidos.estado'                   
+                    'pedidos.estado'
                 )
                 ->where('pedidos.estado', '1')
                 ->where('dp.estado', '1')
-                ->whereIn('pedidos.condicion', ['POR ATENDER', 'EN PROCESO ATENCION', 'ATENDIDO', 'ANULADO'])
+                ->whereIn('pedidos.condicion', [1, 2, 3, 'ANULADO'])
                 ->groupBy(
                     'pedidos.id',
                     'c.nombre',
@@ -1801,8 +1801,8 @@ return ' no imagen ';
                 );
                 //->orderBy('pedidos.created_at', 'DESC')
                 //->get();
-        
-        
+
+
         if(Auth::user()->rol == "Asesor"){
 
             $usersasesores = User::where('users.rol', 'Asesor')
@@ -1814,8 +1814,8 @@ return ' no imagen ';
                 ->pluck('users.identificador');
 
             $pedidos=$pedidos->WhereIn('u.identificador',$usersasesores);
-            
-           
+
+
         }else if(Auth::user()->rol == "Super asesor"){
             $usersasesores = User::where('users.rol', 'Asesor')
                 -> where('users.estado', '1')
@@ -1829,13 +1829,13 @@ return ' no imagen ';
 
         }else{
             $pedidos=$pedidos;
-            
+
         }
         $pedidos=$pedidos->get();
 
         return Datatables::of($pedidos)
                     ->addIndexColumn()
-                    ->addColumn('action', function($pedido){     
+                    ->addColumn('action', function($pedido){
 
                         $btn='<a href="'.route('pedidosPDF', $pedido).'" class="btn btn-primary btn-sm" target="_blank"><i class="fa fa-file-pdf"></i> PDF</a>';
                         $btn=$btn.'<a href="'.route('pedidos.show', $pedido).'" class="btn btn-info btn-sm"><i class="fas fa-eye"></i> VER</a>';
@@ -1849,10 +1849,10 @@ return ' no imagen ';
 
                             if(Auth::user()->rol =="Administrador")
                             {
-                                $btn = $btn.'<a href="" data-target="#modal-delete" data-toggle="modal" data-delete="'.$pedido->id.'"><button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i> Anular</button></a>';                                                     
+                                $btn = $btn.'<a href="" data-target="#modal-delete" data-toggle="modal" data-delete="'.$pedido->id.'"><button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i> Anular</button></a>';
                             }
-                            
-                            
+
+
                         }
 
                         return $btn;
@@ -1968,9 +1968,9 @@ return ' no imagen ';
 
         return Datatables::of($pedidos)
             ->addIndexColumn()
-            ->addColumn('action', function($pedido){     
+            ->addColumn('action', function($pedido){
                 $btn='';
-                
+
                 return $btn;
             })
             ->rawColumns(['action'])
@@ -1980,7 +1980,7 @@ return ' no imagen ';
 
     public function SinPagos()//PEDIDOS POR COBRAR
     {
-        
+
         $miidentificador=User::where("id", Auth::user()->id)->first()->identificador;
 
         $superasesor = User::where('rol', 'Super asesor')->count();
@@ -2073,7 +2073,7 @@ return ' no imagen ';
                 )
                 ->pluck('users.identificador');
 
-            $pedidos=$pedidos->WhereIn('u.identificador',$usersasesores); 
+            $pedidos=$pedidos->WhereIn('u.identificador',$usersasesores);
 
         }else{
             $pedidos=$pedidos;
@@ -2082,9 +2082,9 @@ return ' no imagen ';
 
         return Datatables::of($pedidos)
             ->addIndexColumn()
-            ->addColumn('action', function($pedido){     
+            ->addColumn('action', function($pedido){
                 $btn='';
-                
+
                 return $btn;
             })
             ->rawColumns(['action'])
@@ -2092,9 +2092,9 @@ return ' no imagen ';
 
     }
 
-    
 
-    
+
+
 
     public function EnAtenciontabla(Request $request)
     {
@@ -2133,7 +2133,7 @@ return ' no imagen ';
                 ->where('dp.estado', '1')
                 ->WhereIn('pedidos.user_id',$asesores)
                 //->where('u.operario', Auth::user()->id)
-                ->where('pedidos.condicion', 'EN PROCESO ATENCION')
+                ->where('pedidos.condicion', 2)
                 ->groupBy(
                     'pedidos.id',
                     'c.nombre',
@@ -2194,7 +2194,7 @@ return ' no imagen ';
                 ->where('dp.estado', '1')
                 ->WhereIn('pedidos.user_id',$asesores)
                 //->where('u.jefe', Auth::user()->id)
-                ->where('pedidos.condicion', 'EN PROCESO ATENCION')
+                ->where('pedidos.condicion', 2)
                 ->groupBy(
                     'pedidos.id',
                     'c.nombre',
@@ -2237,7 +2237,7 @@ return ' no imagen ';
                 )
                 ->where('pedidos.estado', '1')
                 ->where('dp.estado', '1')
-                ->where('pedidos.condicion', 'EN PROCESO ATENCION')
+                ->where('pedidos.condicion', 2)
                 ->groupBy(
                     'pedidos.id',
                     'c.nombre',
@@ -2260,7 +2260,7 @@ return ' no imagen ';
 
         return Datatables::of($pedidos)
                     ->addIndexColumn()
-                    ->addColumn('action', function($pedido){     
+                    ->addColumn('action', function($pedido){
                         $btn='';
 
                         return $btn;
@@ -2314,7 +2314,7 @@ return ' no imagen ';
                 ->where('dp.estado', '1')
                 ->WhereIn('u.identificador',$asesores)
                 //->where('u.operario', Auth::user()->id)
-                ->where('pedidos.condicion', 'EN PROCESO ATENCION')
+                ->where('pedidos.condicion', 2)
                 ->groupBy(
                     'pedidos.id',
                     'c.nombre',
@@ -2376,7 +2376,7 @@ return ' no imagen ';
                 ->where('dp.estado', '1')
                 ->WhereIn('u.identificador',$asesores)
                 //->where('u.jefe', Auth::user()->id)
-                ->where('pedidos.condicion', 'EN PROCESO ATENCION')
+                ->where('pedidos.condicion', 2)
                 ->groupBy(
                     'pedidos.id',
                     'c.nombre',
@@ -2419,7 +2419,7 @@ return ' no imagen ';
                 )
                 ->where('pedidos.estado', '1')
                 ->where('dp.estado', '1')
-                ->where('pedidos.condicion', 'EN PROCESO ATENCION')
+                ->where('pedidos.condicion', 2)
                 ->groupBy(
                     'pedidos.id',
                     'c.nombre',
@@ -2446,16 +2446,16 @@ return ' no imagen ';
         return view('pedidos.enAtencion', compact('dateMin', 'dateMax', 'pedidos', 'condiciones', 'imagenes', 'superasesor'));
     }
 
-    
 
-    
 
-    
 
-    
+
+
+
+
 
     public function cargarAtendidos(Request $request)//pedidoscliente
-    {   
+    {
         if(Auth::user()->rol == "Operario"){
             $pedidos = Pedido::join('users as u', 'pedidos.user_id', 'u.id')
                 ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
@@ -2477,7 +2477,7 @@ return ' no imagen ';
                 ->where('pedidos.estado', '1')
                 ->where('dp.estado', '1')
                 ->where('u.operario', Auth::user()->id)
-                ->where('pedidos.condicion', 'ATENDIDO')
+                ->where('pedidos.condicion', 3)
                 ->groupBy(
                     'pedidos.id',
                     'u.name',
@@ -2516,7 +2516,7 @@ return ' no imagen ';
                 ->where('pedidos.estado', '1')
                 ->where('dp.estado', '1')
                 ->where('u.jefe', Auth::user()->id)
-                ->where('pedidos.condicion', 'ATENDIDO')
+                ->where('pedidos.condicion', 3)
                 ->groupBy(
                     'pedidos.id',
                     'u.name',
@@ -2554,7 +2554,7 @@ return ' no imagen ';
                 )
                 ->where('pedidos.estado', '1')
                 ->where('dp.estado', '1')
-                ->where('pedidos.condicion', 'ATENDIDO')
+                ->where('pedidos.condicion', 3)
                 ->groupBy(
                     'pedidos.id',
                     'u.name',
@@ -2580,7 +2580,7 @@ return ' no imagen ';
     public function Atenderid(Request $request)
     {
         $hiddenAtender=$request->hiddenAtender;
-        $detalle_pedidos = DetallePedido::where('pedido_id',$hiddenAtender)->first();        
+        $detalle_pedidos = DetallePedido::where('pedido_id',$hiddenAtender)->first();
         $fecha = Carbon::now();
 
         $pedido=Pedido::where("id",$hiddenAtender)->first();
@@ -2591,7 +2591,7 @@ return ' no imagen ';
 
 
 
-        if ($request->condicion == "ATENDIDO")
+        if ($request->condicion == "3")
         {
             $pedido->update([
                 'notificacion' => 'Pedido atendido'
@@ -2631,7 +2631,7 @@ return ' no imagen ';
                 $file_name = Carbon::now()->second.$file->getClientOriginalName();
                 $file->move($destinationPath , $file_name);
 
-                ImagenAtencion::create([                    
+                ImagenAtencion::create([
                     'pedido_id' => $pedido->id,
                     'adjunto' => $file_name,
                     'estado' => '1'
@@ -2639,7 +2639,7 @@ return ' no imagen ';
 
                 $cont++;
             }
-        }*/      
+        }*/
 
         $detalle_pedidos->update([
             'envio_doc' => '1',
@@ -2652,7 +2652,7 @@ return ' no imagen ';
         /* if ($request->hasFile('envio_doc')){
             $file_name = Carbon::now()->second.$files->getClientOriginalName();
             $files->move($destinationPath , $file_name);
-            
+
             $detalle_pedidos->update([
                 'envio_doc' => $file_name,
                 'fecha_envio_doc' => $fecha,
@@ -2663,14 +2663,14 @@ return ' no imagen ';
             $detalle_pedidos->update([
                 'cant_compro' => $request->cant_compro,
             ]);
-        } */        
+        } */
 
         return redirect()->route('operaciones.poratender')->with('info','actualizado');
     }
 
     public function Atender(Request $request, Pedido $pedido)
     {
-        $detalle_pedidos = DetallePedido::where('pedido_id',$pedido->id)->first();        
+        $detalle_pedidos = DetallePedido::where('pedido_id',$pedido->id)->first();
         $fecha = Carbon::now();
 
         $pedido->update([
@@ -2678,7 +2678,7 @@ return ' no imagen ';
             'modificador' => 'USER'.Auth::user()->id
         ]);
 
-        if ($request->condicion == "ATENDIDO")
+        if ($request->condicion == "3")
         {
             $pedido->update([
                 'notificacion' => 'Pedido atendido'
@@ -2700,7 +2700,7 @@ return ' no imagen ';
                 $file_name = Carbon::now()->second.$file->getClientOriginalName();
                 $file->move($destinationPath , $file_name);
 
-                ImagenAtencion::create([                    
+                ImagenAtencion::create([
                     'pedido_id' => $pedido->id,
                     'adjunto' => $file_name,
                     'estado' => '1'
@@ -2708,7 +2708,7 @@ return ' no imagen ';
 
                 $cont++;
             }
-        }        
+        }
 
         $detalle_pedidos->update([
             'envio_doc' => '1',
@@ -2721,7 +2721,7 @@ return ' no imagen ';
         /* if ($request->hasFile('envio_doc')){
             $file_name = Carbon::now()->second.$files->getClientOriginalName();
             $files->move($destinationPath , $file_name);
-            
+
             $detalle_pedidos->update([
                 'envio_doc' => $file_name,
                 'fecha_envio_doc' => $fecha,
@@ -2732,7 +2732,7 @@ return ' no imagen ';
             $detalle_pedidos->update([
                 'cant_compro' => $request->cant_compro,
             ]);
-        } */        
+        } */
 
         return redirect()->route('operaciones.poratender')->with('info','actualizado');
     }
@@ -2807,14 +2807,14 @@ return ' no imagen ';
             ->get();
 
         $imagenespedido = ImagenPedido::where('imagen_pedidos.pedido_id', $pedido->id)->where('estado', '1')->get();
-        $imagenes = ImagenAtencion::where('imagen_atencions.pedido_id', $pedido->id)->where('estado', '1')->get();        
+        $imagenes = ImagenAtencion::where('imagen_atencions.pedido_id', $pedido->id)->where('estado', '1')->get();
 
         return view('pedidos.editatender', compact('pedido', 'pedidos', 'imagenespedido', 'imagenes'));
     }
 
     public function updateAtender(Request $request, Pedido $pedido)
     {
-        $detalle_pedidos = DetallePedido::where('pedido_id',$pedido->id)->first();        
+        $detalle_pedidos = DetallePedido::where('pedido_id',$pedido->id)->first();
         $fecha = Carbon::now();
 
         /* $files = $request->file('envio_doc'); */
@@ -2836,7 +2836,7 @@ return ' no imagen ';
                 $file_name = Carbon::now()->second.$file->getClientOriginalName();
                 $file->move($destinationPath , $file_name);
 
-                ImagenAtencion::create([                    
+                ImagenAtencion::create([
                     'pedido_id' => $pedido->id,
                     'adjunto' => $file_name,
                     'estado' => '1'
@@ -2844,7 +2844,7 @@ return ' no imagen ';
 
                 $cont++;
             }
-            
+
             $detalle_pedidos->update([
                 'envio_doc' => '1',
                 'fecha_envio_doc' => $fecha,
@@ -2949,7 +2949,7 @@ return ' no imagen ';
                 'estado' => '0'
             ]);
         }
-        
+
         return response()->json(['html' => $imagenatencion]);
     }
 
@@ -3012,7 +3012,7 @@ return ' no imagen ';
 
     public function Destino(Request $request, Pedido $pedido)
     {
-        $pedido->update([            
+        $pedido->update([
             'destino' => $request->destino,
             'modificador' => 'USER'.Auth::user()->id
         ]);
@@ -3027,7 +3027,7 @@ return ' no imagen ';
 
         $pedido->update([
             'envio' => '3',//SIN ENVIO
-            'condicion_envio' => 'ENTREGADO',
+            'condicion_envio' => 3,
             'modificador' => 'USER'.Auth::user()->id
         ]);
 
@@ -3050,7 +3050,7 @@ return ' no imagen ';
 
         $pedido->update([
             'envio' => '3',//SIN ENVIO
-            'condicion_envio' => 'ENTREGADO',
+            'condicion_envio' => 3,
             'modificador' => 'USER'.Auth::user()->id
         ]);
 
@@ -3068,7 +3068,7 @@ return ' no imagen ';
                 'estado'=>'1',
                 'destino' => 'LIMA',
                 'distribucion'=> '',
-                'condicion_envio' => 'ENTREGADO',
+                'condicion_envio' => 3,
                 'condicion_sobre' => 'SIN ENVIO',
             ]);
 
@@ -3102,7 +3102,7 @@ return ' no imagen ';
     }
 
     public function DescargarAdjunto($adjunto)
-    {   
+    {
         $destinationPath = base_path("public/storage/adjuntos/".$adjunto);
         /* $destinationPath = storage_path("app/public/adjuntos/".$pedido->adjunto); */
 
@@ -3110,7 +3110,7 @@ return ' no imagen ';
     }
 
     public function DescargarGastos($adjunto)
-    {   
+    {
         $destinationPath = base_path("public/storage/gastos/".$adjunto);
 
         return response()->download($destinationPath);
@@ -3121,33 +3121,33 @@ return ' no imagen ';
         $item = $request->item;
         $pedido=$request->pedido;
         $file = $request->file('adjunto');
-        
-        if(isset($file)){                   
+
+        if(isset($file)){
             $destinationPath = base_path('public/storage/entregas/');
-            $cont = 0;       
+            $cont = 0;
             $file_name = Carbon::now()->second.$file->getClientOriginalName();
             $fileList[$cont] = array(
                 'file_name' => $file_name,
             );
             $file->move($destinationPath , $file_name);
             $html=$file_name;
-            
+
             DetallePedido::where('pedido_id', $pedido)
                 ->update([
                     'foto'.$item => $file_name
                 ]);
         }else{
             $html="";
-        }            
+        }
 
-        return response()->json(['html' => $html]); 
+        return response()->json(['html' => $html]);
     }
 
-    
 
-    
 
-    
+
+
+
 
     public function Recibir(Pedido $pedido)
     {
@@ -3167,7 +3167,7 @@ return ' no imagen ';
             'modificador' => 'USER'.Auth::user()->id
         ]);
 
-        return response()->json(['html' => $request->hiddenRecibir]); 
+        return response()->json(['html' => $request->hiddenRecibir]);
 
         //return redirect()->route('envios.index')->with('info','actualizado');
     }
@@ -3182,7 +3182,7 @@ return ' no imagen ';
             'modificador' => 'USER'.Auth::user()->id
         ]);
 
-        if ($request->condicion == "ENTREGADO")
+        if ($request->condicion == "3")
         {
             $pedido->update([
                 'notificacion' => 'Pedido entregado'
@@ -3199,10 +3199,10 @@ return ' no imagen ';
         if ($request->hasFile('foto1') && $request->hasFile('foto2')){
             $file_name = Carbon::now()->second.$files->getClientOriginalName();
             $file_name2 = Carbon::now()->second.$files2->getClientOriginalName();
-            
+
             $files->move($destinationPath , $file_name);
             $files2->move($destinationPath , $file_name2);
-            
+
             $detalle_pedidos->update([
                 'foto1' => $file_name,
                 'foto2' => $file_name2,
@@ -3221,7 +3221,7 @@ return ' no imagen ';
                 'atendido_por' => Auth::user()->name,
                 'atendido_por_id' => Auth::user()->id,
             ]);
-        }  
+        }
         else if ($request->foto1 == null && $request->hasFile('foto2')){
             $file_name2 = Carbon::now()->second.$files2->getClientOriginalName();
             $files2->move($destinationPath , $file_name2);
@@ -3231,7 +3231,7 @@ return ' no imagen ';
                 'fecha_recepcion' => $request->fecha_recepcion,
                 'atendido_por' => Auth::user()->name,
                 'atendido_por_id' => Auth::user()->id,
-            ]);    
+            ]);
         }
         else
         {
@@ -3250,8 +3250,8 @@ return ' no imagen ';
         return redirect()->route('envios.index')->with('info','actualizado');
     }
 
-    
-    
+
+
     public function createDireccion(Pedido $pedido)
     {
         $destinos = [
@@ -3267,7 +3267,7 @@ return ' no imagen ';
                             ->where('id', $pedido->user_id)
                             ->first();
         $pedidos = Pedido::join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
-                            ->select('pedidos.id', 
+                            ->select('pedidos.id',
                                     'dp.codigo')
                             ->where('pedidos.cliente_id', $pedido->cliente_id)
                             ->where('pedidos.destino', null)
@@ -3288,7 +3288,7 @@ return ' no imagen ';
             return '0';
         }
         else{
-            $array_pedidos=explode(",",$pedidos);  
+            $array_pedidos=explode(",",$pedidos);
 
             //return var_dump($array_pedidos);
 
@@ -3299,7 +3299,7 @@ return ' no imagen ';
                 'estado'=>'1',
                 'destino' => $request->destino,
                 'distribucion'=> ( ($request->destino=='PROVINCIA')? 'NORTE':''),
-                'nombre_cliente'=> ( ($request->destino=='LIMA')? $request->nombre : $cliente->nombre  ),  
+                'nombre_cliente'=> ( ($request->destino=='LIMA')? $request->nombre : $cliente->nombre  ),
                 'celular_cliente'=> ( ($request->destino=='LIMA')? $request->contacto : $cliente->celular."-".$cliente->icelular ),
             ]);
 
@@ -3311,7 +3311,7 @@ return ' no imagen ';
                     DB::beginTransaction();
 
                     $cantidad=$count_pedidos;
-                    
+
                     $direccionLima = DireccionEnvio::create([
                         'cliente_id' => $request->cliente_id,
                         'distrito' => $request->distrito,
@@ -3327,7 +3327,7 @@ return ' no imagen ';
                         "salvado"=> "0"
                     ]);
 
-                        
+
                     // ALMACENANDO DIRECCION-PEDIDOS
                     $pedido_id = $request->pedido_id;
                     $contPe = 0;
@@ -3338,17 +3338,17 @@ return ' no imagen ';
 
                         $pedido->update([
                             'destino' => $request->destino,
-                            'condicion_envio' => 'EN REPARTO',//AL REGISTRAR DIRECCION PASA A ESTADO  EN REPARTO
+                            'condicion_envio' => 2,//AL REGISTRAR DIRECCION PASA A ESTADO  EN REPARTO
                             'direccion' => $request->direccion,
-                            
+
                         ]);
 
-                        
+
                         $dp_empresa=DetallePedido::where("pedido_id",$pedido_id)->first();
                             /*->update([
                                 'fecha_envio_doc_fis'=>Carbon()::now()
                             ]);*/
-                        
+
 
                         $direccionPedido = DireccionPedido::create([
                                 'direccion_id' => $direccionLima->id,
@@ -3358,12 +3358,12 @@ return ' no imagen ';
                                 'empresa' => $dp_empresa->nombre_empresa,
                                 'estado' => '1'
                             ]);
-        
+
                         //INDICADOR DE DIRECCION
-                        
-        
-                        
-        
+
+
+
+
                        // $contPe++;
                     }
 
@@ -3384,7 +3384,7 @@ return ' no imagen ';
 
             }
 
-            
+
             if ($request->destino == "PROVINCIA")
             {
                 try {
@@ -3416,8 +3416,8 @@ return ' no imagen ';
                         'foto' => $file_name,
                         'importe' => "0.00",
                         'cantidad' => $cantidad,
-                        'direcciongrupo' => $direcciongrupo->id,  
-                        'destino'=>$request->destino,                      
+                        'direcciongrupo' => $direcciongrupo->id,
+                        'destino'=>$request->destino,
                         'estado' => '1',
                         "salvado"=> "0"
                     ]);
@@ -3431,8 +3431,8 @@ return ' no imagen ';
 
                         $pedido->update([
                             'destino' => $request->destino,
-                            'condicion_envio' => 'EN REPARTO',//AL REGISTRAR DIRECCION PASA A ESTADO  EN REPARTO
-                            'direccion' => '1',                            
+                            'condicion_envio' => 2,//AL REGISTRAR DIRECCION PASA A ESTADO  EN REPARTO
+                            'direccion' => '1',
                         ]);
 
                         $dp_empresa=DetallePedido::where("pedido_id",$pedido_id)->first();
@@ -3453,7 +3453,7 @@ return ' no imagen ';
 
                         //INDICADOR DE PAGOS
                         $pedido = Pedido::find($pedido_id);
-                       
+
 
                         //$contPe++;
                     }
@@ -3475,15 +3475,15 @@ return ' no imagen ';
             }
 
             return response()->json(['html' => $pedidos]);
-          
+
 
         }
-        
-        
-        //$pedido=Pedido::where("id",$request->)
-        
 
-        
+
+        //$pedido=Pedido::where("id",$request->)
+
+
+
 
         return redirect()->route('envios.index')->with('info','actualizado');
     }
@@ -3492,7 +3492,7 @@ return ' no imagen ';
     {
         $direccion->update([
             /* 'departamento' => $request->departamento,
-            'provincia' => $request->provincia, */            
+            'provincia' => $request->provincia, */
             'distrito' => $request->distrito,
             'direccion' => $request->direccion,
             'referencia' => $request->referencia,
@@ -3505,7 +3505,7 @@ return ' no imagen ';
     }
 
     public function DescargarImagen($imagen)
-    {   
+    {
         $destinationPath = base_path("public/storage/entregas/".$imagen);
 
         return response()->download($destinationPath);
@@ -3560,7 +3560,7 @@ return ' no imagen ';
             {
                 $html="1";
                 return response()->json(['html' => $html]);
-                
+
             }else{
                 //no existe ,registrare
                 $html="0";

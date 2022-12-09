@@ -857,7 +857,7 @@ class ClienteController extends Controller
                 ->where('pedidos.estado', '1')
                 ->where('dp.estado', '1')
                 //->where('pedidos.envio', '1')
-                ->where('pedidos.condicion_envio', 'PENDIENTE DE ENVIO')
+                ->where('pedidos.condicion_envio', 1)
                 ->get();
 
 

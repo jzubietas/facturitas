@@ -92,7 +92,7 @@ class PdfController extends Controller
             )
             ->where('pedidos.estado', '1')
             ->where('dp.estado', '1')
-            ->whereIn('pedidos.condicion', ['POR ATENDER', 'EN PROCESO ATENCION', 'ATENDIDO'])
+            ->whereIn('pedidos.condicion', [1, 2, 3])
             ->where('pedidos.pago', '0')
             ->whereBetween(DB::raw('DATE(pedidos.created_at)'), [$request->desde, $request->hasta]) //rango de fechas
             ->groupBy(
@@ -163,7 +163,7 @@ class PdfController extends Controller
             ->where('pedidos.estado', '1')
             ->where('dp.estado', '1')
             ->where('u.id', $request->user_id)
-            ->whereIn('pedidos.condicion', ['POR ATENDER', 'EN PROCESO ATENCION', 'ATENDIDO'])
+            ->whereIn('pedidos.condicion', [1, 2, 3])
             ->where('pedidos.pago', '0')
             ->groupBy(
                 'pedidos.id',
@@ -233,7 +233,7 @@ class PdfController extends Controller
             ->where('pedidos.estado', '1')
             ->where('dp.estado', '1')
             ->whereIn('u.id', [$request->user_id1, $request->user_id2, $request->user_id3, $request->user_id4])
-            ->whereIn('pedidos.condicion', ['POR ATENDER', 'EN PROCESO ATENCION', 'ATENDIDO'])
+            ->whereIn('pedidos.condicion', [1, 2, 3])
             ->where('pedidos.pago', '0')
             ->groupBy(
                 'pedidos.id',
@@ -255,7 +255,7 @@ class PdfController extends Controller
     {
         $fecha = Carbon::now('America/Lima')->format('d-m-Y');
         $pagos = Pago::join('users as u', 'pagos.user_id', 'u.id')
-        ->join('detalle_pagos as dpa', 'pagos.id', 'dpa.pago_id') 
+        ->join('detalle_pagos as dpa', 'pagos.id', 'dpa.pago_id')
         ->join('pago_pedidos as pp', 'pagos.id', 'pp.pago_id')
         ->rightjoin('pedidos as p', 'pp.pedido_id', 'p.id')
         ->rightjoin('detalle_pedidos as dpe', 'p.id', 'dpe.pedido_id')
@@ -293,25 +293,25 @@ class PdfController extends Controller
         ->join('pago_pedidos as pp', 'pagos.id', 'pp.pago_id')
         ->join('pedidos as p', 'pp.pedido_id', 'p.id')
         ->join('detalle_pedidos as dpe', 'p.id', 'dpe.pedido_id')
-        ->select('pagos.id', 
-                'dpe.codigo as codigos', 
-                'u.name as users', 
-                'pagos.observacion', 
+        ->select('pagos.id',
+                'dpe.codigo as codigos',
+                'u.name as users',
+                'pagos.observacion',
                 'dpe.total as total_deuda',
-                DB::raw('sum(dpa.monto) as total_pago'), 
-                'pagos.condicion',                   
+                DB::raw('sum(dpa.monto) as total_pago'),
+                'pagos.condicion',
                 'pagos.created_at as fecha'
                 )
         ->where('pagos.estado', '1')
         ->where('dpe.estado', '1')
         ->where('dpa.estado', '1')
         ->where('u.id', $request->user_id)
-        ->groupBy('pagos.id', 
-                'dpe.codigo', 
+        ->groupBy('pagos.id',
+                'dpe.codigo',
                 'u.name',
                 'pagos.observacion', 'dpe.total',
                 'pagos.total_cobro',
-                'pagos.condicion', 
+                'pagos.condicion',
                 'pagos.created_at')
         ->get();
 
@@ -326,25 +326,25 @@ class PdfController extends Controller
         ->join('pago_pedidos as pp', 'pagos.id', 'pp.pago_id')
         ->join('pedidos as p', 'pp.pedido_id', 'p.id')
         ->join('detalle_pedidos as dpe', 'p.id', 'dpe.pedido_id')
-        ->select('pagos.id', 
-                'dpe.codigo as codigos', 
-                'u.name as users', 
-                'pagos.observacion', 
+        ->select('pagos.id',
+                'dpe.codigo as codigos',
+                'u.name as users',
+                'pagos.observacion',
                 'dpe.total as total_deuda',
-                DB::raw('sum(dpa.monto) as total_pago'), 
-                'pagos.condicion',                   
+                DB::raw('sum(dpa.monto) as total_pago'),
+                'pagos.condicion',
                 'pagos.created_at as fecha'
                 )
         ->where('pagos.estado', '1')
         ->where('dpe.estado', '1')
         ->where('dpa.estado', '1')
         ->whereIn('u.id', [$request->user_id1, $request->user_id2, $request->user_id3, $request->user_id4])
-        ->groupBy('pagos.id', 
-                'dpe.codigo', 
+        ->groupBy('pagos.id',
+                'dpe.codigo',
                 'u.name',
                 'pagos.observacion', 'dpe.total',
                 'pagos.total_cobro',
-                'pagos.condicion', 
+                'pagos.condicion',
                 'pagos.created_at')
         ->get();
 
@@ -474,10 +474,10 @@ class PdfController extends Controller
             )
             ->orderBy('pedidos.created_at', 'DESC')
             ->get();
-                
+
         $pdf = PDF::loadView('pedidos.reportes.pedidosPDF', compact('pedidos', 'fecha','mirol','identificador'))
             ->setPaper('a4', 'portrait');
-        //$canvas = PDF::getDomPDF(); 
+        //$canvas = PDF::getDomPDF();
         //return $canvas;
         return $pdf->stream('pedido ' . $pedido->id . '.pdf');
     }
