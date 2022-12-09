@@ -45,6 +45,35 @@
         chart.draw(data, google.charts.Bar.convertOptions(options));
       };
     </script>
+
+
+<script type="text/javascript">
+  google.charts.load('current', {
+    'packages': ['bar']
+  });
+  google.charts.setOnLoadCallback(drawStuff);
+
+  function drawStuff() {
+    console.log("1454588");
+    var data = new google.visualization.arrayToDataTable([
+      [ 'Mes','Total'],
+      @foreach ($pedidos_mes_ as $vxa)
+        ['Diciembre',{{ $vxa->total }}],
+      @endforeach
+    ]);
+
+    var options = {
+      chart: {
+        title: 'PEDIDOS DEL MES',
+        subtitle: 'PEDIDOS/MES'
+      }
+    };
+
+    var chart = new google.charts.Bar(document.getElementById('pedidos-subiendo-mes'));
+    chart.draw(data, google.charts.Bar.convertOptions(options));
+  };
+</script>
+
         
         
 <script type="text/javascript">
@@ -410,6 +439,19 @@ google.charts.setOnLoadCallback(drawBasic);
               </div>
             </table>
           </div>
+
+          <div class="table-responsive">
+            <table class="table table-striped table-bordered table-condensed table-hover">
+              <div class="chart tab-pane active" id="pedidos-subiendo-mes" style="width: 50%; height: 550px;">
+              </div>
+            </table>
+          </div>
+
+
+
+
+
+
           <div class="table-responsive">
             <table class="table table-striped table-bordered table-condensed table-hover">
               <div class="chart tab-pane active" id="cobranzaxmes" style="width: 100%; height: 550px;">

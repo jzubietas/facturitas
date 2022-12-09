@@ -240,6 +240,8 @@
         fd2.append('hiddenDistribuir', $('#hiddenDistribuir').val() );
         fd2.append('distribuir', $('#distribuir').val() );
 
+        // modal para distribucion
+        
         $.ajax({
           data: fd2,
           processData: false,
