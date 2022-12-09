@@ -1214,7 +1214,26 @@
               //return 'REGISTRE DIRECCION';
             },
           },
-          {data: 'condicion_envio', name: 'condicion_envio', },
+          {
+              data: 'condicion_envio',
+              name: 'condicion_envio',
+              render: function ( data, type, row, meta ) {
+
+                  if(row.condicion_envio=='ANULADO'){
+                      return 'ANULADO';
+                  }else if(row.condicion_envio == 0){
+                      return 'ANULADO';
+                  }else if(row.condicion_envio == 1){
+                      return 'PENDIENTE DE ENVÍO';
+                  }else if(row.condicion_envio == 2){
+                      return 'EN REPARTO';
+                  }else if(row.condicion_envio == 3){
+                      return 'ENTREGADO';
+                  }else{
+                      return data;
+                  }
+              }
+          },
           {
             data: 'envio',
             name: 'envio',

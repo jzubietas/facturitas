@@ -224,13 +224,25 @@
           name: 'total',
           render: $.fn.dataTable.render.number(',', '.', 2, '')
         },
-        {
-          data: 'condiciones',
-          name: 'condiciones',
-          render: function ( data, type, row, meta ) {
-              return data;
-          }
-        },//estado de pedido
+            {
+                data: 'condiciones',
+                name: 'condiciones',
+                render: function ( data, type, row, meta ) {
+                    if(row.condiciones =='ANULADO'){
+                        return 'ANULADO';
+                    }else if(row.condiciones == 0){
+                        return 'ANULADO';
+                    }else if(row.condiciones == 1){
+                        return 'PENDIENTE DE ENVÍO';
+                    }else if(row.condiciones == 2){
+                        return 'EN REPARTO';
+                    }else if(row.condiciones == 3){
+                        return 'ENTREGADO';
+                    }else{
+                        return data;
+                    }
+                }
+            },//estado de pedido
         {
           data: 'condicion_pa',
           name: 'condicion_pa',
@@ -274,7 +286,25 @@
         //{data: 'responsable', name: 'responsable', },//estado de envio
 
         //{data: 'condicion_pa', name: 'condicion_pa', },//ss
-        {data: 'condicion_env', name: 'condicion_envio', },//
+        {   data: 'condicion_env',
+            name: 'condicion_envio',
+            render: function ( data, type, row, meta ) {
+
+                if(row.condicion_env=='ANULADO'){
+                    return 'ANULADO';
+                }else if(row.condicion_env == 0){
+                    return 'ANULADO';
+                }else if(row.condicion_env == 1){
+                    return 'PENDIENTE DE ENVÍO';
+                }else if(row.condicion_env == 2){
+                    return 'EN REPARTO';
+                }else if(row.condicion_env == 3){
+                    return 'ENTREGADO';
+                }else{
+                    return data;
+                }
+            }
+        },//
         /*{
           data: 'envio',
           name: 'envio',
