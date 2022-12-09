@@ -221,12 +221,12 @@
                     },
                     columns: [
                         {
-                            data: 'id',
-                            name: 'id',
+                            data: 'code',
+                            name: 'code',
                         },
                         {
                             data: 'codigos',
-                            name: 'dpe.codigo',
+                            name: 'codigos',
                             render: function (data, type, row, meta) {
                                 if (data == null) {
                                     return 'SIN PEDIDOS';
@@ -242,7 +242,7 @@
                         },
                         {
                             data: 'users',
-                            name: 'u.name',
+                            name: 'users',
                         },
                         {
                             data: 'observacion',
@@ -250,9 +250,9 @@
                         },
                         {
                             data: 'total_deuda',
-                            name: 'dpe.total'
+                            name: 'total_deuda'
                         },
-                        {data: 'total_pago', name: 'dpa.monto'},//total_pago
+                        {data: 'total_pago', name: 'total_pago'},//total_pago
                         {
                             data: 'condicion',
                             name: 'condicion',

@@ -94,6 +94,12 @@ class User extends Authenticatable
         'profile_photo_url'
     ];
 
+    public function encargado(){
+        return $this->belongsTo(self::class,'supervisor');
+    }
+    public function asesoroperario(){
+        return $this->belongsTo(self::class,'operario');
+    }
 
     public function adminlte_desc()
     {
