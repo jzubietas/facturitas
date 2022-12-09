@@ -106,6 +106,7 @@ class EnvioController extends Controller
         return view('envios.porEnviar', compact('condiciones', 'distritos', 'direcciones', 'destinos', 'superasesor','ver_botones_accion','departamento','distribuir'));
     }
 
+    
     public function Enviostabla(Request $request)
     {
         $pedidos=null;
@@ -123,9 +124,12 @@ class EnvioController extends Controller
                 'de.celular',
                 'de.nombre',
                 'de.cantidad',
-                DB::raw(" (select group_concat(dp.codigo_pedido) from direccion_pedidos dp where dp.direcciongrupo=direccion_grupos.id) as codigos "),
-                DB::raw(" (select group_concat(ab.empresa) from direccion_pedidos ab where ab.direcciongrupo=direccion_grupos.id) as producto "),
-                'de.direccion',
+                'direccion_grupos.codigos',
+                'direccion_grupos.producto',
+               //DB::raw(" (select group_concat(dp.codigo_pedido) from direccion_pedidos dp where dp.direcciongrupo=direccion_grupos.id) as codigos "),
+             //  DB::raw(" (select group_concat(ab.empresa) from direccion_pedidos ab where ab.direcciongrupo=direccion_grupos.id) as producto "),
+               
+               'de.direccion',
                 'de.referencia',
                 'de.observacion',                                        
                 'de.distrito',
@@ -152,8 +156,12 @@ class EnvioController extends Controller
                 DB::raw(" (select '') as celular "),
                 DB::raw(" (select '') as nombre "),
                 'de.cantidad',
-                DB::raw(" (select group_concat(dp.codigo_pedido) from gasto_pedidos dp where dp.direcciongrupo=direccion_grupos.id) as codigos "),
-                DB::raw(" (select group_concat(ab.empresa) from gasto_pedidos ab where ab.direcciongrupo=direccion_grupos.id) as producto "),
+               'direccion_grupos.codigos',
+                'direccion_grupos.producto',
+               
+                // DB::raw(" (select group_concat(dp.codigo_pedido) from gasto_pedidos dp where dp.direcciongrupo=direccion_grupos.id) as codigos "),
+               // DB::raw(" (select group_concat(ab.empresa) from gasto_pedidos ab where ab.direcciongrupo=direccion_grupos.id) as producto "),
+               
                 'de.tracking as direccion',
                 'de.foto as referencia',
                 DB::raw(" (select '') as observacion "),
@@ -293,6 +301,7 @@ class EnvioController extends Controller
 
     }
 
+
     public function DistribuirEnvioid(Request $request)
     {
       
@@ -349,8 +358,10 @@ class EnvioController extends Controller
                 'de.celular',
                 'de.nombre',
                 'de.cantidad',
-                DB::raw(" (select group_concat(dp.codigo_pedido) from direccion_pedidos dp where dp.direcciongrupo=direccion_grupos.id) as codigos "),
-                DB::raw(" (select group_concat(ab.empresa) from direccion_pedidos ab where ab.direcciongrupo=direccion_grupos.id) as producto "),
+                'direccion_grupos.codigos',
+                'direccion_grupos.producto',
+              // DB::raw(" (select group_concat(dp.codigo_pedido) from direccion_pedidos dp where dp.direcciongrupo=direccion_grupos.id) as codigos "),
+              // DB::raw(" (select group_concat(ab.empresa) from direccion_pedidos ab where ab.direcciongrupo=direccion_grupos.id) as producto "),
                 'de.direccion',
                 'de.referencia',
                 'de.observacion',                                        
@@ -377,8 +388,11 @@ class EnvioController extends Controller
                 DB::raw(" (select '') as celular "),
                 DB::raw(" (select '') as nombre "),
                 'de.cantidad',
-                DB::raw(" (select group_concat(dp.codigo_pedido) from gasto_pedidos dp where dp.direcciongrupo=direccion_grupos.id) as codigos "),
-                DB::raw(" (select group_concat(ab.empresa) from gasto_pedidos ab where ab.direcciongrupo=direccion_grupos.id) as producto "),
+                'direccion_grupos.codigos',
+                'direccion_grupos.producto',
+             //  DB::raw(" (select group_concat(dp.codigo_pedido) from gasto_pedidos dp where dp.direcciongrupo=direccion_grupos.id) as codigos "),
+             //  DB::raw(" (select group_concat(ab.empresa) from gasto_pedidos ab where ab.direcciongrupo=direccion_grupos.id) as producto "),
+          
                 'de.tracking as direccion',
                 'de.foto as referencia',
                 DB::raw(" (select '') as observacion "),
@@ -541,12 +555,11 @@ class EnvioController extends Controller
                                         'de.cantidad',
                                         DB::raw(" (select group_concat(dp.codigo_pedido) from direccion_pedidos dp where dp.direcciongrupo=direccion_grupos.id and dp.estado = 1) as codigos "),
                                         DB::raw(" (select group_concat(ab.empresa) from direccion_pedidos ab where ab.direcciongrupo=direccion_grupos.id) as producto "),
-                                        'de.direccion',
+                                     
                                         'de.referencia',
                                         'de.observacion',                                        
                                         'de.distrito',
-                                        'direccion_grupos.created_at as fecha',
-                                        'direccion_grupos.destino as destino2',
+                                     
                                         'direccion_grupos.distribucion',
                                         'direccion_grupos.condicion_sobre',
                                     );
@@ -579,12 +592,11 @@ class EnvioController extends Controller
                                         'de.cantidad',
                                         DB::raw(" (select group_concat(dp.codigo_pedido) from gasto_pedidos dp where dp.direcciongrupo=direccion_grupos.id and dp.estado = 1) as codigos "),
                                         DB::raw(" (select group_concat(ab.empresa) from gasto_pedidos ab where ab.direcciongrupo=direccion_grupos.id) as producto "),
-                                        'de.tracking as direccion',
+                                       
                                         'de.foto as referencia',
                                         DB::raw(" (select '') as observacion "),
                                         DB::raw(" (select '') as distrito "),
-                                        'direccion_grupos.created_at as fecha',
-                                        'direccion_grupos.destino as destino2',
+                                        
                                         'direccion_grupos.distribucion',
                                         'direccion_grupos.condicion_sobre',
                                     );
