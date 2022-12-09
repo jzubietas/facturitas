@@ -303,16 +303,16 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::post('users.asignarsupervisorpost', [UserController::class, 'AsignarSupervisorpost'])->name('users.asignarsupervisorpost');
     Route::post('users.asignarasesorpost', [UserController::class, 'AsignarAsesorpost'])->name('users.asignarasesorpost');////
 
-    Route::post('users.asignarjefe/{user}', [UserController::class, 'AsignarJefe'])->name('users.asignarjefe');
-    Route::get('users.misasesores', [UserController::class, 'MisAsesores'])->name('users.misasesores');
-    Route::post('users.asignarmetaasesor/{user}', [UserController::class, 'AsignarMetaAsesor'])->name('users.asignarmetaasesor');
-    Route::get('users.encargados', [UserController::class, 'Encargados'])->name('users.encargados');
-    Route::post('users.asignarmetaencargado/{user}', [UserController::class, 'AsignarMetaEncargado'])->name('users.asignarmetaencargado');
-    Route::get('users.operarios', [UserController::class, 'Operarios'])->name('users.operarios');
-    Route::get('users.misoperarios', [UserController::class, 'MisOperarios'])->name('users.misoperarios');
-    Route::get('users.jefes', [UserController::class, 'Jefes'])->name('users.jefes');
-    Route::get('users.mipersonal', [UserController::class, 'MiPersonal'])->name('users.mipersonal');
-    Route::get('clientesmipersonal', [UserController::class, 'indextablapersonal'])->name('clientesmipersonal');
+Route::post('users.asignarjefe/{user}', [UserController::class, 'AsignarJefe'])->name('users.asignarjefe');
+Route::get('users.misasesores', [UserController::class, 'MisAsesores'])->name('users.misasesores');
+Route::post('users.asignarmetaasesor/{user}', [UserController::class, 'AsignarMetaAsesor'])->name('users.asignarmetaasesor');
+Route::get('users.encargados', [UserController::class, 'Encargados'])->name('users.encargados');
+Route::post('users.asignarmetaencargado/{user}', [UserController::class, 'AsignarMetaEncargado'])->name('users.asignarmetaencargado');
+Route::get('users.operarios', [UserController::class, 'Operarios'])->name('users.operarios');
+Route::get('users.misoperarios', [UserController::class, 'MisOperarios'])->name('users.misoperarios');
+Route::get('users.jefes', [UserController::class, 'Jefes'])->name('users.jefes');
+Route::get('users.mipersonal',[UserController::class, 'MiPersonal'])->name('users.mipersonal');
+Route::get('indextablapersonal', [UserController::class, 'indextablapersonal'])->name('indextablapersonal');
 
     Route::post('VentaPorFechas', [PdfController::class, 'VentaPorFechas'])->name('VentaPorFechas');
     Route::post('IngresoPorFechas', [PdfController::class, 'IngresoPorFechas'])->name('IngresoPorFechas');

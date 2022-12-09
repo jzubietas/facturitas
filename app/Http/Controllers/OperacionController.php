@@ -61,12 +61,10 @@ class OperacionController extends Controller
         $dateMax = Carbon::now()->format('d/m/Y');
 
         $condiciones = [
-            "POR ATENDER" => 'POR ATENDER',
-            "EN PROCESO ATENCION" => 'EN PROCESO ATENCION',
-            "ATENDIDO" => 'ATENDIDO'
+            "1" => 'POR ATENDER',
+            "2" => 'EN PROCESO ATENCION',
+            "3" => 'ATENDIDO'
         ];
-
-        
 
         $imagenespedido = ImagenPedido::get();
         $imagenes = ImagenAtencion::get();        
@@ -111,7 +109,7 @@ class OperacionController extends Controller
                 )   
             ->where('pedidos.estado', '1')
             ->where('dp.estado', '1')
-            ->whereIn('pedidos.condicion', ['POR ATENDER','EN PROCESO ATENCION']);
+            ->whereIn('pedidos.condicion', ['1','2']);
             /*->groupBy(
                 'pedidos.id',
                 'c.nombre',
@@ -212,9 +210,9 @@ class OperacionController extends Controller
         $dateMax = Carbon::now()->format('d/m/Y');
 
         $condiciones = [
-            "POR ATENDER" => 'POR ATENDER',
-            "EN PROCESO ATENCION" => 'EN PROCESO ATENCION',
-            "ATENDIDO" => 'ATENDIDO'
+            "1" => 'POR ATENDER',
+            "2" => 'EN PROCESO ATENCION',
+            "3" => 'ATENDIDO'
         ];
 
         
@@ -256,7 +254,7 @@ class OperacionController extends Controller
                 ->where('dp.estado', '1')
                 //->WhereIn('u.identificador',$asesores)                
                 //->where('u.operario', Auth::user()->id)
-                ->where('pedidos.condicion', 'ATENDIDO')
+                ->where('pedidos.condicion', '3')//ATENDIDO
                 ->whereIn('pedidos.envio', ['0'])
                 ->groupBy(
                     'pedidos.id',
