@@ -9,12 +9,20 @@ class Pago extends Model
 {
     use HasFactory;
 
+    /*
     const PAGO = 1;
     const ABONADO = 2;
     const ADELANTO = 4;
     const OBSERVADO = 6;
     const PENDIENTE = 5;
     const ABONADO_PARCIAL = 3;
+    */
+    const PAGO = "PAGO";
+    const ABONADO = "ABONADO";
+    const ADELANTO = "ADELANTO";
+    const OBSERVADO = "OBSERVADO";
+    const PENDIENTE = "PENDIENTE";
+    const ABONADO_PARCIAL = "ABONADO_PARCIAL";
 
     protected $guarded = ['id'];
 
