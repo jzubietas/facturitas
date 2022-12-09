@@ -35,7 +35,7 @@
                 <label for="id_ingresomaterial">Estado</label>
                 <p>{{ $pedido->condiciones }}</p>
               </div>
-            </div>  
+            </div>
           </div>
         </div>
 
@@ -108,11 +108,11 @@
               </tfoot>
             </table>
           </div>
-        </div>      
+        </div>
 
         <br>
 
-        @if ($pedido->condiciones == "ATENDIDO")
+        @if ($pedido->condiciones == "3")
           <div class="border rounded card-body border-secondary">
             <table id="tabla" class="table table-striped" style="text-align: center">
               <thead><h4 style="text-align: center"><strong>Detalle de atención</strong></h4>
@@ -131,7 +131,7 @@
                           <p>
                             <a href="{{ route('pedidos.descargaradjunto', $img->adjunto) }}">{{ $img->adjunto }}</a>
                           </p>
-                      @endforeach                    
+                      @endforeach
                     </td>
                     <td>{{ $pedido->fecha_envio_doc }}</td>
                     <td>{{ $pedido->cant_compro }}</td>
@@ -147,7 +147,7 @@
 
 
         <textarea class="form-control" rows="6" placeholder="Cotizacion" name="copiar_cotizacion" cols="50" id="copiar_cotizacion">
-        
+
         </textarea>
 
 
@@ -187,9 +187,9 @@
 
 
   <script>
-  
 
-  
+
+
 
   </script>
 

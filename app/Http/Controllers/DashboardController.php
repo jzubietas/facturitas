@@ -240,7 +240,7 @@ class DashboardController extends Controller
             $pedidoxatender = Pedido::where('condicion', 'REGISTRADO')
                 ->where('pedidos.estado', '1')
                 ->count();
-            $pedidoenatencion = Pedido::where('condicion', 'EN PROCESO ATENCION')
+            $pedidoenatencion = Pedido::where('condicion', 2)
                 ->where('pedidos.estado', '1')
                 ->count();
         //DASHBOARD ADMINISTRACION

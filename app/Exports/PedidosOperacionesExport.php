@@ -14,7 +14,7 @@ use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 class PedidosOperacionesExport implements FromView, ShouldAutoSize
 {
     use Exportable;
-    
+
     public function pedidos($request) {
 
         $pedidos = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')
@@ -47,9 +47,9 @@ class PedidosOperacionesExport implements FromView, ShouldAutoSize
             )
             ->where('pedidos.estado', '1')
             ->where('dpe.estado', '1')
-            ->where('pedidos.condicion',['ATENDIDO'])
+            ->where('pedidos.condicion',[3])
             ->whereBetween(DB::raw('DATE(pedidos.created_at)'), [$request->desde, $request->hasta]);
-            
+
 
             if(Auth::user()->rol == "Administrador"){
 
@@ -80,7 +80,7 @@ class PedidosOperacionesExport implements FromView, ShouldAutoSize
                 )
                 ->pluck('users.identificador');
                 $pedidos=$pedidos->WhereIn('u.identificador',$asesores);
-            }else{ 
+            }else{
             }
             $pedidos = $pedidos -> get();
             $this->pedidos = $pedidos;
@@ -97,9 +97,9 @@ class PedidosOperacionesExport implements FromView, ShouldAutoSize
 /*class PedidosOperacionesExport implements FromView, ShouldAutoSize
 {
     use Exportable;
-    
+
     public function pedidos($request) {
-        
+
         $pedidos = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')
             ->join('users as u', 'pedidos.user_id', 'u.id')
             ->join('detalle_pedidos as dpe', 'pedidos.id', 'dpe.pedido_id')
@@ -112,7 +112,7 @@ class PedidosOperacionesExport implements FromView, ShouldAutoSize
                 'dpe.codigo as codigos',
                 'dpe.nombre_empresa as empresas',
                 'dpe.ruc',
-                'dpe.mes', 
+                'dpe.mes',
                 'dpe.tipo_banca',
                 'dpe.total',
                 'dpe.atendido_por',
@@ -127,7 +127,7 @@ class PedidosOperacionesExport implements FromView, ShouldAutoSize
             ->where('pedidos.estado', '1')
             ->where('dpe.estado', '1')
             ->where('pedidos.pago', '1')
-            ->where('pedidos.condicion', 'ATENDIDO')
+            ->where('pedidos.condicion', 3)
             ->where('u.jefe', Auth::user()->id) // Filtrar por operarios a cargo del jefe actual
             ->whereBetween(DB::raw('DATE(pedidos.created_at)'), [$request->desde, $request->hasta]) //rango de fechas
             ->groupBy(
@@ -137,7 +137,7 @@ class PedidosOperacionesExport implements FromView, ShouldAutoSize
                 'dpe.codigo',
                 'dpe.nombre_empresa',
                 'dpe.ruc',
-                'dpe.mes', 
+                'dpe.mes',
                 'dpe.tipo_banca',
                 'dpe.total',
                 'dpe.atendido_por',
@@ -151,7 +151,7 @@ class PedidosOperacionesExport implements FromView, ShouldAutoSize
             )
             ->orderBy('pedidos.created_at', 'DESC')
             ->get();
-        
+
         $this->pedidos = $pedidos;
 
         return $this;
@@ -169,7 +169,7 @@ class PedidosOperacionesExport implements FromView, ShouldAutoSize
                 'dpe.codigo as codigos',
                 'dpe.nombre_empresa as empresas',
                 'dpe.ruc',
-                'dpe.mes', 
+                'dpe.mes',
                 'dpe.tipo_banca',
                 'dpe.total',
                 'dpe.atendido_por',
@@ -182,7 +182,7 @@ class PedidosOperacionesExport implements FromView, ShouldAutoSize
             ->where('pedidos.estado', '1')
             ->where('dpe.estado', '1')
             ->where('pedidos.pago', '0')
-            ->where('pedidos.condicion', 'ATENDIDO')
+            ->where('pedidos.condicion', 3)
             ->where('u.jefe', Auth::user()->id) // Filtrar por operarios a cargo del jefe actual
             ->whereBetween(DB::raw('DATE(pedidos.created_at)'), [$request->desde, $request->hasta]) //rango de fechas
             ->groupBy(
@@ -192,7 +192,7 @@ class PedidosOperacionesExport implements FromView, ShouldAutoSize
                 'dpe.codigo',
                 'dpe.nombre_empresa',
                 'dpe.ruc',
-                'dpe.mes', 
+                'dpe.mes',
                 'dpe.tipo_banca',
                 'dpe.total',
                 'dpe.atendido_por',
@@ -204,12 +204,12 @@ class PedidosOperacionesExport implements FromView, ShouldAutoSize
             )
             ->orderBy('pedidos.created_at', 'DESC')
             ->get();
-        
+
         $this->pedidos2 = $pedidos2;
 
         return $this;
     }
-    
+
     public function view(): View {
         return view('reportes.PedidosOperacionesExcel', [
             'pedidos'=> $this->pedidos,

@@ -36,7 +36,7 @@ use DataTables;
 
 class OperacionController extends Controller
 {
-    
+
     /**
      * Display a listing of the resource.
      *
@@ -67,7 +67,7 @@ class OperacionController extends Controller
         ];
 
         $imagenespedido = ImagenPedido::get();
-        $imagenes = ImagenAtencion::get();        
+        $imagenes = ImagenAtencion::get();
         $superasesor = User::where('rol', 'Super asesor')->count();
 
         return view('operaciones.porAtender', compact('dateMin', 'dateMax',  'condiciones', 'imagenespedido', 'imagenes', 'superasesor'));
@@ -105,8 +105,8 @@ class OperacionController extends Controller
                 'dp.tipo_banca',
                 DB::raw(" ( select count(ip.id) from imagen_pedidos ip inner join pedidos pedido on pedido.id=ip.pedido_id and pedido.id=pedidos.id where ip.estado=1 and ip.adjunto not in ('logo_facturas.png') ) as imagenes ")
                 //DB::raw(" ( select count(ip.id) from imagen_pedidos ip inner join pedidos p on p.id=ip.pedido_id where ip.estado=1 and ip.adjunto not in ('logo_facturas.png') ) as imagenes ")
-            
-                )   
+
+                )
             ->where('pedidos.estado', '1')
             ->where('dp.estado', '1')
             ->whereIn('pedidos.condicion', ['1','2']);
@@ -132,11 +132,11 @@ class OperacionController extends Controller
 
         /*return Datatables::of($pedidos)
                     ->addIndexColumn()
-                    ->addColumn('action', function($pedido){     
+                    ->addColumn('action', function($pedido){
                         $btn='';
                         return $btn;
                     })
-                    ->addColumn('action2', function($pedido){     
+                    ->addColumn('action2', function($pedido){
                         $btn='';
                         return $btn;
                     })
@@ -159,7 +159,7 @@ class OperacionController extends Controller
                 ->pluck('users.identificador');
                 $pedidos=$pedidos->WhereIn('u.identificador',$asesores);
 
-           
+
         }else if(Auth::user()->rol == "Jefe de operaciones"){
 
             $operarios = User::where('users.rol', 'Operario')
@@ -169,7 +169,7 @@ class OperacionController extends Controller
                     DB::raw("users.id as id")
                 )
                 ->pluck('users.id');
-            
+
             $asesores = User::whereIN('users.rol', ['Asesor','Administrador'])
                 -> where('users.estado', '1')
                 ->WhereIn('users.operario',$operarios)
@@ -188,20 +188,20 @@ class OperacionController extends Controller
             $pedidos=$pedidos;
         }
         $pedidos=$pedidos->get();
-        
+
         return Datatables::of($pedidos)
                     ->addIndexColumn()
-                    ->addColumn('action', function($pedido){     
+                    ->addColumn('action', function($pedido){
                         $btn='';
                         return $btn;
                     })
-                    ->addColumn('action2', function($pedido){     
+                    ->addColumn('action2', function($pedido){
                         $btn='';
                         return $btn;
                     })
                     ->rawColumns(['action','action2'])
                     ->make(true);
-        
+
     }
 
     public function Atendidos()
@@ -215,7 +215,7 @@ class OperacionController extends Controller
             "3" => 'ATENDIDO'
         ];
 
-        
+
 
         $imagenes = ImagenAtencion::where('estado', '1')->get();
         $superasesor = User::where('rol', 'Super asesor')->count();
@@ -231,13 +231,13 @@ class OperacionController extends Controller
                     'pedidos.id',
                     DB::raw(" (CASE WHEN pedidos.id<10 THEN concat('PED000',pedidos.id)
                                     WHEN pedidos.id<100 THEN concat('PED00',pedidos.id)
-                                    WHEN pedidos.id<1000 THEN concat('PED0',pedidos.id) 
+                                    WHEN pedidos.id<1000 THEN concat('PED0',pedidos.id)
                                     ELSE concat('PED',pedidos.id)  end ) as id2 "),
                     'u.identificador as users',
                     'dp.codigo as codigos',
                     'dp.nombre_empresa as empresas',
                     'pedidos.condicion',
-                    DB::raw('(DATE_FORMAT(pedidos.created_at, "%Y-%m-%d %h:%i:%s")) as fecha'),                  
+                    DB::raw('(DATE_FORMAT(pedidos.created_at, "%Y-%m-%d %h:%i:%s")) as fecha'),
                     'pedidos.envio',
                     'pedidos.destino',
                     'pedidos.condicion_envio',
@@ -252,7 +252,7 @@ class OperacionController extends Controller
                 )
                 ->where('pedidos.estado', '1')
                 ->where('dp.estado', '1')
-                //->WhereIn('u.identificador',$asesores)                
+                //->WhereIn('u.identificador',$asesores)
                 //->where('u.operario', Auth::user()->id)
                 ->where('pedidos.condicion', '3')//ATENDIDO
                 ->whereIn('pedidos.envio', ['0'])
@@ -293,7 +293,7 @@ class OperacionController extends Controller
 
             $pedidos=$pedidos->WhereIn('u.identificador',$asesores);
 
-            
+
         }else if(Auth::user()->rol == "Jefe de operaciones"){
             $operarios = User::where('users.rol', 'Operario')
                 -> where('users.estado', '1')
@@ -317,17 +317,17 @@ class OperacionController extends Controller
 
             $pedidos=$pedidos->WhereIn('u.identificador',$asesores);
 
-           
+
         }else{
             $pedidos=$pedidos;
-            
+
                 /*->simplePaginate(1000);*/
             }
         $pedidos=$pedidos->get();
 
         return Datatables::of($pedidos)
             ->addIndexColumn()
-            ->addColumn('action', function($pedido){     
+            ->addColumn('action', function($pedido){
                 $btn='';
 
                 return $btn;
@@ -368,7 +368,7 @@ class OperacionController extends Controller
                     'dp.nombre_empresa as empresas',
                     'pedidos.condicion',
                     //DB::raw('DATE_FORMAT(pedidos.created_at, "%d/%m/%Y") as fecha'),
-                    DB::raw('(DATE_FORMAT(pedidos.created_at, "%Y-%m-%d %h:%i:%s")) as fecha'),  
+                    DB::raw('(DATE_FORMAT(pedidos.created_at, "%Y-%m-%d %h:%i:%s")) as fecha'),
                     'pedidos.envio',
                     'pedidos.destino',
                     'pedidos.condicion_envio',
@@ -390,11 +390,11 @@ class OperacionController extends Controller
                 )
                 ->where('pedidos.estado', '1')
                 ->where('dp.estado', '1')
-                ->where('pedidos.condicion', 'ATENDIDO')
+                ->where('pedidos.condicion', 3)
                 ->whereIn('pedidos.envio', ['1','2','3'])
                 //->whereIn('pedidos.envio', ['0'])
                 ->whereBetween( 'pedidos.created_at', [$min, $max]);
-                       
+
         if(Auth::user()->rol == "Operario"){
 
             $asesores = User::whereIN('users.rol', ['Asesor','Administrador'])
@@ -411,7 +411,7 @@ class OperacionController extends Controller
 
             $pedidos->WhereIn('u.identificador',$asesores);
 
-            
+
         }else if(Auth::user()->rol == "Jefe de operaciones"){
             $operarios = User::where('users.rol', 'Operario')
                 -> where('users.estado', '1')
@@ -435,7 +435,7 @@ class OperacionController extends Controller
 
             $pedidos->WhereIn('u.identificador',$asesores);
 
-            
+
         }else{
             $pedidos=$pedidos;
         }
@@ -443,7 +443,7 @@ class OperacionController extends Controller
 
         return Datatables::of($pedidos)
             ->addIndexColumn()
-            ->addColumn('action', function($pedido){     
+            ->addColumn('action', function($pedido){
                 $btn='';
 
                 return $btn;
@@ -452,5 +452,5 @@ class OperacionController extends Controller
             ->make(true);
     }
 
-    
+
 }

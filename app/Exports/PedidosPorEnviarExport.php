@@ -33,7 +33,7 @@ class PedidosPorEnviarExport implements FromView, ShouldAutoSize
                 'c.celular as celular_cliente',
                 'dp.nombre_empresa as empresa',
                 'dp.cantidad as cantidad',
-                'dp.fecha_envio_doc as fecha_elaboracion',                
+                'dp.fecha_envio_doc as fecha_elaboracion',
                 'die.distrito as distrito',
                 'die.direccion as direccion',
                 'die.referencia as referencia',
@@ -49,7 +49,7 @@ class PedidosPorEnviarExport implements FromView, ShouldAutoSize
             ->where('pedidos.direccion', '1')
             ->where('pedidos.destino', 'LIMA')
             ->where('di.provincia', 'LIMA')
-            ->whereIn('pedidos.condicion_envio', ['EN REPARTO'])//'PENDIENTE DE ENVIO',
+            ->whereIn('pedidos.condicion_envio', [2])//1,
             ->whereBetween(DB::raw('DATE(pedidos.created_at)'), [$request->desde, $request->hasta]) //rango de fechas
             ->groupBy(
                 'pedidos.id',
@@ -79,7 +79,7 @@ class PedidosPorEnviarExport implements FromView, ShouldAutoSize
         return $this;
     }
 
-    public function pedidosProvincia($request) {    
+    public function pedidosProvincia($request) {
         $pedidosProvincia = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')
             ->join('users as u', 'pedidos.user_id', 'u.id')
             ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
@@ -96,7 +96,7 @@ class PedidosPorEnviarExport implements FromView, ShouldAutoSize
                 'c.celular as celular_cliente',
                 'dp.nombre_empresa as empresa',
                 'dp.cantidad as cantidad',
-                'dp.fecha_envio_doc as fecha_elaboracion',  
+                'dp.fecha_envio_doc as fecha_elaboracion',
                 'ge.tracking as tracking',
                 'ge.registro as registro',
                 'ge.importe as importe',
@@ -108,7 +108,7 @@ class PedidosPorEnviarExport implements FromView, ShouldAutoSize
             ->where('pedidos.envio', '<>', '0')
             ->where('pedidos.direccion', '1')
             ->where('pedidos.destino', 'PROVINCIA')
-            ->whereIn('pedidos.condicion_envio', ['EN REPARTO'])//'PENDIENTE DE ENVIO',
+            ->whereIn('pedidos.condicion_envio', [2])//1,
             ->whereBetween(DB::raw('DATE(pedidos.created_at)'), [$request->desde, $request->hasta]) //rango de fechas
             ->groupBy(
                 'pedidos.id',

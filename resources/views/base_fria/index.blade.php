@@ -340,7 +340,7 @@ $(document).ready(function () {
       var celular = document.getElementById('celular').value;
       var provincia = document.getElementById('provincia').value;
       var distrito = document.getElementById('distrito').value;
-      var direccion = document.getElementById('direccion').value;
+      //var direccion = document.getElementById('direccion').value;
       var referencia = document.getElementById('referencia').value;
       var porcentaje1 = document.getElementById('porcentaje1').value;
       var porcentaje2 = document.getElementById('porcentaje2').value;
@@ -382,13 +382,14 @@ $(document).ready(function () {
             'warning'
           )
         }
+        /*
         else if (direccion == ''){
           Swal.fire(
             'Error',
             'Registre la direccion del cliente',
             'warning'
           )
-        }
+        }*/
         else if (referencia == ''){
           Swal.fire(
             'Error',

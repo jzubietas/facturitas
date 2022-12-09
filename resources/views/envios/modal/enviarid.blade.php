@@ -8,7 +8,7 @@
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
-        
+
         <form id="formularioenviar" name="formularioenviar" enctype="multipart/form-data">
           <input type="hidden" id="hiddenEnviar" name="hiddenEnviar">
           <div class="modal-body">
@@ -34,21 +34,21 @@
 
                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
                             {!! Form::label('fecha_recepcion', 'Fecha de entrega') !!}
-                            {!! Form::date('fecha_recepcion', null, ['class' => 'form-control', 'id' => 'fecha_recepcion']) !!}                             
+                            {!! Form::date('fecha_recepcion', null, ['class' => 'form-control', 'id' => 'fecha_recepcion']) !!}
                             </div>
 
                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
                               {!! Form::label('foto1', 'Foto de recibido 1') !!}
                               @csrf
-                              {!! Form::file('foto1', ['class' => 'form-control-file', 'accept' =>'image/*']) !!}  
+                              {!! Form::file('foto1', ['class' => 'form-control-file', 'accept' =>'image/*']) !!}
                             </div>
 
-                            
+
 
                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
                               {!! Form::label('foto2', 'Foto de recibido 2') !!}
                               @csrf
-                              {!! Form::file('foto2', ['class' => 'form-control-file', 'accept' =>'image/*']) !!}  
+                              {!! Form::file('foto2', ['class' => 'form-control-file', 'accept' =>'image/*']) !!}
                             </div>
 
                             <div class="form-group col-lg-6">
@@ -70,17 +70,17 @@
                                 <option value="REGISTRADO">REGISTRADO</option>
                                 <option value="EN CAMINO">EN CAMINO</option>
                                 <option value="EN TIENDA/AGENTE">EN TIENDA/AGENTE</option>
-                                <option value="ENTREGADO">ENTREGADO</option>
+                                <option value="3">ENTREGADO</option>
                                 <option value="NO ENTREGADO">NO ENTREGADO</option>
                               </select>
 
                             </div>
-                            
+
 
                           </div>
 
 
-                         
+
                         </div>
                       </div>
                     </div>
