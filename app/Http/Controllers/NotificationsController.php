@@ -77,27 +77,28 @@ class NotificationsController extends Controller
         // Return the new notification data.
 
         return [
-            'icon'         => 'fas fa-bell',
-            'label'       => count(auth()->user()->unreadNotifications),
+            'icon' => 'fas fa-bell',
+            'label' => count(auth()->user()->unreadNotifications),
             'label_color' => 'danger',
-            'icon_color'  => 'white',
-            'dropdown'    => $dropdownHtml,
+            'icon_color' => 'white',
+            'dropdown' => $dropdownHtml,
         ];
     }
 
     public function index()
     {
         $postNotifications = auth()->user()->unreadNotifications;
-        $devoluciones=Devolucion::query()->noAtendidos()->get();
-        return view('notifications.index', compact('postNotifications','devoluciones'));
+        $devoluciones = Devolucion::query()->with(['cliente','pago','asesor'])->noAtendidos()->get();
+        //return $devoluciones;
+        return view('notifications.index', compact('postNotifications', 'devoluciones'));
     }
 
     public function markNotification(Request $request)
     {
         auth()->user()->unreadNotifications
-                ->when($request->input('id'), function($query) use ($request){
-                    return $query->where('id', $request->input('id'));
-                })->markAsRead();
+            ->when($request->input('id'), function ($query) use ($request) {
+                return $query->where('id', $request->input('id'));
+            })->markAsRead();
         return response()->noContent();
     }
 }

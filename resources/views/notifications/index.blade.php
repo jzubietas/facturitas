@@ -16,6 +16,7 @@
                     <div class="card-body">
 
                         @if (auth()->user())
+                            {{--
                             @foreach($devoluciones as $notification)
                                 <div class="alert alert-default-warning">
                                     Asunto: Pago por devolver a {{$notification->cliente->nombre}} <br>
@@ -25,6 +26,7 @@
                                     <a href="{{ route('markAsRead') }}" id="mark-all">Marcar todas como leídas</a>
                                 @endif
                             @endforeach
+                            --}}
                         @forelse ($postNotifications as $notification)
                                 <div class="alert alert-default-warning">
                                     Asunto: {{ $notification->data['asunto'] }} <br>
