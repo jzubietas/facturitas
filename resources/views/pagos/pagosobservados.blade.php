@@ -172,15 +172,14 @@
     <script>
 
         (function ($) {
-            function clickformdelete()
-            {
+            function clickformdelete() {
                 console.log("action delete action")
                 var formData = $("#formdelete").serialize();
                 console.log(formData);
                 $.ajax({
-                    type:'POST',
-                    url:"{{ route('pagodeleteRequest.post') }}",
-                    data:formData,
+                    type: 'POST',
+                    url: "{{ route('pagodeleteRequest.post') }}",
+                    data: formData,
                 }).done(function (data) {
                     $("#modal-delete").modal("hide");
                     //resetearcamposdelete();
@@ -199,7 +198,7 @@
                     processing: true,
                     serverSide: true,
                     searching: true,
-                    order: [[ 0, "asc" ]],
+                    order: [[0, "asc"]],
                     ajax: {
                         url: "{{ route('pagos.pagosobservados',['datatable'=>1]) }}",
                         data: function (d) {
@@ -213,11 +212,11 @@
                     rowCallback: function (row, data, index) {
 
                     },
-                    initComplete:function(settings,json){
-                        if (localStorage. getItem("search_tabla") === null) {
+                    initComplete: function (settings, json) {
+                        if (localStorage.getItem("search_tabla") === null) {
                             //no existe
-                        }else{
-                            $('#tablaPrincipal_filter label input').val(localStorage.getItem("search_tabla") ).change();
+                        } else {
+                            $('#tablaPrincipal_filter label input').val(localStorage.getItem("search_tabla")).change();
                         }
                     },
                     columns: [
@@ -228,6 +227,18 @@
                         {
                             data: 'codigos',
                             name: 'dpe.codigo',
+                            render: function (data, type, row, meta) {
+                                if (data == null) {
+                                    return 'SIN PEDIDOS';
+                                } else {
+                                    var returndata = '';
+                                    var jsonArray = data.split(",");
+                                    $.each(jsonArray, function (i, item) {
+                                        returndata += item + '<br>';
+                                    });
+                                    return returndata;
+                                }
+                            }
                         },
                         {
                             data: 'users',
@@ -241,21 +252,20 @@
                             data: 'total_deuda',
                             name: 'dpe.total'
                         },
-                        { data: 'total_pago', name: 'dpa.monto'},//total_pago
+                        {data: 'total_pago', name: 'dpa.monto'},//total_pago
                         {
                             data: 'condicion',
                             name: 'condicion',
-                            render: function ( data, type, row, meta ) {
-                                if(row.subcondicion!=null)
-                                {
-                                    return '<span class="badge badge-dark">'+row.subcondicion+'</span>'+data;
-                                }else{
+                            render: function (data, type, row, meta) {
+                                if (row.subcondicion != null) {
+                                    return '<span class="badge badge-dark">' + row.subcondicion + '</span>' + data;
+                                } else {
                                     return data;
                                 }
 
                             }
                         },//estado
-                        {data: 'action', name: 'action', orderable: false, searchable: false,sWidth:'20%'},
+                        {data: 'action', name: 'action', orderable: false, searchable: false, sWidth: '20%'},
                     ],
                     language: {
                         "decimal": "",
@@ -280,17 +290,17 @@
 
                 });
 
-                $(document).on("keypress",'#tablaPrincipal_filter label input',function(){
+                $(document).on("keypress", '#tablaPrincipal_filter label input', function () {
                     console.log("aaaaa")
 
-                    localStorage.setItem("search_tabla",$(this).val());
-                    console.log( "search_tabla es "+localStorage.getItem("search_tabla") );
+                    localStorage.setItem("search_tabla", $(this).val());
+                    console.log("search_tabla es " + localStorage.getItem("search_tabla"));
 
                 });
 
-                $('#tablaPrincipal_filter label input').on('paste', function(e) {
+                $('#tablaPrincipal_filter label input').on('paste', function (e) {
                     var pasteData = e.originalEvent.clipboardData.getData('text')
-                    localStorage.setItem("search_tabla",pasteData);
+                    localStorage.setItem("search_tabla", pasteData);
                 });
 
                 $.ajax({
@@ -311,6 +321,22 @@
                 $(document).on("change", "#asesores_observado", function () {
                     localStorage.setItem('pagosobservados', $(this).val());
                     $('#tablaPrincipal').DataTable().ajax.reload();
+                });
+
+                $('#modal-delete').on('show.bs.modal', function (event) {
+                    var button = $(event.relatedTarget)
+                    var idunico = button.data('delete')
+                    $("#hiddenId").val(idunico);
+                    if (idunico < 10) {
+                        idunico = 'PAG000' + idunico;
+                    } else if (idunico < 100) {
+                        idunico = 'PAG00' + idunico;
+                    } else if (idunico < 1000) {
+                        idunico = 'PAG0' + idunico;
+                    } else {
+                        idunico = 'PAG' + idunico;
+                    }
+                    $(".textcode").html(idunico);
                 });
 
                 $(document).on("submit", "#formdelete", function (evento) {

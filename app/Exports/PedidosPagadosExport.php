@@ -2,6 +2,7 @@
 
 namespace App\Exports;
 
+use App\Models\Pago;
 use App\Models\Pedido;
 use Carbon\Carbon;
 use Illuminate\Contracts\View\View;
@@ -37,7 +38,7 @@ class PedidosPagadosExport implements FromView, ShouldAutoSize
             ->where('pedidos.estado', '1')
             ->where('dp.estado', '1')
             ->where('u.id', Auth::user()->id)
-            ->where('pa.condicion', 'ABONADO')
+            ->where('pa.condicion', Pago::ABONADO)
             ->whereBetween(DB::raw('DATE(pedidos.created_at)'), [$request->desde, $request->hasta]) //rango de fechas
             ->groupBy(
                 'pedidos.id',
@@ -60,6 +61,6 @@ class PedidosPagadosExport implements FromView, ShouldAutoSize
         return view('pedidos.excel.pedidospagados', [
             'pedidos'=> $this->pedidos
         ]);
-    }    
+    }
 
 }

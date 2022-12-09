@@ -81,7 +81,7 @@
 
 @section('css')
   {{-- <link rel="stylesheet" href="../css/admin_custom.css"> --}}
-  <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">  
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
 
   <style>
     .yellow {
@@ -91,7 +91,7 @@
     .red {
       background-color: red !important;
     }
-    
+
     .white {
       background-color: white !important;
     }
@@ -161,7 +161,7 @@
             {
             }else{
               $(row).addClass('yellow');
-            } */         
+            } */
         },
         rowCallback: function (row, data, index) {
               var pedidodiferencia=data.diferencia;
@@ -174,19 +174,19 @@
                 }else{
                   $('td:eq(10)', row).css('background', '#44c24b').css('text-align','center').css('font-weight','bold');
                 }
-              }    
-              
+              }
+
         },
-        initComplete:function(settings,json){          
+        initComplete:function(settings,json){
           if (localStorage. getItem("search_tabla") === null) {
             //no existe
           }else{
-            $('#tablaPrincipal_filter label input').val(localStorage.getItem("search_tabla") ).change();            
-          }          
+            $('#tablaPrincipal_filter label input').val(localStorage.getItem("search_tabla") ).change();
+          }
         },
         columns: [
         {//15 columnas
-            data: 'id', 
+            data: 'id',
             name: 'id',
             render: function ( data, type, row, meta ) {
               if(row.id<10){
@@ -197,12 +197,12 @@
                 return 'PED0'+row.id;
               }else{
                 return 'PED'+row.id;
-              } 
+              }
             }
         },
         {data: 'codigos', name: 'codigos', },
         {
-            data: 'celulares', 
+            data: 'celulares',
             name: 'celulares',
             render: function ( data, type, row, meta ) {
               if(row.icelulares!=null)
@@ -212,7 +212,7 @@
               }else{
                 return row.celulares+' - '+row.nombres;
               }
-              
+
             },
             //searchable: true
         },
@@ -220,20 +220,20 @@
         {data: 'users', name: 'users', },
         {data: 'fecha', name: 'fecha', },
         {
-          data: 'total', 
-          name: 'total', 
+          data: 'total',
+          name: 'total',
           render: $.fn.dataTable.render.number(',', '.', 2, '')
         },
         {
-          data: 'condiciones', 
-          name: 'condiciones', 
+          data: 'condiciones',
+          name: 'condiciones',
           render: function ( data, type, row, meta ) {
               return data;
           }
         },//estado de pedido
         {
-          data: 'condicion_pa', 
-          name: 'condicion_pa', 
+          data: 'condicion_pa',
+          name: 'condicion_pa',
           render: function ( data, type, row, meta ) {
             if(row.condicion_pa==null){
               return 'SIN PAGO REGISTRADO';
@@ -247,13 +247,13 @@
                 return 'PAGO';
               }
               return data;
-            }              
+            }
           }
         },//estado de pago
         /*{
           //estado del sobre
-          data: 'envio', 
-          name: 'envio', 
+          data: 'envio',
+          name: 'envio',
           render: function ( data, type, row, meta ) {
             if(row.envio==null){
               return '';
@@ -272,7 +272,7 @@
           }
         },*/
         //{data: 'responsable', name: 'responsable', },//estado de envio
-        
+
         //{data: 'condicion_pa', name: 'condicion_pa', },//ss
         {data: 'condicion_env', name: 'condicion_envio', },//
         /*{
@@ -287,7 +287,7 @@
             }
         },*/
         {
-          data: 'diferencia', 
+          data: 'diferencia',
           name: 'diferencia',
           render: function ( data, type, row, meta ) {
             if(row.diferencia==null){
@@ -298,7 +298,7 @@
               }else{
                 return row.diferencia;
               }
-            }            
+            }
           }
         },
         //{data: 'responsable', name: 'responsable', },
@@ -306,7 +306,7 @@
         ],
         language: {
         "decimal": "",
-        "emptyTable": "No hay informaciÃ³n",
+        "emptyTable": "No hay información",
         "info": "Mostrando del _START_ al _END_ de _TOTAL_ Entradas",
         "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
         "infoFiltered": "(Filtrado de _MAX_ total entradas)",
@@ -329,12 +329,12 @@
       var pasteData = e.originalEvent.clipboardData.getData('text')
       localStorage.setItem("search_tabla",pasteData);
     });
-    $(document).on("keypress",'#tablaPrincipal_filter label input',function(){      
+    $(document).on("keypress",'#tablaPrincipal_filter label input',function(){
       localStorage.setItem("search_tabla",$(this).val());
       console.log( "search_tabla es "+localStorage.getItem("search_tabla") );
     });
   });
-  
+
 
 
   </script>
@@ -353,15 +353,15 @@
   <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
 
   <script>
-    /*window.onload = function () {      
+    /*window.onload = function () {
       $('#tablaPrincipal').DataTable().draw();
     }*/
   </script>
 
   <script>
     /* Custom filtering function which will search data in column four between two values */
-        $(document).ready(function () { 
-        
+        $(document).ready(function () {
+
             $.fn.dataTable.ext.search.push(
                 function (settings, data, dataIndex) {
                     var min = $('#min').datepicker("getDate");
@@ -378,7 +378,7 @@
                 }
             );
 
-      
+
             $("#min").datepicker({ onSelect: function () { table.draw(); }, changeMonth: true, changeYear: true , dateFormat:"dd/mm/yy"});
             $("#max").datepicker({ onSelect: function () { table.draw(); }, changeMonth: true, changeYear: true, dateFormat:"dd/mm/yy" });
             var table = $('#tablaPrincipal').DataTable();

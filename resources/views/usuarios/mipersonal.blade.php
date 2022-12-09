@@ -117,7 +117,7 @@
 
   <script>
     //VALIDAR CAMPOS NUMERICO DE MONTO EN PAGOS
-    
+
     $('input.number').keyup(function(event) {
 
     if(event.which >= 37 && event.which <= 40){
@@ -127,7 +127,7 @@
     $(this).val(function(index, value) {
       return value
         .replace(/\D/g, "")
-        .replace(/([0-9])([0-9]{2})$/, '$1.$2')  
+        .replace(/([0-9])([0-9]{2})$/, '$1.$2')
         .replace(/\B(?=(\d{3})+(?!\d)\.?)/g, ",")
       ;
     });
@@ -139,25 +139,25 @@
         autowidth:true,
         serverSide: true,
         ajax: "{{ route('indextablapersonal') }}",
-        initComplete:function(settings,json){          
+        initComplete:function(settings,json){
           if (localStorage. getItem("search_tabla") === null) {
             //no existe
           }else{
-            $('#tablaPrincipal_filter label input').val(localStorage.getItem("search_tabla") ).change();            
-          }          
+            $('#tablaPrincipal_filter label input').val(localStorage.getItem("search_tabla") ).change();
+          }
         },
         columns: [
         {
-            data: 'id', 
+            data: 'id',
             name: 'id',
         },
         {data: 'name', name: 'name'},
         {
-          data: 'email', 
+          data: 'email',
           name: 'email',
         },
         {
-          data: 'rol', 
+          data: 'rol',
           name: 'rol',
         },
         {data: 'estado', name: 'estado'},
@@ -165,7 +165,7 @@
 
         language: {
         "decimal": "",
-        "emptyTable": "No hay informaciÃ³n",
+        "emptyTable": "No hay información",
         "info": "Mostrando del _START_ al _END_ de _TOTAL_ Entradas",
         "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
         "infoFiltered": "(Filtrado de _MAX_ total entradas)",
@@ -187,7 +187,7 @@
     });
     $(document).on("keypress",'#tablaPrincipal_filter label input',function(){
       console.log("aaaaa")
-      
+
       localStorage.setItem("search_tabla",$(this).val());
       console.log( "search_tabla es "+localStorage.getItem("search_tabla") );
 
