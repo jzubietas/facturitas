@@ -19,6 +19,7 @@
 @stop
 
 @section('content')
+@include('usuarios.modal.historialpersonal')
 
   <div class="card">
     <div class="card-body">
@@ -30,24 +31,18 @@
             <th scope="col">CORREO</th>
             <th scope="col">CARGO</th>
             <th scope="col">ESTADO</th>
+            <th scope="col">ACCIONES</th>
           </tr>
         </thead>
         <tbody>
           @foreach ($users as $user)
             <tr>
-              <td>USER{{ $user->id }}</td>
+              <td>{{ $user->id }}</td>
               <td>{{ $user->name }}</td>
               <td>{{ $user->email }}</td>
               <td>{{ $user->rol }}</td>
-              <td>{{ $user->estado }}</td>
-              <td>
-                @php
-                  if ($user->estado == '1') {
-                      echo '<span class="badge badge-success">Activo</span>';
-                  } else {
-                      echo '<span class="badge badge-danger">Inactivo</span>';
-                  }
-                @endphp
+              <td>{{ $user->estado }}
+              <td>{{ $user->action }}
               </td>
             </tr>
           @endforeach
@@ -104,6 +99,8 @@
 
 @section('js')
   <script src="{{ asset('js/datatables.js') }}"></script>
+  <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
 
   @if (session('info') == 'registrado' || session('info') == 'actualizado' || session('info') == 'eliminado')
     <script>
@@ -133,12 +130,22 @@
     });
     });
 
+    $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+
     $('#tablaPrincipal').DataTable({
         processing: true,
-        responsive:true,
-        autowidth:true,
+        //responsive:true,
+        //autowidth:true,
         serverSide: true,
+        searching: true,
+        "order": [[ 0, "desc" ]],
         ajax: "{{ route('indextablapersonal') }}",
+        "createdRow": function( row, data, dataIndex){        
+          },
         initComplete:function(settings,json){          
           if (localStorage. getItem("search_tabla") === null) {
             //no existe
@@ -150,6 +157,17 @@
         {
             data: 'id', 
             name: 'id',
+            render: function ( data, type, row, meta ) {
+                    if(row.id<10){
+                        return 'USER000'+row.id;
+                    }else if(row.id<100){
+                        return 'USER00'+row.id;
+                    }else if(row.id<1000){
+                        return 'USER0'+row.id;
+                    }else{
+                        return 'USER'+row.id;
+                    }
+            }
         },
         {data: 'name', name: 'name'},
         {
@@ -160,41 +178,59 @@
           data: 'rol', 
           name: 'rol',
         },
-        {data: 'estado', name: 'estado'},
+        {       
+          data: 'estado', name: 'estado',
+                render: function ( data, type, row, meta ) {
+                    if(data=="1")
+                    {
+                        return '<span class="badge badge-success">Activo</span>';
+                    }else if(data=="0"){
+                        return '<span class="badge badge-danger">Inactivo</span>';
+                    }
+                }
+        }, 
+        {
+                data: 'action', 
+                name: 'action', 
+                orderable: false, 
+                searchable: false,
+                sWidth:'20%',
+                render: function ( data, type, row, meta ) {
+                  
+                    return data;             
+                }
+        },
         ],
 
         language: {
-        "decimal": "",
-        "emptyTable": "No hay informaciÃ³n",
-        "info": "Mostrando del _START_ al _END_ de _TOTAL_ Entradas",
-        "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
-        "infoFiltered": "(Filtrado de _MAX_ total entradas)",
-        "infoPostFix": "",
-        "thousands": ",",
-        "lengthMenu": "Mostrar _MENU_ Entradas",
-        "loadingRecords": "Cargando...",
-        "processing": "Procesando...",
-        "search": "Buscar:",
-        "zeroRecords": "Sin resultados encontrados",
-        "paginate": {
-          "first": "Primero",
-          "last": "Ultimo",
-          "next": "Siguiente",
-          "previous": "Anterior"
-        }
-      },
-
-    });
-    $(document).on("keypress",'#tablaPrincipal_filter label input',function(){
-      console.log("aaaaa")
-      
-      localStorage.setItem("search_tabla",$(this).val());
-      console.log( "search_tabla es "+localStorage.getItem("search_tabla") );
+              "decimal": "",
+              "emptyTable": "No hay informaciÃ³n",
+              "info": "Mostrando del _START_ al _END_ de _TOTAL_ Entradas",
+              "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
+              "infoFiltered": "(Filtrado de _MAX_ total entradas)",
+              "infoPostFix": "",
+              "thousands": ",",
+              "lengthMenu": "Mostrar _MENU_ Entradas",
+              "loadingRecords": "Cargando...",
+              "processing": "Procesando...",
+              "search": "Buscar:",
+              "zeroRecords": "Sin resultados encontrados",
+              "paginate": {
+              "first": "Primero",
+              "last": "Ultimo",
+              "next": "Siguiente",
+              "previous": "Anterior"
+              }
+          },
 
     });
     $('#tablaPrincipal_filter label input').on('paste', function(e) {
       var pasteData = e.originalEvent.clipboardData.getData('text')
       localStorage.setItem("search_tabla",pasteData);
+    });
+    $(document).on("keypress",'#tablaPrincipal_filter label input',function(){      
+      localStorage.setItem("search_tabla",$(this).val());
+      console.log( "search_tabla es "+localStorage.getItem("search_tabla") );
     });
 
 

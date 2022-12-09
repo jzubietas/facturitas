@@ -276,7 +276,19 @@
             render:$.fn.dataTable.render.moment('YYYY-MM-DD HH:mm:ss', 'DD/MM/YYYY HH:mm:ss' )
           },
           {data: 'destino', name: 'destino',"visible":false },
-          {data: 'condicion', name: 'condicion', },
+          {data: 'condicion', name: 'condicion',
+            render: function ( data, type, row, meta ) { 
+                if(row.condicion==1){
+                  return '<span>Por Atender</span>';
+                }else if(row.condicion==2){
+                  return '<span>En Proceso Atencion</span>';
+                }else if(row.condicion==3){
+                  return '<span>Atendido</span>';
+                }else{
+                  
+                } 
+              }
+          },
           {data: 'atendido_por', name: 'atendido_por', },
           {data: 'jefe', name: 'jefe', },
           {
