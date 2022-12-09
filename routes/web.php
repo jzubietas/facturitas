@@ -196,6 +196,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::post('pedidos/eliminarFoto2/{pedido}', [PedidoController::class, 'eliminarFoto2'])->name('pedidos.eliminarFoto2');
     Route::get('envios/{imagen}/descargarimagen', [PedidoController::class, 'DescargarImagen'])->name('envios.descargarimagen');
 
+    Route::get('pagos/devolucion/{devolucion}', [PagoController::class,'devolucion'])->name('pagos.devolucion');
     Route::resource('pagos', PagoController::class)->names('pagos');
 //Route::get('pagos/create/{cliente}', [PagoController::class, 'create'])->name('pagos.create');
 
