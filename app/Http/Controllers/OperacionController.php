@@ -61,10 +61,12 @@ class OperacionController extends Controller
         $dateMax = Carbon::now()->format('d/m/Y');
 
         $condiciones = [
-            "1" => 'POR ATENDER',
-            "2" => 'EN PROCESO ATENCION',
-            "3" => 'ATENDIDO'
+            "POR ATENDER" => 'POR ATENDER',
+            "EN PROCESO ATENCION" => 'EN PROCESO ATENCION',
+            "ATENDIDO" => 'ATENDIDO'
         ];
+
+        
 
         $imagenespedido = ImagenPedido::get();
         $imagenes = ImagenAtencion::get();        
@@ -104,12 +106,10 @@ class OperacionController extends Controller
                 'dp.fecha_recepcion',
                 'dp.tipo_banca',
                 DB::raw(" ( select count(ip.id) from imagen_pedidos ip inner join pedidos pedido on pedido.id=ip.pedido_id and pedido.id=pedidos.id where ip.estado=1 and ip.adjunto not in ('logo_facturas.png') ) as imagenes ")
-                //DB::raw(" ( select count(ip.id) from imagen_pedidos ip inner join pedidos p on p.id=ip.pedido_id where ip.estado=1 and ip.adjunto not in ('logo_facturas.png') ) as imagenes ")
-            
-                )   
+            )
             ->where('pedidos.estado', '1')
             ->where('dp.estado', '1')
-            ->whereIn('pedidos.condicion', ['1','2']);
+            ->whereIn('pedidos.condicion', ['POR ATENDER','EN PROCESO ATENCION']);
             /*->groupBy(
                 'pedidos.id',
                 'c.nombre',
@@ -210,9 +210,9 @@ class OperacionController extends Controller
         $dateMax = Carbon::now()->format('d/m/Y');
 
         $condiciones = [
-            "1" => 'POR ATENDER',
-            "2" => 'EN PROCESO ATENCION',
-            "3" => 'ATENDIDO'
+            "POR ATENDER" => 'POR ATENDER',
+            "EN PROCESO ATENCION" => 'EN PROCESO ATENCION',
+            "ATENDIDO" => 'ATENDIDO'
         ];
 
         
@@ -254,7 +254,7 @@ class OperacionController extends Controller
                 ->where('dp.estado', '1')
                 //->WhereIn('u.identificador',$asesores)                
                 //->where('u.operario', Auth::user()->id)
-                ->where('pedidos.condicion', '3')//ATENDIDO
+                ->where('pedidos.condicion', 'ATENDIDO')
                 ->whereIn('pedidos.envio', ['0'])
                 ->groupBy(
                     'pedidos.id',

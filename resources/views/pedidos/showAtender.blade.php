@@ -110,7 +110,7 @@
 
         <br>
 
-        @if ($pedido->condiciones == "3")
+        @if ($pedido->condicion == "ATENDIDO")
           <div class="border rounded card-body border-secondary">
             <table id="tabla" class="table table-striped" style="text-align: center">
               <thead><h4 style="text-align: center"><strong>Detalle de atención</strong></h4>

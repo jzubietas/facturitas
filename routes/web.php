@@ -331,6 +331,7 @@ Route::get('users.operarios', [UserController::class, 'Operarios'])->name('users
 Route::get('users.misoperarios', [UserController::class, 'MisOperarios'])->name('users.misoperarios');
 Route::get('users.jefes', [UserController::class, 'Jefes'])->name('users.jefes');
 Route::get('users.mipersonal',[UserController::class, 'MiPersonal'])->name('users.mipersonal');
+Route::get('personaltablahistorial', [UserController::class, 'personaltablahistorial'])->name('personaltablahistorial');//actualizado para serverside
 Route::get('indextablapersonal', [UserController::class, 'indextablapersonal'])->name('indextablapersonal');
 
 Route::post('VentaPorFechas', [PdfController::class, 'VentaPorFechas'])->name('VentaPorFechas');

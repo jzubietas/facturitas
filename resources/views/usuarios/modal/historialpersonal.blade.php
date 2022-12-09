@@ -11,7 +11,7 @@
         <div class="card">
           <div class="card-body">
             <div class="card-body border border-secondary rounded">
-              <table id="tablapagospedidoshistorial" class="table table-striped" style="text-align: center">
+              <table id="tablaPrincipalPersonal" class="table table-striped" style="text-align: center">
                 <thead><h4 style="text-align: center"><strong>Mis Asignados</strong></h4>
                   <tr>
                     <th scope="col">Codigo</th>

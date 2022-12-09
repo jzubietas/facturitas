@@ -179,6 +179,7 @@
         evento.preventDefault();
         var fd = new FormData();
         fd.append( 'hiddenSinenvio', $("#hiddenSinenvio").val() );
+        fd.append( 'condicion', $("#condicion").val() );
         $.ajax({
            data: fd,
            processData: false,
@@ -276,19 +277,7 @@
             render:$.fn.dataTable.render.moment('YYYY-MM-DD HH:mm:ss', 'DD/MM/YYYY HH:mm:ss' )
           },
           {data: 'destino', name: 'destino',"visible":false },
-          {data: 'condicion', name: 'condicion',
-            render: function ( data, type, row, meta ) { 
-                if(row.condicion==1){
-                  return '<span>Por Atender</span>';
-                }else if(row.condicion==2){
-                  return '<span>En Proceso Atencion</span>';
-                }else if(row.condicion==3){
-                  return '<span>Atendido</span>';
-                }else{
-                  
-                } 
-              }
-          },
+          {data: 'condicion', name: 'condicion', },
           {data: 'atendido_por', name: 'atendido_por', },
           {data: 'jefe', name: 'jefe', },
           {
@@ -318,7 +307,7 @@
 
               var urlver = '{{ route("operaciones.showatender", ":id") }}';
               urlver = urlver.replace(':id', row.id);
-              data = data+'<a href="'+urlver+'" class="btn btn-primary btn-sm"><i class="fas fa-eye"></i> Ver</a>';
+              data = data+'<a href="'+urlver+'" class="btn btn-primary btn-sm" ><i class="fas fa-eye"></i> Ver</a>';
 
               var urledit = '{{ route("operaciones.editatender", ":id") }}';
               urledit = urledit.replace(':id', row.id);
