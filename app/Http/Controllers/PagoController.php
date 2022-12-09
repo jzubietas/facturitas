@@ -1477,8 +1477,7 @@ class PagoController extends Controller
             ->where('pago_pedidos.pago_id', $pago->id)
             ->get();
 
-        $detallePagos = DetallePago::
-        select('id',
+        $detallePagos = DetallePago::select('id',
             'monto',
             'banco',
             'imagen',
@@ -1491,7 +1490,8 @@ class PagoController extends Controller
             ->where('pago_id', $pago->id)
             ->get();
         //DB::raw('sum(detalle_pagos.monto) as total')
-        return view('pagos.show', compact('pagos', 'pagoPedidos', 'detallePagos', 'pago'));
+        $devoluciones = Devolucion::query()->wherePagoId($pago->id)->get();
+        return view('pagos.show', compact('pagos', 'pagoPedidos', 'detallePagos', 'pago', 'devoluciones'));
     }
 
     /**
@@ -2150,9 +2150,9 @@ class PagoController extends Controller
         } else {
             $pagos = $pagos;
         }
-        $pagos = $pagos->get();
+        //$pagos = $pagos->get();
 
-        return Datatables::of($pagos)
+        return Datatables::of(DB::table($pagos))
             ->addIndexColumn()
             ->addColumn('action', function ($pago) {
                 $btn = '';
@@ -2328,13 +2328,13 @@ class PagoController extends Controller
                 ->addColumn('action', function ($pago) {
                     $btn = '';
                     if (Auth::user()->can('pagos.show')) {
-                        $btn = $btn . '<a href="' . route('pagos.show', data_get($pago,'id')) . '" class="btn btn-info btn-sm">Ver</a>';
+                        $btn = $btn . '<a href="' . route('pagos.show', data_get($pago, 'id')) . '" class="btn btn-info btn-sm">Ver</a>';
                     }
                     if (Auth::user()->can('pagos.edit')) {
-                        $btn = $btn . '<a href="' . route('administracion.revisar', data_get($pago,'id')) . '" class="btn btn-success btn-sm">Editar</a>';
+                        $btn = $btn . '<a href="' . route('administracion.revisar', data_get($pago, 'id')) . '" class="btn btn-success btn-sm">Editar</a>';
                     }
                     if (Auth::user()->can('pagos.destroy')) {
-                        $btn = $btn . '<a href="" data-target="#modal-delete" data-toggle="modal" data-delete="' . data_get($pago,'id') . '"><button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i> Eliminar</button></a>';
+                        $btn = $btn . '<a href="" data-target="#modal-delete" data-toggle="modal" data-delete="' . data_get($pago, 'id') . '"><button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i> Eliminar</button></a>';
                     }
                     return $btn;
                 })
@@ -2342,7 +2342,7 @@ class PagoController extends Controller
                 ->toJson();
         }
 
-       // $pagos = $pagos->get();
+        // $pagos = $pagos->get();
         $pagosobservados_cantidad = Pago::where('user_id', Auth::user()->id)//PAGOS OBSERVADOS
         ->where('estado', '1')
             ->where('condicion', Pago::OBSERVADO)
@@ -2735,7 +2735,45 @@ class PagoController extends Controller
             'asesor.asesoroperario',
             'asesor.encargado',
         ]);
-        return view('pagos.devolucion.index', compact('devolucion'));
+        $bancos = [
+            "BCP" => 'BCP',
+            "BBVA" => 'BBVA',
+            "INTERBANK" => 'INTERBANK',
+            //"SCOTIABANK" => 'SCOTIABANK',
+            //"PICHINCHA" => 'PICHINCHA',
+        ];
+        return view('pagos.devolucion.index', compact('devolucion', 'bancos'));
+    }
+
+    public function devolucionUpdate(Request $request, Devolucion $devolucion)
+    {
+
+        $this->validate($request, [
+            'voucher' => 'required|file|image',
+            "bank_destino" => 'required',
+            "bank_number" => 'required',
+            "num_operacion" => 'required',
+        ]);
+
+        $devolucion->load([
+            'cliente',
+            'pago',
+            'asesor.asesoroperario',
+            'asesor.encargado',
+        ]);
+
+        DB::transaction(function () use ($request, $devolucion) {
+            $path = $request->file('voucher')->store('pagos_devolucion', 'pstorage');
+            $devolucion->update([
+                "bank_destino" => $request->bank_destino,
+                "bank_number" => $request->bank_number,
+                "num_operacion" => $request->num_operacion,
+                "voucher_path" => $path,
+                "status" => Devolucion::DEVUELTO,
+                "returned_at" => now(),
+            ]);
+        });
+        return redirect()->route("notifications.index");
     }
 
 }

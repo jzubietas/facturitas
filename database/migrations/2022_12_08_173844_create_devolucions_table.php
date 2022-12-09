@@ -21,6 +21,7 @@ class CreateDevolucionsTable extends Migration
             $table->float("amount")->comment("monto a devolver");
             $table->integer("status")->default(\App\Models\Devolucion::PENDIENTE);
             $table->text("voucher_path")->nullable();
+            $table->timestamp("returned_at")->nullable();
             $table->timestamps();
         });
     }
