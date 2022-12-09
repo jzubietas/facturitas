@@ -84,7 +84,7 @@
                         <td>PAGADO PAGO</td>
                         @endif
                     @endif
-
+                      
                     <td>{{ $pagoPedido->condicion }}</td>
                     <td>{{ $pagoPedido->total }}</td>
                     <td style='font-weight: bolder;'>{{ $pagoPedido->abono }}</td>
@@ -93,7 +93,7 @@
                       @else
                         <td><span style="color:red;">{{ number_format($pagoPedido->total - $pagoPedido->abono, 2, '.', ' ') }}</span></td>
                       @endif
-                    <td><a href="" data-target="#modal-historial-pagos-pedido" data-toggle="modal" data-pedido="{{ $pagoPedido->codigo }}" data-pago="{{$pago->id}}"><button class="btn btn-danger btn-sm">Historial</button></a>
+                    <td><a href="" data-target="#modal-historial-pagos-pedido" data-toggle="modal" data-pedido="{{ $pagoPedido->codigo }}" data-pago="{{$pago->id}}"><button class="btn btn-danger btn-sm">Historial</button></a>   
                     </td>
                   </tr>
                   @php
@@ -130,7 +130,7 @@
                   <tr>
                     <th scope="col">ITEM</th>
                     <th scope="col">PAGO</th>
-                    <th scope="col">BANCO</th>
+                    <th scope="col">BANCO</th>                
                     <th scope="col">MONTO</th>
                     <th scope="col">FECHA</th>
                     <th scope="col">CUENTA DESTINO</th>
@@ -149,10 +149,10 @@
                     <tr>
                       <td>{{ $contPa + 1 }}</td>
                       <td>PAG000{{ $detallePago->id }}</td>
-                      <td>{{ $detallePago->banco }}</td>
+                      <td>{{ $detallePago->banco }}</td>                  
                       <td>@php echo number_format($detallePago->monto,2) @endphp</td>
                       <td>{{ $detallePago->fecha }}</td>
-                      <td>{{ $detallePago->cuenta }}</td>
+                      <td>{{ $detallePago->cuenta }}</td>                  
                       <td>{{ $detallePago->titular }}</td>
                       <td>{{ $detallePago->fecha_deposito }}</td>
                       <td>{{ $detallePago->observacion }}</td>
@@ -173,7 +173,7 @@
                   <th></th>
                   <th></th>
                   <th><h4><?php echo number_format($sumPa, 2, '.', ' ')?></h4></th>
-                  <th></th>
+                  <th></th>  
                 </tfoot>
               </table>
             </div>
@@ -184,7 +184,7 @@
     <div class="card-footer">
        <buttom onclick="history.back()" class="btn btn-danger"><i class="fas fas fa-arrow-left"></i>ATRAS</buttom>
     </div>
-  </div>
+  </div>  
 @stop
 
 @section('css')
@@ -206,21 +206,21 @@
 		height: 100%;
 		overflow-y: auto;
 	}
-
+	
 	.modal.left .modal-body,
 	.modal.right .modal-body {
 		padding: 15px 15px 80px;
 	}
 
 /*Left*/
-
-
+	
+	
 	.modal.left.fade.in .modal-dialog{
 		left: 0;
 	}
-
+        
 /*Right*/
-
+	
 	.modal.right.fade.in .modal-dialog {
 		right: 0;
 	}
@@ -265,7 +265,7 @@
           "bFilter": false,
           "bInfo": false,
           "length": 3,
-          columns:
+          columns: 
           [
             {
               data: 'titular'
@@ -285,7 +285,7 @@
           ],
           language: {
             "decimal": "",
-            "emptyTable": "No hay información",
+            "emptyTable": "No hay informaciÃ³n",
             "info": "Mostrando del _START_ al _END_ de _TOTAL_ Entradas",
             "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
             "infoFiltered": "(Filtrado de _MAX_ total entradas)",
@@ -306,9 +306,9 @@
         });
 
       $('#modal-historial-pagos-pedido').on('show.bs.modal', function (event) {
-
+       
        console.log("aa")
-       var button = $(event.relatedTarget)
+       var button = $(event.relatedTarget) 
        var pedido = button.data('pedido')
        var pago = button.data('pago')
 
@@ -322,8 +322,8 @@
           "pageLength":5,
          "order": [[ 0, "asc" ]],
          'ajax': {
-           url:"{{ route('pagostablahistorial') }}",
-           'data': { "pedido":pedido,"pago":pago },
+           url:"{{ route('pagostablahistorial') }}",					
+           'data': { "pedido":pedido,"pago":pago }, 
            "type": "get",
          },
          "search": {
@@ -331,9 +331,9 @@
           },
          columns: [
         {
-            data: 'id',
+            data: 'id', 
             name: 'id',
-            render: function ( data, type, row, meta ) {
+            render: function ( data, type, row, meta ) {   
               var cantidadvoucher=row.cantidad_voucher;
               var cantidadpedido=row.cantidad_pedido;
               var unido= ( (cantidadvoucher>1)? 'V':'I' )+''+( (cantidadpedido>1)? 'V':'I' );
@@ -360,8 +360,8 @@
         },
         {
           data: 'codigos'
-          , name: 'codigos'
-          , render: function ( data, type, row, meta ) {
+          , name: 'codigos' 
+          , render: function ( data, type, row, meta ) {    
             if(data==null){
               return 'SIN PEDIDOS';
             }else{
@@ -371,13 +371,13 @@
                   returndata+=item+'<br>';
               });
               return returndata;
-            }
+            }  
           }
         },
         {//asesor
           data: 'users', name: 'users' },
         {//cliente
-          data: 'celular',
+          data: 'celular', 
             name: 'celular',
             render: function ( data, type, row, meta ) {
               return row.celular;
@@ -393,24 +393,24 @@
           data: 'total_pago', name: 'total_pago'
         },
         {//fecha
-          data: 'fecha',
-          name: 'fecha',
+          data: 'fecha', 
+          name: 'fecha', 
           render: function ( data, type, row, meta ) {
               return data;
           }
         },//estado de pedido
         {
-          data: 'condicion',
-          name: 'condicion',
-          render: function ( data, type, row, meta ) {
-            return data;
+          data: 'condicion', 
+          name: 'condicion', 
+          render: function ( data, type, row, meta ) {            
+            return data;             
           }
         },//estado de pago
         {data: 'action', name: 'action', orderable: false, searchable: false,sWidth:'20%'},
         ],
          language: {
            "decimal": "",
-           "emptyTable": "No hay información",
+           "emptyTable": "No hay informaciÃ³n",
            "info": "Mostrando del _START_ al _END_ de _TOTAL_ Entradas",
            "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
            "infoFiltered": "(Filtrado de _MAX_ total entradas)",

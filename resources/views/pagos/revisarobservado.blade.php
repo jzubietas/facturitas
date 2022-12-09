@@ -84,23 +84,23 @@
                       <td>{{ $pagoPedido->codigo }}</td>
                       <
 
-                      @if($pagos->condicion==\App\Models\Pago::ABONADO)
+                      @if($pagos->condicion=='ABONADO')
                           @if($pagoPedido->pagado == 1)
                           <td>ADELANTO ABONADO</td>
                           @else
                           <td>PAGADO ABONADO</td>
                           @endif
-                      @elseif($pagos->condicion==\App\Models\Pago::OBSERVADO)
+                      @elseif($pagos->condicion=='OBSERVADO')
                           @if($pagoPedido->pagado == 1)
                           <td>ADELANTO OBSERVADO</td>
                           @else
                           <td>PAGADO OBSERVADO</td>
                           @endif
-                      @elseif($pagos->condicion==\App\Models\Pago::PENDIENTE)
+                      @elseif($pagos->condicion=='PENDIENTE')
 
                           <td>PENDIENTE</td>
 
-                      @elseif($pagos->condicion==\App\Models\Pago::PAGO)
+                      @elseif($pagos->condicion=='PAGO')
                           @if($pagoPedido->pagado == 1)
                           <td>ADELANTO PAGO</td>
                           @else
@@ -494,7 +494,7 @@
           ],
           language: {
             "decimal": "",
-            "emptyTable": "No hay información",
+            "emptyTable": "No hay informaciÃ³n",
             "info": "Mostrando del _START_ al _END_ de _TOTAL_ Entradas",
             "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
             "infoFiltered": "(Filtrado de _MAX_ total entradas)",
@@ -751,7 +751,7 @@
           ],
           language: {
             "decimal": "",
-            "emptyTable": "No hay información",
+            "emptyTable": "No hay informaciÃ³n",
             "info": "Mostrando del _START_ al _END_ de _TOTAL_ Entradas",
             "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
             "infoFiltered": "(Filtrado de _MAX_ total entradas)",
@@ -989,7 +989,7 @@
         ],
          language: {
            "decimal": "",
-           "emptyTable": "No hay información",
+           "emptyTable": "No hay informaciÃ³n",
            "info": "Mostrando del _START_ al _END_ de _TOTAL_ Entradas",
            "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
            "infoFiltered": "(Filtrado de _MAX_ total entradas)",
@@ -1027,7 +1027,7 @@
 
       $(document).on("click","#pendientebtn",function(){
         console.log("pendiente")
-        $("#condicion").val("{{\App\Models\Pago::PENDIENTE}}").selectpicker("refresh");
+        $("#condicion").val("PENDIENTE").selectpicker("refresh");
         $("#formulario").submit();
       });
 
@@ -1037,7 +1037,7 @@
 
             var campo_condicion = $("#condicion").val();
             var inputconciliar=0
-            if(campo_condicion=='{{\App\Models\Pago::ABONADO}}')
+            if(campo_condicion=='ABONADO')
             {
                     var total_conciliar={{$contPa}};
                     console.log("total detalles para conciliar: "+total_conciliar);

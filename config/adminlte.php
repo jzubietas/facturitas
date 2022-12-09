@@ -503,35 +503,42 @@ return [
                 ],
                 [
                     'text' => 'Clientes Abandono',
-                    'route'  => 'clientes.abandonos',
-                    'can' => 'clientes.abandonos',
+                    'route'  => 'clientes.abandono',
+                    'can' => 'clientes.index',
                     'icon'   => 'fas fa-check-circle',
                     'active' => ['clientes'],
-                ],
+                ],            
                 [
+                    'text' => 'Base fría',
+                    'route'  => 'basefria',
+                    'can' => 'base_fria.index',
+                    'icon'   => 'fas fa-check-circle',
+                    'active' => ['base fria'],
+                ],
+                /*[
                     'text' => 'Clientes Recurrentes',
                     'route'  => 'clientes.recurrentes',
-                    'can' => 'clientes.recurrentes',
+                    'can' => 'clientes.index',
                     'icon'   => 'fas fa-check-circle',
                     'active' => ['clientes'],
                 ],
                 [
                     'text' => 'Clientes Nuevos',
                     'route'  => 'clientes.nuevos',
-                    'can' => 'clientes.nuevos',
+                    'can' => 'clientes.index',
                     'icon'   => 'fas fa-check-circle',
                     'active' => ['clientes'],
                 ],
                 [
                     'text' => 'Clientes Recuperados',
                     'route'  => 'clientes.recuperados',
-                    'can' => 'clientes.recuperados',
+                    'can' => 'clientes.index',
                     'icon'   => 'fas fa-check-circle',
                     'active' => ['clientes'],
                 ],
             ],
         ],
-
+        
         [
             'text'    => 'Reportes',
             'icon'    => 'fas fa-chart-bar',
@@ -723,7 +730,7 @@ return [
                 [
                     'type' => 'js',
                     'asset' => false,
-                    'location' => '//cdn.jsdelivr.net/npm/sweetalert2@8',
+                    'location' => '//cdn.jsdelivr.net/npm/sweetalert2@11',
                 ],
             ],
         ],

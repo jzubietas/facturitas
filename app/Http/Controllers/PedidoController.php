@@ -647,6 +647,13 @@ class PedidoController extends Controller
             foreach ($imagenes as $imagen) {
                 $array_html[]=$imagen->adjunto;
             }
+            $imagenesatencion=ImagenAtencion::where('pedido_id',$buscar_pedido)
+                ->where("estado","1")
+                ->whereNotIn("adjunto",['logo_facturas.png'])
+                ->orderBy('created_at', 'DESC')->get();
+            foreach ($imagenesatencion as $imagenatencion) {
+                $array_html[]=$imagenatencion->adjunto;
+            }
             $html=implode("|",$array_html);
             return response()->json(['html' => $html,'cantidad'=>$cont_imagen]);
         }else{
@@ -807,7 +814,7 @@ class PedidoController extends Controller
         return response()->json(['html' => $html]);
     }
 
-    public function tipobanca(Request $request)//pedidoscliente
+    public function tipobanca(Request $request)//pedidoscliente 
     {
         if (!$request->cliente_id || $request->cliente_id=='') {
             $html = '<option value="">' . trans('---- SELECCIONE ----') . '</option>';
@@ -1033,9 +1040,9 @@ class PedidoController extends Controller
 return $files;
             }else{
 return ' no imagen ';
-            }
+            }*/
 
-            return '';*/
+            //return '';
 
             if(isset($files)){
                 $destinationPath = base_path('public/storage/adjuntos/');
@@ -1122,12 +1129,6 @@ return ' no imagen ';
                         'pidio' => '1'
                     ]);
                 }
-
-
-                
-
-
-                
             }
             DB::commit();
             $html=$pedido->id;
@@ -1642,6 +1643,27 @@ return ' no imagen ';
             ]);
 
             $html=$detalle_pedidos;
+        }
+        return response()->json(['html' => $html]);
+    }
+
+    public function destroyidpedidoadjuntooperaciones(Request $request)
+    {
+        if (!$request->hiddenID) {
+            $html='';
+        } else {
+            ImagenAtencion::where("pedido_id",$request->hiddenID)->update([
+                'estado' => '0'
+            ]);
+
+            //$detalle_pedidos = DetallePedido::find($request->hiddenID);            
+            //$detalle_pedidos = DetallePedido::where('pedido_id',$request->hiddenID)->first() ;          
+           
+            /*$detalle_pedidos->update([
+                'estado' => '0'
+            ]);*/
+
+            $html=$request;
         }
         return response()->json(['html' => $html]);
     }
@@ -2548,6 +2570,8 @@ return ' no imagen ';
             'modificador' => 'USER'.Auth::user()->id
         ]);
 
+
+
         if ($request->condicion == "ATENDIDO")
         {
             $pedido->update([
@@ -2892,13 +2916,22 @@ return ' no imagen ';
         return view('pedidos.showAtender', compact('pedidos', 'imagenes', 'imagenesatencion'));
     }
 
-    public function eliminarAdjunto($id)
+
+
+    public function eliminarAdjuntoOperaciones(Request $request)
     {
-        $imagenes = ImagenAtencion::find($id);
-        $imagenes->update([
-            'estado' => '0'
-        ]);
-        return redirect()->route('operaciones.atendidos')->with('info', 'actualizado');
+        $id = $request->eliminar_pedido_id;
+        $imagen = $request->eliminar_pedido_id_imagen;
+        $imagenatencion = ImagenAtencion::where("pedido_id",$id)
+        ->where("adjunto",$imagen)->first();
+
+        if($imagenatencion != NULL){
+            $imagenatencion->update([
+                'estado' => '0'
+            ]);
+        }
+        
+        return response()->json(['html' => $imagenatencion]);
     }
 
     public function Enviar(Request $request, Pedido $pedido)
@@ -3476,4 +3509,66 @@ return ' no imagen ';
         ]);
         return redirect()->route('envios.enviados')->with('info', 'actualizado');
     }
+
+<<<<<<< Updated upstream
+    public function validadContenidoPedido(Request $request)
+    {
+
+        $pedidos_repetidos = Pedido::join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
+            ->join('users as u', 'pedidos.user_id', 'u.id')
+            ->select(
+                'pedidos.id',
+                'u.identificador',
+                'pedidos.user_id',
+                'pedidos.cliente_id',
+                'dp.mes',
+                'dp.anio',
+                'dp.cantidad',
+                'dp.tipo_banca',
+                'dp.porcentaje',
+                'dp.courier'
+            )
+            ->where('u.identificador', $request->asesor)
+            ->where('pedidos.cliente_id', $request->cliente)
+            ->where('dp.mes', $request->mes)
+            ->where('dp.anio', $request->ano)
+            ->where('dp.cantidad', $request->cantidad)
+            ->where('dp.tipo_banca', $request->banca)
+            ->where('dp.porcentaje', $request->porcentaje)
+            ->where('dp.courier', $request->courier)
+            ->count();
+
+            if($pedidos_repetidos>0)
+            {
+                $html="1";
+                return response()->json(['html' => $html]);
+                
+            }else{
+                //no existe ,registrare
+                $html="0";
+                return response()->json(['html' => $html]);
+            }
+=======
+    public function eliminaradjunto(Request $request)
+    
+    {
+        //$eliminar_pedido_id = ImagenAtencion::find($eliminar_pedido_id);
+        //$eliminar_pedido_adjunto = ImagenAtencion::find($eliminar_pedido_adjunto);
+        if (!$request->hiddenID) {
+            $html='';
+        } else {
+            ImagenAtencion::find($request->hiddenID)->update([
+                'estado' => '0'
+            ]);
+
+            //$detalle_pedidos = DetallePedido::find($request->hiddenID);            
+            //$eliminar_pedido_id = ImagenAtencion::where('pedido_id',$request->hiddenID)->first() ;          
+           
+
+            $html=$request;
+        }
+        return response()->json(['html' => $html]);
+>>>>>>> Stashed changes
+    }
+
 }
