@@ -753,6 +753,10 @@ class EnvioController extends Controller
                 ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
                 ->select(
                     'pedidos.id',
+                    DB::raw(" (CASE WHEN pedidos.id<10 THEN concat('PED000',pedidos.id)
+                                WHEN pedidos.id<100 THEN concat('PED00',pedidos.id)
+                                WHEN pedidos.id<1000 THEN concat('PED0',pedidos.id)
+                                ELSE concat('PED',pedidos.id) END) AS id2"),
                     'c.nombre as nombres',
                     'c.celular as celulares',
                     'u.identificador as users',
