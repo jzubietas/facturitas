@@ -50,7 +50,7 @@
 
   <div class="card">
     <div class="card-body">
-      <table id="tablaPrincipal" class="table table-striped">
+      <table id="tablaPrincipal" style="width:100;" class="table table-striped">
         <thead>
           <tr>
             <th scope="col">COD.</th>

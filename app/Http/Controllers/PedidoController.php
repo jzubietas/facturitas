@@ -238,9 +238,10 @@ class PedidoController extends Controller
         }else{
             $pedidos=$pedidos;
         }
-        $pedidos=$pedidos->get();
+        //$pedidos=$pedidos->get();
 
-        return Datatables::of($pedidos)
+        return Datatables::query(DB::table($pedidos))
+                    //of($pedidos)
                     ->addIndexColumn()
                     ->addColumn('action', function($pedido){
                         $btn='';
@@ -994,7 +995,8 @@ class PedidoController extends Controller
                 'cliente_id' => $request->cliente_id,
                 'user_id' => $identi_asesor->id, //usuario que registra
                 'creador' => 'USER0'.Auth::user()->id,//aqui una observacion, en el migrate la columna en tabla pedido tenia nombre creador y resulto ser creador_id
-                'condicion' => 1,
+                'condicion' => 'POR ATENDER',
+                'condicion_int' => '1',
                 'pago' => '0',
                 'envio' => '0',
                 'condicion_envio' => 1,
@@ -2078,9 +2080,9 @@ return ' no imagen ';
         }else{
             $pedidos=$pedidos;
         }
-        $pedidos=$pedidos->get();
-
-        return Datatables::of($pedidos)
+        //$pedidos=$pedidos->get();
+        return Datatables::query(DB::table($pedidos))
+        //return Datatables::of($pedidos)
             ->addIndexColumn()
             ->addColumn('action', function($pedido){
                 $btn='';
@@ -2582,6 +2584,7 @@ return ' no imagen ';
         $hiddenAtender=$request->hiddenAtender;
         $detalle_pedidos = DetallePedido::where('pedido_id',$hiddenAtender)->first();
         $fecha = Carbon::now();
+        //sds
 
         $pedido=Pedido::where("id",$hiddenAtender)->first();
         $pedido->update([
@@ -3301,6 +3304,7 @@ return ' no imagen ';
                 'distribucion'=> ( ($request->destino=='PROVINCIA')? 'NORTE':''),
                 'nombre_cliente'=> ( ($request->destino=='LIMA')? $request->nombre : $cliente->nombre  ),
                 'celular_cliente'=> ( ($request->destino=='LIMA')? $request->contacto : $cliente->celular."-".$cliente->icelular ),
+                'codigos'=>$pedidos
             ]);
 
             $count_pedidos=count((array)$array_pedidos);
