@@ -676,7 +676,7 @@ tabla_pedidos=$('#tablaPrincipalpedidosagregar').DataTable({
       var foto2 = document.getElementById('foto2').value;
       var pfoto2 = document.getElementById('pfoto2').value;
 
-      if (condicion == 'ENTREGADO') {
+      if (condicion == 3) {
         if (foto1 == '' && pfoto1 == '') {
           Swal.fire(
             'Error',

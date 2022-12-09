@@ -170,7 +170,7 @@ class PedidosPagosGeneralExport implements FromView, ShouldAutoSize
 
                 'pedidos.condicion_envio'
             )
-            ->whereIn('pedidos.condicion', ['POR ATENDER', 'EN PROCESO ATENCION', 'ATENDIDO', 'ANULADO'])
+            ->whereIn('pedidos.condicion', [1, 2, 3, 'ANULADO'])
             ->whereBetween(DB::raw('DATE(pedidos.created_at)'), [$request->desde, $request->hasta]);
 
         switch (Auth::user()->rol) {
@@ -260,7 +260,7 @@ class PedidosPagosGeneralExport implements FromView, ShouldAutoSize
             )
             ->where('pedidos.estado', '1')
             ->where('dpe.estado', '1')
-            ->whereIn('pedidos.condicion', ['POR ATENDER', 'EN PROCESO ATENCION', 'ATENDIDO', 'ANULADO'])
+            ->whereIn('pedidos.condicion', [1, 2, 3, 'ANULADO'])
             ->where('pedidos.pago', '0')
             ->whereBetween(DB::raw('DATE(pedidos.created_at)'), [$request->desde, $request->hasta]) //rango de fechas
             ->groupBy(

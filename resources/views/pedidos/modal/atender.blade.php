@@ -32,7 +32,7 @@
                                   <p><a href="{{ route('pedidos.descargaradjunto', $img->adjunto) }}">{{ $img->adjunto }}</a></p>
                                 @endif
                               @endforeach
-                            </div>                          
+                            </div>
                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
                                 {!! Form::label('envio_doc', 'Documento enviado') !!}
                                 @csrf
@@ -46,7 +46,7 @@
                                 {!! Form::file('adjunto[]', ['class' => 'form-control-file', 'id'=>'adjunto', 'multiple', 'required'=>'required']) !!}
                                 {{-- <td>@csrf<input type="file" id="adjunto" name="adjunto[]" multiple=""/></td> --}}
                             </div>
-                          @endif 
+                          @endif
                           <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
                               {!! Form::label('fecha_envio_doc', 'Fecha de envío') !!}
                               {!! Form::dateTimeLocal('fecha_envio_doc', $pedido->fecha_envio_doc, ['class' => 'form-control', 'id' => 'fecha_envio_doc', 'disabled']) !!}
@@ -60,9 +60,9 @@
                             {{-- {!! Form::text('condicion', $pedido->condicion, ['class' => 'form-control', 'id' => 'condicion']) !!}
                             {!! Form::select('pcondicion', $condiciones, $pedido->condicion, ['class' => 'form-control selectpicker border border-secondary', 'id'=>'pcondicion','data-live-search' => 'true', 'placeholder' => '---- SELECCIONE ----']) !!} --}}
                             <select name="condicion" class="form-control" id="condicion">
-                              <!-- <option value="POR ATENDER"  {{ ($pedido->condicion == "POR ATENDER" ? "selected" : "") }}>POR ATENDER</option> -->
-                              <option value="EN PROCESO ATENCION" {{ ($pedido->condicion == "EN PROCESO ATENCION" ? "selected" : "") }}>EN PROCESO ATENCION</option>
-                              <option value="ATENDIDO" {{ ($pedido->condicion == "ATENDIDO" ? "selected" : "") }}>ATENDIDO</option>
+                              <!-- <option value="1"  {{ ($pedido->condicion == "1" ? "selected" : "") }}>POR ATENDER</option> -->
+                              <option value="2" {{ ($pedido->condicion == "2" ? "selected" : "") }}>EN PROCESO ATENCION</option>
+                              <option value="3" {{ ($pedido->condicion == "3" ? "selected" : "") }}>ATENDIDO</option>
                             </select>
                           </div>
                         </div>

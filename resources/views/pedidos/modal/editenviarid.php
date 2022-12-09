@@ -8,7 +8,7 @@
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
-        
+
         <form id="formularioeditenviar" name="formularioeditenviar" enctype="multipart/form-data">
           <input type="text" id="hiddenEditenviar" name="hiddenEditenviar">
           <div class="modal-body">
@@ -34,19 +34,19 @@
 
                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
                             {!! Form::label('fecha_recepcion', 'Fecha de entrega') !!}
-                            {!! Form::date('fecha_recepcion', null, ['class' => 'form-control', 'id' => 'fecha_recepcion']) !!}                             
+                            {!! Form::date('fecha_recepcion', null, ['class' => 'form-control', 'id' => 'fecha_recepcion']) !!}
                             </div>
 
                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
                               {!! Form::label('foto1', 'Foto de recibido 1') !!}
                               @csrf
-                              {!! Form::file('foto1', ['class' => 'form-control-file', 'accept' =>'image/*']) !!}  
+                              {!! Form::file('foto1', ['class' => 'form-control-file', 'accept' =>'image/*']) !!}
                             </div>
 
                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
                               {!! Form::label('foto2', 'Foto de recibido 2') !!}
                               @csrf
-                              {!! Form::file('foto2', ['class' => 'form-control-file', 'accept' =>'image/*']) !!}  
+                              {!! Form::file('foto2', ['class' => 'form-control-file', 'accept' =>'image/*']) !!}
                             </div>
 
                             <!--foto 1  y descargar-->
@@ -55,14 +55,14 @@
                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
                               {!! Form::label('condicion', 'Estado') !!}
                               <select name="condicion" class="form-control" id="condicion">
-                                <option value="PENDIENTE DE ENVIO">PENDIENTE DE ENVIO</option>
-                                <option value="EN REPARTO">EN REPARTO</option>
+                                <option value="1">PENDIENTE DE ENVIO</option>
+                                <option value="2">EN REPARTO</option>
                                 {{--@if($pedido->destino == "PROVINCIA")--}}
                                   <option value="REGISTRO">REGISTRO</option>
                                   <option value="TRASLADO">TRASLADO</option>
                                   <option value="EN TIENDA">EN TIENDA</option>
                                 {{--@endif--}}
-                                <option value="ENTREGADO">ENTREGADO</option>
+                                <option value="3">ENTREGADO</option>
                               </select>
 
                             </div>
@@ -75,7 +75,7 @@
                           </div>
 
 
-                         
+
                         </div>
                       </div>
                     </div>

@@ -40,13 +40,13 @@ use DataTables;
 
 class EnvioController extends Controller
 {
-    
+
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    
+
     public function Envios()//SOBRES EN REPARTO
     {
 
@@ -72,7 +72,7 @@ class EnvioController extends Controller
                             ->pluck('distrito', 'distrito');
 
         $departamento = Departamento::where('estado', "1")
-                            ->pluck('departamento', 'departamento');                              
+                            ->pluck('departamento', 'departamento');
 
         $direcciones = DireccionEnvio::join('direccion_pedidos as dp', 'direccion_envios.id', 'dp.direccion_id')
                             ->select('direccion_envios.id',
@@ -85,13 +85,13 @@ class EnvioController extends Controller
                                     )
                             ->where('direccion_envios.estado', '1')
                             ->where('dp.estado', '1')
-                           
-                            ->get();        
+
+                            ->get();
 
         $superasesor = User::where('rol', 'Super asesor')->count();
-        
+
         $ver_botones_accion = 1;
-        
+
         if(Auth::user()->rol == "Asesor")
         {
             $ver_botones_accion = 0;
@@ -109,12 +109,12 @@ class EnvioController extends Controller
     public function Enviostabla(Request $request)
     {
         $pedidos=null;
-        
+
         $pedidos_lima = DireccionGrupo::join('direccion_envios as de','direccion_grupos.id','de.direcciongrupo')
             ->join('clientes as c', 'c.id', 'de.cliente_id')
             ->join('users as u', 'u.id', 'c.user_id')
-            ->where('direccion_grupos.estado','1')  
-            ->where('direccion_grupos.condicion_envio','EN REPARTO') 
+            ->where('direccion_grupos.estado','1')
+            ->where('direccion_grupos.condicion_envio',2)
             ->whereNotIn('direccion_grupos.condicion_envio',['REGISTRADO','EN CAMINO','EN TIENDA/AGENTE','NO ENTREGADO'])
             ->select(
                 'direccion_grupos.id',
@@ -127,7 +127,7 @@ class EnvioController extends Controller
                 DB::raw(" (select group_concat(ab.empresa) from direccion_pedidos ab where ab.direcciongrupo=direccion_grupos.id) as producto "),
                 'de.direccion',
                 'de.referencia',
-                'de.observacion',                                        
+                'de.observacion',
                 'de.distrito',
                 DB::raw('(select DATE_FORMAT( direccion_grupos.created_at, "%Y-%m-%d")   from direccion_grupos dpa where dpa.id=direccion_grupos.id) as fecha'),
 
@@ -143,7 +143,7 @@ class EnvioController extends Controller
             ->join('clientes as c', 'c.id', 'de.cliente_id')
             ->join('users as u', 'u.id', 'c.user_id')
             ->where('direccion_grupos.estado','1')
-            ->where('direccion_grupos.condicion_envio','EN REPARTO')
+            ->where('direccion_grupos.condicion_envio',2)
             ->whereNotIn('direccion_grupos.condicion_envio',['REGISTRADO','EN CAMINO','EN TIENDA/AGENTE','NO ENTREGADO'])
             ->select(
                 'direccion_grupos.id',
@@ -158,7 +158,7 @@ class EnvioController extends Controller
                 'de.foto as referencia',
                 DB::raw(" (select '') as observacion "),
                 DB::raw(" (select '') as distrito "),
-                
+
                 DB::raw('(select DATE_FORMAT( direccion_grupos.created_at, "%Y-%m-%d")   from direccion_grupos dpa where dpa.id=direccion_grupos.id) as fecha'),
                 //'direccion_grupos.created_at as fecha',
                 'direccion_grupos.destino as destino2',
@@ -182,7 +182,7 @@ class EnvioController extends Controller
                 )
                 ->pluck('users.identificador');
 
-            $pedidos_lima=$pedidos_lima->WhereIn('u.identificador',$usersasesores); 
+            $pedidos_lima=$pedidos_lima->WhereIn('u.identificador',$usersasesores);
             $pedidos_provincia=$pedidos_provincia->WhereIn('u.identificador',$usersasesores);
         }else if(Auth::user()->rol == "Jefe de llamadas"){
             $pedidos_lima=$pedidos_lima->where('u.identificador','<>','B');
@@ -202,10 +202,10 @@ class EnvioController extends Controller
 
 
         $pedidos = $pedidos_lima->union($pedidos_provincia);
-        //$pedidos = $pedidos->where("direccion_grupos.condicion_envio","EN REPARTO");
+        //$pedidos = $pedidos->where("direccion_grupos.condicion_envio","2");
         //$pedidos=$pedidos->where(DB::raw('DATE(direccion_grupos.created_at)'), $request->desde);
         $pedidos=$pedidos->get();
-        
+
 
         /*$pedidos = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')
                 ->join('users as u', 'pedidos.user_id', 'u.id')
@@ -230,12 +230,12 @@ class EnvioController extends Controller
                     DB::raw(" (select dp.fecha_envio_doc_fis from detalle_pedidos dp where dp.pedido_id=pedidos.id) as fecha_envio_doc_fis "),
                     DB::raw(" (select dp.foto1 from detalle_pedidos dp where dp.pedido_id=pedidos.id) as foto1 "),
                     DB::raw(" (select dp.foto2 from detalle_pedidos dp where dp.pedido_id=pedidos.id) as foto2 "),
-                    DB::raw(" (select dp.fecha_recepcion from detalle_pedidos dp where dp.pedido_id=pedidos.id) as fecha_recepcion "),                 
+                    DB::raw(" (select dp.fecha_recepcion from detalle_pedidos dp where dp.pedido_id=pedidos.id) as fecha_recepcion "),
                 )
                 ->where('pedidos.estado', '1')
                 ->where('pedidos.envio', '<>', '1')
-                ->where('pedidos.condicion_envio', '<>', 'ENTREGADO')
-                ->where('pedidos.condicion_envio', 'EN REPARTO');                
+                ->where('pedidos.condicion_envio', '<>', 3)
+                ->where('pedidos.condicion_envio', 2);
         if(Auth::user()->rol == "Operario"){
             $asesores = User::where('users.rol', 'Asesor')
                 -> where('users.estado', '1')
@@ -246,7 +246,7 @@ class EnvioController extends Controller
                 ->pluck('users.identificador');
 
             $pedidos=$pedidos->WhereIn('u.identificador',$asesores);
-            
+
         }else if(Auth::user()->rol == "Jefe de operaciones"){
             $operarios = User::where('users.rol', 'Operario')
                 -> where('users.estado', '1')
@@ -268,7 +268,7 @@ class EnvioController extends Controller
 
         }else if(Auth::user()->rol == "Asesor"){
             $pedidos=$pedidos->Where('u.identificador',Auth::user()->identificador);
-            
+
         }
         else if(Auth::user()->rol == "Super asesor"){
             $pedidos=$pedidos->Where('u.identificador',Auth::user()->identificador);
@@ -281,11 +281,11 @@ class EnvioController extends Controller
             $pedidos=$pedidos;
         }*/
         //$pedidos=$pedidos->get();
-        
+
         return Datatables::of($pedidos)
                     ->addIndexColumn()
-                    ->addColumn('action', function($pedido){     
-                        $btn='';                         
+                    ->addColumn('action', function($pedido){
+                        $btn='';
                         return $btn;
                     })
                     ->rawColumns(['action'])
@@ -295,9 +295,9 @@ class EnvioController extends Controller
 
     public function DistribuirEnvioid(Request $request)
     {
-      
+
         $envio=DireccionGrupo::where("id",$request->hiddenDistribuir)->first();
-        
+
         $envio->update([
             'distribucion' => $request->distribuir,
             //'modificador' => 'USER'.Auth::user()->id
@@ -336,12 +336,12 @@ class EnvioController extends Controller
 
 
         $pedidos=null;
-        
+
         $pedidos_lima = DireccionGrupo::join('direccion_envios as de','direccion_grupos.id','de.direcciongrupo')
             ->join('clientes as c', 'c.id', 'de.cliente_id')
             ->join('users as u', 'u.id', 'c.user_id')
-            ->where('direccion_grupos.estado','1')  
-            ->where('direccion_grupos.condicion_envio','ENTREGADO')                                    
+            ->where('direccion_grupos.estado','1')
+            ->where('direccion_grupos.condicion_envio',3)
             ->select(
                 'direccion_grupos.id',
                 'u.identificador as identificador',
@@ -355,7 +355,7 @@ class EnvioController extends Controller
                 'direccion_grupos.producto',
                 'de.direccion',
                 'de.referencia',
-                'de.observacion',                                        
+                'de.observacion',
                 'de.distrito',
                 'direccion_grupos.created_at as fecha',
                 'direccion_grupos.destino as destino2',
@@ -371,7 +371,7 @@ class EnvioController extends Controller
             ->join('clientes as c', 'c.id', 'de.cliente_id')
             ->join('users as u', 'u.id', 'c.user_id')
             ->where('direccion_grupos.estado','1')
-            ->where('direccion_grupos.condicion_envio','ENTREGADO')  
+            ->where('direccion_grupos.condicion_envio',3)
             ->select(
                 'direccion_grupos.id',
                 'u.identificador as identificador',
@@ -412,7 +412,7 @@ class EnvioController extends Controller
                 )
                 ->pluck('users.id');
                 $pedidos=$pedidos->Where('u.identificador',Auth::user()->identificador);
-            
+
         }else if(Auth::user()->rol == "Jefe de operaciones"){
 
             $operarios = User::where('users.rol', 'Operario')
@@ -432,21 +432,21 @@ class EnvioController extends Controller
                 ->pluck('users.id');
                 $pedidos=$pedidos->Where('u.identificador',Auth::user()->identificador);
 
-            
+
         }else if(Auth::user()->rol == "Asesor"){
-           
+
                 $pedidos=$pedidos->Where('u.identificador',Auth::user()->identificador);
-    
+
        }else if(Auth::user()->rol == "Encargado"){
-            
+
         }else{
-           
+
         }
         $pedidos=$pedidos->get();
-        
+
         return Datatables::of($pedidos)
                     ->addIndexColumn()
-                    ->addColumn('action', function($pedido){     
+                    ->addColumn('action', function($pedido){
                         $btn='';
                         return $btn;
                     })
@@ -466,9 +466,9 @@ class EnvioController extends Controller
         ];
 
         $condiciones = [
-            "PENDIENTE DE ENVIO" => 'PENDIENTE DE ENVIO',
-            "EN REPARTO" => 'EN REPARTO',
-            "ENTREGADO" => 'ENTREGADO'
+            "1" => 1,
+            "2" => 2,
+            "3" => 3
         ];
 
         $destinos = [
@@ -477,7 +477,7 @@ class EnvioController extends Controller
         ];
 
         $departamento = Departamento::where('estado', "1")
-                ->pluck('departamento', 'departamento');    
+                ->pluck('departamento', 'departamento');
 
         $distritos = Distrito::whereIn('provincia', ['LIMA', 'CALLAO'])
                             ->where('estado', '1')
@@ -494,13 +494,13 @@ class EnvioController extends Controller
                                     )
                             ->where('direccion_envios.estado', '1')
                             ->where('dp.estado', '1')
-                           
-                            ->get();        
-           
+
+                            ->get();
+
         $superasesor = User::where('rol', 'Super asesor')->count();
-        
+
         $ver_botones_accion = 1;
-        
+
         if(Auth::user()->rol == "Asesor")
         {
             $ver_botones_accion = 0;
@@ -522,7 +522,7 @@ class EnvioController extends Controller
 
         $pedidos_lima=null;
         $pedidos_provincia=null;
-        
+
         if(!$request->general)
         {
 
@@ -533,8 +533,8 @@ class EnvioController extends Controller
             $pedidos_lima = DireccionGrupo::join('direccion_envios as de','direccion_grupos.id','de.direcciongrupo')
                                     ->join('clientes as c', 'c.id', 'de.cliente_id')
                                     ->join('users as u', 'u.id', 'c.user_id')
-                                    ->where('direccion_grupos.estado','1')   
-                                    ->whereNull('direccion_grupos.condicion_sobre')                                 
+                                    ->where('direccion_grupos.estado','1')
+                                    ->whereNull('direccion_grupos.condicion_sobre')
                                     //->where('direccion_grupos.condicion_sobre', '<>', 'SIN ENVIO')
                                     ->select(
                                         'direccion_grupos.id',
@@ -549,7 +549,7 @@ class EnvioController extends Controller
                                         DB::raw(" (select group_concat(ab.empresa) from direccion_pedidos ab where ab.direcciongrupo=direccion_grupos.id) as producto "),
                                         'de.direccion',
                                         'de.referencia',
-                                        'de.observacion',                                        
+                                        'de.observacion',
                                         'de.distrito',
                                         'direccion_grupos.created_at as fecha',
                                         'direccion_grupos.destino as destino2',
@@ -633,7 +633,7 @@ class EnvioController extends Controller
                                         DB::raw(" (select group_concat(ab.empresa) from direccion_pedidos ab where ab.direcciongrupo=direccion_grupos.id) as producto "),
                                         'de.direccion',
                                         'de.referencia',
-                                        'de.observacion',                                        
+                                        'de.observacion',
                                         'de.distrito',
                                         'direccion_grupos.created_at as fecha',
                                         'direccion_grupos.destino as destino2',
@@ -648,7 +648,7 @@ class EnvioController extends Controller
                                     ->where('direccion_grupos.estado','1')
                                     ->where(DB::raw('DATE(direccion_grupos.created_at)'), $min)
                                     ->whereNull('direccion_grupos.condicion_sobre')
-                                    //->whereNotIn('direccion_grupos.condicion_sobre',['SIN ENVIO']) 
+                                    //->whereNotIn('direccion_grupos.condicion_sobre',['SIN ENVIO'])
                                     //->where('direccion_grupos.condicion_sobre', '<>', 'SIN ENVIO')
                                     ->select(
                                         'direccion_grupos.id',
@@ -669,8 +669,8 @@ class EnvioController extends Controller
                                         'direccion_grupos.distribucion',
                                         'direccion_grupos.condicion_sobre',
                                         DB::raw('DATE(direccion_grupos.created_at) fecha2')
-                                    ); 
-                                  //  $pedidos_provincia->whereNot                                   
+                                    );
+                                  //  $pedidos_provincia->whereNot
 
         }
 
@@ -682,8 +682,8 @@ class EnvioController extends Controller
 
         return Datatables::of($pedidos_lima)
             ->addIndexColumn()
-            ->addColumn('action', function($pedido){     
-                $btn='';                         
+            ->addColumn('action', function($pedido){
+                $btn='';
                 return $btn;
             })
             ->rawColumns(['action'])
@@ -697,9 +697,9 @@ class EnvioController extends Controller
     public function Enviosporrecibir()
     {
         $condiciones = [
-            "PENDIENTE DE ENVIO" => 'PENDIENTE DE ENVIO',
-            "EN REPARTO" => 'EN REPARTO',
-            "ENTREGADO" => 'ENTREGADO'
+            "1" => 1,
+            "2" => 2,
+            "3" => 3
         ];
 
         $destinos = [
@@ -722,14 +722,14 @@ class EnvioController extends Controller
                                     )
                             ->where('direccion_envios.estado', '1')
                             ->where('dp.estado', '1')
-                           
-                            ->get();        
+
+                            ->get();
         $departamento = Departamento::where('estado', "1")
-                            ->pluck('departamento', 'departamento');   
+                            ->pluck('departamento', 'departamento');
         $superasesor = User::where('rol', 'Super asesor')->count();
-        
+
         $ver_botones_accion = 1;
-        
+
         if(Auth::user()->rol == "Asesor")
         {
             $ver_botones_accion = 0;
@@ -775,9 +775,9 @@ class EnvioController extends Controller
                 )
                 ->where('pedidos.estado', '1')
                 ->where('dp.estado', '1')
-                ->where('pedidos.envio',  '1');
-                //->where('pedidos.condicion_envio', '<>', 'ENTREGADO');
-                
+                ->where('pedidos.envio', '1');
+                //->where('pedidos.condicion_envio', '<>', 3);
+
         if(Auth::user()->rol == "Operario"){
             $asesores = User::where('users.rol', 'Asesor')
                 -> where('users.estado', '1')
@@ -788,7 +788,7 @@ class EnvioController extends Controller
                 ->pluck('users.identificador');
 
             $pedidos=$pedidos->WhereIn('u.identificador',$asesores);
-            
+
         }else if(Auth::user()->rol == "Jefe de operaciones"){
             $operarios = User::where('users.rol', 'Operario')
                 -> where('users.estado', '1')
@@ -810,7 +810,7 @@ class EnvioController extends Controller
 
         }else if(Auth::user()->rol == "Asesor"){
             $pedidos=$pedidos->Where('u.identificador',Auth::user()->identificador);
-            
+
         }
         else if(Auth::user()->rol == "Super asesor"){
             $pedidos=$pedidos->Where('u.identificador',Auth::user()->identificador);
@@ -827,19 +827,19 @@ class EnvioController extends Controller
                     DB::raw("users.identificador as identificador")
                 )
                 ->pluck('users.identificador');
-            
-            $pedidos=$pedidos->WhereIn('u.identificador',$usersasesores);  
+
+            $pedidos=$pedidos->WhereIn('u.identificador',$usersasesores);
         }else if(Auth::user()->rol == "Jefe de llamadas"){
             $pedidos=$pedidos->where('u.identificador','<>','B');
         }else{
             $pedidos=$pedidos;
         }
         $pedidos=$pedidos->get();
-        
+
         return Datatables::of($pedidos)
                     ->addIndexColumn()
-                    ->addColumn('action', function($pedido){     
-                        $btn='';                         
+                    ->addColumn('action', function($pedido){
+                        $btn='';
                         return $btn;
                     })
                     ->rawColumns(['action'])
@@ -868,10 +868,10 @@ class EnvioController extends Controller
 
 
 
-        if ($request->condicion == "ENTREGADO")
+        if ($request->condicion == "3")
         {
             $envio->update([
-                'condicion_envio' => 'ENTREGADO'
+                'condicion_envio' => 3
             ]);
 
         }
@@ -884,10 +884,10 @@ class EnvioController extends Controller
         if ($request->hasFile('foto1') && $request->hasFile('foto2')){
             $file_name = Carbon::now()->second.$files->getClientOriginalName();
             $file_name2 = Carbon::now()->second.$files2->getClientOriginalName();
-            
+
             $files->move($destinationPath , $file_name);
             $files2->move($destinationPath , $file_name2);
-            
+
             $envio->update([
                 'foto1' => $file_name,
                 'foto2' => $file_name2,
@@ -906,7 +906,7 @@ class EnvioController extends Controller
                 'atendido_por' => Auth::user()->name,
                 'atendido_por_id' => Auth::user()->id,
             ]);
-        }  
+        }
         else if ($request->foto1 == null && $request->hasFile('foto2')){
             $file_name2 = Carbon::now()->second.$files2->getClientOriginalName();
             $files2->move($destinationPath , $file_name2);
@@ -916,7 +916,7 @@ class EnvioController extends Controller
                 'fecha_recepcion' => $request->fecha_recepcion,
                 'atendido_por' => Auth::user()->name,
                 'atendido_por_id' => Auth::user()->id,
-            ]);    
+            ]);
         }
         else
         {
@@ -942,10 +942,10 @@ class EnvioController extends Controller
         $item = $request->item;
         $pedido=$request->pedido;
         $file = $request->file('adjunto');
-        
-        if(isset($file)){                   
+
+        if(isset($file)){
             $destinationPath = base_path('public/storage/entregas/');
-            $cont = 0;       
+            $cont = 0;
             $file_name = Carbon::now()->second.$file->getClientOriginalName();
             $fileList[$cont] = array(
                 'file_name' => $file_name,
@@ -954,16 +954,16 @@ class EnvioController extends Controller
             $html=$pedido.'_'.$item.'_'.$file_name;
 
 
-            
+
             DireccionGrupo::where('id', $pedido)
                 ->update([
                     'foto'.$item => $file_name
                 ]);
         }else{
             $html="";
-        }            
+        }
 
-        return response()->json(['html' => $html]); 
+        return response()->json(['html' => $html]);
     }
 
 
@@ -978,9 +978,9 @@ class EnvioController extends Controller
         ];
 
         $condiciones = [
-            "PENDIENTE DE ENVIO" => 'PENDIENTE DE ENVIO',
-            "EN REPARTO" => 'EN REPARTO',
-            "ENTREGADO" => 'ENTREGADO'
+            "1" => 1,
+            "2" => 2,
+            "3" => 3
         ];
 
         $destinos = [
@@ -993,7 +993,7 @@ class EnvioController extends Controller
                             ->pluck('distrito', 'distrito');
 
         $departamento = Departamento::where('estado', "1")
-                            ->pluck('departamento', 'departamento');                              
+                            ->pluck('departamento', 'departamento');
 
         $direcciones = DireccionEnvio::join('direccion_pedidos as dp', 'direccion_envios.id', 'dp.direccion_id')
                             ->select('direccion_envios.id',
@@ -1006,13 +1006,13 @@ class EnvioController extends Controller
                                     )
                             ->where('direccion_envios.estado', '1')
                             ->where('dp.estado', '1')
-                           
-                            ->get();        
+
+                            ->get();
 
         $superasesor = User::where('rol', 'Super asesor')->count();
-        
+
         $ver_botones_accion = 1;
-        
+
         if(Auth::user()->rol == "Asesor")
         {
             $ver_botones_accion = 0;
@@ -1030,14 +1030,14 @@ class EnvioController extends Controller
     public function Seguimientoprovinciatabla(Request $request)
     {
         $pedidos=null;
-        
-      
+
+
         $pedidos_provincia = DireccionGrupo::join('gasto_envios as de','direccion_grupos.id','de.direcciongrupo')
             ->join('clientes as c', 'c.id', 'de.cliente_id')
             ->join('users as u', 'u.id', 'c.user_id')
             ->where('direccion_grupos.estado','1')
-            ->where('direccion_grupos.condicion_envio','EN REPARTO')
-            ->whereIn('direccion_grupos.subcondicion_envio',['REGISTRADO','EN CAMINO','EN TIENDA/AGENTE','NO ENTREGADO']) 
+            ->where('direccion_grupos.condicion_envio',2)
+            ->whereIn('direccion_grupos.subcondicion_envio',['REGISTRADO','EN CAMINO','EN TIENDA/AGENTE','NO ENTREGADO'])
             ->select(
                 'direccion_grupos.id',
                 'u.identificador as identificador',
@@ -1062,11 +1062,11 @@ class EnvioController extends Controller
         //$pedidos = $pedidos_lima->union($pedidos_provincia);
         $pedidos = $pedidos_provincia;
         $pedidos=$pedidos->get();
-        
+
         return Datatables::of($pedidos)
                     ->addIndexColumn()
-                    ->addColumn('action', function($pedido){     
-                        $btn='';                         
+                    ->addColumn('action', function($pedido){
+                        $btn='';
                         return $btn;
                     })
                     ->rawColumns(['action'])
@@ -1074,6 +1074,6 @@ class EnvioController extends Controller
 
     }
 
-    
+
 
 }

@@ -15,7 +15,7 @@ use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 class PedidosAtendidosExport implements FromView, ShouldAutoSize
 {
     use Exportable;
-    
+
     public function pedidos($request) {
         $mirol=Auth::user()->rol;
 
@@ -41,7 +41,7 @@ class PedidosAtendidosExport implements FromView, ShouldAutoSize
                 )
                 ->where('pedidos.estado', '1')
                 ->where('dp.estado', '1')
-                ->where('pedidos.condicion', 'ATENDIDO')
+                ->where('pedidos.condicion', 3)
                 ->whereBetween(DB::raw('DATE(pedidos.created_at)'), [$request->desde, $request->hasta]) //rango de fechas
                 //->WhereIn('pedidos.user_id',$asesores)
                 ->groupBy(
@@ -75,8 +75,8 @@ class PedidosAtendidosExport implements FromView, ShouldAutoSize
                 ->pluck('users.identificador');
 
             $pedidos->WhereIn('u.identificador',$asesores);
-            
-            
+
+
         }else if($mirol=="Jefe de operaciones")
         {
             $operarios = User::where('users.rol', 'Operario')
@@ -96,20 +96,20 @@ class PedidosAtendidosExport implements FromView, ShouldAutoSize
                 ->pluck('users.identificador');
 
             $pedidos->WhereIn('u.identificador',$asesores);
-            
+
         }else{
             $pedidos=$pedidos;
-            
+
         }
-        
+
         $this->pedidos = $pedidos->get();
         return $this;
-    } 
+    }
 
     public function view(): View {
         return view('pedidos.excel.pedidosatendidos', [
             'pedidos'=> $this->pedidos
         ]);
-    } 
+    }
 
 }

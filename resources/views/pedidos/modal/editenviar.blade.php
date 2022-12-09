@@ -35,19 +35,19 @@
                           <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
                               {!! Form::label('foto1', 'Foto de recibido 1') !!}
                               @csrf
-                              {!! Form::file('foto1', ['class' => 'form-control-file', 'accept' =>'image/*']) !!}  
+                              {!! Form::file('foto1', ['class' => 'form-control-file', 'accept' =>'image/*']) !!}
                           </div>
                           <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
                             {!! Form::label('foto2', 'Foto de recibido 2') !!}
                             @csrf
-                            {!! Form::file('foto2', ['class' => 'form-control-file', 'accept' =>'image/*']) !!}  
+                            {!! Form::file('foto2', ['class' => 'form-control-file', 'accept' =>'image/*']) !!}
                           </div>
-                          {!! Form::hidden('pfoto1', $pedido->foto1, ['class' => 'form-control', 'id' => 'pfoto1']) !!}       
-                          @if ($pedido->foto1 != null) 
+                          {!! Form::hidden('pfoto1', $pedido->foto1, ['class' => 'form-control', 'id' => 'pfoto1']) !!}
+                          @if ($pedido->foto1 != null)
                           <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6"><br>
                             <p>FOTO 1</p>
                             <img src="{{ asset('storage/entregas/' . $pedido->foto1) }}" alt="{{ $pedido->foto1 }}" height="400px" width="400px" class="img-thumbnail">
-                            <p><a href="{{ route('envios.descargarimagen', $pedido->foto1) }}">Descargar</a></p>                            
+                            <p><a href="{{ route('envios.descargarimagen', $pedido->foto1) }}">Descargar</a></p>
                           </div>
                           @endif
                           {!! Form::hidden('pfoto2', $pedido->foto2, ['class' => 'form-control', 'id' => 'pfoto2']) !!}
@@ -55,20 +55,20 @@
                           <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6"><br>
                             <p>FOTO 2</p>
                             <img src="{{ asset('storage/entregas/' . $pedido->foto2) }}" alt="{{ $pedido->foto2 }}" height="400px" width="400px" class="img-thumbnail">
-                            <p><a href="{{ route('envios.descargarimagen', $pedido->foto2) }}">Descargar</a></p>                            
+                            <p><a href="{{ route('envios.descargarimagen', $pedido->foto2) }}">Descargar</a></p>
                           </div>
                           @endif
                           <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
-                            {!! Form::label('condicion', 'Estado') !!}                      
+                            {!! Form::label('condicion', 'Estado') !!}
                             <select name="condicion" class="form-control" id="condicion">
-                              <option value="PENDIENTE DE ENVIO"  {{ ($pedido->condicion_envio == "PENDIENTE DE ENVIO" ? "selected" : "") }}>PENDIENTE DE ENVIO</option>
-                              <option value="EN REPARTO" {{ ($pedido->condicion_envio == "EN REPARTO" ? "selected" : "") }}>EN REPARTO</option>
+                              <option value="1"  {{ ($pedido->condicion_envio == "1" ? "selected" : "") }}>PENDIENTE DE ENVIO</option>
+                              <option value="2" {{ ($pedido->condicion_envio == "2" ? "selected" : "") }}>EN REPARTO</option>
                               @if($pedido->destino == "PROVINCIA")
                                 <option value="REGISTRO" {{ ($pedido->condicion_envio == "REGISTRO" ? "selected" : "") }}>REGISTRO</option>
                                 <option value="TRASLADO" {{ ($pedido->condicion_envio == "TRASLADO" ? "selected" : "") }}>TRASLADO</option>
                                 <option value="EN TIENDA" {{ ($pedido->condicion_envio == "EN TIENDA" ? "selected" : "") }}>EN TIENDA</option>
                               @endif
-                              <option value="ENTREGADO" {{ ($pedido->condicion_envio == "ENTREGADO" ? "selected" : "") }}>ENTREGADO</option>
+                              <option value="3" {{ ($pedido->condicion_envio == "3" ? "selected" : "") }}>ENTREGADO</option>
                             </select>
                           </div>
                           @if($pedido->destino == "PROVINCIA")

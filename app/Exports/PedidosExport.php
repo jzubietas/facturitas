@@ -16,7 +16,7 @@ class PedidosExport implements FromView, ShouldAutoSize
 {
     use Exportable;
 
-    public function pedidos($request) {       
+    public function pedidos($request) {
         $mirol=Auth::user()->rol;
 
         $pedidos = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')
@@ -51,7 +51,7 @@ class PedidosExport implements FromView, ShouldAutoSize
                         'pedidos.estado',
                         'pedidos.envio',
                         )
-                    ->whereIn('pedidos.condicion', ['POR ATENDER', 'EN PROCESO ATENCION', 'ATENDIDO', 'ANULADO'])
+                    ->whereIn('pedidos.condicion', [1, 2, 3, 'ANULADO'])
                     ->whereBetween(DB::raw('DATE(pedidos.created_at)'), [$request->desde, $request->hasta]) //rango de fechas
                     ->groupBy(
                         'pedidos.id',
@@ -95,7 +95,7 @@ class PedidosExport implements FromView, ShouldAutoSize
                 ->pluck('users.identificador');
 
             $pedidos->WhereIn('u.identificador',$asesores);
-            
+
         }
         else if(Auth::user()->rol == "Jefe de llamadas")
         {
@@ -134,7 +134,7 @@ class PedidosExport implements FromView, ShouldAutoSize
                     ->pluck('users.identificador');
 
             $pedidos->WhereIn('u.identificador',$asesores);
-            
+
 
         }
         else if(Auth::user()->rol == "Encargado")
@@ -149,7 +149,7 @@ class PedidosExport implements FromView, ShouldAutoSize
 
             $pedidos->WhereIn('u.identificador',$asesores);
 
-            
+
         }else{
             $pedidos=$pedidos;
         }
@@ -157,7 +157,7 @@ class PedidosExport implements FromView, ShouldAutoSize
         $this->pedidos = $pedidos->get();
         return $this;
     }
-    
+
 
 
     public function view(): View {
