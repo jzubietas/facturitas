@@ -39,33 +39,32 @@ class MigrateStatusPedido extends Command
      */
     public function handle()
     {
-        $migrateCondiciones = [
-            'PAGO' => 1,
-            'ABONADO' => 2,
-            'ABONADO_PARCIAL' => 3,
-            'ADELANTO' => 4,
-            'PENDIENTE' => 5,
-            'OBSERVADO' => 6,
-        ];
-
-        foreach ($migrateCondiciones as $status => $value) {
-            Pago::query()->where('condicion', '=', $status)->update([
-                "condicion" => $value
-            ]);
-        }
 
         \Schema::table('pagos', function (Blueprint $table) {
-            $table->integer('condicion')->nullable()->change();
+            $table->integer('condicion_code')->nullable();
         });
+
+        foreach (Pago::$migrateCondiciones as $status => $code) {
+            Pago::query()->where('condicion', '=', $status)->update([
+                "condicion" => $status,
+                "condicion_code" => $code,
+            ]);
+        }
 
         \Schema::create('devolucions', function (Blueprint $table) {
             $table->id();
             $table->unsignedInteger("pago_id");
             $table->unsignedInteger("client_id");
             $table->unsignedInteger("asesor_id")->comment("id usuario asesor");
+            $table->string("bank_destino")->nullable();
+            $table->string("bank_number")->nullable();
+            $table->string("num_operacion")->nullable();
+
             $table->float("amount")->comment("monto a devolver");
             $table->integer("status")->default(\App\Models\Devolucion::PENDIENTE);
+            $table->string("voucher_disk")->nullable();
             $table->text("voucher_path")->nullable();
+            $table->timestamp("returned_at")->nullable();
             $table->timestamps();
         });
 

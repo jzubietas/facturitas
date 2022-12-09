@@ -42,6 +42,28 @@ class NotificationsController extends Controller
 
         $dropdownHtml = '';
 
+
+        $devoluciones = Devolucion::query()->with(['cliente','pago','asesor'])->noAtendidos()->get();
+        foreach ($devoluciones as $key=>$devolucion) {
+            $icon = "<i class='mr-2 fas fa-fw fa-envelope'></i>";
+
+            $time = "<span class='float-right text-muted text-sm'>
+                       {$devolucion->created_at->diffForHumans()}
+                     </span>";
+
+            $dropdownHtml .= "<a href='".route('pagos.devolucion',$devolucion)."' class='dropdown-item'>
+                             {$icon}
+                             <span class='text-wrap'>
+                              Pago por devolver a <b>{$devolucion->cliente->nombre}</b> un valor de <b>{$devolucion->amount_format}</b>
+</span>
+                             {$time}
+                              </a>";
+
+            if ($key < count($devoluciones) - 1) {
+                $dropdownHtml .= "<div class='dropdown-divider'></div>";
+            }
+        }
+
         /* foreach ($notifications as $key => $not) {
             $icon = "<i class='mr-2 {$not['icon']}'></i>";
 
@@ -78,7 +100,7 @@ class NotificationsController extends Controller
 
         return [
             'icon' => 'fas fa-bell',
-            'label' => count(auth()->user()->unreadNotifications),
+            'label' => count(auth()->user()->unreadNotifications)+count($devoluciones),
             'label_color' => 'danger',
             'icon_color' => 'white',
             'dropdown' => $dropdownHtml,
