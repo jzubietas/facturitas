@@ -8,13 +8,13 @@
 
 @section('content')
 
-  <div class="card">    
+  <div class="card">
     <div class="card-header bg-primary">Reporte general - PEDIDOS/PAGOS</div>
     <div class="form-group">
       <div class="row">
         <div class="form-group col-lg-1"></div>
         <div class="form-group col-lg-10"><br>
-          <div class="card"> 
+          <div class="card">
             {!! Form::open(['route' => ['pedidosgeneralexcel'], 'method' => 'POST', 'target' => 'blanck_']) !!}
             <div class="card-body">
               <div class="form-row">
@@ -23,11 +23,11 @@
                   <div class="form-row">
                     <div class="col-lg-6">
                       <label>Fecha inicial&nbsp;</label>
-                      {!! Form::date('desde', \Carbon\Carbon::now(), ['class' => 'form-control']); !!}
+                      {!! Form::date('desde', now(), ['class' => 'form-control']); !!}
                     </div>
                     <div class="col-lg-6">
                       <label>Fecha final&nbsp;</label>
-                      {!! Form::date('hasta', \Carbon\Carbon::now(), ['class' => 'form-control']); !!}
+                      {!! Form::date('hasta', now(), ['class' => 'form-control']); !!}
                     </div>
                     {{-- <div class="col-lg-4">
                       <label>Asesor </label>
@@ -36,12 +36,12 @@
                   </div>
                 </div>
               </div>
-            </div>    
+            </div>
             <div class="card-footer">
               <button type="submit" class="btn btn-success"><i class="fas fa-save"></i> Consultar</button>
             </div>
             {!! Form::close() !!}
-          </div>      
+          </div>
         </div>
         <div class="form-group col-lg-1"></div>
       </div>
@@ -54,7 +54,7 @@
       <div class="row">
         <div class="form-group col-lg-1"></div>
         <div class="form-group col-lg-5"><br>
-          <div class="card"> 
+          <div class="card">
             {!! Form::open(['route' => ['pagosporfechasexcel'], 'method' => 'POST', 'target' => 'blanck_']) !!}
             <div class="card-body">
               <div class="form-row">
@@ -72,15 +72,15 @@
                   </div>
                 </div>
               </div>
-            </div>    
+            </div>
             <div class="card-footer">
               <button type="submit" class="btn btn-success"><i class="fas fa-save"></i> Consultar</button>
             </div>
             {!! Form::close() !!}
-          </div>      
+          </div>
         </div>
         <div class="form-group col-lg-5"><br>
-          <div class="card"> 
+          <div class="card">
             {!! Form::open(['route' => ['pagosporasesorexcel'], 'method' => 'POST', 'target' => 'blanck_']) !!}
             <div class="card-body">
               <div class="form-row">
@@ -96,12 +96,12 @@
                   </div>
                 </div>
               </div>
-            </div>    
+            </div>
             <div class="card-footer">
               <button type="submit" class="btn btn-success"><i class="fas fa-save"></i> Consultar</button>
             </div>
             {!! Form::close() !!}
-          </div>      
+          </div>
         </div>
         <div class="form-group col-lg-1"></div>
       </div>
@@ -114,7 +114,7 @@
       <div class="row">
         <div class="form-group col-lg-1"></div>
         <div class="form-group col-lg-10"><br>
-          <div class="card"> 
+          <div class="card">
             {!! Form::open(['route' => ['pedidosporasesoresexcel'], 'method' => 'POST', 'target' => 'blanck_']) !!}
             <div class="card-body">
               <div class="form-row">
@@ -140,19 +140,19 @@
                   </div>
                 </div>
               </div>
-            </div>    
+            </div>
             <div class="card-footer">
               <button type="submit" class="btn btn-success"><i class="fas fa-save"></i> Consultar</button>
             </div>
             {!! Form::close() !!}
-          </div>      
+          </div>
         </div>
         <div class="form-group col-lg-1"></div>
       </div>
       <div class="row">
         <div class="form-group col-lg-1"></div>
         <div class="form-group col-lg-10"><br>
-          <div class="card"> 
+          <div class="card">
             {!! Form::open(['route' => ['pagosporasesoresexcel'], 'method' => 'POST', 'target' => 'blanck_']) !!}
             <div class="card-body">
               <div class="form-row">
@@ -178,12 +178,12 @@
                   </div>
                 </div>
               </div>
-            </div>    
+            </div>
             <div class="card-footer">
               <button type="submit" class="btn btn-success"><i class="fas fa-save"></i> Consultar</button>
             </div>
             {!! Form::close() !!}
-          </div>      
+          </div>
         </div>
         <div class="form-group col-lg-1"></div>
       </div>

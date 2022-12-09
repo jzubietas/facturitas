@@ -42,12 +42,12 @@ class ClienteController extends Controller
             "2031" => '2031 - 2032',
         ];
 
-        
+
         $superasesor = User::where('rol', 'Super asesor')->count();
 
         return view('clientes.index', compact( 'anios', 'dateM', 'dateY', 'superasesor','mirol'));
     }
-    
+
     public function indextabla(Request $request)
     {
         //
@@ -79,9 +79,9 @@ class ClienteController extends Controller
                 ->groupBy(
                     'clientes.id',
                     'clientes.nombre',
-                    'clientes.icelular', 
-                    'clientes.celular', 
-                    'clientes.estado', 
+                    'clientes.icelular',
+                    'clientes.celular',
+                    'clientes.estado',
                     'u.name',
                     'u.identificador',
                     'clientes.provincia',
@@ -90,11 +90,11 @@ class ClienteController extends Controller
                     'clientes.deuda',
                     'clientes.pidio'
                 )
-                ->select('clientes.id', 
-                        'clientes.nombre', 
-                        'clientes.icelular', 
-                        'clientes.celular', 
-                        'clientes.estado', 
+                ->select('clientes.id',
+                        'clientes.nombre',
+                        'clientes.icelular',
+                        'clientes.celular',
+                        'clientes.estado',
                         'u.name as user',
                         'u.identificador',
                         'clientes.provincia',
@@ -124,7 +124,7 @@ class ClienteController extends Controller
                     DB::raw("users.identificador as identificador")
                 )
                 ->pluck('users.identificador');
-            //$pedidos=$pedidos->WhereIn('pedidos.user_id',$usersasesores);   
+            //$pedidos=$pedidos->WhereIn('pedidos.user_id',$usersasesores);
             $data=$data->WhereIn("u.identificador",$usersasesores);
 
 
@@ -152,9 +152,9 @@ class ClienteController extends Controller
                 ->groupBy(
                     'clientes.id',
                     'clientes.nombre',
-                    'clientes.icelular', 
-                    'clientes.celular', 
-                    'clientes.estado', 
+                    'clientes.icelular',
+                    'clientes.celular',
+                    'clientes.estado',
                     'u.name',
                     'u.identificador',
                     'clientes.provincia',
@@ -163,11 +163,11 @@ class ClienteController extends Controller
                     'clientes.deuda',
                     'clientes.pidio'
                 )
-                ->get(['clientes.id', 
-                        'clientes.nombre', 
-                        'clientes.icelular', 
-                        'clientes.celular', 
-                        'clientes.estado', 
+                ->get(['clientes.id',
+                        'clientes.nombre',
+                        'clientes.icelular',
+                        'clientes.celular',
+                        'clientes.estado',
                         'u.name as user',
                         'u.identificador',
                         'clientes.provincia',
@@ -195,20 +195,20 @@ class ClienteController extends Controller
 
             $data=$data->WhereIn("u.identificador",$usersasesores);
         }else{
-            
+
             $data=$data;
-            
+
         }
-        $data=$data->get();
-        
-            return Datatables::of($data)
+        //$data=$data->get();
+
+            return datatables()->query(DB::table($data))//Datatables::of($data)
                     ->addIndexColumn()
-                    ->addColumn('action', function($row){     
-                        $btn="";                          
+                    ->addColumn('action', function($row){
+                        $btn="";
                             return $btn;
                     })
                     ->rawColumns(['action'])
-                    ->make(true);
+                    ->toJson();
         //}
     }
 
@@ -243,7 +243,7 @@ class ClienteController extends Controller
             //$user->timestamp('temporal_update')->useCurrent();
 
         }
-        
+
         return response()->json(['html' => $html]);
         //return redirect()->route('users.asesores')->with('info', 'asignado');
     }
@@ -271,16 +271,16 @@ class ClienteController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {    
-      
+    {
+
         $request->validate([
-            'celular' => 'required|unique:clientes',            
+            'celular' => 'required|unique:clientes',
         ]);
 
         try {
             DB::beginTransaction();
 
-            $cliente = Cliente::create([            
+            $cliente = Cliente::create([
             'nombre' => $request->nombre,
             'celular' => $request->celular,
             /*'icelular'=> $request->icelular,*/
@@ -298,7 +298,7 @@ class ClienteController extends Controller
 
             $user = User::where('id', $request->user_id)->first();
 
-            if(     $user->exidentificador =='01' || 
+            if(     $user->exidentificador =='01' ||
                     $user->exidentificador =='03' ||
                     $user->exidentificador =='05' ||
                     $user->exidentificador =='07' ||
@@ -313,7 +313,7 @@ class ClienteController extends Controller
                         $letra="A";
                     }
 
-            if(     $user->exidentificador =='02' || 
+            if(     $user->exidentificador =='02' ||
                     $user->exidentificador =='04' ||
                     $user->exidentificador =='06' ||
                     $user->exidentificador =='08' ||
@@ -340,11 +340,11 @@ class ClienteController extends Controller
                     'cliente_id' => $cliente->id,
                     'nombre' => $nombreporcentaje[$cont],
                     'porcentaje' => $valoresporcentaje[$cont],
-                  
+
                 ]);
                 $cont++;
             }
-            
+
             DB::commit();
         } catch (\Throwable $th) {
             throw $th;
@@ -352,7 +352,7 @@ class ClienteController extends Controller
             dd($th); */
         }
 
-        return redirect()->route('clientes.index')->with('info','registrado');        
+        return redirect()->route('clientes.index')->with('info','registrado');
     }
 
     /**
@@ -385,7 +385,7 @@ class ClienteController extends Controller
         ->where('users.rol', 'Asesor')
         ->pluck('name', 'id');
         $porcentajes = Porcentaje::where('cliente_id', $cliente->id)->get();
-        
+
         return view('clientes.edit', compact('cliente', 'users', 'porcentajes','mirol'));
     }
 
@@ -399,7 +399,7 @@ class ClienteController extends Controller
     public function update(Request $request, Cliente $cliente)
     {
         $request->validate([
-            'celular' => 'required',            
+            'celular' => 'required',
         ]);
 
         $cliente->update($request->all());
@@ -407,7 +407,7 @@ class ClienteController extends Controller
         $idporcentaje = $request->idporcentaje;
         $valoresporcentaje = $request->porcentaje;
         $cont = 0;
-        /* return $request->all(); */        
+        /* return $request->all(); */
         $valor = Porcentaje::find($idporcentaje); /* return $valor; */
         while ($cont < count((array)$idporcentaje)) {
             $valor[$cont]->update([
@@ -435,7 +435,7 @@ class ClienteController extends Controller
         $cliente->update([
             'estado' => '0'
         ]);
-        
+
         return redirect()->route('clientes.index')->with('info','eliminado');
     }
 
@@ -445,27 +445,27 @@ class ClienteController extends Controller
             ->update([
             'estado' => '0'
         ]);
-        
+
         return redirect()->route('clientes.index')->with('info','eliminado');
     }
 
 
     public function indexbf()
     {
-        
+
 
         $superasesor = User::where('rol', 'Super asesor')->count();
 
         if (Auth::user()->rol == "Llamadas" || Auth::user()->rol == "Llamadas")
         {
             $users = User::
-                where('estado', '1')    
-                ->whereIn('rol', ['Asesor', 'Super asesor']) 
+                where('estado', '1')
+                ->whereIn('rol', ['Asesor', 'Super asesor'])
                 ->where('users.llamada', Auth::user()->id)
                 ->pluck('identificador', 'id');
         }else{
             $users = User::
-                where('estado', '1')    
+                where('estado', '1')
                 ->whereIn('rol', ['Asesor', 'Super asesor'])
                 //->where('users.llamada', Auth::user()->id)
                 ->pluck('identificador', 'id');
@@ -487,22 +487,22 @@ class ClienteController extends Controller
     }
 
     public function storebf(Request $request)
-    {   
+    {
         /* $request->validate([
                 'celular' => 'required|unique:clientes',*/
 
-        $cliente = Cliente::where('celular', $request->celular)->first();  
-        $letra="";      
+        $cliente = Cliente::where('celular', $request->celular)->first();
+        $letra="";
         if($cliente !== null){
-            
+
             $user = User::where('id', $cliente->user_id)->first();
-            
+
             $messages = [
                 'unique' => 'EL CELULAR INGRESADO SE ENCUENTA ASIGNADO AL ASESOR '.$user->identificador,
             ];
-            
 
-            if(     $user->exidentificador =='01' || 
+
+            if(     $user->exidentificador =='01' ||
                     $user->exidentificador =='03' ||
                     $user->exidentificador =='05' ||
                     $user->exidentificador =='07' ||
@@ -517,7 +517,7 @@ class ClienteController extends Controller
                         $letra="A";
                     }
 
-            if(     $user->exidentificador =='02' || 
+            if(     $user->exidentificador =='02' ||
                     $user->exidentificador =='04' ||
                     $user->exidentificador =='06' ||
                     $user->exidentificador =='08' ||
@@ -531,19 +531,19 @@ class ClienteController extends Controller
                     {
                         $letra="B";
                     }
-    
+
             $validator = Validator::make($request->all(), [
                 'celular' => 'required|unique:clientes',
             ], $messages);
-     
+
             if ($validator->fails()) {
                 return redirect('clientes.createbf')
                             ->withErrors($validator)
                             ->withInput();
-            } 
+            }
         }
 
-            $cliente = Cliente::create([            
+            $cliente = Cliente::create([
             'nombre' => $request->nombre,
             'celular' => $request->celular,
             'user_id' => $request->user_id,
@@ -554,7 +554,7 @@ class ClienteController extends Controller
             'icelular' => $letra,
             ]);
 
-        return redirect()->route('basefria')->with('info','registrado');        
+        return redirect()->route('basefria')->with('info','registrado');
     }
 
     public function editbf(Cliente $cliente)
@@ -597,7 +597,7 @@ class ClienteController extends Controller
 
         try {
             DB::beginTransaction();
-            
+
         // ALMACENANDO PAGO-PEDIDOS
         $nombreporcentaje = $request->nombreporcentaje;
         $valoresporcentaje = $request->porcentaje;
@@ -615,7 +615,7 @@ class ClienteController extends Controller
             }
         DB::commit();
         } catch (\Throwable $th) {
-            throw $th;            
+            throw $th;
         }
 
         //return redirect()->route('clientes.index')->with('info','registrado');
@@ -648,7 +648,7 @@ class ClienteController extends Controller
         ]);
         try {
             DB::beginTransaction();
-            
+
         // ALMACENANDO PAGO-PEDIDOS
         $nombreporcentaje = $request->nombreporcentaje;
         $valoresporcentaje = $request->porcentaje;
@@ -705,10 +705,10 @@ class ClienteController extends Controller
                 DB::raw(" (select count(ped.id) from pedidos ped where ped.cliente_id=clientes.id and ped.pago in (0,1) and ped.pagado in (0,1) and ped.created_at >='2022-11-01 00:00:00' and ped.estado=1) as pedidos_mes_deuda "),
                 DB::raw(" (select count(ped2.id) from pedidos ped2 where ped2.cliente_id=clientes.id and ped2.pago in (0,1) and ped2.pagado in (0,1) and ped2.created_at <='2022-10-31 00:00:00' and ped2.estado=1) as pedidos_mes_deuda_antes "),
             ]);
-        
+
         $html = '<option value="">' . trans('---- SELECCIONE CLIENTE ----') . '</option>';
 
-        foreach ($clientes as $cliente) 
+        foreach ($clientes as $cliente)
         {
             //Auth::user()->rol=='Administrador'
             if($mirol=='Administrador' || 'Asistente de Administración')
@@ -723,7 +723,7 @@ class ClienteController extends Controller
                     //considerar deuda real
                     if($cliente->pedidos_mes_deuda>0 && $cliente->pedidos_mes_deuda_antes==0)
                     {
-                        $html .= '<option style="color:lightblue" value="' . $cliente->id . '">' . $cliente->celular.'-'.$cliente->icelular. '  -  ' . $cliente->nombre . '</option>';    
+                        $html .= '<option style="color:lightblue" value="' . $cliente->id . '">' . $cliente->celular.'-'.$cliente->icelular. '  -  ' . $cliente->nombre . '</option>';
                     }else if($cliente->pedidos_mes_deuda>0 && $cliente->pedidos_mes_deuda_antes>0)
                     {
                         $html .= '<option disabled style="color:red" value="' . $cliente->id . '">' . $cliente->celular.'-'.$cliente->icelular. '  -  ' . $cliente->nombre . '**CLIENTE CON DEUDA**</option>';
@@ -736,7 +736,7 @@ class ClienteController extends Controller
                 }
             }
         }
-        
+
         return response()->json(['html' => $html]);
     }
 
@@ -770,10 +770,10 @@ class ClienteController extends Controller
                 DB::raw(" (select count(ped.id) from pedidos ped where ped.cliente_id=clientes.id and ped.pago in (0,1) and ped.pagado in (0,1) and ped.created_at >='2022-12-01 00:00:00' and ped.estado=1) as pedidos_mes_deuda "),
                 DB::raw(" (select count(ped2.id) from pedidos ped2 where ped2.cliente_id=clientes.id and ped2.pago in (0,1) and ped2.pagado in (0,1) and ped2.created_at <='2022-11-30 00:00:00' and ped2.estado=1) as pedidos_mes_deuda_antes "),
             ]);
-        
+
         $html = '<option value="">' . trans('---- SELECCIONE CLIENTE ----') . '</option>';
 
-        foreach ($clientes as $cliente) 
+        foreach ($clientes as $cliente)
         {
             //Auth::user()->rol=='Administrador'
             if($mirol=='Administrador')
@@ -783,13 +783,13 @@ class ClienteController extends Controller
                 /*if($cliente->crea_temporal==1)
                 {
                     //falta considerar el tiempo ahora menos el tiempo activado temporal
-                    $html .= '<option style="color:yellow" value="' . $cliente->id . '">' . $cliente->celular.'-'.$cliente->icelular. '  -  ' . $cliente->nombre . '</option>'; 
+                    $html .= '<option style="color:yellow" value="' . $cliente->id . '">' . $cliente->celular.'-'.$cliente->icelular. '  -  ' . $cliente->nombre . '</option>';
                 }else*/
                 {
                     //considerar deuda real
                     if($cliente->pedidos_mes_deuda>0 && $cliente->pedidos_mes_deuda_antes==0)
                     {
-                        $html .= '<option style="color:lightblue" value="' . $cliente->id . '">' . $cliente->celular.'-'.$cliente->icelular. '  -  ' . $cliente->nombre . '</option>';    
+                        $html .= '<option style="color:lightblue" value="' . $cliente->id . '">' . $cliente->celular.'-'.$cliente->icelular. '  -  ' . $cliente->nombre . '</option>';
                     }else if($cliente->pedidos_mes_deuda>0 && $cliente->pedidos_mes_deuda_antes>0)
                     {
                         $html .= '<option style="color:black" value="' . $cliente->id . '">' . $cliente->celular.'-'.$cliente->icelular. '  -  ' . $cliente->nombre . '**CLIENTE CON DEUDA**</option>';
@@ -802,7 +802,7 @@ class ClienteController extends Controller
                 }
             }
         }
-        
+
         return response()->json(['html' => $html]);
     }
 
@@ -816,7 +816,7 @@ class ClienteController extends Controller
             $html = '<option value="">' . trans('---- SELECCIONE CLIENTE ----') . '</option>';
             $clientes = Cliente::where('clientes.user_id', $request->user_id)
                                 ->where('clientes.tipo', '1')
-                                ->get();        
+                                ->get();
             foreach ($clientes as $cliente) {
                 if($cliente->deuda=="0")
                 {
@@ -833,25 +833,25 @@ class ClienteController extends Controller
                         $html .= '<option  style="color:#fff" value="' . $cliente->id . '">' . $cliente->celular. '  -  ' . $cliente->nombre . '</option>';
                     }
                 }
-                
+
             }
         }
-        
+
         return response()->json(['html' => $html]);
     }
 
     public function pedidosenvioclientetabla(Request $request)
-    {        
+    {
         $pedidos=null;
-        if (!$request->cliente_id) {            
+        if (!$request->cliente_id) {
         } else {
-            
-            $idrequest=$request->cliente_id;       
+
+            $idrequest=$request->cliente_id;
             $pedidos = Pedido::join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
-                ->select('pedidos.id', 
+                ->select('pedidos.id',
                         'dp.codigo',
                         'dp.nombre_empresa',
-                        //DB::raw(" (select dd.nombre_empresa from detalle_pedidos de where de.pedido_id=direcion_grupos.id) as clientes "),                     
+                        //DB::raw(" (select dd.nombre_empresa from detalle_pedidos de where de.pedido_id=direcion_grupos.id) as clientes "),
                         )
                 ->where('pedidos.cliente_id', $idrequest)
                 ->where('pedidos.estado', '1')
@@ -860,14 +860,14 @@ class ClienteController extends Controller
                 ->where('pedidos.condicion_envio', 'PENDIENTE DE ENVIO')
                 ->get();
 
-                
-                
 
-            
+
+
+
             return Datatables::of($pedidos)
-                    ->addIndexColumn()                  
+                    ->addIndexColumn()
                     ->make(true);
-        }       
+        }
     }
 
     public function indexabandono()
@@ -890,7 +890,7 @@ class ClienteController extends Controller
             "2030" => '2030 - 2031',
             "2031" => '2031 - 2032',
         ];
-        
+
         $superasesor = User::where('rol', 'Super asesor')->count();
 
         return view('clientes.abandono', compact( 'anios', 'dateM', 'dateY', 'superasesor','mirol'));
@@ -928,9 +928,9 @@ class ClienteController extends Controller
                 ->groupBy(
                     'clientes.id',
                     'clientes.nombre',
-                    'clientes.icelular', 
-                    'clientes.celular', 
-                    'clientes.estado', 
+                    'clientes.icelular',
+                    'clientes.celular',
+                    'clientes.estado',
                     'u.name',
                     'u.identificador',
                     'clientes.provincia',
@@ -939,11 +939,11 @@ class ClienteController extends Controller
                     'clientes.deuda',
                     'clientes.pidio'
                 )
-                ->select('clientes.id', 
-                        'clientes.nombre', 
-                        'clientes.icelular', 
-                        'clientes.celular', 
-                        'clientes.estado', 
+                ->select('clientes.id',
+                        'clientes.nombre',
+                        'clientes.icelular',
+                        'clientes.celular',
+                        'clientes.estado',
                         'u.name as user',
                         'u.identificador',
                         'clientes.provincia',
@@ -971,7 +971,7 @@ class ClienteController extends Controller
                     DB::raw("users.identificador as identificador")
                 )
                 ->pluck('users.identificador');
-            //$pedidos=$pedidos->WhereIn('pedidos.user_id',$usersasesores);   
+            //$pedidos=$pedidos->WhereIn('pedidos.user_id',$usersasesores);
             $data=$data->WhereIn("u.identificador",$usersasesores);
 
         }
@@ -984,7 +984,7 @@ class ClienteController extends Controller
                     DB::raw("users.identificador as identificador")
                 )
                 ->pluck('users.identificador');
-                
+
             $data=$data->WhereIn("u.identificador",$usersasesores);
 
         }
@@ -1000,9 +1000,9 @@ class ClienteController extends Controller
                 ->groupBy(
                     'clientes.id',
                     'clientes.nombre',
-                    'clientes.icelular', 
-                    'clientes.celular', 
-                    'clientes.estado', 
+                    'clientes.icelular',
+                    'clientes.celular',
+                    'clientes.estado',
                     'u.name',
                     'u.identificador',
                     'clientes.provincia',
@@ -1011,11 +1011,11 @@ class ClienteController extends Controller
                     'clientes.deuda',
                     'clientes.pidio'
                 )
-                ->get(['clientes.id', 
-                        'clientes.nombre', 
-                        'clientes.icelular', 
-                        'clientes.celular', 
-                        'clientes.estado', 
+                ->get(['clientes.id',
+                        'clientes.nombre',
+                        'clientes.icelular',
+                        'clientes.celular',
+                        'clientes.estado',
                         'u.name as user',
                         'u.identificador',
                         'clientes.provincia',
@@ -1043,16 +1043,16 @@ class ClienteController extends Controller
 
             $data=$data->WhereIn("u.identificador",$usersasesores);
         }else{
-            
+
             $data=$data;
-            
+
         }
         $data=$data->get();
-        
+
             return Datatables::of($data)
                     ->addIndexColumn()
-                    ->addColumn('action', function($row){     
-                        $btn="";                          
+                    ->addColumn('action', function($row){
+                        $btn="";
                             return $btn;
                     })
                     ->rawColumns(['action'])
@@ -1066,13 +1066,13 @@ class ClienteController extends Controller
         if (Auth::user()->rol == "Llamadas" || Auth::user()->rol == "Llamadas")
         {
             $users = User::
-                where('estado', '1')    
-                ->whereIn('rol', ['Asesor', 'Super asesor']) 
+                where('estado', '1')
+                ->whereIn('rol', ['Asesor', 'Super asesor'])
                 ->where('users.llamada', Auth::user()->id)
                 ->pluck('identificador', 'id');
         }else{
             $users = User::
-                where('estado', '1')    
+                where('estado', '1')
                 ->whereIn('rol', ['Asesor', 'Super asesor'])
                 //->where('users.llamada', Auth::user()->id)
                 ->pluck('identificador', 'id');
@@ -1086,13 +1086,13 @@ class ClienteController extends Controller
         if (Auth::user()->rol == "Llamadas" || Auth::user()->rol == "Llamadas")
         {
             $users = User::
-                where('estado', '1')    
-                ->whereIn('rol', ['Asesor', 'Super asesor']) 
+                where('estado', '1')
+                ->whereIn('rol', ['Asesor', 'Super asesor'])
                 ->where('users.llamada', Auth::user()->id)
                 ->pluck('identificador', 'id');
         }else{
             $users = User::
-                where('estado', '1')    
+                where('estado', '1')
                 ->whereIn('rol', ['Asesor', 'Super asesor'])
                 //->where('users.llamada', Auth::user()->id)
                 ->pluck('identificador', 'id');
@@ -1106,13 +1106,13 @@ class ClienteController extends Controller
         if (Auth::user()->rol == "Llamadas" || Auth::user()->rol == "Llamadas")
         {
             $users = User::
-                where('estado', '1')    
-                ->whereIn('rol', ['Asesor', 'Super asesor']) 
+                where('estado', '1')
+                ->whereIn('rol', ['Asesor', 'Super asesor'])
                 ->where('users.llamada', Auth::user()->id)
                 ->pluck('identificador', 'id');
         }else{
             $users = User::
-                where('estado', '1')    
+                where('estado', '1')
                 ->whereIn('rol', ['Asesor', 'Super asesor'])
                 //->where('users.llamada', Auth::user()->id)
                 ->pluck('identificador', 'id');
@@ -1152,9 +1152,9 @@ class ClienteController extends Controller
                 ->groupBy(
                     'clientes.id',
                     'clientes.nombre',
-                    'clientes.icelular', 
-                    'clientes.celular', 
-                    'clientes.estado', 
+                    'clientes.icelular',
+                    'clientes.celular',
+                    'clientes.estado',
                     'u.name',
                     'u.identificador',
                     'clientes.provincia',
@@ -1163,11 +1163,11 @@ class ClienteController extends Controller
                     'clientes.deuda',
                     'clientes.pidio'
                 )
-                ->select('clientes.id', 
-                        'clientes.nombre', 
-                        'clientes.icelular', 
-                        'clientes.celular', 
-                        'clientes.estado', 
+                ->select('clientes.id',
+                        'clientes.nombre',
+                        'clientes.icelular',
+                        'clientes.celular',
+                        'clientes.estado',
                         'u.name as user',
                         'u.identificador',
                         'clientes.provincia',
@@ -1197,7 +1197,7 @@ class ClienteController extends Controller
                     DB::raw("users.identificador as identificador")
                 )
                 ->pluck('users.identificador');
-            //$pedidos=$pedidos->WhereIn('pedidos.user_id',$usersasesores);   
+            //$pedidos=$pedidos->WhereIn('pedidos.user_id',$usersasesores);
             $data=$data->WhereIn("u.identificador",$usersasesores);
 
 
@@ -1225,9 +1225,9 @@ class ClienteController extends Controller
                 ->groupBy(
                     'clientes.id',
                     'clientes.nombre',
-                    'clientes.icelular', 
-                    'clientes.celular', 
-                    'clientes.estado', 
+                    'clientes.icelular',
+                    'clientes.celular',
+                    'clientes.estado',
                     'u.name',
                     'u.identificador',
                     'clientes.provincia',
@@ -1236,11 +1236,11 @@ class ClienteController extends Controller
                     'clientes.deuda',
                     'clientes.pidio'
                 )
-                ->get(['clientes.id', 
-                        'clientes.nombre', 
-                        'clientes.icelular', 
-                        'clientes.celular', 
-                        'clientes.estado', 
+                ->get(['clientes.id',
+                        'clientes.nombre',
+                        'clientes.icelular',
+                        'clientes.celular',
+                        'clientes.estado',
                         'u.name as user',
                         'u.identificador',
                         'clientes.provincia',
@@ -1268,16 +1268,16 @@ class ClienteController extends Controller
 
             $data=$data->WhereIn("u.identificador",$usersasesores);
         }else{
-            
+
             $data=$data;
-            
+
         }
         $data=$data->get();
-        
+
             return Datatables::of($data)
                     ->addIndexColumn()
-                    ->addColumn('action', function($row){     
-                        $btn="";                          
+                    ->addColumn('action', function($row){
+                        $btn="";
                             return $btn;
                     })
                     ->rawColumns(['action'])
@@ -1316,9 +1316,9 @@ class ClienteController extends Controller
                 ->groupBy(
                     'clientes.id',
                     'clientes.nombre',
-                    'clientes.icelular', 
-                    'clientes.celular', 
-                    'clientes.estado', 
+                    'clientes.icelular',
+                    'clientes.celular',
+                    'clientes.estado',
                     'u.name',
                     'u.identificador',
                     'clientes.provincia',
@@ -1327,11 +1327,11 @@ class ClienteController extends Controller
                     'clientes.deuda',
                     'clientes.pidio'
                 )
-                ->select('clientes.id', 
-                        'clientes.nombre', 
-                        'clientes.icelular', 
-                        'clientes.celular', 
-                        'clientes.estado', 
+                ->select('clientes.id',
+                        'clientes.nombre',
+                        'clientes.icelular',
+                        'clientes.celular',
+                        'clientes.estado',
                         'u.name as user',
                         'u.identificador',
                         'clientes.provincia',
@@ -1361,7 +1361,7 @@ class ClienteController extends Controller
                     DB::raw("users.identificador as identificador")
                 )
                 ->pluck('users.identificador');
-            //$pedidos=$pedidos->WhereIn('pedidos.user_id',$usersasesores);   
+            //$pedidos=$pedidos->WhereIn('pedidos.user_id',$usersasesores);
             $data=$data->WhereIn("u.identificador",$usersasesores);
 
 
@@ -1389,9 +1389,9 @@ class ClienteController extends Controller
                 ->groupBy(
                     'clientes.id',
                     'clientes.nombre',
-                    'clientes.icelular', 
-                    'clientes.celular', 
-                    'clientes.estado', 
+                    'clientes.icelular',
+                    'clientes.celular',
+                    'clientes.estado',
                     'u.name',
                     'u.identificador',
                     'clientes.provincia',
@@ -1400,11 +1400,11 @@ class ClienteController extends Controller
                     'clientes.deuda',
                     'clientes.pidio'
                 )
-                ->get(['clientes.id', 
-                        'clientes.nombre', 
-                        'clientes.icelular', 
-                        'clientes.celular', 
-                        'clientes.estado', 
+                ->get(['clientes.id',
+                        'clientes.nombre',
+                        'clientes.icelular',
+                        'clientes.celular',
+                        'clientes.estado',
                         'u.name as user',
                         'u.identificador',
                         'clientes.provincia',
@@ -1432,16 +1432,16 @@ class ClienteController extends Controller
 
             $data=$data->WhereIn("u.identificador",$usersasesores);
         }else{
-            
+
             $data=$data;
-            
+
         }
         $data=$data->get();
-        
+
             return Datatables::of($data)
                     ->addIndexColumn()
-                    ->addColumn('action', function($row){     
-                        $btn="";                          
+                    ->addColumn('action', function($row){
+                        $btn="";
                             return $btn;
                     })
                     ->rawColumns(['action'])
@@ -1480,9 +1480,9 @@ class ClienteController extends Controller
                 ->groupBy(
                     'clientes.id',
                     'clientes.nombre',
-                    'clientes.icelular', 
-                    'clientes.celular', 
-                    'clientes.estado', 
+                    'clientes.icelular',
+                    'clientes.celular',
+                    'clientes.estado',
                     'u.name',
                     'u.identificador',
                     'clientes.provincia',
@@ -1491,11 +1491,11 @@ class ClienteController extends Controller
                     'clientes.deuda',
                     'clientes.pidio'
                 )
-                ->select('clientes.id', 
-                        'clientes.nombre', 
-                        'clientes.icelular', 
-                        'clientes.celular', 
-                        'clientes.estado', 
+                ->select('clientes.id',
+                        'clientes.nombre',
+                        'clientes.icelular',
+                        'clientes.celular',
+                        'clientes.estado',
                         'u.name as user',
                         'u.identificador',
                         'clientes.provincia',
@@ -1525,7 +1525,7 @@ class ClienteController extends Controller
                     DB::raw("users.identificador as identificador")
                 )
                 ->pluck('users.identificador');
-            //$pedidos=$pedidos->WhereIn('pedidos.user_id',$usersasesores);   
+            //$pedidos=$pedidos->WhereIn('pedidos.user_id',$usersasesores);
             $data=$data->WhereIn("u.identificador",$usersasesores);
 
 
@@ -1553,9 +1553,9 @@ class ClienteController extends Controller
                 ->groupBy(
                     'clientes.id',
                     'clientes.nombre',
-                    'clientes.icelular', 
-                    'clientes.celular', 
-                    'clientes.estado', 
+                    'clientes.icelular',
+                    'clientes.celular',
+                    'clientes.estado',
                     'u.name',
                     'u.identificador',
                     'clientes.provincia',
@@ -1564,11 +1564,11 @@ class ClienteController extends Controller
                     'clientes.deuda',
                     'clientes.pidio'
                 )
-                ->get(['clientes.id', 
-                        'clientes.nombre', 
-                        'clientes.icelular', 
-                        'clientes.celular', 
-                        'clientes.estado', 
+                ->get(['clientes.id',
+                        'clientes.nombre',
+                        'clientes.icelular',
+                        'clientes.celular',
+                        'clientes.estado',
                         'u.name as user',
                         'u.identificador',
                         'clientes.provincia',
@@ -1596,16 +1596,16 @@ class ClienteController extends Controller
 
             $data=$data->WhereIn("u.identificador",$usersasesores);
         }else{
-            
+
             $data=$data;
-            
+
         }
         $data=$data->get();
-        
+
             return Datatables::of($data)
                     ->addIndexColumn()
-                    ->addColumn('action', function($row){     
-                        $btn="";                          
+                    ->addColumn('action', function($row){
+                        $btn="";
                             return $btn;
                     })
                     ->rawColumns(['action'])

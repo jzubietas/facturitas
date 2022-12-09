@@ -96,9 +96,9 @@
 
 <script>
     $(document).ready(function(){
-        $('#modal-asignarjefellamadas').on('show.bs.modal', function (event) {     
-            var button = $(event.relatedTarget) 
-            var idunico = button.data('jefellamadas')      
+        $('#modal-asignarjefellamadas').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget)
+            var idunico = button.data('jefellamadas')
             $("#hiddenIdjefellamadas").val(idunico);
             if(idunico<10){
                 idunico='USER000'+idunico;
@@ -111,11 +111,11 @@
             }
             $(".textcode").html(idunico);
         });
-   
 
-    $('#modal-asignarasesor').on('show.bs.modal', function (event) {     
-            var button = $(event.relatedTarget) 
-            var idunico = button.data('asesor')      
+
+    $('#modal-asignarasesor').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget)
+            var idunico = button.data('asesor')
             $("#hiddenIdasesor").val(idunico);
             if(idunico<10){
                 idunico='USER000'+idunico;
@@ -127,7 +127,7 @@
                 idunico='USER'+idunico;
             }
             $(".textcode").html(idunico);
-          
+
     });
 
     /*cargar combos para y submit guardar form */
@@ -147,9 +147,9 @@
                     '',
                     'success'
                 )
-            $("#modal-asignarjefellamadas").modal("hide");      
+            $("#modal-asignarjefellamadas").modal("hide");
         });
-      
+
     });
     $(document).on("submit", "#formasesor", function (evento) {
         evento.preventDefault();
@@ -165,17 +165,17 @@
                     '',
                     'success'
                 )
-                $("#modal-asignarasesor").modal("hide");          
+                $("#modal-asignarasesor").modal("hide");
         });
 
-       
+
     });
 
 });
 
-    
+
   $(document).ready(function () {
-    
+
     $.ajaxSetup({
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -188,9 +188,9 @@
         searching: true,
         "order": [[ 0, "desc" ]],
         ajax: "{{ route('users.llamadastabla') }}",
-        "createdRow": function( row, data, dataIndex){        
+        "createdRow": function( row, data, dataIndex){
         },
-       
+
         columns: [
             {
                 data: 'id',
@@ -210,8 +210,8 @@
             {data: 'name', name: 'name', },
             {data: 'email', name: 'email', },
             {
-                data: 'supervisor', 
-                name: 'supervisor', 
+                data: 'supervisor',
+                name: 'supervisor',
                 render: function ( data, type, row, meta ) {
                     if(data==null)
                     {
@@ -222,7 +222,7 @@
                 }
             },
             {
-                data: 'operario', 
+                data: 'operario',
                 name: 'operario',
                 render: function ( data, type, row, meta ) {
                     if(data==null)
@@ -246,20 +246,20 @@
                 },
              },
             {
-                data: 'action', 
-                name: 'action', 
-                orderable: false, 
+                data: 'action',
+                name: 'action',
+                orderable: false,
                 searchable: false,
                 sWidth:'20%',
                 render: function ( data, type, row, meta ) {
-                  
-                    return data;             
+
+                    return data;
                 }
             },
         ],
         language: {
             "decimal": "",
-            "emptyTable": "No hay informaciÃ³n",
+            "emptyTable": "No hay información",
             "info": "Mostrando del _START_ al _END_ de _TOTAL_ Entradas",
             "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
             "infoFiltered": "(Filtrado de _MAX_ total entradas)",

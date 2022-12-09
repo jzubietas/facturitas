@@ -38,7 +38,7 @@
 
   <div class="card">
     <div class="card-body">
-      
+
       <table id="tablaPrincipal" class="table table-striped">
         <thead>
           <tr>
@@ -65,7 +65,7 @@
 
       @include('sobres.modal.historialLima')
       @include('sobres.modal.historialProvincia')
-     
+
     </div>
   </div>
 
@@ -74,7 +74,7 @@
 @section('css')
   <link rel="stylesheet" href="/css/admin_custom.css">
   <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.0.943/pdf_viewer.css">
-  
+
   <style>
     img:hover{
       transform: scale(1.2)
@@ -143,7 +143,7 @@
 @stop
 
 @section('js')
-  
+
   <script src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
   <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
   <script src="https://cdn.datatables.net/select/1.5.0/js/dataTables.select.min.js"></script>
@@ -151,12 +151,12 @@
 
   <script src="https://gyrocode.github.io/jquery-datatables-checkboxes/1.2.12/js/dataTables.checkboxes.min.js"></script>
 
-  
+
 
 <script>
   var tablehistoricolima=null;
   tablehistoricolima=$('#tablaHistorialLima').DataTable({"bPaginate": false,"bFilter": false,"bInfo": false,"length": 3,
-          columns: 
+          columns:
           [
             {data: 'id'},{data: 'nombre'},{data: 'recibe'},{data: 'direccion'},{data: 'referencia'},{data: 'distrito'},{data: 'observacion'},{data: null},
           ],
@@ -164,8 +164,8 @@
 
   var tablehistoricoprovincia=null;
   tablehistoricoprovincia=$('#tablaHistorialProvincia').DataTable({"bPaginate": false,"bFilter": false,"bInfo": false,"length": 3,
-          columns: 
-          [            
+          columns:
+          [
             {data: 'id'},{data: 'tracking'},{data: 'numregistro'},{data: null},
           ],
         });
@@ -175,7 +175,7 @@
           currentPage: 1,
           zoom: 1
       }
-    
+   
   var currPage=0;
 
   var tabla_pedidos=null;
@@ -228,15 +228,15 @@
             console.log(data);
             $("#modal-direccion").modal("hide");
             $("#tablaPrincipal").DataTable().ajax.reload();
-           
+
           }
         });
-      
+
     });*/
 
     $(document).on("click","#go_previous",function(e){
       e.preventDefault();
-      if(myState.pdf == null || myState.currentPage == 1) 
+      if(myState.pdf == null || myState.currentPage == 1)
       {
         console.log("atras")
         return false;
@@ -250,13 +250,13 @@
       e.preventDefault();
       console.log("numpages "+myState.pdf._pdfInfo.numPages);
       console.log("currentpage "+myState.currentPage)
-        if(myState.pdf == null || myState.currentPage == myState.pdf._pdfInfo.numPages) 
+        if(myState.pdf == null || myState.currentPage == myState.pdf._pdfInfo.numPages)
         {
           console.log("next")
           return false;
         }
-                
-          
+
+
               myState.currentPage += 1;
               $("#current_page").val(myState.currentPage);
               if(myState.currentPage == myState.pdf._pdfInfo.numPages)
@@ -268,14 +268,14 @@
 
     $(document).on("keypress","#current_page",function(e){
           if(myState.pdf == null) return;
-            
+
             // Get key code
             var code = (e.keyCode ? e.keyCode : e.which);
-        
+
             // If key code matches that of the Enter key
             if(code == 13) {
                 var desiredPage = document.getElementById('current_page').valueAsNumber;
-                                
+
                 if(desiredPage >= 1 && desiredPage <= myState.pdf._pdfInfo.numPages) {
                         myState.currentPage = desiredPage;
                         document.getElementById("current_page").value = desiredPage;
@@ -300,7 +300,7 @@
 </script>
 
   <script>
-    
+
   </script>
 
   <script>
@@ -311,7 +311,7 @@
         //agregados el id pago
         let files=$('input[name="pimagen')
         var cambiaitem=$("#cambiaitem").val();
-        var cambiapedido=$("#cambiapedido").val();        
+        var cambiapedido=$("#cambiapedido").val();
 
         fd2.append("item",cambiaitem )
         fd2.append("pedido",cambiapedido )
@@ -351,7 +351,7 @@
         var reader = new FileReader();
         reader.onload = (event) => {
 
-          pdfjsLib.getDocument(event.target.result).then((pdf) => {   
+          pdfjsLib.getDocument(event.target.result).then((pdf) => {
             $("#my_pdf_viewer").removeClass("d-none");
             //cargar frame
             myState.pdf = pdf;
@@ -364,7 +364,7 @@
 
             if(myState.currentPage == myState.pdf._pdfInfo.numPages)
             {
-              
+
               $("#go_next").addClass("d-none");
               $("#go_previous").addClass("d-none");
               $("#current_page").addClass("d-none");
@@ -374,11 +374,11 @@
               $("#current_page").removeClass("d-none");
             }
 
-            
+
 
 
           });
-          
+
         };
         reader.readAsDataURL(file);
 
@@ -388,7 +388,7 @@
       {
         myState.pdf.getPage(myState.currentPage).then((page) => {
           var canvas = document.getElementById("pdf_renderer");
-          
+
           var ctx = canvas.getContext('2d');
           var viewport = page.getViewport(1);
           canvas.width = viewport.width;//viewport.width;
@@ -431,7 +431,7 @@
         }
       }
 
-      $('#celular').on('input', function () { 
+      $('#celular').on('input', function () {
         this.value = this.value.replace(/[^0-9]/g,'');
       });
 
@@ -462,10 +462,10 @@
         }
       });
 
-      
+
       $(".provincia").addClass("d-none");
       $(".lima").addClass("d-none");
-      
+
       $(document).on("change","#limaprovincia",function(){
         switch($(this).val())
         {
@@ -474,14 +474,14 @@
             if(!$(".provincia").hasClass("d-none"))
             {
               $(".provincia").addClass("d-none");
-              
+
             }
             if(!$(".viewpdf").hasClass("d-none"))
             {
               $(".viewpdf").addClass("d-none");
             }
-            $(".lima").removeClass("d-none");   
-            
+            $(".lima").removeClass("d-none");
+
             /*.removeClass('col-md-2')
             .addClass('col-md-3')*/
             if($(".contenedor-tabla").hasClass("col-4"))
@@ -511,7 +511,7 @@
             {
               $(".lima").addClass("d-none");
             }
-            $(".provincia").removeClass("d-none"); 
+            $(".provincia").removeClass("d-none");
             $(".viewpdf").removeClass("d-none");
 
 
@@ -530,7 +530,7 @@
             //$("#tablaPrincipalpedidosagregar").columns.adjust().draw();
 
             break;
-          default: 
+          default:
             if(!$(".lima").hasClass("d-none"))
             {
               $(".lima").addClass("d-none");
@@ -553,7 +553,7 @@
 
             tabla_pedidos.columns.adjust().draw();
             break;
-          
+
         }
       });
 
@@ -673,7 +673,7 @@
           }
           //paso provincia validacion
           if(combo_limaprovincia=="P")
-          { 
+          {
             fd2.append('departamento', val_departamento);
             fd2.append('oficina', val_oficina);
             fd2.append('tracking', val_tracking);
@@ -694,15 +694,15 @@
             fd2.append('observacion', val_observacion);
 
             fd2.append('saveHistoricoLima', saveHistoricoLima);
-          }          
-          
+          }
+
         }
         var destino= (combo_limaprovincia=="L")? 'LIMA':'PROVINCIA';
           fd2.append('destino', destino);
         var pedidos=[];
         $.each(rows_selected, function(index, rowId){
               console.log("ID PEDIDO  es "+  rowId);
-              pedidos.push(rowId);             
+              pedidos.push(rowId);
           });
           var let_pedidos=pedidos.length;
 
@@ -761,19 +761,19 @@
            "pageLength":5,
           "order": [[ 0, "asc" ]],
           'ajax': {
-            url:"{{ route('movimientostablaconciliar') }}",					
-            'data': { "provincialima":provincialima,"cliente_id":clienteidprovincia}, 
+            url:"{{ route('movimientostablaconciliar') }}",
+            'data': { "provincialima":provincialima,"cliente_id":clienteidprovincia},
             "type": "get",
           },
-          columns: 
+          columns:
           [
             {
-              data: 'id', 
+              data: 'id',
               name: 'id',
               "visible":true
             },
             {
-              data: 'tracking', 
+              data: 'tracking',
               name: 'tracking',
               sWidth:'30%',
               render: function ( data, type, row, meta ) {
@@ -781,28 +781,28 @@
               }
             },
             {
-              data: 'numregistro', 
+              data: 'numregistro',
               name: 'numregistro',
-              sWidth:'15%', 
+              sWidth:'15%',
               render: function ( data, type, row, meta ) {
                 return '<span class="banco">' + data + '</span>';
               }
             },
             {
-              data: null, 
-              name: null, 
+              data: null,
+              name: null,
               sWidth:'20%',
               render: function ( data, type, row, meta ) {
                 data = data+''+
                       '<button class="btn btn-danger btn-sm button_provincia" data-provincia="'+row.id+'"><i class="fas fa-check-circle"></i></button>'+
                             '';
-                return data;             
+                return data;
               },
             }
           ],
           language: {
             "decimal": "",
-            "emptyTable": "No hay informaciÃ³n",
+            "emptyTable": "No hay información",
             "info": "Mostrando del _START_ al _END_ de _TOTAL_ Entradas",
             "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
             "infoFiltered": "(Filtrado de _MAX_ total entradas)",
@@ -836,14 +836,14 @@
            "pageLength":5,
           "order": [[ 0, "asc" ]],
           'ajax': {
-            url:"{{ route('sobreenvioshistorial') }}",					
-            'data': { "provincialima":provincialima,"cliente_id":clienteidlima }, 
+            url:"{{ route('sobreenvioshistorial') }}",
+            'data': { "provincialima":provincialima,"cliente_id":clienteidlima },
             "type": "get",
           },
-          columns: 
+          columns:
           [
             {
-              data: 'id', 
+              data: 'id',
               name: 'id',
               "visible":true,
               render: function ( data, type, row, meta ) {
@@ -851,7 +851,7 @@
               }
             },
             {
-              data: 'nombre', 
+              data: 'nombre',
               name: 'nombre',
               sWidth:'30%',
               render: function ( data, type, row, meta ) {
@@ -859,60 +859,60 @@
               }
             },
             {
-              data: 'recibe', 
+              data: 'recibe',
               name: 'recibe',
-              sWidth:'15%', 
+              sWidth:'15%',
               render: function ( data, type, row, meta ) {
                 return data;
               }
             },
             {
-              data: 'direccion', 
+              data: 'direccion',
               name: 'direccion',
-              sWidth:'15%', 
+              sWidth:'15%',
               render: function ( data, type, row, meta ) {
                 return data;
               }
             },
             {
-              data: 'referencia', 
+              data: 'referencia',
               name: 'referencia',
-              sWidth:'15%', 
+              sWidth:'15%',
               render: function ( data, type, row, meta ) {
                 return data;
               }
             },
             {
-              data: 'distrito', 
+              data: 'distrito',
               name: 'distrito',
-              sWidth:'15%', 
+              sWidth:'15%',
               render: function ( data, type, row, meta ) {
                 return data;
               }
             },
             {
-              data: 'observacion', 
+              data: 'observacion',
               name: 'observacion',
-              sWidth:'15%', 
+              sWidth:'15%',
               render: function ( data, type, row, meta ) {
                 return data;
               }
             },
             {
-              data: null, 
-              name: null, 
+              data: null,
+              name: null,
               sWidth:'20%',
               render: function ( data, type, row, meta ) {
                 data = data+''+
                       '<button class="btn btn-danger btn-sm button_provincia" data-provincia="'+row.id+'"><i class="fas fa-check-circle"></i></button>'+
                             '';
-                return data;             
+                return data;
               },
             }
           ],
           language: {
             "decimal": "",
-            "emptyTable": "No hay informaciÃ³n",
+            "emptyTable": "No hay información",
             "info": "Mostrando del _START_ al _END_ de _TOTAL_ Entradas",
             "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
             "infoFiltered": "(Filtrado de _MAX_ total entradas)",
@@ -949,14 +949,14 @@
         $("#tracking").val("")
         $("#numregistro").val("")
         $(".drop-rotulo").addClass("d-none");
-        
+
         if(!$(".viewpdf").hasClass("d-none"))
         {
           $(".viewpdf").addClass("d-none");
         }
         $("#rotulo").val("");
 
-        var button = $(event.relatedTarget) 
+        var button = $(event.relatedTarget)
         var cliente = button.data('cliente');
         console.log("cliente "+cliente);
         $("#cliente_id").val(cliente);
@@ -971,8 +971,8 @@
           "bFilter": false,
           "bInfo": false,
           'ajax': {
-            url:"{{ route('cargar.pedidosenvioclientetabla') }}",					
-            'data': { "cliente_id": cliente}, 
+            url:"{{ route('cargar.pedidosenvioclientetabla') }}",
+            'data': { "cliente_id": cliente},
             "type": "get",
           },
           'columnDefs': [ {
@@ -983,19 +983,19 @@
             {
                 "data": "id",
                 'targets': [0],
-                'checkboxes': {                        
+                'checkboxes': {
                     'selectRow': true
                 },
                 defaultContent: '',
-                orderable: false, 
+                orderable: false,
             },
             {data: 'codigo', name: 'codigo',},
             {
                 "data": 'nombre_empresa',
                 "name": 'nombre_empresa',
-                "render": function ( data, type, row, meta ) {      
-                  return data;                
-                    
+                "render": function ( data, type, row, meta ) {
+                  return data;
+
                 }
             },
           ],
@@ -1032,7 +1032,7 @@
           "bPaginate": false,
           "bFilter": false,
           "bInfo": false,
-          columns: 
+          columns:
           [
             {
               data: 'id'
@@ -1046,7 +1046,7 @@
           ],
           language: {
             "decimal": "",
-            "emptyTable": "No hay informaciÃ³n",
+            "emptyTable": "No hay información",
             "info": "Mostrando del _START_ al _END_ de _TOTAL_ Entradas",
             "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
             "infoFiltered": "(Filtrado de _MAX_ total entradas)",
@@ -1075,7 +1075,7 @@
 
       $('#modal-enviar').on('show.bs.modal', function (event) {
         //cuando abre el form de anular pedido
-        var button = $(event.relatedTarget) 
+        var button = $(event.relatedTarget)
         var idunico = button.data('enviar')//pedido
         $("#hiddenEnviar").val(idunico)
         if(idunico<10){
@@ -1086,13 +1086,13 @@
           idunico='PED0'+idunico;
         }else{
           idunico='PED'+idunico;
-        } 
+        }
         $("#modal-enviar .textcode").html(idunico);
-        
+
       });
 
       $('#modal-recibir').on('show.bs.modal', function (event) {
-        var button = $(event.relatedTarget) 
+        var button = $(event.relatedTarget)
         var idunico = button.data('recibir')//pedido
         $("#hiddenRecibir").val(idunico)
         if(idunico<10){
@@ -1103,7 +1103,7 @@
           idunico='PED0'+idunico;
         }else{
           idunico='PED'+idunico;
-        } 
+        }
         $("#modal-recibir .textcode").html(idunico);
 
 
@@ -1116,14 +1116,14 @@
         var fd2 = new FormData();
         let files=$('input[name="pimagen')
         var fileitem=$("#DPitem").val();
-        
+
         fd2.append('hiddenEnviar', $('#hiddenEnviar').val() );
         fd2.append('fecha_envio_doc_fis', $('#fecha_envio_doc_fis').val() );
         fd2.append('fecha_recepcion', $('#fecha_recepcion').val() );
         fd2.append('foto1', $('input[type=file][id="foto1"]')[0].files[0]);
         fd2.append('foto2', $('input[type=file][id="foto2"]')[0].files[0]);
         fd2.append('condicion', $('#condicion').val() );
-        
+
         $.ajax({
           data: fd2,
           processData: false,
@@ -1145,7 +1145,7 @@
         "order": [[ 0, "desc" ]],
         ajax: "{{ route('sobres.porenviartabla') }}",
         createdRow: function( row, data, dataIndex){
-          //console.log(row);          
+          //console.log(row);
         },
         rowCallback: function (row, data, index) {
               console.log(data);
@@ -1155,7 +1155,7 @@
         },
         columns: [
           {
-              data: 'id', 
+              data: 'id',
               name: 'id',
               render: function ( data, type, row, meta ) {
                 if(row.id<10){
@@ -1166,13 +1166,13 @@
                   return 'PED0'+row.id;
                 }else{
                   return 'PED'+row.id;
-                } 
+                }
               },"visible":false
           },
           {data: 'codigos', name: 'codigos', },
           {data: 'users', name: 'users', },
           // {
-          //   data: 'celulares', 
+          //   data: 'celulares',
           //   name: 'celulares',
           //   render: function ( data, type, row, meta ) {
           //     return row.celulares+' - '+row.nombres
@@ -1216,7 +1216,7 @@
           },
           {data: 'condicion_envio', name: 'condicion_envio', },
           {
-            data: 'envio', 
+            data: 'envio',
             name: 'envio',
             render: function ( data, type, row, meta ) {
               if(row.envio=='1')
@@ -1229,7 +1229,7 @@
             "visible":false
           },
           {
-            data: 'observacion_devuelto', 
+            data: 'observacion_devuelto',
             name: 'observacion_devuelto',
             render: function ( data, type, row, meta ) {
               if(data!=null)
@@ -1242,43 +1242,43 @@
             "visible":true
           },
           {
-            data: 'action', 
-            name: 'action', 
-            orderable: false, 
+            data: 'action',
+            name: 'action',
+            orderable: false,
             searchable: false,
             sWidth:'20%',
-            render: function ( data, type, row, meta ) {   
+            render: function ( data, type, row, meta ) {
               datass='';
 
               @if (Auth::user()->rol == "Asesor" || Auth::user()->rol == "Administrador")
-                datass=datass+'<a href="" data-target="#modal-direccion" data-toggle="modal" data-cliente="'+row.cliente_id+'" data-direccion="'+row.id+'"><button class="btn btn-info btn-sm"><i class="fas fa-envelope"></i> Direccion</button></a>';  
+                datass=datass+'<a href="" data-target="#modal-direccion" data-toggle="modal" data-cliente="'+row.cliente_id+'" data-direccion="'+row.id+'"><button class="btn btn-info btn-sm"><i class="fas fa-envelope"></i> Direccion</button></a>';
               @endif
-              
+
 
               @if($ver_botones_accion > 2)
                 @can('envios.enviar')
-                  datass=datass+'<a href="" data-target="#modal-enviar" data-toggle="modal" data-enviar="'+row.id+'"><button class="btn btn-success btn-sm"><i class="fas fa-envelope"></i> Entregado</button></a>';  
+                  datass=datass+'<a href="" data-target="#modal-enviar" data-toggle="modal" data-enviar="'+row.id+'"><button class="btn btn-success btn-sm"><i class="fas fa-envelope"></i> Entregado</button></a>';
                   if(row.envio=='1')
                   {
-                    datass = datass+ '<a href="" data-target="#modal-recibir" data-toggle="modal" data-recibir="'+row.id+'"><button class="btn btn-warning btn-sm"><i class="fas fa-check-circle"></i> Recibido</button></a>'; 
+                    datass = datass+ '<a href="" data-target="#modal-recibir" data-toggle="modal" data-recibir="'+row.id+'"><button class="btn btn-warning btn-sm"><i class="fas fa-check-circle"></i> Recibido</button></a>';
                   }
                 @endcan
               @endif
-              
+
               if(row.destino == null && row.direccion =='0' && (row.envio*1) >0)
               {
                 var urldireccion = '{{ route("envios.createdireccion", ":id") }}';
                 urldireccion = urldireccion.replace(':id', row.id);
                 data = data+'<a href="'+urldireccion+'" class="btn btn-dark btn-sm"><i class="fas fa-map"></i> Destino</a><br>';
               }
-              
-              return datass;                    
+
+              return datass;
             }
           },
         ],
         language: {
           "decimal": "",
-          "emptyTable": "No hay informaciÃ³n",
+          "emptyTable": "No hay información",
           "info": "Mostrando del _START_ al _END_ de _TOTAL_ Entradas",
           "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
           "infoFiltered": "(Filtrado de _MAX_ total entradas)",
@@ -1312,9 +1312,9 @@
       )
     </script>
   @endif
-  
+
   <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
-  
+
   <script>
     function maxLengthCheck(object)
     {
@@ -1323,8 +1323,8 @@
     }
 
     /* Custom filtering function which will search data in column four between two values */
-        $(document).ready(function () { 
-        
+        $(document).ready(function () {
+
 
             /*$("#destino", this).on( 'keyup change', function () {
               if ( table.column(i).search() !== this.value ) {
@@ -1335,8 +1335,8 @@
                 }*/
               //} );
 
-          
-            
+
+
 
         });
   </script>

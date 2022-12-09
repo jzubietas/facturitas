@@ -42,9 +42,9 @@
             <div class="card">
                 <div class="card-body">
                     <div class="card-title">
-                     
+
                     </div>
-                    
+
                     <table class="table table-striped data-table" id="tablaserverside" style="width:100%">
                         <thead>
                             <tr>
@@ -58,10 +58,10 @@
                         <tbody>
                         </tbody>
                     </table>
-                    @include('base_fria.modal.convertirid')                    
+                    @include('base_fria.modal.convertirid')
                 </div>
             </div>
-    
+
 @stop
 
 
@@ -122,16 +122,16 @@ $(document).ready(function () {
         processing: true,
         serverSide: true,
         ajax: "{{ route('basefriatabla') }}",
-        initComplete:function(settings,json){          
+        initComplete:function(settings,json){
           if (localStorage. getItem("search_tabla") === null) {
             //no existe
           }else{
-            $('#tablaPrincipal_filter label input').val(localStorage.getItem("search_tabla") ).change();            
-          }          
+            $('#tablaPrincipal_filter label input').val(localStorage.getItem("search_tabla") ).change();
+          }
         },
         columns: [
         {
-            data: 'id', 
+            data: 'id',
             name: 'id',
             render: function ( data, type, row, meta ) {
                 if(row.id<10){
@@ -159,11 +159,11 @@ $(document).ready(function () {
                 //return ''+data+'';
             }},
         {
-            data: 'nombre', 
-            name: 'nombre',            
+            data: 'nombre',
+            name: 'nombre',
         },
         {
-          data: 'celular', 
+          data: 'celular',
           name: 'celular',
           render: function ( data, type, row, meta ) {
             if(row.icelular!=null)
@@ -171,17 +171,17 @@ $(document).ready(function () {
               return row.celular+'-'+row.icelular;
             }else{
               return row.celular;
-            }            
+            }
           }
         },
         {
-            data: 'identificador', 
-            name: 'Asesor',            
+            data: 'identificador',
+            name: 'Asesor',
         },
         {
-          data: 'action', 
-          name: 'action', 
-          orderable: false, 
+          data: 'action',
+          name: 'action',
+          orderable: false,
           searchable: false,
           sWidth:'20%',
           render: function ( data, type, row, meta ) {
@@ -189,7 +189,7 @@ $(document).ready(function () {
             urledit = urledit.replace(':id', row.id);
 
             @can('base_fria.updatebf')
-              data = data+'<a href="" data-target="#modal-convertir" data-toggle="modal" data-opcion="'+row.id+'"><button class="btn btn-info btn-sm">Convertir a cliente</button></a>';              
+              data = data+'<a href="" data-target="#modal-convertir" data-toggle="modal" data-opcion="'+row.id+'"><button class="btn btn-info btn-sm">Convertir a cliente</button></a>';
             @endcan
             @can('base_fria.edit')
               data = data+'<a href="'+urledit+'" class="btn btn-warning btn-sm"><i class="fas fa-edit"></i> Editar</a>';
@@ -197,18 +197,18 @@ $(document).ready(function () {
               //$btn = $btn.'<a href="'.route('clientes.editbf', $row).'" class="btn btn-warning btn-sm"><i class="fas fa-edit"></i> Editar</a>'
 
             @endcan
-            
+
             //@can('clientes.destroy')
-              //data = data+'<a href="" data-target="#modal-delete" data-toggle="modal" data-opcion="'+row.id+'"><button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i> Eliminar</button></a>';  
+              //data = data+'<a href="" data-target="#modal-delete" data-toggle="modal" data-opcion="'+row.id+'"><button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i> Eliminar</button></a>';
             //@endcan
 
-            return data;             
+            return data;
           }
         },
         ],
         language: {
         "decimal": "",
-        "emptyTable": "No hay informaciÃ³n",
+        "emptyTable": "No hay información",
         "info": "Mostrando del _START_ al _END_ de _TOTAL_ Entradas",
         "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
         "infoFiltered": "(Filtrado de _MAX_ total entradas)",
@@ -232,15 +232,15 @@ $(document).ready(function () {
       var pasteData = e.originalEvent.clipboardData.getData('text')
       localStorage.setItem("search_tabla",pasteData);
     });
-    $(document).on("keypress",'#tablaPrincipal_filter label input',function(){      
+    $(document).on("keypress",'#tablaPrincipal_filter label input',function(){
       localStorage.setItem("search_tabla",$(this).val());
       console.log( "search_tabla es "+localStorage.getItem("search_tabla") );
     });
 
-    
+
     $('#modal-convertir').on('show.bs.modal', function (event) {
 
-      var button = $(event.relatedTarget) 
+      var button = $(event.relatedTarget)
       var idunico = button.data('opcion')//id  basefria
       console.log(idunico);
       //id return
@@ -274,14 +274,14 @@ $(document).ready(function () {
           $("#celular").val(result['celular']);
           $("#hiddenId").val(result['id']);
 
-         
+
           //$('#pruc').html(data.html);
         }
       });
 
-      /*var button = $(event.relatedTarget) 
+      /*var button = $(event.relatedTarget)
       var recipient = button.data('whatever')
-     
+
       var modal = $(this)
       modal.find('.modal-title').text('New message to ' + recipient)
       modal.find('.modal-body input').val(recipient)*/
@@ -290,20 +290,20 @@ $(document).ready(function () {
     });
     //
 
-   
+
     $.ajaxSetup({
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
     });
 
-    
-    /*$(document).on("click","#submit",function(e){
-        
 
-        event.preventDefault(); 
+    /*$(document).on("click","#submit",function(e){
+
+
+        event.preventDefault();
     });*/
-    
+
 
 });
 </script>
@@ -316,7 +316,7 @@ $(document).ready(function () {
         'success'
       )
     </script>
-  @endif   
+  @endif
 
   <script>
       //VALIDAR CAMPO CELULAR
@@ -330,7 +330,7 @@ $(document).ready(function () {
 <script>
   //VALIDAR CAMPOS ANTES DE ENVIAR
     document.addEventListener("DOMContentLoaded", function() {
-    document.getElementById("formconvertir").addEventListener('submit', validarFormulario); 
+    document.getElementById("formconvertir").addEventListener('submit', validarFormulario);
     });
 
     function validarFormulario(evento) {
@@ -403,7 +403,7 @@ $(document).ready(function () {
             'warning'
           )
         }
-        else if (dni.length != 8){//provincia.toUpperCase() != ('lima').toUpperCase() && 
+        else if (dni.length != 8){//provincia.toUpperCase() != ('lima').toUpperCase() &&
           Swal.fire(
             'Error',
             'El DNI debe tener 8 dígitos',
@@ -442,8 +442,8 @@ $(document).ready(function () {
           clickformconvertir();
           //this.trigger("click");
 
-        }      
-    }    
+        }
+    }
 
     function resetearcamposconvertir(){
       $('#nombre').val("");
@@ -471,7 +471,7 @@ $(document).ready(function () {
 
           $("#modal-convertir").modal("hide");
           resetearcamposconvertir();
-          
+
           $('#tablaserverside').DataTable().ajax.reload();
           //console.log("resultados");
           //console.log(data);
