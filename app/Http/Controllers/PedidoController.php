@@ -3294,13 +3294,14 @@ return ' no imagen ';
 
             //cliente
             $cliente=Cliente::where("id",$request->cliente_id)->first();
-
+            
             $direcciongrupo=DireccionGrupo::create([
                 'estado'=>'1',
                 'destino' => $request->destino,
                 'distribucion'=> ( ($request->destino=='PROVINCIA')? 'NORTE':''),
                 'nombre_cliente'=> ( ($request->destino=='LIMA')? $request->nombre : $cliente->nombre  ),  
                 'celular_cliente'=> ( ($request->destino=='LIMA')? $request->contacto : $cliente->celular."-".$cliente->icelular ),
+                'codigos'=>$pedidos
             ]);
 
             $count_pedidos=count((array)$array_pedidos);
