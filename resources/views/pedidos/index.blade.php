@@ -3,6 +3,18 @@
 @section('title', 'Pedidos - Bandeja de pedidos')
 
 @section('content_header')
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;400;600;700&family=Work+Sans:wght@300;400&display=swap');
+
+        body{
+            font-family: 'Work Sans', sans-serif;
+        }
+        h1, h2, h3, h4, h5{
+            font-family: 'Poppins', sans-serif;
+            font-weight: bold;
+        }
+    </style>
+
   <h1>Lista de pedidos
     @can('pedidos.create')
       <a href="{{ route('pedidos.create') }}" class="btn btn-info"><i class="fas fa-plus-circle"></i> Agregar</a>
@@ -248,12 +260,12 @@
               var pedidodiferencia=data.diferencia;
               //pedidodiferencia=0;
               if(pedidodiferencia==null){
-                $('td:eq(12)', row).css('background', '#ca3a3a').css('color','#ffffff').css('text-align','center').css('font-weight','bold');
+                $('td:eq(12)', row).css('background', '#ffbcbc').css('color','#ad2626').css('text-align','center').css('font-weight','bold');
               }else{
                 if(pedidodiferencia>3){
-                  $('td:eq(12)', row).css('background', '#ca3a3a').css('color','#ffffff').css('text-align','center').css('font-weight','bold');
+                  $('td:eq(12)', row).css('background', '#ffbcbc').css('color','#ad2626').css('text-align','center').css('font-weight','bold');
                 }else{
-                  $('td:eq(12)', row).css('background', '#44c24b').css('text-align','center').css('font-weight','bold');
+                  $('td:eq(12)', row).css('background', '#53dd5a52').css('text-align','center').css('font-weight','bold');
                 }
               }
         },
@@ -469,31 +481,32 @@
 
             var urledit = '{{ route("pedidos.edit", ":id") }}';
             urledit = urledit.replace(':id', row.id);
-
+              data = '<div class="row">';
             @can('pedidos.pedidosPDF')
-              data = data+'<a href="'+urlpdf+'" class="btn btn-info btn-sm" target="_blank"><i class="fa fa-file-pdf"></i> PDF</a><br>';
+              data = data+'<div class="col-lg-6" style="margin-top:4px;"><a href="'+urlpdf+'" class="btn btn-info btn-sm w-100" target="_blank"><i class="fa fa-file-pdf"></i> PDF</a></div>';
             @endcan
             @can('pedidos.show')
-              data = data+'<a href="'+urlshow+'" class="btn btn-info btn-sm"><i class="fas fa-eye"></i> VER</a><br>';
+              data = data+'<div class="col-lg-6" style="margin-top:4px;"><a href="'+urlshow+'" class="btn btn-info btn-sm w-100"><i class="fas fa-eye"></i> VER</a></div>';
             @endcan
             @can('pedidos.edit')
               if(row.condicion_pa==0)
               {
-                data = data+'<a href="'+urledit+'" class="btn btn-warning btn-sm"> Editar</a><br>';
+                data = data+'<div class="col-lg-6" style="margin-top:4px;"><a href="'+urledit+'" class="btn btn-warning btn-sm w-100"> Editar</a></div>';
               }
             @endcan
             @can('pedidos.destroy')
             if(row.estado==0)
             {
-              data = data+'<a href="" data-target="#modal-restaurar" data-toggle="modal" data-restaurar="'+row.id+'" ><button class="btn btn-success btn-sm"><i class="fas fa-check"></i> Restaurar</button></a><br>';
+              data = data+'<div class="col-lg-6" style="margin-top:4px;"><a href="#" class="btn btn-danger btn-sm w-100" data-target="#modal-restaurar" data-toggle="modal" data-restaurar="'+row.id+'" ><i class="fas fa-check"></i> Restaurar</a><br>';
             }else{
               if(row.condicion_pa==0)
               {
-                data = data+'<a href="" data-target="#modal-delete" data-toggle="modal" data-delete="'+row.id+'" data-responsable="{{ $miidentificador }}"><button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i> Anular</button></a>';
+                data = data+'<div class="col-lg-6" style="margin-top:4px;"><a href="" class="btn btn-danger btn-sm w-100" data-target="#modal-delete" data-toggle="modal" data-delete="'+row.id+'" data-responsable="{{ $miidentificador }}"><i class="fas fa-trash-alt"></i> Anular</a></div>';
               }
             }
 
             @endcan
+            data = data+'</div>';
 
             return data;
           }
