@@ -6,6 +6,7 @@ use App\Events\PagoEvent;
 use App\Models\Cliente;
 use App\Models\DetallePago;
 use App\Models\DetallePedido;
+use App\Models\Devolucion;
 use App\Models\MovimientoBancario;
 use App\Models\EntidadBancaria;
 use App\Models\CuentaBancaria;
@@ -233,19 +234,19 @@ class PagoController extends Controller
             ->addColumn('action', function ($pago) {
                 $btn = '';
                 if (Auth::user()->rol == "Administrador") {
-                    $btn = $btn . '<a href="' . route('pagos.show', data_get($pago,'id')) . '" class="btn btn-info btn-sm">Ver</a>';
+                    $btn = $btn . '<a href="' . route('pagos.show', data_get($pago, 'id')) . '" class="btn btn-info btn-sm">Ver</a>';
                     //$btn=$btn.'<a href="'.route('pagos.edit', $pago['id']).'" class="btn btn-warning btn-sm">Editar</a>';
 
                 } else if (Auth::user()->rol == "Encargado") {
-                    $btn = $btn . '<a href="' . route('pagos.show', data_get($pago,'id')) . '" class="btn btn-info btn-sm">Ver</a>';
+                    $btn = $btn . '<a href="' . route('pagos.show', data_get($pago, 'id')) . '" class="btn btn-info btn-sm">Ver</a>';
                     //$btn=$btn.'<a href="'.route('pagos.edit', $pago['id']).'" class="btn btn-warning btn-sm">Editar</a>';
 
                 } else if (Auth::user()->rol == "Asesor") {
-                    $btn = $btn . '<a href="' . route('pagos.show', data_get($pago,'id')) . '" class="btn btn-info btn-sm">Ver</a>';
+                    $btn = $btn . '<a href="' . route('pagos.show', data_get($pago, 'id')) . '" class="btn btn-info btn-sm">Ver</a>';
                     //$btn=$btn.'<a href="'.route('pagos.edit', $pago['id']).'" class="btn btn-warning btn-sm">Editar</a>';
 
                 } else {
-                    $btn = $btn . '<a href="' . route('pagos.show', data_get($pago,'id')) . '" class="btn btn-info btn-sm">Ver</a>';
+                    $btn = $btn . '<a href="' . route('pagos.show', data_get($pago, 'id')) . '" class="btn btn-info btn-sm">Ver</a>';
                     //$btn=$btn.'<a href="'.route('pagos.edit', $pago['id']).'" class="btn btn-warning btn-sm">Editar</a>';
 
                 }
@@ -875,66 +876,59 @@ class PagoController extends Controller
     public function store(Request $request)
     {
         //return $request->all();
-        if ($request->accion_perdonar == "1") {
-            $contPedidos = 0;
-            $contPedidosfor = 0;
-            $pedido_id = $request->pedido_id;
-            $pedidos_pagados_total = $request->checktotal;
-            $pedidos_pagados_total_ar = array();
-            $pedidos_pagados_parcial = $request->checkadelanto;
-            $pedidos_pagados_parcial_ar = array();
-            $saldo = $request->numberdiferencia;
+        $contPedidos = 0;
+        $contPedidosfor = 0;
+        $pedido_id = $request->pedido_id;
+        $pedidos_pagados_total = $request->checktotal;
+        $pedidos_pagados_total_ar = array();
+        $pedidos_pagados_parcial = $request->checkadelanto;
+        $pedidos_pagados_parcial_ar = array();
+        $saldo = $request->numberdiferencia;
+        if (count((array)$pedido_id) > 0) {
 
-            if (count((array)$pedido_id) > 0) {
-
-                foreach ($pedido_id as $pedido_id_key => $pedido_id_value) {
-                    if (count((array)$pedidos_pagados_total)) {
-                        if (array_key_exists($pedido_id_value, $pedidos_pagados_total)) {
-                            $pedidos_pagados_total_ar[$pedido_id_value]["checked"] = 1;
-                        } else {
-                            $pedidos_pagados_total_ar[$pedido_id_value]["checked"] = 0;
-                        }
-                        $pedidos_pagados_total_ar[$pedido_id_value]["pedido_id"] = $pedido_id[$pedido_id_key];
-                        $pedidos_pagados_total_ar[$pedido_id_value]["total_parcial"] = 'total';
-                        $pedidos_pagados_total_ar[$pedido_id_value]["saldo"] = $saldo[$pedido_id_value];
+            foreach ($pedido_id as $pedido_id_key => $pedido_id_value) {
+                if (count((array)$pedidos_pagados_total)) {
+                    if (array_key_exists($pedido_id_value, $pedidos_pagados_total)) {
+                        $pedidos_pagados_total_ar[$pedido_id_value]["checked"] = 1;
                     } else {
                         $pedidos_pagados_total_ar[$pedido_id_value]["checked"] = 0;
-                        $pedidos_pagados_total_ar[$pedido_id_value]["pedido_id"] = $pedido_id[$pedido_id_key];
-                        $pedidos_pagados_total_ar[$pedido_id_value]["total_parcial"] = 'total';
-                        $pedidos_pagados_total_ar[$pedido_id_value]["saldo"] = $saldo[$pedido_id_value];
                     }
+                } else {
+                    $pedidos_pagados_total_ar[$pedido_id_value]["checked"] = 0;
                 }
+                $pedidos_pagados_total_ar[$pedido_id_value]["pedido_id"] = $pedido_id[$pedido_id_key];
+                $pedidos_pagados_total_ar[$pedido_id_value]["total_parcial"] = 'total';
+                $pedidos_pagados_total_ar[$pedido_id_value]["saldo"] = $saldo[$pedido_id_value];
+            }
 
-                foreach ($pedido_id as $pedido_id_key => $pedido_id_value) {
+            foreach ($pedido_id as $pedido_id_key => $pedido_id_value) {
 
-                    if (count((array)$pedidos_pagados_parcial)) {
-                        if (array_key_exists($pedido_id_value, $pedidos_pagados_parcial)) {
-                            $pedidos_pagados_parcial_ar[$pedido_id_value]["checked"] = 1;
-                        } else {
-                            $pedidos_pagados_parcial_ar[$pedido_id_value]["checked"] = 0;
-                        }
-                        $pedidos_pagados_parcial_ar[$pedido_id_value]["pedido_id"] = $pedido_id[$pedido_id_key];
-                        $pedidos_pagados_parcial_ar[$pedido_id_value]["total_parcial"] = 'parcial';
-                        $pedidos_pagados_parcial_ar[$pedido_id_value]["saldo"] = $saldo[$pedido_id_value];
+                if (count((array)$pedidos_pagados_parcial)) {
+                    if (array_key_exists($pedido_id_value, $pedidos_pagados_parcial)) {
+                        $pedidos_pagados_parcial_ar[$pedido_id_value]["checked"] = 1;
                     } else {
                         $pedidos_pagados_parcial_ar[$pedido_id_value]["checked"] = 0;
-                        $pedidos_pagados_parcial_ar[$pedido_id_value]["pedido_id"] = $pedido_id[$pedido_id_key];
-                        $pedidos_pagados_parcial_ar[$pedido_id_value]["total_parcial"] = 'parcial';
-                        $pedidos_pagados_parcial_ar[$pedido_id_value]["saldo"] = $saldo[$pedido_id_value];
                     }
+                } else {
+                    $pedidos_pagados_parcial_ar[$pedido_id_value]["checked"] = 0;
                 }
-
-                foreach ($pedido_id as $pedido_id_key => $pedido_id_value) {
-                    if ($saldo[$pedido_id_value] <= 3) {
-                        $pedidos_pagados_total_ar[$pedido_id_value]["checked"] = 1;
-                        $pedidos_pagados_parcial_ar[$pedido_id_value]["checked"] = 0;
-                    }
-
-                }
-
-                $pedidos_pagados_parcial = $pedidos_pagados_parcial_ar;
-                $pedidos_pagados_total = $pedidos_pagados_total_ar;
+                $pedidos_pagados_parcial_ar[$pedido_id_value]["pedido_id"] = $pedido_id[$pedido_id_key];
+                $pedidos_pagados_parcial_ar[$pedido_id_value]["total_parcial"] = 'parcial';
+                $pedidos_pagados_parcial_ar[$pedido_id_value]["saldo"] = $saldo[$pedido_id_value];
             }
+
+            foreach ($pedido_id as $pedido_id_key => $pedido_id_value) {
+                if ($saldo[$pedido_id_value] <= 3) {
+                    $pedidos_pagados_total_ar[$pedido_id_value]["checked"] = 1;
+                    $pedidos_pagados_parcial_ar[$pedido_id_value]["checked"] = 0;
+                }
+
+            }
+
+            $pedidos_pagados_parcial = $pedidos_pagados_parcial_ar;
+            $pedidos_pagados_total = $pedidos_pagados_total_ar;
+        }
+        if ($request->accion_perdonar == "1") {
 
             /*$request->validate([
                 'imagen' => 'required',
@@ -1178,66 +1172,6 @@ class PagoController extends Controller
 
         } else {
 
-            $contPedidos = 0;
-            $contPedidosfor = 0;
-            $pedido_id = $request->pedido_id;
-            $pedidos_pagados_total = $request->checktotal;
-            $pedidos_pagados_total_ar = array();
-            $pedidos_pagados_parcial = $request->checkadelanto;
-            $pedidos_pagados_parcial_ar = array();
-            $saldo = $request->numberdiferencia;
-
-            if (count((array)$pedido_id) > 0) {
-
-                foreach ($pedido_id as $pedido_id_key => $pedido_id_value) {
-                    if (count((array)$pedidos_pagados_total)) {
-                        if (array_key_exists($pedido_id_value, $pedidos_pagados_total)) {
-                            $pedidos_pagados_total_ar[$pedido_id_value]["checked"] = 1;
-                        } else {
-                            $pedidos_pagados_total_ar[$pedido_id_value]["checked"] = 0;
-                        }
-                        $pedidos_pagados_total_ar[$pedido_id_value]["pedido_id"] = $pedido_id[$pedido_id_key];
-                        $pedidos_pagados_total_ar[$pedido_id_value]["total_parcial"] = 'total';
-                        $pedidos_pagados_total_ar[$pedido_id_value]["saldo"] = $saldo[$pedido_id_value];
-                    } else {
-                        $pedidos_pagados_total_ar[$pedido_id_value]["checked"] = 0;
-                        $pedidos_pagados_total_ar[$pedido_id_value]["pedido_id"] = $pedido_id[$pedido_id_key];
-                        $pedidos_pagados_total_ar[$pedido_id_value]["total_parcial"] = 'total';
-                        $pedidos_pagados_total_ar[$pedido_id_value]["saldo"] = $saldo[$pedido_id_value];
-                    }
-                }
-
-                foreach ($pedido_id as $pedido_id_key => $pedido_id_value) {
-
-                    if (count((array)$pedidos_pagados_parcial)) {
-                        if (array_key_exists($pedido_id_value, $pedidos_pagados_parcial)) {
-                            $pedidos_pagados_parcial_ar[$pedido_id_value]["checked"] = 1;
-                        } else {
-                            $pedidos_pagados_parcial_ar[$pedido_id_value]["checked"] = 0;
-                        }
-                        $pedidos_pagados_parcial_ar[$pedido_id_value]["pedido_id"] = $pedido_id[$pedido_id_key];
-                        $pedidos_pagados_parcial_ar[$pedido_id_value]["total_parcial"] = 'parcial';
-                        $pedidos_pagados_parcial_ar[$pedido_id_value]["saldo"] = $saldo[$pedido_id_value];
-                    } else {
-                        $pedidos_pagados_parcial_ar[$pedido_id_value]["checked"] = 0;
-                        $pedidos_pagados_parcial_ar[$pedido_id_value]["pedido_id"] = $pedido_id[$pedido_id_key];
-                        $pedidos_pagados_parcial_ar[$pedido_id_value]["total_parcial"] = 'parcial';
-                        $pedidos_pagados_parcial_ar[$pedido_id_value]["saldo"] = $saldo[$pedido_id_value];
-                    }
-                }
-
-                foreach ($pedido_id as $pedido_id_key => $pedido_id_value) {
-                    if ($saldo[$pedido_id_value] <= 3) {
-                        $pedidos_pagados_total_ar[$pedido_id_value]["checked"] = 1;
-                        $pedidos_pagados_parcial_ar[$pedido_id_value]["checked"] = 0;
-                    }
-
-                }
-
-                $pedidos_pagados_parcial = $pedidos_pagados_parcial_ar;
-                $pedidos_pagados_total = $pedidos_pagados_total_ar;
-            }
-
             $request->validate([
                 'imagen' => 'required',
             ]);
@@ -1264,7 +1198,6 @@ class PagoController extends Controller
                 $diferenciasaldocliente = str_replace(',', '', $request->diferencia);
                 $clientesaldo = Cliente::where("id", $request->cliente_id)->first();
                 if (!$request->diferencia) {
-
 
                 } else {
                     if ($diferenciasaldocliente > 3) {
@@ -1472,6 +1405,14 @@ class PagoController extends Controller
                     ]);
                 }
 
+                Devolucion::query()->create([
+                    "pago_id" => $pago->id,
+                    "client_id" => $cliente->id,
+                    "asesor_id" => $identi_asesor->id,
+                    "amount" => $request->diferencia,
+                    "status" => Devolucion::PENDIENTE,
+                    "voucher_path" => null,
+                ]);
 
                 DB::commit();
             } catch (\Throwable $th) {
@@ -2413,21 +2354,6 @@ class PagoController extends Controller
     {
         return view('ingresos.reportes.index');
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     /*tabla para aprobados*/
 

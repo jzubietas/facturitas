@@ -181,11 +181,15 @@
 
                 <div class="form-group col-lg-1">
                     @if (Auth::user()->rol == "Asesor")
-                        <a class="btn btn-danger" href="{{ url()->previous() }}"><i class="fas fa-times-circle"></i>
-                            ATRAS</a>
+                        <a class="btn btn-danger" href="{{ url()->previous() }}">
+                            <i class="fas fa-times-circle"></i>
+                            ATRAS
+                        </a>
                     @else
-                        <a class="btn btn-danger" href="{{ url()->previous() }}"><i class="fas fa-times-circle"></i>
-                            ATRAS</a>
+                        <a class="btn btn-danger" href="{{ url()->previous() }}">
+                            <i class="fas fa-times-circle"></i>
+                            ATRAS
+                        </a>
                     @endif
                 </div>
 
@@ -221,10 +225,9 @@
 
                 <div class="form-group col-lg-1" style="text-align:center;">
                     <div id="consideradevolucion" class="d-none">
-                        <a class="btn btn-danger" disabled href="#"><i class="fas fa-times-circle"></i> Devolucion</a>
+                        <button class="btn btn-danger" type="button" id="btnDevolucion">  <i class="fas fa-times-circle"></i> Devolucion</button>
                     </div>
                 </div>
-
             </div>
         </div>
         {!! Form::close() !!}
@@ -2464,7 +2467,7 @@
                             url: "{{ route('pagos.store') }}",
                             success: function (data) {
                                 console.log("grabado");
-                                window.location.href = "{{ route('pagos.mispagos')}}";
+                                window.location.href = "{{ route('pagos.index')}}";
 
                             }
                         })
@@ -2479,6 +2482,39 @@
 
                 });
                 //$("#btnSaldo")
+
+                $(document).on("click", "#btnDevolucion", function () {
+
+                    let dddd = parseFloat($("#diferencia").val());
+                    if (dddd > 3) {
+                        //$("#formulario").submit();
+                        //$("#formulario").trigger("submit")
+
+                        var formDataSaldo = $("#formulario").serialize();
+
+                        $.ajax({
+                            data: formDataSaldo,
+                            //processData: false,
+                            //contentType: false,
+                            type: 'POST',
+                            url: "{{ route('pagos.store',['action'=>'devoluciones']) }}",
+                            success: function (data) {
+                                console.log("grabado");
+                                window.location.href = "{{ route('pagos.index')}}";
+
+                            }
+                        })
+
+
+                    } else {
+                        Swal.fire(
+                            'Error!',
+                            'No puede generar saldo cuando la diferencia es menor a 3',
+                            'warning')
+                    }
+
+                });
+                //$("#btnDevolucion")
 
                 window.agregarPago = function () {
                     //alert('lol');

@@ -37,7 +37,6 @@ class PagoListener
             ->except($event->pago->user_id)
             ->each(function (User $user) use ($event){
                 Notification::send($user, new PagoNotification($event->pago));
-                
             });
     }
 }
