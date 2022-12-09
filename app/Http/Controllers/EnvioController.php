@@ -583,10 +583,9 @@ class EnvioController extends Controller
                                         DB::raw(" (select '') as celular "),
                                         DB::raw(" (select '') as nombre "),
                                         'de.cantidad',
-                                        'direccion_grupos.codigos',
-                                        //DB::raw(" (select group_concat(dp.codigo_pedido) from gasto_pedidos dp where dp.direcciongrupo=direccion_grupos.id and dp.estado = 1) as codigos "),
+                                        DB::raw(" (select group_concat(dp.codigo_pedido) from gasto_pedidos dp where dp.direcciongrupo=direccion_grupos.id and dp.estado = 1) as codigos "),
                                         DB::raw(" (select group_concat(ab.empresa) from gasto_pedidos ab where ab.direcciongrupo=direccion_grupos.id) as producto "),
-                                        'de.tracking as direccion',
+                                       
                                         'de.foto as referencia',
                                         DB::raw(" (select '') as observacion "),
                                         DB::raw(" (select '') as distrito "),

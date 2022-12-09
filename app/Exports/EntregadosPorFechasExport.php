@@ -133,7 +133,7 @@ class EntregadosPorFechasExport implements FromView, ShouldAutoSize
 
     public function view(): View {
         return view('pedidos.excel.pedidosentregados', [
-            'pedidosLima'=> $this->pedidosLima,
+            'pedidos'=> $this->pedidosLima,
             'pedidosProvincia' => $this->pedidosProvincia
         ]);
     }
