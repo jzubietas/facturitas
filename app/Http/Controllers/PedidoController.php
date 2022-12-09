@@ -647,6 +647,13 @@ class PedidoController extends Controller
             foreach ($imagenes as $imagen) {
                 $array_html[]=$imagen->adjunto;
             }
+            $imagenesatencion=ImagenAtencion::where('pedido_id',$buscar_pedido)
+                ->where("estado","1")
+                ->whereNotIn("adjunto",['logo_facturas.png'])
+                ->orderBy('created_at', 'DESC')->get();
+            foreach ($imagenesatencion as $imagenatencion) {
+                $array_html[]=$imagenatencion->adjunto;
+            }
             $html=implode("|",$array_html);
             return response()->json(['html' => $html,'cantidad'=>$cont_imagen]);
         }else{
@@ -1047,14 +1054,14 @@ class PedidoController extends Controller
                 $file->move($destinationPath , $file_name);
             }*/
 
-           /* if(isset($files))
+            /*if(isset($files))
             {
 return $files;
             }else{
 return ' no imagen ';
-            }
+            }*/
 
-            return '';*/
+            //return '';
 
             if(isset($files)){
                 $destinationPath = base_path('public/storage/adjuntos/');
@@ -2582,6 +2589,8 @@ return ' no imagen ';
             'modificador' => 'USER'.Auth::user()->id
         ]);
 
+
+
         if ($request->condicion == "ATENDIDO")
         {
             $pedido->update([
@@ -2926,13 +2935,22 @@ return ' no imagen ';
         return view('pedidos.showAtender', compact('pedidos', 'imagenes', 'imagenesatencion'));
     }
 
-    public function eliminarAdjunto($id)
+
+
+    public function eliminarAdjuntoOperaciones(Request $request)
     {
-        $imagenes = ImagenAtencion::find($id);
-        $imagenes->update([
-            'estado' => '0'
-        ]);
-        return redirect()->route('operaciones.atendidos')->with('info', 'actualizado');
+        $id = $request->eliminar_pedido_id;
+        $imagen = $request->eliminar_pedido_id_imagen;
+        $imagenatencion = ImagenAtencion::where("pedido_id",$id)
+        ->where("adjunto",$imagen)->first();
+
+        if($imagenatencion != NULL){
+            $imagenatencion->update([
+                'estado' => '0'
+            ]);
+        }
+        
+        return response()->json(['html' => $imagenatencion]);
     }
 
     public function Enviar(Request $request, Pedido $pedido)

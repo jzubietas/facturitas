@@ -63,7 +63,7 @@
           </tr>
         </thead>
         <tbody>
-          
+
         </tbody>
       </table>
     </div>
@@ -78,11 +78,11 @@
   .red {
     background-color: red !important;
   }
-  
+
   .white {
     background-color: white !important;
   }
-  
+
   .lighblue {
     background-color: #4ac4e2 !important;
   }
@@ -141,7 +141,7 @@ $(document).ready(function () {
     });
 
     $(document).on("click","#delete",function(){
-      
+
       console.log("action delete action")
       var formData = $("#formdelete").serialize();
       console.log(formData);
@@ -151,15 +151,15 @@ $(document).ready(function () {
         data:formData,
       }).done(function (data) {
         $("#modal-delete").modal("hide");
-        resetearcamposdelete();          
-        $('#tablaPrincipal').DataTable().ajax.reload();      
+        resetearcamposdelete();
+        $('#tablaPrincipal').DataTable().ajax.reload();
       });
 
     });
 
-  $('#modal-delete').on('show.bs.modal', function (event) {     
-      var button = $(event.relatedTarget) 
-      var idunico = button.data('delete')      
+  $('#modal-delete').on('show.bs.modal', function (event) {
+      var button = $(event.relatedTarget)
+      var idunico = button.data('delete')
       $("#hiddenClienteId").val(idunico);
       if(idunico<10){
         idunico='PAG000'+idunico;
@@ -174,7 +174,7 @@ $(document).ready(function () {
 
     });
 
-    
+
 
     $('#tablaPrincipal').DataTable({
         processing: true,
@@ -182,16 +182,16 @@ $(document).ready(function () {
         autowidth:true,
         serverSide: true,
         ajax: "{{ route('clientestabla') }}",
-        initComplete:function(settings,json){          
+        initComplete:function(settings,json){
           if (localStorage. getItem("search_tabla") === null) {
             //no existe
           }else{
-            $('#tablaPrincipal_filter label input').val(localStorage.getItem("search_tabla") ).change();            
-          }          
+            $('#tablaPrincipal_filter label input').val(localStorage.getItem("search_tabla") ).change();
+          }
         },
         columns: [
         {
-            data: 'id', 
+            data: 'id',
             name: 'id',
             render: function ( data, type, row, meta ) {
                 if(row.id<10){
@@ -207,7 +207,7 @@ $(document).ready(function () {
         },
         {data: 'nombre', name: 'nombre'},
         {
-          data: 'celular', 
+          data: 'celular',
           name: 'celular',
           render: function ( data, type, row, meta ) {
             if(row.icelular!=null)
@@ -215,7 +215,7 @@ $(document).ready(function () {
               return row.celular+'-'+row.icelular;
             }else{
               return row.celular;
-            }            
+            }
           }
         },
         //{data: 'estado', name: 'estado'},
@@ -223,7 +223,7 @@ $(document).ready(function () {
         //{data: 'identificador', name: 'identificador'},
         //{data: 'provincia', name: 'provincia'},
         {
-          data: 'direccion', 
+          data: 'direccion',
           name: 'direccion',
           render: function ( data, type, row, meta ) {
             return row.direccion+' - '+row.provincia+' ('+row.distrito+')';
@@ -239,9 +239,9 @@ $(document).ready(function () {
         //{data: 'mes', name: 'mes'},
         //{data: 'deuda', name: 'deuda'},
         {
-          data: 'action', 
-          name: 'action', 
-          orderable: false, 
+          data: 'action',
+          name: 'action',
+          orderable: false,
           searchable: false,
           sWidth:'20%',
           render: function ( data, type, row, meta ) {
@@ -260,7 +260,7 @@ $(document).ready(function () {
             @endif
 
             @can('clientes.destroy')
-              data = data+'<a href="" data-target="#modal-delete" data-toggle="modal" data-opcion="'+row.id+'"><button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i> Eliminar</button></a>'; 
+              data = data+'<a href="" data-target="#modal-delete" data-toggle="modal" data-opcion="'+row.id+'"><button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i> Eliminar</button></a>';
 
             @endcan
             return data;
@@ -298,7 +298,7 @@ $(document).ready(function () {
         },
         language: {
         "decimal": "",
-        "emptyTable": "No hay informaciÃ³n",
+        "emptyTable": "No hay información",
         "info": "Mostrando del _START_ al _END_ de _TOTAL_ Entradas",
         "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
         "infoFiltered": "(Filtrado de _MAX_ total entradas)",
@@ -321,7 +321,7 @@ $(document).ready(function () {
 
     $(document).on("keypress",'#tablaPrincipal_filter label input',function(){
       console.log("aaaaa")
-      
+
       localStorage.setItem("search_tabla",$(this).val());
       console.log( "search_tabla es "+localStorage.getItem("search_tabla") );
 
@@ -335,7 +335,7 @@ $(document).ready(function () {
       var pasteData = e.originalEvent.clipboardData.getData('text')
       localStorage.setItem("search_tabla",pasteData);
     });
-    $(document).on("keypress",'#tablaPrincipal_filter label input',function(){      
+    $(document).on("keypress",'#tablaPrincipal_filter label input',function(){
       localStorage.setItem("search_tabla",$(this).val());
       console.log( "search_tabla es "+localStorage.getItem("search_tabla") );
     });

@@ -630,42 +630,18 @@ class UserController extends Controller
 
     public function MiPersonal()
     {       
-            $users = User::where('rol', 'Administrador')
-                        ->where('estado', '1')
-                        ->get();
-            $encargados = User::where('rol', 'Encargado')
+            $users = User::whereIn('rol', ['Encargado','Jefe de llamadas','Jefe de operaciones'])
                         ->where('estado', '1')
                         ->get(); 
-            $asesores = User::where('rol', 'Asesor')
-                        ->where('estado', '1')
-                        ->get();       
-            $jefellamadas = User::whereIn('rol', 'Jefe de llamadas')
-                        ->where('estado', '1')
-                        ->get();    
-            $llamadas = User::whereIn('rol', 'Llamadas')
-                        ->where('estado', '1')
-                        ->get(); 
-            $jefeoperarios = User::where('rol', 'Jefe de operaciones')
-                        ->where('estado', '1')
-                        ->get();
-            $operarios = User::where('rol', 'Operario')
-                        ->where('estado', '1')
-                        ->get();
-                        /*->pluck('name', 'id');*/
-            /*$llamadas = User::whereIn('rol', ['Llamadas', 'Jefe de llamadas'])
-                        ->where('estado', '1')
-                        ->pluck('name', 'id');*/
+                      
             $superasesor = User::where('rol', 'Super asesor')->count();
             
-            return view('usuarios.mipersonal', compact('users','encargados', 'asesores', 'jefellamadas', 'llamadas', 'jefeoperarios','operarios','superasesor'));
+            return view('usuarios.mipersonal', compact('users','superasesor'));
     }
 
     public function indextablapersonal(Request $request)
     {
-        $users = User::where('rol', 'Asesor')
-                    ->where('estado', '1')
-                    ->get();
-
+        
         $users = User::select('users.id',
             'users.name',
             'users.email',
@@ -673,25 +649,26 @@ class UserController extends Controller
             'users.estado'
                 //DB::raw('DATE_FORMAT(users.created_at, "%d/%m/%Y") as fecha'),
             )
-            ->where('users.rol', 'Asesor')
+            ->whereIn('users.rol', ['Encargado','Jefe de llamadas','Jefe de operaciones'])
             ->where('users.estado', '1')
             ->groupBy(
                 'users.id',
                 'users.name',
                 'users.email',
                 'users.rol',
-                'users.estado'
+                'users.estado',
             )
-            //->orderBy('users.created_at', 'DESC')
+            ->orderBy('users.id', 'desc')
             ->get();
             
-        return Datatables::of($users)
-                ->addIndexColumn()
-                ->addColumn('action', function($user){     
-                    $btn="";
-                    return $btn;
-                })
-                ->rawColumns(['action'])
-                ->make(true);
+            return Datatables::of($users)
+            ->addIndexColumn()
+            ->addColumn('action', function($user){     
+                $btn="";
+                $btn = $btn.'<a href="" data-target="#modal-historial-personal" data-toggle="modal" data-personal="'.$user->id.'"><button class="btn btn-info btn-sm"><i class="fas fa-eye"></i> Ver Asignados</button></a>';
+                return $btn;
+            })
+            ->rawColumns(['action'])
+            ->make(true);
     }
 }

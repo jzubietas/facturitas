@@ -4,7 +4,7 @@
 
 @section('content_header')
   <h1>Lista de pedidos entregados - ENVIOS
-       
+
     <div class="float-right btn-group dropleft">
       <?php if(Auth::user()->rol=='Administrador' || Auth::user()->rol=='Logística'){ ?>
       <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -16,7 +16,7 @@
       </div>
     </div>
     @include('pedidos.modal.exportar', ['title' => 'Exportar pedidos ENTREGADOS', 'key' => '2'])
-    
+
   </h1>
   @if($superasesor > 0)
   <br>
@@ -53,14 +53,14 @@
             <th scope="col">Razón social</th>
             <th scope="col">Foto 1</th>
             <th scope="col">Foto 2</th>
-            <th scope="col">Estado de envio</th>            
+            <th scope="col">Estado de envio</th>
           </tr>
         </thead>
         <tbody>
         </tbody>
       </table>
       @include('pedidos.modal.editenviarid')
-      @include('pedidos.modal.verenvioid')      
+      @include('pedidos.modal.verenvioid')
       @include('pedidos.modal.imagenid')
       @include('pedidos.modal.imagen2id')
       @include('pedidos.modal.atenderid')
@@ -75,7 +75,7 @@
 
 @section('css')
   <link rel="stylesheet" href="../css/admin_custom.css">
-  <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">  
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
 
   <style>
     .bg-4{
@@ -134,7 +134,7 @@
   }
 </script>
 
-  
+
   <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
   <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
 
@@ -148,20 +148,20 @@
       });
 
       $('#modal-imagen').on('show.bs.modal', function (event) {
-        var button = $(event.relatedTarget) 
+        var button = $(event.relatedTarget)
         var idunico = button.data('imagen');
         var str="storage/entregas/"+idunico;
         var urlimage = '{{ asset(":id") }}';
         urlimage = urlimage.replace(':id', str);
-        $("#modal-imagen .img-thumbnail").attr("src",urlimage);        
+        $("#modal-imagen .img-thumbnail").attr("src",urlimage);
       });
 
       $('#modal-cambiar-imagen').on('show.bs.modal', function (event) {
-        var button = $(event.relatedTarget) 
+        var button = $(event.relatedTarget)
         var imagen = button.data('imagen');
         var pedido = button.data('pedido');
         var item = button.data('item');
-        
+
         var str="storage/entregas/"+imagen;
         var urlimage = '{{ asset(":id") }}';
         urlimage = urlimage.replace(':id', str);
@@ -174,18 +174,18 @@
       });
 
 
-      
+
 
       $('#modal-imagen2').on('show.bs.modal', function (event) {
-        var button = $(event.relatedTarget) 
+        var button = $(event.relatedTarget)
         var idunico = button.data('imagen');
         var str="storage/entregas/"+idunico;
         var urlimage = '{{ asset(":id") }}';
 
         urlimage = urlimage.replace(':id', str);
-        $("#modal-imagen2 .img-thumbnail").attr("src",urlimage);        
+        $("#modal-imagen2 .img-thumbnail").attr("src",urlimage);
       });
-      
+
 
       $(document).on("submit", "#formulario", function (evento) {
         evento.preventDefault();
@@ -193,7 +193,7 @@
       });
 
       /*$('#modal-verenvio').on('show.bs.modal', function (event) {
-        var button = $(event.relatedTarget) 
+        var button = $(event.relatedTarget)
         var idunico = button.data('verenvio')
         $("#modal-verenvio .textcode").html("PED"+idunico);
         $("#hiddenVerenvio").val(idunico);
@@ -203,7 +203,7 @@
       });*/
 
       $('#modal-editenviar').on('show.bs.modal', function (event) {
-        var button = $(event.relatedTarget) 
+        var button = $(event.relatedTarget)
         var idunico = button.data('editenviar')
         $("#modal-editenviar .textcode").html("PED"+idunico);
         $("#hiddenEditenviar").val(idunico);
@@ -228,7 +228,7 @@
         //agregados el id pago
         let files=$('input[name="pimagen')
         var cambiaitem=$("#cambiaitem").val();
-        var cambiapedido=$("#cambiapedido").val();        
+        var cambiapedido=$("#cambiapedido").val();
 
         fd2.append("item",cambiaitem )
         fd2.append("pedido",cambiapedido )
@@ -279,12 +279,12 @@
         "order": [[ 0, "desc" ]],
         ajax: "{{ route('envios.enviadostabla') }}",
         createdRow: function( row, data, dataIndex){
-          //console.log(row);          
+          //console.log(row);
         },
         rowCallback: function (row, data, index) {
             console.log(data.destino2)
               if(data.destino2=='PROVINCIA'){
-                $('td', row).css('color','red')                
+                $('td', row).css('color','red')
               }else if(data.destino2=='LIMA'){
                 if(data.distribucion!=null)
                 {
@@ -297,14 +297,14 @@
                   }else if(data.distribucion=='SUR')
                   {
                     //$('td', row).css('color','green')
-                  }                  
-                }else{                  
+                  }
+                }else{
                 }
               }
         },
         columns: [
           {
-              data: 'id', 
+              data: 'id',
               name: 'id',
               render: function ( data, type, row, meta ) {
                 if(row.id<10){
@@ -315,13 +315,13 @@
                   return 'ENV0'+row.id;
                 }else{
                   return 'ENV'+row.id;
-                } 
+                }
               }
           },
           {
-            data: 'codigos', 
-            name: 'codigos', 
-            render: function ( data, type, row, meta ) {    
+            data: 'codigos',
+            name: 'codigos',
+            render: function ( data, type, row, meta ) {
               if(data==null){
                 return 'SIN PEDIDOS';
               }else{
@@ -331,24 +331,24 @@
                     returndata+=item+'<br>';
                 });
                 return returndata;
-              }  
+              }
             }
           },
           {
-            data: 'identificador', 
+            data: 'identificador',
             name: 'identificador',
           },
           {
-            data: 'celular', 
+            data: 'celular',
             name: 'celular',
             render: function ( data, type, row, meta ) {
               return row.celular+' - '+row.nombre
             },
           },
           {
-            data: 'producto', 
+            data: 'producto',
             name: 'producto',
-            render: function ( data, type, row, meta ) {    
+            render: function ( data, type, row, meta ) {
               if(data==null){
                 return 'SIN RUCS';
               }else{
@@ -358,14 +358,14 @@
                 $.each(jsonArray, function(i, item) {
                     numm++;
                     returndata+=numm+": "+item+'<br>';
-                    
+
                 });
                 return returndata;
-              }  
+              }
             }
-          },          
+          },
           {
-            data: 'foto1', 
+            data: 'foto1',
             name: 'foto1',
             render: function ( data, type, row, meta ) {
               datass=''
@@ -389,7 +389,7 @@
                     datass=datass+'<a href="" data-target="#modal-delete-foto1" data-toggle="modal" data-deletefoto1="'+row.id+'">'+
                       '<button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i></button>'+
                       '</a>';
-                @endif 
+                @endif
                 return datass;
 
               }else if(row.envio == '3'){
@@ -400,7 +400,7 @@
             },
           },
           {
-            data: 'foto2', 
+            data: 'foto2',
             name: 'foto2',
             render: function ( data, type, row, meta ) {
               datass=''
@@ -424,7 +424,7 @@
                     datass=datass+'<a href="" data-target="#modal-delete-foto1" data-toggle="modal" data-deletefoto2="'+row.id+'">'+
                       '<button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i></button>'+
                       '</a>';
-                @endif 
+                @endif
                 return datass;
 
               }else if(row.envio == '3'){
@@ -435,9 +435,9 @@
             },
           },
           {
-            data: 'condicion_envio', 
+            data: 'condicion_envio',
             name: 'condicion_envio',
-            render: function ( data, type, row, meta ) 
+            render: function ( data, type, row, meta )
             {
               if(row.subcondicion_envio==null)
               {
@@ -445,13 +445,13 @@
               }else{
                 return '('+row.subcondicion_envio+') '+ row.condicion_envio;
               }
-              
+
             }
-          },          
+          },
         ],
         language: {
           "decimal": "",
-          "emptyTable": "No hay informaciÃ³n",
+          "emptyTable": "No hay información",
           "info": "Mostrando del _START_ al _END_ de _TOTAL_ Entradas",
           "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
           "infoFiltered": "(Filtrado de _MAX_ total entradas)",
@@ -488,8 +488,8 @@
 
   <script>
     /* Custom filtering function which will search data in column four between two values */
-        $(document).ready(function () { 
-        
+        $(document).ready(function () {
+
             $.fn.dataTable.ext.search.push(
                 function (settings, data, dataIndex) {
                     var min = $('#min').datepicker("getDate");
@@ -506,7 +506,7 @@
                 }
             );
 
-      
+
             $("#min").datepicker({ onSelect: function () { table.draw(); }, changeMonth: true, changeYear: true , dateFormat:"dd/mm/yy"});
             $("#max").datepicker({ onSelect: function () { table.draw(); }, changeMonth: true, changeYear: true, dateFormat:"dd/mm/yy" });
             var table = $('#tablaPrincipal').DataTable();
@@ -517,5 +517,5 @@
             });
         });
   </script>
-  
+
 @stop

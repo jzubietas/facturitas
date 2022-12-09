@@ -33,7 +33,7 @@
         <a href="" data-target="#modal-exportar" data-toggle="modal" class="dropdown-item" target="blank_"><img src="{{ asset('imagenes/icon-excel.png') }}"> Excel</a>
       </div>
     </div>
-    @include('pagos.modals.exportar', ['title' => 'Exportar Lista de pagos', 'key' => '1'])    
+    @include('pagos.modals.exportar', ['title' => 'Exportar Lista de pagos', 'key' => '1'])
   </h1>
 
   @if($superasesor > 0)
@@ -85,7 +85,7 @@
     .red {
       background-color: red !important;
     }
-      
+
     .white {
       background-color: white !important;
     }
@@ -147,8 +147,8 @@
         data:formData,
       }).done(function (data) {
         $("#modal-delete").modal("hide");
-        resetearcamposdelete();          
-        $('#tablaPrincipal').DataTable().ajax.reload();      
+        resetearcamposdelete();
+        $('#tablaPrincipal').DataTable().ajax.reload();
       });
     }
   </script>
@@ -162,9 +162,9 @@
     });
 
     //para opcion eliminar  pagos
-    $('#modal-delete').on('show.bs.modal', function (event) {     
-      var button = $(event.relatedTarget) 
-      var idunico = button.data('delete')      
+    $('#modal-delete').on('show.bs.modal', function (event) {
+      var button = $(event.relatedTarget)
+      var idunico = button.data('delete')
       $("#hiddenId").val(idunico);
       if(idunico<10){
         idunico='PAG000'+idunico;
@@ -184,7 +184,7 @@
       console.log("validar delete");
       //var motivo = $("#motivo").val();
       //var responsable = $("#responsable").val();
-   
+
       /*if (motivo.length < 1) {
         Swal.fire(
           'Error',
@@ -201,7 +201,7 @@
       }*/
       //else {
         clickformdelete();
-      //}     
+      //}
 
     })
 
@@ -211,22 +211,22 @@
         searching: true,
         "order": [[ 0, "desc" ]],
         ajax: "{{ route('pagostabla') }}",
-        createdRow: function( row, data, dataIndex){           
+        createdRow: function( row, data, dataIndex){
         },
-        rowCallback: function (row, data, index) {           
+        rowCallback: function (row, data, index) {
         },
-        initComplete:function(settings,json){          
+        initComplete:function(settings,json){
           if (localStorage. getItem("search_tabla") === null) {
             //no existe
           }else{
-            $('#tablaPrincipal_filter label input').val(localStorage.getItem("search_tabla") ).change();            
-          }          
+            $('#tablaPrincipal_filter label input').val(localStorage.getItem("search_tabla") ).change();
+          }
         },
         columns: [
         {
-            data: 'id', 
+            data: 'id',
             name: 'id',
-            render: function ( data, type, row, meta ) {   
+            render: function ( data, type, row, meta ) {
               var cantidadvoucher=row.cantidad_voucher;
               var cantidadpedido=row.cantidad_pedido;
               var unido= ( (cantidadvoucher>1)? 'V':'I' )+''+( (cantidadpedido>1)? 'V':'I' );
@@ -334,7 +334,7 @@
                 },
             });
 
-    
+
 
   });
   </script>
@@ -342,10 +342,10 @@
   <script>
     function resetearcamposdelete(){
       //$('#motivo').val("");
-      //$('#responsable').val("");      
+      //$('#responsable').val("");
     }
 
-    
+
   </script>
 
   @if (session('info') == 'registrado' || session('info') == 'eliminado' || session('info') == 'renovado')

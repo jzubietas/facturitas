@@ -86,7 +86,7 @@
               <td>{{ $pedido->codigos }}</td>
               <td>{{ $pedido->celulares }} - {{ $pedido->nombres }}</td>
               <td>{{ $pedido->empresas }}</td>
-              <td>{{ $pedido->users }}</td>              
+              <td>{{ $pedido->users }}</td>
               <td>{{ $pedido->fecha }}</td>
               <td>@php echo number_format($pedido->total,2) @endphp</td>
               <td>{{ $pedido->condiciones }}</td>
@@ -142,7 +142,7 @@
               <td>{{ $pedido->codigos }}</td>
               <td>{{ $pedido->celulares }} - {{ $pedido->nombres }}</td>
               <td>{{ $pedido->empresas }}</td>
-              <td>{{ $pedido->users }}</td>              
+              <td>{{ $pedido->users }}</td>
               <td>{{ $pedido->fecha }}</td>
               <td>@php echo number_format($pedido->total,2) @endphp</td>
               <td>{{ $pedido->condiciones }}</td>
@@ -182,7 +182,7 @@
             </tr>
             @include('pedidos.modal')
             @include('pedidos.modal.destino')
-          @endforeach    
+          @endforeach
         </tbody>
       </table>
     </div>
@@ -192,7 +192,7 @@
 
 @section('css')
   {{-- <link rel="stylesheet" href="../css/admin_custom.css"> --}}
-  <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">  
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
 
   <style>
     .bg-4{
@@ -252,15 +252,15 @@
   <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
 
   <script>
-    /*window.onload = function () {      
+    /*window.onload = function () {
       $('#tablaPrincipal').DataTable().draw();
     }*/
   </script>
 
   <script>
     /* Custom filtering function which will search data in column four between two values */
-        $(document).ready(function () { 
-        
+        $(document).ready(function () {
+
             $.fn.dataTable.ext.search.push(
                 function (settings, data, dataIndex) {
                     var min = $('#min').datepicker("getDate");
@@ -277,7 +277,7 @@
                 }
             );
 
-      
+
             $("#min").datepicker({ onSelect: function () { table.draw(); }, changeMonth: true, changeYear: true , dateFormat:"dd/mm/yy"});
             $("#max").datepicker({ onSelect: function () { table.draw(); }, changeMonth: true, changeYear: true, dateFormat:"dd/mm/yy" });
             //var table = $('#tablaPrincipal').DataTable();
@@ -297,7 +297,7 @@
                   {
                   }else{
                     $(row).addClass('yellow');
-                  }           
+                  }
               },
               rowCallback: function (row, data, index) {
                     var pedidodiferencia=data.diferencia;
@@ -314,7 +314,7 @@
               },
               columns: [
               {//15 columnas
-                  data: 'id', 
+                  data: 'id',
                   name: 'id',
                   render: function ( data, type, row, meta ) {
                     if(row.id<10){
@@ -325,12 +325,12 @@
                       return 'PED0'+row.id;
                     }else{
                       return 'PED'+row.id;
-                    } 
+                    }
                   }
               },
               {data: 'codigos', name: 'codigos', },
               {
-                  data: 'celulares', 
+                  data: 'celulares',
                   name: 'celulares',
                   render: function ( data, type, row, meta ) {
                     return row.celulares+' - '+row.nombres
@@ -341,32 +341,32 @@
               {data: 'users', name: 'users', },
               {data: 'fecha', name: 'fecha', },
               {
-                data: 'total', 
-                name: 'total', 
+                data: 'total',
+                name: 'total',
                 render: $.fn.dataTable.render.number(',', '.', 2, '')
               },
               {
-                data: 'condiciones', 
-                name: 'condiciones', 
+                data: 'condiciones',
+                name: 'condiciones',
                 render: function ( data, type, row, meta ) {
                     return data;
                 }
               },//estado de pedido
               {
-                data: 'condicion_pa', 
-                name: 'condicion_pa', 
+                data: 'condicion_pa',
+                name: 'condicion_pa',
                 render: function ( data, type, row, meta ) {
                   if(row.condicion_pa==null){
                     return 'SIN PAGO REGISTRADO';
                   }else{
                     return data;
-                  }              
+                  }
                 }
               },//estado de pago
               {
                 //estado del sobre
-                data: 'envio', 
-                name: 'envio', 
+                data: 'envio',
+                name: 'envio',
                 render: function ( data, type, row, meta ) {
                   if(row.envio==null){
                     return '';
@@ -385,7 +385,7 @@
                 }
               },
               //{data: 'responsable', name: 'responsable', },//estado de envio
-              
+
               //{data: 'condicion_pa', name: 'condicion_pa', },//ss
               {data: 'condicion_envio', name: 'condicion_envio', },//
               {
@@ -400,7 +400,7 @@
                   }
               },
               {
-                data: 'diferencia', 
+                data: 'diferencia',
                 name: 'diferencia',
                 render: function ( data, type, row, meta ) {
                   if(row.diferencia==null){
@@ -411,7 +411,7 @@
                     }else{
                       return row.diferencia;
                     }
-                  }            
+                  }
                 }
               },
               //{data: 'responsable', name: 'responsable', },
@@ -419,7 +419,7 @@
               ],
               language: {
               "decimal": "",
-              "emptyTable": "No hay informaciÃ³n",
+              "emptyTable": "No hay información",
               "info": "Mostrando del _START_ al _END_ de _TOTAL_ Entradas",
               "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
               "infoFiltered": "(Filtrado de _MAX_ total entradas)",

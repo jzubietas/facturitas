@@ -25,7 +25,7 @@
         @include('pedidos.modal.historial2')
         @include('pedidos.modal.activartiempo')
     @stop
-    
+
     @section('css')
         {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet" /> --}}
 
@@ -67,12 +67,12 @@
 
 
         <script>
-            /*$('#cliente_id').select2({    
+            /*$('#cliente_id').select2({
                                       language: {
 
                                         noResults: function() {
 
-                                          return "No se encontró al cliente” ";        
+                                          return "No se encontró al cliente” ";
                                         },
                                         searching: function() {
 
@@ -137,9 +137,9 @@
                 //CLIENTE
                 cliente_ide = $("#cliente_id option:selected").val();
 
-                //MES 
+                //MES
                 mes = $("#pmes").val();
-                
+
                 //AÑO
                 anio = $("#panio").val();
 
@@ -253,7 +253,7 @@
                         '<td><input type="hidden" name="nota[]" value="' + nota + '">' + nota + '</td>' +
                         '<td>@csrf<input type="file" id="adjunto" name="adjunto[]" multiple=""/></td>' +
                         '<td>' + subtotal[cont].toLocaleString("en-US") + '</td></tr>';
-                    cont++; //accept= ".zip, .rar" 
+                    cont++; //accept= ".zip, .rar"
                     limpiar();
                     $("#total").html("S/. " + total.toLocaleString("en-US"));
                     evaluar();
@@ -304,12 +304,12 @@
         <script>
             //VALIDAR ANTES DE ENVIAR
             /*document.addEventListener("DOMContentLoaded", function() {
-            document.getElementById("formulario").addEventListener('submit', validarFormulario); 
+            document.getElementById("formulario").addEventListener('submit', validarFormulario);
             });*/
 
             /*function validarFormulario(evento) {
               evento.preventDefault();
-                
+
                 window.open('https://sistema.ojoceleste.com/pedidos.mispedidos', '_blank');//CAMBIAR A LINK DE PRODUCCION//************
                 this.submit();
             }*/
@@ -317,12 +317,12 @@
 
         <script>
             //VALIDAR ANTES DE ENVIAR 2
-            /*document.addEventListener("DOMContentLoaded", function() {    
+            /*document.addEventListener("DOMContentLoaded", function() {
             var form = document.getElementById("formulario2")
               if(form)
               {
-                form.addEventListener('submit', validarFormulario2); 
-              }    
+                form.addEventListener('submit', validarFormulario2);
+              }
             });*/
 
             /*function validarFormulario2(evento) {
@@ -401,10 +401,10 @@
                         return false;
                     }*/
                     /*else{
-                             
+
                              var totalfilescarga = $('input[name="adjunto[]"]').get(0).files.length;
                              console.log("totalfilescarga "+totalfilescarga);
-                             
+
 
                              if(files.length!=totalfilescarga)
                              {

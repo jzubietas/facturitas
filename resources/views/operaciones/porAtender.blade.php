@@ -22,7 +22,7 @@
         <a href="" data-target="#modal-exportar" data-toggle="modal" class="dropdown-item" target="blank_"><img src="{{ asset('imagenes/icon-excel.png') }}"> Excel</a>
       </div>
     </div>
-    @include('pedidos.modal.exportar', ['title' => 'Exportar pedidos por atender', 'key' => '7'])    
+    @include('pedidos.modal.exportar', ['title' => 'Exportar pedidos por atender', 'key' => '7'])
   </h1>
   @if($superasesor > 0)
   <br>
@@ -53,7 +53,7 @@
             <th scope="col">Acciones</th>
           </tr>
         </thead>
-        <tbody>          
+        <tbody>
         </tbody>
       </table>
       @include('pedidos.modalid')
@@ -139,7 +139,7 @@
         //return false;
 
         var fd = new FormData();
-        
+
         if(files.length == 0)
         {
           Swal.fire(
@@ -184,7 +184,7 @@
 
       $('#modal-atender').on('show.bs.modal', function (event) {
         //cuando abre el form de anular pedido
-        var button = $(event.relatedTarget) 
+        var button = $(event.relatedTarget)
         var idunico = button.data('atender')
         $(".textcode").html("PED"+idunico);
         $("#hiddenAtender").val(idunico);
@@ -192,7 +192,7 @@
 
       $('#modal-veradjunto').on('show.bs.modal', function (event) {
         //cuando abre el form de anular pedido
-        var button = $(event.relatedTarget) 
+        var button = $(event.relatedTarget)
         var idunico = button.data('adjunto')
         $(".textcode").html("PED"+idunico);
 
@@ -229,7 +229,7 @@
       });
 
       $('#modal-delete').on('show.bs.modal', function (event) {
-        var button = $(event.relatedTarget) 
+        var button = $(event.relatedTarget)
         var idunico = button.data('delete')
         var idresponsable = button.data('responsable')
         $("#hiddenIDdelete").val(idunico);
@@ -241,8 +241,8 @@
           idunico='PED0'+idunico;
         }else{
           idunico='PED'+idunico;
-        } 
-        
+        }
+
         $(".textcode").html(idunico);
         $("#motivo").val('');
         $("#responsable").val( idresponsable );
@@ -255,13 +255,13 @@
         "order": [[ 0, "desc" ]],
         ajax: "{{ route('operaciones.poratendertabla') }}",
         createdRow: function( row, data, dataIndex){
-          //console.log(row);          
+          //console.log(row);
         },
-        rowCallback: function (row, data, index) {           
+        rowCallback: function (row, data, index) {
         },
         columns: [
           {
-              data: 'id', 
+              data: 'id',
               name: 'id',
               render: function ( data, type, row, meta ) {
                 if(row.id<10){
@@ -272,23 +272,23 @@
                   return 'PED0'+row.id;
                 }else{
                   return 'PED'+row.id;
-                } 
+                }
               }
           },
           {data: 'codigos', name: 'codigos', },
           //{data: 'empresas', name: 'empresas', },
           {data: 'users', name: 'users', },
           {
-            data: 'fecha', 
-            name: 'fecha', 
+            data: 'fecha',
+            name: 'fecha',
             render:$.fn.dataTable.render.moment('YYYY-MM-DD HH:mm:ss', 'DD/MM/YYYY HH:mm:ss' )
             //render: $.fn.dataTable.render.moment( 'DD/MM/YYYY' ).format('HH:mm:ss'),
           },
           {data: 'tipo_banca', name: 'tipo_banca', },
           {
-            data: 'imagenes', 
-            name: 'imagenes', 
-            orderable: false, 
+            data: 'imagenes',
+            name: 'imagenes',
+            orderable: false,
             searchable: false,
             sWidth:'20%',
             render: function ( data, type, row, meta ) {
@@ -304,32 +304,44 @@
                   return '';
                 }
               }
-              
+
             }
           },
-          {data: 'condicion', name: 'condicion', },
+          {data: 'condicion', name: 'condicion',
+            render: function ( data, type, row, meta ) { 
+                if(row.condicion==1){
+                  return '<span>Por Atender</span>';
+                }else if(row.condicion==2){
+                  return '<span>En Proceso Atencion</span>';
+                }else if(row.condicion==3){
+                  return '<span>Atendido</span>';
+                }else{
+                  
+                } 
+              }
+          },
           {
-            data: 'action2', 
-            name: 'action2', 
-            orderable: false, 
+            data: 'action2',
+            name: 'action2',
+            orderable: false,
             searchable: false,
             sWidth:'20%',
-            render: function ( data, type, row, meta ) {              
+            render: function ( data, type, row, meta ) {
               var urlpdf = '{{ route("pedidosPDF", ":id") }}';
               urlpdf = urlpdf.replace(':id', row.id);
               @can('operacion.atender')
-                data = data+'<a href="" data-target="#modal-atender" data-atender='+row.id+' data-toggle="modal" ><button class="btn btn-success btn-sm">Atender</button></a>';                
+                data = data+'<a href="" data-target="#modal-atender" data-atender='+row.id+' data-toggle="modal" ><button class="btn btn-success btn-sm">Atender</button></a>';
               @endcan
               @can('operacion.PDF')
-                data = data+'<a href="'+urlpdf+'" class="btn btn-primary btn-sm" target="_blank"><i class="fa fa-file-pdf"></i> PDF</a>';                
+                data = data+'<a href="'+urlpdf+'" class="btn btn-primary btn-sm" target="_blank"><i class="fa fa-file-pdf"></i> PDF</a>';
               @endcan
-              return data;                         
+              return data;
             }
           },
         ],
         language: {
           "decimal": "",
-          "emptyTable": "No hay informaciÃ³n",
+          "emptyTable": "No hay información",
           "info": "Mostrando del _START_ al _END_ de _TOTAL_ Entradas",
           "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
           "infoFiltered": "(Filtrado de _MAX_ total entradas)",
@@ -364,7 +376,7 @@
     function mostrarValores2() {
       $("#condicion").val($("#pcondicion option:selected").text());
     }
-  </script>  
+  </script>
 
   @if (session('info') == 'registrado' || session('info') == 'actualizado' || session('info') == 'eliminado')
     <script>
@@ -386,14 +398,14 @@
 
     //VALIDAR CAMPOS ANTES DE ENVIAR
     /*document.addEventListener("DOMContentLoaded", function() {
-    document.getElementById("formulario").addEventListener('submit', validarFormulario); 
+    document.getElementById("formulario").addEventListener('submit', validarFormulario);
     });*/
 
     function validarFormulario(evento) {
       evento.preventDefault();
       var adjunto = document.getElementById('adjunto').value;
       var cant_compro = document.getElementById('cant_compro').value;
-      
+
       if (adjunto == '') {
           Swal.fire(
             'Error',
@@ -417,22 +429,22 @@
         }
         else {
           this.submit();
-        }      
+        }
     }
   </script>
 
 <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
-  
+
 <script>
-  /*window.onload = function () {      
+  /*window.onload = function () {
     $('#tablaPrincipal').DataTable().draw();
   }*/
 </script>
 
   <script>
     /* Custom filtering function which will search data in column four between two values */
-        $(document).ready(function () { 
-        
+        $(document).ready(function () {
+
             $.fn.dataTable.ext.search.push(
                 function (settings, data, dataIndex) {
                     var min = $('#min').datepicker("getDate");
@@ -449,7 +461,7 @@
                 }
             );
 
-      
+
             $("#min").datepicker({ onSelect: function () { table.draw(); }, changeMonth: true, changeYear: true , dateFormat:"dd/mm/yy"});
             $("#max").datepicker({ onSelect: function () { table.draw(); }, changeMonth: true, changeYear: true, dateFormat:"dd/mm/yy" });
             var table = $('#tablaPrincipal').DataTable();
@@ -460,5 +472,5 @@
             });
         });
   </script>
-  
+
 @stop

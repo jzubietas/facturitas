@@ -19,7 +19,7 @@ class DashboardController extends Controller
         $afecha = $mytime->year;
         $mfecha = $mytime->month;
         $dfecha = $mytime->day;
-        
+
         //DASHBOARD ADMINISTRADOR
             $pedidoxmes_total = User::select(DB::raw('sum(users.meta_pedido) as total'))//META PEDIDOS
                 ->where('users.rol', "ENCARGADO")
@@ -117,7 +117,7 @@ class DashboardController extends Controller
                 ->whereMonth('dp.created_at', $mfecha)
                 ->whereYear('dp.created_at', $afecha)
                 ->groupBy('u.name')
-                ->orderBy((DB::raw('count(dp.id)')), 'DESC')                
+                ->orderBy((DB::raw('count(dp.id)')), 'DESC')
                 ->get();
         //DASHBOARD ENCARGADO
             $meta_pedidoencargado = Pedido::join('users as u', 'pedidos.user_id', 'u.id')
@@ -175,7 +175,7 @@ class DashboardController extends Controller
                 ->whereMonth('dp.created_at', $mfecha)
                 ->whereYear('dp.created_at', $afecha)
                 ->groupBy('u.name')
-                ->orderBy((DB::raw('count(dp.id)')), 'DESC')                
+                ->orderBy((DB::raw('count(dp.id)')), 'DESC')
                 ->get();
         //DASHBOARD ASESOR
             $meta_pedidoasesor = Pedido::join('users as u', 'pedidos.user_id', 'u.id')
@@ -195,7 +195,7 @@ class DashboardController extends Controller
                 ->first();
             $pagosobservados_cantidad = Pago::where('user_id', Auth::user()->id)//PAGOS OBSERVADOS
                 ->where('estado', '1')
-                ->where('condicion', 'OBSERVADO')
+                ->where('condicion', Pago::OBSERVADO)
                 ->count();
             //HISTORIAL DE MIS PEDIDOS EN EL MES
             $pedidosxasesorxdia_asesor = Pedido::join('users as u', 'pedidos.user_id', 'u.id')
@@ -248,19 +248,19 @@ class DashboardController extends Controller
                 ->where('condicion', 'PAGO')
                 ->count();
             $pagosobservados_administracion = Pago::where('estado', '1')
-                ->where('condicion', 'OBSERVADO')
+                ->where('condicion', Pago::OBSERVADO)
                 ->count();
         //DASHBOARD Logística
                     //sobres por enviar
                     //sobres por recibir
-                    
+
 
             $conteo = count(auth()->user()->unreadNotifications);
 
-        return view('dashboard.dashboard', compact('pedidoxmes_total', 
+        return view('dashboard.dashboard', compact('pedidoxmes_total',
                                                     'pagoxmes_total',
                                                     'montopedidoxmes_total',
-                                                    'montopagoxmes_total', 
+                                                    'montopagoxmes_total',
                                                     'pedidossinpagos',
                                                     'pedidosxasesor',
                                                     'pagosxmes',

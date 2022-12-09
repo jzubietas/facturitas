@@ -3,7 +3,7 @@
 @section('title', 'Detalle de pedido')
 
 @section('content_header')
-  
+
     @if ($movimiento->id < 10)
       <h1>Movimiento: MOV000{{ $movimiento->id }}</h1>
     @elseif($movimiento->id < 100)
@@ -13,13 +13,13 @@
     @else
       <h1>Movimiento: MOV{{ $movimiento->id }}</h1>
     @endif
-  
+
 @stop
 
 @section('content')
 
 @include('pagos.modals.revisarhistorial')
-  
+
     <div class="card">
       <div class="card-body">
         <div class="border rounded card-body border-secondary" style="text-align: center">
@@ -56,7 +56,7 @@
                 @else
                   <p>Eliminado</p>
                 @endif
-                
+
               </div>
             </div>
 
@@ -92,27 +92,27 @@
                           <td>{{ $contPe + 1 }}</td>
                           <td>PED000{{ $pagoPedido->pedidos }}<input type="hidden" name="pedido_id[]" id="pedido_id" value="{{ $pagoPedido->pedidos }}"></td>
                           <td>{{ $pagoPedido->codigo }}</td>
-                            
-                          @if($pago->condicion=='ABONADO')
+
+                          @if($pago->condicion==\App\Models\Pago::ABONADO)
                               @if($pagoPedido->pagado == 1)
                               <td>ADELANTO ABONADO</td>
                               @else
                               <td>PAGADO ABONADO</td>
                               @endif
-                          @elseif($pago->condicion=='OBSERVADO')
+                          @elseif($pago->condicion==\App\Models\Pago::OBSERVADO)
                               @if($pagoPedido->pagado == 1)
                               <td>ADELANTO OBSERVADO</td>
                               @else
                               <td>PAGADO OBSERVADO</td>
                               @endif
-                          @elseif($pago->condicion=='PAGO')
+                          @elseif($pago->condicion==\App\Models\Pago::PAGO)
                               @if($pagoPedido->pagado == 1)
                               <td>ADELANTO PAGO</td>
                               @else
                               <td>PAGADO PAGO</td>
                               @endif
                           @endif
-    
+
                           <td>{{ $pagoPedido->condicion }}</td>
                           <td>{{ $pagoPedido->total }}</td>
                           <td><input type="hidden" name="pedido_id_abono[]" id="pedido_id_abono" value="{{ $pagoPedido->abono }}">{{ $pagoPedido->abono }}</td>
@@ -150,7 +150,7 @@
                 <br><br>
 
                 <h1>Detalle de Pago Conciliado</h1><br>
-                
+
                 <div class="form-row">
                   <div class="form-group col-lg-4">
                     <label for="id_ingresomaterial">Monto</label>
@@ -162,7 +162,7 @@
                   </div>
                   <div class="form-group col-lg-4">
                     <label for="id_ingresomaterial">Imagen</label>
-                    <p><img src="{{ asset('storage/pagos/' . $detallepago->imagen) }}" alt="{{ $detallepago->imagen }}" height="200px" width="200px" class="img-thumbnail"></p>                    
+                    <p><img src="{{ asset('storage/pagos/' . $detallepago->imagen) }}" alt="{{ $detallepago->imagen }}" height="200px" width="200px" class="img-thumbnail"></p>
                   </div>
                   <div class="form-group col-lg-4">
                     <label for="id_ingresomaterial">Fecha de Deposito</label>
@@ -174,23 +174,23 @@
                     <p>{{ $detallepago->titular }}</p>
                   </div>
                 </div>
-                
+
             @else
 
               <h1 style="color:red !important;">Movimiento no se encuentra conciliado</h1><br>
             @endif
-            
-            
+
+
           </div>
         </div>
 
 
-        
+
         <br>
         <a href="{{ url()->previous() }}" class="btn btn-danger btn-lg"><i class="fas fa-arrow-left"></i> ATRAS</a>
       </div>
     </div>
-  
+
 @stop
 
 @section('css')

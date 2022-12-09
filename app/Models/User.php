@@ -17,10 +17,23 @@ class User extends Authenticatable
     use Notifiable;
     use HasApiTokens;
     use HasFactory;
-    use HasProfilePhoto;    
+    use HasProfilePhoto;
     use TwoFactorAuthenticatable;
 
     use HasRoles;
+
+
+    const ROL_ADMIN = "Administrador";
+    const ROL_JEFE_OPERARIO = "Jefe de operaciones";
+    const ROL_OPERARIO = "Operario";
+    const ROL_ENCARGADO = "Encargado";
+    const ROL_LLAMADAS = "Llamadas";
+    const ROL_ASESOR = "Asesor";
+    const ROL_LOGISTICA = "Logística";
+    const ROL_JEFE_LLAMADAS = "Jefe de llamadas";
+    const ROL_ASISTENTE_PAGOS = "Asistente de Pagos";
+    const ROL_APOYO_ADMINISTRATIVO = "Apoyo administrativo";
+
 
     /**
      * The attributes that are mass assignable.
@@ -103,10 +116,10 @@ class User extends Authenticatable
     }
 
     public function adminlte_image()
-    {   
+    {
         $user = User::find(Auth()->user()->id);
 
-        return '/../storage/users/'.$user->profile_photo_path;
+        return '/../storage/users/' . $user->profile_photo_path;
     }
     /* public function pedidos()
     {
