@@ -638,7 +638,7 @@ class UserController extends Controller
             
             return view('usuarios.mipersonal', compact('users','superasesor'));
     }
-
+    
     public function indextablapersonal(Request $request)
     {
         
@@ -658,17 +658,65 @@ class UserController extends Controller
                 'users.rol',
                 'users.estado',
             )
-            ->orderBy('users.id', 'desc')
+            ->orderBy('users.rol', 'desc')
             ->get();
             
             return Datatables::of($users)
             ->addIndexColumn()
-            ->addColumn('action', function($user){     
-                $btn="";
-                $btn = $btn.'<a href="" data-target="#modal-historial-personal" data-toggle="modal" data-personal="'.$user->id.'"><button class="btn btn-info btn-sm"><i class="fas fa-eye"></i> Ver Asignados</button></a>';
+            ->addColumn('action', function($users){     
+                $btn='';
+                $btn = $btn.'<a href="" data-target="#modal-historial-personal" data-toggle="modal" data-personal="'.$users['id'].'"><button class="btn btn-danger btn-sm"><i class="fas fa-eye-alt"></i> Ver Asignados</button></a>';   
                 return $btn;
             })
             ->rawColumns(['action'])
             ->make(true);
     }
+    
+    public function personaltablahistorial(Request $request)
+    {   
+        $personal=User::findOrFail($request->personal);
+        $query = null;
+        $rol=$personal->rol;
+        $id=$personal->id;
+        if($rol=="Encargado"){
+            $query = User::select('users.id',
+                'users.name',
+                'users.email',
+                'users.rol',
+                'users.estado'
+            )
+            ->where('users.estado', '1')
+            ->whereIn('users.supervisor', [$id])
+            ->where('rol', 'Asesor');
+        }else if($rol=="Jefe de llamadas"){
+            $query = User::select('users.id',
+                'users.name',
+                'users.email',
+                'users.rol',
+                'users.estado'
+            )
+            ->where('users.estado', '1')
+            ->where('rol', 'Llamadas');
+            
+        }else if($rol=="Jefe de operaciones"){
+            $query = User::select('users.id',
+                'users.name',
+                'users.email',
+                'users.rol',
+                'users.estado'
+            )
+            ->where('users.estado', '1')
+            ->where('rol', 'Operario');
+            
+        }
+       
+        
+        
+        return Datatables::of(\DB::table($query))
+            ->addIndexColumn()
+            ->rawColumns(['action'])
+            ->make(true);
+    }
+    
+
 }

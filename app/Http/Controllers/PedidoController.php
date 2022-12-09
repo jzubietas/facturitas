@@ -2932,7 +2932,7 @@ return ' no imagen ';
         $imagenes = ImagenPedido::where('imagen_pedidos.pedido_id', $pedido->id)->get();
         $imagenesatencion = ImagenAtencion::where('imagen_atencions.pedido_id', $pedido->id)->get();
 
-        return view('pedidos.showAtender', compact('pedidos', 'imagenes', 'imagenesatencion'));
+        return view('pedidos.showAtender', compact('pedido','pedidos', 'imagenes', 'imagenesatencion'));
     }
 
 
