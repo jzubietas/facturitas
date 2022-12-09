@@ -237,7 +237,25 @@
             "visible":true,
           },
           {data: 'destino', name: 'destino',"visible":false },
-          {data: 'condicion', name: 'condicion', },
+          {
+              data: 'condicion',
+              name: 'condicion',
+              render: function ( data, type, row, meta ) {
+                  if(row.condicion =='ANULADO'){
+                      return 'ANULADO';
+                  }else if(row.condicion == 0){
+                      return 'ANULADO';
+                  }else if(row.condicion == 1){
+                      return 'PENDIENTE DE ENVÍO';
+                  }else if(row.condicion == 2){
+                      return 'EN REPARTO';
+                  }else if(row.condicion == 3){
+                      return 'ENTREGADO';
+                  }else{
+                      return data;
+                  }
+              }
+          },
           {data: 'atendido_por', name: 'atendido_por', },
           {data: 'jefe', name: 'jefe', },
           {

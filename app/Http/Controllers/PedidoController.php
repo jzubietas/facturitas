@@ -86,9 +86,9 @@ class PedidoController extends Controller
                 ->where('pedidos.estado', '1')
                 //->where('pedidos.cliente_id',$request->buscarpedidocliente)
                 //->where('dp.ruc',$request->buscarpedidoruc)
-                ->orderBy('pedidos.created_at', 'DESC')
-                ->get();
-                return Datatables::of($pedidos)
+                ->orderBy('pedidos.created_at', 'DESC');
+                //->get();
+            return Datatables::of(DB::table($pedidos))
                 ->addIndexColumn()
                 ->make(true);
         }else{
@@ -106,10 +106,10 @@ class PedidoController extends Controller
             ->where('pedidos.estado', '1')
             ->where('pedidos.cliente_id',$request->buscarpedidocliente)
             ->where('dp.ruc',$request->buscarpedidoruc)
-            ->orderBy('pedidos.created_at', 'DESC')
-            ->get();
+            ->orderBy('pedidos.created_at', 'DESC');
+            //->get();
 
-        return Datatables::of($pedidos)
+            return Datatables::of(DB::table($pedidos))
                 ->addIndexColumn()
                 ->make(true);
         }
@@ -240,8 +240,7 @@ class PedidoController extends Controller
         }
         //$pedidos=$pedidos->get();
 
-        return Datatables::query(DB::table($pedidos))
-                    //of($pedidos)
+        return Datatables::of(DB::table($pedidos))
                     ->addIndexColumn()
                     ->addColumn('action', function($pedido){
                         $btn='';
@@ -385,9 +384,9 @@ class PedidoController extends Controller
         }else{
             $pedidos=$pedidos;
         }
-        $pedidos=$pedidos->get();
+        //$pedidos=$pedidos->get();
 
-        return Datatables::of($pedidos)
+        return Datatables::of(DB::table($pedidos))
                     ->addIndexColumn()
                     ->addColumn('action', function($pedido){
                         $btn='';
@@ -408,10 +407,10 @@ class PedidoController extends Controller
         $deudores = Cliente::where('estado', '1')
                                 //->where('user_id', Auth::user()->id)
                                 ->where('tipo', '1')
-                                ->where('deuda', '1')
-                                ->get();
+                                ->where('deuda', '1');
+                                //->get();
 
-        return Datatables::of($deudores)
+            return Datatables::of(DB::table($deudores))
             ->addIndexColumn()
             ->make(true);
 
@@ -1829,18 +1828,15 @@ return ' no imagen ';
 
             $pedidos=$pedidos->WhereIn('u.identificador',$usersasesores);
 
-        }else{
-            $pedidos=$pedidos;
-
         }
-        $pedidos=$pedidos->get();
+        //$pedidos=$pedidos->get();
 
-        return Datatables::of($pedidos)
+        return Datatables::of(DB::table($pedidos))
                     ->addIndexColumn()
                     ->addColumn('action', function($pedido){
 
-                        $btn='<a href="'.route('pedidosPDF', $pedido).'" class="btn btn-primary btn-sm" target="_blank"><i class="fa fa-file-pdf"></i> PDF</a>';
-                        $btn=$btn.'<a href="'.route('pedidos.show', $pedido).'" class="btn btn-info btn-sm"><i class="fas fa-eye"></i> VER</a>';
+                        $btn='<a href="'.route('pedidosPDF', data_get($pedido,'id')).'" class="btn btn-primary btn-sm" target="_blank"><i class="fa fa-file-pdf"></i> PDF</a>';
+                        $btn=$btn.'<a href="'.route('pedidos.show', data_get($pedido,'id')).'" class="btn btn-info btn-sm"><i class="fas fa-eye"></i> VER</a>';
 
                         if($pedido->estado>0){
 
@@ -1965,10 +1961,11 @@ return ' no imagen ';
                 'pedidos.pagado',
                 'pa.condicion',
                 'pedidos.created_at')
-            ->orderBy('pedidos.created_at', 'DESC')
-            ->get();
+            ->orderBy('pedidos.created_at', 'DESC');
+            //->get();
 
-        return Datatables::of($pedidos)
+
+            return Datatables::of(DB::table($pedidos))
             ->addIndexColumn()
             ->addColumn('action', function($pedido){
                 $btn='';
@@ -2080,9 +2077,9 @@ return ' no imagen ';
         }else{
             $pedidos=$pedidos;
         }
-        //$pedidos=$pedidos->get();
-        return Datatables::query(DB::table($pedidos))
-        //return Datatables::of($pedidos)
+        $pedidos=$pedidos->get();
+
+        return Datatables::of($pedidos)
             ->addIndexColumn()
             ->addColumn('action', function($pedido){
                 $btn='';
@@ -2213,8 +2210,8 @@ return ' no imagen ';
                     'dp.fecha_envio_doc_fis',
                     'dp.fecha_recepcion'
                 )
-                ->orderBy('pedidos.created_at', 'DESC')
-                ->get();
+                ->orderBy('pedidos.created_at', 'DESC');
+                //->get();
         }else{
             $pedidos = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')
                 ->join('users as u', 'pedidos.user_id', 'u.id')
@@ -2256,11 +2253,11 @@ return ' no imagen ';
                     'dp.fecha_envio_doc_fis',
                     'dp.fecha_recepcion'
                 )
-                ->orderBy('pedidos.created_at', 'DESC')
-                ->get();
+                ->orderBy('pedidos.created_at', 'DESC');
+                //->get();
         }
 
-        return Datatables::of($pedidos)
+        return Datatables::of(DB::table($pedidos))
                     ->addIndexColumn()
                     ->addColumn('action', function($pedido){
                         $btn='';
