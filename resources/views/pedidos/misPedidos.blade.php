@@ -65,6 +65,7 @@
             <th scope="col">Código</th>
             <th scope="col">Cliente</th>
             <th scope="col">Razón social</th>
+            <th scope="col">Cantidad</th>
             <th scope="col">Asesor</th>
             <th scope="col">Fecha de registro</th>
             <th scope="col">Total (S/)</th>
@@ -173,12 +174,12 @@
               var pedidodiferencia=data.diferencia;
               //pedidodiferencia=0;
               if(pedidodiferencia==null){
-                $('td:eq(10)', row).css('background', '#ca3a3a').css('color','#ffffff').css('text-align','center').css('font-weight','bold');
+                $('td:eq(11)', row).css('background', '#ca3a3a').css('color','#ffffff').css('text-align','center').css('font-weight','bold');
               }else{
                 if(pedidodiferencia>3){
-                  $('td:eq(10)', row).css('background', '#ca3a3a').css('color','#ffffff').css('text-align','center').css('font-weight','bold');
+                  $('td:eq(11)', row).css('background', '#ca3a3a').css('color','#ffffff').css('text-align','center').css('font-weight','bold');
                 }else{
-                  $('td:eq(10)', row).css('background', '#44c24b').css('text-align','center').css('font-weight','bold');
+                  $('td:eq(11)', row).css('background', '#44c24b').css('text-align','center').css('font-weight','bold');
                 }
               }
 
@@ -223,6 +224,7 @@
             //searchable: true
         },
         {data: 'empresas', name: 'empresas', },
+        {data: 'cantidad', name: 'cantidad', },
         {data: 'users', name: 'users', },
         {data: 'fecha', name: 'fecha', },
         {
