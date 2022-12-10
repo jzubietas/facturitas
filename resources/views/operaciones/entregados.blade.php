@@ -155,7 +155,7 @@
            processData: false,
            contentType: false,
            type: 'POST',
-           url:"{{ route('pedidos.revertirenvioid') }}",
+           url:"{{ route('operaciones.revertirenvioid') }}",
            success:function(data)
            {
             console.log(data);
