@@ -268,7 +268,7 @@
         serverSide: true,
         searching: true,
         "order": [[ 0, "desc" ]],
-        ajax: "{{ route('envios.indextabla') }}",
+        ajax: "{{ route('envios.enrepartotabla') }}",
         createdRow: function( row, data, dataIndex){
           //console.log(row);
         },
