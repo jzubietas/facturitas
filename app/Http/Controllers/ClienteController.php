@@ -142,48 +142,14 @@ class ClienteController extends Controller
             $data=$data->WhereIn("u.identificador",$usersasesores);
         }
         elseif (Auth::user()->rol == "Asesor"){
-            $data = Cliente:://CLIENTES SIN PEDIDOS
-                join('users as u', 'clientes.user_id', 'u.id')
-                ->leftjoin('pedidos as p', 'clientes.id', 'p.cliente_id')
-                ->where('clientes.estado','1')
-                ->where('clientes.tipo','1')
-                ->where('clientes.user_id', Auth::user()->id)
-                //->where('clientes.pidio','1')
-                //->where('clientes.deuda', '1')
-                ->groupBy(
-                    'clientes.id',
-                    'clientes.nombre',
-                    'clientes.icelular',
-                    'clientes.celular',
-                    'clientes.estado',
-                    'u.name',
-                    'u.identificador',
-                    'clientes.provincia',
-                    'clientes.distrito',
-                    'clientes.direccion',
-                    'clientes.deuda',
-                    'clientes.pidio'
+            $usersasesores = User::where('users.rol', 'Asesor')
+                -> where('users.estado', '1')
+                -> where('users.identificador', Auth::user()->identificador)
+                ->select(
+                    DB::raw("users.identificador as identificador")
                 )
-                ->get(['clientes.id',
-                        'clientes.nombre',
-                        'clientes.icelular',
-                        'clientes.celular',
-                        'clientes.estado',
-                        'u.name as user',
-                        'u.identificador',
-                        'clientes.provincia',
-                        'clientes.distrito',
-                        'clientes.direccion',
-                        'clientes.pidio',
-                        DB::raw('count(p.created_at) as cantidad'),
-                        DB::raw('MAX(p.created_at) as fecha'),
-                        DB::raw('MAX(DATE_FORMAT(p.created_at, "%d")) as dia'),
-                        DB::raw('MAX(DATE_FORMAT(p.created_at, "%m")) as mes'),
-                        DB::raw('MAX(DATE_FORMAT(p.created_at, "%Y")) as anio'),
-                        DB::raw('MONTH(CURRENT_DATE()) as dateM'),
-                        DB::raw('YEAR(CURRENT_DATE()) as dateY'),
-                        'clientes.deuda',
-                        ]);
+                ->pluck('users.identificador');
+                $data=$data->WhereIn("u.identificador",$usersasesores);
 
         }else if (Auth::user()->rol == "Encargado"){
             $usersasesores = User::where('users.rol', 'Asesor')
