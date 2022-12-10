@@ -31,7 +31,7 @@
                 <label for="id_ingresomaterial">Estado</label>
                 <p>{{ $pedido->condiciones }}</p>
               </div>
-            </div>  
+            </div>
           </div>
         </div>
 
@@ -76,30 +76,30 @@
               </tbody>
             </table>
           </div>
-        </div>      
+        </div>
         <br>
 
-        <div class="border rounded card-body border-secondary">                  
+        <div class="border rounded card-body border-secondary">
           <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-            <div class="row">           
-              <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">  
-                {!! Form::label('envio_doc', 'Documento adjuntado') !!}              
+            <div class="row">
+              <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                {!! Form::label('envio_doc', 'Documento adjuntado') !!}
                 @foreach($imagenes as $img)
                   @if ($img->pedido_id == $pedido->id)
                     <p>
                       <a href="{{ route('pedidos.descargaradjunto', $img->adjunto) }}">{{ $img->adjunto }}</a>
-                      <a href="#" data-target="#modal-delete-adjunto" data-toggle="modal" data-imgid="{{ $img->pedido_id }}" data-imgadjunto="{{ $img->adjunto }}">  
+                      <a href="#" data-target="#modal-delete-adjunto" data-toggle="modal" data-imgid="{{ $img->pedido_id }}" data-imgadjunto="{{ $img->adjunto }}">
                         <button class="btn btn-danger btn-sm" data-imgid="{{ $img->pedido_id }}" data-imgadjunto="{{ $img->adjunto }}">
                           <i class="fas fa-trash-alt"></i>
                         </button>
                       </a>
-                      <!--<a href="" data-target="#modal-delete-adjunto-{{ $img->id }}" data-toggle="modal">  
+                      <!--<a href="" data-target="#modal-delete-adjunto-{{ $img->id }}" data-toggle="modal">
                         <button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i></button></a>-->
                     </p>
                   @endif
                   @include('pedidos.modal.DeleteAdjuntoid')
                 @endforeach
-              </div>              
+              </div>
               <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
                 {{ Form::Open(['route' => ['operaciones.updateatender', $pedido],'enctype'=>'multipart/form-data', 'id'=>'formulario','files'=>true]) }}
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -117,12 +117,12 @@
                 </div>
               </div>
             </div>
-          </div>                    
+          </div>
         </div>
         <div class="col-2 text-left" class="modal-footer">
           <button type="submit" class="btn btn-success" id="atender">Confirmar</button>
           <button type = "button" onClick="history.back()" class="btn btn-danger"><i class="fas fa-arrow-left"></i>ATRAS</button>
-        </div>        
+        </div>
       </div>
     </div>
   @endforeach
@@ -136,9 +136,9 @@
 
 <script>
 
-        $(document).ready(function() 
+        $(document).ready(function()
         {
-          
+
           $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -147,7 +147,7 @@
           console.log("aa");
           $('#modal-delete-adjunto').on('shown.bs.modal', function (event) {
             console.log("aa");
-            var button = $(event.relatedTarget) 
+            var button = $(event.relatedTarget)
             var pedido_id = button.data('imgid')
             var imgname = button.data('imgadjunto')
 
@@ -167,20 +167,15 @@
             //let eliminar_pedido_id=$("#eliminar_pedido_id").val()
             //let eliminar_pedido_id_imagen=$("#eliminar_pedido_id_imagen").val()
 
-                
+
                 var formData = $("#formdeleteadjunto").serialize();
+
+                console.log(formData);
                 $.ajax({
                     type:'POST',
                     url:"{{ route('operaciones.eliminaradjunto') }}",
                     data:formData,
                 }).done(function (data) {
-                    /*Swal.fire(
-                        'Operacion realizada',
-                        '',
-                        'success'
-                    )
-                    $("modal-delete-adjunto").modal("hide");*/  
-                    //$("#user_id").trigger("change");   
                     location.reload();
                     console.log(data);
                 });
