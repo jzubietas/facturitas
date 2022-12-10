@@ -3,18 +3,18 @@
     <div class="modal-dialog" style="max-width: 1000px!important;">
       <div class="modal-content">
         <div class="modal-header bg-info">
-          <h5 class="modal-title" id="exampleModalLabel">Convertir base fría a CLIENTE</h5>
+          <h5 class="modal-title" id="exampleModalLabel">Convertir base fría a CLIENTE 2</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
-        
-        
+
+
         <form id="formconvertir" name="formconvertir">
-        <input type="hidden" id="hiddenId" name="hiddenID" class="form-control"> 
+        <input type="hidden" id="hiddenId" name="hiddenID" class="form-control">
         <div class="modal-body">
           <p>Confirme si desea <strong>PASAR DE BASE FRIA A CLIENTE</strong> a: <br> <strong class="textcode">BF00 id - celular</strong></p>
-          
+
         </div>
         <div style="margin: 10px">
           <div class="card">
@@ -33,7 +33,7 @@
                           <small class="text-danger">{{ $message }}</small>
                         @enderror
                       </div>
-                      <div class="form-group col-lg-3">        
+                      <div class="form-group col-lg-3">
                         {!! Form::label('dni', 'DNI') !!}
                         {!! Form::number('dni', null, ['class' => 'form-control', 'id' => 'dni', 'min' =>'0', 'max' => '99999999', 'maxlength' => '8', 'oninput' => 'maxLengthCheck(this)', 'required']) !!}
                         @error('dni')
@@ -66,7 +66,7 @@
                       </div>
                       <div class="form-group col-lg-6">
                         {!! Form::label('direccion', 'Dirección*') !!}
-                        {!! Form::text('direccion', null, ['class' => 'form-control', 'id' => 'direccion', 'required']) !!}
+                        {!! Form::text('direccion', null, ['class' => 'form-control', 'id' => 'direccion']) !!}
                         @error('direccion')
                           <small class="text-danger">{{ $message }}</small>
                         @enderror
@@ -111,7 +111,7 @@
                               <input type="text" name="nporcentaje[]" value="ELECTRONICA - sin banca" disabled class="form-control">
                               <input type="number" step="0.1" name="porcentaje[]" id="porcentaje2" min="0" class="form-control" required>
                             </div>
-                          </div>                                                    
+                          </div>
                         </div>
                       </div>
                       <br><br>
@@ -130,7 +130,7 @@
                               <input type="text" name="nporcentaje[]" value="ELECTRONICA - banca" disabled class="form-control">
                               <input type="number" step="0.1" name="porcentaje[]" id="porcentaje4" min="0" class="form-control" required>
                             </div>
-                          </div>                          
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -146,7 +146,7 @@
         </div>
 
         </form>
-        
+
       </div>
     </div>
   </div>

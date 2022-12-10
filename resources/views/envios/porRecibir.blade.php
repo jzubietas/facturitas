@@ -55,10 +55,11 @@
         <thead>
           <tr>
             <th scope="col">Item</th>
+            <th scope="col">Item</th>
             <th scope="col">Código</th>
             <th scope="col">Asesor</th>
             <th scope="col">Cliente</th>
-            <th scope="col">Razón social</th>            
+            <th scope="col">Razón social</th>
             <th scope="col">Fecha de registro</th>
             <th scope="col">Fecha de envio</th>
             <th scope="col">Fecha de entrega</th>
@@ -74,7 +75,7 @@
       </table>
       @include('envios.modal.enviarid')
       @include('pedidos.modal.recibirid')
-      
+
       @include('pedidos.modal.verdireccionid')
       @include('pedidos.modal.editdireccionid')
       @include('pedidos.modal.destinoid')
@@ -151,7 +152,7 @@
 
       $('#modal-enviar').on('show.bs.modal', function (event) {
         //cuando abre el form de anular pedido
-        var button = $(event.relatedTarget) 
+        var button = $(event.relatedTarget)
         var idunico = button.data('enviar')//pedido
         $("#hiddenEnviar").val(idunico)
         if(idunico<10){
@@ -162,13 +163,13 @@
           idunico='PED0'+idunico;
         }else{
           idunico='PED'+idunico;
-        } 
+        }
         $("#modal-enviar .textcode").html(idunico);
-        
+
       });
 
       $('#modal-recibir').on('show.bs.modal', function (event) {
-        var button = $(event.relatedTarget) 
+        var button = $(event.relatedTarget)
         var idunico = button.data('recibir')//pedido
         $("#hiddenRecibir").val(idunico)
         if(idunico<10){
@@ -179,7 +180,7 @@
           idunico='PED0'+idunico;
         }else{
           idunico='PED'+idunico;
-        } 
+        }
         $("#modal-recibir .textcode").html(idunico);
 
 
@@ -206,15 +207,15 @@
 
             }
             /*
-            //resetearcamposdelete();     
-             */     
+            //resetearcamposdelete();
+             */
         });
 
       });
-      
+
 
       /*$('#modal-atender').on('show.bs.modal', function (event) {
-        var button = $(event.relatedTarget) 
+        var button = $(event.relatedTarget)
         var idunico = button.data('atender')
         $(".textcode").html("PED"+idunico);
         $("#hiddenAtender").val(idunico);
@@ -227,13 +228,13 @@
         "order": [[ 0, "desc" ]],
         ajax: "{{ route('envios.porrecibirtabla') }}",
         createdRow: function( row, data, dataIndex){
-          //console.log(row);          
+          //console.log(row);
         },
-        rowCallback: function (row, data, index) {           
+        rowCallback: function (row, data, index) {
         },
         columns: [
           {
-              data: 'id', 
+              data: 'id',
               name: 'id',
               render: function ( data, type, row, meta ) {
                 if(row.id<10){
@@ -244,13 +245,14 @@
                   return 'PED0'+row.id;
                 }else{
                   return 'PED'+row.id;
-                } 
+                }
               }
           },
+          {data: 'id2', name: 'id2',"visible":false },
           {data: 'codigos', name: 'codigos', },
           {data: 'users', name: 'users', },
           {
-            data: 'celulares', 
+            data: 'celulares',
             name: 'celulares',
             render: function ( data, type, row, meta ) {
               return row.celulares+' - '+row.nombres
@@ -297,9 +299,28 @@
               //return 'REGISTRE DIRECCION';
             },
           },
-          {data: 'condicion_envio', name: 'condicion_envio', },
           {
-            data: 'envio', 
+              data: 'condicion_envio',
+              name: 'condicion_envio',
+              render: function ( data, type, row, meta ) {
+
+                  if(row.condicion_envio=='ANULADO'){
+                      return 'ANULADO';
+                  }else if(row.condicion_envio == 0){
+                      return 'ANULADO';
+                  }else if(row.condicion_envio == 1){
+                      return 'PENDIENTE DE ENVÍO';
+                  }else if(row.condicion_envio == 2){
+                      return 'EN REPARTO';
+                  }else if(row.condicion_envio == 3){
+                      return 'ENTREGADO';
+                  }else{
+                      return data;
+                  }
+              }
+          },
+          {
+            data: 'envio',
             name: 'envio',
             render: function ( data, type, row, meta ) {
               if(row.envio=='1')
@@ -308,39 +329,39 @@
               }else{
                 return '<span class="badge badge-info">Recibido</span>';
               }
-            }, 
+            },
           },
           {
-            data: 'action', 
-            name: 'action', 
-            orderable: false, 
+            data: 'action',
+            name: 'action',
+            orderable: false,
             searchable: false,
             sWidth:'20%',
-            render: function ( data, type, row, meta ) {   
+            render: function ( data, type, row, meta ) {
               datass='';
               @if($ver_botones_accion > 0)
                 @can('envios.enviar')
                   if(row.envio=='1')
                   {
-                    datass = datass+ '<a href="" data-target="#modal-recibir" data-toggle="modal" data-recibir="'+row.id+'"><button class="btn btn-warning btn-sm"><i class="fas fa-check-circle"></i> Recibido</button></a>'; 
+                    datass = datass+ '<a href="" data-target="#modal-recibir" data-toggle="modal" data-recibir="'+row.id+'"><button class="btn btn-warning btn-sm"><i class="fas fa-check-circle"></i> Recibido</button></a>';
                   }
                 @endcan
               @endif
-              
+
               if(row.destino == null && row.direccion =='0' && (row.envio*1) >0)
               {
                 var urldireccion = '{{ route("envios.createdireccion", ":id") }}';
                 urldireccion = urldireccion.replace(':id', row.id);
                 data = data+'<a href="'+urldireccion+'" class="btn btn-dark btn-sm"><i class="fas fa-map"></i> Destino</a><br>';
               }
-              
-              return datass;                    
+
+              return datass;
             }
           },
         ],
         language: {
           "decimal": "",
-          "emptyTable": "No hay informaciÃ³n",
+          "emptyTable": "No hay información",
           "info": "Mostrando del _START_ al _END_ de _TOTAL_ Entradas",
           "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
           "infoFiltered": "(Filtrado de _MAX_ total entradas)",
@@ -383,10 +404,10 @@
       if (object.value.length > object.maxLength)
         object.value = object.value.slice(0, object.maxLength)
     }
-    
+
     //VALIDAR ANTES DE ENVIAR
     /*document.addEventListener("DOMContentLoaded", function() {
-    document.getElementById("formulario").addEventListener('submit', validarFormulario); 
+    document.getElementById("formulario").addEventListener('submit', validarFormulario);
     });*/
 
     function validarFormulario(evento) {
@@ -397,7 +418,7 @@
       var foto2 = document.getElementById('foto2').value;
       var pfoto2 = document.getElementById('pfoto2').value;
 
-      if (condicion == 'ENTREGADO') {
+      if (condicion == 3) {
         if (foto1 == '' && pfoto1 == '') {
           Swal.fire(
             'Error',
@@ -414,20 +435,20 @@
         }
         else {
         this.submit();
-        } 
+        }
       }
       else {
         this.submit();
-      }      
+      }
     }
   </script>
-  
+
   <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
-  
+
   <script>
     /* Custom filtering function which will search data in column four between two values */
-        $(document).ready(function () { 
-        
+        $(document).ready(function () {
+
 
             $("#destino", this).on( 'keyup change', function () {
               if ( table.column(i).search() !== this.value ) {

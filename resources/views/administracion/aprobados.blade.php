@@ -25,13 +25,13 @@
         <a href="" data-target="#modal-exportar" data-toggle="modal" class="dropdown-item" target="blank_"><img src="{{ asset('imagenes/icon-excel.png') }}"> Excel</a>
       </div>
     </div>
-    @include('pagos.modals.exportar', ['title' => 'Exportar Lista de pagos aprobados', 'key' => '5'])       
+    @include('pagos.modals.exportar', ['title' => 'Exportar Lista de pagos aprobados', 'key' => '5'])
   </h1>
 
   <div class="form-group col-lg-6">
-    
+
       <select name="asesores_aprobado" class="border form-control selectpicker border-secondary" id="asesores_aprobado" data-live-search="true">
-        <option value="">---- SELECCIONE ASESOR ----</option>         
+        <option value="">---- SELECCIONE ASESOR ----</option>
       </select>
   </div>
 
@@ -65,7 +65,7 @@
             <th scope="col">Acciones</th>
           </tr>
         </thead>
-        <tbody>          
+        <tbody>
         </tbody>
       </table>
       @include('pagos.modals.modalDeleteId')
@@ -137,14 +137,14 @@
         data:formData,
       }).done(function (data) {
         $("#modal-delete").modal("hide");
-        //resetearcamposdelete();          
-        $('#tablaPrincipal').DataTable().ajax.reload();      
+        //resetearcamposdelete();
+        $('#tablaPrincipal').DataTable().ajax.reload();
       });
     }
 
     function clickformdesabonar()
     {
-      
+
       var formData = $("#formdesabonar").serialize();
       console.log(formData);
       $.ajax({
@@ -153,8 +153,8 @@
         data:formData,
       }).done(function (data) {
         $("#modal-desabonar").modal("hide");
-        //resetearcamposdelete();          
-        $('#tablaPrincipal').DataTable().ajax.reload();      
+        //resetearcamposdelete();
+        $('#tablaPrincipal').DataTable().ajax.reload();
       });
     }
   </script>
@@ -196,9 +196,9 @@
       clickformdesabonar();
     })
 
-    $('#modal-delete').on('show.bs.modal', function (event) {     
-      var button = $(event.relatedTarget) 
-      var idunico = button.data('delete')      
+    $('#modal-delete').on('show.bs.modal', function (event) {
+      var button = $(event.relatedTarget)
+      var idunico = button.data('delete')
       $("#hiddenId").val(idunico);
       if(idunico<10){
         idunico='PAG000'+idunico;
@@ -212,12 +212,12 @@
       $(".textcode").html(idunico);
     });
 
-    $('#modal-desabonar').on('show.bs.modal', function (event) {     
-      var button = $(event.relatedTarget) 
-      var idunico = button.data('desabonar') 
-      var textpago = button.data('pago')      
+    $('#modal-desabonar').on('show.bs.modal', function (event) {
+      var button = $(event.relatedTarget)
+      var idunico = button.data('desabonar')
+      var textpago = button.data('pago')
       $("#hiddenDesabonar").val(idunico);
-      
+
       $("#modal-desabonar .textcode").html(textpago);
     });
 
@@ -229,21 +229,21 @@
         ajax: {
           url: "{{ route('administracion.aprobadostabla') }}",
           data: function (d) {
-            d.asesores = $("#asesores_aprobado").val();           
+            d.asesores = $("#asesores_aprobado").val();
           },
         },
-        initComplete:function(settings,json){          
-          if (localStorage. getItem("search_tabla") === null) {
-            //no existe
+        initComplete:function(settings,json){
+          /*if (localStorage. getItem("search_tabla") === null) {
+           
           }else{
-            $('#tablaPrincipal_filter label input').val(localStorage.getItem("search_tabla") ).change();            
-          }          
+            $('#tablaPrincipal_filter label input').val(localStorage.getItem("search_tabla") ).change();
+          }*/
         },
         columns: [
           {
-              data: 'id', 
+              data: 'id',
               name: 'id',
-              render: function ( data, type, row, meta ) {             
+              render: function ( data, type, row, meta ) {
                 var cantidadvoucher=row.cantidad_voucher;
                 var cantidadpedido=row.cantidad_pedido;
                 var unido= ( (cantidadvoucher>1)? 'V':'I' )+''+( (cantidadpedido>1)? 'V':'I' );
@@ -255,7 +255,7 @@
                   return 'PAG'+row.users+'-'+unido+'-'+row.id;
                 }else{
                   return 'PAG'+row.users+'-'+unido+'-'+row.id;
-                } 
+                }
               }
           },
           {
@@ -265,7 +265,7 @@
           {data: 'celular', name: 'celular'},
           {
             data: 'codigos'
-            , name: 'codigos' 
+            , name: 'codigos'
             , render: function ( data, type, row, meta ) {
               var returndata='';
               var jsonArray=data.split(",");
@@ -281,17 +281,17 @@
           //{ data: 'total_deuda', name: 'total_deuda'},//total_deuda
           { data: 'total_pago', name: 'total_pago'},//total_pago
           {
-            data: 'condicion', 
-            name: 'condicion', 
-            render: function ( data, type, row, meta ) {            
-              return data;             
+            data: 'condicion',
+            name: 'condicion',
+            render: function ( data, type, row, meta ) {
+              return data;
             }
           },//estado
           {data: 'action', name: 'action', orderable: false, searchable: false,sWidth:'20%'},
       ],
       language: {
         "decimal": "",
-        "emptyTable": "No hay informaciÃ³n",
+        "emptyTable": "No hay información",
         "info": "Mostrando del _START_ al _END_ de _TOTAL_ Entradas",
         "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
         "infoFiltered": "(Filtrado de _MAX_ total entradas)",
@@ -314,7 +314,7 @@
 
     $(document).on("keypress",'#tablaPrincipal_filter label input',function(){
       console.log("aaaaa")
-      
+
       localStorage.setItem("search_tabla",$(this).val());
       console.log( "search_tabla es "+localStorage.getItem("search_tabla") );
 
@@ -324,7 +324,7 @@
       var pasteData = e.originalEvent.clipboardData.getData('text')
       localStorage.setItem("search_tabla",pasteData);
     });
-        
+
 
 
   });

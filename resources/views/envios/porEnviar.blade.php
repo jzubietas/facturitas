@@ -59,7 +59,7 @@
             <th scope="col">Asesor</th>
             <th scope="col">Cliente</th>
             <th scope="col">Fecha de Envio</th>
-            <th scope="col">Razón social</th>     
+            <th scope="col">Razón social</th>
             <th scope="col">Destino</th>
             <th scope="col">Dirección de envío</th>
             <th scope="col">Referencia</th>
@@ -153,7 +153,7 @@
 
       $('#modal-enviar').on('show.bs.modal', function (event) {
         //cuando abre el form de anular pedido
-        var button = $(event.relatedTarget) 
+        var button = $(event.relatedTarget)
         var idunico = button.data('enviar')//pedido
         $("#hiddenEnviar").val(idunico)
         if(idunico<10){
@@ -164,15 +164,15 @@
           idunico='PED0'+idunico;
         }else{
           idunico='PED'+idunico;
-        } 
+        }
         $("#modal-enviar .textcode").html(idunico);
 
 
 
-        
+
       });
 
-      
+
 
       $(document).on("change","#foto1",function(event){
           console.log("cambe image")
@@ -197,10 +197,10 @@
           reader.readAsDataURL(file);
 
       });
-      
+
 
       $('#modal-recibir').on('show.bs.modal', function (event) {
-        var button = $(event.relatedTarget) 
+        var button = $(event.relatedTarget)
         var idunico = button.data('recibir')//pedido
         $("#hiddenRecibir").val(idunico)
         if(idunico<10){
@@ -211,7 +211,7 @@
           idunico='PED0'+idunico;
         }else{
           idunico='PED'+idunico;
-        } 
+        }
         $("#modal-recibir .textcode").html(idunico);
 
 
@@ -225,14 +225,14 @@
         var fd2 = new FormData();
         let files=$('input[name="pimagen')
         var fileitem=$("#DPitem").val();
-        
+
         fd2.append('hiddenEnviar', $('#hiddenEnviar').val() );
         fd2.append('fecha_envio_doc_fis', $('#fecha_envio_doc_fis').val() );
         fd2.append('fecha_recepcion', $('#fecha_recepcion').val() );
         fd2.append('foto1', $('input[type=file][id="foto1"]')[0].files[0]);
         fd2.append('foto2', $('input[type=file][id="foto2"]')[0].files[0]);
         fd2.append('condicion', $('#condicion').val() );
-        
+
         $.ajax({
           data: fd2,
           processData: false,
@@ -249,15 +249,15 @@
 
       });
 
-      
+
 
       $(document).on("submit", "#formulariorecibir", function (evento) {
         evento.preventDefault();
       });
-      
+
 
       /*$('#modal-atender').on('show.bs.modal', function (event) {
-        var button = $(event.relatedTarget) 
+        var button = $(event.relatedTarget)
         var idunico = button.data('atender')
         $(".textcode").html("PED"+idunico);
         $("#hiddenAtender").val(idunico);
@@ -268,15 +268,15 @@
         serverSide: true,
         searching: true,
         "order": [[ 0, "desc" ]],
-        ajax: "{{ route('envios.indextabla') }}",
+        ajax: "{{ route('envios.enrepartotabla') }}",
         createdRow: function( row, data, dataIndex){
-          //console.log(row);          
+          //console.log(row);
         },
         rowCallback: function (row, data, index) {
             console.log(data.destino2)
               if(data.destino2=='PROVINCIA'){
                 $('td', row).css('color','red')
-                
+
               }else if(data.destino2=='LIMA'){
                 if(data.distribucion!=null)
                 {
@@ -290,18 +290,18 @@
                   {
                     //$('td', row).css('color','green')
                   }
-                  
+
                 }else{
-                  
+
                 }
 
-                
+
 
               }
         },
         columns: [
           {
-              data: 'id', 
+              data: 'id',
               name: 'id',
               "visible":false,
               render: function ( data, type, row, meta ) {
@@ -313,11 +313,11 @@
                   return 'ENV0'+row.id;
                 }else{
                   return 'ENV'+row.id;
-                } 
+                }
               }
           },
           {
-            data: 'codigos', 
+            data: 'codigos',
             name: 'codigos',
             render: function ( data, type, row, meta ) {
               if(data==null){
@@ -329,24 +329,24 @@
                     returndata+=item+'<br>';
                 });
                 return returndata;
-              }  
+              }
             },
           },
           {data: 'identificador', name: 'identificador', },
           {
-            data: 'celular', 
+            data: 'celular',
             name: 'celular',
             render: function ( data, type, row, meta ) {
               return row.celular+'<br>'+row.nombre
             },
           },
-          { 
-            data: 'fecha', 
+          {
+            data: 'fecha',
             name: 'fecha',
             render: $.fn.dataTable.render.moment( 'DD/MM/YYYY' )
            },
           {
-            data: 'producto', 
+            data: 'producto',
             name: 'producto',
             render: function ( data, type, row, meta ) {
               if(data==null){
@@ -358,7 +358,7 @@
                 $.each(jsonArray, function(i, item) {
                     numm++;
                     returndata+=numm+": "+item+'<br>';
-                    
+
                 });
                 return returndata;
               }
@@ -400,7 +400,7 @@
             },
           },
           {
-            data: 'referencia', 
+            data: 'referencia',
             name: 'referencia',
             sWidth:'10%',
             render: function ( data, type, row, meta ) {
@@ -408,7 +408,7 @@
               if(row.destino=='LIMA')
               {
                 return data;
-              
+
               }else if(row.destino=='PROVINCIA'){
                 urladjunto = '{{ route("pedidos.descargargastos", ":id") }}';
                 urladjunto = urladjunto.replace(':id', data);
@@ -419,16 +419,16 @@
           },
           {data: 'condicion_envio', name: 'condicion_envio', },
           {
-            data: 'action', 
-            name: 'action', 
-            orderable: false, 
+            data: 'action',
+            name: 'action',
+            orderable: false,
             searchable: false,
             sWidth:'10%',
-            render: function ( data, type, row, meta ) {   
+            render: function ( data, type, row, meta ) {
               datass='';
 
-              
-              
+
+
               @if($ver_botones_accion > 0)
                 @can('envios.enviar')
                   datass=datass+'<a href="" data-target="#modal-enviar" data-toggle="modal" data-enviar="'+row.id+'">'+
@@ -440,21 +440,21 @@
                   }
                 @endcan
               @endif
-              
+
               if(row.destino == null && row.direccion =='0' && (row.envio*1) >0)
               {
                 var urldireccion = '{{ route("envios.createdireccion", ":id") }}';
                 urldireccion = urldireccion.replace(':id', row.id);
                 data = data+'<a href="'+urldireccion+'" class="btn btn-dark btn-sm"><i class="fas fa-map"></i> Destino</a><br>';
               }
-              
-              return datass;                    
+
+              return datass;
             }
           },
         ],
         language: {
           "decimal": "",
-          "emptyTable": "No hay informaciÃ³n",
+          "emptyTable": "No hay información",
           "info": "Mostrando del _START_ al _END_ de _TOTAL_ Entradas",
           "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
           "infoFiltered": "(Filtrado de _MAX_ total entradas)",
@@ -497,10 +497,10 @@
       if (object.value.length > object.maxLength)
         object.value = object.value.slice(0, object.maxLength)
     }
-    
+
     //VALIDAR ANTES DE ENVIAR
     /*document.addEventListener("DOMContentLoaded", function() {
-    document.getElementById("formulario").addEventListener('submit', validarFormulario); 
+    document.getElementById("formulario").addEventListener('submit', validarFormulario);
     });*/
 
     function validarFormulario(evento) {
@@ -511,7 +511,7 @@
       var foto2 = document.getElementById('foto2').value;
       var pfoto2 = document.getElementById('pfoto2').value;
 
-      if (condicion == 'ENTREGADO') {
+      if (condicion == 3) {
         if (foto1 == '' && pfoto1 == '') {
           Swal.fire(
             'Error',
@@ -528,20 +528,20 @@
         }
         else {
         this.submit();
-        } 
+        }
       }
       else {
         this.submit();
-      }      
+      }
     }
   </script>
-  
+
   <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
-  
+
   <script>
     /* Custom filtering function which will search data in column four between two values */
-        $(document).ready(function () { 
-        
+        $(document).ready(function () {
+
 
             $("#destino", this).on( 'keyup change', function () {
               if ( table.column(i).search() !== this.value ) {

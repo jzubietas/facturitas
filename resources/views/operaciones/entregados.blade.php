@@ -22,7 +22,7 @@
         <a href="" data-target="#modal-exportar" data-toggle="modal" class="dropdown-item" target="blank_"><img src="{{ asset('imagenes/icon-excel.png') }}"> Excel</a>
       </div>
     </div>
-    @include('pedidos.modal.exportar', ['title' => 'Exportar pedidos entregados', 'key' => '10'])       
+    @include('pedidos.modal.exportar', ['title' => 'Exportar pedidos entregados', 'key' => '10'])
   </h1>
   @if($superasesor > 0)
   <br>
@@ -139,7 +139,7 @@
 
       $('#modal-revertir').on('show.bs.modal', function (event) {
         //cuando abre el form de anular pedido
-        var button = $(event.relatedTarget) 
+        var button = $(event.relatedTarget)
         var idunico = button.data('revertir')
         $(".textcode").html("PED"+idunico);
         $("#hiddenRevertirpedido").val(idunico);
@@ -167,7 +167,7 @@
       });
 
       $('#modal-delete').on('show.bs.modal', function (event) {
-        var button = $(event.relatedTarget) 
+        var button = $(event.relatedTarget)
         var idunico = button.data('delete')
         var idresponsable = button.data('responsable')
         $("#hiddenIDdelete").val(idunico);
@@ -179,7 +179,7 @@
           idunico='PED0'+idunico;
         }else{
           idunico='PED'+idunico;
-        }        
+        }
         $(".textcode").html(idunico);
         $("#motivo").val('');
         $("#responsable").val( idresponsable );
@@ -195,25 +195,25 @@
           data: function (d) {
             //d.asesores = $("#asesores_pago").val();
             d.min = $("#min").val();
-            d.max = $("#max").val();           
-            
+            d.max = $("#max").val();
+
           },
         },
         createdRow: function( row, data, dataIndex){
-          //console.log(row);          
+          //console.log(row);
         },
-        rowCallback: function (row, data, index) {           
+        rowCallback: function (row, data, index) {
         },
-        initComplete:function(settings,json){          
+        initComplete:function(settings,json){
           /*if (localStorage. getItem("search_tabla") === null) {
             //no existe
           }else{
-            $('#tablaPrincipal_filter label input').val(localStorage.getItem("search_tabla") ).change();            
-          } */         
+            $('#tablaPrincipal_filter label input').val(localStorage.getItem("search_tabla") ).change();
+          } */
         },
         columns: [
           {
-              data: 'id', 
+              data: 'id',
               name: 'id',
               render: function ( data, type, row, meta ) {
                 if(row.id<10){
@@ -224,15 +224,15 @@
                   return 'PED0'+row.id;
                 }else{
                   return 'PED'+row.id;
-                } 
+                }
               }
           },
           {data: 'codigos', name: 'codigos', },
           {data: 'empresas', name: 'empresas', },
           {data: 'users', name: 'users', },
           {
-            data: 'fecha', 
-            name: 'fecha', 
+            data: 'fecha',
+            name: 'fecha',
             render:$.fn.dataTable.render.moment('YYYY-MM-DD HH:mm:ss', 'DD/MM/YYYY HH:mm:ss' ),
             "visible":true,
           },
@@ -254,13 +254,13 @@
                   return '<span class="badge badge-dark">Sin envio</span>';
                 }else{
                   return '<span class="badge badge-danger">por enviar</span>';
-                } 
+                }
               }
           },
           {
-            data: 'action', 
-            name: 'action', 
-            orderable: false, 
+            data: 'action',
+            name: 'action',
+            orderable: false,
             searchable: false,
             sWidth:'20%',
             render: function ( data, type, row, meta ) {
@@ -275,28 +275,28 @@
                 data = data+'<a href="'+urledit+'" class="btn btn-warning btn-sm"><i class=""></i> Editar atención</a><br>';
               @endcan
               var urlpdf = '{{ route("pedidosPDF", ":id") }}';
-              urlpdf = urlpdf.replace(':id', row.id);  
+              urlpdf = urlpdf.replace(':id', row.id);
               @can('operacion.PDF')
-                data = data+'<a href="'+urlpdf+'" class="btn btn-primary btn-sm" target="_blank"><i class="fa fa-file-pdf"></i> PDF</a><br>';                
+                data = data+'<a href="'+urlpdf+'" class="btn btn-primary btn-sm" target="_blank"><i class="fa fa-file-pdf"></i> PDF</a><br>';
               @endcan
 
               @can('operacion.enviar')
                 if (row.envio == '0')
                 {
                   @if (Auth::user()->rol == "Jefe de operaciones" || Auth::user()->rol == "Administrador")
-                  
-                    data = data+'<a href="" data-target="#modal-envio" data-envio='+row.id+' data-toggle="modal" ><button class="btn btn-success btn-sm">Enviar</button></a><br>'; 
-                    data = data+'<a href="" data-target="#modal-sinenvio" data-sinenvio='+row.id+' data-toggle="modal" ><button class="btn btn-dark btn-sm">Sin envío</button></a><br>'; 
+
+                    data = data+'<a href="" data-target="#modal-envio" data-envio='+row.id+' data-toggle="modal" ><button class="btn btn-success btn-sm">Enviar</button></a><br>';
+                    data = data+'<a href="" data-target="#modal-sinenvio" data-sinenvio='+row.id+' data-toggle="modal" ><button class="btn btn-dark btn-sm">Sin envío</button></a><br>';
                   @endif
-                  
+
                 }
               @endcan
 
               if(row.envio=='3' || row.envio=='1')
               {
-                data = data+'<a href="" data-target="#modal-revertir" data-revertir='+row.id+' data-toggle="modal" ><button class="btn btn-success btn-sm">Revertir</button></a>'; 
+                data = data+'<a href="" data-target="#modal-revertir" data-revertir='+row.id+' data-toggle="modal" ><button class="btn btn-success btn-sm">Revertir</button></a>';
               }
-              
+
               return data;
             }
           },
@@ -328,7 +328,7 @@
       var pasteData = e.originalEvent.clipboardData.getData('text')
       localStorage.setItem("search_tabla",pasteData);
     });
-    $(document).on("keypress",'#tablaPrincipal_filter label input',function(){      
+    $(document).on("keypress",'#tablaPrincipal_filter label input',function(){
       localStorage.setItem("search_tabla",$(this).val());
       console.log( "search_tabla es "+localStorage.getItem("search_tabla") );
     });
@@ -358,25 +358,25 @@
         'success'
       )
     </script>
-  @endif  
+  @endif
 
   <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
-  
+
   <script>
-    /*window.onload = function () {      
+    /*window.onload = function () {
       $('#tablaPrincipal').DataTable().draw();
     }*/
   </script>
 
   <script>
     /* Custom filtering function which will search data in column four between two values */
-        $(document).ready(function () { 
-        
+        $(document).ready(function () {
+
             /*$.fn.dataTable.ext.search.push(
                 function (settings, data, dataIndex) {
                     var min = $('#min').datepicker("getDate");
                     var max = $('#max').datepicker("getDate");
-                    
+
                     var d = data[4].split("/");
                     var startDate = new Date(d[1]+ "/" +  d[0] +"/" + d[2]);
 
@@ -388,20 +388,20 @@
                 }
             );*/
 
-            $("#min").datepicker({ 
-              onSelect: function () { 
-                $('#tablaPrincipal').DataTable().ajax.reload(); 
-                //localStorage.setItem('dateMin', $(this).val() ); 
+            $("#min").datepicker({
+              onSelect: function () {
+                $('#tablaPrincipal').DataTable().ajax.reload();
+                //localStorage.setItem('dateMin', $(this).val() );
               }, changeMonth: true, changeYear: true , dateFormat:"dd/mm/yy"
             });
-              
-            $("#max").datepicker({ 
-              onSelect: function () { 
-                $('#tablaPrincipal').DataTable().ajax.reload(); 
-                //localStorage.setItem('dateMax', $(this).val() ); 
-              }, changeMonth: true, changeYear: true, dateFormat:"dd/mm/yy" 
+
+            $("#max").datepicker({
+              onSelect: function () {
+                $('#tablaPrincipal').DataTable().ajax.reload();
+                //localStorage.setItem('dateMax', $(this).val() );
+              }, changeMonth: true, changeYear: true, dateFormat:"dd/mm/yy"
             });
-      
+
             //$("#min").datepicker({ onSelect: function () { table.draw(); }, changeMonth: true, changeYear: true , dateFormat:"dd/mm/yy"});
             //$("#max").datepicker({ onSelect: function () { table.draw(); }, changeMonth: true, changeYear: true, dateFormat:"dd/mm/yy" });
             //var table = $('#tablaPrincipal').DataTable();
@@ -415,12 +415,12 @@
   <script>
     /*if (localStorage.getItem('dateMin') )
     {
-      $( "#min" ).val(localStorage.getItem('dateMin')).trigger("change");        
+      $( "#min" ).val(localStorage.getItem('dateMin')).trigger("change");
     }else{
       localStorage.setItem('dateMin', "{{$dateMin}}" );
     }
     if (localStorage.getItem('dateMax') )
-    { 
+    {
       $( "#max" ).val(localStorage.getItem('dateMax')).trigger("change");
     }else{
       localStorage.setItem('dateMax', "{{$dateMax}}" );

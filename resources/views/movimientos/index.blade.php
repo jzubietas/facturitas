@@ -26,7 +26,7 @@
         </div>
         @include('movimientos.modals.exportar2', ['title' => 'Exportar Lista de Movimientos', 'key' => '1'])
     {{--@endcan --}}
-   
+
     @include('movimientos.modals.AddMovimientos')
     @include('movimientos.modals.EditMovimientos')
   </h1>
@@ -35,7 +35,7 @@
     <div class=" col-lg-2">
         <select name="banco_movimientos" class="border form-control selectpicker border-secondary" id="banco_movimientos" data-live-search="true">
         <option value="">---- SELECCIONE BANCO ----</option>
-          <option value="BCP">BCP</option>          
+          <option value="BCP">BCP</option>
           <option value="BBVA">BBVA</option>
           <option value="INTERBANK">INTERBANK</option>
         </select>
@@ -45,7 +45,7 @@
         <option value="">---- SELECCIONE TITULAR ----</option>
         <option value="EPIFANIO SOLANO HUAMAN">EPIFANIO SOLANO HUAMAN</option>
         <option value="NIKSER DENIS ORE RIVEROS">NIKSER DENIS ORE RIVEROS</option>
-        
+
       </select>
   </div>
     <div class="col-lg-4 d-none">
@@ -53,10 +53,10 @@
           <option value="">---- SELECCIONE TIPO MOVIMIENTO ----</option>
         </select>
     </div>
-    
-    
+
+
   </div>
-  
+
 
   @if($superasesor > 0)
   <br>
@@ -106,7 +106,7 @@
     .red {
       background-color: red !important;
     }
-      
+
     .white {
       background-color: white !important;
     }
@@ -150,7 +150,7 @@
 
   </style>
   <style>
-    
+
 h2 {
     margin: 0;
 }
@@ -327,8 +327,8 @@ ul.form-stepper li a .form-stepper-circle {
         data:formData,
       }).done(function (data) {
         $("#modal-delete").modal("hide");
-        resetearcamposdelete();          
-        $('#tablaPrincipal').DataTable().ajax.reload();      
+        resetearcamposdelete();
+        $('#tablaPrincipal').DataTable().ajax.reload();
       });
     }
   </script>
@@ -339,14 +339,14 @@ ul.form-stepper li a .form-stepper-circle {
       validarFormulario();
     });/*
   /*document.addEventListener("DOMContentLoaded", function() {
-    document.getElementById("formulario").addEventListener('submit', validarFormulario); 
+    document.getElementById("formulario").addEventListener('submit', validarFormulario);
   });*/
 
     function validarFormulario()
     {
       //var submitevent=this;
       //evento.preventDefault();
-      
+
 
     }
 
@@ -360,7 +360,7 @@ ul.form-stepper li a .form-stepper-circle {
       //validarFormulario();
 
 
-      let bancoe=$("#banco").prop("disabled",false).selectpicker("refresh"); 
+      let bancoe=$("#banco").prop("disabled",false).selectpicker("refresh");
       let banco=bancoe.val();
       //$("#banco").prop('disabled', true).selectpicker("refresh");
       //let banco = $("#banco").removeAttr('disabled').selectpicker("refresh").val();
@@ -371,11 +371,11 @@ ul.form-stepper li a .form-stepper-circle {
       let tipotrans = $("#tipotransferencia").val();
       let descrip_otros = $("#descrip_otros").val();
 
-      let titulare=$("#titulares").prop("disabled",false).selectpicker("refresh"); 
+      let titulare=$("#titulares").prop("disabled",false).selectpicker("refresh");
       let titular=titulare.val();
       //$("#titulares").prop('disabled', true).selectpicker("refresh");
       console.log(titular)
-      
+
       //return false;
       let monto = $("#monto").val();
       let fecha = $("#fecha").val();
@@ -483,8 +483,8 @@ ul.form-stepper li a .form-stepper-circle {
                 console.log(result);
                 if (result.value==true) {
                   //$("#formulario").trigger("submit");
-                  
-                  
+
+
                   $.ajax({
                     //async:false,
                     url: "{{ route('register_movimiento') }}",
@@ -496,7 +496,7 @@ ul.form-stepper li a .form-stepper-circle {
                       $("#fecha").val("");
                       $("#tipotransferencia").html("");
                       $("#tipotransferencia").selectpicker("refresh");
-                      $('#tablaPrincipal').DataTable().ajax.reload(); 
+                      $('#tablaPrincipal').DataTable().ajax.reload();
                       $("#banco").trigger("change");
                       Swal.fire(
                         'Pago registrado correctamente',
@@ -511,19 +511,19 @@ ul.form-stepper li a .form-stepper-circle {
                   //$("#registrar_movimientos").prop( "disabled", true );
                   //$("#modal-add-movimientos").modal("hide");
 
-                }else{                 
+                }else{
                   //$("#banco").val("").selectpicker('refresh');
                   //$("#tipotransferencia").val("").selectpicker('refresh');
                   $("#descrip_otros").val("").html("");
                   //$("#titulares").val("").selectpicker('refresh');
                   $("#monto").val("");
                   $("#fecha").val("");
-                  
+
                   //$("#modal-add-movimientos").modal("hide");
                 }
-              })      
+              })
             }else  if(dataresponse[0]=="sigue")
-            {              
+            {
               $.ajax({
                 //async:false,
                 url: "{{ route('register_movimiento') }}",
@@ -535,7 +535,7 @@ ul.form-stepper li a .form-stepper-circle {
                   $("#fecha").val("");
                   $("#tipotransferencia").html("");
                   $("#tipotransferencia").selectpicker("refresh");
-                  $('#tablaPrincipal').DataTable().ajax.reload(); 
+                  $('#tablaPrincipal').DataTable().ajax.reload();
                   $("#banco").trigger("change");
                   Swal.fire(
                     'Pago registrado correctamente',
@@ -547,18 +547,18 @@ ul.form-stepper li a .form-stepper-circle {
               });
 
               //$("#formulario").trigger("submit")
-            }            
+            }
           }
         });
 
 
-        
+
       }
        // var oForm = $(this);
         //var formId = oForm.attr("id");
         //var firstValue = oForm.find("input").first().val();
         //alert("Form '" + formId + " is being submitted, value of first input is: " + firstValue);
-        // Do stuff 
+        // Do stuff
         //return false;
     })
 
@@ -572,22 +572,22 @@ ul.form-stepper li a .form-stepper-circle {
         }
     });
 
-    
+
 
     //$(document).on("submit", "#formulario", function (event) {
       //event.preventDefault();
-      
+
       //var total_pedido_pagar = document.getElementById('total_pedido_pagar').value;
 
-      
+
     //});
 
     /*function validarFormulario(evento) {
       evento.preventDefault();
-      
+
 
     }*/
-    
+
 
     /*$.ajax({
       url: "{{ route('asesorespago') }}",
@@ -616,7 +616,7 @@ ul.form-stepper li a .form-stepper-circle {
         $('#titular_movimientos').selectpicker('refresh');
       }
     });*/
-    
+
 
     $(document).on("change","#banco",function(event){
 
@@ -670,25 +670,25 @@ ul.form-stepper li a .form-stepper-circle {
     $(document).on("click",".btn-navigate-titular",function(){
       let titular__=$(this).attr("titular");
       console.log(titular__);
-      localStorage.setItem('titular', titular__ ); 
+      localStorage.setItem('titular', titular__ );
     });
 
     $(document).on("click",".btn-navigate-banco",function(e){
       //e.preventDefault();
       let banco__=$(this).attr("banco");
       console.log(banco__);
-      localStorage.setItem('banco', banco__ ); 
+      localStorage.setItem('banco', banco__ );
       //return true;
     });
 
-    $('#modal-add-movimientos').on('show.bs.modal', function (event) {   
+    $('#modal-add-movimientos').on('show.bs.modal', function (event) {
       navigateToFormStep(1);
       $("#registrar_movimientos").prop( "disabled", false );
-      
+
 
       //let temp_titular=null;
       //let temp_banco=null;
-      
+
       /*if (localStorage.getItem('titular')=== null )
       {
         temp_titular="";
@@ -698,7 +698,7 @@ ul.form-stepper li a .form-stepper-circle {
 
       /*if (localStorage.getItem('banco')=== null )
       {
-        temp_banco="";        
+        temp_banco="";
       }else{
         temp_banco=localStorage.getItem('banco')
       }*/
@@ -715,9 +715,9 @@ ul.form-stepper li a .form-stepper-circle {
     });
 
     //para opcion eliminar  movimientos
-     $('#modal-delete').on('show.bs.modal', function (event) {     
-      var button = $(event.relatedTarget) 
-      var idunico = button.data('delete')      
+     $('#modal-delete').on('show.bs.modal', function (event) {
+      var button = $(event.relatedTarget)
+      var idunico = button.data('delete')
       $("#hiddenIDdelete").val(idunico);
       if(idunico<10){
         idunico='MOV000'+idunico;
@@ -758,18 +758,18 @@ ul.form-stepper li a .form-stepper-circle {
                 $('td:eq(6)', row).css('color','red');
               }
         },
-        initComplete:function(settings,json){          
+        initComplete:function(settings,json){
           /*if (localStorage. getItem("search_tabla") === null) {
             //no existe
           }else{
-            $('#tablaPrincipal_filter label input').val(localStorage.getItem("search_tabla") ).change();            
-          } */         
+            $('#tablaPrincipal_filter label input').val(localStorage.getItem("search_tabla") ).change();
+          } */
         },
         columns: [
         {
-            data: 'id', 
+            data: 'id',
             name: 'id',
-            render: function ( data, type, row, meta ) {             
+            render: function ( data, type, row, meta ) {
               if(row.id<10){
                 return 'MOV000'+row.id;
               }else if(row.id<100){
@@ -778,18 +778,18 @@ ul.form-stepper li a .form-stepper-circle {
                 return 'MOV0'+row.id;
               }else{
                 return 'MOV'+row.id;
-              } 
+              }
             }
         },
         {
-            data: 'id2', 
+            data: 'id2',
             name: 'id2',
             "visible":false,
         },
         {
           data: 'banco' , name: 'banco' },
         {//asesor
-          data: 'titular', 
+          data: 'titular',
           name: 'titular',
           render: function ( data, type, row, meta ) {
             if(data=='EPIFANIO SOLANO HUAMAN'){
@@ -803,19 +803,19 @@ ul.form-stepper li a .form-stepper-circle {
           }
         },
         {
-          data: 'fecha', 
+          data: 'fecha',
           name: 'fecha',
           render: $.fn.dataTable.render.moment( 'DD/MM/YYYY' )
         },
         /*{
-          data: 'fecha2', 
+          data: 'fecha2',
           name: 'fecha2',"visible":false
           //render: $.fn.dataTable.render.moment( 'DD/MM/YYYY' )
         },*/
         {//observacion
-          data: 'tipo', 
+          data: 'tipo',
           name: 'tipo',
-          render: function ( data, type, row, meta ) { 
+          render: function ( data, type, row, meta ) {
             if(row.descripcion_otros==null)
             {
               return data;
@@ -824,26 +824,26 @@ ul.form-stepper li a .form-stepper-circle {
             }
           }
         },
-        
+
         {//cliente
           data: 'importe',  name: 'importe' },
         {
-          data: 'pago', 
-          name: 'pago', 
-          render: function ( data, type, row, meta ) {  
+          data: 'pago',
+          name: 'pago',
+          render: function ( data, type, row, meta ) {
             /*if(data==null || data==0 || data=='0')
             {
               return 'SIN CONCILIAR';
             }else{
               return "CONCILIADO";
             }*/
-            return data;             
+            return data;
           }
         },//estado de pago
         {
-          data: 'action', 
-          name: 'action', 
-          orderable: false, 
+          data: 'action',
+          name: 'action',
+          orderable: false,
           searchable: false,
           sWidth:'20%',
           render: function ( data, type, row, meta ) {
@@ -865,10 +865,10 @@ ul.form-stepper li a .form-stepper-circle {
             if(row.pago=='SIN CONCILIAR')
             {
               //data = data+'<a href="" data-target="#modal-update" data-toggle="modal" data-update="'+row.id+'"><button class="btn btn-warning btn-sm"><i class="fas fa-trash-alt"></i> Editar</button></a><br><br>';
-              data = data+'<a href="" data-target="#modal-delete" data-toggle="modal" data-delete="'+row.id+'"><button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i> Eliminar</button></a>';              
+              data = data+'<a href="" data-target="#modal-delete" data-toggle="modal" data-delete="'+row.id+'"><button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i> Eliminar</button></a>';
             }
-           
-            return data;             
+
+            return data;
           }
         },
         ],
@@ -894,7 +894,7 @@ ul.form-stepper li a .form-stepper-circle {
       },
     });
 
-    
+
 
   });
   </script>
@@ -902,15 +902,15 @@ ul.form-stepper li a .form-stepper-circle {
   <script>
     function resetearcamposdelete(){
       //$('#motivo').val("");
-      //$('#responsable').val("");      
+      //$('#responsable').val("");
     }
 
-    
+
   </script>
 
-  <script>  
+  <script>
     //VALIDAR CAMPOS NUMERICO DE MONTO EN PAGOS
-    
+
     $('input.number').keyup(function(event) {
 
     if(event.which >= 37 && event.which <= 40){
@@ -920,7 +920,7 @@ ul.form-stepper li a .form-stepper-circle {
     $(this).val(function(index, value) {
       return value
         .replace(/\D/g, "")
-        .replace(/([0-9])([0-9]{2})$/, '$1.$2')  
+        .replace(/([0-9])([0-9]{2})$/, '$1.$2')
         .replace(/\B(?=(\d{3})+(?!\d)\.?)/g, ",")
       ;
     });

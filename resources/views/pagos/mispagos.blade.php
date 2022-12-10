@@ -15,7 +15,7 @@
     @can('pagos.create')
       <a href="{{ route('pagos.create') }}" class="btn btn-info"><i class="fas fa-plus-circle"></i> Agregar</a>
     @endcan
-    
+
     @if ($mirol=='Administrador')
       <div class="float-right btn-group dropleft">
         <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -252,7 +252,7 @@
             urledit = urledit.replace(':id', row.id);
 
             @can('pagos.show')
-              data = data+'<a href="'+urlshow+'" class="btn btn-info btn-sm"><i class="fas fa-eye"></i> VER</a>';
+              data = data+'<a href="'+urlshow+'" class="btn btn-dev btn-info btn-sm"><i class="fas fa-eye"></i> VER</a>';
             @endcan
             @can('pagos.edit')
                 //data = data+'<a href="'+urledit+'" class="btn btn-warning btn-sm"> Editar</a>';

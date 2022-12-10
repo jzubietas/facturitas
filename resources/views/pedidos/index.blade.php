@@ -3,6 +3,18 @@
 @section('title', 'Pedidos - Bandeja de pedidos')
 
 @section('content_header')
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;400;600;700&family=Work+Sans:wght@300;400&display=swap');
+
+        body{
+            font-family: 'Work Sans', sans-serif;
+        }
+        h1, h2, h3, h4, h5{
+            font-family: 'Poppins', sans-serif;
+            font-weight: bold;
+        }
+    </style>
+
   <h1>Lista de pedidos
     @can('pedidos.create')
       <a href="{{ route('pedidos.create') }}" class="btn btn-info"><i class="fas fa-plus-circle"></i> Agregar</a>
@@ -26,15 +38,16 @@
         <a href="" data-target="#modal-exportar" data-toggle="modal" class="dropdown-item" target="blank_"><img src="{{ asset('imagenes/icon-excel.png') }}"> Excel</a>
       </div>
     </div>
-    @include('pedidos.modal.exportar', ['title' => 'Exportar Lista de pedidos', 'key' => '3'])    
+    @include('pedidos.modal.exportar', ['title' => 'Exportar Lista de pedidos', 'key' => '3'])
   </h1>
   {{--@if($superasesor > 0)--}}
+  {{--
   <br>
   <div class="bg-4">
     <h1 class="t-stroke t-shadow-halftone2" style="text-align: center">
       asesores con privilegios superiores: {{ $superasesor }}
     </h1>
-  </div>
+  </div>--}}
   {{--@endif--}}
 @stop
 
@@ -59,12 +72,13 @@
             <th scope="col">Código</th>
             <th scope="col">Cliente</th>
             <th scope="col">Razón social</th>
+            <th scope="col">Cantidad</th>
             <th scope="col">Asesor</th>
             <th scope="col">F. Registro</th>
-            <th scope="col">F. Actualizacion</th> 
+            <th scope="col">F. Actualizacion</th>
             <th scope="col">Total (S/)</th>
             <th scope="col">Est. pedido</th>
-            
+
             <th scope="col">Est. pago</th>
             <th scope="col">Con. pago</th>
             <th scope="col">Est. sobre</th>
@@ -88,7 +102,7 @@
 
 @section('css')
   {{-- <link rel="stylesheet" href="../css/admin_custom.css"> --}}
-  <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">  
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
 
   <style>
 
@@ -102,11 +116,11 @@
     .red {
         background-color: red !important;
       }
-      
+
       .white {
         background-color: white !important;
       }
-      
+
     .bg-4{
       background: linear-gradient(to right, rgb(240, 152, 25), rgb(237, 222, 93));
     }
@@ -186,7 +200,7 @@
 
     $('#modal-delete').on('show.bs.modal', function (event) {
       //cuando abre el form de anular pedido
-      var button = $(event.relatedTarget) 
+      var button = $(event.relatedTarget)
       var idunico = button.data('delete')//id  basefria
       var idresponsable = button.data('responsable')//id  basefria
       //console.log(idunico);
@@ -199,7 +213,7 @@
         idunico='PED0'+idunico;
       }else{
         idunico='PED'+idunico;
-      } 
+      }
       //solo completo datos
       //hiddenId
       //
@@ -212,7 +226,7 @@
     });
 
     $('#modal-restaurar').on('show.bs.modal', function (event) {
-      var button = $(event.relatedTarget) 
+      var button = $(event.relatedTarget)
       var idunico = button.data('restaurar')
       console.log("unico "+idunico)
       $("#hiddenIDrestaurar").val(idunico);
@@ -224,8 +238,8 @@
         idunico='PED0'+idunico;
       }else{
         idunico='PED'+idunico;
-      } 
-     
+      }
+
       $(".textcode").html(idunico);
 
     });
@@ -241,32 +255,32 @@
             {
             }else{
               $(row).addClass('textred');
-            }           
+            }
         },
         rowCallback: function (row, data, index) {
               var pedidodiferencia=data.diferencia;
               //pedidodiferencia=0;
               if(pedidodiferencia==null){
-                $('td:eq(12)', row).css('background', '#ca3a3a').css('color','#ffffff').css('text-align','center').css('font-weight','bold');
+                $('td:eq(13)', row).css('background', '#ca3a3a').css('color','#ffffff').css('text-align','center').css('font-weight','bold');
               }else{
                 if(pedidodiferencia>3){
-                  $('td:eq(12)', row).css('background', '#ca3a3a').css('color','#ffffff').css('text-align','center').css('font-weight','bold');
+                  $('td:eq(13)', row).css('background', '#ca3a3a').css('color','#ffffff').css('text-align','center').css('font-weight','bold');
                 }else{
-                  $('td:eq(12)', row).css('background', '#44c24b').css('text-align','center').css('font-weight','bold');
+                  $('td:eq(13)', row).css('background', '#44c24b').css('text-align','center').css('font-weight','bold');
                 }
               }
         },
-        initComplete:function(settings,json){          
+        initComplete:function(settings,json){
           /*if (localStorage. getItem("search_tabla") === null) {
             //no existe
           }else{
             $('#tablaPrincipal_filter label input').val(localStorage.getItem("search_tabla") ).change();
-          } */         
+          } */
         },
         columns: [
           //ID
         {
-            data: 'id', 
+            data: 'id',
             name: 'id',
             render: function ( data, type, row, meta ) {
               if(row.id<10){
@@ -277,14 +291,14 @@
                 return 'PED0'+row.id;
               }else{
                 return 'PED'+row.id;
-              } 
+              }
             },
             "visible":false,
         },
         // CODIGO
         {data: 'codigos', name: 'codigos', },
         {
-            data: 'celulares', 
+            data: 'celulares',
             name: 'celulares',
             render: function ( data, type, row, meta ) {
               if(row.icelulares!=null)
@@ -293,41 +307,55 @@
               }else{
                 return row.celulares+' - '+row.nombres;
               }
-              
+
             },
             //searchable: true
         },
         //EMPRESAS
         {data: 'empresas', name: 'empresas', },
+        {data: 'cantidad', name: 'cantidad', },
         //USUARIOS
         {data: 'users', name: 'users', },
+
         //FECHA
         {
-          data: 'fecha', 
-          name: 'fecha', 
+          data: 'fecha',
+          name: 'fecha',
           //render: $.fn.dataTable.render.moment( 'DD-MMM-YYYY HH:mm:ss' )
         },
         {
-          data: 'fecha_up', 
-          name: 'fecha_up', 
+          data: 'fecha_up',
+          name: 'fecha_up',
           "visible":false,
           //render: $.fn.dataTable.render.moment( 'DD-MMM-YYYY HH:mm:ss' )
         },
         {
-          data: 'total', 
-          name: 'total', 
+          data: 'total',
+          name: 'total',
           render: $.fn.dataTable.render.number(',', '.', 2, '')
         },
         {
-          data: 'condiciones', 
-          name: 'condiciones', 
+          data: 'condiciones',
+          name: 'condiciones',
           render: function ( data, type, row, meta ) {
-              return data;
+              if(row.condiciones =='ANULADO'){
+                  return 'ANULADO';
+              }else if(row.condiciones == 0){
+                  return 'ANULADO';
+              }else if(row.condiciones == 1){
+                  return 'PENDIENTE DE ENVÍO';
+              }else if(row.condiciones == 2){
+                  return 'EN REPARTO';
+              }else if(row.condiciones == 3){
+                  return 'ENTREGADO';
+              }else{
+                  return data;
+              }
           }
         },//estado de pedido
         {
-          data: 'condicion_pa', 
-          name: 'condicion_pa', 
+          data: 'condicion_pa',
+          name: 'condicion_pa',
           render: function ( data, type, row, meta ) {
             if(row.condiciones=='ANULADO'){
                 return 'ANULADO';
@@ -350,12 +378,12 @@
                 //return data;
               }
             }
-            
+
           }
         },//estado de pago
         {
-          data: 'condiciones_aprobado', 
-          name: 'condiciones_aprobado', 
+          data: 'condiciones_aprobado',
+          name: 'condiciones_aprobado',
           render: function ( data, type, row, meta ) {
             if(data!=null)
             {
@@ -363,13 +391,13 @@
             }else{
               return 'SIN REVISAR';
             }
-              
+
           }
         },
         {
           //estado del sobre
-          data: 'envio', 
-          name: 'envio', 
+          data: 'envio',
+          name: 'envio',
           render: function ( data, type, row, meta ) {
             if(row.envio==null){
               return '';
@@ -385,20 +413,29 @@
                   return '<span class="badge badge-danger">Pendiente</span>';
                 }
               }
-              
+
 
             }
           }
         },
         //{data: 'responsable', name: 'responsable', },//estado de envio
-        
+
         //{data: 'condicion_pa', name: 'condicion_pa', },//ss
         {
-          data: 'condicion_envio', 
+          data: 'condicion_envio',
           name: 'condicion_envio',
           render: function ( data, type, row, meta ) {
-            if(row.condiciones=='ANULADO'){
+
+            if(row.condicion_envio=='ANULADO'){
                 return 'ANULADO';
+            }else if(row.condicion_envio == 0){
+                return 'ANULADO';
+            }else if(row.condicion_envio == 1){
+                return 'PENDIENTE DE ENVÍO';
+            }else if(row.condicion_envio == 2){
+                return 'EN REPARTO';
+            }else if(row.condicion_envio == 3){
+                return 'ENTREGADO';
             }else{
               return data;
             }
@@ -416,7 +453,7 @@
             }
         },
         {
-          data: 'diferencia', 
+          data: 'diferencia',
           name: 'diferencia',
           render: function ( data, type, row, meta ) {
             if(row.diferencia==null){
@@ -427,14 +464,14 @@
               }else{
                 return row.diferencia;
               }
-            }            
+            }
           }
         },
         //{data: 'responsable', name: 'responsable', },
         {
-          data: 'action', 
-          name: 'action', 
-          orderable: false, 
+          data: 'action',
+          name: 'action',
+          orderable: false,
           searchable: false,
           sWidth:'20%',
           render: function ( data, type, row, meta ) {
@@ -447,33 +484,34 @@
 
             var urledit = '{{ route("pedidos.edit", ":id") }}';
             urledit = urledit.replace(':id', row.id);
-
+              data = '<div class="row">';
             @can('pedidos.pedidosPDF')
-              data = data+'<a href="'+urlpdf+'" class="btn btn-info btn-sm" target="_blank"><i class="fa fa-file-pdf"></i> PDF</a><br>';
+              data = data+'<div class="col-lg-12" style="margin-top:4px;"><a href="'+urlpdf+'" class="btn btn-info btn-sm w-100" target="_blank"><i class="fa fa-file-pdf"></i> PDF</a></div>';
             @endcan
             @can('pedidos.show')
-              data = data+'<a href="'+urlshow+'" class="btn btn-info btn-sm"><i class="fas fa-eye"></i> VER</a><br>';
+              data = data+'<div class="col-lg-12" style="margin-top:4px;"><a href="'+urlshow+'" class="btn btn-info btn-sm w-100"><i class="fas fa-eye"></i> VER</a></div>';
             @endcan
             @can('pedidos.edit')
               if(row.condicion_pa==0)
               {
-                data = data+'<a href="'+urledit+'" class="btn btn-warning btn-sm"> Editar</a><br>';
-              } 
+                data = data+'<div class="col-lg-12" style="margin-top:4px;"><a href="'+urledit+'" class="btn btn-warning btn-sm w-100"> Editar</a></div>';
+              }
             @endcan
             @can('pedidos.destroy')
             if(row.estado==0)
             {
-              data = data+'<a href="" data-target="#modal-restaurar" data-toggle="modal" data-restaurar="'+row.id+'" ><button class="btn btn-success btn-sm"><i class="fas fa-check"></i> Restaurar</button></a><br>';
+              data = data+'<div class="col-lg-12" style="margin-top:4px;"><a href="#" class="btn btn-danger btn-sm w-100" data-target="#modal-restaurar" data-toggle="modal" data-restaurar="'+row.id+'" ><i class="fas fa-check"></i> Restaurar</a><br>';
             }else{
               if(row.condicion_pa==0)
               {
-                data = data+'<a href="" data-target="#modal-delete" data-toggle="modal" data-delete="'+row.id+'" data-responsable="{{ $miidentificador }}"><button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i> Anular</button></a>';
-              }              
+                data = data+'<div class="col-lg-12" style="margin-top:4px;"><a href="" class="btn btn-danger btn-sm w-100" data-target="#modal-delete" data-toggle="modal" data-delete="'+row.id+'" data-responsable="{{ $miidentificador }}"><i class="fas fa-trash-alt"></i> Anular</a></div>';
+              }
             }
-              
-            @endcan     
-                
-            return data;             
+
+            @endcan
+            data = data+'</div>';
+
+            return data;
           }
         },
         ],
@@ -504,7 +542,7 @@
       var pasteData = e.originalEvent.clipboardData.getData('text')
       localStorage.setItem("search_tabla",pasteData);
     });
-    $(document).on("keypress",'#tablaPrincipal_filter label input',function(){      
+    $(document).on("keypress",'#tablaPrincipal_filter label input',function(){
       localStorage.setItem("search_tabla",$(this).val());
       console.log( "search_tabla es "+localStorage.getItem("search_tabla") );
     });
@@ -520,9 +558,9 @@
       localStorage.setItem("search_tabla",pasteData);
     });
 
-    
 
-    
+
+
 
     //$('#myInput').val( ... ).change();
 
@@ -546,7 +584,7 @@
       console.log("validar delete");
       var motivo = $("#motivo").val();
       var responsable = $("#responsable").val();
-   
+
       if (motivo.length < 1) {
         Swal.fire(
           'Error',
@@ -564,19 +602,19 @@
       else {
       //this.submit();
         clickformdelete();
-      }     
+      }
 
       /*var oForm = $(this);
       var formId = oForm.attr("id");
       var firstValue = oForm.find("input").first().val();
       alert("Form '" + formId + " is being submitted, value of first input is: " + firstValue);
-      // Do stuff 
+      // Do stuff
       return false;*/
    })
 
    $(document).on("submit", "#formrestaurar", function (evento) {
       evento.preventDefault();
-      clickformrestaurar();     
+      clickformrestaurar();
    });
 
   });
@@ -585,7 +623,7 @@
 <script>
   function resetearcamposdelete(){
       $('#motivo').val("");
-      $('#responsable').val("");      
+      $('#responsable').val("");
     }
 
   function clickformdelete()
@@ -599,8 +637,8 @@
         data:formData,
       }).done(function (data) {
         $("#modal-delete").modal("hide");
-        resetearcamposdelete();          
-        $('#tablaPrincipal').DataTable().ajax.reload();      
+        resetearcamposdelete();
+        $('#tablaPrincipal').DataTable().ajax.reload();
       });
     }
 
@@ -613,8 +651,8 @@
         data:formData,
       }).done(function (data) {
         $("#modal-restaurar").modal("hide");
-        //resetearcamposdelete();          
-        $('#tablaPrincipal').DataTable().ajax.reload();      
+        //resetearcamposdelete();
+        $('#tablaPrincipal').DataTable().ajax.reload();
       });
     }
 
@@ -637,7 +675,7 @@
   <script>
     //VALIDAR ANTES DE ENVIAR
     /*document.addEventListener("DOMContentLoaded", function() {
-      document.getElementById("formdelete").addEventListener('submit', validarFormularioDelete); 
+      document.getElementById("formdelete").addEventListener('submit', validarFormularioDelete);
     });*/
 
   </script>
@@ -649,14 +687,14 @@
         if (object.value.length > object.maxLength)
           object.value = object.value.slice(0, object.maxLength)
       }
-      
+
     //VALIDAR ANTES DE ENVIAR 2
-    document.addEventListener("DOMContentLoaded", function() {    
+    document.addEventListener("DOMContentLoaded", function() {
     var form = document.getElementById("formulario2")
       if(form)
       {
-        form.addEventListener('submit', validarFormulario2); 
-      }    
+        form.addEventListener('submit', validarFormulario2);
+      }
     });
 
     function validarFormulario2(evento) {
@@ -686,15 +724,15 @@
   <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
 
   <script>
-    /*window.onload = function () {      
+    /*window.onload = function () {
       $('#tablaPrincipal').DataTable().draw();
     }*/
   </script>
 
   <script>
     /* Custom filtering function which will search data in column four between two values */
-        $(document).ready(function () { 
-        
+        $(document).ready(function () {
+
             $.fn.dataTable.ext.search.push(
                 function (settings, data, dataIndex) {
                     var min = $('#min').datepicker("getDate");
@@ -711,7 +749,7 @@
                 }
             );
 
-      
+
             $("#min").datepicker({ onSelect: function () { table.draw(); }, changeMonth: true, changeYear: true , dateFormat:"dd/mm/yy"});
             $("#max").datepicker({ onSelect: function () { table.draw(); }, changeMonth: true, changeYear: true, dateFormat:"dd/mm/yy" });
             var table = $('#tablaPrincipal').DataTable();

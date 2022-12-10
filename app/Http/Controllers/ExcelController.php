@@ -377,6 +377,7 @@ class ExcelController extends Controller
                 ->pedidosProvincia($request)
                 ->download('reporte pedidos entregados.xlsx');
     }
+    
     public function pagosporasesorExcel(Request $request)
     {
         return (new PagosPorAsesorExport)

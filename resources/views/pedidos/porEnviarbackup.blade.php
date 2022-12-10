@@ -58,7 +58,7 @@
             <th scope="col">Código</th>
             <th scope="col">Asesor</th>
             <th scope="col">Cliente</th>
-            <th scope="col">Razón social</th>            
+            <th scope="col">Razón social</th>
             <th scope="col">Fecha de registro</th>
             <th scope="col">Fecha de envio</th>
             <th scope="col">Fecha de entrega</th>
@@ -82,9 +82,9 @@
                 <td>PED{{ $pedido->id }}</td>
               @endif
               <td>{{ $pedido->codigos }}</td>
-              <td>{{ $pedido->users }}</td> 
+              <td>{{ $pedido->users }}</td>
               <td>{{ $pedido->celulares }} - {{ $pedido->nombres }}</td>
-              <td>{{ $pedido->empresas }}</td>                           
+              <td>{{ $pedido->empresas }}</td>
               <td>{{ $pedido->fecha_envio_doc }}</td>
               <td>{{ $pedido->fecha_envio_doc_fis }}</td>
               <td>{{ $pedido->fecha_recepcion }}</td>
@@ -114,7 +114,7 @@
                 @endif
               </td>
               <td>
-              
+
                 @if($ver_botones_accion > 0)
                   @can('envios.enviar')
                     <a href="" data-target="#modal-enviar-{{ $pedido->id }}" data-toggle="modal"><button class="btn btn-success btn-sm"><i class="fas fa-envelope"></i> Entregado</button></a>
@@ -128,10 +128,10 @@
                   {{-- <a href="" data-target="#modal-destino-{{ $pedido->id }}" data-toggle="modal"><button class="btn btn-outline-dark btn-sm"><i class="fas fa-map"></i> Destino</button></a> --}}
                   <a href="{{ route('envios.createdireccion', $pedido) }}" class="btn btn-dark btn-sm"><i class="fas fa-map"></i> Destino</a>
                 @endif
-                {{-- @if($pedido->destino == 'LIMA' && $pedido->direccion == '0')                  
+                {{-- @if($pedido->destino == 'LIMA' && $pedido->direccion == '0')
                   <a href="{{ route('envios.createdireccion', $pedido) }}" class="btn btn-dark btn-sm"><i class="fas fa-motorcycle"></i> Direccion</a>
                 @endif
-                @if($pedido->destino == 'PROVINCIA' && $pedido->direccion == '0')                  
+                @if($pedido->destino == 'PROVINCIA' && $pedido->direccion == '0')
                   <a href="#" class="btn btn-secondary btn-sm"><i class="fas fa-bus"></i> Provincia</a>
                 @endif --}}
               </td>
@@ -218,10 +218,10 @@
       if (object.value.length > object.maxLength)
         object.value = object.value.slice(0, object.maxLength)
     }
-    
+
     //VALIDAR ANTES DE ENVIAR
     document.addEventListener("DOMContentLoaded", function() {
-    document.getElementById("formulario").addEventListener('submit', validarFormulario); 
+    document.getElementById("formulario").addEventListener('submit', validarFormulario);
     });
 
     function validarFormulario(evento) {
@@ -232,7 +232,7 @@
       var foto2 = document.getElementById('foto2').value;
       var pfoto2 = document.getElementById('pfoto2').value;
 
-      if (condicion == 'ENTREGADO') {
+      if (condicion == 3) {
         if (foto1 == '' && pfoto1 == '') {
           Swal.fire(
             'Error',
@@ -249,20 +249,20 @@
         }
         else {
         this.submit();
-        } 
+        }
       }
       else {
         this.submit();
-      }      
+      }
     }
   </script>
-  
+
   <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
-  
+
   <script>
     /* Custom filtering function which will search data in column four between two values */
-        $(document).ready(function () { 
-        
+        $(document).ready(function () {
+
 
             $("#destino", this).on( 'keyup change', function () {
               if ( table.column(i).search() !== this.value ) {

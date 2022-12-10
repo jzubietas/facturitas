@@ -3,6 +3,7 @@
 namespace App\Exports;
 
 use App\Models\Pago;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use Illuminate\Contracts\View\View;
@@ -17,8 +18,6 @@ class PagosExport implements FromView, ShouldAutoSize
 
     public function pagos($request)
     {
-        $pagos = null;
-
         $pagos = Pago::join('users as u', 'pagos.user_id', 'u.id')
             ->join('clientes as c', 'pagos.cliente_id', 'c.id')
             ->select('pagos.id as id',
@@ -75,8 +74,6 @@ class PagosExport implements FromView, ShouldAutoSize
 
             $pagos = $pagos->WhereIn('u.identificador', $usersasesores);
 
-        } else {
-            $pagos = $pagos;
         }
 
         $pagos = $pagos->get();

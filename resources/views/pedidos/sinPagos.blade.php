@@ -25,7 +25,7 @@
         <a href="" data-target="#modal-exportar" data-toggle="modal" class="dropdown-item" target="blank_"><img src="{{ asset('imagenes/icon-excel.png') }}"> Excel</a>
       </div>
     </div>
-    @include('pedidos.modal.exportar', ['title' => 'Exportar Lista de pedidos por cobrar', 'key' => '6'])    
+    @include('pedidos.modal.exportar', ['title' => 'Exportar Lista de pedidos por cobrar', 'key' => '6'])
   </h1>
   @if($superasesor > 0)
   <br>
@@ -57,10 +57,10 @@
             <th scope="col">Acciones</th>
           </tr>
         </thead>
-        <tbody>                      
+        <tbody>
         </tbody>
       </table>
-      @include('pedidos.modalid') 
+      @include('pedidos.modalid')
     </div>
   </div>
 
@@ -135,7 +135,7 @@
             {
             }else{
               $(row).addClass('textred');
-            }   */        
+            }   */
         },
         rowCallback: function (row, data, index) {
               /*var pedidodiferencia=data.diferencia;
@@ -149,16 +149,16 @@
                 }
               }*/
         },
-        initComplete:function(settings,json){          
+        initComplete:function(settings,json){
           /*if (localStorage. getItem("search_tabla") === null) {
             //no existe
           }else{
-            $('#tablaPrincipal_filter label input').val(localStorage.getItem("search_tabla") ).change();            
+            $('#tablaPrincipal_filter label input').val(localStorage.getItem("search_tabla") ).change();
           }*/
         },
         columns: [
           {
-            data: 'id', 
+            data: 'id',
             name: 'id',
             render: function ( data, type, row, meta ) {
               if(row.id<10){
@@ -169,13 +169,13 @@
                 return 'PED0'+row.id;
               }else{
                 return 'PED'+row.id;
-              } 
+              }
             },
             "visible":false,
         },
         {data: 'codigos', name: 'codigos', },
         {
-            data: 'celulares', 
+            data: 'celulares',
             name: 'celulares',
             render: function ( data, type, row, meta ) {
               if(row.icelulares!=null)
@@ -183,30 +183,42 @@
                 return row.celulares+'-'+row.icelulares+' '+row.nombres;
               }else{
                 return row.celulares+' '+row.nombres;;
-              }              
+              }
             },
         },
         {data: 'empresas', name: 'empresas', },
         {data: 'users', name: 'users', },
         {
-          data: 'fecha', 
-          name: 'fecha', 
+          data: 'fecha',
+          name: 'fecha',
         },
         {
-          data: 'total', 
-          name: 'total', 
+          data: 'total',
+          name: 'total',
           render: $.fn.dataTable.render.number(',', '.', 2, '')
         },
+            {
+                data: 'condiciones',
+                name: 'condiciones',
+                render: function ( data, type, row, meta ) {
+                    if(row.condiciones =='ANULADO'){
+                        return 'ANULADO';
+                    }else if(row.condiciones == 0){
+                        return 'ANULADO';
+                    }else if(row.condiciones == 1){
+                        return 'PENDIENTE DE ENVÍO';
+                    }else if(row.condiciones == 2){
+                        return 'EN REPARTO';
+                    }else if(row.condiciones == 3){
+                        return 'ENTREGADO';
+                    }else{
+                        return data;
+                    }
+                }
+            },
         {
-          data: 'condiciones', 
-          name: 'condiciones', 
-          render: function ( data, type, row, meta ) {
-              return data;
-          }
-        },
-        {
-          data: 'condicion_pa', 
-          name: 'condicion_pa', 
+          data: 'condicion_pa',
+          name: 'condicion_pa',
           render: function ( data, type, row, meta ) {
             if(row.condiciones=='ANULADO'){
                 return 'ANULADO';
@@ -229,12 +241,12 @@
                 //return data;
               }
             }
-            
+
           }
         },
         {
-          data: 'condiciones_aprobado', 
-          name: 'condiciones_aprobado', 
+          data: 'condiciones_aprobado',
+          name: 'condiciones_aprobado',
           render: function ( data, type, row, meta ) {
             if(data!=null)
             {
@@ -242,13 +254,13 @@
             }else{
               return 'SIN REVISAR';
             }
-              
+
           }
         },
         {
-          data: 'action', 
-          name: 'action', 
-          orderable: false, 
+          data: 'action',
+          name: 'action',
+          orderable: false,
           searchable: false,
           sWidth:'20%',
           render: function ( data, type, row, meta ) {
@@ -269,7 +281,7 @@
               if(row.condicion_pa==0)
               {
                 data = data+'<a href="'+urledit+'" class="btn btn-warning btn-sm"> Editar</a><br>';
-              } 
+              }
             @endcan
             @can('pedidos.destroy')
             if(row.estado==0)
@@ -279,10 +291,10 @@
               if(row.condicion_pa==0)
               {
                 data = data+'<a href="" data-target="#modal-delete" data-toggle="modal" data-delete="'+row.id+'" data-responsable="{{ $miidentificador }}"><button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i> Anular</button></a>';
-              }              
+              }
             }
-              
-            @endcan 
+
+            @endcan
             @can('pagos.create')
 
                 //var varpagar1 = "['id'=>:id]";
@@ -296,10 +308,10 @@
 
                 data = data+'<a class="clickpagar" href="'+varcreate+'" class="btn btn-success btn-sm" data-pagar="'+row.cliente_id+'"><button class="btn btn-success btn-sm"><i class="fas fa-check"></i> Pagar</button></a><br>';
 
-            @endcan 
+            @endcan
 
-                          
-            return data;             
+
+            return data;
           }
         },
 
@@ -313,15 +325,15 @@
         localStorage.setItem("search_tabla",pasteData);
         console.log("set "+pasteData)
       });
-      $(document).on("keypress",'#tablaPrincipal_filter label input',function(){      
+      $(document).on("keypress",'#tablaPrincipal_filter label input',function(){
         localStorage.setItem("search_tabla",$(this).val());
         console.log( "search_tabla es "+localStorage.getItem("search_tabla") );
       });
 
 
       $(document).on("click",".clickpagar",function(){
-        var button = $(event.relatedTarget) 
-        var idunico = button.data('pagar')   
+        var button = $(event.relatedTarget)
+        var idunico = button.data('pagar')
         localStorage.setItem('clickpagar', idunico);
       });
     });

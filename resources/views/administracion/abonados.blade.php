@@ -7,8 +7,8 @@
     @can('pagos.create')
       <a href="{{ route('pagos.create') }}" class="btn btn-info"><i class="fas fa-plus-circle"></i> Agregar</a>
     @endcan
-    
-    
+
+
     <div class="float-right btn-group dropleft">
       <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         Exportar
@@ -17,14 +17,14 @@
         <a href="" data-target="#modal-exportar" data-toggle="modal" class="dropdown-item" target="blank_"><img src="{{ asset('imagenes/icon-excel.png') }}"> Excel</a>
       </div>
     </div>
-    @include('pagos.modals.exportar', ['title' => 'Exportar Lista de pagos', 'key' => '7']) 
+    @include('pagos.modals.exportar', ['title' => 'Exportar Lista de pagos', 'key' => '7'])
 
   </h1>
 
   <div class="form-group col-lg-6">
-    
+
       <select name="asesores_pago" class="border form-control selectpicker border-secondary" id="asesores_pago" data-live-search="true">
-        <option value="">---- SELECCIONE ASESOR ----</option>         
+        <option value="">---- SELECCIONE ASESOR ----</option>
       </select>
   </div>
 
@@ -77,7 +77,7 @@
     .red {
       background-color: red !important;
     }
-      
+
     .white {
       background-color: white !important;
     }
@@ -125,7 +125,7 @@
 
 @section('js')
 
-  <!--<script src="{{ asset('js/datatables.js') }}"></script>--> 
+  <!--<script src="{{ asset('js/datatables.js') }}"></script>-->
   <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
   <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
 
@@ -141,8 +141,8 @@
         data:formData,
       }).done(function (data) {
         $("#modal-delete").modal("hide");
-        resetearcamposdelete();          
-        $('#tablaPrincipal').DataTable().ajax.reload();      
+        resetearcamposdelete();
+        $('#tablaPrincipal').DataTable().ajax.reload();
       });
     }
   </script>
@@ -177,9 +177,9 @@
     //});
 
     //para opcion eliminar  pagos
-    $('#modal-delete').on('show.bs.modal', function (event) {     
-      var button = $(event.relatedTarget) 
-      var idunico = button.data('delete')      
+    $('#modal-delete').on('show.bs.modal', function (event) {
+      var button = $(event.relatedTarget)
+      var idunico = button.data('delete')
       $("#hiddenId").val(idunico);
       if(idunico<10){
         idunico='PAG000'+idunico;
@@ -198,7 +198,7 @@
       console.log("validar delete");
       clickformdelete();
     })
-    
+
     $('#tablaPrincipal').DataTable({
         processing: true,
         serverSide: true,
@@ -212,10 +212,10 @@
             // etc
           },
         },
-        
-        /*createdRow: function( row, data, dataIndex){           
+
+        /*createdRow: function( row, data, dataIndex){
         },*/
-        /*rowCallback: function (row, data, index) {           
+        /*rowCallback: function (row, data, index) {
         },*/
         columns: [
           {
@@ -224,9 +224,9 @@
               "visible": false
           },
           {
-              data: 'id', 
+              data: 'id',
               name: 'id',
-              render: function ( data, type, row, meta ) {             
+              render: function ( data, type, row, meta ) {
                 if(row.id<10){
                   return 'PAG000'+row.id;
                 }else if(row.id<100){
@@ -235,13 +235,13 @@
                   return 'PAG0'+row.id;
                 }else{
                   return 'PAG'+row.id;
-                } 
+                }
               }
           },
           {data: 'celular', name: 'celular'},
           {
             data: 'codigos'
-            , name: 'codigos' 
+            , name: 'codigos'
             , render: function ( data, type, row, meta ) {
               if(data==null)
               {
@@ -256,7 +256,7 @@
                 return returndata;
                 //return data;
               }
-              
+
             }
           },
           { data: 'fecha', name: 'fecha' },////asesor
@@ -265,17 +265,17 @@
           //{ data: 'total_deuda', name: 'total_deuda'},//total_deuda
           { data: 'total_pago', name: 'total_pago'},//total_pago
           {
-            data: 'condicion', 
-            name: 'condicion', 
-            render: function ( data, type, row, meta ) {            
-              return data;             
+            data: 'condicion',
+            name: 'condicion',
+            render: function ( data, type, row, meta ) {
+              return data;
             }
           },//estado
           {data: 'action', name: 'action', orderable: false, searchable: false,sWidth:'20%'},
       ],
       language: {
         "decimal": "",
-        "emptyTable": "No hay informaciÃ³n",
+        "emptyTable": "No hay información",
         "info": "Mostrando del _START_ al _END_ de _TOTAL_ Entradas",
         "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
         "infoFiltered": "(Filtrado de _MAX_ total entradas)",
@@ -295,7 +295,7 @@
       },
 
     });
-        
+
 
 
 

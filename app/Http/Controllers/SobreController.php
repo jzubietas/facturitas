@@ -36,7 +36,7 @@ use DataTables;
 
 class SobreController extends Controller
 {
-    
+
     /**
      * Display a listing of the resource.
      *
@@ -44,13 +44,13 @@ class SobreController extends Controller
      */
     public function index()
     {
-        
+
     }
 
     public function Sobresporenviar()
     {
         $ver_botones_accion = 1;
-        
+
         if(Auth::user()->rol == "Asesor")
         {
             $ver_botones_accion = 0;
@@ -70,10 +70,10 @@ class SobreController extends Controller
                             ->pluck('distrito', 'distrito');
 
         $departamento = Departamento::where('estado', "1")
-                ->pluck('departamento', 'departamento');        
+                ->pluck('departamento', 'departamento');
 
         $superasesor = User::where('rol', 'Super asesor')->count();
-        
+
         return view('sobres.porEnviar', compact('superasesor','ver_botones_accion','distritos','departamento'));
     }
 
@@ -112,9 +112,9 @@ class SobreController extends Controller
                     'pedidos.observacion_devuelto',
                 )
                 ->where('pedidos.estado', '1')
-                ->whereIn('pedidos.envio', ['1','2']) // ENVIADO CONFIRMAR RECEPCION Y ENVIADO RECIBIDO 
+                ->whereIn('pedidos.envio', [Pedido::ENVIO_CONFIRMAR_RECEPCION,Pedido::ENVIO_RECIBIDO]) // ENVIADO CONFIRMAR RECEPCION Y ENVIADO RECIBIDO
                 ->where('dp.estado', '1')
-                ->whereIn('pedidos.condicion_envio',['PENDIENTE DE ENVIO']);
+                ->whereIn('pedidos.condicion_envio',[Pedido::PENDIENTE_DE_ENVIO]);
                 /*->groupBy(
                     'pedidos.id',
                     'pedidos.cliente_id',
@@ -148,7 +148,7 @@ class SobreController extends Controller
                 ->pluck('users.identificador');
 
             $pedidos=$pedidos->WhereIn('u.identificador',$asesores);
-            
+
         }else if(Auth::user()->rol == "Jefe de operaciones"){
             $operarios = User::where('users.rol', 'Operario')
                 -> where('users.estado', '1')
@@ -170,7 +170,7 @@ class SobreController extends Controller
 
         }else if(Auth::user()->rol == "Asesor"){
             $pedidos=$pedidos->Where('u.identificador',Auth::user()->identificador);
-            
+
         }
         else if(Auth::user()->rol == "Super asesor"){
             $pedidos=$pedidos->Where('u.identificador',Auth::user()->identificador);
@@ -186,17 +186,17 @@ class SobreController extends Controller
                 )
                 ->pluck('users.identificador');
 
-            $pedidos=$pedidos->WhereIn('u.identificador',$usersasesores);   
+            $pedidos=$pedidos->WhereIn('u.identificador',$usersasesores);
         }
         else{
             $pedidos=$pedidos;
         }
         $pedidos=$pedidos->get();
-        
+
         return Datatables::of($pedidos)
                     ->addIndexColumn()
-                    ->addColumn('action', function($pedido){     
-                        $btn='';                         
+                    ->addColumn('action', function($pedido){
+                        $btn='';
                         return $btn;
                     })
                     ->rawColumns(['action'])
@@ -211,7 +211,7 @@ class SobreController extends Controller
             $historicos=DireccionEnvio::where("id",0)->get();
             return Datatables::of($historicos)
                      ->addIndexColumn()
-                     ->addColumn('action', function($historico){     
+                     ->addColumn('action', function($historico){
                          $btn='';
                          return $btn;
                      })
@@ -234,7 +234,7 @@ class SobreController extends Controller
 
                 return Datatables::of($historicos)
                      ->addIndexColumn()
-                     ->addColumn('action', function($historico){     
+                     ->addColumn('action', function($historico){
                          $btn='';
                          return $btn;
                      })
@@ -252,13 +252,13 @@ class SobreController extends Controller
                         'direccion_envios.celular',
                         )
                     ->where('direccion_envios.estado', '1')
-                    ->where("direccion_envios.salvado",'1')
+                    //->where("direccion_envios.salvado",'1')
                     ->where('direccion_envios.cliente_id', $request->cliente_id);
 
                 $historicos=$query->get();
                 return Datatables::of($historicos)
                      ->addIndexColumn()
-                     ->addColumn('action', function($historico){     
+                     ->addColumn('action', function($historico){
                          $btn='';
                          return $btn;
                      })
@@ -266,18 +266,18 @@ class SobreController extends Controller
                      ->make(true);
 
             }
-            
+
         }
     }
 
     public function create()
-    {   
-       
+    {
+
     }
-    
+
     public function store(Request $request)
     {
-        
+
     }
 
     /**
@@ -288,7 +288,7 @@ class SobreController extends Controller
      */
     public function show(Pedido $pedido)
     {
-        
+
     }
 
     /**
@@ -299,7 +299,7 @@ class SobreController extends Controller
      */
     public function edit(Pedido $pedido)
     {
-        
+
     }
 
     /**
@@ -365,9 +365,9 @@ class SobreController extends Controller
                         'descripcion' => $descripcion[$contP],
                         'nota' => $nota[$contP]
                     ]);
-                    
+
                     $contP++;
-                }     
+                }
 
                 //ACTUALIZAR PORCENTAJE EN CLIENTE
                 $porcentaje = Porcentaje::where('cliente_id', $pedido->cliente_id)
@@ -380,7 +380,7 @@ class SobreController extends Controller
                 $pedido->update([
                     'modificador' => 'USER'.Auth::user()->id
                 ]);
-            
+
             DB::commit();
             }
         catch (\Throwable $th) {
@@ -392,10 +392,10 @@ class SobreController extends Controller
         if(Auth::user()->rol == "Asesor"){
             return redirect()->route('pedidos.mispedidos')->with('info', 'actualizado');
         }
-        else 
+        else
             return redirect()->route('pedidos.index')->with('info', 'actualizado');
 
-        
+
     }
 
     /**
@@ -429,7 +429,7 @@ class SobreController extends Controller
             $cliente->update([
                 'deuda' => '0'
             ]);
-        }   
+        }
 
         return redirect()->route('pedidos.index')->with('info', 'eliminado');
     }
@@ -447,9 +447,9 @@ class SobreController extends Controller
                 'estado' => '0'
             ]);
 
-            //$detalle_pedidos = DetallePedido::find($request->hiddenID);            
-            $detalle_pedidos = DetallePedido::where('pedido_id',$request->hiddenID)->first() ;          
-           
+            //$detalle_pedidos = DetallePedido::find($request->hiddenID);
+            $detalle_pedidos = DetallePedido::where('pedido_id',$request->hiddenID)->first() ;
+
             $detalle_pedidos->update([
                 'estado' => '0'
             ]);
@@ -459,15 +459,15 @@ class SobreController extends Controller
         return response()->json(['html' => $html]);
     }
     public function pedidosgrupotabla(Request $request)
-    {        
+    {
         $pedidos=null;
-        if (!$request->direcciongrupo) {            
+        if (!$request->direcciongrupo) {
         } else {
-            //$idrequest=explode("_",$request->direcciongrupo);        
-            
+            //$idrequest=explode("_",$request->direcciongrupo);
+
             $direcciongrupo = DireccionGrupo::find($request->direcciongrupo);
             $destino = $direcciongrupo->destino;
-            
+
             if($destino=='LIMA'){
                 $pedidos =  DireccionPedido::where("direcciongrupo",$request->direcciongrupo)
                  ->where("estado",'1');
@@ -477,11 +477,11 @@ class SobreController extends Controller
             }
 
             $pedidos=$pedidos->get();
-            
+
             return Datatables::of($pedidos)
-                    ->addIndexColumn()                  
+                    ->addIndexColumn()
                     ->make(true);
-        }       
+        }
     }
 
     public function EnvioDesvincular(Request $request)
@@ -495,7 +495,7 @@ class SobreController extends Controller
             return '0';
         }
         else{
-            $array_pedidos=explode(",",$pedidos);  
+            $array_pedidos=explode(",",$pedidos);
 
             //return var_dump($array_pedidos);
 
@@ -513,7 +513,7 @@ class SobreController extends Controller
                     ]);
                     $pedido = Pedido::where("id",$pedido_id)->first();
                     $pedido->update([
-                        "condicion_envio"=>'PENDIENTE DE ENVIO',
+                        "condicion_envio"=>1,
                         "envio"=>'1',
                         "observacion_devuelto"=>$observaciongrupo
                     ]);
@@ -535,7 +535,7 @@ class SobreController extends Controller
                     //return $pedido_id;
                     $pedido = Pedido::where("id",$pedido_id)->first();
                     $pedido->update([
-                        "condicion_envio"=>'PENDIENTE DE ENVIO',
+                        "condicion_envio"=>1,
                         "envio"=>'1',
                         "observacion_devuelto"=>$observaciongrupo
                     ]);
@@ -549,24 +549,24 @@ class SobreController extends Controller
                 }
             }
 
-          
-            
 
-          
+
+
+
 
             return response()->json(['html' => $array_pedidos]);
-          
+
 
         }
-        
-        
-        //$pedido=Pedido::where("id",$request->)
-        
 
-        
+
+        //$pedido=Pedido::where("id",$request->)
+
+
+
 
         //return redirect()->route('envios.index')->with('info','actualizado');
     }
 
-   
+
 }

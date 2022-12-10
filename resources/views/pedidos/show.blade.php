@@ -35,7 +35,7 @@
                 <label for="id_ingresomaterial">Estado</label>
                 <p>{{ $pedido->condiciones }}</p>
               </div>
-            </div>  
+            </div>
           </div>
         </div>
 
@@ -108,11 +108,11 @@
               </tfoot>
             </table>
           </div>
-        </div>      
+        </div>
 
         <br>
 
-        @if ($pedido->condiciones == "ATENDIDO")
+        @if ($pedido->condiciones == "3")
           <div class="border rounded card-body border-secondary">
             <table id="tabla" class="table table-striped" style="text-align: center">
               <thead><h4 style="text-align: center"><strong>Detalle de atención</strong></h4>
@@ -131,7 +131,7 @@
                           <p>
                             <a href="{{ route('pedidos.descargaradjunto', $img->adjunto) }}">{{ $img->adjunto }}</a>
                           </p>
-                      @endforeach                    
+                      @endforeach
                     </td>
                     <td>{{ $pedido->fecha_envio_doc }}</td>
                     <td>{{ $pedido->cant_compro }}</td>
@@ -145,20 +145,52 @@
           </div>
         @endif
 
+          <div class="border rounded card-body border-secondary">
+              <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                  <div class="row">
+                      <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                          <h4 style="font-weight:bold;">Detalle de atención</h4>
+                          <div class="row">
+                              <div class="col-lg-6">
+                                  <p><b>Cantidad de comprobantes enviados:</b></p>
+                                  <p>{{ $pedido->cant_compro }}</p>
+                              </div>
+                              <div class="col-lg-6">
+                                  <p><b>Archivos Adjuntados:</b></p>
+
+                                  @foreach($imagenesatencion as $img_at)
+                                      @if ($img_at->pedido_id == $pedido->id)
+                                          <p>
+                                              <a href="{{ route('pedidos.descargaradjunto', $img_at->adjunto) }}">{{ $img_at->adjunto }}</a>
+                                          </p>
+                                      @endif
+                                      @include('pedidos.modal.DeleteAdjuntoid')
+                                  @endforeach
+                              </div>
+
+                          </div>
+
+
+
+                      </div>
+                      <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                      </div>
+                  </div>
+              </div>
+          </div>
+          <br>
 
         <textarea class="form-control" rows="6" placeholder="Cotizacion" name="copiar_cotizacion" cols="50" id="copiar_cotizacion">
-        
+
         </textarea>
 
 
         <br>
+
+
         <!--<a href="{{ route('pedidos.index', $pedido) }}" class="btn btn-danger btn-sm">Cancelar</a>-->
         <div class="card-footer">
-          @if (Auth::user()->rol == "Asesor")
-            <a href="{{ url()->previous() }}" class="btn btn-danger"><i class="fas fas fa-arrow-left"></i>ATRAS</a>
-          @else
-            <a href="{{ url()->previous() }}" class="btn btn-danger"><i class="fas fas fa-arrow-left"></i>ATRAS</a>
-          @endif
+        <button type = "button" onClick="history.back()" class="btn btn-danger btn-lg"><i class="fas fa-arrow-left"></i>ATRAS</button>
         </div>
       </div>
     </div>
@@ -187,9 +219,9 @@
 
 
   <script>
-  
 
-  
+
+
 
   </script>
 

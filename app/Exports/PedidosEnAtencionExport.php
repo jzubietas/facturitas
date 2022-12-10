@@ -14,7 +14,7 @@ use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 class PedidosEnAtencionExport implements FromView, ShouldAutoSize
 {
     use Exportable;
-    
+
     public function pedidos($request) {
         $pedidos = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')
             ->join('users as u', 'pedidos.user_id', 'u.id')
@@ -38,7 +38,7 @@ class PedidosEnAtencionExport implements FromView, ShouldAutoSize
             )
             ->where('pedidos.estado', '1')
             ->where('dp.estado', '1')
-            ->where('pedidos.condicion', 'EN PROCESO ATENCION')
+            ->where('pedidos.condicion', 2)
             ->whereBetween(DB::raw('DATE(pedidos.created_at)'), [$request->desde, $request->hasta]) //rango de fechas
             ->groupBy(
                 'pedidos.id',
@@ -62,11 +62,11 @@ class PedidosEnAtencionExport implements FromView, ShouldAutoSize
 
         $this->pedidos = $pedidos;
         return $this;
-    }    
+    }
 
     public function view(): View {
         return view('pedidos.excel.pedidosenatencion', [
             'pedidos'=> $this->pedidos
         ]);
-    }    
+    }
 }

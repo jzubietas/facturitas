@@ -33,7 +33,7 @@ class PedidosPorEnviarPorFechasExport implements FromView, ShouldAutoSize
                 'c.celular as celular_cliente',
                 'dp.nombre_empresa as empresa',
                 'dp.cantidad as cantidad',
-                'dp.fecha_envio_doc as fecha_elaboracion',                
+                'dp.fecha_envio_doc as fecha_elaboracion',
                 'die.distrito as distrito',
                 'die.direccion as direccion',
                 'die.referencia as referencia',
@@ -49,7 +49,7 @@ class PedidosPorEnviarPorFechasExport implements FromView, ShouldAutoSize
             ->where('pedidos.direccion', '1')
             ->where('pedidos.destino', 'LIMA')
             ->where('di.provincia', 'LIMA')
-            ->whereIn('pedidos.condicion_envio', ['EN REPARTO'])//'PENDIENTE DE ENVIO',
+            ->whereIn('pedidos.condicion_envio', [2])//1,
             ->whereBetween(DB::raw('DATE(dp.fecha_recepcion)'), [$request->desde, $request->hasta]) //rango de fechas
             ->groupBy(
                 'pedidos.id',
@@ -74,7 +74,7 @@ class PedidosPorEnviarPorFechasExport implements FromView, ShouldAutoSize
                 )
             ->orderBy('pedidos.created_at', 'DESC')
             ->get();
-        
+
         $this->pedidosLima = $pedidosLima;
         return $this;
     }
@@ -97,7 +97,7 @@ class PedidosPorEnviarPorFechasExport implements FromView, ShouldAutoSize
                 'c.celular as celular_cliente',
                 'dp.nombre_empresa as empresa',
                 'dp.cantidad as cantidad',
-                'dp.fecha_envio_doc as fecha_elaboracion',  
+                'dp.fecha_envio_doc as fecha_elaboracion',
                 'ge.tracking as tracking',
                 'ge.registro as registro',
                 'ge.importe as importe',
@@ -109,7 +109,7 @@ class PedidosPorEnviarPorFechasExport implements FromView, ShouldAutoSize
             ->where('pedidos.envio', '<>', '0')
             ->where('pedidos.direccion', '1')
             ->where('pedidos.destino', 'PROVINCIA')
-            ->whereIn('pedidos.condicion_envio', ['EN REPARTO'])//'PENDIENTE DE ENVIO'
+            ->whereIn('pedidos.condicion_envio', [2])//1
             ->whereBetween(DB::raw('DATE(dp.fecha_recepcion)'), [$request->desde, $request->hasta]) //rango de fechas
             ->groupBy(
                 'pedidos.id',
@@ -131,11 +131,11 @@ class PedidosPorEnviarPorFechasExport implements FromView, ShouldAutoSize
                 )
             ->orderBy('pedidos.created_at', 'DESC')
             ->get();
-            
+
         $this->pedidosProvincia = $pedidosProvincia;
         return $this;
     }
-    
+
     public function view(): View {
         return view('pedidos.excel.pedidosporenviar', [
             'pedidosLima'=> $this->pedidosLima,

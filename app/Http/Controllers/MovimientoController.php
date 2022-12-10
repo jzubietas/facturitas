@@ -25,9 +25,9 @@ class MovimientoController extends Controller
     {
         $pagosobservados_cantidad = Pago::where('user_id', Auth::user()->id)//PAGOS OBSERVADOS
                 ->where('estado', '1')
-                ->where('condicion', 'OBSERVADO')
+                ->where('condicion', Pago::OBSERVADO)
                 ->count();
-        
+
         $superasesor = User::where('rol', 'Super asesor')->count();
 
         $bancos = [
@@ -93,9 +93,9 @@ class MovimientoController extends Controller
         $movimientos = $movimientos->select(
             'movimiento_bancarios.id',
             //'movimiento_bancarios.id as id2',
-            DB::raw(" (CASE WHEN movimiento_bancarios.id<10 THEN concat('MOV000',movimiento_bancarios.id) 
-                            WHEN movimiento_bancarios.id<100  THEN concat('MOV00',movimiento_bancarios.id) 
-                            WHEN movimiento_bancarios.id<1000  THEN concat('MOV0',movimiento_bancarios.id) 
+            DB::raw(" (CASE WHEN movimiento_bancarios.id<10 THEN concat('MOV000',movimiento_bancarios.id)
+                            WHEN movimiento_bancarios.id<100  THEN concat('MOV00',movimiento_bancarios.id)
+                            WHEN movimiento_bancarios.id<1000  THEN concat('MOV0',movimiento_bancarios.id)
                             ELSE concat('MOV',movimiento_bancarios.id) END) AS id2"),
             'movimiento_bancarios.banco',
             'movimiento_bancarios.titular',
@@ -109,17 +109,17 @@ class MovimientoController extends Controller
             'movimiento_bancarios.created_at',
         )
         ->orderBy('updated_at','desc');//actualizacion de orden para movimientos
-        $movimientos=$movimientos->get();
+        //$movimientos=$movimientos->get();
 
         /*->where(function ($query) {
             $query->where('c', '=', 1)
                   ->orWhere('d', '=', 1);
 */
-        
 
-        return Datatables::of($movimientos)
+
+        return Datatables::of(DB::table($movimientos))
                     ->addIndexColumn()
-                    ->addColumn('action', function($movimiento){     
+                    ->addColumn('action', function($movimiento){
                         $btn='';
                         return $btn;
                     })
@@ -151,7 +151,7 @@ class MovimientoController extends Controller
         //return $excluir;
         //return $conciliar;//2218
 
-        //reques conciliar 
+        //reques conciliar
         $comparar=DetallePago::where('id',$conciliar)->first();
         //return $comparar;
         $banco_compara=$comparar->banco;
@@ -170,7 +170,7 @@ class MovimientoController extends Controller
             $query->where('banco','LIKE','%'.$banco_compara.'%');
         }
 
-        
+
         //monto_compara=$comparar->monto;
         //return  $monto_compara;
 
@@ -202,7 +202,7 @@ class MovimientoController extends Controller
                 $query->where('titular','LIKE','%'.$titular_compara.'%');
             }
 
-            
+
         }
 
         $fecha_compra=$comparar->fecha;
@@ -229,7 +229,7 @@ class MovimientoController extends Controller
         //return $fecha_compra;
 
         /*if ($fechadeposito!='' || !is_null($fechadeposito) ) {
-            
+
             $query->where(DB::raw('DATE(movimiento_bancarios.fecha)'),'>=',''.$fechadeposito.'');
         }*/
         //return $fecha_compra;
@@ -239,15 +239,15 @@ class MovimientoController extends Controller
 
             $array_excluir=explode(",",$excluir);
             //return $array_excluir;
-            $query->whereNotIn('id',$array_excluir); 
+            $query->whereNotIn('id',$array_excluir);
             //whereNotIn('book_price', [100,200]
                }
-        
-        $movimientos = $query->orderBy('fecha', 'ASC')->get();
 
-        return Datatables::of($movimientos)
+        $movimientos = $query->orderBy('fecha', 'ASC');//->get();
+
+        return Datatables::of(DB::table($movimientos))
                     ->addIndexColumn()
-                    ->addColumn('action', function($movimiento){     
+                    ->addColumn('action', function($movimiento){
                         $btn='';
                         return $btn;
                     })
@@ -261,7 +261,7 @@ class MovimientoController extends Controller
             $html = '<option value="">' . trans('---- SELECCIONE ----') . '</option>';
         } else {
             $html = '<option value="">' . trans('---- SELECCIONE ----') . '</option>';
-            $tiposmovimientos = TipoMovimiento::where('tipo_movimientos.banco', $request->banco)->get();        
+            $tiposmovimientos = TipoMovimiento::where('tipo_movimientos.banco', $request->banco)->get();
             foreach ($tiposmovimientos as $tiposmovimiento) {
                 $html .= '<option value="' . $tiposmovimiento->descripcion . '">' . $tiposmovimiento->descripcion . '</option>';
             }
@@ -290,7 +290,7 @@ class MovimientoController extends Controller
         $monto = $request->monto;
         $descrip_otros = $request->descrip_otros;
         $monto=str_replace(',','',$monto);
- 
+
         $movimientos = MovimientoBancario::create([
             'banco' => $request->banco,
             'titular' => $request->titulares,
@@ -302,7 +302,7 @@ class MovimientoController extends Controller
             'pago' => '0',
             'detpago' => '0',
             'cabpago' => '0',
-            'descripcion_otros' =>$descrip_otros 
+            'descripcion_otros' =>$descrip_otros
         ]);
 
         //return redirect()->route('movimientos.index')->with('info', 'registrado');
@@ -333,7 +333,7 @@ class MovimientoController extends Controller
         if($movimiento_repeat == 0)
         {
             $html="sigue|0";
-            
+
         }else{
             $movimiento_repeat_select=MovimientoBancario::where('banco',$request->banco)
                             ->where('titular',$titular)
@@ -344,7 +344,7 @@ class MovimientoController extends Controller
             $repetido=$movimiento_repeat_select->id;
             $html="bloqueo|".$repetido;
 
-            
+
         }
         //$html=$titular;
         //$html=var_dump($request);
@@ -371,12 +371,12 @@ class MovimientoController extends Controller
             'pago' => '0',
             'detpago' => '0',
             'cabpago' => '0',
-            'descripcion_otros' =>$descrip_otros 
+            'descripcion_otros' =>$descrip_otros
         ]);
 
-        
+
         $html="ok|0";
-        
+
         return response()->json(['html' => $html]);
     }
 
@@ -403,7 +403,7 @@ class MovimientoController extends Controller
 
         $pagoPedidos = PagoPedido::join('pedidos as p', 'pago_pedidos.pedido_id', 'p.id')
             ->join('detalle_pedidos as dp', 'p.id', 'dp.pedido_id')
-            ->select('pago_pedidos.id', 
+            ->select('pago_pedidos.id',
                     'dp.codigo',
                     'p.id as pedidos',
                     'p.condicion',
@@ -417,8 +417,8 @@ class MovimientoController extends Controller
             ->where('pago_pedidos.pago_id', $movimiento->cabpago)
             ->get();
 
-        
-        $detallepago=DetallePago::where("id",$movimiento->detpago)->first(); 
+
+        $detallepago=DetallePago::where("id",$movimiento->detpago)->first();
         //
         return view('movimientos.show', compact('movimiento','pago','detallepago','pagoPedidos'));
     }
@@ -441,8 +441,8 @@ class MovimientoController extends Controller
                 DB::raw(" (CASE WHEN (select count(dpago.id) from detalle_pagos dpago where dpago.pago_id=pagos.id and dpago.estado in (1) )>1 then 'V' else 'I' end) as cantidad_voucher "),
                 DB::raw(" (CASE WHEN (select count(ppedidos.id) from pago_pedidos ppedidos where ppedidos.pago_id=pagos.id and ppedidos.estado in (1)  )>1 then 'V' else 'I' end) as cantidad_pedido "),
             )
-            ->first(); 
-        $detallepago=DetallePago::where("id",$movimiento->detpago)->first(); 
+            ->first();
+        $detallepago=DetallePago::where("id",$movimiento->detpago)->first();
 
     }
 
@@ -460,7 +460,7 @@ class MovimientoController extends Controller
         $monto = $request->monto;
         $descrip_otros = $request->descrip_otros;
         $monto=str_replace(',','',$monto);
- 
+
         $movimientos = MovimientoBancario::create([
             'banco' => $request->banco,
             'titular' => $request->titulares,
@@ -472,10 +472,10 @@ class MovimientoController extends Controller
             'pago' => '0',
             'detpago' => '0',
             'cabpago' => '0',
-            'descripcion_otros' =>$descrip_otros 
+            'descripcion_otros' =>$descrip_otros
         ]);
 
-        
+
     }
 
     public function actualiza(Request $request)
@@ -485,7 +485,7 @@ class MovimientoController extends Controller
         $monto = $request->monto;
         $descrip_otros = $request->descrip_otros;
         $monto=str_replace(',','',$monto);
- 
+
         $movimientos = MovimientoBancario::create([
             'banco' => $request->banco,
             'titular' => $request->titulares,
@@ -497,10 +497,10 @@ class MovimientoController extends Controller
             'pago' => '0',
             'detpago' => '0',
             'cabpago' => '0',
-            'descripcion_otros' =>$descrip_otros 
+            'descripcion_otros' =>$descrip_otros
         ]);
 
-        
+
     }
 
     /**
@@ -515,17 +515,17 @@ class MovimientoController extends Controller
         if (!$request->hiddenIDdelete) {
             $html=$request->hiddenIDdelete."--";
         } else {
-            
+
             $html=$request->hiddenIDdelete." id";
             $movimiento_id=$request->hiddenIDdelete;
-            
+
             //Cliente::where('clientes.id',$request->hiddenID)
             $movimiento = MovimientoBancario::where('movimiento_bancarios.id', $movimiento_id);//->first();
 
             try {
                 DB::beginTransaction();
 
-                $movimiento->update([            
+                $movimiento->update([
                     'estado' => 0
                 ]);
 
@@ -536,10 +536,10 @@ class MovimientoController extends Controller
             catch (\Throwable $th) {
                 throw $th;
                 $html="error";
-              
+
             }
-            
-            
+
+
         }
         return response()->json(['html' => $html]);
     }

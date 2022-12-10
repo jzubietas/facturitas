@@ -15,14 +15,14 @@ use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 class PedidosPorAtenderExport implements FromView, ShouldAutoSize
 {
     use Exportable;
-    
+
     public function pedidos($request) {
         $mirol=Auth::user()->rol;
 
         //$pedidos = null;
         //$pedidos = Pedido::where('estado', '1');
         //$pedidos = $pedidos->where('banco','like','%'.'a'.'%');
-        
+
         if($mirol=="Operario")
         {
             $asesores = User::where('users.rol', 'Asesor')
@@ -55,8 +55,8 @@ class PedidosPorAtenderExport implements FromView, ShouldAutoSize
                 )
                 ->where('pedidos.estado', '1')
                 ->where('dp.estado', '1')
-                ->WhereIn('pedidos.condicion',['POR ATENDER','EN PROCESO ATENCION'])
-                //->where('pedidos.condicion', 'POR ATENDER')
+                ->WhereIn('pedidos.condicion',[1,2])
+                //->where('pedidos.condicion', 1)
                 ->whereBetween(DB::raw('DATE(pedidos.created_at)'), [$request->desde, $request->hasta])
                 ->WhereIn('u.identificador',$asesores)
                 //->where('u.operario', Auth::user()->id)
@@ -120,8 +120,8 @@ class PedidosPorAtenderExport implements FromView, ShouldAutoSize
                 )
                 ->where('pedidos.estado', '1')
                 ->where('dp.estado', '1')
-                ->WhereIn('pedidos.condicion',['POR ATENDER','EN PROCESO ATENCION'])
-                //->where('pedidos.condicion', 'POR ATENDER')
+                ->WhereIn('pedidos.condicion',[1,2])
+                //->where('pedidos.condicion', 1)
                 ->whereBetween(DB::raw('DATE(pedidos.created_at)'), [$request->desde, $request->hasta])
                 //->where('u.jefe', Auth::user()->id)
                 ->WhereIn('u.identificador',$asesores)
@@ -169,8 +169,8 @@ class PedidosPorAtenderExport implements FromView, ShouldAutoSize
             )
             ->where('pedidos.estado', '1')
             ->where('dp.estado', '1')
-            //->where('pedidos.condicion', 'POR ATENDER')
-            ->WhereIn('pedidos.condicion',['POR ATENDER','EN PROCESO ATENCION'])
+            //->where('pedidos.condicion', 1)
+            ->WhereIn('pedidos.condicion',[1,2])
             ->whereBetween(DB::raw('DATE(pedidos.created_at)'), [$request->desde, $request->hasta])
             ->groupBy(
                 'pedidos.id',
@@ -193,13 +193,13 @@ class PedidosPorAtenderExport implements FromView, ShouldAutoSize
             ->get();
         }
 
-        
 
-        
+
+
 
         $this->pedidos = $pedidos;
         return $this;
-    }            
+    }
 
     public function view(): View {
         return view('pedidos.excel.pedidosporatender', [

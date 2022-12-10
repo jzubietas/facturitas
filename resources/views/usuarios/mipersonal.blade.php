@@ -245,7 +245,7 @@
 
   <script>
     //VALIDAR CAMPOS NUMERICO DE MONTO EN PAGOS
-    
+
     $('input.number').keyup(function(event) {
 
     if(event.which >= 37 && event.which <= 40){
@@ -255,7 +255,7 @@
     $(this).val(function(index, value) {
       return value
         .replace(/\D/g, "")
-        .replace(/([0-9])([0-9]{2})$/, '$1.$2')  
+        .replace(/([0-9])([0-9]{2})$/, '$1.$2')
         .replace(/\B(?=(\d{3})+(?!\d)\.?)/g, ",")
       ;
     });
@@ -281,12 +281,12 @@
           if (localStorage. getItem("search_tabla") === null) {
             //no existe
           }else{
-            $('#tablaPrincipal_filter label input').val(localStorage.getItem("search_tabla") ).change();            
-          }          
+            $('#tablaPrincipal_filter label input').val(localStorage.getItem("search_tabla") ).change();
+          }
         },
         columns: [
         {
-            data: 'id', 
+            data: 'id',
             name: 'id',
             render: function ( data, type, row, meta ) {
                     if(row.id<10){
@@ -345,6 +345,7 @@
               "previous": "Anterior"
               }
           },
+
     });
     $('#tablaPrincipal_filter label input').on('paste', function(e) {
       var pasteData = e.originalEvent.clipboardData.getData('text')

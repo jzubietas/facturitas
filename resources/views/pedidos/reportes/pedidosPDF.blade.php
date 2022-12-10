@@ -4,9 +4,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">  
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
-  <title>PDF PEDIDO</title> 
+  <title>PDF PEDIDO</title>
   <style>
     .textLayer {
   -webkit-touch-callout: none !important; /* iOS Safari */
@@ -32,8 +32,8 @@
       text-align: center;
       vertical-align: top;
       /*border: 1px solid #000;*/
-      font-size:20px;    
-      table-layout:fixed;  
+      font-size:20px;
+      table-layout:fixed;
     }
 
     #detalle th {
@@ -61,10 +61,14 @@
 <body>
   {{-- <h1 id="title">PEDIDO</h1> --}}
   <table id="tabla" class="table ">
-    @foreach ($pedidos as $pedido)          
+    @foreach ($pedidos as $pedido)
       <thead class="noselect">
         <tr >
-          <th colspan="2" style="background: white"><h2>PEDIDO</h2></th>
+          <th colspan="2" style="background: white">
+              <span>{{ $pedido->codigos }}</span><br>
+              <img src="@php echo $codigo_barras_img @endphp" width="200">
+              <h2>PEDIDO</h2>
+          </th>
         </tr>
       </thead>
       <tbody>
@@ -75,7 +79,7 @@
         @else
             <th scope="row"><br><span class="textLayer">CODIGO</span><br><br></th>
             <td><br><span class="textLayer">{{ $pedido->codigos }}</span><br><br></td>
-        @endif 
+        @endif
         </tr>
         <tr>
           @if ( ($mirol=="Asesor") && ($identificador=="06" || $identificador=="07" || $identificador=="08" || $identificador=="09" || $identificador=="10" ) )
@@ -96,7 +100,7 @@
             <th scope="row"><br>RUC<br><br></th>
             <td><br>{{ $pedido->ruc }}<br><br></td>
           @endif
-          
+
         </tr>
         <tr>
           @if ( ($mirol=="Asesor") && ($identificador=="06" || $identificador=="07" || $identificador=="08" || $identificador=="09" || $identificador=="10" ) )
@@ -106,16 +110,16 @@
             <td><br>{{ $pedido->empresas }}<br><br></td>
           @endif
 
-          
+
         </tr>
         <tr>
           @if ( ($mirol=="Asesor") && ($identificador=="06" || $identificador=="07" || $identificador=="08" || $identificador=="09" || $identificador=="10" ) )
-            <th scope="row"><br>MES<br><br></th>
+                <td><br>{{ $pedido->mes }}<br><br></td>
           @else
-            <th scope="row"><br>MES<br><br></th>
+            <td scope="row"><br>MES<br><br></td>
             <td><br>{{ $pedido->mes }}<br><br></td>
           @endif
-          
+
         </tr>
         <tr>
           @if ( ($mirol=="Asesor") && ($identificador=="06" || $identificador=="07" || $identificador=="08" || $identificador=="09" || $identificador=="10" ) )
@@ -124,7 +128,7 @@
             <th scope="row"><br>AÑO<br><br></th>
             <td><br>{{ $pedido->anio }}<br><br></td>
           @endif
-          
+
         </tr>
         <tr>
           @if ( ($mirol=="Asesor") && ($identificador=="06" || $identificador=="07" || $identificador=="08" || $identificador=="09" || $identificador=="10" ) )
@@ -133,7 +137,7 @@
             <th scope="row"><br>FISICO O ELECTRONICO<br><br></th>
             <td><br>{{ $pedido->tipo_banca }}<br><br></td>
           @endif
-          
+
         </tr>
 
         @if ( ($mirol=="Asesor") && ($identificador=="06" || $identificador=="07" || $identificador=="08" || $identificador=="09" || $identificador=="10" ) )
@@ -148,7 +152,7 @@
             <td colspan="2"><p>{{ $pedido->descripcion }}</div></p></td>
           </tr>
         @endif
-        
+
         @if ( ($mirol=="Asesor") && ($identificador=="06" || $identificador=="07" || $identificador=="08" || $identificador=="09" || $identificador=="10" ) )
           <tr>
             <td colspan="2"><p>{{ $pedido->nota }}</p></td>
@@ -162,11 +166,11 @@
           </tr>
         @endif
 
-        
+
       </tbody>
       <tfoot>
         <tr><td colspan="2"></td></tr>
-      </tfoot> 
+      </tfoot>
     @endforeach
   </table>
 </body>
