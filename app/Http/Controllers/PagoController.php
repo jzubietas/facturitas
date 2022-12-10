@@ -2439,6 +2439,19 @@ class PagoController extends Controller
             if ($condicion == Pago::ABONADO) {
                 $pago->update([
                     'fecha_aprobacion' => $fecha_aprobacion,
+                    'condicion_code' =>Pago::ABONADO_CODE
+                ]);
+            }
+
+            if ($condicion == Pago::Observado) {
+                $pago->update([
+                    'condicion_code' =>Pago::OBSERVADO_CODE
+                ]);
+            }
+
+            if ($condicion == Pago::PENDIENTE) {
+                $pago->update([
+                    'condicion_code' =>Pago::PENDIENTE_CODE
                 ]);
             }
 
