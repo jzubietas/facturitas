@@ -270,12 +270,12 @@
                 }
               }
         },
-        initComplete:function(settings,json){
+        initComplete:function(settings,json){          
           /*if (localStorage. getItem("search_tabla") === null) {
             //no existe
           }else{
             $('#tablaPrincipal_filter label input').val(localStorage.getItem("search_tabla") ).change();
-          } */
+          }*/
         },
         columns: [
           //ID
@@ -313,10 +313,10 @@
         },
         //EMPRESAS
         {data: 'empresas', name: 'empresas', },
-        {data: 'cantidad', name: 'cantidad', },
+        {data: 'cantidad', name: 'cantidad',render: $.fn.dataTable.render.number(',', '.', 2, ''), },
         //USUARIOS
         {data: 'users', name: 'users', },
-
+        
         //FECHA
         {
           data: 'fecha',

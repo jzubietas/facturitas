@@ -153,7 +153,7 @@
         for (let i = 0; i < files.length; i++) {
           fd.append('adjunto', $('input[type=file][name="adjunto[]"]')[0].files[0]);
         }
-        
+
         //console.log(files);
         //return false;
 

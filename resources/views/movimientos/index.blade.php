@@ -758,12 +758,12 @@ ul.form-stepper li a .form-stepper-circle {
                 $('td:eq(6)', row).css('color','red');
               }
         },
-        initComplete:function(settings,json){
+        initComplete:function(settings,json){          
           /*if (localStorage. getItem("search_tabla") === null) {
             //no existe
           }else{
-            $('#tablaPrincipal_filter label input').val(localStorage.getItem("search_tabla") ).change();
-          } */
+            $('#tablaPrincipal_filter label input').val(localStorage.getItem("search_tabla") ).change();            
+          }*/
         },
         columns: [
         {
@@ -874,7 +874,7 @@ ul.form-stepper li a .form-stepper-circle {
         ],
         language: {
         "decimal": "",
-        "emptyTable": "No hay informaciÃ³n",
+        "emptyTable": "No hay información",
         "info": "Mostrando del _START_ al _END_ de _TOTAL_ Entradas",
         "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
         "infoFiltered": "(Filtrado de _MAX_ total entradas)",

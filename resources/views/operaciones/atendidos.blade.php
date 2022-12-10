@@ -70,6 +70,7 @@
         <tbody>
         </tbody>
       </table>
+        @include('pedidos.modal.EditarAtencion')
       @include('pedidos.modal.envioid')
       @include('pedidos.modal.sinenvioid')
     </div>
@@ -132,6 +133,80 @@
 
   <script>
     $(document).ready(function () {
+
+        $('#modal-editar-atencion').on('show.bs.modal', function (event) {
+            //cuando abre el form de anular pedido
+            var button = $(event.relatedTarget)
+            var idunico = button.data('atencion')
+            $(".textcode").html("PED"+idunico);
+            $("#hiddenAtender").val(idunico);
+
+            /*$.ajax({
+                url: "{{ route('operaciones.editatencion',':id') }}".replace(':id',idunico),
+                data: idunico,
+                method: 'POST',
+                success: function(data) {
+                $('#listado_adjuntos').html(data);
+
+                }
+            });*/
+
+            $('#modal-delete-adjunto').on('shown.bs.modal', function (event) {
+                console.log("aa");
+                var button = $(event.relatedTarget)
+                var pedido_id = button.data('imgid')
+                var imgname = button.data('imgadjunto')
+
+
+                $("#eliminar_pedido_id").val(pedido_id);
+                $("#eliminar_pedido_id_imagen").val(imgname);
+                //campo oculto pedido id
+                //campo oculto imagname
+
+                $('#confirmar_delete_adjunto').on('click', function(e){
+                    e.preventDefault();
+                    let eliminar_pedido_id=$("#eliminar_pedido_id").val();
+                    let eliminar_pedido_id_imagen=$("#eliminar_pedido_id_imagen").val()
+                    var formData = 'eliminar_pedido_id='+ eliminar_pedido_id +'&eliminar_pedido_id_imagen=' + eliminar_pedido_id_imagen;
+
+                    $.ajax({
+                        type:'POST',
+                        url:"{{ route('operaciones.eliminaradjunto') }}",
+                        data:formData,
+                        success:function(data){
+                            console.log(data);
+                        }
+                    }).done(function (data) {
+                        $('#modal-delete-adjunto').modal('hide');
+                        $('#listado_adjuntos').html(data);
+                    });
+                });
+
+            });
+
+        });
+
+        $(document).on("submit", "#formdeleteadjunto", function (evento) {
+            evento.preventDefault();
+            //let eliminar_pedido_id=$("#eliminar_pedido_id").val()
+            //let eliminar_pedido_id_imagen=$("#eliminar_pedido_id_imagen").val()
+
+
+            var formData = $("#formdeleteadjunto").serialize();
+            console.log(formData);
+/*
+            $.ajax({
+                type:'POST',
+                url:"{{ route('operaciones.eliminaradjunto') }}",
+                data:formData,
+            }).done(function (data) {
+                console.log(data);
+            });*/
+        });
+
+
+
+
       $.ajaxSetup({
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -234,12 +309,12 @@
         },
         rowCallback: function (row, data, index) {
         },
-        initComplete:function(settings,json){
+        initComplete:function(settings,json){          
           /*if (localStorage. getItem("search_tabla") === null) {
             //no existe
           }else{
-            $('#tablaPrincipal_filter label input').val(localStorage.getItem("search_tabla") ).change();
-          } */
+            $('#tablaPrincipal_filter label input').val(localStorage.getItem("search_tabla") ).change();            
+          }*/
         },
         columns: [
           {
@@ -314,6 +389,11 @@
               @can('operacion.editatender')
                 data = data+'<a href="'+urledit+'" class="btn btn-warning btn-sm"><i class=""></i> Editar atención</a>';
               @endcan
+                /*
+              @can('operacion.editatender')
+                  data = data+'<a href="#" data-target="#modal-editar-atencion" data-toggle="modal" data-atencion="'+ row.id +'" class="btn btn-warning btn-sm"><i class=""></i> Editar atención 2</a>';
+              @endcan
+                */
               var urlpdf = '{{ route("pedidosPDF", ":id") }}';
               urlpdf = urlpdf.replace(':id', row.id);
               @can('operacion.PDF')
@@ -338,7 +418,7 @@
         ],
         language: {
           "decimal": "",
-          "emptyTable": "No hay informaciÃ³n",
+          "emptyTable": "No hay información",
           "info": "Mostrando del _START_ al _END_ de _TOTAL_ Entradas",
           "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
           "infoFiltered": "(Filtrado de _MAX_ total entradas)",

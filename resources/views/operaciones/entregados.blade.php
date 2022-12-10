@@ -204,12 +204,12 @@
         },
         rowCallback: function (row, data, index) {
         },
-        initComplete:function(settings,json){
+        initComplete:function(settings,json){          
           /*if (localStorage. getItem("search_tabla") === null) {
             //no existe
           }else{
-            $('#tablaPrincipal_filter label input').val(localStorage.getItem("search_tabla") ).change();
-          } */
+            $('#tablaPrincipal_filter label input').val(localStorage.getItem("search_tabla") ).change();            
+          }*/
         },
         columns: [
           {
@@ -237,7 +237,25 @@
             "visible":true,
           },
           {data: 'destino', name: 'destino',"visible":false },
-          {data: 'condicion', name: 'condicion', },
+          {
+              data: 'condicion',
+              name: 'condicion',
+              render: function ( data, type, row, meta ) {
+                  if(row.condicion =='ANULADO'){
+                      return 'ANULADO';
+                  }else if(row.condicion == 0){
+                      return 'ANULADO';
+                  }else if(row.condicion == 1){
+                      return 'PENDIENTE DE ENVÍO';
+                  }else if(row.condicion == 2){
+                      return 'EN REPARTO';
+                  }else if(row.condicion == 3){
+                      return 'ENTREGADO';
+                  }else{
+                      return data;
+                  }
+              }
+          },
           {data: 'atendido_por', name: 'atendido_por', },
           {data: 'jefe', name: 'jefe', },
           {
@@ -303,7 +321,7 @@
         ],
         language: {
           "decimal": "",
-          "emptyTable": "No hay informaciÃ³n",
+          "emptyTable": "No hay información",
           "info": "Mostrando del _START_ al _END_ de _TOTAL_ Entradas",
           "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
           "infoFiltered": "(Filtrado de _MAX_ total entradas)",

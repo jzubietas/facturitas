@@ -41,17 +41,18 @@ class NotificationsController extends Controller
         // Now, we create the notification dropdown main content.
 
         $dropdownHtml = '';
+        $devoluciones = [];
+        if (\Auth::check()) {
+            if (\Auth::user()->rol == \App\Models\User::ROL_ADMIN) {
+                $devoluciones = Devolucion::query()->with(['cliente', 'pago', 'asesor'])->noAtendidos()->get();
+                foreach ($devoluciones as $key => $devolucion) {
+                    $icon = "<i class='mr-2 fas fa-fw fa-envelope'></i>";
 
-
-        $devoluciones = Devolucion::query()->with(['cliente','pago','asesor'])->noAtendidos()->get();
-        foreach ($devoluciones as $key=>$devolucion) {
-            $icon = "<i class='mr-2 fas fa-fw fa-envelope'></i>";
-
-            $time = "<span class='float-right text-muted text-sm'>
+                    $time = "<span class='float-right text-muted text-sm'>
                        {$devolucion->created_at->diffForHumans()}
                      </span>";
 
-            $dropdownHtml .= "<a href='".route('pagos.devolucion',$devolucion)."' class='dropdown-item'>
+                    $dropdownHtml .= "<a href='" . route('pagos.devolucion', $devolucion) . "' class='dropdown-item'>
                              {$icon}
                              <span class='text-wrap'>
                               Pago por devolver a <b>{$devolucion->cliente->nombre}</b> un valor de <b>{$devolucion->amount_format}</b>
@@ -59,8 +60,10 @@ class NotificationsController extends Controller
                              {$time}
                               </a>";
 
-            if ($key < count($devoluciones) - 1) {
-                $dropdownHtml .= "<div class='dropdown-divider'></div>";
+                    if ($key < count($devoluciones) - 1) {
+                        $dropdownHtml .= "<div class='dropdown-divider'></div>";
+                    }
+                }
             }
         }
 
@@ -99,8 +102,8 @@ class NotificationsController extends Controller
         // Return the new notification data.
 
         return [
-            'icon' => 'fas fa-bell',
-            'label' => count(auth()->user()->unreadNotifications)+count($devoluciones),
+            'icon' => 'fas fa-envelope',
+            'label' => count(auth()->user()->unreadNotifications) + count($devoluciones),
             'label_color' => 'danger',
             'icon_color' => 'white',
             'dropdown' => $dropdownHtml,
@@ -110,7 +113,12 @@ class NotificationsController extends Controller
     public function index()
     {
         $postNotifications = auth()->user()->unreadNotifications;
-        $devoluciones = Devolucion::query()->with(['cliente','pago','asesor'])->noAtendidos()->get();
+        $devoluciones=[];
+        if (\Auth::check()) {
+            if (\Auth::user()->rol == \App\Models\User::ROL_ADMIN) {
+                $devoluciones = Devolucion::query()->with(['cliente', 'pago', 'asesor'])->noAtendidos()->get();
+            }
+        }
         //return $devoluciones;
         return view('notifications.index', compact('postNotifications', 'devoluciones'));
     }
