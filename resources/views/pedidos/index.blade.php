@@ -313,7 +313,7 @@
         },
         //EMPRESAS
         {data: 'empresas', name: 'empresas', },
-        {data: 'cantidad', name: 'cantidad', },
+        {data: 'cantidad', name: 'cantidad',render: $.fn.dataTable.render.number(',', '.', 2, ''), },
         //USUARIOS
         {data: 'users', name: 'users', },
         

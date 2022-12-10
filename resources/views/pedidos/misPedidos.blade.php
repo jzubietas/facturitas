@@ -224,7 +224,7 @@
             //searchable: true
         },
         {data: 'empresas', name: 'empresas', },
-        {data: 'cantidad', name: 'cantidad', },
+        {data: 'cantidad', name: 'cantidad', render: $.fn.dataTable.render.number(',', '.', 2, ''),},
         {data: 'users', name: 'users', },
         {data: 'fecha', name: 'fecha', },
         {
