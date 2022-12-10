@@ -2229,9 +2229,9 @@ class PagoController extends Controller
                 'pagos.created_at as fecha'
             )
             ->where('pagos.estado', '1')
-            ->where('dpe.estado', '1')
-            ->where('dpa.estado', '1')
-            ->where('u.id', Auth::user()->id)
+            //->where('dpe.estado', '1')
+            //->where('dpa.estado', '1')
+            //->where('u.identificador', Auth::user()->identificador)
             ->where('pagos.condicion', Pago::ADELANTO)
             ->groupBy('pagos.id',
                 'dpe.codigo',
@@ -2250,39 +2250,7 @@ class PagoController extends Controller
     //funcion pagos observados *
     public function PagosObservados(Request $request)
     {
-        /*$pagos = Pago::join('users as u', 'pagos.user_id', 'u.id')
-            ->join('detalle_pagos as dpa', 'pagos.id', 'dpa.pago_id')
-            ->join('pago_pedidos as pp', 'pagos.id', 'pp.pago_id')
-            ->join('pedidos as p', 'pp.pedido_id', 'p.id')
-            ->join('detalle_pedidos as dpe', 'p.id', 'dpe.pedido_id')
-            ->select('pagos.id',
-                DB::raw("GROUP_CONCAT(dpe.codigo) as codigos"),
-                //'dpe.codigo as codigos',
-                'u.name as users',
-                //'pagos.observacion', cambio 19/10/2022 08.55am anterior * zubieta - a solicitud de ruben
-                'dpa.observacion', //cambio 19/10/2022 08.55am nuevo * zubieta - a solicitud de ruben
-                DB::raw('sum(dpe.total) as total_deuda'),
-                DB::raw('sum(dpa.monto) as total_pago'),
-                'pagos.condicion',
-                'pagos.created_at as fecha'
-            )
-            ->where('pagos.estado', '1')
-            ->where('dpe.estado', '1')
-            ->where('dpa.estado', '1')
-            //->where('u.id', Auth::user()->id)
-            ->where('pagos.condicion', Pago::OBSERVADO)
-            ->groupBy('pagos.id',
-               // 'dpe.codigo',
-                'u.name',
-                //'pagos.observacion', cambio 19/10/2022 08.55am anterior * zubieta - a solicitud de ruben
-                'dpa.observacion', //cambio 19/10/2022 08.55am nuevo * zubieta - a solicitud de ruben
-                //'dpe.total',
-                //'pagos.total_cobro',
-                'pagos.condicion',
-                'pagos.created_at');
-
-        */
-
+       
         if ($request->has("datatable")) {
             $pagos = Pago::join('users as u', 'pagos.user_id', 'u.id')
                 ->join('clientes as c', 'pagos.cliente_id', 'c.id')

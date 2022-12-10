@@ -50,10 +50,8 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
 
     Route::get('clientes.createbf', [ClienteController::class, 'createbf'])->name('clientes.createbf');
     Route::post('clientes.storebf', [ClienteController::class, 'storebf'])->name('clientes.storebf');
-    Route::post('basefriacliente/{cliente}', [ClienteController::class, 'updatebf'])->name('updatebf');
 
-    Route::post('basefriaclienteRequest', [ClienteController::class, 'updatebfpost'])->name('basefriaRequest.post');
-
+    
     Route::get('clientes.editbf/{cliente}/edit2', [ClienteController::class, 'editbf'])->name('clientes.editbf');
 
     Route::post('clientedeleteRequest', [ClienteController::class, 'destroyid'])->name('clientedeleteRequest.post');
@@ -75,11 +73,16 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::get('clientes.recuperados', [ClienteController::class, 'indexrecuperado'])->name('clientes.recuperados');
     Route::get('recuperadostabla', [ClienteController::class, 'indexrecuperadotabla'])->name('recuperadostabla');
 
-    Route::get('basefria', [ClienteController::class, 'indexbf'])->name('basefria');//actualizado para serverside
-/*Controller Cliente*/
+    /*Controller Cliente*/
 
 /*Controller Basefria*/
-    Route::get('basefriatabla', [BasefriaController::class, 'index'])->name('basefriatabla');//actualizado para serverside
+    Route::post('basefriacliente/{cliente}', [BasefriaController::class, 'updatebf'])->name('updatebf');
+
+    Route::post('basefriaclienteRequest', [BasefriaController::class, 'updatebfpost'])->name('basefriaRequest.post');
+
+    Route::get('basefria', [BasefriaController::class, 'index'])->name('basefria');//actualizado para serverside
+
+    Route::get('basefriatabla', [BasefriaController::class, 'indextabla'])->name('basefriatabla');//actualizado para serverside
     Route::get('basefria.cargarid', [BasefriaController::class, 'cargarid'])->name('basefria.cargarid');
 /*Controller Basefria*/
 
@@ -181,12 +184,12 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::get('envios.porrecibirtabla', [EnvioController::class, 'Enviosporrecibirtabla'])->name('envios.porrecibirtabla');
     Route::get('envios.rutaenvio', [EnvioController::class, 'Enviosrutaenvio'])->name('envios.rutaenvio');
     Route::get('envios.rutaenviotabla', [EnvioController::class, 'Enviosrutaenviotabla'])->name('envios.rutaenviotabla');
-    Route::get('envios.index', [EnvioController::class, 'Envios'])->name('envios.index');
-    Route::get('envios.indextabla', [EnvioController::class, 'Enviostabla'])->name('envios.indextabla');
+    Route::get('envios.enreparto', [EnvioController::class, 'Enviosenreparto'])->name('envios.enreparto');
+    Route::get('envios.enrepartotabla', [EnvioController::class, 'Enviosenrepartotabla'])->name('envios.enrepartotabla');
     Route::get('envios.seguimientoprovincia', [EnvioController::class, 'Seguimientoprovincia'])->name('envios.seguimientoprovincia');
     Route::get('envios.seguimientoprovinciatabla', [EnvioController::class, 'Seguimientoprovinciatabla'])->name('envios.seguimientoprovinciatabla');
-    Route::get('envios.enviados', [EnvioController::class, 'Enviados'])->name('envios.enviados');
-    Route::get('envios.enviadostabla', [EnvioController::class, 'Enviadostabla'])->name('envios.enviadostabla');
+    Route::get('envios.entregados', [EnvioController::class, 'Entregados'])->name('envios.enviados');
+    Route::get('envios.entregadostabla', [EnvioController::class, 'Entregadostabla'])->name('envios.enviadostabla');
     /*Envios */
 
     /*Operaciones*/

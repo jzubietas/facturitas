@@ -109,7 +109,7 @@ class MovimientoController extends Controller
             'movimiento_bancarios.created_at',
         )
         ->orderBy('updated_at','desc');//actualizacion de orden para movimientos
-        $movimientos=$movimientos->get();
+        //$movimientos=$movimientos->get();
 
         /*->where(function ($query) {
             $query->where('c', '=', 1)
@@ -117,7 +117,7 @@ class MovimientoController extends Controller
 */
 
 
-        return Datatables::of($movimientos)
+        return Datatables::of(DB::table($movimientos))
                     ->addIndexColumn()
                     ->addColumn('action', function($movimiento){
                         $btn='';
@@ -243,9 +243,9 @@ class MovimientoController extends Controller
             //whereNotIn('book_price', [100,200]
                }
 
-        $movimientos = $query->orderBy('fecha', 'ASC')->get();
+        $movimientos = $query->orderBy('fecha', 'ASC');//->get();
 
-        return Datatables::of($movimientos)
+        return Datatables::of(DB::table($movimientos))
                     ->addIndexColumn()
                     ->addColumn('action', function($movimiento){
                         $btn='';

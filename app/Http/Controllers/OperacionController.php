@@ -109,41 +109,8 @@ class OperacionController extends Controller
             )
             ->where('pedidos.estado', '1')
             ->where('dp.estado', '1')
-            ->whereIn('pedidos.condicion', ['POR ATENDER','EN PROCESO ATENCION']);
-            /*->groupBy(
-                'pedidos.id',
-                'c.nombre',
-                'c.celular',
-                'u.identificador',
-                'dp.codigo',
-                'dp.nombre_empresa',
-                'dp.total',
-                'pedidos.condicion',
-                'pedidos.created_at',
-                'dp.envio_doc',
-                'dp.fecha_envio_doc',
-                'dp.cant_compro',
-                'dp.fecha_envio_doc_fis',
-                'dp.fecha_recepcion'
-            );*/
-            //->orderBy('pedidos.created_at', 'DESC')
-            //->get();
-        //$pedidos=$pedidos->get();
-
-        /*return Datatables::of($pedidos)
-                    ->addIndexColumn()
-                    ->addColumn('action', function($pedido){
-                        $btn='';
-                        return $btn;
-                    })
-                    ->addColumn('action2', function($pedido){
-                        $btn='';
-                        return $btn;
-                    })
-                    ->rawColumns(['action','action2'])
-                    ->make(true);*/
-
-
+            ->whereIn('pedidos.condicion', [Pedido::POR_ATENDER,Pedido::EN_PROCESO_ATENCION]);
+            
         if(Auth::user()->rol == "Operario"){
 
             $asesores = User::whereIN('users.rol', ['Asesor','Administrador'])
@@ -254,7 +221,8 @@ class OperacionController extends Controller
                 ->where('dp.estado', '1')
                 //->WhereIn('u.identificador',$asesores)
                 //->where('u.operario', Auth::user()->id)
-                ->where('pedidos.condicion', 'ATENDIDO')
+                //->where('pedidos.condicion', 'ATENDIDO')
+                ->where('pedidos.condicion', Pedido::ATENDIDO)
                 ->whereIn('pedidos.envio', ['0'])
                 ->groupBy(
                     'pedidos.id',
@@ -390,7 +358,7 @@ class OperacionController extends Controller
                 )
                 ->where('pedidos.estado', '1')
                 ->where('dp.estado', '1')
-                ->where('pedidos.condicion', 3)
+                ->where('pedidos.condicion', Pedido::ATENDIDO)
                 ->whereIn('pedidos.envio', ['1','2','3'])
                 //->whereIn('pedidos.envio', ['0'])
                 ->whereBetween( 'pedidos.created_at', [$min, $max]);
@@ -439,9 +407,9 @@ class OperacionController extends Controller
         }else{
             $pedidos=$pedidos;
         }
-        $pedidos=$pedidos->get();
+        //$pedidos=$pedidos->get();
 
-        return Datatables::of($pedidos)
+        return Datatables::of(DB::table($pedidos))//Datatables::of($pedidos)
             ->addIndexColumn()
             ->addColumn('action', function($pedido){
                 $btn='';
@@ -755,7 +723,7 @@ class OperacionController extends Controller
         $imagenes = ImagenPedido::where('imagen_pedidos.pedido_id', $pedido->id)->get();
         $imagenesatencion = ImagenAtencion::where('imagen_atencions.pedido_id', $pedido->id)->get();
 
-        return view('pedidos.showAtender', compact('pedido','pedidos', 'imagenes', 'imagenesatencion'));
+        return view('operaciones.showAtender', compact('pedido','pedidos', 'imagenes', 'imagenesatencion'));
     }
 
 

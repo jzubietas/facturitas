@@ -1778,7 +1778,7 @@ return ' no imagen ';
                 )
                 ->where('pedidos.estado', '1')
                 ->where('dp.estado', '1')
-                ->whereIn('pedidos.condicion', [1, 2, 3, 'ANULADO'])
+                ->whereIn('pedidos.condicion', [Pedido::POR_ATENDER, Pedido::EN_PROCESO_ATENCION, Pedido::ATENDIDO, 'ANULADO'])
                 ->groupBy(
                     'pedidos.id',
                     'c.nombre',

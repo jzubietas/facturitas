@@ -47,7 +47,7 @@ class EnvioController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    public function Envios()//SOBRES EN REPARTO
+    public function Enviosenreparto()//SOBRES EN REPARTO
     {
 
         $distribuir = [
@@ -106,7 +106,7 @@ class EnvioController extends Controller
         return view('envios.porEnviar', compact('condiciones', 'distritos', 'direcciones', 'destinos', 'superasesor','ver_botones_accion','departamento','distribuir'));
     }
 
-    public function Enviostabla(Request $request)
+    public function Enviosenrepartotabla(Request $request)
     {
         $pedidos=null;
 
@@ -114,8 +114,9 @@ class EnvioController extends Controller
             ->join('clientes as c', 'c.id', 'de.cliente_id')
             ->join('users as u', 'u.id', 'c.user_id')
             ->where('direccion_grupos.estado','1')
-            ->where('direccion_grupos.condicion_envio',2)
-            ->whereNotIn('direccion_grupos.condicion_envio',['REGISTRADO','EN CAMINO','EN TIENDA/AGENTE','NO ENTREGADO'])
+            ->where('direccion_grupos.condicion_envio',DireccionGrupo::CE_EN_REPARTO)
+            ->whereNull('direccion_grupos.subcondicion_envio')
+            //->whereNotIn('direccion_grupos.subcondicion_envio',[DireccionGrupo::SCE_REGISTRADO,DireccionGrupo::SCE_EN_CAMINO,DireccionGrupo::SCE_EN_TIENDA_AGENTE,DireccionGrupo::SCE_NO_ENTREGADO])
             ->select(
                 'direccion_grupos.id',
                 'u.identificador as identificador',
@@ -143,8 +144,9 @@ class EnvioController extends Controller
             ->join('clientes as c', 'c.id', 'de.cliente_id')
             ->join('users as u', 'u.id', 'c.user_id')
             ->where('direccion_grupos.estado','1')
-            ->where('direccion_grupos.condicion_envio',2)
-            ->whereNotIn('direccion_grupos.condicion_envio',['REGISTRADO','EN CAMINO','EN TIENDA/AGENTE','NO ENTREGADO'])
+            ->where('direccion_grupos.condicion_envio',DireccionGrupo::CE_EN_REPARTO)
+            ->whereNull('direccion_grupos.subcondicion_envio')
+            //->whereNotIn('direccion_grupos.subcondicion_envio',[DireccionGrupo::SCE_REGISTRADO,DireccionGrupo::SCE_EN_CAMINO,DireccionGrupo::SCE_EN_TIENDA_AGENTE,DireccionGrupo::SCE_NO_ENTREGADO])
             ->select(
                 'direccion_grupos.id',
                 'u.identificador as identificador',
@@ -307,7 +309,7 @@ class EnvioController extends Controller
 
     }
 
-    public function Enviados()//ENTREGADOS
+    public function Entregados()//ENTREGADOS
     {
 
         $distribuir = [
@@ -330,7 +332,7 @@ class EnvioController extends Controller
         return view('envios.enviados', compact('dateMin', 'dateMax', 'condiciones', 'superasesor'));
     }
 
-    public function Enviadostabla()//ENTREGADOS
+    public function Entregadostabla()//ENTREGADOS
     {
         $mirol=Auth::user()->rol;
 
@@ -341,7 +343,7 @@ class EnvioController extends Controller
             ->join('clientes as c', 'c.id', 'de.cliente_id')
             ->join('users as u', 'u.id', 'c.user_id')
             ->where('direccion_grupos.estado','1')
-            ->where('direccion_grupos.condicion_envio',3)
+            ->where('direccion_grupos.condicion_envio',DireccionGrupo::CE_ENTREGADO)
             ->select(
                 'direccion_grupos.id',
                 'u.identificador as identificador',
@@ -350,9 +352,9 @@ class EnvioController extends Controller
                 'de.nombre',
                 'de.cantidad',
                 //DB::raw(" (select group_concat(dp.codigo_pedido) from direccion_pedidos dp where dp.direcciongrupo=direccion_grupos.id) as codigos "),
-                //DB::raw(" (select group_concat(ab.empresa) from direccion_pedidos ab where ab.direcciongrupo=direccion_grupos.id) as producto "),
+                DB::raw(" (select group_concat(ab.empresa) from direccion_pedidos ab where ab.direcciongrupo=direccion_grupos.id) as producto "),
                 'direccion_grupos.codigos',
-                'direccion_grupos.producto',
+                //'direccion_grupos.producto',
                 'de.direccion',
                 'de.referencia',
                 'de.observacion',
@@ -371,7 +373,7 @@ class EnvioController extends Controller
             ->join('clientes as c', 'c.id', 'de.cliente_id')
             ->join('users as u', 'u.id', 'c.user_id')
             ->where('direccion_grupos.estado','1')
-            ->where('direccion_grupos.condicion_envio',3)
+            ->where('direccion_grupos.condicion_envio',DireccionGrupo::CE_ENTREGADO)
             ->select(
                 'direccion_grupos.id',
                 'u.identificador as identificador',
@@ -380,9 +382,9 @@ class EnvioController extends Controller
                 DB::raw(" (select '') as nombre "),
                 'de.cantidad',
                 //DB::raw(" (select group_concat(dp.codigo_pedido) from gasto_pedidos dp where dp.direcciongrupo=direccion_grupos.id) as codigos "),
-                //DB::raw(" (select group_concat(ab.empresa) from gasto_pedidos ab where ab.direcciongrupo=direccion_grupos.id) as producto "),
+                DB::raw(" (select group_concat(ab.empresa) from gasto_pedidos ab where ab.direcciongrupo=direccion_grupos.id) as producto "),
                 'direccion_grupos.codigos',
-                'direccion_grupos.producto',
+                //'direccion_grupos.producto',
                 'de.tracking as direccion',
                 'de.foto as referencia',
                 DB::raw(" (select '') as observacion "),
@@ -1039,8 +1041,9 @@ class EnvioController extends Controller
             ->join('clientes as c', 'c.id', 'de.cliente_id')
             ->join('users as u', 'u.id', 'c.user_id')
             ->where('direccion_grupos.estado','1')
-            ->where('direccion_grupos.condicion_envio',2)
-            ->whereIn('direccion_grupos.subcondicion_envio',['REGISTRADO','EN CAMINO','EN TIENDA/AGENTE','NO ENTREGADO'])
+            ->where('direccion_grupos.condicion_envio',DireccionGrupo::CE_EN_REPARTO)
+            ->whereNull('direccion_grupos.subcondicion_envio')
+            //->whereIn('direccion_grupos.subcondicion_envio',['REGISTRADO','EN CAMINO','EN TIENDA/AGENTE','NO ENTREGADO'])
             ->select(
                 'direccion_grupos.id',
                 'u.identificador as identificador',
@@ -1048,7 +1051,8 @@ class EnvioController extends Controller
                 DB::raw(" (select '') as celular "),
                 DB::raw(" (select '') as nombre "),
                 'de.cantidad',
-                DB::raw(" (select group_concat(dp.codigo_pedido) from gasto_pedidos dp where dp.direcciongrupo=direccion_grupos.id) as codigos "),
+                'direccion_grupos.codigos',
+                //DB::raw(" (select group_concat(dp.codigo_pedido) from gasto_pedidos dp where dp.direcciongrupo=direccion_grupos.id) as codigos "),
                 DB::raw(" (select group_concat(ab.empresa) from gasto_pedidos ab where ab.direcciongrupo=direccion_grupos.id) as producto "),
                 'de.tracking as direccion',
                 'de.foto as referencia',
