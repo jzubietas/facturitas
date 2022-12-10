@@ -398,28 +398,18 @@
                         <div class="card-header">Buscar Cliente</div>
                         <div class="card-header">
                             <div class="row">
-                                <div class="col-md-9">
+                                <div class="col-md-8">
                                     <div class="form-group">
                                         <input id="input_search_cliente" class="form-control" placeholder="Buscar cliente">
                                     </div>
                                 </div>
-                                <div class="col-md-3">
-                                    <button type="button" class="btn btn-light btn-block" id="buttom_search_cliente">
+                                <div class="col-md-4">
+                                    <button type="button" class="btn btn-dark" id="buttom_search_cliente">
                                         <i class="fa fa-search"></i>
                                         Buscar Cliente
                                     </button>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-9">
-                                    <div class="form-group">
-                                        <input id="input_search_ruc" class="form-control" placeholder="Buscar Ruc">
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <button type="button" class="btn btn-light btn-block" id="buttom_search_ruc">
-                                        <i class="fa fa-search"></i>
-                                        Buscar Ruc
+                                    <button type="button" class="btn btn-light" id="buttom_search_cliente_clear">
+                                        <i class="fa fa-times"></i>
                                     </button>
                                 </div>
                             </div>
@@ -432,49 +422,31 @@
                     </div>
                 </div>
                 <div class="col-lg-6 col-sm-6 col-md-6 col-xs-12">
-                    <br>
-                    <h4>CANTIDAD DIARIA DE PEDIDOS POR ASESOR</h4>
+                    <div class="card">
+                        <div class="card-header">Buscar por Ruc</div>
+                        <div class="card-header">
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <div class="form-group">
+                                        <input id="input_search_ruc" class="form-control" placeholder="Buscar Ruc">
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <button type="button" class="btn btn-dark" id="buttom_search_ruc">
+                                        <i class="fa fa-search"></i>
+                                        Buscar Ruc
+                                    </button>
+                                    <button type="button" class="btn btn-light" id="buttom_search_ruc_clear">
+                                        <i class="fa fa-times"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div id="search_content_result_ruc">
 
-                    <table>
-                        <span>Setiembre</span>
-                        <thead>
-                        <th>Asesor</th>
-                        <th>Cantidad</th>
-                        </thead>
-                        <tbody>
-
-                        </tbody>
-                    </table>
-
-                    <table>
-                        <span>Octubre</span>
-                        <thead>
-                        <th>Asesor</th>
-                        <th>Cantidad</th>
-                        </thead>
-                        <tbody>
-
-                        </tbody>
-                    </table>
-
-                    <table>
-                        <span>Noviembre</span>
-                        <thead>
-                        <th>Asesor</th>
-                        <th>Cantidad</th>
-                        </thead>
-                        <tbody>
-
-                        </tbody>
-                    </table>
-
-
-                    <div class="table-responsive">
-                        <table class="table table-striped table-bordered table-condensed table-hover"><br>
-                            <div id="pedidosxasesorxdia" style="width: 100%; height: 500px;"></div>
-                        </table>
-
-
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="container-fluid">
@@ -990,6 +962,13 @@
             </script> --}}
             <script>
                 (function () {
+
+                    $("#buttom_search_cliente_clear").click(function () {
+                        $("#search_content_result").html('');
+                    });
+                    $("#buttom_search_ruc_clear").click(function () {
+                        $("#search_content_result_ruc").html('');
+                    });
                     $("#buttom_search_cliente").click(function () {
                         $.ajax({
                             url: "{{route('dashboard.search-cliente')}}",
@@ -1009,7 +988,7 @@
                             context: document.body
                         }).done(function (a) {
                             console.log(a)
-                            $("#search_content_result").html(a);
+                            $("#search_content_result_ruc").html(a);
                         });
                     })
                 })()
