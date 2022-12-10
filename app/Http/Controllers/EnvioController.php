@@ -329,7 +329,7 @@ class EnvioController extends Controller
 
         $superasesor = User::where('rol', 'Super asesor')->count();
 
-        return view('envios.enviados', compact('dateMin', 'dateMax', 'condiciones', 'superasesor'));
+        return view('envios.entregados', compact('dateMin', 'dateMax', 'condiciones', 'superasesor'));
     }
 
     public function Entregadostabla()//ENTREGADOS
