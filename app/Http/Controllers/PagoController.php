@@ -15,9 +15,11 @@ use App\Models\Pago;
 use App\Models\PagoPedido;
 use App\Models\Pedido;
 use App\Models\User;
+use App\Notifications\DevolucionApproved;
 use Carbon\Carbon;
 use Illuminate\Auth\Events\Validated;
 use Illuminate\Http\Request;
+use Illuminate\Notifications\DatabaseNotification;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use DataTables;
@@ -1176,10 +1178,10 @@ class PagoController extends Controller
                 'imagen' => 'required',
             ]);
             if ($request->get('action') == 'devoluciones') {
-                $this->validate($request,[
+                $this->validate($request, [
                     "bank_destino" => 'required',
                     "bank_number" => 'required',
-                ],[
+                ], [
                     "bank_destino.required" => 'El Banco de la cuenta del cliente es obligatorio',
                     "bank_number.required" => 'El Numero de su cuenta bancaria es obligatorio',
                 ]);
@@ -2707,7 +2709,7 @@ class PagoController extends Controller
 
     }
 
-    public function devolucion(Devolucion $devolucion)
+    public function devolucion(Request $request, Devolucion $devolucion)
     {
         $devolucion->load([
             'cliente',
@@ -2719,13 +2721,49 @@ class PagoController extends Controller
             "BCP" => 'BCP',
             "BBVA" => 'BBVA',
             "INTERBANK" => 'INTERBANK',
-            //"SCOTIABANK" => 'SCOTIABANK',
-            //"PICHINCHA" => 'PICHINCHA',
+            "SCOTIABANK" => 'SCOTIABANK',
+            "PICHINCHA" => 'PICHINCHA',
         ];
-        if($devolucion->status==Devolucion::DEVUELTO){
-            return redirect()->route("pagos.show",$devolucion->pago);
+
+        /*if ($devolucion->status == Devolucion::DEVUELTO) {
+            return redirect()->route("pagos.show", $devolucion->pago);
+        }*/
+        if ($request->has("read_notification")) {
+            $notification = DatabaseNotification::query()->find($request->get('read_notification'));
+            if($notification!=null){
+                $notification->markAsRead();
+            }
         }
-        return view('pagos.devolucion.index', compact('devolucion', 'bancos'));
+
+        $pagoPedidos = PagoPedido::join('pedidos as p', 'pago_pedidos.pedido_id', 'p.id')
+            ->join('detalle_pedidos as dp', 'p.id', 'dp.pedido_id')
+            ->select('pago_pedidos.id',
+                'dp.codigo',
+                'p.id as pedidos',
+                'p.condicion',
+                'dp.total',
+                'pago_pedidos.pagado',
+                'pago_pedidos.abono'
+            )
+            ->where('pago_pedidos.estado', '1')
+            ->where('p.estado', '1')
+            ->where('dp.estado', '1')
+            ->where('pago_pedidos.pago_id', $devolucion->pago->id)
+            ->get();
+
+        $detallePagos = DetallePago::select('id',
+            'monto',
+            'banco',
+            'imagen',
+            'fecha',
+            'titular',
+            'cuenta',
+            'fecha_deposito',
+            'observacion')
+            ->where('estado', '1')
+            ->where('pago_id', $devolucion->pago->id)
+            ->get();
+        return view('pagos.devolucion.index', compact('devolucion', 'bancos', 'pagoPedidos', 'detallePagos'));
     }
 
     public function devolucionUpdate(Request $request, Devolucion $devolucion)
@@ -2734,8 +2772,8 @@ class PagoController extends Controller
         $this->validate($request, [
             'voucher' => 'required|file|image',
             //"bank_destino" => 'required',
-           // "bank_number" => 'required',
-            "num_operacion" => 'required',
+            // "bank_number" => 'required',
+            "num_operacion" => 'nullable',
         ]);
 
         $devolucion->load([
@@ -2755,8 +2793,15 @@ class PagoController extends Controller
                 "status" => Devolucion::DEVUELTO,
                 "returned_at" => now(),
             ]);
+            $asesores = User::where('rol', 'Asesor')
+                ->where('estado', '1')
+                ->get();
+
+            foreach ($asesores as $asesor) {
+                $asesor->notify(new DevolucionApproved($devolucion));
+            }
         });
-        return redirect()->route("pagos.show",$devolucion->pago);
+        return redirect()->route("pagos.show", $devolucion);
     }
 
 }

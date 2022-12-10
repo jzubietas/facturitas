@@ -2515,8 +2515,8 @@
                             },
                             error: function (jqXHR, textStatus, errorThrown) {
                                 console.log(arguments)
-                                $("#btnDevolucion").removeAttr("disabled")
-                                $("#btnDevolucion").text("Registrar devolucion")
+                                //$("#btnDevolucion").removeAttr("disabled")
+                                //$("#btnDevolucion").text("Registrar devolucion")
                                 if (jqXHR.status === 422) {
                                     if (jqXHR.responseJSON && jqXHR.responseJSON.errors) {
                                         $("#devolucion_message_response").html(generateHtmlErrors(
