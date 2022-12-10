@@ -110,7 +110,7 @@
 
     <div class="card-footer">
       {{--<button type="submit" class="btn btn-success"><i class="fas fa-save"></i> Guardar</button>--}}
-      <a href="{{ url()->previous() }}" class="btn btn-danger"><i class="fas fa-times-circle"></i> Atras</a>
+      <button type = "button" onClick="history.back()" class="btn btn-danger btn-lg"><i class="fas fa-arrow-left"></i>ATRAS</button>
     </div>
     
   </div>

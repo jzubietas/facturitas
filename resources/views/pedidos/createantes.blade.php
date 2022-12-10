@@ -15,11 +15,7 @@
       <div class="card-footer" id=guardar>
         <button type="submit" class="btn btn-success" id="btnImprimir" target="_blank"><i class="fas fa-save"></i> Guardar</button>
 
-        @if (Auth::user()->rol == "Asesor" || Auth::user()->rol == "Super asesor")
-          <a class="btn btn-danger" href="{{ url()->previous() }}"><i class="fas fa-times-circle"></i> ATRAS</a>
-        @else
-          <a href="{{ url()->previous() }}" class="btn btn-danger"><i class="fas fa-times-circle"></i> ATRAS</a>
-        @endif        
+        <button type = "button" onClick="history.back()" class="btn btn-danger btn-lg"><i class="fas fa-arrow-left"></i>ATRAS</button>       
       </div>
     {!! Form::close() !!}
   @include('pedidos.modal.AddRuc')

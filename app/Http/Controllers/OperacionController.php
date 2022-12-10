@@ -452,5 +452,412 @@ class OperacionController extends Controller
             ->make(true);
     }
 
+    public function Atenderid(Request $request)
+    {
+        $hiddenAtender=$request->hiddenAtender;
+        $detalle_pedidos = DetallePedido::where('pedido_id',$hiddenAtender)->first();
+        $fecha = Carbon::now();
+        //sds
+
+        $pedido=Pedido::where("id",$hiddenAtender)->first();
+        $pedido->update([
+            'condicion' => $request->condicion,
+            'modificador' => 'USER'.Auth::user()->id
+        ]);
+
+
+
+        if ($request->condicion == "3")
+        {
+            $pedido->update([
+                'notificacion' => 'Pedido atendido'
+            ]);
+
+            event(new PedidoAtendidoEvent($pedido));
+        }
+
+        $files = $request->file('adjunto');
+        $destinationPath = base_path('public/storage/adjuntos/');
+
+        $cont = 0;
+
+        if(isset($files)){
+            $destinationPath = base_path('public/storage/adjuntos/');
+            $cont = 0;
+            $file_name = Carbon::now()->second.$files->getClientOriginalName();
+            $fileList[$cont] = array(
+                'file_name' => $file_name,
+            );
+            $files->move($destinationPath , $file_name);
+
+            ImagenAtencion::create([
+                'pedido_id' => $pedido->id,
+                'adjunto' => $file_name,
+                'estado' => '1'
+            ]);
+
+                //$cont++;
+            //}
+        }
+
+
+
+        /*if(isset($files)){
+            foreach ($files as $file){
+                $file_name = Carbon::now()->second.$file->getClientOriginalName();
+                $file->move($destinationPath , $file_name);
+
+                ImagenAtencion::create([
+                    'pedido_id' => $pedido->id,
+                    'adjunto' => $file_name,
+                    'estado' => '1'
+                ]);
+
+                $cont++;
+            }
+        }*/
+
+        $detalle_pedidos->update([
+            'envio_doc' => '1',
+            'fecha_envio_doc' => $fecha,
+            'cant_compro' => $request->cant_compro,
+            'atendido_por' => Auth::user()->name,
+            'atendido_por_id' => Auth::user()->id,
+        ]);
+
+        /* if ($request->hasFile('envio_doc')){
+            $file_name = Carbon::now()->second.$files->getClientOriginalName();
+            $files->move($destinationPath , $file_name);
+
+            $detalle_pedidos->update([
+                'envio_doc' => $file_name,
+                'fecha_envio_doc' => $fecha,
+                'cant_compro' => $request->cant_compro,
+            ]);
+        }
+        else{
+            $detalle_pedidos->update([
+                'cant_compro' => $request->cant_compro,
+            ]);
+        } */
+
+        return redirect()->route('operaciones.poratender')->with('info','actualizado');
+    }
+
+    public function editAtender(Pedido $pedido)
+    {
+        $pedidos = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')
+        ->join('users as u', 'pedidos.user_id', 'u.id')
+        ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
+            ->select(
+                'pedidos.id',
+                'c.nombre as nombres',
+                'c.celular as celulares',
+                'u.name as users',
+                'dp.codigo as codigos',
+                'dp.nombre_empresa as empresas',
+                'dp.mes',
+                'dp.anio',
+                'dp.ruc',
+                'dp.cantidad',
+                'dp.tipo_banca',
+                'dp.porcentaje',
+                'dp.courier',
+                'dp.ft',
+                'dp.descripcion',
+                'dp.nota',
+                'dp.adjunto',
+                'dp.total',
+                'pedidos.condicion as condiciones',
+                'pedidos.envio',
+                'pedidos.condicion_envio',
+                'dp.envio_doc',
+                'dp.fecha_envio_doc',
+                'dp.cant_compro',
+                'dp.fecha_envio_doc_fis',
+                'dp.fecha_recepcion',
+                'pedidos.created_at as fecha'
+            )
+            ->where('pedidos.estado', '1')
+            ->where('pedidos.id', $pedido->id)
+            ->where('dp.estado', '1')
+            ->groupBy(
+                'pedidos.id',
+                'c.nombre',
+                'c.celular',
+                'u.name',
+                'dp.codigo',
+                'dp.nombre_empresa',
+                'dp.mes',
+                'dp.anio',
+                'dp.ruc',
+                'dp.cantidad',
+                'dp.tipo_banca',
+                'dp.porcentaje',
+                'dp.courier',
+                'dp.ft',
+                'dp.descripcion',
+                'dp.nota',
+                'dp.adjunto',
+                'dp.total',
+                'pedidos.condicion',
+                'pedidos.envio',
+                'pedidos.condicion_envio',
+                'dp.envio_doc',
+                'dp.fecha_envio_doc',
+                'dp.cant_compro',
+                'dp.fecha_envio_doc_fis',
+                'dp.fecha_recepcion',
+                'pedidos.created_at'
+            )
+            ->orderBy('pedidos.created_at', 'DESC')
+            ->get();
+
+        $imagenespedido = ImagenPedido::where('imagen_pedidos.pedido_id', $pedido->id)->where('estado', '1')->get();
+        $imagenes = ImagenAtencion::where('imagen_atencions.pedido_id', $pedido->id)->where('estado', '1')->get();
+
+        return view('operaciones.editatender', compact('pedido', 'pedidos', 'imagenespedido', 'imagenes'));
+    }
+
+    public function eliminarAdjuntoOperaciones(Request $request)
+    {
+        $id = $request->eliminar_pedido_id;
+        $imagen = $request->eliminar_pedido_id_imagen;
+        $imagenatencion = ImagenAtencion::where("pedido_id",$id)
+            ->where("adjunto",$imagen)->first();
+
+        if($imagenatencion != NULL){
+            $imagenatencion->update([
+                'estado' => '0'
+            ]);
+        }
+
+        return response()->json(['html' => $imagenatencion]);
+    }
+
+    public function updateAtender(Request $request, Pedido $pedido)
+    {
+        $detalle_pedidos = DetallePedido::where('pedido_id',$pedido->id)->first();
+        $fecha = Carbon::now();
+
+        /* $files = $request->file('envio_doc'); */
+        $files = $request->file('adjunto');
+        $destinationPath = base_path('public/storage/adjuntos/');
+
+        $cont = 0;
+
+        //ACTUALIZAR MODIFICACION AL PEDIDO
+        $pedido->update([
+            'modificador' => 'USER'.Auth::user()->id
+        ]);
+
+        if ($request->hasFile('adjunto')){
+            /* $file_name = Carbon::now()->second.$files->getClientOriginalName();
+            $files->move($destinationPath , $file_name); */
+
+            foreach ($files as $file){
+                $file_name = Carbon::now()->second.$file->getClientOriginalName();
+                $file->move($destinationPath , $file_name);
+
+                ImagenAtencion::create([
+                    'pedido_id' => $pedido->id,
+                    'adjunto' => $file_name,
+                    'estado' => '1'
+                ]);
+
+                $cont++;
+            }
+
+            $detalle_pedidos->update([
+                'envio_doc' => '1',
+                'fecha_envio_doc' => $fecha,
+                'cant_compro' => $request->cant_compro,
+                'atendido_por' => Auth::user()->name,
+                'atendido_por_id' => Auth::user()->id,
+            ]);
+        }
+        else{
+            $detalle_pedidos->update([
+                'cant_compro' => $request->cant_compro,
+                'atendido_por' => Auth::user()->name,
+                'atendido_por_id' => Auth::user()->id,
+            ]);
+        }
+
+        return redirect()->route('operaciones.atendidos')->with('info','actualizado');
+    }
+
+    public function showAtender(Pedido $pedido)
+    {
+        $pedidos = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')
+        ->join('users as u', 'pedidos.user_id', 'u.id')
+        ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
+            ->select(
+                'pedidos.id',
+                'c.nombre as nombres',
+                'c.celular as celulares',
+                'u.name as users',
+                'dp.codigo as codigos',
+                'dp.nombre_empresa as empresas',
+                'dp.mes',
+                'dp.anio',
+                'dp.ruc',
+                'dp.cantidad',
+                'dp.tipo_banca',
+                'dp.porcentaje',
+                'dp.courier',
+                'dp.ft',
+                'dp.descripcion',
+                'dp.nota',
+                'dp.adjunto',
+                'dp.total',
+                'dp.envio_doc',
+                'dp.fecha_envio_doc',
+                'dp.cant_compro',
+                'dp.fecha_envio_doc_fis',
+                'dp.fecha_recepcion',
+                'pedidos.condicion as condiciones',
+                'pedidos.created_at as fecha'
+            )
+            ->where('pedidos.estado', '1')
+            ->where('pedidos.id', $pedido->id)
+            ->where('dp.estado', '1')
+            ->groupBy(
+                'pedidos.id',
+                'c.nombre',
+                'c.celular',
+                'u.name',
+                'dp.codigo',
+                'dp.nombre_empresa',
+                'dp.mes',
+                'dp.anio',
+                'dp.ruc',
+                'dp.cantidad',
+                'dp.tipo_banca',
+                'dp.porcentaje',
+                'dp.courier',
+                'dp.ft',
+                'dp.descripcion',
+                'dp.nota',
+                'dp.adjunto',
+                'dp.total',
+                'dp.envio_doc',
+                'dp.fecha_envio_doc',
+                'dp.cant_compro',
+                'dp.fecha_envio_doc_fis',
+                'dp.fecha_recepcion',
+                'pedidos.condicion',
+                'pedidos.created_at'
+            )
+            ->orderBy('pedidos.created_at', 'DESC')
+            ->get();
+
+        $imagenes = ImagenPedido::where('imagen_pedidos.pedido_id', $pedido->id)->get();
+        $imagenesatencion = ImagenAtencion::where('imagen_atencions.pedido_id', $pedido->id)->get();
+
+        return view('pedidos.showAtender', compact('pedido','pedidos', 'imagenes', 'imagenesatencion'));
+    }
+
+
+    public function SinEnviarid(Request $request)
+    {
+        //Pedido $pedido
+        $pedido=Pedido::where("id",$request->hiddenSinenvio)->first();
+        $detalle_pedidos = DetallePedido::where('pedido_id',$pedido->id)->first();
+        $fecha = Carbon::now();
+
+        $pedido->update([
+            'envio' => '3',//SIN ENVIO
+            'condicion_envio' => 3,
+            'modificador' => 'USER'.Auth::user()->id
+        ]);
+
+        $detalle_pedidos->update([
+            'fecha_envio_doc_fis' => $fecha,
+            'fecha_recepcion' => $fecha,
+            'atendido_por' => Auth::user()->name,
+            'atendido_por_id' => Auth::user()->id,
+        ]);
+
+        /**/
+        $cliente=Cliente::where("id",$pedido->cliente_id)->first();
+
+        $direcciongrupo=DireccionGrupo::create([
+                'estado'=>'1',
+                'destino' => 'LIMA',
+                'distribucion'=> '',
+                'condicion_envio' => 3,
+                'condicion_sobre' => 'SIN ENVIO',
+            ]);
+
+        $direccionLima = DireccionEnvio::create([
+            'cliente_id' => $pedido->cliente_id,
+            'distrito' => 'LIMA',
+            'direccion' => '',
+            'referencia' => '',
+            'nombre' => $cliente->nombre,
+            'celular' => $cliente->celular,
+            'observacion' => '',
+            'direcciongrupo' => $direcciongrupo->id,
+            'cantidad' => 1,
+            'destino'=>'LIMA',
+            'estado' => '1',
+            "salvado"=> "0"
+        ]);
+
+
+        $direccionPedido = DireccionPedido::create([
+                'direccion_id' => $direccionLima->id,
+                'pedido_id' => $pedido->id,
+                'codigo_pedido' => $detalle_pedidos->codigo,
+                'direcciongrupo' => $direcciongrupo->id,
+                'empresa' => $detalle_pedidos->nombre_empresa,
+                'estado' => '1'
+            ]);
+
+        return response()->json(['html' => $pedido->id]);
+        //return redirect()->route('operaciones.atendidos')->with('info','actualizado');
+    }
+
+    public function Enviarid(Request $request)
+    {
+        $pedido=Pedido::where("id",$request->hiddenEnvio)->first();
+        $detalle_pedidos = DetallePedido::where('pedido_id',$pedido->id)->first();
+        $fecha = Carbon::now();
+
+        $pedido->update([
+            'envio' => '1',
+            'modificador' => 'USER'.Auth::user()->id
+        ]);
+
+        $detalle_pedidos->update([
+            'fecha_envio_doc_fis' => $fecha,
+        ]);
+
+        return response()->json(['html' => $pedido->id]);
+
+        //return redirect()->route('operaciones.atendidos')->with('info','actualizado');
+    }
+
+    public function Revertirenvio(Request $request)
+    {
+        $pedido=Pedido::where("id",$request->hiddenRevertirpedido)->first();
+        $detalle_pedidos = DetallePedido::where('pedido_id',$pedido->id)->first();
+        $fecha = Carbon::now();
+
+        $pedido->update([
+            'envio' => '0',
+            'modificador' => 'USER'.Auth::user()->id
+        ]);
+
+        /*$detalle_pedidos->update([
+            'fecha_envio_doc_fis' => $fecha,
+        ]);*/
+
+        return response()->json(['html' => $pedido->id]);
+
+        //return redirect()->route('operaciones.atendidos')->with('info','actualizado');
+    }
+
 
 }

@@ -187,7 +187,7 @@
 
 
         <br>
-        <a href="{{ url()->previous() }}" class="btn btn-danger btn-lg"><i class="fas fa-arrow-left"></i> ATRAS</a>
+        <button type = "button" onClick="history.back()" class="btn btn-danger btn-lg"><i class="fas fa-arrow-left"></i>ATRAS</button>
       </div>
     </div>
 

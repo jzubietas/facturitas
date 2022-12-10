@@ -271,7 +271,7 @@
         <div class="col-2 text-left">
           
 
-          <a href="{{ url()->previous() }}" class="btn btn-danger btn-lg"><i class="fas fa-times-circle"></i> Atras</a>
+        <button type = "button" onClick="history.back()" class="btn btn-danger btn-lg"><i class="fas fa-arrow-left"></i>ATRAS</button>
         </div>
         <div class="col-10">
           <button type="button" id="aprobarrbtn" class="btn btn-success btn-lg"><i class="fas fa-save"></i> APROBAR</button>

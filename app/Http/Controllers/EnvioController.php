@@ -1077,6 +1077,19 @@ class EnvioController extends Controller
 
     }
 
+    public function Recibirid(Request $request)
+    {
+        $pedido=Pedido::where("id",$request->hiddenRecibir)->first();
+        $pedido->update([
+            'envio' => '2',
+            'modificador' => 'USER'.Auth::user()->id
+        ]);
+
+        return response()->json(['html' => $request->hiddenRecibir]);
+
+        //return redirect()->route('envios.index')->with('info','actualizado');
+    }
+
 
 
 }

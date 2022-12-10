@@ -164,7 +164,7 @@
            processData: false,
            contentType: false,
            type: 'POST',
-           url:"{{ route('pedidos.envioid') }}",
+           url:"{{ route('operaciones.envioid') }}",
            success:function(data)
            {
             console.log(data);
