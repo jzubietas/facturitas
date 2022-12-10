@@ -279,7 +279,7 @@
         "order": [[ 0, "desc" ]],
         ajax: "{{ route('envios.enviadostabla') }}",
         createdRow: function( row, data, dataIndex){
-          //console.log(row);
+          //console.log(rsow);
         },
         rowCallback: function (row, data, index) {
             console.log(data.destino2)

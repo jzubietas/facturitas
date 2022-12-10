@@ -72,6 +72,7 @@
             <th scope="col">Código</th>
             <th scope="col">Cliente</th>
             <th scope="col">Razón social</th>
+            <th scope="col">Cantidad</th>
             <th scope="col">Asesor</th>
             <th scope="col">F. Registro</th>
             <th scope="col">F. Actualizacion</th>
@@ -260,21 +261,21 @@
               var pedidodiferencia=data.diferencia;
               //pedidodiferencia=0;
               if(pedidodiferencia==null){
-                $('td:eq(12)', row).css('background', '#ffbcbc').css('color','#ad2626').css('text-align','center').css('font-weight','bold');
+                $('td:eq(13)', row).css('background', '#ca3a3a').css('color','#ffffff').css('text-align','center').css('font-weight','bold');
               }else{
                 if(pedidodiferencia>3){
-                  $('td:eq(12)', row).css('background', '#ffbcbc').css('color','#ad2626').css('text-align','center').css('font-weight','bold');
+                  $('td:eq(13)', row).css('background', '#ca3a3a').css('color','#ffffff').css('text-align','center').css('font-weight','bold');
                 }else{
-                  $('td:eq(12)', row).css('background', '#53dd5a52').css('text-align','center').css('font-weight','bold');
+                  $('td:eq(13)', row).css('background', '#44c24b').css('text-align','center').css('font-weight','bold');
                 }
               }
         },
-        initComplete:function(settings,json){
-          if (localStorage. getItem("search_tabla") === null) {
+        initComplete:function(settings,json){          
+          /*if (localStorage. getItem("search_tabla") === null) {
             //no existe
           }else{
             $('#tablaPrincipal_filter label input').val(localStorage.getItem("search_tabla") ).change();
-          }
+          }*/
         },
         columns: [
           //ID
@@ -312,8 +313,10 @@
         },
         //EMPRESAS
         {data: 'empresas', name: 'empresas', },
+        {data: 'cantidad', name: 'cantidad',render: $.fn.dataTable.render.number(',', '.', 2, ''), },
         //USUARIOS
         {data: 'users', name: 'users', },
+        
         //FECHA
         {
           data: 'fecha',
@@ -483,25 +486,25 @@
             urledit = urledit.replace(':id', row.id);
               data = '<div class="row">';
             @can('pedidos.pedidosPDF')
-              data = data+'<div class="col-lg-6" style="margin-top:4px;"><a href="'+urlpdf+'" class="btn btn-info btn-sm w-100" target="_blank"><i class="fa fa-file-pdf"></i> PDF</a></div>';
+              data = data+'<div class="col-lg-12" style="margin-top:4px;"><a href="'+urlpdf+'" class="btn btn-info btn-sm w-100" target="_blank"><i class="fa fa-file-pdf"></i> PDF</a></div>';
             @endcan
             @can('pedidos.show')
-              data = data+'<div class="col-lg-6" style="margin-top:4px;"><a href="'+urlshow+'" class="btn btn-info btn-sm w-100"><i class="fas fa-eye"></i> VER</a></div>';
+              data = data+'<div class="col-lg-12" style="margin-top:4px;"><a href="'+urlshow+'" class="btn btn-info btn-sm w-100"><i class="fas fa-eye"></i> VER</a></div>';
             @endcan
             @can('pedidos.edit')
               if(row.condicion_pa==0)
               {
-                data = data+'<div class="col-lg-6" style="margin-top:4px;"><a href="'+urledit+'" class="btn btn-warning btn-sm w-100"> Editar</a></div>';
+                data = data+'<div class="col-lg-12" style="margin-top:4px;"><a href="'+urledit+'" class="btn btn-warning btn-sm w-100"> Editar</a></div>';
               }
             @endcan
             @can('pedidos.destroy')
             if(row.estado==0)
             {
-              data = data+'<div class="col-lg-6" style="margin-top:4px;"><a href="#" class="btn btn-danger btn-sm w-100" data-target="#modal-restaurar" data-toggle="modal" data-restaurar="'+row.id+'" ><i class="fas fa-check"></i> Restaurar</a><br>';
+              data = data+'<div class="col-lg-12" style="margin-top:4px;"><a href="#" class="btn btn-danger btn-sm w-100" data-target="#modal-restaurar" data-toggle="modal" data-restaurar="'+row.id+'" ><i class="fas fa-check"></i> Restaurar</a><br>';
             }else{
               if(row.condicion_pa==0)
               {
-                data = data+'<div class="col-lg-6" style="margin-top:4px;"><a href="" class="btn btn-danger btn-sm w-100" data-target="#modal-delete" data-toggle="modal" data-delete="'+row.id+'" data-responsable="{{ $miidentificador }}"><i class="fas fa-trash-alt"></i> Anular</a></div>';
+                data = data+'<div class="col-lg-12" style="margin-top:4px;"><a href="" class="btn btn-danger btn-sm w-100" data-target="#modal-delete" data-toggle="modal" data-delete="'+row.id+'" data-responsable="{{ $miidentificador }}"><i class="fas fa-trash-alt"></i> Anular</a></div>';
               }
             }
 

@@ -134,6 +134,7 @@ class PedidoController extends Controller
                 'pedidos.codigo as codigos',
                 'dp.nombre_empresa as empresas',
                 'dp.total as total',
+                'dp.cantidad as cantidad',
                 'pedidos.condicion_envio',
                 'pedidos.condicion as condiciones',
                 'pedidos.pagado as condicion_pa',
@@ -1764,6 +1765,7 @@ return ' no imagen ';
                     'dp.codigo as codigos',
                     'dp.nombre_empresa as empresas',
                     'dp.total as total',
+                    'dp.cantidad as cantidad',
                     'pedidos.condicion_envio as condicion_env',
                     'pedidos.condicion_envio',
                     'pedidos.condicion as condiciones',
@@ -1790,6 +1792,7 @@ return ' no imagen ';
                     'dp.codigo',
                     'dp.nombre_empresa',
                     'dp.total',
+                    'dp.cantidad',
                     'pedidos.condicion_envio',
                     'pedidos.condicion',
                     /*'pedidos.envio',*/

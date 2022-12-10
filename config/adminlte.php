@@ -389,7 +389,7 @@ return [
                 ],
                 [
                     'text' => 'Sobre entregados',
-                    'route'  => 'envios.enviados',
+                    'route'  => 'envios.entregados',
                     'can' => 'envios.enviados',
                     'icon'   => 'fas fa-check-circle',
                     'active' => ['enviados'],
