@@ -14,7 +14,11 @@ class Cliente extends Model
     const RECURRENTE ="RECURRENTE";
     const NUEVO ="NUEVO";
     const RECUPERADO ="RECUPERADO";
-    
+
     protected $guarded = ['id'];
+
+    public function user(){
+        return $this->belongsTo(User::class);
+    }
 
 }
