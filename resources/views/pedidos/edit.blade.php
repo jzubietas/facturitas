@@ -168,7 +168,7 @@
         <button type="submit" class="btn btn-success btn-sm"><i class="fas fa-save"></i> Guardar</button>
       </div>
       <div class="form-group col-lg-2" style="margin-top: 10px;margin-left: -75px;text-align: center;">
-      <a href="{{ url()->previous() }}" class="btn btn-danger"><i class="fas fas fa-arrow-left"></i> ATRAS</a>
+      <button type = "button" onClick="history.back()" class="btn btn-danger btn-lg"><i class="fas fa-arrow-left"></i>ATRAS</button>
       </div>
     {{-- </div> --}}
     {!! Form::close() !!}

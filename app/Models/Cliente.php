@@ -8,6 +8,12 @@ use Illuminate\Database\Eloquent\Model;
 class Cliente extends Model
 {
     use HasFactory;
+
+    const ABANDONO_RECIENTE ="ABANDONO RECIENTE";
+    const ABANDONO_PERMANENTE ="ABANDONO PERMANENTE";
+    const RECURRENTE ="RECURRENTE";
+    const NUEVO ="NUEVO";
+    const RECUPERADO ="RECUPERADO";
     
     protected $guarded = ['id'];
 

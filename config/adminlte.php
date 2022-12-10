@@ -375,7 +375,7 @@ return [
                 ],
                 [
                     'text' => 'Sobres en reparto',
-                    'route'  => 'envios.index',
+                    'route'  => 'envios.enreparto',
                     'can' => 'envios.index',
                     'icon'   => 'fas fa-check-circle',
                     'active' => ['envios'],

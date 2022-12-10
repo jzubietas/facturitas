@@ -112,9 +112,9 @@ class SobreController extends Controller
                     'pedidos.observacion_devuelto',
                 )
                 ->where('pedidos.estado', '1')
-                ->whereIn('pedidos.envio', ['1','2']) // ENVIADO CONFIRMAR RECEPCION Y ENVIADO RECIBIDO
+                ->whereIn('pedidos.envio', [Pedido::ENVIO_CONFIRMAR_RECEPCION,Pedido::ENVIO_RECIBIDO]) // ENVIADO CONFIRMAR RECEPCION Y ENVIADO RECIBIDO
                 ->where('dp.estado', '1')
-                ->whereIn('pedidos.condicion_envio',[1]);
+                ->whereIn('pedidos.condicion_envio',[Pedido::PENDIENTE_DE_ENVIO]);
                 /*->groupBy(
                     'pedidos.id',
                     'pedidos.cliente_id',

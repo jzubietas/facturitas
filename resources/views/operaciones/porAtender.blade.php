@@ -153,10 +153,12 @@
         for (let i = 0; i < files.length; i++) {
           fd.append('adjunto', $('input[type=file][name="adjunto[]"]')[0].files[0]);
         }
+        
         //console.log(files);
         //return false;
 
-        fd.append( 'cant_compro', $("#cant_compro").val() );
+        //fd.append( 'cant_compro', $("#cant_compro").val() );
+        fd.append( 'cant_compro', files.length );
         fd.append( 'condicion', $("#condicion").val() );
         fd.append( 'hiddenAtender', $("#hiddenAtender").val() );
 
@@ -165,7 +167,7 @@
            processData: false,
            contentType: false,
            type: 'POST',
-           url:"{{ route('pedidos.atenderid') }}",
+           url:"{{ route('operaciones.atenderid') }}",
            success:function(data)
            {
             console.log(data);

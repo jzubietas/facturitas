@@ -68,52 +68,7 @@ class AdministracionController extends Controller
 
         $pagos=null;
 
-        if(!$request->asesores)
-        {
-            $pagos = Pago::join('users as u', 'pagos.user_id', 'u.id')
-                ->join('clientes as c', 'pagos.cliente_id', 'c.id')
-                ->select('pagos.id as id',
-                DB::raw(" (CASE WHEN pagos.id<10 THEN concat('PAG',u.identificador,'-',
-                                IF ( (select count(dpago.id) from detalle_pagos dpago where dpago.pago_id=pagos.id and dpago.estado in (1) )>1,'V','I' )  ,
-                                IF ( (select count(ppedidos.id) from pago_pedidos ppedidos where ppedidos.pago_id=pagos.id and ppedidos.estado in (1) ) >1,'V','I' ),
-                                '-',pagos.id
-                                )
-                            WHEN pagos.id<100  THEN concat('PAG',u.identificador,'-',
-                                IF ( (select count(dpago.id) from detalle_pagos dpago where dpago.pago_id=pagos.id and dpago.estado in (1) )>1,'V','I' )  ,
-                                IF ( (select count(ppedidos.id) from pago_pedidos ppedidos where ppedidos.pago_id=pagos.id and ppedidos.estado in (1) ) >1,'V','I' ),
-                                '-',pagos.id)
-                            WHEN pagos.id<1000  THEN concat('PAG',u.identificador,'-',
-                                IF ( (select count(dpago.id) from detalle_pagos dpago where dpago.pago_id=pagos.id and dpago.estado in (1) )>1,'V','I' )  ,
-                                IF ( (select count(ppedidos.id) from pago_pedidos ppedidos where ppedidos.pago_id=pagos.id and ppedidos.estado in (1) ) >1,'V','I' ),
-                                '-',pagos.id)
-                            ELSE concat('PAG',u.identificador,'-',
-                                IF ( (select count(dpago.id) from detalle_pagos dpago where dpago.pago_id=pagos.id and dpago.estado in (1) )>1,'V','I' )  ,
-                                IF ( (select count(ppedidos.id) from pago_pedidos ppedidos where ppedidos.pago_id=pagos.id and ppedidos.estado in (1) ) >1,'V','I' ),
-                                '-',pagos.id) END) AS id2"),
-                        'u.identificador as users',
-                        'c.celular',
-                        'c.icelular',
-                        DB::raw(" (CASE WHEN pagos.subcondicion='COURIER PERDONADO' THEN 'COURIER PERDONADO'
-                                    else CONCAT(c.celular,IF(ISNULL(c.icelular),'',CONCAT('-',c.icelular) )) end) as cliente "),
-                        'pagos.observacion',
-                        'pagos.total_cobro',
-                        'pagos.condicion',
-                        'pagos.subcondicion',
-                        'pagos.created_at',
-                        DB::raw('(select DATE_FORMAT( MIN(dpa.fecha), "%Y-%m-%d")   from detalle_pagos dpa where dpa.pago_id=pagos.id and dpa.estado=1) as fecha'),
-                        DB::raw('(select DATE_FORMAT( MIN(dpa.fecha), "%d/%m/%Y %H:%i:%s")   from detalle_pagos dpa where dpa.pago_id=pagos.id and dpa.estado=1) as fecha2'),
-                        DB::raw('(select UNIX_TIMESTAMP(MIN(dpa.fecha))   from detalle_pagos dpa where dpa.pago_id=pagos.id and dpa.estado=1) as fecha_timestamp'),
-                        DB::raw(" (select count(dpago.id) from detalle_pagos dpago where dpago.pago_id=pagos.id and dpago.estado in (1) ) as cantidad_voucher "),
-                        DB::raw(" (select count(ppedidos.id) from pago_pedidos ppedidos where ppedidos.pago_id=pagos.id and ppedidos.estado in (1)  ) as cantidad_pedido "),
-                        DB::raw(" ( select GROUP_CONCAT(ppp.codigo) from pago_pedidos ped inner join pedidos ppp on ped.pedido_id =ppp.id where pagos.id=ped.pago_id and ped.estado=1 and ppp.estado=1 and ped.pagado in (1,2)) as codigos "),
-                        DB::raw(" (select sum(ped2.abono) from pago_pedidos ped2 where ped2.pago_id =pagos.id and ped2.estado=1 and ped2.pagado in (1,2) ) as total_pago ")
-                        )
-                ->whereIn('pagos.condicion', [Pago::PAGO,Pago::ADELANTO])
-                ->where('pagos.estado', '1')
-                ->whereBetween(DB::raw('( (select DATE( MIN(dpa.fecha))   from detalle_pagos dpa where dpa.pago_id=pagos.id and dpa.estado=1)  )'), [$min, $max]) //rango de fechas
-                ->get();
-        }else{
-            $pagos = Pago::join('users as u', 'pagos.user_id', 'u.id')
+        $pagos = Pago::join('users as u', 'pagos.user_id', 'u.id')
             ->join('clientes as c', 'pagos.cliente_id', 'c.id')
             ->select('pagos.id as id',
                     DB::raw(" (CASE WHEN pagos.id<10 THEN concat('PAG',u.identificador,'-',
@@ -151,24 +106,31 @@ class AdministracionController extends Controller
                     DB::raw(" ( select GROUP_CONCAT(ppp.codigo) from pago_pedidos ped inner join pedidos ppp on ped.pedido_id =ppp.id where pagos.id=ped.pago_id and ped.estado=1 and ppp.estado=1 and ped.pagado in (1,2)) as codigos "),
                     DB::raw(" (select sum(ped2.abono) from pago_pedidos ped2 where ped2.pago_id =pagos.id and ped2.estado=1 and ped2.pagado in (1,2) ) as total_pago ")
                     )
-            ->where('pagos.user_id',$request->asesores)
+            //->where('pagos.user_id',$request->asesores)
             ->whereIn('pagos.condicion', [Pago::PAGO,Pago::ADELANTO])
             ->where('pagos.estado', '1')
-            ->whereBetween(DB::raw('( (select DATE( MIN(dpa.fecha))   from detalle_pagos dpa where dpa.pago_id=pagos.id and dpa.estado=1)  )'), [$min, $max]) //rango de fechas
-            ->get();
+            ->whereBetween(DB::raw('( (select DATE( MIN(dpa.fecha))   from detalle_pagos dpa where dpa.pago_id=pagos.id and dpa.estado=1)  )'), [$min, $max]); //rango de fechas
+
+        if(!$request->asesores)
+        {
+            $pagos=$pagos;
+        }else{
+            $pagos=$pagos->where('pagos.user_id',$request->asesores);
         }
 
-        return Datatables::of($pagos)
+        //$pagos=$pagos->get();
+
+        return Datatables::of(DB::table($pagos))
             ->addIndexColumn()
             ->addColumn('action', function($pago){
                 $btn='';
 
                 if(Auth::user()->rol == "Administrador"){
-                    $btn=$btn.'<a href="'.route('pagos.show', $pago['id']).'" class="btn btn-info btn-sm">Ver</a>';
+                    $btn=$btn.'<a href="'.route('pagos.show', $pago->id).'" class="btn btn-info btn-sm">Ver</a>';
 
-                    $btn=$btn.'<a href="'.route('administracion.revisar', $pago).'" class="btn btn-success btn-sm">Revisar</a>';
+                    $btn=$btn.'<a href="'.route('administracion.revisar', $pago->id).'" class="btn btn-success btn-sm">Revisar</a>';
 
-                    $btn = $btn.'<a href="" data-target="#modal-delete" data-toggle="modal" data-delete="'.$pago['id'].'"><button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i> Eliminar</button></a>';
+                    $btn = $btn.'<a href="" data-target="#modal-delete" data-toggle="modal" data-delete="'.$pago->id.'"><button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i> Eliminar</button></a>';
                 }
 
                 return $btn;
@@ -326,7 +288,7 @@ class AdministracionController extends Controller
                         DB::raw(" ( select GROUP_CONCAT(ppp.codigo) from pago_pedidos ped inner join pedidos ppp on ped.pedido_id =ppp.id where pagos.id=ped.pago_id and ped.estado=1 and ppp.estado=1 and ped.pagado in (1,2)) as codigos "),
                         DB::raw(" (select sum(ped2.abono) from pago_pedidos ped2 where ped2.pago_id =pagos.id and ped2.estado=1 and ped2.pagado in (1,2) ) as total_pago ")
                         )
-                ->whereIn('pagos.condicion', [Pago::PENDIENTE])
+                //->whereIn('pagos.condicion', [Pago::PENDIENTE])
                 ->where('pagos.estado', '1')
                 ->whereBetween(DB::raw('( (select DATE( MIN(dpa.fecha))   from detalle_pagos dpa where dpa.pago_id=pagos.id and dpa.estado=1)  )'), [$min, $max]); //rango de fechas
 
@@ -337,20 +299,20 @@ class AdministracionController extends Controller
             $pagos=$pagos->where('pagos.user_id',$request->asesores);
         }
 
-        $pagos=$pagos->get();
+        //$pagos=$pagos->get();
 
 
-        return Datatables::of($pagos)
+        return Datatables::of(DB::table($pagos))
             ->addIndexColumn()
             ->addColumn('action', function($pago){
                 $btn='';
 
                 if(Auth::user()->rol == "Administrador"){
-                    $btn=$btn.'<a href="'.route('pagos.show', $pago['id']).'" class="btn btn-info btn-sm">Ver</a>';
+                    $btn=$btn.'<a href="'.route('pagos.show', $pago->id).'" class="btn btn-info btn-sm">Ver</a>';
 
-                    $btn=$btn.'<a href="'.route('administracion.revisarpendiente', $pago).'" class="btn btn-success btn-sm">Revisar</a>';
+                    $btn=$btn.'<a href="'.route('administracion.revisarpendiente', $pago->id).'" class="btn btn-success btn-sm">Revisar</a>';
 
-                    $btn = $btn.'<a href="" data-target="#modal-delete" data-toggle="modal" data-delete="'.$pago['id'].'"><button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i> Eliminar</button></a>';
+                    $btn = $btn.'<a href="" data-target="#modal-delete" data-toggle="modal" data-delete="'.$pago->id.'"><button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i> Eliminar</button></a>';
                 }
 
                 return $btn;
@@ -510,14 +472,16 @@ class AdministracionController extends Controller
             $pagos=$pagos->where('pagos.user_id',$request->asesores);
         }
 
-        return Datatables::of($pagos)
+        //$pagos=$pagos->get();
+
+        return Datatables::of(DB::table($pagos))
             ->addIndexColumn()
             ->addColumn('action', function($pago){
                 $btn='';
                 if(Auth::user()->rol == "Administrador"){
-                    $btn=$btn.'<a href="'.route('pagos.show', $pago['id']).'" class="btn btn-info btn-sm">Ver</a>';
-                    $btn=$btn.'<a href="'.route('administracion.revisarobservado', $pago).'" class="btn btn-success btn-sm">Revisar</a>';
-                    $btn = $btn.'<a href="" data-target="#modal-delete" data-toggle="modal" data-delete="'.$pago['id'].'"><button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i> Eliminar</button></a>';
+                    $btn=$btn.'<a href="'.route('pagos.show', $pago->id).'" class="btn btn-info btn-sm">Ver</a>';
+                    $btn=$btn.'<a href="'.route('administracion.revisarobservado', $pago->id).'" class="btn btn-success btn-sm">Revisar</a>';
+                    $btn = $btn.'<a href="" data-target="#modal-delete" data-toggle="modal" data-delete="'.$pago->id.'"><button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i> Eliminar</button></a>';
                 }
                 return $btn;
             })
@@ -665,36 +629,10 @@ class AdministracionController extends Controller
 
     public function Aprobados()
     {
-        $pagos = Pago::join('users as u', 'pagos.user_id', 'u.id')
-            ->join('detalle_pagos as dpa', 'pagos.id', 'dpa.pago_id')
-            ->join('pago_pedidos as pp', 'pagos.id', 'pp.pago_id')
-            ->join('pedidos as p', 'pp.pedido_id', 'p.id')
-            ->join('detalle_pedidos as dpe', 'p.id', 'dpe.pedido_id')
-            ->select('pagos.id',
-                    'dpe.codigo as codigos',
-                    'u.name as users',
-                    'pagos.observacion',
-                    'dpe.total as total_deuda',
-                    DB::raw('sum(dpa.monto) as total_pago'),
-                    'pagos.condicion',
-                    'pagos.created_at as fecha'
-                    )
-            ->where('pagos.estado', '1')
-            ->where('dpe.estado', '1')
-            ->where('dpa.estado', '1')
-            ->where('pagos.condicion', Pago::ABONADO)
-            ->groupBy('pagos.id',
-                    'dpe.codigo',
-                    'u.name',
-                    'pagos.observacion',
-                    'dpe.total',
-                    'pagos.condicion',
-                    'pagos.created_at')
-            ->get();
-
+        
         $superasesor = User::where('rol', 'Super asesor')->count();
 
-        return view('administracion.aprobados', compact('pagos', 'superasesor'));
+        return view('administracion.aprobados', compact( 'superasesor'));
     }
 
     public function Aprobadostabla(Request $request)
@@ -743,13 +681,13 @@ class AdministracionController extends Controller
             $pagos=$pagos->where('pagos.user_id',$request->asesores);
         }
 
-        return Datatables::of($pagos)
+        return Datatables::of(DB::table($pagos))
             ->addIndexColumn()
             ->addColumn('action', function($pago){
                 $btn='';
                 if(Auth::user()->rol == "Administrador"){
-                    $btn=$btn.'<a href="'.route('pagos.show', $pago['id']).'" class="btn btn-info btn-sm">Ver</a>';                    
-                    $btn = $btn.'<a href="" data-target="#modal-desabonar" data-toggle="modal" data-desabonar="'.$pago['id'].'" data-pago="'.$pago['id2'].'"><button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i> Desabonar</button></a>';
+                    $btn=$btn.'<a href="'.route('pagos.show', $pago->id).'" class="btn btn-info btn-sm">Ver</a>';                    
+                    $btn = $btn.'<a href="" data-target="#modal-desabonar" data-toggle="modal" data-desabonar="'.$pago->id.'" data-pago="'.$pago->id2.'"><button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i> Desabonar</button></a>';
                 }
                 return $btn;
             })

@@ -16,7 +16,7 @@
         <div class="card-footer" id="guardar">
             <button type="submit" class="btn btn-success" id="btnImprimir" target="_blank"><i class="fas fa-save"></i>
                 Guardar</button>
-                <a class="btn btn-danger" href="{{ url()->previous() }}"><i class="fas fa-times-circle"></i> ATRAS</a>
+                <button type = "button" onClick="history.back()" class="btn btn-danger btn-lg"><i class="fas fa-arrow-left"></i>ATRAS</button>
         </div>
         {!! Form::close() !!}
         @include('pedidos.modal.AddRuc')

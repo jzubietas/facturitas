@@ -21,7 +21,31 @@ class BasefriaController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index()
+    {
+
+
+        $superasesor = User::where('rol', 'Super asesor')->count();
+
+        if (Auth::user()->rol == "Llamadas" || Auth::user()->rol == "Llamadas")
+        {
+            $users = User::
+                where('estado', '1')
+                ->whereIn('rol', ['Asesor', 'Super asesor'])
+                ->where('users.llamada', Auth::user()->id)
+                ->pluck('identificador', 'id');
+        }else{
+            $users = User::
+                where('estado', '1')
+                ->whereIn('rol', ['Asesor', 'Super asesor'])
+                //->where('users.llamada', Auth::user()->id)
+                ->pluck('identificador', 'id');
+        }
+
+        return view('base_fria.index', compact( 'superasesor', 'users'));
+    }
+
+    public function indextabla(Request $request)
     {
         //
         //return $dataTable->render('base_fria.index');
@@ -194,5 +218,113 @@ class BasefriaController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function updatebfpost(Request $request)
+    {
+        $request->validate([
+            'nombre' => 'required',
+            'dni' => 'required',
+            'celular' => 'required',
+            'provincia' => 'required',
+            'distrito' => 'required',
+            'direccion' => 'required',
+            'referencia' => 'required',
+            'porcentaje' => 'required',
+        ]);
+        //$id=null;
+        //Selection::whereId($id)->update($request->all());
+        $cliente = Cliente::where('clientes.id',$request->hiddenID)->update([
+            'nombre' => $request->nombre,
+            'dni' => $request->dni,
+            'celular' => $request->celular,
+            'provincia' => $request->provincia,
+            'distrito' => $request->distrito,
+            'direccion' => $request->direccion,
+            'referencia' => $request->referencia,
+            'deuda' => '0',
+            'pidio' => '0',
+            'tipo' => '1',
+            'saldo' => '0'
+
+        ]);
+
+        try {
+            DB::beginTransaction();
+
+        // ALMACENANDO PAGO-PEDIDOS
+        $nombreporcentaje = $request->nombreporcentaje;
+        $valoresporcentaje = $request->porcentaje;
+        $cont = 0;
+
+        /* return $porcentaje; */
+        while ($cont < count((array)$nombreporcentaje)) {
+
+            Porcentaje::create([
+                    'cliente_id' => $request->hiddenID,//$cliente->id,//
+                    'nombre' => $nombreporcentaje[$cont],
+                    'porcentaje' => $valoresporcentaje[$cont],
+                ]);
+                $cont++;
+            }
+        DB::commit();
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+
+        //return redirect()->route('clientes.index')->with('info','registrado');
+    }
+
+    public function updatebf(Request $request, Cliente $cliente)
+    {
+        $request->validate([
+            'nombre' => 'required',
+            'dni' => 'required',
+            'celular' => 'required',
+            'provincia' => 'required',
+            'distrito' => 'required',
+            'direccion' => 'required',
+            'referencia' => 'required',
+            'porcentaje' => 'required',
+        ]);
+
+        $cliente->update([
+            'nombre' => $request->nombre,
+            'dni' => $request->dni,
+            'celular' => $request->celular,
+            'provincia' => $request->provincia,
+            'distrito' => $request->distrito,
+            'direccion' => $request->direccion,
+            'referencia' => $request->referencia,
+            'deuda' => '0',
+            'pidio' => '0',
+            'tipo' => '1'
+        ]);
+        try {
+            DB::beginTransaction();
+
+        // ALMACENANDO PAGO-PEDIDOS
+        $nombreporcentaje = $request->nombreporcentaje;
+        $valoresporcentaje = $request->porcentaje;
+        $cont = 0;
+
+        /* return $porcentaje; */
+        while ($cont < count((array)$nombreporcentaje)) {
+
+            Porcentaje::create([
+                    'cliente_id' => $cliente->id,
+                    'nombre' => $nombreporcentaje[$cont],
+                    'porcentaje' => $valoresporcentaje[$cont],
+                ]);
+                $cont++;
+            }
+        DB::commit();
+        } catch (\Throwable $th) {
+            throw $th;
+            /* DB::rollback();
+            dd($th); */
+        }
+
+        return redirect()->route('clientes.index')->with('info','registrado');
     }
 }

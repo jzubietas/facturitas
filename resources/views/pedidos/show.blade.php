@@ -154,11 +154,7 @@
         <br>
         <!--<a href="{{ route('pedidos.index', $pedido) }}" class="btn btn-danger btn-sm">Cancelar</a>-->
         <div class="card-footer">
-          @if (Auth::user()->rol == "Asesor")
-            <a href="{{ url()->previous() }}" class="btn btn-danger"><i class="fas fas fa-arrow-left"></i>ATRAS</a>
-          @else
-            <a href="{{ url()->previous() }}" class="btn btn-danger"><i class="fas fas fa-arrow-left"></i>ATRAS</a>
-          @endif
+        <button type = "button" onClick="history.back()" class="btn btn-danger btn-lg"><i class="fas fa-arrow-left"></i>ATRAS</button>
         </div>
       </div>
     </div>
