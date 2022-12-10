@@ -12,6 +12,7 @@
 
         <!-- Styles -->
         <link rel="stylesheet" href="{{ mix('css/app.css') }}">
+        <link rel="stylesheet" href="{{ mix('css/boot-dev.css') }}">
 
         @livewireStyles
 
@@ -47,7 +48,7 @@
         <script src="{{ asset('vendor/datatables/buttons.server-side.js') }}"></script>
         @stack('scripts')
 
-        
+
     </body>
 </html>
 {{-- <style>

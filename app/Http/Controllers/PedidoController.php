@@ -1765,7 +1765,9 @@ return ' no imagen ';
                     'dp.nombre_empresa as empresas',
                     'dp.total as total',
                     'pedidos.condicion_envio as condicion_env',
+                    'pedidos.condicion_envio',
                     'pedidos.condicion as condiciones',
+
                     /*'pedidos.envio',*/
                     'pedidos.direccion',
                     'pedidos.destino',
@@ -2576,7 +2578,7 @@ return ' no imagen ';
         //return datatables($pedidos)->toJson();
     }
 
-    
+
 
     public function Atender(Request $request, Pedido $pedido)
     {
@@ -2647,15 +2649,15 @@ return ' no imagen ';
         return redirect()->route('operaciones.poratender')->with('info','actualizado');
     }
 
-    
-
-    
-
-    
 
 
 
-    
+
+
+
+
+
+
 
     public function Enviar(Request $request, Pedido $pedido)
     {
@@ -2674,9 +2676,9 @@ return ' no imagen ';
         return redirect()->route('operaciones.atendidos')->with('info','actualizado');
     }
 
-    
 
-    
+
+
 
     public function Destino(Request $request, Pedido $pedido)
     {
@@ -2709,7 +2711,7 @@ return ' no imagen ';
         return redirect()->route('operaciones.atendidos')->with('info','actualizado');
     }
 
-    
+
 
     public function DescargarAdjunto($adjunto)
     {
@@ -2769,7 +2771,7 @@ return ' no imagen ';
         return redirect()->route('envios.index')->with('info','actualizado');
     }
 
-    
+
 
     public function EnviarPedido(Request $request, Pedido $pedido)//'notificacion' => 'Nuevo pedido creado'
     {
