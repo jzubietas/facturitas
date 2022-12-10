@@ -204,12 +204,12 @@
         },
         rowCallback: function (row, data, index) {
         },
-        initComplete:function(settings,json){
-          if (localStorage. getItem("search_tabla") === null) {
+        initComplete:function(settings,json){          
+          /*if (localStorage. getItem("search_tabla") === null) {
             //no existe
           }else{
-            $('#tablaPrincipal_filter label input').val(localStorage.getItem("search_tabla") ).change();
-          }
+            $('#tablaPrincipal_filter label input').val(localStorage.getItem("search_tabla") ).change();            
+          }*/
         },
         columns: [
           {
