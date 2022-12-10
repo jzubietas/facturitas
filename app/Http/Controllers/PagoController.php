@@ -1175,6 +1175,15 @@ class PagoController extends Controller
             $request->validate([
                 'imagen' => 'required',
             ]);
+            if ($request->get('action') == 'devoluciones') {
+                $this->validate($request,[
+                    "bank_destino" => 'required',
+                    "bank_number" => 'required',
+                ],[
+                    "bank_destino.required" => 'El Banco de la cuenta del cliente es obligatorio',
+                    "bank_number.required" => 'El Numero de su cuenta bancaria es obligatorio',
+                ]);
+            }
 
             try {
                 DB::beginTransaction();
@@ -1412,6 +1421,8 @@ class PagoController extends Controller
                         "asesor_id" => $identi_asesor->id,
                         "amount" => $request->diferencia,
                         "status" => Devolucion::PENDIENTE,
+                        "bank_destino" => $request->bank_destino,
+                        "bank_number" => $request->bank_number,
                         "voucher_path" => null,
                     ]);
                 }
@@ -1491,6 +1502,7 @@ class PagoController extends Controller
             ->get();
         //DB::raw('sum(detalle_pagos.monto) as total')
         $devoluciones = Devolucion::query()->wherePagoId($pago->id)->get();
+
         return view('pagos.show', compact('pagos', 'pagoPedidos', 'detallePagos', 'pago', 'devoluciones'));
     }
 
@@ -2250,7 +2262,7 @@ class PagoController extends Controller
     //funcion pagos observados *
     public function PagosObservados(Request $request)
     {
-       
+
         if ($request->has("datatable")) {
             $pagos = Pago::join('users as u', 'pagos.user_id', 'u.id')
                 ->join('clientes as c', 'pagos.cliente_id', 'c.id')
@@ -2710,6 +2722,9 @@ class PagoController extends Controller
             //"SCOTIABANK" => 'SCOTIABANK',
             //"PICHINCHA" => 'PICHINCHA',
         ];
+        if($devolucion->status==Devolucion::DEVUELTO){
+            return redirect()->route("pagos.show",$devolucion->pago);
+        }
         return view('pagos.devolucion.index', compact('devolucion', 'bancos'));
     }
 
@@ -2718,8 +2733,8 @@ class PagoController extends Controller
 
         $this->validate($request, [
             'voucher' => 'required|file|image',
-            "bank_destino" => 'required',
-            "bank_number" => 'required',
+            //"bank_destino" => 'required',
+           // "bank_number" => 'required',
             "num_operacion" => 'required',
         ]);
 
@@ -2733,15 +2748,15 @@ class PagoController extends Controller
         DB::transaction(function () use ($request, $devolucion) {
             $path = $request->file('voucher')->store('pagos_devolucion', 'pstorage');
             $devolucion->update([
-                "bank_destino" => $request->bank_destino,
-                "bank_number" => $request->bank_number,
+                //"bank_destino" => $request->bank_destino,
+                //"bank_number" => $request->bank_number,
                 "num_operacion" => $request->num_operacion,
                 "voucher_path" => $path,
                 "status" => Devolucion::DEVUELTO,
                 "returned_at" => now(),
             ]);
         });
-        return redirect()->route("notifications.index");
+        return redirect()->route("pagos.show",$devolucion->pago);
     }
 
 }

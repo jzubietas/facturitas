@@ -19,19 +19,7 @@
                                 <li class="list-group-item">Cliente: <b>{{$devolucion->cliente->nombre}}</b></li>
                                 <li class="list-group-item">
                                     <div class="form-group col-lg-12">
-                                        {!! Form::label('bank_destino', 'Banco de la cuenta del cliente') !!}
-                                        {!! Form::select('bank_destino', $bancos , '0', ['required'=>'required','class' => 'form-control selectpicker', 'data-live-search' => 'true', 'placeholder' => '---- SELECCIONE ----']) !!}
-                                    </div>
-                                </li>
-                                <li class="list-group-item">
-                                    <div class="form-group col-lg-12">
-                                        {!! Form::label('bank_number', 'Numero de su cuenta bancaria') !!}
-                                        {!! Form::input('text','bank_number', null,  ['class' => 'form-control','required'=>'required']) !!}
-                                    </div>
-                                </li>
-                                <li class="list-group-item">
-                                    <div class="form-group col-lg-12">
-                                        {!! Form::label('num_operacion', 'Numero de operacion o del voucher') !!}
+                                        {!! Form::label('num_operacion', 'Numero de operacion del voucher') !!}
                                         {!! Form::input('text','num_operacion', null , ['class' => 'form-control','required'=>'required']) !!}
                                     </div>
                                 </li>
@@ -47,7 +35,14 @@
                                     </div>
                                 </li>
                                 <li class="list-group-item">
-                                    <button type="submit" class="btn btn-success">Marcar pago devuelto</button>
+                                   <div class="flex d-flex justify-content-between">
+                                       <button type="submit" class="btn btn-success">
+                                           <i class="fa fa-save"></i>
+                                           Marcar pago devuelto</button>
+                                       <a href="{{route('pagos.show',$devolucion->pago)}}#section_devoluciones" target="_blank" class="btn btn-info">
+                                           <i class="fa fa-link"></i>
+                                           Ver Pago</a>
+                                   </div>
                                 </li>
                             </ul>
                             @if ($errors->any())

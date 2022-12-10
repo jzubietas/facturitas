@@ -99,7 +99,7 @@ class NotificationsController extends Controller
         // Return the new notification data.
 
         return [
-            'icon' => 'fas fa-bell',
+            'icon' => 'fas fa-envelope',
             'label' => count(auth()->user()->unreadNotifications)+count($devoluciones),
             'label_color' => 'danger',
             'icon_color' => 'white',

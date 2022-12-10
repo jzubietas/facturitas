@@ -180,7 +180,9 @@
                 </div>
 
                 <div class="form-group col-lg-1">
-                <button type = "button" onClick="history.back()" class="btn btn-danger btn-lg"><i class="fas fa-arrow-left"></i>ATRAS</button>
+                    <button type="button" onClick="history.back()" class="btn btn-danger btn-lg"><i
+                            class="fas fa-arrow-left"></i>ATRAS
+                    </button>
                 </div>
 
                 <div class="form-group col-lg-2">
@@ -215,11 +217,16 @@
 
                 <div class="form-group col-lg-1" style="text-align:center;">
                     <div id="consideradevolucion" class="d-none">
-                        <button class="btn btn-danger" type="button" id="btnDevolucion">  <i class="fas fa-times-circle"></i> Devolucion</button>
+                        <button class="btn btn-danger" type="button"
+                                data-target="#modal-add-devolucion" data-toggle="modal">
+                            <i class="fas fa-times-circle"></i>
+                            Devolucion
+                        </button>
                     </div>
                 </div>
             </div>
         </div>
+        @include('pagos.modals.AddDevolucion')
         {!! Form::close() !!}
     </div>
 
@@ -2473,15 +2480,27 @@
                 });
                 //$("#btnSaldo")
 
-                $(document).on("click", "#btnDevolucion", function () {
+                $(document).on("click", "#btnDevolucion", function (e) {
 
                     let dddd = parseFloat($("#diferencia").val());
+
+                    function generateHtmlErrors(errors) {
+                        console.log(errors)
+                        return `<div class="alert alert-danger">
+                                    <ul>
+                                       ${errors.map(function (e){return `<li>${e}</li>`;}).join('')}
+                                    </ul>
+                                </div>`;
+                    }
+
                     if (dddd > 3) {
                         //$("#formulario").submit();
                         //$("#formulario").trigger("submit")
 
                         var formDataSaldo = $("#formulario").serialize();
-
+                        $("#devolucion_message_response").html("");
+                        $("#btnDevolucion").attr("disabled","disabled")
+                        $("#btnDevolucion").text("Guardando ..")
                         $.ajax({
                             data: formDataSaldo,
                             //processData: false,
@@ -2490,8 +2509,24 @@
                             url: "{{ route('pagos.store',['action'=>'devoluciones']) }}",
                             success: function (data) {
                                 console.log("grabado");
+                                $("#btnDevolucion").removeAttr("disabled")
+                                $("#btnDevolucion").text("Registrar devolucion")
                                 window.location.href = "{{ route('pagos.index')}}";
-
+                            },
+                            error: function (jqXHR, textStatus, errorThrown) {
+                                console.log(arguments)
+                                $("#btnDevolucion").removeAttr("disabled")
+                                $("#btnDevolucion").text("Registrar devolucion")
+                                if (jqXHR.status === 422) {
+                                    if (jqXHR.responseJSON && jqXHR.responseJSON.errors) {
+                                        $("#devolucion_message_response").html(generateHtmlErrors(
+                                                Object.keys(jqXHR.responseJSON.errors).map(function (a){
+                                                    return jqXHR.responseJSON.errors[a][0]
+                                                })
+                                            )
+                                        );
+                                    }
+                                }
                             }
                         })
 

@@ -196,7 +196,7 @@
                 </div>
             </div>
         </div>
-        <div class="card-body">
+        <div class="card-body" id="section_devoluciones">
             <div class="border rounded card-body border-secondary">
                 <div class="form-row">
                     <div class="form-group col-lg-12">
@@ -231,9 +231,9 @@
                                         <td>{{$devolucion->amount_format}}</td>
                                         <td>{{ optional($devolucion->created_at)->format('d-m-Y h:i A') }}</td>
                                         <td>{{ $devolucion->bank_number }}</td>
-                                        <td>{{ $devolucion->num_operacion }}</td>
+                                        <td>{{ $devolucion->num_operacion?:'--' }}</td>
                                         <td>{{ $devolucion->cliente->nombre }}</td>
-                                        <td>{{ optional($devolucion->returned_at)->format('d-m-Y h:i A') }}</td>
+                                        <td>{{ optional($devolucion->returned_at)->format('d-m-Y h:i A')??'--' }}</td>
                                         <td class="bg-{{$devolucion->estado_color}}">
                                             {{$devolucion->estado_text}}
                                         </td>
@@ -243,10 +243,13 @@
                                                     src="{{ Storage::disk($devolucion->voucher_disk)->url($devolucion->voucher_path) }}"
                                                     alt="{{ basename($devolucion->voucher_path) }}" height="200px"
                                                     width="200px" class="img-thumbnail"></a>
-                                            <p><br><a target="_blank"
-                                                      href="{{ Storage::disk($devolucion->voucher_disk)->url($devolucion->voucher_path) }}">
+                                            <p>
+                                                <br>
+                                                <a target="_blank"
+                                                   href="{{ Storage::disk($devolucion->voucher_disk)->url($devolucion->voucher_path) }}">
                                                     <button type="button" class="btn btn-secondary"> Descargar</button>
-                                                </a></p>
+                                                </a>
+                                            </p>
                                         </td>
                                     </tr>
                                     @php
