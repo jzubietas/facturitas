@@ -892,11 +892,8 @@
                         "createdRow": function(row, data, dataIndex) {},
                         "autoWidth": false,
                         rowCallback: function(row, data, index) {},
-                        columns: [{
-                                data: 'DT_RowIndex',
-                                name: 'DT_RowIndex',
-                                sWidth: '10%',
-                            },
+                        columns: [
+
                             {
                                 data: 'id',
                                 name: 'id',
