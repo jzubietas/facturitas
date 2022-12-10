@@ -55,7 +55,8 @@
         <td>{{ $dato['asesor'] }}</td>
         <td>{{ $dato['nombre'] }}</td>
         <td>{{ $dato['dni'] }}</td>
-        <td>{{ $dato['celular'] }}</td>        
+        <td>{{ $dato['celular'] }}</td> 
+        <td>{{ $dato['icelular'] }}</td>
         <td>{{ $dato['provincia'] }}</td>
         <td>{{ $dato['distrito'] }}</td>
         <td>{{ $dato['direccion'] }}</td>

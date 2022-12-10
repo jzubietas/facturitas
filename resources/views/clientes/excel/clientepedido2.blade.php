@@ -201,6 +201,8 @@
       <th style="background-color: #4c5eaf; text-align: center; color: white;">NOMBRE</th>
       <th style="background-color: #4c5eaf; text-align: center; color: white;">DNI</th>
       <th style="background-color: #4c5eaf; text-align: center; color: white;">CELULAR</th>
+      <th style="background-color: #4c5eaf; text-align: center; color: white;">IDENTIFICADOR CELULAR</th>
+      <th style="background-color: #4c5eaf; text-align: center; color: white;">COD. PEDIDO</th>
       <th style="background-color: #4c5eaf; text-align: center; color: white;">PROVINCIA</th>
       <th style="background-color: #4c5eaf; text-align: center; color: white;">DISTRITO</th>
       <th style="background-color: #4c5eaf; text-align: center; color: white;">DIRECCION</th>
@@ -248,7 +250,9 @@
         <td>{{ $dato['asesor'] }}</td>
         <td>{{ $dato['nombre'] }}</td>
         <td>{{ $dato['dni'] }}</td>
-        <td>{{ $dato['celular'] }}</td>        
+        <td>{{ $dato['celular'] }}</td>     
+        <td>{{ $dato['icelular'] }}</td>   
+        <td>{{ $dato['codigo'] }}</td> 
         <td>{{ $dato['provincia'] }}</td>
         <td>{{ $dato['distrito'] }}</td>
         <td>{{ $dato['direccion'] }}</td>

@@ -183,7 +183,6 @@
                             if(data.html == 0){
                                 agregar();
                             }else{
-
                                 Swal.fire({
                                 icon: 'warning',
                                 title: 'Advertencia',
@@ -193,7 +192,22 @@
                                 denyButtonText: 'Cancelar',
                                 }).then((result) => {
                                 if (result.isConfirmed) {
-                                    agregar();
+                                    //agregar();
+                                    if (result.isConfirmed) {
+                                    Swal.fire({
+                                    icon: 'warning',
+                                    title: 'Advertencia',
+                                    text: 'Esta seguro de querer guardar?',
+                                    showDenyButton: true,
+                                    confirmButtonText: 'Estoy de acuerdo',
+                                    denyButtonText: 'Cancelar',
+                                    }).then((result) => {
+                                    if (result.isConfirmed) {
+                                        agregar();
+                                    }
+                                    })
+                                    //agregar();
+                                    }
                                 }
                                 })
                             }
