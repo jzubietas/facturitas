@@ -41,7 +41,7 @@ class MigrateStatusPedido extends Command
     {
 
         \Schema::table('pagos', function (Blueprint $table) {
-            $table->integer('condicion_code')->nullable();
+            $table->integer('condicion_code')->after('condicion')->nullable();
         });
 
         foreach (Pago::$migrateCondiciones as $status => $code) {

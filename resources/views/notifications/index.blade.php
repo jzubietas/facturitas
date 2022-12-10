@@ -33,17 +33,25 @@
                             @endforeach
 
                             @forelse ($postNotifications as $notification)
-                                <div class="alert alert-default-warning">
-                                    Asunto: {{ $notification->data['asunto'] }} <br>
+                                <div class="alert alert-default-warning" id="{{$notification->id}}">
+                                    Asunto: {{ new \Illuminate\Support\HtmlString($notification->data['asunto']) }} <br>
+                                    <hr class="my-2">
                                     {{ $notification->data['tipo'] }} <br>
+                                    <hr class="my-1">
                                     Estado: {{ $notification->data['condicion'] }}
                                     <p>{{ $notification->created_at->diffForHumans() }}</p>
-                                    <button type="submit" class="mark-as-read btn btn-sm btn-dark"
-                                            data-id="{{ $notification->id }}">Marcar como leída
-                                    </button>
+
+                                    @if(isset($notification->data['devolucion_id']))
+                                        <a href="{{ route('pagos.devolucion',[$notification->data['devolucion_id'],'read_notification'=>$notification->id]) }}"
+                                           id="mark-all">Ver notificacion</a>
+                                    @else
+                                        <button type="submit" class="mark-as-read btn btn-sm btn-dark"
+                                                data-id="{{ $notification->id }}">Marcar como leída
+                                        </button>
+                                    @endif
                                 </div>
                                 @if ($loop->last)
-                                    <a href="{{ route('markAsRead') }}" id="mark-all">Marcar todas como leídas</a>
+                                        <a href="{{ route('markAsRead') }}" id="mark-all">Marcar todas como leídas</a>
                                 @endif
 
                             @empty
