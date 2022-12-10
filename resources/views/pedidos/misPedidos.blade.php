@@ -3,6 +3,12 @@
 @section('title', 'Pedidos | Mis pedidos')
 
 @section('content_header')
+
+    <style>
+        .btn-dev{
+            min-width: 170px;
+        }
+    </style>
   <h1>Lista de mis pedidos
     @can('pedidos.create')
       <a href="{{ route('pedidos.create') }}" class="btn btn-info"><i class="fas fa-plus-circle"></i> Agregar</a>
