@@ -177,7 +177,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     
     Route::post('pedidoobteneradjuntoRequest', [PedidoController::class, 'pedidoobteneradjuntoRequest'])->name('pedidoobteneradjuntoRequest');
 
-    /*Controller Pedido*/
+    /*Controller Pedido */
 
     /*Envios */
     Route::get('envios.porrecibir', [EnvioController::class, 'Enviosporrecibir'])->name('envios.porrecibir');
@@ -188,7 +188,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::get('envios.enrepartotabla', [EnvioController::class, 'Enviosenrepartotabla'])->name('envios.enrepartotabla');
     Route::get('envios.seguimientoprovincia', [EnvioController::class, 'Seguimientoprovincia'])->name('envios.seguimientoprovincia');
     Route::get('envios.seguimientoprovinciatabla', [EnvioController::class, 'Seguimientoprovinciatabla'])->name('envios.seguimientoprovinciatabla');
-    Route::get('envios.entregados', [EnvioController::class, 'Entregados'])->name('envios.enviados');
+    Route::get('envios.entregados', [EnvioController::class, 'Entregados'])->name('envios.entregados');
     Route::get('envios.entregadostabla', [EnvioController::class, 'Entregadostabla'])->name('envios.enviadostabla');
     /*Envios */
 
