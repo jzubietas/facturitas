@@ -190,7 +190,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::get('envios.seguimientoprovinciatabla', [EnvioController::class, 'Seguimientoprovinciatabla'])->name('envios.seguimientoprovinciatabla');
     Route::get('envios.entregados', [EnvioController::class, 'Entregados'])->name('envios.entregados');
     Route::get('envios.entregadostabla', [EnvioController::class, 'Entregadostabla'])->name('envios.enviadostabla');
-    /*Envios */
+    /*Envios routes */
 
     /*Operaciones*/
     Route::get('operaciones.poratender', [OperacionController::class, 'PorAtender'])->name('operaciones.poratender');
