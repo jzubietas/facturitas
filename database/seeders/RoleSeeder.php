@@ -134,5 +134,6 @@ class RoleSeeder extends Seeder
         Permission::create(['name' => 'users.operarios', 'description' => 'Ver Operarios', 'modulo' => 'Usuarios'])->assignRole($admin);
         Permission::create(['name' => 'users.misoperarios', 'description' => 'Operarios Asignados', 'modulo' => 'Usuarios'])->assignRole($admin);
         Permission::create(['name' => 'users.jefes', 'description' => 'Ver Jefes', 'modulo' => 'Usuarios'])->assignRole($admin);
+        //Permission::create(['name' => 'users.mipersonal', 'description' => 'Ver Personal', 'modulo' => 'Usuarios'])->assignRole($admin);
     }
 }

@@ -701,6 +701,7 @@
           fd2.append('destino', destino);
         var pedidos=[];
         $.each(rows_selected, function(index, rowId){
+            console.log("index "+index);
               console.log("ID PEDIDO  es "+  rowId);
               pedidos.push(rowId);
           });

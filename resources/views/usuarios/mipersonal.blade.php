@@ -42,7 +42,7 @@
               <td>{{ $user->email }}</td>
               <td>{{ $user->rol }}</td>
               <td>{{ $user->estado }}
-              <td>{{ $user->action }}
+              <td><a href="" data-target="#modal-historial-personal" data-toggle="modal" data-personal="{{ $user->id }}"><button class="btn btn-danger btn-sm">Ver Asignados</button></a>     
               </td>
             </tr>
           @endforeach
@@ -113,6 +113,137 @@
   @endif
 
   <script>
+    var tablepersonal=null;
+    $(document).ready(function() {
+
+      $.ajaxSetup({
+          headers: {
+              'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+          }
+      });
+      
+
+      //AGREGANDO MODAL
+    $('#modal-historial-personal').on('show.bs.modal', function (event) {
+       
+        console.log("aa")   
+        var button = $(event.relatedTarget) 
+        var personal = button.data('personal')
+ 
+        tablepersonal.destroy();
+ 
+        tablepersonal=$('#tablaPrincipalPersonal').DataTable({
+          "bPaginate": true,
+          "bFilter": true,
+          "bInfo": true,
+          "bAutoWidth": false,
+           "pageLength":5,
+          "order": [[ 0, "asc" ]],
+          'ajax': {
+            url:"{{ route('personaltablahistorial') }}",					
+            'data': { "personal":personal}, 
+            "type": "get",
+          },
+          /*"search": {
+             "search": id
+           },*/
+          columns: [
+         {
+            data: 'id', 
+            name: 'id',
+            render: function ( data, type, row, meta ) {
+                    if(row.id<10){
+                        return 'USER000'+row.id;
+                    }else if(row.id<100){
+                        return 'USER00'+row.id;
+                    }else if(row.id<1000){
+                        return 'USER0'+row.id;
+                    }else{
+                        return 'USER'+row.id;
+                    }
+            }
+         },
+         {data: 'name', name: 'name'},
+         {data: 'email',name: 'email'},
+         {data: 'rol',name: 'rol'},
+        
+         //estado de pago
+         {       
+            data: 'estado', name: 'estado',
+                  render: function ( data, type, row, meta ) {
+                      if(data=="1")
+                      {
+                          return '<span>Activo</span>';
+                      }else if(data=="0"){
+                          return '<span>Inactivo</span>';
+                      }
+                  }
+        }, 
+         ],
+          language: {
+            "decimal": "",
+            "emptyTable": "No hay informaciÃ³n",
+            "info": "Mostrando del _START_ al _END_ de _TOTAL_ Entradas",
+            "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
+            "infoFiltered": "(Filtrado de _MAX_ total entradas)",
+            "infoPostFix": "",
+            "thousands": ",",
+            "lengthMenu": "Mostrar _MENU_ Entradas",
+            "loadingRecords": "Cargando...",
+            "processing": "Procesando...",
+            "search": "Buscar:",
+            "zeroRecords": "Sin resultados encontrados",
+            "paginate": {
+            "first": "Primero",
+            "last": "Ultimo",
+            "next": "Siguiente",
+            "previous": "Anterior"
+            }
+          },
+        });
+ 
+ 
+      });
+      
+      tablepersonal=$('#tablaPrincipalPersonal').DataTable({
+        "bPaginate": false,
+        "bFilter": false,
+        "bInfo": false,
+        "length": 3,
+        columns: 
+        [
+          {data: 'id' },
+          {data: 'name'},
+          {data: 'email'},
+          {data: 'rol'},
+          {data: 'estado'}
+        ],
+        language: {
+          "decimal": "",
+          "emptyTable": "No hay informaciÃ³n",
+          "info": "Mostrando del _START_ al _END_ de _TOTAL_ Entradas",
+          "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
+          "infoFiltered": "(Filtrado de _MAX_ total entradas)",
+          "infoPostFix": "",
+          "thousands": ",",
+          "lengthMenu": "Mostrar _MENU_ Entradas",
+          "loadingRecords": "Cargando...",
+          "processing": "Procesando...",
+          "search": "Buscar:",
+          "zeroRecords": "Sin resultados encontrados",
+          "paginate": {
+          "first": "Primero",
+          "last": "Ultimo",
+          "next": "Siguiente",
+          "previous": "Anterior"
+          }
+        }
+      });
+    });
+
+   </script>  
+
+  <script>
     //VALIDAR CAMPOS NUMERICO DE MONTO EN PAGOS
 
     $('input.number').keyup(function(event) {
@@ -170,16 +301,9 @@
             }
         },
         {data: 'name', name: 'name'},
-        {
-          data: 'email',
-          name: 'email',
-        },
-        {
-          data: 'rol',
-          name: 'rol',
-        },
-        {       
-          data: 'estado', name: 'estado',
+        {data: 'email', name: 'email'},
+        {data: 'rol', name: 'rol'},
+        {data: 'estado', name: 'estado',
                 render: function ( data, type, row, meta ) {
                     if(data=="1")
                     {
@@ -201,34 +325,26 @@
                 }
         },
         ],
-
         language: {
-        "decimal": "",
-        "emptyTable": "No hay informaciÃ³n",
-        "info": "Mostrando del _START_ al _END_ de _TOTAL_ Entradas",
-        "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
-        "infoFiltered": "(Filtrado de _MAX_ total entradas)",
-        "infoPostFix": "",
-        "thousands": ",",
-        "lengthMenu": "Mostrar _MENU_ Entradas",
-        "loadingRecords": "Cargando...",
-        "processing": "Procesando...",
-        "search": "Buscar:",
-        "zeroRecords": "Sin resultados encontrados",
-        "paginate": {
-          "first": "Primero",
-          "last": "Ultimo",
-          "next": "Siguiente",
-          "previous": "Anterior"
-        }
-      },
-
-    });
-    $(document).on("keypress",'#tablaPrincipal_filter label input',function(){
-      console.log("aaaaa")
-      
-      localStorage.setItem("search_tabla",$(this).val());
-      console.log( "search_tabla es "+localStorage.getItem("search_tabla") );
+              "decimal": "",
+              "emptyTable": "No hay informaciÃ³n",
+              "info": "Mostrando del _START_ al _END_ de _TOTAL_ Entradas",
+              "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
+              "infoFiltered": "(Filtrado de _MAX_ total entradas)",
+              "infoPostFix": "",
+              "thousands": ",",
+              "lengthMenu": "Mostrar _MENU_ Entradas",
+              "loadingRecords": "Cargando...",
+              "processing": "Procesando...",
+              "search": "Buscar:",
+              "zeroRecords": "Sin resultados encontrados",
+              "paginate": {
+              "first": "Primero",
+              "last": "Ultimo",
+              "next": "Siguiente",
+              "previous": "Anterior"
+              }
+          },
 
     });
     $('#tablaPrincipal_filter label input').on('paste', function(e) {
@@ -243,3 +359,6 @@
 
   </script>
 @stop
+
+
+

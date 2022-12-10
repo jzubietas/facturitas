@@ -44,7 +44,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::resource('clientes', ClienteController::class)->names('clientes');
     Route::get('clientestabla', [ClienteController::class, 'indextabla'])->name('clientestabla');
 
-    Route::get('clientes.abandono', [ClienteController::class, 'indexabandono'])->name('clientes.abandono');
+    Route::get('clientes.abandonos', [ClienteController::class, 'indexabandono'])->name('clientes.abandonos');
     Route::get('clientesabandonotabla', [ClienteController::class, 'indexabandonotabla'])->name('clientesabandonotabla');
 
     Route::get('clientes.recurrentes', [ClienteController::class, 'indexrecurrente'])->name('clientes.recurrentes');
@@ -197,6 +197,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::get('envios/{imagen}/descargarimagen', [PedidoController::class, 'DescargarImagen'])->name('envios.descargarimagen');
 
     Route::get('pagos/devolucion/{devolucion}', [PagoController::class,'devolucion'])->name('pagos.devolucion');
+    Route::post('pagos/devolucion/{devolucion}', [PagoController::class,'devolucionUpdate'])->name('pagos.devolucion.update');
     Route::resource('pagos', PagoController::class)->names('pagos');
 //Route::get('pagos/create/{cliente}', [PagoController::class, 'create'])->name('pagos.create');
 
@@ -313,6 +314,7 @@ Route::get('users.operarios', [UserController::class, 'Operarios'])->name('users
 Route::get('users.misoperarios', [UserController::class, 'MisOperarios'])->name('users.misoperarios');
 Route::get('users.jefes', [UserController::class, 'Jefes'])->name('users.jefes');
 Route::get('users.mipersonal',[UserController::class, 'MiPersonal'])->name('users.mipersonal');
+Route::get('personaltablahistorial', [UserController::class, 'personaltablahistorial'])->name('personaltablahistorial');//actualizado para serverside
 Route::get('indextablapersonal', [UserController::class, 'indextablapersonal'])->name('indextablapersonal');
 
     Route::post('VentaPorFechas', [PdfController::class, 'VentaPorFechas'])->name('VentaPorFechas');

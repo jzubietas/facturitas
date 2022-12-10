@@ -37,3 +37,18 @@ if (!function_exists("generate_bar_code")) {
         return $data;
     }
 }
+
+if (!function_exists("generate_correlativo")) {
+    function generate_correlativo($prefix,$next,$digit=4 )
+    {
+        return $prefix . str_pad($next, $digit, '0', STR_PAD_LEFT);
+    }
+}
+
+if (!function_exists("money_f")) {
+    function money_f($amount,$currency='PEN',$locale='es-PE')
+    {
+        $a = new \NumberFormatter($locale, \NumberFormatter::CURRENCY);
+        return $a->formatCurrency($amount, $currency);
+    }
+}

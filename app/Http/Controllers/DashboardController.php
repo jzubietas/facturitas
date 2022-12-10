@@ -26,6 +26,7 @@ class DashboardController extends Controller
                 ->where('users.estado', '1')
                 /* ->whereMonth('pedidos.created_at', $mfecha) */
                 ->get();
+                
             if(Auth::user()->id == "33"){
                 $pagoxmes_total = Pedido::join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')//CANTIDAD DE PEDIDOS DEL MES
                     ->join('users as u', 'pedidos.user_id', 'u.id')
@@ -95,6 +96,15 @@ class DashboardController extends Controller
                 ->groupBy('u.identificador')
                 ->orderBy((DB::raw('count(dp.id)')), 'DESC')
                 ->get();
+
+            //PEDIDOS X MES
+            
+            $pedidos_mes_ = Pedido::select(DB::raw('count(*) as total'))//META PEDIDOS
+            ->whereMonth('created_at', $mfecha)
+            ->get();
+            
+
+
             //MONTO DE PAGO X CLIENTE EN EL MES TOP 30
             $pagosxmes = Pago::join('clientes as c', 'pagos.cliente_id', 'c.id')
                 ->join('users as u', 'pagos.user_id', 'u.id')
@@ -258,6 +268,7 @@ class DashboardController extends Controller
             $conteo = count(auth()->user()->unreadNotifications);
 
         return view('dashboard.dashboard', compact('pedidoxmes_total',
+                                                    'pedidos_mes_',
                                                     'pagoxmes_total',
                                                     'montopedidoxmes_total',
                                                     'montopagoxmes_total',
@@ -280,7 +291,8 @@ class DashboardController extends Controller
                                                     'pagosxrevisar_administracion',
                                                     'pagosobservados_administracion',
                                                     'conteo',
-                                                    'cobranzaxmes'
+                                                    'cobranzaxmes',
+                                                    
                                                     )
                     );
     }

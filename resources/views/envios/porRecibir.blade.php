@@ -55,6 +55,7 @@
         <thead>
           <tr>
             <th scope="col">Item</th>
+            <th scope="col">Item</th>
             <th scope="col">Código</th>
             <th scope="col">Asesor</th>
             <th scope="col">Cliente</th>
@@ -247,6 +248,7 @@
                 }
               }
           },
+          {data: 'id2', name: 'id2',"visible":false },
           {data: 'codigos', name: 'codigos', },
           {data: 'users', name: 'users', },
           {
