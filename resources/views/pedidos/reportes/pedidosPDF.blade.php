@@ -114,9 +114,9 @@
         </tr>
         <tr>
           @if ( ($mirol=="Asesor") && ($identificador=="06" || $identificador=="07" || $identificador=="08" || $identificador=="09" || $identificador=="10" ) )
-            <th scope="row"><br>MES<br><br></th>
+                <td><br>{{ $pedido->mes }}<br><br></td>
           @else
-            <th scope="row"><br>MES<br><br></th>
+            <td scope="row"><br>MES<br><br></td>
             <td><br>{{ $pedido->mes }}<br><br></td>
           @endif
 
