@@ -279,14 +279,14 @@ return [
             'icon'   => 'fas fa-check-circle',
             'active' => ['pagos perdonar courier'],
         ],
-        
+
         ['header' => 'MÓDULOS'],
 
         [
             'text'    => 'Pedidos',
             'icon'    => 'fa fa-file',
             'can' => 'pedidos.modulo',
-            'submenu' => [                
+            'submenu' => [
                 [
                     'text' => 'Bandeja de pedidos',
                     'route'  => 'pedidos.index',
@@ -379,7 +379,7 @@ return [
                     'can' => 'envios.index',
                     'icon'   => 'fas fa-check-circle',
                     'active' => ['envios'],
-                ],                
+                ],
                 [
                     'text' => 'Seguimiento provincia',
                     'route'  => 'envios.seguimientoprovincia',
@@ -493,7 +493,7 @@ return [
                     'can' => 'base_fria.index',
                     'icon'   => 'fas fa-check-circle',
                     'active' => ['base fria'],
-                ],                
+                ],
                 [
                     'text' => 'Clientes',
                     'route'  => 'clientes.index',
@@ -531,7 +531,7 @@ return [
                 ],
             ],
         ],
-        
+
         [
             'text'    => 'Reportes',
             'icon'    => 'fas fa-chart-bar',
@@ -542,7 +542,7 @@ return [
                     'route'  => 'reportes.index',
                     'can' => 'reportes.index',
                     'icon'   => 'fas fa-check-circle',
-                ], 
+                ],
                 /*[
                     'text' => 'Reportes mis asesores',
                     'route'  => 'reportes.misasesores',
@@ -557,7 +557,7 @@ return [
                 ],
             ],
         ],
-        
+
         [
             'text'    => 'Accesos y permisos',
             'icon'    => 'fas fa-cogs',
@@ -634,7 +634,7 @@ return [
                     'active' => ['mis llamadas'],
                 ],
             ],
-        ],        
+        ],
     ],
 
     /*
@@ -723,7 +723,7 @@ return [
                 [
                     'type' => 'js',
                     'asset' => false,
-                    'location' => '//cdn.jsdelivr.net/npm/sweetalert2@8',
+                    'location' => '//cdn.jsdelivr.net/npm/sweetalert2@11',
                 ],
             ],
         ],

@@ -26,6 +26,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/css/bootstrap-select.min.css">
 
+    <link rel="stylesheet" href="{{asset('css/boot-dev.css')}}">
+
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
 </head>
@@ -62,7 +64,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                   <i class="fas fa-bell"></i>
                     @if (count(auth()->user()->unreadNotifications))
                     <span class="badge badge-warning">{{ count(auth()->user()->unreadNotifications) }}</span>
-                        
+
                     @endif
                   </span>
                 </a>
@@ -74,9 +76,9 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     <span class="ml-3 pull-right text-muted text-sm">{{ $notification->created_at->diffForHumans() }}</span>
                   </a>
                   @empty
-                    <span class="ml-3 pull-right text-muted text-sm">Sin notificaciones por leer </span>  
+                    <span class="ml-3 pull-right text-muted text-sm">Sin notificaciones por leer </span>
                   @endforelse
-                  
+
                   <div class="dropdown-divider"></div>
                   <span class="dropdown-header">Read Notifications</span>
                   @forelse (auth()->user()->readNotifications as $notification)
@@ -88,7 +90,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
                     <span class="ml-3 pull-right text-muted text-sm">Sin notificaciones leidas                      </span>
                   @endforelse
 
-                  
+
                   <div class="dropdown-divider"></div>
                   {{-- <a href="{{ route('markAsRead') }}" class="dropdown-item dropdown-footer">Mark all as read</a> --}}
                 </div>
@@ -181,10 +183,10 @@ scratch. This page gets rid of all links and provides the needed markup only.
                   Logout
                   </p>
                 </a>
-            
+
                 <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                   @csrf
-                </form>              
+                </form>
             </li>
           </ul>
         </nav>
@@ -223,24 +225,24 @@ scratch. This page gets rid of all links and provides the needed markup only.
 
                   <div class="container-fluid">
                     @if (session('message'))
-                    <div class="row mb-2">                      
+                    <div class="row mb-2">
                       <div class="col-lg-12">
                         <div class="alert alert-danger">
                           {{ session('message') }}
                         </div>
                       </div>
-                    </div>                        
+                    </div>
                     @endif
                   </div>
 
-                  @yield('content')                  
-                
+                  @yield('content')
+
                 </div>
               </div>
 
-              
+
             </div>
-            
+
             <!-- /.col-md-6 -->
           </div>
           <!-- /.row -->
@@ -281,8 +283,8 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
     <!-- AdminLTE App -->
     <script src="{{asset('js/app.min.js')}}"></script>
-    
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>   
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>
   @yield('scripts')
 </body>
 
