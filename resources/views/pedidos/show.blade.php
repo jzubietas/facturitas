@@ -149,29 +149,36 @@
               <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                   <div class="row">
                       <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
-                          {!! Form::label('envio_doc', 'Documento adjuntado') !!}
-                          @foreach($imagenes as $img)
-                              @if ($img->pedido_id == $pedido->id)
-                                  <p>
-                                      <a href="{{ route('pedidos.descargaradjunto', $img->adjunto) }}">{{ $img->adjunto }}</a>
-                                      <a href="#" data-target="#modal-delete-adjunto" data-toggle="modal" data-imgid="{{ $img->pedido_id }}" data-imgadjunto="{{ $img->adjunto }}">
-                                          <button class="btn btn-danger btn-sm" data-imgid="{{ $img->pedido_id }}" data-imgadjunto="{{ $img->adjunto }}">
-                                              <i class="fas fa-trash-alt"></i>
-                                          </button>
-                                      </a>
-                                      <!--<a href="" data-target="#modal-delete-adjunto-{{ $img->id }}" data-toggle="modal">
-                        <button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i></button></a>-->
-                                  </p>
-                              @endif
-                              @include('pedidos.modal.DeleteAdjuntoid')
-                          @endforeach
+                          <h4 style="font-weight:bold;">Detalle de atención</h4>
+                          <div class="row">
+                              <div class="col-lg-6">
+                                  <p><b>Cantidad de comprobantes enviados:</b></p>
+                                  <p>{{ $pedido->cant_compro }}</p>
+                              </div>
+                              <div class="col-lg-6">
+                                  <p><b>Archivos Adjuntados:</b></p>
+
+                                  @foreach($imagenesatencion as $img_at)
+                                      @if ($img_at->pedido_id == $pedido->id)
+                                          <p>
+                                              <a href="{{ route('pedidos.descargaradjunto', $img_at->adjunto) }}">{{ $img_at->adjunto }}</a>
+                                          </p>
+                                      @endif
+                                      @include('pedidos.modal.DeleteAdjuntoid')
+                                  @endforeach
+                              </div>
+
+                          </div>
+
+
+
                       </div>
                       <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
                       </div>
                   </div>
               </div>
           </div>
-<br>
+          <br>
 
         <textarea class="form-control" rows="6" placeholder="Cotizacion" name="copiar_cotizacion" cols="50" id="copiar_cotizacion">
 
