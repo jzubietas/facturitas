@@ -141,15 +141,7 @@
             $(".textcode").html("PED"+idunico);
             $("#hiddenAtender").val(idunico);
 
-            /*$.ajax({
-                url: "{{ route('operaciones.editatencion',':id') }}".replace(':id',idunico),
-                data: idunico,
-                method: 'POST',
-                success: function(data) {
-                $('#listado_adjuntos').html(data);
-
-                }
-            });*/
+            
 
             $('#modal-delete-adjunto').on('shown.bs.modal', function (event) {
                 console.log("aa");
