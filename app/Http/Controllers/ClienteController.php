@@ -690,14 +690,12 @@ class ClienteController extends Controller
                 ->where('pedidos.estado', '1')
                 ->where('dp.estado', '1')
                 //->where('pedidos.envio', '1')
-                ->where('pedidos.condicion_envio', 1)
-                ->get();
+                //->where('pedidos.condicion_envio', 1)
+                ->whereIn('pedidos.condicion_envio',[Pedido::PENDIENTE_DE_ENVIO])
+                ->whereIn('pedidos.envio', [Pedido::ENVIO_CONFIRMAR_RECEPCION,Pedido::ENVIO_RECIBIDO]);
+                //->get();
 
-
-
-
-
-            return Datatables::of($pedidos)
+            return Datatables::of(DB::table($pedidos))
                     ->addIndexColumn()
                     ->make(true);
         }
