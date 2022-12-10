@@ -17,7 +17,9 @@ class EntregadosPorFechasExport implements FromView, ShouldAutoSize
 
     public function pedidosLima($request) {
         $pedidosLima = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')
-            ->join('users as u', 'pedidos.user_id', 'u.id')
+            ->leftjoin('users as u', 'pedidos.user_id', 'u.id')
+            ->leftjoin('rucs as r', 'c.user_id', 'r.cliente_id')
+            //->leftjoin('users as us', 'us.user_id', 'u.jefe')
             ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
             ->join('direccion_pedidos as dip', 'pedidos.id', 'dip.pedido_id')
             ->join('direccion_envios as die', 'dip.direccion_id', 'die.id')
@@ -32,6 +34,7 @@ class EntregadosPorFechasExport implements FromView, ShouldAutoSize
                 'c.celular as celular_cliente',
                 'dp.nombre_empresa as empresa',
                 'dp.cantidad as cantidad',
+                'dp.mes',
                 'dp.fecha_envio_doc as fecha_elaboracion',
                 'die.distrito as distrito',
                 'die.direccion as direccion',
@@ -39,16 +42,23 @@ class EntregadosPorFechasExport implements FromView, ShouldAutoSize
                 'die.nombre as nombre_recibe',
                 'die.celular as celular_contacto',
                 'di.zona as zona',
-                'pedidos.condicion as estado_pedido',
-                'pedidos.condicion_envio as estado_envio'
+                'dp.cant_compro',
+               
+                'pedidos.condicion_envio as estado_envio',
+                'r.num_ruc',
+                'c.tipo',
+                'dp.descripcion',
+                DB::raw('DATE_FORMAT(pedidos.updated_at, "%d/%m/%Y") as fecha_finalizacion'),
+              //  'us.name AS jefe'
             )
             ->where('pedidos.estado', '1')
             ->where('dp.estado', '1')
-            ->where('pedidos.envio', '<>', '0')
-            ->where('pedidos.direccion', '1')
+           // ->where('pedidos.envio', '<>', '0')
+           // ->where('pedidos.direccion', '1')
             ->where('pedidos.destino', 'LIMA')
             ->where('di.provincia', 'LIMA')
-            ->whereIn('pedidos.condicion_envio', [3])
+            ->where('pedidos.condicion_envio', 'ENTREGADO')
+           // ->whereIn('pedidos.condicion_envio', [3])
             ->whereBetween(DB::raw('DATE(dp.fecha_recepcion)'), [$request->desde, $request->hasta]) //rango de fechas
             ->groupBy(
                 'pedidos.id',
@@ -68,7 +78,14 @@ class EntregadosPorFechasExport implements FromView, ShouldAutoSize
                 'die.celular',
                 'di.zona',
                 'pedidos.condicion',
-                'pedidos.condicion_envio'
+                'pedidos.condicion_envio',
+                'r.num_ruc',
+                'dp.mes',
+                'c.tipo',
+                'dp.descripcion',
+                'pedidos.updated_at',
+                'dp.cant_compro'
+               
                 )
             ->orderBy('pedidos.created_at', 'DESC')
             ->get();
@@ -102,10 +119,10 @@ class EntregadosPorFechasExport implements FromView, ShouldAutoSize
             )
             ->where('pedidos.estado', '1')
             ->where('dp.estado', '1')
-            ->where('pedidos.envio', '<>', '0')
+           // ->where('pedidos.envio', '<>', '0')
             ->where('pedidos.direccion', '1')
             ->where('pedidos.destino', 'PROVINCIA')
-            ->whereIn('pedidos.condicion_envio', [3])
+           // ->whereIn('pedidos.condicion_envio', [3])
             ->whereBetween(DB::raw('DATE(dp.fecha_recepcion)'), [$request->desde, $request->hasta]) //rango de fechas
             ->groupBy(
                 'pedidos.id',
