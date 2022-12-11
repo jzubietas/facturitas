@@ -12,16 +12,15 @@
             <a href="{{ route('clientes.create') }}" class="btn btn-info"><i class="fas fa-plus-circle"></i> Agregar</a>
         @endcan
         @can('clientes.exportar')
-            <div class="float-right btn-group dropleft">
-                <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Exportar
-                </button>
-                <div class="dropdown-menu">
-
-                    <a href="" data-target="#modal-exportar-unico" data-toggle="modal" class="dropdown-item d-none" target="blank_"><img src="{{ asset('imagenes/icon-excel.png') }}"> Clientes - Situacion</a>
-                </div>
+        <div class="float-right btn-group dropleft">
+            <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              Exportar
+            </button>
+            <div class="dropdown-menu">
+            <a href="" data-target="#modal-exportar-unico" data-toggle="modal" class="dropdown-item" target="blank_"><img src="{{ asset('imagenes/icon-excel.png') }}"> Clientes - Pedidos</a>
             </div>
-            @include('clientes.modal.exportar_unico', ['title' => 'Exportar Lista de clientes RECURRENTES', 'key' => '2'])
+        </div>
+        @include('clientes.modal.exportar_unico', ['title' => 'Exportar Lista de clientes RECURRENTES', 'key' => '2'])
             
         @endcan
     </h1>

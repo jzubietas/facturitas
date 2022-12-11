@@ -17,9 +17,7 @@
         Exportar
       </button>
       <div class="dropdown-menu">
-       
-        <a href="" data-target="#modal-exportar-unico" data-toggle="modal" class="dropdown-item d-none" target="blank_"><img src="{{ asset('imagenes/icon-excel.png') }}"> Clientes - Situacion</a>
-
+       <a href="" data-target="#modal-exportar-unico" data-toggle="modal" class="dropdown-item" target="blank_"><img src="{{ asset('imagenes/icon-excel.png') }}"> Clientes - Pedidos</a>
       </div>
     </div>
     @include('clientes.modal.exportar_unico', ['title' => 'Exportar Lista de clientes ABANDONO', 'key' => '1'])

@@ -11,8 +11,12 @@
       
       @if($key === '1')
         {!! Form::open(['route' => ['clientesabandonoExcel'], 'method' => 'POST', 'target' => 'blanck_']) !!}
-      {{--@elseif($key === '2')
-        {!! Form::open(['route' => ['entregadosporfechasexcel'], 'method' => 'POST', 'target' => 'blanck_']) !!}--}}
+      @elseif($key === '2')
+        {!! Form::open(['route' => ['entregadosporfechasexcel'], 'method' => 'POST', 'target' => 'blanck_']) !!}
+        @elseif($key === '3')
+        {!! Form::open(['route' => ['nuevosporfechasexcel'], 'method' => 'POST', 'target' => 'blanck_']) !!}
+        @elseif($key === '4')
+        {!! Form::open(['route' => ['entregadosporfechasexcel'], 'method' => 'POST', 'target' => 'blanck_']) !!}
       @endif
             <div class="card-body">
               <div class="form-row">
