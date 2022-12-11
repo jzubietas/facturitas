@@ -361,10 +361,15 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
 //EXCEL EXPORTABLES
     //MODULO PERSONAS
     // Route::get('clientesExcel', [ExcelController::class, 'clientesExcel'])->name('clientesExcel');
-    Route::post('usuariosExcel', [ExcelController::class, 'usuariosExcel'])->name('usuariosExcel');
-    Route::post('movimientosExcel', [ExcelController::class, 'movimientosExcel'])->name('movimientosExcel');
-    Route::post('clientesExcel', [ExcelController::class, 'clientesExcel'])->name('clientesExcel');
+    Route::post('abandonosporfechasExcel', [ExcelController::class, 'abandonosExcel'])->name('abandonosporfechasExcel');
+    Route::post('recurrentesporfechasExcel', [ExcelController::class, 'recurrentesExcel'])->name('recurrentesporfechasExcel');
+    Route::post('nuevosporfechasExcel', [ExcelController::class, 'nuevosExcel'])->name('nuevosporfechasExcel');
+    Route::post('recuperadosporfechasExcel', [ExcelController::class, 'recuperadosExcel'])->name('recuperadosporfechasExcel');
+
+
     Route::post('clientesv2Excel', [ExcelController::class, 'clientesv2Excel'])->name('clientesv2Excel');
+
+
 
     Route::post('clientespedidosExcel', [ExcelController::class, 'clientespedidosExcel'])->name('clientespedidosExcel');
 
