@@ -8,8 +8,7 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      {{--{!! Form::open(['route' => ['clientesExcel'], 'method' => 'POST', 'target' => 'blanck_']) !!}--}}
-
+      
       @if($key === '1')
         {!! Form::open(['route' => ['clientesabandonoExcel'], 'method' => 'POST', 'target' => 'blanck_']) !!}
       {{--@elseif($key === '2')
@@ -22,13 +21,9 @@
                     <div class="col-lg-12">
                       {!! Form::label('anio', 'Elija el rango de fechas del reporte') !!} <br><br>
                       <div class="form-row">
-                        <div class="col-lg-6">
-                          <label>Fecha iniciala&nbsp;</label>
-                          {!! Form::date('desde', \Carbon\Carbon::now(), ['class' => 'form-control']); !!}
-                        </div>
-                        <div class="col-lg-6">
-                          <label>Fecha final&nbsp;</label>
-                          {!! Form::date('hasta', \Carbon\Carbon::now(), ['class' => 'form-control']); !!}
+                        <div class="col-lg-12">
+                          {!! Form::label('anio', 'Elija un año del reporte') !!} <br><br>
+                          {!! Form::select('anio', $anios, $dateY-1, ['class' => 'form-control', 'placeholder' => '---- SELECCIONE ----', 'required'=>'required']) !!}
                         </div>
                       </div>
                     </div>

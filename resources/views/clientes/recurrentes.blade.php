@@ -18,10 +18,11 @@
                 </button>
                 <div class="dropdown-menu">
 
-                    <a href="" data-target="#modal-exportar-v2" data-toggle="modal" class="dropdown-item d-none" target="blank_"><img src="{{ asset('imagenes/icon-excel.png') }}"> Clientes - Situacion</a>
+                    <a href="" data-target="#modal-exportar-unico" data-toggle="modal" class="dropdown-item d-none" target="blank_"><img src="{{ asset('imagenes/icon-excel.png') }}"> Clientes - Situacion</a>
                 </div>
             </div>
-            @include('clientes.modal.exportarv2')
+            @include('clientes.modal.exportar_unico', ['title' => 'Exportar Lista de clientes RECURRENTES', 'key' => '2'])
+            
         @endcan
     </h1>
     @if($superasesor > 0)

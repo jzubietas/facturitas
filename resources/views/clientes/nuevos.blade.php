@@ -17,17 +17,11 @@
         Exportar
       </button>
       <div class="dropdown-menu">
-        {{-- <a href="{{ route('clientesExcel') }}" class="dropdown-item" target="blank_"><img src="{{ asset('imagenes/icon-excel.png') }}"> Clientes</a> --}}
-        {{-- <a href="" data-target="#modal-exportar" data-toggle="modal" class="dropdown-item" target="blank_"><img src="{{ asset('imagenes/icon-excel.png') }}"> Clientes</a>--}}
-        {{--<a href="{{ route('clientespedidosExcel') }}" class="dropdown-item" target="blank_"><img src="{{ asset('imagenes/icon-excel.png') }}"> Clientes - Pedidos</a> --}}
-        <a href="" data-target="#modal-exportar2" data-toggle="modal" class="dropdown-item" target="blank_"><img src="{{ asset('imagenes/icon-excel.png') }}"> Clientes - Pedidos</a>
-
-        <a href="" data-target="#modal-exportar-v2" data-toggle="modal" class="dropdown-item d-none" target="blank_"><img src="{{ asset('imagenes/icon-excel.png') }}"> Clientes - Situacion</a>
+        
+        <a href="" data-target="#modal-exportar-unico" data-toggle="modal" class="dropdown-item d-none" target="blank_"><img src="{{ asset('imagenes/icon-excel.png') }}"> Clientes - Pedidos</a>
       </div>
     </div>
-    @include('clientes.modal.exportar') {{-- Modal Clientes - Pedidos --}}
-    @include('clientes.modal.exportar2') {{-- Modal Clientes --}}
-    @include('clientes.modal.exportarv2')
+    @include('clientes.modal.exportar_unico', ['title' => 'Exportar Lista de clientes NUEVO', 'key' => '3'])
     @endcan
   </h1>
   @if($superasesor > 0)
