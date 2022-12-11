@@ -1320,6 +1320,32 @@ class EnvioController extends Controller
         return redirect()->route('envios.index')->with('info','actualizado');
     }
 
+    public function createDireccion(Pedido $pedido)
+    {
+        $destinos = [
+            "LIMA" => 'LIMA',
+            "PROVINCIA" => 'PROVINCIA'
+        ];
+
+        $distritos = Distrito::whereIn('provincia', ['LIMA', 'CALLAO'])
+                            ->where('estado', '1')
+                            ->pluck('distrito', 'distrito');
+
+        $clientes = Cliente::where('estado', '1')
+                            ->where('id', $pedido->user_id)
+                            ->first();
+        $pedidos = Pedido::join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
+                            ->select('pedidos.id',
+                                    'dp.codigo')
+                            ->where('pedidos.cliente_id', $pedido->cliente_id)
+                            ->where('pedidos.destino', null)
+                            ->where('pedidos.direccion', '0')
+                            ->where('pedidos.envio', '>', '0')
+                            ->where('pedidos.estado', '1')
+                            ->get();
+
+        return view('pedidos.createDireccion', compact('destinos', 'distritos', 'clientes', 'pedidos'));
+    }
 
 
 }

@@ -167,10 +167,10 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::post('pedidos/eliminarAdjunto/{id}', [PedidoController::class, 'eliminarAdjunto'])->name('pedidos.eliminarAdjunto');
     Route::get('pedidos/{adjunto}/descargaradjunto', [PedidoController::class, 'DescargarAdjunto'])->name('pedidos.descargaradjunto');
     Route::get('pedidos/{adjunto}/descargargastos', [PedidoController::class, 'DescargarGastos'])->name('pedidos.descargargastos');
-    Route::post('envios.direccion', [PedidoController::class, 'DireccionEnvio'])->name('envios.direccion');
-    Route::post('envios.desvincular', [PedidoController::class, 'EnvioDesvincular'])->name('envios.desvincular');
-    Route::get('envios.createdireccion/{pedido}', [PedidoController::class, 'createDireccion'])->name('envios.createdireccion');
-    Route::post('envios.updatedireccion/{direccion}', [PedidoController::class, 'UpdateDireccionEnvio'])->name('envios.updatedireccion');
+    Route::post('envios.direccion', [EnvioController::class, 'DireccionEnvio'])->name('envios.direccion');
+    Route::post('envios.desvincular', [SobreController::class, 'EnvioDesvincular'])->name('envios.desvincular');
+    Route::get('envios.createdireccion/{pedido}', [EnvioController::class, 'createDireccion'])->name('envios.createdireccion');
+    Route::post('envios.updatedireccion/{direccion}', [EnvioController::class, 'UpdateDireccionEnvio'])->name('envios.updatedireccion');
 
     Route::post('pedidos/eliminarFoto1/{pedido}', [PedidoController::class, 'eliminarFoto1'])->name('pedidos.eliminarFoto1');
     Route::post('pedidos/eliminarFoto2/{pedido}', [PedidoController::class, 'eliminarFoto2'])->name('pedidos.eliminarFoto2');
