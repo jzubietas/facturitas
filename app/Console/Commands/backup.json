@@ -1,0 +1,612 @@
+[
+    {
+        "cliente_id": 12,
+        "situacion": "RECUPERADO RECIENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 14,
+        "situacion": "RECURRENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 19,
+        "situacion": "RECURRENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 770,
+        "situacion": "RECURRENTE",
+        "situacion_old": "NUEVO"
+    },
+    {
+        "cliente_id": 966,
+        "situacion": "RECUPERADO RECIENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 1012,
+        "situacion": "RECURRENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 1136,
+        "situacion": "RECURRENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 1156,
+        "situacion": "RECURRENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 1232,
+        "situacion": "RECURRENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 1287,
+        "situacion": "RECURRENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 1318,
+        "situacion": "RECURRENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 1344,
+        "situacion": "RECURRENTE",
+        "situacion_old": "RECUPERADO"
+    },
+    {
+        "cliente_id": 1364,
+        "situacion": "RECUPERADO RECIENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 1518,
+        "situacion": "RECURRENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 1563,
+        "situacion": "RECURRENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 1596,
+        "situacion": "NUEVO",
+        "situacion_old": "ABANDONO PERMANENTE"
+    },
+    {
+        "cliente_id": 1661,
+        "situacion": "RECURRENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 1704,
+        "situacion": "NUEVO",
+        "situacion_old": "NO EXISTE"
+    },
+    {
+        "cliente_id": 1718,
+        "situacion": "RECURRENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 1751,
+        "situacion": "RECURRENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 1892,
+        "situacion": "RECURRENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 1896,
+        "situacion": "RECURRENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 1898,
+        "situacion": "RECURRENTE",
+        "situacion_old": "RECUPERADO"
+    },
+    {
+        "cliente_id": 2112,
+        "situacion": "RECURRENTE",
+        "situacion_old": "RECUPERADO"
+    },
+    {
+        "cliente_id": 2534,
+        "situacion": "RECURRENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 2660,
+        "situacion": "RECUPERADO RECIENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 3084,
+        "situacion": "RECUPERADO RECIENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 3089,
+        "situacion": "RECURRENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 3130,
+        "situacion": "RECUPERADO RECIENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 3258,
+        "situacion": "RECURRENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 3320,
+        "situacion": "RECURRENTE",
+        "situacion_old": "RECUPERADO"
+    },
+    {
+        "cliente_id": 3746,
+        "situacion": "RECURRENTE",
+        "situacion_old": "RECUPERADO"
+    },
+    {
+        "cliente_id": 3993,
+        "situacion": "RECURRENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 4052,
+        "situacion": "RECURRENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 4212,
+        "situacion": "RECURRENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 4216,
+        "situacion": "RECUPERADO RECIENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 4273,
+        "situacion": "RECURRENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 4409,
+        "situacion": "RECURRENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 4413,
+        "situacion": "RECURRENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 4420,
+        "situacion": "RECURRENTE",
+        "situacion_old": "RECUPERADO"
+    },
+    {
+        "cliente_id": 4449,
+        "situacion": "RECURRENTE",
+        "situacion_old": "NUEVO"
+    },
+    {
+        "cliente_id": 4837,
+        "situacion": "RECURRENTE",
+        "situacion_old": "NUEVO"
+    },
+    {
+        "cliente_id": 4945,
+        "situacion": "RECURRENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 5010,
+        "situacion": "RECUPERADO RECIENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 5168,
+        "situacion": "RECURRENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 5170,
+        "situacion": "RECURRENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 5171,
+        "situacion": "NUEVO",
+        "situacion_old": "NO EXISTE"
+    },
+    {
+        "cliente_id": 5209,
+        "situacion": "RECURRENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 5213,
+        "situacion": "RECURRENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 5216,
+        "situacion": "RECUPERADO RECIENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 5232,
+        "situacion": "RECURRENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 5244,
+        "situacion": "RECURRENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 5267,
+        "situacion": "RECUPERADO RECIENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 5273,
+        "situacion": "RECURRENTE",
+        "situacion_old": "RECUPERADO"
+    },
+    {
+        "cliente_id": 5294,
+        "situacion": "RECURRENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 5296,
+        "situacion": "RECURRENTE",
+        "situacion_old": "RECUPERADO"
+    },
+    {
+        "cliente_id": 5323,
+        "situacion": "RECURRENTE",
+        "situacion_old": "NUEVO"
+    },
+    {
+        "cliente_id": 5334,
+        "situacion": "RECURRENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 5347,
+        "situacion": "RECURRENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 5352,
+        "situacion": "RECURRENTE",
+        "situacion_old": "RECUPERADO"
+    },
+    {
+        "cliente_id": 5360,
+        "situacion": "RECUPERADO RECIENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 5370,
+        "situacion": "RECUPERADO RECIENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 5377,
+        "situacion": "NUEVO",
+        "situacion_old": "NO EXISTE"
+    },
+    {
+        "cliente_id": 5397,
+        "situacion": "RECURRENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 5398,
+        "situacion": "NUEVO",
+        "situacion_old": "ABANDONO PERMANENTE"
+    },
+    {
+        "cliente_id": 5430,
+        "situacion": "NUEVO",
+        "situacion_old": "ABANDONO PERMANENTE"
+    },
+    {
+        "cliente_id": 5437,
+        "situacion": "RECUPERADO RECIENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 5457,
+        "situacion": "RECUPERADO RECIENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 5472,
+        "situacion": "RECUPERADO RECIENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 5492,
+        "situacion": "RECUPERADO RECIENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 5503,
+        "situacion": "RECUPERADO RECIENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 5527,
+        "situacion": "RECURRENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 5529,
+        "situacion": "RECURRENTE",
+        "situacion_old": "NUEVO"
+    },
+    {
+        "cliente_id": 5539,
+        "situacion": "RECURRENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 5719,
+        "situacion": "RECURRENTE",
+        "situacion_old": "NUEVO"
+    },
+    {
+        "cliente_id": 5873,
+        "situacion": "RECURRENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 6162,
+        "situacion": "RECURRENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 6257,
+        "situacion": "RECURRENTE",
+        "situacion_old": "NUEVO"
+    },
+    {
+        "cliente_id": 6613,
+        "situacion": "RECURRENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 13124,
+        "situacion": "NUEVO",
+        "situacion_old": "NO EXISTE"
+    },
+    {
+        "cliente_id": 13766,
+        "situacion": "RECURRENTE",
+        "situacion_old": "RECUPERADO"
+    },
+    {
+        "cliente_id": 14116,
+        "situacion": "RECURRENTE",
+        "situacion_old": "NUEVO"
+    },
+    {
+        "cliente_id": 14671,
+        "situacion": "RECURRENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 14686,
+        "situacion": "RECURRENTE",
+        "situacion_old": "RECUPERADO"
+    },
+    {
+        "cliente_id": 14836,
+        "situacion": "NUEVO",
+        "situacion_old": "ABANDONO PERMANENTE"
+    },
+    {
+        "cliente_id": 15343,
+        "situacion": "RECUPERADO RECIENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 15356,
+        "situacion": "NUEVO",
+        "situacion_old": "NO EXISTE"
+    },
+    {
+        "cliente_id": 16512,
+        "situacion": "RECURRENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 16731,
+        "situacion": "NUEVO",
+        "situacion_old": "NO EXISTE"
+    },
+    {
+        "cliente_id": 16846,
+        "situacion": "NUEVO",
+        "situacion_old": "NO EXISTE"
+    },
+    {
+        "cliente_id": 17404,
+        "situacion": "RECURRENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 18371,
+        "situacion": "RECURRENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 18565,
+        "situacion": "NUEVO",
+        "situacion_old": "NO EXISTE"
+    },
+    {
+        "cliente_id": 18687,
+        "situacion": "RECURRENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 19454,
+        "situacion": "RECUPERADO RECIENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 19752,
+        "situacion": "RECURRENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 19885,
+        "situacion": "NUEVO",
+        "situacion_old": "NO EXISTE"
+    },
+    {
+        "cliente_id": 21194,
+        "situacion": "RECURRENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 21277,
+        "situacion": "RECURRENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 21292,
+        "situacion": "RECURRENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 21297,
+        "situacion": "RECURRENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 21502,
+        "situacion": "RECURRENTE",
+        "situacion_old": "NUEVO"
+    },
+    {
+        "cliente_id": 21559,
+        "situacion": "RECUPERADO RECIENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 22007,
+        "situacion": "RECUPERADO RECIENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 22311,
+        "situacion": "RECURRENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 22378,
+        "situacion": "RECURRENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 22391,
+        "situacion": "RECURRENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 24051,
+        "situacion": "RECUPERADO RECIENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 24053,
+        "situacion": "RECURRENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 24070,
+        "situacion": "RECUPERADO RECIENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 24093,
+        "situacion": "RECURRENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 24131,
+        "situacion": "RECURRENTE",
+        "situacion_old": "NUEVO"
+    },
+    {
+        "cliente_id": 24199,
+        "situacion": "NUEVO",
+        "situacion_old": "NO EXISTE"
+    },
+    {
+        "cliente_id": 24335,
+        "situacion": "RECURRENTE",
+        "situacion_old": "NUEVO"
+    },
+    {
+        "cliente_id": 24405,
+        "situacion": "NUEVO",
+        "situacion_old": "NO EXISTE"
+    },
+    {
+        "cliente_id": 24452,
+        "situacion": "NUEVO",
+        "situacion_old": "NO EXISTE"
+    },
+    {
+        "cliente_id": 24507,
+        "situacion": "RECURRENTE",
+        "situacion_old": "NUEVO"
+    },
+    {
+        "cliente_id": 24649,
+        "situacion": "NUEVO",
+        "situacion_old": "NO EXISTE"
+    },
+    {
+        "cliente_id": 24677,
+        "situacion": "NUEVO",
+        "situacion_old": "NO EXISTE"
+    },
+    {
+        "cliente_id": 24689,
+        "situacion": "NUEVO",
+        "situacion_old": "NO EXISTE"
+    },
+    {
+        "cliente_id": 24706,
+        "situacion": "NUEVO",
+        "situacion_old": "NO EXISTE"
+    },
+    {
+        "cliente_id": 24737,
+        "situacion": "NUEVO",
+        "situacion_old": "NO EXISTE"
+    }
+]

@@ -65,6 +65,9 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
 
 
     Route::get('clientes.abandonos', [ClienteController::class, 'indexabandono'])->name('clientes.abandonos');
+
+    Route::get('clientes.abandonos.recientes', [ClienteController::class, 'indexRecientes'])->name('clientes.abandonos.recientes');
+
     Route::get('clientesabandonotabla', [ClienteController::class, 'indexabandonotabla'])->name('clientesabandonotabla');
 
     Route::get('clientes.recurrentes', [ClienteController::class, 'indexrecurrente'])->name('clientes.recurrentes');
@@ -74,6 +77,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::get('clientesnuevotabla', [ClienteController::class, 'indexnuevotabla'])->name('clientesnuevotabla');
 
     Route::get('clientes.recuperados', [ClienteController::class, 'indexrecuperado'])->name('clientes.recuperados');
+    Route::get('clientes.recuperados.recientes', [ClienteController::class, 'indexRecuperadoRecientes'])->name('clientes.recuperados.recientes');
     Route::get('recuperadostabla', [ClienteController::class, 'indexrecuperadotabla'])->name('recuperadostabla');
 
     /*Controller Cliente*/
@@ -222,7 +226,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     //Route::get('operaciones.enatenciontabla', [PedidoController::class, 'EnAtenciontabla'])->name('operaciones.enatenciontabla');
 
 
-    
+
     //Route::post('pedidos.atender/{pedido}', [PedidoController::class, 'Atender'])->name('pedidos.atender');
 
     //Route::post('pedidos.envio/{pedido}', [PedidoController::class, 'Enviar'])->name('pedidos.envio');
@@ -234,7 +238,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::post('titulares.banco', [PagoController::class, 'TitularesBanco'])->name('titulares.banco');
     Route::get('pagos/devolucion/{devolucion}', [PagoController::class,'devolucion'])->name('pagos.devolucion');
     Route::post('pagos/devolucion/{devolucion}', [PagoController::class,'devolucionUpdate'])->name('pagos.devolucion.update');
-    
+
     Route::get('pagostabla', [PagoController::class, 'indextabla'])->name('pagostabla');//actualizado para serverside
     Route::get('pagostablahistorial', [PagoController::class, 'indextablahistorial'])->name('pagostablahistorial');//actualizado para serverside
     Route::get('MisPagosTabla', [PagoController::class, 'MisPagosTabla'])->name('MisPagosTabla');//actualizado para serverside
@@ -267,7 +271,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     //Route::post('operaciones.sinenvio/{pedido}', [PedidoController::class, 'SinEnviar'])->name('operaciones.sinenvio');
 
 
-   
+
 /////////
 
     /*Controller Sobres*/
@@ -369,7 +373,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     //MODULO PERSONAS
      Route::get('clientesExcel', [ExcelController::class, 'clientesExcel'])->name('clientesExcel');
     Route::post('situacionporfechasExcel', [ExcelController::class, 'clientessituacionExcel'])->name('situacionporfechasExcel');
-  
+
     Route::post('clientesv2Excel', [ExcelController::class, 'clientesv2Excel'])->name('clientesv2Excel');
 
 
