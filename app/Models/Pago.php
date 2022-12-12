@@ -37,6 +37,7 @@ class Pago extends Model
 
     public function setCondicionAttribute($value)
     {
+        $this->attributes['condicion'] = $value;
         $this->setAttribute('condicion_code', self::$migrateCondiciones[$value] ?? $value);
     }
 
