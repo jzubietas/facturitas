@@ -124,6 +124,8 @@
 
 
 
+
+
     @endforeach
     ]);
 
@@ -392,59 +394,42 @@
         </div>
         <div class="container-fluid">
             <div class="row">
-                <div class="col-lg-6 col-sm-6 col-md-6 col-xs-12">
-
+                <div class="col-lg-12">
                     <div class="card">
-                        <div class="card-header">Buscar Cliente</div>
+                        <div class="card-header">Buscar Cliente/RUC</div>
                         <div class="card-header">
                             <div class="row">
                                 <div class="col-md-8">
                                     <div class="form-group">
-                                        <input id="input_search_cliente" class="form-control" placeholder="Buscar cliente">
+                                        <input id="input_search_cliente" class="form-control" maxlength="11"
+                                               placeholder="Buscar cliente">
                                     </div>
                                 </div>
                                 <div class="col-md-4">
-                                    <button type="button" class="btn btn-dark" id="buttom_search_cliente">
-                                        <i class="fa fa-search"></i>
-                                        Buscar Cliente
-                                    </button>
-                                    <button type="button" class="btn btn-light" id="buttom_search_cliente_clear">
-                                        <i class="fa fa-times"></i>
-                                    </button>
+                                    <div class="input-group mb-3">
+                                        <select id="input_search_type" class="form-control">
+                                            <option value="CLIENTE">CLIENTE</option>
+                                            <option value="RUC">RUC</option>
+                                        </select>
+                                        <div class="input-group-append">
+                                            <button type="button" class="btn btn-dark" id="buttom_search_cliente">
+                                                <i class="fa fa-search"></i>
+                                                Buscar
+                                            </button>
+                                            <button type="button" class="btn btn-light" id="buttom_search_cliente_clear">
+                                                <i class="fa fa-times"></i>
+                                            </button>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            <div id="search_content_result">
-
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-6 col-sm-6 col-md-6 col-xs-12">
+                <div class="col-md-12">
                     <div class="card">
-                        <div class="card-header">Buscar por Ruc</div>
-                        <div class="card-header">
-                            <div class="row">
-                                <div class="col-md-8">
-                                    <div class="form-group">
-                                        <input id="input_search_ruc" class="form-control" placeholder="Buscar Ruc">
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <button type="button" class="btn btn-dark" id="buttom_search_ruc">
-                                        <i class="fa fa-search"></i>
-                                        Buscar Ruc
-                                    </button>
-                                    <button type="button" class="btn btn-light" id="buttom_search_ruc_clear">
-                                        <i class="fa fa-times"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
                         <div class="card-body">
-                            <div id="search_content_result_ruc">
-
+                            <div id="search_content_result">
                             </div>
                         </div>
                     </div>
@@ -965,31 +950,36 @@
 
                     $("#buttom_search_cliente_clear").click(function () {
                         $("#search_content_result").html('');
+                        $("#input_search_cliente").val('');
                     });
-                    $("#buttom_search_ruc_clear").click(function () {
-                        $("#search_content_result_ruc").html('');
-                    });
-                    $("#buttom_search_cliente").click(function () {
-                        $.ajax({
-                            url: "{{route('dashboard.search-cliente')}}",
-                            data:{q:document.getElementById("input_search_cliente").value},
-                            context: document.body
-                        }).done(function (a) {
-                            console.log(a)
-                            $("#search_content_result").html(a);
-                        });
+                    $("#input_search_type").on("change",function (){
+                        $("#search_content_result").html('');
+                        $("#input_search_cliente").val('');
                     })
-                    $("#buttom_search_ruc").click(function () {
-                        $.ajax({
-                            url: "{{route('dashboard.search-ruc')}}",
-                            data:{
-                                q:document.getElementById("input_search_ruc").value
-                            },
-                            context: document.body
-                        }).done(function (a) {
-                            console.log(a)
-                            $("#search_content_result_ruc").html(a);
-                        });
+                    $("#buttom_search_cliente").click(function () {
+                        var tipo = $("#input_search_type").val()
+                        if (tipo == "CLIENTE") {
+                            $.ajax({
+                                url: "{{route('dashboard.search-cliente')}}",
+                                data: {q: document.getElementById("input_search_cliente").value},
+                                context: document.body
+                            }).done(function (a) {
+                                console.log(a)
+                                $("#search_content_result").html(a);
+                            });
+                        } else if (tipo == "RUC") {
+                            $.ajax({
+                                url: "{{route('dashboard.search-ruc')}}",
+                                data: {
+                                    q: document.getElementById("input_search_cliente").value
+                                },
+                                context: document.body
+                            }).done(function (a) {
+                                console.log(a)
+                                $("#search_content_result").html(a);
+                            });
+                        }
+
                     })
                 })()
             </script>
