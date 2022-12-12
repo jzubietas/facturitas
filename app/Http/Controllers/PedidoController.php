@@ -1401,6 +1401,7 @@ return ' no imagen ';
                 'dp.ft',
                 'dp.courier',
                 'dp.total',
+                'dp.saldo as diferencia',
             )
             ->where('pedidos.id', $pedido->id)
             ->first();
