@@ -423,14 +423,14 @@
 
               var urledit = '{{ route("operaciones.editatender", ":id") }}';
               urledit = urledit.replace(':id', row.id);
-              /*
+
               @can('operacion.editatender')
                 data = data+'<a href="'+urledit+'" class="btn btn-warning btn-sm"><i class=""></i> Editar atención</a>';
               @endcan
-              */
+
 
               @can('operacion.editatender')
-                  data = data+'<a href="#" class="modal-atender-pedido btn btn-warning btn-sm" data-atencion="'+ row.id +'" class="btn btn-warning btn-sm"><i class=""></i> Editar atención</a>';
+                  data = data+'<a href="#" class="modal-atender-pedido btn btn-warning btn-sm" data-atencion="'+ row.id +'" class="btn btn-warning btn-sm"><i class=""></i> Editar atención 2</a>';
               @endcan
 
               var urlpdf = '{{ route("pedidosPDF", ":id") }}';
