@@ -310,7 +310,7 @@ class DashboardController extends Controller
             ->limit(10)
             ->get()
             ->map(function (Cliente $cliente) {
-                $cliente->deuda_total=DetallePedido::query()->whereIn('pedido_id',$cliente->pedidos()->pluck("id"))->sum("saldo");
+                $cliente->deuda_total=DetallePedido::query()->whereIn('pedido_id',$cliente->pedidos()->where('estado','1')->pluck("id"))->sum("saldo");
                 return $cliente;
             });
 
@@ -326,7 +326,7 @@ class DashboardController extends Controller
             ->limit(10)
             ->get()
             ->map(function (Ruc $ruc) {
-                $ruc->cliente->deuda_total=DetallePedido::query()->whereIn('pedido_id',$ruc->cliente->pedidos()->pluck("id"))->sum("saldo");
+                $ruc->cliente->deuda_total=DetallePedido::query()->whereIn('pedido_id',$ruc->cliente->pedidos()->where('estado','1')->pluck("id"))->sum("saldo");
                 return $ruc;
             });
         return view('dashboard.searchs.search_rucs', compact('rucs'));
