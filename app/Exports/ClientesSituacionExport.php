@@ -12,7 +12,7 @@ use Maatwebsite\Excel\Concerns\Exportable;
 use Maatwebsite\Excel\Concerns\FromView;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 
-class ClientesAbandonosExport implements FromView, ShouldAutoSize
+class ClientesSituacionExport implements FromView, ShouldAutoSize
 {
     use Exportable;
     
@@ -20,7 +20,7 @@ class ClientesAbandonosExport implements FromView, ShouldAutoSize
 
             $clientes = Cliente::
                     join('users as u', 'clientes.user_id', 'u.id')
-                    ->rightJoin('pedidos as p', 'clientes.id', 'p.cliente_id')
+                    //->rightJoin('pedidos as p', 'clientes.id', 'p.cliente_id')
                     ->select('clientes.id',
                             'u.identificador as asesor',
                             'clientes.nombre',
@@ -34,13 +34,15 @@ class ClientesAbandonosExport implements FromView, ShouldAutoSize
                             'clientes.estado',
                             'clientes.deuda',
                             'clientes.pidio',
-                            DB::raw("DATE_FORMAT(MAX(p.created_at), '%d-%m-%Y %h:%i:%s') as fecha"),
-                            DB::raw('DATE_FORMAT(MAX(p.created_at), "%m") as mes'),
-                            DB::raw('DATE_FORMAT(MAX(p.created_at), "%Y") as anio'),
+                            DB::raw( "(select DATE_FORMAT(dp1.created_at,'%d-%m-%Y %h:%i:%s') from pedidos dp1 where dp1.cliente_id=clientes.id order by dp1.created_at desc limit 1) as fecha"),
+                            DB::raw( "(select DATE_FORMAT(dp2.created_at,'%m') from pedidos dp2 where dp2.cliente_id=clientes.id order by dp2.created_at desc limit 1) as mes"),
+                            DB::raw( "(select DATE_FORMAT(dp3.created_at,'%Y') from pedidos dp3 where dp3.cliente_id=clientes.id order by dp3.created_at desc limit 1) as anio"),
+                            DB::raw(" (select (dp.codigo) from pedidos dp where dp.cliente_id=clientes.id order by dp.created_at desc limit 1) as codigo "),
                             'clientes.situacion',
                             )
                     ->where('clientes.estado','1')
-                    ->where('clientes.tipo','1')                    
+                    ->where('clientes.tipo','1') 
+                    //->where(DB::raw('CAST(clientes.created_at as date)'), '=', '2022-09-09')              
                     ->groupBy(
                         'clientes.id',
                         'u.identificador',
@@ -68,7 +70,7 @@ class ClientesAbandonosExport implements FromView, ShouldAutoSize
                     $clientes=$clientes->whereIn('clientes.situacion',['RECUPERADO']);
 
 
-
+                    $clientes=$clientes->get();
 
 
             $cliente_list = [];
@@ -282,6 +284,8 @@ class ClientesAbandonosExport implements FromView, ShouldAutoSize
                     'nombre' => $cliente->nombre,
                     'dni' => $cliente->dni,
                     'celular' => $cliente->celular,
+                    'icelular' => $cliente->icelular,
+                    'codigo' => $cliente->codigo,
                     'provincia' => $cliente->provincia,
                     'distrito' => $cliente->distrito,
                     'direccion' => $cliente->direccion,
@@ -298,6 +302,7 @@ class ClientesAbandonosExport implements FromView, ShouldAutoSize
                     'mes' => $cliente->mes,
                     'anio' => $cliente->anio,
                     'situacion' => $cliente->situacion,
+                    
                     /* 'dateM' => Carbon::now()->format('m'),
                     'dateY' => Carbon::now()->format('Y'), */
                     'estadopedido' => $estadopedido,

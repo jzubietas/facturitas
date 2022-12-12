@@ -20,8 +20,8 @@ class Pedido extends Model
     const ENVIO_RECIBIDO = '2';//ENVIADO RECIBIDO
 
     //condicion de envio
-    const PENDIENTE_DE_ENVIO = 'PENDIENTE DE ENVIO';
-    const EN_REPARTO = 'EN REPARTO';
+    const PENDIENTE_DE_ENVIO = 'PENDIENTE DE ENVIO';//1
+    const EN_REPARTO = 'EN REPARTO';//1
     const ENTREGADO = 'ENTREGADO';
     
     protected $guarded = ['id'];
