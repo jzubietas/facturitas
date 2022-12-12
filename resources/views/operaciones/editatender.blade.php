@@ -85,6 +85,7 @@
 
               <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
                 <form method="POST" action="{{ route('operaciones.updateatender', $pedido->id) }}" accept-charset="UTF-8" enctype="multipart/form-data" id="formulario">
+                  @csrf
                   <input name="_token" type="hidden" value="gC4bbgB44XSNjYzh2N0OS6BLkmzepKe0jRLoSqPR">
                   <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                       <label for="envio_doc">Documento enviado</label>
