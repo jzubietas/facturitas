@@ -201,7 +201,7 @@
                                     Swal.fire({
                                     icon: 'warning',
                                     title: 'Advertencia',
-                                    text: 'Esta seguro de querer guardar?',
+                                    text: 'Recuerda que tienes que revisar si es un pedido duplicado',
                                     showDenyButton: true,
                                     confirmButtonText: 'Estoy de acuerdo',
                                     denyButtonText: 'Cancelar',
