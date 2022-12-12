@@ -23,11 +23,15 @@ class Pedido extends Model
     const PENDIENTE_DE_ENVIO = 'PENDIENTE DE ENVIO';//1
     const EN_REPARTO = 'EN REPARTO';//1
     const ENTREGADO = 'ENTREGADO';
-    
+
     protected $guarded = ['id'];
 
     /* public function user()
     {
         return $this->belongsTo('App\Models\User');
     } */
+
+    public function cliente(){
+        return $this->belongsTo(Cliente::class);
+    }
 }
