@@ -155,7 +155,7 @@ class ExcelController extends Controller
     }
 
 
-    public function clientespedidosExcel(Request $request)
+    /*public function clientespedidosExcel(Request $request)
     {
         ini_set('memory_limit', '-1');
         set_time_limit(3000000);
@@ -167,7 +167,12 @@ class ExcelController extends Controller
                 ->aniop($request)
                 ->download('Lista de Clientes_pedidos_'.$request->anio.'.xlsx');
 
-        /* return Excel::download(new ClientesPedidosExport, 'Lista de Clientes_pedidos.xlsx'); */
+         return Excel::download(new ClientesPedidosExport, 'Lista de Clientes_pedidos.xlsx');
+    }*/
+
+    public function clientespedidosExcel()
+    {
+        return Excel::download(new ClientesPedidosExport, 'Lista de Clientes_pedidos.xlsx');
     }
 
     // public function basefriaExcel()

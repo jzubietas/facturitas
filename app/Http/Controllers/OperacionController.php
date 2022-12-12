@@ -222,9 +222,9 @@ class OperacionController extends Controller
                 //->WhereIn('u.identificador',$asesores)
                 //->where('u.operario', Auth::user()->id)
                 //->where('pedidos.condicion', 'ATENDIDO')
-                ->where('pedidos.condicion', Pedido::ATENDIDO)
-                ->whereIn('pedidos.envio', ['0'])
-                ->groupBy(
+                ->where('pedidos.condicion', 'ATENDIDO')
+                ->where('pedidos.envio', 0);
+                /*->groupBy(
                     'pedidos.id',
                     'u.identificador',
                     'dp.codigo',
