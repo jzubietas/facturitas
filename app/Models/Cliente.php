@@ -20,5 +20,9 @@ class Cliente extends Model
     public function user(){
         return $this->belongsTo(User::class);
     }
+    public function rucs(){
+        return $this->hasMany(Ruc::class,'cliente_id');
+    }
+
 
 }

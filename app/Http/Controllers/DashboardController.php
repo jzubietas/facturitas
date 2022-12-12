@@ -302,8 +302,10 @@ class DashboardController extends Controller
     {
         $q = $request->get("q");
         $clientes = Cliente::query()
+            ->with(['user','rucs'])
             ->where('celular', 'like', '%' . $q . '%')
-            ->orWhere('nombre', 'like', '%' . join("%", explode(" ", $q)) . '%')
+            ->orwhere(DB::raw("concat(clientes.celular,'-',clientes.icelular)"), 'like', '%' . $q . '%')
+            ->orWhere('nombre', 'like', '%' . join("%", explode(" ", trim($q))) . '%')
             ->orWhere('dni', 'like', '%' . $q . '%')
             ->limit(10)->get();
 
