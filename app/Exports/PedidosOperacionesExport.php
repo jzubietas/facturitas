@@ -47,7 +47,7 @@ class PedidosOperacionesExport implements FromView, ShouldAutoSize
             )
             ->where('pedidos.estado', '1')
             ->where('dpe.estado', '1')
-            ->where('pedidos.condicion',[3])
+            ->where('pedidos.condicion',[Pedido::ATENDIDO])
             ->whereBetween(DB::raw('DATE(pedidos.created_at)'), [$request->desde, $request->hasta]);
 
 

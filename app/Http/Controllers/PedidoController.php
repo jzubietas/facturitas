@@ -156,8 +156,8 @@ class PedidoController extends Controller
                 'pedidos.estado',
                 'pedidos.envio'
             )
-            //->whereIn('pedidos.condicion', [1, 2, 3, 'ANULADO']);
-            ->whereIn('pedidos.condicion_int', ['0', '1', '2', '3']);
+            ->whereIn('pedidos.condicion', [Pedido::POR_ATENDER, Pedido::EN_PROCESO_ATENCION, Pedido::ATENDIDO, Pedido::ANULADO]);
+            //->whereIn('pedidos.condicion_int', ['0', '1', '2', '3']);
             /*->groupBy(
                 'pedidos.id',
                 'c.nombre',
@@ -284,7 +284,7 @@ class PedidoController extends Controller
                 'pedidos.pagado',
                 'pedidos.envio'
             )
-            ->whereIn('pedidos.condicion', [1, 2, 3, 'ANULADO'])
+            ->whereIn('pedidos.condicion', [Pedido::POR_ATENDER, Pedido::EN_PROCESO_ATENCION, Pedido::ATENDIDO, Pedido::ANULADO])
             ->whereIn('pedidos.pagado', ['1'])
             ->whereIn('pedidos.pago',['1'])
             ->whereNotIn("pedidos.envio",['3'])
@@ -316,7 +316,7 @@ class PedidoController extends Controller
                 'pedidos.pagado',
                 'pedidos.envio'
             )
-            ->whereIn('pedidos.condicion', [1, 2, 3, 'ANULADO'])
+            ->whereIn('pedidos.condicion', [Pedido::POR_ATENDER, Pedido::EN_PROCESO_ATENCION, Pedido::ATENDIDO, Pedido::ANULADO])
             ->whereIn('pedidos.pagado', ['1'])
             ->whereIn('pedidos.pago',['1'])
             ->whereNotIn("pedidos.envio",['3'])
@@ -1782,7 +1782,7 @@ return ' no imagen ';
                 )
                 ->where('pedidos.estado', '1')
                 ->where('dp.estado', '1')
-                ->whereIn('pedidos.condicion', [Pedido::POR_ATENDER, Pedido::EN_PROCESO_ATENCION, Pedido::ATENDIDO, 'ANULADO'])
+                ->whereIn('pedidos.condicion', [Pedido::POR_ATENDER, Pedido::EN_PROCESO_ATENCION, Pedido::ATENDIDO, Pedido::ANULADO])
                 ->groupBy(
                     'pedidos.id',
                     'c.nombre',
@@ -2137,7 +2137,7 @@ return ' no imagen ';
                 ->where('dp.estado', '1')
                 ->WhereIn('pedidos.user_id',$asesores)
                 //->where('u.operario', Auth::user()->id)
-                ->where('pedidos.condicion', 2)
+                ->where('pedidos.condicion', Pedido::EN_PROCESO_ATENCION)
                 ->groupBy(
                     'pedidos.id',
                     'c.nombre',
@@ -2198,7 +2198,7 @@ return ' no imagen ';
                 ->where('dp.estado', '1')
                 ->WhereIn('pedidos.user_id',$asesores)
                 //->where('u.jefe', Auth::user()->id)
-                ->where('pedidos.condicion', 2)
+                ->where('pedidos.condicion', Pedido:EN_PROCESO_ATENCION)
                 ->groupBy(
                     'pedidos.id',
                     'c.nombre',
@@ -2241,7 +2241,7 @@ return ' no imagen ';
                 )
                 ->where('pedidos.estado', '1')
                 ->where('dp.estado', '1')
-                ->where('pedidos.condicion', 2)
+                ->where('pedidos.condicion', Pedido::EN_PROCESO_ATENCION)
                 ->groupBy(
                     'pedidos.id',
                     'c.nombre',
@@ -2318,7 +2318,7 @@ return ' no imagen ';
                 ->where('dp.estado', '1')
                 ->WhereIn('u.identificador',$asesores)
                 //->where('u.operario', Auth::user()->id)
-                ->where('pedidos.condicion', 2)
+                ->where('pedidos.condicion', Pedido:EN_PROCESO_ATENCION)
                 ->groupBy(
                     'pedidos.id',
                     'c.nombre',
@@ -2380,7 +2380,7 @@ return ' no imagen ';
                 ->where('dp.estado', '1')
                 ->WhereIn('u.identificador',$asesores)
                 //->where('u.jefe', Auth::user()->id)
-                ->where('pedidos.condicion', 2)
+                ->where('pedidos.condicion', Pedido::EN_PROCESO_ATENCION)
                 ->groupBy(
                     'pedidos.id',
                     'c.nombre',
@@ -2423,7 +2423,7 @@ return ' no imagen ';
                 )
                 ->where('pedidos.estado', '1')
                 ->where('dp.estado', '1')
-                ->where('pedidos.condicion', 2)
+                ->where('pedidos.condicion', Pedido::EN_PROCESO_ATENCION)
                 ->groupBy(
                     'pedidos.id',
                     'c.nombre',
@@ -2481,7 +2481,7 @@ return ' no imagen ';
                 ->where('pedidos.estado', '1')
                 ->where('dp.estado', '1')
                 ->where('u.operario', Auth::user()->id)
-                ->where('pedidos.condicion', 3)
+                ->where('pedidos.condicion', Pedido::ATENDIDO)
                 ->groupBy(
                     'pedidos.id',
                     'u.name',
@@ -2520,7 +2520,7 @@ return ' no imagen ';
                 ->where('pedidos.estado', '1')
                 ->where('dp.estado', '1')
                 ->where('u.jefe', Auth::user()->id)
-                ->where('pedidos.condicion', 3)
+                ->where('pedidos.condicion', Pedido::ATENDIDO)
                 ->groupBy(
                     'pedidos.id',
                     'u.name',
@@ -2558,7 +2558,7 @@ return ' no imagen ';
                 )
                 ->where('pedidos.estado', '1')
                 ->where('dp.estado', '1')
-                ->where('pedidos.condicion', 3)
+                ->where('pedidos.condicion', Pedido::ATENDIDO)
                 ->groupBy(
                     'pedidos.id',
                     'u.name',
