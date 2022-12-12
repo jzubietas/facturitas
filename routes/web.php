@@ -420,6 +420,8 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     // Route::get('mispedidosExcel', [ExcelController::class, 'mispedidosExcel'])->name('mispedidosExcel');
     // Route::get('pedidospagadosExcel', [ExcelController::class, 'pedidospagadosExcel'])->name('pedidospagadosExcel');
     // Route::get('pedidossinpagosExcel', [ExcelController::class, 'pedidossinpagosExcel'])->name('pedidossinpagosExcel');
+    Route::post('movimientosExcel', [ExcelController::class, 'movimientosExcel'])->name('movimientosExcel');
+    Route::post('usuariosExcel', [ExcelController::class, 'usuariosExcel'])->name('usuariosExcel');
     Route::post('pedidosExcel', [ExcelController::class, 'pedidosExcel'])->name('pedidosExcel');
     Route::post('mispedidosExcel', [ExcelController::class, 'mispedidosExcel'])->name('mispedidosExcel');
     Route::post('pedidospagadosExcel', [ExcelController::class, 'pedidospagadosExcel'])->name('pedidospagadosExcel');

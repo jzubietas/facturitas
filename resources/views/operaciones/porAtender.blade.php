@@ -128,8 +128,37 @@
         }
       });
 
+      function validarFormulario(evento) {
+      var adjunto = document.getElementById('adjunto').files;
+      var cant_compro = document.getElementById('cant_compro').value;
+      if (adjunto.length == 0) {
+          Swal.fire(
+            'Error',
+            'Debe registrar almenos un documento adjunto',
+            'warning'
+          )
+          return false;
+        }
+        else if (cant_compro == '0'){
+          Swal.fire(
+            'Error',
+            'Cantidad de comprobantes enviados debe ser diferente de 0 (cero)',
+            'warning'
+          )
+          
+          return false;
+        }
+        return true;
+    }
       $(document).on("submit", "#formularioatender", function (evento) {
+
+        
         evento.preventDefault();
+       var status= validarFormulario(evento);
+       if(!status){
+        return;
+       }
+
         let files=$('input[name="adjunto[]');
         //console.log(files)
 
@@ -161,7 +190,7 @@
         fd.append( 'cant_compro', files.length );
         fd.append( 'condicion', $("#condicion").val() );
         fd.append( 'hiddenAtender', $("#hiddenAtender").val() );
-
+        
         $.ajax({
            data: fd,
            processData: false,
@@ -190,6 +219,7 @@
         var idunico = button.data('atender')
         $(".textcode").html("PED"+idunico);
         $("#hiddenAtender").val(idunico);
+        
       });
 
       $('#modal-veradjunto').on('show.bs.modal', function (event) {
@@ -378,50 +408,6 @@
     </script>
   @endif
 
-  <script>
-    $(document).ready(function () {
-      $(document).on("submit","#formulario",function(event){
-        event.preventDefault();
-        validarFormulario();
-      });
-    });
-
-    //VALIDAR CAMPOS ANTES DE ENVIAR
-    /*document.addEventListener("DOMContentLoaded", function() {
-    document.getElementById("formulario").addEventListener('submit', validarFormulario);
-    });*/
-
-    function validarFormulario(evento) {
-      evento.preventDefault();
-      var adjunto = document.getElementById('adjunto').value;
-      var cant_compro = document.getElementById('cant_compro').value;
-
-      if (adjunto == '') {
-          Swal.fire(
-            'Error',
-            'Debe registrar almenos un documento adjunto',
-            'warning'
-          )
-        }
-        else if (cant_compro == '0'){
-          Swal.fire(
-            'Error',
-            'Cantidad de comprobantes enviados debe ser diferente de 0 (cero)',
-            'warning'
-          )
-        }
-        else if (cant_compro == '') {
-          Swal.fire(
-            'Error',
-            'Ingrese cantidad de comprobantes enviados',
-            'warning'
-          )
-        }
-        else {
-          this.submit();
-        }
-    }
-  </script>
 
 <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
 

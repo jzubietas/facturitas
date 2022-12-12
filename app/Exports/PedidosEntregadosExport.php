@@ -41,7 +41,7 @@ class PedidosEntregadosExport implements FromView, ShouldAutoSize
                 )
                 ->where('pedidos.estado', '1')
                 ->where('dp.estado', '1')
-                ->where('pedidos.condicion', 3)
+                ->where('pedidos.condicion', [Pedido::ATENDIDO])
                 ->whereBetween(DB::raw('DATE(pedidos.created_at)'), [$request->desde, $request->hasta]) //rango de fechas
                 ->whereNotIn('pedidos.envio', ['0'])
                 //->WhereIn('pedidos.user_id',$asesores)

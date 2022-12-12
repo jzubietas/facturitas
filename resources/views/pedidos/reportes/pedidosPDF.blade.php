@@ -65,7 +65,7 @@
       <thead class="noselect">
         <tr >
           <th colspan="2" style="background: white">
-              <span>{{ $pedido->codigos }}</span><br>
+              <span>{{ $pedido->empresas}} {{ $pedido->codigos }}</span><br>
               <img src="@php echo $codigo_barras_img @endphp" width="200">
               <h2>PEDIDO</h2>
           </th>
