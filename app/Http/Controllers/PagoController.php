@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use App\Events\PagoEvent;
@@ -2402,7 +2401,7 @@ class PagoController extends Controller
                 ]);
             }
 
-            if ($condicion == Pago::Observado) {
+            if ($condicion == Pago::OBSERVADO) {
                 $pago->update([
                     'condicion_code' =>Pago::OBSERVADO_CODE
                 ]);
