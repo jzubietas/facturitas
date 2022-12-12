@@ -511,7 +511,7 @@ return [
                 [
                     'text' => 'Abandono Recientes',
                     'route'  => 'clientes.abandonos.recientes',
-                    'can' => 'clientes.abandonos',//clientes.abandonos.reciente
+                    'can' => 'clientes.abandonos.reciente',//
                     'icon'   => 'fas fa-check-circle',
                     'active' => ['clientes'],
                 ],
@@ -537,9 +537,9 @@ return [
                     'active' => ['clientes'],
                 ],
                 [
-                    'text' => 'Clientes Recuperados Reciente',
+                    'text' => 'Recuperados Reciente',
                     'route'  => 'clientes.recuperados.recientes',
-                    'can' => 'clientes.recuperados',//clientes.recuperados.reciente
+                    'can' => 'clientes.recuperados.reciente',//
                     'icon'   => 'fas fa-check-circle',
                     'active' => ['clientes'],
                 ],
