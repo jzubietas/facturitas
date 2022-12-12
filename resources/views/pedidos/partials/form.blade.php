@@ -8,19 +8,19 @@
             {{--@if (Auth::user()->rol == 'Asesor' || Auth::user()->rol == 'Super asesor')--}}
               {{--<input type="hidden" name="user_id" requerid value="{{ Auth::user()->id }}" class="form-control">
               <input type="text" name="user_name" value="{{ Auth::user()->name }}" class="form-control" disabled>--}}
-            
-              
+
+
 
               <select name="user_id" class="border form-control  border-secondary selectpicker" id="user_id" data-live-search="true" >
-                <option value="0" class="ob" data-type="select" data-msj="Seleccione un Asesor">---- SELECCIONE ASESOR ----</option> 
+                <option value="0" class="ob" data-type="select" data-msj="Seleccione un Asesor">---- SELECCIONE ASESOR ----</option>
               </select>
 
           </div>
 
 
           <div class="form-group col-lg-6">
-            {!! Form::label('cliente_id', 'Cliente*') !!} &nbsp; &nbsp; &nbsp; 
-            
+            {!! Form::label('cliente_id', 'Cliente*') !!} &nbsp; &nbsp; &nbsp;
+
             <a href="" data-target="#modal-historial" data-toggle="modal"><button class="btn btn-danger btn-sm">Deudores</button></a>
 
             @if($mirol =='Administrador')
@@ -31,14 +31,14 @@
               <small class="rounded mb-2 bg-info text-white" style="font-size: 16px">Permitido</small>
               <small class="rounded mb-2 bg-dark text-white" style="font-size: 16px">Normal</small>
             </div>
-            
-           
+
+
               <select name="cliente_id" class="border form-control  border-secondary selectpicker" id="cliente_id" data-live-search="true" >{{-- selectpicker lang="es" --}}
-                <option>---- SELECCIONE CLIENTE ----</option>                  
-              </select>              
-              
+                <option>---- SELECCIONE CLIENTE ----</option>
+              </select>
+
           </div>
-        </div>  
+        </div>
       </div>
     </div>
 
@@ -49,13 +49,13 @@
 
       <div class="form-row">
           <div class="form-group col-lg-2">
-          {!! Form::label('pruc', 'RUC *') !!} &nbsp; &nbsp; &nbsp; 
-            
+          {!! Form::label('pruc', 'RUC *') !!} &nbsp; &nbsp; &nbsp;
+
             <a href="" data-target="#modal-add-ruc" id= "btn_agregar_ruc" data-toggle="modal" class="btn btn-info btn-sm">AGREGAR RUC Y R.S.</a>
-          
+
             <select name="pruc" class="border form-control border-secondary selectpicker" id="pruc" data-live-search="true" style="height: 100% !important;">
-              <option value="">---- SELECCIONE ----</option>                  
-            </select>  
+              <option value="">---- SELECCIONE ----</option>
+            </select>
           </div>
 
           @error('num_ruc')
@@ -63,7 +63,7 @@
           @enderror
 
           <div class="form-group col-lg-3">
-           {!! Form::label('pempresa', 'Nombre de empresa') !!} 
+           {!! Form::label('pempresa', 'Nombre de empresa') !!}
              <input type="text" name="pempresa" id="pempresa" class="form-control" placeholder="Nombre de empresa..." disabled>
          </div>
 
@@ -83,31 +83,31 @@
             </a><!--align-items-stretch-->
           </div>
 
-          
+
 
       </div>
 
         <div class="form-row">
-        <div class="form-group col-lg-2">            
-        
+        <div class="form-group col-lg-2">
+
         </div>
 
               <input type="hidden" name="pcodigo" id="pcodigo" value="{{ Auth::user()->identificador }}-{{ $fecha }}-{{ $numped}}" class="form-control" readonly>
-         
-          
+
+
         </div>
         <div class="form-row">
-          
+
           <div class="form-group col-lg-2">
             {!! Form::label('pcantidad', 'Cantidad') !!}
               <input type="text" name="pcantidad" id="pcantidad" step="0.01" min="0" class="form-control number ob" data-type="text" data-msj="Ingrese una cantidad" placeholder="Cantidad...">
-          </div>       
+          </div>
           <div class="form-group col-lg-3">
             {!! Form::label('ptipo_banca', 'Tipo de comprobante y banca') !!}
             <select name="ptipo_banca" id="ptipo_banca" class="border form-control border-secondary">
               <option value="">---- SELECCIONE ----</option>
             </select>
-          </div>       
+          </div>
           <div class="form-group col-lg-2">
             {!! Form::label('pporcentaje', 'Porcentaje(%)') !!}
               <input type="number" name="pporcentaje" id="pporcentaje" step="0.1" min="0" class="form-control" placeholder="Porcentaje..." disabled>
@@ -128,19 +128,19 @@
         <div class="form-row">
           <div class="form-group col-lg-5">
             {!! Form::label('pdescripcion', 'Descripción') !!}
-              <input type="text" name="pdescripcion OB" type="text" data-msj="ingrese 9 digitos" id="pdescripcion" class="form-control" placeholder="Descripción..." value="Sin descripción">
+              <input type="text" name="pdescripcion OB" type="text" data-msj="ingrese 9 digitos" id="pdescripcion" class="form-control" placeholder="Descripción...">
           </div>
           <div class="form-group col-lg-4">
             {!! Form::label('pnota', 'Nota') !!}
-              <input type="text" name="pnota" id="pnota" class="form-control" placeholder="Nota..." value="Sin notas">
+              <input type="text" name="pnota" id="pnota" class="form-control" placeholder="Nota...">
           </div>
-         
+
           <div class="form-group col-lg-3 d-flex justify-content-center align-items-center">
-            
+
             <button type="button" id="bt_add" class="btn btn-primary btn-lg"><i class="fas fa-plus-circle"></i> Agregar</button>
 
           </div>
-          
+
         </div>
         <div class="row">
 
@@ -180,7 +180,7 @@
                     <th style="text-align: center"><h4 id="total">S/. 0.00</h4></th>
                   </tfoot>
                   <tbody>
-                    
+
                   </tbody>
                 </table>
                 <br>
@@ -189,6 +189,6 @@
           </div>
         </div>
       </div>
-    </div>    
+    </div>
   </div>
 </div>
