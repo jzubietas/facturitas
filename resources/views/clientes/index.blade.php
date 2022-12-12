@@ -18,12 +18,12 @@
       </button>
       <div class="dropdown-menu">
        <a href="" data-target="#modal-exportar2" data-toggle="modal" class="dropdown-item" target="blank_"><img src="{{ asset('imagenes/icon-excel.png') }}"> Clientes - Pedidos</a>
+       <a href="" data-target="#modal-exportar-v2" data-toggle="modal" class="dropdown-item" target="blank_"><img src="{{ asset('imagenes/icon-excel.png') }}"> Clientes - Situacion</a>
 
-        <a href="" data-target="#modal-exportar-v2" data-toggle="modal" class="dropdown-item d-none" target="blank_"><img src="{{ asset('imagenes/icon-excel.png') }}"> Clientes - Situacion</a>
+        
       </div>
     </div>
-    @include('clientes.modal.exportar') {{-- Modal Clientes - Pedidos --}}
-    @include('clientes.modal.exportar2') {{-- Modal Clientes --}}
+    @include('clientes.modal.exportar')
     @include('clientes.modal.exportarv2')
     @endcan
   </h1>
