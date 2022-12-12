@@ -15,11 +15,11 @@
           <div class="form-row">
               <div class="form-group col-lg-12">
                   {!! Form::label('bank_destino', 'Banco de la cuenta del cliente') !!}
-                  {!! Form::select('bank_destino', $bancos , '0', ['required'=>'required','class' => 'form-control selectpicker', 'data-live-search' => 'true', 'placeholder' => '---- SELECCIONE ----']) !!}
+                  {!! Form::select('bank_destino', $bancos , '0', ['class' => 'form-control selectpicker', 'data-live-search' => 'true', 'placeholder' => '---- SELECCIONE ----']) !!}
               </div>
               <div class="form-group col-lg-12">
                   {!! Form::label('bank_number', 'Numero de su cuenta bancaria') !!}
-                  {!! Form::input('text','bank_number', null,  ['class' => 'form-control','required'=>'required']) !!}
+                  {!! Form::input('text','bank_number', null,  ['class' => 'form-control']) !!}
               </div>
               <div id="devolucion_message_response">
               </div>

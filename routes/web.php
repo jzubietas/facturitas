@@ -35,13 +35,15 @@ Route::middleware(['guest'])->get('/', function () {
 Route::middleware(['auth:sanctum', 'verified'])->group(function () {
 
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
+    Route::get('/search/cliente', [DashboardController::class, 'searchCliente'])->name('dashboard.search-cliente');
+    Route::get('/search/ruc', [DashboardController::class, 'searchRuc'])->name('dashboard.search-ruc');
 
 //Route::get('image-upload-preview', [PagoController::class, 'indexpreview'])->name('image-upload-preview');
 //Route::post('upload-image', [PagoController::class, 'storeimage'])->name('upload-image');
 //Route::resource('clientes.recurrentes', [ClienteController::class, 'Recurrentes'])->name('clientes.recurrentes');
 //Route::get('recurrentestabla', [ClienteController::class, 'tablarecurrentes'])->name('recurrentestabla');
 
-/*Controller Clientes*/
+    /*Controller Clientes*/
     Route::resource('clientes', ClienteController::class)->names('clientes');
 
     Route::get('pedidosenvioclientetabla', [ClienteController::class, 'pedidosenvioclientetabla'])->name('cargar.pedidosenvioclientetabla');
@@ -51,7 +53,8 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::get('clientes.createbf', [ClienteController::class, 'createbf'])->name('clientes.createbf');
     Route::post('clientes.storebf', [ClienteController::class, 'storebf'])->name('clientes.storebf');
 
-    
+
+
     Route::get('clientes.editbf/{cliente}/edit2', [ClienteController::class, 'editbf'])->name('clientes.editbf');
 
     Route::post('clientedeleteRequest', [ClienteController::class, 'destroyid'])->name('clientedeleteRequest.post');
@@ -59,7 +62,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::get('clientedeasesorparapagos', [ClienteController::class, 'clientedeasesor'])->name('cargar.clientedeasesorparapagos');
 
     Route::get('clientestabla', [ClienteController::class, 'indextabla'])->name('clientestabla');
-    
+
 
     Route::get('clientes.abandonos', [ClienteController::class, 'indexabandono'])->name('clientes.abandonos');
     Route::get('clientesabandonotabla', [ClienteController::class, 'indexabandonotabla'])->name('clientesabandonotabla');
@@ -75,7 +78,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
 
     /*Controller Cliente*/
 
-/*Controller Basefria*/
+    /*Controller Basefria*/
     Route::post('basefriacliente/{cliente}', [BasefriaController::class, 'updatebf'])->name('updatebf');
 
     Route::post('basefriaclienteRequest', [BasefriaController::class, 'updatebfpost'])->name('basefriaRequest.post');
@@ -84,9 +87,9 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
 
     Route::get('basefriatabla', [BasefriaController::class, 'indextabla'])->name('basefriatabla');//actualizado para serverside
     Route::get('basefria.cargarid', [BasefriaController::class, 'cargarid'])->name('basefria.cargarid');
-/*Controller Basefria*/
+    /*Controller Basefria*/
 
-/*Controller User*/
+    /*Controller User*/
     Route::resource('users', UserController::class)->names('users');
     Route::post('reset/{user}', [UserController::class, 'reset'])->name('user.reset');
     Route::post('asesorcombo', [UserController::class, 'Asesorcombo'])->name('asesorcombo');
@@ -117,12 +120,12 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::get('users.operarios', [UserController::class, 'Operarios'])->name('users.operarios');
     Route::get('users.misoperarios', [UserController::class, 'MisOperarios'])->name('users.misoperarios');
     Route::get('users.jefes', [UserController::class, 'Jefes'])->name('users.jefes');
-    Route::get('users.mipersonal',[UserController::class, 'MiPersonal'])->name('users.mipersonal');
+    Route::get('users.mipersonal', [UserController::class, 'MiPersonal'])->name('users.mipersonal');
     Route::get('personaltablahistorial', [UserController::class, 'personaltablahistorial'])->name('personaltablahistorial');//actualizado para serverside
     Route::get('indextablapersonal', [UserController::class, 'indextablapersonal'])->name('indextablapersonal');
-/*Controller User*/
+    /*Controller User*/
 
-/*Controller Pedido*/
+    /*Controller Pedido*/
     Route::resource('pedidos', PedidoController::class)->names('pedidos');
     Route::post('pedidoss.store', [PedidoController::class, 'pedidosstore'])->name('pedidoss.store');//actualizado para serverside
     Route::get('pedidostabla', [PedidoController::class, 'indextabla'])->name('pedidostabla');//actualizado para serverside
@@ -140,15 +143,15 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::post('pedidodeleteRequest', [PedidoController::class, 'destroyid'])->name('pedidodeleteRequest.post');
 
 //Route::get('pedidos.destroyid', [PedidoController::class, 'destroyid'])->name('pedidos.destroyid');
-    
+
     Route::post('pedidorestaurarRequest', [PedidoController::class, 'Restaurarid'])->name('pedidorestaurarRequest.post');
     Route::post('pedidos.restaurar/{pedido}', [PedidoController::class, 'Restaurar'])->name('pedidos.restaurar');
 
 
     Route::get('cliente', [PedidoController::class, 'cliente'])->name('cargar.cliente');
-    
+
     Route::get('asesortiempo', [PedidoController::class, 'asesortiempo'])->name('asesortiempo');
-    
+
     Route::get('clientedeasesordeuda', [PedidoController::class, 'clientedeasesordeuda'])->name('cargar.clientedeasesordeuda');
     Route::get('clientedeudaparaactivar', [PedidoController::class, 'clientedeudaparaactivar'])->name('cargar.clientedeudaparaactivar');
 
@@ -165,16 +168,16 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::post('pedidos/eliminarAdjunto/{id}', [PedidoController::class, 'eliminarAdjunto'])->name('pedidos.eliminarAdjunto');
     Route::get('pedidos/{adjunto}/descargaradjunto', [PedidoController::class, 'DescargarAdjunto'])->name('pedidos.descargaradjunto');
     Route::get('pedidos/{adjunto}/descargargastos', [PedidoController::class, 'DescargarGastos'])->name('pedidos.descargargastos');
-    Route::post('envios.direccion', [PedidoController::class, 'DireccionEnvio'])->name('envios.direccion');
-    Route::post('envios.desvincular', [PedidoController::class, 'EnvioDesvincular'])->name('envios.desvincular');
-    Route::get('envios.createdireccion/{pedido}', [PedidoController::class, 'createDireccion'])->name('envios.createdireccion');
-    Route::post('envios.updatedireccion/{direccion}', [PedidoController::class, 'UpdateDireccionEnvio'])->name('envios.updatedireccion');
+    Route::post('envios.direccion', [EnvioController::class, 'DireccionEnvio'])->name('envios.direccion');
+    Route::post('envios.desvincular', [SobreController::class, 'EnvioDesvincular'])->name('envios.desvincular');
+    Route::get('envios.createdireccion/{pedido}', [EnvioController::class, 'createDireccion'])->name('envios.createdireccion');
+    Route::post('envios.updatedireccion/{direccion}', [EnvioController::class, 'UpdateDireccionEnvio'])->name('envios.updatedireccion');
 
     Route::post('pedidos/eliminarFoto1/{pedido}', [PedidoController::class, 'eliminarFoto1'])->name('pedidos.eliminarFoto1');
     Route::post('pedidos/eliminarFoto2/{pedido}', [PedidoController::class, 'eliminarFoto2'])->name('pedidos.eliminarFoto2');
     Route::get('envios/{imagen}/descargarimagen', [PedidoController::class, 'DescargarImagen'])->name('envios.descargarimagen');
     Route::post('validarrelacionruc', [PedidoController::class, 'validarrelacionruc'])->name('validarrelacionruc');
-    
+
     Route::post('pedidoobteneradjuntoRequest', [PedidoController::class, 'pedidoobteneradjuntoRequest'])->name('pedidoobteneradjuntoRequest');
 
     /*Controller Pedido */
@@ -201,6 +204,8 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::get('operaciones.entregadostabla', [OperacionController::class, 'Entregadostabla'])->name('operaciones.entregadostabla');
     Route::post('operaciones.atenderid', [OperacionController::class, 'Atenderid'])->name('operaciones.atenderid');
     Route::get('operaciones.editatender/{pedido}', [OperacionController::class, 'editAtender'])->name('operaciones.editatender');
+    Route::post('operaciones.editatencion/{pedido}', [OperacionController::class, 'editAtencion'])->name('operaciones.editatencion');
+    Route::post('operaciones.datossubidaadj/{pedido}', [OperacionController::class, 'DatosSubidaAdjunto'])->name('operaciones.datossubidaadj');
     Route::post('operaciones.eliminaradjunto', [OperacionController::class, 'eliminarAdjuntoOperaciones'])->name('operaciones.eliminaradjunto');
 
     Route::post('operaciones.updateatender/{pedido}', [OperacionController::class, 'updateAtender'])->name('operaciones.updateatender');
@@ -217,9 +222,9 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
 
     
     //Route::post('pedidos.atender/{pedido}', [PedidoController::class, 'Atender'])->name('pedidos.atender');
-    
+
     //Route::post('pedidos.envio/{pedido}', [PedidoController::class, 'Enviar'])->name('pedidos.envio');
-    
+
 
     /*Controller Pagos*/
     Route::resource('pagos', PagoController::class)->names('pagos');
@@ -237,7 +242,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
 
     Route::post('pagodeleteRequest', [PagoController::class, 'destroyid'])->name('pagodeleteRequest.post');
     Route::post('pagodesabonarRequest', [PagoController::class, 'desabonarid'])->name('pagodesabonarRequest.post');
-    
+
     Route::post('pagos.addImgTemp', [PagoController::class, 'addImgTemp'])->name('pagos.addImgTemp');//actualizado para serverside
     Route::post('pagos.changeImg', [PagoController::class, 'changeImg'])->name('pagos.changeImg');
 
@@ -253,12 +258,12 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::get('pagos/{imagen}/descargarimagen', [PagoController::class, 'DescargarImagen'])->name('pagos.descargarimagen');
 
     Route::get('asesorespago', [PagoController::class, 'asesorespago'])->name('asesorespago');
-    
+
 
     /*Controller Pagos*/
-    
+
     //Route::post('operaciones.sinenvio/{pedido}', [PedidoController::class, 'SinEnviar'])->name('operaciones.sinenvio');
-    
+
 
    
 /////////
@@ -276,7 +281,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
 
     //Route::post('envios.recibir/{pedido}', [PedidoController::class, 'Recibir'])->name('envios.recibir');
     //Route::post('envios.enviar/{pedido}', [PedidoController::class, 'EnviarPedido'])->name('envios.enviar');
-    
+
     /*Controller Envio*/
     Route::post('envios.recibirid', [EnvioController::class, 'Recibirid'])->name('envios.recibirid');
     Route::post('envios.enviarid', [EnvioController::class, 'EnviarPedidoid'])->name('envios.enviarid');
@@ -285,12 +290,12 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
 
 
     /*Controller Envio*/
-    
+
     //Route::get('pagos/create/{cliente}', [PagoController::class, 'create'])->name('pagos.create');
 
     //Route::post('pago/create/{id}', [PagoController::class, 'create2'])->name('pago.create');
 
-    
+
     /* Administracion */
     Route::get('administracion.porrevisar', [AdministracionController::class, 'PorRevisar'])->name('administracion.porrevisar');
     Route::get('administracion.porrevisartabla', [AdministracionController::class, 'PorRevisartabla'])->name('administracion.porrevisartabla');//agregado para serverside
@@ -311,23 +316,23 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::get('administracion.aprobadostabla', [AdministracionController::class, 'Aprobadostabla'])->name('administracion.aprobadostabla');//agregado por zubieta
     /* Administracion */
 
-    
+
     /* Movimiento */
     Route::resource('movimientos', MovimientoController::class)->names('movimientos');
 
     Route::get('movimientos.actualiza', [MovimientoController::class, 'actualiza'])->name('movimientos.actualiza');
     Route::get('movimientostabla', [MovimientoController::class, 'indextabla'])->name('movimientostabla');//actualizado para serverside
     Route::get('movimientostablaconciliar', [MovimientoController::class, 'indextablaconciliar'])->name('movimientostablaconciliar');//actualizado para serverside
-    
+
     Route::get('tipomovimiento', [MovimientoController::class, 'tipomovimiento'])->name('cargar.tipomovimiento');
     Route::post('validar_repetido', [MovimientoController::class, 'repeat'])->name('validar_repetido');
     Route::post('register_movimiento', [MovimientoController::class, 'register'])->name('register_movimiento');
 
     Route::post('movimientodeleteRequest', [MovimientoController::class, 'destroyid'])->name('movimientodeleteRequest.post');
     /* Movimiento */
-    
+
     Route::resource('roles', RoleController::class)->names('roles');
-    
+
     Route::post('VentaPorFechas', [PdfController::class, 'VentaPorFechas'])->name('VentaPorFechas');
     Route::post('IngresoPorFechas', [PdfController::class, 'IngresoPorFechas'])->name('IngresoPorFechas');
     Route::get('reportes.index', [PdfController::class, 'index'])->name('reportes.index');
@@ -360,11 +365,12 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
 
 //EXCEL EXPORTABLES
     //MODULO PERSONAS
-    // Route::get('clientesExcel', [ExcelController::class, 'clientesExcel'])->name('clientesExcel');
-    Route::post('usuariosExcel', [ExcelController::class, 'usuariosExcel'])->name('usuariosExcel');
-    Route::post('movimientosExcel', [ExcelController::class, 'movimientosExcel'])->name('movimientosExcel');
-    Route::post('clientesExcel', [ExcelController::class, 'clientesExcel'])->name('clientesExcel');
+     Route::get('clientesExcel', [ExcelController::class, 'clientesExcel'])->name('clientesExcel');
+    Route::post('situacionporfechasExcel', [ExcelController::class, 'clientessituacionExcel'])->name('situacionporfechasExcel');
+  
     Route::post('clientesv2Excel', [ExcelController::class, 'clientesv2Excel'])->name('clientesv2Excel');
+
+
 
     Route::post('clientespedidosExcel', [ExcelController::class, 'clientespedidosExcel'])->name('clientespedidosExcel');
 

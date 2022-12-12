@@ -34,6 +34,29 @@
             </div>
           </div>
         </div>
+        <div class="container">
+          <div class="row">
+            <div class="col-lg-4 col-md-6 col-sm-6 col-xs-6" style="padding: 24px;">
+                {!! Form::label('envio_doc', 'Documento enviado') !!}
+                @csrf
+                {!! Form::file('adjunto[]', ['class' => 'form-control-file', 'id'=>'adjunto', 'multiple']) !!}
+            </div>
+            <div class="col-lg-4 col-md-6 col-sm-6 col-xs-6" style="padding: 24px;">
+                {!! Form::label('fecha_envio_doc', 'Fecha de envío') !!}
+                {!! Form::text('fecha_envio_doc', '11-12-2022', ['class' => 'form-control', 'id' => 'fecha_envio_doc', 'disabled']) !!}
+            </div>
+            <div class="col-lg-4 col-md-6 col-sm-6 col-xs-6" style="padding: 24px;">
+                {!! Form::label('cant_compro', 'Cantidad de comprobantes enviados') !!}
+                {!! Form::number('cant_compro', '1', ['class' => 'form-control', 'id' => 'cant_compro', 'step'=>'1', 'min' => '0']) !!}
+            </div>
+            <div class="col-lg-12 col-md-6 col-sm-6 col-xs-6 text-center" style="padding: 24px;">
+              <button type="submit" class="btn btn-info" id="atender">Confirmar</button>
+          </div>
+          </div>
+        </div>
+
+
+
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
           <button type="submit" class="btn btn-info" id="atender">Confirmar</button>

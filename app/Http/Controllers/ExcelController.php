@@ -8,7 +8,7 @@ use App\Exports\BasesFriasExport;
 use App\Exports\ClientesExport;
 use App\Exports\Clientesv2Export;
 use App\Exports\ClientesPedidosExport;
-use App\Exports\ClientesAbandonosExport;
+use App\Exports\ClientesSituacionExport;
 use App\Exports\PedidosPorEnviarPorFechasExport;
 use App\Exports\EntregadosPorFechasExport;
 use App\Exports\MisPagosExport;
@@ -142,21 +142,20 @@ class ExcelController extends Controller
                 ->download('Lista de Clientes Situacion.xlsx');           
     }
 
-    public function clientesabandonoExcel(Request $request)
+    public function clientessituacionExcel(Request $request)
     {
         ini_set('memory_limit', '-1');
         set_time_limit(3000000);
 
-        return (new ClientesAbandonosExport)
+        return (new ClientesSituacionExport)
                 ->clientes($request)
                 ->anioa($request)
                 ->aniop($request)
-                ->download('Lista de Clientes_abandonos_'.$request->anio.'.xlsx');
-
-        /* return Excel::download(new ClientesPedidosExport, 'Lista de Clientes_pedidos.xlsx'); */
+                ->download('Lista de Clientes_Situacion_'.$request->anio.'.xlsx');
     }
 
-    public function clientespedidosExcel(Request $request)
+
+    /*public function clientespedidosExcel(Request $request)
     {
         ini_set('memory_limit', '-1');
         set_time_limit(3000000);
@@ -168,7 +167,12 @@ class ExcelController extends Controller
                 ->aniop($request)
                 ->download('Lista de Clientes_pedidos_'.$request->anio.'.xlsx');
 
-        /* return Excel::download(new ClientesPedidosExport, 'Lista de Clientes_pedidos.xlsx'); */
+         return Excel::download(new ClientesPedidosExport, 'Lista de Clientes_pedidos.xlsx');
+    }*/
+
+    public function clientespedidosExcel()
+    {
+        return Excel::download(new ClientesPedidosExport, 'Lista de Clientes_pedidos.xlsx');
     }
 
     // public function basefriaExcel()

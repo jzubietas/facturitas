@@ -222,9 +222,9 @@ class OperacionController extends Controller
                 //->WhereIn('u.identificador',$asesores)
                 //->where('u.operario', Auth::user()->id)
                 //->where('pedidos.condicion', 'ATENDIDO')
-                ->where('pedidos.condicion', Pedido::ATENDIDO)
-                ->whereIn('pedidos.envio', ['0'])
-                ->groupBy(
+                ->where('pedidos.condicion', 'ATENDIDO')
+                ->where('pedidos.envio', 0);
+                /*->groupBy(
                     'pedidos.id',
                     'u.identificador',
                     'dp.codigo',
@@ -666,50 +666,15 @@ class OperacionController extends Controller
         //return response()->json(compact('pedido', 'pedidos', 'imagenespedido', 'imagenes'));
     }
 
-    public function eliminarAdjuntoOperaciones(Request $request)
-    {
-        $id = $request->eliminar_pedido_id;
-        $imagen = $request->eliminar_pedido_id_imagen;
-        $imagenatencion = ImagenAtencion::where("pedido_id",$id)
-            ->where("adjunto",$imagen)->first();
 
-        if($imagenatencion != NULL){
-            $imagenatencion->update([
-                'estado' => '0'
-            ]);
-        }
-/*
-        $pedido = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')
+    public function DatosSubidaAdjunto(Pedido $pedido)
+    {
+        $pedidos = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')
             ->join('users as u', 'pedidos.user_id', 'u.id')
             ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
             ->select(
-                'pedidos.id',
-                'c.nombre as nombres',
-                'c.celular as celulares',
-                'u.name as users',
-                'dp.codigo as codigos',
-                'dp.nombre_empresa as empresas',
-                'dp.mes',
-                'dp.anio',
-                'dp.ruc',
-                'dp.cantidad',
-                'dp.tipo_banca',
-                'dp.porcentaje',
-                'dp.courier',
-                'dp.ft',
-                'dp.descripcion',
-                'dp.nota',
-                'dp.adjunto',
-                'dp.total',
-                'pedidos.condicion as condiciones',
-                'pedidos.envio',
-                'pedidos.condicion_envio',
-                'dp.envio_doc',
                 'dp.fecha_envio_doc',
                 'dp.cant_compro',
-                'dp.fecha_envio_doc_fis',
-                'dp.fecha_recepcion',
-                'pedidos.created_at as fecha'
             )
             ->where('pedidos.estado', '1')
             ->where('pedidos.id', $pedido->id)
@@ -746,12 +711,97 @@ class OperacionController extends Controller
             ->orderBy('pedidos.created_at', 'DESC')
             ->get();
 
-        $imagenes = ImagenAtencion::where('imagen_atencions.pedido_id', $pedido->id)->where('estado', '1')->get();
+        return response()->json(compact('pedidos'));
+    }
+
+    public function eliminarAdjuntoOperaciones(Request $request)
+    {
+        $id = $request->eliminar_pedido_id;
+        $imagen = $request->eliminar_pedido_id_imagen;
+        $imagenatencion = ImagenAtencion::where("pedido_id",$id)
+            ->where("adjunto",$imagen)->first();
+
+        if($imagenatencion != NULL){
+            $imagenatencion->update([
+                'estado' => '0'
+            ]);
+/*
+            $pedido = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')
+            ->join('users as u', 'pedidos.user_id', 'u.id')
+            ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
+            ->select(
+                'pedidos.id',
+                'c.nombre as nombres',
+                'c.celular as celulares',
+                'u.name as users',
+                'dp.codigo as codigos',
+                'dp.nombre_empresa as empresas',
+                'dp.mes',
+                'dp.anio',
+                'dp.ruc',
+                'dp.cantidad',
+                'dp.tipo_banca',
+                'dp.porcentaje',
+                'dp.courier',
+                'dp.ft',
+                'dp.descripcion',
+                'dp.nota',
+                'dp.adjunto',
+                'dp.total',
+                'pedidos.condicion as condiciones',
+                'pedidos.envio',
+                'pedidos.condicion_envio',
+                'dp.envio_doc',
+                'dp.fecha_envio_doc',
+                'dp.cant_compro',
+                'dp.fecha_envio_doc_fis',
+                'dp.fecha_recepcion',
+                'pedidos.created_at as fecha'
+            )
+            ->where('pedidos.estado', '1')
+            ->where('pedidos.id', $id)
+            ->where('dp.estado', '1')
+            ->groupBy(
+                'pedidos.id',
+                'c.nombre',
+                'c.celular',
+                'u.name',
+                'dp.codigo',
+                'dp.nombre_empresa',
+                'dp.mes',
+                'dp.anio',
+                'dp.ruc',
+                'dp.cantidad',
+                'dp.tipo_banca',
+                'dp.porcentaje',
+                'dp.courier',
+                'dp.ft',
+                'dp.descripcion',
+                'dp.nota',
+                'dp.adjunto',
+                'dp.total',
+                'pedidos.condicion',
+                'pedidos.envio',
+                'pedidos.condicion_envio',
+                'dp.envio_doc',
+                'dp.fecha_envio_doc',
+                'dp.cant_compro',
+                'dp.fecha_envio_doc_fis',
+                'dp.fecha_recepcion',
+                'pedidos.created_at'
+            )
+            ->orderBy('pedidos.created_at', 'DESC')
+            ->get();
+
+        $imagenes = ImagenAtencion::where('imagen_atencions.pedido_id', $id)->where('estado', '1')->get();*/
 
 
-        return view('pedidos.modal.ContenidoModal.ListadoAdjuntos',compact('imagenes', 'pedido')); */
+        }
 
-        return response()->json(['html' => $imagenatencion]);
+
+        //return view('pedidos.modal.ContenidoModal.ListadoAdjuntos',compact('imagenes', 'pedido'));
+
+        return response()->json(['html' => $imagen]);
     }
 
     public function updateAtender(Request $request, Pedido $pedido)

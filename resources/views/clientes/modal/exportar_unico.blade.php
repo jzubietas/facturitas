@@ -3,17 +3,32 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header bg-success">
-        <h5 class="modal-title" id="exampleModalLabel">Exportar clientes abandonos</h5>
+        <h5 class="modal-title" id="exampleModalLabel">
+          Exportar clientes
+          @if($key === '1')
+          abandonos
+          @elseif($key === '2')
+          recurrentes
+            @elseif($key === '3')
+            nuevos
+            @elseif($key === '4')
+            recuperado
+          @endif
+        
+      </h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      {{--{!! Form::open(['route' => ['clientesExcel'], 'method' => 'POST', 'target' => 'blanck_']) !!}--}}
-
+      
       @if($key === '1')
-        {!! Form::open(['route' => ['clientesabandonoExcel'], 'method' => 'POST', 'target' => 'blanck_']) !!}
-      {{--@elseif($key === '2')
-        {!! Form::open(['route' => ['entregadosporfechasexcel'], 'method' => 'POST', 'target' => 'blanck_']) !!}--}}
+        {!! Form::open(['route' => ['situacionporfechasExcel'], 'method' => 'POST', 'target' => 'blanck_']) !!}
+      @elseif($key === '2')
+        {!! Form::open(['route' => ['situacionporfechasExcel'], 'method' => 'POST', 'target' => 'blanck_']) !!}
+        @elseif($key === '3')
+        {!! Form::open(['route' => ['situacionporfechasExcel'], 'method' => 'POST', 'target' => 'blanck_']) !!}
+        @elseif($key === '4')
+        {!! Form::open(['route' => ['situacionporfechasExcel'], 'method' => 'POST', 'target' => 'blanck_']) !!}
       @endif
             <div class="card-body">
               <div class="form-row">
@@ -22,14 +37,19 @@
                     <div class="col-lg-12">
                       {!! Form::label('anio', 'Elija el rango de fechas del reporte') !!} <br><br>
                       <div class="form-row">
-                        <div class="col-lg-6">
-                          <label>Fecha iniciala&nbsp;</label>
-                          {!! Form::date('desde', \Carbon\Carbon::now(), ['class' => 'form-control']); !!}
+                        <div class="col-lg-12">
+                          {!! Form::label('anio', 'Elija un año del reporte') !!} <br><br>
+                          {!! Form::select('anio', $anios, $dateY-1, ['class' => 'form-control', 'placeholder' => '---- SELECCIONE ----', 'required'=>'required']) !!}
                         </div>
-                        <div class="col-lg-6">
-                          <label>Fecha final&nbsp;</label>
-                          {!! Form::date('hasta', \Carbon\Carbon::now(), ['class' => 'form-control']); !!}
-                        </div>
+                        @if($key === '1')
+                          <input type="hidden" id="situacion" name="situacion" value="ABANDONO">
+                        @elseif($key === '2')
+                        <input type="hidden" id="situacion" name="situacion" value="RECURRENTE">
+                          @elseif($key === '3')
+                          <input type="hidden" id="situacion" name="situacion" value="NUEVO">
+                          @elseif($key === '4')
+                          <input type="hidden" id="situacion" name="situacion" value="RECUPERADO">
+                        @endif
                       </div>
                     </div>
                   </div>

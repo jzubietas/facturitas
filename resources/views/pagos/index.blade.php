@@ -50,7 +50,7 @@
 
   <div class="card">
     <div class="card-body">
-      <table id="tablaPrincipal" style="width:100;" class="table table-striped">
+      <table id="tablaPrincipal" style="width:100%;" class="table table-striped display" >
         <thead>
           <tr>
             <th scope="col">COD.</th>
@@ -58,6 +58,7 @@
             <th scope="col">Codigo pedido</th>
             <th scope="col">Asesor</th>
             <th scope="col">Cliente</th>
+            <th scope="col">Celular</th>
             {{--<th scope="col">Observacion</th>--}}
             {{--<th scope="col">Total cobro</th>--}}
             {{--<th scope="col">Total pagado</th>--}}
@@ -77,6 +78,13 @@
 
 @section('css')
   <!--<link rel="stylesheet" href="../css/admin_custom.css">-->
+  
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.1/css/jquery.dataTables.min.css">
+  <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.3.2/css/buttons.dataTables.min.css">
+
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.1/css/dataTables.bootstrap4.min.css">
+  <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.3.2/css/buttons.bootstrap4.min.css">
+
   <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
   <style>
     .yellow {
@@ -131,9 +139,25 @@
 @stop
 
 @section('js')
+  
+  <!--https://code.jquery.com/jquery-3.5.1.js--> 
+  <script src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/buttons/2.3.2/js/dataTables.buttons.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+  <script src="https://cdn.datatables.net/buttons/2.3.2/js/buttons.html5.min.js"></script>
+  <script src="https://cdn.datatables.net/buttons/2.3.2/js/buttons.print.min.js"></script>
 
-  <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
   <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+  
+  
+  
+  
+  
+  
+  
+  
 
   <script>
     function clickformdelete()
@@ -205,7 +229,27 @@
 
     })
 
-    $('#tablaPrincipal').DataTable({
+    $.fn.dataTable.ext.buttons.refresh = {
+      text: 'Recargar'
+    , action: function ( e, dt, node, config ) {
+        dt.clear().draw();
+        dt.ajax.reload();
+      }
+  };
+
+    var tablaPrincipal=$('#tablaPrincipal').DataTable({
+        dom: 'Bfrtip',
+         buttons: [  
+          {
+            className: 'red'
+            ,text:"Recargar"
+          },
+          
+          ],
+        //buttons: [
+            /*'copy', 'csv', 'excel', 'pdf', 'print'*/
+          //'refresh'
+        //],
         processing: true,
         serverSide: true,
         searching: true,
@@ -240,15 +284,6 @@
                 return 'PAG'+row.users+'-'+unido+'-'+row.id;
               }
 
-                            /*if(row.id<10){
-                              return 'PAG000'+row.id;
-                            }else if(row.id<100){
-                              return 'PAG00'+row.id;
-                            }else if(row.id<1000){
-                              return 'PAG0'+row.id;
-                            }else{
-                              return 'PAG'+row.id;
-                            } */
                         }
                     },
                     {
@@ -287,6 +322,7 @@
 
                         },
                     },
+                    {data: 'ccliente', name: 'ccliente',"visible":false,},
                     /*{//observacion
                       data: 'observacion', name: 'observacion'
                     },*/
@@ -331,9 +367,29 @@
                         "next": "Siguiente",
                         "previous": "Anterior"
                     }
-                },
+                },                
+                /*buttons: [
+                    'copy', 'csv', 'excel', 'pdf', 'print'
+                ]*/
+                //buttons: [ "print", "refresh"]
+                
             });
 
+            
+
+            $.fn.dataTable.ext.buttons.refresh = {
+                text: 'Recargar'
+              , action: function ( e, dt, node, config ) {
+                  dt.clear().draw();
+                  dt.ajax.reload();
+                }
+            };
+
+            new $.fn.dataTable.Buttons( tablaPrincipal, {
+              buttons: [
+                  'refresh'
+              ]
+          } );
 
 
   });

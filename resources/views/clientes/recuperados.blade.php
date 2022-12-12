@@ -7,7 +7,7 @@
 @endsection
 
 @section('content_header')
-  <h1>Lista de clientes
+  <h1>Lista de clientes en situacion RECUPERADOS
     @can('clientes.create')
       <a href="{{ route('clientes.create') }}" class="btn btn-info"><i class="fas fa-plus-circle"></i> Agregar</a>
     @endcan
@@ -17,17 +17,10 @@
         Exportar
       </button>
       <div class="dropdown-menu">
-        {{-- <a href="{{ route('clientesExcel') }}" class="dropdown-item" target="blank_"><img src="{{ asset('imagenes/icon-excel.png') }}"> Clientes</a> --}}
-        {{-- <a href="" data-target="#modal-exportar" data-toggle="modal" class="dropdown-item" target="blank_"><img src="{{ asset('imagenes/icon-excel.png') }}"> Clientes</a>--}}
-        {{--<a href="{{ route('clientespedidosExcel') }}" class="dropdown-item" target="blank_"><img src="{{ asset('imagenes/icon-excel.png') }}"> Clientes - Pedidos</a> --}}
-        <a href="" data-target="#modal-exportar2" data-toggle="modal" class="dropdown-item" target="blank_"><img src="{{ asset('imagenes/icon-excel.png') }}"> Clientes - Pedidos</a>
-
-        <a href="" data-target="#modal-exportar-v2" data-toggle="modal" class="dropdown-item d-none" target="blank_"><img src="{{ asset('imagenes/icon-excel.png') }}"> Clientes - Situacion</a>
+       <a href="" data-target="#modal-exportar-unico" data-toggle="modal" class="dropdown-item" target="blank_"><img src="{{ asset('imagenes/icon-excel.png') }}"> Clientes - Pedidos</a>
       </div>
     </div>
-    @include('clientes.modal.exportar') {{-- Modal Clientes - Pedidos --}}
-    @include('clientes.modal.exportar2') {{-- Modal Clientes --}}
-    @include('clientes.modal.exportarv2')
+    @include('clientes.modal.exportar_unico', ['title' => 'Exportar Lista de clientes RECUPERADOS', 'key' => '4'])
     @endcan
   </h1>
   @if($superasesor > 0)
@@ -183,11 +176,7 @@ $(document).ready(function () {
         serverSide: true,
         ajax: "{{ route('recuperadostabla') }}",
         initComplete:function(settings,json){
-          if (localStorage. getItem("search_tabla") === null) {
-            //no existe
-          }else{
-            $('#tablaPrincipal_filter label input').val(localStorage.getItem("search_tabla") ).change();
-          }
+          
         },
         columns: [
         {

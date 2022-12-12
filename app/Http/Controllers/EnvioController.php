@@ -1094,6 +1094,258 @@ class EnvioController extends Controller
         //return redirect()->route('envios.index')->with('info','actualizado');
     }
 
+    public function DireccionEnvio(Request $request)
+    {
+        //return $request->all();
+        $pedidos=$request->pedidos;
+        if(!$request->pedidos)
+        {
+            return '0';
+        }
+        else{
+            $array_pedidos=explode(",",$pedidos);
+
+            //return var_dump($array_pedidos);
+
+            //cliente
+            $cliente=Cliente::where("id",$request->cliente_id)->first();
+
+            $direcciongrupo=DireccionGrupo::create([
+                'estado'=>'1',
+                'destino' => $request->destino,
+                'distribucion'=> ( ($request->destino=='PROVINCIA')? 'NORTE':''),
+                'nombre_cliente'=> ( ($request->destino=='LIMA')? $request->nombre : $cliente->nombre  ),
+                'celular_cliente'=> ( ($request->destino=='LIMA')? $request->contacto : $cliente->celular."-".$cliente->icelular ),
+                'codigos'=>$pedidos
+            ]);
+
+            $count_pedidos=count((array)$array_pedidos);
+
+            if ($request->destino == "LIMA")
+            {
+                try {
+                    DB::beginTransaction();
+
+                    $cantidad=$count_pedidos;
+
+                    $direccionLima = DireccionEnvio::create([
+                        'cliente_id' => $request->cliente_id,
+                        'distrito' => $request->distrito,
+                        'direccion' => $request->direccion,
+                        'referencia' => $request->referencia,
+                        'nombre' => $request->nombre,
+                        'celular' => $request->contacto,
+                        'observacion' => $request->observacion,
+                        'direcciongrupo' => $direcciongrupo->id,
+                        'cantidad' => $cantidad,
+                        'destino'=>$request->destino,
+                        'estado' => '1',
+                        "salvado"=> "0"
+                    ]);
+
+
+                    // ALMACENANDO DIRECCION-PEDIDOS
+                    $pedido_id = $request->pedido_id;
+                    $contPe = 0;
+
+                    foreach($array_pedidos as $pedido_id)
+                    {
+                        $pedido = Pedido::find($pedido_id);
+
+                        $pedido->update([
+                            'destino' => $request->destino,
+                            'condicion_envio' => 2,//AL REGISTRAR DIRECCION PASA A ESTADO  EN REPARTO
+                            'direccion' => $request->direccion,
+
+                        ]);
+
+
+                        $dp_empresa=DetallePedido::where("pedido_id",$pedido_id)->first();
+                            /*->update([
+                                'fecha_envio_doc_fis'=>Carbon()::now()
+                            ]);*/
+
+
+                        $direccionPedido = DireccionPedido::create([
+                                'direccion_id' => $direccionLima->id,
+                                'pedido_id' => $pedido_id,
+                                'codigo_pedido' => $dp_empresa->codigo,
+                                'direcciongrupo' => $direcciongrupo->id,
+                                'empresa' => $dp_empresa->nombre_empresa,
+                                'estado' => '1'
+                            ]);
+
+                        //INDICADOR DE DIRECCION
+
+
+
+
+                       // $contPe++;
+                    }
+
+                    if($request->saveHistoricoLima=="1")
+                    {
+                        //temporal lima
+                        $direccionLima->update([
+                            "salvado"=>"1"
+                        ]);
+                    }
+
+                    DB::commit();
+                } catch (\Throwable $th) {
+                    throw $th;
+                    /*DB::rollback();
+                    dd($th);*/
+                }
+
+            }
+
+
+            if ($request->destino == "PROVINCIA")
+            {
+                try {
+                    DB::beginTransaction();
+
+                    //IMPORTE
+                    //$importe = $request->importe;
+
+
+                    //$importe=str_replace(',','',$importe);
+                    $cantidad=$count_pedidos;
+                    //FOTO
+                    $files = $request->file('rotulo');
+                    $destinationPath = base_path('public/storage/gastos/');
+
+                    if(isset($files)){
+                        $file_name = Carbon::now()->second.$files->getClientOriginalName();
+                        $files->move($destinationPath , $file_name);
+                    }
+                    else{
+                        $file_name = 'logo_facturas.png';
+                    }
+
+                    $gastoProvincia = GastoEnvio::create([
+                        'cliente_id' => $request->cliente_id,
+                        'user_id' => Auth::user()->id,
+                        'tracking' => $request->tracking,
+                        'registro' => $request->numregistro,
+                        'foto' => $file_name,
+                        'importe' => "0.00",
+                        'cantidad' => $cantidad,
+                        'direcciongrupo' => $direcciongrupo->id,
+                        'destino'=>$request->destino,
+                        'estado' => '1',
+                        "salvado"=> "0"
+                    ]);
+
+                    // ALMACENANDO DIRECCION-PEDIDOS
+                    //$pedido_id = $request->pedido_id;
+                    //$contPe = 0;
+                    foreach($array_pedidos as $pedido_id)
+                    {
+                        $pedido = Pedido::find($pedido_id);
+
+                        $pedido->update([
+                            'destino' => $request->destino,
+                            'condicion_envio' => 2,//AL REGISTRAR DIRECCION PASA A ESTADO  EN REPARTO
+                            'direccion' => '1',
+                        ]);
+
+                        $dp_empresa=DetallePedido::where("pedido_id",$pedido_id)->first();
+
+                        /*$dp_empresa=DetallePedido::where("pedido_id",$pedido_id)->first()
+                            ->update([
+                                'fecha_envio_doc_fis'=>Carbon()::now()
+                            ]);*/
+
+                        $gastoPedido = GastoPedido::create([
+                            'gasto_id' => $gastoProvincia->id,
+                            'pedido_id' => $pedido_id,
+                            'codigo_pedido' => $dp_empresa->codigo,
+                            'direcciongrupo' => $direcciongrupo->id,
+                            'empresa' => $dp_empresa->nombre_empresa,
+                            'estado' => '1'
+                        ]);
+
+                        //INDICADOR DE PAGOS
+                        $pedido = Pedido::find($pedido_id);
+
+
+                        //$contPe++;
+                    }
+
+                    if($request->saveHistoricoLima=="1")
+                    {
+                        //temporal lima
+                        $gastoProvincia->update([
+                            "salvado"=>"1"
+                        ]);
+                    }
+
+                    DB::commit();
+                } catch (\Throwable $th) {
+                    throw $th;
+                    /*DB::rollback();
+                    dd($th);*/
+                }
+            }
+
+            return response()->json(['html' => $pedidos]);
+
+
+        }
+
+
+        //$pedido=Pedido::where("id",$request->)
+
+
+
+
+        return redirect()->route('envios.index')->with('info','actualizado');
+    }
+
+    public function UpdateDireccionEnvio(Request $request, DireccionEnvio $direccion)
+    {
+        $direccion->update([
+            /* 'departamento' => $request->departamento,
+            'provincia' => $request->provincia, */
+            'distrito' => $request->distrito,
+            'direccion' => $request->direccion,
+            'referencia' => $request->referencia,
+            'nombre' => $request->nombre,
+            'celular' => $request->celular,
+            'estado' => '1'
+        ]);
+
+        return redirect()->route('envios.index')->with('info','actualizado');
+    }
+
+    public function createDireccion(Pedido $pedido)
+    {
+        $destinos = [
+            "LIMA" => 'LIMA',
+            "PROVINCIA" => 'PROVINCIA'
+        ];
+
+        $distritos = Distrito::whereIn('provincia', ['LIMA', 'CALLAO'])
+                            ->where('estado', '1')
+                            ->pluck('distrito', 'distrito');
+
+        $clientes = Cliente::where('estado', '1')
+                            ->where('id', $pedido->user_id)
+                            ->first();
+        $pedidos = Pedido::join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
+                            ->select('pedidos.id',
+                                    'dp.codigo')
+                            ->where('pedidos.cliente_id', $pedido->cliente_id)
+                            ->where('pedidos.destino', null)
+                            ->where('pedidos.direccion', '0')
+                            ->where('pedidos.envio', '>', '0')
+                            ->where('pedidos.estado', '1')
+                            ->get();
+
+        return view('pedidos.createDireccion', compact('destinos', 'distritos', 'clientes', 'pedidos'));
+    }
 
 
 }

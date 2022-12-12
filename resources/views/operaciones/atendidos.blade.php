@@ -134,49 +134,93 @@
   <script>
     $(document).ready(function () {
 
-        $('#modal-editar-atencion').on('show.bs.modal', function (event) {
+      function AtenderAtencion(){
+        $('.modal-atender-pedido').on('click', function (event) {
+          event.preventDefault();
+            console.log("test");
             //cuando abre el form de anular pedido
-            var button = $(event.relatedTarget)
-            var idunico = button.data('atencion')
+            //var button = $(event.relatedTarget)
+            var idunico = $(this).data('atencion')
             $(".textcode").html("PED"+idunico);
             $("#hiddenAtender").val(idunico);
 
-            
+            $.ajax({
+                        type:'POST',
+                        url: "{{ route('operaciones.datossubidaadj',':id') }}".replace(':id',idunico),
+                        data:idunico,
+                        success:function(data){
+                            console.log(data);
+                            console.log(data.pedidos[0]['cant_compro']);
+                            $('#cant_compro').val(data.pedidos[0]['cant_compro']);
+                            $('#fecha_envio_doc').val(data.pedidos[0]['fecha_envio_doc']);
+                        }
+                    }).done(function (data) {
+                        //$('#modal-delete-adjunto').modal('hide');
+                        //$('#listado_adjuntos').html(data);
+            });
 
-            $('#modal-delete-adjunto').on('shown.bs.modal', function (event) {
-                console.log("aa");
-                var button = $(event.relatedTarget)
-                var pedido_id = button.data('imgid')
-                var imgname = button.data('imgadjunto')
 
+            $.ajax({
+                url: "{{ route('operaciones.editatencion',':id') }}".replace(':id',idunico),
+                data: idunico,
+                method: 'POST',
+                success: function(data) {
+                $('#listado_adjuntos').html(data);
 
+                $('.btn-delete-adjunto').on('click', function (event) {
+               event.preventDefault();
+                //console.log("aa");
+                //var button = $(event.relatedTarget)
+                var pedido_id = $(this).data('imgid')
+                var imgname = $(this).data('imgadjunto')
+
+                $('#modal-delete-adjunto').modal('show');
                 $("#eliminar_pedido_id").val(pedido_id);
                 $("#eliminar_pedido_id_imagen").val(imgname);
                 //campo oculto pedido id
                 //campo oculto imagname
 
-                $('#confirmar_delete_adjunto').on('click', function(e){
+                $('#modal-delete-adjunto').on('shown.bs.modal', function (event) {
+
+                  $('#confirmar_delete_adjunto').on('click', function(e){
                     e.preventDefault();
                     let eliminar_pedido_id=$("#eliminar_pedido_id").val();
                     let eliminar_pedido_id_imagen=$("#eliminar_pedido_id_imagen").val()
                     var formData = 'eliminar_pedido_id='+ eliminar_pedido_id +'&eliminar_pedido_id_imagen=' + eliminar_pedido_id_imagen;
+                    console.log(formData);
 
                     $.ajax({
                         type:'POST',
                         url:"{{ route('operaciones.eliminaradjunto') }}",
                         data:formData,
                         success:function(data){
-                            console.log(data);
+                            //$('#listado_adjuntos').html(data);
+                            //console.log(data.html);
+                            $('.adjuntos[data-adjunto="'+ data.html +'"]').remove();
+                            $('#modal-delete-adjunto').modal('toggle');
                         }
                     }).done(function (data) {
-                        $('#modal-delete-adjunto').modal('hide');
-                        $('#listado_adjuntos').html(data);
+                        //$('#modal-delete-adjunto').modal('hide');
+                        //$('#listado_adjuntos').html(data);
                     });
+
                 });
+
+              });
+
+
 
             });
 
+                }
+            });
+
+            $('#modal-editar-atencion').modal('show');
+
+            return false;
         });
+      }
+
 
         $(document).on("submit", "#formdeleteadjunto", function (evento) {
             evento.preventDefault();
@@ -301,12 +345,11 @@
         },
         rowCallback: function (row, data, index) {
         },
-        initComplete:function(settings,json){          
-          /*if (localStorage. getItem("search_tabla") === null) {
-            //no existe
-          }else{
-            $('#tablaPrincipal_filter label input').val(localStorage.getItem("search_tabla") ).change();            
-          }*/
+        initComplete:function(settings,json){
+         
+        },
+        "drawCallback": function( settings ) {
+          AtenderAtencion();
         },
         columns: [
           {
@@ -381,11 +424,11 @@
               @can('operacion.editatender')
                 data = data+'<a href="'+urledit+'" class="btn btn-warning btn-sm"><i class=""></i> Editar atención</a>';
               @endcan
-                /*
+
               @can('operacion.editatender')
-                  data = data+'<a href="#" data-target="#modal-editar-atencion" data-toggle="modal" data-atencion="'+ row.id +'" class="btn btn-warning btn-sm"><i class=""></i> Editar atención 2</a>';
+                  data = data+'<a href="#" class="modal-atender-pedido btn btn-warning btn-sm" data-atencion="'+ row.id +'" class="btn btn-warning btn-sm"><i class=""></i> Editar atención 2</a>';
               @endcan
-                */
+
               var urlpdf = '{{ route("pedidosPDF", ":id") }}';
               urlpdf = urlpdf.replace(':id', row.id);
               @can('operacion.PDF')
