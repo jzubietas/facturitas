@@ -131,6 +131,8 @@
             }
 
             function ValidarDatosPedido(){
+                pruc = $("#pruc option:selected").val();
+                nombre_empresa = $("#pempresa").val();
                 //ASESOR
                 asesor_ide = $("#user_id option:selected").val();
 
@@ -149,31 +151,33 @@
                 var can_numFinal = parseFloat(cant_strEx);
 
                 // BANCA
-                datosTipoBanca = document.getElementById('ptipo_banca').value.split('_');
-                tipo_banca = datosTipoBanca[0];
+                /*datosTipoBanca = document.getElementById('ptipo_banca').value.split('_');
+                tipo_banca = datosTipoBanca[0];*/
 
                 // PORCENTAJE
-                porcentaje = $("#pporcentaje").val();
+                //porcentaje = $("#pporcentaje").val();
 
                 // COURIER
-                var strEx = $("#pcourier").val(); //1,000.00
+                /*var strEx = $("#pcourier").val(); //1,000.00
                 strEx = strEx.replace(",", ""); //1000.00
                 var numFinal = parseFloat(strEx);
                 courier = numFinal * 1;
 
-                var respuesta_validacion = "";
+                var respuesta_validacion = "";*/
 
 
                 $.ajax({
                         data: {
+                            ruc:pruc,
+                            nombre_empresa:nombre_empresa,
                             asesor : asesor_ide,
                             cliente : cliente_ide,
                             mes : mes,
                             ano : anio,
-                            cantidad : cantidad,
-                            banca : tipo_banca,
-                            porcentaje : porcentaje,
-                            courier : courier
+                            cantidad : cant_strEx
+                            //banca : tipo_banca,
+                            //porcentaje : porcentaje,
+                            //courier : courier
                         },
                         type: 'POST',
                         url: "{{ route('validarpedido') }}",
