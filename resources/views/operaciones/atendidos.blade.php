@@ -144,6 +144,8 @@
             $(".textcode").html("PED"+idunico);
             $("#hiddenAtender").val(idunico);
 
+            $('#formulario_adjuntos').attr('action',"{{ route('operaciones.updateatender',':id') }}".replace(':id',idunico));
+
             $.ajax({
                         type:'POST',
                         url: "{{ route('operaciones.datossubidaadj',':id') }}".replace(':id',idunico),
@@ -346,7 +348,7 @@
         rowCallback: function (row, data, index) {
         },
         initComplete:function(settings,json){
-         
+
         },
         "drawCallback": function( settings ) {
           AtenderAtencion();
@@ -421,12 +423,14 @@
 
               var urledit = '{{ route("operaciones.editatender", ":id") }}';
               urledit = urledit.replace(':id', row.id);
+              /*
               @can('operacion.editatender')
                 data = data+'<a href="'+urledit+'" class="btn btn-warning btn-sm"><i class=""></i> Editar atención</a>';
               @endcan
+              */
 
               @can('operacion.editatender')
-                  data = data+'<a href="#" class="modal-atender-pedido btn btn-warning btn-sm" data-atencion="'+ row.id +'" class="btn btn-warning btn-sm"><i class=""></i> Editar atención 2</a>';
+                  data = data+'<a href="#" class="modal-atender-pedido btn btn-warning btn-sm" data-atencion="'+ row.id +'" class="btn btn-warning btn-sm"><i class=""></i> Editar atención</a>';
               @endcan
 
               var urlpdf = '{{ route("pedidosPDF", ":id") }}';
