@@ -154,7 +154,7 @@ class PagoController extends Controller
                     DB::raw("users.identificador as identificador")
                 )
                 ->pluck('users.identificador');
-           
+
             $pagos = $pagos->WhereIn('u.identificador', $usersasesores);
         } else if (Auth::user()->rol == "Encargado") {
 
@@ -168,10 +168,15 @@ class PagoController extends Controller
 
             $pagos = $pagos->WhereIn('u.identificador', $usersasesores);
 
-           
 
-        } else {
-            $pagos = $pagos;
+
+        } else if (Auth::user()->rol == "Asesor") {
+
+            $usersasesores = User::where('users.rol', 'Asesor')
+                ->where('users.estado', '1')
+                ->where('users.identificador', \auth()->user()->identificador)
+                ->pluck('identificador');
+            $pagos = $pagos->WhereIn('u.identificador', $usersasesores);
 
         }
 
