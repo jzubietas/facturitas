@@ -1085,7 +1085,11 @@ class EnvioController extends Controller
     {
         $pedido=Pedido::where("id",$request->hiddenRecibir)->first();
         $pedido->update([
-            'envio' => '2',
+            
+            'envio' => '1',
+            //'envio' => '2',
+            'estado_sobre' => '1',
+            
             'modificador' => 'USER'.Auth::user()->id
         ]);
 
