@@ -310,6 +310,7 @@
           }
         }*/
 
+        
 
         $(document).ready(function () {
 
@@ -609,6 +610,7 @@
                     return false;
                 } else {
                     this.submit();
+                    //ValidarDatosPedido();
                     //$("#formulario").trigger("submit");
                 }
                 //aqui

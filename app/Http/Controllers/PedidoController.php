@@ -2892,19 +2892,24 @@ return ' no imagen ';
                 'pedidos.cliente_id',
                 'dp.mes',
                 'dp.anio',
-                'dp.cantidad',
-                'dp.tipo_banca',
-                'dp.porcentaje',
-                'dp.courier'
+                'dp.ruc',
+                'dp.nombre_empresa',
+                'dp.cantidad'
+                //'dp.tipo_banca',
+                //'dp.porcentaje',
+                //'dp.courier',
+                
             )
             ->where('u.identificador', $request->asesor)
             ->where('pedidos.cliente_id', $request->cliente)
             ->where('dp.mes', $request->mes)
             ->where('dp.anio', $request->ano)
             ->where('dp.cantidad', $request->cantidad)
-            ->where('dp.tipo_banca', $request->banca)
-            ->where('dp.porcentaje', $request->porcentaje)
-            ->where('dp.courier', $request->courier)
+            //->where('dp.tipo_banca', $request->banca)
+            //->where('dp.porcentaje', $request->porcentaje)
+            //->where('dp.courier', $request->courier)
+            ->where('dp.ruc', $request->ruc)
+            ->where('dp.nombre_empresa', $request->nombre_empresa)
             ->count();
 
             if($pedidos_repetidos>0)

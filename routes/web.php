@@ -131,6 +131,8 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::get('pedidostabla', [PedidoController::class, 'indextabla'])->name('pedidostabla');//actualizado para serverside
     Route::post('validarpedido', [PedidoController::class, 'validadContenidoPedido'])->name('validarpedido');
 
+    //Route::post('validarpago', [PagoController::class, 'validadContenidoPago'])->name('validarpago');
+
     Route::get('pedidosperdonarcurrier', [PedidoController::class, 'indexperdonarcurrier'])->name('pedidosperdonarcurrier');
     Route::get('pedidosperdonarcurriertabla', [PedidoController::class, 'indexperdonarcurriertabla'])->name('pedidosperdonarcurriertabla');//actualizado para serverside
 
