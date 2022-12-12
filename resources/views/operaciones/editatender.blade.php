@@ -82,6 +82,31 @@
         <div class="border rounded card-body border-secondary">
           <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
             <div class="row">
+
+              <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                <form method="POST" action="{{ route('operaciones.updateatender', $pedido->id) }}" accept-charset="UTF-8" enctype="multipart/form-data" id="formulario">
+                  <input name="_token" type="hidden" value="gC4bbgB44XSNjYzh2N0OS6BLkmzepKe0jRLoSqPR">
+                  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                      <label for="envio_doc">Documento enviado</label>
+                      <input type="hidden" name="_token" value="gC4bbgB44XSNjYzh2N0OS6BLkmzepKe0jRLoSqPR">
+                      <input class="form-control-file" id="adjunto" multiple="" name="adjunto[]" type="file">
+                  </div>
+                  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                      <label for="fecha_envio_doc">Fecha de envío</label>
+                      <input class="form-control" id="fecha_envio_doc" disabled="" name="fecha_envio_doc" type="text" value="{{$pedido->fecha_envio_doc}}">
+                  </div>
+                  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                      <label for="cant_compro">Cantidad de comprobantes enviados</label>
+                      <input class="form-control" id="cant_compro" step="1" min="0" name="cant_compro" type="number" value="{{$pedido->cant_compro}}">
+                  </div>
+                  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-top:12px;">
+                    <button type="submit" class="btn btn-success" id="atender">Confirmar</button>
+                </div>
+
+                </form>
+              </div>
+
+
               <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
                 {!! Form::label('envio_doc', 'Documento adjuntado') !!}
                 @foreach($imagenes as $img)
@@ -100,6 +125,10 @@
                   @include('pedidos.modal.DeleteAdjuntoid')
                 @endforeach
               </div>
+
+
+
+              <!--
               <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
                 {{ Form::Open(['route' => ['operaciones.updateatender', $pedido],'enctype'=>'multipart/form-data', 'id'=>'formulario','files'=>true]) }}
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -115,12 +144,12 @@
                     {!! Form::label('cant_compro', 'Cantidad de comprobantes enviados') !!}
                     {!! Form::number('cant_compro', $pedido->cant_compro, ['class' => 'form-control', 'id' => 'cant_compro', 'step'=>'1', 'min' => '0']) !!}
                 </div>
-              </div>
+              </div>-->
             </div>
           </div>
         </div>
-        <div class="col-2 text-left" class="modal-footer">
-          <button type="submit" class="btn btn-success" id="atender">Confirmar</button>
+        <div class="col-12 text-center" style="margin-top:12px;" class="modal-footer">
+
           <button type = "button" onClick="history.back()" class="btn btn-danger"><i class="fas fa-arrow-left"></i>ATRAS</button>
         </div>
       </div>
