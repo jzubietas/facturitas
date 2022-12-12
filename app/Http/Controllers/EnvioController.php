@@ -1097,7 +1097,13 @@ class EnvioController extends Controller
     public function DireccionEnvio(Request $request)
     {
 
+        /*  
         
+        pruebas de actualizacion
+
+        
+        */
+
         //return $request->all();
         $pedidos=$request->pedidos;
         if(!$request->pedidos)
