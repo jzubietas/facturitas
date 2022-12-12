@@ -54,6 +54,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::post('clientes.storebf', [ClienteController::class, 'storebf'])->name('clientes.storebf');
 
 
+
     Route::get('clientes.editbf/{cliente}/edit2', [ClienteController::class, 'editbf'])->name('clientes.editbf');
 
     Route::post('clientedeleteRequest', [ClienteController::class, 'destroyid'])->name('clientedeleteRequest.post');
@@ -203,6 +204,8 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::get('operaciones.entregadostabla', [OperacionController::class, 'Entregadostabla'])->name('operaciones.entregadostabla');
     Route::post('operaciones.atenderid', [OperacionController::class, 'Atenderid'])->name('operaciones.atenderid');
     Route::get('operaciones.editatender/{pedido}', [OperacionController::class, 'editAtender'])->name('operaciones.editatender');
+    Route::post('operaciones.editatencion/{pedido}', [OperacionController::class, 'editAtencion'])->name('operaciones.editatencion');
+    Route::post('operaciones.datossubidaadj/{pedido}', [OperacionController::class, 'DatosSubidaAdjunto'])->name('operaciones.datossubidaadj');
     Route::post('operaciones.eliminaradjunto', [OperacionController::class, 'eliminarAdjuntoOperaciones'])->name('operaciones.eliminaradjunto');
 
     Route::post('operaciones.updateatender/{pedido}', [OperacionController::class, 'updateAtender'])->name('operaciones.updateatender');
@@ -217,6 +220,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     //Route::get('operaciones.enatenciontabla', [PedidoController::class, 'EnAtenciontabla'])->name('operaciones.enatenciontabla');
 
 
+    
     //Route::post('pedidos.atender/{pedido}', [PedidoController::class, 'Atender'])->name('pedidos.atender');
 
     //Route::post('pedidos.envio/{pedido}', [PedidoController::class, 'Enviar'])->name('pedidos.envio');
@@ -226,9 +230,9 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::resource('pagos', PagoController::class)->names('pagos');
     Route::post('pagos.perdonardeuda', [PagoController::class, 'perdonardeuda'])->name('pagos.perdonardeuda');
     Route::post('titulares.banco', [PagoController::class, 'TitularesBanco'])->name('titulares.banco');
-    Route::get('pagos/devolucion/{devolucion}', [PagoController::class, 'devolucion'])->name('pagos.devolucion');
-    Route::post('pagos/devolucion/{devolucion}', [PagoController::class, 'devolucionUpdate'])->name('pagos.devolucion.update');
-
+    Route::get('pagos/devolucion/{devolucion}', [PagoController::class,'devolucion'])->name('pagos.devolucion');
+    Route::post('pagos/devolucion/{devolucion}', [PagoController::class,'devolucionUpdate'])->name('pagos.devolucion.update');
+    
     Route::get('pagostabla', [PagoController::class, 'indextabla'])->name('pagostabla');//actualizado para serverside
     Route::get('pagostablahistorial', [PagoController::class, 'indextablahistorial'])->name('pagostablahistorial');//actualizado para serverside
     Route::get('MisPagosTabla', [PagoController::class, 'MisPagosTabla'])->name('MisPagosTabla');//actualizado para serverside
@@ -261,6 +265,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     //Route::post('operaciones.sinenvio/{pedido}', [PedidoController::class, 'SinEnviar'])->name('operaciones.sinenvio');
 
 
+   
 /////////
 
     /*Controller Sobres*/
