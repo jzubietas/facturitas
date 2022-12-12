@@ -2854,14 +2854,6 @@ return ' no imagen ';
         return redirect()->route('envios.index')->with('info','actualizado');
     }
 
-
-
-    
-
-    
-
-    
-
     public function DescargarImagen($imagen)
     {
         $destinationPath = base_path("public/storage/entregas/".$imagen);
