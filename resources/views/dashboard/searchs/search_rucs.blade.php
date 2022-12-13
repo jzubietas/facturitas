@@ -1,6 +1,6 @@
 <div class="row">
     @foreach($rucs as $ruc)
-        <div class="col-md-6">
+        <div class="col-md-4">
             <div class="card mt-4" style=" background: rgba(25,255,247,0.06); ">
                 <div class="card-body">
                     <div>
@@ -12,13 +12,16 @@
                             <li class="list-group-item bg-success">DNI: <b>{{$ruc->cliente->dni}}</b></li>
                             <li class="list-group-item bg-success">Celular: <b>{{$ruc->cliente->celular}}-{{$ruc->cliente->icelular}}</b></li>
                             <li class="list-group-item bg-success">Situacion: <b>{{$ruc->cliente->situacion}}</b></li>
-                            <li class="list-group-item bg-success">Tiene Deuda: <b> No</b></li>
-                            <li class="list-group-item bg-success">Deuda Total: <b>S/0.00</b></li>
+                            <li class="list-group-item bg-success">Tiene Deuda: <b
+                                    class="{{$ruc->cliente->deuda_total>3?'bg-danger p-2 text-white':''}}"> {{$ruc->cliente->deuda_total>3?'SI':'NO'}}</b>
+                            </li>
+                            <li class="list-group-item bg-success">Deuda Total: <b
+                                    class="{{$ruc->cliente->deuda_total>3?'bg-danger p-2 text-white':''}}">{{money_f($ruc->cliente->deuda_total)}}</b>
+                            </li>
                             @if($ruc->user!=null)
                                 <li class="list-group-item bg-info">Asesor:
                                     <b>{{$ruc->user->identificador}}</b>
                                 </li>
-                                <li class="list-group-item bg-info">Asesor Email: <b>{{$ruc->user->email}}</b></li>
                             @else
                                 <li class="list-group-item bg-info">
                                     <div class="alert alert-warning " role="alert">
@@ -26,6 +29,16 @@
                                     </div>
                                 </li>
                             @endif
+                            @if(count($ruc->cliente->porcentajes)>0)
+                                <li class="list-group-item bg-warning">
+                                    <b>Porcentajes</b>
+                                </li>
+                            @endif
+                            @foreach($ruc->cliente->porcentajes as $porcentaje)
+                                <li class="list-group-item bg-warning">
+                                    {{$porcentaje->nombre}}:<b>{{$porcentaje->porcentaje}}</b>
+                                </li>
+                            @endforeach
                         </ul>
                     </div>
                 </div>

@@ -1,0 +1,4002 @@
+[
+    {
+        "cliente_id": 2,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 8,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 13,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 14,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 15,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 23,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 24,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 28,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 29,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 31,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 32,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 38,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 42,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 46,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 50,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 52,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 53,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 55,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 57,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 58,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 61,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 741,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 749,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 780,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 817,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 819,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 826,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 904,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 915,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 935,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 943,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 945,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 948,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 952,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 955,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 960,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 962,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 963,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 964,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 969,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 982,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 984,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 989,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 1002,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 1010,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 1045,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 1050,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 1057,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 1088,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 1121,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 1144,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 1161,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 1162,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 1173,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 1177,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 1185,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 1199,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 1202,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 1217,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 1224,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 1228,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 1244,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 1249,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 1261,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 1273,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 1278,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 1281,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 1300,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 1315,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 1317,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 1324,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 1326,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 1330,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 1337,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 1343,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 1347,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 1350,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 1351,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 1358,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 1360,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 1361,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 1363,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 1367,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 1419,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 1420,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 1437,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 1439,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 1458,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 1485,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 1525,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 1676,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 1693,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 1701,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 1708,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 1744,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 1746,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 1748,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 1750,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 1759,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 1767,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 1814,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 1855,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 1880,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 1886,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 1906,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 1907,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 1909,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 1921,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 1962,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 1983,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 1994,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 2022,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 2023,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 2047,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 2059,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 2060,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 2096,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 2109,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 2111,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 2113,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 2115,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 2119,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 2141,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 2198,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 2212,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 2298,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 2318,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECUPERADO"
+    },
+    {
+        "cliente_id": 2364,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 2367,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 2378,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 2453,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 2483,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 2491,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 2558,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 2583,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 2626,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 2646,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 2650,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 2654,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 2655,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 2657,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 2658,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 2662,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 2663,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 2664,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 2665,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 2671,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 2695,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 2696,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 2697,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 2704,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 2726,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 2737,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 2749,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 2752,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 2829,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 2838,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 2841,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 2852,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 2856,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 2928,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 2948,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 2961,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 2982,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 3011,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 3012,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 3023,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 3050,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 3104,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 3112,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 3143,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 3153,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 3154,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 3156,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECUPERADO"
+    },
+    {
+        "cliente_id": 3190,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 3196,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 3206,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 3225,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECUPERADO"
+    },
+    {
+        "cliente_id": 3227,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 3244,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECUPERADO"
+    },
+    {
+        "cliente_id": 3245,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 3252,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 3254,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 3255,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 3261,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 3262,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 3278,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 3280,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 3305,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 3318,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 3349,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 3398,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 3400,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 3401,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 3403,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 3419,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 3474,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 3475,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 3558,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 3559,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 3562,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 3642,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 3686,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 3746,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 3780,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 3796,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 3799,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 3805,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 3840,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 3846,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 3857,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 3909,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 3920,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 3963,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 4023,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 4024,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 4049,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 4050,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 4069,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 4128,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 4140,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 4175,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 4179,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 4190,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 4197,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 4205,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 4218,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECUPERADO"
+    },
+    {
+        "cliente_id": 4222,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 4236,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 4243,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 4244,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 4247,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 4248,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 4259,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 4263,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 4268,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 4279,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 4305,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 4334,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 4338,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 4349,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 4401,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 4412,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 4414,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 4416,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 4417,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 4448,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 4459,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 4478,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 4499,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 4501,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 4531,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 4574,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 4648,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 4650,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 4678,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 4697,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 4699,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 4712,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 4723,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 4766,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 4786,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 4811,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 4942,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 4982,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 5001,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 5003,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 5081,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 5111,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 5116,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 5144,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 5156,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECUPERADO"
+    },
+    {
+        "cliente_id": 5157,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 5159,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 5179,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 5184,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 5185,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 5186,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 5190,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 5191,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 5192,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 5195,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 5198,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 5200,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 5203,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 5207,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 5210,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 5212,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 5219,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 5223,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 5226,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 5231,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 5235,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 5237,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 5240,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 5241,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECUPERADO"
+    },
+    {
+        "cliente_id": 5243,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 5246,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 5249,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 5250,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 5256,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 5258,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 5259,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 5262,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 5263,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 5266,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 5269,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 5270,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 5271,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 5273,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 5281,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 5283,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 5289,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 5292,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 5293,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 5298,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 5302,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 5303,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 5304,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 5305,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECUPERADO"
+    },
+    {
+        "cliente_id": 5308,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 5309,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 5310,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 5312,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECUPERADO"
+    },
+    {
+        "cliente_id": 5313,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 5317,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 5318,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 5324,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 5325,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 5326,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 5330,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 5332,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 5335,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 5336,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 5339,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 5341,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 5343,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 5345,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 5349,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 5354,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 5356,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 5358,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 5363,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 5368,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 5375,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 5378,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 5379,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 5382,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 5385,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 5386,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 5387,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 5389,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 5392,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 5393,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 5395,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 5401,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 5412,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 5413,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 5416,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 5419,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECUPERADO"
+    },
+    {
+        "cliente_id": 5421,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 5424,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 5425,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 5428,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 5434,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 5435,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 5439,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 5441,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 5443,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 5445,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 5451,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECUPERADO"
+    },
+    {
+        "cliente_id": 5453,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 5454,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 5455,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 5460,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECUPERADO"
+    },
+    {
+        "cliente_id": 5468,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 5471,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECUPERADO"
+    },
+    {
+        "cliente_id": 5476,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 5478,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 5479,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 5482,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 5485,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 5487,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 5488,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 5502,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 5505,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 5511,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 5513,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 5516,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 5517,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 5519,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 5525,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 5531,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 5533,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECUPERADO"
+    },
+    {
+        "cliente_id": 5537,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 5538,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 5543,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 5545,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 5557,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 5558,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 5560,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 5566,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 5604,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 5617,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 5686,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 5703,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 5714,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 5716,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 5718,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 5789,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 5806,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 5823,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 5831,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 5853,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 5864,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 5919,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 5953,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 5974,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 6004,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 6163,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 6252,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 6256,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 6263,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 6267,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 6272,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 6274,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 6291,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 6375,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 6418,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 6424,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 6432,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 6478,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 6491,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 6538,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 6603,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 6744,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECUPERADO"
+    },
+    {
+        "cliente_id": 6748,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 6749,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 6852,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 6925,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 6934,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 9904,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 9908,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 9919,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 9943,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 13026,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECUPERADO"
+    },
+    {
+        "cliente_id": 13034,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 13046,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 13048,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 13050,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 13179,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 13202,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 13331,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 13383,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 13635,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 13649,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 13685,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 13713,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 13735,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 13786,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 13824,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 13863,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 13871,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 13882,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 13961,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 13988,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 14032,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 14052,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 14054,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 14056,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 14061,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 14062,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 14069,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 14091,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 14099,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 14101,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 14107,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 14189,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 14202,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 14233,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 14242,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 14352,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 14353,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 14441,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 14490,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 14522,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 14525,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 14538,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 14543,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 14600,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 14625,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 14832,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 14836,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECUPERADO"
+    },
+    {
+        "cliente_id": 14837,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 14922,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 14976,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 15136,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 15162,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 15164,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 15166,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 15170,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 15194,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 15199,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 15203,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 15235,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 15245,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 15254,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 15273,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 15290,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 15291,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 15329,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 15381,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 15382,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 15396,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 15407,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 15503,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 15515,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 15516,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 15635,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 15687,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 15693,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 15701,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 15732,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 15740,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 15741,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 15790,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 15809,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 15852,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 15948,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 15994,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 15997,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 16018,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 16057,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 16074,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 16112,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 16142,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 16269,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 16288,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 16297,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 16333,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 16363,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 16408,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 16470,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 16501,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 16515,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 16532,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 16580,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 16581,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 16588,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 16589,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 16608,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 16731,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 16837,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 16892,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 16915,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 16970,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 17074,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 17080,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 17110,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 17114,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 17164,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 17288,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 17289,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 17348,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 17354,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 17371,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 17384,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 17435,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 17439,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 17474,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 17501,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 17515,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 17725,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 17842,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 17979,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 18002,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 18009,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 18013,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 18082,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 18095,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 18113,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 18200,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 18234,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 18300,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 18310,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 18329,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 18331,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 18355,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 18375,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 18404,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 18407,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 18416,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 18468,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 18478,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 18499,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 18503,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 18510,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 18518,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 18530,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 18568,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 18585,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 18596,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 18626,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 18652,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 18656,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 18684,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 18779,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 18830,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 18842,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 18845,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 18848,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 18907,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 18952,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 18988,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 18989,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 19000,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 19021,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 19096,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 19183,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 19234,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 19392,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 19432,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 19461,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 19506,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 19526,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 19561,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 19581,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 19586,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 19602,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 19607,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 19610,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 19713,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 19730,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 19781,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 19785,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 19937,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 19966,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 20001,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 21028,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 21080,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 21101,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 21224,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 21229,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 21240,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 21246,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 21248,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 21261,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 21276,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 21280,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 21283,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 21291,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 21300,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 21347,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 21423,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 21424,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 21438,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 21521,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 21562,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 21567,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 21583,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 21600,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 21616,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 21759,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 21909,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 21918,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 21939,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 21974,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 22001,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 22012,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 22015,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 22030,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 22044,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 22046,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 22054,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 22062,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 22067,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 22106,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 22136,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 22140,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 22161,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 22184,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 22192,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 22225,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 22256,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 22264,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 22266,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 22323,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 22330,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 22338,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 22365,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 22380,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 22483,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 22500,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 22533,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 22594,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 22615,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 22622,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 24035,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 24036,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 24044,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 24046,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 24052,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 24054,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 24057,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 24061,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 24062,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 24063,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 24065,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 24066,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 24069,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 24071,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 24072,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 24073,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 24074,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 24076,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 24077,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 24078,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 24079,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 24080,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 24082,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 24084,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 24086,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 24087,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 24088,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 24090,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 24091,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 24092,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 24094,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 24095,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 24096,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 24097,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 24099,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 24100,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 24101,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 24102,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 24103,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 24105,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 24106,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 24107,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 24108,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 24109,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 24110,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 24111,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 24112,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 24115,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 24117,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 24119,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 24120,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 24121,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 24122,
+        "situacion": "RECUPERADO PERMANENTE",
+        "situacion_old": "ABANDONO RECIENTE"
+    },
+    {
+        "cliente_id": 24123,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 24124,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 24126,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 24130,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 24134,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 24141,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 24148,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 24149,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 24164,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 24166,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 24168,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 24173,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 24207,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 24237,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 24252,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 24291,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 24296,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 24323,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 24329,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 24331,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 24350,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 24353,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 24356,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 24379,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 24380,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 24383,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 24384,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 24393,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 24405,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 24407,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 24414,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 24424,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 24428,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 24438,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 24453,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 24478,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 24487,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 24492,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 24495,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 24527,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 24536,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 24538,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 24578,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 24587,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 24589,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 24595,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 24603,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 24610,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 24650,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    },
+    {
+        "cliente_id": 24670,
+        "situacion": "ABANDONO RECIENTE",
+        "situacion_old": "RECURRENTE"
+    }
+]

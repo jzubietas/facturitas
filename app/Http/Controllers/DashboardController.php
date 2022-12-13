@@ -302,12 +302,17 @@ class DashboardController extends Controller
     {
         $q = $request->get("q");
         $clientes = Cliente::query()
-            ->with(['user','rucs'])
+            ->with(['user', 'rucs', 'porcentajes'])
             ->where('celular', 'like', '%' . $q . '%')
             ->orwhere(DB::raw("concat(clientes.celular,'-',clientes.icelular)"), 'like', '%' . $q . '%')
             ->orWhere('nombre', 'like', '%' . join("%", explode(" ", trim($q))) . '%')
             ->orWhere('dni', 'like', '%' . $q . '%')
-            ->limit(10)->get();
+            ->limit(10)
+            ->get()
+            ->map(function (Cliente $cliente) {
+                $cliente->deuda_total=DetallePedido::query()->whereIn('pedido_id',$cliente->pedidos()->where('estado','1')->pluck("id"))->sum("saldo");
+                return $cliente;
+            });
 
         return view('dashboard.searchs.search_cliente', compact('clientes'));
     }
@@ -319,7 +324,11 @@ class DashboardController extends Controller
             ->with(['cliente', 'user'])
             ->where('num_ruc', 'like', '%' . $q . '%')
             ->limit(10)
-            ->get();
+            ->get()
+            ->map(function (Ruc $ruc) {
+                $ruc->cliente->deuda_total=DetallePedido::query()->whereIn('pedido_id',$ruc->cliente->pedidos()->where('estado','1')->pluck("id"))->sum("saldo");
+                return $ruc;
+            });
         return view('dashboard.searchs.search_rucs', compact('rucs'));
     }
 }

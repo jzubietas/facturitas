@@ -55,7 +55,7 @@ class PedidosPorAtenderExport implements FromView, ShouldAutoSize
                 )
                 ->where('pedidos.estado', '1')
                 ->where('dp.estado', '1')
-                ->WhereIn('pedidos.condicion',[1,2])
+                ->WhereIn('pedidos.condicion',[Pedido::POR_ATENDER,Pedido::EN_PROCESO_ATENCION])
                 //->where('pedidos.condicion', 1)
                 ->whereBetween(DB::raw('DATE(pedidos.created_at)'), [$request->desde, $request->hasta])
                 ->WhereIn('u.identificador',$asesores)
@@ -120,7 +120,7 @@ class PedidosPorAtenderExport implements FromView, ShouldAutoSize
                 )
                 ->where('pedidos.estado', '1')
                 ->where('dp.estado', '1')
-                ->WhereIn('pedidos.condicion',[1,2])
+                ->WhereIn('pedidos.condicion',[Pedido::POR_ATENDER,Pedido::EN_PROCESO_ATENCION])
                 //->where('pedidos.condicion', 1)
                 ->whereBetween(DB::raw('DATE(pedidos.created_at)'), [$request->desde, $request->hasta])
                 //->where('u.jefe', Auth::user()->id)
@@ -170,7 +170,7 @@ class PedidosPorAtenderExport implements FromView, ShouldAutoSize
             ->where('pedidos.estado', '1')
             ->where('dp.estado', '1')
             //->where('pedidos.condicion', 1)
-            ->WhereIn('pedidos.condicion',[1,2])
+            ->WhereIn('pedidos.condicion',[Pedido::POR_ATENDER,Pedido::EN_PROCESO_ATENCION])
             ->whereBetween(DB::raw('DATE(pedidos.created_at)'), [$request->desde, $request->hasta])
             ->groupBy(
                 'pedidos.id',

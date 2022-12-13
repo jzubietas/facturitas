@@ -1085,7 +1085,11 @@ class EnvioController extends Controller
     {
         $pedido=Pedido::where("id",$request->hiddenRecibir)->first();
         $pedido->update([
-            'envio' => '2',
+            
+            'envio' => '1',
+            //'envio' => '2',
+            'estado_sobre' => '1',
+            
             'modificador' => 'USER'.Auth::user()->id
         ]);
 
@@ -1096,6 +1100,14 @@ class EnvioController extends Controller
 
     public function DireccionEnvio(Request $request)
     {
+
+        /*  
+        
+        pruebas de actualizacion
+
+        
+        */
+
         //return $request->all();
         $pedidos=$request->pedidos;
         if(!$request->pedidos)
@@ -1103,21 +1115,42 @@ class EnvioController extends Controller
             return '0';
         }
         else{
-            $array_pedidos=explode(",",$pedidos);
+           
 
-            //return var_dump($array_pedidos);
+             /* agregando pedidos a la tabla direccion_grupos (campos codigos, productos) */
+       
+             $lista_productos='';
+             $lista_codigos='';
+             $pedidos=$request->pedidos;
+             $array_pedidos=explode(",",$pedidos);
+         
+             $data=DetallePedido::wherein("pedido_id",$array_pedidos)->get();
+             foreach ($data as $dat ) { $lista_productos.=$dat->nombre_empresa. ", "; $lista_codigos.=$dat->codigo. ", "; }
+             $lista_codigos = rtrim ($lista_codigos, ", ");        
+             $lista_productos = rtrim ($lista_productos, ", ");        
+              
+             /* fin */    
 
             //cliente
             $cliente=Cliente::where("id",$request->cliente_id)->first();
-
-            $direcciongrupo=DireccionGrupo::create([
+             
+            // agregando nuevo correlativo en tabla
+            
+            $direccion_grupo_id=DireccionGrupo::create([
                 'estado'=>'1',
                 'destino' => $request->destino,
                 'distribucion'=> ( ($request->destino=='PROVINCIA')? 'NORTE':''),
                 'nombre_cliente'=> ( ($request->destino=='LIMA')? $request->nombre : $cliente->nombre  ),
                 'celular_cliente'=> ( ($request->destino=='LIMA')? $request->contacto : $cliente->celular."-".$cliente->icelular ),
-                'codigos'=>$pedidos
-            ]);
+                'codigos'=>$lista_codigos,
+                'producto'=>$lista_productos
+            ])->id;
+
+            $direccion_grupo = DireccionGrupo::find($direccion_grupo_id);
+            $direccion_grupo->correlativo = 'ENV'.$direccion_grupo_id;
+            $direccion_grupo->save();
+
+
 
             $count_pedidos=count((array)$array_pedidos);
 
@@ -1136,7 +1169,7 @@ class EnvioController extends Controller
                         'nombre' => $request->nombre,
                         'celular' => $request->contacto,
                         'observacion' => $request->observacion,
-                        'direcciongrupo' => $direcciongrupo->id,
+                        'direcciongrupo' => $direccion_grupo_id,
                         'cantidad' => $cantidad,
                         'destino'=>$request->destino,
                         'estado' => '1',
@@ -1170,7 +1203,7 @@ class EnvioController extends Controller
                                 'direccion_id' => $direccionLima->id,
                                 'pedido_id' => $pedido_id,
                                 'codigo_pedido' => $dp_empresa->codigo,
-                                'direcciongrupo' => $direcciongrupo->id,
+                                'direcciongrupo' => $direccion_grupo_id,
                                 'empresa' => $dp_empresa->nombre_empresa,
                                 'estado' => '1'
                             ]);
@@ -1232,7 +1265,7 @@ class EnvioController extends Controller
                         'foto' => $file_name,
                         'importe' => "0.00",
                         'cantidad' => $cantidad,
-                        'direcciongrupo' => $direcciongrupo->id,
+                        'direcciongrupo' => $direccion_grupo_id,
                         'destino'=>$request->destino,
                         'estado' => '1',
                         "salvado"=> "0"
@@ -1262,7 +1295,7 @@ class EnvioController extends Controller
                             'gasto_id' => $gastoProvincia->id,
                             'pedido_id' => $pedido_id,
                             'codigo_pedido' => $dp_empresa->codigo,
-                            'direcciongrupo' => $direcciongrupo->id,
+                            'direcciongrupo' => $direccion_grupo_id,
                             'empresa' => $dp_empresa->nombre_empresa,
                             'estado' => '1'
                         ]);

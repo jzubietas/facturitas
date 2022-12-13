@@ -318,6 +318,7 @@
                 }
               }
           },
+          {data: 'id2', name: 'id2',"visible":false },
           {
             data: 'codigos',
             name: 'codigos',

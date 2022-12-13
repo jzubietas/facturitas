@@ -156,8 +156,8 @@ class PedidoController extends Controller
                 'pedidos.estado',
                 'pedidos.envio'
             )
-            //->whereIn('pedidos.condicion', [1, 2, 3, 'ANULADO']);
-            ->whereIn('pedidos.condicion_int', ['0', '1', '2', '3']);
+            ->whereIn('pedidos.condicion', [Pedido::POR_ATENDER, Pedido::EN_PROCESO_ATENCION, Pedido::ATENDIDO, Pedido::ANULADO]);
+            //->whereIn('pedidos.condicion_int', ['0', '1', '2', '3']);
             /*->groupBy(
                 'pedidos.id',
                 'c.nombre',
@@ -284,7 +284,7 @@ class PedidoController extends Controller
                 'pedidos.pagado',
                 'pedidos.envio'
             )
-            ->whereIn('pedidos.condicion', [1, 2, 3, 'ANULADO'])
+            ->whereIn('pedidos.condicion', [Pedido::POR_ATENDER, Pedido::EN_PROCESO_ATENCION, Pedido::ATENDIDO, Pedido::ANULADO])
             ->whereIn('pedidos.pagado', ['1'])
             ->whereIn('pedidos.pago',['1'])
             ->whereNotIn("pedidos.envio",['3'])
@@ -316,7 +316,7 @@ class PedidoController extends Controller
                 'pedidos.pagado',
                 'pedidos.envio'
             )
-            ->whereIn('pedidos.condicion', [1, 2, 3, 'ANULADO'])
+            ->whereIn('pedidos.condicion', [Pedido::POR_ATENDER, Pedido::EN_PROCESO_ATENCION, Pedido::ATENDIDO, Pedido::ANULADO])
             ->whereIn('pedidos.pagado', ['1'])
             ->whereIn('pedidos.pago',['1'])
             ->whereNotIn("pedidos.envio",['3'])
@@ -955,8 +955,8 @@ class PedidoController extends Controller
                     'clientes.activado_tiempo',
                     'clientes.activado_pedido',
                     'clientes.temporal_update',
-                    DB::raw(" (select count(ped.id) from pedidos ped where ped.cliente_id=clientes.id and ped.pago in (0,1) and ped.pagado in (0,1) and ped.created_at >='2022-12-01 00:00:00' and ped.estado=1) as pedidos_mes_deuda "),
-                    DB::raw(" (select count(ped2.id) from pedidos ped2 where ped2.cliente_id=clientes.id and ped2.pago in (0,1) and ped2.pagado in (0,1) and ped2.created_at <='2022-11-30 00:00:00'  and ped2.estado=1) as pedidos_mes_deuda_antes ")
+                    DB::raw(" (select count(ped.id) from pedidos ped where ped.cliente_id=clientes.id and ped.pago in (0,1) and ped.pagado in (0,1) and ped.created_at >='".now()->startOfMonth()->format("Y-m-d h:i:s")."' and ped.estado=1) as pedidos_mes_deuda "),
+                    DB::raw(" (select count(ped2.id) from pedidos ped2 where ped2.cliente_id=clientes.id and ped2.pago in (0,1) and ped2.pagado in (0,1) and ped2.created_at <='".now()->subMonth()->endOfMonth()->format("Y-m-d h:i:s")."'  and ped2.estado=1) as pedidos_mes_deuda_antes ")
                     ]
                 )->first();
 
@@ -1401,6 +1401,7 @@ return ' no imagen ';
                 'dp.ft',
                 'dp.courier',
                 'dp.total',
+                'dp.saldo as diferencia',
             )
             ->where('pedidos.id', $pedido->id)
             ->first();
@@ -1782,7 +1783,7 @@ return ' no imagen ';
                 )
                 ->where('pedidos.estado', '1')
                 ->where('dp.estado', '1')
-                ->whereIn('pedidos.condicion', [Pedido::POR_ATENDER, Pedido::EN_PROCESO_ATENCION, Pedido::ATENDIDO, 'ANULADO'])
+                ->whereIn('pedidos.condicion', [Pedido::POR_ATENDER, Pedido::EN_PROCESO_ATENCION, Pedido::ATENDIDO, Pedido::ANULADO])
                 ->groupBy(
                     'pedidos.id',
                     'c.nombre',
@@ -2137,7 +2138,7 @@ return ' no imagen ';
                 ->where('dp.estado', '1')
                 ->WhereIn('pedidos.user_id',$asesores)
                 //->where('u.operario', Auth::user()->id)
-                ->where('pedidos.condicion', 2)
+                ->where('pedidos.condicion', Pedido::EN_PROCESO_ATENCION)
                 ->groupBy(
                     'pedidos.id',
                     'c.nombre',
@@ -2198,7 +2199,7 @@ return ' no imagen ';
                 ->where('dp.estado', '1')
                 ->WhereIn('pedidos.user_id',$asesores)
                 //->where('u.jefe', Auth::user()->id)
-                ->where('pedidos.condicion', 2)
+                ->where('pedidos.condicion', Pedido:EN_PROCESO_ATENCION)
                 ->groupBy(
                     'pedidos.id',
                     'c.nombre',
@@ -2241,7 +2242,7 @@ return ' no imagen ';
                 )
                 ->where('pedidos.estado', '1')
                 ->where('dp.estado', '1')
-                ->where('pedidos.condicion', 2)
+                ->where('pedidos.condicion', Pedido::EN_PROCESO_ATENCION)
                 ->groupBy(
                     'pedidos.id',
                     'c.nombre',
@@ -2318,7 +2319,7 @@ return ' no imagen ';
                 ->where('dp.estado', '1')
                 ->WhereIn('u.identificador',$asesores)
                 //->where('u.operario', Auth::user()->id)
-                ->where('pedidos.condicion', 2)
+                ->where('pedidos.condicion', Pedido:EN_PROCESO_ATENCION)
                 ->groupBy(
                     'pedidos.id',
                     'c.nombre',
@@ -2380,7 +2381,7 @@ return ' no imagen ';
                 ->where('dp.estado', '1')
                 ->WhereIn('u.identificador',$asesores)
                 //->where('u.jefe', Auth::user()->id)
-                ->where('pedidos.condicion', 2)
+                ->where('pedidos.condicion', Pedido::EN_PROCESO_ATENCION)
                 ->groupBy(
                     'pedidos.id',
                     'c.nombre',
@@ -2423,7 +2424,7 @@ return ' no imagen ';
                 )
                 ->where('pedidos.estado', '1')
                 ->where('dp.estado', '1')
-                ->where('pedidos.condicion', 2)
+                ->where('pedidos.condicion', Pedido::EN_PROCESO_ATENCION)
                 ->groupBy(
                     'pedidos.id',
                     'c.nombre',
@@ -2481,7 +2482,7 @@ return ' no imagen ';
                 ->where('pedidos.estado', '1')
                 ->where('dp.estado', '1')
                 ->where('u.operario', Auth::user()->id)
-                ->where('pedidos.condicion', 3)
+                ->where('pedidos.condicion', Pedido::ATENDIDO)
                 ->groupBy(
                     'pedidos.id',
                     'u.name',
@@ -2520,7 +2521,7 @@ return ' no imagen ';
                 ->where('pedidos.estado', '1')
                 ->where('dp.estado', '1')
                 ->where('u.jefe', Auth::user()->id)
-                ->where('pedidos.condicion', 3)
+                ->where('pedidos.condicion', Pedido::ATENDIDO)
                 ->groupBy(
                     'pedidos.id',
                     'u.name',
@@ -2558,7 +2559,7 @@ return ' no imagen ';
                 )
                 ->where('pedidos.estado', '1')
                 ->where('dp.estado', '1')
-                ->where('pedidos.condicion', 3)
+                ->where('pedidos.condicion', Pedido::ATENDIDO)
                 ->groupBy(
                     'pedidos.id',
                     'u.name',
@@ -2891,19 +2892,24 @@ return ' no imagen ';
                 'pedidos.cliente_id',
                 'dp.mes',
                 'dp.anio',
-                'dp.cantidad',
-                'dp.tipo_banca',
-                'dp.porcentaje',
-                'dp.courier'
+                'dp.ruc',
+                'dp.nombre_empresa',
+                'dp.cantidad'
+                //'dp.tipo_banca',
+                //'dp.porcentaje',
+                //'dp.courier',
+                
             )
             ->where('u.identificador', $request->asesor)
             ->where('pedidos.cliente_id', $request->cliente)
             ->where('dp.mes', $request->mes)
             ->where('dp.anio', $request->ano)
             ->where('dp.cantidad', $request->cantidad)
-            ->where('dp.tipo_banca', $request->banca)
-            ->where('dp.porcentaje', $request->porcentaje)
-            ->where('dp.courier', $request->courier)
+            //->where('dp.tipo_banca', $request->banca)
+            //->where('dp.porcentaje', $request->porcentaje)
+            //->where('dp.courier', $request->courier)
+            ->where('dp.ruc', $request->ruc)
+            ->where('dp.nombre_empresa', $request->nombre_empresa)
             ->count();
 
             if($pedidos_repetidos>0)

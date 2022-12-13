@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use App\Events\PagoEvent;
@@ -154,7 +153,7 @@ class PagoController extends Controller
                     DB::raw("users.identificador as identificador")
                 )
                 ->pluck('users.identificador');
-           
+
             $pagos = $pagos->WhereIn('u.identificador', $usersasesores);
         } else if (Auth::user()->rol == "Encargado") {
 
@@ -168,10 +167,15 @@ class PagoController extends Controller
 
             $pagos = $pagos->WhereIn('u.identificador', $usersasesores);
 
-           
 
-        } else {
-            $pagos = $pagos;
+
+        } else if (Auth::user()->rol == "Asesor") {
+
+            $usersasesores = User::where('users.rol', 'Asesor')
+                ->where('users.estado', '1')
+                ->where('users.identificador', \auth()->user()->identificador)
+                ->pluck('identificador');
+            $pagos = $pagos->WhereIn('u.identificador', $usersasesores);
 
         }
 
@@ -2402,7 +2406,7 @@ class PagoController extends Controller
                 ]);
             }
 
-            if ($condicion == Pago::Observado) {
+            if ($condicion == Pago::OBSERVADO) {
                 $pago->update([
                     'condicion_code' =>Pago::OBSERVADO_CODE
                 ]);
@@ -2761,5 +2765,39 @@ class PagoController extends Controller
         });
         return redirect()->route("pagos.show", $devolucion);
     }
+
+    /*public function validadContenidoPago(Request $request)
+    {
+
+        $pedidos_repetidos = DetallePago::join('detalle_pagos as dp', 'pagos.id', 'dp.pago_id')
+            ->join('users as u', 'pagos.user_id', 'u.id')
+            ->join('clientes as c', 'pagos.cliente_id', 'c.id')
+            ->select(
+                'pagos.id',
+                'u.identificador',
+                'pagos.user_id',
+                'pagos.cliente_id',
+                'dp.banco',
+                'dp.titular',
+                'dp.cuenta'
+            )
+            ->where('u.identificador', $request->asesor)
+            ->where('pagos.cliente_id', $request->cliente)
+            ->where('dp.banco', $request->banco)
+            ->where('dp.titular', $request->titular)
+            ->where('dp.cuenta', $request->cuenta)
+            ->count();
+
+            if($pedidos_repetidos>0)
+            {
+                $html="1";
+                return response()->json(['html' => $html]);
+
+            }else{
+                //no existe ,registrare
+                $html="0";
+                return response()->json(['html' => $html]);
+            }
+    }*/
 
 }
