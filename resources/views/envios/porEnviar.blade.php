@@ -155,6 +155,8 @@
         //cuando abre el form de anular pedido
         var button = $(event.relatedTarget)
         var idunico = button.data('enviar')//pedido
+        var ubicacion=data.destino2;
+        console.log(ubicacion);
         $("#hiddenEnviar").val(idunico)
         if(idunico<10){
           idunico='PED000'+idunico;
@@ -301,20 +303,9 @@
         },
         columns: [
           {
-              data: 'id',
-              name: 'id',
-              "visible":false,
-              render: function ( data, type, row, meta ) {
-                if(row.id<10){
-                  return 'ENV000'+row.id;
-                }else if(row.id<100){
-                  return 'ENV00'+row.id;
-                }else if(row.id<1000){
-                  return 'ENV0'+row.id;
-                }else{
-                  return 'ENV'+row.id;
-                }
-              }
+            data: 'correlativo',
+            name: 'correlativo',
+            
           },
           {
             data: 'codigos',
