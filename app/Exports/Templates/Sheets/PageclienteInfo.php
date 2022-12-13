@@ -33,7 +33,7 @@ class PageclienteInfo extends ExportYear implements WithColumnFormatting
                 ,'clientes.nombre'
                 ,'clientes.dni'
                 ,'clientes.icelular'
-                //'p.codigo as codigo',
+                //'p.codigo as codigo'
                 ,'clientes.celular'
                 ,'u.name as nombre_asesor'
                 ,'clientes.provincia'
