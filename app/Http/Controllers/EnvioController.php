@@ -138,6 +138,7 @@ class EnvioController extends Controller
                 'direccion_grupos.condicion_envio',
                 'direccion_grupos.subcondicion_envio',
                 'direccion_grupos.condicion_sobre',
+                'direccion_grupos.correlativo as correlativo'
             );
 
         $pedidos_provincia = DireccionGrupo::join('gasto_envios as de','direccion_grupos.id','de.direcciongrupo')
@@ -168,6 +169,7 @@ class EnvioController extends Controller
                 'direccion_grupos.condicion_envio',
                 'direccion_grupos.subcondicion_envio',
                 'direccion_grupos.condicion_sobre',
+                'direccion_grupos.correlativo as correlativo',
             );
 
         if(Auth::user()->rol == "Asesor"){
