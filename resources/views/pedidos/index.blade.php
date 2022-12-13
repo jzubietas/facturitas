@@ -74,6 +74,7 @@
             <th scope="col">Razón social</th>
             <th scope="col">Cantidad</th>
             <th scope="col">Asesor</th>
+              <th scope="col">RUC</th>
             <th scope="col">F. Registro</th>
             <th scope="col">F. Actualizacion</th>
             <th scope="col">Total (S/)</th>
@@ -270,8 +271,8 @@
                 }
               }
         },
-        initComplete:function(settings,json){          
-          
+        initComplete:function(settings,json){
+
         },
         columns: [
           //ID
@@ -312,7 +313,8 @@
         {data: 'cantidad', name: 'cantidad',render: $.fn.dataTable.render.number(',', '.', 2, ''), },
         //USUARIOS
         {data: 'users', name: 'users', },
-        
+            {data: 'ruc', name: 'ruc', },
+
         //FECHA
         {
           data: 'fecha',
