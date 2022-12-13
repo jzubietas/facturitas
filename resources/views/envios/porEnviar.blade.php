@@ -155,6 +155,10 @@
         //cuando abre el form de anular pedido
         var button = $(event.relatedTarget)
         var idunico = button.data('enviar')//pedido
+        var destino = button.data('destino')//pedido
+
+        console.log(destino);
+
         $("#hiddenEnviar").val(idunico)
         if(idunico<10){
           idunico='PED000'+idunico;
@@ -431,7 +435,7 @@
 
               @if($ver_botones_accion > 0)
                 @can('envios.enviar')
-                  datass=datass+'<a href="" data-target="#modal-enviar" data-toggle="modal" data-enviar="'+row.id+'">'+
+                  datass=datass+'<a href="" data-target="#modal-enviar" data-toggle="modal" data-enviar="'+row.id+'" data-destino="'+row.destino+'"  >'+
                     '<button class="btn btn-success btn-sm"><i class="fas fa-envelope"></i> Entregado</button></a>';
                   if(row.envio=='1')
                   {
