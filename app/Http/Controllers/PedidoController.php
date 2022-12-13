@@ -158,7 +158,6 @@ class PedidoController extends Controller
                 'pedidos.envio'
             )
             ->whereIn('pedidos.condicion', [Pedido::POR_ATENDER, Pedido::EN_PROCESO_ATENCION, Pedido::ATENDIDO, Pedido::ANULADO]);
-        
 
         if (Auth::user()->rol == "Llamadas") {
             $usersasesores = User::where('users.rol', 'Asesor')
@@ -1723,6 +1722,8 @@ return ' no imagen ';
                 'pedidos.condicion_envio as condicion_env',
                 'pedidos.condicion_envio',
                 'pedidos.condicion as condiciones',
+
+                /*'pedidos.envio',*/
                 'pedidos.direccion',
                 'pedidos.destino',
                 'pedidos.motivo',
@@ -1735,7 +1736,8 @@ return ' no imagen ';
             ->where('pedidos.estado', '1')
             ->where('dp.estado', '1')
             ->whereIn('pedidos.condicion', [Pedido::POR_ATENDER, Pedido::EN_PROCESO_ATENCION, Pedido::ATENDIDO, Pedido::ANULADO]);
-            
+
+
         if (Auth::user()->rol == "Asesor") {
 
             $usersasesores = User::where('users.rol', 'Asesor')
