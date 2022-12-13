@@ -51,7 +51,7 @@
         </div>
       </div>
     </div>
-    
+
     <div class="card-body">
       <div class="border rounded card-body border-secondary">
         <div class="form-row">
@@ -275,7 +275,7 @@
         <div class="col-2 text-left">
 
         <button type = "button" onClick="history.back()" class="btn btn-danger btn-lg"><i class="fas fa-arrow-left"></i>ATRAS</button>
-          
+
         </div>
         <div class="col-10">
           <button type="button" id="aprobarrbtn" class="btn btn-success btn-lg"><i class="fas fa-save"></i> APROBAR</button>
@@ -1013,14 +1013,14 @@
 
       $(document).on("click","#aprobarrbtn",function(){
         console.log("aprobar");
-        $("#condicion").val("ABONADO").selectpicker("refresh");
+        $("#condicion").val("{{\App\Models\Pago::ABONADO}}").selectpicker("refresh");
         $("#formulario").submit();
 
       });
 
       $(document).on("click","#observarbtn",function(){
         console.log("observar")
-        $("#condicion").val("OBSERVADO").selectpicker("refresh");
+        $("#condicion").val("{{\App\Models\Pago::OBSERVADO}}").selectpicker("refresh");
         $("#formulario").submit();
       });
 

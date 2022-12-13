@@ -1014,14 +1014,14 @@
 
       $(document).on("click","#aprobarrbtn",function(){
         console.log("aprobar");
-        $("#condicion").val("ABONADO").selectpicker("refresh");
+        $("#condicion").val("{{\App\Models\Pago::ABONADO}}").selectpicker("refresh");
         $("#formulario").submit();
 
       });
 
       $(document).on("click","#observarbtn",function(){
         console.log("observar")
-        $("#condicion").val("OBSERVADO").selectpicker("refresh");
+        $("#condicion").val("{{\App\Models\Pago::OBSERVADO}}").selectpicker("refresh");
         $("#formulario").submit();
       });
 

@@ -256,7 +256,7 @@ class DashboardController extends Controller
             ->count();
         //DASHBOARD ADMINISTRACION
         $pagosxrevisar_administracion = Pago::where('estado', '1')
-            ->where('condicion', 'PAGO')
+            ->where('condicion', Pago::PAGO)
             ->count();
         $pagosobservados_administracion = Pago::where('estado', '1')
             ->where('condicion', Pago::OBSERVADO)
