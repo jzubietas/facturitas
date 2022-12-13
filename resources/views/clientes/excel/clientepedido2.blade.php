@@ -1,198 +1,4 @@
 <table>
-    <thead>
-      <tr>
-        <th style="background-color: #4c5eaf; text-align: center; color: white;">ITEM</th>
-        <th style="background-color: #4c5eaf; text-align: center; color: white;">EJERCICIO</th>
-        <th style="background-color: #4c5eaf; text-align: center; color: white;">PERIODO</th>
-        <th style="background-color: #4c5eaf; text-align: center; color: white;">GRUPO</th>
-        <th style="background-color: #4c5eaf; text-align: center; color: white;">CANTIDAD</th>
-      </tr>
-    </thead>
-    <tbody>
-      <?php $cont = 0; ?>
-      @foreach ($resumenes as $resumen)
-        <tr>
-          <td>{{ $cont + 1 }}</td>
-          <td>{{ $resumen->Ejercicio }}</td>
-          <td>{{ $resumen->Periodo2 }}</td>
-          <td>{{ $resumen->grupo }}</td>
-          <td>{{ $resumen->total }}</td>
-        </tr>
-        <?php $cont++; ?>
-      @endforeach
-  
-      <?php $cont = 0; ?>
-      {{--@foreach ($clientes202112 as $cliente)
-        <tr>
-          <td>{{ $cont + 1 }}</td>
-          <td>{{ $cliente->Ejercicio }}</td>
-          <td>{{ $cliente->Periodo2 }}</td>
-          <td>{{ $cliente->grupo }}</td>
-          <td>{{ $cliente->total }}</td>
-        </tr>--}}
-        <?php $cont++; ?>
-      {{--@endforeach--}}
-  
-      <?php $cont = 0; ?>
-      {{--@foreach ($clientes202201 as $cliente)
-        <tr>
-          <td>{{ $cont + 1 }}</td>
-          <td>{{ $cliente->Ejercicio }}</td>
-          <td>{{ $cliente->Periodo2 }}</td>
-          <td>{{ $cliente->grupo }}</td>
-          <td>{{ $cliente->total }}</td>
-        </tr>--}}
-        <?php $cont++; ?>
-      {{--@endforeach--}}
-  
-      <?php $cont = 0; ?>
-      {{--@foreach ($clientes202201 as $cliente)
-        <tr>
-          <td>{{ $cont + 1 }}</td>
-          <td>{{ $cliente->Ejercicio }}</td>
-          <td>{{ $cliente->Periodo2 }}</td>
-          <td>{{ $cliente->grupo }}</td>
-          <td>{{ $cliente->total }}</td>
-        </tr>--}}
-        <?php $cont++; ?>
-      {{--@endforeach--}}
-  
-      <?php $cont = 0; ?>
-      {{--@foreach ($clientes202201 as $cliente)
-        <tr>
-          <td>{{ $cont + 1 }}</td>
-          <td>{{ $cliente->Ejercicio }}</td>
-          <td>{{ $cliente->Periodo2 }}</td>
-          <td>{{ $cliente->grupo }}</td>
-          <td>{{ $cliente->total }}</td>
-        </tr>--}}
-        <?php $cont++; ?>
-      {{--@endforeach--}}
-  
-      <?php $cont = 0; ?>
-      {{--@foreach ($clientes202202 as $cliente)
-        <tr>
-          <td>{{ $cont + 1 }}</td>
-          <td>{{ $cliente->Ejercicio }}</td>
-          <td>{{ $cliente->Periodo2 }}</td>
-          <td>{{ $cliente->grupo }}</td>
-          <td>{{ $cliente->total }}</td>
-        </tr>--}}
-        <?php $cont++; ?>
-      {{--@endforeach--}}
-  
-      <?php $cont = 0; ?>
-      {{--@foreach ($clientes202203 as $cliente)
-        <tr>
-          <td>{{ $cont + 1 }}</td>
-          <td>{{ $cliente->Ejercicio }}</td>
-          <td>{{ $cliente->Periodo2 }}</td>
-          <td>{{ $cliente->grupo }}</td>
-          <td>{{ $cliente->total }}</td>
-        </tr>--}}
-        <?php $cont++; ?>
-      {{--@endforeach--}}
-  
-      <?php $cont = 0; ?>
-      {{--@foreach ($clientes202204 as $cliente)
-        <tr>
-          <td>{{ $cont + 1 }}</td>
-          <td>{{ $cliente->Ejercicio }}</td>
-          <td>{{ $cliente->Periodo2 }}</td>
-          <td>{{ $cliente->grupo }}</td>
-          <td>{{ $cliente->total }}</td>
-        </tr>--}}
-        <?php $cont++; ?>
-      {{--@endforeach--}}
-  
-      <?php $cont = 0; ?>
-      {{--@foreach ($clientes202205 as $cliente)
-        <tr>
-          <td>{{ $cont + 1 }}</td>
-          <td>{{ $cliente->Ejercicio }}</td>
-          <td>{{ $cliente->Periodo2 }}</td>
-          <td>{{ $cliente->grupo }}</td>
-          <td>{{ $cliente->total }}</td>
-        </tr>--}}
-        <?php $cont++; ?>
-      {{--@endforeach--}}
-  
-      <?php $cont = 0; ?>
-      {{--@foreach ($clientes202206 as $cliente)
-        <tr>
-          <td>{{ $cont + 1 }}</td>
-          <td>{{ $cliente->Ejercicio }}</td>
-          <td>{{ $cliente->Periodo2 }}</td>
-          <td>{{ $cliente->grupo }}</td>
-          <td>{{ $cliente->total }}</td>
-        </tr>--}}
-        <?php $cont++; ?>
-      {{--@endforeach--}}
-  
-      <?php $cont = 0; ?>
-      {{--@foreach ($clientes202207 as $cliente)
-        <tr>
-          <td>{{ $cont + 1 }}</td>
-          <td>{{ $cliente->Ejercicio }}</td>
-          <td>{{ $cliente->Periodo2 }}</td>
-          <td>{{ $cliente->grupo }}</td>
-          <td>{{ $cliente->total }}</td>
-        </tr>--}}
-        <?php $cont++; ?>
-      {{--@endforeach--}}
-  
-      <?php $cont = 0; ?>
-      {{--@foreach ($clientes202208 as $cliente)
-        <tr>
-          <td>{{ $cont + 1 }}</td>
-          <td>{{ $cliente->Ejercicio }}</td>
-          <td>{{ $cliente->Periodo2 }}</td>
-          <td>{{ $cliente->grupo }}</td>
-          <td>{{ $cliente->total }}</td>
-        </tr>--}}
-        <?php $cont++; ?>
-      {{--@endforeach--}}
-  
-      <?php $cont = 0; ?>
-      {{--@foreach ($clientes202209 as $cliente)
-        <tr>
-          <td>{{ $cont + 1 }}</td>
-          <td>{{ $cliente->Ejercicio }}</td>
-          <td>{{ $cliente->Periodo2 }}</td>
-          <td>{{ $cliente->grupo }}</td>
-          <td>{{ $cliente->total }}</td>
-        </tr>--}}
-        <?php $cont++; ?>
-      {{--@endforeach--}}
-  
-      <?php $cont = 0; ?>
-      {{--@foreach ($clientes202210 as $cliente)
-        <tr>
-          <td>{{ $cont + 1 }}</td>
-          <td>{{ $cliente->Ejercicio }}</td>
-          <td>{{ $cliente->Periodo2 }}</td>
-          <td>{{ $cliente->grupo }}</td>
-          <td>{{ $cliente->total }}</td>
-        </tr>--}}
-        <?php $cont++; ?>
-      {{--@endforeach--}}
-  
-      <?php $cont = 0; ?>
-      {{--@foreach ($clientes202211 as $cliente)
-        <tr>
-          <td>{{ $cont + 1 }}</td>
-          <td>{{ $cliente->Ejercicio }}</td>
-          <td>{{ $cliente->Periodo2 }}</td>
-          <td>{{ $cliente->grupo }}</td>
-          <td>{{ $cliente->total }}</td>
-        </tr>--}}
-        <?php $cont++; ?>
-      {{--@endforeach--}}
-      
-    </tbody>
-  </table>
-
-<table>
   <thead>
     <tr>
       <th style="background-color: #4c5eaf; text-align: center; color: white;">ITEM</th>
@@ -214,18 +20,18 @@
       <th style="background-color: #4c5eaf; text-align: center; color: white;">DEPOSITO</th>
       <th style="background-color: #4c5eaf; text-align: center; color: white;">FECHA DEL ÚLTIMO PEDIDO</th>
       <th style="background-color: #4c5eaf; text-align: center; color: white;">ESTADO PEDIDOS</th>
-      <th style="background-color: #ebfa67; text-align: center; color: black;">ENE-{{ $anioa }}</th>      
-      <th style="background-color: #ebfa67; text-align: center; color: black;">FEB-{{ $anioa }}</th>      
-      <th style="background-color: #ebfa67; text-align: center; color: black;">MAR-{{ $anioa }}</th>      
-      <th style="background-color: #ebfa67; text-align: center; color: black;">ABR-{{ $anioa }}</th>      
-      <th style="background-color: #ebfa67; text-align: center; color: black;">MAY-{{ $anioa }}</th>      
-      <th style="background-color: #ebfa67; text-align: center; color: black;">JUN-{{ $anioa }}</th>      
-      <th style="background-color: #ebfa67; text-align: center; color: black;">JUL-{{ $anioa }}</th>      
-      <th style="background-color: #ebfa67; text-align: center; color: black;">AGO-{{ $anioa }}</th>      
-      <th style="background-color: #ebfa67; text-align: center; color: black;">SET-{{ $anioa }}</th>      
-      <th style="background-color: #ebfa67; text-align: center; color: black;">OCT-{{ $anioa }}</th>      
-      <th style="background-color: #ebfa67; text-align: center; color: black;">NOV-{{ $anioa }}</th>      
-      <th style="background-color: #ebfa67; text-align: center; color: black;">DIC-{{ $anioa }}</th>      
+      <th style="background-color: #ebfa67; text-align: center; color: black;">ENE-{{ $anioa }}</th>
+      <th style="background-color: #ebfa67; text-align: center; color: black;">FEB-{{ $anioa }}</th>
+      <th style="background-color: #ebfa67; text-align: center; color: black;">MAR-{{ $anioa }}</th>
+      <th style="background-color: #ebfa67; text-align: center; color: black;">ABR-{{ $anioa }}</th>
+      <th style="background-color: #ebfa67; text-align: center; color: black;">MAY-{{ $anioa }}</th>
+      <th style="background-color: #ebfa67; text-align: center; color: black;">JUN-{{ $anioa }}</th>
+      <th style="background-color: #ebfa67; text-align: center; color: black;">JUL-{{ $anioa }}</th>
+      <th style="background-color: #ebfa67; text-align: center; color: black;">AGO-{{ $anioa }}</th>
+      <th style="background-color: #ebfa67; text-align: center; color: black;">SET-{{ $anioa }}</th>
+      <th style="background-color: #ebfa67; text-align: center; color: black;">OCT-{{ $anioa }}</th>
+      <th style="background-color: #ebfa67; text-align: center; color: black;">NOV-{{ $anioa }}</th>
+      <th style="background-color: #ebfa67; text-align: center; color: black;">DIC-{{ $anioa }}</th>
       <th style="background-color: #ebfa67; text-align: center; color: black;">ENE-{{ $aniop }}</th>
       <th style="background-color: #ebfa67; text-align: center; color: black;">FEB-{{ $aniop }}</th>
       <th style="background-color: #ebfa67; text-align: center; color: black;">MAR-{{ $aniop }}</th>
@@ -250,9 +56,9 @@
         <td>{{ $dato['asesor'] }}</td>
         <td>{{ $dato['nombre'] }}</td>
         <td>{{ $dato['dni'] }}</td>
-        <td>{{ $dato['celular'] }}</td>     
-        <td>{{ $dato['icelular'] }}</td>   
-        <td>{{ $dato['codigo'] }}</td> 
+        <td>{{ $dato['celular'] }}</td>
+        <td>{{ $dato['icelular'] }}</td>
+        <td>{{ $dato['codigo'] }}</td>
         <td>{{ $dato['provincia'] }}</td>
         <td>{{ $dato['distrito'] }}</td>
         <td>{{ $dato['direccion'] }}</td>
@@ -281,7 +87,7 @@
         <?php }else{ ?>
             <td></td>
         <?php } ?>
-        
+
         <td>{{ $dato['deposito'] }}</td>
         <td>{{ $dato['fecha'] }}</td>
         @if($dato['estadopedido'] == 'RECURRENTE')
@@ -291,40 +97,40 @@
         @endif
         <td>
             {{ $dato['eneroa'] }}
-        </td>        
+        </td>
         <td>
             {{ $dato['febreroa'] }}
-        </td>        
+        </td>
         <td>
             {{ $dato['marzoa'] }}
-        </td>        
+        </td>
         <td>
             {{ $dato['abrila'] }}
-        </td>        
+        </td>
         <td>
             {{ $dato['mayoa'] }}
-        </td>        
+        </td>
         <td>
             {{ $dato['junioa'] }}
-        </td>        
+        </td>
         <td>
             {{ $dato['julioa'] }}
-        </td>        
+        </td>
         <td>
             {{ $dato['agostoa'] }}
-        </td>        
+        </td>
         <td>
             {{ $dato['setiembrea'] }}
-        </td>        
+        </td>
         <td>
             {{ $dato['octubrea'] }}
-        </td>        
+        </td>
         <td>
             {{ $dato['noviembrea'] }}
-        </td>        
+        </td>
         <td>
             {{ $dato['diciembrea'] }}
-        </td>        
+        </td>
         <td>
             {{ $dato['enerop'] }}
         </td>
@@ -363,6 +169,6 @@
         </td>
       </tr>
       <?php $cont++; ?>
-    @endforeach    
+    @endforeach
   </tbody>
 </table>
