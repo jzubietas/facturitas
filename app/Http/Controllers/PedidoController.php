@@ -1768,7 +1768,7 @@ return ' no imagen ';
                     'dp.nombre_empresa as empresas',
                     'dp.total as total',
                     'dp.cantidad as cantidad',
-                    'dp.ruc as ruc',
+                    'dp.ruc',
                     'pedidos.condicion_envio as condicion_env',
                     'pedidos.condicion_envio',
                     'pedidos.condicion as condiciones',
