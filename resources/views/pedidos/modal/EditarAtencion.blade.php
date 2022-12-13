@@ -24,24 +24,19 @@
 
                       <div class="col-lg-12 col-md-6 col-sm-6 col-xs-6">
                         <form method="POST" action="{{ route('operaciones.updateatender', 1) }}" accept-charset="UTF-8" enctype="multipart/form-data" id="formulario_adjuntos">
-                          <input name="_token" type="hidden" value="gC4bbgB44XSNjYzh2N0OS6BLkmzepKe0jRLoSqPR">
                           <div class="row">
                           <div class="col-lg-4 col-md-12 col-sm-12 col-xs-12">
                               <label for="envio_doc">Documento enviado</label>
-                              <input type="hidden" name="_token" value="gC4bbgB44XSNjYzh2N0OS6BLkmzepKe0jRLoSqPR">
-                              <input class="form-control-file" id="adjunto" multiple="" name="adjunto[]" type="file">
+                              <input class="form-control-file" id="adjunto" multiple="true" name="adjunto[]" type="file">
                           </div>
                           <div class="col-lg-4 col-md-12 col-sm-12 col-xs-12">
                               <label for="fecha_envio_doc">Fecha de envío</label>
-                              <input class="form-control" id="fecha_envio_doc" disabled="" name="fecha_envio_doc" type="text" value="">
+                              <input class="form-control" id="fecha_envio_doc" name="fecha_envio_doc" type="text" value="">
                           </div>
 
-                          <div class="col-lg-4 col-md-12 col-sm-12 col-xs-12" style="margin-top:12px;">
-                            <button type="submit" class="btn btn-success" id="atender">Confirmar</button>
-                        </div>
-                          <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                          <div class="col-lg-4 col-md-12 col-sm-12 col-xs-12">
                               <label for="cant_compro">Cantidad de comprobantes enviados</label>
-                              <input class="form-control" id="cant_compro" step="1" min="0" name="cant_compro" type="number" value="0" disabled>
+                              <input class="form-control" id="cant_compro" step="1" min="0" name="cant_compro" type="number" value="0">
                           </div>
 
                       </div>
@@ -69,7 +64,7 @@
 
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-          <button type="submit" class="btn btn-info" id="atender">Confirmar</button>
+          <a href="#" class="btn btn-info" id="confirmar_atender">Confirmar</a>
         </div>
 
       </div>

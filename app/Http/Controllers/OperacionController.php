@@ -820,6 +820,8 @@ class OperacionController extends Controller
             'modificador' => 'USER'.Auth::user()->id
         ]);
 
+        //dd($files);
+
         if ($request->hasFile('adjunto')){
             /* $file_name = Carbon::now()->second.$files->getClientOriginalName();
             $files->move($destinationPath , $file_name); */
@@ -844,6 +846,8 @@ class OperacionController extends Controller
                 'atendido_por' => Auth::user()->name,
                 'atendido_por_id' => Auth::user()->id,
             ]);
+
+
         }
         else{
             $detalle_pedidos->update([
