@@ -327,10 +327,12 @@
               {
                 return '<span class="badge badge-danger">Por confirmar recepcion</span>';
               }
+              /*
+              El estado del sobre cambia a 1 y luego cambia el estado del pedido
               else if (row.envio=='1' && row.estado_sobre=='1'){
                 return '<span class="badge badge-info">Sobre por Enviar</span>';
               }
-
+              */
 
               else{
                 return '<span class="badge badge-info">Recibido</span>';

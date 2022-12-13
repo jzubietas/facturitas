@@ -138,6 +138,7 @@ class EnvioController extends Controller
                 'direccion_grupos.condicion_envio',
                 'direccion_grupos.subcondicion_envio',
                 'direccion_grupos.condicion_sobre',
+                'direccion_grupos.correlativo as correlativo'
             );
 
         $pedidos_provincia = DireccionGrupo::join('gasto_envios as de','direccion_grupos.id','de.direcciongrupo')
@@ -168,6 +169,7 @@ class EnvioController extends Controller
                 'direccion_grupos.condicion_envio',
                 'direccion_grupos.subcondicion_envio',
                 'direccion_grupos.condicion_sobre',
+                'direccion_grupos.correlativo as correlativo',
             );
 
         if(Auth::user()->rol == "Asesor"){
@@ -1094,12 +1096,18 @@ class EnvioController extends Controller
         $pedido=Pedido::where("id",$request->hiddenRecibir)->first();
         $pedido->update([
             
-            'envio' => '1',
-            //'envio' => '2',
+            //'envio' => '1',
+            'envio' => '2',
             'estado_sobre' => '1',
-            
+            'condicion_envio'=>Pedido::EN_REPARTO,
+            'condicion_envio_code'=>Pedido::EN_REPARTO_CODE,
             'modificador' => 'USER'.Auth::user()->id
         ]);
+
+        // actualizando en direccion_grupos
+
+
+
 
         return response()->json(['html' => $request->hiddenRecibir]);
 

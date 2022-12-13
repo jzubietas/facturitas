@@ -30,7 +30,7 @@ class Pedido extends Model
     const ENTREGADO_CODE=3;
 
 
-    /* relacion de conciones de envio y enteros */
+    /* condicion de pedidos relacion */
 
     public static $estadosCondicion = [
         'ANULADO' => 0,
@@ -38,6 +38,9 @@ class Pedido extends Model
         'EN PROCESO ATENCIÓN' => 2,
         'ATENDIDO' => 3,
     ];
+
+
+    /* condicion de envios relacion */
 
     public static $estadosCondicionEnvio = [
         'ANULADO' => 0,
