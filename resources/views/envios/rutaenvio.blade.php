@@ -502,7 +502,7 @@
                 datass=datass+'<a href="#" data-target="#modal-distribuir" data-toggle="modal" data-distribuir="'+row.id+'">'+
                     '<button class="btn btn-warning btn-sm"><i class="fas fa-envelope"></i> Distribuir</button></a><br>';
 
-                datass = datass+ '<a href="" data-target="#modal-revertir" data-toggle="modal" data-recibir="'+row.id+'"><button class="btn btn-info btn-sm"><i class="fas fa-trash"></i> REVERTIR</button></a>';
+               //datass = datass+ '<a href="" data-target="#modal-revertir" data-toggle="modal" data-recibir="'+row.id+'"><button class="btn btn-info btn-sm"><i class="fas fa-trash"></i> REVERTIR</button></a>';
                 datass = datass+ '<a href="" data-target="#modal-desvincular" data-toggle="modal" data-desvincular="'+row.id+'"><button class="btn btn-danger btn-sm"><i class="fas fa-trash"></i> DESVINCULAR</button></a>';
 
               }
