@@ -2799,6 +2799,13 @@ return ' no imagen ';
             //->where('dp.courier', $request->courier)
             ->where('dp.ruc', $request->ruc)
             ->where('dp.nombre_empresa', $request->nombre_empresa)
+            ->whereIn('pedidos.id',
+                DetallePedido::query()
+                    ->select('detalle_pedidos.pedido_id')
+                    ->whereRaw('pedidos.id=detalle_pedidos.pedido_id')
+                    ->where('detalle_pedidos.tipo_banca', '=', $request->ptipo_banca)
+                    ->getQuery()
+            )
             ->limit(2)
             ->get();
 

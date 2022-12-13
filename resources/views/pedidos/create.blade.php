@@ -156,8 +156,8 @@
             var can_numFinal = parseFloat(cant_strEx);
 
             // BANCA
-            /*datosTipoBanca = document.getElementById('ptipo_banca').value.split('_');
-            tipo_banca = datosTipoBanca[0];*/
+            var selectedTipoBanca = document.getElementById('ptipo_banca').value.split('_');
+            var ptipo_banca = selectedTipoBanca[0];
 
             // PORCENTAJE
             //porcentaje = $("#pporcentaje").val();
@@ -179,6 +179,7 @@
                     cliente: cliente_ide,
                     mes: mes,
                     ano: anio,
+                    ptipo_banca: ptipo_banca,
                     cantidad: cant_strEx
                     //banca : tipo_banca,
                     //porcentaje : porcentaje,
