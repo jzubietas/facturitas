@@ -29,6 +29,20 @@ class Pedido extends Model
     const ENTREGADO_CODE=3;
 
 
+    public static $estadosCondicion = [
+        'ANULADO' => 0,
+        'POR ATENDER' => 1,
+        'EN PROCESO ATENCIÓN' => 2,
+        'ATENDIDO' => 3,
+    ];
+
+    public static $estadosCondicionEnvio = [
+        'ANULADO' => 0,
+        'PENDIENTE DE ENVÍO' => 1,
+        'EN REPARTO' => 2,
+        'ENTREGADO' => 3,
+    ];
+
     protected $guarded = ['id'];
 
     /* public function user()
@@ -36,7 +50,8 @@ class Pedido extends Model
         return $this->belongsTo('App\Models\User');
     } */
 
-    public function cliente(){
+    public function cliente()
+    {
         return $this->belongsTo(Cliente::class);
     }
 }

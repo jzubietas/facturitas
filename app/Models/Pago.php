@@ -16,6 +16,10 @@ class Pago extends Model
     const PENDIENTE = 'PENDIENTE';
     const ABONADO_PARCIAL = 'ABONADO_PARCIAL';
 
+
+    const SUBCONDICION_COURIER_PERDONADO = "COURIER PERDONADO";
+    const SUBCONDICION_DEUDA_PERDONADA = "DEUDA PERDONADA";
+
     const PAGO_CODE = 1;
     const ABONADO_CODE = 2;
     const ADELANTO_CODE = 4;
@@ -30,6 +34,11 @@ class Pago extends Model
         'ADELANTO' => 4,
         'PENDIENTE' => 5,
         'OBSERVADO' => 6,
+    ];
+
+    public static $migrateSubCondiciones = [
+        'COURIER PERDONADO' => 1,
+        'DEUDA PERDONADA' => 2,
     ];
 
     protected $guarded = ['id'];
