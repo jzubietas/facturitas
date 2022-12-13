@@ -53,14 +53,7 @@
             <td>Fecha</td>
             <td><input type="text" value={{ $dateMin }} id="min" name="min" class="form-control"></td>
             <td></td>
-            <td>Buscar General</td>
-            <td>
-              <div class="form-group col-lg-12">
-                {!! Form::label('general', 'Buscador General') !!}
-                  <input type="text" name="general" id="general" class="form-control" placeholder="Busqueda General..." >
-              </div>
-
-            </td>
+            
 
           </tr>
         </tbody>
@@ -384,6 +377,8 @@
               }
           },
           {data: 'identificador', name: 'identificador',sWidth:'5%' },
+
+          
           {
             data: 'celular',
             name: 'celular',
@@ -391,6 +386,9 @@
               return row.celular+' - '+row.nombre
             },
           },
+
+
+        
           {
             data: 'nombre',
             name: 'nombre',
@@ -500,10 +498,10 @@
               {
                 if(row.destino=='LIMA')
                 datass=datass+'<a href="#" data-target="#modal-distribuir" data-toggle="modal" data-distribuir="'+row.id+'">'+
-                    '<button class="btn btn-warning btn-sm"><i class="fas fa-envelope"></i> Distribuir</button></a><br>';
+                    '<button class="btn btn-warning btn-sm"><i class="fas fa-envelope"></i> Distribuir</button></a>';
 
                //datass = datass+ '<a href="" data-target="#modal-revertir" data-toggle="modal" data-recibir="'+row.id+'"><button class="btn btn-info btn-sm"><i class="fas fa-trash"></i> REVERTIR</button></a>';
-                datass = datass+ '<a href="" data-target="#modal-desvincular" data-toggle="modal" data-desvincular="'+row.id+'"><button class="btn btn-danger btn-sm"><i class="fas fa-trash"></i> DESVINCULAR</button></a>';
+                datass = datass+ '<a href="" data-target="#modal-desvincular" data-toggle="modal" data-desvincular="'+row.id+'">    <button class="btn btn-danger btn-sm"><i class="fas fa-trash"></i>DESVINCULAR</button></a>';
 
               }
 
