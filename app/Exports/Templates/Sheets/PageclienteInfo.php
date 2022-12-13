@@ -9,12 +9,24 @@ use App\Models\Pedido;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Concerns\WithColumnFormatting;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
+
 use Maatwebsite\Excel\Concerns\WithColumnWidths;
 use PhpOffice\PhpSpreadsheet\Cell\DataType;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Concerns\WithBackgroundColor;
 
-class PageclienteInfo extends ExportYear implements WithColumnFormatting
+use \Maatwebsite\Excel\Sheet;
+use Maatwebsite\Excel\Events\AfterSheet;
+use Maatwebsite\Excel\Concerns\FromCollection;
+use Maatwebsite\Excel\Concerns\WithHeadings;
+use Maatwebsite\Excel\Concerns\WithEvents;
+use Maatwebsite\Excel\Concerns\ShouldAutoSize;
+
+Sheet::macro('styleCells', function (Sheet $sheet, string $cellRange, array $style) {
+    $sheet->getDelegate()->getStyle($cellRange)->applyFromArray($style);
+});
+
+class PageclienteInfo extends ExportYear implements WithColumnFormatting, FromCollection, WithHeadings, ShouldAutoSize, WithEvents
 {
     //public $anio;
     /*public function __construct($anio)
@@ -245,27 +257,41 @@ class PageclienteInfo extends ExportYear implements WithColumnFormatting
         ];
     }
 
-    public function registerEvents($report): array
+    public function registerEvents(): array
     {
-        echo "<pre>";print_r($report->all());exit;
         return [
-            AfterSheet::class => function(AfterSheet $event) {
-                $event->sheet->getStyle('A1:I1')->applyFromArray([
-                    'font'=>[
-                        'bold'=>true,
-                    ],
-                ]);
-
-                foreach ($certificates as $value) {
-
-                    if($value->certificate_status == 'Valid'){
-                        $sheet->cell('J', function($color){
-                            $color->setBackground('#008000');
-                        });
-                    }
-                }
-            },
+            AfterSheet::class => [self::class, 'afterSheet']
         ];
+    }
+
+    public static function afterSheet(AfterSheet $event){
+//Single Column
+        $event->sheet->styleCells(
+            'A1',
+            [
+                'alignment' => [
+                    'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+                ],
+                'fill' => [
+                    'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                    'color' => ['rgb' => '996633']
+                ]
+            ]
+        );
+
+//Range Columns
+        $event->sheet->styleCells(
+            'B2:E2',
+            [
+                'alignment' => [
+                    'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+                ],
+                'fill' => [
+                    'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                    'color' => ['rgb' => '336655']
+                ]
+            ]
+        );
     }
 
 
