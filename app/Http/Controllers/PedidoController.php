@@ -136,6 +136,7 @@ class PedidoController extends Controller
                 'dp.nombre_empresa as empresas',
                 'dp.total as total',
                 'dp.cantidad as cantidad',
+                'dp.ruc as ruc',
                 'pedidos.condicion_envio',
                 'pedidos.condicion as condiciones',
                 'pedidos.pagado as condicion_pa',
@@ -1766,6 +1767,7 @@ return ' no imagen ';
                     'dp.nombre_empresa as empresas',
                     'dp.total as total',
                     'dp.cantidad as cantidad',
+                    'dp.ruc as ruc',
                     'pedidos.condicion_envio as condicion_env',
                     'pedidos.condicion_envio',
                     'pedidos.condicion as condiciones',
@@ -1793,6 +1795,7 @@ return ' no imagen ';
                     'dp.nombre_empresa',
                     'dp.total',
                     'dp.cantidad',
+                    'dp.ruc',
                     'pedidos.condicion_envio',
                     'pedidos.condicion',
                     /*'pedidos.envio',*/
@@ -2897,7 +2900,7 @@ return ' no imagen ';
                 //'dp.tipo_banca',
                 //'dp.porcentaje',
                 //'dp.courier',
-                
+
             )
             ->where('u.identificador', $request->asesor)
             ->where('pedidos.cliente_id', $request->cliente)

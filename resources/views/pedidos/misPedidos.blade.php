@@ -67,6 +67,7 @@
             <th scope="col">Razón social</th>
             <th scope="col">Cantidad</th>
             <th scope="col">Asesor</th>
+              <th scope="col">RUC</th>
             <th scope="col">Fecha de registro</th>
             <th scope="col">Total (S/)</th>
             <th scope="col">Estado de pedido</th>
@@ -184,8 +185,8 @@
               }
 
         },
-        initComplete:function(settings,json){          
-               
+        initComplete:function(settings,json){
+
         },
         columns: [
         {//15 columnas
@@ -222,6 +223,7 @@
         {data: 'empresas', name: 'empresas', },
         {data: 'cantidad', name: 'cantidad', render: $.fn.dataTable.render.number(',', '.', 2, ''),},
         {data: 'users', name: 'users', },
+            {data: 'ruc', name: 'ruc', },
         {data: 'fecha', name: 'fecha', },
         {
           data: 'total',
