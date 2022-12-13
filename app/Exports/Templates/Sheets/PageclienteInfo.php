@@ -9,16 +9,29 @@ use App\Models\Pedido;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Concerns\WithColumnFormatting;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
+
 use Maatwebsite\Excel\Concerns\WithColumnWidths;
 use PhpOffice\PhpSpreadsheet\Cell\DataType;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Concerns\WithBackgroundColor;
 
-class PageclienteInfo extends ExportYear implements WithColumnFormatting
+use \Maatwebsite\Excel\Sheet;
+use Maatwebsite\Excel\Events\AfterSheet;
+use Maatwebsite\Excel\Concerns\FromCollection;
+use Maatwebsite\Excel\Concerns\WithHeadings;
+use Maatwebsite\Excel\Concerns\WithEvents;
+use Maatwebsite\Excel\Concerns\ShouldAutoSize;
+
+Sheet::macro('styleCells', function (Sheet $sheet, string $cellRange, array $style) {
+    $sheet->getDelegate()->getStyle($cellRange)->applyFromArray($style);
+});
+
+class PageclienteInfo extends ExportYear implements WithColumnFormatting, FromCollection, WithHeadings, ShouldAutoSize, WithEvents
 {
     //public $anio;
     /*public function __construct($anio)
     {
-        
+
         parent::__construct();
         //$this->$anio=2021;
     }*/
@@ -40,7 +53,7 @@ class PageclienteInfo extends ExportYear implements WithColumnFormatting
                 ,'clientes.distrito'
                 ,'clientes.direccion'
                 ,'clientes.referencia'
-                ,'clientes.estado' 
+                ,'clientes.estado'
                 ,'clientes.deuda'
                 ,'clientes.pidio'
                 ,'clientes.situacion as estadopedido'
@@ -73,7 +86,7 @@ class PageclienteInfo extends ExportYear implements WithColumnFormatting
         try {
             $model->porcentajefsb= Porcentaje::select('porcentaje')
             ->where('cliente_id',$model->id)
-            ->where('nombre','FISICO - sin banca')->first()->porcentaje;          
+            ->where('nombre','FISICO - sin banca')->first()->porcentaje;
           } catch (\Exception $e) {
             $model->porcentajefsb=0;
           }
@@ -133,7 +146,7 @@ class PageclienteInfo extends ExportYear implements WithColumnFormatting
             ->where(DB::raw('MONTH(created_at)'), '6')->count();
         $model->juniop = Pedido::where('estado', '1')->whereYear(DB::raw('Date(created_at)'), $this->anio+1)->where('cliente_id', $model->id)
             ->where(DB::raw('MONTH(created_at)'), '6')->count();
-        
+
         $model->julioa = Pedido::where('estado', '1')->whereYear(DB::raw('Date(created_at)'), $this->anio)->where('cliente_id', $model->id)
             ->where(DB::raw('MONTH(created_at)'), '7')->count();
         $model->juliop = Pedido::where('estado', '1')->whereYear(DB::raw('Date(created_at)'), $this->anio+1)->where('cliente_id', $model->id)
@@ -164,7 +177,7 @@ class PageclienteInfo extends ExportYear implements WithColumnFormatting
         $model->diciembrep = Pedido::where('estado', '1')->whereYear(DB::raw('Date(created_at)'), $this->anio+1)->where('cliente_id', $model->id)
             ->where(DB::raw('MONTH(created_at)'), '12')->count();
 
-           
+
 
         if ($model->deuda == '1') {
             $model->deposito = 'DEBE';
@@ -174,7 +187,7 @@ class PageclienteInfo extends ExportYear implements WithColumnFormatting
 
         //$dateM = Carbon::now()->format('m');
         //$dateY = Carbon::now()->format('Y');
-            
+
 
         //$model->created_at->format('');
         return parent::map($model);
@@ -221,17 +234,19 @@ class PageclienteInfo extends ExportYear implements WithColumnFormatting
             ,"setiembrea"=>"setiembrea","setiembrep"=>"setiembrep"
             ,"octubrea"=>"octubrea","octubrep"=>"octubrep"
             ,"noviembrea"=>"noviembrea","noviembrep"=>"noviembrep"
-            ,"diciembrea"=>"diciembrea","diciembrep"=>"diciembrep"        
+            ,"diciembrea"=>"diciembrea","diciembrep"=>"diciembrep"
             //,"created_at"=>"Fecha",
         ];
 
-            
+
                 //'p.codigo as codigo',
-                
+
     }
 
     public function columnFormats(): array
     {
+
+
         return [
             //Formato de las columnas segun la letra
             /*
@@ -241,5 +256,44 @@ class PageclienteInfo extends ExportYear implements WithColumnFormatting
             'O' => NumberFormat::FORMAT_DATE_YYYYMMDD
         ];
     }
+
+    public function registerEvents(): array
+    {
+        return [
+            AfterSheet::class => [self::class, 'afterSheet']
+        ];
+    }
+
+    public static function afterSheet(AfterSheet $event){
+//Single Column
+        $event->sheet->styleCells(
+            'A1',
+            [
+                'alignment' => [
+                    'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+                ],
+                'fill' => [
+                    'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                    'color' => ['rgb' => '996633']
+                ]
+            ]
+        );
+
+//Range Columns
+        $event->sheet->styleCells(
+            'B2:E2',
+            [
+                'alignment' => [
+                    'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+                ],
+                'fill' => [
+                    'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                    'color' => ['rgb' => '336655']
+                ]
+            ]
+        );
+    }
+
+
 }
 
