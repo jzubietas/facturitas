@@ -158,28 +158,7 @@ class PedidoController extends Controller
                 'pedidos.envio'
             )
             ->whereIn('pedidos.condicion', [Pedido::POR_ATENDER, Pedido::EN_PROCESO_ATENCION, Pedido::ATENDIDO, Pedido::ANULADO]);
-        //->whereIn('pedidos.condicion_int', ['0', '1', '2', '3']);
-        /*->groupBy(
-            'pedidos.id',
-            'c.nombre',
-            'c.icelular',
-            'c.celular',
-            'u.identificador',
-            'pedidos.codigo',
-            'dp.nombre_empresa',
-            'dp.total',
-            'pedidos.condicion',
-            'pedidos.condicion_envio',
-            'pedidos.pagado',
-            'pedidos.motivo',
-            'pedidos.responsable',
-            'pedidos.created_at',
-            'dp.saldo',
-            'pedidos.estado',
-            'pedidos.envio'
-        );*/
-        //->orderBy('pedidos.created_at', 'DESC')
-        //->get();
+        
 
         if (Auth::user()->rol == "Llamadas") {
             $usersasesores = User::where('users.rol', 'Asesor')
@@ -1744,8 +1723,6 @@ return ' no imagen ';
                 'pedidos.condicion_envio as condicion_env',
                 'pedidos.condicion_envio',
                 'pedidos.condicion as condiciones',
-
-                /*'pedidos.envio',*/
                 'pedidos.direccion',
                 'pedidos.destino',
                 'pedidos.motivo',
@@ -1757,34 +1734,8 @@ return ' no imagen ';
             )
             ->where('pedidos.estado', '1')
             ->where('dp.estado', '1')
-            ->whereIn('pedidos.condicion', [Pedido::POR_ATENDER, Pedido::EN_PROCESO_ATENCION, Pedido::ATENDIDO, Pedido::ANULADO])
-            ->groupBy(
-                'pedidos.id',
-                'c.nombre',
-                'c.icelular',
-                'c.celular',
-                'u.identificador',
-                'dp.codigo',
-                'dp.nombre_empresa',
-                'dp.total',
-                'dp.cantidad',
-                'dp.ruc',
-                'pedidos.condicion_envio',
-                'pedidos.condicion',
-                /*'pedidos.envio',*/
-                'pedidos.direccion',
-                'pedidos.destino',
-                'pedidos.motivo',
-                'pedidos.responsable',
-                'pedidos.created_at',
-                'dp.saldo',
-                'pedidos.pagado',
-                'pedidos.estado'
-            );
-        //->orderBy('pedidos.created_at', 'DESC')
-        //->get();
-
-
+            ->whereIn('pedidos.condicion', [Pedido::POR_ATENDER, Pedido::EN_PROCESO_ATENCION, Pedido::ATENDIDO, Pedido::ANULADO]);
+            
         if (Auth::user()->rol == "Asesor") {
 
             $usersasesores = User::where('users.rol', 'Asesor')
