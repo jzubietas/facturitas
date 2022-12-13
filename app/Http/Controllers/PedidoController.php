@@ -1728,60 +1728,61 @@ return ' no imagen ';
         $pedidos = null;
 
         $pedidos = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')
-                ->join('users as u', 'pedidos.user_id', 'u.id')
-                ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
-                ->select(
-                    'pedidos.id',
-                    'c.nombre as nombres',
-                    'c.icelular as icelulares',
-                    'c.celular as celulares',
-                    'u.identificador as users',
-                    'dp.codigo as codigos',
-                    'dp.nombre_empresa as empresas',
-                    'dp.total as total',
-                    'dp.cantidad as cantidad',
-                    'dp.ruc',
-                    'pedidos.condicion_envio as condicion_env',
-                    'pedidos.condicion_envio',
-                    'pedidos.condicion as condiciones',
+            ->join('users as u', 'pedidos.user_id', 'u.id')
+            ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
+            ->select(
+                'pedidos.id',
+                'c.nombre as nombres',
+                'c.icelular as icelulares',
+                'c.celular as celulares',
+                'u.identificador as users',
+                'dp.codigo as codigos',
+                'dp.nombre_empresa as empresas',
+                'dp.total as total',
+                'dp.cantidad as cantidad',
+                'dp.ruc as ruc',
+                'pedidos.condicion_envio as condicion_env',
+                'pedidos.condicion_envio',
+                'pedidos.condicion as condiciones',
 
-                    /*'pedidos.envio',*/
-                    'pedidos.direccion',
-                    'pedidos.destino',
-                    'pedidos.motivo',
-                    'pedidos.responsable',
-                    'dp.saldo as diferencia',
-                    'pedidos.pagado as condicion_pa',
-                    DB::raw('DATE_FORMAT(pedidos.created_at, "%d/%m/%Y") as fecha') ,
-                    'pedidos.estado'
-                )
-                ->where('pedidos.estado', '1')
-                ->where('dp.estado', '1')
-                ->whereIn('pedidos.condicion', [Pedido::POR_ATENDER, Pedido::EN_PROCESO_ATENCION, Pedido::ATENDIDO, Pedido::ANULADO])
-                ->groupBy(
-                    'pedidos.id',
-                    'c.nombre',
-                    'c.icelular',
-                    'c.celular',
-                    'u.identificador',
-                    'dp.codigo',
-                    'dp.nombre_empresa',
-                    'dp.total',
-                    'dp.cantidad',
-                    'pedidos.condicion_envio',
-                    'pedidos.condicion',
-                    /*'pedidos.envio',*/
-                    'pedidos.direccion',
-                    'pedidos.destino',
-                    'pedidos.motivo',
-                    'pedidos.responsable',
-                    'pedidos.created_at',
-                    'dp.saldo',
-                    'pedidos.pagado',
-                    'pedidos.estado'
-                );
-                //->orderBy('pedidos.created_at', 'DESC')
-                //->get();
+                /*'pedidos.envio',*/
+                'pedidos.direccion',
+                'pedidos.destino',
+                'pedidos.motivo',
+                'pedidos.responsable',
+                'dp.saldo as diferencia',
+                'pedidos.pagado as condicion_pa',
+                DB::raw('DATE_FORMAT(pedidos.created_at, "%d/%m/%Y") as fecha'),
+                'pedidos.estado'
+            )
+            ->where('pedidos.estado', '1')
+            ->where('dp.estado', '1')
+            ->whereIn('pedidos.condicion', [Pedido::POR_ATENDER, Pedido::EN_PROCESO_ATENCION, Pedido::ATENDIDO, Pedido::ANULADO])
+            ->groupBy(
+                'pedidos.id',
+                'c.nombre',
+                'c.icelular',
+                'c.celular',
+                'u.identificador',
+                'dp.codigo',
+                'dp.nombre_empresa',
+                'dp.total',
+                'dp.cantidad',
+                'dp.ruc',
+                'pedidos.condicion_envio',
+                'pedidos.condicion',
+                /*'pedidos.envio',*/
+                'pedidos.direccion',
+                'pedidos.destino',
+                'pedidos.motivo',
+                'pedidos.responsable',
+                'pedidos.created_at',
+                'dp.saldo',
+                'pedidos.pagado',
+                'pedidos.estado'
+            );
+        //->orderBy('pedidos.created_at', 'DESC')
+        //->get();
 
 
         if (Auth::user()->rol == "Asesor") {
@@ -2830,10 +2831,10 @@ return ' no imagen ';
                 'dp.ruc',
                 'dp.nombre_empresa',
                 'dp.cantidad'
-                //'dp.tipo_banca',
-                //'dp.porcentaje',
-                //'dp.courier',
-                
+            //'dp.tipo_banca',
+            //'dp.porcentaje',
+            //'dp.courier',
+
             )
             ->where('u.identificador', $request->asesor)
             ->where('pedidos.cliente_id', $request->cliente)
