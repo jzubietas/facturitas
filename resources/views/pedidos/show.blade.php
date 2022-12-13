@@ -209,8 +209,11 @@
     console.log(localStorage.getItem("search_tabla"));
 
   let copydata="*S/."+"{{$cotizacion->cantidad}}"+" * "+"{{$cotizacion->porcentaje}}" +"% = S/."+"{{$cotizacion->ft}}"+"*\n"+
+              "*ENVIO = S/."+"{{$cotizacion->courier}}"+"*\n"+"*\n"+
+      @if($adelanto>0)
               "*ADELANTO = S/."+"{{$adelanto}}"+"*\n"+
-              "*TOTAL = S/."+"{{$cotizacion->diferencia}}"+"*\n\n"+
+      @endif
+              "*TOTAL = S/."+"{{$cotizacion->total}}"+"*\n\n"+
               "*ES IMPORTANTE PAGAR EL ENVIO* \n";
 
               $("#copiar_cotizacion").val(copydata);
