@@ -158,7 +158,9 @@ class ExcelController extends Controller
     public function clientespedidosExcel(Request $request)
     {
         //cambiar aca
-        return Excel::download(new PlantillaExportMultiple($request->anio), 'Lista de Clientes_pedidos_'.Carbon::now().'.xlsx');
+        //return Excel::download(new PlantillaExportMultiple($request->anio), 'Lista de Clientes_pedidos_'.Carbon::now().'.xlsx');
+        return (new PlantillaExportMultiple($request->anio))
+                ->download('Lista de Clientes_pedidos_'.$request->anio.'.xlsx');
     }
 
     // public function basefriaExcel()

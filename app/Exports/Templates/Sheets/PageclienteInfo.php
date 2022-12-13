@@ -2,7 +2,7 @@
 
 namespace App\Exports\Templates\Sheets;
 
-use App\Abstracts\Export;
+use App\Abstracts\ExportYear;
 use App\Models\Cliente;
 use App\Models\Porcentaje;
 use App\Models\Pedido;
@@ -13,13 +13,14 @@ use Maatwebsite\Excel\Concerns\WithColumnWidths;
 use PhpOffice\PhpSpreadsheet\Cell\DataType;
 use Illuminate\Http\Request;
 
-class PageclienteInfo extends Export implements WithColumnFormatting
+class PageclienteInfo extends ExportYear implements WithColumnFormatting
 {
-    private $anio;
-
+    //public $anio;
     /*public function __construct($anio)
     {
-        $this->anio=$anio;
+        
+        parent::__construct();
+        //$this->$anio=2021;
     }*/
 
     public function collection()
@@ -85,62 +86,62 @@ class PageclienteInfo extends Export implements WithColumnFormatting
         $model->eneroa = Pedido::where('estado', '1')->whereYear(DB::raw('Date(created_at)'), $this->anio)->where('cliente_id', $model->id)
             ->where(DB::raw('MONTH(created_at)'), '1')->count();
         $model->eneroa=($model->eneroa<0)? 0:$model->eneroa;
-        $model->enerop = Pedido::where('estado', '1')/*->whereYear(DB::raw('Date(created_at)'), $request->anio+1)*/->where('cliente_id', $model->id)
+        $model->enerop = Pedido::where('estado', '1')->whereYear(DB::raw('Date(created_at)'), $this->anio+1)->where('cliente_id', $model->id)
             ->where(DB::raw('MONTH(created_at)'), '1')->count();
 
-        $model->febreroa = Pedido::where('estado', '1')/*->whereYear(DB::raw('Date(created_at)'), $request->anio)*/->where('cliente_id', $model->id)
+        $model->febreroa = Pedido::where('estado', '1')->whereYear(DB::raw('Date(created_at)'), $this->anio)->where('cliente_id', $model->id)
             ->where(DB::raw('MONTH(created_at)'), '2')->count();
-        $model->febrerop = Pedido::where('estado', '1')/*->whereYear(DB::raw('Date(created_at)'), $request->anio+1)*/->where('cliente_id', $model->id)
+        $model->febrerop = Pedido::where('estado', '1')->whereYear(DB::raw('Date(created_at)'), $this->anio+1)->where('cliente_id', $model->id)
             ->where(DB::raw('MONTH(created_at)'), '2')->count();
 
-        $model->marzoa = Pedido::where('estado', '1')/*->whereYear(DB::raw('Date(created_at)'), $request->anio)*/->where('cliente_id', $model->id)
+        $model->marzoa = Pedido::where('estado', '1')->whereYear(DB::raw('Date(created_at)'), $this->anio)->where('cliente_id', $model->id)
             ->where(DB::raw('MONTH(created_at)'), '3')->count();
-        $model->marzop = Pedido::where('estado', '1')/*->whereYear(DB::raw('Date(created_at)'), $request->anio+1)*/->where('cliente_id', $model->id)
+        $model->marzop = Pedido::where('estado', '1')->whereYear(DB::raw('Date(created_at)'), $this->anio+1)->where('cliente_id', $model->id)
             ->where(DB::raw('MONTH(created_at)'), '3')->count();
 
-        $model->abrila = Pedido::where('estado', '1')/*->whereYear(DB::raw('Date(created_at)'), $request->anio)*/->where('cliente_id', $model->id)
+        $model->abrila = Pedido::where('estado', '1')->whereYear(DB::raw('Date(created_at)'), $this->anio)->where('cliente_id', $model->id)
             ->where(DB::raw('MONTH(created_at)'), '4')->count();
-        $model->abrilp = Pedido::where('estado', '1')/*->whereYear(DB::raw('Date(created_at)'), $request->anio+1)*/->where('cliente_id', $model->id)
+        $model->abrilp = Pedido::where('estado', '1')->whereYear(DB::raw('Date(created_at)'), $this->anio+1)->where('cliente_id', $model->id)
             ->where(DB::raw('MONTH(created_at)'), '4')->count();
 
-        $model->mayoa = Pedido::where('estado', '1')/*->whereYear(DB::raw('Date(created_at)'), $request->anio)*/->where('cliente_id', $model->id)
+        $model->mayoa = Pedido::where('estado', '1')->whereYear(DB::raw('Date(created_at)'), $this->anio)->where('cliente_id', $model->id)
             ->where(DB::raw('MONTH(created_at)'), '5')->count();
-        $model->mayop = Pedido::where('estado', '1')/*->whereYear(DB::raw('Date(created_at)'), $request->anio+1)*/->where('cliente_id', $model->id)
+        $model->mayop = Pedido::where('estado', '1')->whereYear(DB::raw('Date(created_at)'), $this->anio+1)->where('cliente_id', $model->id)
             ->where(DB::raw('MONTH(created_at)'), '5')->count();
 
-        $model->junioa = Pedido::where('estado', '1')/*->whereYear(DB::raw('Date(created_at)'), $request->anio)*/->where('cliente_id', $model->id)
+        $model->junioa = Pedido::where('estado', '1')->whereYear(DB::raw('Date(created_at)'), $this->anio)->where('cliente_id', $model->id)
             ->where(DB::raw('MONTH(created_at)'), '6')->count();
-        $model->juniop = Pedido::where('estado', '1')/*->whereYear(DB::raw('Date(created_at)'), $request->anio+1)*/->where('cliente_id', $model->id)
+        $model->juniop = Pedido::where('estado', '1')->whereYear(DB::raw('Date(created_at)'), $this->anio+1)->where('cliente_id', $model->id)
             ->where(DB::raw('MONTH(created_at)'), '6')->count();
         
-        $model->julioa = Pedido::where('estado', '1')/*->whereYear(DB::raw('Date(created_at)'), $request->anio)*/->where('cliente_id', $model->id)
+        $model->julioa = Pedido::where('estado', '1')->whereYear(DB::raw('Date(created_at)'), $this->anio)->where('cliente_id', $model->id)
             ->where(DB::raw('MONTH(created_at)'), '7')->count();
-        $model->juliop = Pedido::where('estado', '1')/*->whereYear(DB::raw('Date(created_at)'), $request->anio+1)*/->where('cliente_id', $model->id)
+        $model->juliop = Pedido::where('estado', '1')->whereYear(DB::raw('Date(created_at)'), $this->anio+1)->where('cliente_id', $model->id)
             ->where(DB::raw('MONTH(created_at)'), '7')->count();
 
-        $model->agostoa = Pedido::where('estado', '1')/*->whereYear(DB::raw('Date(created_at)'), $request->anio)*/->where('cliente_id', $model->id)
+        $model->agostoa = Pedido::where('estado', '1')->whereYear(DB::raw('Date(created_at)'), $this->anio)->where('cliente_id', $model->id)
             ->where(DB::raw('MONTH(created_at)'), '8')->count();
-        $model->agostop = Pedido::where('estado', '1')/*->whereYear(DB::raw('Date(created_at)'), $request->anio+1)*/->where('cliente_id', $model->id)
+        $model->agostop = Pedido::where('estado', '1')->whereYear(DB::raw('Date(created_at)'), $this->anio+1)->where('cliente_id', $model->id)
             ->where(DB::raw('MONTH(created_at)'), '8')->count();
 
-        $model->setiembrea = Pedido::where('estado', '1')/*->whereYear(DB::raw('Date(created_at)'), $request->anio)*/->where('cliente_id', $model->id)
+        $model->setiembrea = Pedido::where('estado', '1')->whereYear(DB::raw('Date(created_at)'), $this->anio)->where('cliente_id', $model->id)
             ->where(DB::raw('MONTH(created_at)'), '9')->count();
-        $model->setiembrep = Pedido::where('estado', '1')/*->whereYear(DB::raw('Date(created_at)'), $request->anio+1)*/->where('cliente_id', $model->id)
+        $model->setiembrep = Pedido::where('estado', '1')->whereYear(DB::raw('Date(created_at)'), $this->anio+1)->where('cliente_id', $model->id)
             ->where(DB::raw('MONTH(created_at)'), '9')->count();
 
-        $model->octubrea = Pedido::where('estado', '1')/*->whereYear(DB::raw('Date(created_at)'), $request->anio)*/->where('cliente_id', $model->id)
+        $model->octubrea = Pedido::where('estado', '1')->whereYear(DB::raw('Date(created_at)'), $this->anio)->where('cliente_id', $model->id)
             ->where(DB::raw('MONTH(created_at)'), '10')->count();
-        $model->octubrep = Pedido::where('estado', '1')/*->whereYear(DB::raw('Date(created_at)'), $request->anio+1)*/->where('cliente_id', $model->id)
+        $model->octubrep = Pedido::where('estado', '1')->whereYear(DB::raw('Date(created_at)'), $this->anio+1)->where('cliente_id', $model->id)
             ->where(DB::raw('MONTH(created_at)'), '10')->count();
 
-        $model->noviembrea = Pedido::where('estado', '1')/*->whereYear(DB::raw('Date(created_at)'), $request->anio)*/->where('cliente_id', $model->id)
+        $model->noviembrea = Pedido::where('estado', '1')->whereYear(DB::raw('Date(created_at)'), $this->anio)->where('cliente_id', $model->id)
             ->where(DB::raw('MONTH(created_at)'), '11')->count();
-        $model->noviembrep = Pedido::where('estado', '1')/*->whereYear(DB::raw('Date(created_at)'), $request->anio+1)*/->where('cliente_id', $model->id)
+        $model->noviembrep = Pedido::where('estado', '1')->whereYear(DB::raw('Date(created_at)'), $this->anio+1)->where('cliente_id', $model->id)
             ->where(DB::raw('MONTH(created_at)'), '11')->count();
 
-        $model->diciembrea = Pedido::where('estado', '1')/*->whereYear(DB::raw('Date(created_at)'), $request->anio)*/->where('cliente_id', $model->id)
+        $model->diciembrea = Pedido::where('estado', '1')->whereYear(DB::raw('Date(created_at)'), $this->anio)->where('cliente_id', $model->id)
             ->where(DB::raw('MONTH(created_at)'), '12')->count();
-        $model->diciembrep = Pedido::where('estado', '1')/*->whereYear(DB::raw('Date(created_at)'), $request->anio+1)*/->where('cliente_id', $model->id)
+        $model->diciembrep = Pedido::where('estado', '1')->whereYear(DB::raw('Date(created_at)'), $this->anio+1)->where('cliente_id', $model->id)
             ->where(DB::raw('MONTH(created_at)'), '12')->count();
 
            

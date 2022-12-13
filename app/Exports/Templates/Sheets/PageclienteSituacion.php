@@ -14,6 +14,8 @@ use Illuminate\Http\Request;
 
 class PageclienteSituacion extends Export implements WithColumnFormatting,WithColumnWidths
 {
+    
+
     public function collection()
     {
         $cliente_list = [];
