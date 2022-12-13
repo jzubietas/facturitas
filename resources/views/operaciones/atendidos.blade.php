@@ -227,14 +227,14 @@
                       }).done(function (data) {
                                 //$('#modal-delete-adjunto').modal('hide');
                                 //$('#listado_adjuntos').html(data);
-                      });        
+                      });
 
       });
 
-      
+
       $(document).on("submit", "#formulario_adjuntos", function (evento) {
         evento.preventDefault();
-        
+
         let idunico=$("#hiddenAtender").val();
         console.log(idunico);
         $('#cargar_adjunto').attr("disabled",true);
@@ -244,7 +244,7 @@
         //e.preventDefault();
         var data = new FormData(document.getElementById("formulario_adjuntos"));
 
-        
+
         $.ajax({
                   type:'POST',
                   url: "{{ route('operaciones.updateatender',':id') }}".replace(':id',idunico),
@@ -269,7 +269,7 @@
 
                   }
               }).done(function (data) {
-                
+
               });
 
               return false;
@@ -313,7 +313,7 @@
             }
         }).done(function (data) {
             //$('#modal-delete-adjunto').modal('hide');
-            //$('#listado_adjuntos').html(data);            
+            //$('#listado_adjuntos').html(data);
         });
 
 
@@ -449,7 +449,20 @@
             render:$.fn.dataTable.render.moment('YYYY-MM-DD HH:mm:ss', 'DD/MM/YYYY HH:mm:ss' )
           },
           {data: 'destino', name: 'destino',"visible":false },
-          {data: 'condicion', name: 'condicion', },
+          {data: 'condicion_code',
+              name: 'condicion_code',
+              render: function ( data, type, row, meta ) {
+                  if(row.condicion_code==1){
+                      return '{{\App\Models\Pedido::POR_ATENDER }}';
+                  }else if(row.condicion_code==2){
+                      return '{{\App\Models\Pedido::EN_PROCESO_ATENCION }}';
+                  }else if(row.condicion_code==3){
+                      return '{{\App\Models\Pedido::ATENDIDO }}';
+                  }else if(row.condicion_code==4){
+                      return '{{\App\Models\Pedido::ANULADO }}';
+                  }
+              }
+          },
           {data: 'atendido_por', name: 'atendido_por', },
           {data: 'jefe', name: 'jefe', },
           {
@@ -489,7 +502,7 @@
 
               @can('operacion.editatender')
                   data = data+'<a href="" data-target="#modal-editar-atencion" data-atencion='+row.id+' data-toggle="modal" ><button class="btn btn-warning btn-sm">Atender atención</button></a>';
-                  
+
               @endcan
 
               var urlpdf = '{{ route("pedidosPDF", ":id") }}';

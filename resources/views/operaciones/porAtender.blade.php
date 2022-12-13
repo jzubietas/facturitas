@@ -145,14 +145,14 @@
             'Cantidad de comprobantes enviados debe ser diferente de 0 (cero)',
             'warning'
           )
-          
+
           return false;
         }
         return true;
     }
       $(document).on("submit", "#formularioatender", function (evento) {
 
-        
+
         evento.preventDefault();
        var status= validarFormulario(evento);
        if(!status){
@@ -190,7 +190,7 @@
         fd.append( 'cant_compro', files.length );
         fd.append( 'condicion', $("#condicion").val() );
         fd.append( 'hiddenAtender', $("#hiddenAtender").val() );
-        
+
         $.ajax({
            data: fd,
            processData: false,
@@ -219,7 +219,7 @@
         var idunico = button.data('atender')
         $(".textcode").html("PED"+idunico);
         $("#hiddenAtender").val(idunico);
-        
+
       });
 
       $('#modal-veradjunto').on('show.bs.modal', function (event) {
@@ -339,7 +339,20 @@
 
             }
           },
-          {data: 'condicion', name: 'condicion', },
+            {data: 'condicion_code',
+                name: 'condicion_code',
+                render: function ( data, type, row, meta ) {
+                    if(row.condicion_code==1){
+                        return '{{\App\Models\Pedido::POR_ATENDER }}';
+                    }else if(row.condicion_code==2){
+                        return '{{\App\Models\Pedido::EN_PROCESO_ATENCION }}';
+                    }else if(row.condicion_code==3){
+                        return '{{\App\Models\Pedido::ATENDIDO }}';
+                    }else if(row.condicion_code==4){
+                        return '{{\App\Models\Pedido::ANULADO }}';
+                    }
+                }
+            },
           {
             data: 'action2',
             name: 'action2',
