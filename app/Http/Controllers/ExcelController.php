@@ -8,6 +8,7 @@ use App\Exports\BasesFriasExport;
 use App\Exports\ClientesExport;
 use App\Exports\Clientesv2Export;
 use App\Exports\ClientesPedidosExport;
+use App\Exports\Templates\PlantillaExportMultiple;
 use App\Exports\ClientesSituacionExport;
 use App\Exports\PedidosPorEnviarPorFechasExport;
 use App\Exports\EntregadosPorFechasExport;
@@ -155,24 +156,11 @@ class ExcelController extends Controller
     }
 
 
-    /*public function clientespedidosExcel(Request $request)
-    {
-        ini_set('memory_limit', '-1');
-        set_time_limit(3000000);
-
-        return (new ClientesPedidosExport)
-                ->clientes($request)
-                ->resumenes($request)
-                ->anioa($request)
-                ->aniop($request)
-                ->download('Lista de Clientes_pedidos_'.$request->anio.'.xlsx');
-
-         return Excel::download(new ClientesPedidosExport, 'Lista de Clientes_pedidos.xlsx');
-    }*/
-
+  
     public function clientespedidosExcel()
     {
-        return Excel::download(new ClientesPedidosExport, 'Lista de Clientes_pedidos.xlsx');
+        //cambiar aca
+        return Excel::download(new PlantillaExportMultiple, 'Lista de Clientes_pedidos.xlsx');
     }
 
     // public function basefriaExcel()
