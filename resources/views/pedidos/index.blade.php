@@ -74,6 +74,7 @@
             <th scope="col">Razón social</th>
             <th scope="col">Cantidad</th>
             <th scope="col">Asesor</th>
+              <th scope="col">RUC</th>
             <th scope="col">F. Registro</th>
             <th scope="col">F. Actualizacion</th>
             <th scope="col">Total (S/)</th>
@@ -261,17 +262,17 @@
               var pedidodiferencia=data.diferencia;
               //pedidodiferencia=0;
               if(pedidodiferencia==null){
-                $('td:eq(13)', row).css('background', '#ca3a3a').css('color','#ffffff').css('text-align','center').css('font-weight','bold');
+                $('td:eq(14)', row).css('background', '#ca3a3a').css('color','#ffffff').css('text-align','center').css('font-weight','bold');
               }else{
                 if(pedidodiferencia>3){
-                  $('td:eq(13)', row).css('background', '#ca3a3a').css('color','#ffffff').css('text-align','center').css('font-weight','bold');
+                  $('td:eq(14)', row).css('background', '#ca3a3a').css('color','#ffffff').css('text-align','center').css('font-weight','bold');
                 }else{
-                  $('td:eq(13)', row).css('background', '#44c24b').css('text-align','center').css('font-weight','bold');
+                  $('td:eq(14)', row).css('background', '#44c24b').css('text-align','center').css('font-weight','bold');
                 }
               }
         },
-        initComplete:function(settings,json){          
-          
+        initComplete:function(settings,json){
+
         },
         columns: [
           //ID
@@ -312,7 +313,8 @@
         {data: 'cantidad', name: 'cantidad',render: $.fn.dataTable.render.number(',', '.', 2, ''), },
         //USUARIOS
         {data: 'users', name: 'users', },
-        
+            {data: 'ruc', name: 'ruc', },
+
         //FECHA
         {
           data: 'fecha',
@@ -330,25 +332,20 @@
           name: 'total',
           render: $.fn.dataTable.render.number(',', '.', 2, '')
         },
-        {
-          data: 'condiciones',
-          name: 'condiciones',
-          render: function ( data, type, row, meta ) {
-              if(row.condiciones =='ANULADO'){
-                  return 'ANULADO';
-              }else if(row.condiciones == 0){
-                  return 'ANULADO';
-              }else if(row.condiciones == 1){
-                  return 'PENDIENTE DE ENVÍO';
-              }else if(row.condiciones == 2){
-                  return 'EN REPARTO';
-              }else if(row.condiciones == 3){
-                  return 'ENTREGADO';
-              }else{
-                  return data;
-              }
-          }
-        },//estado de pedido
+            {data: 'condicion_code',
+                name: 'condicion_code',
+                render: function ( data, type, row, meta ) {
+                    if(row.condicion_code==1){
+                        return '{{\App\Models\Pedido::POR_ATENDER }}';
+                    }else if(row.condicion_code==2){
+                        return '{{\App\Models\Pedido::EN_PROCESO_ATENCION }}';
+                    }else if(row.condicion_code==3){
+                        return '{{\App\Models\Pedido::ATENDIDO }}';
+                    }else if(row.condicion_code==4){
+                        return '{{\App\Models\Pedido::ANULADO }}';
+                    }
+                }
+            },//estado de pedido
         {
           data: 'condicion_pa',
           name: 'condicion_pa',

@@ -3,7 +3,7 @@
 @section('title', 'Detalle de pagos')
 
 @section('content_header')
-    <h1>DETALLE DEL <b>PAGO</b>: PAG000{{ $pagos->id }}</h1>
+    <h1>DETALLE DEL <b>PAGO</b>: {{ $pagos->id2 }}</h1>
 @stop
 
 @section('content')

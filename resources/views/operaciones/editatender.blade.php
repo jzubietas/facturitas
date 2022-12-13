@@ -85,6 +85,7 @@
 
               <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
                 <form method="POST" action="{{ route('operaciones.updateatender', $pedido->id) }}" accept-charset="UTF-8" enctype="multipart/form-data" id="formulario">
+                  @csrf
                   <input name="_token" type="hidden" value="gC4bbgB44XSNjYzh2N0OS6BLkmzepKe0jRLoSqPR">
                   <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                       <label for="envio_doc">Documento enviado</label>
@@ -113,11 +114,11 @@
                   @if ($img->pedido_id == $pedido->id)
                     <p>
                       <a href="{{ route('pedidos.descargaradjunto', $img->adjunto) }}">{{ $img->adjunto }}</a>
-                      <a href="#" data-target="#modal-delete-adjunto" data-toggle="modal" data-imgid="{{ $img->pedido_id }}" data-imgadjunto="{{ $img->adjunto }}">
+                      <!--<a href="#" data-target="#modal-delete-adjunto" data-toggle="modal" data-imgid="{{ $img->pedido_id }}" data-imgadjunto="{{ $img->adjunto }}">
                         <button class="btn btn-danger btn-sm" data-imgid="{{ $img->pedido_id }}" data-imgadjunto="{{ $img->adjunto }}">
                           <i class="fas fa-trash-alt"></i>
                         </button>
-                      </a>
+                      </a>-->
                       <!--<a href="" data-target="#modal-delete-adjunto-{{ $img->id }}" data-toggle="modal">
                         <button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i></button></a>-->
                     </p>

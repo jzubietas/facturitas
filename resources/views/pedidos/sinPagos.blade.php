@@ -149,8 +149,8 @@
                 }
               }*/
         },
-        initComplete:function(settings,json){          
-         
+        initComplete:function(settings,json){
+
         },
         columns: [
           {
@@ -193,22 +193,17 @@
           name: 'total',
           render: $.fn.dataTable.render.number(',', '.', 2, '')
         },
-            {
-                data: 'condiciones',
-                name: 'condiciones',
+            {data: 'condicion_code',
+                name: 'condicion_code',
                 render: function ( data, type, row, meta ) {
-                    if(row.condiciones =='ANULADO'){
-                        return 'ANULADO';
-                    }else if(row.condiciones == 0){
-                        return 'ANULADO';
-                    }else if(row.condiciones == 1){
-                        return 'PENDIENTE DE ENVÍO';
-                    }else if(row.condiciones == 2){
-                        return 'EN REPARTO';
-                    }else if(row.condiciones == 3){
-                        return 'ENTREGADO';
-                    }else{
-                        return data;
+                    if(row.condicion_code==1){
+                        return '{{\App\Models\Pedido::POR_ATENDER }}';
+                    }else if(row.condicion_code==2){
+                        return '{{\App\Models\Pedido::EN_PROCESO_ATENCION }}';
+                    }else if(row.condicion_code==3){
+                        return '{{\App\Models\Pedido::ATENDIDO }}';
+                    }else if(row.condicion_code==4){
+                        return '{{\App\Models\Pedido::ANULADO }}';
                     }
                 }
             },

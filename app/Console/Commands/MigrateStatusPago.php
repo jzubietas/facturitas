@@ -6,14 +6,14 @@ use App\Models\Pago;
 use Illuminate\Console\Command;
 use Illuminate\Database\Schema\Blueprint;
 
-class MigrateStatusPedido extends Command
+class MigrateStatusPago extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'migrate:pedido:status';
+    protected $signature = 'migrate:pago:status';
 
     /**
      * The console command description.

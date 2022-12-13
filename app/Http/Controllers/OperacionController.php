@@ -96,6 +96,7 @@ class OperacionController extends Controller
                 'dp.nombre_empresa as empresas',
                 'dp.total as total',
                 'pedidos.condicion',
+                'pedidos.condicion_code',
                 DB::raw('(DATE_FORMAT(pedidos.created_at, "%Y-%m-%d %h:%i:%s")) as fecha'),
                 //DB::raw('(select DATE_FORMAT( MIN(dpa.fecha), "%Y-%m-%d")   from detalle_pagos dpa where dpa.pago_id=pagos.id and dpa.estado=1) as fecha'),
                 //DB::raw('DATE_FORMAT(pedidos.created_at, "%d/%m/%Y") as fecha'),
@@ -204,6 +205,7 @@ class OperacionController extends Controller
                     'dp.codigo as codigos',
                     'dp.nombre_empresa as empresas',
                     'pedidos.condicion',
+                    'pedidos.condicion_code',
                     DB::raw('(DATE_FORMAT(pedidos.created_at, "%Y-%m-%d %h:%i:%s")) as fecha'),
                     'pedidos.envio',
                     'pedidos.destino',
@@ -222,7 +224,7 @@ class OperacionController extends Controller
                 //->WhereIn('u.identificador',$asesores)
                 //->where('u.operario', Auth::user()->id)
                 //->where('pedidos.condicion', 'ATENDIDO')
-                ->where('pedidos.condicion', 'ATENDIDO')
+                ->where('pedidos.condicion_code', Pedido::ATENDIDO_INT)
                 ->where('pedidos.envio', 0);
                 /*->groupBy(
                     'pedidos.id',
@@ -358,7 +360,7 @@ class OperacionController extends Controller
                 )
                 ->where('pedidos.estado', '1')
                 ->where('dp.estado', '1')
-                ->where('pedidos.condicion', Pedido::ATENDIDO)
+                ->where('pedidos.condicion_code', Pedido::ATENDIDO_INT)
                 ->whereIn('pedidos.envio', ['1','2','3'])
                 //->whereIn('pedidos.envio', ['0'])
                 ->whereBetween( 'pedidos.created_at', [$min, $max]);
@@ -430,6 +432,7 @@ class OperacionController extends Controller
         $pedido=Pedido::where("id",$hiddenAtender)->first();
         $pedido->update([
             'condicion' => $request->condicion,
+            'condicion_code' => $request->condicion,
             'modificador' => 'USER'.Auth::user()->id
         ]);
 
@@ -719,7 +722,7 @@ class OperacionController extends Controller
         $id = $request->eliminar_pedido_id;
         $imagen = $request->eliminar_pedido_id_imagen;
         $imagenatencion = ImagenAtencion::where("pedido_id",$id)
-            ->where("adjunto",$imagen)->first();
+            ->where("id",$imagen)->first();
 
         if($imagenatencion != NULL){
             $imagenatencion->update([
@@ -820,6 +823,8 @@ class OperacionController extends Controller
             'modificador' => 'USER'.Auth::user()->id
         ]);
 
+        //dd($files);
+
         if ($request->hasFile('adjunto')){
             /* $file_name = Carbon::now()->second.$files->getClientOriginalName();
             $files->move($destinationPath , $file_name); */
@@ -844,6 +849,8 @@ class OperacionController extends Controller
                 'atendido_por' => Auth::user()->name,
                 'atendido_por_id' => Auth::user()->id,
             ]);
+
+
         }
         else{
             $detalle_pedidos->update([
@@ -854,6 +861,42 @@ class OperacionController extends Controller
         }
 
         return redirect()->route('operaciones.atendidos')->with('info','actualizado');
+    }
+
+    public function updateAtenderId(Request $request)
+    {
+        $pedido = Pedido::where('id',$request->hiddenAtender)->first();
+        $detalle_pedidos = DetallePedido::where('pedido_id',$request->hiddenAtender)->first();
+        $fecha = Carbon::now();
+        $cont = 0;
+
+        //ACTUALIZAR MODIFICACION AL PEDIDO
+        $pedido->update([
+            'modificador' => 'USER'.Auth::user()->id
+        ]);
+
+        //dd($files);
+        //quien es el operario relacionado al pedido (el asesor)
+        $asesor_de_pedido=$pedido->user_id;
+        $operario=User::where('id',$asesor_de_pedido)->first()->operario;
+        //calcular el operario relacionado a este pedido
+
+        $info_operario=User::where('id',$operario)->first();
+
+        {
+            $detalle_pedidos->update([
+                'envio_doc' => '1',
+                'fecha_envio_doc' => $fecha,
+                'cant_compro' => $request->cant_compro,
+                'atendido_por' => $info_operario->name,//Auth::user()->name,
+                'atendido_por_id' => $info_operario->id,//Auth::user()->id,
+            ]);
+            //atendido por - atendido por id , no debe ser el quien registra, sino la operaria vinculada segun el pedido (osea al asesor)
+        }
+
+        return response()->json(['html' => $request->hiddenAtender]);
+
+        //return redirect()->route('operaciones.atendidos')->with('info','actualizado');
     }
 
     public function showAtender(Pedido $pedido)

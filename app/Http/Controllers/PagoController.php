@@ -153,7 +153,7 @@ class PagoController extends Controller
                     DB::raw("users.identificador as identificador")
                 )
                 ->pluck('users.identificador');
-           
+
             $pagos = $pagos->WhereIn('u.identificador', $usersasesores);
         } else if (Auth::user()->rol == "Encargado") {
 
@@ -167,10 +167,15 @@ class PagoController extends Controller
 
             $pagos = $pagos->WhereIn('u.identificador', $usersasesores);
 
-           
 
-        } else {
-            $pagos = $pagos;
+
+        } else if (Auth::user()->rol == "Asesor") {
+
+            $usersasesores = User::where('users.rol', 'Asesor')
+                ->where('users.estado', '1')
+                ->where('users.identificador', \auth()->user()->identificador)
+                ->pluck('identificador');
+            $pagos = $pagos->WhereIn('u.identificador', $usersasesores);
 
         }
 
@@ -1399,6 +1404,23 @@ class PagoController extends Controller
         $pagos = Pago::join('users as u', 'pagos.user_id', 'u.id')
             ->join('clientes as c', 'pagos.cliente_id', 'c.id')
             ->select('pagos.id',
+                            DB::raw(" (CASE WHEN pagos.id<10 THEN concat('PAG',u.identificador,'-',
+                                IF ( (select count(dpago.id) from detalle_pagos dpago where dpago.pago_id=pagos.id and dpago.estado in (1) )>1,'V','I' )  ,
+                                IF ( (select count(ppedidos.id) from pago_pedidos ppedidos where ppedidos.pago_id=pagos.id and ppedidos.estado in (1) ) >1,'V','I' ),
+                                '-',pagos.id
+                                )
+                            WHEN pagos.id<100  THEN concat('PAG',u.identificador,'-',
+                                IF ( (select count(dpago.id) from detalle_pagos dpago where dpago.pago_id=pagos.id and dpago.estado in (1) )>1,'V','I' )  ,
+                                IF ( (select count(ppedidos.id) from pago_pedidos ppedidos where ppedidos.pago_id=pagos.id and ppedidos.estado in (1) ) >1,'V','I' ),
+                                '-',pagos.id)
+                            WHEN pagos.id<1000  THEN concat('PAG',u.identificador,'-',
+                                IF ( (select count(dpago.id) from detalle_pagos dpago where dpago.pago_id=pagos.id and dpago.estado in (1) )>1,'V','I' )  ,
+                                IF ( (select count(ppedidos.id) from pago_pedidos ppedidos where ppedidos.pago_id=pagos.id and ppedidos.estado in (1) ) >1,'V','I' ),
+                                '-',pagos.id)
+                            ELSE concat('PAG',u.identificador,'-',
+                                IF ( (select count(dpago.id) from detalle_pagos dpago where dpago.pago_id=pagos.id and dpago.estado in (1) )>1,'V','I' )  ,
+                                IF ( (select count(ppedidos.id) from pago_pedidos ppedidos where ppedidos.pago_id=pagos.id and ppedidos.estado in (1) ) >1,'V','I' ),
+                                '-',pagos.id) END) AS id2"),
                 'u.name as users',
                 'c.celular', //cliente
                 'c.nombre', //cliente
@@ -1409,6 +1431,7 @@ class PagoController extends Controller
             ->where('pagos.id', $pago->id)
             ->groupBy('pagos.id',
                 'u.name',
+                'u.identificador',
                 'c.celular',
                 'c.nombre',
                 'pagos.observacion',
@@ -2569,7 +2592,7 @@ class PagoController extends Controller
             try {
                 DB::beginTransaction();
 
-                $cliente_perdondarcourier = Cliente::where("nombre", "PERDONAR COURIER")->first();
+                $cliente_perdondarcourier = Cliente::where("user_id", 33)->first();
 
                 //return $cliente_perdondarcourier;
 
@@ -2760,5 +2783,39 @@ class PagoController extends Controller
         });
         return redirect()->route("pagos.show", $devolucion);
     }
+
+    /*public function validadContenidoPago(Request $request)
+    {
+
+        $pedidos_repetidos = DetallePago::join('detalle_pagos as dp', 'pagos.id', 'dp.pago_id')
+            ->join('users as u', 'pagos.user_id', 'u.id')
+            ->join('clientes as c', 'pagos.cliente_id', 'c.id')
+            ->select(
+                'pagos.id',
+                'u.identificador',
+                'pagos.user_id',
+                'pagos.cliente_id',
+                'dp.banco',
+                'dp.titular',
+                'dp.cuenta'
+            )
+            ->where('u.identificador', $request->asesor)
+            ->where('pagos.cliente_id', $request->cliente)
+            ->where('dp.banco', $request->banco)
+            ->where('dp.titular', $request->titular)
+            ->where('dp.cuenta', $request->cuenta)
+            ->count();
+
+            if($pedidos_repetidos>0)
+            {
+                $html="1";
+                return response()->json(['html' => $html]);
+
+            }else{
+                //no existe ,registrare
+                $html="0";
+                return response()->json(['html' => $html]);
+            }
+    }*/
 
 }

@@ -66,8 +66,6 @@ class AdministracionController extends Controller
         $min = Carbon::createFromFormat('d/m/Y', $request->min)->format('Y-m-d');
         $max = Carbon::createFromFormat('d/m/Y', $request->max)->format('Y-m-d');
 
-        $pagos=null;
-
         $pagos = Pago::join('users as u', 'pagos.user_id', 'u.id')
             ->join('clientes as c', 'pagos.cliente_id', 'c.id')
             ->select('pagos.id as id',
@@ -111,10 +109,8 @@ class AdministracionController extends Controller
             ->where('pagos.estado', '1')
             ->whereBetween(DB::raw('( (select DATE( MIN(dpa.fecha))   from detalle_pagos dpa where dpa.pago_id=pagos.id and dpa.estado=1)  )'), [$min, $max]); //rango de fechas
 
-        if(!$request->asesores)
+        if($request->asesores!=null && !empty($request->asesores))
         {
-            $pagos=$pagos;
-        }else{
             $pagos=$pagos->where('pagos.user_id',$request->asesores);
         }
 
@@ -141,7 +137,7 @@ class AdministracionController extends Controller
 
     public function Revisar(Pago $pago)
     {
-       
+
         $cuentas = [
             "BCP" => 'BCP',
             "BBVA" => 'BBVA',
@@ -323,7 +319,7 @@ class AdministracionController extends Controller
 
     public function Revisarpendiente(Pago $pago)
     {
-       
+
         $cuentas = [
             "BCP" => 'BCP',
             "BBVA" => 'BBVA',
@@ -467,7 +463,7 @@ class AdministracionController extends Controller
         if(!$request->asesores)
         {
             $pagos=$pagos;
-            
+
         }else{
             $pagos=$pagos->where('pagos.user_id',$request->asesores);
         }
@@ -607,7 +603,7 @@ class AdministracionController extends Controller
 
         if(!$request->asesores)
         {
-            $pagos=$pagos;           
+            $pagos=$pagos;
         }else{
             $pagos=$pagos->where('pagos.user_id',$request->asesores);
         }
@@ -629,7 +625,7 @@ class AdministracionController extends Controller
 
     public function Aprobados()
     {
-        
+
         $superasesor = User::where('rol', 'Super asesor')->count();
 
         return view('administracion.aprobados', compact( 'superasesor'));
@@ -676,7 +672,7 @@ class AdministracionController extends Controller
 
         if(!$request->asesores)
         {
-            $pagos=$pagos;            
+            $pagos=$pagos;
         }else{
             $pagos=$pagos->where('pagos.user_id',$request->asesores);
         }
@@ -686,7 +682,7 @@ class AdministracionController extends Controller
             ->addColumn('action', function($pago){
                 $btn='';
                 if(Auth::user()->rol == "Administrador"){
-                    $btn=$btn.'<a href="'.route('pagos.show', $pago->id).'" class="btn btn-info btn-sm">Ver</a>';                    
+                    $btn=$btn.'<a href="'.route('pagos.show', $pago->id).'" class="btn btn-info btn-sm">Ver</a>';
                     $btn = $btn.'<a href="" data-target="#modal-desabonar" data-toggle="modal" data-desabonar="'.$pago->id.'" data-pago="'.$pago->id2.'"><button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i> Desabonar</button></a>';
                 }
                 return $btn;
