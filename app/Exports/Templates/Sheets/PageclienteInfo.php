@@ -267,7 +267,7 @@ class PageclienteInfo extends ExportYear implements WithColumnFormatting, FromCo
     public static function afterSheet(AfterSheet $event){
 //Single Column ss
         $event->sheet->styleCells(
-            'A1',
+            'A',
             [
                 'alignment' => [
                     'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
@@ -280,7 +280,7 @@ class PageclienteInfo extends ExportYear implements WithColumnFormatting, FromCo
         );
 
 //Range Columns
-        $event->sheet->styleCells(
+        /*$event->sheet->styleCells(
             'B2:E2',
             [
                 'alignment' => [
@@ -291,7 +291,7 @@ class PageclienteInfo extends ExportYear implements WithColumnFormatting, FromCo
                     'color' => ['rgb' => '336655']
                 ]
             ]
-        );
+        );*/
     }
 
 
