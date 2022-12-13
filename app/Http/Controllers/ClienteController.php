@@ -131,7 +131,7 @@ class ClienteController extends Controller
 
 
         } else if (Auth::user()->rol == "Jefe de llamadas") {
-            $usersasesores = User::where('users.rol', 'Asesor')
+            /*$usersasesores = User::where('users.rol', 'Asesor')
                 ->where('users.estado', '1')
                 ->where('users.llamada', Auth::user()->id)
                 ->select(
@@ -139,7 +139,7 @@ class ClienteController extends Controller
                 )
                 ->pluck('users.identificador');
 
-            $data = $data->WhereIn("u.identificador", $usersasesores);
+            $data = $data->WhereIn("u.identificador", $usersasesores);*/
         } elseif (Auth::user()->rol == "Asesor") {
             $usersasesores = User::where('users.rol', 'Asesor')
                 ->where('users.estado', '1')
@@ -819,7 +819,7 @@ class ClienteController extends Controller
 
         } else if (Auth::user()->rol == "Jefe de llamadas") {
 
-            $usersasesores = User::where('users.rol', 'Asesor')
+            /*$usersasesores = User::where('users.rol', 'Asesor')
                 ->where('users.estado', '1')
                 ->where('users.llamada', Auth::user()->id)
                 ->select(
@@ -827,7 +827,7 @@ class ClienteController extends Controller
                 )
                 ->pluck('users.identificador');
 
-            $data = $data->WhereIn("u.identificador", $usersasesores);
+            $data = $data->WhereIn("u.identificador", $usersasesores);*/
 
         } elseif (Auth::user()->rol == "Asesor") {
 
@@ -1114,7 +1114,7 @@ class ClienteController extends Controller
 
 
         } else if (Auth::user()->rol == "Jefe de llamadas") {
-            $usersasesores = User::where('users.rol', 'Asesor')
+            /*$usersasesores = User::where('users.rol', 'Asesor')
                 ->where('users.estado', '1')
                 ->where('users.llamada', Auth::user()->id)
                 ->select(
@@ -1122,7 +1122,7 @@ class ClienteController extends Controller
                 )
                 ->pluck('users.identificador');
 
-            $data = $data->WhereIn("u.identificador", $usersasesores);
+            $data = $data->WhereIn("u.identificador", $usersasesores);*/
         } elseif (Auth::user()->rol == "Asesor") {
             $usersasesores = User::where('users.rol', 'Asesor')
                 ->where('users.estado', '1')
@@ -1244,7 +1244,7 @@ class ClienteController extends Controller
 
 
         } else if (Auth::user()->rol == "Jefe de llamadas") {
-            $usersasesores = User::where('users.rol', 'Asesor')
+            /*$usersasesores = User::where('users.rol', 'Asesor')
                 ->where('users.estado', '1')
                 ->where('users.llamada', Auth::user()->id)
                 ->select(
@@ -1252,7 +1252,7 @@ class ClienteController extends Controller
                 )
                 ->pluck('users.identificador');
 
-            $data = $data->WhereIn("u.identificador", $usersasesores);
+            $data = $data->WhereIn("u.identificador", $usersasesores);*/
         } elseif (Auth::user()->rol == "Asesor") {
             $usersasesores = User::where('users.rol', 'Asesor')
                 ->where('users.estado', '1')
@@ -1379,7 +1379,7 @@ class ClienteController extends Controller
 
 
         } else if (Auth::user()->rol == "Jefe de llamadas") {
-            $usersasesores = User::where('users.rol', 'Asesor')
+            /*$usersasesores = User::where('users.rol', 'Asesor')
                 ->where('users.estado', '1')
                 ->where('users.llamada', Auth::user()->id)
                 ->select(
@@ -1387,7 +1387,7 @@ class ClienteController extends Controller
                 )
                 ->pluck('users.identificador');
 
-            $data = $data->WhereIn("u.identificador", $usersasesores);
+            $data = $data->WhereIn("u.identificador", $usersasesores);*/
         } elseif (Auth::user()->rol == "Asesor") {
             $usersasesores = User::where('users.rol', 'Asesor')
                 ->where('users.estado', '1')

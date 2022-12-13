@@ -352,9 +352,9 @@ class EnvioController extends Controller
                 'de.nombre',
                 'de.cantidad',
                 //DB::raw(" (select group_concat(dp.codigo_pedido) from direccion_pedidos dp where dp.direcciongrupo=direccion_grupos.id) as codigos "),
-                DB::raw(" (select group_concat(ab.empresa) from direccion_pedidos ab where ab.direcciongrupo=direccion_grupos.id) as producto "),
+               // DB::raw(" (select group_concat(ab.empresa) from direccion_pedidos ab where ab.direcciongrupo=direccion_grupos.id) as producto "),
                 'direccion_grupos.codigos',
-                //'direccion_grupos.producto',
+                'direccion_grupos.producto',
                 'de.direccion',
                 'de.referencia',
                 'de.observacion',
@@ -367,6 +367,7 @@ class EnvioController extends Controller
                 'direccion_grupos.subcondicion_envio',
                 'direccion_grupos.foto1',
                 'direccion_grupos.foto2',
+                'direccion_grupos.correlativo'
             );
 
         $pedidos_provincia = DireccionGrupo::join('gasto_envios as de','direccion_grupos.id','de.direcciongrupo')
@@ -382,9 +383,9 @@ class EnvioController extends Controller
                 DB::raw(" (select '') as nombre "),
                 'de.cantidad',
                 //DB::raw(" (select group_concat(dp.codigo_pedido) from gasto_pedidos dp where dp.direcciongrupo=direccion_grupos.id) as codigos "),
-                DB::raw(" (select group_concat(ab.empresa) from gasto_pedidos ab where ab.direcciongrupo=direccion_grupos.id) as producto "),
+               // DB::raw(" (select group_concat(ab.empresa) from gasto_pedidos ab where ab.direcciongrupo=direccion_grupos.id) as producto "),
                 'direccion_grupos.codigos',
-                //'direccion_grupos.producto',
+                'direccion_grupos.producto',
                 'de.tracking as direccion',
                 'de.foto as referencia',
                 DB::raw(" (select '') as observacion "),
@@ -397,6 +398,7 @@ class EnvioController extends Controller
                 'direccion_grupos.subcondicion_envio',
                 'direccion_grupos.foto1',
                 'direccion_grupos.foto2',
+                'direccion_grupos.correlativo'
             );
 
         $pedidos = $pedidos_lima->union($pedidos_provincia);
