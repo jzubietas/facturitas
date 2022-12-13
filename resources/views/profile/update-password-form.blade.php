@@ -28,9 +28,11 @@
     </x-slot>
 
     <x-slot name="actions">
+       {{--
         <x-jet-action-message class="mr-3" on="saved">
             <p style="color: red; font-text: 20px">{{ __('Registrado.') }}</p>
         </x-jet-action-message>
+       --}}
 
         <x-jet-button  style="background: black">
             {{ __('Grabar') }}
