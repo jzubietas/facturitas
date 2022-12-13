@@ -265,7 +265,7 @@ class PageclienteInfo extends ExportYear implements WithColumnFormatting, FromCo
     }
 
     public static function afterSheet(AfterSheet $event){
-//Single Column
+//Single Column ss
         $event->sheet->styleCells(
             'A1',
             [
