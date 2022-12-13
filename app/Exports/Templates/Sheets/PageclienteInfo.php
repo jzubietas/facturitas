@@ -12,13 +12,14 @@ use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 use Maatwebsite\Excel\Concerns\WithColumnWidths;
 use PhpOffice\PhpSpreadsheet\Cell\DataType;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Concerns\WithBackgroundColor;
 
 class PageclienteInfo extends ExportYear implements WithColumnFormatting
 {
     //public $anio;
     /*public function __construct($anio)
     {
-        
+
         parent::__construct();
         //$this->$anio=2021;
     }*/
@@ -40,7 +41,7 @@ class PageclienteInfo extends ExportYear implements WithColumnFormatting
                 ,'clientes.distrito'
                 ,'clientes.direccion'
                 ,'clientes.referencia'
-                ,'clientes.estado' 
+                ,'clientes.estado'
                 ,'clientes.deuda'
                 ,'clientes.pidio'
                 ,'clientes.situacion as estadopedido'
@@ -73,7 +74,7 @@ class PageclienteInfo extends ExportYear implements WithColumnFormatting
         try {
             $model->porcentajefsb= Porcentaje::select('porcentaje')
             ->where('cliente_id',$model->id)
-            ->where('nombre','FISICO - sin banca')->first()->porcentaje;          
+            ->where('nombre','FISICO - sin banca')->first()->porcentaje;
           } catch (\Exception $e) {
             $model->porcentajefsb=0;
           }
@@ -133,7 +134,7 @@ class PageclienteInfo extends ExportYear implements WithColumnFormatting
             ->where(DB::raw('MONTH(created_at)'), '6')->count();
         $model->juniop = Pedido::where('estado', '1')->whereYear(DB::raw('Date(created_at)'), $this->anio+1)->where('cliente_id', $model->id)
             ->where(DB::raw('MONTH(created_at)'), '6')->count();
-        
+
         $model->julioa = Pedido::where('estado', '1')->whereYear(DB::raw('Date(created_at)'), $this->anio)->where('cliente_id', $model->id)
             ->where(DB::raw('MONTH(created_at)'), '7')->count();
         $model->juliop = Pedido::where('estado', '1')->whereYear(DB::raw('Date(created_at)'), $this->anio+1)->where('cliente_id', $model->id)
@@ -164,7 +165,7 @@ class PageclienteInfo extends ExportYear implements WithColumnFormatting
         $model->diciembrep = Pedido::where('estado', '1')->whereYear(DB::raw('Date(created_at)'), $this->anio+1)->where('cliente_id', $model->id)
             ->where(DB::raw('MONTH(created_at)'), '12')->count();
 
-           
+
 
         if ($model->deuda == '1') {
             $model->deposito = 'DEBE';
@@ -174,7 +175,7 @@ class PageclienteInfo extends ExportYear implements WithColumnFormatting
 
         //$dateM = Carbon::now()->format('m');
         //$dateY = Carbon::now()->format('Y');
-            
+
 
         //$model->created_at->format('');
         return parent::map($model);
@@ -221,17 +222,19 @@ class PageclienteInfo extends ExportYear implements WithColumnFormatting
             ,"setiembrea"=>"setiembrea","setiembrep"=>"setiembrep"
             ,"octubrea"=>"octubrea","octubrep"=>"octubrep"
             ,"noviembrea"=>"noviembrea","noviembrep"=>"noviembrep"
-            ,"diciembrea"=>"diciembrea","diciembrep"=>"diciembrep"        
+            ,"diciembrea"=>"diciembrea","diciembrep"=>"diciembrep"
             //,"created_at"=>"Fecha",
         ];
 
-            
+
                 //'p.codigo as codigo',
-                
+
     }
 
     public function columnFormats(): array
     {
+
+
         return [
             //Formato de las columnas segun la letra
             /*
@@ -241,5 +244,30 @@ class PageclienteInfo extends ExportYear implements WithColumnFormatting
             'O' => NumberFormat::FORMAT_DATE_YYYYMMDD
         ];
     }
+
+    public function registerEvents($report): array
+    {
+        echo "<pre>";print_r($report->all());exit;
+        return [
+            AfterSheet::class => function(AfterSheet $event) {
+                $event->sheet->getStyle('A1:I1')->applyFromArray([
+                    'font'=>[
+                        'bold'=>true,
+                    ],
+                ]);
+
+                foreach ($certificates as $value) {
+
+                    if($value->certificate_status == 'Valid'){
+                        $sheet->cell('J', function($color){
+                            $color->setBackground('#008000');
+                        });
+                    }
+                }
+            },
+        ];
+    }
+
+
 }
 
