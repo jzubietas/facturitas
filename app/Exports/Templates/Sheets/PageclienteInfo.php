@@ -51,7 +51,7 @@ class PageclienteInfo extends ExportYear implements WithColumnFormatting
                 ,DB::raw("(select DATE_FORMAT(dp3.created_at,'%Y') from pedidos dp3 where dp3.cliente_id=clientes.id order by dp3.created_at desc limit 1) as anio")
                 ,DB::raw(" (select (dp.codigo) from pedidos dp where dp.cliente_id=clientes.id order by dp.created_at desc limit 1) as codigo ")
             )
-        ->where('clientes.id',1)
+        //->where('clientes.id',1)
         ->where('clientes.estado', '1')
         ->where('clientes.tipo', '1')
         ->get();
@@ -70,18 +70,38 @@ class PageclienteInfo extends ExportYear implements WithColumnFormatting
         $model->nuevo_campo = //nuevo campo
      */
         //$model->fehca_formato=$model->created_at->format('');
-        $model->porcentajefsb= Porcentaje::select('porcentaje')
+        try {
+            $model->porcentajefsb= Porcentaje::select('porcentaje')
             ->where('cliente_id',$model->id)
-            ->where('nombre','FISICO - sin banca')->first()->porcentaje;
-        $model->porcentajefb= Porcentaje::select('porcentaje')
+            ->where('nombre','FISICO - sin banca')->first()->porcentaje;          
+          } catch (\Exception $e) {
+            $model->porcentajefsb=0;
+          }
+
+          try {
+            $model->porcentajefb= Porcentaje::select('porcentaje')
             ->where('cliente_id',$model->id)
             ->where('nombre','FISICO - banca')->first()->porcentaje;
-        $model->porcentajeesb= Porcentaje::select('porcentaje')
+          } catch (\Exception $e) {
+            $model->porcentajefb=0;
+          }
+
+          try {
+            $model->porcentajeesb= Porcentaje::select('porcentaje')
             ->where('cliente_id',$model->id)
             ->where('nombre','ELECTRONICA - sin banca')->first()->porcentaje;
-        $model->porcentajeeb= Porcentaje::select('porcentaje')
+          } catch (\Exception $e) {
+            $model->porcentajeesb=0;
+          }
+
+          try {
+            $model->porcentajeeb= Porcentaje::select('porcentaje')
             ->where('cliente_id',$model->id)
             ->where('nombre','ELECTRONICA - banca')->first()->porcentaje;
+          } catch (\Exception $e) {
+            $model->porcentajeeb=0;
+          }
+
 
         $model->eneroa = Pedido::where('estado', '1')->whereYear(DB::raw('Date(created_at)'), $this->anio)->where('cliente_id', $model->id)
             ->where(DB::raw('MONTH(created_at)'), '1')->count();

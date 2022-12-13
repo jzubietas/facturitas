@@ -1404,6 +1404,23 @@ class PagoController extends Controller
         $pagos = Pago::join('users as u', 'pagos.user_id', 'u.id')
             ->join('clientes as c', 'pagos.cliente_id', 'c.id')
             ->select('pagos.id',
+                            DB::raw(" (CASE WHEN pagos.id<10 THEN concat('PAG',u.identificador,'-',
+                                IF ( (select count(dpago.id) from detalle_pagos dpago where dpago.pago_id=pagos.id and dpago.estado in (1) )>1,'V','I' )  ,
+                                IF ( (select count(ppedidos.id) from pago_pedidos ppedidos where ppedidos.pago_id=pagos.id and ppedidos.estado in (1) ) >1,'V','I' ),
+                                '-',pagos.id
+                                )
+                            WHEN pagos.id<100  THEN concat('PAG',u.identificador,'-',
+                                IF ( (select count(dpago.id) from detalle_pagos dpago where dpago.pago_id=pagos.id and dpago.estado in (1) )>1,'V','I' )  ,
+                                IF ( (select count(ppedidos.id) from pago_pedidos ppedidos where ppedidos.pago_id=pagos.id and ppedidos.estado in (1) ) >1,'V','I' ),
+                                '-',pagos.id)
+                            WHEN pagos.id<1000  THEN concat('PAG',u.identificador,'-',
+                                IF ( (select count(dpago.id) from detalle_pagos dpago where dpago.pago_id=pagos.id and dpago.estado in (1) )>1,'V','I' )  ,
+                                IF ( (select count(ppedidos.id) from pago_pedidos ppedidos where ppedidos.pago_id=pagos.id and ppedidos.estado in (1) ) >1,'V','I' ),
+                                '-',pagos.id)
+                            ELSE concat('PAG',u.identificador,'-',
+                                IF ( (select count(dpago.id) from detalle_pagos dpago where dpago.pago_id=pagos.id and dpago.estado in (1) )>1,'V','I' )  ,
+                                IF ( (select count(ppedidos.id) from pago_pedidos ppedidos where ppedidos.pago_id=pagos.id and ppedidos.estado in (1) ) >1,'V','I' ),
+                                '-',pagos.id) END) AS id2"),
                 'u.name as users',
                 'c.celular', //cliente
                 'c.nombre', //cliente
@@ -1414,6 +1431,7 @@ class PagoController extends Controller
             ->where('pagos.id', $pago->id)
             ->groupBy('pagos.id',
                 'u.name',
+                'u.identificador',
                 'c.celular',
                 'c.nombre',
                 'pagos.observacion',
