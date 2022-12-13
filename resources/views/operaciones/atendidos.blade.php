@@ -73,6 +73,7 @@
         @include('pedidos.modal.EditarAtencion')
       @include('pedidos.modal.envioid')
       @include('pedidos.modal.sinenvioid')
+      @include('pedidos.modal.DeleteAdjuntoid')
     </div>
   </div>
 
@@ -134,151 +135,46 @@
   <script>
     $(document).ready(function () {
 
-      function AtenderAtencion(){
-        $('.modal-atender-pedido').on('click', function (event) {
-          event.preventDefault();
-            console.log("test");
-
-            //cuando abre el form de anular pedido
-            //var button = $(event.relatedTarget)
-            var idunico = $(this).data('atencion')
-            $(".textcode").html("PED"+idunico);
-            $("#hiddenAtender").val(idunico);
-
-            RecuperarAdjuntos(idunico);
-
-            //$('#formulario_adjuntos').attr('action',"{{ route('operaciones.updateatender',':id') }}".replace(':id',idunico));
-
-            $('#confirmar_atender').on('click', function(e){
-
-              $(this).attr('disabled',true);
-              $(this).text('Subiendo archivos...');
-                            e.preventDefault();
-                            var data = new FormData(document.getElementById("formulario_adjuntos"));
-
-                            $.ajax({
-                                      type:'POST',
-                                      url: "{{ route('operaciones.updateatender',':id') }}".replace(':id',idunico),
-                                      data: data,
-                                      processData: false,
-                                      contentType: false,
-                                      success:function(data){
-                                        $('#confirmar_atender').prop("disabled",false);
-                                        $('#confirmar_atender').text('Confirmar');
-
-                                        RecuperarAdjuntos(idunico);
-                                      }
-                                  }).done(function (data) {
-                                      //$('#modal-delete-adjunto').modal('hide');
-                                      //$('#listado_adjuntos').html(data);
-                          });
-              });
-
-            $.ajax({
-                        type:'POST',
-                        url: "{{ route('operaciones.datossubidaadj',':id') }}".replace(':id',idunico),
-                        data:idunico,
-                        success:function(data){
-                            console.log(data);
-                            console.log(data.pedidos[0]['cant_compro']);
-
-                            $('#cant_compro').val(data.pedidos[0]['cant_compro']);
-                            $('#fecha_envio_doc').val(data.pedidos[0]['fecha_envio_doc']);
-
-                        }
-                    }).done(function (data) {});
-
-            $('#modal-editar-atencion').modal('show');
-
-            return false;
-        });
-      }
-
-      // Funcion para recuperar listado de adjuntos
-
-function RecuperarAdjuntos(idunico){
-
-$.ajax({
-              url: "{{ route('operaciones.editatencion',':id') }}".replace(':id',idunico),
-              data: idunico,
-              method: 'POST',
-              success: function(data) {
-              $('#listado_adjuntos').html(data);
-
-              $('.btn-delete-adjunto').on('click', function (event) {
-             event.preventDefault();
-              //console.log("aa");
-              //var button = $(event.relatedTarget)
-              var pedido_id = $(this).data('imgid')
-              var imgname = $(this).data('imgadjunto')
-
-              $('#modal-delete-adjunto').modal('show');
-              $("#eliminar_pedido_id").val(pedido_id);
-              $("#eliminar_pedido_id_imagen").val(imgname);
-              //campo oculto pedido id
-              //campo oculto imagname
-
-              $('#modal-delete-adjunto').on('shown.bs.modal', function (event) {
-
-                $('#confirmar_delete_adjunto').on('click', function(e){
-                  e.preventDefault();
-                  let eliminar_pedido_id=$("#eliminar_pedido_id").val();
-                  let eliminar_pedido_id_imagen=$("#eliminar_pedido_id_imagen").val()
-                  var formData = 'eliminar_pedido_id='+ eliminar_pedido_id +'&eliminar_pedido_id_imagen=' + eliminar_pedido_id_imagen;
-                  console.log(formData);
-
-                  $.ajax({
-                      type:'POST',
-                      url:"{{ route('operaciones.eliminaradjunto') }}",
-                      data:formData,
-                      success:function(data){
-                          //$('#listado_adjuntos').html(data);
-                          //console.log(data.html);
-                          $('.adjuntos[data-adjunto="'+ data.html +'"]').remove();
-                          $('#modal-delete-adjunto').modal('toggle');
-                      }
-                  }).done(function (data) {
-                      //$('#modal-delete-adjunto').modal('hide');
-                      //$('#listado_adjuntos').html(data);
-                  });
-
-              });
-
-            });
-
-
-
-          });
-              }
-          });
-}
-
-
-        $(document).on("submit", "#formdeleteadjunto", function (evento) {
-            evento.preventDefault();
-            //let eliminar_pedido_id=$("#eliminar_pedido_id").val()
-            //let eliminar_pedido_id_imagen=$("#eliminar_pedido_id_imagen").val()
-
-
-            var formData = $("#formdeleteadjunto").serialize();
-            console.log(formData);
-/*
-            $.ajax({
-                type:'POST',
-                url:"{{ route('operaciones.eliminaradjunto') }}",
-                data:formData,
-            }).done(function (data) {
-                console.log(data);
-            });*/
-        });
-
-
-
-
       $.ajaxSetup({
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
+      });
+
+      $('#modal-editar-atencion').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget)
+        var idunico = button.data('atencion')
+        $(".textcode").html("PED"+idunico);
+        $("#hiddenAtender").val(idunico);
+        //RecuperarAdjuntos(idunico);
+
+        //recupera info de atencion
+        $.ajax({
+            type:'POST',
+            url: "{{ route('operaciones.datossubidaadj',':id') }}".replace(':id',idunico),
+            data:idunico,
+            success:function(data){
+                console.log(data);
+                console.log(data.pedidos[0]['cant_compro']);
+
+                $('#cant_compro').val(data.pedidos[0]['cant_compro']);
+                $('#fecha_envio_doc').val(data.pedidos[0]['fecha_envio_doc']);
+
+            }
+        }).done(function (data) {});
+
+        //recupera imagenes adjuntas
+        $.ajax({
+            url: "{{ route('operaciones.editatencion',':id') }}".replace(':id',idunico),
+            data: idunico,
+            method: 'POST',
+            success: function(data) {
+              console.log(data)
+              console.log("obtuve las imagenes atencion del pedido "+idunico)
+            $('#listado_adjuntos').html(data);
+            }
+        });
+
       });
 
       $('#modal-envio').on('show.bs.modal', function (event) {
@@ -287,6 +183,140 @@ $.ajax({
         var idunico = button.data('envio')
         $(".textcode").html("PED"+idunico);
         $("#hiddenEnvio").val(idunico);
+      });
+
+      $('#modal-delete-adjunto').on('show.bs.modal', function (event) {
+        //cuando abre el form de anular pedido
+        var button = $(event.relatedTarget)
+        var img_pedidoid = button.data('imgid')
+        var imgadjunto = button.data('imgadjunto')
+        $(".textcode").html("PED"+img_pedidoid);
+        $("#eliminar_pedido_id").val(img_pedidoid);
+        $("#eliminar_pedido_id_imagen").val(imgadjunto);
+      });
+
+      $(document).on("submit", "#formulario_adjuntos_confirmar", function (evento) {
+        evento.preventDefault();
+        let idunicoconfirmar=$("#hiddenAtender").val();
+        let fecha_envio_doc_confirmar=$("#fecha_envio_doc").val();
+        let cant_compro_confirmar=$("#cant_compro").val();
+        $('#confirmar_atender').attr('disabled',true);
+        $('#confirmar_atender').text('Subiendo archivos...');
+        console.log("returnado")
+
+        var data=new FormData();
+        data.append('hiddenAtender',idunicoconfirmar);
+        data.append('fecha_envio_doc',fecha_envio_doc_confirmar);
+        data.append('cant_compro',cant_compro_confirmar);
+                      //var data = new FormData(document.getElementById("formulario_adjuntos"));
+
+                      $.ajax({
+                                type:'POST',
+                                url: "{{ route('operaciones.updateatenderid',':id') }}".replace(':id',idunicoconfirmar),
+                                data: data,
+                                processData: false,
+                                contentType: false,
+                                success:function(data){
+                                  $('#confirmar_atender').prop("disabled",false);
+                                  $('#confirmar_atender').text('Confirmar');
+                                  $('#modal-editar-atencion').modal('hide');
+                                  $('#tablaPrincipal').DataTable().ajax.reload();
+
+                                  //RecuperarAdjuntos(idunicoconfirmar);
+                                }
+                      }).done(function (data) {
+                                //$('#modal-delete-adjunto').modal('hide');
+                                //$('#listado_adjuntos').html(data);
+                      });        
+
+      });
+
+      
+      $(document).on("submit", "#formulario_adjuntos", function (evento) {
+        evento.preventDefault();
+        
+        let idunico=$("#hiddenAtender").val();
+        console.log(idunico);
+        $('#cargar_adjunto').attr("disabled",true);
+        //$(this).attr('disabled',true);
+        //$(this).text('Subiendo archivos...');
+        $('#cargar_adjunto').html('Subiendo archivos...');
+        //e.preventDefault();
+        var data = new FormData(document.getElementById("formulario_adjuntos"));
+
+        
+        $.ajax({
+                  type:'POST',
+                  url: "{{ route('operaciones.updateatender',':id') }}".replace(':id',idunico),
+                  data: data,
+                  processData: false,
+                  contentType: false,
+                  success:function(data){
+                    $('#cargar_adjunto').prop("disabled",false);
+                    $('#cargar_adjunto').text('Confirmar');
+
+                    ///RecuperarAdjuntos(idunico);
+                    $.ajax({
+                        url: "{{ route('operaciones.editatencion',':id') }}".replace(':id',idunico),
+                        data: idunico,
+                        method: 'POST',
+                        success: function(data) {
+                          console.log(data)
+                          console.log("obtuve las imagenes atencion del pedido "+idunico)
+                        $('#listado_adjuntos').html(data);
+                        }
+                    });
+
+                  }
+              }).done(function (data) {
+                
+              });
+
+              return false;
+
+      });
+
+      $(document).on("submit", "#formdeleteadjunto", function (evento) {
+        evento.preventDefault();
+        console.log("ejecutando eliminando adjunto")
+        //return false;
+        let pedidoidimagenes=$("#eliminar_pedido_id").val();
+        var fddeleteadjunto = new FormData();
+        fddeleteadjunto.append( 'eliminar_pedido_id', pedidoidimagenes );
+        fddeleteadjunto.append( 'eliminar_pedido_id_imagen', $("#eliminar_pedido_id_imagen").val() );
+        console.log(fddeleteadjunto);
+
+        //return false;
+        $.ajax({
+            url:"{{ route('operaciones.eliminaradjunto') }}",
+            type:'POST',
+            data:fddeleteadjunto,
+            processData:false,
+            contentType:false,
+            success:function(data){
+                //$('#listado_adjuntos').html(data);
+                //console.log(data.html);
+                console.log("rest ajax")
+                $('.adjuntos[data-adjunto="'+ data.html +'"]').remove();
+                $('#modal-delete-adjunto').modal('toggle');
+
+                $.ajax({
+                    url: "{{ route('operaciones.editatencion',':id') }}".replace(':id',pedidoidimagenes),
+                    data: pedidoidimagenes,
+                    method: 'POST',
+                    success: function(data) {
+                      console.log(data)
+                      console.log("obtuve las imagenes atencion del pedido "+pedidoidimagenes)
+                    $('#listado_adjuntos').html(data);
+                    }
+                });
+            }
+        }).done(function (data) {
+            //$('#modal-delete-adjunto').modal('hide');
+            //$('#listado_adjuntos').html(data);            
+        });
+
+
       });
 
       $('#modal-sinenvio').on('show.bs.modal', function (event) {
@@ -380,9 +410,9 @@ $.ajax({
         initComplete:function(settings,json){
 
         },
-        "drawCallback": function( settings ) {
+        /*"drawCallback": function( settings ) {
           AtenderAtencion();
-        },
+        },*/
         columns: [
           {
               data: 'id',
@@ -458,7 +488,8 @@ $.ajax({
 
 
               @can('operacion.editatender')
-                  data = data+'<a href="#" class="modal-atender-pedido btn btn-warning btn-sm" data-atencion="'+ row.id +'"><i class=""></i> Atender atención</a>';
+                  data = data+'<a href="" data-target="#modal-editar-atencion" data-atencion='+row.id+' data-toggle="modal" ><button class="btn btn-warning btn-sm">Atender atención</button></a>';
+                  
               @endcan
 
               var urlpdf = '{{ route("pedidosPDF", ":id") }}';

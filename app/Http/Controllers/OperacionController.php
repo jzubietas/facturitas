@@ -719,7 +719,7 @@ class OperacionController extends Controller
         $id = $request->eliminar_pedido_id;
         $imagen = $request->eliminar_pedido_id_imagen;
         $imagenatencion = ImagenAtencion::where("pedido_id",$id)
-            ->where("adjunto",$imagen)->first();
+            ->where("id",$imagen)->first();
 
         if($imagenatencion != NULL){
             $imagenatencion->update([
@@ -858,6 +858,42 @@ class OperacionController extends Controller
         }
 
         return redirect()->route('operaciones.atendidos')->with('info','actualizado');
+    }
+
+    public function updateAtenderId(Request $request)
+    {
+        $pedido = Pedido::where('id',$request->hiddenAtender)->first();
+        $detalle_pedidos = DetallePedido::where('pedido_id',$request->hiddenAtender)->first();
+        $fecha = Carbon::now();
+        $cont = 0;
+
+        //ACTUALIZAR MODIFICACION AL PEDIDO
+        $pedido->update([
+            'modificador' => 'USER'.Auth::user()->id
+        ]);
+
+        //dd($files);
+        //quien es el operario relacionado al pedido (el asesor)
+        $asesor_de_pedido=$pedido->user_id;
+        $operario=User::where('id',$asesor_de_pedido)->first()->operario;
+        //calcular el operario relacionado a este pedido
+
+        $info_operario=User::where('id',$operario)->first();
+        
+        {
+            $detalle_pedidos->update([
+                'envio_doc' => '1',
+                'fecha_envio_doc' => $fecha,
+                'cant_compro' => $request->cant_compro,
+                'atendido_por' => $info_operario->name,//Auth::user()->name,
+                'atendido_por_id' => $info_operario->id,//Auth::user()->id,
+            ]);
+            //atendido por - atendido por id , no debe ser el quien registra, sino la operaria vinculada segun el pedido (osea al asesor)
+        }
+
+        return response()->json(['html' => $request->hiddenAtender]);
+
+        //return redirect()->route('operaciones.atendidos')->with('info','actualizado');
     }
 
     public function showAtender(Pedido $pedido)
