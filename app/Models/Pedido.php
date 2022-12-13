@@ -24,6 +24,11 @@ class Pedido extends Model
     const EN_REPARTO = 'EN REPARTO';//1
     const ENTREGADO = 'ENTREGADO';
 
+    const PENDIENTE_DE_ENVIO_CODE=1;
+    const EN_REPARTO_CODE=2;
+    const ENTREGADO_CODE=3;
+
+
     protected $guarded = ['id'];
 
     /* public function user()
