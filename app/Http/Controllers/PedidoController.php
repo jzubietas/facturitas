@@ -17,6 +17,7 @@ use App\Models\GastoEnvio;
 use App\Models\GastoPedido;
 use App\Models\ImagenAtencion;
 use App\Models\ImagenPedido;
+use App\Models\PagoPedido;
 use App\Models\User;
 use App\Models\Pedido;
 use App\Models\Porcentaje;
@@ -519,8 +520,7 @@ class PedidoController extends Controller
         $dateY = Carbon::now()->format('Y');
 
         $mirol=Auth::user()->rol;
-        $users = null;
-        $users = User::where('estado', '1')->where("rol","Asesor");
+       $users = User::where('estado', '1')->where("rol","Asesor");
 
         if($mirol=='Llamadas')
         {
@@ -529,10 +529,7 @@ class PedidoController extends Controller
             $users = $users->where('llamada',Auth::user()->id);
         }else if($mirol=='Asesor'){
             $users = $users->where('id',Auth::user()->id);
-        }else{
-            $users = $users;
         }
-
         //$users=$users->get(['identificador','id'])  ;//->pluck('identificador', 'id');
         $users=$users->pluck('identificador', 'id');
 
@@ -1406,10 +1403,12 @@ return ' no imagen ';
             ->where('pedidos.id', $pedido->id)
             ->first();
 
+        $adelanto=PagoPedido::query()->where('pedido_id', $pedido->id)->whereEstado(1)->sum('abono');
+
         $imagenes = ImagenPedido::where('imagen_pedidos.pedido_id', $pedido->id)->where('estado', '1')->get();
         $imagenesatencion = ImagenAtencion::where('imagen_atencions.pedido_id', $pedido->id)->where('estado', '1')->get();
 
-        return view('pedidos.show', compact('pedidos', 'imagenes', 'imagenesatencion','cotizacion'));
+        return view('pedidos.show', compact('pedidos', 'imagenes', 'imagenesatencion','cotizacion','adelanto'));
     }
 
     /**
