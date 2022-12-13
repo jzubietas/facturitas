@@ -1728,21 +1728,22 @@ return ' no imagen ';
         $pedidos = null;
 
         $pedidos = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')
-            ->join('users as u', 'pedidos.user_id', 'u.id')
-            ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
-            ->select(
-                'pedidos.id',
-                'c.nombre as nombres',
-                'c.icelular as icelulares',
-                'c.celular as celulares',
-                'u.identificador as users',
-                'dp.codigo as codigos',
-                'dp.nombre_empresa as empresas',
-                'dp.total as total',
-                'dp.cantidad as cantidad',
-                'pedidos.condicion_envio as condicion_env',
-                'pedidos.condicion_envio',
-                'pedidos.condicion as condiciones',
+                ->join('users as u', 'pedidos.user_id', 'u.id')
+                ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
+                ->select(
+                    'pedidos.id',
+                    'c.nombre as nombres',
+                    'c.icelular as icelulares',
+                    'c.celular as celulares',
+                    'u.identificador as users',
+                    'dp.codigo as codigos',
+                    'dp.nombre_empresa as empresas',
+                    'dp.total as total',
+                    'dp.cantidad as cantidad',
+                    'dp.ruc',
+                    'pedidos.condicion_envio as condicion_env',
+                    'pedidos.condicion_envio',
+                    'pedidos.condicion as condiciones',
 
                     /*'pedidos.envio',*/
                     'pedidos.direccion',
