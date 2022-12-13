@@ -367,6 +367,7 @@ class EnvioController extends Controller
                 'direccion_grupos.subcondicion_envio',
                 'direccion_grupos.foto1',
                 'direccion_grupos.foto2',
+                'direccion_grupos.correlativo'
             );
 
         $pedidos_provincia = DireccionGrupo::join('gasto_envios as de','direccion_grupos.id','de.direcciongrupo')
@@ -397,6 +398,7 @@ class EnvioController extends Controller
                 'direccion_grupos.subcondicion_envio',
                 'direccion_grupos.foto1',
                 'direccion_grupos.foto2',
+                'direccion_grupos.correlativo'
             );
 
         $pedidos = $pedidos_lima->union($pedidos_provincia);
