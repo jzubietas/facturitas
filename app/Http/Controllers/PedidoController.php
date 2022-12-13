@@ -17,6 +17,7 @@ use App\Models\GastoEnvio;
 use App\Models\GastoPedido;
 use App\Models\ImagenAtencion;
 use App\Models\ImagenPedido;
+use App\Models\Pago;
 use App\Models\PagoPedido;
 use App\Models\User;
 use App\Models\Pedido;
@@ -1828,7 +1829,7 @@ return ' no imagen ';
             ->where('pedidos.estado', '1')
             ->where('dp.estado', '1')
             ->where('u.id', Auth::user()->id)
-            ->where('pa.condicion', 'PAGO')
+            ->where('pa.condicion', Pago::PAGO)
             ->groupBy(
                 'pedidos.id',
                 'c.nombre',
@@ -1883,7 +1884,7 @@ return ' no imagen ';
             ->where('pedidos.estado', '1')
             ->where('dp.estado', '1')
             ->where('u.id', Auth::user()->id)
-            ->where('pa.condicion', 'PAGO')
+            ->where('pa.condicion', Pago::PAGO)
             ->groupBy(
                 'pedidos.id',
                 'c.nombre',

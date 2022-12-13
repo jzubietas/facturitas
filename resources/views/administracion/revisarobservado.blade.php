@@ -51,7 +51,6 @@
         </div>
       </div>
     </div>
-
     <div class="card-body">
       <div class="border rounded card-body border-secondary">
         <div class="form-row">
@@ -83,23 +82,25 @@
                       <td>{{ $contPe + 1 }}</td>
                       <td>PED000{{ $pagoPedido->pedidos }}<input type="hidden" name="pedido_id[]" id="pedido_id" value="{{ $pagoPedido->pedidos }}"></td>
                       <td>{{ $pagoPedido->codigo }}</td>
+                      <
 
-                      @if($pagos->isAbonado())
+                      @if($pagos->condicion==\App\Models\Pago::ABONADO)
                           @if($pagoPedido->pagado == 1)
                           <td>ADELANTO ABONADO</td>
                           @else
                           <td>PAGADO ABONADO</td>
                           @endif
-                      @elseif($pagos->isObservado())
+                      @elseif($pagos->condicion==\App\Models\Pago::OBSERVADO)
                           @if($pagoPedido->pagado == 1)
                           <td>ADELANTO OBSERVADO</td>
                           @else
                           <td>PAGADO OBSERVADO</td>
                           @endif
-                      @elseif($pagos->isPendiente())
+                      @elseif($pagos->condicion==\App\Models\Pago::PENDIENTE)
 
                           <td>PENDIENTE</td>
-                      @elseif($pagos->isPago())
+
+                      @elseif($pagos->condicion==\App\Models\Pago::PAGO)
                           @if($pagoPedido->pagado == 1)
                           <td>ADELANTO PAGO</td>
                           @else
@@ -274,13 +275,11 @@
       <div class="row">
         <div class="col-2 text-left">
 
-        <button type = "button" onClick="history.back()" class="btn btn-danger btn-lg"><i class="fas fa-arrow-left"></i>ATRAS</button>
 
+        <button type = "button" onClick="history.back()" class="btn btn-danger btn-lg"><i class="fas fa-arrow-left"></i>ATRAS</button>
         </div>
         <div class="col-10">
           <button type="button" id="aprobarrbtn" class="btn btn-success btn-lg"><i class="fas fa-save"></i> APROBAR</button>
-          <button type="button" id="observarbtn" class="btn btn-danger btn-lg"><i class="fas fa-save"></i> OBSERVADO</button>
-          <button type="button" id="pendientebtn" class="btn btn-warning btn-lg"><i class="fas fa-save"></i> PENDIENTE</button>
         </div>
       </div>
 

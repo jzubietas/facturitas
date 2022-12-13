@@ -9,6 +9,7 @@ class Pago extends Model
 {
     use HasFactory;
 
+    const ANULADO = 'ANULADO';
     const PAGO = 'PAGO';
     const ABONADO = 'ABONADO';
     const ADELANTO = 'ADELANTO';
@@ -20,6 +21,7 @@ class Pago extends Model
     const SUBCONDICION_COURIER_PERDONADO = "COURIER PERDONADO";
     const SUBCONDICION_DEUDA_PERDONADA = "DEUDA PERDONADA";
 
+    const ANULADO_CODE = 0;
     const PAGO_CODE = 1;
     const ABONADO_CODE = 2;
     const ADELANTO_CODE = 4;
@@ -28,6 +30,7 @@ class Pago extends Model
     const ABONADO_PARCIAL_CODE = 3;
 
     public static $migrateCondiciones = [
+        'ANULADO' => 0,
         'PAGO' => 1,
         'ABONADO' => 2,
         'ABONADO_PARCIAL' => 3,
@@ -43,11 +46,20 @@ class Pago extends Model
 
     protected $guarded = ['id'];
 
+    public function scopeCondicion($query,$value){
+        $query->where('condicion','=',$value);
+    }
 
     public function setCondicionAttribute($value)
     {
         $this->attributes['condicion'] = $value;
         $this->setAttribute('condicion_code', self::$migrateCondiciones[$value] ?? $value);
+    }
+
+    public function setSubcondicionAttribute($value)
+    {
+        $this->attributes['subcondicion'] = $value;
+        $this->setAttribute('subcondicion_code', self::$migrateSubCondiciones[$value] ?? $value);
     }
 
     public function pedidos()

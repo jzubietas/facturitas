@@ -5,13 +5,13 @@
 @section('content_header')
   <h1>DETALLE DEL <b>PAGO</b>: PAG000{{ $pagos->id }}</h1>
      {{-- <a href="" data-target="#modal-historial-{{ $pago->id }}" data-toggle="modal"><button class="btn btn-info btn-sm">Historial</button></a> --}}
-  {{-- @include('contratos.modals.modalHistorial') --}}  
+  {{-- @include('contratos.modals.modalHistorial') --}}
 @stop
 
 @section('content')
 
   <div class="card">
-      
+
     {{--!! Form::model($pago, ['route' => ['administracion.updaterevisar', $pago],'enctype'=>'multipart/form-data', 'id'=>'formulario','files'=>true]) !!--}}
 
     <form id="formulario">
@@ -79,7 +79,7 @@
                         <td>ADELANTO</td>
                         @else
                         <td>PAGADO {{$pagoPedido->pagado}}</td>
-                        @endif                
+                        @endif
                       <td>{{ $pagoPedido->condicion }}</td>
                       <td>{{ $pagoPedido->total }}</td>
                       <td>{{ $pagoPedido->abono }}</td>
@@ -103,7 +103,7 @@
                 </tfoot>
               </table>
             </div>
-          </div>          
+          </div>
         </div>
       </div>
     </div>
@@ -111,19 +111,19 @@
       <div class="border rounded card-body border-secondary">
         <div class="form-row">
           <div class="form-group col-lg-12">
-            <h3 style="text-align: center"><strong>PAGOS REALIZADOS POR EL CLIENTE</strong> @if($pagos->saldo>0) SALDO A FAVOR DEL CLIENTE: {{ $pagos->saldo }}@endif</h3> 
+            <h3 style="text-align: center"><strong>PAGOS REALIZADOS POR EL CLIENTE</strong> @if($pagos->saldo>0) SALDO A FAVOR DEL CLIENTE: {{ $pagos->saldo }}@endif</h3>
             <div class="table-responsive">
               <table class="table table-striped">
                 <thead>
                   <tr>
                     <th scope="col">ITEM</th>
                     <th scope="col">PAGO</th>
-                    <th scope="col">BANCO</th>                
+                    <th scope="col">BANCO</th>
                     <th scope="col">MONTO</th>
                     <th scope="col">FECHA</th>
                     <th scope="col">CUENTA DESTINO</th>
                     <th scope="col">TITULAR</th>
-                    <th scope="col">FECHA DEPOSITO</th>                    
+                    <th scope="col">FECHA DEPOSITO</th>
                     <th scope="col">IMAGEN</th>
                   </tr>
                 </thead>
@@ -136,12 +136,12 @@
                     <tr>
                       <td>{{ $contPa + 1 }}</td>
                       <td>DETPAG00{{ $detallePago->id }}<input type="hidden" name="detalle_id[]" value="{{ $detallePago->id }}" class="form-control"></td>
-                      <td>{{ $detallePago->banco }}</td>                  
+                      <td>{{ $detallePago->banco }}</td>
                       <td>{{ $detallePago->monto }}</td>
                       <td>{{ $detallePago->fecha }}</td>
                       <td>
-                        {!! Form::select('cuenta[]', $cuentas, $detallePago->cuenta, ['class' => 'form-control selectpicker border border-secondary', 'id'=>'cuenta','data-live-search' => 'true', 'placeholder' => '---- SELECCIONE ----']) !!}  
-                      </td>                  
+                        {!! Form::select('cuenta[]', $cuentas, $detallePago->cuenta, ['class' => 'form-control selectpicker border border-secondary', 'id'=>'cuenta','data-live-search' => 'true', 'placeholder' => '---- SELECCIONE ----']) !!}
+                      </td>
                       <td>
                         {!! Form::select('titular[]', $titulares, $detallePago->titular, ['class' => 'form-control selectpicker border border-secondary', 'id'=>'titular','data-live-search' => 'true', 'placeholder' => '---- SELECCIONE ----']) !!}
                       </td>
@@ -152,7 +152,7 @@
                       <td>
                         <a href="" data-target="#modal-imagen-{{ $detallePago->id }}" data-toggle="modal">
                           <img src="{{ asset('storage/pagos/' . $detallePago->imagen) }}" alt="{{ $detallePago->imagen }}" height="200px" width="200px" class="img-thumbnail">
-                        </a>  
+                        </a>
                         <p><br><a href="{{ route('pagos.descargarimagen', $detallePago->imagen) }}"><button type="button" class="btn btn-secondary"> Descargar</button></a></p>
                       </td>
                     </tr>
@@ -175,7 +175,7 @@
                     <th></th>
                     <th></th>
                     <th><h4><?php echo number_format($sumPa, 2, '.', ' ')?></h4></th>
-                    <th></th> 
+                    <th></th>
                     <th></th>
                     <th></th>
                     <th style="text-align: center">ESTADO:</th>
@@ -187,13 +187,13 @@
                         @endforeach
                       </select>
                     </th>
-                  </tr>                  
+                  </tr>
                 </tfoot>
               </table>
             </div>
           </div>
         </div>
-      </div>  
+      </div>
     </div>
     <div class="card-footer" id=guardar>
       <button type="submit" class="btn btn-success btn-sm"><i class="fas fa-save"></i> Guardar</button>
@@ -210,7 +210,7 @@
   <script>
     //VALIDAR ANTES DE ENVIAR
     /*document.addEventListener("DOMContentLoaded", function() {
-    document.getElementById("formulario").addEventListener('submit', validarFormulario); 
+    document.getElementById("formulario").addEventListener('submit', validarFormulario);
     });*/
     $(document).ready(function () {
 
@@ -243,7 +243,7 @@
             console.info(tit);
             console.info(fec);
 
-            if (condicion == "ABONADO") {
+            if (condicion == "{{\App\Models\Pago::ABONADO}}") {
                 if (cuent.includes('') == true) {
                     Swal.fire(
                     'Error',
@@ -267,17 +267,17 @@
                 }
                 else {
                     clickformulario();
-                }  
+                }
             }
             else {
                 clickformulario();
-            }     
+            }
 
             /*var oForm = $(this);
             var formId = oForm.attr("id");
             var firstValue = oForm.find("input").first().val();
             alert("Form '" + formId + " is being submitted, value of first input is: " + firstValue);
-            // Do stuff 
+            // Do stuff
             return false;*/
         });
 
@@ -297,7 +297,7 @@
 
                 //$("#modal-convertir").modal("hide");
             //resetearcamposconvertir();
-            
+
                 //$('#tablaserverside').DataTable().ajax.reload();
             //console.log("resultados");
             //console.log(data);
@@ -307,13 +307,13 @@
 
     });
 
-    
 
-    
-    
+
+
+
 
     /*function validarFormulario(evento) {
-      evento.preventDefault();      
+      evento.preventDefault();
       cuenta = document.getElementsByName("cuenta[]");
       titular = document.getElementsByName("titular[]");
       fecha_deposito = document.getElementsByName("fecha_deposito[]");
@@ -357,11 +357,11 @@
           }
           else {
             this.submit();
-          }  
-      }  
+          }
+      }
       else {
             this.submit();
-          }   
+          }
     }*/
   </script>
 @stop

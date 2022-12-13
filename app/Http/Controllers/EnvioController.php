@@ -1096,12 +1096,18 @@ class EnvioController extends Controller
         $pedido=Pedido::where("id",$request->hiddenRecibir)->first();
         $pedido->update([
             
-            'envio' => '1',
-            //'envio' => '2',
+            //'envio' => '1',
+            'envio' => '2',
             'estado_sobre' => '1',
-            
+            'condicion_envio'=>Pedido::EN_REPARTO,
+            'condicion_envio_code'=>Pedido::EN_REPARTO_CODE,
             'modificador' => 'USER'.Auth::user()->id
         ]);
+
+        // actualizando en direccion_grupos
+
+
+
 
         return response()->json(['html' => $request->hiddenRecibir]);
 

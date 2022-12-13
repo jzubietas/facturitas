@@ -39,7 +39,6 @@
 @stop
 
 @section('content')
-
   <div class="card">
     <div class="card-body">
       <table cellspacing="5" cellpadding="5" class="table-responsive">
@@ -147,7 +146,7 @@
         rowCallback: function (row, data, index) {
         },
         initComplete:function(settings,json){
-         
+
         },
         columns: [
         {

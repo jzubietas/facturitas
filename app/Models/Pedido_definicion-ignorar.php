@@ -15,15 +15,6 @@ class Pedido extends Model
     const ATENDIDO = 'ATENDIDO';//3
     const ANULADO = 'ANULADO';//4
 
-    // Condiciones pedido numerico
-
-
-    const POR_ATENDER_INT = 1;
-    const EN_PROCESO_ATENCION_INT = 2;
-    const ATENDIDO_INT = 3;
-    const ANULADO_INT = 4;
-
-
     //envio
     const ENVIO_CONFIRMAR_RECEPCION = '1';//ENVIADO CONFIRMAR RECEPCION
     const ENVIO_RECIBIDO = '2';//ENVIADO RECIBIDO
@@ -39,7 +30,7 @@ class Pedido extends Model
     const ENTREGADO_CODE=3;
 
 
-    /* relacion de conciones de envio y enteros */
+    /* condicion de pedidos relacion */
 
     public static $estadosCondicion = [
         'ANULADO' => 0,
@@ -47,6 +38,9 @@ class Pedido extends Model
         'EN PROCESO ATENCIÓN' => 2,
         'ATENDIDO' => 3,
     ];
+
+
+    /* condicion de envios relacion */
 
     public static $estadosCondicionEnvio = [
         'ANULADO' => 0,
