@@ -559,6 +559,8 @@ class EnvioController extends Controller
                                         'direccion_grupos.destino as destino2',
                                         'direccion_grupos.distribucion',
                                         'direccion_grupos.condicion_sobre',
+                                        'direccion_grupos.correlativo',
+                                        
                                     );
                                     $pedidos_lima->where( 'direccion_grupos.codigos','like','%'.$request->general.'%')
             //$pedidos_lima->where( DB::raw(" (select group_concat(dp.codigo_pedido) from direccion_pedidos dp where dp.direcciongrupo=direccion_grupos.id and dp.estado = 1 ) "),'like','%'.$request->general.'%')
@@ -597,6 +599,7 @@ class EnvioController extends Controller
                                         'direccion_grupos.destino as destino2',
                                         'direccion_grupos.distribucion',
                                         'direccion_grupos.condicion_sobre',
+                                        'direccion_grupos.correlativo'
                                     );
                                     $pedidos_provincia->where( 'direccion_grupos.codigos','like','%'.$request->general.'%')
             //$pedidos_provincia->where(DB::raw(" (select group_concat(dp.codigo_pedido) from gasto_pedidos dp where dp.direcciongrupo=direccion_grupos.id and dp.estado = 1) "),'like','%'.$request->general.'%')
@@ -642,6 +645,7 @@ class EnvioController extends Controller
                                         'direccion_grupos.destino as destino2',
                                         'direccion_grupos.distribucion',
                                         'direccion_grupos.condicion_sobre',
+                                        'direccion_grupos.correlativo',
                                         DB::raw('DATE(direccion_grupos.created_at) fecha2')
                                     );
 
@@ -671,6 +675,7 @@ class EnvioController extends Controller
                                         'direccion_grupos.destino as destino2',
                                         'direccion_grupos.distribucion',
                                         'direccion_grupos.condicion_sobre',
+                                        'direccion_grupos.correlativo',
                                         DB::raw('DATE(direccion_grupos.created_at) fecha2')
                                     );
                                   //  $pedidos_provincia->whereNot
@@ -772,6 +777,7 @@ class EnvioController extends Controller
                     'pedidos.envio',
                     'pedidos.destino',
                     'pedidos.direccion',
+                    'pedidos.estado_sobre',
                     'dp.envio_doc',
                     'dp.fecha_envio_doc',
                     'dp.cant_compro',

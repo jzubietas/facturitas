@@ -15,7 +15,9 @@
 
         <input id="direcciongrupo" name="direcciongrupo" value="" type="hidden">
         
-          <h5 class="modal-title" id="exampleModalLabel">Observacion: </h5><input style = "width:300px" id="observaciongrupo" name="observaciongrupo" value="" type="text"> 
+          <h5 class="modal-title" id="exampleModalLabel">Observacion: </h5> <input type="text" class="form-control"  id="observaciongrupo" name="observaciongrupo" maxLength="256">
+          
+          <!-- <input style = "width:300px" id="observaciongrupo" name="observaciongrupo" value="" type="text"> -->
        
         <div class="row">
           <div class="col-12  contenedor-tabla"><!--tabla-->

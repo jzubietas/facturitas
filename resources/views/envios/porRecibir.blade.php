@@ -323,10 +323,16 @@
             data: 'envio',
             name: 'envio',
             render: function ( data, type, row, meta ) {
-              if(row.envio=='1')
+              if(row.envio=='1' && row.estado_sobre=='0')
               {
                 return '<span class="badge badge-danger">Por confirmar recepcion</span>';
-              }else{
+              }
+              else if (row.envio=='1' && row.estado_sobre=='1'){
+                return '<span class="badge badge-info">Sobre por Enviar</span>';
+              }
+
+
+              else{
                 return '<span class="badge badge-info">Recibido</span>';
               }
             },
