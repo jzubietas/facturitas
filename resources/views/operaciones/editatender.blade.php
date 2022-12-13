@@ -114,11 +114,11 @@
                   @if ($img->pedido_id == $pedido->id)
                     <p>
                       <a href="{{ route('pedidos.descargaradjunto', $img->adjunto) }}">{{ $img->adjunto }}</a>
-                      <a href="#" data-target="#modal-delete-adjunto" data-toggle="modal" data-imgid="{{ $img->pedido_id }}" data-imgadjunto="{{ $img->adjunto }}">
+                      <!--<a href="#" data-target="#modal-delete-adjunto" data-toggle="modal" data-imgid="{{ $img->pedido_id }}" data-imgadjunto="{{ $img->adjunto }}">
                         <button class="btn btn-danger btn-sm" data-imgid="{{ $img->pedido_id }}" data-imgadjunto="{{ $img->adjunto }}">
                           <i class="fas fa-trash-alt"></i>
                         </button>
-                      </a>
+                      </a>-->
                       <!--<a href="" data-target="#modal-delete-adjunto-{{ $img->id }}" data-toggle="modal">
                         <button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i></button></a>-->
                     </p>

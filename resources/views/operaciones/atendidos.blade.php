@@ -146,6 +146,29 @@
 
             $('#formulario_adjuntos').attr('action',"{{ route('operaciones.updateatender',':id') }}".replace(':id',idunico));
 
+            $('#atender').on('click', function(e){
+              e.preventDefault();
+
+              datos_formulario = $('#formulario_adjuntos').serialize();
+
+              $.ajax({
+                        type:'POST',
+                        url: "{{ route('operaciones.datossubidaadj',':id') }}".replace(':id',idunico),
+                        data: datos_formulario,
+                        success:function(data){
+                            console.log(data);
+                            console.log(data.pedidos[0]['cant_compro']);
+                            $('#cant_compro').val(data.pedidos[0]['cant_compro']);
+                            $('#fecha_envio_doc').val(data.pedidos[0]['fecha_envio_doc']);
+                        }
+                    }).done(function (data) {
+                        //$('#modal-delete-adjunto').modal('hide');
+                        //$('#listado_adjuntos').html(data);
+            });
+
+
+            });
+
             $.ajax({
                         type:'POST',
                         url: "{{ route('operaciones.datossubidaadj',':id') }}".replace(':id',idunico),
@@ -160,7 +183,6 @@
                         //$('#modal-delete-adjunto').modal('hide');
                         //$('#listado_adjuntos').html(data);
             });
-
 
             $.ajax({
                 url: "{{ route('operaciones.editatencion',':id') }}".replace(':id',idunico),
@@ -425,12 +447,12 @@
               urledit = urledit.replace(':id', row.id);
 
               @can('operacion.editatender')
-                data = data+'<a href="'+urledit+'" class="btn btn-warning btn-sm"><i class=""></i> Editar atención</a>';
+                data = data+'<a href="'+urledit+'" class="btn btn-warning btn-sm"><i class=""></i> Agregar Adj.</a>';
               @endcan
 
 
               @can('operacion.editatender')
-                  data = data+'<a href="#" class="modal-atender-pedido btn btn-warning btn-sm" data-atencion="'+ row.id +'" class="btn btn-warning btn-sm"><i class=""></i> Editar atención 2</a>';
+                  data = data+'<a href="#" class="modal-atender-pedido btn btn-danger btn-sm" data-atencion="'+ row.id +'"><i class=""></i> Eliminar Adj.</a>';
               @endcan
 
               var urlpdf = '{{ route("pedidosPDF", ":id") }}';
