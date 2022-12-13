@@ -10,6 +10,7 @@ use Maatwebsite\Excel\Concerns\WithColumnFormatting;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 use Maatwebsite\Excel\Concerns\WithColumnWidths;
 use PhpOffice\PhpSpreadsheet\Cell\DataType;
+use Illuminate\Http\Request;
 
 class PageclienteSituacion extends Export implements WithColumnFormatting,WithColumnWidths
 {
@@ -17,6 +18,7 @@ class PageclienteSituacion extends Export implements WithColumnFormatting,WithCo
     {
         $cliente_list = [];
 
+        //now()->startOfMonth()->format("Y-m-d h:i:s")
 
         $_2021_11=ListadoResultado::join('clientes as c','c.id','listado_resultados.id')
             ->select(

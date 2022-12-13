@@ -9,9 +9,19 @@ use App\Models\Pedido;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Concerns\WithColumnFormatting;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
+use Maatwebsite\Excel\Concerns\WithColumnWidths;
+use PhpOffice\PhpSpreadsheet\Cell\DataType;
+use Illuminate\Http\Request;
 
 class PageclienteInfo extends Export implements WithColumnFormatting
 {
+    private $anio;
+
+    /*public function __construct($anio)
+    {
+        $this->anio=$anio;
+    }*/
+
     public function collection()
     {
         return Cliente::with('user')
@@ -22,6 +32,7 @@ class PageclienteInfo extends Export implements WithColumnFormatting
                 ,'clientes.nombre'
                 ,'clientes.dni'
                 ,'clientes.icelular'
+                //'p.codigo as codigo',
                 ,'clientes.celular'
                 ,'u.name as nombre_asesor'
                 ,'clientes.provincia'
@@ -30,14 +41,18 @@ class PageclienteInfo extends Export implements WithColumnFormatting
                 ,'clientes.referencia'
                 ,'clientes.estado' 
                 ,'clientes.deuda'
-                ,'clientes.pidio'    
-                ,'clientes.created_at as fecha'               
-                //,DB::raw(" (select ' '  ) as fecha ")
-                ,DB::raw(" (select ' '  ) as dia ")
-                ,DB::raw(" (select ' '  ) as mes ")
-                ,DB::raw(" (select ' '  ) as anio ")
+                ,'clientes.pidio'
+                ,'clientes.situacion as estadopedido'
+
+                ,DB::raw("(select DATE_FORMAT(dp1.created_at,'%d-%m-%Y %h:%i:%s') from pedidos dp1 where dp1.cliente_id=clientes.id order by dp1.created_at desc limit 1) as fecha")
+                ,DB::raw("(select DATE_FORMAT(dp2.created_at,'%d') from pedidos dp2 where dp2.cliente_id=clientes.id order by dp2.created_at desc limit 1) as dia")
+                ,DB::raw("(select DATE_FORMAT(dp2.created_at,'%m') from pedidos dp2 where dp2.cliente_id=clientes.id order by dp2.created_at desc limit 1) as mes")
+                ,DB::raw("(select DATE_FORMAT(dp3.created_at,'%Y') from pedidos dp3 where dp3.cliente_id=clientes.id order by dp3.created_at desc limit 1) as anio")
+                ,DB::raw(" (select (dp.codigo) from pedidos dp where dp.cliente_id=clientes.id order by dp.created_at desc limit 1) as codigo ")
             )
         ->where('clientes.id',1)
+        ->where('clientes.estado', '1')
+        ->where('clientes.tipo', '1')
         ->get();
     }
 
@@ -56,18 +71,18 @@ class PageclienteInfo extends Export implements WithColumnFormatting
         //$model->fehca_formato=$model->created_at->format('');
         $model->porcentajefsb= Porcentaje::select('porcentaje')
             ->where('cliente_id',$model->id)
-            ->where('nombre','FISICO - sin banca')->first();
+            ->where('nombre','FISICO - sin banca')->first()->porcentaje;
         $model->porcentajefb= Porcentaje::select('porcentaje')
             ->where('cliente_id',$model->id)
-            ->where('nombre','FISICO - banca')->first();
+            ->where('nombre','FISICO - banca')->first()->porcentaje;
         $model->porcentajeesb= Porcentaje::select('porcentaje')
             ->where('cliente_id',$model->id)
-            ->where('nombre','ELECTRONICA - sin banca')->first();
+            ->where('nombre','ELECTRONICA - sin banca')->first()->porcentaje;
         $model->porcentajeeb= Porcentaje::select('porcentaje')
             ->where('cliente_id',$model->id)
-            ->where('nombre','ELECTRONICA - banca')->first();
+            ->where('nombre','ELECTRONICA - banca')->first()->porcentaje;
 
-        $model->eneroa = Pedido::where('estado', '1')/*->whereYear(DB::raw('Date(created_at)'), $request->anio)*/->where('cliente_id', $model->id)
+        $model->eneroa = Pedido::where('estado', '1')->whereYear(DB::raw('Date(created_at)'), $this->anio)->where('cliente_id', $model->id)
             ->where(DB::raw('MONTH(created_at)'), '1')->count();
         $model->eneroa=($model->eneroa<0)? 0:$model->eneroa;
         $model->enerop = Pedido::where('estado', '1')/*->whereYear(DB::raw('Date(created_at)'), $request->anio+1)*/->where('cliente_id', $model->id)
@@ -78,6 +93,66 @@ class PageclienteInfo extends Export implements WithColumnFormatting
         $model->febrerop = Pedido::where('estado', '1')/*->whereYear(DB::raw('Date(created_at)'), $request->anio+1)*/->where('cliente_id', $model->id)
             ->where(DB::raw('MONTH(created_at)'), '2')->count();
 
+        $model->marzoa = Pedido::where('estado', '1')/*->whereYear(DB::raw('Date(created_at)'), $request->anio)*/->where('cliente_id', $model->id)
+            ->where(DB::raw('MONTH(created_at)'), '3')->count();
+        $model->marzop = Pedido::where('estado', '1')/*->whereYear(DB::raw('Date(created_at)'), $request->anio+1)*/->where('cliente_id', $model->id)
+            ->where(DB::raw('MONTH(created_at)'), '3')->count();
+
+        $model->abrila = Pedido::where('estado', '1')/*->whereYear(DB::raw('Date(created_at)'), $request->anio)*/->where('cliente_id', $model->id)
+            ->where(DB::raw('MONTH(created_at)'), '4')->count();
+        $model->abrilp = Pedido::where('estado', '1')/*->whereYear(DB::raw('Date(created_at)'), $request->anio+1)*/->where('cliente_id', $model->id)
+            ->where(DB::raw('MONTH(created_at)'), '4')->count();
+
+        $model->mayoa = Pedido::where('estado', '1')/*->whereYear(DB::raw('Date(created_at)'), $request->anio)*/->where('cliente_id', $model->id)
+            ->where(DB::raw('MONTH(created_at)'), '5')->count();
+        $model->mayop = Pedido::where('estado', '1')/*->whereYear(DB::raw('Date(created_at)'), $request->anio+1)*/->where('cliente_id', $model->id)
+            ->where(DB::raw('MONTH(created_at)'), '5')->count();
+
+        $model->junioa = Pedido::where('estado', '1')/*->whereYear(DB::raw('Date(created_at)'), $request->anio)*/->where('cliente_id', $model->id)
+            ->where(DB::raw('MONTH(created_at)'), '6')->count();
+        $model->juniop = Pedido::where('estado', '1')/*->whereYear(DB::raw('Date(created_at)'), $request->anio+1)*/->where('cliente_id', $model->id)
+            ->where(DB::raw('MONTH(created_at)'), '6')->count();
+        
+        $model->julioa = Pedido::where('estado', '1')/*->whereYear(DB::raw('Date(created_at)'), $request->anio)*/->where('cliente_id', $model->id)
+            ->where(DB::raw('MONTH(created_at)'), '7')->count();
+        $model->juliop = Pedido::where('estado', '1')/*->whereYear(DB::raw('Date(created_at)'), $request->anio+1)*/->where('cliente_id', $model->id)
+            ->where(DB::raw('MONTH(created_at)'), '7')->count();
+
+        $model->agostoa = Pedido::where('estado', '1')/*->whereYear(DB::raw('Date(created_at)'), $request->anio)*/->where('cliente_id', $model->id)
+            ->where(DB::raw('MONTH(created_at)'), '8')->count();
+        $model->agostop = Pedido::where('estado', '1')/*->whereYear(DB::raw('Date(created_at)'), $request->anio+1)*/->where('cliente_id', $model->id)
+            ->where(DB::raw('MONTH(created_at)'), '8')->count();
+
+        $model->setiembrea = Pedido::where('estado', '1')/*->whereYear(DB::raw('Date(created_at)'), $request->anio)*/->where('cliente_id', $model->id)
+            ->where(DB::raw('MONTH(created_at)'), '9')->count();
+        $model->setiembrep = Pedido::where('estado', '1')/*->whereYear(DB::raw('Date(created_at)'), $request->anio+1)*/->where('cliente_id', $model->id)
+            ->where(DB::raw('MONTH(created_at)'), '9')->count();
+
+        $model->octubrea = Pedido::where('estado', '1')/*->whereYear(DB::raw('Date(created_at)'), $request->anio)*/->where('cliente_id', $model->id)
+            ->where(DB::raw('MONTH(created_at)'), '10')->count();
+        $model->octubrep = Pedido::where('estado', '1')/*->whereYear(DB::raw('Date(created_at)'), $request->anio+1)*/->where('cliente_id', $model->id)
+            ->where(DB::raw('MONTH(created_at)'), '10')->count();
+
+        $model->noviembrea = Pedido::where('estado', '1')/*->whereYear(DB::raw('Date(created_at)'), $request->anio)*/->where('cliente_id', $model->id)
+            ->where(DB::raw('MONTH(created_at)'), '11')->count();
+        $model->noviembrep = Pedido::where('estado', '1')/*->whereYear(DB::raw('Date(created_at)'), $request->anio+1)*/->where('cliente_id', $model->id)
+            ->where(DB::raw('MONTH(created_at)'), '11')->count();
+
+        $model->diciembrea = Pedido::where('estado', '1')/*->whereYear(DB::raw('Date(created_at)'), $request->anio)*/->where('cliente_id', $model->id)
+            ->where(DB::raw('MONTH(created_at)'), '12')->count();
+        $model->diciembrep = Pedido::where('estado', '1')/*->whereYear(DB::raw('Date(created_at)'), $request->anio+1)*/->where('cliente_id', $model->id)
+            ->where(DB::raw('MONTH(created_at)'), '12')->count();
+
+           
+
+        if ($model->deuda == '1') {
+            $model->deposito = 'DEBE';
+        } else {
+            $model->deposito = 'CANCELADO';
+        }
+
+        //$dateM = Carbon::now()->format('m');
+        //$dateY = Carbon::now()->format('Y');
             
 
         //$model->created_at->format('');
@@ -94,9 +169,11 @@ class PageclienteInfo extends Export implements WithColumnFormatting
             ,"dni"=>"DNI"
             ,"icelular"=>"Ientificador celular"
             ,"celular"=>"Celular"
+            ,"id_asesor"=>"Identificador Asesor"
             ,"nombre_asesor"=>"Nombre Asesor"
             ,"provincia"=>"provincia"
             ,"distrito"=>"distrito"
+            ,"direccion"=>"direccion"
             ,"referencia"=>"referencia"
             ,"estado"=>"estado"
             ,"deuda"=>"deuda"
@@ -105,8 +182,31 @@ class PageclienteInfo extends Export implements WithColumnFormatting
             ,"dia"=>"dia"
             ,"mes"=>"mes"
             ,"anio"=>"anio"
+            ,"codigo"=>"codigo"
+            ,"estadopedido"=>"estadopedido"
+            ,'deposito'=>'deposito'
+            ,"porcentajefsb"=>"porcentajefsb"
+            ,"porcentajefb"=>"porcentajefb"
+            ,"porcentajeesb"=>"porcentajeesb"
+            ,"porcentajeeb"=>"porcentajeeb"
+            ,"eneroa"=>"eneroa","enerop"=>"enerop"
+            ,"febreroa"=>"febreroa","febrerop"=>"febrerop"
+            ,"marzoa"=>"marzoa","marzop"=>"marzop"
+            ,"abrila"=>"abrila","abrilp"=>"abrilp"
+            ,"mayoa"=>"mayoa","mayop"=>"mayop"
+            ,"junioa"=>"junioa","juniop"=>"juniop"
+            ,"julioa"=>"julioa","juliop"=>"juliop"
+            ,"agostoa"=>"agostoa","agostop"=>"agostop"
+            ,"setiembrea"=>"setiembrea","setiembrep"=>"setiembrep"
+            ,"octubrea"=>"octubrea","octubrep"=>"octubrep"
+            ,"noviembrea"=>"noviembrea","noviembrep"=>"noviembrep"
+            ,"diciembrea"=>"diciembrea","diciembrep"=>"diciembrep"        
             //,"created_at"=>"Fecha",
         ];
+
+            
+                //'p.codigo as codigo',
+                
     }
 
     public function columnFormats(): array
@@ -117,7 +217,7 @@ class PageclienteInfo extends Export implements WithColumnFormatting
              'D' => NumberFormat::FORMAT_DATE_YYYYMMDD,
              'E' => NumberFormat::FORMAT_DATE_YYYYMMDD,
             */
-            'M' => NumberFormat::FORMAT_DATE_YYYYMMDD
+            'O' => NumberFormat::FORMAT_DATE_YYYYMMDD
         ];
     }
 }

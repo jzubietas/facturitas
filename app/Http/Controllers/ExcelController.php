@@ -155,12 +155,10 @@ class ExcelController extends Controller
                 ->download('Lista de Clientes_Situacion_'.$request->anio.'.xlsx');
     }
 
-
-  
-    public function clientespedidosExcel()
+    public function clientespedidosExcel(Request $request)
     {
         //cambiar aca
-        return Excel::download(new PlantillaExportMultiple, 'Lista de Clientes_pedidos.xlsx');
+        return Excel::download(new PlantillaExportMultiple($request->anio), 'Lista de Clientes_pedidos_'.Carbon::now().'.xlsx');
     }
 
     // public function basefriaExcel()
