@@ -1427,8 +1427,6 @@ class EnvioController extends Controller
 
 
 
-
-
     public function SinEnviarid(Request $request)
     {
         //Pedido $pedido
