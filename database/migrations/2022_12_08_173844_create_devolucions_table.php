@@ -21,6 +21,7 @@ class CreateDevolucionsTable extends Migration
             $table->string("bank_destino")->nullable();
             $table->string("bank_number")->nullable();
             $table->string("num_operacion")->nullable();
+            $table->string("bank_titular")->nullable();
 
             $table->float("amount")->comment("monto a devolver");
             $table->integer("status")->default(\App\Models\Devolucion::PENDIENTE);

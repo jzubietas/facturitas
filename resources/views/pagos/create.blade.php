@@ -2501,7 +2501,7 @@
                         var formDataSaldo = $("#formulario").serialize();
                         $("#devolucion_message_response").html("");
                         $("#btnDevolucion").attr("disabled", "disabled")
-                        $("#btnDevolucion").text("Guardando ..")
+                        $("#btnDevolucion").text("Guardando ...")
                         $.ajax({
                             data: formDataSaldo,
                             //processData: false,
@@ -2516,9 +2516,9 @@
                             },
                             error: function (jqXHR, textStatus, errorThrown) {
                                 console.log(arguments)
-                                //$("#btnDevolucion").removeAttr("disabled")
-                                //$("#btnDevolucion").text("Registrar devolucion")
                                 if (jqXHR.status === 422) {
+                                    $("#btnDevolucion").removeAttr("disabled")
+                                    $("#btnDevolucion").text("Registrar devolucion")
                                     if (jqXHR.responseJSON && jqXHR.responseJSON.errors) {
                                         $("#devolucion_message_response").html(generateHtmlErrors(
                                                 Object.keys(jqXHR.responseJSON.errors).map(function (a) {
