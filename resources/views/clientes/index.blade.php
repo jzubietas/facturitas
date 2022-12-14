@@ -121,6 +121,9 @@
         transition: all 0.5s ease;
         text-shadow: 10px 2px #6ac7c2;
     }
+    
+    .modal-lg { max-width: 80% !important; }
+
 
   </style>
 @stop
@@ -243,11 +246,6 @@ $(document).ready(function () {
           rowCallback: function (row, data, index) {
           },
           columns: [            
-              {
-                data: 'DT_RowIndex',
-                name: 'DT_RowIndex',
-                sWidth: '10%',
-              },
               {
                   data: 'id',
                   name: 'id',
