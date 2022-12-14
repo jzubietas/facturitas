@@ -114,11 +114,10 @@ class EnvioController extends Controller
             ->join('clientes as c', 'c.id', 'de.cliente_id')
             ->join('users as u', 'u.id', 'c.user_id')
             ->join('pedidos as p', 'p.codigo', 'direccion_grupos.codigos')
+           
             ->where('p.condicion_envio',DireccionGrupo::CE_EN_REPARTO)
             ->where('direccion_grupos.estado','1')
-           
             ->whereNull('direccion_grupos.subcondicion_envio')
-            //->whereNotIn('direccion_grupos.subcondicion_envio',[DireccionGrupo::SCE_REGISTRADO,DireccionGrupo::SCE_EN_CAMINO,DireccionGrupo::SCE_EN_TIENDA_AGENTE,DireccionGrupo::SCE_NO_ENTREGADO])
             ->select(
                 'direccion_grupos.id',
                 'u.identificador as identificador',
@@ -126,15 +125,14 @@ class EnvioController extends Controller
                 'de.celular',
                 'de.nombre',
                 'de.cantidad',
-                DB::raw(" (select group_concat(dp.codigo_pedido) from direccion_pedidos dp where dp.direcciongrupo=direccion_grupos.id) as codigos "),
-                DB::raw(" (select group_concat(ab.empresa) from direccion_pedidos ab where ab.direcciongrupo=direccion_grupos.id) as producto "),
+                'direccion_grupos.codigos',
+                'direccion_grupos.producto',
                 'de.direccion',
                 'de.referencia',
                 'de.observacion',
                 'de.distrito',
                 DB::raw('(select DATE_FORMAT( direccion_grupos.created_at, "%Y-%m-%d")   from direccion_grupos dpa where dpa.id=direccion_grupos.id) as fecha'),
 
-                //'direccion_grupos.created_at as fecha',
                 'direccion_grupos.destino as destino2',
                 'direccion_grupos.distribucion',
                 'direccion_grupos.condicion_envio',
@@ -147,11 +145,11 @@ class EnvioController extends Controller
             ->join('clientes as c', 'c.id', 'de.cliente_id')
             ->join('users as u', 'u.id', 'c.user_id')
             ->join('pedidos as p', 'p.codigo', 'direccion_grupos.codigos')
+       
             ->where('p.condicion_envio',DireccionGrupo::CE_EN_REPARTO)
             ->where('direccion_grupos.estado','1')
-          
             ->whereNull('direccion_grupos.subcondicion_envio')
-            //->whereNotIn('direccion_grupos.subcondicion_envio',[DireccionGrupo::SCE_REGISTRADO,DireccionGrupo::SCE_EN_CAMINO,DireccionGrupo::SCE_EN_TIENDA_AGENTE,DireccionGrupo::SCE_NO_ENTREGADO])
+       
             ->select(
                 'direccion_grupos.id',
                 'u.identificador as identificador',
@@ -159,8 +157,10 @@ class EnvioController extends Controller
                 DB::raw(" (select '') as celular "),
                 DB::raw(" (select '') as nombre "),
                 'de.cantidad',
-                DB::raw(" (select group_concat(dp.codigo_pedido) from gasto_pedidos dp where dp.direcciongrupo=direccion_grupos.id) as codigos "),
-                DB::raw(" (select group_concat(ab.empresa) from gasto_pedidos ab where ab.direcciongrupo=direccion_grupos.id) as producto "),
+                
+                'direccion_grupos.codigos',
+                'direccion_grupos.producto',
+           
                 'de.tracking as direccion',
                 'de.foto as referencia',
                 DB::raw(" (select '') as observacion "),
@@ -767,10 +767,7 @@ class EnvioController extends Controller
                 ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
                 ->select(
                     'pedidos.id',
-                    DB::raw(" (CASE WHEN pedidos.id<10 THEN concat('PED000',pedidos.id)
-                                WHEN pedidos.id<100 THEN concat('PED00',pedidos.id)
-                                WHEN pedidos.id<1000 THEN concat('PED0',pedidos.id)
-                                ELSE concat('PED',pedidos.id) END) AS id2"),
+                    'pedidos.correlativo as id2',
                     'c.nombre as nombres',
                     'c.celular as celulares',
                     'u.identificador as users',
@@ -792,10 +789,13 @@ class EnvioController extends Controller
                     'dp.foto2',
                     'dp.fecha_recepcion'
                 )
-                ->where('pedidos.estado', '1')
-                ->where('dp.estado', '1')
-                ->where('pedidos.envio', '1');
-                //->where('pedidos.condicion_envio', '<>', 3);
+                  // 14-12-22 se realiza la consulta con el filtro por la columna  p.condicion_code=1
+               ->where('pedidos.condicion_envio_code', '1')
+              //  ->where('dp.estado', '1')
+                ->where('pedidos.envio', '1')  //estado del sobre anterior
+                 ->where('pedidos.estado', '1'); //estado anulado o activo
+
+           // esta query esta mal formulada ->where('pedidos.condicion_envio', '<>', 3);
 
         if(Auth::user()->rol == "Operario"){
             $asesores = User::where('users.rol', 'Asesor')
@@ -1211,12 +1211,30 @@ class EnvioController extends Controller
                     {
                         $pedido = Pedido::find($pedido_id);
 
+                        /*
                         $pedido->update([
                             'destino' => $request->destino,
                             'condicion_envio' => 2,//AL REGISTRAR DIRECCION PASA A ESTADO  EN REPARTO
                             'direccion' => $request->direccion,
 
                         ]);
+                        */
+
+                        /* 14/12/22  El pedido se debe listar en envios sobres por recibir al ser cargado el destino
+                        y se debe usar las columnas creadas condicion_envio_code y condicion (manteniendo lo anterior para no romper el app)
+                        por defecto condicion_envio_code=1 , condicion='PENDIENTE DE ENVIO'
+                        */
+
+
+                        $pedido->update([
+                            'destino' => $request->destino,
+                            'condicion_envio' => 2,//AL REGISTRAR DIRECCION PASA A ESTADO  EN REPARTO
+                            'direccion' => $request->direccion,
+                            'condicion_envio_code' => Pedido::PENDIENTE_DE_ENVIO ,
+                            'condicion' => Pedido::PENDIENTE_DE_ENVIO_CODE ,
+                            
+                        ]);
+
 
 
                         $dp_empresa=DetallePedido::where("pedido_id",$pedido_id)->first();
