@@ -422,6 +422,123 @@ class OperacionController extends Controller
             ->make(true);
     }
 
+
+    public function Bancarizacion()
+    {
+        $dateMin = Carbon::now()->subDays(4)->format('d/m/Y');
+        $dateMax = Carbon::now()->format('d/m/Y');
+
+        $condiciones = [
+            "POR ATENDER" => 'POR ATENDER',
+            "EN PROCESO ATENCION" => 'EN PROCESO ATENCION',
+            "ATENDIDO" => 'ATENDIDO'
+        ];
+
+        $imagenes = ImagenAtencion::where('estado', '1')->get();
+        $superasesor = User::where('rol', 'Super asesor')->count();
+
+        return view('operaciones.bancarizacion', compact('dateMin', 'dateMax', 'condiciones', 'superasesor'));//, 'imagenes'
+    }
+
+    public function bancarizaciontabla(Request $request)
+    {
+        $min = Carbon::createFromFormat('d/m/Y', $request->min)->format('Y-m-d');
+        $max = Carbon::createFromFormat('d/m/Y', $request->max)->format('Y-m-d');
+        $pedidos=null;
+
+        $pedidos = Pedido::join('users as u', 'pedidos.user_id', 'u.id')
+                ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
+                ->select(
+                    'pedidos.id',
+                    'u.identificador as users',
+                    'dp.codigo as codigos',
+                    'dp.nombre_empresa as empresas',
+                    'pedidos.condicion',
+                    //DB::raw('DATE_FORMAT(pedidos.created_at, "%d/%m/%Y") as fecha'),
+                    DB::raw('(DATE_FORMAT(pedidos.created_at, "%Y-%m-%d %h:%i:%s")) as fecha'),
+                    'pedidos.envio',
+                    'pedidos.destino',
+                    'pedidos.condicion_envio',
+                    'dp.envio_doc',
+                    'dp.fecha_envio_doc',
+                    'dp.cant_compro',
+                    'dp.atendido_por',
+                    'dp.atendido_por_id',
+                    DB::raw(" (select u2.name from users u2 where u2.id=u.jefe limit 1) as jefe "),
+                    DB::raw(' (select DATE_FORMAT(dp1.fecha_envio_doc_fis, "%d/%m/%Y")  from detalle_pedidos dp1 where dp1.id=dp.id limit 1) as fecha_envio_doc_fis'),
+                    'dp.fecha_recepcion',
+                    DB::raw("  (select IFNULL(count(b1.pedido_id),0) from direccion_pedidos b1 where b1.pedido_id=pedidos.id limit 1) as envios_lima "),
+                    DB::raw("  (select IFNULL(count(b2.pedido_id),0) from gasto_pedidos b2 where b2.pedido_id=pedidos.id limit 1) as envios_provincia "),
+                    DB::raw("  (CASE  when ((select IFNULL(count(b1.pedido_id),0) from direccion_pedidos b1 where b1.pedido_id=pedidos.id limit 1)+(select IFNULL(count(b2.pedido_id),0) from gasto_pedidos b2 where b2.pedido_id=pedidos.id limit 1))>0 then '1' else '0' end  )  as revierte "),
+                    DB::raw("  (CASE  when pedidos.destino='LIMA' then (select gg.created_at from direccion_pedidos gg where gg.pedido_id=pedidos.id limit 1) ".
+                                    "when pedidos.destino='PROVINCIA' then (select g.created_at from gasto_pedidos g where g.pedido_id=pedidos.id limit 1) ".
+                                    "else '' end) as fecha_envio_sobre "),
+
+                )
+                ->where('pedidos.estado', '1')
+                ->where('dp.estado', '1')
+                ->where('pedidos.condicion_code', Pedido::ATENDIDO_INT)
+                ->whereIn('pedidos.envio', ['1','2','3'])
+                //->whereIn('pedidos.envio', ['0'])
+                ->whereBetween( 'pedidos.created_at', [$min, $max]);
+
+        if(Auth::user()->rol == "Operario"){
+
+            $asesores = User::whereIN('users.rol', ['Asesor','Administrador'])
+                -> where('users.estado', '1')
+                -> Where('users.operario',Auth::user()->id)
+                ->select(
+                    DB::raw("users.identificador as identificador")
+                )/*->union(
+                    User::where("id","33")
+                        ->select(
+                            DB::raw("users.identificador as identificador")
+                        ) )*/
+                ->pluck('users.identificador');
+
+            $pedidos->WhereIn('u.identificador',$asesores);
+
+
+        }else if(Auth::user()->rol == "Jefe de operaciones"){
+            $operarios = User::where('users.rol', 'Operario')
+                -> where('users.estado', '1')
+                -> where('users.jefe', Auth::user()->id)
+                ->select(
+                    DB::raw("users.id as id")
+                )
+                ->pluck('users.id');
+
+            $asesores = User::whereIN('users.rol', ['Asesor','Administrador'])
+                -> where('users.estado', '1')
+                ->WhereIn('users.operario',$operarios)
+                ->select(
+                    DB::raw("users.identificador as identificador")
+                )/*->union(
+                    User::where("id","33")
+                        ->select(
+                            DB::raw("users.identificador as identificador")
+                        ) )*/
+                ->pluck('users.identificador');
+
+            $pedidos->WhereIn('u.identificador',$asesores);
+
+
+        }else{
+            $pedidos=$pedidos;
+        }
+        //$pedidos=$pedidos->get();
+
+        return Datatables::of(DB::table($pedidos))//Datatables::of($pedidos)
+            ->addIndexColumn()
+            ->addColumn('action', function($pedido){
+                $btn='';
+
+                return $btn;
+            })
+            ->rawColumns(['action'])
+            ->make(true);
+    }
+
     public function Atenderid(Request $request)
     {
         $hiddenAtender=$request->hiddenAtender;
@@ -430,8 +547,9 @@ class OperacionController extends Controller
         //sds
 
         $pedido=Pedido::where("id",$hiddenAtender)->first();
+
         $pedido->update([
-            'condicion' => $request->condicion,
+            'condicion' => Pedido::$estadosCondicionCode[$request->condicion],
             'condicion_code' => $request->condicion,
             'modificador' => 'USER'.Auth::user()->id
         ]);
