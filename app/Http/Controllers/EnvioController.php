@@ -113,8 +113,10 @@ class EnvioController extends Controller
         $pedidos_lima = DireccionGrupo::join('direccion_envios as de','direccion_grupos.id','de.direcciongrupo')
             ->join('clientes as c', 'c.id', 'de.cliente_id')
             ->join('users as u', 'u.id', 'c.user_id')
+            ->join('pedidos as p', 'p.codigo', 'direccion_grupos.codigos')
+            ->where('p.condicion_envio',DireccionGrupo::CE_EN_REPARTO)
             ->where('direccion_grupos.estado','1')
-            ->where('direccion_grupos.condicion_envio',DireccionGrupo::CE_EN_REPARTO)
+           
             ->whereNull('direccion_grupos.subcondicion_envio')
             //->whereNotIn('direccion_grupos.subcondicion_envio',[DireccionGrupo::SCE_REGISTRADO,DireccionGrupo::SCE_EN_CAMINO,DireccionGrupo::SCE_EN_TIENDA_AGENTE,DireccionGrupo::SCE_NO_ENTREGADO])
             ->select(
@@ -144,8 +146,10 @@ class EnvioController extends Controller
         $pedidos_provincia = DireccionGrupo::join('gasto_envios as de','direccion_grupos.id','de.direcciongrupo')
             ->join('clientes as c', 'c.id', 'de.cliente_id')
             ->join('users as u', 'u.id', 'c.user_id')
+            ->join('pedidos as p', 'p.codigo', 'direccion_grupos.codigos')
+            ->where('p.condicion_envio',DireccionGrupo::CE_EN_REPARTO)
             ->where('direccion_grupos.estado','1')
-            ->where('direccion_grupos.condicion_envio',DireccionGrupo::CE_EN_REPARTO)
+          
             ->whereNull('direccion_grupos.subcondicion_envio')
             //->whereNotIn('direccion_grupos.subcondicion_envio',[DireccionGrupo::SCE_REGISTRADO,DireccionGrupo::SCE_EN_CAMINO,DireccionGrupo::SCE_EN_TIENDA_AGENTE,DireccionGrupo::SCE_NO_ENTREGADO])
             ->select(
@@ -1092,16 +1096,28 @@ class EnvioController extends Controller
     }
 
     public function Recibirid(Request $request)
+    
     {
+
+      //  dd($request);
+      //  exit;
+
         $pedido=Pedido::where("id",$request->hiddenRecibir)->first();
         $pedido->update([
             
-            'envio' => '1',
-            //'envio' => '2',
+            //'envio' => '1',
+            'envio' => '2',
             'estado_sobre' => '1',
-            
+            'condicion_envio'=>Pedido::EN_REPARTO,
+            'condicion_envio_code'=>Pedido::EN_REPARTO_CODE,
             'modificador' => 'USER'.Auth::user()->id
         ]);
+
+        // actualizando en direccion_grupos
+
+
+
+
 
         return response()->json(['html' => $request->hiddenRecibir]);
 

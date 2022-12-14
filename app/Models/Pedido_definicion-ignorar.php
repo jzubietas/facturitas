@@ -15,15 +15,6 @@ class Pedido extends Model
     const ATENDIDO = 'ATENDIDO';//3
     const ANULADO = 'ANULADO';//4
 
-    // Condiciones pedido numerico
-
-
-    const POR_ATENDER_INT = 1;
-    const EN_PROCESO_ATENCION_INT = 2;
-    const ATENDIDO_INT = 3;
-    const ANULADO_INT = 4;
-
-
     //envio
     const ENVIO_CONFIRMAR_RECEPCION = '1';//ENVIADO CONFIRMAR RECEPCION
     const ENVIO_RECIBIDO = '2';//ENVIADO RECIBIDO
@@ -39,24 +30,20 @@ class Pedido extends Model
     const ENTREGADO_CODE=3;
 
 
-    /* relacion de conciones de envio y enteros */
+    /* condicion de pedidos relacion */
 
     public static $estadosCondicion = [
-        'ANULADO' => 4,
+        'ANULADO' => 0,
         'POR ATENDER' => 1,
         'EN PROCESO ATENCIÓN' => 2,
         'ATENDIDO' => 3,
     ];
 
-    public static $estadosCondicionCode = [
-        4=> 'ANULADO',
-        1=> 'POR ATENDER',
-        2=> 'EN PROCESO ATENCIÓN' ,
-        3=> 'ATENDIDO' ,
-    ];
+
+    /* condicion de envios relacion */
 
     public static $estadosCondicionEnvio = [
-        'ANULADO' => 4,
+        'ANULADO' => 0,
         'PENDIENTE DE ENVÍO' => 1,
         'EN REPARTO' => 2,
         'ENTREGADO' => 3,
@@ -74,11 +61,5 @@ class Pedido extends Model
     public function cliente()
     {
         return $this->belongsTo(Cliente::class);
-    }
-
-    public function setCondicionAttributeCode($value)
-    {
-        $this->attributes['condicion_code'] = $value;
-        $this->setAttribute('condicion', self::$estadosCondicionCode[$value] ?? $value);
     }
 }
