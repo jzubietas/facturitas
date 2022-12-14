@@ -361,7 +361,7 @@ class OperacionController extends Controller
                 ->where('pedidos.estado', '1')
                 ->where('dp.estado', '1')
                 ->where('pedidos.condicion_code', Pedido::ATENDIDO_INT)
-                ->whereIn('pedidos.envio', ['1','2','3'])
+                ->whereIn('pedidos.envio', ['2','3'])
                 //->whereIn('pedidos.envio', ['0'])
                 ->whereBetween( 'pedidos.created_at', [$min, $max]);
 
@@ -440,7 +440,7 @@ class OperacionController extends Controller
         return view('operaciones.bancarizacion', compact('dateMin', 'dateMax', 'condiciones', 'superasesor'));//, 'imagenes'
     }
 
-    public function bancarizaciontabla(Request $request)
+    public function Bancarizaciontabla(Request $request)
     {
         $min = Carbon::createFromFormat('d/m/Y', $request->min)->format('Y-m-d');
         $max = Carbon::createFromFormat('d/m/Y', $request->max)->format('Y-m-d');
@@ -478,7 +478,7 @@ class OperacionController extends Controller
                 ->where('pedidos.estado', '1')
                 ->where('dp.estado', '1')
                 ->where('pedidos.condicion_code', Pedido::ATENDIDO_INT)
-                ->whereIn('pedidos.envio', ['1','2','3'])
+                ->whereIn('pedidos.envio', ['1'])
                 //->whereIn('pedidos.envio', ['0'])
                 ->whereBetween( 'pedidos.created_at', [$min, $max]);
 
@@ -544,7 +544,8 @@ class OperacionController extends Controller
         $hiddenAtender=$request->hiddenAtender;
         $detalle_pedidos = DetallePedido::where('pedido_id',$hiddenAtender)->first();
         $fecha = Carbon::now();
-        //sds
+
+        $files = $request->file('adjunto');
 
         $pedido=Pedido::where("id",$hiddenAtender)->first();
 
@@ -565,30 +566,43 @@ class OperacionController extends Controller
             event(new PedidoAtendidoEvent($pedido));
         }
 
-        $files = $request->file('adjunto');
+
+
         $destinationPath = base_path('public/storage/adjuntos/');
 
         $cont = 0;
 
-        if(isset($files)){
-            $destinationPath = base_path('public/storage/adjuntos/');
-            $cont = 0;
-            $file_name = Carbon::now()->second.$files->getClientOriginalName();
-            $fileList[$cont] = array(
-                'file_name' => $file_name,
-            );
-            $files->move($destinationPath , $file_name);
 
-            ImagenAtencion::create([
-                'pedido_id' => $pedido->id,
-                'adjunto' => $file_name,
-                'estado' => '1'
+        if ($request->hasFile('adjunto')){
+
+            foreach ($files as $file){
+                $file_name = Carbon::now()->second.$file->getClientOriginalName();
+                $file->move($destinationPath , $file_name);
+
+                ImagenAtencion::create([
+                    'pedido_id' => $pedido->id,
+                    'adjunto' => $file_name,
+                    'estado' => '1'
+                ]);
+
+                $cont++;
+            }
+
+            $detalle_pedidos->update([
+                'envio_doc' => '1',
+                'fecha_envio_doc' => $fecha,
+                'cant_compro' => $request->cant_compro,
+                'atendido_por' => Auth::user()->name,
+                'atendido_por_id' => Auth::user()->id,
             ]);
 
-                //$cont++;
-            //}
+        }else{
+            $detalle_pedidos->update([
+                'cant_compro' => $request->cant_compro,
+                'atendido_por' => Auth::user()->name,
+                'atendido_por_id' => Auth::user()->id,
+            ]);
         }
-
 
 
         /*if(isset($files)){
@@ -606,13 +620,7 @@ class OperacionController extends Controller
             }
         }*/
 
-        $detalle_pedidos->update([
-            'envio_doc' => '1',
-            'fecha_envio_doc' => $fecha,
-            'cant_compro' => $request->cant_compro,
-            'atendido_por' => Auth::user()->name,
-            'atendido_por_id' => Auth::user()->id,
-        ]);
+
 
         /* if ($request->hasFile('envio_doc')){
             $file_name = Carbon::now()->second.$files->getClientOriginalName();
@@ -1098,7 +1106,8 @@ class OperacionController extends Controller
 
         $pedido->update([
             'envio' => '3',//SIN ENVIO
-            'condicion_envio' => 3,
+            'condicion_envio' => Pedido::$estadosCondicionCode[3],
+            'condicion_envio_code' => 3,
             'modificador' => 'USER'.Auth::user()->id
         ]);
 
