@@ -33,7 +33,7 @@ class PedidosSinPagosExport implements FromView, ShouldAutoSize
             )
             ->where('pedidos.estado', '1')
             ->where('dp.estado', '1')
-            ->where('u.id', Auth::user()->id)
+            //->where('u.id', Auth::user()->id)
             ->where('pedidos.pago', '0')
             ->whereBetween(DB::raw('DATE(pedidos.created_at)'), [$request->desde, $request->hasta]) //rango de fechas
             ->groupBy(
@@ -56,5 +56,5 @@ class PedidosSinPagosExport implements FromView, ShouldAutoSize
         return view('pedidos.excel.pedidossinpagos', [
             'pedidos'=> $this->pedidos
         ]);
-    }       
+    }
 }
