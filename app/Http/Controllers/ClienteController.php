@@ -178,11 +178,53 @@ class ClienteController extends Controller
         //}
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    public function indextablahistoricocliente(Request $request)
+    {
+        $idconsulta=$request->idconsulta;
+        $data = ListadoResultado::where('id', '1')
+            ->select('id',
+                'a_2021_11',
+                'a_2021_12',
+                'a_2022_01',
+                'a_2022_01',
+                'a_2022_02',
+                'a_2022_03',
+                'a_2022_04',
+                'a_2022_05',
+                'a_2022_06',
+                'a_2022_07',
+                'a_2022_08',
+                'a_2022_09',
+                'a_2022_10',
+                'a_2022_11',
+                'a_2022_12',
+                's_2021_11',
+                's_2021_12',
+                's_2022_01',
+                's_2022_01',
+                's_2022_02',
+                's_2022_03',
+                's_2022_04',
+                's_2022_05',
+                's_2022_06',
+                's_2022_07',
+                's_2022_08',
+                's_2022_09',
+                's_2022_10',
+                's_2022_11',
+                's_2022_12',
+            );
+
+        return datatables()->query(DB::table($data))
+        ->addIndexColumn()
+            ->addColumn('action', function ($row) {
+                $btn = "";
+                return $btn;
+            })
+            ->rawColumns(['action'])
+            ->toJson();
+       
+    }
 
     public function pedidostiempo(Request $request)
     {

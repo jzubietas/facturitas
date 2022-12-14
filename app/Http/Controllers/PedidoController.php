@@ -139,6 +139,7 @@ class PedidoController extends Controller
                 'dp.ruc as ruc',
                 'pedidos.condicion_envio',
                 'pedidos.condicion as condiciones',
+                'pedidos.condicion_code',
                 'pedidos.pagado as condicion_pa',
                 DB::raw("
                     concat(
@@ -158,7 +159,7 @@ class PedidoController extends Controller
                 'pedidos.estado',
                 'pedidos.envio'
             )
-            ->whereIn('pedidos.condicion', [Pedido::POR_ATENDER, Pedido::EN_PROCESO_ATENCION, Pedido::ATENDIDO, Pedido::ANULADO]);
+            ->whereIn('pedidos.condicion_code', [Pedido::POR_ATENDER_INT, Pedido::EN_PROCESO_ATENCION_INT, Pedido::ATENDIDO_INT, Pedido::ANULADO_INT]);
 
         if (Auth::user()->rol == "Llamadas") {
             $usersasesores = User::where('users.rol', 'Asesor')
@@ -955,10 +956,12 @@ class PedidoController extends Controller
                 'user_id' => $identi_asesor->id, //usuario que registra
                 'creador' => 'USER0' . Auth::user()->id,//aqui una observacion, en el migrate la columna en tabla pedido tenia nombre creador y resulto ser creador_id
                 'condicion' => 'POR ATENDER',
+                'condicion_code' => 1,
                 'condicion_int' => '1',
                 'pago' => '0',
                 'envio' => '0',
-                'condicion_envio' => 1,
+                'condicion_envio' => 'PENDIENTE DE ENVIO',
+                'condicion_envio_code' => 1,
                 'estado' => '1',
                 'codigo' => $codigo,
                 'notificacion' => 'Nuevo pedido creado',
@@ -1605,6 +1608,7 @@ return ' no imagen ';
                 'motivo' => $request->motivo,
                 'responsable' => $request->responsable,
                 'condicion' => 'ANULADO',
+                'condicion_code' => Pedido::ANULADO_INT,
                 'modificador' => 'USER' . Auth::user()->id,
                 'estado' => '0'
             ]);
@@ -1666,6 +1670,7 @@ return ' no imagen ';
         } else {
             Pedido::find($request->hiddenID)->update([
                 'condicion' => 1,
+                'condicion_code' => Pedido::POR_ATENDER_INT,
                 'modificador' => 'USER' . Auth::user()->id,
                 'estado' => '1'
             ]);
@@ -1723,6 +1728,7 @@ return ' no imagen ';
                 'pedidos.condicion_envio as condicion_env',
                 'pedidos.condicion_envio',
                 'pedidos.condicion as condiciones',
+                'pedidos.condicion_code',
 
                 /*'pedidos.envio',*/
                 'pedidos.direccion',
@@ -1736,7 +1742,7 @@ return ' no imagen ';
             )
             ->where('pedidos.estado', '1')
             ->where('dp.estado', '1')
-            ->whereIn('pedidos.condicion', [Pedido::POR_ATENDER, Pedido::EN_PROCESO_ATENCION, Pedido::ATENDIDO, Pedido::ANULADO]);
+            ->whereIn('pedidos.condicion_code', [Pedido::POR_ATENDER_INT, Pedido::EN_PROCESO_ATENCION_INT, Pedido::ATENDIDO_INT, Pedido::ANULADO_INT]);
 
 
         if (Auth::user()->rol == "Asesor") {
@@ -1936,11 +1942,12 @@ return ' no imagen ';
                 'dp.nombre_empresa as empresas',
                 'dp.total as total',
                 'pedidos.condicion as condiciones',
+                'pedidos.condicion_code',
                 'pedidos.motivo',
                 'pedidos.responsable',
                 'pedidos.pagado as condicion_pa',
                 'pedidos.created_at as fecha',
-                DB::raw('(select pago.condicion from pago_pedidos pagopedido inner join pedidos pedido on pedido.id=pagopedido.pedido_id and pedido.id=pedidos.id inner join pagos pago on pagopedido.pago_id=pago.id where pagopedido.estado=1 and pago.estado=1 order by pagopedido.created_at desc limit 1) as condiciones_aprobado'),
+                DB::raw('(select pago.condicion_code from pago_pedidos pagopedido inner join pedidos pedido on pedido.id=pagopedido.pedido_id and pedido.id=pedidos.id inner join pagos pago on pagopedido.pago_id=pago.id where pagopedido.estado=1 and pago.estado=1 order by pagopedido.created_at desc limit 1) as condiciones_aprobado'),
             )
             ->where('pedidos.estado', '1')
             ->where('dp.estado', '1')

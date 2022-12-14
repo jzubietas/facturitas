@@ -256,6 +256,9 @@ $(document).ready(function () {
               data = data+'<a href="" data-target="#modal-delete" data-toggle="modal" data-opcion="'+row.id+'"><button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i> Eliminar</button></a>';
 
             @endcan
+
+            data = data+'<a href="" data-target="#modal-historial-cliente" data-toggle="modal" data-cliente="'+row.id+'"><button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i> Historico</button></a>';
+
             return data;
           }
         },
