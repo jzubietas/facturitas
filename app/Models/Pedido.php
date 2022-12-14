@@ -45,6 +45,13 @@ class Pedido extends Model
         'ATENDIDO' => 3,
     ];
 
+    public static $estadosCondicionCode = [
+        0=> 'ANULADO',
+        1=> 'POR ATENDER',
+        2=> 'EN PROCESO ATENCIÓN' ,
+        3=> 'ATENDIDO' ,
+    ];
+
     public static $estadosCondicionEnvio = [
         'ANULADO' => 0,
         'PENDIENTE DE ENVÍO' => 1,
@@ -62,5 +69,11 @@ class Pedido extends Model
     public function cliente()
     {
         return $this->belongsTo(Cliente::class);
+    }
+
+    public function setCondicionAttributeCode($value)
+    {
+        $this->attributes['condicion_code'] = $value;
+        $this->setAttribute('condicion', self::$estadosCondicionCode[$value] ?? $value);
     }
 }
