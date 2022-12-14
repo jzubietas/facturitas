@@ -352,7 +352,7 @@ return [
                     'active' => ['pedidos atendidos'],
                 ],
                 [
-                    'text' => 'Sobres terminados',
+                    'text' => 'En Jefe de Operaciones',
                     'route'  => 'operaciones.entregados',
                     'can' => 'operacion.atendidos',
                     'icon'   => 'fas fa-check-circle',
