@@ -1348,7 +1348,7 @@ return ' no imagen ';
             ->orderBy('pedidos.created_at', 'DESC')
             ->get();
 
-        $cotizacion = Pedido::join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
+        $cotizacion = Pedido::query()->with(['cliente'])->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
             ->select(
                 'pedidos.id',
                 'dp.nombre_empresa',
@@ -1362,12 +1362,13 @@ return ' no imagen ';
             ->where('pedidos.id', $pedido->id)
             ->first();
 
+        $deudaTotal=DetallePedido::query()->whereIn('pedido_id',$pedido->cliente->pedidos()->where('estado','1')->pluck("id"))->sum("saldo");
         $adelanto = PagoPedido::query()->where('pedido_id', $pedido->id)->whereEstado(1)->sum('abono');
 
         $imagenes = ImagenPedido::where('imagen_pedidos.pedido_id', $pedido->id)->where('estado', '1')->get();
         $imagenesatencion = ImagenAtencion::where('imagen_atencions.pedido_id', $pedido->id)->where('estado', '1')->get();
 
-        return view('pedidos.show', compact('pedidos', 'imagenes', 'imagenesatencion', 'cotizacion', 'adelanto'));
+        return view('pedidos.show', compact('pedidos', 'imagenes', 'imagenesatencion', 'cotizacion', 'adelanto','deudaTotal'));
     }
 
     /**
