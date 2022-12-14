@@ -790,7 +790,7 @@ class EnvioController extends Controller
                     'dp.fecha_recepcion'
                 )
                   // 14-12-22 se realiza la consulta con el filtro por la columna  p.condicion_code=1
-               ->where('pedidos.condicion_envio_code', '1')
+               ->where('pedidos.condicion_envio_code', Pedido::PENDIENTE_DE_ENVIO_CODE)
               //  ->where('dp.estado', '1')
                 ->where('pedidos.envio', '1')  //estado del sobre anterior
                  ->where('pedidos.estado', '1'); //estado anulado o activo
