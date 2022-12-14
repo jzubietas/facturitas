@@ -235,8 +235,7 @@ $(document).ready(function () {
           ajax: {
               url: "{{ route('clientestablasituacion') }}",
               data: function (d) {
-                  //d.buscarpedidocliente = c_cliente_id;
-                  //d.buscarpedidoruc = c_ruc;
+                  d.cliente = idcliente;
 
               },
           },
