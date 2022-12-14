@@ -1947,6 +1947,7 @@ return ' no imagen ';
                 'pedidos.responsable',
                 'pedidos.pagado as condicion_pa',
                 'pedidos.created_at as fecha',
+                'dp.saldo as diferencia',
                 DB::raw('(select pago.condicion_code from pago_pedidos pagopedido inner join pedidos pedido on pedido.id=pagopedido.pedido_id and pedido.id=pedidos.id inner join pagos pago on pagopedido.pago_id=pago.id where pagopedido.estado=1 and pago.estado=1 order by pagopedido.created_at desc limit 1) as condiciones_aprobado'),
             )
             ->where('pedidos.estado', '1')
@@ -2014,12 +2015,11 @@ return ' no imagen ';
 
             $pedidos = $pedidos->WhereIn('u.identificador', $usersasesores);
 
-        } else {
-            $pedidos = $pedidos;
         }
-        $pedidos = $pedidos->get();
 
-        return Datatables::of($pedidos)
+        //$pedidos = $pedidos->get();
+
+        return Datatables::of(DB::table($pedidos))
             ->addIndexColumn()
             ->addColumn('action', function ($pedido) {
                 $btn = '';
@@ -2787,6 +2787,7 @@ return ' no imagen ';
                 'pedidos.user_id',
                 'pedidos.cliente_id',
                 'pedidos.codigo',
+                'pedidos.condicion_code',
                 'dp.mes',
                 'dp.anio',
                 'dp.ruc',
@@ -2814,13 +2815,19 @@ return ' no imagen ';
                     ->where('detalle_pedidos.tipo_banca', '=', $request->ptipo_banca)
                     ->getQuery()
             )
-            ->limit(2)
+            ->limit(5)
             ->get();
 
         return response()->json([
             'is_repetido' => $pedidos_repetidos->count() > 0,
             'coincidencia' => $pedidos_repetidos,
-            'codigos' => $pedidos_repetidos->pluck('codigo')->join(', '),
+            'codigos' => $pedidos_repetidos->map(function (Pedido $p) {
+                if ($p->condicion_code == 4) {
+                    return "<span class='text-danger'>" . $p->codigo . "</span>";
+                }else{
+                    return "<span class='text-dark'>" . $p->codigo . "</span>";
+                }
+            })->join(', '),
         ]);
     }
 

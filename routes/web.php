@@ -62,6 +62,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::get('clientedeasesorparapagos', [ClienteController::class, 'clientedeasesor'])->name('cargar.clientedeasesorparapagos');
 
     Route::get('clientestabla', [ClienteController::class, 'indextabla'])->name('clientestabla');
+    Route::get('clientestablasituacion', [ClienteController::class, 'clientestablasituacion'])->name('clientestablasituacion');
 
 
     Route::get('clientes.abandonos', [ClienteController::class, 'indexabandono'])->name('clientes.abandonos');
@@ -134,8 +135,6 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::post('pedidoss.store', [PedidoController::class, 'pedidosstore'])->name('pedidoss.store');//actualizado para serverside
     Route::get('pedidostabla', [PedidoController::class, 'indextabla'])->name('pedidostabla');//actualizado para serverside
     Route::post('validarpedido', [PedidoController::class, 'validadContenidoPedido'])->name('validarpedido');
-
-    //Route::post('validarpago', [PagoController::class, 'validadContenidoPago'])->name('validarpago');
 
     Route::get('pedidosperdonarcurrier', [PedidoController::class, 'indexperdonarcurrier'])->name('pedidosperdonarcurrier');
     Route::get('pedidosperdonarcurriertabla', [PedidoController::class, 'indexperdonarcurriertabla'])->name('pedidosperdonarcurriertabla');//actualizado para serverside
@@ -218,8 +217,9 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::post('operaciones.updateatenderid/{pedido}', [OperacionController::class, 'updateAtenderId'])->name('operaciones.updateatenderid');
     Route::get('operaciones.showatender/{pedido}', [OperacionController::class, 'showAtender'])->name('operaciones.showatender');
     Route::post('operaciones.envioid', [EnvioController::class, 'Enviarid'])->name('operaciones.envioid');
+    Route::post('operaciones.envioid', [EnvioController::class, 'Enviarid'])->name('operaciones.envioid');
     Route::post('operaciones.revertirenvioid', [OperacionController::class, 'Revertirenvio'])->name('operaciones.revertirenvioid');
-        Route::post('operaciones.sinenvioid', [EnvioController::class, 'SinEnviarid'])->name('operaciones.sinenvioid');
+    Route::post('operaciones.sinenvioid', [EnvioController::class, 'SinEnviarid'])->name('operaciones.sinenvioid');
 
     /*Operaciones*/
 
@@ -234,6 +234,8 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
 
 
     /*Controller Pagos*/
+
+    Route::post('pagos.store.validate', [PagoController::class,'validadContenidoPago'])->name('pagos.store.validate');
     Route::resource('pagos', PagoController::class)->names('pagos');
     Route::post('pagos.perdonardeuda', [PagoController::class, 'perdonardeuda'])->name('pagos.perdonardeuda');
     Route::post('titulares.banco', [PagoController::class, 'TitularesBanco'])->name('titulares.banco');

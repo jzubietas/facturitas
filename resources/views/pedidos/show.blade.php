@@ -212,8 +212,10 @@
               "*ENVIO = S/."+"{{$cotizacion->courier}}"+"*\n"+"*\n"+
       @if($adelanto>0)
               "*ADELANTO = S/."+"{{$adelanto}}"+"*\n"+
+      "*TOTAL = S/."+"{{$cotizacion->total-$adelanto}}"+"*\n\n"+
+      @else
+          "*TOTAL = S/."+"{{$cotizacion->total}}"+"*\n\n"+
       @endif
-              "*TOTAL = S/."+"{{$cotizacion->total}}"+"*\n\n"+
               "*ES IMPORTANTE PAGAR EL ENVIO* \n";
 
               $("#copiar_cotizacion").val(copydata);

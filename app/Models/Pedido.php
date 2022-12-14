@@ -42,21 +42,21 @@ class Pedido extends Model
     /* relacion de conciones de envio y enteros */
 
     public static $estadosCondicion = [
-        'ANULADO' => 0,
+        'ANULADO' => 4,
         'POR ATENDER' => 1,
         'EN PROCESO ATENCIÓN' => 2,
         'ATENDIDO' => 3,
     ];
 
     public static $estadosCondicionCode = [
-        0=> 'ANULADO',
+        4=> 'ANULADO',
         1=> 'POR ATENDER',
         2=> 'EN PROCESO ATENCIÓN' ,
         3=> 'ATENDIDO' ,
     ];
 
     public static $estadosCondicionEnvio = [
-        'ANULADO' => 0,
+        'ANULADO' => 4,
         'PENDIENTE DE ENVÍO' => 1,
         'EN REPARTO' => 2,
         'ENTREGADO' => 3,

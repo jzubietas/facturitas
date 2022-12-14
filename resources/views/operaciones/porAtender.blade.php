@@ -150,11 +150,54 @@
         }
         return true;
     }
-      $(document).on("submit", "#formularioatender", function (evento) {
 
 
+    $(document).on("submit", "#formulario_adjuntos", function (evento) {
         evento.preventDefault();
-       var status= validarFormulario(evento);
+
+        let idunico=$("#hiddenAtender").val();
+        console.log(idunico);
+        $('#cargar_adjunto').attr("disabled",true);
+        //$(this).attr('disabled',true);
+        //$(this).text('Subiendo archivos...');
+        $('#cargar_adjunto').html('Subiendo archivos...');
+        //e.preventDefault();
+        var data = new FormData(document.getElementById("formulario_adjuntos"));
+
+        $.ajax({
+                  type:'POST',
+                  url: "{{ route('operaciones.updateatender',':id') }}".replace(':id',idunico),
+                  data: data,
+                  processData: false,
+                  contentType: false,
+                  success:function(data){
+                    $('#cargar_adjunto').prop("disabled",false);
+                    $('#cargar_adjunto').text('Confirmar');
+
+                    ///RecuperarAdjuntos(idunico);
+                    $.ajax({
+                        url: "{{ route('operaciones.editatencion',':id') }}".replace(':id',idunico),
+                        data: idunico,
+                        method: 'POST',
+                        success: function(data) {
+                          console.log(data)
+                          console.log("obtuve las imagenes atencion del pedido "+idunico)
+                        $('#listado_adjuntos').html(data);
+                        }
+                    });
+
+                  }
+              }).done(function (data) {
+
+              });
+
+              return false;
+      });
+
+
+    $(document).on("submit", "#formularioatender", function (evento) {
+      evento.preventDefault();
+      var status= validarFormulario(evento);
        if(!status){
         return;
        }
@@ -163,9 +206,10 @@
         //console.log(files)
 
         var imagen = $('input[type=file][name="adjunto[]"]')[0].files[0];
-       // console.log(imagen)
+      // console.log(imagen)
+      //return false;
 
-        //return false;
+      var data = new FormData(document.getElementById("formularioatender"));
 
         var fd = new FormData();
 
@@ -185,14 +229,13 @@
 
         //console.log(files);
         //return false;
-
         //fd.append( 'cant_compro', $("#cant_compro").val() );
         fd.append( 'cant_compro', files.length );
         fd.append( 'condicion', $("#condicion").val() );
         fd.append( 'hiddenAtender', $("#hiddenAtender").val() );
 
         $.ajax({
-           data: fd,
+           data: data,
            processData: false,
            contentType: false,
            type: 'POST',
@@ -207,10 +250,7 @@
            }
 
         });
-
         console.log(fd);
-
-
       });
 
       $('#modal-atender').on('show.bs.modal', function (event) {
