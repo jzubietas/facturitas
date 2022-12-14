@@ -390,6 +390,8 @@
                         return '{{\App\Models\Pedido::ATENDIDO }}';
                     }else if(row.condicion_code==4){
                         return '{{\App\Models\Pedido::ANULADO }}';
+                    }else{
+                        return '';
                     }
                 }
             },
