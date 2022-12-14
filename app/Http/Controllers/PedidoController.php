@@ -1947,6 +1947,7 @@ return ' no imagen ';
                 'pedidos.responsable',
                 'pedidos.pagado as condicion_pa',
                 'pedidos.created_at as fecha',
+                'dp.saldo as diferencia',
                 DB::raw('(select pago.condicion_code from pago_pedidos pagopedido inner join pedidos pedido on pedido.id=pagopedido.pedido_id and pedido.id=pedidos.id inner join pagos pago on pagopedido.pago_id=pago.id where pagopedido.estado=1 and pago.estado=1 order by pagopedido.created_at desc limit 1) as condiciones_aprobado'),
             )
             ->where('pedidos.estado', '1')
@@ -2014,12 +2015,11 @@ return ' no imagen ';
 
             $pedidos = $pedidos->WhereIn('u.identificador', $usersasesores);
 
-        } else {
-            $pedidos = $pedidos;
         }
-        $pedidos = $pedidos->get();
 
-        return Datatables::of($pedidos)
+        //$pedidos = $pedidos->get();
+
+        return Datatables::of(DB::table($pedidos))
             ->addIndexColumn()
             ->addColumn('action', function ($pedido) {
                 $btn = '';

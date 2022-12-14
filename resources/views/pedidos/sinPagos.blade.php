@@ -54,6 +54,7 @@
             <th scope="col">Estado de pedido</th>
             <th scope="col">Estado de pago</th>
             <th scope="col">Administracion</th>
+            <th scope="col">Diferencia</th>
             <th scope="col">Acciones</th>
           </tr>
         </thead>
@@ -138,16 +139,17 @@
             }   */
         },
         rowCallback: function (row, data, index) {
-              /*var pedidodiferencia=data.diferencia;
-              if(pedidodiferencia==null){
-                $('td:eq(12)', row).css('background', '#ca3a3a').css('color','#ffffff').css('text-align','center').css('font-weight','bold');
-              }else{
+            var pedidodiferencia=data.diferencia;
+            //pedidodiferencia=0;
+            if(pedidodiferencia==null){
+                $('td:eq(9)', row).css('background', '#ca3a3a').css('color','#ffffff').css('text-align','center').css('font-weight','bold');
+            }else{
                 if(pedidodiferencia>3){
-                  $('td:eq(12)', row).css('background', '#ca3a3a').css('color','#ffffff').css('text-align','center').css('font-weight','bold');
+                    $('td:eq(9)', row).css('background', '#ca3a3a').css('color','#ffffff').css('text-align','center').css('font-weight','bold');
                 }else{
-                  $('td:eq(12)', row).css('background', '#44c24b').css('text-align','center').css('font-weight','bold');
+                    $('td:eq(9)', row).css('background', '#44c24b').css('text-align','center').css('font-weight','bold');
                 }
-              }*/
+            }
         },
         initComplete:function(settings,json){
 
@@ -248,6 +250,21 @@
 
           }
         },
+            {
+                data: 'diferencia',
+                name: 'diferencia',
+                render: function ( data, type, row, meta ) {
+                    if(row.diferencia==null){
+                        return 'NO REGISTRA PAGO';
+                    }else{
+                        if(row.diferencia>0){
+                            return row.diferencia;
+                        }else{
+                            return row.diferencia;
+                        }
+                    }
+                }
+            },
         {
           data: 'action',
           name: 'action',
