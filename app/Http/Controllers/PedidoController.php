@@ -2787,6 +2787,7 @@ return ' no imagen ';
                 'pedidos.user_id',
                 'pedidos.cliente_id',
                 'pedidos.codigo',
+                'pedidos.condicion_code',
                 'dp.mes',
                 'dp.anio',
                 'dp.ruc',
@@ -2820,9 +2821,12 @@ return ' no imagen ';
         return response()->json([
             'is_repetido' => $pedidos_repetidos->count() > 0,
             'coincidencia' => $pedidos_repetidos,
-            'codigos' => $pedidos_repetidos->map(function (Pedido $p){
-                if($p->condicion==Pedido::ANULADO||$p->condicion_code==4)
-                return "<span class='text-danger'>".$p->codigo."</span>";
+            'codigos' => $pedidos_repetidos->map(function (Pedido $p) {
+                if ($p->condicion_code == 4) {
+                    return "<span class='text-danger'>" . $p->codigo . "</span>";
+                }else{
+                    return "<span class='text-dark'>" . $p->codigo . "</span>";
+                }
             })->join(', '),
         ]);
     }
