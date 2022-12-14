@@ -96,6 +96,7 @@ class OperacionController extends Controller
                 'dp.nombre_empresa as empresas',
                 'dp.total as total',
                 'pedidos.condicion',
+                'pedidos.condicion_code',
                 DB::raw('(DATE_FORMAT(pedidos.created_at, "%Y-%m-%d %h:%i:%s")) as fecha'),
                 //DB::raw('(select DATE_FORMAT( MIN(dpa.fecha), "%Y-%m-%d")   from detalle_pagos dpa where dpa.pago_id=pagos.id and dpa.estado=1) as fecha'),
                 //DB::raw('DATE_FORMAT(pedidos.created_at, "%d/%m/%Y") as fecha'),
@@ -204,6 +205,7 @@ class OperacionController extends Controller
                     'dp.codigo as codigos',
                     'dp.nombre_empresa as empresas',
                     'pedidos.condicion',
+                    'pedidos.condicion_code',
                     DB::raw('(DATE_FORMAT(pedidos.created_at, "%Y-%m-%d %h:%i:%s")) as fecha'),
                     'pedidos.envio',
                     'pedidos.destino',
@@ -222,7 +224,7 @@ class OperacionController extends Controller
                 //->WhereIn('u.identificador',$asesores)
                 //->where('u.operario', Auth::user()->id)
                 //->where('pedidos.condicion', 'ATENDIDO')
-                ->where('pedidos.condicion', 'ATENDIDO')
+                ->where('pedidos.condicion_code', Pedido::ATENDIDO_INT)
                 ->where('pedidos.envio', 0);
                 /*->groupBy(
                     'pedidos.id',
@@ -358,7 +360,7 @@ class OperacionController extends Controller
                 )
                 ->where('pedidos.estado', '1')
                 ->where('dp.estado', '1')
-                ->where('pedidos.condicion', Pedido::ATENDIDO)
+                ->where('pedidos.condicion_code', Pedido::ATENDIDO_INT)
                 ->whereIn('pedidos.envio', ['1','2','3'])
                 //->whereIn('pedidos.envio', ['0'])
                 ->whereBetween( 'pedidos.created_at', [$min, $max]);
@@ -430,6 +432,7 @@ class OperacionController extends Controller
         $pedido=Pedido::where("id",$hiddenAtender)->first();
         $pedido->update([
             'condicion' => $request->condicion,
+            'condicion_code' => $request->condicion,
             'modificador' => 'USER'.Auth::user()->id
         ]);
 
@@ -879,7 +882,7 @@ class OperacionController extends Controller
         //calcular el operario relacionado a este pedido
 
         $info_operario=User::where('id',$operario)->first();
-        
+
         {
             $detalle_pedidos->update([
                 'envio_doc' => '1',

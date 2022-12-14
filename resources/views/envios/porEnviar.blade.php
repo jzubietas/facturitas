@@ -305,20 +305,9 @@
         },
         columns: [
           {
-              data: 'id',
-              name: 'id',
-              "visible":false,
-              render: function ( data, type, row, meta ) {
-                if(row.id<10){
-                  return 'ENV000'+row.id;
-                }else if(row.id<100){
-                  return 'ENV00'+row.id;
-                }else if(row.id<1000){
-                  return 'ENV0'+row.id;
-                }else{
-                  return 'ENV'+row.id;
-                }
-              }
+            data: 'correlativo',
+            name: 'correlativo',
+            
           },
           {
             data: 'codigos',
