@@ -242,26 +242,157 @@ $(document).ready(function () {
           "autoWidth": false,
           rowCallback: function (row, data, index) {
           },
-          columns: [{
+          columns: [
+            
+            {
               data: 'DT_RowIndex',
               name: 'DT_RowIndex',
               sWidth: '10%',
           },
               {
-                  data: 'celular',
-                  name: 'celular',
-                  sWidth: '70%',
-                  render: function (data, type, row, meta) {
-                      return row.celular + " - " + row.nombre;
-                  }
+                  data: 'id',
+                  name: 'id',
+                  sWidth: '10%'
               },
               {
-                  data: 'estado',
-                  name: 'estado',
+                  data: 'a_2021_11',
+                  name: 'a_2021_11',
                   sWidth: '20%',
-                  render: function (data, type, row, meta) {
-                      return '<span class="badge badge-danger">Deudor</span>';
-                  }
+              },
+              {
+                  data: 's_2021_11',
+                  name: 's_2021_11',
+                  sWidth: '20%',
+              },
+              {
+                  data: 'a_2021_12',
+                  name: 'a_2021_12',
+                  sWidth: '20%',
+              },
+              {
+                  data: 's_2021_12',
+                  name: 's_2021_12',
+                  sWidth: '20%',
+              },
+              {
+                  data: 'a_2022_01',
+                  name: 'a_2022_01',
+                  sWidth: '20%',
+              },
+              {
+                  data: 's_2022_01',
+                  name: 's_2022_01',
+                  sWidth: '20%',
+              },
+              {
+                  data: 'a_2022_02',
+                  name: 'a_2022_02',
+                  sWidth: '20%',
+              },
+              {
+                  data: 's_2022_02',
+                  name: 's_2022_02',
+                  sWidth: '20%',
+              },
+              {
+                  data: 'a_2022_03',
+                  name: 'a_2022_03',
+                  sWidth: '20%',
+              },
+              {
+                  data: 's_2022_03',
+                  name: 's_2022_03',
+                  sWidth: '20%',
+              },
+              {
+                  data: 'a_2022_04',
+                  name: 'a_2022_04',
+                  sWidth: '20%',
+              },
+              {
+                  data: 's_2022_04',
+                  name: 's_2022_04',
+                  sWidth: '20%',
+              },
+              {
+                  data: 'a_2022_05',
+                  name: 'a_2022_05',
+                  sWidth: '20%',
+              },
+              {
+                  data: 's_2022_05',
+                  name: 's_2022_05',
+                  sWidth: '20%',
+              },
+              {
+                  data: 'a_2022_06',
+                  name: 'a_2022_06',
+                  sWidth: '20%',
+              },
+              {
+                  data: 's_2022_06',
+                  name: 's_2022_06',
+                  sWidth: '20%',
+              },
+              {
+                  data: 'a_2022_07',
+                  name: 'a_2022_07',
+                  sWidth: '20%',
+              },
+              {
+                  data: 's_2022_07',
+                  name: 's_2022_07',
+                  sWidth: '20%',
+              },
+              {
+                  data: 'a_2022_08',
+                  name: 'a_2022_08',
+                  sWidth: '20%',
+              },
+              {
+                  data: 's_2022_08',
+                  name: 's_2022_08',
+                  sWidth: '20%',
+              },
+              {
+                  data: 'a_2022_09',
+                  name: 'a_2022_09',
+                  sWidth: '20%',
+              },
+              {
+                  data: 's_2022_09',
+                  name: 's_2022_09',
+                  sWidth: '20%',
+              },
+              {
+                  data: 'a_2022_10',
+                  name: 'a_2022_10',
+                  sWidth: '20%',
+              },
+              {
+                  data: 's_2022_10',
+                  name: 's_2022_10',
+                  sWidth: '20%',
+              },
+              {
+                  data: 'a_2022_11',
+                  name: 'a_2022_11',
+                  sWidth: '20%',
+              },
+              {
+                  data: 's_2022_11',
+                  name: 's_2022_11',
+                  sWidth: '20%',
+              },
+              {
+                  data: 'a_2022_12',
+                  name: 'a_2022_12',
+                  sWidth: '20%',
+              },
+              {
+                  data: 's_2022_12',
+                  name: 's_2022_12',
+                  sWidth: '20%',
               },
           ],
           language: {
