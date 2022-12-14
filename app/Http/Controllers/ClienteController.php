@@ -178,7 +178,7 @@ class ClienteController extends Controller
         //}
     }
 
-    public function indextablahistoricocliente(Request $request)
+    public function clientestablasituacion(Request $request)
     {
         $idconsulta=$request->idconsulta;
         $data = ListadoResultado::where('id', '1')

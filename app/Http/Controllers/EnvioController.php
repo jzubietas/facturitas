@@ -1406,5 +1406,86 @@ class EnvioController extends Controller
         return view('pedidos.createDireccion', compact('destinos', 'distritos', 'clientes', 'pedidos'));
     }
 
+    public function SinEnviarid(Request $request)
+    {
+        //Pedido $pedido
+        $pedido=Pedido::where("id",$request->hiddenSinenvio)->first();
+        $detalle_pedidos = DetallePedido::where('pedido_id',$pedido->id)->first();
+        $fecha = Carbon::now();
+
+        $pedido->update([
+            'envio' => '3',//SIN ENVIO
+            'condicion_envio' => Pedido::$estadosCondicionCode[3],
+            'condicion_envio_code' => 3,
+            'modificador' => 'USER'.Auth::user()->id
+        ]);
+
+        $detalle_pedidos->update([
+            'fecha_envio_doc_fis' => $fecha,
+            'fecha_recepcion' => $fecha,
+            'atendido_por' => Auth::user()->name,
+            'atendido_por_id' => Auth::user()->id,
+        ]);
+
+        /**/
+        $cliente=Cliente::where("id",$pedido->cliente_id)->first();
+
+        $direcciongrupo=DireccionGrupo::create([
+                'estado'=>'1',
+                'destino' => 'LIMA',
+                'distribucion'=> '',
+                'condicion_envio' => 3,
+                'condicion_sobre' => 'SIN ENVIO',
+            ]);
+
+        $direccionLima = DireccionEnvio::create([
+            'cliente_id' => $pedido->cliente_id,
+            'distrito' => 'LIMA',
+            'direccion' => '',
+            'referencia' => '',
+            'nombre' => $cliente->nombre,
+            'celular' => $cliente->celular,
+            'observacion' => '',
+            'direcciongrupo' => $direcciongrupo->id,
+            'cantidad' => 1,
+            'destino'=>'LIMA',
+            'estado' => '1',
+            "salvado"=> "0"
+        ]);
+
+
+        $direccionPedido = DireccionPedido::create([
+                'direccion_id' => $direccionLima->id,
+                'pedido_id' => $pedido->id,
+                'codigo_pedido' => $detalle_pedidos->codigo,
+                'direcciongrupo' => $direcciongrupo->id,
+                'empresa' => $detalle_pedidos->nombre_empresa,
+                'estado' => '1'
+            ]);
+
+        return response()->json(['html' => $pedido->id]);
+        //return redirect()->route('operaciones.atendidos')->with('info','actualizado');
+    }
+
+    public function Enviarid(Request $request)
+    {
+        $pedido=Pedido::where("id",$request->hiddenEnvio)->first();
+        $detalle_pedidos = DetallePedido::where('pedido_id',$pedido->id)->first();
+        $fecha = Carbon::now();
+
+        $pedido->update([
+            'envio' => '1',
+            'modificador' => 'USER'.Auth::user()->id
+        ]);
+
+        $detalle_pedidos->update([
+            'fecha_envio_doc_fis' => $fecha,
+        ]);
+
+        return response()->json(['html' => $pedido->id]);
+
+        //return redirect()->route('operaciones.atendidos')->with('info','actualizado');
+    }
+
 
 }

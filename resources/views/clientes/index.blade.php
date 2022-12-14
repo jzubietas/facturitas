@@ -63,6 +63,7 @@
 
         </tbody>
       </table>
+      @include('clientes.modal.historialsituacion')
     </div>
   </div>
 
@@ -129,11 +130,56 @@
 <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
 <script>
+
+var tabla_historial_cliente = null;
+
 $(document).ready(function () {
 
   $.ajaxSetup({
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+
+    tabla_historial_cliente = $('#tabla_pedidos').DataTable({
+        "bPaginate": false,
+        "bFilter": false,
+        "bInfo": false,
+        columns:
+            [
+                data: null
+                ,data: null
+                ,data: null
+                ,data: null
+                ,data: null
+                ,data: null
+                ,data: null
+                ,data: null
+                ,data: null
+                ,data: null
+                ,data: null
+                ,data: null
+                ,data: null
+            ],
+        language: {
+            "decimal": "",
+            "emptyTable": "No hay información",
+            "info": "Mostrando del _START_ al _END_ de _TOTAL_ Entradas",
+            "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
+            "infoFiltered": "(Filtrado de _MAX_ total entradas)",
+            "infoPostFix": "",
+            "thousands": ",",
+            "lengthMenu": "Mostrar _MENU_ Entradas",
+            "loadingRecords": "Cargando...",
+            "processing": "Procesando...",
+            "search": "Buscar:",
+            "zeroRecords": "Sin resultados encontrados",
+            "paginate": {
+                "first": "Primero",
+                "last": "Ultimo",
+                "next": "Siguiente",
+                "previous": "Anterior"
+            }
         }
     });
 
@@ -169,6 +215,75 @@ $(document).ready(function () {
       }
       $(".textcode").html(idunico);
 
+    });
+
+    $('#modal-historial-situacion-cliente').on('show.bs.modal', function (event) {
+      var button = $(event.relatedTarget)
+      var idcliente = button.data('cliente')
+      $('#tablaPrincipalHistorialSituacion').DataTable().clear().destroy();
+
+      $('#tablaPrincipalHistorialSituacion').DataTable({
+          processing: true,
+          serverSide: true,
+          searching: true,
+          "order": [
+              [0, "desc"]
+          ],
+          ajax: {
+              url: "{{ route('deudoresoncreate') }}",
+              data: function (d) {
+                  //d.buscarpedidocliente = c_cliente_id;
+                  //d.buscarpedidoruc = c_ruc;
+
+              },
+          },
+          "createdRow": function (row, data, dataIndex) {
+          },
+          "autoWidth": false,
+          rowCallback: function (row, data, index) {
+          },
+          columns: [{
+              data: 'DT_RowIndex',
+              name: 'DT_RowIndex',
+              sWidth: '10%',
+          },
+              {
+                  data: 'celular',
+                  name: 'celular',
+                  sWidth: '70%',
+                  render: function (data, type, row, meta) {
+                      return row.celular + " - " + row.nombre;
+                  }
+              },
+              {
+                  data: 'estado',
+                  name: 'estado',
+                  sWidth: '20%',
+                  render: function (data, type, row, meta) {
+                      return '<span class="badge badge-danger">Deudor</span>';
+                  }
+              },
+          ],
+          language: {
+            "decimal": "",
+            "emptyTable": "No hay informaciÃ³n",
+            "info": "Mostrando del _START_ al _END_ de _TOTAL_ Entradas",
+            "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
+            "infoFiltered": "(Filtrado de _MAX_ total entradas)",
+            "infoPostFix": "",
+            "thousands": ",",
+            "lengthMenu": "Mostrar _MENU_ Entradas",
+            "loadingRecords": "Cargando...",
+            "processing": "Procesando...",
+            "search": "Buscar:",
+            "zeroRecords": "Sin resultados encontrados",
+            "paginate": {
+                "first": "Primero",
+                "last": "Ultimo",
+                "next": "Siguiente",
+                "previous": "Anterior"
+            }
+        },
     });
 
 
@@ -257,7 +372,7 @@ $(document).ready(function () {
 
             @endcan
 
-            data = data+'<a href="" data-target="#modal-historial-cliente" data-toggle="modal" data-cliente="'+row.id+'"><button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i> Historico</button></a>';
+            data = data+'<a href="" data-target="#modal-historial-situacion-cliente" data-toggle="modal" data-cliente="'+row.id+'"><button class="btn btn-success btn-sm"><i class="fas fa-trash-alt"></i> Historico</button></a>';
 
             return data;
           }
