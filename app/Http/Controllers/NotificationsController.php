@@ -44,7 +44,7 @@ class NotificationsController extends Controller
         $devoluciones = [];
         if (\Auth::check()) {
             if (\Auth::user()->rol == \App\Models\User::ROL_ADMIN) {
-                $devoluciones = Devolucion::query()->with(['cliente', 'pago', 'asesor'])->noAtendidos()->get();
+                $devoluciones = Devolucion::query()->with(['cliente', 'pago', 'asesor'])->noAtendidos()->orderByDesc('created_at')->get();
                 foreach ($devoluciones as $key => $devolucion) {
                     $icon = "<i class='mr-2 fas fa-fw fa-envelope'></i>";
 

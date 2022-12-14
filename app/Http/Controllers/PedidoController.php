@@ -1351,6 +1351,7 @@ return ' no imagen ';
         $cotizacion = Pedido::join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
             ->select(
                 'pedidos.id',
+                'dp.nombre_empresa',
                 'dp.cantidad',
                 'dp.porcentaje',
                 'dp.ft',
