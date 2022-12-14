@@ -345,12 +345,20 @@ return [
                     'active' => ['pedidos atendidos'],
                 ],
                 [
+                    'text' => 'En bancarización',
+                    'route'  => 'operaciones.bancarizacion',
+                    'can' => 'operacion.atendidos',
+                    'icon'   => 'fas fa-check-circle',
+                    'active' => ['pedidos atendidos'],
+                ],
+                [
                     'text' => 'Sobres terminados',
                     'route'  => 'operaciones.entregados',
                     'can' => 'operacion.atendidos',
                     'icon'   => 'fas fa-check-circle',
                     'active' => ['pedidos atendidos'],
                 ],
+
             ],
         ],
 
@@ -487,7 +495,7 @@ return [
             'icon'    => 'fas fa-users',
             'can' => 'personas.modulo',
             'submenu' => [
-                
+
                 [
                     'text' => 'Clientes',
                     'route'  => 'clientes.index',
@@ -501,7 +509,7 @@ return [
                     'can' => 'clientes.recurrentes',
                     'icon'   => 'fas fa-check-circle',
                     'active' => ['clientes'],
-                ],     
+                ],
                 [
                     'text' => 'Abandono Recientes',
                     'route'  => 'clientes.abandonos.recientes',
@@ -537,9 +545,9 @@ return [
                     'icon'   => 'fas fa-check-circle',
                     'active' => ['clientes'],
                 ],
-                          
-                
-                
+
+
+
                 [
                     'text' => 'Base fría',
                     'route'  => 'basefria',
