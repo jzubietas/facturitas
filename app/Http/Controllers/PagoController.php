@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use App\Events\PagoEvent;
@@ -139,16 +140,16 @@ class PagoController extends Controller
         } else if (Auth::user()->rol == 'Jefe de llamadas') {
 
             $llamadas = User::where('users.rol', 'Llamadas')
-                -> where('users.estado', '1')
-                -> where('users.jefe', Auth::user()->id)
+                ->where('users.estado', '1')
+                ->where('users.jefe', Auth::user()->id)
                 ->select(
                     DB::raw("users.id as id")
                 )
                 ->pluck('users.id');
 
             $usersasesores = User::whereIn('users.rol', ['Asesor'])//,'Administrador'
-                -> where('users.estado', '1')
-                ->WhereIn('users.llamada',$llamadas)
+            ->where('users.estado', '1')
+                ->WhereIn('users.llamada', $llamadas)
                 ->select(
                     DB::raw("users.identificador as identificador")
                 )
@@ -166,7 +167,6 @@ class PagoController extends Controller
                 ->pluck('users.identificador');
 
             $pagos = $pagos->WhereIn('u.identificador', $usersasesores);
-
 
 
         } else if (Auth::user()->rol == "Asesor") {
@@ -1404,7 +1404,7 @@ class PagoController extends Controller
         $pagos = Pago::join('users as u', 'pagos.user_id', 'u.id')
             ->join('clientes as c', 'pagos.cliente_id', 'c.id')
             ->select('pagos.id',
-                            DB::raw(" (CASE WHEN pagos.id<10 THEN concat('PAG',u.identificador,'-',
+                DB::raw(" (CASE WHEN pagos.id<10 THEN concat('PAG',u.identificador,'-',
                                 IF ( (select count(dpago.id) from detalle_pagos dpago where dpago.pago_id=pagos.id and dpago.estado in (1) )>1,'V','I' )  ,
                                 IF ( (select count(ppedidos.id) from pago_pedidos ppedidos where ppedidos.pago_id=pagos.id and ppedidos.estado in (1) ) >1,'V','I' ),
                                 '-',pagos.id
@@ -2420,19 +2420,19 @@ class PagoController extends Controller
             if ($condicion == Pago::ABONADO) {
                 $pago->update([
                     'fecha_aprobacion' => $fecha_aprobacion,
-                    'condicion_code' =>Pago::ABONADO_CODE
+                    'condicion_code' => Pago::ABONADO_CODE
                 ]);
             }
 
             if ($condicion == Pago::OBSERVADO) {
                 $pago->update([
-                    'condicion_code' =>Pago::OBSERVADO_CODE
+                    'condicion_code' => Pago::OBSERVADO_CODE
                 ]);
             }
 
             if ($condicion == Pago::PENDIENTE) {
                 $pago->update([
-                    'condicion_code' =>Pago::PENDIENTE_CODE
+                    'condicion_code' => Pago::PENDIENTE_CODE
                 ]);
             }
 
@@ -2710,7 +2710,7 @@ class PagoController extends Controller
         }*/
         if ($request->has("read_notification")) {
             $notification = DatabaseNotification::query()->find($request->get('read_notification'));
-            if($notification!=null){
+            if ($notification != null) {
                 $notification->markAsRead();
             }
         }
@@ -2784,38 +2784,31 @@ class PagoController extends Controller
         return redirect()->route("pagos.show", $devolucion);
     }
 
-    /*public function validadContenidoPago(Request $request)
+    public function validadContenidoPago(Request $request)
     {
-
-        $pedidos_repetidos = DetallePago::join('detalle_pagos as dp', 'pagos.id', 'dp.pago_id')
-            ->join('users as u', 'pagos.user_id', 'u.id')
-            ->join('clientes as c', 'pagos.cliente_id', 'c.id')
-            ->select(
-                'pagos.id',
-                'u.identificador',
-                'pagos.user_id',
-                'pagos.cliente_id',
-                'dp.banco',
-                'dp.titular',
-                'dp.cuenta'
+        $pagos_repetidos = DetallePago::query()
+            ->with(['pago','pago.user'])
+            ->where('banco', $request->banco)
+            ->where('titular', $request->titular)
+            ->where('cuenta', $request->cuenta)
+            ->where('monto', $request->monto)
+            ->where('fecha', $request->fecha)
+            ->whereIn('pago_id',
+                Pago::query()->distinct()->select('pagos.id')
+                    ->join('users', 'users.id', '=', 'pagos.user_id')
+                    ->where('cliente_id', $request->cliente_id)
+                    ->where('users.identificador', $request->asesor)
             )
-            ->where('u.identificador', $request->asesor)
-            ->where('pagos.cliente_id', $request->cliente)
-            ->where('dp.banco', $request->banco)
-            ->where('dp.titular', $request->titular)
-            ->where('dp.cuenta', $request->cuenta)
-            ->count();
+            ->limit(5)
+            ->get();
 
-            if($pedidos_repetidos>0)
-            {
-                $html="1";
-                return response()->json(['html' => $html]);
-
-            }else{
-                //no existe ,registrare
-                $html="0";
-                return response()->json(['html' => $html]);
-            }
-    }*/
+        return response()->json([
+            'codigos' => $pagos_repetidos->map(function ($dp){
+                return $dp->pago->code_id;
+            })->join(', '),
+            'is_repetido' => $pagos_repetidos->count() > 0,
+            'coincidencia' => $pagos_repetidos,
+        ]);
+    }
 
 }

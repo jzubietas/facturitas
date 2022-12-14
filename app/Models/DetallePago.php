@@ -8,7 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 class DetallePago extends Model
 {
     use HasFactory;
-    
+
     protected $guarded = ['id'];
 
+    public function pago()
+    {
+        return $this->belongsTo(Pago::class,'pago_id');
+    }
 }

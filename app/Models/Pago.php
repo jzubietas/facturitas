@@ -46,8 +46,9 @@ class Pago extends Model
 
     protected $guarded = ['id'];
 
-    public function scopeCondicion($query,$value){
-        $query->where('condicion','=',$value);
+    public function scopeCondicion($query, $value)
+    {
+        $query->where('condicion', '=', $value);
     }
 
     public function setCondicionAttribute($value)
@@ -60,6 +61,39 @@ class Pago extends Model
     {
         $this->attributes['subcondicion'] = $value;
         $this->setAttribute('subcondicion_code', self::$migrateSubCondiciones[$value] ?? $value);
+    }
+
+    public function getCodeIdAttribute()
+    {
+        $cantidadvoucher = $this->detalle_pagos()->whereEstado(1)->count();
+        $cantidadpedido = $this->pago_pedidos()->whereEstado(1)->count();
+        $users=$this->user->identificador;
+
+        $unido = ($cantidadvoucher > 1) ? 'V' : 'I' . (($cantidadpedido > 1) ? 'V' : 'I');
+        if ($this-> id < 10) {
+            return 'PAG' . $users . '-' . $unido . '-' . $this->id;
+        } else if ($this->id < 100) {
+            return 'PAG00' . $users . '-' . $unido . '-' . $this->id;
+        } else if ($this->id < 1000) {
+            return 'PAG0' . $users . '-' . $unido . '-' . $this->id;
+        } else {
+            return 'PAG' . $users .'-' . $unido . '-' . $this->id;
+        }
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class,'user_id');
+    }
+
+    public function detalle_pagos()
+    {
+        return $this->hasMany(DetallePago::class,'pago_id');
+    }
+
+    public function pago_pedidos()
+    {
+        return $this->hasMany(PagoPedido::class,'pago_id');
     }
 
     public function pedidos()
@@ -96,4 +130,6 @@ class Pago extends Model
     {
         return $this->condicion == self::ABONADO_PARCIAL;
     }
+
+
 }

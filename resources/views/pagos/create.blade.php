@@ -310,7 +310,6 @@
           }
         }*/
 
-        
 
         $(document).ready(function () {
 
@@ -2008,8 +2007,6 @@
             }
               }
           }*/
-
-
                     else {
 
                         console.log("empieza logica 2");
@@ -2490,7 +2487,9 @@
                         console.log(errors)
                         return `<div class="alert alert-danger">
                                     <ul>
-                                       ${errors.map(function (e){return `<li>${e}</li>`;}).join('')}
+                                       ${errors.map(function (e) {
+                            return `<li>${e}</li>`;
+                        }).join('')}
                                     </ul>
                                 </div>`;
                     }
@@ -2501,7 +2500,7 @@
 
                         var formDataSaldo = $("#formulario").serialize();
                         $("#devolucion_message_response").html("");
-                        $("#btnDevolucion").attr("disabled","disabled")
+                        $("#btnDevolucion").attr("disabled", "disabled")
                         $("#btnDevolucion").text("Guardando ..")
                         $.ajax({
                             data: formDataSaldo,
@@ -2522,7 +2521,7 @@
                                 if (jqXHR.status === 422) {
                                     if (jqXHR.responseJSON && jqXHR.responseJSON.errors) {
                                         $("#devolucion_message_response").html(generateHtmlErrors(
-                                                Object.keys(jqXHR.responseJSON.errors).map(function (a){
+                                                Object.keys(jqXHR.responseJSON.errors).map(function (a) {
                                                     return jqXHR.responseJSON.errors[a][0]
                                                 })
                                             )
@@ -2545,6 +2544,7 @@
 
                 window.agregarPago = function () {
                     //alert('lol');
+
                     $("#accion_perdonar").val("");
                     console.log("en pagos")
                     var strEx = $("#pmonto").val();
@@ -2576,20 +2576,20 @@
 
                         //let files=$('#pimagen');
                         let files = $('input[name="pimagen')
-                        console.log(files.length);//1
-                        {
-                            //
-                            //var totalfilescarga = $('#pimagen').get(0).files.length;
-                            var totalfilescarga = $('input[name="pimagen"]').get(0).files.length;
-                            //var totalfilescarga = $('input[name="adjunto[]"]').get(0).files.length;
-                            console.log("totalfilescarga " + totalfilescarga);
-                            console.log(files.get(0).files[0]);
-                            console.log("cargo inputs y len " + files.length)
-                            for (let i = 0; i < files.length; i++) {
-                                fd2.append('adjunto', $('input[type=file][name="pimagen"]')[0].files[0]);
-                            }
-                            console.log(fd2);
 
+                        //
+                        //var totalfilescarga = $('#pimagen').get(0).files.length;
+                        var totalfilescarga = $('input[name="pimagen"]').get(0).files.length;
+                        //var totalfilescarga = $('input[name="adjunto[]"]').get(0).files.length;
+                        console.log("totalfilescarga " + totalfilescarga);
+                        console.log(files.get(0).files[0]);
+                        console.log("cargo inputs y len " + files.length)
+                        for (let i = 0; i < files.length; i++) {
+                            fd2.append('adjunto', $('input[type=file][name="pimagen"]')[0].files[0]);
+                        }
+                        console.log(fd2);
+
+                        function AgregarPagoTemporal() {
                             $.ajax({
                                 data: fd2,
                                 processData: false,
@@ -2649,6 +2649,54 @@
                                 }
                             });
                         }
+
+
+                        $.post("{{ route('pagos.store.validate') }}", {
+                            banco: $("#pbanco").val(),
+                            titular: $("#titulares").val(),
+                            cuenta: $("#tipotransferencia").val(),
+                            monto: $("#pmonto").val(),
+                            fecha: $("#pfecha").val(),
+                            cliente_id: $("#pcliente_id").val(),
+                            asesor: $("#user_id").val(),
+                        })
+                            .done(function (data) {
+                                if (!data.is_repetido) {
+                                    AgregarPagoTemporal();
+                                } else {
+                                    Swal.fire({
+                                        icon: 'warning',
+                                        title: 'Advertencia',
+                                        html: 'Este pago ya se encuentra regitrado con el codigo <b>' + data.codigos + '</b>',
+                                        showDenyButton: true,
+                                        confirmButtonText: 'Estoy de acuerdo',
+                                        denyButtonText: 'Cancelar',
+                                    }).then((result) => {
+                                        if (result.isConfirmed) {
+                                            //agregar();
+                                            if (result.isConfirmed) {
+                                                Swal.fire({
+                                                    icon: 'warning',
+                                                    title: 'Advertencia',
+                                                    text: 'Recuerda que tienes que revisar si es un pago duplicado',
+                                                    showDenyButton: true,
+                                                    confirmButtonText: 'Estoy de acuerdo, Agregar',
+                                                    denyButtonText: 'Cancelar, No Agregar',
+                                                }).then((result) => {
+                                                    if (result.isConfirmed) {
+                                                        AgregarPagoTemporal();
+                                                    }
+                                                })
+                                                //agregar();
+                                            }
+                                        }
+                                    })
+                                }
+
+                            })
+                            .fail(function (data) {
+
+                            });
 
 
                         //////
