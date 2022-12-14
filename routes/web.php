@@ -208,6 +208,8 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::get('operaciones.atendidostabla', [OperacionController::class, 'Atendidostabla'])->name('operaciones.atendidostabla');
     Route::get('operaciones.entregados', [OperacionController::class, 'Entregados'])->name('operaciones.entregados');
     Route::get('operaciones.entregadostabla', [OperacionController::class, 'Entregadostabla'])->name('operaciones.entregadostabla');
+    Route::get('operaciones.bancarizacion', [OperacionController::class, 'Bancarizacion'])->name('operaciones.bancarizacion');
+    Route::get('operaciones.bancarizaciontabla', [OperacionController::class, 'Bancarizaciontabla'])->name('operaciones.bancarizaciontabla');
     Route::post('operaciones.atenderid', [OperacionController::class, 'Atenderid'])->name('operaciones.atenderid');
     Route::get('operaciones.editatender/{pedido}', [OperacionController::class, 'editAtender'])->name('operaciones.editatender');
     Route::post('operaciones.editatencion/{pedido}', [OperacionController::class, 'editAtencion'])->name('operaciones.editatencion');
@@ -217,6 +219,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::post('operaciones.updateatender/{pedido}', [OperacionController::class, 'updateAtender'])->name('operaciones.updateatender');
     Route::post('operaciones.updateatenderid/{pedido}', [OperacionController::class, 'updateAtenderId'])->name('operaciones.updateatenderid');
     Route::get('operaciones.showatender/{pedido}', [OperacionController::class, 'showAtender'])->name('operaciones.showatender');
+    Route::post('operaciones.recepcionid', [OperacionController::class, 'confirmarRecepcionID'])->name('operaciones.recepcionid');
     Route::post('operaciones.envioid', [OperacionController::class, 'Enviarid'])->name('operaciones.envioid');
     Route::post('operaciones.revertirenvioid', [OperacionController::class, 'Revertirenvio'])->name('operaciones.revertirenvioid');
     Route::post('operaciones.sinenvioid', [OperacionController::class, 'SinEnviarid'])->name('operaciones.sinenvioid');

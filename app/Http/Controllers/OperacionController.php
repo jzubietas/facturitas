@@ -1178,6 +1178,18 @@ class OperacionController extends Controller
         //return redirect()->route('operaciones.atendidos')->with('info','actualizado');
     }
 
+    public function confirmarRecepcionID(Request $request)
+    {
+        $pedido=Pedido::where("id",$request->hiddenEnvio)->first();
+
+        $pedido->update([
+            'envio' => '2',
+            'modificador' => 'USER'.Auth::user()->id
+        ]);
+
+        return response()->json(['html' => $pedido->id]);
+    }
+
     public function Revertirenvio(Request $request)
     {
         $pedido=Pedido::where("id",$request->hiddenRevertirpedido)->first();
