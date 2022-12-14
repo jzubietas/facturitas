@@ -2807,13 +2807,16 @@ return ' no imagen ';
                     ->where('detalle_pedidos.tipo_banca', '=', $request->ptipo_banca)
                     ->getQuery()
             )
-            ->limit(2)
+            ->limit(5)
             ->get();
 
         return response()->json([
             'is_repetido' => $pedidos_repetidos->count() > 0,
             'coincidencia' => $pedidos_repetidos,
-            'codigos' => $pedidos_repetidos->pluck('codigo')->join(', '),
+            'codigos' => $pedidos_repetidos->map(function (Pedido $p){
+                if($p->condicion==Pedido::ANULADO||$p->condicion_code==4)
+                return "<span class='text-danger'>".$p->codigo."</span>";
+            })->join(', '),
         ]);
     }
 

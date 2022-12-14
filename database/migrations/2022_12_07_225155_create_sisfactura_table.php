@@ -709,6 +709,10 @@ return new class extends Migration
             $table->integer('estado');
             $table->timestamps();
         });
+        Schema::table('pedidos', function (Blueprint $table) {
+            $table->integer('condicion')->nullable()->change();
+            $table->integer('condicion_envio')->nullable()->change();
+        });
     }
 
     /**

@@ -135,8 +135,6 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::get('pedidostabla', [PedidoController::class, 'indextabla'])->name('pedidostabla');//actualizado para serverside
     Route::post('validarpedido', [PedidoController::class, 'validadContenidoPedido'])->name('validarpedido');
 
-    //Route::post('validarpago', [PagoController::class, 'validadContenidoPago'])->name('validarpago');
-
     Route::get('pedidosperdonarcurrier', [PedidoController::class, 'indexperdonarcurrier'])->name('pedidosperdonarcurrier');
     Route::get('pedidosperdonarcurriertabla', [PedidoController::class, 'indexperdonarcurriertabla'])->name('pedidosperdonarcurriertabla');//actualizado para serverside
 
@@ -234,6 +232,8 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
 
 
     /*Controller Pagos*/
+
+    Route::post('pagos.store.validate', [PagoController::class,'validadContenidoPago'])->name('pagos.store.validate');
     Route::resource('pagos', PagoController::class)->names('pagos');
     Route::post('pagos.perdonardeuda', [PagoController::class, 'perdonardeuda'])->name('pagos.perdonardeuda');
     Route::post('titulares.banco', [PagoController::class, 'TitularesBanco'])->name('titulares.banco');
