@@ -121,6 +121,9 @@
         transition: all 0.5s ease;
         text-shadow: 10px 2px #6ac7c2;
     }
+    
+    .modal-lg { max-width: 80% !important; }
+
 
   </style>
 @stop
@@ -147,19 +150,19 @@ $(document).ready(function () {
         "bInfo": false,
         columns:
             [
-                data: null
-                ,data: null
-                ,data: null
-                ,data: null
-                ,data: null
-                ,data: null
-                ,data: null
-                ,data: null
-                ,data: null
-                ,data: null
-                ,data: null
-                ,data: null
-                ,data: null
+                {data: null}
+                ,{data: null}
+                ,{data: null}
+                ,{data: null}
+                ,{data: null}
+                ,{data: null}
+                ,{data: null}
+                ,{data: null}
+                ,{data: null}
+                ,{data: null}
+                ,{data: null}
+                ,{data: null}
+                ,{data: null}
             ],
         language: {
             "decimal": "",
@@ -215,7 +218,7 @@ $(document).ready(function () {
       }
       $(".textcode").html(idunico);
 
-    });
+  });
 
     $('#modal-historial-situacion-cliente').on('show.bs.modal', function (event) {
       var button = $(event.relatedTarget)
@@ -230,7 +233,7 @@ $(document).ready(function () {
               [0, "desc"]
           ],
           ajax: {
-              url: "{{ route('deudoresoncreate') }}",
+              url: "{{ route('clientestablasituacion') }}",
               data: function (d) {
                   //d.buscarpedidocliente = c_cliente_id;
                   //d.buscarpedidoruc = c_ruc;
@@ -242,13 +245,7 @@ $(document).ready(function () {
           "autoWidth": false,
           rowCallback: function (row, data, index) {
           },
-          columns: [
-            
-            {
-              data: 'DT_RowIndex',
-              name: 'DT_RowIndex',
-              sWidth: '10%',
-          },
+          columns: [            
               {
                   data: 'id',
                   name: 'id',
@@ -416,6 +413,8 @@ $(document).ready(function () {
             }
         },
     });
+
+  });
 
 
 

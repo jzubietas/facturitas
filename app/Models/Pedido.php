@@ -55,14 +55,37 @@ class Pedido extends Model
         3=> 'ATENDIDO' ,
     ];
 
+    /******************
+     * CONDICION DE ENVIO
+     */
+
     public static $estadosCondicionEnvio = [
-        'ANULADO' => 4,
-        'PENDIENTE DE ENVÍO' => 1,
-        'EN REPARTO' => 2,
-        'ENTREGADO' => 3,
+        'POR ATENDER' => 1,
+        'INCOMPLETO' => 2,
+        'PDF' => 3,
+        'BANCARIZACION' => 4,
+        'JEFE_OP' => 5,
+        'COURIER' => 6,
+        'SOBRE_ENVIAR' => 7,
+        'EN_REPARTO' => 8,
+        'SEG_PROVINCIA' => 9,
+        'ENTREGADO' => 10,
     ];
 
-    
+    public static $estadosCondicionEnvioCode = [
+        1 => 'POR ATENDER',
+        2 => 'INCOMPLETO',
+        3 => 'PDF',
+        4 => 'BANCARIZACION',
+        5 => 'JEFE_OP',
+        6 => 'COURIER',
+        7 => 'SOBRE_ENVIAR',
+        8 => 'EN_REPARTO',
+        9 => 'SEG_PROVINCIA',
+        10 => 'ENTREGADO'
+    ];
+
+
 
     protected $guarded = ['id'];
 

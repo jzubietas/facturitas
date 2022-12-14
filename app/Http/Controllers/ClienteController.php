@@ -8,6 +8,7 @@ use App\Models\Cliente;
 use App\Models\Pedido;
 use App\Models\Porcentaje;
 use App\Models\User;
+use App\Models\ListadoResultado;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -186,7 +187,6 @@ class ClienteController extends Controller
                 'a_2021_11',
                 'a_2021_12',
                 'a_2022_01',
-                'a_2022_01',
                 'a_2022_02',
                 'a_2022_03',
                 'a_2022_04',
@@ -200,7 +200,6 @@ class ClienteController extends Controller
                 'a_2022_12',
                 's_2021_11',
                 's_2021_12',
-                's_2022_01',
                 's_2022_01',
                 's_2022_02',
                 's_2022_03',

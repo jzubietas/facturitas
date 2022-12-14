@@ -1,9 +1,9 @@
 @extends('adminlte::page')
 
-@section('title', 'Operaciones | Pedidos atendidos')
+@section('title', 'Operaciones | Sobres terminados')
 
 @section('content_header')
-  <h1>Lista de pedidos ATENDIDOS - OPERACIONES
+  <h1>BANCARIZACIÓN - OPERACIONES
     {{-- @can('pedidos.exportar')
     <div class="float-right btn-group dropleft">
       <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -22,7 +22,7 @@
         <a href="" data-target="#modal-exportar" data-toggle="modal" class="dropdown-item" target="blank_"><img src="{{ asset('imagenes/icon-excel.png') }}"> Excel</a>
       </div>
     </div>
-    @include('pedidos.modal.exportar', ['title' => 'Exportar pedidos atendidos', 'key' => '9'])
+    @include('pedidos.modal.exportar', ['title' => 'Exportar pedidos entregados', 'key' => '10'])
   </h1>
   @if($superasesor > 0)
   <br>
@@ -38,7 +38,7 @@
 
   <div class="card">
     <div class="card-body">
-      <table cellspacing="5" cellpadding="5" class="d-none">
+      <table cellspacing="5" cellpadding="5">
         <tbody>
           <tr>
             <td>Minimum date:</td>
@@ -53,12 +53,10 @@
         <thead>
           <tr>
             <th scope="col">Item</th>
-            <th scope="col">Item</th>
             <th scope="col">Código</th>
             <th scope="col">Razón social</th>
             <th scope="col">Asesor</th>
             <th scope="col">Fecha de registro</th>
-            <th scope="col">Fecha de atención</th>
             <th scope="col">Destino</th>
             <th scope="col">Estado</th>
             <th scope="col">Atendido por</th>
@@ -70,10 +68,8 @@
         <tbody>
         </tbody>
       </table>
-        @include('pedidos.modal.EditarAtencion')
-      @include('pedidos.modal.envioid')
-      @include('pedidos.modal.sinenvioid')
-      @include('pedidos.modal.DeleteAdjuntoid')
+      @include('pedidos.modal.confirmarecepcion')
+      @include('pedidos.modal.revertirporenviar')
     </div>
   </div>
 
@@ -134,47 +130,10 @@
 
   <script>
     $(document).ready(function () {
-
       $.ajaxSetup({
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
-      });
-
-      $('#modal-editar-atencion').on('show.bs.modal', function (event) {
-        var button = $(event.relatedTarget)
-        var idunico = button.data('atencion')
-        $(".textcode").html("PED"+idunico);
-        $("#hiddenAtender").val(idunico);
-        //RecuperarAdjuntos(idunico);
-
-        //recupera info de atencion
-        $.ajax({
-            type:'POST',
-            url: "{{ route('operaciones.datossubidaadj',':id') }}".replace(':id',idunico),
-            data:idunico,
-            success:function(data){
-                console.log(data);
-                console.log(data.pedidos[0]['cant_compro']);
-
-                $('#cant_compro').val(data.pedidos[0]['cant_compro']);
-                $('#fecha_envio_doc').val(data.pedidos[0]['fecha_envio_doc']);
-
-            }
-        }).done(function (data) {});
-
-        //recupera imagenes adjuntas
-        $.ajax({
-            url: "{{ route('operaciones.editatencion',':id') }}".replace(':id',idunico),
-            data: idunico,
-            method: 'POST',
-            success: function(data) {
-              console.log(data)
-              console.log("obtuve las imagenes atencion del pedido "+idunico)
-            $('#listado_adjuntos').html(data);
-            }
-        });
-
       });
 
       $('#modal-envio').on('show.bs.modal', function (event) {
@@ -183,161 +142,22 @@
         var idunico = button.data('envio')
         $(".textcode").html("PED"+idunico);
         $("#hiddenEnvio").val(idunico);
-      });
-
-      $('#modal-delete-adjunto').on('show.bs.modal', function (event) {
-        //cuando abre el form de anular pedido
-        var button = $(event.relatedTarget)
-        var img_pedidoid = button.data('imgid')
-        var imgadjunto = button.data('imgadjunto')
-        $(".textcode").html("PED"+img_pedidoid);
-        $("#eliminar_pedido_id").val(img_pedidoid);
-        $("#eliminar_pedido_id_imagen").val(imgadjunto);
-      });
-
-      $(document).on("submit", "#formulario_adjuntos_confirmar", function (evento) {
-        evento.preventDefault();
-        let idunicoconfirmar=$("#hiddenAtender").val();
-        let fecha_envio_doc_confirmar=$("#fecha_envio_doc").val();
-        let cant_compro_confirmar=$("#cant_compro").val();
-        $('#confirmar_atender').attr('disabled',true);
-        $('#confirmar_atender').text('Subiendo archivos...');
-        console.log("returnado")
-
-        var data=new FormData();
-        data.append('hiddenAtender',idunicoconfirmar);
-        data.append('fecha_envio_doc',fecha_envio_doc_confirmar);
-        data.append('cant_compro',cant_compro_confirmar);
-                      //var data = new FormData(document.getElementById("formulario_adjuntos"));
-
-                      $.ajax({
-                                type:'POST',
-                                url: "{{ route('operaciones.updateatenderid',':id') }}".replace(':id',idunicoconfirmar),
-                                data: data,
-                                processData: false,
-                                contentType: false,
-                                success:function(data){
-                                  $('#confirmar_atender').prop("disabled",false);
-                                  $('#confirmar_atender').text('Confirmar');
-                                  $('#modal-editar-atencion').modal('hide');
-                                  $('#tablaPrincipal').DataTable().ajax.reload();
-
-                                  //RecuperarAdjuntos(idunicoconfirmar);
-                                }
-                      }).done(function (data) {
-                                //$('#modal-delete-adjunto').modal('hide');
-                                //$('#listado_adjuntos').html(data);
-                      });
 
       });
 
-
-      $(document).on("submit", "#formulario_adjuntos", function (evento) {
-        evento.preventDefault();
-
-        let idunico=$("#hiddenAtender").val();
-        console.log(idunico);
-        $('#cargar_adjunto').attr("disabled",true);
-        //$(this).attr('disabled',true);
-        //$(this).text('Subiendo archivos...');
-        $('#cargar_adjunto').html('Subiendo archivos...');
-        //e.preventDefault();
-        var data = new FormData(document.getElementById("formulario_adjuntos"));
-
-
-        $.ajax({
-                  type:'POST',
-                  url: "{{ route('operaciones.updateatender',':id') }}".replace(':id',idunico),
-                  data: data,
-                  processData: false,
-                  contentType: false,
-                  success:function(data){
-                    $('#cargar_adjunto').prop("disabled",false);
-                    $('#cargar_adjunto').text('Confirmar');
-
-                    ///RecuperarAdjuntos(idunico);
-                    $.ajax({
-                        url: "{{ route('operaciones.editatencion',':id') }}".replace(':id',idunico),
-                        data: idunico,
-                        method: 'POST',
-                        success: function(data) {
-                          console.log(data)
-                          console.log("obtuve las imagenes atencion del pedido "+idunico)
-                        $('#listado_adjuntos').html(data);
-                        }
-                    });
-
-                  }
-              }).done(function (data) {
-
-              });
-
-              return false;
-
-      });
-
-      $(document).on("submit", "#formdeleteadjunto", function (evento) {
-        evento.preventDefault();
-        console.log("ejecutando eliminando adjunto")
-        //return false;
-        let pedidoidimagenes=$("#eliminar_pedido_id").val();
-        var fddeleteadjunto = new FormData();
-        fddeleteadjunto.append( 'eliminar_pedido_id', pedidoidimagenes );
-        fddeleteadjunto.append( 'eliminar_pedido_id_imagen', $("#eliminar_pedido_id_imagen").val() );
-        console.log(fddeleteadjunto);
-
-        //return false;
-        $.ajax({
-            url:"{{ route('operaciones.eliminaradjunto') }}",
-            type:'POST',
-            data:fddeleteadjunto,
-            processData:false,
-            contentType:false,
-            success:function(data){
-                //$('#listado_adjuntos').html(data);
-                //console.log(data.html);
-                console.log("rest ajax")
-                $('.adjuntos[data-adjunto="'+ data.html +'"]').remove();
-                $('#modal-delete-adjunto').modal('toggle');
-
-                $.ajax({
-                    url: "{{ route('operaciones.editatencion',':id') }}".replace(':id',pedidoidimagenes),
-                    data: pedidoidimagenes,
-                    method: 'POST',
-                    success: function(data) {
-                      console.log(data)
-                      console.log("obtuve las imagenes atencion del pedido "+pedidoidimagenes)
-                    $('#listado_adjuntos').html(data);
-                    }
-                });
-            }
-        }).done(function (data) {
-            //$('#modal-delete-adjunto').modal('hide');
-            //$('#listado_adjuntos').html(data);
-        });
-
-
-      });
-
-      $('#modal-sinenvio').on('show.bs.modal', function (event) {
-        //cuando abre el form de anular pedido
-        var button = $(event.relatedTarget)
-        var idunico = button.data('sinenvio')
-        $(".textcode").html("PED"+idunico);
-        $("#hiddenSinenvio").val(idunico);
-      });
-
-      $(document).on("submit", "#formularioenvio", function (evento) {
+      $(document).on("submit", "#formulariorecepcion", function (evento) {
         evento.preventDefault();
         var fd = new FormData();
+        var data = new FormData(document.getElementById("formulariorecepcion"));
+
         fd.append( 'hiddenEnvio', $("#hiddenEnvio").val() );
 
         $.ajax({
-           data: fd,
+           data: data,
            processData: false,
            contentType: false,
            type: 'POST',
-           url:"{{ route('operaciones.envioid') }}",
+           url:"{{ route('operaciones.recepcionid') }}",
            success:function(data)
            {
             console.log(data);
@@ -348,22 +168,30 @@
         });
       });
 
-      $(document).on("submit", "#formulariosinenvio", function (evento) {
+      $('#modal-revertir').on('show.bs.modal', function (event) {
+        //cuando abre el form de anular pedido
+        var button = $(event.relatedTarget)
+        var idunico = button.data('revertir')
+        $(".textcode").html("PED"+idunico);
+        $("#hiddenRevertirpedido").val(idunico);
+      });
+
+      $(document).on("submit", "#formulariorevertir", function (evento) {
         evento.preventDefault();
         var fd = new FormData();
-        fd.append( 'hiddenSinenvio', $("#hiddenSinenvio").val() );
-        fd.append( 'condicion', $("#condicion").val() );
+        fd.append( 'hiddenRevertirpedido', $("#hiddenRevertirpedido").val() );
+
         $.ajax({
            data: fd,
            processData: false,
            contentType: false,
            type: 'POST',
-           url:"{{ route('operaciones.sinenvioid') }}",
+           url:"{{ route('operaciones.revertirenvioid') }}",
            success:function(data)
            {
             console.log(data);
-            $("#modal-sinenvio .textcode").text('');
-            $("#modal-sinenvio").modal("hide");
+            $("#modal-revertir .textcode").text('');
+            $("#modal-revertir").modal("hide");
             $('#tablaPrincipal').DataTable().ajax.reload();
            }
         });
@@ -394,7 +222,7 @@
         searching: true,
         "order": [[ 0, "desc" ]],
         ajax: {
-          url: "{{ route('operaciones.atendidostabla') }}",
+          url: "{{ route('operaciones.bancarizaciontabla') }}",
           data: function (d) {
             //d.asesores = $("#asesores_pago").val();
             d.min = $("#min").val();
@@ -410,9 +238,6 @@
         initComplete:function(settings,json){
 
         },
-        /*"drawCallback": function( settings ) {
-          AtenderAtencion();
-        },*/
         columns: [
           {
               data: 'id',
@@ -429,37 +254,32 @@
                 }
               }
           },
-          {
-            data: 'id2'
-            , name: 'id2' ,"visible":false
-          },
           {data: 'codigos', name: 'codigos', },
           {data: 'empresas', name: 'empresas', },
           {data: 'users', name: 'users', },
-          //{data: 'fecha', name: 'fecha', },
           {
             data: 'fecha',
             name: 'fecha',
             render:$.fn.dataTable.render.moment('YYYY-MM-DD HH:mm:ss', 'DD/MM/YYYY HH:mm:ss' ),
-            "visible":false,
-          },
-          {
-            data: 'fecha_envio_doc',
-            name: 'fecha_envio_doc',
-            render:$.fn.dataTable.render.moment('YYYY-MM-DD HH:mm:ss', 'DD/MM/YYYY HH:mm:ss' )
+            "visible":true,
           },
           {data: 'destino', name: 'destino',"visible":false },
-          {data: 'condicion_code',
-              name: 'condicion_code',
+          {
+              data: 'condicion',
+              name: 'condicion',
               render: function ( data, type, row, meta ) {
-                  if(row.condicion_code==1){
-                      return '{{\App\Models\Pedido::POR_ATENDER }}';
-                  }else if(row.condicion_code==2){
-                      return '{{\App\Models\Pedido::EN_PROCESO_ATENCION }}';
-                  }else if(row.condicion_code==3){
-                      return '{{\App\Models\Pedido::ATENDIDO }}';
-                  }else if(row.condicion_code==4){
-                      return '{{\App\Models\Pedido::ANULADO }}';
+                  if(row.condicion =='ANULADO'){
+                      return 'ANULADO';
+                  }else if(row.condicion == 0){
+                      return 'ANULADO';
+                  }else if(row.condicion == 1){
+                      return 'PENDIENTE DE ENVÍO';
+                  }else if(row.condicion == 2){
+                      return 'EN REPARTO';
+                  }else if(row.condicion == 3){
+                      return 'ENTREGADO';
+                  }else{
+                      return data;
                   }
               }
           },
@@ -492,23 +312,13 @@
 
               var urlver = '{{ route("operaciones.showatender", ":id") }}';
               urlver = urlver.replace(':id', row.id);
-              data = data+'<a href="'+urlver+'" class="btn btn-primary btn-sm" ><i class="fas fa-eye"></i> Ver</a>';
-
-              var urledit = '{{ route("operaciones.editatender", ":id") }}';
-              urledit = urledit.replace(':id', row.id);
-
-
-
-
-              @can('operacion.editatender')
-                  data = data+'<a href="" data-target="#modal-editar-atencion" data-atencion='+row.id+' data-toggle="modal" ><button class="btn btn-warning btn-sm">Atender atención</button></a>';
-
-              @endcan
+              data = data+'<a href="'+urlver+'" class="btn btn-primary btn-sm"><i class="fas fa-eye"></i> Ver</a><br>';
 
               var urlpdf = '{{ route("pedidosPDF", ":id") }}';
               urlpdf = urlpdf.replace(':id', row.id);
               @can('operacion.PDF')
-                data = data+'<a href="'+urlpdf+'" class="btn btn-primary btn-sm" target="_blank"><i class="fa fa-file-pdf"></i> PDF</a>';
+                data = data+'<a href="'+urlpdf+'" class="btn btn-primary btn-sm" target="_blank"><i class="fa fa-file-pdf"></i> PDF</a><br>';
+                data = data+'<a href="" data-target="#modal-envio" data-envio='+row.id+' data-toggle="modal" ><button class="btn btn-success btn-sm">Atender</button></a><br>';
               @endcan
 
               @can('operacion.enviar')
@@ -516,12 +326,17 @@
                 {
                   @if (Auth::user()->rol == "Jefe de operaciones" || Auth::user()->rol == "Administrador")
 
-                    data = data+'<a href="" data-target="#modal-envio" data-envio='+row.id+' data-toggle="modal" ><button class="btn btn-success btn-sm">Con sobre</button></a>';
-                    data = data+'<a href="" data-target="#modal-sinenvio" data-sinenvio='+row.id+' data-toggle="modal" ><button class="btn btn-dark btn-sm">Sin sobre</button></a>';
+                    data = data+'<a href="" data-target="#modal-envio" data-envio='+row.id+' data-toggle="modal" ><button class="btn btn-success btn-sm">Enviar</button></a><br>';
+                    data = data+'<a href="" data-target="#modal-sinenvio" data-sinenvio='+row.id+' data-toggle="modal" ><button class="btn btn-dark btn-sm">Sin envío</button></a><br>';
                   @endif
 
                 }
               @endcan
+
+              if(row.envio=='3' || row.envio=='1')
+              {
+                data = data+'<a href="" data-target="#modal-revertir" data-revertir='+row.id+' data-toggle="modal" ><button class="btn btn-danger btn-sm">Revertir</button></a>';
+              }
 
               return data;
             }
@@ -550,7 +365,7 @@
 
       });
 
-     $('#tablaPrincipal_filter label input').on('paste', function(e) {
+      $('#tablaPrincipal_filter label input').on('paste', function(e) {
       var pasteData = e.originalEvent.clipboardData.getData('text')
       localStorage.setItem("search_tabla",pasteData);
     });
@@ -558,7 +373,6 @@
       localStorage.setItem("search_tabla",$(this).val());
       console.log( "search_tabla es "+localStorage.getItem("search_tabla") );
     });
-
 
     });
   </script>
@@ -599,11 +413,11 @@
     /* Custom filtering function which will search data in column four between two values */
         $(document).ready(function () {
 
-            $.fn.dataTable.ext.search.push(
+            /*$.fn.dataTable.ext.search.push(
                 function (settings, data, dataIndex) {
                     var min = $('#min').datepicker("getDate");
                     var max = $('#max').datepicker("getDate");
-                    // need to change str order before making  date obect since it uses a new Date("mm/dd/yyyy") format for short date.
+
                     var d = data[4].split("/");
                     var startDate = new Date(d[1]+ "/" +  d[0] +"/" + d[2]);
 
@@ -613,17 +427,46 @@
                     if (startDate <= max && startDate >= min) { return true; }
                     return false;
                 }
-            );
+            );*/
 
+            $("#min").datepicker({
+              onSelect: function () {
+                $('#tablaPrincipal').DataTable().ajax.reload();
+                //localStorage.setItem('dateMin', $(this).val() );
+              }, changeMonth: true, changeYear: true , dateFormat:"dd/mm/yy"
+            });
 
-            $("#min").datepicker({ onSelect: function () { table.draw(); }, changeMonth: true, changeYear: true , dateFormat:"dd/mm/yy"});
-            $("#max").datepicker({ onSelect: function () { table.draw(); }, changeMonth: true, changeYear: true, dateFormat:"dd/mm/yy" });
-            var table = $('#tablaPrincipal').DataTable();
+            $("#max").datepicker({
+              onSelect: function () {
+                $('#tablaPrincipal').DataTable().ajax.reload();
+                //localStorage.setItem('dateMax', $(this).val() );
+              }, changeMonth: true, changeYear: true, dateFormat:"dd/mm/yy"
+            });
+
+            //$("#min").datepicker({ onSelect: function () { table.draw(); }, changeMonth: true, changeYear: true , dateFormat:"dd/mm/yy"});
+            //$("#max").datepicker({ onSelect: function () { table.draw(); }, changeMonth: true, changeYear: true, dateFormat:"dd/mm/yy" });
+            //var table = $('#tablaPrincipal').DataTable();
 
             // Event listener to the two range filtering inputs to redraw on input
-            $('#min, #max').change(function () {
+            /*$('#min, #max').change(function () {
                 table.draw();
-            });
+            });*/
         });
+  </script>
+  <script>
+    /*if (localStorage.getItem('dateMin') )
+    {
+      $( "#min" ).val(localStorage.getItem('dateMin')).trigger("change");
+    }else{
+      localStorage.setItem('dateMin', "{{$dateMin}}" );
+    }
+    if (localStorage.getItem('dateMax') )
+    {
+      $( "#max" ).val(localStorage.getItem('dateMax')).trigger("change");
+    }else{
+      localStorage.setItem('dateMax', "{{$dateMax}}" );
+    }*/
+    //console.log(localStorage.getItem('dateMin'));
+    //console.log(localStorage.getItem('dateMax'));
   </script>
 @stop

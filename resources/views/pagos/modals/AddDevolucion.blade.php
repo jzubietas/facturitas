@@ -21,6 +21,10 @@
                   {!! Form::label('bank_number', 'Numero de su cuenta bancaria') !!}
                   {!! Form::input('text','bank_number', null,  ['class' => 'form-control']) !!}
               </div>
+              <div class="form-group col-lg-12">
+                  {!! Form::label('bank_number', 'Titular') !!}
+                  {!! Form::input('text','bank_titular', null,  ['class' => 'form-control']) !!}
+              </div>
               <div id="devolucion_message_response">
               </div>
           </div>

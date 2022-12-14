@@ -22,6 +22,7 @@
                                     <li class="list-group-item">Cliente: <b>{{$devolucion->cliente->nombre}}</b></li>
                                     <li class="list-group-item">Banco: <b>{{$devolucion->bank_destino}}</b></li>
                                     <li class="list-group-item">N° de cuenta: <b>{{$devolucion->bank_number}}</b></li>
+                                    <li class="list-group-item">Titular: <b>{{$devolucion->bank_titular}}</b></li>
                                     {{--
                                     <li class="list-group-item">
                                         <div class="form-group col-lg-12">
@@ -76,6 +77,7 @@
                                     <li class="list-group-item">Estado: <b class="text-{{$devolucion->estado_color}}">{{$devolucion->estado_text}}</b></li>
                                     <li class="list-group-item">Banco: <b>{{$devolucion->bank_destino}}</b></li>
                                     <li class="list-group-item">N° de cuenta: <b>{{$devolucion->bank_number}}</b></li>
+                                    <li class="list-group-item">Titular: <b>{{$devolucion->bank_titular}}</b></li>
                                     <li class="list-group-item">
                                         <div>
                                             <img id="voucher_img"

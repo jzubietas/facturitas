@@ -1130,9 +1130,11 @@ class PagoController extends Controller
                 $this->validate($request, [
                     "bank_destino" => 'required',
                     "bank_number" => 'required',
+                    "bank_titular" => 'required',
                 ], [
                     "bank_destino.required" => 'El Banco de la cuenta del cliente es obligatorio',
-                    "bank_number.required" => 'El Numero de su cuenta bancaria es obligatorio',
+                    "bank_number.required" => 'El Numero de la cuenta bancaria es obligatorio',
+                    "bank_titular.required" => 'El Titular de la cuenta bancaria es obligatorio',
                 ]);
             }
 
@@ -1374,6 +1376,7 @@ class PagoController extends Controller
                         "status" => Devolucion::PENDIENTE,
                         "bank_destino" => $request->bank_destino,
                         "bank_number" => $request->bank_number,
+                        "bank_titular" => $request->bank_titular,
                         "voucher_path" => null,
                     ]);
                 }

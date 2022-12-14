@@ -31,6 +31,7 @@ class Devolucion extends Model
         "voucher_disk",
         "voucher_path",
         "returned_at",
+        'bank_titular',
     ];*/
 
     protected $casts = [
