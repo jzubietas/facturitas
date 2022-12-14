@@ -1424,13 +1424,22 @@ class EnvioController extends Controller
         return view('pedidos.createDireccion', compact('destinos', 'distritos', 'clientes', 'pedidos'));
     }
 
+
+
+
     public function SinEnviarid(Request $request)
     {
         //Pedido $pedido
         $pedido=Pedido::where("id",$request->hiddenSinenvio)->first();
+        $data=DetallePedido::where("pedido_id",$request->hiddenSinenvio)->first();
         $detalle_pedidos = DetallePedido::where('pedido_id',$pedido->id)->first();
         $fecha = Carbon::now();
 
+       
+
+
+       
+  
         $pedido->update([
             'envio' => '3',//SIN ENVIO
             'condicion_envio' => Pedido::$estadosCondicionCode[3],
@@ -1448,13 +1457,18 @@ class EnvioController extends Controller
         /**/
         $cliente=Cliente::where("id",$pedido->cliente_id)->first();
 
+        $data=DetallePedido::where("pedido_id",$request->hiddenSinenvio)->first();
+
         $direcciongrupo=DireccionGrupo::create([
                 'estado'=>'1',
                 'destino' => 'LIMA',
                 'distribucion'=> '',
                 'condicion_envio' => 3,
                 'condicion_sobre' => 'SIN ENVIO',
+                'codigos'=>$data->codigo,
+                'producto'=>$data->nombre_empresa
             ]);
+            
 
         $direccionLima = DireccionEnvio::create([
             'cliente_id' => $pedido->cliente_id,
@@ -1504,7 +1518,6 @@ class EnvioController extends Controller
 
         //return redirect()->route('operaciones.atendidos')->with('info','actualizado');
     }
-
 
 
 }
