@@ -8,6 +8,7 @@ use App\Models\Cliente;
 use App\Models\Pedido;
 use App\Models\Porcentaje;
 use App\Models\User;
+use App\Models\ListadoResultado;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
