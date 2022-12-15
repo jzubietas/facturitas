@@ -141,36 +141,14 @@ class Pedido extends Model
         return $this->belongsTo(Cliente::class);
     }
 
-    public function setCondicionAttributeCode($value)
-    {
-        $this->attributes['condicion_code'] = $value;
-        $this->setAttribute('condicion', self::$estadosCondicionCode[$value] ?? $value);
-    }
-
     public function getIdCodeAttribute()
     {
-        if ($this->id < 10) {
-            return 'PED000' . $this->id;
-        } else if ($this->id < 100) {
-            return 'PED00' . $this->id;
-        } else if ($this->id < 1000) {
-            return 'PED0' . $this->id;
-        } else {
-            return 'PED' . $this->id;
-        }
+       return generate_correlativo('PED',$this->id,4);
     }
 
     public static function generateIdCode($id)
     {
-        if ($id < 10) {
-            return 'PED000' . $id;
-        } else if ($id < 100) {
-            return 'PED00' . $id;
-        } else if ($id < 1000) {
-            return 'PED0' . $id;
-        } else {
-            return 'PED' . $id;
-        }
+        return generate_correlativo('PED',$id,4);
     }
 
     public function notasCreditoFiles()
