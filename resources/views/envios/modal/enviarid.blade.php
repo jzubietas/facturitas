@@ -70,7 +70,7 @@
                                 <option value="REGISTRADO">REGISTRADO</option>
                                 <option value="EN CAMINO">EN CAMINO</option>
                                 <option value="EN TIENDA/AGENTE">EN TIENDA/AGENTE</option>
-                                <option value="3">ENTREGADO</option>
+                                <option value="ENTREGADO">ENTREGADO</option>
                                 <option value="NO ENTREGADO">NO ENTREGADO</option>
                               </select>
 
