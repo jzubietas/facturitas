@@ -115,6 +115,7 @@ class EnvioController extends Controller
             ->join('users as u', 'u.id', 'c.user_id')
             ->join('pedidos as p', 'p.codigo', 'direccion_grupos.codigos')
 
+
             ->where('p.condicion_envio',DireccionGrupo::CE_EN_REPARTO)
             ->where('direccion_grupos.estado','1')
             ->whereNull('direccion_grupos.subcondicion_envio')
@@ -273,7 +274,8 @@ class EnvioController extends Controller
             ->join('users as u', 'u.id', 'c.user_id')
             ->where('direccion_grupos.estado','1')
            // ->where('direccion_grupos.condicion_envio',DireccionGrupo::CE_ENTREGADO)
-            ->where('direccion_grupos.condicion_envio_code', Pedido::ENTREGADO_CODE )// DireccionGrupo::CE_ENTREGADO_CODE
+            ->where('direccion_grupos.condicion_envio_code',DireccionGrupo::CE_ENTREGADO_CODE)
+            
             ->select(
                 'direccion_grupos.id',
                 'u.identificador as identificador',
@@ -1155,9 +1157,9 @@ class EnvioController extends Controller
                             'destino' => $request->destino,
                             'condicion_envio' => 2,//AL REGISTRAR DIRECCION PASA A ESTADO  EN REPARTO
                             'direccion' => $request->direccion,
-                            'condicion_envio_code' => Pedido::PENDIENTE_DE_ENVIO_CODE ,
-                            'condicion_envio' => Pedido::PENDIENTE_DE_ENVIO,
-
+                            'condicion_envio_code' => Pedido::PENDIENTE_DE_ENVIO ,
+                            'condicion' => Pedido::PENDIENTE_DE_ENVIO_CODE ,
+                            
                         ]);
 
 
@@ -1449,10 +1451,7 @@ class EnvioController extends Controller
 
         $pedido->update([
             'envio' => '1',
-            'modificador' => 'USER'.Auth::user()->id,
-            'condicion_envio' => DireccionGrupo::CE_BANCARIZACION,
-            'condicion_envio_code' => DireccionGrupo::CE_BANCARIZACION_CODE,
-            
+            'modificador' => 'USER'.Auth::user()->id
         ]);
 
         $detalle_pedidos->update([
