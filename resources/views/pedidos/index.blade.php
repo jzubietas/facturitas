@@ -199,6 +199,11 @@
 
     }
 
+    $('#modal-delete').on('hidden.bs.modal', function (event) {
+        $("#motivo").val('')
+        $("#anulacion_password").val('')
+        $("#attachments").val(null)
+    })
     $('#modal-delete').on('show.bs.modal', function (event) {
       //cuando abre el form de anular pedido
       var button = $(event.relatedTarget)
@@ -335,6 +340,9 @@
             {data: 'condicion_code',
                 name: 'condicion_code',
                 render: function ( data, type, row, meta ) {
+                    if(row.pendiente_anulacion){
+                        return '{{\App\Models\Pedido::PENDIENTE_ANULACION}}';
+                    }
                     if(row.condicion_code==1){
                         return '{{\App\Models\Pedido::POR_ATENDER }}';
                     }else if(row.condicion_code==2){
@@ -350,6 +358,7 @@
           data: 'condicion_pa',
           name: 'condicion_pa',
           render: function ( data, type, row, meta ) {
+
             if(row.condiciones=='ANULADO'){
                 return 'ANULADO';
             }else{
@@ -495,7 +504,7 @@
             {
               data = data+'<div class="col-lg-12" style="margin-top:4px;"><a href="#" class="btn btn-danger btn-sm w-100" data-target="#modal-restaurar" data-toggle="modal" data-restaurar="'+row.id+'" ><i class="fas fa-check"></i> Restaurar</a><br>';
             }else{
-              if(row.condicion_pa==0)
+              if(!row.pendiente_anulacion && row.condicion_pa==0)
               {
                 data = data+'<div class="col-lg-12" style="margin-top:4px;"><a href="" class="btn btn-danger btn-sm w-100" data-target="#modal-delete" data-toggle="modal" data-delete="'+row.id+'" data-responsable="{{ $miidentificador }}"><i class="fas fa-trash-alt"></i> Anular</a></div>';
               }
@@ -577,6 +586,7 @@
       console.log("validar delete");
       var motivo = $("#motivo").val();
       var responsable = $("#responsable").val();
+      var anulacion_password = $("#anulacion_password").val();
 
       if (motivo.length < 1) {
         Swal.fire(
@@ -589,6 +599,13 @@
         Swal.fire(
           'Error',
           'Ingrese el responsable de la anulación',
+          'warning'
+        )
+      }
+      else if (!anulacion_password){
+        Swal.fire(
+          'Error',
+          'Ingrese la contraseña para autorizar la anulación',
           'warning'
         )
       }
@@ -622,16 +639,43 @@
   function clickformdelete()
     {
       console.log("action delete action")
-      var formData = $("#formdelete").serialize();
+      var formData = new FormData();//$("#formdelete").serialize();
+        formData.append("hiddenID",$("#hiddenIDdelete").val())
+        formData.append("motivo",$("#motivo").val())
+        formData.append("responsable",$("#responsable").val())
+        formData.append("anulacion_password",$("#anulacion_password").val())
+        if($("#attachments")[0].files.length>0) {
+            var attachments=Array.from($("#attachments")[0].files)
+            attachments.forEach(function (file) {
+                formData.append("attachments[]", file, file.name)
+            })
+        }
       console.log(formData);
       $.ajax({
         type:'POST',
         url:"{{ route('pedidodeleteRequest.post') }}",
         data:formData,
+          processData: false,
+          contentType: false,
       }).done(function (data) {
         $("#modal-delete").modal("hide");
         resetearcamposdelete();
         $('#tablaPrincipal').DataTable().ajax.reload();
+      }).fail(function (err,error,errMsg) {
+          console.log(arguments,err,errMsg)
+          if(err.status==401){
+              Swal.fire(
+                  'Error',
+                  'No autorizado para poder anular el pedido, ingrese una contraseña correcta',
+                  'error'
+              )
+          }else{
+              Swal.fire(
+                  'Error',
+                  'Ocurrio un error: '+errMsg,
+                  'error'
+              )
+          }
       });
     }
 

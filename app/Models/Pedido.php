@@ -16,6 +16,7 @@ class Pedido extends Model
     const EN_PROCESO_ATENCION = 'EN PROCESO ATENCION';//2
     const ATENDIDO = 'ATENDIDO';//3
     const ANULADO = 'ANULADO';//4
+    const PENDIENTE_ANULACION = 'PENDIENTE ANULACION';//
 
     /**************
      * CONSTANTES PEDIDO NUMERICO
@@ -64,9 +65,9 @@ class Pedido extends Model
 
 
     //condicion de envio en entero
-    const PENDIENTE_DE_ENVIO_CODE=1;
-    const EN_REPARTO_CODE=2;
-    const ENTREGADO_CODE=3;
+    const PENDIENTE_DE_ENVIO_CODE = 1;
+    const EN_REPARTO_CODE = 2;
+    const ENTREGADO_CODE = 3;
 
     const PORATENDDER = 1;
 
@@ -84,10 +85,10 @@ class Pedido extends Model
     ];
 
     public static $estadosCondicionCode = [
-        4=> 'ANULADO',
-        1=> 'POR ATENDER',
-        2=> 'EN PROCESO ATENCIÓN' ,
-        3=> 'ATENDIDO' ,
+        4 => 'ANULADO',
+        1 => 'POR ATENDER',
+        2 => 'EN PROCESO ATENCIÓN',
+        3 => 'ATENDIDO',
     ];
 
     /******************
@@ -123,8 +124,12 @@ class Pedido extends Model
     ];
 
 
-
     protected $guarded = ['id'];
+
+    protected $dates = [
+        'fecha_anulacion',
+        'fecha_anulacion_confirm',
+    ];
 
     /* public function user()
     {
@@ -140,5 +145,48 @@ class Pedido extends Model
     {
         $this->attributes['condicion_code'] = $value;
         $this->setAttribute('condicion', self::$estadosCondicionCode[$value] ?? $value);
+    }
+
+    public function getIdCodeAttribute()
+    {
+        if ($this->id < 10) {
+            return 'PED000' . $this->id;
+        } else if ($this->id < 100) {
+            return 'PED00' . $this->id;
+        } else if ($this->id < 1000) {
+            return 'PED0' . $this->id;
+        } else {
+            return 'PED' . $this->id;
+        }
+    }
+
+    public static function generateIdCode($id)
+    {
+        if ($id < 10) {
+            return 'PED000' . $id;
+        } else if ($id < 100) {
+            return 'PED00' . $id;
+        } else if ($id < 1000) {
+            return 'PED0' . $id;
+        } else {
+            return 'PED' . $id;
+        }
+    }
+
+    public function notasCreditoFiles()
+    {
+        $data = setting("pedido." . $this->id . ".nota_credito_file");
+        if(is_array($data)){
+            return $data;
+        }
+        return [];
+    }
+    public function adjuntosFiles()
+    {
+        $data = setting("pedido." . $this->id . ".adjuntos_file");
+        if(is_array($data)){
+            return $data;
+        }
+        return [];
     }
 }
