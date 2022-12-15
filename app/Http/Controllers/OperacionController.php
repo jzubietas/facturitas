@@ -342,6 +342,7 @@ class OperacionController extends Controller
                     'pedidos.envio',
                     'pedidos.destino',
                     'pedidos.condicion_envio',
+                    'pedidos.condicion_envio_code',
                     'dp.envio_doc',
                     'dp.fecha_envio_doc',
                     'dp.cant_compro',
@@ -361,6 +362,7 @@ class OperacionController extends Controller
                 ->where('pedidos.estado', '1')
                 ->where('dp.estado', '1')
                 ->where('pedidos.condicion_code', Pedido::ATENDIDO_INT)
+                ->whereIn('pedidos.condicion_envio_code', [Pedido::JEFE_OP_INT])
                 ->whereIn('pedidos.envio', ['2','3'])
                 //->whereIn('pedidos.envio', ['0'])
                 ->whereBetween( 'pedidos.created_at', [$min, $max]);
@@ -1098,21 +1100,6 @@ class OperacionController extends Controller
         $imagenesatencion = ImagenAtencion::where('imagen_atencions.pedido_id', $pedido->id)->get();
 
         return view('operaciones.showAtender', compact('pedido','pedidos', 'imagenes', 'imagenesatencion'));
-    }
-
-    public function confirmarRecepcionID(Request $request)
-    { 
-        //
-        $pedido=Pedido::where("id",$request->hiddenEnvio)->first();
-
-        $pedido->update([
-            'envio' => '2',
-            'condicion_envio' => Pedido::JEFE_OP,
-            'condicion_envio_code' => Pedido::JEFE_OP_INT,
-            'modificador' => 'USER'.Auth::user()->id
-        ]);
-
-        return response()->json(['html' => $pedido->id]);
     }
 
     public function Revertirenvio(Request $request)

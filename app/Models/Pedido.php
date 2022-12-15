@@ -38,6 +38,7 @@ class Pedido extends Model
     const EN_REPARTO = 'EN_REPARTO';
     const SEG_PROVINCIA = 'SEG_PROVINCIA';
     const ENTREGADO = 'ENTREGADO';
+    const JEFE_OP_CONF = 'JEFE_OP_CONF';
 
     /**************
      * CONSTANTES CONDICION ENVIO NUMERICO
@@ -51,7 +52,8 @@ class Pedido extends Model
     const SOBRE_ENVIAR_INT = 7;
     const EN_REPARTO_INT = 8;
     const SEG_PROVINCIA_INT = 9;
-    const ENTREGADO_INT = 1;
+    const ENTREGADO_INT = 10;
+    const JEFE_OP_CONF_INT = 11;
 
     //envio
     const ENVIO_CONFIRMAR_RECEPCION = '1';//ENVIADO CONFIRMAR RECEPCION
@@ -103,6 +105,7 @@ class Pedido extends Model
         'EN_REPARTO' => 8,
         'SEG_PROVINCIA' => 9,
         'ENTREGADO' => 10,
+        'JEFE_OP_CONF_INT' => 11,
     ];
 
     public static $estadosCondicionEnvioCode = [
@@ -115,7 +118,8 @@ class Pedido extends Model
         7 => 'SOBRE_ENVIAR',
         8 => 'EN_REPARTO',
         9 => 'SEG_PROVINCIA',
-        10 => 'ENTREGADO'
+        10 => 'ENTREGADO',
+        11 => 'JEFE_OP_CONF_INT'
     ];
 
 

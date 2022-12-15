@@ -275,7 +275,7 @@ class EnvioController extends Controller
             ->where('direccion_grupos.estado','1')
            // ->where('direccion_grupos.condicion_envio',DireccionGrupo::CE_ENTREGADO)
             ->where('direccion_grupos.condicion_envio_code',DireccionGrupo::CE_ENTREGADO_CODE)
-            
+
             ->select(
                 'direccion_grupos.id',
                 'u.identificador as identificador',
@@ -1025,7 +1025,7 @@ class EnvioController extends Controller
 
     {
 
-        
+
        // dd($request);
       //  exit;
 
@@ -1045,7 +1045,7 @@ class EnvioController extends Controller
 
         $direccion_grupos=DireccionGrupo::where("codigos",$pedido->codigo)->first();
 
-        
+
         $direccion_grupos->update([
 
             'condicion_envio'=>DireccionGrupo::CE_EN_REPARTO,
@@ -1159,7 +1159,7 @@ class EnvioController extends Controller
                             'direccion' => $request->direccion,
                             'condicion_envio_code' => Pedido::PENDIENTE_DE_ENVIO ,
                             'condicion' => Pedido::PENDIENTE_DE_ENVIO_CODE ,
-                            
+
                         ]);
 
 
@@ -1472,9 +1472,24 @@ class EnvioController extends Controller
         $pedido->update([
             'envio' => '2',
             'modificador' => 'USER'.Auth::user()->id,
-            'condicion_envio' => Pedido::PENDIENTE_DE_ENVIO,
-            'condicion_envio_code' => Pedido::PENDIENTE_DE_ENVIO_CODE,
-            
+            'condicion_envio' => Pedido::JEFE_OP,
+            'condicion_envio_code' => Pedido::JEFE_OP_INT,
+
+        ]);
+
+        return response()->json(['html' => $pedido->id]);
+    }
+
+    public function AtenderPedidoOP(Request $request)
+    {
+        $pedido=Pedido::where("id",$request->hiddenEnvio)->first();
+
+        $pedido->update([
+            'envio' => '2',
+            'modificador' => 'USER'.Auth::user()->id,
+            'condicion_envio' => Pedido::JEFE_OP_CONF,
+            'condicion_envio_code' => Pedido::JEFE_OP_CONF_INT,
+
         ]);
 
         return response()->json(['html' => $pedido->id]);
