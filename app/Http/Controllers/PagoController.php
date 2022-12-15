@@ -2793,7 +2793,7 @@ class PagoController extends Controller
             ->with(['pago','pago.user'])
             ->where('banco', $request->banco)
             ->where('titular', $request->titular)
-            ->where('cuenta', $request->cuenta)
+            //->where('cuenta', $request->cuenta)
             ->where('monto', $request->monto)
             ->where('fecha', $request->fecha)
             ->whereIn('pago_id',

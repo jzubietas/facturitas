@@ -457,6 +457,7 @@ class OperacionController extends Controller
                     //DB::raw('DATE_FORMAT(pedidos.created_at, "%d/%m/%Y") as fecha'),
                     DB::raw('(DATE_FORMAT(pedidos.created_at, "%Y-%m-%d %h:%i:%s")) as fecha'),
                     'pedidos.envio',
+                    'pedidos.condicion_envio_code',
                     'pedidos.destino',
                     'pedidos.condicion_envio',
                     'dp.envio_doc',
@@ -478,7 +479,8 @@ class OperacionController extends Controller
                 ->where('pedidos.estado', '1')
                 ->where('dp.estado', '1')
                 ->where('pedidos.condicion_code', Pedido::ATENDIDO_INT)
-                ->whereIn('pedidos.envio', ['1'])
+                ->whereIn('pedidos.condicion_envio_code', [Pedido::BANCARIZACION_INT] )
+                //->whereIn('pedidos.envio', ['1'])
                 //->whereIn('pedidos.envio', ['0'])
                 ->whereBetween( 'pedidos.created_at', [$min, $max]);
 
@@ -552,6 +554,8 @@ class OperacionController extends Controller
         $pedido->update([
             'condicion' => Pedido::$estadosCondicionCode[$request->condicion],
             'condicion_code' => $request->condicion,
+            'condicion_envio' => Pedido::$estadosCondicionEnvioCode[$request->condicion],
+            'condicion_envio_code' => $request->condicion,
             'modificador' => 'USER'.Auth::user()->id
         ]);
 
@@ -1100,6 +1104,12 @@ class OperacionController extends Controller
 
 
 
+        $pedido->update([
+            'envio' => '2',
+            'condicion_envio' => Pedido::JEFE_OP,
+            'condicion_envio_code' => Pedido::JEFE_OP_INT,
+            'modificador' => 'USER'.Auth::user()->id
+        ]);
 
     public function Revertirenvio(Request $request)
     {
