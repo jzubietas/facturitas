@@ -157,7 +157,25 @@
         var idunico = button.data('enviar')//pedido
         var destino = button.data('destino')//pedido
 
+        var newOption = $('<option value="REGISTRADO">REGISTRADO</option>');
+        var newOption2 = $('<option value="NO ENTREGADO">NO ENTREGADO</option>');
+        var newOption3 = $('<option value="ENTREGADO">ENTREGADO</option>');
+
+        var newOption4 = $('<option value="EN CAMINO">EN CAMINO</option>');
+        var newOption5 = $('<option value="EN TIENDA/AGENTE">EN TIENDA/AGENTE</option>');
+
+
+        
+        if (destino=='LIMA')
+        $('#condicion').empty().append(newOption).append(newOption2).append(newOption3);
+        else
+        $('#condicion').empty().append(newOption).append(newOption2).append(newOption4).append(newOption5).append(newOption3);
+        
+
         console.log(destino);
+
+
+
 
         $("#hiddenEnviar").val(idunico)
         if(idunico<10){
