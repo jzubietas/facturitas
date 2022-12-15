@@ -301,11 +301,11 @@ class PageclienteInfo extends ExportYear implements WithColumnFormatting, FromCo
             }
             else if($event->sheet->getCellByColumnAndRow(2,$row->getRowIndex())=='RECURRENTE')
             {
-                $event->sheet->getStyle("A".$row->getRowIndex())->applyFromArray($style1);
+                $event->sheet->getStyle("B".$row->getRowIndex())->applyFromArray($style1);
             }
             else
             {
-                $event->sheet->getStyle("A".$row->getRowIndex())->applyFromArray($style2);
+                $event->sheet->getStyle("C".$row->getRowIndex())->applyFromArray($style2);
             }
 
             //$row->getRowIndex();
