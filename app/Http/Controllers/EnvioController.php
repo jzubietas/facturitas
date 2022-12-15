@@ -114,7 +114,7 @@ class EnvioController extends Controller
             ->join('clientes as c', 'c.id', 'de.cliente_id')
             ->join('users as u', 'u.id', 'c.user_id')
             ->join('pedidos as p', 'p.codigo', 'direccion_grupos.codigos')
-           
+
             ->where('p.condicion_envio',DireccionGrupo::CE_EN_REPARTO)
             ->where('direccion_grupos.estado','1')
             ->whereNull('direccion_grupos.subcondicion_envio')
@@ -145,11 +145,11 @@ class EnvioController extends Controller
             ->join('clientes as c', 'c.id', 'de.cliente_id')
             ->join('users as u', 'u.id', 'c.user_id')
             ->join('pedidos as p', 'p.codigo', 'direccion_grupos.codigos')
-       
+
             ->where('p.condicion_envio',DireccionGrupo::CE_EN_REPARTO)
             ->where('direccion_grupos.estado','1')
             ->whereNull('direccion_grupos.subcondicion_envio')
-       
+
             ->select(
                 'direccion_grupos.id',
                 'u.identificador as identificador',
@@ -157,10 +157,10 @@ class EnvioController extends Controller
                 DB::raw(" (select '') as celular "),
                 DB::raw(" (select '') as nombre "),
                 'de.cantidad',
-                
+
                 'direccion_grupos.codigos',
                 'direccion_grupos.producto',
-           
+
                 'de.tracking as direccion',
                 'de.foto as referencia',
                 DB::raw(" (select '') as observacion "),
@@ -351,7 +351,7 @@ class EnvioController extends Controller
             ->where('direccion_grupos.estado','1')
            // ->where('direccion_grupos.condicion_envio',DireccionGrupo::CE_ENTREGADO)
             ->where('direccion_grupos.condicion_envio_code',DireccionGrupo::CE_ENTREGADO_CODE)
-            
+
             ->select(
                 'direccion_grupos.id',
                 'u.identificador as identificador',
@@ -568,7 +568,7 @@ class EnvioController extends Controller
                                         'direccion_grupos.distribucion',
                                         'direccion_grupos.condicion_sobre',
                                         'direccion_grupos.correlativo',
-                                        
+
                                     );
                                     $pedidos_lima->where( 'direccion_grupos.codigos','like','%'.$request->general.'%')
             //$pedidos_lima->where( DB::raw(" (select group_concat(dp.codigo_pedido) from direccion_pedidos dp where dp.direcciongrupo=direccion_grupos.id and dp.estado = 1 ) "),'like','%'.$request->general.'%')
@@ -599,7 +599,7 @@ class EnvioController extends Controller
                                         'de.cantidad',
                                         DB::raw(" (select group_concat(dp.codigo_pedido) from gasto_pedidos dp where dp.direcciongrupo=direccion_grupos.id and dp.estado = 1) as codigos "),
                                         DB::raw(" (select group_concat(ab.empresa) from gasto_pedidos ab where ab.direcciongrupo=direccion_grupos.id) as producto "),
-                                       
+
                                         'de.foto as referencia',
                                         DB::raw(" (select '') as observacion "),
                                         DB::raw(" (select '') as distrito "),
@@ -1098,7 +1098,7 @@ class EnvioController extends Controller
     }
 
     public function Recibirid(Request $request)
-    
+
     {
 
        dd($request);
@@ -1106,7 +1106,7 @@ class EnvioController extends Controller
 
         $pedido=Pedido::where("id",$request->hiddenRecibir)->first();
         $pedido->update([
-            
+
             //'envio' => '1',
             'envio' => '2',
             'estado_sobre' => '1',
@@ -1129,11 +1129,11 @@ class EnvioController extends Controller
     public function DireccionEnvio(Request $request)
     {
 
-        /*  
-        
+        /*
+
         pruebas de actualizacion
 
-        
+
         */
 
         //return $request->all();
@@ -1143,27 +1143,27 @@ class EnvioController extends Controller
             return '0';
         }
         else{
-           
+
 
              /* agregando pedidos a la tabla direccion_grupos (campos codigos, productos) */
-       
+
              $lista_productos='';
              $lista_codigos='';
              $pedidos=$request->pedidos;
              $array_pedidos=explode(",",$pedidos);
-         
+
              $data=DetallePedido::wherein("pedido_id",$array_pedidos)->get();
              foreach ($data as $dat ) { $lista_productos.=$dat->nombre_empresa. ", "; $lista_codigos.=$dat->codigo. ", "; }
-             $lista_codigos = rtrim ($lista_codigos, ", ");        
-             $lista_productos = rtrim ($lista_productos, ", ");        
-              
-             /* fin */    
+             $lista_codigos = rtrim ($lista_codigos, ", ");
+             $lista_productos = rtrim ($lista_productos, ", ");
+
+             /* fin */
 
             //cliente
             $cliente=Cliente::where("id",$request->cliente_id)->first();
-             
+
             // agregando nuevo correlativo en tabla
-            
+
             $direccion_grupo_id=DireccionGrupo::create([
                 'estado'=>'1',
                 'destino' => $request->destino,
@@ -1216,7 +1216,7 @@ class EnvioController extends Controller
                     {
                         $pedido = Pedido::find($pedido_id);
 
-                      
+
 
                         $pedido->update([
                             'destino' => $request->destino,
@@ -1224,7 +1224,7 @@ class EnvioController extends Controller
                             'direccion' => $request->direccion,
                             'condicion_envio_code' => Pedido::PENDIENTE_DE_ENVIO_CODE ,
                             'condicion_envio' => Pedido::PENDIENTE_DE_ENVIO,
-                            
+
                         ]);
 
 
@@ -1427,18 +1427,18 @@ class EnvioController extends Controller
         $detalle_pedidos = DetallePedido::where('pedido_id',$pedido->id)->first();
         $fecha = Carbon::now();
 
-       
 
 
-       
-  
+
+
+
         $pedido->update([
             'envio' => '3',//SIN ENVIO
             'condicion_envio' => DireccionGrupo::CE_ENTREGADO,
             'condicion_envio_code' => DireccionGrupo::CE_ENTREGADO_CODE,
-            
+
           //  'condicion_envio' => 'ENTREGADO',
-          //  'condicion_envio_code' => 10 ,    
+          //  'condicion_envio_code' => 10 ,
             'modificador' => 'USER'.Auth::user()->id
         ]);
 
@@ -1458,16 +1458,16 @@ class EnvioController extends Controller
                 'estado'=>'1',
                 'destino' => 'LIMA',
                 'distribucion'=> '',
-                
+
                 'condicion_envio' => DireccionGrupo::CE_ENTREGADO,
                 'condicion_envio_code' => DireccionGrupo::CE_ENTREGADO_CODE,
-                
+
                 'condicion_sobre' => 'SIN ENVIO',
                 'codigos'=>$data->codigo,
                 'producto'=>$data->nombre_empresa,
-                
+
             ])->id;
-    
+
          $direccion_grupo = DireccionGrupo::find($direccion_grupo_id);
          $direccion_grupo->correlativo = 'ENV'.$direccion_grupo_id;
          $direccion_grupo->save();
@@ -1525,6 +1525,18 @@ class EnvioController extends Controller
         return response()->json(['html' => $pedido->id]);
 
         //return redirect()->route('operaciones.atendidos')->with('info','actualizado');
+    }
+
+    public function confirmarRecepcionID(Request $request)
+    {
+        $pedido=Pedido::where("id",$request->hiddenEnvio)->first();
+
+        $pedido->update([
+            'envio' => '2',
+            'modificador' => 'USER'.Auth::user()->id
+        ]);
+
+        return response()->json(['html' => $pedido->id]);
     }
 
 
