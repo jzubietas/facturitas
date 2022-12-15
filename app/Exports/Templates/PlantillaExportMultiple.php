@@ -4,6 +4,12 @@ namespace App\Exports\Templates;
 
 use App\Exports\Templates\Sheets\PageclienteInfo;
 use App\Exports\Templates\Sheets\PageclienteSituacion;
+use App\Exports\Templates\Sheets\PageclienteOctubre;
+use App\Exports\Templates\Sheets\PageclienteinfoOctubre;
+use App\Exports\Templates\Sheets\PageclienteNoviembre;
+use App\Exports\Templates\Sheets\PageclienteinfoNoviembre;
+use App\Exports\Templates\Sheets\PageclienteDiciembre;
+use App\Exports\Templates\Sheets\PageclienteinfoDiciembre;
 use Maatwebsite\Excel\Concerns\Exportable;
 use Maatwebsite\Excel\Concerns\WithMultipleSheets;
 use Illuminate\Http\Request;
@@ -21,8 +27,13 @@ class PlantillaExportMultiple implements WithMultipleSheets
     public function sheets(): array
     {
         return [
-        new PageclienteInfo(null,$this->anio),
-        new PageclienteSituacion(/*$this->anio*/),
+            new PageclienteInfo(null,$this->anio),
+            new PageclienteOctubre(),
+            new PageclienteinfoOctubre(),
+            new PageclienteNoviembre(),
+            new PageclienteinfoNoviembre(),
+            new PageclienteDiciembre(),
+            new PageclienteinfoDiciembre(),
         ];
     }
 }

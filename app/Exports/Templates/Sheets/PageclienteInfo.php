@@ -8,6 +8,8 @@ use App\Models\Porcentaje;
 use App\Models\Pedido;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Concerns\WithColumnFormatting;
+use PhpOffice\PhpSpreadsheet\Style\Alignment;
+use PhpOffice\PhpSpreadsheet\Style\Fill;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 
 use Maatwebsite\Excel\Concerns\WithColumnWidths;
@@ -56,15 +58,12 @@ class PageclienteInfo extends ExportYear implements WithColumnFormatting, FromCo
                 ,'clientes.estado'
                 ,'clientes.deuda'
                 ,'clientes.pidio'
-                ,'clientes.situacion as estadopedido'
+                ,'clientes.situacion'
+                ,DB::raw("(select DATE_FORMAT(dp1.created_at,'%Y-%m-%d %h:%i:%s') from pedidos dp1 where dp1.cliente_id=clientes.id order by dp1.created_at desc limit 1) as fecha")
 
-                ,DB::raw("(select DATE_FORMAT(dp1.created_at,'%d-%m-%Y %h:%i:%s') from pedidos dp1 where dp1.cliente_id=clientes.id order by dp1.created_at desc limit 1) as fecha")
-                ,DB::raw("(select DATE_FORMAT(dp2.created_at,'%d') from pedidos dp2 where dp2.cliente_id=clientes.id order by dp2.created_at desc limit 1) as dia")
-                ,DB::raw("(select DATE_FORMAT(dp2.created_at,'%m') from pedidos dp2 where dp2.cliente_id=clientes.id order by dp2.created_at desc limit 1) as mes")
-                ,DB::raw("(select DATE_FORMAT(dp3.created_at,'%Y') from pedidos dp3 where dp3.cliente_id=clientes.id order by dp3.created_at desc limit 1) as anio")
                 ,DB::raw(" (select (dp.codigo) from pedidos dp where dp.cliente_id=clientes.id order by dp.created_at desc limit 1) as codigo ")
             )
-        //->where('clientes.id',1)
+        ->whereIn('clientes.id',[1,2,3])
         ->where('clientes.estado', '1')
         ->where('clientes.tipo', '1')
         ->get();
@@ -188,7 +187,6 @@ class PageclienteInfo extends ExportYear implements WithColumnFormatting, FromCo
         //$dateM = Carbon::now()->format('m');
         //$dateY = Carbon::now()->format('Y');
 
-
         //$model->created_at->format('');
         return parent::map($model);
     }
@@ -205,36 +203,33 @@ class PageclienteInfo extends ExportYear implements WithColumnFormatting, FromCo
             ,"celular"=>"Celular"
             ,"id_asesor"=>"Identificador Asesor"
             ,"nombre_asesor"=>"Nombre Asesor"
-            ,"provincia"=>"provincia"
-            ,"distrito"=>"distrito"
-            ,"direccion"=>"direccion"
-            ,"referencia"=>"referencia"
-            ,"estado"=>"estado"
-            ,"deuda"=>"deuda"
-            ,"pidio"=>"pidio"
-            ,"fecha"=>"fecha"
-            ,"dia"=>"dia"
-            ,"mes"=>"mes"
-            ,"anio"=>"anio"
+            ,"provincia"=>"Provincia"
+            ,"distrito"=>"Distrito"
+            ,"direccion"=>"Direccion"
+            ,"referencia"=>"Referencia"
+            ,"estado"=>"Estado"
+            ,"deuda"=>"Deuda"
+            ,"pidio"=>"Pidio"
+            ,"fecha"=>"Fecha"
             ,"codigo"=>"codigo"
-            ,"estadopedido"=>"estadopedido"
-            ,'deposito'=>'deposito'
-            ,"porcentajefsb"=>"porcentajefsb"
-            ,"porcentajefb"=>"porcentajefb"
-            ,"porcentajeesb"=>"porcentajeesb"
-            ,"porcentajeeb"=>"porcentajeeb"
-            ,"eneroa"=>"eneroa","enerop"=>"enerop"
-            ,"febreroa"=>"febreroa","febrerop"=>"febrerop"
-            ,"marzoa"=>"marzoa","marzop"=>"marzop"
-            ,"abrila"=>"abrila","abrilp"=>"abrilp"
-            ,"mayoa"=>"mayoa","mayop"=>"mayop"
-            ,"junioa"=>"junioa","juniop"=>"juniop"
-            ,"julioa"=>"julioa","juliop"=>"juliop"
-            ,"agostoa"=>"agostoa","agostop"=>"agostop"
-            ,"setiembrea"=>"setiembrea","setiembrep"=>"setiembrep"
-            ,"octubrea"=>"octubrea","octubrep"=>"octubrep"
-            ,"noviembrea"=>"noviembrea","noviembrep"=>"noviembrep"
-            ,"diciembrea"=>"diciembrea","diciembrep"=>"diciembrep"
+            ,"situacion"=>"Situacion"
+            ,'deposito'=>'Deposito'
+            ,"porcentajefsb"=>"Porcentaje Fisico sin banca"
+            ,"porcentajefb"=>"Porcentaje Fisico Bancarizado"
+            ,"porcentajeesb"=>"Porcentaje Electronico sin banca"
+            ,"porcentajeeb"=>"Porcentaje Electronico Bancarizado"
+            ,"eneroa"=>"Enero a","enerop"=>"Enero p"
+            ,"febreroa"=>"febrero a","febrerop"=>"Febrero p"
+            ,"marzoa"=>"marzo a","marzop"=>"marzo p"
+            ,"abrila"=>"abril a","abrilp"=>"abril p"
+            ,"mayoa"=>"mayo a","mayop"=>"mayo p"
+            ,"junioa"=>"junio a","juniop"=>"junio p"
+            ,"julioa"=>"julio a","juliop"=>"julio p"
+            ,"agostoa"=>"agosto a","agostop"=>"agosto p"
+            ,"setiembrea"=>"setiembre a","setiembrep"=>"setiembre p"
+            ,"octubrea"=>"octubre a","octubrep"=>"octubre p"
+            ,"noviembrea"=>"noviembre a","noviembrep"=>"noviembre p"
+            ,"diciembrea"=>"diciembre a","diciembrep"=>"diciembre p"
             //,"created_at"=>"Fecha",
         ];
 
@@ -245,7 +240,6 @@ class PageclienteInfo extends ExportYear implements WithColumnFormatting, FromCo
 
     public function columnFormats(): array
     {
-
 
         return [
             //Formato de las columnas segun la letra
@@ -265,8 +259,175 @@ class PageclienteInfo extends ExportYear implements WithColumnFormatting, FromCo
     }
 
     public static function afterSheet(AfterSheet $event){
-//Single Column ss
-        $event->sheet->styleCells(
+
+        $style_recurrente = array(
+            [
+                'alignment' => [
+                    'horizontal' => Alignment::HORIZONTAL_CENTER,
+                ],
+                'fill' => [
+                    'fillType' => Fill::FILL_SOLID,
+                    'color' => ['rgb' => '336655']
+                ]
+            ]
+        );
+        $stylerecuperadoabandono = array(
+            [
+                'alignment' => [
+                    'horizontal' => Alignment::HORIZONTAL_CENTER,
+                ],
+                'fill' => [
+                    'fillType' => Fill::FILL_SOLID,
+                    'color' => ['rgb' => '336655']
+                ]
+            ]
+        );
+        $stylerecuperadoreciente = array(
+            'alignment' => array(
+                'horizontal' => Alignment::HORIZONTAL_JUSTIFY,
+            ),
+            'fill' => [
+                'fillType' => Fill::FILL_SOLID,
+                'startColor' => [
+                    'rgb' => 'bfd200',
+                ]
+            ],
+        );
+        $stylenuevo = array(
+            'alignment' => array(
+                'horizontal' => Alignment::HORIZONTAL_JUSTIFY,
+            ),
+            'fill' => [
+                'fillType' => Fill::FILL_SOLID,
+                'startColor' => [
+                    'rgb' => 'ffcfd2',
+                ]
+            ],
+        );
+        $stylebasefria = array(
+            'alignment' => array(
+                'horizontal' => Alignment::HORIZONTAL_JUSTIFY,
+            ),
+            'fill' => [
+                'fillType' => Fill::FILL_SOLID,
+                'startColor' => [
+                    'rgb' => 'eff7f6',
+                ]
+            ],
+        );
+        $styleabandono = array(
+            'alignment' => array(
+                'horizontal' => Alignment::HORIZONTAL_JUSTIFY,
+            ),
+            'fill' => [
+                'fillType' => Fill::FILL_SOLID,
+                'startColor' => [
+                    'rgb' => 'ff4d6d',
+                ]
+            ],
+        );
+        $styleabandonoreciente = array(
+            [
+                'alignment' => [
+                    'horizontal' => Alignment::HORIZONTAL_CENTER,
+                ],
+                'fill' => [
+                    'fillType' => Fill::FILL_SOLID,
+                    'color' => ['rgb' => 'e85d04']
+                ]
+            ]
+        );
+
+        /*
+         * RECURRENTE-----90e0ef
+            RECUPERADO ABANDONO----b5e48c
+            RECUPERADO RECIENTE---bfd200
+            NUEVO------ffcfd2
+            BASE FRIA----eff7f6
+            ABANDONO----ff4d6d
+            ABANDONO RECIENTE----e85d04
+         * */
+
+        foreach ($event->sheet->getRowIterator() as $row)
+        {
+            if($event->sheet->getCellByColumnAndRow(17,$row->getRowIndex())->getValue()=='RECURRENTE')
+            {
+                $event->sheet->getStyle("T".$row->getRowIndex())->applyFromArray($style_recurrente);
+            }
+            else if($event->sheet->getCellByColumnAndRow(17,$row->getRowIndex())->getValue()=='RECUPERADO ABANDONO')
+            {
+                $event->sheet->getStyle("T".$row->getRowIndex())->applyFromArray($stylerecuperadoabandono);
+            }
+            else if($event->sheet->getCellByColumnAndRow(17,$row->getRowIndex())->getValue()=='RECUPERADO RECIENTE')
+            {
+                $event->sheet->getStyle("T".$row->getRowIndex())->applyFromArray($stylerecuperadoreciente);
+            }
+            else if($event->sheet->getCellByColumnAndRow(17,$row->getRowIndex())->getValue()=='NUEVO')
+            {
+                $event->sheet->getStyle("T".$row->getRowIndex())->applyFromArray($stylenuevo);
+            }
+            else if($event->sheet->getCellByColumnAndRow(17,$row->getRowIndex())->getValue()=='BASE FRIA')
+            {
+                $event->sheet->getStyle("T".$row->getRowIndex())->applyFromArray($stylebasefria);
+            }
+            else if($event->sheet->getCellByColumnAndRow(17,$row->getRowIndex())->getValue()=='ABANDONO')
+            {
+                $event->sheet->getStyle("T".$row->getRowIndex())->applyFromArray($styleabandono);
+            }
+            else if($event->sheet->getCellByColumnAndRow(17,$row->getRowIndex())->getValue()=='ABANDONO RECIENTE')
+            {
+                $event->sheet->getStyle("T".$row->getRowIndex())->applyFromArray($styleabandonoreciente);
+            }else{
+                $event->sheet->getStyle("T".$row->getRowIndex())->applyFromArray($styleabandono);
+            }
+
+            //$row->getRowIndex();
+        }
+
+        /*$event->sheet->getStyleByColumnAndRow(3,3,)->applyFromArray(array(
+            'fill' => array(
+                'type' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                'color' => array('rgb' => 'FF0000')
+            )
+        ));*/
+        //#800080
+
+        /*foreach ($event->sheet->getRowIterator() as $row) {
+            $cellIterator=$row;
+
+                foreach($cellIterator as $cell)
+                {
+                    if($cell->getValue() != 'ABANDONO') {
+                        $event->sheet->getStyle('T' . $cell->getColumn())->applyFromArray(
+                            array(
+                                'fill' => array(
+                                    'type' => PHPExcel_Style_Fill::FILL_SOLID,
+                                    'color' => array('rgb' => 'FF0000')
+                                )
+                            )
+                        );
+                    } else {
+                        $event->sheet->getStyle('T' . $cell->getColumn())->applyFromArray(
+                            array(
+                                'fill' => array(
+                                    'type' => PHPExcel_Style_Fill::FILL_SOLID,
+                                    'color' => array('rgb' => 'FF0000')
+                                )
+                            )
+                        );
+                    }
+
+
+
+            }
+        }*/
+        /*echo 'ROW: ', $cell->getRow(), PHP_EOL;
+                   echo 'COLUMN: ', $cell->getColumn(), PHP_EOL;
+                   echo 'COORDINATE: ', $cell->getCoordinate(), PHP_EOL;
+                   echo 'RAW VALUE: ', $cell->getValue(), PHP_EOL;*/
+
+
+        /*$event->sheet->styleCells(
             'T',
             [
                 'alignment' => [
@@ -277,21 +438,22 @@ class PageclienteInfo extends ExportYear implements WithColumnFormatting, FromCo
                     'color' => ['rgb' => '996633']
                 ]
             ]
-        );
+        );*/
 
 //Range Columns
-        /*$event->sheet->styleCells(
-            'B2:E2',
+        /*
+        $event->sheet->styleCells(
+            'Q',
             [
                 'alignment' => [
-                    'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+                    'horizontal' => Alignment::HORIZONTAL_CENTER,
                 ],
                 'fill' => [
-                    'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                    'fillType' => Fill::FILL_SOLID,
                     'color' => ['rgb' => '336655']
                 ]
             ]
-        );*/
+        ); */
     }
 
 

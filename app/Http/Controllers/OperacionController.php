@@ -352,6 +352,7 @@ class OperacionController extends Controller
                     'pedidos.envio',
                     'pedidos.destino',
                     'pedidos.condicion_envio',
+                    'pedidos.condicion_envio_code',
                     'dp.envio_doc',
                     'dp.fecha_envio_doc',
                     'dp.cant_compro',
@@ -371,6 +372,7 @@ class OperacionController extends Controller
                 ->where('pedidos.estado', '1')
                 ->where('dp.estado', '1')
                 ->where('pedidos.condicion_code', Pedido::ATENDIDO_INT)
+                ->whereIn('pedidos.condicion_envio_code', [Pedido::JEFE_OP_INT])
                 ->whereIn('pedidos.envio', ['2','3'])
                 //->whereIn('pedidos.envio', ['0'])
                 ->whereBetween( 'pedidos.created_at', [$min, $max]);
@@ -467,6 +469,7 @@ class OperacionController extends Controller
                     //DB::raw('DATE_FORMAT(pedidos.created_at, "%d/%m/%Y") as fecha'),
                     DB::raw('(DATE_FORMAT(pedidos.created_at, "%Y-%m-%d %h:%i:%s")) as fecha'),
                     'pedidos.envio',
+                    'pedidos.condicion_envio_code',
                     'pedidos.destino',
                     'pedidos.condicion_envio',
                     'dp.envio_doc',
@@ -488,7 +491,8 @@ class OperacionController extends Controller
                 ->where('pedidos.estado', '1')
                 ->where('dp.estado', '1')
                 ->where('pedidos.condicion_code', Pedido::ATENDIDO_INT)
-                ->whereIn('pedidos.envio', ['1'])
+                ->whereIn('pedidos.condicion_envio_code', [Pedido::BANCARIZACION_INT] )
+                //->whereIn('pedidos.envio', ['1'])
                 //->whereIn('pedidos.envio', ['0'])
                 ->whereBetween( 'pedidos.created_at', [$min, $max]);
 
@@ -562,6 +566,8 @@ class OperacionController extends Controller
         $pedido->update([
             'condicion' => Pedido::$estadosCondicionCode[$request->condicion],
             'condicion_code' => $request->condicion,
+            'condicion_envio' => Pedido::$estadosCondicionEnvioCode[$request->condicion],
+            'condicion_envio_code' => $request->condicion,
             'modificador' => 'USER'.Auth::user()->id
         ]);
 
@@ -1104,21 +1110,6 @@ class OperacionController extends Controller
         $imagenesatencion = ImagenAtencion::where('imagen_atencions.pedido_id', $pedido->id)->get();
 
         return view('operaciones.showAtender', compact('pedido','pedidos', 'imagenes', 'imagenesatencion'));
-    }
-
-
-
-
-    public function confirmarRecepcionID(Request $request)
-    {
-        $pedido=Pedido::where("id",$request->hiddenEnvio)->first();
-
-        $pedido->update([
-            'envio' => '2',
-            'modificador' => 'USER'.Auth::user()->id
-        ]);
-
-        return response()->json(['html' => $pedido->id]);
     }
 
     public function Revertirenvio(Request $request)

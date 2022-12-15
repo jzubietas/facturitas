@@ -843,6 +843,7 @@ class PedidoController extends Controller
 
     public function pedidosstore(Request $request)
     {
+
         //return $request->all();
         $numped = "";
         $mirol = Auth::user()->rol;//
@@ -963,8 +964,8 @@ class PedidoController extends Controller
                 'condicion_int' => '1',
                 'pago' => '0',
                 'envio' => '0',
-                'condicion_envio' => 'PENDIENTE DE ENVIO',
-                'condicion_envio_code' => 1,
+                'condicion_envio' => Pedido::POR_ATENDER,
+                'condicion_envio_code' => Pedido::POR_ATENDER_INT,
                 'estado' => '1',
                 'codigo' => $codigo,
                 'notificacion' => 'Nuevo pedido creado',
@@ -1007,26 +1008,32 @@ class PedidoController extends Controller
             $cont = 0;
             $fileList = [];
 
-            /*if(isset($file))
-            {
-                $destinationPath = base_path('public/storage/adjuntos/');
+
+            if (isset($files)) {
+
                 $cont = 0;
-                $file_name = Carbon::now()->second.$file->getClientOriginalName();
-                $fileList[$cont] = array(
-                    'file_name' => $file_name,
-                );
-                $file->move($destinationPath , $file_name);
-            }*/
+                foreach ($files as $file){
+                    $file_name = Carbon::now()->second.$file->getClientOriginalName();
+                    $file->move($destinationPath , $file_name);
 
-            /*if(isset($files))
-            {
-return $files;
+                    ImagenPedido::create([
+                        'pedido_id' => $pedido->id,
+                        'adjunto' => $file_name,
+                        'estado' => '1'
+                    ]);
+                }
             }else{
-return ' no imagen ';
-            }*/
-
-            //return '';
-
+                ImagenPedido::create([
+                    'pedido_id' => $pedido->id,
+                    'adjunto' => 'logo_facturas.png',
+                    'estado' => '1'
+                ]);
+                $cont = 0;
+                $fileList[$cont] = array(
+                    'file_name' => 'logo_facturas.png',
+                );
+            }
+/*
             if (isset($files)) {
                 $destinationPath = base_path('public/storage/adjuntos/');
                 $cont = 0;
@@ -1055,7 +1062,8 @@ return ' no imagen ';
                     'file_name' => 'logo_facturas.png',
                 );
 
-            }
+            }*/
+
             $contP = 0;
 
             while ($contP < count((array)$codigo)) {
@@ -1077,7 +1085,7 @@ return ' no imagen ';
                     'descripcion' => $descripcion[$contP],
                     'nota' => $nota[$contP],
                     'estado' => '1',//,
-                    'adjunto' => $fileList[$contP]['file_name']
+                    //'adjunto' => $fileList[$contP]['file_name']
                 ]);
 
                 $contP++;
@@ -1203,6 +1211,7 @@ return ' no imagen ';
             $fileList = [];
 
             if (isset($files)) {
+
                 foreach ($files as $file) {
                     $file_name = Carbon::now()->second . $file->getClientOriginalName(); //Get file original name
                     /*  $fileList[$cont] = array(
@@ -1511,6 +1520,8 @@ return ' no imagen ';
             $files = $request->file('adjunto');
             $destinationPath = base_path('public/storage/adjuntos/');
             $cont = 0;
+
+
 
             if (isset($files)) {
                 foreach ($files as $file) {

@@ -284,7 +284,7 @@ class AdministracionController extends Controller
                         DB::raw(" ( select GROUP_CONCAT(ppp.codigo) from pago_pedidos ped inner join pedidos ppp on ped.pedido_id =ppp.id where pagos.id=ped.pago_id and ped.estado=1 and ppp.estado=1 and ped.pagado in (1,2)) as codigos "),
                         DB::raw(" (select sum(ped2.abono) from pago_pedidos ped2 where ped2.pago_id =pagos.id and ped2.estado=1 and ped2.pagado in (1,2) ) as total_pago ")
                         )
-                //->whereIn('pagos.condicion', [Pago::PENDIENTE])
+                ->whereIn('pagos.condicion', [Pago::PENDIENTE])
                 ->where('pagos.estado', '1')
                 ->whereBetween(DB::raw('( (select DATE( MIN(dpa.fecha))   from detalle_pagos dpa where dpa.pago_id=pagos.id and dpa.estado=1)  )'), [$min, $max]); //rango de fechas
 

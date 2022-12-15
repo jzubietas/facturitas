@@ -114,10 +114,11 @@ class EnvioController extends Controller
             ->join('clientes as c', 'c.id', 'de.cliente_id')
             ->join('users as u', 'u.id', 'c.user_id')
             ->join('pedidos as p', 'p.codigo', 'direccion_grupos.codigos')
-           
+
+
             ->where('p.condicion_envio',DireccionGrupo::CE_EN_REPARTO)
             ->where('direccion_grupos.estado','1')
-            ->whereNull('direccion_grupos.subcondicion_envio')
+           // ->whereNull('direccion_grupos.subcondicion_envio')
             ->select(
                 'direccion_grupos.id',
                 'u.identificador as identificador',
@@ -145,11 +146,11 @@ class EnvioController extends Controller
             ->join('clientes as c', 'c.id', 'de.cliente_id')
             ->join('users as u', 'u.id', 'c.user_id')
             ->join('pedidos as p', 'p.codigo', 'direccion_grupos.codigos')
-       
+
             ->where('p.condicion_envio',DireccionGrupo::CE_EN_REPARTO)
             ->where('direccion_grupos.estado','1')
             ->whereNull('direccion_grupos.subcondicion_envio')
-       
+
             ->select(
                 'direccion_grupos.id',
                 'u.identificador as identificador',
@@ -157,10 +158,10 @@ class EnvioController extends Controller
                 DB::raw(" (select '') as celular "),
                 DB::raw(" (select '') as nombre "),
                 'de.cantidad',
-                
+
                 'direccion_grupos.codigos',
                 'direccion_grupos.producto',
-           
+
                 'de.tracking as direccion',
                 'de.foto as referencia',
                 DB::raw(" (select '') as observacion "),
@@ -210,85 +211,8 @@ class EnvioController extends Controller
 
 
         $pedidos = $pedidos_lima->union($pedidos_provincia);
-        //$pedidos = $pedidos->where("direccion_grupos.condicion_envio","2");
-        //$pedidos=$pedidos->where(DB::raw('DATE(direccion_grupos.created_at)'), $request->desde);
         $pedidos=$pedidos->get();
 
-
-        /*$pedidos = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')
-                ->join('users as u', 'pedidos.user_id', 'u.id')
-                ->select(
-                    'pedidos.id',
-                    'pedidos.cliente_id',
-                    'c.nombre as nombres',
-                    'c.celular as celulares',
-                    'u.identificador as users',
-                    DB::raw(" (select dp.codigo from detalle_pedidos dp where dp.pedido_id=pedidos.id) as codigos "),
-                    DB::raw(" (select dp.nombre_empresa from detalle_pedidos dp where dp.pedido_id=pedidos.id) as empresas "),
-                    DB::raw(" (select dp.total from detalle_pedidos dp where dp.pedido_id=pedidos.id) as total "),
-                    'pedidos.condicion',
-                    'pedidos.created_at as fecha',
-                    'pedidos.condicion_envio',
-                    'pedidos.envio',
-                    'pedidos.destino',
-                    'pedidos.direccion',
-                    DB::raw(" (select dp.envio_doc from detalle_pedidos dp where dp.pedido_id=pedidos.id) as envio_doc "),
-                    DB::raw(" (select dp.fecha_envio_doc from detalle_pedidos dp where dp.pedido_id=pedidos.id) as fecha_envio_doc "),
-                    DB::raw(" (select dp.cant_compro from detalle_pedidos dp where dp.pedido_id=pedidos.id) as cant_compro "),
-                    DB::raw(" (select dp.fecha_envio_doc_fis from detalle_pedidos dp where dp.pedido_id=pedidos.id) as fecha_envio_doc_fis "),
-                    DB::raw(" (select dp.foto1 from detalle_pedidos dp where dp.pedido_id=pedidos.id) as foto1 "),
-                    DB::raw(" (select dp.foto2 from detalle_pedidos dp where dp.pedido_id=pedidos.id) as foto2 "),
-                    DB::raw(" (select dp.fecha_recepcion from detalle_pedidos dp where dp.pedido_id=pedidos.id) as fecha_recepcion "),
-                )
-                ->where('pedidos.estado', '1')
-                ->where('pedidos.envio', '<>', '1')
-                ->where('pedidos.condicion_envio', '<>', 3)
-                ->where('pedidos.condicion_envio', 2);
-        if(Auth::user()->rol == "Operario"){
-            $asesores = User::where('users.rol', 'Asesor')
-                -> where('users.estado', '1')
-                -> Where('users.operario',Auth::user()->id)
-                ->select(
-                    DB::raw("users.identificador as identificador")
-                )
-                ->pluck('users.identificador');
-
-            $pedidos=$pedidos->WhereIn('u.identificador',$asesores);
-
-        }else if(Auth::user()->rol == "Jefe de operaciones"){
-            $operarios = User::where('users.rol', 'Operario')
-                -> where('users.estado', '1')
-                -> where('users.jefe', Auth::user()->id)
-                ->select(
-                    DB::raw("users.id as id")
-                )
-                ->pluck('users.id');
-
-            $asesores = User::where('users.rol', 'Asesor')
-                -> where('users.estado', '1')
-                ->WhereIn('users.operario',$operarios)
-                ->select(
-                    DB::raw("users.identificador as identificador")
-                )
-                ->pluck('users.identificador');
-
-            $pedidos=$pedidos->WhereIn('u.identificador',$asesores);
-
-        }else if(Auth::user()->rol == "Asesor"){
-            $pedidos=$pedidos->Where('u.identificador',Auth::user()->identificador);
-
-        }
-        else if(Auth::user()->rol == "Super asesor"){
-            $pedidos=$pedidos->Where('u.identificador',Auth::user()->identificador);
-
-        }
-        else if(Auth::user()->rol == "Encargado"){
-            $pedidos=$pedidos->Where('u.supervisor',Auth::user()->identificador);
-        }
-        else{
-            $pedidos=$pedidos;
-        }*/
-        //$pedidos=$pedidos->get();
 
         return Datatables::of($pedidos)
                     ->addIndexColumn()
@@ -349,7 +273,9 @@ class EnvioController extends Controller
             ->join('clientes as c', 'c.id', 'de.cliente_id')
             ->join('users as u', 'u.id', 'c.user_id')
             ->where('direccion_grupos.estado','1')
-            ->where('direccion_grupos.condicion_envio',DireccionGrupo::CE_ENTREGADO)
+           // ->where('direccion_grupos.condicion_envio',DireccionGrupo::CE_ENTREGADO)
+            ->where('direccion_grupos.condicion_envio_code',DireccionGrupo::CE_ENTREGADO_CODE)
+
             ->select(
                 'direccion_grupos.id',
                 'u.identificador as identificador',
@@ -566,7 +492,7 @@ class EnvioController extends Controller
                                         'direccion_grupos.distribucion',
                                         'direccion_grupos.condicion_sobre',
                                         'direccion_grupos.correlativo',
-                                        
+
                                     );
                                     $pedidos_lima->where( 'direccion_grupos.codigos','like','%'.$request->general.'%')
             //$pedidos_lima->where( DB::raw(" (select group_concat(dp.codigo_pedido) from direccion_pedidos dp where dp.direcciongrupo=direccion_grupos.id and dp.estado = 1 ) "),'like','%'.$request->general.'%')
@@ -597,7 +523,7 @@ class EnvioController extends Controller
                                         'de.cantidad',
                                         DB::raw(" (select group_concat(dp.codigo_pedido) from gasto_pedidos dp where dp.direcciongrupo=direccion_grupos.id and dp.estado = 1) as codigos "),
                                         DB::raw(" (select group_concat(ab.empresa) from gasto_pedidos ab where ab.direcciongrupo=direccion_grupos.id) as producto "),
-                                       
+
                                         'de.foto as referencia',
                                         DB::raw(" (select '') as observacion "),
                                         DB::raw(" (select '') as distrito "),
@@ -875,6 +801,10 @@ class EnvioController extends Controller
         //adjunto2
         //condicion
         //$pedido=Pedido::where("id",$request->hiddenEnviar)->first();
+
+        dd($request);
+        exit;
+
         $envio=DireccionGrupo::where("id",$request->hiddenEnviar)->first();
 
         //$detalle_pedidos = DetallePedido::where('pedido_id',$pedido->id)->first();
@@ -887,13 +817,18 @@ class EnvioController extends Controller
 
 
 
-        if ($request->condicion == "3")
+        if ($request->condicion == 'ENTREGADO' )
         {
             $envio->update([
-                'condicion_envio' => 3
+                'condicion_envio' => Pedido::ENTREGADO,
+                'condicion_envio_code' => Pedido::ENTREGADO_INT,
+                
             ]);
 
         }
+
+
+
 
         $files = $request->file('foto1');
         $files2 = $request->file('foto2');
@@ -1096,26 +1031,42 @@ class EnvioController extends Controller
     }
 
     public function Recibirid(Request $request)
-    
+
     {
 
-      //  dd($request);
+
+       // dd($request);
       //  exit;
 
+
         $pedido=Pedido::where("id",$request->hiddenRecibir)->first();
+      
+        dd($pedido->codigo);
+        exit;
+      
         $pedido->update([
-            
+
             //'envio' => '1',
             'envio' => '2',
             'estado_sobre' => '1',
-            'condicion_envio'=>Pedido::EN_REPARTO,
-            'condicion_envio_code'=>Pedido::EN_REPARTO_CODE,
+            'condicion_envio'=>DireccionGrupo::CE_EN_REPARTO,
+            'condicion_envio_code'=>DireccionGrupo::CE_EN_REPARTO_CODE,
             'modificador' => 'USER'.Auth::user()->id
         ]);
 
+
         // actualizando en direccion_grupos
 
+        $direccion_grupos=DireccionGrupo::where("codigos",$pedido->codigo)->first();
 
+
+        $direccion_grupos->update([
+
+            'condicion_envio'=>DireccionGrupo::CE_EN_REPARTO,
+            'condicion_envio_code'=>DireccionGrupo::CE_EN_REPARTO_CODE,
+            'modificador' => 'USER'.Auth::user()->id,
+            'pedido_id' => $request->hiddenRecibir
+        ]);
 
 
 
@@ -1127,11 +1078,11 @@ class EnvioController extends Controller
     public function DireccionEnvio(Request $request)
     {
 
-        /*  
-        
+        /*
+
         pruebas de actualizacion
 
-        
+
         */
 
         //return $request->all();
@@ -1141,27 +1092,27 @@ class EnvioController extends Controller
             return '0';
         }
         else{
-           
+
 
              /* agregando pedidos a la tabla direccion_grupos (campos codigos, productos) */
-       
+
              $lista_productos='';
              $lista_codigos='';
              $pedidos=$request->pedidos;
              $array_pedidos=explode(",",$pedidos);
-         
+
              $data=DetallePedido::wherein("pedido_id",$array_pedidos)->get();
              foreach ($data as $dat ) { $lista_productos.=$dat->nombre_empresa. ", "; $lista_codigos.=$dat->codigo. ", "; }
-             $lista_codigos = rtrim ($lista_codigos, ", ");        
-             $lista_productos = rtrim ($lista_productos, ", ");        
-              
-             /* fin */    
+             $lista_codigos = rtrim ($lista_codigos, ", ");
+             $lista_productos = rtrim ($lista_productos, ", ");
+
+             /* fin */
 
             //cliente
             $cliente=Cliente::where("id",$request->cliente_id)->first();
-             
+
             // agregando nuevo correlativo en tabla
-            
+
             $direccion_grupo_id=DireccionGrupo::create([
                 'estado'=>'1',
                 'destino' => $request->destino,
@@ -1169,11 +1120,14 @@ class EnvioController extends Controller
                 'nombre_cliente'=> ( ($request->destino=='LIMA')? $request->nombre : $cliente->nombre  ),
                 'celular_cliente'=> ( ($request->destino=='LIMA')? $request->contacto : $cliente->celular."-".$cliente->icelular ),
                 'codigos'=>$lista_codigos,
-                'producto'=>$lista_productos
+                'producto'=>$lista_productos,
+                'condicion_envio_code' => Pedido::PENDIENTE_DE_ENVIO_CODE ,
+                'condicion_envio' => Pedido::PENDIENTE_DE_ENVIO,
             ])->id;
 
             $direccion_grupo = DireccionGrupo::find($direccion_grupo_id);
             $direccion_grupo->correlativo = 'ENV'.$direccion_grupo_id;
+
             $direccion_grupo->save();
 
 
@@ -1211,19 +1165,6 @@ class EnvioController extends Controller
                     {
                         $pedido = Pedido::find($pedido_id);
 
-                        /*
-                        $pedido->update([
-                            'destino' => $request->destino,
-                            'condicion_envio' => 2,//AL REGISTRAR DIRECCION PASA A ESTADO  EN REPARTO
-                            'direccion' => $request->direccion,
-
-                        ]);
-                        */
-
-                        /* 14/12/22  El pedido se debe listar en envios sobres por recibir al ser cargado el destino
-                        y se debe usar las columnas creadas condicion_envio_code y condicion (manteniendo lo anterior para no romper el app)
-                        por defecto condicion_envio_code=1 , condicion='PENDIENTE DE ENVIO'
-                        */
 
 
                         $pedido->update([
@@ -1232,7 +1173,7 @@ class EnvioController extends Controller
                             'direccion' => $request->direccion,
                             'condicion_envio_code' => Pedido::PENDIENTE_DE_ENVIO ,
                             'condicion' => Pedido::PENDIENTE_DE_ENVIO_CODE ,
-                            
+
                         ]);
 
 
@@ -1435,15 +1376,18 @@ class EnvioController extends Controller
         $detalle_pedidos = DetallePedido::where('pedido_id',$pedido->id)->first();
         $fecha = Carbon::now();
 
-       
 
 
-       
-  
+
+
+
         $pedido->update([
             'envio' => '3',//SIN ENVIO
-            'condicion_envio' => Pedido::$estadosCondicionCode[3],
-            'condicion_envio_code' => 3,
+            'condicion_envio' => DireccionGrupo::CE_ENTREGADO,
+            'condicion_envio_code' => DireccionGrupo::CE_ENTREGADO_CODE,
+
+          //  'condicion_envio' => 'ENTREGADO',
+          //  'condicion_envio_code' => 10 ,
             'modificador' => 'USER'.Auth::user()->id
         ]);
 
@@ -1452,6 +1396,9 @@ class EnvioController extends Controller
             'fecha_recepcion' => $fecha,
             'atendido_por' => Auth::user()->name,
             'atendido_por_id' => Auth::user()->id,
+            'condicion_envio' => DireccionGrupo::CE_ENTREGADO,
+            'condicion_envio_code' => DireccionGrupo::CE_ENTREGADO_CODE,
+            'pedido_id'=>$request->hiddenSinenvio
         ]);
 
         /**/
@@ -1459,16 +1406,23 @@ class EnvioController extends Controller
 
         $data=DetallePedido::where("pedido_id",$request->hiddenSinenvio)->first();
 
-        $direcciongrupo=DireccionGrupo::create([
+        $direccion_grupo_id=DireccionGrupo::create([
                 'estado'=>'1',
                 'destino' => 'LIMA',
                 'distribucion'=> '',
-                'condicion_envio' => 3,
+
+                'condicion_envio' => DireccionGrupo::CE_ENTREGADO,
+                'condicion_envio_code' => DireccionGrupo::CE_ENTREGADO_CODE,
+
                 'condicion_sobre' => 'SIN ENVIO',
                 'codigos'=>$data->codigo,
-                'producto'=>$data->nombre_empresa
-            ]);
-            
+                'producto'=>$data->nombre_empresa,
+
+            ])->id;
+
+         $direccion_grupo = DireccionGrupo::find($direccion_grupo_id);
+         $direccion_grupo->correlativo = 'ENV'.$direccion_grupo_id;
+         $direccion_grupo->save();
 
         $direccionLima = DireccionEnvio::create([
             'cliente_id' => $pedido->cliente_id,
@@ -1478,7 +1432,7 @@ class EnvioController extends Controller
             'nombre' => $cliente->nombre,
             'celular' => $cliente->celular,
             'observacion' => '',
-            'direcciongrupo' => $direcciongrupo->id,
+            'direcciongrupo' => $direccion_grupo_id,
             'cantidad' => 1,
             'destino'=>'LIMA',
             'estado' => '1',
@@ -1490,7 +1444,7 @@ class EnvioController extends Controller
                 'direccion_id' => $direccionLima->id,
                 'pedido_id' => $pedido->id,
                 'codigo_pedido' => $detalle_pedidos->codigo,
-                'direcciongrupo' => $direcciongrupo->id,
+                'direcciongrupo' => $direccion_grupo_id,
                 'empresa' => $detalle_pedidos->nombre_empresa,
                 'estado' => '1'
             ]);
@@ -1498,6 +1452,10 @@ class EnvioController extends Controller
         return response()->json(['html' => $pedido->id]);
         //return redirect()->route('operaciones.atendidos')->with('info','actualizado');
     }
+
+
+    /* Esta funciòn actualiza al estado envio 4*/
+
 
     public function Enviarid(Request $request)
     {
@@ -1507,6 +1465,8 @@ class EnvioController extends Controller
 
         $pedido->update([
             'envio' => '1',
+            'condicion_envio' => Pedido::BANCARIZACION,
+            'condicion_envio_code' => Pedido::BANCARIZACION_INT,
             'modificador' => 'USER'.Auth::user()->id
         ]);
 
@@ -1517,6 +1477,36 @@ class EnvioController extends Controller
         return response()->json(['html' => $pedido->id]);
 
         //return redirect()->route('operaciones.atendidos')->with('info','actualizado');
+    }
+
+    public function confirmarRecepcionID(Request $request)
+    {
+        $pedido=Pedido::where("id",$request->hiddenEnvio)->first();
+
+        $pedido->update([
+            'envio' => '2',
+            'modificador' => 'USER'.Auth::user()->id,
+            'condicion_envio' => Pedido::JEFE_OP,
+            'condicion_envio_code' => Pedido::JEFE_OP_INT,
+
+        ]);
+
+        return response()->json(['html' => $pedido->id]);
+    }
+
+    public function AtenderPedidoOP(Request $request)
+    {
+        $pedido=Pedido::where("id",$request->hiddenEnvio)->first();
+
+        $pedido->update([
+            'envio' => '2',
+            'modificador' => 'USER'.Auth::user()->id,
+            'condicion_envio' => Pedido::JEFE_OP_CONF,
+            'condicion_envio_code' => Pedido::JEFE_OP_CONF_INT,
+
+        ]);
+
+        return response()->json(['html' => $pedido->id]);
     }
 
 
