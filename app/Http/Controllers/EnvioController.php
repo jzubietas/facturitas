@@ -1451,6 +1451,8 @@ class EnvioController extends Controller
 
         $pedido->update([
             'envio' => '1',
+            'condicion_envio' => Pedido::BANCARIZACION,
+            'condicion_envio_code' => Pedido::BANCARIZACION_INT,
             'modificador' => 'USER'.Auth::user()->id
         ]);
 
