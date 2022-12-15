@@ -219,6 +219,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::post('operaciones.updateatenderid/{pedido}', [OperacionController::class, 'updateAtenderId'])->name('operaciones.updateatenderid');
     Route::get('operaciones.showatender/{pedido}', [OperacionController::class, 'showAtender'])->name('operaciones.showatender');
     Route::post('operaciones.recepcionid', [EnvioController::class, 'confirmarRecepcionID'])->name('operaciones.recepcionid');
+    Route::post('operaciones.atender_pedido_op', [EnvioController::class, 'AtenderPedidoOP'])->name('operaciones.atender_pedido_op');
     Route::post('operaciones.envioid', [EnvioController::class, 'Enviarid'])->name('operaciones.envioid');
     Route::post('operaciones.revertirenvioid', [OperacionController::class, 'Revertirenvio'])->name('operaciones.revertirenvioid');
     Route::post('operaciones.sinenvioid', [EnvioController::class, 'SinEnviarid'])->name('operaciones.sinenvioid');
