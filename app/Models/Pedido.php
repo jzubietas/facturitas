@@ -9,35 +9,49 @@ class Pedido extends Model
 {
     use HasFactory;
 
-    //condicion del pedido
+    /**************
+     * CONSTANTES PEDIDO
+     */
     const POR_ATENDER = 'POR ATENDER';//1
     const EN_PROCESO_ATENCION = 'EN PROCESO ATENCION';//2
     const ATENDIDO = 'ATENDIDO';//3
     const ANULADO = 'ANULADO';//4
 
-    // Condiciones pedido numerico
-
-
+    /**************
+     * CONSTANTES PEDIDO NUMERICO
+     */
     const POR_ATENDER_INT = 1;
     const EN_PROCESO_ATENCION_INT = 2;
     const ATENDIDO_INT = 3;
     const ANULADO_INT = 4;
 
-
-    //envio
-    const ENVIO_CONFIRMAR_RECEPCION = '1';//ENVIADO CONFIRMAR RECEPCION
-    const ENVIO_RECIBIDO = '2';//ENVIADO RECIBIDO
-
-    //condicion de envio en cadena
-    const PENDIENTE_DE_ENVIO = 'PENDIENTE DE ENVIO';//1
-    const EN_REPARTO = 'EN REPARTO';//1
+    /**************
+     * CONSTANTES CONDICION ENVIO
+     */
+    const POR_ATENDER_PEDIDO = 'POR_ATENDER_PEDIDO';
+    const INCOMPLETO = 'INCOMPLETO';
+    const PDF = 'PDF';
+    const BANCARIZACION = 'BANCARIZACION';
+    const JEFE_OP = 'JEFE_OP';
+    const COURIER = 'COURIER';
+    const SOBRE_ENVIAR = 'SOBRE_ENVIAR';
+    const EN_REPARTO = 'EN_REPARTO';
+    const SEG_PROVINCIA = 'SEG_PROVINCIA';
     const ENTREGADO = 'ENTREGADO';
 
-    //condicion de envio en entero
-    const PENDIENTE_DE_ENVIO_CODE=1;
-    const EN_REPARTO_CODE=2;
-    const ENTREGADO_CODE=3;
-
+    /**************
+     * CONSTANTES CONDICION ENVIO NUMERICO
+     */
+    const POR_ATENDER_PEDIDO_INT = 1;
+    const INCOMPLETO_INT = 2;
+    const PDF_INT = 3;
+    const BANCARIZACION_INT = 4;
+    const JEFE_OP_INT = 5;
+    const COURIER_INT= 6;
+    const SOBRE_ENVIAR_INT = 7;
+    const EN_REPARTO_INT = 8;
+    const SEG_PROVINCIA_INT = 9;
+    const ENTREGADO_INT = 1;
 
     /* relacion de conciones de envio y enteros */
 
