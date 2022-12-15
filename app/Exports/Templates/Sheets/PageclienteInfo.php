@@ -59,7 +59,7 @@ class PageclienteInfo extends ExportYear implements WithColumnFormatting, FromCo
                 ,'clientes.pidio'
                 ,'clientes.situacion as estadopedido'
 
-                ,DB::raw("(select DATE_FORMAT(dp1.created_at,'%d-%m-%Y %h:%i:%s') from pedidos dp1 where dp1.cliente_id=clientes.id order by dp1.created_at desc limit 1) as fecha")
+                ,DB::raw("(select DATE_FORMAT(dp1.created_at,'%Y-%m-%d %h:%i:%s') from pedidos dp1 where dp1.cliente_id=clientes.id order by dp1.created_at desc limit 1) as fecha")
                 ,DB::raw("(select DATE_FORMAT(dp2.created_at,'%d') from pedidos dp2 where dp2.cliente_id=clientes.id order by dp2.created_at desc limit 1) as dia")
                 ,DB::raw("(select DATE_FORMAT(dp2.created_at,'%m') from pedidos dp2 where dp2.cliente_id=clientes.id order by dp2.created_at desc limit 1) as mes")
                 ,DB::raw("(select DATE_FORMAT(dp3.created_at,'%Y') from pedidos dp3 where dp3.cliente_id=clientes.id order by dp3.created_at desc limit 1) as anio")
@@ -269,10 +269,6 @@ class PageclienteInfo extends ExportYear implements WithColumnFormatting, FromCo
             'alignment' => array(
                 'horizontal' => Alignment::HORIZONTAL_JUSTIFY,
             ),
-            /*'fill' => [
-                'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
-                'color' => ['rgb' => 'FFF000']
-            ],*/
             'font' => [
                 'name'      =>  'Calibri',
                 'size'      =>  15,
@@ -284,34 +280,108 @@ class PageclienteInfo extends ExportYear implements WithColumnFormatting, FromCo
             'alignment' => array(
                 'horizontal' => Alignment::HORIZONTAL_JUSTIFY,
             ),
-            'fill' => [
-            'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
-            'color' => ['rgb' => '000FFF']
-        ]
+            'font' => [
+                'name'      =>  'Calibri',
+                'size'      =>  15,
+                'bold'      =>  true,
+                'color' => ['argb' => 'b5e48c'],
+            ],
         );
-        $style3 = array(
+        $stylerecuperadoreciente = array(
             'alignment' => array(
                 'horizontal' => Alignment::HORIZONTAL_JUSTIFY,
             ),
-            'fill' => [
-                'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
-                'color' => ['rgb' => '123121']
-            ]
+            'font' => [
+                'name'      =>  'Calibri',
+                'size'      =>  15,
+                'bold'      =>  true,
+                'color' => ['argb' => 'bfd200'],
+            ],
         );
+        $stylenuevo = array(
+            'alignment' => array(
+                'horizontal' => Alignment::HORIZONTAL_JUSTIFY,
+            ),
+            'font' => [
+                'name'      =>  'Calibri',
+                'size'      =>  15,
+                'bold'      =>  true,
+                'color' => ['argb' => 'ffcfd2'],
+            ],
+        );
+        $stylebasefria = array(
+            'alignment' => array(
+                'horizontal' => Alignment::HORIZONTAL_JUSTIFY,
+            ),
+            'font' => [
+                'name'      =>  'Calibri',
+                'size'      =>  15,
+                'bold'      =>  true,
+                'color' => ['argb' => 'eff7f6'],
+            ],
+        );
+        $styleabandono = array(
+            'alignment' => array(
+                'horizontal' => Alignment::HORIZONTAL_JUSTIFY,
+            ),
+            'font' => [
+                'name'      =>  'Calibri',
+                'size'      =>  15,
+                'bold'      =>  true,
+                'color' => ['argb' => 'ff4d6d'],
+            ],
+        );
+        $styleabandonoreciente = array(
+            'alignment' => array(
+                'horizontal' => Alignment::HORIZONTAL_JUSTIFY,
+            ),
+            'font' => [
+                'name'      =>  'Calibri',
+                'size'      =>  15,
+                'bold'      =>  true,
+                'color' => ['argb' => 'e85d04'],
+            ],
+        );
+
+        /*
+         * RECURRENTE-----90e0ef
+            RECUPERADO ABANDONO----b5e48c
+            RECUPERADO RECIENTE---bfd200
+            NUEVO------ffcfd2
+            BASE FRIA----eff7f6
+            ABANDONO----ff4d6d
+            ABANDONO RECIENTE----e85d04
+         * */
 
         foreach ($event->sheet->getRowIterator() as $row)
         {
-            if($event->sheet->getCellByColumnAndRow(20,$row->getRowIndex())->getValue()=='ABANDONO RECIENTE')
+            if($event->sheet->getCellByColumnAndRow(20,$row->getRowIndex())->getValue()=='RECURRENTE')
             {
-                $event->sheet->getStyle("T".$row->getRowIndex())->applyFromArray($style1);
+                $event->sheet->getStyle("T".$row->getRowIndex())->applyFromArray($style_recurrente);
             }
-            else if($event->sheet->getCellByColumnAndRow(20,$row->getRowIndex())->getValue()=='RECURRENTE')
+            else if($event->sheet->getCellByColumnAndRow(20,$row->getRowIndex())->getValue()=='RECUPERADO ABANDONO')
             {
-                $event->sheet->getStyle("T".$row->getRowIndex())->applyFromArray($style1);
+                $event->sheet->getStyle("T".$row->getRowIndex())->applyFromArray($stylerecuperadoabandono);
             }
-            else
+            else if($event->sheet->getCellByColumnAndRow(20,$row->getRowIndex())->getValue()=='RECUPERADO RECIENTE')
             {
-                $event->sheet->getStyle("T".$row->getRowIndex())->applyFromArray($style2);
+                $event->sheet->getStyle("T".$row->getRowIndex())->applyFromArray($stylerecuperadoreciente);
+            }
+            else if($event->sheet->getCellByColumnAndRow(20,$row->getRowIndex())->getValue()=='NUEVO')
+            {
+                $event->sheet->getStyle("T".$row->getRowIndex())->applyFromArray($stylenuevo);
+            }
+            else if($event->sheet->getCellByColumnAndRow(20,$row->getRowIndex())->getValue()=='BASE FRIA')
+            {
+                $event->sheet->getStyle("T".$row->getRowIndex())->applyFromArray($stylebasefria);
+            }
+            else if($event->sheet->getCellByColumnAndRow(20,$row->getRowIndex())->getValue()=='ABANDONO')
+            {
+                $event->sheet->getStyle("T".$row->getRowIndex())->applyFromArray($styleabandono);
+            }
+            else if($event->sheet->getCellByColumnAndRow(20,$row->getRowIndex())->getValue()=='ABANDONO RECIENTE')
+            {
+                $event->sheet->getStyle("T".$row->getRowIndex())->applyFromArray($styleabandonoreciente);
             }
 
             //$row->getRowIndex();

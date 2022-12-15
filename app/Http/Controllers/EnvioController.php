@@ -350,8 +350,7 @@ class EnvioController extends Controller
             ->join('users as u', 'u.id', 'c.user_id')
             ->where('direccion_grupos.estado','1')
            // ->where('direccion_grupos.condicion_envio',DireccionGrupo::CE_ENTREGADO)
-            ->where('direccion_grupos.condicion_envio_code',DireccionGrupo::CE_ENTREGADO_CODE)
-
+            ->where('direccion_grupos.condicion_envio_code', Pedido::ENTREGADO_CODE )// DireccionGrupo::CE_ENTREGADO_CODE
             ->select(
                 'direccion_grupos.id',
                 'u.identificador as identificador',
