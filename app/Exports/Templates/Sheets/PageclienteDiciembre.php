@@ -26,7 +26,7 @@ class PageclienteDiciembre extends Export implements WithColumnFormatting,WithCo
                 ,'clientes.icelular'
                 ,'clientes.celular'
                 //,'clientes.situacion as situacion'
-                ,DB::raw(" (select a.s_2022_12 from listado_resultados a where a.id=clientes.id ) as situacion "),
+                ,DB::raw(" (select s_2022_12 from listado_resultados  where id = clientes.id ) as situacion "),
             )
             //->whereIn('clientes.id',[1,2,3])
             ->where('clientes.estado', '1')
