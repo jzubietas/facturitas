@@ -8,6 +8,7 @@ use App\Models\Porcentaje;
 use App\Models\Pedido;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Concerns\WithColumnFormatting;
+use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 
 use Maatwebsite\Excel\Concerns\WithColumnWidths;
@@ -64,7 +65,7 @@ class PageclienteInfo extends ExportYear implements WithColumnFormatting, FromCo
                 ,DB::raw("(select DATE_FORMAT(dp3.created_at,'%Y') from pedidos dp3 where dp3.cliente_id=clientes.id order by dp3.created_at desc limit 1) as anio")
                 ,DB::raw(" (select (dp.codigo) from pedidos dp where dp.cliente_id=clientes.id order by dp.created_at desc limit 1) as codigo ")
             )
-        //->where('clientes.id',1)
+        //->whereIn('clientes.id',[1,2,3])
         ->where('clientes.estado', '1')
         ->where('clientes.tipo', '1')
         ->get();
@@ -188,7 +189,6 @@ class PageclienteInfo extends ExportYear implements WithColumnFormatting, FromCo
         //$dateM = Carbon::now()->format('m');
         //$dateY = Carbon::now()->format('Y');
 
-
         //$model->created_at->format('');
         return parent::map($model);
     }
@@ -246,7 +246,6 @@ class PageclienteInfo extends ExportYear implements WithColumnFormatting, FromCo
     public function columnFormats(): array
     {
 
-
         return [
             //Formato de las columnas segun la letra
             /*
@@ -265,8 +264,97 @@ class PageclienteInfo extends ExportYear implements WithColumnFormatting, FromCo
     }
 
     public static function afterSheet(AfterSheet $event){
-//Single Column ss
-        $event->sheet->styleCells(
+
+        $style1 = array(
+            'alignment' => array(
+                'horizontal' => Alignment::HORIZONTAL_JUSTIFY,
+            ),
+            'fill' => [
+                'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                'color' => ['rgb' => 'FFF000']
+            ]
+        );
+        $style2 = array(
+            'alignment' => array(
+                'horizontal' => Alignment::HORIZONTAL_JUSTIFY,
+            ),
+            'fill' => [
+            'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+            'color' => ['rgb' => '000FFF']
+        ]
+        );
+        $style3 = array(
+            'alignment' => array(
+                'horizontal' => Alignment::HORIZONTAL_JUSTIFY,
+            ),
+            'fill' => [
+                'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                'color' => ['rgb' => '123121']
+            ]
+        );
+
+        foreach ($event->sheet->getRowIterator() as $row)
+        {
+            if($event->sheet->getCellByColumnAndRow(2,$row->getRowIndex())=='ABANDONO RECIENTE')
+            {
+                $event->sheet->getStyle("A".$row->getRowIndex())->applyFromArray($style1);
+            }
+            else if($event->sheet->getCellByColumnAndRow(2,$row->getRowIndex())=='RECURRENTE')
+            {
+                $event->sheet->getStyle("A".$row->getRowIndex())->applyFromArray($style1);
+            }
+            else
+            {
+                $event->sheet->getStyle("A".$row->getRowIndex())->applyFromArray($style2);
+            }
+
+            //$row->getRowIndex();
+        }
+
+        /*$event->sheet->getStyleByColumnAndRow(3,3,)->applyFromArray(array(
+            'fill' => array(
+                'type' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                'color' => array('rgb' => 'FF0000')
+            )
+        ));*/
+        //#800080
+
+        /*foreach ($event->sheet->getRowIterator() as $row) {
+            $cellIterator=$row;
+
+                foreach($cellIterator as $cell)
+                {
+                    if($cell->getValue() != 'ABANDONO') {
+                        $event->sheet->getStyle('T' . $cell->getColumn())->applyFromArray(
+                            array(
+                                'fill' => array(
+                                    'type' => PHPExcel_Style_Fill::FILL_SOLID,
+                                    'color' => array('rgb' => 'FF0000')
+                                )
+                            )
+                        );
+                    } else {
+                        $event->sheet->getStyle('T' . $cell->getColumn())->applyFromArray(
+                            array(
+                                'fill' => array(
+                                    'type' => PHPExcel_Style_Fill::FILL_SOLID,
+                                    'color' => array('rgb' => 'FF0000')
+                                )
+                            )
+                        );
+                    }
+
+
+
+            }
+        }*/
+        /*echo 'ROW: ', $cell->getRow(), PHP_EOL;
+                   echo 'COLUMN: ', $cell->getColumn(), PHP_EOL;
+                   echo 'COORDINATE: ', $cell->getCoordinate(), PHP_EOL;
+                   echo 'RAW VALUE: ', $cell->getValue(), PHP_EOL;*/
+
+
+        /*$event->sheet->styleCells(
             'T',
             [
                 'alignment' => [
@@ -277,7 +365,7 @@ class PageclienteInfo extends ExportYear implements WithColumnFormatting, FromCo
                     'color' => ['rgb' => '996633']
                 ]
             ]
-        );
+        );*/
 
 //Range Columns
         /*$event->sheet->styleCells(
