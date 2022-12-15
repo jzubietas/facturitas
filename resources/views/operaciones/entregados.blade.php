@@ -68,8 +68,7 @@
         <tbody>
         </tbody>
       </table>
-      @include('pedidos.modal.envioid')
-      @include('pedidos.modal.sinenvioid')
+      @include('pedidos.modal.Atender-pedido-op')
       @include('pedidos.modal.revertirporenviar')
     </div>
   </div>
@@ -136,6 +135,39 @@
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
       });
+
+        $('#modal-envio-op').on('show.bs.modal', function (event) {
+            //cuando abre el form de anular pedido
+            var button = $(event.relatedTarget)
+            var idunico = button.data('envio')
+            $(".textcode").html("PED"+idunico);
+            $("#hiddenEnvio").val(idunico);
+
+        });
+
+        $(document).on("submit", "#formulario_atender_op", function (evento) {
+            evento.preventDefault();
+            var fd = new FormData();
+            var data = new FormData(document.getElementById("formulario_atender_op"));
+
+            fd.append( 'hiddenEnvio', $("#hiddenEnvio").val() );
+
+            $.ajax({
+                data: data,
+                processData: false,
+                contentType: false,
+                type: 'POST',
+                url:"{{ route('operaciones.atender_pedido_op') }}",
+                success:function(data)
+                {
+                    console.log(data);
+                    $("#modal-envio-op .textcode").text('');
+                    $("#modal-envio-op").modal("hide");
+                    $('#tablaPrincipal').DataTable().ajax.reload();
+                }
+            });
+        });
+
 
       $('#modal-revertir').on('show.bs.modal', function (event) {
         //cuando abre el form de anular pedido
@@ -204,8 +236,8 @@
         },
         rowCallback: function (row, data, index) {
         },
-        initComplete:function(settings,json){          
-         
+        initComplete:function(settings,json){
+
         },
         columns: [
           {
@@ -292,6 +324,7 @@
               urlpdf = urlpdf.replace(':id', row.id);
               @can('operacion.PDF')
                 data = data+'<a href="'+urlpdf+'" class="btn btn-primary btn-sm" target="_blank"><i class="fa fa-file-pdf"></i> PDF</a><br>';
+                data = data+'<a href="" data-target="#modal-envio-op" data-envio='+row.id+' data-toggle="modal" ><button class="btn btn-success btn-sm">Atender</button></a><br>';
               @endcan
 
               @can('operacion.enviar')
