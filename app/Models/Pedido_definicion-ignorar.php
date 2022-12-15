@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Pedido extends Model
+class PedidoBackup extends Model
 {
     use HasFactory;
 
@@ -49,7 +49,7 @@ class Pedido extends Model
         'ENTREGADO' => 3,
     ];
 
-    
+
 
     protected $guarded = ['id'];
 

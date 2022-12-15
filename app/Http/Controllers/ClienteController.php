@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 /* use Validator; */
 
 use App\Models\Cliente;
+use App\Models\DetallePedido;
 use App\Models\Pedido;
 use App\Models\Porcentaje;
 use App\Models\User;
@@ -181,7 +182,7 @@ class ClienteController extends Controller
 
     public function clientestablasituacion(Request $request)
     {
-        $idconsulta=$request->cliente;
+        $idconsulta = $request->cliente;
         $idconsulta;
         $data = ListadoResultado::where('id', $idconsulta)
             ->select('id',
@@ -217,7 +218,7 @@ class ClienteController extends Controller
 
         return datatables()->query(DB::table($data))
             ->toJson();
-       
+
     }
 
     public function pedidostiempo(Request $request)
@@ -639,15 +640,21 @@ class ClienteController extends Controller
                     $html .= '<option style="color:yellow" value="' . $cliente->id . '">' . $cliente->celular.'-'.$cliente->icelular. '  -  ' . $cliente->nombre . '</option>';
                 }else*/
                 {
+                   $saldo= DetallePedido::query()->whereEstado(1)->whereIn('pedido_id',
+                        Pedido::query()->select('pedidos.id')
+                            ->where('pedidos.cliente_id','=', $cliente->id)
+                            ->whereEstado(1)
+                    )->sum('saldo');
+                   dump($saldo,$cliente->id);
                     //considerar deuda real
                     if ($cliente->pedidos_mes_deuda > 0 && $cliente->pedidos_mes_deuda_antes == 0) {
-                        $html .= '<option style="color:lightblue" value="' . $cliente->id . '">' . $cliente->celular . '-' . $cliente->icelular . '  -  ' . $cliente->nombre . '</option>';
+                        $html .= '<option '.($saldo==0?'disabled':'').' style="color:'.($saldo==0?'green':'lightblue').'" value="' . $cliente->id . '">' . $cliente->celular . '-' . $cliente->icelular . '  -  ' . $cliente->nombre . '  ('.($saldo==0?'Sin Deuda':'').')</option>';
                     } else if ($cliente->pedidos_mes_deuda > 0 && $cliente->pedidos_mes_deuda_antes > 0) {
-                        $html .= '<option style="color:black" value="' . $cliente->id . '">' . $cliente->celular . '-' . $cliente->icelular . '  -  ' . $cliente->nombre . '**CLIENTE CON DEUDA**</option>';
+                        $html .= '<option '.($saldo==0?'disabled':'').' style="color:'.($saldo==0?'green':'black').'" value="' . $cliente->id . '">' . $cliente->celular . '-' . $cliente->icelular . '  -  ' . $cliente->nombre . '**CLIENTE CON DEUDA**</option>';
                     } else if ($cliente->pedidos_mes_deuda == 0 && $cliente->pedidos_mes_deuda_antes > 0) {
-                        $html .= '<option style="color:black" value="' . $cliente->id . '">' . $cliente->celular . '-' . $cliente->icelular . '  -  ' . $cliente->nombre . '**CLIENTE CON DEUDA**</option>';
+                        $html .= '<option '.($saldo==0?'disabled':'').' style="color:'.($saldo==0?'green':'black').'" value="' . $cliente->id . '">' . $cliente->celular . '-' . $cliente->icelular . '  -  ' . $cliente->nombre . '**CLIENTE CON DEUDA**</option>';
                     } else {
-                        $html .= '<option  style="color:red" value="' . $cliente->id . '">' . $cliente->celular . '-' . $cliente->icelular . '  -  ' . $cliente->nombre . '</option>';
+                        $html .= '<option '.($saldo==0?'disabled':'').'  style="color:'.($saldo==0?'green':'red').'" value="' . $cliente->id . '">' . $cliente->celular . '-' . $cliente->icelular . '  -  ' . $cliente->nombre . '  ('.($saldo==0?'Sin Deuda':'').')</option>';
                     }
                 }
             }
@@ -796,10 +803,10 @@ class ClienteController extends Controller
             ->leftjoin('pedidos as p', 'clientes.id', 'p.cliente_id')
             ->where('clientes.estado', '1')
             ->where('clientes.tipo', '1')
-            ->when($request->has("situacion"),function ($query)use ($request){
+            ->when($request->has("situacion"), function ($query) use ($request) {
                 $query->whereIn('clientes.situacion', [$request->situacion]);
             })
-            ->when(!$request->has("situacion"),function ($query)use ($request){
+            ->when(!$request->has("situacion"), function ($query) use ($request) {
                 $query->whereIn('clientes.situacion', [Cliente::ABANDONO_PERMANENTE]);
             })
             ->groupBy(
@@ -1355,10 +1362,10 @@ class ClienteController extends Controller
             ->leftjoin('pedidos as p', 'clientes.id', 'p.cliente_id')
             ->where('clientes.estado', '1')
             ->where('clientes.tipo', '1')
-            ->when($request->has("situacion"),function ($query)use ($request){
+            ->when($request->has("situacion"), function ($query) use ($request) {
                 $query->whereIn('clientes.situacion', [$request->situacion]);
             })
-            ->when(!$request->has("situacion"),function ($query)use ($request){
+            ->when(!$request->has("situacion"), function ($query) use ($request) {
                 $query->whereIn('clientes.situacion', [Cliente::RECUPERADO_PERMANENTE]);
             })
             ->groupBy(

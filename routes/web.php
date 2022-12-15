@@ -6,6 +6,7 @@ use App\Http\Controllers\ExcelController;
 use App\Http\Controllers\PagoController;
 use App\Http\Controllers\PdfController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\SettingsController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\PedidoController;
 use App\Http\Controllers\EnvioController;
@@ -35,6 +36,9 @@ Route::middleware(['guest'])->get('/', function () {
 Route::middleware(['auth:sanctum', 'verified'])->group(function () {
 
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
+    Route::post('/setting/store', [SettingsController::class, 'settingStore'])->name('settings.store-setting');
+
+
     Route::get('/search/cliente', [DashboardController::class, 'searchCliente'])->name('dashboard.search-cliente');
     Route::get('/search/ruc', [DashboardController::class, 'searchRuc'])->name('dashboard.search-ruc');
 
@@ -131,6 +135,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     /*Controller User*/
 
     /*Controller Pedido*/
+    Route::post('pedidos.confirm.anulled', [PedidoController::class,'ConfirmarAnular'])->name('pedidos.confirmar.anular');
     Route::resource('pedidos', PedidoController::class)->names('pedidos');
     Route::post('pedidoss.store', [PedidoController::class, 'pedidosstore'])->name('pedidoss.store');//actualizado para serverside
     Route::get('pedidostabla', [PedidoController::class, 'indextabla'])->name('pedidostabla');//actualizado para serverside
@@ -145,7 +150,9 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     Route::get('ruc', [PedidoController::class, 'ruc'])->name('cargar.ruc');
     Route::get('rucnombreempresa', [PedidoController::class, 'rucnombreempresa'])->name('rucnombreempresa');
     Route::post('pedidos.infopdf', [PedidoController::class, 'infopdf'])->name('pedidos.infopdf');
-    Route::post('pedidodeleteRequest', [PedidoController::class, 'destroyid'])->name('pedidodeleteRequest.post');
+    Route::middleware('authorize.pedido.anulled')
+        ->post('pedidodeleteRequest', [PedidoController::class, 'destroyid'])
+        ->name('pedidodeleteRequest.post');
 
 //Route::get('pedidos.destroyid', [PedidoController::class, 'destroyid'])->name('pedidos.destroyid');
 

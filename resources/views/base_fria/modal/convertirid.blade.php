@@ -33,6 +33,7 @@
                           <small class="text-danger">{{ $message }}</small>
                         @enderror
                       </div>
+                     {{--
                       <div class="form-group col-lg-3">
                         {!! Form::label('dni', 'DNI') !!}
                         {!! Form::number('dni', null, ['class' => 'form-control', 'id' => 'dni', 'min' =>'0', 'max' => '99999999', 'maxlength' => '8', 'oninput' => 'maxLengthCheck(this)', 'required']) !!}
@@ -40,6 +41,7 @@
                           <small class="text-danger">{{ $message }}</small>
                         @enderror
                       </div>
+                     --}}
                       <div class="form-group col-lg-3">
                         {!! Form::label('celular', 'Celular*') !!}
                         {!! Form::number('celular', 'celular', ['class' => 'form-control', 'id' => 'celular', 'min' =>'0', 'max' => '999999999', 'maxlength' => '9', 'oninput' => 'maxLengthCheck(this)', 'required']) !!}
@@ -47,6 +49,7 @@
                           <small class="text-danger">{{ $message }}</small>
                         @enderror
                       </div>
+                      {{--
                       <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                         <h5 style="text-align: center"><br><b>Direccion de envío de documentos</b></h5>
                       </div>
@@ -71,6 +74,7 @@
                           <small class="text-danger">{{ $message }}</small>
                         @enderror
                       </div>
+
                       <div class="form-group col-lg-6">
                         {!! Form::label('referencia', 'Referencia*') !!}
                         {!! Form::text('referencia', null, ['class' => 'form-control', 'id' => 'referencia', 'required']) !!}
@@ -80,7 +84,7 @@
                       </div>
                       <div class="form-group col-lg-6">
                         <p style="color: red">*CAMPO OBLIGATORIO</p>
-                      </div>
+                      </div>--}}
                     </div>
                   </div>
                 </div>

@@ -95,6 +95,7 @@ class OperacionController extends Controller
                 'dp.codigo as codigos',
                 'dp.nombre_empresa as empresas',
                 'dp.total as total',
+                'pedidos.pendiente_anulacion',
                 'pedidos.condicion',
                 'pedidos.condicion_code',
                 DB::raw('(DATE_FORMAT(pedidos.created_at, "%Y-%m-%d %h:%i:%s")) as fecha'),
@@ -110,7 +111,11 @@ class OperacionController extends Controller
             )
             ->where('pedidos.estado', '1')
             ->where('dp.estado', '1')
-            ->whereIn('pedidos.condicion', [Pedido::POR_ATENDER,Pedido::EN_PROCESO_ATENCION]);
+            ->where(function ($query){
+                $query->whereIn('pedidos.condicion', [Pedido::POR_ATENDER,Pedido::EN_PROCESO_ATENCION]);
+                $query->orWhere('pedidos.pendiente_anulacion', '1');
+            });
+
 
         if(Auth::user()->rol == "Operario"){
 
@@ -152,15 +157,20 @@ class OperacionController extends Controller
 
                 $pedidos=$pedidos->WhereIn('u.identificador',$asesores);
         }
-        else{
+        /*else{
             $pedidos=$pedidos;
         }
         $pedidos=$pedidos->get();
-
-        return Datatables::of($pedidos)
+*/
+        return Datatables::of(DB::table($pedidos))
                     ->addIndexColumn()
                     ->addColumn('action', function($pedido){
                         $btn='';
+                        if(in_array(\auth()->user()->rol,[User::ROL_JEFE_OPERARIO,User::ROL_ADMIN])) {
+                            if ($pedido->pendiente_anulacion == 1) {
+                                $btn .= '<button data-toggle="modal" data-target="#modal_confirmar_anular" data-confirm_anular_pedido="'.$pedido->id.'"  data-pedido_id="'.$pedido->id.'" data-pedido_id_code="'.Pedido::generateIdCode($pedido->id).'" type="button" class="btn btn-danger btn-sm" >Anular</button>';
+                            }
+                        }
                         return $btn;
                     })
                     ->addColumn('action2', function($pedido){
@@ -1097,7 +1107,7 @@ class OperacionController extends Controller
     }
 
 
-    
+
 
     public function confirmarRecepcionID(Request $request)
     {

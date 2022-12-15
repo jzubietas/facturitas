@@ -59,6 +59,7 @@
       @include('pedidos.modalid')
       @include('operaciones.modal.atenderid')
       @include('operaciones.modal.veradjuntoid')
+      @include('operaciones.modal.confirmarAnular')
     </div>
   </div>
 
@@ -151,8 +152,60 @@
         return true;
     }
 
+        $('#modal_confirmar_anular').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget)
+            console.log(event.relatedTarget)
+            console.log(button.data('pedido_id_code'))
+            $("#anular_pedido_id").html(button.data('pedido_id_code'))
+            $("#anular_pedido_id").val(button.data('pedido_id'))
+        })
 
-    $(document).on("submit", "#formulario_adjuntos", function (evento) {
+        $('#attachmentsButtom').click(function (event) {
+            var files=Array.from($("#anularAttachments")[0].files);
+            if(files.length==0){
+                Swal.fire(
+                    'Error',
+                    'Debe adjuntar almenos una nota de credito',
+                    'warning'
+                )
+            }
+            var data=new FormData();
+            data.append("pedido_id",$("#anular_pedido_id").val())
+            data.append("action",'confirm_anulled')
+            for (var i in files){
+                if(files[i].name) {
+                    data.append('attachments[' + i + ']', files[i],files[i].name)
+                }
+            }
+            $.ajax({
+                type: 'POST',
+                url: "{{ route('pedidos.confirmar.anular') }}",
+                data: data,
+                processData: false,
+                contentType: false,
+            }).done(function (data){
+                if(data.success) {
+                    Swal.fire(
+                        'Mensaje',
+                        'Pedido anulado correctamente',
+                        'success'
+                    )
+                }else{
+                    Swal.fire(
+                        'Mensaje',
+                        'Pedido ya ha sido anulado',
+                        'warning'
+                    )
+                }
+            }).always(function (){
+                $('#modal_confirmar_anular').modal('hide')
+                $("#anularAttachments").val(null)
+
+                $('#tablaPrincipal').DataTable().ajax.reload();
+            });
+        })
+
+        $(document).on("submit", "#formulario_adjuntos", function (evento) {
         evento.preventDefault();
 
         let idunico=$("#hiddenAtender").val();
@@ -327,9 +380,12 @@
         "order": [[ 0, "desc" ]],
         ajax: "{{ route('operaciones.poratendertabla') }}",
         createdRow: function( row, data, dataIndex){
-          //console.log(row);
+
         },
         rowCallback: function (row, data, index) {
+            if(data.pendiente_anulacion==1){
+                $('td',row).css('background', 'red').css('font-weight','bold');
+            }
         },
         columns: [
           {
@@ -382,6 +438,9 @@
             {data: 'condicion_code',
                 name: 'condicion_code',
                 render: function ( data, type, row, meta ) {
+                    if(row.pendiente_anulacion==1){
+                        return '{{\App\Models\Pedido::PENDIENTE_ANULACION }}';
+                    }
                     if(row.condicion_code==1){
                         return '{{\App\Models\Pedido::POR_ATENDER }}';
                     }else if(row.condicion_code==2){
@@ -402,14 +461,18 @@
             searchable: false,
             sWidth:'20%',
             render: function ( data, type, row, meta ) {
+                console.log(arguments)
               var urlpdf = '{{ route("pedidosPDF", ":id") }}';
               urlpdf = urlpdf.replace(':id', row.id);
               @can('operacion.atender')
-                data = data+'<a href="" data-target="#modal-atender" data-atender='+row.id+' data-toggle="modal" ><button class="btn btn-success btn-sm">Atender</button></a>';
+                  if(!row.pendiente_anulacion) {
+                      data = data + '<a href="" data-target="#modal-atender" data-atender=' + row.id + ' data-toggle="modal" ><button class="btn btn-success btn-sm">Atender</button></a>';
+                  }
               @endcan
               @can('operacion.PDF')
                 data = data+'<a href="'+urlpdf+'" class="btn btn-primary btn-sm" target="_blank"><i class="fa fa-file-pdf"></i> PDF</a>';
               @endcan
+              data+=row.action;
               return data;
             }
           },
