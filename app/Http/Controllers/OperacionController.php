@@ -1100,9 +1100,10 @@ class OperacionController extends Controller
         return view('operaciones.showAtender', compact('pedido','pedidos', 'imagenes', 'imagenesatencion'));
     }
 
- 
-
-
+    public function confirmarRecepcionID(Request $request)
+    { 
+        //
+        $pedido=Pedido::where("id",$request->hiddenEnvio)->first();
 
         $pedido->update([
             'envio' => '2',
@@ -1110,6 +1111,9 @@ class OperacionController extends Controller
             'condicion_envio_code' => Pedido::JEFE_OP_INT,
             'modificador' => 'USER'.Auth::user()->id
         ]);
+
+        return response()->json(['html' => $pedido->id]);
+    }
 
     public function Revertirenvio(Request $request)
     {
