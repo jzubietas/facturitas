@@ -428,8 +428,10 @@
           {
             data: 'condicion_envio',
             name: 'condicion_envio',
+            /*
             render: function ( data, type, row, meta )
             {
+              
               if(row.subcondicion_envio==null)
               {
                 return row.condicion_envio;
@@ -437,7 +439,9 @@
                 return '('+row.subcondicion_envio+') '+ row.condicion_envio;
               }
 
+              
             }
+            */
           },
         ],
         language: {
