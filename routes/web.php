@@ -33,7 +33,7 @@ Route::middleware(['guest'])->get('/', function () {
     return view('auth.login');
 });
 
-Route::middleware(['auth:sanctum', 'verified'])->group(function () {
+Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->group(function () {
 
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
     Route::post('/setting/store', [SettingsController::class, 'settingStore'])->name('settings.store-setting');
@@ -56,7 +56,6 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
 
     Route::get('clientes.createbf', [ClienteController::class, 'createbf'])->name('clientes.createbf');
     Route::post('clientes.storebf', [ClienteController::class, 'storebf'])->name('clientes.storebf');
-
 
 
     Route::get('clientes.editbf/{cliente}/edit2', [ClienteController::class, 'editbf'])->name('clientes.editbf');
@@ -135,7 +134,7 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     /*Controller User*/
 
     /*Controller Pedido*/
-    Route::post('pedidos.confirm.anulled', [PedidoController::class,'ConfirmarAnular'])->name('pedidos.confirmar.anular');
+    Route::post('pedidos.confirm.anulled', [PedidoController::class, 'ConfirmarAnular'])->name('pedidos.confirmar.anular');
     Route::resource('pedidos', PedidoController::class)->names('pedidos');
     Route::post('pedidoss.store', [PedidoController::class, 'pedidosstore'])->name('pedidoss.store');//actualizado para serverside
     Route::get('pedidostabla', [PedidoController::class, 'indextabla'])->name('pedidostabla');//actualizado para serverside
@@ -237,7 +236,6 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     //Route::get('operaciones.enatenciontabla', [PedidoController::class, 'EnAtenciontabla'])->name('operaciones.enatenciontabla');
 
 
-
     //Route::post('pedidos.atender/{pedido}', [PedidoController::class, 'Atender'])->name('pedidos.atender');
 
     //Route::post('pedidos.envio/{pedido}', [PedidoController::class, 'Enviar'])->name('pedidos.envio');
@@ -245,12 +243,12 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
 
     /*Controller Pagos*/
 
-    Route::post('pagos.store.validate', [PagoController::class,'validadContenidoPago'])->name('pagos.store.validate');
+    Route::post('pagos.store.validate', [PagoController::class, 'validadContenidoPago'])->name('pagos.store.validate');
     Route::resource('pagos', PagoController::class)->names('pagos');
     Route::post('pagos.perdonardeuda', [PagoController::class, 'perdonardeuda'])->name('pagos.perdonardeuda');
     Route::post('titulares.banco', [PagoController::class, 'TitularesBanco'])->name('titulares.banco');
-    Route::get('pagos/devolucion/{devolucion}', [PagoController::class,'devolucion'])->name('pagos.devolucion');
-    Route::post('pagos/devolucion/{devolucion}', [PagoController::class,'devolucionUpdate'])->name('pagos.devolucion.update');
+    Route::get('pagos/devolucion/{devolucion}', [PagoController::class, 'devolucion'])->name('pagos.devolucion');
+    Route::post('pagos/devolucion/{devolucion}', [PagoController::class, 'devolucionUpdate'])->name('pagos.devolucion.update');
 
     Route::get('pagostabla', [PagoController::class, 'indextabla'])->name('pagostabla');//actualizado para serverside
     Route::get('pagostablahistorial', [PagoController::class, 'indextablahistorial'])->name('pagostablahistorial');//actualizado para serverside
@@ -282,7 +280,6 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
     /*Controller Pagos*/
 
     //Route::post('operaciones.sinenvio/{pedido}', [PedidoController::class, 'SinEnviar'])->name('operaciones.sinenvio');
-
 
 
 /////////
@@ -384,11 +381,10 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
 
 //EXCEL EXPORTABLES
     //MODULO PERSONAS
-     Route::get('clientesExcel', [ExcelController::class, 'clientesExcel'])->name('clientesExcel');
+    Route::get('clientesExcel', [ExcelController::class, 'clientesExcel'])->name('clientesExcel');
     Route::post('situacionporfechasExcel', [ExcelController::class, 'clientessituacionExcel'])->name('situacionporfechasExcel');
 
     Route::post('clientesv2Excel', [ExcelController::class, 'clientesv2Excel'])->name('clientesv2Excel');
-
 
 
     Route::post('clientespedidosExcel', [ExcelController::class, 'clientespedidosExcel'])->name('clientespedidosExcel');
