@@ -63,7 +63,7 @@ class PageclienteInfo extends ExportYear implements WithColumnFormatting, FromCo
 
                 ,DB::raw(" (select (dp.codigo) from pedidos dp where dp.cliente_id=clientes.id order by dp.created_at desc limit 1) as codigo ")
             )
-        //->whereIn('clientes.id',[1,2,3])
+        ->whereIn('clientes.id',[1,2,3])
         ->where('clientes.estado', '1')
         ->where('clientes.tipo', '1')
         ->get();
