@@ -265,16 +265,22 @@ class PageclienteInfo extends ExportYear implements WithColumnFormatting, FromCo
 
     public static function afterSheet(AfterSheet $event){
 
-        $style1 = array(
+        $style_recurrente = array(
             'alignment' => array(
                 'horizontal' => Alignment::HORIZONTAL_JUSTIFY,
             ),
-            'fill' => [
+            /*'fill' => [
                 'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
                 'color' => ['rgb' => 'FFF000']
-            ]
+            ],*/
+            'font' => [
+                'name'      =>  'Calibri',
+                'size'      =>  15,
+                'bold'      =>  true,
+                'color' => ['argb' => '90e0ef'],
+            ],
         );
-        $style2 = array(
+        $stylerecuperadoabandono = array(
             'alignment' => array(
                 'horizontal' => Alignment::HORIZONTAL_JUSTIFY,
             ),
@@ -297,15 +303,15 @@ class PageclienteInfo extends ExportYear implements WithColumnFormatting, FromCo
         {
             if($event->sheet->getCellByColumnAndRow(20,$row->getRowIndex())->getValue()=='ABANDONO RECIENTE')
             {
-                $event->sheet->getStyle("A".$row->getRowIndex())->applyFromArray($style1);
+                $event->sheet->getStyle("T".$row->getRowIndex())->applyFromArray($style1);
             }
             else if($event->sheet->getCellByColumnAndRow(20,$row->getRowIndex())->getValue()=='RECURRENTE')
             {
-                $event->sheet->getStyle("B".$row->getRowIndex())->applyFromArray($style1);
+                $event->sheet->getStyle("T".$row->getRowIndex())->applyFromArray($style1);
             }
             else
             {
-                $event->sheet->getStyle("C".$row->getRowIndex())->applyFromArray($style2);
+                $event->sheet->getStyle("T".$row->getRowIndex())->applyFromArray($style2);
             }
 
             //$row->getRowIndex();
