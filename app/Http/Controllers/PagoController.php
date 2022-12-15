@@ -2800,7 +2800,7 @@ class PagoController extends Controller
                 Pago::query()->distinct()->select('pagos.id')
                     ->join('users', 'users.id', '=', 'pagos.user_id')
                     ->where('cliente_id', $request->cliente_id)
-                    ->where('users.identificador', $request->asesor)
+                    //->where('users.identificador', $request->asesor)
             )
             ->limit(5)
             ->get();
