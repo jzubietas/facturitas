@@ -308,10 +308,9 @@
             data: 'envio',
             name: 'envio',
             render: function ( data, type, row, meta ) {
-              if(row.envio=='1' && row.estado_sobre=='0')
-              {
+             
                 return '<span class="badge badge-danger">Por confirmar recepcion</span>';
-              }
+             
               /*
               El estado del sobre cambia a 1 y luego cambia el estado del pedido
               else if (row.envio=='1' && row.estado_sobre=='1'){
@@ -319,9 +318,7 @@
               }
               */
 
-              else{
-                return '<span class="badge badge-info">Recibido</span>';
-              }
+           
             },
           },
           {
@@ -334,7 +331,7 @@
               datass='';
               @if($ver_botones_accion > 0)
                 @can('envios.enviar')
-                  if(row.envio=='1')
+                  if(row.envio=='2')
                   {
                     datass = datass+ '<a href="" data-target="#modal-recibir" data-toggle="modal" data-recibir="'+row.id+'"><button class="btn btn-warning btn-sm"><i class="fas fa-check-circle"></i> Recibido</button></a>';
                   }
