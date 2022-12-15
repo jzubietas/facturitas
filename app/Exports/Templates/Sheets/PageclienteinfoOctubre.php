@@ -29,6 +29,19 @@ class PageclienteinfoOctubre extends Export implements WithColumnFormatting,With
             ->where('clientes.tipo', '1')
             ->get();
     }
+    public function fields(): array
+    {
+        return [
+            "id"=>"Id"
+            ,"id_asesor"=>"Asesor"
+            ,"nombre"=>"Nombre"
+            ,"dni"=>"Dni"
+            ,"icelular"=>"Identificador celular"
+            ,"celular"=>"Celular"
+            ,"situacion"=>"Situacion"
+            ,"created_at"=>"Creado"
+        ];
+    }
     public function title(): string
     {
         return 'Detalle Noviembre';
@@ -51,19 +64,7 @@ class PageclienteinfoOctubre extends Export implements WithColumnFormatting,With
             ,'H' => 8
         ];
     }
-    public function fields(): array
-    {
-        return [
-            "Id"=>"Id"
-            ,"Asesor"=>"Asesor"
-            ,"Nombre"=>"Nombre"
-            ,"Dni"=>"Dni"
-            ,"icelular"=>"icelular"
-            ,"celular"=>"celular"
-            ,"situacion"=>"situacion"
-            ,"created_at"=>"created_at"
-        ];
-    }
+
     public function columnFormats(): array
     {
         return [

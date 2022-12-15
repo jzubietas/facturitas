@@ -14,8 +14,6 @@ use Illuminate\Http\Request;
 
 class PageclienteDiciembre extends Export implements WithColumnFormatting,WithColumnWidths
 {
-
-
     public function collection()
     {
         return Cliente::with('user')

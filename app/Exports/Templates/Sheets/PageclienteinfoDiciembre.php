@@ -3,46 +3,42 @@
 namespace App\Exports\Templates\Sheets;
 
 use App\Abstracts\Export;
-use App\Models\Cliente;
 use App\Models\ListadoResultado;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Concerns\WithColumnFormatting;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 use Maatwebsite\Excel\Concerns\WithColumnWidths;
-use PhpOffice\PhpSpreadsheet\Cell\DataType;
-use Illuminate\Http\Request;
 
-class PageclienteinfoDiciembre extends Export implements WithColumnFormatting,WithColumnWidths
+class PageclienteDiciembre extends Export implements WithColumnFormatting,WithColumnWidths
 {
     public function collection()
     {
-        return Cliente::with('user')
-            ->join('users as u', 'clientes.user_id', 'u.id')
+        $_2022_12=ListadoResultado::join('clientes as c','c.id','listado_resultados.id')
             ->select(
-                'clientes.id'
-                ,'u.identificador as id_asesor'
-                ,'clientes.nombre'
-                ,'clientes.dni'
-                ,'clientes.icelular'
-                ,'clientes.celular'
-                ,'clientes.situacion'
-                ,'clientes.created_at'
-                //,DB::raw(" (select a.s_2022_11 from listado_resultados a where a.id=clientes.id ) as situacion "),
+                DB::raw(" (select '2022') as Ejercicio "),
+                DB::raw(" (select '12') as Periodo "),
+                DB::raw(" (select 'Diciembre') as Periodo2 "),
+                'listado_resultados.s_2022_12 as grupo',
+                DB::raw('count(listado_resultados.s_2022_12) as total')
+            //'cantidad'
             )
-            ->where('clientes.estado', '1')
-            ->where('clientes.tipo', '1')
-            ->get();
+            ->groupBy(
+                's_2022_12'
+            );
+
+        $data=$_2022_12;
+
+        return $data->get();
     }
     public function title(): string
     {
-        return 'Detalle Diciembre';
+        return 'Noviembre';
     }
     public function map($model): array
     {
         $model->Periodo=strval(str_pad($model->Periodo,2,"0"));//->setDataType(DataType::TYPE_STRING);
         return parent::map($model);
     }
-
     public function columnWidths(): array
     {
         return [
@@ -51,9 +47,6 @@ class PageclienteinfoDiciembre extends Export implements WithColumnFormatting,Wi
             ,'C' => 8
             ,'D' => 8
             ,'E' => 8
-            ,'F' => 8
-            ,'G' => 8
-            ,'H' => 8
         ];
     }
 
@@ -61,14 +54,11 @@ class PageclienteinfoDiciembre extends Export implements WithColumnFormatting,Wi
     {
         // columna de la base de datos => nombre de la columna en excel
         return [
-            "Id"=>"Id"
-            ,"Asesor"=>"Asesor"
-            ,"Nombre"=>"Nombre"
-            ,"Dni"=>"Dni"
-            ,"icelular"=>"icelular"
-            ,"celular"=>"celular"
-            ,"situacion"=>"situacion"
-            ,"created_at"=>"created_at"
+            "Ejercicio"=>"Ejercicio"
+            ,"Periodo"=>"Periodo"
+            ,"Periodo2"=>"Periodo2"
+            ,"grupo"=>"grupo"
+            ,"total"=>"total"
         ];
     }
 
@@ -80,7 +70,7 @@ class PageclienteinfoDiciembre extends Export implements WithColumnFormatting,Wi
              'D' => NumberFormat::FORMAT_DATE_YYYYMMDD,
              'E' => NumberFormat::FORMAT_DATE_YYYYMMDD,
             */
-            'H' => NumberFormat::FORMAT_DATE_YYYYMMDD
+            'B' => NumberFormat::FORMAT_TEXT
 
         ];
     }

@@ -9,6 +9,7 @@ use App\Models\Pedido;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Concerns\WithColumnFormatting;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
+use PhpOffice\PhpSpreadsheet\Style\Fill;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 
 use Maatwebsite\Excel\Concerns\WithColumnWidths;
@@ -57,12 +58,9 @@ class PageclienteInfo extends ExportYear implements WithColumnFormatting, FromCo
                 ,'clientes.estado'
                 ,'clientes.deuda'
                 ,'clientes.pidio'
-                ,'clientes.situacion as estadopedido'
-
+                ,'clientes.situacion'
                 ,DB::raw("(select DATE_FORMAT(dp1.created_at,'%Y-%m-%d %h:%i:%s') from pedidos dp1 where dp1.cliente_id=clientes.id order by dp1.created_at desc limit 1) as fecha")
-                ,DB::raw("(select DATE_FORMAT(dp2.created_at,'%d') from pedidos dp2 where dp2.cliente_id=clientes.id order by dp2.created_at desc limit 1) as dia")
-                ,DB::raw("(select DATE_FORMAT(dp2.created_at,'%m') from pedidos dp2 where dp2.cliente_id=clientes.id order by dp2.created_at desc limit 1) as mes")
-                ,DB::raw("(select DATE_FORMAT(dp3.created_at,'%Y') from pedidos dp3 where dp3.cliente_id=clientes.id order by dp3.created_at desc limit 1) as anio")
+
                 ,DB::raw(" (select (dp.codigo) from pedidos dp where dp.cliente_id=clientes.id order by dp.created_at desc limit 1) as codigo ")
             )
         //->whereIn('clientes.id',[1,2,3])
@@ -205,36 +203,33 @@ class PageclienteInfo extends ExportYear implements WithColumnFormatting, FromCo
             ,"celular"=>"Celular"
             ,"id_asesor"=>"Identificador Asesor"
             ,"nombre_asesor"=>"Nombre Asesor"
-            ,"provincia"=>"provincia"
-            ,"distrito"=>"distrito"
-            ,"direccion"=>"direccion"
-            ,"referencia"=>"referencia"
-            ,"estado"=>"estado"
-            ,"deuda"=>"deuda"
-            ,"pidio"=>"pidio"
-            ,"fecha"=>"fecha"
-            ,"dia"=>"dia"
-            ,"mes"=>"mes"
-            ,"anio"=>"anio"
+            ,"provincia"=>"Provincia"
+            ,"distrito"=>"Distrito"
+            ,"direccion"=>"Direccion"
+            ,"referencia"=>"Referencia"
+            ,"estado"=>"Estado"
+            ,"deuda"=>"Deuda"
+            ,"pidio"=>"Pidio"
+            ,"fecha"=>"Fecha"
             ,"codigo"=>"codigo"
-            ,"estadopedido"=>"estadopedido"
-            ,'deposito'=>'deposito'
-            ,"porcentajefsb"=>"porcentajefsb"
-            ,"porcentajefb"=>"porcentajefb"
-            ,"porcentajeesb"=>"porcentajeesb"
-            ,"porcentajeeb"=>"porcentajeeb"
-            ,"eneroa"=>"eneroa","enerop"=>"enerop"
-            ,"febreroa"=>"febreroa","febrerop"=>"febrerop"
-            ,"marzoa"=>"marzoa","marzop"=>"marzop"
-            ,"abrila"=>"abrila","abrilp"=>"abrilp"
-            ,"mayoa"=>"mayoa","mayop"=>"mayop"
-            ,"junioa"=>"junioa","juniop"=>"juniop"
-            ,"julioa"=>"julioa","juliop"=>"juliop"
-            ,"agostoa"=>"agostoa","agostop"=>"agostop"
-            ,"setiembrea"=>"setiembrea","setiembrep"=>"setiembrep"
-            ,"octubrea"=>"octubrea","octubrep"=>"octubrep"
-            ,"noviembrea"=>"noviembrea","noviembrep"=>"noviembrep"
-            ,"diciembrea"=>"diciembrea","diciembrep"=>"diciembrep"
+            ,"situacion"=>"Situacion"
+            ,'deposito'=>'Deposito'
+            ,"porcentajefsb"=>"Porcentaje Fisico sin banca"
+            ,"porcentajefb"=>"Porcentaje Fisico Bancarizado"
+            ,"porcentajeesb"=>"Porcentaje Electronico sin banca"
+            ,"porcentajeeb"=>"Porcentaje Electronico Bancarizado"
+            ,"eneroa"=>"Enero a","enerop"=>"Enero p"
+            ,"febreroa"=>"febrero a","febrerop"=>"Febrero p"
+            ,"marzoa"=>"marzo a","marzop"=>"marzo p"
+            ,"abrila"=>"abril a","abrilp"=>"abril p"
+            ,"mayoa"=>"mayo a","mayop"=>"mayo p"
+            ,"junioa"=>"junio a","juniop"=>"junio p"
+            ,"julioa"=>"julio a","juliop"=>"julio p"
+            ,"agostoa"=>"agosto a","agostop"=>"agosto p"
+            ,"setiembrea"=>"setiembre a","setiembrep"=>"setiembre p"
+            ,"octubrea"=>"octubre a","octubrep"=>"octubre p"
+            ,"noviembrea"=>"noviembre a","noviembrep"=>"noviembre p"
+            ,"diciembrea"=>"diciembre a","diciembrep"=>"diciembre p"
             //,"created_at"=>"Fecha",
         ];
 
@@ -269,77 +264,77 @@ class PageclienteInfo extends ExportYear implements WithColumnFormatting, FromCo
             'alignment' => array(
                 'horizontal' => Alignment::HORIZONTAL_JUSTIFY,
             ),
-            'font' => [
-                'name'      =>  'Calibri',
-                'size'      =>  15,
-                'bold'      =>  true,
-                'color' => ['argb' => '90e0ef'],
+            'fill' => [
+                'fillType' => Fill::FILL_SOLID,
+                'startColor' => [
+                    'rgb' => '90e0ef',
+                ]
             ],
         );
         $stylerecuperadoabandono = array(
             'alignment' => array(
                 'horizontal' => Alignment::HORIZONTAL_JUSTIFY,
             ),
-            'font' => [
-                'name'      =>  'Calibri',
-                'size'      =>  15,
-                'bold'      =>  true,
-                'color' => ['argb' => 'b5e48c'],
+            'fill' => [
+                'fillType' => Fill::FILL_SOLID,
+                'startColor' => [
+                    'rgb' => 'b5e48c',
+                ]
             ],
         );
         $stylerecuperadoreciente = array(
             'alignment' => array(
                 'horizontal' => Alignment::HORIZONTAL_JUSTIFY,
             ),
-            'font' => [
-                'name'      =>  'Calibri',
-                'size'      =>  15,
-                'bold'      =>  true,
-                'color' => ['argb' => 'bfd200'],
+            'fill' => [
+                'fillType' => Fill::FILL_SOLID,
+                'startColor' => [
+                    'rgb' => 'bfd200',
+                ]
             ],
         );
         $stylenuevo = array(
             'alignment' => array(
                 'horizontal' => Alignment::HORIZONTAL_JUSTIFY,
             ),
-            'font' => [
-                'name'      =>  'Calibri',
-                'size'      =>  15,
-                'bold'      =>  true,
-                'color' => ['argb' => 'ffcfd2'],
+            'fill' => [
+                'fillType' => Fill::FILL_SOLID,
+                'startColor' => [
+                    'rgb' => 'ffcfd2',
+                ]
             ],
         );
         $stylebasefria = array(
             'alignment' => array(
                 'horizontal' => Alignment::HORIZONTAL_JUSTIFY,
             ),
-            'font' => [
-                'name'      =>  'Calibri',
-                'size'      =>  15,
-                'bold'      =>  true,
-                'color' => ['argb' => 'eff7f6'],
+            'fill' => [
+                'fillType' => Fill::FILL_SOLID,
+                'startColor' => [
+                    'rgb' => 'eff7f6',
+                ]
             ],
         );
         $styleabandono = array(
             'alignment' => array(
                 'horizontal' => Alignment::HORIZONTAL_JUSTIFY,
             ),
-            'font' => [
-                'name'      =>  'Calibri',
-                'size'      =>  15,
-                'bold'      =>  true,
-                'color' => ['argb' => 'ff4d6d'],
+            'fill' => [
+                'fillType' => Fill::FILL_SOLID,
+                'startColor' => [
+                    'rgb' => 'ff4d6d',
+                ]
             ],
         );
         $styleabandonoreciente = array(
             'alignment' => array(
                 'horizontal' => Alignment::HORIZONTAL_JUSTIFY,
             ),
-            'font' => [
-                'name'      =>  'Calibri',
-                'size'      =>  15,
-                'bold'      =>  true,
-                'color' => ['argb' => 'e85d04'],
+            'fill' => [
+                'fillType' => Fill::FILL_SOLID,
+                'startColor' => [
+                    'rgb' => 'e85d04',
+                ]
             ],
         );
 
