@@ -295,11 +295,11 @@ class PageclienteInfo extends ExportYear implements WithColumnFormatting, FromCo
 
         foreach ($event->sheet->getRowIterator() as $row)
         {
-            if($event->sheet->getCellByColumnAndRow(2,$row->getRowIndex())=='ABANDONO RECIENTE')
+            if($event->sheet->getCellByColumnAndRow(20,$row->getRowIndex())->getValue()=='ABANDONO RECIENTE')
             {
                 $event->sheet->getStyle("A".$row->getRowIndex())->applyFromArray($style1);
             }
-            else if($event->sheet->getCellByColumnAndRow(2,$row->getRowIndex())=='RECURRENTE')
+            else if($event->sheet->getCellByColumnAndRow(20,$row->getRowIndex())->getValue()=='RECURRENTE')
             {
                 $event->sheet->getStyle("B".$row->getRowIndex())->applyFromArray($style1);
             }
