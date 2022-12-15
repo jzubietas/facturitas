@@ -9,7 +9,7 @@ use Maatwebsite\Excel\Concerns\WithColumnFormatting;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 use Maatwebsite\Excel\Concerns\WithColumnWidths;
 
-class PageclienteDiciembre extends Export implements WithColumnFormatting,WithColumnWidths
+class PageclienteinfoDiciembre extends Export implements WithColumnFormatting,WithColumnWidths
 {
     public function collection()
     {
@@ -73,5 +73,129 @@ class PageclienteDiciembre extends Export implements WithColumnFormatting,WithCo
             'B' => NumberFormat::FORMAT_TEXT
 
         ];
+    }
+
+    public static function afterSheet(AfterSheet $event){
+
+        $style_recurrente = array(
+            'alignment' => array(
+                'horizontal' => Alignment::HORIZONTAL_JUSTIFY,
+            ),
+            'fill' => [
+                'fillType' => Fill::FILL_SOLID,
+                'startColor' => [
+                    'rgb' => '90e0ef',
+                ]
+            ],
+        );
+        $stylerecuperadoabandono = array(
+            'alignment' => array(
+                'horizontal' => Alignment::HORIZONTAL_JUSTIFY,
+            ),
+            'fill' => [
+                'fillType' => Fill::FILL_SOLID,
+                'startColor' => [
+                    'rgb' => 'b5e48c',
+                ]
+            ],
+        );
+        $stylerecuperadoreciente = array(
+            'alignment' => array(
+                'horizontal' => Alignment::HORIZONTAL_JUSTIFY,
+            ),
+            'fill' => [
+                'fillType' => Fill::FILL_SOLID,
+                'startColor' => [
+                    'rgb' => 'bfd200',
+                ]
+            ],
+        );
+        $stylenuevo = array(
+            'alignment' => array(
+                'horizontal' => Alignment::HORIZONTAL_JUSTIFY,
+            ),
+            'fill' => [
+                'fillType' => Fill::FILL_SOLID,
+                'startColor' => [
+                    'rgb' => 'ffcfd2',
+                ]
+            ],
+        );
+        $stylebasefria = array(
+            'alignment' => array(
+                'horizontal' => Alignment::HORIZONTAL_JUSTIFY,
+            ),
+            'fill' => [
+                'fillType' => Fill::FILL_SOLID,
+                'startColor' => [
+                    'rgb' => 'eff7f6',
+                ]
+            ],
+        );
+        $styleabandono = array(
+            'alignment' => array(
+                'horizontal' => Alignment::HORIZONTAL_JUSTIFY,
+            ),
+            'fill' => [
+                'fillType' => Fill::FILL_SOLID,
+                'startColor' => [
+                    'rgb' => 'ff4d6d',
+                ]
+            ],
+        );
+        $styleabandonoreciente = array(
+            'alignment' => array(
+                'horizontal' => Alignment::HORIZONTAL_JUSTIFY,
+            ),
+            'fill' => [
+                'fillType' => Fill::FILL_SOLID,
+                'startColor' => [
+                    'rgb' => 'e85d04',
+                ]
+            ],
+        );
+
+        /*
+         * RECURRENTE-----90e0ef
+            RECUPERADO ABANDONO----b5e48c
+            RECUPERADO RECIENTE---bfd200
+            NUEVO------ffcfd2
+            BASE FRIA----eff7f6
+            ABANDONO----ff4d6d
+            ABANDONO RECIENTE----e85d04
+         * */
+
+        foreach ($event->sheet->getRowIterator() as $row)
+        {
+            if($event->sheet->getCellByColumnAndRow(20,$row->getRowIndex())->getValue()=='RECURRENTE')
+            {
+                $event->sheet->getStyle("T".$row->getRowIndex())->applyFromArray($style_recurrente);
+            }
+            else if($event->sheet->getCellByColumnAndRow(20,$row->getRowIndex())->getValue()=='RECUPERADO ABANDONO')
+            {
+                $event->sheet->getStyle("T".$row->getRowIndex())->applyFromArray($stylerecuperadoabandono);
+            }
+            else if($event->sheet->getCellByColumnAndRow(20,$row->getRowIndex())->getValue()=='RECUPERADO RECIENTE')
+            {
+                $event->sheet->getStyle("T".$row->getRowIndex())->applyFromArray($stylerecuperadoreciente);
+            }
+            else if($event->sheet->getCellByColumnAndRow(20,$row->getRowIndex())->getValue()=='NUEVO')
+            {
+                $event->sheet->getStyle("T".$row->getRowIndex())->applyFromArray($stylenuevo);
+            }
+            else if($event->sheet->getCellByColumnAndRow(20,$row->getRowIndex())->getValue()=='BASE FRIA')
+            {
+                $event->sheet->getStyle("T".$row->getRowIndex())->applyFromArray($stylebasefria);
+            }
+            else if($event->sheet->getCellByColumnAndRow(20,$row->getRowIndex())->getValue()=='ABANDONO')
+            {
+                $event->sheet->getStyle("T".$row->getRowIndex())->applyFromArray($styleabandono);
+            }
+            else if($event->sheet->getCellByColumnAndRow(20,$row->getRowIndex())->getValue()=='ABANDONO RECIENTE')
+            {
+                $event->sheet->getStyle("T".$row->getRowIndex())->applyFromArray($styleabandonoreciente);
+            }
+            //$row->getRowIndex();
+        }
     }
 }

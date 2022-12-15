@@ -9,7 +9,7 @@ use Maatwebsite\Excel\Concerns\WithColumnFormatting;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 use Maatwebsite\Excel\Concerns\WithColumnWidths;
 
-class PageclienteNoviembre extends Export implements WithColumnFormatting,WithColumnWidths
+class PageclienteinfoNoviembre extends Export implements WithColumnFormatting,WithColumnWidths
 {
     public function collection()
     {

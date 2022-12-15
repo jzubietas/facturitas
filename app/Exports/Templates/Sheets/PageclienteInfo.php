@@ -261,26 +261,26 @@ class PageclienteInfo extends ExportYear implements WithColumnFormatting, FromCo
     public static function afterSheet(AfterSheet $event){
 
         $style_recurrente = array(
-            'alignment' => array(
-                'horizontal' => Alignment::HORIZONTAL_JUSTIFY,
-            ),
-            'fill' => [
-                'fillType' => Fill::FILL_SOLID,
-                'startColor' => [
-                    'rgb' => '90e0ef',
+            [
+                'alignment' => [
+                    'horizontal' => Alignment::HORIZONTAL_CENTER,
+                ],
+                'fill' => [
+                    'fillType' => Fill::FILL_SOLID,
+                    'color' => ['rgb' => '336655']
                 ]
-            ],
+            ]
         );
         $stylerecuperadoabandono = array(
-            'alignment' => array(
-                'horizontal' => Alignment::HORIZONTAL_JUSTIFY,
-            ),
-            'fill' => [
-                'fillType' => Fill::FILL_SOLID,
-                'startColor' => [
-                    'rgb' => 'b5e48c',
+            [
+                'alignment' => [
+                    'horizontal' => Alignment::HORIZONTAL_CENTER,
+                ],
+                'fill' => [
+                    'fillType' => Fill::FILL_SOLID,
+                    'color' => ['rgb' => '336655']
                 ]
-            ],
+            ]
         );
         $stylerecuperadoreciente = array(
             'alignment' => array(
@@ -327,15 +327,15 @@ class PageclienteInfo extends ExportYear implements WithColumnFormatting, FromCo
             ],
         );
         $styleabandonoreciente = array(
-            'alignment' => array(
-                'horizontal' => Alignment::HORIZONTAL_JUSTIFY,
-            ),
-            'fill' => [
-                'fillType' => Fill::FILL_SOLID,
-                'startColor' => [
-                    'rgb' => 'e85d04',
+            [
+                'alignment' => [
+                    'horizontal' => Alignment::HORIZONTAL_CENTER,
+                ],
+                'fill' => [
+                    'fillType' => Fill::FILL_SOLID,
+                    'color' => ['rgb' => 'e85d04']
                 ]
-            ],
+            ]
         );
 
         /*
@@ -350,33 +350,35 @@ class PageclienteInfo extends ExportYear implements WithColumnFormatting, FromCo
 
         foreach ($event->sheet->getRowIterator() as $row)
         {
-            if($event->sheet->getCellByColumnAndRow(20,$row->getRowIndex())->getValue()=='RECURRENTE')
+            if($event->sheet->getCellByColumnAndRow(17,$row->getRowIndex())->getValue()=='RECURRENTE')
             {
                 $event->sheet->getStyle("T".$row->getRowIndex())->applyFromArray($style_recurrente);
             }
-            else if($event->sheet->getCellByColumnAndRow(20,$row->getRowIndex())->getValue()=='RECUPERADO ABANDONO')
+            else if($event->sheet->getCellByColumnAndRow(17,$row->getRowIndex())->getValue()=='RECUPERADO ABANDONO')
             {
                 $event->sheet->getStyle("T".$row->getRowIndex())->applyFromArray($stylerecuperadoabandono);
             }
-            else if($event->sheet->getCellByColumnAndRow(20,$row->getRowIndex())->getValue()=='RECUPERADO RECIENTE')
+            else if($event->sheet->getCellByColumnAndRow(17,$row->getRowIndex())->getValue()=='RECUPERADO RECIENTE')
             {
                 $event->sheet->getStyle("T".$row->getRowIndex())->applyFromArray($stylerecuperadoreciente);
             }
-            else if($event->sheet->getCellByColumnAndRow(20,$row->getRowIndex())->getValue()=='NUEVO')
+            else if($event->sheet->getCellByColumnAndRow(17,$row->getRowIndex())->getValue()=='NUEVO')
             {
                 $event->sheet->getStyle("T".$row->getRowIndex())->applyFromArray($stylenuevo);
             }
-            else if($event->sheet->getCellByColumnAndRow(20,$row->getRowIndex())->getValue()=='BASE FRIA')
+            else if($event->sheet->getCellByColumnAndRow(17,$row->getRowIndex())->getValue()=='BASE FRIA')
             {
                 $event->sheet->getStyle("T".$row->getRowIndex())->applyFromArray($stylebasefria);
             }
-            else if($event->sheet->getCellByColumnAndRow(20,$row->getRowIndex())->getValue()=='ABANDONO')
+            else if($event->sheet->getCellByColumnAndRow(17,$row->getRowIndex())->getValue()=='ABANDONO')
             {
                 $event->sheet->getStyle("T".$row->getRowIndex())->applyFromArray($styleabandono);
             }
-            else if($event->sheet->getCellByColumnAndRow(20,$row->getRowIndex())->getValue()=='ABANDONO RECIENTE')
+            else if($event->sheet->getCellByColumnAndRow(17,$row->getRowIndex())->getValue()=='ABANDONO RECIENTE')
             {
                 $event->sheet->getStyle("T".$row->getRowIndex())->applyFromArray($styleabandonoreciente);
+            }else{
+                $event->sheet->getStyle("T".$row->getRowIndex())->applyFromArray($styleabandono);
             }
 
             //$row->getRowIndex();
@@ -439,18 +441,19 @@ class PageclienteInfo extends ExportYear implements WithColumnFormatting, FromCo
         );*/
 
 //Range Columns
-        /*$event->sheet->styleCells(
-            'B2:E2',
+        /*
+        $event->sheet->styleCells(
+            'Q',
             [
                 'alignment' => [
-                    'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+                    'horizontal' => Alignment::HORIZONTAL_CENTER,
                 ],
                 'fill' => [
-                    'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                    'fillType' => Fill::FILL_SOLID,
                     'color' => ['rgb' => '336655']
                 ]
             ]
-        );*/
+        ); */
     }
 
 
