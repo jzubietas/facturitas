@@ -118,7 +118,7 @@ class EnvioController extends Controller
 
             ->where('p.condicion_envio',DireccionGrupo::CE_EN_REPARTO)
             ->where('direccion_grupos.estado','1')
-            ->whereNull('direccion_grupos.subcondicion_envio')
+           // ->whereNull('direccion_grupos.subcondicion_envio')
             ->select(
                 'direccion_grupos.id',
                 'u.identificador as identificador',
@@ -801,6 +801,10 @@ class EnvioController extends Controller
         //adjunto2
         //condicion
         //$pedido=Pedido::where("id",$request->hiddenEnviar)->first();
+
+        dd($request);
+        exit;
+
         $envio=DireccionGrupo::where("id",$request->hiddenEnviar)->first();
 
         //$detalle_pedidos = DetallePedido::where('pedido_id',$pedido->id)->first();
@@ -813,13 +817,18 @@ class EnvioController extends Controller
 
 
 
-        if ($request->condicion == "3")
+        if ($request->condicion == 'ENTREGADO' )
         {
             $envio->update([
-                'condicion_envio' => 3
+                'condicion_envio' => Pedido::ENTREGADO,
+                'condicion_envio_code' => Pedido::ENTREGADO_INT,
+                
             ]);
 
         }
+
+
+
 
         $files = $request->file('foto1');
         $files2 = $request->file('foto2');
@@ -1029,7 +1038,12 @@ class EnvioController extends Controller
        // dd($request);
       //  exit;
 
+
         $pedido=Pedido::where("id",$request->hiddenRecibir)->first();
+      
+        dd($pedido->codigo);
+        exit;
+      
         $pedido->update([
 
             //'envio' => '1',
