@@ -275,7 +275,7 @@
                     '<td><input type="hidden" name="courier[]" value="' + courier + '">' + courier + '</td>' +
                     '<td><input type="hidden" name="descripcion[]" value="' + descripcion + '">' + descripcion + '</td>' +
                     '<td><input type="hidden" name="nota[]" value="' + nota + '">' + nota + '</td>' +
-                    '<td>@csrf<input type="file" id="adjunto" name="adjunto[]" multiple=""/></td>' +
+                    '<td>@csrf<input type="file" id="adjunto" name="adjunto[]" multiple /></td>' +
                     '<td>' + subtotal[cont].toLocaleString("en-US") + '</td></tr>';
                 cont++; //accept= ".zip, .rar"
                 limpiar();
@@ -383,6 +383,7 @@
                 //console.log("abrir")
 
                 var fd = new FormData();
+                //var data = new FormData(document.getElementById("formulario"));
 
                 $('input[name="nombre_empresa[]"]').each(function () {
                     fd.append("nombre_empresa[]", this.value);
@@ -440,9 +441,10 @@
                            return false;
                          }else{
                           */
-                if (files.length > 0) {
-                    for (let i = 0; i < files.length; i++) {
-                        fd.append('adjunto', $('input[type=file][name="adjunto[]"]')[0].files[0]);
+
+                if (files[0].files.length > 0) {
+                    for (let i in files[0].files) {
+                        fd.append('adjunto[]',  files[0].files[i]);
                     }
                 }
                 /*for (let i = 0; i < files.length; i++) {
@@ -457,6 +459,7 @@
 
                 $.ajax({
                     data: fd,
+                    //data: data,
                     processData: false,
                     contentType: false,
                     type: 'POST',
