@@ -1362,7 +1362,15 @@ class PedidoController extends Controller
                 'dp.fecha_envio_doc_fis',
                 'dp.fecha_recepcion',
                 'pedidos.condicion',
-                'pedidos.created_at'
+                'pedidos.created_at',
+                'pedidos.path_adjunto_anular',
+                'pedidos.path_adjunto_anular_disk',
+                'pedidos.pendiente_anulacion',
+                'pedidos.user_anulacion_id',
+                'pedidos.fecha_anulacion',
+                'pedidos.fecha_anulacion_confirm',
+                'pedidos.responsable',
+
             )
             ->orderBy('pedidos.created_at', 'DESC')
             ->get();

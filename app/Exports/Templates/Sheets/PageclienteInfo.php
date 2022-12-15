@@ -260,6 +260,14 @@ class PageclienteInfo extends ExportYear implements WithColumnFormatting, FromCo
 
     public static function afterSheet(AfterSheet $event){
 
+        /*d62828  ABANDONO
+        fca311  ABANDONO RECIENTE
+        blanco  base fria
+        b5e48c	nuevo
+        00b4d8		RECUPERADO RECIENTE
+        3a86ff		RECUPERADO ABANDONO
+        a9def9		RECURRENTE*/
+        
         $style_recurrente = array(
             [
                 'alignment' => [
