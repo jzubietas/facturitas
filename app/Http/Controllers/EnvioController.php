@@ -1101,8 +1101,8 @@ class EnvioController extends Controller
     
     {
 
-      //  dd($request);
-      //  exit;
+       dd($request);
+        exit;
 
         $pedido=Pedido::where("id",$request->hiddenRecibir)->first();
         $pedido->update([
@@ -1110,8 +1110,8 @@ class EnvioController extends Controller
             //'envio' => '1',
             'envio' => '2',
             'estado_sobre' => '1',
-            'condicion_envio'=>Pedido::EN_REPARTO,
-            'condicion_envio_code'=>Pedido::EN_REPARTO_CODE,
+            'condicion_envio'=>DireccionGrupo::CE_EN_REPARTO,
+            'condicion_envio_code'=>DireccionGrupo::CE_EN_REPARTO_CODE,
             'modificador' => 'USER'.Auth::user()->id
         ]);
 
@@ -1171,11 +1171,14 @@ class EnvioController extends Controller
                 'nombre_cliente'=> ( ($request->destino=='LIMA')? $request->nombre : $cliente->nombre  ),
                 'celular_cliente'=> ( ($request->destino=='LIMA')? $request->contacto : $cliente->celular."-".$cliente->icelular ),
                 'codigos'=>$lista_codigos,
-                'producto'=>$lista_productos
+                'producto'=>$lista_productos,
+                'condicion_envio_code' => Pedido::PENDIENTE_DE_ENVIO_CODE ,
+                'condicion_envio' => Pedido::PENDIENTE_DE_ENVIO,
             ])->id;
 
             $direccion_grupo = DireccionGrupo::find($direccion_grupo_id);
             $direccion_grupo->correlativo = 'ENV'.$direccion_grupo_id;
+
             $direccion_grupo->save();
 
 
@@ -1213,27 +1216,14 @@ class EnvioController extends Controller
                     {
                         $pedido = Pedido::find($pedido_id);
 
-                        /*
-                        $pedido->update([
-                            'destino' => $request->destino,
-                            'condicion_envio' => 2,//AL REGISTRAR DIRECCION PASA A ESTADO  EN REPARTO
-                            'direccion' => $request->direccion,
-
-                        ]);
-                        */
-
-                        /* 14/12/22  El pedido se debe listar en envios sobres por recibir al ser cargado el destino
-                        y se debe usar las columnas creadas condicion_envio_code y condicion (manteniendo lo anterior para no romper el app)
-                        por defecto condicion_envio_code=1 , condicion='PENDIENTE DE ENVIO'
-                        */
-
+                      
 
                         $pedido->update([
                             'destino' => $request->destino,
                             'condicion_envio' => 2,//AL REGISTRAR DIRECCION PASA A ESTADO  EN REPARTO
                             'direccion' => $request->direccion,
-                            'condicion_envio_code' => Pedido::PENDIENTE_DE_ENVIO ,
-                            'condicion' => Pedido::PENDIENTE_DE_ENVIO_CODE ,
+                            'condicion_envio_code' => Pedido::PENDIENTE_DE_ENVIO_CODE ,
+                            'condicion_envio' => Pedido::PENDIENTE_DE_ENVIO,
                             
                         ]);
 
@@ -1523,7 +1513,9 @@ class EnvioController extends Controller
 
         $pedido->update([
             'envio' => '1',
-            'modificador' => 'USER'.Auth::user()->id
+            'modificador' => 'USER'.Auth::user()->id,
+            'condicion_envio' => DireccionGrupo::CE_BANCARIZACION,
+            'condicion_envio_code' => DireccionGrupo::CE_BANCARIZACION_CODE,
         ]);
 
         $detalle_pedidos->update([
