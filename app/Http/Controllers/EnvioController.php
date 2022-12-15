@@ -349,7 +349,9 @@ class EnvioController extends Controller
             ->join('clientes as c', 'c.id', 'de.cliente_id')
             ->join('users as u', 'u.id', 'c.user_id')
             ->where('direccion_grupos.estado','1')
-            ->where('direccion_grupos.condicion_envio',DireccionGrupo::CE_ENTREGADO)
+           // ->where('direccion_grupos.condicion_envio',DireccionGrupo::CE_ENTREGADO)
+            ->where('direccion_grupos.condicion_envio_code',DireccionGrupo::CE_ENTREGADO_CODE)
+            
             ->select(
                 'direccion_grupos.id',
                 'u.identificador as identificador',
@@ -1442,8 +1444,11 @@ class EnvioController extends Controller
   
         $pedido->update([
             'envio' => '3',//SIN ENVIO
-            'condicion_envio' => Pedido::$estadosCondicionCode[3],
-            'condicion_envio_code' => 3,
+            'condicion_envio' => DireccionGrupo::CE_ENTREGADO,
+            'condicion_envio_code' => DireccionGrupo::CE_ENTREGADO_CODE,
+            
+          //  'condicion_envio' => 'ENTREGADO',
+          //  'condicion_envio_code' => 10 ,    
             'modificador' => 'USER'.Auth::user()->id
         ]);
 
@@ -1459,16 +1464,23 @@ class EnvioController extends Controller
 
         $data=DetallePedido::where("pedido_id",$request->hiddenSinenvio)->first();
 
-        $direcciongrupo=DireccionGrupo::create([
+        $direccion_grupo_id=DireccionGrupo::create([
                 'estado'=>'1',
                 'destino' => 'LIMA',
                 'distribucion'=> '',
-                'condicion_envio' => 3,
+                
+                'condicion_envio' => DireccionGrupo::CE_ENTREGADO,
+                'condicion_envio_code' => DireccionGrupo::CE_ENTREGADO_CODE,
+                
                 'condicion_sobre' => 'SIN ENVIO',
                 'codigos'=>$data->codigo,
-                'producto'=>$data->nombre_empresa
-            ]);
-            
+                'producto'=>$data->nombre_empresa,
+                
+            ])->id;
+    
+         $direccion_grupo = DireccionGrupo::find($direccion_grupo_id);
+         $direccion_grupo->correlativo = 'ENV'.$direccion_grupo_id;
+         $direccion_grupo->save();
 
         $direccionLima = DireccionEnvio::create([
             'cliente_id' => $pedido->cliente_id,
@@ -1478,7 +1490,7 @@ class EnvioController extends Controller
             'nombre' => $cliente->nombre,
             'celular' => $cliente->celular,
             'observacion' => '',
-            'direcciongrupo' => $direcciongrupo->id,
+            'direcciongrupo' => $direccion_grupo_id,
             'cantidad' => 1,
             'destino'=>'LIMA',
             'estado' => '1',
@@ -1490,7 +1502,7 @@ class EnvioController extends Controller
                 'direccion_id' => $direccionLima->id,
                 'pedido_id' => $pedido->id,
                 'codigo_pedido' => $detalle_pedidos->codigo,
-                'direcciongrupo' => $direcciongrupo->id,
+                'direcciongrupo' => $direccion_grupo_id,
                 'empresa' => $detalle_pedidos->nombre_empresa,
                 'estado' => '1'
             ]);
@@ -1498,6 +1510,10 @@ class EnvioController extends Controller
         return response()->json(['html' => $pedido->id]);
         //return redirect()->route('operaciones.atendidos')->with('info','actualizado');
     }
+
+
+    /* Esta funciòn actualiza al estado envio 4*/
+
 
     public function Enviarid(Request $request)
     {

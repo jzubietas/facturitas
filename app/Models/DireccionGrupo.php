@@ -11,7 +11,12 @@ class DireccionGrupo extends Model
 
     //condicion_envio
     const CE_EN_REPARTO ="EN REPARTO";//1
+    
+
+    
     const CE_ENTREGADO ="ENTREGADO";//2
+    const CE_ENTREGADO_CODE =10;//2
+
 
     //subcondicion_envio
     const SCE_REGISTRADO = 'REGISTRADO';
