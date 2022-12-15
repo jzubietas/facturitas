@@ -18,31 +18,22 @@ class PageclienteDiciembre extends Export implements WithColumnFormatting,WithCo
 
     public function collection()
     {
-        $cliente_list = [];
-
-        //now()->startOfMonth()->format("Y-m-d h:i:s")
-
-
-            $_2022_12=ListadoResultado::join('clientes as c','c.id','listado_resultados.id')
+        return Cliente::with('user')
+            ->join('users as u', 'clientes.user_id', 'u.id')
             ->select(
-                DB::raw(" (select '2022') as Ejercicio "),
-                DB::raw(" (select '12') as Periodo "),
-                DB::raw(" (select 'Diciembre') as Periodo2 "),
-                'listado_resultados.s_2022_12 as grupo',
-                DB::raw('count(listado_resultados.s_2022_12) as total')
-                //'cantidad'
+                'clientes.id'
+                ,'u.identificador as id_asesor'
+                ,'clientes.nombre'
+                ,'clientes.dni'
+                ,'clientes.icelular'
+                ,'clientes.celular'
+                //,'clientes.situacion as situacion'
+                ,DB::raw(" (select a.s_2022_12 from listado_resultados a where a.id=clientes.id ) as situacion "),
             )
-            ->groupBy(
-                's_2022_12'
-            );
-
-        $data=$_2022_12;
-
-        //$pedidos = $pedidosLima->union($pedidosProvincia);
-
-        //$data=$data->get();
-        //return Cliente::with('user')->get();
-        return $data->get();
+            //->whereIn('clientes.id',[1,2,3])
+            ->where('clientes.estado', '1')
+            ->where('clientes.tipo', '1')
+            ->get();
     }
 
     public function title(): string
