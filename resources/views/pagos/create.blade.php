@@ -523,6 +523,8 @@
                 $("#tipotransferencia").val("").selectpicker("refresh");
                 $("#titulares").val("").selectpicker("refresh");
                 $("#pmonto").val("");
+                $("#add_pago").text("Guardar")
+                $("#add_pago").removeAttr("disabled")
             });
 
             $(document).on("submit", "#formulario", function (event) {
@@ -2590,6 +2592,9 @@
                         console.log(fd2);
 
                         function AgregarPagoTemporal() {
+
+                            $("#add_pago").text("Agregando ...")
+                            $("#add_pago").attr("disabled", 'disabled')
                             $.ajax({
                                 data: fd2,
                                 processData: false,
@@ -2646,10 +2651,17 @@
 
 
                                     }
-                                }
-                            });
+                                },
+                            })
+                                .always(function () {
+                                    $("#add_pago").text("Agregar")
+                                    $("#add_pago").removeAttr("disabled")
+                                });
                         }
 
+
+                        $("#add_pago").text("Validando ...")
+                        $("#add_pago").attr("disabled", 'disabled')
 
                         $.post("{{ route('pagos.store.validate') }}", {
                             banco: $("#pbanco").val(),
@@ -2664,10 +2676,11 @@
                                 if (!data.is_repetido) {
                                     AgregarPagoTemporal();
                                 } else {
+                                    $("#modal-add-pagos").modal("hide")
                                     Swal.fire({
                                         icon: 'warning',
                                         title: 'Advertencia',
-                                        html: 'Este pago ya se encuentra regitrado con el codigo <b>' + data.codigos + '</b>',
+                                        html: 'Este pago ya se encuentra regitrado con el codigo <br><b>' + data.codigos + '</b>',
                                         showDenyButton: true,
                                         confirmButtonText: 'Estoy de acuerdo',
                                         denyButtonText: 'Cancelar',
@@ -2688,8 +2701,14 @@
                                                     }
                                                 })
                                                 //agregar();
+                                            } else {
+                                                $("#add_pago").text("Agregar")
+                                                $("#add_pago").removeAttr("disabled")
                                             }
                                         }
+                                    }).catch(function () {
+                                        $("#add_pago").text("Agregar")
+                                        $("#add_pago").removeAttr("disabled")
                                     })
                                 }
 
