@@ -53,26 +53,6 @@ class Pedido extends Model
     const SEG_PROVINCIA_INT = 9;
     const ENTREGADO_INT = 1;
 
-    //envio
-    const ENVIO_CONFIRMAR_RECEPCION = '1';//ENVIADO CONFIRMAR RECEPCION
-    const ENVIO_RECIBIDO = '2';//ENVIADO RECIBIDO
-
-    //condicion de envio en cadena
-    const PENDIENTE_DE_ENVIO = 'PENDIENTE DE ENVIO';//1
-    const EN_REPARTO = 'EN REPARTO';//1
-    const ENTREGADO = 'ENTREGADO';
-
-    //condicion de envio en entero
-    const PENDIENTE_DE_ENVIO_CODE=1;
-    const EN_REPARTO_CODE=2;
-    const ENTREGADO_CODE=3;
-
-    const PORATENDDER = 1;
-
-
-
-
-
     /* relacion de conciones de envio y enteros */
 
     public static $estadosCondicion = [
