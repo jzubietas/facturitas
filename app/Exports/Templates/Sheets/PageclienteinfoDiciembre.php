@@ -32,7 +32,7 @@ class PageclienteinfoDiciembre extends Export implements WithColumnFormatting,Wi
     }
     public function title(): string
     {
-        return 'Noviembre';
+        return 'Detalle Diciembre';
     }
     public function map($model): array
     {

@@ -63,7 +63,7 @@ class PageclienteInfo extends ExportYear implements WithColumnFormatting, FromCo
 
                 ,DB::raw(" (select (dp.codigo) from pedidos dp where dp.cliente_id=clientes.id order by dp.created_at desc limit 1) as codigo ")
             )
-        ->whereIn('clientes.id',[1,2,3])
+        //->whereIn('clientes.id',[1,2,3])
         ->where('clientes.estado', '1')
         ->where('clientes.tipo', '1')
         ->get();
@@ -337,6 +337,17 @@ class PageclienteInfo extends ExportYear implements WithColumnFormatting, FromCo
                 ]
             ]
         );
+        $styledefault = array(
+            [
+                'alignment' => [
+                    'horizontal' => Alignment::HORIZONTAL_CENTER,
+                ],
+                'fill' => [
+                    'fillType' => Fill::FILL_SOLID,
+                    'color' => ['rgb' => '000000']
+                ]
+            ]
+        );
 
         /*
          * RECURRENTE-----90e0ef
@@ -352,33 +363,33 @@ class PageclienteInfo extends ExportYear implements WithColumnFormatting, FromCo
         {
             if($event->sheet->getCellByColumnAndRow(17,$row->getRowIndex())->getValue()=='RECURRENTE')
             {
-                $event->sheet->getStyle("T".$row->getRowIndex())->applyFromArray($style_recurrente);
+                $event->sheet->getStyle("Q".$row->getRowIndex())->applyFromArray($style_recurrente);
             }
             else if($event->sheet->getCellByColumnAndRow(17,$row->getRowIndex())->getValue()=='RECUPERADO ABANDONO')
             {
-                $event->sheet->getStyle("T".$row->getRowIndex())->applyFromArray($stylerecuperadoabandono);
+                $event->sheet->getStyle("Q".$row->getRowIndex())->applyFromArray($stylerecuperadoabandono);
             }
             else if($event->sheet->getCellByColumnAndRow(17,$row->getRowIndex())->getValue()=='RECUPERADO RECIENTE')
             {
-                $event->sheet->getStyle("T".$row->getRowIndex())->applyFromArray($stylerecuperadoreciente);
+                $event->sheet->getStyle("Q".$row->getRowIndex())->applyFromArray($stylerecuperadoreciente);
             }
             else if($event->sheet->getCellByColumnAndRow(17,$row->getRowIndex())->getValue()=='NUEVO')
             {
-                $event->sheet->getStyle("T".$row->getRowIndex())->applyFromArray($stylenuevo);
+                $event->sheet->getStyle("Q".$row->getRowIndex())->applyFromArray($stylenuevo);
             }
             else if($event->sheet->getCellByColumnAndRow(17,$row->getRowIndex())->getValue()=='BASE FRIA')
             {
-                $event->sheet->getStyle("T".$row->getRowIndex())->applyFromArray($stylebasefria);
+                $event->sheet->getStyle("Q".$row->getRowIndex())->applyFromArray($stylebasefria);
             }
             else if($event->sheet->getCellByColumnAndRow(17,$row->getRowIndex())->getValue()=='ABANDONO')
             {
-                $event->sheet->getStyle("T".$row->getRowIndex())->applyFromArray($styleabandono);
+                $event->sheet->getStyle("Q".$row->getRowIndex())->applyFromArray($styleabandono);
             }
             else if($event->sheet->getCellByColumnAndRow(17,$row->getRowIndex())->getValue()=='ABANDONO RECIENTE')
             {
-                $event->sheet->getStyle("T".$row->getRowIndex())->applyFromArray($styleabandonoreciente);
+                $event->sheet->getStyle("Q".$row->getRowIndex())->applyFromArray($styleabandonoreciente);
             }else{
-                $event->sheet->getStyle("T".$row->getRowIndex())->applyFromArray($styleabandono);
+                $event->sheet->getStyle("Q".$row->getRowIndex())->applyFromArray($styledefault);
             }
 
             //$row->getRowIndex();

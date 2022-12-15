@@ -35,7 +35,7 @@ class PageclienteinfoNoviembre extends Export implements WithColumnFormatting,Wi
     public function title(): string
     {
         //return parent::title();//Por defecto se toma del nombre de la clase de php, en este caso seria "Pagina One" de titulo
-        return 'Noviembre';
+        return 'Detalle Noviembre';
     }
 
     public function map($model): array
