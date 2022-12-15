@@ -196,7 +196,7 @@
                     <div class="d-flex justify-content-between">
                         <button type = "button" onClick="history.back()" class="btn btn-danger btn-lg"><i class="fas fa-arrow-left"></i>ATRAS</button>
                         <h3 class="text-danger">
-                           Deuda Total {{money_f($cotizacion->total-$adelanto)}}
+                           *TOTAL DE DEUDAS {{money_f($deudaTotal)}}*
                         </h3>
                     </div>
                 </div>
@@ -216,7 +216,8 @@
 
         console.log(localStorage.getItem("search_tabla"));
 
-        let copydata = "*S/." + "{{$cotizacion->cantidad}}" + " * " + "{{$cotizacion->porcentaje}}" + "% = S/." + "{{$cotizacion->ft}}" + "*\n" +
+        let copydata = "{{$cotizacion->nombre_empresa}}" + "\n\n" +
+         "*S/." + "{{$cotizacion->cantidad}}" + " * " + "{{$cotizacion->porcentaje}}" + "% = S/." + "{{$cotizacion->ft}}" + "*\n" +
             "*ENVIO = S/." + "{{$cotizacion->courier}}" + "*\n" +
             @if($adelanto>0)
                 "*ADELANTO = S/." + "{{$adelanto}}" + "*\n" +
@@ -224,7 +225,6 @@
             @else
                 "*TOTAL = S/." + "{{$cotizacion->total}}" + "*\n\n" +
             @endif
-                "*Razón Social = S/." + "{{$cotizacion->nombre_empresa}}" + "*\n\n" +
             "*ES IMPORTANTE PAGAR EL ENVIO* \n";
 
         $("#copiar_cotizacion").val(copydata);

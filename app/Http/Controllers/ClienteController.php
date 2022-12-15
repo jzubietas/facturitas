@@ -181,8 +181,9 @@ class ClienteController extends Controller
 
     public function clientestablasituacion(Request $request)
     {
-        $idconsulta=$request->idconsulta;
-        $data = ListadoResultado::where('id', '1')
+        $idconsulta=$request->cliente;
+        $idconsulta;
+        $data = ListadoResultado::where('id', $idconsulta)
             ->select('id',
                 'a_2021_11',
                 'a_2021_12',
@@ -215,12 +216,6 @@ class ClienteController extends Controller
             );
 
         return datatables()->query(DB::table($data))
-        ->addIndexColumn()
-            ->addColumn('action', function ($row) {
-                $btn = "";
-                return $btn;
-            })
-            ->rawColumns(['action'])
             ->toJson();
        
     }
