@@ -1046,7 +1046,7 @@ class EnvioController extends Controller
       
 
         /* si es lima */
-        if ($localizacion==6)
+        if ($localizacion==7)
 
         {
 
@@ -1073,7 +1073,7 @@ class EnvioController extends Controller
 
         /* si es provincia */
 
-        if ($localizacion==7)
+        if ($localizacion==6)
 
             {
 
