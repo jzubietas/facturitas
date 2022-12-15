@@ -1100,7 +1100,7 @@ class OperacionController extends Controller
         return view('operaciones.showAtender', compact('pedido','pedidos', 'imagenes', 'imagenesatencion'));
     }
 
-
+ 
 
 
     public function confirmarRecepcionID(Request $request)
