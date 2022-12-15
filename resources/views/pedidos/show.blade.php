@@ -160,7 +160,6 @@
                                     </div>
                                     <div class="col-lg-6">
                                         <p><b>Archivos Adjuntados:</b></p>
-
                                         @foreach($imagenesatencion as $img_at)
                                             @if ($img_at->pedido_id == $pedido->id)
                                                 <p>
@@ -170,22 +169,73 @@
                                             @include('pedidos.modal.DeleteAdjuntoid')
                                         @endforeach
                                     </div>
-
                                 </div>
-
-
                             </div>
-                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
-                            </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6"></div>
                         </div>
+                    </div>
+                </div>
+                <div class="card mt-4 border rounded card-body border-secondary">
+                    <div class="card-header">
+                        <h4 class="text-bold">Detalle de anulación</h4>
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-group">
+                            <li class="list-group-item">
+                                Responsable <B>{{$pedido->responsable}}</B>
+                            </li>
+                            <li class="list-group-item">
+                                Fecha de anulacion <b>{{optional($pedido->fecha_anulacion)->format('d-m-Y h:i')}}</b>
+                            </li>
+                            <li class="list-group-item">
+                                Fecha de anulacion
+                                confirmada <b>{{optional($pedido->fecha_anulacion_confirm)->format('d-m-Y h:i')}}</b>
+                            </li>
+                            @if(count($pedido->adjuntosFiles())>0)
+                                <li class="list-group-item bg-danger">
+                                    Adjuntos
+                                </li>
+                            @endif
+                            @foreach($pedido->adjuntosFiles() as $file)
+                                <li class="list-group-item">
+                                    <a target="_blank"
+                                       href="{{Storage::disk($pedido->path_adjunto_anular_disk)->url($file)}}">
+                                        {{basename($file)}}
+                                    </a>
+                                </li>
+                            @endforeach
+
+                            @if(count($pedido->notasCreditoFiles())>0)
+                                <li class="list-group-item bg-danger">
+                                    Notas de Credito
+                                </li>
+                            @endif
+
+                            <li class="list-group-item">
+                                <div class="row">
+                                    @foreach($pedido->notasCreditoFiles() as $file)
+                                        <div class="col-md-3">
+                                            <div class="card">
+                                                <div class="card-body">
+                                                    <a target="_blank"
+                                                       href="{{Storage::disk($pedido->path_adjunto_anular_disk)->url($file)}}">
+                                                        <img class="w-100"
+                                                             src="{{Storage::disk($pedido->path_adjunto_anular_disk)->url($file)}}">
+                                                        {{basename($file)}}
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            </li>
+                        </ul>
                     </div>
                 </div>
                 <br>
 
                 <textarea class="form-control" rows="6" placeholder="Cotizacion" name="copiar_cotizacion" cols="50"
-                          id="copiar_cotizacion">
-
-        </textarea>
+                          id="copiar_cotizacion"></textarea>
 
 
                 <br>
@@ -194,9 +244,11 @@
                 <!--<a href="{{ route('pedidos.index', $pedido) }}" class="btn btn-danger btn-sm">Cancelar</a>-->
                 <div class="card-footer">
                     <div class="d-flex justify-content-between">
-                        <button type = "button" onClick="history.back()" class="btn btn-danger btn-lg"><i class="fas fa-arrow-left"></i>ATRAS</button>
+                        <button type="button" onClick="history.back()" class="btn btn-danger btn-lg"><i
+                                class="fas fa-arrow-left"></i>ATRAS
+                        </button>
                         <h3 class="text-danger">
-                           *TOTAL DE DEUDAS {{money_f($deudaTotal)}}*
+                            *TOTAL DE DEUDAS {{money_f($deudaTotal)}}*
                         </h3>
                     </div>
                 </div>
@@ -217,7 +269,7 @@
         console.log(localStorage.getItem("search_tabla"));
 
         let copydata = "{{$cotizacion->nombre_empresa}}" + "\n\n" +
-         "*S/." + "{{$cotizacion->cantidad}}" + " * " + "{{$cotizacion->porcentaje}}" + "% = S/." + "{{$cotizacion->ft}}" + "*\n" +
+            "*S/." + "{{$cotizacion->cantidad}}" + " * " + "{{$cotizacion->porcentaje}}" + "% = S/." + "{{$cotizacion->ft}}" + "*\n" +
             "*ENVIO = S/." + "{{$cotizacion->courier}}" + "*\n" +
             @if($adelanto>0)
                 "*ADELANTO = S/." + "{{$adelanto}}" + "*\n" +
@@ -225,7 +277,7 @@
             @else
                 "*TOTAL = S/." + "{{$cotizacion->total}}" + "*\n\n" +
             @endif
-            "*ES IMPORTANTE PAGAR EL ENVIO* \n";
+                "*ES IMPORTANTE PAGAR EL ENVIO* \n";
 
         $("#copiar_cotizacion").val(copydata);
 

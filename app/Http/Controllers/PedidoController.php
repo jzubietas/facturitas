@@ -29,6 +29,7 @@ use Carbon\Carbon;
 use Exception;
 use Facade\FlareClient\Http\Client;
 use Illuminate\Http\Request;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use PDF;
@@ -137,6 +138,7 @@ class PedidoController extends Controller
                 'dp.total as total',
                 'dp.cantidad as cantidad',
                 'dp.ruc as ruc',
+                'pedidos.pendiente_anulacion',
                 'pedidos.condicion_envio',
                 'pedidos.condicion as condiciones',
                 'pedidos.condicion_code',
@@ -159,6 +161,7 @@ class PedidoController extends Controller
                 'pedidos.estado',
                 'pedidos.envio'
             )
+            //->where('pendiente_anulacion', '<>', 1)
             ->whereIn('pedidos.condicion_code', [Pedido::POR_ATENDER_INT, Pedido::EN_PROCESO_ATENCION_INT, Pedido::ATENDIDO_INT, Pedido::ANULADO_INT]);
 
         if (Auth::user()->rol == "Llamadas") {
@@ -215,9 +218,9 @@ class PedidoController extends Controller
                 ->pluck('users.identificador');
 
             $pedidos = $pedidos->WhereIn('u.identificador', $usersasesores);
-        } else {
+        }/* else {
             $pedidos = $pedidos;
-        }
+        }*/
         //$pedidos=$pedidos->get();
 
         return Datatables::of(DB::table($pedidos))
@@ -1322,7 +1325,14 @@ class PedidoController extends Controller
                 'dp.fecha_envio_doc_fis',
                 'dp.fecha_recepcion',
                 'pedidos.condicion as condiciones',
-                'pedidos.created_at as fecha'
+                'pedidos.created_at as fecha',
+                'pedidos.path_adjunto_anular',
+                'pedidos.path_adjunto_anular_disk',
+                'pedidos.pendiente_anulacion',
+                'pedidos.user_anulacion_id',
+                'pedidos.fecha_anulacion',
+                'pedidos.fecha_anulacion_confirm',
+                'pedidos.responsable',
             )
             //->where('pedidos.estado', '1')
             ->where('pedidos.id', $pedido->id)
@@ -1371,13 +1381,13 @@ class PedidoController extends Controller
             ->where('pedidos.id', $pedido->id)
             ->first();
 
-        $deudaTotal=DetallePedido::query()->whereIn('pedido_id',$pedido->cliente->pedidos()->where('estado','1')->pluck("id"))->sum("saldo");
+        $deudaTotal = DetallePedido::query()->whereIn('pedido_id', $pedido->cliente->pedidos()->where('estado', '1')->pluck("id"))->sum("saldo");
         $adelanto = PagoPedido::query()->where('pedido_id', $pedido->id)->whereEstado(1)->sum('abono');
 
         $imagenes = ImagenPedido::where('imagen_pedidos.pedido_id', $pedido->id)->where('estado', '1')->get();
         $imagenesatencion = ImagenAtencion::where('imagen_atencions.pedido_id', $pedido->id)->where('estado', '1')->get();
 
-        return view('pedidos.show', compact('pedidos', 'imagenes', 'imagenesatencion', 'cotizacion', 'adelanto','deudaTotal'));
+        return view('pedidos.show', compact('pedidos', 'imagenes', 'imagenesatencion', 'cotizacion', 'adelanto', 'deudaTotal'));
     }
 
     /**
@@ -1617,23 +1627,64 @@ class PedidoController extends Controller
         if (!$request->hiddenID) {
             $html = '';
         } else {
-            Pedido::find($request->hiddenID)->update([
-                'motivo' => $request->motivo,
-                'responsable' => $request->responsable,
-                'condicion' => 'ANULADO',
-                'condicion_code' => Pedido::ANULADO_INT,
-                'modificador' => 'USER' . Auth::user()->id,
-                'estado' => '0'
-            ]);
+            $pedido = Pedido::findOrFail($request->hiddenID);
+            $filePaths = [];
+            $files = $request->attachments;
+            if (is_array($files)) {
+                foreach ($files as $file) {
+                    if ($file instanceof UploadedFile) {
+                        $filePaths[] = $file->store("pedidos_adjuntos", "pstorage");
+                    }
+                }
+            }
 
-            //$detalle_pedidos = DetallePedido::find($request->hiddenID);
-            $detalle_pedidos = DetallePedido::where('pedido_id', $request->hiddenID)->first();
+            setting()->load();
+            foreach ($filePaths as $index => $path) {
+                $key = "pedido." . $pedido->id . ".adjuntos_file." . $index;
+                $keyd = "pedido." . $pedido->id . ".adjuntos_disk." . $index;
+                setting([
+                    $key => $path,
+                    $keyd => 'pstorage'
+                ]);
+            }
+            setting()->save();
 
-            $detalle_pedidos->update([
-                'estado' => '0'
-            ]);
+            if ($pedido->condicion_code == Pedido::ATENDIDO_INT) {
+                //pendiente de anulacion
+                $pedido->update([
+                    'motivo' => $request->motivo,
+                    'responsable' => $request->responsable,
+                    'pendiente_anulacion' => 1,
+                    'path_adjunto_anular' => null,
+                    'path_adjunto_anular_disk' => 'pstorage',
+                    'modificador' => 'USER' . Auth::user()->id,
+                    'fecha_anulacion' => now(),
+                ]);
+                $html = '';
+            } else {
+                $pedido->update([
+                    'motivo' => $request->motivo,
+                    'responsable' => $request->responsable,
+                    'condicion' => 'ANULADO',
+                    'condicion_code' => Pedido::ANULADO_INT,
+                    'modificador' => 'USER' . Auth::user()->id,
+                    'user_anulacion_id' => Auth::user()->id,
+                    'fecha_anulacion' => now(),
+                    'fecha_anulacion_confirm' => now(),
+                    'estado' => '0',
+                    'path_adjunto_anular' => null,
+                    'path_adjunto_anular_disk' => 'pstorage',
+                ]);
+                //$detalle_pedidos = DetallePedido::find($request->hiddenID);
+                $detalle_pedidos = DetallePedido::where('pedido_id', $request->hiddenID)->first();
 
-            $html = $detalle_pedidos;
+                $detalle_pedidos->update([
+                    'estado' => '0'
+                ]);
+                $html = $detalle_pedidos;
+            }
+
+
         }
         return response()->json(['html' => $html]);
     }
@@ -2837,11 +2888,60 @@ class PedidoController extends Controller
             'codigos' => $pedidos_repetidos->map(function (Pedido $p) {
                 if ($p->condicion_code == 4) {
                     return "<span class='text-danger'>" . $p->codigo . "</span>";
-                }else{
+                } else {
                     return "<span class='text-dark'>" . $p->codigo . "</span>";
                 }
             })->join(', '),
         ]);
     }
 
+    public function ConfirmarAnular(Request $request)
+    {
+        $this->validate($request, [
+            'pedido_id' => 'required|integer',
+            'attachments' => 'array',
+            'attachments.*' => 'required|file',
+        ]);
+        $pedido = Pedido::findOrFail($request->pedido_id);
+        if ($pedido->fecha_anulacion_confirm!=null) {
+            return response()->json([
+                "success" => 0,
+            ]);
+        }
+        $filePaths = [];
+        $files = $request->attachments;
+        if (is_array($files)) {
+            foreach ($files as $file) {
+                if ($file instanceof UploadedFile) {
+                    $filePaths[] = $file->store("pedidos_notacredito", "pstorage");
+                }
+            }
+        }
+        $pedido->update([
+            'condicion' => 'ANULADO',
+            'condicion_code' => Pedido::ANULADO_INT,
+            'user_anulacion_id' => Auth::user()->id,
+            'fecha_anulacion_confirm' => now(),
+            'estado' => '0',
+            'pendiente_anulacion' => '0',
+        ]);
+        setting()->load();
+        foreach ($filePaths as $index => $path) {
+            $key = "pedido." . $pedido->id . ".nota_credito_file." . $index;
+            $keyd = "pedido." . $pedido->id . ".nota_credito_disk." . $index;
+            setting([
+                $key => $path,
+                $keyd => 'pstorage'
+            ]);
+        }
+        setting()->save();
+        $detalle_pedidos = DetallePedido::where('pedido_id', $request->pedido_id)->first();
+
+        $detalle_pedidos->update([
+            'estado' => '0'
+        ]);
+        return response()->json([
+            "success" => 1
+        ]);
+    }
 }
