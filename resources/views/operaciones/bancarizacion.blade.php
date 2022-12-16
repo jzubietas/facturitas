@@ -314,7 +314,7 @@
               var urlver = '{{ route("operaciones.showatender", ":id") }}';
               urlver = urlver.replace(':id', row.id);
 
-                data = '<div class="dropdown"><button class="btn btn-option font-14 dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">  Opciones </button><div class="dropdown-menu" aria-labelledby="dropdownMenuButton">';
+                data = '<div><ul class="" aria-labelledby="dropdownMenuButton">';
 
               data = data+'<a href="'+urlver+'" class="btn-sm dropdown-item"><i class="fas fa-eye text-success"></i> Ver</a>';
 
@@ -341,7 +341,7 @@
               {
                 data = data+'<a href="" class="btn-sm dropdown-item" data-target="#modal-revertir" data-revertir='+row.id+' data-toggle="modal" ><i class="fa fa-undo text-danger" aria-hidden="true"></i> Revertir</a>';
               }
-                data = data+'</div></div>';
+                data = data+'</ul></div>';
               return data;
             }
           },
