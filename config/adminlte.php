@@ -279,6 +279,13 @@ return [
             'icon'   => 'fas fa-check-circle',
             'active' => ['pagos perdonar courier'],
         ],
+        [
+            'text' => 'Config. Administrador',
+            'route'  => 'settings.admin-settings',
+            'can' => '',//admin.configuration
+            'icon'   => 'fas fa-cogs',
+            'active' => ['pagos perdonar courier'],
+        ],
 
         ['header' => 'MÓDULOS'],
 

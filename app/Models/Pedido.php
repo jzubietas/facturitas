@@ -140,6 +140,14 @@ class Pedido extends Model
     {
         return $this->belongsTo(Cliente::class);
     }
+    public function detallePedidos()
+    {
+        return $this->hasMany(DetallePedido::class);
+    }
+    public function pagoPedidos()
+    {
+        return $this->hasMany(PagoPedido::class);
+    }
 
     public function getIdCodeAttribute()
     {

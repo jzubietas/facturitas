@@ -36,6 +36,10 @@ Route::middleware(['guest'])->get('/', function () {
 Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->group(function () {
 
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
+
+    Route::get('/setting/administrador', [SettingsController::class, 'settingAdmin'])->name('settings.admin-settings');
+    Route::post('/setting/administrador', [SettingsController::class, 'settingAdminStore'])->name('settings.store-admin-settings');
+
     Route::post('/setting/store', [SettingsController::class, 'settingStore'])->name('settings.store-setting');
 
 
@@ -48,6 +52,7 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
 //Route::get('recurrentestabla', [ClienteController::class, 'tablarecurrentes'])->name('recurrentestabla');
 
     /*Controller Clientes*/
+    Route::get('clientes/deudas_copy', [ClienteController::class,'deudasCopyAjax'])->name('clientes.deudas_copy');
     Route::resource('clientes', ClienteController::class)->names('clientes');
 
     Route::get('pedidosenvioclientetabla', [ClienteController::class, 'pedidosenvioclientetabla'])->name('cargar.pedidosenvioclientetabla');

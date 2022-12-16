@@ -14,13 +14,13 @@ use Illuminate\Http\Request;
 
 class PageclienteSituacion extends Export implements WithColumnFormatting,WithColumnWidths
 {
-    
+
 
     public function collection()
     {
         $cliente_list = [];
 
-        //now()->startOfMonth()->format("Y-m-d h:i:s")
+        //now()->startOfMonth()->format("Y-m-d H:i:s")
 
         $_2021_11=ListadoResultado::join('clientes as c','c.id','listado_resultados.id')
             ->select(

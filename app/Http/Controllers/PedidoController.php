@@ -923,8 +923,8 @@ class PedidoController extends Controller
                         'clientes.activado_tiempo',
                         'clientes.activado_pedido',
                         'clientes.temporal_update',
-                        DB::raw(" (select count(ped.id) from pedidos ped where ped.cliente_id=clientes.id and ped.pago in (0,1) and ped.pagado in (0,1) and ped.created_at >='" . now()->startOfMonth()->format("Y-m-d h:i:s") . "' and ped.estado=1) as pedidos_mes_deuda "),
-                        DB::raw(" (select count(ped2.id) from pedidos ped2 where ped2.cliente_id=clientes.id and ped2.pago in (0,1) and ped2.pagado in (0,1) and ped2.created_at <='" . now()->subMonth()->endOfMonth()->format("Y-m-d h:i:s") . "'  and ped2.estado=1) as pedidos_mes_deuda_antes ")
+                        DB::raw(" (select count(ped.id) from pedidos ped where ped.cliente_id=clientes.id and ped.pago in (0,1) and ped.pagado in (0,1) and ped.created_at >='" . now()->startOfMonth()->format("Y-m-d H:i:s") . "' and ped.estado=1) as pedidos_mes_deuda "),
+                        DB::raw(" (select count(ped2.id) from pedidos ped2 where ped2.cliente_id=clientes.id and ped2.pago in (0,1) and ped2.pagado in (0,1) and ped2.created_at <='" . now()->subMonth()->endOfMonth()->format("Y-m-d H:i:s") . "'  and ped2.estado=1) as pedidos_mes_deuda_antes ")
                     ]
                 )->first();
 
@@ -1375,7 +1375,8 @@ class PedidoController extends Controller
             ->orderBy('pedidos.created_at', 'DESC')
             ->get();
 
-        $cotizacion = Pedido::query()->with(['cliente'])->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
+        $cotizacion = Pedido::query()->with(['cliente'])
+            ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
             ->select(
                 'pedidos.id',
                 'dp.nombre_empresa',
