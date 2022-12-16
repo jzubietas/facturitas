@@ -998,7 +998,7 @@ class EnvioController extends Controller
             ->join('users as u', 'u.id', 'c.user_id')
             ->where('direccion_grupos.estado','1')
             ->where('direccion_grupos.condicion_envio_code',Pedido::SEG_PROVINCIA_INT)
-            ->whereNull('direccion_grupos.subcondicion_envio')
+           // ->whereNull('direccion_grupos.subcondicion_envio')
             //->whereIn('direccion_grupos.subcondicion_envio',['REGISTRADO','EN CAMINO','EN TIENDA/AGENTE','NO ENTREGADO'])
             ->select(
                 'direccion_grupos.id',
@@ -1008,8 +1008,10 @@ class EnvioController extends Controller
                 DB::raw(" (select '') as nombre "),
                 'de.cantidad',
                 'direccion_grupos.codigos',
+                'direccion_grupos.producto',
+                
                 //DB::raw(" (select group_concat(dp.codigo_pedido) from gasto_pedidos dp where dp.direcciongrupo=direccion_grupos.id) as codigos "),
-                DB::raw(" (select group_concat(ab.empresa) from gasto_pedidos ab where ab.direcciongrupo=direccion_grupos.id) as producto "),
+              //  DB::raw(" (select group_concat(ab.empresa) from gasto_pedidos ab where ab.direcciongrupo=direccion_grupos.id) as producto "),
                 'de.tracking as direccion',
                 'de.foto as referencia',
                 DB::raw(" (select '') as observacion "),
@@ -1191,33 +1193,48 @@ class EnvioController extends Controller
 
             // agregando nuevo correlativo en tabla
 
-            $direccion_grupo_id=DireccionGrupo::create([
-                'estado'=>'1',
-                'destino' => $request->destino,
-                'distribucion'=> ( ($request->destino=='PROVINCIA')? 'NORTE':''),
-                'nombre_cliente'=> ( ($request->destino=='LIMA')? $request->nombre : $cliente->nombre  ),
-                'celular_cliente'=> ( ($request->destino=='LIMA')? $request->contacto : $cliente->celular."-".$cliente->icelular ),
-                'codigos'=>$lista_codigos,
-                'producto'=>$lista_productos,
-                'condicion_envio_code' => Pedido::PENDIENTE_DE_ENVIO_CODE,
-                'condicion_envio' => Pedido::PENDIENTE_DE_ENVIO,
-            ])->id;
-
-            $direccion_grupo = DireccionGrupo::find($direccion_grupo_id);
-            $direccion_grupo->correlativo = 'ENV'.$direccion_grupo_id;
-
-            $direccion_grupo->save();
-
-            
-        
-
-
+           
             $count_pedidos=count((array)$array_pedidos);
+
+           $usuario = Cliente::find($request->cliente_id);
+           $usuario_id=$usuario->user_id;
 
             if ($request->destino == "LIMA")
             {
+
+
+                                 
+                        $direccion_grupo_id=DireccionGrupo::create([
+                            'estado'=>'1',
+                            'destino' => $request->destino,
+                            'distribucion'=> ( ($request->destino=='PROVINCIA')? 'NORTE':''),
+                            'nombre_cliente'=> ( ($request->destino=='LIMA')? $request->nombre : $cliente->nombre  ),
+                            'celular_cliente'=> ( ($request->destino=='LIMA')? $request->contacto : $cliente->celular."-".$cliente->icelular ),
+                            'codigos'=>$lista_codigos,
+                            'producto'=>$lista_productos,
+                            'condicion_envio' => Pedido::SOBRE_ENVIAR ,
+                            'condicion_envio_code' => Pedido::SOBRE_ENVIAR_INT ,
+                            'pedido_id'=>$request->cod_pedido,
+                            'cliente_id'=>$request->cliente_id,
+                            'user_id'=>$usuario_id
+
+                        ])->id;
+
+
+                $direccion_grupo = DireccionGrupo::find($direccion_grupo_id);
+                $direccion_grupo->correlativo = 'ENV'.$direccion_grupo_id;
+                $direccion_grupo->save();
+
+
                 try {
                     DB::beginTransaction();
+
+
+
+           
+
+
+            
 
                     $cantidad=$count_pedidos;
 
@@ -1304,6 +1321,28 @@ class EnvioController extends Controller
             if ($request->destino == "PROVINCIA")
             {
                 try {
+
+                    
+                    $direccion_grupo_id=DireccionGrupo::create([
+                        'estado'=>'1',
+                        'destino' => $request->destino,
+                        'distribucion'=> ( ($request->destino=='PROVINCIA')? 'NORTE':''),
+                        'nombre_cliente'=> ( ($request->destino=='LIMA')? $request->nombre : $cliente->nombre  ),
+                        'celular_cliente'=> ( ($request->destino=='LIMA')? $request->contacto : $cliente->celular."-".$cliente->icelular ),
+                        'codigos'=>$lista_codigos,
+                        'producto'=>$lista_productos,
+                        'condicion_envio' => Pedido::COURIER,
+                        'condicion_envio_code' => Pedido::COURIER_INT,
+                        'pedido_id'=>$request->cod_pedido,
+                        'cliente_id'=>$request->cliente_id,
+                        'user_id'=>$usuario_id
+                    ])->id;
+
+
+                    $direccion_grupo = DireccionGrupo::find($direccion_grupo_id);
+                    $direccion_grupo->correlativo = 'ENV'.$direccion_grupo_id;
+                    $direccion_grupo->save();
+
                     DB::beginTransaction();
 
                     //IMPORTE
