@@ -349,7 +349,7 @@
                         return '{{\App\Models\Pedido::EN_PROCESO_ATENCION }}';
                     }else if(row.condicion_code==3){
                         return '{{\App\Models\Pedido::ATENDIDO }}';
-                    }else if(row.condicion_code==4){
+                    }else if(row.condicion_code==4||row.estado==0){
                         return '{{\App\Models\Pedido::ANULADO }}';
                     }
                 }
@@ -359,7 +359,7 @@
           name: 'condicion_pa',
           render: function ( data, type, row, meta ) {
 
-            if(row.condiciones=='ANULADO'){
+            if(row.condiciones=='ANULADO'||row.condicion_code==4||row.estado==0){
                 return 'ANULADO';
             }else{
               if(row.condicion_pa==null){
@@ -387,7 +387,7 @@
           data: 'condiciones_aprobado',
           name: 'condiciones_aprobado',
           render: function ( data, type, row, meta ) {
-              if(row.condicion_code==4){
+              if(row.condicion_code==4||row.estado==0){
                   return 'ANULADO';
               }
             if(data!=null)
@@ -430,7 +430,7 @@
           data: 'condicion_envio',
           name: 'condicion_envio',
           render: function ( data, type, row, meta ) {
-              if(row.condicion_code==4){
+              if(row.condicion_code==4||row.estado==0){
                   return 'ANULADO';
               }
             if(row.condicion_envio=='ANULADO'){
@@ -463,7 +463,7 @@
           data: 'diferencia',
           name: 'diferencia',
           render: function ( data, type, row, meta ) {
-              if(row.condicion_code==4){
+              if(row.condicion_code==4||row.estado==0){
                   return '0';
               }
             if(row.diferencia==null){

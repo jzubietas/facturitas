@@ -1371,7 +1371,6 @@ class PedidoController extends Controller
                 'pedidos.fecha_anulacion',
                 'pedidos.fecha_anulacion_confirm',
                 'pedidos.responsable',
-
             )
             ->orderBy('pedidos.created_at', 'DESC')
             ->get();
