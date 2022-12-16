@@ -600,7 +600,7 @@ class ClienteController extends Controller
         $clientes = null;
         $clientes = Cliente::whereIn('user_id',
                 User::query()->select('users.id')
-                ->where('users.rol','Asesor')
+                ->whereIn('users.rol',['Asesor',User::ROL_ADMIN])
                 ->where('users.estado','1')
                 ->where('users.identificador',$request->user_id)
             )
@@ -648,6 +648,7 @@ class ClienteController extends Controller
                             ->where('pedidos.cliente_id','=', $cliente->id)
                             ->whereEstado(1)
                     )->sum('saldo');
+                   
                     //considerar deuda real
                     if ($cliente->pedidos_mes_deuda > 0 && $cliente->pedidos_mes_deuda_antes == 0) {
                         $html .= '<option '.($saldo==0?'disabled':'').' style="color:'.($saldo==0?'green':'lightblue').'" value="' . $cliente->id . '">' . $cliente->celular . '-' . $cliente->icelular . '  -  ' . $cliente->nombre . '  ('.($saldo==0?'Sin Deuda':'').')</option>';
