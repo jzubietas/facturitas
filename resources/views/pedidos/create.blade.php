@@ -23,13 +23,29 @@
             <i class="fas fa-arrow-left"></i>
             ATRAS
         </button>
-    </div>s
+    </div>
     {!! Form::close() !!}
     @include('pedidos.modal.AddRuc')
-    @include('pedidos.modal.copiarinfo') 
+    @include('pedidos.modal.copiarinfo')
     @include('pedidos.modal.historial')
     @include('pedidos.modal.historial2')
     @include('pedidos.modal.activartiempo')
+
+
+    <x-simple-modal id="previsualizar_modal_pedido" title="Previsualizar Pedido" size="lg">
+        <x-slot name="body">
+            <div class="">
+                <button type="button" onclick="copyElement('#pedido_visualizar_content')" class="btn btn-outline-dark">
+                    <i class="fa fa-copy"></i> Copiar
+                </button>
+                <textarea class="form-control w-100" cols="20" rows="15" id="pedido_visualizar_content"></textarea>
+            </div>
+        </x-slot>
+
+        <x-slot name="footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+        </x-slot>
+    </x-simple-modal>
 @endsection
 
 @section('css')
@@ -46,6 +62,12 @@
             background: white !important;
         }
     </style>
+    <script>
+        window.copyElement=function (el) {
+            $(el).select();
+            window.document.execCommand("copy");
+        }
+    </script>
 @stop
 
 @section('js')
@@ -68,24 +90,6 @@
             )
         </script>
     @endif
-
-
-
-    <script>
-        /*$('#cliente_id').select2({
-                                  language: {
-
-                                    noResults: function() {
-
-                                      return "No se encontró al cliente” ";
-                                    },
-                                    searching: function() {
-
-                                      return "Buscando..";
-                                    }
-                                  }
-                                });*/
-    </script>
 
     <script>
         ///fin
@@ -373,10 +377,36 @@
         }*/
     </script>
 
-
-
     <script>
         $(document).ready(function () {
+
+            $("#previsualizar_modal_pedido").on('show.bs.modal',function () {
+                let pruc = $('#pruc').val();
+                let pempresa = $('#pempresa').val();
+                let pmes = $('#pmes').val();
+                let panio = $('#panio').val();
+                let pcantidad = $('#pcantidad').val();
+                let ptipo_banca = $('#ptipo_banca').val();
+                let pdescripcion = $('#pdescripcion').val();
+                let pnota = $('#pnota').val();
+
+                var insertData=`
+PEDIDO
+__________________________________
+*CANTIDAD* ${pcantidad}
+*RUC* ${pruc}
+*RAZON SOCIAL* ${pempresa}
+*MES* ${pmes}
+*AÑO* ${panio}
+*FISICO O ELECTRONICO* ${ptipo_banca}
+*DESCRIPCIÓN*
+    ${pdescripcion}
+*NOTA*
+    ${pnota}
+__________________________________
+`;
+              $("#pedido_visualizar_content").val(insertData)
+            })
 
             $(document).on("submit", "#formulario", function (event) {
                 event.preventDefault();
@@ -786,11 +816,11 @@
                     "autoWidth": false,
                     rowCallback: function (row, data, index) {
                     },
-                    columns: [{
+                    columns: [/*{
                         data: 'DT_RowIndex',
                         name: 'DT_RowIndex',
                         sWidth: '10%',
-                    },
+                    },*/
                         {
                             data: 'celular',
                             name: 'celular',
@@ -987,7 +1017,7 @@
             });
 
             $(document).on("submit", "#formulariotiempo", function (evento) {
-                event.preventDefault();
+                evento.preventDefault();
 
                 var formData = $("#formulariotiempo").serialize();
                 $.ajax({

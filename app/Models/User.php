@@ -14,7 +14,9 @@ use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
-    use Notifiable;
+    use Notifiable {
+        unreadNotifications as unreadNotificationsLimits;
+    }
     use HasApiTokens;
     use HasFactory;
     use HasProfilePhoto;
@@ -94,11 +96,14 @@ class User extends Authenticatable
         'profile_photo_url'
     ];
 
-    public function encargado(){
-        return $this->belongsTo(self::class,'supervisor');
+    public function encargado()
+    {
+        return $this->belongsTo(self::class, 'supervisor');
     }
-    public function asesoroperario(){
-        return $this->belongsTo(self::class,'operario');
+
+    public function asesoroperario()
+    {
+        return $this->belongsTo(self::class, 'operario');
     }
 
     public function adminlte_desc()
@@ -127,8 +132,13 @@ class User extends Authenticatable
 
         return '/../storage/users/' . $user->profile_photo_path;
     }
+
     /* public function pedidos()
     {
         return $this->hasMany('App\Models\Pedido');
     } */
+    public function unreadNotifications()
+    {
+        return $this->unreadNotificationsLimits()->limit(15);
+    }
 }
