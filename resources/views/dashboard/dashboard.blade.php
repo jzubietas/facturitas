@@ -123,6 +123,7 @@
 
 
 
+
     @endforeach
     ]);
 
@@ -391,32 +392,6 @@
         </div>
         <div class="container-fluid">
             <div class="row">
-                @if(auth()->user()->rol=\App\Models\User::ROL_ADMIN)
-                    <div class="col-lg-4">
-                        <div class="card">
-                            <div class="card-header">
-                                <h3>Definir contraseña para anular pedidos</h3>
-                            </div>
-                            <div class="card-body">
-                                <div class="row">
-                                    <div class="col-md-8">
-                                        <div class="form-group">
-                                            <input id="pedido_password" class="form-control"
-                                                   placeholder="Generar contraseña">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <button class="btn btn-success" type="button" id="pedido_change_password">
-                                                Guardar contraseña
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                @endif
                 <div class="col-lg-12">
                     <div class="card">
                         <div class="card-header">Buscar Cliente/RUC</div>
@@ -977,30 +952,6 @@
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                         }
                     });
-                    $("#pedido_change_password").click(function () {
-                        var password = $("#pedido_password").val();
-                        if (!password) {
-                            Swal.fire(
-                                'El campo de contraseña no debe estar vacio',
-                                '',
-                                'warning'
-                            )
-                        }
-                        $.post('{{route('settings.store-setting')}}', {
-                            key: 'pedido_password',
-                            value: password
-                        }).done(function (a, b, c) {
-                            if (c.status === 200) {
-                                Swal.fire(
-                                    'Contraseña cambiada',
-                                    '',
-                                    'success'
-                                )
-                            }
-                        }).always(function (){
-                            $("#pedido_password").val("");
-                        })
-                    })
 
                     $("#buttom_search_cliente_clear").click(function () {
                         $("#search_content_result").html('');
