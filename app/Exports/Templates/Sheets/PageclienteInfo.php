@@ -363,7 +363,7 @@ class PageclienteInfo extends ExportYear implements WithColumnFormatting, FromCo
             }
             else if($event->sheet->getCellByColumnAndRow($row_cell_,$row->getRowIndex())->getValue()=='ABANDONO')
             {
-                $event->sheet->styleCells($letter_cell.$row->getRowIndex())->applyFromArray($style_abandono);
+                $event->sheet->getStyle($letter_cell.$row->getRowIndex())->applyFromArray($style_abandono);
             }
             else if($event->sheet->getCellByColumnAndRow($row_cell_,$row->getRowIndex())->getValue()=='ABANDONO RECIENTE')
             {
