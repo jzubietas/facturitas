@@ -97,6 +97,7 @@ class SobreController extends Controller
                     'pedidos.created_at as fecha',
                     'pedidos.condicion_envio',
                     'pedidos.envio',
+                    'pedidos.codigo',
                     'pedidos.destino',
                     'pedidos.direccion',
                     'dp.envio_doc',
