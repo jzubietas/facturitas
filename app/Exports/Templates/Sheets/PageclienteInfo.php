@@ -74,6 +74,55 @@ class PageclienteInfo extends ExportYear implements WithColumnFormatting, FromCo
         return 'Info de Cliente';
     }
 
+    public function columnWidths(): array
+    {
+        return [
+            'A' => 8
+            ,'B' => 8
+            ,'C' => 8
+            ,'D' => 8
+            ,'E' => 8
+            ,'F' => 8
+            ,'G' => 8
+            ,'H' => 8
+            ,'I' => 8
+            ,'J' => 8
+            ,'K' => 8
+            ,'L' => 8
+            ,'M' => 8
+            ,'N' => 8
+            ,'O' => 8
+            ,'P' => 8
+            ,'Q' => 8
+            ,'R' => 8
+            ,'S' => 8
+            ,'T' => 8
+            ,'U' => 8
+            ,'V' => 8
+            ,'W' => 8
+            ,'X' => 8
+            ,'Y' => 8
+            ,'Z' => 8
+            ,'AA' => 8
+            ,'AB' => 8
+            ,'AC' => 8
+            ,'AD' => 8
+            ,'AE' => 8
+            ,'AF' => 8
+            ,'AG' => 8
+            ,'AH' => 8
+            ,'AI' => 8
+            ,'AJ' => 8
+            ,'AK' => 8
+            ,'AL' => 8
+            ,'AM' => 8
+            ,'AN' => 8
+            ,'AO' => 8
+            ,'AP' => 8
+            ,'AQ' => 8
+        ];
+    }
+
     public function map($model): array
     {
         //mapear datos del model que no esten la tabla

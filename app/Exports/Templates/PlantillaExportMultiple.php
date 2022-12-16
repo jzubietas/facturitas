@@ -5,6 +5,9 @@ namespace App\Exports\Templates;
 use App\Exports\Templates\Sheets\PageclienteInfo;
 use App\Exports\Templates\Sheets\PageclienteSituacion;
 use App\Exports\Templates\Sheets\PageclienteOctubre;
+use App\Exports\Templates\Sheets\PageclienteinfoSetiembre;
+use App\Exports\Templates\Sheets\PageclienteinfoAgosto;
+use App\Exports\Templates\Sheets\PageclienteinfoJulio;
 use App\Exports\Templates\Sheets\PageclienteinfoOctubre;
 use App\Exports\Templates\Sheets\PageclienteNoviembre;
 use App\Exports\Templates\Sheets\PageclienteinfoNoviembre;
@@ -27,12 +30,16 @@ class PlantillaExportMultiple implements WithMultipleSheets
     public function sheets(): array
     {
         return [
+            new PageclienteSituacion(),
             new PageclienteInfo(null,$this->anio),
-            new PageclienteOctubre(),
+            new PageclienteinfoJulio(),
+            new PageclienteinfoAgosto(),
+            new PageclienteinfoSetiembre(),
+            //new PageclienteOctubre(),
             new PageclienteinfoOctubre(),
-            new PageclienteNoviembre(),
+            //new PageclienteNoviembre(),
             new PageclienteinfoNoviembre(),
-            new PageclienteDiciembre(),
+            //new PageclienteDiciembre(),
             new PageclienteinfoDiciembre(),
         ];
     }
