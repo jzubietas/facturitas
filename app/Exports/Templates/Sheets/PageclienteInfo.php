@@ -282,7 +282,7 @@ class PageclienteInfo extends ExportYear implements WithColumnFormatting, FromCo
         $color_recuperadoabandono='3a86ff';
         $color_recuperadoreciente='00b4d8';
         $color_nuevo='b5e48c';
-        $color_basefria='000000';
+        $color_basefria='ffffff';
         $color_abandono='d62828';
         $color_abandonoreciente='fca311';
         $color_default='eff7f6';
