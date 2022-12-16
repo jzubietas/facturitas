@@ -1137,6 +1137,43 @@ class EnvioController extends Controller
         else{
 
 
+            dd($request);
+            exit;
+
+            /* actualizando el estado en la tabla pedido por id a  los nuevos estados */
+
+
+            $_destino=$request->destino;
+            
+            $_pedido_id='';
+            $_pedido = Pedido::find($_pedido_id);
+                    
+            if ($_destino=='LIMA')
+
+            {
+                    $_pedido->update([
+                        'condicion_envio' => Pedido::SOBRE_ENVIAR,
+                        'condicion_envio_code' => Pedido::SOBRE_ENVIAR_INT
+                    ]);
+
+            }
+
+            else {
+
+                $_pedido->update([
+                    'condicion_envio' => Pedido::COURIER,
+                    'condicion_envio_code' => Pedido::COURIER_INT
+                ]);
+
+            }
+        
+
+
+
+            
+
+
+
              /* agregando pedidos a la tabla direccion_grupos (campos codigos, productos) */
 
              $lista_productos='';
@@ -1174,7 +1211,7 @@ class EnvioController extends Controller
             $direccion_grupo->save();
 
             
-
+        
 
 
             $count_pedidos=count((array)$array_pedidos);
