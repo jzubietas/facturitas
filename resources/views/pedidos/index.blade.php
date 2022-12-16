@@ -486,32 +486,32 @@
 
             var urledit = '{{ route("pedidos.edit", ":id") }}';
             urledit = urledit.replace(':id', row.id);
-              data = '<div class="row">';
+              data = '<div class="dropdown"><button class="btn btn-option font-14 dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">  Opciones </button><div class="dropdown-menu" aria-labelledby="dropdownMenuButton">';
             @can('pedidos.pedidosPDF')
-              data = data+'<div class="col-lg-12" style="margin-top:4px;"><a href="'+urlpdf+'" class="btn btn-info btn-sm w-100" target="_blank"><i class="fa fa-file-pdf"></i> PDF</a></div>';
+              data = data+'<a href="'+urlpdf+'" class="btn-sm dropdown-item" target="_blank"><i class="fa fa-file-pdf text-primary"></i> Ver PDF</a>';
             @endcan
             @can('pedidos.show')
-              data = data+'<div class="col-lg-12" style="margin-top:4px;"><a href="'+urlshow+'" class="btn btn-info btn-sm w-100"><i class="fas fa-eye"></i> VER</a></div>';
+              data = data+'<a href="'+urlshow+'" class="btn-sm dropdown-item"><i class="fas fa-eye text-success"></i> Ver pedido</a>';
             @endcan
             @can('pedidos.edit')
               if(row.condicion_pa==0)
               {
-                data = data+'<div class="col-lg-12" style="margin-top:4px;"><a href="'+urledit+'" class="btn btn-warning btn-sm w-100"> Editar</a></div>';
+                data = data+'<a href="'+urledit+'" class="btn-sm dropdown-item"><i class="fas fa-edit text-warning" aria-hidden="true"></i> Editar</a>';
               }
             @endcan
             @can('pedidos.destroy')
             if(row.estado==0)
             {
-              data = data+'<div class="col-lg-12" style="margin-top:4px;"><a href="#" class="btn btn-danger btn-sm w-100" data-target="#modal-restaurar" data-toggle="modal" data-restaurar="'+row.id+'" ><i class="fas fa-check"></i> Restaurar</a><br>';
+              data = data+'<a href="#" class="btn-sm dropdown-item" data-target="#modal-restaurar" data-toggle="modal" data-restaurar="'+row.id+'" ><i class="fas fa-check text-secondary"></i> Restaurar</a>';
             }else{
               if(!row.pendiente_anulacion && row.condicion_pa==0)
               {
-                data = data+'<div class="col-lg-12" style="margin-top:4px;"><a href="" class="btn btn-danger btn-sm w-100" data-target="#modal-delete" data-toggle="modal" data-delete="'+row.id+'" data-responsable="{{ $miidentificador }}"><i class="fas fa-trash-alt"></i> Anular</a></div>';
+                data = data+'<a href="" class="btn-sm dropdown-item" data-target="#modal-delete" data-toggle="modal" data-delete="'+row.id+'" data-responsable="{{ $miidentificador }}"><i class="fas fa-trash-alt text-danger"></i> Anular</a>';
               }
             }
 
             @endcan
-            data = data+'</div>';
+            data = data+'</div></div>';
 
             return data;
           }
