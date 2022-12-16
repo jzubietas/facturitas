@@ -53,10 +53,10 @@ class BasefriaController extends Controller
 
         $data = Cliente::
             join('users as u', 'clientes.user_id', 'u.id')
-            ->select('clientes.id', 
-                    'clientes.nombre', 
-                    'clientes.icelular', 
-                    'clientes.celular', 
+            ->select('clientes.id',
+                    'clientes.nombre',
+                    'clientes.icelular',
+                    'clientes.celular',
                     'u.identificador as identificador',
                     'u.rol'
                     )
@@ -138,9 +138,9 @@ class BasefriaController extends Controller
         } else {
             $data = Cliente::
             join('users as u', 'clientes.user_id', 'u.id')
-            ->select('clientes.id', 
-                    'clientes.nombre', 
-                    'clientes.celular', 
+            ->select('clientes.id',
+                    'clientes.nombre',
+                    'clientes.celular',
                     'u.identificador as identificador',
                     'u.rol'
                     )
@@ -224,24 +224,24 @@ class BasefriaController extends Controller
     {
         $request->validate([
             'nombre' => 'required',
-            'dni' => 'required',
+            //'dni' => 'required',
             'celular' => 'required',
-            'provincia' => 'required',
-            'distrito' => 'required',
-            'direccion' => 'required',
-            'referencia' => 'required',
+            //'provincia' => 'required',
+            //'distrito' => 'required',
+           // 'direccion' => 'required',
+           // 'referencia' => 'required',
             'porcentaje' => 'required',
         ]);
         //$id=null;
         //Selection::whereId($id)->update($request->all());
         $cliente = Cliente::where('clientes.id',$request->hiddenID)->update([
             'nombre' => $request->nombre,
-            'dni' => $request->dni,
+            //'dni' => $request->dni,
             'celular' => $request->celular,
-            'provincia' => $request->provincia,
-            'distrito' => $request->distrito,
-            'direccion' => $request->direccion,
-            'referencia' => $request->referencia,
+            //'provincia' => $request->provincia,
+           // 'distrito' => $request->distrito,
+           // 'direccion' => $request->direccion,
+            //'referencia' => $request->referencia,
             'deuda' => '0',
             'pidio' => '0',
             'tipo' => '1',
