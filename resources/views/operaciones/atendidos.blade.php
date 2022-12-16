@@ -526,6 +526,8 @@
                 }
               @endcan
 
+                  data = data+'</div></div>';
+
               return data;
             }
           },
