@@ -1,3 +1,19 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;400;600;700&family=Work+Sans:wght@300;400&display=swap');
+
+body{
+    font-family: 'Poppins', sans-serif !important;
+    font-size: 14px !important;
+}
+
+.elevation-4 {
+    box-shadow: black 0px 0px 0px !important;
+}
+
+.main-sidebar .nav-header{
+font-weight: bold;
+}
+
+
 .bg-center{ background-position: 50%;}
 
 .cnt-shw { box-shadow: 0 5px 15px rgb(0 0 0 / 10%), 0 0 0 rgb(0 0 0 / 8%) inset;
@@ -13,7 +29,7 @@
     font-weight:bold !important;
 }
 
-.btn-dev{min-width:170px;}
+.btn-dev{ margin:4px;}
 
 .border-right{border-right: 1px solid #e3e3e3;}
 
