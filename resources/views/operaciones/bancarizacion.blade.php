@@ -38,7 +38,8 @@
 
   <div class="card">
     <div class="card-body">
-      <table cellspacing="5" cellpadding="5">
+
+      <table  style="display:none;" cellspacing="5" cellpadding="5">
         <tbody>
           <tr>
             <td>Minimum date:</td>
@@ -312,13 +313,16 @@
 
               var urlver = '{{ route("operaciones.showatender", ":id") }}';
               urlver = urlver.replace(':id', row.id);
-              data = data+'<a href="'+urlver+'" class="btn btn-primary btn-sm"><i class="fas fa-eye"></i> Ver</a><br>';
+
+                data = '<div class="dropdown"><button class="btn btn-option font-14 dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">  Opciones </button><div class="dropdown-menu" aria-labelledby="dropdownMenuButton">';
+
+              data = data+'<a href="'+urlver+'" class="btn-sm dropdown-item"><i class="fas fa-eye text-success"></i> Ver</a>';
 
               var urlpdf = '{{ route("pedidosPDF", ":id") }}';
               urlpdf = urlpdf.replace(':id', row.id);
               @can('operacion.PDF')
-                data = data+'<a href="'+urlpdf+'" class="btn btn-primary btn-sm" target="_blank"><i class="fa fa-file-pdf"></i> PDF</a><br>';
-                data = data+'<a href="" data-target="#modal-envio" data-envio='+row.id+' data-toggle="modal" ><button class="btn btn-success btn-sm">Atender</button></a><br>';
+                data = data+'<a href="'+urlpdf+'" class="btn-sm dropdown-item" target="_blank"><i class="fa fa-file-pdf text-primary"></i> PDF</a>';
+                data = data+'<a href="" class="btn-sm dropdown-item" data-target="#modal-envio" data-envio='+row.id+' data-toggle="modal" ><i class="fa fa-check text-warning" aria-hidden="true"></i> Atender</a>';
               @endcan
 
               @can('operacion.enviar')
@@ -326,8 +330,8 @@
                 {
                   @if (Auth::user()->rol == "Jefe de operaciones" || Auth::user()->rol == "Administrador")
 
-                    data = data+'<a href="" data-target="#modal-envio" data-envio='+row.id+' data-toggle="modal" ><button class="btn btn-success btn-sm">Enviar</button></a><br>';
-                    data = data+'<a href="" data-target="#modal-sinenvio" data-sinenvio='+row.id+' data-toggle="modal" ><button class="btn btn-dark btn-sm">Sin envío</button></a><br>';
+                    data = data+'<a href="" class="btn-sm dropdown-item" data-target="#modal-envio" data-envio='+row.id+' data-toggle="modal" >Enviar</a>';
+                    data = data+'<a href="" class="btn-sm dropdown-item" data-target="#modal-sinenvio" data-sinenvio='+row.id+' data-toggle="modal" >Sin envío</a>';
                   @endif
 
                 }
@@ -335,9 +339,9 @@
 
               if(row.envio=='3' || row.envio=='1')
               {
-                data = data+'<a href="" data-target="#modal-revertir" data-revertir='+row.id+' data-toggle="modal" ><button class="btn btn-danger btn-sm">Revertir</button></a>';
+                data = data+'<a href="" class="btn-sm dropdown-item" data-target="#modal-revertir" data-revertir='+row.id+' data-toggle="modal" ><i class="fa fa-undo text-danger" aria-hidden="true"></i> Revertir</a>';
               }
-
+                data = data+'</div></div>';
               return data;
             }
           },

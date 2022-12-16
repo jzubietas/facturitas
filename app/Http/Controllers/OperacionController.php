@@ -373,9 +373,9 @@ class OperacionController extends Controller
                 ->where('dp.estado', '1')
                 ->where('pedidos.condicion_code', Pedido::ATENDIDO_INT)
                 ->whereIn('pedidos.condicion_envio_code', [Pedido::JEFE_OP_INT])
-                ->whereIn('pedidos.envio', ['2','3'])
+                ->whereIn('pedidos.envio', ['2','3']);
                 //->whereIn('pedidos.envio', ['0'])
-                ->whereBetween( 'pedidos.created_at', [$min, $max]);
+                //->whereBetween( 'pedidos.created_at', [$min, $max]);
 
         if(Auth::user()->rol == "Operario"){
 
@@ -491,10 +491,11 @@ class OperacionController extends Controller
                 ->where('pedidos.estado', '1')
                 ->where('dp.estado', '1')
                 ->where('pedidos.condicion_code', Pedido::ATENDIDO_INT)
-                ->whereIn('pedidos.condicion_envio_code', [Pedido::BANCARIZACION_INT] )
+                ->whereIn('pedidos.condicion_envio_code', [Pedido::BANCARIZACION_INT] );
                 //->whereIn('pedidos.envio', ['1'])
                 //->whereIn('pedidos.envio', ['0'])
-                ->whereBetween( 'pedidos.created_at', [$min, $max]);
+                //->whereBetween( DB::raw('DATE(pedidos.created_at)'), [$min, $max]);
+
 
         if(Auth::user()->rol == "Operario"){
 
