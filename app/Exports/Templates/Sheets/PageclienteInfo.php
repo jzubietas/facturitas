@@ -60,10 +60,9 @@ class PageclienteInfo extends ExportYear implements WithColumnFormatting, FromCo
                 ,'clientes.pidio'
                 ,'clientes.situacion'
                 ,DB::raw("(select DATE_FORMAT(dp1.created_at,'%Y-%m-%d %h:%i:%s') from pedidos dp1 where dp1.cliente_id=clientes.id order by dp1.created_at desc limit 1) as fecha")
-
                 ,DB::raw(" (select (dp.codigo) from pedidos dp where dp.cliente_id=clientes.id order by dp.created_at desc limit 1) as codigo ")
             )
-        //->whereIn('clientes.id',[1,2,3])
+        //->whereIn('clientes.id',[1,2,3,4,5,6,7,8,9,10])
         ->where('clientes.estado', '1')
         ->where('clientes.tipo', '1')
         ->get();
@@ -267,30 +266,8 @@ class PageclienteInfo extends ExportYear implements WithColumnFormatting, FromCo
         00b4d8		RECUPERADO RECIENTE
         3a86ff		RECUPERADO ABANDONO
         a9def9		RECURRENTE*/
-        
-        $style_recurrente = array(
-            [
-                'alignment' => [
-                    'horizontal' => Alignment::HORIZONTAL_CENTER,
-                ],
-                'fill' => [
-                    'fillType' => Fill::FILL_SOLID,
-                    'color' => ['rgb' => '336655']
-                ]
-            ]
-        );
-        $stylerecuperadoabandono = array(
-            [
-                'alignment' => [
-                    'horizontal' => Alignment::HORIZONTAL_CENTER,
-                ],
-                'fill' => [
-                    'fillType' => Fill::FILL_SOLID,
-                    'color' => ['rgb' => '336655']
-                ]
-            ]
-        );
-        $stylerecuperadoreciente = array(
+
+        /*$stylerecuperadoreciente = array(
             'alignment' => array(
                 'horizontal' => Alignment::HORIZONTAL_JUSTIFY,
             ),
@@ -300,180 +277,123 @@ class PageclienteInfo extends ExportYear implements WithColumnFormatting, FromCo
                     'rgb' => 'bfd200',
                 ]
             ],
-        );
-        $stylenuevo = array(
-            'alignment' => array(
-                'horizontal' => Alignment::HORIZONTAL_JUSTIFY,
-            ),
-            'fill' => [
-                'fillType' => Fill::FILL_SOLID,
-                'startColor' => [
-                    'rgb' => 'ffcfd2',
-                ]
-            ],
-        );
-        $stylebasefria = array(
-            'alignment' => array(
-                'horizontal' => Alignment::HORIZONTAL_JUSTIFY,
-            ),
-            'fill' => [
-                'fillType' => Fill::FILL_SOLID,
-                'startColor' => [
-                    'rgb' => 'eff7f6',
-                ]
-            ],
-        );
-        $styleabandono = array(
-            'alignment' => array(
-                'horizontal' => Alignment::HORIZONTAL_JUSTIFY,
-            ),
-            'fill' => [
-                'fillType' => Fill::FILL_SOLID,
-                'startColor' => [
-                    'rgb' => 'ff4d6d',
-                ]
-            ],
-        );
-        $styleabandonoreciente = array(
-            [
-                'alignment' => [
-                    'horizontal' => Alignment::HORIZONTAL_CENTER,
-                ],
-                'fill' => [
+        );*/
+        $color_recurente='a9def9';
+        $color_recuperadoabandono='3a86ff';
+        $color_recuperadoreciente='00b4d8';
+        $color_nuevo='b5e48c';
+        $color_basefria='000000';
+        $color_abandono='d62828';
+        $color_abandonoreciente='fca311';
+        $color_default='eff7f6';
+
+        $style_recurrente = array(
+                'fill' => array(
                     'fillType' => Fill::FILL_SOLID,
-                    'color' => ['rgb' => 'e85d04']
-                ]
-            ]
+                    'startColor' => array('argb' => $color_recurente)
+                )
+        );
+        $style_recuperadoabandono = array(
+                'fill' => array(
+                    'fillType' => Fill::FILL_SOLID,
+                    'startColor' => array('argb' => $color_recuperadoabandono)
+                )
+        );
+        $style_recuperadoreciente = array(
+            'fill' => array(
+                'fillType' => Fill::FILL_SOLID,
+                'startColor' => array('argb' => $color_recuperadoreciente)
+            )
+        );
+        $style_nuevo = array(
+            'fill' => array(
+                'fillType' => Fill::FILL_SOLID,
+                'startColor' => array('argb' => $color_nuevo)
+            )
+        );
+        $style_basefria = array(
+            'fill' => array(
+                'fillType' => Fill::FILL_SOLID,
+                'startColor' => array('argb' => $color_basefria)
+            )
+        );
+        $style_abandono = array(
+            'fill' => array(
+                'fillType' => Fill::FILL_SOLID,
+                'startColor' => array('argb' => $color_abandono)
+            )
+        );
+        $style_abandonoreciente = array(
+            'fill' => array(
+                'fillType' => Fill::FILL_SOLID,
+                'startColor' => array('argb' => $color_abandonoreciente)
+            )
         );
         $styledefault = array(
-            [
-                'alignment' => [
-                    'horizontal' => Alignment::HORIZONTAL_CENTER,
-                ],
-                'fill' => [
-                    'fillType' => Fill::FILL_SOLID,
-                    'color' => ['rgb' => '000000']
-                ]
-            ]
+            'fill' => array(
+                'fillType' => Fill::FILL_SOLID,
+                'startColor' => array('argb' => $color_default)
+            )
         );
 
-        /*
-         * RECURRENTE-----90e0ef
-            RECUPERADO ABANDONO----b5e48c
-            RECUPERADO RECIENTE---bfd200
-            NUEVO------ffcfd2
-            BASE FRIA----eff7f6
-            ABANDONO----ff4d6d
-            ABANDONO RECIENTE----e85d04
-         * */
-
+        $row_cell_=17;
+        $letter_cell='Q';
         foreach ($event->sheet->getRowIterator() as $row)
         {
-            if($event->sheet->getCellByColumnAndRow(17,$row->getRowIndex())->getValue()=='RECURRENTE')
+            if($row->getRowIndex()==1)continue;
+            if($event->sheet->getCellByColumnAndRow($row_cell_,$row->getRowIndex())->getValue()=='RECURRENTE')
             {
-                $event->sheet->getStyle("Q".$row->getRowIndex())->applyFromArray($style_recurrente);
+                $event->sheet->getStyle($letter_cell.$row->getRowIndex())->applyFromArray($style_recurrente);
             }
-            else if($event->sheet->getCellByColumnAndRow(17,$row->getRowIndex())->getValue()=='RECUPERADO ABANDONO')
+            else if($event->sheet->getCellByColumnAndRow($row_cell_,$row->getRowIndex())->getValue()=='RECUPERADO ABANDONO')
             {
-                $event->sheet->getStyle("Q".$row->getRowIndex())->applyFromArray($stylerecuperadoabandono);
+                $event->sheet->getStyle($letter_cell.$row->getRowIndex())->applyFromArray($style_recuperadoabandono);
             }
-            else if($event->sheet->getCellByColumnAndRow(17,$row->getRowIndex())->getValue()=='RECUPERADO RECIENTE')
+            else if($event->sheet->getCellByColumnAndRow($row_cell_,$row->getRowIndex())->getValue()=='RECUPERADO RECIENTE')
             {
-                $event->sheet->getStyle("Q".$row->getRowIndex())->applyFromArray($stylerecuperadoreciente);
+                $event->sheet->getStyle($letter_cell.$row->getRowIndex())->applyFromArray($style_recuperadoreciente);
             }
-            else if($event->sheet->getCellByColumnAndRow(17,$row->getRowIndex())->getValue()=='NUEVO')
+            else if($event->sheet->getCellByColumnAndRow($row_cell_,$row->getRowIndex())->getValue()=='NUEVO')
             {
-                $event->sheet->getStyle("Q".$row->getRowIndex())->applyFromArray($stylenuevo);
+                $event->sheet->getStyle($letter_cell.$row->getRowIndex())->applyFromArray($style_nuevo);
             }
-            else if($event->sheet->getCellByColumnAndRow(17,$row->getRowIndex())->getValue()=='BASE FRIA')
+            else if($event->sheet->getCellByColumnAndRow($row_cell_,$row->getRowIndex())->getValue()=='BASE FRIA')
             {
-                $event->sheet->getStyle("Q".$row->getRowIndex())->applyFromArray($stylebasefria);
+                $event->sheet->getStyle($letter_cell.$row->getRowIndex())->applyFromArray($style_basefria);
             }
-            else if($event->sheet->getCellByColumnAndRow(17,$row->getRowIndex())->getValue()=='ABANDONO')
+            else if($event->sheet->getCellByColumnAndRow($row_cell_,$row->getRowIndex())->getValue()=='ABANDONO')
             {
-                $event->sheet->getStyle("Q".$row->getRowIndex())->applyFromArray($styleabandono);
+                $event->sheet->styleCells($letter_cell.$row->getRowIndex())->applyFromArray($style_abandono);
             }
-            else if($event->sheet->getCellByColumnAndRow(17,$row->getRowIndex())->getValue()=='ABANDONO RECIENTE')
+            else if($event->sheet->getCellByColumnAndRow($row_cell_,$row->getRowIndex())->getValue()=='ABANDONO RECIENTE')
             {
-                $event->sheet->getStyle("Q".$row->getRowIndex())->applyFromArray($styleabandonoreciente);
+                $event->sheet->getStyle($letter_cell.$row->getRowIndex())->applyFromArray($style_abandonoreciente);
             }else{
-                $event->sheet->getStyle("Q".$row->getRowIndex())->applyFromArray($styledefault);
+                $event->sheet->getStyle($letter_cell.$row->getRowIndex())->applyFromArray($styledefault);
             }
 
-            //$row->getRowIndex();
         }
 
-        /*$event->sheet->getStyleByColumnAndRow(3,3,)->applyFromArray(array(
-            'fill' => array(
-                'type' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
-                'color' => array('rgb' => 'FF0000')
-            )
-        ));*/
-        //#800080
-
-        /*foreach ($event->sheet->getRowIterator() as $row) {
-            $cellIterator=$row;
-
-                foreach($cellIterator as $cell)
-                {
-                    if($cell->getValue() != 'ABANDONO') {
-                        $event->sheet->getStyle('T' . $cell->getColumn())->applyFromArray(
-                            array(
-                                'fill' => array(
-                                    'type' => PHPExcel_Style_Fill::FILL_SOLID,
-                                    'color' => array('rgb' => 'FF0000')
-                                )
-                            )
-                        );
-                    } else {
-                        $event->sheet->getStyle('T' . $cell->getColumn())->applyFromArray(
-                            array(
-                                'fill' => array(
-                                    'type' => PHPExcel_Style_Fill::FILL_SOLID,
-                                    'color' => array('rgb' => 'FF0000')
-                                )
-                            )
-                        );
-                    }
-
-
-
-            }
-        }*/
         /*echo 'ROW: ', $cell->getRow(), PHP_EOL;
                    echo 'COLUMN: ', $cell->getColumn(), PHP_EOL;
                    echo 'COORDINATE: ', $cell->getCoordinate(), PHP_EOL;
                    echo 'RAW VALUE: ', $cell->getValue(), PHP_EOL;*/
 
-
-        /*$event->sheet->styleCells(
-            'T',
-            [
-                'alignment' => [
-                    'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
-                ],
-                'fill' => [
-                    'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
-                    'color' => ['rgb' => '996633']
-                ]
-            ]
-        );*/
-
-//Range Columns
-        /*
-        $event->sheet->styleCells(
-            'Q',
-            [
-                'alignment' => [
-                    'horizontal' => Alignment::HORIZONTAL_CENTER,
-                ],
-                'fill' => [
-                    'fillType' => Fill::FILL_SOLID,
-                    'color' => ['rgb' => '336655']
-                ]
-            ]
-        ); */
-    }
+        //Range Columns
+                /*
+                $event->sheet->styleCells(
+                    'Q',
+                    [
+                        'alignment' => [
+                            'horizontal' => Alignment::HORIZONTAL_CENTER,
+                        ],
+                        'fill' => [
+                            'fillType' => Fill::FILL_SOLID,
+                            'color' => ['rgb' => '336655']
+                        ]
+                    ]
+                ); */
+            }
 
 
 }
