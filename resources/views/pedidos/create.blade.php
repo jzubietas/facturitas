@@ -26,7 +26,7 @@
     </div>s
     {!! Form::close() !!}
     @include('pedidos.modal.AddRuc')
-    @include('pedidos.modal.copiarinfo')
+    @include('pedidos.modal.copiarinfo') 
     @include('pedidos.modal.historial')
     @include('pedidos.modal.historial2')
     @include('pedidos.modal.activartiempo')
