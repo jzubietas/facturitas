@@ -1339,7 +1339,7 @@ class PedidoController extends Controller
             //->where('pedidos.estado', '1')
             ->where('pedidos.id', $pedido->id)
             //->where('dp.estado', '1')
-            ->groupBy(
+            /*->groupBy(
                 'pedidos.id',
                 'c.nombre',
                 'c.celular',
@@ -1373,6 +1373,7 @@ class PedidoController extends Controller
                 'pedidos.fecha_anulacion_confirm',
                 'pedidos.responsable',
             )
+            */
             ->orderBy('pedidos.created_at', 'DESC')
             ->get();
 
