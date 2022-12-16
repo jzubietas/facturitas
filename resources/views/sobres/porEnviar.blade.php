@@ -561,7 +561,9 @@
         var fd2=new FormData();
         //return false;
         let val_cliente=$("#cliente_id").val();
+          let val_cod_pedido=$("#cod_pedido").val();
         fd2.append('cliente_id', val_cliente);
+          fd2.append('cod_pedido', val_cod_pedido);
 
         let val_nombre=$("#nombre").val();
         let val_contacto=$("#celular").val();
