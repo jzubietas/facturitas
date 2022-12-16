@@ -1338,41 +1338,7 @@ class PedidoController extends Controller
             //->where('pedidos.estado', '1')
             ->where('pedidos.id', $pedido->id)
             //->where('dp.estado', '1')
-            ->groupBy(
-                'pedidos.id',
-                'c.nombre',
-                'c.celular',
-                'u.name',
-                'dp.codigo',
-                'dp.nombre_empresa',
-                'dp.mes',
-                'dp.anio',
-                'dp.ruc',
-                'dp.cantidad',
-                'dp.tipo_banca',
-                'dp.porcentaje',
-                'dp.courier',
-                'dp.ft',
-                'dp.descripcion',
-                'dp.nota',
-                'dp.adjunto',
-                'dp.total',
-                'dp.envio_doc',
-                'dp.fecha_envio_doc',
-                'dp.cant_compro',
-                'dp.fecha_envio_doc_fis',
-                'dp.fecha_recepcion',
-                'pedidos.condicion',
-                'pedidos.created_at',
-                'pedidos.path_adjunto_anular',
-                'pedidos.path_adjunto_anular_disk',
-                'pedidos.pendiente_anulacion',
-                'pedidos.user_anulacion_id',
-                'pedidos.fecha_anulacion',
-                'pedidos.fecha_anulacion_confirm',
-                'pedidos.responsable',
 
-            )
             ->orderBy('pedidos.created_at', 'DESC')
             ->get();
 
@@ -1849,11 +1815,9 @@ class PedidoController extends Controller
             ->addIndexColumn()
             ->addColumn('action', function ($pedido) {
 
-                $btn = ' <div class="dropdown">
-  <button class="btn btn-option font-14 dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-    Opciones
-  </button>
-  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">';
+                $btn = ' <div>
+
+  <ul class="" aria-labelledby="dropdownMenuButton">';
 
                 $btn = $btn . '
                 <a href="' . route('pedidosPDF', data_get($pedido, 'id')) . '" class="btn-sm dropdown-item" target="_blank"><i class="fa fa-file-pdf text-primary"></i> Ver PDF</a>';
@@ -1872,7 +1836,7 @@ class PedidoController extends Controller
 
                 }
 
-                $btn = $btn . '</div></div>';
+                $btn = $btn . '</ul></div>';
 
                 return $btn;
             })
