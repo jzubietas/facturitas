@@ -113,10 +113,11 @@ class EnvioController extends Controller
         $pedidos_lima = DireccionGrupo::join('direccion_envios as de','direccion_grupos.id','de.direcciongrupo')
             ->join('clientes as c', 'c.id', 'de.cliente_id')
             ->join('users as u', 'u.id', 'c.user_id')
-            ->join('pedidos as p', 'p.codigo', 'direccion_grupos.codigos')
+           // ->join('pedidos as p', 'p.codigo', 'direccion_grupos.codigos')
 
-
-            ->where('p.condicion_envio_code',Pedido::EN_REPARTO_INT)
+           ->where('direccion_grupos.condicion_envio_code',Pedido::EN_REPARTO_INT)
+          
+            //->where('p.condicion_envio_code',Pedido::EN_REPARTO_INT)
             ->where('direccion_grupos.estado','1')
            // ->whereNull('direccion_grupos.subcondicion_envio')
             ->select(
@@ -142,14 +143,16 @@ class EnvioController extends Controller
                 'direccion_grupos.correlativo as correlativo'
             );
 
+        
         $pedidos_provincia = DireccionGrupo::join('gasto_envios as de','direccion_grupos.id','de.direcciongrupo')
             ->join('clientes as c', 'c.id', 'de.cliente_id')
             ->join('users as u', 'u.id', 'c.user_id')
-            ->join('pedidos as p', 'p.codigo', 'direccion_grupos.codigos')
+          //  ->join('pedidos as p', 'p.codigo', 'direccion_grupos.codigos')
 
-            ->where('p.condicion_envio_code',Pedido::EN_REPARTO_INT)
+          //  ->where('p.condicion_envio_code',Pedido::EN_REPARTO_INT)
+            ->where('direccion_grupos.condicion_envio_code',Pedido::EN_REPARTO_INT)
             ->where('direccion_grupos.estado','1')
-            ->whereNull('direccion_grupos.subcondicion_envio')
+         //   ->whereNull('direccion_grupos.subcondicion_envio')
 
             ->select(
                 'direccion_grupos.id',
@@ -180,7 +183,7 @@ class EnvioController extends Controller
         if(Auth::user()->rol == "Asesor"){
             $pedidos_lima=$pedidos_lima->Where('u.identificador',Auth::user()->identificador);
 
-            $pedidos_provincia=$pedidos_provincia->Where('u.identificador',Auth::user()->identificador);
+          //  $pedidos_provincia=$pedidos_provincia->Where('u.identificador',Auth::user()->identificador);
 
         }else if(Auth::user()->rol == "Encargado"){
             $usersasesores = User::where('users.rol', 'Asesor')
@@ -192,10 +195,10 @@ class EnvioController extends Controller
                 ->pluck('users.identificador');
 
             $pedidos_lima=$pedidos_lima->WhereIn('u.identificador',$usersasesores);
-            $pedidos_provincia=$pedidos_provincia->WhereIn('u.identificador',$usersasesores);
+           // $pedidos_provincia=$pedidos_provincia->WhereIn('u.identificador',$usersasesores);
         }else if(Auth::user()->rol == "Jefe de llamadas"){
             $pedidos_lima=$pedidos_lima->where('u.identificador','<>','B');
-            $pedidos_provincia=$pedidos_provincia->where('u.identificador','<>','B');
+           // $pedidos_provincia=$pedidos_provincia->where('u.identificador','<>','B');
         }else if(Auth::user()->rol == "Llamadas"){
             $usersasesores = User::where('users.rol', 'Asesor')
                 -> where('users.estado', '1')
@@ -206,12 +209,12 @@ class EnvioController extends Controller
                 ->pluck('users.identificador');
 
             $pedidos_lima=$pedidos_lima->WhereIn('u.identificador',$usersasesores);
-            $pedidos_provincia=$pedidos_provincia->WhereIn('u.identificador',$usersasesores);
+           // $pedidos_provincia=$pedidos_provincia->WhereIn('u.identificador',$usersasesores);
         }
 
 
-        $pedidos = $pedidos_lima->union($pedidos_provincia);
-        $pedidos=$pedidos->get();
+        //$pedidos = $pedidos_lima //->union($pedidos_provincia);
+        $pedidos=$pedidos_lima->get();
 
 
         return Datatables::of($pedidos)
@@ -224,6 +227,9 @@ class EnvioController extends Controller
                     ->make(true);
 
     }
+
+
+
 
     public function DistribuirEnvioid(Request $request)
     {
@@ -991,7 +997,7 @@ class EnvioController extends Controller
             ->join('clientes as c', 'c.id', 'de.cliente_id')
             ->join('users as u', 'u.id', 'c.user_id')
             ->where('direccion_grupos.estado','1')
-            ->where('direccion_grupos.condicion_envio',DireccionGrupo::CE_EN_REPARTO)
+            ->where('direccion_grupos.condicion_envio_code',Pedido::SEG_PROVINCIA_INT)
             ->whereNull('direccion_grupos.subcondicion_envio')
             //->whereIn('direccion_grupos.subcondicion_envio',['REGISTRADO','EN CAMINO','EN TIENDA/AGENTE','NO ENTREGADO'])
             ->select(
