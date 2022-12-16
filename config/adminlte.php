@@ -282,7 +282,7 @@ return [
         [
             'text' => 'Config. Administrador',
             'route'  => 'settings.admin-settings',
-            'can' => '',//admin.configuration
+            'can' => 'admin.configuration',
             'icon'   => 'fas fa-cogs',
             'active' => ['pagos perdonar courier'],
         ],
