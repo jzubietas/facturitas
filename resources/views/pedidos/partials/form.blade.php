@@ -118,8 +118,17 @@
               <input type="text" name="pcourier" id="pcourier" step="0.01" min="0" class="form-control number" value="0" placeholder="Courier...">
           </div>
           <div class="form-group col-lg-3 d-flex justify-content-center align-items-center">
+              <div class="btn-group-vertical" role="group" aria-label="Basic example">
+                  <button type="button" class="btn btn-info btn-lg" id="prev">
+                      <i class="fa fa-link"></i>
+                      Previsualizar PDF
+                  </button>
+                  <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#previsualizar_modal_pedido">
+                      <i class="fa fa-copy"></i>
+                      Previsualizar Modal
+                  </button>
+              </div>
 
-              <a href="#" class="btn btn-info btn-lg" id="prev" name = "prev" target="_blank">Previsualizar</a>
           </div>
           <div class="form-group col-lg-2">
 
