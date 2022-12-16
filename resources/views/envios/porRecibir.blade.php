@@ -309,7 +309,7 @@
             name: 'envio',
             render: function ( data, type, row, meta ) {
              
-                return '<span class="badge badge-danger">Por confirmar recepcion</span>';
+                return '<span class="badge badge-danger">Enviar a Courier</span>';
              
               /*
               El estado del sobre cambia a 1 y luego cambia el estado del pedido
