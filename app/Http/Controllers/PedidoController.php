@@ -1848,17 +1848,17 @@ class PedidoController extends Controller
             ->addIndexColumn()
             ->addColumn('action', function ($pedido) {
 
-                $btn = '<a href="' . route('pedidosPDF', data_get($pedido, 'id')) . '" class="btn btn-dev btn-primary btn-sm" target="_blank"><i class="fa fa-file-pdf"></i> PDF</a>';
-                $btn = $btn . '<a href="' . route('pedidos.show', data_get($pedido, 'id')) . '" class="btn btn-dev btn-info btn-sm"><i class="fas fa-eye"></i> VER</a>';
+                $btn = '<a href="' . route('pedidosPDF', data_get($pedido, 'id')) . '" class="btn btn-dev btn-primary btn-sm" data-toggle="tooltip" data-placement="top" title="Ver PDF" target="_blank"><i class="fa fa-file-pdf"></i></a>';
+                $btn = $btn . '<a href="' . route('pedidos.show', data_get($pedido, 'id')) . '" class="btn btn-dev btn-info btn-sm" data-toggle="tooltip" data-placement="top" title="Ver Pedido"><i class="fas fa-eye"></i></a>';
 
                 if ($pedido->estado > 0) {
 
                     if (Auth::user()->rol == "Super asesor" || Auth::user()->rol == "Administrador") {
-                        $btn = $btn . '<a href="' . route('pedidos.edit', $pedido->id) . '" class="btn btn-dev btn-warning btn-sm">Editar</a>';
+                        $btn = $btn . '<a href="' . route('pedidos.edit', $pedido->id) . '" class="btn btn-dev btn-warning btn-sm" data-toggle="tooltip" data-placement="top" title="Editar Pedido"><i class="fas fa-edit" aria-hidden="true"></i></a>';
                     }
 
                     if (Auth::user()->rol == "Administrador") {
-                        $btn = $btn . '<a href="" data-target="#modal-delete" data-toggle="modal" data-delete="' . $pedido->id . '"><button class="btn btn-dev btn-danger btn-sm"><i class="fas fa-trash-alt"></i> Anular</button></a>';
+                        $btn = $btn . '<a href="" data-target="#modal-delete" data-toggle="modal" data-delete="' . $pedido->id . '"><button class="btn btn-dev btn-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Anular Pedido"><i class="fas fa-trash-alt"></i></button></a>';
                     }
 
 

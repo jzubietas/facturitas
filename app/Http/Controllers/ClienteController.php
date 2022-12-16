@@ -162,10 +162,6 @@ class ClienteController extends Controller
                 ->pluck('users.identificador');
 
             $data = $data->WhereIn("u.identificador", $usersasesores);
-        } else {
-
-            $data = $data;
-
         }
         //$data=$data->get();
 
@@ -602,16 +598,23 @@ class ClienteController extends Controller
         //ahora con el identificador de  Usuarios
         $mirol = Auth::user()->rol;
         $clientes = null;
-        $clientes = Cliente::join('users as u', 'clientes.user_id', 'u.id')->where('clientes.estado', '1')->where("clientes.tipo", "1");
+        $clientes = Cliente::whereIn('user_id',
+                User::query()->select('users.id')
+                ->whereIn('users.rol',['Asesor',User::ROL_ADMIN])
+                ->where('users.estado','1')
+                ->where('users.identificador',$request->user_id)
+            )
+            ->where('clientes.estado', '1')
+            ->where("clientes.tipo", "1");
         $html = "";
 
         //valida deuda excepto para administrador o por tener tiempo temporal
-
+/*
         if (!$request->user_id || $request->user_id == '') {
             $clientes = $clientes;
         } else {
             $clientes = $clientes->where('u.identificador', $request->user_id);
-        }
+        }*/
         $clientes = $clientes->orderBy('id', 'ASC')
             ->get([
                 'clientes.id',
@@ -645,7 +648,7 @@ class ClienteController extends Controller
                             ->where('pedidos.cliente_id','=', $cliente->id)
                             ->whereEstado(1)
                     )->sum('saldo');
-                   dump($saldo,$cliente->id);
+                   
                     //considerar deuda real
                     if ($cliente->pedidos_mes_deuda > 0 && $cliente->pedidos_mes_deuda_antes == 0) {
                         $html .= '<option '.($saldo==0?'disabled':'').' style="color:'.($saldo==0?'green':'lightblue').'" value="' . $cliente->id . '">' . $cliente->celular . '-' . $cliente->icelular . '  -  ' . $cliente->nombre . '  ('.($saldo==0?'Sin Deuda':'').')</option>';

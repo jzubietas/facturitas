@@ -123,7 +123,7 @@ $(document).ready(function () {
         serverSide: true,
         ajax: "{{ route('basefriatabla') }}",
         initComplete:function(settings,json){
-         
+
         },
         columns: [
         {
@@ -332,12 +332,12 @@ $(document).ready(function () {
     function validarFormulario(evento) {
       evento.preventDefault();
       var nombre = document.getElementById('nombre').value;
-      var dni = document.getElementById('dni').value;
+      /*var dni = document.getElementById('dni').value;*/
       var celular = document.getElementById('celular').value;
-      var provincia = document.getElementById('provincia').value;
+      /*var provincia = document.getElementById('provincia').value;
       var distrito = document.getElementById('distrito').value;
       //var direccion = document.getElementById('direccion').value;
-      var referencia = document.getElementById('referencia').value;
+      var referencia = document.getElementById('referencia').value;*/
       var porcentaje1 = document.getElementById('porcentaje1').value;
       var porcentaje2 = document.getElementById('porcentaje2').value;
       var porcentaje3 = document.getElementById('porcentaje3').value;
@@ -364,7 +364,7 @@ $(document).ready(function () {
             'warning'
           )
         }
-        else if (provincia == ''){
+        /*else if (provincia == ''){
           Swal.fire(
             'Error',
             'Registre la provincia del cliente',
@@ -377,7 +377,7 @@ $(document).ready(function () {
             'Registre el distrito del cliente',
             'warning'
           )
-        }
+        }*/
         /*
         else if (direccion == ''){
           Swal.fire(
@@ -386,7 +386,7 @@ $(document).ready(function () {
             'warning'
           )
         }*/
-        else if (referencia == ''){
+        /*else if (referencia == ''){
           Swal.fire(
             'Error',
             'Registre la referencia del cliente',
@@ -406,7 +406,7 @@ $(document).ready(function () {
             'El DNI debe tener 8 dígitos',
             'warning'
           )
-        }
+        }*/
         else if (porcentaje1 == '0' || porcentaje1 == ''){
           Swal.fire(
             'Error',

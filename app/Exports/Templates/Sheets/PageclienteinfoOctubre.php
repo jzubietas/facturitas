@@ -22,7 +22,7 @@ class PageclienteinfoOctubre extends Export implements WithColumnFormatting,With
                 ,'clientes.icelular'
                 ,'clientes.celular'
                 //,'clientes.situacion'
-                ,DB::raw(" (select a.s_2022_11 from listado_resultados a where a.id=clientes.id ) as situacion ")
+                ,DB::raw(" (select a.s_2022_10 from listado_resultados a where a.id=clientes.id ) as situacion ")
                 ,'clientes.created_at'
             )
             ->where('clientes.estado', '1')

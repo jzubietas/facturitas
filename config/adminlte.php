@@ -751,6 +751,11 @@ return [
                     'asset' => false,
                     'location' => '//cdn.jsdelivr.net/npm/sweetalert2@11',
                 ],
+                [
+                    'type' => 'css',
+                    'asset' => true,
+                    'location' => 'css/boot-dev.css',
+                ],
             ],
         ],
         'Pace' => [

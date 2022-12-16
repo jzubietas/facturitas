@@ -170,14 +170,16 @@
             $.ajax({
                 type:'POST',
                 url:"{{ route('users.asignarencargadopost') }}",
-                data:formData,
+                data:formData
             }).done(function (data) {
+                $("#modal-asignarencargado").modal("hide");
                 Swal.fire(
                     'Usuario asignado correctamente',
                     '',
                     'success'
                 )
-                $("#modal-asignareencargado").modal("hide");
+
+
                 $('#tablaPrincipal').DataTable().ajax.reload();
             });
         });

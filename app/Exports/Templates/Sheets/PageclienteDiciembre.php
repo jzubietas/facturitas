@@ -17,7 +17,8 @@ class PageclienteDiciembre extends Export implements WithColumnFormatting,WithCo
             ->select(
                 DB::raw(" (select '2022') as Ejercicio "),
                 DB::raw(" (select '12') as Periodo "),
-                DB::raw(" (select 'Noviembre') as Periodo2 "),
+                DB::raw(" (select 'Diciembre') as Periodo2 "),
+                //'situacion',
                 'listado_resultados.s_2022_12 as grupo',
                 DB::raw('count(listado_resultados.s_2022_12) as total')
             )
@@ -29,7 +30,7 @@ class PageclienteDiciembre extends Export implements WithColumnFormatting,WithCo
     }
     public function title(): string
     {
-        return 'Noviembre';
+        return 'Diciembre';
     }
     public function map($model): array
     {
