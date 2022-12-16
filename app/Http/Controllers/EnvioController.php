@@ -1137,16 +1137,14 @@ class EnvioController extends Controller
         else{
 
 
-            dd($request);
-            exit;
+          
 
             /* actualizando el estado en la tabla pedido por id a  los nuevos estados */
 
-
             $_destino=$request->destino;
+            $_pedido = Pedido::find($request->cod_pedido);
             
-            $_pedido_id='';
-            $_pedido = Pedido::find($_pedido_id);
+
                     
             if ($_destino=='LIMA')
 
@@ -1168,7 +1166,7 @@ class EnvioController extends Controller
             }
         
 
-
+            
 
             
 
