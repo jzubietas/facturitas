@@ -91,7 +91,7 @@
         <td>{{ $dato['deposito'] }}</td>
         <td>{{ $dato['fecha'] }}</td>
         @if($dato['estadopedido'] == 'RECURRENTE')
-          <td style="background: #44c24b">RECURRENTE</td>
+          <td style="background: #afdfb2">RECURRENTE</td>
         @else
           <td style="background: #e73d3d">ABANDONO</td>
         @endif

@@ -13,6 +13,34 @@ body{
 font-weight: bold;
 }
 
+.badge-success {
+    color: #4a604b !important;
+    background-color: hwb(124deg 69% 13%) !important;
+    padding: 8px !important;
+}
+
+.badge-danger {
+    color: #ad3939 !important;
+    background-color: #efb7b7 !important;
+    padding: 8px !important;
+}
+
+.badge-info {
+    color: #35424a !important;
+    background-color: #62becd !important;
+    padding: 8px !important;
+}
+
+.badge-warning {
+    color: #765f17 !important;
+    background-color: #fde9ab !important;
+    padding: 8px !important;
+}
+
+.badge{
+    margin:2px;
+}
+
 
 .bg-center{ background-position: 50%;}
 

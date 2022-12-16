@@ -9,7 +9,7 @@
       <th width="80px" style="background-color: #4c5eaf; text-align: center; color: white;">DNI</th>
       <th width="80px" style="background-color: #4c5eaf; text-align: center; color: white;">CELULAR</th>
       <th width="80px" style="background-color: #4c5eaf; text-align: center; color: white;">IDENTIFICADOR CELULAR</th>
-      
+
       <th width="80px" style="background-color: #4c5eaf; text-align: center; color: white;">PROVINCIA</th>
       <th width="80px" style="background-color: #4c5eaf; text-align: center; color: white;">DISTRITO</th>
       <th width="80px" style="background-color: #4c5eaf; text-align: center; color: white;">DIRECCION</th>
@@ -23,18 +23,18 @@
       <th width="80px" style="background-color: #4c5eaf; text-align: center; color: white;">COD. PEDIDO</th>
       <th width="80px" style="background-color: #4c5eaf; text-align: center; color: white;">ESTADO PEDIDOS</th>
       <th width="80px" style="background-color: #4c5eaf; text-align: center; color: white;">SITUACION CLIENTE</th>
-      <th width="80px" style="background-color: #ebfa67; text-align: center; color: black;">ENE-{{ $anioa }}</th>      
-      <th width="80px" style="background-color: #ebfa67; text-align: center; color: black;">FEB-{{ $anioa }}</th>      
-      <th width="80px" style="background-color: #ebfa67; text-align: center; color: black;">MAR-{{ $anioa }}</th>      
-      <th width="80px" style="background-color: #ebfa67; text-align: center; color: black;">ABR-{{ $anioa }}</th>      
-      <th width="80px" style="background-color: #ebfa67; text-align: center; color: black;">MAY-{{ $anioa }}</th>      
-      <th width="80px" style="background-color: #ebfa67; text-align: center; color: black;">JUN-{{ $anioa }}</th>      
-      <th width="80px" style="background-color: #ebfa67; text-align: center; color: black;">JUL-{{ $anioa }}</th>      
-      <th width="80px" style="background-color: #ebfa67; text-align: center; color: black;">AGO-{{ $anioa }}</th>      
-      <th width="80px" style="background-color: #ebfa67; text-align: center; color: black;">SET-{{ $anioa }}</th>      
-      <th width="80px" style="background-color: #ebfa67; text-align: center; color: black;">OCT-{{ $anioa }}</th>      
-      <th width="80px" style="background-color: #ebfa67; text-align: center; color: black;">NOV-{{ $anioa }}</th>      
-      <th width="80px" style="background-color: #ebfa67; text-align: center; color: black;">DIC-{{ $anioa }}</th>      
+      <th width="80px" style="background-color: #ebfa67; text-align: center; color: black;">ENE-{{ $anioa }}</th>
+      <th width="80px" style="background-color: #ebfa67; text-align: center; color: black;">FEB-{{ $anioa }}</th>
+      <th width="80px" style="background-color: #ebfa67; text-align: center; color: black;">MAR-{{ $anioa }}</th>
+      <th width="80px" style="background-color: #ebfa67; text-align: center; color: black;">ABR-{{ $anioa }}</th>
+      <th width="80px" style="background-color: #ebfa67; text-align: center; color: black;">MAY-{{ $anioa }}</th>
+      <th width="80px" style="background-color: #ebfa67; text-align: center; color: black;">JUN-{{ $anioa }}</th>
+      <th width="80px" style="background-color: #ebfa67; text-align: center; color: black;">JUL-{{ $anioa }}</th>
+      <th width="80px" style="background-color: #ebfa67; text-align: center; color: black;">AGO-{{ $anioa }}</th>
+      <th width="80px" style="background-color: #ebfa67; text-align: center; color: black;">SET-{{ $anioa }}</th>
+      <th width="80px" style="background-color: #ebfa67; text-align: center; color: black;">OCT-{{ $anioa }}</th>
+      <th width="80px" style="background-color: #ebfa67; text-align: center; color: black;">NOV-{{ $anioa }}</th>
+      <th width="80px" style="background-color: #ebfa67; text-align: center; color: black;">DIC-{{ $anioa }}</th>
       <th width="80px" style="background-color: #ebfa67; text-align: center; color: black;">ENE-{{ $aniop }}</th>
       <th width="80px" style="background-color: #ebfa67; text-align: center; color: black;">FEB-{{ $aniop }}</th>
       <th width="80px" style="background-color: #ebfa67; text-align: center; color: black;">MAR-{{ $aniop }}</th>
@@ -59,9 +59,9 @@
         <td>{{ $dato['asesor'] }}</td>
         <td>{{ $dato['nombre'] }}</td>
         <td>{{ $dato['dni'] }}</td>
-        <td>{{ $dato['celular'] }}</td>     
-        <td>{{ $dato['icelular'] }}</td>   
-        
+        <td>{{ $dato['celular'] }}</td>
+        <td>{{ $dato['icelular'] }}</td>
+
         <td>{{ $dato['provincia'] }}</td>
         <td>{{ $dato['distrito'] }}</td>
         <td>{{ $dato['direccion'] }}</td>
@@ -90,54 +90,54 @@
         <?php }else{ ?>
             <td></td>
         <?php } ?>
-        
+
         <td>{{ $dato['deposito'] }}</td>
         <td>{{ $dato['fecha'] }}</td>
-        <td>{{ $dato['codigo'] }}</td> 
+        <td>{{ $dato['codigo'] }}</td>
         @if($dato['estadopedido'] == 'RECURRENTE')
-          <td style="background: #44c24b">RECURRENTE</td>
+          <td style="background: #afdfb2">RECURRENTE</td>
         @else
           <td style="background: #e73d3d">ABANDONO</td>
         @endif
         <td>
           {{ $dato['situacion'] }}
-        </td> 
+        </td>
         <td>
             {{ $dato['eneroa'] }}
-        </td>        
+        </td>
         <td>
             {{ $dato['febreroa'] }}
-        </td>        
+        </td>
         <td>
             {{ $dato['marzoa'] }}
-        </td>        
+        </td>
         <td>
             {{ $dato['abrila'] }}
-        </td>        
+        </td>
         <td>
             {{ $dato['mayoa'] }}
-        </td>        
+        </td>
         <td>
             {{ $dato['junioa'] }}
-        </td>        
+        </td>
         <td>
             {{ $dato['julioa'] }}
-        </td>        
+        </td>
         <td>
             {{ $dato['agostoa'] }}
-        </td>        
+        </td>
         <td>
             {{ $dato['setiembrea'] }}
-        </td>        
+        </td>
         <td>
             {{ $dato['octubrea'] }}
-        </td>        
+        </td>
         <td>
             {{ $dato['noviembrea'] }}
-        </td>        
+        </td>
         <td>
             {{ $dato['diciembrea'] }}
-        </td>        
+        </td>
         <td>
             {{ $dato['enerop'] }}
         </td>
@@ -176,6 +176,6 @@
         </td>
       </tr>
       <?php $cont++; ?>
-    @endforeach    
+    @endforeach
   </tbody>
 </table>

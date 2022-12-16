@@ -65,7 +65,7 @@
           </tr>
         </tbody>
       </table><br>
-      <table id="tablaPrincipal" class="table table-striped table-responsive">{{-- display nowrap  --}}
+      <table id="tablaPrincipal" class="table table-striped">{{-- display nowrap  --}}
         <thead>
           <tr>
             <th scope="col">Item</th>
@@ -267,12 +267,12 @@
               var pedidodiferencia=data.diferencia;
               //pedidodiferencia=0;
               if(pedidodiferencia==null){
-                $('td:eq(14)', row).css('background', '#ca3a3a').css('color','#ffffff').css('text-align','center').css('font-weight','bold');
+                $('td:eq(14)', row).css('background', '#efb7b7').css('color','#934242').css('text-align','center').css('font-weight','bold');
               }else{
                 if(pedidodiferencia>3){
-                  $('td:eq(14)', row).css('background', '#ca3a3a').css('color','#ffffff').css('text-align','center').css('font-weight','bold');
+                  $('td:eq(14)', row).css('background', '#efb7b7').css('color','#934242').css('text-align','center').css('font-weight','bold');
                 }else{
-                  $('td:eq(14)', row).css('background', '#44c24b').css('text-align','center').css('font-weight','bold');
+                  $('td:eq(14)', row).css('background', '#afdfb2').css('text-align','center').css('font-weight','bold');
                 }
               }
         },
