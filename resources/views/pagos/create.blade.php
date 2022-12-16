@@ -3020,10 +3020,7 @@
 
                 $("#user_id").selectpicker("refresh").trigger("change");
 
-
                 //$("#pcliente_id").val(  ).trigger("change");
-
-
             });
 
 

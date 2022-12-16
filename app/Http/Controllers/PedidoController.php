@@ -1334,6 +1334,7 @@ class PedidoController extends Controller
                 'pedidos.fecha_anulacion',
                 'pedidos.fecha_anulacion_confirm',
                 'pedidos.responsable',
+                'pedidos.condicion_code',
             )
             //->where('pedidos.estado', '1')
             ->where('pedidos.id', $pedido->id)

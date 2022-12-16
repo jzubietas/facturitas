@@ -387,6 +387,9 @@
           data: 'condiciones_aprobado',
           name: 'condiciones_aprobado',
           render: function ( data, type, row, meta ) {
+              if(row.condicion_code==4){
+                  return 'ANULADO';
+              }
             if(data!=null)
             {
               return data;
@@ -427,7 +430,9 @@
           data: 'condicion_envio',
           name: 'condicion_envio',
           render: function ( data, type, row, meta ) {
-
+              if(row.condicion_code==4){
+                  return 'ANULADO';
+              }
             if(row.condicion_envio=='ANULADO'){
                 return 'ANULADO';
             }else if(row.condicion_envio == 0){
@@ -458,6 +463,9 @@
           data: 'diferencia',
           name: 'diferencia',
           render: function ( data, type, row, meta ) {
+              if(row.condicion_code==4){
+                  return '0';
+              }
             if(row.diferencia==null){
               return 'NO REGISTRA PAGO';
             }else{

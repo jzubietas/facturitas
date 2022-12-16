@@ -1497,6 +1497,7 @@ class ClienteController extends Controller
             )
             ->where('pedidos.created_at','<=',now()->subDays(7)->format('Y-m-d H:i:s'))
             ->where('pedidos.cliente_id', $cliente->id)
+            ->where('pedidos.condicion_code','<>',Pedido::ANULADO_INT)
             ->get()
             ->map(function (Pedido $pedido) {
                 $pedido->adelanto = $pedido->pagoPedidos()->whereEstado(1)->sum('abono');

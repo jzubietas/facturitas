@@ -175,6 +175,8 @@
                         </div>
                     </div>
                 </div>
+
+                @if($pedido->condicion_code==\App\Models\Pedido::ANULADO_INT)
                 <div class="card mt-4 border rounded card-body border-secondary">
                     <div class="card-header">
                         <h4 class="text-bold">Detalle de anulación</h4>
@@ -232,6 +234,7 @@
                         </ul>
                     </div>
                 </div>
+                @endif
                 <br>
 
                 <textarea class="form-control" rows="6" placeholder="Cotizacion" name="copiar_cotizacion" cols="50"
