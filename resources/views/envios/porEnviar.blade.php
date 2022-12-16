@@ -164,12 +164,12 @@
         var newOption4 = $('<option value="EN CAMINO">EN CAMINO</option>');
         var newOption5 = $('<option value="EN TIENDA/AGENTE">EN TIENDA/AGENTE</option>');
 
-
+        $('#condicion').empty().append(newOption3);
         
-        if (destino=='LIMA')
-        $('#condicion').empty().append(newOption).append(newOption2).append(newOption3);
-        else
-        $('#condicion').empty().append(newOption).append(newOption2).append(newOption4).append(newOption5).append(newOption3);
+       // if (destino=='LIMA')
+       // $('#condicion').empty().append(newOption).append(newOption2).append(newOption3);
+      //  else
+      //  $('#condicion').empty().append(newOption).append(newOption2).append(newOption4).append(newOption5).append(newOption3);
         
 
         console.log(destino);

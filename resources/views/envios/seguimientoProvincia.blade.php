@@ -170,6 +170,14 @@
           idunico='PED'+idunico;
         }
         $("#modal-enviar .textcode").html(idunico);
+        var newOption = $('<option value="REGISTRADO">REGISTRADO</option>');
+        var newOption2 = $('<option value="NO ENTREGADO">NO ENTREGADO</option>');
+        var newOption3 = $('<option value="ENTREGADO">ENTREGADO</option>');
+
+        var newOption4 = $('<option value="EN CAMINO">EN CAMINO</option>');
+        var newOption5 = $('<option value="EN TIENDA/AGENTE">EN TIENDA/AGENTE</option>');
+
+        $('#condicion').empty().append(newOption3);
 
       });
 

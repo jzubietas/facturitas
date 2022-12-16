@@ -490,18 +490,20 @@
             "visible":true,
             //sWidth:'20%',
             render: function ( data, type, row, meta ) {
-              datass="";
+              datass='<div class="dropdown"><button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Opciones</button><div class="dropdown-menu" aria-labelledby="dropdownMenuButton">';
 
               //si es lima
 
               if ("{{$rol}}" =='Administrador' || "{{$rol}}" =='Logística')
               {
                 if(row.destino=='LIMA')
-                datass=datass+'<a href="#" data-target="#modal-distribuir" data-toggle="modal" data-distribuir="'+row.id+'">'+
-                    '<button class="btn btn-warning btn-sm"><i class="fas fa-envelope"></i> Distribuir</button></a>';
+                datass=datass+'<a class="dropdown-item" href="#" data-target="#modal-distribuir" data-toggle="modal" data-distribuir="'+row.id+'">'+
+                    '<i class="fas fa-envelope"></i> Distribuir</a>';
 
                //datass = datass+ '<a href="" data-target="#modal-revertir" data-toggle="modal" data-recibir="'+row.id+'"><button class="btn btn-info btn-sm"><i class="fas fa-trash"></i> REVERTIR</button></a>';
-                datass = datass+ '<a href="" data-target="#modal-desvincular" data-toggle="modal" data-desvincular="'+row.id+'">    <button class="btn btn-danger btn-sm"><i class="fas fa-trash"></i>DESVINCULAR</button></a>';
+               
+               
+               datass = datass+ '<a class="dropdown-item" href="" data-target="#modal-desvincular" data-toggle="modal" data-desvincular="'+row.id+'"><i class="fas fa-trash"></i>Desvincular</a>'+'</div></div>';
 
               }
 
