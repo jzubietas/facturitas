@@ -20,7 +20,7 @@
        <a href="" data-target="#modal-exportar2" data-toggle="modal" class="dropdown-item" target="blank_"><img src="{{ asset('imagenes/icon-excel.png') }}"> Clientes - Pedidos</a>
        {{--<a href="" data-target="#modal-exportar-v2" data-toggle="modal" class="dropdown-item" target="blank_"><img src="{{ asset('imagenes/icon-excel.png') }}"> Clientes - Situacion</a>--}}
 
-        
+
       </div>
     </div>
     @include('clientes.modal.exportar')
@@ -121,7 +121,7 @@
         transition: all 0.5s ease;
         text-shadow: 10px 2px #6ac7c2;
     }
-    
+
     .modal-lg { max-width: 80% !important; }
 
 
@@ -244,7 +244,7 @@ $(document).ready(function () {
           "autoWidth": false,
           rowCallback: function (row, data, index) {
           },
-          columns: [            
+          columns: [
               {
                   data: 'id',
                   name: 'id',
@@ -424,7 +424,7 @@ $(document).ready(function () {
         serverSide: true,
         ajax: "{{ route('clientestabla') }}",
         initComplete:function(settings,json){
-         
+
         },
         columns: [
         {
@@ -501,6 +501,7 @@ $(document).ready(function () {
 
             @endcan
 
+            data = data+'<a href="" data-target="#modal-historial-situacion-cliente" data-toggle="modal" data-cliente="'+row.id+'"><button class="btn btn-success btn-sm"><i class="fas fa-trash-alt"></i> Historico</button></a>';
             data = data+'<a href="" data-target="#modal-historial-situacion-cliente" data-toggle="modal" data-cliente="'+row.id+'"><button class="btn btn-success btn-sm"><i class="fas fa-trash-alt"></i> Historico</button></a>';
 
             return data;
