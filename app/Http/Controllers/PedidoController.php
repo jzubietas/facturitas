@@ -160,9 +160,9 @@ class PedidoController extends Controller
                 'dp.saldo as diferencia',
                 'pedidos.estado',
                 'pedidos.envio'
-            )
+            );
             //->where('pendiente_anulacion', '<>', 1)
-            ->whereIn('pedidos.condicion_code', [Pedido::POR_ATENDER_INT, Pedido::EN_PROCESO_ATENCION_INT, Pedido::ATENDIDO_INT, Pedido::ANULADO_INT]);
+            //->whereIn('pedidos.condicion_code', [Pedido::POR_ATENDER_INT, Pedido::EN_PROCESO_ATENCION_INT, Pedido::ATENDIDO_INT, Pedido::ANULADO_INT]);
 
         if (Auth::user()->rol == "Llamadas") {
             $usersasesores = User::where('users.rol', 'Asesor')
@@ -1132,163 +1132,6 @@ class PedidoController extends Controller
         //return redirect()->route('pedidosPDF', $pedido)->with('info', 'registrado');
     }
 
-    public function store(Request $request)
-    {
-        return $request->all();
-
-        $files = $request->file('adjunto');
-
-        $numped = "";
-        $mirol = Auth::user()->rol;
-        $codigo = "";
-        //return $mirol;
-        if ($mirol == 'Llamadas') {
-            $identi_asesor = User::where("id", $request->user_id)->first();
-            $fecha = Carbon::now()->format('dm');
-            $dia = Carbon::now()->toDateString();
-            $numped = Pedido::where(DB::raw('Date(created_at)'), $dia)
-                ->where('user_id', Auth::user()->id)
-                ->groupBy(DB::raw('Date(created_at)'))
-                ->count();
-            $numped = $numped + 1;
-
-            $codigo = $identi_asesor->identificador . "-" . $fecha . "-" . $numped;
-        } else {
-            $identi_asesor = User::where("id", $request->user_id)->first();
-            $fecha = Carbon::now()->format('dm');
-            $dia = Carbon::now()->toDateString();
-            $numped = Pedido::where(DB::raw('Date(created_at)'), $dia)
-                ->where('user_id', Auth::user()->id)
-                ->groupBy(DB::raw('Date(created_at)'))
-                ->count();
-            $numped = $numped + 1;
-
-            $codigo = $identi_asesor->identificador . "-" . $fecha . "-" . $numped;
-
-        }
-        //return $codigo;//21-0311-1
-
-        $request->validate([
-            'cliente_id' => 'required',
-        ]);
-
-        try {
-            DB::beginTransaction();
-
-            $pedido = Pedido::create([
-                'cliente_id' => $request->cliente_id,
-                'user_id' => $request->user_id, //usuario que registra
-                'creador' => 'USER0' . Auth::user()->id,//aqui una observacion, en el migrate la columna en tabla pedido tenia nombre creador y resulto ser creador_id
-                'condicion' => 1,
-                'pago' => '0',
-                'envio' => '0',
-                'condicion_envio' => 1,
-                'estado' => '1',
-                'codigo' => $codigo,
-                'notificacion' => 'Nuevo pedido creado',
-                'modificador' => 'USER0' . Auth::user()->id,
-                'pagado' => '0',
-                'direccion' => '0'
-            ]);
-
-            // ALMACENANDO DETALLES
-            $codigo = $codigo;//$request->codigo; actualizado para codigo autogenerado
-            $codigo_generado = $codigo;
-            $nombre_empresa = $request->nombre_empresa;
-            $mes = $request->mes;
-            $anio = $request->anio;
-            $ruc = $request->ruc;
-            $cantidad = $request->cantidad;
-            $tipo_banca = $request->tipo_banca;
-            $porcentaje = $request->porcentaje;
-            $courier = $request->courier;
-            $descripcion = $request->descripcion;
-            $nota = $request->nota;
-
-            $files = $request->file('adjunto');
-            $destinationPath = base_path('public/storage/adjuntos/');
-
-            $cont = 0;
-            $fileList = [];
-
-            if (isset($files)) {
-
-                foreach ($files as $file) {
-                    $file_name = Carbon::now()->second . $file->getClientOriginalName(); //Get file original name
-                    /*  $fileList[$cont] = array(
-                         'file_name' => $file_name,
-                     ); */
-                    $file->move($destinationPath, $file_name);
-
-                    ImagenPedido::create([
-                        'pedido_id' => $pedido->id,
-                        'adjunto' => $file_name,
-                        'estado' => '1'
-                    ]);
-
-                    $cont++;
-                }
-            } else {
-                ImagenPedido::create([
-                    'pedido_id' => $pedido->id,
-                    'adjunto' => 'logo_facturas.png',
-                    'estado' => '1'
-                ]);
-            }
-            $contP = 0;
-
-            while ($contP < count((array)$codigo)) {
-
-                $detallepedido = DetallePedido::create([
-                    'pedido_id' => $pedido->id,
-                    'codigo' => $codigo_generado,//$codigo[$contP],
-                    'nombre_empresa' => $nombre_empresa[$contP],
-                    'mes' => $mes[$contP],
-                    'anio' => $anio[$contP],
-                    'ruc' => $ruc[$contP],
-                    'cantidad' => $cantidad[$contP],
-                    'tipo_banca' => $tipo_banca[$contP],
-                    'porcentaje' => $porcentaje[$contP],
-                    'ft' => ($cantidad[$contP] * $porcentaje[$contP]) / 100,
-                    'courier' => $courier[$contP],
-                    'total' => (($cantidad[$contP] * $porcentaje[$contP]) / 100) + $courier[$contP],
-                    'saldo' => (($cantidad[$contP] * $porcentaje[$contP]) / 100) + $courier[$contP],
-                    'descripcion' => $descripcion[$contP],
-                    'nota' => $nota[$contP],
-                    'estado' => '1'
-                ]);
-
-                $contP++;
-
-                //ACTUALIZAR DEUDA
-                $cliente = Cliente::find($request->cliente_id);
-                $cliente->update([
-                    'deuda' => '1',
-                    'pidio' => '1'
-                ]);
-            }
-            DB::commit();
-            $html = "true";
-        } catch (\Throwable $th) {
-            throw $th;
-            $html = "false";
-            /* DB::rollback();
-            dd($th); */
-        }
-        return response()->json(['html' => $html]);
-
-        //NOTIFICATION
-        /*event(new PedidoEvent($pedido));
-
-        if(Auth::user()->rol == "Asesor"){
-
-            return redirect()->route('pedidosPDF', $pedido)->with('info', 'registrado');
-        }
-        else
-
-            return redirect()->route('pedidosPDF', $pedido)->with('info', 'registrado');*/
-    }
-
     /**
      * Display the specified resource.
      *
@@ -1721,30 +1564,13 @@ class PedidoController extends Controller
         return response()->json(['html' => $html]);
     }
 
-    public function Restaurar(Pedido $pedido)
-    {
-        $detalle_pedidos = DetallePedido::where('pedido_id', $pedido->id)->first();
-
-        $pedido->update([
-            'condicion' => 1,
-            'modificador' => 'USER' . Auth::user()->id,
-            'estado' => '1'
-        ]);
-
-        $detalle_pedidos->update([
-            'estado' => '1',
-        ]);
-
-        return redirect()->route('pedidos.index')->with('info', 'restaurado');
-    }
-
     public function Restaurarid(Request $request)
     {
         if (!$request->hiddenID) {
             $html = '';
         } else {
             Pedido::find($request->hiddenID)->update([
-                'condicion' => 1,
+                'condicion' => Pedido::POR_ATENDER,
                 'condicion_code' => Pedido::POR_ATENDER_INT,
                 'modificador' => 'USER' . Auth::user()->id,
                 'estado' => '1'
