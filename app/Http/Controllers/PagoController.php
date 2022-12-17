@@ -2798,7 +2798,7 @@ class PagoController extends Controller
             ->where('fecha', $request->fecha)
             ->whereIn('pago_id',
                 Pago::query()->distinct()->select('pagos.id')
-                    ->whereEstado(1)
+                    ->where('pagos.estado',1)
                     ->join('users', 'users.id', '=', 'pagos.user_id')
                     ->where('cliente_id', $request->cliente_id)
                     //->where('users.identificador', $request->asesor)
