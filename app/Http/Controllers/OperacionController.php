@@ -346,7 +346,7 @@ class OperacionController extends Controller
                     'u.identificador as users',
                     'dp.codigo as codigos',
                     'dp.nombre_empresa as empresas',
-                    'pedidos.condicion',
+                    'pedidos.condicion_envio as condicion',
                     //DB::raw('DATE_FORMAT(pedidos.created_at, "%d/%m/%Y") as fecha'),
                     DB::raw('(DATE_FORMAT(pedidos.created_at, "%Y-%m-%d %h:%i:%s")) as fecha'),
                     'pedidos.envio',
@@ -448,7 +448,7 @@ class OperacionController extends Controller
         $imagenes = ImagenAtencion::where('estado', '1')->get();
         $superasesor = User::where('rol', 'Super asesor')->count();
 
-        return view('operaciones.entregados', compact('dateMin', 'dateMax', 'condiciones', 'superasesor'));//, 'imagenes'
+        return view('operaciones.terminados', compact('dateMin', 'dateMax', 'condiciones', 'superasesor'));//, 'imagenes'
     }
 
 
@@ -465,7 +465,7 @@ class OperacionController extends Controller
                 'u.identificador as users',
                 'dp.codigo as codigos',
                 'dp.nombre_empresa as empresas',
-                'pedidos.condicion',
+                'pedidos.condicion_envio as condicion',
                 //DB::raw('DATE_FORMAT(pedidos.created_at, "%d/%m/%Y") as fecha'),
                 DB::raw('(DATE_FORMAT(pedidos.created_at, "%Y-%m-%d %h:%i:%s")) as fecha'),
                 'pedidos.envio',
@@ -491,7 +491,7 @@ class OperacionController extends Controller
             ->where('pedidos.estado', '1')
             ->where('dp.estado', '1')
             ->where('pedidos.condicion_code', Pedido::ATENDIDO_INT)
-            ->whereIn('pedidos.condicion_envio_code', [Pedido::JEFE_OP_INT])
+            ->whereIn('pedidos.condicion_envio_code', [Pedido::JEFE_OP_INT],[Pedido::COURIER_INT], [Pedido::EN_REPARTO_INT],[Pedido::SOBRE_ENVIAR_INT])
             ->whereIn('pedidos.envio', ['2','3']);
         //->whereIn('pedidos.envio', ['0'])
         //->whereBetween( 'pedidos.created_at', [$min, $max]);
@@ -584,7 +584,7 @@ class OperacionController extends Controller
                     'u.identificador as users',
                     'dp.codigo as codigos',
                     'dp.nombre_empresa as empresas',
-                    'pedidos.condicion',
+                    'pedidos.condicion_envio as condicion',
                     //DB::raw('DATE_FORMAT(pedidos.created_at, "%d/%m/%Y") as fecha'),
                     DB::raw('(DATE_FORMAT(pedidos.created_at, "%Y-%m-%d %h:%i:%s")) as fecha'),
                     'pedidos.envio',
