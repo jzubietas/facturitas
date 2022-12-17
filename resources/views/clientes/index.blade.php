@@ -514,7 +514,8 @@
                                 data = data + '<a href="" data-target="#modal-historial-situacion-cliente" data-toggle="modal" data-cliente="' + row.id + '"><button class="btn btn-success btn-sm"><i class="fas fa-trash-alt"></i> Historico</button></a>';
                                 if (
                                     (row.pedidos_mes_deuda == 0 && row.pedidos_mes_deuda_antes > 0)||
-                                    (row.pedidos_mes_deuda > 0 && row.pedidos_mes_deuda_antes > 0)
+                                    (row.pedidos_mes_deuda > 0 && row.pedidos_mes_deuda_antes > 0)||
+                                    (row.pedidos_mes_deuda > 0 && row.pedidos_mes_deuda_antes == 0)
                                 ) {
                                 data = data + '<a href="" data-target="#modal_clientes_deudas_model" data-toggle="modal" data-cliente="' + row.id + '"><button class="btn btn-dark btn-sm"><i class="fas fa-money"></i> Deudas</button></a>';
                             }
