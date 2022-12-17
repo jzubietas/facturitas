@@ -49,7 +49,7 @@ class Pedido extends Model
     const PDF_INT = 3;
     const BANCARIZACION_INT = 4;
     const JEFE_OP_INT = 5;
-    const COURIER_INT= 6;
+    const COURIER_INT = 6;
     const SOBRE_ENVIAR_INT = 7;
     const EN_REPARTO_INT = 8;
     const SEG_PROVINCIA_INT = 9;
@@ -70,9 +70,6 @@ class Pedido extends Model
     const ENTREGADO_CODE = 3;
 
     const PORATENDDER = 1;
-
-
-
 
 
     /* relacion de conciones de envio y enteros */
@@ -140,10 +137,12 @@ class Pedido extends Model
     {
         return $this->belongsTo(Cliente::class);
     }
+
     public function detallePedidos()
     {
         return $this->hasMany(DetallePedido::class);
     }
+
     public function pagoPedidos()
     {
         return $this->hasMany(PagoPedido::class);
@@ -151,28 +150,38 @@ class Pedido extends Model
 
     public function getIdCodeAttribute()
     {
-       return generate_correlativo('PED',$this->id,4);
+        return generate_correlativo('PED', $this->id, 4);
     }
 
     public static function generateIdCode($id)
     {
-        return generate_correlativo('PED',$id,4);
+        return generate_correlativo('PED', $id, 4);
     }
 
     public function notasCreditoFiles()
     {
         $data = setting("pedido." . $this->id . ".nota_credito_file");
-        if(is_array($data)){
+        if (is_array($data)) {
             return $data;
         }
         return [];
     }
+
     public function adjuntosFiles()
     {
         $data = setting("pedido." . $this->id . ".adjuntos_file");
-        if(is_array($data)){
+        if (is_array($data)) {
             return $data;
         }
         return [];
+    }
+
+    public function scopeActivo($query, $status = 1)
+    {
+        return $query->where('pedidos.estado', '=', $status);
+    }
+    public function scopePagados($query)
+    {
+        return $query->where('pedidos.pago', '=', 1)->where('pedidos.pagado', '=', 2);
     }
 }

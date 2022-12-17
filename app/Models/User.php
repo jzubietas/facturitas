@@ -106,6 +106,16 @@ class User extends Authenticatable
         return $this->belongsTo(self::class, 'operario');
     }
 
+    public function pedidos()
+    {
+        return $this->hasMany(Pedido::class, 'user_id');
+    }
+
+    public function pedidosActivos()
+    {
+        return $this->pedidos()->where('pedidos.estado', '<>', '0');
+    }
+
     public function adminlte_desc()
     {
         $user = User::find(Auth()->user()->id);
@@ -140,5 +150,20 @@ class User extends Authenticatable
     public function unreadNotifications()
     {
         return $this->unreadNotificationsLimits()->limit(15);
+    }
+
+    public function scopeActivo($query, $status=1)
+    {
+        return $query->where('users.estado', "=","$status");
+    }
+
+    public function scopeRol($query, $rol)
+    {
+        return $query->whereIn('users.rol', \Arr::wrap($rol));
+    }
+
+    public function scopeRolAsesor($query)
+    {
+        return $this->scopeRol($query, self::ROL_ASESOR);
     }
 }
