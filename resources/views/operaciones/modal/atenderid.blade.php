@@ -50,8 +50,8 @@
 
                             <select name="condicion" class="form-control" id="condicion">
 
-                              <option value="{{\App\Models\Pedido::EN_PROCESO_ATENCION_INT}}">EN PROCESO ATENCION</option>
-                              <option value="{{\App\Models\Pedido::ATENDIDO_INT}}" >ATENDIDO</option>
+                              <option value="{{\App\Models\Pedido::EN_PROCESO_ATENCION_INT}}">INCOMPLETO</option>
+                              <option value="{{\App\Models\Pedido::ATENDIDO_INT}}" >PDF</option>
 
                             </select>
                           </div>
