@@ -458,101 +458,129 @@ class EnvioController extends Controller
 
         return view('envios.rutaenvio', compact('condiciones', 'distritos', 'direcciones', 'destinos', 'superasesor','ver_botones_accion','departamento','dateMin','distribuir','rol'));
     }
+ 
+
     public function Enviosrutaenviotabla(Request $request)
     {
-        $pedidos=null;//21/11/2022
 
+
+       
+
+
+        $pedidos=null;//21/11/2022
         $pedidos_lima=null;
         $pedidos_provincia=null;
 
-        if(!$request->general)
+        if(!$request->general )
         {
 
-        }else{
+        }
+        
+        else{
 
-            //busca general nada mas
+            if (empty($request->general))
+            {
+                    dd($request->general);
+            }
+
+            else {
+
+
+                //busca general nada mas
             //$min = Carbon::createFromFormat('d/m/Y', $request->desde)->format('Y-m-d');
             $pedidos_lima = DireccionGrupo::join('direccion_envios as de','direccion_grupos.id','de.direcciongrupo')
-                                    ->join('clientes as c', 'c.id', 'de.cliente_id')
-                                    ->join('users as u', 'u.id', 'c.user_id')
-                                    ->where('direccion_grupos.estado','1')
-                                    ->whereNull('direccion_grupos.condicion_sobre')
-                                    //->where('direccion_grupos.condicion_sobre', '<>', 'SIN ENVIO')
-                                    ->select(
-                                        'direccion_grupos.id',
-                                        'u.identificador as identificador',
-                                        DB::raw(" (select 'LIMA') as destino "),
-                                        'de.celular',
-                                        'de.nombre',
-                                        'de.cantidad',
-                                        'direccion_grupos.codigos',
-                                        //'direccion_grupos.producto',
-                                        //DB::raw(" (select group_concat(dp.codigo_pedido) from direccion_pedidos dp where dp.direcciongrupo=direccion_grupos.id and dp.estado = 1) as codigos "),
-                                        DB::raw(" (select group_concat(ab.empresa) from direccion_pedidos ab where ab.direcciongrupo=direccion_grupos.id) as producto "),
-                                        'de.direccion',
-                                        'de.referencia',
-                                        'de.observacion',
-                                        'de.distrito',
-                                        'direccion_grupos.created_at as fecha',
-                                        'direccion_grupos.destino as destino2',
-                                        'direccion_grupos.distribucion',
-                                        'direccion_grupos.condicion_sobre',
-                                        'direccion_grupos.correlativo',
+            ->join('clientes as c', 'c.id', 'de.cliente_id')
+            ->join('users as u', 'u.id', 'c.user_id')
+            ->where('direccion_grupos.estado','1')
+         //   ->whereNull('direccion_grupos.condicion_sobre')
+            //->where('direccion_grupos.condicion_sobre', '<>', 'SIN ENVIO')
+            ->select(
+                'direccion_grupos.id',
+                'u.identificador as identificador',
+                DB::raw(" (select 'LIMA') as destino "),
+                'de.celular',
+                'de.nombre',
+                'de.cantidad',
+                'direccion_grupos.codigos',
+                'direccion_grupos.producto',
+                'de.direccion',
+                'de.referencia',
+                'de.observacion',
+                'de.distrito',
+                'direccion_grupos.created_at as fecha',
+                'direccion_grupos.destino as destino2',
+                'direccion_grupos.distribucion',
+                'direccion_grupos.condicion_sobre',
+                'direccion_grupos.correlativo',
 
-                                    );
-                                    $pedidos_lima->where( 'direccion_grupos.codigos','like','%'.$request->general.'%')
-            //$pedidos_lima->where( DB::raw(" (select group_concat(dp.codigo_pedido) from direccion_pedidos dp where dp.direcciongrupo=direccion_grupos.id and dp.estado = 1 ) "),'like','%'.$request->general.'%')
-                                              ->orWhere('direccion_grupos.id', 'like','%'.$request->general.'%')
-                                              ->orWhere('u.identificador', 'like','%'.$request->general.'%')
-                                              ->orWhere('de.celular', 'like','%'.$request->general.'%')
-                                              ->orWhere('de.nombre', 'like','%'.$request->general.'%')
-                                              ->orWhere('de.cantidad', 'like','%'.$request->general.'%')
-                                              ->orWhere('direccion_grupos.id', 'like','%'.$request->general.'%')
-                                              ->orWhere( DB::raw(" (select group_concat(ab.empresa) from direccion_pedidos ab where ab.direcciongrupo=direccion_grupos.id) "),'like','%'.$request->general.'%')
-                                              ->orWhere('de.direccion', 'like','%'.$request->general.'%')
-                                              ->orWhere('de.referencia', 'like','%'.$request->general.'%')
-                                              ->orWhere('de.observacion', 'like','%'.$request->general.'%')
-                                              ->orWhere('de.distrito', 'like','%'.$request->general.'%');
+            );
+            
+            
+            
+        
+            
+            
+            $pedidos_lima->where( 'direccion_grupos.codigos','like','%'.$request->general.'%')
+                      ->orWhere('direccion_grupos.id', 'like','%'.$request->general.'%')
+                      ->orWhere('u.identificador', 'like','%'.$request->general.'%')
+                      ->orWhere('de.celular', 'like','%'.$request->general.'%')
+                      ->orWhere('de.nombre', 'like','%'.$request->general.'%')
+                      ->orWhere('de.cantidad', 'like','%'.$request->general.'%')
+                      ->orWhere('direccion_grupos.id', 'like','%'.$request->general.'%')
+                      ->orWhere('direccion_grupos.producto','like','%'.$request->general.'%')
+                      ->orWhere('de.direccion', 'like','%'.$request->general.'%')
+                      ->orWhere('de.referencia', 'like','%'.$request->general.'%')
+                      ->orWhere('de.observacion', 'like','%'.$request->general.'%')
+                      ->orWhere('de.distrito', 'like','%'.$request->general.'%');
 
-            $pedidos_provincia = DireccionGrupo::join('gasto_envios as de','direccion_grupos.id','de.direcciongrupo')
-                                    ->join('clientes as c', 'c.id', 'de.cliente_id')
-                                    ->join('users as u', 'u.id', 'c.user_id')
-                                    ->where('direccion_grupos.estado','1')
-                                    ->whereNull('direccion_grupos.condicion_sobre')
-                                    //->where('direccion_grupos.condicion_sobre', '<>', 'SIN ENVIO')
-                                    ->select(
-                                        'direccion_grupos.id',
-                                        'u.identificador as identificador',
-                                        DB::raw(" (select 'PROVINCIA') as destino "),
-                                        DB::raw(" (select '') as celular "),
-                                        DB::raw(" (select '') as nombre "),
-                                        'de.cantidad',
-                                        DB::raw(" (select group_concat(dp.codigo_pedido) from gasto_pedidos dp where dp.direcciongrupo=direccion_grupos.id and dp.estado = 1) as codigos "),
-                                        DB::raw(" (select group_concat(ab.empresa) from gasto_pedidos ab where ab.direcciongrupo=direccion_grupos.id) as producto "),
+$pedidos_provincia = DireccionGrupo::join('gasto_envios as de','direccion_grupos.id','de.direcciongrupo')
+            ->join('clientes as c', 'c.id', 'de.cliente_id')
+            ->join('users as u', 'u.id', 'c.user_id')
+            ->where('direccion_grupos.estado','1')
+          //  ->whereNull('direccion_grupos.condicion_sobre')
+            //->where('direccion_grupos.condicion_sobre', '<>', 'SIN ENVIO')
+            ->select(
+                'direccion_grupos.id',
+                'u.identificador as identificador',
+                DB::raw(" (select 'PROVINCIA') as destino "),
+                DB::raw(" (select '') as celular "),
+                DB::raw(" (select '') as nombre "),
+                'de.cantidad',
+                'direccion_grupos.codigos',
+                'direccion_grupos.producto',
+                DB::raw(" (select '') as observacion "),
+                'de.foto as referencia',
+               'de.tracking as direccion',
+                DB::raw(" (select '') as distrito "),
+                'direccion_grupos.created_at as fecha',
+                'direccion_grupos.destino as destino2',
+                'direccion_grupos.distribucion',
+                'direccion_grupos.condicion_sobre',
+                'direccion_grupos.correlativo'
+            );
+            $pedidos_provincia->where( 'direccion_grupos.codigos','like','%'.$request->general.'%')
+                    ->orWhere('direccion_grupos.id', 'like','%'.$request->general.'%')
+                    ->orWhere('de.cantidad', 'like','%'.$request->general.'%')
+                    ->orWhere('direccion_grupos.id', 'like','%'.$request->general.'%')
+                    ->orWhere('direccion_grupos.producto','like','%'.$request->general.'%')
+                    ->orWhere('de.tracking', 'like','%'.$request->general.'%');
 
-                                        'de.foto as referencia',
-                                        DB::raw(" (select '') as observacion "),
-                                        DB::raw(" (select '') as distrito "),
-                                        'direccion_grupos.created_at as fecha',
-                                        'direccion_grupos.destino as destino2',
-                                        'direccion_grupos.distribucion',
-                                        'direccion_grupos.condicion_sobre',
-                                        'direccion_grupos.correlativo'
-                                    );
-                                    $pedidos_provincia->where( 'direccion_grupos.codigos','like','%'.$request->general.'%')
-            //$pedidos_provincia->where(DB::raw(" (select group_concat(dp.codigo_pedido) from gasto_pedidos dp where dp.direcciongrupo=direccion_grupos.id and dp.estado = 1) "),'like','%'.$request->general.'%')
-                                            ->orWhere('direccion_grupos.id', 'like','%'.$request->general.'%')
-                                            ->orWhere('de.cantidad', 'like','%'.$request->general.'%')
-                                            ->orWhere('direccion_grupos.id', 'like','%'.$request->general.'%')
-                                            ->orWhere(DB::raw(" (select group_concat(ab.empresa) from gasto_pedidos ab where ab.direcciongrupo=direccion_grupos.id) "),'like','%'.$request->general.'%')
-                                            ->orWhere('de.tracking', 'like','%'.$request->general.'%');
+
+            }
+           
+
+            
 
         }
 
         if(!$request->desde)
         {
 
-        }else{
+
+        }
+        
+        
+        else{
             //busca solo el dia nada mas
 
             $min = Carbon::createFromFormat('d/m/Y', $request->desde)->format('Y-m-d');//2022-11-25
@@ -563,8 +591,6 @@ class EnvioController extends Controller
                                     ->join('users as u', 'u.id', 'c.user_id')
                                     ->where('direccion_grupos.estado','1')
                                     ->where(DB::raw('DATE(direccion_grupos.created_at)'), $min)
-                                    ->whereNull('direccion_grupos.condicion_sobre')
-                                    //->where('direccion_grupos.condicion_sobre', '<>', 'SIN ENVIO')
                                     ->select(
                                         'direccion_grupos.id',
                                         'u.identificador as identificador',
@@ -573,8 +599,7 @@ class EnvioController extends Controller
                                         'de.nombre',
                                         'de.cantidad',
                                         'direccion_grupos.codigos',
-                                        //DB::raw(" (select group_concat(dp.codigo_pedido) from direccion_pedidos dp where dp.direcciongrupo=direccion_grupos.id and dp.estado = 1) as codigos "),
-                                        DB::raw(" (select group_concat(ab.empresa) from direccion_pedidos ab where ab.direcciongrupo=direccion_grupos.id) as producto "),
+                                        'direccion_grupos.producto',
                                         'de.direccion',
                                         'de.referencia',
                                         'de.observacion',
@@ -592,7 +617,6 @@ class EnvioController extends Controller
                                     ->join('users as u', 'u.id', 'c.user_id')
                                     ->where('direccion_grupos.estado','1')
                                     ->where(DB::raw('DATE(direccion_grupos.created_at)'), $min)
-                                    ->whereNull('direccion_grupos.condicion_sobre')
                                     //->whereNotIn('direccion_grupos.condicion_sobre',['SIN ENVIO'])
                                     //->where('direccion_grupos.condicion_sobre', '<>', 'SIN ENVIO')
                                     ->select(
@@ -603,8 +627,7 @@ class EnvioController extends Controller
                                         DB::raw(" (select '') as nombre "),
                                         'de.cantidad',
                                         'direccion_grupos.codigos',
-                                        //DB::raw(" (select group_concat(dp.codigo_pedido) from gasto_pedidos dp where dp.direcciongrupo=direccion_grupos.id and dp.estado = 1) as codigos "),
-                                        DB::raw(" (select group_concat(ab.empresa) from gasto_pedidos ab where ab.direcciongrupo=direccion_grupos.id) as producto "),
+                                        'direccion_grupos.producto',
                                         'de.tracking as direccion',
                                         'de.foto as referencia',
                                         DB::raw(" (select '') as observacion "),
@@ -618,12 +641,14 @@ class EnvioController extends Controller
                                     );
                                   //  $pedidos_provincia->whereNot
 
+                                  $pedidos = $pedidos_lima->union($pedidos_provincia);
+                                  //$pedidos=$pedidos->where(DB::raw('DATE(direccion_grupos.created_at)'), $request->desde);
+                                  $pedidos=$pedidos->get();
+                                  //$pedidos=$pedidos_provincia;
+
         }
 
-        $pedidos = $pedidos_lima->union($pedidos_provincia);
-        //$pedidos=$pedidos->where(DB::raw('DATE(direccion_grupos.created_at)'), $request->desde);
-        $pedidos=$pedidos->get();
-        //$pedidos=$pedidos_provincia;
+       
 
 
         return Datatables::of($pedidos_lima)

@@ -53,7 +53,14 @@
             <td>Fecha</td>
             <td><input type="text" value={{ $dateMin }} id="min" name="min" class="form-control"></td>
             <td></td>
-            
+            <td>Buscar General</td>
+            <td>
+              <div class="form-group col-lg-12">
+                {!! Form::label('general', 'Buscador General') !!}
+                  <input type="text" name="general" id="general" class="form-control" placeholder="Busqueda General..." >
+              </div>
+
+            </td>
 
           </tr>
         </tbody>
@@ -713,16 +720,15 @@ tabla_pedidos=$('#tablaPrincipalpedidosagregar').DataTable({
 
           $(document).on("keyup","#general",function(){
             console.log($(this).val())
-            if($(this).val()=='')
+            if(!$(this).val())
             {
-
-
-            }else{
+              return;
+            }
               $("#min").val("");
               //busca en general
               $('#tablaPrincipal').DataTable().ajax.reload();
 
-            }
+            
 
             $('#tablaPrincipal').DataTable().ajax.reload();
           });
