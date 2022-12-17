@@ -16,6 +16,15 @@ body{
     transform-origin: bottom left;
 }
 
+#santa_navidad{
+    position: absolute;
+    right: 0;
+    bottom: -50px;
+    width: 50px;
+    animation: santa ease-in 4s infinite;
+    transition: all 0.2s;
+}
+
 @keyframes navidad {
     0%{
         transform: rotate(35deg);
@@ -25,6 +34,29 @@ body{
     }
     100%{
         transform: rotate(35deg);
+    }
+}
+
+@keyframes santa {
+    0%{
+        bottom: -46px;
+    }
+    10%{
+        bottom: -46px;
+    }
+    40%{
+        bottom: -8px;
+    }
+    70%{
+        bottom: -8px;
+    }
+
+    85%{
+        bottom: -8px;
+    }
+
+    100%{
+        bottom: -46px;
     }
 }
 

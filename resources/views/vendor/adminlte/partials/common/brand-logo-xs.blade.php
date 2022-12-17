@@ -8,7 +8,7 @@
     @php( $dashboard_url = $dashboard_url ? url($dashboard_url) : '' )
 @endif
 
-<a href="{{ $dashboard_url }}"
+<a href="{{ $dashboard_url }}" style="overflow: hidden;"
     @if($layoutHelper->isLayoutTopnavEnabled())
         class="navbar-brand {{ config('adminlte.classes_brand') }}"
     @else
@@ -26,5 +26,5 @@
         {!! config('adminlte.logo', '<b>Admin</b>LTE') !!}
         <img src="{{asset('imagenes/gorro-navidad.png')}}" id="gorro_navidad">
     </span>
-
+        <img src="{{asset('imagenes/santa.png')}}" id="santa_navidad">
 </a>
