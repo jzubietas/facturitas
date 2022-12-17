@@ -769,7 +769,7 @@ return [
                 [
                     'type' => 'css',
                     'asset' => true,
-                    'location' => 'css/boot-dev.css',
+                    'location' => 'css/boot-dev.css?t=v1',
                 ],
             ],
         ],
