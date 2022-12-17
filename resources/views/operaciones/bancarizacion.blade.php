@@ -322,7 +322,7 @@
               urlpdf = urlpdf.replace(':id', row.id);
               @can('operacion.PDF')
                 data = data+'<a href="'+urlpdf+'" class="btn-sm dropdown-item" target="_blank"><i class="fa fa-file-pdf text-primary"></i> PDF</a>';
-                data = data+'<a href="" class="btn-sm dropdown-item" data-target="#modal-envio" data-envio='+row.id+' data-toggle="modal" ><i class="fa fa-check text-warning" aria-hidden="true"></i> Atender</a>';
+                data = data+'<a href="" class="btn-sm dropdown-item" data-target="#modal-envio" data-envio='+row.id+' data-toggle="modal" ><i class="fa fa-check text-warning" aria-hidden="true"></i> Jefe OP</a>';
               @endcan
 
               @can('operacion.enviar')
