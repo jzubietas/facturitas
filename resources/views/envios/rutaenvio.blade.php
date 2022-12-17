@@ -51,16 +51,9 @@
         <tbody>
           <tr>
             <td>Fecha</td>
-            <td><input type="text" value={{ $dateMin }} id="min" name="min" class="form-control"></td>
+            <td><input type="text" value="" id="min" name="min" class="form-control"></td>
             <td></td>
-            <td>Buscar General</td>
-            <td>
-              <div class="form-group col-lg-12">
-                {!! Form::label('general', 'Buscador General') !!}
-                  <input type="text" name="general" id="general" class="form-control" placeholder="Busqueda General..." >
-              </div>
-
-            </td>
+  
 
           </tr>
         </tbody>
@@ -332,7 +325,9 @@
           data: function (d) {
             //d.asesores = $("#asesores_pago").val();
             d.desde = $("#min").val();
-            d.general = $("#general").val();
+           // d.general = $("#general").val();
+
+           console.log(d.desde);
           },
         },
         rowCallback: function (row, data, index) {
