@@ -17,21 +17,9 @@
       <div class="dropdown-menu">
         <a href="" data-target="#modal-exportar" data-toggle="modal" class="dropdown-item" target="blank_"><img src="{{ asset('imagenes/icon-excel.png') }}"> Excel</a>
 
-        {{--<a href="" data-target="#modal-exportar2" data-toggle="modal" class="dropdown-item" target="blank_"><img src="{{ asset('imagenes/icon-excel.png') }}"> Clientes - Pedidos</a>
-
-        <a href="" data-target="#modal-exportar" data-toggle="modal" class="dropdown-item" target="blank_"><img src="{{ asset('imagenes/icon-excel.png') }}"> Provincia</a>
-        <a href="" data-target="#modal-exportar" data-toggle="modal" class="dropdown-item" target="blank_"><img src="{{ asset('imagenes/icon-excel.png') }}"> Lima Norte</a>
-        <a href="" data-target="#modal-exportar" data-toggle="modal" class="dropdown-item" target="blank_"><img src="{{ asset('imagenes/icon-excel.png') }}"> Lima Centro</a>
-        <a href="" data-target="#modal-exportar" data-toggle="modal" class="dropdown-item" target="blank_"><img src="{{ asset('imagenes/icon-excel.png') }}"> Lima Sur</a>--}}
       </div>
     </div>
-    @include('sobres.modal.exportar', ['title' => 'Exportar RUTAS DE ENVIAR', 'key' => '1'])
-    {{--@include('sobres.modal.exportar', ['title' => 'Exportar RUTAS DE ENVIAR PROVINCIA', 'key' => '2'])
-    @include('sobres.modal.exportar', ['title' => 'Exportar RUTAS DE ENVIAR LIMA NORTE', 'key' => '3'])
-    @include('sobres.modal.exportar', ['title' => 'Exportar RUTAS DE ENVIAR LIMA CENTRO', 'key' => '4'])
-    @include('sobres.modal.exportar', ['title' => 'Exportar RUTAS DE ENVIAR LIMA SUR', 'key' => '5'])--}}
-
-    {{-- @endcan --}}
+    @include('envios.modal.exportar', ['title' => 'Exportar RUTAS DE ENVIAR', 'key' => '1'])
   </h1>
   @if($superasesor > 0)
   <br>
