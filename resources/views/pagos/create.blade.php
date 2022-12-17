@@ -2648,8 +2648,6 @@
                                         evaluarPa();
                                         console.log("total_pago 1 " + total_pago);
                                         diferenciaFaltante();
-
-
                                     }
                                 },
                             })
@@ -2698,23 +2696,32 @@
                                                 }).then((result) => {
                                                     if (result.isConfirmed) {
                                                         AgregarPagoTemporal();
+                                                    }else{
+                                                        $("#add_pago").text("Agregar")
+                                                        $("#add_pago").removeAttr("disabled")
                                                     }
+                                                }).catch(function () {
+                                                    $("#add_pago").text("Agregar")
+                                                    $("#add_pago").removeAttr("disabled")
                                                 })
                                                 //agregar();
                                             } else {
                                                 $("#add_pago").text("Agregar")
                                                 $("#add_pago").removeAttr("disabled")
                                             }
+                                        }else{
+                                            $("#add_pago").text("Agregar")
+                                            $("#add_pago").removeAttr("disabled")
                                         }
                                     }).catch(function () {
                                         $("#add_pago").text("Agregar")
                                         $("#add_pago").removeAttr("disabled")
                                     })
                                 }
-
                             })
                             .fail(function (data) {
-
+                                $("#add_pago").text("Guardar")
+                                $("#add_pago").removeAttr("disabled")
                             });
 
 

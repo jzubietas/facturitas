@@ -218,6 +218,8 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     Route::get('operaciones.atendidostabla', [OperacionController::class, 'Atendidostabla'])->name('operaciones.atendidostabla');
     Route::get('operaciones.entregados', [OperacionController::class, 'Entregados'])->name('operaciones.entregados');
     Route::get('operaciones.entregadostabla', [OperacionController::class, 'Entregadostabla'])->name('operaciones.entregadostabla');
+    Route::get('operaciones.terminados', [OperacionController::class, 'Terminados'])->name('operaciones.terminados');
+    Route::get('operaciones.terminadostabla', [OperacionController::class, 'Terminadostabla'])->name('operaciones.terminadostabla');
     Route::get('operaciones.bancarizacion', [OperacionController::class, 'Bancarizacion'])->name('operaciones.bancarizacion');
     Route::get('operaciones.bancarizaciontabla', [OperacionController::class, 'Bancarizaciontabla'])->name('operaciones.bancarizaciontabla');
     Route::post('operaciones.atenderid', [OperacionController::class, 'Atenderid'])->name('operaciones.atenderid');

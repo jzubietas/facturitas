@@ -78,7 +78,7 @@
 
 @section('css')
   <!--<link rel="stylesheet" href="../css/admin_custom.css">-->
-  
+
   <link rel="stylesheet" href="https://cdn.datatables.net/1.13.1/css/jquery.dataTables.min.css">
   <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.3.2/css/buttons.dataTables.min.css">
 
@@ -139,8 +139,8 @@
 @stop
 
 @section('js')
-  
-  <!--https://code.jquery.com/jquery-3.5.1.js--> 
+
+  <!--https://code.jquery.com/jquery-3.5.1.js-->
   <script src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
   <script src="https://cdn.datatables.net/buttons/2.3.2/js/dataTables.buttons.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
@@ -150,14 +150,14 @@
   <script src="https://cdn.datatables.net/buttons/2.3.2/js/buttons.print.min.js"></script>
 
   <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
-  
-  
-  
-  
-  
-  
-  
-  
+
+
+
+
+
+
+
+
 
   <script>
     function clickformdelete()
@@ -230,26 +230,26 @@
     })
 
     $.fn.dataTable.ext.buttons.refresh = {
-      text: 'Recargar'
-    , action: function ( e, dt, node, config ) {
-        dt.clear().draw();
-        dt.ajax.reload();
-      }
+      text: 'Recargar'
+    , action: function ( e, dt, node, config ) {
+        dt.clear().draw();
+        dt.ajax.reload();
+      }
   };
 
     var tablaPrincipal=$('#tablaPrincipal').DataTable({
         dom: 'Bfrtip',
-         buttons: [  
+         buttons: [
           {
             className: 'red'
             ,text:"Recargar"
           },
-          
+
           ],
         //buttons: [
-            /*'copy', 'csv', 'excel', 'pdf', 'print'*/
+            /*'copy', 'csv', 'excel', 'pdf', 'print'*/
           //'refresh'
-        //],
+        //],
         processing: true,
         serverSide: true,
         searching: true,
@@ -259,12 +259,12 @@
         },
         rowCallback: function (row, data, index) {
         },
-        initComplete:function(settings,json){          
+        initComplete:function(settings,json){
           /*if (localStorage. getItem("search_tabla") === null) {
             //no existe
           }else{
-            $('#tablaPrincipal_filter label input').val(localStorage.getItem("search_tabla") ).change();            
-          }*/        
+            $('#tablaPrincipal_filter label input').val(localStorage.getItem("search_tabla") ).change();
+          }*/
         },
         columns: [
         {
@@ -367,28 +367,28 @@
                         "next": "Siguiente",
                         "previous": "Anterior"
                     }
-                },                
+                },
                 /*buttons: [
-                    'copy', 'csv', 'excel', 'pdf', 'print'
-                ]*/
+                    'copy', 'csv', 'excel', 'pdf', 'print'
+                ]*/
                 //buttons: [ "print", "refresh"]
-                
+
             });
 
-            
+
 
             $.fn.dataTable.ext.buttons.refresh = {
-                text: 'Recargar'
-              , action: function ( e, dt, node, config ) {
-                  dt.clear().draw();
-                  dt.ajax.reload();
-                }
+                text: 'Recargar'
+              , action: function ( e, dt, node, config ) {
+                  dt.clear().draw();
+                  dt.ajax.reload();
+                }
             };
 
             new $.fn.dataTable.Buttons( tablaPrincipal, {
-              buttons: [
-                  'refresh'
-              ]
+              buttons: [
+                  'refresh'
+              ]
           } );
 
 
