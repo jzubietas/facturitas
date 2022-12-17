@@ -51,9 +51,9 @@
         <tbody>
           <tr>
             <td>Fecha</td>
-            <td><input type="text" value={{ $dateMin }} id="min" name="min" class="form-control"></td>
+            <td><input type="text" value="" id="min" name="min" class="form-control"></td>
             <td></td>
-            
+  
 
           </tr>
         </tbody>
@@ -325,7 +325,9 @@
           data: function (d) {
             //d.asesores = $("#asesores_pago").val();
             d.desde = $("#min").val();
-            d.general = $("#general").val();
+           // d.general = $("#general").val();
+
+           console.log(d.desde);
           },
         },
         rowCallback: function (row, data, index) {
@@ -713,16 +715,15 @@ tabla_pedidos=$('#tablaPrincipalpedidosagregar').DataTable({
 
           $(document).on("keyup","#general",function(){
             console.log($(this).val())
-            if($(this).val()=='')
+            if(!$(this).val())
             {
-
-
-            }else{
+              return;
+            }
               $("#min").val("");
               //busca en general
               $('#tablaPrincipal').DataTable().ajax.reload();
 
-            }
+            
 
             $('#tablaPrincipal').DataTable().ajax.reload();
           });
