@@ -9,6 +9,7 @@ use App\Exports\ClientesExport;
 use App\Exports\Clientesv2Export;
 use App\Exports\ClientesPedidosExport;
 use App\Exports\Templates\PlantillaExportMultiple;
+use App\Exports\Rutaenvio\PlantillaRutaenvioExportMultiple;
 use App\Exports\ClientesSituacionExport;
 use App\Exports\PedidosPorEnviarPorFechasExport;
 use App\Exports\EntregadosPorFechasExport;
@@ -88,9 +89,8 @@ class ExcelController extends Controller
     
     public function sobresRutaEnvioExcel(Request $request)
     {
-        return (new SobresRutaEnvioExport)
-                ->pedidos($request)
-                ->download('Lista de Sobres - Ruta de Envio.xlsx');
+        return (new PlantillaRutaenvioExportMultiple($request->de))
+                ->download('Lista de Sobres - Ruta de Envio_'.$request->de.'.xlsx');
     }
 
     public function porrevisarExcel(Request $request)
@@ -157,8 +157,6 @@ class ExcelController extends Controller
 
     public function clientespedidosExcel(Request $request)
     {
-        //cambiar aca
-        //return Excel::download(new PlantillaExportMultiple($request->anio), 'Lista de Clientes_pedidos_'.Carbon::now().'.xlsx');
         return (new PlantillaExportMultiple($request->anio))
                 ->download('Lista de Clientes_pedidos_'.$request->anio.'.xlsx');
     }

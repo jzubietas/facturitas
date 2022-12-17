@@ -94,5 +94,7 @@ class PageclienteinfoAgosto extends Export implements WithColumnFormatting,WithC
         $row_cell_=14;
         $letter_cell='N';
         //$event->sheet->getStyle($letter_cell.$row->getRowIndex())->applyFromArray($style_recurrente);
+
+        /*foreach ($event->sheet->getRowIterator() as $row)
     }
 }
