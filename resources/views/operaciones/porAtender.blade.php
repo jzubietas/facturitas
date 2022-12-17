@@ -157,7 +157,8 @@
             console.log(event.relatedTarget)
             console.log(button.data('pedido_id_code'))
             $("#anular_pedido_id").html(button.data('pedido_id_code'))
-            $("#anular_pedido_id").val(button.data('pedido_id'))
+            $("#motivo_anulacion_text").html(button.data('pedido_motivo'))
+            //$("#anular_pedido_id").val(button.data('pedido_id'))
         })
 
         $('#attachmentsButtom').click(function (event) {
