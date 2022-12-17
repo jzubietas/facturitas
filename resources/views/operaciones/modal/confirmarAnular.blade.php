@@ -10,6 +10,9 @@
             </div>
             <div class="modal-body">
                 <p>Adjuntos del pedido: <strong id="anular_pedido_id">PED00</strong></p>
+                <p class="p-2 border border-dark">
+                    <b>Motivo de anulacion: </b> <span id="motivo_anulacion_text"></span>
+                </p>
                 <div class="mt-4">
                     <input type="hidden" id="anular_pedido_id">
                     <div class="alert alert-warning"> Permite seleccionar multiples archivos</div>
