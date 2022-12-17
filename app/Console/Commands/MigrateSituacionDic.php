@@ -48,7 +48,7 @@ class MigrateSituacionDic extends Command
         return;
         Cliente::query()
             //->where('celular','=','999033256')
-            ->whereRaw('(select count(*) from pedidos where pedidos.cliente_id=clientes.id and pedidos.estado=1 and pedidos.pago in (0,1) and pedidos.pagado in (0,1) and pedidos.created_at>=\'' . now()->startOfMonth()->format("Y-m-d h:i:s") . '\')>0')
+            ->whereRaw('(select count(*) from pedidos where pedidos.cliente_id=clientes.id and pedidos.estado=1 and pedidos.pago in (0,1) and pedidos.pagado in (0,1) and pedidos.created_at>=\'' . now()->startOfMonth()->format("Y-m-d H:i:s") . '\')>0')
             ->chunk(1000, function ($clientes) {
                 foreach ($clientes as $cliente) {
                     $this->info("Cliente: " . $cliente->nombre . " (" . $cliente->id . ")");
@@ -63,8 +63,8 @@ class MigrateSituacionDic extends Command
         }
         $this->resultados = [];
         Cliente::query()
-            ->whereRaw('(select count(*) from pedidos where pedidos.cliente_id=clientes.id and pedidos.estado=1 and pedidos.pago in (0,1) and pedidos.pagado in (0,1) and pedidos.created_at>=\'' . now()->startOfMonth()->format("Y-m-d h:i:s") . '\')=0')
-            ->whereRaw('(select count(*) from pedidos where pedidos.cliente_id=clientes.id and pedidos.estado=1 and pedidos.pago in (0,1) and pedidos.pagado in (0,1) and pedidos.created_at>=\'' . now()->subMonth()->startOfMonth()->format("Y-m-d h:i:s") . '\')>0')
+            ->whereRaw('(select count(*) from pedidos where pedidos.cliente_id=clientes.id and pedidos.estado=1 and pedidos.pago in (0,1) and pedidos.pagado in (0,1) and pedidos.created_at>=\'' . now()->startOfMonth()->format("Y-m-d H:i:s") . '\')=0')
+            ->whereRaw('(select count(*) from pedidos where pedidos.cliente_id=clientes.id and pedidos.estado=1 and pedidos.pago in (0,1) and pedidos.pagado in (0,1) and pedidos.created_at>=\'' . now()->subMonth()->startOfMonth()->format("Y-m-d H:i:s") . '\')>0')
             ->chunk(1000, function ($clientes) {
                 foreach ($clientes as $cliente) {
                     $this->info("Cero Cliente: " . $cliente->nombre . " (" . $cliente->id . ")");

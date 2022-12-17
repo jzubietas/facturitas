@@ -492,7 +492,10 @@
 
               var urlver = '{{ route("operaciones.showatender", ":id") }}';
               urlver = urlver.replace(':id', row.id);
-              data = data+'<a href="'+urlver+'" class="btn btn-primary btn-sm" ><i class="fas fa-eye"></i> Ver</a>';
+
+                data = '<div><ul class="" aria-labelledby="dropdownMenuButton">';
+
+                data = data+'<a href="'+urlver+'" class="btn-sm dropdown-item" ><i class="fas fa-eye text-success"></i> Ver</a>';
 
               var urledit = '{{ route("operaciones.editatender", ":id") }}';
               urledit = urledit.replace(':id', row.id);
@@ -501,14 +504,14 @@
 
 
               @can('operacion.editatender')
-                  data = data+'<a href="" data-target="#modal-editar-atencion" data-atencion='+row.id+' data-toggle="modal" ><button class="btn btn-warning btn-sm">Atender atención</button></a>';
+                  data = data+'<a href="" class="btn-sm dropdown-item" data-target="#modal-editar-atencion" data-atencion='+row.id+' data-toggle="modal" ><i class="fa fa-paperclip text-primary" aria-hidden="true"></i> Editar Adjuntos</a>';
 
               @endcan
 
               var urlpdf = '{{ route("pedidosPDF", ":id") }}';
               urlpdf = urlpdf.replace(':id', row.id);
               @can('operacion.PDF')
-                data = data+'<a href="'+urlpdf+'" class="btn btn-primary btn-sm" target="_blank"><i class="fa fa-file-pdf"></i> PDF</a>';
+                data = data+'<a href="'+urlpdf+'" class="btn-sm dropdown-item" target="_blank"><i class="fa fa-file-pdf text-warning"></i> PDF</a>';
               @endcan
 
               @can('operacion.enviar')
@@ -516,12 +519,14 @@
                 {
                   @if (Auth::user()->rol == "Jefe de operaciones" || Auth::user()->rol == "Administrador")
 
-                    data = data+'<a href="" data-target="#modal-envio" data-envio='+row.id+' data-toggle="modal" ><button class="btn btn-success btn-sm">Con sobre</button></a>';
-                    data = data+'<a href="" data-target="#modal-sinenvio" data-sinenvio='+row.id+' data-toggle="modal" ><button class="btn btn-dark btn-sm">Sin sobre</button></a>';
+                    data = data+'<a href="" class="btn-sm dropdown-item" data-target="#modal-envio" data-envio='+row.id+' data-toggle="modal" ><i class="fa fa-envelope text-success" aria-hidden="true"></i> Con sobre</a>';
+                    data = data+'<a href="" class="btn-sm dropdown-item" data-target="#modal-sinenvio" data-sinenvio='+row.id+' data-toggle="modal" ><i class="fa fa-times text-danger" aria-hidden="true"></i> Sin sobre</a>';
                   @endif
 
                 }
               @endcan
+
+                  data = data+'</ul></div>';
 
               return data;
             }

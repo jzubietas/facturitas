@@ -25,7 +25,7 @@ class PageclienteinfoNoviembre extends Export implements WithColumnFormatting,Wi
                 ,'clientes.celular'
                 //,'clientes.situacion'
                 ,DB::raw(" (select a.s_2022_11 from listado_resultados a where a.id=clientes.id ) as situacion ")
-                ,'clientes.created_at'
+                ,DB::raw("(select DATE_FORMAT(dp1.created_at,'%Y-%m-%d %h:%i:%s') from pedidos dp1 where dp1.cliente_id=clientes.id order by dp1.created_at desc limit 1) as fecha"),
             )
             ->where('clientes.estado', '1')
             ->where('clientes.tipo', '1')
@@ -41,7 +41,7 @@ class PageclienteinfoNoviembre extends Export implements WithColumnFormatting,Wi
             ,"icelular"=>"Identificador celular"
             ,"celular"=>"Celular"
             ,"situacion"=>"Situacion"
-            ,"created_at"=>"Creado"
+            ,"fecha"=>"Fecha Ultimo Pedido"
         ];
     }
     public function title(): string

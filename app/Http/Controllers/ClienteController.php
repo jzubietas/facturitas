@@ -6,6 +6,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Cliente;
 use App\Models\DetallePedido;
+use App\Models\PagoPedido;
 use App\Models\Pedido;
 use App\Models\Porcentaje;
 use App\Models\User;
@@ -112,8 +113,8 @@ class ClienteController extends Controller
                 DB::raw('MAX(DATE_FORMAT(p.created_at, "%Y")) as anio'),
                 DB::raw('MONTH(CURRENT_DATE()) as dateM'),
                 DB::raw('YEAR(CURRENT_DATE()) as dateY'),
-                DB::raw(" (select count(ped.id) from pedidos ped where ped.cliente_id=clientes.id and ped.pago in (0,1) and ped.pagado in (0,1) and ped.created_at >='2022-12-01 00:00:00' and ped.estado=1) as pedidos_mes_deuda "),
-                DB::raw(" (select count(ped2.id) from pedidos ped2 where ped2.cliente_id=clientes.id and ped2.pago in (0,1) and ped2.pagado in (0,1) and ped2.created_at <='2022-11-30 00:00:00'  and ped2.estado=1) as pedidos_mes_deuda_antes "),
+                DB::raw(" (select count(ped.id) from pedidos ped where ped.cliente_id=clientes.id and ped.pago in (0,1) and ped.pagado in (0,1) and ped.created_at >='".now()->startOfMonth()->format('Y-m-d H:i:s')."' and ped.estado=1) as pedidos_mes_deuda "),
+                DB::raw(" (select count(ped2.id) from pedidos ped2 where ped2.cliente_id=clientes.id and ped2.pago in (0,1) and ped2.pagado in (0,1) and ped2.created_at <='".now()->endOfMonth()->format('Y-m-d H:i:s')."'  and ped2.estado=1) as pedidos_mes_deuda_antes "),
                 'clientes.deuda',
                 //DB::raw(" (select lr.s_2022_11 from clientes c inner join listado_resultados lr on c.id=lr.id limit 1) as situacion")
                 'clientes.situacion'
@@ -599,22 +600,22 @@ class ClienteController extends Controller
         $mirol = Auth::user()->rol;
         $clientes = null;
         $clientes = Cliente::whereIn('user_id',
-                User::query()->select('users.id')
-                ->whereIn('users.rol',['Asesor',User::ROL_ADMIN])
-                ->where('users.estado','1')
-                ->where('users.identificador',$request->user_id)
-            )
+            User::query()->select('users.id')
+                ->whereIn('users.rol', ['Asesor', User::ROL_ADMIN])
+                ->where('users.estado', '1')
+                ->where('users.identificador', $request->user_id)
+        )
             ->where('clientes.estado', '1')
             ->where("clientes.tipo", "1");
         $html = "";
 
         //valida deuda excepto para administrador o por tener tiempo temporal
-/*
-        if (!$request->user_id || $request->user_id == '') {
-            $clientes = $clientes;
-        } else {
-            $clientes = $clientes->where('u.identificador', $request->user_id);
-        }*/
+        /*
+                if (!$request->user_id || $request->user_id == '') {
+                    $clientes = $clientes;
+                } else {
+                    $clientes = $clientes->where('u.identificador', $request->user_id);
+                }*/
         $clientes = $clientes->orderBy('id', 'ASC')
             ->get([
                 'clientes.id',
@@ -643,21 +644,21 @@ class ClienteController extends Controller
                     $html .= '<option style="color:yellow" value="' . $cliente->id . '">' . $cliente->celular.'-'.$cliente->icelular. '  -  ' . $cliente->nombre . '</option>';
                 }else*/
                 {
-                   $saldo= DetallePedido::query()->whereEstado(1)->whereIn('pedido_id',
+                    $saldo = DetallePedido::query()->whereEstado(1)->whereIn('pedido_id',
                         Pedido::query()->select('pedidos.id')
-                            ->where('pedidos.cliente_id','=', $cliente->id)
+                            ->where('pedidos.cliente_id', '=', $cliente->id)
                             ->whereEstado(1)
                     )->sum('saldo');
-                   
+
                     //considerar deuda real
                     if ($cliente->pedidos_mes_deuda > 0 && $cliente->pedidos_mes_deuda_antes == 0) {
-                        $html .= '<option '.($saldo==0?'disabled':'').' style="color:'.($saldo==0?'green':'lightblue').'" value="' . $cliente->id . '">' . $cliente->celular . '-' . $cliente->icelular . '  -  ' . $cliente->nombre . '  ('.($saldo==0?'Sin Deuda':'').')</option>';
+                        $html .= '<option ' . ($saldo == 0 ? 'disabled' : '') . ' style="color:' . ($saldo == 0 ? 'green' : 'lightblue') . '" value="' . $cliente->id . '">' . $cliente->celular . '-' . $cliente->icelular . '  -  ' . $cliente->nombre . '  (' . ($saldo == 0 ? 'Sin Deuda' : '') . ')</option>';
                     } else if ($cliente->pedidos_mes_deuda > 0 && $cliente->pedidos_mes_deuda_antes > 0) {
-                        $html .= '<option '.($saldo==0?'disabled':'').' style="color:'.($saldo==0?'green':'black').'" value="' . $cliente->id . '">' . $cliente->celular . '-' . $cliente->icelular . '  -  ' . $cliente->nombre . '**CLIENTE CON DEUDA**</option>';
+                        $html .= '<option ' . ($saldo == 0 ? 'disabled' : '') . ' style="color:' . ($saldo == 0 ? 'green' : 'black') . '" value="' . $cliente->id . '">' . $cliente->celular . '-' . $cliente->icelular . '  -  ' . $cliente->nombre . '**CLIENTE CON DEUDA**</option>';
                     } else if ($cliente->pedidos_mes_deuda == 0 && $cliente->pedidos_mes_deuda_antes > 0) {
-                        $html .= '<option '.($saldo==0?'disabled':'').' style="color:'.($saldo==0?'green':'black').'" value="' . $cliente->id . '">' . $cliente->celular . '-' . $cliente->icelular . '  -  ' . $cliente->nombre . '**CLIENTE CON DEUDA**</option>';
+                        $html .= '<option ' . ($saldo == 0 ? 'disabled' : '') . ' style="color:' . ($saldo == 0 ? 'green' : 'black') . '" value="' . $cliente->id . '">' . $cliente->celular . '-' . $cliente->icelular . '  -  ' . $cliente->nombre . '**CLIENTE CON DEUDA**</option>';
                     } else {
-                        $html .= '<option '.($saldo==0?'disabled':'').'  style="color:'.($saldo==0?'green':'red').'" value="' . $cliente->id . '">' . $cliente->celular . '-' . $cliente->icelular . '  -  ' . $cliente->nombre . '  ('.($saldo==0?'Sin Deuda':'').')</option>';
+                        $html .= '<option ' . ($saldo == 0 ? 'disabled' : '') . '  style="color:' . ($saldo == 0 ? 'green' : 'red') . '" value="' . $cliente->id . '">' . $cliente->celular . '-' . $cliente->icelular . '  -  ' . $cliente->nombre . '  (' . ($saldo == 0 ? 'Sin Deuda' : '') . ')</option>';
                     }
                 }
             }
@@ -1455,12 +1456,7 @@ class ClienteController extends Controller
                 ->pluck('users.identificador');
 
             $data = $data->WhereIn("u.identificador", $usersasesores);
-        } else {
-
-            $data = $data;
-
         }
-        //$data=$data->get();
 
         return Datatables::of(DB::table($data))
             ->addIndexColumn()
@@ -1473,4 +1469,45 @@ class ClienteController extends Controller
         //}
     }
 
+    public function deudasCopyAjax(Request $request)
+    {
+        $this->validate($request, [
+            'cliente_id' => 'required'
+        ]);
+        $cliente=Cliente::query()->with('user')->findOrFail($request->cliente_id);
+        $mensajesRandom = [];
+        $mensajesRandom[] = '*Amigo buenos dias, por favor neceisto que me cancele el pago, le mando el resumen*';
+        $mensajesRandom[] = '*Amigo buenos días el saldito pendiente que tenemos por favor no se olvide, le envio el detalle.';
+        $mensajesRandom[] = '*Buenas tardes estimado, le envio el total de la deuda para que me deposite por favor, le mando el resumen para que me cancele. ';
+
+        $messajeKey = array_rand($mensajesRandom);
+        $messaje = $mensajesRandom[$messajeKey];
+        $pedidos = Pedido::query()->with(['cliente', 'pagoPedidos', 'detallePedidos'])
+            ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
+            ->select(
+                'pedidos.id',
+                'pedidos.created_at',
+                'dp.nombre_empresa',
+                'dp.cantidad',
+                'dp.porcentaje',
+                'dp.ft',
+                'dp.courier',
+                'dp.total',
+                'dp.saldo as diferencia',
+            )
+            ->where('pedidos.created_at','<=',now()->subDays(7)->format('Y-m-d H:i:s'))
+            ->where('pedidos.cliente_id', $cliente->id)
+            ->where('pedidos.condicion_code','<>',Pedido::ANULADO_INT)
+            ->get()
+            ->map(function (Pedido $pedido) {
+                $pedido->adelanto = $pedido->pagoPedidos()->whereEstado(1)->sum('abono');
+               // $pedido->deuda_total = $pedido->detallePedidos()->sum("saldo");
+                return $pedido;
+            });
+        $totalDeuda=$pedidos->sum('diferencia');
+
+        return response()->json([
+            "html" => view('clientes.response.modal_data_clientes_deuda', compact('messaje','pedidos','totalDeuda','cliente'))->render()
+        ]);
+    }
 }

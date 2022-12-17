@@ -142,12 +142,12 @@
             var pedidodiferencia=data.diferencia;
             //pedidodiferencia=0;
             if(pedidodiferencia==null){
-                $('td:eq(9)', row).css('background', '#ca3a3a').css('color','#ffffff').css('text-align','center').css('font-weight','bold');
+                $('td:eq(9)', row).css('background', '#efb7b7').css('color','##934242').css('text-align','center').css('font-weight','bold');
             }else{
                 if(pedidodiferencia>3){
-                    $('td:eq(9)', row).css('background', '#ca3a3a').css('color','#ffffff').css('text-align','center').css('font-weight','bold');
+                    $('td:eq(9)', row).css('background', '#efb7b7').css('color','##934242').css('text-align','center').css('font-weight','bold');
                 }else{
-                    $('td:eq(9)', row).css('background', '#44c24b').css('text-align','center').css('font-weight','bold');
+                    $('td:eq(9)', row).css('background', '#afdfb2').css('text-align','center').css('font-weight','bold');
                 }
             }
         },
@@ -279,26 +279,29 @@
             var urledit = '{{ route("pedidos.edit", ":id") }}';
             urledit = urledit.replace(':id', row.id);
 
-            @can('pedidos.pedidosPDF')
-              data = data+'<a href="'+urlpdf+'" class="btn btn-info btn-sm" target="_blank"><i class="fa fa-file-pdf"></i> PDF</a><br>';
+              data = '<div><ul class="" aria-labelledby="dropdownMenuButton">';
+
+
+              @can('pedidos.pedidosPDF')
+              data = data+'<a href="'+urlpdf+'" class="btn-sm dropdown-item" target="_blank"><i class="fa fa-file-pdf text-primary"></i> PDF</a>';
             @endcan
             @can('pedidos.show')
-              data = data+'<a href="'+urlshow+'" class="btn btn-info btn-sm"><i class="fas fa-eye"></i> VER</a><br>';
+              data = data+'<a href="'+urlshow+'" class="btn-sm dropdown-item"><i class="fas fa-eye text-success"></i> Ver</a>';
             @endcan
             @can('pedidos.edit')
               if(row.condicion_pa==0)
               {
-                data = data+'<a href="'+urledit+'" class="btn btn-warning btn-sm"> Editar</a><br>';
+                data = data+'<a href="'+urledit+'" class="btn-sm dropdown-item"><i class="fas fa-edit text-warning"></i>  Editar</a>';
               }
             @endcan
             @can('pedidos.destroy')
             if(row.estado==0)
             {
-              data = data+'<a href="" data-target="#modal-restaurar" data-toggle="modal" data-restaurar="'+row.id+'" ><button class="btn btn-success btn-sm"><i class="fas fa-check"></i> Restaurar</button></a><br>';
+              data = data+'<a href="" data-target="#modal-restaurar" class="btn-sm dropdown-item" data-toggle="modal" data-restaurar="'+row.id+'" ><i class="fa fa-undo" aria-hidden="true"></i> Restaurar</a>';
             }else{
               if(row.condicion_pa==0)
               {
-                data = data+'<a href="" data-target="#modal-delete" data-toggle="modal" data-delete="'+row.id+'" data-responsable="{{ $miidentificador }}"><button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i> Anular</button></a>';
+                data = data+'<a href="" data-target="#modal-delete" class="btn-sm dropdown-item" data-toggle="modal" data-delete="'+row.id+'" data-responsable="{{ $miidentificador }}"><i class="fas fa-trash-alt text-danger"></i> Anular</a>';
               }
             }
 
@@ -314,10 +317,11 @@
 
                 console.log(varcreate);
 
-                data = data+'<a class="clickpagar" href="'+varcreate+'" class="btn btn-success btn-sm" data-pagar="'+row.cliente_id+'"><button class="btn btn-success btn-sm"><i class="fas fa-check"></i> Pagar</button></a><br>';
+                data = data+'<a class="clickpagar btn-sm dropdown-item" href="'+varcreate+'" data-pagar="'+row.cliente_id+'"><i class="fas fa-check text-success"></i> Pagar</a>';
 
             @endcan
 
+                data = data+'</ul></div>';
 
             return data;
           }

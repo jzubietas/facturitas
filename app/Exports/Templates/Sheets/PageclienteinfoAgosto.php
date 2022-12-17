@@ -1,16 +1,14 @@
 <?php
-
 namespace App\Exports\Templates\Sheets;
 
 use App\Abstracts\Export;
 use App\Models\Cliente;
-use App\Models\ListadoResultado;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Concerns\WithColumnFormatting;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 use Maatwebsite\Excel\Concerns\WithColumnWidths;
 
-class PageclienteinfoDiciembre extends Export implements WithColumnFormatting,WithColumnWidths
+class PageclienteinfoAgosto extends Export implements WithColumnFormatting,WithColumnWidths
 {
     public function collection()
     {
@@ -24,7 +22,7 @@ class PageclienteinfoDiciembre extends Export implements WithColumnFormatting,Wi
                 ,'clientes.icelular'
                 ,'clientes.celular'
                 //,'clientes.situacion'
-                ,DB::raw(" (select a.s_2022_12 from listado_resultados a where a.id=clientes.id ) as situacion ")
+                ,DB::raw(" (select a.s_2022_08 from listado_resultados a where a.id=clientes.id ) as situacion ")
                 ,DB::raw("(select DATE_FORMAT(dp1.created_at,'%Y-%m-%d %h:%i:%s') from pedidos dp1 where dp1.cliente_id=clientes.id order by dp1.created_at desc limit 1) as fecha"),
             )
             ->where('clientes.estado', '1')
@@ -44,10 +42,9 @@ class PageclienteinfoDiciembre extends Export implements WithColumnFormatting,Wi
             ,"fecha"=>"Fecha Ultimo Pedido"
         ];
     }
-
     public function title(): string
     {
-        return 'Detalle Diciembre';
+        return 'Detalle Setiembre';
     }
     public function map($model): array
     {
@@ -67,11 +64,35 @@ class PageclienteinfoDiciembre extends Export implements WithColumnFormatting,Wi
             ,'H' => 8
         ];
     }
+
     public function columnFormats(): array
     {
         return [
             'H' => NumberFormat::FORMAT_DATE_YYYYMMDD
 
         ];
+    }
+
+    public function registerEvents(): array
+    {
+        return [
+            AfterSheet::class => [self::class, 'afterSheet']
+        ];
+    }
+
+    public static function afterSheet(AfterSheet $event)
+    {
+        $color_recurente='a9def9';
+
+        $style_recurrente = array(
+            'fill' => array(
+                'fillType' => Fill::FILL_SOLID,
+                'startColor' => array('argb' => $color_recurente)
+            )
+        );
+
+        $row_cell_=14;
+        $letter_cell='N';
+        //$event->sheet->getStyle($letter_cell.$row->getRowIndex())->applyFromArray($style_recurrente);
     }
 }

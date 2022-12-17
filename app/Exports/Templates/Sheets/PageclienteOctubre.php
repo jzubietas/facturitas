@@ -15,7 +15,7 @@ class PageclienteOctubre extends Export implements WithColumnFormatting,WithColu
     {
         $cliente_list = [];
 
-        //now()->startOfMonth()->format("Y-m-d h:i:s")
+        //now()->startOfMonth()->format("Y-m-d H:i:s")
 
         $_2022_10=ListadoResultado::join('clientes as c','c.id','listado_resultados.id')
             ->select(

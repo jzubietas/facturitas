@@ -25,7 +25,7 @@
         <a href="" data-target="#modal-exportar" data-toggle="modal" class="dropdown-item" target="blank_"><img src="{{ asset('imagenes/icon-excel.png') }}"> Excel</a>
       </div>
     </div>
-    @include('pedidos.modal.exportar', ['title' => 'Exportar Lista de pedidos pagados', 'key' => '5'])    
+    @include('pedidos.modal.exportar', ['title' => 'Exportar Lista de pedidos pagados', 'key' => '5'])
   </h1>
   @if($superasesor > 0)
   <br>
@@ -68,7 +68,7 @@
             <th scope="col">Acciones</th>
           </tr>
         </thead>
-        <tbody>          
+        <tbody>
         </tbody>
       </table>
       {{--@include('pedidos.modal')--}}
@@ -149,23 +149,23 @@
             {
             }else{
               $(row).addClass('textred');
-            }   */        
+            }   */
         },
         rowCallback: function (row, data, index) {
               /*var pedidodiferencia=data.diferencia;
               if(pedidodiferencia==null){
-                $('td:eq(12)', row).css('background', '#ca3a3a').css('color','#ffffff').css('text-align','center').css('font-weight','bold');
+                $('td:eq(12)', row).css('background', '#efb7b7').css('color','#ffffff').css('text-align','center').css('font-weight','bold');
               }else{
                 if(pedidodiferencia>3){
-                  $('td:eq(12)', row).css('background', '#ca3a3a').css('color','#ffffff').css('text-align','center').css('font-weight','bold');
+                  $('td:eq(12)', row).css('background', '#efb7b7').css('color','#ffffff').css('text-align','center').css('font-weight','bold');
                 }else{
-                  $('td:eq(12)', row).css('background', '#44c24b').css('text-align','center').css('font-weight','bold');
+                  $('td:eq(12)', row).css('background', '#afdfb2').css('text-align','center').css('font-weight','bold');
                 }
               }*/
         },
         columns: [
           {
-            data: 'id', 
+            data: 'id',
             name: 'id',
             render: function ( data, type, row, meta ) {
               if(row.id<10){
@@ -176,13 +176,13 @@
                 return 'PED0'+row.id;
               }else{
                 return 'PED'+row.id;
-              } 
+              }
             },
             "visible":false,
         },
         {data: 'codigos', name: 'codigos', },
         {
-            data: 'celulares', 
+            data: 'celulares',
             name: 'celulares',
             render: function ( data, type, row, meta ) {
               if(row.icelulares!=null)
@@ -190,30 +190,30 @@
                 return row.celulares+'-'+row.icelulares;
               }else{
                 return row.celulares;
-              }              
+              }
             },
         },
         {data: 'empresas', name: 'empresas', },
         {data: 'users', name: 'users', },
         {
-          data: 'fecha', 
-          name: 'fecha', 
+          data: 'fecha',
+          name: 'fecha',
         },
         {
-          data: 'total', 
-          name: 'total', 
+          data: 'total',
+          name: 'total',
           render: $.fn.dataTable.render.number(',', '.', 2, '')
         },
         {
-          data: 'condiciones', 
-          name: 'condiciones', 
+          data: 'condiciones',
+          name: 'condiciones',
           render: function ( data, type, row, meta ) {
               return data;
           }
         },
         {
-          data: 'condicion_pa', 
-          name: 'condicion_pa', 
+          data: 'condicion_pa',
+          name: 'condicion_pa',
           render: function ( data, type, row, meta ) {
             if(row.condiciones=='ANULADO'){
                 return 'ANULADO';
@@ -236,12 +236,12 @@
                 //return data;
               }
             }
-            
+
           }
         },
         {
-          data: 'condiciones_aprobado', 
-          name: 'condiciones_aprobado', 
+          data: 'condiciones_aprobado',
+          name: 'condiciones_aprobado',
           render: function ( data, type, row, meta ) {
             if(data!=null)
             {
@@ -249,13 +249,13 @@
             }else{
               return 'SIN REVISAR';
             }
-              
+
           }
         },
         {
-          data: 'action', 
-          name: 'action', 
-          orderable: false, 
+          data: 'action',
+          name: 'action',
+          orderable: false,
           searchable: false,
           sWidth:'20%',
           render: function ( data, type, row, meta ) {
@@ -276,7 +276,7 @@
               if(row.condicion_pa==0)
               {
                 data = data+'<a href="'+urledit+'" class="btn btn-warning btn-sm"> Editar</a><br>';
-              } 
+              }
             @endcan
             @can('pedidos.destroy')
             if(row.estado==0)
@@ -286,12 +286,12 @@
               if(row.condicion_pa==0)
               {
                 data = data+'<a href="" data-target="#modal-delete" data-toggle="modal" data-delete="'+row.id+'" data-responsable="{{ $miidentificador }}"><button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i> Anular</button></a>';
-              }              
+              }
             }
-              
-            @endcan     
-                
-            return data;             
+
+            @endcan
+
+            return data;
           }
         },
       ],
@@ -318,15 +318,15 @@
   <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
 
   <script>
-    /*window.onload = function () {      
+    /*window.onload = function () {
       $('#tablaPrincipal').DataTable().draw();
     }*/
   </script>
 
   <script>
     /* Custom filtering function which will search data in column four between two values */
-        $(document).ready(function () { 
-        
+        $(document).ready(function () {
+
             $.fn.dataTable.ext.search.push(
                 function (settings, data, dataIndex) {
                     var min = $('#min').datepicker("getDate");
@@ -343,7 +343,7 @@
                 }
             );
 
-      
+
             $("#min").datepicker({ onSelect: function () { table.draw(); }, changeMonth: true, changeYear: true , dateFormat:"dd/mm/yy"});
             $("#max").datepicker({ onSelect: function () { table.draw(); }, changeMonth: true, changeYear: true, dateFormat:"dd/mm/yy" });
             var table = $('#tablaPrincipal').DataTable();

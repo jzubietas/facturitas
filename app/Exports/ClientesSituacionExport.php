@@ -433,7 +433,7 @@ class ClientesSituacionExport implements FromView, ShouldAutoSize
                 'porcentajeeb' => $porcentajeeb,
                 'deuda' => $cliente->deuda,
                 'deposito' => $deposito,
-                //'fecha' => date('d-m-Y h:i:s', strtotime($cliente->fecha)),
+                //'fecha' => date('d-m-Y H:i:s', strtotime($cliente->fecha)),
                 'fecha' => ($cliente->fecha),
                 'dia' => $cliente->dia,
                 'mes' => $cliente->mes,

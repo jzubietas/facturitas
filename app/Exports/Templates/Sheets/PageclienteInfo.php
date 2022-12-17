@@ -55,9 +55,9 @@ class PageclienteInfo extends ExportYear implements WithColumnFormatting, FromCo
                 ,'clientes.distrito'
                 ,'clientes.direccion'
                 ,'clientes.referencia'
-                ,'clientes.estado'
-                ,'clientes.deuda'
-                ,'clientes.pidio'
+                //,'clientes.estado'
+                //,'clientes.deuda'
+                //,'clientes.pidio'
                 ,'clientes.situacion'
                 ,DB::raw("(select DATE_FORMAT(dp1.created_at,'%Y-%m-%d %h:%i:%s') from pedidos dp1 where dp1.cliente_id=clientes.id order by dp1.created_at desc limit 1) as fecha")
                 ,DB::raw(" (select (dp.codigo) from pedidos dp where dp.cliente_id=clientes.id order by dp.created_at desc limit 1) as codigo ")
@@ -72,6 +72,55 @@ class PageclienteInfo extends ExportYear implements WithColumnFormatting, FromCo
     {
         //return parent::title();//Por defecto se toma del nombre de la clase de php, en este caso seria "Pagina One" de titulo
         return 'Info de Cliente';
+    }
+
+    public function columnWidths(): array
+    {
+        return [
+            'A' => 8
+            ,'B' => 8
+            ,'C' => 8
+            ,'D' => 8
+            ,'E' => 8
+            ,'F' => 8
+            ,'G' => 8
+            ,'H' => 8
+            ,'I' => 8
+            ,'J' => 8
+            ,'K' => 8
+            ,'L' => 8
+            ,'M' => 8
+            ,'N' => 8
+            ,'O' => 8
+            ,'P' => 8
+            ,'Q' => 8
+            ,'R' => 8
+            ,'S' => 8
+            ,'T' => 8
+            ,'U' => 8
+            ,'V' => 8
+            ,'W' => 8
+            ,'X' => 8
+            ,'Y' => 8
+            ,'Z' => 8
+            ,'AA' => 8
+            ,'AB' => 8
+            ,'AC' => 8
+            ,'AD' => 8
+            ,'AE' => 8
+            ,'AF' => 8
+            ,'AG' => 8
+            ,'AH' => 8
+            ,'AI' => 8
+            ,'AJ' => 8
+            ,'AK' => 8
+            ,'AL' => 8
+            ,'AM' => 8
+            ,'AN' => 8
+            ,'AO' => 8
+            ,'AP' => 8
+            ,'AQ' => 8
+        ];
     }
 
     public function map($model): array
@@ -192,8 +241,6 @@ class PageclienteInfo extends ExportYear implements WithColumnFormatting, FromCo
 
     public function fields(): array
     {
-        // columna de la base de datos => nombre de la columna en excel
-
         return [
             "id"=>"Identificador"
             ,"nombre"=>"Nombre"
@@ -206,9 +253,9 @@ class PageclienteInfo extends ExportYear implements WithColumnFormatting, FromCo
             ,"distrito"=>"Distrito"
             ,"direccion"=>"Direccion"
             ,"referencia"=>"Referencia"
-            ,"estado"=>"Estado"
-            ,"deuda"=>"Deuda"
-            ,"pidio"=>"Pidio"
+            //,"estado"=>"Estado"
+            //,"deuda"=>"Deuda"
+            //,"pidio"=>"Pidio"
             ,"fecha"=>"Fecha"
             ,"codigo"=>"codigo"
             ,"situacion"=>"Situacion"
@@ -217,36 +264,43 @@ class PageclienteInfo extends ExportYear implements WithColumnFormatting, FromCo
             ,"porcentajefb"=>"Porcentaje Fisico Bancarizado"
             ,"porcentajeesb"=>"Porcentaje Electronico sin banca"
             ,"porcentajeeb"=>"Porcentaje Electronico Bancarizado"
-            ,"eneroa"=>"Enero a","enerop"=>"Enero p"
-            ,"febreroa"=>"febrero a","febrerop"=>"Febrero p"
-            ,"marzoa"=>"marzo a","marzop"=>"marzo p"
-            ,"abrila"=>"abril a","abrilp"=>"abril p"
-            ,"mayoa"=>"mayo a","mayop"=>"mayo p"
-            ,"junioa"=>"junio a","juniop"=>"junio p"
-            ,"julioa"=>"julio a","juliop"=>"julio p"
-            ,"agostoa"=>"agosto a","agostop"=>"agosto p"
-            ,"setiembrea"=>"setiembre a","setiembrep"=>"setiembre p"
-            ,"octubrea"=>"octubre a","octubrep"=>"octubre p"
-            ,"noviembrea"=>"noviembre a","noviembrep"=>"noviembre p"
-            ,"diciembrea"=>"diciembre a","diciembrep"=>"diciembre p"
+            ,"eneroa"=>"Enero ".$this->anio
+            ,"febreroa"=>"Febrero ".$this->anio
+            ,"marzoa"=>"Marzo ".$this->anio
+            ,"abrila"=>"Abril ".$this->anio
+            ,"mayoa"=>"Mayo ".$this->anio
+            ,"junioa"=>"Junio ".$this->anio
+            ,"julioa"=>"Julio ".$this->anio
+            ,"agostoa"=>"Agosto ".$this->anio
+            ,"setiembrea"=>"Setiembre ".$this->anio
+            ,"octubrea"=>"Octubre ".$this->anio
+            ,"noviembrea"=>"Noviembre ".$this->anio
+            ,"diciembrea"=>"Diciembre ".$this->anio
+            ,"enerop"=>"Enero ".($this->anio+1)
+            ,"febrerop"=>"Febrero ".($this->anio+1)
+            ,"marzop"=>"Marzo ".($this->anio+1)
+            ,"abrilp"=>"Abril ".($this->anio+1)
+            ,"mayop"=>"Mayo ".($this->anio+1)
+            ,"juniop"=>"Junio ".($this->anio+1)
+            ,"juliop"=>"Julio ".($this->anio+1)
+            ,"agostop"=>"Agosto ".($this->anio+1)
+            ,"setiembrep"=>"Setiembre ".($this->anio+1)
+            ,"octubrep"=>"Octubre ".($this->anio+1)
+            ,"noviembrep"=>"Noviembre ".($this->anio+1)
+            ,"diciembrep"=>"Diciembre ".($this->anio+1)
             //,"created_at"=>"Fecha",
         ];
-
-
-                //'p.codigo as codigo',
-
     }
 
     public function columnFormats(): array
     {
-
         return [
             //Formato de las columnas segun la letra
             /*
              'D' => NumberFormat::FORMAT_DATE_YYYYMMDD,
              'E' => NumberFormat::FORMAT_DATE_YYYYMMDD,
             */
-            'O' => NumberFormat::FORMAT_DATE_YYYYMMDD
+            'L' => NumberFormat::FORMAT_DATE_YYYYMMDD
         ];
     }
 
@@ -336,8 +390,8 @@ class PageclienteInfo extends ExportYear implements WithColumnFormatting, FromCo
             )
         );
 
-        $row_cell_=17;
-        $letter_cell='Q';
+        $row_cell_=14;
+        $letter_cell='N';
         foreach ($event->sheet->getRowIterator() as $row)
         {
             if($row->getRowIndex()==1)continue;

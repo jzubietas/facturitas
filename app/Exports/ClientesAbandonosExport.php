@@ -15,7 +15,7 @@ use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 class ClientesAbandonosExport implements FromView, ShouldAutoSize
 {
     use Exportable;
-    
+
     public function clientes($request) {
 
             $clientes = Cliente::
@@ -26,7 +26,7 @@ class ClientesAbandonosExport implements FromView, ShouldAutoSize
                             'clientes.nombre',
                             'clientes.dni',
                             'clientes.icelular',
-                            'clientes.celular', 
+                            'clientes.celular',
                             'clientes.provincia',
                             'clientes.distrito',
                             'clientes.direccion',
@@ -40,14 +40,14 @@ class ClientesAbandonosExport implements FromView, ShouldAutoSize
                             'clientes.situacion',
                             )
                     ->where('clientes.estado','1')
-                    ->where('clientes.tipo','1')                    
+                    ->where('clientes.tipo','1')
                     ->groupBy(
                         'clientes.id',
                         'u.identificador',
                         'clientes.nombre',
                         'clientes.dni',
-                        'clientes.icelular', 
-                        'clientes.celular', 
+                        'clientes.icelular',
+                        'clientes.celular',
                         'clientes.provincia',
                         'clientes.distrito',
                         'clientes.direccion',
@@ -247,7 +247,7 @@ class ClientesAbandonosExport implements FromView, ShouldAutoSize
 
                 $dateM = Carbon::now()->format('m');
                 $dateY = Carbon::now()->format('Y');//2022
-                
+
                 if($cliente->pidio==0 || $cliente->pidio=='0' || $cliente->pidio==null  || $cliente->pidio=='null' ){
                     $estadopedido = 'SIN PEDIDO';
                 }else{
@@ -268,7 +268,7 @@ class ClientesAbandonosExport implements FromView, ShouldAutoSize
                         $estadopedido = 'ABANDONO';
                     }
                 }
-                
+
 
                 /*if( (($dateM*1)-($cliente->mes*1)) >= 0 && (($dateM*1)-($cliente->mes*1))<3 && (($dateY*1)-($cliente->anio*1)) == 0){
                     $estadopedido = 'RECURRENTE';
@@ -285,14 +285,14 @@ class ClientesAbandonosExport implements FromView, ShouldAutoSize
                     'provincia' => $cliente->provincia,
                     'distrito' => $cliente->distrito,
                     'direccion' => $cliente->direccion,
-                    'referencia' => $cliente->referencia,   
+                    'referencia' => $cliente->referencia,
                     'porcentajefsb' => $porcentajefsb,
                     'porcentajefb' => $porcentajefb,
                     'porcentajeesb' => $porcentajeesb,
                     'porcentajeeb' => $porcentajeeb,
                     'deuda' => $cliente->deuda,
                     'deposito' => $deposito,
-                    //'fecha' => date('d-m-Y h:i:s', strtotime($cliente->fecha)),
+                    //'fecha' => date('d-m-Y H:i:s', strtotime($cliente->fecha)),
                     'fecha' => ($cliente->fecha),
                     'dia' => $cliente->dia,
                     'mes' => $cliente->mes,
@@ -334,14 +334,14 @@ class ClientesAbandonosExport implements FromView, ShouldAutoSize
                 );
                 $cont++;
             }
-            
+
             $this->cliente_list = $cliente_list;
-            
+
         return $this;
     }
 
     public function anioa($request) {
-        
+
         $anioa = $request->anio;
         $this->anioa = $anioa;
 
@@ -349,13 +349,13 @@ class ClientesAbandonosExport implements FromView, ShouldAutoSize
     }
 
     public function aniop($request) {
-        
+
         $aniop = $request->anio+1;
         $this->aniop = $aniop;
 
         return $this;
     }
-    
+
     public function view(): View {
         return view('clientes.excel.clientesituacion', [
             'cliente_list'=> $this->cliente_list,

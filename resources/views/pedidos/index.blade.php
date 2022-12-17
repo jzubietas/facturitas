@@ -65,7 +65,7 @@
           </tr>
         </tbody>
       </table><br>
-      <table id="tablaPrincipal" class="table table-striped table-responsive">{{-- display nowrap  --}}
+      <table id="tablaPrincipal" class="table table-striped">{{-- display nowrap  --}}
         <thead>
           <tr>
             <th scope="col">Item</th>
@@ -267,12 +267,12 @@
               var pedidodiferencia=data.diferencia;
               //pedidodiferencia=0;
               if(pedidodiferencia==null){
-                $('td:eq(14)', row).css('background', '#ca3a3a').css('color','#ffffff').css('text-align','center').css('font-weight','bold');
+                $('td:eq(14)', row).css('background', '#efb7b7').css('color','#934242').css('text-align','center').css('font-weight','bold');
               }else{
                 if(pedidodiferencia>3){
-                  $('td:eq(14)', row).css('background', '#ca3a3a').css('color','#ffffff').css('text-align','center').css('font-weight','bold');
+                  $('td:eq(14)', row).css('background', '#efb7b7').css('color','#934242').css('text-align','center').css('font-weight','bold');
                 }else{
-                  $('td:eq(14)', row).css('background', '#44c24b').css('text-align','center').css('font-weight','bold');
+                  $('td:eq(14)', row).css('background', '#afdfb2').css('text-align','center').css('font-weight','bold');
                 }
               }
         },
@@ -349,7 +349,7 @@
                         return '{{\App\Models\Pedido::EN_PROCESO_ATENCION }}';
                     }else if(row.condicion_code==3){
                         return '{{\App\Models\Pedido::ATENDIDO }}';
-                    }else if(row.condicion_code==4){
+                    }else if(row.condicion_code==4||row.estado==0){
                         return '{{\App\Models\Pedido::ANULADO }}';
                     }
                 }
@@ -359,7 +359,7 @@
           name: 'condicion_pa',
           render: function ( data, type, row, meta ) {
 
-            if(row.condiciones=='ANULADO'){
+            if(row.condiciones=='ANULADO'||row.condicion_code==4||row.estado==0){
                 return 'ANULADO';
             }else{
               if(row.condicion_pa==null){
@@ -387,6 +387,9 @@
           data: 'condiciones_aprobado',
           name: 'condiciones_aprobado',
           render: function ( data, type, row, meta ) {
+              if(row.condicion_code==4||row.estado==0){
+                  return 'ANULADO';
+              }
             if(data!=null)
             {
               return data;
@@ -427,7 +430,9 @@
           data: 'condicion_envio',
           name: 'condicion_envio',
           render: function ( data, type, row, meta ) {
-
+              if(row.condicion_code==4||row.estado==0){
+                  return 'ANULADO';
+              }
             if(row.condicion_envio=='ANULADO'){
                 return 'ANULADO';
             }else if(row.condicion_envio == 0){
@@ -458,6 +463,9 @@
           data: 'diferencia',
           name: 'diferencia',
           render: function ( data, type, row, meta ) {
+              if(row.condicion_code==4||row.estado==0){
+                  return '0';
+              }
             if(row.diferencia==null){
               return 'NO REGISTRA PAGO';
             }else{
@@ -486,32 +494,32 @@
 
             var urledit = '{{ route("pedidos.edit", ":id") }}';
             urledit = urledit.replace(':id', row.id);
-              data = '<div class="row">';
+              data = '<div><ul class="" aria-labelledby="dropdownMenuButton">';
             @can('pedidos.pedidosPDF')
-              data = data+'<div class="col-lg-12" style="margin-top:4px;"><a href="'+urlpdf+'" class="btn btn-info btn-sm w-100" target="_blank"><i class="fa fa-file-pdf"></i> PDF</a></div>';
+              data = data+'<a href="'+urlpdf+'" class="btn-sm dropdown-item" target="_blank"><i class="fa fa-file-pdf text-primary"></i> Ver PDF</a>';
             @endcan
             @can('pedidos.show')
-              data = data+'<div class="col-lg-12" style="margin-top:4px;"><a href="'+urlshow+'" class="btn btn-info btn-sm w-100"><i class="fas fa-eye"></i> VER</a></div>';
+              data = data+'<a href="'+urlshow+'" class="btn-sm dropdown-item"><i class="fas fa-eye text-success"></i> Ver pedido</a>';
             @endcan
             @can('pedidos.edit')
               if(row.condicion_pa==0)
               {
-                data = data+'<div class="col-lg-12" style="margin-top:4px;"><a href="'+urledit+'" class="btn btn-warning btn-sm w-100"> Editar</a></div>';
+                data = data+'<a href="'+urledit+'" class="btn-sm dropdown-item"><i class="fas fa-edit text-warning" aria-hidden="true"></i> Editar</a>';
               }
             @endcan
             @can('pedidos.destroy')
             if(row.estado==0)
             {
-              data = data+'<div class="col-lg-12" style="margin-top:4px;"><a href="#" class="btn btn-danger btn-sm w-100" data-target="#modal-restaurar" data-toggle="modal" data-restaurar="'+row.id+'" ><i class="fas fa-check"></i> Restaurar</a><br>';
+              data = data+'<a href="#" class="btn-sm dropdown-item" data-target="#modal-restaurar" data-toggle="modal" data-restaurar="'+row.id+'" ><i class="fas fa-check text-secondary"></i> Restaurar</a>';
             }else{
               if(!row.pendiente_anulacion && row.condicion_pa==0)
               {
-                data = data+'<div class="col-lg-12" style="margin-top:4px;"><a href="" class="btn btn-danger btn-sm w-100" data-target="#modal-delete" data-toggle="modal" data-delete="'+row.id+'" data-responsable="{{ $miidentificador }}"><i class="fas fa-trash-alt"></i> Anular</a></div>';
+                data = data+'<a href="" class="btn-sm dropdown-item" data-target="#modal-delete" data-toggle="modal" data-delete="'+row.id+'" data-responsable="{{ $miidentificador }}"><i class="fas fa-trash-alt text-danger"></i> Anular</a>';
               }
             }
 
             @endcan
-            data = data+'</div>';
+            data = data+'</ul></div>';
 
             return data;
           }

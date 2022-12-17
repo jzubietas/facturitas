@@ -320,6 +320,7 @@ class PedidoController extends Controller
 
             $pedidos = $pedidos->WhereIn('u.identificador', $usersasesores);
         } else if (Auth::user()->rol == "Jefe de llamadas") {
+            /*
             $usersasesores = User::where('users.rol', 'Asesor')
                 ->where('users.estado', '1')
                 ->where('users.llamada', Auth::user()->id)
@@ -327,8 +328,8 @@ class PedidoController extends Controller
                     DB::raw("users.identificador as identificador")
                 )
                 ->pluck('users.identificador');
-
             $pedidos = $pedidos->WhereIn('u.identificador', $usersasesores);
+            */
         } else if (Auth::user()->rol == "Asesor") {
             $usersasesores = User::where('users.rol', 'Asesor')
                 ->where('users.estado', '1')
@@ -923,8 +924,8 @@ class PedidoController extends Controller
                         'clientes.activado_tiempo',
                         'clientes.activado_pedido',
                         'clientes.temporal_update',
-                        DB::raw(" (select count(ped.id) from pedidos ped where ped.cliente_id=clientes.id and ped.pago in (0,1) and ped.pagado in (0,1) and ped.created_at >='" . now()->startOfMonth()->format("Y-m-d h:i:s") . "' and ped.estado=1) as pedidos_mes_deuda "),
-                        DB::raw(" (select count(ped2.id) from pedidos ped2 where ped2.cliente_id=clientes.id and ped2.pago in (0,1) and ped2.pagado in (0,1) and ped2.created_at <='" . now()->subMonth()->endOfMonth()->format("Y-m-d h:i:s") . "'  and ped2.estado=1) as pedidos_mes_deuda_antes ")
+                        DB::raw(" (select count(ped.id) from pedidos ped where ped.cliente_id=clientes.id and ped.pago in (0,1) and ped.pagado in (0,1) and ped.created_at >='" . now()->startOfMonth()->format("Y-m-d H:i:s") . "' and ped.estado=1) as pedidos_mes_deuda "),
+                        DB::raw(" (select count(ped2.id) from pedidos ped2 where ped2.cliente_id=clientes.id and ped2.pago in (0,1) and ped2.pagado in (0,1) and ped2.created_at <='" . now()->subMonth()->endOfMonth()->format("Y-m-d H:i:s") . "'  and ped2.estado=1) as pedidos_mes_deuda_antes ")
                     ]
                 )->first();
 
@@ -1333,11 +1334,12 @@ class PedidoController extends Controller
                 'pedidos.fecha_anulacion',
                 'pedidos.fecha_anulacion_confirm',
                 'pedidos.responsable',
+                'pedidos.condicion_code',
             )
             //->where('pedidos.estado', '1')
             ->where('pedidos.id', $pedido->id)
             //->where('dp.estado', '1')
-            ->groupBy(
+            /*->groupBy(
                 'pedidos.id',
                 'c.nombre',
                 'c.celular',
@@ -1370,12 +1372,13 @@ class PedidoController extends Controller
                 'pedidos.fecha_anulacion',
                 'pedidos.fecha_anulacion_confirm',
                 'pedidos.responsable',
-
             )
+            */
             ->orderBy('pedidos.created_at', 'DESC')
             ->get();
 
-        $cotizacion = Pedido::query()->with(['cliente'])->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
+        $cotizacion = Pedido::query()->with(['cliente'])
+            ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
             ->select(
                 'pedidos.id',
                 'dp.nombre_empresa',
@@ -1848,21 +1851,28 @@ class PedidoController extends Controller
             ->addIndexColumn()
             ->addColumn('action', function ($pedido) {
 
-                $btn = '<a href="' . route('pedidosPDF', data_get($pedido, 'id')) . '" class="btn btn-dev btn-primary btn-sm" data-toggle="tooltip" data-placement="top" title="Ver PDF" target="_blank"><i class="fa fa-file-pdf"></i></a>';
-                $btn = $btn . '<a href="' . route('pedidos.show', data_get($pedido, 'id')) . '" class="btn btn-dev btn-info btn-sm" data-toggle="tooltip" data-placement="top" title="Ver Pedido"><i class="fas fa-eye"></i></a>';
+                $btn = ' <div>
+
+  <ul class="" aria-labelledby="dropdownMenuButton">';
+
+                $btn = $btn . '
+                <a href="' . route('pedidosPDF', data_get($pedido, 'id')) . '" class="btn-sm dropdown-item" target="_blank"><i class="fa fa-file-pdf text-primary"></i> Ver PDF</a>';
+                $btn = $btn . '<a href="' . route('pedidos.show', data_get($pedido, 'id')) . '" class="btn-sm dropdown-item"><i class="fas fa-eye text-success"></i> Ver pedido</a>';
 
                 if ($pedido->estado > 0) {
 
                     if (Auth::user()->rol == "Super asesor" || Auth::user()->rol == "Administrador") {
-                        $btn = $btn . '<a href="' . route('pedidos.edit', $pedido->id) . '" class="btn btn-dev btn-warning btn-sm" data-toggle="tooltip" data-placement="top" title="Editar Pedido"><i class="fas fa-edit" aria-hidden="true"></i></a>';
+                        $btn = $btn . '<a href="' . route('pedidos.edit', $pedido->id) . '" class="btn-sm dropdown-item"><i class="fas fa-edit text-warning" aria-hidden="true"></i> Editar pedido</a>';
                     }
 
                     if (Auth::user()->rol == "Administrador") {
-                        $btn = $btn . '<a href="" data-target="#modal-delete" data-toggle="modal" data-delete="' . $pedido->id . '"><button class="btn btn-dev btn-danger btn-sm" data-toggle="tooltip" data-placement="top" title="Anular Pedido"><i class="fas fa-trash-alt"></i></button></a>';
+                        $btn = $btn . '<a href="" class="btn-sm dropdown-item" data-target="#modal-delete" data-toggle="modal" data-delete="' . $pedido->id . '"><i class="fas fa-trash-alt text-danger"></i> Anular pedido</a>';
                     }
 
 
                 }
+
+                $btn = $btn . '</ul></div>';
 
                 return $btn;
             })
