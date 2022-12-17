@@ -366,6 +366,14 @@ return [
                     'active' => ['pedidos atendidos'],
                 ],
 
+                [
+                    'text' => 'Sobres terminados',
+                    'route'  => 'operaciones.terminados',
+                    'can' => 'operacion.atendidos',
+                    'icon'   => 'fas fa-check-circle',
+                    'active' => ['pedidos atendidos'],
+                ],
+
             ],
         ],
 

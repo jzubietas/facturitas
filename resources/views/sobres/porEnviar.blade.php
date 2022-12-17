@@ -562,8 +562,10 @@
         //return false;
         let val_cliente=$("#cliente_id").val();
           let val_cod_pedido=$("#cod_pedido").val();
+          let val_cod_ase=$("#cod_ase").val();
         fd2.append('cliente_id', val_cliente);
           fd2.append('cod_pedido', val_cod_pedido);
+          fd2.append('cod_asesor', val_cod_ase);
 
         let val_nombre=$("#nombre").val();
         let val_contacto=$("#celular").val();
@@ -962,9 +964,12 @@
         var button = $(event.relatedTarget)
         var cliente = button.data('cliente');
         var codigo_ped = button.data('codigo');
+          var codigo_asesor = button.data('asesor');
+
         console.log("cliente "+cliente);
         $("#cliente_id").val(cliente);
         $("#cod_pedido").val(codigo_ped);
+          $("#cod_ase").val(codigo_asesor);
 
         $("#modal-historial-lima-a").attr("data-cliente",cliente);
         $("#modal-historial-provincia-a").attr("data-cliente",cliente);
@@ -1278,7 +1283,7 @@
               datass='';
 
               @if (Auth::user()->rol == "Asesor" || Auth::user()->rol == "Administrador")
-                datass=datass+'<a href="" data-target="#modal-direccion" data-toggle="modal" data-cliente="'+row.cliente_id+'" data-direccion="'+row.id+'" data-codigo="'+ row.id +'"><button class="btn btn-info btn-sm"><i class="fas fa-envelope"></i> Direccion</button></a>';
+                datass=datass+'<a href="" data-target="#modal-direccion" data-toggle="modal" data-cliente="'+row.cliente_id+'" data-asesor="'+row.user_id+'" data-direccion="'+row.id+'" data-codigo="'+ row.id +'"><button class="btn btn-info btn-sm"><i class="fas fa-envelope"></i> Direccion</button></a>';
               @endif
 
 

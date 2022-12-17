@@ -5,6 +5,29 @@ body{
     font-size: 14px !important;
 }
 
+#gorro_navidad{
+    width: 24px;
+    position: absolute;
+    top: -20px;
+    right: -13px;
+    transform: rotate(35deg);
+    animation: navidad ease-in 2s infinite;
+    transition: all 0.2s;
+    transform-origin: bottom left;
+}
+
+@keyframes navidad {
+    0%{
+        transform: rotate(35deg);
+    }
+    50%{
+        transform: rotate(50deg);
+    }
+    100%{
+        transform: rotate(35deg);
+    }
+}
+
 .elevation-4 {
     box-shadow: black 0px 0px 0px !important;
 }

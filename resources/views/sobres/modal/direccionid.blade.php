@@ -15,6 +15,7 @@
 
         <input id="cliente_id" name="cliente_id" value="" type="hidden">
           <input id="cod_pedido" name="cod_pedido" value="" type="hidden">
+          <input id="cod_ase" name="cod_ase" value="" type="hidden">
 
         <div class="row">
           <div class="col-4  contenedor-tabla"><!--tabla-->
