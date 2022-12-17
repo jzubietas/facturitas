@@ -67,8 +67,6 @@
         <tbody>
         </tbody>
       </table>
-      @include('pedidos.modal.Atender-pedido-op')
-      @include('pedidos.modal.revertirporenviar')
     </div>
   </div>
 
