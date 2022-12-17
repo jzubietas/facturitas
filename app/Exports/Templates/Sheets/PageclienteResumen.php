@@ -9,7 +9,7 @@ use Maatwebsite\Excel\Concerns\WithColumnFormatting;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 use Maatwebsite\Excel\Concerns\WithColumnWidths;
 
-class PageclienteOctubre extends Export implements WithColumnFormatting,WithColumnWidths
+class PageclienteResumen extends Export implements WithColumnFormatting,WithColumnWidths
 {
     public function collection()
     {
@@ -29,7 +29,7 @@ class PageclienteOctubre extends Export implements WithColumnFormatting,WithColu
                 's_2022_07'
             );
 
-        
+
 
         $_2022_08=ListadoResultado::join('clientes as c','c.id','listado_resultados.id')
             ->select(

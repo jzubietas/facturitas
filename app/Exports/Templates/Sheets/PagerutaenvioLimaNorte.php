@@ -2,45 +2,54 @@
 
 namespace App\Exports\Templates\Sheets;
 
+
 use App\Abstracts\Export;
-use App\Models\ListadoResultado;
+use App\Models\DireccionGrupo;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Concerns\WithColumnFormatting;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 use Maatwebsite\Excel\Concerns\WithColumnWidths;
 
-class PagerutaenvioProvincia extends Export implements WithColumnFormatting,WithColumnWidths
+class PagerutaenvioLimaNorte  extends Export
 {
+    public $fecharuta;
+    public function __construct($fecharuta)
+    {
+        parent::__construct();
+        $this->fecharuta=$fecharuta;
+    }
     public function collection()
     {
-        $min = Carbon::createFromFormat('d/m/Y', $this->fecha)->format('Y-m-d');
-       
-        $pedidos_provincia = DireccionGrupo::join('gasto_envios as de','direccion_grupos.id','de.direcciongrupo')
+        $pedidos_lima = DireccionGrupo::join('direccion_envios as de','direccion_grupos.id','de.direcciongrupo')
             ->join('clientes as c', 'c.id', 'de.cliente_id')
             ->join('users as u', 'u.id', 'c.user_id')
             ->where('direccion_grupos.estado','1')
-            //->where('direccion_grupos.distribucion','NORTE')
-            ->where('direccion_grupos.destino','PROVINCIA')
-            ->where(DB::raw('DATE(direccion_grupos.created_at)'), $min)
+            ->where('direccion_grupos.distribucion','NORTE')
+            /*->where(function($query){
+                $query->where('direccion_grupos.distribucion','=','')->orWhereNull('direccion_grupos.distribucion');
+            })*/
+            ->where('direccion_grupos.destino','LIMA')
+            ->where(DB::raw('DATE(direccion_grupos.created_at)'), $this->fecharuta)
             ->select(
                 'direccion_grupos.correlativo',
                 'u.identificador as identificador',
                 'direccion_grupos.destino',
-                DB::raw(" (select '') as celular "),
-                DB::raw(" (select '') as nombre "),
+                'de.celular',
+                'de.nombre',
                 'de.cantidad',
                 'direccion_grupos.codigos',
                 'direccion_grupos.producto',
-                'de.tracking as direccion',
-                'de.foto as referencia',
-                DB::raw(" (select '') as observacion "),
-                DB::raw(" (select '') as distrito "),
+                'de.direccion',
+                'de.referencia',
+                'de.observacion',
+                'de.distrito',
                 'direccion_grupos.created_at as fecha',
                 'direccion_grupos.distribucion',
                 'direccion_grupos.condicion_sobre',
             );
 
-        $pedidos = $pedidos_provincia;
+        $pedidos = $pedidos_lima;
         return $pedidos->get();
     }
 
@@ -67,12 +76,12 @@ class PagerutaenvioProvincia extends Export implements WithColumnFormatting,With
 
     public function title(): string
     {
-        return 'Lima Sin Asignar';
+        return 'Lima NORTE';
     }
     public function map($model): array
     {
         //$model->Periodo=strval(str_pad($model->Periodo,2,"0"));
-        return parent::map($model);
+        return map($model);
     }
     public function columnWidths(): array
     {
@@ -94,7 +103,7 @@ class PagerutaenvioProvincia extends Export implements WithColumnFormatting,With
             ,'P' => 8
         ];
     }
-    
+
     public function columnFormats(): array
     {
         return [

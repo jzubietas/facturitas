@@ -9,7 +9,8 @@ use App\Exports\ClientesExport;
 use App\Exports\Clientesv2Export;
 use App\Exports\ClientesPedidosExport;
 use App\Exports\Templates\PlantillaExportMultiple;
-use App\Exports\Rutaenvio\PlantillaRutaenvioExportMultiple;
+use App\Exports\Templates\PlantillaExportRutaenvioMultiple;
+use App\Exports\Templates\PlantillaRutaenvioExportMultiple;
 use App\Exports\ClientesSituacionExport;
 use App\Exports\PedidosPorEnviarPorFechasExport;
 use App\Exports\EntregadosPorFechasExport;
@@ -52,7 +53,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class ExcelController extends Controller
-{   
+{
     // public function clientesExcel()
     // {
     //     return Excel::download(new ClientesExport, 'Lista de Clientes.xlsx');
@@ -86,10 +87,10 @@ class ExcelController extends Controller
                 ->download('Lista de Sobres - Ruta de Envio Provincia.xlsx');
     }
 
-    
+
     public function sobresRutaEnvioExcel(Request $request)
     {
-        return (new PlantillaRutaenvioExportMultiple($request->de))
+        return (new PlantillaExportRutaenvioMultiple($request->de))
                 ->download('Lista de Sobres - Ruta de Envio_'.$request->de.'.xlsx');
     }
 
@@ -106,7 +107,7 @@ class ExcelController extends Controller
     {
         return (new PagosIncompletosExport)
                 ->pagos($request)
-                ->download('Lista de Pagos Incompletos.xlsx');          
+                ->download('Lista de Pagos Incompletos.xlsx');
     }*/
 
     public function usuariosExcel(Request $request)
@@ -114,7 +115,7 @@ class ExcelController extends Controller
         return (new UsuariosExport)
                 //->clientes1($request)
                 ->usuarios1($request)
-                ->download('Lista de Usuarios.xlsx');           
+                ->download('Lista de Usuarios.xlsx');
     }
 
     public function movimientosExcel(Request $request)
@@ -125,7 +126,7 @@ class ExcelController extends Controller
         return (new MovimientosExport)
                 //->clientes1($request)
                 ->movimientos($request)
-                ->download('Lista de Movimientos.xlsx');           
+                ->download('Lista de Movimientos.xlsx');
     }
 
     public function clientesExcel(Request $request)
@@ -133,14 +134,14 @@ class ExcelController extends Controller
         return (new ClientesExport)
                 ->clientes1($request)
                 ->clientes2($request)
-                ->download('Lista de Clientes.xlsx');           
+                ->download('Lista de Clientes.xlsx');
     }
 
     public function clientesv2Excel(Request $request)
     {
         return (new Clientesv2Export)
                 ->clientes1($request)
-                ->download('Lista de Clientes Situacion.xlsx');           
+                ->download('Lista de Clientes Situacion.xlsx');
     }
 
     public function clientessituacionExcel(Request $request)
@@ -169,7 +170,7 @@ class ExcelController extends Controller
     {
         return (new BasesFriasExport)
                 ->base_fria($request)
-                ->download('Lista Base Fria.xlsx');              
+                ->download('Lista Base Fria.xlsx');
     }
 
     public function basefriaporasesorExcel(Request $request)
@@ -187,7 +188,7 @@ class ExcelController extends Controller
     {
         return (new PagosAprobadosExport)
                 ->pagos($request)
-                ->download('Lista de Pagos Aprobados.xlsx');         
+                ->download('Lista de Pagos Aprobados.xlsx');
     }
 
     // public function pagosExcel()
@@ -210,32 +211,32 @@ class ExcelController extends Controller
     {
         return (new PagosExport)
                 ->pagos($request)
-                ->download('Lista de Pagos.xlsx');        
+                ->download('Lista de Pagos.xlsx');
     }
     public function mispagosExcel(Request $request)
     {
         return (new MisPagosExport)
                 ->pagos($request)
-                ->download('Lista de Mis Pagos.xlsx');          
+                ->download('Lista de Mis Pagos.xlsx');
     }
     public function pagosincompletosExcel(Request $request)
     {
         return (new PagosIncompletosExport)
                 ->pagos($request)
-                ->download('Lista de Pagos Incompletos.xlsx');          
+                ->download('Lista de Pagos Incompletos.xlsx');
     }
     public function pagosobservadosExcel(Request $request)
     {
         return (new PagosObservadosExport)
                 ->pagos($request)
-                ->download('Lista de Pagos Observados.xlsx');          
+                ->download('Lista de Pagos Observados.xlsx');
     }
 
     public function pagosabonadosExcel(Request $request)
     {
         return (new PagosAbonadosExport)
                 ->pagos($request)
-                ->download('Lista de Pagos Abonado Parcial.xlsx');          
+                ->download('Lista de Pagos Abonado Parcial.xlsx');
     }
 
     // public function pedidosExcel()
@@ -297,25 +298,25 @@ class ExcelController extends Controller
     {
         return (new PedidosPorAtenderExport)
                 ->pedidos($request)
-                ->download('Lista de Pedidos por Atender.xlsx');        
+                ->download('Lista de Pedidos por Atender.xlsx');
     }
     public function pedidosenatencionExcel(Request $request)
     {
         return (new PedidosEnAtencionExport)
                 ->pedidos($request)
-                ->download('Lista de Pedidos en Atencion.xlsx');          
+                ->download('Lista de Pedidos en Atencion.xlsx');
     }
     public function pedidosatendidosExcel(Request $request)
     {
         return (new PedidosAtendidosExport)
                 ->pedidos($request)
-                ->download('Lista de Pedidos Atendidos.xlsx');          
+                ->download('Lista de Pedidos Atendidos.xlsx');
     }
     public function pedidosentregadosExcel(Request $request)
     {
         return (new PedidosEntregadosExport)
                 ->pedidos($request)
-                ->download('Lista de Pedidos Entregados.xlsx');          
+                ->download('Lista de Pedidos Entregados.xlsx');
     }
 
     // public function pedidosporenviarExcel()
@@ -337,7 +338,7 @@ class ExcelController extends Controller
                 ->pedidos($request)
                 ->download('reporte general de pedidos y pagos.xlsx');
     }
-    
+
     public function pedidosporasesorExcel(Request $request)//REPORTE MIS ASESORES
     {
         return (new PedidosPorAsesorExport)
@@ -345,7 +346,7 @@ class ExcelController extends Controller
                 ->pedidos2($request)
                 ->download('reporte pedidos y pagos de mis asesores.xlsx');
     }
-    
+
     public function pedidosoperacionesexcel(Request $request)//REPORTE OPERACIONES
     {
         return (new PedidosOperacionesExport)
@@ -359,7 +360,7 @@ class ExcelController extends Controller
                 ->pedidosLima($request)
                 ->pedidosProvincia($request)
                 ->download('Lista de Pedidos por Enviar.xlsx');
-    }    
+    }
     public function entregadosporfechasexcel(Request $request)//ENTREGADOS POR FECHAS
     {
         return (new EntregadosPorFechasExport)
@@ -367,7 +368,7 @@ class ExcelController extends Controller
                 ->pedidosProvincia($request)
                 ->download('reporte pedidos entregados.xlsx');
     }
-    
+
     public function pagosporasesorExcel(Request $request)
     {
         return (new PagosPorAsesorExport)
@@ -381,7 +382,7 @@ class ExcelController extends Controller
                 ->download('Lista de pagos por asesores.xlsx');
     }
 
-    
 
-    
+
+
 }
