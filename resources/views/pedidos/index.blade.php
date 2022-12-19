@@ -82,7 +82,7 @@
 
             <th scope="col">Est. pago</th>
             <th scope="col">Con. pago</th>
-            <th scope="col">Est. sobre</th>
+          <!--   <th scope="col">Est. sobre</th> -->
            <th scope="col">Est. envío</th>
            <!--  <th scope="col">Cond. Pago</th> -->
             <!-- <th scope="col">Estado</th>-->
@@ -400,6 +400,7 @@
 
           }
         },
+        /*
         {
           //estado del sobre
           data: 'envio',
@@ -423,7 +424,7 @@
 
             }
           }
-        },
+        },  */
         //{data: 'responsable', name: 'responsable', },//estado de envio
 
         //{data: 'condicion_pa', name: 'condicion_pa', },//ss
@@ -432,20 +433,20 @@
           name: 'condicion_envio',
           render: function ( data, type, row, meta ) {
               if(row.condicion_code==4||row.estado==0){
-                  return 'ANULADO';
+                  return   '<span class="badge badge-info">ANULADO</span>' //    'ANULADO';
               }
             if(row.condicion_envio=='ANULADO'){
-                return 'ANULADO';
+                return '<span class="badge badge-info">ANULADO</span>';
             }else if(row.condicion_envio == 0){
-                return 'ANULADO';
+                return '<span class="badge badge-info">ANULADO</span>';
             }else if(row.condicion_envio == 1){
-                return 'PENDIENTE DE ENVÍO';
+                return '<span class="badge badge-info">PENDIENTE DE ENVIO</span>';
             }else if(row.condicion_envio == 2){
-                return 'EN REPARTO';
+                return  '<span class="badge badge-info">EN REPARTO</span>';
             }else if(row.condicion_envio == 3){
-                return 'ENTREGADO';
+                return '<span class="badge badge-info">ENTREGADO</span>';
             }else{
-              return data;
+              return '<span class="badge badge-info">'+data+'</span>' //data;
             }
           }
         },//
