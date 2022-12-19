@@ -381,7 +381,7 @@ return [
             'can'     => 'envios.modulo',
             'submenu' => [
                 [
-                    'text' => 'Sobres por recibir',
+                    'text' => 'Sobres por confirmar',
                     'route'  => 'envios.porconfirmar',
                     'can' => 'envios.porrecibir',
                     'icon'   => 'fas fa-check-circle',
