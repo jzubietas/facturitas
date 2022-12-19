@@ -286,15 +286,15 @@
                 if(row.condicion_env=='ANULADO'){
                     return '<span class="badge badge-info">ANULADO</span>';
                 }else if(row.condicion_env == 0){
-                    return  return   '<span class="badge badge-info">ANULADO</span>';
+                    return     '<span class="badge badge-info">ANULADO</span>';
                 }else if(row.condicion_env == 1){
-                    return   return   '<span class="badge badge-info">PENDIENTE DE ENVIO</span>'
+                    return     '<span class="badge badge-info">PENDIENTE DE ENVIO</span>';
                 }else if(row.condicion_env == 2){
-                    return  return   '<span class="badge badge-info">EN REPARTO</span>'
+                    return     '<span class="badge badge-info">EN REPARTO</span>';
                 }else if(row.condicion_env == 3){
-                    return   return   '<span class="badge badge-info">ENTREGADO</span>'
+                    return     '<span class="badge badge-info">ENTREGADO</span>';
                 }else{
-                    return  '<span class="badge badge-info">'+data+'</span>' 
+                    return  '<span class="badge badge-info">'+data+'</span>' ;
                 }
             }
         },//
