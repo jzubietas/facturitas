@@ -114,7 +114,9 @@ class OperacionController extends Controller
             ->where('dp.estado', '1')
             ->where(function ($query){
                 $query->whereIn('pedidos.condicion', [Pedido::POR_ATENDER,Pedido::EN_PROCESO_ATENCION]);
-                $query->orWhere('pedidos.pendiente_anulacion', '1');
+                if(Auth::user()->rol == User::ROL_JEFE_OPERARIO||Auth::user()->rol == User::ROL_ADMIN) {
+                    $query->orWhere('pedidos.pendiente_anulacion', '1');
+                }
             });
 
 
@@ -125,7 +127,8 @@ class OperacionController extends Controller
                 -> Where('users.operario',Auth::user()->id)
                 ->select(
                     DB::raw("users.identificador as identificador")
-                )/*->union(
+                )
+                /*->union(
                     User::where("id","33")
                         ->select(
                             DB::raw("users.identificador as identificador")
@@ -149,7 +152,8 @@ class OperacionController extends Controller
                 ->WhereIn('users.operario',$operarios)
                 ->select(
                     DB::raw("users.identificador as identificador")
-                )/*->union(
+                )
+                /*->union(
                     User::where("id","33")
                         ->select(
                             DB::raw("users.identificador as identificador")
