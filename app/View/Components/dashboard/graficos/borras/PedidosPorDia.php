@@ -82,20 +82,17 @@ class PedidosPorDia extends GraficosComponent
     public function Encargado()
     {
         $this->applyData(function ($query) {
-            $query->where(function ($query) {
-                $query->where('users.rol', '=', 'Encargado');
-            });
+            $query->where('users.rol', '=', 'Asesor');
+            $query->where('users.supervisor', auth()->id());
         }, function ($user) {
-            $ids = User::query()->whereRol('Asesor')->whereSupervisor($user->id)->pluck('id');
             $pedidos = $this->applyFilter(Pedido::query(), 'pedidos.created_at')->where('pedidos.estado', '<>', '0')
-                ->whereIn('user_id', $ids)
+                ->where('user_id', '=', $user->id)
                 ->count();
             return [
                 'label' => $user->name . ' (' . $user->identificador . ')',
                 'y' => $pedidos,
             ];
         });
-
     }
 
     public function Administrador()
