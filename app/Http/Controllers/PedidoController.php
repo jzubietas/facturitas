@@ -1239,7 +1239,7 @@ class PedidoController extends Controller
         $adelanto = PagoPedido::query()->where('pedido_id', $pedido->id)->whereEstado(1)->sum('abono');
 
         $imagenes = ImagenPedido::where('imagen_pedidos.pedido_id', $pedido->id)->where('estado', '1')->get();
-        $imagenesatencion = ImagenAtencion::where('imagen_atencions.pedido_id', $pedido->id)->where('estado', '1')->get();
+        $imagenesatencion = ImagenAtencion::where('pedido_id', $pedido->id)->where('estado', '1')->get();
 
         return view('pedidos.show', compact('pedidos', 'imagenes', 'imagenesatencion', 'cotizacion', 'adelanto', 'deudaTotal'));
     }
