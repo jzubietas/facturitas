@@ -116,7 +116,9 @@ class OperacionController extends Controller
             ->where('dp.estado', '1')
             ->where(function ($query){
                 $query->whereIn('pedidos.condicion', [Pedido::POR_ATENDER,Pedido::EN_PROCESO_ATENCION]);
-                $query->orWhere('pedidos.pendiente_anulacion', '1');
+                if(Auth::user()->rol == User::ROL_JEFE_OPERARIO||Auth::user()->rol == User::ROL_ADMIN) {
+                    $query->orWhere('pedidos.pendiente_anulacion', '1');
+                }
             });
 
 
@@ -127,7 +129,8 @@ class OperacionController extends Controller
                 -> Where('users.operario',Auth::user()->id)
                 ->select(
                     DB::raw("users.identificador as identificador")
-                )/*->union(
+                )
+                /*->union(
                     User::where("id","33")
                         ->select(
                             DB::raw("users.identificador as identificador")
@@ -151,7 +154,8 @@ class OperacionController extends Controller
                 ->WhereIn('users.operario',$operarios)
                 ->select(
                     DB::raw("users.identificador as identificador")
-                )/*->union(
+                )
+                /*->union(
                     User::where("id","33")
                         ->select(
                             DB::raw("users.identificador as identificador")
@@ -495,6 +499,7 @@ class OperacionController extends Controller
             ->where('dp.estado', '1')
             ->where('pedidos.condicion_code', Pedido::ATENDIDO_INT)
             ->whereIn('pedidos.condicion_envio_code', [Pedido::JEFE_OP_CONF_INT,Pedido::COURIER_INT,Pedido::EN_REPARTO_INT,Pedido::SOBRE_ENVIAR_INT])
+            //->whereIn('pedidos.condicion_envio_code', [Pedido::JEFE_OP_CONF_INT],[Pedido::COURIER_INT], [Pedido::EN_REPARTO_INT],[Pedido::SOBRE_ENVIAR_INT])
             ->whereIn('pedidos.envio', ['2','3']);
         //->whereIn('pedidos.envio', ['0'])
         //->whereBetween( 'pedidos.created_at', [$min, $max]);
@@ -1255,6 +1260,7 @@ class OperacionController extends Controller
 
         $pedido->update([
             'envio' => '0',
+            'condicion_envio_code'=>4,
             'modificador' => 'USER'.Auth::user()->id
         ]);
 

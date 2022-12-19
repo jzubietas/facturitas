@@ -221,7 +221,7 @@
         searching: true,
         "order": [[ 0, "desc" ]],
         ajax: {
-          url: "{{ route('operaciones.entregadostabla') }}",
+          url: "{{ route('operaciones.terminadostabla') }}",
           data: function (d) {
             //d.asesores = $("#asesores_pago").val();
             d.min = $("#min").val();
@@ -338,10 +338,9 @@
                 }
               @endcan
 
-              if(row.envio=='3' || row.envio=='1')
-              {
+              
                 data = data+'<a href="" data-target="#modal-revertir" data-revertir='+row.id+' data-toggle="modal" ><button class="btn btn-success btn-sm">Revertir</button></a>';
-              }
+              
 
               return data;
             }

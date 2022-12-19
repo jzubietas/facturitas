@@ -29,7 +29,11 @@
                               {!! Form::label('envio_doc', 'Documento adjuntado') !!}
                               @foreach($imagenes as $img)
                                 @if ($img->pedido_id == $pedido->id)
-                                  <p><a href="{{ route('pedidos.descargaradjunto', $img->adjunto) }}">{{ $img->adjunto }}</a></p>
+                                  <p>
+                                      {{--<a href="{{ route('pedidos.descargaradjunto', $img->adjunto) }}">{{ $img->adjunto }}</a>--}}
+
+                                      <a target="_blank" download href="{{ \Storage::disk('pstorage')->url('adjuntos/'. $img->adjunto) }}">{{ $img->adjunto }}</a>
+                                  </p>
                                 @endif
                               @endforeach
                             </div>

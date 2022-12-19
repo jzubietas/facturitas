@@ -24,7 +24,9 @@
                             @if ($img->pedido_id == $pedido->id)
                               @if($img->adjunto <> "logo_facturas.png")
                                 <p>
-                                  <a href="{{ route('pedidos.descargaradjunto', $img->adjunto) }}">{{ $img->adjunto }}</a>
+                                  {{--<a href="{{ route('pedidos.descargaradjunto', $img->adjunto) }}">{{ $img->adjunto }}</a>--}}
+
+                                    <a target="_blank" download href="{{ \Storage::disk('pstorage')->url('adjuntos/'. $img->adjunto) }}">{{ $img->adjunto }}</a>
                                 </p>
                               @endif
                             @endif

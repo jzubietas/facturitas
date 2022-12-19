@@ -79,7 +79,9 @@
                                 <td>
                                     @foreach ($imagenes as $img)
                                         <p>
-                                            <a href="{{ route('pedidos.descargaradjunto', $img->adjunto) }}">{{ $img->adjunto }}</a>
+                                            {{--<a href="{{ route('pedidos.descargaradjunto', $img->adjunto) }}">{{ $img->adjunto }}</a>--}}
+                                            <a target="_blank" download
+                                               href="{{ \Storage::disk('pstorage')->url('adjuntos/'. $img->adjunto) }}">{{ $img->adjunto }}</a>
                                         </p>
                                     @endforeach
                                 </td>
@@ -132,7 +134,10 @@
                                 <td>
                                     @foreach($imagenesatencion as $img)
                                         <p>
-                                            <a href="{{ route('pedidos.descargaradjunto', $img->adjunto) }}">{{ $img->adjunto }}</a>
+                                            {{--<a href="{{ route('pedidos.descargaradjunto', $img->adjunto) }}">{{ $img->adjunto }}</a>--}}
+
+                                            <a target="_blank" download
+                                               href="{{ \Storage::disk('pstorage')->url('adjuntos/'. $img->adjunto) }}">{{ $img->adjunto }}</a>
                                         </p>
                                     @endforeach
                                 </td>
@@ -156,17 +161,17 @@
                                 <div class="row">
                                     <div class="col-lg-6">
                                         <p><b>Cantidad de comprobantes enviados:</b></p>
-                                        <p>{{ $pedido->cant_compro }}</p>
+                                        <b class="h4">{{ $pedido->cant_compro }}</b>
                                     </div>
                                     <div class="col-lg-6">
                                         <p><b>Archivos Adjuntados:</b></p>
                                         @foreach($imagenesatencion as $img_at)
-                                            @if ($img_at->pedido_id == $pedido->id)
-                                                <p>
-                                                    <a href="{{ route('pedidos.descargaradjunto', $img_at->adjunto) }}">{{ $img_at->adjunto }}</a>
-                                                </p>
-                                            @endif
-                                            @include('pedidos.modal.DeleteAdjuntoid')
+                                            <p>
+                                                <a class="{{$img_at->estado==0?'text-danger':''}}" target="_blank" download
+                                                   href="{{ \Storage::disk('pstorage')->url('adjuntos/'. $img_at->adjunto) }}">
+                                                    {{ $img_at->adjunto }}
+                                                </a>
+                                            </p>
                                         @endforeach
                                     </div>
                                 </div>
@@ -177,63 +182,65 @@
                 </div>
 
                 @if($pedido->condicion_code==\App\Models\Pedido::ANULADO_INT)
-                <div class="card mt-4 border rounded card-body border-secondary">
-                    <div class="card-header">
-                        <h4 class="text-bold">Detalle de anulación</h4>
-                    </div>
-                    <div class="card-body">
-                        <ul class="list-group">
-                            <li class="list-group-item">
-                                Responsable <B>{{$pedido->responsable}}</B>
-                            </li>
-                            <li class="list-group-item">
-                                Fecha de anulacion <b>{{optional($pedido->fecha_anulacion)->format('d-m-Y h:i')}}</b>
-                            </li>
-                            <li class="list-group-item">
-                                Fecha de anulacion
-                                confirmada <b>{{optional($pedido->fecha_anulacion_confirm)->format('d-m-Y h:i')}}</b>
-                            </li>
-                            @if(count($pedido->adjuntosFiles())>0)
-                                <li class="list-group-item bg-danger">
-                                    Adjuntos
-                                </li>
-                            @endif
-                            @foreach($pedido->adjuntosFiles() as $file)
+                    <div class="card mt-4 border rounded card-body border-secondary">
+                        <div class="card-header">
+                            <h4 class="text-bold">Detalle de anulación</h4>
+                        </div>
+                        <div class="card-body">
+                            <ul class="list-group">
                                 <li class="list-group-item">
-                                    <a target="_blank"
-                                       href="{{Storage::disk($pedido->path_adjunto_anular_disk)->url($file)}}">
-                                        {{basename($file)}}
-                                    </a>
+                                    Responsable <B>{{$pedido->responsable}}</B>
                                 </li>
-                            @endforeach
-
-                            @if(count($pedido->notasCreditoFiles())>0)
-                                <li class="list-group-item bg-danger">
-                                    Notas de Credito
+                                <li class="list-group-item">
+                                    Fecha de anulacion
+                                    <b>{{optional($pedido->fecha_anulacion)->format('d-m-Y h:i')}}</b>
                                 </li>
-                            @endif
+                                <li class="list-group-item">
+                                    Fecha de anulacion
+                                    confirmada
+                                    <b>{{optional($pedido->fecha_anulacion_confirm)->format('d-m-Y h:i')}}</b>
+                                </li>
+                                @if(count($pedido->adjuntosFiles())>0)
+                                    <li class="list-group-item bg-danger">
+                                        Adjuntos
+                                    </li>
+                                @endif
+                                @foreach($pedido->adjuntosFiles() as $file)
+                                    <li class="list-group-item">
+                                        <a target="_blank"
+                                           href="{{Storage::disk($pedido->path_adjunto_anular_disk)->url($file)}}">
+                                            {{basename($file)}}
+                                        </a>
+                                    </li>
+                                @endforeach
 
-                            <li class="list-group-item">
-                                <div class="row">
-                                    @foreach($pedido->notasCreditoFiles() as $file)
-                                        <div class="col-md-3">
-                                            <div class="card">
-                                                <div class="card-body">
-                                                    <a target="_blank"
-                                                       href="{{Storage::disk($pedido->path_adjunto_anular_disk)->url($file)}}">
-                                                        <img class="w-100"
-                                                             src="{{Storage::disk($pedido->path_adjunto_anular_disk)->url($file)}}">
-                                                        {{basename($file)}}
-                                                    </a>
+                                @if(count($pedido->notasCreditoFiles())>0)
+                                    <li class="list-group-item bg-danger">
+                                        Notas de Credito
+                                    </li>
+                                @endif
+
+                                <li class="list-group-item">
+                                    <div class="row">
+                                        @foreach($pedido->notasCreditoFiles() as $file)
+                                            <div class="col-md-3">
+                                                <div class="card">
+                                                    <div class="card-body">
+                                                        <a target="_blank"
+                                                           href="{{Storage::disk($pedido->path_adjunto_anular_disk)->url($file)}}">
+                                                            <img class="w-100"
+                                                                 src="{{Storage::disk($pedido->path_adjunto_anular_disk)->url($file)}}">
+                                                            {{basename($file)}}
+                                                        </a>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    @endforeach
-                                </div>
-                            </li>
-                        </ul>
+                                        @endforeach
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
-                </div>
                 @endif
                 <br>
 

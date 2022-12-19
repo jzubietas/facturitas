@@ -37,23 +37,23 @@
                 <input type="text" name="user_name" value="{{ $pedido->nombres }} - {{ $pedido->celulares }}" class="form-control" disabled>
                 @endforeach
               </div>
-            </div>  
+            </div>
           </div>
         </div>
-    
+
         <br>
-    
+
         <div class="border rounded card-body border-secondary" id="vertabla">
           <div class="card-body">
             <div class="form-row">
               @foreach ($pedidos as $pedido)
                 <div class="form-group col-lg-2">
-                  {!! Form::label('pcodigo', 'Codigo') !!}                  
-                      <input type="text" name="pcodigo" id="pcodigo" value="{{ $pedido->codigos}}" class="form-control" disabled>                
+                  {!! Form::label('pcodigo', 'Codigo') !!}
+                      <input type="text" name="pcodigo" id="pcodigo" value="{{ $pedido->codigos}}" class="form-control" disabled>
                 </div>
                 <div class="form-group col-lg-4">
                   {!! Form::label('pempresa', 'Nombre de empresa') !!}
-                      <input type="text" name="pempresa" id="pempresa" value="{{ $pedido->empresas}}" class="form-control" placeholder="Nombre de empresa...">    
+                      <input type="text" name="pempresa" id="pempresa" value="{{ $pedido->empresas}}" class="form-control" placeholder="Nombre de empresa...">
                 </div>
                 <div class="form-group col-lg-3">
                   {!! Form::label('pmes', 'Mes') !!}
@@ -70,9 +70,9 @@
                 </div>
                 <div class="form-group col-lg-2">
                   {!! Form::label('pcantidad', 'Cantidad') !!}
-                      {{-- <input type="number" name="pcantidad" id="pcantidad"  step="0.01" min="0" class="form-control" placeholder="Cantidad...">  --}}                 
+                      {{-- <input type="number" name="pcantidad" id="pcantidad"  step="0.01" min="0" class="form-control" placeholder="Cantidad...">  --}}
                       <input type="text" name="pcantidad" id="pcantidad" value="{{ $pedido->cantidad}}" step="0.01" min="0" class="form-control number" placeholder="Cantidad...">
-                </div>          
+                </div>
                 <div class="form-group col-lg-3">
                   {!! Form::label('ptipo_banca', 'Tipo de comprobante y banca') !!}
                   {{-- {!! Form::select('ptipo_banca', $porcentajes['nombre'] , $pedido->porcentaje, ['class' => 'form-control selectpicker border border-secondary', 'data-live-search' => 'true', 'placeholder' => '---- SELECCIONE ----']) !!} --}}
@@ -89,7 +89,7 @@
 
                   @if ($mirol =='Administrador' || $mirol =='Jefe de llamadas')
                     <input type="number" name="pporcentaje" id="pporcentaje" value="{{ $pedido->porcentaje}}" step="0.1" min="0" class="form-control" placeholder="Porcentaje...">
-                  @else 
+                  @else
                     <input type="number" name="pporcentaje" id="pporcentaje" value="{{ $pedido->porcentaje}}" step="0.1" min="0" class="form-control" placeholder="Porcentaje..." readonly="readonly">
                   @endif
                 </div>
@@ -110,7 +110,11 @@
                   {!! Form::label('padjunto', 'Adjuntos actuales') !!}
                   @foreach ($imagenes as $img)
                     @if($img->adjunto <> "logo_facturas.png")
-                      <p><a href="{{ route('pedidos.descargaradjunto', $img->adjunto) }}">{{ $img->adjunto }}</a></p>
+                      <p>
+                          {{--<a href="{{ route('pedidos.descargaradjunto', $img->adjunto) }}">{{ $img->adjunto }}</a>--}}
+
+                          <a target="_blank" download href="{{ \Storage::disk('pstorage')->url('adjuntos/'. $img->adjunto) }}">{{ $img->adjunto }}</a>
+                      </p>
                     @endif
                   @endforeach
                 </div>
@@ -139,7 +143,7 @@
                         <th>Adjunto</th>
                         <th>FT</th>
                       </thead>
-                      <tbody>                        
+                      <tbody>
                       </tbody>
                       <tfoot>
                         <th style="text-align: center">TOTAL</th>
@@ -147,7 +151,7 @@
                         <th></th>
                         <th></th>
                         <th></th>
-                        <th></th>                        
+                        <th></th>
                         <th></th>
                         <th></th>
                         <th></th>
@@ -156,7 +160,7 @@
                         <th></th>
                         <th></th>
                         <th style="text-align: center"><h4 id="total">S/. 0.00</h4></th>
-                      </tfoot>                      
+                      </tfoot>
                     </table>
                 </div>
               </div>
@@ -191,7 +195,7 @@
     });
 
     //VALIDAR CAMPOS NUMERICO DE MONTO EN PAGOS
-    
+
     $('input.number').keyup(function(event) {
 
     if(event.which >= 37 && event.which <= 40){
@@ -201,7 +205,7 @@
     $(this).val(function(index, value) {
       return value
         .replace(/\D/g, "")
-        .replace(/([0-9])([0-9]{2})$/, '$1.$2')  
+        .replace(/([0-9])([0-9]{2})$/, '$1.$2')
         .replace(/\B(?=(\d{3})+(?!\d)\.?)/g, ",")
       ;
     });
@@ -367,22 +371,22 @@
         var fila = '<tr class="selected" id="fila' + cont + '"><td><button type="button" class="btn btn-warning" onclick="eliminar(' + cont + ');">X</button></td>' +
           '<td><input type="hidden" name="codigo[]" value="' + codigo + '">' + codigo + '</td>' +
           '<td><input type="hidden" name="nombre_empresa[]" value="' + nombre_empresa + '">' + nombre_empresa + '</td>' +
-          '<td><input type="hidden" name="mes[]" value="' + mes + '">' + mes + '</td>' + 
+          '<td><input type="hidden" name="mes[]" value="' + mes + '">' + mes + '</td>' +
           '<td><input type="hidden" name="anio[]" value="' + anio + '">' + anio + '</td>' +
-          '<td><input type="hidden" name="ruc[]" value="' + ruc + '">' + ruc + '</td>' + 
-          '<td><input type="hidden" name="cantidad[]" value="' + cantidad + '">' + cantidad.toLocaleString("en-US") + '</td>' + 
-          '<td><input type="hidden" name="tipo_banca[]" value="' + tipo_banca + '">' + tipo_banca + '</td>' + 
-          '<td><input type="hidden" name="porcentaje[]" value="' + porcentaje + '">' + porcentaje + '</td>' + 
+          '<td><input type="hidden" name="ruc[]" value="' + ruc + '">' + ruc + '</td>' +
+          '<td><input type="hidden" name="cantidad[]" value="' + cantidad + '">' + cantidad.toLocaleString("en-US") + '</td>' +
+          '<td><input type="hidden" name="tipo_banca[]" value="' + tipo_banca + '">' + tipo_banca + '</td>' +
+          '<td><input type="hidden" name="porcentaje[]" value="' + porcentaje + '">' + porcentaje + '</td>' +
           '<td><input type="hidden" name="courier[]" value="' + courier + '">' + courier + '</td>' +
-          '<td><input type="hidden" name="descripcion[]" value="' + descripcion + '">' + descripcion + '</td>' + 
-          '<td><input type="hidden" name="nota[]" value="' + nota + '">' + nota + '</td>' + 
-          '<td>@csrf<input type="file" id="adjunto" name="adjunto[]" multiple=""/></td>' + 
+          '<td><input type="hidden" name="descripcion[]" value="' + descripcion + '">' + descripcion + '</td>' +
+          '<td><input type="hidden" name="nota[]" value="' + nota + '">' + nota + '</td>' +
+          '<td>@csrf<input type="file" id="adjunto" name="adjunto[]" multiple=""/></td>' +
           '<td>' + subtotal[cont].toLocaleString("en-US") + '</td></tr>';
         cont++;
         limpiar();
         $("#total").html("S/. " + total.toLocaleString("en-US"));
         evaluar();
-        $('#detalles').append(fila);        
+        $('#detalles').append(fila);
       } else {
         alert("error al ingresar el detalle del pedido, revise los datos");
       }
@@ -419,6 +423,6 @@
     function eliminar(index) {
       location.reload();
     }
-    
+
   </script>
 @stop

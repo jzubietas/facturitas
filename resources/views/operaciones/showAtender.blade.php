@@ -35,7 +35,7 @@
                 <label for="id_ingresomaterial">Estado</label>
                 <p>{{ $pedido->condiciones }}</p>
               </div>
-            </div>  
+            </div>
           </div>
         </div>
 
@@ -78,7 +78,9 @@
                       @foreach ($imagenes as $img)
                         @if($img->adjunto <> "logo_facturas.png")
                           <p>
-                            <a href="{{ route('pedidos.descargaradjunto', $img->adjunto) }}">{{ $img->adjunto }}</a>
+                            {{--<a href="{{ route('pedidos.descargaradjunto', $img->adjunto) }}">{{ $img->adjunto }}</a>--}}
+
+                              <a target="_blank" download href="{{ \Storage::disk('pstorage')->url('adjuntos/'. $img->adjunto) }}">{{ $img->adjunto }}</a>
                           </p>
                         @endif
                       @endforeach
@@ -106,7 +108,7 @@
               </tfoot>
             </table>
           </div>
-        </div>      
+        </div>
 
         <br>
 
@@ -127,9 +129,10 @@
                     <td>
                       @foreach($imagenesatencion as $img)
                           <p>
-                            <a href="{{ route('pedidos.descargaradjunto', $img->adjunto) }}">{{ $img->adjunto }}</a>
+                            {{--<a href="{{ route('pedidos.descargaradjunto', $img->adjunto) }}">{{ $img->adjunto }}</a>--}}
+                              <a target="_blank" download href="{{ \Storage::disk('pstorage')->url('adjuntos/'. $img->adjunto) }}">{{ $img->adjunto }}</a>
                           </p>
-                      @endforeach                    
+                      @endforeach
                     </td>
                     <td>{{ $pedido->fecha_envio_doc }}</td>
                     <td>{{ $pedido->cant_compro }}</td>

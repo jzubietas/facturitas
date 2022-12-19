@@ -38,36 +38,6 @@
         }
     </script>
 
-
-    <script type="text/javascript">
-        google.charts.load('current', {
-            'packages': ['bar']
-        });
-        google.charts.setOnLoadCallback(drawStuff);
-
-        function drawStuff() {
-            console.log("1454588");
-            var data = new google.visualization.arrayToDataTable([
-                ['Mes', 'Total'],
-                    @foreach ($pedidos_mes_ as $vxa)
-                ['Diciembre', {{ $vxa->total }}],
-                @endforeach
-            ]);
-
-            var options = {
-                chart: {
-                    title: 'PEDIDOS DEL MES',
-                    subtitle: 'PEDIDOS/MES'
-                }
-            };
-
-            var chart = new google.charts.Bar(document.getElementById('pedidos-subiendo-mes'));
-            chart.draw(data, google.charts.Bar.convertOptions(options));
-        };
-    </script>
-
-
-
     <script type="text/javascript">
         google.charts.load('current', {packages: ['corechart', 'bar']});
         google.charts.setOnLoadCallback(drawBasic);
@@ -92,10 +62,6 @@
             chart.draw(data, options);
         };
     </script>
-
-
-
-
     <!--<script type="text/javascript">
       google.charts.load('current', {
         'packages': ['bar']
@@ -107,6 +73,12 @@
           ['Cobranza', 'Pedidos'],
           @foreach ($cobranzaxmes as $vxax)
         ['{{ $vxax->users }}', {{ $vxax->total }}],
+
+
+
+
+
+
 
 
 
@@ -138,8 +110,6 @@
     chart.draw(data, google.charts.Bar.convertOptions(options));
   };
 </script>-->
-
-
     <script type="text/javascript">
         google.charts.load('current', {
             'packages': ['bar']
@@ -182,8 +152,10 @@
                 is3D: true,
             };
 
-            var chart = new google.visualization.PieChart(document.getElementById('pedidosxasesorxdia'));
-            chart.draw(data, options);
+            if (document.getElementById('pedidosxasesorxdia')) {
+                var chart = new google.visualization.PieChart(document.getElementById('pedidosxasesorxdia'));
+                chart.draw(data, options);
+            }
         }
     </script>
     <!--ENCARGADO-->
@@ -208,8 +180,10 @@
                 }
             };
 
-            var chart = new google.charts.Bar(document.getElementById('pedidosxasesor_3meses_encargado'));
-            chart.draw(data, google.charts.Bar.convertOptions(options));
+            if (document.getElementById('pedidosxasesor_3meses_encargado')) {
+                var chart = new google.charts.Bar(document.getElementById('pedidosxasesor_3meses_encargado'));
+                chart.draw(data, google.charts.Bar.convertOptions(options));
+            }
         };
     </script>
 
@@ -234,8 +208,10 @@
                 }
             };
 
-            var chart = new google.charts.Bar(document.getElementById('pedidosxasesor_encargado'));
-            chart.draw(data, google.charts.Bar.convertOptions(options));
+            if (document.getElementById('pedidosxasesor_encargado')) {
+                var chart = new google.charts.Bar(document.getElementById('pedidosxasesor_encargado'));
+                chart.draw(data, google.charts.Bar.convertOptions(options));
+            }
         };
     </script>
 
@@ -260,8 +236,10 @@
                 }
             };
 
-            var chart = new google.charts.Bar(document.getElementById('pagosxmes_encargado'));
-            chart.draw(data, google.charts.Bar.convertOptions(options));
+            if (document.getElementById('pagosxmes_encargado')) {
+                var chart = new google.charts.Bar(document.getElementById('pagosxmes_encargado'));
+                chart.draw(data, google.charts.Bar.convertOptions(options));
+            }
         }
     </script>
 
@@ -282,8 +260,10 @@
                 is3D: true,
             };
 
-            var chart = new google.visualization.PieChart(document.getElementById('pedidosxasesorxdia_encargado'));
-            chart.draw(data, options);
+            if (document.getElementById('pedidosxasesorxdia_encargado')) {
+                var chart = new google.visualization.PieChart(document.getElementById('pedidosxasesorxdia_encargado'));
+                chart.draw(data, options);
+            }
         }
     </script>
 
@@ -309,14 +289,15 @@
                 }
             };
 
-            var chart = new google.charts.Bar(document.getElementById('mispedidosxasesorxdia'));
-            chart.draw(data, google.charts.Bar.convertOptions(options));
+            if (document.getElementById('mispedidosxasesorxdia')) {
+                var chart = new google.charts.Bar(document.getElementById('mispedidosxasesorxdia'));
+                chart.draw(data, google.charts.Bar.convertOptions(options));
+            }
         };
     </script>
 @stop
 
 @section('content')
-
     @if(Auth::user()->rol == 'Administrador')
         <div style="text-align: center; font-family:'Times New Roman', Times, serif">
             <h2>
@@ -390,601 +371,182 @@
                 </div>
             </div>
         </div>
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="card">
-                        <div class="card-header">Buscar Cliente/RUC</div>
-                        <div class="card-header">
-                            <div class="row">
-                                <div class="col-md-8">
-                                    <div class="form-group">
-                                        <input id="input_search_cliente" class="form-control" maxlength="11"
-                                               placeholder="Buscar cliente">
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="input-group mb-3">
-                                        <select id="input_search_type" class="form-control">
-                                            <option value="CLIENTE">CLIENTE</option>
-                                            <option value="RUC">RUC</option>
-                                        </select>
-                                        <div class="input-group-append">
-                                            <button type="button" class="btn btn-dark" id="buttom_search_cliente">
-                                                <i class="fa fa-search"></i>
-                                                Buscar
-                                            </button>
-                                            <button type="button" class="btn btn-light"
-                                                    id="buttom_search_cliente_clear">
-                                                <i class="fa fa-times"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-12">
-                    <div class="card">
-                        <div class="card-body">
-                            <div id="search_content_result">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="container-fluid">
-                    <div class="row">
-                        <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12">
-                            <br>
-                            <div class="table-responsive">
-                                <table class="table table-striped table-bordered table-condensed table-hover">
-                                    <div class="chart tab-pane active" id="pedidosxasesor"
-                                         style="width: 100%; height: 550px;">
-                                    </div>
-                                </table>
-                            </div>
+    @endif
+    <div class="container-fluid">
+        @if(Auth::user()->rol == 'Administrador')
+            @include('dashboard.partials.vista_administrador')
+        @elseif (Auth::user()->rol == 'Encargado')
+            @include('dashboard.partials.vista_encargado')
+        @elseif (Auth::user()->rol == 'Asesor')
+            @include('dashboard.partials.vista_asesor')
+        @elseif (Auth::user()->rol == 'Operacion')
+            @include('dashboard.partials.vista_operacion')
+        @elseif (Auth::user()->rol == 'Administracion')
+            @include('dashboard.partials.vista_administracion')
+        @elseif (Auth::user()->rol == 'Logística')
+            @include('dashboard.partials.vista_logistica')
+        @else
+            @include('dashboard.partials.vista_otros')
+        @endif
+    </div>
+@stop
 
-                            <div class="table-responsive">
-                                <table class="table table-striped table-bordered table-condensed table-hover">
-                                    <div class="chart tab-pane active" id="pedidos-subiendo-mes"
-                                         style="width: 50%; height: 550px;">
-                                    </div>
-                                </table>
-                            </div>
+@section('css')
+    <style>
+        .content-header {
+            background-color: white !important;
+        }
 
+        .content {
+            background-color: white !important;
+        }
+    </style>
+@stop
 
-                            <div class="table-responsive">
-                                <table class="table table-striped table-bordered table-condensed table-hover">
-                                    <div class="chart tab-pane active" id="cobranzaxmes"
-                                         style="width: 100%; height: 550px;">
-                                    </div>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="container-fluid">
-                    <div class="row">
-                        <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12">
-                            <br>
-                            <div class="table-responsive">
-                                <table class="table table-striped table-bordered table-condensed table-hover">
-                                    <div id="pagosxmes" style="width: 100%; height: 550px;">
-                                    </div>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+@section('js')
+    <script src="https://canvasjs.com/assets/script/jquery.canvasjs.min.js"></script>
+    <script src="{{ asset('js/datatables.js') }}"></script>
+    @if (!$pedidossinpagos == null)
+        <script>
+            $('#staticBackdrop').modal('show')
+        </script>
+    @endif
 
-            </div>
-            {{-- @include('dashboard.modal.alerta') --}}
+    {{-- <script>
+      // CARGAR PEDIDOS DE CLIENTE SELECCIONADO
+      window.onload = function () {
+        $.ajax({
+          url: "{{ route('notifications.get') }}"
+          method: 'GET',
+          success: function(data) {
+            $('#my-notification').html(data.html);
+          }
+        });
+      };
+    </script> --}}
+    <script>
+        (function () {
 
-            @elseif (Auth::user()->rol == 'Encargado')
-                <div style="text-align: center; font-family:'Times New Roman', Times, serif">
-                    <h2>
-                        <p>Bienvenido(a) <b>{{ Auth::user()->name }}</b> al software empresarial de sisFacturas, donde
-                            cumples la función de <b>{{ Auth::user()->rol }}</b></p>
-                    </h2>
-                </div>
-                <br>
-                <br>
-                <div class="container-fluid">
-                    <div class="row" style="color: #fff;">
-                        <div class="col-lg-1 col-1">
-                        </div>
-                        <div class="col-lg-5 col-5">
-                            <div class="small-box bg-info">
-                                <div class="inner">
-                                    <h3>@php echo number_format(Auth::user()->meta_pedido)@endphp</h3>
-                                    <p>META DE PEDIDOS</p>
-                                </div>
-                                <div class="icon">
-                                    <i class="ion ion-bag"></i>
-                                </div>
-                                <a href="{{ route('pedidos.index') }}" class="small-box-footer">Más info <i
-                                        class="fas fa-arrow-circle-right"></i></a>
-                            </div>
-                        </div>
-                        <div class="col-lg-5 col-5">
-                            <div class="small-box bg-success">
-                                <div class="inner">
-                                    {{-- @foreach ($montoventadia as $mvd) --}}
-                                    <h3>S/{{ Auth::user()->meta_cobro }}</h3>
-                                    {{-- @endforeach --}}
-                                    <p>META DE COBRANZAS</p>
-                                </div>
-                                <div class="icon">
-                                    <i class="ion ion-stats-bars"></i>
-                                </div>
-                                <a href="{{ route('pagos.index') }}" class="small-box-footer">Más info <i
-                                        class="fas fa-arrow-circle-right"></i></a>
-                            </div>
-                        </div>
-                        <div class="col-lg-1 col-1">
-                        </div>
-                        <div class="col-lg-1 col-1">
-                        </div>
-                        <div class="col-lg-5 col-5">
-                            <div class="small-box bg-warning">
-                                <div class="inner">
-                                    <h3>{{ $meta_pedidoencargado }}</h3>
-                                    <p>TUS PEDIDOS DEL MES</p>
-                                </div>
-                                <div class="icon">
-                                    <i class="ion ion-person-add"></i>
-                                </div>
-                                <a href="{{ route('pedidos.index') }}" class="small-box-footer">Más info <i
-                                        class="fas fa-arrow-circle-right"></i></a>
-                            </div>
-                        </div>
-                        <div class="col-lg-5 col-5">
-                            <div class="small-box bg-danger">
-                                <div class="inner">
-                                    <h3>S/@php echo number_format( ($meta_pagoencargado->pagos)/1000 ,2) @endphp </h3>
-
-                                    <p>MIS COBRANZAS DEL MES</p>
-                                </div>
-                                <div class="icon">
-                                    <i class="ion ion-pie-graph"></i>
-                                </div>
-                                <a href="{{ route('pagos.index') }}" class="small-box-footer">Más info <i
-                                        class="fas fa-arrow-circle-right"></i></a>
-                            </div>
-                        </div>
-                        <div class="col-lg-1 col-1">
-                        </div>
-                    </div>
-                </div>
-                <div class="container-fluid">
-                    <div class="row">
-                        <div class="col-lg-6 col-sm-6 col-md-6 col-xs-12">
-                            <br>
-                            <div class="table-responsive">
-                                <table class="table table-striped table-bordered table-condensed table-hover"><br><h4>
-                                        PEDIDOS DEL DIA POR ASESOR</h4>
-                                    <div id="pedidosxasesorxdia_encargado" style="width: 100%; height: 500px;"></div>
-                                </table>
-                            </div>
-                        </div>
-                        <div class="col-lg-6 col-sm-6 col-md-6 col-xs-12">
-                            <br>
-                            <div class="table-responsive">
-                                <img src="imagenes/logo_facturas.png" alt="Logo" width="80%">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="container-fluid">
-                    <div class="row">
-                        <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12">
-                            <br>
-                            <div class="table-responsive">
-                                <table class="table table-striped table-bordered table-condensed table-hover">
-                                    <div class="chart tab-pane active" id="pedidosxasesor_encargado"
-                                         style="width: 100%; height: 550px;">
-                                    </div>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="container-fluid">
-                    <div class="row">
-                        <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12">
-                            <br>
-                            <div class="table-responsive">
-                                <table class="table table-striped table-bordered table-condensed table-hover">
-                                    <div class="chart tab-pane active" id="pedidosxasesor_3meses_encargado"
-                                         style="width: 100%; height: 550px;">
-                                    </div>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="container-fluid">
-                    <div class="row">
-                        <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12">
-                            <br>
-                            <div class="table-responsive">
-                                <table class="table table-striped table-bordered table-condensed table-hover">
-                                    <div id="pagosxmes_encargado" style="width: 100%; height: 550px;">
-                                    </div>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-            @elseif (Auth::user()->rol == 'Asesor')
-                <div class="container-fluid">
-                    <div class="row" style="text-align: center; font-family:Georgia, 'Times New Roman', Times, serif">
-                        <div class="col-lg-9 col-9" style="margin-top:20px">
-                            <h2>
-                                <p>Bienvenido(a) <b>{{ Auth::user()->name }}</b> al software empresarial de sisFacturas,
-                                    donde cumples la función de <b>{{ Auth::user()->rol }}</b></p>
-                            </h2>
-                        </div>
-                        <div class="col-lg-3 col-3">
-                            <div class="small-box bg-danger">
-                                <div class="inner">
-                                    <h3>{{ $pagosobservados_cantidad }}</h3>
-                                    <p>PAGOS OBSERVADOS</p>
-                                </div>
-                                <div class="icon">
-                                    <i class="ion ion-bag"></i>
-                                </div>
-                                <a href="{{ route('pagos.pagosobservados') }}" class="small-box-footer">Más info <i
-                                        class="fas fa-arrow-circle-right"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <br>
-                <br>
-                <div class="container-fluid">
-                    <div class="row" style="color: #fff;">
-                        <div class="col-lg-1 col-1">
-                        </div>
-                        <div class="col-lg-5 col-5">
-                            <div class="small-box bg-info">
-                                <div class="inner">
-                                    <h3>@php echo number_format(Auth::user()->meta_pedido)@endphp</h3>
-                                    <p>META DE PEDIDOS</p>
-                                </div>
-                                <div class="icon">
-                                    <i class="ion ion-bag"></i>
-                                </div>
-                                <a href="{{ route('pedidos.mispedidos') }}" class="small-box-footer">Más info <i
-                                        class="fas fa-arrow-circle-right"></i></a>
-                            </div>
-                        </div>
-                        <div class="col-lg-5 col-5">
-                            <div class="small-box bg-success">
-                                <div class="inner">
-                                    <h3>S/{{ Auth::user()->meta_cobro }}</h3>
-                                    <p>META DE COBRANZAS</p>
-                                </div>
-                                <div class="icon">
-                                    <i class="ion ion-stats-bars"></i>
-                                </div>
-                                <a href="{{ route('pagos.mispagos') }}" class="small-box-footer">Más info <i
-                                        class="fas fa-arrow-circle-right"></i></a>
-                            </div>
-                        </div>
-                        <div class="col-lg-1 col-1">
-                        </div>
-                        <div class="col-lg-1 col-1">
-                        </div>
-                        <div class="col-lg-5 col-5">
-                            <div class="small-box bg-warning">
-                                <div class="inner">
-                                    <h3>{{ $meta_pedidoasesor }}</h3>
-                                    <p>TUS PEDIDOS DEL MES</p>
-                                </div>
-                                <div class="icon">
-                                    <i class="ion ion-person-add"></i>
-                                </div>
-                                <a href="{{ route('pedidos.mispedidos') }}" class="small-box-footer">Más info <i
-                                        class="fas fa-arrow-circle-right"></i></a>
-                            </div>
-                        </div>
-                        <div class="col-lg-5 col-5">
-                            <div class="small-box bg-warning">
-                                <div class="inner">
-                                    <h3>S/@php echo number_format( ($meta_pagoasesor->pagos)/1000 ,2) @endphp </h3>
-                                    <p>MIS COBRANZAS DEL MES</p>
-                                </div>
-                                <div class="icon">
-                                    <i class="ion ion-pie-graph"></i>
-                                </div>
-                                <a href="{{ route('pagos.mispagos') }}" class="small-box-footer">Más info <i
-                                        class="fas fa-arrow-circle-right"></i></a>
-                            </div>
-                        </div>
-                        <div class="col-lg-1 col-1">
-                        </div>
-                    </div>
-                </div>
-                <div class="container-fluid">
-                    <div class="row">
-                        <div class="container-fluid">
-                            <div class="row">
-                                <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12">
-                                    <br>
-                                    <div class="table-responsive">
-                                        <table class="table table-striped table-bordered table-condensed table-hover">
-                                            <div class="chart tab-pane active" id="mispedidosxasesorxdia"
-                                                 style="width: 100%; height: 550px;">
-                                            </div>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-4 col-sm-4 col-md-4 col-xs-12">
-                        </div>
-                        <div class="col-lg-4 col-sm-4 col-md-4 col-xs-12">
-                            <br>
-                            <div class="table-responsive">
-                                <img src="imagenes/logo_facturas.png" alt="Logo" width="100%">
-                            </div>
-                        </div>
-                        <div class="col-lg-4 col-sm-4 col-md-4 col-xs-12">
-                        </div>
-                    </div>
-                </div>
-                @include('dashboard.modal.asesoralerta')
-
-            @elseif (Auth::user()->rol == 'Operacion')
-                <div style="text-align: center; font-family:'Times New Roman', Times, serif">
-                    <h2>
-                        <p>Bienvenido(a) <b>{{ Auth::user()->name }}</b> del equipo de <b>OPERACIONES</b> al software
-                            empresarial de sisFacturas</b></p>
-                    </h2>
-                </div>
-                <br>
-                <br>
-                <div class="container-fluid">
-                    <div class="row" style="color: #fff;">
-                        <div class="col-lg-1 col-1">
-                        </div>
-                        <div class="col-lg-5 col-5">
-                            <div class="small-box bg-info">
-                                <div class="inner">
-                                    <h3>{{ $pedidoxatender }}</h3>
-                                    <p>PEDIDOS POR ATENDER</p>
-                                </div>
-                                <div class="icon">
-                                    <i class="ion ion-bag"></i>
-                                </div>
-                                <a href="{{ route('operaciones.poratender') }}" class="small-box-footer">Más info <i
-                                        class="fas fa-arrow-circle-right"></i></a>
-                            </div>
-                        </div>
-                        <div class="col-lg-5 col-5">
-                            <div class="small-box bg-success">
-                                <div class="inner">
-                                    <h3>{{ $pedidoenatencion }}</h3>
-                                    <p>PEDIDOS EN PROCESO DE ATENCION</p>
-                                </div>
-                                <div class="icon">
-                                    <i class="ion ion-stats-bars"></i>
-                                </div>
-                                <a href="{{ route('operaciones.enatencion') }}" class="small-box-footer">Más info <i
-                                        class="fas fa-arrow-circle-right"></i></a>
-                            </div>
-                        </div>
-                        <div class="col-lg-1 col-1">
-                        </div>
-                    </div>
-                </div>
-                <div class="container-fluid">
-                    <div class="row">
-                        <div class="col-lg-4 col-sm-4 col-md-4 col-xs-12">
-                        </div>
-                        <div class="col-lg-4 col-sm-4 col-md-4 col-xs-12">
-                            <br>
-                            <div class="table-responsive">
-                                <img src="imagenes/logo_facturas.png" alt="Logo" width="100%">
-                            </div>
-                        </div>
-                        <div class="col-lg-4 col-sm-4 col-md-4 col-xs-12">
-                        </div>
-                    </div>
-                </div>
-            @elseif (Auth::user()->rol == 'Administracion')
-                <div style="text-align: center; font-family:'Times New Roman', Times, serif">
-                    <h2>
-                        <p>Bienvenido(a) <b>{{ Auth::user()->name }}</b> del equipo de <b>ADMINISTRACION</b> al software
-                            empresarial de sisFacturas</b></p>
-                    </h2>
-                </div>
-                <br>
-                <br>
-                <div class="container-fluid">
-                    <div class="row" style="color: #fff;">
-                        <div class="col-lg-1 col-1">
-                        </div>
-                        <div class="col-lg-5 col-5">
-                            <div class="small-box bg-warning">
-                                <div class="inner">
-                                    <h3>{{ $pagosxrevisar_administracion }}</h3>
-                                    <p>PAGOS POR REVISAR</p>
-                                </div>
-                                <div class="icon">
-                                    <i class="ion ion-bag"></i>
-                                </div>
-                                <a href="{{ route('administracion.porrevisar') }}" class="small-box-footer">Más info <i
-                                        class="fas fa-arrow-circle-right"></i></a>
-                            </div>
-                        </div>
-                        <div class="col-lg-5 col-5">
-                            <div class="small-box bg-danger">
-                                <div class="inner">
-                                    <h3>{{ $pagosobservados_administracion }}</h3>
-                                    <p>PAGOS OBSERVADOS</p>
-                                </div>
-                                <div class="icon">
-                                    <i class="ion ion-stats-bars"></i>
-                                </div>
-                                <a href="{{ route('administracion.porrevisar') }}" class="small-box-footer">Más info <i
-                                        class="fas fa-arrow-circle-right"></i></a>
-                            </div>
-                        </div>
-                        <div class="col-lg-1 col-1">
-                        </div>
-                    </div>
-                </div>
-                <div class="container-fluid">
-                    <div class="row">
-                        <div class="col-lg-4 col-sm-4 col-md-4 col-xs-12">
-                        </div>
-                        <div class="col-lg-4 col-sm-4 col-md-4 col-xs-12">
-                            <br>
-                            <div class="table-responsive">
-                                <img src="imagenes/logo_facturas.png" alt="Logo" width="100%">
-                            </div>
-                        </div>
-                        <div class="col-lg-4 col-sm-4 col-md-4 col-xs-12">
-                        </div>
-                    </div>
-                </div>
-            @elseif (Auth::user()->rol == 'Logística')
-
-                <div style="text-align: center; font-family:'Times New Roman', Times, serif">
-                    <h2>
-                        <p>Bienvenido(a) <b>{{ Auth::user()->name }}</b> al software empresarial de sisFacturas</b></p>
-                    </h2>
-                </div>
-                <br>
-                <br>
-                <div class="container-fluid">
-                    <div class="row" style="color: #fff;">
-                        <div class="col-lg-1 col-1">
-                        </div>
-                        <div class="col-lg-5 col-5">
-                            <div class="small-box bg-warning">
-                                <div class="inner">
-                                    <h3>{{ $pagosxrevisar_administracion }}</h3>
-                                    <p>Sobres por enviar</p>
-                                </div>
-                                <div class="icon">
-                                    <i class="ion ion-bag"></i>
-                                </div>
-                                <a href="{{ route('administracion.porrevisar') }}" class="small-box-footer">Más info <i
-                                        class="fas fa-arrow-circle-right"></i></a>
-                            </div>
-                        </div>
-                        <div class="col-lg-5 col-5">
-                            <div class="small-box bg-danger">
-                                <div class="inner">
-                                    <h3>{{ $pagosobservados_administracion }}</h3>
-                                    <p>Sobres por recibir</p>
-                                </div>
-                                <div class="icon">
-                                    <i class="ion ion-stats-bars"></i>
-                                </div>
-                                <a href="{{ route('administracion.porrevisar') }}" class="small-box-footer">Más info <i
-                                        class="fas fa-arrow-circle-right"></i></a>
-                            </div>
-                        </div>
-                        <div class="col-lg-1 col-1">
-                        </div>
-                    </div>
-                </div>
-
-            @else
-                <div style="text-align: center; font-family:'Times New Roman', Times, serif">
-                    <h2>
-                        <p>Bienvenido(a) <b>{{ Auth::user()->name }}</b> al software empresarial de sisFacturas</b></p>
-                    </h2>
-                </div>
-                <br>
-                <br>
-                <div class="col-lg-12 col-12" style="text-align: center">
-                    <img src="imagenes/logo_facturas.png" alt="Logo" width="50%">
-                </div>
-            @endif
-        </div>
-        @stop
-
-        @section('css')
-            <style>
-                .content-header {
-                    background-color: white !important;
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
+            });
 
-                .content {
-                    background-color: white !important;
+            $("#buttom_search_cliente_clear").click(function () {
+                $("#search_content_result").html('');
+                $("#input_search_cliente").val('');
+            });
+            $("#input_search_type").on("change", function () {
+                $("#search_content_result").html('');
+                $("#input_search_cliente").val('');
+            })
+            $("#buttom_search_cliente").click(function () {
+                var tipo = $("#input_search_type").val()
+                if (tipo == "CLIENTE") {
+                    $.ajax({
+                        url: "{{route('dashboard.search-cliente')}}",
+                        data: {q: document.getElementById("input_search_cliente").value},
+                        context: document.body
+                    }).done(function (a) {
+                        console.log(a)
+                        $("#search_content_result").html(a);
+                    });
+                } else if (tipo == "RUC") {
+                    $.ajax({
+                        url: "{{route('dashboard.search-ruc')}}",
+                        data: {
+                            q: document.getElementById("input_search_cliente").value
+                        },
+                        context: document.body
+                    }).done(function (a) {
+                        console.log(a)
+                        $("#search_content_result").html(a);
+                    });
                 }
-            </style>
+            })
+        })()
+    </script>
+@endsection
+@push('js')
+    @if(in_array(auth()->user()->rol,[\App\Models\User::ROL_ADMIN,\App\Models\User::ROL_ENCARGADO,\App\Models\User::ROL_ASESOR]))
+        <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+        <script type="text/javascript"
+                src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css"/>
+        <script>
+            $(function () {
+                const startYear = moment().startOf('year');
+                const momentStart = moment('{{request('start_date',now()->startOfMonth()->format('Y-m-d'))}}', 'YYYY-MM-DD');
+                const momentEnd = moment('{{request('end_date',now()->endOfMonth()->format('Y-m-d'))}}', 'YYYY-MM-DD');
+                $('#datepickerDashborad').val(momentStart.format('DD/MM/YYYY') + ' - ' + momentEnd.format('DD/MM/YYYY'))
 
-        @stop
-
-        @section('js')
-            <script src="{{ asset('js/datatables.js') }}"></script>
-            @if (!$pedidossinpagos == null)
-                <script>
-                    $('#staticBackdrop').modal('show')
-                </script>
-            @endif
-
-            {{-- <script>
-              // CARGAR PEDIDOS DE CLIENTE SELECCIONADO
-              window.onload = function () {
-                $.ajax({
-                  url: "{{ route('notifications.get') }}"
-                  method: 'GET',
-                  success: function(data) {
-                    $('#my-notification').html(data.html);
-                  }
+                $('#datepickerDashborad').daterangepicker({
+                    "alwaysShowCalendars": false,
+                    "showDropdowns": false,
+                    "startDate": momentStart.format('DD/MM/YYYY'),
+                    "endDate": momentEnd.format('DD/MM/YYYY'),
+                    "autoUpdateInput": false,
+                    ranges: {
+                        'Enero': [startYear.clone(), startYear.clone().endOf('month')],
+                        'Febrero': [startYear.clone().add(1, 'month'), startYear.clone().add(1, 'month').endOf('month')],
+                        'Marzo': [startYear.clone().add(2, 'month'), startYear.clone().add(2, 'month').endOf('month')],
+                        "Abril": [startYear.clone().add(3, 'month'), startYear.clone().add(3, 'month').endOf('month')],
+                        "Mayo": [startYear.clone().add(4, 'month'), startYear.clone().add(4, 'month').endOf('month')],
+                        "Junio": [startYear.clone().add(5, 'month'), startYear.clone().add(5, 'month').endOf('month')],
+                        "Julio": [startYear.clone().add(6, 'month'), startYear.clone().add(6, 'month').endOf('month')],
+                        "Agosto": [startYear.clone().add(7, 'month'), startYear.clone().add(7, 'month').endOf('month')],
+                        "Septiembre": [startYear.clone().add(8, 'month'), startYear.clone().add(8, 'month').endOf('month')],
+                        "Octubre": [startYear.clone().add(9, 'month'), startYear.clone().add(9, 'month').endOf('month')],
+                        "Noviembre": [startYear.clone().add(10, 'month'), startYear.clone().add(10, 'month').endOf('month')],
+                        "Diciembre": [startYear.clone().add(11, 'month'), startYear.clone().add(11, 'month').endOf('month')],
+                        /*'Hoy': [moment(), moment()],
+                        'El dia de ayer': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                        'Los últimos 7 días': [moment().subtract(6, 'days'), moment()],
+                        'Los últimos 30 días': [moment().subtract(29, 'days'), moment()],
+                        'Este Mes': [moment().startOf('month'), moment().endOf('month')],
+                        'Mes pasado': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]*/
+                    },
+                    "locale": {
+                        "format": "DD/MM/YYYY",
+                        "separator": " - ",
+                        "applyLabel": "Aplicar",
+                        "cancelLabel": "Cancelar",
+                        "fromLabel": "De",
+                        "toLabel": "Hasta",
+                        "customRangeLabel": "Custom",
+                        "weekLabel": "W",
+                        "daysOfWeek": [
+                            "Do",
+                            "Lu",
+                            "Ma",
+                            "Mi",
+                            "Ju",
+                            "Vi",
+                            "Sa"
+                        ],
+                        "monthNames": [
+                            "Enero",
+                            "Febrero",
+                            "Marzo",
+                            "Abril",
+                            "Mayo",
+                            "Junio",
+                            "Julio",
+                            "Agosto",
+                            "Septiembre",
+                            "Octubre",
+                            "Noviembre",
+                            "Diciembre"
+                        ],
+                        "firstDay": 1
+                    },
+                }, function (start, end, label) {
+                    window.location.replace('{{route('dashboard.index')}}?start_date=' + start.format('YYYY-MM-DD') + '&end_date=' + end.format('YYYY-MM-DD'))
                 });
-              };
-            </script> --}}
-            <script>
-                (function () {
+            });
+        </script>
+    @endif
+@endpush
 
-                    $.ajaxSetup({
-                        headers: {
-                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                        }
-                    });
 
-                    $("#buttom_search_cliente_clear").click(function () {
-                        $("#search_content_result").html('');
-                        $("#input_search_cliente").val('');
-                    });
-                    $("#input_search_type").on("change", function () {
-                        $("#search_content_result").html('');
-                        $("#input_search_cliente").val('');
-                    })
-                    $("#buttom_search_cliente").click(function () {
-                        var tipo = $("#input_search_type").val()
-                        if (tipo == "CLIENTE") {
-                            $.ajax({
-                                url: "{{route('dashboard.search-cliente')}}",
-                                data: {q: document.getElementById("input_search_cliente").value},
-                                context: document.body
-                            }).done(function (a) {
-                                console.log(a)
-                                $("#search_content_result").html(a);
-                            });
-                        } else if (tipo == "RUC") {
-                            $.ajax({
-                                url: "{{route('dashboard.search-ruc')}}",
-                                data: {
-                                    q: document.getElementById("input_search_cliente").value
-                                },
-                                context: document.body
-                            }).done(function (a) {
-                                console.log(a)
-                                $("#search_content_result").html(a);
-                            });
-                        }
-                    })
-                })()
-            </script>
-        @stop

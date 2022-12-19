@@ -354,34 +354,39 @@ return [
                 [
                     'text' => 'En bancarización',
                     'route'  => 'operaciones.bancarizacion',
-                    'can' => 'operacion.atendidos',
+                    'can' => 'operacion.bancarizacion',
                     'icon'   => 'fas fa-check-circle',
-                    'active' => ['pedidos atendidos'],
+                    'active' => ['pedidos bancarizacion'],
                 ],
                 [
                     'text' => 'En Jefe de Operaciones',
                     'route'  => 'operaciones.entregados',
-                    'can' => 'operacion.atendidos',
+                    'can' => 'operacion.entregados',
                     'icon'   => 'fas fa-check-circle',
-                    'active' => ['pedidos atendidos'],
+                    'active' => ['pedidos entregados'],
                 ],
-
                 [
                     'text' => 'Sobres terminados',
                     'route'  => 'operaciones.terminados',
-                    'can' => 'operacion.atendidos',
+                    'can' => 'operacion.terminados',
                     'icon'   => 'fas fa-check-circle',
-                    'active' => ['pedidos atendidos'],
+                    'active' => ['pedidos terminados'],
                 ],
 
             ],
         ],
-
         [
             'text'    => 'Envios',
             'icon'    => 'fas fa-people-carry',
             'can'     => 'envios.modulo',
             'submenu' => [
+                [
+                    'text' => 'Sobres por confirmar',
+                    'route'  => 'envios.porconfirmar',
+                    'can' => 'envios.porrecibir',
+                    'icon'   => 'fas fa-check-circle',
+                    'active' => ['envios'],
+                ],
                 [
                     'text' => 'Sobres por recibir',
                     'route'  => 'envios.porrecibir',
