@@ -22,6 +22,7 @@ use App\Models\Pedido;
 use App\Models\Porcentaje;
 use App\Models\Provincia;
 use App\Models\Ruc;
+use App\Models\PedidoMovimientoEstado;
 use App\Notifications\PedidoNotification;
 use Carbon\Carbon;
 use Exception;
@@ -241,6 +242,7 @@ class EnvioController extends Controller
             //'modificador' => 'USER'.Auth::user()->id
         ]);
 
+    
         return response()->json(['html' => $request->hiddenEnviar]);
 
     }
@@ -1518,7 +1520,10 @@ class EnvioController extends Controller
         $fecha = Carbon::now();
 
 
-
+        PedidoMovimientoEstado::create([
+            'pedido' => $request->hiddenSinenvio,
+            'condicion_envio_code' => DireccionGrupo::CE_ENTREGADO_CODE
+        ]);
 
 
 
@@ -1611,6 +1616,13 @@ class EnvioController extends Controller
             'modificador' => 'USER'.Auth::user()->id
         ]);
 
+        PedidoMovimientoEstado::create([
+            'pedido' => $request->hiddenEnvio,
+            'condicion_envio_code' => Pedido::BANCARIZACION_INT
+        ]);
+
+
+
         $detalle_pedidos->update([
             'fecha_envio_doc_fis' => $fecha,
         ]);
@@ -1632,6 +1644,11 @@ class EnvioController extends Controller
 
         ]);
 
+          PedidoMovimientoEstado::create([
+                    'pedido' => $request->hiddenEnvio,
+                    'condicion_envio_code' => Pedido::JEFE_OP_INT,
+                ]);
+
         return response()->json(['html' => $pedido->id]);
     }
 
@@ -1645,6 +1662,11 @@ class EnvioController extends Controller
             'condicion_envio' => Pedido::JEFE_OP_CONF,
             'condicion_envio_code' => Pedido::JEFE_OP_CONF_INT,
 
+        ]);
+
+        PedidoMovimientoEstado::create([
+            'pedido' => $request->hiddenEnvio,
+            'condicion_envio_code' => Pedido::JEFE_OP_CONF_INT
         ]);
 
         return response()->json(['html' => $pedido->id]);

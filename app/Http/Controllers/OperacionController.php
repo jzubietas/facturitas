@@ -22,6 +22,8 @@ use App\Models\Pedido;
 use App\Models\Porcentaje;
 use App\Models\Provincia;
 use App\Models\Ruc;
+use App\Models\PedidoMovimientoEstado;
+
 use App\Notifications\PedidoNotification;
 use Carbon\Carbon;
 use Exception;
@@ -676,6 +678,12 @@ class OperacionController extends Controller
 
     public function Atenderid(Request $request)
     {
+
+       
+
+
+      
+
         $hiddenAtender=$request->hiddenAtender;
         $detalle_pedidos = DetallePedido::where('pedido_id',$hiddenAtender)->first();
         $fecha = Carbon::now();
@@ -690,6 +698,12 @@ class OperacionController extends Controller
             'condicion_envio' => Pedido::$estadosCondicionEnvioCode[$request->condicion],
             'condicion_envio_code' => $request->condicion,
             'modificador' => 'USER'.Auth::user()->id
+        ]);
+
+
+        PedidoMovimientoEstado::create([
+            'pedido' => $request->hiddenAtender,
+            'condicion_envio_code' => $request->condicion,
         ]);
 
 
