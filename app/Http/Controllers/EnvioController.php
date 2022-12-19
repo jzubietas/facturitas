@@ -657,6 +657,167 @@ class EnvioController extends Controller
 
     }
 
+    public function Enviosporconfirmar()
+    {
+        $condiciones = [
+            "1" => 1,
+            "2" => 2,
+            "3" => 3
+        ];
+
+        $destinos = [
+            "LIMA" => 'LIMA',
+            "PROVINCIA" => 'PROVINCIA'
+        ];
+
+        $distritos = Distrito::whereIn('provincia', ['LIMA', 'CALLAO'])
+                            ->where('estado', '1')
+                            ->pluck('distrito', 'distrito');
+
+        $direcciones = DireccionEnvio::join('direccion_pedidos as dp', 'direccion_envios.id', 'dp.direccion_id')
+                            ->select('direccion_envios.id',
+                                    'direccion_envios.distrito',
+                                    'direccion_envios.direccion',
+                                    'direccion_envios.referencia',
+                                    'direccion_envios.nombre',
+                                    'direccion_envios.celular',
+                                    'dp.pedido_id as pedido_id',
+                                    )
+                            ->where('direccion_envios.estado', '1')
+                            ->where('dp.estado', '1')
+
+                            ->get();
+        $departamento = Departamento::where('estado', "1")
+                            ->pluck('departamento', 'departamento');
+        $superasesor = User::where('rol', 'Super asesor')->count();
+
+        $ver_botones_accion = 1;
+
+        if(Auth::user()->rol == "Asesor")
+        {
+            $ver_botones_accion = 0;
+        }else if(Auth::user()->rol == "Super asesor"){
+            $ver_botones_accion = 0;
+        }else if(Auth::user()->rol == "Encargado"){
+            $ver_botones_accion = 1;
+        }else{
+            $ver_botones_accion = 1;
+        }
+
+        return view('envios.porRecibir', compact('condiciones', 'distritos', 'direcciones', 'destinos', 'superasesor','ver_botones_accion','departamento'));
+    }
+
+    public function Enviosporconfirmartabla(Request $request)
+    {
+        $pedidos=null;
+        $filtros_code=[6,7];
+
+        $pedidos = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')
+                ->join('users as u', 'pedidos.user_id', 'u.id')
+                ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
+                ->select(
+                    'pedidos.id',
+                    'pedidos.correlativo as id2',
+                    'c.nombre as nombres',
+                    'c.celular as celulares',
+                    'u.identificador as users',
+                    'dp.codigo as codigos',
+                    'dp.nombre_empresa as empresas',
+                    'dp.total as total',
+                    'pedidos.condicion',
+                    'pedidos.created_at as fecha',
+                    'pedidos.condicion_envio',
+                    'pedidos.envio',
+                    'pedidos.destino',
+                    'pedidos.direccion',
+                    'pedidos.estado_sobre',
+                    'dp.envio_doc',
+                    'dp.fecha_envio_doc',
+                    'dp.cant_compro',
+                    'dp.fecha_envio_doc_fis',
+                    'dp.foto1',
+                    'dp.foto2',
+                    'dp.fecha_recepcion'
+                )
+                  // 14-12-22 se realiza la consulta con el filtro por la columna  p.condicion_code=13
+                  ->WhereIn('pedidos.condicion_envio_code',$filtros_code)
+               //->where('pedidos.condicion_envio_code', Pedido::COURIER_INT);
+              // ->where('pedidos.condicion_envio_code', Pedido::SOBRE_ENVIAR_INT);
+              //  ->where('dp.estado', '1')
+                ->where('pedidos.envio', '2')  //estado del sobre anterior
+                ->where('pedidos.estado', '1'); 
+
+           // esta query esta mal formulada ->where('pedidos.condicion_envio', '<>', 3);
+
+        if(Auth::user()->rol == "Operario"){
+            $asesores = User::where('users.rol', 'Asesor')
+                -> where('users.estado', '1')
+                -> Where('users.operario',Auth::user()->id)
+                ->select(
+                    DB::raw("users.identificador as identificador")
+                )
+                ->pluck('users.identificador');
+
+            $pedidos=$pedidos->WhereIn('u.identificador',$asesores);
+
+        }else if(Auth::user()->rol == "Jefe de operaciones"){
+            $operarios = User::where('users.rol', 'Operario')
+                -> where('users.estado', '1')
+                -> where('users.jefe', Auth::user()->id)
+                ->select(
+                    DB::raw("users.id as id")
+                )
+                ->pluck('users.id');
+
+            $asesores = User::where('users.rol', 'Asesor')
+                -> where('users.estado', '1')
+                ->WhereIn('users.operario',$operarios)
+                ->select(
+                    DB::raw("users.identificador as identificador")
+                )
+                ->pluck('users.identificador');
+
+            $pedidos=$pedidos->WhereIn('u.identificador',$asesores);
+
+        }else if(Auth::user()->rol == "Asesor"){
+            $pedidos=$pedidos->Where('u.identificador',Auth::user()->identificador);
+
+        }
+        else if(Auth::user()->rol == "Super asesor"){
+            $pedidos=$pedidos->Where('u.identificador',Auth::user()->identificador);
+
+        }
+        else if(Auth::user()->rol == "Encargado"){
+            $pedidos=$pedidos->Where('u.supervisor',Auth::user()->identificador);
+        }
+        else if(Auth::user()->rol == "Llamadas"){
+            $usersasesores = User::where('users.rol', 'Asesor')
+                -> where('users.estado', '1')
+                -> where('users.llamada', Auth::user()->id)
+                ->select(
+                    DB::raw("users.identificador as identificador")
+                )
+                ->pluck('users.identificador');
+
+            $pedidos=$pedidos->WhereIn('u.identificador',$usersasesores);
+        }else if(Auth::user()->rol == "Jefe de llamadas"){
+            $pedidos=$pedidos->where('u.identificador','<>','B');
+        }else{
+            $pedidos=$pedidos;
+        }
+        //$pedidos=$pedidos->get();
+
+        return Datatables::of(DB::table($pedidos))
+                    ->addIndexColumn()
+                    ->addColumn('action', function($pedido){
+                        $btn='';
+                        return $btn;
+                    })
+                    ->rawColumns(['action'])
+                    ->make(true);
+
+    }
+
 
     public function Enviosporrecibir()
     {
