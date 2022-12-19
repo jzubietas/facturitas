@@ -83,7 +83,7 @@
             <th scope="col">Est. pago</th>
             <th scope="col">Con. pago</th>
           <!--   <th scope="col">Est. sobre</th> -->
-           <th scope="col">Est. envío</th>
+           <th scope="col">Est. Sobre</th>
            <!--  <th scope="col">Cond. Pago</th> -->
             <!-- <th scope="col">Estado</th>-->
             <th scope="col">Diferencia</th>
