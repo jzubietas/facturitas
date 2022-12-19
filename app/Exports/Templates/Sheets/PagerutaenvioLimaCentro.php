@@ -2,27 +2,36 @@
 
 namespace App\Exports\Templates\Sheets;
 
+
 use App\Abstracts\Export;
-use App\Models\ListadoResultado;
+use App\Models\DireccionGrupo;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Concerns\WithColumnFormatting;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 use Maatwebsite\Excel\Concerns\WithColumnWidths;
 
-class PagerutaenvioLimaSinasignar extends Export implements WithColumnFormatting,WithColumnWidths
+class PagerutaenvioLimaCentro  extends Export
 {
+    public $fecharuta;
+    public function __construct($fecharuta)
+    {
+        parent::__construct();
+        $this->fecharuta=$fecharuta;
+    }
     public function collection()
     {
-        $min = Carbon::createFromFormat('d/m/Y', $this->fecha)->format('Y-m-d');
+
         $pedidos_lima = DireccionGrupo::join('direccion_envios as de','direccion_grupos.id','de.direcciongrupo')
             ->join('clientes as c', 'c.id', 'de.cliente_id')
             ->join('users as u', 'u.id', 'c.user_id')
             ->where('direccion_grupos.estado','1')
-            ->where(function($query){
+            ->where('direccion_grupos.distribucion','CENTRO')
+            /*->where(function($query){
                 $query->where('direccion_grupos.distribucion','=','')->orWhereNull('direccion_grupos.distribucion');
-            })
+            })*/
             ->where('direccion_grupos.destino','LIMA')
-            ->where(DB::raw('DATE(direccion_grupos.created_at)'), $min)
+            ->where(DB::raw('DATE(direccion_grupos.created_at)'), $this->fecharuta)
             ->select(
                 'direccion_grupos.correlativo',
                 'u.identificador as identificador',
@@ -38,7 +47,7 @@ class PagerutaenvioLimaSinasignar extends Export implements WithColumnFormatting
                 'de.distrito',
                 'direccion_grupos.created_at as fecha',
                 'direccion_grupos.distribucion',
-                'direccion_grupos.condicion_sobre',                
+                'direccion_grupos.condicion_sobre',
             );
 
         $pedidos = $pedidos_lima;
@@ -68,7 +77,7 @@ class PagerutaenvioLimaSinasignar extends Export implements WithColumnFormatting
 
     public function title(): string
     {
-        return 'Lima Sin Asignar';
+        return 'Lima CENTRO';
     }
     public function map($model): array
     {
@@ -95,7 +104,7 @@ class PagerutaenvioLimaSinasignar extends Export implements WithColumnFormatting
             ,'P' => 8
         ];
     }
-    
+
     public function columnFormats(): array
     {
         return [
