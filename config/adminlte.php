@@ -375,12 +375,18 @@ return [
 
             ],
         ],
-
         [
             'text'    => 'Envios',
             'icon'    => 'fas fa-people-carry',
             'can'     => 'envios.modulo',
             'submenu' => [
+                [
+                    'text' => 'Sobres por recibir',
+                    'route'  => 'envios.porconfirmar',
+                    'can' => 'envios.porrecibir',
+                    'icon'   => 'fas fa-check-circle',
+                    'active' => ['envios'],
+                ],
                 [
                     'text' => 'Sobres por recibir',
                     'route'  => 'envios.porrecibir',
