@@ -89,7 +89,7 @@ class PedidosPorDia extends GraficosComponent
                 ->where('user_id', '=', $user->id)
                 ->count();
             return [
-                'label' => $user->name . ' (' . $user->identificador . ')',
+                'label' => $user->identificador,
                 'y' => $pedidos,
             ];
         });
