@@ -78,14 +78,14 @@
             <th scope="col">F. Registro</th>
             <th scope="col">F. Actualizacion</th>
             <th scope="col">Total (S/)</th>
-            <th scope="col">Est. pedido</th>
+            <!--<th scope="col">Est. pedido</th> -->
 
             <th scope="col">Est. pago</th>
             <th scope="col">Con. pago</th>
-            <th scope="col">Est. sobre</th>
-           <th scope="col">Est. envío</th>
-            <th scope="col">Cond. Pago</th>
-            <!--<th scope="col">Estado</th>-->
+          <!--   <th scope="col">Est. sobre</th> -->
+           <th scope="col">Est. Sobre</th>
+           <!--  <th scope="col">Cond. Pago</th> -->
+            <!-- <th scope="col">Estado</th>-->
             <th scope="col">Diferencia</th>
             {{--<th scope="col">Resp. Pedido</th>--}}
             <th scope="col">Acciones</th>
@@ -267,12 +267,12 @@
               var pedidodiferencia=data.diferencia;
               //pedidodiferencia=0;
               if(pedidodiferencia==null){
-                $('td:eq(14)', row).css('background', '#efb7b7').css('color','#934242').css('text-align','center').css('font-weight','bold');
+                $('td:eq(11)', row).css('background', '#ca3a3a').css('color','#ffffff').css('text-align','center').css('font-weight','bold');
               }else{
                 if(pedidodiferencia>3){
-                  $('td:eq(14)', row).css('background', '#efb7b7').css('color','#934242').css('text-align','center').css('font-weight','bold');
+                  $('td:eq(11)', row).css('background', '#ca3a3a').css('color','#ffffff').css('text-align','center').css('font-weight','bold');
                 }else{
-                  $('td:eq(14)', row).css('background', '#afdfb2').css('text-align','center').css('font-weight','bold');
+                  $('td:eq(11)', row).css('background', '#44c24b').css('text-align','center').css('font-weight','bold');
                 }
               }
         },
@@ -337,6 +337,7 @@
           name: 'total',
           render: $.fn.dataTable.render.number(',', '.', 2, '')
         },
+        /*
             {data: 'condicion_code',
                 name: 'condicion_code',
                 render: function ( data, type, row, meta ) {
@@ -353,7 +354,7 @@
                         return '{{\App\Models\Pedido::ANULADO }}';
                     }
                 }
-            },//estado de pedido
+            }, */
         {
           data: 'condicion_pa',
           name: 'condicion_pa',
@@ -399,6 +400,7 @@
 
           }
         },
+        /*
         {
           //estado del sobre
           data: 'envio',
@@ -422,7 +424,7 @@
 
             }
           }
-        },
+        },  */
         //{data: 'responsable', name: 'responsable', },//estado de envio
 
         //{data: 'condicion_pa', name: 'condicion_pa', },//ss
@@ -431,23 +433,25 @@
           name: 'condicion_envio',
           render: function ( data, type, row, meta ) {
               if(row.condicion_code==4||row.estado==0){
-                  return 'ANULADO';
+                  return   '<span class="badge badge-info">ANULADO</span>' //    'ANULADO';
               }
             if(row.condicion_envio=='ANULADO'){
-                return 'ANULADO';
+                return '<span class="badge badge-info">ANULADO</span>';
             }else if(row.condicion_envio == 0){
-                return 'ANULADO';
+                return '<span class="badge badge-info">ANULADO</span>';
             }else if(row.condicion_envio == 1){
-                return 'PENDIENTE DE ENVÍO';
+                return '<span class="badge badge-info">PENDIENTE DE ENVIO</span>';
             }else if(row.condicion_envio == 2){
-                return 'EN REPARTO';
+                return  '<span class="badge badge-info">EN REPARTO</span>';
             }else if(row.condicion_envio == 3){
-                return 'ENTREGADO';
+                return '<span class="badge badge-info">ENTREGADO</span>';
             }else{
-              return data;
+              return '<span class="badge badge-info">'+data+'</span>' //data;
             }
           }
         },//
+        
+        /*
         {
           data: 'estado',
           name: 'estado',
@@ -459,6 +463,8 @@
               }
             }
         },
+
+        */
         {
           data: 'diferencia',
           name: 'diferencia',
