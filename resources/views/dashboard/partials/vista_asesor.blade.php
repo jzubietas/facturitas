@@ -92,7 +92,7 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-md-12">
-                    <x-dashboard.graficos.meta-progress-bar></x-dashboard.graficos.meta-progress-bar>
+                    <x-grafico-metas-progress-bar></x-grafico-metas-progress-bar>
                 </div>
                 <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12">
                     <br>

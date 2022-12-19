@@ -87,19 +87,11 @@
         <div class="col-md-12">
             <div class="row" id="widget-container">
                 <div class="col-md-12">
-                    <x-dashboard.graficos.meta-progress-bar></x-dashboard.graficos.meta-progress-bar>
+                    <x-grafico-metas-progress-bar></x-grafico-metas-progress-bar>
                 </div>
                 <div class="col-md-12">
-                    <x-dashboard.graficos.borras.pedidos-por-dia rol="Encargado"
-                                                                 title="Cantidad de pedidos de los asesores por dia"
-                                                                 label-x="Asesores"
-                                                                 label-y="Cant. Pedidos"
-                                                                 only-day
-                    ></x-dashboard.graficos.borras.pedidos-por-dia>
-                    <x-dashboard.graficos.borras.pedidos-por-dia rol="Encargado"
-                                                                 title="Cantidad de pedidos de los asesores por mes"
-                                                                 label-x="Asesores"
-                                                                 label-y="Cant. Pedidos"></x-dashboard.graficos.borras.pedidos-por-dia>
+                    <x-grafico-pedidos-por-dia rol="Encargado" title="Cantidad de pedidos de los asesores por dia" label-x="Asesores" label-y="Cant. Pedidos" only-day></x-grafico-pedidos-por-dia>
+                    <x-grafico-pedidos-por-dia rol="Encargado" title="Cantidad de pedidos de los asesores por mes" label-x="Asesores" label-y="Cant. Pedidos"></x-grafico-pedidos-por-dia>
                 </div>
             </div>
         </div>
