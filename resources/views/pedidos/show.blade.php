@@ -168,7 +168,7 @@
                                         @foreach($imagenesatencion as $img_at)
                                             <p>
                                                 <a class="{{$img_at->estado==0?'text-danger':''}}" target="_blank"
-                                                   href="{{ \Storage::disk('pstorage')->url('adjuntos/'. $img->adjunto) }}">
+                                                   href="{{ \Storage::disk('pstorage')->url('adjuntos/'. $img_at->adjunto) }}">
                                                     {{ $img_at->adjunto }}
                                                 </a>
                                             </p>
