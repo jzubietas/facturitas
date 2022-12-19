@@ -166,22 +166,12 @@
                                     <div class="col-lg-6">
                                         <p><b>Archivos Adjuntados:</b></p>
                                         @foreach($imagenesatencion as $img_at)
-                                            @if ($img_at->pedido_id == $pedido->id)
-                                                <p>
-                                                    {{--<a href="{{ route('pedidos.descargaradjunto', $img_at->adjunto) }}">{{ $img_at->adjunto }}</a>--}}
-                                                    <a class="{{$img_at->estado==0?'text-danger':''}}" target="_blank"
-                                                       href="{{ \Storage::disk('pstorage')->url('adjuntos/'. $img->adjunto) }}">
-                                                        @if($img_at->estado==0)
-                                                            <strike>
-                                                                {{ $img->adjunto }}
-                                                            </strike>
-                                                        @else
-                                                            {{ $img->adjunto }}
-                                                        @endif
-                                                    </a>
-                                                </p>
-                                            @endif
-                                            @include('pedidos.modal.DeleteAdjuntoid')
+                                            <p>
+                                                <a class="{{$img_at->estado==0?'text-danger':''}}" target="_blank"
+                                                   href="{{ \Storage::disk('pstorage')->url('adjuntos/'. $img->adjunto) }}">
+                                                    {{ $img_at->adjunto }}
+                                                </a>
+                                            </p>
                                         @endforeach
                                     </div>
                                 </div>
