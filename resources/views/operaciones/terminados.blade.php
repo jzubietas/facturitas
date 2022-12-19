@@ -267,17 +267,17 @@
               name: 'condicion',
               render: function ( data, type, row, meta ) {
                   if(row.condicion =='ANULADO'){
-                      return 'ANULADO';
+                      return '<span class="badge badge-success">ANULADO</span>';
                   }else if(row.condicion == 0){
-                      return 'ANULADO';
+                      return  '<span class="badge badge-success">ANULADO</span>';
                   }else if(row.condicion == 1){
-                      return 'PENDIENTE DE ENVÍO';
+                      return '<span class="badge badge-success">PENDIENTE</span>';
                   }else if(row.condicion == 2){
-                      return 'EN REPARTO';
+                      return '<span class="badge badge-success">EN REPARTO</span>';
                   }else if(row.condicion == 3){
-                      return 'ENTREGADO';
+                      return '<span class="badge badge-success">ENTREGADO</span>';
                   }else{
-                      return data;
+                      return '<span class="badge badge-success">'+data+'</span>';
                   }
               }
           },
@@ -298,7 +298,7 @@
                 }else{
                   return '<span class="badge badge-danger">por enviar</span>';
                 }
-              }
+              },"visible":false
           }
         ],
         language: {
