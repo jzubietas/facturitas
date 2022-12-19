@@ -78,14 +78,14 @@
             <th scope="col">F. Registro</th>
             <th scope="col">F. Actualizacion</th>
             <th scope="col">Total (S/)</th>
-            <th scope="col">Est. pedido</th>
+            <!--<th scope="col">Est. pedido</th> -->
 
             <th scope="col">Est. pago</th>
             <th scope="col">Con. pago</th>
             <th scope="col">Est. sobre</th>
            <th scope="col">Est. envío</th>
-            <th scope="col">Cond. Pago</th>
-            <!--<th scope="col">Estado</th>-->
+           <!--  <th scope="col">Cond. Pago</th> -->
+            <!-- <th scope="col">Estado</th>-->
             <th scope="col">Diferencia</th>
             {{--<th scope="col">Resp. Pedido</th>--}}
             <th scope="col">Acciones</th>
@@ -337,6 +337,7 @@
           name: 'total',
           render: $.fn.dataTable.render.number(',', '.', 2, '')
         },
+        /*
             {data: 'condicion_code',
                 name: 'condicion_code',
                 render: function ( data, type, row, meta ) {
@@ -353,7 +354,7 @@
                         return '{{\App\Models\Pedido::ANULADO }}';
                     }
                 }
-            },//estado de pedido
+            }, */
         {
           data: 'condicion_pa',
           name: 'condicion_pa',
@@ -448,6 +449,8 @@
             }
           }
         },//
+        
+        /*
         {
           data: 'estado',
           name: 'estado',
@@ -459,6 +462,8 @@
               }
             }
         },
+
+        */
         {
           data: 'diferencia',
           name: 'diferencia',
