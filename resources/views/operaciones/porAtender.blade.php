@@ -440,16 +440,16 @@
                 name: 'condicion_code',
                 render: function ( data, type, row, meta ) {
                     if(row.pendiente_anulacion==1){
-                        return '{{\App\Models\Pedido::PENDIENTE_ANULACION }}';
+                        return '<span class="badge badge-success">'+'{{\App\Models\Pedido::PENDIENTE_ANULACION }}'+'</span>';
                     }
                     if(row.condicion_code==1){
-                        return '{{\App\Models\Pedido::POR_ATENDER }}';
+                        return '<span class="badge badge-success">'+'{{\App\Models\Pedido::POR_ATENDER }}'+'</span>';
                     }else if(row.condicion_code==2){
-                        return '{{\App\Models\Pedido::EN_PROCESO_ATENCION }}';
+                        return '<span class="badge badge-success">'+'{{\App\Models\Pedido::EN_PROCESO_ATENCION }}'+'</span>';
                     }else if(row.condicion_code==3){
-                        return '{{\App\Models\Pedido::ATENDIDO }}';
+                        return '<span class="badge badge-success">'+'{{\App\Models\Pedido::ATENDIDO }}'+'</span>';
                     }else if(row.condicion_code==4){
-                        return '{{\App\Models\Pedido::ANULADO }}';
+                        return '<span class="badge badge-success">'+'{{\App\Models\Pedido::ANULADO }}'+'</span>';
                     }else{
                         return '';
                     }
