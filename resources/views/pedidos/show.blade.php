@@ -159,7 +159,7 @@
                                 <div class="row">
                                     <div class="col-lg-6">
                                         <p><b>Cantidad de comprobantes enviados:</b></p>
-                                        <p>{{ $pedido->cant_compro }}</p>
+                                        <b class="h4">{{ $pedido->cant_compro }}</b>
                                     </div>
                                     <div class="col-lg-6">
                                         <p><b>Archivos Adjuntados:</b></p>
@@ -167,6 +167,7 @@
                                             @if ($img_at->pedido_id == $pedido->id)
                                                 <p>
                                                     {{--<a href="{{ route('pedidos.descargaradjunto', $img_at->adjunto) }}">{{ $img_at->adjunto }}</a>--}}
+                                                    <a target="_blank" href="{{ \Storage::disk('pstorage')->url('adjuntos/'. $img->adjunto) }}">{{ $img->adjunto }}</a>
                                                 </p>
                                             @endif
                                             @include('pedidos.modal.DeleteAdjuntoid')
