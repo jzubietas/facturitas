@@ -622,7 +622,7 @@ class UserController extends Controller
 
     public function Operarios()
     {
-        $users = User::where('rol', 'Operario')
+        $users = User::whereIn('rol', ['Operario','BANCARIZACION'])
             ->where('estado', '1')
             ->get();
         $jefes = User::where('rol', 'Jefe de operaciones')
