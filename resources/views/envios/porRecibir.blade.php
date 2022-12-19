@@ -3,7 +3,7 @@
 @section('title', 'Lista de pedidos por recibir')
 
 @section('content_header')
-  <h1>Lista de pedidos por recibir - ENVIOS
+  <h1>SOBRES EN COURIER
     {{-- <div class="float-right btn-group dropleft">
       <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         Exportar
