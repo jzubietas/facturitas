@@ -62,6 +62,7 @@
             <th scope="col">Atendido por</th>
             <th scope="col">Jefe</th>
             <th scope="col">Estado de sobre</th>
+            <th scope="col">Accion</th>
           </tr>
         </thead>
         <tbody>
@@ -220,7 +221,7 @@
         searching: true,
         "order": [[ 0, "desc" ]],
         ajax: {
-          url: "{{ route('operaciones.entregadostabla') }}",
+          url: "{{ route('operaciones.terminadostabla') }}",
           data: function (d) {
             //d.asesores = $("#asesores_pago").val();
             d.min = $("#min").val();
@@ -267,17 +268,17 @@
               name: 'condicion',
               render: function ( data, type, row, meta ) {
                   if(row.condicion =='ANULADO'){
-                      return 'ANULADO';
+                      return '<span class="badge badge-success">ANULADO</span>';
                   }else if(row.condicion == 0){
-                      return 'ANULADO';
+                      return  '<span class="badge badge-success">ANULADO</span>';
                   }else if(row.condicion == 1){
-                      return 'PENDIENTE DE ENVÍO';
+                      return '<span class="badge badge-success">PENDIENTE</span>';
                   }else if(row.condicion == 2){
-                      return 'EN REPARTO';
+                      return '<span class="badge badge-success">EN REPARTO</span>';
                   }else if(row.condicion == 3){
-                      return 'ENTREGADO';
+                      return '<span class="badge badge-success">ENTREGADO</span>';
                   }else{
-                      return data;
+                      return '<span class="badge badge-success">'+data+'</span>';
                   }
               }
           },
@@ -298,9 +299,59 @@
                 }else{
                   return '<span class="badge badge-danger">por enviar</span>';
                 }
+              },"visible":false
+          },
+
+          {
+            data: 'action',
+            name: 'action',
+            orderable: false,
+            searchable: false,
+            sWidth:'20%',
+            render: function ( data, type, row, meta ) {
+
+              var urlver = '{{ route("operaciones.showatender", ":id") }}';
+              urlver = urlver.replace(':id', row.id);
+              data = data+'<a href="'+urlver+'" class="btn btn-primary btn-sm"><i class="fas fa-eye"></i> Ver</a><br>';
+
+              var urledit = '{{ route("operaciones.editatender", ":id") }}';
+              urledit = urledit.replace(':id', row.id);
+              @can('operacion.editatender')
+                data = data+'<a href="'+urledit+'" class="btn btn-warning btn-sm"><i class=""></i> Editar atención</a><br>';
+              @endcan
+              var urlpdf = '{{ route("pedidosPDF", ":id") }}';
+              urlpdf = urlpdf.replace(':id', row.id);
+              @can('operacion.PDF')
+                data = data+'<a href="'+urlpdf+'" class="btn btn-primary btn-sm" target="_blank"><i class="fa fa-file-pdf"></i> PDF</a><br>';
+              //  data = data+'<a href="" data-target="#modal-envio-op" data-envio='+row.id+' data-toggle="modal" ><button class="btn btn-success btn-sm">Atender</button></a><br>';
+              @endcan
+
+              @can('operacion.enviar')
+                if (row.envio == '0')
+                {
+                  @if (Auth::user()->rol == "Jefe de operaciones" || Auth::user()->rol == "Administrador")
+
+                    data = data+'<a href="" data-target="#modal-envio" data-envio='+row.id+' data-toggle="modal" ><button class="btn btn-success btn-sm">Enviar</button></a><br>';
+                    data = data+'<a href="" data-target="#modal-sinenvio" data-sinenvio='+row.id+' data-toggle="modal" ><button class="btn btn-dark btn-sm">Sin envío</button></a><br>';
+                  @endif
+
+                }
+              @endcan
+
+              if(row.envio=='3' || row.envio=='1')
+              {
+                data = data+'<a href="" data-target="#modal-revertir" data-revertir='+row.id+' data-toggle="modal" ><button class="btn btn-success btn-sm">Revertir</button></a>';
               }
-          }
+
+              return data;
+            }
+          },
+
+
         ],
+
+
+
         language: {
           "decimal": "",
           "emptyTable": "No hay información",
