@@ -107,6 +107,7 @@ class OperacionController extends Controller
                 'dp.fecha_envio_doc_fis',
                 'dp.fecha_recepcion',
                 'dp.tipo_banca',
+                'pedidos.motivo',
                 DB::raw(" ( select count(ip.id) from imagen_pedidos ip inner join pedidos pedido on pedido.id=ip.pedido_id and pedido.id=pedidos.id where ip.estado=1 and ip.adjunto not in ('logo_facturas.png') ) as imagenes ")
             )
             ->where('pedidos.estado', '1')
@@ -168,7 +169,7 @@ class OperacionController extends Controller
                         $btn='';
                         if(in_array(\auth()->user()->rol,[User::ROL_JEFE_OPERARIO,User::ROL_ADMIN])) {
                             if ($pedido->pendiente_anulacion == 1) {
-                                $btn .= '<button data-toggle="modal" data-target="#modal_confirmar_anular" data-confirm_anular_pedido="'.$pedido->id.'"  data-pedido_id="'.$pedido->id.'" data-pedido_id_code="'.Pedido::generateIdCode($pedido->id).'" type="button" class="btn btn-danger btn-sm" >Anular</button>';
+                                $btn .= '<button data-toggle="modal" data-target="#modal_confirmar_anular" data-confirm_anular_pedido="'.$pedido->id.'"  data-pedido_id="'.$pedido->id.'" data-pedido_motivo="'.$pedido->motivo.'" data-pedido_id_code="'.Pedido::generateIdCode($pedido->id).'" type="button" class="btn btn-danger btn-sm" >Anular</button>';
                             }
                         }
                         return $btn;
@@ -491,7 +492,7 @@ class OperacionController extends Controller
             ->where('pedidos.estado', '1')
             ->where('dp.estado', '1')
             ->where('pedidos.condicion_code', Pedido::ATENDIDO_INT)
-            ->whereIn('pedidos.condicion_envio_code', [Pedido::JEFE_OP_INT],[Pedido::COURIER_INT], [Pedido::EN_REPARTO_INT],[Pedido::SOBRE_ENVIAR_INT])
+            ->whereIn('pedidos.condicion_envio_code', [Pedido::JEFE_OP_CONF_INT],[Pedido::COURIER_INT], [Pedido::EN_REPARTO_INT],[Pedido::SOBRE_ENVIAR_INT])
             ->whereIn('pedidos.envio', ['2','3']);
         //->whereIn('pedidos.envio', ['0'])
         //->whereBetween( 'pedidos.created_at', [$min, $max]);

@@ -45,8 +45,8 @@
 
 
                             <select name="condicion" class="form-control" id="condicion">
-                              <option value="2">EN PROCESO ATENCION</option>
-                              <option value="3" >ATENDIDO</option>
+                              <option value="2">INCOMPLETO</option>
+                              <option value="3" >PDF</option>
                             </select>
                           </div>
                         </div>

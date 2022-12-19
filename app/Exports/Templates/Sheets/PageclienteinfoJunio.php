@@ -8,7 +8,7 @@ use Maatwebsite\Excel\Concerns\WithColumnFormatting;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 use Maatwebsite\Excel\Concerns\WithColumnWidths;
 
-class PageclienteinfoJulio extends Export implements WithColumnFormatting,WithColumnWidths
+class PageclienteinfoJunio extends Export implements WithColumnFormatting,WithColumnWidths
 {
     public function collection()
     {
