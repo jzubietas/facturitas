@@ -40,6 +40,7 @@ class Pedido extends Model
     const SEG_PROVINCIA = 'SEG_PROVINCIA';
     const ENTREGADO = 'ENTREGADO';
     const JEFE_OP_CONF = 'JEFE_OP_CONF';
+    const LOGISTICA_CONF = 'LOGISTICA_CONF';
 
     /**************
      * CONSTANTES CONDICION ENVIO NUMERICO
@@ -55,6 +56,7 @@ class Pedido extends Model
     const SEG_PROVINCIA_INT = 9;
     const ENTREGADO_INT = 10;
     const JEFE_OP_CONF_INT = 11;
+    const LOGISTICA_CONF_INT = 12;
 
     //envio
     const ENVIO_CONFIRMAR_RECEPCION = '1';//ENVIADO CONFIRMAR RECEPCION
