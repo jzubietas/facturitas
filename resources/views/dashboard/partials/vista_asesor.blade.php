@@ -92,6 +92,14 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-md-12">
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="basic-addon3">Seleccionar Mes</span>
+                        </div>
+                        <input type="text" class="form-control date-picker" id="datepickerDashborad" aria-describedby="basic-addon3">
+                    </div>
+                </div>
+                <div class="col-md-12">
                     <x-grafico-metas-progress-bar></x-grafico-metas-progress-bar>
                 </div>
                 <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12">
