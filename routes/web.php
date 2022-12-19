@@ -296,6 +296,8 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     Route::get('sobres.porenviar', [SobreController::class, 'Sobresporenviar'])->name('sobres.porenviar');
     Route::get('sobres.porenviartabla', [SobreController::class, 'Sobresporenviartabla'])->name('sobres.porenviartabla');
 
+    Route::get('sobres.pedidosporenviar', [SobreController::class, 'Pedidosporenviar'])->name('sobres.pedidosporenviar');
+    Route::get('sobres.pedidosporenviartabla', [SobreController::class, 'Pedidosporenviartabla'])->name('sobres.pedidosporenviartabla');
 
     Route::get('pedidosgrupotabla', [SobreController::class, 'pedidosgrupotabla'])->name('cargar.pedidosgrupotabla');
     Route::post('sobres.desvinculargrupo', [SobreController::class, 'EnvioDesvincular'])->name('sobres.desvinculargrupo');
