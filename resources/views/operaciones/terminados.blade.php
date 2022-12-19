@@ -220,7 +220,7 @@
         searching: true,
         "order": [[ 0, "desc" ]],
         ajax: {
-          url: "{{ route('operaciones.entregadostabla') }}",
+          url: "{{ route('operaciones.terminadostabla') }}",
           data: function (d) {
             //d.asesores = $("#asesores_pago").val();
             d.min = $("#min").val();
