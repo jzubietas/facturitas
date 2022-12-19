@@ -2,9 +2,9 @@
 
 namespace App\Abstracts\GraficosComponent;
 
+use App\Abstracts\Widgets;
 use Illuminate\Support\Str;
-use Illuminate\View\Component;
-abstract class GraficosComponent extends Component
+abstract class GraficosComponent extends Widgets
 {
     public $title = null;
     public $labelX = null;
@@ -15,6 +15,7 @@ abstract class GraficosComponent extends Component
 
     public function __construct($title=null, $labelX=null, $labelY=null,  string $height='370')
     {
+        parent::__construct();
         $this->title = $title;
         $this->labelX = $labelX;
         $this->labelY = $labelY;

@@ -43,21 +43,32 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-12">
-                <x-dashboard.graficos.meta-progress-bar></x-dashboard.graficos.meta-progress-bar>
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon3">Seleccionar Mes</span>
+                    </div>
+                    <input type="text" class="form-control date-picker" id="datepickerDashborad" aria-describedby="basic-addon3">
+                </div>
             </div>
             <div class="col-md-12">
-                <!--<x-dashboard.graficos.borras.pedidos-por-dia rol="Asesor" title="Cantidad de pedidos de los asesores por dia" label-x="Asesores" label-y="Cant. Pedidos"></x-dashboard.graficos.borras.pedidos-por-dia>-->
-                @if(auth()->user()->rol==\App\Models\User::ROL_ENCARGADO)
-                    <x-dashboard.graficos.borras.pedidos-por-dia rol="Encargado"
-                                                                 title="Cantidad de pedidos de los asesores por dia"
-                                                                 label-x="Asesores"
-                                                                 label-y="Cant. Pedidos"></x-dashboard.graficos.borras.pedidos-por-dia>
-                @elseif(auth()->user()->rol==\App\Models\User::ROL_ADMIN)
-                    <x-dashboard.graficos.borras.pedidos-por-dia rol="Administrador"
-                                                                 title="Cantidad de pedidos de los asesores por dia"
-                                                                 label-x="Asesores"
-                                                                 label-y="Cant. Pedidos"></x-dashboard.graficos.borras.pedidos-por-dia>
-                @endif
+                <div class="row" id="widget-container">
+                    <div class="col-md-12">
+                        <x-dashboard.graficos.meta-progress-bar></x-dashboard.graficos.meta-progress-bar>
+                    </div>
+                    <div class="col-md-12">
+                        <x-dashboard.graficos.borras.pedidos-por-dia rol="Administrador"
+                                                                     title="Cantidad de pedidos de los asesores por dia"
+                                                                     label-x="Asesores"
+                                                                     label-y="Cant. Pedidos"
+                                                                     only-day
+                        ></x-dashboard.graficos.borras.pedidos-por-dia>
+
+                        <x-dashboard.graficos.borras.pedidos-por-dia rol="Administrador"
+                                                                     title="Cantidad de pedidos de los asesores por mes"
+                                                                     label-x="Asesores"
+                                                                     label-y="Cant. Pedidos"></x-dashboard.graficos.borras.pedidos-por-dia>
+                    </div>
+                </div>
             </div>
             <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12">
                 <div class="card">

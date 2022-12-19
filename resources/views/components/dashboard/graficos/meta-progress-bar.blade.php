@@ -1,6 +1,6 @@
 <div class="card">
     <div class="card-header">
-        <b>Porgreso total de pedidos pagados del mes pasado {{now()->subMonth()->startOfMonth()->format('m-Y')}}</b>
+        <b>Porgreso total de pedidos pagados del mes {{$startDate->startOfMonth()->format('m-Y')}}</b>
     </div>
     <div class="card-body">
         <ul class="list-group">

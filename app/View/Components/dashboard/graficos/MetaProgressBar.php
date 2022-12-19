@@ -2,24 +2,17 @@
 
 namespace App\View\Components\dashboard\graficos;
 
+use App\Abstracts\Widgets;
 use App\Models\Pedido;
 use App\Models\User;
-use Illuminate\View\Component;
 
-class MetaProgressBar extends Component
+class MetaProgressBar extends Widgets
 {
     public $general = [];
     public $progressData = [];
 
-    /**
-     * Create a new component instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        //
-    }
+    public $generalDataSupervisor = [];
+
 
     /**
      * Get the view / contents that represent the component.
@@ -30,29 +23,23 @@ class MetaProgressBar extends Component
     {
         if (auth()->user()->rol == User::ROL_ADMIN) {
             $this->generalData();
+            $this->asesores();
         } else {
-            $this->general = (object)[
-                "enabled" => true,
-            ];
+            $this->asesores();
+            $this->generalDataSupervisor['enabled'] = true;
+            $this->general = (object)$this->generalDataSupervisor;
         }
-        $this->asesores();
         return view('components.dashboard.graficos.meta-progress-bar');
     }
 
     public function generalData()
     {
-        $pedidtosActivos = Pedido::query()->activo()->whereBetween('created_at',[
-            now()->subMonth()->startOfMonth(),
-            now()->subMonth()->endOfMonth()
-        ])->count();
-        $pedidtosPagados = Pedido::query()->activo()->pagados()->whereBetween('created_at',[
-            now()->subMonth()->startOfMonth(),
-            now()->subMonth()->endOfMonth()
-        ])->count();
-        if($pedidtosActivos>0) {
+        $pedidtosActivos = $this->applyFilter(Pedido::query())->activo()->count();
+        $pedidtosPagados = $this->applyFilter(Pedido::query())->activo()->pagados()->count();
+        if ($pedidtosActivos > 0) {
             $progress = intval(($pedidtosPagados / $pedidtosActivos) * 100);
-        }else{
-            $progress=0;
+        } else {
+            $progress = 0;
         }
         $this->general = (object)[
             "enabled" => true,
@@ -66,7 +53,17 @@ class MetaProgressBar extends Component
 
     public function asesores()
     {
-        $asesores = User::query()->activo()->rolAsesor()->get();
+        $encargado = null;
+        if (auth()->user()->rol == User::ROL_ENCARGADO) {
+            $encargado = auth()->user()->id;
+        }
+        $asesores = User::query()
+            ->activo()
+            ->rolAsesor()
+            ->when($encargado != null, function ($query) use ($encargado) {
+                return $query->where('supervisor', '=', $encargado);
+            })
+            ->get();
         $progressData = [];
         foreach ($asesores as $asesor) {
             if (auth()->user()->rol != User::ROL_ADMIN) {
@@ -74,41 +71,65 @@ class MetaProgressBar extends Component
                     if (auth()->user()->id != $asesor->id) {
                         continue;
                     }
-                }else{
+                } else {
                     if (auth()->user()->id != $asesor->supervisor) {
                         continue;
                     }
                 }
             }
 
-            $all = Pedido::query()->whereUserId($asesor->id)->activo()->whereBetween('created_at',[
-                now()->subMonth()->startOfMonth(),
-                now()->subMonth()->endOfMonth()
-            ])->count();
-            $pay = Pedido::query()->whereUserId($asesor->id)->activo()->whereBetween('created_at',[
-                now()->subMonth()->startOfMonth(),
-                now()->subMonth()->endOfMonth()
-            ])->pagados()->count();
-
-            if ($all > 0) {
-                $p = intval(($pay / $all) * 100);
-            } else {
-                $p = 0;
-            }
-
-            //$p2 = intval(($pay / ($pedidtosActivos/count($asesores))) * 100);
+            $all = $this->applyFilter(Pedido::query())->whereUserId($asesor->id)->activo()->count();
+            $pay = $this->applyFilter(Pedido::query())->whereUserId($asesor->id)->activo()->pagados()->count();
 
             $progressData[] = [
-                "code" => "{$asesor->identificador}",
+                "identificador" => $asesor->identificador,
+                "code" => "Asesor {$asesor->identificador}",
                 "name" => $asesor->name,
-                "progress" => $p,
-                //"progress2" => $p2,
                 "activos" => $all,
                 "pagados" => $pay,
             ];
 
         }
-        $this->progressData = collect($progressData)->sortByDesc('progress')->all();
+
+        $newData = [];
+        $union = collect($progressData)->groupBy('identificador');
+        foreach ($union as $identificador => $items) {
+            foreach ($items as $item) {
+                if (!isset($newData[$identificador])) {
+                    $newData[$identificador] = $item;
+                } else {
+                    $newData[$identificador]['activos']+= data_get($item,'activos');
+                    $newData[$identificador]['pagados']+= data_get($item,'pagados');
+                }
+            }
+        }
+        $this->progressData = collect($newData)->values()->map(function ($item){
+            $all = data_get($item,'activos');
+            $pay = data_get($item,'pagados');
+            if ($all > 0) {
+                $p = intval(($pay / $all) * 100);
+            } else {
+                $p = 0;
+            }
+            $item['progress']=$p;
+            return $item;
+        })->sortBy('identificador')->all();
+
+
+        $all = collect($this->progressData)->pluck('activos')->sum();
+        $pay = collect($this->progressData)->pluck('pagados')->sum();
+        if ($all > 0) {
+            $p = intval(($pay / $all) * 100);
+        } else {
+            $p = 0;
+        }
+        $this->generalDataSupervisor = [
+            "code" => '',
+            "name" => auth()->user()->name,
+            "progress" => $p,
+            "activos" => $all,
+            "pagados" => $pay,
+        ];
     }
 
 }

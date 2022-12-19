@@ -36,6 +36,7 @@ Route::middleware(['guest'])->get('/', function () {
 Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->group(function () {
 
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
+    Route::get('/dashboard/widgets-fetch', [DashboardController::class, 'widgets'])->name('dashboard.widgets');
 
     Route::get('/setting/administrador', [SettingsController::class, 'settingAdmin'])->name('settings.admin-settings');
     Route::post('/setting/administrador', [SettingsController::class, 'settingAdminStore'])->name('settings.store-admin-settings');

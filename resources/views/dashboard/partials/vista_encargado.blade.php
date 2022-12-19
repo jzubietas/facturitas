@@ -73,8 +73,36 @@
         </div>
     </div>
 </div>
-<div class="container-fluid">
+<div class="container-fluid mt-4">
     <div class="row">
+        <div class="col-md-12">
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text" id="basic-addon3">Seleccionar Mes</span>
+                </div>
+                <input type="text" class="form-control date-picker" id="datepickerDashborad"
+                       aria-describedby="basic-addon3">
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="row" id="widget-container">
+                <div class="col-md-12">
+                    <x-dashboard.graficos.meta-progress-bar></x-dashboard.graficos.meta-progress-bar>
+                </div>
+                <div class="col-md-12">
+                    <x-dashboard.graficos.borras.pedidos-por-dia rol="Encargado"
+                                                                 title="Cantidad de pedidos de los asesores por dia"
+                                                                 label-x="Asesores"
+                                                                 label-y="Cant. Pedidos"
+                                                                 only-day
+                    ></x-dashboard.graficos.borras.pedidos-por-dia>
+                    <x-dashboard.graficos.borras.pedidos-por-dia rol="Encargado"
+                                                                 title="Cantidad de pedidos de los asesores por mes"
+                                                                 label-x="Asesores"
+                                                                 label-y="Cant. Pedidos"></x-dashboard.graficos.borras.pedidos-por-dia>
+                </div>
+            </div>
+        </div>
         <div class="col-lg-6 col-sm-6 col-md-6 col-xs-12">
             <br>
             <div class="table-responsive">
@@ -82,12 +110,6 @@
                         PEDIDOS DEL DIA POR ASESOR</h4>
                     <div id="pedidosxasesorxdia_encargado" style="width: 100%; height: 500px;"></div>
                 </table>
-            </div>
-        </div>
-        <div class="col-lg-6 col-sm-6 col-md-6 col-xs-12">
-            <br>
-            <div class="table-responsive">
-                <img src="imagenes/logo_facturas.png" alt="Logo" width="80%">
             </div>
         </div>
     </div>

@@ -8,6 +8,8 @@ use App\Models\Pago;
 use App\Models\Pedido;
 use App\Models\Ruc;
 use App\Models\User;
+use App\View\Components\dashboard\graficos\borras\PedidosPorDia;
+use App\View\Components\dashboard\graficos\MetaProgressBar;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -298,6 +300,33 @@ class DashboardController extends Controller
         );
     }
 
+    public function widgets(Request $request)
+    {
+        $widget1 = new MetaProgressBar();
+        $widget2 = new PedidosPorDia(\auth()->user()->rol, 'Cantidad de pedidos de los asesores por dia', 'Asesores', 'Cant. Pedidos', '370', true);
+        $widget3 = new PedidosPorDia(\auth()->user()->rol, 'Cantidad de pedidos de los asesores por mes', 'Asesores', 'Cant. Pedidos');
+        $widget2->renderData();
+        $widget3->renderData();
+        return response()->json([
+            "widgets" =>
+                [
+                    [
+                        "data" => [],
+                        "html" => \Blade::renderComponent($widget1)
+                    ],
+                    [
+                        "data" => $widget2->getData(),
+                        "html" => \Blade::renderComponent($widget2)
+                    ],
+                    [
+                        "chart" => true,
+                        "data" => $widget3->getData(),
+                        "html" => \Blade::renderComponent($widget3)
+                    ],
+                ]
+        ]);
+    }
+
     public function searchCliente(Request $request)
     {
         $q = $request->get("q");
@@ -310,7 +339,7 @@ class DashboardController extends Controller
             ->limit(10)
             ->get()
             ->map(function (Cliente $cliente) {
-                $cliente->deuda_total=DetallePedido::query()->whereIn('pedido_id',$cliente->pedidos()->where('estado','1')->pluck("id"))->sum("saldo");
+                $cliente->deuda_total = DetallePedido::query()->whereIn('pedido_id', $cliente->pedidos()->where('estado', '1')->pluck("id"))->sum("saldo");
                 return $cliente;
             });
 
@@ -326,7 +355,7 @@ class DashboardController extends Controller
             ->limit(10)
             ->get()
             ->map(function (Ruc $ruc) {
-                $ruc->cliente->deuda_total=DetallePedido::query()->whereIn('pedido_id',$ruc->cliente->pedidos()->where('estado','1')->pluck("id"))->sum("saldo");
+                $ruc->cliente->deuda_total = DetallePedido::query()->whereIn('pedido_id', $ruc->cliente->pedidos()->where('estado', '1')->pluck("id"))->sum("saldo");
                 return $ruc;
             });
         return view('dashboard.searchs.search_rucs', compact('rucs'));

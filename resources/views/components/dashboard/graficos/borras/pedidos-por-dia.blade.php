@@ -6,7 +6,9 @@
 @push("js")
     <script>
         (function () {
-            $(document).ready(function () {
+            window.$widgets = window.$widgets || []
+
+            function generateWidget() {
                 var options = {
                     animationEnabled: true,
                     title: {
@@ -18,6 +20,7 @@
                     },
                     axisX: {
                         title: "{{$labelX}}",
+                        prefix: "Asesor "
                     },
                     data: [{
                         type: "column",
@@ -27,6 +30,10 @@
                 };
 
                 $("#{{$genId}}").CanvasJSChart(options);
+            }
+            window.$widgets['{{$genId}}'] = generateWidget;
+            $(document).ready(function () {
+                generateWidget()
             })
         })()
     </script>

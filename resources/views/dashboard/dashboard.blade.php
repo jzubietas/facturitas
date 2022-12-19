@@ -62,10 +62,6 @@
             chart.draw(data, options);
         };
     </script>
-
-
-
-
     <!--<script type="text/javascript">
       google.charts.load('current', {
         'packages': ['bar']
@@ -77,6 +73,9 @@
           ['Cobranza', 'Pedidos'],
           @foreach ($cobranzaxmes as $vxax)
         ['{{ $vxax->users }}', {{ $vxax->total }}],
+
+
+
 
 
 
@@ -111,8 +110,6 @@
     chart.draw(data, google.charts.Bar.convertOptions(options));
   };
 </script>-->
-
-
     <script type="text/javascript">
         google.charts.load('current', {
             'packages': ['bar']
@@ -155,8 +152,10 @@
                 is3D: true,
             };
 
-            var chart = new google.visualization.PieChart(document.getElementById('pedidosxasesorxdia'));
-            chart.draw(data, options);
+            if (document.getElementById('pedidosxasesorxdia')) {
+                var chart = new google.visualization.PieChart(document.getElementById('pedidosxasesorxdia'));
+                chart.draw(data, options);
+            }
         }
     </script>
     <!--ENCARGADO-->
@@ -181,8 +180,10 @@
                 }
             };
 
-            var chart = new google.charts.Bar(document.getElementById('pedidosxasesor_3meses_encargado'));
-            chart.draw(data, google.charts.Bar.convertOptions(options));
+            if (document.getElementById('pedidosxasesor_3meses_encargado')) {
+                var chart = new google.charts.Bar(document.getElementById('pedidosxasesor_3meses_encargado'));
+                chart.draw(data, google.charts.Bar.convertOptions(options));
+            }
         };
     </script>
 
@@ -207,8 +208,10 @@
                 }
             };
 
-            var chart = new google.charts.Bar(document.getElementById('pedidosxasesor_encargado'));
-            chart.draw(data, google.charts.Bar.convertOptions(options));
+            if (document.getElementById('pedidosxasesor_encargado')) {
+                var chart = new google.charts.Bar(document.getElementById('pedidosxasesor_encargado'));
+                chart.draw(data, google.charts.Bar.convertOptions(options));
+            }
         };
     </script>
 
@@ -233,8 +236,10 @@
                 }
             };
 
-            var chart = new google.charts.Bar(document.getElementById('pagosxmes_encargado'));
-            chart.draw(data, google.charts.Bar.convertOptions(options));
+            if (document.getElementById('pagosxmes_encargado')) {
+                var chart = new google.charts.Bar(document.getElementById('pagosxmes_encargado'));
+                chart.draw(data, google.charts.Bar.convertOptions(options));
+            }
         }
     </script>
 
@@ -255,8 +260,10 @@
                 is3D: true,
             };
 
-            var chart = new google.visualization.PieChart(document.getElementById('pedidosxasesorxdia_encargado'));
-            chart.draw(data, options);
+            if (document.getElementById('pedidosxasesorxdia_encargado')) {
+                var chart = new google.visualization.PieChart(document.getElementById('pedidosxasesorxdia_encargado'));
+                chart.draw(data, options);
+            }
         }
     </script>
 
@@ -282,8 +289,10 @@
                 }
             };
 
-            var chart = new google.charts.Bar(document.getElementById('mispedidosxasesorxdia'));
-            chart.draw(data, google.charts.Bar.convertOptions(options));
+            if (document.getElementById('mispedidosxasesorxdia')) {
+                var chart = new google.charts.Bar(document.getElementById('mispedidosxasesorxdia'));
+                chart.draw(data, google.charts.Bar.convertOptions(options));
+            }
         };
     </script>
 @stop
@@ -459,3 +468,85 @@
         })()
     </script>
 @endsection
+@push('js')
+    @if(in_array(auth()->user()->rol,[\App\Models\User::ROL_ADMIN,\App\Models\User::ROL_ENCARGADO]))
+        <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+        <script type="text/javascript"
+                src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css"/>
+        <script>
+            $(function () {
+                const startYear = moment().startOf('year');
+                const momentStart = moment('{{request('start_date',now()->startOfMonth()->format('Y-m-d'))}}', 'YYYY-MM-DD');
+                const momentEnd = moment('{{request('end_date',now()->endOfMonth()->format('Y-m-d'))}}', 'YYYY-MM-DD');
+                $('#datepickerDashborad').val(momentStart.format('DD/MM/YYYY') + ' - ' + momentEnd.format('DD/MM/YYYY'))
+
+                $('#datepickerDashborad').daterangepicker({
+                    "alwaysShowCalendars": false,
+                    "showDropdowns": false,
+                    "startDate": momentStart.format('DD/MM/YYYY'),
+                    "endDate": momentEnd.format('DD/MM/YYYY'),
+                    "autoUpdateInput": false,
+                    ranges: {
+                        'Enero': [startYear.clone(), startYear.clone().endOf('month')],
+                        'Febrero': [startYear.clone().add(1, 'month'), startYear.clone().add(1, 'month').endOf('month')],
+                        'Marzo': [startYear.clone().add(2, 'month'), startYear.clone().add(2, 'month').endOf('month')],
+                        "Abril": [startYear.clone().add(3, 'month'), startYear.clone().add(3, 'month').endOf('month')],
+                        "Mayo": [startYear.clone().add(4, 'month'), startYear.clone().add(4, 'month').endOf('month')],
+                        "Junio": [startYear.clone().add(5, 'month'), startYear.clone().add(5, 'month').endOf('month')],
+                        "Julio": [startYear.clone().add(6, 'month'), startYear.clone().add(6, 'month').endOf('month')],
+                        "Agosto": [startYear.clone().add(7, 'month'), startYear.clone().add(7, 'month').endOf('month')],
+                        "Septiembre": [startYear.clone().add(8, 'month'), startYear.clone().add(8, 'month').endOf('month')],
+                        "Octubre": [startYear.clone().add(9, 'month'), startYear.clone().add(9, 'month').endOf('month')],
+                        "Noviembre": [startYear.clone().add(10, 'month'), startYear.clone().add(10, 'month').endOf('month')],
+                        "Diciembre": [startYear.clone().add(11, 'month'), startYear.clone().add(11, 'month').endOf('month')],
+                        /*'Hoy': [moment(), moment()],
+                        'El dia de ayer': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                        'Los últimos 7 días': [moment().subtract(6, 'days'), moment()],
+                        'Los últimos 30 días': [moment().subtract(29, 'days'), moment()],
+                        'Este Mes': [moment().startOf('month'), moment().endOf('month')],
+                        'Mes pasado': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]*/
+                    },
+                    "locale": {
+                        "format": "DD/MM/YYYY",
+                        "separator": " - ",
+                        "applyLabel": "Aplicar",
+                        "cancelLabel": "Cancelar",
+                        "fromLabel": "De",
+                        "toLabel": "Hasta",
+                        "customRangeLabel": "Custom",
+                        "weekLabel": "W",
+                        "daysOfWeek": [
+                            "Do",
+                            "Lu",
+                            "Ma",
+                            "Mi",
+                            "Ju",
+                            "Vi",
+                            "Sa"
+                        ],
+                        "monthNames": [
+                            "Enero",
+                            "Febrero",
+                            "Marzo",
+                            "Abril",
+                            "Mayo",
+                            "Junio",
+                            "Julio",
+                            "Agosto",
+                            "Septiembre",
+                            "Octubre",
+                            "Noviembre",
+                            "Diciembre"
+                        ],
+                        "firstDay": 1
+                    },
+                }, function (start, end, label) {
+                    window.location.replace('{{route('dashboard.index')}}?start_date=' + start.format('YYYY-MM-DD') + '&end_date=' + end.format('YYYY-MM-DD'))
+                });
+            });
+        </script>
+    @endif
+@endpush
+
+
