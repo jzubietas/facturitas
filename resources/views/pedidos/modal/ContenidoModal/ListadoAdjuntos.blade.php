@@ -2,7 +2,10 @@
     @foreach($imagenes as $img)
         @if ($img->pedido_id == $pedido->id)
             <tr class="adjuntos" data-adjunto="{{ $img->adjunto }}">
-                <td><a href="{{ route('pedidos.descargaradjunto', $img->adjunto) }}">{{ $img->adjunto }}</a></td>
+                <td>
+                   {{--<a href="{{ route('pedidos.descargaradjunto', $img->adjunto) }}">{{ $img->adjunto }}</a>--}}
+                    <a target="_blank" href="{{ \Storage::disk('pstorage')->url('adjuntos/'. $img->adjunto) }}">{{ $img->adjunto }}</a>
+                </td>
                 <td><a href="#" style="margin-left: 12px;" data-imgid="{{ $img->pedido_id }}" data-imgadjunto="{{ $img->adjunto }}">
 
                 <a href="" data-target="#modal-delete-adjunto" data-imgid="{{ $img->pedido_id }}" data-imgadjunto="{{ $img->id }}" data-toggle="modal">
@@ -13,7 +16,7 @@
                 </td>
             </tr>
         @endif
-        
+
     @endforeach
 </table>
 

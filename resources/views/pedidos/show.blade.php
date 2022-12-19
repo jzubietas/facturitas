@@ -79,7 +79,8 @@
                                 <td>
                                     @foreach ($imagenes as $img)
                                         <p>
-                                            <a href="{{ route('pedidos.descargaradjunto', $img->adjunto) }}">{{ $img->adjunto }}</a>
+                                            {{--<a href="{{ route('pedidos.descargaradjunto', $img->adjunto) }}">{{ $img->adjunto }}</a>--}}
+                                            <a target="_blank" href="{{ \Storage::disk('pstorage')->url('adjuntos/'. $img->adjunto) }}">{{ $img->adjunto }}</a>
                                         </p>
                                     @endforeach
                                 </td>
@@ -132,7 +133,9 @@
                                 <td>
                                     @foreach($imagenesatencion as $img)
                                         <p>
-                                            <a href="{{ route('pedidos.descargaradjunto', $img->adjunto) }}">{{ $img->adjunto }}</a>
+                                            {{--<a href="{{ route('pedidos.descargaradjunto', $img->adjunto) }}">{{ $img->adjunto }}</a>--}}
+
+                                            <a target="_blank" href="{{ \Storage::disk('pstorage')->url('adjuntos/'. $img->adjunto) }}">{{ $img->adjunto }}</a>
                                         </p>
                                     @endforeach
                                 </td>
@@ -163,7 +166,7 @@
                                         @foreach($imagenesatencion as $img_at)
                                             @if ($img_at->pedido_id == $pedido->id)
                                                 <p>
-                                                    <a href="{{ route('pedidos.descargaradjunto', $img_at->adjunto) }}">{{ $img_at->adjunto }}</a>
+                                                    {{--<a href="{{ route('pedidos.descargaradjunto', $img_at->adjunto) }}">{{ $img_at->adjunto }}</a>--}}
                                                 </p>
                                             @endif
                                             @include('pedidos.modal.DeleteAdjuntoid')
