@@ -704,7 +704,7 @@ class EnvioController extends Controller
             $ver_botones_accion = 1;
         }
 
-        return view('envios.porRecibir', compact('condiciones', 'distritos', 'direcciones', 'destinos', 'superasesor','ver_botones_accion','departamento'));
+        return view('envios.porConfirmar', compact('condiciones', 'distritos', 'direcciones', 'destinos', 'superasesor','ver_botones_accion','departamento'));
     }
 
     public function Enviosporconfirmartabla(Request $request)
