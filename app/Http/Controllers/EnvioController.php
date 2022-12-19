@@ -1642,8 +1642,8 @@ class EnvioController extends Controller
         $pedido->update([
             'envio' => '2',
             'modificador' => 'USER'.Auth::user()->id,
-            'condicion_envio' => Pedido::JEFE_OP_CONF,
-            'condicion_envio_code' => Pedido::JEFE_OP_CONF_INT,
+            'condicion_envio' => Pedido::LOGISTICA_CONF,
+            'condicion_envio_code' => Pedido::LOGISTICA_CONF_INT,
 
         ]);
 
