@@ -4,7 +4,7 @@
             <tr class="adjuntos" data-adjunto="{{ $img->adjunto }}">
                 <td>
                    {{--<a href="{{ route('pedidos.descargaradjunto', $img->adjunto) }}">{{ $img->adjunto }}</a>--}}
-                    <a target="_blank" href="{{ \Storage::disk('pstorage')->url('adjuntos/'. $img->adjunto) }}">{{ $img->adjunto }}</a>
+                    <a target="_blank" download href="{{ \Storage::disk('pstorage')->url('adjuntos/'. $img->adjunto) }}">{{ $img->adjunto }}</a>
                 </td>
                 <td><a href="#" style="margin-left: 12px;" data-imgid="{{ $img->pedido_id }}" data-imgadjunto="{{ $img->adjunto }}">
 

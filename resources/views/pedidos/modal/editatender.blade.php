@@ -31,7 +31,7 @@
                                 @if ($img->pedido_id == $pedido->id)
                                   <p>
                                     {{--<a href="{{ route('pedidos.descargaradjunto', $img->adjunto) }}">{{ $img->adjunto }}</a>--}}
-                                      <a target="_blank" href="{{ \Storage::disk('pstorage')->url('adjuntos/'. $img->adjunto) }}">{{ $img->adjunto }}</a>
+                                      <a target="_blank" download href="{{ \Storage::disk('pstorage')->url('adjuntos/'. $img->adjunto) }}">{{ $img->adjunto }}</a>
                                     <a href="" data-target="#modal-delete-adjunto-{{ $img->id }}" data-toggle="modal">  <button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i></button></a>
                                   </p>
                                 @endif

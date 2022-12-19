@@ -80,7 +80,7 @@
                                     @foreach ($imagenes as $img)
                                         <p>
                                             {{--<a href="{{ route('pedidos.descargaradjunto', $img->adjunto) }}">{{ $img->adjunto }}</a>--}}
-                                            <a target="_blank"
+                                            <a target="_blank" download
                                                href="{{ \Storage::disk('pstorage')->url('adjuntos/'. $img->adjunto) }}">{{ $img->adjunto }}</a>
                                         </p>
                                     @endforeach
@@ -136,7 +136,7 @@
                                         <p>
                                             {{--<a href="{{ route('pedidos.descargaradjunto', $img->adjunto) }}">{{ $img->adjunto }}</a>--}}
 
-                                            <a target="_blank"
+                                            <a target="_blank" download
                                                href="{{ \Storage::disk('pstorage')->url('adjuntos/'. $img->adjunto) }}">{{ $img->adjunto }}</a>
                                         </p>
                                     @endforeach
@@ -167,7 +167,7 @@
                                         <p><b>Archivos Adjuntados:</b></p>
                                         @foreach($imagenesatencion as $img_at)
                                             <p>
-                                                <a class="{{$img_at->estado==0?'text-danger':''}}" target="_blank"
+                                                <a class="{{$img_at->estado==0?'text-danger':''}}" target="_blank" download
                                                    href="{{ \Storage::disk('pstorage')->url('adjuntos/'. $img_at->adjunto) }}">
                                                     {{ $img_at->adjunto }}
                                                 </a>
