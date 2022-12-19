@@ -65,7 +65,7 @@
               <th scope="col">RUC</th>
             <th scope="col">Fecha de registro</th>
             <th scope="col">Total (S/)</th>
-        
+
             <th scope="col">Estado de pago</th>
             <!--<th scope="col">Estado de sobre</th>-->
             <th scope="col">Estado de envío</th>
@@ -173,6 +173,9 @@
         rowCallback: function (row, data, index) {
               var pedidodiferencia=data.diferencia;
               //pedidodiferencia=0;
+            if(data.pendiente_anulacion==1){
+                $('td',row).css('background', 'red').css('font-weight','bold');
+            }
               if(pedidodiferencia==null){
                 $('td:eq(11)', row).css('background', '#ca3a3a').css('color','#ffffff').css('text-align','center').css('font-weight','bold');
               }else{
@@ -235,7 +238,7 @@
           name: 'total',
           render: $.fn.dataTable.render.number(',', '.', 2, '')
         },
-           
+
         {
           data: 'condicion_pa',
           name: 'condicion_pa',

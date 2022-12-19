@@ -161,8 +161,8 @@ class PedidoController extends Controller
                 'pedidos.estado',
                 'pedidos.envio'
             );
-            //->where('pendiente_anulacion', '<>', 1)
-            //->whereIn('pedidos.condicion_code', [Pedido::POR_ATENDER_INT, Pedido::EN_PROCESO_ATENCION_INT, Pedido::ATENDIDO_INT, Pedido::ANULADO_INT]);
+        //->where('pendiente_anulacion', '<>', 1)
+        //->whereIn('pedidos.condicion_code', [Pedido::POR_ATENDER_INT, Pedido::EN_PROCESO_ATENCION_INT, Pedido::ATENDIDO_INT, Pedido::ANULADO_INT]);
 
         if (Auth::user()->rol == "Llamadas") {
             $usersasesores = User::where('users.rol', 'Asesor')
@@ -1013,9 +1013,9 @@ class PedidoController extends Controller
             if (isset($files)) {
 
                 $cont = 0;
-                foreach ($files as $file){
-                    $file_name = Carbon::now()->second.$file->getClientOriginalName();
-                    $file->move($destinationPath , $file_name);
+                foreach ($files as $file) {
+                    $file_name = Carbon::now()->second . $file->getClientOriginalName();
+                    $file->move($destinationPath, $file_name);
 
                     ImagenPedido::create([
                         'pedido_id' => $pedido->id,
@@ -1023,35 +1023,6 @@ class PedidoController extends Controller
                         'estado' => '1'
                     ]);
                 }
-            }else{
-                ImagenPedido::create([
-                    'pedido_id' => $pedido->id,
-                    'adjunto' => 'logo_facturas.png',
-                    'estado' => '1'
-                ]);
-                $cont = 0;
-                $fileList[$cont] = array(
-                    'file_name' => 'logo_facturas.png',
-                );
-            }
-/*
-            if (isset($files)) {
-                $destinationPath = base_path('public/storage/adjuntos/');
-                $cont = 0;
-                $file_name = Carbon::now()->second . $files->getClientOriginalName();
-                $fileList[$cont] = array(
-                    'file_name' => $file_name,
-                );
-                $files->move($destinationPath, $file_name);
-
-                ImagenPedido::create([
-                    'pedido_id' => $pedido->id,
-                    'adjunto' => $file_name,
-                    'estado' => '1'
-                ]);
-
-                //$cont++;
-                //}
             } else {
                 ImagenPedido::create([
                     'pedido_id' => $pedido->id,
@@ -1062,8 +1033,37 @@ class PedidoController extends Controller
                 $fileList[$cont] = array(
                     'file_name' => 'logo_facturas.png',
                 );
+            }
+            /*
+                        if (isset($files)) {
+                            $destinationPath = base_path('public/storage/adjuntos/');
+                            $cont = 0;
+                            $file_name = Carbon::now()->second . $files->getClientOriginalName();
+                            $fileList[$cont] = array(
+                                'file_name' => $file_name,
+                            );
+                            $files->move($destinationPath, $file_name);
 
-            }*/
+                            ImagenPedido::create([
+                                'pedido_id' => $pedido->id,
+                                'adjunto' => $file_name,
+                                'estado' => '1'
+                            ]);
+
+                            //$cont++;
+                            //}
+                        } else {
+                            ImagenPedido::create([
+                                'pedido_id' => $pedido->id,
+                                'adjunto' => 'logo_facturas.png',
+                                'estado' => '1'
+                            ]);
+                            $cont = 0;
+                            $fileList[$cont] = array(
+                                'file_name' => 'logo_facturas.png',
+                            );
+
+                        }*/
 
             $contP = 0;
 
@@ -1240,7 +1240,7 @@ class PedidoController extends Controller
 
         $imagenes = ImagenPedido::where('imagen_pedidos.pedido_id', $pedido->id)->where('estado', '1')->get();
 
-        $imagenesatencion = ImagenAtencion::where('pedido_id', $pedido->id)->where('estado','=','1')->orderByDesc('estado')->get();
+        $imagenesatencion = ImagenAtencion::where('pedido_id', $pedido->id)->where('estado', '=', '1')->orderByDesc('estado')->get();
 
         return view('pedidos.show', compact('pedidos', 'imagenes', 'imagenesatencion', 'cotizacion', 'adelanto', 'deudaTotal'));
     }
@@ -1375,7 +1375,6 @@ class PedidoController extends Controller
             $files = $request->file('adjunto');
             $destinationPath = base_path('public/storage/adjuntos/');
             $cont = 0;
-
 
 
             if (isset($files)) {
@@ -1574,7 +1573,8 @@ class PedidoController extends Controller
                 'condicion' => Pedido::POR_ATENDER,
                 'condicion_code' => Pedido::POR_ATENDER_INT,
                 'modificador' => 'USER' . Auth::user()->id,
-                'estado' => '1'
+                'estado' => '1',
+                'pendiente_anulacion' => '0'
             ]);
             $detalle_pedidos = DetallePedido::where('pedido_id', $request->hiddenID)->first();
 
@@ -1637,6 +1637,7 @@ class PedidoController extends Controller
                 'pedidos.destino',
                 'pedidos.motivo',
                 'pedidos.responsable',
+                'pedidos.pendiente_anulacion',
                 'dp.saldo as diferencia',
                 'pedidos.pagado as condicion_pa',
                 DB::raw('DATE_FORMAT(pedidos.created_at, "%d/%m/%Y") as fecha'),
@@ -1689,11 +1690,15 @@ class PedidoController extends Controller
                 if ($pedido->estado > 0) {
 
                     if (Auth::user()->rol == "Super asesor" || Auth::user()->rol == "Administrador") {
-                        $btn = $btn . '<a href="' . route('pedidos.edit', $pedido->id) . '" class="btn-sm dropdown-item"><i class="fas fa-edit text-warning" aria-hidden="true"></i> Editar pedido</a>';
+                        if (!$pedido->pendiente_anulacion) {
+                            $btn = $btn . '<a href="' . route('pedidos.edit', $pedido->id) . '" class="btn-sm dropdown-item"><i class="fas fa-edit text-warning" aria-hidden="true"></i> Editar pedido</a>';
+                        }
                     }
 
                     if (Auth::user()->rol == "Administrador") {
-                        $btn = $btn . '<a href="" class="btn-sm dropdown-item" data-target="#modal-delete" data-toggle="modal" data-delete="' . $pedido->id . '"><i class="fas fa-trash-alt text-danger"></i> Anular pedido</a>';
+                        if (!$pedido->pendiente_anulacion) {
+                            $btn = $btn . '<a href="" class="btn-sm dropdown-item" data-target="#modal-delete" data-toggle="modal" data-delete="' . $pedido->id . '"><i class="fas fa-trash-alt text-danger"></i> Anular pedido</a>';
+                        }
                     }
 
 
@@ -1853,6 +1858,7 @@ class PedidoController extends Controller
                 'pedidos.condicion as condiciones',
                 'pedidos.condicion_code',
                 'pedidos.motivo',
+                'pedidos.pendiente_anulacion',
                 'pedidos.responsable',
                 'pedidos.pagado as condicion_pa',
                 'pedidos.created_at as fecha',
@@ -2742,13 +2748,27 @@ class PedidoController extends Controller
 
     public function ConfirmarAnular(Request $request)
     {
+        if($request->get('action')=='confirm_anulled_cancel'){
+            $pedido = Pedido::findOrFail($request->pedido_id);
+            if ($pedido->fecha_anulacion_confirm != null) {
+                return response()->json([
+                    "success" => 0,
+                ]);
+            }
+            $pedido->update([
+                'pendiente_anulacion' => '0',
+            ]);
+            return response()->json([
+                "success" => 1
+            ]);
+        }
         $this->validate($request, [
             'pedido_id' => 'required|integer',
             'attachments' => 'array',
             'attachments.*' => 'required|file',
         ]);
         $pedido = Pedido::findOrFail($request->pedido_id);
-        if ($pedido->fecha_anulacion_confirm!=null) {
+        if ($pedido->fecha_anulacion_confirm != null) {
             return response()->json([
                 "success" => 0,
             ]);

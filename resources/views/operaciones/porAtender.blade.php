@@ -158,9 +158,41 @@
             console.log(button.data('pedido_id_code'))
             $("#anular_pedido_id").html(button.data('pedido_id_code'))
             $("#motivo_anulacion_text").html(button.data('pedido_motivo'))
-            //$("#anular_pedido_id").val(button.data('pedido_id'))
+            $("#anular_pedido_id").val(button.data('pedido_id'))
         })
 
+        $('#attachmentsButtomRechazar').click(function (event) {
+
+            var data=new FormData();
+            data.append("pedido_id",$("#anular_pedido_id").val())
+            data.append("action",'confirm_anulled_cancel')
+            $.ajax({
+                type: 'POST',
+                url: "{{ route('pedidos.confirmar.anular') }}",
+                data: data,
+                processData: false,
+                contentType: false,
+            }).done(function (data){
+                if(data.success) {
+                    Swal.fire(
+                        'Mensaje',
+                        'Pedido restaurado correctamente',
+                        'success'
+                    )
+                }else{
+                    Swal.fire(
+                        'Mensaje',
+                        'Pedido ya ha sido anulado',
+                        'warning'
+                    )
+                }
+            }).always(function (){
+                $('#modal_confirmar_anular').modal('hide')
+                $("#anularAttachments").val(null)
+
+                $('#tablaPrincipal').DataTable().ajax.reload();
+            });
+        });
         $('#attachmentsButtom').click(function (event) {
             var files=Array.from($("#anularAttachments")[0].files);
             if(files.length==0){

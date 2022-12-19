@@ -23,10 +23,15 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button class="btn btn-danger" id="attachmentsButtom">
-                    Confirmar anulacion de Pedido
-                </button>
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                <div class="d-flex justify-content-between w-100">
+                    <button class="btn btn-success" id="attachmentsButtomRechazar">
+                        Rechazar Anulacion
+                    </button>
+                    <button class="btn btn-danger" id="attachmentsButtom">
+                        Confirmar
+                    </button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                </div>
             </div>
         </div>
     </div>
