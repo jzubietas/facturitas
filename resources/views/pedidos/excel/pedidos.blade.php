@@ -16,7 +16,7 @@
       <th width="80px" style="background-color: #4c5eaf; text-align: center; color: #ffff;">COURIER (S/)</th>
       <th width="80px" style="background-color: #4c5eaf; text-align: center; color: #ffff;">TOTAL (S/)</th>
       <th width="80px" style="background-color: #4c5eaf; text-align: center; color: #ffff;">DIFERENCIA (S/)</th>
-      <th width="80px" style="background-color: #4c5eaf; text-align: center; color: #ffff;">ESTADO DE PEDIDO</th>
+ 
       <th width="80px" style="background-color: #4c5eaf; text-align: center; color: #ffff;">ESTADO DE PAGO</th>
       <th width="80px" style="background-color: #4c5eaf; text-align: center; color: #ffff;">REVISADO ADMINISTRACION</th>
       <th width="80px" style="background-color: #4c5eaf; text-align: center; color: #ffff;">ESTADO DE ENVIO</th>
@@ -51,7 +51,7 @@
         <td>{{ $pedido->courier }}</td>
         <td>{{ $pedido->total }}</td>
         <td>{{ $pedido->diferencia }}</td>
-        <td>{{ $pedido->condiciones }}</td>
+       
         <td>
           @if($pedido->condicion_pa == null)
             SIN PAGO REGISTRADO
