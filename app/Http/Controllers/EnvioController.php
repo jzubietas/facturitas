@@ -1352,8 +1352,8 @@ class EnvioController extends Controller
 
             {
                     $_pedido->update([
-                        'condicion_envio' => Pedido::SOBRE_ENVIAR,
-                        'condicion_envio_code' => Pedido::SOBRE_ENVIAR_INT
+                        'condicion_envio' => Pedido::EN_REPARTO,
+                        'condicion_envio_code' => Pedido::EN_REPARTO_INT
                     ]);
 
             }
@@ -1361,18 +1361,11 @@ class EnvioController extends Controller
             else {
 
                 $_pedido->update([
-                    'condicion_envio' => Pedido::COURIER,
-                    'condicion_envio_code' => Pedido::COURIER_INT
+                    'condicion_envio' => Pedido::SEG_PROVINCIA,
+                    'condicion_envio_code' => Pedido::SEG_PROVINCIA_INT
                 ]);
 
             }
-
-
-
-
-
-
-
 
              /* agregando pedidos a la tabla direccion_grupos (campos codigos, productos) */
 
@@ -1412,8 +1405,8 @@ class EnvioController extends Controller
                             'celular_cliente'=> ( ($request->destino=='LIMA')? $request->contacto : $cliente->celular."-".$cliente->icelular ),
                             'codigos'=>$lista_codigos,
                             'producto'=>$lista_productos,
-                            'condicion_envio' => Pedido::SOBRE_ENVIAR ,
-                            'condicion_envio_code' => Pedido::SOBRE_ENVIAR_INT ,
+                            'condicion_envio' => Pedido::EN_REPARTO ,
+                            'condicion_envio_code' => Pedido::EN_REPARTO_INT ,
                             'pedido_id'=>$request->cod_pedido,
                             'cliente_id'=>$request->cliente_id,
                             'user_id'=>$usuario_id
@@ -1470,8 +1463,8 @@ class EnvioController extends Controller
                             'destino' => $request->destino,
                             'condicion_envio' => 2,//AL REGISTRAR DIRECCION PASA A ESTADO  EN REPARTO
                             'direccion' => $request->direccion,
-                            'condicion_envio' => Pedido::SOBRE_ENVIAR ,
-                            'condicion_envio_code' => Pedido::SOBRE_ENVIAR_INT ,
+                            'condicion_envio' => Pedido::EN_REPARTO ,
+                            'condicion_envio_code' => Pedido::EN_REPARTO_INT ,
 
                         ]);
 
@@ -1531,8 +1524,8 @@ class EnvioController extends Controller
                         'celular_cliente'=> ( ($request->destino=='LIMA')? $request->contacto : $cliente->celular."-".$cliente->icelular ),
                         'codigos'=>$lista_codigos,
                         'producto'=>$lista_productos,
-                        'condicion_envio' => Pedido::COURIER,
-                        'condicion_envio_code' => Pedido::COURIER_INT,
+                        'condicion_envio' => Pedido::SEG_PROVINCIA,
+                        'condicion_envio_code' => Pedido::SEG_PROVINCIA_INT,
                         'pedido_id'=>$request->cod_pedido,
                         'cliente_id'=>$request->cliente_id,
                         'user_id'=>$usuario_id
@@ -1588,8 +1581,8 @@ class EnvioController extends Controller
                             'destino' => $request->destino,
                             'condicion_envio' => 2,//AL REGISTRAR DIRECCION PASA A ESTADO  EN REPARTO
                             'direccion' => '1',
-                            'condicion_envio' => Pedido::COURIER,
-                            'condicion_envio_code' => Pedido::COURIER_INT,
+                            'condicion_envio' => Pedido::SEG_PROVINCIA,
+                            'condicion_envio_code' => Pedido::SEG_PROVINCIA_INT,
                         ]);
 
                         $dp_empresa=DetallePedido::where("pedido_id",$pedido_id)->first();
