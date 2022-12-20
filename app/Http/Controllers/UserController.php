@@ -265,12 +265,20 @@ class UserController extends Controller
             {
                 $html .= '<option style="color:black" value="' . $user->identificador . '">' . $user->identificador. '</option>';
             }else{
-                if(intval($user->exidentificador)%2==0)
+                if($user->exidentificador==22 || $user->exidentificador==21)
                 {
-                    $html .= '<option disabled style="color:red" value="' . $user->identificador . '">' . $user->identificador.  ( ($user->exidentificador!=null)? '  (' . $user->exidentificador.')':'' )  . '</option>';
-                }else{
                     $html .= '<option style="color:black" value="' . $user->identificador . '">' . $user->identificador. ( ($user->exidentificador!=null)? '  (' . $user->exidentificador.')':'' ) . '</option>';
+                }else 
+                {
+                    if(intval($user->exidentificador)%2==0)
+                    {
+                        $html .= '<option disabled style="color:red" value="' . $user->identificador . '">' . $user->identificador.  ( ($user->exidentificador!=null)? '  (' . $user->exidentificador.')':'' )  . '</option>';
+                    }else{
+                        $html .= '<option style="color:black" value="' . $user->identificador . '">' . $user->identificador. ( ($user->exidentificador!=null)? '  (' . $user->exidentificador.')':'' ) . '</option>';
+                    }
                 }
+                
+                
             }
         }
 
