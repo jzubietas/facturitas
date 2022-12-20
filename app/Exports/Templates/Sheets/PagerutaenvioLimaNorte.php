@@ -92,7 +92,7 @@ class PagerutaenvioLimaNorte  extends Export  implements WithEvents
     public function map($model): array
     {
         //$model->Periodo=strval(str_pad($model->Periodo,2,"0"));
-        return map($model);
+        return parent::map($model);
     }
     public function columnWidths(): array
     {
