@@ -32,7 +32,7 @@
 
   <div class="card">
     <div class="card-body">
-      <table cellspacing="5" cellpadding="5">
+      <table cellspacing="5" cellpadding="5" class="d-none">
         <tbody>
           <tr>
             <td>Minimum date:</td>
