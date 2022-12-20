@@ -59,7 +59,6 @@
       @include('pedidos.modalid')
       @include('operaciones.modal.atenderid')
       @include('operaciones.modal.veradjuntoid')
-      @include('operaciones.modal.confirmarAnular')
     </div>
   </div>
 
@@ -151,92 +150,6 @@
         }
         return true;
     }
-
-        $('#modal_confirmar_anular').on('show.bs.modal', function (event) {
-            var button = $(event.relatedTarget)
-            console.log(event.relatedTarget)
-            console.log(button.data('pedido_id_code'))
-            $("#anular_pedido_id").html(button.data('pedido_id_code'))
-            $("#motivo_anulacion_text").html(button.data('pedido_motivo'))
-            $("#anular_pedido_id").val(button.data('pedido_id'))
-        })
-
-        $('#attachmentsButtomRechazar').click(function (event) {
-
-            var data=new FormData();
-            data.append("pedido_id",$("#anular_pedido_id").val())
-            data.append("action",'confirm_anulled_cancel')
-            $.ajax({
-                type: 'POST',
-                url: "{{ route('pedidos.confirmar.anular') }}",
-                data: data,
-                processData: false,
-                contentType: false,
-            }).done(function (data){
-                if(data.success) {
-                    Swal.fire(
-                        'Mensaje',
-                        'Pedido restaurado correctamente',
-                        'success'
-                    )
-                }else{
-                    Swal.fire(
-                        'Mensaje',
-                        'Pedido ya ha sido anulado',
-                        'warning'
-                    )
-                }
-            }).always(function (){
-                $('#modal_confirmar_anular').modal('hide')
-                $("#anularAttachments").val(null)
-
-                $('#tablaPrincipal').DataTable().ajax.reload();
-            });
-        });
-        $('#attachmentsButtom').click(function (event) {
-            var files=Array.from($("#anularAttachments")[0].files);
-            if(files.length==0){
-                Swal.fire(
-                    'Error',
-                    'Debe adjuntar almenos una nota de credito',
-                    'warning'
-                )
-            }
-            var data=new FormData();
-            data.append("pedido_id",$("#anular_pedido_id").val())
-            data.append("action",'confirm_anulled')
-            for (var i in files){
-                if(files[i].name) {
-                    data.append('attachments[' + i + ']', files[i],files[i].name)
-                }
-            }
-            $.ajax({
-                type: 'POST',
-                url: "{{ route('pedidos.confirmar.anular') }}",
-                data: data,
-                processData: false,
-                contentType: false,
-            }).done(function (data){
-                if(data.success) {
-                    Swal.fire(
-                        'Mensaje',
-                        'Pedido anulado correctamente',
-                        'success'
-                    )
-                }else{
-                    Swal.fire(
-                        'Mensaje',
-                        'Pedido ya ha sido anulado',
-                        'warning'
-                    )
-                }
-            }).always(function (){
-                $('#modal_confirmar_anular').modal('hide')
-                $("#anularAttachments").val(null)
-
-                $('#tablaPrincipal').DataTable().ajax.reload();
-            });
-        })
 
         $(document).on("submit", "#formulario_adjuntos", function (evento) {
         evento.preventDefault();
@@ -570,7 +483,7 @@
 
   <script>
     /* Custom filtering function which will search data in column four between two values */
-        $(document).ready(function () {
+    $(document).ready(function () {
 
             $.fn.dataTable.ext.search.push(
                 function (settings, data, dataIndex) {

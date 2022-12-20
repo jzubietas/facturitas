@@ -594,15 +594,15 @@ class ClienteController extends Controller
                         ->whereIn('pedido_id',
                             Pedido::query()->select('pedidos.id')
                                 ->where('pedidos.cliente_id', '=', $cliente->id)
-                                ->whereEstado(1)
+                                ->activo()
                         )->sum('saldo');
                     //pago | pagado
-                    $deuda_anterior = Pedido::query()->noPagados()
+                    $deuda_anterior = Pedido::query()->noPagados()->activo()
                         ->where('pedidos.cliente_id', '=', $cliente->id)
                         ->whereDate('created_at', '=', now()->subMonth())
                         ->count();
 
-                    $deuda_pedidos_5 = Pedido::query()->noPagados()
+                    $deuda_pedidos_5 = Pedido::query()->noPagados()->activo()
                         ->where('pedidos.cliente_id', '=', $cliente->id)
                         ->count();
 
@@ -616,7 +616,7 @@ class ClienteController extends Controller
                         } else if (($cliente->pedidos_mes_deuda > 0 && $cliente->pedidos_mes_deuda_antes > 0) || ($cliente->pedidos_mes_deuda == 0 && $cliente->pedidos_mes_deuda_antes > 0)) {
                             $html .= '<option ' . ($saldo == 0 ? '' : 'disabled') . ' style="color:' . ($saldo == 0 ? 'green' : 'red') . '" value="' . $cliente->id . '">' . $cliente->celular . '-' . $cliente->icelular . '  -  ' . $cliente->nombre . '**CLIENTE CON DEUDA**</option>';
                         } else {
-                            $html .= '<option ' . ($saldo == 0 ? '' : 'disabled') . '  style="color:' . ($saldo == 0 ? 'green' : 'red') . '" value="' . $cliente->id . '">' . $cliente->celular . '-' . $cliente->icelular . '  -  ' . $cliente->nombre . '  (' . ($saldo == 0 ? 'Sin Deuda' : 'Con Deuda') . ')</option>';
+                            $html .= '<option style="color:' . ($saldo == 0 ? 'green' : 'red') . '" value="' . $cliente->id . '">' . $cliente->celular . '-' . $cliente->icelular . '  -  ' . $cliente->nombre . '  (' . ($saldo == 0 ? 'Sin Deuda' : 'Con Deuda') . ')</option>';
                         }
                     }
                 }
