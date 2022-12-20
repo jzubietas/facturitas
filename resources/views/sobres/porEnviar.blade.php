@@ -453,6 +453,21 @@
         }
       });*/
 
+      $('input.number').keyup(function (event) {
+        console.log("number")
+
+        if (event.which >= 37 && event.which <= 40) {
+            event.preventDefault();
+        }
+
+        $(this).val(function (index, value) {
+            return value
+                .replace(/\D/g, "")
+                .replace(/([0-9])([0-9]{2})$/, '$1.$2')
+                .replace(/\B(?=(\d{3})+(?!\d)\.?)/g, ",");
+        });
+      });
+
       $("#cantidad").bind('keypress', function(event) {
         var regex = new RegExp("^[0-9]+$");
         var key = String.fromCharCode(!event.charCode ? event.which : event.charCode);

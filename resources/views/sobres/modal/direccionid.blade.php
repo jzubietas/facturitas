@@ -153,7 +153,7 @@
                   </div>
 
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                        {!! Form::label('importe', 'Importe') !!}
+                        {!! Form::label('importe', 'Imporsste') !!}
                         <input type="text" maxlength="12" id="importe" name="importe" placeholder="Importe" class="form-control number ob" step="0.01" min="0" data-type="text" data-msj="Ingrese una cantidad">
                     </div>
 
