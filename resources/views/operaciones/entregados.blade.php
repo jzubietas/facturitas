@@ -59,6 +59,7 @@
             <th scope="col">Fecha de registro</th>
             <th scope="col">Destino</th>
             <th scope="col">Estado</th>
+              <th scope="col">Estado sobre</th>
             <th scope="col">Atendido por</th>
             <th scope="col">Jefe</th>
             <th scope="col">Estado de sobre</th>
@@ -319,6 +320,19 @@
                   }
               }
           },
+            {
+                data: 'condicion_envio_code',
+                name: 'condicion_envio_code',
+                render: function ( data, type, row, meta ) {
+                    if(row.condicion_envio_code == 13){
+                        return '<span class="badge badge-danger">Sin Sobre</span>'
+                    }else if(row.condicion_envio_code == 5){
+                        return '<span class="badge badge-warning">Con sobre</span>'
+                    }else{
+                        return  '<span class="badge badge-warning">'+ row.condicion_envio_code +'</span>' ;
+                    }
+                }
+            },
           {data: 'atendido_por', name: 'atendido_por', },
           {data: 'jefe', name: 'jefe', },
           {
