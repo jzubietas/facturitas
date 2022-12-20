@@ -515,8 +515,8 @@ class SobreController extends Controller
                     ]);
                     $pedido = Pedido::where("id",$pedido_id)->first();
                     $pedido->update([
-                        "condicion_envio"=>1,
-                        "envio"=>'1',
+                        "condicion_envio"=>pedido::JEFE_OP_CONF,
+                        "condicion_envio_code"=>pedido::JEFE_OP_CONF_INT,
                         "observacion_devuelto"=>$observaciongrupo
                     ]);
                 }
@@ -537,8 +537,8 @@ class SobreController extends Controller
                     //return $pedido_id;
                     $pedido = Pedido::where("id",$pedido_id)->first();
                     $pedido->update([
-                        "condicion_envio"=>1,
-                        "envio"=>'1',
+                        "condicion_envio"=>pedido::JEFE_OP_CONF,
+                        "condicion_envio_code"=>pedido::JEFE_OP_CONF_INT,
                         "observacion_devuelto"=>$observaciongrupo
                     ]);
                 }
