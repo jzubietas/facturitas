@@ -319,7 +319,7 @@
               */
 
            
-            },
+            },"visible":false,
           },
           {
             data: 'action',
