@@ -98,15 +98,15 @@ class PagerutaenvioProvincia  extends Export  implements WithEvents,WithColumnWi
     {
         return [
             'A' => 8
-            ,'B' => 40
-            ,'C' => 40
-            ,'D' => 50
+            ,'B' => 30
+            ,'C' => 30
+            ,'D' => 30
             ,'E' => 10
-            ,'F' => 40
-            ,'G' => 40
-            ,'H' => 40
+            ,'F' => 30
+            ,'G' => 30
+            ,'H' => 30
             ,'I' => 30
-            ,'J' => 40
+            ,'J' => 30
             ,'K' => 8
             ,'M' => 8
             ,'N' => 8
