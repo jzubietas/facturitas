@@ -91,7 +91,6 @@ class SobreController extends Controller
                     // 'c.celular as celulares',
                     'u.identificador as users',
                     'u.id as user_id',
-                    'dp.codigo as codigos',
                      'dp.nombre_empresa as empresas',
                     'dp.total as total',
                     'pedidos.condicion',
