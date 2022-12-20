@@ -101,10 +101,10 @@ class PagerutaenvioProvincia  extends Export  implements WithEvents,WithColumnWi
             ,'B' => 40
             ,'C' => 40
             ,'D' => 90
-            ,'E' => 30
-            ,'F' => 140
-            ,'G' => 250
-            ,'H' => 250
+            ,'E' => 10
+            ,'F' => 50
+            ,'G' => 60
+            ,'H' => 60
             ,'I' => 40
             ,'J' => 80
             ,'K' => 8

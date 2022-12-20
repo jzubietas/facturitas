@@ -66,21 +66,22 @@ class PagerutaenvioLimaCentro  extends Export implements WithEvents,WithColumnWi
     public function fields(): array
     {
         return [
-            'A' => 8
-            ,'B' => 40
-            ,'C' => 40
-            ,'D' => 90
-            ,'E' => 30
-            ,'F' => 140
-            ,'G' => 250
-            ,'H' => 250
-            ,'I' => 40
-            ,'J' => 80
-            ,'K' => 8
-            ,'M' => 8
-            ,'N' => 8
-            ,'O' => 8
-            ,'P' => 8
+            "correlativo"=>"Correlativo"
+            //,"identificador"=>"Asersor"
+            ,"nombre_cli" => "Nombre cliente"
+            ,"codigos"=>"Codigos"
+            ,"producto"=>"Producto"
+            ,"cantidad"=>"Cantidad"
+            ,"nombre"=>"Nombre"
+            ,"direccion"=>"Direccion"
+            ,"referencia"=>"Referencia"
+            ,"distrito"=>"Distrito"
+            ,"observacion"=>"Observacion"
+            //,"celular"=>"Celular"
+            //,"destino"=>"Destino"
+            //,"fecha"=>"Fecha"
+            //,"distribucion"=>"Distribucion"
+            //,"condicion_sobre"=>"Condicion"
         ];
     }
 
@@ -97,15 +98,15 @@ class PagerutaenvioLimaCentro  extends Export implements WithEvents,WithColumnWi
     {
         return [
             'A' => 8
-            ,'B' => 8
-            ,'C' => 8
-            ,'D' => 8
-            ,'E' => 8
-            ,'F' => 8
-            ,'G' => 8
-            ,'H' => 8
-            ,'I' => 8
-            ,'J' => 8
+            ,'B' => 40
+            ,'C' => 40
+            ,'D' => 90
+            ,'E' => 10
+            ,'F' => 50
+            ,'G' => 60
+            ,'H' => 60
+            ,'I' => 40
+            ,'J' => 80
             ,'K' => 8
             ,'M' => 8
             ,'N' => 8
