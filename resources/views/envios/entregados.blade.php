@@ -51,6 +51,7 @@
             <th scope="col">Cliente</th>
             <th scope="col">Código</th>
             <th scope="col">Razón social</th>
+            <th scope="col">Fecha de entrega</th>
             <th scope="col">Foto 1</th>
             <th scope="col">Foto 2</th>
             <th scope="col">Estado de envio</th>
