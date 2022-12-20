@@ -15,7 +15,7 @@
                 </p>
                 <div class="mt-4">
                     <input type="hidden" id="anular_pedido_id">
-                    <div class="alert alert-warning"> Permite seleccionar multiples archivos</div>
+                    <div class="alert alert-warning"> Permite seleccionar multiples notas de credito</div>
                     <div class="input-group mb-3">
                         <input type="file" name="attachments[]" multiple accept="image/*"
                                id="anularAttachments" class="form-control">
