@@ -354,7 +354,7 @@
               */
 
 
-            },
+            },"visible":false,
           },
           {
             data: 'action',
