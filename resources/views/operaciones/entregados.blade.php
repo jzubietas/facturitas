@@ -391,7 +391,7 @@
 
               if(row.condicion_envio_code == 13)
               {
-                  data = data+'<a href="" class="btn-sm btn-secondary dropdown-item" data-target="#modal-envio" data-envio='+row.id+' data-toggle="modal" ><i class="fa fa-check text-warning" aria-hidden="true"></i> Confirmar</a>';
+                  data = data+'<a href="" class="btn-sm btn-secondary" data-target="#modal-envio" data-envio='+row.id+' data-toggle="modal" ><i class="fa fa-check text-warning" aria-hidden="true"></i> Confirmar</a>';
                   data = data+'<a href="" data-target="#modal-revertir" data-revertir='+row.id+' data-toggle="modal" ><button class="btn btn-danger btn-sm">Revertir</button></a>';
               }
 
