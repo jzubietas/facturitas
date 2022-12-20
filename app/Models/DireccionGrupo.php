@@ -18,6 +18,9 @@ class DireccionGrupo extends Model
     const CE_ENTREGADO ="ENTREGADO";//2
     const CE_ENTREGADO_CODE =10;//2
 
+    const CE_ENTREGADO_SIN_SOBRE ="ENTREGADO SIN SOBRE";
+    const CE_ENTREGADO_SIN_SOBRE_CODE =13;
+
     const CE_BANCARIZACION ="BANCARIZACION";//2
     const CE_BANCARIZACION_CODE =4;//2
 

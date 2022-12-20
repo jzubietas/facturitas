@@ -29,34 +29,36 @@ class Pedido extends Model
     /**************
      * CONSTANTES CONDICION ENVIO
      */
-    const POR_ATENDER_PEDIDO = 'POR_ATENDER_PEDIDO';
+    const POR_ATENDER_PEDIDO = 'POR ATENDER OPE';
     const INCOMPLETO = 'INCOMPLETO';
-    const PDF = 'PDF';
+    const ATENDIDO_OP = 'ATENDIDO OP';
     const BANCARIZACION = 'BANCARIZACION';
     const JEFE_OP = 'JEFE_OP';
     const COURIER = 'COURIER';
     const SOBRE_ENVIAR = 'SOBRE_ENVIAR';
-    const EN_REPARTO = 'EN_REPARTO';
-    const SEG_PROVINCIA = 'SEG_PROVINCIA';
-    const ENTREGADO = 'ENTREGADO';
+    const REPARTO_COURIER = 'REPARTO COURIER';
+    const SEG_PROVINCIA = 'SEGUIMIENTO PROVINCIA COURIER';
+    const ENTREGADO_CLIENTE = 'ENTREGADO CLIENTE';
     const JEFE_OP_CONF = 'JEFE_OP_CONF';
-    const LOGISTICA_CONF = 'LOGISTICA_CONF';
+    const RECEPCION_COURIER = 'RECEPCION COURIER';
+    const ENTREGADO_SIN_SOBRE = 'ENTREGADO_SIN_SOBRE';
 
     /**************
      * CONSTANTES CONDICION ENVIO NUMERICO
      */
     const POR_ATENDER_PEDIDO_INT = 1;
     const INCOMPLETO_INT = 2;
-    const PDF_INT = 3;
+    const ATENDIDO_OP_INT = 3;
     const BANCARIZACION_INT = 4;
     const JEFE_OP_INT = 5;
     const COURIER_INT = 6;
     const SOBRE_ENVIAR_INT = 7;
-    const EN_REPARTO_INT = 8;
+    const REPARTO_COURIER_INT = 8;
     const SEG_PROVINCIA_INT = 9;
-    const ENTREGADO_INT = 10;
+    const ENTREGADO_CLIENTE_INT = 10;
     const JEFE_OP_CONF_INT = 11;
-    const LOGISTICA_CONF_INT = 12;
+    const RECEPCION_COURIER_INT = 12;
+    const ENTREGADO_SIN_SOBRE_INT = 13;
 
     //envio
     const ENVIO_CONFIRMAR_RECEPCION = '1';//ENVIADO CONFIRMAR RECEPCION

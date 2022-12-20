@@ -46,7 +46,7 @@
             <th scope="col">Código</th>
             <th scope="col">Asesor</th>
             {{-- <th scope="col">Cliente</th> --}}
-            <th scope="col">Razón social</th>            
+            <th scope="col">Razón social</th>
             <th scope="col">Fecha de registro</th>
             <th scope="col">Fecha de envio</th>
             <th scope="col">Fecha de entrega</th>
@@ -1182,7 +1182,7 @@
                 }
               },"visible":false
           },
-          {data: 'codigos', name: 'codigos', },
+          {data: 'codigo', name: 'codigo', },
           {data: 'users', name: 'users', },
           // {
           //   data: 'celulares',

@@ -32,7 +32,7 @@
 
   <div class="card">
     <div class="card-body">
-      <table cellspacing="5" cellpadding="5">
+      <table cellspacing="5" cellpadding="5" class="d-none">
         <tbody>
           <tr>
             <td>Minimum date:</td>
@@ -47,10 +47,11 @@
         <thead>
           <tr>
             <th scope="col">Item</th>
-            <th scope="col">Código</th>
             <th scope="col">Asesor</th>
             <th scope="col">Cliente</th>
+            <th scope="col">Código</th>
             <th scope="col">Razón social</th>
+            <th scope="col">Fecha de entrega</th>
             <th scope="col">Foto 1</th>
             <th scope="col">Foto 2</th>
             <th scope="col">Estado de envio</th>
@@ -137,6 +138,9 @@
 
   <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
   <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+
+  <script src="https://momentjs.com/downloads/moment.js"></script>
+  <script src="https://cdn.datatables.net/plug-ins/1.11.4/dataRender/datetime.js"></script>
 
   <script>
     $(document).ready(function () {
@@ -308,7 +312,17 @@
               name: 'correlativo'
            
           },
-        
+          {
+            data: 'identificador',
+            name: 'identificador',
+          },
+          {
+            data: 'celular',
+            name: 'celular',
+            render: function ( data, type, row, meta ) {
+              return row.celular+' - '+row.nombre
+            },
+          },
           {
             data: 'codigos',
             name: 'codigos',
@@ -324,17 +338,6 @@
                 return returndata;
               }
             }
-          },
-          {
-            data: 'identificador',
-            name: 'identificador',
-          },
-          {
-            data: 'celular',
-            name: 'celular',
-            render: function ( data, type, row, meta ) {
-              return row.celular+' - '+row.nombre
-            },
           },
           {
             data: 'producto',
@@ -355,6 +358,11 @@
               }
             }
           },
+          {
+            data: 'fechaentrega',
+            name: 'fechaentrega',
+            render: $.fn.dataTable.render.moment( 'DD/MM/YYYY' )
+           },
           {
             data: 'foto1',
             name: 'foto1',
