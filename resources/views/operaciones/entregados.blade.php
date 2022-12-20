@@ -137,6 +137,15 @@
         }
       });
 
+        $('#modal-envio-op').on('show.bs.modal', function (event) {
+            //cuando abre el form de anular pedido
+            var button = $(event.relatedTarget)
+            var idunico = button.data('envio')
+            $(".textcode").html("PED"+idunico);
+            $("#hiddenEnvioOP").val(idunico);
+
+        });
+
         $('#modal-envio').on('show.bs.modal', function (event) {
             //cuando abre el form de anular pedido
             var button = $(event.relatedTarget)
@@ -146,14 +155,7 @@
 
         });
 
-        $('#modal-envio-op').on('show.bs.modal', function (event) {
-            //cuando abre el form de anular pedido
-            var button = $(event.relatedTarget)
-            var idunico = button.data('envio')
-            $(".textcode").html("PED"+idunico);
-            $("#hiddenEnvio").val(idunico);
 
-        });
 
         $(document).on("submit", "#formulariorecepcion", function (evento) {
             evento.preventDefault();
