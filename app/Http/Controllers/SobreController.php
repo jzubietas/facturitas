@@ -115,9 +115,8 @@ class SobreController extends Controller
                 )
                 ->where('pedidos.estado', '1')
                 //->whereIn('pedidos.envio', [Pedido::ENVIO_CONFIRMAR_RECEPCION,Pedido::ENVIO_RECIBIDO]) // ENVIADO CONFIRMAR RECEPCION Y ENVIADO RECIBIDO
-                ->whereIn('pedidos.condicion_envio_code', [Pedido::JEFE_OP_CONF_INT]) // ENVIADO CONFIRMAR RECEPCION Y ENVIADO RECIBIDO
-                ->where('dp.estado', '1')
-                ->whereIn('pedidos.condicion_envio',[Pedido::JEFE_OP_CONF]);
+                ->whereIn('pedidos.condicion_envio_code', [Pedido::JEFE_OP_CONF_INT,Pedido::LOGISTICA_CONF_INT]) // ENVIADO CONFIRMAR RECEPCION Y ENVIADO RECIBIDO
+                ->where('dp.estado', '1');
                 /*->groupBy(
                     'pedidos.id',
                     'pedidos.cliente_id',
