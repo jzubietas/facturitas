@@ -138,6 +138,21 @@
   <script src="https://cdn.datatables.net/plug-ins/1.11.4/dataRender/datetime.js"></script>
 
   <script>
+
+  $('input.number').keyup(function (event) {
+
+    if (event.which >= 37 && event.which <= 40) {
+        event.preventDefault();
+    }
+
+    $(this).val(function (index, value) {
+        return value
+            .replace(/\D/g, "")
+            .replace(/([0-9])([0-9]{2})$/, '$1.$2')
+            .replace(/\B(?=(\d{3})+(?!\d)\.?)/g, ",");
+    });
+  });
+
     $(document).ready(function () {
 
       $.ajaxSetup({
