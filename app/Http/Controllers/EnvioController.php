@@ -386,7 +386,7 @@ class EnvioController extends Controller
         }else{
 
         }
-        $pedidos=$pedidos->get();
+        //$pedidos=$pedidos->get();
 
         return Datatables::of($pedidos)
                     ->addIndexColumn()
@@ -1695,7 +1695,7 @@ class EnvioController extends Controller
 
         PedidoMovimientoEstado::create([
             'pedido' => $request->hiddenSinenvio,
-            'condicion_envio_code' => DireccionGrupo::CE_ENTREGADO_CODE
+            'condicion_envio_code' => DireccionGrupo::CE_ENTREGADO_SIN_SOBRE_CODE
         ]);
 
 
@@ -1717,8 +1717,8 @@ class EnvioController extends Controller
             'fecha_recepcion' => $fecha,
             'atendido_por' => Auth::user()->name,
             'atendido_por_id' => Auth::user()->id,
-            'condicion_envio' => DireccionGrupo::CE_ENTREGADO,
-            'condicion_envio_code' => DireccionGrupo::CE_ENTREGADO_CODE,
+            'condicion_envio' => DireccionGrupo::CE_ENTREGADO_SIN_SOBRE,
+            'condicion_envio_code' => DireccionGrupo::CE_ENTREGADO_SIN_SOBRE_CODE,
             'pedido_id'=>$request->hiddenSinenvio
         ]);
 
@@ -1732,8 +1732,8 @@ class EnvioController extends Controller
                 'destino' => 'LIMA',
                 'distribucion'=> '',
 
-                'condicion_envio' => DireccionGrupo::CE_ENTREGADO,
-                'condicion_envio_code' => DireccionGrupo::CE_ENTREGADO_CODE,
+                'condicion_envio' => DireccionGrupo::CE_ENTREGADO_SIN_SOBRE,
+                'condicion_envio_code' => DireccionGrupo::CE_ENTREGADO_SIN_SOBRE_CODE,
 
                 'condicion_sobre' => 'SIN ENVIO',
                 'codigos'=>$data->codigo,
