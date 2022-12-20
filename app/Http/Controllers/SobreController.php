@@ -193,7 +193,7 @@ class SobreController extends Controller
         else{
             $pedidos=$pedidos;
         }
-        $pedidos=$pedidos->get();
+        //$pedidos=$pedidos->get();
 
         return Datatables::of($pedidos)
                     ->addIndexColumn()
