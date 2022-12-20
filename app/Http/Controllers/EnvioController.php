@@ -282,7 +282,7 @@ class EnvioController extends Controller
             ->join('users as u', 'u.id', 'c.user_id')
             ->where('direccion_grupos.estado','1')
            // ->where('direccion_grupos.condicion_envio',DireccionGrupo::CE_ENTREGADO)
-            ->where('direccion_grupos.condicion_envio_code',DireccionGrupo::CE_ENTREGADO_CODE)
+            ->whereIn('direccion_grupos.condicion_envio_code',[DireccionGrupo::CE_ENTREGADO_CODE,DireccionGrupo::CE_ENTREGADO_SIN_SOBRE_CODE])
 
             ->select(
                 'direccion_grupos.id',
@@ -314,7 +314,7 @@ class EnvioController extends Controller
             ->join('clientes as c', 'c.id', 'de.cliente_id')
             ->join('users as u', 'u.id', 'c.user_id')
             ->where('direccion_grupos.estado','1')
-            ->where('direccion_grupos.condicion_envio',DireccionGrupo::CE_ENTREGADO)
+            ->whereIn('direccion_grupos.condicion_envio',[DireccionGrupo::CE_ENTREGADO,DireccionGrupo::CE_ENTREGADO_SIN_SOBRE_CODE])
             ->select(
                 'direccion_grupos.id',
                 'u.identificador as identificador',
