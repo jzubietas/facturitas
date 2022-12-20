@@ -17,7 +17,7 @@
                     <input type="hidden" id="anular_pedido_id">
                     <div class="alert alert-warning"> Permite seleccionar multiples notas de credito</div>
                     <div class="input-group mb-3">
-                        <input type="file" name="attachments[]" multiple accept="image/*"
+                        <input type="file" name="attachments[]" multiple accept="application/pdf"
                                id="anularAttachments" class="form-control">
                     </div>
                 </div>
