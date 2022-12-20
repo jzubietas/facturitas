@@ -747,8 +747,8 @@ class ClienteController extends Controller
                 ->where('dp.estado', '1')
                 //->where('pedidos.envio', '1')
                 //->where('pedidos.condicion_envio', 1)
-                ->whereIn('pedidos.condicion_envio_code', [Pedido::JEFE_OP_CONF_INT,Pedido::RECEPCION_COURIER_INT])
-                ->whereIn('pedidos.envio', [Pedido::ENVIO_CONFIRMAR_RECEPCION, Pedido::ENVIO_RECIBIDO]);
+                ->whereIn('pedidos.condicion_envio_code', [Pedido::JEFE_OP_CONF_INT,Pedido::RECEPCION_COURIER_INT]);
+                //->whereIn('pedidos.envio', [Pedido::ENVIO_CONFIRMAR_RECEPCION, Pedido::ENVIO_RECIBIDO]);
             //->get();
 
             return Datatables::of(DB::table($pedidos))
