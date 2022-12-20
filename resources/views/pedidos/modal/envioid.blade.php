@@ -12,10 +12,10 @@
       {{-- Form::Open(['route' => ['pedidos.envio', $pedido],'enctype'=>'multipart/form-data', 'id'=>'formulario','files'=>true]) --}}
       <input type="hidden" id="hiddenEnvio" name="hiddenEnvio">
       <div class="modal-body">
-        <p>Confirme si desea enviar el pedido <strong class="textcode">PED000</strong> al área de ENVIOS</p>
+          <p>Desea enviar el pedido <strong class="textcode">PED000</strong> al Jefe de operaciones?</p>
       </div>
       {{-- <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-        {!! Form::label('destino', 'Destino') !!}                      
+        {!! Form::label('destino', 'Destino') !!}
         {!! Form::select('destino', $destinos , null, ['class' => 'form-control border border-secondary', 'data-live-search' => 'true', 'placeholder' => '---- SELECCIONE ----']) !!}
       </div> --}}
       <div class="modal-footer">

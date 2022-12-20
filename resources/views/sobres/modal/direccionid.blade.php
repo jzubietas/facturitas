@@ -152,6 +152,11 @@
                     {!! Form::text('numregistro', null, ['class' => 'form-control', 'placeholder' => 'Nombre', 'required' => 'required']) !!}
                   </div>
 
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <label>Importe</label>
+                        <input type="number" maxlength="12" id="importe" name="importe" placeholder="S/00.00" class="form-control" required>
+                    </div>
+
                   <div class="col-lg-12 col-md-6 col-sm-6 col-xs-6">
                     <div class="row">
                       <div class="col-10">
