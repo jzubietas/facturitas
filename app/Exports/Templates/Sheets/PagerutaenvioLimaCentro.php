@@ -66,22 +66,21 @@ class PagerutaenvioLimaCentro  extends Export implements WithEvents,WithColumnWi
     public function fields(): array
     {
         return [
-            "correlativo"=>"Correlativo"
-            //,"identificador"=>"Asersor"
-            ,"nombre_cli" => "Nombre cliente"
-            ,"codigos"=>"Codigos"
-            ,"producto"=>"Producto"
-            ,"cantidad"=>"Cantidad"
-            ,"nombre"=>"Nombre"
-            ,"direccion"=>"Direccion"
-            ,"referencia"=>"Referencia"
-            ,"distrito"=>"Distrito"
-            ,"observacion"=>"Observacion"
-            //,"celular"=>"Celular"
-            //,"destino"=>"Destino"
-            //,"fecha"=>"Fecha"
-            //,"distribucion"=>"Distribucion"
-            //,"condicion_sobre"=>"Condicion"
+            'A' => 8
+            ,'B' => 100
+            ,'C' => 100
+            ,'D' => 250
+            ,'E' => 30
+            ,'F' => 140
+            ,'G' => 250
+            ,'H' => 250
+            ,'I' => 100
+            ,'J' => 200
+            ,'K' => 8
+            ,'M' => 8
+            ,'N' => 8
+            ,'O' => 8
+            ,'P' => 8
         ];
     }
 

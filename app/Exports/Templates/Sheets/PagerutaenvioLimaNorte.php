@@ -98,15 +98,15 @@ class PagerutaenvioLimaNorte  extends Export  implements WithEvents,WithColumnWi
     {
         return [
             'A' => 8
-            ,'B' => 8
-            ,'C' => 8
-            ,'D' => 8
-            ,'E' => 8
-            ,'F' => 8
-            ,'G' => 8
-            ,'H' => 8
-            ,'I' => 8
-            ,'J' => 8
+            ,'B' => 100
+            ,'C' => 100
+            ,'D' => 250
+            ,'E' => 30
+            ,'F' => 140
+            ,'G' => 250
+            ,'H' => 250
+            ,'I' => 100
+            ,'J' => 200
             ,'K' => 8
             ,'M' => 8
             ,'N' => 8
