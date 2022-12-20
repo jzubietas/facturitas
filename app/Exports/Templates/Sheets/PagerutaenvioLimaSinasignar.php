@@ -22,7 +22,7 @@ Sheet::macro('styleCells', function (Sheet $sheet, string $cellRange, array $sty
     $sheet->getDelegate()->getStyle($cellRange)->applyFromArray($style);
 });
 
-class PagerutaenvioLimaSinasignar extends Export implements WithEvents
+class PagerutaenvioLimaSinasignar extends Export implements WithEvents,WithColumnWidths
 {
     public $fecharuta;
     public function __construct($fecharuta)

@@ -18,7 +18,7 @@ use Maatwebsite\Excel\Concerns\WithColumnWidths;
 Sheet::macro('styleCells', function (Sheet $sheet, string $cellRange, array $style) {
     $sheet->getDelegate()->getStyle($cellRange)->applyFromArray($style);
 });
-class PagerutaenvioProvincia  extends Export  implements WithEvents
+class PagerutaenvioProvincia  extends Export  implements WithEvents,WithColumnWidths
 {
     public $fecharuta;
     public function __construct($fecharuta)
