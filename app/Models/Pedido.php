@@ -29,18 +29,18 @@ class Pedido extends Model
     /**************
      * CONSTANTES CONDICION ENVIO
      */
-    const POR_ATENDER_PEDIDO = 'POR_ATENDER_PEDIDO';
+    const POR_ATENDER_PEDIDO = 'POR ATENDER OPE';
     const INCOMPLETO = 'INCOMPLETO';
-    const PDF = 'PDF';
+    const PDF = 'ATENDIDO OP';
     const BANCARIZACION = 'BANCARIZACION';
     const JEFE_OP = 'JEFE_OP';
     const COURIER = 'COURIER';
     const SOBRE_ENVIAR = 'SOBRE_ENVIAR';
-    const EN_REPARTO = 'EN_REPARTO';
-    const SEG_PROVINCIA = 'SEG_PROVINCIA';
-    const ENTREGADO = 'ENTREGADO';
+    const EN_REPARTO = 'REPARTO COURIER';
+    const SEG_PROVINCIA = 'SEGUIMIENTO PROVINCIA COURIER';
+    const ENTREGADO = 'ENTREGADO CLIENTE';
     const JEFE_OP_CONF = 'JEFE_OP_CONF';
-    const LOGISTICA_CONF = 'LOGISTICA_CONF';
+    const LOGISTICA_CONF = 'RECEPCION COURIER';
     const ENTREGADO_SIN_SOBRE = 'ENTREGADO_SIN_SOBRE';
 
     /**************
