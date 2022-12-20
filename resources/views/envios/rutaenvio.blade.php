@@ -490,12 +490,19 @@
 
                 //datass = datass+ '<a href="" data-target="#modal-revertir" data-toggle="modal" data-recibir="'+row.id+'"><button class="btn btn-info btn-sm"><i class="fas fa-trash"></i> REVERTIR</button></a>';
                 datass=datass+'<a  href="#" data-target="#modal-distribuir" data-toggle="modal" data-distribuir="'+row.id+'">'+
-                    '<i class="fas fa-envelope"></i> Distribuir</a>';
+                  '<button class="btn btn-info btn-sm">'+
+                    '<i class="fas fa-envelope"></i> Distribuir'+
+                    '</button>'+                    
+                    '</a>';
 
                //datass = datass+ '<a href="" data-target="#modal-revertir" data-toggle="modal" data-recibir="'+row.id+'"><button class="btn btn-info btn-sm"><i class="fas fa-trash"></i> REVERTIR</button></a>';
                
                
-               datass = datass+ '<a href="" data-target="#modal-desvincular" data-toggle="modal" data-desvincular="'+row.id+'"><i class="fas fa-trash"></i>Desvincular</a>'+'</div></div>';
+               datass = datass+ '<a href="" data-target="#modal-desvincular" data-toggle="modal" data-desvincular="'+row.id+'">'+
+                    '<button class="btn btn-info btn-sm">'+
+                      '<i class="fas fa-trash"></i>Sin enviar'+
+                      '</button>'+
+                      '</a>'+'</div></div>';
 
               }
 
