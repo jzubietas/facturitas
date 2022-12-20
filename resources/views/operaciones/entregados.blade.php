@@ -68,6 +68,7 @@
         <tbody>
         </tbody>
       </table>
+        @include('pedidos.modal.confirmarecepcion')
       @include('pedidos.modal.atender_pedido_op')
       @include('pedidos.modal.revertirporenviar')
     </div>
@@ -136,6 +137,15 @@
         }
       });
 
+        $('#modal-envio').on('show.bs.modal', function (event) {
+            //cuando abre el form de anular pedido
+            var button = $(event.relatedTarget)
+            var idunico = button.data('envio')
+            $(".textcode").html("PED"+idunico);
+            $("#hiddenEnvio").val(idunico);
+
+        });
+
         $('#modal-envio-op').on('show.bs.modal', function (event) {
             //cuando abre el form de anular pedido
             var button = $(event.relatedTarget)
@@ -143,6 +153,29 @@
             $(".textcode").html("PED"+idunico);
             $("#hiddenEnvio").val(idunico);
 
+        });
+
+        $(document).on("submit", "#formulariorecepcion", function (evento) {
+            evento.preventDefault();
+            var fd = new FormData();
+            var data = new FormData(document.getElementById("formulariorecepcion"));
+
+            fd.append( 'hiddenEnvio', $("#hiddenEnvio").val() );
+
+            $.ajax({
+                data: data,
+                processData: false,
+                contentType: false,
+                type: 'POST',
+                url:"{{ route('operaciones.recepcionid') }}",
+                success:function(data)
+                {
+                    console.log(data);
+                    $("#modal-envio .textcode").text('');
+                    $("#modal-envio").modal("hide");
+                    $('#tablaPrincipal').DataTable().ajax.reload();
+                }
+            });
         });
 
         $(document).on("submit", "#formulario_atender_op", function (evento) {
@@ -324,7 +357,7 @@
               urlpdf = urlpdf.replace(':id', row.id);
               @can('operacion.PDF')
                 data = data+'<a href="'+urlpdf+'" class="btn btn-primary btn-sm" target="_blank"><i class="fa fa-file-pdf"></i> PDF</a><br>';
-                data = data+'<a href="" data-target="#modal-envio-op" data-envio='+row.id+' data-toggle="modal" ><button class="btn btn-success btn-sm">Enviar a Logistica</button></a><br>';
+                data = data+'<a href="" data-target="#modal-envio-op" data-envio='+row.id+' data-toggle="modal" ><button class="btn btn-success btn-sm">Enviar a Logistica / Confirmar</button></a><br>';
               @endcan
 
               @can('operacion.enviar')
@@ -339,9 +372,18 @@
                 }
               @endcan
 
-              if(row.envio=='3' || row.envio=='1')
+
+              if(row.condicion_envio_code == 14)
               {
-                data = data+'<a href="" data-target="#modal-revertir" data-revertir='+row.id+' data-toggle="modal" ><button class="btn btn-success btn-sm">Revertir</button></a>';
+                  data = data+'<a href="" class="btn-sm btn-secondary dropdown-item" data-target="#modal-envio" data-envio='+row.id+' data-toggle="modal" ><i class="fa fa-check text-warning" aria-hidden="true"></i> No tocar</a>';
+
+              }
+
+
+              if(row.condicion_envio_code == 13)
+              {
+
+                  data = data+'<a href="" data-target="#modal-revertir" data-revertir='+row.id+' data-toggle="modal" ><button class="btn btn-danger btn-sm">Revertir</button></a>';
               }
 
               return data;

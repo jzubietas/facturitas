@@ -517,7 +517,7 @@
               @can('operacion.enviar')
                 if (row.envio == '0')
                 {
-                  @if (Auth::user()->rol == "Jefe de operaciones" || Auth::user()->rol == "Administrador")
+                  @if (Auth::user()->rol == "Jefe de operaciones" || Auth::user()->rol == "Administrador" || Auth::user()->rol == "Operario")
 
                     data = data+'<a href="" class="btn-sm dropdown-item" data-target="#modal-envio" data-envio='+row.id+' data-toggle="modal" ><i class="fa fa-envelope text-success" aria-hidden="true"></i> Con sobre</a>';
                     data = data+'<a href="" class="btn-sm dropdown-item" data-target="#modal-sinenvio" data-sinenvio='+row.id+' data-toggle="modal" ><i class="fa fa-times text-danger" aria-hidden="true"></i> Sin sobre</a>';
