@@ -999,6 +999,7 @@
         $("#observacion").val("")
         $("#tracking").val("")
         $("#numregistro").val("")
+        $("#importe").val("")
         $(".drop-rotulo").addClass("d-none");
 
         if(!$(".viewpdf").hasClass("d-none"))
