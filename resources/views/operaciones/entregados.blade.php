@@ -373,6 +373,8 @@
               urlpdf = urlpdf.replace(':id', row.id);
               @can('operacion.PDF')
                 data = data+'<a href="'+urlpdf+'" class="btn btn-primary btn-sm" target="_blank"><i class="fa fa-file-pdf"></i> PDF</a><br>';
+
+                if(row.condicion_envio_code==5)
                 data = data+'<a href="" data-target="#modal-envio-op" data-envio='+row.id+' data-toggle="modal" ><button class="btn btn-success btn-sm">ENVIO A COURIER_JEFE OPE</button></a><br>';
               @endcan
 
