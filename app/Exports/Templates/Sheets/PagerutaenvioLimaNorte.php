@@ -8,10 +8,18 @@ use App\Models\DireccionGrupo;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Concerns\WithColumnFormatting;
+use Maatwebsite\Excel\Concerns\WithEvents;
+use Maatwebsite\Excel\Events\AfterSheet;
+use Maatwebsite\Excel\Sheet;
+use PhpOffice\PhpSpreadsheet\Style\Fill;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 use Maatwebsite\Excel\Concerns\WithColumnWidths;
 
-class PagerutaenvioLimaNorte  extends Export
+Sheet::macro('styleCells', function (Sheet $sheet, string $cellRange, array $style) {
+    $sheet->getDelegate()->getStyle($cellRange)->applyFromArray($style);
+});
+
+class PagerutaenvioLimaNorte  extends Export  implements WithEvents
 {
     public $fecharuta;
     public function __construct($fecharuta)
@@ -44,6 +52,8 @@ class PagerutaenvioLimaNorte  extends Export
                 'de.referencia',
                 'de.observacion',
                 'de.distrito',
+                'de.celular',
+                'c.nombre as nombre_cli',
                 'direccion_grupos.created_at as fecha',
                 'direccion_grupos.distribucion',
                 'direccion_grupos.condicion_sobre',
@@ -57,20 +67,21 @@ class PagerutaenvioLimaNorte  extends Export
     {
         return [
             "correlativo"=>"Correlativo"
-            ,"identificador"=>"Asersor"
-            ,"destino"=>"Destino"
-            ,"celular"=>"Celular"
-            ,"nombre"=>"Nombre"
-            ,"cantidad"=>"Cantidad"
+            //,"identificador"=>"Asersor"
+            ,"nombre_cli" => "Nombre cliente"
             ,"codigos"=>"Codigos"
             ,"producto"=>"Producto"
+            ,"cantidad"=>"Cantidad"
+            ,"nombre"=>"Nombre"
             ,"direccion"=>"Direccion"
             ,"referencia"=>"Referencia"
-            ,"observacion"=>"Observacion"
             ,"distrito"=>"Distrito"
-            ,"fecha"=>"Fecha"
-            ,"distribucion"=>"Distribucion"
-            ,"condicion_sobre"=>"Condicion"
+            ,"observacion"=>"Observacion"
+            //,"celular"=>"Celular"
+            //,"destino"=>"Destino"
+            //,"fecha"=>"Fecha"
+            //,"distribucion"=>"Distribucion"
+            //,"condicion_sobre"=>"Condicion"
         ];
     }
 
@@ -81,7 +92,7 @@ class PagerutaenvioLimaNorte  extends Export
     public function map($model): array
     {
         //$model->Periodo=strval(str_pad($model->Periodo,2,"0"));
-        return map($model);
+        return parent::map($model);
     }
     public function columnWidths(): array
     {
@@ -109,5 +120,31 @@ class PagerutaenvioLimaNorte  extends Export
         return [
             'N' => NumberFormat::FORMAT_TEXT
         ];
+    }
+
+    public function registerEvents(): array
+    {
+        return [
+            AfterSheet::class => [self::class, 'afterSheet']
+        ];
+    }
+
+    public static function afterSheet(AfterSheet $event){
+
+        /*echo 'ROW: ', $cell->getRow(), PHP_EOL;
+                   echo 'COLUMN: ', $cell->getColumn(), PHP_EOL;
+                   echo 'COORDINATE: ', $cell->getCoordinate(), PHP_EOL;
+                   echo 'RAW VALUE: ', $cell->getValue(), PHP_EOL;*/
+
+        //Range Columns
+
+
+        $event->sheet->styleCells('A1',['fill' => ['fillType' => Fill::FILL_SOLID,'color' => ['rgb' => 'ff0000']]]);
+        $event->sheet->styleCells('B1:C1',['fill' => ['fillType' => Fill::FILL_SOLID,'color' => ['rgb' => 'ffeb00']]]);
+        $event->sheet->styleCells('D1:H1',['fill' => ['fillType' => Fill::FILL_SOLID,'color' => ['rgb' => 'cde5f5']]]);
+        $event->sheet->styleCells('I1',['fill' => ['fillType' => Fill::FILL_SOLID,'color' => ['rgb' => 'ffeb00']]]);
+        $event->sheet->styleCells('J1',['fill' => ['fillType' => Fill::FILL_SOLID,'color' => ['rgb' => 'cde5f5']]]);
+
+
     }
 }
