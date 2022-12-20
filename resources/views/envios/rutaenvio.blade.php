@@ -481,7 +481,7 @@
             //sWidth:'20%',
             render: function ( data, type, row, meta ) {
               //datass='<div class="dropdown"><button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Opciones</button><div class="dropdown-menu" aria-labelledby="dropdownMenuButton">';
-
+              datass="";
               //si es lima
 
               if ("{{$rol}}" =='Administrador' || "{{$rol}}" =='Logística')
