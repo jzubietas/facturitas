@@ -32,6 +32,24 @@ class PagerutaenvioLimaSinasignar extends Export implements WithEvents,WithColum
     }
     public function collection()
     {
+        $uni=array(
+            '',
+            '',
+            '',
+            '',
+            DB::raw(" (select 'CORRELA') as celular "),
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+        );
 
         $pedidos_lima = DireccionGrupo::join('direccion_envios as de','direccion_grupos.id','de.direcciongrupo')
             ->join('clientes as c', 'c.id', 'de.cliente_id')
@@ -55,14 +73,13 @@ class PagerutaenvioLimaSinasignar extends Export implements WithEvents,WithColum
                 'de.referencia',
                 'de.observacion',
                 'de.distrito',
-                'de.celular',
                 'c.nombre as nombre_cli',
                 'direccion_grupos.created_at as fecha',
                 'direccion_grupos.distribucion',
                 'direccion_grupos.condicion_sobre',
             );
 
-        $pedidos = $pedidos_lima;
+        $pedidos = $pedidos_lima->union($uni);
         return $pedidos->get();
     }
 
