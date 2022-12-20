@@ -186,4 +186,9 @@ class Pedido extends Model
     {
         return $query->where('pedidos.pago', '=', 1)->where('pedidos.pagado', '=', 2);
     }
+    public function scopeNoPagados($query)
+    {
+        return $query->whereIn('pedidos.pago',[0,1])//no hay pago
+            ->whereIn('pedidos.pagado',[0,1]);//no hay pago o adelanto
+    }
 }
