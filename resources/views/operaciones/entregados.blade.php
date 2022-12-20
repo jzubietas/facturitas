@@ -390,9 +390,10 @@
 
               
               if(row.condicion_envio_code==5)
+              {
                 data = data+'<a href="" data-target="#modal-envio-op" data-envio='+row.id+' data-toggle="modal" ><button class="btn btn-success btn-sm">ENVIO A COURIER_JEFE OPE</button></a><br>';
                 data = data+'<a href="" data-target="#modal-revertir" data-revertir='+row.id+' data-toggle="modal" ><button class="btn btn-danger btn-sm">Revertir</button></a>';
-
+              }
 
               if(row.condicion_envio_code == 13)
               {
