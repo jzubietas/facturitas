@@ -583,7 +583,9 @@
         var val_oficina=$("#oficina").val();
         var val_tracking=$("#tracking").val();
         var val_numregistro=$("#numregistro").val();
-          var val_importe=$("#importe").val();
+        var val_importe=$("#importe").val();
+        val_importeEx = val_importe.replace(",", "")
+        var importeex = parseFloat(val_importeEx);
         var rows_selected = tabla_pedidos.column(0).checkboxes.selected();
         if(combo_limaprovincia=="")
         {
@@ -659,6 +661,14 @@
               )
               return;
             }else if(val_numregistro=="")
+            {
+              Swal.fire(
+                'Error',
+                'Debe ingresar tracking',
+                'warning'
+              )
+              return;
+            }else if(val_importe=="")
             {
               Swal.fire(
                 'Error',
