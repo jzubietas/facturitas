@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -141,6 +142,10 @@ class Pedido extends Model
     {
         return $this->belongsTo(Cliente::class);
     }
+    public function imagenAtencion()
+    {
+        return $this->hasMany(ImagenAtencion::class,'pedido_id');
+    }
 
     public function detallePedidos()
     {
@@ -184,13 +189,59 @@ class Pedido extends Model
     {
         return $query->where('pedidos.estado', '=', $status);
     }
+
     public function scopePagados($query)
     {
         return $query->where('pedidos.pago', '=', 1)->where('pedidos.pagado', '=', 2);
     }
+
     public function scopeNoPagados($query)
     {
-        return $query->whereIn('pedidos.pago',[0,1])//no hay pago
-            ->whereIn('pedidos.pagado',[0,1]);//no hay pago o adelanto
+        return $query->whereIn('pedidos.pago', [0, 1])//no hay pago
+        ->whereIn('pedidos.pagado', [0, 1]);//no hay pago o adelanto
+    }
+
+    public function scopeAtendidos($query)
+    {
+        return $query->where($this->qualifyColumn('condicion_code'), '=', self::ATENDIDO_INT);
+    }
+
+    public function scopePorAtender($query)
+    {
+        return $query->where($this->qualifyColumn('condicion_code'), '=', self::POR_ATENDER_INT);
+    }
+
+    public function scopeCurrentUser($query)
+    {
+        return $query->where($this->qualifyColumn('user_id'), '=', auth()->id());
+    }
+
+    public function scopeNoPendingAnulation($query)
+    {
+        return $query->where($this->qualifyColumn('pendiente_anulacion'), '<>', '1');
+    }
+
+    /**
+     * @param Builder $query
+     * @param $roles
+     */
+    public function scopeSegunRolUsuario($query, $roles = [])
+    {
+        if (in_array(User::ROL_ASESOR, $roles)) {
+            if (auth()->user()->rol == User::ROL_ASESOR) {
+                return $query->where($this->qualifyColumn('user_id'), '=', auth()->id());
+            }
+        }
+        if (in_array(User::ROL_ENCARGADO, $roles)) {
+            if (auth()->user()->rol == User::ROL_ENCARGADO) {
+                return $query->whereIn($this->qualifyColumn('user_id'), User::query()->select('id')->activo()->where('users.supervisor', auth()->id()));
+            }
+        }
+        if (in_array(User::ROL_ADMIN, $roles)) {
+            if (auth()->user()->rol == User::ROL_ENCARGADO) {
+                return $query;
+            }
+        }
+        return $query;
     }
 }
