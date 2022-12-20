@@ -144,12 +144,12 @@
 
                   <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     {!! Form::label('tracking', 'Tracking') !!}
-                    {!! Form::text('tracking', null, ['class' => 'form-control', 'placeholder' => 'Nombre', 'required' => 'required']) !!}
+                    {!! Form::text('tracking', null, ['class' => 'form-control', 'placeholder' => 'Nombre', 'required' => 'required','maxlength' => 12]) !!}
                   </div>
 
                   <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     {!! Form::label('numregistro', 'Numero de Registro') !!}
-                    {!! Form::text('numregistro', null, ['class' => 'form-control', 'placeholder' => 'Nombre', 'required' => 'required']) !!}
+                    {!! Form::text('numregistro', null, ['class' => 'form-control', 'placeholder' => 'Nombre', 'required' => 'required','maxlength' => 12]) !!}
                   </div>
 
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
