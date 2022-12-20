@@ -139,19 +139,7 @@
 
   <script>
 
-  $('input.number').keyup(function (event) {
-
-    if (event.which >= 37 && event.which <= 40) {
-        event.preventDefault();
-    }
-
-    $(this).val(function (index, value) {
-        return value
-            .replace(/\D/g, "")
-            .replace(/([0-9])([0-9]{2})$/, '$1.$2')
-            .replace(/\B(?=(\d{3})+(?!\d)\.?)/g, ",");
-    });
-  });
+  
 
     $(document).ready(function () {
 
@@ -159,6 +147,21 @@
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
+      });
+
+      $('input.number').keyup(function (event) {
+        console.log("number")
+
+        if (event.which >= 37 && event.which <= 40) {
+            event.preventDefault();
+        }
+
+        $(this).val(function (index, value) {
+            return value
+                .replace(/\D/g, "")
+                .replace(/([0-9])([0-9]{2})$/, '$1.$2')
+                .replace(/\B(?=(\d{3})+(?!\d)\.?)/g, ",");
+        });
       });
 
       $(document).on("submit", "#formulario", function (evento) {
