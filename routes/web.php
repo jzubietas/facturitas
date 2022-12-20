@@ -143,6 +143,10 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     /*Controller Pedido*/
 
     Route::get('pedidos/estados/anulados', [PedidoStatusController::class,'anulados'])->name('pedidos.estados.anulados');
+    Route::get('pedidos/estados/{pedido}/detalle_atencion', [PedidoStatusController::class,'pedidoDetalleAtencion'])->name('pedidos.estados.detalle-atencion');
+    Route::post('pedidos/estados/{pedido}/detalle_atencion', [PedidoStatusController::class,'pedidoDetalleAtencionConfirm']);
+
+    Route::get('pedidos/estados', [PedidoStatusController::class,'index'])->name('pedidos.estados.index');
 
     Route::post('pedidos.confirm.anulled', [PedidoController::class, 'ConfirmarAnular'])->name('pedidos.confirmar.anular');
     Route::resource('pedidos', PedidoController::class)->names('pedidos');

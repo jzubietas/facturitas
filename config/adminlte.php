@@ -302,11 +302,11 @@ return [
                     'active' => ['pedidos'],
                 ],
                 [
-                    'text' => 'Mis pedidos',
-                    'route'  => 'pedidos.mispedidos',
+                    'text' => 'Estado Pedidos',
+                    'route'  => 'pedidos.estados.index',
                     'can' => 'pedidos.mispedidos',
                     'icon'   => 'fas fa-check-circle',
-                    'active' => ['mis pedidos'],
+                    'active' => ['estatus pedido'],
                 ],
                 [
                     'text' => 'Sobres por enviar',
