@@ -665,6 +665,13 @@
                 'warning'
               )
               return;
+            }else if(val_distrito=="") {
+                Swal.fire(
+                    'Error',
+                    'Debe seleccionar un distrito',
+                    'warning'
+                )
+                return;
             }
           }else if(combo_limaprovincia=="P")
           {
