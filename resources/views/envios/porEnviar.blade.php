@@ -156,6 +156,7 @@
         var button = $(event.relatedTarget)
         var idunico = button.data('enviar')//pedido
         var destino = button.data('destino')//pedido
+        var dfecha = button.data('fecha')//pedido
 
         var newOption = $('<option value="REGISTRADO">REGISTRADO</option>');
         var newOption2 = $('<option value="NO ENTREGADO">NO ENTREGADO</option>');
@@ -165,6 +166,7 @@
         var newOption5 = $('<option value="EN TIENDA/AGENTE">EN TIENDA/AGENTE</option>');
 
         $('#condicion').empty().append(newOption3);
+        $("#fecha_envio_doc_fis").val(dfecha);
         
        // if (destino=='LIMA')
        // $('#condicion').empty().append(newOption).append(newOption2).append(newOption3);
@@ -442,7 +444,7 @@
 
               @if($ver_botones_accion > 0)
                 @can('envios.enviar')
-                  datass=datass+'<a href="" data-target="#modal-enviar" data-toggle="modal" data-enviar="'+row.id+'" data-destino="'+row.destino+'"  >'+
+                  datass=datass+'<a href="" data-target="#modal-enviar" data-toggle="modal" data-enviar="'+row.id+'" data-destino="'+row.destino+'"  data-fechaenvio="'+row.fecha+'">'+
                     '<button class="btn btn-success btn-sm"><i class="fas fa-envelope"></i> Entregado</button></a>';
                   if(row.envio=='1')
                   {
