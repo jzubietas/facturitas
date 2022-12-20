@@ -43,6 +43,8 @@ class Pedido extends Model
     const RECEPCION_COURIER = 'RECEPCION COURIER';
     const ENTREGADO_SIN_SOBRE = 'ENTREGADO_SIN_SOBRE';
 
+    const CONFIRMACION_SIN_SOBRE = 'CONFIRMACION SIN SOBRE';
+
     /**************
      * CONSTANTES CONDICION ENVIO NUMERICO
      */
@@ -59,6 +61,8 @@ class Pedido extends Model
     const JEFE_OP_CONF_INT = 11;
     const RECEPCION_COURIER_INT = 12;
     const ENTREGADO_SIN_SOBRE_INT = 13;
+
+    const CONFIRMACION_SIN_SOBRE_INT = 14;
 
     //envio
     const ENVIO_CONFIRMAR_RECEPCION = '1';//ENVIADO CONFIRMAR RECEPCION
@@ -88,7 +92,7 @@ class Pedido extends Model
     public static $estadosCondicionCode = [
         4 => 'ANULADO',
         1 => 'POR ATENDER',
-        2 => 'EN PROCESO ATENCIÓN',
+        2 => 'EN PROCEOS DE ATENCION',
         3 => 'ATENDIDO',
     ];
 
@@ -99,7 +103,7 @@ class Pedido extends Model
     public static $estadosCondicionEnvio = [
         'POR ATENDER' => 1,
         'INCOMPLETO' => 2,
-        'PDF' => 3,
+        'ATENDIDO OP' => 3,
         'BANCARIZACION' => 4,
         'JEFE_OP' => 5,
         'COURIER' => 6,
