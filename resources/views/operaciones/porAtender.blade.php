@@ -44,7 +44,7 @@
           <tr>
             <th scope="col">Item</th>
             <th scope="col">Código</th>
-            {{-- <th scope="col">Razón social</th> --}}
+            <th scope="col">Razón social</th>
             <th scope="col">Asesor</th>
             <th scope="col">Fecha de registro</th>{{--fecha hora--}}
             <th scope="col">Tipo de Banca</th>
@@ -437,7 +437,7 @@
               }
           },
           {data: 'codigos', name: 'codigos', },
-          //{data: 'empresas', name: 'empresas', },
+          {data: 'empresas', name: 'empresas', },
           {data: 'users', name: 'users', },
           {
             data: 'fecha',
