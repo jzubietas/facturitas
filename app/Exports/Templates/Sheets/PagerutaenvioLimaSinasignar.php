@@ -101,15 +101,15 @@ class PagerutaenvioLimaSinasignar extends Export implements WithEvents,WithColum
     {
         return [
             'A' => 8
-            ,'B' => 100
-            ,'C' => 100
-            ,'D' => 250
+            ,'B' => 40
+            ,'C' => 40
+            ,'D' => 90
             ,'E' => 30
             ,'F' => 140
             ,'G' => 250
             ,'H' => 250
-            ,'I' => 100
-            ,'J' => 200
+            ,'I' => 40
+            ,'J' => 80
             ,'K' => 8
             ,'M' => 8
             ,'N' => 8

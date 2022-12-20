@@ -29,6 +29,7 @@ class PagerutaenvioProvincia  extends Export  implements WithEvents,WithColumnWi
     public function collection()
     {
 
+
         $pedidos_lima = DireccionGrupo::join('gasto_envios as de','direccion_grupos.id','de.direcciongrupo')
             ->join('clientes as c', 'c.id', 'de.cliente_id')
             ->join('users as u', 'u.id', 'c.user_id')
@@ -97,15 +98,15 @@ class PagerutaenvioProvincia  extends Export  implements WithEvents,WithColumnWi
     {
         return [
             'A' => 8
-            ,'B' => 100
-            ,'C' => 100
-            ,'D' => 250
+            ,'B' => 40
+            ,'C' => 40
+            ,'D' => 90
             ,'E' => 30
             ,'F' => 140
             ,'G' => 250
             ,'H' => 250
-            ,'I' => 100
-            ,'J' => 200
+            ,'I' => 40
+            ,'J' => 80
             ,'K' => 8
             ,'M' => 8
             ,'N' => 8
