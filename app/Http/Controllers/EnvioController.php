@@ -1788,14 +1788,14 @@ class EnvioController extends Controller
 
         $pedido->update([
             'envio' => '1',
-            'condicion_envio' => Pedido::BANCARIZACION,
-            'condicion_envio_code' => Pedido::BANCARIZACION_INT,
+            'condicion_envio' => Pedido::JEFE_OP,
+            'condicion_envio_code' => Pedido::JEFE_OP_INT,
             'modificador' => 'USER'.Auth::user()->id
         ]);
 
         PedidoMovimientoEstado::create([
             'pedido' => $request->hiddenEnvio,
-            'condicion_envio_code' => Pedido::BANCARIZACION_INT
+            'condicion_envio_code' => Pedido::JEFE_OP_INT
         ]);
 
 
