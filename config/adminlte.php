@@ -383,7 +383,7 @@ return [
                 [
                     'text' => 'Sobres por confirmar',
                     'route'  => 'envios.porconfirmar',
-                    'can' => 'envios.porrecibir',
+                    'can' => 'envios.porconfirmar',
                     'icon'   => 'fas fa-check-circle',
                     'active' => ['envios'],
                 ],
