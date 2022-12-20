@@ -56,6 +56,40 @@ class PedidoStatusController extends Controller
                 ->where('dp.estado', '1')
                 ->where('pedidos.pendiente_anulacion', '1');
 
+
+
+            if(Auth::user()->rol == "Operario"){
+
+                $asesores = User::whereIN('users.rol', ['Asesor','Administrador'])
+                    -> where('users.estado', '1')
+                    -> Where('users.operario',Auth::user()->id)
+                    ->select(
+                        DB::raw("users.identificador as identificador")
+                    )
+                    ->pluck('users.identificador');
+                $pedidos=$pedidos->WhereIn('u.identificador',$asesores);
+
+            }else if(Auth::user()->rol == "Jefe de operaciones"){
+
+                $operarios = User::where('users.rol', 'Operario')
+                    -> where('users.estado', '1')
+                    -> where('users.jefe', Auth::user()->id)
+                    ->select(
+                        DB::raw("users.id as id")
+                    )
+                    ->pluck('users.id');
+
+                $asesores = User::whereIN('users.rol', ['Asesor','Administrador'])
+                    -> where('users.estado', '1')
+                    ->WhereIn('users.operario',$operarios)
+                    ->select(
+                        DB::raw("users.identificador as identificador")
+                    )
+                    ->pluck('users.identificador');
+
+                $pedidos=$pedidos->WhereIn('u.identificador',$asesores);
+            }
+
             return datatables()->query(DB::table($pedidos))
                 ->addIndexColumn()
                 ->addColumn('action', function ($pedido) {

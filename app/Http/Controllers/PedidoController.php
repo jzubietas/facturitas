@@ -1503,7 +1503,20 @@ class PedidoController extends Controller
             }
             setting()->save();
 
-            if ($pedido->condicion_code == Pedido::ATENDIDO_INT) {
+            /**
+            tipo_banca
+            ELECTRONICA - sin banca
+            ELECTRONICA - banca
+            FISICO - sin banca
+            FISICA - sin banca
+            ELECTRONICA - bancarizado
+             */
+            $is_fisico=$pedido->detallePedidos()->whereIn('detalle_pedidos.tipo_banca',[
+                'FISICO - banca',
+                'FISICO - sin banca',
+                'FISICA - sin banca',
+            ])->count();
+            if ($is_fisico==0 && $pedido->condicion_code == Pedido::ATENDIDO_INT) {
                 //pendiente de anulacion
                 $pedido->update([
                     'motivo' => $request->motivo,
