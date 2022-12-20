@@ -180,7 +180,7 @@ class Pedido extends Model
         return [];
     }
 
-    public function scopeActivo($query, $status = 1)
+    public function scopeActivo($query, $status = '1')
     {
         return $query->where('pedidos.estado', '=', $status);
     }
