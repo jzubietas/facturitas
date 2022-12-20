@@ -116,7 +116,7 @@ class EnvioController extends Controller
             ->join('users as u', 'u.id', 'c.user_id')
            // ->join('pedidos as p', 'p.codigo', 'direccion_grupos.codigos')
 
-           ->where('direccion_grupos.condicion_envio_code',Pedido::EN_REPARTO_INT)
+           ->where('direccion_grupos.condicion_envio_code',Pedido::REPARTO_COURIER_INT)
 
             //->where('p.condicion_envio_code',Pedido::EN_REPARTO_INT)
             ->where('direccion_grupos.estado','1')
@@ -151,7 +151,7 @@ class EnvioController extends Controller
           //  ->join('pedidos as p', 'p.codigo', 'direccion_grupos.codigos')
 
           //  ->where('p.condicion_envio_code',Pedido::EN_REPARTO_INT)
-            ->where('direccion_grupos.condicion_envio_code',Pedido::EN_REPARTO_INT)
+            ->where('direccion_grupos.condicion_envio_code',Pedido::REPARTO_COURIER_INT)
             ->where('direccion_grupos.estado','1')
          //   ->whereNull('direccion_grupos.subcondicion_envio')
 
@@ -1010,8 +1010,8 @@ class EnvioController extends Controller
         if ($request->condicion == 'ENTREGADO' )
         {
             $envio->update([
-                'condicion_envio' => Pedido::ENTREGADO,
-                'condicion_envio_code' => Pedido::ENTREGADO_INT,
+                'condicion_envio' => Pedido::ENTREGADO_CLIENTE,
+                'condicion_envio_code' => Pedido::ENTREGADO_CLIENTE_INT,
 
             ]);
 
@@ -1265,15 +1265,15 @@ class EnvioController extends Controller
                 //'envio' => '1',
                 'envio' => '2',
                 'estado_sobre' => '1',
-                'condicion_envio'=>Pedido::EN_REPARTO,
-                'condicion_envio_code'=>Pedido::EN_REPARTO_INT,
+                'condicion_envio'=>Pedido::REPARTO_COURIER,
+                'condicion_envio_code'=>Pedido::REPARTO_COURIER_INT,
                 'modificador' => 'USER'.Auth::user()->id
             ]);
 
             $direccion_grupos->update([
 
-                'condicion_envio'=>Pedido::EN_REPARTO,
-                'condicion_envio_code'=>Pedido::EN_REPARTO_INT,
+                'condicion_envio'=>Pedido::REPARTO_COURIER,
+                'condicion_envio_code'=>Pedido::REPARTO_COURIER_INT,
                 'modificador' => 'USER'.Auth::user()->id,
                 'pedido_id' => $request->hiddenRecibir
             ]);
@@ -1354,8 +1354,8 @@ class EnvioController extends Controller
 
             {
                     $_pedido->update([
-                        'condicion_envio' => Pedido::EN_REPARTO,
-                        'condicion_envio_code' => Pedido::EN_REPARTO_INT
+                        'condicion_envio' => Pedido::REPARTO_COURIER,
+                        'condicion_envio_code' => Pedido::REPARTO_COURIER_INT
                     ]);
 
             }
@@ -1407,8 +1407,8 @@ class EnvioController extends Controller
                             'celular_cliente'=> ( ($request->destino=='LIMA')? $request->contacto : $cliente->celular."-".$cliente->icelular ),
                             'codigos'=>$lista_codigos,
                             'producto'=>$lista_productos,
-                            'condicion_envio' => Pedido::EN_REPARTO ,
-                            'condicion_envio_code' => Pedido::EN_REPARTO_INT ,
+                            'condicion_envio' => Pedido::REPARTO_COURIER ,
+                            'condicion_envio_code' => Pedido::REPARTO_COURIER_INT ,
                             'pedido_id'=>$request->cod_pedido,
                             'cliente_id'=>$request->cliente_id,
                             'user_id'=>$usuario_id
@@ -1465,8 +1465,8 @@ class EnvioController extends Controller
                             'destino' => $request->destino,
                             'condicion_envio' => 2,//AL REGISTRAR DIRECCION PASA A ESTADO  EN REPARTO
                             'direccion' => $request->direccion,
-                            'condicion_envio' => Pedido::EN_REPARTO ,
-                            'condicion_envio_code' => Pedido::EN_REPARTO_INT ,
+                            'condicion_envio' => Pedido::REPARTO_COURIER ,
+                            'condicion_envio_code' => Pedido::REPARTO_COURIER_INT ,
 
                         ]);
 
@@ -1836,8 +1836,8 @@ class EnvioController extends Controller
         $pedido->update([
             'envio' => '2',
             'modificador' => 'USER'.Auth::user()->id,
-            'condicion_envio' => Pedido::LOGISTICA_CONF,
-            'condicion_envio_code' => Pedido::LOGISTICA_CONF_INT,
+            'condicion_envio' => Pedido::RECEPCION_COURIER,
+            'condicion_envio_code' => Pedido::RECEPCION_COURIER_INT,
 
         ]);
 
