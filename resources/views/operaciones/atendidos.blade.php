@@ -453,11 +453,11 @@
               name: 'condicion_code',
               render: function ( data, type, row, meta ) {
                   if(row.condicion_code==1){
-                      return '<span class="badge badge-success">'+'{{\App\Models\Pedido::POR_ATENDER }}'+'</span>';
+                      return '<span class="badge badge-success">'+'{{\App\Models\Pedido::POR_ATENDER_PEDIDO }}'+'</span>';
                   }else if(row.condicion_code==2){
-                      return '<span class="badge badge-success">'+'{{\App\Models\Pedido::EN_PROCESO_ATENCION }}'+'</span>';
+                      return '<span class="badge badge-success">'+'{{\App\Models\Pedido::INCOMPLETO }}'+'</span>';
                   }else if(row.condicion_code==3){
-                      return '<span class="badge badge-success">'+'{{\App\Models\Pedido::ATENDIDO }}'+'</span>';
+                      return '<span class="badge badge-success">'+'{{\App\Models\Pedido::ATENDIDO_OP }}'+'</span>';
                   }else if(row.condicion_code==4){
                       return '<span class="badge badge-success">'+'{{\App\Models\Pedido::ANULADO }}'+'</span>';
                   }
