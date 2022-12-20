@@ -156,7 +156,7 @@
         var button = $(event.relatedTarget)
         var idunico = button.data('enviar')//pedido
         var destino = button.data('destino')//pedido
-        var dfecha = button.data('fecha')//pedido
+        var dfecha = button.data('fechaenvio')//pedido
 
         var newOption = $('<option value="REGISTRADO">REGISTRADO</option>');
         var newOption2 = $('<option value="NO ENTREGADO">NO ENTREGADO</option>');
@@ -164,7 +164,7 @@
 
         var newOption4 = $('<option value="EN CAMINO">EN CAMINO</option>');
         var newOption5 = $('<option value="EN TIENDA/AGENTE">EN TIENDA/AGENTE</option>');
-
+        console.log(dfecha)
         $('#condicion').empty().append(newOption3);
         $("#fecha_envio_doc_fis").val(dfecha);
         
