@@ -73,6 +73,7 @@
         <tbody>
         </tbody>
       </table>
+      @include('pedidos.modal.confirmar_recepcion_log')
       @include('envios.modal.enviarid')
       @include('pedidos.modal.recibirid')
 
@@ -145,9 +146,43 @@
         }
       });
 
+      $('#modal-envio').on('show.bs.modal', function (event) {
+        //cuando abre el form de anular pedido
+        var button = $(event.relatedTarget)
+        var idunico = button.data('recibir')
+        $(".textcode").html("PED"+idunico);
+        $("#hiddenEnvio").val(idunico);
+
+      });
+
+      $(document).on("submit", "#formulariorecepcion", function (evento) {
+        evento.preventDefault();
+        var fd = new FormData();
+        var data = new FormData(document.getElementById("formulariorecepcion"));
+
+        fd.append( 'hiddenEnvio', $("#hiddenEnvio").val() );
+
+        $.ajax({
+           data: data,
+           processData: false,
+           contentType: false,
+           type: 'POST',
+           url:"{{ route('envios.recibiridlog') }}",
+           success:function(data)
+           {
+            console.log(data);
+            $("#modal-envio .textcode").text('');
+            $("#modal-envio").modal("hide");
+            $('#tablaPrincipal').DataTable().ajax.reload();
+           }
+        });
+      });
+
+
       $(document).on("submit", "#formulario", function (evento) {
         evento.preventDefault();
         var fd = new FormData();
+
       });
 
       $('#modal-enviar').on('show.bs.modal', function (event) {
@@ -302,15 +337,15 @@
           {
               data: 'condicion_envio',
               name: 'condicion_envio',
-           
+
           },
           {
             data: 'envio',
             name: 'envio',
             render: function ( data, type, row, meta ) {
-             
+
                 return '<span class="badge badge-danger">Enviar a Courier</span>';
-             
+
               /*
               El estado del sobre cambia a 1 y luego cambia el estado del pedido
               else if (row.envio=='1' && row.estado_sobre=='1'){
@@ -318,7 +353,7 @@
               }
               */
 
-           
+
             },
           },
           {
@@ -333,7 +368,7 @@
                 @can('envios.enviar')
                   if(row.envio=='2')
                   {
-                    datass = datass+ '<a href="" data-target="#modal-recibir" data-toggle="modal" data-recibir="'+row.id+'"><button class="btn btn-warning btn-sm"><i class="fas fa-check-circle"></i> Recibido</button></a>';
+                    datass = datass+ '<a href="" data-target="#modal-envio" data-toggle="modal" data-recibir="'+row.id+'"><button class="btn btn-warning btn-sm"><i class="fas fa-check-circle"></i> Recibido</button></a>';
                   }
                 @endcan
               @endif
