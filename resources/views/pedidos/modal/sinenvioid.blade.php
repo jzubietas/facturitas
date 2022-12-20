@@ -12,13 +12,14 @@
       {{-- Form::Open(['route' => ['operaciones.sinenvio', $pedido],'enctype'=>'multipart/form-data', 'id'=>'formulario','files'=>true]) --}}
       <input type="hidden" id="hiddenSinenvio" name="hiddenSinenvio">
       <div class="modal-body">
-        <p>Está seguro que el pedido: <strong class="textcode">PED000</strong> será sin envío</p>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-        <button type="submit" class="btn btn-success">Confirmar</button>
-      </div>
-      {{ Form::Close() }}
-    </div>
-  </div>
+          <p>Desea enviar el PEDIDO <strong class="textcode">PED000</strong> Sin sobre al jefe operaciones?</p>
+{{--<p>Está seguro que el pedido: <strong class="textcode">PED000</strong> será sin envío</p> --}}
+</div>
+<div class="modal-footer">
+<button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+<button type="submit" class="btn btn-success">Confirmar</button>
+</div>
+{{ Form::Close() }}
+</div>
+</div>
 </div>

@@ -583,6 +583,7 @@
         var val_oficina=$("#oficina").val();
         var val_tracking=$("#tracking").val();
         var val_numregistro=$("#numregistro").val();
+          var val_importe=$("#importe").val();
         var rows_selected = tabla_pedidos.column(0).checkboxes.selected();
         if(combo_limaprovincia=="")
         {
@@ -682,6 +683,7 @@
             fd2.append('oficina', val_oficina);
             fd2.append('tracking', val_tracking);
             fd2.append('numregistro', val_numregistro);
+              fd2.append('importe', val_importe);
 
             for (let i = 0; i < files.length; i++) {
               fd2.append('rotulo', $('input[type=file][name="rotulo"]')[0].files[0]);

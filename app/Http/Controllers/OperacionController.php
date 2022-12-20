@@ -379,8 +379,8 @@ class OperacionController extends Controller
                 ->where('pedidos.estado', '1')
                 ->where('dp.estado', '1')
                 ->where('pedidos.condicion_code', Pedido::ATENDIDO_INT)
-                ->whereIn('pedidos.condicion_envio_code', [Pedido::JEFE_OP_INT])
-                ->whereIn('pedidos.envio', ['2','3']);
+                ->whereIn('pedidos.condicion_envio_code', [14, Pedido::JEFE_OP_INT, Pedido::ENTREGADO_SIN_SOBRE_INT]);
+
                 //->whereIn('pedidos.envio', ['0'])
                 //->whereBetween( 'pedidos.created_at', [$min, $max]);
 
@@ -1260,7 +1260,7 @@ class OperacionController extends Controller
 
         $pedido->update([
             'envio' => '0',
-            'condicion_envio_code'=>4,
+            'condicion_envio_code'=>Pedido::ATENDIDO_OP_INT,
             'modificador' => 'USER'.Auth::user()->id
         ]);
 
