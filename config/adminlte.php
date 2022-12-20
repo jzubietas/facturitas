@@ -372,6 +372,13 @@ return [
                     'icon'   => 'fas fa-check-circle',
                     'active' => ['pedidos terminados'],
                 ],
+                [
+                    'text' => 'Pendiente Anulación',
+                    'route'  => 'pedidos.estados.anulados',
+                    'can' => 'pedidos.pendiente.anulacion',
+                    'icon'   => 'fas fa-check-circle',
+                    'active' => ['Pedidos Pendiente'],
+                ],
 
             ],
         ],

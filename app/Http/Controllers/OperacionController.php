@@ -114,12 +114,7 @@ class OperacionController extends Controller
             )
             ->where('pedidos.estado', '1')
             ->where('dp.estado', '1')
-            ->where(function ($query){
-                $query->whereIn('pedidos.condicion', [Pedido::POR_ATENDER,Pedido::EN_PROCESO_ATENCION]);
-                if(Auth::user()->rol == User::ROL_JEFE_OPERARIO||Auth::user()->rol == User::ROL_ADMIN) {
-                    $query->orWhere('pedidos.pendiente_anulacion', '1');
-                }
-            });
+            ->whereIn('pedidos.condicion', [Pedido::POR_ATENDER,Pedido::EN_PROCESO_ATENCION]);
 
 
         if(Auth::user()->rol == "Operario"){
@@ -173,11 +168,6 @@ class OperacionController extends Controller
                     ->addIndexColumn()
                     ->addColumn('action', function($pedido){
                         $btn='';
-                        if(in_array(\auth()->user()->rol,[User::ROL_JEFE_OPERARIO,User::ROL_ADMIN])) {
-                            if ($pedido->pendiente_anulacion == 1) {
-                                $btn .= '<button data-toggle="modal" data-target="#modal_confirmar_anular" data-confirm_anular_pedido="'.$pedido->id.'"  data-pedido_id="'.$pedido->id.'" data-pedido_motivo="'.$pedido->motivo.'" data-pedido_id_code="'.Pedido::generateIdCode($pedido->id).'" type="button" class="btn btn-danger btn-sm" >EMITIR N/C</button>';
-                            }
-                        }
                         return $btn;
                     })
                     ->addColumn('action2', function($pedido){

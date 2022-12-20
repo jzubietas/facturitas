@@ -594,15 +594,15 @@ class ClienteController extends Controller
                         ->whereIn('pedido_id',
                             Pedido::query()->select('pedidos.id')
                                 ->where('pedidos.cliente_id', '=', $cliente->id)
-                                ->whereEstado(1)
+                                ->activo()
                         )->sum('saldo');
                     //pago | pagado
-                    $deuda_anterior = Pedido::query()->noPagados()
+                    $deuda_anterior = Pedido::query()->noPagados()->activo()
                         ->where('pedidos.cliente_id', '=', $cliente->id)
                         ->whereDate('created_at', '=', now()->subMonth())
                         ->count();
 
-                    $deuda_pedidos_5 = Pedido::query()->noPagados()
+                    $deuda_pedidos_5 = Pedido::query()->noPagados()->activo()
                         ->where('pedidos.cliente_id', '=', $cliente->id)
                         ->count();
 
