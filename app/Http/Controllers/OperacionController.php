@@ -175,7 +175,7 @@ class OperacionController extends Controller
                         $btn='';
                         if(in_array(\auth()->user()->rol,[User::ROL_JEFE_OPERARIO,User::ROL_ADMIN])) {
                             if ($pedido->pendiente_anulacion == 1) {
-                                $btn .= '<button data-toggle="modal" data-target="#modal_confirmar_anular" data-confirm_anular_pedido="'.$pedido->id.'"  data-pedido_id="'.$pedido->id.'" data-pedido_motivo="'.$pedido->motivo.'" data-pedido_id_code="'.Pedido::generateIdCode($pedido->id).'" type="button" class="btn btn-danger btn-sm" >Anular</button>';
+                                $btn .= '<button data-toggle="modal" data-target="#modal_confirmar_anular" data-confirm_anular_pedido="'.$pedido->id.'"  data-pedido_id="'.$pedido->id.'" data-pedido_motivo="'.$pedido->motivo.'" data-pedido_id_code="'.Pedido::generateIdCode($pedido->id).'" type="button" class="btn btn-danger btn-sm" >EMITIR N/C</button>';
                             }
                         }
                         return $btn;
@@ -684,10 +684,10 @@ class OperacionController extends Controller
     public function Atenderid(Request $request)
     {
 
-       
 
 
-      
+
+
 
         $hiddenAtender=$request->hiddenAtender;
         $detalle_pedidos = DetallePedido::where('pedido_id',$hiddenAtender)->first();
