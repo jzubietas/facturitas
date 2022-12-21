@@ -16,7 +16,7 @@
       <th width="80px" style="background-color: #4c5eaf; text-align: center; color: #ffff;">COURIER (S/)</th>
       <th width="80px" style="background-color: #4c5eaf; text-align: center; color: #ffff;">TOTAL (S/)</th>
       <th width="80px" style="background-color: #4c5eaf; text-align: center; color: #ffff;">DIFERENCIA (S/)</th>
- 
+
       <th width="80px" style="background-color: #4c5eaf; text-align: center; color: #ffff;">ESTADO DE PAGO</th>
       <th width="80px" style="background-color: #4c5eaf; text-align: center; color: #ffff;">REVISADO ADMINISTRACION</th>
       <th width="80px" style="background-color: #4c5eaf; text-align: center; color: #ffff;">ESTADO DE ENVIO</th>
@@ -27,33 +27,37 @@
   <tbody>
     <?php $cont = 0; ?>
     @foreach ($pedidos as $pedido)
-      <tr>
-        <td>{{ $cont + 1 }}</td>
+      <tr style="background-color: {{$pedido->estado==0?'red':($pedido->pendiente_anulacion==1?'orange':'white')}}">
+        <td  style="background-color: {{$pedido->estado==0?'red':($pedido->pendiente_anulacion==1?'orange':'white')}}">{{ $cont + 1 }}</td>
         @if ($pedido->id < 10)
-          <td>PED0000{{ $pedido->id }}</td>
+          <td  style="background-color: {{$pedido->estado==0?'red':($pedido->pendiente_anulacion==1?'orange':'white')}}">PED0000{{ $pedido->id }}</td>
         @elseif($pedido->id < 100)
-          <td>PED000{{ $pedido->id }}</td>
+          <td  style="background-color: {{$pedido->estado==0?'red':($pedido->pendiente_anulacion==1?'orange':'white')}}">PED000{{ $pedido->id }}</td>
         @elseif($pedido->id < 1000)
-          <td>PED00{{ $pedido->id }}</td>
+          <td  style="background-color: {{$pedido->estado==0?'red':($pedido->pendiente_anulacion==1?'orange':'white')}}">PED00{{ $pedido->id }}</td>
         @else
-          <td>PED0{{ $pedido->id }}</td>
+          <td  style="background-color: {{$pedido->estado==0?'red':($pedido->pendiente_anulacion==1?'orange':'white')}}">PED0{{ $pedido->id }}</td>
         @endif
-        <td>{{ $pedido->codigos }}</td>
-        <td>{{ $pedido->celulares }}-{{ $pedido->icelulares }}</td>
-        <td>{{ $pedido->nombres }}</td>
-        <td>{{ $pedido->empresas }}</td>
-        <td>{{ $pedido->users }}</td>
-        <td>{{ $pedido->fecha }}</td>
-        <td>{{ $pedido->cantidad }}</td>
-        <td>{{ $pedido->tipo_banca }}</td>
-        <td>{{ $pedido->porcentaje }}</td>
-        <td>{{ $pedido->ft }}</td>
-        <td>{{ $pedido->courier }}</td>
-        <td>{{ $pedido->total }}</td>
-        <td>{{ $pedido->diferencia }}</td>
-       
-        <td>
-          @if($pedido->condicion_pa == null)
+        <td  style="background-color: {{$pedido->estado==0?'red':($pedido->pendiente_anulacion==1?'orange':'white')}}">{{ $pedido->codigos }}</td>
+        <td  style="background-color: {{$pedido->estado==0?'red':($pedido->pendiente_anulacion==1?'orange':'white')}}">{{ $pedido->celulares }}-{{ $pedido->icelulares }}</td>
+        <td  style="background-color: {{$pedido->estado==0?'red':($pedido->pendiente_anulacion==1?'orange':'white')}}">{{ $pedido->nombres }}</td>
+        <td  style="background-color: {{$pedido->estado==0?'red':($pedido->pendiente_anulacion==1?'orange':'white')}}">{{ $pedido->empresas }}</td>
+        <td  style="background-color: {{$pedido->estado==0?'red':($pedido->pendiente_anulacion==1?'orange':'white')}}">{{ $pedido->users }}</td>
+        <td  style="background-color: {{$pedido->estado==0?'red':($pedido->pendiente_anulacion==1?'orange':'white')}}">{{ $pedido->fecha }}</td>
+        <td  style="background-color: {{$pedido->estado==0?'red':($pedido->pendiente_anulacion==1?'orange':'white')}}">{{ $pedido->cantidad }}</td>
+        <td  style="background-color: {{$pedido->estado==0?'red':($pedido->pendiente_anulacion==1?'orange':'white')}}">{{ $pedido->tipo_banca }}</td>
+        <td  style="background-color: {{$pedido->estado==0?'red':($pedido->pendiente_anulacion==1?'orange':'white')}}">{{ $pedido->porcentaje }}</td>
+        <td  style="background-color: {{$pedido->estado==0?'red':($pedido->pendiente_anulacion==1?'orange':'white')}}">{{ $pedido->ft }}</td>
+        <td  style="background-color: {{$pedido->estado==0?'red':($pedido->pendiente_anulacion==1?'orange':'white')}}">{{ $pedido->courier }}</td>
+        <td  style="background-color: {{$pedido->estado==0?'red':($pedido->pendiente_anulacion==1?'orange':'white')}}">{{ $pedido->total }}</td>
+        <td  style="background-color: {{$pedido->estado==0?'red':($pedido->pendiente_anulacion==1?'orange':'white')}}">{{ $pedido->diferencia }}</td>
+
+        <td  style="background-color: {{$pedido->estado==0?'red':($pedido->pendiente_anulacion==1?'orange':'white')}}">
+          @if($pedido->estado == 0)
+           ANULADO
+          @elseif($pedido->pendiente_anulacion == 1)
+                PENDIENTE ANULACION
+          @elseif($pedido->condicion_pa == null)
             SIN PAGO REGISTRADO
           @else
             @if($pedido->condicion_pa == 0)
@@ -67,48 +71,60 @@
             @endif
           @endif
         </td>
-        <td>
-          @if($pedido->condiciones_aprobado == null)
-            SIN REVISAR
-          @else 
-          {{ $pedido->condiciones_aprobado }}
-          @endif 
+        <td  style="background-color: {{$pedido->estado==0?'red':($pedido->pendiente_anulacion==1?'orange':'white')}}">
+            @if($pedido->estado == 0)
+                ANULADO
+            @elseif($pedido->pendiente_anulacion == 1)
+                PENDIENTE ANULACION
+            @elseif($pedido->condiciones_aprobado == null)
+                SIN REVISAR
+            @else
+              {{ $pedido->condiciones_aprobado }}
+            @endif
         </td>
-        <td>{{ $pedido->condicion_env }}</td>
-        <td>{{ $pedido->fecha_mod }}</td>
-        <td>{{ $pedido->modificador }}</td>
+        <td  style="background-color: {{$pedido->estado==0?'red':($pedido->pendiente_anulacion==1?'orange':'white')}}">
+            @if($pedido->estado == 0)
+                ANULADO
+            @elseif($pedido->pendiente_anulacion == 1)
+                PENDIENTE ANULACION
+            @else
+                {{ $pedido->condicion_env }}
+            @endif
+        </td>
+        <td  style="background-color: {{$pedido->estado==0?'red':($pedido->pendiente_anulacion==1?'orange':'white')}}">{{ $pedido->fecha_mod }}</td>
+        <td  style="background-color: {{$pedido->estado==0?'red':($pedido->pendiente_anulacion==1?'orange':'white')}}">{{ $pedido->modificador }}</td>
       </tr>
       <?php $cont++; ?>
     @endforeach
     {{-- @foreach ($pedidos2 as $pedido)
         <tr>
-          <td>{{ $cont + 1 }}</td>
+          <td  style="background-color: {{$pedido->estado==0?'red':($pedido->pendiente_anulacion==1?'orange':'white')}}">{{ $cont + 1 }}</td>
           @if ($pedido->id < 10)
-            <td>PED0000{{ $pedido->id }}</td>
+            <td  style="background-color: {{$pedido->estado==0?'red':($pedido->pendiente_anulacion==1?'orange':'white')}}">PED0000{{ $pedido->id }}</td>
           @elseif($pedido->id < 100)
-            <td>PED000{{ $pedido->id }}</td>
+            <td  style="background-color: {{$pedido->estado==0?'red':($pedido->pendiente_anulacion==1?'orange':'white')}}">PED000{{ $pedido->id }}</td>
           @elseif($pedido->id < 1000)
-            <td>PED00{{ $pedido->id }}</td>
+            <td  style="background-color: {{$pedido->estado==0?'red':($pedido->pendiente_anulacion==1?'orange':'white')}}">PED00{{ $pedido->id }}</td>
           @else
-            <td>PED0{{ $pedido->id }}</td>
+            <td  style="background-color: {{$pedido->estado==0?'red':($pedido->pendiente_anulacion==1?'orange':'white')}}">PED0{{ $pedido->id }}</td>
           @endif
-          <td>{{ $pedido->codigos }}</td>
-          <td>{{ $pedido->celulares }}</td>
-          <td>{{ $pedido->nombres }}</td>
-          <td>{{ $pedido->empresas }}</td>
-          <td>{{ $pedido->users }}</td>              
-          <td>{{ $pedido->fecha }}</td>
-          <td>{{ $pedido->cantidad }}</td>
-          <td>{{ $pedido->tipo_banca }}</td>
-          <td>{{ $pedido->porcentaje }}</td>
-          <td>{{ $pedido->courier }}</td>
-          <td>{{ $pedido->total }}</td>
-          <td>{{ $pedido->total }}</td>
-          <td>{{ $pedido->condiciones }}</td>
-          <td>SIN PAGO</td>
-          <td>{{ $pedido->condicion_env }}</td>
-          <td>{{ $pedido->fecha_mod }}</td>
-          <td>{{ $pedido->modificador }}</td>
+          <td  style="background-color: {{$pedido->estado==0?'red':($pedido->pendiente_anulacion==1?'orange':'white')}}">{{ $pedido->codigos }}</td>
+          <td  style="background-color: {{$pedido->estado==0?'red':($pedido->pendiente_anulacion==1?'orange':'white')}}">{{ $pedido->celulares }}</td>
+          <td  style="background-color: {{$pedido->estado==0?'red':($pedido->pendiente_anulacion==1?'orange':'white')}}">{{ $pedido->nombres }}</td>
+          <td  style="background-color: {{$pedido->estado==0?'red':($pedido->pendiente_anulacion==1?'orange':'white')}}">{{ $pedido->empresas }}</td>
+          <td  style="background-color: {{$pedido->estado==0?'red':($pedido->pendiente_anulacion==1?'orange':'white')}}">{{ $pedido->users }}</td>
+          <td  style="background-color: {{$pedido->estado==0?'red':($pedido->pendiente_anulacion==1?'orange':'white')}}">{{ $pedido->fecha }}</td>
+          <td  style="background-color: {{$pedido->estado==0?'red':($pedido->pendiente_anulacion==1?'orange':'white')}}">{{ $pedido->cantidad }}</td>
+          <td  style="background-color: {{$pedido->estado==0?'red':($pedido->pendiente_anulacion==1?'orange':'white')}}">{{ $pedido->tipo_banca }}</td>
+          <td  style="background-color: {{$pedido->estado==0?'red':($pedido->pendiente_anulacion==1?'orange':'white')}}">{{ $pedido->porcentaje }}</td>
+          <td  style="background-color: {{$pedido->estado==0?'red':($pedido->pendiente_anulacion==1?'orange':'white')}}">{{ $pedido->courier }}</td>
+          <td  style="background-color: {{$pedido->estado==0?'red':($pedido->pendiente_anulacion==1?'orange':'white')}}">{{ $pedido->total }}</td>
+          <td  style="background-color: {{$pedido->estado==0?'red':($pedido->pendiente_anulacion==1?'orange':'white')}}">{{ $pedido->total }}</td>
+          <td  style="background-color: {{$pedido->estado==0?'red':($pedido->pendiente_anulacion==1?'orange':'white')}}">{{ $pedido->condiciones }}</td>
+          <td  style="background-color: {{$pedido->estado==0?'red':($pedido->pendiente_anulacion==1?'orange':'white')}}">SIN PAGO</td>
+          <td  style="background-color: {{$pedido->estado==0?'red':($pedido->pendiente_anulacion==1?'orange':'white')}}">{{ $pedido->condicion_env }}</td>
+          <td  style="background-color: {{$pedido->estado==0?'red':($pedido->pendiente_anulacion==1?'orange':'white')}}">{{ $pedido->fecha_mod }}</td>
+          <td  style="background-color: {{$pedido->estado==0?'red':($pedido->pendiente_anulacion==1?'orange':'white')}}">{{ $pedido->modificador }}</td>
         </tr>
     @endforeach --}}
   </tbody>
