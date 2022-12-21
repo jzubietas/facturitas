@@ -1246,6 +1246,7 @@ class OperacionController extends Controller
 
         $pedido->update([
             'envio' => '0',
+            'condicion_envio'=>Pedido::ATENDIDO_OP,
             'condicion_envio_code'=>Pedido::ATENDIDO_OP_INT,
             'modificador' => 'USER'.Auth::user()->id
         ]);
@@ -1267,6 +1268,5 @@ class OperacionController extends Controller
 
         //return redirect()->route('operaciones.atendidos')->with('info','actualizado');
     }
-
 
 }

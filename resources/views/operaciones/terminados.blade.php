@@ -68,6 +68,8 @@
         <tbody>
         </tbody>
       </table>
+
+      @include('pedidos.modal.revertirid');
     </div>
   </div>
 
@@ -172,13 +174,13 @@
         var button = $(event.relatedTarget)
         var idunico = button.data('revertir')
         $(".textcode").html("PED"+idunico);
-        $("#hiddenRevertirpedido").val(idunico);
+        $("#hiddenRecibir").val(idunico);
       });
 
       $(document).on("submit", "#formulariorevertir", function (evento) {
         evento.preventDefault();
         var fd = new FormData();
-        fd.append( 'hiddenRevertirpedido', $("#hiddenRevertirpedido").val() );
+        fd.append( 'hiddenRevertirpedido', $("#hiddenRecibir").val() );
 
         $.ajax({
            data: fd,
@@ -338,9 +340,9 @@
                 }
               @endcan
 
-              
+
                 data = data+'<a href="" data-target="#modal-revertir" data-revertir='+row.id+' data-toggle="modal" ><button class="btn btn-success btn-sm">Revertir</button></a>';
-              
+
 
               return data;
             }
