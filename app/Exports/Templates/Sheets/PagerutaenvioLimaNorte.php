@@ -7,7 +7,6 @@ use App\Abstracts\Export;
 use App\Models\DireccionGrupo;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
-use Maatwebsite\Excel\Concerns\Exportable;
 use Maatwebsite\Excel\Concerns\WithColumnFormatting;
 use Maatwebsite\Excel\Concerns\WithEvents;
 use Maatwebsite\Excel\Events\BeforeSheet;
@@ -20,8 +19,7 @@ use Maatwebsite\Excel\Concerns\WithColumnWidths;
 Sheet::macro('styleCells', function (Sheet $sheet, string $cellRange, array $style) {
     $sheet->getDelegate()->getStyle($cellRange)->applyFromArray($style);
 });
-
-class PagerutaenvioLimaNorte  extends Export  implements WithEvents,WithColumnWidths
+class PagerutaenvioLimaNorte  extends Export implements WithEvents,WithColumnWidths
 {
     public static $fecharuta='';
     public function __construct($ids)
@@ -31,6 +29,7 @@ class PagerutaenvioLimaNorte  extends Export  implements WithEvents,WithColumnWi
     }
     public function collection()
     {
+
         $pedidos_lima = DireccionGrupo::join('direccion_envios as de','direccion_grupos.id','de.direcciongrupo')
             ->join('clientes as c', 'c.id', 'de.cliente_id')
             ->join('users as u', 'u.id', 'c.user_id')
@@ -89,7 +88,7 @@ class PagerutaenvioLimaNorte  extends Export  implements WithEvents,WithColumnWi
 
     public function title(): string
     {
-        return 'Lima NORTE';
+        return 'Lima NORTE '.self::$fecharuta;
     }
     public function map($model): array
     {
@@ -131,13 +130,13 @@ class PagerutaenvioLimaNorte  extends Export  implements WithEvents,WithColumnWi
             AfterSheet::class => [self::class, 'afterSheet']
         ];
     }
-
     public static function beforeSheet(BeforeSheet $event){
         $event->sheet->appendRows(array(
-            array('', '','','','FECHA '.self::$fecharuta),
-            array('', '','','',''),
+            array('test1', 'test2'),
+            array('test3', self::$fecharuta),
             //....
         ), $event);
+
     }
 
     public static function afterSheet(AfterSheet $event){
