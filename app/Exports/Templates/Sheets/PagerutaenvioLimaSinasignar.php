@@ -133,8 +133,8 @@ class PagerutaenvioLimaSinasignar extends Export implements WithEvents,WithColum
             AfterSheet::class => [self::class, 'afterSheet']
         ];
     }
-    private function getfecha(): string{
-        return $this->fecharuta;
+    private static function getfecha(): string{
+        return self::$fecharuta;
     }
     public static function beforeSheet(BeforeSheet $event){
         /*$event->sheet->getSheetView()->getView()-sheetcappendRows(array(
