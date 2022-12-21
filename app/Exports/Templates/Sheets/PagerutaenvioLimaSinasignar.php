@@ -26,7 +26,7 @@ Sheet::macro('styleCells', function (Sheet $sheet, string $cellRange, array $sty
 
 class PagerutaenvioLimaSinasignar extends Export implements WithEvents,WithColumnWidths
 {
-    public $fecharuta;
+    private $fecharuta='';
     public function __construct($fecharuta)
     {
         parent::__construct();
@@ -152,9 +152,9 @@ class PagerutaenvioLimaSinasignar extends Export implements WithEvents,WithColum
             AfterSheet::class => [self::class, 'afterSheet']
         ];
     }
-    public static  function getFecharuta()
+    public function getFecharuta()
     {
-        return self::$fecharuta;
+        return $this->fecharuta;
     }
     public static function beforeSheet(BeforeSheet $event){
         $event->sheet->appendRows(array(
