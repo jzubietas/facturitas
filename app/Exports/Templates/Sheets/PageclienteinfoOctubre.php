@@ -44,7 +44,7 @@ class PageclienteinfoOctubre extends Export implements WithColumnFormatting,With
     }
     public function title(): string
     {
-        return 'Detalle Noviembre';
+        return 'Detalle Octubre';
     }
     public function map($model): array
     {
