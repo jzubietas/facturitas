@@ -43,7 +43,7 @@
         <div class="col-lg-5 col-5">
             <div class="small-box bg-success">
                 <div class="inner">
-                    <h3>S/{{ Auth::user()->meta_cobro }}</h3>
+                    <h3>S/{{ (int)Auth::user()->meta_cobro }}</h3>
                     <p>META DE COBRANZAS</p>
                 </div>
                 <div class="icon">
@@ -73,7 +73,7 @@
         <div class="col-lg-5 col-5">
             <div class="small-box bg-warning">
                 <div class="inner">
-                    <h3>S/@php echo number_format( ($meta_pagoasesor->pagos)/1000 ,2) @endphp </h3>
+                    <h3>S/{{number_format( ($meta_pagoasesor->pagos)/1000 ,2)}} </h3>
                     <p>MIS COBRANZAS DEL MES</p>
                 </div>
                 <div class="icon">

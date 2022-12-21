@@ -9,9 +9,9 @@
                     <b> {{data_get($general,'name')}}</b>
                     <div class="progress">
                         <div class="progress-bar
-                @if(data_get($general,'progress')<33)
+                @if(data_get($general,'progress')<40)
                  bg-danger
-                 @elseif( data_get($general,'progress')<67)
+                 @elseif( data_get($general,'progress')<70)
                  bg-warning
                   @else
                   bg-success
@@ -36,9 +36,9 @@
                                 <b>{{$data['code']}}</b> - {{$data['name']}}
                                 <div class="progress">
                                     <div class="progress-bar
-                @if($data['progress']<33)
+                @if($data['progress']<40)
                  bg-danger
-                 @elseif($data['progress']<67)
+                 @elseif($data['progress']<70)
                  bg-warning
                   @else
                   bg-success
