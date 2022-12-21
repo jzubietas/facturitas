@@ -138,8 +138,7 @@ class PagerutaenvioLimaSinasignar extends Export implements WithEvents,WithColum
     }
     public static function beforeSheet(BeforeSheet $event){
         $event->sheet->appendRows(array(
-            array('', ''),
-            array('test3', self::$fecharuta),
+            array('', self::$fecharuta),
             array('', ''),
         ), $event);
     }
