@@ -9,6 +9,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Concerns\WithColumnFormatting;
 use Maatwebsite\Excel\Concerns\WithEvents;
+use Maatwebsite\Excel\Events\BeforeSheet;
 use Maatwebsite\Excel\Events\AfterSheet;
 use Maatwebsite\Excel\Sheet;
 use PhpOffice\PhpSpreadsheet\Style\Fill;
@@ -125,6 +126,7 @@ class PagerutaenvioProvincia  extends Export  implements WithEvents,WithColumnWi
     public function registerEvents(): array
     {
         return [
+            BeforeSheet::class => [self::class, 'beforeSheet'],
             AfterSheet::class => [self::class, 'afterSheet']
         ];
     }
@@ -139,11 +141,11 @@ class PagerutaenvioProvincia  extends Export  implements WithEvents,WithColumnWi
         //Range Columns
 
 
-        $event->sheet->styleCells('A1',['fill' => ['fillType' => Fill::FILL_SOLID,'color' => ['rgb' => 'ff0000']]]);
-        $event->sheet->styleCells('B1:C1',['fill' => ['fillType' => Fill::FILL_SOLID,'color' => ['rgb' => 'ffeb00']]]);
-        $event->sheet->styleCells('D1:H1',['fill' => ['fillType' => Fill::FILL_SOLID,'color' => ['rgb' => 'cde5f5']]]);
-        $event->sheet->styleCells('I1',['fill' => ['fillType' => Fill::FILL_SOLID,'color' => ['rgb' => 'ffeb00']]]);
-        $event->sheet->styleCells('J1',['fill' => ['fillType' => Fill::FILL_SOLID,'color' => ['rgb' => 'cde5f5']]]);
+        $event->sheet->styleCells('A3',['fill' => ['fillType' => Fill::FILL_SOLID,'color' => ['rgb' => 'ff0000']]]);
+        $event->sheet->styleCells('B3:C3',['fill' => ['fillType' => Fill::FILL_SOLID,'color' => ['rgb' => 'ffeb00']]]);
+        $event->sheet->styleCells('D3:H3',['fill' => ['fillType' => Fill::FILL_SOLID,'color' => ['rgb' => 'cde5f5']]]);
+        $event->sheet->styleCells('I3',['fill' => ['fillType' => Fill::FILL_SOLID,'color' => ['rgb' => 'ffeb00']]]);
+        $event->sheet->styleCells('J3',['fill' => ['fillType' => Fill::FILL_SOLID,'color' => ['rgb' => 'cde5f5']]]);
 
 
     }
