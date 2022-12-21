@@ -49,7 +49,7 @@ class PagerutaenvioProvincia  extends Export  implements WithEvents,WithColumnWi
             ->where('direccion_grupos.destino','PROVINCIA')
             ->where(DB::raw('DATE(direccion_grupos.created_at)'), self::$fecharuta)
             ->select(
-                'direccion_grupos.correlativo',
+                'c.celular as correlativo',
                 'u.identificador as identificador',
                 'direccion_grupos.destino',
                 DB::raw(" (select '') as celular "),
