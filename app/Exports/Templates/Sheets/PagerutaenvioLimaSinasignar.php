@@ -16,6 +16,7 @@ use Maatwebsite\Excel\Concerns\WithEvents;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Events\BeforeSheet;
 use Maatwebsite\Excel\Events\AfterSheet;
+use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Style\Fill;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 use Maatwebsite\Excel\Concerns\WithColumnWidths;
@@ -154,8 +155,8 @@ class PagerutaenvioLimaSinasignar extends Export implements WithEvents,WithColum
         //$workSheet->freezePane('A3');
 
         $event->sheet->appendRows(array(
-            array('', self::$fecharuta),
-            array('', ''),
+            array('', 'FECHA: ',self::$fecharuta),
+            array('', '',''),
             //....
         ), $event);
 
@@ -171,6 +172,20 @@ class PagerutaenvioLimaSinasignar extends Export implements WithEvents,WithColum
                    echo 'RAW VALUE: ', $cell->getValue(), PHP_EOL;*/
 
         //Range Columns
+
+        $event->sheet->styleCells(
+            'B1:C1',
+            [
+                'alignment' => [
+                    'horizontal' => Alignment::HORIZONTAL_CENTER,
+                ],
+                'fill' => [
+                    'fillType' => Fill::FILL_SOLID,
+                    'color' => ['rgb' => 'cde5f5']
+                ]
+            ]
+        );
+    
 
 
         $event->sheet->styleCells('A3',['fill' => ['fillType' => Fill::FILL_SOLID,'color' => ['rgb' => 'ff0000']]]);
