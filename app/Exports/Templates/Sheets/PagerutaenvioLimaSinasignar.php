@@ -5,6 +5,7 @@ namespace App\Exports\Templates\Sheets;
 
 use App\Abstracts\Export;
 use App\Models\DireccionGrupo;
+use App\Models\User;
 use Carbon\Carbon;
 use \Maatwebsite\Excel\Sheet;
 use Illuminate\Support\Facades\DB;
