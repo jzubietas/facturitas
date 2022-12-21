@@ -181,11 +181,11 @@ class PagerutaenvioLimaSinasignar extends Export implements WithEvents,WithColum
                 ],
                 'fill' => [
                     'fillType' => Fill::FILL_SOLID,
-                    'color' => ['rgb' => 'cde5f5']
+                    'color' => ['rgb' => 'ffeb00']
                 ]
             ]
         );
-    
+
 
 
         $event->sheet->styleCells('A3',['fill' => ['fillType' => Fill::FILL_SOLID,'color' => ['rgb' => 'ff0000']]]);

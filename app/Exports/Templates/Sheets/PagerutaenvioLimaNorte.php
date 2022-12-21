@@ -8,10 +8,12 @@ use App\Models\DireccionGrupo;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Concerns\WithColumnFormatting;
+use Maatwebsite\Excel\Concerns\WithCustomStartCell;
 use Maatwebsite\Excel\Concerns\WithEvents;
 use Maatwebsite\Excel\Events\BeforeSheet;
 use Maatwebsite\Excel\Events\AfterSheet;
 use Maatwebsite\Excel\Sheet;
+use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Style\Fill;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 use Maatwebsite\Excel\Concerns\WithColumnWidths;
@@ -19,13 +21,17 @@ use Maatwebsite\Excel\Concerns\WithColumnWidths;
 Sheet::macro('styleCells', function (Sheet $sheet, string $cellRange, array $style) {
     $sheet->getDelegate()->getStyle($cellRange)->applyFromArray($style);
 });
-class PagerutaenvioLimaNorte  extends Export implements WithEvents,WithColumnWidths
+class PagerutaenvioLimaNorte  extends Export implements WithEvents,WithColumnWidths,WithCustomStartCell
 {
     public static $fecharuta='';
     public function __construct($ids)
     {
         parent::__construct();
         self::$fecharuta=$ids;
+    }
+    public function startCell(): string
+    {
+        return 'A4';
     }
     public function collection()
     {
@@ -132,9 +138,9 @@ class PagerutaenvioLimaNorte  extends Export implements WithEvents,WithColumnWid
     }
     public static function beforeSheet(BeforeSheet $event){
         $event->sheet->appendRows(array(
-            array('', ''),
-            array('test3', self::$fecharuta),
-            array('', ''),
+            array('', 'FECHA: ',self::$fecharuta),
+            array('', '',''),
+            //....
         ), $event);
     }
 
@@ -146,6 +152,19 @@ class PagerutaenvioLimaNorte  extends Export implements WithEvents,WithColumnWid
                    echo 'RAW VALUE: ', $cell->getValue(), PHP_EOL;*/
 
         //Range Columns
+
+        $event->sheet->styleCells(
+            'B1:C1',
+            [
+                'alignment' => [
+                    'horizontal' => Alignment::HORIZONTAL_CENTER,
+                ],
+                'fill' => [
+                    'fillType' => Fill::FILL_SOLID,
+                    'color' => ['rgb' => 'ffeb00']
+                ]
+            ]
+        );
 
 
         $event->sheet->styleCells('A3',['fill' => ['fillType' => Fill::FILL_SOLID,'color' => ['rgb' => 'ff0000']]]);
