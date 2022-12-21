@@ -19,19 +19,25 @@ use Maatwebsite\Excel\Events\AfterSheet;
 use PhpOffice\PhpSpreadsheet\Style\Fill;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 use Maatwebsite\Excel\Concerns\WithColumnWidths;
+use Maatwebsite\Excel\Concerns\WithCustomStartCell;
 use function PHPUnit\Framework\returnSelf;
 
 Sheet::macro('styleCells', function (Sheet $sheet, string $cellRange, array $style) {
     $sheet->getDelegate()->getStyle($cellRange)->applyFromArray($style);
 });
 
-class PagerutaenvioLimaSinasignar extends Export implements WithEvents,WithColumnWidths
+class PagerutaenvioLimaSinasignar extends Export implements WithEvents,WithColumnWidths,WithCustomStartCell
 {
     public static $fecharuta='';
     public function __construct($ids)
     {
         parent::__construct();
         self::$fecharuta=$ids;
+    }
+
+    public function startCell(): string
+    {
+        return 'A2';
     }
 
     public function collection()
@@ -142,11 +148,7 @@ class PagerutaenvioLimaSinasignar extends Export implements WithEvents,WithColum
             'prepended', 'prepended'
         ));*/
 
-        $event->sheet->appendRows(array(
-            array('', self::$fecharuta),
-            array('', ''),
-            //....
-        ), $event);
+
 
         //$workSheet = $event->sheet->getDelegate();
         //$workSheet->freezePane('A3');
@@ -156,6 +158,11 @@ class PagerutaenvioLimaSinasignar extends Export implements WithEvents,WithColum
     public static function afterSheet(AfterSheet $event){
 
 
+        /*->sheet->appendRows(array(
+            array('', self::$fecharuta),
+            array('', ''),
+            //....
+        ), $event);*/
         /*echo 'ROW: ', $cell->getRow(), PHP_EOL;
                    echo 'COLUMN: ', $cell->getColumn(), PHP_EOL;
                    echo 'COORDINATE: ', $cell->getCoordinate(), PHP_EOL;
