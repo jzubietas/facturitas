@@ -153,16 +153,18 @@ class PagerutaenvioLimaSinasignar extends Export implements WithEvents,WithColum
         //$workSheet = $event->sheet->getDelegate();
         //$workSheet->freezePane('A3');
 
-    }
-
-    public static function afterSheet(AfterSheet $event){
-
-
         $event->sheet->appendRows(array(
             array('', self::$fecharuta),
             array('', ''),
             //....
         ), $event);
+
+    }
+
+    public static function afterSheet(AfterSheet $event){
+
+
+
         /*echo 'ROW: ', $cell->getRow(), PHP_EOL;
                    echo 'COLUMN: ', $cell->getColumn(), PHP_EOL;
                    echo 'COORDINATE: ', $cell->getCoordinate(), PHP_EOL;
