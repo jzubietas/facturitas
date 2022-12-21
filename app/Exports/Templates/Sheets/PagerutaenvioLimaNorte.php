@@ -23,11 +23,11 @@ Sheet::macro('styleCells', function (Sheet $sheet, string $cellRange, array $sty
 
 class PagerutaenvioLimaNorte  extends Export  implements WithEvents,WithColumnWidths
 {
-    use Exportable;
-    public $fecha;
-    public function __construct($fecha)
+    public static $fecharuta='';
+    public function __construct($ids)
     {
-        $this->fecha=$fecha;
+        parent::__construct();
+        self::$fecharuta=$ids;
     }
     public function collection()
     {
