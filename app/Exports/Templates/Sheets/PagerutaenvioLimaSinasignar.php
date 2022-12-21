@@ -130,7 +130,10 @@ class PagerutaenvioLimaSinasignar extends Export implements WithEvents,WithColum
     {
         return [
             BeforeSheet::class => [self::class, 'beforeSheet'],
-            AfterSheet::class => [self::class, 'afterSheet']
+            AfterSheet::class => function(AfterSheet $event) {
+                $workSheet = $event->sheet->getDelegate();
+                $workSheet->freezePane('A2');
+            },
         ];
     }
     private static function getfecha(): string{
@@ -162,12 +165,12 @@ class PagerutaenvioLimaSinasignar extends Export implements WithEvents,WithColum
         $event->sheet->styleCells('I3',['fill' => ['fillType' => Fill::FILL_SOLID,'color' => ['rgb' => 'ffeb00']]]);
         $event->sheet->styleCells('J3',['fill' => ['fillType' => Fill::FILL_SOLID,'color' => ['rgb' => 'cde5f5']]]);
 
-        return [
+        /*sreturn [
             AfterSheet::class => function(AfterSheet $event) {
                 $workSheet = $event->sheet->getDelegate();
                 $workSheet->freezePane('5');
             },
-        ];
+        ];*/
 
     }
 }
