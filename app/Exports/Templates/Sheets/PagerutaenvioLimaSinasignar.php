@@ -32,18 +32,24 @@ class PagerutaenvioLimaSinasignar extends Export implements WithEvents,WithColum
     }
     public function collection()
     {
-        $uni=collect([
-                [
-                    'correlativo' => 1, 'identificador' => 1,'destino'=>'','celular'=>'','nombre'=>'','cantidad'=>'','codigos'=>'','producto'=>'','direccion'=>'','referencia'=>'',
-                    'observacion'=>'','distrito'=>'','nombre_cli'=>'','fecha'=>'fecha','distribucion'=>'','condicion_sobre'=>''
-                ],
-                [
-                    'correlativo' => 2, 'identificador' => 1,'destino'=>'','celular'=>'','nombre'=>'','cantidad'=>'','codigos'=>'','producto'=>'','direccion'=>'','referencia'=>'',
-                    'observacion'=>'','distrito'=>'','nombre_cli'=>'','fecha'=>'fecha','distribucion'=>'','condicion_sobre'=>''
-                ],
-            ]
+        $uni=User::where("id",1)->select(
+            DB::raw(" (select '') as correlativo "),
+            DB::raw(" (select '') as identificador "),
+            DB::raw(" (select '') as destino "),
+            DB::raw(" (select '') as celular "),
+            DB::raw(" (select '') as nombre "),
+            DB::raw(" (select '') as cantidad "),
+            DB::raw(" (select '') as codigos "),
+            DB::raw(" (select '') as producto "),
+            DB::raw(" (select '') as direccion "),
+            DB::raw(" (select '') as referencia "),
+            DB::raw(" (select '') as observacion "),
+            DB::raw(" (select '') as distrito "),
+            DB::raw(" (select '') as nombre_cli "),
+            DB::raw(" (select '') as fecha "),
+            DB::raw(" (select '') as distribucion "),
+            DB::raw(" (select '') as condicion_sobre "),
         );
-        $uni->toArray();
 
         $pedidos_lima = DireccionGrupo::join('direccion_envios as de','direccion_grupos.id','de.direcciongrupo')
             ->join('clientes as c', 'c.id', 'de.cliente_id')
