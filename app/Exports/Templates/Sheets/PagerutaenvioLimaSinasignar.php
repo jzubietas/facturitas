@@ -167,7 +167,7 @@ class PagerutaenvioLimaSinasignar extends Export implements WithEvents,WithColum
                 $workSheet = $event->sheet->getDelegate();
                 $workSheet->freezePane('A2');
             },
-        ];s
+        ];
 
     }
 }
