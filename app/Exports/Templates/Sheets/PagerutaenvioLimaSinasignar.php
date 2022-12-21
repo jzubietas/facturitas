@@ -110,7 +110,7 @@ class PagerutaenvioLimaSinasignar extends Export implements WithEvents,WithColum
 
     public function title(): string
     {
-        return 'Lima Sin Asignar ' . self::getFecharuta();
+        return 'Lima Sin Asignar ' . self::Statechart();
     }
     public function map($model): array
     {
@@ -145,6 +145,10 @@ class PagerutaenvioLimaSinasignar extends Export implements WithEvents,WithColum
         ];
     }
 
+    public function getFecha(){
+        return $this->getFecha();
+    }
+
     public function registerEvents(): array
     {
         return [
@@ -152,13 +156,10 @@ class PagerutaenvioLimaSinasignar extends Export implements WithEvents,WithColum
             AfterSheet::class => [self::class, 'afterSheet']
         ];
     }
-    public function getFecharuta()
-    {
-        return $this->fecharuta;
-    }
+
     public static function beforeSheet(BeforeSheet $event){
-        $event->sheet->appendRows(array(
-            array('', '','','','FECHA '. self::getFecharuta()),
+        $event->sheetcappendRows(array(
+            array('', '','','','FECHA '. (new PagerutaenvioLimaSinasignar)->getFecha()),
             array('', '','','',''),
             //....
         ));
