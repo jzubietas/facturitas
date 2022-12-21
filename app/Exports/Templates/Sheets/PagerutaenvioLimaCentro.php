@@ -130,17 +130,13 @@ class PagerutaenvioLimaCentro  extends Export implements WithEvents,WithColumnWi
             AfterSheet::class => [self::class, 'afterSheet']
         ];
     }
-    public function getFecharuta()
-    {
-        return $this->fecharuta;
-    }
-
     public static function beforeSheet(BeforeSheet $event){
         $event->sheet->appendRows(array(
-            array('', '','','','FECHA '.self::getFecharuta()),
-            array('', '','','',''),
+            array('test1', 'test2'),
+            array('test3', self::$fecharuta),
             //....
-        ));
+        ), $event);
+
     }
 
     public static function afterSheet(AfterSheet $event){
