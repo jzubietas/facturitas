@@ -21,11 +21,11 @@ Sheet::macro('styleCells', function (Sheet $sheet, string $cellRange, array $sty
 });
 class PagerutaenvioProvincia  extends Export  implements WithEvents,WithColumnWidths
 {
-    public $fecharuta;
-    public function __construct($fecharuta)
+    public static $fecharuta='';
+    public function __construct($ids)
     {
         parent::__construct();
-        $this->fecharuta=$fecharuta;
+        self::$fecharuta=$ids;
     }
     public function collection()
     {
@@ -40,7 +40,7 @@ class PagerutaenvioProvincia  extends Export  implements WithEvents,WithColumnWi
                 $query->where('direccion_grupos.distribucion','=','')->orWhereNull('direccion_grupos.distribucion');
             })*/
             ->where('direccion_grupos.destino','PROVINCIA')
-            ->where(DB::raw('DATE(direccion_grupos.created_at)'), $this->fecharuta)
+            ->where(DB::raw('DATE(direccion_grupos.created_at)'), self::$fecharuta)
             ->select(
                 'direccion_grupos.correlativo',
                 'u.identificador as identificador',
@@ -129,6 +129,20 @@ class PagerutaenvioProvincia  extends Export  implements WithEvents,WithColumnWi
             BeforeSheet::class => [self::class, 'beforeSheet'],
             AfterSheet::class => [self::class, 'afterSheet']
         ];
+    }
+
+    public function getFecharuta()
+    {
+        return $this->fecharuta;
+    }
+
+    public static function beforeSheet(BeforeSheet $event){
+        $event->sheet->appendRows(array(
+            array('test1', 'test2'),
+            array('test3', self::$fecharuta),
+            //....
+        ), $event);
+
     }
 
     public static function afterSheet(AfterSheet $event){

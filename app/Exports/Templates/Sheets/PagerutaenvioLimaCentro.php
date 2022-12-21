@@ -21,11 +21,11 @@ Sheet::macro('styleCells', function (Sheet $sheet, string $cellRange, array $sty
 });
 class PagerutaenvioLimaCentro  extends Export implements WithEvents,WithColumnWidths
 {
-    public $fecharuta;
-    public function __construct($fecharuta)
+    public static $fecharuta='';
+    public function __construct($ids)
     {
         parent::__construct();
-        $this->fecharuta=$fecharuta;
+        self::$fecharuta=$ids;
     }
     public function collection()
     {
@@ -39,7 +39,7 @@ class PagerutaenvioLimaCentro  extends Export implements WithEvents,WithColumnWi
                 $query->where('direccion_grupos.distribucion','=','')->orWhereNull('direccion_grupos.distribucion');
             })*/
             ->where('direccion_grupos.destino','LIMA')
-            ->where(DB::raw('DATE(direccion_grupos.created_at)'), $this->fecharuta)
+            ->where(DB::raw('DATE(direccion_grupos.created_at)'), self::$fecharuta)
             ->select(
                 'direccion_grupos.correlativo',
                 'u.identificador as identificador',
