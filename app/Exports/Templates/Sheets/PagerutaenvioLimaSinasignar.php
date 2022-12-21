@@ -45,7 +45,7 @@ class PagerutaenvioLimaSinasignar extends Export implements WithEvents,WithColum
                 $query->where('direccion_grupos.distribucion','=','')->orWhereNull('direccion_grupos.distribucion');
             })
             ->where('direccion_grupos.destino','LIMA')
-            ->where(DB::raw('DATE(direccion_grupos.created_at)'), $this->fecharuta)
+            ->where(DB::raw('DATE(direccion_grupos.created_at)'), self::$fecharuta)
             ->select(
                 'direccion_grupos.correlativo',
                 'u.identificador as identificador',
