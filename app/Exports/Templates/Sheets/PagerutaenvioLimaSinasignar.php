@@ -138,19 +138,18 @@ class PagerutaenvioLimaSinasignar extends Export implements WithEvents,WithColum
     }
     public static function beforeSheet(BeforeSheet $event){
 
-       /* $sheet->prependRow(1, array(
+        /*$sheet->prependRow(1, array(
             'prepended', 'prepended'
         ));*/
 
-        $event->sheet->prependRow(array(
+        $event->sheet->appendRows(array(
             array('', self::$fecharuta),
-            array('', ''),
             array('', ''),
             //....
         ), $event);
 
-        $workSheet = $event->sheet->getDelegate();
-        $workSheet->freezePane('A3');
+        //$workSheet = $event->sheet->getDelegate();
+        //$workSheet->freezePane('A3');
 
     }
 
