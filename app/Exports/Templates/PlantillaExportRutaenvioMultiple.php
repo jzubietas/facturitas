@@ -18,6 +18,10 @@ class PlantillaExportRutaenvioMultiple implements WithMultipleSheets
     {
         $this->fecha=$fecha;
     }
+
+    public function retornafiltro(): string{
+        return $this->fecha;
+    }
     public function sheets(): array
     {
         return [

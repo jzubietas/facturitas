@@ -25,6 +25,7 @@ abstract class Export implements FromCollection, HasLocalePreference, ShouldAuto
 
     public $user;
 
+
     public function __construct($ids = null)
     {
         $this->ids = $ids;

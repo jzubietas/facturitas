@@ -28,10 +28,10 @@ Sheet::macro('styleCells', function (Sheet $sheet, string $cellRange, array $sty
 class PagerutaenvioLimaSinasignar extends Export implements WithEvents,WithColumnWidths
 {
     public $fecharuta='';
-    public function __construct($fecharuta)
+    public function __construct($ids)
     {
         parent::__construct();
-        $this->fecharuta=$fecharuta;
+        $this->fecharuta=$ids;
     }
 
     public function collection()
@@ -143,7 +143,7 @@ class PagerutaenvioLimaSinasignar extends Export implements WithEvents,WithColum
             //....
         ));*/
         $event->sheet->appendRow(array(
-            '', '','FECHA '.self::getfecha()
+            '', '','FECHA '.getfecha()
         ));
     }
 
