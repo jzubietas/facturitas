@@ -32,23 +32,16 @@ class PagerutaenvioLimaSinasignar extends Export implements WithEvents,WithColum
     }
     public function collection()
     {
-        $uni=array(
-            '',
-            '',
-            '',
-            '',
-            DB::raw(" (select 'CORRELA') as celular "),
-            '',
-            '',
-            '',
-            '',
-            '',
-            '',
-            '',
-            '',
-            '',
-            '',
-            '',
+        $uni=collect([
+                [
+                    'correlativo' => 1, 'identificador' => 1,'destino'=>'','celular'=>'','nombre'=>'','cantidad'=>'','codigos'=>'','producto'=>'','direccion'=>'','referencia'=>'',
+                    'observacion'=>'','distrito'=>'','nombre_cli'=>'','fecha'=>'fecha','distribucion'=>'','condicion_sobre'=>''
+                ],
+                [
+                    'correlativo' => 1, 'identificador' => 1,'destino'=>'','celular'=>'','nombre'=>'','cantidad'=>'','codigos'=>'','producto'=>'','direccion'=>'','referencia'=>'',
+                    'observacion'=>'','distrito'=>'','nombre_cli'=>'','fecha'=>'fecha','distribucion'=>'','condicion_sobre'=>''
+                ],
+            ]
         );
 
         $pedidos_lima = DireccionGrupo::join('direccion_envios as de','direccion_grupos.id','de.direcciongrupo')
