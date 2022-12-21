@@ -227,9 +227,9 @@ class Pedido extends Model
      */
     public function scopeSegunRolUsuario($query, $roles = [])
     {
-        if (in_array(User::ROL_ASESOR, $roles)) {
-            if (auth()->user()->rol == User::ROL_ASESOR) {
-                return $query->where($this->qualifyColumn('user_id'), '=', auth()->id());
+        if (in_array(User::ROL_ADMIN, $roles)) {
+            if (auth()->user()->rol == User::ROL_ADMIN) {
+                return $query;
             }
         }
         if (in_array(User::ROL_ENCARGADO, $roles)) {
@@ -237,9 +237,9 @@ class Pedido extends Model
                 return $query->whereIn($this->qualifyColumn('user_id'), User::query()->select('id')->activo()->where('users.supervisor', auth()->id()));
             }
         }
-        if (in_array(User::ROL_ADMIN, $roles)) {
-            if (auth()->user()->rol == User::ROL_ENCARGADO) {
-                return $query;
+        if (in_array(User::ROL_ASESOR, $roles)) {
+            if (auth()->user()->rol == User::ROL_ASESOR) {
+                return $query->where($this->qualifyColumn('user_id'), '=', auth()->id());
             }
         }
         return $query;
