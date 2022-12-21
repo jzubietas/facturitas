@@ -38,11 +38,12 @@ class PagerutaenvioLimaSinasignar extends Export implements WithEvents,WithColum
                     'observacion'=>'','distrito'=>'','nombre_cli'=>'','fecha'=>'fecha','distribucion'=>'','condicion_sobre'=>''
                 ],
                 [
-                    'correlativo' => 1, 'identificador' => 1,'destino'=>'','celular'=>'','nombre'=>'','cantidad'=>'','codigos'=>'','producto'=>'','direccion'=>'','referencia'=>'',
+                    'correlativo' => 2, 'identificador' => 1,'destino'=>'','celular'=>'','nombre'=>'','cantidad'=>'','codigos'=>'','producto'=>'','direccion'=>'','referencia'=>'',
                     'observacion'=>'','distrito'=>'','nombre_cli'=>'','fecha'=>'fecha','distribucion'=>'','condicion_sobre'=>''
                 ],
             ]
         );
+        $uni->toArray();
 
         $pedidos_lima = DireccionGrupo::join('direccion_envios as de','direccion_grupos.id','de.direcciongrupo')
             ->join('clientes as c', 'c.id', 'de.cliente_id')
