@@ -161,7 +161,7 @@ class PagerutaenvioLimaSinasignar extends Export implements WithEvents,WithColum
             array('', '','','','FECHA '. (new PagerutaenvioLimaSinasignar)->getFecharuta()),
             array('', '','','',''),
             //....
-        ), $event);
+        ));
     }
 
     public static function afterSheet(AfterSheet $event){

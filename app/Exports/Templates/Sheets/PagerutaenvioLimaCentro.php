@@ -88,7 +88,7 @@ class PagerutaenvioLimaCentro  extends Export implements WithEvents,WithColumnWi
 
     public function title(): string
     {
-        return 'Lima CENTRO';
+        return 'Lima CENTRO '.self::getFecharuta();
     }
     public function map($model): array
     {
@@ -130,13 +130,17 @@ class PagerutaenvioLimaCentro  extends Export implements WithEvents,WithColumnWi
             AfterSheet::class => [self::class, 'afterSheet']
         ];
     }
+    public function getFecharuta()
+    {
+        return $this->fecharuta;
+    }
 
     public static function beforeSheet(BeforeSheet $event){
         $event->sheet->appendRows(array(
-            array('', '','','','FECHA '.$this->fecharuta),
+            array('', '','','','FECHA '.self::getFecharuta()),
             array('', '','','',''),
             //....
-        ), $event);
+        ));
     }
 
     public static function afterSheet(AfterSheet $event){
