@@ -5,6 +5,7 @@ namespace App\View\Components\dashboard\graficos;
 use App\Abstracts\Widgets;
 use App\Models\Pedido;
 use App\Models\User;
+use Illuminate\Support\HtmlString;
 
 class MetaProgressBar extends Widgets
 {
@@ -102,6 +103,7 @@ class MetaProgressBar extends Widgets
                     $newData[$identificador]['pagados']+= data_get($item,'pagados');
                 }
             }
+            $newData[$identificador]['name']=new HtmlString(collect($items)->pluck('name')->join(',<br> '));
         }
         $this->progressData = collect($newData)->values()->map(function ($item){
             $all = data_get($item,'activos');
