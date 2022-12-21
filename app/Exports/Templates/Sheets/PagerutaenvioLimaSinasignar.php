@@ -130,10 +130,11 @@ class PagerutaenvioLimaSinasignar extends Export implements WithEvents,WithColum
     {
         return [
             BeforeSheet::class => [self::class, 'beforeSheet'],
-            AfterSheet::class => function(AfterSheet $event) {
+            AfterSheet::class => [self::class, 'beforeSheet'],
+            /*AfterSheet::class => function(AfterSheet $event) {
                 $workSheet = $event->sheet->getDelegate();
                 $workSheet->freezePane('A2');
-            },
+            },*/
         ];
     }
     private static function getfecha(): string{
@@ -150,6 +151,8 @@ class PagerutaenvioLimaSinasignar extends Export implements WithEvents,WithColum
     }
 
     public static function afterSheet(AfterSheet $event){
+        $workSheet = $event->sheet->getDelegate();
+        $workSheet->freezePane('A3');
 
         /*echo 'ROW: ', $cell->getRow(), PHP_EOL;
                    echo 'COLUMN: ', $cell->getColumn(), PHP_EOL;
