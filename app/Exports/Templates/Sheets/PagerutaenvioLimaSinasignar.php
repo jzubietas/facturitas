@@ -37,7 +37,7 @@ class PagerutaenvioLimaSinasignar extends Export implements WithEvents,WithColum
 
     public function startCell(): string
     {
-        return 'A2';
+        return 'A4';
     }
 
     public function collection()
@@ -158,11 +158,11 @@ class PagerutaenvioLimaSinasignar extends Export implements WithEvents,WithColum
     public static function afterSheet(AfterSheet $event){
 
 
-        /*->sheet->appendRows(array(
+        $event->sheet->appendRows(array(
             array('', self::$fecharuta),
             array('', ''),
             //....
-        ), $event);*/
+        ), $event);
         /*echo 'ROW: ', $cell->getRow(), PHP_EOL;
                    echo 'COLUMN: ', $cell->getColumn(), PHP_EOL;
                    echo 'COORDINATE: ', $cell->getCoordinate(), PHP_EOL;
