@@ -19,6 +19,7 @@ use Maatwebsite\Excel\Events\AfterSheet;
 use PhpOffice\PhpSpreadsheet\Style\Fill;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 use Maatwebsite\Excel\Concerns\WithColumnWidths;
+use function PHPUnit\Framework\returnSelf;
 
 Sheet::macro('styleCells', function (Sheet $sheet, string $cellRange, array $style) {
     $sheet->getDelegate()->getStyle($cellRange)->applyFromArray($style);
@@ -35,24 +36,6 @@ class PagerutaenvioLimaSinasignar extends Export implements WithEvents,WithColum
 
     public function collection()
     {
-        /*$uni=User::where("id",1)->select(
-            DB::raw(" (select '') as correlativo "),
-            DB::raw(" (select '') as identificador "),
-            DB::raw(" (select '') as destino "),
-            DB::raw(" (select '') as celular "),
-            DB::raw(" (select '') as nombre "),
-            DB::raw(" (select '') as cantidad "),
-            DB::raw(" (select '') as codigos "),
-            DB::raw(" (select '') as producto "),
-            DB::raw(" (select '') as direccion "),
-            DB::raw(" (select '') as referencia "),
-            DB::raw(" (select '') as observacion "),
-            DB::raw(" (select '') as distrito "),
-            DB::raw(" (select '') as nombre_cli "),
-            DB::raw(" (select '') as fecha "),
-            DB::raw(" (select '') as distribucion "),
-            DB::raw(" (select '') as condicion_sobre "),
-        );*/
 
         $pedidos_lima = DireccionGrupo::join('direccion_envios as de','direccion_grupos.id','de.direcciongrupo')
             ->join('clientes as c', 'c.id', 'de.cliente_id')
@@ -110,11 +93,10 @@ class PagerutaenvioLimaSinasignar extends Export implements WithEvents,WithColum
 
     public function title(): string
     {
-        return 'Lima Sin Asignar ' . self::Statechart();
+        return 'Lima Sin Asignar ';
     }
     public function map($model): array
     {
-        //$model->Periodo=strval(str_pad($model->Periodo,2,"0"));
         return parent::map($model);
     }
     public function columnWidths(): array
@@ -144,11 +126,6 @@ class PagerutaenvioLimaSinasignar extends Export implements WithEvents,WithColum
             'N' => NumberFormat::FORMAT_TEXT
         ];
     }
-
-    public function getFecha(){
-        return $this->getFecha();
-    }
-
     public function registerEvents(): array
     {
         return [
@@ -158,10 +135,13 @@ class PagerutaenvioLimaSinasignar extends Export implements WithEvents,WithColum
     }
 
     public static function beforeSheet(BeforeSheet $event){
-        $event->sheetcappendRows(array(
+        /*$event->sheet->getSheetView()->getView()-sheetcappendRows(array(
             array('', '','','','FECHA '. (new PagerutaenvioLimaSinasignar)->getFecha()),
             array('', '','','',''),
             //....
+        ));*/
+        $event->sheet->appendRow(array(
+            '', '','FECHA '.returnSelf()->fecharuta
         ));
     }
 
