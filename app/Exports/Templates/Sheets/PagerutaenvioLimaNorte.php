@@ -132,11 +132,10 @@ class PagerutaenvioLimaNorte  extends Export implements WithEvents,WithColumnWid
     }
     public static function beforeSheet(BeforeSheet $event){
         $event->sheet->appendRows(array(
-            array('test1', 'test2'),
+            array('', ''),
             array('test3', self::$fecharuta),
-            //....
+            array('', ''),
         ), $event);
-
     }
 
     public static function afterSheet(AfterSheet $event){
