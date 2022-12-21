@@ -88,7 +88,7 @@ class PagerutaenvioLimaSur  extends Export implements WithEvents,WithColumnWidth
 
     public function title(): string
     {
-        return 'Lima SUR';
+        return 'Lima SUR '.self::$fecharuta;
     }
     public function map($model): array
     {
@@ -130,12 +130,6 @@ class PagerutaenvioLimaSur  extends Export implements WithEvents,WithColumnWidth
             AfterSheet::class => [self::class, 'afterSheet']
         ];
     }
-
-    public function getFecharuta()
-    {
-        return $this->fecharuta;
-    }
-
     public static function beforeSheet(BeforeSheet $event){
         $event->sheet->appendRows(array(
             array('test1', 'test2'),

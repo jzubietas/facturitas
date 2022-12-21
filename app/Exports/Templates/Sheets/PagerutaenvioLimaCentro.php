@@ -88,7 +88,7 @@ class PagerutaenvioLimaCentro  extends Export implements WithEvents,WithColumnWi
 
     public function title(): string
     {
-        return 'Lima CENTRO '.self::getFecharuta();
+        return 'Lima CENTRO '.self::$fecharuta;
     }
     public function map($model): array
     {

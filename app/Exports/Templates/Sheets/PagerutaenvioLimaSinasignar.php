@@ -93,7 +93,7 @@ class PagerutaenvioLimaSinasignar extends Export implements WithEvents,WithColum
 
     public function title(): string
     {
-        return 'Lima Sin Asignar ';
+        return 'Lima Sin Asignar '.self::$fecharuta;
     }
     public function map($model): array
     {
