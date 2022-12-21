@@ -27,11 +27,11 @@ Sheet::macro('styleCells', function (Sheet $sheet, string $cellRange, array $sty
 
 class PagerutaenvioLimaSinasignar extends Export implements WithEvents,WithColumnWidths
 {
-    public $fecharuta='';
+    public static $fecharuta='';
     public function __construct($ids)
     {
         parent::__construct();
-        $this->fecharuta=$ids;
+        self::$fecharuta=$ids;
     }
 
     public function collection()
