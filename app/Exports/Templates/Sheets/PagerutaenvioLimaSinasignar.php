@@ -137,14 +137,12 @@ class PagerutaenvioLimaSinasignar extends Export implements WithEvents,WithColum
         return self::$fecharuta;
     }
     public static function beforeSheet(BeforeSheet $event){
-        /*$event->sheet->getSheetView()->getView()-sheetcappendRows(array(
-            array('', '','','','FECHA '. (new PagerutaenvioLimaSinasignar)->getFecha()),
-            array('', '','','',''),
+        $event->sheet->appendRows(array(
+            array('test1', 'test2'),
+            array('test3', self::$fecharuta),
             //....
-        ));*/
-        $event->sheet->appendRow(array(
-            '', '','FECHA '.self::getfecha()
-        ));
+        ), $event);
+
     }
 
     public static function afterSheet(AfterSheet $event){
