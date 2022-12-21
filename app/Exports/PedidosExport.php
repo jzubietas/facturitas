@@ -51,6 +51,7 @@ class PedidosExport implements FromView, ShouldAutoSize
                         'pedidos.estado',
                         'pedidos.envio',
                         )
+                    ->activo()
                     ->whereIn('pedidos.condicion', [Pedido::POR_ATENDER, Pedido::EN_PROCESO_ATENCION, Pedido::ATENDIDO, Pedido::ANULADO])
                     ->whereBetween(DB::raw('DATE(pedidos.created_at)'), [$request->desde, $request->hasta]) //rango de fechas
                     ->groupBy(
@@ -150,8 +151,6 @@ class PedidosExport implements FromView, ShouldAutoSize
             $pedidos->WhereIn('u.identificador',$asesores);
 
 
-        }else{
-            $pedidos=$pedidos;
         }
 
         $this->pedidos = $pedidos->get();
