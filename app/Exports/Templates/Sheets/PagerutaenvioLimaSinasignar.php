@@ -80,7 +80,7 @@ class PagerutaenvioLimaSinasignar extends Export implements WithEvents,WithColum
                 'direccion_grupos.condicion_sobre',
             );
 
-        $pedidos = $pedidos_lima->union($uni);
+        $pedidos = $uni ->union($pedidos_lima);
         return $pedidos->get();
     }
 
