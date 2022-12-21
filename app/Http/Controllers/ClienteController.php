@@ -578,7 +578,7 @@ class ClienteController extends Controller
 
 
         foreach ($clientes as $cliente) {
-            $cliente->pedidos_mes_deuda = $cliente->pedidos()->activo()->noPagados()->whereDate('pedidos.created_at', now())->count();
+            $cliente->pedidos_mes_deuda = $cliente->pedidos()->activo()->noPagados()->whereBetween('pedidos.created_at', [now()->startOfMonth(),now()->endOfMonth()])->count();
             $cliente->pedidos_mes_deuda_antes = $cliente->pedidos()->activo()->noPagados()->where('pedidos.created_at', '<=', now()->subMonth()->endOfMonth())->count();
 
             //Auth::user()->rol=='Administrador'
@@ -599,7 +599,7 @@ class ClienteController extends Controller
                     //pago | pagado
                     $deuda_anterior = Pedido::query()->noPagados()->activo()
                         ->where('pedidos.cliente_id', '=', $cliente->id)
-                        ->whereDate('created_at', '=', now()->subMonth())
+                        ->whereBetween('created_at', [now()->subMonth()->startOfMonth(),now()->subMonth()->endOfMonth()])
                         ->count();
 
                     $deuda_pedidos_5 = Pedido::query()->noPagados()->activo()

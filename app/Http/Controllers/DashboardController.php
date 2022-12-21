@@ -33,20 +33,18 @@ class DashboardController extends Controller
 
         if (Auth::user()->id == "33") {
             $pagoxmes_total = Pedido::join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')//CANTIDAD DE PEDIDOS DEL MES
-                ->activo()
-            ->join('users as u', 'pedidos.user_id', 'u.id')
+            ->activo()
+                ->join('users as u', 'pedidos.user_id', 'u.id')
                 ->select(DB::raw('count(dp.id) as pedidos'))
-                ->whereMonth('dp.created_at', $mfecha)
-                ->whereYear('dp.created_at', $afecha)
+                ->whereBetween('dp.created_at', [now()->startOfMonth(),now()->endOfMonth()])
                 ->get();
         } else {
             $pagoxmes_total = Pedido::join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')//CANTIDAD DE PEDIDOS DEL MES
             ->activo()
-            ->join('users as u', 'pedidos.user_id', 'u.id')
+                ->join('users as u', 'pedidos.user_id', 'u.id')
                 ->select(DB::raw('count(dp.id) as pedidos'))
                 ->where('u.rol', "ASESOR")
-                ->whereMonth('dp.created_at', $mfecha)
-                ->whereYear('dp.created_at', $afecha)
+                ->whereBetween('dp.created_at', [now()->startOfMonth(),now()->endOfMonth()])
                 ->get();
         }
         //$montopedidoxmes_total = User::select(DB::raw('sum(users.meta_cobro) as total'))
@@ -57,8 +55,8 @@ class DashboardController extends Controller
             ->select(DB::raw('(sum(dp.total))/(count(dp.pedido_id)) as total'))
             //->where('users.rol', "ASESOR")
             ->where('users.estado', '1')
-            ->where('pedidos.created_at', $mfecha)
-            ->whereYear('pedidos.created_at', $afecha)
+            ->whereBetween('pedidos.created_at', [now()->startOfMonth(),now()->endOfMonth()])
+            //->whereYear('pedidos.created_at', $afecha)
             ->get();
         //return $montopedidoxmes_total;
         if (Auth::user()->id == "33") {
@@ -66,8 +64,7 @@ class DashboardController extends Controller
             ->select(DB::raw('sum(dpa.monto) as total'))
                 ->where('pagos.estado', '1')
                 ->where('dpa.estado', '1')
-                ->whereMonth('dpa.created_at', $mfecha)
-                ->whereYear('dpa.created_at', $afecha)
+                ->whereBetween('dpa.created_at', [now()->startOfMonth(),now()->endOfMonth()])
                 ->get();
         } else {
             $montopagoxmes_total = Pago::join('detalle_pagos as dpa', 'pagos.id', 'dpa.pago_id')//CANTIDAD DE PAGOS DEL MES
@@ -76,8 +73,7 @@ class DashboardController extends Controller
                 ->where('u.rol', 'ASESOR')
                 ->where('pagos.estado', '1')
                 ->where('dpa.estado', '1')
-                ->whereMonth('dpa.created_at', $mfecha)
-                ->whereYear('dpa.created_at', $afecha)
+                ->whereBetween('dpa.created_at', [now()->startOfMonth(),now()->endOfMonth()])
                 ->get();
         }
         //GRAFICO DE BARRAS IMPORTE/PEDIDOS
@@ -88,8 +84,7 @@ class DashboardController extends Controller
                 'u.identificador as usuarios',
                 DB::raw('((sum(dp.total)/count(dp.id))) as total'))
             //->whereIn('u.rol', ['ENCARGADO', 'Super asesor','ASESOR'])
-            ->whereMonth('dp.created_at', $mfecha)
-            ->whereYear('dp.created_at', $afecha)
+            ->whereBetween('dp.created_at', [now()->startOfMonth(),now()->endOfMonth()])
             ->groupBy('u.identificador')
             //->orderBy((DB::raw('count(dp.id)')), 'DESC')
             ->get();
@@ -100,8 +95,7 @@ class DashboardController extends Controller
             ->join('users as u', 'pedidos.user_id', 'u.id')
             ->select('u.identificador as users', DB::raw('count(dp.id) as pedidos'))
             ->whereIn('u.rol', ['ASESOR', 'Super asesor'])
-            ->whereMonth('dp.created_at', $mfecha)
-            ->whereYear('dp.created_at', $afecha)
+            ->whereBetween('dp.created_at', [now()->startOfMonth(),now()->endOfMonth()])
             ->groupBy('u.identificador')
             ->orderBy((DB::raw('count(dp.id)')), 'DESC')
             ->get();
@@ -110,7 +104,7 @@ class DashboardController extends Controller
 
         $pedidos_mes_ = Pedido::select(DB::raw('count(*) as total'))//META PEDIDOS
         ->activo()
-        ->whereMonth('created_at', $mfecha)
+            ->whereBetween('created_at', [now()->startOfMonth(),now()->endOfMonth()])
             ->get();
 
 
@@ -120,8 +114,7 @@ class DashboardController extends Controller
             ->select('c.nombre as cliente', DB::raw('sum(pagos.total_cobro) as pagos'))
             ->whereIn('u.rol', ['ASESOR', 'Super asesor'])
             ->where('pagos.estado', '1')
-            ->whereMonth('pagos.created_at', $mfecha)
-            ->whereYear('pagos.created_at', $afecha)
+            ->whereBetween('pagos.created_at', [now()->startOfMonth(),now()->endOfMonth()])
             ->groupBy('c.nombre')
             ->orderBy(DB::raw('sum(pagos.total_cobro)'), 'DESC')
             ->offset(0)
@@ -133,9 +126,7 @@ class DashboardController extends Controller
             ->join('users as u', 'pedidos.user_id', 'u.id')
             ->select('u.name as users', DB::raw('count(dp.id) as pedidos'))
             ->whereIn('u.rol', ['ASESOR', 'Super asesor'])
-            ->whereDay('dp.created_at', $dfecha)
-            ->whereMonth('dp.created_at', $mfecha)
-            ->whereYear('dp.created_at', $afecha)
+            ->whereDate('dp.created_at', now())
             ->groupBy('u.name')
             ->orderBy((DB::raw('count(dp.id)')), 'DESC')
             ->get();
@@ -144,16 +135,14 @@ class DashboardController extends Controller
             ->activo()
             ->where('u.supervisor', Auth::user()->id)
             ->where('pedidos.estado', '1')
-            ->whereMonth('pedidos.created_at', $mfecha)
-            ->whereYear('pedidos.created_at', $afecha)
+            ->whereBetween('pedidos.created_at', [now()->startOfMonth(),now()->endOfMonth()])
             ->count();
         $meta_pagoencargado = Pago::join('users as u', 'pagos.user_id', 'u.id')
             ->join('detalle_pagos as dpa', 'pagos.id', 'dpa.pago_id')
             ->select(DB::raw('sum(dpa.monto) as pagos'))
             ->where('u.supervisor', Auth::user()->id)
             ->where('pagos.estado', '1')
-            ->whereMonth('pagos.created_at', $mfecha)
-            ->whereYear('pagos.created_at', $afecha)
+            ->whereBetween('pagos.created_at', [now()->startOfMonth(),now()->endOfMonth()])
             ->first();
         //PEDIDOS DE MIS ASESORES EN EL MES
         $pedidosxasesor_encargado = Pedido::join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
@@ -161,8 +150,7 @@ class DashboardController extends Controller
             ->join('users as u', 'pedidos.user_id', 'u.id')
             ->select('u.name as users', DB::raw('count(dp.id) as pedidos'))
             ->where('u.supervisor', Auth::user()->id)
-            ->whereMonth('dp.created_at', $mfecha)
-            ->whereYear('dp.created_at', $afecha)
+            ->whereBetween('dp.created_at', [now()->startOfMonth(),now()->endOfMonth()])
             ->groupBy('u.name')
             ->orderBy((DB::raw('count(dp.id)')), 'DESC')
             ->get();
@@ -183,8 +171,7 @@ class DashboardController extends Controller
             ->select('c.nombre as cliente', DB::raw('sum(pagos.total_cobro) as pagos'))
             ->where('u.supervisor', Auth::user()->id)
             ->where('pagos.estado', '1')
-            ->whereMonth('pagos.created_at', $mfecha)
-            ->whereYear('pagos.created_at', $afecha)
+            ->whereBetween('pagos.created_at', [now()->startOfMonth(),now()->endOfMonth()])
             ->groupBy('c.nombre')
             ->offset(0)
             ->limit(30)
@@ -195,9 +182,7 @@ class DashboardController extends Controller
             ->join('users as u', 'pedidos.user_id', 'u.id')
             ->select('u.name as users', DB::raw('count(dp.id) as pedidos'))
             ->where('u.supervisor', Auth::user()->id)
-            ->whereDay('dp.created_at', $dfecha)
-            ->whereMonth('dp.created_at', $mfecha)
-            ->whereYear('dp.created_at', $afecha)
+            ->whereDate('dp.created_at', now())
             ->groupBy('u.name')
             ->orderBy((DB::raw('count(dp.id)')), 'DESC')
             ->get();
@@ -206,18 +191,16 @@ class DashboardController extends Controller
             ->activo()
             ->where('u.id', Auth::user()->id)
             ->where('pedidos.estado', '1')
-            ->whereMonth('pedidos.created_at', $mfecha)
-            ->whereYear('pedidos.created_at', $afecha)
+            ->whereBetween('pedidos.created_at', [now()->startOfMonth(),now()->endOfMonth()])
             ->count();
-        $meta_pagoasesor = Pago::join('users as u', 'pagos.user_id', 'u.id')
+        $meta_pagoasesor = (object)["pagos"=>Pago::join('users as u', 'pagos.user_id', 'u.id')
             ->join('detalle_pagos as dpa', 'pagos.id', 'dpa.pago_id')
-            ->select(DB::raw('sum(dpa.monto) as pagos'))
             ->where('u.id', Auth::user()->id)
             ->where('pagos.estado', '1')
             ->where('dpa.estado', '1')
-            ->whereMonth('pagos.created_at', $mfecha)
-            ->whereYear('pagos.created_at', $afecha)
-            ->first();
+            ->whereBetween('pagos.created_at', [now()->startOfMonth(),now()->endOfMonth()])
+            ->sum('dpa.monto')];
+
         $pagosobservados_cantidad = Pago::where('user_id', Auth::user()->id)//PAGOS OBSERVADOS
         ->where('estado', '1')
             ->where('condicion', Pago::OBSERVADO)
@@ -227,8 +210,7 @@ class DashboardController extends Controller
             ->activo()
             ->select('u.name as users', DB::raw('count(pedidos.id) as pedidos'), DB::raw('DATE(pedidos.created_at) as fecha'))
             ->where('u.id', Auth::user()->id)
-            ->whereMonth('pedidos.created_at', $mfecha)
-            ->whereYear('pedidos.created_at', $afecha)
+            ->whereBetween('pedidos.created_at', [now()->startOfMonth(),now()->endOfMonth()])
             ->groupBy('u.name', DB::raw('DATE(pedidos.created_at)'))
             ->orderBy(DB::raw('DATE(pedidos.created_at)'), 'ASC')
             ->get();

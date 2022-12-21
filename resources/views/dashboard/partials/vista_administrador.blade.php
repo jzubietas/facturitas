@@ -1,3 +1,76 @@
+<div class="text-center mb-4" style="font-family:'Times New Roman', Times, serif">
+    <h2>
+        <p>
+            Bienvenido <b>{{ Auth::user()->name }}</b> al software empresarial de sisFacturas, eres el
+            <b>{{ Auth::user()->rol }} del sistema</b>
+        </p>
+    </h2>
+</div>
+
+<div class="row">
+    <div class="col-lg-3 col-6">
+        <div class="small-box bg-info">
+            <div class="inner">
+                @foreach ($pedidoxmes_total as $mpxm)
+                    <h3>{{ $mpxm->total  }}</h3>
+                @endforeach
+                <p>META DE PEDIDOS DEL MES</p>
+            </div>
+            <div class="icon">
+                <i class="ion ion-bag"></i>
+            </div>
+            <a href="{{ route('pedidos.index') }}" class="small-box-footer">Más info <i
+                    class="fas fa-arrow-circle-right"></i></a>
+        </div>
+    </div>
+    <div class="col-lg-3 col-6">
+        <div class="small-box bg-success">
+            <div class="inner">
+                @foreach ($montopedidoxmes_total as $mcxm)
+                    <h3>{{number_format( ($mcxm->total)/10 ,2)}} %</h3>
+                @endforeach
+                <p>META DE COBRANZAS DEL MES</p>
+            </div>
+            <div class="icon">
+                <i class="ion ion-stats-bars"></i>
+            </div>
+            <a href="{{ route('pedidos.index') }}" class="small-box-footer">Más info <i
+                    class="fas fa-arrow-circle-right"></i></a>
+        </div>
+    </div>
+    <div class="col-lg-3 col-6">
+        <div class="small-box bg-warning">
+            <div class="inner">
+                @foreach ($pagoxmes_total as $pxm)
+                    <h3>{{ $pxm->pedidos }}</h3>
+                @endforeach
+                <p>PEDIDOS DEL MES</p>
+            </div>
+            <div class="icon">
+                <i class="ion ion-person-add"></i>
+            </div>
+            <a href="{{ route('pagos.index') }}" class="small-box-footer">Más info <i
+                    class="fas fa-arrow-circle-right"></i></a>
+        </div>
+    </div>
+    <div class="col-lg-3 col-6">
+        <div class="small-box bg-danger">
+            <div class="inner">
+                @foreach ($montopagoxmes_total as $cxm)
+                    <h3>S/@php echo number_format( ($cxm->total)/1000 ,2) @endphp </h3>
+                @endforeach
+                <p>COBRANZAS DEL MES</p>
+            </div>
+            <div class="icon">
+                <i class="ion ion-pie-graph"></i>
+            </div>
+            <a href="{{ route('pagos.index') }}" class="small-box-footer">Más info <i
+                    class="fas fa-arrow-circle-right"></i></a>
+        </div>
+    </div>
+</div>
+
+
 <div class="row">
     <div class="col-lg-12">
         <div class="card">
@@ -47,7 +120,8 @@
                     <div class="input-group-prepend">
                         <span class="input-group-text" id="basic-addon3">Seleccionar Mes</span>
                     </div>
-                    <input type="text" class="form-control date-picker" id="datepickerDashborad" aria-describedby="basic-addon3">
+                    <input type="text" class="form-control date-picker" id="datepickerDashborad"
+                           aria-describedby="basic-addon3">
                 </div>
             </div>
             <div class="col-md-12">
@@ -56,9 +130,15 @@
                         <x-grafico-metas-progress-bar></x-grafico-metas-progress-bar>
                     </div>
                     <div class="col-md-12">
-                        <x-grafico-pedidos-por-dia rol="Administrador" title="Cantidad de pedidos de los asesores por dia" label-x="Asesores" label-y="Cant. Pedidos" only-day ></x-grafico-pedidos-por-dia>
+                        <x-grafico-pedidos-por-dia rol="Administrador"
+                                                   title="Cantidad de pedidos de los asesores por dia"
+                                                   label-x="Asesores" label-y="Cant. Pedidos"
+                                                   only-day></x-grafico-pedidos-por-dia>
 
-                        <x-grafico-pedidos-por-dia rol="Administrador" title="Cantidad de pedidos de los asesores por mes" label-x="Asesores" label-y="Cant. Pedidos"></x-grafico-pedidos-por-dia>
+                        <x-grafico-pedidos-por-dia rol="Administrador"
+                                                   title="Cantidad de pedidos de los asesores por mes"
+                                                   label-x="Asesores"
+                                                   label-y="Cant. Pedidos"></x-grafico-pedidos-por-dia>
                     </div>
                 </div>
             </div>

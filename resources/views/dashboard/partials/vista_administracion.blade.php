@@ -1,7 +1,8 @@
 <div style="text-align: center; font-family:'Times New Roman', Times, serif">
     <h2>
         <p>Bienvenido(a) <b>{{ Auth::user()->name }}</b> del equipo de <b>ADMINISTRACION</b> al software
-            empresarial de sisFacturas</b></p>
+            empresarial de sisFacturas
+        </p>
     </h2>
 </div>
 <br>
