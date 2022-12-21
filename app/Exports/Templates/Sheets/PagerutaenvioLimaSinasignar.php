@@ -33,7 +33,7 @@ class PagerutaenvioLimaSinasignar extends Export implements WithEvents,WithColum
     }
     public function collection()
     {
-        $uni=User::where("id",1)->select(
+        /*$uni=User::where("id",1)->select(
             DB::raw(" (select '') as correlativo "),
             DB::raw(" (select '') as identificador "),
             DB::raw(" (select '') as destino "),
@@ -50,7 +50,7 @@ class PagerutaenvioLimaSinasignar extends Export implements WithEvents,WithColum
             DB::raw(" (select '') as fecha "),
             DB::raw(" (select '') as distribucion "),
             DB::raw(" (select '') as condicion_sobre "),
-        );
+        );*/
 
         $pedidos_lima = DireccionGrupo::join('direccion_envios as de','direccion_grupos.id','de.direcciongrupo')
             ->join('clientes as c', 'c.id', 'de.cliente_id')
@@ -80,7 +80,7 @@ class PagerutaenvioLimaSinasignar extends Export implements WithEvents,WithColum
                 'direccion_grupos.condicion_sobre',
             );
 
-        $pedidos = $uni ->union($pedidos_lima);
+        $pedidos =($pedidos_lima);
         return $pedidos->get();
     }
 
