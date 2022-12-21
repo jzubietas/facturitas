@@ -390,7 +390,7 @@ class EnvioController extends Controller
         }
         //$pedidos=$pedidos->get();
 
-        return Datatables::of($pedidos)
+        return Datatables::of(\DB::table($pedidos))//select * from (s)
                     ->addIndexColumn()
                     ->addColumn('action', function($pedido){
                         $btn='';
