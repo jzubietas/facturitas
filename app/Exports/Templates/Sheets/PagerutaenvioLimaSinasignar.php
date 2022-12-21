@@ -27,7 +27,7 @@ Sheet::macro('styleCells', function (Sheet $sheet, string $cellRange, array $sty
 
 class PagerutaenvioLimaSinasignar extends Export implements WithEvents,WithColumnWidths
 {
-    private $fecharuta='';
+    public $fecharuta='';
     public function __construct($fecharuta)
     {
         parent::__construct();
@@ -133,7 +133,9 @@ class PagerutaenvioLimaSinasignar extends Export implements WithEvents,WithColum
             AfterSheet::class => [self::class, 'afterSheet']
         ];
     }
-
+    public function getfecha(): string{
+        return $this->fecharuta;
+    }
     public static function beforeSheet(BeforeSheet $event){
         /*$event->sheet->getSheetView()->getView()-sheetcappendRows(array(
             array('', '','','','FECHA '. (new PagerutaenvioLimaSinasignar)->getFecha()),
@@ -141,7 +143,7 @@ class PagerutaenvioLimaSinasignar extends Export implements WithEvents,WithColum
             //....
         ));*/
         $event->sheet->appendRow(array(
-            '', '','FECHA '.returnSelf()->fecharuta
+            '', '','FECHA '.self::getfecha()
         ));
     }
 
