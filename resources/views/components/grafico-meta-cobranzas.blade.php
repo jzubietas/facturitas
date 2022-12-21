@@ -1,3 +1,17 @@
-<div>
-    <!-- Knowing is not enough; we must apply. Being willing is not enough; we must do. - Leonardo da Vinci -->
+<div class="card">
+    <div class="card-body">
+        <div id="chart"></div>
+    </div>
 </div>
+@push('js')
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+
+    <script>
+        (function () {
+            var options = {{\Illuminate\Support\Js::from( $jsChart)}};
+
+            var chart = new ApexCharts(document.querySelector("#chart"), options);
+            chart.render();
+        })()
+    </script>
+@endpush
