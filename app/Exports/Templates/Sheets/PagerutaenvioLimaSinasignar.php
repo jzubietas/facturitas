@@ -137,6 +137,8 @@ class PagerutaenvioLimaSinasignar extends Export implements WithEvents,WithColum
         return self::$fecharuta;
     }
     public static function beforeSheet(BeforeSheet $event){
+        $workSheet = $event->sheet->getDelegate();
+        $workSheet->freezePane('A3');
         $event->sheet->appendRows(array(
             array('', self::$fecharuta),
             array('', ''),
@@ -147,8 +149,7 @@ class PagerutaenvioLimaSinasignar extends Export implements WithEvents,WithColum
     }
 
     public static function afterSheet(AfterSheet $event){
-        $workSheet = $event->sheet->getDelegate();
-        $workSheet->freezePane('A3');
+
 
         /*echo 'ROW: ', $cell->getRow(), PHP_EOL;
                    echo 'COLUMN: ', $cell->getColumn(), PHP_EOL;
