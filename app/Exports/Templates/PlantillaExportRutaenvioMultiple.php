@@ -21,9 +21,7 @@ class PlantillaExportRutaenvioMultiple implements WithMultipleSheets
     public function sheets(): array
     {
         return [
-            new PagerutaenvioLimaSinasignar($this->fecha)->prependRow(1, array(
-                'prepended', 'prepended'
-            ));,
+            new PagerutaenvioLimaSinasignar($this->fecha),
             new PagerutaenvioLimaNorte($this->fecha),
             new PagerutaenvioLimaCentro($this->fecha),
             new PagerutaenvioLimaSur($this->fecha),

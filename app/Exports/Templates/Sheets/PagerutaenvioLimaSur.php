@@ -125,8 +125,17 @@ class PagerutaenvioLimaSur  extends Export implements WithEvents,WithColumnWidth
     public function registerEvents(): array
     {
         return [
+            BeforeSheet::class => [self::class, 'beforeSheet'],
             AfterSheet::class => [self::class, 'afterSheet']
         ];
+    }
+
+    public static function beforeSheet(BeforeSheet $event){
+        $event->sheet->appendRows(array(
+            array('test1', 'test2'),
+            array('test3', 'test4'),
+            //....
+        ), $event);
     }
 
     public static function afterSheet(AfterSheet $event){
