@@ -165,12 +165,6 @@ class PagerutaenvioLimaSinasignar extends Export implements WithEvents,WithColum
         $event->sheet->styleCells('I3',['fill' => ['fillType' => Fill::FILL_SOLID,'color' => ['rgb' => 'ffeb00']]]);
         $event->sheet->styleCells('J3',['fill' => ['fillType' => Fill::FILL_SOLID,'color' => ['rgb' => 'cde5f5']]]);
 
-        /*sreturn [
-            AfterSheet::class => function(AfterSheet $event) {
-                $workSheet = $event->sheet->getDelegate();
-                $workSheet->freezePane('5');
-            },
-        ];*/
 
     }
 }
