@@ -1250,6 +1250,15 @@ class OperacionController extends Controller
             'modificador' => 'USER'.Auth::user()->id
         ]);
 
+        PedidoMovimientoEstado::where('pedido', $request->hiddenRevertirpedido)->delete();
+
+        PedidoMovimientoEstado::create([
+            'pedido' => $request->hiddenRevertirpedido,
+            'condicion_envio_code' => Pedido::ATENDIDO_OP_INT,
+        ]);
+
+
+
         /*$detalle_pedidos->update([
             'fecha_envio_doc_fis' => $fecha,
         ]);*/
