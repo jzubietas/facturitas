@@ -144,13 +144,18 @@
 
                   <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     {!! Form::label('tracking', 'Tracking') !!}
-                    {!! Form::text('tracking', null, ['class' => 'form-control', 'placeholder' => 'Nombre', 'required' => 'required']) !!}
+                    {!! Form::text('tracking', null, ['class' => 'form-control', 'placeholder' => 'Nombre', 'required' => 'required','maxlength' => 12]) !!}
                   </div>
 
                   <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     {!! Form::label('numregistro', 'Numero de Registro') !!}
-                    {!! Form::text('numregistro', null, ['class' => 'form-control', 'placeholder' => 'Nombre', 'required' => 'required']) !!}
+                    {!! Form::text('numregistro', null, ['class' => 'form-control', 'placeholder' => 'Nombre', 'required' => 'required','maxlength' => 12]) !!}
                   </div>
+
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        {!! Form::label('importe', 'Importe') !!}
+                        <input oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" type="text" maxlength="5" id="importe" name="importe" placeholder="Importe" class="form-control number ob" step="0.01" min="0" data-type="text" data-msj="Ingrese una cantidad">
+                    </div>
 
                   <div class="col-lg-12 col-md-6 col-sm-6 col-xs-6">
                     <div class="row">

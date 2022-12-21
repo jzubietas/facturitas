@@ -8,6 +8,7 @@ use Illuminate\Support\Str;
 use Maatwebsite\Excel\Concerns\Exportable;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
+use Maatwebsite\Excel\Concerns\WithEvents;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
 use Maatwebsite\Excel\Concerns\WithTitle;
@@ -23,6 +24,7 @@ abstract class Export implements FromCollection, HasLocalePreference, ShouldAuto
     public $fieldsHeaders;
 
     public $user;
+
 
     public function __construct($ids = null)
     {

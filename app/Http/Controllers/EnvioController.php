@@ -1564,7 +1564,7 @@ class EnvioController extends Controller
                         'tracking' => $request->tracking,
                         'registro' => $request->numregistro,
                         'foto' => $file_name,
-                        'importe' => "0.00",
+                        'importe' => $request->importe,
                         'cantidad' => $cantidad,
                         'direcciongrupo' => $direccion_grupo_id,
                         'destino'=>$request->destino,
@@ -1816,14 +1816,14 @@ class EnvioController extends Controller
         $pedido->update([
             'envio' => '2',
             'modificador' => 'USER'.Auth::user()->id,
-            'condicion_envio' => Pedido::JEFE_OP,
-            'condicion_envio_code' => Pedido::JEFE_OP_INT,
+            'condicion_envio' => Pedido::CONFIRMACION_SIN_SOBRE,
+            'condicion_envio_code' => Pedido::CONFIRMACION_SIN_SOBRE_INT,
 
         ]);
 
           PedidoMovimientoEstado::create([
                     'pedido' => $request->hiddenEnvio,
-                    'condicion_envio_code' => Pedido::JEFE_OP_INT,
+                    'condicion_envio_code' => Pedido::CONFIRMACION_SIN_SOBRE_INT,
                 ]);
 
         return response()->json(['html' => $pedido->id]);

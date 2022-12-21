@@ -10,7 +10,8 @@
       </div>
       {{ Form::Open(['route' => ['operaciones.sinenvio', $pedido],'enctype'=>'multipart/form-data', 'id'=>'formulario','files'=>true]) }}
       <div class="modal-body">
-        <p>Está seguro que el pedido: <strong>PED000{{ $pedido->id }}</strong> será sin envío</p>
+          <p>Desea enviar el PEDIDO <strong>PED000{{ $pedido->id }}</strong> Sin sobre al jefe operaciones</p>
+        {{--<p>Está seguro que el pedido: <strong>PED000{{ $pedido->id }}</strong> será sin envío</p>--}}
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>

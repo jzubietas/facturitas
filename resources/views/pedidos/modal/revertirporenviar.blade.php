@@ -9,7 +9,7 @@
         </button>
       </div>
       <form id="formulariorevertir" name="formulariorevertir" enctype="multipart/form-data">
-      <input type="text" id="hiddenRevertirpedido" name="hiddenRevertirpedido">
+      <input type="hidden" id="hiddenRevertirpedido" name="hiddenRevertirpedido">
       <div class="modal-body">
         <p>Confirme si desea enviar el pedido <strong class="textcode">PED000</strong> al área de ENVIOS</p>
       </div>

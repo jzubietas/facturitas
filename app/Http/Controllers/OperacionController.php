@@ -369,8 +369,8 @@ class OperacionController extends Controller
                 ->where('pedidos.estado', '1')
                 ->where('dp.estado', '1')
                 ->where('pedidos.condicion_code', Pedido::ATENDIDO_INT)
-                ->whereIn('pedidos.condicion_envio_code', [Pedido::JEFE_OP_INT])
-                ->whereIn('pedidos.envio', ['2','3']);
+                ->whereIn('pedidos.condicion_envio_code', [Pedido::JEFE_OP_INT, Pedido::ENTREGADO_SIN_SOBRE_INT]);
+
                 //->whereIn('pedidos.envio', ['0'])
                 //->whereBetween( 'pedidos.created_at', [$min, $max]);
 
@@ -488,7 +488,7 @@ class OperacionController extends Controller
             ->where('pedidos.estado', '1')
             ->where('dp.estado', '1')
 
-            ->whereIn('pedidos.condicion_envio_code', [Pedido::COURIER_INT, Pedido::SOBRE_ENVIAR_INT,Pedido::REPARTO_COURIER_INT,Pedido::SEG_PROVINCIA_INT, Pedido::ENTREGADO_CLIENTE_INT, Pedido::JEFE_OP_CONF_INT,Pedido::RECEPCION_COURIER_INT,Pedido::ENTREGADO_SIN_SOBRE_INT]);
+            ->whereIn('pedidos.condicion_envio_code', [Pedido::COURIER_INT, Pedido::SOBRE_ENVIAR_INT,Pedido::REPARTO_COURIER_INT,Pedido::SEG_PROVINCIA_INT, Pedido::ENTREGADO_CLIENTE_INT, Pedido::JEFE_OP_CONF_INT,Pedido::RECEPCION_COURIER_INT,Pedido::ENTREGADO_SIN_SOBRE_INT, Pedido::CONFIRMACION_SIN_SOBRE_INT]);
             //->whereIn('pedidos.condicion_envio_code', [Pedido::JEFE_OP_CONF_INT],[Pedido::COURIER_INT], [Pedido::EN_REPARTO_INT],[Pedido::SOBRE_ENVIAR_INT])
 
         //->whereIn('pedidos.envio', ['0'])
@@ -673,10 +673,6 @@ class OperacionController extends Controller
 
     public function Atenderid(Request $request)
     {
-
-
-
-
 
 
         $hiddenAtender=$request->hiddenAtender;
@@ -1250,7 +1246,7 @@ class OperacionController extends Controller
 
         $pedido->update([
             'envio' => '0',
-            'condicion_envio_code'=>4,
+            'condicion_envio_code'=>Pedido::ATENDIDO_OP_INT,
             'modificador' => 'USER'.Auth::user()->id
         ]);
 

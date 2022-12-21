@@ -453,11 +453,11 @@
               name: 'condicion_code',
               render: function ( data, type, row, meta ) {
                   if(row.condicion_code==1){
-                      return '<span class="badge badge-success">'+'{{\App\Models\Pedido::POR_ATENDER }}'+'</span>';
+                      return '<span class="badge badge-success">'+'{{\App\Models\Pedido::POR_ATENDER_PEDIDO }}'+'</span>';
                   }else if(row.condicion_code==2){
-                      return '<span class="badge badge-success">'+'{{\App\Models\Pedido::EN_PROCESO_ATENCION }}'+'</span>';
+                      return '<span class="badge badge-success">'+'{{\App\Models\Pedido::INCOMPLETO }}'+'</span>';
                   }else if(row.condicion_code==3){
-                      return '<span class="badge badge-success">'+'{{\App\Models\Pedido::ATENDIDO }}'+'</span>';
+                      return '<span class="badge badge-success">'+'{{\App\Models\Pedido::ATENDIDO_OP }}'+'</span>';
                   }else if(row.condicion_code==4){
                       return '<span class="badge badge-success">'+'{{\App\Models\Pedido::ANULADO }}'+'</span>';
                   }
@@ -517,7 +517,7 @@
               @can('operacion.enviar')
                 if (row.envio == '0')
                 {
-                  @if (Auth::user()->rol == "Jefe de operaciones" || Auth::user()->rol == "Administrador")
+                  @if (Auth::user()->rol == "Jefe de operaciones" || Auth::user()->rol == "Administrador" || Auth::user()->rol == "Operario")
 
                     data = data+'<a href="" class="btn-sm dropdown-item" data-target="#modal-envio" data-envio='+row.id+' data-toggle="modal" ><i class="fa fa-envelope text-success" aria-hidden="true"></i> Con sobre</a>';
                     data = data+'<a href="" class="btn-sm dropdown-item" data-target="#modal-sinenvio" data-sinenvio='+row.id+' data-toggle="modal" ><i class="fa fa-times text-danger" aria-hidden="true"></i> Sin sobre</a>';

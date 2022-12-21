@@ -138,6 +138,9 @@
   <script src="https://cdn.datatables.net/plug-ins/1.11.4/dataRender/datetime.js"></script>
 
   <script>
+
+  
+
     $(document).ready(function () {
 
       $.ajaxSetup({
@@ -145,6 +148,8 @@
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
       });
+
+      
 
       $(document).on("submit", "#formulario", function (evento) {
         evento.preventDefault();

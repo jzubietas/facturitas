@@ -39,7 +39,7 @@
         <tbody>
           <tr>
             <td>Fecha</td>
-            <td><input type="text" value="" id="min" name="min" class="form-control"></td>
+            <td><input type="text" value="{{$dateMin}}" id="min" name="min" class="form-control" autocomplete="off"></td>
             <td></td>
   
 

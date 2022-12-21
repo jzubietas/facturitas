@@ -280,7 +280,7 @@
         processing: true,
         serverSide: true,
         searching: true,
-        "order": [[ 0, "desc" ]],
+        "order": [[ 5, "desc" ]],
         ajax: "{{ route('envios.enviadostabla') }}",
         createdRow: function( row, data, dataIndex){
           //console.log(rsow);

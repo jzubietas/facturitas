@@ -5,20 +5,42 @@ namespace App\Exports\Templates\Sheets;
 
 use App\Abstracts\Export;
 use App\Models\DireccionGrupo;
+use App\Models\User;
 use Carbon\Carbon;
+use \Maatwebsite\Excel\Sheet;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Concerns\FromCollection;
+use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Concerns\WithColumnFormatting;
+use Maatwebsite\Excel\Concerns\WithEvents;
+use Maatwebsite\Excel\Concerns\WithHeadings;
+use Maatwebsite\Excel\Events\BeforeSheet;
+use Maatwebsite\Excel\Events\AfterSheet;
+use PhpOffice\PhpSpreadsheet\Style\Alignment;
+use PhpOffice\PhpSpreadsheet\Style\Fill;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 use Maatwebsite\Excel\Concerns\WithColumnWidths;
+use Maatwebsite\Excel\Concerns\WithCustomStartCell;
+use function PHPUnit\Framework\returnSelf;
 
-class PagerutaenvioLimaSinasignar extends Export
+Sheet::macro('styleCells', function (Sheet $sheet, string $cellRange, array $style) {
+    $sheet->getDelegate()->getStyle($cellRange)->applyFromArray($style);
+});
+
+class PagerutaenvioLimaSinasignar extends Export implements WithEvents,WithColumnWidths,WithCustomStartCell
 {
-    public $fecharuta;
-    public function __construct($fecharuta)
+    public static $fecharuta='';
+    public function __construct($ids)
     {
         parent::__construct();
-        $this->fecharuta=$fecharuta;
+        self::$fecharuta=$ids;
     }
+
+    public function startCell(): string
+    {
+        return 'A4';
+    }
+
     public function collection()
     {
 
@@ -30,7 +52,7 @@ class PagerutaenvioLimaSinasignar extends Export
                 $query->where('direccion_grupos.distribucion','=','')->orWhereNull('direccion_grupos.distribucion');
             })
             ->where('direccion_grupos.destino','LIMA')
-            ->where(DB::raw('DATE(direccion_grupos.created_at)'), $this->fecharuta)
+            ->where(DB::raw('DATE(direccion_grupos.created_at)'), self::$fecharuta)
             ->select(
                 'direccion_grupos.correlativo',
                 'u.identificador as identificador',
@@ -44,12 +66,13 @@ class PagerutaenvioLimaSinasignar extends Export
                 'de.referencia',
                 'de.observacion',
                 'de.distrito',
+                'c.nombre as nombre_cli',
                 'direccion_grupos.created_at as fecha',
                 'direccion_grupos.distribucion',
                 'direccion_grupos.condicion_sobre',
             );
 
-        $pedidos = $pedidos_lima;
+        $pedidos =($pedidos_lima);
         return $pedidos->get();
     }
 
@@ -57,45 +80,45 @@ class PagerutaenvioLimaSinasignar extends Export
     {
         return [
             "correlativo"=>"Correlativo"
-            ,"identificador"=>"Asersor"
-            ,"destino"=>"Destino"
-            ,"celular"=>"Celular"
-            ,"nombre"=>"Nombre"
-            ,"cantidad"=>"Cantidad"
+            //,"identificador"=>"Asersor"
+             ,"nombre_cli" => "Nombre cliente"
             ,"codigos"=>"Codigos"
             ,"producto"=>"Producto"
+            ,"cantidad"=>"Cantidad"
+            ,"nombre"=>"Nombre"
             ,"direccion"=>"Direccion"
             ,"referencia"=>"Referencia"
-            ,"observacion"=>"Observacion"
             ,"distrito"=>"Distrito"
-            ,"fecha"=>"Fecha"
-            ,"distribucion"=>"Distribucion"
-            ,"condicion_sobre"=>"Condicion"
+            ,"observacion"=>"Observacion"
+            //,"celular"=>"Celular"
+            //,"destino"=>"Destino"
+            //,"fecha"=>"Fecha"
+            //,"distribucion"=>"Distribucion"
+            //,"condicion_sobre"=>"Condicion"
         ];
     }
 
     public function title(): string
     {
-        return 'Lima Sin Asignar';
+        return 'Lima Sin Asignar '.self::$fecharuta;
     }
     public function map($model): array
     {
-        //$model->Periodo=strval(str_pad($model->Periodo,2,"0"));
         return parent::map($model);
     }
     public function columnWidths(): array
     {
         return [
             'A' => 8
-            ,'B' => 8
-            ,'C' => 8
-            ,'D' => 8
-            ,'E' => 8
-            ,'F' => 8
-            ,'G' => 8
-            ,'H' => 8
-            ,'I' => 8
-            ,'J' => 8
+            ,'B' => 30
+            ,'C' => 30
+            ,'D' => 30
+            ,'E' => 10
+            ,'F' => 30
+            ,'G' => 30
+            ,'H' => 30
+            ,'I' => 30
+            ,'J' => 30
             ,'K' => 8
             ,'M' => 8
             ,'N' => 8
@@ -109,5 +132,68 @@ class PagerutaenvioLimaSinasignar extends Export
         return [
             'N' => NumberFormat::FORMAT_TEXT
         ];
+    }
+    public function registerEvents(): array
+    {
+        return [
+            BeforeSheet::class => [self::class, 'beforeSheet'],
+            AfterSheet::class => [self::class, 'afterSheet']
+        ];
+    }
+    private static function getfecha(): string{
+        return self::$fecharuta;
+    }
+    public static function beforeSheet(BeforeSheet $event){
+
+        /*$sheet->prependRow(1, array(
+            'prepended', 'prepended'
+        ));*/
+
+
+
+        //$workSheet = $event->sheet->getDelegate();
+        //$workSheet->freezePane('A3');
+
+        $event->sheet->appendRows(array(
+            array('', 'FECHA: ',self::$fecharuta),
+            array('', '',''),
+            //....
+        ), $event);
+
+    }
+
+    public static function afterSheet(AfterSheet $event){
+
+
+
+        /*echo 'ROW: ', $cell->getRow(), PHP_EOL;
+                   echo 'COLUMN: ', $cell->getColumn(), PHP_EOL;
+                   echo 'COORDINATE: ', $cell->getCoordinate(), PHP_EOL;
+                   echo 'RAW VALUE: ', $cell->getValue(), PHP_EOL;*/
+
+        //Range Columns
+
+        $event->sheet->styleCells(
+            'B1:C1',
+            [
+                'alignment' => [
+                    'horizontal' => Alignment::HORIZONTAL_CENTER,
+                ],
+                'fill' => [
+                    'fillType' => Fill::FILL_SOLID,
+                    'color' => ['rgb' => 'ffeb00']
+                ]
+            ]
+        );
+
+
+
+        $event->sheet->styleCells('A3',['fill' => ['fillType' => Fill::FILL_SOLID,'color' => ['rgb' => 'ff0000']]]);
+        $event->sheet->styleCells('B3:C3',['fill' => ['fillType' => Fill::FILL_SOLID,'color' => ['rgb' => 'ffeb00']]]);
+        $event->sheet->styleCells('D3:H3',['fill' => ['fillType' => Fill::FILL_SOLID,'color' => ['rgb' => 'cde5f5']]]);
+        $event->sheet->styleCells('I3',['fill' => ['fillType' => Fill::FILL_SOLID,'color' => ['rgb' => 'ffeb00']]]);
+        $event->sheet->styleCells('J3',['fill' => ['fillType' => Fill::FILL_SOLID,'color' => ['rgb' => 'cde5f5']]]);
+
+
     }
 }

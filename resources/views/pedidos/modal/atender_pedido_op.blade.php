@@ -10,9 +10,10 @@
       </div>
       <form id="formulario_atender_op" name="formulario_atender_op" enctype="multipart/form-data">
       {{-- Form::Open(['route' => ['pedidos.envio', $pedido],'enctype'=>'multipart/form-data', 'id'=>'formulario','files'=>true]) --}}
-      <input type="hidden" id="hiddenEnvio" name="hiddenEnvio">
+      <input type="hidden" id="hiddenEnvioOP" name="hiddenEnvio">
       <div class="modal-body">
-        <p>Esta seguro de confirmar la recepción del Pedido <strong class="textcode">PED000</strong>?</p>
+          Esta seguro que desea Enviar el Pedido <strong class="textcode">PED000</strong> a Courier?
+          {{--<p>Esta seguro de confirmar la recepción del Pedido <strong class="textcode">PED000</strong>?</p>--}}
       </div>
       {{-- <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
         {!! Form::label('destino', 'Destino') !!}
@@ -20,7 +21,7 @@
       </div> --}}
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-        <button type="submit" class="btn btn-success">Confirmar</button>
+        <button type="submit" class="btn btn-success">ENVIO A COURIER_JEFE OPE</button>
       </div>
     </form>
     </div>

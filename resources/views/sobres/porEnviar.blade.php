@@ -453,6 +453,40 @@
         }
       });*/
 
+      $('input.number').keyup(function (event) {
+        console.log("number")
+
+        if (event.which >= 37 && event.which <= 40) {
+            event.preventDefault();
+        }
+
+        $(this).val(function (index, value) {
+            return value
+                .replace(/\D/g, "")
+                .replace(/([0-9])([0-9]{2})$/, '$1.$2')
+                .replace(/\B(?=(\d{3})+(?!\d)\.?)/g, ",");
+        });
+      });
+
+      
+      $("#tracking").bind('keypress', function(event) {
+        var regex = new RegExp("^[0-9]+$");
+        var key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
+        if (!regex.test(key)) {
+          event.preventDefault();
+          return false;
+        }
+      });
+      
+      $("#numregistro").bind('keypress', function(event) {
+        var regex = new RegExp("^[0-9]+$");
+        var key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
+        if (!regex.test(key)) {
+          event.preventDefault();
+          return false;
+        }
+      });
+
       $("#cantidad").bind('keypress', function(event) {
         var regex = new RegExp("^[0-9]+$");
         var key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
@@ -583,6 +617,9 @@
         var val_oficina=$("#oficina").val();
         var val_tracking=$("#tracking").val();
         var val_numregistro=$("#numregistro").val();
+        var val_importe=$("#importe").val();
+        val_importeEx = val_importe.replace(",", "")
+        var importeex = parseFloat(val_importeEx);
         var rows_selected = tabla_pedidos.column(0).checkboxes.selected();
         if(combo_limaprovincia=="")
         {
@@ -628,6 +665,13 @@
                 'warning'
               )
               return;
+            }else if(val_distrito=="") {
+                Swal.fire(
+                    'Error',
+                    'Debe seleccionar un distrito',
+                    'warning'
+                )
+                return;
             }
           }else if(combo_limaprovincia=="P")
           {
@@ -665,6 +709,14 @@
                 'warning'
               )
               return;
+            }else if(val_importe=="")
+            {
+              Swal.fire(
+                'Error',
+                'Debe ingresar tracking',
+                'warning'
+              )
+              return;
             }else if(cont_rotulo==0)
             {
               Swal.fire(
@@ -682,6 +734,7 @@
             fd2.append('oficina', val_oficina);
             fd2.append('tracking', val_tracking);
             fd2.append('numregistro', val_numregistro);
+              fd2.append('importe', val_importe);
 
             for (let i = 0; i < files.length; i++) {
               fd2.append('rotulo', $('input[type=file][name="rotulo"]')[0].files[0]);
@@ -953,6 +1006,7 @@
         $("#observacion").val("")
         $("#tracking").val("")
         $("#numregistro").val("")
+        $("#importe").val("")
         $(".drop-rotulo").addClass("d-none");
 
         if(!$(".viewpdf").hasClass("d-none"))
