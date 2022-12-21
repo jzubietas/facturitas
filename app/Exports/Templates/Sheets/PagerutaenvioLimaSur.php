@@ -9,6 +9,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Concerns\WithColumnFormatting;
 use Maatwebsite\Excel\Concerns\WithEvents;
+use Maatwebsite\Excel\Events\BeforeSheet;
 use Maatwebsite\Excel\Events\AfterSheet;
 use Maatwebsite\Excel\Sheet;
 use PhpOffice\PhpSpreadsheet\Style\Fill;
