@@ -6,6 +6,7 @@ use App\Models\Pedido;
 use App\Observers\PedidoObserver;
 use App\View\Components\dashboard\graficos\borras\PedidosPorDia;
 use App\View\Components\dashboard\graficos\MetaProgressBar;
+use App\View\Components\GraficoMetaCobranzas;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -29,5 +30,6 @@ class AppServiceProvider extends ServiceProvider
     {
         \Blade::component('grafico-metas-progress-bar',MetaProgressBar::class);
         \Blade::component('grafico-pedidos-por-dia',PedidosPorDia::class);
+        \Blade::component('grafico-meta_cobranzas',GraficoMetaCobranzas::class);
     }
 }

@@ -15,6 +15,7 @@
         "laravel/framework": "^8.54",
         "laravel/jetstream": "^2.4",
         "laravel/sanctum": "^2.11",
+        "laravel/telescope": "^4.10",
         "laravel/tinker": "^2.5",
         "laravelcollective/html": "^6.2",
         "laraveles/spanish": "^1.5",
@@ -56,7 +57,8 @@
             "@php artisan package:discover --ansi"
         ],
         "post-update-cmd": [
-            "@php artisan vendor:publish --tag=laravel-assets --ansi"
+            "@php artisan vendor:publish --tag=laravel-assets --ansi",
+            "@php artisan telescope:publish --ansi"
         ],
         "post-root-package-install": [
             "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
