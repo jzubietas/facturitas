@@ -32,10 +32,7 @@ class PagerutaenvioLimaSinasignar extends Export implements WithEvents,WithColum
         parent::__construct();
         $this->fecharuta=$fecharuta;
     }
-    public function getFecharuta()
-    {
-        return $this->fecharuta;
-    }
+
     public function collection()
     {
         /*$uni=User::where("id",1)->select(
@@ -155,7 +152,10 @@ class PagerutaenvioLimaSinasignar extends Export implements WithEvents,WithColum
             AfterSheet::class => [self::class, 'afterSheet']
         ];
     }
-
+    public static  function getFecharuta()
+    {
+        return self::$fecharuta;
+    }
     public static function beforeSheet(BeforeSheet $event){
         $event->sheet->appendRows(array(
             array('', '','','','FECHA '. self::getFecharuta()),
