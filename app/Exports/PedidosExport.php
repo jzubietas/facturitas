@@ -150,8 +150,6 @@ class PedidosExport implements FromView, ShouldAutoSize
             $pedidos->WhereIn('u.identificador',$asesores);
 
 
-        }else{
-            $pedidos=$pedidos;
         }
 
         $this->pedidos = $pedidos->get();

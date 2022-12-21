@@ -33,7 +33,7 @@
                     <ul class="list-group list-group-horizontal-lg w-100 d-flex">
                         @foreach($registros as $data)
                             <li class="list-group-item col-md-4">
-                                <b>{{$data['code']}}</b> - {{$data['name']}}
+                                <b>{{$data['code']}}</b> <br> {{$data['name']}}
                                 <div class="progress">
                                     <div class="progress-bar
                 @if($data['progress']<40)
