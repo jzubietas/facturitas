@@ -16,3 +16,4 @@ yarn-error.log
 resources/views/base_fria/action.blade
 resources/views/base_fria/action.blade.php
 metadata/*
+*.sql
