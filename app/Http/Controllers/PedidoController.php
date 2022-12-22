@@ -975,6 +975,9 @@ class PedidoController extends Controller
                 'direccion' => '0'
             ]);
 
+            $pedido->update([
+                "correlativo" => $pedido->id_code
+            ]);
 
             if ($cliente_AB->situacion == 'ABANDONO RECIENTE') {
                 $cliente_AB->update([
@@ -1504,19 +1507,19 @@ class PedidoController extends Controller
             setting()->save();
 
             /**
-            tipo_banca
-            ELECTRONICA - sin banca
-            ELECTRONICA - banca
-            FISICO - sin banca
-            FISICA - sin banca
-            ELECTRONICA - bancarizado
+             * tipo_banca
+             * ELECTRONICA - sin banca
+             * ELECTRONICA - banca
+             * FISICO - sin banca
+             * FISICA - sin banca
+             * ELECTRONICA - bancarizado
              */
-            $is_fisico=$pedido->detallePedidos()->whereIn('detalle_pedidos.tipo_banca',[
+            $is_fisico = $pedido->detallePedidos()->whereIn('detalle_pedidos.tipo_banca', [
                 'FISICO - banca',
                 'FISICO - sin banca',
                 'FISICA - sin banca',
             ])->count();
-            if ($is_fisico==0 && $pedido->condicion_code == Pedido::ATENDIDO_INT) {
+            if ($is_fisico == 0 && $pedido->condicion_code == Pedido::ATENDIDO_INT) {
                 //pendiente de anulacion
                 $pedido->update([
                     'motivo' => $request->motivo,
@@ -2761,7 +2764,7 @@ class PedidoController extends Controller
 
     public function ConfirmarAnular(Request $request)
     {
-        if($request->get('action')=='confirm_anulled_cancel'){
+        if ($request->get('action') == 'confirm_anulled_cancel') {
             $pedido = Pedido::findOrFail($request->pedido_id);
             if ($pedido->fecha_anulacion_confirm != null) {
                 return response()->json([
