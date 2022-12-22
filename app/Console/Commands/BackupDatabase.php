@@ -44,8 +44,8 @@ class BackupDatabase extends Command
         $p = config('database.connections.' . $default . '.password');
         $u = config('database.connections.' . $default . '.username');
 
-        if (file_exists(storage_path("backups"))) {
-
+        if (!file_exists(storage_path("backups"))) {
+            mkdir(storage_path("backups"));
         }
         $filename = storage_path("backups/" . now()->format('Y_m_d_H_i_s') . '_' . time() . '.sql');
         $credentialsFile = __DIR__ . '/mysql-credentials.cnf';
@@ -57,7 +57,7 @@ host=127.0.0.1
 ";
         file_put_contents($credentialsFile, $data);
         try {
-            $this->executeCommand("mysqldump --defaults-extra-file=\"$credentialsFile\" --routines --no-data $database > $filename");
+            $this->executeCommand("mysqldump --defaults-extra-file=\"$credentialsFile\" --routines $database > $filename");
             unlink($credentialsFile);
         } catch (\Exception $ex) {
             unlink($credentialsFile);
