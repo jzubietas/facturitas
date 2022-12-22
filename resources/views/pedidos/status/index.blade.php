@@ -42,24 +42,26 @@
             </div>
         </div>
         <div class="card-body">
-            <table id="tablaPrincipal" class="table table-striped">
-                <thead>
-                <tr>
-                    <th scope="col">Item</th>
-                    <th scope="col">Código</th>
-                    <th scope="col">Cliente</th>
-                    <th scope="col">Razón social</th>
-                    <th scope="col">Asesor</th>
-                    <th scope="col">Fecha de registro</th>{{--fecha hora--}}
-                    <th scope="col">Tipo de Banca</th>
-                    <th scope="col">Adjuntos</th>
-                    <th scope="col">Estado</th>
-                    <th scope="col">Acciones</th>
-                </tr>
-                </thead>
-                <tbody>
-                </tbody>
-            </table>
+            <div class="table-responsive">
+                <table id="tablaPrincipal" class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th scope="col">Item</th>
+                        <th scope="col">Código</th>
+                        <th scope="col">Cliente</th>
+                        <th scope="col">Razón social</th>
+                        <th scope="col">Asesor</th>
+                        <th scope="col">Fecha de registro</th>{{--fecha hora--}}
+                        <th scope="col">Tipo de Banca</th>
+                        <th scope="col">Adjuntos</th>
+                        <th scope="col">Estado</th>
+                        <th scope="col">Acciones</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 
@@ -102,9 +104,9 @@
                 $('#tablaPrincipal').DataTable().ajax.reload();
             })
 
-            function openConfirmDownloadDocuments(action,idc,codigo) {
+            function openConfirmDownloadDocuments(action, idc, codigo) {
                 $.confirm({
-                    title: 'Detalle de atencion de <b>'+idc+'</b>',
+                    title: 'Detalle de atencion de <b>' + idc + '</b>',
                     buttons: {
                         confirm: {
                             text: 'Confirmar descarga',
@@ -112,7 +114,7 @@
                             action: function () {
                                 var $checkbox = this.$content.find('#enableCheckbox');
 
-                                if($checkbox.prop('checked')) {
+                                if ($checkbox.prop('checked')) {
                                     this.showLoading(true)
                                     var self = this
                                     $.post(action, {
@@ -186,7 +188,7 @@
                 drawCallback: function (settings) {
                     setTimeout(function () {
                         $("[data-toggle=jqConfirm]").on('click', function (e) {
-                            openConfirmDownloadDocuments($(e.target).data('target'),$(e.target).data('idc'),$(e.target).data('codigo'))
+                            openConfirmDownloadDocuments($(e.target).data('target'), $(e.target).data('idc'), $(e.target).data('codigo'))
                         })
                     }, 100)
                 },
@@ -308,7 +310,6 @@
             });
 
 
-
             function validarFormulario(evento) {
                 var adjunto = document.getElementById('adjunto').files;
                 var cant_compro = document.getElementById('cant_compro').value;
@@ -319,8 +320,7 @@
                         'warning'
                     )
                     return false;
-                }
-                else if (cant_compro == '0'){
+                } else if (cant_compro == '0') {
                     Swal.fire(
                         'Error',
                         'Cantidad de comprobantes enviados debe ser diferente de 0 (cero)',
@@ -334,12 +334,12 @@
 
             $(document).on("submit", "#formularioatender", function (evento) {
                 evento.preventDefault();
-                var status= validarFormulario(evento);
-                if(!status){
+                var status = validarFormulario(evento);
+                if (!status) {
                     return;
                 }
 
-                let files=$('input[name="adjunto[]');
+                let files = $('input[name="adjunto[]');
                 //console.log(files)
 
                 var imagen = $('input[type=file][name="adjunto[]"]')[0].files[0];
@@ -350,8 +350,7 @@
 
                 var fd = new FormData();
 
-                if(files.length == 0)
-                {
+                if (files.length == 0) {
                     Swal.fire(
                         'Error',
                         'Debe ingresar el detalle del pedido',
@@ -367,18 +366,17 @@
                 //console.log(files);
                 //return false;
                 //fd.append( 'cant_compro', $("#cant_compro").val() );
-                fd.append( 'cant_compro', files.length );
-                fd.append( 'condicion', $("#condicion").val() );
-                fd.append( 'hiddenAtender', $("#hiddenAtender").val() );
+                fd.append('cant_compro', files.length);
+                fd.append('condicion', $("#condicion").val());
+                fd.append('hiddenAtender', $("#hiddenAtender").val());
 
                 $.ajax({
                     data: data,
                     processData: false,
                     contentType: false,
                     type: 'POST',
-                    url:"{{ route('operaciones.atenderid') }}",
-                    success:function(data)
-                    {
+                    url: "{{ route('operaciones.atenderid') }}",
+                    success: function (data) {
                         console.log(data);
                         $("#modal-atender .textcode").text('');
                         $("#modal-atender").modal("hide");
@@ -394,7 +392,7 @@
                 //cuando abre el form de anular pedido
                 var button = $(event.relatedTarget)
                 var idunico = button.data('atender')
-                $(".textcode").html("PED"+idunico);
+                $(".textcode").html("PED" + idunico);
                 $("#hiddenAtender").val(idunico);
 
             });
