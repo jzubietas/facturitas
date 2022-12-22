@@ -442,7 +442,7 @@ class ClientesSituacionExport implements FromView, ShouldAutoSize
 
                 /* 'dateM' => Carbon::now()->format('m'),
                 'dateY' => Carbon::now()->format('Y'), */
-                'estadopedido' => $estadopedido,
+                'estadopedido' => $cliente->situacion,
                 'pidio' => $cliente->pidio,
                 //
                 //'dateY' => $dateY,
