@@ -94,9 +94,15 @@
         <td>{{ $dato['fecha'] }}</td>
         <td>{{ $dato['codigo'] }}</td>
         @if($dato['situacion'] == 'RECURRENTE')
-          <td style="background: #afdfb2">RECURRENTE</td>
+          <td style="background: ##17a2b8">RECURRENTE</td>
+        @elseif($dato['situacion'] == 'NUEVO')
+          <td style="background: #17a2b8">RECURRENTE</td>
+        @elseif($dato['situacion'] == 'ABANDONO')
+          <td style="background: #dc3545">ABANDONO</td>
+        @elseif($dato['situacion'] == 'ABANDONO RECIENTE')
+          <td style="background: #dc3545">ABANDONO RECIENTE</td>
         @else
-          <td style="background: #e73d3d">{{ $dato['situacion'] }}</td>
+          <td >{{ $dato['situacion'] }}</td>
         @endif
         
         <td>
