@@ -5,6 +5,7 @@ namespace App\Exports\Templates\Sheets;
 
 use App\Abstracts\Export;
 use App\Models\DireccionGrupo;
+use App\Models\Pedido;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Concerns\WithColumnFormatting;
@@ -42,6 +43,7 @@ class PagerutaenvioLimaSur  extends Export implements WithEvents,WithColumnWidth
             ->join('users as u', 'u.id', 'c.user_id')
             ->where('direccion_grupos.estado','1')
             ->where('direccion_grupos.distribucion','SUR')
+            ->whereNotIn('direccion_grupos.condicion_envio_code',[Pedido::ENTREGADO_SIN_SOBRE_INT,Pedido::CONFIRMACION_SIN_SOBRE_INT])
             /*->where(function($query){
                 $query->where('direccion_grupos.distribucion','=','')->orWhereNull('direccion_grupos.distribucion');
             })*/
