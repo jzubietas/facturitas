@@ -2,6 +2,7 @@
 
 namespace App\Observers;
 
+use App\Jobs\PostCreatePedido;
 use App\Models\Cliente;
 use App\Models\Pedido;
 use Illuminate\Support\Facades\DB;
@@ -16,55 +17,8 @@ class PedidoObserver
      */
     public function created(Pedido $pedido)
     {
-
-        //NO EXISTE --> PEDIDOS EN CERO CON ESTADO "1"
-
-        //NUEVO --> tiene pedidos mayor a cero en un rango de 1 mes
-        //--> si no registra en el mes siguiente pasa a RECURRENTE
-
-        //ABANDONO
-        //RECUPERADO ABANDONO
-
-        //ABANDONO RECIENTE -> si
-        //RECUPERADO ABANDONO RECIENTE
-
-        //RECURRENTE
-        //
-        /*
-                S_2022_12
-        ABANDONO RECIENTE=RECUPERADO RECIENTE
-        RECURRENTE=RECURRENTE
-        RECUPERADO=RECURRENTE
-        RECUPERADO ABANDONO=RECURRENTE
-        ABANDONO PERMANENTE=RECUPERADO ABANDONO
-        NO EXISTE=NUEVO
-        NUEVO=RECURRENTE
-        */
-        if (now()->format("Y-m") == "2022-12") {
-            $status = "";
-            switch ($pedido->cliente->situacion) {
-                case "ABANDONO RECIENTE":
-                    $status = "RECUPERADO RECIENTE";
-                    break;
-                case "RECURRENTE":
-                case "RECUPERADO":
-                case "RECUPERADO ABANDONO":
-                case "NUEVO":
-                    $status = "RECURRENTE";
-                    break;
-                case "ABANDONO PERMANENTE":
-                    $status = "RECUPERADO ABANDONO";
-                case "NO EXISTE":
-                    $status = "NUEVO";
-                    break;
-            }
-
-            if (!empty($status)) {
-                $pedido->cliente->update([
-                    "situacion" => $status
-                ]);
-            }
-        }
+        \Log::info("PostCreatePedido -> ".$pedido->cliente_id);
+        PostCreatePedido::dispatchSync($pedido);
     }
 
     /**

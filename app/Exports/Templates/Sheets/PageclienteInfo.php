@@ -2,7 +2,7 @@
 
 namespace App\Exports\Templates\Sheets;
 
-use App\Abstracts\ExportYear;
+use App\Abstracts\Export;
 use App\Models\Cliente;
 use App\Models\Porcentaje;
 use App\Models\Pedido;
@@ -28,8 +28,11 @@ Sheet::macro('styleCells', function (Sheet $sheet, string $cellRange, array $sty
     $sheet->getDelegate()->getStyle($cellRange)->applyFromArray($style);
 });
 
-class PageclienteInfo extends ExportYear implements WithColumnFormatting, FromCollection, WithHeadings, ShouldAutoSize, WithEvents
+class PageclienteInfo extends Export implements WithColumnFormatting, FromCollection, WithHeadings, ShouldAutoSize, WithEvents
 {
+
+    public static $fecharuta='';
+
     //public $anio;
     /*public function __construct($anio)
     {
@@ -37,6 +40,11 @@ class PageclienteInfo extends ExportYear implements WithColumnFormatting, FromCo
         parent::__construct();
         //$this->$anio=2021;
     }*/
+    public function __construct($ids)
+    {
+        parent::__construct();
+        self::$fecharuta=$ids;
+    }
 
     public function collection()
     {
@@ -163,65 +171,65 @@ class PageclienteInfo extends ExportYear implements WithColumnFormatting, FromCo
           }
 
 
-        $model->eneroa = Pedido::where('estado', '1')->whereYear(DB::raw('Date(created_at)'), $this->anio)->where('cliente_id', $model->id)
+        $model->eneroa = Pedido::where('estado', '1')->whereYear(DB::raw('Date(created_at)'), self::$fecharuta)->where('cliente_id', $model->id)
             ->where(DB::raw('MONTH(created_at)'), '1')->count();
         $model->eneroa=($model->eneroa<0)? 0:$model->eneroa;
-        $model->enerop = Pedido::where('estado', '1')->whereYear(DB::raw('Date(created_at)'), $this->anio+1)->where('cliente_id', $model->id)
+        $model->enerop = Pedido::where('estado', '1')->whereYear(DB::raw('Date(created_at)'), self::$fecharuta+1)->where('cliente_id', $model->id)
             ->where(DB::raw('MONTH(created_at)'), '1')->count();
 
-        $model->febreroa = Pedido::where('estado', '1')->whereYear(DB::raw('Date(created_at)'), $this->anio)->where('cliente_id', $model->id)
+        $model->febreroa = Pedido::where('estado', '1')->whereYear(DB::raw('Date(created_at)'), self::$fecharuta)->where('cliente_id', $model->id)
             ->where(DB::raw('MONTH(created_at)'), '2')->count();
-        $model->febrerop = Pedido::where('estado', '1')->whereYear(DB::raw('Date(created_at)'), $this->anio+1)->where('cliente_id', $model->id)
+        $model->febrerop = Pedido::where('estado', '1')->whereYear(DB::raw('Date(created_at)'), self::$fecharuta+1)->where('cliente_id', $model->id)
             ->where(DB::raw('MONTH(created_at)'), '2')->count();
 
-        $model->marzoa = Pedido::where('estado', '1')->whereYear(DB::raw('Date(created_at)'), $this->anio)->where('cliente_id', $model->id)
+        $model->marzoa = Pedido::where('estado', '1')->whereYear(DB::raw('Date(created_at)'), self::$fecharuta)->where('cliente_id', $model->id)
             ->where(DB::raw('MONTH(created_at)'), '3')->count();
-        $model->marzop = Pedido::where('estado', '1')->whereYear(DB::raw('Date(created_at)'), $this->anio+1)->where('cliente_id', $model->id)
+        $model->marzop = Pedido::where('estado', '1')->whereYear(DB::raw('Date(created_at)'), self::$fecharuta+1)->where('cliente_id', $model->id)
             ->where(DB::raw('MONTH(created_at)'), '3')->count();
 
-        $model->abrila = Pedido::where('estado', '1')->whereYear(DB::raw('Date(created_at)'), $this->anio)->where('cliente_id', $model->id)
+        $model->abrila = Pedido::where('estado', '1')->whereYear(DB::raw('Date(created_at)'), self::$fecharuta)->where('cliente_id', $model->id)
             ->where(DB::raw('MONTH(created_at)'), '4')->count();
-        $model->abrilp = Pedido::where('estado', '1')->whereYear(DB::raw('Date(created_at)'), $this->anio+1)->where('cliente_id', $model->id)
+        $model->abrilp = Pedido::where('estado', '1')->whereYear(DB::raw('Date(created_at)'), self::$fecharuta+1)->where('cliente_id', $model->id)
             ->where(DB::raw('MONTH(created_at)'), '4')->count();
 
-        $model->mayoa = Pedido::where('estado', '1')->whereYear(DB::raw('Date(created_at)'), $this->anio)->where('cliente_id', $model->id)
+        $model->mayoa = Pedido::where('estado', '1')->whereYear(DB::raw('Date(created_at)'), self::$fecharuta)->where('cliente_id', $model->id)
             ->where(DB::raw('MONTH(created_at)'), '5')->count();
-        $model->mayop = Pedido::where('estado', '1')->whereYear(DB::raw('Date(created_at)'), $this->anio+1)->where('cliente_id', $model->id)
+        $model->mayop = Pedido::where('estado', '1')->whereYear(DB::raw('Date(created_at)'), self::$fecharuta+1)->where('cliente_id', $model->id)
             ->where(DB::raw('MONTH(created_at)'), '5')->count();
 
-        $model->junioa = Pedido::where('estado', '1')->whereYear(DB::raw('Date(created_at)'), $this->anio)->where('cliente_id', $model->id)
+        $model->junioa = Pedido::where('estado', '1')->whereYear(DB::raw('Date(created_at)'), self::$fecharuta)->where('cliente_id', $model->id)
             ->where(DB::raw('MONTH(created_at)'), '6')->count();
-        $model->juniop = Pedido::where('estado', '1')->whereYear(DB::raw('Date(created_at)'), $this->anio+1)->where('cliente_id', $model->id)
+        $model->juniop = Pedido::where('estado', '1')->whereYear(DB::raw('Date(created_at)'), self::$fecharuta+1)->where('cliente_id', $model->id)
             ->where(DB::raw('MONTH(created_at)'), '6')->count();
 
-        $model->julioa = Pedido::where('estado', '1')->whereYear(DB::raw('Date(created_at)'), $this->anio)->where('cliente_id', $model->id)
+        $model->julioa = Pedido::where('estado', '1')->whereYear(DB::raw('Date(created_at)'), self::$fecharuta)->where('cliente_id', $model->id)
             ->where(DB::raw('MONTH(created_at)'), '7')->count();
-        $model->juliop = Pedido::where('estado', '1')->whereYear(DB::raw('Date(created_at)'), $this->anio+1)->where('cliente_id', $model->id)
+        $model->juliop = Pedido::where('estado', '1')->whereYear(DB::raw('Date(created_at)'), self::$fecharuta+1)->where('cliente_id', $model->id)
             ->where(DB::raw('MONTH(created_at)'), '7')->count();
 
-        $model->agostoa = Pedido::where('estado', '1')->whereYear(DB::raw('Date(created_at)'), $this->anio)->where('cliente_id', $model->id)
+        $model->agostoa = Pedido::where('estado', '1')->whereYear(DB::raw('Date(created_at)'), self::$fecharuta)->where('cliente_id', $model->id)
             ->where(DB::raw('MONTH(created_at)'), '8')->count();
-        $model->agostop = Pedido::where('estado', '1')->whereYear(DB::raw('Date(created_at)'), $this->anio+1)->where('cliente_id', $model->id)
+        $model->agostop = Pedido::where('estado', '1')->whereYear(DB::raw('Date(created_at)'), self::$fecharuta+1)->where('cliente_id', $model->id)
             ->where(DB::raw('MONTH(created_at)'), '8')->count();
 
-        $model->setiembrea = Pedido::where('estado', '1')->whereYear(DB::raw('Date(created_at)'), $this->anio)->where('cliente_id', $model->id)
+        $model->setiembrea = Pedido::where('estado', '1')->whereYear(DB::raw('Date(created_at)'), self::$fecharuta)->where('cliente_id', $model->id)
             ->where(DB::raw('MONTH(created_at)'), '9')->count();
-        $model->setiembrep = Pedido::where('estado', '1')->whereYear(DB::raw('Date(created_at)'), $this->anio+1)->where('cliente_id', $model->id)
+        $model->setiembrep = Pedido::where('estado', '1')->whereYear(DB::raw('Date(created_at)'), self::$fecharuta+1)->where('cliente_id', $model->id)
             ->where(DB::raw('MONTH(created_at)'), '9')->count();
 
-        $model->octubrea = Pedido::where('estado', '1')->whereYear(DB::raw('Date(created_at)'), $this->anio)->where('cliente_id', $model->id)
+        $model->octubrea = Pedido::where('estado', '1')->whereYear(DB::raw('Date(created_at)'), self::$fecharuta)->where('cliente_id', $model->id)
             ->where(DB::raw('MONTH(created_at)'), '10')->count();
-        $model->octubrep = Pedido::where('estado', '1')->whereYear(DB::raw('Date(created_at)'), $this->anio+1)->where('cliente_id', $model->id)
+        $model->octubrep = Pedido::where('estado', '1')->whereYear(DB::raw('Date(created_at)'), self::$fecharuta+1)->where('cliente_id', $model->id)
             ->where(DB::raw('MONTH(created_at)'), '10')->count();
 
-        $model->noviembrea = Pedido::where('estado', '1')->whereYear(DB::raw('Date(created_at)'), $this->anio)->where('cliente_id', $model->id)
+        $model->noviembrea = Pedido::where('estado', '1')->whereYear(DB::raw('Date(created_at)'), self::$fecharuta)->where('cliente_id', $model->id)
             ->where(DB::raw('MONTH(created_at)'), '11')->count();
-        $model->noviembrep = Pedido::where('estado', '1')->whereYear(DB::raw('Date(created_at)'), $this->anio+1)->where('cliente_id', $model->id)
+        $model->noviembrep = Pedido::where('estado', '1')->whereYear(DB::raw('Date(created_at)'), self::$fecharuta+1)->where('cliente_id', $model->id)
             ->where(DB::raw('MONTH(created_at)'), '11')->count();
 
-        $model->diciembrea = Pedido::where('estado', '1')->whereYear(DB::raw('Date(created_at)'), $this->anio)->where('cliente_id', $model->id)
+        $model->diciembrea = Pedido::where('estado', '1')->whereYear(DB::raw('Date(created_at)'), self::$fecharuta)->where('cliente_id', $model->id)
             ->where(DB::raw('MONTH(created_at)'), '12')->count();
-        $model->diciembrep = Pedido::where('estado', '1')->whereYear(DB::raw('Date(created_at)'), $this->anio+1)->where('cliente_id', $model->id)
+        $model->diciembrep = Pedido::where('estado', '1')->whereYear(DB::raw('Date(created_at)'), self::$fecharuta+1)->where('cliente_id', $model->id)
             ->where(DB::raw('MONTH(created_at)'), '12')->count();
 
 
@@ -264,30 +272,30 @@ class PageclienteInfo extends ExportYear implements WithColumnFormatting, FromCo
             ,"porcentajefb"=>"Porcentaje Fisico Bancarizado"
             ,"porcentajeesb"=>"Porcentaje Electronico sin banca"
             ,"porcentajeeb"=>"Porcentaje Electronico Bancarizado"
-            ,"eneroa"=>"Enero ".$this->anio
-            ,"febreroa"=>"Febrero ".$this->anio
-            ,"marzoa"=>"Marzo ".$this->anio
-            ,"abrila"=>"Abril ".$this->anio
-            ,"mayoa"=>"Mayo ".$this->anio
-            ,"junioa"=>"Junio ".$this->anio
-            ,"julioa"=>"Julio ".$this->anio
-            ,"agostoa"=>"Agosto ".$this->anio
-            ,"setiembrea"=>"Setiembre ".$this->anio
-            ,"octubrea"=>"Octubre ".$this->anio
-            ,"noviembrea"=>"Noviembre ".$this->anio
-            ,"diciembrea"=>"Diciembre ".$this->anio
-            ,"enerop"=>"Enero ".($this->anio+1)
-            ,"febrerop"=>"Febrero ".($this->anio+1)
-            ,"marzop"=>"Marzo ".($this->anio+1)
-            ,"abrilp"=>"Abril ".($this->anio+1)
-            ,"mayop"=>"Mayo ".($this->anio+1)
-            ,"juniop"=>"Junio ".($this->anio+1)
-            ,"juliop"=>"Julio ".($this->anio+1)
-            ,"agostop"=>"Agosto ".($this->anio+1)
-            ,"setiembrep"=>"Setiembre ".($this->anio+1)
-            ,"octubrep"=>"Octubre ".($this->anio+1)
-            ,"noviembrep"=>"Noviembre ".($this->anio+1)
-            ,"diciembrep"=>"Diciembre ".($this->anio+1)
+            ,"eneroa"=>"Enero ".self::$fecharuta
+            ,"febreroa"=>"Febrero ".self::$fecharuta
+            ,"marzoa"=>"Marzo ".self::$fecharuta
+            ,"abrila"=>"Abril ".self::$fecharuta
+            ,"mayoa"=>"Mayo ".self::$fecharuta
+            ,"junioa"=>"Junio ".self::$fecharuta
+            ,"julioa"=>"Julio ".self::$fecharuta
+            ,"agostoa"=>"Agosto ".self::$fecharuta
+            ,"setiembrea"=>"Setiembre ".self::$fecharuta
+            ,"octubrea"=>"Octubre ".self::$fecharuta
+            ,"noviembrea"=>"Noviembre ".self::$fecharuta
+            ,"diciembrea"=>"Diciembre ".self::$fecharuta
+            ,"enerop"=>"Enero ".(intval(self::$fecharuta)+1)
+            ,"febrerop"=>"Febrero ".(intval(self::$fecharuta)+1)
+            ,"marzop"=>"Marzo ".(intval(self::$fecharuta)+1)
+            ,"abrilp"=>"Abril ".(intval(self::$fecharuta)+1)
+            ,"mayop"=>"Mayo ".(intval(self::$fecharuta)+1)
+            ,"juniop"=>"Junio ".(intval(self::$fecharuta)+1)
+            ,"juliop"=>"Julio ".(intval(self::$fecharuta)+1)
+            ,"agostop"=>"Agosto ".(intval(self::$fecharuta)+1)
+            ,"setiembrep"=>"Setiembre ".(intval(self::$fecharuta)+1)
+            ,"octubrep"=>"Octubre ".(intval(self::$fecharuta)+1)
+            ,"noviembrep"=>"Noviembre ".(intval(self::$fecharuta)+1)
+            ,"diciembrep"=>"Diciembre ".(intval(self::$fecharuta)+1)
             //,"created_at"=>"Fecha",
         ];
     }
