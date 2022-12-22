@@ -96,7 +96,7 @@
         @if($dato['situacion'] == 'RECURRENTE')
           <td style="background: ##17a2b8">RECURRENTE</td>
         @elseif($dato['situacion'] == 'NUEVO')
-          <td style="background: #17a2b8">RECURRENTE</td>
+          <td style="background: #17a2b8">NUEVO</td>
         @elseif($dato['situacion'] == 'ABANDONO')
           <td style="background: #dc3545">ABANDONO</td>
         @elseif($dato['situacion'] == 'ABANDONO RECIENTE')
