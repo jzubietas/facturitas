@@ -86,14 +86,14 @@ class Pedido extends Model
     public static $estadosCondicion = [
         'ANULADO' => 4,
         'POR ATENDER' => 1,
-        'EN PROCESO ATENCIÓN' => 2,
+        'EN PROCESO ATENCION' => 2,
         'ATENDIDO' => 3,
     ];
 
     public static $estadosCondicionCode = [
         4 => 'ANULADO',
         1 => 'POR ATENDER',
-        2 => 'EN PROCEOS DE ATENCION',
+        2 => 'EN PROCESOS DE ATENCION',
         3 => 'ATENDIDO',
     ];
 
