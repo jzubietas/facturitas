@@ -18,7 +18,7 @@ class PedidoObserver
     public function created(Pedido $pedido)
     {
         \Log::info("PostCreatePedido -> ".$pedido->cliente_id);
-        PostCreatePedido::dispatchSync($pedido);
+        PostCreatePedido::dispatchSync($pedido->cliente_id);
     }
 
     /**

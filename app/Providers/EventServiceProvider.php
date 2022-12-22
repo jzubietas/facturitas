@@ -10,7 +10,9 @@ use App\Listeners\PagoListener;
 use App\Listeners\PedidoAtendidoListener;
 use App\Listeners\PedidoEntregadoListener;
 use App\Listeners\PedidoListener;
+use App\Models\Cliente;
 use App\Models\Pedido;
+use App\Observers\ClienteObserver;
 use App\Observers\PedidoObserver;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
@@ -50,5 +52,6 @@ class EventServiceProvider extends ServiceProvider
     public function boot()
     {
         Pedido::observe(PedidoObserver::class);
+        Cliente::observe(ClienteObserver::class);
     }
 }
