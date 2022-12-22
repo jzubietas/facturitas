@@ -5,6 +5,7 @@ namespace App\Exports\Templates\Sheets;
 
 use App\Abstracts\Export;
 use App\Models\DireccionGrupo;
+use App\Models\Pedido;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Concerns\WithColumnFormatting;
@@ -48,6 +49,7 @@ class PagerutaenvioProvincia  extends Export  implements WithEvents,WithColumnWi
             })*/
             ->where('direccion_grupos.destino','PROVINCIA')
             ->where(DB::raw('DATE(direccion_grupos.created_at)'), self::$fecharuta)
+            ->whereNotIn('direccion_grupos.condicion_envio_code',[Pedido::ENTREGADO_SIN_SOBRE_INT,Pedido::CONFIRMACION_SIN_SOBRE_INT])
             ->select(
                 'c.celular as correlativo',
                 'u.identificador as identificador',

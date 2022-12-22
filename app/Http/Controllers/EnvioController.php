@@ -470,7 +470,7 @@ class EnvioController extends Controller
 
 
 
-
+        $arreglo=[Pedido::ENTREGADO_SIN_SOBRE_INT,Pedido::CONFIRMACION_SIN_SOBRE_INT];
 
 
         if($request->desde)
@@ -478,7 +478,7 @@ class EnvioController extends Controller
             {
             //busca solo el dia nada mas
 
-
+          
 
             $min = Carbon::createFromFormat('d/m/Y', $request->desde)->format('Y-m-d');//2022-11-25
             //return $min;
@@ -488,6 +488,7 @@ class EnvioController extends Controller
                                     ->join('users as u', 'u.id', 'c.user_id')
                                     ->where('direccion_grupos.estado','1')
                                     ->where(DB::raw('DATE(direccion_grupos.created_at)'), $min)
+                                    ->whereNotIn('direccion_grupos.condicion_envio_code',$arreglo)
                                     ->select(
                                         'direccion_grupos.id',
                                         'u.identificador as identificador',
@@ -514,6 +515,7 @@ class EnvioController extends Controller
                                     ->join('users as u', 'u.id', 'c.user_id')
                                     ->where('direccion_grupos.estado','1')
                                    ->where(DB::raw('DATE(direccion_grupos.created_at)'), $min)
+                                   ->whereNotIn('direccion_grupos.condicion_envio_code',$arreglo)
                                     //->whereNotIn('direccion_grupos.condicion_sobre',['SIN ENVIO'])
                                     //->where('direccion_grupos.condicion_sobre', '<>', 'SIN ENVIO')
                                     ->select(
@@ -553,6 +555,7 @@ class EnvioController extends Controller
                         ->join('clientes as c', 'c.id', 'de.cliente_id')
                         ->join('users as u', 'u.id', 'c.user_id')
                         ->where('direccion_grupos.estado','1')
+                        ->whereNotIn('direccion_grupos.condicion_envio_code',$arreglo)
                     //   ->whereNull('direccion_grupos.condicion_sobre')
                         //->where('direccion_grupos.condicion_sobre', '<>', 'SIN ENVIO')
                         ->select(
@@ -600,6 +603,7 @@ class EnvioController extends Controller
                         ->join('clientes as c', 'c.id', 'de.cliente_id')
                         ->join('users as u', 'u.id', 'c.user_id')
                         ->where('direccion_grupos.estado','1')
+                        ->whereNotIn('direccion_grupos.condicion_envio_code',$arreglo)
                     //  ->whereNull('direccion_grupos.condicion_sobre')
                         //->where('direccion_grupos.condicion_sobre', '<>', 'SIN ENVIO')
                         ->select(
