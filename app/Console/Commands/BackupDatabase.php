@@ -13,7 +13,7 @@ class BackupDatabase extends Command
      *
      * @var string
      */
-    protected $signature = 'backup:database';
+    protected $signature = 'backup:database {--u|user=} {--p|pwd=} {--host=127.0.0.1}';
 
     /**
      * The console command description.
@@ -42,9 +42,9 @@ class BackupDatabase extends Command
         $this->deleteBackups();
         $database = \DB::connection()->getDatabaseName();
         $default = config('database.default');
-        $h = config('database.connections.' . $default . '.host');
-        $p = config('database.connections.' . $default . '.password');
-        $u = config('database.connections.' . $default . '.username');
+        $h = $this->option("host")?:config('database.connections.' . $default . '.host');
+        $p = $this->option("pwd")?:config('database.connections.' . $default . '.password');
+        $u = $this->option("user")?:config('database.connections.' . $default . '.username');
 
         if (!file_exists(storage_path("backups"))) {
             mkdir(storage_path("backups"));
