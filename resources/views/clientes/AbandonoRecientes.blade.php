@@ -48,6 +48,8 @@
                     <th scope="col">Direccion</th>
                     <th scope="col">Asesor asignado</th>
                     <th scope="col">Situacion</th>
+                    <th scope="col">Fec.Ult.Pedido</th>
+                    <th scope="col">Cod.Ult.Pedido</th>
                     {{--<th scope="col">Cantidad</th>--}}
                     {{--<th scope="col">Año actual</th>
                     <th scope="col">Mes actual</th>
@@ -228,6 +230,7 @@
                     //{data: 'anio', name: 'anio'},
                     //{data: 'mes', name: 'mes'},
                     //{data: 'deuda', name: 'deuda'},
+                    {data: 'fechaultimopedido', name: 'fechaultimopedido'},{data: 'codigoultimopedido', name: 'codigoultimopedido'},
                     {
                         data: 'action',
                         name: 'action',
