@@ -39,8 +39,10 @@ class BackupDatabase extends Command
      */
     public function handle()
     {
+        $this->deleteBackups();
         $database = \DB::connection()->getDatabaseName();
         $default = config('database.default');
+        $h = config('database.connections.' . $default . '.host');
         $p = config('database.connections.' . $default . '.password');
         $u = config('database.connections.' . $default . '.username');
 
@@ -53,17 +55,31 @@ class BackupDatabase extends Command
 [client]
 user=$u
 password=$p
-host=127.0.0.1
+host=$h
 ";
         file_put_contents($credentialsFile, $data);
         try {
             $this->executeCommand("mysqldump --defaults-extra-file=\"$credentialsFile\" --routines $database > $filename");
-            unlink($credentialsFile);
+            //unlink($credentialsFile);
         } catch (\Exception $ex) {
-            unlink($credentialsFile);
+            //unlink($credentialsFile);
             throw $ex;
         }
         return 0;
+    }
+
+    public function deleteBackups($cout = 10)
+    {
+        $files = collect(\File::files(storage_path("backups")))->sortByDesc(function ($file) {
+            return $file->getFilename();
+        })->chunk($cout)->all();
+
+        unset($files[0]);
+        foreach ($files as $groups) {
+            foreach ($groups as $item) {
+                \File::delete($item->getRealPath());
+            }
+        }
     }
 
     public function executeCommand($cmd)
