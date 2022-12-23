@@ -25,7 +25,7 @@
                 </div>
                 <div class="card-body">
                     <h4 class="text-center">
-                        <b>{{$pedidos_atendidos}}/{{$pedidos_atendidos_total}}</b>
+                        <b>{{$pedidos_atendidos}}</b>
                     </h4>
                 </div>
             </div>

@@ -57,6 +57,7 @@
 @section('content')
     <div class="card">
         <div class="card-body">
+            <!--
             <table cellspacing="5" cellpadding="5" class="table-responsive">
                 <tbody>
                 <tr>
@@ -68,7 +69,7 @@
                 </tr>
                 </tbody>
             </table>
-            <br>
+            <br>-->
             <table id="tablaPrincipal" class="table table-striped">{{-- display nowrap  --}}
                 <thead>
                 <tr>

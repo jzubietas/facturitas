@@ -2773,6 +2773,7 @@ class PedidoController extends Controller
             }
             $pedido->update([
                 'pendiente_anulacion' => '0',
+                'user_anulacion_id' => \auth()->id(),
                 'fecha_anulacion_denegada' => now(),
             ]);
             return response()->json([
