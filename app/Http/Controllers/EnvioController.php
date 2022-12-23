@@ -1853,5 +1853,162 @@ class EnvioController extends Controller
         return response()->json(['html' => $pedido->id]);
     }
 
+    public function Estadosobres()
+    {
+        $ver_botones_accion = 1;
+
+        if(Auth::user()->rol == "Asesor")
+        {
+            $ver_botones_accion = 0;
+        }else if(Auth::user()->rol == "Super asesor"){
+            $ver_botones_accion = 0;
+        }else if(Auth::user()->rol == "Encargado"){
+            $ver_botones_accion = 1;
+        }else{
+            $ver_botones_accion = 1;
+        }
+
+        $distritos = Distrito::whereIn('provincia', ['LIMA', 'CALLAO'])
+                            ->where('estado', '1')
+                            ->WhereNotIn('distrito' ,['CHACLACAYO','CIENEGUILLA','LURIN','PACHACAMAC','PUCUSANA','PUNTA HERMOSA','PUNTA NEGRA','SAN BARTOLO','SANTA MARIA DEL MAR'])
+                            ->pluck('distrito', 'distrito');
+
+        $departamento = Departamento::where('estado', "1")
+                ->pluck('departamento', 'departamento');
+
+        $superasesor = User::where('rol', 'Super asesor')->count();
+
+        return view('envios.estadosobres', compact('superasesor','ver_botones_accion','distritos','departamento'));
+    }
+
+    public function Estadosobrestabla(Request $request)
+    {
+        $pedidos=null;
+
+        $pedidos = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')
+                ->join('users as u', 'pedidos.user_id', 'u.id')
+                ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
+                ->select(
+                    'pedidos.id',
+                    'pedidos.cliente_id',
+                    // 'c.nombre as nombres',
+                    // 'c.celular as celulares',
+                    'u.identificador as users',
+                    'u.id as user_id',
+                    'dp.codigo as codigos',
+                     'dp.nombre_empresa as empresas',
+                    'dp.total as total',
+                    'pedidos.condicion',
+                    'pedidos.created_at as fecha',
+                    'pedidos.condicion_envio',
+                    'pedidos.envio',
+                    'pedidos.codigo',
+                    'pedidos.destino',
+                    'pedidos.direccion',
+                    'dp.envio_doc',
+                    'dp.fecha_envio_doc',
+                    'dp.cant_compro',
+                    'dp.fecha_envio_doc_fis',
+                    'dp.foto1',
+                    'dp.foto2',
+                    'dp.fecha_recepcion',
+                    'pedidos.devuelto',
+                    'pedidos.cant_devuelto',
+                    'pedidos.returned_at',
+                    'pedidos.observacion_devuelto',
+                )
+                ->where('pedidos.estado', '1')
+                //->whereIn('pedidos.envio', [Pedido::ENVIO_CONFIRMAR_RECEPCION,Pedido::ENVIO_RECIBIDO]) // ENVIADO CONFIRMAR RECEPCION Y ENVIADO RECIBIDO
+                ->whereIn('pedidos.condicion_envio_code', [Pedido::JEFE_OP_INT,Pedido::JEFE_OP_CONF_INT,Pedido::RECEPCION_COURIER_INT]) // ENVIADO CONFIRMAR RECEPCION Y ENVIADO RECIBIDO
+                ->where('dp.estado', '1');
+                /*->groupBy(
+                    'pedidos.id',
+                    'pedidos.cliente_id',
+                    'c.nombre',
+                    'c.celular',
+                    'u.identificador',
+                    'dp.codigo',
+                    'dp.nombre_empresa',
+                    'dp.total',
+                    'pedidos.condicion',
+                    'pedidos.created_at',
+                    'pedidos.condicion_envio',
+                    'pedidos.envio',
+                    'pedidos.destino',
+                    'pedidos.direccion',
+                    'dp.envio_doc',
+                    'dp.fecha_envio_doc',
+                    'dp.cant_compro',
+                    'dp.fecha_envio_doc_fis',
+                    'dp.foto1',
+                    'dp.foto2',
+                    'dp.fecha_recepcion'
+                );*/
+        if(Auth::user()->rol == "Operario"){
+            $asesores = User::where('users.rol', 'Asesor')
+                -> where('users.estado', '1')
+                -> Where('users.operario',Auth::user()->id)
+                ->select(
+                    DB::raw("users.identificador as identificador")
+                )
+                ->pluck('users.identificador');
+
+            $pedidos=$pedidos->WhereIn('u.identificador',$asesores);
+
+        }else if(Auth::user()->rol == "Jefe de operaciones"){
+            $operarios = User::where('users.rol', 'Operario')
+                -> where('users.estado', '1')
+                -> where('users.jefe', Auth::user()->id)
+                ->select(
+                    DB::raw("users.id as id")
+                )
+                ->pluck('users.id');
+
+            $asesores = User::where('users.rol', 'Asesor')
+                -> where('users.estado', '1')
+                ->WhereIn('users.operario',$operarios)
+                ->select(
+                    DB::raw("users.identificador as identificador")
+                )
+                ->pluck('users.identificador');
+
+            $pedidos=$pedidos->WhereIn('u.identificador',$asesores);
+
+        }else if(Auth::user()->rol == "Asesor"){
+            $pedidos=$pedidos->Where('u.identificador',Auth::user()->identificador);
+
+        }
+        else if(Auth::user()->rol == "Super asesor"){
+            $pedidos=$pedidos->Where('u.identificador',Auth::user()->identificador);
+
+        }
+        else if(Auth::user()->rol == "Encargado"){
+
+            $usersasesores = User::where('users.rol', 'Asesor')
+                -> where('users.estado', '1')
+                -> where('users.supervisor', Auth::user()->id)
+                ->select(
+                    DB::raw("users.identificador as identificador")
+                )
+                ->pluck('users.identificador');
+
+            $pedidos=$pedidos->WhereIn('u.identificador',$usersasesores);
+        }
+        else{
+            $pedidos=$pedidos;
+        }
+        $pedidos=$pedidos->get();
+
+        return Datatables::of($pedidos)
+                    ->addIndexColumn()
+                    ->addColumn('action', function($pedido){
+                        $btn='';
+                        return $btn;
+                    })
+                    ->rawColumns(['action'])
+                    ->make(true);
+
+    }
+
 
 }
