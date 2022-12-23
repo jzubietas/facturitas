@@ -126,8 +126,16 @@
             </div>
             <div class="col-md-12">
                 <div class="row" id="widget-container">
+
                     <div class="col-md-12">
-                        <x-grafico-metas-progress-bar></x-grafico-metas-progress-bar>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <x-grafico-meta-pedidos-progress-bar></x-grafico-meta-pedidos-progress-bar>
+                            </div>
+                            <div class="col-md-6">
+                                <x-grafico-metas-progress-bar></x-grafico-metas-progress-bar>
+                            </div>
+                        </div>
                     </div>
                     <div class="col-md-12">
                         <x-grafico-meta_cobranzas></x-grafico-meta_cobranzas>
@@ -145,6 +153,7 @@
                     </div>
                 </div>
             </div>
+            {{--
             <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12">
                 <div class="card">
                     <div class="card-body">
@@ -152,6 +161,7 @@
                     </div>
                 </div>
             </div>
+            --}}
             <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12">
                 <div class="card">
                     <div class="card-body">
