@@ -95,7 +95,6 @@ class PedidoStatusController extends Controller
 
                 $pedidos = $pedidos->WhereIn('u.identificador', $asesores);
             }elseif (Auth::user()->rol == "Encargado") {
-
                 $usersasesores = User::whereIn('users.rol', ['Asesor',User::ROL_ADMIN])
                     ->where('users.estado', '1')
                     ->where('users.supervisor', Auth::user()->id)
@@ -106,7 +105,17 @@ class PedidoStatusController extends Controller
 
                 $pedidos = $pedidos->WhereIn('u.identificador', $usersasesores);
             }
+            else if (Auth::user()->rol == "Asesor") {
+                $usersasesores = User::where('users.rol', 'Asesor')
+                    ->where('users.estado', '1')
+                    ->where('users.identificador', Auth::user()->identificador)
+                    ->select(
+                        DB::raw("users.identificador as identificador")
+                    )
+                    ->pluck('users.identificador');
 
+                $pedidos = $pedidos->WhereIn('u.identificador', $usersasesores);
+            }
             if ($request->get('load_data') == 'por_atender') {
                 $pedidos->whereIn('pedidos.condicion_code', [Pedido::POR_ATENDER_INT, Pedido::EN_PROCESO_ATENCION_INT]);
             } else {
