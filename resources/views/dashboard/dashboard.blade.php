@@ -317,6 +317,7 @@
 
     <script>
       // CARGAR PEDIDOS DE CLIENTE SELECCIONADO
+      {{--
       window.onload = function () {
         $.ajax({
           url: "{{ route('notifications.getpedidosatender') }}",
@@ -329,6 +330,7 @@
           }
         });
       };
+      --}}
     </script>
     <script>
         (function () {
