@@ -7,8 +7,8 @@
     <div><h1>Dashboard</h1>
         <!-- Right navbar links -->
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 
-    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <!--ADMINISTRADOR-->
     <script type="text/javascript">
