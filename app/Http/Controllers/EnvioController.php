@@ -265,6 +265,10 @@ class EnvioController extends Controller
             "ENTREGADO" => 'ENTREGADO'
         ];
 
+        PedidoMovimientoEstado::where('condicion_envio_code',Pedido::ENTREGADO_SIN_SOBRE_INT)->update([
+            'notificado' => 1,
+        ]);
+
         $superasesor = User::where('rol', 'Super asesor')->count();
 
         return view('envios.entregados', compact('dateMin', 'dateMax', 'condiciones', 'superasesor'));
@@ -1235,7 +1239,8 @@ class EnvioController extends Controller
 
         PedidoMovimientoEstado::create([
             'pedido' => $request->hiddenEnvio,
-            'condicion_envio_code' => Pedido::JEFE_OP_CONF_INT
+            'condicion_envio_code' => Pedido::JEFE_OP_CONF_INT,
+            'notificado' => 0
         ]);
 
         return response()->json(['html' => $pedido->id]);
@@ -1697,7 +1702,8 @@ class EnvioController extends Controller
 
         PedidoMovimientoEstado::create([
             'pedido' => $request->hiddenSinenvio,
-            'condicion_envio_code' => DireccionGrupo::CE_ENTREGADO_SIN_SOBRE_CODE
+            'condicion_envio_code' => DireccionGrupo::CE_ENTREGADO_SIN_SOBRE_CODE,
+            'notificado' => 0
         ]);
 
 
@@ -1795,7 +1801,8 @@ class EnvioController extends Controller
 
         PedidoMovimientoEstado::create([
             'pedido' => $request->hiddenEnvio,
-            'condicion_envio_code' => Pedido::JEFE_OP_INT
+            'condicion_envio_code' => Pedido::JEFE_OP_INT,
+            'notificado' => 0
         ]);
 
 
@@ -1824,6 +1831,7 @@ class EnvioController extends Controller
           PedidoMovimientoEstado::create([
                     'pedido' => $request->hiddenEnvio,
                     'condicion_envio_code' => Pedido::CONFIRMACION_SIN_SOBRE_INT,
+                    'notificado' => 0
                 ]);
 
         return response()->json(['html' => $pedido->id]);
@@ -1843,7 +1851,8 @@ class EnvioController extends Controller
 
         PedidoMovimientoEstado::create([
             'pedido' => $request->hiddenEnvio,
-            'condicion_envio_code' => Pedido::JEFE_OP_CONF_INT
+            'condicion_envio_code' => Pedido::JEFE_OP_CONF_INT,
+            'notificado' => 0
         ]);
 
         return response()->json(['html' => $pedido->id]);

@@ -7,18 +7,6 @@
 @section('content')
     <div class="row">
         <div class="col-md-3">
-            <div class="card card-warning">
-                <div class="card-header">
-                    <h5>PEDIDO POR ATENDER</h5>
-                </div>
-                <div class="card-body">
-                    <h4 class="text-center">
-                        <b>{{$pedidos_por_atender}}</b>
-                    </h4>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-3">
             <div class="card card-success">
                 <div class="card-header">
                     <h5>PEDIDOS ATENDIDOS</h5>
@@ -30,14 +18,27 @@
                 </div>
             </div>
         </div>
+        <div class="col-md-3">
+            <div class="card card-warning">
+                <div class="card-header">
+                    <h5>PEDIDO POR ATENDER</h5>
+                </div>
+                <div class="card-body">
+                    <h4 class="text-center">
+                        <b>{{$pedidos_por_atender}}</b>
+                    </h4>
+                </div>
+            </div>
+        </div>
     </div>
     <div class="card">
         <div class="card-header">
             <div class="form-group">
                 <label for="select_status_list">Selecionar estado</label>
                 <select class="form-control" id="select_status_list">
-                    <option value="por_atender">POR ATENDER</option>
                     <option value="atendendido">ATENDIDOS</option>
+                    <option value="por_atender">POR ATENDER</option>
+
                 </select>
             </div>
         </div>
