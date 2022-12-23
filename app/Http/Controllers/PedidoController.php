@@ -2766,7 +2766,7 @@ class PedidoController extends Controller
     {
         if ($request->get('action') == 'confirm_anulled_cancel') {
             $pedido = Pedido::findOrFail($request->pedido_id);
-            if ($pedido->pendiente_anulacion == '1') {
+            if ($pedido->pendiente_anulacion != '1') {
                 return response()->json([
                     "success" => 0,
                 ]);
@@ -2785,7 +2785,7 @@ class PedidoController extends Controller
             'attachments.*' => 'required|file',
         ]);
         $pedido = Pedido::findOrFail($request->pedido_id);
-        if ($pedido->pendiente_anulacion == '1') {
+        if ($pedido->pendiente_anulacion != '1') {
             return response()->json([
                 "success" => 0,
             ]);
