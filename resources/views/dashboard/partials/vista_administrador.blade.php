@@ -128,7 +128,14 @@
                 <div class="row" id="widget-container">
 
                     <div class="col-md-12">
-                        <x-grafico-meta-pedidos-progress-bar></x-grafico-meta-pedidos-progress-bar>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <x-grafico-meta-pedidos-progress-bar></x-grafico-meta-pedidos-progress-bar>
+                            </div>
+                            <div class="col-md-6">
+                                <x-grafico-metas-progress-bar></x-grafico-metas-progress-bar>
+                            </div>
+                        </div>
                         {{--
                          <ul class="nav nav-tabs" id="myTab" role="tablist">
                             <li class="nav-item">
