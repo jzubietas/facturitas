@@ -58,9 +58,17 @@
             $.ajax({
                 url: "{{ $makeUpdateUrl() }}"
             })
+
             .done((data) => {
+                $('.noti-pedidos-atender').html(data.contador_pedidos_atender);
+                $('.noti-pedidos-atendidos').html(data.contador_pedidos_atendidos);
+                $('.noti-pedidos-pen-anulacion').html(data.contador_pedidos_pen_anulacion);
+                $('.noti-sobres-entregados').html(data.contador_sobres_entregados);
+
                 nLink.update(data);
             })
+
+
             .fail(function(jqXHR, textStatus, errorThrown) {
                 console.log(jqXHR, textStatus, errorThrown);
             });

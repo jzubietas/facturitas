@@ -25,6 +25,23 @@ body{
     transition: all 0.2s;
 }
 
+.noti-side{
+    background-color: #9cffbf;
+    height: 16px;
+    padding: 0px 4px;
+    display: inline-block;
+    border-radius: 5px;
+    font-size: 11px;
+    color: #2d3a2d;
+    text-align: center;
+    text-transform: initial;
+    font-style: initial;
+    font-weight: bold;
+    position: absolute;
+    right: 4px;
+    /*letter-spacing: 1.5px;*/
+}
+
 @keyframes navidad {
     0%{
         transform: rotate(35deg);

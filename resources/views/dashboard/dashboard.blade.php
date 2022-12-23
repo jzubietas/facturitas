@@ -315,18 +315,21 @@
         </script>
     @endif
 
-    {{-- <script>
+    <script>
       // CARGAR PEDIDOS DE CLIENTE SELECCIONADO
       window.onload = function () {
         $.ajax({
-          url: "{{ route('notifications.get') }}"
+          url: "{{ route('notifications.getpedidosatender') }}",
           method: 'GET',
           success: function(data) {
-            $('#my-notification').html(data.html);
+
+              console.log('prueba');
+              console.log(data);
+            //$('#my-notification').html(data.html);
           }
         });
       };
-    </script> --}}
+    </script>
     <script>
         (function () {
 
