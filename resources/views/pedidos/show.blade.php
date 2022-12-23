@@ -228,8 +228,12 @@
                                                     <div class="card-body">
                                                         <a target="_blank"
                                                            href="{{Storage::disk($pedido->path_adjunto_anular_disk)->url($file)}}">
-                                                            <img class="w-100"
-                                                                 src="{{Storage::disk($pedido->path_adjunto_anular_disk)->url($file)}}">
+                                                            @if(!Str::contains(Str::lower($file),'.pdf'))
+                                                                <img class="w-100"
+                                                                     src="{{Storage::disk($pedido->path_adjunto_anular_disk)->url($file)}}">
+                                                            @else
+                                                                <i class="fa fa-file-pdf"></i>
+                                                            @endif
                                                             {{basename($file)}}
                                                         </a>
                                                     </div>
