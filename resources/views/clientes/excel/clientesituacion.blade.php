@@ -21,7 +21,6 @@
       <th width="80px" style="background-color: #4c5eaf; text-align: center; color: white;">DEPOSITO</th>
       <th width="80px" style="background-color: #4c5eaf; text-align: center; color: white;">FECHA DEL ÚLTIMO PEDIDO</th>
       <th width="80px" style="background-color: #4c5eaf; text-align: center; color: white;">COD. PEDIDO</th>
-      <th width="80px" style="background-color: #4c5eaf; text-align: center; color: white;">ESTADO PEDIDOS</th>
       <th width="80px" style="background-color: #4c5eaf; text-align: center; color: white;">SITUACION CLIENTE</th>
       <th width="80px" style="background-color: #ebfa67; text-align: center; color: black;">ENE-{{ $anioa }}</th>
       <th width="80px" style="background-color: #ebfa67; text-align: center; color: black;">FEB-{{ $anioa }}</th>
@@ -94,14 +93,18 @@
         <td>{{ $dato['deposito'] }}</td>
         <td>{{ $dato['fecha'] }}</td>
         <td>{{ $dato['codigo'] }}</td>
-        @if($dato['estadopedido'] == 'RECURRENTE')
-          <td style="background: #afdfb2">RECURRENTE</td>
+        @if($dato['situacion'] == 'RECURRENTE')
+          <td style="background: ##17a2b8">RECURRENTE</td>
+        @elseif($dato['situacion'] == 'NUEVO')
+          <td style="background: #17a2b8">NUEVO</td>
+        @elseif($dato['situacion'] == 'ABANDONO')
+          <td style="background: #dc3545">ABANDONO</td>
+        @elseif($dato['situacion'] == 'ABANDONO RECIENTE')
+          <td style="background: #dc3545">ABANDONO RECIENTE</td>
         @else
-          <td style="background: #e73d3d">ABANDONO</td>
+          <td >{{ $dato['situacion'] }}</td>
         @endif
-        <td>
-          {{ $dato['situacion'] }}
-        </td>
+        
         <td>
             {{ $dato['eneroa'] }}
         </td>

@@ -81,14 +81,34 @@ class FixedPedidosPagado extends Command
                 ];
             }
         }
-        $result = collect($result)->filter(function ($result) {
-            return !(($result['total_cobro'] == $result['total_pagado'])
-                && ($result['detalle_pagos_monto'] == $result['pago_pedidos_abono'])
-                && ($result['total_cobro'] == $result['pago_pedidos_abono']));
-        })->values()->map(function ($result,$index){
-            $result['nro']=$index+1;
-            return $result;
-        });
+
+        /*collect($result)
+            ->filter(function ($result) {
+                return ($result['total_cobro'] == $result['total_pagado'])
+                    && ($result['detalle_pagos_monto'] == $result['pago_pedidos_abono'])
+                    && ($result['total_cobro'] == $result['pago_pedidos_abono']);
+            })
+            ->values()
+            ->each(function ($result) {
+                Pedido::query()
+                    ->where('id', '=', data_get($result, 'id'))
+                    ->update([
+                        'pago' => 1
+                    ]);
+                return $result;
+            });*/
+
+        $result = collect($result)
+            ->filter(function ($result) {
+                return !(($result['total_cobro'] == $result['total_pagado'])
+                    && ($result['detalle_pagos_monto'] == $result['pago_pedidos_abono'])
+                    && ($result['total_cobro'] == $result['pago_pedidos_abono']));
+            })
+            ->values()
+            ->map(function ($result, $index) {
+                $result['nro'] = $index + 1;
+                return $result;
+            });
         $this->info($count);
         $this->table([
             "nro",

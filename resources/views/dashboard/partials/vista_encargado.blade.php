@@ -90,6 +90,9 @@
                     <x-grafico-metas-progress-bar></x-grafico-metas-progress-bar>
                 </div>
                 <div class="col-md-12">
+                    <x-grafico-meta_cobranzas></x-grafico-meta_cobranzas>
+                </div>
+                <div class="col-md-12">
                     <x-grafico-pedidos-por-dia rol="Encargado" title="Cantidad de pedidos de los asesores por dia" label-x="Asesores" label-y="Cant. Pedidos" only-day></x-grafico-pedidos-por-dia>
                     <x-grafico-pedidos-por-dia rol="Encargado" title="Cantidad de pedidos de los asesores por mes" label-x="Asesores" label-y="Cant. Pedidos"></x-grafico-pedidos-por-dia>
                 </div>
