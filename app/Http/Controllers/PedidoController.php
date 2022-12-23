@@ -2766,13 +2766,14 @@ class PedidoController extends Controller
     {
         if ($request->get('action') == 'confirm_anulled_cancel') {
             $pedido = Pedido::findOrFail($request->pedido_id);
-            if ($pedido->fecha_anulacion_confirm != null) {
+            if ($pedido->pendiente_anulacion == '1') {
                 return response()->json([
                     "success" => 0,
                 ]);
             }
             $pedido->update([
                 'pendiente_anulacion' => '0',
+                'fecha_anulacion_denegada' => now(),
             ]);
             return response()->json([
                 "success" => 1
@@ -2784,7 +2785,7 @@ class PedidoController extends Controller
             'attachments.*' => 'required|file',
         ]);
         $pedido = Pedido::findOrFail($request->pedido_id);
-        if ($pedido->fecha_anulacion_confirm != null) {
+        if ($pedido->pendiente_anulacion == '1') {
             return response()->json([
                 "success" => 0,
             ]);
