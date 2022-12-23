@@ -15,7 +15,7 @@
         <td>{{ $cont + 1 }}</td>
         <td>BF00{{ $bf->id }}</td>
         <td>{{ $bf->nombre }}</td>
-        <td>{{ $bf->celular }}</td>
+        <td>{{ $bf->celular }} - {{ $bf->icelular }}</td>
         <td>{{ $bf->users }}</td>
       </tr>
       <?php $cont++; ?>
