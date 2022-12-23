@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Pedidos;
 
 use App\Http\Controllers\Controller;
 use App\Models\Pedido;
+use App\Models\PedidoMovimientoEstado;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -147,8 +148,11 @@ class PedidoStatusController extends Controller
                 })
                 ->rawColumns(['action', 'action2'])
                 ->toJson();
-
         }
+
+        PedidoMovimientoEstado::where('condicion_envio_code',Pedido::ATENDIDO_INT)->update([
+            'notificado' => 1,
+        ]);
 
         return view('pedidos.status.index', compact('pedidos_atendidos', 'pedidos_por_atender', 'pedidos_atendidos_total'));
     }
