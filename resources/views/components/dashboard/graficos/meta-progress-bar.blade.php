@@ -1,6 +1,6 @@
 <div class="card">
     <div class="card-header">
-        <b>Progreso total de pedidos pagados del mes {{$startDate->startOfMonth()->format('m-Y')}}</b>
+        <b>Progreso total de pedidos pagados del mes {{$title}}</b>
     </div>
     <div class="card-body">
         <ul class="list-group">

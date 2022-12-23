@@ -102,6 +102,9 @@
                 <div class="col-md-12">
                     <x-grafico-metas-progress-bar></x-grafico-metas-progress-bar>
                 </div>
+                <div class="col-md-12">
+                    <x-grafico-meta_cobranzas></x-grafico-meta_cobranzas>
+                </div>
                 <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12">
                     <br>
                     <div class="table-responsive">

@@ -44,4 +44,21 @@ abstract class Widgets extends Component
             $this->endDate->clone()
         ]);
     }
+
+    public function getDateTitle()
+    {
+        if ($this->startDate != null) {
+            $formatA = $this->startDate->format('m-Y');
+            if ($this->endDate != null) {
+                $formatB = $this->endDate->format('m-Y');
+                if ($formatA == $formatB) {
+                    return $formatA;
+                } else {
+                    return $formatA . ' - ' . $formatB;
+                }
+            }
+            return $formatA;
+        }
+        return '';
+    }
 }

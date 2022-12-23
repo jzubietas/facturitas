@@ -21,8 +21,10 @@ class PageclienteinfoJulio extends Export implements WithColumnFormatting,WithCo
                 ,'clientes.dni'
                 ,'clientes.icelular'
                 ,'clientes.celular'
+                ,'clientes.situacion'
+                
                 //,'clientes.situacion'
-                ,DB::raw(" (select a.s_2022_07 from listado_resultados a where a.id=clientes.id ) as situacion ")
+                //,DB::raw(" (select a.s_2022_07 from listado_resultados a where a.id=clientes.id ) as situacion ")
                 ,DB::raw("(select DATE_FORMAT(dp1.created_at,'%Y-%m-%d %h:%i:%s') from pedidos dp1 where dp1.cliente_id=clientes.id order by dp1.created_at desc limit 1) as fecha"),
             )
             ->where('clientes.estado', '1')

@@ -19,12 +19,19 @@ class Kernel extends ConsoleKernel
     /**
      * Define the application's command schedule.
      *
-     * @param  \Illuminate\Console\Scheduling\Schedule  $schedule
+     * @param \Illuminate\Console\Scheduling\Schedule $schedule
      * @return void
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')->hourly();
+        $schedule->command('backup:database',[
+            "--user" => 'operador',
+            "--pwd" => 'ajjm2123',
+        ])
+            ->dailyAt('19:30');
+
+        $schedule->command('backup:database')
+            ->dailyAt('13:15');
     }
 
     /**
@@ -34,7 +41,7 @@ class Kernel extends ConsoleKernel
      */
     protected function commands()
     {
-        $this->load(__DIR__.'/Commands');
+        $this->load(__DIR__ . '/Commands');
 
         require base_path('routes/console.php');
     }

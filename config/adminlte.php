@@ -402,6 +402,13 @@ return [
                     'active' => ['envios'],
                 ],
                 [
+                    'text' => 'Estado Sobres',
+                    'route'  => 'envios.estadosobres',
+                    'can' => 'envios.estadosobre',
+                    'icon'   => 'fas fa-check-circle',
+                    'active' => ['envios estadosobres'],
+                ],
+                [
                     'text' => 'Rutas de Envio',
                     'route'  => 'envios.rutaenvio',
                     'can' => 'envios.rutaenvio',

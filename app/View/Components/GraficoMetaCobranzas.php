@@ -90,12 +90,16 @@ class GraficoMetaCobranzas extends Widgets
         $seriaC = [];
         $asesores = [];
         foreach ($this->progressData as $item) {
+            $asignados=data_get($item, 'asignados');
+            if($asignados<=0){
+                continue;
+            }
             $seriaA[] = data_get($item, 'meta');
-            $seriaB[] = data_get($item, 'asignados');
+            $seriaB[] = $asignados;
             $seriaC[] = data_get($item, 'pagados');
-            $asesores[] = data_get($item, 'identificador');
+            $asesores[] = 'Asesor '.data_get($item, 'identificador');
         }
-        $width=800;
+        $width=900;
         if(count($seriaC)<8){
             $width=100*count($seriaC);
         }
@@ -103,9 +107,9 @@ class GraficoMetaCobranzas extends Widgets
             $width=190;
         }
         return [
-            "colors" => ['#008FFB','#00E396','#000'],
+            "colors" => ['#464646','#03a4f1','#00E396'],
             'title' => [
-                'text' => 'Progreso total de pedidos pagados y la meta asignada',
+                'text' => 'Progreso total de pedidos pagados y la meta asignada - '.$this->getDateTitle(),
                 'align' => 'left',
             ],
             'series' => [
@@ -114,7 +118,7 @@ class GraficoMetaCobranzas extends Widgets
                     'data' => $seriaA,
                 ],
                 [
-                    'name' => 'Pedidos Asignada',
+                    'name' => 'Pedidos Asignados',
                     'data' => $seriaB,
                 ],
                 [

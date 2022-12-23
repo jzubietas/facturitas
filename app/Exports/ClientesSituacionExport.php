@@ -389,13 +389,14 @@ class ClientesSituacionExport implements FromView, ShouldAutoSize
 
             $dateM = Carbon::now()->format('m');
             $dateY = Carbon::now()->format('Y');//2022
+            
+            $estadopedido=$cliente->situacion;
 
-            if ($cliente->pidio == 0 || $cliente->pidio == '0' || $cliente->pidio == null || $cliente->pidio == 'null') {
+            /*if ($cliente->pidio == 0 || $cliente->pidio == '0' || $cliente->pidio == null || $cliente->pidio == 'null') {
                 $estadopedido = 'SIN PEDIDO';
             } else {
                 if ((($dateY * 1) - ($cliente->anio * 1)) == 0) {
-                    //año actual
-                    //27-08-2022--     (11-8) 3  >=  0   (11-8)  3   <2
+                   
                     if ((($dateM * 1) - ($cliente->mes * 1)) >= 0 && (($dateM * 1) - ($cliente->mes * 1)) < 2) {
                         $estadopedido = 'RECURRENTE';
                     } else {
@@ -403,10 +404,9 @@ class ClientesSituacionExport implements FromView, ShouldAutoSize
                     }
 
                 } else {
-                    //año anterior
                     $estadopedido = 'ABANDONO';
                 }
-            }
+            }*/
 
 
             /*if( (($dateM*1)-($cliente->mes*1)) >= 0 && (($dateM*1)-($cliente->mes*1))<3 && (($dateY*1)-($cliente->anio*1)) == 0){
@@ -442,7 +442,7 @@ class ClientesSituacionExport implements FromView, ShouldAutoSize
 
                 /* 'dateM' => Carbon::now()->format('m'),
                 'dateY' => Carbon::now()->format('Y'), */
-                'estadopedido' => $estadopedido,
+                'estadopedido' => $cliente->situacion,
                 'pidio' => $cliente->pidio,
                 //
                 //'dateY' => $dateY,

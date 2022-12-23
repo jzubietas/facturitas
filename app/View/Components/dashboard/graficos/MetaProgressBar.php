@@ -30,7 +30,8 @@ class MetaProgressBar extends Widgets
             $this->generalDataSupervisor['enabled'] = true;
             $this->general = (object)$this->generalDataSupervisor;
         }
-        return view('components.dashboard.graficos.meta-progress-bar');
+        $title=$this->getDateTitle();
+        return view('components.dashboard.graficos.meta-progress-bar',compact('title'));
     }
 
     public function generalData()
