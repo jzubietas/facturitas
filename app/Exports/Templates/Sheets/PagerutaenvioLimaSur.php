@@ -76,13 +76,14 @@ class PagerutaenvioLimaSur  extends Export implements WithEvents,WithColumnWidth
     public function fields(): array
     {
         return [
-            "correlativo"=>"NUMERO"
+            "celular"=>"NUMERO"
             ,"num_registros"=>"Nº"
-             ,"nombre_cli" => "NOMBRE CLIENTE"
+            ,"nombre"=>"NOMBRE A QUIEN RECIBE"
+            // ,"nombre_cli" => "NOMBRE CLIENTE"
             ,"codigos"=>"CODIGO"
             ,"producto"=>"PRODUCTO"
             ,"cantidad"=>"CANTIDAD"
-            ,"nombre"=>"NOMBRE A QUIEN RECIBE"
+            
             ,"direccion"=>"DIRECCION DE ENTREGA"
             ,"referencia"=>"REFERENCIA"
             ,"distrito"=>"DISTRITO"
@@ -94,7 +95,6 @@ class PagerutaenvioLimaSur  extends Export implements WithEvents,WithColumnWidth
             //,"condicion_sobre"=>"Condicion"
         ];
     }
-
     public function title(): string
     {
         return 'Lima SUR '.self::$fecharuta;
