@@ -3,6 +3,7 @@
 namespace App\Abstracts;
 
 use Carbon\Carbon;
+use Illuminate\Support\Str;
 use Illuminate\View\Component;
 
 abstract class Widgets extends Component
@@ -16,6 +17,7 @@ abstract class Widgets extends Component
      * @var \Illuminate\Support\Carbon
      */
     public $endDate;
+    public $genId;
 
 
     /**
@@ -27,6 +29,7 @@ abstract class Widgets extends Component
     {
         $this->startDate = now()->startOfMonth();
         $this->endDate = now()->endOfMonth();
+        $this->genId = Str::random(40);
 
         if (request()->has("start_date") && request()->has("end_date")) {
             try {
@@ -48,9 +51,9 @@ abstract class Widgets extends Component
     public function getDateTitle()
     {
         if ($this->startDate != null) {
-            $formatA = $this->startDate->format('m-Y');
+            $formatA = $this->startDate->format('m/Y');
             if ($this->endDate != null) {
-                $formatB = $this->endDate->format('m-Y');
+                $formatB = $this->endDate->format('m/Y');
                 if ($formatA == $formatB) {
                     return $formatA;
                 } else {

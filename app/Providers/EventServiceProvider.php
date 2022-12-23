@@ -30,7 +30,7 @@ class EventServiceProvider extends ServiceProvider
         Registered::class => [
             SendEmailVerificationNotification::class,
         ],
-        PedidoEvent::class => [
+        /*PedidoEvent::class => [
             PedidoListener::class,
         ],
         PedidoAtendidoEvent::class => [
@@ -38,7 +38,7 @@ class EventServiceProvider extends ServiceProvider
         ],
         PedidoEntregadoEvent::class => [
             PedidoEntregadoListener::class,
-        ],
+        ],*/
         PagoEvent::class => [
             PagoListener::class,
         ],

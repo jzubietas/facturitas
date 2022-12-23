@@ -126,12 +126,64 @@
             </div>
             <div class="col-md-12">
                 <div class="row" id="widget-container">
+
                     <div class="col-md-12">
-                        <x-grafico-metas-progress-bar></x-grafico-metas-progress-bar>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <x-grafico-meta-pedidos-progress-bar></x-grafico-meta-pedidos-progress-bar>
+                            </div>
+                            <div class="col-md-6">
+                                <x-grafico-metas-progress-bar></x-grafico-metas-progress-bar>
+                            </div>
+                        </div>
+                        {{--
+                         <ul class="nav nav-tabs" id="myTab" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link active" id="grafico_pedidos_vista1-tab" data-toggle="tab"
+                                   href="#grafico_pedidos_vista1" role="tab"
+                                   aria-controls="grafico_pedidos_vista1" aria-selected="true">
+                                    Primera Vista
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="grafico_pedidos_vista2-tab" data-toggle="tab"
+                                   href="#grafico_pedidos_vista2" role="tab"
+                                   aria-controls="grafico_pedidos_vista2" aria-selected="false">
+                                    Segunda Vista
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="grafico_pedidos_vista3-tab" data-toggle="tab"
+                                   href="#grafico_pedidos_vista3" role="tab"
+                                   aria-controls="grafico_pedidos_vista3" aria-selected="false">
+                                    Segunda Vista
+                                </a>
+                            </li>
+                        </ul>
+                        <div class="tab-content" id="myTabContent">
+                            <div class="tab-pane fade show active" id="grafico_pedidos_vista1" role="tabpanel"
+                                 aria-labelledby="grafico_pedidos_vista1-tab">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <x-grafico-meta-pedidos-progress-bar></x-grafico-meta-pedidos-progress-bar>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <x-grafico-metas-progress-bar></x-grafico-metas-progress-bar>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="grafico_pedidos_vista2" role="tabpanel"
+                                 aria-labelledby="grafico_pedidos_vista2-tab">
+                                <x-grafico-pedidos-meta-progress></x-grafico-pedidos-meta-progress>
+                            </div>
+                            <div class="tab-pane fade" id="grafico_pedidos_vista3" role="tabpanel"
+                                 aria-labelledby="grafico_pedidos_vista3-tab">
+                                <x-grafico-meta_cobranzas></x-grafico-meta_cobranzas>
+                            </div>
+                        </div>
+                         --}}
                     </div>
-                    <div class="col-md-12">
-                        <x-grafico-meta_cobranzas></x-grafico-meta_cobranzas>
-                    </div>
+
                     <div class="col-md-12">
                         <x-grafico-pedidos-por-dia rol="Administrador"
                                                    title="Cantidad de pedidos de los asesores por dia"
@@ -145,6 +197,7 @@
                     </div>
                 </div>
             </div>
+            {{--
             <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12">
                 <div class="card">
                     <div class="card-body">
@@ -152,6 +205,7 @@
                     </div>
                 </div>
             </div>
+            --}}
             <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12">
                 <div class="card">
                     <div class="card-body">
@@ -163,6 +217,9 @@
     </div>
     <div class="container-fluid">
         <div class="row">
+            <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12">
+                <x-grafico-top-clientes-pedidos top="10"></x-grafico-top-clientes-pedidos>
+            </div>
             <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12">
                 <div class="card">
                     <div class="card-body">

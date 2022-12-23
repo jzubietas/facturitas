@@ -99,8 +99,13 @@
                         <input type="text" class="form-control date-picker" id="datepickerDashborad" aria-describedby="basic-addon3">
                     </div>
                 </div>
-                <div class="col-md-12">
-                    <x-grafico-metas-progress-bar></x-grafico-metas-progress-bar>
+                <div class="row">
+                    <div class="col-md-6">
+                        <x-grafico-meta-pedidos-progress-bar></x-grafico-meta-pedidos-progress-bar>
+                    </div>
+                    <div class="col-md-6">
+                        <x-grafico-metas-progress-bar></x-grafico-metas-progress-bar>
+                    </div>
                 </div>
                 <div class="col-md-12">
                     <x-grafico-meta_cobranzas></x-grafico-meta_cobranzas>

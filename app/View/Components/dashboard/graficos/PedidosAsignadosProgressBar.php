@@ -6,10 +6,12 @@ use App\Abstracts\Widgets;
 use App\Models\Pedido;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\HtmlString;
 
-class MetaProgressBar extends Widgets
+class PedidosAsignadosProgressBar extends Widgets
 {
+
     public $general = [];
     public $progressData = [];
 
@@ -32,24 +34,24 @@ class MetaProgressBar extends Widgets
             $this->general = (object)$this->generalDataSupervisor;
         }
         $title = $this->getDateTitle();
-        return view('components.dashboard.graficos.meta-progress-bar', compact('title'));
+        return view('components.dashboard.graficos.pedidos-asignados-progress-bar', compact('title'));
     }
 
     public function generalData()
     {
         if (Auth::user()->id == "33") {
-            $pagoxmes_total = $this->applyFilter(
-                Pedido::join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')//CANTIDAD DE PEDIDOS DEL MES
-                ->activo()
-                    ->join('users as u', 'pedidos.user_id', 'u.id'),
-                'dp.created_at'
-            )->count('dp.id');
-        } else {
-            $pagoxmes_total = $this->applyFilter(Pedido::join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')//CANTIDAD DE PEDIDOS DEL MES
+            $pagoxmes_total = Pedido::join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')//CANTIDAD DE PEDIDOS DEL MES
             ->activo()
                 ->join('users as u', 'pedidos.user_id', 'u.id')
-                ->where('u.rol', "ASESOR"), 'dp.created_at')->count('dp.id');
-
+                ->whereBetween('dp.created_at', [now()->startOfMonth(), now()->endOfMonth()])
+                ->count('dp.id');
+        } else {
+            $pagoxmes_total = Pedido::join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')//CANTIDAD DE PEDIDOS DEL MES
+            ->activo()
+                ->join('users as u', 'pedidos.user_id', 'u.id')
+                ->where('u.rol', "ASESOR")
+                ->whereBetween('dp.created_at', [now()->startOfMonth(), now()->endOfMonth()])
+                ->count('dp.id');
         }
 
         if ($pagoxmes_total > 0) {
@@ -62,9 +64,8 @@ class MetaProgressBar extends Widgets
             "code" => '',
             "name" => 'General',
             "progress" => $progress,
-            "meta" => 1600,
+            "activos" => 1600,
             "pagados" => $pagoxmes_total,
-            "asignados" => $pagoxmes_total,
         ];
     }
 
@@ -95,16 +96,14 @@ class MetaProgressBar extends Widgets
                 }
             }
 
-            $meta = (float)$asesor->meta_pedido;
-            $asignados = $this->applyFilter(Pedido::query())->whereUserId($asesor->id)->activo()->count();
+            $all = $this->applyFilter(Pedido::query())->whereUserId($asesor->id)->activo()->count();
             $pay = $this->applyFilter(Pedido::query())->whereUserId($asesor->id)->activo()->pagados()->count();
 
             $progressData[] = [
                 "identificador" => $asesor->identificador,
                 "code" => "Asesor {$asesor->identificador}",
                 "name" => $asesor->name,
-                "meta" => $meta,
-                "asignados" => $asignados,
+                "activos" => $all,
                 "pagados" => $pay,
             ];
 
@@ -117,8 +116,7 @@ class MetaProgressBar extends Widgets
                 if (!isset($newData[$identificador])) {
                     $newData[$identificador] = $item;
                 } else {
-                    $newData[$identificador]['meta'] += data_get($item, 'meta');
-                    $newData[$identificador]['asignados'] += data_get($item, 'asignados');
+                    $newData[$identificador]['activos'] += data_get($item, 'activos');
                     $newData[$identificador]['pagados'] += data_get($item, 'pagados');
                 }
             }
@@ -127,10 +125,10 @@ class MetaProgressBar extends Widgets
             })->first();//new HtmlString(collect($items)->pluck('name')->join(',<br> '));
         }
         $this->progressData = collect($newData)->values()->map(function ($item) {
-            $all = data_get($item, 'meta');
-            $asignados = data_get($item, 'asignados');
+            $all = data_get($item, 'activos');
+            $pay = data_get($item, 'pagados');
             if ($all > 0) {
-                $p = intval(($asignados / $all) * 100);
+                $p = intval(($pay / $all) * 100);
             } else {
                 $p = 0;
             }
@@ -139,11 +137,10 @@ class MetaProgressBar extends Widgets
         })->sortBy('identificador')->all();
 
 
-        $metaTotal = collect($this->progressData)->pluck('meta')->sum();
-        $asignados = collect($this->progressData)->pluck('asignados')->sum();
-        $pagados = collect($this->progressData)->pluck('pagados')->sum();
-        if ($metaTotal > 0) {
-            $p = intval(($asignados / $metaTotal) * 100);
+        $all = collect($this->progressData)->pluck('activos')->sum();
+        $pay = collect($this->progressData)->pluck('pagados')->sum();
+        if ($all > 0) {
+            $p = intval(($pay / $all) * 100);
         } else {
             $p = 0;
         }
@@ -151,9 +148,9 @@ class MetaProgressBar extends Widgets
             "code" => '',
             "name" => auth()->user()->name,
             "progress" => $p,
-            "meta" => $metaTotal,
-            "asignados" => $asignados,
-            "pagados" => $pagados,
+            "activos" => $all,
+            "pagados" => $pay,
         ];
     }
+
 }
