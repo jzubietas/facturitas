@@ -404,7 +404,7 @@ return [
                 [
                     'text' => 'Estado Sobres',
                     'route'  => 'envios.estadosobres',
-                    'can' => 'envios.porconfirmar',
+                    'can' => 'envios.estadosobre',
                     'icon'   => 'fas fa-check-circle',
                     'active' => ['envios estadosobres'],
                 ],
