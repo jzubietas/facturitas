@@ -56,11 +56,12 @@ class EstadoSobresExport implements FromView, ShouldAutoSize
                     'pedidos.cant_devuelto',
                     'pedidos.returned_at',
                     'pedidos.observacion_devuelto',
+                    DB::raw("DATEDIFF(DATE(NOW()), DATE(pedidos.created_at)) AS dias")
                 )
                 ->where('pedidos.estado', '1')
                 //->whereIn('pedidos.envio', [Pedido::ENVIO_CONFIRMAR_RECEPCION,Pedido::ENVIO_RECIBIDO]) // ENVIADO CONFIRMAR RECEPCION Y ENVIADO RECIBIDO
                 ->whereIn('pedidos.condicion_envio_code', [Pedido::JEFE_OP_CONF_INT]) // ENVIADO CONFIRMAR RECEPCION Y ENVIADO RECIBIDO
-                ->whereBetween(DB::raw('DATE(pedidos.created_at)'), [$request->desde, $request->hasta]) 
+              
                 ->where('dp.estado', '1')->get();
        
 
