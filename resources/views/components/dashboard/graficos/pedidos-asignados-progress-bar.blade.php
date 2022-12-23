@@ -1,6 +1,6 @@
 <div class="card">
     <div class="card-header">
-        <b>Progreso total de pedidos asignados sobre la meta -- {{$title}}</b>
+        <b>Progreso total de pedidos pagados sobre pedidos asignados -- {{$title}}</b>
     </div>
     <div class="card-body">
         <ul class="list-group">
@@ -22,17 +22,17 @@
                              aria-valuenow="{{ data_get($general,'progress')}}"
                              aria-valuemin="0"
                              aria-valuemax="100">
-                            {{ data_get($general,'progress')}}% - {{data_get($general,'asignados')}}
-                            /{{data_get($general,'meta')}}
+                            {{ data_get($general,'progress')}}% - {{data_get($general,'pagados')}}
+                            /{{data_get($general,'activos')}}
                         </div>
                     </div>
                 </li>
             @endif
             @foreach($progressData as $data)
-                            <li class="list-group-item">
-                                <b>{{$data['code']}}</b> <br> {{$data['name']}}
-                                <div class="progress">
-                                    <div class="progress-bar
+                <li class="list-group-item">
+                    <b>{{$data['code']}}</b> <br> {{$data['name']}}
+                    <div class="progress">
+                        <div class="progress-bar
                 @if($data['progress']<40)
                  bg-danger
                  @elseif($data['progress']<70)
@@ -41,19 +41,19 @@
                   bg-success
                   @endif
                  "
-                                         role="progressbar"
-                                         style="width: {{$data['progress']}}%"
-                                         aria-valuenow="{{$data['progress']}}"
-                                         aria-valuemin="0"
-                                         aria-valuemax="100">
-                                        {{$data['progress']}}% - {{$data['asignados']}}/{{$data['meta']}}
-                                    </div>
-                                </div>
-                                <span>
-                                    % - Asignados / Meta
+                             role="progressbar"
+                             style="width: {{$data['progress']}}%"
+                             aria-valuenow="{{$data['progress']}}"
+                             aria-valuemin="0"
+                             aria-valuemax="100">
+                            {{$data['progress']}}% - {{$data['pagados']}}/{{$data['activos']}}
+                        </div>
+                    </div>
+                    <span>
+                                    % - Pagados / Asignados
                                 </span>
-                            </li>
-                        @endforeach
+                </li>
+            @endforeach
 
         </ul>
 

@@ -12,7 +12,7 @@
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <!--ADMINISTRADOR-->
     <script type="text/javascript">
-        google.charts.load('current', {
+        /*google.charts.load('current', {
             'packages': ['bar']
         });
         google.charts.setOnLoadCallback(drawStuff);
@@ -35,7 +35,7 @@
 
             var chart = new google.charts.Bar(document.getElementById('pedidosxasesor'));
             chart.draw(data, google.charts.Bar.convertOptions(options));
-        }
+        }*/
     </script>
 
     <script type="text/javascript">
