@@ -73,29 +73,6 @@
           ['Cobranza', 'Pedidos'],
           @foreach ($cobranzaxmes as $vxax)
         ['{{ $vxax->users }}', {{ $vxax->total }}],
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     @endforeach
     ]);
 

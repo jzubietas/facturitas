@@ -111,7 +111,7 @@ class DashboardController extends Controller
         //MONTO DE PAGO X CLIENTE EN EL MES TOP 30
         $pagosxmes = Pago::join('clientes as c', 'pagos.cliente_id', 'c.id')
             ->join('users as u', 'pagos.user_id', 'u.id')
-            ->select('c.nombre as cliente', DB::raw('sum(pagos.total_cobro) as pagos'))
+            ->select(['c.nombre as cliente', DB::raw('sum(pagos.total_cobro) as pagos')])
             ->whereIn('u.rol', ['ASESOR', 'Super asesor'])
             ->where('pagos.estado', '1')
             ->whereBetween('pagos.created_at', [now()->startOfMonth(),now()->endOfMonth()])
@@ -120,6 +120,7 @@ class DashboardController extends Controller
             ->offset(0)
             ->limit(30)
             ->get();
+
         //PEDIDOS POR ASESOR EN EL DIA
         $pedidosxasesorxdia = Pedido::join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
             ->activo()
