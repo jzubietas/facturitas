@@ -1868,6 +1868,20 @@ class EnvioController extends Controller
             $ver_botones_accion = 1;
         }
 
+
+        
+        $_pedidos = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')
+        ->join('users as u', 'pedidos.user_id', 'u.id')
+        ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
+        ->select(
+            DB::raw("COUNT(u.identificador) AS total, u.identificador ")
+        )
+        ->where('pedidos.estado', '1')
+        ->whereIn('pedidos.condicion_envio_code', [Pedido::JEFE_OP_CONF_INT]) 
+        ->where('dp.estado', '1')
+        ->groupBy('u.identificador');
+        
+
         $distritos = Distrito::whereIn('provincia', ['LIMA', 'CALLAO'])
                             ->where('estado', '1')
                             ->WhereNotIn('distrito' ,['CHACLACAYO','CIENEGUILLA','LURIN','PACHACAMAC','PUCUSANA','PUNTA HERMOSA','PUNTA NEGRA','SAN BARTOLO','SANTA MARIA DEL MAR'])
@@ -1878,7 +1892,9 @@ class EnvioController extends Controller
 
         $superasesor = User::where('rol', 'Super asesor')->count();
 
-        return view('envios.estadosobres', compact('superasesor','ver_botones_accion','distritos','departamento'));
+        $_pedidos=$_pedidos->get();
+
+        return view('envios.estadosobres', compact('superasesor','ver_botones_accion','distritos','departamento','_pedidos'));
     }
 
     public function Estadosobrestabla(Request $request)
@@ -1888,6 +1904,7 @@ class EnvioController extends Controller
         $pedidos = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')
                 ->join('users as u', 'pedidos.user_id', 'u.id')
                 ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
+                
                 ->select(
                     'pedidos.id',
                     'pedidos.cliente_id',
@@ -1919,7 +1936,7 @@ class EnvioController extends Controller
                 )
                 ->where('pedidos.estado', '1')
                 //->whereIn('pedidos.envio', [Pedido::ENVIO_CONFIRMAR_RECEPCION,Pedido::ENVIO_RECIBIDO]) // ENVIADO CONFIRMAR RECEPCION Y ENVIADO RECIBIDO
-                ->whereIn('pedidos.condicion_envio_code', [Pedido::JEFE_OP_INT,Pedido::JEFE_OP_CONF_INT,Pedido::RECEPCION_COURIER_INT]) // ENVIADO CONFIRMAR RECEPCION Y ENVIADO RECIBIDO
+                ->whereIn('pedidos.condicion_envio_code', [Pedido::JEFE_OP_CONF_INT]) // ENVIADO CONFIRMAR RECEPCION Y ENVIADO RECIBIDO
                 ->where('dp.estado', '1');
                 /*->groupBy(
                     'pedidos.id',

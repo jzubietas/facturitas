@@ -36,6 +36,28 @@
 
 @section('content')
 
+
+
+<div class="row">
+@foreach ($_pedidos as $pedido)
+        <div class="col-md-3">
+            <div class="card card-warning">
+                <div class="card-header">
+                    <h5>ASESOR {{ $pedido->identificador }}</h5>
+                </div>
+                <div class="card-body">
+                    <h4 class="text-center">
+                        <b>{{ $pedido->total }}</b>
+                    </h4>
+                </div>
+            </div>
+        </div>
+        @endforeach      
+</div>
+
+
+
+
   <div class="card">
     <div class="card-body">
 
@@ -1210,7 +1232,7 @@
         serverSide: true,
         searching: true,
         "order": [[ 0, "desc" ]],
-        ajax: "{{ route('sobres.porenviartabla') }}",
+        ajax: "{{ route('envios.estadosobrestabla') }}",
         createdRow: function( row, data, dataIndex){
           //console.log(row);
         },
