@@ -42,6 +42,9 @@ use App\Exports\MovimientosExport;
 use App\Exports\SobresRutaEnvioExport;
 use App\Exports\EnviosLimaExport;
 use App\Exports\EnviosLima1Export;
+use App\Exports\EstadoSobresExport;
+
+
 //use App\Exports\EnviosLimanorteExport;
 //use App\Exports\EnviosLimacentroExport;
 //use App\Exports\EnviosLimasurExport;
@@ -381,6 +384,17 @@ class ExcelController extends Controller
                 ->pagos($request)
                 ->download('Lista de pagos por asesores.xlsx');
     }
+
+
+
+    public function estadosobresExcel(Request $request)
+    {
+        return (new EstadoSobresExport)
+                ->pedidosLima($request)
+              
+                ->download('Estado de Sobres.xlsx');
+    }
+
 
 
 

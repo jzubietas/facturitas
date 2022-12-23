@@ -21,7 +21,7 @@
         <a href="" data-target="#modal-exportar" data-toggle="modal" class="dropdown-item" target="blank_"><img src="{{ asset('imagenes/icon-excel.png') }}"> Excel</a>
       </div>
     </div>
-    @include('pedidos.modal.exportar', ['title' => 'Exportar pedidos POR ENVIAR', 'key' => '1'])
+    @include('pedidos.modal.exportar', ['title' => 'Exportar Estado Sobres', 'key' => '11'])
     {{-- @endcan --}}
   </h1>
   @if($superasesor > 0)
