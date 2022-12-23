@@ -1942,6 +1942,7 @@ class EnvioController extends Controller
                     'pedidos.cant_devuelto',
                     'pedidos.returned_at',
                     'pedidos.observacion_devuelto',
+                    DB::raw("DATEDIFF(DATE(NOW()), DATE(pedidos.created_at)) AS dias")
                 )
                 ->where('pedidos.estado', '1')
                 //->whereIn('pedidos.envio', [Pedido::ENVIO_CONFIRMAR_RECEPCION,Pedido::ENVIO_RECIBIDO]) // ENVIADO CONFIRMAR RECEPCION Y ENVIADO RECIBIDO
