@@ -41,7 +41,7 @@ class BackupDatabase extends Command
     {
         $this->deleteBackups();
         $database = \DB::connection()->getDatabaseName();
-        $default = config('database.default');
+        $default = 'backup';
         $h = $this->option("host")?:config('database.connections.' . $default . '.host');
         $p = $this->option("pwd")?:config('database.connections.' . $default . '.password');
         $u = $this->option("user")?:config('database.connections.' . $default . '.username');
