@@ -40,7 +40,7 @@
 
 <div class="row">
 @foreach ($_pedidos as $pedido)
-        <div class="col-md-3">
+        <div class="col-2">
             <div class="card card-warning">
                 <div class="card-header">
                     <h5>ASESOR {{ $pedido->identificador }}</h5>
