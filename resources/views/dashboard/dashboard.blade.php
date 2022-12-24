@@ -39,11 +39,11 @@
     </script>
 
     <script type="text/javascript">
-        google.charts.load('current', {packages: ['corechart', 'bar']});
-        google.charts.setOnLoadCallback(drawBasic);
+        //google.charts.load('current', {packages: ['corechart', 'bar']});
+        //google.charts.setOnLoadCallback(drawBasic);
 
 
-        function drawBasic() {
+        /*function drawBasic() {
             var data = new google.visualization.arrayToDataTable([
                 ['Cobranza', 'Pedidos'],
                     @foreach ($cobranzaxmes as $vxax)
@@ -58,9 +58,9 @@
                 }
             };
 
-            //var chart = new google.visualization.BarChart(document.getElementById('cobranzaxmes'));
-            //chart.draw(data, options);
-        };
+            var chart = new google.visualization.BarChart(document.getElementById('cobranzaxmes'));
+            chart.draw(data, options);
+        };*/
     </script>
     <!--<script type="text/javascript">
       google.charts.load('current', {
