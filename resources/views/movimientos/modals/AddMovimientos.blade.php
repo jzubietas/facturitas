@@ -57,6 +57,8 @@
                           <button class="button mx-2 p-2 btn-navigate-titular btn btn-primary btn-lg rounded text-white" type="button" step_number="2" titular="{{$titular}}">{{$titular}}</button>
                         @elseif($titular=='NIKSER DENIS ORE RIVEROS')
                           <button class="button mx-2 p-2 btn-navigate-titular btn btn-warning btn-lg rounded text-white" type="button" step_number="2" titular="{{$titular}}">{{$titular}}</button>
+                          @elseif($titular=='ALFREDO ALEJANDRO GABRIEL MONTALVO')
+                          <button class="button mx-2 p-2 btn-navigate-titular btn btn-warning btn-lg rounded text-white" type="button" step_number="2" titular="{{$titular}}">{{$titular}}</button>
                         @endif
                         
                       @endforeach

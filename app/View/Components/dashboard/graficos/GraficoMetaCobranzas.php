@@ -1,6 +1,6 @@
 <?php
 
-namespace App\View\Components;
+namespace App\View\Components\dashboard\graficos;
 
 
 use App\Abstracts\Widgets;
@@ -21,7 +21,7 @@ class GraficoMetaCobranzas extends Widgets
     {
         $this->asesores();
         $jsChart = $this->generateConfigChart();
-        return view('components.grafico-meta-cobranzas', compact('jsChart'));
+        return view('components.dashboard.graficos.grafico-meta-cobranzas', compact('jsChart'));
     }
 
     public function asesores()
@@ -90,26 +90,26 @@ class GraficoMetaCobranzas extends Widgets
         $seriaC = [];
         $asesores = [];
         foreach ($this->progressData as $item) {
-            $asignados=data_get($item, 'asignados');
-            if($asignados<=0){
+            $asignados = data_get($item, 'asignados');
+            if ($asignados <= 0) {
                 continue;
             }
             $seriaA[] = data_get($item, 'meta');
             $seriaB[] = $asignados;
             $seriaC[] = data_get($item, 'pagados');
-            $asesores[] = 'Asesor '.data_get($item, 'identificador');
+            $asesores[] = 'Asesor ' . data_get($item, 'identificador');
         }
-        $width=900;
-        if(count($seriaC)<8){
-            $width=100*count($seriaC);
+        $width = 900;
+        if (count($seriaC) < 8) {
+            $width = 100 * count($seriaC);
         }
-        if(count($seriaC)==1){
-            $width=190;
+        if (count($seriaC) == 1) {
+            $width = 190;
         }
         return [
-            "colors" => ['#464646','#03a4f1','#00E396'],
+            "colors" => ['#464646', '#03a4f1', '#00E396'],
             'title' => [
-                'text' => 'Progreso total de pedidos pagados y la meta asignada - '.$this->getDateTitle(),
+                'text' => 'Progreso total de pedidos pagados y la meta asignada - ' . $this->getDateTitle(),
                 'align' => 'left',
             ],
             'series' => [
@@ -152,7 +152,7 @@ class GraficoMetaCobranzas extends Widgets
                 'show' => true,
                 'width' => 0,
                 'colors' => [
-                   '#fff',
+                    '#fff',
                 ],
             ],
             'tooltip' => [

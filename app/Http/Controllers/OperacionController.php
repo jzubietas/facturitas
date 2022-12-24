@@ -68,6 +68,10 @@ class OperacionController extends Controller
             "ATENDIDO" => 'ATENDIDO'
         ];
 
+        PedidoMovimientoEstado::where('condicion_envio_code',Pedido::POR_ATENDER_PEDIDO_INT)->update([
+            'notificado' => 1,
+        ]);
+
 
 
         $imagenespedido = ImagenPedido::get();
@@ -114,7 +118,7 @@ class OperacionController extends Controller
             )
             ->where('pedidos.estado', '1')
             ->where('dp.estado', '1')
-            ->whereIn('pedidos.condicion', [Pedido::POR_ATENDER,Pedido::EN_PROCESO_ATENCION]);
+            ->whereIn('pedidos.condicion_code', [Pedido::POR_ATENDER_INT,Pedido::EN_PROCESO_ATENCION_INT]);
 
 
         if(Auth::user()->rol == "Operario"){
@@ -189,11 +193,14 @@ class OperacionController extends Controller
             "EN PROCESO ATENCION" => 'EN PROCESO ATENCION',
             "ATENDIDO" => 'ATENDIDO'
         ];
-
-
-
         $imagenes = ImagenAtencion::where('estado', '1')->get();
         $superasesor = User::where('rol', 'Super asesor')->count();
+
+        PedidoMovimientoEstado::where('condicion_envio_code',Pedido::ATENDIDO_INT)->update([
+            'notificado' => 1,
+        ]);
+
+
 
         return view('operaciones.atendidos', compact('dateMin', 'dateMax', 'condiciones', 'superasesor'));//, 'imagenes'
     }
@@ -228,9 +235,6 @@ class OperacionController extends Controller
                 )
                 ->where('pedidos.estado', '1')
                 ->where('dp.estado', '1')
-                //->WhereIn('u.identificador',$asesores)
-                //->where('u.operario', Auth::user()->id)
-                //->where('pedidos.condicion', 'ATENDIDO')
                 ->where('pedidos.condicion_code', Pedido::ATENDIDO_INT)
                 ->where('pedidos.envio', 0);
                 /*->groupBy(
@@ -695,6 +699,7 @@ class OperacionController extends Controller
         PedidoMovimientoEstado::create([
             'pedido' => $request->hiddenAtender,
             'condicion_envio_code' => $request->condicion,
+            'notificado' => 0
         ]);
 
 
@@ -1256,6 +1261,7 @@ class OperacionController extends Controller
         PedidoMovimientoEstado::create([
             'pedido' => $request->hiddenRevertirpedido,
             'condicion_envio_code' => Pedido::ATENDIDO_OP_INT,
+            'notificado' => 0
         ]);
 
 

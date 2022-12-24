@@ -135,6 +135,7 @@ class Pedido extends Model
     protected $dates = [
         'fecha_anulacion',
         'fecha_anulacion_confirm',
+        'fecha_anulacion_denegada',
     ];
 
     /* public function user()

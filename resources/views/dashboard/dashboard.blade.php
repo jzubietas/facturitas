@@ -7,12 +7,12 @@
     <div><h1>Dashboard</h1>
         <!-- Right navbar links -->
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 
-    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <!--ADMINISTRADOR-->
     <script type="text/javascript">
-        google.charts.load('current', {
+        /*google.charts.load('current', {
             'packages': ['bar']
         });
         google.charts.setOnLoadCallback(drawStuff);
@@ -35,7 +35,7 @@
 
             var chart = new google.charts.Bar(document.getElementById('pedidosxasesor'));
             chart.draw(data, google.charts.Bar.convertOptions(options));
-        }
+        }*/
     </script>
 
     <script type="text/javascript">
@@ -73,29 +73,6 @@
           ['Cobranza', 'Pedidos'],
           @foreach ($cobranzaxmes as $vxax)
         ['{{ $vxax->users }}', {{ $vxax->total }}],
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     @endforeach
     ]);
 
@@ -338,18 +315,23 @@
         </script>
     @endif
 
-    {{-- <script>
+    <script>
       // CARGAR PEDIDOS DE CLIENTE SELECCIONADO
+      {{--
       window.onload = function () {
         $.ajax({
-          url: "{{ route('notifications.get') }}"
+          url: "{{ route('notifications.getpedidosatender') }}",
           method: 'GET',
           success: function(data) {
-            $('#my-notification').html(data.html);
+
+              console.log('prueba');
+              console.log(data);
+            //$('#my-notification').html(data.html);
           }
         });
       };
-    </script> --}}
+      --}}
+    </script>
     <script>
         (function () {
 

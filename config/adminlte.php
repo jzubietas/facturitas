@@ -305,7 +305,7 @@ return [
                     'text' => 'Estado Pedidos',
                     'route'  => 'pedidos.estados.index',
                     'can' => 'pedidos.mispedidos',
-                    'icon'   => 'fas fa-check-circle',
+                    'icon'   => 'noti-pedidos-atendidos noti-side',
                     'active' => ['estatus pedido'],
                 ],
                 [
@@ -334,7 +334,7 @@ return [
                     'text' => 'Pedidos por atender',
                     'route'  => 'operaciones.poratender',
                     'can' => 'operacion.poratender',
-                    'icon'   => 'fas fa-check-circle',
+                    'icon'   => 'noti-pedidos-atender noti-side',
                     'active' => ['pedidos por atender'],
                 ],
                 /*[
@@ -376,7 +376,7 @@ return [
                     'text' => 'Pendiente Anulación',
                     'route'  => 'pedidos.estados.anulados',
                     'can' => 'pedidos.pendiente.anulacion',
-                    'icon'   => 'fas fa-check-circle',
+                    'icon'   => 'noti-pedidos-pen-anulacion noti-side',
                     'active' => ['Pedidos Pendiente'],
                 ],
 
@@ -433,7 +433,7 @@ return [
                     'text' => 'Sobre entregados',
                     'route'  => 'envios.entregados',
                     'can' => 'envios.enviados',
-                    'icon'   => 'fas fa-check-circle',
+                    'icon'   => 'noti-sobres-entregados noti-side',
                     'active' => ['enviados'],
                 ],
             ],

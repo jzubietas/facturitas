@@ -111,7 +111,7 @@ class DashboardController extends Controller
         //MONTO DE PAGO X CLIENTE EN EL MES TOP 30
         $pagosxmes = Pago::join('clientes as c', 'pagos.cliente_id', 'c.id')
             ->join('users as u', 'pagos.user_id', 'u.id')
-            ->select('c.nombre as cliente', DB::raw('sum(pagos.total_cobro) as pagos'))
+            ->select(['c.nombre as cliente', DB::raw('sum(pagos.total_cobro) as pagos')])
             ->whereIn('u.rol', ['ASESOR', 'Super asesor'])
             ->where('pagos.estado', '1')
             ->whereBetween('pagos.created_at', [now()->startOfMonth(),now()->endOfMonth()])
@@ -120,6 +120,7 @@ class DashboardController extends Controller
             ->offset(0)
             ->limit(30)
             ->get();
+
         //PEDIDOS POR ASESOR EN EL DIA
         $pedidosxasesorxdia = Pedido::join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
             ->activo()
@@ -134,7 +135,6 @@ class DashboardController extends Controller
         $meta_pedidoencargado = Pedido::join('users as u', 'pedidos.user_id', 'u.id')
             ->activo()
             ->where('u.supervisor', Auth::user()->id)
-            ->where('pedidos.estado', '1')
             ->whereBetween('pedidos.created_at', [now()->startOfMonth(),now()->endOfMonth()])
             ->count();
         $meta_pagoencargado = Pago::join('users as u', 'pagos.user_id', 'u.id')
@@ -190,7 +190,6 @@ class DashboardController extends Controller
         $meta_pedidoasesor = Pedido::join('users as u', 'pedidos.user_id', 'u.id')
             ->activo()
             ->where('u.id', Auth::user()->id)
-            ->where('pedidos.estado', '1')
             ->whereBetween('pedidos.created_at', [now()->startOfMonth(),now()->endOfMonth()])
             ->count();
         $meta_pagoasesor = (object)["pagos"=>Pago::join('users as u', 'pagos.user_id', 'u.id')
@@ -230,7 +229,6 @@ class DashboardController extends Controller
                 'pedidos.condicion as condiciones',
                 'pedidos.created_at as fecha'
             )
-            ->where('pedidos.estado', '1')
             ->where('dp.estado', '1')
             ->where('u.id', Auth::user()->id)
             ->where('pedidos.pago', '0')
@@ -247,10 +245,10 @@ class DashboardController extends Controller
             ->get();
         //DASHBOARD OPERACION
         $pedidoxatender = Pedido::where('condicion', 'REGISTRADO')
-            ->where('pedidos.estado', '1')
+            ->activo()
             ->count();
         $pedidoenatencion = Pedido::where('condicion', 2)
-            ->where('pedidos.estado', '1')
+            ->activo()
             ->count();
         //DASHBOARD ADMINISTRACION
         $pagosxrevisar_administracion = Pago::where('estado', '1')
