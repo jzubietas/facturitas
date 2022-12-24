@@ -58,8 +58,8 @@
                 }
             };
 
-            var chart = new google.visualization.BarChart(document.getElementById('cobranzaxmes'));
-            chart.draw(data, options);
+            //var chart = new google.visualization.BarChart(document.getElementById('cobranzaxmes'));
+            //chart.draw(data, options);
         };
     </script>
     <!--<script type="text/javascript">
@@ -108,8 +108,8 @@
                 }
             };
 
-            var chart = new google.charts.Bar(document.getElementById('pagosxmes'));
-            chart.draw(data, google.charts.Bar.convertOptions(options));
+            //var chart = new google.charts.Bar(document.getElementById('pagosxmes'));
+            //chart.draw(data, google.charts.Bar.convertOptions(options));
         }
     </script>
     <script type="text/javascript">
