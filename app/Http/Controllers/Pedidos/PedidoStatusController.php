@@ -49,8 +49,15 @@ class PedidoStatusController extends Controller
                     'pedidos.pendiente_anulacion',
                     'pedidos.condicion',
                     'pedidos.condicion_code',
-                    DB::raw('(DATE_FORMAT(pedidos.created_at, "%Y-%m-%d %h:%i:%s")) as fecha'),
-                    'dp.envio_doc',
+                   // DB::raw('(DATE_FORMAT(pedidos.created_at, "%Y-%m-%d %h:%i:%s")) as fecha'),
+                   
+                   DB::raw(" (CASE WHEN pedidos.condicion_code=1 THEN pedidos.created_at 
+                                WHEN pedidos.condicion_code=2 THEN pedidos.updated_at
+                                WHEN pedidos.condicion_code=3 THEN pedidos.updated_at
+                                ELSE pedidos.created_at END) AS fecha"),
+                   
+                   
+                   'dp.envio_doc',
                     'dp.fecha_envio_doc',
                     'dp.cant_compro',
                     'dp.fecha_envio_doc_fis',
@@ -117,12 +124,16 @@ class PedidoStatusController extends Controller
 
                 $pedidos = $pedidos->WhereIn('u.identificador', $usersasesores);
             }
+       
+
             if ($request->get('load_data') == 'por_atender') {
                 $pedidos->whereIn('pedidos.condicion_code', [Pedido::POR_ATENDER_INT, Pedido::EN_PROCESO_ATENCION_INT]);
             } else {
                 $pedidos->where('pedidos.da_confirmar_descarga', '0');
                 $pedidos->whereIn('pedidos.condicion_code', [Pedido::ATENDIDO_INT]);
             }
+
+
 
             return datatables()->query(DB::table($pedidos))
                 ->addIndexColumn()
