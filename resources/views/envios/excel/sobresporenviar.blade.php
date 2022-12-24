@@ -5,6 +5,8 @@
       <th style="background-color: #e0dbdb; text-align: center; color: #ffff;">CODIGO</th>
       <th style="background-color: #e0dbdb; text-align: center; color: #ffff;">ASESOR</th>
       <th style="background-color: #e0dbdb; text-align: center; color: #ffff;">RAZON SOCIAL</th>
+      <th style="background-color: #e0dbdb; text-align: center; color: #ffff;">DIAS</th>
+      
       <th style="background-color: #e0dbdb; text-align: center; color: #ffff;">FECHA ENVIO</th>
       <th style="background-color: #e0dbdb; text-align: center; color: #ffff;">ESTADO DE ENVIO</th>
       <th style="background-color: #e0dbdb; text-align: center; color: #ffff;">NOMBRE CLIENTE</th>
@@ -20,6 +22,8 @@
         <td>{{ $pedido->codigo }}</td>
         <td>{{ $pedido->identificador }}</td>
         <td>{{ $pedido->empresas }}</td>
+        <td>{{ $pedido->dias }}</td>
+        
         <td>{{ $pedido->fecha_envio_doc }}</td>
         <td>{{ $pedido->condicion_envio }}</td>
         <td>{{ $pedido->empresas }}</td>
