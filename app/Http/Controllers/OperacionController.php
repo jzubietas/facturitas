@@ -118,7 +118,7 @@ class OperacionController extends Controller
             )
             ->where('pedidos.estado', '1')
             ->where('dp.estado', '1')
-            ->whereIn('pedidos.condicion', [Pedido::POR_ATENDER,Pedido::EN_PROCESO_ATENCION]);
+            ->whereIn('pedidos.condicion_code', [Pedido::POR_ATENDER_INT,Pedido::EN_PROCESO_ATENCION_INT]);
 
 
         if(Auth::user()->rol == "Operario"){
