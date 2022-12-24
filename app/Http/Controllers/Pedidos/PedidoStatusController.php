@@ -265,8 +265,9 @@ class PedidoStatusController extends Controller
                 ->addColumn('action', function ($pedido) {
                     $btn = '';
                     if ($pedido->pendiente_anulacion == 1) {
-                        $btn .= '<button data-toggle="modal" data-target="#modal_confirmar_anular" data-confirm_anular_pedido="' . $pedido->id . '"  data-pedido_id="' . $pedido->id . '" data-pedido_motivo="' . $pedido->motivo . '" data-pedido_id_code="' . Pedido::generateIdCode($pedido->id) . '" type="button" class="btn btn-danger btn-sm" >EMITIR N/C</button>';
+                        $btn .= '<button data-toggle="modal" data-target="#modal_confirmar_anular" data-confirm_anular_pedido="' . $pedido->id . '"  data-pedido_id="' . $pedido->id . '" data-pedido_motivo="' . $pedido->motivo . '" data-pedido_id_code="' . Pedido::generateIdCode($pedido->id) . '" type="button" class="btn btn-danger btn-sm" >EMITIR N/C</button>';                        
                     }
+                    $btn .= '<a href="' . route('pedidosPDF', data_get($pedido, 'id')) . '" class="btn-sm dropdown-item" target="_blank"><i class="fa fa-file-pdf text-primary"></i> Ver PDF</a>';
                     return $btn;
                 })
                 ->rawColumns(['action', 'action2'])
