@@ -4,12 +4,17 @@ namespace App\View\Components\dashboard\graficos;
 
 use App\Models\Pedido;
 use App\Models\User;
+use Carbon\Carbon;
+use Carbon\CarbonInterface;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\View\Component;
 
 class GraficoMetasDelMes extends Component
 {
+    public $novResult = [];
+    public $dicResult = [];
+
     /**
      * Create a new component instance.
      *
@@ -27,12 +32,26 @@ class GraficoMetasDelMes extends Component
      */
     public function render()
     {
-        $data_noviembre = $this->generalDataAsignados();
-        $data_diciembre = $this->generalData();
-        return view('components.dashboard.graficos.grafico-metas-del-mes', compact('data_noviembre', 'data_diciembre'));
+        $now = now();
+        $now_submonth = $now->clone()->subMonth();
+        $data_noviembre = $this->generarDataNoviembre($now_submonth);
+
+        $data_diciembre = $this->generarDataDiciembre();
+        return view('components.dashboard.graficos.grafico-metas-del-mes', compact('data_noviembre', 'data_diciembre','now','now_submonth'));
     }
 
-    public function generalDataAsignados()
+    public function applyFilter($query, CarbonInterface $date = null, $column = 'created_at')
+    {
+        if ($date == null) {
+            $date = now();
+        }
+        return $query->whereBetween($column, [
+            $date->clone()->startOfMonth(),
+            $date->clone()->endOfMonth()->endOfDay()
+        ]);
+    }
+
+    public function generarDataNoviembre($date)
     {
         $encargado = null;
         if (auth()->user()->rol == User::ROL_ENCARGADO) {
@@ -45,8 +64,7 @@ class GraficoMetasDelMes extends Component
                 return $query->where('supervisor', '=', $encargado);
             })
             ->get();
-        $metatotal = 0;
-        $users = [];
+        $progressData = [];
         foreach ($asesores as $asesor) {
             if (auth()->user()->rol != User::ROL_ADMIN) {
                 if (auth()->user()->rol != User::ROL_ENCARGADO) {
@@ -59,33 +77,71 @@ class GraficoMetasDelMes extends Component
                     }
                 }
             }
-            $users[] = $asesor->id;
-            $metatotal += (float)$asesor->meta_pedido;
+
+            $metatotal = (float)$asesor->meta_pedido;
+            $all = $this->applyFilter(Pedido::query()->where('user_id', $asesor->id)->activo(), $date, 'created_at')
+                ->count();
+
+            $pay = $this->applyFilter(Pedido::query()->where('user_id', $asesor->id)->activo()->pagados(), $date, 'created_at')
+                ->count();
+
+            $progressData[] = [
+                "identificador" => $asesor->identificador,
+                "code" => "Asesor {$asesor->identificador}",
+                "name" => $asesor->name,
+                "total" => $all,
+                "current" => $pay,
+                "meta" => $metatotal,
+            ];
+
         }
+        $newData = [];
+        $union = collect($progressData)->groupBy('identificador');
+        foreach ($union as $identificador => $items) {
+            foreach ($items as $item) {
+                if (!isset($newData[$identificador])) {
+                    $newData[$identificador] = $item;
+                } else {
+                    $newData[$identificador]['total'] += data_get($item, 'total');
+                    $newData[$identificador]['current'] += data_get($item, 'current');
+                    $newData[$identificador]['meta'] += data_get($item, 'meta');
+                }
+            }
+            $newData[$identificador]['name'] = collect($items)->map(function ($item) {
+                return explode(" ", data_get($item, 'name'))[0];
+            })->first();
+        }
+        $progressData = collect($newData)->values()->map(function ($item) {
+            $all = data_get($item, 'total');
+            $pay = data_get($item, 'current');
+            if ($all > 0) {
+                $p = intval(($pay / $all) * 100);
+            } else {
+                $p = 0;
+            }
+            $item['progress'] = $p;
+            return $item;
+        })->sortBy('identificador')->all();
 
-        $all = Pedido::query()->whereIn('user_id', $users)
-            ->activo()
-            ->whereBetween('created_at', [now()->subMonth()->startOfMonth(), now()->subMonth()->endOfMonth()])
-            ->count();
-        $pay = Pedido::query()->whereIn('user_id', $users)->activo()->pagados()
-            ->whereBetween('created_at', [now()->subMonth()->startOfMonth(), now()->subMonth()->endOfMonth()])
-            ->count();
+        $this->novResult = $progressData;
 
+        $all = collect($progressData)->pluck('total')->sum();
+        $pay = collect($progressData)->pluck('current')->sum();
+        $meta = collect($progressData)->pluck('meta')->sum();
         if ($all > 0) {
             $p = intval(($pay / $all) * 100);
         } else {
             $p = 0;
         }
         return (object)[
+            "progress" => $p,
             "total" => $all,
             "current" => $pay,
-            "meta" => $metatotal,
-            "progress" => $p,
+            "meta" => $meta,
         ];
-
     }
 
-    public function generalData()
+    public function generarDataDiciembre()
     {
         $encargado = null;
         if (auth()->user()->rol == User::ROL_ENCARGADO) {
@@ -98,8 +154,7 @@ class GraficoMetasDelMes extends Component
                 return $query->where('supervisor', '=', $encargado);
             })
             ->get();
-        $metatotal = 0;
-        $users = [];
+        $progressData = [];
         foreach ($asesores as $asesor) {
             if (auth()->user()->rol != User::ROL_ADMIN) {
                 if (auth()->user()->rol != User::ROL_ENCARGADO) {
@@ -112,33 +167,66 @@ class GraficoMetasDelMes extends Component
                     }
                 }
             }
-            $users[] = $asesor->id;
-            $metatotal += (float)$asesor->meta_pedido;
+
+            $meta = (float)$asesor->meta_pedido;
+            $asignados = $this->applyFilter(Pedido::query())->whereUserId($asesor->id)->activo()->count();
+            //$pay = $this->applyFilter(Pedido::query())->whereUserId($asesor->id)->activo()->pagados()->count();
+
+            $progressData[] = [
+                "identificador" => $asesor->identificador,
+                "code" => "Asesor {$asesor->identificador}",
+                "name" => $asesor->name,
+                "meta" => $meta,
+                "total" => $asignados,
+                //"current" => $pay,
+            ];
+
         }
 
-        $all = Pedido::query()
-            ->whereIn('user_id', $users)
-            ->activo()
-            ->whereBetween('created_at', [now()->startOfMonth(), now()->endOfMonth()])
-            ->count();
-
-        $t=1600;
-        if (auth()->user()->rol == User::ROL_ASESOR) {
-            $t=$metatotal;
+        $newData = [];
+        $union = collect($progressData)->groupBy('identificador');
+        foreach ($union as $identificador => $items) {
+            foreach ($items as $item) {
+                if (!isset($newData[$identificador])) {
+                    $newData[$identificador] = $item;
+                } else {
+                    $newData[$identificador]['meta'] += data_get($item, 'meta');
+                    $newData[$identificador]['total'] += data_get($item, 'total');
+                    //$newData[$identificador]['current'] += data_get($item, 'current');
+                }
+            }
+            $newData[$identificador]['name'] = collect($items)->map(function ($item) {
+                return explode(" ", data_get($item, 'name'))[0];
+            })->first();
         }
-        if ($t > 0) {
-            $p = intval(($all / $t) * 100);
+        $dicResult = collect($newData)->values()->map(function ($item) {
+            $all = data_get($item, 'meta');
+            $asignados = data_get($item, 'total');
+            if ($all > 0) {
+                $p = intval(($asignados / $all) * 100);
+            } else {
+                $p = 0;
+            }
+            $item['progress'] = $p;
+            return $item;
+        })->sortBy('identificador')->all();
+
+        $this->dicResult = $dicResult;
+
+        $metaTotal = collect($dicResult)->pluck('meta')->sum();
+        $asignados = collect($dicResult)->pluck('total')->sum();
+        //$pagados = collect($dicResult)->pluck('current')->sum();
+        if ($metaTotal > 0) {
+            $p = intval(($asignados / $metaTotal) * 100);
         } else {
             $p = 0;
         }
         return (object)[
-            "total" => $t,
-            "current" => $all,
-            "meta" => $metatotal,
             "progress" => $p,
+            "meta" => $metaTotal,
+            "total" => $asignados,//$metaTotal,
+            "current" => $asignados,
         ];
-
     }
-
 
 }

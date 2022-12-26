@@ -988,6 +988,8 @@ class PagoController extends Controller
                     );
                 }
 
+
+
                 foreach ($monto as $monto_key => $monto_value) {
                     if (isset($fileList[$monto_key]['file_name'])) {
                         DetallePago::create([
