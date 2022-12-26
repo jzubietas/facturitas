@@ -242,6 +242,7 @@ class UserController extends Controller
 
     public function Asesorcombo(Request $request)
     {   
+
         $mirol=Auth::user()->rol;
         $users = null;
         $users = User::where('estado', '1')->where("rol", "Asesor");
@@ -250,29 +251,53 @@ class UserController extends Controller
             $users = $users->where('llamada', Auth::user()->id)->where("rol", "Asesor");
         } else if ($mirol == 'Jefe de llamadas') {
             $users = $users->where('llamada', Auth::user()->id)->where("rol", "Asesor");
-        } else if ($mirol == 'Asesor') {
+        } 
+        
+        else if ($mirol == 'Asesor') {
             $users = $users->where('id', Auth::user()->id)->where("rol", "Asesor");
-        } else {
-            $usersB = User::where("identificador", "B")->where("rol", "Administrador");
+        }
+        
+        else if ($mirol == 'ASESOR ADMINISTRATIVO') {
+                        
+            //$usersB = User::where("identificador", "ADMIN")->where("rol", "Administrador");
+            $users = User::where("identificador", "B")->where("rol", "ASESOR ADMINISTRATIVO");
+            //$users = $usersB->union($users);
+        
+        }
+        
+        else {
+            $usersB = User::where("identificador", "ADMIN")->where("rol", "Administrador");
             $users = $usersB->union($users);
         }
+        
+
+
+
         $users = $users->orderBy('exidentificador', 'ASC')->get();
         $html = "";
+
+
         //$html = '<option value="">' . trans('---- SELECCIONE ASESOR ----') . '</option>';
+
+                          
+
         foreach ($users as $user) 
         {
 
-            
+
+
             if($user->identificador=='B')
             {
                 $html .= '<option style="color:black" value="' . $user->identificador . '">' . $user->identificador. '</option>';
             }
             
+   
 
             elseif($user->identificador=='ADMIN')
             {
                 $html .= '<option style="color:black" value="' . $user->identificador . '">' . $user->identificador. '</option>';
             }
+            
             
             
             else{
@@ -326,15 +351,26 @@ class UserController extends Controller
             if($user->identificador=='B')
             {
                 $html .= '<option style="color:black" value="' . $user->identificador . '">' . $user->identificador. '</option>';
-            }else{
+            }
+            
+            
+            else{
 
-                if($user->exidentificador==22 || $user->exidentificador==21){
+                if($user->exidentificador==22 || $user->exidentificador==21)
+                
+                {
                     $html .= '<option style="color:black" value="' . $user->identificador . '">' . $user->identificador. ( ($user->exidentificador!=null)? '  (' . $user->exidentificador.')':'' ) . '</option>';
-                }else {
+                }
+                
+                
+                else {
+                
                     if(intval($user->exidentificador)%2==0)
                     {
                         $html .= '<option style="color:red" value="' . $user->identificador . '">' . $user->identificador.  ( ($user->exidentificador!=null)? '  (' . $user->exidentificador.')':'' )  . '</option>';
-                    }else{
+                    }
+                    
+                    else{
                         $html .= '<option style="color:black" value="' . $user->identificador . '">' . $user->identificador. ( ($user->exidentificador!=null)? '  (' . $user->exidentificador.')':'' ) . '</option>';
                     }
                  }
