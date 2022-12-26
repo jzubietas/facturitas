@@ -56,24 +56,24 @@ body{
 
 @keyframes santa {
     0%{
-        bottom: -46px;
+        bottom: -50px;
     }
     10%{
-        bottom: -46px;
+        bottom: -50px;
     }
     40%{
-        bottom: -8px;
+        bottom: -4px;
     }
     70%{
-        bottom: -8px;
+        bottom: -4px;
     }
 
     85%{
-        bottom: -8px;
+        bottom: -4px;
     }
 
     100%{
-        bottom: -46px;
+        bottom: -50px;
     }
 }
 
@@ -1210,7 +1210,7 @@ font-weight: bold;
 
 .tpl-snow > div{position:fixed;-webkit-animation:ease-in infinite normal;-moz-animation:ease-in infinite normal;animation:ease-in infinite normal;}
 
-.tpl-snow > div{z-index:9999999999999;width:30px;height:30px;background-image: url('../imagenes/copo.png'); background-repeat: no-repeat;    background-size: contain; -webkit-animation-name:nieve,horiz;-moz-animation-name:nieve,horiz;animation-name:nieve,horiz;}
+.tpl-snow > div{z-index:9999999999999;width:30px;height:30px;background-image: url('../imagenes/pica.png'); background-repeat: no-repeat;    background-size: contain; -webkit-animation-name:nieve,horiz;-moz-animation-name:nieve,horiz;animation-name:nieve,horiz;}
 .tpl-snow > div:nth-of-type(odd){width:15px; height:15px;-webkit-animation-name:nieve,horiz2;-moz-animation-name:nieve,horiz2;animation-name:nieve,horiz2;}
 
 .tpl-snow > div:nth-of-type(1){left:40px;-webkit-animation-duration:5.5s;-moz-animation-duration:5.5s;animation-duration:5.5s;-webkit-animation-delay:1s;-moz-animation-delay:1s;animation-delay:1s;}
