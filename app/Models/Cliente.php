@@ -40,6 +40,10 @@ class Cliente extends Model
         return $this->hasMany(Pedido::class, 'cliente_id');
     }
 
+    public function direccion_grupos(){
+        return $this->hasMany(DireccionGrupo::class,'cliente_id');
+    }
+
     public function scopeActivo($query, $estado = 1, $boolean = 'and')
     {
         return $query->where($this->qualifyColumn('estado'), '=', $estado, $boolean);
