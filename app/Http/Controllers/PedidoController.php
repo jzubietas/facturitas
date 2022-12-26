@@ -140,6 +140,7 @@ class PedidoController extends Controller
                 'dp.ruc as ruc',
                 'pedidos.pendiente_anulacion',
                 'pedidos.condicion_envio',
+                'pedidos.condicion_envio_code',
                 'pedidos.condicion as condiciones',
                 'pedidos.condicion_code',
                 'pedidos.pagado as condicion_pa',
@@ -196,8 +197,8 @@ class PedidoController extends Controller
 
             $pedidos = $pedidos->WhereIn('u.identificador', $usersasesores);
 
-        } 
-        
+        }
+
         else if (Auth::user()->rol == "Super asesor") {
             $usersasesores = User::where('users.rol', 'Asesor')
                 ->where('users.estado', '1')
@@ -209,8 +210,8 @@ class PedidoController extends Controller
 
             $pedidos = $pedidos->WhereIn('u.identificador', $usersasesores);
 
-        } 
-        
+        }
+
 
         else if (Auth::user()->rol == "ASESOR ADMINISTRATIVO") {
             $usersasesores = User::where('users.rol', 'ASESOR ADMINISTRATIVO')
@@ -223,12 +224,12 @@ class PedidoController extends Controller
 
             $pedidos = $pedidos->WhereIn('u.identificador', $usersasesores);
 
-        } 
-        
-        
-        
-        
-        
+        }
+
+
+
+
+
         else if (Auth::user()->rol == "Encargado") {
 
             $usersasesores = User::where('users.rol', 'Asesor')
@@ -933,7 +934,7 @@ class PedidoController extends Controller
 
         //$cliente = Cliente::find($request->cliente_id);
 
-        
+
 
         $arreglo = array("ASESOR ADMINISTRATIVO", "Administrador", );
 
@@ -965,8 +966,8 @@ class PedidoController extends Controller
 
 
 
-            } 
-            
+            }
+
             else {
 
 
@@ -975,14 +976,14 @@ class PedidoController extends Controller
                         $html = "|4";
                         return response()->json(['html' => $html]);
                     }
-                } 
-                
+                }
+
                 else if ($cliente_deuda->pedidos_mes_deuda > 0 && $cliente_deuda->pedidos_mes_deuda_antes > 0) {
                     $html = "|0";
                     return response()->json(['html' => $html]);
-                } 
-                
-                
+                }
+
+
                 else if ($cliente_deuda->pedidos_mes_deuda == 0 && $cliente_deuda->pedidos_mes_deuda_antes > 0) {
                     $html = "|0";
                     return response()->json(['html' => $html]);
