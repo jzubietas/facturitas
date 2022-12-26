@@ -190,8 +190,8 @@ class MovimientoController extends Controller
             $monto_ma_3= floatval($monto_compara)+3;
             $monto_me_3= floatval($monto_compara)-3;
 
-            $query->where('movimiento_bancarios.ismporte','<=',$monto_ma_3);
             $query->where('movimiento_bancarios.importe','>=',$monto_me_3);
+            $query->where('movimiento_bancarios.importe','<=',$monto_ma_3);
             //$query->whereBetween('movimiento_bancarios.importe',[$monto_me_3,$monto_ma_3]);
 
 
