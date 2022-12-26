@@ -38,6 +38,8 @@
                     class="fas fa-arrow-circle-right"></i></a>
         </div>
     </div>
+    
+    
     <div class="col-lg-3 col-6">
         <div class="small-box bg-warning">
             <div class="inner">
@@ -53,6 +55,34 @@
                     class="fas fa-arrow-circle-right"></i></a>
         </div>
     </div>
+
+
+
+    <div class="col-lg-3 col-6">
+        <div class="small-box bg-default">
+            <div class="inner">
+                @foreach ($pagoxmes_total_solo_asesor_b as $pxm2)
+                    <h3>{{ $pxm2->pedidos }}</h3>
+                @endforeach
+                <p>PEDIDOS DEL MES  ASESOR B</p>
+            </div>
+            <div class="icon">
+                <i class="ion ion-person-add"></i>
+            </div>
+            <a href="{{ route('pagos.index') }}" class="small-box-footer">Más info <i
+                    class="fas fa-arrow-circle-right"></i></a>
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+
+
     <div class="col-lg-3 col-6">
         <div class="small-box bg-danger">
             <div class="inner">
