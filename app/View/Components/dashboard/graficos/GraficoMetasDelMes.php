@@ -37,6 +37,12 @@ class GraficoMetasDelMes extends Component
         $data_noviembre = $this->generarDataNoviembre($now_submonth);
 
         $data_diciembre = $this->generarDataDiciembre();
+
+        if(\auth()->user()->rol==User::ROL_ASESOR){
+            $this->novResult=[];
+            $this->dicResult=[];
+        }
+
         return view('components.dashboard.graficos.grafico-metas-del-mes', compact('data_noviembre', 'data_diciembre','now','now_submonth'));
     }
 

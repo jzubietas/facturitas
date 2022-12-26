@@ -143,61 +143,66 @@
         }
     </script>
     <!--ENCARGADO-->
-    <script type="text/javascript">
-        google.charts.load('current', {
-            'packages': ['bar']
-        });
-        google.charts.setOnLoadCallback(drawStuff);
 
-        function drawStuff() {
-            var data = new google.visualization.arrayToDataTable([
-                ['Asesores', 'Pedidos'],
-                    @foreach ($pedidosxasesor_3meses_encargado as $vxa)
-                ['{{ $vxa->users }} - {{ $vxa->fecha }}', {{ $vxa->pedidos }}],
-                @endforeach
-            ]);
+    {{--
+        <script type="text/javascript">
+            google.charts.load('current', {
+                'packages': ['bar']
+            });
+            google.charts.setOnLoadCallback(drawStuff);
 
-            var options = {
-                chart: {
-                    title: 'HISTORIAL DE PEDIDOS DE LOS ULTIMOS 3 MESES DE MIS ASESORES',
-                    subtitle: 'PEDIDO/ASESOR'
+            function drawStuff() {
+                var data = new google.visualization.arrayToDataTable([
+                    ['Asesores', 'Pedidos'],
+                        @foreach ($pedidosxasesor_3meses_encargado as $vxa)
+                    ['{{ $vxa->users }} - {{ $vxa->fecha }}', {{ $vxa->pedidos }}],
+                    @endforeach
+                ]);
+
+                var options = {
+                    chart: {
+                        title: 'HISTORIAL DE PEDIDOS DE LOS ULTIMOS 3 MESES DE MIS ASESORES',
+                        subtitle: 'PEDIDO/ASESOR'
+                    }
+                };
+
+                if (document.getElementById('pedidosxasesor_3meses_encargado')) {
+                    var chart = new google.charts.Bar(document.getElementById('pedidosxasesor_3meses_encargado'));
+                    chart.draw(data, google.charts.Bar.convertOptions(options));
                 }
             };
+        </script>
 
-            if (document.getElementById('pedidosxasesor_3meses_encargado')) {
-                var chart = new google.charts.Bar(document.getElementById('pedidosxasesor_3meses_encargado'));
-                chart.draw(data, google.charts.Bar.convertOptions(options));
-            }
-        };
-    </script>
 
-    <script type="text/javascript">
-        google.charts.load('current', {
-            'packages': ['bar']
-        });
-        google.charts.setOnLoadCallback(drawStuff);
+        <script type="text/javascript">
+            google.charts.load('current', {
+                'packages': ['bar']
+            });
+            google.charts.setOnLoadCallback(drawStuff);
 
-        function drawStuff() {
-            var data = new google.visualization.arrayToDataTable([
-                ['Asesores', 'Pedidos'],
-                    @foreach ($pedidosxasesor_encargado as $vxa)
-                ['{{ $vxa->users }}', {{ $vxa->pedidos }}],
-                @endforeach
-            ]);
+            function drawStuff() {
+                var data = new google.visualization.arrayToDataTable([
+                    ['Asesores', 'Pedidos'],
+                        @foreach ($pedidosxasesor_encargado as $vxa)
+                    ['{{ $vxa->users }}', {{ $vxa->pedidos }}],
+                    @endforeach
+                ]);
 
-            var options = {
-                chart: {
-                    title: 'PEDIDOS DEL MES DE MIS ASESORES',
-                    subtitle: 'PEDIDO/ASESOR'
+                var options = {
+                    chart: {
+                        title: 'PEDIDOS DEL MES DE MIS ASESORES',
+                        subtitle: 'PEDIDO/ASESOR'
+                    }
+                };
+
+                if (document.getElementById('pedidosxasesor_encargado')) {
+                    var chart = new google.charts.Bar(document.getElementById('pedidosxasesor_encargado'));
+                    chart.draw(data, google.charts.Bar.convertOptions(options));
                 }
             };
+        </script>
 
-            if (document.getElementById('pedidosxasesor_encargado')) {
-                var chart = new google.charts.Bar(document.getElementById('pedidosxasesor_encargado'));
-                chart.draw(data, google.charts.Bar.convertOptions(options));
-            }
-        };
-    </script>
+
 
     <script type="text/javascript">
         google.charts.load('current', {
@@ -278,7 +283,7 @@
                 chart.draw(data, google.charts.Bar.convertOptions(options));
             }
         };
-    </script>
+    </script>--}}
 @stop
 
 @section('content')

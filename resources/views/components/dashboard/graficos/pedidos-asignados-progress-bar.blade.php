@@ -1,6 +1,6 @@
 <div class="card">
     <div class="card-header">
-        <b>Progreso total de pedidos pagados sobre pedidos asignados -- {{$title}}</b>
+        <b>PEDIDOS PAGADOS -- {{Str::upper($title)}}</b>
     </div>
     <div class="card-body">
         <ul class="list-group">

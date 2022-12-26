@@ -5,17 +5,17 @@
                 <div class="d-flex justify-content-center">
                     <ul class="list-group">
                         <li class="list-group-item">
-                            <h4 class="text-center"><b>Meta del mes</b></h4>
+                            <h4 class="text-center"><b>METAS DEL MES</b></h4>
                         </li>
                         <li class="list-group-item">
                             <div class="row">
                                 <div class="col-md-6">
                                     <ul class="list-group">
                                         <li class="list-group-item" style=" min-width: 300px; ">
-                                            <h5>Cobranzas {{$now_submonth->monthName}}</h5>
+                                            <h5>COBRANZAS {{Str::upper($now_submonth->monthName)}}</h5>
                                         </li>
                                         <li class="list-group-item" style=" background-color: #b7b7b7; ">
-                                            <b>General </b>
+                                            <b>GENERAL </b>
                                             <div class="progress">
                                                 <div class="progress-bar
                 @if($data_noviembre->progress<50)
@@ -66,10 +66,10 @@
                                 <div class="col-md-6">
                                     <ul class="list-group">
                                         <li class="list-group-item" style=" min-width: 300px; ">
-                                            <h4>Pedidos {{$now->monthName}}</h4>
+                                            <h4>PEDIDOS {{Str::upper($now->monthName)}}</h4>
                                         </li>
                                         <li class="list-group-item" style=" background-color: #b7b7b7; ">
-                                            <b>General </b>
+                                            <b>GENERAL </b>
                                             <div class="progress">
                                                 <div class="progress-bar
                 @if($data_diciembre->progress<50)
