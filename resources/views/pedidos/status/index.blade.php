@@ -261,20 +261,20 @@
                         }
                     },
                     {
-                        data: 'condicion_code',
-                        name: 'condicion_code',
+                        data: 'condicion_envio',
+                        name: 'condicion_envio',
                         render: function (data, type, row, meta) {
                             if (row.pendiente_anulacion == 1) {
                                 return '<span class="badge badge-success">' + '{{\App\Models\Pedido::PENDIENTE_ANULACION }}' + '</span>';
                             }
-                            if (row.condicion_code == 1) {
+                            if (row.condicion_envio_code == 1) {
                                 return '<span class="badge badge-warning border border-danger">' + '{{\App\Models\Pedido::POR_ATENDER }}' + '</span>';
-                            } else if (row.condicion_code == 2) {
+                            } else if (row.condicion_envio_code == 2) {
                                 return '<span class="badge badge-warning border border-success">' + '{{\App\Models\Pedido::EN_PROCESO_ATENCION }}' + '</span>';
-                            } else if (row.condicion_code == 3) {
+                            } else if (row.condicion_envio_code == 3) {
                                 return '<span class="badge badge-success">' + '{{\App\Models\Pedido::ATENDIDO }}' + '</span>';
-                            } else if (row.condicion_code == 4) {
-                                return '<span class="badge badge-success">' + '{{\App\Models\Pedido::ANULADO }}' + '</span>';
+                            } else if (row.condicion_envio_code == 4) {
+                                return '<span class="badge badge-danger">' + '{{\App\Models\Pedido::ANULADO }}' + '</span>';
                             } else {
                                 return '';
                             }
