@@ -126,7 +126,7 @@ class GraficoMetasDelMes extends Component
         if (auth()->user()->rol == User::ROL_ASESOR) {
             $t=$metatotal;
         }
-        if ($all > 0) {
+        if ($t > 0) {
             $p = intval(($all / $t) * 100);
         } else {
             $p = 0;
