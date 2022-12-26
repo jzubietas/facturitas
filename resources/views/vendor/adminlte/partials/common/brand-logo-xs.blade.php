@@ -20,11 +20,12 @@
          alt="{{ config('adminlte.logo_img_alt', 'AdminLTE') }}"
          class="{{ config('adminlte.logo_img_class', 'brand-image img-circle elevation-3') }}"
          style="opacity:.8">
-
+    <!--<img src="{{asset('imagenes/ojo-logo.svg')}}" width="120">-->
+    <img src="{{asset('imagenes/papel-picado.png')}}" id="gorro_navidad">
     {{-- Brand text --}}
     <span class="brand-text font-weight-light {{ config('adminlte.classes_brand_text') }}" style="position: relative;">
         {!! config('adminlte.logo', '<b>Admin</b>LTE') !!}
-        <img src="{{asset('imagenes/gorro-navidad.png')}}" id="gorro_navidad">
+
     </span>
-        <img src="{{asset('imagenes/santa.png')}}" id="santa_navidad">
+        <img src="{{asset('imagenes/globo.png')}}" id="santa_navidad">
 </a>
