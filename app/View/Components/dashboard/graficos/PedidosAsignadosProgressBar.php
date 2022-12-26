@@ -26,31 +26,37 @@ class PedidosAsignadosProgressBar extends Widgets
     public function render()
     {
         if (auth()->user()->rol == User::ROL_ADMIN) {
-            $this->generalData();
+            //$this->generalData();
             $this->asesores();
+            $this->generalDataSupervisor['name'] = 'General';
+            $this->generalDataSupervisor['enabled'] = true;
+            $this->general = (object)$this->generalDataSupervisor;
         } else {
             $this->asesores();
             $this->generalDataSupervisor['enabled'] = true;
             $this->general = (object)$this->generalDataSupervisor;
         }
         $title = $this->getDateTitle();
+        if (\auth()->user()->rol == User::ROL_ASESOR) {
+            $this->progressData = [];
+        }
         return view('components.dashboard.graficos.pedidos-asignados-progress-bar', compact('title'));
     }
 
     public function generalData()
     {
         if (Auth::user()->id == "33") {
-            $pagoxmes_total = Pedido::join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')//CANTIDAD DE PEDIDOS DEL MES
+            $pagoxmes_total = $this->applyFilter(Pedido::join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')//CANTIDAD DE PEDIDOS DEL MES
             ->activo()
                 ->join('users as u', 'pedidos.user_id', 'u.id')
-                ->whereBetween('dp.created_at', [now()->startOfMonth(), now()->endOfMonth()])
+                , 'dp.created_at')
                 ->count('dp.id');
         } else {
-            $pagoxmes_total = Pedido::join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')//CANTIDAD DE PEDIDOS DEL MES
+            $pagoxmes_total = $this->applyFilter(Pedido::join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')//CANTIDAD DE PEDIDOS DEL MES
             ->activo()
                 ->join('users as u', 'pedidos.user_id', 'u.id')
                 ->where('u.rol', "ASESOR")
-                ->whereBetween('dp.created_at', [now()->startOfMonth(), now()->endOfMonth()])
+                , 'dp.created_at')
                 ->count('dp.id');
         }
 
@@ -96,8 +102,8 @@ class PedidosAsignadosProgressBar extends Widgets
                 }
             }
 
-            $all = $this->applyFilter(Pedido::query())->whereUserId($asesor->id)->activo()->count();
-            $pay = $this->applyFilter(Pedido::query())->whereUserId($asesor->id)->activo()->pagados()->count();
+            $all = $this->applyFilter(Pedido::query()->where('user_id',$asesor->id)->activo())->count();
+            $pay = $this->applyFilter(Pedido::query()->where('user_id',$asesor->id)->activo()->pagados())->count();
 
             $progressData[] = [
                 "identificador" => $asesor->identificador,

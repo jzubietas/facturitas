@@ -278,6 +278,8 @@
     <div class="container-fluid">
         @if(Auth::user()->rol == 'Administrador')
             @include('dashboard.partials.vista_administrador')
+        @elseif(Auth::user()->rol == 'Apoyo administrativo')
+            @include('dashboard.partials.apoyo_administrativo')
         @elseif (Auth::user()->rol == 'Encargado')
             @include('dashboard.partials.vista_encargado')
         @elseif (Auth::user()->rol == 'Asesor')
@@ -351,6 +353,14 @@
             })
             $("#buttom_search_cliente").click(function () {
                 var tipo = $("#input_search_type").val()
+                if(!document.getElementById("input_search_cliente").value){
+                    Swal.fire(
+                        'El campo de texto del buscador esta vacio, ingrese valores para poder buscar',
+                        '',
+                        'warning'
+                    )
+                    return;
+                }
                 if (tipo == "CLIENTE") {
                     $.ajax({
                         url: "{{route('dashboard.search-cliente')}}",

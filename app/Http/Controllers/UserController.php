@@ -261,10 +261,21 @@ class UserController extends Controller
         //$html = '<option value="">' . trans('---- SELECCIONE ASESOR ----') . '</option>';
         foreach ($users as $user) 
         {
+
+            
             if($user->identificador=='B')
             {
                 $html .= '<option style="color:black" value="' . $user->identificador . '">' . $user->identificador. '</option>';
-            }else{
+            }
+            
+
+            elseif($user->identificador=='ADMIN')
+            {
+                $html .= '<option style="color:black" value="' . $user->identificador . '">' . $user->identificador. '</option>';
+            }
+            
+            
+            else{
                 if($user->exidentificador==22 || $user->exidentificador==21)
                 {
                     $html .= '<option style="color:black" value="' . $user->identificador . '">' . $user->identificador. ( ($user->exidentificador!=null)? '  (' . $user->exidentificador.')':'' ) . '</option>';

@@ -75,6 +75,9 @@
 </div>
 <div class="container-fluid mt-4">
     <div class="row">
+        <div class="col-lg-12">
+                <x-grafico-metas-mes></x-grafico-metas-mes>
+        </div>
         <div class="col-md-12">
             <div class="input-group mb-3">
                 <div class="input-group-prepend">

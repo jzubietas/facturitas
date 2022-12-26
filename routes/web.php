@@ -55,7 +55,24 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
 
     /*Controller Clientes*/
     Route::get('clientes/deudas_copy', [ClienteController::class,'deudasCopyAjax'])->name('clientes.deudas_copy');
+   
+    
     Route::resource('clientes', ClienteController::class)->names('clientes');
+
+
+    /* agregando rutas para permisos en opciones del modulo clientes (editar cada secciòn) */
+
+    Route::get('clientes.edit.recuperado/{cliente}/edit2', [ClienteController::class, 'edit'])->name('clientes.edit.recuperado');
+    Route::get('clientes.edit.recuperado.reciente/{cliente}/edit2', [ClienteController::class, 'edit'])->name('clientes.edit.recuperado.reciente');
+    Route::get('clientes.edit.nuevo/{cliente}/edit2', [ClienteController::class, 'edit'])->name('clientes.edit.nuevo');
+    Route::get('clientes.edit.abandono/{cliente}/edit2', [ClienteController::class, 'edit'])->name('clientes.edit.abandono');
+    Route::get('clientes.edit.abandono.reciente/{cliente}/edit2', [ClienteController::class, 'edit'])->name('clientes.edit.abandono.reciente');
+    Route::get('clientes.edit.recurrente/{cliente}/edit2', [ClienteController::class, 'edit'])->name('clientes.edit.recurrente');
+    
+    
+  
+
+
 
     Route::get('pedidosenvioclientetabla', [ClienteController::class, 'pedidosenvioclientetabla'])->name('cargar.pedidosenvioclientetabla');
     Route::post('pedidostiempo', [ClienteController::class, 'pedidostiempo'])->name('pedidostiempo');
@@ -197,6 +214,8 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     Route::post('envios.desvincular', [SobreController::class, 'EnvioDesvincular'])->name('envios.desvincular');
     Route::get('envios.createdireccion/{pedido}', [EnvioController::class, 'createDireccion'])->name('envios.createdireccion');
     Route::post('envios.updatedireccion/{direccion}', [EnvioController::class, 'UpdateDireccionEnvio'])->name('envios.updatedireccion');
+    
+
 
     Route::post('pedidos/eliminarFoto1/{pedido}', [PedidoController::class, 'eliminarFoto1'])->name('pedidos.eliminarFoto1');
     Route::post('pedidos/eliminarFoto2/{pedido}', [PedidoController::class, 'eliminarFoto2'])->name('pedidos.eliminarFoto2');

@@ -44,7 +44,7 @@ abstract class Widgets extends Component
     {
         return $query->whereBetween($column, [
             $this->startDate->clone(),
-            $this->endDate->clone()
+            $this->endDate->clone()->endOfDay()
         ]);
     }
 

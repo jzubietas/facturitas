@@ -38,6 +38,8 @@
                     class="fas fa-arrow-circle-right"></i></a>
         </div>
     </div>
+    
+    
     <div class="col-lg-3 col-6">
         <div class="small-box bg-warning">
             <div class="inner">
@@ -53,6 +55,34 @@
                     class="fas fa-arrow-circle-right"></i></a>
         </div>
     </div>
+
+
+
+    <div class="col-lg-3 col-6">
+        <div class="small-box bg-default">
+            <div class="inner">
+                @foreach ($pagoxmes_total_solo_asesor_b as $pxm2)
+                    <h3>{{ $pxm2->pedidos }}</h3>
+                @endforeach
+                <p>PEDIDOS DEL MES  ASESOR B</p>
+            </div>
+            <div class="icon">
+                <i class="ion ion-person-add"></i>
+            </div>
+            <a href="{{ route('pagos.index') }}" class="small-box-footer">Más info <i
+                    class="fas fa-arrow-circle-right"></i></a>
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+
+
     <div class="col-lg-3 col-6">
         <div class="small-box bg-danger">
             <div class="inner">
@@ -73,22 +103,29 @@
 
 <div class="row">
     <div class="col-lg-12">
+        <x-grafico-metas-mes></x-grafico-metas-mes>
+    </div>
+    <div class="col-lg-12">
         <div class="card">
             <div class="card-header">Buscar Cliente/RUC</div>
             <div class="card-header">
                 <div class="row">
-                    <div class="col-md-8">
-                        <div class="form-group">
+                    <div class="col-md-10">
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text p-0">
+                                    <select id="input_search_type" class="form-control">
+                                        <option value="CLIENTE">CLIENTE</option>
+                                        <option value="RUC">RUC</option>
+                                    </select>
+                                </div>
+                            </div>
                             <input id="input_search_cliente" class="form-control" maxlength="11"
                                    placeholder="Buscar cliente">
                         </div>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-2">
                         <div class="input-group mb-3">
-                            <select id="input_search_type" class="form-control">
-                                <option value="CLIENTE">CLIENTE</option>
-                                <option value="RUC">RUC</option>
-                            </select>
                             <div class="input-group-append">
                                 <button type="button" class="btn btn-dark" id="buttom_search_cliente">
                                     <i class="fa fa-search"></i>
@@ -206,10 +243,10 @@
                 </div>
             </div>
             --}}
-            <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12">
-                <div class="card">
+            <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12 d-none">
+                <div class="card ">
                     <div class="card-body">
-                        <div class="chart tab-pane active w-100" id="cobranzaxmes" style="height: 550px;"></div>
+                        <div class="chart tab-pane active w-100" id="cobranzaxmes" style="height: 550px; "></div>
                     </div>
                 </div>
             </div>
@@ -220,7 +257,7 @@
             <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12">
                 <x-grafico-top-clientes-pedidos top="10"></x-grafico-top-clientes-pedidos>
             </div>
-            <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12">
+            <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12 d-none">
                 <div class="card">
                     <div class="card-body">
                         <div id="pagosxmes" class="w-100" style="height: 550px;"></div>

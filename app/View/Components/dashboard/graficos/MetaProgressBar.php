@@ -32,6 +32,9 @@ class MetaProgressBar extends Widgets
             $this->general = (object)$this->generalDataSupervisor;
         }
         $title = $this->getDateTitle();
+        if (\auth()->user()->rol == User::ROL_ASESOR) {
+            $this->progressData = [];
+        }
         return view('components.dashboard.graficos.meta-progress-bar', compact('title'));
     }
 
@@ -45,7 +48,8 @@ class MetaProgressBar extends Widgets
                 'dp.created_at'
             )->count('dp.id');
         } else {
-            $pagoxmes_total = $this->applyFilter(Pedido::join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')//CANTIDAD DE PEDIDOS DEL MES
+            $pagoxmes_total = $this->applyFilter(
+                Pedido::join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')//CANTIDAD DE PEDIDOS DEL MES
             ->activo()
                 ->join('users as u', 'pedidos.user_id', 'u.id')
                 ->where('u.rol', "ASESOR"), 'dp.created_at')->count('dp.id');
