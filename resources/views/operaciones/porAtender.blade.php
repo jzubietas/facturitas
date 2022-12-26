@@ -197,6 +197,8 @@
     $(document).on("submit", "#formularioatender", function (evento) {
       evento.preventDefault();
       var status= validarFormulario(evento);
+      var cant_compro = document.getElementById('cant_compro').value;
+      var cantidad_archivos = $("");
        if(!status){
         return;
        }
@@ -218,6 +220,16 @@
               'Error',
               'Debe ingresar el detalle del pedido',
               'warning'
+            )
+            return false;
+        }
+
+        if(cant_compro == "")
+        {
+            Swal.fire(
+                'Error',
+                'Debe colocar la cantidad de archivos',
+                'warning'
             )
             return false;
         }
