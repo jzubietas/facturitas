@@ -911,7 +911,11 @@ class PedidoController extends Controller
 
         //$cliente = Cliente::find($request->cliente_id);
 
-        if ($mirol != "Administrador") {
+        
+
+        $arreglo = array("ASESOR ADMINISTRATIVO", "Administrador", );
+
+        if ( !(in_array($mirol,$arreglo))) {
             //calcular con activacion temporal
 
             //sino darle bloqueado por 3 maximo en el mes
@@ -929,18 +933,35 @@ class PedidoController extends Controller
                     ]
                 )->first();
 
+
+
+
+
             if ($cliente_deuda->crea_temporal == 1) {
 
-            } else {
+
+
+
+
+            } 
+            
+            else {
+
+
                 if ($cliente_deuda->pedidos_mes_deuda > 0 && $cliente_deuda->pedidos_mes_deuda_antes == 0) {
                     if ($cliente_deuda->pedidos_mes_deuda > 4) {
                         $html = "|4";
                         return response()->json(['html' => $html]);
                     }
-                } else if ($cliente_deuda->pedidos_mes_deuda > 0 && $cliente_deuda->pedidos_mes_deuda_antes > 0) {
+                } 
+                
+                else if ($cliente_deuda->pedidos_mes_deuda > 0 && $cliente_deuda->pedidos_mes_deuda_antes > 0) {
                     $html = "|0";
                     return response()->json(['html' => $html]);
-                } else if ($cliente_deuda->pedidos_mes_deuda == 0 && $cliente_deuda->pedidos_mes_deuda_antes > 0) {
+                } 
+                
+                
+                else if ($cliente_deuda->pedidos_mes_deuda == 0 && $cliente_deuda->pedidos_mes_deuda_antes > 0) {
                     $html = "|0";
                     return response()->json(['html' => $html]);
                 }
