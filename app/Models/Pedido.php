@@ -30,13 +30,10 @@ class Pedido extends Model
     /**************
      * CONSTANTES CONDICION ENVIO
      */
-    const POR_ATENDER_PEDIDO = 'POR ATENDER OPE';
+    const POR_ATENDER_PEDIDO = 'POR ATENDER OPE'; // POR ATENDER - OPE
     const INCOMPLETO = 'INCOMPLETO';
-    const ATENDIDO_OP = 'ATENDIDO OP';
-    const BANCARIZACION = 'BANCARIZACION';
-    const JEFE_OP = 'JEFE_OP';
-    const COURIER = 'COURIER';
-    const SOBRE_ENVIAR = 'SOBRE_ENVIAR';
+    const ATENDIDO_OP = 'ATENDIDO OP'; // ATENDIDO - OPE
+    const JEFE_OP = 'JEFE_OP'; // JEFE - OPE
     const REPARTO_COURIER = 'REPARTO COURIER';
     const SEG_PROVINCIA = 'SEGUIMIENTO PROVINCIA COURIER';
     const ENTREGADO_CLIENTE = 'ENTREGADO CLIENTE';
@@ -126,7 +123,10 @@ class Pedido extends Model
         8 => 'EN_REPARTO',
         9 => 'SEG_PROVINCIA',
         10 => 'ENTREGADO',
-        11 => 'JEFE_OP_CONF_INT'
+        11 => 'JEFE_OP_CONF_INT',
+        12 => 'RECEPCION_COURIER',
+        13 => 'ENTREGADO_SIN_SOBRE',
+        14 => 'CONFIRMACION_SIN_SOBRE'
     ];
 
 

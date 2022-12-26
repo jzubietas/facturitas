@@ -15,6 +15,9 @@
     </div>
     @endcan --}}
     <div class="float-right btn-group dropleft">
+        <button type="button" class="btn btn-option" data-toggle="modal" data-target="#modal-escanear" data-backdrop="static" style="margin-right:16px;" aria-haspopup="true" aria-expanded="false">
+            <i class="fa fa-barcode" aria-hidden="true"></i> Escaneo Envio Courier
+        </button>
       <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         Exportar
       </button>
@@ -72,6 +75,7 @@
         @include('pedidos.modal.confirmarecepcion')
       @include('pedidos.modal.atender_pedido_op')
       @include('pedidos.modal.revertirporenviar')
+        @include('pedidos.modal.escaneaqr')
     </div>
   </div>
 
@@ -130,9 +134,79 @@
   <script src="https://momentjs.com/downloads/moment.js"></script>
   <script src="https://cdn.datatables.net/plug-ins/1.11.4/dataRender/datetime.js"></script>
 
+
+
   <script>
     $(document).ready(function () {
-      $.ajaxSetup({
+        /************
+         * ESCANEAR PEDIDO
+         */
+
+        $('#modal-escanear').on('shown.bs.modal', function () {
+            $('#codigo_confirmar').focus();
+            $('#codigo_accion').val("jefe_op");
+            $('#titulo-scan').html("Escanear para enviar a <span class='text-success'>Courier</span> | Confirmar <span class='text-success'>sobres sin envío</span>");
+            console.log($('#codigo_accion').val());
+            $('#modal-escanear').on('click', function(){
+                console.log("focus");
+                $('#codigo_confirmar').focus();
+
+                return false;
+            });
+
+            $('#close-scan').on('click', function (){
+                console.log("actualizamos la tabla");
+                $('#tablaPrincipal').DataTable().ajax.reload();
+            });
+        })
+
+        $('#codigo_confirmar').change(function (event) {
+            event.preventDefault();
+            var codigo_caturado = $(this).val();
+            var codigo_mejorado = codigo_caturado.replace(/['']+/g, '-');
+            var codigo_accion = $('#codigo_accion').val();
+            console.log("El codigo es: " + codigo_mejorado);
+            /*************
+             * Enviamos la orden al controlaor
+             * @type {FormData}
+             */
+            var fd_scan = new FormData();
+
+            fd_scan.append( 'hiddenCodigo', codigo_mejorado );
+            fd_scan.append( 'accion', codigo_accion );
+
+            $.ajax({
+                data: fd_scan,
+                processData: false,
+                contentType: false,
+                type: 'POST',
+                url:"{{ route('operaciones.confirmaropbarras') }}",
+                success:function(data)
+                {
+                    console.log(data);
+                    $('#respuesta_barra').removeClass("text-danger");
+                    $('#respuesta_barra').removeClass("text-success");
+                    $('#respuesta_barra').addClass(data.class);
+                    $('#respuesta_barra').html(data.html);
+                    if(data.codigo == 0){
+
+                    }else{
+                        $('#pedidos-procesados').append("<li> <i class='fa fa-check text-success'></i> " + data.codigo + "</li>");
+                    }
+
+                }
+            });
+
+            $(this).val("");
+            return false;
+        });
+
+        /***********
+         * FIN ESCANEAR MOUSE
+         */
+
+
+        $.ajaxSetup({
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
@@ -153,7 +227,6 @@
             var idunico = button.data('envio')
             $(".textcode").html("PED"+idunico);
             $("#hiddenEnvio").val(idunico);
-
         });
 
 
@@ -376,7 +449,7 @@
 
               @endcan
 
-             
+
 
               @can('operacion.enviar')
                 if (row.envio == '0')
@@ -390,7 +463,7 @@
                 }
               @endcan
 
-              
+
               if(row.condicion_envio_code==5)
               {
                 data = data+'<a href="" data-target="#modal-envio-op" data-envio='+row.id+' data-toggle="modal" ><button class="btn btn-success btn-sm">ENVIO A COURIER_JEFE OPE</button></a><br>';
