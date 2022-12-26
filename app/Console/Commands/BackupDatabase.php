@@ -60,9 +60,9 @@ host=$h
         file_put_contents($credentialsFile, $data);
         try {
             $this->executeCommand("mysqldump --defaults-extra-file=\"$credentialsFile\" --routines $database > $filename");
-            //unlink($credentialsFile);
+            unlink($credentialsFile);
         } catch (\Exception $ex) {
-            //unlink($credentialsFile);
+            unlink($credentialsFile);
             throw $ex;
         }
         return 0;
