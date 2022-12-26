@@ -23,37 +23,34 @@ use Maatwebsite\Excel\Concerns\WithColumnWidths;
 Sheet::macro('styleCells', function (Sheet $sheet, string $cellRange, array $style) {
     $sheet->getDelegate()->getStyle($cellRange)->applyFromArray($style);
 });
-class PagerutaenvioProvincia  extends PageRutasEnvioLima
+
+class PagerutaenvioProvincia extends PageRutasEnvioLima
 {
 
     public function collection()
     {
 
 
-        $pedidos_lima = DireccionGrupo::join('gasto_envios as de','direccion_grupos.id','de.direcciongrupo')
+        $pedidos_lima = DireccionGrupo::join('gasto_envios as de', 'direccion_grupos.id', 'de.direcciongrupo')
             ->join('clientes as c', 'c.id', 'de.cliente_id')
             ->join('users as u', 'u.id', 'c.user_id')
-            ->where('direccion_grupos.estado','1')
+            ->where('direccion_grupos.estado', '1')
             //->where('direccion_grupos.distribucion','SUR')
             /*->where(function($query){
                 $query->where('direccion_grupos.distribucion','=','')->orWhereNull('direccion_grupos.distribucion');
             })*/
-            ->where('direccion_grupos.destino','PROVINCIA')
+            ->where('direccion_grupos.destino', 'PROVINCIA')
             ->where(DB::raw('DATE(direccion_grupos.created_at)'), self::$fecharuta)
-            ->whereNotIn('direccion_grupos.condicion_envio_code',[Pedido::ENTREGADO_SIN_SOBRE_INT,Pedido::CONFIRMACION_SIN_SOBRE_INT])
+            ->whereNotIn('direccion_grupos.condicion_envio_code', [Pedido::ENTREGADO_SIN_SOBRE_INT, Pedido::CONFIRMACION_SIN_SOBRE_INT])
             ->select(
                 'c.celular as correlativo',
                 'u.identificador as identificador',
                 'direccion_grupos.destino',
-                DB::raw(" (select '') as celular "),
-                DB::raw(" (select '') as nombre "),
                 'de.cantidad',
                 'direccion_grupos.codigos',
                 'direccion_grupos.producto',
                 'de.tracking as direccion',
                 'de.foto as referencia',
-                DB::raw(" (select '') as observacion "),
-                DB::raw(" (select '') as distrito "),
                 'c.nombre as nombre_cli',
                 'direccion_grupos.created_at as fecha',
                 'direccion_grupos.distribucion',
@@ -68,9 +65,14 @@ class PagerutaenvioProvincia  extends PageRutasEnvioLima
     {
         return 'PROVINCIA';
     }
+
     public function map($model): array
     {
-        $model->num_registros=$this->contador;
+        $model->celular = 'N/A';
+        $model->nombre = 'N/A';
+        $model->observacion = 'N/A';
+        $model->distrito = 'N/A';
+        $model->num_registros = $this->contador;
         $this->contador++;
         return parent::map($model);
     }

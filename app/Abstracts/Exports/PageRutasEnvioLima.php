@@ -14,15 +14,17 @@ use PhpOffice\PhpSpreadsheet\Style\Border;
 use PhpOffice\PhpSpreadsheet\Style\Fill;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
-abstract class PageRutasEnvioLima  extends Export implements WithEvents, WithColumnWidths, WithCustomStartCell,WithStyles
+abstract class PageRutasEnvioLima extends Export implements WithEvents, WithColumnWidths, WithCustomStartCell, WithStyles
 {
     public static $fecharuta = '';
     public $contador = 1;
+
     public function __construct($ids)
     {
         parent::__construct();
-        self::$fecharuta=$ids;
+        self::$fecharuta = $ids;
     }
+
     public function fields(): array
     {
         return [
@@ -49,14 +51,14 @@ abstract class PageRutasEnvioLima  extends Export implements WithEvents, WithCol
     public function columnWidths(): array
     {
         return [
-            'A' => 15
-            , 'B' => 5
+            'A' => 10
+            , 'B' => 4
             , 'C' => 15
-            , 'D' => 30
+            , 'D' => 12
             , 'E' => 40
             , 'F' => 7
-            , 'G' => 15
-            , 'H' => 25
+            , 'G' => 17
+            , 'H' => 28
             , 'I' => 25
             , 'J' => 15
             , 'K' => 20
@@ -109,17 +111,18 @@ abstract class PageRutasEnvioLima  extends Export implements WithEvents, WithCol
                    echo 'RAW VALUE: ', $cell->getValue(), PHP_EOL;*/
 
         //Range Columns
-        $event->sheet->styleCells(
-            'A4:K4',
-            [
-                'borders' => [
-                    'outline' => [
-                        'borderStyle' => Border::BORDER_THIN
-                    ],
-                ]
-            ]
-        );
 
+        $event->sheet->getStyle('A4:K4')->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN);
+
+
+
+        $letter_cell='N';
+        foreach ($event->sheet->getRowIterator() as $row)
+        {
+            if($row->getRowIndex()<5)continue;
+            $num=$row->getRowIndex();
+            $event->sheet->getStyle("A$num:K$num")->getBorders()->getAllBorders()->setBorderStyle(Border::BORDER_THIN);
+        }
         $event->sheet->getStyle('4')->getAlignment()->setWrapText(true);
         $event->sheet->getStyle('A')->getAlignment()->setWrapText(true);
         $event->sheet->getStyle('B')->getAlignment()->setWrapText(true);
@@ -161,18 +164,19 @@ abstract class PageRutasEnvioLima  extends Export implements WithEvents, WithCol
     {
         return [
             // Styling an entire column.
-            '4'  => ['font' => ['bold' => true,'size' => 11]],
-            'C'  => ['font' => ['size' => 11]],
+            '4' => ['font' => ['bold' => true, 'size' => 11]],
+            'C' => ['font' => ['size' => 11]],
         ];
     }
+
     public function map($model): array
     {
-        $model->nombre_cli = \Str::upper($model->nombre_cli?:'');
-        $model->producto = \Str::upper($model->producto?:'');
-        $model->referencia = \Str::upper($model->referencia?:'');
-        $model->distrito = \Str::upper($model->distrito?:'');
+        $model->nombre_cli = \Str::upper($model->nombre_cli ?: '');
+        $model->producto = \Str::upper($model->producto ?: '');
+        $model->referencia = \Str::upper($model->referencia ?: '');
+        $model->distrito = \Str::upper($model->distrito ?: '');
 
-        if(\Str::contains($model->producto?:'',',')) {
+        if (\Str::contains($model->producto ?: '', ',')) {
             $productos = explode(',', $model->producto ?: '');
 
             $ptxt = '';
@@ -182,7 +186,7 @@ abstract class PageRutasEnvioLima  extends Export implements WithEvents, WithCol
             }
             $model->producto = $ptxt;
         }
-        if(\Str::contains($model->codigos?:'',',')) {
+        if (\Str::contains($model->codigos ?: '', ',')) {
             $codigos = explode(',', $model->codigos ?: '');
             $ptxt = '';
             foreach ($codigos as $p) {
