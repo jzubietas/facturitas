@@ -196,7 +196,9 @@ class PedidoController extends Controller
 
             $pedidos = $pedidos->WhereIn('u.identificador', $usersasesores);
 
-        } else if (Auth::user()->rol == "Super asesor") {
+        } 
+        
+        else if (Auth::user()->rol == "Super asesor") {
             $usersasesores = User::where('users.rol', 'Asesor')
                 ->where('users.estado', '1')
                 ->where('users.identificador', Auth::user()->identificador)
@@ -207,7 +209,27 @@ class PedidoController extends Controller
 
             $pedidos = $pedidos->WhereIn('u.identificador', $usersasesores);
 
-        } else if (Auth::user()->rol == "Encargado") {
+        } 
+        
+
+        else if (Auth::user()->rol == "ASESOR ADMINISTRATIVO") {
+            $usersasesores = User::where('users.rol', 'ASESOR ADMINISTRATIVO')
+                ->where('users.estado', '1')
+                ->where('users.identificador', Auth::user()->identificador)
+                ->select(
+                    DB::raw("users.identificador as identificador")
+                )
+                ->pluck('users.identificador');
+
+            $pedidos = $pedidos->WhereIn('u.identificador', $usersasesores);
+
+        } 
+        
+        
+        
+        
+        
+        else if (Auth::user()->rol == "Encargado") {
 
             $usersasesores = User::where('users.rol', 'Asesor')
                 ->where('users.estado', '1')
