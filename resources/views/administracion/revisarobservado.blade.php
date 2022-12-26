@@ -1075,9 +1075,12 @@
                         {
                           if( (importe_dpa<importe_con) &&  ( (importe_dpa+3) >=importe_con))
                           {
+                            
+                            
                           }
                           else if( (importe_dpa>importe_con) &&  ( (importe_dpa) <=importe_con+3))
                           {
+                            
                           }
                           else
                           {

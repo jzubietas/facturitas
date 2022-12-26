@@ -1077,9 +1077,24 @@
                           //6   3
                           if( (importe_dpa<importe_con) &&  ( (importe_dpa+3) >=importe_con))
                           {
+                            
+                            Swal.fire(
+                              'Error',
+                              'Existen pagos que no coinciden en importe',
+                              'warning'
+                            )
+                            error_conciliar=false;
+                            return false;
                           }
                           else if( (importe_dpa>importe_con) &&  ( (importe_dpa) <=importe_con+3))
                           {
+                            Swal.fire(
+                              'Error',
+                              'Existen pagos que no coinciden en importe',
+                              'warning'
+                            )
+                            error_conciliar=false;
+                            return false;
                           }
                           else
                           {
