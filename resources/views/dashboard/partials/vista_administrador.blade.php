@@ -73,22 +73,28 @@
 
 <div class="row">
     <div class="col-lg-12">
+    </div>
+    <div class="col-lg-12">
         <div class="card">
             <div class="card-header">Buscar Cliente/RUC</div>
             <div class="card-header">
                 <div class="row">
-                    <div class="col-md-8">
-                        <div class="form-group">
+                    <div class="col-md-10">
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text p-0">
+                                    <select id="input_search_type" class="form-control">
+                                        <option value="CLIENTE">CLIENTE</option>
+                                        <option value="RUC">RUC</option>
+                                    </select>
+                                </div>
+                            </div>
                             <input id="input_search_cliente" class="form-control" maxlength="11"
                                    placeholder="Buscar cliente">
                         </div>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-2">
                         <div class="input-group mb-3">
-                            <select id="input_search_type" class="form-control">
-                                <option value="CLIENTE">CLIENTE</option>
-                                <option value="RUC">RUC</option>
-                            </select>
                             <div class="input-group-append">
                                 <button type="button" class="btn btn-dark" id="buttom_search_cliente">
                                     <i class="fa fa-search"></i>
