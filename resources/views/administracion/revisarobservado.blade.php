@@ -1073,13 +1073,23 @@
 
                         if(importe_dpa!=importe_con)
                         {
-                          Swal.fire(
-                            'Error',
-                            'Existen pagos que no coinciden en importe',
-                            'warning'
-                          )
-                          error_conciliar=false;
-                          return false;
+                          if( (importe_dpa<importe_con) &&  ( (importe_dpa+3) >=importe_con))
+                          {
+                          }
+                          else if( (importe_dpa>importe_con) &&  ( (importe_dpa) <=importe_con+3))
+                          {
+                          }
+                          else
+                          {
+                            Swal.fire(
+                              'Error',
+                              'Existen pagos que no coinciden en importe',
+                              'warning'
+                            )
+                            error_conciliar=false;
+                            return false;
+                          }
+                          
                         }
 
                         let fecha_dpa=$(".nohide_"+ir).find("td").eq(5).html();
