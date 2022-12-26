@@ -286,7 +286,11 @@
             @include('dashboard.partials.vista_operacion')
         @elseif (Auth::user()->rol == 'Administracion')
             @include('dashboard.partials.vista_administracion')
-        @elseif (Auth::user()->rol == 'Logística')
+        @elseif (Auth::user()->rol == 'Jefe de llamadas')
+           @include('dashboard.partials.vista_llamadas')
+       @elseif (Auth::user()->rol == 'Llamadas')
+           @include('dashboard.partials.vista_llamadas')
+       @elseif (Auth::user()->rol == 'Logística')
             @include('dashboard.partials.vista_logistica')
         @else
             @include('dashboard.partials.vista_otros')
