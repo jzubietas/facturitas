@@ -191,7 +191,7 @@ class MovimientoController extends Controller
 
             //$query->where('movimiento_bancarios.importe','>',$monto_ma_3);
             //$query->where('movimiento_bancarios.importe','<',$monto_me_3);
-            $query->whereBetweeen('movimiento_bancarios.importe',[$monto_me_3,$monto_ma_3]);
+            $query->whereBetween('movimiento_bancarios.importe',[$monto_me_3,$monto_ma_3]);
 
 
         }
