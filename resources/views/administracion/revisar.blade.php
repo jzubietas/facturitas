@@ -1074,11 +1074,16 @@
 
                         if(importe_dpa!=importe_con)
                         {
-                          //6   3
-                          if( (importe_dpa<importe_con) &&  ( (importe_dpa+3) >=importe_con))
+                          let importe_dpa_n=parseFloat(importe_dpa);
+                          let importe_dpa_ma=parseFloat(importe_dpa)+3;
+                          let importe_dpa_me=parseFloat(importe_dpa)-3;
+                          console.log(parseFloat(importe_dpa))
+                          console.log(parseFloat(importe_dpa)+3)
+                          console.log(parseFloat(importe_dpa)-3)
+                          if( importe_con <=(importe_dpa_ma) )
                           {
                           }
-                          else if( (importe_dpa>importe_con) &&  ( (importe_dpa) <=importe_con+3))
+                          else if(  importe_con >=(importe_dpa_me) )
                           {
                           }
                           else
