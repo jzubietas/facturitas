@@ -139,6 +139,10 @@ font-weight: bold;
     transition: all 0.2s;
 }
 
+.form-control input:hover{
+    cursor: pointer !important;
+}
+
 .btn-option:hover{
     background-color: #e2e6ee !important;
     box-shadow: #a89eb5 0px 0px 0px;
