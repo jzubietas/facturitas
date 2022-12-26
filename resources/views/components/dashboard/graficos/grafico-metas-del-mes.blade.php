@@ -42,9 +42,9 @@
                             <li class="list-group-item">
                                 <div class="progress">
                                     <div class="progress-bar
-                @if(data_get($data_diciembre,'progress')<40)
+            @if(data_get($data_noviembre,'progress')<50)
                  bg-danger
-                 @elseif( data_get($data_diciembre,'progress')<70)
+                 @elseif( data_get($data_noviembre,'progress')<80)
                  bg-warning
                   @else
                   bg-success
