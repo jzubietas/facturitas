@@ -351,6 +351,14 @@
             })
             $("#buttom_search_cliente").click(function () {
                 var tipo = $("#input_search_type").val()
+                if(!document.getElementById("input_search_cliente").value){
+                    Swal.fire(
+                        'El campo de texto del buscador esta vacio, ingrese valores para poder buscar',
+                        '',
+                        'warning'
+                    )
+                    return;
+                }
                 if (tipo == "CLIENTE") {
                     $.ajax({
                         url: "{{route('dashboard.search-cliente')}}",
