@@ -172,7 +172,7 @@ class MovimientoController extends Controller
         }
 
 
-        //monto_compara=$comparar->monto;
+        $monto_compara=$comparar->monto;
         //return  $monto_compara;
 
         /*if ($monto_compara!='' and is_null($monto_compara) ) {
@@ -181,10 +181,8 @@ class MovimientoController extends Controller
 
         //$monto_compara=
 
-        if(!$request->monto){
-            $query=$query;
-        }
-        else{
+        if($monto_compara)
+        {
 
             //$fechadeposito = Carbon::createFromFormat('d/m/Y', $request->fechadeposito)->format('Y-m-d');
             //$query->where('movimiento_bancarios.importe',$monto.'%');
