@@ -216,7 +216,8 @@
             //cuando abre el form de anular pedido
             var button = $(event.relatedTarget)
             var idunico = button.data('envio')
-            $(".textcode").html("PED"+idunico);
+            var codigo = button.data('code')
+            $(".textcode").html(codigo);
             $("#hiddenEnvioOP").val(idunico);
 
         });
@@ -225,7 +226,8 @@
             //cuando abre el form de anular pedido
             var button = $(event.relatedTarget)
             var idunico = button.data('envio')
-            $(".textcode").html("PED"+idunico);
+            var codigo = button.data('code')
+            $(".textcode").html(codigo);
             $("#hiddenEnvio").val(idunico);
         });
 
@@ -466,13 +468,13 @@
 
               if(row.condicion_envio_code==5)
               {
-                data = data+'<a href="" data-target="#modal-envio-op" data-envio='+row.id+' data-toggle="modal" ><button class="btn btn-success btn-sm">ENVIO A COURIER_JEFE OPE</button></a><br>';
+                data = data+'<a href="" data-target="#modal-envio-op" data-envio='+row.id+' data-code="'+ row.codigos +'" data-toggle="modal" ><button class="btn btn-success btn-sm">ENVIO A COURIER JEFE OPE</button></a><br>';
                 data = data+'<a href="" data-target="#modal-revertir" data-revertir='+row.id+' data-toggle="modal" ><button class="btn btn-danger btn-sm">Revertir</button></a>';
               }
 
               if(row.condicion_envio_code == 13)
               {
-                  data = data+'<a href="" class="btn-sm btn-secondary" data-target="#modal-envio" data-envio='+row.id+' data-toggle="modal" ><i class="fa fa-check text-warning" aria-hidden="true"></i> Confirmar</a>';
+                  data = data+'<a href="" class="btn-sm btn-secondary" data-target="#modal-envio" data-code="'+ row.codigos +'" data-envio='+row.id+' data-toggle="modal" ><i class="fa fa-check text-warning" aria-hidden="true"></i> Confirmar</a>';
                   data = data+'<a href="" data-target="#modal-revertir" data-revertir='+row.id+' data-toggle="modal" ><button class="btn btn-danger btn-sm">Revertir</button></a>';
               }
 
