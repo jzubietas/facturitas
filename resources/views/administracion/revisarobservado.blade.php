@@ -1073,14 +1073,14 @@
 
                         if(importe_dpa!=importe_con)
                         {
-                          if( (importe_dpa<importe_con) &&  ( (importe_dpa+3) >=importe_con))
+                          console.log(importe_dpa)
+                          console.log(importe_con+3)
+                          console.log(importe_con-3)
+                          if( importe_dpa <=(importe_con+3) )
                           {
-                            
-                            
                           }
-                          else if( (importe_dpa>importe_con) &&  ( (importe_dpa) <=importe_con+3))
+                          else if(  importe_dpa >=(importe_con-3) )
                           {
-                            
                           }
                           else
                           {

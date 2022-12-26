@@ -1075,7 +1075,6 @@
 
                         if(importe_dpa!=importe_con)
                         {
-                          //100  104
                           console.log(importe_dpa)
                           console.log(importe_con+3)
                           console.log(importe_con-3)
