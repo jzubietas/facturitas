@@ -18,9 +18,9 @@
                                             <b>General </b>
                                             <div class="progress">
                                                 <div class="progress-bar
-                @if($data_noviembre->progress<40)
+                @if($data_noviembre->progress<50)
                  bg-danger
-                 @elseif($data_noviembre->progress<70)
+                 @elseif($data_noviembre->progress<80)
                  bg-warning
                   @else
                   bg-success
@@ -40,9 +40,9 @@
                                                 <b>{{$data['code']}}</b> <br> {{$data['name']}}
                                                 <div class="progress">
                                                     <div class="progress-bar
-                @if($data['progress']<40)
+                @if($data['progress']<50)
                  bg-danger
-                 @elseif($data['progress']<70)
+                 @elseif($data['progress']<80)
                  bg-warning
                   @else
                   bg-success
@@ -72,9 +72,9 @@
                                             <b>General </b>
                                             <div class="progress">
                                                 <div class="progress-bar
-                @if($data_diciembre->progress<40)
+                @if($data_diciembre->progress<50)
                  bg-danger
-                 @elseif($data_diciembre->progress<70)
+                 @elseif($data_diciembre->progress<80)
                  bg-warning
                   @else
                   bg-success
@@ -94,9 +94,9 @@
                                                 <b>{{$data['code']}}</b> <br> {{$data['name']}}
                                                 <div class="progress">
                                                     <div class="progress-bar
-                @if($data['progress']<40)
+                @if($data['progress']<50)
                  bg-danger
-                 @elseif($data['progress']<70)
+                 @elseif($data['progress']<80)
                  bg-warning
                   @else
                   bg-success

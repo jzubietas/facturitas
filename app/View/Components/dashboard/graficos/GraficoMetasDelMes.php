@@ -224,7 +224,7 @@ class GraficoMetasDelMes extends Component
         return (object)[
             "progress" => $p,
             "meta" => $metaTotal,
-            "total" => $metaTotal,
+            "total" => $asignados,//$metaTotal,
             "current" => $asignados,
         ];
     }
