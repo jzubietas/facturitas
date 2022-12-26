@@ -46,7 +46,20 @@ class DashboardController extends Controller
                 ->where('u.rol', "ASESOR")
                 ->whereBetween('dp.created_at', [now()->startOfMonth(),now()->endOfMonth()])
                 ->get();
+
+         
+
         }
+
+        $pagoxmes_total_solo_asesor_b=Pedido::join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')//CANTIDAD DE PEDIDOS DEL MES
+        ->activo()
+            ->join('users as u', 'pedidos.user_id', 'u.id')
+            ->select(DB::raw('count(dp.id) as pedidos'))
+            ->where('u.id', 33)
+            ->whereBetween('dp.created_at', [now()->startOfMonth(),now()->endOfMonth()])
+            ->get();
+
+
         //$montopedidoxmes_total = User::select(DB::raw('sum(users.meta_cobro) as total'))
         //META DE COBRANZAS DEL MES
         $montopedidoxmes_total = Pedido::join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
@@ -267,6 +280,7 @@ class DashboardController extends Controller
         return view('dashboard.dashboard', compact('pedidoxmes_total',
                 'pedidos_mes_',
                 'pagoxmes_total',
+                'pagoxmes_total_solo_asesor_b',
                 'montopedidoxmes_total',
                 'montopagoxmes_total',
                 'pedidossinpagos',

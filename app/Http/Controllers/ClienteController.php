@@ -538,33 +538,8 @@ class ClienteController extends Controller
 
     public function clientedeasesor(Request $request)
     {
-        //ahora con el identificador de  Usuarios
         $mirol = Auth::user()->rol;
-        /*$clientes = null;
-        $clientes = Cliente::join('users as u', 'clientes.user_id', 'u.id')
-            ->where('clientes.estado', '1')
-            ->where("clientes.tipo", "1");
-        $html = "";
-
-        //valida deuda excepto para administrador o por tener tiempo temporal
-
-        if ($request->user_id) {
-            $clientes = $clientes->where('u.identificador', $request->user_id);
-        }
-        $clientes = $clientes->orderBy('id', 'ASC')
-            ->get([
-                'clientes.id',
-                'clientes.deuda',
-                'clientes.crea_temporal',
-                'clientes.activado_tiempo',
-                'clientes.activado_pedido',
-                'clientes.temporal_update',
-                'clientes.icelular',
-                'clientes.celular',
-                'clientes.nombre',
-                DB::raw(" (select count(ped.id) from pedidos ped where ped.cliente_id=clientes.id and ped.pago in (0,1) and ped.pagado in (0,1) and ped.created_at >='2022-11-01 00:00:00' and ped.estado=1) as pedidos_mes_deuda "),
-                DB::raw(" (select count(ped2.id) from pedidos ped2 where ped2.cliente_id=clientes.id and ped2.pago in (0,1) and ped2.pagado in (0,1) and ped2.created_at <='2022-10-31 00:00:00' and ped2.estado=1) as pedidos_mes_deuda_antes "),
-            ]);*/
+     
 
         $html = '<option value="">' . trans('---- SELECCIONE CLIENTE ----') . '</option>';
 
@@ -582,10 +557,10 @@ class ClienteController extends Controller
             $cliente->pedidos_mes_deuda_antes = $cliente->pedidos()->activo()->noPagados()->where('pedidos.created_at', '<=', now()->subMonth()->endOfMonth())->count();
 
             //Auth::user()->rol=='Administrador'
-            if ($mirol == 'Administrador' || $mirol == 'Asistente de Administración') {
+            if ($mirol == 'Administrador' || $mirol == 'Asistente de Administración' || Auth::user()->identificador=='B' ) {
                 $html .= '<option style="color:black" value="' . $cliente->id . '">' . $cliente->celular . (($cliente->icelular != null) ? '-' . $cliente->icelular : '') . '  -  ' . $cliente->nombre . '</option>';
             } else {
-                if ($cliente->crea_temporal == 1) {
+                if ($cliente->crea_temporal == 1 ) {
                     //falta considerar el tiempo ahora menos el tiempo activado temporal
                     $html .= '<option style="color:lightblue" value="' . $cliente->id . '">' . $cliente->celular . '-' . $cliente->icelular . '  -  ' . $cliente->nombre . ' (Temporal)</option>';
                 } else {
