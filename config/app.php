@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'sisFacturas'),
+    'name' => env('APP_NAME', 'Ojo Celeste'),
 
     /*
     |--------------------------------------------------------------------------

@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'name' => 'Sisfacturas',
+    'name' => 'Ojo Celeste',
     'manifest' => [
         'name' => env('APP_NAME', 'Sis Facturas'),
         'short_name' => 'FAC',

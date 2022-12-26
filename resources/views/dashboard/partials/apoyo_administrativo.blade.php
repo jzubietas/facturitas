@@ -1,7 +1,7 @@
 <div class="text-center mb-4" style="font-family:'Times New Roman', Times, serif">
     <h2>
         <p>
-            Bienvenido <b>{{ Auth::user()->name }}</b> al software empresarial de sisFacturas, eres el
+            Bienvenido <b>{{ Auth::user()->name }}</b> al software empresarial de Ojo Celeste, eres el
             <b>{{ Auth::user()->rol }} del sistema</b>
         </p>
     </h2>
