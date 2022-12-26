@@ -1,6 +1,6 @@
 <div class="card">
     <div class="card-header">
-        <b>Progreso total de pedidos asignados sobre la meta -- {{$title}}</b>
+        <b>TOTAL DE PEDIDOS -- {{Str::upper($title)}}</b>
     </div>
     <div class="card-body">
         <ul class="list-group">
