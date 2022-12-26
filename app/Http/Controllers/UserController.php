@@ -262,7 +262,7 @@ class UserController extends Controller
         foreach ($users as $user) 
         {
 
-            
+
             if($user->identificador=='B')
             {
                 $html .= '<option style="color:black" value="' . $user->identificador . '">' . $user->identificador. '</option>';
@@ -326,15 +326,26 @@ class UserController extends Controller
             if($user->identificador=='B')
             {
                 $html .= '<option style="color:black" value="' . $user->identificador . '">' . $user->identificador. '</option>';
-            }else{
+            }
+            
+            
+            else{
 
-                if($user->exidentificador==22 || $user->exidentificador==21){
+                if($user->exidentificador==22 || $user->exidentificador==21)
+                
+                {
                     $html .= '<option style="color:black" value="' . $user->identificador . '">' . $user->identificador. ( ($user->exidentificador!=null)? '  (' . $user->exidentificador.')':'' ) . '</option>';
-                }else {
+                }
+                
+                
+                else {
+                
                     if(intval($user->exidentificador)%2==0)
                     {
                         $html .= '<option style="color:red" value="' . $user->identificador . '">' . $user->identificador.  ( ($user->exidentificador!=null)? '  (' . $user->exidentificador.')':'' )  . '</option>';
-                    }else{
+                    }
+                    
+                    else{
                         $html .= '<option style="color:black" value="' . $user->identificador . '">' . $user->identificador. ( ($user->exidentificador!=null)? '  (' . $user->exidentificador.')':'' ) . '</option>';
                     }
                  }

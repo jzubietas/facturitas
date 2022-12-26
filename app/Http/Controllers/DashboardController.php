@@ -31,31 +31,23 @@ class DashboardController extends Controller
             /* ->whereMonth('pedidos.created_at', $mfecha) */
             ->get();
 
-        if (Auth::user()->id == "33") {
-            $pagoxmes_total = Pedido::join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')//CANTIDAD DE PEDIDOS DEL MES
+      
+         $pagoxmes_total = Pedido::join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')//CANTIDAD DE PEDIDOS DEL MES
             ->activo()
                 ->join('users as u', 'pedidos.user_id', 'u.id')
                 ->select(DB::raw('count(dp.id) as pedidos'))
-                ->whereBetween('dp.created_at', [now()->startOfMonth(),now()->endOfMonth()])
-                ->get();
-        } else {
-            $pagoxmes_total = Pedido::join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')//CANTIDAD DE PEDIDOS DEL MES
-            ->activo()
-                ->join('users as u', 'pedidos.user_id', 'u.id')
-                ->select(DB::raw('count(dp.id) as pedidos'))
-                ->where('u.rol', "ASESOR")
+                ->wherein('u.rol', ['ASESOR'])
+                
                 ->whereBetween('dp.created_at', [now()->startOfMonth(),now()->endOfMonth()])
                 ->get();
 
-         
-
-        }
+        
 
         $pagoxmes_total_solo_asesor_b=Pedido::join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')//CANTIDAD DE PEDIDOS DEL MES
         ->activo()
             ->join('users as u', 'pedidos.user_id', 'u.id')
             ->select(DB::raw('count(dp.id) as pedidos'))
-            ->where('u.id', 33)
+            ->where('u.id', 51)
             ->whereBetween('dp.created_at', [now()->startOfMonth(),now()->endOfMonth()])
             ->get();
 
