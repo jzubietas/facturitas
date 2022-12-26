@@ -26,8 +26,11 @@ class PedidosAsignadosProgressBar extends Widgets
     public function render()
     {
         if (auth()->user()->rol == User::ROL_ADMIN) {
-            $this->generalData();
+            //$this->generalData();
             $this->asesores();
+            $this->generalDataSupervisor['name'] = 'General';
+            $this->generalDataSupervisor['enabled'] = true;
+            $this->general = (object)$this->generalDataSupervisor;
         } else {
             $this->asesores();
             $this->generalDataSupervisor['enabled'] = true;
@@ -99,8 +102,8 @@ class PedidosAsignadosProgressBar extends Widgets
                 }
             }
 
-            $all = $this->applyFilter(Pedido::query())->whereUserId($asesor->id)->activo()->count();
-            $pay = $this->applyFilter(Pedido::query())->whereUserId($asesor->id)->activo()->pagados()->count();
+            $all = $this->applyFilter(Pedido::query()->where('user_id',$asesor->id)->activo())->count();
+            $pay = $this->applyFilter(Pedido::query()->where('user_id',$asesor->id)->activo()->pagados())->count();
 
             $progressData[] = [
                 "identificador" => $asesor->identificador,
