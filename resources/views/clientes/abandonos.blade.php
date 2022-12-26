@@ -237,13 +237,13 @@ $(document).ready(function () {
           searchable: false,
           sWidth:'20%',
           render: function ( data, type, row, meta ) {
-            var urledit = '{{ route("clientes.edit", ":id") }}';
+            var urledit = '{{ route("clientes.edit.abandono", ":id") }}';
             urledit = urledit.replace(':id', row.id);
 
             var urlshow = '{{ route("clientes.show", ":id") }}';
             urlshow = urlshow.replace(':id', row.id);
 
-            @can('clientes.edit')
+            @can('clientes.edit.abandono')
               data = data+'<a href="'+urledit+'" class="btn btn-warning btn-sm"><i class="fas fa-edit"></i> Editar</a>';
             @endcan
 
