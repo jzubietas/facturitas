@@ -49,68 +49,7 @@ class EnvioController extends Controller
      */
 
 
-     public function NuevoEstado()//SOBRES EN REPARTO
-     {
- 
-         $distribuir = [
-             "NORTE" => 'NORTE',
-             "CENTRO" => 'CENTRO',
-             "SUR" => 'SUR',
-         ];
- 
-         $condiciones = [
-             "PENDIENTE DE ENVIO" => 'PENDIENTE DE ENVIO',
-             "EN REPARTO" => 'EN REPARTO',
-             "ENTREGADO" => 'ENTREGADO'
-         ];
- 
-         $destinos = [
-             "LIMA" => 'LIMA',
-             "PROVINCIA" => 'PROVINCIA'
-         ];
- 
-         $distritos = Distrito::whereIn('provincia', ['LIMA', 'CALLAO'])
-                             ->where('estado', '1')
-                             ->pluck('distrito', 'distrito');
- 
-         $departamento = Departamento::where('estado', "1")
-                             ->pluck('departamento', 'departamento');
- 
-         $direcciones = DireccionEnvio::join('direccion_pedidos as dp', 'direccion_envios.id', 'dp.direccion_id')
-                             ->select('direccion_envios.id',
-                                     'direccion_envios.distrito',
-                                     'direccion_envios.direccion',
-                                     'direccion_envios.referencia',
-                                     'direccion_envios.nombre',
-                                     'direccion_envios.celular',
-                                     'dp.pedido_id as pedido_id',
-                                     )
-                             ->where('direccion_envios.estado', '1')
-                             ->where('dp.estado', '1')
- 
-                             ->get();
- 
-         $superasesor = User::where('rol', 'Super asesor')->count();
- 
-         $ver_botones_accion = 1;
- 
-         if(Auth::user()->rol == "Asesor")
-         {
-             $ver_botones_accion = 0;
-         }else if(Auth::user()->rol == "Super asesor"){
-             $ver_botones_accion = 0;
-         }else if(Auth::user()->rol == "Encargado"){
-             $ver_botones_accion = 1;
-         }else{
-             $ver_botones_accion = 1;
-         }
- 
-         return view('envios.porEnviar', compact('condiciones', 'distritos', 'direcciones', 'destinos', 'superasesor','ver_botones_accion','departamento','distribuir'));
-     }
-
-
-
-
+    
 
 
 
