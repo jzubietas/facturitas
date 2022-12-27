@@ -70,15 +70,15 @@ class StatusPedidoModelChange extends Command
         }*/
 
         foreach($MigracionVariablesPedidosEnvio  as $status => $value){
-            Pedido::where('condicion_envio','=', $value)->update([
-                'condicion_envio' => $status
+            Pedido::where('condicion_envio_code','=', $status)->update([
+                'condicion_envio' => $value
             ]);
         }
 
-        Schema::table('pedidos', function (Blueprint $table) {
+        /*Schema::table('pedidos', function (Blueprint $table) {
             $table->integer('condicion')->nullable()->change();
             $table->integer('condicion_envio')->nullable()->change();
-        });
+        });*/
 
         return 0;
     }
