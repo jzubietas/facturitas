@@ -239,6 +239,13 @@
                         }
                     },
                     {
+                        data: 'condicion_envio',
+                        name: 'condicion_envio',
+                        render: function (data, type, row, meta) {
+                            return '<span class="badge badge-success">' + row.condicion_envio + '</span>';
+                        }
+                    },/*
+                    {
                         data: 'condicion_code',
                         name: 'condicion_code',
                         render: function (data, type, row, meta) {
@@ -257,7 +264,7 @@
                                 return '';
                             }
                         }
-                    },
+                    },*/
                     {
                         data: 'action',
                         name: 'action',

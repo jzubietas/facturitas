@@ -12,7 +12,7 @@
         <form id="formularioatender" name="formularioatender" enctype="multipart/form-data">
           <input type="hidden" id="hiddenAtender" name="hiddenAtender">
         <div class="modal-body">
-          <p>Complete los siguientes datos para pasar a estado <strong>{{\App\Models\Pedido::ATENDIDO_OP}}</strong> el pedido: <strong class="textcode">PED00</strong></p>
+          <p>Complete los siguientes datos para pasar a estado <strong>{{\App\Models\Pedido::ATENDIDO_OPE}}</strong> el pedido: <strong class="textcode">PED00</strong></p>
         </div>
         <div style="margin: 10px">
           <div class="card">

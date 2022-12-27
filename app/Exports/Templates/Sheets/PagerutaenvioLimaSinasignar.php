@@ -56,7 +56,7 @@ class PagerutaenvioLimaSinasignar extends Export implements WithEvents,WithColum
             })
             ->where('direccion_grupos.destino','LIMA')
             ->where(DB::raw('DATE(direccion_grupos.created_at)'), self::$fecharuta)
-            ->whereNotIn('direccion_grupos.condicion_envio_code',[Pedido::ENTREGADO_SIN_SOBRE_OPE_INT,Pedido::CONFIRMACION_SIN_SOBRE_CLIENTE])
+            ->whereNotIn('direccion_grupos.condicion_envio_code',[Pedido::ENTREGADO_SIN_SOBRE_OPE_INT,Pedido::ENTREGADO_SIN_SOBRE_CLIENTE_INT])
             ->select(
                 'c.celular as correlativo',
                 'u.identificador as identificador',

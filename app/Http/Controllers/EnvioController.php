@@ -181,7 +181,7 @@ class EnvioController extends Controller
         if(Auth::user()->rol == "Asesor"){
             $pedidos_lima=$pedidos_lima->Where('u.identificador',Auth::user()->identificador);
 
-       
+
         }else if(Auth::user()->rol == "Encargado"){
             $usersasesores = User::where('users.rol', 'Asesor')
                 -> where('users.estado', '1')
@@ -204,7 +204,7 @@ class EnvioController extends Controller
                 ->pluck('users.identificador');
 
             $pedidos_lima=$pedidos_lima->WhereIn('u.identificador',$usersasesores);
-           
+
         }
 
 
@@ -278,7 +278,7 @@ class EnvioController extends Controller
             ->join('clientes as c', 'c.id', 'de.cliente_id')
             ->join('users as u', 'u.id', 'c.user_id')
             ->where('direccion_grupos.estado','1')
-            ->whereIn('direccion_grupos.condicion_envio_code',[Pedido::ENTREGADO_CLIENTE_INT,Pedido::ENTREGADO_SIN_SOBRE_INT,Pedido::CONFIRMACION_SIN_SOBRE_INT])
+            ->whereIn('direccion_grupos.condicion_envio_code',[Pedido::ENTREGADO_CLIENTE_INT,Pedido::ENTREGADO_SIN_SOBRE_OPE_INT,Pedido::ENTREGADO_SIN_SOBRE_CLIENTE_INT])
 
             ->select(
                 'direccion_grupos.id',
@@ -309,7 +309,7 @@ class EnvioController extends Controller
             ->join('clientes as c', 'c.id', 'de.cliente_id')
             ->join('users as u', 'u.id', 'c.user_id')
             ->where('direccion_grupos.estado','1')
-            ->whereIn('direccion_grupos.condicion_envio',[Pedido::ENTREGADO_CLIENTE_INT,Pedido::ENTREGADO_SIN_SOBRE_INT,Pedido::CONFIRMACION_SIN_SOBRE_INT])
+            ->whereIn('direccion_grupos.condicion_envio',[Pedido::ENTREGADO_CLIENTE_INT,Pedido::ENTREGADO_SIN_SOBRE_OPE_INT,Pedido::ENTREGADO_SIN_SOBRE_CLIENTE_INT])
             ->select(
                 'direccion_grupos.id',
                 'u.identificador as identificador',
@@ -380,7 +380,7 @@ class EnvioController extends Controller
 
         }
 
-        return Datatables::of(\DB::table($pedidos)) 
+        return Datatables::of(\DB::table($pedidos))
                     ->addIndexColumn()
                     ->addColumn('action', function($pedido){
                         $btn='';
@@ -460,7 +460,7 @@ class EnvioController extends Controller
 
 
 
-        $arreglo=[Pedido::ENTREGADO_SIN_SOBRE_OPE_INT,Pedido::CONFIRMACION_SIN_SOBRE_CLIENTE];
+        $arreglo=[Pedido::ENTREGADO_SIN_SOBRE_OPE_INT,Pedido::ENTREGADO_SIN_SOBRE_CLIENTE_INT];
 
 
         if($request->desde)
@@ -562,7 +562,7 @@ class EnvioController extends Controller
 
 
 
-                   
+
             $pedidos_provincia = DireccionGrupo::join('gasto_envios as de','direccion_grupos.id','de.direcciongrupo')
                         ->join('clientes as c', 'c.id', 'de.cliente_id')
                         ->join('users as u', 'u.id', 'c.user_id')
@@ -588,7 +588,7 @@ class EnvioController extends Controller
                             'direccion_grupos.correlativo'
                         );
 
-                    
+
             }
 
 
@@ -700,7 +700,7 @@ class EnvioController extends Controller
                     'dp.fecha_recepcion'
                 )
                   ->WhereIn('pedidos.condicion_envio_code',$filtros_code)
-                  ->where('pedidos.envio', '2')  
+                  ->where('pedidos.envio', '2')
                   ->where('pedidos.estado', '1');
 
         if(Auth::user()->rol == "Operario"){
@@ -826,7 +826,7 @@ class EnvioController extends Controller
     {
         $pedidos=null;
 
-        $filtros_code=[Pedido::COURIER_INT,Pedido::SOBRE_ENVIAR_INT];
+        $filtros_code=[Pedido::REPARTO_COURIER_INT,Pedido::ATENDIDO_JEFE_OPE_INT,Pedido::RECEPCION_COURIER_INT];
 
         $pedidos = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')
                 ->join('users as u', 'pedidos.user_id', 'u.id')
@@ -856,7 +856,7 @@ class EnvioController extends Controller
                     'dp.fecha_recepcion'
                 )
                   ->WhereIn('pedidos.condicion_envio_code',$filtros_code)
-                ->where('pedidos.envio', '2') 
+                ->where('pedidos.envio', '2')
                 ->where('pedidos.estado', '1');
         if(Auth::user()->rol == "Operario"){
             $asesores = User::where('users.rol', 'Asesor')
@@ -1104,7 +1104,7 @@ class EnvioController extends Controller
             ->join('clientes as c', 'c.id', 'de.cliente_id')
             ->join('users as u', 'u.id', 'c.user_id')
             ->where('direccion_grupos.estado','1')
-            ->where('direccion_grupos.condicion_envio_code',Pedido::SEG_PROVINCIA_INT)
+            ->where('direccion_grupos.condicion_envio_code',Pedido::SEGUIMIENTO_PROVINCIA_COURIER_INT)
             ->select(
                 'direccion_grupos.id',
                 'u.identificador as identificador',
@@ -1168,7 +1168,7 @@ class EnvioController extends Controller
         $direccion_grupos=DireccionGrupo::where("codigos",$pedido->codigo)->first();
         $localizacion=$pedido->condicion_envio_code;
 
-        
+
         if ($localizacion==7)
 
         {
@@ -1520,7 +1520,7 @@ class EnvioController extends Controller
 
         PedidoMovimientoEstado::create([
             'pedido' => $request->hiddenSinenvio,
-            'condicion_envio_code' => Pedido::ENTREGADO_SIN_SOBRE_INT,
+            'condicion_envio_code' => Pedido::ENTREGADO_SIN_SOBRE_OPE_INT,
             'notificado' => 0
         ]);
 
@@ -1530,8 +1530,8 @@ class EnvioController extends Controller
             'envio' => '3',//SIN ENVIO
           //'condicion_envio' => DireccionGrupo::CE_ENTREGADO,
           //'condicion_envio_code' => DireccionGrupo::CE_ENTREGADO_CODE,
-          'condicion_envio' => Pedido::ENTREGADO_SIN_SOBRE,
-          'condicion_envio_code' => Pedido::ENTREGADO_SIN_SOBRE_INT,
+          'condicion_envio' => Pedido::ENTREGADO_SIN_SOBRE_OPE,
+          'condicion_envio_code' => Pedido::ENTREGADO_SIN_SOBRE_OPE_INT,
 
           //  'condicion_envio' => 'ENTREGADO',
           //  'condicion_envio_code' => 10 ,
@@ -1543,8 +1543,8 @@ class EnvioController extends Controller
             'fecha_recepcion' => $fecha,
             'atendido_por' => Auth::user()->name,
             'atendido_por_id' => Auth::user()->id,
-            'condicion_envio' => Pedido::ENTREGADO_SIN_SOBRE,
-            'condicion_envio_code' => Pedido::ENTREGADO_SIN_SOBRE_INT,
+            'condicion_envio' => Pedido::ENTREGADO_SIN_SOBRE_OPE,
+            'condicion_envio_code' => Pedido::ENTREGADO_SIN_SOBRE_OPE,
             'pedido_id'=>$request->hiddenSinenvio
         ]);
 
@@ -1558,8 +1558,8 @@ class EnvioController extends Controller
                 'destino' => 'LIMA',
                 'distribucion'=> '',
 
-                'condicion_envio' => Pedido::ENTREGADO_SIN_SOBRE,
-                'condicion_envio_code' =>  Pedido::ENTREGADO_SIN_SOBRE_INT,
+                'condicion_envio' => Pedido::ENTREGADO_SIN_SOBRE_OPE,
+                'condicion_envio_code' =>  Pedido::ENTREGADO_SIN_SOBRE_OPE_INT,
 
                 'condicion_sobre' => 'SIN ENVIO',
                 'codigos'=>$data->codigo,
@@ -1597,7 +1597,7 @@ class EnvioController extends Controller
             ]);
 
         return response()->json(['html' => $pedido->id]);
-        
+
     }
 
 
@@ -1631,7 +1631,7 @@ class EnvioController extends Controller
 
         return response()->json(['html' => $pedido->id]);
 
-        
+
     }
 
     public function confirmarRecepcionID(Request $request)
@@ -1642,13 +1642,13 @@ class EnvioController extends Controller
             'envio' => '2',
             'modificador' => 'USER'.Auth::user()->id,
             'condicion_envio' => Pedido::ENTREGADO_SIN_SOBRE_CLIENTE,
-            'condicion_envio_code' => Pedido::CONFIRMACION_SIN_SOBRE_CLIENTE,
+            'condicion_envio_code' => Pedido::ENTREGADO_SIN_SOBRE_CLIENTE_INT,
 
         ]);
 
           PedidoMovimientoEstado::create([
                     'pedido' => $request->hiddenEnvio,
-                    'condicion_envio_code' => Pedido::CONFIRMACION_SIN_SOBRE_CLIENTE,
+                    'condicion_envio_code' => Pedido::ENTREGADO_SIN_SOBRE_CLIENTE_INT,
                     'notificado' => 0
                 ]);
 
@@ -1731,7 +1731,7 @@ class EnvioController extends Controller
                 ->select(
                     'pedidos.id',
                     'pedidos.cliente_id',
-                  
+
                     'u.identificador as users',
                     'u.id as user_id',
                     'dp.codigo as codigos',
@@ -1759,9 +1759,9 @@ class EnvioController extends Controller
                 )
                 ->where('pedidos.estado', '1')
                 //->whereIn('pedidos.envio', [Pedido::ENVIO_CONFIRMAR_RECEPCION,Pedido::ENVIO_RECIBIDO]) // ENVIADO CONFIRMAR RECEPCION Y ENVIADO RECIBIDO
-                ->whereIn('pedidos.condicion_envio_code', [Pedido::CONFIRMACION_COURIER]) // ENVIADO CONFIRMAR RECEPCION Y ENVIADO RECIBIDO
+                ->whereIn('pedidos.condicion_envio_code', [Pedido::CONFIRMACION_COURIER_INT]) // ENVIADO CONFIRMAR RECEPCION Y ENVIADO RECIBIDO
                 ->where('dp.estado', '1');
-              
+
         if(Auth::user()->rol == "Operario"){
             $asesores = User::where('users.rol', 'Asesor')
                 -> where('users.estado', '1')
@@ -1865,7 +1865,7 @@ class EnvioController extends Controller
                  * CONFIRMACION DE PEDIDOS SIN SOBRE
                  */
                 case 13:
-                    $nuevo_estado = Pedido::CONFIRMACION_SIN_SOBRE_CLIENTE;
+                    $nuevo_estado = Pedido::ENTREGADO_SIN_SOBRE_CLIENTE_INT;
                     $respuesta = "El pedido sin sobre se confirmo correctamente.";
                     $nombre_accion = Pedido::$estadosCondicionEnvioCode[$nuevo_estado];
 
