@@ -258,7 +258,7 @@ class EnvioController extends Controller
             "ENTREGADO" => 'ENTREGADO'
         ];
 
-        PedidoMovimientoEstado::where('condicion_envio_code',Pedido::ENTREGADO_SIN_SOBRE_INT)->update([
+        PedidoMovimientoEstado::where('condicion_envio_code',Pedido::ENTREGADO_SIN_SOBRE_OPE_INT)->update([
             'notificado' => 1,
         ]);
 
@@ -460,7 +460,7 @@ class EnvioController extends Controller
 
 
 
-        $arreglo=[Pedido::ENTREGADO_SIN_SOBRE_INT,Pedido::CONFIRMACION_SIN_SOBRE_INT];
+        $arreglo=[Pedido::ENTREGADO_SIN_SOBRE_OPE_INT,Pedido::CONFIRMACION_SIN_SOBRE_CLIENTE];
 
 
         if($request->desde)
@@ -1146,14 +1146,14 @@ class EnvioController extends Controller
         $pedido->update([
             'envio' => '2',
             'modificador' => 'USER'.Auth::user()->id,
-            'condicion_envio' => Pedido::JEFE_OP_CONF,
-            'condicion_envio_code' => Pedido::JEFE_OP_CONF_INT,
+            'condicion_envio' => Pedido::CONFIRMACION_COURIER,
+            'condicion_envio_code' => Pedido::CONFIRMACION_COURIER_INT,
 
         ]);
 
         PedidoMovimientoEstado::create([
             'pedido' => $request->hiddenEnvio,
-            'condicion_envio_code' => Pedido::JEFE_OP_CONF_INT,
+            'condicion_envio_code' => Pedido::CONFIRMACION_COURIER_INT,
             'notificado' => 0
         ]);
 
@@ -1201,16 +1201,16 @@ class EnvioController extends Controller
 
                     'envio' => '2',
                     'estado_sobre' => '1',
-                    'condicion_envio'=>Pedido::SEG_PROVINCIA,
-                    'condicion_envio_code'=>Pedido::SEG_PROVINCIA_INT,
+                    'condicion_envio'=>Pedido::SEGUIMIENTO_PROVINCIA_COURIER,
+                    'condicion_envio_code'=>Pedido::SEGUIMIENTO_PROVINCIA_COURIER_INT,
                     'modificador' => 'USER'.Auth::user()->id
                 ]);
 
 
                 $direccion_grupos->update([
 
-                    'condicion_envio'=>Pedido::SEG_PROVINCIA,
-                    'condicion_envio_code'=>Pedido::SEG_PROVINCIA_INT,
+                    'condicion_envio'=>Pedido::SEGUIMIENTO_PROVINCIA_COURIER,
+                    'condicion_envio_code'=>Pedido::SEGUIMIENTO_PROVINCIA_COURIER_INT,
                     'modificador' => 'USER'.Auth::user()->id,
                     'pedido_id' => $request->hiddenRecibir
                 ]);
@@ -1249,8 +1249,8 @@ class EnvioController extends Controller
             else {
 
                 $_pedido->update([
-                    'condicion_envio' => Pedido::SEG_PROVINCIA,
-                    'condicion_envio_code' => Pedido::SEG_PROVINCIA_INT
+                    'condicion_envio' => Pedido::SEGUIMIENTO_PROVINCIA_COURIER,
+                    'condicion_envio_code' => Pedido::SEGUIMIENTO_PROVINCIA_COURIER_INT
                 ]);
 
             }
@@ -1375,8 +1375,8 @@ class EnvioController extends Controller
                         'celular_cliente'=> ( ($request->destino=='LIMA')? $request->contacto : $cliente->celular."-".$cliente->icelular ),
                         'codigos'=>$lista_codigos,
                         'producto'=>$lista_productos,
-                        'condicion_envio' => Pedido::SEG_PROVINCIA,
-                        'condicion_envio_code' => Pedido::SEG_PROVINCIA_INT,
+                        'condicion_envio' => Pedido::SEGUIMIENTO_PROVINCIA_COURIER,
+                        'condicion_envio_code' => Pedido::SEGUIMIENTO_PROVINCIA_COURIER_INT,
                         'pedido_id'=>$request->cod_pedido,
                         'cliente_id'=>$request->cliente_id,
                         'user_id'=>$usuario_id
@@ -1422,8 +1422,8 @@ class EnvioController extends Controller
                             'destino' => $request->destino,
                             'condicion_envio' => 2,//AL REGISTRAR DIRECCION PASA A ESTADO  EN REPARTO
                             'direccion' => '1',
-                            'condicion_envio' => Pedido::SEG_PROVINCIA,
-                            'condicion_envio_code' => Pedido::SEG_PROVINCIA_INT,
+                            'condicion_envio' => Pedido::SEGUIMIENTO_PROVINCIA_COURIER,
+                            'condicion_envio_code' => Pedido::SEGUIMIENTO_PROVINCIA_COURIER_INT,
                         ]);
 
                         $dp_empresa=DetallePedido::where("pedido_id",$pedido_id)->first();
@@ -1527,10 +1527,15 @@ class EnvioController extends Controller
 
 
         $pedido->update([
-          'envio' => '3',//SIN ENVIO
+            'envio' => '3',//SIN ENVIO
+          //'condicion_envio' => DireccionGrupo::CE_ENTREGADO,
+          //'condicion_envio_code' => DireccionGrupo::CE_ENTREGADO_CODE,
           'condicion_envio' => Pedido::ENTREGADO_SIN_SOBRE,
           'condicion_envio_code' => Pedido::ENTREGADO_SIN_SOBRE_INT,
-          'modificador' => 'USER'.Auth::user()->id
+
+          //  'condicion_envio' => 'ENTREGADO',
+          //  'condicion_envio_code' => 10 ,
+            'modificador' => 'USER'.Auth::user()->id
         ]);
 
         $detalle_pedidos->update([
@@ -1607,14 +1612,14 @@ class EnvioController extends Controller
 
         $pedido->update([
             'envio' => '1',
-            'condicion_envio' => Pedido::JEFE_OP,
-            'condicion_envio_code' => Pedido::JEFE_OP_INT,
+            'condicion_envio' => Pedido::ATENDIDO_JEFE_OPE,
+            'condicion_envio_code' => Pedido::ATENDIDO_JEFE_OPE_INT,
             'modificador' => 'USER'.Auth::user()->id
         ]);
 
         PedidoMovimientoEstado::create([
             'pedido' => $request->hiddenEnvio,
-            'condicion_envio_code' => Pedido::JEFE_OP_INT,
+            'condicion_envio_code' => Pedido::ATENDIDO_JEFE_OPE_INT,
             'notificado' => 0
         ]);
 
@@ -1636,14 +1641,14 @@ class EnvioController extends Controller
         $pedido->update([
             'envio' => '2',
             'modificador' => 'USER'.Auth::user()->id,
-            'condicion_envio' => Pedido::CONFIRMACION_SIN_SOBRE,
-            'condicion_envio_code' => Pedido::CONFIRMACION_SIN_SOBRE_INT,
+            'condicion_envio' => Pedido::ENTREGADO_SIN_SOBRE_CLIENTE,
+            'condicion_envio_code' => Pedido::CONFIRMACION_SIN_SOBRE_CLIENTE,
 
         ]);
 
           PedidoMovimientoEstado::create([
                     'pedido' => $request->hiddenEnvio,
-                    'condicion_envio_code' => Pedido::CONFIRMACION_SIN_SOBRE_INT,
+                    'condicion_envio_code' => Pedido::CONFIRMACION_SIN_SOBRE_CLIENTE,
                     'notificado' => 0
                 ]);
 
@@ -1664,7 +1669,7 @@ class EnvioController extends Controller
 
         PedidoMovimientoEstado::create([
             'pedido' => $request->hiddenEnvio,
-            'condicion_envio_code' => Pedido::JEFE_OP_CONF_INT,
+            'condicion_envio_code' => Pedido::CONFIRMACION_COURIER_INT,
             'notificado' => 0
         ]);
 
@@ -1695,7 +1700,7 @@ class EnvioController extends Controller
             DB::raw("COUNT(u.identificador) AS total, u.identificador ")
         )
         ->where('pedidos.estado', '1')
-        ->whereIn('pedidos.condicion_envio_code', [Pedido::JEFE_OP_CONF_INT])
+        ->whereIn('pedidos.condicion_envio_code', [Pedido::CONFIRMACION_COURIER_INT])
         ->where('dp.estado', '1')
         ->groupBy('u.identificador');
 
@@ -1753,6 +1758,7 @@ class EnvioController extends Controller
                     DB::raw("DATEDIFF(DATE(NOW()), DATE(pedidos.created_at)) AS dias")
                 )
                 ->where('pedidos.estado', '1')
+                //->whereIn('pedidos.envio', [Pedido::ENVIO_CONFIRMAR_RECEPCION,Pedido::ENVIO_RECIBIDO]) // ENVIADO CONFIRMAR RECEPCION Y ENVIADO RECIBIDO
                 ->whereIn('pedidos.condicion_envio_code', [Pedido::JEFE_OP_CONF_INT]) // ENVIADO CONFIRMAR RECEPCION Y ENVIADO RECIBIDO
                 ->where('dp.estado', '1');
               
@@ -1837,7 +1843,7 @@ class EnvioController extends Controller
         if($area_accion == "fernandez"){
             switch ($condicion_code_actual){
                 case 12:
-                    $nuevo_estado = Pedido::JEFE_OP_CONF_INT;
+                    $nuevo_estado = Pedido::CONFIRMACION_COURIER_INT;
                     $respuesta = "El sobre se recibio correctamente.";
                     $nombre_accion = Pedido::$estadosCondicionEnvioCode[$nuevo_estado];
 
@@ -1859,7 +1865,7 @@ class EnvioController extends Controller
                  * CONFIRMACION DE PEDIDOS SIN SOBRE
                  */
                 case 13:
-                    $nuevo_estado = Pedido::CONFIRMACION_SIN_SOBRE_INT;
+                    $nuevo_estado = Pedido::CONFIRMACION_SIN_SOBRE_CLIENTE;
                     $respuesta = "El pedido sin sobre se confirmo correctamente.";
                     $nombre_accion = Pedido::$estadosCondicionEnvioCode[$nuevo_estado];
 

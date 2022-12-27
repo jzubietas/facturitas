@@ -65,8 +65,8 @@
                             {!! Form::select('pcondicion', $condiciones, $pedido->condicion, ['class' => 'form-control selectpicker border border-secondary', 'id'=>'pcondicion','data-live-search' => 'true', 'placeholder' => '---- SELECCIONE ----']) !!} --}}
                             <select name="condicion" class="form-control" id="condicion">
                               <!-- <option value="1"  {{ ($pedido->condicion == "1" ? "selected" : "") }}>POR ATENDER</option> -->
-                              <option value="2" {{ ($pedido->condicion == "2" ? "selected" : "") }}>{{\App\Models\Pedido::INCOMPLETO}}</option>
-                              <option value="3" {{ ($pedido->condicion == "3" ? "selected" : "") }}>{{\App\Models\Pedido::ATENDIDO_OP}}</option>
+                              <option value="2" {{ ($pedido->condicion == "2" ? "selected" : "") }}>{{\App\Models\Pedido::EN_ATENCION_OPE}}</option>
+                              <option value="3" {{ ($pedido->condicion == "3" ? "selected" : "") }}>{{\App\Models\Pedido::ATENDIDO_OPE}}</option>
                             </select>
                           </div>
                         </div>
