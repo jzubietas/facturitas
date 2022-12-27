@@ -73,6 +73,7 @@ class StatusDireccionGrupoModelChange extends Command
           
             10 => 'ENTREGADO - CLIENTE',
             13 => 'ENTREGADO SIN SOBRE - OPE',
+            14 => 'ENTREGADO SIN SOBRE - CLIENTE',
             8 => 'REPARTO - COURIER',
             9 => 'SEGUIMIENTO PROVINCIA - COURIER',
             
