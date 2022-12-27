@@ -89,10 +89,7 @@ class OperacionController extends Controller
             ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
             ->select(
                 'pedidos.id',
-                DB::raw(" (CASE WHEN pedidos.id<10 THEN concat('PED000',pedidos.id)
-                                WHEN pedidos.id<100 THEN concat('PED00',pedidos.id)
-                                WHEN pedidos.id<1000 THEN concat('PED0',pedidos.id)
-                                ELSE concat('PED',pedidos.id) END) AS id2"),
+                'pedidos.correlativo as id2',
                 'c.nombre as nombres',
                 'c.celular as celulares',
                 'u.identificador as users',
@@ -110,7 +107,7 @@ class OperacionController extends Controller
             )
             ->where('pedidos.estado', '1')
             ->where('dp.estado', '1')
-            ->whereIn('pedidos.condicion_code', [Pedido::POR_ATENDER_INT, Pedido::EN_PROCESO_ATENCION_INT]);
+            ->whereIn('pedidos.condicion_envio_code', [Pedido::POR_ATENDER_OPE_INT, Pedido::EN_ATENCION_OPE_INT]);
 
 
         if(Auth::user()->rol == "Operario"){
@@ -120,12 +117,7 @@ class OperacionController extends Controller
                 ->Where('users.operario', Auth::user()->id)
                 ->select(
                     DB::raw("users.identificador as identificador")
-                )
-                /*->union(
-                    User::where("id","33")
-                        ->select(
-                            DB::raw("users.identificador as identificador")
-                        ) )*/
+                )               
                 ->pluck('users.identificador');
             $pedidos = $pedidos->WhereIn('u.identificador', $asesores);
 
