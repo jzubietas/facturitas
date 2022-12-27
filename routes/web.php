@@ -55,8 +55,8 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
 
     /*Controller Clientes*/
     Route::get('clientes/deudas_copy', [ClienteController::class,'deudasCopyAjax'])->name('clientes.deudas_copy');
-   
-    
+
+
     Route::resource('clientes', ClienteController::class)->names('clientes');
 
 
@@ -68,9 +68,9 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     Route::get('clientes.edit.abandono/{cliente}/edit2', [ClienteController::class, 'edit'])->name('clientes.edit.abandono');
     Route::get('clientes.edit.abandono.reciente/{cliente}/edit2', [ClienteController::class, 'edit'])->name('clientes.edit.abandono.reciente');
     Route::get('clientes.edit.recurrente/{cliente}/edit2', [ClienteController::class, 'edit'])->name('clientes.edit.recurrente');
-    
-    
-  
+
+
+
 
 
 
@@ -214,7 +214,7 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     Route::post('envios.desvincular', [SobreController::class, 'EnvioDesvincular'])->name('envios.desvincular');
     Route::get('envios.createdireccion/{pedido}', [EnvioController::class, 'createDireccion'])->name('envios.createdireccion');
     Route::post('envios.updatedireccion/{direccion}', [EnvioController::class, 'UpdateDireccionEnvio'])->name('envios.updatedireccion');
-    
+
 
 
     Route::post('pedidos/eliminarFoto1/{pedido}', [PedidoController::class, 'eliminarFoto1'])->name('pedidos.eliminarFoto1');
@@ -507,6 +507,9 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     /* Escaneo e códdigos de Barras  */
 
     Route::post('operaciones.confirmaropbarras', [EnvioController::class, 'ConfirmarOPBarra'])->name('operaciones.confirmaropbarras');
+    /* Cambiar estado a Motorizado */
+    Route::post('operaciones.confirmar', [EnvioController::class, 'confirmarEstado'])->name('operaciones.confirmar');
+
     /* Route::group(['middleware' => ['permission:pedidos.index']], function () {
         Route::get('pedidos.index', [PedidoController::class, 'index']);
     }); */

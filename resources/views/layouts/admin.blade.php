@@ -39,7 +39,7 @@ scratch. This page gets rid of all links and provides the needed markup only.
     <!-- Navbar -->
     <nav class="main-header navbar navbar-expand navbar-white navbar-light">
 
-        <div class="tpl-snow">
+        <div class="tpl-snow2">
             <div></div>
             <div></div>
             <div></div>

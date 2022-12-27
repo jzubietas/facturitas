@@ -49,7 +49,7 @@ class EnvioController extends Controller
      */
 
 
-    
+
 
 
 
@@ -122,7 +122,7 @@ class EnvioController extends Controller
             ->join('users as u', 'u.id', 'c.user_id')
            // ->join('pedidos as p', 'p.codigo', 'direccion_grupos.codigos')
 
-           ->where('direccion_grupos.condicion_envio_code',Pedido::REPARTO_COURIER_INT)
+           ->where('direccion_grupos.condicion_envio_code',[Pedido::REPARTO_COURIER_INT, Pedido::MOTORIZADO_INT])
 
             //->where('p.condicion_envio_code',Pedido::EN_REPARTO_INT)
             ->where('direccion_grupos.estado','1')
@@ -157,7 +157,7 @@ class EnvioController extends Controller
           //  ->join('pedidos as p', 'p.codigo', 'direccion_grupos.codigos')
 
           //  ->where('p.condicion_envio_code',Pedido::EN_REPARTO_INT)
-            ->where('direccion_grupos.condicion_envio_code',Pedido::REPARTO_COURIER_INT)
+            ->where('direccion_grupos.condicion_envio_code',[Pedido::REPARTO_COURIER_INT, Pedido::MOTORIZADO_INT])
             ->where('direccion_grupos.estado','1')
          //   ->whereNull('direccion_grupos.subcondicion_envio')
 
@@ -2105,6 +2105,30 @@ class EnvioController extends Controller
 
             return response()->json(['html' => $respuesta, 'class' => "text-success", 'codigo' => $request->hiddenCodigo]);
         }
+    }
+
+    public function confirmarEstado(Request $request)
+    {
+
+        $envio=DireccionGrupo::where("id",$request->hiddenCodigo)->first();
+
+        //dd($envio);
+
+        //$detalle_pedidos = DetallePedido::where('pedido_id',$pedido->id)->first();
+
+            $envio->update([
+                'condicion_envio' => Pedido::MOTORIZADO,
+                'condicion_envio_code' => Pedido::MOTORIZADO_INT,
+
+            ]);
+
+        PedidoMovimientoEstado::create([
+            'pedido' => $request->hiddenCodigo,
+            'condicion_envio_code' => Pedido::EN_REPARTO_CODE,
+            'notificado' => 0
+        ]);
+
+        return response()->json(['html' => $envio->id]);
     }
 
 
