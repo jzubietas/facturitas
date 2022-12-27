@@ -230,7 +230,7 @@
                                 return '';
                             } else {
                                 if (data > 0) {
-                                    data = '<a href="" data-target="#modal-veradjunto" data-adjunto=' + row.id + ' data-toggle="modal" ><button class="btn btn-primary btn-sm"><i class="fas fa-eye"></i> Ver</button></a>';
+                                    data = '<a href="" data-target="#modal-veradjunto" data-code="' + row.codigos + '" data-adjunto=' + row.id + ' data-toggle="modal" ><button class="btn btn-primary btn-sm"><i class="fas fa-eye"></i> Ver</button></a>';
                                     return data;
                                 } else {
                                     return '';
@@ -246,7 +246,7 @@
                             if (row.pendiente_anulacion == 1) {
                                 return '<span class="badge badge-success">' + '{{\App\Models\Pedido::PENDIENTE_ANULACION }}' + '</span>';
                             }
-                            return '<span class="badge badge-success" style="background-color: '+row.condicion_envio_color+'!important;">'+row.condicion_envio+'</span>';
+                            return '<span class="badge badge-success" style="background-color: ' + row.condicion_envio_color + '!important;">' + row.condicion_envio + '</span>';
                         }
                     },/*
                     {
@@ -389,42 +389,45 @@
 
 
             $('#modal-veradjunto').on('show.bs.modal', function (event) {
-        //cuando abre el form de anular pedido
-        var button = $(event.relatedTarget)
-        var idunico = button.data('adjunto')
-        $(".textcode").html("PED"+idunico);
+                //cuando abre el form de anular pedido
+                var button = $(event.relatedTarget)
+                var idunico = button.data('adjunto')
+                $(".textcode").html("PED" + idunico);
+                var code = button.data('code')
+                $(".textcode").html(code);
 
-        //consulta de imagenes
-          $.ajax({
-            type:'POST',
-            url:"{{ route('pedidoobteneradjuntoRequest') }}",
-            data:{"pedido":idunico},
-          }).done(function (data) {
-            //console.log(data.html);
-            console.log(data.cantidad);
-            if(data.cantidad>0)
-            {
-              ////recorrer y poner imagenes en div con router
-              var adjuntos = data.html.split('|');
-              //console.log(adjuntos);
-              var urladjunto="";
-              var datal="";
-              $.each(adjuntos, function( index, value ) {
-                urladjunto = '{{ route("pedidos.descargaradjunto", ":id") }}';
-                urladjunto = urladjunto.replace(':id', value);
-                datal = datal+'<p><a href="'+urladjunto+'">'+value+'</a><p>';
-                //console.log(datal);
-                //console.log( index + ": " + value );
-              });
-              $("#imagenes_adjunto").html(datal)
-              return datal;
-              //console.log(data.html)
-            }else{
-              console.log("sin imagenes");
-            }
-          });
+                //consulta de imagenes
+                $.ajax({
+                    type: 'POST',
+                    url: "{{ route('pedidoobteneradjuntoRequest') }}",
+                    data: {"pedido": idunico},
+                }).done(function (data) {
+                    //console.log(data.html);
+                    console.log(data.cantidad);
+                    if (data.cantidad > 0) {
+                        ////recorrer y poner imagenes en div con router
+                        var cantidad = data.cantidad;
+                        var adjuntos = data.html.split('|');
+                        //console.log(adjuntos);
+                        var urladjunto = "";
+                        var datal = "";
+                        $.each(adjuntos, function (index, value) {
+                            urladjunto = '{{ route("pedidos.descargaradjunto", ":id") }}';
+                            urladjunto = urladjunto.replace(':id', value);
+                            datal = datal + '<p><a href="' + urladjunto + '"><i class="fa fa-file mr-2"></i>' + value + '</a><p>';
+                            //console.log(datal);
+                            //console.log( index + ": " + value );
+                        });
+                        $("#imagenes_adjunto").html(datal)
+                        $(".textcountadj").html(cantidad)
+                        return datal;
+                        //console.log(data.html)
+                    } else {
+                        console.log("sin imagenes");
+                    }
+                });
 
-      });
+            });
 
 
         });
