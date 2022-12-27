@@ -1116,7 +1116,9 @@ class OperacionController extends Controller
 
         //ACTUALIZAR MODIFICACION AL PEDIDO
         $pedido->update([
-            'modificador' => 'USER' . Auth::user()->id
+            'modificador' => 'USER' . Auth::user()->id,
+            'sustento_adjunto'=>$request->sustento,
+            'da_confirmar_descarga'=>0
         ]);
 
         //dd($files);
