@@ -8,8 +8,10 @@
 </div>
 
 <div class="row">
-    <div class="col-lg-12">
-        <div class="card">
+    <div class="col-lg-6">
+        <div class="card" style="
+    background-color: #a5770f1a;
+">
             <div class="card-header">Buscar Cliente/RUC</div>
             <div class="card-header">
                 <div class="row">

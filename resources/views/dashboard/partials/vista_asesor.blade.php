@@ -95,19 +95,49 @@
                     <x-grafico-metas-mes></x-grafico-metas-mes>
                 </div>
                 <div class="col-md-12">
-                    <div class="input-group mb-3">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text" id="basic-addon3">Seleccionar Mes</span>
+                    <div class="card">
+                        <div class="d-flex justify-content-end align-items-center">
+                            <div class="card my-2 mx-2">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" id="basic-addon3">Seleccionar Mes</span>
+                                    </div>
+                                    <select class="form-control" id="datepickerDashborad"
+                                            aria-describedby="basic-addon3">
+
+                                        @foreach([1,2,3,4,5,6,7,8,9,10,11,12] as $month)
+                                            @php
+                                                $currentMonth=now()->startOfYear()->addMonths($month-1);
+                                            @endphp
+                                            <option
+                                                {{$currentMonth->monthName==request('selected_month','diciembre')?'selected':''}} value="{{$currentMonth->monthName}}">{{Str::ucfirst($currentMonth->monthName)}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
                         </div>
-                        <input type="text" class="form-control date-picker" id="datepickerDashborad" aria-describedby="basic-addon3">
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-md-6">
-                        <x-grafico-meta-pedidos-progress-bar></x-grafico-meta-pedidos-progress-bar>
-                    </div>
-                    <div class="col-md-6">
-                        <x-grafico-metas-progress-bar></x-grafico-metas-progress-bar>
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-center">
+                                <ul class="list-group">
+                                    <li class="list-group-item">
+                                    </li>
+                                    <li class="list-group-item">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <x-grafico-meta-pedidos-progress-bar></x-grafico-meta-pedidos-progress-bar>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <x-grafico-metas-progress-bar></x-grafico-metas-progress-bar>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 {{--<div class="col-md-12">

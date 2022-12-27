@@ -267,22 +267,16 @@
           },
           {data: 'destino', name: 'destino',"visible":false },
           {
-              data: 'condicion',
-              name: 'condicion',
+              data: 'condicion_envio',
+              name: 'condicion_envio',
               render: function ( data, type, row, meta ) {
-                  if(row.condicion =='ANULADO'){
-                      return '<span class="badge badge-success">ANULADO</span>';
-                  }else if(row.condicion == 0){
-                      return  '<span class="badge badge-success">ANULADO</span>';
-                  }else if(row.condicion == 1){
-                      return '<span class="badge badge-success">PENDIENTE</span>';
-                  }else if(row.condicion == 2){
-                      return '<span class="badge badge-success">EN REPARTO</span>';
-                  }else if(row.condicion == 3){
-                      return '<span class="badge badge-success">ENTREGADO</span>';
-                  }else{
-                      return '<span class="badge badge-success">'+data+'</span>';
+                  if (row.pendiente_anulacion == 1) {
+                      return '<span class="badge badge-danger">' + '{{\App\Models\Pedido::PENDIENTE_ANULACION }}' + '</span>';
                   }
+                  if(row.estado==0){
+                      return '<span class="badge badge-danger">'+'{{\App\Models\Pedido::ANULADO }}'+'</span>';
+                  }
+                  return '<span class="badge badge-success" style="background-color: '+row.condicion_envio_color+'!important;">'+row.condicion_envio+'</span>';
               }
           },
           {data: 'atendido_por', name: 'atendido_por', },

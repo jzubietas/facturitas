@@ -128,23 +128,20 @@ class PedidoController extends Controller
             ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
             //->leftjoin('pago_pedidos as pp', 'pedidos.id','pp.pedido_id')
             ->select(
-                'pedidos.id',
-                'c.nombre as nombres',
-                'c.icelular as icelulares',
-                'c.celular as celulares',
-                'u.identificador as users',
-                'pedidos.codigo as codigos',
-                'dp.nombre_empresa as empresas',
-                'dp.total as total',
-                'dp.cantidad as cantidad',
-                'dp.ruc as ruc',
-                'pedidos.pendiente_anulacion',
-                'pedidos.condicion_envio',
-                'pedidos.condicion_envio_code',
-                'pedidos.condicion as condiciones',
-                'pedidos.condicion_code',
-                'pedidos.pagado as condicion_pa',
-                DB::raw("
+                [
+                    'pedidos.*',
+                    'pedidos.codigo as codigos',
+                    'pedidos.condicion as condiciones',
+                    'pedidos.pagado as condicion_pa',
+                    'c.nombre as nombres',
+                    'c.icelular as icelulares',
+                    'c.celular as celulares',
+                    'u.identificador as users',
+                    'dp.nombre_empresa as empresas',
+                    'dp.total as total',
+                    'dp.cantidad as cantidad',
+                    'dp.ruc as ruc',
+                    DB::raw("
                     concat(
                         (case when pedidos.pago=1 and pedidos.pagado=1 then 'ADELANTO' when pedidos.pago=1 and pedidos.pagado=2 then 'PAGO' else '' end),
                         ' ',
@@ -152,15 +149,12 @@ class PedidoController extends Controller
                             select pago.condicion from pago_pedidos pagopedido inner join pedidos pedido on pedido.id=pagopedido.pedido_id and pedido.id=pedidos.id inner join pagos pago on pagopedido.pago_id=pago.id where pagopedido.estado=1 and pago.estado=1 order by pagopedido.created_at desc limit 1
                         )
                     )  as condiciones_aprobado"),
-                'pedidos.motivo',
-                'pedidos.responsable',
-                DB::raw('DATE_FORMAT(pedidos.created_at, "%d/%m/%Y") as fecha2'),
-                DB::raw('DATE_FORMAT(pedidos.created_at, "%Y-%m-%d %H:%i:%s") as fecha'),
-                DB::raw('DATE_FORMAT(pedidos.updated_at, "%d/%m/%Y") as fecha2_up'),
-                DB::raw('DATE_FORMAT(pedidos.updated_at, "%Y-%m-%d %H:%i:%s") as fecha_up'),
-                'dp.saldo as diferencia',
-                'pedidos.estado',
-                'pedidos.envio'
+                    DB::raw('DATE_FORMAT(pedidos.created_at, "%d/%m/%Y") as fecha2'),
+                    DB::raw('DATE_FORMAT(pedidos.created_at, "%Y-%m-%d %H:%i:%s") as fecha'),
+                    DB::raw('DATE_FORMAT(pedidos.updated_at, "%d/%m/%Y") as fecha2_up'),
+                    DB::raw('DATE_FORMAT(pedidos.updated_at, "%Y-%m-%d %H:%i:%s") as fecha_up'),
+                    'dp.saldo as diferencia',
+                ]
             );
         //->where('pendiente_anulacion', '<>', 1)
         //->whereIn('pedidos.condicion_code', [Pedido::POR_ATENDER_INT, Pedido::EN_PROCESO_ATENCION_INT, Pedido::ATENDIDO_INT, Pedido::ANULADO_INT]);
@@ -248,6 +242,10 @@ class PedidoController extends Controller
 
         return Datatables::of(DB::table($pedidos))
             ->addIndexColumn()
+            ->addColumn('condicion_envio_color',function ($pedido){
+                $p=new Pedido((array)$pedido);
+                return $p->condicion_envio_color;
+            })
             ->addColumn('action', function ($pedido) {
                 $btn = '';
 
@@ -1917,6 +1915,8 @@ class PedidoController extends Controller
                 'dp.total as total',
                 'pedidos.condicion as condiciones',
                 'pedidos.condicion_code',
+                'pedidos.condicion_envio as condicion_envio',
+                'pedidos.condicion_envio_code as condicion_envio_code',
                 'pedidos.motivo',
                 'pedidos.pendiente_anulacion',
                 'pedidos.responsable',

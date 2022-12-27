@@ -93,17 +93,14 @@
 
 
 <div class="row">
-    <div class="col-lg-12">
-        <x-grafico-metas-mes></x-grafico-metas-mes>
-    </div>
-    <div class="col-lg-12">
+    <div class="col-lg-6">
         <div class="card" style="
-    background-color: #a5a5a5;
+    background-color: #a5770f1a;
 ">
             <div class="card-header">Buscar Cliente/RUC</div>
             <div class="card-header">
                 <div class="row">
-                    <div class="col-md-10">
+                    <div class="col-md-9">
                         <div class="input-group mb-3">
                             <div class="input-group-prepend">
                                 <div class="input-group-text p-0">
@@ -117,7 +114,7 @@
                                    placeholder="Buscar cliente">
                         </div>
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-md-3">
                         <div class="input-group mb-3">
                             <div class="input-group-append">
                                 <button type="button" class="btn btn-dark" id="buttom_search_cliente">
@@ -143,13 +140,17 @@
             </div>
         </div>
     </div>
+    <div class="col-lg-12">
+        <x-grafico-metas-mes></x-grafico-metas-mes>
+    </div>
+
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-12">
-                <div class="d-flex justify-content-end">
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="input-group mb-3">
+                <div class="card">
+                    <div class="d-flex justify-content-end align-items-center">
+                        <div class="card my-2 mx-2">
+                            <div class="input-group">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text" id="basic-addon3">Seleccionar Mes</span>
                                 </div>
@@ -160,7 +161,8 @@
                                         @php
                                             $currentMonth=now()->startOfYear()->addMonths($month-1);
                                         @endphp
-                                        <option {{$currentMonth->monthName==request('selected_month','diciembre')?'selected':''}} value="{{$currentMonth->monthName}}">{{Str::ucfirst($currentMonth->monthName)}}</option>
+                                        <option
+                                            {{$currentMonth->monthName==request('selected_month','diciembre')?'selected':''}} value="{{$currentMonth->monthName}}">{{Str::ucfirst($currentMonth->monthName)}}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -170,62 +172,27 @@
             </div>
             <div class="col-md-12">
                 <div class="row" id="widget-container">
-
                     <div class="col-md-12">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <x-grafico-meta-pedidos-progress-bar></x-grafico-meta-pedidos-progress-bar>
-                            </div>
-                            <div class="col-md-6">
-                                <x-grafico-metas-progress-bar></x-grafico-metas-progress-bar>
-                            </div>
-                        </div>
-                        {{--
-                         <ul class="nav nav-tabs" id="myTab" role="tablist">
-                            <li class="nav-item">
-                                <a class="nav-link active" id="grafico_pedidos_vista1-tab" data-toggle="tab"
-                                   href="#grafico_pedidos_vista1" role="tab"
-                                   aria-controls="grafico_pedidos_vista1" aria-selected="true">
-                                    Primera Vista
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" id="grafico_pedidos_vista2-tab" data-toggle="tab"
-                                   href="#grafico_pedidos_vista2" role="tab"
-                                   aria-controls="grafico_pedidos_vista2" aria-selected="false">
-                                    Segunda Vista
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" id="grafico_pedidos_vista3-tab" data-toggle="tab"
-                                   href="#grafico_pedidos_vista3" role="tab"
-                                   aria-controls="grafico_pedidos_vista3" aria-selected="false">
-                                    Segunda Vista
-                                </a>
-                            </li>
-                        </ul>
-                        <div class="tab-content" id="myTabContent">
-                            <div class="tab-pane fade show active" id="grafico_pedidos_vista1" role="tabpanel"
-                                 aria-labelledby="grafico_pedidos_vista1-tab">
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <x-grafico-meta-pedidos-progress-bar></x-grafico-meta-pedidos-progress-bar>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <x-grafico-metas-progress-bar></x-grafico-metas-progress-bar>
-                                    </div>
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-center mb-4 pb-4">
+                                    <ul class="list-group">
+                                        <li class="list-group-item">
+                                        </li>
+                                        <li class="list-group-item">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <x-grafico-meta-pedidos-progress-bar></x-grafico-meta-pedidos-progress-bar>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <x-grafico-metas-progress-bar></x-grafico-metas-progress-bar>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul>
                                 </div>
                             </div>
-                            <div class="tab-pane fade" id="grafico_pedidos_vista2" role="tabpanel"
-                                 aria-labelledby="grafico_pedidos_vista2-tab">
-                                <x-grafico-pedidos-meta-progress></x-grafico-pedidos-meta-progress>
-                            </div>
-                            <div class="tab-pane fade" id="grafico_pedidos_vista3" role="tabpanel"
-                                 aria-labelledby="grafico_pedidos_vista3-tab">
-                                <x-grafico-meta_cobranzas></x-grafico-meta_cobranzas>
-                            </div>
                         </div>
-                         --}}
                     </div>
 
                     <div class="col-md-12">
