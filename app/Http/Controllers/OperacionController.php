@@ -380,7 +380,7 @@ class OperacionController extends Controller
 
         if(Auth::user()->rol == "Operario"){
 
-            $asesores = User::whereIN('users.rol', ['Asesor','Administrador'])
+            $asesores = User::whereIN('users.rol', ['Asesor','Administrador','ASESOR ADMINISTRATIVO'])
                 -> where('users.estado', '1')
                 -> Where('users.operario',Auth::user()->id)
                 ->select(
@@ -404,7 +404,7 @@ class OperacionController extends Controller
                 )
                 ->pluck('users.id');
 
-            $asesores = User::whereIN('users.rol', ['Asesor','Administrador'])
+            $asesores = User::whereIN('users.rol', ['Asesor','Administrador','ASESOR ADMINISTRATIVO'])
                 -> where('users.estado', '1')
                 ->WhereIn('users.operario',$operarios)
                 ->select(
@@ -500,7 +500,7 @@ class OperacionController extends Controller
 
         if(Auth::user()->rol == "Operario"){
 
-            $asesores = User::whereIN('users.rol', ['Asesor','Administrador'])
+            $asesores = User::whereIN('users.rol', ['Asesor','Administrador','ASESOR ADMINISTRATIVO'])
                 -> where('users.estado', '1')
                 -> Where('users.operario',Auth::user()->id)
                 ->select(
@@ -524,7 +524,7 @@ class OperacionController extends Controller
                 )
                 ->pluck('users.id');
 
-            $asesores = User::whereIN('users.rol', ['Asesor','Administrador'])
+            $asesores = User::whereIN('users.rol', ['Asesor','Administrador','ASESOR ADMINISTRATIVO'])
                 -> where('users.estado', '1')
                 ->WhereIn('users.operario',$operarios)
                 ->select(
