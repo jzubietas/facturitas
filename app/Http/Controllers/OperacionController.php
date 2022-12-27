@@ -72,15 +72,12 @@ class OperacionController extends Controller
             'notificado' => 1,
         ]);
 
-
-
         $imagenespedido = ImagenPedido::get();
         $imagenes = ImagenAtencion::get();
         $superasesor = User::where('rol', 'Super asesor')->count();
 
         return view('operaciones.porAtender', compact('dateMin', 'dateMax',  'condiciones', 'imagenespedido', 'imagenes', 'superasesor'));
     }
-
 
     public function PorAtendertabla(Request $request)
     {
@@ -91,10 +88,7 @@ class OperacionController extends Controller
             ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
             ->select(
                 'pedidos.id',
-                DB::raw(" (CASE WHEN pedidos.id<10 THEN concat('PED000',pedidos.id)
-                                WHEN pedidos.id<100 THEN concat('PED00',pedidos.id)
-                                WHEN pedidos.id<1000 THEN concat('PED0',pedidos.id)
-                                ELSE concat('PED',pedidos.id) END) AS id2"),
+                'pedidos.correlativo as id2',
                 'c.nombre as nombres',
                 'c.celular as celulares',
                 'u.identificador as users',
@@ -105,8 +99,6 @@ class OperacionController extends Controller
                 'pedidos.condicion',
                 'pedidos.condicion_code',
                 DB::raw('(DATE_FORMAT(pedidos.created_at, "%Y-%m-%d %h:%i:%s")) as fecha'),
-                //DB::raw('(select DATE_FORMAT( MIN(dpa.fecha), "%Y-%m-%d")   from detalle_pagos dpa where dpa.pago_id=pagos.id and dpa.estado=1) as fecha'),
-                //DB::raw('DATE_FORMAT(pedidos.created_at, "%d/%m/%Y") as fecha'),
                 'dp.envio_doc',
                 'dp.fecha_envio_doc',
                 'dp.cant_compro',
@@ -119,7 +111,6 @@ class OperacionController extends Controller
             ->where('pedidos.estado', '1')
             ->where('dp.estado', '1')
             ->whereIn('pedidos.condicion_code', [Pedido::POR_ATENDER_INT,Pedido::EN_PROCESO_ATENCION_INT]);
-
 
         if(Auth::user()->rol == "Operario"){
 
@@ -137,7 +128,6 @@ class OperacionController extends Controller
                 ->pluck('users.identificador');
                 $pedidos=$pedidos->WhereIn('u.identificador',$asesores);
 
-
         }else if(Auth::user()->rol == "Jefe de operaciones"){
 
             $operarios = User::where('users.rol', 'Operario')
@@ -154,11 +144,6 @@ class OperacionController extends Controller
                 ->select(
                     DB::raw("users.identificador as identificador")
                 )
-                /*->union(
-                    User::where("id","33")
-                        ->select(
-                            DB::raw("users.identificador as identificador")
-                        ) )*/
                 ->pluck('users.identificador');
 
                 $pedidos=$pedidos->WhereIn('u.identificador',$asesores);

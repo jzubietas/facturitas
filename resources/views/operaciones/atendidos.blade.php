@@ -320,7 +320,6 @@
                     //$('#listado_adjuntos').html(data);
                 });
 
-
             });
 
             $('#modal-sinenvio').on('show.bs.modal', function (event) {
