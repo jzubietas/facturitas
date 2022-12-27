@@ -268,7 +268,8 @@
         //cuando abre el form de anular pedido
         var button = $(event.relatedTarget)
         var idunico = button.data('atender')
-        $(".textcode").html("PED"+idunico);
+        var idcodigo = button.data('codigo')
+        $(".textcode").html(idcodigo);
         $("#hiddenAtender").val(idunico);
 
       });
@@ -277,7 +278,8 @@
         //cuando abre el form de anular pedido
         var button = $(event.relatedTarget)
         var idunico = button.data('adjunto')
-        $(".textcode").html("PED"+idunico);
+        var idcodigo = button.data('codigo')
+        $(".textcode").html(idcodigo);
 
         //consulta de imagenes
           $.ajax({
@@ -385,7 +387,7 @@
               }else{
                 if(data>0)
                 {
-                  data = '<a href="" data-target="#modal-veradjunto" data-adjunto='+row.id+' data-toggle="modal" ><button class="btn btn-primary btn-sm"><i class="fas fa-eye"></i> Ver</button></a>';
+                  data = '<a href="" data-target="#modal-veradjunto" data-adjunto='+row.id+' data-codigo='+row.codigo+' data-toggle="modal" ><button class="btn btn-primary btn-sm"><i class="fas fa-eye"></i> Ver</button></a>';
                   return data;
                 }else{
                   return '';
@@ -415,7 +417,7 @@
               urlpdf = urlpdf.replace(':id', row.id);
               @can('operacion.atender')
                   if(!row.pendiente_anulacion) {
-                      data = data + '<a href="" data-target="#modal-atender" data-atender=' + row.id + ' data-toggle="modal" ><button class="btn btn-success btn-sm">Atender</button></a>';
+                      data = data + '<a href="" data-target="#modal-atender" data-atender=' + row.id + ' data-codigo='+row.codigo+' data-toggle="modal" ><button class="btn btn-success btn-sm">Atender</button></a>';
                   }
               @endcan
               @can('operacion.PDF')
