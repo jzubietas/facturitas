@@ -16,7 +16,7 @@ return [
 
     'title' => '',
     'title_prefix' => '',
-    'title_postfix' => ' | sisFacturas',
+    'title_postfix' => ' | Ojo Celeste',
 
     /*
     |--------------------------------------------------------------------------
@@ -45,12 +45,12 @@ return [
     |
     */
 
-    'logo' => 'sis<b>Facturas</b>',
+    'logo' => 'Ojo<b>Celeste</b>',
     'logo_img' => 'vendor/adminlte/dist/img/logo_facturas.png',
     'logo_img_class' => 'brand-image-xl img-circle elevation-3',
     'logo_img_xl' => null,
     'logo_img_xl_class' => 'brand-image-xs',
-    'logo_img_alt' => 'sisFacturas',
+    'logo_img_alt' => 'Ojo Celeste',
 
     /*
     |--------------------------------------------------------------------------

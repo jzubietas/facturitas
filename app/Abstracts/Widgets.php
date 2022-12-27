@@ -31,7 +31,28 @@ abstract class Widgets extends Component
         $this->endDate = now()->endOfMonth();
         $this->genId = Str::random(40);
 
-        if (request()->has("start_date") && request()->has("end_date")) {
+        if (request()->has("selected_month")) {
+            try {
+                $month = request('selected_month');
+                $months = [
+                    'enero' => 1,
+                    'febrero' => 2,
+                    'marzo' => 3,
+                    'abril' => 4,
+                    'mayo' => 5,
+                    'junio' => 6,
+                    'julio' => 7,
+                    'agosto' => 8,
+                    'septiembre' => 9,
+                    'octubre' => 10,
+                    'noviembre' => 11,
+                    'diciembre' => 12,
+                ];
+                $this->startDate = now()->startOfYear()->addMonths($months[$month]-1)->startOfMonth();
+                $this->endDate = $this->startDate->clone()->endOfMonth()->endOfDay();
+            } catch (\Exception $ex) {
+            }
+        } elseif (request()->has("start_date") && request()->has("end_date")) {
             try {
                 $this->startDate = Carbon::parse(request('start_date'));
                 $this->endDate = Carbon::parse(request('end_date'));
@@ -51,16 +72,14 @@ abstract class Widgets extends Component
     public function getDateTitle()
     {
         if ($this->startDate != null) {
-            $formatA = $this->startDate->format('m/Y');
+            $formatA = $this->startDate->locale('es_PE')->translatedFormat('F - Y');
             if ($this->endDate != null) {
-                $formatB = $this->endDate->format('m/Y');
-                if ($formatA == $formatB) {
-                    return $formatA;
-                } else {
+                $formatB = $this->endDate->locale('es_PE')->translatedFormat('F - Y');
+                if ($this->startDate->format('m-Y') !=  $this->endDate->format('m-Y')) {
                     return $formatA . ' - ' . $formatB;
                 }
             }
-            return $formatA;
+            return Str::ucfirst($formatA);
         }
         return '';
     }

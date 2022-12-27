@@ -3,7 +3,7 @@
 @section('title', 'Reporte de Ventas')
 
 @section('content_header')
-  <h1>REPORTES DE <i><b>sisFACTURAS</b></i></h1>
+  <h1>REPORTES DE <i><b>Ojo Celeste</b></i></h1>
 @stop
 
 @section('content')

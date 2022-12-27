@@ -196,7 +196,9 @@ class PedidoController extends Controller
 
             $pedidos = $pedidos->WhereIn('u.identificador', $usersasesores);
 
-        } else if (Auth::user()->rol == "Super asesor") {
+        } 
+        
+        else if (Auth::user()->rol == "Super asesor") {
             $usersasesores = User::where('users.rol', 'Asesor')
                 ->where('users.estado', '1')
                 ->where('users.identificador', Auth::user()->identificador)
@@ -207,7 +209,27 @@ class PedidoController extends Controller
 
             $pedidos = $pedidos->WhereIn('u.identificador', $usersasesores);
 
-        } else if (Auth::user()->rol == "Encargado") {
+        } 
+        
+
+        else if (Auth::user()->rol == "ASESOR ADMINISTRATIVO") {
+            $usersasesores = User::where('users.rol', 'ASESOR ADMINISTRATIVO')
+                ->where('users.estado', '1')
+                ->where('users.identificador', Auth::user()->identificador)
+                ->select(
+                    DB::raw("users.identificador as identificador")
+                )
+                ->pluck('users.identificador');
+
+            $pedidos = $pedidos->WhereIn('u.identificador', $usersasesores);
+
+        } 
+        
+        
+        
+        
+        
+        else if (Auth::user()->rol == "Encargado") {
 
             $usersasesores = User::where('users.rol', 'Asesor')
                 ->where('users.estado', '1')
@@ -911,7 +933,11 @@ class PedidoController extends Controller
 
         //$cliente = Cliente::find($request->cliente_id);
 
-        if ($mirol != "Administrador") {
+        
+
+        $arreglo = array("ASESOR ADMINISTRATIVO", "Administrador", );
+
+        if ( !(in_array($mirol,$arreglo))) {
             //calcular con activacion temporal
 
             //sino darle bloqueado por 3 maximo en el mes
@@ -929,18 +955,35 @@ class PedidoController extends Controller
                     ]
                 )->first();
 
+
+
+
+
             if ($cliente_deuda->crea_temporal == 1) {
 
-            } else {
+
+
+
+
+            } 
+            
+            else {
+
+
                 if ($cliente_deuda->pedidos_mes_deuda > 0 && $cliente_deuda->pedidos_mes_deuda_antes == 0) {
                     if ($cliente_deuda->pedidos_mes_deuda > 4) {
                         $html = "|4";
                         return response()->json(['html' => $html]);
                     }
-                } else if ($cliente_deuda->pedidos_mes_deuda > 0 && $cliente_deuda->pedidos_mes_deuda_antes > 0) {
+                } 
+                
+                else if ($cliente_deuda->pedidos_mes_deuda > 0 && $cliente_deuda->pedidos_mes_deuda_antes > 0) {
                     $html = "|0";
                     return response()->json(['html' => $html]);
-                } else if ($cliente_deuda->pedidos_mes_deuda == 0 && $cliente_deuda->pedidos_mes_deuda_antes > 0) {
+                } 
+                
+                
+                else if ($cliente_deuda->pedidos_mes_deuda == 0 && $cliente_deuda->pedidos_mes_deuda_antes > 0) {
                     $html = "|0";
                     return response()->json(['html' => $html]);
                 }
