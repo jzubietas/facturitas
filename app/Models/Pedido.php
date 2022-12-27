@@ -30,40 +30,39 @@ class Pedido extends Model
     /**************
      * CONSTANTES CONDICION ENVIO
      */
-    const POR_ATENDER_PEDIDO = 'POR ATENDER - OPE'; // POR ATENDER - OPE
-    const INCOMPLETO = 'INCOMPLETO';
-    const ATENDIDO_OP = 'ATENDIDO - OPE'; // ATENDIDO - OPE
-    const JEFE_OP = 'JEFE - OPE'; // JEFE - OPE
-    const REPARTO_COURIER = 'REPARTO - COURIER';
-    const SEG_PROVINCIA = 'SEGUIMIENTO PROVINCIA - COURIER';
-    const ENTREGADO_CLIENTE = 'ENTREGADO - CLIENTE';
-    const JEFE_OP_CONF = 'JEFE CONF - OPE';
-    const RECEPCION_COURIER = 'RECEPCION - COURIER';
-    const ENTREGADO_SIN_SOBRE = 'ENTREGADO SIN SOBRE - OPE';
 
-    const CONFIRMACION_SIN_SOBRE = 'ENTREGADO SIN SOBRE - CLIENTE';
-    const MOTORIZADO = 'MOTORIZADO';
+    const POR_ATENDER_OPE = 'POR ATENDER - OPE'; // 1
+    const EN_ATENCION_OPE = 'EN ATENCION - OPE'; // 2
+    const ATENDIDO_OPE = 'ATENDIDO - OPE'; // 3
+    const ATENDIDO_JEFE_OPE = 'ATENDIDO - JEFE OPE'; // 5
+    const RECEPCION_COURIER = 'RECEPCION - COURIER'; // 12
+    const CONFIRMACION_COURIER = 'CONFIRMACION - COURIER'; // 11
+    const REPARTO_COURIER = 'REPARTO - COURIER'; // 8
+    const SEGUIMIENTO_PROVINCIA_COURIER = 'SEGUIMIENTO PROVINCIA - COURIER'; // 9
+    const MOTORIZADO = 'MOTORIZADO'; // 15
+    const ENTREGADO_CLIENTE = 'ENTREGADO - CLIENTE'; // 10
+    const ENTREGADO_SIN_SOBRE_OPE = 'ENTREGADO SIN SOBRE - OPE'; // 13
+    const ENTREGADO_SIN_SOBRE_CLIENTE = 'ENTREGADO SIN SOBRE - CLIENTE'; // 14
 
     /**************
      * CONSTANTES CONDICION ENVIO NUMERICO
      */
-    const POR_ATENDER_PEDIDO_INT = 1;
-    const INCOMPLETO_INT = 2;
-    const ATENDIDO_OP_INT = 3;
-    const BANCARIZACION_INT = 4;
-    const JEFE_OP_INT = 5;
-    const COURIER_INT = 6;
-    const SOBRE_ENVIAR_INT = 7;
-    const REPARTO_COURIER_INT = 8;
-    const SEG_PROVINCIA_INT = 9;
-    const ENTREGADO_CLIENTE_INT = 10;
-    const JEFE_OP_CONF_INT = 11;
+    const POR_ATENDER_OPE_INT = 1;
+    const EN_ATENCION_OPE_INT = 2;
+    const ATENDIDO_OPE_INT = 3;
+    const ATENDIDO_JEFE_OPE_INT = 5;
     const RECEPCION_COURIER_INT = 12;
-    const ENTREGADO_SIN_SOBRE_INT = 13;
-
-    const CONFIRMACION_SIN_SOBRE_INT = 14;
-
+    const CONFIRMACION_COURIER_INT = 11;
+    const REPARTO_COURIER_INT = 8;
+    const SEGUIMIENTO_PROVINCIA_COURIER_INT = 9;
     const MOTORIZADO_INT = 15;
+    const ENTREGADO_CLIENTE_INT = 10;
+    const ENTREGADO_SIN_SOBRE_OPE_INT = 13;
+    const CONFIRMACION_SIN_SOBRE_CLIENTE = 14;
+
+    /**************
+     * FIN CONSTANTES CONDICION ENVIO NUMERICO
+     */
 
     //envio
     const ENVIO_CONFIRMAR_RECEPCION = '1';//ENVIADO CONFIRMAR RECEPCION
@@ -102,36 +101,36 @@ class Pedido extends Model
      */
 
     public static $estadosCondicionEnvio = [
-        'POR ATENDER' => 1,
-        'INCOMPLETO' => 2,
-        'ATENDIDO OP' => 3,
-        'BANCARIZACION' => 4,
-        'JEFE_OP' => 5,
-        'COURIER' => 6,
-        'SOBRE_ENVIAR' => 7,
-        'EN_REPARTO' => 8,
-        'SEG_PROVINCIA' => 9,
-        'ENTREGADO' => 10,
-        'JEFE_OP_CONF_INT' => 11,
-        'MOTORIZADO' => 15,
+
+    'POR ATENDER - OPE' => 1,
+    'EN ATENCION - OPE' => 2,
+    'ATENDIDO - OPE' => 3,
+    'ATENDIDO - JEFE OPE' => 5,
+    'RECEPCION - COURIER' => 12,
+    'CONFIRMACION - COURIER' => 11,
+    'REPARTO - COURIER' => 8,
+    'SEGUIMIENTO PROVINCIA - COURIER' => 9,
+    'MOTORIZADO' => 15,
+    'ENTREGADO - CLIENTE' => 10,
+    'ENTREGADO SIN SOBRE - OPE' => 13,
+    'ENTREGADO SIN SOBRE - CLIENTE' => 14
+
     ];
 
     public static $estadosCondicionEnvioCode = [
-        1 => 'POR ATENDER',
-        2 => 'INCOMPLETO',
-        3 => 'PDF',
-        4 => 'BANCARIZACION',
-        5 => 'JEFE_OP',
-        6 => 'COURIER',
-        7 => 'SOBRE_ENVIAR',
-        8 => 'EN_REPARTO',
-        9 => 'SEG_PROVINCIA',
-        10 => 'ENTREGADO',
-        11 => 'JEFE_OP_CONF_INT',
-        12 => 'RECEPCION_COURIER',
-        13 => 'ENTREGADO_SIN_SOBRE',
-        14 => 'CONFIRMACION_SIN_SOBRE',
-        15 => 'MOTORIZADO'
+
+        1 => 'POR ATENDER - OPE',
+        2 =>'EN ATENCION - OPE',
+        3 =>'ATENDIDO - OPE',
+        5 => 'ATENDIDO - JEFE OPE',
+        12 => 'RECEPCION - COURIER',
+        11 => 'CONFIRMACION - COURIER',
+        8 => 'REPARTO - COURIER',
+        9 => 'SEGUIMIENTO PROVINCIA - COURIER',
+        15 => 'MOTORIZADO',
+        10 => 'ENTREGADO - CLIENTE',
+        13 => 'ENTREGADO SIN SOBRE - OPE',
+        14 => 'ENTREGADO SIN SOBRE - CLIENTE'
     ];
 
 
