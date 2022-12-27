@@ -30,16 +30,16 @@ class Pedido extends Model
     /**************
      * CONSTANTES CONDICION ENVIO
      */
-    const POR_ATENDER_PEDIDO = 'POR ATENDER OPE'; // POR ATENDER - OPE
+    const POR_ATENDER_PEDIDO = 'POR ATENDER - OPE'; // POR ATENDER - OPE
     const INCOMPLETO = 'INCOMPLETO';
-    const ATENDIDO_OP = 'ATENDIDO OPE'; // ATENDIDO - OPE
-    const JEFE_OP = 'JEFE_OP'; // JEFE - OPE
+    const ATENDIDO_OP = 'ATENDIDO - OPE'; // ATENDIDO - OPE
+    const JEFE_OP = 'JEFE - OPE'; // JEFE - OPE
     const REPARTO_COURIER = 'REPARTO COURIER';
     const SEG_PROVINCIA = 'SEGUIMIENTO PROVINCIA COURIER';
     const ENTREGADO_CLIENTE = 'ENTREGADO CLIENTE';
-    const JEFE_OP_CONF = 'JEFE_OP_CONF';
+    const JEFE_OP_CONF = 'JEFE CONF - OPE';
     const RECEPCION_COURIER = 'RECEPCION COURIER';
-    const ENTREGADO_SIN_SOBRE = 'ENTREGADO SIN SOBRE OPE';
+    const ENTREGADO_SIN_SOBRE = 'ENTREGADO SIN SOBRE - OPE';
 
     const CONFIRMACION_SIN_SOBRE = 'ENTREGADO SIN SOBRE CLIENTE';
     const MOTORIZADO = 'MOTORIZADO';
@@ -219,6 +219,10 @@ class Pedido extends Model
     public function scopePorAtender($query)
     {
         return $query->where($this->qualifyColumn('condicion_code'), '=', self::POR_ATENDER_INT);
+    }
+    public function scopePoratenderestatus($query)
+    {
+        return $query->whereIn($this->qualifyColumn('condicion_code'), '=', [self::POR_ATENDER_INT,self::EN_PROCESO_ATENCION_INT ]);
     }
 
     public function scopeCurrentUser($query)
