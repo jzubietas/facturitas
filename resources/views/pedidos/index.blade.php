@@ -447,7 +447,10 @@
                             if (row.condicion_code == 4 || row.estado == 0) {
                                 return '<span class="badge badge-danger">ANULADO</span>' //    'ANULADO';
                             }
-                            return '<span class="badge badge-info">'+row.condicion_envio+'</span>';
+                            if (row.pendiente_anulacion == 1) {
+                                return '<span class="badge badge-success">' + '{{\App\Models\Pedido::PENDIENTE_ANULACION }}' + '</span>';
+                            }
+                            return '<span class="badge badge-success" style="background-color: '+row.condicion_envio_color+'!important;">'+row.condicion_envio+'</span>';
                             /*if (row.condicion_envio == 'ANULADO') {
                                 return '<span class="badge badge-info">ANULADO</span>';
                             } else if (row.condicion_envio == 0) {
