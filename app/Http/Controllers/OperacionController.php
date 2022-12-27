@@ -197,10 +197,7 @@ class OperacionController extends Controller
             ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
             ->select(
                 'pedidos.id',
-                DB::raw(" (CASE WHEN pedidos.id<10 THEN concat('PED000',pedidos.id)
-                                    WHEN pedidos.id<100 THEN concat('PED00',pedidos.id)
-                                    WHEN pedidos.id<1000 THEN concat('PED0',pedidos.id)
-                                    ELSE concat('PED',pedidos.id)  end ) as id2 "),
+                'pedidos.correlativo as id2',
                     'u.identificador as users',
                     'dp.codigo as codigos',
                     'dp.nombre_empresa as empresas',
@@ -224,27 +221,7 @@ class OperacionController extends Controller
                 ->where('dp.estado', '1')
                 ->where('pedidos.condicion_code', Pedido::ATENDIDO_INT)
                 ->where('pedidos.envio', 0);
-                /*->groupBy(
-                    'pedidos.id',
-                    'u.identificador',
-                    'dp.codigo',
-                    'dp.nombre_empresa',
-                    'pedidos.condicion',
-                    'pedidos.created_at',
-                    'pedidos.envio',
-                    'pedidos.destino',
-                    'pedidos.condicion_envio',
-                    'dp.envio_doc',
-                    'dp.fecha_envio_doc',
-                    'dp.cant_compro',
-                    'dp.atendido_por',
-                    'u.jefe',
-                    'dp.fecha_envio_doc_fis',
-                    'dp.fecha_recepcion'
-                )
-                ->orderBy('pedidos.created_at', 'DESC');
-                /* ->take('200') */
-                //->get();
+               
         if(Auth::user()->rol == "Operario"){
 
             $asesores = User::whereIN('users.rol', ['Asesor', 'Administrador', 'ASESOR ADMINISTRATIVO'])
@@ -252,11 +229,7 @@ class OperacionController extends Controller
                 ->Where('users.operario', Auth::user()->id)
                 ->select(
                     DB::raw("users.identificador as identificador")
-                )/*->union(
-                    User::where("id","33")
-                        ->select(
-                            DB::raw("users.identificador as identificador")
-                        ) )*/
+                )
                 ->pluck('users.identificador');
 
             $pedidos = $pedidos->WhereIn('u.identificador', $asesores);
@@ -276,11 +249,7 @@ class OperacionController extends Controller
                 ->WhereIn('users.operario', $operarios)
                 ->select(
                     DB::raw("users.identificador as identificador")
-                )/*->union(
-                    User::where("id","33")
-                        ->select(
-                            DB::raw("users.identificador as identificador")
-                        ) )*/
+                )
                 ->pluck('users.identificador');
 
             $pedidos = $pedidos->WhereIn('u.identificador', $asesores);
@@ -289,7 +258,6 @@ class OperacionController extends Controller
         } else {
             $pedidos = $pedidos;
 
-            /*->simplePaginate(1000);*/
         }
         $pedidos = $pedidos->get();
 
