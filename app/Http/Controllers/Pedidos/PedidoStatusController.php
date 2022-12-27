@@ -339,6 +339,8 @@ class PedidoStatusController extends Controller
                     'dp.nombre_empresa as empresas',
                     'dp.total as total',
                     'pedidos.pendiente_anulacion',
+                    'pedidos.condicion_envio',
+                    'pedidos.condicion_envio_code',
                     'pedidos.condicion',
                     'pedidos.condicion_code',
                    DB::raw(" (CASE WHEN pedidos.condicion_code=1 THEN pedidos.created_at
@@ -416,9 +418,10 @@ class PedidoStatusController extends Controller
 
             /*if ($request->get('load_data') == 'por_atender') {
                 $pedidos->whereIn('pedidos.condicion_code', [Pedido::POR_ATENDER_INT, Pedido::EN_PROCESO_ATENCION_INT]);
-            } *//*else*/ {
+            } *//*else*/
+            {
                 $pedidos->where('pedidos.da_confirmar_descarga', '0');
-                $pedidos->whereIn('pedidos.condicion_code', [Pedido::ATENDIDO_INT]);
+                $pedidos->whereIn('pedidos.condicion_envio_code', [Pedido::ATENDIDO_INT]);
             }
 
             return datatables()->query(DB::table($pedidos))
