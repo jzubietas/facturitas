@@ -302,14 +302,6 @@ return [
                     'active' => ['pedidos'],
                 ],
                 [
-                    'text' => 'Estado Pedidos',
-                    'route' => 'pedidos.estados.index',
-                    'can' => 'pedidos.mispedidos',
-                    'icon' => 'fas fa-check-circle',
-                    //'icon' => 'noti-pedidos-atendidos noti-side',
-                    'active' => ['estatus pedido'],
-                ],
-                [
                     'text' => 'Pedidos Por Atender',
                     'route'  => 'pedidos.estados.poratender',
                     'can' => 'pedidos.estados.poratender',
