@@ -71,10 +71,10 @@ class StatusDireccionGrupoModelChange extends Command
     
         $MigracionVariablesDireccionGrupo = [
           
-            10 => 'ENTREGADO_CLIENTE',
-            13 => 'ENTREGADO_SIN_SOBRE_OPE',
-            8 => 'REPARTO_COURIER',
-            9 => 'SEGUIMIENTO_PROVINCIA_COURIER',
+            10 => 'ENTREGADO - CLIENTE',
+            13 => 'ENTREGADO SIN SOBRE - OPE',
+            8 => 'REPARTO - COURIER',
+            9 => 'SEGUIMIENTO PROVINCIA - COURIER',
             
         ];
         
