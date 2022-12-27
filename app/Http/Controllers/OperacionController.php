@@ -220,6 +220,7 @@ class OperacionController extends Controller
                     'dp.nombre_empresa as empresas',
                     'pedidos.condicion',
                     'pedidos.condicion_code',
+                    'pedidos.da_confirmar_descarga',
                     DB::raw('(DATE_FORMAT(pedidos.created_at, "%Y-%m-%d %h:%i:%s")) as fecha'),
                     'pedidos.envio',
                     'pedidos.destino',
@@ -890,6 +891,7 @@ class OperacionController extends Controller
                 'dp.nota',
                 'dp.adjunto',
                 'dp.total',
+
                 'pedidos.condicion as condiciones',
                 'pedidos.envio',
                 'pedidos.condicion_envio',
@@ -1202,6 +1204,7 @@ class OperacionController extends Controller
                 'dp.fecha_envio_doc_fis',
                 'dp.fecha_recepcion',
                 'pedidos.condicion as condiciones',
+                'pedidos.da_confirmar_descarga',
                 'pedidos.created_at as fecha'
             )
             ->where('pedidos.estado', '1')

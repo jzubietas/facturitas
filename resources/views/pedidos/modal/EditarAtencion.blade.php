@@ -10,7 +10,7 @@
         </div>
         {{-- Form::Open(['route' => ['pedidos.atender', $pedido],'enctype'=>'multipart/form-data', 'id'=>'formulario','files'=>true]) --}}
 
-          
+
         <div class="modal-body">
           <p>Detalles del pedido: <strong class="textcode">PED00</strong></p>
         </div>
@@ -21,11 +21,12 @@
                 <div class="form-row">
                   <div class="form-group col-lg-12">
 
-                      
+
 
                       <div class="col-lg-12 col-md-6 col-sm-6 col-xs-6">
                         <form method="POST" id="formulario_adjuntos" name="formulario_adjuntos">
                         <input type="hidden" id="hiddenAtender" name="hiddenAtender">
+                            <input type="hidden" id="conf_descarga" name="conf_descarga">
                           <div class="row">
                             <div class="col-lg-4 col-md-12 col-sm-12 col-xs-12">
                                 <label for="envio_doc">Documento enviado</label>
@@ -44,7 +45,7 @@
                           </div>
                           <div class="row">
                             <div class="col-md-12 col-sm-12 col-xs-12">
-                              
+
                               {{-- <a href="#" class="btn btn-info" id="confirmar_atender">Confirmar</a>--}}
                               <button type="submit" class="btn btn-primary" id="cargar_adjunto">Subir Informacion</button>
                             </div>
@@ -54,11 +55,13 @@
                       </div>
 
                       <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
-                        <h5><b>Archivos adjuntos:</b></h5>
+                        <h6><b>Archivos adjuntos:</b></h6>
                       </div>
-                      <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12" id="listado_adjuntos">
-
-                      </div>
+                      <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12" id="listado_adjuntos"></div>
+                      <div id="sustento_adjunto">
+                          <h5><b>Sustento:</b></h5>
+                          <textarea name="sustento" id="sustento_data" class="form-control" cols="30" rows="5" placeholder="El asesor ya envio los ajuntos hacia el clíente, Ingrese un sustento para validar el envio de estos nuevos adjuntos."></textarea>
+                      </divid>
 
                   </div>
                 </div>
