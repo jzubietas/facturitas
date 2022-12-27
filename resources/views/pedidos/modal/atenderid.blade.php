@@ -45,8 +45,8 @@
 
 
                             <select name="condicion" class="form-control" id="condicion">
-                              <option value="{{\App\Models\Pedido::EN_PROCESO_ATENCION_INT}}">{{\App\Models\Pedido::INCOMPLETO}}</option>
-                              <option value="{{\App\Models\Pedido::ATENDIDO_INT}}" >{{\App\Models\Pedido::ATENDIDO_OP}}</option>
+                              <option value="{{\App\Models\Pedido::EN_PROCESO_ATENCION_INT}}">{{\App\Models\Pedido::EN_ATENCION_OPE}}</option>
+                              <option value="{{\App\Models\Pedido::ATENDIDO_INT}}" >{{\App\Models\Pedido::ATENDIDO_OPE}}</option>
                             </select>
                           </div>
                         </div>
