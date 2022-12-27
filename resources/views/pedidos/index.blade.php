@@ -275,13 +275,17 @@
                 rowCallback: function (row, data, index) {
                     var pedidodiferencia = data.diferencia;
                     //pedidodiferencia=0;
-                    if (pedidodiferencia == null) {
-                        $('td:eq(11)', row).css('background', '#ca3a3a').css('color', '#ffffff').css('text-align', 'center').css('font-weight', 'bold');
-                    } else {
-                        if (pedidodiferencia > 3) {
+                    if (data.condicion_code == 4 || data.estado == 0) {
+                        $('td:eq(11)', row).css('background', '#ff7400').css('color', '#ffffff').css('text-align', 'center').css('font-weight', 'bold');
+                    }else {
+                        if (pedidodiferencia == null) {
                             $('td:eq(11)', row).css('background', '#ca3a3a').css('color', '#ffffff').css('text-align', 'center').css('font-weight', 'bold');
                         } else {
-                            $('td:eq(11)', row).css('background', '#44c24b').css('text-align', 'center').css('font-weight', 'bold');
+                            if (pedidodiferencia > 3) {
+                                $('td:eq(11)', row).css('background', '#ca3a3a').css('color', '#ffffff').css('text-align', 'center').css('font-weight', 'bold');
+                            } else {
+                                $('td:eq(11)', row).css('background', '#44c24b').css('text-align', 'center').css('font-weight', 'bold');
+                            }
                         }
                     }
                 },
@@ -441,7 +445,7 @@
                         name: 'condicion_envio',
                         render: function (data, type, row, meta) {
                             if (row.condicion_code == 4 || row.estado == 0) {
-                                return '<span class="badge badge-info">ANULADO</span>' //    'ANULADO';
+                                return '<span class="badge badge-danger">ANULADO</span>' //    'ANULADO';
                             }
                             return '<span class="badge badge-info">'+row.condicion_envio+'</span>';
                             /*if (row.condicion_envio == 'ANULADO') {
