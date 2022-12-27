@@ -171,7 +171,7 @@ class Pedido extends Model
 
     public function getCondicionEnvioColorAttribute()
     {
-        $condicion_envio = \Str::lower($this->attributes['condicion_envio']);
+        $condicion_envio = \Str::lower($this->condicion_envio??'');
 
         if (\Str::contains($condicion_envio, "ope")) {
             return '#ffc107';
