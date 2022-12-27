@@ -241,6 +241,7 @@
             $('#modal-restaurar').on('show.bs.modal', function (event) {
                 var button = $(event.relatedTarget)
                 var idunico = button.data('restaurar')
+                var idcodigo = button.data('codigo')
                 console.log("unico " + idunico)
                 $("#hiddenIDrestaurar").val(idunico);
                 if (idunico < 10) {
@@ -253,7 +254,7 @@
                     idunico = 'PED' + idunico;
                 }
 
-                $(".textcode").html(idunico);
+                $(".textcode").html(idcodigo);
 
             });
 
