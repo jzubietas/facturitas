@@ -33,9 +33,9 @@
                     <b>{{$data['code']}}</b> <br> {{$data['name']}}
                     <div class="progress">
                         <div class="progress-bar
-                @if($data['progress']<40)
+                @if($data['progress']<50)
                  bg-danger
-                 @elseif($data['progress']<70)
+                 @elseif($data['progress']<80)
                  bg-warning
                   @else
                   bg-success
