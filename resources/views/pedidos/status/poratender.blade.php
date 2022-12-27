@@ -57,6 +57,7 @@
     </div>
 
     @include('operaciones.modal.atenderid')
+    @include('operaciones.modal.veradjuntoid')
 @endsection
 
 @section('css')
@@ -387,6 +388,49 @@
                 $("#hiddenAtender").val(idunico);
 
             });
+
+
+            $('#modal-veradjunto').on('show.bs.modal', function (event) {
+        //cuando abre el form de anular pedido
+        var button = $(event.relatedTarget)
+        var idunico = button.data('adjunto')
+        $(".textcode").html("PED"+idunico);
+
+        //consulta de imagenes
+          $.ajax({
+            type:'POST',
+            url:"{{ route('pedidoobteneradjuntoRequest') }}",
+            data:{"pedido":idunico},
+          }).done(function (data) {
+            //console.log(data.html);
+            console.log(data.cantidad);
+            if(data.cantidad>0)
+            {
+              ////recorrer y poner imagenes en div con router
+              var adjuntos = data.html.split('|');
+              //console.log(adjuntos);
+              var urladjunto="";
+              var datal="";
+              $.each(adjuntos, function( index, value ) {
+                urladjunto = '{{ route("pedidos.descargaradjunto", ":id") }}';
+                urladjunto = urladjunto.replace(':id', value);
+                datal = datal+'<p><a href="'+urladjunto+'">'+value+'</a><p>';
+                //console.log(datal);
+                //console.log( index + ": " + value );
+              });
+              $("#imagenes_adjunto").html(datal)
+              return datal;
+              //console.log(data.html)
+            }else{
+              console.log("sin imagenes");
+            }
+          });
+
+      });
+
+
+
+
         });
     </script>
 @stop
