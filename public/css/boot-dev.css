@@ -26,59 +26,59 @@ body{
 }
 
 .noti-side{
-    background-color: #9cffbf;
+    background-color: #e74c3c;
     height: 16px;
     padding: 0px 4px;
     display: inline-block;
     border-radius: 5px;
     font-size: 11px;
-    color: #2d3a2d;
+    color: #ffffff;
     text-align: center;
     text-transform: initial;
     font-style: initial;
     font-weight: bold;
     position: absolute;
-    right: 4px;
-    /*letter-spacing: 1.5px;*/
+    right: 0px;
+
 }
 
 @keyframes navidad {
-    0%{
-        transform: rotate(35deg);
-    }
-    50%{
-        transform: rotate(50deg);
-    }
-    100%{
-        transform: rotate(35deg);
-    }
+0%{
+    transform: rotate(35deg);
+}
+50%{
+    transform: rotate(50deg);
+}
+100%{
+    transform: rotate(35deg);
+}
 }
 
 @keyframes santa {
-    0%{
-        bottom: -50px;
-    }
-    10%{
-        bottom: -50px;
-    }
-    40%{
-        bottom: -4px;
-    }
-    70%{
-        bottom: -4px;
-    }
+0%{
+    bottom: -50px;
+}
+10%{
+    bottom: -50px;
+}
+40%{
+    bottom: -4px;
+}
+70%{
+    bottom: -4px;
+}
 
-    85%{
-        bottom: -4px;
-    }
+85%{
+    bottom: -4px;
+}
 
-    100%{
-        bottom: -50px;
-    }
+100%{
+    bottom: -50px;
+}
 }
 
 .elevation-4 {
-    box-shadow: black 0px 0px 0px !important;
+box-shadow: black 0px 0px 0px !important;
 }
 
 .main-sidebar .nav-header{
@@ -86,66 +86,66 @@ font-weight: bold;
 }
 
 .badge-success {
-    color: #4a604b !important;
-    background-color: hwb(124deg 69% 13%) !important;
-    padding: 8px !important;
+color: #4a604b !important;
+background-color: hwb(124deg 69% 13%) !important;
+padding: 8px !important;
 }
 
 .badge-danger {
-    color: #ad3939 !important;
-    background-color: #efb7b7 !important;
-    padding: 8px !important;
+color: #ad3939 !important;
+background-color: #efb7b7 !important;
+padding: 8px !important;
 }
 
 .badge-info {
-    color: #35424a !important;
-    background-color: #62becd !important;
-    padding: 8px !important;
+color: #35424a !important;
+background-color: #62becd !important;
+padding: 8px !important;
 }
 
 .badge-warning {
-    color: #765f17 !important;
-    background-color: #fde9ab !important;
-    padding: 8px !important;
+color: #765f17 !important;
+background-color: #fde9ab !important;
+padding: 8px !important;
 }
 
 .badge{
-    margin:2px;
+margin:2px;
 }
 
 
 .bg-center{ background-position: 50%;}
 
 .cnt-shw { box-shadow: 0 5px 15px rgb(0 0 0 / 10%), 0 0 0 rgb(0 0 0 / 8%) inset !important;
-    transition: box-shadow .2s linear, border-color .2s linear, background-color .2s linear !important;}
+transition: box-shadow .2s linear, border-color .2s linear, background-color .2s linear !important;}
 .txt-shw { text-shadow: 0px 2px 16px rgba(0, 0, 0, 0.4);}
 
 .text-light{
-	color:#e8e8e8 !important;
+color:#e8e8e8 !important;
 }
 .text-black{ color:black;}
 
 .font-weight-bold{
-    font-weight:bold !important;
+font-weight:bold !important;
 }
 
 .btn-dev{ margin:4px;}
 
 .btn-option {
 
-    border-radius: 8px;
-    background-color: white !important;
-    box-shadow: #e3e3e3 0px 3px 0px;
-    transition: all 0.2s;
+border-radius: 8px;
+background-color: white !important;
+box-shadow: #e3e3e3 0px 3px 0px;
+transition: all 0.2s;
 }
 
 .form-control input:hover{
-    cursor: pointer !important;
+cursor: pointer !important;
 }
 
 .btn-option:hover{
-    background-color: #e2e6ee !important;
-    box-shadow: #a89eb5 0px 0px 0px;
+background-color: #e2e6ee !important;
+box-shadow: #a89eb5 0px 0px 0px;
 }
 
 
@@ -167,8 +167,8 @@ font-weight: bold;
 .list-horizontal{ padding-left: 0px;}
 
 .list-horizontal li {
-	display: inline-block;
-	margin: 2px;
+display: inline-block;
+margin: 2px;
 }
 
 /* Iconos */

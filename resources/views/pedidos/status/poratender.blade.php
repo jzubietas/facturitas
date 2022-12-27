@@ -18,30 +18,17 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-3">
-            <div class="card card-warning">
-                <div class="card-header">
-                    <h5>PEDIDO POR ATENDER</h5>
-                </div>
-                <div class="card-body">
-                    <h4 class="text-center">
+        <div class="col-md-4 p-16">
+            <div class="row bg-white">
+                <div class="col-lg-8 bg-white p-16"><h5>Total de pedidos por atender</h5></div>
+                <div class="col-lg-4 bg-white p-16">
+                    <h4 class="text-center text-danger">
                         <b>{{$pedidos_por_atender}}</b>
-                    </h4>
-                </div>
+                    </h4></div>
             </div>
         </div>
     </div>
     <div class="card">
-        <div class="card-header">
-            <div class="form-group">
-                <label for="select_status_list">Selecionar estado</label>
-                <select class="form-control" id="select_status_list">
-                    {{--<option value="atendendido">ATENDIDOS</option>--}}
-                    <option value="por_atender">POR ATENDER</option>
-
-                </select>
-            </div>
-        </div>
         <div class="card-body">
             <div class="table-responsive">
                 <table id="tablaPrincipal" class="table table-striped">
