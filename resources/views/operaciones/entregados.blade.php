@@ -62,7 +62,6 @@
             <th scope="col">Fecha de registro</th>
             <th scope="col">Destino</th>
             <th scope="col">Estado</th>
-              <th scope="col">Estado sobre</th>
             <th scope="col">Atendido por</th>
             <th scope="col">Jefe</th>
             <th scope="col">Estado de sobre</th>
@@ -377,7 +376,7 @@
             "visible":true,
           },
           {data: 'destino', name: 'destino',"visible":false },
-          {
+          /*{
               data: 'condicion',
               name: 'condicion',
               render: function ( data, type, row, meta ) {
@@ -395,18 +394,18 @@
                       return  '<span class="badge badge-info">'+data+'</span>' ;
                   }
               }
-          },
+          },*/
             {
-                data: 'condicion_envio_code',
-                name: 'condicion_envio_code',
+                data: 'condicion_envio',
+                name: 'condicion_envio',
                 render: function ( data, type, row, meta ) {
-                    if(row.condicion_envio_code == 13){
-                        return '<span class="badge badge-danger">Sin Sobre</span>'
-                    }else if(row.condicion_envio_code == 5){
-                        return '<span class="badge badge-warning">Con sobre</span>'
-                    }else{
-                        return  '<span class="badge badge-warning">'+ row.condicion_envio_code +'</span>' ;
+                    if (row.pendiente_anulacion == 1) {
+                        return '<span class="badge badge-danger">' + '{{\App\Models\Pedido::PENDIENTE_ANULACION }}' + '</span>';
                     }
+                    if(row.estado==0){
+                        return '<span class="badge badge-danger">'+'{{\App\Models\Pedido::ANULADO }}'+'</span>';
+                    }
+                    return '<span class="badge badge-success" style="background-color: '+row.condicion_envio_color+'!important;">'+row.condicion_envio+'</span>';
                 }
             },
           {data: 'atendido_por', name: 'atendido_por', },

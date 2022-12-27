@@ -168,7 +168,7 @@ class OperacionController extends Controller
             ->addColumn('condicion_envio_color', function ($pedido) {
                 $pedido = new Pedido((array)$pedido);
                 $pedido->forceFill((array)$pedido);
-                $pedido->exists=true;
+                $pedido->exists = true;
                 return $pedido->condicion_envio_color;
             })
             ->addColumn('action', function ($pedido) {
@@ -343,32 +343,28 @@ class OperacionController extends Controller
         $pedidos = Pedido::join('users as u', 'pedidos.user_id', 'u.id')
             ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
             ->select(
-                'pedidos.id',
-                'u.identificador as users',
-                'dp.codigo as codigos',
-                'dp.nombre_empresa as empresas',
-                'pedidos.condicion_envio as condicion',
-                //DB::raw('DATE_FORMAT(pedidos.created_at, "%d/%m/%Y") as fecha'),
-                DB::raw('(DATE_FORMAT(pedidos.created_at, "%Y-%m-%d %h:%i:%s")) as fecha'),
-                'pedidos.envio',
-                'pedidos.destino',
-                'pedidos.condicion_envio',
-                'pedidos.condicion_envio_code',
-                'dp.envio_doc',
-                'dp.fecha_envio_doc',
-                'dp.cant_compro',
-                'dp.atendido_por',
-                'dp.atendido_por_id',
-                DB::raw(" (select u2.name from users u2 where u2.id=u.jefe limit 1) as jefe "),
-                DB::raw(' (select DATE_FORMAT(dp1.fecha_envio_doc_fis, "%d/%m/%Y")  from detalle_pedidos dp1 where dp1.id=dp.id limit 1) as fecha_envio_doc_fis'),
-                'dp.fecha_recepcion',
-                DB::raw("  (select IFNULL(count(b1.pedido_id),0) from direccion_pedidos b1 where b1.pedido_id=pedidos.id limit 1) as envios_lima "),
-                DB::raw("  (select IFNULL(count(b2.pedido_id),0) from gasto_pedidos b2 where b2.pedido_id=pedidos.id limit 1) as envios_provincia "),
-                DB::raw("  (CASE  when ((select IFNULL(count(b1.pedido_id),0) from direccion_pedidos b1 where b1.pedido_id=pedidos.id limit 1)+(select IFNULL(count(b2.pedido_id),0) from gasto_pedidos b2 where b2.pedido_id=pedidos.id limit 1))>0 then '1' else '0' end  )  as revierte "),
-                DB::raw("  (CASE  when pedidos.destino='LIMA' then (select gg.created_at from direccion_pedidos gg where gg.pedido_id=pedidos.id limit 1) " .
-                    "when pedidos.destino='PROVINCIA' then (select g.created_at from gasto_pedidos g where g.pedido_id=pedidos.id limit 1) " .
-                    "else '' end) as fecha_envio_sobre "),
-
+                [
+                    'pedidos.*',
+                    'u.identificador as users',
+                    'dp.codigo as codigos',
+                    'dp.nombre_empresa as empresas',
+                    //DB::raw('DATE_FORMAT(pedidos.created_at, "%d/%m/%Y") as fecha'),
+                    DB::raw('(DATE_FORMAT(pedidos.created_at, "%Y-%m-%d %h:%i:%s")) as fecha'),
+                    'dp.envio_doc',
+                    'dp.fecha_envio_doc',
+                    'dp.cant_compro',
+                    'dp.atendido_por',
+                    'dp.atendido_por_id',
+                    DB::raw(" (select u2.name from users u2 where u2.id=u.jefe limit 1) as jefe "),
+                    DB::raw(' (select DATE_FORMAT(dp1.fecha_envio_doc_fis, "%d/%m/%Y")  from detalle_pedidos dp1 where dp1.id=dp.id limit 1) as fecha_envio_doc_fis'),
+                    'dp.fecha_recepcion',
+                    DB::raw("  (select IFNULL(count(b1.pedido_id),0) from direccion_pedidos b1 where b1.pedido_id=pedidos.id limit 1) as envios_lima "),
+                    DB::raw("  (select IFNULL(count(b2.pedido_id),0) from gasto_pedidos b2 where b2.pedido_id=pedidos.id limit 1) as envios_provincia "),
+                    DB::raw("  (CASE  when ((select IFNULL(count(b1.pedido_id),0) from direccion_pedidos b1 where b1.pedido_id=pedidos.id limit 1)+(select IFNULL(count(b2.pedido_id),0) from gasto_pedidos b2 where b2.pedido_id=pedidos.id limit 1))>0 then '1' else '0' end  )  as revierte "),
+                    DB::raw("  (CASE  when pedidos.destino='LIMA' then (select gg.created_at from direccion_pedidos gg where gg.pedido_id=pedidos.id limit 1) " .
+                        "when pedidos.destino='PROVINCIA' then (select g.created_at from gasto_pedidos g where g.pedido_id=pedidos.id limit 1) " .
+                        "else '' end) as fecha_envio_sobre "),
+                ]
             )
             ->where('pedidos.estado', '1')
             ->where('dp.estado', '1')
@@ -419,13 +415,13 @@ class OperacionController extends Controller
             $pedidos->WhereIn('u.identificador', $asesores);
 
 
-        } else {
-            $pedidos = $pedidos;
         }
-        //$pedidos=$pedidos->get();
-
-        return Datatables::of(DB::table($pedidos))//Datatables::of($pedidos)
+        return Datatables::of(DB::table($pedidos))
         ->addIndexColumn()
+            ->addColumn('condicion_envio_color', function ($pedido) {
+                $p = new Pedido((array)$pedido);
+                return $p->condicion_envio_color;
+            })
             ->addColumn('action', function ($pedido) {
                 $btn = '';
 
@@ -462,32 +458,27 @@ class OperacionController extends Controller
         $pedidos = Pedido::join('users as u', 'pedidos.user_id', 'u.id')
             ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
             ->select(
-                'pedidos.id',
-                'u.identificador as users',
-                'dp.codigo as codigos',
-                'dp.nombre_empresa as empresas',
-                'pedidos.condicion_envio as condicion',
-                //DB::raw('DATE_FORMAT(pedidos.created_at, "%d/%m/%Y") as fecha'),
-                DB::raw('(DATE_FORMAT(pedidos.created_at, "%Y-%m-%d %h:%i:%s")) as fecha'),
-                'pedidos.envio',
-                'pedidos.destino',
-                'pedidos.condicion_envio',
-                'pedidos.condicion_envio_code',
-                'dp.envio_doc',
-                'dp.fecha_envio_doc',
-                'dp.cant_compro',
-                'dp.atendido_por',
-                'dp.atendido_por_id',
-                DB::raw(" (select u2.name from users u2 where u2.id=u.jefe limit 1) as jefe "),
-                DB::raw(' (select DATE_FORMAT(dp1.fecha_envio_doc_fis, "%d/%m/%Y")  from detalle_pedidos dp1 where dp1.id=dp.id limit 1) as fecha_envio_doc_fis'),
-                'dp.fecha_recepcion',
-                DB::raw("  (select IFNULL(count(b1.pedido_id),0) from direccion_pedidos b1 where b1.pedido_id=pedidos.id limit 1) as envios_lima "),
-                DB::raw("  (select IFNULL(count(b2.pedido_id),0) from gasto_pedidos b2 where b2.pedido_id=pedidos.id limit 1) as envios_provincia "),
-                DB::raw("  (CASE  when ((select IFNULL(count(b1.pedido_id),0) from direccion_pedidos b1 where b1.pedido_id=pedidos.id limit 1)+(select IFNULL(count(b2.pedido_id),0) from gasto_pedidos b2 where b2.pedido_id=pedidos.id limit 1))>0 then '1' else '0' end  )  as revierte "),
-                DB::raw("  (CASE  when pedidos.destino='LIMA' then (select gg.created_at from direccion_pedidos gg where gg.pedido_id=pedidos.id limit 1) " .
-                    "when pedidos.destino='PROVINCIA' then (select g.created_at from gasto_pedidos g where g.pedido_id=pedidos.id limit 1) " .
-                    "else '' end) as fecha_envio_sobre "),
-
+                [
+                    'pedidos.*',
+                    'u.identificador as users',
+                    'dp.codigo as codigos',
+                    'dp.nombre_empresa as empresas',
+                    DB::raw('(DATE_FORMAT(pedidos.created_at, "%Y-%m-%d %h:%i:%s")) as fecha'),
+                    'dp.envio_doc',
+                    'dp.fecha_envio_doc',
+                    'dp.cant_compro',
+                    'dp.atendido_por',
+                    'dp.atendido_por_id',
+                    DB::raw(" (select u2.name from users u2 where u2.id=u.jefe limit 1) as jefe "),
+                    DB::raw(' (select DATE_FORMAT(dp1.fecha_envio_doc_fis, "%d/%m/%Y")  from detalle_pedidos dp1 where dp1.id=dp.id limit 1) as fecha_envio_doc_fis'),
+                    'dp.fecha_recepcion',
+                    DB::raw("  (select IFNULL(count(b1.pedido_id),0) from direccion_pedidos b1 where b1.pedido_id=pedidos.id limit 1) as envios_lima "),
+                    DB::raw("  (select IFNULL(count(b2.pedido_id),0) from gasto_pedidos b2 where b2.pedido_id=pedidos.id limit 1) as envios_provincia "),
+                    DB::raw("  (CASE  when ((select IFNULL(count(b1.pedido_id),0) from direccion_pedidos b1 where b1.pedido_id=pedidos.id limit 1)+(select IFNULL(count(b2.pedido_id),0) from gasto_pedidos b2 where b2.pedido_id=pedidos.id limit 1))>0 then '1' else '0' end  )  as revierte "),
+                    DB::raw("  (CASE  when pedidos.destino='LIMA' then (select gg.created_at from direccion_pedidos gg where gg.pedido_id=pedidos.id limit 1) " .
+                        "when pedidos.destino='PROVINCIA' then (select g.created_at from gasto_pedidos g where g.pedido_id=pedidos.id limit 1) " .
+                        "else '' end) as fecha_envio_sobre "),
+                ]
             )
             ->where('pedidos.estado', '1')
             ->where('dp.estado', '1')
@@ -538,13 +529,13 @@ class OperacionController extends Controller
             $pedidos->WhereIn('u.identificador', $asesores);
 
 
-        } else {
-            $pedidos = $pedidos;
         }
-        //$pedidos=$pedidos->get();
-
-        return Datatables::of(DB::table($pedidos))//Datatables::of($pedidos)
-        ->addIndexColumn()
+        return Datatables::of(DB::table($pedidos))
+            ->addIndexColumn()
+            ->addColumn('condicion_envio_color', function ($pedido) {
+                $p = new Pedido((array)$pedido);
+                return $p->condicion_envio_color;
+            })
             ->addColumn('action', function ($pedido) {
                 $btn = '';
 
