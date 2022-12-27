@@ -309,6 +309,20 @@ return [
                     'active' => ['estatus pedido'],
                 ],
                 [
+                    'text' => 'Estado Pedidos Por Atender',
+                    'route'  => 'pedidos.estados.poratender',
+                    'can' => 'pedidos.estados.poratender',
+                    'icon'   => 'noti-pedidos-atendidos noti-side',
+                    'active' => ['estatus pedido'],
+                ],
+                [
+                    'text' => 'Estado Pedidos Atendidos',
+                    'route'  => 'pedidos.estados.atendidos',
+                    'can' => 'pedidos.estados.atendidos',
+                    'icon'   => 'noti-pedidos-atendidos noti-side',
+                    'active' => ['estatus pedido'],
+                ],
+                [
                     'text' => 'Sobres por enviar',
                     'route'  => 'sobres.porenviar',
                     'can' => 'pedidos.pagados',

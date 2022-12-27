@@ -165,6 +165,9 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
 
     Route::get('pedidos/estados', [PedidoStatusController::class,'index'])->name('pedidos.estados.index');
 
+    Route::get('pedidos/estados/porAtender', [PedidoStatusController::class,'PorAtender'])->name('pedidos.estados.poratender');
+    Route::get('pedidos/estados/Atendidos', [PedidoStatusController::class,'Atendidos'])->name('pedidos.estados.atendidos');
+
     Route::post('pedidos.confirm.anulled', [PedidoController::class, 'ConfirmarAnular'])->name('pedidos.confirmar.anular');
     Route::resource('pedidos', PedidoController::class)->names('pedidos');
     Route::post('pedidoss.store', [PedidoController::class, 'pedidosstore'])->name('pedidoss.store');//actualizado para serverside
