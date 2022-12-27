@@ -273,11 +273,12 @@ class PedidoStatusController extends Controller
        
 
             /*if ($request->get('load_data') == 'por_atender') {
-                $pedidos->whereIn('pedidos.condicion_code', [Pedido::POR_ATENDER_INT, Pedido::EN_PROCESO_ATENCION_INT]);
+                
             } *//*else {
                 $pedidos->where('pedidos.da_confirmar_descarga', '0');
                 $pedidos->whereIn('pedidos.condicion_code', [Pedido::ATENDIDO_INT]);
             }*/
+            $pedidos->whereIn('pedidos.condicion_code', [Pedido::POR_ATENDER_INT, Pedido::EN_PROCESO_ATENCION_INT]);
 
             return datatables()->query(DB::table($pedidos))
                 ->addIndexColumn()
