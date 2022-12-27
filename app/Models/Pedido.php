@@ -58,7 +58,7 @@ class Pedido extends Model
     const MOTORIZADO_INT = 15;
     const ENTREGADO_CLIENTE_INT = 10;
     const ENTREGADO_SIN_SOBRE_OPE_INT = 13;
-    const CONFIRMACION_SIN_SOBRE_CLIENTE = 14;
+    const ENTREGADO_SIN_SOBRE_CLIENTE_INT = 14;
 
     /**************
      * FIN CONSTANTES CONDICION ENVIO NUMERICO

@@ -492,7 +492,7 @@ class OperacionController extends Controller
             ->where('pedidos.estado', '1')
             ->where('dp.estado', '1')
 
-            ->whereIn('pedidos.condicion_envio_code', [Pedido::COURIER_INT, Pedido::SOBRE_ENVIAR_INT,Pedido::REPARTO_COURIER_INT,Pedido::SEGUIMIENTO_PROVINCIA_COURIER_INT, Pedido::ENTREGADO_CLIENTE_INT, Pedido::CONFIRMACION_COURIER_INT,Pedido::RECEPCION_COURIER_INT,Pedido::ENTREGADO_SIN_SOBRE_OPE_INT, Pedido::CONFIRMACION_SIN_SOBRE_CLIENTE]);
+            ->whereIn('pedidos.condicion_envio_code', [Pedido::COURIER_INT, Pedido::SOBRE_ENVIAR_INT,Pedido::REPARTO_COURIER_INT,Pedido::SEGUIMIENTO_PROVINCIA_COURIER_INT, Pedido::ENTREGADO_CLIENTE_INT, Pedido::CONFIRMACION_COURIER_INT,Pedido::RECEPCION_COURIER_INT,Pedido::ENTREGADO_SIN_SOBRE_OPE_INT, Pedido::ENTREGADO_SIN_SOBRE_CLIENTE_INT]);
             //->whereIn('pedidos.condicion_envio_code', [Pedido::JEFE_OP_CONF_INT],[Pedido::COURIER_INT], [Pedido::EN_REPARTO_INT],[Pedido::SOBRE_ENVIAR_INT])
 
         //->whereIn('pedidos.envio', ['0'])
