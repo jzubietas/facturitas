@@ -387,7 +387,7 @@
               }else{
                 if(data>0)
                 {
-                  data = '<a href="" data-target="#modal-veradjunto" data-adjunto='+row.id+' data-codigo='+row.codigo+' data-toggle="modal" ><button class="btn btn-primary btn-sm"><i class="fas fa-eye"></i> Ver</button></a>';
+                  data = '<a href="" data-target="#modal-veradjunto" data-adjunto='+row.id+' data-codigo='+row.codigos+' data-toggle="modal" ><button class="btn btn-primary btn-sm"><i class="fas fa-eye"></i> Ver</button></a>';
                   return data;
                 }else{
                   return '';
