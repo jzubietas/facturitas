@@ -48,7 +48,7 @@ class PagerutaenvioLimaSinasignar extends Export implements WithEvents,WithColum
 
         $pedidos_lima = DireccionGrupo::join('direccion_envios as de','direccion_grupos.id','de.direcciongrupo')
             ->join('clientes as c', 'c.id', 'de.cliente_id')
-            
+
             ->join('users as u', 'u.id', 'c.user_id')
             ->where('direccion_grupos.estado','1')
             ->where(function($query){
@@ -56,7 +56,7 @@ class PagerutaenvioLimaSinasignar extends Export implements WithEvents,WithColum
             })
             ->where('direccion_grupos.destino','LIMA')
             ->where(DB::raw('DATE(direccion_grupos.created_at)'), self::$fecharuta)
-            ->whereNotIn('direccion_grupos.condicion_envio_code',[Pedido::ENTREGADO_SIN_SOBRE_INT,Pedido::CONFIRMACION_SIN_SOBRE_INT])
+            ->whereNotIn('direccion_grupos.condicion_envio_code',[Pedido::ENTREGADO_SIN_SOBRE_OPE_INT,Pedido::CONFIRMACION_SIN_SOBRE_CLIENTE])
             ->select(
                 'c.celular as correlativo',
                 'u.identificador as identificador',
@@ -90,7 +90,7 @@ class PagerutaenvioLimaSinasignar extends Export implements WithEvents,WithColum
             ,"codigos"=>"CODIGO"
             ,"producto"=>"PRODUCTO"
             ,"cantidad"=>"CANTIDAD"
-            
+
             ,"direccion"=>"DIRECCION DE ENTREGA"
             ,"referencia"=>"REFERENCIA"
             ,"distrito"=>"DISTRITO"
@@ -198,7 +198,7 @@ class PagerutaenvioLimaSinasignar extends Export implements WithEvents,WithColum
         $event->sheet->styleCells('A4',['fill' => ['fillType' => Fill::FILL_SOLID,'color' => ['rgb' => 'ff0000']]]);
         $event->sheet->styleCells('B4',['fill' => ['fillType' => Fill::FILL_SOLID,'color' => ['rgb' => 'EF7D31']]]);
         $event->sheet->styleCells('C4:D4',['fill' => ['fillType' => Fill::FILL_SOLID,'color' => ['rgb' => 'ffeb00']]]);
-        
+
         $event->sheet->styleCells('E4:I4',['fill' => ['fillType' => Fill::FILL_SOLID,'color' => ['rgb' => 'cde5f5']]]);
         $event->sheet->styleCells('J4',['fill' => ['fillType' => Fill::FILL_SOLID,'color' => ['rgb' => 'ffeb00']]]);
         $event->sheet->styleCells('K4',['fill' => ['fillType' => Fill::FILL_SOLID,'color' => ['rgb' => 'cde5f5']]]);

@@ -1009,7 +1009,7 @@ class PedidoController extends Controller
                 'condicion_int' => '1',
                 'pago' => '0',
                 'envio' => '0',
-                'condicion_envio' => Pedido::POR_ATENDER_PEDIDO,
+                'condicion_envio' => Pedido::POR_ATENDER_OPE,
                 'condicion_envio_code' => Pedido::POR_ATENDER_INT,
                 'estado' => '1',
                 'codigo' => $codigo,

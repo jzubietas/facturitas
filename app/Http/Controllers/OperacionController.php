@@ -68,7 +68,7 @@ class OperacionController extends Controller
             "ATENDIDO" => 'ATENDIDO'
         ];
 
-        PedidoMovimientoEstado::where('condicion_envio_code',Pedido::POR_ATENDER_PEDIDO_INT)->update([
+        PedidoMovimientoEstado::where('condicion_envio_code',Pedido::POR_ATENDER_OPE_INT)->update([
             'notificado' => 1,
         ]);
 
@@ -373,7 +373,7 @@ class OperacionController extends Controller
                 ->where('pedidos.estado', '1')
                 ->where('dp.estado', '1')
                 ->where('pedidos.condicion_code', Pedido::ATENDIDO_INT)
-                ->whereIn('pedidos.condicion_envio_code', [Pedido::JEFE_OP_INT, Pedido::ENTREGADO_SIN_SOBRE_INT]);
+                ->whereIn('pedidos.condicion_envio_code', [Pedido::ATENDIDO_JEFE_OPE_INT, Pedido::ENTREGADO_SIN_SOBRE_OPE_INT]);
 
                 //->whereIn('pedidos.envio', ['0'])
                 //->whereBetween( 'pedidos.created_at', [$min, $max]);
@@ -492,7 +492,7 @@ class OperacionController extends Controller
             ->where('pedidos.estado', '1')
             ->where('dp.estado', '1')
 
-            ->whereIn('pedidos.condicion_envio_code', [Pedido::COURIER_INT, Pedido::SOBRE_ENVIAR_INT,Pedido::REPARTO_COURIER_INT,Pedido::SEG_PROVINCIA_INT, Pedido::ENTREGADO_CLIENTE_INT, Pedido::JEFE_OP_CONF_INT,Pedido::RECEPCION_COURIER_INT,Pedido::ENTREGADO_SIN_SOBRE_INT, Pedido::CONFIRMACION_SIN_SOBRE_INT]);
+            ->whereIn('pedidos.condicion_envio_code', [Pedido::COURIER_INT, Pedido::SOBRE_ENVIAR_INT,Pedido::REPARTO_COURIER_INT,Pedido::SEGUIMIENTO_PROVINCIA_COURIER_INT, Pedido::ENTREGADO_CLIENTE_INT, Pedido::CONFIRMACION_COURIER_INT,Pedido::RECEPCION_COURIER_INT,Pedido::ENTREGADO_SIN_SOBRE_OPE_INT, Pedido::CONFIRMACION_SIN_SOBRE_CLIENTE]);
             //->whereIn('pedidos.condicion_envio_code', [Pedido::JEFE_OP_CONF_INT],[Pedido::COURIER_INT], [Pedido::EN_REPARTO_INT],[Pedido::SOBRE_ENVIAR_INT])
 
         //->whereIn('pedidos.envio', ['0'])
@@ -1251,8 +1251,8 @@ class OperacionController extends Controller
 
         $pedido->update([
             'envio' => '0',
-            'condicion_envio'=>Pedido::ATENDIDO_OP,
-            'condicion_envio_code'=>Pedido::ATENDIDO_OP_INT,
+            'condicion_envio'=>Pedido::ATENDIDO_OPE,
+            'condicion_envio_code'=>Pedido::ATENDIDO_OPE_INT,
             'modificador' => 'USER'.Auth::user()->id
         ]);
 
@@ -1260,7 +1260,7 @@ class OperacionController extends Controller
 
         PedidoMovimientoEstado::create([
             'pedido' => $request->hiddenRevertirpedido,
-            'condicion_envio_code' => Pedido::ATENDIDO_OP_INT,
+            'condicion_envio_code' => Pedido::ATENDIDO_OPE_INT,
             'notificado' => 0
         ]);
 
