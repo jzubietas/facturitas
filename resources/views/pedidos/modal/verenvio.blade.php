@@ -10,7 +10,7 @@
         </div>
         {{ Form::Open(['route' => ['envios.enviar', $pedido],'enctype'=>'multipart/form-data', 'id'=>'formulario','files'=>true]) }}
         <div class="modal-body">
-          {{-- <p>Complete los siguientes datos para pasar a estado <strong>ATENDIDO</strong> el pedido: <strong>PED00{{ $pedido->id }}</strong></p> --}}
+          
         </div>
         <div style="margin: 10px">
           <div class="card">

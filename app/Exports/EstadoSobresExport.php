@@ -27,7 +27,7 @@ class EstadoSobresExport implements FromView, ShouldAutoSize
         $pedidos = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')
                 ->join('users as u', 'pedidos.user_id', 'u.id')
                 ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
-                
+
                 ->select(
                     'pedidos.id',
                     'pedidos.cliente_id',
@@ -60,10 +60,10 @@ class EstadoSobresExport implements FromView, ShouldAutoSize
                 )
                 ->where('pedidos.estado', '1')
                 //->whereIn('pedidos.envio', [Pedido::ENVIO_CONFIRMAR_RECEPCION,Pedido::ENVIO_RECIBIDO]) // ENVIADO CONFIRMAR RECEPCION Y ENVIADO RECIBIDO
-                ->whereIn('pedidos.condicion_envio_code', [Pedido::JEFE_OP_CONF_INT]) // ENVIADO CONFIRMAR RECEPCION Y ENVIADO RECIBIDO
-              
+                ->whereIn('pedidos.condicion_envio_code', [Pedido::CONFIRMACION_COURIER_INT]) // ENVIADO CONFIRMAR RECEPCION Y ENVIADO RECIBIDO
+
                 ->where('dp.estado', '1')->get();
-       
+
 
         $this->pedidosLima = $pedidos;
         return $this;
@@ -129,7 +129,7 @@ class EstadoSobresExport implements FromView, ShouldAutoSize
     public function view(): View {
         return view('envios.excel.sobresporenviar', [
             'pedidosLima'=> $this->pedidosLima,
-            
+
         ]);
     }
 

@@ -270,12 +270,12 @@
                                 return '<span class="badge badge-warning border border-danger">' + '{{\App\Models\Pedido::POR_ATENDER }}' + '</span>';
                             } else if (row.condicion_envio_code == {{\App\Models\Pedido::EN_PROCESO_ATENCION_INT }}) {
                                 return '<span class="badge badge-warning border border-success">' + '{{\App\Models\Pedido::EN_PROCESO_ATENCION }}' + '</span>';
-                            } else if (row.condicion_envio_code == {{\App\Models\Pedido::ATENDIDO_OP_INT}}) {
-                                return '<span class="badge badge-success">' + '{{\App\Models\Pedido::ATENDIDO_OP }}' + '</span>';
+                            } else if (row.condicion_envio_code == {{\App\Models\Pedido::ATENDIDO_OPE_INT}}) {
+                                return '<span class="badge badge-success">' + '{{\App\Models\Pedido::ATENDIDO_OPE }}' + '</span>';
                             } else if (row.condicion_envio_code == {{\App\Models\Pedido::ANULADO_INT}}) {
                                 return '<span class="badge badge-danger">' + '{{\App\Models\Pedido::ANULADO }}' + '</span>';
                             } else {
-                                return '<span class="badge badge-info">' +row.condicion_envio + '</span>';
+                                return '<span class="badge badge-info">' + row.condicion_envio + '</span>';
                             }
                         }
                     },

@@ -539,7 +539,7 @@ class ClienteController extends Controller
     public function clientedeasesor(Request $request)
     {
         $mirol = Auth::user()->rol;
-     
+
 
         $html = '<option value="">' . trans('---- SELECCIONE CLIENTE ----') . '</option>';
 
@@ -722,7 +722,7 @@ class ClienteController extends Controller
                 ->where('dp.estado', '1')
                 //->where('pedidos.envio', '1')
                 //->where('pedidos.condicion_envio', 1)
-                ->whereIn('pedidos.condicion_envio_code', [Pedido::JEFE_OP_INT,Pedido::JEFE_OP_CONF_INT,Pedido::RECEPCION_COURIER_INT]);
+                ->whereIn('pedidos.condicion_envio_code', [Pedido::ATENDIDO_JEFE_OPE_INT,Pedido::CONFIRMACION_COURIER_INT,Pedido::RECEPCION_COURIER_INT]);
                 //->whereIn('pedidos.envio', [Pedido::ENVIO_CONFIRMAR_RECEPCION, Pedido::ENVIO_RECIBIDO]);
             //->get();
 

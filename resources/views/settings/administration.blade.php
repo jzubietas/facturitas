@@ -35,7 +35,59 @@
                 </div>
             </div>
         @endif
-        <div class="col-md-8">
+
+        <div class="col-8">
+            
+            <div class="card">
+                <div class="card-header">
+                    <h3>Activar al cliente por tiempo</h3>
+                </div>
+                <div class="card-body">
+                    <div class="card-body border border-secondary rounded">
+
+                        <div class="form-row">
+
+                            <div class="form-group col-lg-6">
+                                {!! Form::label('user_id_tiempo', 'Asesor*') !!} &nbsp; &nbsp; &nbsp; 
+
+                                <select name="user_id_tiempo" class="border form-control border-secondary" id="user_id_tiempo" data-live-search="true" >
+                                    <option value="">---- SELECCIONE ASESOR ----</option>                  
+                                </select>          
+
+                            </div>
+
+                            <div class="form-group col-lg-6">
+                                {!! Form::label('cliente_id_tiempo', 'Cliente*') !!} &nbsp; &nbsp; &nbsp; 
+
+                                <select name="cliente_id_tiempo" class="border form-control border-secondary" id="cliente_id_tiempo" data-live-search="true" >
+                                    <option value="">---- SELECCIONE CLIENTE ----</option>                  
+                                </select>          
+
+                            </div>
+
+                            <div class="form-group col-lg-6">
+                                {!! Form::label('pcantidad_pedido', 'Cantidad por pedidos (unidad)') !!}
+                                <input type="text" name="pcantidad_pedido" id="pcantidad_pedido" step="0.01" min="0" class="form-control number" placeholder="Cantidad por pedidos...">
+
+                            </div>
+
+                            <div class="form-group col-lg-6">
+                                {!! Form::label('pcantidad_tiempo', 'Tiempo (min)') !!}
+                                <input type="text" name="pcantidad_tiempo" id="pcantidad_tiempo" step="0.01" min="0" class="form-control number" placeholder="Cantidad por tiempo...">
+
+                            </div>
+
+                            <button type="button" id="activar_tiempo" class="btn btn-info btn-sm" >Establecer</button>
+
+                        </div>
+            
+
+                    </div> 
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-12">
             <div class="card">
                 <div class="card-header">
                     <h3>
@@ -103,15 +155,70 @@
                 </div>
             </div>
         </div>
+
+        
     </div>
+
 @endsection
 @section('js')
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
     <script>
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
         });
+
+        //$('#modal-activartiempo').on('show.bs.modal', function (event) {
+               
+            $.ajax({
+                url: "{{ route('asesorcombo') }}",
+                method: 'POST',
+                success: function (data) {
+                    $('#user_id_tiempo').html(data.html);
+                    $("#user_id_tiempo").selectpicker("refresh").trigger("change");
+                }
+            });
+
+        //});
+
+        $( document ).ready(function() {
+
+            console.log( "ready!" );
+            
+        });
+
+        $(document).on("change", "#user_id_tiempo", function () {
+            let userid = $(this).val();
+            $.ajax({
+                url: "{{ route('cargar.clientedeudaparaactivar') }}?user_id=" + userid,
+                method: 'GET',
+                success: function (data) {
+                    $('#cliente_id_tiempo').html(data.html);
+                    $("#cliente_id_tiempo").selectpicker("refresh");
+                }
+            });
+        });
+
+        $(document).on("submit", "#formulariotiempo", function (evento) {
+            evento.preventDefault();
+
+            var formData = $("#formulariotiempo").serialize();
+            $.ajax({
+                type: 'POST',
+                url: "{{ route('pedidostiempo') }}",
+                data: formData,
+            }).done(function (data) {
+                Swal.fire(
+                    'Activacion temporal realizada',
+                    '',
+                    'success'
+                )
+                $("#modal-activartiempo").modal("hide");
+                $("#user_id").trigger("change");
+            });
+        });
+
         $("#pedido_change_password").click(function () {
             var password = $("#pedido_password").val();
             if (!password) {

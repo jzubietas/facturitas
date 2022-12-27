@@ -33,7 +33,7 @@ class PagerutaenvioLimaNorte  extends PageRutasEnvioLima
             ->join('users as u', 'u.id', 'c.user_id')
             ->where('direccion_grupos.estado','1')
             ->where('direccion_grupos.distribucion','NORTE')
-            ->whereNotIn('direccion_grupos.condicion_envio_code',[Pedido::ENTREGADO_SIN_SOBRE_INT,Pedido::CONFIRMACION_SIN_SOBRE_INT])
+            ->whereNotIn('direccion_grupos.condicion_envio_code',[Pedido::ENTREGADO_SIN_SOBRE_OPE_INT,Pedido::CONFIRMACION_SIN_SOBRE_CLIENTE])
             /*->where(function($query){
                 $query->where('direccion_grupos.distribucion','=','')->orWhereNull('direccion_grupos.distribucion');
             })*/

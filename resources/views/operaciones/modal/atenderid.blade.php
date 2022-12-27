@@ -47,12 +47,9 @@
                           <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
                             {!! Form::label('condicion', 'Estado') !!}
 
-
                             <select name="condicion" class="form-control" id="condicion">
-
-                              <option value="{{\App\Models\Pedido::EN_PROCESO_ATENCION_INT}}">INCOMPLETO</option>
-                              <option value="{{\App\Models\Pedido::ATENDIDO_INT}}" >ATENDIDO OPE</option>
-
+                              <option value="{{\App\Models\Pedido::EN_PROCESO_ATENCION_INT}}">{{\App\Models\Pedido::EN_ATENCION_OPE}}</option>
+                              <option value="{{\App\Models\Pedido::ATENDIDO_INT}}" >{{\App\Models\Pedido::ATENDIDO_OPE}}</option>
                             </select>
                           </div>
                         </div>

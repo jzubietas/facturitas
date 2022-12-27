@@ -10,7 +10,7 @@
         </div>
         {{ Form::Open(['route' => ['pedidos.atender', $pedido],'enctype'=>'multipart/form-data', 'id'=>'formulario','files'=>true]) }}
         <div class="modal-body">
-          <p>Complete los siguientes datos para pasar a estado <strong>ATENDIDO</strong> el pedido: <strong>PED00{{ $pedido->id }}</strong></p>
+          <p>Complete los siguientes datos para pasar a estado <strong>{{\App\Models\Pedido::ATENDIDO_OP}}</strong> el pedido: <strong>PED00{{ $pedido->id }}</strong></p>
         </div>
         <div style="margin: 10px">
           <div class="card">
@@ -65,8 +65,8 @@
                             {!! Form::select('pcondicion', $condiciones, $pedido->condicion, ['class' => 'form-control selectpicker border border-secondary', 'id'=>'pcondicion','data-live-search' => 'true', 'placeholder' => '---- SELECCIONE ----']) !!} --}}
                             <select name="condicion" class="form-control" id="condicion">
                               <!-- <option value="1"  {{ ($pedido->condicion == "1" ? "selected" : "") }}>POR ATENDER</option> -->
-                              <option value="2" {{ ($pedido->condicion == "2" ? "selected" : "") }}>EN PROCESO ATENCION</option>
-                              <option value="3" {{ ($pedido->condicion == "3" ? "selected" : "") }}>ATENDIDO</option>
+                              <option value="2" {{ ($pedido->condicion == "2" ? "selected" : "") }}>{{\App\Models\Pedido::EN_ATENCION_OPE}}</option>
+                              <option value="3" {{ ($pedido->condicion == "3" ? "selected" : "") }}>{{\App\Models\Pedido::ATENDIDO_OPE}}</option>
                             </select>
                           </div>
                         </div>
