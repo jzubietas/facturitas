@@ -320,7 +320,8 @@
 
       $('#tablaPrincipal').DataTable({
         processing: true,
-        serverSide: true,
+        stateSave:true,
+		serverSide: true,
         searching: true,
         "order": [[ 0, "desc" ]],
         ajax: "{{ route('envios.enrepartotabla') }}",

@@ -742,7 +742,8 @@ ul.form-stepper li a .form-stepper-circle {
 
     $('#tablaPrincipal').DataTable({
         processing: true,
-        serverSide: true,
+        stateSave:true,
+		serverSide: true,
         searching: true,
         "order": [[ 0, "desc" ]],
         ajax: {

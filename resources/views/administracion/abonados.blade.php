@@ -201,6 +201,7 @@
 
     $('#tablaPrincipal').DataTable({
         processing: true,
+        stateSave:true,
         serverSide: true,
         searching: true,
         "order": [[ 0, "asc" ]],

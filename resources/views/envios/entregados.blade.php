@@ -278,6 +278,7 @@
 
       $('#tablaPrincipal').DataTable({
         processing: true,
+        stateSave:true,
         serverSide: true,
         searching: true,
         "order": [[ 5, "desc" ]],
