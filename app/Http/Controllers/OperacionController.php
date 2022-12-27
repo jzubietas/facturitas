@@ -103,6 +103,8 @@ class OperacionController extends Controller
                 'dp.fecha_envio_doc_fis',
                 'dp.fecha_recepcion',
                 'dp.tipo_banca',
+                'pedidos.condicion_envio',
+                'pedidos.condicion_envio_code',
                 DB::raw(" ( select count(ip.id) from imagen_pedidos ip inner join pedidos pedido on pedido.id=ip.pedido_id and pedido.id=pedidos.id where ip.estado=1 and ip.adjunto not in ('logo_facturas.png') ) as imagenes ")
             )
             ->where('pedidos.estado', '1')

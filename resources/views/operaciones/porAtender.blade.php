@@ -338,7 +338,7 @@
         stateSave:true,
 		serverSide: true,
         searching: true,
-        "order": [[ 0, "desc" ]],
+        //"order": [[ 0, "desc" ]],
         ajax: "{{ route('operaciones.poratendertabla') }}",
         createdRow: function( row, data, dataIndex){
 
