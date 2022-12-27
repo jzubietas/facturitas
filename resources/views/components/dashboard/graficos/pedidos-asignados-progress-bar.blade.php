@@ -7,48 +7,19 @@
             @if(data_get($general,'enabled'))
                 <li class="list-group-item" style=" background: #d5d5d5; ">
                     <b> {{data_get($general,'name')}}</b>
-                    <div class="progress">
-                        <div class="progress-bar
-                @if(data_get($general,'progress')<50)
-                 bg-danger
-                 @elseif( data_get($general,'progress')<80)
-                 bg-warning
-                  @else
-                  bg-success
-                  @endif
-                 "
-                             role="progressbar"
-                             style="width: {{ data_get($general,'progress')}}%"
-                             aria-valuenow="{{ data_get($general,'progress')}}"
-                             aria-valuemin="0"
-                             aria-valuemax="100">
-                            {{ data_get($general,'progress')}}% - {{data_get($general,'pagados')}}
-                            /{{data_get($general,'activos')}}
-                        </div>
-                    </div>
+                    <x-bs-progressbar :progress="data_get($general,'progress')">
+                        {{ data_get($general,'progress')}}% - {{data_get($general,'pagados')}}
+                        /{{data_get($general,'activos')}}
+                    </x-bs-progressbar>
                 </li>
             @endif
             @foreach($progressData as $data)
                 <li class="list-group-item">
                     <b>{{$data['code']}}</b> <br> {{$data['name']}}
-                    <div class="progress">
-                        <div class="progress-bar
-                @if($data['progress']<50)
-                 bg-danger
-                 @elseif($data['progress']<80)
-                 bg-warning
-                  @else
-                  bg-success
-                  @endif
-                 "
-                             role="progressbar"
-                             style="width: {{$data['progress']}}%"
-                             aria-valuenow="{{$data['progress']}}"
-                             aria-valuemin="0"
-                             aria-valuemax="100">
-                            {{$data['progress']}}% - {{$data['pagados']}}/{{$data['activos']}}
-                        </div>
-                    </div>
+
+                    <x-bs-progressbar :progress="data_get($data,'progress')">
+                        {{$data['progress']}}% - {{$data['pagados']}}/{{$data['activos']}}
+                    </x-bs-progressbar>
                     <span>
                                     % - Pagados / Asignados
                                 </span>

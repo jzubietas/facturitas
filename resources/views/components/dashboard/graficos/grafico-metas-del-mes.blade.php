@@ -16,46 +16,16 @@
                                         </li>
                                         <li class="list-group-item" style=" background-color: #b7b7b7; ">
                                             <b>GENERAL </b>
-                                            <div class="progress">
-                                                <div class="progress-bar
-                @if($data_noviembre->progress<50)
-                 bg-danger
-                 @elseif($data_noviembre->progress<80)
-                 bg-warning
-                  @else
-                  bg-success
-                  @endif
-                 "
-                                                     role="progressbar"
-                                                     style="width: {{$data_noviembre->progress}}%"
-                                                     aria-valuenow="{{$data_noviembre->progress}}"
-                                                     aria-valuemin="0"
-                                                     aria-valuemax="100">
-                                                    <span> <b>  {{$data_noviembre->progress}}%</b> - {{$data_noviembre->current}}/{{$data_noviembre->total}}</span>
-                                                </div>
-                                            </div>
+                                            <x-bs-progressbar :progress="$data_noviembre->progress">
+                                                <span> <b>  {{$data_noviembre->progress}}%</b> - {{$data_noviembre->current}}/{{$data_noviembre->total}}</span>
+                                            </x-bs-progressbar>
                                         </li>
                                         @foreach($novResult as $data)
                                             <li class="list-group-item">
                                                 <b>{{$data['code']}}</b> <br> {{$data['name']}}
-                                                <div class="progress">
-                                                    <div class="progress-bar
-                @if($data['progress']<50)
-                 bg-danger
-                 @elseif($data['progress']<80)
-                 bg-warning
-                  @else
-                  bg-success
-                  @endif
-                 "
-                                                         role="progressbar"
-                                                         style="width: {{$data['progress']}}%"
-                                                         aria-valuenow="{{$data['progress']}}"
-                                                         aria-valuemin="0"
-                                                         aria-valuemax="100">
-                                                        <span> <b>{{$data['progress']}}%</b> - {{$data['current']}}/{{$data['total']}}</span>
-                                                    </div>
-                                                </div>
+                                                <x-bs-progressbar :progress="$data['progress']">
+                                                    <span> <b>{{$data['progress']}}%</b> - {{$data['current']}}/{{$data['total']}}</span>
+                                                </x-bs-progressbar>
                                                 <span>
                                     % - Asignados / Meta
                                 </span>
@@ -70,46 +40,16 @@
                                         </li>
                                         <li class="list-group-item" style=" background-color: #b7b7b7; ">
                                             <b>GENERAL </b>
-                                            <div class="progress">
-                                                <div class="progress-bar
-                @if($data_diciembre->progress<50)
-                 bg-danger
-                 @elseif($data_diciembre->progress<80)
-                 bg-warning
-                  @else
-                  bg-success
-                  @endif
-                 "
-                                                     role="progressbar"
-                                                     style="width: {{$data_diciembre->progress}}%"
-                                                     aria-valuenow="{{$data_diciembre->progress}}"
-                                                     aria-valuemin="0"
-                                                     aria-valuemax="100">
-                                                    <span> <b>{{$data_diciembre->progress}}%</b> - {{$data_diciembre->total}}/{{$data_diciembre->meta}}</span>
-                                                </div>
-                                            </div>
+                                            <x-bs-progressbar :progress="$data_diciembre->progress">
+                                                <span> <b>{{$data_diciembre->progress}}%</b> - {{$data_diciembre->total}}/{{$data_diciembre->meta}}</span>
+                                            </x-bs-progressbar>
                                         </li>
                                         @foreach($dicResult as $data)
                                             <li class="list-group-item">
                                                 <b>{{$data['code']}}</b> <br> {{$data['name']}}
-                                                <div class="progress">
-                                                    <div class="progress-bar
-                @if($data['progress']<50)
-                 bg-danger
-                 @elseif($data['progress']<80)
-                 bg-warning
-                  @else
-                  bg-success
-                  @endif
-                 "
-                                                         role="progressbar"
-                                                         style="width: {{$data['progress']}}%"
-                                                         aria-valuenow="{{$data['progress']}}"
-                                                         aria-valuemin="0"
-                                                         aria-valuemax="100">
-                                                        <span><b>{{$data['progress']}}%</b> - {{$data['total']}}/{{$data['meta']}}</span>
-                                                    </div>
-                                                </div>
+                                                <x-bs-progressbar :progress="$data['progress']">
+                                                    <span><b>{{$data['progress']}}%</b> - {{$data['total']}}/{{$data['meta']}}</span>
+                                                </x-bs-progressbar>
                                                 <span>
                                     % - Asignados / Meta
                                 </span>
