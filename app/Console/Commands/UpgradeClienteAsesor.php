@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Models\Cliente;
+use App\Models\Pedido;
 use App\Models\Ruc;
 use App\Models\User;
 use Illuminate\Console\Command;
@@ -40,8 +41,10 @@ class UpgradeClienteAsesor extends Command
      */
     public function handle()
     {
+
         $userGroups = User::query()->where('rol', '=', User::ROL_ASESOR)->get()->groupBy('identificador')->values();
         $data = [];
+
         foreach ($userGroups as $users) {
             $users = collect($users)->sortBy('identificador');
             $data[] = [
@@ -49,6 +52,7 @@ class UpgradeClienteAsesor extends Command
                 "remplazar_por" => $users->pluck('id')->first(),
             ];
         }
+
         foreach ($data as $item) {
             Cliente::query()->whereIn('user_id',$item['ids']->all())->update([
                 'user_id'=>$item['remplazar_por']
@@ -56,7 +60,11 @@ class UpgradeClienteAsesor extends Command
             Ruc::query()->whereIn('user_id',$item['ids']->all())->update([
                 'user_id'=>$item['remplazar_por']
             ]);
+            Pedido::query()->whereIn('user_id',$item['ids']->all())->update([
+                'user_id'=>$item['remplazar_por']
+            ]);
         }
+
         $this->table([
             "user_id_nuevo",
             "remplazar_por",
