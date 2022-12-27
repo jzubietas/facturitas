@@ -196,16 +196,6 @@
         var fd = new FormData();
       });
 
-      /*$('#modal-verenvio').on('show.bs.modal', function (event) {
-        var button = $(event.relatedTarget)
-        var idunico = button.data('verenvio')
-        $("#modal-verenvio .textcode").html("PED"+idunico);
-        $("#hiddenVerenvio").val(idunico);
-        $("#fecha_envio_doc_fis").val("");
-        $("#fecha_recepcion").val("");
-        $("#condicion").val("");
-      });*/
-
       $('#modal-editenviar').on('show.bs.modal', function (event) {
         var button = $(event.relatedTarget)
         var idunico = button.data('editenviar')
