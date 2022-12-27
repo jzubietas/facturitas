@@ -299,7 +299,7 @@
               $.each(adjuntos, function( index, value ) {
                 urladjunto = '{{ route("pedidos.descargaradjunto", ":id") }}';
                 urladjunto = urladjunto.replace(':id', value);
-                datal = datal+'<p><a href="'+urladjunto+'">'+value+'</a><p>';
+                datal = datal+'<p><a href="'+urladjunto+'"><i class="fa fa-file mr-2"></i>'+value+'</a><p>';
                 //console.log(datal);
                 //console.log( index + ": " + value );
               });
