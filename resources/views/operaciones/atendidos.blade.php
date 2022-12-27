@@ -147,8 +147,18 @@
             $('#modal-editar-atencion').on('show.bs.modal', function (event) {
                 var button = $(event.relatedTarget)
                 var idunico = button.data('atencion')
+                var confirmo_descarga = button.data('adj')
+
                 $(".textcode").html("PED" + idunico);
                 $("#hiddenAtender").val(idunico);
+                $('#conf_descarga').val(confirmo_descarga);
+
+                if(confirmo_descarga == 1){
+                    $('#sustento_adjunto').css({'display':'block'});
+                }else{
+                    $('#sustento_adjunto').css({'display':'none'});
+                }
+
                 //RecuperarAdjuntos(idunico);
 
                 //recupera info de atencion
@@ -176,6 +186,7 @@
                         console.log(data)
                         console.log("obtuve las imagenes atencion del pedido " + idunico)
                         $('#listado_adjuntos').html(data);
+                        console.log(data);
                     }
                 });
 
@@ -205,14 +216,40 @@
                 let idunicoconfirmar = $("#hiddenAtender").val();
                 let fecha_envio_doc_confirmar = $("#fecha_envio_doc").val();
                 let cant_compro_confirmar = $("#cant_compro").val();
-                $('#confirmar_atender').attr('disabled', true);
-                $('#confirmar_atender').text('Subiendo archivos...');
-                console.log("returnado")
+                let cnf_adjunto = $("#conf_descarga").val();
+                console.log(cnf_adjunto);
+
+
+
 
                 var data = new FormData();
                 data.append('hiddenAtender', idunicoconfirmar);
                 data.append('fecha_envio_doc', fecha_envio_doc_confirmar);
                 data.append('cant_compro', cant_compro_confirmar);
+
+                if(cnf_adjunto == 1){
+
+                    console.log("tiene adjuntos");
+
+                    var sustento = $('#sustento_data').val();
+
+                    if(sustento == ""){
+                        Swal.fire(
+                            'Error',
+                            'Ingrese un sustento para continuar',
+                            'warning'
+                        )
+                        return false;
+                    }else{
+                        data.append('sustento', sustento);
+                    }
+                }else{
+                    data.append('sustento', "");
+                }
+
+                $('#confirmar_atender').attr('disabled', true);
+                $('#confirmar_atender').text('Subiendo archivos...');
+                console.log("returnado")
                 //var data = new FormData(document.getElementById("formulario_adjuntos"));
 
                 $.ajax({
@@ -506,7 +543,7 @@
 
 
                             @can('operacion.editatender')
-                                data = data + '<a href="" class="btn-sm dropdown-item" data-target="#modal-editar-atencion" data-atencion=' + row.id + ' data-toggle="modal" ><i class="fa fa-paperclip text-primary" aria-hidden="true"></i> Editar Adjuntos</a>';
+                                data = data + '<a href="" class="btn-sm dropdown-item" data-target="#modal-editar-atencion" data-adj=' + row.da_confirmar_descarga + ' data-atencion=' + row.id + ' data-toggle="modal" ><i class="fa fa-paperclip text-primary" aria-hidden="true"></i> Editar Adjuntos</a>';
 
                             @endcan
 
