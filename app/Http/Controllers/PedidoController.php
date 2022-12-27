@@ -1004,7 +1004,7 @@ class PedidoController extends Controller
                 'cliente_id' => $request->cliente_id,
                 'user_id' => $identi_asesor->id, //usuario que registra
                 'creador' => 'USER0' . Auth::user()->id,//aqui una observacion, en el migrate la columna en tabla pedido tenia nombre creador y resulto ser creador_id
-                'condicion' => 'POR ATENDER',
+                'condicion' => Pedido::POR_ATENDER,
                 'condicion_code' => 1,
                 'condicion_int' => '1',
                 'pago' => '0',
@@ -2186,9 +2186,9 @@ class PedidoController extends Controller
         $dateMax = Carbon::now()->format('d/m/Y');
 
         $condiciones = [
-            "POR ATENDER" => 'POR ATENDER',
-            "EN PROCESO ATENCION" => 'EN PROCESO ATENCION',
-            "ATENDIDO" => 'ATENDIDO'
+            "POR ATENDER" => Pedido::POR_ATENDER,
+            "EN PROCESO ATENCION" => Pedido::EN_PROCESO_ATENCION,
+            "ATENDIDO" => Pedido::ATENDIDO
         ];
 
         if (Auth::user()->rol == "Operario") {
