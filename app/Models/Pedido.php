@@ -102,26 +102,26 @@ class Pedido extends Model
 
     public static $estadosCondicionEnvio = [
 
-    'POR ATENDER - OPE' => 1,
-    'EN ATENCION - OPE' => 2,
-    'ATENDIDO - OPE' => 3,
-    'ATENDIDO - JEFE OPE' => 5,
-    'RECEPCION - COURIER' => 12,
-    'CONFIRMACION - COURIER' => 11,
-    'REPARTO - COURIER' => 8,
-    'SEGUIMIENTO PROVINCIA - COURIER' => 9,
-    'MOTORIZADO' => 15,
-    'ENTREGADO - CLIENTE' => 10,
-    'ENTREGADO SIN SOBRE - OPE' => 13,
-    'ENTREGADO SIN SOBRE - CLIENTE' => 14
+        'POR ATENDER - OPE' => 1,
+        'EN ATENCION - OPE' => 2,
+        'ATENDIDO - OPE' => 3,
+        'ATENDIDO - JEFE OPE' => 5,
+        'RECEPCION - COURIER' => 12,
+        'CONFIRMACION - COURIER' => 11,
+        'REPARTO - COURIER' => 8,
+        'SEGUIMIENTO PROVINCIA - COURIER' => 9,
+        'MOTORIZADO' => 15,
+        'ENTREGADO - CLIENTE' => 10,
+        'ENTREGADO SIN SOBRE - OPE' => 13,
+        'ENTREGADO SIN SOBRE - CLIENTE' => 14
 
     ];
 
     public static $estadosCondicionEnvioCode = [
 
         1 => 'POR ATENDER - OPE',
-        2 =>'EN ATENCION - OPE',
-        3 =>'ATENDIDO - OPE',
+        2 => 'EN ATENCION - OPE',
+        3 => 'ATENDIDO - OPE',
         5 => 'ATENDIDO - JEFE OPE',
         12 => 'RECEPCION - COURIER',
         11 => 'CONFIRMACION - COURIER',
@@ -141,7 +141,9 @@ class Pedido extends Model
         'fecha_anulacion_confirm',
         'fecha_anulacion_denegada',
     ];
-
+    protected $appends=[
+        'condicion_envio_color'
+    ];
     /* public function user()
     {
         return $this->belongsTo('App\Models\User');
@@ -151,9 +153,10 @@ class Pedido extends Model
     {
         return $this->belongsTo(Cliente::class);
     }
+
     public function imagenAtencion()
     {
-        return $this->hasMany(ImagenAtencion::class,'pedido_id');
+        return $this->hasMany(ImagenAtencion::class, 'pedido_id');
     }
 
     public function detallePedidos()
@@ -164,6 +167,21 @@ class Pedido extends Model
     public function pagoPedidos()
     {
         return $this->hasMany(PagoPedido::class);
+    }
+
+    public function getCondicionEnvioColorAttribute()
+    {
+        $condicion_envio = \Str::lower($this->condicion_envio??'');
+
+        if (\Str::contains($condicion_envio, "ope")) {
+            return '#ffc107';
+        } elseif (\Str::contains($condicion_envio, "courier") || \Str::contains($condicion_envio, "motorizado")) {
+            return '#f97100';
+        } elseif (\Str::contains($condicion_envio, "cliente")) {
+            return '#b0deb3';
+        }else{
+            return '#b0deb3';
+        }
     }
 
     public function getIdCodeAttribute()
@@ -212,16 +230,17 @@ class Pedido extends Model
 
     public function scopeAtendidos($query)
     {
-        return $query->where($this->qualifyColumn('condicion_code'), '=', self::ATENDIDO_INT);
+        return $query->where($this->qualifyColumn('condicion_envio_code'), '=', self::ATENDIDO_INT);
     }
 
     public function scopePorAtender($query)
     {
-        return $query->where($this->qualifyColumn('condicion_code'), '=', self::POR_ATENDER_INT);
+        return $query->where($this->qualifyColumn('condicion_envio_code'), '=', self::POR_ATENDER_INT);
     }
-    public function scopePoratenderestatus($query)
+
+    public function scopePorAtenderEstatus($query)
     {
-        return $query->whereIn($this->qualifyColumn('condicion_code'), '=', [self::POR_ATENDER_INT,self::EN_PROCESO_ATENCION_INT ]);
+        return $query->whereIn($this->qualifyColumn('condicion_envio_code'), [self::POR_ATENDER_INT, self::EN_PROCESO_ATENCION_INT]);
     }
 
     public function scopeCurrentUser($query)

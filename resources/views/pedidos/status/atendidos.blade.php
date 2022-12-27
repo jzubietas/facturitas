@@ -243,7 +243,10 @@
                         data: 'condicion_envio',
                         name: 'condicion_envio',
                         render: function (data, type, row, meta) {
-                            return '<span class="badge badge-success">' + row.condicion_envio + '</span>';
+                            if (row.pendiente_anulacion == 1) {
+                                return '<span class="badge badge-success">' + '{{\App\Models\Pedido::PENDIENTE_ANULACION }}' + '</span>';
+                            }
+                            return '<span class="badge badge-success" style="background-color: '+row.condicion_envio_color+'!important;">'+row.condicion_envio+'</span>';
                         }
                     },/*
                     {
