@@ -1,7 +1,7 @@
 @extends('adminlte::page')
 @section('title', 'Estado del pedidos')
 @section('content_header')
-    <h1>Estado del pedidos</h1>
+
 @stop
 
 @section('content')
@@ -18,9 +18,12 @@
                 </div>
             </div>
         </div>
+        <div class="col-md-8 p-16">
+            <h1>Pedidos por atender</h1>
+        </div>
         <div class="col-md-4 p-16">
             <div class="row bg-white">
-                <div class="col-lg-8 bg-white p-16"><h5>Total de pedidos por atender</h5></div>
+                <div class="col-lg-8 bg-white p-16"><h5 class="font-weight-bold">Total de pedidos por atender</h5></div>
                 <div class="col-lg-4 bg-white p-16">
                     <h4 class="text-center text-danger">
                         <b>{{$pedidos_por_atender}}</b>
