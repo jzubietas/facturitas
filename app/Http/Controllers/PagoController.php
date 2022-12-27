@@ -827,7 +827,6 @@ class PagoController extends Controller
 
     public function store(Request $request)
     {
-        //return $request->all();
         $contPedidos = 0;
         $contPedidosfor = 0;
         $pedido_id = $request->pedido_id;
@@ -836,6 +835,7 @@ class PagoController extends Controller
         $pedidos_pagados_parcial = $request->checkadelanto;
         $pedidos_pagados_parcial_ar = array();
         $saldo = $request->numberdiferencia;
+
         if (count((array)$pedido_id) > 0) {
 
             foreach ($pedido_id as $pedido_id_key => $pedido_id_value) {
@@ -995,7 +995,7 @@ class PagoController extends Controller
                             'cuenta' => $tipomovimiento[$monto_key],
                             'titular' => $titular[$monto_key],
                             'operacion' => $operacion[$monto_key],
-                            'observacion' => $nota[$monto_key],
+                            'observacion' => $nota[$monto_key]??'N/A',
                             'monto' => $monto[$monto_key],
                             'banco' => $banco[$monto_key],
                             'fecha' => $fecha[$monto_key],
@@ -1010,7 +1010,7 @@ class PagoController extends Controller
                             'cuenta' => $tipomovimiento[$monto_key],
                             'titular' => $titular[$monto_key],
                             'operacion' => $operacion[$monto_key],
-                            'observacion' => $nota[$monto_key],
+                            'observacion' => $nota[$monto_key]??'N/A',
                             'monto' => $monto[$monto_key],
                             'banco' => $banco[$monto_key],
                             'fecha' => $fecha[$monto_key],
@@ -1230,6 +1230,9 @@ class PagoController extends Controller
                 $imagen = $request->imagen;
                 $banco = $request->banco;
                 $fecha = $request->fecha;
+                $nota = $request->nota;
+
+
 
                 $files = $request->file('imagen');
                 $destinationPath = base_path('public/storage/pagos/');
@@ -1257,7 +1260,8 @@ class PagoController extends Controller
                             'fecha' => $fecha[$monto_key],
                             'fecha_deposito' => $fecha[$monto_key],
                             'imagen' => $fileList[$monto_key]['file_name'],
-                            'estado' => '1'
+                            'estado' => '1',
+                            'observacion' => $nota[$monto_key]??'N/A',
                         ]);
 
                     } else {
@@ -1270,7 +1274,8 @@ class PagoController extends Controller
                             'fecha' => $fecha[$monto_key],
                             'fecha_deposito' => $fecha[$monto_key],
                             'imagen' => 'logo_facturas.png',
-                            'estado' => '1'
+                            'estado' => '1',
+                            'observacion' => $nota[$monto_key]??'N/A',
                         ]);
                     }
 

@@ -26,59 +26,59 @@ body{
 }
 
 .noti-side{
-    background-color: #9cffbf;
+    background-color: #e74c3c;
     height: 16px;
     padding: 0px 4px;
     display: inline-block;
     border-radius: 5px;
     font-size: 11px;
-    color: #2d3a2d;
+    color: #ffffff;
     text-align: center;
     text-transform: initial;
     font-style: initial;
     font-weight: bold;
     position: absolute;
-    right: 4px;
-    /*letter-spacing: 1.5px;*/
+    right: 0px;
+
 }
 
 @keyframes navidad {
-    0%{
-        transform: rotate(35deg);
-    }
-    50%{
-        transform: rotate(50deg);
-    }
-    100%{
-        transform: rotate(35deg);
-    }
+0%{
+    transform: rotate(35deg);
+}
+50%{
+    transform: rotate(50deg);
+}
+100%{
+    transform: rotate(35deg);
+}
 }
 
 @keyframes santa {
-    0%{
-        bottom: -46px;
-    }
-    10%{
-        bottom: -46px;
-    }
-    40%{
-        bottom: -8px;
-    }
-    70%{
-        bottom: -8px;
-    }
+0%{
+    bottom: -50px;
+}
+10%{
+    bottom: -50px;
+}
+40%{
+    bottom: -4px;
+}
+70%{
+    bottom: -4px;
+}
 
-    85%{
-        bottom: -8px;
-    }
+85%{
+    bottom: -4px;
+}
 
-    100%{
-        bottom: -46px;
-    }
+100%{
+    bottom: -50px;
+}
 }
 
 .elevation-4 {
-    box-shadow: black 0px 0px 0px !important;
+box-shadow: black 0px 0px 0px !important;
 }
 
 .main-sidebar .nav-header{
@@ -86,62 +86,66 @@ font-weight: bold;
 }
 
 .badge-success {
-    color: #4a604b !important;
-    background-color: hwb(124deg 69% 13%) !important;
-    padding: 8px !important;
+color: #4a604b !important;
+background-color: hwb(124deg 69% 13%) !important;
+padding: 8px !important;
 }
 
 .badge-danger {
-    color: #ad3939 !important;
-    background-color: #efb7b7 !important;
-    padding: 8px !important;
+color: #ad3939 !important;
+background-color: #efb7b7 !important;
+padding: 8px !important;
 }
 
 .badge-info {
-    color: #35424a !important;
-    background-color: #62becd !important;
-    padding: 8px !important;
+color: #35424a !important;
+background-color: #62becd !important;
+padding: 8px !important;
 }
 
 .badge-warning {
-    color: #765f17 !important;
-    background-color: #fde9ab !important;
-    padding: 8px !important;
+color: #765f17 !important;
+background-color: #fde9ab !important;
+padding: 8px !important;
 }
 
 .badge{
-    margin:2px;
+margin:2px;
 }
 
 
 .bg-center{ background-position: 50%;}
 
-.cnt-shw { box-shadow: 0 5px 15px rgb(0 0 0 / 10%), 0 0 0 rgb(0 0 0 / 8%) inset;
-    transition: box-shadow .2s linear, border-color .2s linear, background-color .2s linear;}
+.cnt-shw { box-shadow: 0 5px 15px rgb(0 0 0 / 10%), 0 0 0 rgb(0 0 0 / 8%) inset !important;
+transition: box-shadow .2s linear, border-color .2s linear, background-color .2s linear !important;}
 .txt-shw { text-shadow: 0px 2px 16px rgba(0, 0, 0, 0.4);}
 
 .text-light{
-	color:#e8e8e8 !important;
+color:#e8e8e8 !important;
 }
 .text-black{ color:black;}
 
 .font-weight-bold{
-    font-weight:bold !important;
+font-weight:bold !important;
 }
 
 .btn-dev{ margin:4px;}
 
 .btn-option {
 
-    border-radius: 8px;
-    background-color: white !important;
-    box-shadow: #e3e3e3 0px 3px 0px;
-    transition: all 0.2s;
+border-radius: 8px;
+background-color: white !important;
+box-shadow: #e3e3e3 0px 3px 0px;
+transition: all 0.2s;
+}
+
+.form-control input:hover{
+cursor: pointer !important;
 }
 
 .btn-option:hover{
-    background-color: #e2e6ee !important;
-    box-shadow: #a89eb5 0px 0px 0px;
+background-color: #e2e6ee !important;
+box-shadow: #a89eb5 0px 0px 0px;
 }
 
 
@@ -149,22 +153,22 @@ font-weight: bold;
 
 .text-left { text-align: left !important;}
 .br-0 { border-radius: 0px !important;}
-.br-4 { border-radius: 4px;}
-.br-8 { border-radius: 8px;}
-.br-12 { border-radius: 12px;}
-.br-16 { border-radius: 16px;}
-.br-20 { border-radius: 20px;}
-.br-24 { border-radius: 24px;}
-.br-28 { border-radius: 28px;}
-.br-32 { border-radius: 32px;}
+.br-4 { border-radius: 4px !important;}
+.br-8 { border-radius: 8px !important;}
+.br-12 { border-radius: 12px !important;}
+.br-16 { border-radius: 16px !important;}
+.br-20 { border-radius: 20px !important;}
+.br-24 { border-radius: 24px !important;}
+.br-28 { border-radius: 28px !important;}
+.br-32 { border-radius: 32px !important;}
 
 .modal-md{max-width: 500px;}
 
 .list-horizontal{ padding-left: 0px;}
 
 .list-horizontal li {
-	display: inline-block;
-	margin: 2px;
+display: inline-block;
+margin: 2px;
 }
 
 /* Iconos */
@@ -1206,7 +1210,7 @@ font-weight: bold;
 
 .tpl-snow > div{position:fixed;-webkit-animation:ease-in infinite normal;-moz-animation:ease-in infinite normal;animation:ease-in infinite normal;}
 
-.tpl-snow > div{z-index:9999999999999;width:30px;height:30px;background-image: url('../imagenes/copo.png'); background-repeat: no-repeat;    background-size: contain; -webkit-animation-name:nieve,horiz;-moz-animation-name:nieve,horiz;animation-name:nieve,horiz;}
+.tpl-snow > div{z-index:9999999999999;width:30px;height:30px;background-image: url('../imagenes/pica.png'); background-repeat: no-repeat;    background-size: contain; -webkit-animation-name:nieve,horiz;-moz-animation-name:nieve,horiz;animation-name:nieve,horiz;}
 .tpl-snow > div:nth-of-type(odd){width:15px; height:15px;-webkit-animation-name:nieve,horiz2;-moz-animation-name:nieve,horiz2;animation-name:nieve,horiz2;}
 
 .tpl-snow > div:nth-of-type(1){left:40px;-webkit-animation-duration:5.5s;-moz-animation-duration:5.5s;animation-duration:5.5s;-webkit-animation-delay:1s;-moz-animation-delay:1s;animation-delay:1s;}

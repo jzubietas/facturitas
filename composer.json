@@ -26,7 +26,8 @@
         "spatie/laravel-permission": "^5.3",
         "tecnickcom/tc-lib-barcode": "^1.17",
         "yajra/laravel-datatables": "*",
-        "yajra/laravel-datatables-oracle": "~9.0"
+        "yajra/laravel-datatables-oracle": "~9.0",
+        "laravel/ui": "^3.0"
     },
     "require-dev": {
         "doctrine/dbal": "^3.5",

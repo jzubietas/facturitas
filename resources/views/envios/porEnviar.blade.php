@@ -77,6 +77,7 @@
       @include('pedidos.modal.editdireccionid')
       @include('pedidos.modal.destinoid')
       @include('envios.modal.distribuir')
+        @include('operaciones.modal.confirmacion')
     </div>
   </div>
 
@@ -139,9 +140,41 @@
 
   <script>
 
-  
+
 
     $(document).ready(function () {
+
+    $('#modal-confirmacion').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget)
+        var idunico = button.data('ide')
+
+        $('.titulo-confirmacion').html("Enviar sobre a Motorizado");
+
+        $("#hiddenCodigo").val(idunico)
+        $("#modal-enviar .textcode").html(idunico);
+    });
+
+    $(document).on("submit", "#formulario_confirmacion", function (evento) {
+        evento.preventDefault();
+        //validacion
+
+        var fd2 = new FormData();
+        fd2.append('hiddenCodigo', $('#hiddenCodigo').val() );
+        $.ajax({
+            data: fd2,
+            processData: false,
+            contentType: false,
+            type: 'POST',
+            url:"{{ route('operaciones.confirmar') }}",
+            success:function(data){
+                $("#modal-confirmacion").modal("hide");
+                $('#tablaPrincipal').DataTable().ajax.reload();
+
+            }
+        });
+    });
+
+
 
       $.ajaxSetup({
         headers: {
@@ -149,7 +182,7 @@
         }
       });
 
-      
+
 
       $(document).on("submit", "#formulario", function (evento) {
         evento.preventDefault();
@@ -172,17 +205,13 @@
         console.log(dfecha)
         $('#condicion').empty().append(newOption3);
         $("#fecha_envio_doc_fis").val(dfecha);
-        
+
        // if (destino=='LIMA')
        // $('#condicion').empty().append(newOption).append(newOption2).append(newOption3);
       //  else
       //  $('#condicion').empty().append(newOption).append(newOption2).append(newOption4).append(newOption5).append(newOption3);
-        
 
         console.log(destino);
-
-
-
 
         $("#hiddenEnviar").val(idunico)
         if(idunico<10){
@@ -195,9 +224,6 @@
           idunico='PED'+idunico;
         }
         $("#modal-enviar .textcode").html(idunico);
-
-
-
 
       });
 
@@ -332,7 +358,7 @@
           {
             data: 'correlativo',
             name: 'correlativo',
-            
+
           },
           {
             data: 'codigos',
@@ -449,12 +475,13 @@
 
               @if($ver_botones_accion > 0)
                 @can('envios.enviar')
-                  datass=datass+'<a href="" data-target="#modal-enviar" data-toggle="modal" data-enviar="'+row.id+'" data-destino="'+row.destino+'"  data-fechaenvio="'+row.fecha+'">'+
-                    '<button class="btn btn-success btn-sm"><i class="fas fa-envelope"></i> Entregado</button></a>';
+                  datass=datass+'<ul class="list-unstyled pl-0"><li><a href="" class="btn-sm text-secondary" data-target="#modal-enviar" data-toggle="modal" data-enviar="'+row.id+'" data-destino="'+row.destino+'"  data-fechaenvio="'+row.fecha+'">'+
+                    '<i class="fas fa-envelope text-success"></i> Entregado</a></li>' +
+                  '<li><a href="" class="btn-sm text-secondary" data-target="#modal-confirmacion" data-toggle="modal" data-ide="'+row.id+'" data-destino="'+row.destino+'"  data-fechaenvio="'+row.fecha+'"><i class="fa fa-motorcycle text-primary" aria-hidden="true"></i> Motorizado</a></li></ul>';
                   if(row.envio=='1')
                   {
-                    datass = datass+ '<a href="" data-target="#modal-recibir" data-toggle="modal" data-recibir="'+row.id+'">'+
-                      '<button class="btn btn-warning btn-sm"><i class="fas fa-check-circle"></i> Recibido</button></a>';
+                    datass = datass+ '<a href="" class="btn-sm text-secondary" data-target="#modal-recibir" data-toggle="modal" data-recibir="'+row.id+'">'+
+                      '<i class="fa fa-motorcycle text-primary" aria-hidden="true"></i>Recibido</a>';
                   }
                 @endcan
               @endif

@@ -1,6 +1,6 @@
 <div style="text-align: center; font-family:'Times New Roman', Times, serif">
     <h2>
-        <p>Bienvenido(a) <b>{{ Auth::user()->name }}</b> al software empresarial de sisFacturas, donde
+        <p>Bienvenido(a) <b>{{ Auth::user()->name }}</b> al software empresarial de Ojo Celeste, donde
             cumples la función de <b>{{ Auth::user()->rol }}</b></p>
     </h2>
 </div>
@@ -75,6 +75,9 @@
 </div>
 <div class="container-fluid mt-4">
     <div class="row">
+        <div class="col-lg-12">
+                <x-grafico-metas-mes></x-grafico-metas-mes>
+        </div>
         <div class="col-md-12">
             <div class="input-group mb-3">
                 <div class="input-group-prepend">
@@ -96,18 +99,21 @@
                         </div>
                     </div>
                 </div>
+                {{--
                 <div class="col-md-12">
                     <x-grafico-meta_cobranzas></x-grafico-meta_cobranzas>
                 </div>
+                --}}
                 <div class="col-md-12">
-                    <x-grafico-pedidos-por-dia rol="Encargado" title="Cantidad de pedidos de los asesores por dia"
+                    <x-grafico-pedidos-por-dia rol="Encargado" title="CANTIDAD DE PEDIDOS DE LOS ASESORES POR DIA"
                                                label-x="Asesores" label-y="Cant. Pedidos"
                                                only-day></x-grafico-pedidos-por-dia>
-                    <x-grafico-pedidos-por-dia rol="Encargado" title="Cantidad de pedidos de los asesores por mes"
+                    <x-grafico-pedidos-por-dia rol="Encargado" title="CANTIDAD DE PEDIDOS DE LOS ASESORES POR MES"
                                                label-x="Asesores" label-y="Cant. Pedidos"></x-grafico-pedidos-por-dia>
                 </div>
             </div>
         </div>
+        {{--
         <div class="col-lg-6 col-sm-6 col-md-6 col-xs-12">
             <br>
             <div class="table-responsive">
@@ -117,8 +123,10 @@
                 </table>
             </div>
         </div>
+        --}}
     </div>
 </div>
+{{--
 <div class="container-fluid">
     <div class="row">
         <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12">
@@ -133,6 +141,7 @@
         </div>
     </div>
 </div>
+
 <div class="container-fluid">
     <div class="row">
         <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12">
@@ -160,3 +169,4 @@
         </div>
     </div>
 </div>
+--}}

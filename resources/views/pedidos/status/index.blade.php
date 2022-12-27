@@ -7,24 +7,24 @@
 @section('content')
     <div class="row">
         <div class="col-md-3">
-            <div class="card card-success">
-                <div class="card-header">
-                    <h5>PEDIDOS ATENDIDOS</h5>
+            <div class="card">
+                <div class="card-header text-center">
+                    <h6 class="mb-6">PEDIDOS ATENDIDOS</h6>
                 </div>
-                <div class="card-body">
-                    <h4 class="text-center">
+                <div class="card-body p-8">
+                    <h4 class="text-center mb-0">
                         <b>{{$pedidos_atendidos}}</b>
                     </h4>
                 </div>
             </div>
         </div>
         <div class="col-md-3">
-            <div class="card card-warning">
-                <div class="card-header">
-                    <h5>PEDIDO POR ATENDER</h5>
+            <div class="card">
+                <div class="card-header text-center">
+                    <h6 class="mb-6">PEDIDO POR ATENDER</h6>
                 </div>
-                <div class="card-body">
-                    <h4 class="text-center">
+                <div class="card-body p-8">
+                    <h4 class="text-center mb-0">
                         <b>{{$pedidos_por_atender}}</b>
                     </h4>
                 </div>
@@ -107,11 +107,11 @@
 
             function openConfirmDownloadDocuments(action, idc, codigo) {
                 $.confirm({
-                    title: 'Detalle de atencion de <b>' + idc + '</b>',
+                    title: '<h5>Archivos del pedido</h5> <h4 class="text-success"><b>' + codigo + '</b></h4>',
                     buttons: {
                         confirm: {
                             text: 'Confirmar descarga',
-                            btnClass: 'btn-success',
+                            btnClass: 'btn-primary',
                             action: function () {
                                 var $checkbox = this.$content.find('#enableCheckbox');
 
@@ -151,8 +151,7 @@
                             method: 'get'
                         }).done(function (response) {
                             var html = `<div class="list-group">`
-                            html += `<li class="list-group-item bg-dark">Codigo: ${codigo}</li>`
-                            html += `<li class="list-group-item bg-primary">Adjuntos de detalle de atencion</li>`
+                            html += `<li class="list-group-item"><b>Adjuntos de detalle de atencion</b></li>`
                             html += response.data.map(function (item) {
                                 return `<li class="list-group-item"><a href="${item.link}" download>${item.adjunto}</a></li>`
                             }).join('')
@@ -261,22 +260,22 @@
                         }
                     },
                     {
-                        data: 'condicion_code',
-                        name: 'condicion_code',
+                        data: 'condicion_envio',
+                        name: 'condicion_envio',
                         render: function (data, type, row, meta) {
                             if (row.pendiente_anulacion == 1) {
                                 return '<span class="badge badge-success">' + '{{\App\Models\Pedido::PENDIENTE_ANULACION }}' + '</span>';
                             }
-                            if (row.condicion_code == 1) {
+                            if (row.condicion_envio_code == {{\App\Models\Pedido::POR_ATENDER_INT }}) {
                                 return '<span class="badge badge-warning border border-danger">' + '{{\App\Models\Pedido::POR_ATENDER }}' + '</span>';
-                            } else if (row.condicion_code == 2) {
+                            } else if (row.condicion_envio_code == {{\App\Models\Pedido::EN_PROCESO_ATENCION_INT }}) {
                                 return '<span class="badge badge-warning border border-success">' + '{{\App\Models\Pedido::EN_PROCESO_ATENCION }}' + '</span>';
-                            } else if (row.condicion_code == 3) {
-                                return '<span class="badge badge-success">' + '{{\App\Models\Pedido::ATENDIDO }}' + '</span>';
-                            } else if (row.condicion_code == 4) {
-                                return '<span class="badge badge-success">' + '{{\App\Models\Pedido::ANULADO }}' + '</span>';
+                            } else if (row.condicion_envio_code == {{\App\Models\Pedido::ATENDIDO_OP_INT}}) {
+                                return '<span class="badge badge-success">' + '{{\App\Models\Pedido::ATENDIDO_OP }}' + '</span>';
+                            } else if (row.condicion_envio_code == {{\App\Models\Pedido::ANULADO_INT}}) {
+                                return '<span class="badge badge-danger">' + '{{\App\Models\Pedido::ANULADO }}' + '</span>';
                             } else {
-                                return '';
+                                return '<span class="badge badge-info">' +row.condicion_envio + '</span>';
                             }
                         }
                     },

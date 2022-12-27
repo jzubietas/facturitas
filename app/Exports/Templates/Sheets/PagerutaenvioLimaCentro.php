@@ -59,7 +59,6 @@ class PagerutaenvioLimaCentro extends PageRutasEnvioLima
                     'de.referencia',
                     'de.observacion',
                     'de.distrito',
-                    'de.celular',
                     'c.nombre as nombre_cli',
                     'direccion_grupos.created_at as fecha',
                     'direccion_grupos.distribucion',

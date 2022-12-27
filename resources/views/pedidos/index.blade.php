@@ -345,7 +345,7 @@
                         name: 'total',
                         render: $.fn.dataTable.render.number(',', '.', 2, '')
                     },
-                    /*
+                    {{--
                         {data: 'condicion_code',
                             name: 'condicion_code',
                             render: function ( data, type, row, meta ) {
@@ -362,7 +362,8 @@
                         return '{{\App\Models\Pedido::ANULADO }}';
                     }
                 }
-            }, */
+            },
+                    --}}
                     {
                         data: 'condicion_pa',
                         name: 'condicion_pa',
@@ -442,7 +443,8 @@
                             if (row.condicion_code == 4 || row.estado == 0) {
                                 return '<span class="badge badge-info">ANULADO</span>' //    'ANULADO';
                             }
-                            if (row.condicion_envio == 'ANULADO') {
+                            return '<span class="badge badge-info">'+row.condicion_envio+'</span>';
+                            /*if (row.condicion_envio == 'ANULADO') {
                                 return '<span class="badge badge-info">ANULADO</span>';
                             } else if (row.condicion_envio == 0) {
                                 return '<span class="badge badge-info">ANULADO</span>';
@@ -454,7 +456,7 @@
                                 return '<span class="badge badge-info">ENTREGADO</span>';
                             } else {
                                 return '<span class="badge badge-info">' + data + '</span>' //data;
-                            }
+                            }*/
                         }
                     },//
 

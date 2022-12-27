@@ -49,7 +49,7 @@ class EnvioController extends Controller
      */
 
 
-    
+
 
 
 
@@ -148,6 +148,9 @@ class EnvioController extends Controller
         $pedidos_provincia = DireccionGrupo::join('gasto_envios as de','direccion_grupos.id','de.direcciongrupo')
             ->join('clientes as c', 'c.id', 'de.cliente_id')
             ->join('users as u', 'u.id', 'c.user_id')
+          //  ->join('pedidos as p', 'p.codigo', 'direccion_grupos.codigos')
+
+          //  ->where('p.condicion_envio_code',Pedido::EN_REPARTO_INT)
             ->where('direccion_grupos.condicion_envio_code',Pedido::REPARTO_COURIER_INT)
             ->where('direccion_grupos.estado','1')
             ->select(
@@ -464,7 +467,7 @@ class EnvioController extends Controller
 
             {
 
-          
+
 
             $min = Carbon::createFromFormat('d/m/Y', $request->desde)->format('Y-m-d');//2022-11-25
             $pedidos_lima = DireccionGrupo::join('direccion_envios as de','direccion_grupos.id','de.direcciongrupo')
@@ -1684,7 +1687,7 @@ class EnvioController extends Controller
         }
 
 
-        
+
         $_pedidos = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')
         ->join('users as u', 'pedidos.user_id', 'u.id')
         ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
@@ -1692,10 +1695,10 @@ class EnvioController extends Controller
             DB::raw("COUNT(u.identificador) AS total, u.identificador ")
         )
         ->where('pedidos.estado', '1')
-        ->whereIn('pedidos.condicion_envio_code', [Pedido::JEFE_OP_CONF_INT]) 
+        ->whereIn('pedidos.condicion_envio_code', [Pedido::JEFE_OP_CONF_INT])
         ->where('dp.estado', '1')
         ->groupBy('u.identificador');
-        
+
 
         $distritos = Distrito::whereIn('provincia', ['LIMA', 'CALLAO'])
                             ->where('estado', '1')
@@ -1719,7 +1722,7 @@ class EnvioController extends Controller
         $pedidos = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')
                 ->join('users as u', 'pedidos.user_id', 'u.id')
                 ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
-                
+
                 ->select(
                     'pedidos.id',
                     'pedidos.cliente_id',
@@ -1818,6 +1821,95 @@ class EnvioController extends Controller
                     ->make(true);
 
     }
+
+    public function ConfirmarOPBarra(Request $request)
+    {
+        $area_accion = $request->accion;
+        $pedido=Pedido::where("codigo",$request->hiddenCodigo)->first();
+        $codigo_pedido_actual = $pedido->id; // 9B-1612-1
+        $condicion_code_actual = $pedido->condicion_envio_code; // 11
+
+        $respuesta = "";
+        $respuesta_rechazo = "";
+        $nuevo_estado = $condicion_code_actual; // 11
+        $nombre_accion = Pedido::$estadosCondicionEnvioCode[$condicion_code_actual]; // JEFE_OP_CONF
+
+        if($area_accion == "fernandez"){
+            switch ($condicion_code_actual){
+                case 12:
+                    $nuevo_estado = Pedido::JEFE_OP_CONF_INT;
+                    $respuesta = "El sobre se recibio correctamente.";
+                    $nombre_accion = Pedido::$estadosCondicionEnvioCode[$nuevo_estado];
+
+                    break;
+            }
+        }else if($area_accion == "jefe_op"){
+            switch ($condicion_code_actual){
+                /*********
+                 *  JEFE DE OPERACIONES
+                 */
+                case 5:
+                    $nuevo_estado = Pedido::RECEPCION_COURIER_INT;
+                    $respuesta = "El pedido se envió a Logistica correctamente.";
+                    $nombre_accion = Pedido::$estadosCondicionEnvioCode[$nuevo_estado];
+
+                    break;
+
+                /*********
+                 * CONFIRMACION DE PEDIDOS SIN SOBRE
+                 */
+                case 13:
+                    $nuevo_estado = Pedido::CONFIRMACION_SIN_SOBRE_INT;
+                    $respuesta = "El pedido sin sobre se confirmo correctamente.";
+                    $nombre_accion = Pedido::$estadosCondicionEnvioCode[$nuevo_estado];
+
+                    break;
+            }
+        }
+
+        if($pedido->condicion_envio_code == $nuevo_estado){
+            return response()->json(['html' => "Este pedido ya ah sido procesado anteriormente", 'class' => "text-danger", 'codigo' => 0]);
+        }else {
+            $pedido->update([
+                'modificador' => 'USER'.Auth::user()->id,
+                'condicion_envio' => $nombre_accion,
+                'condicion_envio_code' => $nuevo_estado,
+            ]);
+
+            PedidoMovimientoEstado::create([
+                'pedido' => $codigo_pedido_actual,
+                'condicion_envio_code' => $condicion_code_actual,
+                'notificado' => "0"
+            ]);
+
+            return response()->json(['html' => $respuesta, 'class' => "text-success", 'codigo' => $request->hiddenCodigo]);
+        }
+    }
+
+    public function confirmarEstado(Request $request)
+    {
+
+        $envio=DireccionGrupo::where("id",$request->hiddenCodigo)->first();
+
+        //dd($envio);
+
+        //$detalle_pedidos = DetallePedido::where('pedido_id',$pedido->id)->first();
+
+            $envio->update([
+                'condicion_envio' => Pedido::MOTORIZADO,
+                'condicion_envio_code' => Pedido::MOTORIZADO_INT,
+
+            ]);
+
+        PedidoMovimientoEstado::create([
+            'pedido' => $request->hiddenCodigo,
+            'condicion_envio_code' => Pedido::EN_REPARTO_CODE,
+            'notificado' => 0
+        ]);
+
+        return response()->json(['html' => $envio->id]);
+    }
+
 
 
 }

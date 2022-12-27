@@ -13,7 +13,7 @@ class Pedido extends Model
     /**************
      * CONSTANTES PEDIDO
      */
-    const POR_ATENDER = 'POR ATENDER';//1
+    const POR_ATENDER = 'POR ATENDER - OPE';//1
     const EN_PROCESO_ATENCION = 'EN PROCESO ATENCION';//2
     const ATENDIDO = 'ATENDIDO';//3
     const ANULADO = 'ANULADO';//4
@@ -30,21 +30,19 @@ class Pedido extends Model
     /**************
      * CONSTANTES CONDICION ENVIO
      */
-    const POR_ATENDER_PEDIDO = 'POR ATENDER OPE';
+    const POR_ATENDER_PEDIDO = 'POR ATENDER - OPE'; // POR ATENDER - OPE
     const INCOMPLETO = 'INCOMPLETO';
-    const ATENDIDO_OP = 'ATENDIDO OP';
-    const BANCARIZACION = 'BANCARIZACION';
-    const JEFE_OP = 'JEFE_OP';
-    const COURIER = 'COURIER';
-    const SOBRE_ENVIAR = 'SOBRE_ENVIAR';
-    const REPARTO_COURIER = 'REPARTO COURIER';
-    const SEG_PROVINCIA = 'SEGUIMIENTO PROVINCIA COURIER';
-    const ENTREGADO_CLIENTE = 'ENTREGADO CLIENTE';
-    const JEFE_OP_CONF = 'JEFE_OP_CONF';
-    const RECEPCION_COURIER = 'RECEPCION COURIER';
-    const ENTREGADO_SIN_SOBRE = 'ENTREGADO_SIN_SOBRE';
+    const ATENDIDO_OP = 'ATENDIDO - OPE'; // ATENDIDO - OPE
+    const JEFE_OP = 'JEFE - OPE'; // JEFE - OPE
+    const REPARTO_COURIER = 'REPARTO - COURIER';
+    const SEG_PROVINCIA = 'SEGUIMIENTO PROVINCIA - COURIER';
+    const ENTREGADO_CLIENTE = 'ENTREGADO - CLIENTE';
+    const JEFE_OP_CONF = 'JEFE CONF - OPE';
+    const RECEPCION_COURIER = 'RECEPCION - COURIER';
+    const ENTREGADO_SIN_SOBRE = 'ENTREGADO SIN SOBRE - OPE';
 
-    const CONFIRMACION_SIN_SOBRE = 'CONFIRMACION SIN SOBRE';
+    const CONFIRMACION_SIN_SOBRE = 'ENTREGADO SIN SOBRE - CLIENTE';
+    const MOTORIZADO = 'MOTORIZADO';
 
     /**************
      * CONSTANTES CONDICION ENVIO NUMERICO
@@ -64,6 +62,8 @@ class Pedido extends Model
     const ENTREGADO_SIN_SOBRE_INT = 13;
 
     const CONFIRMACION_SIN_SOBRE_INT = 14;
+
+    const MOTORIZADO_INT = 15;
 
     //envio
     const ENVIO_CONFIRMAR_RECEPCION = '1';//ENVIADO CONFIRMAR RECEPCION
@@ -113,6 +113,7 @@ class Pedido extends Model
         'SEG_PROVINCIA' => 9,
         'ENTREGADO' => 10,
         'JEFE_OP_CONF_INT' => 11,
+        'MOTORIZADO' => 15,
     ];
 
     public static $estadosCondicionEnvioCode = [
@@ -126,7 +127,11 @@ class Pedido extends Model
         8 => 'EN_REPARTO',
         9 => 'SEG_PROVINCIA',
         10 => 'ENTREGADO',
-        11 => 'JEFE_OP_CONF_INT'
+        11 => 'JEFE_OP_CONF_INT',
+        12 => 'RECEPCION_COURIER',
+        13 => 'ENTREGADO_SIN_SOBRE',
+        14 => 'CONFIRMACION_SIN_SOBRE',
+        15 => 'MOTORIZADO'
     ];
 
 
@@ -214,6 +219,10 @@ class Pedido extends Model
     public function scopePorAtender($query)
     {
         return $query->where($this->qualifyColumn('condicion_code'), '=', self::POR_ATENDER_INT);
+    }
+    public function scopePoratenderestatus($query)
+    {
+        return $query->whereIn($this->qualifyColumn('condicion_code'), '=', [self::POR_ATENDER_INT,self::EN_PROCESO_ATENCION_INT ]);
     }
 
     public function scopeCurrentUser($query)

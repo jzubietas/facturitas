@@ -1074,13 +1074,28 @@
 
                         if(importe_dpa!=importe_con)
                         {
-                          Swal.fire(
-                            'Error',
-                            'Existen pagos que no coinciden en importe',
-                            'warning'
-                          )
-                          error_conciliar=false;
-                          return false;
+                          let importe_dpa_n=parseFloat(importe_dpa);
+                          let importe_dpa_ma=parseFloat(importe_dpa)+3;
+                          let importe_dpa_me=parseFloat(importe_dpa)-3;
+                          console.log(parseFloat(importe_dpa))
+                          console.log(parseFloat(importe_dpa)+3)
+                          console.log(parseFloat(importe_dpa)-3)
+                          if( importe_con <=(importe_dpa_ma) )
+                          {
+                          }
+                          else if(  importe_con >=(importe_dpa_me) )
+                          {
+                          }
+                          else
+                          {
+                            Swal.fire(
+                              'Error',
+                              'Existen pagos que no coinciden en importe',
+                              'warning'
+                            )
+                            error_conciliar=false;
+                            return false;
+                          }
                         }
 
                         let fecha_dpa=$(".nohide_"+ir).find("td").eq(5).html();

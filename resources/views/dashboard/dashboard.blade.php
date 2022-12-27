@@ -2,7 +2,13 @@
 {{-- @extends('layouts.admin') --}}
 
 @section('title', 'Dashboard')
-
+@push('css')
+    <style>
+        .card {
+            background: rgb(241 241 241 / 80%);
+        }
+    </style>
+@endpush
 @section('content_header')
     <div><h1>Dashboard</h1>
         <!-- Right navbar links -->
@@ -22,20 +28,20 @@
             var data = new google.visualization.arrayToDataTable([
                 ['Asesores', 'Pedidos'],
                     @foreach ($pedidosxasesor as $vxa)
-                ['{{ $vxa->users }}', {{ $vxa->pedidos }}],
+        ['{{ $vxa->users }}', {{ $vxa->pedidos }}],
                 @endforeach
-            ]);
+        ]);
 
-            var options = {
-                chart: {
-                    title: 'PEDIDOS DEL MES DE TODOS LOS ASESORES',
-                    subtitle: 'PEDIDO/ASESOR'
-                }
-            };
+        var options = {
+            chart: {
+                title: 'PEDIDOS DEL MES DE TODOS LOS ASESORES',
+                subtitle: 'PEDIDO/ASESOR'
+            }
+        };
 
-            var chart = new google.charts.Bar(document.getElementById('pedidosxasesor'));
-            chart.draw(data, google.charts.Bar.convertOptions(options));
-        }*/
+        var chart = new google.charts.Bar(document.getElementById('pedidosxasesor'));
+        chart.draw(data, google.charts.Bar.convertOptions(options));
+    }*/
     </script>
 
     <script type="text/javascript">
@@ -73,6 +79,7 @@
           ['Cobranza', 'Pedidos'],
           @foreach ($cobranzaxmes as $vxax)
         ['{{ $vxax->users }}', {{ $vxax->total }}],
+
     @endforeach
     ]);
 
@@ -136,61 +143,66 @@
         }
     </script>
     <!--ENCARGADO-->
-    <script type="text/javascript">
-        google.charts.load('current', {
-            'packages': ['bar']
-        });
-        google.charts.setOnLoadCallback(drawStuff);
 
-        function drawStuff() {
-            var data = new google.visualization.arrayToDataTable([
-                ['Asesores', 'Pedidos'],
-                    @foreach ($pedidosxasesor_3meses_encargado as $vxa)
-                ['{{ $vxa->users }} - {{ $vxa->fecha }}', {{ $vxa->pedidos }}],
-                @endforeach
-            ]);
+    {{--
+        <script type="text/javascript">
+            google.charts.load('current', {
+                'packages': ['bar']
+            });
+            google.charts.setOnLoadCallback(drawStuff);
 
-            var options = {
-                chart: {
-                    title: 'HISTORIAL DE PEDIDOS DE LOS ULTIMOS 3 MESES DE MIS ASESORES',
-                    subtitle: 'PEDIDO/ASESOR'
+            function drawStuff() {
+                var data = new google.visualization.arrayToDataTable([
+                    ['Asesores', 'Pedidos'],
+                        @foreach ($pedidosxasesor_3meses_encargado as $vxa)
+                    ['{{ $vxa->users }} - {{ $vxa->fecha }}', {{ $vxa->pedidos }}],
+                    @endforeach
+                ]);
+
+                var options = {
+                    chart: {
+                        title: 'HISTORIAL DE PEDIDOS DE LOS ULTIMOS 3 MESES DE MIS ASESORES',
+                        subtitle: 'PEDIDO/ASESOR'
+                    }
+                };
+
+                if (document.getElementById('pedidosxasesor_3meses_encargado')) {
+                    var chart = new google.charts.Bar(document.getElementById('pedidosxasesor_3meses_encargado'));
+                    chart.draw(data, google.charts.Bar.convertOptions(options));
                 }
             };
+        </script>
 
-            if (document.getElementById('pedidosxasesor_3meses_encargado')) {
-                var chart = new google.charts.Bar(document.getElementById('pedidosxasesor_3meses_encargado'));
-                chart.draw(data, google.charts.Bar.convertOptions(options));
-            }
-        };
-    </script>
 
-    <script type="text/javascript">
-        google.charts.load('current', {
-            'packages': ['bar']
-        });
-        google.charts.setOnLoadCallback(drawStuff);
+        <script type="text/javascript">
+            google.charts.load('current', {
+                'packages': ['bar']
+            });
+            google.charts.setOnLoadCallback(drawStuff);
 
-        function drawStuff() {
-            var data = new google.visualization.arrayToDataTable([
-                ['Asesores', 'Pedidos'],
-                    @foreach ($pedidosxasesor_encargado as $vxa)
-                ['{{ $vxa->users }}', {{ $vxa->pedidos }}],
-                @endforeach
-            ]);
+            function drawStuff() {
+                var data = new google.visualization.arrayToDataTable([
+                    ['Asesores', 'Pedidos'],
+                        @foreach ($pedidosxasesor_encargado as $vxa)
+                    ['{{ $vxa->users }}', {{ $vxa->pedidos }}],
+                    @endforeach
+                ]);
 
-            var options = {
-                chart: {
-                    title: 'PEDIDOS DEL MES DE MIS ASESORES',
-                    subtitle: 'PEDIDO/ASESOR'
+                var options = {
+                    chart: {
+                        title: 'PEDIDOS DEL MES DE MIS ASESORES',
+                        subtitle: 'PEDIDO/ASESOR'
+                    }
+                };
+
+                if (document.getElementById('pedidosxasesor_encargado')) {
+                    var chart = new google.charts.Bar(document.getElementById('pedidosxasesor_encargado'));
+                    chart.draw(data, google.charts.Bar.convertOptions(options));
                 }
             };
+        </script>
 
-            if (document.getElementById('pedidosxasesor_encargado')) {
-                var chart = new google.charts.Bar(document.getElementById('pedidosxasesor_encargado'));
-                chart.draw(data, google.charts.Bar.convertOptions(options));
-            }
-        };
-    </script>
+
 
     <script type="text/javascript">
         google.charts.load('current', {
@@ -271,13 +283,15 @@
                 chart.draw(data, google.charts.Bar.convertOptions(options));
             }
         };
-    </script>
+    </script>--}}
 @stop
 
 @section('content')
     <div class="container-fluid">
         @if(Auth::user()->rol == 'Administrador')
             @include('dashboard.partials.vista_administrador')
+        @elseif(Auth::user()->rol == 'Apoyo administrativo')
+            @include('dashboard.partials.apoyo_administrativo')
         @elseif (Auth::user()->rol == 'Encargado')
             @include('dashboard.partials.vista_encargado')
         @elseif (Auth::user()->rol == 'Asesor')
@@ -320,21 +334,21 @@
     @endif
 
     <script>
-      // CARGAR PEDIDOS DE CLIENTE SELECCIONADO
-      {{--
-      window.onload = function () {
-        $.ajax({
-          url: "{{ route('notifications.getpedidosatender') }}",
-          method: 'GET',
-          success: function(data) {
+        // CARGAR PEDIDOS DE CLIENTE SELECCIONADO
+        {{--
+        window.onload = function () {
+          $.ajax({
+            url: "{{ route('notifications.getpedidosatender') }}",
+            method: 'GET',
+            success: function(data) {
 
-              console.log('prueba');
-              console.log(data);
-            //$('#my-notification').html(data.html);
-          }
-        });
-      };
-      --}}
+                console.log('prueba');
+                console.log(data);
+              //$('#my-notification').html(data.html);
+            }
+          });
+        };
+        --}}
     </script>
     <script>
         (function () {
@@ -355,6 +369,14 @@
             })
             $("#buttom_search_cliente").click(function () {
                 var tipo = $("#input_search_type").val()
+                if (!document.getElementById("input_search_cliente").value) {
+                    Swal.fire(
+                        'El campo de texto del buscador esta vacio, ingrese valores para poder buscar',
+                        '',
+                        'warning'
+                    )
+                    return;
+                }
                 if (tipo == "CLIENTE") {
                     $.ajax({
                         url: "{{route('dashboard.search-cliente')}}",
@@ -388,37 +410,46 @@
         <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css"/>
         <script>
             $(function () {
-                const startYear = moment().startOf('year');
-                const momentStart = moment('{{request('start_date',now()->startOfMonth()->format('Y-m-d'))}}', 'YYYY-MM-DD');
-                const momentEnd = moment('{{request('end_date',now()->endOfMonth()->format('Y-m-d'))}}', 'YYYY-MM-DD');
-                $('#datepickerDashborad').val(momentStart.format('DD/MM/YYYY') + ' - ' + momentEnd.format('DD/MM/YYYY'))
-
-                $('#datepickerDashborad').daterangepicker({
+                {{--
+                //const startYear = moment().startOf('year');
+                //const momentStart = moment('{{request('start_date',now()->startOfMonth()->format('Y-m-d'))}}', 'YYYY-MM-DD');
+                //const momentEnd = moment('{{request('end_date',now()->endOfMonth()->format('Y-m-d'))}}', 'YYYY-MM-DD');
+                //$('#datepickerDashborad').val(momentStart.format('DD/MM/YYYY') + ' - ' + momentEnd.format('DD/MM/YYYY'))
+                --}}
+                $('#datepickerDashborad').change(function (e) {
+                    const value = e.target.value;
+                    console.log(value)
+                    if(value){
+                        window.location.replace('{{route('dashboard.index')}}?selected_month=' + value)
+                    }
+                })
+                {{--
+                  /*$('#datepickerDashborad').daterangepicker({
                     "alwaysShowCalendars": false,
                     "showDropdowns": false,
                     "startDate": momentStart.format('DD/MM/YYYY'),
                     "endDate": momentEnd.format('DD/MM/YYYY'),
                     "autoUpdateInput": false,
                     ranges: {
-                        'Enero': [startYear.clone(), startYear.clone().endOf('month')],
-                        'Febrero': [startYear.clone().add(1, 'month'), startYear.clone().add(1, 'month').endOf('month')],
-                        'Marzo': [startYear.clone().add(2, 'month'), startYear.clone().add(2, 'month').endOf('month')],
-                        "Abril": [startYear.clone().add(3, 'month'), startYear.clone().add(3, 'month').endOf('month')],
-                        "Mayo": [startYear.clone().add(4, 'month'), startYear.clone().add(4, 'month').endOf('month')],
-                        "Junio": [startYear.clone().add(5, 'month'), startYear.clone().add(5, 'month').endOf('month')],
-                        "Julio": [startYear.clone().add(6, 'month'), startYear.clone().add(6, 'month').endOf('month')],
-                        "Agosto": [startYear.clone().add(7, 'month'), startYear.clone().add(7, 'month').endOf('month')],
-                        "Septiembre": [startYear.clone().add(8, 'month'), startYear.clone().add(8, 'month').endOf('month')],
-                        "Octubre": [startYear.clone().add(9, 'month'), startYear.clone().add(9, 'month').endOf('month')],
-                        "Noviembre": [startYear.clone().add(10, 'month'), startYear.clone().add(10, 'month').endOf('month')],
-                        "Diciembre": [startYear.clone().add(11, 'month'), startYear.clone().add(11, 'month').endOf('month')],
-                        /*'Hoy': [moment(), moment()],
-                        'El dia de ayer': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-                        'Los últimos 7 días': [moment().subtract(6, 'days'), moment()],
-                        'Los últimos 30 días': [moment().subtract(29, 'days'), moment()],
-                        'Este Mes': [moment().startOf('month'), moment().endOf('month')],
-                        'Mes pasado': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]*/
-                    },
+                    'Enero': [startYear.clone(), startYear.clone().endOf('month')],
+                    'Febrero': [startYear.clone().add(1, 'month'), startYear.clone().add(1, 'month').endOf('month')],
+                    'Marzo': [startYear.clone().add(2, 'month'), startYear.clone().add(2, 'month').endOf('month')],
+                    "Abril": [startYear.clone().add(3, 'month'), startYear.clone().add(3, 'month').endOf('month')],
+                    "Mayo": [startYear.clone().add(4, 'month'), startYear.clone().add(4, 'month').endOf('month')],
+                    "Junio": [startYear.clone().add(5, 'month'), startYear.clone().add(5, 'month').endOf('month')],
+                    "Julio": [startYear.clone().add(6, 'month'), startYear.clone().add(6, 'month').endOf('month')],
+                    "Agosto": [startYear.clone().add(7, 'month'), startYear.clone().add(7, 'month').endOf('month')],
+                    "Septiembre": [startYear.clone().add(8, 'month'), startYear.clone().add(8, 'month').endOf('month')],
+                    "Octubre": [startYear.clone().add(9, 'month'), startYear.clone().add(9, 'month').endOf('month')],
+                    "Noviembre": [startYear.clone().add(10, 'month'), startYear.clone().add(10, 'month').endOf('month')],
+                    "Diciembre": [startYear.clone().add(11, 'month'), startYear.clone().add(11, 'month').endOf('month')],
+                    /*'Hoy': [moment(), moment()],
+                    'El dia de ayer': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                    'Los últimos 7 días': [moment().subtract(6, 'days'), moment()],
+                    'Los últimos 30 días': [moment().subtract(29, 'days'), moment()],
+                    'Este Mes': [moment().startOf('month'), moment().endOf('month')],
+                    'Mes pasado': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+                },
                     "locale": {
                         "format": "DD/MM/YYYY",
                         "separator": " - ",
@@ -455,7 +486,8 @@
                     },
                 }, function (start, end, label) {
                     window.location.replace('{{route('dashboard.index')}}?start_date=' + start.format('YYYY-MM-DD') + '&end_date=' + end.format('YYYY-MM-DD'))
-                });
+                });*/
+                 --}}
             });
         </script>
     @endif

@@ -63,9 +63,9 @@ class OperacionController extends Controller
         $dateMax = Carbon::now()->format('d/m/Y');
 
         $condiciones = [
-            "POR ATENDER" => 'POR ATENDER',
-            "EN PROCESO ATENCION" => 'EN PROCESO ATENCION',
-            "ATENDIDO" => 'ATENDIDO'
+            "POR ATENDER" => Pedido::POR_ATENDER,
+            "EN PROCESO ATENCION" => Pedido::EN_PROCESO_ATENCION,
+            "ATENDIDO" => Pedido::ATENDIDO
         ];
 
         PedidoMovimientoEstado::where('condicion_envio_code',Pedido::POR_ATENDER_PEDIDO_INT)->update([
@@ -189,9 +189,9 @@ class OperacionController extends Controller
         $dateMax = Carbon::now()->format('d/m/Y');
 
         $condiciones = [
-            "POR ATENDER" => 'POR ATENDER',
-            "EN PROCESO ATENCION" => 'EN PROCESO ATENCION',
-            "ATENDIDO" => 'ATENDIDO'
+            "POR ATENDER" => Pedido::POR_ATENDER,
+            "EN PROCESO ATENCION" => Pedido::EN_PROCESO_ATENCION,
+            "ATENDIDO" => Pedido::ATENDIDO
         ];
         $imagenes = ImagenAtencion::where('estado', '1')->get();
         $superasesor = User::where('rol', 'Super asesor')->count();
@@ -323,9 +323,9 @@ class OperacionController extends Controller
         $dateMax = Carbon::now()->format('d/m/Y');
 
         $condiciones = [
-            "POR ATENDER" => 'POR ATENDER',
-            "EN PROCESO ATENCION" => 'EN PROCESO ATENCION',
-            "ATENDIDO" => 'ATENDIDO'
+            "POR ATENDER" => Pedido::POR_ATENDER,
+            "EN PROCESO ATENCION" => Pedido::EN_PROCESO_ATENCION,
+            "ATENDIDO" => Pedido::ATENDIDO
         ];
 
         $imagenes = ImagenAtencion::where('estado', '1')->get();
@@ -441,9 +441,9 @@ class OperacionController extends Controller
         $dateMax = Carbon::now()->format('d/m/Y');
 
         $condiciones = [
-            "POR ATENDER" => 'POR ATENDER',
-            "EN PROCESO ATENCION" => 'EN PROCESO ATENCION',
-            "ATENDIDO" => 'ATENDIDO'
+            "POR ATENDER" => Pedido::POR_ATENDER,
+            "EN PROCESO ATENCION" => Pedido::EN_PROCESO_ATENCION,
+            "ATENDIDO" => Pedido::ATENDIDO
         ];
 
         $imagenes = ImagenAtencion::where('estado', '1')->get();
@@ -562,9 +562,9 @@ class OperacionController extends Controller
         $dateMax = Carbon::now()->format('d/m/Y');
 
         $condiciones = [
-            "POR ATENDER" => 'POR ATENDER',
-            "EN PROCESO ATENCION" => 'EN PROCESO ATENCION',
-            "ATENDIDO" => 'ATENDIDO'
+            "POR ATENDER" => Pedido::POR_ATENDER,
+            "EN PROCESO ATENCION" => Pedido::EN_PROCESO_ATENCION,
+            "ATENDIDO" => Pedido::ATENDIDO
         ];
 
         $imagenes = ImagenAtencion::where('estado', '1')->get();

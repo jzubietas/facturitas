@@ -1,7 +1,7 @@
 <div class="text-center mb-4" style="font-family:'Times New Roman', Times, serif">
     <h2>
         <p>
-            Bienvenido <b>{{ Auth::user()->name }}</b> al software empresarial de sisFacturas, eres el
+            Bienvenido <b>{{ Auth::user()->name }}</b> al software empresarial de Ojo Celeste, eres el
             <b>{{ Auth::user()->rol }} del sistema</b>
         </p>
     </h2>
@@ -38,8 +38,8 @@
                     class="fas fa-arrow-circle-right"></i></a>
         </div>
     </div>
-    
-    
+
+
     <div class="col-lg-3 col-6">
         <div class="small-box bg-warning">
             <div class="inner">
@@ -57,14 +57,13 @@
     </div>
 
 
-
     <div class="col-lg-3 col-6">
         <div class="small-box bg-default">
             <div class="inner">
                 @foreach ($pagoxmes_total_solo_asesor_b as $pxm2)
                     <h3>{{ $pxm2->pedidos }}</h3>
                 @endforeach
-                <p>PEDIDOS DEL MES  ASESOR B</p>
+                <p>PEDIDOS DEL MES ASESOR B</p>
             </div>
             <div class="icon">
                 <i class="ion ion-person-add"></i>
@@ -73,14 +72,6 @@
                     class="fas fa-arrow-circle-right"></i></a>
         </div>
     </div>
-
-
-
-
-
-
-
-
 
 
     <div class="col-lg-3 col-6">
@@ -103,22 +94,31 @@
 
 <div class="row">
     <div class="col-lg-12">
-        <div class="card">
+        <x-grafico-metas-mes></x-grafico-metas-mes>
+    </div>
+    <div class="col-lg-12">
+        <div class="card" style="
+    background-color: #a5a5a5;
+">
             <div class="card-header">Buscar Cliente/RUC</div>
             <div class="card-header">
                 <div class="row">
-                    <div class="col-md-8">
-                        <div class="form-group">
+                    <div class="col-md-10">
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text p-0">
+                                    <select id="input_search_type" class="form-control">
+                                        <option value="CLIENTE">CLIENTE</option>
+                                        <option value="RUC">RUC</option>
+                                    </select>
+                                </div>
+                            </div>
                             <input id="input_search_cliente" class="form-control" maxlength="11"
                                    placeholder="Buscar cliente">
                         </div>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-2">
                         <div class="input-group mb-3">
-                            <select id="input_search_type" class="form-control">
-                                <option value="CLIENTE">CLIENTE</option>
-                                <option value="RUC">RUC</option>
-                            </select>
                             <div class="input-group-append">
                                 <button type="button" class="btn btn-dark" id="buttom_search_cliente">
                                     <i class="fa fa-search"></i>
@@ -146,12 +146,26 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-12">
-                <div class="input-group mb-3">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text" id="basic-addon3">Seleccionar Mes</span>
+                <div class="d-flex justify-content-end">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="basic-addon3">Seleccionar Mes</span>
+                                </div>
+                                <select class="form-control" id="datepickerDashborad"
+                                        aria-describedby="basic-addon3">
+
+                                    @foreach([1,2,3,4,5,6,7,8,9,10,11,12] as $month)
+                                        @php
+                                            $currentMonth=now()->startOfYear()->addMonths($month-1);
+                                        @endphp
+                                        <option {{$currentMonth->monthName==request('selected_month','diciembre')?'selected':''}} value="{{$currentMonth->monthName}}">{{Str::ucfirst($currentMonth->monthName)}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
                     </div>
-                    <input type="text" class="form-control date-picker" id="datepickerDashborad"
-                           aria-describedby="basic-addon3">
                 </div>
             </div>
             <div class="col-md-12">

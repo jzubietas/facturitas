@@ -6,12 +6,12 @@ use App\Models\Devolucion;
 use App\Models\DireccionGrupo;
 use App\Models\Pedido;
 use App\Models\PedidoMovimientoEstado;
+use App\Models\User;
 use Illuminate\Http\Request;
 use App\Notifications\InvoicePaid;
 use Illuminate\Support\Facades\Notification;
 use App\Http\Controllers\Controller;
 use App\Message;
-use App\User;
 use App\Notifications\NewMessage;
 
 class NotificationsController extends Controller
@@ -116,33 +116,37 @@ class NotificationsController extends Controller
         }
 
         // Return the new notification data.
-        $contador_pedidos_atender = PedidoMovimientoEstado::
-        join('pedidos as pe','pedido_movimiento_estados.pedido','pe.id')
-            ->where('pedido_movimiento_estados.condicion_envio_code',Pedido::POR_ATENDER_PEDIDO_INT)
-            ->where('pedido_movimiento_estados.notificado','0')
-            ->count();
-
-        $contador_pedidos_atendidos = PedidoMovimientoEstado::join('pedidos as pe','pedido_movimiento_estados.pedido','pe.id')
-        ->join('detalle_pedidos as dp', 'pe.id', 'dp.pedido_id')
-            ->where('pe.estado', '1')
+        $contador_pedidos_atender = Pedido::join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
+            ->where('pedidos.estado', '1')
             ->where('dp.estado', '1')
-            ->where('pedido_movimiento_estados.condicion_envio_code', Pedido::ATENDIDO_INT)
-            ->where('pedido_movimiento_estados.notificado','0')
+            ->whereIn('condicion_code', [Pedido::POR_ATENDER_INT,Pedido::EN_PROCESO_ATENCION_INT])
+            ->count();
+        // Estado de pediddos
+        $contador_pedidos_atendidos = Pedido::query()->activo()->segunRolUsuario([\App\Models\User::ROL_ADMIN, User::ROL_ENCARGADO, User::ROL_ASESOR])
+            ->atendidos()
+            ->noPendingAnulation()
+            ->where('da_confirmar_descarga', '0')
             ->count();
 
-        $contador_pedidos_pen_anulacion = PedidoMovimientoEstado::join('pedidos as pe','pedido_movimiento_estados.pedido','pe.id')
-        ->where('pe.pendiente_anulacion',1)
+        /*
+        $contador_pedidos_atendidos = Pedido::where('estado', '1')
+            ->where('condicion_envio_code', Pedido::ATENDIDO_INT)
+            ->count(); */
+
+        $contador_pedidos_pen_anulacion = Pedido::where('pendiente_anulacion',1)
             ->where('estado',1)
-            ->where('pedido_movimiento_estados.notificado','0')
             ->count();
 
-        $contador_sobres_entregados = PedidoMovimientoEstado::join('pedidos as pe','pedido_movimiento_estados.pedido','pe.id')
-            ->where('pe.estado',1)
-            ->where('pedido_movimiento_estados.notificado','0')
+        $contador_jefe_op = Pedido::join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
+            ->where('pedidos.estado', '1')
+            ->where('dp.estado', '1')
+            ->where('pedidos.condicion_code', Pedido::ATENDIDO_INT)
+            ->whereIn('pedidos.condicion_envio_code', [Pedido::JEFE_OP_INT, Pedido::ENTREGADO_SIN_SOBRE_INT])
             ->count();
 
-        //$contador_sobres_entregados = DireccionGrupo::where('condicion_envio',[DireccionGrupo::CE_ENTREGADO,DireccionGrupo::CE_ENTREGADO_SIN_SOBRE_CODE])->count();
-
+        $contador_sobres_entregados = Pedido::where('estado',1)
+            ->where('condicion_envio_code', Pedido::ENTREGADO_CLIENTE_INT)
+            ->count();
 
         return [
             'icon' => 'fas fa-envelope',
@@ -153,7 +157,9 @@ class NotificationsController extends Controller
             'contador_pedidos_atender' => $contador_pedidos_atender,
             'contador_pedidos_atendidos'=>$contador_pedidos_atendidos,
             'contador_pedidos_pen_anulacion' => $contador_pedidos_pen_anulacion,
-            'contador_sobres_entregados' => $contador_sobres_entregados
+            'contador_sobres_entregados' => $contador_sobres_entregados,
+            'contador_jefe_op' => $contador_jefe_op
+
 
         ];
     }

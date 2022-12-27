@@ -12,7 +12,7 @@
         <form id="formularioatender" name="formularioatender" enctype="multipart/form-data">
           <input type="hidden" id="hiddenAtender" name="hiddenAtender">
         <div class="modal-body">
-          <p>Complete los siguientes datos para pasar a estado <strong>ATENDIDO</strong> el pedido: <strong class="textcode">PED00</strong></p>
+          <p>Complete los siguientes datos para pasar a estado <strong>{{\App\Models\Pedido::ATENDIDO_OP}}</strong> el pedido: <strong class="textcode">PED00</strong></p>
         </div>
         <div style="margin: 10px">
           <div class="card">
@@ -45,8 +45,8 @@
 
 
                             <select name="condicion" class="form-control" id="condicion">
-                              <option value="2">INCOMPLETO</option>
-                              <option value="3" >PDF</option>
+                              <option value="{{\App\Models\Pedido::EN_PROCESO_ATENCION_INT}}">{{\App\Models\Pedido::INCOMPLETO}}</option>
+                              <option value="{{\App\Models\Pedido::ATENDIDO_INT}}" >{{\App\Models\Pedido::ATENDIDO_OP}}</option>
                             </select>
                           </div>
                         </div>

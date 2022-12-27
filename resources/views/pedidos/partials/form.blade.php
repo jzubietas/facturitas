@@ -24,7 +24,7 @@
             <a href="" data-target="#modal-historial" data-toggle="modal"><button class="btn btn-danger btn-sm">Deudores</button></a>
 
             @if($mirol =='Administrador')
-              <a href="" data-target="#modal-activartiempo" data-toggle="modal"><button class="btn btn-warning btn-sm">Activar temporal a cliente</button></a>
+              
             @endif
             <div class="pr-2 btn border-0 rounded text-right">
               <small class="rounded mb-2 bg-danger text-white" style="font-size: 16px">Desactivado</small>

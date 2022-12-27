@@ -29,7 +29,7 @@
     @include('pedidos.modal.copiarinfo')
     @include('pedidos.modal.historial')
     @include('pedidos.modal.historial2')
-    @include('pedidos.modal.activartiempo')
+    
 
 
     <x-simple-modal id="previsualizar_modal_pedido" title="Previsualizar Pedido" size="lg">
@@ -730,46 +730,6 @@ __________________________________
                 });
             });
 
-            $(document).on("change", "#user_id_tiempo", function () {
-                //al cambiar el ruc que hacer
-                let userid = $(this).val();
-                //console.log(userid)
-                $.ajax({
-                    url: "{{ route('cargar.clientedeudaparaactivar') }}?user_id=" + userid,
-                    method: 'GET',
-                    success: function (data) {
-                        //console.log(data.html);
-                        $('#cliente_id_tiempo').html(data.html);
-                        $("#cliente_id_tiempo").selectpicker("refresh");
-                    }
-                });
-            });
-
-            $('#modal-activartiempo').on('show.bs.modal', function (event) {
-                //cargar combo
-                //var userid=$("#user_id").val();
-
-                $.ajax({
-                    url: "{{ route('asesorcombo') }}",
-                    method: 'POST',
-                    success: function (data) {
-                        //console.log(data.html);
-                        $('#user_id_tiempo').html(data.html);
-                        $("#user_id_tiempo").selectpicker("refresh").trigger("change");
-                    }
-                });
-
-                /*$.ajax({
-                  url: "{{ route('cargar.clientedeudaparaactivar') }}?user_id=" + userid,
-                      method: 'GET',
-                      success: function(data) {
-                        console.log(data.html);
-                        $('#cliente_id_tiempo').html(data.html);
-                        $("#cliente_id_tiempo").selectpicker("refresh");
-                      }
-                    });*/
-            });
-
             $('#modal-add-ruc').on('show.bs.modal', function (event) {
 
                 $("#agregarruc").val("");
@@ -1016,24 +976,7 @@ __________________________________
                 });
             });
 
-            $(document).on("submit", "#formulariotiempo", function (evento) {
-                evento.preventDefault();
-
-                var formData = $("#formulariotiempo").serialize();
-                $.ajax({
-                    type: 'POST',
-                    url: "{{ route('pedidostiempo') }}",
-                    data: formData,
-                }).done(function (data) {
-                    Swal.fire(
-                        'Activacion temporal realizada',
-                        '',
-                        'success'
-                    )
-                    $("#modal-activartiempo").modal("hide");
-                    $("#user_id").trigger("change");
-                });
-            });
+            
 
             $("#formulario2").submit(function (event) {
                 event.preventDefault();
