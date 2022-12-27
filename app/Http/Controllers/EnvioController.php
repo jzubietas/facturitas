@@ -1559,7 +1559,7 @@ class EnvioController extends Controller
                 'distribucion'=> '',
 
                 'condicion_envio' => Pedido::ENTREGADO_SIN_SOBRE_OPE,
-                'condicion_envio_code' =>  Pedido::ENTREGADO_SIN_SOBRE_OPE,
+                'condicion_envio_code' =>  Pedido::ENTREGADO_SIN_SOBRE_OPE_INT,
 
                 'condicion_sobre' => 'SIN ENVIO',
                 'codigos'=>$data->codigo,
