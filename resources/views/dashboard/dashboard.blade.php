@@ -80,6 +80,7 @@
           @foreach ($cobranzaxmes as $vxax)
         ['{{ $vxax->users }}', {{ $vxax->total }}],
 
+
     @endforeach
     ]);
 
@@ -301,11 +302,13 @@
         @elseif (Auth::user()->rol == 'Administracion')
             @include('dashboard.partials.vista_administracion')
         @elseif (Auth::user()->rol == 'Jefe de llamadas')
-           @include('dashboard.partials.vista_llamadas')
-       @elseif (Auth::user()->rol == 'Llamadas')
-           @include('dashboard.partials.vista_llamadas')
-       @elseif (Auth::user()->rol == 'Logística')
+            @include('dashboard.partials.vista_llamadas')
+        @elseif (Auth::user()->rol == 'Llamadas')
+            @include('dashboard.partials.vista_llamadas')
+        @elseif (Auth::user()->rol == 'Logística')
             @include('dashboard.partials.vista_logistica')
+        @elseif (Auth::user()->rol == \App\Models\User::ROL_FORMACION)
+            @include('dashboard.partials.formacion')
         @else
             @include('dashboard.partials.vista_otros')
         @endif
@@ -419,7 +422,7 @@
                 $('#datepickerDashborad').change(function (e) {
                     const value = e.target.value;
                     console.log(value)
-                    if(value){
+                    if (value) {
                         window.location.replace('{{route('dashboard.index')}}?selected_month=' + value)
                     }
                 })
