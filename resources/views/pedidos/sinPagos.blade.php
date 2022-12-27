@@ -201,15 +201,15 @@
                         render: $.fn.dataTable.render.number(',', '.', 2, '')
                     },
                     {
-                        data: 'condicion_code',
-                        name: 'condicion_code',
+                        data: 'condicion_envio_code',
+                        name: 'condicion_envio_code',
                         render: function (data, type, row, meta) {
                             if (row.condicion_code == 1) {
-                                return '{{\App\Models\Pedido::POR_ATENDER }}';
+                                return '{{\App\Models\Pedido::POR_ATENDER_OPE }}';
                             } else if (row.condicion_code == 2) {
-                                return '{{\App\Models\Pedido::EN_PROCESO_ATENCION }}';
+                                return '{{\App\Models\Pedido::EN_ATENCION_OPE }}';
                             } else if (row.condicion_code == 3) {
-                                return '{{\App\Models\Pedido::ATENDIDO }}';
+                                return '{{\App\Models\Pedido::ATENDIDO_OPE }}';
                             } else if (row.condicion_code == 4) {
                                 return '{{\App\Models\Pedido::ANULADO }}';
                             }

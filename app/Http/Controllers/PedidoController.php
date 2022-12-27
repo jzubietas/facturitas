@@ -1915,6 +1915,8 @@ class PedidoController extends Controller
                 'dp.total as total',
                 'pedidos.condicion as condiciones',
                 'pedidos.condicion_code',
+                'pedidos.condicion_envio as condicion_envio',
+                'pedidos.condicion_envio_code as condicion_envio_code',
                 'pedidos.motivo',
                 'pedidos.pendiente_anulacion',
                 'pedidos.responsable',
