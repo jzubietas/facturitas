@@ -1929,6 +1929,8 @@ class PedidoController extends Controller
             ->where('dp.estado', '1')
             //->where('u.id', Auth::user()->id)
             ->where('pedidos.pagado', '<>', '2')
+            ->where('pedidos.da_confirmar_descarga', '1')
+            
             /*->groupBy(
                 'pedidos.id',
                 'c.id',
