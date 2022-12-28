@@ -907,7 +907,7 @@ class OperacionController extends Controller
         $imagenespedido = ImagenPedido::where('imagen_pedidos.pedido_id', $pedido->id)->where('estado', '1')->get();
         $imagenes = ImagenAtencion::where('imagen_atencions.pedido_id', $pedido->id)->where('estado', '1')->where('confirm', '0')->get();
 
-        return view('pedidos.modal.ContenidoModal.ListadoAdjuntos', compact('imagenes', 'pedido'));
+        return view('pedidos.modal.ContenidoModal.ListadoAdjuntosSinConfirmar', compact('imagenes', 'pedido'));
         //return response()->json(compact('pedido', 'pedidos', 'imagenespedido', 'imagenes'));
     }
 
