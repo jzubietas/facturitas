@@ -9,6 +9,7 @@ use App\View\Components\dashboard\graficos\GraficoMetasDelMes;
 use App\View\Components\dashboard\graficos\GraficoPedidosMetaProgress;
 use App\View\Components\dashboard\graficos\MetaProgressBar;
 use App\View\Components\dashboard\graficos\PedidosAsignadosProgressBar;
+use App\View\Components\dashboard\graficos\QtyPedidoFisicoElectronicos;
 use App\View\Components\dashboard\graficos\TopClientesPedidos;
 use Carbon\Carbon;
 use Illuminate\Support\ServiceProvider;
@@ -39,6 +40,7 @@ class AppServiceProvider extends ServiceProvider
         \Blade::component('grafico-top-clientes-pedidos',TopClientesPedidos::class);
         \Blade::component('grafico-metas-mes',GraficoMetasDelMes::class);
         \Blade::component('bs-progressbar',BsProgressbar::class);
+        \Blade::component('grafico-pedidos-elect-fisico',QtyPedidoFisicoElectronicos::class);
 
         Carbon::setUTF8(true);
         Carbon::setLocale(config('app.locale'));
