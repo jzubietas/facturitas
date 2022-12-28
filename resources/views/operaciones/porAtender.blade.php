@@ -292,7 +292,9 @@
         var idunico = button.data('atender')
         var idcodigo = button.data('codigo')
         $(".textcode").html(idcodigo);
-        $("#hiddenAtender").val(idunico);+
+        $("#hiddenAtender").val(idunico);
+
+        $("#adjunto").val("");
 
         $.ajax({
             url: "{{ route('operaciones.editatencion',':id') }}".replace(':id', idunico),
