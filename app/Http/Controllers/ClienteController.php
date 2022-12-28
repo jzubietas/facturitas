@@ -218,36 +218,6 @@ class ClienteController extends Controller
 
     }
 
-    public function pedidostiempo(Request $request)
-    {
-        if (!$request->cliente_id_tiempo) {
-            $html = "";
-
-        } else {
-            $cliente_id_tiempo = $request->cliente_id_tiempo;
-            $pcantidad_pedido = $request->pcantidad_pedido;
-            $pcantidad_tiempo = $request->pcantidad_tiempo;
-
-            $html = $cliente_id_tiempo . "|" . $pcantidad_pedido . "|" . $pcantidad_tiempo;
-            $user = Cliente::where("celular", $request->cliente_id_tiempo);
-            //$jefe = User::find($request->asesor, ['jefe']);
-            $user->update([
-                //'deuda' => "0",
-                'crea_temporal' => "1",
-                'activado_tiempo' => $pcantidad_tiempo,
-                'activado_pedido' => $pcantidad_pedido,
-                'temporal_update' => Carbon::now()->addMinutes($pcantidad_tiempo)
-            ]);
-            //intval($pcantidad_tiempo)
-            //Carbon::now()->addMinutes(5);
-            //$user->timestamp('temporal_update')->useCurrent();
-
-        }
-
-        return response()->json(['html' => $html]);
-        //return redirect()->route('users.asesores')->with('info', 'asignado');
-    }
-
     public function create()
     {
         /*$users = User::where('users.estado','1')

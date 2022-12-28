@@ -731,43 +731,28 @@ class PedidoController extends Controller
         if (!$request->user_id || $request->user_id == '') {
             $html = '<option value="">' . trans('---- SELECCIONE CLIENTE ----') . '</option>';
         } else {
-            //return $request->user_id;
             $html = '<option value="">' . trans('---- SELECCIONE CLIENTE ----') . '</option>';
-
-
-            /*$cliente_deuda=Cliente::where("id",$request->cliente_id)
+            $clientes = Cliente::join('users as u', 'clientes.user_id', 'u.id')->where('clientes.tipo', '1')//->where('clientes.celular','925549426')
+            ->where('u.identificador', $request->user_id)
+                ->where('clientes.estado', '1')
                 ->get([
                     'clientes.id',
+                    'clientes.celular',
+                    'clientes.icelular',
+                    'clientes.nombre',
                     'clientes.crea_temporal',
                     'clientes.activado_tiempo',
                     'clientes.activado_pedido',
                     'clientes.temporal_update',
                     DB::raw(" (select count(ped.id) from pedidos ped where ped.cliente_id=clientes.id and ped.pago in (0,1) and ped.pagado in (0,1) and ped.created_at >='2022-12-01 00:00:00' and ped.estado=1) as pedidos_mes_deuda "),
                     DB::raw(" (select count(ped2.id) from pedidos ped2 where ped2.cliente_id=clientes.id and ped2.pago in (0,1) and ped2.pagado in (0,1) and ped2.created_at <='2022-11-30 00:00:00'  and ped2.estado=1) as pedidos_mes_deuda_antes ")
-                    ]
-                )->first();*/
-
-
-            $clientes = Cliente::join('users as u', 'clientes.user_id', 'u.id')->where('clientes.tipo', '1')//->where('clientes.celular','925549426')
-            ->where('u.identificador', $request->user_id)
-                //->where('clientes.deuda', '1')
-                ->where('clientes.estado', '1')
-                ->get([
-                    'clientes.celular', 'clientes.icelular', 'clientes.nombre', 'clientes.crea_temporal', 'clientes.activado_tiempo', 'clientes.activado_pedido', 'clientes.temporal_update',
-                    DB::raw(" (select count(ped.id) from pedidos ped where ped.cliente_id=clientes.id and ped.pago in (0,1) and ped.pagado in (0,1) and ped.created_at >='2022-12-01 00:00:00' and ped.estado=1) as pedidos_mes_deuda "),
-                    DB::raw(" (select count(ped2.id) from pedidos ped2 where ped2.cliente_id=clientes.id and ped2.pago in (0,1) and ped2.pagado in (0,1) and ped2.created_at <='2022-11-30 00:00:00'  and ped2.estado=1) as pedidos_mes_deuda_antes ")
-
                 ]);
             foreach ($clientes as $cliente) {
                 if ($cliente->pedidos_mes_deuda > 0 || $cliente->pedidos_mes_deuda_antes > 0) {
                     $html .= '<option style="color:black" value="' . $cliente->celular . '">' . $cliente->celular . (($cliente->icelular != null) ? '-' . $cliente->icelular : '') . '  -  ' . $cliente->nombre . '</option>';
                 }
-
-                //$html .= '<option value="' . $cliente->id . '">' . $cliente->celular. '  -  ' . $cliente->nombre . '</option>';
             }
-
         }
-
         return response()->json(['html' => $html]);
     }
 

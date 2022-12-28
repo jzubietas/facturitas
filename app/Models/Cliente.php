@@ -19,6 +19,9 @@ class Cliente extends Model
     const RECUPERADO = "RECUPERADO";
 
     protected $guarded = ['id'];
+    protected $dates=[
+        'temporal_update'
+    ];
 
     public function user()
     {
