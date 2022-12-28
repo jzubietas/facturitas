@@ -1077,6 +1077,61 @@ class OperacionController extends Controller
         return redirect()->route('operaciones.atendidos')->with('info', 'actualizado');
     }
 
+    public function updateatendersinconfirmar(Request $request, Pedido $pedido)
+    {
+        $detalle_pedidos = DetallePedido::where('pedido_id', $pedido->id)->first();
+        $fecha = Carbon::now();
+
+        /* $files = $request->file('envio_doc'); */
+        $files = $request->file('adjunto');
+        $destinationPath = base_path('public/storage/adjuntos/');
+
+        $cont = 0;
+
+        //ACTUALIZAR MODIFICACION AL PEDIDO
+        $pedido->update([
+            'modificador' => 'USER' . Auth::user()->id
+        ]);
+
+        //dd($files);
+
+        if ($request->hasFile('adjunto')) {
+            /* $file_name = Carbon::now()->second.$files->getClientOriginalName();
+            $files->move($destinationPath , $file_name); */
+
+            foreach ($files as $file) {
+                $file_name = Carbon::now()->second . $file->getClientOriginalName();
+                $file->move($destinationPath, $file_name);
+
+                ImagenAtencion::create([
+                    'pedido_id' => $pedido->id,
+                    'adjunto' => $file_name,
+                    'estado' => '1'
+                ]);
+
+                $cont++;
+            }
+
+            $detalle_pedidos->update([
+                'envio_doc' => '1',
+                'fecha_envio_doc' => $fecha,
+                'cant_compro' => $request->cant_compro,
+                'atendido_por' => Auth::user()->name,
+                'atendido_por_id' => Auth::user()->id,
+            ]);
+
+
+        } else {
+            $detalle_pedidos->update([
+                'cant_compro' => $request->cant_compro,
+                'atendido_por' => Auth::user()->name,
+                'atendido_por_id' => Auth::user()->id,
+            ]);
+        }
+
+        return redirect()->route('operaciones.atendidos')->with('info', 'actualizado');
+    }
+
     public function updateAtenderId(Request $request)
     {
         $pedido = Pedido::where('id', $request->hiddenAtender)->first();
