@@ -189,7 +189,8 @@
                     success: function (data) {
                         console.log(data)
                         console.log("obtuve las imagenes atencion del pedido " + idunico)
-                        $('#listado_adjuntos').html(data);
+                        $('#listado_adjuntos').html("");
+                        $('#listado_adjuntos_antes').html(data);
                         console.log(data);
                     }
                 });
@@ -303,6 +304,47 @@
                     //$('#listado_adjuntos').html(data);
                 });
 
+            });
+
+            $(document).on("submit", "#formularioatender", function (evento) {
+                evento.preventDefault();
+                var cant_compro = document.getElementById('cant_compro').value;
+                if (!cant_compro) {
+                    cant_compro = 0;
+                }
+                cant_compro = parseInt(cant_compro);
+
+                if (isNaN(cant_compro)) {
+                    cant_compro = 0;
+                }
+
+                var data = new FormData(document.getElementById("formularioatender"));
+                data.delete('adjunto')
+                data.delete('adjunto[]')
+                if (cant_compro==0) {
+                    Swal.fire(
+                        'Error',
+                        'Debe colocar la cantidad de archivos',
+                        'warning'
+                    )
+                    return false;
+                }
+                $.ajax({
+                    data: data,
+                    processData: false,
+                    contentType: false,
+                    type: 'POST',
+                    url: "{{ route('operaciones.atenderid') }}",
+                    success: function (data) {
+                        console.log(data);
+                        $("#modal-atender .textcode").text('');
+                        $("#modal-atender").modal("hide");
+                        $('#tablaPrincipal').DataTable().ajax.reload();
+
+                    }
+
+                });
+                console.log(fd);
             });
 
 
