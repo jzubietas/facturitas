@@ -81,7 +81,7 @@
           <form method="POST" id="formulario_adjuntos_confirmar" name="formulario_adjuntos_confirmar">
             <button type="submit" class="btn btn-info" id="confirmar_atender">Confirmar</button>
           </form>
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+          <button type="button" class="btn btn-secondary" id="cerrarmodalatender">Cerrar</button>
         </div>
 
       </div>

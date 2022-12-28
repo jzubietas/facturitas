@@ -144,6 +144,10 @@
                 }
             });
 
+            $(document).on("change", "#adjunto", function (evento) {
+                $("#cargar_adjunto").trigger("click");
+            });
+
             $('#modal-editar-atencion').on('show.bs.modal', function (event) {
                 var button = $(event.relatedTarget)
                 var idunico = button.data('atencion')
@@ -191,6 +195,27 @@
                 });
 
             });
+
+            $(document).on("click", "#cerrarmodalatender", function (evento) {
+                evento.preventDefault();
+                console.log("no atender")
+                var fd = new FormData();
+                fd.append( 'hiddenAtender', $("#hiddenAtender").val() );
+                $.ajax({
+                    data: fd,
+                    processData: false,
+                    contentType: false,
+                    type: 'POST',
+                    url:"{{ route('operaciones.atenderiddismiss') }}",
+                    success:function(data)
+                    {
+                        console.log(data);
+                        $("#modal-atender .textcode").text('');
+                        $("#modal-atender").modal("hide");
+                        $('#tablaPrincipal').DataTable().ajax.reload();
+                    }
+                });
+                });
 
             $('#modal-envio').on('show.bs.modal', function (event) {
                 //cuando abre el form de anular pedido
