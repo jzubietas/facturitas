@@ -216,6 +216,11 @@
               return false;
       });
 
+      $(document).on("click", "#formularioatender", function (evento) {
+
+
+      });
+
 
     $(document).on("submit", "#formularioatender", function (evento) {
       evento.preventDefault();
@@ -479,12 +484,11 @@
       $('#tablaPrincipal').DataTable({
         processing: true,
         stateSave:true,
-		serverSide: true,
+		    serverSide: true,
         searching: true,
         order: [[ 4, "desc" ]],
         ajax: "{{ route('operaciones.poratendertabla') }}",
         createdRow: function( row, data, dataIndex){
-
         },
         rowCallback: function (row, data, index) {
             if(data.pendiente_anulacion==1){
@@ -513,8 +517,8 @@
           {
             data: 'fecha',
             name: 'fecha',
-            render:$.fn.dataTable.render.moment('YYYY-MM-DD HH:mm:ss', 'DD/MM/YYYY HH:mm:ss' )
-            //render: $.fn.dataTable.render.moment( 'DD/MM/YYYY' ).format('HH:mm:ss'),
+            render:$.fn.dataTable.render.moment('YYYY-MM-DD HH:mm:ss', 'DD/MM/YYYY HH:mm:ss' ),
+            orderable: true,
           },
           {data: 'tipo_banca', name: 'tipo_banca', },
           {
