@@ -661,8 +661,13 @@ class OperacionController extends Controller
 
         $cont = 0;
 
+        $imagenesatencion_=ImagenAtencion::where("pedido_id", $hiddenAtender)->where("confirm", '0');
+        $imagenesatencion_->update([
+            'confirm' => '1'
+        ]);
 
-        if ($request->hasFile('adjunto')) {
+
+        /*if ($request->hasFile('adjunto')) {
 
             foreach ($files as $file) {
                 $file_name = Carbon::now()->second . $file->getClientOriginalName();
@@ -692,7 +697,7 @@ class OperacionController extends Controller
                 'atendido_por' => Auth::user()->name,
                 'atendido_por_id' => Auth::user()->id,
             ]);
-        }
+        }*/
 
 
         /*if(isset($files)){

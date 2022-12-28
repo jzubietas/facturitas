@@ -237,6 +237,8 @@
 
         var fd = new FormData();
 
+        console.log(files.length+" cantidad adjuntos sin confirmar")
+
         if(files.length == 0)
         {
           Swal.fire(
@@ -304,6 +306,7 @@
             success: function (data) {
                 console.log(data)
                 console.log("obtuve las imagenes atencion del pedido " + idunico)
+                $('#listado_adjuntos').html("");
                 $('#listado_adjuntos_antes').html(data);
                 console.log(data);
             }
@@ -332,7 +335,7 @@
               $('#cargar_adjunto').text('Subir Informacion');
 
               $.ajax({
-                  url: "{{ route('operaciones.editatencion',':id') }}".replace(':id', idunico),
+                  url: "{{ route('operaciones.editatencionsinconfirmar',':id') }}".replace(':id', idunico),
                   data: idunico,
                   method: 'POST',
                   success: function (data) {
@@ -352,15 +355,15 @@
       $(document).on("submit", "#formdeleteadjunto", function (evento) {
           evento.preventDefault();
           console.log("ejecutando eliminando adjunto")
-          //return false;
           let pedidoidimagenes = $("#eliminar_pedido_id").val();
+          let pedidoconfirmado = $("#eliminar_pedido_id_confirmado").val();/*0 o 1*/
           console.log(pedidoidimagenes);
           var fddeleteadjunto = new FormData();
           fddeleteadjunto.append('eliminar_pedido_id', pedidoidimagenes);
           fddeleteadjunto.append('eliminar_pedido_id_imagen', $("#eliminar_pedido_id_imagen").val());
+          fddeleteadjunto.append('eliminar_pedido_id_confirmado', pedidoconfirmado);
           console.log(fddeleteadjunto);
 
-          //return false;
           $.ajax({
               url: "{{ route('operaciones.eliminaradjunto') }}",
               type: 'POST',
@@ -368,14 +371,25 @@
               processData: false,
               contentType: false,
               success: function (data) {
-                  //$('#listado_adjuntos').html(data);
-                  //console.log(data.html);
                   console.log("rest ajax")
                   $('.adjuntos[data-adjunto="' + data.html + '"]').remove();
                   $('#modal-delete-adjunto').modal('toggle');
-
-                  $.ajax({
+                  if(pedidoconfirmado==1)
+                  {
+                    $.ajax({
                       url: "{{ route('operaciones.editatencion',':id') }}".replace(':id', pedidoidimagenes),
+                      data: pedidoidimagenes,
+                      method: 'POST',
+                      success: function (data) {
+                          console.log(data)
+                          console.log("obtuve las imagenes atencion del pedido " + pedidoidimagenes)
+                          $('#listado_adjuntos_antes').html(data);
+                      }
+                  });
+                  }else if(pedidoconfirmado==0)
+                  {
+                    $.ajax({
+                      url: "{{ route('operaciones.editatencionsinconfirmar',':id') }}".replace(':id', pedidoidimagenes),
                       data: pedidoidimagenes,
                       method: 'POST',
                       success: function (data) {
@@ -384,12 +398,11 @@
                           $('#listado_adjuntos').html(data);
                       }
                   });
+                  }
+                  
               }
           }).done(function (data) {
-              //$('#modal-delete-adjunto').modal('hide');
-              //$('#listado_adjuntos').html(data);
           });
-
       });
 
       $('#modal-delete-adjunto').on('show.bs.modal', function (event) {
@@ -397,9 +410,11 @@
             var button = $(event.relatedTarget)
             var img_pedidoid = button.data('imgid')
             var imgadjunto = button.data('imgadjunto')
+            var imgadjuntoconfirm = button.data('imgadjuntoconfirm')
             $(".textcode").html("PED" + img_pedidoid);
             $("#eliminar_pedido_id").val(img_pedidoid);
             $("#eliminar_pedido_id_imagen").val(imgadjunto);
+            $("#eliminar_pedido_id_confirmado").val(imgadjuntoconfirm);
         });
 
       $('#modal-veradjunto').on('show.bs.modal', function (event) {

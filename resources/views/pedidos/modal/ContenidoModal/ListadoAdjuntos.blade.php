@@ -8,7 +8,7 @@
                 </td>
                 <td><a href="#" style="margin-left: 12px;" data-imgid="{{ $img->pedido_id }}" data-imgadjunto="{{ $img->adjunto }}">
 
-                <a href="" data-target="#modal-delete-adjunto" data-imgid="{{ $img->pedido_id }}" data-imgadjunto="{{ $img->id }}" data-toggle="modal">
+                <a href="" data-target="#modal-delete-adjunto" data-imgid="{{ $img->pedido_id }}" data-imgadjunto="{{ $img->id }}" data-imgadjuntoconfirm="{{ $img->confirm }}" data-toggle="modal">
                     <button class="btn-delete-adjunto btn btn-danger btn-sm" ><i class="fas fa-trash-alt"></i></button>
                 </a>
 
