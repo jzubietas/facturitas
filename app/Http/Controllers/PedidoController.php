@@ -279,7 +279,7 @@ class PedidoController extends Controller
             ->whereIn('pedidos.condicion', [Pedido::POR_ATENDER, Pedido::EN_PROCESO_ATENCION, Pedido::ATENDIDO, Pedido::ANULADO])
             ->whereIn('pedidos.pagado', ['1'])
             ->whereIn('pedidos.pago', ['1'])
-            ->whereNotIn("pedidos.envio", ['3'])
+            //->whereNotIn("pedidos.envio", ['3'])
             ->where('dp.saldo', '>=', 11)->where('dp.saldo', '<=', 13);
 
         $pedidos2 = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')
@@ -311,7 +311,7 @@ class PedidoController extends Controller
             ->whereIn('pedidos.condicion_code', [Pedido::POR_ATENDER_INT, Pedido::EN_PROCESO_ATENCION_INT, Pedido::ATENDIDO_INT, Pedido::ANULADO_INT])
             ->whereIn('pedidos.pagado', ['1'])
             ->whereIn('pedidos.pago', ['1'])
-            ->whereNotIn("pedidos.envio", ['3'])
+            //->whereNotIn("pedidos.envio", ['3'])
             ->Where('dp.saldo', '>=', 17)->where('dp.saldo', '<=', 19);
 
         $pedidos = $pedidos->union($pedidos2);
