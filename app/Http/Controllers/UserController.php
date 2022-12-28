@@ -308,8 +308,7 @@ class UserController extends Controller
             $users = $users->where('llamada', Auth::user()->id)->where("rol", "Asesor");
 
         } elseif ($mirol == 'Jefe de llamadas') {
-
-            $llamadasIds = User::where('users.estado', '1')
+            /*$llamadasIds = User::where('users.estado', '1')
                 ->where('rol', 'Llamadas')
                 ->where('users.jefe', Auth::user()->id)
                 ->pluck('id')
@@ -321,15 +320,13 @@ class UserController extends Controller
                 ->whereIn('llamada', $llamadasIds)
                 ->pluck('identificador')
                 ->unique()
-                ->values();
-
-            $users = $users->WhereIn("identificador", $usersasesores);
+                ->values();*/
+            $users = $users->WhereNotIn("identificador", ['B']);
             //$users = $users->where('llamada', Auth::user()->id)->where("rol", "Asesor");
         } elseif ($mirol == 'Asesor') {
 
             $users = $users->where('id', Auth::user()->id)->where("rol", "Asesor");
         } else {
-
             $usersB = User::where("identificador", "B")->where("rol", "Administrador");
             $users = $usersB->union($users);
         }
