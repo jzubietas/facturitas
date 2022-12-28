@@ -286,11 +286,7 @@ class UserController extends Controller
                     $html .= '<option style="color:black" value="' . $user->identificador . '">' . $user->identificador . (($user->exidentificador != null) ? '  (' . $user->exidentificador . ')' : '') . '</option>';
                 } else {
                     if (intval($user->exidentificador) % 2 == 0) {
-                        if ($mirol == User::ROL_APOYO_ADMINISTRATIVO) {
-                            $html .= '<option style="color:red" value="' . $user->identificador . '">' . $user->identificador . (($user->exidentificador != null) ? '  (' . $user->exidentificador . ')' : '') . '</option>';
-                        }else{
-                            $html .= '<option disabled style="color:red" value="' . $user->identificador . '">' . $user->identificador . (($user->exidentificador != null) ? '  (' . $user->exidentificador . ')' : '') . '</option>';
-                        }
+                        $html .= '<option disabled style="color:red" value="' . $user->identificador . '">' . $user->identificador . (($user->exidentificador != null) ? '  (' . $user->exidentificador . ')' : '') . '</option>';
                     } else {
                         $html .= '<option style="color:black" value="' . $user->identificador . '">' . $user->identificador . (($user->exidentificador != null) ? '  (' . $user->exidentificador . ')' : '') . '</option>';
                     }
