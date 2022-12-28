@@ -51,6 +51,9 @@ class BasefriaController extends Controller
         //return $dataTable->render('base_fria.index');
         //if ($request->ajax()) {
 
+            DB::enableQueryLog();   
+
+
         $data = Cliente::
             join('users as u', 'clientes.user_id', 'u.id')
             ->select('clientes.id',
@@ -75,7 +78,11 @@ class BasefriaController extends Controller
                 ->pluck('users.identificador');
             $data=$data->WhereIn("u.identificador",$usersasesores);
 
-        }else if(Auth::user()->rol == 'Jefe de llamadas')
+        }
+        
+        /*
+        else if(Auth::user()->rol == 'Jefe de llamadas')
+        
         {
 
 
@@ -91,7 +98,10 @@ class BasefriaController extends Controller
 
 
 
-        }else if(Auth::user()->rol == 'Asesor')
+        }
+        */
+        
+        else if(Auth::user()->rol == 'Asesor')
         {
             $usersasesores = User::where('users.rol', 'Asesor')
                 -> where('users.estado', '1')
@@ -120,6 +130,9 @@ class BasefriaController extends Controller
             $data=$data;
         }
         $data=$data->get();
+
+       // dd(DB::getQueryLog());
+       // exit;
 
             return Datatables::of($data)
                     ->addIndexColumn()
