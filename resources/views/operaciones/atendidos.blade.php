@@ -232,9 +232,11 @@
                 var button = $(event.relatedTarget)
                 var img_pedidoid = button.data('imgid')
                 var imgadjunto = button.data('imgadjunto')
+                var imgadjuntoconfirm = button.data('imgadjuntoconfirm')
                 $(".textcode").html("PED" + img_pedidoid);
                 $("#eliminar_pedido_id").val(img_pedidoid);
                 $("#eliminar_pedido_id_imagen").val(imgadjunto);
+                $("#eliminar_pedido_id_confirmado").val(imgadjuntoconfirm);
             });
 
             $(document).on("submit", "#formulario_adjuntos_confirmar", function (evento) {
