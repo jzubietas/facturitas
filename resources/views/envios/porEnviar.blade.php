@@ -147,11 +147,13 @@
     $('#modal-confirmacion').on('show.bs.modal', function (event) {
         var button = $(event.relatedTarget)
         var idunico = button.data('ide')
+        var codigos = button.data('codigos')
+        
 
         $('.titulo-confirmacion').html("Enviar sobre a Motorizado");
 
         $("#hiddenCodigo").val(idunico)
-        $("#modal-enviar .textcode").html(idunico);
+        $("#modal-confirmacion .textcode").html(codigos);
     });
 
     $(document).on("submit", "#formulario_confirmacion", function (evento) {
@@ -478,7 +480,7 @@
                 @can('envios.enviar')
                   datass=datass+'<ul class="list-unstyled pl-0"><li><a href="" class="btn-sm text-secondary" data-target="#modal-enviar" data-toggle="modal" data-enviar="'+row.id+'" data-destino="'+row.destino+'"  data-fechaenvio="'+row.fecha+'">'+
                     '<i class="fas fa-envelope text-success"></i> Entregado</a></li>' +
-                  '<li><a href="" class="btn-sm text-secondary" data-target="#modal-confirmacion" data-toggle="modal" data-ide="'+row.id+'" data-destino="'+row.destino+'"  data-fechaenvio="'+row.fecha+'"><i class="fa fa-motorcycle text-primary" aria-hidden="true"></i> Motorizado</a></li></ul>';
+                  '<li><a href="" class="btn-sm text-secondary" data-target="#modal-confirmacion" data-codigos="'+row.codigos+'" data-toggle="modal" data-ide="'+row.id+'" data-destino="'+row.destino+'"  data-fechaenvio="'+row.fecha+'"><i class="fa fa-motorcycle text-primary" aria-hidden="true"></i> Motorizado</a></li></ul>';
                   if(row.envio=='1')
                   {
                     datass = datass+ '<a href="" class="btn-sm text-secondary" data-target="#modal-recibir" data-toggle="modal" data-recibir="'+row.id+'">'+
