@@ -201,8 +201,8 @@
                                     <b>{{optional($pedido->fecha_anulacion_confirm)->format('d-m-Y h:i')}}</b>
                                 </li>
                                 <li class="list-group-item">
-                                    Motivo de anulacion: 
-                                    <b>{{$pedido->motivo}}</b>
+                                    Motivo de anulacion:
+                                    <b>{{$pedidoModel->motivo}}</b>
                                 </li>
                                 @if(count($pedido->adjuntosFiles())>0)
                                     <li class="list-group-item bg-danger">
