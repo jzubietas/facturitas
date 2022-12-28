@@ -671,7 +671,8 @@ class OperacionController extends Controller
                 ImagenAtencion::create([
                     'pedido_id' => $pedido->id,
                     'adjunto' => $file_name,
-                    'estado' => '1'
+                    'estado' => '1',
+                    'confirm' => '1'
                 ]);
 
                 $cont++;
@@ -845,13 +846,30 @@ class OperacionController extends Controller
             ->where('pedidos.estado', '1')
             ->where('pedidos.id', $pedido->id)
             ->where('dp.estado', '1')
-            ->groupBy(
+            ->orderBy('pedidos.created_at', 'DESC')
+            ->get();
+
+        $imagenespedido = ImagenPedido::where('imagen_pedidos.pedido_id', $pedido->id)->where('estado', '1')->get();
+        $imagenes = ImagenAtencion::where('imagen_atencions.pedido_id', $pedido->id)->where('estado', '1')->where('confirm', '1')->get();
+
+        return view('pedidos.modal.ContenidoModal.ListadoAdjuntos', compact('imagenes', 'pedido'));
+        //return response()->json(compact('pedido', 'pedidos', 'imagenespedido', 'imagenes'));
+    }
+
+    public function editatencionsinconfirmar(Pedido $pedido)
+    {
+
+        //dd('editando pedido: ' . $pedido);
+        $pedidos = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')
+            ->join('users as u', 'pedidos.user_id', 'u.id')
+            ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
+            ->select(
                 'pedidos.id',
-                'c.nombre',
-                'c.celular',
-                'u.name',
-                'dp.codigo',
-                'dp.nombre_empresa',
+                'c.nombre as nombres',
+                'c.celular as celulares',
+                'u.name as users',
+                'dp.codigo as codigos',
+                'dp.nombre_empresa as empresas',
                 'dp.mes',
                 'dp.anio',
                 'dp.ruc',
@@ -864,7 +882,8 @@ class OperacionController extends Controller
                 'dp.nota',
                 'dp.adjunto',
                 'dp.total',
-                'pedidos.condicion',
+
+                'pedidos.condicion as condiciones',
                 'pedidos.envio',
                 'pedidos.condicion_envio',
                 'dp.envio_doc',
@@ -872,13 +891,16 @@ class OperacionController extends Controller
                 'dp.cant_compro',
                 'dp.fecha_envio_doc_fis',
                 'dp.fecha_recepcion',
-                'pedidos.created_at'
+                'pedidos.created_at as fecha'
             )
+            ->where('pedidos.estado', '1')
+            ->where('pedidos.id', $pedido->id)
+            ->where('dp.estado', '1')
             ->orderBy('pedidos.created_at', 'DESC')
             ->get();
 
         $imagenespedido = ImagenPedido::where('imagen_pedidos.pedido_id', $pedido->id)->where('estado', '1')->get();
-        $imagenes = ImagenAtencion::where('imagen_atencions.pedido_id', $pedido->id)->where('estado', '1')->get();
+        $imagenes = ImagenAtencion::where('imagen_atencions.pedido_id', $pedido->id)->where('estado', '1')->where('confirm', '0')->get();
 
         return view('pedidos.modal.ContenidoModal.ListadoAdjuntos', compact('imagenes', 'pedido'));
         //return response()->json(compact('pedido', 'pedidos', 'imagenespedido', 'imagenes'));
@@ -1051,7 +1073,64 @@ class OperacionController extends Controller
                 ImagenAtencion::create([
                     'pedido_id' => $pedido->id,
                     'adjunto' => $file_name,
-                    'estado' => '1'
+                    'estado' => '1',
+                    'confirm' => '1'
+                ]);
+
+                $cont++;
+            }
+
+            $detalle_pedidos->update([
+                'envio_doc' => '1',
+                'fecha_envio_doc' => $fecha,
+                'cant_compro' => $request->cant_compro,
+                'atendido_por' => Auth::user()->name,
+                'atendido_por_id' => Auth::user()->id,
+            ]);
+
+
+        } else {
+            $detalle_pedidos->update([
+                'cant_compro' => $request->cant_compro,
+                'atendido_por' => Auth::user()->name,
+                'atendido_por_id' => Auth::user()->id,
+            ]);
+        }
+
+        return redirect()->route('operaciones.atendidos')->with('info', 'actualizado');
+    }
+
+    public function updateatendersinconfirmar(Request $request, Pedido $pedido)
+    {
+        $detalle_pedidos = DetallePedido::where('pedido_id', $pedido->id)->first();
+        $fecha = Carbon::now();
+
+        /* $files = $request->file('envio_doc'); */
+        $files = $request->file('adjunto');
+        $destinationPath = base_path('public/storage/adjuntos/');
+
+        $cont = 0;
+
+        //ACTUALIZAR MODIFICACION AL PEDIDO
+        $pedido->update([
+            'modificador' => 'USER' . Auth::user()->id
+        ]);
+
+        //dd($files);
+
+        if ($request->hasFile('adjunto')) {
+            /* $file_name = Carbon::now()->second.$files->getClientOriginalName();
+            $files->move($destinationPath , $file_name); */
+
+            foreach ($files as $file) {
+                $file_name = Carbon::now()->second . $file->getClientOriginalName();
+                $file->move($destinationPath, $file_name);
+
+                ImagenAtencion::create([
+                    'pedido_id' => $pedido->id,
+                    'adjunto' => $file_name,
+                    'estado' => '1',
+                    'confirm' => '0'
                 ]);
 
                 $cont++;

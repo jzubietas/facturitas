@@ -323,7 +323,7 @@
 
         $.ajax({
           type: 'POST',
-          url: "{{ route('operaciones.updateatender',':id') }}".replace(':id', idunico),
+          url: "{{ route('operaciones.updateatendersinconfirmar',':id') }}".replace(':id', idunico),
           data: data,
           processData: false,
           contentType: false,

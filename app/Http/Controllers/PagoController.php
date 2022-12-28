@@ -2601,9 +2601,8 @@ class PagoController extends Controller
             try {
                 DB::beginTransaction();
 
-                $cliente_perdondarcourier = Cliente::where("user_id", 33)->first();
+                $cliente_perdondarcourier = Cliente::query()->where('nombre','COURIER PERDONADO')->first();
 
-                //return $cliente_perdondarcourier;
 
                 $pago = Pago::create([
                     'user_id' => $cliente_perdondarcourier->user_id,
