@@ -173,7 +173,9 @@
         //cuando abre el form de anular pedido
         var button = $(event.relatedTarget)
         var idunico = button.data('revertir')
-        $(".textcode").html("PED"+idunico);
+          var codigo_pedido = button.data('codigo')
+        //$(".textcode").html("PED"+idunico);
+          $(".textcode").html(codigo_pedido);
         $("#hiddenRecibir").val(idunico);
       });
 
@@ -336,7 +338,7 @@
               @endcan
 
 
-                data = data+'<a href="" data-target="#modal-revertir" data-revertir='+row.id+' data-toggle="modal" ><button class="btn btn-success btn-sm">Revertir</button></a>';
+                data = data+'<a href="" data-target="#modal-revertir" data-revertir='+row.id+' data-codigo='+row.codigo+' data-toggle="modal" ><button class="btn btn-success btn-sm">Revertir</button></a>';
 
 
               return data;

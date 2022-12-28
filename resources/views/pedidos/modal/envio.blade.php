@@ -11,10 +11,10 @@
       {{ Form::Open(['route' => ['pedidos.envio', $pedido],'enctype'=>'multipart/form-data', 'id'=>'formulario','files'=>true]) }}
       <div class="modal-body">
         {{-- <p>Elija el tipo de envío del pedido: <strong>PED000{{ $pedido->id }}</strong></p> --}}
-        <p>Confirme si desea enviar el pedido <strong>PED000{{ $pedido->id }}</strong> al área de ENVIOS</p>
+        <p>Confirme si desea revertir el pedido <strong>PED000{{ $pedido->id }}</strong></p>
       </div>
       {{-- <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-        {!! Form::label('destino', 'Destino') !!}                      
+        {!! Form::label('destino', 'Destino') !!}
         {!! Form::select('destino', $destinos , null, ['class' => 'form-control border border-secondary', 'data-live-search' => 'true', 'placeholder' => '---- SELECCIONE ----']) !!}
       </div> --}}
       <div class="modal-footer">

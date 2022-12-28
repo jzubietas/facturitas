@@ -11,7 +11,7 @@
       <form id="formulariorevertir" name="formulariorevertir" enctype="multipart/form-data">
       <input type="hidden" id="hiddenRevertirpedido" name="hiddenRevertirpedido">
       <div class="modal-body">
-        <p>Confirme si desea enviar el pedido <strong class="textcode">PED000</strong> al área de ENVIOS</p>
+        <p>Confirme si desea revertir el pedido <strong class="textcode">PED000</strong></p>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
