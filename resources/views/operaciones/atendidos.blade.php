@@ -73,9 +73,9 @@
                 <tbody>
                 </tbody>
             </table>
-            @include('pedidos.modal.EditarAtencion')
-            @include('pedidos.modal.envioid')
             @include('pedidos.modal.sinenvioid')
+            @include('pedidos.modal.envioid')
+            @include('pedidos.modal.EditarAtencion')
             @include('pedidos.modal.DeleteAdjuntoid')
         </div>
     </div>
