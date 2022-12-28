@@ -304,7 +304,7 @@
             success: function (data) {
                 console.log(data)
                 console.log("obtuve las imagenes atencion del pedido " + idunico)
-                $('#listado_adjuntos').html(data);
+                $('#listado_adjuntos_antes').html(data);
                 console.log(data);
             }
         });
