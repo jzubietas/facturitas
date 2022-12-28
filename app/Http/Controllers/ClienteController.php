@@ -221,36 +221,6 @@ class ClienteController extends Controller
 
     }
 
-    public function pedidostiempo(Request $request)
-    {
-        if (!$request->cliente_id_tiempo) {
-            $html = "";
-
-        } else {
-            $cliente_id_tiempo = $request->cliente_id_tiempo;
-            $pcantidad_pedido = $request->pcantidad_pedido;
-            $pcantidad_tiempo = $request->pcantidad_tiempo;
-
-            $html = $cliente_id_tiempo . "|" . $pcantidad_pedido . "|" . $pcantidad_tiempo;
-            $user = Cliente::where("celular", $request->cliente_id_tiempo);
-            //$jefe = User::find($request->asesor, ['jefe']);
-            $user->update([
-                //'deuda' => "0",
-                'crea_temporal' => "1",
-                'activado_tiempo' => $pcantidad_tiempo,
-                'activado_pedido' => $pcantidad_pedido,
-                'temporal_update' => Carbon::now()->addMinutes($pcantidad_tiempo)
-            ]);
-            //intval($pcantidad_tiempo)
-            //Carbon::now()->addMinutes(5);
-            //$user->timestamp('temporal_update')->useCurrent();
-
-        }
-
-        return response()->json(['html' => $html]);
-        //return redirect()->route('users.asesores')->with('info', 'asignado');
-    }
-
     public function create()
     {
         /*$users = User::where('users.estado','1')
@@ -556,14 +526,14 @@ class ClienteController extends Controller
 
 
         foreach ($clientes as $cliente) {
-            $cliente->pedidos_mes_deuda = $cliente->pedidos()->activo()->noPagados()->whereBetween('pedidos.created_at', [now()->startOfMonth(),now()->endOfMonth()])->count();
+            $cliente->pedidos_mes_deuda = $cliente->pedidos()->activo()->noPagados()->whereBetween('pedidos.created_at', [now()->startOfMonth(), now()->endOfMonth()])->count();
             $cliente->pedidos_mes_deuda_antes = $cliente->pedidos()->activo()->noPagados()->where('pedidos.created_at', '<=', now()->subMonth()->endOfMonth())->count();
 
             //Auth::user()->rol=='Administrador'
-            if ($mirol == 'Administrador' || $mirol == 'Asistente de Administración' || Auth::user()->identificador=='B' ) {
+            if ($mirol == 'Administrador' || $mirol == 'Asistente de Administración' || Auth::user()->identificador == 'B') {
                 $html .= '<option style="color:black" value="' . $cliente->id . '">' . $cliente->celular . (($cliente->icelular != null) ? '-' . $cliente->icelular : '') . '  -  ' . $cliente->nombre . '</option>';
             } else {
-                if ($cliente->crea_temporal == 1 ) {
+                if ($cliente->crea_temporal == 1) {
                     //falta considerar el tiempo ahora menos el tiempo activado temporal
                     $html .= '<option style="color:lightblue" value="' . $cliente->id . '">' . $cliente->celular . '-' . $cliente->icelular . '  -  ' . $cliente->nombre . ' (Temporal)</option>';
                 } else {
@@ -577,7 +547,7 @@ class ClienteController extends Controller
                     //pago | pagado
                     $deuda_anterior = Pedido::query()->noPagados()->activo()
                         ->where('pedidos.cliente_id', '=', $cliente->id)
-                        ->whereBetween('created_at', [now()->subMonth()->startOfMonth(),now()->subMonth()->endOfMonth()])
+                        ->whereBetween('created_at', [now()->subMonth()->startOfMonth(), now()->subMonth()->endOfMonth()])
                         ->count();
 
                     $deuda_pedidos_5 = Pedido::query()->noPagados()->activo()
@@ -586,13 +556,22 @@ class ClienteController extends Controller
 
                     //aca evalua primero si tiene deuda el mes anterior y si tiene pedidos cond deuda mayor a 5
                     if ($deuda_anterior > 0 || $deuda_pedidos_5 > 5) {
-                        $html .= '<option disabled style="color:red" value="' . $cliente->id . '">' . $cliente->celular . '-' . $cliente->icelular . '  -  ' . $cliente->nombre . '  (' . ($saldo > 0 ? 'Con Deuda' : '') . ')</option>';
-                    }else {
+                        if ($mirol == User::ROL_APOYO_ADMINISTRATIVO) {
+                            $html .= '<option style="color:red" value="' . $cliente->id . '">' . $cliente->celular . '-' . $cliente->icelular . '  -  ' . $cliente->nombre . '  (' . ($saldo > 0 ? 'Con Deuda' : '') . ')</option>';
+                        } else {
+                            $html .= '<option disabled style="color:red" value="' . $cliente->id . '">' . $cliente->celular . '-' . $cliente->icelular . '  -  ' . $cliente->nombre . '  (' . ($saldo > 0 ? 'Con Deuda' : '') . ')</option>';
+                        }
+                    } else {
                         //y si no tiene esod e arriba pasa a evaluar esta parte
                         if ($cliente->pedidos_mes_deuda > 0 && $cliente->pedidos_mes_deuda_antes == 0) {
-                            $html .= '<option style="color:' . ($saldo == 0 ? 'green' : 'lightblue') . '" value="' . $cliente->id . '">' . $cliente->celular . '-' . $cliente->icelular . '  -  ' . $cliente->nombre . '  (' . ($saldo == 0 ? 'Sin Deuda ' : 'Con Deuda')  . ')</option>';
+                            $html .= '<option style="color:' . ($saldo == 0 ? 'green' : 'lightblue') . '" value="' . $cliente->id . '">' . $cliente->celular . '-' . $cliente->icelular . '  -  ' . $cliente->nombre . '  (' . ($saldo == 0 ? 'Sin Deuda ' : 'Con Deuda') . ')</option>';
                         } else if (($cliente->pedidos_mes_deuda > 0 && $cliente->pedidos_mes_deuda_antes > 0) || ($cliente->pedidos_mes_deuda == 0 && $cliente->pedidos_mes_deuda_antes > 0)) {
-                            $html .= '<option ' . ($saldo == 0 ? '' : 'disabled') . ' style="color:' . ($saldo == 0 ? 'green' : 'red') . '" value="' . $cliente->id . '">' . $cliente->celular . '-' . $cliente->icelular . '  -  ' . $cliente->nombre . '**CLIENTE CON DEUDA**</option>';
+                            if ($mirol == User::ROL_APOYO_ADMINISTRATIVO) {
+                                $html .= '<option style="color:' . ($saldo == 0 ? 'green' : 'red') . '" value="' . $cliente->id . '">' . $cliente->celular . '-' . $cliente->icelular . '  -  ' . $cliente->nombre . '**CLIENTE CON DEUDA**</option>';
+                            } else {
+                                $html .= '<option ' . ($saldo == 0 ? '' : 'disabled') . ' style="color:' . ($saldo == 0 ? 'green' : 'red') . '" value="' . $cliente->id . '">' . $cliente->celular . '-' . $cliente->icelular . '  -  ' . $cliente->nombre . '**CLIENTE CON DEUDA**</option>';
+                            }
+
                         } else {
                             $html .= '<option style="color:' . ($saldo == 0 ? 'green' : 'red') . '" value="' . $cliente->id . '">' . $cliente->celular . '-' . $cliente->icelular . '  -  ' . $cliente->nombre . '  (' . ($saldo == 0 ? 'Sin Deuda' : 'Con Deuda') . ')</option>';
                         }
@@ -611,7 +590,7 @@ class ClienteController extends Controller
         $clientes = null;
         $clientes = Cliente::whereIn('user_id',
             User::query()->select('users.id')
-                ->whereIn('users.rol', ['Asesor', User::ROL_ADMIN])
+                ->whereIn('users.rol', ['Asesor', User::ROL_ADMIN, User::ROL_ASESOR_ADMINISTRATIVO])
                 ->where('users.estado', '1')
                 ->where('users.identificador', $request->user_id)
         )
@@ -619,13 +598,6 @@ class ClienteController extends Controller
             ->where("clientes.tipo", "1");
         $html = "";
 
-        //valida deuda excepto para administrador o por tener tiempo temporal
-        /*
-                if (!$request->user_id || $request->user_id == '') {
-                    $clientes = $clientes;
-                } else {
-                    $clientes = $clientes->where('u.identificador', $request->user_id);
-                }*/
         $clientes = $clientes->orderBy('id', 'ASC')
             ->get([
                 'clientes.id',
@@ -725,8 +697,8 @@ class ClienteController extends Controller
                 ->where('dp.estado', '1')
                 //->where('pedidos.envio', '1')
                 //->where('pedidos.condicion_envio', 1)
-                ->whereIn('pedidos.condicion_envio_code', [Pedido::ATENDIDO_JEFE_OPE_INT,Pedido::CONFIRMACION_COURIER_INT,Pedido::RECEPCION_COURIER_INT]);
-                //->whereIn('pedidos.envio', [Pedido::ENVIO_CONFIRMAR_RECEPCION, Pedido::ENVIO_RECIBIDO]);
+                ->whereIn('pedidos.condicion_envio_code', [Pedido::ATENDIDO_JEFE_OPE_INT, Pedido::CONFIRMACION_COURIER_INT, Pedido::RECEPCION_COURIER_INT]);
+            //->whereIn('pedidos.envio', [Pedido::ENVIO_CONFIRMAR_RECEPCION, Pedido::ENVIO_RECIBIDO]);
             //->get();
 
             return Datatables::of(DB::table($pedidos))
@@ -862,8 +834,8 @@ class ClienteController extends Controller
                 DB::raw(" (select count(ped2.id) from pedidos ped2 where ped2.cliente_id=clientes.id and ped2.pago in (0,1) and ped2.pagado in (0,1) and ped2.created_at <='2022-11-30 00:00:00'  and ped2.estado=1) as pedidos_mes_deuda_antes "),
                 'clientes.deuda',
                 'clientes.situacion'
-                ,DB::raw("(select DATE_FORMAT(dp1.created_at,'%Y-%m-%d %h:%i:%s') from pedidos dp1 where dp1.estado=1 and dp1.cliente_id=clientes.id order by dp1.created_at desc limit 1) as fechaultimopedido")
-                ,DB::raw(" (select (dp.codigo) from pedidos dp where dp.estado=1 and dp.cliente_id=clientes.id order by dp.created_at desc limit 1) as codigoultimopedido ")
+                , DB::raw("(select DATE_FORMAT(dp1.created_at,'%Y-%m-%d %h:%i:%s') from pedidos dp1 where dp1.estado=1 and dp1.cliente_id=clientes.id order by dp1.created_at desc limit 1) as fechaultimopedido")
+                , DB::raw(" (select (dp.codigo) from pedidos dp where dp.estado=1 and dp.cliente_id=clientes.id order by dp.created_at desc limit 1) as codigoultimopedido ")
             );
 
         if (Auth::user()->rol == "Llamadas") {
@@ -1159,8 +1131,8 @@ class ClienteController extends Controller
                 'clientes.deuda',
                 //DB::raw(" (select lr.s_2022_11 from clientes c inner join listado_resultados lr on c.id=lr.id limit 1) as situacion")
                 'clientes.situacion'
-                ,DB::raw("(select DATE_FORMAT(dp1.created_at,'%Y-%m-%d %h:%i:%s') from pedidos dp1 where dp1.estado=1 and dp1.cliente_id=clientes.id order by dp1.created_at desc limit 1) as fechaultimopedido")
-                ,DB::raw(" (select (dp.codigo) from pedidos dp where dp.estado=1 and dp.cliente_id=clientes.id order by dp.created_at desc limit 1) as codigoultimopedido ")
+                , DB::raw("(select DATE_FORMAT(dp1.created_at,'%Y-%m-%d %h:%i:%s') from pedidos dp1 where dp1.estado=1 and dp1.cliente_id=clientes.id order by dp1.created_at desc limit 1) as fechaultimopedido")
+                , DB::raw(" (select (dp.codigo) from pedidos dp where dp.estado=1 and dp.cliente_id=clientes.id order by dp.created_at desc limit 1) as codigoultimopedido ")
             );
 
         if (Auth::user()->rol == "Llamadas") {
@@ -1295,8 +1267,8 @@ class ClienteController extends Controller
                 'clientes.deuda',
                 //DB::raw(" (select lr.s_2022_11 from clientes c inner join listado_resultados lr on c.id=lr.id limit 1) as situacion")
                 'clientes.situacion'
-                ,DB::raw("(select DATE_FORMAT(dp1.created_at,'%Y-%m-%d %h:%i:%s') from pedidos dp1 where dp1.estado=1 and dp1.cliente_id=clientes.id order by dp1.created_at desc limit 1) as fechaultimopedido")
-                ,DB::raw(" (select (dp.codigo) from pedidos dp where dp.estado=1 and dp.cliente_id=clientes.id order by dp.created_at desc limit 1) as codigoultimopedido ")
+                , DB::raw("(select DATE_FORMAT(dp1.created_at,'%Y-%m-%d %h:%i:%s') from pedidos dp1 where dp1.estado=1 and dp1.cliente_id=clientes.id order by dp1.created_at desc limit 1) as fechaultimopedido")
+                , DB::raw(" (select (dp.codigo) from pedidos dp where dp.estado=1 and dp.cliente_id=clientes.id order by dp.created_at desc limit 1) as codigoultimopedido ")
             );
 
         if (Auth::user()->rol == "Llamadas") {
@@ -1432,8 +1404,8 @@ class ClienteController extends Controller
                 'clientes.deuda',
                 //DB::raw(" (select lr.s_2022_11 from clientes c inner join listado_resultados lr on c.id=lr.id limit 1) as situacion")
                 'clientes.situacion'
-                ,DB::raw("(select DATE_FORMAT(dp1.created_at,'%Y-%m-%d %h:%i:%s') from pedidos dp1 where dp1.estado=1 and dp1.cliente_id=clientes.id order by dp1.created_at desc limit 1) as fechaultimopedido")
-                ,DB::raw(" (select (dp.codigo) from pedidos dp where dp.estado=1 and dp.cliente_id=clientes.id order by dp.created_at desc limit 1) as codigoultimopedido ")
+                , DB::raw("(select DATE_FORMAT(dp1.created_at,'%Y-%m-%d %h:%i:%s') from pedidos dp1 where dp1.estado=1 and dp1.cliente_id=clientes.id order by dp1.created_at desc limit 1) as fechaultimopedido")
+                , DB::raw(" (select (dp.codigo) from pedidos dp where dp.estado=1 and dp.cliente_id=clientes.id order by dp.created_at desc limit 1) as codigoultimopedido ")
             );
 
         if (Auth::user()->rol == "Llamadas") {

@@ -338,6 +338,13 @@ return [
             'can' => 'operacion.modulo',
             'submenu' => [
                 [
+                    'text' => 'Bandeja de sobres',
+                    'route' => 'operaciones.terminados',
+                    'can' => 'operacion.terminados',
+                    'icon' => 'fas fa-check-circle',
+                    'active' => ['pedidos terminados'],
+                ],
+                [
                     'text' => 'Pedidos por atender',
                     'route' => 'operaciones.poratender',
                     'can' => 'operacion.poratender',
@@ -366,18 +373,11 @@ return [
                     'active' => ['pedidos bancarizacion'],
                 ],
                 [
-                    'text' => 'En Jefe de Operaciones',
+                    'text' => 'Jefe de Operaciones',
                     'route' => 'operaciones.entregados',
                     'can' => 'operacion.entregados',
                     'icon' => 'fas fa-check-circle',
                     'active' => ['pedidos entregados'],
-                ],
-                [
-                    'text' => 'Sobres terminados',
-                    'route' => 'operaciones.terminados',
-                    'can' => 'operacion.terminados',
-                    'icon' => 'fas fa-check-circle',
-                    'active' => ['pedidos terminados'],
                 ],
                 [
                     'text' => 'Pendiente Anulación',

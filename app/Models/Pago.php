@@ -2,12 +2,14 @@
 
 namespace App\Models;
 
+use App\Traits\CommonModel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Pago extends Model
 {
     use HasFactory;
+    use CommonModel;
 
     const ANULADO = 'ANULADO';
     const PAGO = 'PAGO';
@@ -79,11 +81,6 @@ class Pago extends Model
         } else {
             return 'PAG' . $users . '-' . $unido . '-' . $this->id;
         }
-    }
-
-    public function scopeActivo($query, $estado = 1,$boolean = 'and')
-    {
-        return $query->where($this->qualifyColumn('estado'), '=', $estado,$boolean);
     }
 
     public function user()

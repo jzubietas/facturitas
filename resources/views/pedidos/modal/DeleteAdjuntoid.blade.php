@@ -12,6 +12,7 @@
         <Form id="formdeleteadjunto" name ="formdeleteadjunto">
           <input type = "hidden" id="eliminar_pedido_id" name="eliminar_pedido_id">
           <input type = "hidden" id="eliminar_pedido_id_imagen" name="eliminar_pedido_id_imagen">
+          <input type = "hidden" id="eliminar_pedido_id_confirmado" name="eliminar_pedido_id_confirmado">
         <div class="modal-body">
           <p>Confirme si desea <strong>ELIMINAR</strong> archivo adjunto</p>
         </div>

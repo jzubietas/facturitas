@@ -54,69 +54,49 @@ class MovimientoController extends Controller
             "ALFREDO ALEJANDRO GABRIEL MONTALVO" => 'ALFREDO ALEJANDRO GABRIEL MONTALVO'
         ];
 
-        //$titulares = CuentaBancaria::join('bancos b');join('users as u', 'pagos.user_id', 'u.id')
-        ////
-
-        return view('movimientos.index', compact('pagosobservados_cantidad', 'superasesor', 'bancos', 'tipotransferencia', 'titulares'));
+        $movimientosSinConciliar= MovimientoBancario::activo()->sinConciliar()->count();
+        return view('movimientos.index', compact('pagosobservados_cantidad', 'superasesor', 'bancos', 'tipotransferencia', 'titulares','movimientosSinConciliar'));
     }
 
 
 
     public function indextabla(Request $request)
     {
-        $movimientos = null;
-
-        //$min = Carbon::createFromFormat('d/m/Y', $request->min)->format('Y-m-d');
-        //$max = Carbon::createFromFormat('d/m/Y', $request->max)->format('Y-m-d');
-
         $movimientos = MovimientoBancario::where('estado', '1');//->get();
         $buscar_banco=$request->banco;
         $buscar_tipo=$request->tipo;
         $buscar_titular=$request->titular;
-        //return $buscar_banco;
         if($buscar_banco)
         {
             $movimientos = $movimientos->where('banco','like','%'.$buscar_banco.'%');
         }
-
-        /*if($buscar_tipo)
-        {
-            $movimientos = $movimientos->where('tipo','like','%'.$buscar_tipo.'%');
-        }*/
 
         if($buscar_titular)
         {
             $movimientos = $movimientos->where('titular','like','%'.$buscar_titular.'%');
         }
 
-        //return $request->all();
-
         $movimientos = $movimientos->select(
-            'movimiento_bancarios.id',
-            //'movimiento_bancarios.id as id2',
-            DB::raw(" (CASE WHEN movimiento_bancarios.id<10 THEN concat('MOV000',movimiento_bancarios.id)
+            [
+                'movimiento_bancarios.id',
+                //'movimiento_bancarios.id as id2',
+                DB::raw(" (CASE WHEN movimiento_bancarios.id<10 THEN concat('MOV000',movimiento_bancarios.id)
                             WHEN movimiento_bancarios.id<100  THEN concat('MOV00',movimiento_bancarios.id)
                             WHEN movimiento_bancarios.id<1000  THEN concat('MOV0',movimiento_bancarios.id)
                             ELSE concat('MOV',movimiento_bancarios.id) END) AS id2"),
-            'movimiento_bancarios.banco',
-            'movimiento_bancarios.titular',
-            'movimiento_bancarios.importe',
-            'movimiento_bancarios.tipo',
-            'movimiento_bancarios.descripcion_otros',
-            DB::raw('(DATE_FORMAT(movimiento_bancarios.fecha, "%Y-%m-%d")) as fecha'),
-            //DB::raw('(DATE_FORMAT(movimiento_bancarios.fecha, "%d/%m/%Y")) as fecha2'),
-            DB::raw("(CASE WHEN movimiento_bancarios.pago =0 THEN 'SIN CONCILIAR' ELSE 'CONCILIADO' END) AS pago"),
-            'movimiento_bancarios.estado',
-            'movimiento_bancarios.created_at',
+                'movimiento_bancarios.banco',
+                'movimiento_bancarios.titular',
+                'movimiento_bancarios.importe',
+                'movimiento_bancarios.tipo',
+                'movimiento_bancarios.descripcion_otros',
+                DB::raw('(DATE_FORMAT(movimiento_bancarios.fecha, "%Y-%m-%d")) as fecha'),
+                //DB::raw('(DATE_FORMAT(movimiento_bancarios.fecha, "%d/%m/%Y")) as fecha2'),
+                DB::raw("(CASE WHEN movimiento_bancarios.pago =0 THEN 'SIN CONCILIAR' ELSE 'CONCILIADO' END) AS pago"),
+                'movimiento_bancarios.estado',
+                'movimiento_bancarios.created_at',
+            ]
         )
         ->orderBy('updated_at','desc');//actualizacion de orden para movimientos
-        //$movimientos=$movimientos->get();
-
-        /*->where(function ($query) {
-            $query->where('c', '=', 1)
-                  ->orWhere('d', '=', 1);
-*/
-
 
         return Datatables::of(DB::table($movimientos))
                     ->addIndexColumn()
@@ -171,7 +151,7 @@ class MovimientoController extends Controller
             $query->where('banco','LIKE','%'.$banco_compara.'%');
         }
 
-        
+
         $monto_compara=$comparar->monto;
         //return $monto_compara;
         //return  $monto_compara;

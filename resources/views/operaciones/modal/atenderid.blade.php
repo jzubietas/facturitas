@@ -29,14 +29,13 @@
 
                         <div class="row">
 
-
-
-
                           <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
                               {!! Form::label('envio_doc', 'Documento enviado') !!}
                               @csrf
                               {!! Form::file('adjunto[]', ['class' => 'form-control-file', 'id'=>'adjunto', 'multiple']) !!}
                               {{-- <td>@csrf<input type="file" id="adjunto" name="adjunto[]" multiple=""/></td> --}}
+
+                              
                           </div>
 
                           <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
@@ -44,6 +43,32 @@
                               {!! Form::number('cant_compro', '', ['class' => 'form-control', 'id' => 'cant_compro', 'step'=>'1', 'min' => '0']) !!}
 
                           </div>
+
+                          <hr>
+                        </div>
+                        <div class="row">
+                          <div class="col-md-12 col-sm-12 col-xs-12">
+                            <button type="button" class="btn btn-primary d-none" id="cargar_adjunto">Subir Informacion</button><br><br><br>
+                          </div>
+                        </div>
+                        <div class="row">
+
+                          <div class="col-12">
+                            <h6><b>Archivos adjuntos:</b></h6>
+                          </div>
+                          <div class="col-6 d-none">
+                            <h6><b>Archivos adjuntos Confirmados:</b></h6>                            
+                          </div>
+                          <div class="col-12">
+                            <div class="row">
+                              <div class="col-12" id="listado_adjuntos"></div>
+                              <div class="col-12" id="listado_adjuntos_antes"></div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="row">
+
+                          
                           <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
                             {!! Form::label('condicion', 'Estado') !!}
 

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\CommonModel;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -9,6 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 class Pedido extends Model
 {
     use HasFactory;
+    use CommonModel;
 
     /**************
      * CONSTANTES PEDIDO
@@ -212,10 +214,6 @@ class Pedido extends Model
         return [];
     }
 
-    public function scopeActivo($query, $status = '1')
-    {
-        return $query->where('pedidos.estado', '=', $status);
-    }
 
     public function scopePagados($query)
     {
@@ -262,7 +260,7 @@ class Pedido extends Model
     }
 
     public function scoperoljefedellamada($query)
-    {       
+    {
         return $query;
     }
 

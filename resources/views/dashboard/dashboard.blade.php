@@ -328,6 +328,7 @@
 @stop
 
 @section('js')
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
     <script src="https://canvasjs.com/assets/script/jquery.canvasjs.min.js"></script>
     <script src="{{ asset('js/datatables.js') }}"></script>
     @if (!$pedidossinpagos == null)

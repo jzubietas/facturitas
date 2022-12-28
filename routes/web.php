@@ -41,6 +41,7 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
 
     Route::get('/setting/administrador', [SettingsController::class, 'settingAdmin'])->name('settings.admin-settings');
     Route::post('/setting/administrador', [SettingsController::class, 'settingAdminStore'])->name('settings.store-admin-settings');
+    Route::post('/setting/administrador/time-clientes', [SettingsController::class, 'settingTimeClienteStore'])->name('settings.store-time-clientes');
 
     Route::post('/setting/store', [SettingsController::class, 'settingStore'])->name('settings.store-setting');
 
@@ -75,7 +76,6 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
 
 
     Route::get('pedidosenvioclientetabla', [ClienteController::class, 'pedidosenvioclientetabla'])->name('cargar.pedidosenvioclientetabla');
-    Route::post('pedidostiempo', [ClienteController::class, 'pedidostiempo'])->name('pedidostiempo');
     Route::get('clientescreatepago', [ClienteController::class, 'clientedeasesorpagos'])->name('clientescreatepago');
 
     Route::get('clientes.createbf', [ClienteController::class, 'createbf'])->name('clientes.createbf');
@@ -257,12 +257,15 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     Route::get('operaciones.bancarizacion', [OperacionController::class, 'Bancarizacion'])->name('operaciones.bancarizacion');
     Route::get('operaciones.bancarizaciontabla', [OperacionController::class, 'Bancarizaciontabla'])->name('operaciones.bancarizaciontabla');
     Route::post('operaciones.atenderid', [OperacionController::class, 'Atenderid'])->name('operaciones.atenderid');
+    Route::post('operaciones.atenderiddismiss', [OperacionController::class, 'Atenderiddismiss'])->name('operaciones.atenderiddismiss');
     Route::get('operaciones.editatender/{pedido}', [OperacionController::class, 'editAtender'])->name('operaciones.editatender');
     Route::post('operaciones.editatencion/{pedido}', [OperacionController::class, 'editAtencion'])->name('operaciones.editatencion');
+    Route::post('operaciones.editatencionsinconfirmar/{pedido}', [OperacionController::class, 'editatencionsinconfirmar'])->name('operaciones.editatencionsinconfirmar');
     Route::post('operaciones.datossubidaadj/{pedido}', [OperacionController::class, 'DatosSubidaAdjunto'])->name('operaciones.datossubidaadj');
     Route::post('operaciones.eliminaradjunto', [OperacionController::class, 'eliminarAdjuntoOperaciones'])->name('operaciones.eliminaradjunto');
 
     Route::post('operaciones.updateatender/{pedido}', [OperacionController::class, 'updateAtender'])->name('operaciones.updateatender');
+    Route::post('operaciones.updateatendersinconfirmar/{pedido}', [OperacionController::class, 'updateatendersinconfirmar'])->name('operaciones.updateatendersinconfirmar');
     Route::post('operaciones.updateatenderid/{pedido}', [OperacionController::class, 'updateAtenderId'])->name('operaciones.updateatenderid');
     Route::get('operaciones.showatender/{pedido}', [OperacionController::class, 'showAtender'])->name('operaciones.showatender');
     Route::post('operaciones.recepcionid', [EnvioController::class, 'confirmarRecepcionID'])->name('operaciones.recepcionid');

@@ -276,6 +276,7 @@ class PedidoStatusController extends Controller
                 $pedidos->whereIn('pedidos.condicion_code', [Pedido::ATENDIDO_INT]);
             }*/
             $pedidos->whereIn('pedidos.condicion_envio_code', [Pedido::POR_ATENDER_INT, Pedido::EN_PROCESO_ATENCION_INT]);
+            //$pedidos->where('pedidos.dar_confirmar_descarga', 0);
 
             return datatables()->query(DB::table($pedidos))
                 ->addIndexColumn()
@@ -307,12 +308,23 @@ class PedidoStatusController extends Controller
             abort(401);
         }
         $pedidos_atendidos = Pedido::query()->activo()->segunRolUsuario([User::ROL_ADMIN, User::ROL_ENCARGADO, User::ROL_ASESOR])
-            ->atendidos()
+            //->atendidos()
             ->noPendingAnulation()
             ->where('da_confirmar_descarga', '0')
+            ->whereNotIn('pedidos.condicion_code', [Pedido::POR_ATENDER_OPE_INT, Pedido::EN_ATENCION_OPE_INT])
             ->count();
-        $pedidos_atendidos_total = Pedido::query()->activo()->segunRolUsuario([User::ROL_ADMIN, User::ROL_ENCARGADO, User::ROL_ASESOR])->atendidos()->noPendingAnulation()->count();
+        //$pedidos_atendidos_total = Pedido::query()->activo()->segunRolUsuario([User::ROL_ADMIN, User::ROL_ENCARGADO, User::ROL_ASESOR])->atendidos()->noPendingAnulation()->count();
+
+        $pedidos_atendidos_total = Pedido::query()
+            ->activo()
+            ->segunRolUsuario([User::ROL_ADMIN, User::ROL_ENCARGADO, User::ROL_ASESOR])
+            ->noPendingAnulation()
+            ->where('da_confirmar_descarga', '0')
+            ->whereNotIn('pedidos.condicion_code', [Pedido::POR_ATENDER_OPE_INT, Pedido::EN_ATENCION_OPE_INT])
+            ->count();
+
         $pedidos_por_atender = Pedido::query()->activo()->segunRolUsuario([User::ROL_ADMIN, User::ROL_ENCARGADO, User::ROL_ASESOR])->porAtender()->noPendingAnulation()->count();
+
         if ($request->has('ajax-datatable')) {
 
             $pedidos = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')
@@ -408,8 +420,9 @@ class PedidoStatusController extends Controller
                 $pedidos->whereIn('pedidos.condicion_code', [Pedido::POR_ATENDER_INT, Pedido::EN_PROCESO_ATENCION_INT]);
             } *//*else*/
             {
-                $pedidos->where('pedidos.da_confirmar_descarga', '0');
-                $pedidos->whereIn('pedidos.condicion_envio_code', [Pedido::ATENDIDO_INT]);
+                $pedidos->where('pedidos.da_confirmar_descarga', '0')
+                    ->whereNotIn('pedidos.condicion_code', [Pedido::POR_ATENDER_OPE_INT, Pedido::EN_ATENCION_OPE_INT]);
+                //$pedidos->whereIn('pedidos.condicion_envio_code', [Pedido::ATENDIDO_INT]);
             }
 
             return datatables()->query(DB::table($pedidos))
@@ -431,7 +444,7 @@ class PedidoStatusController extends Controller
                         $btn .= '<button data-toggle="jqConfirm" data-target="' . route("pedidos.estados.detalle-atencion", $pedido->id) . '"
                                     data-idc="' . $pedido->id2 . '"
                                     data-codigo="' . $pedido->codigos . '"
-                                    class="btn btn-outline-dark btn-sm mx-2">
+                                    class="btn btn-primary btn-sm mx-2">
                                     <i class="fa fa-eye"></i> Detalle Atención
                                 </button>';
                     }
@@ -450,9 +463,9 @@ class PedidoStatusController extends Controller
 
     public function pedidoDetalleAtencion(Pedido $pedido)
     {
-        if (!\auth()->user()->can('pedidos.mispedidos')) {
+        /*if (!\auth()->user()->can('pedidos.mispedidos')) {
             abort(401);
-        }
+        }*/
         return response()->json([
             "data" => $pedido->imagenAtencion()->activo()->get()
         ]);
@@ -460,9 +473,9 @@ class PedidoStatusController extends Controller
 
     public function pedidoDetalleAtencionConfirm(Request $request, Pedido $pedido)
     {
-        if (!\auth()->user()->can('pedidos.mispedidos')) {
+        /*if (!\auth()->user()->can('pedidos.mispedidos')) {
             abort(401);
-        }
+        }*/
         if ($request->get('action') == 'confirm_download') {
             $pedido->update([
                 'da_confirmar_descarga' => 1

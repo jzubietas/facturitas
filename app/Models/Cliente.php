@@ -2,12 +2,14 @@
 
 namespace App\Models;
 
+use App\Traits\CommonModel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Cliente extends Model
 {
     use HasFactory;
+    use CommonModel;
 
     const RECUPERADO_RECIENTE = "RECUPERADO RECIENTE";
     const RECUPERADO_PERMANENTE = "RECUPERADO ABANDONO";
@@ -22,6 +24,9 @@ class Cliente extends Model
     const RECUPERADO = "RECUPERADO";
 
     protected $guarded = ['id'];
+    protected $dates=[
+        'temporal_update'
+    ];
 
     public function user()
     {
@@ -46,11 +51,6 @@ class Cliente extends Model
 
     public function direccion_grupos(){
         return $this->hasMany(DireccionGrupo::class,'cliente_id');
-    }
-
-    public function scopeActivo($query, $estado = 1, $boolean = 'and')
-    {
-        return $query->where($this->qualifyColumn('estado'), '=', $estado, $boolean);
     }
 
 }

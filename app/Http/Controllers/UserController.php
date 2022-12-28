@@ -6,6 +6,7 @@ use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
 use DataTables;
 
@@ -72,12 +73,11 @@ class UserController extends Controller
 
         $files = $request->file('imagen');
         $destinationPath = base_path('public/storage/users/');
-        
-        if(isset($files)){
-            $file_name = Carbon::now()->second.$files->getClientOriginalName();
-            $files->move($destinationPath , $file_name);
-        }
-        else{
+
+        if (isset($files)) {
+            $file_name = Carbon::now()->second . $files->getClientOriginalName();
+            $files->move($destinationPath, $file_name);
+        } else {
             $file_name = 'logo_facturas.png';
         }
 
@@ -217,8 +217,8 @@ class UserController extends Controller
             ->where('estado', '1')
             ->pluck('name', 'id');
         $superasesor = User::where('rol', 'Super asesor')->count();
-        
-        return view('usuarios.llamadas', compact('users', 'supervisores', 'supervisor', 'operarios', 'superasesor','jefellamadas','asesores'));
+
+        return view('usuarios.llamadas', compact('users', 'supervisores', 'supervisor', 'operarios', 'superasesor', 'jefellamadas', 'asesores'));
     }
 
     public function Llamadastabla(Request $request)
@@ -229,21 +229,21 @@ class UserController extends Controller
             ->get();
 
         return Datatables::of($users)
-                    ->addIndexColumn()
-                    ->addColumn('action', function($user){     
-                        $btn="";
-                        $btn = $btn.'<a href="" data-target="#modal-asignarjefellamadas" data-toggle="modal" data-jefellamadas="'.$user->id.'"><button class="btn btn-info btn-sm"><i class="fas fa-check"></i> Asignar Jefe Llamadas</button></a>';
-                        //$btn = $btn.'<a href="" data-target="#modal-asignarasesor" data-toggle="modal" data-supervisor="'.$user->id.'"><button class="btn btn-warning btn-sm"><i class="fas fa-check"></i> Asignar Asesor</button></a>';
-                        return $btn;
-                    })
-                    ->rawColumns(['action'])
-                    ->make(true);
+            ->addIndexColumn()
+            ->addColumn('action', function ($user) {
+                $btn = "";
+                $btn = $btn . '<a href="" data-target="#modal-asignarjefellamadas" data-toggle="modal" data-jefellamadas="' . $user->id . '"><button class="btn btn-info btn-sm"><i class="fas fa-check"></i> Asignar Jefe Llamadas</button></a>';
+                //$btn = $btn.'<a href="" data-target="#modal-asignarasesor" data-toggle="modal" data-supervisor="'.$user->id.'"><button class="btn btn-warning btn-sm"><i class="fas fa-check"></i> Asignar Asesor</button></a>';
+                return $btn;
+            })
+            ->rawColumns(['action'])
+            ->make(true);
     }
 
     public function Asesorcombo(Request $request)
-    {   
+    {
 
-        $mirol=Auth::user()->rol;
+        $mirol = Auth::user()->rol;
         $users = null;
         $users = User::where('estado', '1')->where("rol", "Asesor");
 
@@ -251,26 +251,20 @@ class UserController extends Controller
             $users = $users->where('llamada', Auth::user()->id)->where("rol", "Asesor");
         } else if ($mirol == 'Jefe de llamadas') {
             $users = $users->where('llamada', Auth::user()->id)->where("rol", "Asesor");
-        } 
-        
-        else if ($mirol == 'Asesor') {
+        } else if ($mirol == User::ROL_APOYO_ADMINISTRATIVO) {
+            $users = $users->where('identificador', '<>','B');
+        } else if ($mirol == 'Asesor') {
             $users = $users->where('id', Auth::user()->id)->where("rol", "Asesor");
-        }
-        
-        else if ($mirol == 'ASESOR ADMINISTRATIVO') {
-                        
+        } else if ($mirol == 'ASESOR ADMINISTRATIVO') {
+
             //$usersB = User::where("identificador", "ADMIN")->where("rol", "Administrador");
             $users = User::where("identificador", "B")->where("rol", "ASESOR ADMINISTRATIVO");
             //$users = $usersB->union($users);
-        
-        }
-        
-        else {
+
+        } else {
             $usersB = User::where("identificador", "ADMIN")->where("rol", "Administrador");
             $users = $usersB->union($users);
         }
-        
-
 
 
         $users = $users->orderBy('exidentificador', 'ASC')->get();
@@ -279,42 +273,26 @@ class UserController extends Controller
 
         //$html = '<option value="">' . trans('---- SELECCIONE ASESOR ----') . '</option>';
 
-                          
 
-        foreach ($users as $user) 
-        {
+        foreach ($users as $user) {
 
 
-
-            if($user->identificador=='B')
-            {
-                $html .= '<option style="color:black" value="' . $user->identificador . '">' . $user->identificador. '</option>';
-            }
-            
-   
-
-            elseif($user->identificador=='ADMIN')
-            {
-                $html .= '<option style="color:black" value="' . $user->identificador . '">' . $user->identificador. '</option>';
-            }
-            
-            
-            
-            else{
-                if($user->exidentificador==22 || $user->exidentificador==21)
-                {
-                    $html .= '<option style="color:black" value="' . $user->identificador . '">' . $user->identificador. ( ($user->exidentificador!=null)? '  (' . $user->exidentificador.')':'' ) . '</option>';
-                }else 
-                {
-                    if(intval($user->exidentificador)%2==0)
-                    {
-                        $html .= '<option disabled style="color:red" value="' . $user->identificador . '">' . $user->identificador.  ( ($user->exidentificador!=null)? '  (' . $user->exidentificador.')':'' )  . '</option>';
-                    }else{
-                        $html .= '<option style="color:black" value="' . $user->identificador . '">' . $user->identificador. ( ($user->exidentificador!=null)? '  (' . $user->exidentificador.')':'' ) . '</option>';
+            if ($user->identificador == 'B') {
+                $html .= '<option style="color:black" value="' . $user->identificador . '">' . $user->identificador . '</option>';
+            } elseif ($user->identificador == 'ADMIN') {
+                $html .= '<option style="color:black" value="' . $user->identificador . '">' . $user->identificador . '</option>';
+            } else {
+                if ($user->exidentificador == 22 || $user->exidentificador == 21) {
+                    $html .= '<option style="color:black" value="' . $user->identificador . '">' . $user->identificador . (($user->exidentificador != null) ? '  (' . $user->exidentificador . ')' : '') . '</option>';
+                } else {
+                    if (intval($user->exidentificador) % 2 == 0) {
+                        $html .= '<option disabled style="color:red" value="' . $user->identificador . '">' . $user->identificador . (($user->exidentificador != null) ? '  (' . $user->exidentificador . ')' : '') . '</option>';
+                    } else {
+                        $html .= '<option style="color:black" value="' . $user->identificador . '">' . $user->identificador . (($user->exidentificador != null) ? '  (' . $user->exidentificador . ')' : '') . '</option>';
                     }
                 }
-                
-                
+
+
             }
         }
 
@@ -324,57 +302,40 @@ class UserController extends Controller
     }
 
     public function Asesorcombopago(Request $request)
-    {   
-        $mirol=Auth::user()->rol;
-        $users = null;
+    {
+        $mirol = Auth::user()->rol;
         $users = User::where('estado', '1')->where("rol", "Asesor");
 
         if ($mirol == 'Llamadas') {
             $users = $users->where('llamada', Auth::user()->id)->where("rol", "Asesor");
 
-        } else if ($mirol == 'Jefe de llamadas') {
-
-            $users = $users->where('llamada', Auth::user()->id)->where("rol", "Asesor");
-        } else if ($mirol == 'Asesor') {
-
-            $users = $users->where('id',Auth::user()->id)->where("rol","Asesor");
-        }else{
-            
-            $usersB=User::where("identificador","B")->where("rol","Administrador");
+        } elseif ($mirol == 'Jefe de llamadas') {
+            $users = $users->WhereNotIn("identificador", ['B']);
+        } elseif ($mirol == 'Asesor') {
+            $users = $users->where('id', Auth::user()->id)->where("rol", "Asesor");
+        } else {
+            $usersB = User::where("identificador", "B");//->where("rol", "Administrador");// ahora es "ASESOR ADMINISTRATIVO"
             $users = $usersB->union($users);
         }
         $users = $users->orderBy('exidentificador', 'ASC')->get();
         $html = "";
         //$html = '<option value="">' . trans('---- SELECCIONE ASESOR ----') . '</option>';
-        foreach ($users as $user) 
-        {
-            if($user->identificador=='B')
-            {
-                $html .= '<option style="color:black" value="' . $user->identificador . '">' . $user->identificador. '</option>';
-            }
-            
-            
-            else{
+        foreach ($users as $user) {
+            if ($user->identificador == 'B') {
+                $html .= '<option style="color:black" value="' . $user->identificador . '">' . $user->identificador . '</option>';
+            } else {
 
-                if($user->exidentificador==22 || $user->exidentificador==21)
-                
-                {
-                    $html .= '<option style="color:black" value="' . $user->identificador . '">' . $user->identificador. ( ($user->exidentificador!=null)? '  (' . $user->exidentificador.')':'' ) . '</option>';
+                if ($user->exidentificador == 22 || $user->exidentificador == 21) {
+                    $html .= '<option style="color:black" value="' . $user->identificador . '">' . $user->identificador . (($user->exidentificador != null) ? '  (' . $user->exidentificador . ')' : '') . '</option>';
+                } else {
+
+                    if (intval($user->exidentificador) % 2 == 0) {
+                        $html .= '<option style="color:red" value="' . $user->identificador . '">' . $user->identificador . (($user->exidentificador != null) ? '  (' . $user->exidentificador . ')' : '') . '</option>';
+                    } else {
+                        $html .= '<option style="color:black" value="' . $user->identificador . '">' . $user->identificador . (($user->exidentificador != null) ? '  (' . $user->exidentificador . ')' : '') . '</option>';
+                    }
                 }
-                
-                
-                else {
-                
-                    if(intval($user->exidentificador)%2==0)
-                    {
-                        $html .= '<option style="color:red" value="' . $user->identificador . '">' . $user->identificador.  ( ($user->exidentificador!=null)? '  (' . $user->exidentificador.')':'' )  . '</option>';
-                    }
-                    
-                    else{
-                        $html .= '<option style="color:black" value="' . $user->identificador . '">' . $user->identificador. ( ($user->exidentificador!=null)? '  (' . $user->exidentificador.')':'' ) . '</option>';
-                    }
-                 }
-                
+
             }
         }
 
@@ -410,9 +371,9 @@ class UserController extends Controller
             ->where('estado', '1')
             ->pluck('name', 'id');
         $superasesor = User::where('rol', 'Super asesor')->count();
-        
-        return view('usuarios.asesores', compact('users', 'supervisores', 'supervisor', 'operarios', 'superasesor','supervisores','asesores','encargados','llamadas'));
-        
+
+        return view('usuarios.asesores', compact('users', 'supervisores', 'supervisor', 'operarios', 'superasesor', 'supervisores', 'asesores', 'encargados', 'llamadas'));
+
     }
 
     public function Asesorestabla(Request $request)
@@ -450,19 +411,18 @@ class UserController extends Controller
             ->get();
 
         return Datatables::of($users)
-                ->addIndexColumn()
-                ->addColumn('action', function($user){     
-                    $btn="";
-                    $btn = $btn.'<a href="" data-target="#modal-asignarencargado" data-toggle="modal" data-encargado="'.$user->id.'"><button class="btn btn-info btn-sm"><i class="fas fa-check"></i> Asignar Encargado</button></a>';
-                    $btn = $btn.'<a href="" data-target="#modal-asignaroperario" data-toggle="modal" data-operario="'.$user->id.'"><button class="btn btn-warning btn-sm"><i class="fas fa-check"></i> Asignar Operario</button></a>';
-                    $btn = $btn.'<a href="" data-target="#modal-asignarllamadas" data-toggle="modal" data-llamadas="'.$user->id.'"><button class="btn btn-success btn-sm"><i class="fas fa-check"></i> Asignar Llamadas</button></a>';
-                    return $btn;
-                })
-                ->rawColumns(['action'])
-                ->make(true);
+            ->addIndexColumn()
+            ->addColumn('action', function ($user) {
+                $btn = "";
+                $btn = $btn . '<a href="" data-target="#modal-asignarencargado" data-toggle="modal" data-encargado="' . $user->id . '"><button class="btn btn-info btn-sm"><i class="fas fa-check"></i> Asignar Encargado</button></a>';
+                $btn = $btn . '<a href="" data-target="#modal-asignaroperario" data-toggle="modal" data-operario="' . $user->id . '"><button class="btn btn-warning btn-sm"><i class="fas fa-check"></i> Asignar Operario</button></a>';
+                $btn = $btn . '<a href="" data-target="#modal-asignarllamadas" data-toggle="modal" data-llamadas="' . $user->id . '"><button class="btn btn-success btn-sm"><i class="fas fa-check"></i> Asignar Llamadas</button></a>';
+                return $btn;
+            })
+            ->rawColumns(['action'])
+            ->make(true);
     }
 
-    
 
     public function AsignarSupervisor(Request $request, User $user)
     {
@@ -476,15 +436,15 @@ class UserController extends Controller
     public function AsignarEncargadopost(Request $request)
     {
         if (!$request->hiddenIdencargado) {
-            $html="";
+            $html = "";
 
-        }else{
-            $encargado=$request->encargado;
-            $buscar=$request->hiddenIdencargado;
+        } else {
+            $encargado = $request->encargado;
+            $buscar = $request->hiddenIdencargado;
 
-            $html=$buscar."|".$encargado;
+            $html = $buscar . "|" . $encargado;
 
-            $user=User::find($request->hiddenIdencargado);
+            $user = User::find($request->hiddenIdencargado);
             $user->update([
                 'supervisor' => $request->encargado
             ]);
@@ -546,41 +506,42 @@ class UserController extends Controller
 
         return redirect()->route('users.asesores')->with('info', 'asignado');
     }
-/*
-    public function AsignarOperariopost(Request $request)
-    {
-        if (!$request->hiddenIdasesor) {
-            $html = "";
 
-        } else {
-            $asesor = $request->asesor;
-            $buscar = $request->hiddenIdasesor;
+    /*
+        public function AsignarOperariopost(Request $request)
+        {
+            if (!$request->hiddenIdasesor) {
+                $html = "";
 
-            $html = $buscar . "|" . $asesor;
-            $user = User::find($request->hiddenIdasesor);
-            $jefe = User::find($request->asesor, ['jefe']);
-            $user->update([
-                'operario' => $request->asesor,
-                'jefe' => $jefe->jefe
-            ]);
+            } else {
+                $asesor = $request->asesor;
+                $buscar = $request->hiddenIdasesor;
 
-        }
+                $html = $buscar . "|" . $asesor;
+                $user = User::find($request->hiddenIdasesor);
+                $jefe = User::find($request->asesor, ['jefe']);
+                $user->update([
+                    'operario' => $request->asesor,
+                    'jefe' => $jefe->jefe
+                ]);
 
-        return response()->json(['html' => $html]);
-        //return redirect()->route('users.asesores')->with('info', 'asignado');
-    } */
+            }
+
+            return response()->json(['html' => $html]);
+            //return redirect()->route('users.asesores')->with('info', 'asignado');
+        } */
 
     public function AsignarOperariopost(Request $request)
     {
         if (!$request->hiddenIdoperario) {
-            $html="";
+            $html = "";
 
-        }else{
-            $asesor=$request->operario;
-            $buscar=$request->hiddenIdoperario;
+        } else {
+            $asesor = $request->operario;
+            $buscar = $request->hiddenIdoperario;
 
-            $html=$buscar."|".$asesor;
-            $user=User::find($request->hiddenIdoperario);
+            $html = $buscar . "|" . $asesor;
+            $user = User::find($request->hiddenIdoperario);
             $jefe = User::find($request->operario, ['jefe']);
             $user->update([
                 'operario' => $request->operario,
@@ -669,7 +630,6 @@ class UserController extends Controller
         return redirect()->route('users.misasesores')->with('info', 'asignado');
     }
 
-    
 
     public function Encargados()
     {
@@ -683,7 +643,7 @@ class UserController extends Controller
 
     public function Operarios()
     {
-        $users = User::whereIn('rol', ['Operario','BANCARIZACION'])
+        $users = User::whereIn('rol', ['Operario', 'BANCARIZACION'])
             ->where('estado', '1')
             ->get();
         $jefes = User::where('rol', 'Jefe de operaciones')
@@ -730,14 +690,14 @@ class UserController extends Controller
 
 
     public function MiPersonal()
-    {       
-            $users = User::whereIn('rol', ['Encargado','Jefe de llamadas','Jefe de operaciones'])
-                        ->where('estado', '1')
-                        ->get(); 
-                      
-            $superasesor = User::where('rol', 'Super asesor')->count();
-            
-            return view('usuarios.mipersonal', compact('users','superasesor'));
+    {
+        $users = User::whereIn('rol', ['Encargado', 'Jefe de llamadas', 'Jefe de operaciones'])
+            ->where('estado', '1')
+            ->get();
+
+        $superasesor = User::where('rol', 'Super asesor')->count();
+
+        return view('usuarios.mipersonal', compact('users', 'superasesor'));
     }
 
     public function indextablapersonal(Request $request)
@@ -761,12 +721,12 @@ class UserController extends Controller
             )
             ->orderBy('users.rol', 'desc')
             ->get();
-            
-            return Datatables::of($users)
+
+        return Datatables::of($users)
             ->addIndexColumn()
-            ->addColumn('action', function($users){     
-                $btn='';
-                $btn = $btn.'<a href="" data-target="#modal-historial-personal" data-toggle="modal" data-personal="'.$users['id'].'"><button class="btn btn-danger btn-sm"><i class="fas fa-eye-alt"></i> Ver Asignados</button></a>';   
+            ->addColumn('action', function ($users) {
+                $btn = '';
+                $btn = $btn . '<a href="" data-target="#modal-historial-personal" data-toggle="modal" data-personal="' . $users['id'] . '"><button class="btn btn-danger btn-sm"><i class="fas fa-eye-alt"></i> Ver Asignados</button></a>';
                 return $btn;
             })
             ->rawColumns(['action'])
@@ -774,8 +734,8 @@ class UserController extends Controller
     }
 
     public function personaltablahistorial(Request $request)
-    {   
-        $personal=User::findOrFail($request->personal);
+    {
+        $personal = User::findOrFail($request->personal);
         $query = null;
         $rol = $personal->rol;
         $id = $personal->id;
@@ -796,23 +756,22 @@ class UserController extends Controller
                 'users.rol',
                 'users.estado'
             )
-            ->where('users.estado', '1')
-            ->where('rol', 'Llamadas');
-            
-        }else if($rol=="Jefe de operaciones"){
+                ->where('users.estado', '1')
+                ->where('rol', 'Llamadas');
+
+        } else if ($rol == "Jefe de operaciones") {
             $query = User::select('users.id',
                 'users.name',
                 'users.email',
                 'users.rol',
                 'users.estado'
             )
-            ->where('users.estado', '1')
-            ->where('rol', 'Operario');
-            
+                ->where('users.estado', '1')
+                ->where('rol', 'Operario');
+
         }
-       
-        
-        
+
+
         return Datatables::of(\DB::table($query))
             ->addIndexColumn()
             ->rawColumns(['action'])

@@ -60,8 +60,13 @@
                       <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12" id="listado_adjuntos"></div>
                       <div id="sustento_adjunto">
                           <h5><b>Sustento:</b></h5>
-                          <textarea name="sustento" id="sustento_data" class="form-control" cols="30" rows="5" placeholder="El asesor ya envio los ajuntos hacia el clíente, Ingrese un sustento para validar el envio de estos nuevos adjuntos."></textarea>
-                      </divid>
+                          <style>
+                              #sustento_data::placeholder{
+                                  color:#D9D9D9;
+                              }
+                          </style>
+                          <textarea name="sustento" id="sustento_data" class="form-control" cols="30" rows="5" placeholder="El asesor ya envió los ajuntos hacia el clíente, justifique porque esta adjuntando archivos nuevamente."></textarea>
+                      </div>
 
                   </div>
                 </div>

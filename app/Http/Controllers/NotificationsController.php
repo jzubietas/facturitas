@@ -124,9 +124,10 @@ class NotificationsController extends Controller
             ->count();
         // Estado de pediddos
         $contador_pedidos_atendidos = Pedido::query()->activo()->segunRolUsuario([\App\Models\User::ROL_ADMIN, User::ROL_ENCARGADO, User::ROL_ASESOR])
-            ->atendidos()
+            //->atendidos()
             ->noPendingAnulation()
             ->where('da_confirmar_descarga', '0')
+            ->whereNotIn('pedidos.condicion_code', [Pedido::POR_ATENDER_OPE_INT, Pedido::EN_ATENCION_OPE_INT])
             ->count();
 
         /*

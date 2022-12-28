@@ -201,18 +201,16 @@
                         render: $.fn.dataTable.render.number(',', '.', 2, '')
                     },
                     {
-                        data: 'condicion_envio_code',
-                        name: 'condicion_envio_code',
+                        data: 'condicion_envio',
+                        name: 'condicion_envio',
                         render: function (data, type, row, meta) {
-                            if (row.condicion_code == 1) {
-                                return '{{\App\Models\Pedido::POR_ATENDER_OPE }}';
-                            } else if (row.condicion_code == 2) {
-                                return '{{\App\Models\Pedido::EN_ATENCION_OPE }}';
-                            } else if (row.condicion_code == 3) {
-                                return '{{\App\Models\Pedido::ATENDIDO_OPE }}';
-                            } else if (row.condicion_code == 4) {
-                                return '{{\App\Models\Pedido::ANULADO }}';
+                            if (row.pendiente_anulacion == 1) {
+                                return '<span class="badge badge-danger">' + '{{\App\Models\Pedido::PENDIENTE_ANULACION }}' + '</span>';
                             }
+                            if(row.estado==0){
+                                return '<span class="badge badge-danger">'+'{{\App\Models\Pedido::ANULADO }}'+'</span>';
+                            }
+                            return '<span class="badge badge-success" style="background-color: '+row.condicion_envio_color+'!important;">'+row.condicion_envio+'</span>';
                         }
                     },
                     {

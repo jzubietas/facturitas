@@ -283,7 +283,9 @@
         //cuando abre el form de anular pedido
         var button = $(event.relatedTarget)
         var idunico = button.data('revertir')
-        $(".textcode").html("PED"+idunico);
+          var codigo_pedido = button.data('codigo')
+        //$(".textcode").html("PED"+idunico);
+          $(".textcode").html(codigo_pedido);
         $("#hiddenRevertirpedido").val(idunico);
       });
 
@@ -469,13 +471,13 @@
               if(row.condicion_envio_code==5)
               {
                 data = data+'<a href="" data-target="#modal-envio-op" data-envio='+row.id+' data-code="'+ row.codigos +'" data-toggle="modal" ><button class="btn btn-success btn-sm">ENVIO A COURIER JEFE OPE</button></a><br>';
-                data = data+'<a href="" data-target="#modal-revertir" data-revertir='+row.id+' data-toggle="modal" ><button class="btn btn-danger btn-sm">Revertir</button></a>';
+                data = data+'<a href="" data-target="#modal-revertir" data-revertir='+row.id+'  data-codigo='+row.codigo+' data-toggle="modal" ><button class="btn btn-danger btn-sm">Revertir</button></a>';
               }
 
               if(row.condicion_envio_code == 13)
               {
                   data = data+'<a href="" class="btn-sm btn-secondary" data-target="#modal-envio" data-code="'+ row.codigos +'" data-envio='+row.id+' data-toggle="modal" ><i class="fa fa-check text-warning" aria-hidden="true"></i> Confirmar</a>';
-                  data = data+'<a href="" data-target="#modal-revertir" data-revertir='+row.id+' data-toggle="modal" ><button class="btn btn-danger btn-sm">Revertir</button></a>';
+                  data = data+'<a href="" data-target="#modal-revertir" data-revertir='+row.id+' data-codigo='+row.codigo+' data-toggle="modal" ><button class="btn btn-danger btn-sm">Revertir</button></a>';
               }
 
               return data;
