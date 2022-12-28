@@ -308,12 +308,23 @@ class PedidoStatusController extends Controller
             abort(401);
         }
         $pedidos_atendidos = Pedido::query()->activo()->segunRolUsuario([User::ROL_ADMIN, User::ROL_ENCARGADO, User::ROL_ASESOR])
-            ->atendidos()
+            //->atendidos()
             ->noPendingAnulation()
             ->where('da_confirmar_descarga', '0')
+            ->whereNotIn('pedidos.condicion_code', [Pedido::POR_ATENDER_OPE_INT, Pedido::EN_ATENCION_OPE_INT])
             ->count();
-        $pedidos_atendidos_total = Pedido::query()->activo()->segunRolUsuario([User::ROL_ADMIN, User::ROL_ENCARGADO, User::ROL_ASESOR])->atendidos()->noPendingAnulation()->count();
+        //$pedidos_atendidos_total = Pedido::query()->activo()->segunRolUsuario([User::ROL_ADMIN, User::ROL_ENCARGADO, User::ROL_ASESOR])->atendidos()->noPendingAnulation()->count();
+
+        $pedidos_atendidos_total = Pedido::query()
+            ->activo()
+            ->segunRolUsuario([User::ROL_ADMIN, User::ROL_ENCARGADO, User::ROL_ASESOR])
+            ->noPendingAnulation()
+            ->where('da_confirmar_descarga', '0')
+            ->whereNotIn('pedidos.condicion_code', [Pedido::POR_ATENDER_OPE_INT, Pedido::EN_ATENCION_OPE_INT])
+            ->count();
+
         $pedidos_por_atender = Pedido::query()->activo()->segunRolUsuario([User::ROL_ADMIN, User::ROL_ENCARGADO, User::ROL_ASESOR])->porAtender()->noPendingAnulation()->count();
+
         if ($request->has('ajax-datatable')) {
 
             $pedidos = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')
