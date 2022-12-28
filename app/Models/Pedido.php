@@ -16,8 +16,8 @@ class Pedido extends Model
      * CONSTANTES PEDIDO
      */
     const POR_ATENDER = 'POR ATENDER - OPE';//1
-    const EN_PROCESO_ATENCION = 'EN PROCESO ATENCION';//2
-    const ATENDIDO = 'ATENDIDO';//3
+    const EN_PROCESO_ATENCION = 'EN ATENCION - OPE';//2
+    const ATENDIDO = 'ATENDIDO - OPE';//3
     const ANULADO = 'ANULADO';//4
     const PENDIENTE_ANULACION = 'PENDIENTE ANULACION';//
 
