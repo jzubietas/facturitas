@@ -79,7 +79,7 @@ class PageclienteInfo extends Export implements WithColumnFormatting, FromCollec
     public function title(): string
     {
         //return parent::title();//Por defecto se toma del nombre de la clase de php, en este caso seria "Pagina One" de titulo
-        return 'Info de Cliente';
+        return 'Clientes';
     }
 
     public function columnWidths(): array
@@ -265,7 +265,7 @@ class PageclienteInfo extends Export implements WithColumnFormatting, FromCollec
             //,"deuda"=>"Deuda"
             //,"pidio"=>"Pidio"
             ,"fecha"=>"Fecha"
-            ,"codigo"=>"codigo"
+            ,"codigo"=>"Ultimo Cod. Pedido"
             ,"situacion"=>"Situacion"
             ,'deposito'=>'Deposito'
             ,"porcentajefsb"=>"Porcentaje Fisico sin banca"
