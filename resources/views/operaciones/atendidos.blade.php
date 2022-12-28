@@ -306,32 +306,28 @@
             });
 
 
-            $(document).on("submit", "#formulario_adjuntos", function (evento) {
-                evento.preventDefault();
-
+            $(document).on("click", "#cargar_adjunto", function (evento) {
                 let idunico = $("#hiddenAtender").val();
                 console.log(idunico);
                 $('#cargar_adjunto').attr("disabled", true);
-                //$(this).attr('disabled',true);
-                //$(this).text('Subiendo archivos...');
                 $('#cargar_adjunto').html('Subiendo archivos...');
                 //e.preventDefault();
-                var data = new FormData(document.getElementById("formulario_adjuntos"));
-
+                let cant_compro = $("#cant_compro").val();
+                if (cant_compro == '') $("#cant_compro").val(0);
+                var data = new FormData(document.getElementById("formularioatender"));
 
                 $.ajax({
                     type: 'POST',
-                    url: "{{ route('operaciones.updateatender',':id') }}".replace(':id', idunico),
+                    url: "{{ route('operaciones.updateatendersinconfirmar',':id') }}".replace(':id', idunico),
                     data: data,
                     processData: false,
                     contentType: false,
                     success: function (data) {
                         $('#cargar_adjunto').prop("disabled", false);
-                        $('#cargar_adjunto').text('Confirmar');
+                        $('#cargar_adjunto').text('Subir Informacion');
 
-                        ///RecuperarAdjuntos(idunico);
                         $.ajax({
-                            url: "{{ route('operaciones.editatencion',':id') }}".replace(':id', idunico),
+                            url: "{{ route('operaciones.editatencionsinconfirmar',':id') }}".replace(':id', idunico),
                             data: idunico,
                             method: 'POST',
                             success: function (data) {
@@ -340,13 +336,11 @@
                                 $('#listado_adjuntos').html(data);
                             }
                         });
-
                     }
                 }).done(function (data) {
-
                 });
-
                 return false;
+
 
             });
 
