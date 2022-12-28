@@ -285,7 +285,7 @@ class PedidoStatusController extends Controller
                 })
                 ->addColumn('action', function ($pedido) use ($request) {
                     $btn = '';
-                    $btn .= '<a href="" data-target="#modal-atender" data-atender=' . $pedido->id . ' data-toggle="modal" ><button class="btn btn-success btn-sm">Atender</button></a>';
+                    //$btn .= '<a href="" data-target="#modal-atender" data-atender=' . $pedido->id . ' data-toggle="modal" ><button class="btn btn-success btn-sm">Atender</button></a>';
                     $btn .= '<a href="' . route("pedidosPDF", $pedido->id) . '" class="btn btn-primary btn-sm" target="_blank"><i class="fa fa-file-pdf"></i> PDF</a>';
 
                     return $btn;
