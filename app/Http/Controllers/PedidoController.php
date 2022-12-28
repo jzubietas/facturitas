@@ -276,7 +276,7 @@ class PedidoController extends Controller
                 'pedidos.pagado',
                 'pedidos.envio'
             )
-            ->whereIn('pedidos.condicion', [Pedido::POR_ATENDER, Pedido::EN_PROCESO_ATENCION, Pedido::ATENDIDO, Pedido::ANULADO])
+            ->whereIn('pedidos.condicion_code', [Pedido::POR_ATENDER_INT, Pedido::EN_PROCESO_ATENCION_INT, Pedido::ATENDIDO_INT, Pedido::ANULADO_INT])
             ->whereIn('pedidos.pagado', ['1'])
             ->whereIn('pedidos.pago', ['1'])
             //->whereNotIn("pedidos.envio", ['3'])
