@@ -337,14 +337,14 @@
                     url: "{{ route('operaciones.atenderid') }}",
                     success: function (data) {
                         console.log(data);
-                        $("#modal-atender .textcode").text('');
-                        $("#modal-atender").modal("hide");
+                        $("#modal-editar-atencion .textcode").text('');
+                        $("#modal-editar-atencion").modal("hide");
                         $('#tablaPrincipal').DataTable().ajax.reload();
 
                     }
 
                 });
-                console.log(fd);
+                //console.log(fd);
             });
 
 
