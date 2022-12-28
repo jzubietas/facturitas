@@ -586,13 +586,6 @@ class ClienteController extends Controller
             ->where("clientes.tipo", "1");
         $html = "";
 
-        //valida deuda excepto para administrador o por tener tiempo temporal
-        /*
-                if (!$request->user_id || $request->user_id == '') {
-                    $clientes = $clientes;
-                } else {
-                    $clientes = $clientes->where('u.identificador', $request->user_id);
-                }*/
         $clientes = $clientes->orderBy('id', 'ASC')
             ->get([
                 'clientes.id',
