@@ -276,6 +276,7 @@ class PedidoStatusController extends Controller
                 $pedidos->whereIn('pedidos.condicion_code', [Pedido::ATENDIDO_INT]);
             }*/
             $pedidos->whereIn('pedidos.condicion_envio_code', [Pedido::POR_ATENDER_INT, Pedido::EN_PROCESO_ATENCION_INT]);
+            //$pedidos->where('pedidos.dar_confirmar_descarga', 0);
 
             return datatables()->query(DB::table($pedidos))
                 ->addIndexColumn()
@@ -409,7 +410,7 @@ class PedidoStatusController extends Controller
             } *//*else*/
             {
                 $pedidos->where('pedidos.da_confirmar_descarga', '0');
-                $pedidos->whereIn('pedidos.condicion_envio_code', [Pedido::ATENDIDO_INT]);
+                //$pedidos->whereIn('pedidos.condicion_envio_code', [Pedido::ATENDIDO_INT]);
             }
 
             return datatables()->query(DB::table($pedidos))
@@ -431,7 +432,7 @@ class PedidoStatusController extends Controller
                         $btn .= '<button data-toggle="jqConfirm" data-target="' . route("pedidos.estados.detalle-atencion", $pedido->id) . '"
                                     data-idc="' . $pedido->id2 . '"
                                     data-codigo="' . $pedido->codigos . '"
-                                    class="btn btn-outline-dark btn-sm mx-2">
+                                    class="btn btn-primary btn-sm mx-2">
                                     <i class="fa fa-eye"></i> Detalle Atención
                                 </button>';
                     }

@@ -230,7 +230,7 @@
                                 return '';
                             } else {
                                 if (data > 0) {
-                                    data = '<a href="" data-target="#modal-veradjunto" data-code="' + row.codigos + '" data-adjunto=' + row.id + ' data-toggle="modal" ><button class="btn btn-primary btn-sm"><i class="fas fa-eye"></i> Ver</button></a>';
+                                    data = '<a href="" data-target="#modal-veradjunto" data-code="' + row.codigos + '" data-adjunto=' + row.id + ' data-toggle="modal" ><button class="btn btn-outline-dark btn-sm"><i class="fas fa-eye"></i> Ver</button></a>';
                                     return data;
                                 } else {
                                     return '';

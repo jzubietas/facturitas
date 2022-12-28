@@ -148,6 +148,23 @@
 
           return false;
         }
+
+      else if (adjunto.length != cant_compro) {
+          Swal.fire({
+              icon: 'warning',
+              title: 'Aviso',
+              text: 'La cantidad de adjuntos es diferente a la cantidad ingresada',
+              confirmButtonText:'Confirmar',
+          }).then((result) => {
+              /* Read more about isConfirmed, isDenied below */
+              if (result.isConfirmed) {
+
+              } else if (result.isDenied) {
+              }
+          })
+
+      }
+
         return true;
     }
 
@@ -338,7 +355,7 @@
         stateSave:true,
 		serverSide: true,
         searching: true,
-        //"order": [[ 0, "desc" ]],
+        order: [[ 4, "desc" ]],
         ajax: "{{ route('operaciones.poratendertabla') }}",
         createdRow: function( row, data, dataIndex){
 
@@ -387,7 +404,7 @@
               }else{
                 if(data>0)
                 {
-                  data = '<a href="" data-target="#modal-veradjunto" data-adjunto='+row.id+' data-codigo='+row.codigos+' data-toggle="modal" ><button class="btn btn-primary btn-sm"><i class="fas fa-eye"></i> Ver</button></a>';
+                  data = '<a href="" data-target="#modal-veradjunto" data-adjunto='+row.id+' data-codigo='+row.codigos+' data-toggle="modal" ><button class="btn btn-outline-dark btn-sm"><i class="fas fa-eye"></i> Ver</button></a>';
                   return data;
                 }else{
                   return '';
