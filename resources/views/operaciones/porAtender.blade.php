@@ -131,6 +131,7 @@
       function validarFormulario(evento) {
       var adjunto = document.getElementById('adjunto').files;
       var cant_compro = document.getElementById('cant_compro').value;
+     
       if (adjunto.length == 0) {
           Swal.fire(
             'Error',
@@ -139,6 +140,12 @@
           )
           return false;
         }
+
+
+
+
+
+
         else if (cant_compro == '0'){
           Swal.fire(
             'Error',
@@ -148,6 +155,21 @@
 
           return false;
         }
+
+
+
+
+        
+        else if (adjunto.length != cant_compro) {
+          Swal.fire(
+            'Aviso',
+            'La cantidad de ajuntos es diferente del archivos enviados',
+            'warning'
+          )
+          return true;
+        }
+
+
         return true;
     }
 
