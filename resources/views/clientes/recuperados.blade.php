@@ -7,7 +7,7 @@
 @endsection
 
 @section('content_header')
-  <h1>Lista de clientes en situacion RECUPERADOS
+  <h1>Lista de clientes en situacion RECUPERADOS 
     @can('clientes.create')
       <a href="{{ route('clientes.create') }}" class="btn btn-info"><i class="fas fa-plus-circle"></i> Agregar</a>
     @endcan
@@ -20,7 +20,7 @@
        <a href="" data-target="#modal-exportar-unico" data-toggle="modal" class="dropdown-item" target="blank_"><img src="{{ asset('imagenes/icon-excel.png') }}"> Clientes - Pedidos</a>
       </div>
     </div>
-    @include('clientes.modal.exportar_unico', ['title' => 'Exportar Lista de clientes RECUPERADOS', 'key' => '4'])
+    @include('clientes.modal.exportar_unico', ['title' => 'Exportar Lista de clientes RECUPERADOS', 'key' => '6'])
     @endcan
   </h1>
   @if($superasesor > 0)

@@ -203,9 +203,11 @@ class ClientesSituacionExport implements FromView, ShouldAutoSize
         else if ($request->situacion == 'RECURRENTE')
             $clientes = $clientes->whereIn('clientes.situacion', [Cliente::RECURRENTE]);
         else if ($request->situacion == 'NUEVO')
-            $clientes = $clientes->whereIn('clientes.situacion', ['NUEVO']);
+            $clientes = $clientes->whereIn('clientes.situacion', [Cliente::NUEVO]);
         else if ($request->situacion == 'RECUPERADO')
-            $clientes = $clientes->whereIn('clientes.situacion', ['RECUPERADO']);
+            $clientes = $clientes->whereIn('clientes.situacion', [Cliente::RECUPERADO_RECIENTE]);
+        else if ($request->situacion == 'RECUPERADO_ABANDONO')
+            $clientes = $clientes->whereIn('clientes.situacion', [Cliente::RECUPERADO_ABANDONO]);    
 
 
         $clientes = $clientes->get();
