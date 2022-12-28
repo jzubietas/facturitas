@@ -671,7 +671,8 @@ class OperacionController extends Controller
                 ImagenAtencion::create([
                     'pedido_id' => $pedido->id,
                     'adjunto' => $file_name,
-                    'estado' => '1'
+                    'estado' => '1',
+                    'confirm' => '1'
                 ]);
 
                 $cont++;
@@ -1051,7 +1052,8 @@ class OperacionController extends Controller
                 ImagenAtencion::create([
                     'pedido_id' => $pedido->id,
                     'adjunto' => $file_name,
-                    'estado' => '1'
+                    'estado' => '1',
+                    'confirm' => '1'
                 ]);
 
                 $cont++;
@@ -1106,7 +1108,8 @@ class OperacionController extends Controller
                 ImagenAtencion::create([
                     'pedido_id' => $pedido->id,
                     'adjunto' => $file_name,
-                    'estado' => '1'
+                    'estado' => '1',
+                    'confirm' => '0'
                 ]);
 
                 $cont++;
