@@ -42,6 +42,10 @@
 
                           </div>
 
+                          <hr>
+                        </div>
+                        <div class="row">
+
                           <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
                             <h6><b>Archivos adjuntos:</b></h6>
                           </div>
