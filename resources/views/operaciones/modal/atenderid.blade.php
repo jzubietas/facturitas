@@ -48,15 +48,19 @@
                         </div>
                         <div class="row">
                           <div class="col-md-12 col-sm-12 col-xs-12">
-                            <button type="button" class="btn btn-primary" id="cargar_adjunto">Subir Informacion</button><br>
+                            <button type="button" class="btn btn-primary" id="cargar_adjunto">Subir Informacion</button><br><br><br>
                           </div>
                         </div>
                         <div class="row">
 
-                          <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
+                          <div class="col-12">
                             <h6><b>Archivos adjuntos:</b></h6>
                           </div>
-                          <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12" id="listado_adjuntos"></div>
+                          <div class="col-6" id="listado_adjuntos"></div>
+
+                        </div>
+                        <div class="row">
+
                           
                           <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
                             {!! Form::label('condicion', 'Estado') !!}

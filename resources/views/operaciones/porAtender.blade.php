@@ -59,6 +59,7 @@
       @include('pedidos.modalid')
       @include('operaciones.modal.atenderid')
       @include('operaciones.modal.veradjuntoid')
+      @include('pedidos.modal.DeleteAdjuntoid')
     </div>
   </div>
 
@@ -316,6 +317,8 @@
         $('#cargar_adjunto').attr("disabled", true);
         $('#cargar_adjunto').html('Subiendo archivos...');
         //e.preventDefault();
+        let cant_compro=$("#cant_compro").val();
+        if(cant_compro=='')$("#cant_compro").val(0);
         var data = new FormData(document.getElementById("formularioatender"));
 
         $.ajax({
@@ -326,7 +329,7 @@
           contentType: false,
           success: function (data) {
               $('#cargar_adjunto').prop("disabled", false);
-              $('#cargar_adjunto').text('Confirmar');
+              $('#cargar_adjunto').text('Subir Informacion');
 
               $.ajax({
                   url: "{{ route('operaciones.editatencion',':id') }}".replace(':id', idunico),
@@ -345,6 +348,59 @@
 
 
       });
+
+      $(document).on("submit", "#formdeleteadjunto", function (evento) {
+          evento.preventDefault();
+          console.log("ejecutando eliminando adjunto")
+          //return false;
+          let pedidoidimagenes = $("#eliminar_pedido_id").val();
+          console.log(pedidoidimagenes);
+          var fddeleteadjunto = new FormData();
+          fddeleteadjunto.append('eliminar_pedido_id', pedidoidimagenes);
+          fddeleteadjunto.append('eliminar_pedido_id_imagen', $("#eliminar_pedido_id_imagen").val());
+          console.log(fddeleteadjunto);
+
+          //return false;
+          $.ajax({
+              url: "{{ route('operaciones.eliminaradjunto') }}",
+              type: 'POST',
+              data: fddeleteadjunto,
+              processData: false,
+              contentType: false,
+              success: function (data) {
+                  //$('#listado_adjuntos').html(data);
+                  //console.log(data.html);
+                  console.log("rest ajax")
+                  $('.adjuntos[data-adjunto="' + data.html + '"]').remove();
+                  $('#modal-delete-adjunto').modal('toggle');
+
+                  $.ajax({
+                      url: "{{ route('operaciones.editatencion',':id') }}".replace(':id', pedidoidimagenes),
+                      data: pedidoidimagenes,
+                      method: 'POST',
+                      success: function (data) {
+                          console.log(data)
+                          console.log("obtuve las imagenes atencion del pedido " + pedidoidimagenes)
+                          $('#listado_adjuntos').html(data);
+                      }
+                  });
+              }
+          }).done(function (data) {
+              //$('#modal-delete-adjunto').modal('hide');
+              //$('#listado_adjuntos').html(data);
+          });
+
+      });
+
+      $('#modal-delete-adjunto').on('show.bs.modal', function (event) {
+            //cuando abre el form de anular pedido
+            var button = $(event.relatedTarget)
+            var img_pedidoid = button.data('imgid')
+            var imgadjunto = button.data('imgadjunto')
+            $(".textcode").html("PED" + img_pedidoid);
+            $("#eliminar_pedido_id").val(img_pedidoid);
+            $("#eliminar_pedido_id_imagen").val(imgadjunto);
+        });
 
       $('#modal-veradjunto').on('show.bs.modal', function (event) {
         //cuando abre el form de anular pedido
