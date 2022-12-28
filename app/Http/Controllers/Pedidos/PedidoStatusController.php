@@ -452,9 +452,9 @@ class PedidoStatusController extends Controller
 
     public function pedidoDetalleAtencion(Pedido $pedido)
     {
-        if (!\auth()->user()->can('pedidos.mispedidos')) {
+        /*if (!\auth()->user()->can('pedidos.mispedidos')) {
             abort(401);
-        }
+        }*/
         return response()->json([
             "data" => $pedido->imagenAtencion()->activo()->get()
         ]);
@@ -462,9 +462,9 @@ class PedidoStatusController extends Controller
 
     public function pedidoDetalleAtencionConfirm(Request $request, Pedido $pedido)
     {
-        if (!\auth()->user()->can('pedidos.mispedidos')) {
+        /*if (!\auth()->user()->can('pedidos.mispedidos')) {
             abort(401);
-        }
+        }*/
         if ($request->get('action') == 'confirm_download') {
             $pedido->update([
                 'da_confirmar_descarga' => 1
