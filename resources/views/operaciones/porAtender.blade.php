@@ -131,6 +131,7 @@
       function validarFormulario(evento) {
       var adjunto = document.getElementById('adjunto').files;
       var cant_compro = document.getElementById('cant_compro').value;
+     
       if (adjunto.length == 0) {
           Swal.fire(
             'Error',
@@ -139,6 +140,12 @@
           )
           return false;
         }
+
+
+
+
+
+
         else if (cant_compro == '0'){
           Swal.fire(
             'Error',
@@ -147,9 +154,7 @@
           )
 
           return false;
-        }
-
-      else if (adjunto.length != cant_compro) {
+        }else if (adjunto.length != cant_compro) {
           Swal.fire({
               icon: 'warning',
               title: 'Aviso',
