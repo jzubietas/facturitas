@@ -499,7 +499,7 @@
         //stateSave:true,
 		    serverSide: true,
         //searching: true,
-        order: [[ 4, "desc" ]],
+        order: [[ 4, "asc" ]],
         ajax: "{{ route('operaciones.poratendertabla') }}",
         createdRow: function( row, data, dataIndex){
         },
