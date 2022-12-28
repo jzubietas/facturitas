@@ -225,13 +225,6 @@
 
       });
 
-      $(document).on("click", "#cerrarmodalatender", function (evento) {
-        evento.preventDefault();
-        var fd = new FormData();
-        fd.append( 'hiddenAtender', $("#hiddenAtender").val() );
-        
-      });
-
     $(document).on("submit", "#formularioatender", function (evento) {
       evento.preventDefault();
       var status= validarFormulario(evento);
