@@ -200,19 +200,37 @@
                                     confirmada
                                     <b>{{optional($pedido->fecha_anulacion_confirm)->format('d-m-Y h:i')}}</b>
                                 </li>
+                                <li class="list-group-item">
+                                    Motivo de anulacion:
+                                    <b>{{$pedido->motivo}}</b>
+                                </li>
                                 @if(count($pedido->adjuntosFiles())>0)
                                     <li class="list-group-item bg-danger">
                                         Adjuntos
                                     </li>
                                 @endif
-                                @foreach($pedido->adjuntosFiles() as $file)
-                                    <li class="list-group-item">
-                                        <a target="_blank"
-                                           href="{{Storage::disk($pedido->path_adjunto_anular_disk)->url($file)}}">
-                                            {{basename($file)}}
-                                        </a>
-                                    </li>
-                                @endforeach
+                                <li class="list-group-item">
+                                    <div class="row">
+                                        @foreach($pedido->adjuntosFiles() as $file)
+                                            <div class="col-md-3">
+                                                <div class="card">
+                                                    <div class="card-body">
+                                                        <a target="_blank"
+                                                           href="{{Storage::disk($pedido->path_adjunto_anular_disk)->url($file)}}">
+                                                            @if(!Str::contains(Str::lower($file),'.pdf'))
+                                                                <img class="w-100"
+                                                                     src="{{Storage::disk($pedido->path_adjunto_anular_disk)->url($file)}}">
+                                                            @else
+                                                                <i class="fa fa-file-pdf"></i>
+                                                            @endif
+                                                            {{basename($file)}}
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                </li>
 
                                 @if(count($pedido->notasCreditoFiles())>0)
                                     <li class="list-group-item bg-danger">

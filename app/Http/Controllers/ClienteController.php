@@ -421,13 +421,21 @@ class ClienteController extends Controller
 
     public function createbf()
     {
-        $users = User::select(
+        $usersB = User::where('users.estado', '1')
+            ->where('identificador', 'B')
+            ->first();
+
+        $users = collect();
+        $users->put($usersB->id, $usersB->identificador);
+        $usersall = User::select(
             DB::raw("CONCAT(identificador,' (ex ',IFNULL(exidentificador,''),')') AS identificador"), 'id'
         )
             ->where('users.rol', 'Asesor')
             ->where('users.estado', '1')
             ->pluck('identificador', 'id');
-
+        foreach ($usersall as $key => $value) {
+            $users->put($key,$value);
+        }
         return view('base_fria.create', compact('users'));
     }
 

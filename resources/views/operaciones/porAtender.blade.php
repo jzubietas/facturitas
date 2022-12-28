@@ -132,7 +132,7 @@
       function validarFormulario(evento) {
       var adjunto = document.getElementById('adjunto').files;
       var cant_compro = document.getElementById('cant_compro').value;
-     
+
       if (adjunto.length == 0) {
           Swal.fire(
             'Error',
@@ -231,7 +231,7 @@
       var fd = new FormData();
       fd.append( 'hiddenAtender', $("#hiddenAtender").val() );
       $.ajax({
-          data: data,
+          data: fd,
           processData: false,
           contentType: false,
           type: 'POST',
@@ -428,7 +428,7 @@
                       }
                   });
                   }
-                  
+
               }
           }).done(function (data) {
           });
@@ -507,7 +507,7 @@
 
       $('#tablaPrincipal').DataTable({
         processing: true,
-        stateSave:true,
+        //stateSave:true,
 		    serverSide: true,
         searching: true,
         order: [[ 4, "desc" ]],
