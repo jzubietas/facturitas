@@ -218,9 +218,12 @@
 
       $(document).on("click", "#formularioatender", function (evento) {
 
-
       });
 
+      $(document).on("change", "#adjunto", function (evento) {
+        $("#cargar_adjunto").trigger("click");
+
+      });
 
     $(document).on("submit", "#formularioatender", function (evento) {
       evento.preventDefault();
@@ -305,26 +308,13 @@
         $("#adjunto").val("");
 
         $.ajax({
-            url: "{{ route('operaciones.editatencionsinconfirmar',':id') }}".replace(':id', idunico),
-            data: idunico,
-            method: 'POST',
-            success: function (data) {
-                console.log(data)
-                console.log("obtuve las imagenes atencion del pedido " + idunico)
-                $('#listado_adjuntos').html("");
-                //$('#listado_adjuntos_antes').html(data);
-                console.log(data);
-            }
-        });
-
-        $.ajax({
             url: "{{ route('operaciones.editatencion',':id') }}".replace(':id', idunico),
             data: idunico,
             method: 'POST',
             success: function (data) {
                 console.log(data)
                 console.log("obtuve las imagenes atencion del pedido " + idunico)
-                //$('#listado_adjuntos').html("");
+                $('#listado_adjuntos').html("");
                 $('#listado_adjuntos_antes').html(data);
                 console.log(data);
             }
@@ -498,8 +488,8 @@
         processing: true,
         //stateSave:true,
 		    serverSide: true,
-        //searching: true,
-        order: [[ 4, "asc" ]],
+        searching: true,
+        order: [[ 4, "desc" ]],
         ajax: "{{ route('operaciones.poratendertabla') }}",
         createdRow: function( row, data, dataIndex){
         },

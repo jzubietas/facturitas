@@ -48,7 +48,7 @@
                         </div>
                         <div class="row">
                           <div class="col-md-12 col-sm-12 col-xs-12">
-                            <button type="button" class="btn btn-primary" id="cargar_adjunto">Subir Informacion</button><br><br><br>
+                            <button type="button" class="btn btn-primary d-none" id="cargar_adjunto">Subir Informacion</button><br><br><br>
                           </div>
                         </div>
                         <div class="row">
@@ -87,7 +87,7 @@
           </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+          <button type="button" class="btn btn-secondary" id="cerrarmodalatender">Cerrar</button>
           <button type="submit" class="btn btn-info" id="atender">Confirmar</button>
         </div>
         {{ Form::Close() }}
