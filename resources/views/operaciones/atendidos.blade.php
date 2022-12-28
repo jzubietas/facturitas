@@ -394,6 +394,8 @@
                 var fddeleteadjunto = new FormData();
                 fddeleteadjunto.append('eliminar_pedido_id', pedidoidimagenes);
                 fddeleteadjunto.append('eliminar_pedido_id_imagen', $("#eliminar_pedido_id_imagen").val());
+                fddeleteadjunto.append('eliminar_pedido_id_confirmado', pedidoconfirmado);
+
                 console.log(fddeleteadjunto);
 
                 //return false;
@@ -404,26 +406,35 @@
                     processData: false,
                     contentType: false,
                     success: function (data) {
-                        //$('#listado_adjuntos').html(data);
-                        //console.log(data.html);
                         console.log("rest ajax")
                         $('.adjuntos[data-adjunto="' + data.html + '"]').remove();
                         $('#modal-delete-adjunto').modal('toggle');
+                        if (pedidoconfirmado == 1) {
+                            $.ajax({
+                                url: "{{ route('operaciones.editatencion',':id') }}".replace(':id', pedidoidimagenes),
+                                data: pedidoidimagenes,
+                                method: 'POST',
+                                success: function (data) {
+                                    console.log(data)
+                                    console.log("obtuve las imagenes atencion del pedido " + pedidoidimagenes)
+                                    $('#listado_adjuntos_antes').html(data);
+                                }
+                            });
+                        } else if (pedidoconfirmado == 0) {
+                            $.ajax({
+                                url: "{{ route('operaciones.editatencionsinconfirmar',':id') }}".replace(':id', pedidoidimagenes),
+                                data: pedidoidimagenes,
+                                method: 'POST',
+                                success: function (data) {
+                                    console.log(data)
+                                    console.log("obtuve las imagenes atencion del pedido " + pedidoidimagenes)
+                                    $('#listado_adjuntos').html(data);
+                                }
+                            });
+                        }
 
-                        $.ajax({
-                            url: "{{ route('operaciones.editatencion',':id') }}".replace(':id', pedidoidimagenes),
-                            data: pedidoidimagenes,
-                            method: 'POST',
-                            success: function (data) {
-                                console.log(data)
-                                console.log("obtuve las imagenes atencion del pedido " + pedidoidimagenes)
-                                $('#listado_adjuntos').html(data);
-                            }
-                        });
                     }
                 }).done(function (data) {
-                    //$('#modal-delete-adjunto').modal('hide');
-                    //$('#listado_adjuntos').html(data);
                 });
 
             });
