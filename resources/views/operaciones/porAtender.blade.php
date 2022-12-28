@@ -218,9 +218,12 @@
 
       $(document).on("click", "#formularioatender", function (evento) {
 
-
       });
 
+      $(document).on("change", "#adjunto", function (evento) {
+        $("#cargar_adjunto").trigger("click");
+
+      });
 
     $(document).on("submit", "#formularioatender", function (evento) {
       evento.preventDefault();
