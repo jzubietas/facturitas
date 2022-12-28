@@ -202,7 +202,7 @@
                                 </li>
                                 <li class="list-group-item">
                                     Motivo de anulacion:
-                                    <b>{{$pedidoModel->motivo}}</b>
+                                    <b>{{$pedido->motivo}}</b>
                                 </li>
                                 @if(count($pedido->adjuntosFiles())>0)
                                     <li class="list-group-item bg-danger">
