@@ -52,11 +52,11 @@ class QtyPedidoFisicoElectronicos extends Widgets
         return [
           "fisico"=>[
               "count"=>$pedidosAtendidosFisicos,
-              "title"=>"Pedidos por atender Fisicos"
+              "title"=>"Pedidos por atender Físicos"
           ],
           "electroinco"=>[
               "count"=>$pedidosAtendidosElectronica,
-              "title"=>"Pedidos por atender Electrónico"
+              "title"=>"Pedidos por atender Electrónicos"
           ]
         ];
     }
