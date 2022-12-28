@@ -243,6 +243,53 @@ class Pedido extends Model
         return $query->whereIn($this->qualifyColumn('condicion_envio_code'), [self::POR_ATENDER_INT, self::EN_PROCESO_ATENCION_INT]);
     }
 
+    public function scoperoladmin($query)
+    {
+        return $query;
+        //return $query->where($this->qualifyColumn('condicion_envio_code'), '=', self::ATENDIDO_INT);
+    }
+
+    public function scoperolllamada($query)
+    {
+        $usersasesores = User::where('users.rol', 'Asesor')
+            ->where('users.estado', '1')
+            ->where('users.llamada', Auth::user()->id)
+            ->select(
+                DB::raw("users.identificador as identificador")
+            )
+            ->pluck('users.identificador');
+        return $query->whereIn($this->qualifyColumn('u.identificador'),  $usersasesores);
+    }
+
+    public function scoperoljefedellamada($query)
+    {       
+        return $query;
+    }
+
+    public function scoperolasesor($query)
+    {
+        $usersasesores = User::whereIn('users.rol', ['Asesor','Administrador','ASESOR ADMINISTRATIVO'])
+                ->where('users.estado', '1')
+                ->where('users.identificador', Auth::user()->identificador)
+                ->select(
+                    DB::raw("users.identificador as identificador")
+                )
+                ->pluck('users.identificador');
+        return $query->whereIn($this->qualifyColumn('u.identificador'),  $usersasesores);
+    }
+
+    public function scoperolencargado($query)
+    {
+        $usersasesores = User::where('users.rol', 'Asesor')
+                ->where('users.estado', '1')
+                ->where('users.supervisor', Auth::user()->id)
+                ->select(
+                    DB::raw("users.identificador as identificador")
+                )
+                ->pluck('users.identificador');
+        return $query->whereIn($this->qualifyColumn('u.identificador'),  $usersasesores);
+    }
+
     public function scopeCurrentUser($query)
     {
         return $query->where($this->qualifyColumn('user_id'), '=', auth()->id());

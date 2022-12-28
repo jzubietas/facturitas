@@ -191,9 +191,7 @@ class PedidoController extends Controller
 
             $pedidos = $pedidos->WhereIn('u.identificador', $usersasesores);
 
-        }
-
-        else if (Auth::user()->rol == "Super asesor") {
+        } else if (Auth::user()->rol == "Super asesor") {
             $usersasesores = User::where('users.rol', 'Asesor')
                 ->where('users.estado', '1')
                 ->where('users.identificador', Auth::user()->identificador)
@@ -204,10 +202,7 @@ class PedidoController extends Controller
 
             $pedidos = $pedidos->WhereIn('u.identificador', $usersasesores);
 
-        }
-
-
-        else if (Auth::user()->rol == "ASESOR ADMINISTRATIVO") {
+        } else if (Auth::user()->rol == "ASESOR ADMINISTRATIVO") {
             $usersasesores = User::where('users.rol', 'ASESOR ADMINISTRATIVO')
                 ->where('users.estado', '1')
                 ->where('users.identificador', Auth::user()->identificador)
@@ -218,13 +213,7 @@ class PedidoController extends Controller
 
             $pedidos = $pedidos->WhereIn('u.identificador', $usersasesores);
 
-        }
-
-
-
-
-
-        else if (Auth::user()->rol == "Encargado") {
+        } else if (Auth::user()->rol == "Encargado") {
 
             $usersasesores = User::where('users.rol', 'Asesor')
                 ->where('users.estado', '1')
@@ -242,8 +231,8 @@ class PedidoController extends Controller
 
         return Datatables::of(DB::table($pedidos))
             ->addIndexColumn()
-            ->addColumn('condicion_envio_color',function ($pedido){
-                $p=new Pedido((array)$pedido);
+            ->addColumn('condicion_envio_color', function ($pedido) {
+                $p = new Pedido((array)$pedido);
                 return $p->condicion_envio_color;
             })
             ->addColumn('action', function ($pedido) {
@@ -287,10 +276,10 @@ class PedidoController extends Controller
                 'pedidos.pagado',
                 'pedidos.envio'
             )
-            ->whereIn('pedidos.condicion', [Pedido::POR_ATENDER, Pedido::EN_PROCESO_ATENCION, Pedido::ATENDIDO, Pedido::ANULADO])
+            ->whereIn('pedidos.condicion_code', [Pedido::POR_ATENDER_INT, Pedido::EN_PROCESO_ATENCION_INT, Pedido::ATENDIDO_INT, Pedido::ANULADO_INT])
             ->whereIn('pedidos.pagado', ['1'])
             ->whereIn('pedidos.pago', ['1'])
-            ->whereNotIn("pedidos.envio", ['3'])
+            //->whereNotIn("pedidos.envio", ['3'])
             ->where('dp.saldo', '>=', 11)->where('dp.saldo', '<=', 13);
 
         $pedidos2 = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')
@@ -319,10 +308,10 @@ class PedidoController extends Controller
                 'pedidos.pagado',
                 'pedidos.envio'
             )
-            ->whereIn('pedidos.condicion', [Pedido::POR_ATENDER, Pedido::EN_PROCESO_ATENCION, Pedido::ATENDIDO, Pedido::ANULADO])
+            ->whereIn('pedidos.condicion_code', [Pedido::POR_ATENDER_INT, Pedido::EN_PROCESO_ATENCION_INT, Pedido::ATENDIDO_INT, Pedido::ANULADO_INT])
             ->whereIn('pedidos.pagado', ['1'])
             ->whereIn('pedidos.pago', ['1'])
-            ->whereNotIn("pedidos.envio", ['3'])
+            //->whereNotIn("pedidos.envio", ['3'])
             ->Where('dp.saldo', '>=', 17)->where('dp.saldo', '<=', 19);
 
         $pedidos = $pedidos->union($pedidos2);
@@ -633,29 +622,24 @@ class PedidoController extends Controller
     {
         $buscar_pedido = $request->pedido;
 
-        $cont_imagen = ImagenPedido::where('pedido_id', $buscar_pedido)->count();
         $array_html = [];
-        if ($cont_imagen > 0) {
-            $imagenes = ImagenPedido::where('pedido_id', $buscar_pedido)
-                ->where("estado", "1")
-                ->whereNotIn("adjunto", ['logo_facturas.png'])
-                ->orderBy('created_at', 'DESC')->get();
-            foreach ($imagenes as $imagen) {
-                $array_html[] = $imagen->adjunto;
-            }
-            $imagenesatencion = ImagenAtencion::where('pedido_id', $buscar_pedido)
-                ->where("estado", "1")
-                ->whereNotIn("adjunto", ['logo_facturas.png'])
-                ->orderBy('created_at', 'DESC')->get();
-            foreach ($imagenesatencion as $imagenatencion) {
-                $array_html[] = $imagenatencion->adjunto;
-            }
-            $html = implode("|", $array_html);
-            return response()->json(['html' => $html, 'cantidad' => $cont_imagen]);
-        } else {
-            $html = "0";
-            return response()->json(['html' => $html, 'cantidad' => $cont_imagen]);
+
+        $imagenes = ImagenPedido::where('pedido_id', $buscar_pedido)
+            ->where("estado", "1")
+            ->whereNotIn("adjunto", ['logo_facturas.png'])
+            ->orderBy('created_at', 'DESC')->get();
+        foreach ($imagenes as $imagen) {
+            $array_html[] = $imagen->adjunto;
         }
+        $imagenesatencion = ImagenAtencion::where('pedido_id', $buscar_pedido)
+            ->where("estado", "1")
+            ->whereNotIn("adjunto", ['logo_facturas.png'])
+            ->orderBy('created_at', 'DESC')->get();
+        foreach ($imagenesatencion as $imagenatencion) {
+            $array_html[] = $imagenatencion->adjunto;
+        }
+        $html = implode("|", $array_html);
+        return response()->json(['html' => $html, 'cantidad' => count($array_html)]);
     }
 
     public function ruc(Request $request)//rucs
@@ -933,10 +917,9 @@ class PedidoController extends Controller
         //$cliente = Cliente::find($request->cliente_id);
 
 
+        $arreglo = array("ASESOR ADMINISTRATIVO", "Administrador",);
 
-        $arreglo = array("ASESOR ADMINISTRATIVO", "Administrador", );
-
-        if ( !(in_array($mirol,$arreglo))) {
+        if (!(in_array($mirol, $arreglo))) {
             //calcular con activacion temporal
 
             //sino darle bloqueado por 3 maximo en el mes
@@ -955,18 +938,10 @@ class PedidoController extends Controller
                 )->first();
 
 
-
-
-
             if ($cliente_deuda->crea_temporal == 1) {
 
 
-
-
-
-            }
-
-            else {
+            } else {
 
 
                 if ($cliente_deuda->pedidos_mes_deuda > 0 && $cliente_deuda->pedidos_mes_deuda_antes == 0) {
@@ -974,15 +949,10 @@ class PedidoController extends Controller
                         $html = "|4";
                         return response()->json(['html' => $html]);
                     }
-                }
-
-                else if ($cliente_deuda->pedidos_mes_deuda > 0 && $cliente_deuda->pedidos_mes_deuda_antes > 0) {
+                } else if ($cliente_deuda->pedidos_mes_deuda > 0 && $cliente_deuda->pedidos_mes_deuda_antes > 0) {
                     $html = "|0";
                     return response()->json(['html' => $html]);
-                }
-
-
-                else if ($cliente_deuda->pedidos_mes_deuda == 0 && $cliente_deuda->pedidos_mes_deuda_antes > 0) {
+                } else if ($cliente_deuda->pedidos_mes_deuda == 0 && $cliente_deuda->pedidos_mes_deuda_antes > 0) {
                     $html = "|0";
                     return response()->json(['html' => $html]);
                 }
@@ -1930,7 +1900,6 @@ class PedidoController extends Controller
             //->where('u.id', Auth::user()->id)
             ->where('pedidos.pagado', '<>', '2')
             ->where('pedidos.da_confirmar_descarga', '1')
-            
             /*->groupBy(
                 'pedidos.id',
                 'c.id',

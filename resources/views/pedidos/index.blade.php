@@ -215,6 +215,7 @@
                 var button = $(event.relatedTarget)
                 var idunico = button.data('delete')//id  basefria
                 var idresponsable = button.data('responsable')//id  basefria
+                var idcodigo = button.data('codigo')
                 //console.log(idunico);
                 $("#hiddenIDdelete").val(idunico);
                 if (idunico < 10) {
@@ -231,7 +232,7 @@
                 //
                 $
 
-                $(".textcode").html(idunico);
+                $(".textcode").html(idcodigo);
                 $("#motivo").val('');
                 $("#responsable").val(idresponsable);
 
@@ -240,6 +241,7 @@
             $('#modal-restaurar').on('show.bs.modal', function (event) {
                 var button = $(event.relatedTarget)
                 var idunico = button.data('restaurar')
+                var idcodigo = button.data('codigo')
                 console.log("unico " + idunico)
                 $("#hiddenIDrestaurar").val(idunico);
                 if (idunico < 10) {
@@ -252,7 +254,7 @@
                     idunico = 'PED' + idunico;
                 }
 
-                $(".textcode").html(idunico);
+                $(".textcode").html(idcodigo);
 
             });
 
@@ -530,12 +532,12 @@
                             @endcan
                                 @can('pedidos.destroy')
                             if (row.estado == 0) {
-                                data = data + '<a href="#" class="btn-sm dropdown-item" data-target="#modal-restaurar" data-toggle="modal" data-restaurar="' + row.id + '" ><i class="fas fa-check text-secondary"></i> Restaurar</a>';
+                                data = data + '<a href="#" class="btn-sm dropdown-item" data-target="#modal-restaurar" data-toggle="modal" data-restaurar="' + row.id + '" data-codigo='+row.codigo+'><i class="fas fa-check text-secondary"></i> Restaurar</a>';
                             } else {
                                 if (!row.pendiente_anulacion) {
                                     console.log(row.pendiente_anulacion)
                                     if (row.condicion_pa == 0) {
-                                        data = data + '<a href="" class="btn-sm dropdown-item" data-target="#modal-delete" data-toggle="modal" data-delete="' + row.id + '" data-responsable="{{ $miidentificador }}"><i class="fas fa-trash-alt text-danger"></i> Anular</a>';
+                                        data = data + '<a href="" class="btn-sm dropdown-item" data-target="#modal-delete" data-toggle="modal" data-delete="' + row.id + '" data-codigo='+row.codigo+' data-responsable="{{ $miidentificador }}"><i class="fas fa-trash-alt text-danger"></i> Anular</a>';
                                     }
                                 }
                             }
