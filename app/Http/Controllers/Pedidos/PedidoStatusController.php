@@ -409,7 +409,8 @@ class PedidoStatusController extends Controller
                 $pedidos->whereIn('pedidos.condicion_code', [Pedido::POR_ATENDER_INT, Pedido::EN_PROCESO_ATENCION_INT]);
             } *//*else*/
             {
-                $pedidos->where('pedidos.da_confirmar_descarga', '0');
+                $pedidos->where('pedidos.da_confirmar_descarga', '0')
+                    ->whereNotIn('pedidos.condicion_code', [Pedido::POR_ATENDER_OPE_INT, Pedido::EN_ATENCION_OPE_INT]);
                 //$pedidos->whereIn('pedidos.condicion_envio_code', [Pedido::ATENDIDO_INT]);
             }
 
