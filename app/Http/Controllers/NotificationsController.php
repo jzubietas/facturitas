@@ -119,7 +119,8 @@ class NotificationsController extends Controller
         $contador_pedidos_atender = Pedido::join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
             ->where('pedidos.estado', '1')
             ->where('dp.estado', '1')
-            ->whereIn('condicion_code', [Pedido::POR_ATENDER_INT,Pedido::EN_PROCESO_ATENCION_INT])
+            ->poratenderestatus()
+            //->whereIn('condicion_envio_code', [Pedido::POR_ATENDER_OPE_INT,Pedido::EN_ATENCION_OPE_INT])
             ->count();
         // Estado de pediddos
         $contador_pedidos_atendidos = Pedido::query()->activo()->segunRolUsuario([\App\Models\User::ROL_ADMIN, User::ROL_ENCARGADO, User::ROL_ASESOR])
