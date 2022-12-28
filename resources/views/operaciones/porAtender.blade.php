@@ -483,9 +483,9 @@
 
       $('#tablaPrincipal').DataTable({
         processing: true,
-        stateSave:true,
+        //stateSave:true,
 		    serverSide: true,
-        searching: true,
+        //searching: true,
         order: [[ 4, "desc" ]],
         ajax: "{{ route('operaciones.poratendertabla') }}",
         createdRow: function( row, data, dataIndex){
