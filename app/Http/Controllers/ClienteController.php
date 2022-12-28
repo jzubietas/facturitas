@@ -106,6 +106,9 @@ class ClienteController extends Controller
                 'clientes.distrito',
                 'clientes.direccion',
                 'clientes.pidio',
+                
+                DB::raw(" (select (dp.codigo) from pedidos dp where dp.estado=1 and dp.cliente_id=clientes.id order by dp.created_at desc limit 1) as ultimo_pedido "),
+
                 DB::raw('count(p.created_at) as cantidad'),
                 DB::raw('MAX(p.created_at) as fecha'),
                 DB::raw('MAX(DATE_FORMAT(p.created_at, "%d")) as dia'),
@@ -759,6 +762,10 @@ class ClienteController extends Controller
     public function indexabandonotabla(Request $request)
     {
         //
+
+
+       
+
         $dateM = Carbon::now()->format('m');
         $dateY = Carbon::now()->format('Y');
 
@@ -785,7 +792,7 @@ class ClienteController extends Controller
             ->where('clientes.estado', '1')
             ->where('clientes.tipo', '1')
             ->when($request->has("situacion"), function ($query) use ($request) {
-                $query->whereIn('clientes.situacion', [$request->situacion]);
+                $query->whereIn('clientes.situacion', [Cliente::ABANDONO_RECIENTE]);
             })
             ->when(!$request->has("situacion"), function ($query) use ($request) {
                 $query->whereIn('clientes.situacion', [Cliente::ABANDONO_PERMANENTE]);
@@ -1142,7 +1149,8 @@ class ClienteController extends Controller
 
 
         } else if (Auth::user()->rol == "Jefe de llamadas") {
-            /*$usersasesores = User::where('users.rol', 'Asesor')
+          
+          /*$usersasesores = User::where('users.rol', 'Asesor')
                 ->where('users.estado', '1')
                 ->where('users.llamada', Auth::user()->id)
                 ->select(
@@ -1151,7 +1159,10 @@ class ClienteController extends Controller
                 ->pluck('users.identificador');
 
             $data = $data->WhereIn("u.identificador", $usersasesores);*/
-        } elseif (Auth::user()->rol == "Asesor") {
+        } 
+        
+        
+        elseif (Auth::user()->rol == "Asesor") {
             $usersasesores = User::where('users.rol', 'Asesor')
                 ->where('users.estado', '1')
                 ->where('users.identificador', Auth::user()->identificador)

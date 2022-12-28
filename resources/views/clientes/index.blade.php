@@ -58,6 +58,8 @@
                     <th scope="col">anio pedido</th>
                     <th scope="col">mes pedido</th>
                     <th scope="col">Deuda</th>--}}
+                    <th scope="col">Cod Ult. Pedido</th>
+                    
                     <th scope="col">Acciones</th>
                 </tr>
                 </thead>
@@ -479,6 +481,10 @@
                     //{data: 'direccion', name: 'direccion'},
                     {data: 'identificador', name: 'identificador'},
                     {data: 'situacion', name: 'situacion'},
+
+
+                    {data: 'ultimo_pedido', name: 'ultimo_pedido'},
+                    
                     //{data: 'cantidad', name: 'cantidad'},
                     //{data: 'dateY', name: 'dateY'},
                     //{data: 'dateM', name: 'dateM'},

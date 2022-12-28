@@ -197,9 +197,11 @@ class ClientesSituacionExport implements FromView, ShouldAutoSize
             );
         //->get();
         if ($request->situacion == 'ABANDONO')
-            $clientes = $clientes->whereIn('clientes.situacion', ['ABANDONO PERMANENTE', 'ABANDONO RECIENTE']);
-        else if ($request->situacion == 'RECURENTE')
-            $clientes = $clientes->whereIn('clientes.situacion', ['RECURRENTE']);
+            $clientes = $clientes->whereIn('clientes.situacion', [Cliente::ABANDONO_RECIENTE]);
+        else if ($request->situacion == 'ABANDONO_PERMANENTE')
+            $clientes = $clientes->whereIn('clientes.situacion', [Cliente::ABANDONO_PERMANENTE]);    
+        else if ($request->situacion == 'RECURRENTE')
+            $clientes = $clientes->whereIn('clientes.situacion', [Cliente::RECURRENTE]);
         else if ($request->situacion == 'NUEVO')
             $clientes = $clientes->whereIn('clientes.situacion', ['NUEVO']);
         else if ($request->situacion == 'RECUPERADO')
