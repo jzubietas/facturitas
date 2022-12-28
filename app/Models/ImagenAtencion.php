@@ -2,22 +2,20 @@
 
 namespace App\Models;
 
+use App\Traits\CommonModel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class ImagenAtencion extends Model
 {
     use HasFactory;
+    use CommonModel;
 
     protected $guarded = ['id'];
 
     protected $appends=[
         'link'
     ];
-    public function scopeActivo($query, $status = '1')
-    {
-        return $query->where($this->qualifyColumn('estado'), '=', $status);
-    }
 
     public function getLinkAttribute()
     {
