@@ -292,7 +292,19 @@
         var idunico = button.data('atender')
         var idcodigo = button.data('codigo')
         $(".textcode").html(idcodigo);
-        $("#hiddenAtender").val(idunico);
+        $("#hiddenAtender").val(idunico);+
+
+        $.ajax({
+            url: "{{ route('operaciones.editatencion',':id') }}".replace(':id', idunico),
+            data: idunico,
+            method: 'POST',
+            success: function (data) {
+                console.log(data)
+                console.log("obtuve las imagenes atencion del pedido " + idunico)
+                $('#listado_adjuntos').html(data);
+                console.log(data);
+            }
+        });
 
       });
 

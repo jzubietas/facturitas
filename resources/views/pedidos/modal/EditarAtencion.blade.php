@@ -61,7 +61,7 @@
                       <div id="sustento_adjunto">
                           <h5><b>Sustento:</b></h5>
                           <textarea name="sustento" id="sustento_data" class="form-control" cols="30" rows="5" placeholder="El asesor ya envio los ajuntos hacia el clíente, Ingrese un sustento para validar el envio de estos nuevos adjuntos."></textarea>
-                      </divid>
+                      </div>
 
                   </div>
                 </div>
