@@ -175,7 +175,7 @@ class GraficoMetasDelMes extends Component
             }
 
             $meta = (float)$asesor->meta_pedido;
-            $asignados = $this->applyFilter(Pedido::query())->whereUserId($asesor->id)->activo()->count();
+            $asignados = $this->applyFilter(Pedido::query()->whereUserId($asesor->id)->activo())->count();
             //$pay = $this->applyFilter(Pedido::query())->whereUserId($asesor->id)->activo()->pagados()->count();
 
             $progressData[] = [
