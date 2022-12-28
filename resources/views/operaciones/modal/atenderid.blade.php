@@ -57,6 +57,7 @@
                             <h6><b>Archivos adjuntos:</b></h6>
                           </div>
                           <div class="col-6" id="listado_adjuntos"></div>
+                          <div class="col-6" id="listado_adjuntos_antes"></div>
 
                         </div>
                         <div class="row">
