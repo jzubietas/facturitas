@@ -217,7 +217,7 @@ class PedidoStatusController extends Controller
 
             if (Auth::user()->rol == "Operario") {
 
-                $asesores = User::whereIN('users.rol', ['Asesor', 'Administrador'])
+                $asesores = User::whereIN('users.rol', ['Asesor', 'Administrador','ASESOR ADMINISTRATIVO'])
                     ->where('users.estado', '1')
                     ->Where('users.operario', Auth::user()->id)
                     ->select(
