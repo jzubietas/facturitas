@@ -544,7 +544,7 @@
                             urlpdf = urlpdf.replace(':id', row.id);
                             @can('operacion.atender')
                             if (!row.pendiente_anulacion) {
-                                data = data + '<a href="" data-target="#modal-atender" data-cant_compro=' + row.cant_compro + ' data-atender=' + row.id + ' data-codigo=' + row.codigos + ' data-toggle="modal" ><button class="btn btn-success btn-sm">Atender</button></a>';
+                                data = data + '<a href="" data-backdrop="static" data-keyboard="false" data-target="#modal-atender" data-cant_compro=' + row.cant_compro + ' data-atender=' + row.id + ' data-codigo=' + row.codigos + ' data-toggle="modal" ><button class="btn btn-success btn-sm">Atender</button></a>';
                             }
                             @endcan
                                 @can('operacion.PDF')
