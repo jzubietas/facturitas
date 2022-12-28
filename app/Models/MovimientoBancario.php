@@ -2,19 +2,20 @@
 
 namespace App\Models;
 
+use App\Traits\CommonModel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class MovimientoBancario extends Model
 {
     use HasFactory;
+    use CommonModel;
 
     protected $guarded = ['id'];
 
     protected $dates = ['created_at', 'updated_at', 'fecha'];
 
-    /*protected $fillable = [
-        'id','banco','created_at'
-     ];*/
-    
+    public function scopeSinConciliar($query){
+        return $query->where($this->qualifyColumn('pago'),'=','0');
+    }
 }

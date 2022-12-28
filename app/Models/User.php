@@ -2,14 +2,13 @@
 
 namespace App\Models;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Traits\CommonModel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
-
 use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
@@ -23,6 +22,7 @@ class User extends Authenticatable
     use TwoFactorAuthenticatable;
 
     use HasRoles;
+    use CommonModel;
 
 
     const ROL_ADMIN = "Administrador";
@@ -153,11 +153,6 @@ class User extends Authenticatable
     public function unreadNotifications()
     {
         return $this->unreadNotificationsLimits()->limit(15);
-    }
-
-    public function scopeActivo($query, $status=1)
-    {
-        return $query->where('users.estado', "=","$status");
     }
 
     public function scopeRol($query, $rol)
