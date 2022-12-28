@@ -308,26 +308,11 @@ class UserController extends Controller
             $users = $users->where('llamada', Auth::user()->id)->where("rol", "Asesor");
 
         } elseif ($mirol == 'Jefe de llamadas') {
-            /*$llamadasIds = User::where('users.estado', '1')
-                ->where('rol', 'Llamadas')
-                ->where('users.jefe', Auth::user()->id)
-                ->pluck('id')
-                ->unique()
-                ->values();
-
-            $usersasesores = User::where('rol', 'Asesor')
-                ->where('estado', '1')
-                ->whereIn('llamada', $llamadasIds)
-                ->pluck('identificador')
-                ->unique()
-                ->values();*/
             $users = $users->WhereNotIn("identificador", ['B']);
-            //$users = $users->where('llamada', Auth::user()->id)->where("rol", "Asesor");
         } elseif ($mirol == 'Asesor') {
-
             $users = $users->where('id', Auth::user()->id)->where("rol", "Asesor");
         } else {
-            $usersB = User::where("identificador", "B")->where("rol", "Administrador");
+            $usersB = User::where("identificador", "B");//->where("rol", "Administrador");// ahora es "ASESOR ADMINISTRATIVO"
             $users = $usersB->union($users);
         }
         $users = $users->orderBy('exidentificador', 'ASC')->get();

@@ -578,7 +578,7 @@ class ClienteController extends Controller
         $clientes = null;
         $clientes = Cliente::whereIn('user_id',
             User::query()->select('users.id')
-                ->whereIn('users.rol', ['Asesor', User::ROL_ADMIN])
+                ->whereIn('users.rol', ['Asesor', User::ROL_ADMIN,User::ROL_ASESOR_ADMINISTRATIVO ])
                 ->where('users.estado', '1')
                 ->where('users.identificador', $request->user_id)
         )
