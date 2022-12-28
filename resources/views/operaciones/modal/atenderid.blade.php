@@ -34,6 +34,8 @@
                               @csrf
                               {!! Form::file('adjunto[]', ['class' => 'form-control-file', 'id'=>'adjunto', 'multiple']) !!}
                               {{-- <td>@csrf<input type="file" id="adjunto" name="adjunto[]" multiple=""/></td> --}}
+
+                              <button type="button" class="btn btn-primary" id="cargar_adjunto">Subir Informacion</button>
                           </div>
 
                           <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">

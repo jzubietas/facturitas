@@ -310,6 +310,42 @@
 
       });
 
+      $(document).on("click", "#cargar_adjunto", function (evento) {
+        let idunico = $("#hiddenAtender").val();
+        console.log(idunico);
+        $('#cargar_adjunto').attr("disabled", true);
+        $('#cargar_adjunto').html('Subiendo archivos...');
+        //e.preventDefault();
+        var data = new FormData(document.getElementById("formularioatender"));
+
+        $.ajax({
+          type: 'POST',
+          url: "{{ route('operaciones.updateatender',':id') }}".replace(':id', idunico),
+          data: data,
+          processData: false,
+          contentType: false,
+          success: function (data) {
+              $('#cargar_adjunto').prop("disabled", false);
+              $('#cargar_adjunto').text('Confirmar');
+
+              $.ajax({
+                  url: "{{ route('operaciones.editatencion',':id') }}".replace(':id', idunico),
+                  data: idunico,
+                  method: 'POST',
+                  success: function (data) {
+                      console.log(data)
+                      console.log("obtuve las imagenes atencion del pedido " + idunico)
+                      $('#listado_adjuntos').html(data);
+                  }
+              });
+          }
+        }).done(function (data) {
+        });
+        return false;
+
+
+      });
+
       $('#modal-veradjunto').on('show.bs.modal', function (event) {
         //cuando abre el form de anular pedido
         var button = $(event.relatedTarget)
