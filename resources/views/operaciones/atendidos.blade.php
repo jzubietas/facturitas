@@ -391,13 +391,14 @@
             $(document).on("submit", "#formdeleteadjunto", function (evento) {
                 evento.preventDefault();
                 console.log("ejecutando eliminando adjunto")
-                //return false;
                 let pedidoidimagenes = $("#eliminar_pedido_id").val();
+                let pedidoconfirmado = $("#eliminar_pedido_id_confirmado").val();/*0 o 1*/
+                console.log(pedidoidimagenes);
                 var fddeleteadjunto = new FormData();
                 fddeleteadjunto.append('eliminar_pedido_id', pedidoidimagenes);
                 fddeleteadjunto.append('eliminar_pedido_id_imagen', $("#eliminar_pedido_id_imagen").val());
                 fddeleteadjunto.append('eliminar_pedido_id_confirmado', pedidoconfirmado);
-
+                
                 console.log(fddeleteadjunto);
 
                 //return false;
