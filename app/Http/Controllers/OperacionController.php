@@ -619,6 +619,16 @@ class OperacionController extends Controller
             ->rawColumns(['action'])
             ->make(true);
     }
+    
+    public function Atenderiddismiss(Request $request)
+    {
+        $hiddenAtender = $request->hiddenAtender;
+        $pedido = Pedido::where("id", $hiddenAtender)->first();
+        $imagenesatencion_=ImagenAtencion::where("pedido_id", $hiddenAtender)->where("confirm", '0');
+        $imagenesatencion_->update([
+            'estado' => '0'
+        ]);
+    }
 
     public function Atenderid(Request $request)
     {
