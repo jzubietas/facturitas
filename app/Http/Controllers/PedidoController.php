@@ -1870,8 +1870,8 @@ class PedidoController extends Controller
                 'dp.total as total',
                 'pedidos.condicion as condiciones',
                 'pedidos.condicion_code',
-                'pedidos.condicion_envio as condicion_envio',
-                'pedidos.condicion_envio_code as condicion_envio_code',
+                'pedidos.condicion_envio',
+                'pedidos.condicion_envio_code',
                 'pedidos.motivo',
                 'pedidos.pendiente_anulacion',
                 'pedidos.responsable',
@@ -1952,6 +1952,10 @@ class PedidoController extends Controller
 
         return Datatables::of(DB::table($pedidos))
             ->addIndexColumn()
+            ->addColumn('condicion_envio_color', function ($pedido) {
+                $p = new Pedido((array)$pedido);
+                return $p->condicion_envio_color;
+            })
             ->addColumn('action', function ($pedido) {
                 $btn = '';
 
