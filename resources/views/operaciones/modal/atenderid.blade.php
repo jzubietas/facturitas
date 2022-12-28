@@ -53,15 +53,18 @@
                         </div>
                         <div class="row">
 
-                          <div class="col-6">
+                          <div class="col-12">
                             <h6><b>Archivos adjuntos:</b></h6>
                           </div>
-                          <div class="col-6">
+                          <div class="col-6 d-none">
                             <h6><b>Archivos adjuntos Confirmados:</b></h6>                            
                           </div>
-                          <div class="col-6" id="listado_adjuntos"></div>
-                          <div class="col-6" id="listado_adjuntos_antes"></div>
-
+                          <div class="col-12">
+                            <div class="row">
+                              <div class="col-12" id="listado_adjuntos"></div>
+                              <div class="col-12" id="listado_adjuntos_antes"></div>
+                            </div>
+                          </div>
                         </div>
                         <div class="row">
 

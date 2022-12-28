@@ -86,7 +86,7 @@
 
             function openConfirmDownloadDocuments(action, idc, codigo) {
                 $.confirm({
-                    title: 'Detalle de atencion de <b>' + idc + '</b>',
+                    title: '<h5>Detalle de atencion de pedido <b>' + codigo + '</b></h5>',
                     buttons: {
                         confirm: {
                             text: 'Confirmar descarga',
@@ -130,8 +130,8 @@
                             method: 'get'
                         }).done(function (response) {
                             var html = `<div class="list-group">`
-                            html += `<li class="list-group-item bg-dark">Codigo: ${codigo}</li>`
-                            html += `<li class="list-group-item bg-primary">Adjuntos de detalle de atencion</li>`
+                            // html += `<li class="list-group-item bg-dark">Codigo: ${codigo}</li>`
+                            html += `<li class="list-group-item"><b>Adjuntos de detalle de atencion<b></li>`
                             html += response.data.map(function (item) {
                                 return `<li class="list-group-item"><a href="${item.link}" download>${item.adjunto}</a></li>`
                             }).join('')

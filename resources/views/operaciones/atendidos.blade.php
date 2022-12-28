@@ -240,6 +240,13 @@
                             'warning'
                         )
                         return false;
+                    }else if(sustento.length<50){
+                        Swal.fire(
+                            'Error',
+                            'Debe ingresar al menos 50 caracteres',
+                            'warning'
+                        )
+                        return false;
                     }else{
                         data.append('sustento', sustento);
                     }
