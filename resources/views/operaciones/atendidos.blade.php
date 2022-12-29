@@ -548,11 +548,12 @@
                 $("#responsable").val(idresponsable);
             });
 
-            $('#modal-revertir').on('show.bs.modal', function (event) {
+            $('#modal-revertir-poratender').on('show.bs.modal', function (event) {
                 //cuando abre el form de anular pedido
                 var button = $(event.relatedTarget)
                 var idunico = button.data('revertir')//
-                $(".textcode").html("PED"+idunico);
+                var idcodigo = button.data('codigo')
+                $(".textcode").html(idcodigo);
                 $("#hiddenRevertirpedidoporatender").val(idunico);
             });
 
@@ -694,7 +695,7 @@
 
                             @can('operacion.atendidos.revertir')
 
-                                data = data+'<a href="" class="btn-sm dropdown-item" data-target="#modal-revertir-poratender" data-revertir='+row.id+' data-toggle="modal" ><i class="fa fa-undo text-danger" aria-hidden="true"></i> Revertir</a>';
+                                data = data+'<a href="" class="btn-sm dropdown-item" data-target="#modal-revertir-poratender" data-revertir='+row.id+' data-codigo='+row.codigos+' data-toggle="modal" ><i class="fa fa-undo text-danger" aria-hidden="true"></i> Revertir</a>';
                             @endcan
 
                                 data = data + '</ul></div>';
