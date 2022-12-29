@@ -250,13 +250,9 @@ class OperacionController extends Controller
             $pedidos = $pedidos->WhereIn('u.identificador', $asesores);
 
 
-        } else {
-            $pedidos = $pedidos;
-
         }
-        $pedidos = $pedidos->get();
 
-        return Datatables::of($pedidos)
+        return Datatables::of(DB::table($pedidos))
             ->addIndexColumn()
             ->addColumn('action', function ($pedido) {
                 $btn = '';
@@ -319,7 +315,7 @@ class OperacionController extends Controller
             ->where('pedidos.estado', '1')
             ->where('dp.estado', '1')
             ->where('pedidos.condicion_code', Pedido::ATENDIDO_INT)
-            ->whereIn('pedidos.condicion_envio_code', [Pedido::RECIBIDO_JEFE_OPE_INT, Pedido::ENTREGADO_SIN_SOBRE_OPE_INT]);
+            ->whereIn('pedidos.condicion_envio_code', [Pedido::ENVIADO_OPE_INT, Pedido::ENTREGADO_SIN_SOBRE_OPE_INT, Pedido::RECIBIDO_JEFE_OPE_INT]);
 
         //->whereIn('pedidos.envio', ['0'])
         //->whereBetween( 'pedidos.created_at', [$min, $max]);
@@ -432,7 +428,7 @@ class OperacionController extends Controller
             )
             ->where('pedidos.estado', '1')
             ->where('dp.estado', '1')
-            ->whereIn('pedidos.condicion_envio_code', [Pedido::CONFIRMACION_COURIER_INT, Pedido::REPARTO_COURIER_INT, Pedido::SEGUIMIENTO_PROVINCIA_COURIER_INT, Pedido::ENTREGADO_CLIENTE_INT, Pedido::CONFIRMACION_COURIER_INT, Pedido::RECEPCION_COURIER_INT, Pedido::ENTREGADO_SIN_SOBRE_OPE_INT, Pedido::ENTREGADO_SIN_SOBRE_CLIENTE_INT]);
+            ->whereIn('pedidos.condicion_envio_code', [Pedido::RECEPCION_COURIER_INT, Pedido::REPARTO_COURIER_INT, Pedido::SEGUIMIENTO_PROVINCIA_COURIER_INT, Pedido::ENTREGADO_CLIENTE_INT, Pedido::RECEPCION_COURIER_INT, Pedido::ENVIO_COURIER_JEFE_OPE_INT, Pedido::ENTREGADO_SIN_SOBRE_OPE_INT, Pedido::ENTREGADO_SIN_SOBRE_CLIENTE_INT]);
         //->whereIn('pedidos.condicion_envio_code', [Pedido::JEFE_OP_CONF_INT],[Pedido::COURIER_INT], [Pedido::EN_REPARTO_INT],[Pedido::SOBRE_ENVIAR_INT])
 
         //->whereIn('pedidos.envio', ['0'])
@@ -627,14 +623,11 @@ class OperacionController extends Controller
 
     public function Atenderid(Request $request)
     {
-
-
         $hiddenAtender = $request->hiddenAtender;
 
         $fecha = Carbon::now();
 
         $pedido = Pedido::where("id", $hiddenAtender)->first();
-
         if ($pedido->imagenAtencion()->activo()->count() < 1) {
             abort(402);
         }
@@ -644,7 +637,9 @@ class OperacionController extends Controller
             'condicion_code' => $request->condicion,
             'condicion_envio' => Pedido::$estadosCondicionEnvioCode[$request->condicion],
             'condicion_envio_code' => $request->condicion,
-            'modificador' => 'USER' . Auth::user()->id
+            'sustento_adjunto' => $request->sustento,
+            'modificador' => 'USER' . Auth::user()->id,
+            'da_confirmar_descarga' => 0,
         ]);
 
         $pedido->detallePedidos()->activo()->update([
@@ -1297,6 +1292,8 @@ class OperacionController extends Controller
             'envio' => '0',
             'condicion_envio' => Pedido::POR_ATENDER_OPE,
             'condicion_envio_code' => Pedido::POR_ATENDER_OPE_INT,
+            'condicion' => Pedido::POR_ATENDER_OPE,
+            'condicion_code' => Pedido::POR_ATENDER_OPE_INT,
             'modificador' => 'USER' . Auth::user()->id
         ]);
 

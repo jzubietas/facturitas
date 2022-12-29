@@ -216,8 +216,21 @@
             var button = $(event.relatedTarget)
             var idunico = button.data('envio')
             var codigo = button.data('code')
-            $(".textcode").html(codigo);
+            var group = button.data('group')
+
+            if(group == 1){
+                $('#titulo-modal-op').html("Confirmar recepción");
+                $('#msj-modal').html('Esta seguro que desea confirmar la recepción del Pedido <b>' + codigo + '</b>');
+                $('#conf-modal-OP').html("Confirmar recepción");
+            }else{
+                $('#titulo-modal-op').html("Enviar pedido");
+                $('#msj-modal').html('Esta seguro que desea enviar el Pedido <b>' + codigo + '</b> al Área de Courier.');
+                $('#conf-modal-OP').html("Enviar a Courier");
+            }
+            //$(".textcode").html(codigo);
+
             $("#hiddenEnvioOP").val(idunico);
+            $("#hiddenGroup").val(group);
 
         });
 
@@ -257,25 +270,46 @@
 
         $(document).on("submit", "#formulario_atender_op", function (evento) {
             evento.preventDefault();
+
+            var group = $('#hiddenGroup').val();
+
             var fd = new FormData();
             var data = new FormData(document.getElementById("formulario_atender_op"));
 
             fd.append( 'hiddenEnvio', $("#hiddenEnvio").val() );
 
-            $.ajax({
-                data: data,
-                processData: false,
-                contentType: false,
-                type: 'POST',
-                url:"{{ route('operaciones.atender_pedido_op') }}",
-                success:function(data)
-                {
-                    console.log(data);
-                    $("#modal-envio-op .textcode").text('');
-                    $("#modal-envio-op").modal("hide");
-                    $('#tablaPrincipal').DataTable().ajax.reload();
-                }
-            });
+            if(group == 1){
+                $.ajax({
+                    data: data,
+                    processData: false,
+                    contentType: false,
+                    type: 'POST',
+                    url:"{{ route('operaciones.recibir_pedido_op') }}",
+                    success:function(data)
+                    {
+                        console.log(data);
+                        $("#modal-envio-op .textcode").text('');
+                        $("#modal-envio-op").modal("hide");
+                        $('#tablaPrincipal').DataTable().ajax.reload();
+                    }
+                });
+            }else{
+
+                $.ajax({
+                    data: data,
+                    processData: false,
+                    contentType: false,
+                    type: 'POST',
+                    url:"{{ route('operaciones.atender_pedido_op') }}",
+                    success:function(data)
+                    {
+                        console.log(data);
+                        $("#modal-envio-op .textcode").text('');
+                        $("#modal-envio-op").modal("hide");
+                        $('#tablaPrincipal').DataTable().ajax.reload();
+                    }
+                });
+            }
         });
 
 
@@ -474,9 +508,17 @@
 
               if(row.condicion_envio_code==5)
               {
-                data = data+'<a href="" data-target="#modal-envio-op" class="btn-sm dropdown-item" data-envio='+row.id+' data-code="'+ row.codigos +'" data-toggle="modal" ><i class="fa fa-envelope text-success" aria-hidden="true"></i> ENVIO A COURIER JEFE OPE</a>';
+                  data = data+'<a href="" data-target="#modal-envio-op" data-group="1" class="btn-sm dropdown-item" data-envio='+row.id+' data-code="'+ row.codigos +'" data-toggle="modal" ><i class="fa fa-envelope text-success" aria-hidden="true"></i> Confirmar</a>';
+                data = data+'<p data-target="#" class="btn-sm pl-16 text-gray mb-0" data-envio='+row.id+' data-code="'+ row.codigos +'" data-toggle="" disabled><i class="fa fa-envelope text-gray" aria-hidden="true"></i> ENVIO A COURIER JEFE OPE</p>';
                 data = data+'<a href="" data-target="#modal-revertir" class="btn-sm dropdown-item" data-revertir='+row.id+'  data-codigo='+row.codigo+' data-toggle="modal" ><i class="fa fa-times text-danger" aria-hidden="true"></i> Revertir</a>';
               }
+
+                if(row.condicion_envio_code==6)
+                {
+                    data = data+'<p data-target="text-gray" class="btn-sm pl-16 mb-0" data-envio='+row.id+' data-code="'+ row.codigos +'" data-toggle="" disabled><i class="fa fa-envelope text-gray " aria-hidden="true"></i> Confirmar</p>';
+                    data = data+'<a href="" data-target="#modal-envio-op" data-group="2" class="btn-sm dropdown-item " data-envio='+row.id+' data-code="'+ row.codigos +'" data-toggle="modal" ><i class="fa fa-envelope text-success" aria-hidden="true"></i> ENVIO A COURIER JEFE OPE</a>';
+                    data = data+'<a href="" data-target="#modal-revertir" class="btn-sm dropdown-item" data-revertir='+row.id+'  data-codigo='+row.codigo+' data-toggle="modal" ><i class="fa fa-times text-danger" aria-hidden="true"></i> Revertir</a>';
+                }
 
               if(row.condicion_envio_code == 13)
               {

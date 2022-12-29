@@ -8,8 +8,30 @@
 
 @section('content')
 
+  
+  
+
   <div class="card">
-    <div class="card-header bg-primary">PEDIDOS {{ $mes_month }}  {{ $mes_anio }}   {{ $mes_mes }}</div>
+    <div class="card-header bg-primary">
+      PEDIDOS {{ $mes_month }}  {{ $mes_anio }}   {{ $mes_mes }}
+
+      <div class="float-right btn-group dropleft">
+        <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown"
+                aria-haspopup="true" aria-expanded="false">
+            Exportar
+        </button>
+        <div class="dropdown-menu">
+            <a href="" data-target="#modal-exportar-unico" data-toggle="modal" class="dropdown-item" target="blank_"><img
+                    src="{{ asset('imagenes/icon-excel.png') }}"> Analisis</a>
+            {{--<a href="" data-target="#modal-exportar-v2" data-toggle="modal" class="dropdown-item" target="blank_"><img src="{{ asset('imagenes/icon-excel.png') }}"> Clientes - Situacion</a>--}}
+    
+    
+        </div>
+      </div>
+      @include('reportes.modal.exportar_unico', ['title' => 'Exportar Analisis', 'key' => '1'])
+    
+    
+    </div>
     <div class="form-group">
 
       <div class="row">

@@ -826,7 +826,7 @@ class EnvioController extends Controller
     {
         $pedidos=null;
 
-        $filtros_code=[Pedido::REPARTO_COURIER_INT,Pedido::RECIBIDO_JEFE_OPE_INT,Pedido::RECEPCION_COURIER_INT];
+        $filtros_code=[Pedido::REPARTO_COURIER_INT,Pedido::ENVIADO_OPE_INT,Pedido::ENVIO_COURIER_JEFE_OPE_INT];
 
         $pedidos = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')
                 ->join('users as u', 'pedidos.user_id', 'u.id')
@@ -1146,14 +1146,14 @@ class EnvioController extends Controller
         $pedido->update([
             'envio' => '2',
             'modificador' => 'USER'.Auth::user()->id,
-            'condicion_envio' => Pedido::CONFIRMACION_COURIER,
-            'condicion_envio_code' => Pedido::CONFIRMACION_COURIER_INT,
+            'condicion_envio' => Pedido::RECEPCION_COURIER,
+            'condicion_envio_code' => Pedido::RECEPCION_COURIER_INT,
 
         ]);
 
         PedidoMovimientoEstado::create([
             'pedido' => $request->hiddenEnvio,
-            'condicion_envio_code' => Pedido::CONFIRMACION_COURIER_INT,
+            'condicion_envio_code' => Pedido::RECEPCION_COURIER_INT,
             'notificado' => 0
         ]);
 
@@ -1612,14 +1612,14 @@ class EnvioController extends Controller
 
         $pedido->update([
             'envio' => '1',
-            'condicion_envio' => Pedido::RECIBIDO_JEFE_OPE,
-            'condicion_envio_code' => Pedido::RECIBIDO_JEFE_OPE_INT,
+            'condicion_envio' => Pedido::ENVIADO_OPE,
+            'condicion_envio_code' => Pedido::ENVIADO_OPE_INT,
             'modificador' => 'USER'.Auth::user()->id
         ]);
 
         PedidoMovimientoEstado::create([
             'pedido' => $request->hiddenEnvio,
-            'condicion_envio_code' => Pedido::RECIBIDO_JEFE_OPE_INT,
+            'condicion_envio_code' => Pedido::ENVIADO_OPE_INT,
             'notificado' => 0
         ]);
 
@@ -1655,6 +1655,27 @@ class EnvioController extends Controller
         return response()->json(['html' => $pedido->id]);
     }
 
+    public function RecibirPedidoOP(Request $request)
+    {
+        $pedido=Pedido::where("id",$request->hiddenEnvio)->first();
+
+        $pedido->update([
+            'envio' => '2',
+            'modificador' => 'USER'.Auth::user()->id,
+            'condicion_envio' => Pedido::RECIBIDO_JEFE_OPE,
+            'condicion_envio_code' => Pedido::RECIBIDO_JEFE_OPE_INT,
+
+        ]);
+
+        PedidoMovimientoEstado::create([
+            'pedido' => $request->hiddenEnvio,
+            'condicion_envio_code' => Pedido::ENVIO_COURIER_JEFE_OPE_INT,
+            'notificado' => 0
+        ]);
+
+        return response()->json(['html' => $pedido->id]);
+    }
+
     public function AtenderPedidoOP(Request $request)
     {
         $pedido=Pedido::where("id",$request->hiddenEnvio)->first();
@@ -1662,14 +1683,14 @@ class EnvioController extends Controller
         $pedido->update([
             'envio' => '2',
             'modificador' => 'USER'.Auth::user()->id,
-            'condicion_envio' => Pedido::RECEPCION_COURIER,
-            'condicion_envio_code' => Pedido::RECEPCION_COURIER_INT,
+            'condicion_envio' => Pedido::ENVIO_COURIER_JEFE_OPE,
+            'condicion_envio_code' => Pedido::ENVIO_COURIER_JEFE_OPE_INT,
 
         ]);
 
         PedidoMovimientoEstado::create([
             'pedido' => $request->hiddenEnvio,
-            'condicion_envio_code' => Pedido::CONFIRMACION_COURIER_INT,
+            'condicion_envio_code' => Pedido::RECEPCION_COURIER_INT,
             'notificado' => 0
         ]);
 
@@ -1700,7 +1721,7 @@ class EnvioController extends Controller
             DB::raw("COUNT(u.identificador) AS total, u.identificador ")
         )
         ->where('pedidos.estado', '1')
-        ->whereIn('pedidos.condicion_envio_code', [Pedido::CONFIRMACION_COURIER_INT])
+        ->whereIn('pedidos.condicion_envio_code', [Pedido::RECEPCION_COURIER_INT])
         ->where('dp.estado', '1')
         ->groupBy('u.identificador');
 
@@ -1759,7 +1780,7 @@ class EnvioController extends Controller
                 )
                 ->where('pedidos.estado', '1')
                 //->whereIn('pedidos.envio', [Pedido::ENVIO_CONFIRMAR_RECEPCION,Pedido::ENVIO_RECIBIDO]) // ENVIADO CONFIRMAR RECEPCION Y ENVIADO RECIBIDO
-                ->whereIn('pedidos.condicion_envio_code', [Pedido::CONFIRMACION_COURIER_INT]) // ENVIADO CONFIRMAR RECEPCION Y ENVIADO RECIBIDO
+                ->whereIn('pedidos.condicion_envio_code', [Pedido::RECEPCION_COURIER_INT]) // ENVIADO CONFIRMAR RECEPCION Y ENVIADO RECIBIDO
                 ->where('dp.estado', '1');
 
         if(Auth::user()->rol == "Operario"){
@@ -1843,7 +1864,7 @@ class EnvioController extends Controller
         if($area_accion == "fernandez"){
             switch ($condicion_code_actual){
                 case 12:
-                    $nuevo_estado = Pedido::CONFIRMACION_COURIER_INT;
+                    $nuevo_estado = Pedido::RECEPCION_COURIER_INT;
                     $respuesta = "El sobre se recibio correctamente.";
                     $nombre_accion = Pedido::$estadosCondicionEnvioCode[$nuevo_estado];
 
@@ -1855,7 +1876,7 @@ class EnvioController extends Controller
                  *  JEFE DE OPERACIONES
                  */
                 case 5:
-                    $nuevo_estado = Pedido::RECEPCION_COURIER_INT;
+                    $nuevo_estado = Pedido::ENVIO_COURIER_JEFE_OPE_INT;
                     $respuesta = "El pedido se envió a Logistica correctamente.";
                     $nombre_accion = Pedido::$estadosCondicionEnvioCode[$nuevo_estado];
 

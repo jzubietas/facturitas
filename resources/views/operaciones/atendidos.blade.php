@@ -73,12 +73,12 @@
                 <tbody>
                 </tbody>
             </table>
+            @include('operaciones.modal.revertirporatender')
+
             @include('pedidos.modal.sinenvioid')
             @include('pedidos.modal.envioid')
             @include('pedidos.modal.EditarAtencion')
             @include('pedidos.modal.DeleteAdjuntoid')
-
-            @include('operaciones.modal.revertirporatender')
         </div>
     </div>
 
@@ -239,6 +239,7 @@
                 $("#eliminar_pedido_id_imagen").val(imgadjunto);
                 $("#eliminar_pedido_id_confirmado").val(imgadjuntoconfirm);
             });
+            {{--
 
             $(document).on("submit", "#formulario_adjuntos_confirmar", function (evento) {
                 evento.preventDefault();
@@ -307,6 +308,7 @@
 
             });
 
+            --}}
             $(document).on("submit", "#formularioatender", function (evento) {
                 evento.preventDefault();
                 var cant_compro = document.getElementById('cant_compro').value;
@@ -355,7 +357,7 @@
 
                     var sustento = $('#sustento_data').val();
 
-                    if (sustento == "") {
+                    if (!sustento) {
                         Swal.fire(
                             'Error',
                             'Ingrese un sustento para continuar',
@@ -602,8 +604,8 @@
                 success:function(data)
                 {
                     console.log(data);
-                    $("#modal-revertir .textcode").text('');
-                    $("#modal-revertir").modal("hide");
+                    $("#modal-revertir-poratender .textcode").text('');
+                    $("#modal-revertir-poratender").modal("hide");
                     $('#tablaPrincipal').DataTable().ajax.reload();
                 }
                 });
@@ -673,16 +675,17 @@
                     {
                         data: 'condicion_code',
                         name: 'condicion_code',
+                        sWidth: '10%',
                         render: function (data, type, row, meta) {
 
                             if (row.condicion_code == 1) {
-                                return '<span class="bagde badge-success" style="background-color:'+row.condicion_envio_color+' !important;" >' + '{{\App\Models\Pedido::POR_ATENDER_OPE }}' + '</span>';
+                                return '<span class="badge badge-success" style="background-color:'+row.condicion_envio_color+' !important;" >' + '{{\App\Models\Pedido::POR_ATENDER_OPE }}' + '</span>';
                             } else if (row.condicion_code == 2) {
-                                return '<span class="bagde badge-success" style="background-color:'+row.condicion_envio_color+' !important;" >' + '{{\App\Models\Pedido::EN_ATENCION_OPE }}' + '</span>';
+                                return '<span class="badge badge-success" style="background-color:'+row.condicion_envio_color+' !important;" >' + '{{\App\Models\Pedido::EN_ATENCION_OPE }}' + '</span>';
                             } else if (row.condicion_code == 3) {
-                                return '<span class="bagde badge-success" style="background-color:'+row.condicion_envio_color+' !important;" >' + '{{\App\Models\Pedido::ATENDIDO_OPE }}' + '</span>';
+                                return '<span class="badge badge-success" style="background-color:'+row.condicion_envio_color+' !important;" >' + '{{\App\Models\Pedido::ATENDIDO_OPE }}' + '</span>';
                             } else if (row.condicion_code == 4) {
-                                return '<span class="bagde badge-success" style="background-color:'+row.condicion_envio_color+' !important;" >' + '{{\App\Models\Pedido::ANULADO }}' + '</span>';
+                                return '<span class="badge badge-success" style="background-color:'+row.condicion_envio_color+' !important;" >' + '{{\App\Models\Pedido::ANULADO }}' + '</span>';
                             }
                         }
                     },
