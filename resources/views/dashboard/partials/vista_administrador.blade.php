@@ -89,14 +89,50 @@
                     class="fas fa-arrow-circle-right"></i></a>
         </div>
     </div>
+
+    <div class="col-lg-9 col-6">
+
+        <div class="small-box bg-secondary">
+            <div class="inner">
+                PEDIDOS CREADOS {{  \Carbon\Carbon::now()->format('d-m-Y') }}
+            </div>
+            <div class="row">
+                <div class="col-lg-12 col-12">
+                    <table class="table" style="font-size:8px;border-spacing: 10px;border-collapse: separate;width:100%;">
+                        <thead>
+                            <tr>
+                                @foreach ($_pedidos as $pedido)
+                                    <td style="width:100px !important;">ASESOR {{ $pedido->identificador }}</td>
+                                @endforeach  
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr style="height:10px !important;">
+
+                            
+                            @foreach ($_pedidos as $pedido)                            
+                                    <td>{{ $pedido->total }}</td>                           
+                                @endforeach  
+                                
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+        
+            </div>
+
+        </div>
+
+        
+    </div>
 </div>
+    
+
 
 
 <div class="row">
     <div class="col-lg-6">
-        <div class="card" style="
-    background-color: #a5770f1a;
-">
+        <div class="card" style="background-color: #a5770f1a;">
             <div class="card-header">Buscar Cliente/RUC</div>
             <div class="card-header">
                 <div class="row">

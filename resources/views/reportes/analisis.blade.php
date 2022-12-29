@@ -8,23 +8,6 @@
 
 @section('content')
 
-<div class="row">
-  ss
-  @foreach ($_pedidos as $pedido)
-          <div class="col-2">
-              <div class="card card-warning">
-                  <div class="card-header">
-                      <h5>ASESOR {{ $pedido->identificador }}</h5>
-                  </div>
-                  <div class="card-body">
-                      <h4 class="text-center">
-                          <b>{{ $pedido->total }}</b>
-                      </h4>
-                  </div>
-              </div>
-          </div>
-          @endforeach      
-  </div>
 
   <div class="card">
     <div class="card-header bg-primary">PEDIDOS</div>

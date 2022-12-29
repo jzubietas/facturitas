@@ -42,16 +42,7 @@ class PdfController extends Controller
     {
         $users = User::where('estado', '1')->pluck('name', 'id');
 
-        $_pedidos = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')
-        ->join('users as u', 'pedidos.user_id', 'u.id')
-        ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
-        ->select(
-            DB::raw("COUNT(u.identificador) AS total, u.identificador ")
-        )
-        ->where('pedidos.estado', '1')
-        ->whereIn('pedidos.condicion_envio_code', [Pedido::POR_ATENDER_INT])
-        ->where('dp.estado', '1')
-        ->groupBy('u.identificador');
+        
         
         return view('reportes.analisis', compact('users','_pedidos'));
     }

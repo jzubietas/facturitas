@@ -24,6 +24,19 @@ class DashboardController extends Controller
         $mfecha = $mytime->month;
         $dfecha = $mytime->day;
 
+        $_pedidos = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')
+        ->join('users as u', 'pedidos.user_id', 'u.id')
+        ->select(
+            DB::raw("COUNT(u.identificador) AS total, u.identificador ")
+        )
+        ->where('pedidos.estado', '1')
+        //->whereIn('pedidos.condicion_envio_code', [Pedido::POR_ATENDER_INT])
+        ->where(DB::raw('CAST(pedidos.created_at as date)'), '=', Carbon::now()->format('Y-m-d'))
+        //->whereIn('u.identificador', ['01','02','03'])
+        ->groupBy('u.identificador');
+
+        $_pedidos=$_pedidos->get();
+
         //DASHBOARD ADMINISTRADOR
         $pedidoxmes_total = User::select(DB::raw('sum(users.meta_pedido) as total'))//META PEDIDOS
         ->where('users.rol', "ENCARGADO")
@@ -295,7 +308,7 @@ class DashboardController extends Controller
                 'pagosobservados_administracion',
                 'conteo',
                 'cobranzaxmes',
-
+                '_pedidos'
             )
         );
     }
