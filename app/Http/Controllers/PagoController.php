@@ -287,7 +287,7 @@ class PagoController extends Controller
         }
 
         $pedidos = Pedido::join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
-            ->select('pedidos.id','dp.codigo',DB::raw(" (select dp.ft+dp.courier) as tot_pag "))
+            ->select('pedidos.id','dp.codigo')
             ->where('pedidos.estado', '1')
             ->where('pedidos.pago', '0')
             ->get();
