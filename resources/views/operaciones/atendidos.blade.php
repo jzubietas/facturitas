@@ -309,6 +309,10 @@
                 evento.preventDefault();
                 var cant_compro = document.getElementById('cant_compro').value;
                 var cant_compro_attachment = document.getElementById('adjunto_total_attachment');//adjuntos en el servidor
+
+                let cnf_adjunto = $("#conf_descarga").val();
+                console.log(cnf_adjunto);
+
                 if (!cant_compro_attachment) {
                     cant_compro_attachment = 0
                 } else {
@@ -341,6 +345,33 @@
                         'warning'
                     )
                     return false;
+                }
+
+                if (cnf_adjunto == 1) {
+
+                    console.log("tiene adjuntos");
+
+                    var sustento = $('#sustento_data').val();
+
+                    if (sustento == "") {
+                        Swal.fire(
+                            'Error',
+                            'Ingrese un sustento para continuar',
+                            'warning'
+                        )
+                        return false;
+                    } else if (sustento.length < 50) {
+                        Swal.fire(
+                            'Error',
+                            'Debe ingresar al menos 50 caracteres',
+                            'warning'
+                        )
+                        return false;
+                    } else {
+
+                    }
+                } else {
+                    return false
                 }
 
                 function submitForm() {
