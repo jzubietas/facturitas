@@ -286,7 +286,7 @@ class PedidoStatusController extends Controller
                     $btn = '<div><ul class="" aria-labelledby="dropdownMenuButton">';
                     //$btn .= '<a href="" data-target="#modal-atender" data-atender=' . $pedido->id . ' data-toggle="modal" ><button class="btn btn-success btn-sm">Atender</button></a>';
                     $btn .= '<a href="' . route("pedidosPDF", $pedido->id) . '" class="btn-sm dropdown-item" target="_blank"><i class="fa fa-file-pdf"></i> PDF</a>';
-                    if (ImagenAtencion::query()->where('pedido_id','=',$pedido->id)->activo()->whereNotIn("adjunto", ['logo_facturas.png'])->count() > 0) {
+                    if (ImagenAtencion::query()->where('pedido_id', '=', $pedido->id)->activo()->whereNotIn("adjunto", ['logo_facturas.png'])->count() > 0) {
                         $btn .= '<a href="#" data-target="#modal-veradjunto" data-toggle="modal" data-adjunto="' . $pedido->id . '" class="btn-sm dropdown-item" data-group="2" target="_blank"><i class="fa fa-file-pdf text-primary"></i> Ver adjuntos</a>';
                     }
                     $btn .= '</ul></div>';
@@ -479,7 +479,8 @@ class PedidoStatusController extends Controller
             abort(401);
         }*/
         return response()->json([
-            "data" => $pedido->imagenAtencion()->activo()->get()
+            "data" => $pedido->imagenAtencion()->activo()->get(),
+            "sustento" => $pedido->sustento_adjunto
         ]);
     }
 

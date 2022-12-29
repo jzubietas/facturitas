@@ -239,6 +239,7 @@
                 $("#eliminar_pedido_id_imagen").val(imgadjunto);
                 $("#eliminar_pedido_id_confirmado").val(imgadjuntoconfirm);
             });
+            {{--
 
             $(document).on("submit", "#formulario_adjuntos_confirmar", function (evento) {
                 evento.preventDefault();
@@ -307,6 +308,7 @@
 
             });
 
+            --}}
             $(document).on("submit", "#formularioatender", function (evento) {
                 evento.preventDefault();
                 var cant_compro = document.getElementById('cant_compro').value;
@@ -355,7 +357,7 @@
 
                     var sustento = $('#sustento_data').val();
 
-                    if (sustento == "") {
+                    if (!sustento) {
                         Swal.fire(
                             'Error',
                             'Ingrese un sustento para continuar',
