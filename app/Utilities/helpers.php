@@ -57,7 +57,7 @@ if (!function_exists("get_color_role")) {
     function get_color_role()
     {
         return [
-            'Administrador' => ['#000','#fff'],
+            'Administrador' => ['#343a40','#fff'],
             'Apoyo administrativo' => ['#525252','#fff'],
             'ASESOR ADMINISTRATIVO' => ['#7c7c7c','#fff'],
 
