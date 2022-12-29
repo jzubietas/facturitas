@@ -6,6 +6,7 @@ use App\Abstracts\Widgets;
 use App\Models\DetallePedido;
 use App\Models\Pedido;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 
 class QtyPedidoFisicoElectronicos extends Widgets
 {
@@ -32,7 +33,22 @@ class QtyPedidoFisicoElectronicos extends Widgets
 
     public function jsConfig()
     {
-        $pedidosAtendidosFisicos = Pedido::query()
+
+
+
+        //
+
+        if(auth()->user()->rol==User::ROL_JEFE_OPERARIO)
+        {
+            $jefesOpe = User::activo()
+            ->where('rol', '=', User::ROL_JEFE_OPERARIO)
+            ->where('id', '=', Auth::user()->id)->get();
+            $dataFi = [];
+            $dataEl = [];
+
+        }else{
+
+            $pedidosAtendidosFisicos = Pedido::query()
             ->activo()
             ->porAtenderEstatus()
             ->whereIn(
@@ -56,16 +72,27 @@ class QtyPedidoFisicoElectronicos extends Widgets
             )
             ->count();
 
-        $jefesOpe = User::activo()->where('rol', '=', User::ROL_JEFE_OPERARIO)->get();
+            $jefesOpe = User::activo()
+            ->where('rol', '=', User::ROL_JEFE_OPERARIO)->get();
+            $dataFi = [
+                [
+                "count" => $pedidosAtendidosFisicos,
+                "title" => "Total"
+            ]
+        ];
+            $dataEl = [[
+                "count" => $pedidosAtendidosElectronica,
+                "title" => "Total"
+            ]];
 
-        $dataFi = [[
-            "count" => $pedidosAtendidosFisicos,
-            "title" => "Total"
-        ]];
-        $dataEl = [[
-            "count" => $pedidosAtendidosElectronica,
-            "title" => "Total"
-        ]];
+        }
+
+       
+      
+  
+
+
+
         foreach ($jefesOpe as $user) {
 
             $operario = User::activo()
@@ -77,7 +104,9 @@ class QtyPedidoFisicoElectronicos extends Widgets
                 ->whereIn('rol', [User::ROL_ASESOR, User::ROL_ASESOR_ADMINISTRATIVO])
                 ->whereIn('operario', $operario)
                 ->pluck('id');
-            $fi = Pedido::query()
+           
+           
+             $fi = Pedido::query()
                 ->activo()
                 ->porAtenderEstatus()
                 ->whereIn('user_id', $asesores)
@@ -102,6 +131,8 @@ class QtyPedidoFisicoElectronicos extends Widgets
                         ->where('detalle_pedidos.tipo_banca', 'like', '%ELECTRONICA%')
                 )
                 ->count();
+
+
             $dataFi[] = [
                 "title" => $user->name,
                 "count" => $fi,
@@ -111,6 +142,11 @@ class QtyPedidoFisicoElectronicos extends Widgets
                 "count" => $el
             ];
         }
+
+
+
+
+
         return [
             "fisico" => $dataFi,
             "electronic" => $dataEl

@@ -299,6 +299,8 @@
             @include('dashboard.partials.vista_asesor')
         @elseif (Auth::user()->rol == 'Operacion')
             @include('dashboard.partials.vista_operacion')
+        @elseif (Auth::user()->rol == 'Jefe de operaciones')
+            @include('dashboard.partials.vista_jefeoperacion')
         @elseif (Auth::user()->rol == 'Administracion')
             @include('dashboard.partials.vista_administracion')
         @elseif (Auth::user()->rol == 'Jefe de llamadas')
