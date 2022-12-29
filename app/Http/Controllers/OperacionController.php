@@ -250,13 +250,9 @@ class OperacionController extends Controller
             $pedidos = $pedidos->WhereIn('u.identificador', $asesores);
 
 
-        } else {
-            $pedidos = $pedidos;
-
         }
-        $pedidos = $pedidos->get();
 
-        return Datatables::of($pedidos)
+        return Datatables::of(DB::table($pedidos))
             ->addIndexColumn()
             ->addColumn('action', function ($pedido) {
                 $btn = '';

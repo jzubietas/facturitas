@@ -44,14 +44,14 @@ class AddPermisions extends Command
             $table->integer("confirm")->nullable()->after('adjunto');
         });*/
 
-        DB::table('permissions')->insertOfIgnore([
+        \DB::table('permissions')->insertOrIgnore([
             'name' => 'operacion.atendidos.revertir'
             ,'description' => 'Revertir Pedidos Atendidos'
             ,'modulo' => 'Operacion'
             ,'guard_name' => 'web'
             //,'' => ''
         ]);
-      
+
         return 0;
     }
 }
