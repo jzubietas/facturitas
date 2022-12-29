@@ -3,6 +3,20 @@
 @inject('layoutHelper', 'JeroenNoten\LaravelAdminLte\Helpers\LayoutHelper')
 
 @section('adminlte_css')
+    <style>
+        @foreach(get_color_role() as $rol=>$color)
+            .bg-{{Str::slug($rol)}} {
+            @if(is_array($color))
+            background: {{$color[0]}}!important;;
+            color: {{$color[1]}}!important;;
+            @else
+            background: {{$color}};
+            color: #000!important;
+            @endif
+            font-weight: bold!important;;
+        }
+        @endforeach
+    </style>
     @stack('css')
     @yield('css')
 @stop
