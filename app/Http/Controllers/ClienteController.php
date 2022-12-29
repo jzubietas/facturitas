@@ -772,7 +772,6 @@ class ClienteController extends Controller
         //
 
 
-       
 
         $dateM = Carbon::now()->format('m');
         $dateY = Carbon::now()->format('Y');
@@ -803,7 +802,7 @@ class ClienteController extends Controller
                 $query->whereIn('clientes.situacion', [Cliente::ABANDONO_RECIENTE]);
             })
             ->when(!$request->has("situacion"), function ($query) use ($request) {
-                $query->whereIn('clientes.situacion', [Cliente::ABANDONO_PERMANENTE]);
+                $query->whereIn('clientes.situacion', [Cliente::ABANDONO]);
             })
             ->groupBy(
                 'clientes.id',
