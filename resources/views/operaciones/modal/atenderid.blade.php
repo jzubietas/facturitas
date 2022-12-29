@@ -4,9 +4,6 @@
       <div class="modal-content">
         <div class="modal-header bg-success">
           <h5 class="modal-title" id="exampleModalLabel">Atender pedido</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
         </div>
         {{-- Form::Open(['route' => ['pedidos.atender', $pedido],'enctype'=>'multipart/form-data', 'id'=>'formulario','files'=>true]) --}}
         <form id="formularioatender" name="formularioatender" enctype="multipart/form-data">
@@ -26,7 +23,6 @@
                       </div><br><br>
                       <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 
-
                         <div class="row">
 
                           <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
@@ -35,7 +31,6 @@
                               {!! Form::file('adjunto[]', ['class' => 'form-control-file', 'id'=>'adjunto', 'multiple']) !!}
                               {{-- <td>@csrf<input type="file" id="adjunto" name="adjunto[]" multiple=""/></td> --}}
 
-                              
                           </div>
 
                           <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
@@ -57,7 +52,7 @@
                             <h6><b>Archivos adjuntos:</b></h6>
                           </div>
                           <div class="col-6 d-none">
-                            <h6><b>Archivos adjuntos Confirmados:</b></h6>                            
+                            <h6><b>Archivos adjuntos Confirmados:</b></h6>
                           </div>
                           <div class="col-12">
                             <div class="row">
@@ -68,7 +63,7 @@
                         </div>
                         <div class="row">
 
-                          
+
                           <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
                             {!! Form::label('condicion', 'Estado') !!}
 
@@ -87,7 +82,7 @@
           </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+          <button type="button" class="btn btn-secondary" id="cerrarmodalatender">Cerrar</button>
           <button type="submit" class="btn btn-info" id="atender">Confirmar</button>
         </div>
         {{ Form::Close() }}

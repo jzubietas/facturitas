@@ -3,16 +3,13 @@
     <div class="modal-dialog" style="max-width: 800px!important;">
       <div class="modal-content">
         <div class="modal-header bg-success">
-          <h5 class="modal-title" id="exampleModalLabel">Editar Atención</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
+          <h5 class="modal-title" id="exampleModalLabel">Atender pedido</h5>
         </div>
         {{-- Form::Open(['route' => ['pedidos.atender', $pedido],'enctype'=>'multipart/form-data', 'id'=>'formulario','files'=>true]) --}}
-
-
+        <form id="formularioatender" name="formularioatender" enctype="multipart/form-data">
+          <input type="hidden" id="hiddenAtender" name="hiddenAtender">
         <div class="modal-body">
-          <p>Detalles del pedido: <strong class="textcode">PED00</strong></p>
+          <p>Complete los siguientes datos para pasar a estado <strong>ATENDIDO</strong> el pedido: <strong class="textcode">PED00</strong></p>
         </div>
         <div style="margin: 10px">
           <div class="card">
@@ -20,70 +17,75 @@
               <div class="card-body">
                 <div class="form-row">
                   <div class="form-group col-lg-12">
+                    <div class="row">
+                      <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <h5>Información:</h5>
+                      </div><br><br>
+                      <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 
 
+                        <div class="row">
 
-                      <div class="col-lg-12 col-md-6 col-sm-6 col-xs-6">
-                        <form method="POST" id="formulario_adjuntos" name="formulario_adjuntos">
-                        <input type="hidden" id="hiddenAtender" name="hiddenAtender">
-                            <input type="hidden" id="conf_descarga" name="conf_descarga">
-                          <div class="row">
-                            <div class="col-lg-4 col-md-12 col-sm-12 col-xs-12">
-                                <label for="envio_doc">Documento enviado</label>
-                                <input class="form-control-file" id="adjunto" multiple="true" name="adjunto[]" type="file">
-                            </div>
-                            <div class="col-lg-4 col-md-12 col-sm-12 col-xs-12">
-                                <label for="fecha_envio_doc">Fecha de envío</label>
-                                <input class="form-control" id="fecha_envio_doc" name="fecha_envio_doc" type="text" value="">
-                            </div>
-
-                            <div class="col-lg-4 col-md-12 col-sm-12 col-xs-12">
-                                <label for="cant_compro">Cantidad de comprobantes enviados</label>
-                                <input class="form-control" id="cant_compro" step="1" min="0" name="cant_compro" type="number" value="0">
-                            </div>
+                          <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                              {!! Form::label('envio_doc', 'Documento enviado') !!}
+                              @csrf
+                              {!! Form::file('adjunto[]', ['class' => 'form-control-file', 'id'=>'adjunto', 'multiple']) !!}
+                              {{-- <td>@csrf<input type="file" id="adjunto" name="adjunto[]" multiple=""/></td> --}}
 
                           </div>
-                          <div class="row">
-                            <div class="col-md-12 col-sm-12 col-xs-12">
 
-                              {{-- <a href="#" class="btn btn-info" id="confirmar_atender">Confirmar</a>--}}
-                              <button type="submit" class="btn btn-primary" id="cargar_adjunto">Subir Informacion</button>
+                          <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                              {!! Form::label('cant_compro', 'Cantidad de comprobantes enviados') !!}
+                              {!! Form::number('cant_compro', '', ['class' => 'form-control', 'id' => 'cant_compro', 'step'=>'1', 'min' => '0']) !!}
+
+                          </div>
+
+                          <hr>
+                        </div>
+                        <div class="row">
+                          <div class="col-md-12 col-sm-12 col-xs-12">
+                            <button type="button" class="btn btn-primary d-none" id="cargar_adjunto">Subir Informacion</button><br><br><br>
+                          </div>
+                        </div>
+                        <div class="row">
+
+                          <div class="col-12">
+                            <h6><b>Archivos adjuntos:</b></h6>
+                          </div>
+                          <div class="col-6 d-none">
+                            <h6><b>Archivos adjuntos Confirmados:</b></h6>
+                          </div>
+                          <div class="col-12">
+                            <div class="row">
+                              <div class="col-12" id="listado_adjuntos"></div>
+                              <div class="col-12" id="listado_adjuntos_antes"></div>
                             </div>
                           </div>
-                        </form>
-                        <hr>
-                      </div>
+                        </div>
+                        <div class="row">
 
-                      <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
-                        <h6><b>Archivos adjuntos:</b></h6>
-                      </div>
-                      <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12" id="listado_adjuntos"></div>
-                      <div id="sustento_adjunto">
-                          <h5><b>Sustento:</b></h5>
-                          <style>
-                              #sustento_data::placeholder{
-                                  color:#D9D9D9;
-                              }
-                          </style>
-                          <textarea name="sustento" id="sustento_data" class="form-control" cols="30" rows="5" placeholder="El asesor ya envió los ajuntos hacia el clíente, justifique porque esta adjuntando archivos nuevamente."></textarea>
-                      </div>
 
+                          <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                            {!! Form::label('condicion', 'Estado') !!}
+
+                            <select name="condicion" class="form-control" id="condicion">
+                              <option value="{{\App\Models\Pedido::ATENDIDO_INT}}" >{{\App\Models\Pedido::ATENDIDO_OPE}}</option>
+                            </select>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-        <div class="container">
-        </div>
-
         <div class="modal-footer">
-          <form method="POST" id="formulario_adjuntos_confirmar" name="formulario_adjuntos_confirmar">
-            <button type="submit" class="btn btn-info" id="confirmar_atender">Confirmar</button>
-          </form>
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+          <button type="button" class="btn btn-secondary" id="cerrarmodalatender">Cerrar</button>
+          <button type="submit" class="btn btn-info" id="confirmar-atender">Confirmar</button>
         </div>
-
+        {{ Form::Close() }}
       </div>
     </div>
   </div>

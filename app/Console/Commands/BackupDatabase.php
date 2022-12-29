@@ -39,7 +39,7 @@ class BackupDatabase extends Command
      */
     public function handle()
     {
-        $this->deleteBackups();
+        $this->deleteBackups(20);
         $database = \DB::connection()->getDatabaseName();
         $default = 'backup';
         $h = $this->option("host")?:config('database.connections.' . $default . '.host');

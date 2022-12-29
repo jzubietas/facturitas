@@ -1146,6 +1146,7 @@ class PedidoController extends Controller
             ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
             ->select(
                 'pedidos.id',
+                'pedidos.motivo',
                 'c.nombre as nombres',
                 'c.celular as celulares',
                 'u.name as users',
