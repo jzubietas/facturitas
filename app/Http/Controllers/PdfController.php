@@ -43,13 +43,12 @@ class PdfController extends Controller
         $users = User::where('estado', '1')->pluck('name', 'id');
 
         //
-
         //$mes_month=Carbon::now()->subMonth()->format('Y_m');
         //$mes_month=Carbon::now()->subMonth()->format('Y_m');
         //$mes_month=Carbon::now()->subMonth()->format('Y_m');
-        $mes_month=Carbon::now()->subMonth(2)->format('Y_m');
-        $mes_anio=Carbon::now()->subMonth()->format('Y');
-        $mes_mes=Carbon::now()->subMonth()->format('m');
+        $mes_month=Carbon::now()/*->subMonth(2)*/->format('Y_m');
+        //$mes_anio=Carbon::now()->subMonth()->format('Y');
+        //$mes_mes=Carbon::now()->subMonth()->format('m');
 
         $_pedidos_mes_pasado = User::select(
             'users.identificador'
@@ -61,15 +60,16 @@ class PdfController extends Controller
             ,DB::raw(" (select count( c.id) from clientes c inner join listado_resultados lr  on c.id=lr.id where c.user_id=users.id and lr.s_".$mes_month."='BASE FRIA' ) base_fria")
             ,DB::raw(" (select count( c.id) from clientes c inner join listado_resultados lr  on c.id=lr.id where c.user_id=users.id and lr.s_".$mes_month."='NUEVO' ) nuevo")
         )
-        ->whereIn('users.rol', ['Asesor','Administrador','ASESOR ADMINISTRATIVO'])
+        ->where('users.estado','1')
+        ->whereIn('users.rol', ['Llamadas']);
         //->where(DB::raw('year(pedidos.created_at)'), '=', Carbon::now()->subMonth()->format('Y'))
         //->where(DB::raw('month(pedidos.created_at)'), '=', Carbon::now()->subMonth()->format('m'))
-        ->groupBy('users.identificador');
+        //->groupBy('users.identificador');
 
 
         $_pedidos_mes_pasado=$_pedidos_mes_pasado->get();
         
-        return view('reportes.analisis', compact('users','_pedidos_mes_pasado','mes_month','mes_anio','mes_mes'));
+        return view('reportes.analisis', compact('users','_pedidos_mes_pasado','mes_month'));
     }
 
     public function PedidosPorFechas(Request $request)

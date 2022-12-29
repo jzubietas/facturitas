@@ -25,7 +25,7 @@
                 <div class="col-2 ">
                   <div class="card card-warning">
                     <div class="card-header">
-                        <h5>ASESOR {{ $pedido->identificador }}</h5>
+                        <h5>LLAMADA {{ $pedido->identificador }}</h5>
                     </div>
                     <div class="card-body">
                         <h4 class="text-center">
