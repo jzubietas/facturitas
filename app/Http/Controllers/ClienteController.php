@@ -767,6 +767,32 @@ class ClienteController extends Controller
         return view('clientes.AbandonoRecientes', compact('anios', 'dateM', 'dateY', 'superasesor', 'mirol'));
     }
 
+    public function indexRecientesIntermedio()
+    {
+        $dateM = Carbon::now()->format('m');
+        $dateY = Carbon::now()->format('Y');
+        $mirol = Auth::user()->rol;
+
+        $anios = [
+            "2020" => '2020 - 2021',
+            "2021" => '2021 - 2022',
+            "2022" => '2022 - 2023',
+            "2023" => '2023 - 2024',
+            "2024" => '2024 - 2025',
+            "2025" => '2025 - 2026',
+            "2026" => '2026 - 2027',
+            "2027" => '2027 - 2028',
+            "2028" => '2028 - 2029',
+            "2029" => '2029 - 2030',
+            "2030" => '2030 - 2031',
+            "2031" => '2031 - 2032',
+        ];
+
+        $superasesor = User::where('rol', 'Super asesor')->count();
+
+        return view('clientes.AbandonoRecientesIntermedio', compact('anios', 'dateM', 'dateY', 'superasesor', 'mirol'));
+    }
+
     public function indexabandonotabla(Request $request)
     {
         //
@@ -908,6 +934,132 @@ class ClienteController extends Controller
             ->rawColumns(['action'])
             ->make(true);
         //}
+    }
+
+    public function indexabandonointermediotabla(Request $request)
+    {
+        $dateM = Carbon::now()->format('m');
+        $dateY = Carbon::now()->format('Y');
+
+        $data = null;
+
+        $anios = [
+            "2020" => '2020 - 2021',
+            "2021" => '2021 - 2022',
+            "2022" => '2022 - 2023',
+            "2023" => '2023 - 2024',
+            "2024" => '2024 - 2025',
+            "2025" => '2025 - 2026',
+            "2026" => '2026 - 2027',
+            "2027" => '2027 - 2028',
+            "2028" => '2028 - 2029',
+            "2029" => '2029 - 2030',
+            "2030" => '2030 - 2031',
+            "2031" => '2031 - 2032',
+        ];
+
+        $data = Cliente::
+            join('users as u', 'clientes.user_id', 'u.id')
+            ->join('listado_resultados as lr', 'clientes.id', 'lr.id')
+            ->leftjoin('pedidos as p', 'clientes.id', 'p.cliente_id')
+            ->where('clientes.estado', '1')
+            ->where('clientes.tipo', '1')
+            ->where('lr.s_2022_11','ABANDONO RECIENTE')
+            ->where('lr.s_2022_12','ABANDONO')
+            /*->when($request->has("situacion"), function ($query) use ($request) {
+                $query->whereIn('clientes.situacion', [Cliente::ABANDONO_RECIENTE]);
+            })
+            ->when(!$request->has("situacion"), function ($query) use ($request) {
+                $query->whereIn('clientes.situacion', [Cliente::ABANDONO_PERMANENTE]);
+            })*/
+            ->groupBy(
+                'clientes.id',
+                'clientes.nombre',
+                'clientes.icelular',
+                'clientes.celular',
+                'clientes.estado',
+                'u.name',
+                'u.identificador',
+                'clientes.provincia',
+                'clientes.distrito',
+                'clientes.direccion',
+                'clientes.deuda',
+                'clientes.pidio',
+                'clientes.situacion'
+            )
+            ->select('clientes.id',
+                'clientes.nombre',
+                'clientes.icelular',
+                'clientes.celular',
+                'clientes.estado',
+                'u.name as user',
+                'u.identificador',
+                'clientes.provincia',
+                'clientes.distrito',
+                'clientes.direccion',
+                'clientes.pidio',
+                DB::raw('count(p.created_at) as cantidad'),
+                DB::raw('MAX(p.created_at) as fecha'),
+                DB::raw('MAX(DATE_FORMAT(p.created_at, "%d")) as dia'),
+                DB::raw('MAX(DATE_FORMAT(p.created_at, "%m")) as mes'),
+                DB::raw('MAX(DATE_FORMAT(p.created_at, "%Y")) as anio'),
+                DB::raw('MONTH(CURRENT_DATE()) as dateM'),
+                DB::raw('YEAR(CURRENT_DATE()) as dateY'),
+                DB::raw(" (select count(ped.id) from pedidos ped where ped.cliente_id=clientes.id and ped.pago in (0,1) and ped.pagado in (0,1) and ped.created_at >='2022-12-01 00:00:00' and ped.estado=1) as pedidos_mes_deuda "),
+                DB::raw(" (select count(ped2.id) from pedidos ped2 where ped2.cliente_id=clientes.id and ped2.pago in (0,1) and ped2.pagado in (0,1) and ped2.created_at <='2022-11-30 00:00:00'  and ped2.estado=1) as pedidos_mes_deuda_antes "),
+                'clientes.deuda',
+                'clientes.situacion'
+                , DB::raw("(select DATE_FORMAT(dp1.created_at,'%Y-%m-%d %h:%i:%s') from pedidos dp1 where dp1.estado=1 and dp1.cliente_id=clientes.id order by dp1.created_at desc limit 1) as fechaultimopedido")
+                , DB::raw(" (select (dp.codigo) from pedidos dp where dp.estado=1 and dp.cliente_id=clientes.id order by dp.created_at desc limit 1) as codigoultimopedido ")
+            );
+
+        if (Auth::user()->rol == "Llamadas") {
+
+            $usersasesores = User::where('users.rol', 'Asesor')
+                ->where('users.estado', '1')
+                ->where('users.llamada', Auth::user()->id)
+                ->select(
+                    DB::raw("users.identificador as identificador")
+                )
+                ->pluck('users.identificador');
+            $data = $data->WhereIn("u.identificador", $usersasesores);
+
+        } elseif (Auth::user()->rol == "Asesor") {
+
+            $usersasesores = User::where('users.rol', 'Asesor')
+                ->where('users.estado', '1')
+                ->where('users.identificador', Auth::user()->identificador)
+                ->select(
+                    DB::raw("users.identificador as identificador")
+                )
+                ->pluck('users.identificador');
+
+            $data = $data->WhereIn('u.identificador', $usersasesores);
+
+        } else if (Auth::user()->rol == "Encargado") {
+            $usersasesores = User::where('users.rol', 'Asesor')
+                ->where('users.estado', '1')
+                ->where('users.supervisor', Auth::user()->id)
+                ->select(
+                    DB::raw("users.identificador as identificador")
+                )
+                ->pluck('users.identificador');
+
+            $data = $data->WhereIn("u.identificador", $usersasesores);
+        } else {
+
+            $data = $data;
+
+        }
+
+        return Datatables::of(DB::table($data))
+            ->addIndexColumn()
+            ->addColumn('action', function ($row) {
+                $btn = "";
+                return $btn;
+            })
+            ->rawColumns(['action'])
+            ->make(true);
     }
 
     public function indexrecurrente()

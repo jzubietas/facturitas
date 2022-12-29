@@ -570,7 +570,7 @@ return [
                 [
                     'text' => 'AB -> ABANDONO',
                     'route' => 'clientes.abandonos.recientes.abandono',
-                    'can' => 'clientes.abandonos.recientes.abandono',
+                    'can' => 'clientes.abandonos.reciente.abandono',
                     'icon' => 'fas fa-check-circle',
                     'active' => ['clientes'],
                 ],
