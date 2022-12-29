@@ -44,7 +44,7 @@ class PdfController extends Controller
 
         
         
-        return view('reportes.analisis', compact('users','_pedidos'));
+        return view('reportes.analisis', compact('users'));
     }
 
     public function PedidosPorFechas(Request $request)
