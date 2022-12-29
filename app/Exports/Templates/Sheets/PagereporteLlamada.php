@@ -19,25 +19,17 @@ class PagereporteLlamada extends Export implements WithColumnFormatting,WithColu
     {
         $cliente_list = [];
 
-        /*"cliente"=>"Ejercicio"
-            ,"asesor"=>"Periodo"
-            ,"llamada"=>"Periodo2"
-            ,"pedido"=>"grupo"
-            ,"fecha_pedido"=>"total*/
-
-        $informacion=Cliente::join('clientes as c','c.id','listado_resultados.id')
-        ->select(
-            DB::raw(" (select '2022') as Ejercicio "),
-            DB::raw(" (select '07') as Periodo "),
-            DB::raw(" (select 'Julio') as Periodo2 "),
-            'listado_resultados.s_2022_07 as grupo',
-            DB::raw('count(listado_resultados.s_2022_07) as total')
-            //'cantidad'
-        )
-        ->groupBy(
-            's_2022_07'
+        $informacion=Cliente::
+        select(
+            'clientes.id'
+            ,'clientes.user_id'
+            ,DB::raw(" (select u.identificador from users u where u.id=clientes.user_id and u.Rol='Asesor' ) as asesor ")
+            .DB::raw("   
+                select ua.name from users ua where u.id in 
+                    (select u.id from users u where u.id=clientes.user_id and u.rol='Asesor' ) and ua.rol='Llamada'
+                as llamada "),
         );
-
+        
        
         return $informacion->get();
     }
