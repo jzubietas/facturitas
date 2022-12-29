@@ -1287,4 +1287,29 @@ class OperacionController extends Controller
         //return redirect()->route('operaciones.atendidos')->with('info','actualizado');
     }
 
+    public function Revertirenvioporatender(Request $request)
+    {
+        $pedido = Pedido::where("id", $request->hiddenRevertirpedidoporatender)->first();
+        $detalle_pedidos = DetallePedido::where('pedido_id', $pedido->id)->first();
+        $fecha = Carbon::now();
+
+        $pedido->update([
+            'envio' => '0',
+            'condicion_envio' => Pedido::POR_ATENDER_OPE,
+            'condicion_envio_code' => Pedido::POR_ATENDER_OPE_INT,
+            'modificador' => 'USER' . Auth::user()->id
+        ]);
+
+        PedidoMovimientoEstado::where('pedido', $request->hiddenRevertirpedidoporatender)->delete();
+
+        PedidoMovimientoEstado::create([
+            'pedido' => $request->hiddenRevertirpedidoporatender,
+            'condicion_envio_code' => Pedido::POR_ATENDER_OPE_INT,
+            'notificado' => 0
+        ]);
+
+        return response()->json(['html' => $pedido->id]);
+
+    }
+
 }

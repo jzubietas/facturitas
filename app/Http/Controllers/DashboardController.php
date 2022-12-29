@@ -162,7 +162,11 @@ class DashboardController extends Controller
             ->where('pagos.estado', '1')
             ->whereBetween('pagos.created_at', [now()->startOfMonth(),now()->endOfMonth()])
             ->first();
+
+
         //PEDIDOS DE MIS ASESORES EN EL MES
+        
+        
         $pedidosxasesor_encargado = Pedido::join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
             ->activo()
             ->join('users as u', 'pedidos.user_id', 'u.id')
@@ -172,6 +176,10 @@ class DashboardController extends Controller
             ->groupBy('u.name')
             ->orderBy((DB::raw('count(dp.id)')), 'DESC')
             ->get();
+
+
+
+
         //HISTORIAL DE PEDIDOS DE MIS ASESORES EN LOS ULTIMOS 3 MES
         $pedidosxasesor_3meses_encargado = Pedido::join('users as u', 'pedidos.user_id', 'u.id')
             ->activo()

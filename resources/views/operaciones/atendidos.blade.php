@@ -77,6 +77,8 @@
             @include('pedidos.modal.envioid')
             @include('pedidos.modal.EditarAtencion')
             @include('pedidos.modal.DeleteAdjuntoid')
+
+            @include('operaciones.modal.revertirporatender')
         </div>
     </div>
 
@@ -577,6 +579,36 @@
                 $("#responsable").val(idresponsable);
             });
 
+            $('#modal-revertir-poratender').on('show.bs.modal', function (event) {
+                //cuando abre el form de anular pedido
+                var button = $(event.relatedTarget)
+                var idunico = button.data('revertir')//
+                var idcodigo = button.data('codigo')
+                $(".textcode").html(idcodigo);
+                $("#hiddenRevertirpedidoporatender").val(idunico);
+            });
+
+            $(document).on("submit", "#formulariorevertirporatender", function (evento) {
+                evento.preventDefault();
+                var fd = new FormData();
+                fd.append( 'hiddenRevertirpedidoporatender', $("#hiddenRevertirpedidoporatender").val() );
+
+                $.ajax({
+                data: fd,
+                processData: false,
+                contentType: false,
+                type: 'POST',
+                url:"{{ route('operaciones.revertirenvioidporatender') }}",
+                success:function(data)
+                {
+                    console.log(data);
+                    $("#modal-revertir .textcode").text('');
+                    $("#modal-revertir").modal("hide");
+                    $('#tablaPrincipal').DataTable().ajax.reload();
+                }
+                });
+            });
+
             $('#tablaPrincipal').DataTable({
                 processing: true,
                 serverSide: true,
@@ -641,15 +673,17 @@
                     {
                         data: 'condicion_code',
                         name: 'condicion_code',
+                        sWidth: '10%',
                         render: function (data, type, row, meta) {
+
                             if (row.condicion_code == 1) {
-                                return '<span class="badge badge-success">' + '{{\App\Models\Pedido::POR_ATENDER_OPE }}' + '</span>';
+                                return '<span class="badge badge-success" style="background-color:'+row.condicion_envio_color+' !important;" >' + '{{\App\Models\Pedido::POR_ATENDER_OPE }}' + '</span>';
                             } else if (row.condicion_code == 2) {
-                                return '<span class="badge badge-success">' + '{{\App\Models\Pedido::EN_ATENCION_OPE }}' + '</span>';
+                                return '<span class="badge badge-success" style="background-color:'+row.condicion_envio_color+' !important;" >' + '{{\App\Models\Pedido::EN_ATENCION_OPE }}' + '</span>';
                             } else if (row.condicion_code == 3) {
-                                return '<span class="badge badge-success">' + '{{\App\Models\Pedido::ATENDIDO_OPE }}' + '</span>';
+                                return '<span class="badge badge-success" style="background-color:'+row.condicion_envio_color+' !important;" >' + '{{\App\Models\Pedido::ATENDIDO_OPE }}' + '</span>';
                             } else if (row.condicion_code == 4) {
-                                return '<span class="badge badge-success">' + '{{\App\Models\Pedido::ANULADO }}' + '</span>';
+                                return '<span class="badge badge-success" style="background-color:'+row.condicion_envio_color+' !important;" >' + '{{\App\Models\Pedido::ANULADO }}' + '</span>';
                             }
                         }
                     },
@@ -710,6 +744,11 @@
                                 @endif
 
                             }
+                            @endcan
+
+                            @can('operacion.atendidos.revertir')
+
+                                data = data+'<a href="" class="btn-sm dropdown-item" data-target="#modal-revertir-poratender" data-revertir='+row.id+' data-codigo='+row.codigos+' data-toggle="modal" ><i class="fa fa-undo text-danger" aria-hidden="true"></i> Revertir</a>';
                             @endcan
 
                                 data = data + '</ul></div>';

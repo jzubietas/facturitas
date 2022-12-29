@@ -36,6 +36,8 @@
         {!! Form::open(['route' => ['situacionporfechasExcel'], 'method' => 'POST', 'target' => 'blanck_']) !!}
         @elseif($key === '6')
         {!! Form::open(['route' => ['situacionporfechasExcel'], 'method' => 'POST', 'target' => 'blanck_']) !!}
+        @elseif($key === '7')
+        {!! Form::open(['route' => ['situacionporfechasExcel'], 'method' => 'POST', 'target' => 'blanck_']) !!}
         
       @endif
             <div class="card-body">
@@ -61,6 +63,8 @@
                           <input type="hidden" id="situacion" name="situacion" value="ABANDONO_PERMANENTE">
                           @elseif($key === '6')
                           <input type="hidden" id="situacion" name="situacion" value="RECUPERADO_ABANDONO">
+                          @elseif($key === '7')
+                          <input type="hidden" id="situacion" name="situacion" value="CASI_ABANDONO">
                         @endif
                       </div>
                     </div>
