@@ -623,14 +623,11 @@ class OperacionController extends Controller
 
     public function Atenderid(Request $request)
     {
-
-
         $hiddenAtender = $request->hiddenAtender;
 
         $fecha = Carbon::now();
 
         $pedido = Pedido::where("id", $hiddenAtender)->first();
-
         if ($pedido->imagenAtencion()->activo()->count() < 1) {
             abort(402);
         }
@@ -640,7 +637,9 @@ class OperacionController extends Controller
             'condicion_code' => $request->condicion,
             'condicion_envio' => Pedido::$estadosCondicionEnvioCode[$request->condicion],
             'condicion_envio_code' => $request->condicion,
-            'modificador' => 'USER' . Auth::user()->id
+            'sustento_adjunto' => $request->sustento,
+            'modificador' => 'USER' . Auth::user()->id,
+            'da_confirmar_descarga' => 0,
         ]);
 
         $pedido->detallePedidos()->activo()->update([
@@ -1293,6 +1292,8 @@ class OperacionController extends Controller
             'envio' => '0',
             'condicion_envio' => Pedido::POR_ATENDER_OPE,
             'condicion_envio_code' => Pedido::POR_ATENDER_OPE_INT,
+            'condicion' => Pedido::POR_ATENDER_OPE,
+            'condicion_code' => Pedido::POR_ATENDER_OPE_INT,
             'modificador' => 'USER' . Auth::user()->id
         ]);
 
