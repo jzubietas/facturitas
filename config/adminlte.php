@@ -623,6 +623,12 @@ return [
                     'can' => 'reportes.operaciones',
                     'icon' => 'fas fa-check-circle',
                 ],
+                [
+                    'text' => 'Analisis',
+                    'route' => 'reportes.operaciones',
+                    'can' => 'reportes.operaciones',
+                    'icon' => 'fas fa-check-circle',
+                ],
             ],
         ],
 
