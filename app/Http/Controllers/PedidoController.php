@@ -631,13 +631,15 @@ class PedidoController extends Controller
         foreach ($imagenes as $imagen) {
             $array_html[] = $imagen->adjunto;
         }
+        /*
         $imagenesatencion = ImagenAtencion::where('pedido_id', $buscar_pedido)
             ->where("estado", "1")
             ->whereNotIn("adjunto", ['logo_facturas.png'])
             ->orderBy('created_at', 'DESC')->get();
         foreach ($imagenesatencion as $imagenatencion) {
             $array_html[] = $imagenatencion->adjunto;
-        }
+        } */
+
         $html = implode("|", $array_html);
         return response()->json(['html' => $html, 'cantidad' => count($array_html)]);
     }
@@ -647,14 +649,14 @@ class PedidoController extends Controller
         $buscar_pedido = $request->pedido;
 
         $array_html = [];
-
+        /*
         $imagenes = ImagenPedido::where('pedido_id', $buscar_pedido)
             ->where("estado", "1")
             ->whereNotIn("adjunto", ['logo_facturas.png'])
             ->orderBy('created_at', 'DESC')->get();
         foreach ($imagenes as $imagen) {
             $array_html[] = $imagen->adjunto;
-        }
+        } */
         $imagenesatencion = ImagenAtencion::where('pedido_id', $buscar_pedido)
             ->where("estado", "1")
             ->whereNotIn("adjunto", ['logo_facturas.png'])
