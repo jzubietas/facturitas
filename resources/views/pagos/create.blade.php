@@ -57,7 +57,7 @@
                         </div>
 
                         <div class="form-group col-lg-3">
-                            @if (Auth::user()->rol == "Administrador")
+                            @if (Auth::user()->rol == "Administrador" || Auth::user()->rol == "Jefe de llamadas" )
                                 <button class="btn btn-info" id="btn-perdonar-deuda" type="button">PERDONAR DEUDA
                                 </button>
                             @endif
