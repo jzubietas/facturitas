@@ -59,19 +59,19 @@ if (!function_exists("get_color_role")) {
         return [
             'Administrador' => ['#343a40','#fff'],
             'Apoyo administrativo' => ['#525252','#fff'],
-            'ASESOR ADMINISTRATIVO' => ['#7c7c7c','#fff'],
+            'ASESOR ADMINISTRATIVO' => ['#7c7c7c','#000'],
 
-            'Jefe de operaciones' => ['#014a43','#fff'],
-            'Jefe de llamadas' => '#019385',
-            'Encargado' => '#06dfca',
-            'Llamadas' => '#04e8ff',
-            'Asesor' => ['#d0fffa','#000'],
+            'Jefe de operaciones' => ['#e74c3c','#fff'],
+            'Jefe de llamadas' => '#e83e8c',
+            'Encargado' => '#6f42c1',
+            'Llamadas' => '#fd7e14',
+            'Asesor' => ['#f39c12','#000'],
 
-            'Asistente de Pagos' => ['#b90240','#fff'],
+            'Asistente de Pagos' => ['#28a745','#fff'],
 
             'Logística' => '#795548',
             'Operario' => '#03a9f4',
-            'FORMACIÓN' => '#3f51b5',
+            'FORMACIÓN' => '#20c997',
             'PRACTICANTE' => '#9e9e9e',
         ];
     }
