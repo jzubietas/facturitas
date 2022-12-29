@@ -705,7 +705,7 @@ class ClienteController extends Controller
                 ->where('dp.estado', '1')
                 //->where('pedidos.envio', '1')
                 //->where('pedidos.condicion_envio', 1)
-                ->whereIn('pedidos.condicion_envio_code', [Pedido::RECIBIDO_JEFE_OPE_INT, Pedido::CONFIRMACION_COURIER_INT, Pedido::RECEPCION_COURIER_INT]);
+                ->whereIn('pedidos.condicion_envio_code', [Pedido::ENVIADO_OPE_INT, Pedido::RECEPCION_COURIER_INT, Pedido::ENVIO_COURIER_JEFE_OPE_INT]);
             //->whereIn('pedidos.envio', [Pedido::ENVIO_CONFIRMAR_RECEPCION, Pedido::ENVIO_RECIBIDO]);
             //->get();
 
