@@ -22,7 +22,7 @@
                        target="blank_"><img src="{{ asset('imagenes/icon-excel.png') }}"> Clientes - Pedidos</a>
                 </div>
             </div>
-            @include('clientes.modal.exportar_unico', ['title' => 'Exportar Lista de clientes ABANDONO RECIENTE', 'key' => '1'])
+            @include('clientes.modal.exportar_unico', ['title' => 'Exportar Lista de clientes ABANDONO RECIENTE', 'key' => '7'])
         @endcan
     </h1>
     @if($superasesor > 0)
