@@ -14,8 +14,8 @@ class PageclienteinfoNoviembre extends Export implements WithColumnFormatting,Wi
 {
     public function collection()
     {
-        return Cliente::
-            join('users as u', 'clientes.user_id', 'u.id')
+        return Cliente::with('user')
+            ->join('users as u', 'clientes.user_id', 'u.id')
             ->select(
                 'clientes.id'
                 ,'u.identificador as id_asesor'

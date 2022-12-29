@@ -36,9 +36,9 @@ class PlantillaExportMultiple implements WithMultipleSheets
             //new PageclienteinfoAgosto(),
             //new PageclienteinfoSetiembre(),
             //new PageclienteOctubre(),
-            //new PageclienteinfoOctubre(),
+            new PageclienteinfoOctubre(),
             //new PageclienteNoviembre(),
-           //new PageclienteinfoNoviembre(),
+           new PageclienteinfoNoviembre(),
             //new PageclienteDiciembre(),
             new PageclienteinfoDiciembre(),
         ];
