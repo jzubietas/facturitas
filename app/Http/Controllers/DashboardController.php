@@ -37,6 +37,68 @@ class DashboardController extends Controller
 
         $_pedidos=$_pedidos->get();
 
+
+        
+         
+        $_pedidos_mes_operario = Pedido::join('users as u', 'pedidos.user_id', 'u.id')
+        ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
+        ->select( 
+        'u.name',
+        DB::raw("COUNT(u.identificador) AS total"),
+        DB::raw(" (SELECT count(dp.tipo_banca) FROM detalle_pedidos dp
+        JOIN pedidos p ON (dp.pedido_id=p.id)
+        JOIN users us ON (p.user_id=us.id)
+         WHERE us.identificador=u.identificador AND dp.estado=1  AND dp.tipo_banca LIKE  'electronica%'
+       ) as electronico"),
+
+       DB::raw(" (SELECT count(dp.tipo_banca) FROM detalle_pedidos dp
+       JOIN pedidos p ON (dp.pedido_id=p.id)
+       JOIN users us ON (p.user_id=us.id)
+        WHERE us.identificador=u.identificador AND dp.estado=1  AND dp.tipo_banca LIKE  'fisico%'
+      ) as fisico")
+        
+        )
+         ->where('pedidos.estado', '1');
+        
+        
+        
+
+        if (Auth::user()->rol == "Jefe de operaciones") {
+
+            $operarios = User::where('users.rol', 'Operario')
+                ->where('users.estado', '1')
+                ->where('users.jefe', Auth::user()->id)
+                ->select(
+                    DB::raw("users.id as id")
+                )
+                ->pluck('users.id');
+
+            $asesores = User::whereIN('users.rol', ['Asesor'])
+                ->where('users.estado', '1')
+                ->WhereIn('users.operario', $operarios)
+                ->select(
+                    DB::raw("users.identificador as identificador")
+                )
+                ->pluck('users.identificador');
+                
+
+            $_pedidos_mes_operario->WhereIn('u.identificador', $asesores)->groupBy('u.identificador','u.name');
+
+        }
+
+
+
+
+
+        
+
+        $_pedidos_mes_op=$_pedidos_mes_operario->get();
+
+       
+
+
+
+
         //DASHBOARD ADMINISTRADOR
         $pedidoxmes_total = User::select(DB::raw('sum(users.meta_pedido) as total'))//META PEDIDOS
         ->where('users.rol', "ENCARGADO")
@@ -290,6 +352,10 @@ class DashboardController extends Controller
 
         $conteo = count(auth()->user()->unreadNotifications);
 
+
+
+       
+
         return view('dashboard.dashboard', compact('pedidoxmes_total',
                 'pedidos_mes_',
                 'pagoxmes_total',
@@ -316,7 +382,8 @@ class DashboardController extends Controller
                 'pagosobservados_administracion',
                 'conteo',
                 'cobranzaxmes',
-                '_pedidos'
+                '_pedidos',
+                '_pedidos_mes_op'
             )
         );
     }
