@@ -49,7 +49,7 @@ class PdfController extends Controller
             DB::raw("COUNT(u.identificador) AS total, u.identificador ")
         )
         ->where('pedidos.estado', '1')
-        ->whereIn('pedidos.condicion_envio_code', [Pedido::CONFIRMACION_COURIER_INT])
+        ->whereIn('pedidos.condicion_envio_code', [Pedido::POR_ATENDER_INT])
         ->where('dp.estado', '1')
         ->groupBy('u.identificador');
         

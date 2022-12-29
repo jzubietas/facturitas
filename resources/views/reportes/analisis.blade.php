@@ -9,6 +9,7 @@
 @section('content')
 
 <div class="row">
+  ss
   @foreach ($_pedidos as $pedido)
           <div class="col-2">
               <div class="card card-warning">
