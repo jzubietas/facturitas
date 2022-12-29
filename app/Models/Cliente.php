@@ -13,15 +13,15 @@ class Cliente extends Model
 
     const RECUPERADO_RECIENTE = "RECUPERADO RECIENTE";
     const RECUPERADO_PERMANENTE = "RECUPERADO ABANDONO";
-
     const RECUPERADO_ABANDONO = "RECUPERADO ABANDONO";
-
     const ABANDONO_RECIENTE = "ABANDONO RECIENTE";
     const ABANDONO_PERMANENTE = "ABANDONO PERMANENTE";
     const ABANDONO = "ABANDONO";
     const RECURRENTE = "RECURRENTE";
     const NUEVO = "NUEVO";
     const RECUPERADO = "RECUPERADO";
+    const CASI_ABANDONO = "CASI ABANDONO";
+
 
     protected $guarded = ['id'];
     protected $dates=[

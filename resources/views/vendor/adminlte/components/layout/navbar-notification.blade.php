@@ -68,8 +68,10 @@
                     })
 
                         .done((data) => {
+                            console.log(data);
                             insertDotMenu("i.dot_pedidos_atender_count",'.noti-pedidos-atender.noti-side',data.contador_pedidos_atender)
                             insertDotMenu("i.dot_pedidos_atendidos_count",'.noti-pedidos-atendidos.noti-side',data.contador_pedidos_atendidos)
+                            insertDotMenu("i.dot_pedidos_atendidos_operacion_count",'.noti-pedidos-atendidos.noti-side',data.contador_pedidos_atendidos_operacion)
                             insertDotMenu("i.dot_pedidos_pen_anulacion_count",'.noti-pedidos-pen-anulacion.noti-side',data.contador_pedidos_pen_anulacion)
                             insertDotMenu("i.dot_sobres_entregados_count",'.noti-sobres-entregados.noti-side',data.contador_sobres_entregados)
                             nLink.update(data);
