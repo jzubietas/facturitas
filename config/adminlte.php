@@ -625,7 +625,7 @@ return [
                 ],
                 [
                     'text' => 'Analisis',
-                    'route' => 'reportes.operaciones',
+                    'route' => 'reportes.analisis',
                     'can' => 'reportes.operaciones',
                     'icon' => 'fas fa-check-circle',
                 ],
