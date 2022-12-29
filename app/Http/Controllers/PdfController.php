@@ -42,6 +42,24 @@ class PdfController extends Controller
     {
         $users = User::where('estado', '1')->pluck('name', 'id');
 
+        $anios = [
+            "2020" => '2020 - 2021',
+            "2021" => '2021 - 2022',
+            "2022" => '2022 - 2023',
+            "2023" => '2023 - 2024',
+            "2024" => '2024 - 2025',
+            "2025" => '2025 - 2026',
+            "2026" => '2026 - 2027',
+            "2027" => '2027 - 2028',
+            "2028" => '2028 - 2029',
+            "2029" => '2029 - 2030',
+            "2030" => '2030 - 2031',
+            "2031" => '2031 - 2032',
+        ];
+
+        $dateM = Carbon::now()->format('m');
+        $dateY = Carbon::now()->format('Y');
+
         //
 
         //$mes_month=Carbon::now()->subMonth()->format('Y_m');
@@ -69,7 +87,7 @@ class PdfController extends Controller
 
         $_pedidos_mes_pasado=$_pedidos_mes_pasado->get();
         
-        return view('reportes.analisis', compact('users','_pedidos_mes_pasado','mes_month','mes_anio','mes_mes'));
+        return view('reportes.analisis', compact('users','_pedidos_mes_pasado','mes_month','mes_anio','mes_mes','anios','dateM','dateY'));
     }
 
     public function PedidosPorFechas(Request $request)

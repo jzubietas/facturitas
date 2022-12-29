@@ -8,6 +8,7 @@ use App\Exports\BasesFriasExport;
 use App\Exports\ClientesExport;
 use App\Exports\Clientesv2Export;
 use App\Exports\ClientesPedidosExport;
+use App\Exports\Templates\PlantillaExportMultipleLlamada;
 use App\Exports\Templates\PlantillaExportMultiple;
 use App\Exports\Templates\PlantillaExportRutaenvioMultiple;
 use App\Exports\Templates\PlantillaRutaenvioExportMultiple;
@@ -61,6 +62,12 @@ class ExcelController extends Controller
     // {
     //     return Excel::download(new ClientesExport, 'Lista de Clientes.xlsx');
     // }
+
+    public function analisisExcel(Request $request)
+    {
+        return (new PlantillaExportMultipleLlamada())
+                ->download('Reporte Llamadas.xlsx');
+    }
 
     public function sobresRutaEnvioLimaNorteExcel(Request $request)
     {
