@@ -362,7 +362,7 @@ return [
                     'text' => 'Pedidos atendidos',
                     'route' => 'operaciones.atendidos',
                     'can' => 'operacion.atendidos',
-                    'icon' => 'fas fa-check-circle',
+                    'icon' => 'fas fa-check-circle dot_pedidos_atendidos_operacion_count',
                     'active' => ['pedidos atendidos'],
                 ],
                 [
@@ -574,7 +574,7 @@ return [
                     'icon' => 'fas fa-check-circle',
                     'active' => ['clientes'],
                 ],
-                
+
                 [
                     'text' => 'Clientes Nuevos',
                     'route' => 'clientes.nuevos',

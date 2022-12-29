@@ -8,6 +8,7 @@
         {{-- Form::Open(['route' => ['pedidos.atender', $pedido],'enctype'=>'multipart/form-data', 'id'=>'formulario','files'=>true]) --}}
         <form id="formularioatender" name="formularioatender" enctype="multipart/form-data">
           <input type="hidden" id="hiddenAtender" name="hiddenAtender">
+            <input type="hidden" id="conf_descarga" name="#conf_descarga">
         <div class="modal-body">
           <p>Complete los siguientes datos para pasar a estado <strong>ATENDIDO</strong> el pedido: <strong class="textcode">PED00</strong></p>
         </div>
@@ -62,6 +63,15 @@
                             </div>
                           </div>
                         </div>
+                          <div id="sustento_adjunto">
+                              <h5><b>Sustento:</b></h5>
+                              <style>
+                                  #sustento_data::placeholder{
+                                      color:#D9D9D9;
+                                  }
+                              </style>
+                              <textarea name="sustento" id="sustento_data" class="form-control" cols="30" rows="5" placeholder="El asesor ya envió los ajuntos hacia el clíente, justifique porque esta adjuntando archivos nuevamente."></textarea>
+                          </div>
                         <div class="row">
 
 

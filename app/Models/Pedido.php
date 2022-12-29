@@ -36,9 +36,10 @@ class Pedido extends Model
     const POR_ATENDER_OPE = 'POR ATENDER - OPE'; // 1
     const EN_ATENCION_OPE = 'EN ATENCION - OPE'; // 2
     const ATENDIDO_OPE = 'ATENDIDO - OPE'; // 3
-    const ATENDIDO_JEFE_OPE = 'ATENDIDO - JEFE OPE'; // 5
-    const RECEPCION_COURIER = 'RECEPCION - COURIER'; // 12
-    const CONFIRMACION_COURIER = 'CONFIRMACION - COURIER'; // 11
+    const ENVIADO_OPE = 'ENVIADO - OPE'; // 5
+    const RECIBIDO_JEFE_OPE = 'RECIBIDO - JEFE OPE'; // 6
+    const ENVIO_COURIER_JEFE_OPE = 'ENVIO A COURIER - JEFE OPE'; // 12
+    const RECEPCION_COURIER = 'RECEPCION - COURIER'; // 11
     const REPARTO_COURIER = 'REPARTO - COURIER'; // 8
     const SEGUIMIENTO_PROVINCIA_COURIER = 'SEGUIMIENTO PROVINCIA - COURIER'; // 9
     const MOTORIZADO = 'MOTORIZADO'; // 15
@@ -52,9 +53,10 @@ class Pedido extends Model
     const POR_ATENDER_OPE_INT = 1;
     const EN_ATENCION_OPE_INT = 2;
     const ATENDIDO_OPE_INT = 3;
-    const ATENDIDO_JEFE_OPE_INT = 5;
-    const RECEPCION_COURIER_INT = 12;
-    const CONFIRMACION_COURIER_INT = 11;
+    const ENVIADO_OPE_INT = 5;
+    const RECIBIDO_JEFE_OPE_INT = 6;
+    const ENVIO_COURIER_JEFE_OPE_INT = 12;
+    const RECEPCION_COURIER_INT = 11;
     const REPARTO_COURIER_INT = 8;
     const SEGUIMIENTO_PROVINCIA_COURIER_INT = 9;
     const MOTORIZADO_INT = 15;
@@ -107,9 +109,10 @@ class Pedido extends Model
         'POR ATENDER - OPE' => 1,
         'EN ATENCION - OPE' => 2,
         'ATENDIDO - OPE' => 3,
-        'ATENDIDO - JEFE OPE' => 5,
-        'RECEPCION - COURIER' => 12,
-        'CONFIRMACION - COURIER' => 11,
+        'ENVIADO - OPE' => 5,
+        'RECIBIDO - JEFE OPE' => 6,
+        'ENVIO A COURIER - JEFE OPE' => 12,
+        'RECEPCION - COURIER' => 11,
         'REPARTO - COURIER' => 8,
         'SEGUIMIENTO PROVINCIA - COURIER' => 9,
         'MOTORIZADO' => 15,
@@ -124,9 +127,10 @@ class Pedido extends Model
         1 => 'POR ATENDER - OPE',
         2 => 'EN ATENCION - OPE',
         3 => 'ATENDIDO - OPE',
-        5 => 'ATENDIDO - JEFE OPE',
-        12 => 'RECEPCION - COURIER',
-        11 => 'CONFIRMACION - COURIER',
+        5 => 'ENVIADO - OPE',
+        6 => 'RECIBIDO - JEFE OPE',
+        12 => 'ENVIO A COURIER - JEFE OPE',
+        11 => 'RECEPCION - COURIER',
         8 => 'REPARTO - COURIER',
         9 => 'SEGUIMIENTO PROVINCIA - COURIER',
         15 => 'MOTORIZADO',
@@ -312,7 +316,7 @@ class Pedido extends Model
         if (in_array(User::ROL_ENCARGADO, $roles)) {
             if (auth()->user()->rol == User::ROL_ENCARGADO) {
                 return $query->whereIn(
-                    $this->qualifyColumn('user_id'), 
+                    $this->qualifyColumn('user_id'),
                     User::query()->select('id')->activo()->where('users.supervisor', auth()->id())
                 );
             }
@@ -321,7 +325,7 @@ class Pedido extends Model
         if (in_array(User::ROL_LLAMADAS, $roles)) {
             if (auth()->user()->rol == User::ROL_LLAMADAS) {
                 return $query->whereIn(
-                    $this->qualifyColumn('user_id'), 
+                    $this->qualifyColumn('user_id'),
                     User::query()->select('id')->activo()->where('users.llamada', auth()->id())
                 );
             }
@@ -330,23 +334,23 @@ class Pedido extends Model
         if (in_array(User::ROL_OPERARIO, $roles)) {
             if (auth()->user()->rol == User::ROL_OPERARIO) {
                 return $query->whereIn(
-                    $this->qualifyColumn('user_id'), 
+                    $this->qualifyColumn('user_id'),
                     User::query()->select('id')->activo()->where('users.operario', auth()->id())
                 );
             }
         }
-        
+
         if (in_array(User::ROL_ASESOR, $roles)) {
             if (auth()->user()->rol == User::ROL_ASESOR) {
                 return $query->where($this->qualifyColumn('user_id'), '=', auth()->id());
             }
         }
 
-        if (in_array(User::ROL_JEFE_LLAMADAS, $roles)) {            
+        if (in_array(User::ROL_JEFE_LLAMADAS, $roles)) {
             return $query;
         }
-        
-        
+
+
 
         if (in_array(User::ROL_JEFE_OPERARIO, $roles)) {
             if (auth()->user()->rol == User::ROL_JEFE_OPERARIO) {
