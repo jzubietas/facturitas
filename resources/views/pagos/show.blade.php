@@ -16,18 +16,15 @@
                     <table class="table table-active">
                         <thead>
                         <tr>
-                            <td>
                             <th scope="col" class="col-lg-2" style="text-align: right;">ASESOR:</th>
                             <th scope="col">{{ $pagos->users }}</th>
-                            </td>
-                            <td>
+
                             <th scope="col" class="col-lg-2" style="text-align: right;">CLIENTE:</th>
                             <th scope="col">{{ $pagos->celular }} - {{ $pagos->nombre }}</th>
-                            </td>
-                            <td>
+
                             <th scope="col" colspan="" class="col-lg-2" style="text-align: right;">ESTADO:</th>
                             <th scope="col">{{ $pagos->condicion }}</th>
-                            </td>
+
                         </tr>
                         </thead>
                     </table>
@@ -187,8 +184,9 @@
                                 <th style="text-align: center">TOTAL</th>
                                 <th></th>
                                 <th></th>
-                                <th><h4><?php echo number_format($sumPa, 2, '.', ' ') ?></h4></th>
-                                <th></th>
+                                <th colspan="2">
+                                    <h4><?php echo number_format($sumPa, 2, '.', ' ') ?></h4>
+                                </th>
                                 </tfoot>
                             </table>
                         </div>
@@ -265,8 +263,9 @@
                                     <th style="text-align: center">TOTAL</th>
                                     <th></th>
                                     <th></th>
-                                    <th><h4><?php echo money_f($sumPa) ?></h4></th>
-                                    <th></th>
+                                    <th colspan="2">
+                                        <h4><?php echo money_f($sumPa) ?></h4>
+                                    </th>
                                     </tfoot>
                                 </table>
                             </div>
