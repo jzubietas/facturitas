@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Pedidos;
 
 use App\Http\Controllers\Controller;
+use App\Models\ImagenAtencion;
 use App\Models\Pedido;
 use App\Models\PedidoMovimientoEstado;
 use App\Models\User;
@@ -170,9 +171,6 @@ class PedidoStatusController extends Controller
 
     public function PorAtender(Request $request)
     {
-        if (!\auth()->user()->can('pedidos.estados.poratender')) {
-            abort(401);
-        }
         $pedidos_atendidos = Pedido::query()->activo()->segunRolUsuario([User::ROL_ADMIN, User::ROL_ENCARGADO, User::ROL_ASESOR])
             ->atendidos()
             ->noPendingAnulation()
@@ -217,7 +215,7 @@ class PedidoStatusController extends Controller
 
             if (Auth::user()->rol == "Operario") {
 
-                $asesores = User::whereIN('users.rol', ['Asesor', 'Administrador','ASESOR ADMINISTRATIVO'])
+                $asesores = User::whereIN('users.rol', ['Asesor', 'Administrador', 'ASESOR ADMINISTRATIVO'])
                     ->where('users.estado', '1')
                     ->Where('users.operario', Auth::user()->id)
                     ->select(
@@ -288,7 +286,9 @@ class PedidoStatusController extends Controller
                     $btn = '<div><ul class="" aria-labelledby="dropdownMenuButton">';
                     //$btn .= '<a href="" data-target="#modal-atender" data-atender=' . $pedido->id . ' data-toggle="modal" ><button class="btn btn-success btn-sm">Atender</button></a>';
                     $btn .= '<a href="' . route("pedidosPDF", $pedido->id) . '" class="btn-sm dropdown-item" target="_blank"><i class="fa fa-file-pdf"></i> PDF</a>';
-                    $btn .= '<a href="#" data-target="#modal-veradjunto" data-toggle="modal" data-adjunto="'  . $pedido->id . '" class="btn-sm dropdown-item" data-group="2" target="_blank"><i class="fa fa-file-pdf text-primary"></i> Ver adjuntos</a>';
+                    if (ImagenAtencion::query()->where('pedido_id','=',$pedido->id)->activo()->whereNotIn("adjunto", ['logo_facturas.png'])->count() > 0) {
+                        $btn .= '<a href="#" data-target="#modal-veradjunto" data-toggle="modal" data-adjunto="' . $pedido->id . '" class="btn-sm dropdown-item" data-group="2" target="_blank"><i class="fa fa-file-pdf text-primary"></i> Ver adjuntos</a>';
+                    }
                     $btn .= '</ul></div>';
                     return $btn;
                 })
@@ -308,8 +308,8 @@ class PedidoStatusController extends Controller
         if (!\auth()->user()->can('pedidos.estados.atendidos')) {
             abort(401);
         }
-                
-        $pedidos_atendidos = Pedido::query()->activo()->segunRolUsuario([User::ROL_ADMIN, User::ROL_ENCARGADO, User::ROL_ASESOR,User::ROL_LLAMADAS,User::ROL_JEFE_LLAMADAS])
+
+        $pedidos_atendidos = Pedido::query()->activo()->segunRolUsuario([User::ROL_ADMIN, User::ROL_ENCARGADO, User::ROL_ASESOR, User::ROL_LLAMADAS, User::ROL_JEFE_LLAMADAS])
             //->atendidos()
             ->noPendingAnulation()
             ->where('da_confirmar_descarga', '0')
@@ -319,13 +319,13 @@ class PedidoStatusController extends Controller
 
         $pedidos_atendidos_total = Pedido::query()
             ->activo()
-            ->segunRolUsuario([User::ROL_ADMIN, User::ROL_ENCARGADO, User::ROL_ASESOR,User::ROL_LLAMADAS,User::ROL_JEFE_LLAMADAS])
+            ->segunRolUsuario([User::ROL_ADMIN, User::ROL_ENCARGADO, User::ROL_ASESOR, User::ROL_LLAMADAS, User::ROL_JEFE_LLAMADAS])
             ->noPendingAnulation()
             ->where('da_confirmar_descarga', '0')
             ->whereNotIn('pedidos.condicion_code', [Pedido::POR_ATENDER_OPE_INT, Pedido::EN_ATENCION_OPE_INT])
             ->count();
 
-        $pedidos_por_atender = Pedido::query()->activo()->segunRolUsuario([User::ROL_ADMIN, User::ROL_ENCARGADO, User::ROL_ASESOR,User::ROL_LLAMADAS,User::ROL_JEFE_LLAMADAS])->porAtender()->noPendingAnulation()->count();
+        $pedidos_por_atender = Pedido::query()->activo()->segunRolUsuario([User::ROL_ADMIN, User::ROL_ENCARGADO, User::ROL_ASESOR, User::ROL_LLAMADAS, User::ROL_JEFE_LLAMADAS])->porAtender()->noPendingAnulation()->count();
 
         if ($request->has('ajax-datatable')) {
 
@@ -395,10 +395,7 @@ class PedidoStatusController extends Controller
                     ->pluck('users.identificador');
 
                 $pedidos = $pedidos->WhereIn('u.identificador', $asesores);
-            } 
-            
-            
-           else if (Auth::user()->rol == "Llamadas") {
+            } else if (Auth::user()->rol == "Llamadas") {
                 $usersasesores = User::where('users.rol', 'Asesor')
                     ->where('users.estado', '1')
                     ->where('users.llamada', Auth::user()->id)
@@ -406,11 +403,9 @@ class PedidoStatusController extends Controller
                         DB::raw("users.identificador as identificador")
                     )
                     ->pluck('users.identificador');
-    
+
                 $pedidos = $pedidos->WhereIn('u.identificador', $usersasesores);
-            }
-            
-            elseif (Auth::user()->rol == "Encargado") {
+            } elseif (Auth::user()->rol == "Encargado") {
                 $usersasesores = User::whereIn('users.rol', ['Asesor', User::ROL_ADMIN])
                     ->where('users.estado', '1')
                     ->where('users.supervisor', Auth::user()->id)
