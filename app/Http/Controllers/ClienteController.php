@@ -963,8 +963,9 @@ class ClienteController extends Controller
             ->leftjoin('pedidos as p', 'clientes.id', 'p.cliente_id')
             ->where('clientes.estado', '1')
             ->where('clientes.tipo', '1')
-            ->where('lr.s_2022_11','ABANDONO RECIENTE')
-            ->where('lr.s_2022_12','ABANDONO')
+            ->where('clientes.situacion', 'CASI ABANDONO')
+            //->where('lr.s_2022_11','ABANDONO RECIENTE')
+            //->where('lr.s_2022_12','ABANDONO')
             /*->when($request->has("situacion"), function ($query) use ($request) {
                 $query->whereIn('clientes.situacion', [Cliente::ABANDONO_RECIENTE]);
             })
