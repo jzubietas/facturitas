@@ -319,7 +319,7 @@ class OperacionController extends Controller
             ->where('pedidos.estado', '1')
             ->where('dp.estado', '1')
             ->where('pedidos.condicion_code', Pedido::ATENDIDO_INT)
-            ->whereIn('pedidos.condicion_envio_code', [Pedido::ATENDIDO_JEFE_OPE_INT, Pedido::ENTREGADO_SIN_SOBRE_OPE_INT]);
+            ->whereIn('pedidos.condicion_envio_code', [Pedido::RECIBIDO_JEFE_OPE_INT, Pedido::ENTREGADO_SIN_SOBRE_OPE_INT]);
 
         //->whereIn('pedidos.envio', ['0'])
         //->whereBetween( 'pedidos.created_at', [$min, $max]);
@@ -1285,6 +1285,31 @@ class OperacionController extends Controller
         return response()->json(['html' => $pedido->id]);
 
         //return redirect()->route('operaciones.atendidos')->with('info','actualizado');
+    }
+
+    public function Revertirenvioporatender(Request $request)
+    {
+        $pedido = Pedido::where("id", $request->hiddenRevertirpedidoporatender)->first();
+        $detalle_pedidos = DetallePedido::where('pedido_id', $pedido->id)->first();
+        $fecha = Carbon::now();
+
+        $pedido->update([
+            'envio' => '0',
+            'condicion_envio' => Pedido::POR_ATENDER_OPE,
+            'condicion_envio_code' => Pedido::POR_ATENDER_OPE_INT,
+            'modificador' => 'USER' . Auth::user()->id
+        ]);
+
+        PedidoMovimientoEstado::where('pedido', $request->hiddenRevertirpedidoporatender)->delete();
+
+        PedidoMovimientoEstado::create([
+            'pedido' => $request->hiddenRevertirpedidoporatender,
+            'condicion_envio_code' => Pedido::POR_ATENDER_OPE_INT,
+            'notificado' => 0
+        ]);
+
+        return response()->json(['html' => $pedido->id]);
+
     }
 
 }

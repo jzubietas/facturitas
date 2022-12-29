@@ -826,7 +826,7 @@ class EnvioController extends Controller
     {
         $pedidos=null;
 
-        $filtros_code=[Pedido::REPARTO_COURIER_INT,Pedido::ATENDIDO_JEFE_OPE_INT,Pedido::RECEPCION_COURIER_INT];
+        $filtros_code=[Pedido::REPARTO_COURIER_INT,Pedido::RECIBIDO_JEFE_OPE_INT,Pedido::RECEPCION_COURIER_INT];
 
         $pedidos = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')
                 ->join('users as u', 'pedidos.user_id', 'u.id')
@@ -1612,14 +1612,14 @@ class EnvioController extends Controller
 
         $pedido->update([
             'envio' => '1',
-            'condicion_envio' => Pedido::ATENDIDO_JEFE_OPE,
-            'condicion_envio_code' => Pedido::ATENDIDO_JEFE_OPE_INT,
+            'condicion_envio' => Pedido::RECIBIDO_JEFE_OPE,
+            'condicion_envio_code' => Pedido::RECIBIDO_JEFE_OPE_INT,
             'modificador' => 'USER'.Auth::user()->id
         ]);
 
         PedidoMovimientoEstado::create([
             'pedido' => $request->hiddenEnvio,
-            'condicion_envio_code' => Pedido::ATENDIDO_JEFE_OPE_INT,
+            'condicion_envio_code' => Pedido::RECIBIDO_JEFE_OPE_INT,
             'notificado' => 0
         ]);
 
