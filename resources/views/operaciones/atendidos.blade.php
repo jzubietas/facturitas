@@ -73,12 +73,12 @@
                 <tbody>
                 </tbody>
             </table>
+            @include('operaciones.modal.revertirporatender')
+
             @include('pedidos.modal.sinenvioid')
             @include('pedidos.modal.envioid')
             @include('pedidos.modal.EditarAtencion')
             @include('pedidos.modal.DeleteAdjuntoid')
-
-            @include('operaciones.modal.revertirporatender')
         </div>
     </div>
 
@@ -602,8 +602,8 @@
                 success:function(data)
                 {
                     console.log(data);
-                    $("#modal-revertir .textcode").text('');
-                    $("#modal-revertir").modal("hide");
+                    $("#modal-revertir-poratender .textcode").text('');
+                    $("#modal-revertir-poratender").modal("hide");
                     $('#tablaPrincipal').DataTable().ajax.reload();
                 }
                 });

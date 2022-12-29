@@ -220,8 +220,8 @@
 
             if(group == 1){
                 $('#titulo-modal-op').html("Confirmar recepción");
-                $('#msj-modal').html('Esta seguro que desea atender el Pedido <b>' + codigo + '</b>');
-                $('#conf-modal-OP').html("Atender pedido");
+                $('#msj-modal').html('Esta seguro que desea confirmar la recepción del Pedido <b>' + codigo + '</b>');
+                $('#conf-modal-OP').html("Confirmar recepción");
             }else{
                 $('#titulo-modal-op').html("Enviar pedido");
                 $('#msj-modal').html('Esta seguro que desea enviar el Pedido <b>' + codigo + '</b> al Área de Courier.');
