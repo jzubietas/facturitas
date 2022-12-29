@@ -38,6 +38,24 @@ class PdfController extends Controller
         return view('reportes.operaciones', compact('users'));
     }
 
+    public function Analisis()
+    {
+        $users = User::where('estado', '1')->pluck('name', 'id');
+
+        $_pedidos = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')
+        ->join('users as u', 'pedidos.user_id', 'u.id')
+        ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
+        ->select(
+            DB::raw("COUNT(u.identificador) AS total, u.identificador ")
+        )
+        ->where('pedidos.estado', '1')
+        ->whereIn('pedidos.condicion_envio_code', [Pedido::CONFIRMACION_COURIER_INT])
+        ->where('dp.estado', '1')
+        ->groupBy('u.identificador');
+        
+        return view('reportes.analisis', compact('users','_pedidos'));
+    }
+
     public function PedidosPorFechas(Request $request)
     {
         $fecha = Carbon::now('America/Lima')->format('d-m-Y');
