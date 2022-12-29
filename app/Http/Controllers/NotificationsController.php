@@ -9,6 +9,8 @@ use App\Models\PedidoMovimientoEstado;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Notifications\InvoicePaid;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Notification;
 use App\Http\Controllers\Controller;
 use App\Message;
@@ -115,20 +117,107 @@ class NotificationsController extends Controller
             }
         }
 
-        // Return the new notification data.
-        $contador_pedidos_atender = Pedido::join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
+        /*********
+         * PEDIDOS POR ATENDER
+         */
+        $contador_pedidos_atender = Pedido::join('users as u', 'pedidos.user_id', 'u.id')
+            ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
             ->where('pedidos.estado', '1')
             ->where('dp.estado', '1')
-            ->poratenderestatus()
+            ->poratenderestatus();
+
+            if(Auth::user()->rol == "Operario"){
+
+                $asesores = User::whereIN('users.rol', ['Asesor', 'Administrador', 'ASESOR ADMINISTRATIVO'])
+                    ->where('users.estado', '1')
+                    ->Where('users.operario', Auth::user()->id)
+                    ->select(
+                        DB::raw("users.identificador as identificador")
+                    )
+                    ->pluck('users.identificador');
+
+                $pedidos = $contador_pedidos_atender->WhereIn('u.identificador', $asesores);
+
+
+            } else if (Auth::user()->rol == "Jefe de operaciones") {
+                $operarios = User::where('users.rol', 'Operario')
+                    ->where('users.estado', '1')
+                    ->where('users.jefe', Auth::user()->id)
+                    ->select(
+                        DB::raw("users.id as id")
+                    )
+                    ->pluck('users.id');
+
+                $asesores = User::whereIN('users.rol', ['Asesor', 'Administrador', 'ASESOR ADMINISTRATIVO'])
+                    ->where('users.estado', '1')
+                    ->WhereIn('users.operario', $operarios)
+                    ->select(
+                        DB::raw("users.identificador as identificador")
+                    )
+                    ->pluck('users.identificador');
+
+                $contador_pedidos_atender = $contador_pedidos_atender->WhereIn('u.identificador', $asesores);
+
+
+            } else {
+                $contador_pedidos_atender = $contador_pedidos_atender;
+
+            }
             //->whereIn('condicion_envio_code', [Pedido::POR_ATENDER_OPE_INT,Pedido::EN_ATENCION_OPE_INT])
-            ->count();
+            $contador_pedidos_atender = $contador_pedidos_atender->count();
+
+        /*********
+         * PEDIDOS ATENDIDOS
+         */
+
         // Estado de pediddos
-        $contador_pedidos_atendidos = Pedido::query()->activo()->segunRolUsuario([\App\Models\User::ROL_ADMIN, User::ROL_ENCARGADO, User::ROL_ASESOR])
+        $contador_pedidos_atendidos = Pedido::join('users as u', 'pedidos.user_id', 'u.id')
+            ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
+            ->where('pedidos.estado', '1')
+            ->where('dp.estado', '1')
             //->atendidos()
             ->noPendingAnulation()
             ->where('da_confirmar_descarga', '0')
-            ->whereNotIn('pedidos.condicion_code', [Pedido::POR_ATENDER_OPE_INT, Pedido::EN_ATENCION_OPE_INT])
-            ->count();
+            ->whereNotIn('pedidos.condicion_code', [Pedido::POR_ATENDER_OPE_INT, Pedido::EN_ATENCION_OPE_INT]);
+
+        if(Auth::user()->rol == "Operario"){
+
+            $asesores = User::whereIN('users.rol', ['Asesor', 'Administrador', 'ASESOR ADMINISTRATIVO'])
+                ->where('users.estado', '1')
+                ->Where('users.operario', Auth::user()->id)
+                ->select(
+                    DB::raw("users.identificador as identificador")
+                )
+                ->pluck('users.identificador');
+
+            $contador_pedidos_atendidos = $contador_pedidos_atendidos->WhereIn('u.identificador', $asesores);
+
+
+        } else if (Auth::user()->rol == "Jefe de operaciones") {
+            $operarios = User::where('users.rol', 'Operario')
+                ->where('users.estado', '1')
+                ->where('users.jefe', Auth::user()->id)
+                ->select(
+                    DB::raw("users.id as id")
+                )
+                ->pluck('users.id');
+
+            $asesores = User::whereIN('users.rol', ['Asesor', 'Administrador', 'ASESOR ADMINISTRATIVO'])
+                ->where('users.estado', '1')
+                ->WhereIn('users.operario', $operarios)
+                ->select(
+                    DB::raw("users.identificador as identificador")
+                )
+                ->pluck('users.identificador');
+
+            $contador_pedidos_atendidos = $contador_pedidos_atendidos->WhereIn('u.identificador', $asesores);
+
+
+        } else {
+            $contador_pedidos_atendidos = $contador_pedidos_atendidos;
+        }
+
+        $contador_pedidos_atendidos = $contador_pedidos_atendidos->count();
 
         /*
         $contador_pedidos_atendidos = Pedido::where('estado', '1')

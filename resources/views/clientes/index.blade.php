@@ -237,6 +237,15 @@
             $('#modal-historial-situacion-cliente').on('show.bs.modal', function (event) {
                 var button = $(event.relatedTarget)
                 var idcliente = button.data('cliente')
+
+                /*$.ajax({
+                    url: "{{ route('clientestablasituaciondata') }}",
+                    type: 'POST',
+                    data: idcliente,
+                    processData: false,
+                    contentType: false,
+                });*/
+
                 $('#tablaPrincipalHistorialSituacion').DataTable().clear().destroy();
 
                 $('#tablaPrincipalHistorialSituacion').DataTable({

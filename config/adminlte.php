@@ -568,6 +568,13 @@ return [
                     'active' => ['clientes'],
                 ],
                 [
+                    'text' => 'AB -> ABANDONO',
+                    'route' => 'clientes.abandonos.recientes.abandono',
+                    'can' => 'clientes.abandonos.reciente.abandono',
+                    'icon' => 'fas fa-check-circle',
+                    'active' => ['clientes'],
+                ],
+                [
                     'text' => 'Clientes Nuevos',
                     'route' => 'clientes.nuevos',
                     'can' => 'clientes.nuevos',
@@ -620,6 +627,12 @@ return [
                 [
                     'text' => 'Reportes de operaciones',
                     'route' => 'reportes.operaciones',
+                    'can' => 'reportes.operaciones',
+                    'icon' => 'fas fa-check-circle',
+                ],
+                [
+                    'text' => 'Analisis',
+                    'route' => 'reportes.analisis',
                     'can' => 'reportes.operaciones',
                     'icon' => 'fas fa-check-circle',
                 ],
