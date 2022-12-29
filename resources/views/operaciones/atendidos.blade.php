@@ -548,6 +548,14 @@
                 $("#responsable").val(idresponsable);
             });
 
+            $('#modal-revertir').on('show.bs.modal', function (event) {
+                //cuando abre el form de anular pedido
+                var button = $(event.relatedTarget)
+                var idunico = button.data('revertir')//
+                $(".textcode").html("PED"+idunico);
+                $("#hiddenRevertirpedidoporatender").val(idunico);
+            });
+
             $('#tablaPrincipal').DataTable({
                 processing: true,
                 serverSide: true,
