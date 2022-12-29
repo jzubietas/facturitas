@@ -443,12 +443,13 @@
               data = '<div><ul class="" aria-labelledby="dropdownMenuButton">';
               data = data + '<a href="' + urlver + '" class="btn-sm dropdown-item" ><i class="fas fa-eye text-success"></i> Ver</a>';
 
-
+/*
               var urledit = '{{ route("operaciones.editatender", ":id") }}';
               urledit = urledit.replace(':id', row.id);
               @can('operacion.editatender')
                 data = data+'<a href="'+urledit+'" class="btn-sm dropdown-item"><i class="fas fa-edit text-warning" aria-hidden="true"></i> Editar atención</a>';
               @endcan
+                */
               var urlpdf = '{{ route("pedidosPDF", ":id") }}';
               urlpdf = urlpdf.replace(':id', row.id);
               @can('operacion.PDF')
