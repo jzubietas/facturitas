@@ -568,6 +568,13 @@ return [
                     'active' => ['clientes'],
                 ],
                 [
+                    'text' => 'AB -> ABANDONO',
+                    'route' => 'clientes.abandonos.recientes.abandono',
+                    'can' => 'clientes.abandonos.recientes.abandono',
+                    'icon' => 'fas fa-check-circle',
+                    'active' => ['clientes'],
+                ],
+                [
                     'text' => 'Clientes Nuevos',
                     'route' => 'clientes.nuevos',
                     'can' => 'clientes.nuevos',
