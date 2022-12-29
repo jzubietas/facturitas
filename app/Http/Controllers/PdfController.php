@@ -52,7 +52,7 @@ class PdfController extends Controller
         $mes_mes=Carbon::now()->subMonth()->format('m');
 
         $_pedidos_mes_pasado = User::select(
-            'users.identificador'
+            'users.id','users.name','users.email'
             //,DB::raw(" (select count( c.id) from clientes c inner join users a  on c.user_id=a.id where a.rol='Asesor' and a.llamada=users.id and c.situacion='ABANDONO RECIENTE' ) abandono_reciente")
             //,DB::raw(" (select count( c.id) from clientes c inner join users a  on c.user_id=a.id where a.rol='Asesor' and c.user_id=users.id and c.situacion='ABANDONO' ) abandono")
             //,DB::raw(" (select count( c.id) from clientes c inner join users a  on c.user_id=a.id where a.rol='Asesor' and c.user_id=users.id and c.situacion='RECURRENTE' ) recurrente")
