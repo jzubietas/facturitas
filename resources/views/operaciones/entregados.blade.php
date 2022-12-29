@@ -439,17 +439,20 @@
 
               var urlver = '{{ route("operaciones.showatender", ":id") }}';
               urlver = urlver.replace(':id', row.id);
-              data = data+'<a href="'+urlver+'" class="btn btn-primary btn-sm"><i class="fas fa-eye"></i> Ver</a><br>';
+
+              data = '<div><ul class="" aria-labelledby="dropdownMenuButton">';
+              data = data + '<a href="' + urlver + '" class="btn-sm dropdown-item" ><i class="fas fa-eye text-success"></i> Ver</a>';
+
 
               var urledit = '{{ route("operaciones.editatender", ":id") }}';
               urledit = urledit.replace(':id', row.id);
               @can('operacion.editatender')
-                data = data+'<a href="'+urledit+'" class="btn btn-warning btn-sm"><i class=""></i> Editar atención</a><br>';
+                data = data+'<a href="'+urledit+'" class="btn-sm dropdown-item"><i class="fas fa-edit text-warning" aria-hidden="true"></i> Editar atención</a>';
               @endcan
               var urlpdf = '{{ route("pedidosPDF", ":id") }}';
               urlpdf = urlpdf.replace(':id', row.id);
               @can('operacion.PDF')
-                data = data+'<a href="'+urlpdf+'" class="btn btn-primary btn-sm" target="_blank"><i class="fa fa-file-pdf"></i> PDF</a><br>';
+                data = data+'<a href="'+urlpdf+'" class="btn-sm dropdown-item" target="_blank"><i class="fa fa-file-pdf text-primary"></i>  PDF</a>';
 
               @endcan
 
@@ -460,8 +463,8 @@
                 {
                   @if (Auth::user()->rol == "Jefe de operaciones" || Auth::user()->rol == "Administrador")
 
-                    data = data+'<a href="" data-target="#modal-envio" data-envio='+row.id+' data-toggle="modal" ><button class="btn btn-success btn-sm">Enviar</button></a><br>';
-                    data = data+'<a href="" data-target="#modal-sinenvio" data-sinenvio='+row.id+' data-toggle="modal" ><button class="btn btn-dark btn-sm">Sin envío</button></a><br>';
+                    data = data+'<a href="" data-target="#modal-envio"  class="btn-sm dropdown-item" data-envio='+row.id+' data-toggle="modal" >Enviar</a><br>';
+                    data = data+'<a href="" data-target="#modal-sinenvio"  class="btn-sm dropdown-item" data-sinenvio='+row.id+' data-toggle="modal" ><i class="fa fa-times text-danger" aria-hidden="true"></i> Sin envío</a><br>';
                   @endif
 
                 }
@@ -470,15 +473,17 @@
 
               if(row.condicion_envio_code==5)
               {
-                data = data+'<a href="" data-target="#modal-envio-op" data-envio='+row.id+' data-code="'+ row.codigos +'" data-toggle="modal" ><button class="btn btn-success btn-sm">ENVIO A COURIER JEFE OPE</button></a><br>';
-                data = data+'<a href="" data-target="#modal-revertir" data-revertir='+row.id+'  data-codigo='+row.codigo+' data-toggle="modal" ><button class="btn btn-danger btn-sm">Revertir</button></a>';
+                data = data+'<a href="" data-target="#modal-envio-op" class="btn-sm dropdown-item" data-envio='+row.id+' data-code="'+ row.codigos +'" data-toggle="modal" ><i class="fa fa-envelope text-success" aria-hidden="true"></i> ENVIO A COURIER JEFE OPE</a>';
+                data = data+'<a href="" data-target="#modal-revertir" class="btn-sm dropdown-item" data-revertir='+row.id+'  data-codigo='+row.codigo+' data-toggle="modal" ><i class="fa fa-times text-danger" aria-hidden="true"></i> Revertir</a>';
               }
 
               if(row.condicion_envio_code == 13)
               {
-                  data = data+'<a href="" class="btn-sm btn-secondary" data-target="#modal-envio" data-code="'+ row.codigos +'" data-envio='+row.id+' data-toggle="modal" ><i class="fa fa-check text-warning" aria-hidden="true"></i> Confirmar</a>';
-                  data = data+'<a href="" data-target="#modal-revertir" data-revertir='+row.id+' data-codigo='+row.codigo+' data-toggle="modal" ><button class="btn btn-danger btn-sm">Revertir</button></a>';
+                  data = data+'<a href="" class="btn-sm dropdown-item" data-target="#modal-envio" data-code="'+ row.codigos +'" data-envio='+row.id+' data-toggle="modal" ><i class="fa fa-check text-success" aria-hidden="true"></i> Confirmar</a>';
+                  data = data+'<a href="" data-target="#modal-revertir" class="btn-sm dropdown-item" data-revertir='+row.id+' data-codigo='+row.codigo+' data-toggle="modal" ><i class="fa fa-times text-danger" aria-hidden="true"></i> Revertir</a>';
               }
+
+                data = data + '</ul></div>';
 
               return data;
             }
