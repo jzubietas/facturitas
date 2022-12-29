@@ -57,7 +57,7 @@
                         </div>
 
                         <div class="form-group col-lg-3">
-                            @if (Auth::user()->rol == "Administrador" || Auth::user()->rol == "Jefe de Llamadas" )
+                            @if (Auth::user()->rol == "Administrador" || Auth::user()->rol == "Jefe de llamadas" )
                                 <button class="btn btn-info" id="btn-perdonar-deuda" type="button">PERDONAR DEUDA
                                 </button>
                             @endif
@@ -131,9 +131,11 @@
                         <table id="tabla_pedidos" class="table table-striped" style="text-align: center">
                             <thead class="bg-info">
                             <tr>
-                                <th scope="col">ITEM</th>
+                                 <th scope="col">ITEM</th>
                                 {{-- <th scope="col">PEDIDO</th> --}}
                                 <th scope="col">CODIGO</th>
+                                <th scope="col">IMPORTE</th>
+                                
                                 {{--<th scope="col">MONTO</th>--}}
                                 <th scope="col">SALDO</th>
                                 <th scope="col">DIFERENCIA</th>
@@ -148,6 +150,7 @@
                             <tr>
                                 <td>{{--ITEM--}}</td>
                                 <td>{{--CODIGO--}}</td>
+                                <td></td>
                                 {{--<td>TOTAL MONTO</td>--}}
                                 <td>TOTAL SALDO</td>
                                 <td>TOTAL DIFERENCIA</td>
@@ -950,11 +953,18 @@
                 columns:
                     [
                         {
-                            data: 'id'
+                            data: 'id', "visible":false
                         },
+
+                        {
+                            data: 'tot_pag'
+                        },
+
                         {
                             data: 'codigo'
                         },
+
+
                         {
                             data: 'saldo'
                         },
@@ -1609,9 +1619,12 @@
                                 } else {
                                     return '<input type="hidden" name="pedido_id[' + data + ']" value="' + data + '">PED' + data + '</td>';
                                 }
-                            }
+                            }, "visible":false
                         },
-                        {data: 'codigo', name: 'codigo',},
+                        {data: 'codigo', name: 'codigo'},
+
+                        {data: 'codigo', name: 'codigo'},
+
 
                         {
                             data: 'saldo',
