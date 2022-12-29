@@ -19,7 +19,13 @@ class PagereporteLlamada extends Export implements WithColumnFormatting,WithColu
     {
         $cliente_list = [];
 
-        $_2022_07=ListadoResultado::join('clientes as c','c.id','listado_resultados.id')
+        /*"cliente"=>"Ejercicio"
+            ,"asesor"=>"Periodo"
+            ,"llamada"=>"Periodo2"
+            ,"pedido"=>"grupo"
+            ,"fecha_pedido"=>"total*/
+
+        $informacion=Cliente::join('clientes as c','c.id','listado_resultados.id')
         ->select(
             DB::raw(" (select '2022') as Ejercicio "),
             DB::raw(" (select '07') as Periodo "),
@@ -32,79 +38,8 @@ class PagereporteLlamada extends Export implements WithColumnFormatting,WithColu
             's_2022_07'
         );
 
-        $_2022_08=ListadoResultado::join('clientes as c','c.id','listado_resultados.id')
-        ->select(
-            DB::raw(" (select '2022') as Ejercicio "),
-            DB::raw(" (select '08') as Periodo "),
-            DB::raw(" (select 'Agosto') as Periodo2 "),
-            'listado_resultados.s_2022_08 as grupo',
-            DB::raw('count(listado_resultados.s_2022_08) as total')
-            //'cantidad'
-        )
-        ->groupBy(
-            's_2022_08'
-        );
-
-        $_2022_09=ListadoResultado::join('clientes as c','c.id','listado_resultados.id')
-        ->select(
-            DB::raw(" (select '2022') as Ejercicio "),
-            DB::raw(" (select '09') as Periodo "),
-            DB::raw(" (select 'Setiembre') as Periodo2 "),
-            'listado_resultados.s_2022_09 as grupo',
-            DB::raw('count(listado_resultados.s_2022_09) as total')
-            //'cantidad'
-        )
-        ->groupBy(
-            's_2022_09'
-        );
-
-        $_2022_10=ListadoResultado::join('clientes as c','c.id','listado_resultados.id')
-        ->select(
-            DB::raw(" (select '2022') as Ejercicio "),
-            DB::raw(" (select '10') as Periodo "),
-            DB::raw(" (select 'Octubre') as Periodo2 "),
-            'listado_resultados.s_2022_10 as grupo',
-            DB::raw('count(listado_resultados.s_2022_10) as total')
-            //'cantidad'
-        )
-        ->groupBy(
-            's_2022_10'
-        );
-
-        $_2022_11=ListadoResultado::join('clientes as c','c.id','listado_resultados.id')
-        ->select(
-            DB::raw(" (select '2022') as Ejercicio "),
-            DB::raw(" (select '11') as Periodo "),
-            DB::raw(" (select 'Noviembre') as Periodo2 "),
-            'listado_resultados.s_2022_11 as grupo',
-            DB::raw('count(listado_resultados.s_2022_11) as total')
-            //'cantidad'
-        )
-        ->groupBy(
-            's_2022_11'
-        );
-
-        $_2022_12=ListadoResultado::join('clientes as c','c.id','listado_resultados.id')
-        ->select(
-            DB::raw(" (select '2022') as Ejercicio "),
-            DB::raw(" (select '12') as Periodo "),
-            DB::raw(" (select 'Diciembre') as Periodo2 "),
-            'listado_resultados.s_2022_12 as grupo',
-            DB::raw('count(listado_resultados.s_2022_12) as total')
-            //'cantidad'
-        )
-        ->groupBy(
-            's_2022_12'
-        );
-
-        $data=$_2022_07
-                ->union($_2022_08)
-                ->union($_2022_09)
-                ->union($_2022_10)
-                ->union($_2022_11)
-                ->union($_2022_12);
-
-        return $data->get();
+       
+        return $informacion->get();
     }
 
     public function title(): string
@@ -114,7 +49,7 @@ class PagereporteLlamada extends Export implements WithColumnFormatting,WithColu
 
     public function map($model): array
     {
-        $model->Periodo=strval(str_pad($model->Periodo,2,"0"));
+        //$model->Periodo=strval(str_pad($model->Periodo,2,"0"));
         return parent::map($model);
     }
 
@@ -132,11 +67,11 @@ class PagereporteLlamada extends Export implements WithColumnFormatting,WithColu
     public function fields(): array
     {
         return [
-            "Ejercicio"=>"Ejercicio"
-            ,"Periodo"=>"Periodo"
-            ,"Periodo2"=>"Periodo2"
-            ,"grupo"=>"grupo"
-            ,"total"=>"total"
+            "cliente"=>"Ejercicio"
+            ,"asesor"=>"Periodo"
+            ,"llamada"=>"Periodo2"
+            ,"pedido"=>"grupo"
+            ,"fecha_pedido"=>"total"
         ];
     }
 
