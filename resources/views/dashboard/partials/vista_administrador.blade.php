@@ -90,44 +90,28 @@
         </div>
     </div>
 
-    <div class="col-lg-9 col-6">
+    <div class="col-lg-9 col-12">
 
         <div class="small-box bg-secondary">
             <div class="inner">
-                PEDIDOS CREADOS {{  \Carbon\Carbon::now()->format('d-m-Y') }}
+               <h5> PEDIDOS CREADOS {{  \Carbon\Carbon::now()->format('d-m-Y') }}</h5>
             </div>
             <div class="row">
-                <div class="col-lg-12 col-12">
-                    <table class="table" style="font-size:8px;border-spacing: 10px;border-collapse: separate;width:100%;">
-                        <thead>
-                            <tr>
-                                @foreach ($_pedidos as $pedido)
-                                    <td style="width:100px !important;">ASESOR {{ $pedido->identificador }}</td>
-                                @endforeach  
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr style="height:10px !important;">
-
-                            
-                            @foreach ($_pedidos as $pedido)                            
-                                    <td>{{ $pedido->total }}</td>                           
-                                @endforeach  
-                                
-                            </tr>
-                        </tbody>
-                    </table>
+                @foreach ($_pedidos as $pedido)
+                <div class="col-md-2 col-6">
+                    <div class="p-4 border-top border-bottom">
+                        <h5 class="text-center">ASESOR {{ $pedido->identificador }}</h5>
+                        <h5 class="text-center"><b>{{ $pedido->total }}</b></h5>
+                    </div>
                 </div>
-        
+                @endforeach
             </div>
 
         </div>
 
-        
+
     </div>
 </div>
-    
-
 
 
 <div class="row">
