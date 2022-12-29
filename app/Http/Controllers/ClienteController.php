@@ -106,7 +106,7 @@ class ClienteController extends Controller
                 'clientes.distrito',
                 'clientes.direccion',
                 'clientes.pidio',
-                
+
                 DB::raw(" (select (dp.codigo) from pedidos dp where dp.estado=1 and dp.cliente_id=clientes.id order by dp.created_at desc limit 1) as ultimo_pedido "),
 
                 DB::raw('count(p.created_at) as cantidad'),
@@ -705,7 +705,7 @@ class ClienteController extends Controller
                 ->where('dp.estado', '1')
                 //->where('pedidos.envio', '1')
                 //->where('pedidos.condicion_envio', 1)
-                ->whereIn('pedidos.condicion_envio_code', [Pedido::ATENDIDO_JEFE_OPE_INT, Pedido::CONFIRMACION_COURIER_INT, Pedido::RECEPCION_COURIER_INT]);
+                ->whereIn('pedidos.condicion_envio_code', [Pedido::RECIBIDO_JEFE_OPE_INT, Pedido::CONFIRMACION_COURIER_INT, Pedido::RECEPCION_COURIER_INT]);
             //->whereIn('pedidos.envio', [Pedido::ENVIO_CONFIRMAR_RECEPCION, Pedido::ENVIO_RECIBIDO]);
             //->get();
 
@@ -1309,7 +1309,7 @@ class ClienteController extends Controller
 
 
         } else if (Auth::user()->rol == "Jefe de llamadas") {
-          
+
           /*$usersasesores = User::where('users.rol', 'Asesor')
                 ->where('users.estado', '1')
                 ->where('users.llamada', Auth::user()->id)
@@ -1319,9 +1319,9 @@ class ClienteController extends Controller
                 ->pluck('users.identificador');
 
             $data = $data->WhereIn("u.identificador", $usersasesores);*/
-        } 
-        
-        
+        }
+
+
         elseif (Auth::user()->rol == "Asesor") {
             $usersasesores = User::where('users.rol', 'Asesor')
                 ->where('users.estado', '1')
