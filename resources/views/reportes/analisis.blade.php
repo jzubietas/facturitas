@@ -8,7 +8,6 @@
 
 @section('content')
 
-
   <div class="card">
     <div class="card-header bg-primary">PEDIDOS</div>
     <div class="form-group">
