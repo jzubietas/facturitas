@@ -18,7 +18,7 @@
           <div class="card">
             
             <div class="card-body">
-              <?php //print_r($_pedidos_mes_pasado); ?>
+              <?php echo "<pre>";print_r($_pedidos_mes_pasado);echo "</pre>"; ?>
              
               <div class="row ">
                 @foreach ($_pedidos_mes_pasado as $pedido)
