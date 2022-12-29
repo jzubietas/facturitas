@@ -397,6 +397,7 @@
                 url:"{{ route('pedidoobteneradjuntoRequest') }}",
                 data:{"pedido":idunico},
             }).done(function (data) {
+
                 //console.log(data.html);
                 console.log(data.cantidad);
                 if(data.cantidad>0)
@@ -417,7 +418,7 @@
                     return datal;
                     //console.log(data.html)
                 }else{
-                    console.log("sin imagenes");
+                    $("#imagenes_adjunto").html("No hay archivos adjuntados en este pedido.")
                 }
             });
         }else{
@@ -448,7 +449,7 @@
                     return datal;
                     //console.log(data.html)
                 }else{
-                    console.log("sin imagenes");
+                    $("#imagenes_adjunto").html("No hay archivos adjuntados en este pedido.")
                 }
             });
 
