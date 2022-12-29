@@ -248,8 +248,9 @@
                     <th style="text-align: center">TOTAL:</th>
                     <th></th>
 
-                    <th><h4><?php echo number_format($sumPa, 2, '.', ' ')?></h4></th>
-                    <th></th>
+                    <th colspan="2">
+                        <h4><?php echo number_format($sumPa, 2, '.', ' ')?></h4>
+                    </th>
                     <th></th>
                     <th></th>
                     <th style="text-align: center"></th>
@@ -271,6 +272,85 @@
         </div>
       </div>
     </div>
+      @if(count($devoluciones)>0)
+          <div class="card-body" id="section_devoluciones">
+              <div class="border rounded card-body border-secondary">
+                  <div class="form-row">
+                      <div class="form-group col-lg-12">
+                          <h3>DEVOLUCIONES</h3>
+                          <div class="table-responsive">
+                              <table class="table table-striped">
+                                  <thead>
+                                  <tr>
+                                      <th scope="col">ITEM</th>
+                                      <th scope="col">PAGO</th>
+                                      <th scope="col">BANCO</th>
+                                      <th scope="col">MONTO</th>
+                                      <th scope="col">FECHA</th>
+                                      <th scope="col">CUENTA DESTINO</th>
+                                      <th scope="col">Nro OPERACION</th>
+                                      <th scope="col">TITULAR</th>
+                                      <th scope="col">FECHA DEVOLUCION</th>
+                                      <th scope="col">ESTADO</th>
+                                      <th scope="col">IMAGEN</th>
+                                  </tr>
+                                  </thead>
+                                  <tbody>
+                                  @php
+                                      $contPa = 0;
+                                      $sumPa = 0;
+                                  @endphp
+                                  @foreach ($devoluciones as $devolucion)
+                                      <tr>
+                                          <td>{{ $contPa + 1 }}</td>
+                                          <td>{{ $devolucion->code_id }}</td>
+                                          <td>{{ $devolucion->bank_destino }}</td>
+                                          <td>{{$devolucion->amount_format}}</td>
+                                          <td>{{ optional($devolucion->created_at)->format('d-m-Y h:i A') }}</td>
+                                          <td>{{ $devolucion->bank_number }}</td>
+                                          <td>{{ $devolucion->num_operacion?:'--' }}</td>
+                                          <td>{{ $devolucion->cliente->nombre }}</td>
+                                          <td>{{ optional($devolucion->returned_at)->format('d-m-Y h:i A')??'--' }}</td>
+                                          <td class="bg-{{$devolucion->estado_color}}">
+                                              {{$devolucion->estado_text}}
+                                          </td>
+                                          <td><a href="" data-target="#modal-imagen-{{ $detallePago->id }}"
+                                                 data-toggle="modal">
+                                                  <img
+                                                      src="{{ Storage::disk($devolucion->voucher_disk)->url($devolucion->voucher_path) }}"
+                                                      alt="{{ basename($devolucion->voucher_path) }}" height="200px"
+                                                      width="200px" class="img-thumbnail"></a>
+                                              <p>
+                                                  <br>
+                                                  <a target="_blank"
+                                                     href="{{ Storage::disk($devolucion->voucher_disk)->url($devolucion->voucher_path) }}">
+                                                      <button type="button" class="btn btn-secondary"> Descargar
+                                                      </button>
+                                                  </a>
+                                              </p>
+                                          </td>
+                                      </tr>
+                                      @php
+                                          $sumPa = $sumPa + $devolucion->amount;
+                                          $contPa++;
+                                      @endphp
+                                      @include('pagos.modals.modalimagen')
+                                  @endforeach
+                                  </tbody>
+                                  <tfoot>
+                                  <th style="text-align: center">TOTAL</th>
+                                  <th></th>
+                                  <th></th>
+                                  <th><h4><?php echo money_f($sumPa) ?></h4></th>
+                                  <th></th>
+                                  </tfoot>
+                              </table>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      @endif
     <div class="card-footer text-center" id="guardar">
       <div class="row">
         <div class="col-2 text-left">
@@ -1095,7 +1175,7 @@
                             error_conciliar=false;
                             return false;
                           }
-                          
+
                         }
 
                         let fecha_dpa=$(".nohide_"+ir).find("td").eq(5).html();

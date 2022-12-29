@@ -6,6 +6,7 @@ use App\Events\PagoEvent;
 use App\Models\Cliente;
 use App\Models\DetallePago;
 use App\Models\DetallePedido;
+use App\Models\Devolucion;
 use App\Models\MovimientoBancario;
 use App\Models\EntidadBancaria;
 use App\Models\CuentaBancaria;
@@ -210,7 +211,8 @@ class AdministracionController extends Controller
             //"ABONADO_PARCIAL" => Pago::ABONADO_PARCIAL
         ]);
 
-        return view('administracion.revisar', compact('pago', 'condiciones', 'cuentas', 'titulares', 'pagoPedidos', 'detallePagos', 'bancos'));
+        $devoluciones = Devolucion::query()->wherePagoId($pago->id)->get();
+        return view('administracion.revisar', compact('pago', 'devoluciones','condiciones', 'cuentas', 'titulares', 'pagoPedidos', 'detallePagos', 'bancos'));
     }
 
     public function Administracionpendientes(Request $request)
@@ -389,7 +391,8 @@ class AdministracionController extends Controller
             //"ABONADO_PARCIAL" => Pago::ABONADO_PARCIAL
         ]);
 
-        return view('administracion.revisarpendiente', compact('pago', 'condiciones', 'cuentas', 'titulares', 'pagos', 'pagoPedidos', 'detallePagos', 'bancos'));
+        $devoluciones = Devolucion::query()->wherePagoId($pago->id)->get();
+        return view('administracion.revisarpendiente', compact('pago','devoluciones', 'condiciones', 'cuentas', 'titulares', 'pagos', 'pagoPedidos', 'detallePagos', 'bancos'));
     }
 
     public function Observados()
@@ -551,7 +554,8 @@ class AdministracionController extends Controller
             //"ABONADO_PARCIAL" => Pago::ABONADO_PARCIAL
         ]);
 
-        return view('administracion.revisarobservado', compact('pago', 'condiciones', 'cuentas', 'titulares', 'pagos', 'pagoPedidos', 'detallePagos', 'bancos'));
+        $devoluciones = Devolucion::query()->wherePagoId($pago->id)->get();
+        return view('administracion.revisarobservado', compact('pago', 'devoluciones','condiciones', 'cuentas', 'titulares', 'pagos', 'pagoPedidos', 'detallePagos', 'bancos'));
     }
 
     public function Abonados()

@@ -799,8 +799,8 @@ class PagoController extends Controller
                     DB::raw(" (select count(ped2.id) from pedidos ped2 where ped2.cliente_id=clientes.id and ped2.pago in (0,1) and ped2.pagado in (0,1) and ped2.created_at <='2022-11-30 00:00:00'  and ped2.estado=1) as pedidos_mes_deuda_antes ")
                 ]
             )->first();*/
-        $cliente->pedidos_mes_deuda= $cliente->pedidos()->activo()->noPagados()->whereIn('created_at',[now()->startOfMonth(),now()->endOfMonth()->endOfDay()])->count();
-        $cliente->pedidos_mes_deuda_antes= $cliente->pedidos()->activo()->noPagados()->where('created_at','<',now()->subMonth()->endOfMonth()->endOfDay())->count();
+        $cliente->pedidos_mes_deuda = $cliente->pedidos()->activo()->noPagados()->whereIn('created_at', [now()->startOfMonth(), now()->endOfMonth()->endOfDay()])->count();
+        $cliente->pedidos_mes_deuda_antes = $cliente->pedidos()->activo()->noPagados()->where('created_at', '<', now()->subMonth()->endOfMonth()->endOfDay())->count();
 
         $pedido_deuda = Pedido::where('cliente_id', $request->cliente_id)//CONTAR LA CANTIDAD DE PEDIDOS QUE DEBE
         ->where('pagado', '0')
@@ -996,7 +996,7 @@ class PagoController extends Controller
                             'cuenta' => $tipomovimiento[$monto_key],
                             'titular' => $titular[$monto_key],
                             'operacion' => $operacion[$monto_key],
-                            'observacion' => $nota[$monto_key]??'N/A',
+                            'observacion' => $nota[$monto_key] ?? 'N/A',
                             'monto' => $monto[$monto_key],
                             'banco' => $banco[$monto_key],
                             'fecha' => $fecha[$monto_key],
@@ -1011,7 +1011,7 @@ class PagoController extends Controller
                             'cuenta' => $tipomovimiento[$monto_key],
                             'titular' => $titular[$monto_key],
                             'operacion' => $operacion[$monto_key],
-                            'observacion' => $nota[$monto_key]??'N/A',
+                            'observacion' => $nota[$monto_key] ?? 'N/A',
                             'monto' => $monto[$monto_key],
                             'banco' => $banco[$monto_key],
                             'fecha' => $fecha[$monto_key],
@@ -1086,8 +1086,8 @@ class PagoController extends Controller
 
                 $cliente = Cliente::find($request->cliente_id);
 
-                $cliente->pedidos_mes_deuda= $cliente->pedidos()->activo()->noPagados()->whereIn('created_at',[now()->startOfMonth(),now()->endOfMonth()->endOfDay()])->count();
-                $cliente->pedidos_mes_deuda_antes= $cliente->pedidos()->activo()->noPagados()->where('created_at','<',now()->subMonth()->endOfMonth()->endOfDay())->count();
+                $cliente->pedidos_mes_deuda = $cliente->pedidos()->activo()->noPagados()->whereIn('created_at', [now()->startOfMonth(), now()->endOfMonth()->endOfDay()])->count();
+                $cliente->pedidos_mes_deuda_antes = $cliente->pedidos()->activo()->noPagados()->where('created_at', '<', now()->subMonth()->endOfMonth()->endOfDay())->count();
 
                 /*$cliente_deuda = Cliente::where("id", $request->cliente_id)
                     ->get([
@@ -1237,7 +1237,6 @@ class PagoController extends Controller
                 $nota = $request->nota;
 
 
-
                 $files = $request->file('imagen');
                 $destinationPath = base_path('public/storage/pagos/');
 
@@ -1265,7 +1264,7 @@ class PagoController extends Controller
                             'fecha_deposito' => $fecha[$monto_key],
                             'imagen' => $fileList[$monto_key]['file_name'],
                             'estado' => '1',
-                            'observacion' => $nota[$monto_key]??'N/A',
+                            'observacion' => $nota[$monto_key] ?? 'N/A',
                         ]);
 
                     } else {
@@ -1279,7 +1278,7 @@ class PagoController extends Controller
                             'fecha_deposito' => $fecha[$monto_key],
                             'imagen' => 'logo_facturas.png',
                             'estado' => '1',
-                            'observacion' => $nota[$monto_key]??'N/A',
+                            'observacion' => $nota[$monto_key] ?? 'N/A',
                         ]);
                     }
 
@@ -1349,8 +1348,8 @@ class PagoController extends Controller
                 $cliente = Cliente::find($request->cliente_id);
 
 
-               $pedidos_mes_deuda= $cliente->pedidos()->activo()->noPagados()->whereIn('created_at',[now()->startOfMonth(),now()->endOfMonth()->endOfDay()])->count();
-               $pedidos_mes_deuda_antes= $cliente->pedidos()->activo()->noPagados()->where('created_at','<',now()->subMonth()->endOfMonth()->endOfDay())->count();
+                $pedidos_mes_deuda = $cliente->pedidos()->activo()->noPagados()->whereIn('created_at', [now()->startOfMonth(), now()->endOfMonth()->endOfDay()])->count();
+                $pedidos_mes_deuda_antes = $cliente->pedidos()->activo()->noPagados()->where('created_at', '<', now()->subMonth()->endOfMonth()->endOfDay())->count();
                 /*$cliente_deuda = Cliente::where("id", $request->cliente_id)
                     ->select([
                             'clientes.id',
@@ -2607,7 +2606,7 @@ class PagoController extends Controller
             try {
                 DB::beginTransaction();
 
-                $cliente_perdondarcourier = Cliente::query()->where('nombre','COURIER PERDONADO')->first();
+                $cliente_perdondarcourier = Cliente::query()->where('nombre', 'COURIER PERDONADO')->first();
 
 
                 $pago = Pago::create([
@@ -2787,8 +2786,8 @@ class PagoController extends Controller
                 "status" => Devolucion::DEVUELTO,
                 "returned_at" => now(),
             ]);
-            $asesores = User::where('rol', 'Asesor')
-                ->where('estado', '1')
+            $asesores = User::whereIn('rol', [User::ROL_ASESOR, User::ROL_LLAMADAS])
+                ->activo()
                 ->get();
 
             foreach ($asesores as $asesor) {
@@ -2801,7 +2800,7 @@ class PagoController extends Controller
     public function validadContenidoPago(Request $request)
     {
         $pagos_repetidos = DetallePago::query()
-            ->with(['pago','pago.user'])
+            ->with(['pago', 'pago.user'])
             ->where('banco', $request->banco)
             ->where('titular', $request->titular)
             //->where('cuenta', $request->cuenta)
@@ -2809,16 +2808,16 @@ class PagoController extends Controller
             ->where('fecha', $request->fecha)
             ->whereIn('pago_id',
                 Pago::query()->distinct()->select('pagos.id')
-                    ->where('pagos.estado',1)
+                    ->where('pagos.estado', 1)
                     ->join('users', 'users.id', '=', 'pagos.user_id')
                     ->where('cliente_id', $request->cliente_id)
-                    //->where('users.identificador', $request->asesor)
+            //->where('users.identificador', $request->asesor)
             )
             ->limit(5)
             ->get();
 
         return response()->json([
-            'codigos' => $pagos_repetidos->map(function ($dp){
+            'codigos' => $pagos_repetidos->map(function ($dp) {
                 return $dp->pago->code_id;
             })->join(', '),
             'is_repetido' => $pagos_repetidos->count() > 0,

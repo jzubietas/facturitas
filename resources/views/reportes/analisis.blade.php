@@ -18,18 +18,24 @@
           <div class="card">
             
             <div class="card-body">
-              <?php echo "<pre>";print_r($_pedidos_mes_pasado);echo "</pre>"; ?>
+              <?php //echo "<pre>";print_r($_pedidos_mes_pasado);echo "</pre>"; ?>
              
               <div class="row ">
                 @foreach ($_pedidos_mes_pasado as $pedido)
                 <div class="col-2 ">
                   <div class="card card-warning">
                     <div class="card-header">
-                        <h5>ASESOR {{ $pedido->identificador }}</h5>
+                        <h5>LLAMADA {{ $pedido->name }}</h5>
                     </div>
                     <div class="card-body">
                         <h4 class="text-center">
-                            <b>A.R. : {{ $pedido->abandono_reciente }} </b>
+                          <b>RECUPERADO.REC : {{ $pedido->recuperado_reciente }} </b>
+                        </h4>
+                        <h4 class="text-center">
+                          <b>RECUPERADO.REC : {{ $pedido->recuperado_abandono }} </b>
+                        </h4>
+                        <h4 class="text-center">
+                          <b>NUEVO : {{ $pedido->nuevo }} </b>
                         </h4>
                     </div>
                   </div>
