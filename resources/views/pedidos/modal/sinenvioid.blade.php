@@ -12,7 +12,7 @@
       {{-- Form::Open(['route' => ['operaciones.sinenvio', $pedido],'enctype'=>'multipart/form-data', 'id'=>'formulario','files'=>true]) --}}
       <input type="hidden" id="hiddenSinenvio" name="hiddenSinenvio">
       <div class="modal-body">
-          <p>Desea enviar el PEDIDO <strong class="textcode">PED000</strong> Sin sobre al jefe operaciones?</p>
+          <p>Desea enviar el PEDIDO <strong class="textcode">PED000</strong> <b style="color: #6600d4">SIN SOBRE</b> al jefe operaciones?</p>
 {{--<p>Está seguro que el pedido: <strong class="textcode">PED000</strong> será sin envío</p> --}}
 </div>
 <div class="modal-footer">
