@@ -393,7 +393,24 @@ class PedidoStatusController extends Controller
                     ->pluck('users.identificador');
 
                 $pedidos = $pedidos->WhereIn('u.identificador', $asesores);
-            } elseif (Auth::user()->rol == "Encargado") {
+            } 
+            
+            
+           else if (Auth::user()->rol == "Llamadas") {
+                $usersasesores = User::where('users.rol', 'Asesor')
+                    ->where('users.estado', '1')
+                    ->where('users.llamada', Auth::user()->id)
+                    ->select(
+                        DB::raw("users.identificador as identificador")
+                    )
+                    ->pluck('users.identificador');
+    
+                $pedidos = $pedidos->WhereIn('u.identificador', $usersasesores);
+            }
+            
+            
+            
+            elseif (Auth::user()->rol == "Encargado") {
                 $usersasesores = User::whereIn('users.rol', ['Asesor', User::ROL_ADMIN])
                     ->where('users.estado', '1')
                     ->where('users.supervisor', Auth::user()->id)
