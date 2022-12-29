@@ -44,9 +44,9 @@
                         <th scope="col">Asesor</th>
                         <th scope="col">Fecha de registro</th>{{--fecha hora--}}
                         <th scope="col">Tipo de Banca</th>
-                        <th scope="col">Adjuntos</th>
+                        <th scope="col">Adjuntos Asesor</th>
                         <th scope="col">Estado</th>
-                        <th scope="col">Acciones</th>
+                        <th scope="col">Adjuntos Operaciones</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -58,6 +58,7 @@
 
     @include('operaciones.modal.atenderid')
     @include('operaciones.modal.veradjuntoid')
+
 @endsection
 
 @section('css')
@@ -242,7 +243,7 @@
                                 return '';
                             } else {
                                 if (data > 0) {
-                                    data = '<a href="" data-target="#modal-veradjunto" data-adjunto=' + row.id + ' data-toggle="modal" ><button class="btn btn-outline-dark btn-sm"><i class="fas fa-eye"></i> Ver</button></a>';
+                                    data = '<a href="" data-target="#modal-veradjunto" data-group="1" data-adjunto=' + row.id + ' data-toggle="modal" ><button class="btn btn-outline-dark btn-sm"><i class="fas fa-eye"></i> Ver</button></a>';
                                     return data;
                                 } else {
                                     return '';
@@ -384,42 +385,77 @@
         //cuando abre el form de anular pedido
         var button = $(event.relatedTarget)
         var idunico = button.data('adjunto')
+                var target = button.data('group');
         $(".textcode").html("PED"+idunico);
 
-        //consulta de imagenes
-          $.ajax({
-            type:'POST',
-            url:"{{ route('pedidoobteneradjuntoRequest') }}",
-            data:{"pedido":idunico},
-          }).done(function (data) {
-            //console.log(data.html);
-            console.log(data.cantidad);
-            if(data.cantidad>0)
-            {
-              ////recorrer y poner imagenes en div con router
-              var adjuntos = data.html.split('|');
-              //console.log(adjuntos);
-              var urladjunto="";
-              var datal="";
-              $.each(adjuntos, function( index, value ) {
-                urladjunto = '{{ route("pedidos.descargaradjunto", ":id") }}';
-                urladjunto = urladjunto.replace(':id', value);
-                datal = datal+'<p><a href="'+urladjunto+'"><i class="fa fa-file mr-2"></i>'+value+'</a><p>';
-                //console.log(datal);
-                //console.log( index + ": " + value );
-              });
-              $("#imagenes_adjunto").html(datal)
-              return datal;
-              //console.log(data.html)
-            }else{
-              console.log("sin imagenes");
-            }
-          });
+        if(target == 1){
+            console.log("Mostrar data de Asesor");
+            // VER ADJUNTO DE ASESOR
+            //consulta de imagenes
+            $.ajax({
+                type:'POST',
+                url:"{{ route('pedidoobteneradjuntoRequest') }}",
+                data:{"pedido":idunico},
+            }).done(function (data) {
+                //console.log(data.html);
+                console.log(data.cantidad);
+                if(data.cantidad>0)
+                {
+                    ////recorrer y poner imagenes en div con router
+                    var adjuntos = data.html.split('|');
+                    //console.log(adjuntos);
+                    var urladjunto="";
+                    var datal="";
+                    $.each(adjuntos, function( index, value ) {
+                        urladjunto = '{{ route("pedidos.descargaradjunto", ":id") }}';
+                        urladjunto = urladjunto.replace(':id', value);
+                        datal = datal+'<p><a href="'+urladjunto+'"><i class="fa fa-file mr-2"></i>'+value+'</a><p>';
+                        //console.log(datal);
+                        //console.log( index + ": " + value );
+                    });
+                    $("#imagenes_adjunto").html(datal)
+                    return datal;
+                    //console.log(data.html)
+                }else{
+                    console.log("sin imagenes");
+                }
+            });
+        }else{
+            console.log("Mostrar data de Operaciones");
+            // VER ADJUNTO DE OPERACIONES
+            $.ajax({
+                type:'POST',
+                url:"{{ route('pedidoobteneradjuntoOPRequest') }}",
+                data:{"pedido":idunico},
+            }).done(function (data) {
+                //console.log(data.html);
+                console.log(data.cantidad);
+                if(data.cantidad>0)
+                {
+                    ////recorrer y poner imagenes en div con router
+                    var adjuntos = data.html.split('|');
+                    //console.log(adjuntos);
+                    var urladjunto="";
+                    var datal="";
+                    $.each(adjuntos, function( index, value ) {
+                        urladjunto = '{{ route("pedidos.descargaradjunto", ":id") }}';
+                        urladjunto = urladjunto.replace(':id', value);
+                        datal = datal+'<p><a href="'+urladjunto+'"><i class="fa fa-file mr-2"></i>'+value+'</a><p>';
+                        //console.log(datal);
+                        //console.log( index + ": " + value );
+                    });
+                    $("#imagenes_adjunto").html(datal)
+                    return datal;
+                    //console.log(data.html)
+                }else{
+                    console.log("sin imagenes");
+                }
+            });
+
+        }
+
 
       });
-
-
-
 
         });
     </script>
