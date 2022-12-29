@@ -77,6 +77,8 @@
             @include('pedidos.modal.envioid')
             @include('pedidos.modal.EditarAtencion')
             @include('pedidos.modal.DeleteAdjuntoid')
+
+            @include('operaciones.modal.revertirporatender')
         </div>
     </div>
 
@@ -679,6 +681,11 @@
                                 @endif
 
                             }
+                            @endcan
+
+                            @can('operacion.atendidos.revertir')
+
+                                data = data+'<a href="" class="btn-sm dropdown-item" data-target="#modal-revertir-poratender" data-revertir='+row.id+' data-toggle="modal" ><i class="fa fa-undo text-danger" aria-hidden="true"></i> Revertir</a>';
                             @endcan
 
                                 data = data + '</ul></div>';
