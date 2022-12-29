@@ -34,7 +34,7 @@
                           </div>
 
                           <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
-                              {!! Form::label('cant_compro', 'Cantidad de comprobantes enviados') !!}
+                              {!! Form::label('cant_compro', 'Total de facturas adjuntadas') !!}
                               {!! Form::number('cant_compro', '', ['class' => 'form-control', 'id' => 'cant_compro', 'step'=>'1', 'min' => '0']) !!}
 
                           </div>
