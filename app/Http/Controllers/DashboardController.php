@@ -38,32 +38,36 @@ class DashboardController extends Controller
         $_pedidos=$_pedidos->get();
 
 
-        
+        $_pedidos_mes_op=null;
          
-        $_pedidos_mes_operario = Pedido::join('users as u', 'pedidos.user_id', 'u.id')
-        ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
-        ->select( 
-        'u.name',
-        DB::raw("COUNT(u.identificador) AS total"),
-        DB::raw(" (SELECT count(dp.tipo_banca) FROM detalle_pedidos dp
-        JOIN pedidos p ON (dp.pedido_id=p.id)
-        JOIN users us ON (p.user_id=us.id)
-         WHERE us.identificador=u.identificador AND dp.estado=1  AND dp.tipo_banca LIKE  'electronica%'
-       ) as electronico"),
-
-       DB::raw(" (SELECT count(dp.tipo_banca) FROM detalle_pedidos dp
-       JOIN pedidos p ON (dp.pedido_id=p.id)
-       JOIN users us ON (p.user_id=us.id)
-        WHERE us.identificador=u.identificador AND dp.estado=1  AND dp.tipo_banca LIKE  'fisico%'
-      ) as fisico")
-        
-        )
-         ->where('pedidos.estado', '1');
-        
+       
         
         
 
         if (Auth::user()->rol == "Jefe de operaciones") {
+
+
+
+            $_pedidos_mes_operario = Pedido::join('users as u', 'pedidos.user_id', 'u.id')
+            ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
+            ->select( 
+            'u.name',
+            DB::raw("COUNT(u.identificador) AS total"),
+            DB::raw(" (SELECT count(dp.tipo_banca) FROM detalle_pedidos dp
+            JOIN pedidos p ON (dp.pedido_id=p.id)
+            JOIN users us ON (p.user_id=us.id)
+             WHERE us.identificador=u.identificador AND dp.estado=1  AND dp.tipo_banca LIKE  'electronica%'
+           ) as electronico"),
+    
+           DB::raw(" (SELECT count(dp.tipo_banca) FROM detalle_pedidos dp
+           JOIN pedidos p ON (dp.pedido_id=p.id)
+           JOIN users us ON (p.user_id=us.id)
+            WHERE us.identificador=u.identificador AND dp.estado=1  AND dp.tipo_banca LIKE  'fisico%'
+          ) as fisico")
+            
+            )
+             ->where('pedidos.estado', '1');
+            
 
             $operarios = User::where('users.rol', 'Operario')
                 ->where('users.estado', '1')
@@ -84,6 +88,8 @@ class DashboardController extends Controller
 
             $_pedidos_mes_operario->WhereIn('u.identificador', $asesores)->groupBy('u.identificador','u.name');
 
+            $_pedidos_mes_op=$_pedidos_mes_operario->get();
+
         }
 
 
@@ -92,7 +98,7 @@ class DashboardController extends Controller
 
         
 
-        $_pedidos_mes_op=$_pedidos_mes_operario->get();
+       
 
        
 
