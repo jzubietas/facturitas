@@ -164,4 +164,6 @@ class User extends Authenticatable
     {
         return $this->scopeRol($query, self::ROL_ASESOR);
     }
+
+
 }
