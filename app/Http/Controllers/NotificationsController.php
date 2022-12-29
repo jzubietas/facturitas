@@ -126,9 +126,34 @@ class NotificationsController extends Controller
             ->where('dp.estado', '1')
             ->poratenderestatus();
 
-            if(Auth::user()->rol == "Operario"){
+            if(Auth::user()->rol == User::ROL_ASESOR_ADMINISTRATIVO){
 
-                $asesores = User::whereIN('users.rol', ['Asesor', 'Administrador', 'ASESOR ADMINISTRATIVO'])
+                $asesores = User::whereIn('users.rol', [User::ROL_ASESOR_ADMINISTRATIVO])
+                ->where('users.estado', '1')
+                ->where('users.identificador', Auth::user()->identificador)
+                ->select(
+                    DB::raw("users.identificador as identificador")
+                )
+                ->pluck('users.identificador');
+
+                $contador_pedidos_atender = $contador_pedidos_atender->WhereIn('u.identificador', $asesores);
+
+            }
+            if(Auth::user()->rol == User::ROL_ASESOR){
+
+                $asesores = User::whereIn('users.rol', [User::ROL_ASESOR])
+                ->where('users.estado', '1')
+                ->where('users.identificador', Auth::user()->identificador)
+                ->select(
+                    DB::raw("users.identificador as identificador")
+                )
+                ->pluck('users.identificador');
+
+                $contador_pedidos_atender = $contador_pedidos_atender->WhereIn('u.identificador', $asesores);
+
+            }else if(Auth::user()->rol == User::ROL_OPERARIO){
+
+                $asesores = User::whereIn('users.rol', [User::ROL_ASESOR, User::ROL_ADMIN, User::ROL_ASESOR_ADMINISTRATIVO])
                     ->where('users.estado', '1')
                     ->Where('users.operario', Auth::user()->id)
                     ->select(
@@ -136,11 +161,24 @@ class NotificationsController extends Controller
                     )
                     ->pluck('users.identificador');
 
-                $pedidos = $contador_pedidos_atender->WhereIn('u.identificador', $asesores);
+                $contador_pedidos_atender = $contador_pedidos_atender->WhereIn('u.identificador', $asesores);
 
 
-            } else if (Auth::user()->rol == "Jefe de operaciones") {
-                $operarios = User::where('users.rol', 'Operario')
+            }else if(Auth::user()->rol == User::ROL_LLAMADAS){
+
+                $asesores = User::whereIn('users.rol', [User::ROL_ASESOR, User::ROL_ADMIN, User::ROL_ASESOR_ADMINISTRATIVO])
+                    ->where('users.estado', '1')
+                    ->Where('users.llamada', Auth::user()->id)
+                    ->select(
+                        DB::raw("users.identificador as identificador")
+                    )
+                    ->pluck('users.identificador');
+
+                $contador_pedidos_atender = $contador_pedidos_atender->WhereIn('u.identificador', $asesores);
+
+
+            } else if (Auth::user()->rol == User::ROL_JEFE_OPERARIO) {
+                $operarios = User::where('users.rol', User::ROL_OPERARIO)
                     ->where('users.estado', '1')
                     ->where('users.jefe', Auth::user()->id)
                     ->select(
@@ -148,7 +186,7 @@ class NotificationsController extends Controller
                     )
                     ->pluck('users.id');
 
-                $asesores = User::whereIN('users.rol', ['Asesor', 'Administrador', 'ASESOR ADMINISTRATIVO'])
+                $asesores = User::whereIN('users.rol', [User::ROL_ASESOR, User::ROL_ADMIN, User::ROL_ASESOR_ADMINISTRATIVO])
                     ->where('users.estado', '1')
                     ->WhereIn('users.operario', $operarios)
                     ->select(
@@ -163,7 +201,7 @@ class NotificationsController extends Controller
                 $contador_pedidos_atender = $contador_pedidos_atender;
 
             }
-            //->whereIn('condicion_envio_code', [Pedido::POR_ATENDER_OPE_INT,Pedido::EN_ATENCION_OPE_INT])
+            
             $contador_pedidos_atender = $contador_pedidos_atender->count();
 
         /*********
@@ -180,9 +218,21 @@ class NotificationsController extends Controller
             ->where('da_confirmar_descarga', '0')
             ->whereNotIn('pedidos.condicion_code', [Pedido::POR_ATENDER_OPE_INT, Pedido::EN_ATENCION_OPE_INT]);
 
-        if(Auth::user()->rol == "Operario"){
+        if(Auth::user()->rol == User::ROL_ASESOR){
 
-            $asesores = User::whereIN('users.rol', ['Asesor', 'Administrador', 'ASESOR ADMINISTRATIVO'])
+                $asesores = User::whereIn('users.rol', [User::ROL_ASESOR])
+                ->where('users.estado', '1')
+                ->where('users.identificador', Auth::user()->identificador)
+                ->select(
+                    DB::raw("users.identificador as identificador")
+                )
+                ->pluck('users.identificador');
+
+                $contador_pedidos_atendidos = $contador_pedidos_atendidos->WhereIn('u.identificador', $asesores);
+
+        }else if(Auth::user()->rol == User::ROL_OPERARIO){
+
+            $asesores = User::whereIN('users.rol', [User::ROL_ASESOR, User::ROL_ADMIN, User::ROL_ASESOR_ADMINISTRATIVO])
                 ->where('users.estado', '1')
                 ->Where('users.operario', Auth::user()->id)
                 ->select(
@@ -193,8 +243,21 @@ class NotificationsController extends Controller
             $contador_pedidos_atendidos = $contador_pedidos_atendidos->WhereIn('u.identificador', $asesores);
 
 
-        } else if (Auth::user()->rol == "Jefe de operaciones") {
-            $operarios = User::where('users.rol', 'Operario')
+        }else if(Auth::user()->rol == User::ROL_LLAMADAS){
+
+            $asesores = User::whereIn('users.rol', [User::ROL_ASESOR, User::ROL_ADMIN, User::ROL_ASESOR_ADMINISTRATIVO])
+                ->where('users.estado', '1')
+                ->Where('users.llamada', Auth::user()->id)
+                ->select(
+                    DB::raw("users.identificador as identificador")
+                )
+                ->pluck('users.identificador');
+
+            $contador_pedidos_atendidos = $contador_pedidos_atendidos->WhereIn('u.identificador', $asesores);
+
+
+        } else if (Auth::user()->rol == User::ROL_JEFE_OPERARIO) {
+            $operarios = User::where('users.rol', User::ROL_OPERARIO)
                 ->where('users.estado', '1')
                 ->where('users.jefe', Auth::user()->id)
                 ->select(
@@ -202,7 +265,7 @@ class NotificationsController extends Controller
                 )
                 ->pluck('users.id');
 
-            $asesores = User::whereIN('users.rol', ['Asesor', 'Administrador', 'ASESOR ADMINISTRATIVO'])
+            $asesores = User::whereIN('users.rol', [User::ROL_ASESOR, User::ROL_ADMIN, User::ROL_ASESOR_ADMINISTRATIVO])
                 ->where('users.estado', '1')
                 ->WhereIn('users.operario', $operarios)
                 ->select(
