@@ -18,19 +18,38 @@
           <div class="card">
             
             <div class="card-body">
-              <?php echo "<pre>";print_r($_pedidos_mes_pasado);echo "</pre>"; ?>
+              
+
              
               <div class="row ">
                 @foreach ($_pedidos_mes_pasado as $pedido)
                 <div class="col-2 ">
                   <div class="card card-warning">
                     <div class="card-header">
-                        <h5>LLAMADA {{ $pedido->identificador }}</h5>
+                        <h5> {{ $pedido->name }}</h5>
                     </div>
                     <div class="card-body">
-                        <h4 class="text-center">
-                            <b>A.R. : {{ $pedido->abandono_reciente }} </b>
-                        </h4>
+
+                      <div class="card">
+                        <ul class="list-group list-group-flush">
+                          <li class="list-group-item">
+                            <span class="badge badge-light">RECUPERADO.RECIENTE</span><br>
+                            <span class="badge badge-secondary">{{ $pedido->recuperado_reciente }}</span>
+                          </li>
+                          <li class="list-group-item">
+                            <span class="badge badge-light">RECUPERADO.ABANDONO</span><br>
+                            <span class="badge badge-secondary">{{ $pedido->recuperado_abandono }}</span>
+                          </li>
+                          <li class="list-group-item">
+                            <span class="badge badge-light">NUEVO</span><br>
+                            <span class="badge badge-secondary">{{ $pedido->nuevo }}</span>
+                          </li>
+                        </ul>
+                      </div>
+
+
+
+                      
                     </div>
                   </div>
                   

@@ -297,10 +297,16 @@
                     Swal.fire({
                         icon: 'warning',
                         title: 'Aviso',
-                        text: `La cantidad de adjuntos (${cant_compro_attachment}) es diferente a la cantidad de facturas ingresadas (${cant_compro})`,
+                        html: `La cantidad de archivos es (${cant_compro_attachment}) y es diferente a la cantidad de facturas (${cant_compro})<br> <b>¿Desea continuar?</b>`,
                         confirmButtonText: 'Aceptar y continuar',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
                     }).then((result) => {
-                        submitForm()
+                        if (result.isConfirmed) {
+                            submitForm()
+                        } else if (result.isDenied) {
+                        }
                     })
                 }else{
                     submitForm()

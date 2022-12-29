@@ -157,10 +157,10 @@
                 $("#hiddenAtender").val(idunico);
                 $('#conf_descarga').val(confirmo_descarga);
 
-                if(confirmo_descarga == 1){
-                    $('#sustento_adjunto').css({'display':'block'});
-                }else{
-                    $('#sustento_adjunto').css({'display':'none'});
+                if (confirmo_descarga == 1) {
+                    $('#sustento_adjunto').css({'display': 'block'});
+                } else {
+                    $('#sustento_adjunto').css({'display': 'none'});
                 }
 
                 //RecuperarAdjuntos(idunico);
@@ -201,22 +201,21 @@
                 evento.preventDefault();
                 console.log("no atender")
                 var fd = new FormData();
-                fd.append( 'hiddenAtender', $("#hiddenAtender").val() );
+                fd.append('hiddenAtender', $("#hiddenAtender").val());
                 $.ajax({
                     data: fd,
                     processData: false,
                     contentType: false,
                     type: 'POST',
-                    url:"{{ route('operaciones.atenderiddismiss') }}",
-                    success:function(data)
-                    {
+                    url: "{{ route('operaciones.atenderiddismiss') }}",
+                    success: function (data) {
                         console.log(data);
                         $("#modal-editar-atencion .textcode").text('');
                         $("#modal-editar-atencion").modal("hide");
                         $('#tablaPrincipal').DataTable().ajax.reload();
                     }
                 });
-                });
+            });
 
             $('#modal-envio').on('show.bs.modal', function (event) {
                 //cuando abre el form de anular pedido
@@ -248,37 +247,35 @@
                 console.log(cnf_adjunto);
 
 
-
-
                 var data = new FormData();
                 data.append('hiddenAtender', idunicoconfirmar);
                 data.append('fecha_envio_doc', fecha_envio_doc_confirmar);
                 data.append('cant_compro', cant_compro_confirmar);
 
-                if(cnf_adjunto == 1){
+                if (cnf_adjunto == 1) {
 
                     console.log("tiene adjuntos");
 
                     var sustento = $('#sustento_data').val();
 
-                    if(sustento == ""){
+                    if (sustento == "") {
                         Swal.fire(
                             'Error',
                             'Ingrese un sustento para continuar',
                             'warning'
                         )
                         return false;
-                    }else if(sustento.length<50){
+                    } else if (sustento.length < 50) {
                         Swal.fire(
                             'Error',
                             'Debe ingresar al menos 50 caracteres',
                             'warning'
                         )
                         return false;
-                    }else{
+                    } else {
                         data.append('sustento', sustento);
                     }
-                }else{
+                } else {
                     data.append('sustento', "");
                 }
 
@@ -311,6 +308,24 @@
             $(document).on("submit", "#formularioatender", function (evento) {
                 evento.preventDefault();
                 var cant_compro = document.getElementById('cant_compro').value;
+                var cant_compro_attachment = document.getElementById('adjunto_total_attachment');//adjuntos en el servidor
+                if (!cant_compro_attachment) {
+                    cant_compro_attachment = 0
+                } else {
+                    cant_compro_attachment = parseInt(cant_compro_attachment.value);
+                    if (isNaN(cant_compro_attachment)) {
+                        cant_compro_attachment = 0;
+                    }
+                }
+                if (cant_compro_attachment == 0) {
+                    Swal.fire(
+                        'Error',
+                        'No hay archivos adjuntados',
+                        'warning'
+                    )
+                    return false;
+                }
+
                 if (!cant_compro) {
                     cant_compro = 0;
                 }
@@ -319,11 +334,7 @@
                 if (isNaN(cant_compro)) {
                     cant_compro = 0;
                 }
-
-                var data = new FormData(document.getElementById("formularioatender"));
-                data.delete('adjunto')
-                data.delete('adjunto[]')
-                if (cant_compro==0) {
+                if (cant_compro == 0) {
                     Swal.fire(
                         'Error',
                         'Debe colocar la cantidad de archivos',
@@ -331,22 +342,45 @@
                     )
                     return false;
                 }
-                $.ajax({
-                    data: data,
-                    processData: false,
-                    contentType: false,
-                    type: 'POST',
-                    url: "{{ route('operaciones.atenderid') }}",
-                    success: function (data) {
-                        console.log(data);
-                        $("#modal-editar-atencion .textcode").text('');
-                        $("#modal-editar-atencion").modal("hide");
-                        $('#tablaPrincipal').DataTable().ajax.reload();
 
-                    }
+                function submitForm() {
+                    var data = new FormData(document.getElementById("formularioatender"));
+                    data.delete('adjunto')
+                    data.delete('adjunto[]')
+                    $.ajax({
+                        data: data,
+                        processData: false,
+                        contentType: false,
+                        type: 'POST',
+                        url: "{{ route('operaciones.atenderid') }}",
+                        success: function (data) {
+                            console.log(data);
+                            $("#modal-editar-atencion .textcode").text('');
+                            $("#modal-editar-atencion").modal("hide");
+                            $('#tablaPrincipal').DataTable().ajax.reload();
+                        }
 
-                });
-                //console.log(fd);
+                    });
+                }
+
+                if (cant_compro != cant_compro_attachment) {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Aviso',
+                        html: `La cantidad de archivos es (${cant_compro_attachment}) y es diferente a la cantidad de facturas (${cant_compro})<br><b>¿Desea continuar?</b>`,
+                        confirmButtonText: 'Aceptar y continuar',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            submitForm()
+                        } else if (result.isDenied) {
+                        }
+                    })
+                } else {
+                    submitForm()
+                }
             });
 
 
@@ -381,8 +415,10 @@
                             }
                         });
                     }
-                }).done(function (data) {
-                });
+                })
+                    .done(function (data) {
+                        $("#adjunto").val(null)
+                    });
                 return false;
 
 
@@ -398,7 +434,7 @@
                 fddeleteadjunto.append('eliminar_pedido_id', pedidoidimagenes);
                 fddeleteadjunto.append('eliminar_pedido_id_imagen', $("#eliminar_pedido_id_imagen").val());
                 fddeleteadjunto.append('eliminar_pedido_id_confirmado', pedidoconfirmado);
-                
+
                 console.log(fddeleteadjunto);
 
                 //return false;
@@ -638,8 +674,8 @@
                                 @can('operacion.enviar')
                             if (row.envio == '0') {
                                 @if (Auth::user()->rol == "Jefe de operaciones" || Auth::user()->rol == "Administrador" || Auth::user()->rol == "Operario")
-                                    data = data + '<a href="" class="btn-sm dropdown-item" data-target="#modal-envio" data-envio=' + row.id + ' data-codigo='+row.codigos+' data-toggle="modal" ><i class="fa fa-envelope text-success" aria-hidden="true"></i> Con sobre</a>';
-                                    data = data + '<a href="" class="btn-sm dropdown-item" data-target="#modal-sinenvio" data-sinenvio=' + row.id + ' data-codigo='+row.codigos+' data-toggle="modal" ><i class="fa fa-times text-danger" aria-hidden="true"></i> Sin sobre</a>';
+                                    data = data + '<a href="" class="btn-sm dropdown-item" data-target="#modal-envio" data-pedido_sobre_text="CON SOBRE" data-envio=' + row.id + ' data-codigo=' + row.codigos + ' data-toggle="modal" ><i class="fa fa-envelope text-success" aria-hidden="true"></i> Con sobre</a>';
+                                data = data + '<a href="" class="btn-sm dropdown-item" data-target="#modal-sinenvio" data-pedido_sobre_text="SIN SOBRE" data-sinenvio=' + row.id + ' data-codigo=' + row.codigos + ' data-toggle="modal" ><i class="fa fa-times text-danger" aria-hidden="true"></i> Sin sobre</a>';
                                 @endif
 
                             }

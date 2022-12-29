@@ -93,9 +93,9 @@ class Pedido extends Model
 
     public static $estadosCondicionCode = [
         4 => 'ANULADO',
-        1 => 'POR ATENDER',
-        2 => 'EN PROCESOS DE ATENCION',
-        3 => 'ATENDIDO',
+        1 => 'POR ATENDER - OPE',
+        2 => 'EN ATENCION - OPE',
+        3 => 'ATENDIDO - OPE',
     ];
 
     /******************
@@ -311,14 +311,57 @@ class Pedido extends Model
         }
         if (in_array(User::ROL_ENCARGADO, $roles)) {
             if (auth()->user()->rol == User::ROL_ENCARGADO) {
-                return $query->whereIn($this->qualifyColumn('user_id'), User::query()->select('id')->activo()->where('users.supervisor', auth()->id()));
+                return $query->whereIn(
+                    $this->qualifyColumn('user_id'), 
+                    User::query()->select('id')->activo()->where('users.supervisor', auth()->id())
+                );
             }
         }
+
+        if (in_array(User::ROL_LLAMADAS, $roles)) {
+            if (auth()->user()->rol == User::ROL_LLAMADAS) {
+                return $query->whereIn(
+                    $this->qualifyColumn('user_id'), 
+                    User::query()->select('id')->activo()->where('users.llamada', auth()->id())
+                );
+            }
+        }
+
+        if (in_array(User::ROL_OPERARIO, $roles)) {
+            if (auth()->user()->rol == User::ROL_OPERARIO) {
+                return $query->whereIn(
+                    $this->qualifyColumn('user_id'), 
+                    User::query()->select('id')->activo()->where('users.operario', auth()->id())
+                );
+            }
+        }
+        
         if (in_array(User::ROL_ASESOR, $roles)) {
             if (auth()->user()->rol == User::ROL_ASESOR) {
                 return $query->where($this->qualifyColumn('user_id'), '=', auth()->id());
             }
         }
+
+        if (in_array(User::ROL_JEFE_LLAMADAS, $roles)) {            
+            return $query;
+        }
+        
+        
+
+        if (in_array(User::ROL_JEFE_OPERARIO, $roles)) {
+            if (auth()->user()->rol == User::ROL_JEFE_OPERARIO) {
+
+                return $query->where($this->qualifyColumn('user_id'), '=', auth()->id());
+            }
+        }
+
+        if (in_array(User::ROL_ASESOR_ADMINISTRATIVO, $roles)) {
+            if (auth()->user()->rol == User::ROL_ASESOR_ADMINISTRATIVO) {
+                return $query->where($this->qualifyColumn('user_id'), '=', auth()->id());
+            }
+        }
+
+
         return $query;
     }
 }
