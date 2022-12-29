@@ -131,7 +131,7 @@
                         <table id="tabla_pedidos" class="table table-striped" style="text-align: center">
                             <thead class="bg-info">
                             <tr>
-                                <th scope="col">ITEM</th>
+                                 <th scope="col">ITEM</th>
                                 {{-- <th scope="col">PEDIDO</th> --}}
                                 <th scope="col">CODIGO</th>
                                 {{--<th scope="col">MONTO</th>--}}
@@ -950,7 +950,7 @@
                 columns:
                     [
                         {
-                            data: 'id'
+                            data: 'id', "visible":false
                         },
                         {
                             data: 'codigo'
@@ -1609,7 +1609,7 @@
                                 } else {
                                     return '<input type="hidden" name="pedido_id[' + data + ']" value="' + data + '">PED' + data + '</td>';
                                 }
-                            }
+                            }, "visible":false
                         },
                         {data: 'codigo', name: 'codigo',},
 
