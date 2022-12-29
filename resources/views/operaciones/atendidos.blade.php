@@ -588,6 +588,27 @@
                 $("#hiddenRevertirpedidoporatender").val(idunico);
             });
 
+            $(document).on("submit", "#formulariorevertirporatender", function (evento) {
+                evento.preventDefault();
+                var fd = new FormData();
+                fd.append( 'hiddenRevertirpedidoporatender', $("#hiddenRevertirpedidoporatender").val() );
+
+                $.ajax({
+                data: fd,
+                processData: false,
+                contentType: false,
+                type: 'POST',
+                url:"{{ route('operaciones.revertirenvioidporatender') }}",
+                success:function(data)
+                {
+                    console.log(data);
+                    $("#modal-revertir .textcode").text('');
+                    $("#modal-revertir").modal("hide");
+                    $('#tablaPrincipal').DataTable().ajax.reload();
+                }
+                });
+            });
+
             $('#tablaPrincipal').DataTable({
                 processing: true,
                 serverSide: true,
