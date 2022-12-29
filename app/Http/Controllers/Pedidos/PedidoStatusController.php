@@ -308,6 +308,8 @@ class PedidoStatusController extends Controller
         if (!\auth()->user()->can('pedidos.estados.atendidos')) {
             abort(401);
         }
+        
+        
         $pedidos_atendidos = Pedido::query()->activo()->segunRolUsuario([User::ROL_ADMIN, User::ROL_ENCARGADO, User::ROL_ASESOR])
             //->atendidos()
             ->noPendingAnulation()

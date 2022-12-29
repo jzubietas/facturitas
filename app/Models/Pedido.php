@@ -314,11 +314,48 @@ class Pedido extends Model
                 return $query->whereIn($this->qualifyColumn('user_id'), User::query()->select('id')->activo()->where('users.supervisor', auth()->id()));
             }
         }
+        
         if (in_array(User::ROL_ASESOR, $roles)) {
             if (auth()->user()->rol == User::ROL_ASESOR) {
                 return $query->where($this->qualifyColumn('user_id'), '=', auth()->id());
             }
         }
+
+
+        if (in_array(User::ROL_JEFE_LLAMADAS, $roles)) {
+            
+            if ( auth()->user()->rol == User::ROL_JEFE_LLAMADAS ) {
+                return $query->where($this->qualifyColumn('user_id'), '=', auth()->id());
+            }
+
+
+        }
+
+        
+        if (in_array(User::ROL_LLAMADAS, $roles)) {
+            if (auth()->user()->rol == User::ROL_LLAMADAS) {
+                return $query->where($this->qualifyColumn('user_id'), '=', auth()->id());
+            }
+        }
+
+
+        if (in_array(User::ROL_JEFE_OPERARIO, $roles)) {
+            if (auth()->user()->rol == User::ROL_JEFE_OPERARIO) {
+                return $query->where($this->qualifyColumn('user_id'), '=', auth()->id());
+            }
+        }
+
+
+        if (in_array(User::ROL_OPERARIO, $roles)) {
+            if (auth()->user()->rol == User::ROL_OPERARIO) {
+                return $query->where($this->qualifyColumn('user_id'), '=', auth()->id());
+            }
+        }
+
+    
+
+
+
         return $query;
     }
 }
