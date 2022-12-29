@@ -172,6 +172,9 @@ class NotificationsController extends Controller
 
         // Estado de pediddos
         $contador_pedidos_atendidos = Pedido::join('users as u', 'pedidos.user_id', 'u.id')
+            ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
+            ->where('pedidos.estado', '1')
+            ->where('dp.estado', '1')
             //->atendidos()
             ->noPendingAnulation()
             ->where('da_confirmar_descarga', '0')
@@ -212,9 +215,7 @@ class NotificationsController extends Controller
 
         } else {
             $contador_pedidos_atendidos = $contador_pedidos_atendidos;
-
         }
-
 
         $contador_pedidos_atendidos = $contador_pedidos_atendidos->count();
 
