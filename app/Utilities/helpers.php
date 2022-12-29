@@ -10,15 +10,15 @@ if (!function_exists("generate_bar_code")) {
      * @return object|string
      * @throws \Com\Tecnick\Barcode\Exception
      */
-    function generate_bar_code($data, int $width=-2, int $height=-100, string $color='black', bool $exportUrlData = true, string $type="C39")
+    function generate_bar_code($data, int $width = -2, int $height = -100, string $color = 'black', bool $exportUrlData = true, string $type = "C39")
     {
         $barcode = new \Com\Tecnick\Barcode\Barcode();
 
-        if($width>0){
-            $width=-$width;
+        if ($width > 0) {
+            $width = -$width;
         }
-        if($height>0){
-            $height=-$height;
+        if ($height > 0) {
+            $height = -$height;
         }
 
         $bobj = $barcode->getBarcodeObj(
@@ -39,16 +39,40 @@ if (!function_exists("generate_bar_code")) {
 }
 
 if (!function_exists("generate_correlativo")) {
-    function generate_correlativo($prefix,$next,$digit=4 )
+    function generate_correlativo($prefix, $next, $digit = 4)
     {
         return $prefix . str_pad($next, $digit, '0', STR_PAD_LEFT);
     }
 }
 
 if (!function_exists("money_f")) {
-    function money_f($amount,$currency='PEN',$locale='es-PE')
+    function money_f($amount, $currency = 'PEN', $locale = 'es-PE')
     {
         $a = new \NumberFormatter($locale, \NumberFormatter::CURRENCY);
         return $a->formatCurrency($amount, $currency);
+    }
+}
+
+if (!function_exists("get_color_role")) {
+    function get_color_role()
+    {
+        return [
+            'Administrador' => ['#343a40','#fff'],
+            'Apoyo administrativo' => ['#525252','#fff'],
+            'ASESOR ADMINISTRATIVO' => ['#7c7c7c','#000'],
+
+            'Jefe de operaciones' => ['#e74c3c','#fff'],
+            'Jefe de llamadas' => '#e83e8c',
+            'Encargado' => '#6f42c1',
+            'Llamadas' => '#fd7e14',
+            'Asesor' => ['#f39c12','#000'],
+
+            'Asistente de Pagos' => ['#28a745','#fff'],
+
+            'Logística' => '#795548',
+            'Operario' => '#03a9f4',
+            'FORMACIÓN' => '#20c997',
+            'PRACTICANTE' => '#9e9e9e',
+        ];
     }
 }

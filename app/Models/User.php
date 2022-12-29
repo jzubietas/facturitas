@@ -143,6 +143,16 @@ class User extends Authenticatable
     {
         $user = User::find(Auth()->user()->id);
 
+        switch ($user->id){
+            case 1:
+                return asset('/imagenes/avatar-admin.png');
+                break;
+            case 13:
+                return asset('/imagenes/avatar-jefe-asesor.png');
+                default:
+                    return asset('/imagenes/avatar-asesor.png');
+        }
+
         return '/../storage/users/' . $user->profile_photo_path;
     }
 
@@ -164,4 +174,6 @@ class User extends Authenticatable
     {
         return $this->scopeRol($query, self::ROL_ASESOR);
     }
+
+
 }

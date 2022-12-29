@@ -205,7 +205,6 @@
 
                     }
                 }).done(function (data) {
-
                 });
 
                 return false;
@@ -238,6 +237,24 @@
             $(document).on("submit", "#formularioatender", function (evento) {
                 evento.preventDefault();
                 var cant_compro = document.getElementById('cant_compro').value;
+                var cant_compro_attachment = document.getElementById('adjunto_total_attachment');//adjuntos en el servidor
+                if (!cant_compro_attachment) {
+                    cant_compro_attachment = 0
+                } else {
+                    cant_compro_attachment = parseInt(cant_compro_attachment.value);
+                    if (isNaN(cant_compro_attachment)) {
+                        cant_compro_attachment = 0;
+                    }
+                }
+                if(cant_compro_attachment==0){
+                    Swal.fire(
+                        'Error',
+                        'No hay archivos adjuntados',
+                        'warning'
+                    )
+                    return false;
+                }
+
                 if (!cant_compro) {
                     cant_compro = 0;
                 }
@@ -246,11 +263,7 @@
                 if (isNaN(cant_compro)) {
                     cant_compro = 0;
                 }
-
-                var data = new FormData(document.getElementById("formularioatender"));
-                data.delete('adjunto')
-                data.delete('adjunto[]')
-                if (cant_compro==0) {
+                if (cant_compro == 0) {
                     Swal.fire(
                         'Error',
                         'Debe colocar la cantidad de archivos',
@@ -258,21 +271,41 @@
                     )
                     return false;
                 }
-                $.ajax({
-                    data: data,
-                    processData: false,
-                    contentType: false,
-                    type: 'POST',
-                    url: "{{ route('operaciones.atenderid') }}",
-                    success: function (data) {
-                        console.log(data);
-                        $("#modal-atender .textcode").text('');
-                        $("#modal-atender").modal("hide");
-                        $('#tablaPrincipal').DataTable().ajax.reload();
 
-                    }
+                function submitForm() {
+                    var data = new FormData(document.getElementById("formularioatender"));
+                    data.delete('adjunto')
+                    data.delete('adjunto[]')
+                    $.ajax({
+                        data: data,
+                        processData: false,
+                        contentType: false,
+                        type: 'POST',
+                        url: "{{ route('operaciones.atenderid') }}",
+                        success: function (data) {
+                            console.log(data);
+                            $("#modal-atender .textcode").text('');
+                            $("#modal-atender").modal("hide");
+                            $('#tablaPrincipal').DataTable().ajax.reload();
 
-                });
+                        }
+
+                    });
+                }
+
+                if(cant_compro!=cant_compro_attachment){
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Aviso',
+                        text: `La cantidad de adjuntos (${cant_compro_attachment}) es diferente a la cantidad de facturas ingresadas (${cant_compro})`,
+                        confirmButtonText: 'Aceptar y continuar',
+                    }).then((result) => {
+                        submitForm()
+                    })
+                }else{
+                    submitForm()
+                }
+
                 console.log(fd);
             });
 
@@ -286,7 +319,7 @@
                 $("#hiddenAtender").val(idunico);
                 $("#cant_compro").val(cant_compro);
 
-                $("#adjunto").val("");
+                $("#adjunto").val(null);
 
                 $.ajax({
                     url: "{{ route('operaciones.editatencion',':id') }}".replace(':id', idunico),
@@ -335,6 +368,7 @@
                         });
                     }
                 }).done(function (data) {
+                    $("#adjunto").val(null)
                 });
                 return false;
 
