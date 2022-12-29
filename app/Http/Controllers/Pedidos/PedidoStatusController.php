@@ -308,9 +308,8 @@ class PedidoStatusController extends Controller
         if (!\auth()->user()->can('pedidos.estados.atendidos')) {
             abort(401);
         }
-        
-        
-        $pedidos_atendidos = Pedido::query()->activo()->segunRolUsuario([User::ROL_ADMIN, User::ROL_ENCARGADO, User::ROL_ASESOR,User::ROL::ROL_LLAMADAS])
+                
+        $pedidos_atendidos = Pedido::query()->activo()->segunRolUsuario([User::ROL_ADMIN, User::ROL_ENCARGADO, User::ROL_ASESOR,User::ROL_LLAMADAS,User::ROL_JEFE_LLAMADAS])
             //->atendidos()
             ->noPendingAnulation()
             ->where('da_confirmar_descarga', '0')
@@ -320,13 +319,13 @@ class PedidoStatusController extends Controller
 
         $pedidos_atendidos_total = Pedido::query()
             ->activo()
-            ->segunRolUsuario([User::ROL_ADMIN, User::ROL_ENCARGADO, User::ROL_ASESOR,User::ROL::ROL_LLAMADAS])
+            ->segunRolUsuario([User::ROL_ADMIN, User::ROL_ENCARGADO, User::ROL_ASESOR,User::ROL_LLAMADAS,User::ROL_JEFE_LLAMADAS])
             ->noPendingAnulation()
             ->where('da_confirmar_descarga', '0')
             ->whereNotIn('pedidos.condicion_code', [Pedido::POR_ATENDER_OPE_INT, Pedido::EN_ATENCION_OPE_INT])
             ->count();
 
-        $pedidos_por_atender = Pedido::query()->activo()->segunRolUsuario([User::ROL_ADMIN, User::ROL_ENCARGADO, User::ROL_ASESOR,User::ROL::ROL_LLAMADAS])->porAtender()->noPendingAnulation()->count();
+        $pedidos_por_atender = Pedido::query()->activo()->segunRolUsuario([User::ROL_ADMIN, User::ROL_ENCARGADO, User::ROL_ASESOR,User::ROL_LLAMADAS,User::ROL_JEFE_LLAMADAS])->porAtender()->noPendingAnulation()->count();
 
         if ($request->has('ajax-datatable')) {
 
@@ -410,8 +409,6 @@ class PedidoStatusController extends Controller
     
                 $pedidos = $pedidos->WhereIn('u.identificador', $usersasesores);
             }
-            
-            
             
             elseif (Auth::user()->rol == "Encargado") {
                 $usersasesores = User::whereIn('users.rol', ['Asesor', User::ROL_ADMIN])
