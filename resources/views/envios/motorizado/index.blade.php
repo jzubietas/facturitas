@@ -1,10 +1,10 @@
 @extends('adminlte::page')
 
-@section('title', 'Confirmar Cliente ')
+@section('title', 'Motorizado')
 
 @section('content_header')
     <h1>
-        Confirmar Cliente
+        Motorizado
     </h1>
 @stop
 
@@ -59,7 +59,7 @@
                 serverSide: true,
                 searching: true,
                 order: [[0, "desc"]],
-                ajax: "{{ route('envios.motorizados.confirmar.cliente',['datatable'=>1]) }}",
+                ajax: "{{ route('envios.motorizados.index',['datatable'=>1]) }}",
                 createdRow: function (row, data, dataIndex) {
 
                 },

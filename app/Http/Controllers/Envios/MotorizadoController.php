@@ -139,6 +139,6 @@ class MotorizadoController extends Controller
                 ->rawColumns(['action'])
                 ->toJson();
         }
-        return view('envios.motorizado.index');
+        return view('envios.motorizado.confirmar_cliente');
     }
 }
