@@ -91,6 +91,7 @@
                                         }).always(function (){
                                             self.close()
                                             self.hideLoading(true)
+                                            $('#tablaPrincipal').DataTable().ajax.reload();
                                         });
                                     }
                                 },
