@@ -1,4 +1,9 @@
 <?php
+
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+
 if (!function_exists("generate_bar_code")) {
     /**
      * @param string|numeric $data
@@ -57,22 +62,53 @@ if (!function_exists("get_color_role")) {
     function get_color_role()
     {
         return [
-            'Administrador' => ['#343a40','#fff'],
-            'Apoyo administrativo' => ['#525252','#fff'],
-            'ASESOR ADMINISTRATIVO' => ['#7c7c7c','#000'],
+            'Administrador' => ['#343a40', '#fff'],
+            'Apoyo administrativo' => ['#525252', '#fff'],
+            'ASESOR ADMINISTRATIVO' => ['#7c7c7c', '#000'],
 
-            'Jefe de operaciones' => ['#e74c3c','#fff'],
+            'Jefe de operaciones' => ['#e74c3c', '#fff'],
             'Jefe de llamadas' => '#e83e8c',
             'Encargado' => '#6f42c1',
             'Llamadas' => '#fd7e14',
-            'Asesor' => ['#f39c12','#000'],
+            'Asesor' => ['#f39c12', '#000'],
 
-            'Asistente de Pagos' => ['#28a745','#fff'],
+            'Asistente de Pagos' => ['#28a745', '#fff'],
 
             'Logística' => '#795548',
             'Operario' => '#03a9f4',
             'FORMACIÓN' => '#20c997',
             'PRACTICANTE' => '#9e9e9e',
         ];
+    }
+}
+
+if (!function_exists("add_query_filtros_por_roles")) {
+    function add_query_filtros_por_roles($query, $table, $column = 'identificador')
+    {
+        if (Auth::user()->rol == User::ROL_ASESOR) {
+
+            $query->Where($table . '.' . $column, auth()->user()->identificador);
+
+        } else if (Auth::user()->rol == User::ROL_ENCARGADO) {
+
+            $usersasesores = User::where('rol', User::ROL_ASESOR)
+                ->activo()
+                ->where('supervisor', auth()->user()->id)
+                ->pluck('identificador');
+            $query->whereIn($table . '.' . $column, $usersasesores);
+
+        } else if (Auth::user()->rol == User::ROL_LLAMADAS) {
+
+            $usersasesores = User::where('rol', User::ROL_ASESOR)
+                ->activo()
+                ->where('llamada', auth()->user()->id)
+                ->pluck('identificador');
+            $query->whereIn($table . '.' . $column, $usersasesores);
+
+        } else if (Auth::user()->rol == User::ROL_JEFE_LLAMADAS) {
+
+            $query->where($table . '.' . $column, '<>', 'B');
+
+        }
     }
 }
