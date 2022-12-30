@@ -10,6 +10,8 @@
 
 @section('content')
 
+    @include('envios.motorizado.modal.entregado')
+
     <div class="card">
         <div class="card-body">
             <table id="tablaPrincipal" style="width:100%;" class="table table-striped">
@@ -177,6 +179,116 @@
                         "previous": "Anterior"
                     }
                 },
+            });
+
+            $('#modal-motorizado-entregar').on('show.bs.modal', function (event) {
+                //adjunta dos fotos
+                var button = $(event.relatedTarget)
+                var idunico = button.data('entregar')//
+                console.log(idunico);
+                var idcodigo = button.data('codigos')//
+                $(".textcode").html(idcodigo);
+                $("#hiddenMotorizadoEntregar").val(idunico)
+
+            })
+
+            $(document).on("change","#adjunto1",function(event){
+                console.log("cambe image")
+                var file = event.target.files[0];
+                var reader = new FileReader();
+                reader.onload = (event) => {
+                    document.getElementById("picture1").setAttribute('src', event.target.result);
+                };
+                reader.readAsDataURL(file);
+            });
+
+            $(document).on("change","#adjunto2",function(event){
+                console.log("cambe image")
+                var file = event.target.files[0];
+                var reader = new FileReader();
+                reader.onload = (event) => {
+                    document.getElementById("picture2").setAttribute('src', event.target.result);
+                };
+                reader.readAsDataURL(file);
+            });
+
+            $(document).on("submit", "#formulariomotorizadoentregar", function (evento) {
+                evento.preventDefault();
+                var fd2 = new FormData();
+
+                fd2.append('hiddenMotorizadoEntregar', $('#hiddenMotorizadoEntregar').val());
+                fd2.append('fecha_envio_doc_fis', $('#fecha_envio_doc_fis').val());
+                fd2.append('fecha_recepcion', $('#fecha_recepcion').val());
+
+                $.ajax({
+                    data: fd2,
+                    processData: false,
+                    contentType: false,
+                    type: 'POST',
+                    url: "{{ route('operaciones.confirmarmotorizado') }}",
+                    success: function (data) {
+                        $("#modal-motorizado-entregar").modal("hide");
+                        $('#tablaPrincipal').DataTable().ajax.reload();
+
+                    }
+                });
+            });
+
+            $(document).on("click", "#cerrarmotorizadoentregar", function (evento) {
+                evento.preventDefault();
+                var fd = new FormData();
+                fd.append('hiddenMotorizadoEntregar', $("#hiddenMotorizadoEntregar").val());
+                $.ajax({
+                    data: fd,
+                    processData: false,
+                    contentType: false,
+                    type: 'POST',
+                    url: "{{ route('operaciones.confirmarmotorizadodismiss') }}",
+                    success: function (data) {
+                        //console.log(data);
+                        $("#modal-motorizado-entregar .textcode").text('');
+                        $("#modal-motorizado-entregar").modal("hide");
+                        $('#tablaPrincipal').DataTable().ajax.reload();
+                    }
+                });
+            });
+
+            $(document).on("change", "#adjunto1", function (evento) {
+                $("#cargar_adjunto1").trigger("click");
+            });
+
+            $(document).on("change", "#adjunto1", function (evento) {
+                $("#cargar_adjunto2").trigger("click");
+            });
+
+            $(document).on("click", "#cargar_adjunto1", function (evento) {
+                let idunico = $("#hiddenMotorizadoEntregar").val();
+                var data = new FormData(document.getElementById("formulariomotorizadoentregar"));
+                $("#loading_upload_attachment_file").show()
+                $("#adjunto1").hide()
+                $.ajax({
+                    type: 'POST',
+                    url: "{{ route('operaciones.updateatendersinconfirmar',':id') }}".replace(':id', idunico),
+                    data: data,
+                    processData: false,
+                    contentType: false,
+                    success: function (data) {
+                        $('#cargar_adjunto').prop("disabled", false);
+                        $('#cargar_adjunto').text('Subir Informacion');
+                        console.log(data)
+                        console.log("obtuve las imagenes atencion del pedido " + idunico)
+                        $('#listado_adjuntos').html(data);
+                    }
+                })
+                    .done(function (data) {
+                        $("#adjunto").val(null)
+                    })
+                    .always(function () {
+                        $("#adjunto").show()
+                        $("#loading_upload_attachment_file").hide()
+                    });
+
+
             });
         });
     </script>

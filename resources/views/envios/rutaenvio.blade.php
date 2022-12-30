@@ -320,7 +320,7 @@
           },
         },
         rowCallback: function (row, data, index) {
-            console.log(data.destino2)
+            
               if(data.destino2=='PROVINCIA'){
                 $('td', row).css('color','red')
 

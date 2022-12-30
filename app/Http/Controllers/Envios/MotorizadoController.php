@@ -48,6 +48,25 @@ class MotorizadoController extends Controller
                 ->addIndexColumn()
                 ->addColumn('action', function ($pedido) {
                     $btn = '';
+
+                    $btn.='<ul class="list-unstyled pl-0">';
+                        /*$btn.='<li>
+                                    <a href="" class="btn-sm text-secondary" data-target="#modal-motorizado-entregar" data-toggle="modal" data-entregar="'.$pedido->id.'" data-destino="'.$pedido->destino.'" data-fechaenvio="'.$pedido->fecha.'" data-codigos="'.$pedido->codigos.'">
+                                        <i class="fas fa-envelope text-success"></i>A confirmar</a></li>
+                                    </a>
+                                </li>';*/
+                        $btn.='<li>
+                                    <a href="" class="btn-sm text-secondary" data-target="#modal-motorizado-entregar"  data-codigos="'.$pedido->codigos.'" data-toggle="modal" data-ide="'.$pedido->id.'" data-destino="'.$pedido->destino.'" data-fechaenvio="'.$pedido->fecha.'">
+                                        <i class="fa fa-motorcycle text-primary" aria-hidden="true"></i> A confirmacion
+                                    </a>
+                                </li>';
+                        /*$btn.='<li>
+                                    <a href="" class="btn-sm text-secondary" data-target="#modal-recibir" data-toggle="modal" data-recibir="'.$pedido->id.'">
+                                        <i class="fa fa-motorcycle text-primary" aria-hidden="true"></i>Recibido
+                                    </a>
+                                </li>';*/
+                    $btn.='</ul>';
+
                     return $btn;
                 })
                 ->rawColumns(['action'])
@@ -91,6 +110,14 @@ class MotorizadoController extends Controller
                 ->addIndexColumn()
                 ->addColumn('action', function ($pedido) {
                     $btn = '';
+                    $btn.='<ul class="list-unstyled pl-0">';
+                        $btn.='<li>
+                                    <a href="" class="btn-sm text-secondary" data-target="#modal-motorizado-entregar-confirm" data-toggle="modal" data-entregar-confirm="'.$pedido->id.'" data-destino="'.$pedido->destino.'" data-fechaenvio="'.$pedido->fecha.'" data-codigos="'.$pedido->codigos.'">
+                                        <i class="fas fa-envelope text-success"></i> A cliente</a></li>
+                                    </a>
+                                </li>';
+                    $btn.='</ul>';
+
                     return $btn;
                 })
                 ->rawColumns(['action'])
