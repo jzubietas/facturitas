@@ -1956,6 +1956,8 @@ class EnvioController extends Controller
     {
         $envio = DireccionGrupo::where("id", $request->hiddenCodigo)->first();
         $envio->update([
+            'foto1' => '',
+            'foto2' => '',
             'condicion_envio' => Pedido::MOTORIZADO,
             'condicion_envio_code' => Pedido::MOTORIZADO,
         ]);
