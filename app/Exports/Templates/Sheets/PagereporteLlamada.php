@@ -21,8 +21,8 @@ class PagereporteLlamada extends Export implements WithColumnFormatting,WithColu
 
         $informacion=Cliente::
         select(
-            'clientes.id'
-            ,'clientes.user_id'
+            //'clientes.id'
+            'clientes.user_id'
             ,DB::raw(" (select u.identificador from users u where u.id=clientes.user_id and u.Rol='Asesor' ) as asesor ")
             .DB::raw("   
                 select ua.name from users ua where u.id in 
@@ -52,15 +52,14 @@ class PagereporteLlamada extends Export implements WithColumnFormatting,WithColu
             ,'B' => 8
             ,'C' => 8
             ,'D' => 8
-            ,'E' => 8
         ];
     }
 
     public function fields(): array
     {
         return [
-            "cliente"=>"Ejercicio"
-            ,"asesor"=>"Periodo"
+            "cliente"=>"cliente"
+            ,"asesor"=>"asesor"
             ,"llamada"=>"Periodo2"
             ,"pedido"=>"grupo"
             ,"fecha_pedido"=>"total"
