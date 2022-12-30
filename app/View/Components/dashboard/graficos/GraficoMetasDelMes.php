@@ -15,8 +15,8 @@ class GraficoMetasDelMes extends Component
     public $novResult = [];
     public $dicResult = [];
 
-    public $excludeNov=[];
-    public $excludeDic=[];
+    public $excludeNov = [];
+    public $excludeDic = [];
 
     /**
      * Create a new component instance.
@@ -41,12 +41,12 @@ class GraficoMetasDelMes extends Component
 
         $data_diciembre = $this->generarDataDiciembre();
 
-        if(\auth()->user()->rol==User::ROL_ASESOR){
-            $this->novResult=[];
-            $this->dicResult=[];
+        if (\auth()->user()->rol == User::ROL_ASESOR) {
+            $this->novResult = [];
+            $this->dicResult = [];
         }
 
-        return view('components.dashboard.graficos.grafico-metas-del-mes', compact('data_noviembre', 'data_diciembre','now','now_submonth'));
+        return view('components.dashboard.graficos.grafico-metas-del-mes', compact('data_noviembre', 'data_diciembre', 'now', 'now_submonth'));
     }
 
     public function applyFilter($query, CarbonInterface $date = null, $column = 'created_at')
@@ -95,10 +95,7 @@ class GraficoMetasDelMes extends Component
             $pay = $this->applyFilter(Pedido::query()->where('user_id', $asesor->id)->activo()->pagados(), $date, 'created_at')
                 ->count();
 
-            if($asesor->excluir_meta){
-                //$this->excludeNov[]=
-            }
-            $progressData[] = [
+            $item = [
                 "identificador" => $asesor->identificador,
                 "code" => "Asesor {$asesor->identificador}",
                 "name" => $asesor->name,
@@ -106,7 +103,17 @@ class GraficoMetasDelMes extends Component
                 "current" => $pay,
                 "meta" => $metatotal,
             ];
-
+            if ($asesor->excluir_meta) {
+                if ($all > 0) {
+                    $p = intval(($pay / $all) * 100);
+                } else {
+                    $p = 0;
+                }
+                $item['progress']=$p;
+                $this->excludeNov[] = $item;
+            } else {
+                $progressData[] = $item;
+            }
         }
         $newData = [];
         $union = collect($progressData)->groupBy('identificador');
@@ -186,7 +193,7 @@ class GraficoMetasDelMes extends Component
             $asignados = $this->applyFilter(Pedido::query()->whereUserId($asesor->id)->activo())->count();
             //$pay = $this->applyFilter(Pedido::query())->whereUserId($asesor->id)->activo()->pagados()->count();
 
-            $progressData[] = [
+            $item =  [
                 "identificador" => $asesor->identificador,
                 "code" => "Asesor {$asesor->identificador}",
                 "name" => $asesor->name,
@@ -194,7 +201,17 @@ class GraficoMetasDelMes extends Component
                 "total" => $asignados,
                 //"current" => $pay,
             ];
-
+            if ($asesor->excluir_meta) {
+                if ($meta > 0) {
+                    $p = intval(($asignados / $meta) * 100);
+                } else {
+                    $p = 0;
+                }
+                $item['progress']=$p;
+                $this->excludeDic[] = $item;
+            } else {
+                $progressData[] = $item;
+            }
         }
 
         $newData = [];
