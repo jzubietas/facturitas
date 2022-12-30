@@ -348,8 +348,6 @@
             method: 'GET',
             success: function(data) {
 
-                console.log('prueba');
-                console.log(data);
               //$('#my-notification').html(data.html);
             }
           });

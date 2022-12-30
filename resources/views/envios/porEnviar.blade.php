@@ -84,7 +84,7 @@
 @stop
 
 @section('css')
-  <link rel="stylesheet" href="/css/admin_custom.css">
+  
   <style>
     img:hover{
       transform: scale(1.2)
@@ -149,7 +149,6 @@
         var idunico = button.data('ide')
         var codigos = button.data('codigos')
         
-
         $('.titulo-confirmacion').html("Enviar sobre a Motorizado");
 
         $("#hiddenCodigo").val(idunico)
@@ -331,7 +330,7 @@
           //console.log(row);
         },
         rowCallback: function (row, data, index) {
-            console.log(data.destino2)
+            
               if(data.destino2=='PROVINCIA'){
                 $('td', row).css('color','red')
 
@@ -471,33 +470,6 @@
             orderable: false,
             searchable: false,
             sWidth:'10%',
-            render: function ( data, type, row, meta ) {
-              datass='';
-
-
-
-              @if($ver_botones_accion > 0)
-                @can('envios.enviar')
-                  datass=datass+'<ul class="list-unstyled pl-0"><li><a href="" class="btn-sm text-secondary" data-target="#modal-enviar" data-toggle="modal" data-enviar="'+row.id+'" data-destino="'+row.destino+'"  data-fechaenvio="'+row.fecha+'">'+
-                    '<i class="fas fa-envelope text-success"></i> Entregado</a></li>' +
-                  '<li><a href="" class="btn-sm text-secondary" data-target="#modal-confirmacion" data-codigos="'+row.codigos+'" data-toggle="modal" data-ide="'+row.id+'" data-destino="'+row.destino+'"  data-fechaenvio="'+row.fecha+'"><i class="fa fa-motorcycle text-primary" aria-hidden="true"></i> Motorizado</a></li></ul>';
-                  if(row.envio=='1')
-                  {
-                    datass = datass+ '<a href="" class="btn-sm text-secondary" data-target="#modal-recibir" data-toggle="modal" data-recibir="'+row.id+'">'+
-                      '<i class="fa fa-motorcycle text-primary" aria-hidden="true"></i>Recibido</a>';
-                  }
-                @endcan
-              @endif
-
-              if(row.destino == null && row.direccion =='0' && (row.envio*1) >0)
-              {
-                var urldireccion = '{{ route("envios.createdireccion", ":id") }}';
-                urldireccion = urldireccion.replace(':id', row.id);
-                data = data+'<a href="'+urldireccion+'" class="btn btn-dark btn-sm"><i class="fas fa-map"></i> Destino</a><br>';
-              }
-
-              return datass;
-            }
           },
         ],
         language: {

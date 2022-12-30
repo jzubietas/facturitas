@@ -10,6 +10,8 @@
 
 @section('content')
 
+    @include('envios.motorizado.modal.entregadoconfirm')
+
     <div class="card">
         <div class="card-body">
             <table id="tablaPrincipal" style="width:100%;" class="table table-striped">
@@ -177,6 +179,56 @@
                         "previous": "Anterior"
                     }
                 },
+            });
+
+            $('#modal-motorizado-entregar-confirm').on('show.bs.modal', function (event) {
+                //adjunta dos fotos
+                var button = $(event.relatedTarget)
+                var idunico = button.data('entregar-confirm')//
+                console.log(idunico);
+                var idcodigo = button.data('codigos')//
+                $(".textcode").html(idcodigo);
+                $("#hiddenMotorizadoEntregarConfirm").val(idunico)
+
+            })
+
+            $(document).on("submit", "#formulariomotorizadoentregarconfirm", function (evento) {
+                evento.preventDefault();
+                var fd2 = new FormData();
+
+                fd2.append('hiddenMotorizadoEntregarConfirm', $('#hiddenMotorizadoEntregarConfirm').val());
+
+                $.ajax({
+                    data: fd2,
+                    processData: false,
+                    contentType: false,
+                    type: 'POST',
+                    url: "{{ route('operaciones.confirmarmotorizadoconfirm') }}",
+                    success: function (data) {
+                        $("#modal-motorizado-entregar-confirm").modal("hide");
+                        $('#tablaPrincipal').DataTable().ajax.reload();
+
+                    }
+                });
+            });
+
+            $(document).on("click", "#cerrarmotorizadoentregarconfirm", function (evento) {
+                evento.preventDefault();
+                var fd = new FormData();
+                fd.append('hiddenMotorizadoEntregarConfirm', $("#hiddenMotorizadoEntregarConfirm").val());
+                $.ajax({
+                    data: fd,
+                    processData: false,
+                    contentType: false,
+                    type: 'POST',
+                    url: "{{ route('operaciones.confirmarmotorizadoconfirmdismiss') }}",
+                    success: function (data) {
+                        //console.log(data);
+                        $("#modal-motorizado-entregar-confirm .textcode").text('');
+                        $("#modal-motorizado-entregar-confirm").modal("hide");
+                        $('#tablaPrincipal').DataTable().ajax.reload();
+                    }
+                });
             });
         });
     </script>

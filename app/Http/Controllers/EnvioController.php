@@ -215,6 +215,18 @@ class EnvioController extends Controller
                     ->addIndexColumn()
                     ->addColumn('action', function($pedido){
                         $btn='';
+
+                        if (auth()->user()->can('envios.enviar')):
+                        
+                        $btn.='<ul class="list-unstyled pl-0">';
+                            $btn.='<li>
+                                        <a href="" class="btn-sm text-secondary" data-target="#modal-confirmacion" data-toggle="modal" data-ide="'.$pedido->id.'" data-entregar-confirm="'.$pedido->id.'" data-destino="'.$pedido->destino.'" data-fechaenvio="'.$pedido->fecha.'" data-codigos="'.$pedido->codigos.'">
+                                            <i class="fas fa-envelope text-success"></i> A motorizado</a></li>
+                                        </a>
+                                    </li>';
+                        $btn.='</ul>';
+                        endif;
+
                         return $btn;
                     })
                     ->rawColumns(['action'])
@@ -1932,19 +1944,56 @@ class EnvioController extends Controller
 
     public function confirmarEstadoConfirm(Request $request)
     {
-        $envio=DireccionGrupo::where("id",$request->hiddenCodigo)->first();
+        $envio=DireccionGrupo::where("id",$request->hiddenMotorizadoEntregar)->first();
         $envio->update([
             'condicion_envio' => Pedido::CONFIRM_MOTORIZADO,
             'condicion_envio_code' => Pedido::CONFIRM_MOTORIZADO_INT,
         ]);
 
         PedidoMovimientoEstado::create([
-            'pedido' => $request->hiddenCodigo,
+            'pedido' => $request->hiddenMotorizadoEntregar,
             'condicion_envio_code' => Pedido::CONFIRM_MOTORIZADO_INT,
             'notificado' => 0
         ]);
 
         return response()->json(['html' => $envio->id]);
+    }
+
+    public function confirmarEstadoConfirmConfirm(Request $request)
+    {
+        $envio=DireccionGrupo::where("id",$request->hiddenMotorizadoEntregarConfirm)->first();
+        $envio->update([
+            'condicion_envio' => Pedido::ENTREGADO_CLIENTE,
+            'condicion_envio_code' => Pedido::ENTREGADO_CLIENTE_INT,
+        ]);
+
+        PedidoMovimientoEstado::create([
+            'pedido' => $request->hiddenMotorizadoEntregarConfirm,
+            'condicion_envio_code' => Pedido::ENTREGADO_CLIENTE_INT,
+            'notificado' => 0
+        ]);
+
+        return response()->json(['html' => $envio->id]);
+    }
+
+    public function confirmarEstadoConfirmDismiss(Request $request)
+    {
+        //$hiddenAtender = $request->hiddenMotorizadoEntregarConfirm;
+        /*$pedido = Pedido::where("id", $hiddenAtender)->first();
+        $imagenesatencion_ = ImagenAtencion::where("pedido_id", $hiddenAtender)->where("confirm", '0');
+        $imagenesatencion_->update([
+            'estado' => '0'
+        ]);*/
+    }
+
+    public function confirmarEstadoConfirmConfirmDismiss(Request $request)
+    {
+        //$hiddenAtender = $request->hiddenMotorizadoEntregarConfirm;
+        /*$pedido = Pedido::where("id", $hiddenAtender)->first();
+        $imagenesatencion_ = ImagenAtencion::where("pedido_id", $hiddenAtender)->where("confirm", '0');
+        $imagenesatencion_->update([
+            'estado' => '0'
+        ]);*/
     }
 
     public function confirmarEstadoConfirmValidada(Request $request)
