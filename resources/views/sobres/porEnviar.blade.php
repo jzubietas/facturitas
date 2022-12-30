@@ -1340,7 +1340,8 @@
               datass='';
 
               @if (Auth::user()->rol == "Asesor" || Auth::user()->rol == "Administrador")
-                datass=datass+'<a href="" data-target="#modal-direccion" data-toggle="modal" data-cliente="'+row.cliente_id+'" data-asesor="'+row.user_id+'" data-direccion="'+row.id+'" data-codigo="'+ row.id +'"><button class="btn btn-info btn-sm"><i class="fas fa-envelope"></i> Direccion</button></a>';
+              
+                datass=datass+'<a href="" data-target="#modal-direccion" data-toggle="modal" data-cliente="'+row.cliente_id+'" data-asesor="'+row.user_id+'" data-direccion="'+row.id+'" data-codigo="'+ row.id +'"><button class="btn btn-info btn-sm"><i class="fa fa-map-marker" aria-hidden="true"></i> Direccion</button></a>';
               @endif
 
 
