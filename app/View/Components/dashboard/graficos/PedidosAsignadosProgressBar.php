@@ -77,20 +77,28 @@ class PedidosAsignadosProgressBar extends Widgets
 
     public function asesores()
     {
-        $encargado = null;
-        if (auth()->user()->rol == User::ROL_ENCARGADO) {
-            $encargado = auth()->user()->id;
+        if (auth()->user()->rol == User::ROL_LLAMADAS) {//HASTA MAÑANA
+            $id = auth()->user()->id;
+            $asesores = User::rolAsesor()->where('llamada', '=', $id)->get();
+        } else {
+            $encargado = null;
+            if (auth()->user()->rol == User::ROL_ENCARGADO) {
+                $encargado = auth()->user()->id;
+            }
+            $asesores = User::query()
+                ->activo()
+                ->rolAsesor()
+                ->when($encargado != null, function ($query) use ($encargado) {
+                    return $query->where('supervisor', '=', $encargado);
+                })
+                ->get();
         }
-        $asesores = User::query()
-            ->activo()
-            ->rolAsesor()
-            ->when($encargado != null, function ($query) use ($encargado) {
-                return $query->where('supervisor', '=', $encargado);
-            })
-            ->get();
+
         $progressData = [];
         foreach ($asesores as $asesor) {
-            if (auth()->user()->rol != User::ROL_ADMIN) {
+            if (auth()->user()->rol != User::ROL_ADMIN
+                && auth()->user()->rol != User::ROL_JEFE_LLAMADAS//HASTA MAÑANA
+                && auth()->user()->rol != User::ROL_LLAMADAS) {//HASTA MAÑANA
                 if (auth()->user()->rol != User::ROL_ENCARGADO) {
                     if (auth()->user()->id != $asesor->id) {
                         continue;
@@ -102,8 +110,8 @@ class PedidosAsignadosProgressBar extends Widgets
                 }
             }
 
-            $all = $this->applyFilter(Pedido::query()->where('user_id',$asesor->id)->activo())->count();
-            $pay = $this->applyFilter(Pedido::query()->where('user_id',$asesor->id)->activo()->pagados())->count();
+            $all = $this->applyFilter(Pedido::query()->where('user_id', $asesor->id)->activo())->count();
+            $pay = $this->applyFilter(Pedido::query()->where('user_id', $asesor->id)->activo()->pagados())->count();
 
             $progressData[] = [
                 "identificador" => $asesor->identificador,
