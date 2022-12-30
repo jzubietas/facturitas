@@ -428,7 +428,8 @@
                 let cant_compro = $("#cant_compro").val();
                 if (cant_compro == '') $("#cant_compro").val(0);
                 var data = new FormData(document.getElementById("formularioatender"));
-
+                $("#loading_upload_attachment_file").show()
+                $("#adjunto").hide()
                 $.ajax({
                     type: 'POST',
                     url: "{{ route('operaciones.updateatendersinconfirmar',':id') }}".replace(':id', idunico),
@@ -438,21 +439,17 @@
                     success: function (data) {
                         $('#cargar_adjunto').prop("disabled", false);
                         $('#cargar_adjunto').text('Subir Informacion');
-
-                        $.ajax({
-                            url: "{{ route('operaciones.editatencionsinconfirmar',':id') }}".replace(':id', idunico),
-                            data: idunico,
-                            method: 'POST',
-                            success: function (data) {
-                                console.log(data)
-                                console.log("obtuve las imagenes atencion del pedido " + idunico)
-                                $('#listado_adjuntos').html(data);
-                            }
-                        });
+                        console.log(data)
+                        console.log("obtuve las imagenes atencion del pedido " + idunico)
+                        $('#listado_adjuntos').html(data);
                     }
                 })
                     .done(function (data) {
                         $("#adjunto").val(null)
+                    })
+                    .always(function () {
+                        $("#adjunto").show()
+                        $("#loading_upload_attachment_file").hide()
                     });
                 return false;
 
@@ -593,21 +590,20 @@
             $(document).on("submit", "#formulariorevertirporatender", function (evento) {
                 evento.preventDefault();
                 var fd = new FormData();
-                fd.append( 'hiddenRevertirpedidoporatender', $("#hiddenRevertirpedidoporatender").val() );
+                fd.append('hiddenRevertirpedidoporatender', $("#hiddenRevertirpedidoporatender").val());
 
                 $.ajax({
-                data: fd,
-                processData: false,
-                contentType: false,
-                type: 'POST',
-                url:"{{ route('operaciones.revertirenvioidporatender') }}",
-                success:function(data)
-                {
-                    console.log(data);
-                    $("#modal-revertir-poratender .textcode").text('');
-                    $("#modal-revertir-poratender").modal("hide");
-                    $('#tablaPrincipal').DataTable().ajax.reload();
-                }
+                    data: fd,
+                    processData: false,
+                    contentType: false,
+                    type: 'POST',
+                    url: "{{ route('operaciones.revertirenvioidporatender') }}",
+                    success: function (data) {
+                        console.log(data);
+                        $("#modal-revertir-poratender .textcode").text('');
+                        $("#modal-revertir-poratender").modal("hide");
+                        $('#tablaPrincipal').DataTable().ajax.reload();
+                    }
                 });
             });
 
@@ -679,13 +675,13 @@
                         render: function (data, type, row, meta) {
 
                             if (row.condicion_code == 1) {
-                                return '<span class="badge badge-success" style="background-color:'+row.condicion_envio_color+' !important;" >' + '{{\App\Models\Pedido::POR_ATENDER_OPE }}' + '</span>';
+                                return '<span class="badge badge-success" style="background-color:' + row.condicion_envio_color + ' !important;" >' + '{{\App\Models\Pedido::POR_ATENDER_OPE }}' + '</span>';
                             } else if (row.condicion_code == 2) {
-                                return '<span class="badge badge-success" style="background-color:'+row.condicion_envio_color+' !important;" >' + '{{\App\Models\Pedido::EN_ATENCION_OPE }}' + '</span>';
+                                return '<span class="badge badge-success" style="background-color:' + row.condicion_envio_color + ' !important;" >' + '{{\App\Models\Pedido::EN_ATENCION_OPE }}' + '</span>';
                             } else if (row.condicion_code == 3) {
-                                return '<span class="badge badge-success" style="background-color:'+row.condicion_envio_color+' !important;" >' + '{{\App\Models\Pedido::ATENDIDO_OPE }}' + '</span>';
+                                return '<span class="badge badge-success" style="background-color:' + row.condicion_envio_color + ' !important;" >' + '{{\App\Models\Pedido::ATENDIDO_OPE }}' + '</span>';
                             } else if (row.condicion_code == 4) {
-                                return '<span class="badge badge-success" style="background-color:'+row.condicion_envio_color+' !important;" >' + '{{\App\Models\Pedido::ANULADO }}' + '</span>';
+                                return '<span class="badge badge-success" style="background-color:' + row.condicion_envio_color + ' !important;" >' + '{{\App\Models\Pedido::ANULADO }}' + '</span>';
                             }
                         }
                     },
@@ -748,9 +744,9 @@
                             }
                             @endcan
 
-                            @can('operacion.atendidos.revertir')
+                                @can('operacion.atendidos.revertir')
 
-                                data = data+'<a href="" class="btn-sm dropdown-item" data-target="#modal-revertir-poratender" data-revertir='+row.id+' data-codigo='+row.codigos+' data-toggle="modal" ><i class="fa fa-undo text-danger" aria-hidden="true"></i> Revertir</a>';
+                                data = data + '<a href="" class="btn-sm dropdown-item" data-target="#modal-revertir-poratender" data-revertir=' + row.id + ' data-codigo=' + row.codigos + ' data-toggle="modal" ><i class="fa fa-undo text-danger" aria-hidden="true"></i> Revertir</a>';
                             @endcan
 
                                 data = data + '</ul></div>';
