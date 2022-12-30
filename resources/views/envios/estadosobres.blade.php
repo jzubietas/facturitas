@@ -1276,19 +1276,7 @@
                         name: 'condicion_envio',
                         render: function (data, type, row, meta) {
 
-                  if(row.condicion_envio=='ANULADO'){
-                      return 'ANULADO';
-                  }else if(row.condicion_envio == 0){
-                      return 'ANULADO';
-                  }else if(row.condicion_envio == 1){
-                      return 'PENDIENTE DE ENVÍO';
-                  }else if(row.condicion_envio == 2){
-                      return 'EN REPARTO';
-                  }else if(row.condicion_envio == 3){
-                      return 'ENTREGADO';
-                  }else{
-                      return data;
-                  }
+                            return '<span class="badge badge-success" style="background-color:' + row.condicion_envio_color + ' !important;" >' + data + '</span>';
               }
           },
           {
