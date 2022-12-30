@@ -87,6 +87,7 @@
             function openConfirmDownloadDocuments(action, idc, codigo) {
                 $.confirm({
                     title: '<h5>Detalle de atencion de pedido <b>' + codigo + '</b></h5>',
+                    columnClass:'col-md-6 col-md-offset-4 col-sm-6 col-sm-offset-3 col-xs-10 col-xs-offset-1',
                     buttons: {
                         confirm: {
                             text: 'Confirmar descarga',
