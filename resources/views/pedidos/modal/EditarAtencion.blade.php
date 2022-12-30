@@ -32,7 +32,12 @@
                               @csrf
                               {!! Form::file('adjunto[]', ['class' => 'form-control-file', 'id'=>'adjunto', 'multiple']) !!}
                               {{-- <td>@csrf<input type="file" id="adjunto" name="adjunto[]" multiple=""/></td> --}}
-
+                              <div class="w-100">
+                                  <div class="spinner-border" role="status"
+                                       id="loading_upload_attachment_file" style="display: none">
+                                      <span class="sr-only">Enviando...</span>
+                                  </div>
+                              </div>
                           </div>
 
                           <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
