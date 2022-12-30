@@ -102,9 +102,14 @@ class MotorizadoController extends Controller
                     $btn = '';
                     $btn .= '<ul class="list-unstyled pl-0">';
                     $btn .= '<li>
-                                    <a href="" class="btn-sm text-secondary" data-target="#modal-motorizado-entregar-confirm" data-toggle="modal" data-entregar-confirm="' . $pedido->id . '" data-destino="' . $pedido->destino . '" data-fechaenvio="' . $pedido->fecha . '" data-codigos="' . $pedido->codigos . '">
-                                        <i class="fas fa-envelope text-success"></i> A cliente</a></li>
-                                    </a>
+                                    <button href="" class="btn btn-sm text-secondary" data-target="#modal-motorizado-entregar-confirm" data-toggle="modal" data-entregar-confirm="' . $pedido->id . '" data-destino="' . $pedido->destino . '" data-fechaenvio="' . $pedido->fecha . '" data-codigos="' . $pedido->codigos . '">
+                                        <i class="fas fa-envelope text-success"></i> A cliente
+                                    </button>
+                                </li>';
+                    $btn .= '<li>
+                                    <button class="btn btn-sm text-danger" data-jqconfirm="' . $pedido->id . '" data-jqconfirm-type="revertir">
+                                        <i class="fas fa-arrow-left text-danger"></i> Revertir
+                                    </button>
                                 </li>';
                     $btn .= '</ul>';
 

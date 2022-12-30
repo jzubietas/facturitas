@@ -38,11 +38,12 @@
 
 @stop
 
-@section('css')
-@stop
+@push('css')
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
+@endpush
 
-@section('js')
-    <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+@push('js')
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
 
     <script src="https://momentjs.com/downloads/moment.js"></script>
@@ -69,6 +70,36 @@
                     if (data.destino2 == 'PROVINCIA') {
                         $('td', row).css('color', 'red')
                     }
+                    $('[data-jqconfirm]', row).click(function () {
+                        $.confirm({
+                            type: 'red',
+                            title: '¡Revertir Envio!',
+                            content: 'Confirme si desea revertir el envio <b>'+data.codigos+'</b>',
+                            buttons: {
+                                ok:{
+                                    text:'Si, confirmar',
+                                    btnClass:'btn-red',
+                                    action:function (){
+                                        const self=this;
+                                        self.showLoading(true)
+                                        $.ajax({
+                                            data: {
+                                                envio_id:data.id
+                                            },
+                                            type: 'POST',
+                                            url: "{{ route('operaciones.confirmar.revertir') }}",
+                                        }).always(function (){
+                                            self.close()
+                                            self.hideLoading(true)
+                                        });
+                                    }
+                                },
+                                cancel:{
+                                    text:'No'
+                                }
+                            }
+                        })
+                    })
                 },
                 columns: [
                     {
@@ -233,4 +264,4 @@
         });
     </script>
 
-@stop
+@endpush
