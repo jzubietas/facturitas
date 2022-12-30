@@ -484,7 +484,7 @@ class PedidoStatusController extends Controller
         }*/
        $empresa=$pedido->detallePedido->nombre_empresa;
        $ruc=$pedido->detallePedido->ruc;
-       $total=$pedido->detallePedido->total;
+       $total=$pedido->detallePedido->cantidad;
        $banca=$pedido->detallePedido->tipo_banca;
        $fecha=$pedido->created_at->format('m-y');
         return response()->json([
