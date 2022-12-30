@@ -44,9 +44,41 @@ class AddPermisions extends Command
             $table->integer("confirm")->nullable()->after('adjunto');
         });*/
 
-        \DB::table('permissions')->insertOrIgnore([
+        /*\DB::table('permissions')->insertOrIgnore([
             'name' => 'operacion.atendidos.revertir'
             ,'description' => 'Revertir Pedidos Atendidos'
+            ,'modulo' => 'Operacion'
+            ,'guard_name' => 'web'
+            //,'' => ''
+        ]);*/
+
+        \DB::table('permissions')->insertOrIgnore([
+            'name' => 'operacion.motorizado'
+            ,'description' => 'Motorizados'
+            ,'modulo' => 'Operacion'
+            ,'guard_name' => 'web'
+            //,'' => ''
+        ]);
+
+        \DB::table('permissions')->insertOrIgnore([
+            'name' => 'operacion.motorizado.confirm'
+            ,'description' => 'Boton Motorizados Confirmacion'
+            ,'modulo' => 'Operacion'
+            ,'guard_name' => 'web'
+            //,'' => ''
+        ]);
+
+        \DB::table('permissions')->insertOrIgnore([
+            'name' => 'operacion.confirmmotorizado'
+            ,'description' => 'Motorizados Confirmar'
+            ,'modulo' => 'Operacion'
+            ,'guard_name' => 'web'
+            //,'' => ''
+        ]);
+
+        \DB::table('permissions')->insertOrIgnore([
+            'name' => 'operacion.confirmmotorizado.confirm'
+            ,'description' => 'Boton ConfirmMotorizados Confirmar'
             ,'modulo' => 'Operacion'
             ,'guard_name' => 'web'
             //,'' => ''
