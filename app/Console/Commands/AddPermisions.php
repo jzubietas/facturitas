@@ -6,6 +6,8 @@ use App\Models\Pago;
 use App\Models\Pedido;
 use Illuminate\Console\Command;
 use Illuminate\Database\Schema\Blueprint;
+use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 
 class AddPermisions extends Command
 {
@@ -83,6 +85,10 @@ class AddPermisions extends Command
             ,'guard_name' => 'web'
             //,'' => ''
         ]);
+
+        $rol=Role::first();
+
+        $rol->givePermissionTo(Permission::whereIn('name',['operacion.motorizado','operacion.motorizado.confirm','operacion.confirmmotorizado','operacion.confirmmotorizado.confirm'])->pluck('id'));
 
         return 0;
     }
