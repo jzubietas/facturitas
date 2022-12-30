@@ -645,7 +645,7 @@
             {
               Swal.fire(
                 'Error',
-                'Debe ingresar contacto valido (no vacio y que tenga 9 digitos)',
+                'El numero tiene '+val_contacto.length+' digitos, complete a 9 digitos',
                 'warning'
               )
               return;
