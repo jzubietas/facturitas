@@ -482,9 +482,18 @@ class PedidoStatusController extends Controller
         /*if (!\auth()->user()->can('pedidos.mispedidos')) {
             abort(401);
         }*/
+       $empresa=$pedido->detallePedido->nombre_empresa;
+       $ruc=$pedido->detallePedido->ruc;
+       $total=$pedido->detallePedido->total;
+       $banca=$pedido->detallePedido->tipo_banca;
+       $fecha=$pedido->created_at->format('m-y');
         return response()->json([
             "data" => $pedido->imagenAtencion()->activo()->get(),
-            "sustento" => ($pedido->da_confirmar_descarga==0?$pedido->sustento_adjunto:null)
+            "sustento" => ($pedido->da_confirmar_descarga==0?$pedido->sustento_adjunto:null),
+            'copyText'=>"$empresa - $fecha
+$ruc
+".money_f($total)."
+$banca"
         ]);
     }
 

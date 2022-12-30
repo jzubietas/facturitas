@@ -149,6 +149,9 @@
                                 return `<li class="list-group-item"><a href="${item.link}" download>${item.adjunto}</a></li>`
                             }).join('')
                             html += `<li class="list-group-item">
+<textarea readonly class="form-control w-100" rows="5" style=" color: black; font-weight: bold; background: white; ">${response.copyText}</textarea>
+</li>`
+                            html += `<li class="list-group-item">
 <div class="checkbox"><label><input type="checkbox" id="enableCheckbox"> Termine de descargar</label></div>
 </li>`
                             html += `</div>`
