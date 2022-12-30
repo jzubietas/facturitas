@@ -528,6 +528,9 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     /* Cambiar estado a Motorizado */
     Route::post('operaciones.confirmar', [EnvioController::class, 'confirmarEstado'])->name('operaciones.confirmar');
 
+    Route::post('operaciones.confirmarmotorizado', [EnvioController::class, 'confirmarEstadoConfirm'])->name('operaciones.confirmarmotorizado');
+    Route::post('operaciones.confirmarcliente', [EnvioController::class, 'confirmarEstadoConfirmValidada'])->name('operaciones.confirmarcliente');
+
     /* Route::group(['middleware' => ['permission:pedidos.index']], function () {
         Route::get('pedidos.index', [PedidoController::class, 'index']);
     }); */
