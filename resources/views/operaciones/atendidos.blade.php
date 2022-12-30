@@ -52,6 +52,7 @@
                 </tbody>
             </table>
             <br>
+            <div class="table-responsive">
             <table id="tablaPrincipal" class="table table-striped" style="width:100%">
                 <thead>
                 <tr>
@@ -73,6 +74,7 @@
                 <tbody>
                 </tbody>
             </table>
+            </div>
             @include('operaciones.modal.revertirporatender')
 
             @include('pedidos.modal.sinenvioid')
@@ -710,49 +712,55 @@
                         name: 'action',
                         orderable: false,
                         searchable: false,
-                        sWidth: '20%',
+                        sWidth: '28%',
                         render: function (data, type, row, meta) {
 
                             var urlver = '{{ route("operaciones.showatender", ":id") }}';
                             urlver = urlver.replace(':id', row.id);
 
-                            data = '<div><ul class="" aria-labelledby="dropdownMenuButton">';
+                            data = '<div class="row">'+
+                                        '<div class="col-6 d-flex justify-content-start text-left m-0 p-0">'+
+                                            '<ul class="text-left list-inline text-left" aria-labelledby="dropdownMenuButton" >';
 
-                            data = data + '<a href="' + urlver + '" class="btn-sm dropdown-item" ><i class="fas fa-eye text-success"></i> Ver</a>';
+                                                data = data + '<a href="' + urlver + '" class="btn-sm dropdown-item" ><i class="fas fa-eye text-success"></i> Ver</a>';
 
-                            var urledit = '{{ route("operaciones.editatender", ":id") }}';
-                            urledit = urledit.replace(':id', row.id);
+                                                var urledit = '{{ route("operaciones.editatender", ":id") }}';
+                                                urledit = urledit.replace(':id', row.id);
 
+                                                @can('operacion.editatender')
+                                                    data = data + '<a href="" class="btn-sm dropdown-item" data-target="#modal-editar-atencion" data-adj=' + row.da_confirmar_descarga + ' data-atencion=' + row.id + ' data-toggle="modal" ><i class="fa fa-paperclip text-primary" aria-hidden="true"></i> Editar Adjuntos</a>';
 
-                            @can('operacion.editatender')
-                                data = data + '<a href="" class="btn-sm dropdown-item" data-target="#modal-editar-atencion" data-adj=' + row.da_confirmar_descarga + ' data-atencion=' + row.id + ' data-toggle="modal" ><i class="fa fa-paperclip text-primary" aria-hidden="true"></i> Editar Adjuntos</a>';
+                                                @endcan
 
-                            @endcan
+                                                var urlpdf = '{{ route("pedidosPDF", ":id") }}';
+                                                urlpdf = urlpdf.replace(':id', row.id);
+                                                @can('operacion.PDF')
+                                                    data = data + '<a href="' + urlpdf + '" class="btn-sm dropdown-item" target="_blank"><i class="fa fa-file-pdf text-warning"></i> PDF</a>';
+                                                @endcan
 
-                            var urlpdf = '{{ route("pedidosPDF", ":id") }}';
-                            urlpdf = urlpdf.replace(':id', row.id);
-                            @can('operacion.PDF')
-                                data = data + '<a href="' + urlpdf + '" class="btn-sm dropdown-item" target="_blank"><i class="fa fa-file-pdf text-warning"></i> PDF</a>';
-                            @endcan
+                                data = data + '</ul>';
+                                data = data + '</div>';
+                                data = data + '<div class="col-6 d-flex justify-content-start text-left m-0 p-0">'+
+                                    '<ul class="list-group text-left">';
 
-                            data = data+'</br>'
+                                    @can('operacion.enviar')
+                                        if (row.envio == '0') {
+                                            @if (Auth::user()->rol == "Jefe de operaciones" || Auth::user()->rol == "Administrador" || Auth::user()->rol == "Operario")
+                                                data = data + '<a href="" class="btn-sm dropdown-item" data-target="#modal-envio" data-pedido_sobre_text="CON SOBRE" data-envio=' + row.id + ' data-codigo=' + row.codigos + ' data-toggle="modal" ><i class="fa fa-envelope text-success" aria-hidden="true"></i>Envio con sobre</a>';
+                                            data = data + '<a href="" class="btn-sm dropdown-item" data-target="#modal-sinenvio" data-pedido_sobre_text="SIN SOBRE" data-sinenvio=' + row.id + ' data-codigo=' + row.codigos + ' data-toggle="modal" ><i class="fa fa-times text-danger" aria-hidden="true"></i>Envio sin sobre</a>';
+                                            @endif
 
-                                @can('operacion.enviar')
-                            if (row.envio == '0') {
-                                @if (Auth::user()->rol == "Jefe de operaciones" || Auth::user()->rol == "Administrador" || Auth::user()->rol == "Operario")
-                                    data = data + '<a href="" class="btn-sm dropdown-item" data-target="#modal-envio" data-pedido_sobre_text="CON SOBRE" data-envio=' + row.id + ' data-codigo=' + row.codigos + ' data-toggle="modal" ><i class="fa fa-envelope text-success" aria-hidden="true"></i>Envio con sobre</a>';
-                                data = data + '<a href="" class="btn-sm dropdown-item" data-target="#modal-sinenvio" data-pedido_sobre_text="SIN SOBRE" data-sinenvio=' + row.id + ' data-codigo=' + row.codigos + ' data-toggle="modal" ><i class="fa fa-times text-danger" aria-hidden="true"></i>Envio sin sobre</a>';
-                                @endif
+                                        }
+                                    @endcan
+                                
+                                    @can('operacion.atendidos.revertir')
 
-                            }
-                            @endcan
-                                data = data+'</br>'
-                                @can('operacion.atendidos.revertir')
+                                        data = data + '<a href="" class="btn-sm dropdown-item" data-target="#modal-revertir-poratender" data-revertir=' + row.id + ' data-codigo=' + row.codigos + ' data-toggle="modal" ><i class="fa fa-undo text-danger" aria-hidden="true"></i> Revertir a por atender</a>';
+                                    @endcan
+                                data=data+'</ul>';
+                                data = data +'</div>';
 
-                                data = data + '<a href="" class="btn-sm dropdown-item" data-target="#modal-revertir-poratender" data-revertir=' + row.id + ' data-codigo=' + row.codigos + ' data-toggle="modal" ><i class="fa fa-undo text-danger" aria-hidden="true"></i> Revertir a por atender</a>';
-                            @endcan
-
-                                data = data + '</ul></div>';
+                                    '</div>';
 
                             return data;
                         }
