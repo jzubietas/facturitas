@@ -35,62 +35,59 @@ class QtyPedidoFisicoElectronicos extends Widgets
     {
 
 
-
         //
 
-        if(auth()->user()->rol==User::ROL_JEFE_OPERARIO)
-        {
+        if (auth()->user()->rol == User::ROL_JEFE_OPERARIO) {
             $jefesOpe = User::activo()
-            ->where('rol', '=', User::ROL_JEFE_OPERARIO)
-            ->where('id', '=', Auth::user()->id)->get();
+                ->where('rol', '=', User::ROL_JEFE_OPERARIO)
+                ->where('id', '=', Auth::user()->id)->get();
             $dataFi = [];
             $dataEl = [];
 
-        }else{
+        } else {
 
             $pedidosAtendidosFisicos = Pedido::query()
-            ->activo()
-            ->porAtenderEstatus()
-            ->whereIn(
-                'id',
-                DetallePedido::query()->select('pedido_id')
-                    ->activo()
-                    ->whereRaw('detalle_pedidos.pedido_id=pedidos.id')
-                    ->where('detalle_pedidos.tipo_banca', 'like', '%FISICO%')
-            )
-            ->count();
+                ->activo()
+                ->porAtenderEstatus()
+                ->whereIn(
+                    'id',
+                    DetallePedido::query()->select('pedido_id')
+                        ->activo()
+                        ->whereRaw('detalle_pedidos.pedido_id=pedidos.id')
+                        ->where('detalle_pedidos.tipo_banca', 'like', '%FISICO%')
+                )
+                ->count();
 
-        $pedidosAtendidosElectronica = Pedido::query()
-            ->activo()
-            ->porAtenderEstatus()
-            ->whereIn(
-                'id',
-                DetallePedido::query()->select('pedido_id')
-                    ->activo()
-                    ->whereRaw('detalle_pedidos.pedido_id=pedidos.id')
-                    ->where('detalle_pedidos.tipo_banca', 'like', '%ELECTRONICA%')
-            )
-            ->count();
+            $pedidosAtendidosElectronica = Pedido::query()
+                ->activo()
+                ->porAtenderEstatus()
+                ->whereIn(
+                    'id',
+                    DetallePedido::query()->select('pedido_id')
+                        ->activo()
+                        ->whereRaw('detalle_pedidos.pedido_id=pedidos.id')
+                        ->where('detalle_pedidos.tipo_banca', 'like', '%ELECTRONICA%')
+                )
+                ->count();
 
             $jefesOpe = User::activo()
-            ->where('rol', '=', User::ROL_JEFE_OPERARIO)->get();
+                ->where('rol', '=', User::ROL_JEFE_OPERARIO)->get();
             $dataFi = [
                 [
-                "count" => $pedidosAtendidosFisicos,
-                "title" => "Total"
-            ]
-        ];
+                    "count" => $pedidosAtendidosFisicos,
+                    "title" => "Total",
+                    'bg' => '#00bcd4',
+                    'color' => 'white',
+                ]
+            ];
             $dataEl = [[
                 "count" => $pedidosAtendidosElectronica,
-                "title" => "Total"
+                "title" => "Total",
+                'bg' => '#e91e63',
+                'color' => 'white',
             ]];
 
         }
-
-       
-      
-  
-
 
 
         foreach ($jefesOpe as $user) {
@@ -104,9 +101,9 @@ class QtyPedidoFisicoElectronicos extends Widgets
                 ->whereIn('rol', [User::ROL_ASESOR, User::ROL_ASESOR_ADMINISTRATIVO])
                 ->whereIn('operario', $operario)
                 ->pluck('id');
-           
-           
-             $fi = Pedido::query()
+
+
+            $fi = Pedido::query()
                 ->activo()
                 ->porAtenderEstatus()
                 ->whereIn('user_id', $asesores)
@@ -136,15 +133,16 @@ class QtyPedidoFisicoElectronicos extends Widgets
             $dataFi[] = [
                 "title" => $user->name,
                 "count" => $fi,
+                "bg" => '#7af0ff',
+                'color' => 'black',
             ];
             $dataEl[] = [
                 "title" => $user->name,
-                "count" => $el
+                "count" => $el,
+                'bg' => '#ff97ba',
+                'color' => 'black',
             ];
         }
-
-
-
 
 
         return [
