@@ -130,7 +130,7 @@ class PagoController extends Controller
             $usersasesores = User::where('users.rol', 'Asesor')
                 ->where('users.estado', '1')
                 ->where('users.llamada', Auth::user()->id)
-              
+
                 ->select(
                     DB::raw("users.identificador as identificador")
                 )
@@ -2772,13 +2772,13 @@ class PagoController extends Controller
                 "status" => Devolucion::DEVUELTO,
                 "returned_at" => now(),
             ]);
-            $asesores = User::whereIn('rol', [User::ROL_ASESOR, User::ROL_LLAMADAS])
+            /*$asesores = User::whereIn('rol', [User::ROL_ASESOR, User::ROL_LLAMADAS])
                 ->activo()
                 ->get();
 
             foreach ($asesores as $asesor) {
                 $asesor->notify(new DevolucionApproved($devolucion));
-            }
+            }*/
         });
         return redirect()->route("pagos.show", $devolucion);
     }
