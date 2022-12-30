@@ -210,7 +210,8 @@ class OperacionController extends Controller
                 //'u.jefe',
                 DB::raw(" (select u2.name from users u2 where u2.id=u.jefe) as jefe "),
                 DB::raw('DATE_FORMAT(dp.fecha_envio_doc_fis, "%d/%m/%Y") as fecha_envio_doc_fis'),
-                'dp.fecha_recepcion'
+                'dp.fecha_recepcion',
+                DB::raw(" (select count(ii.id) from imagen_atencions ii where ii.pedido_id=pedidos.id and ii.estado=1) as adjuntos ")
             )
             ->where('pedidos.estado', '1')
             ->where('dp.estado', '1')

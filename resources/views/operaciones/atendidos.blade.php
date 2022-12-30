@@ -586,7 +586,9 @@
                 var button = $(event.relatedTarget)
                 var idunico = button.data('revertir')//
                 var idcodigo = button.data('codigo')
+                var idadjuntos = button.data('adjuntos')
                 $(".textcode").html(idcodigo);
+                $(".textcantadjunto").html(idadjuntos);
                 $("#hiddenRevertirpedidoporatender").val(idunico);
             });
 
@@ -604,6 +606,7 @@
                     success: function (data) {
                         console.log(data);
                         $("#modal-revertir-poratender .textcode").text('');
+                        $("#modal-revertir-poratender .textcantadjunto").text('');
                         $("#modal-revertir-poratender").modal("hide");
                         $('#tablaPrincipal').DataTable().ajax.reload();
                     }
@@ -755,7 +758,7 @@
                                 
                                     @can('operacion.atendidos.revertir')
 
-                                        data = data + '<a href="" class="btn-sm dropdown-item" data-target="#modal-revertir-poratender" data-revertir=' + row.id + ' data-codigo=' + row.codigos + ' data-toggle="modal" ><i class="fa fa-undo text-danger" aria-hidden="true"></i> Revertir a por atender</a>';
+                                        data = data + '<a href="" class="btn-sm dropdown-item" data-target="#modal-revertir-poratender" data-adjuntos="'+row.adjuntos+'" data-revertir=' + row.id + ' data-codigo=' + row.codigos + ' data-toggle="modal" ><i class="fa fa-undo text-danger" aria-hidden="true"></i> Revertir a por atender</a>';
                                     @endcan
                                 data=data+'</ul>';
                                 data = data +'</div>';
