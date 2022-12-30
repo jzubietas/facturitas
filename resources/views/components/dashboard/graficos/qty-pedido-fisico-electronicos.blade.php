@@ -8,14 +8,14 @@
                     </li>
                     @foreach(data_get($resultados,'fisico') as $item)
                         <li class="list-group-item">
-                            <div class="card" style="background: #00bcd4;">
+                            <div class="card" style="background: {{data_get($item,'bg')}};">
                                 <div class="card-body">
                                     <div class="d-flex justify-content-between">
                                         <div>
-                                            <h5 class="text-white">{{Str::upper(data_get($item,'title'))}}</h5>
+                                            <h5 class="text-{{data_get($item,'color')}}">{{Str::upper(data_get($item,'title'))}}</h5>
                                         </div>
                                         <div>
-                                            <h3 class="text-white">{{data_get($item,'count')}}</h3>
+                                            <h3 class="text-{{data_get($item,'color')}}">{{data_get($item,'count')}}</h3>
                                         </div>
                                     </div>
                                 </div>
@@ -31,14 +31,14 @@
                     </li>
                     @foreach(data_get($resultados,'electronic') as $item)
                         <li class="list-group-item">
-                            <div class="card" style="background: #e91e63;">
+                            <div class="card" style="background: {{data_get($item,'bg')}};">
                                 <div class="card-body">
                                     <div class="d-flex justify-content-between">
                                         <div>
-                                            <h5 class="text-white">{{Str::upper(data_get($item,'title'))}}</h5>
+                                            <h5 class="text-{{data_get($item,'color')}}">{{Str::upper(data_get($item,'title'))}}</h5>
                                         </div>
                                         <div>
-                                            <h3 class="text-white">{{data_get($item,'count')}}</h3>
+                                            <h3 class="text-{{data_get($item,'color')}}">{{data_get($item,'count')}}</h3>
                                         </div>
                                     </div>
                                 </div>
