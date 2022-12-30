@@ -93,6 +93,8 @@
                       </div>
 
                       <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <i class="fa fa-commenting-o text-red" aria-hidden="true"></i>
+
                         {!! Form::label('referencia', 'Referencia') !!}
                         {!! Form::text('referencia', null, ['class' => 'form-control', 'placeholder' => 'Referencia', 'required' => 'required']) !!}
                       </div>
