@@ -367,7 +367,7 @@
                     } else if (sustento.length < 50) {
                         Swal.fire(
                             'Error',
-                            'Debe ingresar al menos 50 caracteres',
+                            'Debe ingresar al menos 50 caracteres ('+sustento.length+'/50)',
                             'warning'
                         )
                         return false;

@@ -7,6 +7,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\HtmlString;
 use Spatie\Permission\Models\Role;
 use DataTables;
 
@@ -197,7 +198,7 @@ class UserController extends Controller
 
     public function profile(User $user)
     {
-       $user='33';
+        $user = '33';
         return view('usuarios.perfil', compact('user'));
     }
 
@@ -258,7 +259,7 @@ class UserController extends Controller
         } else if ($mirol == 'Jefe de llamadas') {
             $users = $users->where('llamada', Auth::user()->id)->where("rol", "Asesor");
         } else if ($mirol == User::ROL_APOYO_ADMINISTRATIVO) {
-            $users = $users->where('identificador', '<>','B');
+            $users = $users->where('identificador', '<>', 'B');
         } else if ($mirol == 'Asesor') {
             $users = $users->where('id', Auth::user()->id)->where("rol", "Asesor");
         } else if ($mirol == 'ASESOR ADMINISTRATIVO') {
@@ -394,6 +395,7 @@ class UserController extends Controller
             ->select(
                 'users.id',
                 'users.name',
+                'users.excluir_meta',
                 'users.email',
                 'encargado.name as encargado',
                 'operario.name as operario',
@@ -406,6 +408,7 @@ class UserController extends Controller
             ->groupBy(
                 'users.id',
                 'users.name',
+                'users.excluir_meta',
                 'users.email',
                 'encargado.name',
                 'operario.name',
@@ -416,7 +419,14 @@ class UserController extends Controller
             //->orderBy('users.created_at', 'DESC')
             ->get();
 
-        return Datatables::of($users)
+        return datatables()->collection($users)
+            ->addColumn('excluir_meta_check', function ($user) {
+                if ($user->excluir_meta) {
+                    return new HtmlString('<label class="text-center"><input ' . ($user->excluir_meta?'checked':'' ). ' class="form-control meta_checkbox_active" type="checkbox" data-excluir_meta="' . (int)$user->excluir_meta . '" data-user_id="' . $user->id . '" style=" width: 23px; "></label>');
+                } else {
+                    return new HtmlString('<label class="text-center"><input ' . ($user->excluir_meta?'checked':'' ). ' class="form-control meta_checkbox_active" type="checkbox" data-excluir_meta="' . (int)$user->excluir_meta . '" data-user_id="' . $user->id . '" style=" width: 23px; "></label>');
+                }
+            })
             ->addIndexColumn()
             ->addColumn('action', function ($user) {
                 $btn = "";
@@ -429,6 +439,14 @@ class UserController extends Controller
             ->make(true);
     }
 
+    public function AsesoresTablaMeta(User $user)
+    {
+        $user->update([
+            'excluir_meta' => !$user->excluir_meta
+        ]);
+        return response()->json($user);
+
+    }
 
     public function AsignarSupervisor(Request $request, User $user)
     {

@@ -65,7 +65,8 @@ class User extends Authenticatable
         'distrito',
         'direccion',
         'referencia',
-        'profile_photo_path'
+        'profile_photo_path',
+        'excluir_meta',
     ];
 
     /**
@@ -88,6 +89,7 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
         'meta_cobro' => 'double',
+        'excluir_meta' => 'bool',
     ];
 
     /**
@@ -173,6 +175,11 @@ class User extends Authenticatable
     public function scopeRolAsesor($query)
     {
         return $this->scopeRol($query, self::ROL_ASESOR);
+    }
+
+    public function scopeIncluidoMeta($query)
+    {
+        return $this->where($this->qualifyColumn('excluir_meta'),'=','0');
     }
 
 

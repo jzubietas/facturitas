@@ -75,7 +75,7 @@
                                       color:#D9D9D9;
                                   }
                               </style>
-                              <textarea name="sustento" id="sustento_data" class="form-control" cols="30" rows="5" placeholder="El asesor ya envió los ajuntos hacia el clíente, justifique porque esta adjuntando archivos nuevamente."></textarea>
+                              <textarea name="sustento" id="sustento_data" class="form-control" cols="30" rows="5" placeholder="El asesor ya envio los archivos adjuntos al cliente, justifique porque esta editando el adjuntar archivos. (Ese sustento se le pasara al cliente)"></textarea>
                           </div>
                         <div class="row">
 
