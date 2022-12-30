@@ -70,7 +70,7 @@
 
 
                       <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                        <i class="fa fa-user" aria-hidden="true"></i>
+                        <i class="fa fa-user text-red" aria-hidden="true"></i>
 
                         {!! Form::label('nombre', 'Nombre del contacto quien recibe') !!}
                         {!! Form::text('nombre', null, ['class' => 'form-control', 'placeholder' => 'Nombre', 'required' => 'required']) !!}
@@ -78,7 +78,7 @@
 
 
                       <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                        <i class="fa fa-phone" aria-hidden="true"></i>
+                        <i class="fa fa-phone text-red" aria-hidden="true"></i>
 
                         {!! Form::label('celular', 'Telefono del contacto quien recibe') !!}
                         <span class="badge badge-pill badge-secondary">9 digitos</span>
@@ -86,7 +86,7 @@
                       </div>
 
                       <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                        <i class="fa fa-street-view" aria-hidden="true"></i>
+                        <i class="fa fa-street-view text-red" aria-hidden="true"></i>
 
                         {!! Form::label('direccion', 'Direccion') !!}
                         {!! Form::text('direccion', null, ['class' => 'form-control', 'placeholder' => 'Direccion', 'required' => 'required']) !!}
