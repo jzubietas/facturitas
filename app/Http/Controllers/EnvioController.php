@@ -1915,22 +1915,49 @@ class EnvioController extends Controller
 
     public function confirmarEstado(Request $request)
     {
-
         $envio=DireccionGrupo::where("id",$request->hiddenCodigo)->first();
-
-        //dd($envio);
-
-        //$detalle_pedidos = DetallePedido::where('pedido_id',$pedido->id)->first();
-
-            $envio->update([
-                'condicion_envio' => Pedido::MOTORIZADO,
-                'condicion_envio_code' => Pedido::MOTORIZADO_INT,
-
-            ]);
+        $envio->update([
+            'condicion_envio' => Pedido::MOTORIZADO,
+            'condicion_envio_code' => Pedido::MOTORIZADO_INT,
+        ]);
 
         PedidoMovimientoEstado::create([
             'pedido' => $request->hiddenCodigo,
-            'condicion_envio_code' => Pedido::EN_REPARTO_CODE,
+            'condicion_envio_code' => Pedido::MOTORIZADO_INT,
+            'notificado' => 0
+        ]);
+
+        return response()->json(['html' => $envio->id]);
+    }
+
+    public function confirmarEstadoConfirm(Request $request)
+    {
+        $envio=DireccionGrupo::where("id",$request->hiddenCodigo)->first();
+        $envio->update([
+            'condicion_envio' => Pedido::CONFIRM_MOTORIZADO,
+            'condicion_envio_code' => Pedido::CONFIRM_MOTORIZADO_INT,
+        ]);
+
+        PedidoMovimientoEstado::create([
+            'pedido' => $request->hiddenCodigo,
+            'condicion_envio_code' => Pedido::CONFIRM_MOTORIZADO_INT,
+            'notificado' => 0
+        ]);
+
+        return response()->json(['html' => $envio->id]);
+    }
+
+    public function confirmarEstadoConfirmValidada(Request $request)
+    {
+        $envio=DireccionGrupo::where("id",$request->hiddenCodigo)->first();
+        $envio->update([
+            'condicion_envio' => Pedido::CONFIRM_VALIDADA_CLIENTE,
+            'condicion_envio_code' => Pedido::CONFIRM_VALIDADA_CLIENTE_INT,
+        ]);
+
+        PedidoMovimientoEstado::create([
+            'pedido' => $request->hiddenCodigo,
+            'condicion_envio_code' => Pedido::CONFIRM_VALIDADA_CLIENTE_INT,
             'notificado' => 0
         ]);
 

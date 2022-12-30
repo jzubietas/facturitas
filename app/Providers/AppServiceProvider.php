@@ -6,6 +6,7 @@ use App\View\Components\common\BsProgressbar;
 use App\View\Components\dashboard\graficos\borras\PedidosPorDia;
 use App\View\Components\dashboard\graficos\GraficoMetaCobranzas;
 use App\View\Components\dashboard\graficos\GraficoMetasDelMes;
+use App\View\Components\dashboard\graficos\GraficoPedidosAtendidoAnulados;
 use App\View\Components\dashboard\graficos\GraficoPedidosMetaProgress;
 use App\View\Components\dashboard\graficos\MetaProgressBar;
 use App\View\Components\dashboard\graficos\PedidosAsignadosProgressBar;
@@ -33,16 +34,18 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        \Blade::component('grafico-metas-progress-bar',MetaProgressBar::class);
-        \Blade::component('grafico-meta-pedidos-progress-bar',PedidosAsignadosProgressBar::class);
-        \Blade::component('grafico-pedidos-por-dia',PedidosPorDia::class);
-        \Blade::component('grafico-meta_cobranzas',GraficoMetaCobranzas::class);
-        \Blade::component('grafico-pedidos-meta-progress',GraficoPedidosMetaProgress::class);
-        \Blade::component('grafico-top-clientes-pedidos',TopClientesPedidos::class);
-        \Blade::component('grafico-metas-mes',GraficoMetasDelMes::class);
-        \Blade::component('bs-progressbar',BsProgressbar::class);
-        \Blade::component('grafico-pedidos-elect-fisico',QtyPedidoFisicoElectronicos::class);
-        \Blade::component('tabla-jef-operaciones-fis-elect',FisElecJefeOperaciones::class);
+        \Blade::component('grafico-metas-progress-bar', MetaProgressBar::class);
+        \Blade::component('grafico-meta-pedidos-progress-bar', PedidosAsignadosProgressBar::class);
+        \Blade::component('grafico-pedidos-por-dia', PedidosPorDia::class);
+        \Blade::component('grafico-meta_cobranzas', GraficoMetaCobranzas::class);
+        \Blade::component('grafico-pedidos-meta-progress', GraficoPedidosMetaProgress::class);
+        \Blade::component('grafico-top-clientes-pedidos', TopClientesPedidos::class);
+        \Blade::component('grafico-metas-mes', GraficoMetasDelMes::class);
+        \Blade::component('bs-progressbar', BsProgressbar::class);
+        \Blade::component('grafico-pedidos-elect-fisico', QtyPedidoFisicoElectronicos::class);
+        \Blade::component('tabla-jef-operaciones-fis-elect', FisElecJefeOperaciones::class);
+
+        \Blade::component('grafico-pedidos-atendidos-anulados', GraficoPedidosAtendidoAnulados::class);
 
         Carbon::setUTF8(true);
         Carbon::setLocale(config('app.locale'));

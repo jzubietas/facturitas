@@ -438,6 +438,27 @@ return [
                     'active' => ['enviados'],
                 ],
                 [
+                    'text' => 'Motorizado',
+                    'route' => 'envios.motorizados.index',
+                    'can' => 'operacion.motorizado',
+                    'icon' => 'fas fa-check-circle',
+                    'active' => ['enviados'],
+                ],
+                [
+                    'text' => 'Motorizado Confirmar',
+                    'route' => 'envios.motorizados.confirmar',
+                    'can' => 'operacion.confirmmotorizado',
+                    'icon' => 'fas fa-check-circle',
+                    'active' => ['enviados'],
+                ],
+                /*[
+                    'text' => 'Motorizado',
+                    'route' => 'envios.motorizados.index',
+                    'can' => 'operacion.confirmmotorizado.confirm',
+                    'icon' => 'fas fa-check-circle',
+                    'active' => ['enviados'],
+                ],*/
+                [
                     'text' => 'Sobre entregados',
                     'route' => 'envios.entregados',
                     'can' => 'envios.enviados',

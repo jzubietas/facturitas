@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\Envios\MotorizadoController;
 use App\Http\Controllers\ExcelController;
 use App\Http\Controllers\PagoController;
 use App\Http\Controllers\PdfController;
@@ -55,7 +56,7 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
 //Route::get('recurrentestabla', [ClienteController::class, 'tablarecurrentes'])->name('recurrentestabla');
 
     /*Controller Clientes*/
-    Route::get('clientes/deudas_copy', [ClienteController::class,'deudasCopyAjax'])->name('clientes.deudas_copy');
+    Route::get('clientes/deudas_copy', [ClienteController::class, 'deudasCopyAjax'])->name('clientes.deudas_copy');
 
 
     Route::resource('clientes', ClienteController::class)->names('clientes');
@@ -69,10 +70,6 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     Route::get('clientes.edit.abandono/{cliente}/edit2', [ClienteController::class, 'edit'])->name('clientes.edit.abandono');
     Route::get('clientes.edit.abandono.reciente/{cliente}/edit2', [ClienteController::class, 'edit'])->name('clientes.edit.abandono.reciente');
     Route::get('clientes.edit.recurrente/{cliente}/edit2', [ClienteController::class, 'edit'])->name('clientes.edit.recurrente');
-
-
-
-
 
 
     Route::get('pedidosenvioclientetabla', [ClienteController::class, 'pedidosenvioclientetabla'])->name('cargar.pedidosenvioclientetabla');
@@ -166,14 +163,14 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
 
     /*Controller Pedido*/
 
-    Route::get('pedidos/estados/anulados', [PedidoStatusController::class,'anulados'])->name('pedidos.estados.anulados');
-    Route::get('pedidos/estados/{pedido}/detalle_atencion', [PedidoStatusController::class,'pedidoDetalleAtencion'])->name('pedidos.estados.detalle-atencion');
-    Route::post('pedidos/estados/{pedido}/detalle_atencion', [PedidoStatusController::class,'pedidoDetalleAtencionConfirm']);
+    Route::get('pedidos/estados/anulados', [PedidoStatusController::class, 'anulados'])->name('pedidos.estados.anulados');
+    Route::get('pedidos/estados/{pedido}/detalle_atencion', [PedidoStatusController::class, 'pedidoDetalleAtencion'])->name('pedidos.estados.detalle-atencion');
+    Route::post('pedidos/estados/{pedido}/detalle_atencion', [PedidoStatusController::class, 'pedidoDetalleAtencionConfirm']);
 
-    Route::get('pedidos/estados', [PedidoStatusController::class,'index'])->name('pedidos.estados.index');
+    Route::get('pedidos/estados', [PedidoStatusController::class, 'index'])->name('pedidos.estados.index');
 
-    Route::get('pedidos/estados/porAtender', [PedidoStatusController::class,'PorAtender'])->name('pedidos.estados.poratender');
-    Route::get('pedidos/estados/Atendidos', [PedidoStatusController::class,'Atendidos'])->name('pedidos.estados.atendidos');
+    Route::get('pedidos/estados/porAtender', [PedidoStatusController::class, 'PorAtender'])->name('pedidos.estados.poratender');
+    Route::get('pedidos/estados/Atendidos', [PedidoStatusController::class, 'Atendidos'])->name('pedidos.estados.atendidos');
 
     Route::post('pedidos.confirm.anulled', [PedidoController::class, 'ConfirmarAnular'])->name('pedidos.confirmar.anular');
     Route::resource('pedidos', PedidoController::class)->names('pedidos');
@@ -226,7 +223,6 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     Route::post('envios.updatedireccion/{direccion}', [EnvioController::class, 'UpdateDireccionEnvio'])->name('envios.updatedireccion');
 
 
-
     Route::post('pedidos/eliminarFoto1/{pedido}', [PedidoController::class, 'eliminarFoto1'])->name('pedidos.eliminarFoto1');
     Route::post('pedidos/eliminarFoto2/{pedido}', [PedidoController::class, 'eliminarFoto2'])->name('pedidos.eliminarFoto2');
     Route::get('envios/{imagen}/descargarimagen', [PedidoController::class, 'DescargarImagen'])->name('envios.descargarimagen');
@@ -251,6 +247,11 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     Route::get('envios.seguimientoprovinciatabla', [EnvioController::class, 'Seguimientoprovinciatabla'])->name('envios.seguimientoprovinciatabla');
     Route::get('envios.entregados', [EnvioController::class, 'Entregados'])->name('envios.entregados');
     Route::get('envios.entregadostabla', [EnvioController::class, 'Entregadostabla'])->name('envios.enviadostabla');
+
+    Route::get('envios/motorizados', [MotorizadoController::class, 'index'])->name('envios.motorizados.index');
+    Route::get('envios/motorizados/confirmar', [MotorizadoController::class, 'confirmar'])->name('envios.motorizados.confirmar');
+    Route::get('envios/motorizados/confirmar-cliente', [MotorizadoController::class, 'confirmar_cliente'])->name('envios.motorizados.confirmar.cliente');
+
     /*Envios routes */
 
     /*Operaciones*/
@@ -364,7 +365,6 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     Route::get('envios.estadosobres', [EnvioController::class, 'Estadosobres'])->name('envios.estadosobres');
     Route::get('envios.estadosobrestabla', [EnvioController::class, 'Estadosobrestabla'])->name('envios.estadosobrestabla');
     Route::post('envios.estadosobresexcel', [ExcelController::class, 'estadosobresExcel'])->name('estadosobresexcel');
-
 
 
     /*Controller Envio*/
@@ -486,7 +486,6 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     Route::post('pedidosporenviarExcel', [ExcelController::class, 'pedidosporenviarExcel'])->name('pedidosporenviarExcel');
 
 
-
     Route::post('sobresRutaEnvioExcel', [ExcelController::class, 'sobresRutaEnvioExcel'])->name('sobresRutaEnvioExcel');
     Route::post('sobresRutaEnvioLimaNorteExcel', [ExcelController::class, 'sobresRutaEnvioLimaNorteExcel'])->name('sobresRutaEnvioLimaNorteExcel');
     Route::post('sobresRutaEnvioLimaCentroExcel', [ExcelController::class, 'sobresRutaEnvioLimaCentroExcel'])->name('sobresRutaEnvioLimaCentroExcel');
@@ -527,6 +526,9 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     Route::post('operaciones.confirmaropbarras', [EnvioController::class, 'ConfirmarOPBarra'])->name('operaciones.confirmaropbarras');
     /* Cambiar estado a Motorizado */
     Route::post('operaciones.confirmar', [EnvioController::class, 'confirmarEstado'])->name('operaciones.confirmar');
+
+    Route::post('operaciones.confirmarmotorizado', [EnvioController::class, 'confirmarEstadoConfirm'])->name('operaciones.confirmarmotorizado');
+    Route::post('operaciones.confirmarcliente', [EnvioController::class, 'confirmarEstadoConfirmValidada'])->name('operaciones.confirmarcliente');
 
     /* Route::group(['middleware' => ['permission:pedidos.index']], function () {
         Route::get('pedidos.index', [PedidoController::class, 'index']);
