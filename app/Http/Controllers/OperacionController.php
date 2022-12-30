@@ -259,6 +259,12 @@ class OperacionController extends Controller
 
                 return $btn;
             })
+            ->addColumn('condicion_envio_color', function ($pedido) {
+                $pedido = new Pedido((array)$pedido);
+                $pedido->forceFill((array)$pedido);
+                $pedido->exists = true;
+                return $pedido->condicion_envio_color;
+            })
             ->rawColumns(['action'])
             ->make(true);
     }

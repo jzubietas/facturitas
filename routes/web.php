@@ -125,6 +125,10 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
 
     /*Controller User*/
     Route::resource('users', UserController::class)->names('users');
+
+    Route::get('users.profile', [UserController::class, 'profile'])->name('users.profile');
+    //Route::get('users.misasesores', [UserController::class, 'MisAsesores'])->name('users.misasesores');
+
     Route::post('reset/{user}', [UserController::class, 'reset'])->name('user.reset');
     Route::post('asesorcombo', [UserController::class, 'Asesorcombo'])->name('asesorcombo');
     Route::post('asesorcombopago', [UserController::class, 'Asesorcombopago'])->name('asesorcombopago');
