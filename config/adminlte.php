@@ -396,10 +396,10 @@ return [
             'can' => 'envios.modulo',
             'submenu' => [
                 [
-                    'text' => 'Sobres por confirmar',
+                    'text' => 'Recepción de sobres',
                     'route' => 'envios.porconfirmar',
                     'can' => 'envios.porconfirmar',
-                    'icon' => 'fas fa-check-circle',
+                    'icon' => 'fas fa-check-circle dot_sobres_confirmar_recepcion_count',
                     'active' => ['envios'],
                 ],
                 [
@@ -441,7 +441,7 @@ return [
                     'text' => 'Sobre entregados',
                     'route' => 'envios.entregados',
                     'can' => 'envios.enviados',
-                    'icon' => 'fas fa-check-circle dot_sobres_entregados_count',
+                    'icon' => 'fas fa-check-circle',//dot_sobres_entregados_count
                     //'icon' => 'noti-sobres-entregados noti-side',
                     'active' => ['enviados'],
                 ],
