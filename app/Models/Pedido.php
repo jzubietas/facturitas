@@ -168,6 +168,10 @@ class Pedido extends Model
     {
         return $this->hasMany(ImagenAtencion::class, 'pedido_id');
     }
+    public function detallePedido()
+    {
+        return $this->hasOne(DetallePedido::class);
+    }
 
     public function detallePedidos()
     {
