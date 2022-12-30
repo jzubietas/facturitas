@@ -673,8 +673,8 @@
                     },
                     {data: 'destino', name: 'destino', "visible": false},
                     {
-                        data: 'condicion_code',
-                        name: 'condicion_code',
+                        data: 'condicion_envio',
+                        name: 'condicion_envio',
                         sWidth: '10%',
                         render: function (data, type, row, meta) {
 

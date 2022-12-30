@@ -195,6 +195,12 @@ class UserController extends Controller
         return redirect()->route('users.index')->with('info', 'reseteado');
     }
 
+    public function profile(User $user)
+    {
+       $user='33';
+        return view('usuarios.perfil', compact('user'));
+    }
+
     public function Llamadas()
     {
         //si es usuario llamadas  solo salga sus asesores
