@@ -1287,6 +1287,8 @@
               name: 'condicion_envio',
               render: function ( data, type, row, meta ) {
 
+                return '<span class="badge badge-success" style="background-color:' + row.condicion_envio_color + ' !important;" >' + data + '</span>';
+/*
                   if(row.condicion_envio=='ANULADO'){
                       return 'ANULADO';
                   }else if(row.condicion_envio == 0){
@@ -1299,7 +1301,7 @@
                       return 'ENTREGADO';
                   }else{
                       return data;
-                  }
+                  }*/
               }
           },
           {
