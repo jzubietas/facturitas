@@ -195,7 +195,7 @@
             </div>
             <div class="col-md-12">
                 <div class="row" id="widget-container">
-                    <div class="col-md-12">
+                    <div class="col-md-8">
                         <div class="card">
                             <div class="card-body">
                                 <div class="d-flex justify-content-center mb-4 pb-4">
@@ -217,7 +217,9 @@
                             </div>
                         </div>
                     </div>
-
+                    <div class="col-md-4">
+                        <x-grafico-pedidos-atendidos-anulados></x-grafico-pedidos-atendidos-anulados>
+                    </div>
                     <div class="col-md-12">
                         <x-grafico-pedidos-por-dia rol="Administrador"
                                                    title="Cantidad de pedidos de los asesores por dia"
