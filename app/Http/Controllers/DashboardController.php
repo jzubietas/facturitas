@@ -25,84 +25,68 @@ class DashboardController extends Controller
         $dfecha = $mytime->day;
 
         $_pedidos = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')
-        ->join('users as u', 'pedidos.user_id', 'u.id')
-        ->select(
-            DB::raw("COUNT(u.identificador) AS total, u.identificador ")
-        )
-        ->where('pedidos.estado', '1')
-        //->whereIn('pedidos.condicion_envio_code', [Pedido::POR_ATENDER_INT])
-        ->where(DB::raw('CAST(pedidos.created_at as date)'), '=', Carbon::now()->format('Y-m-d'))
-        //->whereIn('u.identificador', ['01','02','03'])
-        ->groupBy('u.identificador');
+            ->join('users as u', 'pedidos.user_id', 'u.id')
+            ->select(
+                DB::raw("COUNT(u.identificador) AS total, u.identificador ")
+            )
+            ->where('pedidos.estado', '1')
+            //->whereIn('pedidos.condicion_envio_code', [Pedido::POR_ATENDER_INT])
+            ->where(DB::raw('CAST(pedidos.created_at as date)'), '=', Carbon::now()->format('Y-m-d'))
+            //->whereIn('u.identificador', ['01','02','03'])
+            ->groupBy('u.identificador');
 
-        $_pedidos=$_pedidos->get();
+        $_pedidos = $_pedidos->get();
 
 
-        $_pedidos_mes_op=null;
-         
-       
-        
-        
+        /**
+         * $_pedidos_mes_op = null;
+
 
         if (Auth::user()->rol == "Jefe de operaciones") {
 
 
+        $_pedidos_mes_operario = Pedido::join('users as u', 'pedidos.user_id', 'u.id')
+        ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
+        ->select([
+        'u.name',
+        DB::raw("COUNT(u.identificador) AS total"),
+        DB::raw(" (SELECT count(dp.tipo_banca) FROM detalle_pedidos dp
+        JOIN pedidos p ON (dp.pedido_id=p.id)
+        JOIN users us ON (p.user_id=us.id)
+        WHERE us.identificador=u.identificador AND dp.estado=1  AND dp.tipo_banca LIKE  'electronica%'
+        ) as electronico"),
 
-            $_pedidos_mes_operario = Pedido::join('users as u', 'pedidos.user_id', 'u.id')
-            ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
-            ->select( 
-            'u.name',
-            DB::raw("COUNT(u.identificador) AS total"),
-            DB::raw(" (SELECT count(dp.tipo_banca) FROM detalle_pedidos dp
-            JOIN pedidos p ON (dp.pedido_id=p.id)
-            JOIN users us ON (p.user_id=us.id)
-             WHERE us.identificador=u.identificador AND dp.estado=1  AND dp.tipo_banca LIKE  'electronica%'
-           ) as electronico"),
-    
-           DB::raw(" (SELECT count(dp.tipo_banca) FROM detalle_pedidos dp
-           JOIN pedidos p ON (dp.pedido_id=p.id)
-           JOIN users us ON (p.user_id=us.id)
-            WHERE us.identificador=u.identificador AND dp.estado=1  AND dp.tipo_banca LIKE  'fisico%'
-          ) as fisico")
-            
-            )
-             ->where('pedidos.estado', '1');
-            
+        DB::raw(" (SELECT count(dp.tipo_banca) FROM detalle_pedidos dp
+        JOIN pedidos p ON (dp.pedido_id=p.id)
+        JOIN users us ON (p.user_id=us.id)
+        WHERE us.identificador=u.identificador AND dp.estado=1  AND dp.tipo_banca LIKE  'fisico%'
+        ) as fisico")
+        ])
+        ->where('pedidos.estado', '1');
 
-            $operarios = User::where('users.rol', 'Operario')
-                ->where('users.estado', '1')
-                ->where('users.jefe', Auth::user()->id)
-                ->select(
-                    DB::raw("users.id as id")
-                )
-                ->pluck('users.id');
 
-            $asesores = User::whereIN('users.rol', ['Asesor'])
-                ->where('users.estado', '1')
-                ->WhereIn('users.operario', $operarios)
-                ->select(
-                    DB::raw("users.identificador as identificador")
-                )
-                ->pluck('users.identificador');
-                
+        $operarios = User::where('users.rol', 'Operario')
+        ->where('users.estado', '1')
+        ->where('users.jefe', Auth::user()->id)
+        ->select(
+        DB::raw("users.id as id")
+        )
+        ->pluck('users.id');
 
-            $_pedidos_mes_operario->WhereIn('u.identificador', $asesores)->groupBy('u.identificador','u.name');
+        $asesores = User::whereIN('users.rol', ['Asesor'])
+        ->where('users.estado', '1')
+        ->WhereIn('users.operario', $operarios)
+        ->select(
+        DB::raw("users.identificador as identificador")
+        )
+        ->pluck('users.identificador');
 
-            $_pedidos_mes_op=$_pedidos_mes_operario->get();
 
+        $_pedidos_mes_operario->WhereIn('u.identificador', $asesores)->groupBy('u.identificador', 'u.name');
+
+        $_pedidos_mes_op = $_pedidos_mes_operario->get();
         }
-
-
-
-
-
-        
-
-       
-
-       
-
-
+         */
 
 
         //DASHBOARD ADMINISTRADOR
@@ -112,24 +96,22 @@ class DashboardController extends Controller
             /* ->whereMonth('pedidos.created_at', $mfecha) */
             ->get();
 
-      
-         $pagoxmes_total = Pedido::join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')//CANTIDAD DE PEDIDOS DEL MES
-            ->activo()
-                ->join('users as u', 'pedidos.user_id', 'u.id')
-                ->select(DB::raw('count(dp.id) as pedidos'))
-                ->wherein('u.rol', ['ASESOR'])
-                
-                ->whereBetween('dp.created_at', [now()->startOfMonth(),now()->endOfMonth()])
-                ->get();
 
-        
+        $pagoxmes_total = Pedido::join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')//CANTIDAD DE PEDIDOS DEL MES
+        ->activo()
+            ->join('users as u', 'pedidos.user_id', 'u.id')
+            ->select(DB::raw('count(dp.id) as pedidos'))
+            ->wherein('u.rol', ['ASESOR'])
+            ->whereBetween('dp.created_at', [now()->startOfMonth(), now()->endOfMonth()])
+            ->get();
 
-        $pagoxmes_total_solo_asesor_b=Pedido::join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')//CANTIDAD DE PEDIDOS DEL MES
+
+        $pagoxmes_total_solo_asesor_b = Pedido::join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')//CANTIDAD DE PEDIDOS DEL MES
         ->activo()
             ->join('users as u', 'pedidos.user_id', 'u.id')
             ->select(DB::raw('count(dp.id) as pedidos'))
             ->where('u.id', 51)
-            ->whereBetween('dp.created_at', [now()->startOfMonth(),now()->endOfMonth()])
+            ->whereBetween('dp.created_at', [now()->startOfMonth(), now()->endOfMonth()])
             ->get();
 
 
@@ -141,7 +123,7 @@ class DashboardController extends Controller
             ->select(DB::raw('(sum(dp.total))/(count(dp.pedido_id)) as total'))
             //->where('users.rol', "ASESOR")
             ->where('users.estado', '1')
-            ->whereBetween('pedidos.created_at', [now()->startOfMonth(),now()->endOfMonth()])
+            ->whereBetween('pedidos.created_at', [now()->startOfMonth(), now()->endOfMonth()])
             //->whereYear('pedidos.created_at', $afecha)
             ->get();
         //return $montopedidoxmes_total;
@@ -150,7 +132,7 @@ class DashboardController extends Controller
             ->select(DB::raw('sum(dpa.monto) as total'))
                 ->where('pagos.estado', '1')
                 ->where('dpa.estado', '1')
-                ->whereBetween('dpa.created_at', [now()->startOfMonth(),now()->endOfMonth()])
+                ->whereBetween('dpa.created_at', [now()->startOfMonth(), now()->endOfMonth()])
                 ->get();
         } else {
             $montopagoxmes_total = Pago::join('detalle_pagos as dpa', 'pagos.id', 'dpa.pago_id')//CANTIDAD DE PAGOS DEL MES
@@ -159,7 +141,7 @@ class DashboardController extends Controller
                 ->where('u.rol', 'ASESOR')
                 ->where('pagos.estado', '1')
                 ->where('dpa.estado', '1')
-                ->whereBetween('dpa.created_at', [now()->startOfMonth(),now()->endOfMonth()])
+                ->whereBetween('dpa.created_at', [now()->startOfMonth(), now()->endOfMonth()])
                 ->get();
         }
         //GRAFICO DE BARRAS IMPORTE/PEDIDOS
@@ -170,7 +152,7 @@ class DashboardController extends Controller
                 'u.identificador as usuarios',
                 DB::raw('((sum(dp.total)/count(dp.id))) as total'))
             //->whereIn('u.rol', ['ENCARGADO', 'Super asesor','ASESOR'])
-            ->whereBetween('dp.created_at', [now()->startOfMonth(),now()->endOfMonth()])
+            ->whereBetween('dp.created_at', [now()->startOfMonth(), now()->endOfMonth()])
             ->groupBy('u.identificador')
             //->orderBy((DB::raw('count(dp.id)')), 'DESC')
             ->get();
@@ -181,7 +163,7 @@ class DashboardController extends Controller
             ->join('users as u', 'pedidos.user_id', 'u.id')
             ->select('u.identificador as users', DB::raw('count(dp.id) as pedidos'))
             ->whereIn('u.rol', ['ASESOR', 'Super asesor'])
-            ->whereBetween('dp.created_at', [now()->startOfMonth(),now()->endOfMonth()])
+            ->whereBetween('dp.created_at', [now()->startOfMonth(), now()->endOfMonth()])
             ->groupBy('u.identificador')
             ->orderBy((DB::raw('count(dp.id)')), 'DESC')
             ->get();
@@ -190,7 +172,7 @@ class DashboardController extends Controller
 
         $pedidos_mes_ = Pedido::select(DB::raw('count(*) as total'))//META PEDIDOS
         ->activo()
-            ->whereBetween('created_at', [now()->startOfMonth(),now()->endOfMonth()])
+            ->whereBetween('created_at', [now()->startOfMonth(), now()->endOfMonth()])
             ->get();
 
 
@@ -200,7 +182,7 @@ class DashboardController extends Controller
             ->select(['c.nombre as cliente', DB::raw('sum(pagos.total_cobro) as pagos')])
             ->whereIn('u.rol', ['ASESOR', 'Super asesor'])
             ->where('pagos.estado', '1')
-            ->whereBetween('pagos.created_at', [now()->startOfMonth(),now()->endOfMonth()])
+            ->whereBetween('pagos.created_at', [now()->startOfMonth(), now()->endOfMonth()])
             ->groupBy('c.nombre')
             ->orderBy(DB::raw('sum(pagos.total_cobro)'), 'DESC')
             ->offset(0)
@@ -221,31 +203,29 @@ class DashboardController extends Controller
         $meta_pedidoencargado = Pedido::join('users as u', 'pedidos.user_id', 'u.id')
             ->activo()
             ->where('u.supervisor', Auth::user()->id)
-            ->whereBetween('pedidos.created_at', [now()->startOfMonth(),now()->endOfMonth()])
+            ->whereBetween('pedidos.created_at', [now()->startOfMonth(), now()->endOfMonth()])
             ->count();
         $meta_pagoencargado = Pago::join('users as u', 'pagos.user_id', 'u.id')
             ->join('detalle_pagos as dpa', 'pagos.id', 'dpa.pago_id')
             ->select(DB::raw('sum(dpa.monto) as pagos'))
             ->where('u.supervisor', Auth::user()->id)
             ->where('pagos.estado', '1')
-            ->whereBetween('pagos.created_at', [now()->startOfMonth(),now()->endOfMonth()])
+            ->whereBetween('pagos.created_at', [now()->startOfMonth(), now()->endOfMonth()])
             ->first();
 
 
         //PEDIDOS DE MIS ASESORES EN EL MES
-        
-        
+
+
         $pedidosxasesor_encargado = Pedido::join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
             ->activo()
             ->join('users as u', 'pedidos.user_id', 'u.id')
             ->select('u.name as users', DB::raw('count(dp.id) as pedidos'))
             ->where('u.supervisor', Auth::user()->id)
-            ->whereBetween('dp.created_at', [now()->startOfMonth(),now()->endOfMonth()])
+            ->whereBetween('dp.created_at', [now()->startOfMonth(), now()->endOfMonth()])
             ->groupBy('u.name')
             ->orderBy((DB::raw('count(dp.id)')), 'DESC')
             ->get();
-
-
 
 
         //HISTORIAL DE PEDIDOS DE MIS ASESORES EN LOS ULTIMOS 3 MES
@@ -265,7 +245,7 @@ class DashboardController extends Controller
             ->select('c.nombre as cliente', DB::raw('sum(pagos.total_cobro) as pagos'))
             ->where('u.supervisor', Auth::user()->id)
             ->where('pagos.estado', '1')
-            ->whereBetween('pagos.created_at', [now()->startOfMonth(),now()->endOfMonth()])
+            ->whereBetween('pagos.created_at', [now()->startOfMonth(), now()->endOfMonth()])
             ->groupBy('c.nombre')
             ->offset(0)
             ->limit(30)
@@ -284,14 +264,14 @@ class DashboardController extends Controller
         $meta_pedidoasesor = Pedido::join('users as u', 'pedidos.user_id', 'u.id')
             ->activo()
             ->where('u.id', Auth::user()->id)
-            ->whereBetween('pedidos.created_at', [now()->startOfMonth(),now()->endOfMonth()])
+            ->whereBetween('pedidos.created_at', [now()->startOfMonth(), now()->endOfMonth()])
             ->count();
-        $meta_pagoasesor = (object)["pagos"=>Pago::join('users as u', 'pagos.user_id', 'u.id')
+        $meta_pagoasesor = (object)["pagos" => Pago::join('users as u', 'pagos.user_id', 'u.id')
             ->join('detalle_pagos as dpa', 'pagos.id', 'dpa.pago_id')
             ->where('u.id', Auth::user()->id)
             ->where('pagos.estado', '1')
             ->where('dpa.estado', '1')
-            ->whereBetween('pagos.created_at', [now()->startOfMonth(),now()->endOfMonth()])
+            ->whereBetween('pagos.created_at', [now()->startOfMonth(), now()->endOfMonth()])
             ->sum('dpa.monto')];
 
         $pagosobservados_cantidad = Pago::where('user_id', Auth::user()->id)//PAGOS OBSERVADOS
@@ -303,7 +283,7 @@ class DashboardController extends Controller
             ->activo()
             ->select('u.name as users', DB::raw('count(pedidos.id) as pedidos'), DB::raw('DATE(pedidos.created_at) as fecha'))
             ->where('u.id', Auth::user()->id)
-            ->whereBetween('pedidos.created_at', [now()->startOfMonth(),now()->endOfMonth()])
+            ->whereBetween('pedidos.created_at', [now()->startOfMonth(), now()->endOfMonth()])
             ->groupBy('u.name', DB::raw('DATE(pedidos.created_at)'))
             ->orderBy(DB::raw('DATE(pedidos.created_at)'), 'ASC')
             ->get();
@@ -359,9 +339,6 @@ class DashboardController extends Controller
         $conteo = count(auth()->user()->unreadNotifications);
 
 
-
-       
-
         return view('dashboard.dashboard', compact('pedidoxmes_total',
                 'pedidos_mes_',
                 'pagoxmes_total',
@@ -389,7 +366,7 @@ class DashboardController extends Controller
                 'conteo',
                 'cobranzaxmes',
                 '_pedidos',
-                '_pedidos_mes_op'
+                //'_pedidos_mes_op'
             )
         );
     }
