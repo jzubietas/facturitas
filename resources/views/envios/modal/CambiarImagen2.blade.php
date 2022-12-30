@@ -8,14 +8,14 @@
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
-        
+
         <div class="modal-body">
 
-        <input type="text" value="" name="DPConciliar" id="DPConciliar">
-        <input type="text" value="" name="DPitem" id="DPitem">
+        <input type="hidden" value="" name="DPConciliar" id="DPConciliar">
+        <input type="hidden" value="" name="DPitem" id="DPitem">
 
           <div class="form-row">
-            
+
             <div class="form-group col-lg-6">
               <div class="image-wrapper">
                 <img id="picture" src="{{asset('imagenes/logo_facturas.png')}}" alt="Imagen del pago" width="250px">
@@ -23,10 +23,10 @@
             </div>
 
             <div class="form-group col-lg-6">
-              {!! Form::label('pimagen', 'Imagen') !!}  
+              {!! Form::label('pimagen', 'Imagen') !!}
               {!! Form::file('pimagen', ['class' => 'form-control-file', 'accept' => 'image/*']) !!}
             </div>
-            
+
           </div>
 
         </div>
@@ -34,7 +34,7 @@
           <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
           <button type="button" class="btn btn-info" id="change_imagen2" >Agregar</button>
         </div>
-        
+
       </div>
     </div>
   </div>

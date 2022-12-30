@@ -38,10 +38,12 @@
 
 @stop
 
-@section('css')
-@stop
+@push('css')
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
+@endpush
 
 @section('js')
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
 
@@ -69,6 +71,132 @@
                     if (data.destino2 == 'PROVINCIA') {
                         $('td', row).css('color', 'red')
                     }
+                    $('[data-jqconfirm]', row).click(function () {
+                        $.dialog({
+                            title: 'Entregas de motorizado',
+                            type: 'green',
+                            columnClass: 'large',
+                            content: `<div>
+    <form enctype="multipart/form-data" class="card">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <h5>Información:</h5>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6">
+                   <div class="form-group">
+                     <label for="fecha_envio_doc_fis">Fecha de Envio</label>
+                     <input class="form-control" id="fecha_envio_doc_fis" disabled="" name="fecha_envio_doc_fis" type="date" value="${data.fecha}">
+                    </div>
+                </div>
+                <div class="col-6">
+                   <div class="form-group">
+                        <label for="fecha_recepcion">Fecha de Entrega</label>
+                        <input class="form-control" id="fecha_recepcion" name="fecha_recepcion" type="date" value="">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6">
+                    <div class="form-group">
+                        <label for="foto1">Foto recibido 1</label>
+                        <input class="form-control-file" id="adjunto1" name="adjunto1" type="file">
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="form-group">
+                        <label for="foto2">Foto recibido 2</label>
+                        <input class="form-control-file" id="adjunto2" name="adjunto2" type="file">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6">
+                    <div class="form-group">
+                        <div class="image-wrapper">
+                            <img id="picture1" src="https://sisfactura.dev/imagenes/logo_facturas.png"
+                                 alt="Imagen del pago" class="w-100" style="display: none">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="form-group">
+                        <div class="image-wrapper">
+                            <img id="picture2" src="https://sisfactura.dev/imagenes/logo_facturas.png"
+                                 alt="Imagen del pago" class="w-100" style="display: none">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer">
+            <button type="submit" class="btn btn-info" id="atender">Confirmar</button>
+        </div>
+    </form>
+</div>`,
+                            onContentReady: function () {
+                                const self = this
+                                self.$content.find("#adjunto1").change(function (e) {
+                                    const [file] = e.target.files
+                                    if (file) {
+                                        self.$content.find("#picture1").show();
+                                        self.$content.find("#picture1").attr('src', URL.createObjectURL(file))
+                                    }
+                                })
+                                self.$content.find("#adjunto2").change(function (e) {
+                                    const [file] = e.target.files
+                                    if (file) {
+                                        self.$content.find("#picture2").show();
+                                        self.$content.find("#picture2").attr('src', URL.createObjectURL(file))
+                                    }
+                                })
+                                self.$content.find("form").on('submit', function (e) {
+                                    e.preventDefault()
+                                    if (!e.target.fecha_recepcion.value) {
+                                        $.confirm({
+                                            title: '¡Advertencia!',
+                                            content: '<b>Ingresa la fecha de Entrega</b>',
+                                            type: 'orange'
+                                        })
+                                        return false;
+                                    }
+                                    if (e.target.adjunto1.files.length === 0) {
+                                        $.confirm({
+                                            title: '¡Advertencia!',
+                                            content: '<b>Adjunta la foto 1</b>',
+                                            type: 'orange'
+                                        })
+                                        return false;
+                                    }
+                                    if (e.target.adjunto2.files.length === 0) {
+                                        $.confirm({
+                                            title: '¡Advertencia!',
+                                            content: '<b>Adjunta la foto 2</b>',
+                                            type: 'orange'
+                                        })
+                                        return false;
+                                    }
+                                    var fd2=new FormData(e.target);
+                                    fd2.set('envio_id',data.id)
+                                    self.showLoading(true)
+                                    $.ajax({
+                                        data: fd2,
+                                        processData: false,
+                                        contentType: false,
+                                        type: 'POST',
+                                        url: "{{ route('operaciones.confirmarmotorizado') }}"
+                                    }).done(function () {
+                                        self.close()
+                                        $('#tablaPrincipal').DataTable().ajax.reload();
+                                    }).always(function () {
+                                        self.hideLoading(true)
+                                    });
+                                })
+                            },
+                        });
+                    })
                 },
                 columns: [
                     {
@@ -179,116 +307,6 @@
                         "previous": "Anterior"
                     }
                 },
-            });
-
-            $('#modal-motorizado-entregar').on('show.bs.modal', function (event) {
-                //adjunta dos fotos
-                var button = $(event.relatedTarget)
-                var idunico = button.data('entregar')//
-                console.log(idunico);
-                var idcodigo = button.data('codigos')//
-                $(".textcode").html(idcodigo);
-                $("#hiddenMotorizadoEntregar").val(idunico)
-
-            })
-
-            $(document).on("change","#adjunto1",function(event){
-                console.log("cambe image")
-                var file = event.target.files[0];
-                var reader = new FileReader();
-                reader.onload = (event) => {
-                    document.getElementById("picture1").setAttribute('src', event.target.result);
-                };
-                reader.readAsDataURL(file);
-            });
-
-            $(document).on("change","#adjunto2",function(event){
-                console.log("cambe image")
-                var file = event.target.files[0];
-                var reader = new FileReader();
-                reader.onload = (event) => {
-                    document.getElementById("picture2").setAttribute('src', event.target.result);
-                };
-                reader.readAsDataURL(file);
-            });
-
-            $(document).on("submit", "#formulariomotorizadoentregar", function (evento) {
-                evento.preventDefault();
-                var fd2 = new FormData();
-
-                fd2.append('hiddenMotorizadoEntregar', $('#hiddenMotorizadoEntregar').val());
-                fd2.append('fecha_envio_doc_fis', $('#fecha_envio_doc_fis').val());
-                fd2.append('fecha_recepcion', $('#fecha_recepcion').val());
-
-                $.ajax({
-                    data: fd2,
-                    processData: false,
-                    contentType: false,
-                    type: 'POST',
-                    url: "{{ route('operaciones.confirmarmotorizado') }}",
-                    success: function (data) {
-                        $("#modal-motorizado-entregar").modal("hide");
-                        $('#tablaPrincipal').DataTable().ajax.reload();
-
-                    }
-                });
-            });
-
-            $(document).on("click", "#cerrarmotorizadoentregar", function (evento) {
-                evento.preventDefault();
-                var fd = new FormData();
-                fd.append('hiddenMotorizadoEntregar', $("#hiddenMotorizadoEntregar").val());
-                $.ajax({
-                    data: fd,
-                    processData: false,
-                    contentType: false,
-                    type: 'POST',
-                    url: "{{ route('operaciones.confirmarmotorizadodismiss') }}",
-                    success: function (data) {
-                        //console.log(data);
-                        $("#modal-motorizado-entregar .textcode").text('');
-                        $("#modal-motorizado-entregar").modal("hide");
-                        $('#tablaPrincipal').DataTable().ajax.reload();
-                    }
-                });
-            });
-
-            $(document).on("change", "#adjunto1", function (evento) {
-                $("#cargar_adjunto1").trigger("click");
-            });
-
-            $(document).on("change", "#adjunto1", function (evento) {
-                $("#cargar_adjunto2").trigger("click");
-            });
-
-            $(document).on("click", "#cargar_adjunto1", function (evento) {
-                let idunico = $("#hiddenMotorizadoEntregar").val();
-                var data = new FormData(document.getElementById("formulariomotorizadoentregar"));
-                $("#loading_upload_attachment_file").show()
-                $("#adjunto1").hide()
-                $.ajax({
-                    type: 'POST',
-                    url: "{{ route('operaciones.updateatendersinconfirmar',':id') }}".replace(':id', idunico),
-                    data: data,
-                    processData: false,
-                    contentType: false,
-                    success: function (data) {
-                        $('#cargar_adjunto').prop("disabled", false);
-                        $('#cargar_adjunto').text('Subir Informacion');
-                        console.log(data)
-                        console.log("obtuve las imagenes atencion del pedido " + idunico)
-                        $('#listado_adjuntos').html(data);
-                    }
-                })
-                    .done(function (data) {
-                        $("#adjunto").val(null)
-                    })
-                    .always(function () {
-                        $("#adjunto").show()
-                        $("#loading_upload_attachment_file").hide()
-                    });
-
-
             });
         });
     </script>
