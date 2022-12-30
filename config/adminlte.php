@@ -417,7 +417,7 @@ return [
                     'active' => ['envios estadosobres'],
                 ],
                 [
-                    'text' => 'Rutas de Envio',
+                    'text' => 'Sobres para Reparto',
                     'route' => 'envios.rutaenvio',
                     'can' => 'envios.rutaenvio',
                     'icon' => 'fas fa-check-circle',
