@@ -12,8 +12,8 @@
                 {{-- Form::Open(['route' => ['pedidos.envio', $pedido],'enctype'=>'multipart/form-data', 'id'=>'formulario','files'=>true]) --}}
                 <input type="hidden" id="hiddenEnvio" name="hiddenEnvio">
                 <div class="modal-body">
-                    <p>Desea enviar el pedido <strong class="textcode">PED000</strong> <b style="color: #00add4">CON
-                            SOBRE</b> al Jefe de operaciones?</p>
+                    <p>Desea enviar el pedido <strong class="textcode">PED000</strong> <span class="text-success font-weight-bold">CON
+                            SOBRE</span> al Jefe de operaciones?</p>
                 </div>
                 {{-- <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                   {!! Form::label('destino', 'Destino') !!}
