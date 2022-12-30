@@ -396,7 +396,7 @@ return [
             'can' => 'envios.modulo',
             'submenu' => [
                 [
-                    'text' => 'Confirmar recepción de sobres',
+                    'text' => 'Recepción de sobres',
                     'route' => 'envios.porconfirmar',
                     'can' => 'envios.porconfirmar',
                     'icon' => 'fas fa-check-circle dot_sobres_confirmar_recepcion_count',
