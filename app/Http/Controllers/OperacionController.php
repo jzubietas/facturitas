@@ -210,7 +210,8 @@ class OperacionController extends Controller
                 //'u.jefe',
                 DB::raw(" (select u2.name from users u2 where u2.id=u.jefe) as jefe "),
                 DB::raw('DATE_FORMAT(dp.fecha_envio_doc_fis, "%d/%m/%Y") as fecha_envio_doc_fis'),
-                'dp.fecha_recepcion'
+                'dp.fecha_recepcion',
+                DB::raw(" (select count(ii.id) from imagen_atencions ii where ii.pedido_id=pedidos.id and ii.estado=1) as adjuntos ")
             )
             ->where('pedidos.estado', '1')
             ->where('dp.estado', '1')
@@ -1343,6 +1344,12 @@ class OperacionController extends Controller
             'condicion' => Pedido::POR_ATENDER_OPE,
             'condicion_code' => Pedido::POR_ATENDER_OPE_INT,
             'modificador' => 'USER' . Auth::user()->id
+        ]);
+
+        //liberar adjuntos 
+        $imagenesatencion_ = ImagenAtencion::where("pedido_id", $request->hiddenRevertirpedidoporatender);//->where("confirm", '0');
+        $imagenesatencion_->update([
+            'estado' => '0'
         ]);
 
         PedidoMovimientoEstado::where('pedido', $request->hiddenRevertirpedidoporatender)->delete();

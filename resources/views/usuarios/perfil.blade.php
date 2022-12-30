@@ -47,13 +47,49 @@
   
   <div class="card">
 
-    <form id="formperfil" name="formperfil">
+    <form id="formperfilclave" name="formperfilclave">
 
       <div class="card-body">
         
           <div class="row">
             <div class="col-6">
               <h5 class="card-title">Actualiza la contraseña</h5>
+            </div>
+
+            <div class="col-6">
+
+              <div class="row">
+                <div class="col-12">
+                  {!! Form::label('pass', 'Contraseña') !!}
+                  {!! Form::text('pass', null, ['class' => 'form-control', 'placeholder' => 'Ingrese contraseña', 'enabled']) !!}
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-12">
+                  {!! Form::label('passconfirm', 'Confirmar Contraseña') !!}
+                  {!! Form::text('passconfirm', null, ['class' => 'form-control', 'placeholder' => 'Confirmar contraseña', 'enabled']) !!}
+                </div>
+              </div>
+            </div>          
+          </div>
+      </div>
+      <div class="card-footer">
+        <button type="submit" class="btn btn-success"><i class="fas fa-save"></i> Grabar</button>
+        <button type = "button" onClick="history.back()" class="btn btn-danger btn-lg"><i class="fas fa-arrow-left"></i>ATRAS</button>
+      </div>
+    </form>
+    
+  </div>
+
+  <div class="card">
+
+    <form id="formperfilavatar" name="formperfilavatar">
+
+      <div class="card-body">
+        
+          <div class="row">
+            <div class="col-6">
+              <h5 class="card-title">Actualiza el avatar</h5>
             </div>
 
             <div class="col-6">
