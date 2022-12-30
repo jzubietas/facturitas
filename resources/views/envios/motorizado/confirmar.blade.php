@@ -86,8 +86,9 @@
                                             data: {
                                                 envio_id:data.id
                                             },
+                                            //operaciones.confirmar.revertir
                                             type: 'POST',
-                                            url: "{{ route('operaciones.confirmar.revertir') }}",
+                                            url: "{{ route('operaciones.confirmarmotorizado.revertir') }}",
                                         }).always(function (){
                                             self.close()
                                             self.hideLoading(true)
