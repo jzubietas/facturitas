@@ -1907,7 +1907,7 @@ class EnvioController extends Controller
 
     public function confirmarEstadoRevert(Request $request)
     {
-        $envio = DireccionGrupo::where("id", $request->hiddenCodigo)->first();
+        $envio = DireccionGrupo::where("id", $request->envioid)->first();
         $envio->update([
             'condicion_envio' => Pedido::REPARTO_COURIER,
             'condicion_envio_code' => Pedido::REPARTO_COURIER_INT,
