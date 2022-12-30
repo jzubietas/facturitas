@@ -38,23 +38,22 @@
 
 @section('content')
 
-    <div class="row">
-        @foreach ($_pedidos as $pedido)
-            <div class="col-2">
-                <div class="card card-warning">
-                    <div class="d-flex align-items-center justify-content-around">
-                        <h5 class="bg-warning p-2 mb-0 col-6">ASESOR {{ $pedido->identificador }}</h5>
-                        <h4 class="text-center w-100 col-6 p-0 m-0">
-                            <b>{{ $pedido->total }}</b>
-                        </h4>
-                    </div>
+<div class="row">
+@foreach ($_pedidos as $pedido)
+        <div class="col-2">
+            <div class="card card-warning">
+                <div class="card-header">
+                    <h5>ASESOR {{ $pedido->identificador }}</h5>
+                </div>
+                <div class="card-body">
+                    <h4 class="text-center">
+                        <b>{{ $pedido->total }}</b>
+                    </h4>
                 </div>
             </div>
-        @endforeach
-    </div>
-
-
-
+        </div>
+        @endforeach      
+</div>
 
     <div class="card">
         <div class="card-body">
@@ -68,23 +67,23 @@
                     {{-- <th scope="col">Cliente</th> --}}
                     <th scope="col">Razón social</th>
 
-                    <th scope="col">Dias</th>
-
-                    <th scope="col">Fecha de registro</th>
-                    <th scope="col">Fecha de envio</th>
-                    <th scope="col">Fecha de entrega</th>
-                    <th scope="col">Destino</th>
-                    <th scope="col">Dirección de envío</th>
-                    <th scope="col">Estado de envio</th>
-                    <th scope="col">Estado de sobre</th>
-                    <th scope="col">Observacion Devolucion</th>
-                    <th scope="col">Acciones</th>
-                </tr>
-                </thead>
-                <tbody>
-                </tbody>
-            </table>
-            @include('sobres.modal.direccionid')
+            <th scope="col">Dias</th>
+            
+            <th scope="col">Fecha de registro</th>
+            <th scope="col">Fecha de envio</th>
+            <th scope="col">Fecha de entrega</th>
+            <th scope="col">Destino</th>
+            <th scope="col">Dirección de envío</th>
+            <th scope="col">Estado de envio</th>
+            <th scope="col">Estado de sobre</th>
+            <th scope="col">Observacion Devolucion</th>
+            <th scope="col">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+        </tbody>
+      </table>
+      @include('sobres.modal.direccionid')
 
             @include('sobres.modal.historialLima')
             @include('sobres.modal.historialProvincia')
@@ -1277,54 +1276,56 @@
                         name: 'condicion_envio',
                         render: function (data, type, row, meta) {
 
-                            if (row.condicion_envio == 'ANULADO') {
-                                return 'ANULADO';
-                            } else if (row.condicion_envio == 0) {
-                                return 'ANULADO';
-                            } else if (row.condicion_envio == 1) {
-                                return 'PENDIENTE DE ENVÍO';
-                            } else if (row.condicion_envio == 2) {
-                                return 'EN REPARTO';
-                            } else if (row.condicion_envio == 3) {
-                                return 'ENTREGADO';
-                            } else {
-                                return data;
-                            }
-                        }
-                    },
-                    {
-                        data: 'envio',
-                        name: 'envio',
-                        render: function (data, type, row, meta) {
-                            if (row.envio == '1') {
-                                return '<span class="badge badge-danger">Por confirmar recepcion</span>';
-                            } else {
-                                return '<span class="badge badge-info">Recibido</span>';
-                            }
-                        },
-                        "visible": false
-                    },
-                    {
-                        data: 'observacion_devuelto',
-                        name: 'observacion_devuelto',
-                        render: function (data, type, row, meta) {
-                            if (data != null) {
-                                return data;
-                            } else {
-                                return ''
-                            }
-                        },
-                        "visible": true
-                    },
-                    {
-                        data: 'action',
-                        name: 'action',
-                        orderable: false,
-                        searchable: false,
-                        sWidth: '20%',
-                        "visible": false,
-                        render: function (data, type, row, meta) {
-                            datass = '';
+                  if(row.condicion_envio=='ANULADO'){
+                      return 'ANULADO';
+                  }else if(row.condicion_envio == 0){
+                      return 'ANULADO';
+                  }else if(row.condicion_envio == 1){
+                      return 'PENDIENTE DE ENVÍO';
+                  }else if(row.condicion_envio == 2){
+                      return 'EN REPARTO';
+                  }else if(row.condicion_envio == 3){
+                      return 'ENTREGADO';
+                  }else{
+                      return data;
+                  }
+              }
+          },
+          {
+            data: 'envio',
+            name: 'envio',
+            render: function ( data, type, row, meta ) {
+              if(row.envio=='1')
+              {
+                return '<span class="badge badge-danger">Por confirmar recepcion</span>';
+              }else{
+                return '<span class="badge badge-info">Recibido</span>';
+              }
+            },
+            "visible":false
+          },
+          {
+            data: 'observacion_devuelto',
+            name: 'observacion_devuelto',
+            render: function ( data, type, row, meta ) {
+              if(data!=null)
+              {
+                return data;
+              }else{
+                return ''
+              }
+            },
+            "visible":true
+          },
+          {
+            data: 'action',
+            name: 'action',
+            orderable: false,
+            searchable: false,
+            sWidth:'20%',
+            "visible":false,
+            render: function ( data, type, row, meta ) {
+              datass='';
 
 
                             return datass;
