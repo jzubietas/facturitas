@@ -1345,6 +1345,12 @@ class OperacionController extends Controller
             'modificador' => 'USER' . Auth::user()->id
         ]);
 
+        //liberar adjuntos 
+        $imagenesatencion_ = ImagenAtencion::where("pedido_id", $request->hiddenRevertirpedidoporatender);//->where("confirm", '0');
+        $imagenesatencion_->update([
+            'estado' => '0'
+        ]);
+
         PedidoMovimientoEstado::where('pedido', $request->hiddenRevertirpedidoporatender)->delete();
 
         PedidoMovimientoEstado::create([
