@@ -220,7 +220,7 @@
 
             if(group == 1){
                 $('#titulo-modal-op').html("Confirmar recepción");
-                $('#msj-modal').html('Esta seguro que desea confirmar la recepción del Pedido <b>' + codigo + '</b> <span class="text-success font-weight-bold">con sobre<span> ?');
+                $('#msj-modal').html('Esta seguro que desea confirmar la recepción del Pedido <b>' + codigo + '</b> <span class="text-success font-weight-bold">CON SOBRE<span> ?');
                 $('#conf-modal-OP').html("Confirmar recepción");
             }else{
                 $('#titulo-modal-op').html("Enviar pedido");
