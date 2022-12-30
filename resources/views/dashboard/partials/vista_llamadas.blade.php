@@ -43,27 +43,8 @@
         </div>
     </div>
 
-    <div class="col-md-12">
-        <div class="card">
-            <div class="card-body">
-                <div class="d-flex justify-content-center mb-4 pb-4">
-                    <ul class="list-group">
-                        <li class="list-group-item">
-                        </li>
-                        <li class="list-group-item">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <x-grafico-meta-pedidos-progress-bar></x-grafico-meta-pedidos-progress-bar>
-                                </div>
-                                <div class="col-md-6">
-                                    <x-grafico-metas-progress-bar></x-grafico-metas-progress-bar>
-                                </div>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
+    <div class="col-lg-12">
+        <x-grafico-metas-mes></x-grafico-metas-mes>
     </div>
 
 </div>
