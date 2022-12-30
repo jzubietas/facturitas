@@ -70,24 +70,30 @@
 
 
                       <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <i class="fa fa-user" aria-hidden="true"></i>
+
                         {!! Form::label('nombre', 'Nombre del contacto quien recibe') !!}
                         {!! Form::text('nombre', null, ['class' => 'form-control', 'placeholder' => 'Nombre', 'required' => 'required']) !!}
                       </div>
 
 
                       <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <i class="fa fa-phone" aria-hidden="true"></i>
+
                         {!! Form::label('celular', 'Telefono del contacto del que recibe') !!}
                         {!! Form::number('celular', null, ['class' => 'form-control', 'id' => 'celular', 'min' =>'0', 'max' => '999999999', 'maxlength' => '9', 'oninput' => 'maxLengthCheck(this)']) !!}
                       </div>
 
                       <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        <i class="fa fa-street-view" aria-hidden="true"></i>
+
                         {!! Form::label('direccion', 'Direccion') !!}
-                        {!! Form::text('direccion', null, ['class' => 'form-control', 'placeholder' => 'Nombre', 'required' => 'required']) !!}
+                        {!! Form::text('direccion', null, ['class' => 'form-control', 'placeholder' => 'Direccion', 'required' => 'required']) !!}
                       </div>
 
                       <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                         {!! Form::label('referencia', 'Referencia') !!}
-                        {!! Form::text('referencia', null, ['class' => 'form-control', 'placeholder' => 'Nombre', 'required' => 'required']) !!}
+                        {!! Form::text('referencia', null, ['class' => 'form-control', 'placeholder' => 'Referencia', 'required' => 'required']) !!}
                       </div>
 
 
@@ -98,7 +104,7 @@
 
                       <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                         {!! Form::label('observacion', 'Observacion') !!}
-                        {!! Form::text('observacion', null, ['class' => 'form-control', 'placeholder' => 'Nombre', 'required' => 'required']) !!}
+                        {!! Form::text('observacion', null, ['class' => 'form-control', 'placeholder' => 'Observacion', 'required' => 'required']) !!}
                       </div>
 
                       {{--<button type="button" id="saveHistoricoLima" class="btn btn-danger btn-md"><i class="fa"></i>GRABA HISTORICO</button>--}}
