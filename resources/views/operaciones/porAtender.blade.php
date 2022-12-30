@@ -246,7 +246,7 @@
                         cant_compro_attachment = 0;
                     }
                 }
-                if(cant_compro_attachment==0){
+                if (cant_compro_attachment == 0) {
                     Swal.fire(
                         'Error',
                         'No hay archivos adjuntados',
@@ -293,7 +293,7 @@
                     });
                 }
 
-                if(cant_compro!=cant_compro_attachment){
+                if (cant_compro != cant_compro_attachment) {
                     Swal.fire({
                         icon: 'warning',
                         title: 'Aviso',
@@ -308,7 +308,7 @@
                         } else if (result.isDenied) {
                         }
                     })
-                }else{
+                } else {
                     submitForm()
                 }
 
@@ -352,6 +352,8 @@
                 if (cant_compro == '') $("#cant_compro").val(0);
                 var data = new FormData(document.getElementById("formularioatender"));
 
+                $("#loading_upload_attachment_file").show()
+                $("#adjunto").hide()
                 $.ajax({
                     type: 'POST',
                     url: "{{ route('operaciones.updateatendersinconfirmar',':id') }}".replace(':id', idunico),
@@ -361,21 +363,18 @@
                     success: function (data) {
                         $('#cargar_adjunto').prop("disabled", false);
                         $('#cargar_adjunto').text('Subir Informacion');
-
-                        $.ajax({
-                            url: "{{ route('operaciones.editatencionsinconfirmar',':id') }}".replace(':id', idunico),
-                            data: idunico,
-                            method: 'POST',
-                            success: function (data) {
-                                console.log(data)
-                                console.log("obtuve las imagenes atencion del pedido " + idunico)
-                                $('#listado_adjuntos').html(data);
-                            }
-                        });
+                        console.log(data)
+                        console.log("obtuve las imagenes atencion del pedido " + idunico)
+                        $('#listado_adjuntos').html(data);
                     }
-                }).done(function (data) {
-                    $("#adjunto").val(null)
-                });
+                })
+                    .done(function (data) {
+                        $("#adjunto").val(null)
+                    })
+                    .always(function () {
+                        $("#adjunto").show()
+                        $("#loading_upload_attachment_file").hide()
+                    });
                 return false;
 
 
