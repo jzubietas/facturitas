@@ -55,6 +55,11 @@ class MotorizadoController extends Controller
                                         <i class="fa fa-motorcycle text-primary" aria-hidden="true"></i> A confirmacion
                                     </button>
                                 </li>';
+                    $btn .= '<li>
+                                <button class="btn btn-sm text-danger" data-jqconfirmcancel="' . $pedido->id . '" data-jqconfirm-type="revertir">
+                                    <i class="fas fa-arrow-left text-danger"></i> Revertir a reparto
+                                </button>
+                            </li>';
                     $btn .= '</ul>';
 
                     return $btn;
