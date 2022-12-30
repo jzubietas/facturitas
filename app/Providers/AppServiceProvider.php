@@ -11,6 +11,7 @@ use App\View\Components\dashboard\graficos\MetaProgressBar;
 use App\View\Components\dashboard\graficos\PedidosAsignadosProgressBar;
 use App\View\Components\dashboard\graficos\QtyPedidoFisicoElectronicos;
 use App\View\Components\dashboard\graficos\TopClientesPedidos;
+use App\View\Components\dashboard\tablas\FisElecJefeOperaciones;
 use Carbon\Carbon;
 use Illuminate\Support\ServiceProvider;
 
@@ -41,6 +42,7 @@ class AppServiceProvider extends ServiceProvider
         \Blade::component('grafico-metas-mes',GraficoMetasDelMes::class);
         \Blade::component('bs-progressbar',BsProgressbar::class);
         \Blade::component('grafico-pedidos-elect-fisico',QtyPedidoFisicoElectronicos::class);
+        \Blade::component('tabla-jef-operaciones-fis-elect',FisElecJefeOperaciones::class);
 
         Carbon::setUTF8(true);
         Carbon::setLocale(config('app.locale'));
