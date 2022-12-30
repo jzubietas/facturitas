@@ -527,6 +527,8 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     /* Cambiar estado a Motorizado */
     Route::post('operaciones.confirmar', [EnvioController::class, 'confirmarEstado'])->name('operaciones.confirmar');
 
+    //Route::post('operaciones.confirmaradjuntomotorizado/{pedido}', [OperacionController::class, 'updateatendersinconfirmar'])->name('operaciones.updateatendersinconfirmar');
+
     Route::post('operaciones.confirmarmotorizado', [EnvioController::class, 'confirmarEstadoConfirm'])->name('operaciones.confirmarmotorizado');
     Route::post('operaciones.confirmarmotorizadodismiss', [EnvioController::class, 'confirmarEstadoConfirmDismiss'])->name('operaciones.confirmarmotorizadodismiss');
     Route::post('operaciones.confirmarmotorizadoconfirm', [EnvioController::class, 'confirmarEstadoConfirmConfirm'])->name('operaciones.confirmarmotorizadoconfirm');
