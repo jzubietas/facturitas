@@ -50,9 +50,9 @@ class MetaProgressBar extends Widgets
         } else {
             $pagoxmes_total = $this->applyFilter(
                 Pedido::join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')//CANTIDAD DE PEDIDOS DEL MES
-            ->activo()
-                ->join('users as u', 'pedidos.user_id', 'u.id')
-                ->where('u.rol', "ASESOR"), 'dp.created_at')->count('dp.id');
+                ->activo()
+                    ->join('users as u', 'pedidos.user_id', 'u.id')
+                    ->where('u.rol', "ASESOR"), 'dp.created_at')->count('dp.id');
 
         }
 
@@ -74,27 +74,21 @@ class MetaProgressBar extends Widgets
 
     public function asesores()
     {
-        if (auth()->user()->rol == User::ROL_LLAMADAS) {//HASTA MAÑANA
-            $id = auth()->user()->id;
-            $asesores = User::rolAsesor()->where('llamada', '=', $id)->get();
-        } else {
-            $encargado = null;
-            if (auth()->user()->rol == User::ROL_ENCARGADO) {
-                $encargado = auth()->user()->id;
-            }
-            $asesores = User::query()
-                ->activo()
-                ->rolAsesor()
-                ->when($encargado != null, function ($query) use ($encargado) {
-                    return $query->where('supervisor', '=', $encargado);
-                })
-                ->get();
+        $encargado = null;
+        if (auth()->user()->rol == User::ROL_ENCARGADO) {
+            $encargado = auth()->user()->id;
         }
+        $asesores = User::query()
+            ->activo()
+            ->rolAsesor()
+            ->when($encargado != null, function ($query) use ($encargado) {
+                return $query->where('supervisor', '=', $encargado);
+            })
+            ->get();
+
         $progressData = [];
         foreach ($asesores as $asesor) {
-            if (auth()->user()->rol != User::ROL_ADMIN
-                && auth()->user()->rol != User::ROL_JEFE_LLAMADAS//HASTA MAÑANA
-                && auth()->user()->rol != User::ROL_LLAMADAS) {//HASTA MAÑANA
+            if (auth()->user()->rol != User::ROL_ADMIN) {
                 if (auth()->user()->rol != User::ROL_ENCARGADO) {
                     if (auth()->user()->id != $asesor->id) {
                         continue;
