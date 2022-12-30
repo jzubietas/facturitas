@@ -87,7 +87,7 @@
             function openConfirmDownloadDocuments(action, idc, codigo) {
                 $.confirm({
                     title: '<h5>Detalle de atencion de pedido <b>' + codigo + '</b></h5>',
-                    columnClass:'col-md-6 col-md-offset-4 col-sm-6 col-sm-offset-3 col-xs-10 col-xs-offset-1',
+                    columnClass: 'col-md-6 col-md-offset-4 col-sm-6 col-sm-offset-3 col-xs-10 col-xs-offset-1',
                     buttons: {
                         confirm: {
                             text: 'Confirmar descarga',
@@ -108,11 +108,11 @@
                                     }).always(function () {
                                         $('#tablaPrincipal').DataTable().ajax.reload();
                                     })
-                                }else{
+                                } else {
                                     $.confirm({
                                         type: 'orange',
                                         title: '<h5 class="font-weight-bold">Es necesario confirmar si terminó de descargar todos los archivos</h5>',
-                                        content:''
+                                        content: ''
                                     })
                                 }
                                 return false
@@ -138,7 +138,7 @@
                         }).done(function (response) {
                             var html = `<div class="list-group">`
                             // html += `<li class="list-group-item bg-dark">Codigo: ${codigo}</li>`
-                            if(response.sustento) {
+                            if (response.sustento) {
                                 html += `<li class="list-group-item text-wrap">
 <h6 class="alert alert-warning text-center font-weight-bold">Los archivos de este pedido fueron modificados</h6>
 <b>Sustento del facturador:</b>
@@ -149,9 +149,10 @@
                             html += response.data.map(function (item) {
                                 return `<li class="list-group-item"><a href="${item.link}" download>${item.adjunto}</a></li>`
                             }).join('')
+
                             html += `<li class="list-group-item">
-<textarea readonly class="form-control w-100" rows="5" style=" color: black; font-weight: bold; background: white; ">${response.copyText}</textarea>
-</li>`
+<textarea id="copy_pedido_text" readonly class="form-control w-100" rows="5" style=" color: black; font-weight: bold; background: white; ">${response.copyText}</textarea>
+<button id="copy_pedido_buttom" class="btn btn-dark"><i class="fa fa-copy"></i> copiar</button></li>`
                             html += `<li class="list-group-item">
 <div class="checkbox"><label><input type="checkbox" id="enableCheckbox"> Termine de descargar</label></div>
 </li>`
@@ -160,7 +161,14 @@
                         }).fail(function () {
                             self.setContent('Ocurrio un error.');
                         });
-                    }
+                    },
+                    onContentReady: function () {
+                        const self = this
+                        self.$content.find('#copy_pedido_buttom').click(function () {
+                            self.$content.find('#copy_pedido_text').select();
+                            window.document.execCommand("copy");
+                        })
+                    },
                 });
             }
 
@@ -196,7 +204,7 @@
                     if (data.pendiente_anulacion == 1) {
                         $('td', row).css('background', 'red').css('font-weight', 'bold');
                     }
-                    $('[data-toggle="tooltip"]',row).tooltip()
+                    $('[data-toggle="tooltip"]', row).tooltip()
                 },
                 columns: [
                     {
