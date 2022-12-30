@@ -381,6 +381,12 @@ class NotificationsController extends Controller
             ->where('condicion_envio_code', Pedido::ENTREGADO_CLIENTE_INT)
             ->count();
 
+        $contador_sobres_confirmar_recepcion = Pedido::where('estado',1)
+            ->where('condicion_envio_code', Pedido::ENVIO_COURIER_JEFE_OPE_INT)
+            ->where('pedidos.envio', '2')
+            ->where('pedidos.estado', '1')
+            ->count();
+
         return [
             'icon' => 'fas fa-envelope',
             'label' => count(auth()->user()->unreadNotifications) + count($devoluciones),
@@ -392,6 +398,7 @@ class NotificationsController extends Controller
             'contador_pedidos_atendidos_operacion' => $contador_pedidos_atendidos_operacion,
             'contador_pedidos_pen_anulacion' => $contador_pedidos_pen_anulacion,
             'contador_sobres_entregados' => $contador_sobres_entregados,
+            'contador_sobres_confirmar_recepcion' => $contador_sobres_confirmar_recepcion,
             'contador_jefe_op' => $contador_jefe_op
 
 

@@ -145,14 +145,14 @@ class User extends Authenticatable
     {
         $user = User::find(Auth()->user()->id);
 
-        switch ($user->id){
+        switch ($user->id) {
             case 1:
                 return asset('/imagenes/avatar-admin.png');
                 break;
             case 13:
                 return asset('/imagenes/avatar-jefe-asesor.png');
-                default:
-                    return asset('/imagenes/avatar-asesor.png');
+            default:
+                return asset('/imagenes/avatar-asesor.png');
         }
 
         return '/../storage/users/' . $user->profile_photo_path;
@@ -169,17 +169,17 @@ class User extends Authenticatable
 
     public function scopeRol($query, $rol)
     {
-        return $query->whereIn('users.rol', \Arr::wrap($rol));
+        return $query->whereIn($this->qualifyColumn('rol'), \Arr::wrap($rol));
     }
 
     public function scopeRolAsesor($query)
     {
-        return $this->scopeRol($query, self::ROL_ASESOR);
+        return $query->where($this->qualifyColumn('rol'), '=', self::ROL_ASESOR);
     }
 
     public function scopeIncluidoMeta($query)
     {
-        return $this->where($this->qualifyColumn('excluir_meta'),'=','0');
+        return $query->where($this->qualifyColumn('excluir_meta'), '=', '0');
     }
 
 

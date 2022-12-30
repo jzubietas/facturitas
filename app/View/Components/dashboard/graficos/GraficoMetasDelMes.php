@@ -15,7 +15,8 @@ class GraficoMetasDelMes extends Component
     public $novResult = [];
     public $dicResult = [];
 
-    public $exclude=[];
+    public $excludeNov=[];
+    public $excludeDic=[];
 
     /**
      * Create a new component instance.
@@ -67,8 +68,8 @@ class GraficoMetasDelMes extends Component
         }
         $asesores = User::query()
             ->activo()
+            //->incluidoMeta()
             ->rolAsesor()
-            ->incluidoMeta()
             ->when($encargado != null, function ($query) use ($encargado) {
                 return $query->where('supervisor', '=', $encargado);
             })
@@ -94,6 +95,9 @@ class GraficoMetasDelMes extends Component
             $pay = $this->applyFilter(Pedido::query()->where('user_id', $asesor->id)->activo()->pagados(), $date, 'created_at')
                 ->count();
 
+            if($asesor->excluir_meta){
+                //$this->excludeNov[]=
+            }
             $progressData[] = [
                 "identificador" => $asesor->identificador,
                 "code" => "Asesor {$asesor->identificador}",
@@ -159,7 +163,7 @@ class GraficoMetasDelMes extends Component
         $asesores = User::query()
             ->activo()
             ->rolAsesor()
-            ->incluidoMeta()
+            //->incluidoMeta()
             ->when($encargado != null, function ($query) use ($encargado) {
                 return $query->where('supervisor', '=', $encargado);
             })
