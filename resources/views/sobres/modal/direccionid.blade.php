@@ -80,7 +80,7 @@
                       <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                         <i class="fa fa-phone" aria-hidden="true"></i>
 
-                        {!! Form::label('celular', 'Telefono del contacto del que recibe') !!}
+                        {!! Form::label('celular', 'Telefono del contacto quien recibe') !!}
                         {!! Form::number('celular', null, ['class' => 'form-control', 'id' => 'celular', 'min' =>'0', 'max' => '999999999', 'maxlength' => '9', 'oninput' => 'maxLengthCheck(this)']) !!}
                       </div>
 
