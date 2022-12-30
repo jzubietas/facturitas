@@ -88,7 +88,7 @@ class AddPermisions extends Command
 
         $rol=Role::first();
 
-        $rol->givePermissionTo(Permission::whereIn('name',['operacion.motorizado','operacion.motorizado.confirm','operacion.confirmmotorizado','operacion.confirmmotorizado.confirm'])->pluck('id'));
+        //$rol->givePermissionTo(Permission::whereIn('name',['operacion.motorizado','operacion.motorizado.confirm','operacion.confirmmotorizado','operacion.confirmmotorizado.confirm'])->pluck('id'));
 
         return 0;
     }
