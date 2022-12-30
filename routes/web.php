@@ -526,10 +526,12 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     Route::post('operaciones.confirmaropbarras', [EnvioController::class, 'ConfirmarOPBarra'])->name('operaciones.confirmaropbarras');
     /* Cambiar estado a Motorizado */
     Route::post('operaciones.confirmar', [EnvioController::class, 'confirmarEstado'])->name('operaciones.confirmar');
+    Route::post('operaciones.confirmar.revertir', [EnvioController::class, 'confirmarEstadoRevert'])->name('operaciones.confirmar.revertir');
 
     //Route::post('operaciones.confirmaradjuntomotorizado/{pedido}', [OperacionController::class, 'updateatendersinconfirmar'])->name('operaciones.updateatendersinconfirmar');
 
     Route::post('operaciones.confirmarmotorizado', [EnvioController::class, 'confirmarEstadoConfirm'])->name('operaciones.confirmarmotorizado');
+    Route::post('operaciones.confirmarmotorizado.revertir', [EnvioController::class, 'confirmarEstadoConfirmRevert'])->name('operaciones.confirmarmotorizado.revertir');
     Route::post('operaciones.confirmarmotorizadodismiss', [EnvioController::class, 'confirmarEstadoConfirmDismiss'])->name('operaciones.confirmarmotorizadodismiss');
     Route::post('operaciones.confirmarmotorizadoconfirm', [EnvioController::class, 'confirmarEstadoConfirmConfirm'])->name('operaciones.confirmarmotorizadoconfirm');
     Route::post('operaciones.confirmarmotorizadoconfirmdismiss', [EnvioController::class, 'confirmarEstadoConfirmConfirmDismiss'])->name('operaciones.confirmarmotorizadoconfirmdismiss');
