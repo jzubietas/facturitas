@@ -107,6 +107,12 @@
                                     }).always(function () {
                                         $('#tablaPrincipal').DataTable().ajax.reload();
                                     })
+                                }else{
+                                    $.confirm({
+                                        type: 'orange',
+                                        title: '<h5 class="font-weight-bold">Es necesario confirmar si terminó de descargar todos los archivos</h5>',
+                                        content:''
+                                    })
                                 }
                                 return false
                             }
@@ -131,16 +137,17 @@
                         }).done(function (response) {
                             var html = `<div class="list-group">`
                             // html += `<li class="list-group-item bg-dark">Codigo: ${codigo}</li>`
+                            if(response.sustento) {
+                                html += `<li class="list-group-item text-wrap">
+<h6 class="alert alert-warning text-center font-weight-bold">Los archivos de este pedido fueron modificados</h6>
+<b>Sustento del facturador:</b>
+<textarea readonly class="form-control w-100" rows="5" style=" color: red; font-weight: bold; background: white; ">${response.sustento}</textarea>
+</li>`
+                            }
                             html += `<li class="list-group-item"><b>Adjuntos de detalle de atencion<b></li>`
                             html += response.data.map(function (item) {
                                 return `<li class="list-group-item"><a href="${item.link}" download>${item.adjunto}</a></li>`
                             }).join('')
-                            if(response.sustento) {
-                                html += `<li class="list-group-item text-wrap">
-Sustento:
-<textarea readonly class="form-control w-100" rows="5">${response.sustento}</textarea>
-</li>`
-                            }
                             html += `<li class="list-group-item">
 <div class="checkbox"><label><input type="checkbox" id="enableCheckbox"> Termine de descargar</label></div>
 </li>`
@@ -173,7 +180,7 @@ Sustento:
                 },
                 drawCallback: function (settings) {
                     setTimeout(function () {
-                        $("[data-toggle=jqConfirm]").on('click', function (e) {
+                        $("[data-jqconfirm=jqConfirm]").on('click', function (e) {
                             openConfirmDownloadDocuments($(e.target).data('target'), $(e.target).data('idc'), $(e.target).data('codigo'))
                         })
                     }, 100)
@@ -185,6 +192,7 @@ Sustento:
                     if (data.pendiente_anulacion == 1) {
                         $('td', row).css('background', 'red').css('font-weight', 'bold');
                     }
+                    $('[data-toggle="tooltip"]',row).tooltip()
                 },
                 columns: [
                     {

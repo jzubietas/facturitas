@@ -334,6 +334,8 @@ class PedidoStatusController extends Controller
                 ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
                 ->select([
                     'pedidos.id',
+                    'pedidos.da_confirmar_descarga',
+                    'pedidos.sustento_adjunto',
                     'pedidos.correlativo as id2',
                     'c.nombre as nombres',
                     'c.celular as celulares',
@@ -453,10 +455,12 @@ class PedidoStatusController extends Controller
                             $btn .= '<a href="' . route("pedidosPDF", $pedido->id) . '" class="btn btn-primary btn-sm" target="_blank"><i class="fa fa-file-pdf"></i> PDF</a>';
                         }
                     } else*/ {
-                        $btn .= '<button data-toggle="jqConfirm" data-target="' . route("pedidos.estados.detalle-atencion", $pedido->id) . '"
+                        $btn .= '<button data-jqconfirm="jqConfirm" data-target="' . route("pedidos.estados.detalle-atencion", $pedido->id) . '"
                                     data-idc="' . $pedido->id2 . '"
                                     data-codigo="' . $pedido->codigos . '"
-                                    class="btn btn-primary btn-sm mx-2">
+                                    class="btn btn-primary btn-sm mx-2" '.(($pedido->da_confirmar_descarga==0 && !empty($pedido->sustento_adjunto))?'style="border: 3px solid #dc3545!important;"':'').'
+                                    '.(($pedido->da_confirmar_descarga==0 && !empty($pedido->sustento_adjunto))?' data-toggle="tooltip" data-placement="top" title="Los archivos de este pedido fueron editados"':'').'
+                                     >
                                     <i class="fa fa-eye"></i> Detalle Atención
                                 </button>';
                     }
@@ -480,7 +484,7 @@ class PedidoStatusController extends Controller
         }*/
         return response()->json([
             "data" => $pedido->imagenAtencion()->activo()->get(),
-            "sustento" => $pedido->sustento_adjunto
+            "sustento" => ($pedido->da_confirmar_descarga==0?$pedido->sustento_adjunto:null)
         ]);
     }
 
