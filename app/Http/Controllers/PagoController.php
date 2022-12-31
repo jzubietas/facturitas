@@ -786,7 +786,7 @@ class PagoController extends Controller
                 ]
             )->first();*/
         $cliente->pedidos_mes_deuda = $cliente->pedidos()->activo()->noPagados()->whereIn('created_at', [now()->startOfMonth(), now()->endOfMonth()->endOfDay()])->count();
-        $cliente->pedidos_mes_deuda_antes = $cliente->pedidos()->activo()->noPagados()->where('created_at', '<', now()->subMonth()->endOfMonth()->endOfDay())->count();
+        $cliente->pedidos_mes_deuda_antes = $cliente->pedidos()->activo()->noPagados()->where('created_at', '<', now()->startOfMonth()->subMonth()->endOfMonth()->endOfDay()->endOfDay())->count();
 
         $pedido_deuda = Pedido::where('cliente_id', $request->cliente_id)//CONTAR LA CANTIDAD DE PEDIDOS QUE DEBE
         ->where('pagado', '0')
@@ -1073,7 +1073,7 @@ class PagoController extends Controller
                 $cliente = Cliente::find($request->cliente_id);
 
                 $cliente->pedidos_mes_deuda = $cliente->pedidos()->activo()->noPagados()->whereIn('created_at', [now()->startOfMonth(), now()->endOfMonth()->endOfDay()])->count();
-                $cliente->pedidos_mes_deuda_antes = $cliente->pedidos()->activo()->noPagados()->where('created_at', '<', now()->subMonth()->endOfMonth()->endOfDay())->count();
+                $cliente->pedidos_mes_deuda_antes = $cliente->pedidos()->activo()->noPagados()->where('created_at', '<', now()->startOfMonth()->subMonth()->endOfMonth()->endOfDay()->endOfDay())->count();
 
                 /*$cliente_deuda = Cliente::where("id", $request->cliente_id)
                     ->get([
@@ -1335,7 +1335,7 @@ class PagoController extends Controller
 
 
                 $pedidos_mes_deuda = $cliente->pedidos()->activo()->noPagados()->whereIn('created_at', [now()->startOfMonth(), now()->endOfMonth()->endOfDay()])->count();
-                $pedidos_mes_deuda_antes = $cliente->pedidos()->activo()->noPagados()->where('created_at', '<', now()->subMonth()->endOfMonth()->endOfDay())->count();
+                $pedidos_mes_deuda_antes = $cliente->pedidos()->activo()->noPagados()->where('created_at', '<', now()->startOfMonth()->subMonth()->endOfMonth()->endOfDay()->endOfDay())->count();
                 /*$cliente_deuda = Cliente::where("id", $request->cliente_id)
                     ->select([
                             'clientes.id',

@@ -117,7 +117,7 @@ class ClienteController extends Controller
                 DB::raw('MONTH(CURRENT_DATE()) as dateM'),
                 DB::raw('YEAR(CURRENT_DATE()) as dateY'),
                 DB::raw(" (select count(ped.id) from pedidos ped where ped.cliente_id=clientes.id and ped.pago in (0,1) and ped.pagado in (0,1) and cast(ped.created_at as date) >='" . now()->startOfMonth()->format('Y-m-d') . "' and ped.estado=1) as pedidos_mes_deuda "),
-                DB::raw(" (select count(ped2.id) from pedidos ped2 where ped2.cliente_id=clientes.id and ped2.pago in (0,1) and ped2.pagado in (0,1) and cast(ped2.created_at as date) <='" . now()->subMonth()->endOfMonth()->format('Y-m-d') . "'  and ped2.estado=1) as pedidos_mes_deuda_antes "),
+                DB::raw(" (select count(ped2.id) from pedidos ped2 where ped2.cliente_id=clientes.id and ped2.pago in (0,1) and ped2.pagado in (0,1) and cast(ped2.created_at as date) <='" . now()->startOfMonth()->subMonth()->endOfMonth()->endOfDay()->format('Y-m-d') . "'  and ped2.estado=1) as pedidos_mes_deuda_antes "),
                 'clientes.deuda',
                 //DB::raw(" (select lr.s_2022_11 from clientes c inner join listado_resultados lr on c.id=lr.id limit 1) as situacion")
                 'clientes.situacion'
@@ -535,7 +535,7 @@ class ClienteController extends Controller
 
         foreach ($clientes as $cliente) {
             $cliente->pedidos_mes_deuda = $cliente->pedidos()->activo()->noPagados()->whereBetween('pedidos.created_at', [now()->startOfMonth(), now()->endOfMonth()])->count();
-            $cliente->pedidos_mes_deuda_antes = $cliente->pedidos()->activo()->noPagados()->where('pedidos.created_at', '<=', now()->subMonth()->endOfMonth())->count();
+            $cliente->pedidos_mes_deuda_antes = $cliente->pedidos()->activo()->noPagados()->where('pedidos.created_at', '<=', now()->startOfMonth()->subMonth()->endOfMonth()->endOfDay())->count();
 
             //Auth::user()->rol=='Administrador'
             if ($mirol == 'Administrador' || $mirol == 'Asistente de Administración' || Auth::user()->identificador == 'B') {
@@ -555,7 +555,7 @@ class ClienteController extends Controller
                     //pago | pagado
                     $deuda_anterior = Pedido::query()->noPagados()->activo()
                         ->where('pedidos.cliente_id', '=', $cliente->id)
-                        ->whereBetween('created_at', [now()->subMonth()->startOfMonth(), now()->subMonth()->endOfMonth()])
+                        ->whereBetween('created_at', [now()->startOfMonth()->subMonth()->startOfMonth(), now()->startOfMonth()->subMonth()->endOfMonth()->endOfDay()])
                         ->count();
 
                     $deuda_pedidos_5 = Pedido::query()->noPagados()->activo()

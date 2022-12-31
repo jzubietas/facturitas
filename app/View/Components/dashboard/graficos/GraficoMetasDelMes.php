@@ -36,7 +36,8 @@ class GraficoMetasDelMes extends Component
     public function render()
     {
         $now = now();
-        $now_submonth = $now->clone()->subMonth();
+        $now_submonth =now()->startOfMonth()->subMonth();
+
         $data_noviembre = $this->generarDataNoviembre($now_submonth);
 
         $data_diciembre = $this->generarDataDiciembre();
