@@ -44,14 +44,16 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.1/css/dataTables.bootstrap4.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.4.0/css/responsive.bootstrap4.min.css">
 <style>
-    div.dataTables_wrapper div.dataTables_filter input{
-        width: 100% !important;
-    }
-    .content-wrapper{
-        background-color: white !important;
-    }
-    .card{
-        box-shadow: 0 0 1px white !important;
+    @media(max-width:32rem){
+        div.dataTables_wrapper div.dataTables_filter input{
+            width: 200px !important;
+        }
+        .content-wrapper{
+            background-color: white !important;
+        }
+        .card{
+            box-shadow: 0 0 1px white !important;
+        }
     }
 </style>
 @endpush
