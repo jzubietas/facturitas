@@ -277,8 +277,8 @@
                     '<td><input type="hidden" name="tipo_banca[]" value="' + tipo_banca + '">' + tipo_banca + '</td>' +
                     '<td><input type="hidden" name="porcentaje[]" value="' + porcentaje + '">' + porcentaje + '</td>' +
                     '<td><input type="hidden" name="courier[]" value="' + courier + '">' + courier + '</td>' +
-                    '<td><input type="hidden" name="descripcion[]" value="' + descripcion + '">' + descripcion + '</td>' +
-                    '<td><input type="hidden" name="nota[]" value="' + nota + '">' + nota + '</td>' +
+                    '<td><textarea class="d-none" name="descripcion[]">' + descripcion + '</textarea>'+ descripcion +'</td>' +
+                    '<td><textarea class="d-none" name="nota[]" >' + nota + '</textarea>'+ nota +'</td>' +
                     '<td>@csrf<input type="file" id="adjunto" name="adjunto[]" multiple /></td>' +
                     '<td>' + subtotal[cont].toLocaleString("en-US") + '</td></tr>';
                 cont++; //accept= ".zip, .rar"
@@ -439,10 +439,10 @@ __________________________________
                 $('input[name="courier[]"]').each(function () {
                     fd.append("courier[]", this.value);
                 });
-                $('input[name="descripcion[]"]').each(function () {
+                $('[name="descripcion[]"]').each(function () {
                     fd.append("descripcion[]", this.value);
                 });
-                $('input[name="nota[]"]').each(function () {
+                $('[name="nota[]"]').each(function () {
                     fd.append("nota[]", this.value);
                 });
                 let files = $('input[name="adjunto[]');
