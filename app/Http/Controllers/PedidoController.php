@@ -693,7 +693,7 @@ class PedidoController extends Controller
             $html = '<option value="">' . trans('---- SELECCIONE ----') . '</option>';
             $rucs = Ruc::where('rucs.num_ruc', $request->ruc)
                 ->first();
-            $html = $rucs->empresa;
+            $html = htmlentities($rucs->empresa);
 
         }
         return response()->json(['html' => $html]);
