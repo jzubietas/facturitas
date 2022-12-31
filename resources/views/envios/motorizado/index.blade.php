@@ -4,7 +4,7 @@
 
 @section('content_header')
     <h1>
-        Motorizado 2
+        Motorizado
     </h1>
 @stop
 
@@ -120,7 +120,7 @@
                     $('[data-jqconfirm]', row).click(function () {
 
                         $.dialog({
-                            title: 'Entregas de motorizado',
+                            title: '<h3 class="font-weight-bold">Entregas de motorizado</h3>',
                             type: 'green',
                             columnClass: 'large',
                             content: `<div>
@@ -128,17 +128,17 @@
         <div class="card-body">
             <div class="row">
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                    <h5>Información:</h5>
+                    <h5>Sobre de pedido: <b>${data.codigos}</b></h5>
                 </div>
             </div>
             <div class="row">
-                <div class="col-6">
+                <div class="col-lg-6">
                    <div class="form-group">
                      <label for="fecha_envio_doc_fis">Fecha de Envio</label>
                      <input class="form-control" id="fecha_envio_doc_fis" disabled="" name="fecha_envio_doc_fis" type="date" value="${data.fecha}">
                     </div>
                 </div>
-                <div class="col-6">
+                <div class="col-lg-6">
                    <div class="form-group">
                         <label for="fecha_recepcion">Fecha de Entrega</label>
                         <input class="form-control" id="fecha_recepcion" name="fecha_recepcion" type="date" value="">
@@ -178,7 +178,7 @@
                 </div>
             </div>
         </div>
-        <div class="card-footer">
+        <div class="card-footer text-center">
             <button type="submit" class="btn btn-info" id="atender">Confirmar</button>
         </div>
     </form>
