@@ -267,7 +267,7 @@
                     '"><td><button type="button" class="btn btn-warning" onclick="eliminar(' + cont +
                     ');">X</button></td>' +
                     //'<td><input type="hidden" name="codigo[]" value="' + codigo + '">' + codigo + '</td>' +
-                    '<td><input type="hidden" name="nombre_empresa[]" value="' + nombre_empresa + '">' + nombre_empresa +
+                    '<td><textarea class="d-none" name="nombre_empresa[]">' + nombre_empresa + '</textarea>' + nombre_empresa +
                     '</td>' +
                     '<td><input type="hidden" name="mes[]" value="' + mes + '">' + mes + '</td>' +
                     '<td><input type="hidden" name="anio[]" value="' + anio + '">' + anio + '</td>' +
