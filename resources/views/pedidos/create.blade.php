@@ -267,7 +267,7 @@
                     '"><td><button type="button" class="btn btn-warning" onclick="eliminar(' + cont +
                     ');">X</button></td>' +
                     //'<td><input type="hidden" name="codigo[]" value="' + codigo + '">' + codigo + '</td>' +
-                    '<td><input type="hidden" name="nombre_empresa[]" value="' + nombre_empresa + '">' + nombre_empresa +
+                    '<td><textarea class="d-none" name="nombre_empresa[]">' + nombre_empresa + '</textarea>' + nombre_empresa +
                     '</td>' +
                     '<td><input type="hidden" name="mes[]" value="' + mes + '">' + mes + '</td>' +
                     '<td><input type="hidden" name="anio[]" value="' + anio + '">' + anio + '</td>' +
@@ -277,8 +277,8 @@
                     '<td><input type="hidden" name="tipo_banca[]" value="' + tipo_banca + '">' + tipo_banca + '</td>' +
                     '<td><input type="hidden" name="porcentaje[]" value="' + porcentaje + '">' + porcentaje + '</td>' +
                     '<td><input type="hidden" name="courier[]" value="' + courier + '">' + courier + '</td>' +
-                    '<td><input type="hidden" name="descripcion[]" value="' + descripcion + '">' + descripcion + '</td>' +
-                    '<td><input type="hidden" name="nota[]" value="' + nota + '">' + nota + '</td>' +
+                    '<td><textarea class="d-none" name="descripcion[]">' + descripcion + '</textarea>'+ descripcion +'</td>' +
+                    '<td><textarea class="d-none" name="nota[]" >' + nota + '</textarea>'+ nota +'</td>' +
                     '<td>@csrf<input type="file" id="adjunto" name="adjunto[]" multiple /></td>' +
                     '<td>' + subtotal[cont].toLocaleString("en-US") + '</td></tr>';
                 cont++; //accept= ".zip, .rar"
@@ -415,37 +415,37 @@ __________________________________
                 var fd = new FormData();
                 //var data = new FormData(document.getElementById("formulario"));
 
-                $('input[name="nombre_empresa[]"]').each(function () {
+                $('[name="nombre_empresa[]"]').each(function () {
                     fd.append("nombre_empresa[]", this.value);
                 });
-                $('input[name="mes[]"]').each(function () {
+                $('[name="mes[]"]').each(function () {
                     fd.append("mes[]", this.value);
                 });
-                $('input[name="anio[]"]').each(function () {
+                $('[name="anio[]"]').each(function () {
                     fd.append("anio[]", this.value);
                 });
-                $('input[name="ruc[]"]').each(function () {
+                $('[name="ruc[]"]').each(function () {
                     fd.append("ruc[]", this.value);
                 });
-                $('input[name="cantidad[]"]').each(function () {
+                $('[name="cantidad[]"]').each(function () {
                     fd.append("cantidad[]", this.value);
                 });
-                $('input[name="tipo_banca[]"]').each(function () {
+                $('[name="tipo_banca[]"]').each(function () {
                     fd.append("tipo_banca[]", this.value);
                 });
-                $('input[name="porcentaje[]"]').each(function () {
+                $('[name="porcentaje[]"]').each(function () {
                     fd.append("porcentaje[]", this.value);
                 });
-                $('input[name="courier[]"]').each(function () {
+                $('[name="courier[]"]').each(function () {
                     fd.append("courier[]", this.value);
                 });
-                $('input[name="descripcion[]"]').each(function () {
+                $('[name="descripcion[]"]').each(function () {
                     fd.append("descripcion[]", this.value);
                 });
-                $('input[name="nota[]"]').each(function () {
+                $('[name="nota[]"]').each(function () {
                     fd.append("nota[]", this.value);
                 });
-                let files = $('input[name="adjunto[]');
+                let files = $('[name="adjunto[]');
                 /*if(files.length == 0)
                 {
                   Swal.fire(
@@ -725,7 +725,7 @@ __________________________________
                     method: 'GET',
                     //before
                     success: function (data) {
-                        $('#pempresa').val(data.html);
+                        $('#pempresa').val((data.html));
                     }
                 });
             });
