@@ -4,7 +4,7 @@
 
 @section('content_header')
     <h1>
-        Motorizado
+        Motorizado 2
     </h1>
 @stop
 
@@ -14,7 +14,7 @@
 
     <div class="card">
         <div class="card-body">
-            <table id="tablaPrincipal" style="width:100%;" class="table table-striped">
+            <table id="tablaPrincipal" style="width:100%;" class="table table-striped dt-responsive">
                 <thead>
                 <tr>
                     <th scope="col">Item</th>
@@ -40,11 +40,17 @@
 
 @push('css')
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
+
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.1/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.4.0/css/responsive.bootstrap4.min.css">
+
 @endpush
 
 @section('js')
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.1/js/dataTables.bootstrap4.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.4.0/js/dataTables.responsive.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
 
     <script src="https://momentjs.com/downloads/moment.js"></script>
@@ -58,6 +64,11 @@
                 }
             });
             $('#tablaPrincipal').DataTable({
+                responsive: {
+                    details: {
+                        renderer: $.fn.dataTable.Responsive.renderer.listHiddenNodes()
+                    }
+                },
                 processing: true,
                 stateSave: true,
                 serverSide: true,
@@ -68,10 +79,12 @@
 
                 },
                 rowCallback: function (row, data, index) {
+                    console.log(row)
                     if (data.destino2 == 'PROVINCIA') {
                         $('td', row).css('color', 'red')
                     }
                     $('[data-jqconfirmcancel]', row).click(function () {
+
                         $.confirm({
                             type: 'red',
                             title: '¡Revertir Envio!',
@@ -105,6 +118,7 @@
                         }
                     );
                     $('[data-jqconfirm]', row).click(function () {
+
                         $.dialog({
                             title: 'Entregas de motorizado',
                             type: 'green',
