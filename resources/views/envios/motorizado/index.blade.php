@@ -3,8 +3,8 @@
 @section('title', 'Motorizado')
 
 @section('content_header')
-    <h1>
-        Motorizado
+    <h1 class="text-center">
+        <i class="fa fa-motorcycle text-primary" aria-hidden="true"></i> Motorizado
     </h1>
 @stop
 
@@ -12,8 +12,8 @@
 
     @include('envios.motorizado.modal.entregado')
 
-    <div class="card">
-        <div class="card-body">
+    <div class="card p-0">
+        <div class="card-body p-0">
             <table id="tablaPrincipal" style="width:100%;" class="table table-striped dt-responsive">
                 <thead>
                 <tr>
@@ -45,7 +45,13 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.4.0/css/responsive.bootstrap4.min.css">
 <style>
     div.dataTables_wrapper div.dataTables_filter input{
-        width: 100%;
+        width: 100% !important;
+    }
+    .content-wrapper{
+        background-color: white !important;
+    }
+    .card{
+        box-shadow: 0 0 1px white !important;
     }
 </style>
 @endpush
