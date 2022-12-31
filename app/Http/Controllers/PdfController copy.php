@@ -44,14 +44,14 @@ class PdfController extends Controller
 
         //
 
-        //$mes_month=Carbon::now()->subMonth()->format('Y_m');
-        //$mes_month=Carbon::now()->subMonth()->format('Y_m');
-        //$mes_month=Carbon::now()->subMonth()->format('Y_m');
-        $mes_month_2=Carbon::now()->subMonth(3)->format('Y_m');
-        $mes_month_1=Carbon::now()->subMonth(2)->format('Y_m');
-        $mes_month_0=Carbon::now()->subMonth(2)->format('Y_m');
-        $mes_anio=Carbon::now()->subMonth()->format('Y');
-        $mes_mes=Carbon::now()->subMonth()->format('m');
+        //$mes_month=Carbon::now()->startOfMonth()->subMonth()->format('Y_m');
+        //$mes_month=Carbon::now()->startOfMonth()->subMonth()->format('Y_m');
+        //$mes_month=Carbon::now()->startOfMonth()->subMonth()->format('Y_m');
+        $mes_month_2=Carbon::now()->startOfMonth()->subMonth(3)->format('Y_m');
+        $mes_month_1=Carbon::now()->startOfMonth()->subMonth(2)->format('Y_m');
+        $mes_month_0=Carbon::now()->startOfMonth()->subMonth(2)->format('Y_m');
+        $mes_anio=Carbon::now()->startOfMonth()->subMonth()->format('Y');
+        $mes_mes=Carbon::now()->startOfMonth()->subMonth()->format('m');
 
         $_pedidos_mes_pasado = User::join('clientes as c', 'users.id', 'c.user_id')
             ->join('listado_resultados as lr', 'lr_ar.user_identificador', 'users.identificador')
@@ -66,12 +66,12 @@ class PdfController extends Controller
             ,DB::raw(" (select count( c.id) from listado_resultados lrar where listado_resultados.identificador=lrar.identificador and lrar.s_".$mes_month."='NUEVO' ) nuevo")
         )
         ->whereIn('users.rol', ['Asesor','Administrador','ASESOR ADMINISTRATIVO'])
-        //->where(DB::raw('year(pedidos.created_at)'), '=', Carbon::now()->subMonth()->format('Y'))
-        //->where(DB::raw('month(pedidos.created_at)'), '=', Carbon::now()->subMonth()->format('m'))
+        //->where(DB::raw('year(pedidos.created_at)'), '=', Carbon::now()->startOfMonth()->subMonth()->format('Y'))
+        //->where(DB::raw('month(pedidos.created_at)'), '=', Carbon::now()->startOfMonth()->subMonth()->format('m'))
         ->groupBy('users.identificador');
 
         $_pedidos_mes_pasado=$_pedidos_mes_pasado->get();
-        
+
         return view('reportes.analisis', compact('users','_pedidos_mes_pasado','mes_month_2','mes_month_1','mes_month_0','mes_anio','mes_mes'));
     }
 
@@ -513,9 +513,9 @@ class PdfController extends Controller
             ->get();
 
 
-            $codigo_barras = Pedido::find($pedido->id)->codigo;   
+            $codigo_barras = Pedido::find($pedido->id)->codigo;
             $codigo_barras_img = generate_bar_code($codigo_barras);
-                
+
         $pdf = PDF::loadView('pedidos.reportes.pedidosPDF', compact('pedidos', 'fecha','mirol','identificador', 'codigo_barras_img'))
             ->setPaper('a4', 'portrait');
         //$canvas = PDF::getDomPDF();

@@ -62,15 +62,15 @@ class PdfController extends Controller
 
         //
 
-        //$mes_month=Carbon::now()->subMonth()->format('Y_m');
-        //$mes_month=Carbon::now()->subMonth()->format('Y_m');
-        //$mes_month=Carbon::now()->subMonth()->format('Y_m');
-        $mes_month=Carbon::now()->subMonth(2)->format('Y_m');
-        $mes_anio=Carbon::now()->subMonth()->format('Y');
-        $mes_mes=Carbon::now()->subMonth()->format('m');
+        //$mes_month=Carbon::now()->startOfMonth()->subMonth()->format('Y_m');
+        //$mes_month=Carbon::now()->startOfMonth()->subMonth()->format('Y_m');
+        //$mes_month=Carbon::now()->startOfMonth()->subMonth()->format('Y_m');
+        $mes_month=Carbon::now()->startOfMonth()->subMonth(2)->format('Y_m');
+        $mes_anio=Carbon::now()->startOfMonth()->subMonth()->format('Y');
+        $mes_mes=Carbon::now()->startOfMonth()->subMonth()->format('m');
 
         $_pedidos_mes_pasado = User::select(
-            'users.id','users.name','users.email'           
+            'users.id','users.name','users.email'
             ,DB::raw(" (select count( c.id) from clientes c inner join users a  on c.user_id=a.id where a.rol='Asesor' and a.llamada=users.id and c.situacion='RECUPERADO RECIENTE' ) recuperado_reciente")
             ,DB::raw(" (select count( c.id) from clientes c inner join users a  on c.user_id=a.id where a.rol='Asesor' and a.llamada=users.id and c.situacion='RECUPERADO ABANDONO' ) recuperado_abandono")
             ,DB::raw(" (select count( c.id) from clientes c inner join users a  on c.user_id=a.id where a.rol='Asesor' and a.llamada=users.id and c.situacion='NUEVO' ) nuevo")
@@ -79,7 +79,7 @@ class PdfController extends Controller
 
 
         $_pedidos_mes_pasado=$_pedidos_mes_pasado->get();
-        
+
         return view('reportes.analisis', compact('users','_pedidos_mes_pasado','mes_month','mes_anio','mes_mes','anios','dateM','dateY'));
     }
 
@@ -521,9 +521,9 @@ class PdfController extends Controller
             ->get();
 
 
-            $codigo_barras = Pedido::find($pedido->id)->codigo;   
+            $codigo_barras = Pedido::find($pedido->id)->codigo;
             $codigo_barras_img = generate_bar_code($codigo_barras);
-                
+
         $pdf = PDF::loadView('pedidos.reportes.pedidosPDF', compact('pedidos', 'fecha','mirol','identificador', 'codigo_barras_img'))
             ->setPaper('a4', 'portrait');
         //$canvas = PDF::getDomPDF();
