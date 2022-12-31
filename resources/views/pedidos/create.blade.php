@@ -725,7 +725,7 @@ __________________________________
                     method: 'GET',
                     //before
                     success: function (data) {
-                        $('#pempresa').val(data.html);
+                        $('#pempresa').val(escape(data.html));
                     }
                 });
             });
