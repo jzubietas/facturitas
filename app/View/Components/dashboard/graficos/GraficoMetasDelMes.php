@@ -113,7 +113,7 @@ class GraficoMetasDelMes extends Component
             ];
             if ($asesor->excluir_meta) {
                 if ($all > 0) {
-                    $p = intval(($pay / $all) * 100);
+                    $p = round(($pay / $all) * 100,2);
                 } else {
                     $p = 0;
                 }
@@ -143,7 +143,7 @@ class GraficoMetasDelMes extends Component
             $all = data_get($item, 'total');
             $pay = data_get($item, 'current');
             if ($all > 0) {
-                $p = intval(($pay / $all) * 100);
+                $p = round(($pay / $all) * 100,2);
             } else {
                 $p = 0;
             }
@@ -157,7 +157,7 @@ class GraficoMetasDelMes extends Component
         $pay = collect($progressData)->pluck('current')->sum();
         $meta = collect($progressData)->pluck('meta')->sum();
         if ($all > 0) {
-            $p = intval(($pay / $all) * 100);
+            $p = round(($pay / $all) * 100,2);
         } else {
             $p = 0;
         }
@@ -218,7 +218,7 @@ class GraficoMetasDelMes extends Component
             ];
             if ($asesor->excluir_meta) {
                 if ($meta > 0) {
-                    $p = intval(($asignados / $meta) * 100);
+                    $p = round(($asignados / $meta) * 100,2);
                 } else {
                     $p = 0;
                 }
@@ -249,7 +249,7 @@ class GraficoMetasDelMes extends Component
             $all = data_get($item, 'meta');
             $asignados = data_get($item, 'total');
             if ($all > 0) {
-                $p = intval(($asignados / $all) * 100);
+                $p = round(($asignados / $all) * 100,2);
             } else {
                 $p = 0;
             }

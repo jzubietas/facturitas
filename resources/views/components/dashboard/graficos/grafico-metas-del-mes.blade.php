@@ -1,109 +1,102 @@
 <div class="card">
     <div class="card-body">
         <div class="row">
-            <div class="col-md-6">
-                <div class="d-flex justify-content-center">
+            <div class="@if(count($excludeNov)>0)col-md-6 @else col-md-12 @endif">
+                <div class="@if(count($excludeNov)==0) d-flex justify-content-center @endif">
                     <ul class="list-group">
                         <li class="list-group-item">
                             <h4 class="text-center"><b>METAS DEL MES</b></h4>
                         </li>
                         <li class="list-group-item">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <ul class="list-group">
-                                        <li class="list-group-item" style=" min-width: 300px; ">
-                                            <h5>COBRANZAS {{Str::upper($now_submonth->monthName)}}</h5>
-                                        </li>
-                                        <li class="list-group-item" style=" background-color: #b7b7b7; ">
-                                            <b>GENERAL </b>
+                            <ul class="list-group">
+                                <li class="list-group-item" style=" min-width: 300px; ">
+                                    <div class="row">
+                                        <div class="col-4"></div>
+                                        <div class="col-4"><h5 class="text-center">COBRANZAS {{Str::upper($now_submonth->monthName)}}</h5></div>
+                                        <div class="col-4"><h5 class="text-center">COBRANZAS {{Str::upper($now->monthName)}}</h5></div>
+                                    </div>
+                                </li>
+                                <li class="list-group-item" style=" background-color: #b7b7b7; ">
+                                    <div class="row">
+                                        <div class="col-4">GENERAL</div>
+                                        <div class="col-4">
                                             <x-bs-progressbar :progress="$data_noviembre->progress">
                                                 <span> <b>  {{$data_noviembre->progress}}%</b> - {{$data_noviembre->current}}/{{$data_noviembre->total}}</span>
                                             </x-bs-progressbar>
-                                        </li>
-                                        @foreach($novResult as $data)
-                                            <li class="list-group-item">
-                                                <b>{{$data['code']}}</b> <br> {{$data['name']}}
-                                                <x-bs-progressbar :progress="$data['progress']">
-                                                    <span> <b>{{$data['progress']}}%</b> - {{$data['current']}}/{{$data['total']}}</span>
-                                                </x-bs-progressbar>
-                                                <span>
-                                    % - Asignados / Meta
-                                </span>
-                                            </li>
-                                        @endforeach
-                                    </ul>
-                                </div>
-                                <div class="col-md-6">
-                                    <ul class="list-group">
-                                        <li class="list-group-item" style=" min-width: 300px; ">
-                                            <h4>PEDIDOS {{Str::upper($now->monthName)}}</h4>
-                                        </li>
-                                        <li class="list-group-item" style=" background-color: #b7b7b7; ">
-                                            <b>GENERAL </b>
+                                            <sub>% -  Pagados/ Asignados</sub>
+                                        </div>
+                                        <div class="col-4">
                                             <x-bs-progressbar :progress="$data_diciembre->progress">
                                                 <span> <b>{{$data_diciembre->progress}}%</b> - {{$data_diciembre->total}}/{{$data_diciembre->meta}}</span>
                                             </x-bs-progressbar>
-                                        </li>
-                                        @foreach($dicResult as $data)
-                                            <li class="list-group-item">
+                                            <sub>% -  Pagados/ Asignados</sub>
+                                        </div>
+                                    </div>
+                                </li>
+                                @foreach($novResult as $key=>$data)
+                                    <li class="list-group-item">
+                                        <div class="row">
+                                            <div class="col-4">
                                                 <b>{{$data['code']}}</b> <br> {{$data['name']}}
+                                            </div>
+                                            <div class="col-4">
                                                 <x-bs-progressbar :progress="$data['progress']">
-                                                    <span><b>{{$data['progress']}}%</b> - {{$data['total']}}/{{$data['meta']}}</span>
+                                                    <span> <b>{{$data['progress']}}%</b> - {{$data['current']}}/{{$data['total']}}</span>
                                                 </x-bs-progressbar>
-                                                <span>
-                                    % - Asignados / Meta
-                                </span>
-                                            </li>
-                                        @endforeach
-                                    </ul>
-                                </div>
-                            </div>
+                                                <sub>% -  Pagados/ Asignados</sub>
+                                            </div>
+                                            <div class="col-4">
+                                                <x-bs-progressbar :progress="$dicResult[$key]['progress']">
+                                                    <span><b>{{$dicResult[$key]['progress']}}%</b> - {{$dicResult[$key]['total']}}/{{$dicResult[$key]['meta']}}</span>
+                                                </x-bs-progressbar>
+                                                <sub>% - Asignados / Meta</sub>
+                                            </div>
+                                        </div>
+                                    </li>
+                                @endforeach
+                            </ul>
                         </li>
                     </ul>
                 </div>
             </div>
             @if(count($excludeNov)>0)
                 <div class="col-md-6">
-                    <div class="d-flex justify-content-center">
+                    <div class="">
                         <ul class="list-group">
                             <li class="list-group-item" style=" min-width: 300px; ">
                                 <h4 class="text-center"><b>EXCLUIDOS</b></h4>
                             </li>
                             <li class="list-group-item">
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <ul class="list-group">
-                                            <li class="list-group-item" style=" min-width: 300px; ">
-                                                <h5>COBRANZAS {{Str::upper($now_submonth->monthName)}}</h5>
-                                            </li>
-                                            @foreach($excludeNov as $index=>$data)
-                                                <li class="list-group-item">
+                                <ul class="list-group">
+                                    <li class="list-group-item" style=" min-width: 300px; ">
+                                        <div class="row">
+                                            <div class="col-4"></div>
+                                            <div class="col-4"><h5 class="text-center">COBRANZAS {{Str::upper($now_submonth->monthName)}}</h5></div>
+                                            <div class="col-4"><h5 class="text-center">COBRANZAS {{Str::upper($now->monthName)}}</h5></div>
+                                        </div>
+                                    </li>
+                                    @foreach($excludeNov as $index=>$data)
+                                        <li class="list-group-item">
+                                            <div class="row">
+                                                <div class="col-4">
                                                     <b>{{$data['code']}}</b> <br> {{$data['name']}}
+                                                </div>
+                                                <div class="col-4">
                                                     <x-bs-progressbar :progress="$data['progress']">
                                                         <span><b>{{$data['progress']}}%</b> - {{$data['total']}}/{{$data['meta']}}</span>
                                                     </x-bs-progressbar>
-                                                    <span>% - Asignados / Meta</span>
-                                                </li>
-                                            @endforeach
-                                        </ul>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <ul class="list-group">
-                                            <li class="list-group-item" style=" min-width: 300px; ">
-                                                <h4>PEDIDOS {{Str::upper($now->monthName)}}</h4>
-                                            </li>
-                                            @foreach($excludeDic as $index=>$data)
-                                                <li class="list-group-item">
-                                                    <b>{{$data['code']}}</b> <br> {{$data['name']}}
-                                                    <x-bs-progressbar :progress="$data['progress']">
-                                                        <span><b>{{$data['progress']}}%</b> - {{$data['total']}}/{{$data['meta']}}</span>
+                                                    <sub>% - Pagados / Asignados</sub>
+                                                </div>
+                                                <div class="col-4">
+                                                    <x-bs-progressbar :progress="$excludeDic[$index]['progress']">
+                                                        <span><b>{{$excludeDic[$index]['progress']}}%</b> - {{$excludeDic[$index]['total']}}/{{$excludeDic[$index]['meta']}}</span>
                                                     </x-bs-progressbar>
-                                                    <span>% - Asignados / Meta</span>
-                                                </li>
-                                            @endforeach
-                                        </ul>
-                                    </div>
-                                </div>
+                                                    <sub>% - Asignados / Meta</sub>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    @endforeach
+                                </ul>
                             </li>
                         </ul>
                     </div>
