@@ -19,6 +19,10 @@ class DashboardController extends Controller
 {
     public function index()
     {
+        if(auth()->user()->rol=='MOTORIZADO')
+        {
+            return redirect()->route('envios.motorizados.index');//->with('info', 'registrado');
+        }
         $mytime = Carbon::now('America/Lima');
         $afecha = $mytime->year;
         $mfecha = $mytime->month;
