@@ -56,7 +56,7 @@
                                         </div>
                                         <div class="form-group col-lg-4">
                                             {!! Form::label('pempresa', 'Nombre de empresa') !!}
-                                            {{Form::input('text','pempresa',$pedido->empresas,['id'=>'pempresa','placeholder'=>'Nombre de empresa...','class'=>'form-control'])}}
+                                            {{Form::input('text','pempresa',$pedido->empresas,['id'=>'pempresa','placeholder'=>'Nombre de empresa...','class'=>'form-control','disabled'=>'disabled'])}}
                                         </div>
                                         <div class="form-group col-lg-3">
                                             {!! Form::label('pmes', 'Mes') !!}
@@ -380,7 +380,7 @@
 
                             var fila = '<tr class="selected" id="fila' + cont + '"><td><button type="button" class="btn btn-warning" onclick="eliminar(' + cont + ');">X</button></td>' +
                                 '<td><input type="hidden" name="codigo[]" value="' + codigo + '">' + codigo + '</td>' +
-                                '<td><input type="hidden" name="nombre_empresa[]" value="' + nombre_empresa + '">' + nombre_empresa + '</td>' +
+                                '<td><textarea class="d-none" name="nombre_empresa[]">' + nombre_empresa + '</textarea>' + nombre_empresa + '</td>' +
                                 '<td><input type="hidden" name="mes[]" value="' + mes + '">' + mes + '</td>' +
                                 '<td><input type="hidden" name="anio[]" value="' + anio + '">' + anio + '</td>' +
                                 '<td><input type="hidden" name="ruc[]" value="' + ruc + '">' + ruc + '</td>' +
@@ -388,8 +388,8 @@
                                 '<td><input type="hidden" name="tipo_banca[]" value="' + tipo_banca + '">' + tipo_banca + '</td>' +
                                 '<td><input type="hidden" name="porcentaje[]" value="' + porcentaje + '">' + porcentaje + '</td>' +
                                 '<td><input type="hidden" name="courier[]" value="' + courier + '">' + courier + '</td>' +
-                                '<td><input type="hidden" name="descripcion[]" value="' + descripcion + '">' + descripcion + '</td>' +
-                                '<td><input type="hidden" name="nota[]" value="' + nota + '">' + nota + '</td>' +
+                                '<td><textarea class="d-none" name="descripcion[]">' + descripcion + '</textarea>' + descripcion + '</td>' +
+                                '<td><textarea class="d-none" name="nota[]">' + nota + '</textarea>' + nota + '</td>' +
                                 '<td>@csrf<input type="file" id="adjunto" name="adjunto[]" multiple=""/></td>' +
                                 '<td>' + subtotal[cont].toLocaleString("en-US") + '</td></tr>';
                             cont++;
