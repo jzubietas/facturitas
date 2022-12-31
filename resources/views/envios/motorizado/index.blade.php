@@ -43,7 +43,11 @@
 
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.1/css/dataTables.bootstrap4.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.4.0/css/responsive.bootstrap4.min.css">
-
+<style>
+    div.dataTables_wrapper div.dataTables_filter input{
+        width: 100%;
+    }
+</style>
 @endpush
 
 @section('js')
@@ -125,7 +129,7 @@
                             columnClass: 'large',
                             content: `<div>
     <form enctype="multipart/form-data" class="card">
-        <div class="card-body">
+        <div class="card-body p-0">
             <div class="row">
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <h5>Sobre de pedido: <b>${data.codigos}</b></h5>
