@@ -415,28 +415,28 @@ __________________________________
                 var fd = new FormData();
                 //var data = new FormData(document.getElementById("formulario"));
 
-                $('input[name="nombre_empresa[]"]').each(function () {
+                $('[name="nombre_empresa[]"]').each(function () {
                     fd.append("nombre_empresa[]", this.value);
                 });
-                $('input[name="mes[]"]').each(function () {
+                $('[name="mes[]"]').each(function () {
                     fd.append("mes[]", this.value);
                 });
-                $('input[name="anio[]"]').each(function () {
+                $('[name="anio[]"]').each(function () {
                     fd.append("anio[]", this.value);
                 });
-                $('input[name="ruc[]"]').each(function () {
+                $('[name="ruc[]"]').each(function () {
                     fd.append("ruc[]", this.value);
                 });
-                $('input[name="cantidad[]"]').each(function () {
+                $('[name="cantidad[]"]').each(function () {
                     fd.append("cantidad[]", this.value);
                 });
-                $('input[name="tipo_banca[]"]').each(function () {
+                $('[name="tipo_banca[]"]').each(function () {
                     fd.append("tipo_banca[]", this.value);
                 });
-                $('input[name="porcentaje[]"]').each(function () {
+                $('[name="porcentaje[]"]').each(function () {
                     fd.append("porcentaje[]", this.value);
                 });
-                $('input[name="courier[]"]').each(function () {
+                $('[name="courier[]"]').each(function () {
                     fd.append("courier[]", this.value);
                 });
                 $('[name="descripcion[]"]').each(function () {
@@ -445,7 +445,7 @@ __________________________________
                 $('[name="nota[]"]').each(function () {
                     fd.append("nota[]", this.value);
                 });
-                let files = $('input[name="adjunto[]');
+                let files = $('[name="adjunto[]');
                 /*if(files.length == 0)
                 {
                   Swal.fire(
