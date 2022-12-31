@@ -48,16 +48,16 @@ class MotorizadoController extends Controller
                 ->addIndexColumn()
                 ->addColumn('action', function ($pedido) {
                     $btn = '';
-                    $btn .= '<ul class="list-unstyled pl-0">';
-                    $btn .= '<li>
-                                    <button class="btn btn-sm text-secondary"
+                    $btn .= '<ul class="list-unstyled pl-0 d-flex mt-sm-20">';
+                    $btn .= '<li class="p-8">
+                                    <button class="btn btn-sm text-white bg-primary"
                                     data-jqconfirm="' . $pedido->id . '">
-                                        <i class="fa fa-motorcycle text-primary" aria-hidden="true"></i> A confirmacion
+                                        <i class="fa fa-motorcycle text-white" aria-hidden="true"></i> A confirmacion
                                     </button>
                                 </li>';
-                    $btn .= '<li>
-                                <button class="btn btn-sm text-danger" data-jqconfirmcancel="' . $pedido->id . '" data-jqconfirm-type="revertir">
-                                    <i class="fas fa-arrow-left text-danger"></i> Revertir a reparto
+                    $btn .= '<li class="p-8">
+                                <button class="btn btn-sm text-white btn-danger" data-jqconfirmcancel="' . $pedido->id . '" data-jqconfirm-type="revertir">
+                                    <i class="fas fa-arrow-left text-white"></i> Revertir a reparto
                                 </button>
                             </li>';
                     $btn .= '</ul>';
