@@ -283,16 +283,39 @@ class NotificationsController extends Controller
         $contador_pedidos_atendidos = $contador_pedidos_atendidos->count();
 
         /*********
-         * PEDIDOS ATENDIDOS
+         * PEDIDOS ATENDIDOS OPERACIONES
          */
 
-        // Estado de pediddos
+        // Estado de pediddos operaciones
         $contador_pedidos_atendidos_operacion = Pedido::join('users as u', 'pedidos.user_id', 'u.id')
             ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
+            ->select(
+                'pedidos.id',
+                'pedidos.correlativo as id2',
+                'u.identificador as users',
+                'dp.codigo as codigos',
+                'dp.nombre_empresa as empresas',
+                'pedidos.condicion',
+                'pedidos.condicion_code',
+                'pedidos.da_confirmar_descarga',
+                DB::raw('(DATE_FORMAT(pedidos.created_at, "%Y-%m-%d %h:%i:%s")) as fecha'),
+                'pedidos.envio',
+                'pedidos.destino',
+                'pedidos.condicion_envio',
+                'dp.envio_doc',
+                DB::raw('(DATE_FORMAT(dp.fecha_envio_doc, "%Y-%m-%d %h:%i:%s")) as fecha_envio_doc'),
+                'dp.cant_compro',
+                'dp.atendido_por',
+                //'u.jefe',
+                DB::raw(" (select u2.name from users u2 where u2.id=u.jefe) as jefe "),
+                DB::raw('DATE_FORMAT(dp.fecha_envio_doc_fis, "%d/%m/%Y") as fecha_envio_doc_fis'),
+                'dp.fecha_recepcion',
+                DB::raw(" (select count(ii.id) from imagen_atencions ii where ii.pedido_id=pedidos.id and ii.estado=1) as adjuntos ")
+            )
             ->where('pedidos.estado', '1')
             ->where('dp.estado', '1')
             ->where('pedidos.condicion_envio_code', Pedido::ATENDIDO_OPE_INT);
-            //->where('pedidos.envio', 0);
+        //->where('pedidos.envio', 0);
 
         if (Auth::user()->rol == "Operario") {
 
@@ -304,7 +327,7 @@ class NotificationsController extends Controller
                 )
                 ->pluck('users.identificador');
 
-            $contador_pedidos_atendidos_operacion = $contador_pedidos_atendidos_operacion->WhereIn('u.identificador', $asesores);
+            $pedidos = $contador_pedidos_atendidos_operacion->WhereIn('u.identificador', $asesores);
 
 
         } else if (Auth::user()->rol == "Jefe de operaciones") {
@@ -324,7 +347,7 @@ class NotificationsController extends Controller
                 )
                 ->pluck('users.identificador');
 
-            $contador_pedidos_atendidos_operacion = $contador_pedidos_atendidos_operacion->WhereIn('u.identificador', $asesores);
+            $pedidos = $contador_pedidos_atendidos_operacion->WhereIn('u.identificador', $asesores);
 
 
         }
