@@ -1226,6 +1226,8 @@ class EnvioController extends Controller
             return '0';
         } else {
 
+            $zona_distrito = Distrito::where('distrito',$request->distrito)->first();
+
             $_destino = $request->destino;
             $_pedido = Pedido::find($request->cod_pedido);
 
@@ -1269,7 +1271,8 @@ class EnvioController extends Controller
                 $direccion_grupo_id = DireccionGrupo::create([
                     'estado' => '1',
                     'destino' => $request->destino,
-                    'distribucion' => (($request->destino == 'PROVINCIA') ? 'NORTE' : ''),
+                    //'distribucion' => (($request->destino == 'PROVINCIA') ? 'NORTE' : ''),
+                    'distribucion' => ($zona_distrito->zona),
                     'nombre_cliente' => (($request->destino == 'LIMA') ? $request->nombre : $cliente->nombre),
                     'celular_cliente' => (($request->destino == 'LIMA') ? $request->contacto : $cliente->celular . "-" . $cliente->icelular),
                     'codigos' => $lista_codigos,
