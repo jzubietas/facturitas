@@ -468,7 +468,7 @@
         });
       });
 
-      
+
       $("#tracking").bind('keypress', function(event) {
         var regex = new RegExp("^[0-9]+$");
         var key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
@@ -477,7 +477,7 @@
           return false;
         }
       });
-      
+
       $("#numregistro").bind('keypress', function(event) {
         var regex = new RegExp("^[0-9]+$");
         var key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
@@ -1340,8 +1340,8 @@
               datass='';
 
               @if (Auth::user()->rol == "Asesor" || Auth::user()->rol == "Administrador")
-              
-                datass=datass+'<a href="" data-target="#modal-direccion" data-toggle="modal" data-cliente="'+row.cliente_id+'" data-asesor="'+row.user_id+'" data-direccion="'+row.id+'" data-codigo="'+ row.id +'"><button class="btn btn-info btn-sm"><i class="fa fa-map-marker" aria-hidden="true"></i> Direccion</button></a>';
+
+                datass=datass+'<a href="" data-target="#modal-direccion" data-toggle="modal" data-cliente="'+row.cliente_id+'" data-asesor="'+row.user_id+'" data-direccion="'+row.id+'" data-codigo="'+ row.id +'"><button class="btn btn-info btn-sm"><i class="fa fa-map-marker-alt" aria-hidden="true"></i> Direccion</button></a>';
               @endif
 
 
