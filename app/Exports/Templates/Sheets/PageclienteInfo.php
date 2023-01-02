@@ -7,6 +7,7 @@ use App\Models\Cliente;
 use App\Models\User;
 use App\Models\Porcentaje;
 use App\Models\Pedido;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Concerns\WithColumnFormatting;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
