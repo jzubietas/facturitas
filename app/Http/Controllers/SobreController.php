@@ -101,6 +101,7 @@ class SobreController extends Controller
                     'pedidos.codigo',
                     'pedidos.destino',
                     'pedidos.direccion',
+                    'pedidos.da_confirmar_descarga',
                     'dp.envio_doc',
                     'dp.fecha_envio_doc',
                     'dp.cant_compro',
@@ -188,14 +189,9 @@ class SobreController extends Controller
                 )
                 ->pluck('users.identificador');
 
-            $pedidos=$pedidos->WhereIn('u.identificador',$usersasesores);
+            $pedidos=$pedidos->whereIn('u.identificador',$usersasesores);
         }
-        else{
-            $pedidos=$pedidos;
-        }
-        $pedidos=$pedidos->get();
-
-        return Datatables::of($pedidos)
+        return Datatables::of(DB::table($pedidos))
                     ->addIndexColumn()
                     ->addColumn('action', function($pedido){
                         $btn='';

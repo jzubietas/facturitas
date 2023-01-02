@@ -1357,6 +1357,9 @@ class OperacionController extends Controller
             'modificador' => 'USER' . Auth::user()->id
         ]);
 
+        $pedido->detallePedidos()->activo()->update([
+            "cant_compro" => 0
+        ]);
         //liberar adjuntos
         $imagenesatencion_ = ImagenAtencion::where("pedido_id", $request->hiddenRevertirpedidoporatender);//->where("confirm", '0');
         $imagenesatencion_->update([
