@@ -4,6 +4,7 @@ namespace App\Exports\Templates\Sheets;
 
 use App\Abstracts\Export;
 use App\Models\Cliente;
+use App\Models\User;
 use App\Models\ListadoResultado;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Concerns\WithColumnFormatting;
@@ -14,7 +15,7 @@ class PageclienteinfoDiciembre extends Export implements WithColumnFormatting,Wi
 {
     public function collection()
     {
-        return Cliente::with('user')
+        $cliente = Cliente::with('user')
             ->join('users as u', 'clientes.user_id', 'u.id')
             ->select(
                 'clientes.id'
@@ -23,13 +24,25 @@ class PageclienteinfoDiciembre extends Export implements WithColumnFormatting,Wi
                 ,'clientes.dni'
                 ,'clientes.icelular'
                 ,'clientes.celular'
-                //,'clientes.situacion'
                 ,DB::raw(" (select a.s_2022_12 from listado_resultados a where a.id=clientes.id ) as situacion ")
                 ,DB::raw("(select DATE_FORMAT(dp1.created_at,'%Y-%m-%d %h:%i:%s') from pedidos dp1 where dp1.cliente_id=clientes.id order by dp1.created_at desc limit 1) as fecha"),
             )
             ->where('clientes.estado', '1')
-            ->where('clientes.tipo', '1')
-            ->get();
+            ->where('clientes.tipo', '1');
+
+            if (Auth::user()->rol == "Llamadas") {
+                $usersasesores = User::where('users.rol', 'Asesor')
+                    ->where('users.estado', '1')
+                    ->where('users.llamada', Auth::user()->id)
+                    ->select(
+                        DB::raw("users.identificador as identificador")
+                    )
+                    ->pluck('users.identificador');
+    
+                $cliente=$cliente->whereIn('clientes.user_id',$usersasesores);
+            }
+
+            return  $cliente->get();
     }
     public function fields(): array
     {

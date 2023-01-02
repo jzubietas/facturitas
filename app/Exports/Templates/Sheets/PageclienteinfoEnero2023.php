@@ -11,11 +11,11 @@ use Maatwebsite\Excel\Concerns\WithColumnFormatting;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 use Maatwebsite\Excel\Concerns\WithColumnWidths;
 
-class PageclienteinfoNoviembre extends Export implements WithColumnFormatting,WithColumnWidths
+class PageclienteinfoEnero2023 extends Export implements WithColumnFormatting,WithColumnWidths
 {
     public function collection()
     {
-        $cliente= Cliente::with('user')
+        $cliente = Cliente::with('user')
             ->join('users as u', 'clientes.user_id', 'u.id')
             ->select(
                 'clientes.id'
@@ -24,7 +24,7 @@ class PageclienteinfoNoviembre extends Export implements WithColumnFormatting,Wi
                 ,'clientes.dni'
                 ,'clientes.icelular'
                 ,'clientes.celular'
-                ,DB::raw(" (select a.s_2022_11 from listado_resultados a where a.id=clientes.id ) as situacion ")
+                ,DB::raw(" (select a.s_2023_01 from listado_resultados a where a.id=clientes.id ) as situacion ")
                 ,DB::raw("(select DATE_FORMAT(dp1.created_at,'%Y-%m-%d %h:%i:%s') from pedidos dp1 where dp1.cliente_id=clientes.id order by dp1.created_at desc limit 1) as fecha"),
             )
             ->where('clientes.estado', '1')
@@ -57,12 +57,11 @@ class PageclienteinfoNoviembre extends Export implements WithColumnFormatting,Wi
             ,"fecha"=>"Fecha Ultimo Pedido"
         ];
     }
+
     public function title(): string
     {
-        //return parent::title();//Por defecto se toma del nombre de la clase de php, en este caso seria "Pagina One" de titulo
-        return 'Detalle Noviembre';
+        return 'Detalle Diciembre';
     }
-
     public function map($model): array
     {
         $model->Periodo=strval(str_pad($model->Periodo,2,"0"));//->setDataType(DataType::TYPE_STRING);
