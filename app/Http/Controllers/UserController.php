@@ -289,7 +289,9 @@ class UserController extends Controller
             } elseif ($user->identificador == 'ADMIN') {
                 $html .= '<option style="color:black" value="' . $user->identificador . '">' . $user->identificador . '</option>';
             } else {
-                if ($user->exidentificador == 22 || $user->exidentificador == 21) {
+                if ($user->exidentificador == '01' || $user->exidentificador == '02') {
+                    $html .= '<option style="color:black" value="' . $user->identificador . '">' . $user->identificador . (($user->exidentificador != null) ? '  (' . $user->exidentificador . ')' : '') . '</option>';
+                }else if ($user->exidentificador == 22 || $user->exidentificador == 21) {
                     $html .= '<option style="color:black" value="' . $user->identificador . '">' . $user->identificador . (($user->exidentificador != null) ? '  (' . $user->exidentificador . ')' : '') . '</option>';
                 } else {
                     if (intval($user->exidentificador) % 2 == 0) {
@@ -315,7 +317,6 @@ class UserController extends Controller
 
         if ($mirol == 'Llamadas') {
             $users = $users->where('llamada', Auth::user()->id)->where("rol", "Asesor");
-
         } elseif ($mirol == 'Jefe de llamadas') {
             $users = $users->WhereNotIn("identificador", ['B']);
         } elseif ($mirol == 'Asesor') {
@@ -331,8 +332,9 @@ class UserController extends Controller
             if ($user->identificador == 'B') {
                 $html .= '<option style="color:black" value="' . $user->identificador . '">' . $user->identificador . '</option>';
             } else {
-
-                if ($user->exidentificador == 22 || $user->exidentificador == 21) {
+                if ($user->exidentificador == '01' || $user->exidentificador == '02') {
+                    $html .= '<option style="color:black" value="' . $user->identificador . '">' . $user->identificador . (($user->exidentificador != null) ? '  (' . $user->exidentificador . ')' : '') . '</option>';
+                }else if ($user->exidentificador == 22 || $user->exidentificador == 21) {
                     $html .= '<option style="color:black" value="' . $user->identificador . '">' . $user->identificador . (($user->exidentificador != null) ? '  (' . $user->exidentificador . ')' : '') . '</option>';
                 } else {
 
