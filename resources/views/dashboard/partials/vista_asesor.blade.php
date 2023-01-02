@@ -91,7 +91,6 @@
     <div class="row">
         <div class="container-fluid">
             <div class="row">
-
                 <div class="col-md-12">
                     <div class="card">
                         <div class="d-flex justify-content-end align-items-center">
@@ -109,7 +108,8 @@
                                         <span class="input-group-text"> Seleccionar Mes</span>
                                     </div>
                                     <div class="input-group-prepend">
-                                        <a href="{{route('dashboard.index',['selected_date'=>$currentDate->startOfMonth()->subMonth()->format('m-Y')])}}" class="btn m-0 p-0"
+                                        <a href="{{route('dashboard.index',['selected_date'=>$currentDate->clone()->startOfMonth()->subMonth()->format('m-Y')])}}"
+                                           class="btn m-0 p-0"
                                            type="button">
                             <span class="input-group-text">
                                 <
@@ -121,7 +121,7 @@
 
                                         @foreach([1,2,3,4,5,6,7,8,9,10,11,12] as $month)
                                             @php
-                                                $currentMonth=$currentDate->startOfYear()->addMonths($month-1);
+                                                $currentMonth=$currentDate->clone()->startOfYear()->addMonths($month-1);
                                             @endphp
                                             <option
                                                 {{$currentMonth->format('m-Y')==request('selected_date',now()->format('m-Y'))?'selected':''}}
@@ -131,7 +131,8 @@
                                     </select>
 
                                     <div class="input-group-append">
-                                        <a href="{{route('dashboard.index',['selected_date'=>$currentDate->addMonths()->format('m-Y')])}}" class="btn m-0 p-0" type="button">
+                                        <a href="{{route('dashboard.index',['selected_date'=>$currentDate->clone()->addMonths()->format('m-Y')])}}"
+                                           class="btn m-0 p-0" type="button">
                                             <span class="input-group-text">></span>
                                         </a>
                                     </div>
