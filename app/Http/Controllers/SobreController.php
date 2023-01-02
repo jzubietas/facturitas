@@ -47,6 +47,12 @@ class SobreController extends Controller
 
     }
 
+    public function cargadistritos()
+    {
+        $dis=Distrito::cargaDistrito();
+        return $dis;
+    }
+
     public function Sobresporenviar()
     {
         $ver_botones_accion = 1;

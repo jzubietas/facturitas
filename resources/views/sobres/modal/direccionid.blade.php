@@ -100,15 +100,17 @@
                                                     {!! Form::text('referencia', null, ['class' => 'form-control', 'placeholder' => 'Referencia', 'required' => 'required']) !!}
                                                 </div>
 
-
                       <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 
-                        {!! Form::label('distrito', 'Distrito') !!}
-                        <select id="distrito" name="distrito" class="form-control border  border-secondary" data-live-search="true">                       
+                        {!! Form::label('distrito', 'Distrito') !!}<br>
+                        
+                        <select id="distrito" class="distrito form-control" data-show-subtext="true" data-live-search="true" data-live-search-placeholder="Seleccione distrito">
                           @foreach($distritos as $distrito)
-                            <option data-subtext="{{ $distrito->zona }}">{{ $distrito->distrito }}</option>
+                            <option data-subtext="{{$distrito->zona}}" value="{{$distrito->distrito}}">{{($distrito->distrito) }}</option>
                           @endforeach
                         </select>
+                        
+                        
 
                       </div>
 
