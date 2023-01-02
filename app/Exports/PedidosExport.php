@@ -82,8 +82,8 @@ class PedidosExport implements FromView, ShouldAutoSize
                 'pedidos.pagado',
                 'dp.saldo',
                 'pedidos.envio',
-                'dp.mes',
-                'dp.anio',
+                'dp.mes as mespedido',
+                'dp.anio as aniopedido',
             );
         //->orderBy('pedidos.created_at', 'DESC')
         //->get();
