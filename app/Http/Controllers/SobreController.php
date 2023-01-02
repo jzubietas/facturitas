@@ -66,10 +66,11 @@ class SobreController extends Controller
                             ->where('estado', '1')
                             ->WhereNotIn('distrito' ,['CHACLACAYO','CIENEGUILLA','LURIN','PACHACAMAC','PUCUSANA','PUNTA HERMOSA','PUNTA NEGRA','SAN BARTOLO','SANTA MARIA DEL MAR'])
                             ->select([
-                                'distrito',
+                                'distrito',                                
                                 DB::raw("concat(distrito,' - ',zona) as distritonam"),
-                            ])
-                            ->pluck('distritonam', 'distrito');
+                                'zona'
+                            ]);
+                            //->pluck('distritonam', 'distrito');
 
         $departamento = Departamento::where('estado', "1")
                 ->pluck('departamento', 'departamento');
