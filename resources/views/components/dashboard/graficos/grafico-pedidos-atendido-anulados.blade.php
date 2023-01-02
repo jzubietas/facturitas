@@ -5,7 +5,9 @@
 </div>
 @push('js')
     <script>
-        var chart = new ApexCharts(document.querySelector("#{{$genId}}"), {{\Illuminate\Support\Js::from($configuration)}});
-        chart.render();
+        $(document).ready(function (){
+            var chart = new ApexCharts(document.querySelector("#{{$genId}}"), {{\Illuminate\Support\Js::from($configuration)}});
+            chart.render();
+        })
     </script>
 @endpush

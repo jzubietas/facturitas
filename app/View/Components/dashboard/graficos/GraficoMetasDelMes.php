@@ -2,6 +2,7 @@
 
 namespace App\View\Components\dashboard\graficos;
 
+use App\Abstracts\Widgets;
 use App\Models\Pedido;
 use App\Models\User;
 use Carbon\Carbon;
@@ -10,7 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\View\Component;
 
-class GraficoMetasDelMes extends Component
+class GraficoMetasDelMes extends Widgets
 {
     public $novResult = [];
     public $dicResult = [];
@@ -18,15 +19,6 @@ class GraficoMetasDelMes extends Component
     public $excludeNov = [];
     public $excludeDic = [];
 
-    /**
-     * Create a new component instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        //
-    }
 
     /**
      * Get the view / contents that represent the component.
@@ -35,25 +27,26 @@ class GraficoMetasDelMes extends Component
      */
     public function render()
     {
-        $now = now();
-        $now_submonth =now()->startOfMonth()->subMonth();
+        $this->startDate = now();
+        $data_diciembre = $this->generarDataDiciembre();
 
+        $now_submonth = $this->startDate->clone()->startOfMonth()->subMonth();
         $data_noviembre = $this->generarDataNoviembre($now_submonth);
 
-        $data_diciembre = $this->generarDataDiciembre();
 
         if (\auth()->user()->rol == User::ROL_ASESOR) {
             $this->novResult = [];
             $this->dicResult = [];
         }
+        $now = $this->startDate->clone();
 
         return view('components.dashboard.graficos.grafico-metas-del-mes', compact('data_noviembre', 'data_diciembre', 'now', 'now_submonth'));
     }
 
-    public function applyFilter($query, CarbonInterface $date = null, $column = 'created_at')
+    public function applyFilterCustom($query, CarbonInterface $date = null, $column = 'created_at')
     {
         if ($date == null) {
-            $date = now();
+            $date = $this->startDate->clone();
         }
         return $query->whereBetween($column, [
             $date->clone()->startOfMonth(),
@@ -97,10 +90,10 @@ class GraficoMetasDelMes extends Component
             }
 
             $metatotal = (float)$asesor->meta_pedido;
-            $all = $this->applyFilter(Pedido::query()->where('user_id', $asesor->id)->activo(), $date, 'created_at')
+            $all = $this->applyFilterCustom(Pedido::query()->where('user_id', $asesor->id)->activo(), $date, 'created_at')
                 ->count();
 
-            $pay = $this->applyFilter(Pedido::query()->where('user_id', $asesor->id)->activo()->pagados(), $date, 'created_at')
+            $pay = $this->applyFilterCustom(Pedido::query()->where('user_id', $asesor->id)->activo()->pagados(), $date, 'created_at')
                 ->count();
 
             $item = [
@@ -113,11 +106,11 @@ class GraficoMetasDelMes extends Component
             ];
             if ($asesor->excluir_meta) {
                 if ($all > 0) {
-                    $p = round(($pay / $all) * 100,2);
+                    $p = round(($pay / $all) * 100, 2);
                 } else {
                     $p = 0;
                 }
-                $item['progress']=$p;
+                $item['progress'] = $p;
                 $this->excludeNov[] = $item;
             } else {
                 $progressData[] = $item;
@@ -143,7 +136,7 @@ class GraficoMetasDelMes extends Component
             $all = data_get($item, 'total');
             $pay = data_get($item, 'current');
             if ($all > 0) {
-                $p = round(($pay / $all) * 100,2);
+                $p = round(($pay / $all) * 100, 2);
             } else {
                 $p = 0;
             }
@@ -157,7 +150,7 @@ class GraficoMetasDelMes extends Component
         $pay = collect($progressData)->pluck('current')->sum();
         $meta = collect($progressData)->pluck('meta')->sum();
         if ($all > 0) {
-            $p = round(($pay / $all) * 100,2);
+            $p = round(($pay / $all) * 100, 2);
         } else {
             $p = 0;
         }
@@ -205,10 +198,10 @@ class GraficoMetasDelMes extends Component
             }
 
             $meta = (float)$asesor->meta_pedido;
-            $asignados = $this->applyFilter(Pedido::query()->whereUserId($asesor->id)->activo())->count();
+            $asignados = $this->applyFilterCustom(Pedido::query()->whereUserId($asesor->id)->activo())->count();
             //$pay = $this->applyFilter(Pedido::query())->whereUserId($asesor->id)->activo()->pagados()->count();
 
-            $item =  [
+            $item = [
                 "identificador" => $asesor->identificador,
                 "code" => "Asesor {$asesor->identificador}",
                 "name" => $asesor->name,
@@ -218,11 +211,11 @@ class GraficoMetasDelMes extends Component
             ];
             if ($asesor->excluir_meta) {
                 if ($meta > 0) {
-                    $p = round(($asignados / $meta) * 100,2);
+                    $p = round(($asignados / $meta) * 100, 2);
                 } else {
                     $p = 0;
                 }
-                $item['progress']=$p;
+                $item['progress'] = $p;
                 $this->excludeDic[] = $item;
             } else {
                 $progressData[] = $item;
@@ -249,7 +242,7 @@ class GraficoMetasDelMes extends Component
             $all = data_get($item, 'meta');
             $asignados = data_get($item, 'total');
             if ($all > 0) {
-                $p = round(($asignados / $all) * 100,2);
+                $p = round(($asignados / $all) * 100, 2);
             } else {
                 $p = 0;
             }

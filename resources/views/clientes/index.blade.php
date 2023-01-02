@@ -406,6 +406,16 @@
                             name: 's_2022_12',
                             sWidth: '20%',
                         },
+                        {
+                            data: 'a_2023_01',
+                            name: 'a_2023_01',
+                            sWidth: '20%',
+                        },
+                        {
+                            data: 's_2023_01',
+                            name: 's_2023_01',
+                            sWidth: '20%',
+                        },
                     ],
                     language: {
                         "decimal": "",

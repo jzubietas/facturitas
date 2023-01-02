@@ -12,7 +12,7 @@
       <input type="hidden" id="hiddenRevertirpedidoporatender" name="hiddenRevertirpedidoporatender">
       <div class="modal-body">
         <p>Confirme si desea revertir el pedido <strong class="textcode">PED000</strong></p>
-        <p>Adjuntos en esta atencion : <strong class="textcantadjunto"></strong></p>
+        <p>Recuerde que tiene <strong class="textcantadjunto"></strong> archivos adjunto(s)</p>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>

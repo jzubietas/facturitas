@@ -424,7 +424,7 @@
                     const value = e.target.value;
                     console.log(value)
                     if (value) {
-                        window.location.replace('{{route('dashboard.index')}}?selected_month=' + value)
+                        window.location.replace('{{route('dashboard.index')}}?selected_date=' + value)
                     }
                 })
                 {{--
