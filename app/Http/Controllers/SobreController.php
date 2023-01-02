@@ -66,11 +66,10 @@ class SobreController extends Controller
                             ->where('estado', '1')
                             ->WhereNotIn('distrito' ,['CHACLACAYO','CIENEGUILLA','LURIN','PACHACAMAC','PUCUSANA','PUNTA HERMOSA','PUNTA NEGRA','SAN BARTOLO','SANTA MARIA DEL MAR'])
                             ->select([
-                                'distrito',                                
+                                'distrito',
                                 DB::raw("concat(distrito,' - ',zona) as distritonam"),
-                                'zona'
-                            ]);
-                            //->pluck('distritonam', 'distrito');
+                            ])
+                            ->pluck('distritonam', 'distrito');
 
         $departamento = Departamento::where('estado', "1")
                 ->pluck('departamento', 'departamento');
@@ -104,7 +103,6 @@ class SobreController extends Controller
                     'pedidos.codigo',
                     'pedidos.destino',
                     'pedidos.direccion',
-                    'pedidos.da_confirmar_descarga',
                     'dp.envio_doc',
                     'dp.fecha_envio_doc',
                     'dp.cant_compro',
@@ -192,9 +190,14 @@ class SobreController extends Controller
                 )
                 ->pluck('users.identificador');
 
-            $pedidos=$pedidos->whereIn('u.identificador',$usersasesores);
+            $pedidos=$pedidos->WhereIn('u.identificador',$usersasesores);
         }
-        return Datatables::of(DB::table($pedidos))
+        else{
+            $pedidos=$pedidos;
+        }
+        $pedidos=$pedidos->get();
+
+        return Datatables::of($pedidos)
                     ->addIndexColumn()
                     ->addColumn('action', function($pedido){
                         $btn='';
