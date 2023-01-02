@@ -31,7 +31,7 @@ class PlantillaExportMultiple implements WithMultipleSheets
     {
         return [
             new PageclienteSituacion(),
-            new PageclienteInfo($this->anio),
+            //new PageclienteInfo($this->anio),
             //new PageclienteinfoJulio(),
             //new PageclienteinfoAgosto(),
             //new PageclienteinfoSetiembre(),
