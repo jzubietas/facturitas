@@ -61,13 +61,15 @@ class SobreController extends Controller
         }else{
             $ver_botones_accion = 1;
         }
-
-
-
+        
         $distritos = Distrito::whereIn('provincia', ['LIMA', 'CALLAO'])
                             ->where('estado', '1')
                             ->WhereNotIn('distrito' ,['CHACLACAYO','CIENEGUILLA','LURIN','PACHACAMAC','PUCUSANA','PUNTA HERMOSA','PUNTA NEGRA','SAN BARTOLO','SANTA MARIA DEL MAR'])
-                            ->pluck('distrito', 'distrito');
+                            ->select([
+                                'distrito',
+                                DB::raw("concat(distrito,' ') as distritonam"),
+                            ])
+                            ->pluck('distritonam', 'distrito');
 
         $departamento = Departamento::where('estado', "1")
                 ->pluck('departamento', 'departamento');
