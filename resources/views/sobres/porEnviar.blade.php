@@ -1001,9 +1001,11 @@
                 if (confirm_descarga == '1') {
                     $("#show_direccion_is_disabled").hide()
                     $("#show_direccion_is_enabled").show()
+                    $("#direccionConfirmar").show()
                 } else {
                     $("#show_direccion_is_disabled").show()
                     $("#show_direccion_is_enabled").hide()
+                    $("#direccionConfirmar").hide()
                 }
 
                 console.log("cliente " + cliente);
