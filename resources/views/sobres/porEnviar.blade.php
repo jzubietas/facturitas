@@ -127,6 +127,11 @@
             transition: all 0.5s ease;
             text-shadow: 10px 2px #6ac7c2;
         }
+
+        .pull-right {
+  float: right!important;
+}
+
     </style>
     <style>
         /*#canvas_container {
@@ -161,10 +166,9 @@
     <script src="https://cdn.datatables.net/select/1.5.0/js/dataTables.select.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.0.943/pdf.min.js"></script>
 
-    <script
-        src="https://gyrocode.github.io/jquery-datatables-checkboxes/1.2.12/js/dataTables.checkboxes.min.js"></script>
+    
 
-
+    <script src="https://gyrocode.github.io/jquery-datatables-checkboxes/1.2.12/js/dataTables.checkboxes.min.js"></script>
 
     <script>
         var tablehistoricolima = null;
@@ -196,8 +200,14 @@
         var tabla_pedidos = null;
 
     </script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
     <script>
         $(document).ready(function () {
+
+          //.val('test2').trigger('change');
 
             /*$(document).on("click","#saveHistoricoLima",function(){
 
@@ -1017,6 +1027,25 @@
                 $("#modal-historial-provincia-a").attr("data-cliente", cliente);
 
 
+                /*$('#distrito').select2({
+                    dropdownParent: $("#modal-direccion"),                    
+                    data: [
+                      {id: 'test1', text: 'January', subText: "Test1"},
+                      {id: 'test2', text: 'February', subText: "Test2"},
+                      {id: 'test3', text: 'March', subText: "Test3"}      
+                    ],
+                    placeholder: 'Selecciona un distrito',
+                    escapeMarkup: function (markup) {
+                      return markup;
+                    },
+                    templateResult: function (d) {
+                      return '<span>'+d.text+'</span><span class="pull-right subtext">'+d.subText+'</span>';
+                    },
+                    templateSelection: function (d) {
+                      return d.text + ' ( ' + d.subText + ')';
+                    }
+                });*/
+              
                 console.log("carga modales")
                 tabla_pedidos.destroy();
 

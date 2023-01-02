@@ -340,6 +340,8 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
 /////////
 
     /*Controller Sobres*/
+    Route::get('carga.distritos', [SobreController::class, 'cargadistritos'])->name('carga.distritos');
+
     Route::get('sobres.porenviar', [SobreController::class, 'Sobresporenviar'])->name('sobres.porenviar');
     Route::get('sobres.porenviartabla', [SobreController::class, 'Sobresporenviartabla'])->name('sobres.porenviartabla');
 
