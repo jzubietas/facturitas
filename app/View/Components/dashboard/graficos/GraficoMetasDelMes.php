@@ -27,10 +27,10 @@ class GraficoMetasDelMes extends Widgets
      */
     public function render()
     {
-
+        $this->startDate = now();
         $data_diciembre = $this->generarDataDiciembre();
 
-        $now_submonth =$this->startDate->clone()->startOfMonth()->subMonth();
+        $now_submonth = $this->startDate->clone()->startOfMonth()->subMonth();
         $data_noviembre = $this->generarDataNoviembre($now_submonth);
 
 
@@ -38,7 +38,7 @@ class GraficoMetasDelMes extends Widgets
             $this->novResult = [];
             $this->dicResult = [];
         }
-        $now=$this->startDate->clone();
+        $now = $this->startDate->clone();
 
         return view('components.dashboard.graficos.grafico-metas-del-mes', compact('data_noviembre', 'data_diciembre', 'now', 'now_submonth'));
     }
@@ -106,11 +106,11 @@ class GraficoMetasDelMes extends Widgets
             ];
             if ($asesor->excluir_meta) {
                 if ($all > 0) {
-                    $p = round(($pay / $all) * 100,2);
+                    $p = round(($pay / $all) * 100, 2);
                 } else {
                     $p = 0;
                 }
-                $item['progress']=$p;
+                $item['progress'] = $p;
                 $this->excludeNov[] = $item;
             } else {
                 $progressData[] = $item;
@@ -136,7 +136,7 @@ class GraficoMetasDelMes extends Widgets
             $all = data_get($item, 'total');
             $pay = data_get($item, 'current');
             if ($all > 0) {
-                $p = round(($pay / $all) * 100,2);
+                $p = round(($pay / $all) * 100, 2);
             } else {
                 $p = 0;
             }
@@ -150,7 +150,7 @@ class GraficoMetasDelMes extends Widgets
         $pay = collect($progressData)->pluck('current')->sum();
         $meta = collect($progressData)->pluck('meta')->sum();
         if ($all > 0) {
-            $p = round(($pay / $all) * 100,2);
+            $p = round(($pay / $all) * 100, 2);
         } else {
             $p = 0;
         }
@@ -201,7 +201,7 @@ class GraficoMetasDelMes extends Widgets
             $asignados = $this->applyFilterCustom(Pedido::query()->whereUserId($asesor->id)->activo())->count();
             //$pay = $this->applyFilter(Pedido::query())->whereUserId($asesor->id)->activo()->pagados()->count();
 
-            $item =  [
+            $item = [
                 "identificador" => $asesor->identificador,
                 "code" => "Asesor {$asesor->identificador}",
                 "name" => $asesor->name,
@@ -211,11 +211,11 @@ class GraficoMetasDelMes extends Widgets
             ];
             if ($asesor->excluir_meta) {
                 if ($meta > 0) {
-                    $p = round(($asignados / $meta) * 100,2);
+                    $p = round(($asignados / $meta) * 100, 2);
                 } else {
                     $p = 0;
                 }
-                $item['progress']=$p;
+                $item['progress'] = $p;
                 $this->excludeDic[] = $item;
             } else {
                 $progressData[] = $item;
@@ -242,7 +242,7 @@ class GraficoMetasDelMes extends Widgets
             $all = data_get($item, 'meta');
             $asignados = data_get($item, 'total');
             if ($all > 0) {
-                $p = round(($asignados / $all) * 100,2);
+                $p = round(($asignados / $all) * 100, 2);
             } else {
                 $p = 0;
             }

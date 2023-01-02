@@ -180,7 +180,8 @@
                             <span class="input-group-text"> Seleccionar Mes</span>
                         </div>
                         <div class="input-group-prepend">
-                            <a href="{{route('dashboard.index',['selected_date'=>$currentDate->startOfMonth()->subMonth()->format('m-Y')])}}" class="btn m-0 p-0"
+                            <a href="{{route('dashboard.index',['selected_date'=>$currentDate->startOfMonth()->subMonth()->format('m-Y')])}}"
+                               class="btn m-0 p-0"
                                type="button">
                             <span class="input-group-text">
                                 <
@@ -202,7 +203,8 @@
                         </select>
 
                         <div class="input-group-append">
-                            <a href="{{route('dashboard.index',['selected_date'=>$currentDate->addMonths()->format('m-Y')])}}" class="btn m-0 p-0" type="button">
+                            <a href="{{route('dashboard.index',['selected_date'=>$currentDate->addMonths()->format('m-Y')])}}"
+                               class="btn m-0 p-0" type="button">
                                 <span class="input-group-text">></span>
                             </a>
                         </div>
@@ -219,19 +221,17 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="row" id="widget-container">
-                    <div class="col-md-8">
+                    <div class="col-md-12">
                         <div class="card">
                             <div class="card-body">
-                                <div class="d-flex justify-content-center mb-4 pb-4">
+                                <div class="mb-4 pb-4">
                                     <ul class="list-group">
                                         <li class="list-group-item">
-                                        </li>
-                                        <li class="list-group-item">
                                             <div class="row">
-                                                <div class="col-md-6">
+                                                <div class="col-md-9">
                                                     <x-grafico-meta-pedidos-progress-bar></x-grafico-meta-pedidos-progress-bar>
                                                 </div>
-                                                <div class="col-md-6">
+                                                <div class="col-md-3">
                                                     <x-grafico-metas-progress-bar></x-grafico-metas-progress-bar>
                                                 </div>
                                             </div>
@@ -241,8 +241,12 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-4">
-                        <x-grafico-pedidos-atendidos-anulados></x-grafico-pedidos-atendidos-anulados>
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <x-grafico-pedidos-atendidos-anulados></x-grafico-pedidos-atendidos-anulados>
+                            </div>
+                        </div>
                     </div>
                     <div class="col-md-12">
                         <x-grafico-pedidos-por-dia rol="Administrador"
