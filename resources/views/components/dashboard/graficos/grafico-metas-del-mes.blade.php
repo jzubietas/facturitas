@@ -111,5 +111,6 @@
         .list-group .list-group-item {
             background: #a5770f1a;
         }
+
     </style>
 @endpush

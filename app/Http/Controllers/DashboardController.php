@@ -9,7 +9,7 @@ use App\Models\Pedido;
 use App\Models\Ruc;
 use App\Models\User;
 use App\View\Components\dashboard\graficos\borras\PedidosPorDia;
-use App\View\Components\dashboard\graficos\MetaProgressBar;
+use App\View\Components\dashboard\graficos\PedidosMesCountProgressBar;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -377,7 +377,7 @@ class DashboardController extends Controller
 
     public function widgets(Request $request)
     {
-        $widget1 = new MetaProgressBar();
+        $widget1 = new PedidosMesCountProgressBar();
         $widget2 = new PedidosPorDia(\auth()->user()->rol, 'Cantidad de pedidos de los asesores por dia', 'Asesores', 'Cant. Pedidos', '370', true);
         $widget3 = new PedidosPorDia(\auth()->user()->rol, 'Cantidad de pedidos de los asesores por mes', 'Asesores', 'Cant. Pedidos');
         $widget2->renderData();

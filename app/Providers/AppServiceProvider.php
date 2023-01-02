@@ -4,11 +4,12 @@ namespace App\Providers;
 
 use App\View\Components\common\BsProgressbar;
 use App\View\Components\dashboard\graficos\borras\PedidosPorDia;
+use App\View\Components\dashboard\graficos\CobranzasMesesProgressBar;
 use App\View\Components\dashboard\graficos\GraficoMetaCobranzas;
 use App\View\Components\dashboard\graficos\GraficoMetasDelMes;
 use App\View\Components\dashboard\graficos\GraficoPedidosAtendidoAnulados;
 use App\View\Components\dashboard\graficos\GraficoPedidosMetaProgress;
-use App\View\Components\dashboard\graficos\MetaProgressBar;
+use App\View\Components\dashboard\graficos\PedidosMesCountProgressBar;
 use App\View\Components\dashboard\graficos\PedidosAsignadosProgressBar;
 use App\View\Components\dashboard\graficos\QtyPedidoFisicoElectronicos;
 use App\View\Components\dashboard\graficos\TopClientesPedidos;
@@ -34,7 +35,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        \Blade::component('grafico-metas-progress-bar', MetaProgressBar::class);
+        \Blade::component('grafico-pedidos-mes-count-progress-bar', PedidosMesCountProgressBar::class);
         \Blade::component('grafico-meta-pedidos-progress-bar', PedidosAsignadosProgressBar::class);
         \Blade::component('grafico-pedidos-por-dia', PedidosPorDia::class);
         \Blade::component('grafico-meta_cobranzas', GraficoMetaCobranzas::class);
@@ -46,6 +47,8 @@ class AppServiceProvider extends ServiceProvider
         \Blade::component('tabla-jef-operaciones-fis-elect', FisElecJefeOperaciones::class);
 
         \Blade::component('grafico-pedidos-atendidos-anulados', GraficoPedidosAtendidoAnulados::class);
+
+        \Blade::component('grafico-cobranzas-meses-progressbar', CobranzasMesesProgressBar::class);
 
         Carbon::setUTF8(true);
         Carbon::setLocale(config('app.locale'));

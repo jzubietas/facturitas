@@ -8,7 +8,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\HtmlString;
 
-class MetaProgressBar extends Widgets
+class PedidosMesCountProgressBar extends Widgets
 {
     public $general = [];
     public $progressData = [];
