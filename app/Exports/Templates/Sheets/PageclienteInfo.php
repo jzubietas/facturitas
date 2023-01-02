@@ -186,6 +186,11 @@ class PageclienteInfo extends Export implements WithColumnFormatting, FromCollec
             $model->porcentajeeb=0;
           }
 
+        $_array_anios=[
+            '1'=>'2021',
+            '2'=>'2022',
+        ];
+
           $_array_meses=[
               '1'=>'01',
               '2'=>'01',
@@ -202,14 +207,15 @@ class PageclienteInfo extends Export implements WithColumnFormatting, FromCollec
           ];
         ksort($_array_meses);
 
-
-        foreach ($_array_meses as $k=>$v)
+        ksort($_array_anios);
+        foreach ($_array_anios as $kanio=>$vanio)
         {
-            $return_q=Pedido::groupBy([
+            /*$return_q=Pedido::whereYear()
+                ->select([
                 Db::raw("DATE_FORMAT(pedidos.created_at ,'%Y-%m')")
-            ])->select([
+            ])->groupBy([
                 Db::raw("DATE_FORMAT(pedidos.created_at ,'%Y-%m')")
-            ]);
+            ]);*/
 
 
         }
