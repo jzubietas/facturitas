@@ -72,7 +72,7 @@
       </table>
       @include('envios.modal.enviarid')
       @include('pedidos.modal.recibirid')
-      @include('sobres.modal.direccionid')
+      {{--@include('sobres.modal.direccionid')--}}
       @include('pedidos.modal.verdireccionid')
       @include('pedidos.modal.editdireccionid')
       @include('pedidos.modal.destinoid')
@@ -84,7 +84,7 @@
 @stop
 
 @section('css')
-  
+
   <style>
     img:hover{
       transform: scale(1.2)
@@ -148,7 +148,7 @@
         var button = $(event.relatedTarget)
         var idunico = button.data('ide')
         var codigos = button.data('codigos')
-        
+
         $('.titulo-confirmacion').html("Enviar sobre a Motorizado");
 
         $("#hiddenCodigo").val(idunico)
@@ -330,7 +330,7 @@
           //console.log(row);
         },
         rowCallback: function (row, data, index) {
-            
+
               if(data.destino2=='PROVINCIA'){
                 $('td', row).css('color','red')
 
