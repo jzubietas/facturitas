@@ -215,8 +215,8 @@ class OperacionController extends Controller
             )
             ->where('pedidos.estado', '1')
             ->where('dp.estado', '1')
-            ->where('pedidos.condicion_envio_code', Pedido::ATENDIDO_OPE_INT)
-            ->where('pedidos.envio', 0);
+            ->where('pedidos.condicion_envio_code', Pedido::ATENDIDO_OPE_INT);
+            //->where('pedidos.envio', 0);
 
         if (Auth::user()->rol == "Operario") {
 
@@ -1357,7 +1357,7 @@ class OperacionController extends Controller
             'modificador' => 'USER' . Auth::user()->id
         ]);
 
-        //liberar adjuntos 
+        //liberar adjuntos
         $imagenesatencion_ = ImagenAtencion::where("pedido_id", $request->hiddenRevertirpedidoporatender);//->where("confirm", '0');
         $imagenesatencion_->update([
             'estado' => '0'
