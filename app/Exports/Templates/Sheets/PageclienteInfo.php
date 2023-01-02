@@ -4,6 +4,7 @@ namespace App\Exports\Templates\Sheets;
 
 use App\Abstracts\Export;
 use App\Models\Cliente;
+use App\Models\User;
 use App\Models\Porcentaje;
 use App\Models\Pedido;
 use Illuminate\Support\Facades\DB;
@@ -48,7 +49,8 @@ class PageclienteInfo extends Export implements WithColumnFormatting, FromCollec
 
     public function collection()
     {
-        return Cliente::with('user')
+        
+        $cliente= Cliente::with('user')
             ->join('users as u', 'clientes.user_id', 'u.id')
             ->select(
                 'clientes.id'
@@ -72,8 +74,21 @@ class PageclienteInfo extends Export implements WithColumnFormatting, FromCollec
             )
         //->whereIn('clientes.id',[1,2,3,4,5,6,7,8,9,10])
         ->where('clientes.estado', '1')
-        ->where('clientes.tipo', '1')
-        ->get();
+        ->where('clientes.tipo', '1');
+
+        if (Auth::user()->rol == "Llamadas") {
+            $usersasesores = User::where('users.rol', 'Asesor')
+                ->where('users.estado', '1')
+                ->where('users.llamada', Auth::user()->id)
+                ->select(
+                    DB::raw("users.identificador as identificador")
+                )
+                ->pluck('users.identificador');
+
+            $cliente=$cliente->whereIn('clientes.user_id',$usersasesores);
+        }
+
+        return  $cliente->get();
     }
 
     public function title(): string
@@ -187,7 +202,7 @@ class PageclienteInfo extends Export implements WithColumnFormatting, FromCollec
         ksort($_array_meses);
 
 
-        foreach ($_array_meses as $k=>$v)
+        /*foreach ($_array_meses as $k=>$v)
         {
             $return_q=Pedido::groupBy([
                 Db::raw("DATE_FORMAT(created_at as date,'%d-%m-%Y %h:%i:%s')")
@@ -195,7 +210,7 @@ class PageclienteInfo extends Export implements WithColumnFormatting, FromCollec
 
             DB::raw("DATE_FORMAT(MAX(p.created_at), '%d-%m-%Y %h:%i:%s') as fecha"),
 
-        }
+        }*/
 
         $model->eneroa = Pedido::where('estado', '1')->whereYear(DB::raw('Date(created_at)'), self::$fecharuta)->where('cliente_id', $model->id)
             ->where(DB::raw('MONTH(created_at)'), '1')->count();
