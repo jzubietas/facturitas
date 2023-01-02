@@ -50,7 +50,7 @@ class PageclienteInfo extends Export implements WithColumnFormatting, FromCollec
 
     public function collection()
     {
-        
+
         $cliente= Cliente::with('user')
             ->join('users as u', 'clientes.user_id', 'u.id')
             ->select(
@@ -203,15 +203,16 @@ class PageclienteInfo extends Export implements WithColumnFormatting, FromCollec
         ksort($_array_meses);
 
 
-        /*foreach ($_array_meses as $k=>$v)
+        foreach ($_array_meses as $k=>$v)
         {
             $return_q=Pedido::groupBy([
-                Db::raw("DATE_FORMAT(created_at as date,'%d-%m-%Y %h:%i:%s')")
+                Db::raw("DATE_FORMAT(pedidos.created_at ,'%Y-%m')")
+            ])->select([
+                Db::raw("DATE_FORMAT(pedidos.created_at ,'%Y-%m')")
             ]);
 
-            DB::raw("DATE_FORMAT(MAX(p.created_at), '%d-%m-%Y %h:%i:%s') as fecha"),
 
-        }*/
+        }
 
         $model->eneroa = Pedido::where('estado', '1')->whereYear(DB::raw('Date(created_at)'), self::$fecharuta)->where('cliente_id', $model->id)
             ->where(DB::raw('MONTH(created_at)'), '1')->count();
