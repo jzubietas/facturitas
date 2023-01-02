@@ -49,8 +49,8 @@ class PedidosExport implements FromView, ShouldAutoSize
                     'dp.saldo as diferencia',//'pa.diferencia',
                     'pedidos.estado',
                     'pedidos.envio',
-                    'dp.mes',
-                    'dp.anio'
+                    'dp.mes as mespedido',
+                    'dp.anio as aniopedido'
                 ]
             )
             ->whereIn('pedidos.condicion_code', [Pedido::POR_ATENDER_INT, Pedido::EN_PROCESO_ATENCION_INT, Pedido::ATENDIDO_INT, Pedido::ANULADO_INT])
@@ -82,8 +82,8 @@ class PedidosExport implements FromView, ShouldAutoSize
                 'pedidos.pagado',
                 'dp.saldo',
                 'pedidos.envio',
-                'dp.mes as mespedido',
-                'dp.anio as aniopedido',
+                'dp.mes',
+                'dp.anio',
             );
         //->orderBy('pedidos.created_at', 'DESC')
         //->get();
