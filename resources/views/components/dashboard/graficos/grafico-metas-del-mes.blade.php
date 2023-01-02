@@ -12,8 +12,8 @@
                                 <li class="list-group-item" style=" min-width: 300px; ">
                                     <div class="row">
                                         <div class="col-4"></div>
-                                        <div class="col-4"><h5 class="text-center">COBRANZAS {{Str::upper($now_submonth->monthName)}}</h5></div>
-                                        <div class="col-4"><h5 class="text-center">PEDIDOS {{Str::upper($now->monthName)}}</h5></div>
+                                        <div class="col-4"><h5 class="text-center">COBRANZAS {{Str::upper($now_submonth->monthName)}} - {{$now_submonth->year}}</h5></div>
+                                        <div class="col-4"><h5 class="text-center">PEDIDOS {{Str::upper($now->monthName)}} - {{$now->year}}</h5></div>
                                     </div>
                                 </li>
                                 <li class="list-group-item" style=" background-color: #b7b7b7; ">
@@ -71,8 +71,8 @@
                                     <li class="list-group-item" style=" min-width: 300px; ">
                                         <div class="row">
                                             <div class="col-4"></div>
-                                            <div class="col-4"><h5 class="text-center">COBRANZAS {{Str::upper($now_submonth->monthName)}}</h5></div>
-                                            <div class="col-4"><h5 class="text-center">PEDIDOS {{Str::upper($now->monthName)}}</h5></div>
+                                            <div class="col-4"><h5 class="text-center">COBRANZAS {{Str::upper($now_submonth->monthName)}} {{$now_submonth->year}}</h5></div>
+                                            <div class="col-4"><h5 class="text-center">PEDIDOS {{Str::upper($now->monthName)}} {{$now->year}}</h5></div>
                                         </div>
                                     </li>
                                     @foreach($excludeNov as $index=>$data)

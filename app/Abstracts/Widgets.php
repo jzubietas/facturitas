@@ -31,24 +31,10 @@ abstract class Widgets extends Component
         $this->endDate = now()->endOfMonth();
         $this->genId = Str::random(40);
 
-        if (request()->has("selected_month")) {
+        if (request()->has("selected_date")) {
             try {
-                $month = request('selected_month');
-                $months = [
-                    'enero' => 1,
-                    'febrero' => 2,
-                    'marzo' => 3,
-                    'abril' => 4,
-                    'mayo' => 5,
-                    'junio' => 6,
-                    'julio' => 7,
-                    'agosto' => 8,
-                    'septiembre' => 9,
-                    'octubre' => 10,
-                    'noviembre' => 11,
-                    'diciembre' => 12,
-                ];
-                $this->startDate = now()->startOfYear()->addMonths($months[$month]-1)->startOfMonth();
+                $currentDate= Carbon::createFromFormat('m-Y',request('selected_date',now()->format('m-Y')));
+                $this->startDate =$currentDate->startOfMonth();
                 $this->endDate = $this->startDate->clone()->endOfMonth()->endOfDay();
             } catch (\Exception $ex) {
             }
