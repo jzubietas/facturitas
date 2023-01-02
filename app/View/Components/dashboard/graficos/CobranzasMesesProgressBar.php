@@ -32,6 +32,10 @@ class CobranzasMesesProgressBar extends Widgets
         return view('components.dashboard.graficos.cobranzas-meses-progress-bar', compact('title'));
     }
 
+    public function getMonthYear(CarbonInterface $date){
+        return \Str::upper(substr($date->monthName,0,3).' '.$date->format('y'));
+    }
+
     public function generateDataByMonth(CarbonInterface $date)
     {
         if (auth()->user()->rol == User::ROL_LLAMADAS) {//HASTA MAÑANA
@@ -81,7 +85,7 @@ class CobranzasMesesProgressBar extends Widgets
             $currentCount = 0;
             while ($currentCount < $limit) {
                 $dateCurrent = $date->clone()->addMonths($currentCount);
-                $progressData[$identificador][$dateCurrent->format('m-Y')] = $this->getDataProgress($identificador, $ids, collect($asesoresNames[$identificador])->first(), $dateCurrent);
+                $progressData[$identificador][$this->getMonthYear($dateCurrent)] = $this->getDataProgress($identificador, $ids, collect($asesoresNames[$identificador])->first(), $dateCurrent);
                 $currentCount++;
             }
         }

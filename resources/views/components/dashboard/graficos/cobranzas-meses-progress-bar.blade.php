@@ -23,7 +23,7 @@
                 @foreach($dataall as $datestr=>$data)
                     <div class="col-md-3">
                         <x-bs-progressbar :progress="data_get($data,'progress')">
-                            <p><b>{{data_get($data,'date')->format('m-Y')}} | {{$data['progress']}}% - {{$data['pagados']}}/{{$data['activos']}}</b></p>
+                            <p><b>{{$datestr}}  | {{$data['progress']}}% - {{$data['pagados']}}/{{$data['activos']}}</b></p>
                         </x-bs-progressbar>
                     </div>
                 @endforeach
