@@ -12,7 +12,7 @@
         </li>
     @endif
     @foreach($progressData as $data)
-        <li class="list-group-item">
+        <li class="list-group-item" @if($loop->index%2==0) style="background: #ffffff4f" @endif>
             <b>{{$data['code']}}</b> <br> {{$data['name']}}
 
             <x-bs-progressbar :progress="data_get($data,'progress')">

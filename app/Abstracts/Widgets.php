@@ -33,8 +33,8 @@ abstract class Widgets extends Component
 
         if (request()->has("selected_date")) {
             try {
-                $currentDate= Carbon::createFromFormat('m-Y',request('selected_date',now()->format('m-Y')));
-                $this->startDate =$currentDate->startOfMonth();
+                $currentDate = Carbon::createFromFormat('m-Y', request('selected_date', now()->format('m-Y')));
+                $this->startDate = $currentDate->startOfMonth();
                 $this->endDate = $this->startDate->clone()->endOfMonth()->endOfDay();
             } catch (\Exception $ex) {
             }
@@ -47,12 +47,32 @@ abstract class Widgets extends Component
         }
     }
 
-    public function applyFilter($query, $column = 'created_at')
+    public function applyFilter($query, $column = 'created_at', $dateStart = null, $dateEnd = null)
     {
-        return $query->whereBetween($column, [
-            $this->startDate->clone(),
-            $this->endDate->clone()->endOfDay()
-        ]);
+        if ($dateStart == null) {
+            $dateStart = $this->startDate;
+        }
+        if ($dateEnd == null) {
+            $dateEnd = $this->endDate;
+            if ($dateStart != null) {
+                $dateEnd = $dateStart->clone()->endOfMonth();
+            }
+        }
+        if (is_array($column)) {
+            foreach ($column as $col) {
+                $query = $query->whereBetween($col, [
+                    $dateStart->clone(),
+                    $dateEnd->clone()->endOfDay()
+                ]);
+            }
+            return $query;
+        } else {
+            return $query->whereBetween($column, [
+                $dateStart->clone(),
+                $dateEnd->clone()->endOfDay()
+            ]);
+        }
+
     }
 
     public function getDateTitle()
@@ -61,7 +81,7 @@ abstract class Widgets extends Component
             $formatA = $this->startDate->locale('es_PE')->translatedFormat('F - Y');
             if ($this->endDate != null) {
                 $formatB = $this->endDate->locale('es_PE')->translatedFormat('F - Y');
-                if ($this->startDate->format('m-Y') !=  $this->endDate->format('m-Y')) {
+                if ($this->startDate->format('m-Y') != $this->endDate->format('m-Y')) {
                     return $formatA . ' - ' . $formatB;
                 }
             }
