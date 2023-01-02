@@ -1355,7 +1355,7 @@
 
                             @if (Auth::user()->rol == "Asesor" || Auth::user()->rol == "Administrador")
 
-                                datass = datass + '<button type="button" class="btn btn-info btn-sm '+(row.da_confirmar_descarga=='1'?'text-warning':'')+'" data-target="#modal-direccion" data-toggle="modal" data-pedido_codigo="' + row.codigo + '" data-confirm_descarga="' + row.da_confirmar_descarga + '" data-cliente="' + row.cliente_id + '" data-asesor="' + row.user_id + '" data-direccion="' + row.id + '" data-codigo="' + row.id + '"><i class="fa fa-map-marker-alt '+(row.da_confirmar_descarga=='1'?'text-warning':'')+'" aria-hidden="true"></i> Direccion</button>';
+                                datass = datass + '<button type="button" class="btn btn-dark btn-sm '+(row.da_confirmar_descarga=='1'?'':'')+'" data-target="#modal-direccion" data-toggle="modal" data-pedido_codigo="' + row.codigo + '" data-confirm_descarga="' + row.da_confirmar_descarga + '" data-cliente="' + row.cliente_id + '" data-asesor="' + row.user_id + '" data-direccion="' + row.id + '" data-codigo="' + row.id + '"><i class="fa  '+(row.da_confirmar_descarga !='1'?'fa-exclamation-triangle text-warning font-12 mr-8':'fa-map-marker-alt text-success mr-8')+'" aria-hidden="true"></i> Direccion</button>';
                             @endif
 
 

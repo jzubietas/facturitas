@@ -5,6 +5,10 @@ body{
     font-size: 14px !important;
 }
 
+.text-success {
+    color: #50cd1c!important;
+}
+
 #gorro_navidad{
     width: 24px;
     position: absolute;
@@ -138,6 +142,24 @@ background-color: white !important;
 box-shadow: #e3e3e3 0px 3px 0px;
 transition: all 0.2s;
 }
+
+.btn-dark-success {
+    border-radius: 8px;
+    background-color: #343a40 !important;
+    box-shadow: #00bc8c 0px 3px 0px;
+    transition: all 0.2s;
+    color: white !important;
+}
+
+
+
+.btn-dark-success:hover{
+    background-color: #1a1c1e !important;
+    box-shadow: #a89eb5 0px 0px 0px;
+}
+
+#cnt-distritos .dropdown-menu li a span small{float:right;}
+#cnt-distritos .dropdown-menu li a span {width: 100%; text-align: left;}
 
 .form-control input:hover{
 cursor: pointer !important;
