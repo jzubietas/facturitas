@@ -96,7 +96,7 @@ class OperacionController extends Controller
                 'dp.codigo as codigos',
                 'dp.nombre_empresa as empresas',
                 'dp.total as total',
-                DB::raw('(DATE_FORMAT(pedidos.created_at, "%Y-%m-%d %h:%i:%s")) as fecha'),
+                DB::raw('(DATE_FORMAT(pedidos.created_at, "%Y-%m-%d %H:%i:%s")) as fecha'),
                 'dp.envio_doc',
                 'dp.fecha_envio_doc',
                 'dp.cant_compro',
