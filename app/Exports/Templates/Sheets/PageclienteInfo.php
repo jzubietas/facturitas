@@ -186,6 +186,11 @@ class PageclienteInfo extends Export implements WithColumnFormatting, FromCollec
             $model->porcentajeeb=0;
           }
 
+        $_array_anios=[
+            '1'=>'2021',
+            '2'=>'2022',
+        ];
+
           $_array_meses=[
               '1'=>'01',
               '2'=>'01',
@@ -202,17 +207,36 @@ class PageclienteInfo extends Export implements WithColumnFormatting, FromCollec
           ];
         ksort($_array_meses);
 
-
-        foreach ($_array_meses as $k=>$v)
+        ksort($_array_anios);
+        foreach ($_array_anios as $kanio=>$vanio)
         {
-            $return_q=Pedido::groupBy([
-                Db::raw("DATE_FORMAT(pedidos.created_at ,'%Y-%m')")
-            ])->select([
-                Db::raw("DATE_FORMAT(pedidos.created_at ,'%Y-%m')")
-            ]);
-
+            if(array_key_exists('1',$_array_anios))
+            {
+                $return_1=Pedido::whereYear($vanio)
+                    ->select([
+                        Db::raw("(DATE_FORMAT(pedidos.created_at ,'%Y-%m')) as periodo"),
+                        DB::raw( " (count(*) ) as cuenta")
+                    ])->groupBy([
+                        Db::raw("DATE_FORMAT(pedidos.created_at ,'%Y-%m')")
+                    ])->get();
+            }else if(array_key_exists('2',$_array_anios))
+            {
+                $return_2=Pedido::whereYear($vanio)
+                    ->select([
+                        Db::raw("(DATE_FORMAT(pedidos.created_at ,'%Y-%m')) as periodo"),
+                        DB::raw( " (count(*) ) as cuenta")
+                    ])->groupBy([
+                        Db::raw("DATE_FORMAT(pedidos.created_at ,'%Y-%m')")
+                    ])->get();
+            }
 
         }
+
+        periodo     cantidad
+            '2022-01'    1
+            2022-02      1
+
+            $model->eneroa=$return_1
 
         $model->eneroa = Pedido::where('estado', '1')->whereYear(DB::raw('Date(created_at)'), self::$fecharuta)->where('cliente_id', $model->id)
             ->where(DB::raw('MONTH(created_at)'), '1')->count();
