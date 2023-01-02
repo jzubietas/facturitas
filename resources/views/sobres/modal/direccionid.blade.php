@@ -258,7 +258,8 @@
                         <div class="col-12">
                             <div class="alert alert-warning">
                                 Los archivos del pedido <b class="set_pedido_code"></b> aun no han sido enviados al cliente.<br>
-                                <b>Primero envie los archivos al cliente para que se active el boton de envio.</b>
+                                <b>Primero envie los archivos al cliente para que se active el boton de envio.</b><br>
+                                <a href="{{ route('pedidos.estados.atendidos') }}" class="btn btn-dark text-decoration-none font-14 mt-20">Ver pedidos atendidos <i class="fa fa-arrow-right font-12 ml-8" aria-hidden="true"></i></a>
                             </div>
                         </div>
                     </div>
