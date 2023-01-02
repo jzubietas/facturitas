@@ -292,6 +292,7 @@ class NotificationsController extends Controller
             ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
             ->where('pedidos.estado', '1')
             ->where('dp.estado', '1')
+            ->where('pedidos.condicion_code', Pedido::ATENDIDO_OPE_INT)
             ->where('pedidos.condicion_envio_code', Pedido::ATENDIDO_INT)
             ->where('pedidos.envio', 0);
 
