@@ -2,17 +2,6 @@
     <li class="list-group-item" style=" min-width: 300px; ">
         <h5>COBRANZAS <br>{{Str::upper($title)}}  a  {{Str::upper($startDate->clone()->addMonths(4)->monthName)}} - {{$startDate->clone()->addMonths(4)->year}}</h5>
     </li>
-    @dump($general)
-    {{--
-    @if(data_get($general,'enabled'))
-        <li class="list-group-item" style=" background: #b7b7b7; ">
-            <b> {{data_get($general,'name')}}</b>
-            <x-bs-progressbar :progress="data_get($general,'progress')">
-                {{ data_get($general,'progress')}}% - {{data_get($general,'pagados')}} /{{data_get($general,'activos')}}
-            </x-bs-progressbar>
-        </li>
-    @endif
-    --}}
     <li class="list-group-item" style=" background: #b7b7b7; ">
         <b>{{collect($general)->values()->get(0)['name']}}</b>
 
