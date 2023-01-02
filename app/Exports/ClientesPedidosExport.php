@@ -6,8 +6,10 @@ use App\Models\ListadoResultado;
 use App\Models\Cliente;
 use App\Models\Pedido;
 use App\Models\Porcentaje;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Contracts\View\View;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Concerns\Exportable;
 use Maatwebsite\Excel\Concerns\FromView;
@@ -48,6 +50,7 @@ class ClientesPedidosExport implements FromView, ShouldAutoSize
             )
             ->where('clientes.estado', '1')
             ->where('clientes.tipo', '1')
+            ->Limit(10)
             /* ->where('clientes.pidio','1') */
             ->groupBy(
                 'clientes.id',
@@ -64,8 +67,75 @@ class ClientesPedidosExport implements FromView, ShouldAutoSize
                 'clientes.estado',
                 'clientes.deuda',
                 'clientes.pidio'
-            )
-            ->get();
+            );
+            //->get();
+
+        if (Auth::user()->rol == "Llamadas") {
+            $usersasesores = User::where('users.rol', 'Asesor')
+                ->where('users.estado', '1')
+                ->where('users.llamada', Auth::user()->id)
+                ->select(
+                    DB::raw("users.identificador as identificador")
+                )
+                ->pluck('users.identificador');
+
+            $clientes = $clientes->WhereIn('u.identificador', $usersasesores);
+        } else if (Auth::user()->rol == "Jefe de llamadas") {
+            /*$usersasesores = User::where('users.rol', 'Asesor')
+                -> where('users.estado', '1')
+                -> where('users.llamada', Auth::user()->id)
+                ->select(
+                    DB::raw("users.identificador as identificador")
+                )
+                ->pluck('users.identificador');
+
+            $clientes=$clientes->WhereIn('u.identificador',$usersasesores); */
+            $clientes = $clientes->where('u.identificador', '<>', 'B');
+        } else if (Auth::user()->rol == "Asesor") {
+            $usersasesores = User::where('users.rol', 'Asesor')
+                ->where('users.estado', '1')
+                ->where('users.identificador', Auth::user()->identificador)
+                ->select(
+                    DB::raw("users.identificador as identificador")
+                )
+                ->pluck('users.identificador');
+
+            $clientes = $clientes->WhereIn('u.identificador', $usersasesores);
+
+        } else if (Auth::user()->rol == "Super asesor") {
+            $usersasesores = User::where('users.rol', 'Asesor')
+                ->where('users.estado', '1')
+                ->where('users.identificador', Auth::user()->identificador)
+                ->select(
+                    DB::raw("users.identificador as identificador")
+                )
+                ->pluck('users.identificador');
+
+            $clientes = $clientes->WhereIn('u.identificador', $usersasesores);
+
+        } else if (Auth::user()->rol == "ASESOR ADMINISTRATIVO") {
+            $usersasesores = User::where('users.rol', 'ASESOR ADMINISTRATIVO')
+                ->where('users.estado', '1')
+                ->where('users.identificador', Auth::user()->identificador)
+                ->select(
+                    DB::raw("users.identificador as identificador")
+                )
+                ->pluck('users.identificador');
+
+            $clientes = $clientes->WhereIn('u.identificador', $usersasesores);
+
+        } else if (Auth::user()->rol == "Encargado") {
+
+            $usersasesores = User::where('users.rol', 'Asesor')
+                ->where('users.estado', '1')
+                ->where('users.supervisor', Auth::user()->id)
+                ->select(
+                    DB::raw("users.identificador as identificador")
+                )
+                ->pluck('users.identificador');
+
+            $clientes = $clientes->WhereIn('u.identificador', $usersasesores);
+        }
 
         $cliente_list = [];
         $pedido_list = [];
