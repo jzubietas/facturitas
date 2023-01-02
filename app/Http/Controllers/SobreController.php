@@ -69,7 +69,7 @@ class SobreController extends Controller
                                 'distrito',                                
                                 DB::raw("concat(distrito,' - ',zona) as distritonam"),
                                 'zona'
-                            ]);
+                            ])->get();
                             //->pluck('distritonam', 'distrito');
 
         $departamento = Departamento::where('estado', "1")
