@@ -617,8 +617,8 @@ class ClienteController extends Controller
                 'clientes.icelular',
                 'clientes.celular',
                 'clientes.nombre',
-                DB::raw(" (select count(ped.id) from pedidos ped where ped.cliente_id=clientes.id and ped.pago in (0,1) and ped.pagado in (0,1) and ped.created_at >='".now()->startOfMonth()."' and ped.estado=1) as pedidos_mes_deuda "),
-                DB::raw(" (select count(ped2.id) from pedidos ped2 where ped2.cliente_id=clientes.id and ped2.pago in (0,1) and ped2.pagado in (0,1) and ped2.created_at <='".now()->startOfMonth()->subMonth()->endOfMonth()->endOfDay()."' and ped2.estado=1) as pedidos_mes_deuda_antes "),
+                DB::raw(" (select count(ped.id) from pedidos ped where ped.cliente_id=clientes.id and ped.pago in (0,1) and ped.pagado in (0,1) and ped.created_at >='".now()->startOfMonth()->format('Y-m-d h:i:s')."' and ped.estado=1) as pedidos_mes_deuda "),
+                DB::raw(" (select count(ped2.id) from pedidos ped2 where ped2.cliente_id=clientes.id and ped2.pago in (0,1) and ped2.pagado in (0,1) and ped2.created_at <='".now()->startOfMonth()->subMonth()->endOfMonth()->endOfDay()->format('Y-m-d h:i:s')."' and ped2.estado=1) as pedidos_mes_deuda_antes "),
             ]);
 
 
@@ -867,8 +867,8 @@ class ClienteController extends Controller
                 DB::raw('MAX(DATE_FORMAT(p.created_at, "%Y")) as anio'),
                 DB::raw('MONTH(CURRENT_DATE()) as dateM'),
                 DB::raw('YEAR(CURRENT_DATE()) as dateY'),
-                DB::raw(" (select count(ped.id) from pedidos ped where ped.cliente_id=clientes.id and ped.pago in (0,1) and ped.pagado in (0,1) and ped.created_at >='2022-12-01 00:00:00' and ped.estado=1) as pedidos_mes_deuda "),
-                DB::raw(" (select count(ped2.id) from pedidos ped2 where ped2.cliente_id=clientes.id and ped2.pago in (0,1) and ped2.pagado in (0,1) and ped2.created_at <='2022-11-30 00:00:00'  and ped2.estado=1) as pedidos_mes_deuda_antes "),
+                DB::raw(" (select count(ped.id) from pedidos ped where ped.cliente_id=clientes.id and ped.pago in (0,1) and ped.pagado in (0,1) and ped.created_at >='".now()->startOfMonth()->format('Y-m-d h:i:s')."' and ped.estado=1) as pedidos_mes_deuda "),
+                DB::raw(" (select count(ped2.id) from pedidos ped2 where ped2.cliente_id=clientes.id and ped2.pago in (0,1) and ped2.pagado in (0,1) and ped2.created_at <='".now()->startOfMonth()->subMonth()->endOfMonth()->endOfDay()->format('Y-m-d h:i:s')."'  and ped2.estado=1) as pedidos_mes_deuda_antes "),
                 'clientes.deuda',
                 'clientes.situacion'
                 , DB::raw("(select DATE_FORMAT(dp1.created_at,'%Y-%m-%d %h:%i:%s') from pedidos dp1 where dp1.estado=1 and dp1.cliente_id=clientes.id order by dp1.created_at desc limit 1) as fechaultimopedido")
@@ -1009,8 +1009,8 @@ class ClienteController extends Controller
                 DB::raw('MAX(DATE_FORMAT(p.created_at, "%Y")) as anio'),
                 DB::raw('MONTH(CURRENT_DATE()) as dateM'),
                 DB::raw('YEAR(CURRENT_DATE()) as dateY'),
-                DB::raw(" (select count(ped.id) from pedidos ped where ped.cliente_id=clientes.id and ped.pago in (0,1) and ped.pagado in (0,1) and ped.created_at >='2022-12-01 00:00:00' and ped.estado=1) as pedidos_mes_deuda "),
-                DB::raw(" (select count(ped2.id) from pedidos ped2 where ped2.cliente_id=clientes.id and ped2.pago in (0,1) and ped2.pagado in (0,1) and ped2.created_at <='2022-11-30 00:00:00'  and ped2.estado=1) as pedidos_mes_deuda_antes "),
+                DB::raw(" (select count(ped.id) from pedidos ped where ped.cliente_id=clientes.id and ped.pago in (0,1) and ped.pagado in (0,1) and ped.created_at >='".now()->startOfMonth()->format('Y-m-d h:i:s')."' and ped.estado=1) as pedidos_mes_deuda "),
+                DB::raw(" (select count(ped2.id) from pedidos ped2 where ped2.cliente_id=clientes.id and ped2.pago in (0,1) and ped2.pagado in (0,1) and ped2.created_at <='".now()->startOfMonth()->subMonth()->endOfMonth()->endOfDay()->format('Y-m-d h:i:s')."'  and ped2.estado=1) as pedidos_mes_deuda_antes "),
                 'clientes.deuda',
                 'clientes.situacion'
                 , DB::raw("(select DATE_FORMAT(dp1.created_at,'%Y-%m-%d %h:%i:%s') from pedidos dp1 where dp1.estado=1 and dp1.cliente_id=clientes.id order by dp1.created_at desc limit 1) as fechaultimopedido")
@@ -1290,8 +1290,8 @@ class ClienteController extends Controller
                 DB::raw('MAX(DATE_FORMAT(p.created_at, "%Y")) as anio'),
                 DB::raw('MONTH(CURRENT_DATE()) as dateM'),
                 DB::raw('YEAR(CURRENT_DATE()) as dateY'),
-                DB::raw(" (select count(ped.id) from pedidos ped where ped.cliente_id=clientes.id and ped.pago in (0,1) and ped.pagado in (0,1) and ped.created_at >='2022-12-01 00:00:00' and ped.estado=1) as pedidos_mes_deuda "),
-                DB::raw(" (select count(ped2.id) from pedidos ped2 where ped2.cliente_id=clientes.id and ped2.pago in (0,1) and ped2.pagado in (0,1) and ped2.created_at <='2022-11-30 00:00:00'  and ped2.estado=1) as pedidos_mes_deuda_antes "),
+                DB::raw(" (select count(ped.id) from pedidos ped where ped.cliente_id=clientes.id and ped.pago in (0,1) and ped.pagado in (0,1) and ped.created_at >='".now()->startOfMonth()->format('Y-m-d h:i:s')."' and ped.estado=1) as pedidos_mes_deuda "),
+                DB::raw(" (select count(ped2.id) from pedidos ped2 where ped2.cliente_id=clientes.id and ped2.pago in (0,1) and ped2.pagado in (0,1) and ped2.created_at <='".now()->startOfMonth()->subMonth()->endOfMonth()->endOfDay()->format('Y-m-d h:i:s')."'  and ped2.estado=1) as pedidos_mes_deuda_antes "),
                 'clientes.deuda',
                 //DB::raw(" (select lr.s_2022_11 from clientes c inner join listado_resultados lr on c.id=lr.id limit 1) as situacion")
                 'clientes.situacion'
@@ -1563,8 +1563,8 @@ class ClienteController extends Controller
                 DB::raw('MAX(DATE_FORMAT(p.created_at, "%Y")) as anio'),
                 DB::raw('MONTH(CURRENT_DATE()) as dateM'),
                 DB::raw('YEAR(CURRENT_DATE()) as dateY'),
-                DB::raw(" (select count(ped.id) from pedidos ped where ped.cliente_id=clientes.id and ped.pago in (0,1) and ped.pagado in (0,1) and ped.created_at >='2022-12-01 00:00:00' and ped.estado=1) as pedidos_mes_deuda "),
-                DB::raw(" (select count(ped2.id) from pedidos ped2 where ped2.cliente_id=clientes.id and ped2.pago in (0,1) and ped2.pagado in (0,1) and ped2.created_at <='2022-11-30 00:00:00'  and ped2.estado=1) as pedidos_mes_deuda_antes "),
+                DB::raw(" (select count(ped.id) from pedidos ped where ped.cliente_id=clientes.id and ped.pago in (0,1) and ped.pagado in (0,1) and ped.created_at >='".now()->startOfMonth()->format('Y-m-d h:i:s')."' and ped.estado=1) as pedidos_mes_deuda "),
+                DB::raw(" (select count(ped2.id) from pedidos ped2 where ped2.cliente_id=clientes.id and ped2.pago in (0,1) and ped2.pagado in (0,1) and ped2.created_at <='".now()->startOfMonth()->subMonth()->endOfMonth()->endOfDay()->format('Y-m-d h:i:s')."'  and ped2.estado=1) as pedidos_mes_deuda_antes "),
                 'clientes.deuda',
                 //DB::raw(" (select lr.s_2022_11 from clientes c inner join listado_resultados lr on c.id=lr.id limit 1) as situacion")
                 'clientes.situacion'

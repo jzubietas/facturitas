@@ -770,8 +770,8 @@ class PedidoController extends Controller
                     'clientes.activado_tiempo',
                     'clientes.activado_pedido',
                     'clientes.temporal_update',
-                    DB::raw(" (select count(ped.id) from pedidos ped where ped.cliente_id=clientes.id and ped.pago in (0,1) and ped.pagado in (0,1) and ped.created_at >='2022-12-01 00:00:00' and ped.estado=1) as pedidos_mes_deuda "),
-                    DB::raw(" (select count(ped2.id) from pedidos ped2 where ped2.cliente_id=clientes.id and ped2.pago in (0,1) and ped2.pagado in (0,1) and ped2.created_at <='2022-11-30 00:00:00'  and ped2.estado=1) as pedidos_mes_deuda_antes ")
+                    DB::raw(" (select count(ped.id) from pedidos ped where ped.cliente_id=clientes.id and ped.pago in (0,1) and ped.pagado in (0,1) and ped.created_at >='".now()->startOfMonth()->format("Y-m-d H:i:s")."' and ped.estado=1) as pedidos_mes_deuda "),
+                    DB::raw(" (select count(ped2.id) from pedidos ped2 where ped2.cliente_id=clientes.id and ped2.pago in (0,1) and ped2.pagado in (0,1) and ped2.created_at <='".now()->startOfMonth()->subMonth()->endOfMonth()->endOfDay()->format("Y-m-d H:i:s")."'  and ped2.estado=1) as pedidos_mes_deuda_antes ")
                 ]);
             foreach ($clientes as $cliente) {
                 if ($cliente->pedidos_mes_deuda > 0 || $cliente->pedidos_mes_deuda_antes > 0) {
