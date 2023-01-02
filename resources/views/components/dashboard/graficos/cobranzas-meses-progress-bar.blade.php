@@ -1,6 +1,9 @@
 <ul class="list-group">
     <li class="list-group-item" style=" min-width: 300px; ">
         <h5>COBRANZAS <br>{{Str::upper($title)}}  a  {{Str::upper($startDate->clone()->addMonths(4)->monthName)}} - {{$startDate->clone()->addMonths(4)->year}}</h5>
+        <x-bs-progressbar :progress="data_get($totalMonths,'progress')">
+            <p><b> {{$totalMonths['progress']}}% - {{$totalMonths['pagados']}}/{{$totalMonths['total']}}</b></p>
+        </x-bs-progressbar>
     </li>
     <li class="list-group-item" style=" background: #b7b7b7; ">
         <b>{{collect($general)->values()->get(0)['name']}}</b>

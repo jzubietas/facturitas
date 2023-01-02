@@ -29,18 +29,60 @@ class CobranzasMesesProgressBar extends Widgets
         if (\auth()->user()->rol == User::ROL_ASESOR) {
             $this->progressData = [];
         }
-        return view('components.dashboard.graficos.cobranzas-meses-progress-bar', compact('title'));
+        $totalMonths = $this->generalTotal();
+        return view('components.dashboard.graficos.cobranzas-meses-progress-bar', compact('title', 'totalMonths'));
     }
 
-    public function getMonthYear(CarbonInterface $date){
-        return \Str::upper(substr($date->monthName,0,3).' '.$date->format('y'));
+    public function generalTotal()
+    {
+        $all = Pedido::query()->activo()->whereBetween('pedidos.created_at', [
+            $this->startDate->clone(),
+            $this->startDate->clone()->endOfMonth()->endOfDay(),
+        ])->count();
+
+        $pay = \DB::table(Pedido::query()
+            ->select(['pedidos.id', \DB::raw('sum(detalle_pedidos.total) AS total'), \DB::raw('sum(pago_pedidos.abono) as abonado')])
+            ->activo()
+            ->pagados()
+            ->join('detalle_pedidos', 'detalle_pedidos.pedido_id', '=', 'pedidos.id')
+            ->join('pago_pedidos', 'pago_pedidos.pedido_id', '=', 'pedidos.id')
+            ->where('detalle_pedidos.estado', '=', 1)
+            ->where('pago_pedidos.estado', '=', 1)
+            ->groupBy('pedidos.id')
+            ->whereBetween('pedidos.created_at', [
+                $this->startDate->clone(),
+                $this->startDate->clone()->endOfMonth()->endOfDay(),
+            ])
+            ->whereBetween('pago_pedidos.created_at', [
+                $this->startDate->clone(),
+                $this->startDate->clone()->addMonths(3)->endOfMonth()->endOfDay(),
+            ])
+        )->whereRaw('total=abonado')->count();
+
+
+        if ($all > 0) {
+            $p = round(($pay / $all) * 100, 2);
+        } else {
+            $p = 0;
+        }
+
+        return [
+            "total" => $all,
+            "pagados" => $pay,
+            "progress" => $p,
+        ];
+    }
+
+    public function getMonthYear(CarbonInterface $date)
+    {
+        return \Str::upper(substr($date->monthName, 0, 3) . ' ' . $date->format('y'));
     }
 
     public function generateDataByMonth(CarbonInterface $date)
     {
         if (auth()->user()->rol == User::ROL_LLAMADAS) {//HASTA MAÑANA
             $id = auth()->user()->id;
-            $asesores = User::rolAsesor()->where('llamada', '=', $id)->get();
+            $asesores = User::rolAllAsesor()->where('llamada', '=', $id)->get();
         } else {
             $encargado = null;
             if (auth()->user()->rol == User::ROL_ENCARGADO) {
@@ -48,7 +90,7 @@ class CobranzasMesesProgressBar extends Widgets
             }
             $asesores = User::query()
                 ->activo()
-                ->rolAsesor()
+                ->rolAllAsesor()
                 ->when($encargado != null, function ($query) use ($encargado) {
                     return $query->where('supervisor', '=', $encargado);
                 })
@@ -79,13 +121,14 @@ class CobranzasMesesProgressBar extends Widgets
             $asesoresIdentificadores[$asesor->identificador][] = $asesor->id;
             $asesoresNames[$asesor->identificador][] = explode(" ", $asesor->name)[0];
         }
-
         foreach ($asesoresIdentificadores as $identificador => $ids) {
             $limit = 4;
             $currentCount = 0;
+
+            $restartTotal = 0;
             while ($currentCount < $limit) {
                 $dateCurrent = $date->clone()->addMonths($currentCount);
-                $progressData[$identificador][$this->getMonthYear($dateCurrent)] = $this->getDataProgress($identificador, $ids, collect($asesoresNames[$identificador])->first(), $dateCurrent);
+                $progressData[$identificador][$this->getMonthYear($dateCurrent)] = $this->getDataProgress($identificador, $ids, collect($asesoresNames[$identificador])->first(), $dateCurrent,$restartTotal);
                 $currentCount++;
             }
         }
@@ -101,11 +144,13 @@ class CobranzasMesesProgressBar extends Widgets
                 $pagados[$datestr][] = $pay;
             }
         }
+        //$restartTotal = 0;
         foreach ($activos as $datestr => $list) {
-            $all = collect($list)->sum();
+            $all = collect($list)->sum();// - $restartTotal;
             $pay = collect($pagados[$datestr])->sum();
+            //$restartTotal += $pay;
             if ($all > 0) {
-                $p = round(($pay / $all) * 100,2);
+                $p = round(($pay / $all) * 100, 2);
             } else {
                 $p = 0;
             }
@@ -128,12 +173,16 @@ class CobranzasMesesProgressBar extends Widgets
 
     }
 
-    public function getDataProgress($identificador, $ids, $name, CarbonInterface $date)
+    public function getDataProgress($identificador, $ids, $name, CarbonInterface $date, &$restartTotal)
     {
-        $all = $this->applyFilter(Pedido::query()->whereIn('user_id', $ids)->activo(), 'created_at', $date)->count();
+        $all = $this->applyFilter(Pedido::query()->whereIn('user_id', $ids)->activo(), 'created_at')->count();
+
+        if ($all > 0) {
+            $all -= $restartTotal;
+        }
 
         $pay = \DB::table($this->applyFilter(
-            Pedido::query()
+            $this->applyFilter(Pedido::query()
                 ->select(['pedidos.id', \DB::raw('sum(detalle_pedidos.total) AS total'), \DB::raw('sum(pago_pedidos.abono) as abonado')])
                 ->activo()
                 ->pagados()
@@ -142,13 +191,14 @@ class CobranzasMesesProgressBar extends Widgets
                 ->whereIn('user_id', $ids)
                 ->where('detalle_pedidos.estado', '=', 1)
                 ->where('pago_pedidos.estado', '=', 1)
-                ->groupBy('pedidos.id'),
-            ['pedidos.created_at', 'pago_pedidos.created_at'],
+                ->groupBy('pedidos.id'), 'pedidos.created_at'),
+            'pago_pedidos.created_at',
             $date)
         )->whereRaw('total=abonado')->count();
+        $restartTotal += $pay;
 
         if ($all > 0) {
-            $p = round(($pay / $all) * 100,2);
+            $p = round(($pay / $all) * 100, 2);
         } else {
             $p = 0;
         }

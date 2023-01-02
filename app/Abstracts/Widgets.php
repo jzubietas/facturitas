@@ -55,20 +55,20 @@ abstract class Widgets extends Component
         if ($dateEnd == null) {
             $dateEnd = $this->endDate;
             if ($dateStart != null) {
-                $dateEnd = $dateStart->clone()->endOfMonth();
+                $dateEnd = $dateStart->clone()->endOfMonth()->endOfDay();
             }
         }
         if (is_array($column)) {
             foreach ($column as $col) {
                 $query = $query->whereBetween($col, [
-                    $dateStart->clone(),
+                    $dateStart->clone()->startOfMonth(),
                     $dateEnd->clone()->endOfDay()
                 ]);
             }
             return $query;
         } else {
             return $query->whereBetween($column, [
-                $dateStart->clone(),
+                $dateStart->clone()->startOfMonth(),
                 $dateEnd->clone()->endOfDay()
             ]);
         }

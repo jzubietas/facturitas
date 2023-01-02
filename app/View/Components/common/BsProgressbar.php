@@ -11,7 +11,7 @@ class BsProgressbar extends Component
     /**
      * @param int $progress
      */
-    public function __construct(int $progress)
+    public function __construct(float $progress)
     {
         $this->progress = $progress;
     }

@@ -177,6 +177,11 @@ class User extends Authenticatable
         return $query->where($this->qualifyColumn('rol'), '=', self::ROL_ASESOR);
     }
 
+    public function scopeRolAllAsesor($query)
+    {
+        return $query->whereIn($this->qualifyColumn('rol'),[self::ROL_ASESOR,self::ROL_ASESOR_ADMINISTRATIVO]);
+    }
+
     public function scopeIncluidoMeta($query)
     {
         return $query->where($this->qualifyColumn('excluir_meta'), '=', '0');
