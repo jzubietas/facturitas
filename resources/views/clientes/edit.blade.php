@@ -36,7 +36,7 @@
               <small class="text-danger">{{ $message }}</small>
             @enderror
           </div>
-          <div class="form-group col-lg-3">        
+          <div class="form-group col-lg-3">
             {!! Form::label('dni', 'DNI') !!}
             {!! Form::number('dni', null, ['class' => 'form-control', 'id' => 'dni', 'min' =>'0', 'max' => '99999999', 'maxlength' => '8', 'oninput' => 'maxLengthCheck(this)']) !!}
             @error('dni')
@@ -78,7 +78,7 @@
               <small class="text-danger">{{ $message }}</small>
             @enderror
           </div>
-        </div>  
+        </div>
       </div>
     </div>
     <br>
@@ -96,10 +96,11 @@
                       <div class="form-group">
                         <label>{{ $porcentaje->nombre }}</label>
                         <input type="hidden" name="idporcentaje[]" value={{ $porcentaje->id }}>
-                        <input type="number" step="0.1" name="porcentaje[]" id="porcentaje1" min="0" class="form-control" value={{ $porcentaje->porcentaje}} required>
+                        <input type="number" step="0.1" name="porcentaje[]" id="porcentaje1" min="0" class="form-control porcentaje-banca" value={{ $porcentaje->porcentaje}} required>
                       </div>
                     </div>
-                @endforeach              
+
+                @endforeach
               </div>
             </div>
           </div>
@@ -131,7 +132,7 @@
 
     //VALIDAR CAMPOS ANTES DE ENVIAR
     document.addEventListener("DOMContentLoaded", function() {
-    document.getElementById("formulario").addEventListener('submit', validarFormulario); 
+    document.getElementById("formulario").addEventListener('submit', validarFormulario);
     });
 
     function validarFormulario(evento) {
@@ -144,6 +145,20 @@
       var distrito = document.getElementById('distrito').value;
       var direccion = document.getElementById('direccion').value;
       var referencia = document.getElementById('referencia').value;
+        var porcentaje_banca = document.getElementsByClassName('porcentaje-banca').value;
+
+        var por = $('.porcentaje-banca').filter(function(e){
+            var porcent = parseFloat($(this).val());
+            return isNaN(porcent)||porcent < 1.5
+        });
+        if(por.length >0){
+            Swal.fire(
+                'Error',
+                'El porcentaje debe ser mayor a 1.5',
+                'warning'
+            );
+            return ;
+        }
       if (usuario == '') {
           Swal.fire(
             'Error',
@@ -200,6 +215,13 @@
             'warning'
           )
         }
+      else if (porcentaje_banca < '1.5'){
+          Swal.fire(
+              'Error',
+              'El valor debe ser mayor a 1.5',
+              'warning'
+          )
+      }
         else if (provincia.toUpperCase() != ('lima').toUpperCase() && dni.length == 0){
           Swal.fire(
             'Error',
@@ -216,7 +238,7 @@
         }
         else {
           this.submit();
-        }      
+        }
     }
   </script>
 @stop

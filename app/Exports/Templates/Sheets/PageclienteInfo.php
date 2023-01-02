@@ -50,7 +50,7 @@ class PageclienteInfo extends Export implements WithColumnFormatting, FromCollec
 
     public function collection()
     {
-        
+
         $cliente= Cliente::with('user')
             ->join('users as u', 'clientes.user_id', 'u.id')
             ->select(
@@ -186,32 +186,74 @@ class PageclienteInfo extends Export implements WithColumnFormatting, FromCollec
             $model->porcentajeeb=0;
           }
 
+        $_array_anios=[
+            1=>(self::$fecharuta),
+            2=>(self::$fecharuta+1),
+        ];
+
           $_array_meses=[
-              '1'=>'01',
-              '2'=>'01',
-              '3'=>'01',
-              '4'=>'01',
-              '5'=>'01',
-              '6'=>'01',
-              '7'=>'01',
-              '8'=>'01',
-              '9'=>'01',
-              '10'=>'01',
-              '11'=>'01',
-              '12'=>'01',
+              1=>'01',
+              2=>'02',
+              3=>'03',
+              4=>'04',
+              5=>'05',
+              6=>'06',
+              7=>'07',
+              8=>'08',
+              9=>'09',
+              10=>'10',
+              11=>'11',
+              12=>'12',
           ];
         ksort($_array_meses);
 
-
-        /*foreach ($_array_meses as $k=>$v)
+        ksort($_array_anios);
+        foreach ($_array_anios as $kanio=>$vanio)
         {
-            $return_q=Pedido::groupBy([
-                Db::raw("DATE_FORMAT(created_at as date,'%d-%m-%Y %h:%i:%s')")
-            ]);
+            if(array_key_exists('1',$_array_anios))
+            {
+                $return_1=Pedido::whereYear($vanio)
+                    ->select([
+                        Db::raw("(DATE_FORMAT(pedidos.created_at ,'%Y-%m')) as periodo"),
+                        DB::raw( " (count(*) ) as cuenta")
+                    ])->groupBy([
+                        Db::raw("DATE_FORMAT(pedidos.created_at ,'%Y-%m')")
+                    ])
+                    ->orderBy([
+                                Db::raw("DATE_FORMAT(pedidos.created_at ,'%Y-%m')")
+                    ])->get();
+            }else if(array_key_exists('2',$_array_anios))
+            {
+                $return_2=Pedido::whereYear($vanio)
+                    ->select([
+                        Db::raw("(DATE_FORMAT(pedidos.created_at ,'%Y-%m')) as periodo"),
+                        DB::raw( " (count(*) ) as cuenta")
+                    ])->groupBy([
+                        Db::raw("DATE_FORMAT(pedidos.created_at ,'%Y-%m')")
+                    ])
+                    ->orderBy([
+                        Db::raw("DATE_FORMAT(pedidos.created_at ,'%Y-%m')")
+                    ])->get();
+            }
 
-            DB::raw("DATE_FORMAT(MAX(p.created_at), '%d-%m-%Y %h:%i:%s') as fecha"),
+            //$_anioa_[]=;
 
-        }*/
+            foreach ($_array_meses as $kmes=>$vmes)
+            {
+                //meses    01 02 03  04
+                if(array_key_exists('1',$_array_anios))
+                {
+                    //$_anioa_[]=
+                }else if(array_key_exists('2',$_array_anios))
+                {
+
+                }
+
+
+            }
+
+        }
+
 
         $model->eneroa = Pedido::where('estado', '1')->whereYear(DB::raw('Date(created_at)'), self::$fecharuta)->where('cliente_id', $model->id)
             ->where(DB::raw('MONTH(created_at)'), '1')->count();
