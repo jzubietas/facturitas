@@ -4,6 +4,8 @@
         <th width="80px" style="background-color: #4c5eaf; text-align: center; color: #ffff;">ITEM</th>
         <th width="80px" style="background-color: #4c5eaf; text-align: center; color: #ffff;">ID</th>
         <th width="120px" style="background-color: #4c5eaf; text-align: center; color: #ffff;">PEDIDO</th>
+        <th width="120px" style="background-color: #4c5eaf; text-align: center; color: #ffff;">MES PEDIDO</th>
+        <th width="120px" style="background-color: #4c5eaf; text-align: center; color: #ffff;">AÑO PEDIDO</th>
         <th width="120px" style="background-color: #4c5eaf; text-align: center; color: #ffff;">CLIENTE CELULAR</th>
         <th width="80px" style="background-color: #4c5eaf; text-align: center; color: #ffff;">NOMBRE CLIENTE</th>
         <th width="80px" style="background-color: #4c5eaf; text-align: center; color: #ffff;">RAZON SOCIAL</th>
@@ -44,6 +46,8 @@
                     PED0{{ $pedido->id }}</td>
             @endif
             <td style="background-color: {{$pedido->estado==0?'red':($pedido->pendiente_anulacion==1?'orange':'white')}}">{{ $pedido->codigos }}</td>
+            <td style="background-color: {{$pedido->estado==0?'red':($pedido->pendiente_anulacion==1?'orange':'white')}}">{{ $pedido->mespedido }}</td>
+            <td style="background-color: {{$pedido->estado==0?'red':($pedido->pendiente_anulacion==1?'orange':'white')}}">{{ $pedido->aniopedido }}</td>
             <td style="background-color: {{$pedido->estado==0?'red':($pedido->pendiente_anulacion==1?'orange':'white')}}">{{ $pedido->celulares }}
                 -{{ $pedido->icelulares }}</td>
             <td style="background-color: {{$pedido->estado==0?'red':($pedido->pendiente_anulacion==1?'orange':'white')}}">{{ $pedido->nombres }}</td>

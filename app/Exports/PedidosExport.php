@@ -48,7 +48,10 @@ class PedidosExport implements FromView, ShouldAutoSize
                     'pedidos.modificador',
                     'dp.saldo as diferencia',//'pa.diferencia',
                     'pedidos.estado',
-                    'pedidos.envio',]
+                    'pedidos.envio',
+                    'dp.mes',
+                    'dp.anio'
+                ]
             )
             ->whereIn('pedidos.condicion_code', [Pedido::POR_ATENDER_INT, Pedido::EN_PROCESO_ATENCION_INT, Pedido::ATENDIDO_INT, Pedido::ANULADO_INT])
             ->whereBetween(DB::raw('DATE(pedidos.created_at)'), [$request->desde, $request->hasta]) //rango de fechas
@@ -78,7 +81,9 @@ class PedidosExport implements FromView, ShouldAutoSize
                 'pedidos.estado',
                 'pedidos.pagado',
                 'dp.saldo',
-                'pedidos.envio'
+                'pedidos.envio',
+                'dp.mes',
+                'dp.anio',
             );
         //->orderBy('pedidos.created_at', 'DESC')
         //->get();
