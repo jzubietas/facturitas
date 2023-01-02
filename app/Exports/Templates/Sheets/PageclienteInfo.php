@@ -170,6 +170,32 @@ class PageclienteInfo extends Export implements WithColumnFormatting, FromCollec
             $model->porcentajeeb=0;
           }
 
+          $_array_meses=[
+              '1'=>'01',
+              '2'=>'01',
+              '3'=>'01',
+              '4'=>'01',
+              '5'=>'01',
+              '6'=>'01',
+              '7'=>'01',
+              '8'=>'01',
+              '9'=>'01',
+              '10'=>'01',
+              '11'=>'01',
+              '12'=>'01',
+          ];
+        ksort($_array_meses);
+
+
+        foreach ($_array_meses as $k=>$v)
+        {
+            $return_q=Pedido::groupBy([
+                Db::raw("DATE_FORMAT(created_at as date,'%d-%m-%Y %h:%i:%s')")
+            ]);
+
+            DB::raw("DATE_FORMAT(MAX(p.created_at), '%d-%m-%Y %h:%i:%s') as fecha"),
+
+        }
 
         $model->eneroa = Pedido::where('estado', '1')->whereYear(DB::raw('Date(created_at)'), self::$fecharuta)->where('cliente_id', $model->id)
             ->where(DB::raw('MONTH(created_at)'), '1')->count();
