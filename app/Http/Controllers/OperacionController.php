@@ -1118,7 +1118,6 @@ class OperacionController extends Controller
                 'atendido_por_id' => Auth::user()->id,
             ]);
 
-
         } else {
             $detalle_pedidos->update([
                 'cant_compro' => $request->cant_compro,
