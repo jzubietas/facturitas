@@ -200,6 +200,7 @@ class ClienteController extends Controller
                 'a_2022_10',
                 'a_2022_11',
                 'a_2022_12',
+                'a_2023_01',
                 's_2021_11',
                 's_2021_12',
                 's_2022_01',
@@ -214,6 +215,7 @@ class ClienteController extends Controller
                 's_2022_10',
                 's_2022_11',
                 's_2022_12',
+                's_2023_01',
             );
 
         return datatables()->query(DB::table($data))

@@ -43,6 +43,8 @@
                     <th scope="col">Situacion</th>
                     <th scope="col">2022 - 12</th>{{--2022-12--}}
                     <th scope="col">Situacion</th>
+                    <th scope="col">2023 - 01</th>{{--2022-12--}}
+                    <th scope="col">Situacion</th>
                   </tr>
                 </thead>
                 <tbody>
