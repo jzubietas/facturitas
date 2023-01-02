@@ -51,6 +51,6 @@
 </div>
 --}}
 
-<div class="col-md-8">
+<div class="col-md-5">
     <x-tabla-jef-operaciones-fis-elect></x-tabla-jef-operaciones-fis-elect>
 </div>

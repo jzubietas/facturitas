@@ -94,16 +94,16 @@
 
         <div class="small-box bg-secondary">
             <div class="inner">
-               <h5> PEDIDOS CREADOS {{  \Carbon\Carbon::now()->format('d-m-Y') }}</h5>
+                <h5> PEDIDOS CREADOS {{  \Carbon\Carbon::now()->format('d-m-Y') }}</h5>
             </div>
             <div class="row">
                 @foreach ($_pedidos as $pedido)
-                <div class="col-md-2 col-6">
-                    <div class="p-4 border-top border-bottom">
-                        <h5 class="text-center">ASESOR {{ $pedido->identificador }}</h5>
-                        <h5 class="text-center"><b>{{ $pedido->total }}</b></h5>
+                    <div class="col-md-2 col-6">
+                        <div class="p-4 border-top border-bottom">
+                            <h5 class="text-center">ASESOR {{ $pedido->identificador }}</h5>
+                            <h5 class="text-center"><b>{{ $pedido->total }}</b></h5>
+                        </div>
                     </div>
-                </div>
                 @endforeach
             </div>
 
@@ -163,6 +163,56 @@
     <div class="col-lg-12">
         <x-grafico-pedidos-elect-fisico></x-grafico-pedidos-elect-fisico>
     </div>
+    <div class="col-md-12">
+        <div class="card">
+            <div class="d-flex justify-content-end align-items-center">
+                <div class="card my-2 mx-2">
+                    @php
+                        try {
+                             $currentDate=\Carbon\Carbon::createFromFormat('m-Y',request('selected_date',now()->format('m-Y')));
+ }catch (Exception $ex){
+                             $currentDate=\Carbon\Carbon::createFromFormat('m-Y',now()->format('m-Y'));
+ }
+
+                    @endphp
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"> Seleccionar Mes</span>
+                        </div>
+                        <div class="input-group-prepend">
+                            <a href="{{route('dashboard.index',['selected_date'=>$currentDate->startOfMonth()->subMonth()->format('m-Y')])}}"
+                               class="btn m-0 p-0"
+                               type="button">
+                            <span class="input-group-text">
+                                <
+                            </span>
+                            </a>
+                        </div>
+                        <select class="form-control" id="datepickerDashborad"
+                                aria-describedby="basic-addon3">
+
+                            @foreach([1,2,3,4,5,6,7,8,9,10,11,12] as $month)
+                                @php
+                                    $currentMonth=$currentDate->startOfYear()->addMonths($month-1);
+                                @endphp
+                                <option
+                                    {{$currentMonth->format('m-Y')==request('selected_date',now()->format('m-Y'))?'selected':''}}
+                                    value="{{$currentMonth->format('m-Y')}}"
+                                >{{Str::ucfirst($currentMonth->monthName)}} {{$currentMonth->year}}</option>
+                            @endforeach
+                        </select>
+
+                        <div class="input-group-append">
+                            <a href="{{route('dashboard.index',['selected_date'=>$currentDate->addMonths()->format('m-Y')])}}"
+                               class="btn m-0 p-0" type="button">
+                                <span class="input-group-text">></span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="col-lg-12">
         <x-grafico-metas-mes></x-grafico-metas-mes>
     </div>
@@ -170,44 +220,18 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-12">
-                <div class="card">
-                    <div class="d-flex justify-content-end align-items-center">
-                        <div class="card my-2 mx-2">
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text" id="basic-addon3">Seleccionar Mes</span>
-                                </div>
-                                <select class="form-control" id="datepickerDashborad"
-                                        aria-describedby="basic-addon3">
-
-                                    @foreach([1,2,3,4,5,6,7,8,9,10,11,12] as $month)
-                                        @php
-                                            $currentMonth=now()->startOfYear()->addMonths($month-1);
-                                        @endphp
-                                        <option
-                                            {{$currentMonth->monthName==request('selected_month','diciembre')?'selected':''}} value="{{$currentMonth->monthName}}">{{Str::ucfirst($currentMonth->monthName)}}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-12">
                 <div class="row" id="widget-container">
-                    <div class="col-md-8">
+                    <div class="col-md-12">
                         <div class="card">
                             <div class="card-body">
-                                <div class="d-flex justify-content-center mb-4 pb-4">
+                                <div class="mb-4 pb-4">
                                     <ul class="list-group">
                                         <li class="list-group-item">
-                                        </li>
-                                        <li class="list-group-item">
                                             <div class="row">
-                                                <div class="col-md-6">
+                                                <div class="col-md-9">
                                                     <x-grafico-meta-pedidos-progress-bar></x-grafico-meta-pedidos-progress-bar>
                                                 </div>
-                                                <div class="col-md-6">
+                                                <div class="col-md-3">
                                                     <x-grafico-metas-progress-bar></x-grafico-metas-progress-bar>
                                                 </div>
                                             </div>
@@ -217,8 +241,12 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-4">
-                        <x-grafico-pedidos-atendidos-anulados></x-grafico-pedidos-atendidos-anulados>
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <x-grafico-pedidos-atendidos-anulados></x-grafico-pedidos-atendidos-anulados>
+                            </div>
+                        </div>
                     </div>
                     <div class="col-md-12">
                         <x-grafico-pedidos-por-dia rol="Administrador"

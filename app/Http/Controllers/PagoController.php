@@ -778,13 +778,7 @@ class PagoController extends Controller
         }
 
         $cliente = Cliente::find($request->cliente_id);
-        /*$cliente_deuda = Cliente::where("id", $request->cliente_id)
-            ->get([
-                    'clientes.id',
-                    DB::raw(" (select count(ped.id) from pedidos ped where ped.cliente_id=clientes.id and ped.pago in (0,1) and ped.pagado in (0,1) and ped.created_at >='2022-12-01 00:00:00' and ped.estado=1) as pedidos_mes_deuda "),
-                    DB::raw(" (select count(ped2.id) from pedidos ped2 where ped2.cliente_id=clientes.id and ped2.pago in (0,1) and ped2.pagado in (0,1) and ped2.created_at <='2022-11-30 00:00:00'  and ped2.estado=1) as pedidos_mes_deuda_antes ")
-                ]
-            )->first();*/
+       
         $cliente->pedidos_mes_deuda = $cliente->pedidos()->activo()->noPagados()->whereIn('created_at', [now()->startOfMonth(), now()->endOfMonth()->endOfDay()])->count();
         $cliente->pedidos_mes_deuda_antes = $cliente->pedidos()->activo()->noPagados()->where('created_at', '<', now()->startOfMonth()->subMonth()->endOfMonth()->endOfDay()->endOfDay())->count();
 
@@ -1075,13 +1069,6 @@ class PagoController extends Controller
                 $cliente->pedidos_mes_deuda = $cliente->pedidos()->activo()->noPagados()->whereIn('created_at', [now()->startOfMonth(), now()->endOfMonth()->endOfDay()])->count();
                 $cliente->pedidos_mes_deuda_antes = $cliente->pedidos()->activo()->noPagados()->where('created_at', '<', now()->startOfMonth()->subMonth()->endOfMonth()->endOfDay()->endOfDay())->count();
 
-                /*$cliente_deuda = Cliente::where("id", $request->cliente_id)
-                    ->get([
-                            'clientes.id',
-                            DB::raw(" (select count(ped.id) from pedidos ped where ped.cliente_id=clientes.id and ped.pago in (0,1) and ped.pagado in (0,1) and ped.created_at >='2022-12-01 00:00:00' and ped.estado=1) as pedidos_mes_deuda "),
-                            DB::raw(" (select count(ped2.id) from pedidos ped2 where ped2.cliente_id=clientes.id and ped2.pago in (0,1) and ped2.pagado in (0,1) and ped2.created_at <='2022-11-30 00:00:00'  and ped2.estado=1) as pedidos_mes_deuda_antes ")
-                        ]
-                    )->first();*/
 
                 $pedido_deuda = Pedido::where('cliente_id', $request->cliente_id)
                     ->where('pagado', '0')
@@ -1336,14 +1323,7 @@ class PagoController extends Controller
 
                 $pedidos_mes_deuda = $cliente->pedidos()->activo()->noPagados()->whereIn('created_at', [now()->startOfMonth(), now()->endOfMonth()->endOfDay()])->count();
                 $pedidos_mes_deuda_antes = $cliente->pedidos()->activo()->noPagados()->where('created_at', '<', now()->startOfMonth()->subMonth()->endOfMonth()->endOfDay()->endOfDay())->count();
-                /*$cliente_deuda = Cliente::where("id", $request->cliente_id)
-                    ->select([
-                            'clientes.id',
-                            DB::raw(" (select count(ped.id) from pedidos ped where ped.cliente_id=clientes.id and ped.pago in (0,1) and ped.pagado in (0,1) and ped.created_at >='2022-12-01 00:00:00' and ped.estado=1) as pedidos_mes_deuda "),
-                            DB::raw(" (select count(ped2.id) from pedidos ped2 where ped2.cliente_id=clientes.id and ped2.pago in (0,1) and ped2.pagado in (0,1) and ped2.created_at <='2022-11-30 00:00:00'  and ped2.estado=1) as pedidos_mes_deuda_antes ")
-                        ]
-                    )->first();*/
-
+                
                 $pedido_deuda = Pedido::where('cliente_id', $request->cliente_id)
                     ->where('pagado', '0')
                     ->count();

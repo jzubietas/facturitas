@@ -11,9 +11,9 @@
                             <ul class="list-group">
                                 <li class="list-group-item" style=" min-width: 300px; ">
                                     <div class="row">
-                                        <div class="col-4"></div>
-                                        <div class="col-4"><h5 class="text-center">COBRANZAS {{Str::upper($now_submonth->monthName)}}</h5></div>
-                                        <div class="col-4"><h5 class="text-center">PEDIDOS {{Str::upper($now->monthName)}}</h5></div>
+                                        <div class="col-2"></div>
+                                        <div class="col-6"><h5 class="text-center">COBRANZAS {{Str::upper($now_submonth->monthName)}} - {{$now_submonth->year}}</h5></div>
+                                        <div class="col-4"><h5 class="text-center">PEDIDOS {{Str::upper($now->monthName)}} - {{$now->year}}</h5></div>
                                     </div>
                                 </li>
                                 <li class="list-group-item" style=" background-color: #b7b7b7; ">
@@ -63,20 +63,20 @@
                 <div class="col-md-6">
                     <div class="">
                         <ul class="list-group">
-                            <li class="list-group-item" style=" min-width: 300px; ">
+                            <li class="list-group-item" style="background: #0000001a; min-width: 300px; ">
                                 <h4 class="text-center"><b>EXCLUIDOS</b></h4>
                             </li>
-                            <li class="list-group-item">
+                            <li class="list-group-item" style="background: #0000001a; min-width: 300px; ">
                                 <ul class="list-group">
-                                    <li class="list-group-item" style=" min-width: 300px; ">
+                                    <li class="list-group-item" style="background: #0000001a; min-width: 300px; ">
                                         <div class="row">
-                                            <div class="col-4"></div>
-                                            <div class="col-4"><h5 class="text-center">COBRANZAS {{Str::upper($now_submonth->monthName)}}</h5></div>
-                                            <div class="col-4"><h5 class="text-center">PEDIDOS {{Str::upper($now->monthName)}}</h5></div>
+                                            <div class="col-2"></div>
+                                            <div class="col-6"><h5 class="text-center">COBRANZAS {{Str::upper($now_submonth->monthName)}} {{$now_submonth->year}}</h5></div>
+                                            <div class="col-4"><h5 class="text-center">PEDIDOS {{Str::upper($now->monthName)}} {{$now->year}}</h5></div>
                                         </div>
                                     </li>
                                     @foreach($excludeNov as $index=>$data)
-                                        <li class="list-group-item">
+                                        <li class="list-group-item" style="background: #0000001a;">
                                             <div class="row">
                                                 <div class="col-4">
                                                     <b>{{$data['code']}}</b> <br> {{$data['name']}}
