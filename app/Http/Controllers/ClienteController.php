@@ -531,7 +531,9 @@ class ClienteController extends Controller
                 return $query->whereIn('clientes.user_id', User::query()->select('users.id')->whereIdentificador($request->user_id));
             })->orderBy('clientes.id')
             ->get();
+        //return $request->user_id;
 
+        //return $clientes;
 
         foreach ($clientes as $cliente) {
             $cliente->pedidos_mes_deuda = $cliente->pedidos()->activo()->noPagados()->whereBetween('pedidos.created_at', [now()->startOfMonth(), now()->endOfMonth()])->count();
