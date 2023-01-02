@@ -101,6 +101,7 @@
 
 
                       <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+
                         {!! Form::label('distrito', 'Distrito') !!}
                         {!! Form::select('distrito', $distritos , null, ['class' => 'form-control border selectpicker border-secondary', 'data-live-search' => 'true', 'placeholder' => '---- SELECCIONE ----']) !!}
                       </div>

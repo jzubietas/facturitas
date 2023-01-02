@@ -76,6 +76,14 @@
   <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.0.943/pdf_viewer.css">
 
   <style>
+
+.bootstrap-select.btn-group .btn .filter-option {
+   text-align: right   
+}
+
+    .bootstrap-select .dropdown-toggle .filter-option {text-align: right !important;}
+    .bootstrap-select .dropdown-menu.inner{text-align: right !important;}
+
     img:hover{
       transform: scale(1.2)
     }
