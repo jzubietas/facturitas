@@ -6,6 +6,7 @@ use App\Abstracts\Export;
 use App\Models\Cliente;
 use App\Models\User;
 use App\Models\ListadoResultado;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Concerns\WithColumnFormatting;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
