@@ -160,6 +160,8 @@ transition: all 0.2s;
 
 #cnt-distritos .dropdown-menu li a span small{float:right;}
 #cnt-distritos .dropdown-menu li a span {width: 100%; text-align: left;}
+#cnt-distritos .dropdown-menu li .active span small{ color: white !important;}
+
 
 .form-control input:hover{
 cursor: pointer !important;
