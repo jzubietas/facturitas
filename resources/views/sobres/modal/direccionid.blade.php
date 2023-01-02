@@ -104,7 +104,7 @@
                       <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 
                         {!! Form::label('distrito', 'Distrito') !!}
-                        <select id="distrito" name="distrito" class="form-control border selectpicker border-secondary" data-live-search="true">                       
+                        <select id="distrito" name="distrito" class="form-control border  border-secondary" data-live-search="true">                       
                           @foreach($distritos as $distrito)
                             <option value="{{ $distrito->distrito }}">{{ $distrito->distritonam }} - <span class="inner">{{ $distrito->zona }}</option>
                           @endforeach
