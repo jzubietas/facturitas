@@ -16,7 +16,7 @@
                 <table id="tablaHistorialLima" class="table table-striped" >
                   <thead><h4 style="text-align: center"><strong></strong></h4>
                     <tr>
-                      <th scope="col">ID</th>
+                      {{-- <th scope="col">ID</th>--}}
                       <th scope="col">Nombre</th>
                       <th scope="col">Contacto quien recibe</th>
                       <th scope="col">Direccion</th>
@@ -30,9 +30,9 @@
                   </tbody>
                 </table>
               </div>
-            </div>   
+            </div>
           </div>
-        </div>  
+        </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-dark btn-sm" data-dismiss="modal">Cerrar</button>
         </div>
@@ -40,4 +40,3 @@
     </div>
   </div>
 
-  

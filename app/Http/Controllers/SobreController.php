@@ -126,7 +126,8 @@ class SobreController extends Controller
                 ->where('pedidos.estado', '1')
                 //->whereIn('pedidos.envio', [Pedido::ENVIO_CONFIRMAR_RECEPCION,Pedido::ENVIO_RECIBIDO]) // ENVIADO CONFIRMAR RECEPCION Y ENVIADO RECIBIDO
                 ->whereIn('pedidos.condicion_envio_code', [Pedido::RECIBIDO_JEFE_OPE_INT,Pedido::RECEPCION_COURIER_INT,Pedido::ENVIO_COURIER_JEFE_OPE_INT]) // ENVIADO CONFIRMAR RECEPCION Y ENVIADO RECIBIDO
-                ->where('dp.estado', '1');
+                ->where('dp.estado', '1')
+                ->sinDireccionEnvio();
                 /*->groupBy(
                     'pedidos.id',
                     'pedidos.cliente_id',
@@ -212,8 +213,6 @@ class SobreController extends Controller
                         $btn='';
                         return $btn;
                     })
-
-
                     ->rawColumns(['action'])
                     ->make(true);
 
@@ -239,15 +238,16 @@ class SobreController extends Controller
             if($request->provincialima=="PROVINCIA")
             {
                 $query=GastoEnvio::select(
-                    'gasto_envios.id',
-                    'gasto_envios.tracking',
-                    'gasto_envios.registro',
+                    'gasto_envios.*',
+                    'clientes.nombre',
+                    'clientes.celular as recibe',
                     )
+                    ->join('clientes','clientes.id','=','gasto_envios.cliente_id')
                 ->where('gasto_envios.estado', '1')
                 ->where("gasto_envios.salvado",'1')
                 ->where('gasto_envios.cliente_id', $request->cliente_id);
 
-                return Datatables::of($historicos)
+                return Datatables::of($query)
                      ->addIndexColumn()
                      ->addColumn('action', function($historico){
                          $btn='';
@@ -258,20 +258,17 @@ class SobreController extends Controller
 
             }else if($request->provincialima=="LIMA")
             {
-                $query=DireccionEnvio::select(
-                        'direccion_envios.id',
-                        'direccion_envios.distrito',
-                        'direccion_envios.direccion',
-                        'direccion_envios.referencia',
-                        'direccion_envios.nombre',
-                        'direccion_envios.celular',
+                $query=DireccionEnvio::query()->select(
+                        'direccion_envios.*',
+                        'clientes.nombre',
+                        'clientes.celular as recibe',
                         )
                     ->where('direccion_envios.estado', '1')
-                    //->where("direccion_envios.salvado",'1')
-                    ->where('direccion_envios.cliente_id', $request->cliente_id);
-
-                $historicos=$query->get();
-                return Datatables::of($historicos)
+                    ->join('clientes','clientes.id','=','direccion_envios.cliente_id')
+                    ->where("direccion_envios.salvado",'1')
+                    ->where('direccion_envios.cliente_id','=', $request->cliente_id);
+                //$historicos=$query->get();
+                return Datatables::of($query)
                      ->addIndexColumn()
                      ->addColumn('action', function($historico){
                          $btn='';
