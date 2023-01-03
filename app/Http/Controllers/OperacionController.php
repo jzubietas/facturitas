@@ -1320,55 +1320,60 @@ class OperacionController extends Controller
                 $direcciongrupo = DireccionPedido::where('direccion_pedidos.pedido_id',$pedido->id)->where("direccion_pedidos.estado",'1')->first();//->direcciongrupo;
                 $direcciongrupo->update(['estado'=>'0']);
 
-                //$count=Direccion
+                $count_pedidos=DireccionPedido::where('direccion_pedidos.pedido_id',$pedido->id)->where("direccion_pedidos.estado",'1')->count();
+                if($count_pedidos==0)
+                {
+                    $grupo=DireccionGrupo::where('id',$direcciongrupo->direcciongrupo)->first();
+                    $grupo->update(['estado','0']);
 
-                $grupo=DireccionGrupo::where('id',$direcciongrupo->direcciongrupo)->first();
-                //concatenar y sacar
+                    $envio=DireccionEnvio::where('direcciongrupo',$direcciongrupo->direcciongrupo)->first();
+                    $envio->update(['estado','0']);
+                }else{
+                    $grupo=DireccionGrupo::where('id',$direcciongrupo->direcciongrupo)->first();
 
-                $loscodigos=DireccionPedido::where('direcciongrupo', $direcciongrupo->direcciongrupo)
-                                //->groupBy('direcciongrupo')
+                    $loscodigos=DireccionPedido::where('direcciongrupo', $direcciongrupo->direcciongrupo)
                                 ->pluck('codigo_pedido')/*->unique()*/->map(function($item){ return $item;})->join(',');
 
-                $loscodigosin=DireccionPedido::where('direcciongrupo', $direcciongrupo->direcciongrupo)
-                                //->groupBy('direcciongrupo')
-                                ->pluck('codigo_pedido')/*->unique()*/;
+                    $loscodigosin=DireccionPedido::where('direcciongrupo', $direcciongrupo->direcciongrupo)
+                                    ->pluck('codigo_pedido')/*->unique()*/;
 
-                //obtener producto con los codigos
-                $losproductos=DetallePedido::whereIn('codigo', $loscodigosin)
-                                //->groupBy('direcciongrupo')
-                                ->pluck('nombre_empresa');//->map(function($item){ return $item;})->join(',');
+                    //obtener producto con los codigos
+                    $losproductos=DetallePedido::whereIn('codigo', $loscodigosin)
+                                    ->pluck('nombre_empresa');//->map(function($item){ return $item;})->join(',');
 
-                               // ['1A-1218-3','34-1012-2']
-                $grupo->update(['codigos'=>$loscodigos,'producto'=>$losproductos]);
+                    $grupo->update(['codigos'=>$loscodigos,'producto'=>$losproductos]);
 
-
+                }
+                //concatenar y sacar
             }
             else if($pedido->destino=='PROVINCIA'){
                 $direcciongrupo = GastoPedido::where('gasto_pedidos.pedido_id',$pedido->id)->where("gasto_pedidos.estado",'1')->first();//->direcciongrupo;
-                $direcciongrupo->update(['estado'=>1]);
+                $direcciongrupo->update(['estado'=>'0']);
 
-                $grupo=DireccionGrupo::where('id',$direcciongrupo->direcciongrupo)->first();
-                //concatenar y sacar
+                $count_pedidos=GastoPedido::where('gasto_pedidos.pedido_id',$pedido->id)->where("gasto_pedidos.estado",'1')->count();
+                if($count_pedidos==0)
+                {
+                    $grupo=DireccionGrupo::where('id',$direcciongrupo->direcciongrupo)->first();
+                    $grupo->update(['estado','0']);
 
-                $loscodigos=GastoPedido::select(DB::raw("group_concat(concat('\'',codigo_pedido,'\'') ) as codigos"))
-                                ->where('direcciongrupo', $direcciongrupo->direcciongrupo)
-                                ->groupBy('direcciongrupo')
-                                ->get()->codigos;
+                    $envio=GastoEnvio::where('direcciongrupo',$direcciongrupo->direcciongrupo)->first();
+                    $envio->update(['estado','0']);
+                }else{
+                    $grupo=DireccionGrupo::where('id',$direcciongrupo->direcciongrupo)->first();
 
-                $loscodigosin=GastoPedido::select(DB::raw("group_concat(codigo_pedido) as codigos"))
-                                ->where('direcciongrupo', $direcciongrupo->direcciongrupo)
-                                ->groupBy('direcciongrupo')
-                                ->get()->codigos;
-                $loscodigosin=explode(",",$loscodigosin);
+                    $loscodigos=GastoPedido::where('direcciongrupo', $direcciongrupo->direcciongrupo)
+                                ->pluck('codigo_pedido')/*->unique()*/->map(function($item){ return $item;})->join(',');
 
-                //obtener producto con los codigos
-                $losproductos=DetallePedido::select(DB::raw("group_concat(nombre_empresa) as producto"))
-                                ->whereIn('codigo', [$loscodigosin])
-                                //->groupBy('direcciongrupo')
-                                ->get()->producto;
+                    $loscodigosin=GastoPedido::where('direcciongrupo', $direcciongrupo->direcciongrupo)
+                                    ->pluck('codigo_pedido')/*->unique()*/;
 
-                               // ['1A-1218-3','34-1012-2']
-                $grupo->update(['codigos'=>$loscodigos,'producto'=>$losproductos]);
+                    //obtener producto con los codigos
+                    $losproductos=DetallePedido::whereIn('codigo', $loscodigosin)
+                                    ->pluck('nombre_empresa');//->map(function($item){ return $item;})->join(',');
+
+                    $grupo->update(['codigos'=>$loscodigos,'producto'=>$losproductos]);
+                }
+
             }
             //buscar el direccion grupo para desvincular
 
