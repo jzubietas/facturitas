@@ -433,6 +433,15 @@ class EnvioController extends Controller
             })
             ->addColumn('action', function ($pedido) {
                 $btn = '';
+                if($pedido->condicion_envio_code==13)
+                {
+                    $btn.='<button class="btn btn-sm text-white bg-primary"
+                                    data-jqconfirm="' . $pedido->id . '">
+                                        <i class="fa fa-motorcycle text-white" aria-hidden="true"></i> A revertir
+                                    </button>';
+
+                }
+
                 return $btn;
             })
             ->rawColumns(['action','foto1','foto2'])
@@ -1820,13 +1829,6 @@ class EnvioController extends Controller
             ->addColumn('action', function ($pedido) {
                 $btn = '';
                 //if($pedido->condicion_envio_code==13)
-               {
-                $btn.='<button class="btn btn-sm text-white bg-primary"
-                                    data-jqconfirm="' . $pedido->id . '">
-                                        <i class="fa fa-motorcycle text-white" aria-hidden="true"></i> A confirmacion
-                                    </button>';
-
-               }
 
                 return $btn;
             })
