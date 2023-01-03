@@ -682,6 +682,14 @@
                             )
                             return;
                         }
+                        if (val_direccion_id && $("#saveHistoricoLima").prop('checked')) {
+                            Swal.fire(
+                                'Error',
+                                'No es posible guardar la dirección en el historial porque ya ah sido registrada<br>Quite el check del <b>guardar direccion en el historial del cliente</b>',
+                                'warning'
+                            )
+                            return;
+                        }
                     } else if (combo_limaprovincia == "P") {
                         var cont_rotulo = files.length;
                         /*if(val_departamento=="")
@@ -730,14 +738,14 @@
                             )
                             return;
                         }
-                    }
-                    if (val_direccion_id && $("#saveHistoricoLima").prop('checked')) {
-                        Swal.fire(
-                            'Error',
-                            'No es posible guardar la dirección en el historial porque ya ah sido registrada<br>Quite el check del <b>guardar direccion en el historial del cliente</b>',
-                            'warning'
-                        )
-                        return;
+                        if (val_direccion_id && $("#saveHistoricoProvincia").prop('checked')) {
+                            Swal.fire(
+                                'Error',
+                                'No es posible guardar la dirección en el historial porque ya ah sido registrada<br>Quite el check del <b>GRABA HISTORICO</b>',
+                                'warning'
+                            )
+                            return;
+                        }
                     }
                     //paso provincia validacion
                     if (combo_limaprovincia == "P") {
@@ -812,13 +820,21 @@
                 $("#rotulo").val("");
                 $(".drop-rotulo").addClass("d-none");
             });
-
+            $("#set_cliente_clear_provincia").click(function () {
+                var form = $("#formdireccion")[0]
+                form.direccion_id.value =''
+                form.tracking.value =''
+                form.numregistro.value = ''
+                form.importe.value = ''
+                $("#set_cliente_clear_provincia").hide()
+            })
             $('#modal-historial-provincia').on('show.bs.modal', function (event) {
                 tablehistoricoprovincia.destroy();
 
                 let provincialima = "PROVINCIA";
                 let clienteidprovincia = $("#modal-historial-provincia-a").attr("data-cliente");
 
+                $("#set_cliente_clear_provincia").hide()
                 tablehistoricoprovincia = $('#tablaHistorialProvincia').DataTable({
                     "bPaginate": true,
                     "bFilter": true,
@@ -830,6 +846,20 @@
                         url: "{{ route('sobreenvioshistorial') }}",
                         'data': {"provincialima": provincialima, "cliente_id": clienteidprovincia},
                         "type": "get",
+                    },
+                    rowCallback: function (row, data, index) {
+                        $('.button_provincia', row).click(function (e) {
+                            const json = $(this).data('json');
+                            const selectedData = ((json && typeof json != 'string') ? json : JSON.parse($(this).data('json')))
+                            console.log(selectedData)
+                            var form = $("#formdireccion")[0]
+                            form.direccion_id.value = selectedData.id;
+                            form.tracking.value = selectedData.tracking;
+                            form.numregistro.value = selectedData.registro;
+                            form.importe.value = selectedData.importe;
+                            $("#modal-historial-provincia").modal('hide')
+                            $("#set_cliente_clear_provincia").show()
+                        })
                     },
                     columns:
                         [
@@ -847,8 +877,8 @@
                                 }
                             },
                             {
-                                data: 'numregistro',
-                                name: 'numregistro',
+                                data: 'registro',
+                                name: 'registro',
                                 sWidth: '15%',
                                 render: function (data, type, row, meta) {
                                     return '<span class="banco">' + data + '</span>';
@@ -920,7 +950,7 @@
                         "type": "get",
                     },
                     rowCallback: function (row, data, index) {
-                        $('.button_provincia', row).click(function (e) {
+                        $('.button_provincia_lima', row).click(function (e) {
                             const json = $(this).data('json');
                             const selectedData = ((json && typeof json != 'string') ? json : JSON.parse($(this).data('json')))
                             console.log(selectedData)
@@ -992,7 +1022,7 @@
                                 sWidth: '20%',
                                 render: function (data, type, row, meta) {
                                     data = data +
-                                        `<button class="btn btn-danger btn-sm button_provincia" data-json='${JSON.stringify(row)}' data-provincia="${row.id}"><i class="fas fa-check-circle"></i></button>`;
+                                        `<button class="btn btn-danger btn-sm button_provincia_lima" data-json='${JSON.stringify(row)}' data-provincia="${row.id}"><i class="fas fa-check-circle"></i></button>`;
                                     return data;
                                 },
                             }

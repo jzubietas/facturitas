@@ -153,13 +153,17 @@
                                     <div class="col">
                                         <h1>PROVINCIA</h1>
 
-                                        <a id="modal-historial-provincia-a" href=""
-                                           data-target="#modal-historial-provincia" data-toggle="modal" data-cliente="">
-                                            <button class="btn btn-info btn-sm">
+                                        <div>
+                                            <button type="button" id="modal-historial-provincia-a" href=""
+                                                    data-target="#modal-historial-provincia" data-toggle="modal"
+                                                    data-cliente="" class="btn btn-info btn-sm">
                                                 <i class="fas fa-envelope"></i>
                                                 Historial
                                             </button>
-                                        </a>
+                                            <button type="button" id="set_cliente_clear_provincia" class="btn btn-outline-danger btn-sm" style="display: none">
+                                                Limpiar
+                                            </button>
+                                        </div>
 
                                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 d-none">
                                             {!! Form::label('departamento', 'departamento') !!}
@@ -215,8 +219,9 @@
                                             <div class="form-check form-switch">
                                                 <input class="form-check-input" type="checkbox"
                                                        id="saveHistoricoProvincia"><!--checked-->
-                                                <label class="form-check-label" for="saveHistoricoProvincia">GRABA
-                                                    HISTORICO</label>
+                                                <label class="form-check-label font-weight-bold" for="saveHistoricoProvincia">
+                                                    Grabar registro en historico
+                                                </label>
                                             </div>
 
                                         </div>
