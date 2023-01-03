@@ -33,6 +33,7 @@ class CobranzasMesesProgressBar extends Widgets
             $this->progressData = [];
         }
         $totalMonths = $this->generalTotal();
+
         return view('components.dashboard.graficos.cobranzas-meses-progress-bar', compact('title', 'totalMonths'));
     }
 
