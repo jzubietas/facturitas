@@ -150,7 +150,7 @@
                                 html += `<li class="list-group-item text-wrap">
 <h6 class="alert alert-warning text-center font-weight-bold">Los archivos de este pedido fueron modificados</h6>
 <b>Sustento del facturador:</b>
-<textarea readonly class="form-control w-100" rows="5" style=" color: red; font-weight: bold; background: white; ">${response.sustento}</textarea>
+<textarea readonly class="form-control w-100" rows="1" style=" color: red; font-weight: bold; background: white; ">${response.sustento}</textarea>
 </li>`
                             }
                             html += `<li class="list-group-item"><b>Adjuntos de detalle de atencion<b></li>`
