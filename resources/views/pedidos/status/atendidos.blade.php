@@ -153,14 +153,17 @@
 <textarea readonly class="form-control w-100" rows="5" style=" color: red; font-weight: bold; background: white; ">${response.sustento}</textarea>
 </li>`
                             }
-                            html += `<li class="list-group-item"><b>Adjuntos de detalle de atencion<b></li>`
+                            html += `<li class="list-group-item text-left"><h5 class="font-weight-bold">Descargue los siguientes adjuntos</h5></li>`
                             html += response.data.map(function (item) {
-                                return `<li class="list-group-item"><a href="${item.link}" download>${item.adjunto}</a></li>`
+                                return `<li class="list-group-item">
+<a href="${item.link}" download class="d-flex justify-content-between"><span>Descargar </span> <span><i class="fa fa-file mx-2"></i>${item.adjunto} <i class="fa fa-download mx-2"></i></span></a>
+</li>`
                             }).join('')
 
                             html += `<li class="list-group-item">
-<textarea id="copy_pedido_text" readonly class="form-control w-100" rows="5" style=" color: black; font-weight: bold; background: white; ">${response.copyText}</textarea>
-<button id="copy_pedido_buttom" class="btn btn-dark"><i class="fa fa-copy"></i> copiar</button></li>`
+<span>Si desea enviar al cliente, copie la siguiente información</span>
+<textarea id="copy_pedido_text" readonly class="form-control w-100" rows="5" style="color: black; font-size: 14px;">${response.copyText}</textarea>
+<button id="copy_pedido_buttom" class="btn btn-light btn-sm"><i class="fa fa-copy"></i> copiar</button></li>`
                             html += `<li class="list-group-item">
 <div class="checkbox"><label><input type="checkbox" id="enableCheckbox"> Termine de descargar</label></div>
 </li>`

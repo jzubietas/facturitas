@@ -2,7 +2,8 @@
     <li class="list-group-item" style=" min-width: 300px; ">
         <div class="row">
             <div class="col-md-6">
-                <h5>COBRANZAS <br>{{Str::upper($title)}}  a  {{Str::upper($startDate->clone()->addMonths(4)->monthName)}} - {{$startDate->clone()->addMonths(4)->year}}</h5>
+                <h5>COBRANZAS <br>{{Str::upper($title)}} a {{Str::upper($startDate->clone()->addMonths(4)->monthName)}}
+                    - {{$startDate->clone()->addMonths(4)->year}}</h5>
             </div>
             <div class="col-md-6">
                 <x-bs-progressbar :progress="data_get($totalMonths,'progress')">
@@ -32,12 +33,19 @@
                 @foreach($dataall as $datestr=>$data)
                     <div class="col-md-3">
                         <x-bs-progressbar :progress="data_get($data,'progress')">
-                            <p><b>{{$datestr}}  | {{$data['progress']}}% - {{$data['pagados']}}/{{$data['activos']}}</b></p>
+                            <p><b>{{$datestr}} | {{$data['progress']}}% - {{$data['pagados']}}/{{$data['activos']}}</b>
+                            </p>
                         </x-bs-progressbar>
                     </div>
                 @endforeach
             </div>
             <span>% - Cobrados / Asignados</span>
+            <div class="mt-4">
+                <x-bs-progressbar :progress="data_get($totales[$identificador],'progress')">
+                    <p><b>{{$totales[$identificador]['progress']}}% - {{$totales[$identificador]['pagados']}}
+                            /{{$totales[$identificador]['activos']}}</b></p>
+                </x-bs-progressbar>
+            </div>
         </li>
     @endforeach
 </ul>

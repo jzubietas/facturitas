@@ -359,7 +359,7 @@ return [
                     'active' => ['pedidos en atención'],
                 ],*/
                 [
-                    'text' => 'Pedidos atendidos',
+                    'text' => 'Pedidos listo para envio',
                     'route' => 'operaciones.atendidos',
                     'can' => 'operacion.atendidos',
                     'icon' => 'fas fa-check-circle dot_pedidos_atendidos_operacion_count',

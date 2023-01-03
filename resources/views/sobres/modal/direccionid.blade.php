@@ -125,8 +125,9 @@
                                                     <div class="form-check form-switch">
                                                         <input class="form-check-input" type="checkbox"
                                                                id="saveHistoricoLima">
-                                                        <label class="form-check-label" for="saveHistoricoLima">GRABA
-                                                            HISTORICO</label>
+                                                        <label class="form-check-label font-weight-bold" for="saveHistoricoLima">
+                                                            Guardar direccion en historial del cliente
+                                                        </label>
                                                     </div>
 
                                                 </div>
