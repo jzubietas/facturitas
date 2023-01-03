@@ -1323,15 +1323,28 @@ class OperacionController extends Controller
                 $grupo=DireccionGrupo::where('id',$direcciongrupo->direcciongrupo)->first();
                 //concatenar y sacar
 
-                $loscodigos=DireccionPedido::select(DB::raw('group_concat(codigo_pedido) as codigos'))
+                $loscodigos=DireccionPedido::select(DB::raw("group_concat(concat('\'',codigo_pedido,'\'') ) as codigos"))
+                                ->where('direcciongrupo', $direcciongrupo->direcciongrupo)
+                                ->groupBy('direcciongrupo')
+                                ->get()->codigos;
+
+                $loscodigosin=DireccionPedido::select(DB::raw("group_concat(codigo_pedido) as codigos"))
                                 ->where('direcciongrupo', $direcciongrupo->direcciongrupo)
                                 ->groupBy('direcciongrupo')
                                 ->get();
-                $grupo->update(['codigos'=>$loscodigos->codigos]);
+
+                //obtener producto con los codigos
+                $losproductos=DetallePedido::select(DB::raw("group_concat(nombre_empresa) as producto"))
+                                ->whereIn('codigo', [$loscodigosin])
+                                //->groupBy('direcciongrupo')
+                                ->get()->producto;
+
+                               // ['1A-1218-3','34-1012-2']
+                $grupo->update(['codigos'=>$loscodigos,'producto'=>$losproductos]);
 
 
             }
-            else if($pedido->destino=='PROVINCIA')
+            else if($pedido->destino=='PROVINCIA'){}
             //buscar el direccion grupo para desvincular
 
         }
