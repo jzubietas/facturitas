@@ -1819,7 +1819,7 @@ class EnvioController extends Controller
             ->addIndexColumn()
             ->addColumn('action', function ($pedido) {
                 $btn = '';
-                if($pedido->condicion_envio_code==13)
+                //if($pedido->condicion_envio_code==13)
                {
                 $btn.='<button class="btn btn-sm text-white bg-primary"
                                     data-jqconfirm="' . $pedido->id . '">
