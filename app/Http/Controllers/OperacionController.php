@@ -1331,7 +1331,8 @@ class OperacionController extends Controller
                 $loscodigosin=DireccionPedido::select(DB::raw("group_concat(codigo_pedido) as codigos"))
                                 ->where('direcciongrupo', $direcciongrupo->direcciongrupo)
                                 ->groupBy('direcciongrupo')
-                                ->get();
+                                ->get()->codigos;
+                $loscodigosin=explode(",",$loscodigosin);
 
                 //obtener producto con los codigos
                 $losproductos=DetallePedido::select(DB::raw("group_concat(nombre_empresa) as producto"))
@@ -1344,7 +1345,33 @@ class OperacionController extends Controller
 
 
             }
-            else if($pedido->destino=='PROVINCIA'){}
+            else if($pedido->destino=='PROVINCIA'){
+                $direcciongrupo = GastoPedido::where('gasto_pedidos.pedido_id',$pedido->id)->where("gasto_pedidos.estado",'1')->first();//->direcciongrupo;
+                $direcciongrupo->update(['estado'=>1]);
+
+                $grupo=DireccionGrupo::where('id',$direcciongrupo->direcciongrupo)->first();
+                //concatenar y sacar
+
+                $loscodigos=GastoPedido::select(DB::raw("group_concat(concat('\'',codigo_pedido,'\'') ) as codigos"))
+                                ->where('direcciongrupo', $direcciongrupo->direcciongrupo)
+                                ->groupBy('direcciongrupo')
+                                ->get()->codigos;
+
+                $loscodigosin=GastoPedido::select(DB::raw("group_concat(codigo_pedido) as codigos"))
+                                ->where('direcciongrupo', $direcciongrupo->direcciongrupo)
+                                ->groupBy('direcciongrupo')
+                                ->get()->codigos;
+                $loscodigosin=explode(",",$loscodigosin);
+
+                //obtener producto con los codigos
+                $losproductos=DetallePedido::select(DB::raw("group_concat(nombre_empresa) as producto"))
+                                ->whereIn('codigo', [$loscodigosin])
+                                //->groupBy('direcciongrupo')
+                                ->get()->producto;
+
+                               // ['1A-1218-3','34-1012-2']
+                $grupo->update(['codigos'=>$loscodigos,'producto'=>$losproductos]);
+            }
             //buscar el direccion grupo para desvincular
 
         }
