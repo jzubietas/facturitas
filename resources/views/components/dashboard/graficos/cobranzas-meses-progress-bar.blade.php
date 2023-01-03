@@ -3,7 +3,7 @@
         <div class="row">
             <div class="col-md-6">
                 <h5>COBRANZAS <br>{{Str::upper($title)}} a {{Str::upper($startDate->clone()->addMonths(4)->monthName)}}
-                    - {{$startDate->clone()->addMonths(4)->year}}</h5>
+                    - {{$startDate->clone()->addMonths($total_dias-1)->year}}</h5>
             </div>
             <div class="col-md-6">
                 <x-bs-progressbar :progress="data_get($totalMonths,'progress')">
