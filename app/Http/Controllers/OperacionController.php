@@ -1318,27 +1318,25 @@ class OperacionController extends Controller
         {
             if($pedido->destino=='LIMA'){
                 $direcciongrupo = DireccionPedido::where('direccion_pedidos.pedido_id',$pedido->id)->where("direccion_pedidos.estado",'1')->first();//->direcciongrupo;
-                $direcciongrupo->update(['estado'=>1]);
+                $direcciongrupo->update(['estado'=>'0']);
+
+                //$count=Direccion
 
                 $grupo=DireccionGrupo::where('id',$direcciongrupo->direcciongrupo)->first();
                 //concatenar y sacar
 
-                $loscodigos=DireccionPedido::select(DB::raw("group_concat(concat('\'',codigo_pedido,'\'') ) as codigos"))
-                                ->where('direcciongrupo', $direcciongrupo->direcciongrupo)
-                                ->groupBy('direcciongrupo')
-                                ->get()->codigos;
+                $loscodigos=DireccionPedido::where('direcciongrupo', $direcciongrupo->direcciongrupo)
+                                //->groupBy('direcciongrupo')
+                                ->pluck('codigo_pedido')/*->unique()*/->map(function($item){ return $item;})->join(',');
 
-                $loscodigosin=DireccionPedido::select(DB::raw("group_concat(codigo_pedido) as codigos"))
-                                ->where('direcciongrupo', $direcciongrupo->direcciongrupo)
-                                ->groupBy('direcciongrupo')
-                                ->get()->codigos;
-                $loscodigosin=explode(",",$loscodigosin);
+                $loscodigosin=DireccionPedido::where('direcciongrupo', $direcciongrupo->direcciongrupo)
+                                //->groupBy('direcciongrupo')
+                                ->pluck('codigo_pedido')/*->unique()*/;
 
                 //obtener producto con los codigos
-                $losproductos=DetallePedido::select(DB::raw("group_concat(nombre_empresa) as producto"))
-                                ->whereIn('codigo', [$loscodigosin])
+                $losproductos=DetallePedido::whereIn('codigo', $loscodigosin)
                                 //->groupBy('direcciongrupo')
-                                ->get()->producto;
+                                ->pluck('nombre_empresa');//->map(function($item){ return $item;})->join(',');
 
                                // ['1A-1218-3','34-1012-2']
                 $grupo->update(['codigos'=>$loscodigos,'producto'=>$losproductos]);
