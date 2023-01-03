@@ -13,7 +13,7 @@
 
   <div class="card">
     <div class="card-header bg-primary">
-      PEDIDOS {{ $mes_month }}  {{-- $mes_anio --}}   {{-- $mes_mes --}}
+      PEDIDOSS {{ $mes_month }}  {{-- $mes_anio --}}   {{-- $mes_mes --}}
 
       <div class="float-right btn-group dropleft">
         <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown"
