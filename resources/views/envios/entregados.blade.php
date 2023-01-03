@@ -295,7 +295,6 @@
                     }
 
                     $('[data-jqconfirm]', row).click(function () {
-
                         $.confirm({
                             type: 'red',
                             title: '¡Revertir Envio!',
@@ -309,11 +308,11 @@
                                         self.showLoading(true)
                                         $.ajax({
                                             data: {
-                                                envio_id:data.id
+                                                envio_id:data.id,
+                                                pedido:data.codigos
                                             },
-                                            //operaciones.confirmar.revertir
                                             type: 'POST',
-                                            url: "{{ route('operaciones.confirmar.revertir') }}",
+                                            url: "{{ route('operaciones.revertirhaciaatendido') }}",
                                         }).always(function (){
                                             self.close()
                                             self.hideLoading(true)
