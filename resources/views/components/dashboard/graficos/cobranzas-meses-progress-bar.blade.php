@@ -2,7 +2,7 @@
     <li class="list-group-item" style=" min-width: 300px; ">
         <div class="row">
             <div class="col-md-6">
-                <h5>COBRANZAS <br>{{Str::upper($title)}} a {{Str::upper($startDate->clone()->addMonths(4)->monthName)}}
+                <h5>COBRANZAS <br>{{Str::upper($title)}} a {{Str::upper($startDate->clone()->addMonths($total_dias-1)->monthName)}}
                     - {{$startDate->clone()->addMonths($total_dias-1)->year}}</h5>
             </div>
             <div class="col-md-6">
