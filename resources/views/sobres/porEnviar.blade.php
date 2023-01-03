@@ -162,10 +162,12 @@
             max-width: 80%;
         }
     </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
 @stop
 
 @section('js')
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
     <script src="https://cdn.datatables.net/select/1.5.0/js/dataTables.select.min.js"></script>
@@ -682,14 +684,7 @@
                             )
                             return;
                         }
-                        if (val_direccion_id && $("#saveHistoricoLima").prop('checked')) {
-                            Swal.fire(
-                                'Error',
-                                'No es posible guardar la dirección en el historial porque ya ah sido registrada<br>Quite el check del <b>guardar direccion en el historial del cliente</b>',
-                                'warning'
-                            )
-                            return;
-                        }
+
                     } else if (combo_limaprovincia == "P") {
                         var cont_rotulo = files.length;
                         /*if(val_departamento=="")
@@ -734,14 +729,6 @@
                             Swal.fire(
                                 'Error',
                                 'Debe ingresar rotulo',
-                                'warning'
-                            )
-                            return;
-                        }
-                        if (val_direccion_id && $("#saveHistoricoProvincia").prop('checked')) {
-                            Swal.fire(
-                                'Error',
-                                'No es posible guardar la dirección en el historial porque ya ah sido registrada<br>Quite el check del <b>GRABA HISTORICO</b>',
                                 'warning'
                             )
                             return;
@@ -796,18 +783,149 @@
                 fd2.append('pedidos', $pedidos);
 
                 console.log("finalizo registro");
-                $.ajax({
-                    data: fd2,
-                    processData: false,
-                    contentType: false,
-                    type: 'POST',
-                    url: "{{ route('envios.direccion') }}",
-                    success: function (data) {
-                        console.log(data);
-                        $("#modal-direccion").modal("hide");
-                        $("#tablaPrincipal").DataTable().ajax.reload();
+
+                function sendAjax(){
+                    if(val_direccion_id){
+                        fd2.append('model_id',val_direccion_id)
                     }
-                });
+                    $.ajax({
+                        data: fd2,
+                        processData: false,
+                        contentType: false,
+                        type: 'POST',
+                        url: "{{ route('envios.direccion') }}",
+                        success: function (data) {
+                            console.log(data);
+                            $("#modal-direccion").modal("hide");
+                            $("#tablaPrincipal").DataTable().ajax.reload();
+                        }
+                    });
+                }
+
+                var form = $("#formdireccion")[0]
+                if (combo_limaprovincia == "L") {
+                    if (val_direccion_id) {
+                        var msg=''
+                        if ($(form.nombre).data('old_value') != $(form.nombre).val()) {
+                            msg+='<li>El <b>Nombre</b> ah sido modificado</li>'
+                        }
+                        if ($(form.celular).data('old_value') != $(form.celular).val()) {
+                            msg+='<li>El <b>celular</b> ah sido modificado</li>'
+                        }
+                        if ($(form.direccion).data('old_value') != $(form.direccion).val()) {
+                            msg+='<li>La <b>direccion</b> ah sido modificada</li>'
+                        }
+                        if ($(form.referencia).data('old_value') != $(form.referencia).val()) {
+                            msg+='<li>La <b>referencia</b> ah sido modificada</li>'
+                        }
+                        if ($(form.distrito).data('old_value') != $(form.distrito).val()) {
+                            msg+='<li>El <b>distrito</b> ah sido modificado</li>'
+                        }
+                        if ($(form.observacion).data('old_value') != $(form.observacion).val()) {
+                            msg+='<li>La <b>observacion</b> ah sido modificada</li>'
+                        }
+                        if(msg.length>0){
+                            $.confirm({
+                                title: '¡Advertencia de cambios en los datos del formulario!',
+                                content: `<ul>${msg}</li>`,
+                                type: 'orange',
+                                buttons: {
+                                    confirm: {
+                                        text: 'Aceptar y guardar cambios',
+                                        btnClass: 'btn-red',
+                                        action:function () {
+                                            if($("#saveHistoricoLimaEditar").prop('checked')){
+                                                $.confirm({
+                                                    title: '¡Advertencia!',
+                                                    content: `Los direccion ingresada se actualizara en el historial`,
+                                                    type: 'orange',
+                                                    buttons: {
+                                                        confirm: {
+                                                            text: 'Aceptar y guardar ',
+                                                            btnClass: 'btn-red',
+                                                            action:function () {
+                                                                sendAjax()
+                                                            }
+                                                        },
+                                                        cancel: function () {
+
+                                                        }
+                                                    }
+                                                });
+                                            }
+                                            sendAjax()
+                                        }
+                                    },
+                                    cancel: function () {
+
+                                    }
+                                }
+                            });
+                        }else{
+                            sendAjax()
+                        }
+                    }else{
+                        sendAjax()
+                    }
+                }else if (combo_limaprovincia == "P"){
+                    if (val_direccion_id) {
+                        var msg=''
+                        if ($(form.tracking).data('old_value') != $(form.tracking).val()) {
+                            msg+='<li>El <b>tracking</b> ah sido modificado</li>'
+                        }
+                        if ($(form.numregistro).data('old_value') != $(form.numregistro).val()) {
+                            msg+='<li>El <b>numregistro</b> ah sido modificado</li>'
+                        }
+                        if ($(form.importe).data('old_value') != $(form.importe).val()) {
+                            msg+='<li>La <b>importe</b> ah sido modificada</li>'
+                        }
+
+                        if(msg.length>0){
+                            $.confirm({
+                                title: '¡Advertencia de cambios en los datos del formulario!',
+                                content: `<ul>${msg}</li>`,
+                                type: 'orange',
+                                buttons: {
+                                    confirm: {
+                                        text: 'Aceptar y guardar cambios',
+                                        btnClass: 'btn-red',
+                                        action:function () {
+                                            if($("#saveHistoricoProvinciaEditar").prop('checked')){
+                                                $.confirm({
+                                                    title: '¡Advertencia!',
+                                                    content: `Los datos ingresados se actualizara en el historial`,
+                                                    type: 'orange',
+                                                    buttons: {
+                                                        confirm: {
+                                                            text: 'Aceptar y guardar ',
+                                                            btnClass: 'btn-red',
+                                                            action:function () {
+                                                                sendAjax()
+                                                            }
+                                                        },
+                                                        cancel: function () {
+
+                                                        }
+                                                    }
+                                                });
+                                            }
+                                        }
+                                    },
+                                    cancel: function () {
+
+                                    }
+                                }
+                            });
+                        }else{
+                            sendAjax()
+                        }
+                    }else{
+                        sendAjax()
+                    }
+                }else{
+                    sendAjax()
+                }
+
 
             });
             /*$(document).on("submit","#formdireccion",function(event){
@@ -826,6 +944,12 @@
                 form.tracking.value =''
                 form.numregistro.value = ''
                 form.importe.value = ''
+
+                $(form.direccion_id).data('old_value',form.direccion_id.value);
+                $(form.tracking).data('old_value',form.tracking.value);
+                $(form.numregistro).data('old_value',form.numregistro.value);
+                $(form.importe).data('old_value',form.importe.value);
+
                 $("#set_cliente_clear_provincia").hide()
             })
             $('#modal-historial-provincia').on('show.bs.modal', function (event) {
@@ -857,6 +981,13 @@
                             form.tracking.value = selectedData.tracking;
                             form.numregistro.value = selectedData.registro;
                             form.importe.value = selectedData.importe;
+
+
+                            $(form.direccion_id).data('old_value',form.direccion_id.value);
+                            $(form.tracking).data('old_value',form.tracking.value);
+                            $(form.numregistro).data('old_value',form.numregistro.value);
+                            $(form.importe).data('old_value',form.importe.value);
+
                             $("#modal-historial-provincia").modal('hide')
                             $("#set_cliente_clear_provincia").show()
                         })
@@ -927,7 +1058,21 @@
                 form.referencia.value = '';
                 $(form.distrito).val('').trigger('change');
                 form.observacion.value = '';
+
+
+                $(form.direccion_id).data('old_value',selectedData.id);
+                $(form.nombre).data('old_value',form.nombre.value);
+                $(form.celular).data('old_value',form.celular.value);
+                $(form.direccion).data('old_value',form.direccion.value);
+                $(form.referencia).data('old_value',form.referencia.value);
+                $(form.distrito).data('old_value',form.distrito.value);
+                $(form.observacion).data('old_value',form.observacion.value);
+
                 $("#set_cliente_clear").hide()
+
+                $("#saveHistoricoLima").parent().show()
+                $("#saveHistoricoLimaEditar").parent().hide()
+
             })
             $('#modal-historial-lima').on('show.bs.modal', function (event) {
                 console.log(tablehistoricolima)
@@ -955,15 +1100,33 @@
                             const selectedData = ((json && typeof json != 'string') ? json : JSON.parse($(this).data('json')))
                             console.log(selectedData)
                             var form = $("#formdireccion")[0]
+
                             form.direccion_id.value = selectedData.id;
+
                             form.nombre.value = selectedData.nombre;
+
                             form.celular.value = selectedData.celular;
+
                             form.direccion.value = selectedData.direccion;
+
                             form.referencia.value = selectedData.referencia;
+
                             $(form.distrito).val(selectedData.distrito).trigger('change');
+
                             form.observacion.value = selectedData.observacion;
+
+                            $(form.direccion_id).data('old_value',selectedData.id);
+                            $(form.nombre).data('old_value',form.nombre.value);
+                            $(form.celular).data('old_value',form.celular.value);
+                            $(form.direccion).data('old_value',form.direccion.value);
+                            $(form.referencia).data('old_value',form.referencia.value);
+                            $(form.distrito).data('old_value',form.distrito.value);
+                            $(form.observacion).data('old_value',form.observacion.value);
+
                             $("#modal-historial-lima").modal('hide')
                             $("#set_cliente_clear").show()
+                            $("#saveHistoricoLima").parent().hide()
+                            $("#saveHistoricoLimaEditar").parent().show()
                         })
                     },
                     columns:
