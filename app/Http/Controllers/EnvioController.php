@@ -433,9 +433,8 @@ class EnvioController extends Controller
             })
             ->addColumn('action', function ($pedido) {
                 $btn = '';
-                if($pedido->condicion_envio_code==13)
-                {
-                    $btn.='<button class="btn btn-sm text-white bg-primary"
+                if ($pedido->condicion_envio_code == 13) {
+                    $btn .= '<button class="btn btn-sm text-white bg-primary"
                                     data-jqconfirm="' . $pedido->id . '">
                                         <i class="fa fa-motorcycle text-white" aria-hidden="true"></i> A revertir
                                     </button>';
@@ -444,7 +443,7 @@ class EnvioController extends Controller
 
                 return $btn;
             })
-            ->rawColumns(['action','foto1','foto2'])
+            ->rawColumns(['action', 'foto1', 'foto2'])
             ->make(true);
 
     }
@@ -1029,20 +1028,20 @@ class EnvioController extends Controller
 
 
         if (isset($file)) {
-            $file_name=$file->store('entregas','pstorage');
+            $file_name = $file->store('entregas', 'pstorage');
             DireccionGrupo::where('id', $pedido)
                 ->update([
                     'foto' . $item => $file_name
                 ]);
             return response()->json([
-                'success'=>true,
-                'pedido'=>$pedido,
-                'item'=>$item,
+                'success' => true,
+                'pedido' => $pedido,
+                'item' => $item,
                 'path' => \Storage::disk('pstorage')->url($file_name)
             ]);
         }
         return response()->json([
-            'success'=>false,
+            'success' => false,
         ]);
     }
 
@@ -1227,15 +1226,83 @@ class EnvioController extends Controller
 
     }
 
+    public function getDireccionEnvio(Request $request)
+    {
+        $pedido_id = (int)$request->get('pedido_id');
+        if ($pedido_id > 0) {
+            $pedido = Pedido::query()->find($pedido_id);
+            $dirgrupo = $pedido->direccionGrupos()->with('direccionEnvio', 'gastoEnvio')->first();
+            $distritos = Distrito::whereIn('provincia', ['LIMA', 'CALLAO'])
+                ->where('estado', '1')
+                ->WhereNotIn('distrito', ['CHACLACAYO', 'CIENEGUILLA', 'LURIN', 'PACHACAMAC', 'PUCUSANA', 'PUNTA HERMOSA', 'PUNTA NEGRA', 'SAN BARTOLO', 'SANTA MARIA DEL MAR'])
+                ->select([
+                    'distrito',
+                    DB::raw("concat(distrito,' - ',zona) as distritonam"),
+                    'zona'
+                ])->get()->map(function ($d) {
+                    $d->zona = trim($d->zona);
+                    return $d;
+                });
+            $departamento = Departamento::where('estado', "1")
+                ->pluck('departamento', 'departamento');
+            return view('sobres.modal.modal_editar_envio_ajax', compact('pedido', 'dirgrupo', 'distritos', 'departamento'));
+        }
+        return '';
+    }
+
+    public function updateDireccionGrupo(Request $request)
+    {
+        $pedido_id = (int)$request->get('pedido_id');
+        if ($pedido_id > 0) {
+            $pedido = Pedido::query()->find($pedido_id);
+            $dirgrupo = $pedido->direccionGrupos()->with('direccionEnvio', 'gastoEnvio')->first();
+            $pedido->direccionGrupos()->update([
+                'nombre_cliente' => $request->nombre,
+                'celular_cliente' => $request->celular,
+                'direccion' => $request->direccion,
+                'referencia' => $request->referencia,
+                'distrito' => $request->distrito,
+                'observacion' => $request->observacion,
+            ]);
+            if ($dirgrupo != null) {
+                if ($dirgrupo->direccionEnvio != null) {
+                    DireccionEnvio::query()->where('estado', '=', 1)
+                        ->whereIn('direcciongrupo', $pedido->direccionGrupos()->pluck('id'))
+                        ->update([
+                            'celular' => $request->celular,
+                            'direccion' => $request->direccion,
+                            'referencia' => $request->referencia,
+                            'distrito' => $request->distrito,
+                            'observacion' => $request->observacion,
+                        ]);
+                } else {
+                    /*GastoEnvio::query()->where('estado', '=', 1)
+                         ->whereIn('direcciongrupo', $pedido->direccionGrupos()->pluck('id'))
+                         ->update([
+                             'celular' => $request->celular,
+                             'direccion' => $request->direccion,
+                             'referencia' => $request->referencia,
+                             'distrito' => $request->distrito,
+                             'observacion' => $request->observacion,
+                         ]);*/
+                }
+            }
+        }
+        return response()->json([
+            'suucess' => true
+        ]);
+    }
+
     public function DireccionEnvio(Request $request)
     {
+
 
         $pedidos = $request->pedidos;
         if (!$request->pedidos) {
             return '0';
         } else {
 
-            $zona_distrito = Distrito::where('distrito',$request->distrito)->first();
+            $zona_distrito = Distrito::where('distrito', $request->distrito)->first();
 
             $_destino = $request->destino;
             $_pedido = Pedido::find($request->cod_pedido);
@@ -1292,7 +1359,15 @@ class EnvioController extends Controller
                     //'condicion_envio_code' => Pedido::REPARTO_COURIER_INT,
                     'pedido_id' => $request->cod_pedido,
                     'cliente_id' => $request->cliente_id,
-                    'user_id' => $usuario_id
+                    'user_id' => $usuario_id,
+
+                    'distrito' => $request->distrito,
+                    'direccion' => $request->direccion,
+                    'referencia' => $request->referencia,
+                    'observacion' => $request->observacion,
+                    'cantidad' => $count_pedidos,
+                    'nombre' => $request->nombre,
+                    'celular' => $request->contacto,
 
                 ])->id;
 
@@ -1307,7 +1382,7 @@ class EnvioController extends Controller
 
                     $cantidad = $count_pedidos;
 
-                    $modelData=[
+                    $modelData = [
                         'cliente_id' => $request->cliente_id,
                         'distrito' => $request->distrito,
                         'direccion' => $request->direccion,
@@ -1321,14 +1396,15 @@ class EnvioController extends Controller
                         'estado' => '1',
                         "salvado" => "0"
                     ];
-                    if(intval($request->model_id)>0){
-                        $direccionLima=DireccionEnvio::query()->find($request->model_id);
-                        if($direccionLima!=null) {
+                    if (intval($request->model_id) > 0) {
+                        $direccionLima = DireccionEnvio::query()->find($request->model_id);
+                        if ($direccionLima != null) {
+                            unset($modelData['salvado']);
                             $direccionLima->update($modelData);
-                        }else{
+                        } else {
                             $direccionLima = DireccionEnvio::create($modelData);
                         }
-                    }else{
+                    } else {
                         $direccionLima = DireccionEnvio::create($modelData);
                     }
 
@@ -1411,7 +1487,7 @@ class EnvioController extends Controller
                         $file_name = 'logo_facturas.png';
                     }
 
-                    $modelData=[
+                    $modelData = [
                         'cliente_id' => $request->cliente_id,
                         'user_id' => Auth::user()->id,
                         'tracking' => $request->tracking,
@@ -1424,14 +1500,15 @@ class EnvioController extends Controller
                         'estado' => '1',
                         "salvado" => "0"
                     ];
-                    if(intval($request->model_id)>0){
-                        $gastoProvincia=GastoEnvio::find($request->model_id);
-                        if($gastoProvincia!=null){
+                    if (intval($request->model_id) > 0) {
+                        $gastoProvincia = GastoEnvio::find($request->model_id);
+                        if ($gastoProvincia != null) {
+                            unset($modelData['salvado']);
                             $gastoProvincia->update($modelData);
-                        }else{
+                        } else {
                             $gastoProvincia = GastoEnvio::create($modelData);
                         }
-                    }else{
+                    } else {
                         $gastoProvincia = GastoEnvio::create($modelData);
                     }
 
@@ -1950,7 +2027,6 @@ class EnvioController extends Controller
             'condicion_envio' => Pedido::REPARTO_COURIER,
             'condicion_envio_code' => Pedido::REPARTO_COURIER_INT,
         ]);
-
 
 
         PedidoMovimientoEstado::create([
