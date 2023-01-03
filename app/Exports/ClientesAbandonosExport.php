@@ -60,7 +60,7 @@ class ClientesAbandonosExport implements FromView, ShouldAutoSize
                     );
                     //->get();
                 if($request->situacion=='ABANDONO')
-                    $clientes=$clientes->whereIn('clientes.situacion',['ABANDONO PERMANENTE','ABANDONO RECIENTE']);
+                    $clientes=$clientes->whereIn('clientes.situacion',['ABANDONO','ABANDONO RECIENTE']);
                 else if($request->situacion=='RECURENTE')
                     $clientes=$clientes->whereIn('clientes.situacion',['RECURRENTE']);
                 else if($request->situacion=='NUEVO')
@@ -105,6 +105,8 @@ class ClientesAbandonosExport implements FromView, ShouldAutoSize
 
                 $clientes = $clientes->WhereIn("u.identificador", $usersasesores);
             }
+
+            $clientes=$clientes->get();
 
             $cliente_list = [];
             $pedido_list = [];
@@ -283,33 +285,7 @@ class ClientesAbandonosExport implements FromView, ShouldAutoSize
                 $dateM = Carbon::now()->format('m');
                 $dateY = Carbon::now()->format('Y');//2022
 
-                if($cliente->pidio==0 || $cliente->pidio=='0' || $cliente->pidio==null  || $cliente->pidio=='null' ){
-                    $estadopedido = 'SIN PEDIDO';
-                }else{
-                    if(  (($dateY*1)-($cliente->anio*1)) == 0)
-                    {
-                        //año actual
-                        //27-08-2022--     (11-8) 3  >=  0   (11-8)  3   <2
-                        if( (($dateM*1)-($cliente->mes*1)) >= 0 && (($dateM*1)-($cliente->mes*1) )<2)
-                        {
-                            $estadopedido = 'RECURRENTE';
-                        }
-                        else{
-                            $estadopedido = 'ABANDONO';
-                        }
-
-                    }else{
-                        //año anterior
-                        $estadopedido = 'ABANDONO';
-                    }
-                }
-
-
-                /*if( (($dateM*1)-($cliente->mes*1)) >= 0 && (($dateM*1)-($cliente->mes*1))<3 && (($dateY*1)-($cliente->anio*1)) == 0){
-                    $estadopedido = 'RECURRENTE';
-                }else{
-                    $estadopedido = 'ABANDONO';
-                }*/
+                $estadopedido=$cliente->situacion;
 
                 $cliente_list[$cont] = array(
                     'id' => $cliente->id,
