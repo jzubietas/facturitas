@@ -8,11 +8,12 @@ use App\Exports\BasesFriasExport;
 use App\Exports\ClientesExport;
 use App\Exports\Clientesv2Export;
 use App\Exports\ClientesPedidosExport;
+use App\Exports\ClientesAbandonosExport;
 use App\Exports\Templates\PlantillaExportMultipleLlamada;
 use App\Exports\Templates\PlantillaExportMultiple;
 use App\Exports\Templates\PlantillaExportRutaenvioMultiple;
 use App\Exports\Templates\PlantillaRutaenvioExportMultiple;
-use App\Exports\ClientesSituacionExport;
+use App\Exports\ClientesSituacionExport;///
 use App\Exports\PedidosPorEnviarPorFechasExport;
 use App\Exports\EntregadosPorFechasExport;
 use App\Exports\MisPagosExport;
@@ -53,6 +54,7 @@ use App\Models\Pedido;
 use App\Models\Pago;
 use Carbon\Carbon;
 use Maatwebsite\Excel\Facades\Excel;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -161,7 +163,7 @@ class ExcelController extends Controller
         ini_set('memory_limit', '-1');
         set_time_limit(3000000);
 
-        return (new ClientesSituacionExport)
+        return (new ClientesAbandonosExport)
                 ->clientes($request)
                 ->anioa($request)
                 ->aniop($request)
@@ -400,7 +402,7 @@ class ExcelController extends Controller
     {
         return (new EstadoSobresExport)
                 ->pedidosLima($request)
-              
+
                 ->download('Estado de Sobres.xlsx');
     }
 
