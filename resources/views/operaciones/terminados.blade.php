@@ -315,9 +315,11 @@
 
               var urledit = '{{ route("operaciones.editatender", ":id") }}';
               urledit = urledit.replace(':id', row.id);
+              /*
               @can('operacion.editatender')
                 data = data+'<a href="'+urledit+'" class="btn btn-warning btn-sm"><i class=""></i> Editar atención</a><br>';
               @endcan
+    */
               var urlpdf = '{{ route("pedidosPDF", ":id") }}';
               urlpdf = urlpdf.replace(':id', row.id);
               @can('operacion.PDF')
