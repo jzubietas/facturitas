@@ -69,7 +69,7 @@ class PdfController extends Controller
 
         $_pedidos_mes_pasado=$_pedidos_mes_pasado->get();
 
-        return view('reportes.analisis', compact('users','_pedidos_mes_pasado','mes_month_2','mes_month_1','mes_month_0','mes_anio','mes_mes'));
+        return view('reportes.analisis', compact('users','_pedidos_mes_pasado','mes_month_2','mes_month_1','mes_month_0','mes_month','mes_anio','mes_mes'));
     }
 
     public function PedidosPorFechas(Request $request)
