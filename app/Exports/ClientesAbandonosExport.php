@@ -4,6 +4,7 @@ namespace App\Exports;
 
 use App\Models\Cliente;
 use App\Models\Pedido;
+use App\Models\User;
 use App\Models\Porcentaje;
 use Carbon\Carbon;
 use Illuminate\Contracts\View\View;
@@ -73,7 +74,37 @@ class ClientesAbandonosExport implements FromView, ShouldAutoSize
                 else if($request->situacion=='ABANDONO RECIENTE')
                     $clientes=$clientes->whereIn('clientes.situacion',['RECUPERADO ABANDONO']);
 
+            if (Auth::user()->rol == "Llamadas") {
 
+                $usersasesores = User::where('users.rol', 'Asesor')
+                    ->where('users.estado', '1')
+                    ->where('users.llamada', Auth::user()->id)
+                    ->select(
+                        DB::raw("users.identificador as identificador")
+                    )
+                    ->pluck('users.identificador');
+                $clientes = $clientes->WhereIn("u.identificador", $usersasesores);
+            }elseif (Auth::user()->rol == "Asesor") {
+                $usersasesores = User::where('users.rol', 'Asesor')
+                    ->where('users.estado', '1')
+                    ->where('users.identificador', Auth::user()->identificador)
+                    ->select(
+                        DB::raw("users.identificador as identificador")
+                    )
+                    ->pluck('users.identificador');
+                $clientes = $clientes->WhereIn("u.identificador", $usersasesores);
+
+            }else if (Auth::user()->rol == "Encargado") {
+                $usersasesores = User::where('users.rol', 'Asesor')
+                    ->where('users.estado', '1')
+                    ->where('users.supervisor', Auth::user()->id)
+                    ->select(
+                        DB::raw("users.identificador as identificador")
+                    )
+                    ->pluck('users.identificador');
+
+                $clientes = $clientes->WhereIn("u.identificador", $usersasesores);
+            }
 
             $cliente_list = [];
             $pedido_list = [];
