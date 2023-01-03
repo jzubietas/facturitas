@@ -67,12 +67,12 @@ class SobreController extends Controller
         }else{
             $ver_botones_accion = 1;
         }
-        
+
         $distritos = Distrito::whereIn('provincia', ['LIMA', 'CALLAO'])
                             ->where('estado', '1')
                             ->WhereNotIn('distrito' ,['CHACLACAYO','CIENEGUILLA','LURIN','PACHACAMAC','PUCUSANA','PUNTA HERMOSA','PUNTA NEGRA','SAN BARTOLO','SANTA MARIA DEL MAR'])
                             ->select([
-                                'distrito',                                
+                                'distrito',
                                 DB::raw("concat(distrito,' - ',zona) as distritonam"),
                                 'zona'
                             ])->get();
@@ -202,10 +202,18 @@ class SobreController extends Controller
         }
         return Datatables::of(DB::table($pedidos))
                     ->addIndexColumn()
+                    ->addColumn('condicion_envio_color', function ($pedidos) {
+                        $pedidos = new Pedido((array)$pedidos);
+                        $pedidos->forceFill((array)$pedidos);
+                        $pedidos->exists = true;
+                        return $pedidos->condicion_envio_color;
+                    })
                     ->addColumn('action', function($pedido){
                         $btn='';
                         return $btn;
                     })
+
+
                     ->rawColumns(['action'])
                     ->make(true);
 
