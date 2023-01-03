@@ -183,6 +183,11 @@ class Pedido extends Model
         return $this->hasMany(PagoPedido::class);
     }
 
+    public function direccionGrupos()
+    {
+        return $this->hasMany(DireccionGrupo::class)->activo();
+    }
+
     public function getCondicionEnvioColorAttribute()
     {
         $condicion_envio = \Str::lower($this->condicion_envio??'');
@@ -226,6 +231,15 @@ class Pedido extends Model
         return [];
     }
 
+
+    public function scopeConDireccionEnvio($query)
+    {
+        return $query->where($this->qualifyColumn('estado_sobre'), '=', 1);
+    }
+    public function scopeSinDireccionEnvio($query)
+    {
+        return $query->where($this->qualifyColumn('estado_sobre'), '=',0);
+    }
 
     public function scopePagados($query)
     {
