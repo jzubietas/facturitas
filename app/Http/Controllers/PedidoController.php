@@ -232,8 +232,7 @@ class PedidoController extends Controller
         return Datatables::of(DB::table($pedidos))
             ->addIndexColumn()
             ->addColumn('condicion_envio_color', function ($pedido) {
-                $p = new Pedido((array)$pedido);
-                return $p->condicion_envio_color;
+                return Pedido::getColorByCondicionEnvio($pedido->condicion_envio);
             })
             ->addColumn('action', function ($pedido) {
                 $btn ='';
@@ -1991,8 +1990,7 @@ class PedidoController extends Controller
         return Datatables::of(DB::table($pedidos))
             ->addIndexColumn()
             ->addColumn('condicion_envio_color', function ($pedido) {
-                $p = new Pedido((array)$pedido);
-                return $p->condicion_envio_color;
+                return Pedido::getColorByCondicionEnvio($pedido->condicion_envio);
             })
             ->addColumn('action', function ($pedido) {
                 $btn = '';
