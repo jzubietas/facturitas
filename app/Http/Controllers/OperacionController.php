@@ -1378,17 +1378,19 @@ class OperacionController extends Controller
     public function Revertirhaciaatendido(Request $request)
     {
         $envio = DireccionGrupo::where("id", $request->envio_id)->first();
-        $pedidos = Pedido::where('id', $request->pedido)->first();
+        $pedidos = Pedido::where('codigo', $request->pedido)->first();
         $fecha = Carbon::now();
-
-        $envio->update([
-            'estado'=>'0'
-        ]);
 
         $pedidos->update([
             "condicion_envio_code" => Pedido::ATENDIDO_OPE_INT,
             "condicion_envio" => Pedido::ATENDIDO_OPE
         ]);
+
+        $envio->update([
+            'estado'=>'0'
+        ]);
+
+
 
         //PedidoMovimientoEstado::where('pedido', $request->hiddenRevertirpedidoporatender)->delete();
 
