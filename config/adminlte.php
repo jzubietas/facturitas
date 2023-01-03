@@ -417,6 +417,20 @@ return [
                     'active' => ['envios estadosobres'],
                 ],
                 [
+                    'text' => 'Sobres con direccion',
+                    'route' => 'envios.condireccion',
+                    'can' => 'envios.condireccion',
+                    'icon' => 'fas fa-check-circle',
+                    'active' => ['envios con direccion'],
+                ],
+                [
+                    'text' => 'Sobres sin direccion',
+                    'route' => 'envios.sindireccion',
+                    'can' => 'envios.sindireccion',
+                    'icon' => 'fas fa-check-circle',
+                    'active' => ['envios sin direccion'],
+                ],
+                [
                     'text' => 'Sobres en Ruta',
                     'route' => 'envios.rutaenvio',
                     'can' => 'envios.rutaenvio',
