@@ -1227,13 +1227,7 @@
                     },
                     {data: 'codigo', name: 'codigo',},
                     {data: 'users', name: 'users',},
-                    // {
-                    //   data: 'celulares',
-                    //   name: 'celulares',
-                    //   render: function ( data, type, row, meta ) {
-                    //     return row.celulares+' - '+row.nombres
-                    //   },
-                    // },
+
                     {data: 'empresas', name: 'empresas',},
                     {data: 'dias', name: 'dias',},
 
@@ -1249,22 +1243,6 @@
                             datas = '';
                             if (data != null) {
                                 return data;
-                                /*if(data=='0')
-                                {
-                                  return '<span class="badge badge-danger">REGISTRE DIRECCION</span>';
-                                }else if(data=='LIMA')
-                                {
-                                  var urlshow = '{{ route("pedidos.show", ":id") }}';
-                  urlshow = urlshow.replace(':id', row.id);
-
-                  return '<a href="" data-target="#modal-verdireccion" data-toggle="modal" data-dirreccion="'+row.id+'"><button class="btn btn-primary btn-sm"><i class="fas fa-eye"></i> Ver</button></a>';
-                }
-                else if(data=='PROVINCIA')
-                {
-                  return '<span class="badge badge-info">ENVIO A PROVINCIA</span>';
-                }else{
-                  return '<span class="badge badge-info">PROBLEMAS CON REGISTRO DE DESTINO</span>';
-                }*/
                             } else {
                                 return '<span class="badge badge-danger">REGISTRE DIRECCION</span>';
                             }

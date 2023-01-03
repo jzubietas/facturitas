@@ -286,6 +286,42 @@
                         } else {
                         }
                     }
+
+                    $('[data-jqconfirm]', row).click(function () {
+
+                        $.confirm({
+                            type: 'red',
+                            title: '¡Revertir Envio!',
+                            content: 'Confirme si desea revertir el envio <b>'+data.codigos+'</b>',
+                            buttons: {
+                                ok:{
+                                    text:'Si, confirmar',
+                                    btnClass:'btn-red',
+                                    action:function (){
+                                        const self=this;
+                                        self.showLoading(true)
+                                        $.ajax({
+                                            data: {
+                                                envio_id:data.id
+                                            },
+                                            //operaciones.confirmar.revertir
+                                            type: 'POST',
+                                            url: "{{ route('operaciones.confirmar.revertir') }}",
+                                        }).always(function (){
+                                            self.close()
+                                            self.hideLoading(true)
+                                            $('#tablaPrincipal').DataTable().ajax.reload();
+                                        });
+                                    }
+                                },
+                                cancel:{
+                                    text:'No'
+                                }
+                            }
+                        })
+                    });
+
+
                 },
                 columns: [
                     {
