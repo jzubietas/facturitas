@@ -294,10 +294,7 @@
           }
         });
 
-
       });
-
-
 
       $(document).on("submit", "#formulariorecibir", function (evento) {
         evento.preventDefault();
@@ -311,10 +308,8 @@
         "order": [[ 0, "desc" ]],
         ajax: "{{ route('envios.pararepartotabla') }}",
         createdRow: function( row, data, dataIndex){
-          //console.log(row);
         },
         rowCallback: function (row, data, index) {
-
               if(data.destino2=='PROVINCIA'){
                 $('td', row).css('color','red')
 

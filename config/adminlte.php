@@ -431,6 +431,13 @@ return [
                     'active' => ['envios'],
                 ],
                 [
+                    'text' => 'Sobres para reparto',
+                    'route' => 'envios.enreparto',
+                    'can' => 'envios.index',
+                    'icon' => 'fas fa-check-circle',
+                    'active' => ['envios en reparto'],
+                ],
+                [
                     'text' => 'Seguimiento provincia',
                     'route' => 'envios.seguimientoprovincia',
                     'can' => 'envios.seguimientoprovincia',
