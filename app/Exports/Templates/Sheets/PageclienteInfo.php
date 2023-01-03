@@ -238,9 +238,16 @@ class PageclienteInfo extends Export implements WithColumnFormatting, FromCollec
 
             //$_anioa_[]=;
 
+
+
+        }
+
+        foreach ($return_1 as $kval1=>$vval2)
+        {
+
             foreach ($_array_meses as $kmes=>$vmes)
             {
-                //meses    01 02 03  04
+
                 if(array_key_exists('1',$_array_anios))
                 {
                     //$_anioa_[]=
@@ -249,9 +256,7 @@ class PageclienteInfo extends Export implements WithColumnFormatting, FromCollec
 
                 }
 
-
             }
-
         }
 
 
