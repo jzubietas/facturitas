@@ -236,6 +236,7 @@ class PedidoController extends Controller
                 return $p->condicion_envio_color;
             })
             ->addColumn('action', function ($pedido) {
+                $btn ='';
                 if($pedido->estado_sobre==1) {
                     if(\auth()->user()->can('envios.direccionenvio.editar')) {
                         $btn = '<button class="btn btn-sm btn-info dropdown-item" data-jqconfirm="' . $pedido->id . '"><i class="fa fa-map-marker-alt text-info mr-8"></i>Editar direccion de envio</button>';
