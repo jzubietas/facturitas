@@ -42,15 +42,11 @@ class PdfController extends Controller
     {
         $users = User::where('estado', '1')->pluck('name', 'id');
 
-        //
-
-        //$mes_month=Carbon::now()->startOfMonth()->subMonth()->format('Y_m');
-        //$mes_month=Carbon::now()->startOfMonth()->subMonth()->format('Y_m');
         //$mes_month=Carbon::now()->startOfMonth()->subMonth()->format('Y_m');
         $mes_month_2=Carbon::now()->startOfMonth()->subMonth(3)->format('Y_m');
         $mes_month_1=Carbon::now()->startOfMonth()->subMonth(2)->format('Y_m');
         $mes_month_0=Carbon::now()->startOfMonth()->subMonth(2)->format('Y_m');
-        $mes_month=Carbon::now()->startOfMonth()->subMonth(1)->format('Y_m');
+        $mes_month=Carbon::now()->startOfMonth()->subMonth()->format('Y_m');
         $mes_anio=Carbon::now()->startOfMonth()->subMonth()->format('Y');
         $mes_mes=Carbon::now()->startOfMonth()->subMonth()->format('m');
 
