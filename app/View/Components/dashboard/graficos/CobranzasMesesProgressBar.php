@@ -17,7 +17,7 @@ class CobranzasMesesProgressBar extends Widgets
 
     public $totales = [];
 
-    public $total_dias = 2;
+    public $total_dias = 4;
 
 
     /**
