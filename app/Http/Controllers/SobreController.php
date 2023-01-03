@@ -143,6 +143,7 @@ class SobreController extends Controller
                     'pedidos.envio',
                     'pedidos.destino',
                     'pedidos.direccion',
+                    'pedidos.estado_sobre',
                     'dp.envio_doc',
                     'dp.fecha_envio_doc',
                     'dp.cant_compro',

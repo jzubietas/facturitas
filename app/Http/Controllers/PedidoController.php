@@ -1905,6 +1905,7 @@ class PedidoController extends Controller
                 'dp.codigo as codigos',
                 'dp.nombre_empresa as empresas',
                 'dp.total as total',
+                'pedidos.estado_sobre',
                 'pedidos.condicion as condiciones',
                 'pedidos.condicion_code',
                 'pedidos.condicion_envio',
