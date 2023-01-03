@@ -815,26 +815,26 @@
                     if (val_direccion_id) {
                         var msg = ''
                         if ($(form.nombre).data('old_value') != $(form.nombre).val()) {
-                            msg += '<li>El <b>Nombre</b> ah sido modificado</li>'
+                            msg += '<li><b>NOMBRE</b></li>'
                         }
                         if ($(form.celular).data('old_value') != $(form.celular).val()) {
-                            msg += '<li>El <b>celular</b> ah sido modificado</li>'
+                            msg += '<li><b>CELULAR</b></li>'
                         }
                         if ($(form.direccion).data('old_value') != $(form.direccion).val()) {
-                            msg += '<li>La <b>direccion</b> ah sido modificada</li>'
+                            msg += '<li><b>DIRECCIÓN</b></li>'
                         }
                         if ($(form.referencia).data('old_value') != $(form.referencia).val()) {
-                            msg += '<li>La <b>referencia</b> ah sido modificada</li>'
+                            msg += '<li><b>REFERENCIA</b></li>'
                         }
                         if ($(form.distrito).data('old_value') != $(form.distrito).val()) {
-                            msg += '<li>El <b>distrito</b> ah sido modificado</li>'
+                            msg += '<li><b>DISTRITO</b></li>'
                         }
                         if ($(form.observacion).data('old_value') != $(form.observacion).val()) {
-                            msg += '<li>La <b>observacion</b> ah sido modificada</li>'
+                            msg += '<li><b>OBSERVACIÓN</b></li>'
                         }
                         if (msg.length > 0) {
                             $.confirm({
-                                title: '¡Advertencia de cambios en los datos del formulario!',
+                                title: '<h3 class="font-20 font-weight-500">¡Ups! acabas de editar la información de :</h3> ',
                                 content: `<ul>${msg}</li>`,
                                 type: 'orange',
                                 buttons: {
