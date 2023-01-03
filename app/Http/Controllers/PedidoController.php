@@ -1004,11 +1004,11 @@ class PedidoController extends Controller
 
             if ($cliente_AB->situacion == 'ABANDONO RECIENTE') {
                 $cliente_AB->update([
-                    'situacion' => 'RECURRENTE',
+                    'situacion' => 'RECUPERADO RECIENTE',
                 ]);
-            } else if ($cliente_AB->situacion == 'ABANDONO PERMANENTE') {
+            } else if ($cliente_AB->situacion == 'ABANDONO') {
                 $cliente_AB->update([
-                    'situacion' => 'RECUPERADO'
+                    'situacion' => 'RECUPERADO ABANDONO'
                 ]);
             }
 
