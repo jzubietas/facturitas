@@ -58,6 +58,7 @@
                     <th scope="col">Foto 1</th>
                     <th scope="col">Foto 2</th>
                     <th scope="col">Estado de envio</th>
+                    <th scope="col">Acciones</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -320,8 +321,6 @@
                             }
                         })
                     });
-
-
                 },
                 columns: [
                     {
@@ -392,6 +391,8 @@
                         data: 'condicion_envio',
                         name: 'condicion_envio',
                     },
+                    {data: 'action', name: 'action', orderable: false, searchable: false,sWidth:'20%'},
+
                 ],
                 language: {
                     "decimal": "",
