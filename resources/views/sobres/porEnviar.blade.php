@@ -1131,7 +1131,7 @@
                         'data': {"cliente_id": cliente},
                         "type": "get",
                     },
-                    'columnDefs': [{
+                    columnDefs: [{
                         'targets': [0], /* column index */
                         'orderable': false, /* true or false */
                     }],
@@ -1151,7 +1151,6 @@
                             "name": 'nombre_empresa',
                             "render": function (data, type, row, meta) {
                                 return data;
-
                             }
                         },
                     ],
