@@ -390,4 +390,18 @@ class Pedido extends Model
 
         return $query;
     }
+
+    public static function getColorByCondicionEnvio($condicion_envio){
+        $condicion_envio = \Str::lower($condicion_envio??'');
+
+        if (\Str::contains($condicion_envio, "ope")) {
+            return '#ffc107';
+        } elseif (\Str::contains($condicion_envio, "courier") || \Str::contains($condicion_envio, "motorizado")) {
+            return '#f97100';
+        } elseif (\Str::contains($condicion_envio, "cliente")) {
+            return '#b0deb3';
+        }else{
+            return '#b0deb3';
+        }
+    }
 }

@@ -206,6 +206,9 @@ class EnvioController extends Controller
 
         return Datatables::of($pedidos)
             ->addIndexColumn()
+            ->addColumn('condicion_envio_color', function ($pedido) {
+                return Pedido::getColorByCondicionEnvio($pedido->condicion_envio);
+            })
             ->addColumn('action', function ($pedido) {
                 $btn = '';
 
@@ -385,6 +388,9 @@ class EnvioController extends Controller
 
         return datatables()->query(\DB::table($pedidos))
             ->addIndexColumn()
+            ->addColumn('condicion_envio_color', function ($pedido) {
+                return Pedido::getColorByCondicionEnvio($pedido->condicion_envio);
+            })
             ->editColumn('foto1', function ($pedido) {
                 if ($pedido->foto1 != null) {
                     $urlimagen1 = \Storage::disk('pstorage')->url($pedido->foto1);
@@ -790,6 +796,9 @@ class EnvioController extends Controller
 
         return Datatables::of(DB::table($pedidos))
             ->addIndexColumn()
+            ->addColumn('condicion_envio_color', function ($pedido) {
+                return Pedido::getColorByCondicionEnvio($pedido->condicion_envio);
+            })
             ->addColumn('action', function ($pedido) {
                 $btn = '';
                 return $btn;
@@ -1139,6 +1148,9 @@ class EnvioController extends Controller
 
         return Datatables::of($pedidos)
             ->addIndexColumn()
+            ->addColumn('condicion_envio_color', function ($pedido) {
+                return Pedido::getColorByCondicionEnvio($pedido->condicion_envio);
+            })
             ->addColumn('action', function ($pedido) {
                 $btn = '';
                 return $btn;
