@@ -38,22 +38,22 @@
 
 @section('content')
 
-<div class="row">
-@foreach ($_pedidos as $pedido)
-        <div class="col-2">
-            <div class="card card-warning">
-                <div class="card-header">
-                    <h5>ASESOR {{ $pedido->identificador }}</h5>
-                </div>
-                <div class="card-body">
-                    <h4 class="text-center">
-                        <b>{{ $pedido->total }}</b>
-                    </h4>
+    <div class="row">
+        @foreach ($_pedidos as $pedido)
+            <div class="col-2">
+                <div class="card card-warning">
+                    <div class="card-header">
+                        <h5>ASESOR {{ $pedido->identificador }}</h5>
+                    </div>
+                    <div class="card-body">
+                        <h4 class="text-center">
+                            <b>{{ $pedido->total }}</b>
+                        </h4>
+                    </div>
                 </div>
             </div>
-        </div>
         @endforeach
-</div>
+    </div>
 
     <div class="card">
         <div class="card-body">
@@ -67,23 +67,23 @@
                     {{-- <th scope="col">Cliente</th> --}}
                     <th scope="col">Razón social</th>
 
-            <th scope="col">Dias</th>
+                    <th scope="col">Dias</th>
 
-            <th scope="col">Fecha de registro</th>
-            <th scope="col">Fecha de envio</th>
-            <th scope="col">Fecha de entrega</th>
-            <th scope="col">Destino</th>
-            <th scope="col">Dirección de envío</th>
-            <th scope="col">Estado de envio</th>
-            <th scope="col">Estado de sobre</th>
-            <th scope="col">Observacion Devolucion</th>
-            <th scope="col">Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-        </tbody>
-      </table>
-      {{--@include('sobres.modal.direccionid')--}}
+                    <th scope="col">Fecha de registro</th>
+                    <th scope="col">Fecha de envio</th>
+                    <th scope="col">Fecha de entrega</th>
+                    <th scope="col">Destino</th>
+                    <th scope="col">Dirección de envío</th>
+                    <th scope="col">Estado de envio</th>
+                    <th scope="col">Estado de sobre</th>
+                    <th scope="col">Observacion Devolucion</th>
+                    <th scope="col">Acciones</th>
+                </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+            {{--@include('sobres.modal.direccionid')--}}
 
             @include('sobres.modal.historialLima')
             @include('sobres.modal.historialProvincia')
@@ -645,7 +645,7 @@
                         } else if (val_contacto == "" || val_contacto.length != 9) {
                             Swal.fire(
                                 'Error',
-                                'El numero tiene '+val_contacto.length+' digitos, complete a 9 digitos',
+                                'El numero tiene ' + val_contacto.length + ' digitos, complete a 9 digitos',
                                 'warning'
                             )
                             return;
@@ -1253,45 +1253,47 @@
                         data: 'condicion_envio',
                         name: 'condicion_envio',
                         render: function (data, type, row, meta) {
-
-                            return '<span class="badge badge-success" style="background-color:' + row.condicion_envio_color + ' !important;" >' + data + '</span>';
-              }
-          },
-          {
-            data: 'envio',
-            name: 'envio',
-            render: function ( data, type, row, meta ) {
-              if(row.envio=='1')
-              {
-                return '<span class="badge badge-danger">Por confirmar recepcion</span>';
-              }else{
-                return '<span class="badge badge-info">Recibido</span>';
-              }
-            },
-            "visible":false
-          },
-          {
-            data: 'observacion_devuelto',
-            name: 'observacion_devuelto',
-            render: function ( data, type, row, meta ) {
-              if(data!=null)
-              {
-                return data;
-              }else{
-                return ''
-              }
-            },
-            "visible":true
-          },
-          {
-            data: 'action',
-            name: 'action',
-            orderable: false,
-            searchable: false,
-            sWidth:'20%',
-            "visible":false,
-            render: function ( data, type, row, meta ) {
-              datass='';
+                            var badge_estado = '';
+                            if (row.estado_sobre == 1) {
+                                badge_estado += '<span class="badge badge-dark p-8" style="color: #fff; background-color: #347cc4; font-weight: 600; margin-bottom: -2px;border-radius: 4px 4px 0px 0px; font-size:8px;  padding:6px;">Direccion agregada</span>';
+                            }
+                            badge_estado += '<span class="badge badge-success" style="background-color:' + row.condicion_envio_color + ' !important;" >' + data + '</span>';
+                            return badge_estado;
+                        }
+                    },
+                    {
+                        data: 'envio',
+                        name: 'envio',
+                        render: function (data, type, row, meta) {
+                            if (row.envio == '1') {
+                                return '<span class="badge badge-danger">Por confirmar recepcion</span>';
+                            } else {
+                                return '<span class="badge badge-info">Recibido</span>';
+                            }
+                        },
+                        "visible": false
+                    },
+                    {
+                        data: 'observacion_devuelto',
+                        name: 'observacion_devuelto',
+                        render: function (data, type, row, meta) {
+                            if (data != null) {
+                                return data;
+                            } else {
+                                return ''
+                            }
+                        },
+                        "visible": true
+                    },
+                    {
+                        data: 'action',
+                        name: 'action',
+                        orderable: false,
+                        searchable: false,
+                        sWidth: '20%',
+                        "visible": false,
+                        render: function (data, type, row, meta) {
+                            datass = '';
 
 
                             return datass;

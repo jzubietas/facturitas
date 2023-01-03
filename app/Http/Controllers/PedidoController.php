@@ -236,8 +236,11 @@ class PedidoController extends Controller
                 return $p->condicion_envio_color;
             })
             ->addColumn('action', function ($pedido) {
+                $btn ='';
                 if($pedido->estado_sobre==1) {
-                    $btn = '<button class="btn btn-sm btn-info dropdown-item" data-jqconfirm="'.$pedido->id.'"><i class="fa fa-map-marker-alt text-info mr-8"></i>Editar direccion de envio</button>';
+                    if(\auth()->user()->can('envios.direccionenvio.editar')) {
+                        $btn = '<button class="btn btn-sm btn-info dropdown-item" data-jqconfirm="' . $pedido->id . '"><i class="fa fa-map-marker-alt text-info mr-8"></i>Editar direccion de envio</button>';
+                    }
                 }else{
                     $btn = '';
                 }
@@ -1902,6 +1905,7 @@ class PedidoController extends Controller
                 'dp.codigo as codigos',
                 'dp.nombre_empresa as empresas',
                 'dp.total as total',
+                'pedidos.estado_sobre',
                 'pedidos.condicion as condiciones',
                 'pedidos.condicion_code',
                 'pedidos.condicion_envio',
