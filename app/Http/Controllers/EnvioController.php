@@ -1307,7 +1307,7 @@ class EnvioController extends Controller
 
                     $cantidad = $count_pedidos;
 
-                    $direccionLima = DireccionEnvio::create([
+                    $modelData=[
                         'cliente_id' => $request->cliente_id,
                         'distrito' => $request->distrito,
                         'direccion' => $request->direccion,
@@ -1320,7 +1320,17 @@ class EnvioController extends Controller
                         'destino' => $request->destino,
                         'estado' => '1',
                         "salvado" => "0"
-                    ]);
+                    ];
+                    if(intval($request->model_id)>0){
+                        $direccionLima=DireccionEnvio::query()->find($request->model_id);
+                        if($direccionLima!=null) {
+                            $direccionLima->update($modelData);
+                        }else{
+                            $direccionLima = DireccionEnvio::create($modelData);
+                        }
+                    }else{
+                        $direccionLima = DireccionEnvio::create($modelData);
+                    }
 
 
                     $pedido_id = $request->pedido_id;
@@ -1401,7 +1411,7 @@ class EnvioController extends Controller
                         $file_name = 'logo_facturas.png';
                     }
 
-                    $gastoProvincia = GastoEnvio::create([
+                    $modelData=[
                         'cliente_id' => $request->cliente_id,
                         'user_id' => Auth::user()->id,
                         'tracking' => $request->tracking,
@@ -1413,7 +1423,18 @@ class EnvioController extends Controller
                         'destino' => $request->destino,
                         'estado' => '1',
                         "salvado" => "0"
-                    ]);
+                    ];
+                    if(intval($request->model_id)>0){
+                        $gastoProvincia=GastoEnvio::find($request->model_id);
+                        if($gastoProvincia!=null){
+                            $gastoProvincia->update($modelData);
+                        }else{
+                            $gastoProvincia = GastoEnvio::create($modelData);
+                        }
+                    }else{
+                        $gastoProvincia = GastoEnvio::create($modelData);
+                    }
+
                     foreach ($array_pedidos as $pedido_id) {
                         $pedido = Pedido::find($pedido_id);
 

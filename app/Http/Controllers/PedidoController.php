@@ -236,7 +236,7 @@ class PedidoController extends Controller
                 return $p->condicion_envio_color;
             })
             ->addColumn('action', function ($pedido) {
-                $btn = '';
+                $btn = '<button class="btn btn-sm btn-info dropdown-item"><i class="fa fa-map-marker-alt text-info mr-8"></i>Editar direccion de envio</button>';
 
                 return $btn;
             })
