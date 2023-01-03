@@ -131,7 +131,6 @@ class CobranzasMesesProgressBar extends Widgets
                 $progressData[$identificador][$this->getMonthYear($dateCurrent)] = $this->getDataProgress($identificador, $ids, collect($asesoresNames[$identificador])->first(), $dateCurrent, $restartTotal);
                 $currentCount++;
             }
-            break;
         }
 
         $alldata = [];
