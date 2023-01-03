@@ -2,19 +2,21 @@
 
 namespace App\Models;
 
+use App\Traits\CommonModel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class DireccionGrupo extends Model
 {
     use HasFactory;
+    use CommonModel;
 
     //condicion_envio
     const CE_EN_REPARTO ="EN REPARTO";//1
     const CE_EN_REPARTO_CODE =8;//1
-    
 
-    
+
+
     const CE_ENTREGADO ="ENTREGADO";//2
     const CE_ENTREGADO_CODE =10;//2
 
@@ -38,5 +40,5 @@ class DireccionGrupo extends Model
     const NULL = 'NULL';
 
     protected $guarded = ['id'];
-    
+
 }

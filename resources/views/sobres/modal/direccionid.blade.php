@@ -28,7 +28,7 @@
                                     <thead>
                                     <tr>
                                         <th scope="col">Item</th>
-                                        <th scope="col">Codigo Pedido</th>
+                                        <th scope="col">Pedidos recepcionados por Jefa OP</th>
                                         <th scope="col">Producto</th>
                                     </tr>
                                     </thead>
@@ -136,6 +136,14 @@
                                                             Guardar direccion en historial del cliente
                                                         </label>
                                                     </div>
+                                                    <div class="form-check form-switch" style="display: none">
+                                                        <input class="form-check-input" type="checkbox"
+                                                               id="saveHistoricoLimaEditar">
+                                                        <label class="form-check-label font-weight-bold"
+                                                               for="saveHistoricoLimaEditar">
+                                                            Actualizar direccion en historial del cliente
+                                                        </label>
+                                                    </div>
 
                                                 </div>
 
@@ -221,6 +229,15 @@
                                                        id="saveHistoricoProvincia"><!--checked-->
                                                 <label class="form-check-label font-weight-bold" for="saveHistoricoProvincia">
                                                     Grabar registro en historico
+                                                </label>
+                                            </div>
+
+                                            <div class="form-check form-switch" style="display: none">
+                                                <input class="form-check-input" type="checkbox"
+                                                       id="saveHistoricoProvinciaEditar">
+                                                <label class="form-check-label font-weight-bold"
+                                                       for="saveHistoricoProvinciaEditar">
+                                                    Actualizar registro en historico
                                                 </label>
                                             </div>
 

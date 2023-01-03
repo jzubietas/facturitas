@@ -699,6 +699,7 @@ class ClienteController extends Controller
     {
         $pedidos = null;
         if (!$request->cliente_id) {
+            return datatables()->toJson();
         } else {
 
             $idrequest = $request->cliente_id;
@@ -713,15 +714,16 @@ class ClienteController extends Controller
                 ->where('dp.estado', '1')
                 //->where('pedidos.envio', '1')
                 //->where('pedidos.condicion_envio', 1)
+                ->sinDireccionEnvio()
                 ->whereIn('pedidos.condicion_envio_code', [
                     Pedido::RECIBIDO_JEFE_OPE_INT,
                     Pedido::ENVIO_COURIER_JEFE_OPE_INT,
-                    Pedido::RECEPCION_COURIER_INT, 
+                    Pedido::RECEPCION_COURIER_INT,
                 ]);
             //->whereIn('pedidos.envio', [Pedido::ENVIO_CONFIRMAR_RECEPCION, Pedido::ENVIO_RECIBIDO]);
             //->get();
 
-            return Datatables::of(DB::table($pedidos))
+            return Datatables::query(DB::table($pedidos))
                 ->addIndexColumn()
                 ->make(true);
         }
