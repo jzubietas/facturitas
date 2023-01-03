@@ -237,7 +237,9 @@ class PedidoController extends Controller
             })
             ->addColumn('action', function ($pedido) {
                 if($pedido->estado_sobre==1) {
-                    $btn = '<button class="btn btn-sm btn-info dropdown-item" data-jqconfirm="'.$pedido->id.'"><i class="fa fa-map-marker-alt text-info mr-8"></i>Editar direccion de envio</button>';
+                    if(\auth()->user()->can('envios.direccionenvio.editar')) {
+                        $btn = '<button class="btn btn-sm btn-info dropdown-item" data-jqconfirm="' . $pedido->id . '"><i class="fa fa-map-marker-alt text-info mr-8"></i>Editar direccion de envio</button>';
+                    }
                 }else{
                     $btn = '';
                 }
