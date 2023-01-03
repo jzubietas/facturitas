@@ -53,10 +53,10 @@ class CobranzasMesesProgressBar extends Widgets
                 $this->startDate->clone(),
                 $this->startDate->clone()->endOfMonth()->endOfDay(),
             ])
-            ->whereBetween('pago_pedidos.created_at', [
+            ->whereBetween('pago_pedidos.created_at',[
                 $this->startDate->clone(),
                 $this->startDate->clone()->addMonths(3)->endOfMonth()->endOfDay(),
-            ])
+            ])->getQuery(),'temp_table'
         )->whereRaw('total=abonado')->count();
 
 
@@ -128,9 +128,10 @@ class CobranzasMesesProgressBar extends Widgets
             $restartTotal = 0;
             while ($currentCount < $limit) {
                 $dateCurrent = $date->clone()->addMonths($currentCount);
-                $progressData[$identificador][$this->getMonthYear($dateCurrent)] = $this->getDataProgress($identificador, $ids, collect($asesoresNames[$identificador])->first(), $dateCurrent,$restartTotal);
+                $progressData[$identificador][$this->getMonthYear($dateCurrent)] = $this->getDataProgress($identificador, $ids, collect($asesoresNames[$identificador])->first(), $dateCurrent, $restartTotal);
                 $currentCount++;
             }
+            break;
         }
 
         $alldata = [];
@@ -192,8 +193,8 @@ class CobranzasMesesProgressBar extends Widgets
                 ->where('detalle_pedidos.estado', '=', 1)
                 ->where('pago_pedidos.estado', '=', 1)
                 ->groupBy('pedidos.id'), 'pedidos.created_at'),
-            'pago_pedidos.created_at',
-            $date)
+            'pago_pedidos.created_at', $date
+        ),'temp_table'
         )->whereRaw('total=abonado')->count();
         $restartTotal += $pay;
 
