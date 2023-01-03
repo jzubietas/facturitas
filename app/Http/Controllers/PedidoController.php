@@ -1010,6 +1010,10 @@ class PedidoController extends Controller
                 $cliente_AB->update([
                     'situacion' => 'RECUPERADO ABANDONO'
                 ]);
+            }else if ($cliente_AB->situacion == 'BASE FRIA') {
+                $cliente_AB->update([
+                    'situacion' => 'NUEVO'
+                ]);
             }
 
 
