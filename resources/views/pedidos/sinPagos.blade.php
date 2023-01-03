@@ -210,7 +210,12 @@
                             if(row.estado==0){
                                 return '<span class="badge badge-danger">'+'{{\App\Models\Pedido::ANULADO }}'+'</span>';
                             }
-                            return '<span class="badge badge-success" style="background-color: '+row.condicion_envio_color+'!important;">'+row.condicion_envio+'</span>';
+                            var badge_estado=''
+                            if (row.estado_sobre == 1) {
+                                badge_estado += '<span class="badge badge-dark p-8" style="color: #fff; background-color: #347cc4; font-weight: 600; margin-bottom: -2px;border-radius: 4px 4px 0px 0px; font-size:8px;  padding:6px;">Direccion agregada</span>';
+                            }
+                            badge_estado+='<span class="badge badge-success" style="background-color: '+row.condicion_envio_color+'!important;">'+row.condicion_envio+'</span>';
+                            return badge_estado;
                         }
                     },
                     {
