@@ -433,9 +433,9 @@ return [
                 [
                     'text' => 'Sobres para reparto',
                     'route' => 'envios.parareparto',
-                    'can' => 'envios.index',
+                    'can' => 'envios.parareparto',
                     'icon' => 'fas fa-check-circle',
-                    'active' => ['envios en reparto'],
+                    'active' => ['envios para reparto'],
                 ],
                 [
                     'text' => 'Seguimiento provincia',
