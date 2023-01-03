@@ -1314,12 +1314,40 @@ class OperacionController extends Controller
         $detalle_pedidos = DetallePedido::where('pedido_id', $pedido->id)->first();
         $fecha = Carbon::now();
 
+        if($pedido->estado_sobre=='1')
+        {
+            if($pedido->destino=='LIMA'){
+                $direcciongrupo = DireccionPedido::where('direccion_pedidos.pedido_id',$pedido->id)->where("direccion_pedidos.estado",'1')->first();//->direcciongrupo;
+                $direcciongrupo->update(['estado'=>1]);
+
+                $grupo=DireccionGrupo::where('id',$direcciongrupo->direcciongrupo)->first();
+                //concatenar y sacar
+
+                $loscodigos=DireccionPedido::select(DB::raw('group_concat(codigo_pedido) as codigos'))
+                                ->where('direcciongrupo', $direcciongrupo->direcciongrupo)
+                                ->groupBy('direcciongrupo')
+                                ->get();
+                $grupo->update(['codigos'=>$loscodigos->codigos]);
+
+
+            }
+            else if($pedido->destino=='PROVINCIA')
+            //buscar el direccion grupo para desvincular
+
+        }
+
         $pedido->update([
             'envio' => '0',
             'condicion_envio' => Pedido::ATENDIDO_OPE,
             'condicion_envio_code' => Pedido::ATENDIDO_OPE_INT,
-            'modificador' => 'USER' . Auth::user()->id
+            'modificador' => 'USER' . Auth::user()->id,
+            'estado_sobre'=> '0'
         ]);
+
+
+
+
+
 
         PedidoMovimientoEstado::where('pedido', $request->hiddenRevertirpedido)->delete();
 
