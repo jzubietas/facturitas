@@ -348,6 +348,7 @@ class PedidoStatusController extends Controller
                     'pedidos.condicion_envio_code',
                     'pedidos.condicion',
                     'pedidos.condicion_code',
+                    'pedidos.estado_sobre',
                     DB::raw(" (CASE WHEN pedidos.condicion_code=1 THEN pedidos.created_at
                                 WHEN pedidos.condicion_code=2 THEN pedidos.updated_at
                                 WHEN pedidos.condicion_code=3 THEN pedidos.updated_at

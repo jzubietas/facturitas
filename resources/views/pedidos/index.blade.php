@@ -452,7 +452,17 @@
                             if (row.pendiente_anulacion == 1) {
                                 return '<span class="badge badge-success">' + '{{\App\Models\Pedido::PENDIENTE_ANULACION }}' + '</span>';
                             }
-                            return '<span class="badge badge-success" style="background-color: '+row.condicion_envio_color+'!important;">'+row.condicion_envio+'</span>';
+
+                            badge_estado= '';
+
+                            if(row.estado_sobre == 1){
+                                badge_estado += '<span class="badge badge-dark p-8" style="color: #fff; background-color: #343a40; font-weight: 600; margin-bottom: -2px;border-radius: 4px 4px 0px 0px; padding:6px;">Direccion agregada</span>';
+                            }
+
+                            badge_estado += '<span class="badge badge-success w-100" style="background-color: '+row.condicion_envio_color+'!important;">'+row.condicion_envio+'</span>';
+
+
+                            return badge_estado;
                             /*if (row.condicion_envio == 'ANULADO') {
                                 return '<span class="badge badge-info">ANULADO</span>';
                             } else if (row.condicion_envio == 0) {
