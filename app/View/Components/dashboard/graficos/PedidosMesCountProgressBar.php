@@ -49,10 +49,9 @@ class PedidosMesCountProgressBar extends Widgets
             )->count('dp.id');
         } else {
             $pagoxmes_total = $this->applyFilter(
-                Pedido::join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')//CANTIDAD DE PEDIDOS DEL MES
-                ->activo()
-                    ->join('users as u', 'pedidos.user_id', 'u.id')
-                    ->where('u.rol', "ASESOR"), 'dp.created_at')->count('dp.id');
+                Pedido::activo()->where('user_id', User::query()->select('users.id')->rolAsesor()->whereNotIn('users.id',[51]))
+                , 'pedidos.created_at'
+            )->count();
 
         }
 
@@ -101,8 +100,8 @@ class PedidosMesCountProgressBar extends Widgets
             }
 
             $meta = (float)$asesor->meta_pedido;
-            $asignados = $this->applyFilter(Pedido::query())->whereUserId($asesor->id)->activo()->count();
-            $pay = $this->applyFilter(Pedido::query())->whereUserId($asesor->id)->activo()->pagados()->count();
+            $asignados = $this->applyFilter(Pedido::query()->whereUserId($asesor->id)->activo())->count();
+            $pay = $this->applyFilter(Pedido::query()->whereUserId($asesor->id)->activo()->pagados())->count();
 
             $progressData[] = [
                 "identificador" => $asesor->identificador,
