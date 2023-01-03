@@ -1375,4 +1375,31 @@ class OperacionController extends Controller
 
     }
 
+    public function Revertirhaciaatendido(Request $request)
+    {
+        $envio = DireccionGrupo::where("id", $request->envio_id)->first();
+        $pedidos = Pedido::where('id', $request->pedido)->first();
+        $fecha = Carbon::now();
+
+        $envio->update([
+            'estado'=>'0'
+        ]);
+
+        $pedidos->update([
+            "condicion_envio_code" => '3',
+            "condicion_envio" => Pedido::ATENDIDO_OPE
+        ]);
+
+        //PedidoMovimientoEstado::where('pedido', $request->hiddenRevertirpedidoporatender)->delete();
+
+        /*PedidoMovimientoEstado::create([
+            'pedido' => $request->hiddenRevertirpedidoporatender,
+            'condicion_envio_code' => Pedido::POR_ATENDER_OPE_INT,
+            'notificado' => 0
+        ]);*/
+
+        return response()->json(['html' => $pedido->id]);
+
+    }
+
 }

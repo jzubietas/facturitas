@@ -433,6 +433,15 @@ class EnvioController extends Controller
             })
             ->addColumn('action', function ($pedido) {
                 $btn = '';
+                if($pedido->condicion_envio_code==13)
+                {
+                    $btn.='<button class="btn btn-sm text-white bg-primary"
+                                    data-jqconfirm="' . $pedido->id . '">
+                                        <i class="fa fa-motorcycle text-white" aria-hidden="true"></i> A revertir
+                                    </button>';
+
+                }
+
                 return $btn;
             })
             ->rawColumns(['action','foto1','foto2'])
@@ -1730,7 +1739,7 @@ class EnvioController extends Controller
         $pedidos = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')
             ->join('users as u', 'pedidos.user_id', 'u.id')
             ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
-            ->select(
+            ->select([
                 'pedidos.id',
                 'pedidos.cliente_id',
 
@@ -1758,10 +1767,9 @@ class EnvioController extends Controller
                 'pedidos.returned_at',
                 'pedidos.observacion_devuelto',
                 DB::raw("DATEDIFF(DATE(NOW()), DATE(pedidos.created_at)) AS dias")
-            )
+            ])
             ->where('pedidos.estado', '1')
-            //->whereIn('pedidos.envio', [Pedido::ENVIO_CONFIRMAR_RECEPCION,Pedido::ENVIO_RECIBIDO]) // ENVIADO CONFIRMAR RECEPCION Y ENVIADO RECIBIDO
-            ->whereIn('pedidos.condicion_envio_code', [Pedido::RECEPCION_COURIER_INT]) // ENVIADO CONFIRMAR RECEPCION Y ENVIADO RECIBIDO
+            ->whereIn('pedidos.condicion_envio_code', [Pedido::RECEPCION_COURIER_INT])
             ->where('dp.estado', '1');
 
         if (Auth::user()->rol == "Operario") {
@@ -1820,6 +1828,8 @@ class EnvioController extends Controller
             ->addIndexColumn()
             ->addColumn('action', function ($pedido) {
                 $btn = '';
+                //if($pedido->condicion_envio_code==13)
+
                 return $btn;
             })
             ->rawColumns(['action'])

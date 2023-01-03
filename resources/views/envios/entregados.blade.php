@@ -58,6 +58,7 @@
                     <th scope="col">Foto 1</th>
                     <th scope="col">Foto 2</th>
                     <th scope="col">Estado de envio</th>
+                    <th scope="col">Acciones</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -121,6 +122,10 @@
     </style>
 @stop
 
+@push('css')
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
+@endpush
+
 @section('js')
     <script>
         $("#penvio_doc").change(mostrarValores1);
@@ -142,6 +147,8 @@
 
     <script src="https://momentjs.com/downloads/moment.js"></script>
     <script src="https://cdn.datatables.net/plug-ins/1.11.4/dataRender/datetime.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
 
     <script>
         $(document).ready(function () {
@@ -286,6 +293,39 @@
                         } else {
                         }
                     }
+
+                    $('[data-jqconfirm]', row).click(function () {
+                        $.confirm({
+                            type: 'red',
+                            title: '¡Revertir Envio!',
+                            content: 'Confirme si desea revertir el envio <b>'+data.codigos+'</b>',
+                            buttons: {
+                                ok:{
+                                    text:'Si, confirmar',
+                                    btnClass:'btn-red',
+                                    action:function (){
+                                        const self=this;
+                                        self.showLoading(true)
+                                        $.ajax({
+                                            data: {
+                                                envio_id:data.id,
+                                                pedido:data.codigos
+                                            },
+                                            type: 'POST',
+                                            url: "{{ route('operaciones.revertirhaciaatendido') }}",
+                                        }).always(function (){
+                                            self.close()
+                                            self.hideLoading(true)
+                                            $('#tablaPrincipal').DataTable().ajax.reload();
+                                        });
+                                    }
+                                },
+                                cancel:{
+                                    text:'No'
+                                }
+                            }
+                        })
+                    });
                 },
                 columns: [
                     {
@@ -356,6 +396,8 @@
                         data: 'condicion_envio',
                         name: 'condicion_envio',
                     },
+                    {data: 'action', name: 'action', orderable: false, searchable: false,sWidth:'20%'},
+
                 ],
                 language: {
                     "decimal": "",
