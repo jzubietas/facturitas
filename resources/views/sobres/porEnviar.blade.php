@@ -83,10 +83,15 @@
             text-align: right
         }
 
-        .bootstrap-select .dropdown-toggle .filter-option {text-align: right !important;}
-        .bootstrap-select .dropdown-menu.inner{text-align: right !important;}
+        .bootstrap-select .dropdown-toggle .filter-option {
+            text-align: right !important;
+        }
 
-        img:hover{
+        .bootstrap-select .dropdown-menu.inner {
+            text-align: right !important;
+        }
+
+        img:hover {
             transform: scale(1.2)
         }
 
@@ -129,8 +134,8 @@
         }
 
         .pull-right {
-  float: right!important;
-}
+            float: right !important;
+        }
 
     </style>
     <style>
@@ -166,9 +171,10 @@
     <script src="https://cdn.datatables.net/select/1.5.0/js/dataTables.select.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.0.943/pdf.min.js"></script>
 
-    
 
-    <script src="https://gyrocode.github.io/jquery-datatables-checkboxes/1.2.12/js/dataTables.checkboxes.min.js"></script>
+
+    <script
+        src="https://gyrocode.github.io/jquery-datatables-checkboxes/1.2.12/js/dataTables.checkboxes.min.js"></script>
 
     <script>
         var tablehistoricolima = null;
@@ -176,7 +182,13 @@
             "bPaginate": false, "bFilter": false, "bInfo": false, "length": 3,
             columns:
                 [
-                    {data: 'id'}, {data: 'nombre'}, {data: 'recibe'}, {data: 'direccion'}, {data: 'referencia'}, {data: 'distrito'}, {data: 'observacion'}, {data: null},
+                    {data: 'nombre'},
+                    {data: 'recibe'},
+                    {data: 'direccion'},
+                    {data: 'referencia'},
+                    {data: 'distrito'},
+                    {data: 'observacion'},
+                    {data: null},
                 ],
         });
 
@@ -202,12 +214,12 @@
     </script>
 
 
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
     <script>
         $(document).ready(function () {
 
-          //.val('test2').trigger('change');
+            //.val('test2').trigger('change');
 
             /*$(document).on("click","#saveHistoricoLima",function(){
 
@@ -596,6 +608,7 @@
             $(document).on("click", "#direccionConfirmar", function (event) {
                 var fd2 = new FormData();
                 //return false;
+                let val_direccion_id = $("#direccion_id").val();
                 let val_cliente = $("#cliente_id").val();
                 let val_cod_pedido = $("#cod_pedido").val();
                 let val_cod_ase = $("#cod_ase").val();
@@ -669,6 +682,14 @@
                             )
                             return;
                         }
+                        if (val_direccion_id && $("#saveHistoricoLima").prop('checked')) {
+                            Swal.fire(
+                                'Error',
+                                'No es posible guardar la dirección en el historial porque ya ah sido registrada<br>Quite el check del <b>guardar direccion en el historial del cliente</b>',
+                                'warning'
+                            )
+                            return;
+                        }
                     } else if (combo_limaprovincia == "P") {
                         var cont_rotulo = files.length;
                         /*if(val_departamento=="")
@@ -713,6 +734,14 @@
                             Swal.fire(
                                 'Error',
                                 'Debe ingresar rotulo',
+                                'warning'
+                            )
+                            return;
+                        }
+                        if (val_direccion_id && $("#saveHistoricoProvincia").prop('checked')) {
+                            Swal.fire(
+                                'Error',
+                                'No es posible guardar la dirección en el historial porque ya ah sido registrada<br>Quite el check del <b>GRABA HISTORICO</b>',
                                 'warning'
                             )
                             return;
@@ -791,13 +820,21 @@
                 $("#rotulo").val("");
                 $(".drop-rotulo").addClass("d-none");
             });
-
+            $("#set_cliente_clear_provincia").click(function () {
+                var form = $("#formdireccion")[0]
+                form.direccion_id.value =''
+                form.tracking.value =''
+                form.numregistro.value = ''
+                form.importe.value = ''
+                $("#set_cliente_clear_provincia").hide()
+            })
             $('#modal-historial-provincia').on('show.bs.modal', function (event) {
                 tablehistoricoprovincia.destroy();
 
                 let provincialima = "PROVINCIA";
                 let clienteidprovincia = $("#modal-historial-provincia-a").attr("data-cliente");
 
+                $("#set_cliente_clear_provincia").hide()
                 tablehistoricoprovincia = $('#tablaHistorialProvincia').DataTable({
                     "bPaginate": true,
                     "bFilter": true,
@@ -806,9 +843,23 @@
                     "pageLength": 5,
                     "order": [[0, "asc"]],
                     'ajax': {
-                        url: "{{ route('movimientostablaconciliar') }}",
+                        url: "{{ route('sobreenvioshistorial') }}",
                         'data': {"provincialima": provincialima, "cliente_id": clienteidprovincia},
                         "type": "get",
+                    },
+                    rowCallback: function (row, data, index) {
+                        $('.button_provincia', row).click(function (e) {
+                            const json = $(this).data('json');
+                            const selectedData = ((json && typeof json != 'string') ? json : JSON.parse($(this).data('json')))
+                            console.log(selectedData)
+                            var form = $("#formdireccion")[0]
+                            form.direccion_id.value = selectedData.id;
+                            form.tracking.value = selectedData.tracking;
+                            form.numregistro.value = selectedData.registro;
+                            form.importe.value = selectedData.importe;
+                            $("#modal-historial-provincia").modal('hide')
+                            $("#set_cliente_clear_provincia").show()
+                        })
                     },
                     columns:
                         [
@@ -826,21 +877,20 @@
                                 }
                             },
                             {
-                                data: 'numregistro',
-                                name: 'numregistro',
+                                data: 'registro',
+                                name: 'registro',
                                 sWidth: '15%',
                                 render: function (data, type, row, meta) {
                                     return '<span class="banco">' + data + '</span>';
                                 }
                             },
                             {
-                                data: null,
-                                name: null,
+                                data: 'action',
+                                name: 'action',
                                 sWidth: '20%',
                                 render: function (data, type, row, meta) {
-                                    data = data + '' +
-                                        '<button class="btn btn-danger btn-sm button_provincia" data-provincia="' + row.id + '"><i class="fas fa-check-circle"></i></button>' +
-                                        '';
+                                    data = data +
+                                        `<button class="btn btn-danger btn-sm button_provincia" data-json='${JSON.stringify(row)}' data-provincia="${row.id}"><i class="fas fa-check-circle"></i></button>`;
                                     return data;
                                 },
                             }
@@ -868,9 +918,23 @@
                 });
 
             });
-
+            $("#set_cliente_clear").click(function () {
+                var form = $("#formdireccion")[0]
+                form.direccion_id.value = '';
+                form.nombre.value = '';
+                form.celular.value = '';
+                form.direccion.value = '';
+                form.referencia.value = '';
+                $(form.distrito).val('').trigger('change');
+                form.observacion.value = '';
+                $("#set_cliente_clear").hide()
+            })
             $('#modal-historial-lima').on('show.bs.modal', function (event) {
-                tablehistoricolima.destroy();
+                console.log(tablehistoricolima)
+                if (tablehistoricolima != null) {
+                    tablehistoricolima.destroy();
+                }
+                $("#set_cliente_clear").hide()
                 let provincialima = "LIMA";
                 let clienteidlima = $("#modal-historial-lima-a").attr("data-cliente");
                 tablehistoricolima = $('#tablaHistorialLima').DataTable({
@@ -885,16 +949,25 @@
                         'data': {"provincialima": provincialima, "cliente_id": clienteidlima},
                         "type": "get",
                     },
+                    rowCallback: function (row, data, index) {
+                        $('.button_provincia_lima', row).click(function (e) {
+                            const json = $(this).data('json');
+                            const selectedData = ((json && typeof json != 'string') ? json : JSON.parse($(this).data('json')))
+                            console.log(selectedData)
+                            var form = $("#formdireccion")[0]
+                            form.direccion_id.value = selectedData.id;
+                            form.nombre.value = selectedData.nombre;
+                            form.celular.value = selectedData.celular;
+                            form.direccion.value = selectedData.direccion;
+                            form.referencia.value = selectedData.referencia;
+                            $(form.distrito).val(selectedData.distrito).trigger('change');
+                            form.observacion.value = selectedData.observacion;
+                            $("#modal-historial-lima").modal('hide')
+                            $("#set_cliente_clear").show()
+                        })
+                    },
                     columns:
                         [
-                            {
-                                data: 'id',
-                                name: 'id',
-                                "visible": true,
-                                render: function (data, type, row, meta) {
-                                    return data;
-                                }
-                            },
                             {
                                 data: 'nombre',
                                 name: 'nombre',
@@ -944,13 +1017,12 @@
                                 }
                             },
                             {
-                                data: null,
-                                name: null,
+                                data: 'action',
+                                name: 'action',
                                 sWidth: '20%',
                                 render: function (data, type, row, meta) {
-                                    data = data + '' +
-                                        '<button class="btn btn-danger btn-sm button_provincia" data-provincia="' + row.id + '"><i class="fas fa-check-circle"></i></button>' +
-                                        '';
+                                    data = data +
+                                        `<button class="btn btn-danger btn-sm button_provincia_lima" data-json='${JSON.stringify(row)}' data-provincia="${row.id}"><i class="fas fa-check-circle"></i></button>`;
                                     return data;
                                 },
                             }
@@ -1028,11 +1100,11 @@
 
 
                 /*$('#distrito').select2({
-                    dropdownParent: $("#modal-direccion"),                    
+                    dropdownParent: $("#modal-direccion"),
                     data: [
                       {id: 'test1', text: 'January', subText: "Test1"},
                       {id: 'test2', text: 'February', subText: "Test2"},
-                      {id: 'test3', text: 'March', subText: "Test3"}      
+                      {id: 'test3', text: 'March', subText: "Test3"}
                     ],
                     placeholder: 'Selecciona un distrito',
                     escapeMarkup: function (markup) {
@@ -1045,7 +1117,7 @@
                       return d.text + ' ( ' + d.subText + ')';
                     }
                 });*/
-              
+
                 console.log("carga modales")
                 tabla_pedidos.destroy();
 
@@ -1059,7 +1131,7 @@
                         'data': {"cliente_id": cliente},
                         "type": "get",
                     },
-                    'columnDefs': [{
+                    columnDefs: [{
                         'targets': [0], /* column index */
                         'orderable': false, /* true or false */
                     }],
@@ -1079,7 +1151,6 @@
                             "name": 'nombre_empresa',
                             "render": function (data, type, row, meta) {
                                 return data;
-
                             }
                         },
                     ],
@@ -1355,7 +1426,7 @@
 
                             @if (Auth::user()->rol == "Asesor" || Auth::user()->rol == "Administrador")
 
-                                datass = datass + '<button type="button" class="btn btn-dark btn-sm '+(row.da_confirmar_descarga=='1'?'':'')+'" data-target="#modal-direccion" data-toggle="modal" data-pedido_codigo="' + row.codigo + '" data-confirm_descarga="' + row.da_confirmar_descarga + '" data-cliente="' + row.cliente_id + '" data-asesor="' + row.user_id + '" data-direccion="' + row.id + '" data-codigo="' + row.id + '"><i class="fa  '+(row.da_confirmar_descarga !='1'?'fa-exclamation-triangle text-warning font-12 mr-8':'fa-map-marker-alt text-success mr-8')+'" aria-hidden="true"></i> Direccion</button>';
+                                datass = datass + '<button type="button" class="btn btn-dark btn-sm ' + (row.da_confirmar_descarga == '1' ? '' : '') + '" data-target="#modal-direccion" data-toggle="modal" data-pedido_codigo="' + row.codigo + '" data-confirm_descarga="' + row.da_confirmar_descarga + '" data-cliente="' + row.cliente_id + '" data-asesor="' + row.user_id + '" data-direccion="' + row.id + '" data-codigo="' + row.id + '"><i class="fa  ' + (row.da_confirmar_descarga != '1' ? 'fa-exclamation-triangle text-warning font-12 mr-8' : 'fa-map-marker-alt text-success mr-8') + '" aria-hidden="true"></i> Direccion</button>';
                             @endif
 
 

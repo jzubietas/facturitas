@@ -59,20 +59,24 @@
                                             <div class="col">
 
                                                 <h1>LIMA</h1>
-
-                                                <a id="modal-historial-lima-a" href=""
-                                                   data-target="#modal-historial-lima" data-toggle="modal"
-                                                   data-cliente="">
-                                                    <button class="btn btn-info btn-sm">
+                                                <div>
+                                                    <button id="modal-historial-lima-a" type="button"
+                                                            data-target="#modal-historial-lima" data-toggle="modal"
+                                                            data-cliente="" class="btn btn-info btn-sm">
                                                         <i class="fas fa-envelope"></i>
                                                         Historial
                                                     </button>
-                                                </a>
+
+                                                    <button id="set_cliente_clear" type="button" style="display: none"
+                                                            class="btn btn-outline-danger btn-sm">
+                                                        Limpiar
+                                                    </button>
+                                                </div>
 
 
                                                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                                     <i class="fa fa-user text-red" aria-hidden="true"></i>
-
+                                                    <input type="hidden" name="direccion_id" id="direccion_id">
                                                     {!! Form::label('nombre', 'Nombre del contacto quien recibe') !!}
                                                     {!! Form::text('nombre', null, ['class' => 'form-control', 'placeholder' => 'Nombre', 'required' => 'required']) !!}
                                                 </div>
@@ -100,19 +104,21 @@
                                                     {!! Form::text('referencia', null, ['class' => 'form-control', 'placeholder' => 'Referencia', 'required' => 'required']) !!}
                                                 </div>
 
-                      <div id="cnt-distritos" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                <div id="cnt-distritos" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 
-                        {!! Form::label('distrito', 'Distrito') !!}<br>
+                                                    {!! Form::label('distrito', 'Distrito') !!}<br>
 
-                        <select id="distrito" class="distrito form-control" data-show-subtext="true" data-live-search="true" data-live-search-placeholder="Seleccione distrito">
-                          @foreach($distritos as $distrito)
-                            <option data-subtext="{{$distrito->zona}}" value="{{$distrito->distrito}}">{{($distrito->distrito) }}</option>
-                          @endforeach
-                        </select>
+                                                    <select name="distrito" id="distrito" class="distrito form-control"
+                                                            data-show-subtext="true" data-live-search="true"
+                                                            data-live-search-placeholder="Seleccione distrito">
+                                                        @foreach($distritos as $distrito)
+                                                            <option data-subtext="{{$distrito->zona}}"
+                                                                    value="{{$distrito->distrito}}">{{($distrito->distrito) }}</option>
+                                                        @endforeach
+                                                    </select>
 
 
-
-                      </div>
+                                                </div>
 
                                                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                                     {!! Form::label('observacion', 'Observacion') !!}
@@ -125,7 +131,8 @@
                                                     <div class="form-check form-switch">
                                                         <input class="form-check-input" type="checkbox"
                                                                id="saveHistoricoLima">
-                                                        <label class="form-check-label font-weight-bold" for="saveHistoricoLima">
+                                                        <label class="form-check-label font-weight-bold"
+                                                               for="saveHistoricoLima">
                                                             Guardar direccion en historial del cliente
                                                         </label>
                                                     </div>
@@ -146,13 +153,17 @@
                                     <div class="col">
                                         <h1>PROVINCIA</h1>
 
-                                        <a id="modal-historial-provincia-a" href=""
-                                           data-target="#modal-historial-provincia" data-toggle="modal" data-cliente="">
-                                            <button class="btn btn-info btn-sm">
+                                        <div>
+                                            <button type="button" id="modal-historial-provincia-a" href=""
+                                                    data-target="#modal-historial-provincia" data-toggle="modal"
+                                                    data-cliente="" class="btn btn-info btn-sm">
                                                 <i class="fas fa-envelope"></i>
                                                 Historial
                                             </button>
-                                        </a>
+                                            <button type="button" id="set_cliente_clear_provincia" class="btn btn-outline-danger btn-sm" style="display: none">
+                                                Limpiar
+                                            </button>
+                                        </div>
 
                                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 d-none">
                                             {!! Form::label('departamento', 'departamento') !!}
@@ -208,8 +219,9 @@
                                             <div class="form-check form-switch">
                                                 <input class="form-check-input" type="checkbox"
                                                        id="saveHistoricoProvincia"><!--checked-->
-                                                <label class="form-check-label" for="saveHistoricoProvincia">GRABA
-                                                    HISTORICO</label>
+                                                <label class="form-check-label font-weight-bold" for="saveHistoricoProvincia">
+                                                    Grabar registro en historico
+                                                </label>
                                             </div>
 
                                         </div>
@@ -258,9 +270,12 @@
                     <div class="row" id="show_direccion_is_disabled">
                         <div class="col-12">
                             <div class="alert alert-warning">
-                                Los archivos del pedido <b class="set_pedido_code"></b> aun no han sido enviados al cliente.<br>
+                                Los archivos del pedido <b class="set_pedido_code"></b> aun no han sido enviados al
+                                cliente.<br>
                                 <b>Primero envie los archivos al cliente para que se active el boton de envio.</b><br>
-                                <a href="{{ route('pedidos.estados.atendidos') }}" class="btn btn-dark text-decoration-none font-14 mt-20">Ver pedidos atendidos <i class="fa fa-arrow-right font-12 ml-8" aria-hidden="true"></i></a>
+                                <a href="{{ route('pedidos.estados.atendidos') }}"
+                                   class="btn btn-dark text-decoration-none font-14 mt-20">Ver pedidos atendidos <i
+                                        class="fa fa-arrow-right font-12 ml-8" aria-hidden="true"></i></a>
                             </div>
                         </div>
                     </div>

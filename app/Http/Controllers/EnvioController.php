@@ -1368,7 +1368,6 @@ class EnvioController extends Controller
             if ($request->destino == "PROVINCIA") {
                 try {
 
-
                     $direccion_grupo_id = DireccionGrupo::create([
                         'estado' => '1',
                         'destino' => $request->destino,
@@ -1442,12 +1441,13 @@ class EnvioController extends Controller
 
                     }
 
-                    if ($request->saveHistoricoLima == "1") {
+                    if ($request->saveHistoricoProvincia == "1") {
                         //temporal lima
                         $gastoProvincia->update([
                             "salvado" => "1"
                         ]);
                     }
+
 
                     DB::commit();
                 } catch (\Throwable $th) {
