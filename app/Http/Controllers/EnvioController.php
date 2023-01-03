@@ -1243,15 +1243,17 @@ class EnvioController extends Controller
 
             if ($_destino == 'LIMA') {
                 $_pedido->update([
-                    'condicion_envio' => Pedido::REPARTO_COURIER,
-                    'condicion_envio_code' => Pedido::REPARTO_COURIER_INT
+                    //'condicion_envio' => Pedido::REPARTO_COURIER,
+                    //'condicion_envio_code' => Pedido::REPARTO_COURIER_INT
+                    'estado_sobre' => '1'
                 ]);
 
             } else {
 
                 $_pedido->update([
-                    'condicion_envio' => Pedido::SEGUIMIENTO_PROVINCIA_COURIER,
-                    'condicion_envio_code' => Pedido::SEGUIMIENTO_PROVINCIA_COURIER_INT
+                    'estado_sobre' => '1'
+                    //'condicion_envio' => Pedido::SEGUIMIENTO_PROVINCIA_COURIER,
+                    //'condicion_envio_code' => Pedido::SEGUIMIENTO_PROVINCIA_COURIER_INT
                 ]);
 
             }
@@ -1286,8 +1288,8 @@ class EnvioController extends Controller
                     'celular_cliente' => (($request->destino == 'LIMA') ? $request->contacto : $cliente->celular . "-" . $cliente->icelular),
                     'codigos' => $lista_codigos,
                     'producto' => $lista_productos,
-                    'condicion_envio' => Pedido::REPARTO_COURIER,
-                    'condicion_envio_code' => Pedido::REPARTO_COURIER_INT,
+                    //'condicion_envio' => Pedido::REPARTO_COURIER,
+                    //'condicion_envio_code' => Pedido::REPARTO_COURIER_INT,
                     'pedido_id' => $request->cod_pedido,
                     'cliente_id' => $request->cliente_id,
                     'user_id' => $usuario_id
@@ -1328,10 +1330,10 @@ class EnvioController extends Controller
                         $pedido = Pedido::find($pedido_id);
                         $pedido->update([
                             'destino' => $request->destino,
-                            'condicion_envio' => 2,
+                            //'condicion_envio' => 2,
                             'direccion' => $request->direccion,
-                            'condicion_envio' => Pedido::REPARTO_COURIER,
-                            'condicion_envio_code' => Pedido::REPARTO_COURIER_INT,
+                            //'condicion_envio' => Pedido::REPARTO_COURIER,
+                            //'condicion_envio_code' => Pedido::REPARTO_COURIER_INT,
 
                         ]);
 
@@ -1374,8 +1376,8 @@ class EnvioController extends Controller
                         'celular_cliente' => (($request->destino == 'LIMA') ? $request->contacto : $cliente->celular . "-" . $cliente->icelular),
                         'codigos' => $lista_codigos,
                         'producto' => $lista_productos,
-                        'condicion_envio' => Pedido::SEGUIMIENTO_PROVINCIA_COURIER,
-                        'condicion_envio_code' => Pedido::SEGUIMIENTO_PROVINCIA_COURIER_INT,
+                        //'condicion_envio' => Pedido::SEGUIMIENTO_PROVINCIA_COURIER,
+                        //'condicion_envio_code' => Pedido::SEGUIMIENTO_PROVINCIA_COURIER_INT,
                         'pedido_id' => $request->cod_pedido,
                         'cliente_id' => $request->cliente_id,
                         'user_id' => $usuario_id
@@ -1417,10 +1419,10 @@ class EnvioController extends Controller
 
                         $pedido->update([
                             'destino' => $request->destino,
-                            'condicion_envio' => 2,//AL REGISTRAR DIRECCION PASA A ESTADO  EN REPARTO
-                            'direccion' => '1',
-                            'condicion_envio' => Pedido::SEGUIMIENTO_PROVINCIA_COURIER,
-                            'condicion_envio_code' => Pedido::SEGUIMIENTO_PROVINCIA_COURIER_INT,
+                            //'condicion_envio' => 2,//AL REGISTRAR DIRECCION PASA A ESTADO  EN REPARTO
+                            'direccion' => 'PROVINCIA',
+                            //'condicion_envio' => Pedido::SEGUIMIENTO_PROVINCIA_COURIER,
+                            //'condicion_envio_code' => Pedido::SEGUIMIENTO_PROVINCIA_COURIER_INT,
                         ]);
 
                         $dp_empresa = DetallePedido::where("pedido_id", $pedido_id)->first();
