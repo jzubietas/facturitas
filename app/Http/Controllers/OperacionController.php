@@ -216,7 +216,6 @@ class OperacionController extends Controller
             ->where('pedidos.estado', '1')
             ->where('dp.estado', '1')
             ->where('pedidos.condicion_envio_code', Pedido::ATENDIDO_OPE_INT);
-            //->where('pedidos.envio', 0);
 
         if (Auth::user()->rol == "Operario") {
 
@@ -229,7 +228,6 @@ class OperacionController extends Controller
                 ->pluck('users.identificador');
 
             $pedidos = $pedidos->WhereIn('u.identificador', $asesores);
-
 
         } else if (Auth::user()->rol == "Jefe de operaciones") {
             $operarios = User::where('users.rol', 'Operario')

@@ -76,7 +76,7 @@
       </table>
       @include('envios.modal.enviarid')
       @include('pedidos.modal.recibirid')
-      @include('sobres.modal.direccionid')
+      {{--@include('sobres.modal.direccionid')--}}
       @include('pedidos.modal.verdireccionid')
       @include('pedidos.modal.editdireccionid')
       @include('pedidos.modal.destinoid')
@@ -283,7 +283,7 @@
           //console.log(row);
         },
         rowCallback: function (row, data, index) {
-            
+
               if(data.destino2=='PROVINCIA'){
                 $('td', row).css('color','red')
 

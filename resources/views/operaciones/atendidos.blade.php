@@ -747,15 +747,13 @@
                                     '<ul class="list-group text-left">';
 
                                     @can('operacion.enviar')
-                                        if (row.envio == '0') {
                                             @if (Auth::user()->rol == "Jefe de operaciones" || Auth::user()->rol == "Administrador" || Auth::user()->rol == "Operario")
                                                 data = data + '<a href="" class="btn-sm dropdown-item" data-target="#modal-envio" data-pedido_sobre_text="CON SOBRE" data-envio=' + row.id + ' data-codigo=' + row.codigos + ' data-toggle="modal" ><i class="fa fa-envelope text-success" aria-hidden="true"></i>Envio con sobre</a>';
                                             data = data + '<a href="" class="btn-sm dropdown-item" data-target="#modal-sinenvio" data-pedido_sobre_text="SIN SOBRE" data-sinenvio=' + row.id + ' data-codigo=' + row.codigos + ' data-toggle="modal" ><i class="fa fa-times text-danger" aria-hidden="true"></i>Envio sin sobre</a>';
                                             @endif
 
-                                        }
                                     @endcan
-                                
+
                                     @can('operacion.atendidos.revertir')
 
                                         data = data + '<a href="" class="btn-sm dropdown-item" data-target="#modal-revertir-poratender" data-adjuntos="'+row.adjuntos+'" data-revertir=' + row.id + ' data-codigo=' + row.codigos + ' data-toggle="modal" ><i class="fa fa-undo text-danger" aria-hidden="true"></i> Revertir a por atender</a>';
