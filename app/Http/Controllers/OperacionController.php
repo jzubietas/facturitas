@@ -1386,7 +1386,7 @@ class OperacionController extends Controller
         ]);
 
         $pedidos->update([
-            "condicion_envio_code" => '3',
+            "condicion_envio_code" => Pedido::ATENDIDO_OPE_INT,
             "condicion_envio" => Pedido::ATENDIDO_OPE
         ]);
 
@@ -1398,7 +1398,7 @@ class OperacionController extends Controller
             'notificado' => 0
         ]);*/
 
-        return response()->json(['html' => $pedido->id]);
+        return response()->json(['html' => $request->pedido]);
 
     }
 
