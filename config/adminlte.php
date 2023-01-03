@@ -432,7 +432,7 @@ return [
                 ],
                 [
                     'text' => 'Sobres para reparto',
-                    'route' => 'envios.enreparto',
+                    'route' => 'envios.parareparto',
                     'can' => 'envios.index',
                     'icon' => 'fas fa-check-circle',
                     'active' => ['envios en reparto'],

@@ -97,11 +97,6 @@ class PedidosExport implements FromView, ShouldAutoSize
             $pedidos->whereIn('u.identificador', $asesores);
 
         } else if (Auth::user()->rol == "Jefe de llamadas") {
-            /*$asesores = User::where('users.rol', 'Asesor')
-                ->where('users.estado', '1')
-                ->where('users.jefe', Auth::user()->id)
-                ->pluck('identificador');
-            $pedidos->whereIn('u.identificador', $asesores);*/
 
             $pedidos = $pedidos->where('u.identificador', '<>', 'B');
         } else if (Auth::user()->rol == "Asesor") {
