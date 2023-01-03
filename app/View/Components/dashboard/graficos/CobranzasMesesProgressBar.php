@@ -15,6 +15,8 @@ class CobranzasMesesProgressBar extends Widgets
 
     public $general = [];
 
+    public $totales = [];
+
 
     /**
      * Get the view / contents that represent the component.
@@ -35,29 +37,35 @@ class CobranzasMesesProgressBar extends Widgets
 
     public function generalTotal()
     {
+        $asesorB = User::activo()->whereIdentificador('B')->pluck('id')->values()->all();
+
         $all = Pedido::query()->activo()->whereBetween('pedidos.created_at', [
             $this->startDate->clone(),
             $this->startDate->clone()->endOfMonth()->endOfDay(),
-        ])->count();
+        ])->whereNotIn('pedidos.user_id', $asesorB)->count();
 
-        $pay = \DB::table(Pedido::query()
-            ->select(['pedidos.id', \DB::raw('sum(detalle_pedidos.total) AS total'), \DB::raw('sum(pago_pedidos.abono) as abonado')])
-            ->activo()
-            ->pagados()
-            ->join('detalle_pedidos', 'detalle_pedidos.pedido_id', '=', 'pedidos.id')
-            ->join('pago_pedidos', 'pago_pedidos.pedido_id', '=', 'pedidos.id')
-            ->where('detalle_pedidos.estado', '=', 1)
-            ->where('pago_pedidos.estado', '=', 1)
-            ->groupBy('pedidos.id')
-            ->whereBetween('pedidos.created_at', [
-                $this->startDate->clone(),
-                $this->startDate->clone()->endOfMonth()->endOfDay(),
-            ])
-            ->whereBetween('pago_pedidos.created_at',[
-                $this->startDate->clone(),
-                $this->startDate->clone()->addMonths(3)->endOfMonth()->endOfDay(),
-            ])->getQuery(),'temp_table'
-        )->whereRaw('total=abonado')->count();
+        $pay = \DB::table(
+            Pedido::query()
+                ->select(['pedidos.id', \DB::raw('sum(detalle_pedidos.total) AS total'), \DB::raw('sum(pago_pedidos.abono) as abonado')])
+                ->activo()
+                ->pagados()
+                ->join('detalle_pedidos', 'detalle_pedidos.pedido_id', '=', 'pedidos.id')
+                ->join('pago_pedidos', 'pago_pedidos.pedido_id', '=', 'pedidos.id')
+                ->where('detalle_pedidos.estado', '=', 1)
+                ->where('pago_pedidos.estado', '=', 1)
+                ->whereNotIn('pedidos.user_id', $asesorB)
+                ->groupBy('pedidos.id')
+                ->whereBetween('pedidos.created_at', [
+                    $this->startDate->clone(),
+                    $this->startDate->clone()->endOfMonth()->endOfDay(),
+                ])
+                ->whereBetween('pago_pedidos.created_at', [
+                    $this->startDate->clone(),
+                    $this->startDate->clone()->addMonths(3)->endOfMonth()->endOfDay(),
+                ])->getQuery(), 'temp_table'
+        )
+            ->whereRaw('total=abonado')
+            ->count();
 
 
         if ($all > 0) {
@@ -82,7 +90,7 @@ class CobranzasMesesProgressBar extends Widgets
     {
         if (auth()->user()->rol == User::ROL_LLAMADAS) {//HASTA MAÑANA
             $id = auth()->user()->id;
-            $asesores = User::rolAllAsesor()->where('llamada', '=', $id)->get();
+            $asesores = User::rolAsesor()->where('llamada', '=', $id)->get();
         } else {
             $encargado = null;
             if (auth()->user()->rol == User::ROL_ENCARGADO) {
@@ -90,7 +98,7 @@ class CobranzasMesesProgressBar extends Widgets
             }
             $asesores = User::query()
                 ->activo()
-                ->rolAllAsesor()
+                ->rolAsesor()
                 ->when($encargado != null, function ($query) use ($encargado) {
                     return $query->where('supervisor', '=', $encargado);
                 })
@@ -114,6 +122,10 @@ class CobranzasMesesProgressBar extends Widgets
                     }
                 }
             }
+            if ($asesor->identificador == 'B') {
+                continue;
+            }
+
             if (!isset($asesoresIdentificadores[$asesor->identificador])) {
                 $asesoresIdentificadores[$asesor->identificador] = [];
                 $asesoresNames[$asesor->identificador] = [];
@@ -193,8 +205,10 @@ class CobranzasMesesProgressBar extends Widgets
                 ->where('pago_pedidos.estado', '=', 1)
                 ->groupBy('pedidos.id'), 'pedidos.created_at'),
             'pago_pedidos.created_at', $date
-        ),'temp_table'
-        )->whereRaw('total=abonado')->count();
+        ), 'temp_table'
+        )
+            ->whereRaw('total=abonado')
+            ->count();
         $restartTotal += $pay;
 
         if ($all > 0) {
