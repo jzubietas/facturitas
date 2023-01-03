@@ -1318,7 +1318,7 @@ class OperacionController extends Controller
         {
             if($pedido->destino=='LIMA'){
                 $direcciongrupo = DireccionPedido::where('direccion_pedidos.pedido_id',$pedido->id)->where("direccion_pedidos.estado",'1')->first();//->direcciongrupo;
-                $direcciongrupo->update(['estado'=>1]);
+                $direcciongrupo->update(['estado'=>'0']);
 
                 $grupo=DireccionGrupo::where('id',$direcciongrupo->direcciongrupo)->first();
                 //concatenar y sacar
