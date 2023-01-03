@@ -217,6 +217,10 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     Route::post('pedidos/eliminarAdjunto/{id}', [PedidoController::class, 'eliminarAdjunto'])->name('pedidos.eliminarAdjunto');
     Route::get('pedidos/{adjunto}/descargaradjunto', [PedidoController::class, 'DescargarAdjunto'])->name('pedidos.descargaradjunto');
     Route::get('pedidos/{adjunto}/descargargastos', [PedidoController::class, 'DescargarGastos'])->name('pedidos.descargargastos');
+
+    Route::get('pedidos/envios/get_direccion_grupo', [EnvioController::class, 'getDireccionEnvio'])->name('pedidos.envios.get-direccion');
+    Route::post('pedidos/envios/update_direccion_grupo', [EnvioController::class, 'updateDireccionGrupo'])->name('pedidos.envios.update-direccion');
+
     Route::post('envios.direccion', [EnvioController::class, 'DireccionEnvio'])->name('envios.direccion');
     Route::post('envios.desvincular', [SobreController::class, 'EnvioDesvincular'])->name('envios.desvincular');
     Route::get('envios.createdireccion/{pedido}', [EnvioController::class, 'createDireccion'])->name('envios.createdireccion');

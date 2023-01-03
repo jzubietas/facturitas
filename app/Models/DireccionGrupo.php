@@ -41,4 +41,20 @@ class DireccionGrupo extends Model
 
     protected $guarded = ['id'];
 
+    public function gastoEnvio(){
+        return $this->hasOne(GastoEnvio::class,'direcciongrupo');
+    }
+
+    public function gastoEnvios(){
+        return $this->hasMany(GastoEnvio::class,'direcciongrupo');
+    }
+
+    public function direccionEnvio(){
+        return $this->hasOne(DireccionEnvio::class,'direcciongrupo');
+    }
+
+    public function direccionEnvios(){
+        return $this->hasMany(DireccionEnvio::class,'direcciongrupo');
+    }
+
 }

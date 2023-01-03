@@ -168,10 +168,11 @@
         }
 
     </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
 @stop
 
 @section('js')
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
 
@@ -290,6 +291,55 @@
                             }
                         }
                     }
+
+                    $('[data-jqconfirm]',row).click(function () {
+                        $.confirm({
+                            title: 'Editar direccion de envio',
+                            content: function () {
+                                var self = this;
+                                return $.ajax({
+                                    url: '{{route('pedidos.envios.get-direccion')}}?pedido_id='+data.id,
+                                    //dataType: 'json',
+                                    method: 'get'
+                                }).done(function (response) {
+                                    console.log(response);
+
+                                    self.setContent(response);
+                                    //self.setContent('Description: ' + response.description);
+                                    //self.setContentAppend('<br>Version: ' + response.version);
+                                    //self.setTitle(response.name);
+                                }).fail(function(e){
+                                    console.error(e)
+                                    self.setContent('Ocurrio un error');
+                                });
+                            },
+                            buttons: {
+                                confirm: {
+                                    text: 'Actualizar',
+                                    btnClass: 'btn-success',
+                                    action: function(){
+                                        var self = this;
+                                        self.showLoading(true)
+                                        console.log(self.$content.find('form')[0])
+                                        $.ajax({
+                                            data: new FormData(self.$content.find('form')[0]),
+                                            processData: false,
+                                            contentType: false,
+                                            type: 'POST',
+                                            url: "{{route('pedidos.envios.update-direccion')}}",
+                                        }).always(function () {
+                                                self.close();
+                                                $('#tablaPrincipal').DataTable().ajax.reload();
+                                            });
+                                        return false
+                                    }
+                                },
+                                cancel: function () {
+
+                                },
+                            }
+                        });
+                    })
                 },
                 initComplete: function (settings, json) {
 
@@ -533,10 +583,10 @@
                             @can('pedidos.pedidosPDF')
                                 data = data + '<a href="' + urlpdf + '" class="btn-sm dropdown-item" target="_blank"><i class="fa fa-file-pdf text-primary"></i> Ver PDF</a>';
                             @endcan
-                                @can('pedidos.show')
+                            @can('pedidos.show')
                                 data = data + '<a href="' + urlshow + '" class="btn-sm dropdown-item"><i class="fas fa-eye text-success"></i> Ver pedido</a>';
                             @endcan
-                                @can('pedidos.edit')
+                            @can('pedidos.edit')
                             if (row.condicion_pa == 0) {
                                 data = data + '<a href="' + urledit + '" class="btn-sm dropdown-item"><i class="fas fa-edit text-warning" aria-hidden="true"></i> Editar</a>';
                             }
