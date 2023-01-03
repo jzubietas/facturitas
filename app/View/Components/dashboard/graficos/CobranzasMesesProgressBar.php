@@ -54,7 +54,7 @@ class CobranzasMesesProgressBar extends Widgets
     function getQueryPay()
     {
         return Pedido::query()
-            ->select(['pedidos.*'])
+            ->select(['pedidos.id'])
             //->select(['pedidos.id', \DB::raw('sum(detalle_pedidos.total) AS total'), \DB::raw('sum(pago_pedidos.abono) as abonado')])
             ->activo()
             ->pagados()
