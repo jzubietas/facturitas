@@ -65,7 +65,7 @@ class PdfController extends Controller
         //$mes_month=Carbon::now()->startOfMonth()->subMonth()->format('Y_m');
         //$mes_month=Carbon::now()->startOfMonth()->subMonth()->format('Y_m');
         //$mes_month=Carbon::now()->startOfMonth()->subMonth()->format('Y_m');
-        $mes_month=Carbon::now()->startOfMonth()->subMonth(2)->format('Y_m');
+        $mes_month=Carbon::now()->startOfMonth()->subMonth(1)->format('Y_m');
         $mes_anio=Carbon::now()->startOfMonth()->subMonth()->format('Y');
         $mes_mes=Carbon::now()->startOfMonth()->subMonth()->format('m');
 

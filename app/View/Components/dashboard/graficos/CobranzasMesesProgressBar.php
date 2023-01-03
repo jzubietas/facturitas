@@ -15,6 +15,10 @@ class CobranzasMesesProgressBar extends Widgets
 
     public $general = [];
 
+    public $totales = [];
+
+    public $total_dias = 4;
+
 
     /**
      * Get the view / contents that represent the component.
@@ -23,8 +27,7 @@ class CobranzasMesesProgressBar extends Widgets
      */
     public function render()
     {
-        $currentDate = $this->startDate->clone();
-        $this->generateDataByMonth($currentDate);
+        $this->generateDataByMonth($this->total_dias);
         $title = $this->getDateTitle();
         if (\auth()->user()->rol == User::ROL_ASESOR) {
             $this->progressData = [];
@@ -33,31 +36,91 @@ class CobranzasMesesProgressBar extends Widgets
         return view('components.dashboard.graficos.cobranzas-meses-progress-bar', compact('title', 'totalMonths'));
     }
 
-    public function generalTotal()
-    {
-        $all = Pedido::query()->activo()->whereBetween('pedidos.created_at', [
-            $this->startDate->clone(),
-            $this->startDate->clone()->endOfMonth()->endOfDay(),
-        ])->count();
+    public function getStartDate(){
+        return $this->startDate->clone();
+    }
+    public function getEndDate(){
+        return $this->endDate->clone();
+    }
 
-        $pay = \DB::table(Pedido::query()
-            ->select(['pedidos.id', \DB::raw('sum(detalle_pedidos.total) AS total'), \DB::raw('sum(pago_pedidos.abono) as abonado')])
+    function getQueryActivos()
+    {
+        return Pedido::query()->activo()->whereBetween('pedidos.created_at', [
+            $this->getStartDate(),
+            $this->getEndDate(),
+        ]);
+    }
+
+    function getQueryPay()
+    {
+        return Pedido::query()
+            ->select(['pedidos.id'])
+            //->select(['pedidos.id', \DB::raw('sum(detalle_pedidos.total) AS total'), \DB::raw('sum(pago_pedidos.abono) as abonado')])
             ->activo()
             ->pagados()
-            ->join('detalle_pedidos', 'detalle_pedidos.pedido_id', '=', 'pedidos.id')
+            //->join('detalle_pedidos', 'detalle_pedidos.pedido_id', '=', 'pedidos.id')
             ->join('pago_pedidos', 'pago_pedidos.pedido_id', '=', 'pedidos.id')
-            ->where('detalle_pedidos.estado', '=', 1)
+            ->join('pagos', 'pagos.id', '=', 'pago_pedidos.pago_id')
+            //->where('detalle_pedidos.estado', '=', 1)
             ->where('pago_pedidos.estado', '=', 1)
+            //->whereNotIn('pedidos.user_id', $asesorB)
             ->groupBy('pedidos.id')
             ->whereBetween('pedidos.created_at', [
-                $this->startDate->clone(),
-                $this->startDate->clone()->endOfMonth()->endOfDay(),
-            ])
-            ->whereBetween('pago_pedidos.created_at', [
-                $this->startDate->clone(),
-                $this->startDate->clone()->addMonths(3)->endOfMonth()->endOfDay(),
-            ])
-        )->whereRaw('total=abonado')->count();
+                $this->getStartDate(),
+                $this->getEndDate(),
+            ]);
+    }
+
+    public function getDataProgress($identificador, $ids, $name, CarbonInterface $date, &$restartTotal)
+    {
+        $all = $this->getQueryActivos()->whereIn('pedidos.user_id', $ids)->count();
+
+        if ($all > 0) {
+            $all -= $restartTotal;
+        }
+
+        $pay = \DB::table(
+            $this->getQueryPay()->whereIn('pedidos.user_id', $ids)
+                ->whereBetween('pago_pedidos.created_at', [
+                    $date->clone(),
+                    $date->clone()->endOfMonth()->endOfDay(),
+                ]), 'temp_table'
+        )
+            ->count();
+        $restartTotal += $pay;
+
+        if ($all > 0) {
+            $p = round(($pay / $all) * 100, 2);
+        } else {
+            $p = 0;
+        }
+        return [
+            "identificador" => $identificador,
+            "code" => "Asesor {$identificador}",
+            "name" => $name,
+            "activos" => $all,
+            "pagados" => $pay,
+            "progress" => $p,
+            "date" => $date->clone(),
+        ];
+    }
+
+    public function generalTotal()
+    {
+        $asesorB = User::activo()->whereIdentificador('B')->pluck('id')->values()->all();
+
+        $all = $this->getQueryActivos()->whereNotIn('pedidos.user_id', $asesorB)->count();
+
+        $pay = \DB::table(
+            $this->getQueryPay()
+                ->whereNotIn('pedidos.user_id', $asesorB)
+                ->whereBetween('pago_pedidos.created_at', [
+                    $this->getStartDate(),
+                    $this->getStartDate()->addMonths($this->total_dias - 1)->endOfMonth()->endOfDay(),
+                ])->getQuery(), 'temp_table'
+        )
+            //->whereRaw('total=abonado')
+            ->count();
 
 
         if ($all > 0) {
@@ -78,11 +141,11 @@ class CobranzasMesesProgressBar extends Widgets
         return \Str::upper(substr($date->monthName, 0, 3) . ' ' . $date->format('y'));
     }
 
-    public function generateDataByMonth(CarbonInterface $date)
+    public function generateDataByMonth($countDates = 4)
     {
         if (auth()->user()->rol == User::ROL_LLAMADAS) {//HASTA MAÑANA
             $id = auth()->user()->id;
-            $asesores = User::rolAllAsesor()->where('llamada', '=', $id)->get();
+            $asesores = User::rolAsesor()->where('llamada', '=', $id)->get();
         } else {
             $encargado = null;
             if (auth()->user()->rol == User::ROL_ENCARGADO) {
@@ -90,7 +153,7 @@ class CobranzasMesesProgressBar extends Widgets
             }
             $asesores = User::query()
                 ->activo()
-                ->rolAllAsesor()
+                ->rolAsesor()
                 ->when($encargado != null, function ($query) use ($encargado) {
                     return $query->where('supervisor', '=', $encargado);
                 })
@@ -114,6 +177,10 @@ class CobranzasMesesProgressBar extends Widgets
                     }
                 }
             }
+            if ($asesor->identificador == 'B') {
+                continue;
+            }
+
             if (!isset($asesoresIdentificadores[$asesor->identificador])) {
                 $asesoresIdentificadores[$asesor->identificador] = [];
                 $asesoresNames[$asesor->identificador] = [];
@@ -122,17 +189,26 @@ class CobranzasMesesProgressBar extends Widgets
             $asesoresNames[$asesor->identificador][] = explode(" ", $asesor->name)[0];
         }
         foreach ($asesoresIdentificadores as $identificador => $ids) {
-            $limit = 4;
             $currentCount = 0;
-
             $restartTotal = 0;
-            while ($currentCount < $limit) {
-                $dateCurrent = $date->clone()->addMonths($currentCount);
-                $progressData[$identificador][$this->getMonthYear($dateCurrent)] = $this->getDataProgress($identificador, $ids, collect($asesoresNames[$identificador])->first(), $dateCurrent,$restartTotal);
+            while ($currentCount < $countDates) {
+                $dateCurrent = $this->getStartDate()->addMonths($currentCount);
+                $progressData[$identificador][$this->getMonthYear($dateCurrent)] = $this->getDataProgress($identificador, $ids, collect($asesoresNames[$identificador])->first(), $dateCurrent, $restartTotal);
                 $currentCount++;
             }
+            $a = collect($progressData[$identificador])->values()->sum('activos');
+            $pp = collect($progressData[$identificador])->values()->sum('pagados');
+            if ($a > 0) {
+                $p = round(($pp / $a) * 100, 2);
+            } else {
+                $p = 0;
+            }
+            $this->totales[$identificador] = [
+                'activos' => $a,
+                'pagados' => $pp,
+                'progress' => $p,
+            ];
         }
-
         $alldata = [];
         $activos = [];
         $pagados = [];
@@ -173,43 +249,4 @@ class CobranzasMesesProgressBar extends Widgets
 
     }
 
-    public function getDataProgress($identificador, $ids, $name, CarbonInterface $date, &$restartTotal)
-    {
-        $all = $this->applyFilter(Pedido::query()->whereIn('user_id', $ids)->activo(), 'created_at')->count();
-
-        if ($all > 0) {
-            $all -= $restartTotal;
-        }
-
-        $pay = \DB::table($this->applyFilter(
-            $this->applyFilter(Pedido::query()
-                ->select(['pedidos.id', \DB::raw('sum(detalle_pedidos.total) AS total'), \DB::raw('sum(pago_pedidos.abono) as abonado')])
-                ->activo()
-                ->pagados()
-                ->join('detalle_pedidos', 'detalle_pedidos.pedido_id', '=', 'pedidos.id')
-                ->join('pago_pedidos', 'pago_pedidos.pedido_id', '=', 'pedidos.id')
-                ->whereIn('user_id', $ids)
-                ->where('detalle_pedidos.estado', '=', 1)
-                ->where('pago_pedidos.estado', '=', 1)
-                ->groupBy('pedidos.id'), 'pedidos.created_at'),
-            'pago_pedidos.created_at',
-            $date)
-        )->whereRaw('total=abonado')->count();
-        $restartTotal += $pay;
-
-        if ($all > 0) {
-            $p = round(($pay / $all) * 100, 2);
-        } else {
-            $p = 0;
-        }
-        return [
-            "identificador" => $identificador,
-            "code" => "Asesor {$identificador}",
-            "name" => $name,
-            "activos" => $all,
-            "pagados" => $pay,
-            "progress" => $p,
-            "date" => $date->clone(),
-        ];
-    }
 }

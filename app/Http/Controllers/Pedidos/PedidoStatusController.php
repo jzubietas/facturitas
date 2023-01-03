@@ -492,7 +492,7 @@ class PedidoStatusController extends Controller
             "sustento" => ($pedido->da_confirmar_descarga==0?$pedido->sustento_adjunto:null),
             'copyText'=>"$empresa - $fecha
 $ruc
-".money_f($total)."
+".$total."
 $banca"
         ]);
     }
