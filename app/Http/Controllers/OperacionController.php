@@ -1384,7 +1384,9 @@ class OperacionController extends Controller
             'condicion_envio' => Pedido::ATENDIDO_OPE,
             'condicion_envio_code' => Pedido::ATENDIDO_OPE_INT,
             'modificador' => 'USER' . Auth::user()->id,
-            'estado_sobre'=> '0'
+            'estado_sobre'=> '0',
+            'destino'=>'',
+            'direccion'=>''
         ]);
 
 
