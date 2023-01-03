@@ -9,6 +9,7 @@ use App\Models\Porcentaje;
 use Carbon\Carbon;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Concerns\Exportable;
 use Maatwebsite\Excel\Concerns\FromView;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
@@ -35,9 +36,15 @@ class ClientesAbandonosExport implements FromView, ShouldAutoSize
                             'clientes.estado',
                             'clientes.deuda',
                             'clientes.pidio',
-                            DB::raw("DATE_FORMAT(MAX(p.created_at), '%d-%m-%Y %h:%i:%s') as fecha"),
-                            DB::raw('DATE_FORMAT(MAX(p.created_at), "%m") as mes'),
-                            DB::raw('DATE_FORMAT(MAX(p.created_at), "%Y") as anio'),
+                            //DB::raw("DATE_FORMAT(MAX(p.created_at), '%d-%m-%Y %h:%i:%s') as fecha"),
+                            //DB::raw("DATE_FORMAT(MAX(p.created_at), '%d-%m-%Y %h:%i:%s') as fecha"),
+                            //DB::raw('DATE_FORMAT(MAX(p.created_at), "%m") as mes'),
+                            //DB::raw('DATE_FORMAT(MAX(p.created_at), "%Y") as anio'),
+                            DB::raw("(select DATE_FORMAT(dp1.created_at,'%d-%m-%Y %h:%i:%s') from pedidos dp1 where dp1.cliente_id=clientes.id order by dp1.created_at desc limit 1) as fecha"),
+                            DB::raw("(select DATE_FORMAT(dp2.created_at,'%m') from pedidos dp2 where dp2.cliente_id=clientes.id and dp2.estado=1 order by dp2.created_at desc limit 1) as mes"),
+                            DB::raw("(select DATE_FORMAT(dp3.created_at,'%Y') from pedidos dp3 where dp3.cliente_id=clientes.id and dp3.estado=1 order by dp3.created_at desc limit 1) as anio"),
+
+                            DB::raw(" (select (dp.codigo) from pedidos dp where dp.cliente_id=clientes.id and dp.estado=1 order by dp.created_at desc limit 1) as codigo "),
                             'clientes.situacion',
                             )
                     ->where('clientes.estado','1')
@@ -293,6 +300,7 @@ class ClientesAbandonosExport implements FromView, ShouldAutoSize
                     'nombre' => $cliente->nombre,
                     'dni' => $cliente->dni,
                     'celular' => $cliente->celular,
+                    'icelular' => $cliente->icelular,
                     'provincia' => $cliente->provincia,
                     'distrito' => $cliente->distrito,
                     'direccion' => $cliente->direccion,
@@ -308,6 +316,7 @@ class ClientesAbandonosExport implements FromView, ShouldAutoSize
                     'dia' => $cliente->dia,
                     'mes' => $cliente->mes,
                     'anio' => $cliente->anio,
+                    'codigo' => $cliente->codigo,
                     'situacion' => $cliente->situacion,
                     /* 'dateM' => Carbon::now()->format('m'),
                     'dateY' => Carbon::now()->format('Y'), */
