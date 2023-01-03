@@ -1082,6 +1082,36 @@
                 $("#saveHistoricoLimaEditar").parent().hide()
 
             })
+
+            $("#formdireccion input,#formdireccion select").change(function () {
+                var form=$("#formdireccion")[0];
+                var msg=''
+                if ($(form.nombre).val() && $(form.nombre).data('old_value') != $(form.nombre).val()) {
+                    msg += '1'
+                }
+                if ($(form.celular).val() && $(form.celular).data('old_value') != $(form.celular).val()) {
+                    msg += '1'
+                }
+                if ($(form.direccion).val() && $(form.direccion).data('old_value') != $(form.direccion).val()) {
+                    msg += '1'
+                }
+                if ($(form.referencia).val() && $(form.referencia).data('old_value') != $(form.referencia).val()) {
+                    msg += '1'
+                }
+                if ($(form.distrito).val() && $(form.distrito).data('old_value') != $(form.distrito).val()) {
+                    msg += '1'
+                }
+                if ($(form.observacion).val() && $(form.observacion).data('old_value') != $(form.observacion).val()) {
+                    msg += '1'
+                }
+                if(msg.length>0){
+                    $("#saveHistoricoLimaEditar").removeAttr('disabled')
+                }else{
+                    $("#saveHistoricoLimaEditar").attr('disabled','disabled')
+                    $("#saveHistoricoLimaEditar").prop('checked',false)
+                }
+            })
+
             $('#modal-historial-lima').on('show.bs.modal', function (event) {
                 console.log(tablehistoricolima)
                 if (tablehistoricolima != null) {

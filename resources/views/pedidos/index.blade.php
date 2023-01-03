@@ -518,6 +518,7 @@
 
                             var urledit = '{{ route("pedidos.edit", ":id") }}';
                             urledit = urledit.replace(':id', row.id);
+                            var oldadata=data;
                             data = '<div><ul class="" aria-labelledby="dropdownMenuButton">';
                             @can('pedidos.pedidosPDF')
                                 data = data + '<a href="' + urlpdf + '" class="btn-sm dropdown-item" target="_blank"><i class="fa fa-file-pdf text-primary"></i> Ver PDF</a>';
@@ -543,7 +544,7 @@
                             }
 
                             @endcan
-                                data = data + '</ul></div>';
+                                data = data +oldadata+ '</ul></div>';
 
                             return data;
                         }

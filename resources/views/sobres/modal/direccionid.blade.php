@@ -138,7 +138,7 @@
                                                     </div>
                                                     <div class="form-check form-switch" style="display: none">
                                                         <input class="form-check-input" type="checkbox"
-                                                               id="saveHistoricoLimaEditar">
+                                                               id="saveHistoricoLimaEditar" disabled>
                                                         <label class="form-check-label font-weight-bold"
                                                                for="saveHistoricoLimaEditar">
                                                             Actualizar direccion en historial del cliente
@@ -234,7 +234,7 @@
 
                                             <div class="form-check form-switch" style="display: none">
                                                 <input class="form-check-input" type="checkbox"
-                                                       id="saveHistoricoProvinciaEditar">
+                                                       id="saveHistoricoProvinciaEditar" disabled>
                                                 <label class="form-check-label font-weight-bold"
                                                        for="saveHistoricoProvinciaEditar">
                                                     Actualizar registro en historico
