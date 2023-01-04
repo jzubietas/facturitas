@@ -125,8 +125,14 @@ class EnvioController extends Controller
         return Datatables::of($pedidos)
             ->addIndexColumn()
             ->editColumn('condicion_envio', function ($pedido) {
+                $badge_estado = '';
                 $color = Pedido::getColorByCondicionEnvio($pedido->condicion_envio);
-                return '<span class="badge badge-success w-100" style="background-color: ' . $color . '!important;">' . $pedido->condicion_envio . '</span>';
+                if($pedido->estado_sobre == '1'){
+                    $badge_estado .= '<span class="badge badge-dark p-8" style="color: #fff; background-color: #347cc4; font-weight: 600; margin-bottom: -2px;border-radius: 4px 4px 0px 0px; font-size:8px;  padding: 4px 4px !important; font-weight: 500;">Direccion agregada</span>';
+                }
+
+                $badge_estado.= '<span class="badge badge-success w-100" style="background-color: ' . $color . '!important;">' . $pedido->condicion_envio . '</span>';
+                return $badge_estado;
             })
             ->addColumn('action', function ($pedido) {
                 $btn = '';
