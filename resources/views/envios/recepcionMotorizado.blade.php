@@ -58,15 +58,12 @@
         <thead>
           <tr>
             <th scope="col">Item</th>
-            <th scope="col">Item</th>
             <th scope="col">Código</th>
             <th scope="col">Asesor</th>
             <th scope="col">Cliente</th>
             <th scope="col">Razón social</th>
             <th scope="col">Fecha de registro</th>
-            <th scope="col">Fecha de envio</th>
-            <th scope="col">Fecha de entrega</th>
-            <th scope="col">Destino</th>
+
             <th scope="col">Dirección de envío</th>
             <th scope="col">Estado de envio</th>
             <th scope="col">Estado de sobre</th>
@@ -323,7 +320,7 @@
 		serverSide: true,
         searching: true,
         "order": [[ 0, "desc" ]],
-        ajax: "{{ route('envios.porconfirmartabla') }}",
+        ajax: "{{ route('envios.recepcionmotorizadotabla') }}",
         createdRow: function( row, data, dataIndex){
           //console.log(row);
         },
@@ -331,23 +328,11 @@
         },
         columns: [
           {
-              data: 'id',
-              name: 'id',
-              render: function ( data, type, row, meta ) {
-                if(row.id<10){
-                  return 'PED000'+row.id;
-                }else if(row.id<100){
-                  return 'PED00'+row.id;
-                }else if(row.id<1000){
-                  return 'PED0'+row.id;
-                }else{
-                  return 'PED'+row.id;
-                }
-              }
+              data: 'correlativo',
+              name: 'correlativo',
           },
-          {data: 'id2', name: 'id2',"visible":false },
           {data: 'codigos', name: 'codigos', },
-          {data: 'users', name: 'users', },
+          {data: 'user_id', name: 'user_id', },
           {
             data: 'celulares',
             name: 'celulares',
@@ -357,11 +342,8 @@
             "visible":false
             //searchable: true
         },
-          {data: 'empresas', name: 'empresas'},
-          {data: 'fecha_envio_doc', name: 'fecha_envio_doc', "visible":false},
-          {data: 'fecha_envio_doc_fis', name: 'fecha_envio_doc_fis', },
-          {data: 'fecha_recepcion', name: 'fecha_recepcion',"visible":false },
-          {data: 'destino', name: 'destino',"visible":false },
+          {data: 'producto', name: 'producto'},
+          {data: 'fecha_formato', name: 'fecha_formato'},
           {
             data:'direccion',
             name:'direccion',"visible":false,
@@ -434,26 +416,7 @@
             orderable: false,
             searchable: false,
             sWidth:'20%',
-            render: function ( data, type, row, meta ) {
-              datass='';
-              @if($ver_botones_accion > 0)
-                @can('envios.enviar')
-                  if(row.envio=='2')
-                  {
-                    datass = datass+ '<a href="" data-target="#modal-envio" data-toggle="modal" data-recibir="'+row.id+'" data-codigos="'+row.codigos+'"><button class="btn btn-warning btn-sm"><i class="fas fa-check-circle"></i> Recibido</button></a>';
-                  }
-                @endcan
-              @endif
 
-              if(row.destino == null && row.direccion =='0' && (row.envio*1) >0)
-              {
-                var urldireccion = '{{ route("envios.createdireccion", ":id") }}';
-                urldireccion = urldireccion.replace(':id', row.id);
-                data = data+'<a href="'+urldireccion+'" class="btn btn-dark btn-sm"><i class="fas fa-map"></i> Destino</a><br>';
-              }
-
-              return datass;
-            }
           },
         ],
         language: {

@@ -1215,6 +1215,16 @@ class EnvioController extends Controller
             })
             ->addColumn('action', function ($pedido) {
                 $btn = '';
+
+                    $btn .= '<ul class="list-unstyled pl-0">';
+                    $btn .= '<li>
+                                        <a href="" class="btn-sm text-secondary" data-target="#modal-confirmacion" data-toggle="modal" data-ide="' . $pedido->id . '" data-entregar-confirm="' . $pedido->id . '" data-destino="' . $pedido->destino . '" data-fechaenvio="' . $pedido->fecha . '" data-codigos="' . $pedido->codigos . '">
+                                            <i class="fas fa-envelope text-success"></i> A motorizado</a></li>
+                                        </a>
+                                    </li>';
+                    $btn .= '</ul>';
+
+
                 return $btn;
             })
             ->rawColumns(['action'])
@@ -1222,104 +1232,31 @@ class EnvioController extends Controller
 
     }
 
-
     public function Enviosrecepcionmotorizadotabla(Request $request)
     {
         $pedidos = null;
         $filtros_code = [12];
 
-        $pedidos = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')
-            ->join('users as u', 'pedidos.user_id', 'u.id')
-            ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
-            ->select(
-                'pedidos.id',
-                'pedidos.correlativo as id2',
-                'c.nombre as nombres',
-                'c.celular as celulares',
-                'u.identificador as users',
-                'dp.codigo as codigos',
-                'dp.nombre_empresa as empresas',
-                'dp.total as total',
-                'pedidos.condicion',
-                'pedidos.created_at as fecha',
-                'pedidos.condicion_envio',
-                'pedidos.envio',
-                'pedidos.destino',
-                'pedidos.direccion',
-                'pedidos.estado_sobre',
-                'dp.envio_doc',
-                'dp.fecha_envio_doc',
-                'dp.cant_compro',
-                'dp.fecha_envio_doc_fis',
-                'dp.foto1',
-                'dp.foto2',
-                'dp.fecha_recepcion'
-            )
-            ->WhereIn('pedidos.condicion_envio_code', $filtros_code)
-            ->where('pedidos.envio', '2')
-            ->where('pedidos.estado', '1');
+        $grupos = DireccionGrupo::select([
+            'direccion_grupos.*',
+            'u.identificador as user_identificador',
+            //DB::raw(" (select 'LIMA') as destino "),
+            DB::raw('(select DATE_FORMAT( direccion_grupos.created_at, "%Y-%m-%d")   from direccion_grupos dpa where dpa.id=direccion_grupos.id) as fecha_formato'),
+        ])
+            //join('direccion_envios as de', 'direccion_grupos.id', 'de.direcciongrupo')
+            ->join('clientes as c', 'c.id', 'direccion_grupos.cliente_id')
+            ->join('users as u', 'u.id', 'c.user_id')
+            ->where('direccion_grupos.condicion_envio_code', Pedido::REPARTO_COURIER_INT)
+            ->activo();
 
-        if (Auth::user()->rol == "Operario") {
-            $asesores = User::where('users.rol', 'Asesor')
-                ->where('users.estado', '1')
-                ->Where('users.operario', Auth::user()->id)
-                ->select(
-                    DB::raw("users.identificador as identificador")
-                )
-                ->pluck('users.identificador');
-
-            $pedidos = $pedidos->WhereIn('u.identificador', $asesores);
-
-        } else if (Auth::user()->rol == "Jefe de operaciones") {
-            $operarios = User::where('users.rol', 'Operario')
-                ->where('users.estado', '1')
-                ->where('users.jefe', Auth::user()->id)
-                ->select(
-                    DB::raw("users.id as id")
-                )
-                ->pluck('users.id');
-
-            $asesores = User::where('users.rol', 'Asesor')
-                ->where('users.estado', '1')
-                ->WhereIn('users.operario', $operarios)
-                ->select(
-                    DB::raw("users.identificador as identificador")
-                )
-                ->pluck('users.identificador');
-
-            $pedidos = $pedidos->WhereIn('u.identificador', $asesores);
-
-        } else if (Auth::user()->rol == "Asesor") {
-            $pedidos = $pedidos->Where('u.identificador', Auth::user()->identificador);
-
-        } else if (Auth::user()->rol == "Super asesor") {
-            $pedidos = $pedidos->Where('u.identificador', Auth::user()->identificador);
-
-        } else if (Auth::user()->rol == "Encargado") {
-            $pedidos = $pedidos->Where('u.supervisor', Auth::user()->identificador);
-        } else if (Auth::user()->rol == "Llamadas") {
-            $usersasesores = User::where('users.rol', 'Asesor')
-                ->where('users.estado', '1')
-                ->where('users.llamada', Auth::user()->id)
-                ->select(
-                    DB::raw("users.identificador as identificador")
-                )
-                ->pluck('users.identificador');
-
-            $pedidos = $pedidos->WhereIn('u.identificador', $usersasesores);
-        } else if (Auth::user()->rol == "Jefe de llamadas") {
-            $pedidos = $pedidos->where('u.identificador', '<>', 'B');
-        } else {
-            $pedidos = $pedidos;
-        }
-
-        return Datatables::of(DB::table($pedidos))
+        return Datatables::of(DB::table($grupos))
             ->addIndexColumn()
-            ->addColumn('condicion_envio_color', function ($pedido) {
-                return Pedido::getColorByCondicionEnvio($pedido->condicion_envio);
+            ->addColumn('condicion_envio_color', function ($grupo) {
+                return Pedido::getColorByCondicionEnvio($grupo->condicion_envio);
             })
             ->addColumn('action', function ($pedido) {
                 $btn = '';
+
                 return $btn;
             })
             ->rawColumns(['action'])

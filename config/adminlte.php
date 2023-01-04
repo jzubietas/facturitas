@@ -434,7 +434,7 @@ return [
                 [
                     'text' => 'Recepción motorizado',
                     'route' => 'envios.recepcionmotorizado',
-                    'can' => 'envios.recepcionmotorizado',
+                    'can' => 'envios.parareparto',
                     'icon' => 'fas fa-check-circle dot_sobres_confirmar_recepcion_count',
                     'active' => ['envios recepcion motorizado'],
                 ],
