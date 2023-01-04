@@ -204,11 +204,8 @@ class SobreController extends Controller
         }
         return Datatables::of(DB::table($pedidos))
                     ->addIndexColumn()
-                    ->addColumn('condicion_envio_color', function ($pedidos) {
-                        $pedidos = new Pedido((array)$pedidos);
-                        $pedidos->forceFill((array)$pedidos);
-                        $pedidos->exists = true;
-                        return $pedidos->condicion_envio_color;
+                    ->addColumn('condicion_envio_color', function ($pedido) {
+                        return Pedido::getColorByCondicionEnvio($pedido->condicion_envio);
                     })
                     ->addColumn('action', function($pedido){
                         $btn='';

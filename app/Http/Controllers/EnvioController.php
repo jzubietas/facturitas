@@ -47,7 +47,416 @@ class EnvioController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public function Envioscondireccion()//SOBRES EN REPARTO
+    {
 
+        $distribuir = [
+            "NORTE" => 'NORTE',
+            "CENTRO" => 'CENTRO',
+            "SUR" => 'SUR',
+        ];
+
+        $condiciones = [
+            "PENDIENTE DE ENVIO" => 'PENDIENTE DE ENVIO',
+            "EN REPARTO" => 'EN REPARTO',
+            "ENTREGADO" => 'ENTREGADO'
+        ];
+
+        $destinos = [
+            "LIMA" => 'LIMA',
+            "PROVINCIA" => 'PROVINCIA'
+        ];
+
+        $distritos = Distrito::whereIn('provincia', ['LIMA', 'CALLAO'])
+            ->where('estado', '1')
+            ->pluck('distrito', 'distrito');
+
+        $departamento = Departamento::where('estado', "1")
+            ->pluck('departamento', 'departamento');
+
+        $direcciones = DireccionEnvio::join('direccion_pedidos as dp', 'direccion_envios.id', 'dp.direccion_id')
+            ->select('direccion_envios.id',
+                'direccion_envios.distrito',
+                'direccion_envios.direccion',
+                'direccion_envios.referencia',
+                'direccion_envios.nombre',
+                'direccion_envios.celular',
+                'dp.pedido_id as pedido_id',
+            )
+            ->where('direccion_envios.estado', '1')
+            ->where('dp.estado', '1')
+            ->get();
+
+        $superasesor = User::where('rol', 'Super asesor')->count();
+
+        $ver_botones_accion = 1;
+
+        if (Auth::user()->rol == "Asesor") {
+            $ver_botones_accion = 0;
+        } else if (Auth::user()->rol == "Super asesor") {
+            $ver_botones_accion = 0;
+        } else if (Auth::user()->rol == "Encargado") {
+            $ver_botones_accion = 1;
+        } else {
+            $ver_botones_accion = 1;
+        }
+
+        return view('envios.condireccion', compact('condiciones', 'distritos', 'direcciones', 'destinos', 'superasesor', 'ver_botones_accion', 'departamento', 'distribuir'));
+    }
+
+    public function Envioscondirecciontabla(Request $request)
+    {
+        $pedidos = null;
+
+        $pedidos_lima = DireccionGrupo::join('direccion_envios as de', 'direccion_grupos.id', 'de.direcciongrupo')
+            ->join('clientes as c', 'c.id', 'de.cliente_id')
+            ->join('users as u', 'u.id', 'c.user_id')
+            ->where('direccion_grupos.condicion_envio_code', Pedido::REPARTO_COURIER_INT)
+            ->where('direccion_grupos.estado', '1')
+            ->select(
+                'direccion_grupos.id',
+                'u.identificador as identificador',
+                DB::raw(" (select 'LIMA') as destino "),
+                'de.celular',
+                'de.nombre',
+                'de.cantidad',
+                'direccion_grupos.codigos',
+                'direccion_grupos.producto',
+                'de.direccion',
+                'de.referencia',
+                'de.observacion',
+                'de.distrito',
+                DB::raw('(select DATE_FORMAT( direccion_grupos.created_at, "%Y-%m-%d")   from direccion_grupos dpa where dpa.id=direccion_grupos.id) as fecha'),
+                'direccion_grupos.destino as destino2',
+                'direccion_grupos.distribucion',
+                'direccion_grupos.condicion_envio',
+                'direccion_grupos.subcondicion_envio',
+                'direccion_grupos.condicion_sobre',
+                'direccion_grupos.correlativo as correlativo'
+            );
+
+        $pedidos_provincia = DireccionGrupo::join('gasto_envios as de', 'direccion_grupos.id', 'de.direcciongrupo')
+            ->join('clientes as c', 'c.id', 'de.cliente_id')
+            ->join('users as u', 'u.id', 'c.user_id')
+            //  ->join('pedidos as p', 'p.codigo', 'direccion_grupos.codigos')
+
+            //  ->where('p.condicion_envio_code',Pedido::EN_REPARTO_INT)
+            ->where('direccion_grupos.condicion_envio_code', Pedido::REPARTO_COURIER_INT)
+            ->where('direccion_grupos.estado', '1')
+            ->select(
+                'direccion_grupos.id',
+                'u.identificador as identificador',
+                DB::raw(" (select 'PROVINCIA') as destino "),
+                DB::raw(" (select '') as celular "),
+                DB::raw(" (select '') as nombre "),
+                'de.cantidad',
+
+                'direccion_grupos.codigos',
+                'direccion_grupos.producto',
+
+                'de.tracking as direccion',
+                'de.foto as referencia',
+                DB::raw(" (select '') as observacion "),
+                DB::raw(" (select '') as distrito "),
+
+                DB::raw('(select DATE_FORMAT( direccion_grupos.created_at, "%Y-%m-%d")   from direccion_grupos dpa where dpa.id=direccion_grupos.id) as fecha'),
+                'direccion_grupos.destino as destino2',
+                'direccion_grupos.distribucion',
+                'direccion_grupos.condicion_envio',
+                'direccion_grupos.subcondicion_envio',
+                'direccion_grupos.condicion_sobre',
+                'direccion_grupos.correlativo as correlativo',
+            );
+
+        if (Auth::user()->rol == "Asesor") {
+            $pedidos_lima = $pedidos_lima->Where('u.identificador', Auth::user()->identificador);
+
+
+        } else if (Auth::user()->rol == "Encargado") {
+            $usersasesores = User::where('users.rol', 'Asesor')
+                ->where('users.estado', '1')
+                ->where('users.supervisor', Auth::user()->id)
+                ->select(
+                    DB::raw("users.identificador as identificador")
+                )
+                ->pluck('users.identificador');
+
+            $pedidos_lima = $pedidos_lima->WhereIn('u.identificador', $usersasesores);
+        } else if (Auth::user()->rol == "Jefe de llamadas") {
+            $pedidos_lima = $pedidos_lima->where('u.identificador', '<>', 'B');
+        } else if (Auth::user()->rol == "Llamadas") {
+            $usersasesores = User::where('users.rol', 'Asesor')
+                ->where('users.estado', '1')
+                ->where('users.llamada', Auth::user()->id)
+                ->select(
+                    DB::raw("users.identificador as identificador")
+                )
+                ->pluck('users.identificador');
+
+            $pedidos_lima = $pedidos_lima->WhereIn('u.identificador', $usersasesores);
+
+        }
+
+
+        $pedidos = $pedidos_lima->get();
+
+
+        return Datatables::of($pedidos)
+            ->addIndexColumn()
+            ->addColumn('action', function ($pedido) {
+                $btn = '';
+
+                if (auth()->user()->can('envios.enviar')):
+
+                    $btn .= '<ul class="list-unstyled pl-0">';
+                    $btn .= '<li>
+                                        <a href="" class="btn-sm text-secondary" data-target="#modal-confirmacion" data-toggle="modal" data-ide="' . $pedido->id . '" data-entregar-confirm="' . $pedido->id . '" data-destino="' . $pedido->destino . '" data-fechaenvio="' . $pedido->fecha . '" data-codigos="' . $pedido->codigos . '">
+                                            <i class="fas fa-envelope text-success"></i> A motorizado</a></li>
+                                        </a>
+                                    </li>';
+                    $btn .= '</ul>';
+                endif;
+
+                return $btn;
+            })
+            ->rawColumns(['action'])
+            ->make(true);
+
+    }
+
+    public function Enviossindireccion()//SOBRES EN REPARTO
+    {
+
+        $distribuir = [
+            "NORTE" => 'NORTE',
+            "CENTRO" => 'CENTRO',
+            "SUR" => 'SUR',
+        ];
+
+        $condiciones = [
+            "PENDIENTE DE ENVIO" => 'PENDIENTE DE ENVIO',
+            "EN REPARTO" => 'EN REPARTO',
+            "ENTREGADO" => 'ENTREGADO'
+        ];
+
+        $destinos = [
+            "LIMA" => 'LIMA',
+            "PROVINCIA" => 'PROVINCIA'
+        ];
+
+        $distritos = Distrito::whereIn('provincia', ['LIMA', 'CALLAO'])
+            ->where('estado', '1')
+            ->pluck('distrito', 'distrito');
+
+        $departamento = Departamento::where('estado', "1")
+            ->pluck('departamento', 'departamento');
+
+        $direcciones = DireccionEnvio::join('direccion_pedidos as dp', 'direccion_envios.id', 'dp.direccion_id')
+            ->select('direccion_envios.id',
+                'direccion_envios.distrito',
+                'direccion_envios.direccion',
+                'direccion_envios.referencia',
+                'direccion_envios.nombre',
+                'direccion_envios.celular',
+                'dp.pedido_id as pedido_id',
+            )
+            ->where('direccion_envios.estado', '1')
+            ->where('dp.estado', '1')
+            ->get();
+
+        $superasesor = User::where('rol', 'Super asesor')->count();
+
+        $ver_botones_accion = 1;
+
+        if (Auth::user()->rol == "Asesor") {
+            $ver_botones_accion = 0;
+        } else if (Auth::user()->rol == "Super asesor") {
+            $ver_botones_accion = 0;
+        } else if (Auth::user()->rol == "Encargado") {
+            $ver_botones_accion = 1;
+        } else {
+            $ver_botones_accion = 1;
+        }
+
+        return view('envios.sindireccion', compact('condiciones', 'distritos', 'direcciones', 'destinos', 'superasesor', 'ver_botones_accion', 'departamento', 'distribuir'));
+    }
+
+    public function Enviossindirecciontabla(Request $request)
+    {
+        $pedidos = null;
+
+        $pedidos_lima = DireccionGrupo::join('direccion_envios as de', 'direccion_grupos.id', 'de.direcciongrupo')
+            ->join('clientes as c', 'c.id', 'de.cliente_id')
+            ->join('users as u', 'u.id', 'c.user_id')
+            ->where('direccion_grupos.condicion_envio_code', Pedido::REPARTO_COURIER_INT)
+            ->where('direccion_grupos.estado', '1')
+            ->select(
+                'direccion_grupos.id',
+                'u.identificador as identificador',
+                DB::raw(" (select 'LIMA') as destino "),
+                'de.celular',
+                'de.nombre',
+                'de.cantidad',
+                'direccion_grupos.codigos',
+                'direccion_grupos.producto',
+                'de.direccion',
+                'de.referencia',
+                'de.observacion',
+                'de.distrito',
+                DB::raw('(select DATE_FORMAT( direccion_grupos.created_at, "%Y-%m-%d")   from direccion_grupos dpa where dpa.id=direccion_grupos.id) as fecha'),
+                'direccion_grupos.destino as destino2',
+                'direccion_grupos.distribucion',
+                'direccion_grupos.condicion_envio',
+                'direccion_grupos.subcondicion_envio',
+                'direccion_grupos.condicion_sobre',
+                'direccion_grupos.correlativo as correlativo'
+            );
+
+        $pedidos_provincia = DireccionGrupo::join('gasto_envios as de', 'direccion_grupos.id', 'de.direcciongrupo')
+            ->join('clientes as c', 'c.id', 'de.cliente_id')
+            ->join('users as u', 'u.id', 'c.user_id')
+            //  ->join('pedidos as p', 'p.codigo', 'direccion_grupos.codigos')
+
+            //  ->where('p.condicion_envio_code',Pedido::EN_REPARTO_INT)
+            ->where('direccion_grupos.condicion_envio_code', Pedido::REPARTO_COURIER_INT)
+            ->where('direccion_grupos.estado', '1')
+            ->select(
+                'direccion_grupos.id',
+                'u.identificador as identificador',
+                DB::raw(" (select 'PROVINCIA') as destino "),
+                DB::raw(" (select '') as celular "),
+                DB::raw(" (select '') as nombre "),
+                'de.cantidad',
+
+                'direccion_grupos.codigos',
+                'direccion_grupos.producto',
+
+                'de.tracking as direccion',
+                'de.foto as referencia',
+                DB::raw(" (select '') as observacion "),
+                DB::raw(" (select '') as distrito "),
+
+                DB::raw('(select DATE_FORMAT( direccion_grupos.created_at, "%Y-%m-%d")   from direccion_grupos dpa where dpa.id=direccion_grupos.id) as fecha'),
+                'direccion_grupos.destino as destino2',
+                'direccion_grupos.distribucion',
+                'direccion_grupos.condicion_envio',
+                'direccion_grupos.subcondicion_envio',
+                'direccion_grupos.condicion_sobre',
+                'direccion_grupos.correlativo as correlativo',
+            );
+
+        if (Auth::user()->rol == "Asesor") {
+            $pedidos_lima = $pedidos_lima->Where('u.identificador', Auth::user()->identificador);
+
+
+        } else if (Auth::user()->rol == "Encargado") {
+            $usersasesores = User::where('users.rol', 'Asesor')
+                ->where('users.estado', '1')
+                ->where('users.supervisor', Auth::user()->id)
+                ->select(
+                    DB::raw("users.identificador as identificador")
+                )
+                ->pluck('users.identificador');
+
+            $pedidos_lima = $pedidos_lima->WhereIn('u.identificador', $usersasesores);
+        } else if (Auth::user()->rol == "Jefe de llamadas") {
+            $pedidos_lima = $pedidos_lima->where('u.identificador', '<>', 'B');
+        } else if (Auth::user()->rol == "Llamadas") {
+            $usersasesores = User::where('users.rol', 'Asesor')
+                ->where('users.estado', '1')
+                ->where('users.llamada', Auth::user()->id)
+                ->select(
+                    DB::raw("users.identificador as identificador")
+                )
+                ->pluck('users.identificador');
+
+            $pedidos_lima = $pedidos_lima->WhereIn('u.identificador', $usersasesores);
+
+        }
+
+
+        $pedidos = $pedidos_lima->get();
+
+
+        return Datatables::of($pedidos)
+            ->addIndexColumn()
+            ->addColumn('action', function ($pedido) {
+                $btn = '';
+
+                if (auth()->user()->can('envios.enviar')):
+
+                    $btn .= '<ul class="list-unstyled pl-0">';
+                    $btn .= '<li>
+                                        <a href="" class="btn-sm text-secondary" data-target="#modal-confirmacion" data-toggle="modal" data-ide="' . $pedido->id . '" data-entregar-confirm="' . $pedido->id . '" data-destino="' . $pedido->destino . '" data-fechaenvio="' . $pedido->fecha . '" data-codigos="' . $pedido->codigos . '">
+                                            <i class="fas fa-envelope text-success"></i> A motorizado</a></li>
+                                        </a>
+                                    </li>';
+                    $btn .= '</ul>';
+                endif;
+
+                return $btn;
+            })
+            ->rawColumns(['action'])
+            ->make(true);
+
+    }
+
+    public function Enviosparareparto()//SOBRES EN REPARTO
+    {
+
+        $distribuir = [
+            "NORTE" => 'NORTE',
+            "CENTRO" => 'CENTRO',
+            "SUR" => 'SUR',
+        ];
+
+        $condiciones = [
+            "PENDIENTE DE ENVIO" => 'PENDIENTE DE ENVIO',
+            "EN REPARTO" => 'EN REPARTO',
+            "ENTREGADO" => 'ENTREGADO'
+        ];
+
+        $destinos = [
+            "LIMA" => 'LIMA',
+            "PROVINCIA" => 'PROVINCIA'
+        ];
+
+        $distritos = Distrito::whereIn('provincia', ['LIMA', 'CALLAO'])
+            ->where('estado', '1')
+            ->pluck('distrito', 'distrito');
+
+        $departamento = Departamento::where('estado', "1")
+            ->pluck('departamento', 'departamento');
+
+        $direcciones = DireccionEnvio::join('direccion_pedidos as dp', 'direccion_envios.id', 'dp.direccion_id')
+            ->select('direccion_envios.id',
+                'direccion_envios.distrito',
+                'direccion_envios.direccion',
+                'direccion_envios.referencia',
+                'direccion_envios.nombre',
+                'direccion_envios.celular',
+                'dp.pedido_id as pedido_id',
+            )
+            ->where('direccion_envios.estado', '1')
+            ->where('dp.estado', '1')
+            ->get();
+
+        $superasesor = User::where('rol', 'Super asesor')->count();
+
+        $ver_botones_accion = 1;
+
+        if (Auth::user()->rol == "Asesor") {
+            $ver_botones_accion = 0;
+        } else if (Auth::user()->rol == "Super asesor") {
+            $ver_botones_accion = 0;
+        } else if (Auth::user()->rol == "Encargado") {
+            $ver_botones_accion = 1;
+        } else {
+            $ver_botones_accion = 1;
+        }
+
+        return view('envios.paraReparto', compact('condiciones', 'distritos', 'direcciones', 'destinos', 'superasesor', 'ver_botones_accion', 'departamento', 'distribuir'));
+    }
 
     public function Enviosenreparto()//SOBRES EN REPARTO
     {
@@ -104,6 +513,126 @@ class EnvioController extends Controller
         }
 
         return view('envios.porEnviar', compact('condiciones', 'distritos', 'direcciones', 'destinos', 'superasesor', 'ver_botones_accion', 'departamento', 'distribuir'));
+    }
+
+    public function Enviospararepartotabla(Request $request)
+    {
+        $pedidos = null;
+
+        $pedidos_lima = DireccionGrupo::join('direccion_envios as de', 'direccion_grupos.id', 'de.direcciongrupo')
+            ->join('clientes as c', 'c.id', 'de.cliente_id')
+            ->join('users as u', 'u.id', 'c.user_id')
+            ->where('direccion_grupos.condicion_envio_code', Pedido::REPARTO_COURIER_INT)
+            ->where('direccion_grupos.estado', '1')
+            ->select(
+                'direccion_grupos.id',
+                'u.identificador as identificador',
+                DB::raw(" (select 'LIMA') as destino "),
+                'de.celular',
+                'de.nombre',
+                'de.cantidad',
+                'direccion_grupos.codigos',
+                'direccion_grupos.producto',
+                'de.direccion',
+                'de.referencia',
+                'de.observacion',
+                'de.distrito',
+                DB::raw('(select DATE_FORMAT( direccion_grupos.created_at, "%Y-%m-%d")   from direccion_grupos dpa where dpa.id=direccion_grupos.id) as fecha'),
+                'direccion_grupos.destino as destino2',
+                'direccion_grupos.distribucion',
+                'direccion_grupos.condicion_envio',
+                'direccion_grupos.subcondicion_envio',
+                'direccion_grupos.condicion_sobre',
+                'direccion_grupos.correlativo as correlativo'
+            );
+
+        $pedidos_provincia = DireccionGrupo::join('gasto_envios as de', 'direccion_grupos.id', 'de.direcciongrupo')
+            ->join('clientes as c', 'c.id', 'de.cliente_id')
+            ->join('users as u', 'u.id', 'c.user_id')
+            //  ->join('pedidos as p', 'p.codigo', 'direccion_grupos.codigos')
+
+            //  ->where('p.condicion_envio_code',Pedido::EN_REPARTO_INT)
+            ->where('direccion_grupos.condicion_envio_code', Pedido::REPARTO_COURIER_INT)
+            ->where('direccion_grupos.estado', '1')
+            ->select(
+                'direccion_grupos.id',
+                'u.identificador as identificador',
+                DB::raw(" (select 'PROVINCIA') as destino "),
+                DB::raw(" (select '') as celular "),
+                DB::raw(" (select '') as nombre "),
+                'de.cantidad',
+
+                'direccion_grupos.codigos',
+                'direccion_grupos.producto',
+
+                'de.tracking as direccion',
+                'de.foto as referencia',
+                DB::raw(" (select '') as observacion "),
+                DB::raw(" (select '') as distrito "),
+
+                DB::raw('(select DATE_FORMAT( direccion_grupos.created_at, "%Y-%m-%d")   from direccion_grupos dpa where dpa.id=direccion_grupos.id) as fecha'),
+                'direccion_grupos.destino as destino2',
+                'direccion_grupos.distribucion',
+                'direccion_grupos.condicion_envio',
+                'direccion_grupos.subcondicion_envio',
+                'direccion_grupos.condicion_sobre',
+                'direccion_grupos.correlativo as correlativo',
+            );
+
+        if (Auth::user()->rol == "Asesor") {
+            $pedidos_lima = $pedidos_lima->Where('u.identificador', Auth::user()->identificador);
+
+
+        } else if (Auth::user()->rol == "Encargado") {
+            $usersasesores = User::where('users.rol', 'Asesor')
+                ->where('users.estado', '1')
+                ->where('users.supervisor', Auth::user()->id)
+                ->select(
+                    DB::raw("users.identificador as identificador")
+                )
+                ->pluck('users.identificador');
+
+            $pedidos_lima = $pedidos_lima->WhereIn('u.identificador', $usersasesores);
+        } else if (Auth::user()->rol == "Jefe de llamadas") {
+            $pedidos_lima = $pedidos_lima->where('u.identificador', '<>', 'B');
+        } else if (Auth::user()->rol == "Llamadas") {
+            $usersasesores = User::where('users.rol', 'Asesor')
+                ->where('users.estado', '1')
+                ->where('users.llamada', Auth::user()->id)
+                ->select(
+                    DB::raw("users.identificador as identificador")
+                )
+                ->pluck('users.identificador');
+
+            $pedidos_lima = $pedidos_lima->WhereIn('u.identificador', $usersasesores);
+
+        }
+
+
+        $pedidos = $pedidos_lima->get();
+
+
+        return Datatables::of($pedidos)
+            ->addIndexColumn()
+            ->addColumn('action', function ($pedido) {
+                $btn = '';
+
+                if (auth()->user()->can('envios.enviar')):
+
+                    $btn .= '<ul class="list-unstyled pl-0">';
+                    $btn .= '<li>
+                                        <a href="" class="btn-sm text-secondary" data-target="#modal-confirmacion" data-toggle="modal" data-ide="' . $pedido->id . '" data-entregar-confirm="' . $pedido->id . '" data-destino="' . $pedido->destino . '" data-fechaenvio="' . $pedido->fecha . '" data-codigos="' . $pedido->codigos . '">
+                                            <i class="fas fa-envelope text-success"></i> A motorizado</a></li>
+                                        </a>
+                                    </li>';
+                    $btn .= '</ul>';
+                endif;
+
+                return $btn;
+            })
+            ->rawColumns(['action'])
+            ->make(true);
+
     }
 
     public function Enviosenrepartotabla(Request $request)
@@ -206,6 +735,9 @@ class EnvioController extends Controller
 
         return Datatables::of($pedidos)
             ->addIndexColumn()
+            ->addColumn('condicion_envio_color', function ($pedido) {
+                return Pedido::getColorByCondicionEnvio($pedido->condicion_envio);
+            })
             ->addColumn('action', function ($pedido) {
                 $btn = '';
 
@@ -385,6 +917,9 @@ class EnvioController extends Controller
 
         return datatables()->query(\DB::table($pedidos))
             ->addIndexColumn()
+            ->addColumn('condicion_envio_color', function ($pedido) {
+                return Pedido::getColorByCondicionEnvio($pedido->condicion_envio);
+            })
             ->editColumn('foto1', function ($pedido) {
                 if ($pedido->foto1 != null) {
                     $urlimagen1 = \Storage::disk('pstorage')->url($pedido->foto1);
@@ -790,6 +1325,9 @@ class EnvioController extends Controller
 
         return Datatables::of(DB::table($pedidos))
             ->addIndexColumn()
+            ->addColumn('condicion_envio_color', function ($pedido) {
+                return Pedido::getColorByCondicionEnvio($pedido->condicion_envio);
+            })
             ->addColumn('action', function ($pedido) {
                 $btn = '';
                 return $btn;
@@ -1139,6 +1677,9 @@ class EnvioController extends Controller
 
         return Datatables::of($pedidos)
             ->addIndexColumn()
+            ->addColumn('condicion_envio_color', function ($pedido) {
+                return Pedido::getColorByCondicionEnvio($pedido->condicion_envio);
+            })
             ->addColumn('action', function ($pedido) {
                 $btn = '';
                 return $btn;
@@ -1344,6 +1885,9 @@ class EnvioController extends Controller
             $usuario = Cliente::find($request->cliente_id);
             $usuario_id = $usuario->user_id;
 
+            $identi=User::find($usuario_id);
+            $identi_id=$identi->identificador;
+
             if ($request->destino == "LIMA") {
 
                 $direccion_grupo_id = DireccionGrupo::create([
@@ -1351,8 +1895,11 @@ class EnvioController extends Controller
                     'destino' => $request->destino,
                     //'distribucion' => (($request->destino == 'PROVINCIA') ? 'NORTE' : ''),
                     'distribucion' => ($zona_distrito->zona),
-                    'nombre_cliente' => (($request->destino == 'LIMA') ? $request->nombre : $cliente->nombre),
-                    'celular_cliente' => (($request->destino == 'LIMA') ? $request->contacto : $cliente->celular . "-" . $cliente->icelular),
+                    'nombre_cliente' => $cliente->nombre,
+                    'celular_cliente' => $cliente->celular ,
+                    'icelular_cliente' => $cliente->icelular,
+                    'nombre' => $request->nombre ,
+                    'celular' => $request->contacto,
                     'codigos' => $lista_codigos,
                     'producto' => $lista_productos,
                     //'condicion_envio' => Pedido::REPARTO_COURIER,
@@ -1360,7 +1907,7 @@ class EnvioController extends Controller
                     'pedido_id' => $request->cod_pedido,
                     'cliente_id' => $request->cliente_id,
                     'user_id' => $usuario_id,
-
+                    'identificador' => $identi_id,
                     'distrito' => $request->distrito,
                     'direccion' => $request->direccion,
                     'referencia' => $request->referencia,
@@ -1454,29 +2001,18 @@ class EnvioController extends Controller
             if ($request->destino == "PROVINCIA") {
                 try {
 
-                    $direccion_grupo_id = DireccionGrupo::create([
-                        'estado' => '1',
-                        'destino' => $request->destino,
-                        'distribucion' => (($request->destino == 'PROVINCIA') ? 'NORTE' : ''),
-                        'nombre_cliente' => (($request->destino == 'LIMA') ? $request->nombre : $cliente->nombre),
-                        'celular_cliente' => (($request->destino == 'LIMA') ? $request->contacto : $cliente->celular . "-" . $cliente->icelular),
-                        'codigos' => $lista_codigos,
-                        'producto' => $lista_productos,
-                        //'condicion_envio' => Pedido::SEGUIMIENTO_PROVINCIA_COURIER,
-                        //'condicion_envio_code' => Pedido::SEGUIMIENTO_PROVINCIA_COURIER_INT,
-                        'pedido_id' => $request->cod_pedido,
-                        'cliente_id' => $request->cliente_id,
-                        'user_id' => $usuario_id
-                    ])->id;
 
-
-                    $direccion_grupo = DireccionGrupo::find($direccion_grupo_id);
-                    $direccion_grupo->correlativo = 'ENV' . $direccion_grupo_id;
-                    $direccion_grupo->save();
-
-                    DB::beginTransaction();
+                    $cliente = Cliente::where("id", $request->cliente_id)->first();
+                    $count_pedidos = count((array)$array_pedidos);
 
                     $cantidad = $count_pedidos;
+
+                    $usuario = Cliente::find($request->cliente_id);
+                    $usuario_id = $usuario->user_id;
+
+                    $identi=User::find($usuario_id);
+                    $identi_id=$identi->identificador;
+
                     $files = $request->file('rotulo');
                     $destinationPath = base_path('public/storage/gastos/');
 
@@ -1486,6 +2022,41 @@ class EnvioController extends Controller
                     } else {
                         $file_name = 'logo_facturas.png';
                     }
+
+                    $direccion_grupo_id = DireccionGrupo::create([
+                        'estado' => '1',
+                        'destino' => $request->destino,
+                        'distribucion' => (($request->destino == 'PROVINCIA') ? 'NORTE' : ''),
+                        'nombre_cliente' => $cliente->nombre,
+                        'celular_cliente' => $cliente->celular,
+                        'icelular_cliente' => $cliente->icelular,
+
+                        'codigos' => $lista_codigos,
+                        'producto' => $lista_productos,
+                        //'condicion_envio' => Pedido::SEGUIMIENTO_PROVINCIA_COURIER,
+                        //'condicion_envio_code' => Pedido::SEGUIMIENTO_PROVINCIA_COURIER_INT,
+                        'pedido_id' => $request->cod_pedido,
+                        'cliente_id' => $request->cliente_id,
+                        'user_id' => $usuario_id,
+                        'identificador' => $identi,
+                        'nombre' => 'OLVA' ,
+                        'celular' => 'OLVA',
+                        'direccion' => $request->tracking,
+                        'referencia' => $request->numregistro,
+                        'observacion' => $file_name,
+                        'cantidad' => $request->importe,
+                        'importe' => $request->importe
+                    ])->id;
+
+
+                    $direccion_grupo = DireccionGrupo::find($direccion_grupo_id);
+                    $direccion_grupo->correlativo = 'ENV' . $direccion_grupo_id;
+                    $direccion_grupo->save();
+
+                    DB::beginTransaction();
+
+
+
 
                     $modelData = [
                         'cliente_id' => $request->cliente_id,
@@ -1790,6 +2361,209 @@ class EnvioController extends Controller
         return response()->json(['html' => $pedido->id]);
     }
 
+    public function Distribuirsobres()
+    {
+        $ver_botones_accion = 1;
+
+        if (Auth::user()->rol == "Asesor") {
+            $ver_botones_accion = 0;
+        } else if (Auth::user()->rol == "Super asesor") {
+            $ver_botones_accion = 0;
+        } else if (Auth::user()->rol == "Encargado") {
+            $ver_botones_accion = 1;
+        } else {
+            $ver_botones_accion = 1;
+        }
+
+
+        $_pedidos = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')
+            ->join('users as u', 'pedidos.user_id', 'u.id')
+            ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
+            ->select(
+                DB::raw("COUNT(u.identificador) AS total, u.identificador ")
+            )
+            ->where('pedidos.estado', '1')
+            ->whereIn('pedidos.condicion_envio_code', [Pedido::RECEPCION_COURIER_INT])
+            ->where('dp.estado', '1')
+            ->groupBy('u.identificador');
+
+
+        $distritos = Distrito::whereIn('provincia', ['LIMA', 'CALLAO'])
+            ->where('estado', '1')
+            ->WhereNotIn('distrito', ['CHACLACAYO', 'CIENEGUILLA', 'LURIN', 'PACHACAMAC', 'PUCUSANA', 'PUNTA HERMOSA', 'PUNTA NEGRA', 'SAN BARTOLO', 'SANTA MARIA DEL MAR'])
+            ->pluck('distrito', 'distrito');
+
+        $departamento = Departamento::where('estado', "1")
+            ->pluck('departamento', 'departamento');
+
+        $superasesor = User::where('rol', 'Super asesor')->count();
+
+        $_pedidos = $_pedidos->get();
+
+        return view('envios.distribuirsobres', compact('superasesor', 'ver_botones_accion', 'distritos', 'departamento', '_pedidos'));
+    }
+
+    public function DistribuirSobrestabla(Request $request)
+    {
+        $pedidos = null;
+
+        $pedidos = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')
+            ->join('users as u', 'pedidos.user_id', 'u.id')
+            ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
+            ->select([
+                'pedidos.id',
+                'pedidos.cliente_id',
+
+                'u.identificador as users',
+                'u.id as user_id',
+                'dp.codigo as codigos',
+                'dp.nombre_empresa as empresas',
+                'dp.total as total',
+                'pedidos.condicion',
+                'pedidos.created_at as fecha',
+                'pedidos.condicion_envio',
+                'pedidos.envio',
+                'pedidos.codigo',
+                'pedidos.destino',
+                'pedidos.direccion',
+                'dp.envio_doc',
+                'dp.fecha_envio_doc',
+                'dp.cant_compro',
+                'dp.fecha_envio_doc_fis',
+                'dp.foto1',
+                'dp.foto2',
+                'dp.fecha_recepcion',
+                'pedidos.devuelto',
+                'pedidos.cant_devuelto',
+                'pedidos.returned_at',
+                'pedidos.observacion_devuelto',
+                DB::raw("DATEDIFF(DATE(NOW()), DATE(pedidos.created_at)) AS dias")
+            ])
+            ->where('pedidos.estado', '1')
+            ->whereIn('pedidos.condicion_envio_code', [Pedido::RECEPCION_COURIER_INT])
+            ->where('dp.estado', '1');
+
+        if (Auth::user()->rol == "Operario") {
+            $asesores = User::where('users.rol', 'Asesor')
+                ->where('users.estado', '1')
+                ->Where('users.operario', Auth::user()->id)
+                ->select(
+                    DB::raw("users.identificador as identificador")
+                )
+                ->pluck('users.identificador');
+
+            $pedidos = $pedidos->WhereIn('u.identificador', $asesores);
+
+        } else if (Auth::user()->rol == "Jefe de operaciones") {
+            $operarios = User::where('users.rol', 'Operario')
+                ->where('users.estado', '1')
+                ->where('users.jefe', Auth::user()->id)
+                ->select(
+                    DB::raw("users.id as id")
+                )
+                ->pluck('users.id');
+
+            $asesores = User::where('users.rol', 'Asesor')
+                ->where('users.estado', '1')
+                ->WhereIn('users.operario', $operarios)
+                ->select(
+                    DB::raw("users.identificador as identificador")
+                )
+                ->pluck('users.identificador');
+
+            $pedidos = $pedidos->WhereIn('u.identificador', $asesores);
+
+        } else if (Auth::user()->rol == "Asesor") {
+            $pedidos = $pedidos->Where('u.identificador', Auth::user()->identificador);
+
+        } else if (Auth::user()->rol == "Super asesor") {
+            $pedidos = $pedidos->Where('u.identificador', Auth::user()->identificador);
+
+        } else if (Auth::user()->rol == "Encargado") {
+
+            $usersasesores = User::where('users.rol', 'Asesor')
+                ->where('users.estado', '1')
+                ->where('users.supervisor', Auth::user()->id)
+                ->select(
+                    DB::raw("users.identificador as identificador")
+                )
+                ->pluck('users.identificador');
+
+            $pedidos = $pedidos->WhereIn('u.identificador', $usersasesores);
+        } else {
+            $pedidos = $pedidos;
+        }
+        $pedidos = $pedidos->get();
+
+        return Datatables::of($pedidos)
+            ->addIndexColumn()
+            ->addColumn('action', function ($pedido) {
+                $btn = '';
+                //if($pedido->condicion_envio_code==13)
+
+                return $btn;
+            })
+            ->rawColumns(['action'])
+            ->make(true);
+
+    }
+
+    public function DistribuirSobrestablaNorte(Request $request)
+    {
+        $pedidos = null;
+
+        $pedidos = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')
+            ->join('users as u', 'pedidos.user_id', 'u.id')
+            ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
+            ->select([
+                'pedidos.id',
+                'pedidos.cliente_id',
+
+                'u.identificador as users',
+                'u.id as user_id',
+                'dp.codigo as codigos',
+                'dp.nombre_empresa as empresas',
+                'dp.total as total',
+                'pedidos.condicion',
+                'pedidos.created_at as fecha',
+                'pedidos.condicion_envio',
+                'pedidos.envio',
+                'pedidos.codigo',
+                'pedidos.destino',
+                'pedidos.direccion',
+                'dp.envio_doc',
+                'dp.fecha_envio_doc',
+                'dp.cant_compro',
+                'dp.fecha_envio_doc_fis',
+                'dp.foto1',
+                'dp.foto2',
+                'dp.fecha_recepcion',
+                'pedidos.devuelto',
+                'pedidos.cant_devuelto',
+                'pedidos.returned_at',
+                'pedidos.observacion_devuelto',
+                DB::raw("DATEDIFF(DATE(NOW()), DATE(pedidos.created_at)) AS dias")
+            ])
+            ->where('pedidos.estado', '1')
+            ->whereIn('pedidos.condicion_envio_code', [Pedido::RECEPCION_COURIER_INT])
+            ->where('dp.estado', '1');
+
+
+        $pedidos = $pedidos->get();
+
+        return Datatables::of($pedidos)
+            ->addIndexColumn()
+            ->addColumn('action', function ($pedido) {
+                $btn = '';
+                //if($pedido->condicion_envio_code==13)
+
+                return $btn;
+            })
+            ->rawColumns(['action'])
+            ->make(true);
+
+    }
+
     public function Estadosobres()
     {
         $ver_botones_accion = 1;
@@ -1831,6 +2605,8 @@ class EnvioController extends Controller
 
         return view('envios.estadosobres', compact('superasesor', 'ver_botones_accion', 'distritos', 'departamento', '_pedidos'));
     }
+
+
 
     public function Estadosobrestabla(Request $request)
     {

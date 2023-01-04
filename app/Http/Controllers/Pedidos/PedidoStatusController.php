@@ -279,8 +279,7 @@ class PedidoStatusController extends Controller
             return datatables()->query(DB::table($pedidos))
                 ->addIndexColumn()
                 ->addColumn('condicion_envio_color', function ($pedido) {
-                    $p = new Pedido((array)$pedido);
-                    return $p->condicion_envio_color;
+                    return Pedido::getColorByCondicionEnvio($pedido->condicion_envio);
                 })
                 ->addColumn('action', function ($pedido) use ($request) {
                     $btn = '<div><ul class="" aria-labelledby="dropdownMenuButton">';
@@ -443,8 +442,7 @@ class PedidoStatusController extends Controller
             return datatables()->query(DB::table($pedidos))
                 ->addIndexColumn()
                 ->addColumn('condicion_envio_color', function ($pedido) {
-                    $p = new Pedido((array)$pedido);
-                    return $p->condicion_envio_color;
+                    return Pedido::getColorByCondicionEnvio($pedido->condicion_envio);
                 })
                 ->addColumn('action', function ($pedido) use ($request) {
                     $btn = '';

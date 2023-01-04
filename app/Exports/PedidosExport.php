@@ -53,7 +53,7 @@ class PedidosExport implements FromView, ShouldAutoSize
                     'dp.anio as aniopedido'
                 ]
             )
-            ->whereIn('pedidos.condicion_envio_code', [Pedido::POR_ATENDER_INT, Pedido::EN_PROCESO_ATENCION_INT, Pedido::ATENDIDO_INT, Pedido::ANULADO_INT])
+            //->whereIn('pedidos.condicion_envio_code', [Pedido::POR_ATENDER_INT, Pedido::EN_PROCESO_ATENCION_INT, Pedido::ATENDIDO_INT, Pedido::ANULADO_INT])
             ->whereBetween(DB::raw('DATE(pedidos.created_at)'), [$request->desde, $request->hasta]) //rango de fechas
             ->groupBy(
                 'pedidos.id',
@@ -97,11 +97,6 @@ class PedidosExport implements FromView, ShouldAutoSize
             $pedidos->whereIn('u.identificador', $asesores);
 
         } else if (Auth::user()->rol == "Jefe de llamadas") {
-            /*$asesores = User::where('users.rol', 'Asesor')
-                ->where('users.estado', '1')
-                ->where('users.jefe', Auth::user()->id)
-                ->pluck('identificador');
-            $pedidos->whereIn('u.identificador', $asesores);*/
 
             $pedidos = $pedidos->where('u.identificador', '<>', 'B');
         } else if (Auth::user()->rol == "Asesor") {

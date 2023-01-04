@@ -417,6 +417,27 @@ return [
                     'active' => ['envios estadosobres'],
                 ],
                 [
+                    'text' => 'Distribuir Sobres',
+                    'route' => 'envios.distribuirsobres',
+                    'can' => 'envios.estadosobre',
+                    'icon' => 'fas fa-check-circle',
+                    'active' => ['envios distribuir sobres'],
+                ],
+                [
+                    'text' => 'Sobres con direccion',
+                    'route' => 'envios.condireccion',
+                    'can' => 'envios.condireccion',
+                    'icon' => 'fas fa-check-circle',
+                    'active' => ['envios con direccion'],
+                ],
+                [
+                    'text' => 'Sobres sin direccion',
+                    'route' => 'envios.sindireccion',
+                    'can' => 'envios.sindireccion',
+                    'icon' => 'fas fa-check-circle',
+                    'active' => ['envios sin direccion'],
+                ],
+                [
                     'text' => 'Sobres en Ruta',
                     'route' => 'envios.rutaenvio',
                     'can' => 'envios.rutaenvio',
@@ -429,6 +450,13 @@ return [
                     'can' => 'envios.index',
                     'icon' => 'fas fa-check-circle',
                     'active' => ['envios'],
+                ],
+                [
+                    'text' => 'Sobres para reparto',
+                    'route' => 'envios.parareparto',
+                    'can' => 'envios.parareparto',
+                    'icon' => 'fas fa-check-circle',
+                    'active' => ['envios para reparto'],
                 ],
                 [
                     'text' => 'Seguimiento provincia',

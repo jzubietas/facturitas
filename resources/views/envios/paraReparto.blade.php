@@ -1,26 +1,14 @@
-@extends('adminlte::page')
+﻿@extends('adminlte::page')
 
 @section('title', 'Lista de pedidos por enviar')
 
 @section('content_header')
-  <h1>Lista de pedidos por enviar - ENVIOS
-    {{-- <div class="float-right btn-group dropleft">
-      <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        Exportar
-      </button>
-      <div class="dropdown-menu">
-        <a href="{{ route('pedidosporenviarExcel') }}" class="dropdown-item"><img src="{{ asset('imagenes/icon-excel.png') }}"> EXCEL</a>
-      </div>
-    </div> --}}
-    {{-- @can('clientes.exportar') --}}
+  <h1>Lista de pedidos para reparto - ENVIOS
+
     <div class="float-right btn-group dropleft">
-
-      <?php if(Auth::user()->rol=='Administrador' || Auth::user()->rol=='Logística'){ ?>
       <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         Exportar
       </button>
-      <?php } ?>
-
       <div class="dropdown-menu">
         <a href="" data-target="#modal-exportar" data-toggle="modal" class="dropdown-item" target="blank_"><img src="{{ asset('imagenes/icon-excel.png') }}"> Excel</a>
       </div>
@@ -65,8 +53,8 @@
             <th scope="col">Fecha de Envio</th>
             <th scope="col">Razón social</th>
             <th scope="col">Destino</th>
-            <th scope="col">Referencia</th>
             <th scope="col">Dirección de envío</th>
+            <th scope="col">Referencia</th>
             <th scope="col">Estado de envio</th><!--ENTREGADO - RECIBIDO-->
             <th scope="col">Acciones</th>
           </tr>
@@ -81,13 +69,14 @@
       @include('pedidos.modal.editdireccionid')
       @include('pedidos.modal.destinoid')
       @include('envios.modal.distribuir')
+        @include('operaciones.modal.confirmacion')
     </div>
   </div>
 
 @stop
 
 @section('css')
-  <link rel="stylesheet" href="/css/admin_custom.css">
+
   <style>
     img:hover{
       transform: scale(1.2)
@@ -142,13 +131,51 @@
   <script src="https://cdn.datatables.net/plug-ins/1.11.4/dataRender/datetime.js"></script>
 
   <script>
+
+
+
     $(document).ready(function () {
+
+    $('#modal-confirmacion').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget)
+        var idunico = button.data('ide')
+        var codigos = button.data('codigos')
+
+        $('.titulo-confirmacion').html("Enviar sobre a Motorizado");
+
+        $("#hiddenCodigo").val(idunico)
+        $("#modal-confirmacion .textcode").html(codigos);
+    });
+
+    $(document).on("submit", "#formulario_confirmacion", function (evento) {
+        evento.preventDefault();
+        //validacion
+
+        var fd2 = new FormData();
+        fd2.append('hiddenCodigo', $('#hiddenCodigo').val() );
+        $.ajax({
+            data: fd2,
+            processData: false,
+            contentType: false,
+            type: 'POST',
+            url:"{{ route('operaciones.confirmar') }}",
+            success:function(data){
+                $("#modal-confirmacion").modal("hide");
+                $('#tablaPrincipal').DataTable().ajax.reload();
+
+            }
+        });
+    });
+
+
 
       $.ajaxSetup({
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
       });
+
+
 
       $(document).on("submit", "#formulario", function (evento) {
         evento.preventDefault();
@@ -159,6 +186,26 @@
         //cuando abre el form de anular pedido
         var button = $(event.relatedTarget)
         var idunico = button.data('enviar')//pedido
+        var destino = button.data('destino')//pedido
+        var dfecha = button.data('fechaenvio')//pedido
+
+        var newOption = $('<option value="REGISTRADO">REGISTRADO</option>');
+        var newOption2 = $('<option value="NO ENTREGADO">NO ENTREGADO</option>');
+        var newOption3 = $('<option value="ENTREGADO">ENTREGADO</option>');
+
+        var newOption4 = $('<option value="EN CAMINO">EN CAMINO</option>');
+        var newOption5 = $('<option value="EN TIENDA/AGENTE">EN TIENDA/AGENTE</option>');
+        console.log(dfecha)
+        $('#condicion').empty().append(newOption3);
+        $("#fecha_envio_doc_fis").val(dfecha);
+
+       // if (destino=='LIMA')
+       // $('#condicion').empty().append(newOption).append(newOption2).append(newOption3);
+      //  else
+      //  $('#condicion').empty().append(newOption).append(newOption2).append(newOption4).append(newOption5).append(newOption3);
+
+        console.log(destino);
+
         $("#hiddenEnviar").val(idunico)
         if(idunico<10){
           idunico='PED000'+idunico;
@@ -170,14 +217,6 @@
           idunico='PED'+idunico;
         }
         $("#modal-enviar .textcode").html(idunico);
-        var newOption = $('<option value="REGISTRADO">REGISTRADO</option>');
-        var newOption2 = $('<option value="NO ENTREGADO">NO ENTREGADO</option>');
-        var newOption3 = $('<option value="ENTREGADO">ENTREGADO</option>');
-
-        var newOption4 = $('<option value="EN CAMINO">EN CAMINO</option>');
-        var newOption5 = $('<option value="EN TIENDA/AGENTE">EN TIENDA/AGENTE</option>');
-
-        $('#condicion').empty().append(newOption3);
 
       });
 
@@ -255,22 +294,11 @@
           }
         });
 
-
       });
-
-
 
       $(document).on("submit", "#formulariorecibir", function (evento) {
         evento.preventDefault();
       });
-
-
-      /*$('#modal-atender').on('show.bs.modal', function (event) {
-        var button = $(event.relatedTarget)
-        var idunico = button.data('atender')
-        $(".textcode").html("PED"+idunico);
-        $("#hiddenAtender").val(idunico);
-      });*/
 
       $('#tablaPrincipal').DataTable({
         processing: true,
@@ -278,12 +306,10 @@
 		serverSide: true,
         searching: true,
         "order": [[ 0, "desc" ]],
-        ajax: "{{ route('envios.seguimientoprovinciatabla') }}",
+        ajax: "{{ route('envios.pararepartotabla') }}",
         createdRow: function( row, data, dataIndex){
-          //console.log(row);
         },
         rowCallback: function (row, data, index) {
-
               if(data.destino2=='PROVINCIA'){
                 $('td', row).css('color','red')
 
@@ -311,20 +337,9 @@
         },
         columns: [
           {
-              data: 'id',
-              name: 'id',
-              "visible":false,
-              render: function ( data, type, row, meta ) {
-                if(row.id<10){
-                  return 'ENV000'+row.id;
-                }else if(row.id<100){
-                  return 'ENV00'+row.id;
-                }else if(row.id<1000){
-                  return 'ENV0'+row.id;
-                }else{
-                  return 'ENV'+row.id;
-                }
-              }
+            data: 'correlativo',
+            name: 'correlativo',
+
           },
           {
             data: 'codigos',
@@ -347,7 +362,7 @@
             data: 'celular',
             name: 'celular',
             render: function ( data, type, row, meta ) {
-              return row.celular+' - '+row.nombre
+              return row.celular+'<br>'+row.nombre
             },
           },
           {
@@ -374,12 +389,7 @@
               }
             }
           },
-          {
-            data: 'destino',
-            name: 'destino',
-            "visible":false,
-        },
-
+          {data: 'destino', name: 'destino', },
           {
             data:'direccion',
             name:'direccion',
@@ -432,63 +442,13 @@
               }
             }
           },
-          {
-            data: 'condicion_envio',
-            name: 'condicion_envio',
-            render: function ( data, type, row, meta )
-            {
-                var badge_estado=''
-                /*if (true) {
-                    badge_estado += '<span class="badge badge-dark p-8" style="color: #fff; background-color: #347cc4; font-weight: 600; margin-bottom: -2px;border-radius: 4px 4px 0px 0px; font-size:8px;  padding:6px;">Direccion agregada</span>';
-                }*/
-                badge_estado+='<span class="badge badge-success" style="background-color: '+row.condicion_envio_color+'!important;">'+row.condicion_envio+'</span>';
-                return badge_estado;
-
-                /*if(row.subcondicion_envio==null)
-                {
-                    return row.condicion_envio;
-                }else{
-                    return '<span class="badge badge-dark">'+row.subcondicion_envio+'</span> '+  row.condicion_envio;
-                }*/
-            }
-
-         },
+          {data: 'condicion_envio', name: 'condicion_envio', },
           {
             data: 'action',
             name: 'action',
             orderable: false,
             searchable: false,
             sWidth:'10%',
-            render: function ( data, type, row, meta ) {
-              datass='';
-
-              @if (Auth::user()->rol == "Asesor" ||  Auth::user()->rol="Logística")
-
-                @if($ver_botones_accion > 0)
-                  @can('envios.enviar')
-                    datass=datass+'<a href="" data-target="#modal-enviar" data-toggle="modal" data-enviar="'+row.id+'">'+
-                      '<button class="btn btn-success btn-sm"><i class="fas fa-envelope"></i> Entregado</button></a>';
-                    if(row.envio=='1')
-                    {
-                      datass = datass+ '<a href="" data-target="#modal-recibir" data-toggle="modal" data-recibir="'+row.id+'">'+
-                        '<button class="btn btn-warning btn-sm"><i class="fas fa-check-circle"></i> Recibido</button></a>';
-                    }
-                  @endcan
-                @endif
-
-              @endif
-
-
-
-              if(row.destino == null && row.direccion =='0' && (row.envio*1) >0)
-              {
-                var urldireccion = '{{ route("envios.createdireccion", ":id") }}';
-                urldireccion = urldireccion.replace(':id', row.id);
-                data = data+'<a href="'+urldireccion+'" class="btn btn-dark btn-sm"><i class="fas fa-map"></i> Destino</a><br>';
-              }
-
-              return datass;
-            }
           },
         ],
         language: {

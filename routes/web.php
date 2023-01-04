@@ -245,6 +245,14 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     Route::get('envios.porrecibirtabla', [EnvioController::class, 'Enviosporrecibirtabla'])->name('envios.porrecibirtabla');
     Route::get('envios.rutaenvio', [EnvioController::class, 'Enviosrutaenvio'])->name('envios.rutaenvio');
     Route::get('envios.rutaenviotabla', [EnvioController::class, 'Enviosrutaenviotabla'])->name('envios.rutaenviotabla');
+
+    Route::get('envios.condireccion', [EnvioController::class, 'Envioscondireccion'])->name('envios.condireccion');
+    Route::get('envios.condirecciontabla', [EnvioController::class, 'Envioscondirecciontabla'])->name('envios.condirecciontabla');
+    Route::get('envios.sindireccion', [EnvioController::class, 'Enviossindireccion'])->name('envios.sindireccion');
+    Route::get('envios.sindirecciontabla', [EnvioController::class, 'Enviossindirecciontabla'])->name('envios.sindirecciontabla');
+
+    Route::get('envios.parareparto', [EnvioController::class, 'Enviosparareparto'])->name('envios.parareparto');
+    Route::get('envios.pararepartotabla', [EnvioController::class, 'Enviospararepartotabla'])->name('envios.pararepartotabla');
     Route::get('envios.enreparto', [EnvioController::class, 'Enviosenreparto'])->name('envios.enreparto');
     Route::get('envios.enrepartotabla', [EnvioController::class, 'Enviosenrepartotabla'])->name('envios.enrepartotabla');
     Route::get('envios.seguimientoprovincia', [EnvioController::class, 'Seguimientoprovincia'])->name('envios.seguimientoprovincia');
@@ -368,6 +376,14 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     Route::post('envios.enviarid', [EnvioController::class, 'EnviarPedidoid'])->name('envios.enviarid');
     Route::post('envios.distribuirid', [EnvioController::class, 'DistribuirEnvioid'])->name('envios.distribuirid');
     Route::post('envios.changeImg', [EnvioController::class, 'changeImg'])->name('envios.changeImg');
+
+    Route::get('envios.distribuirsobres', [EnvioController::class, 'DistribuirSobres'])->name('envios.distribuirsobres');
+    Route::get('envios.distribuirsobrestabla', [EnvioController::class, 'DistribuirSobrestabla'])->name('envios.distribuirsobrestabla');
+
+
+    Route::get('envios.distribuirsobrestablaNorte', [EnvioController::class, 'DistribuirSobrestablaNorte'])->name('envios.distribuirsobrestablaNorte');
+    Route::get('envios.distribuirsobrestablaCentro', [EnvioController::class, 'DistribuirSobrestablaCentro'])->name('envios.distribuirsobrestablaCentro');
+    Route::get('envios.distribuirsobrestablaSur', [EnvioController::class, 'DistribuirSobrestablaSur'])->name('envios.distribuirsobrestablaSur');
 
     Route::get('envios.estadosobres', [EnvioController::class, 'Estadosobres'])->name('envios.estadosobres');
     Route::get('envios.estadosobrestabla', [EnvioController::class, 'Estadosobrestabla'])->name('envios.estadosobrestabla');

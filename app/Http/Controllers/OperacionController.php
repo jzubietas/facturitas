@@ -148,10 +148,7 @@ class OperacionController extends Controller
         return Datatables::of(DB::table($pedidos))
             ->addIndexColumn()
             ->addColumn('condicion_envio_color', function ($pedido) {
-                $pedido = new Pedido((array)$pedido);
-                $pedido->forceFill((array)$pedido);
-                $pedido->exists = true;
-                return $pedido->condicion_envio_color;
+                return Pedido::getColorByCondicionEnvio($pedido->condicion_envio);
             })
             ->addColumn('action', function ($pedido) {
                 $btn = '';
@@ -260,10 +257,7 @@ class OperacionController extends Controller
                 return $btn;
             })
             ->addColumn('condicion_envio_color', function ($pedido) {
-                $pedido = new Pedido((array)$pedido);
-                $pedido->forceFill((array)$pedido);
-                $pedido->exists = true;
-                return $pedido->condicion_envio_color;
+                return Pedido::getColorByCondicionEnvio($pedido->condicion_envio);
             })
             ->rawColumns(['action'])
             ->make(true);
@@ -371,8 +365,7 @@ class OperacionController extends Controller
         return Datatables::of(DB::table($pedidos))
             ->addIndexColumn()
             ->addColumn('condicion_envio_color', function ($pedido) {
-                $p = new Pedido((array)$pedido);
-                return $p->condicion_envio_color;
+                return Pedido::getColorByCondicionEnvio($pedido->condicion_envio);
             })
             ->addColumn('action', function ($pedido) {
                 $btn = '';
@@ -496,8 +489,7 @@ class OperacionController extends Controller
         return Datatables::of(DB::table($pedidos))
             ->addIndexColumn()
             ->addColumn('condicion_envio_color', function ($pedido) {
-                $p = new Pedido((array)$pedido);
-                return $p->condicion_envio_color;
+                return Pedido::getColorByCondicionEnvio($pedido->condicion_envio);
             })
             ->addColumn('action', function ($pedido) {
                 $btn = '';
