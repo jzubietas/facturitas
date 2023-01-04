@@ -41,7 +41,7 @@
                             <tr>
                                 <th scope="col">Código</th>
                                 <th scope="col">Zona</th>
-                                <th scope="col">Distriro</th>
+                                <th scope="col">Distrito</th>
                                 <th scope="col">Acciones</th>
                             </tr>
                             </thead>
@@ -65,7 +65,7 @@
                     <th scope="col">Código</th>
                     <th scope="col">Asesor</th>
                     <th scope="col">ZONA</th>
-                    <th scope="col">DISTRIRO</th>
+                    <th scope="col">DISTRITO</th>
                     <th scope="col">Razón social</th>
 
                     <th scope="col">Dias</th>
