@@ -121,19 +121,19 @@ class EnvioController extends Controller
                     'u.identificador',
                     'dp.nombre_empresa as empresas',
                 ]
-            )->where('condicion_envio_code',Pedido::RECEPCION_COURIER_INT)
-            ->where('estado_sobre','1');
+            )->where('condicion_envio_code', Pedido::RECEPCION_COURIER_INT)
+            ->where('estado_sobre', '1');
 
         return Datatables::of($pedidos)
             ->addIndexColumn()
             ->editColumn('condicion_envio', function ($pedido) {
                 $badge_estado = '';
                 $color = Pedido::getColorByCondicionEnvio($pedido->condicion_envio);
-                if($pedido->estado_sobre == '1'){
+                if ($pedido->estado_sobre == '1') {
                     $badge_estado .= '<span class="badge badge-dark p-8" style="color: #fff; background-color: #347cc4; font-weight: 600; margin-bottom: -2px;border-radius: 4px 4px 0px 0px; font-size:8px;  padding: 4px 4px !important; font-weight: 500;">Direccion agregada</span>';
                 }
 
-                $badge_estado.= '<span class="badge badge-success w-100" style="background-color: ' . $color . '!important;">' . $pedido->condicion_envio . '</span>';
+                $badge_estado .= '<span class="badge badge-success w-100" style="background-color: ' . $color . '!important;">' . $pedido->condicion_envio . '</span>';
                 return $badge_estado;
             })
             ->addColumn('action', function ($pedido) {
@@ -152,7 +152,7 @@ class EnvioController extends Controller
 
                 return $btn;
             })
-            ->rawColumns(['action','condicion_envio'])
+            ->rawColumns(['action', 'condicion_envio'])
             ->make(true);
     }
 
@@ -229,8 +229,8 @@ class EnvioController extends Controller
                     'u.identificador',
                     'dp.nombre_empresa as empresas',
                 ]
-            )->where('condicion_envio_code',Pedido::RECEPCION_COURIER_INT)
-            ->where('estado_sobre','0');
+            )->where('condicion_envio_code', Pedido::RECEPCION_COURIER_INT)
+            ->where('estado_sobre', '0');
 
         return Datatables::of($pedidos)
             ->addIndexColumn()
@@ -254,7 +254,7 @@ class EnvioController extends Controller
 
                 return $btn;
             })
-            ->rawColumns(['action','condicion_envio'])
+            ->rawColumns(['action', 'condicion_envio'])
             ->make(true);
     }
 
@@ -380,7 +380,7 @@ class EnvioController extends Controller
             //DB::raw(" (select 'LIMA') as destino "),
             DB::raw('(select DATE_FORMAT( direccion_grupos.created_at, "%Y-%m-%d")   from direccion_grupos dpa where dpa.id=direccion_grupos.id) as fecha_formato'),
         ])
-        //join('direccion_envios as de', 'direccion_grupos.id', 'de.direcciongrupo')
+            //join('direccion_envios as de', 'direccion_grupos.id', 'de.direcciongrupo')
             ->join('clientes as c', 'c.id', 'direccion_grupos.cliente_id')
             ->join('users as u', 'u.id', 'c.user_id')
             ->where('direccion_grupos.condicion_envio_code', Pedido::REPARTO_COURIER_INT)
@@ -1703,8 +1703,8 @@ class EnvioController extends Controller
             $usuario = Cliente::find($request->cliente_id);
             $usuario_id = $usuario->user_id;
 
-            $identi=User::find($usuario_id);
-            $identi_id=$identi->identificador;
+            $identi = User::find($usuario_id);
+            $identi_id = $identi->identificador;
 
             if ($request->destino == "LIMA") {
 
@@ -1750,7 +1750,7 @@ class EnvioController extends Controller
                             'estado_sobre' => '1',
                             'destino' => $request->destino,
                             'direccion' => $request->direccion,
-                            'env_destino'=>$request->destino,
+                            'env_destino' => $request->destino,
                             'env_distrito' => $request->distrito,
                             'env_zona' => $zona_distrito->zona,
                             'env_nombre_cliente_recibe' => $request->nombre,
@@ -1805,8 +1805,8 @@ class EnvioController extends Controller
                     $usuario = Cliente::find($request->cliente_id);
                     $usuario_id = $usuario->user_id;
 
-                    $identi=User::find($usuario_id);
-                    $identi_id=$identi->identificador;
+                    $identi = User::find($usuario_id);
+                    $identi_id = $identi->identificador;
 
                     $files = $request->file('rotulo');
                     $destinationPath = base_path('public/storage/gastos/');
@@ -1855,7 +1855,7 @@ class EnvioController extends Controller
                             'direccion' => 'PROVINCIA',
                             //'condicion_envio' => Pedido::SEGUIMIENTO_PROVINCIA_COURIER,
                             //'condicion_envio_code' => Pedido::SEGUIMIENTO_PROVINCIA_COURIER_INT,
-                            'env_destino'=>$request->destino,
+                            'env_destino' => $request->destino,
                             'env_distrito' => 'LOS OLIVOS',
                             'env_zona' => 'NORTE',
                             'env_nombre_cliente_recibe' => 'OLVA',
@@ -2180,8 +2180,9 @@ class EnvioController extends Controller
         $superasesor = User::where('rol', 'Super asesor')->count();
 
         $_pedidos = $_pedidos->get();
+        $motorizados = User::query()->where('rol', '=', 'MOTORIZADO')->whereNotNull('zona')->get();
 
-        return view('envios.distribuirsobres', compact('superasesor', 'ver_botones_accion', 'distritos', 'departamento', '_pedidos'));
+        return view('envios.distribuirsobres', compact('superasesor', 'motorizados', 'ver_botones_accion', 'distritos', 'departamento', '_pedidos'));
     }
 
     public function DistribuirSobrestabla(Request $request)
@@ -2282,7 +2283,8 @@ class EnvioController extends Controller
     public function DistribuirSobresAgrupar(Request $request)
     {
         $this->validate($request, [
-            'zona' => ['required', Rule::in(['NORTE', 'SUR', 'CENTRO'])]
+            'zona' => ['required', Rule::in(['NORTE', 'SUR', 'CENTRO'])],
+            'motorizado_id' => 'required'
         ]);
         $zona = $request->get('zona');
 
@@ -2324,6 +2326,7 @@ class EnvioController extends Controller
                 'referencia' => $firstProduct->env_referencia,
                 'observacion' => $firstProduct->env_observacion,
                 'cantidad' => count($pedidos),
+                'motorizado_id' => $request->motorizado_id,
             ]);
             $grupos[] = $direcciongrupo;
             foreach ($pedidos as $pedido) {
