@@ -450,6 +450,10 @@ class EnvioController extends Controller
 
         return Datatables::of(DB::table($pedidos_lima))
             ->addIndexColumn()
+            ->editColumn('condicion_envio', function ($pedido) {
+                $color = Pedido::getColorByCondicionEnvio($pedido->condicion_envio);
+                return '<span class="badge badge-success w-100" style="background-color: ' . $color . '!important;">' . $pedido->condicion_envio . '</span>';
+            })
             ->addColumn('action', function ($pedido) {
                 $btn = '';
 
@@ -466,7 +470,7 @@ class EnvioController extends Controller
 
                 return $btn;
             })
-            ->rawColumns(['action'])
+            ->rawColumns(['action','condicion_envio'])
             ->make(true);
 
     }
