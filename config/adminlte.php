@@ -396,20 +396,6 @@ return [
             'can' => 'envios.modulo',
             'submenu' => [
                 [
-                    'text' => 'Recepción de sobres',
-                    'route' => 'envios.porconfirmar',
-                    'can' => 'envios.porconfirmar',
-                    'icon' => 'fas fa-check-circle dot_sobres_confirmar_recepcion_count',
-                    'active' => ['envios'],
-                ],
-                [
-                    'text' => 'Sobres por recibir',
-                    'route' => 'envios.porrecibir',
-                    'can' => 'envios.porrecibir',
-                    'icon' => 'fas fa-check-circle',
-                    'active' => ['envios'],
-                ],
-                [
                     'text' => 'Estado Sobres',
                     'route' => 'envios.estadosobres',
                     'can' => 'envios.estadosobre',
@@ -417,18 +403,11 @@ return [
                     'active' => ['envios estadosobres'],
                 ],
                 [
-                    'text' => 'Distribuir Sobres',
-                    'route' => 'envios.distribuirsobres',
-                    'can' => 'envios.estadosobre',
-                    'icon' => 'fas fa-check-circle',
-                    'active' => ['envios distribuir sobres'],
-                ],
-                [
-                    'text' => 'Sobres con direccion',
-                    'route' => 'envios.condireccion',
-                    'can' => 'envios.condireccion',
-                    'icon' => 'fas fa-check-circle',
-                    'active' => ['envios con direccion'],
+                    'text' => 'Recepción de sobres',
+                    'route' => 'envios.porconfirmar',
+                    'can' => 'envios.porconfirmar',
+                    'icon' => 'fas fa-check-circle dot_sobres_confirmar_recepcion_count',
+                    'active' => ['envios'],
                 ],
                 [
                     'text' => 'Sobres sin direccion',
@@ -437,6 +416,39 @@ return [
                     'icon' => 'fas fa-check-circle',
                     'active' => ['envios sin direccion'],
                 ],
+                [
+                    'text' => 'Sobres con direccion',
+                    'route' => 'envios.distribuirsobres',
+                    'can' => 'envios.condireccion',
+                    'icon' => 'fas fa-check-circle',
+                    'active' => ['envios con direccion'],
+                ],
+                [
+                    'text' => 'Sobres para reparto',
+                    'route' => 'envios.parareparto',
+                    'can' => 'envios.parareparto',
+                    'icon' => 'fas fa-check-circle',
+                    'active' => ['envios para reparto'],
+                ],
+
+
+                [
+                    'text' => 'Sobres por recibir',
+                    'route' => 'envios.porrecibir',
+                    'can' => 'envios.porrecibir',
+                    'icon' => 'fas fa-check-circle',
+                    'active' => ['envios'],
+                ],
+
+                [
+                    'text' => 'Distribuir Sobres',
+                    'route' => 'envios.distribuirsobres',
+                    'can' => 'envios.estadosobre',
+                    'icon' => 'fas fa-check-circle',
+                    'active' => ['envios distribuir sobres'],
+                ],
+
+
                 [
                     'text' => 'Sobres en Ruta',
                     'route' => 'envios.rutaenvio',
@@ -451,13 +463,7 @@ return [
                     'icon' => 'fas fa-check-circle',
                     'active' => ['envios'],
                 ],
-                [
-                    'text' => 'Sobres para reparto',
-                    'route' => 'envios.parareparto',
-                    'can' => 'envios.parareparto',
-                    'icon' => 'fas fa-check-circle',
-                    'active' => ['envios para reparto'],
-                ],
+
                 [
                     'text' => 'Seguimiento provincia',
                     'route' => 'envios.seguimientoprovincia',
