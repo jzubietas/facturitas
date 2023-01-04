@@ -70,7 +70,7 @@ class PageclienteInfo extends Export implements WithColumnFormatting, FromCollec
                 //,'clientes.deuda'
                 //,'clientes.pidio'
                 ,'clientes.situacion'
-                ,DB::raw("(select DATE_FORMAT(dp1.created_at,'%Y-%m-%d %h:%i:%s') from pedidos dp1 where dp1.cliente_id=clientes.id order by dp1.created_at desc limit 1) as fecha")
+                ,DB::raw("(select DATE_FORMAT(dp1.created_at,'%Y-%m-%d %h:%i:%s') from pedidos dp1 where dp1.estado=1 and  dp1.cliente_id=clientes.id order by dp1.created_at desc limit 1) as fecha")
                 ,DB::raw(" (select (dp.codigo) from pedidos dp where dp.cliente_id=clientes.id order by dp.created_at desc limit 1) as codigo ")
             )
         //->whereIn('clientes.id',[1,2,3,4,5,6,7,8,9,10])

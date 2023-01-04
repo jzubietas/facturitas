@@ -26,7 +26,7 @@ class PageclienteinfoEnero2023 extends Export implements WithColumnFormatting,Wi
                 ,'clientes.icelular'
                 ,'clientes.celular'
                 ,DB::raw(" (select a.s_2023_01 from listado_resultados a where a.id=clientes.id ) as situacion ")
-                ,DB::raw("(select DATE_FORMAT(dp1.created_at,'%Y-%m-%d %h:%i:%s') from pedidos dp1 where dp1.cliente_id=clientes.id order by dp1.created_at desc limit 1) as fecha"),
+                ,DB::raw("(select DATE_FORMAT(dp1.created_at,'%Y-%m-%d %h:%i:%s') from pedidos dp1 where dp1.estado=1 and  dp1.cliente_id=clientes.id order by dp1.created_at desc limit 1) as fecha"),
             )
             ->where('clientes.estado', '1')
             ->where('clientes.tipo', '1');
@@ -39,7 +39,7 @@ class PageclienteinfoEnero2023 extends Export implements WithColumnFormatting,Wi
                         DB::raw("users.identificador as identificador")
                     )
                     ->pluck('users.identificador');
-    
+
                 $cliente=$cliente->whereIn('clientes.user_id',$usersasesores);
             }
 
