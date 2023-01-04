@@ -7,115 +7,53 @@
 @stop
 
 @section('content')
+    @php
+        $color_zones=[];
+        $color_zones['NORTE']='warning';
+        $color_zones['CENTRO']='info';
+        $color_zones['SUR']='dark';
+    @endphp
     <div class="row">
-        <div class="col-4 container-norte">
-            <div class="card card-warning">
-                <div class="card-header">
-                    <div class="d-flex justify-content-between">
-                        <h5>Distribucion Norte</h5>
-                        <div>
-                            <button type="button" class="btn btn-light buttom-agrupar"
-                                    data-zona="NORTE"
-                                    data-ajax-action="{{route('envios.distribuirsobres.agrupar',['zona'=>'NORTE'])}}">
+        @foreach($motorizados as $motorizado)
+            <div class="col-4 container-{{Str::slug($motorizado->zona)}}">
+                <div class="card card-{{$color_zones[Str::upper($motorizado->zona)]??'info'}}">
+                    <div class="card-header">
+                        <div class="d-flex justify-content-between">
+                            <h5>Distribucion {{Str::ucfirst(Str::lower($motorizado->zona))}}</h5>
+                            <div>
+                                <button type="button" class="btn btn-light buttom-agrupar"
+                                        data-zona="{{Str::upper($motorizado->zona)}}"
+                                        data-ajax-action="{{route('envios.distribuirsobres.agrupar',['motorizado_id'=>$motorizado->id,'zona'=>Str::upper($motorizado->zona)])}}">
                                 <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"
                                       style="display: none"></span>
-                                <span class="sr-only" style="display: none"></span>
-                                <i class="fa fa-layer-group"></i>
-                                <b>Agrupar</b>
-                            </button>
+                                    <span class="sr-only" style="display: none"></span>
+                                    <i class="fa fa-layer-group"></i>
+                                    <b>Agrupar</b>
+                                </button>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="card-body">
-                    <h4 class="text-center"></h4>
+                    <div class="card-body">
+                        <h4 class="text-center"></h4>
 
-                    <table id="tablaPrincipalNorte" class="table table-striped">
-                        <thead>
-                        <tr>
-                            <th scope="col">Código</th>
-                            <th scope="col">Zona</th>
-                            <th scope="col">Distriro</th>
-                            <th scope="col">Acciones</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-        <div class="col-4 container-centro">
-            <div class="card card-info">
-                <div class="card-header">
-                    <div class="d-flex justify-content-between">
-                        <h5>Distribucion Centro</h5>
-                        <div>
-                            <button type="button" class="btn btn-light buttom-agrupar"
-                                    data-zona="CENTRO"
-                                    data-ajax-action="{{route('envios.distribuirsobres.agrupar',['zona'=>'CENTRO'])}}">
-                                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"
-                                      style="display: none"></span>
-                                <span class="sr-only" style="display: none"></span>
-                                <i class="fa fa-layer-group"></i>
-                                <b>Agrupar</b>
-                            </button>
-                        </div>
+                        <table id="tablaPrincipal{{Str::upper($motorizado->zona)}}" class="table table-striped">
+                            <thead>
+                            <tr>
+                                <th scope="col">Código</th>
+                                <th scope="col">Zona</th>
+                                <th scope="col">Distriro</th>
+                                <th scope="col">Acciones</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
-                <div class="card-body">
-                    <h4 class="text-center"></h4>
-
-                    <table id="tablaPrincipalCentro" class="table table-striped">
-                        <thead>
-                        <tr>
-                            <th scope="col">Código</th>
-                            <th scope="col">Zona</th>
-                            <th scope="col">Distriro</th>
-                            <th scope="col">Acciones</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        </tbody>
-                    </table>
-                </div>
             </div>
-        </div>
-        <div class="col-4 container-sur">
-            <div class="card card-dark">
-                <div class="card-header">
-                    <div class="d-flex justify-content-between">
-                        <h5>Distribucion Sur</h5>
-                        <div>
-                            <button type="button" class="btn btn-light buttom-agrupar"
-                                    data-zona="SUR"
-                                    data-ajax-action="{{route('envios.distribuirsobres.agrupar',['zona'=>'SUR'])}}">
-                                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"
-                                      style="display: none"></span>
-                                <span class="sr-only" style="display: none"></span>
-                                <i class="fa fa-layer-group"></i>
-                                <b>Agrupar</b>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-                <div class="card-body">
-                    <h4 class="text-center"></h4>
+        @endforeach
 
-                    <table id="tablaPrincipalSur" class="table table-striped">
-                        <thead>
-                        <tr>
-                            <th scope="col">Código</th>
-                            <th scope="col">Zona</th>
-                            <th scope="col">Distriro</th>
-                            <th scope="col">Acciones</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
+
     </div>
 
     <div class="card">
@@ -284,9 +222,10 @@
                     }
                 },
             }
-            $('#tablaPrincipalNorte').DataTable({
+            @foreach($motorizados as $motorizado)
+            $('#tablaPrincipal{{Str::upper($motorizado->zona)}}').DataTable({
                 ...configDataTableZonas,
-                ajax: "{{ route('envios.distribuirsobresporzona.table',['zona'=>'NORTE']) }}",
+                ajax: "{{ route('envios.distribuirsobresporzona.table',['zona'=>Str::upper($motorizado->zona)]) }}",
                 rowCallback: function (row, data, index) {
                     $('[data-ajax-post]', row).click(function () {
                         const link = $(this).attr('data-ajax-post')
@@ -296,49 +235,15 @@
                         $.post(link).always(function () {
                             $(this).find('.spinner-border').hide()
                             $(this).find('.sr-only').hide()
-                            $('#tablaPrincipalNorte').DataTable().ajax.reload();
+                            @foreach($motorizados as $m)
+                            $('#tablaPrincipal{{Str::upper($m->zona)}}').DataTable().ajax.reload();
+                            @endforeach
                             $('#tablaPrincipal').DataTable().ajax.reload();
                         })
                     })
                 },
             });
-            $('#tablaPrincipalCentro').DataTable({
-                ...configDataTableZonas,
-                ajax: "{{ route('envios.distribuirsobresporzona.table',['zona'=>'CENTRO']) }}",
-                rowCallback: function (row, data, index) {
-                    $('[data-ajax-post]', row).click(function () {
-                        const link = $(this).attr('data-ajax-post')
-                        $(this).find('.spinner-border').show()
-                        $(this).find('.sr-only').show()
-
-                        $.post(link).always(function () {
-                            $(this).find('.spinner-border').hide()
-                            $(this).find('.sr-only').hide()
-                            $('#tablaPrincipalCentro').DataTable().ajax.reload();
-                            $('#tablaPrincipal').DataTable().ajax.reload();
-                        })
-                    })
-                },
-            });
-            $('#tablaPrincipalSur').DataTable({
-                ...configDataTableZonas,
-                ajax: "{{ route('envios.distribuirsobresporzona.table',['zona'=>'SUR']) }}",
-                rowCallback: function (row, data, index) {
-                    $('[data-ajax-post]', row).click(function () {
-                        const link = $(this).attr('data-ajax-post')
-                        $(this).find('.spinner-border').show()
-                        $(this).find('.sr-only').show()
-
-                        $.post(link).always(function () {
-                            $(this).find('.spinner-border').hide()
-                            $(this).find('.sr-only').hide()
-                            $('#tablaPrincipalSur').DataTable().ajax.reload();
-                            $('#tablaPrincipal').DataTable().ajax.reload();
-                        })
-                    })
-                },
-            });
-
+            @endforeach
             $(".buttom-agrupar[data-ajax-action]").click(function () {
                 const buttom = $(this)
                 const link = buttom.attr('data-ajax-action')
