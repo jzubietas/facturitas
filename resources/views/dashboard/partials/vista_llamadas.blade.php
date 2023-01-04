@@ -42,7 +42,14 @@
             </div>
         </div>
     </div>
-
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-body">
+                <div id="search_content_result">
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="col-lg-12">
         <x-grafico-metas-mes></x-grafico-metas-mes>
     </div>
