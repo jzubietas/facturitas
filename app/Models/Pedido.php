@@ -232,6 +232,18 @@ class Pedido extends Model
     }
 
 
+    public function scopeSinZonaAsignadaEnvio($query)
+    {
+        return $query->where(function ($query){
+            $query->whereNull($this->qualifyColumn('env_zona_asignada'));
+            $query->orWhere($this->qualifyColumn('env_zona_asignada'),'=','');
+        });
+    }
+
+    public function scopeZonaAsignadaEnvio($query,$zona)
+    {
+        return $query->where($this->qualifyColumn('env_zona_asignada'), '=', $zona);
+    }
     public function scopeConDireccionEnvio($query)
     {
         return $query->where($this->qualifyColumn('estado_sobre'), '=', 1);

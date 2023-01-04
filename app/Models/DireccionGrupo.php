@@ -12,23 +12,18 @@ class DireccionGrupo extends Model
     use CommonModel;
 
     //condicion_envio
-    const CE_EN_REPARTO ="EN REPARTO";//1
-    const CE_EN_REPARTO_CODE =8;//1
+    const CE_EN_REPARTO = "EN REPARTO";//1
+    const CE_EN_REPARTO_CODE = 8;//1
 
 
+    const CE_ENTREGADO = "ENTREGADO";//2
+    const CE_ENTREGADO_CODE = 10;//2
 
-    const CE_ENTREGADO ="ENTREGADO";//2
-    const CE_ENTREGADO_CODE =10;//2
+    const CE_ENTREGADO_SIN_SOBRE = "ENTREGADO SIN SOBRE";
+    const CE_ENTREGADO_SIN_SOBRE_CODE = 14;
 
-    const CE_ENTREGADO_SIN_SOBRE ="ENTREGADO SIN SOBRE";
-    const CE_ENTREGADO_SIN_SOBRE_CODE =14;
-
-    const CE_BANCARIZACION ="BANCARIZACION";//2
-    const CE_BANCARIZACION_CODE =4;//2
-
-
-
-
+    const CE_BANCARIZACION = "BANCARIZACION";//2
+    const CE_BANCARIZACION_CODE = 4;//2
 
 
     //subcondicion_envio
@@ -40,21 +35,38 @@ class DireccionGrupo extends Model
     const NULL = 'NULL';
 
     protected $guarded = ['id'];
+    protected $casts = [
+        'fecha_recepcion' => 'date'
+    ];
 
-    public function gastoEnvio(){
-        return $this->hasOne(GastoEnvio::class,'direcciongrupo');
+    protected static function booted()
+    {
+        parent::booted();
+        self::created(function (self $model) {
+            $model->update([
+                'correlativo' => 'ENV' . $model->id
+            ]);
+        });
     }
 
-    public function gastoEnvios(){
-        return $this->hasMany(GastoEnvio::class,'direcciongrupo');
+    public function gastoEnvio()
+    {
+        return $this->hasOne(GastoEnvio::class, 'direcciongrupo');
     }
 
-    public function direccionEnvio(){
-        return $this->hasOne(DireccionEnvio::class,'direcciongrupo');
+    public function gastoEnvios()
+    {
+        return $this->hasMany(GastoEnvio::class, 'direcciongrupo');
     }
 
-    public function direccionEnvios(){
-        return $this->hasMany(DireccionEnvio::class,'direcciongrupo');
+    public function direccionEnvio()
+    {
+        return $this->hasOne(DireccionEnvio::class, 'direcciongrupo');
+    }
+
+    public function direccionEnvios()
+    {
+        return $this->hasMany(DireccionEnvio::class, 'direcciongrupo');
     }
 
 }

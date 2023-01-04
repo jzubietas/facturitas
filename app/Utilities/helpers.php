@@ -112,3 +112,41 @@ if (!function_exists("add_query_filtros_por_roles")) {
         }
     }
 }
+
+if (!function_exists("add_query_filtros_por_roles_pedidos")) {
+    function add_query_filtros_por_roles_pedidos($query,  $column = 'u.identificador')
+    {
+        if (Auth::user()->rol == "Operario") {
+            $asesores = User::rolAsesor()
+                ->activo()
+                ->Where('operario', Auth::user()->id)
+                ->pluck('identificador');
+
+            $query = $query->WhereIn($column, $asesores);
+        } else if (Auth::user()->rol == "Jefe de operaciones") {
+            $operarios = User::where('rol', 'Operario')
+                ->activo()
+                ->where('jefe', Auth::user()->id)
+                ->pluck('id');
+
+            $asesores = User::rolAsesor()
+                ->activo()
+                ->WhereIn('operario', $operarios)
+                ->pluck('identificador');
+
+            $query = $query->WhereIn( $column, $asesores);
+        } else if (Auth::user()->rol == "Asesor") {
+            $query = $query->Where( $column, Auth::user()->identificador);
+        } else if (Auth::user()->rol == "Super asesor") {
+            $query = $query->Where($column, Auth::user()->identificador);
+        } else if (Auth::user()->rol == "Encargado") {
+            $usersasesores = User::rolAsesor()
+                ->activo()
+                ->where('supervisor', Auth::user()->id)
+                ->pluck('identificador');
+
+            $query = $query->WhereIn($column, $usersasesores);
+        }
+        return $query;
+    }
+}
