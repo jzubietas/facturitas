@@ -1856,24 +1856,6 @@ class EnvioController extends Controller
             $_destino = $request->destino;
             $_pedido = Pedido::find($request->cod_pedido);
 
-
-            if ($_destino == 'LIMA') {
-                $_pedido->update([
-                    //'condicion_envio' => Pedido::REPARTO_COURIER,
-                    //'condicion_envio_code' => Pedido::REPARTO_COURIER_INT
-                    'estado_sobre' => '1'
-                ]);
-
-            } else {
-
-                $_pedido->update([
-                    'estado_sobre' => '1'
-                    //'condicion_envio' => Pedido::SEGUIMIENTO_PROVINCIA_COURIER,
-                    //'condicion_envio_code' => Pedido::SEGUIMIENTO_PROVINCIA_COURIER_INT
-                ]);
-
-            }
-
             $lista_productos = '';
             $lista_codigos = '';
             $pedidos = $request->pedidos;
@@ -1898,39 +1880,6 @@ class EnvioController extends Controller
 
             if ($request->destino == "LIMA") {
 
-                $direccion_grupo_id = DireccionGrupo::create([
-                    'estado' => '1',
-                    'destino' => $request->destino,
-                    //'distribucion' => (($request->destino == 'PROVINCIA') ? 'NORTE' : ''),
-                    'distribucion' => ($zona_distrito->zona),
-                    'nombre_cliente' => $cliente->nombre,
-                    'celular_cliente' => $cliente->celular ,
-                    'icelular_cliente' => $cliente->icelular,
-                    'nombre' => $request->nombre ,
-                    'celular' => $request->contacto,
-                    'codigos' => $lista_codigos,
-                    'producto' => $lista_productos,
-                    //'condicion_envio' => Pedido::REPARTO_COURIER,
-                    //'condicion_envio_code' => Pedido::REPARTO_COURIER_INT,
-                    'pedido_id' => $request->cod_pedido,
-                    'cliente_id' => $request->cliente_id,
-                    'user_id' => $usuario_id,
-                    'identificador' => $identi_id,
-                    'distrito' => $request->distrito,
-                    'direccion' => $request->direccion,
-                    'referencia' => $request->referencia,
-                    'observacion' => $request->observacion,
-                    'cantidad' => $count_pedidos,
-                    'nombre' => $request->nombre,
-                    'celular' => $request->contacto,
-
-                ])->id;
-
-
-                $direccion_grupo = DireccionGrupo::find($direccion_grupo_id);
-                $direccion_grupo->correlativo = 'ENV' . $direccion_grupo_id;
-                $direccion_grupo->save();
-
 
                 try {
                     DB::beginTransaction();
@@ -1945,7 +1894,7 @@ class EnvioController extends Controller
                         'nombre' => $request->nombre,
                         'celular' => $request->contacto,
                         'observacion' => $request->observacion,
-                        'direcciongrupo' => $direccion_grupo_id,
+                        //'direcciongrupo' => $direccion_grupo_id,
                         'cantidad' => $cantidad,
                         'destino' => $request->destino,
                         'estado' => '1',
@@ -1970,12 +1919,22 @@ class EnvioController extends Controller
                     foreach ($array_pedidos as $pedido_id) {
                         $pedido = Pedido::find($pedido_id);
                         $pedido->update([
+                            'estado_sobre' => '1',
                             'destino' => $request->destino,
-                            //'condicion_envio' => 2,
                             'direccion' => $request->direccion,
-                            //'condicion_envio' => Pedido::REPARTO_COURIER,
-                            //'condicion_envio_code' => Pedido::REPARTO_COURIER_INT,
-
+                            'env_destino'=>$request->destino,
+                            'env_distrito' => $request->distrito,
+                            'env_zona' => $zona_distrito->zona,
+                            'env_nombre_cliente_recibe' => $request->nombre,
+                            'env_celular_cliente_recibe' => $request->contacto,
+                            'env_cantidad' => $count_pedidos,
+                            'env_direccion' => $request->direccion,
+                            'env_tracking' => '',
+                            'env_referencia' => $request->referencia,
+                            'env_numregistro' => '',
+                            'env_rotulo' => '',
+                            'env_observacion' => $request->observacion,
+                            'env_importe' => '',
                         ]);
 
 
@@ -1984,7 +1943,7 @@ class EnvioController extends Controller
                             'direccion_id' => $direccionLima->id,
                             'pedido_id' => $pedido_id,
                             'codigo_pedido' => $dp_empresa->codigo,
-                            'direcciongrupo' => $direccion_grupo_id,
+                            //'direcciongrupo' => $direccion_grupo_id,
                             'empresa' => $dp_empresa->nombre_empresa,
                             'estado' => '1'
                         ]);
@@ -2031,40 +1990,7 @@ class EnvioController extends Controller
                         $file_name = 'logo_facturas.png';
                     }
 
-                    $direccion_grupo_id = DireccionGrupo::create([
-                        'estado' => '1',
-                        'destino' => $request->destino,
-                        'distribucion' => (($request->destino == 'PROVINCIA') ? 'NORTE' : ''),
-                        'nombre_cliente' => $cliente->nombre,
-                        'celular_cliente' => $cliente->celular,
-                        'icelular_cliente' => $cliente->icelular,
-
-                        'codigos' => $lista_codigos,
-                        'producto' => $lista_productos,
-                        //'condicion_envio' => Pedido::SEGUIMIENTO_PROVINCIA_COURIER,
-                        //'condicion_envio_code' => Pedido::SEGUIMIENTO_PROVINCIA_COURIER_INT,
-                        'pedido_id' => $request->cod_pedido,
-                        'cliente_id' => $request->cliente_id,
-                        'user_id' => $usuario_id,
-                        'identificador' => $identi,
-                        'nombre' => 'OLVA' ,
-                        'celular' => 'OLVA',
-                        'direccion' => $request->tracking,
-                        'referencia' => $request->numregistro,
-                        'observacion' => $file_name,
-                        'cantidad' => $request->importe,
-                        'importe' => $request->importe
-                    ])->id;
-
-
-                    $direccion_grupo = DireccionGrupo::find($direccion_grupo_id);
-                    $direccion_grupo->correlativo = 'ENV' . $direccion_grupo_id;
-                    $direccion_grupo->save();
-
                     DB::beginTransaction();
-
-
-
 
                     $modelData = [
                         'cliente_id' => $request->cliente_id,
@@ -2074,7 +2000,7 @@ class EnvioController extends Controller
                         'foto' => $file_name,
                         'importe' => $request->importe,
                         'cantidad' => $cantidad,
-                        'direcciongrupo' => $direccion_grupo_id,
+                        //'direcciongrupo' => $direccion_grupo_id,
                         'destino' => $request->destino,
                         'estado' => '1',
                         "salvado" => "0"
@@ -2095,24 +2021,28 @@ class EnvioController extends Controller
                         $pedido = Pedido::find($pedido_id);
 
                         $pedido->update([
+                            'estado_sobre' => '1',
                             'destino' => $request->destino,
                             //'condicion_envio' => 2,//AL REGISTRAR DIRECCION PASA A ESTADO  EN REPARTO
                             'direccion' => 'PROVINCIA',
                             //'condicion_envio' => Pedido::SEGUIMIENTO_PROVINCIA_COURIER,
                             //'condicion_envio_code' => Pedido::SEGUIMIENTO_PROVINCIA_COURIER_INT,
+                            'env_destino'=>$request->destino,
+                            'env_distrito' => 'LOS OLIVOS',
+                            'env_zona' => 'NORTE',
+                            'env_nombre_cliente_recibe' => 'OLVA',
+                            'env_celular_cliente_recibe' => 'OLVA',
+                            'env_cantidad' => $count_pedidos,
+                            'env_direccion' => '',
+                            'env_tracking' => $request->tracking,
+                            'env_referencia' => '',
+                            'env_numregistro' => $request->numregistro,
+                            'env_rotulo' => $file_name,
+                            'env_observacion' => '',
+                            'env_importe' => $request->importe,
                         ]);
 
                         $dp_empresa = DetallePedido::where("pedido_id", $pedido_id)->first();
-
-
-                        $gastoPedido = GastoPedido::create([
-                            'gasto_id' => $gastoProvincia->id,
-                            'pedido_id' => $pedido_id,
-                            'codigo_pedido' => $dp_empresa->codigo,
-                            'direcciongrupo' => $direccion_grupo_id,
-                            'empresa' => $dp_empresa->nombre_empresa,
-                            'estado' => '1'
-                        ]);
 
                         $pedido = Pedido::find($pedido_id);
 
