@@ -410,13 +410,6 @@ return [
                     'active' => ['envios'],
                 ],
                 [
-                    'text' => 'Sobres sin direccion',
-                    'route' => 'envios.sindireccion',
-                    'can' => 'envios.sindireccion',
-                    'icon' => 'fas fa-check-circle',
-                    'active' => ['envios sin direccion'],
-                ],
-                [
                     'text' => 'Sobres con direccion',
                     'route' => 'envios.distribuirsobres',
                     'can' => 'envios.condireccion',
@@ -424,52 +417,19 @@ return [
                     'active' => ['envios con direccion'],
                 ],
                 [
+                    'text' => 'Sobres sin direccion',
+                    'route' => 'envios.sindireccion',
+                    'can' => 'envios.sindireccion',
+                    'icon' => 'fas fa-check-circle',
+                    'active' => ['envios sin direccion'],
+                ],
+
+                [
                     'text' => 'Sobres para reparto',
                     'route' => 'envios.parareparto',
                     'can' => 'envios.parareparto',
                     'icon' => 'fas fa-check-circle',
                     'active' => ['envios para reparto'],
-                ],
-
-
-                [
-                    'text' => 'Sobres por recibir',
-                    'route' => 'envios.porrecibir',
-                    'can' => 'envios.porrecibir',
-                    'icon' => 'fas fa-check-circle',
-                    'active' => ['envios'],
-                ],
-
-                [
-                    'text' => 'Distribuir Sobres',
-                    'route' => 'envios.distribuirsobres',
-                    'can' => 'envios.estadosobre',
-                    'icon' => 'fas fa-check-circle',
-                    'active' => ['envios distribuir sobres'],
-                ],
-
-
-                [
-                    'text' => 'Sobres en Ruta',
-                    'route' => 'envios.rutaenvio',
-                    'can' => 'envios.rutaenvio',
-                    'icon' => 'fas fa-check-circle',
-                    'active' => ['envios'],
-                ],
-                [
-                    'text' => 'Sobres en reparto',
-                    'route' => 'envios.enreparto',
-                    'can' => 'envios.index',
-                    'icon' => 'fas fa-check-circle',
-                    'active' => ['envios'],
-                ],
-
-                [
-                    'text' => 'Seguimiento provincia',
-                    'route' => 'envios.seguimientoprovincia',
-                    'can' => 'envios.seguimientoprovincia',
-                    'icon' => 'fas fa-check-circle',
-                    'active' => ['enviados'],
                 ],
                 [
                     'text' => 'Motorizado',
@@ -485,6 +445,25 @@ return [
                     'icon' => 'fas fa-check-circle',
                     'active' => ['enviados'],
                 ],
+
+                [
+                    'text' => 'Sobres por recibir',
+                    'route' => 'envios.porrecibir',
+                    'can' => 'envios.porrecibir',
+                    'icon' => 'fas fa-check-circle',
+                    'active' => ['envios'],
+                ],
+
+
+
+
+                [
+                    'text' => 'Sobres en reparto',
+                    'route' => 'envios.enreparto',
+                    'can' => 'envios.index',
+                    'icon' => 'fas fa-check-circle',
+                    'active' => ['envios'],
+                ],
                 /*[
                     'text' => 'Motorizado',
                     'route' => 'envios.motorizados.index',
@@ -499,6 +478,13 @@ return [
                     'icon' => 'fas fa-check-circle',//dot_sobres_entregados_count
                     //'icon' => 'noti-sobres-entregados noti-side',
                     'active' => ['enviados'],
+                ],
+                [
+                    'text' => 'Sobres en Ruta',
+                    'route' => 'envios.rutaenvio',
+                    'can' => 'envios.rutaenvio',
+                    'icon' => 'fas fa-check-circle',
+                    'active' => ['envios'],
                 ],
             ],
         ],
