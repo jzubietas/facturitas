@@ -1885,6 +1885,9 @@ class EnvioController extends Controller
             $usuario = Cliente::find($request->cliente_id);
             $usuario_id = $usuario->user_id;
 
+            $identi=User::find($usuario_id);
+            $identi_id=$identi->identificador;
+
             if ($request->destino == "LIMA") {
 
                 $direccion_grupo_id = DireccionGrupo::create([
@@ -1892,8 +1895,11 @@ class EnvioController extends Controller
                     'destino' => $request->destino,
                     //'distribucion' => (($request->destino == 'PROVINCIA') ? 'NORTE' : ''),
                     'distribucion' => ($zona_distrito->zona),
-                    'nombre_cliente' => (($request->destino == 'LIMA') ? $request->nombre : $cliente->nombre),
-                    'celular_cliente' => (($request->destino == 'LIMA') ? $request->contacto : $cliente->celular . "-" . $cliente->icelular),
+                    'nombre_cliente' => $cliente->nombre,
+                    'celular_cliente' => $cliente->celular ,
+                    'icelular_cliente' => $cliente->icelular,
+                    'nombre' => $request->nombre ,
+                    'celular' => $request->contacto,
                     'codigos' => $lista_codigos,
                     'producto' => $lista_productos,
                     //'condicion_envio' => Pedido::REPARTO_COURIER,
@@ -1901,7 +1907,7 @@ class EnvioController extends Controller
                     'pedido_id' => $request->cod_pedido,
                     'cliente_id' => $request->cliente_id,
                     'user_id' => $usuario_id,
-
+                    'identificador' => $identi_id,
                     'distrito' => $request->distrito,
                     'direccion' => $request->direccion,
                     'referencia' => $request->referencia,
@@ -1995,29 +2001,18 @@ class EnvioController extends Controller
             if ($request->destino == "PROVINCIA") {
                 try {
 
-                    $direccion_grupo_id = DireccionGrupo::create([
-                        'estado' => '1',
-                        'destino' => $request->destino,
-                        'distribucion' => (($request->destino == 'PROVINCIA') ? 'NORTE' : ''),
-                        'nombre_cliente' => (($request->destino == 'LIMA') ? $request->nombre : $cliente->nombre),
-                        'celular_cliente' => (($request->destino == 'LIMA') ? $request->contacto : $cliente->celular . "-" . $cliente->icelular),
-                        'codigos' => $lista_codigos,
-                        'producto' => $lista_productos,
-                        //'condicion_envio' => Pedido::SEGUIMIENTO_PROVINCIA_COURIER,
-                        //'condicion_envio_code' => Pedido::SEGUIMIENTO_PROVINCIA_COURIER_INT,
-                        'pedido_id' => $request->cod_pedido,
-                        'cliente_id' => $request->cliente_id,
-                        'user_id' => $usuario_id
-                    ])->id;
 
-
-                    $direccion_grupo = DireccionGrupo::find($direccion_grupo_id);
-                    $direccion_grupo->correlativo = 'ENV' . $direccion_grupo_id;
-                    $direccion_grupo->save();
-
-                    DB::beginTransaction();
+                    $cliente = Cliente::where("id", $request->cliente_id)->first();
+                    $count_pedidos = count((array)$array_pedidos);
 
                     $cantidad = $count_pedidos;
+
+                    $usuario = Cliente::find($request->cliente_id);
+                    $usuario_id = $usuario->user_id;
+
+                    $identi=User::find($usuario_id);
+                    $identi_id=$identi->identificador;
+
                     $files = $request->file('rotulo');
                     $destinationPath = base_path('public/storage/gastos/');
 
@@ -2027,6 +2022,41 @@ class EnvioController extends Controller
                     } else {
                         $file_name = 'logo_facturas.png';
                     }
+
+                    $direccion_grupo_id = DireccionGrupo::create([
+                        'estado' => '1',
+                        'destino' => $request->destino,
+                        'distribucion' => (($request->destino == 'PROVINCIA') ? 'NORTE' : ''),
+                        'nombre_cliente' => $cliente->nombre,
+                        'celular_cliente' => $cliente->celular,
+                        'icelular_cliente' => $cliente->icelular,
+
+                        'codigos' => $lista_codigos,
+                        'producto' => $lista_productos,
+                        //'condicion_envio' => Pedido::SEGUIMIENTO_PROVINCIA_COURIER,
+                        //'condicion_envio_code' => Pedido::SEGUIMIENTO_PROVINCIA_COURIER_INT,
+                        'pedido_id' => $request->cod_pedido,
+                        'cliente_id' => $request->cliente_id,
+                        'user_id' => $usuario_id,
+                        'identificador' => $identi,
+                        'nombre' => 'OLVA' ,
+                        'celular' => 'OLVA',
+                        'direccion' => $request->tracking,
+                        'referencia' => $request->numregistro,
+                        'observacion' => $file_name,
+                        'cantidad' => $request->importe,
+                        'importe' => $request->importe
+                    ])->id;
+
+
+                    $direccion_grupo = DireccionGrupo::find($direccion_grupo_id);
+                    $direccion_grupo->correlativo = 'ENV' . $direccion_grupo_id;
+                    $direccion_grupo->save();
+
+                    DB::beginTransaction();
+
+
+
 
                     $modelData = [
                         'cliente_id' => $request->cliente_id,
