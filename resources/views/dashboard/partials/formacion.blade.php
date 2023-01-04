@@ -9,13 +9,11 @@
 
 <div class="row">
     <div class="col-lg-6">
-        <div class="card" style="
-    background-color: #a5770f1a;
-">
+        <div class="card" style="background-color: #a5770f1a;">
             <div class="card-header">Buscar Cliente/RUC</div>
             <div class="card-header">
                 <div class="row">
-                    <div class="col-md-10">
+                    <div class="col-md-9">
                         <div class="input-group mb-3">
                             <div class="input-group-prepend">
                                 <div class="input-group-text p-0">
@@ -29,7 +27,7 @@
                                    placeholder="Buscar cliente">
                         </div>
                     </div>
-                    <div class="col-md-2">
+                    <div class="col-md-3">
                         <div class="input-group mb-3">
                             <div class="input-group-append">
                                 <button type="button" class="btn btn-dark" id="buttom_search_cliente">
