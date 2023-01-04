@@ -16,6 +16,7 @@ class CobranzasMesesProgressBar extends Widgets
     public $general = [];
 
     public $totales = [];
+    private $addids = [];
 
     public $total_dias = 4;
 
@@ -61,7 +62,7 @@ class CobranzasMesesProgressBar extends Widgets
             ->pagados()
             //->join('detalle_pedidos', 'detalle_pedidos.pedido_id', '=', 'pedidos.id')
             ->join('pago_pedidos', 'pago_pedidos.pedido_id', '=', 'pedidos.id')
-            ->join('pagos', 'pagos.id', '=', 'pago_pedidos.pago_id')
+            //->join('pagos', 'pagos.id', '=', 'pago_pedidos.pago_id')
             //->where('detalle_pedidos.estado', '=', 1)
             ->where('pago_pedidos.estado', '=', 1)
             //->whereNotIn('pedidos.user_id', $asesorB)

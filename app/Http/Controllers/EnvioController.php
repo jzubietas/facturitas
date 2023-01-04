@@ -203,6 +203,10 @@ class EnvioController extends Controller
 
         return Datatables::of($pedidos)
             ->addIndexColumn()
+            ->editColumn('condicion_envio', function ($pedido) {
+                $color = Pedido::getColorByCondicionEnvio($pedido->condicion_envio);
+                return '<span class="badge badge-success w-100" style="background-color: ' . $color . '!important;">' . $pedido->condicion_envio . '</span>';
+            })
             ->addColumn('action', function ($pedido) {
                 $btn = '';
 
@@ -219,7 +223,7 @@ class EnvioController extends Controller
 
                 return $btn;
             })
-            ->rawColumns(['action'])
+            ->rawColumns(['action','condicion_envio'])
             ->make(true);
 
     }
@@ -380,6 +384,10 @@ class EnvioController extends Controller
 
         return Datatables::of($pedidos)
             ->addIndexColumn()
+            ->editColumn('condicion_envio', function ($pedido) {
+                $color = Pedido::getColorByCondicionEnvio($pedido->condicion_envio);
+                return '<span class="badge badge-success w-100" style="background-color: ' . $color . '!important;">' . $pedido->condicion_envio . '</span>';
+            })
             ->addColumn('action', function ($pedido) {
                 $btn = '';
 
@@ -396,7 +404,7 @@ class EnvioController extends Controller
 
                 return $btn;
             })
-            ->rawColumns(['action'])
+            ->rawColumns(['action','condicion_envio'])
             ->make(true);
 
     }
