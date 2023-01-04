@@ -46,25 +46,29 @@ class MotorizadoController extends Controller
             add_query_filtros_por_roles($query, 'u');
             return datatables()->query(DB::table($query))
                 ->addIndexColumn()
+                ->editColumn('condicion_envio', function ($pedido) {
+                    $color = Pedido::getColorByCondicionEnvio($pedido->condicion_envio);
+                    return '<span class="badge badge-success w-100" style="background-color: ' . $color . '!important;">' . $pedido->condicion_envio . '</span>';
+                })
                 ->addColumn('action', function ($pedido) {
-                    $btn = '';
-                    $btn .= '<ul class="list-unstyled pl-0 d-flex mt-sm-20">';
+                    $btn = '<ul class="list-unstyled pl-0 d-flex mt-sm-20">';
                     $btn .= '<li class="p-8">
-                                    <button class="btn btn-sm text-white bg-primary"
-                                    data-jqconfirm="' . $pedido->id . '">
-                                        <i class="fa fa-motorcycle text-white" aria-hidden="true"></i> A confirmacion
+                                    <button class="btn btn-sm text-white bg-primary" data-jqconfirm="' . $pedido->id . '">
+                                        <i class="fa fa-motorcycle text-white" aria-hidden="true"></i>
+                                        A confirmacion
                                     </button>
                                 </li>';
                     $btn .= '<li class="p-8">
                                 <button class="btn btn-sm text-white btn-danger" data-jqconfirmcancel="' . $pedido->id . '" data-jqconfirm-type="revertir">
-                                    <i class="fas fa-arrow-left text-white"></i> Revertir a reparto
+                                    <i class="fas fa-arrow-left text-white"></i>
+                                    Revertir a reparto
                                 </button>
                             </li>';
                     $btn .= '</ul>';
 
                     return $btn;
                 })
-                ->rawColumns(['action'])
+                ->rawColumns(['action','condicion_envio'])
                 ->toJson();
         }
         return view('envios.motorizado.index');
@@ -103,6 +107,10 @@ class MotorizadoController extends Controller
             add_query_filtros_por_roles($query, 'u');
             return datatables()->query(DB::table($query))
                 ->addIndexColumn()
+                ->editColumn('condicion_envio', function ($pedido) {
+                    $color = Pedido::getColorByCondicionEnvio($pedido->condicion_envio);
+                    return '<span class="badge badge-success w-100" style="background-color: ' . $color . '!important;">' . $pedido->condicion_envio . '</span>';
+                })
                 ->addColumn('action', function ($pedido) {
                     $btn = '';
                     $btn .= '<ul class="list-unstyled pl-0">';
@@ -120,7 +128,7 @@ class MotorizadoController extends Controller
 
                     return $btn;
                 })
-                ->rawColumns(['action'])
+                ->rawColumns(['action','condicion_envio'])
                 ->toJson();
         }
         return view('envios.motorizado.confirmar');

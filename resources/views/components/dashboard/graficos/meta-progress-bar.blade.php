@@ -18,9 +18,7 @@
             <x-bs-progressbar :progress="data_get($data,'progress')">
                 {{$data['progress']}}% - {{$data['asignados']}}/{{$data['meta']}}
             </x-bs-progressbar>
-            <span>
-                                    % - Asignados / Meta
-                                </span>
+            <span>% - Asignados / Meta</span>
         </li>
     @endforeach
 

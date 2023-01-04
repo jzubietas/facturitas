@@ -54,8 +54,7 @@ class AddColumPedidosDireccion extends Command
             $table->string("env_rotulo",250)->nullable()->after('env_numregistro');//rotulo
             $table->string("env_observacion",250)->nullable()->after('env_rotulo');//
             $table->string("env_importe",250)->nullable()->after('env_observacion');//importe
-            $table->integer("direccion_grupo",250)->nullable()->after('env_importe');
-
+            //$table->integer("direccion_grupo")->nullable()->after('env_importe');
             //$table->integer("celular_cliente_recibe",250)->nullable()->after('nombre_cliente');
         });
 
