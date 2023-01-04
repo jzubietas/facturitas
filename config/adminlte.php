@@ -432,6 +432,13 @@ return [
                     'active' => ['envios para reparto'],
                 ],
                 [
+                    'text' => 'Recepción motorizado',
+                    'route' => 'envios.recepcionmotorizado',
+                    'can' => 'envios.recepcionmotorizado',
+                    'icon' => 'fas fa-check-circle dot_sobres_confirmar_recepcion_count',
+                    'active' => ['envios recepcion motorizado'],
+                ],
+                [
                     'text' => 'Motorizado',
                     'route' => 'envios.motorizados.index',
                     'can' => 'operacion.motorizado',

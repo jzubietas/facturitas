@@ -238,6 +238,9 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     /*Controller Pedido */
 
     /*Envios */
+    Route::get('envios.recepcionmotorizado', [EnvioController::class, 'Enviosrecepcionmotorizado'])->name('envios.recepcionmotorizado');
+    Route::get('envios.recepcionmotorizadotabla', [EnvioController::class, 'Enviosrecepcionmotorizadotabla'])->name('envios.recepcionmotorizadotabla');
+
     Route::get('envios.porconfirmar', [EnvioController::class, 'Enviosporconfirmar'])->name('envios.porconfirmar');
     Route::get('envios.porconfirmartabla', [EnvioController::class, 'Enviosporconfirmartabla'])->name('envios.porconfirmartabla');
 
