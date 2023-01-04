@@ -377,6 +377,14 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     Route::post('envios.distribuirid', [EnvioController::class, 'DistribuirEnvioid'])->name('envios.distribuirid');
     Route::post('envios.changeImg', [EnvioController::class, 'changeImg'])->name('envios.changeImg');
 
+    Route::get('envios.distribuirsobres', [EnvioController::class, 'DistribuirSobres'])->name('envios.distribuirsobres');
+    Route::get('envios.distribuirsobrestabla', [EnvioController::class, 'DistribuirSobrestabla'])->name('envios.distribuirsobrestabla');
+
+
+    Route::get('envios.distribuirsobrestablaNorte', [EnvioController::class, 'DistribuirSobrestablaNorte'])->name('envios.distribuirsobrestablaNorte');
+    Route::get('envios.distribuirsobrestablaCentro', [EnvioController::class, 'DistribuirSobrestablaCentro'])->name('envios.distribuirsobrestablaCentro');
+    Route::get('envios.distribuirsobrestablaSur', [EnvioController::class, 'DistribuirSobrestablaSur'])->name('envios.distribuirsobrestablaSur');
+
     Route::get('envios.estadosobres', [EnvioController::class, 'Estadosobres'])->name('envios.estadosobres');
     Route::get('envios.estadosobrestabla', [EnvioController::class, 'Estadosobrestabla'])->name('envios.estadosobrestabla');
     Route::post('envios.estadosobresexcel', [ExcelController::class, 'estadosobresExcel'])->name('estadosobresexcel');

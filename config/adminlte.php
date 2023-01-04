@@ -417,6 +417,13 @@ return [
                     'active' => ['envios estadosobres'],
                 ],
                 [
+                    'text' => 'Distribuir Sobres',
+                    'route' => 'envios.distribuirsobres',
+                    'can' => 'envios.estadosobre',
+                    'icon' => 'fas fa-check-circle',
+                    'active' => ['envios distribuir sobres'],
+                ],
+                [
                     'text' => 'Sobres con direccion',
                     'route' => 'envios.condireccion',
                     'can' => 'envios.condireccion',
