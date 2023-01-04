@@ -120,7 +120,8 @@ class EnvioController extends Controller
                     'u.identificador',
                     'dp.nombre_empresa as empresas',
                 ]
-            )->where('estado_sobre','1');
+            )->where('condicion_envio_code',Pedido::RECEPCION_COURIER_INT)
+            ->where('estado_sobre','1');
 
         return Datatables::of($pedidos)
             ->addIndexColumn()
@@ -227,7 +228,8 @@ class EnvioController extends Controller
                     'u.identificador',
                     'dp.nombre_empresa as empresas',
                 ]
-            )->where('estado_sobre','0');
+            )->where('condicion_envio_code',Pedido::RECEPCION_COURIER_INT)
+            ->where('estado_sobre','0');
 
         return Datatables::of($pedidos)
             ->addIndexColumn()
