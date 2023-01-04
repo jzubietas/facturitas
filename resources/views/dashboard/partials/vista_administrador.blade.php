@@ -186,12 +186,17 @@
                                     <span class="input-group-text"> Seleccionar Mes</span>
                                 </div>
                                 <div class="input-group-prepend">
-                                    <a href="{{route('dashboard.index',['selected_date'=>$currentDate->clone()->startOfMonth()->subMonth()->format('m-Y')])}}"
+                                    <a href="{{route('dashboard.index',['selected_date'=>$currentDate->clone()->startOfMonth()->subYear()->format('m-Y')])}}"
                                        class="btn m-0 p-0"
-                                       type="button">
+                                       data-toggle="tooltip" data-placement="top" title="Un año atras">
                             <span class="input-group-text">
                                 <
                             </span>
+                                    </a>
+                                    <a href="{{route('dashboard.index',['selected_date'=>$currentDate->clone()->startOfMonth()->subMonth()->format('m-Y')])}}"
+                                       class="btn m-0 p-0"
+                                       data-toggle="tooltip" data-placement="top" title="Un mes atras">
+                                        <span class="input-group-text"><</span>
                                     </a>
                                 </div>
                                 <select class="form-control" id="datepickerDashborad"
@@ -210,7 +215,15 @@
 
                                 <div class="input-group-append">
                                     <a href="{{route('dashboard.index',['selected_date'=>$currentDate->clone()->addMonths()->format('m-Y')])}}"
-                                       class="btn m-0 p-0" type="button">
+                                       class="btn m-0 p-0"
+                                       data-toggle="tooltip" data-placement="top" title="Un mes adelante">
+                                        <span class="input-group-text">></span>
+                                    </a>
+                                </div>
+                                <div class="input-group-append">
+                                    <a href="{{route('dashboard.index',['selected_date'=>$currentDate->clone()->addYear()->format('m-Y')])}}"
+                                       class="btn m-0 p-0"
+                                       data-toggle="tooltip" data-placement="top" title="Un año adelante">
                                         <span class="input-group-text">></span>
                                     </a>
                                 </div>
