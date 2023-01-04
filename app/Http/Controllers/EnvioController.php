@@ -27,6 +27,7 @@ use App\Notifications\PedidoNotification;
 use Carbon\Carbon;
 use Exception;
 
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Maatwebsite\Excel\Concerns\Exportable;
 use Maatwebsite\Excel\Concerns\WithMultipleSheets;
@@ -2213,23 +2214,29 @@ class EnvioController extends Controller
 
         //add_query_filtros_por_roles_pedidos($pedidoQuery, 'u.identificador');
 
+        $motorizados = User::query()->where('rol', '=', 'MOTORIZADO')->whereNotNull('zona')->get();
+        $color_zones=[];
+        $color_zones['NORTE']='warning';
+        $color_zones['CENTRO']='info';
+        $color_zones['SUR']='dark';
         return Datatables::of(DB::table($pedidoQuery))
             ->addIndexColumn()
             ->editColumn('condicion_envio', function ($pedido) {
                 $color = Pedido::getColorByCondicionEnvio($pedido->condicion_envio);
                 return '<span class="badge badge-success w-100" style="background-color: ' . $color . '!important;">' . $pedido->condicion_envio . '</span>';
             })
-            ->addColumn('action', function ($pedido) {
-                $btn[] = "<li class='list-group-item text-center p-0'><button data-ajax-post='" . route('envios.distribuirsobres.asignarzona', ['pedido_id' => $pedido->id, 'zona' => 'NORTE']) . "' class='btn btn-warning btn-sm btn-block my-0' type='button'>
+            ->addColumn('action', function ($pedido)use ($motorizados,$color_zones) {
+                $btn=[];
+               foreach ($motorizados as $motorizado) {
+                   $btn[] = "<li class='list-group-item text-center p-0'>
+<button data-ajax-post='" . route('envios.distribuirsobres.asignarzona', ['pedido_id' => $pedido->id, 'zona' => Str::upper($motorizado->zona)]) . "'
+ class='btn btn-".($color_zones[Str::upper($motorizado->zona)]??'info')." btn-sm btn-block my-0' type='button'>
 <span class='spinner-border spinner-border-sm' role='status' aria-hidden='true' style='display: none'></span>
-  <span class='sr-only' style='display: none'>Distribuir al Norte</span>Distribuir al Norte
-</button></li>";
-                $btn[] = "<li class='list-group-item text-center p-0'><button data-ajax-post='" . route('envios.distribuirsobres.asignarzona', ['pedido_id' => $pedido->id, 'zona' => 'CENTRO']) . "' class='btn btn-info btn-sm btn-block my-0' type='button'>
-<span class='spinner-border spinner-border-sm' role='status' aria-hidden='true' style='display: none'></span>
-  <span class='sr-only' style='display: none'>Distribuir al Centro</span>Distribuir al Centro</button></li>";
-                $btn[] = "<li class='list-group-item text-center p-0'><button data-ajax-post='" . route('envios.distribuirsobres.asignarzona', ['pedido_id' => $pedido->id, 'zona' => 'SUR']) . "' class='btn btn-dark btn-sm btn-block my-0' type='button'>
-<span class='spinner-border spinner-border-sm' role='status' aria-hidden='true' style='display: none'></span>
-  <span class='sr-only' style='display: none'>Distribuir al Sur</span>Distribuir al Sur</button></li>";
+  <span class='sr-only' style='display: none'>".(Str::ucfirst(Str::lower($motorizado->zona)))."</span>".(Str::ucfirst(Str::lower($motorizado->zona)))."</button></li>";
+               }
+               if(count($motorizados)==0){
+                   $btn[] ='<li class="list-group-item alert alert-warning p-8 text-center mb-0">No hay motorizados registrados</li>';
+               }
                 return "<ul class='list-group'>" . join('', $btn) . "</ul>";
             })
             ->rawColumns(['action', 'condicion_envio'])
