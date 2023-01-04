@@ -133,7 +133,7 @@
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-body">
-                            <div class="d-flex justify-content-center">
+                            <div class="">
                                 <ul class="list-group">
                                     <li class="list-group-item">
                                     </li>
