@@ -145,7 +145,8 @@ class AdministracionController extends Controller
 
         $titulares = [
             "EPIFANIO SOLANO HUAMAN" => 'EPIFANIO SOLANO HUAMAN',
-            "NIKSER DENIS ORE RIVEROS" => 'NIKSER DENIS ORE RIVEROS'
+            "NIKSER DENIS ORE RIVEROS" => 'NIKSER DENIS ORE RIVEROS',
+            "ALFREDO ALEJANDRO GABRIEL MONTALVO" => 'ALFREDO ALEJANDRO GABRIEL MONTALVO'
         ];
 
         $bancos = [
