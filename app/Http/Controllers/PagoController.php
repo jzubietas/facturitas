@@ -778,7 +778,7 @@ class PagoController extends Controller
         }
 
         $cliente = Cliente::find($request->cliente_id);
-       
+
         $cliente->pedidos_mes_deuda = $cliente->pedidos()->activo()->noPagados()->whereIn('created_at', [now()->startOfMonth(), now()->endOfMonth()->endOfDay()])->count();
         $cliente->pedidos_mes_deuda_antes = $cliente->pedidos()->activo()->noPagados()->where('created_at', '<', now()->startOfMonth()->subMonth()->endOfMonth()->endOfDay()->endOfDay())->count();
 
@@ -1323,7 +1323,7 @@ class PagoController extends Controller
 
                 $pedidos_mes_deuda = $cliente->pedidos()->activo()->noPagados()->whereIn('created_at', [now()->startOfMonth(), now()->endOfMonth()->endOfDay()])->count();
                 $pedidos_mes_deuda_antes = $cliente->pedidos()->activo()->noPagados()->where('created_at', '<', now()->startOfMonth()->subMonth()->endOfMonth()->endOfDay()->endOfDay())->count();
-                
+
                 $pedido_deuda = Pedido::where('cliente_id', $request->cliente_id)
                     ->where('pagado', '0')
                     ->count();
@@ -2499,7 +2499,7 @@ class PagoController extends Controller
             throw $th;
         }
 
-        return redirect()->route('administracion.porrevisar'/*,['q1'=>'12/11/2022','q2'=>'15/11/2022']*/)->with('info', 'actualizado');
+        return redirect()->route('administracion.pendientes'/*,['q1'=>'12/11/2022','q2'=>'15/11/2022']*/)->with('info', 'actualizado');
         //return redirect()->route('postSearch', ['q' => 4]);
     }
 
