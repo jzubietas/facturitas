@@ -46,7 +46,7 @@
       <table id="tablaPrincipal" style="width:100%;" class="table table-striped">
         <thead>
           <tr>
-            <th scope="col">Item</th>
+
             <th scope="col">Código</th>
             <th scope="col">Asesor</th>
             <th scope="col">Cliente</th>
@@ -341,82 +341,40 @@
             name: 'correlativo',
 
           },
-          {
-            data: 'codigos',
-            name: 'codigos',
-            render: function ( data, type, row, meta ) {
-              if(data==null){
-                return 'SIN PEDIDOS';
-              }else{
-                var returndata='';
-                var jsonArray=data.split(",");
-                $.each(jsonArray, function(i, item) {
-                    returndata+=item+'<br>';
-                });
-                return returndata;
-              }
-            },
-          },
           {data: 'identificador', name: 'identificador', },
           {
             data: 'celular',
             name: 'celular',
             render: function ( data, type, row, meta ) {
-              return row.celular+'<br>'+row.nombre
+              return row.celulares+row.icelulares+'<br>'+row.nombres
             },
           },
           {
-            data: 'fecha',
-            name: 'fecha',
-            render: $.fn.dataTable.render.moment( 'DD/MM/YYYY' )
+            data: 'created_at',
+            name: 'created_at',
+            //render: $.fn.dataTable.render.moment( 'DD/MM/YYYY' )
            },
           {
-            data: 'producto',
-            name: 'producto',
+            data: 'empresas',
+            name: 'empresas',
             render: function ( data, type, row, meta ) {
               if(data==null){
-                return 'SIN RUCS';
+                return 'SIN EMPRESA';
               }else{
-                var numm=0;
-                var returndata='';
-                var jsonArray=data.split(",");
-                $.each(jsonArray, function(i, item) {
-                    numm++;
-                    returndata+=numm+": "+item+'<br>';
-
-                });
-                return returndata;
+                return data;
               }
             }
           },
-          {data: 'destino', name: 'destino', },
+          {data: 'env_destino', name: 'env_destino', },
           {
-            data:'direccion',
-            name:'direccion',
+            data:'env_direccion',
+            name:'env_direccion',
             render: function ( data, type, row, meta ) {
               //console.log(data);
               datas='';
               if(data!=null)
               {
                 return data;
-                /*if(data=='0')
-                {
-                  return '<span class="badge badge-danger">REGISTRE DIRECCION</span>';
-                }else if(data=='LIMA')
-                {
-                  var urlshow = '{{ route("pedidos.show", ":id") }}';
-                  urlshow = urlshow.replace(':id', row.id);
-
-                  return '<a href="" data-target="#modal-verdireccion" data-toggle="modal" data-dirreccion="'+row.id+'"><button class="btn btn-primary btn-sm"><i class="fas fa-eye"></i> Ver</button></a>';
-                }
-                else if(data=='PROVINCIA')
-                {
-                  return '<span class="badge badge-info">ENVIO A PROVINCIA</span>';
-                }else{
-                  return '<span class="badge badge-info">PROBLEMAS CON REGISTRO DE DESTINO</span>';
-                }*/
-
-                //return datas;
 
               }else{
                 return '<span class="badge badge-info">REGISTRE DIRECCION</span>';
@@ -425,21 +383,19 @@
             },
           },
           {
-            data: 'referencia',
-            name: 'referencia',
+            data: 'env_referencia',
+            name: 'env_referencia',
             sWidth:'10%',
             render: function ( data, type, row, meta ) {
               var datal="";
-              if(row.destino=='LIMA')
+              if(data!=null)
               {
                 return data;
 
-              }else if(row.destino=='PROVINCIA'){
-                urladjunto = '{{ route("pedidos.descargargastos", ":id") }}';
-                urladjunto = urladjunto.replace(':id', data);
-                datal = datal+'<p><a href="'+urladjunto+'">'+data+'</a><p>';
-                  return datal;
+              }else{
+                return ''
               }
+
             }
           },
           {data: 'condicion_envio', name: 'condicion_envio', },

@@ -44,7 +44,8 @@ class AddColumPedidosDireccion extends Command
             $table->string("env_destino",250)->nullable()->after('estado_sobre')->comment('LIMA PROVINCIA');//LIMA PROVINCIA
             $table->string("env_distrito",250)->nullable()->after('env_destino')->comment('LIMA PROVINCIA');//LIMA - provincia
             $table->string("env_zona",250)->nullable()->after('env_distrito')->comment('NORTE SUR ESTE OESTE para LIMA PROVINCIA');//NORTE SUR ESTE OESTE para LIMA PROVINCIA
-            $table->string("env_nombre_cliente_recibe",250)->nullable()->after('env_zona')->comment('LIMA o PROVINCIA');//LIMA o PROVINCIA
+            $table->string("env_zona_asignada",250)->nullable()->after('env_zona')->comment('ZONA CONFIRMADA PARA ENVIAR A MOTORIZADO');//NORTE SUR ESTE OESTE para LIMA PROVINCIA
+            $table->string("env_nombre_cliente_recibe",250)->nullable()->after('env_zona_asignada')->comment('LIMA o PROVINCIA');//LIMA o PROVINCIA
             $table->string("env_celular_cliente_recibe",250)->nullable()->after('env_nombre_cliente_recibe')->comment('LIMA');//olva
             $table->string("env_cantidad",250)->nullable()->after('env_celular_cliente_recibe');
             $table->string("env_direccion",250)->nullable()->after('env_cantidad')->comment('direccion lima provincia');//tracking
