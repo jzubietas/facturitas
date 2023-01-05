@@ -1195,16 +1195,26 @@ class EnvioController extends Controller
             })
             ->addColumn('action', function ($pedido) {
                 $btn = '';
-                $btn.='<a href="" data-target="#modal-envio" data-toggle="modal" data-recibir="'.$pedido->id.'" data-codigos="'.$pedido->codigos.'"><button class="btn btn-warning btn-sm"><i class="fas fa-check-circle"></i> Recibido</button></a>';
 
-                    $btn .= '<ul class="list-unstyled pl-0">';
+                $btn .= '<ul class="list-unstyled pl-0">';
+
+                if($pedido->condicion_envio_code==Pedido::ENVIO_MOTORIZADO_COURIER_INT)
+                {
+
                     $btn .= '<li>
-                                        <a href="" class="btn-sm text-secondary" data-target="#modal-confirmacion" data-toggle="modal" data-ide="' . $pedido->id . '" data-entregar-confirm="' . $pedido->id . '" data-destino="' . $pedido->destino . '" data-fechaenvio="' . $pedido->fecha . '" data-codigos="' . $pedido->codigos . '">
-                                            <i class="fas fa-envelope text-success"></i> A motorizado</a></li>
-                                        </a>
-                                    </li>';
-                    $btn .= '</ul>';
+                                <a href="" class="btn-sm text-secondary" data-target="#modal-confirmacion" data-toggle="modal" data-ide="' . $pedido->id . '" data-entregar-confirm="' . $pedido->id . '" data-destino="' . $pedido->destino . '" data-fechaenvio="' . $pedido->fecha . '" data-codigos="' . $pedido->codigos . '">
+                                    <i class="fas fa-envelope text-success"></i> A motorizado</a></li>
+                                </a>
+                            </li>';
 
+                }else if($pedido->condicion_envio_code==Pedido::RECEPCION_MOTORIZADO_INT)
+                {
+                    $btn.='<li>
+                            <a href="" data-target="#modal-envio" data-toggle="modal" data-recibir="'.$pedido->id.'" data-codigos="'.$pedido->codigos.'"><button class="btn btn-warning btn-sm"><i class="fas fa-check-circle"></i> Recibido</button></a>
+                        </li>';
+                }
+
+                $btn .= '</ul>';
 
                 return $btn;
             })
