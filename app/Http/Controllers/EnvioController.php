@@ -2394,11 +2394,13 @@ class EnvioController extends Controller
 
                 'cliente_id' => $clienteId,
                 'user_id' => $firstProduct->user_id,
-                'nombre' => $cliente->nombre,
-                'icelular_cliente' => $cliente->icelular,
+
+                'nombre' =>$firstProduct->env_nombre_cliente_recibe,
+                'celular' => $firstProduct->env_celular_cliente_recibe,
+
+                'nombre_cliente' =>  $cliente->nombre,
                 'celular_cliente' => $cliente->celular,
-                'celular' => $cliente->celular,
-                'nombre_cliente' => $cliente->nombre,
+                'icelular_cliente' => $cliente->icelular,
 
                 'distrito' => $firstProduct->env_distrito,
                 'referencia' => $firstProduct->env_referencia,
@@ -2411,7 +2413,7 @@ class EnvioController extends Controller
                 $grupos[] = $groupData;
             } else {
                 $direcciongrupo = DireccionGrupo::create($groupData);
-                $grupos[] = $direcciongrupo;
+                $grupos[] = $direcciongrupo->refresh();
                 foreach ($pedidos as $pedido) {
                     $pedido->update([
                         //'env_zona_asignada' => null,

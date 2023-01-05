@@ -17,41 +17,41 @@
         @foreach($motorizados as $motorizado)
             <div class="col-4 container-{{Str::slug($motorizado->zona)}}">
                 <div class="table-responsive">
-                <div class="card card-{{$color_zones[Str::upper($motorizado->zona)]??'info'}}">
-                    <div class="card-header">
-                        <div class="d-flex justify-content-between">
-                            <h5>Distribucion {{Str::ucfirst(Str::lower($motorizado->zona))}}</h5>
-                            <div>
-                                <button type="button" class="btn btn-light buttom-agrupar"
-                                        data-zona="{{Str::upper($motorizado->zona)}}"
-                                        data-ajax-action="{{route('envios.distribuirsobres.agrupar',['motorizado_id'=>$motorizado->id,'zona'=>Str::upper($motorizado->zona)])}}">
+                    <div class="card card-{{$color_zones[Str::upper($motorizado->zona)]??'info'}}">
+                        <div class="card-header">
+                            <div class="d-flex justify-content-between">
+                                <h5>Distribucion {{Str::ucfirst(Str::lower($motorizado->zona))}}</h5>
+                                <div>
+                                    <button type="button" class="btn btn-light buttom-agrupar"
+                                            data-zona="{{Str::upper($motorizado->zona)}}"
+                                            data-ajax-action="{{route('envios.distribuirsobres.agrupar',['visualizar'=>1,'motorizado_id'=>$motorizado->id,'zona'=>Str::upper($motorizado->zona)])}}">
                                 <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"
                                       style="display: none"></span>
-                                    <span class="sr-only" style="display: none"></span>
-                                    <i class="fa fa-layer-group"></i>
-                                    <b>Agrupar</b>
-                                </button>
+                                        <span class="sr-only" style="display: none"></span>
+                                        <i class="fa fa-layer-group"></i>
+                                        <b>Agrupar</b>
+                                    </button>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="card-body">
-                        <h4 class="text-center"></h4>
+                        <div class="card-body">
+                            <h4 class="text-center"></h4>
 
-                        <table id="tablaPrincipal{{Str::upper($motorizado->zona)}}" class="table table-striped">
-                            <thead>
-                            <tr>
-                                <th scope="col">Código</th>
-                                <th scope="col">Zona</th>
-                                <th scope="col">Distrito</th>
-                                <th scope="col">Acciones</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            </tbody>
-                        </table>
+                            <table id="tablaPrincipal{{Str::upper($motorizado->zona)}}" class="table table-striped">
+                                <thead>
+                                <tr>
+                                    <th scope="col">Código</th>
+                                    <th scope="col">Zona</th>
+                                    <th scope="col">Distrito</th>
+                                    <th scope="col">Acciones</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
-            </div>
             </div>
         @endforeach
 
@@ -246,35 +246,98 @@
                 },
             });
             @endforeach
+
+            function getHtmlPrevisualizarAgruparData(rows,success) {
+                var html = rows.map(function (row) {
+                    const ps = row.producto.split(',')
+                    const productos = row.codigos.split(',').map(function (codigo, index) {
+                        return `<b>${codigo}</b> - <i>${ps[index] || ''}</i>`
+                    })
+                    return `${success?`<div class="col-12 alert alert-success">Grupos creados correctamente</div>`:``}<div class="col-md-4">
+<div class="card card-${success?'success':'dark'}">
+<div class="card-header">
+${success?`Correlativo del paquete: <strong>${row.correlativo}</strong>`:`Cliente: <strong>${row.nombre}</strong> - <i>${row.celular}</i>`}
+</div>
+<div class="card-body">
+${success?`Cliente: <strong>${row.nombre}</strong> - <i>${row.celular}</i>
+<hr>`:``}
+${productos.join('<hr>')}
+</div>
+<div class="card-footer">
+RUTA:<br>
+<b>${row.distribucion}</b> - ${row.distrito || ''}, ${row.direccion || ''}<br>
+<i><b>ref.</b> ${row.referencia || 'n/a'}</i>
+</div>
+</div>
+</div>`
+                })
+                return `<div class="row">${html.join('')}</div>`;
+            }
+
             $(".buttom-agrupar[data-ajax-action]").click(function () {
                 const buttom = $(this)
                 const link = buttom.attr('data-ajax-action')
                 $.confirm({
-                    title: '¡Advertencia!',
-                    content: '¿Estas seguro de crear el paquete con los sobres listados en la zona <b>'+$(this).data('zona')+'</b>?',
+                    title: '¡Previsualizar y confirmar paquetes!',
+                    columnClass: 'xlarge',
+                    content: function () {
+                        var self = this;
+                        self.$$goSobres.hide();
+                        return $.ajax({
+                            url: link,
+                            dataType: 'json',
+                            method: 'post'
+                        }).done(function (response) {
+                            self.setContent(getHtmlPrevisualizarAgruparData(response));
+                        }).fail(function () {
+                            self.setContent('Error.');
+                        });
+                    },
+                    //content: '¿Estas seguro de crear el paquete con los sobres listados en la zona <b>'+$(this).data('zona')+'</b>?',
                     type: 'orange',
                     typeAnimated: true,
                     buttons: {
-                        accept: {
+                        ok: {
                             text: 'Aceptar y agrupar',
                             btnClass: 'btn-red',
-                            action: function(){
+                            action: function () {
                                 buttom.find('.spinner-border').show()
                                 buttom.find('.sr-only').show()
-                                const self=this
+                                const self = this
+                                console.log(self)
                                 self.showLoading(true)
-                                $.post(link).always(function () {
-                                    self.hideLoading(true)
-                                    self.close()
-                                    buttom.find('.spinner-border').hide()
-                                    buttom.find('.sr-only').hide()
-
-                                    $('#tablaPrincipal').DataTable().ajax.reload();
-                                    @foreach($motorizados as $m)
-                                    $('#tablaPrincipal{{Str::upper($m->zona)}}').DataTable().ajax.reload();
-                                    @endforeach
+                                $.ajax({
+                                    url: link.replace('visualizar=1', '').replace('visualizar', '_agrupar'),
+                                    dataType: 'json',
+                                    method: 'post'
                                 })
+                                    .done(function (response) {
+                                        self.setTitle('Paquetes Creados');
+                                        self.setContent(getHtmlPrevisualizarAgruparData(response, true))
+                                        self.$$ok.hide();
+                                        self.$$goSobres.show();
+                                        self.$$cancelar.text("Cerrar");
+                                    })
+                                    .always(function () {
+                                        self.hideLoading(true)
+                                        //self.close()
+                                        buttom.find('.spinner-border').hide()
+                                        buttom.find('.sr-only').hide()
+
+                                        $('#tablaPrincipal').DataTable().ajax.reload();
+                                        @foreach($motorizados as $m)
+                                        $('#tablaPrincipal{{Str::upper($m->zona)}}').DataTable().ajax.reload();
+                                        @endforeach
+                                    })
                                 return false
+                            }
+                        },
+                        goSobres: {
+                            text: 'Ir a sobres para reparto',
+                            btnClass: 'btn-success',
+                            action: function () {
+                                window.open('{{route('envios.parareparto')}}', '_blank')
+                                return true
                             }
                         },
                         cancelar: function () {
