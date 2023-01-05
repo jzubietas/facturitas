@@ -355,7 +355,7 @@
                         data: 'celular',
                         name: 'celular',
                         render: function (data, type, row, meta) {
-                            return (row.celular||row.celular_cliente||'') + '<br>' + row.nombre
+                            return row.celular + '<br>' + row.nombre
                         },
                     },
                     {
