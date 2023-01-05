@@ -560,7 +560,6 @@
                         //$(".contenedor-formulario").removeClass("col-4");
                         //$(".contenedor-pdf").removeClass("col-4");
 
-
                         break;
                     case 'P':
                         console.log("e P");
@@ -1251,6 +1250,47 @@
                 });
 
             });
+
+            $("#distrito").on('change', function(){
+                var distrito_seleccionado = $(this).val();
+
+                $.ajax({
+                    data: {
+                        distrito: distrito_seleccionado
+                    },
+                    type: 'POST',
+                    url: "{{ route('envios.verificarzona') }}",
+                    success: function (data) {
+                        console.log(data);
+                        if(data.html == 0){
+                            /**********
+                             * CARGAMOS EL FORMULARIO DE PROVINCIA
+                             */
+                            console.log("La zona es Olva");
+                            if (!$(".lima").hasClass("d-none")) {
+                                $(".lima").addClass("d-none");
+                            }
+                            $(".provincia").removeClass("d-none");
+                            $(".viewpdf").removeClass("d-none");
+
+
+                            if ($(".contenedor-tabla").hasClass("col-6")) {
+                                $(".contenedor-tabla").removeClass("col-6");
+                                $(".contenedor-tabla").addClass("col-4");
+                            }
+                            if ($(".contenedor-formulario").hasClass("col-6")) {
+                                $(".contenedor-formulario").removeClass("col-6");
+                                $(".contenedor-formulario").addClass("col-4");
+                            }
+                            tabla_pedidos.columns.adjust().draw();
+                        }
+                    }
+                });
+
+                return false;
+            });
+
+
 
             //inicio tabla pedidos
             $('#modal-direccion').on('show.bs.modal', function (event) {

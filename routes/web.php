@@ -394,6 +394,9 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     Route::get('envios.estadosobrestabla', [EnvioController::class, 'Estadosobrestabla'])->name('envios.estadosobrestabla');
     Route::post('envios.estadosobresexcel', [ExcelController::class, 'estadosobresExcel'])->name('estadosobresexcel');
 
+    Route::post('envios.verificarzona', [EnvioController::class, 'VerificarZona'])->name('envios.verificarzona');
+
+
 
     /*Controller Envio*/
 
