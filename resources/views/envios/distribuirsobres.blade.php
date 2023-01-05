@@ -34,21 +34,21 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="card-body">
-                            <h4 class="text-center"></h4>
-
-                            <table id="tablaPrincipal{{Str::upper($motorizado->zona)}}" class="table table-striped">
-                                <thead>
-                                <tr>
-                                    <th scope="col">Código</th>
-                                    <th scope="col">Zona</th>
-                                    <th scope="col">Distrito</th>
-                                    <th scope="col">Acciones</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                </tbody>
-                            </table>
+                        <div class="card-body py-1">
+                            <div>
+                                <table id="tablaPrincipal{{Str::upper($motorizado->zona)}}" class="table table-striped">
+                                    <thead>
+                                    <tr>
+                                        <th scope="col">Código</th>
+                                        <th scope="col">Zona</th>
+                                        <th scope="col">Distrito</th>
+                                        <th scope="col">Acciones</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -188,7 +188,10 @@
                 stateSave: true,
                 serverSide: true,
                 searching: true,
-                "order": [[0, "desc"]],
+                bLengthMenu: false,
+                bInfo: false,
+                lengthChange: false,
+                order: [[0, "desc"]],
                 createdRow: function (row, data, dataIndex) {
                 },
                 columns: [

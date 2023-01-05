@@ -1163,8 +1163,6 @@ class EnvioController extends Controller
             $pedidos = $pedidos->WhereIn('u.identificador', $usersasesores);
         } else if (Auth::user()->rol == "Jefe de llamadas") {
             $pedidos = $pedidos->where('u.identificador', '<>', 'B');
-        } else {
-            $pedidos = $pedidos;
         }
 
         return Datatables::of(DB::table($pedidos))
@@ -2435,7 +2433,7 @@ class EnvioController extends Controller
 
                 'estado' => '1',
 
-                'cliente_id' => $clienteId,
+                'cliente_id' => $cliente->id,
                 'user_id' => $firstProduct->user_id,
 
                 'nombre' =>$firstProduct->env_nombre_cliente_recibe,
