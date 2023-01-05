@@ -66,6 +66,7 @@
                 <tr>
                     <th scope="col">Código</th>
                     <th scope="col">Asesor</th>
+                    <th scope="col">PROVINCIA</th>
                     <th scope="col">ZONA</th>
                     <th scope="col">DISTRITO</th>
                     <th scope="col">Razón social</th>
@@ -137,6 +138,7 @@
                 columns: [
                     {data: 'codigo', name: 'codigo',},
                     {data: 'users', name: 'users',},
+                    {data: 'env_destino', name: 'env_destino',},
                     {data: 'env_zona', name: 'env_zona',},
                     {data: 'env_distrito', name: 'env_distrito',},
 
