@@ -2409,7 +2409,11 @@ class EnvioController extends Controller
             ->conDireccionEnvio()
             ->zonaAsignadaEnvio($zona)
             ->get()
-            ->groupBy([/*'cliente_id',*/'env_distrito','env_zona_asignada','env_direccion']);
+            ->map(function ($item){
+                $item->_grupo_part=$item->env_distrito.'_'.$item->env_zona_asignada.'_'.$item->env_direccion;
+                return $item;
+            })
+            ->groupBy(['_grupo_part',/*'env_distrito','env_zona_asignada','env_direccion'*/]);
 
         $grupos = [];
         foreach ($pedidoClientes as $grupo => $pedidos) {
