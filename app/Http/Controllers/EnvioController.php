@@ -2340,16 +2340,16 @@ class EnvioController extends Controller
             ->addColumn('action', function ($pedido) use ($motorizados, $color_zones) {
                 $btn = [];
                 foreach ($motorizados as $motorizado) {
-                    $btn[] = "<li class='list-group-item text-center p-0'>
+                    $btn[] = "<div class='text-center p-1'>
 <button data-ajax-post='" . route('envios.distribuirsobres.asignarzona', ['pedido_id' => $pedido->id, 'zona' => Str::upper($motorizado->zona)]) . "'
  class='btn btn-" . ($color_zones[Str::upper($motorizado->zona)] ?? 'info') . " btn-sm btn-block my-0' type='button'>
 <span class='spinner-border spinner-border-sm' role='status' aria-hidden='true' style='display: none'></span>
-  <span class='sr-only' style='display: none'>" . (Str::ucfirst(Str::lower($motorizado->zona))) . "</span>" . (Str::ucfirst(Str::lower($motorizado->zona))) . "</button></li>";
+  <span class='sr-only' style='display: none'>" . (Str::upper($motorizado->zona)) . "</span>" . (Str::upper($motorizado->zona))  . "</button></div>";
                 }
                 if (count($motorizados) == 0) {
                     $btn[] = '<li class="list-group-item alert alert-warning p-8 text-center mb-0">No hay motorizados registrados</li>';
                 }
-                return "<ul class='list-group'>" . join('', $btn) . "</ul>";
+                return "<ul class='d-flex'>" . join('', $btn) . "</ul>";
             })
             ->rawColumns(['action', 'condicion_envio'])
             ->make(true);
