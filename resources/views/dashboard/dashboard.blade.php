@@ -304,7 +304,7 @@
         @elseif (Auth::user()->rol == 'Administracion')
             @include('dashboard.partials.vista_administracion')
         @elseif (Auth::user()->rol == 'Jefe de llamadas')
-            @include('dashboard.partials.vista_llamadas')
+            @include('dashboard.partials.vista_jefe_llamadas')
         @elseif (Auth::user()->rol == 'Llamadas')
             @include('dashboard.partials.vista_llamadas')
         @elseif (Auth::user()->rol == 'Logística')
