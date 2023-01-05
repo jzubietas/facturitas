@@ -507,43 +507,8 @@ class EnvioController extends Controller
                 'direccion_grupos.correlativo as correlativo'
             );
 
-
-        $pedidos_provincia = DireccionGrupo::join('gasto_envios as de', 'direccion_grupos.id', 'de.direcciongrupo')
-            ->join('clientes as c', 'c.id', 'de.cliente_id')
-            ->join('users as u', 'u.id', 'c.user_id')
-            //  ->join('pedidos as p', 'p.codigo', 'direccion_grupos.codigos')
-
-            //  ->where('p.condicion_envio_code',Pedido::EN_REPARTO_INT)
-            ->where('direccion_grupos.condicion_envio_code', Pedido::REPARTO_COURIER_INT)
-            ->where('direccion_grupos.estado', '1')
-            ->select(
-                'direccion_grupos.id',
-                'u.identificador as identificador',
-                DB::raw(" (select 'PROVINCIA') as destino "),
-                DB::raw(" (select '') as celular "),
-                DB::raw(" (select '') as nombre "),
-                'de.cantidad',
-
-                'direccion_grupos.codigos',
-                'direccion_grupos.producto',
-
-                'de.tracking as direccion',
-                'de.foto as referencia',
-                DB::raw(" (select '') as observacion "),
-                DB::raw(" (select '') as distrito "),
-
-                DB::raw('(select DATE_FORMAT( direccion_grupos.created_at, "%Y-%m-%d")   from direccion_grupos dpa where dpa.id=direccion_grupos.id) as fecha'),
-                'direccion_grupos.destino as destino2',
-                'direccion_grupos.distribucion',
-                'direccion_grupos.condicion_envio',
-                'direccion_grupos.subcondicion_envio',
-                'direccion_grupos.condicion_sobre',
-                'direccion_grupos.correlativo as correlativo',
-            );
-
         if (Auth::user()->rol == "Asesor") {
             $pedidos_lima = $pedidos_lima->Where('u.identificador', Auth::user()->identificador);
-
 
         } else if (Auth::user()->rol == "Encargado") {
             $usersasesores = User::where('users.rol', 'Asesor')
@@ -570,9 +535,7 @@ class EnvioController extends Controller
 
         }
 
-
         $pedidos = $pedidos_lima->get();
-
 
         return Datatables::of($pedidos)
             ->addIndexColumn()
@@ -1260,6 +1223,15 @@ class EnvioController extends Controller
             })
             ->addColumn('action', function ($pedido) {
                 $btn = '';
+
+                    $btn .= '<ul class="list-unstyled pl-0">';
+                    $btn .= '<li>
+                                        <a href="" class="btn-sm text-secondary" data-target="#modal-confirmacion" data-toggle="modal" data-ide="' . $pedido->id . '" data-entregar-confirm="' . $pedido->id . '" data-destino="' . $pedido->destino . '" data-fechaenvio="' . $pedido->fecha . '" data-codigos="' . $pedido->codigos . '">
+                                            <i class="fas fa-envelope text-success"></i> A motorizado</a></li>
+                                        </a>
+                                    </li>';
+                    $btn .= '</ul>';
+
 
                 return $btn;
             })
