@@ -31,6 +31,7 @@
                                     <i class="fa fa-envelope-o" aria-hidden="true"></i>
                                     <b>Agrupar</b>
                                 </button>
+                                </div>
                             </div>
                         </div>
                         <div class="card-body">
