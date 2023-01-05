@@ -308,7 +308,8 @@ class PagoController extends Controller
         $titulares = [
             "EPIFANIO SOLANO HUAMAN" => 'EPIFANIO SOLANO HUAMAN',
             "NIKSER DENIS ORE RIVEROS" => 'NIKSER DENIS ORE RIVEROS',
-            "ALFREDO ALEJANDRO GABRIEL MONTALVO" => 'ALFREDO ALEJANDRO GABRIEL MONTALVO'
+            "ALFREDO ALEJANDRO GABRIEL MONTALVO" => 'ALFREDO ALEJANDRO GABRIEL MONTALVO',
+            "SABINA LACHOS" => 'SABINA LACHOS',
         ];
 
         return view('pagos.create', compact('idcliente_request', 'clientes', 'pedidos', 'bancos', 'tipotransferencia', 'titulares', 'users', 'bancos_procedencia'));

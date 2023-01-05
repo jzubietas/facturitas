@@ -45,7 +45,7 @@
           <!-- Step Wise Form Content -->
 
           <section id="step-1" class="form-step">
-            
+
             <!-- Step 1 input fields -->
 
             <div class="form-row">
@@ -59,15 +59,17 @@
                           <button class="button mx-2 p-2 btn-navigate-titular btn btn-warning btn-lg rounded text-white" type="button" step_number="2" titular="{{$titular}}">{{$titular}}</button>
                           @elseif($titular=='ALFREDO ALEJANDRO GABRIEL MONTALVO')
                           <button class="button mx-2 p-2 btn-navigate-titular btn btn-success btn-lg rounded text-white" type="button" step_number="2" titular="{{$titular}}">{{$titular}}</button>
+                            @elseif($titular=='SABINA LACHOS')
+                          <button class="button mx-2 p-2 btn-navigate-titular btn btn-success btn-lg rounded text-white" type="button" step_number="2" titular="{{$titular}}">{{$titular}}</button>
                         @endif
-                        
+
                       @endforeach
-                      
+
                     </div>
-                    
+
               </div>
             </div>
-            
+
             <div class="mt-3">
                 <button class="button btn-navigate-form-step d-none" type="button" step_number="2">Siguiente</button>
             </div>
@@ -98,11 +100,11 @@
                       <button class="button ml-1 mr-1 m p-3 btn-navigate-banco btn" style="background-color: transparent;" type="button" step_number="3" banco="{{$banco}}">
                         <img src="{{ asset('storage/bancos/bbva.png') }}" alt="{{$banco}}" width="160">
                       </button>
-                      
+
                     @endif
-                    
+
                   @endforeach
-                  
+
                 </div>
 
               </div>
@@ -111,7 +113,7 @@
 
           <div class="mt-3 mx-auto text-center">
 
-            
+
 
               <button class="button btn-navigate-form-step btn btn-info btn-lg rounded text-white" type="button" step_number="1">Atras</button>
               <button class="button btn-navigate-form-step btn-navigate-banco d-none" type="button" step_number="3">Siguiente</button>
@@ -119,7 +121,7 @@
         </section>
 
         <section id="step-3" class="form-step d-none">
-          
+
           <!-- Step 3 input fields -->
           <div class="mt-3">
 
@@ -131,16 +133,16 @@
               <div class="form-group col-lg-6" style="font-size: 18px">
                 {!! Form::label('titulares', 'Titulares') !!}
                 {!! Form::select('titulares', $titulares , '0', ['readonly' => 'readonly','class' => 'form-control selectpicker border border-secondary', 'data-live-search' => 'true', 'placeholder' => '---- SELECCIONE ----']) !!}
-              </div> 
+              </div>
               <div class="form-group col-lg-12" style="font-size: 18px">
-                {!! Form::label('tipotransferencia', 'Tipo Movimiento') !!}              
-                {!! Form::select('tipotransferencia', $tipotransferencia, '', ['class' => 'form-control selectpicker border border-secondary', 'id'=>'tipotransferencia','data-live-search' => 'true', 'placeholder' => '---- SELECCIONE ----']) !!}  
+                {!! Form::label('tipotransferencia', 'Tipo Movimiento') !!}
+                {!! Form::select('tipotransferencia', $tipotransferencia, '', ['class' => 'form-control selectpicker border border-secondary', 'id'=>'tipotransferencia','data-live-search' => 'true', 'placeholder' => '---- SELECCIONE ----']) !!}
               </div>
               <div class="form-group col lg-12 descrip_otros" style="font-size: 18px">
                 {!! Form::label('descrip_otros', 'Ingrese la descripcion para Movimiento Otros (Max. 70 caracteres)') !!}
                 {!! Form::textarea('descrip_otros', '', ['class' => 'form-control', 'rows' => '1', 'placeholder' => 'Descripcion Otros']) !!} {{--, 'required' => 'required'--}}
               </div>
-              
+
             </div>
 
             <div class="form-row">
@@ -154,7 +156,7 @@
               </div>
             </div>
 
-            
+
           </div>
           <div class="mt-3">
               <button class="button btn-navigate-form-step btn btn-info btn-lg rounded text-white" type="button" step_number="2">Atras</button>
