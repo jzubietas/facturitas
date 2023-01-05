@@ -2314,8 +2314,8 @@ class EnvioController extends Controller
             $lista_productos = DetallePedido::wherein("pedido_id", collect($pedidos)->pluck('id'))->pluck('nombre_empresa')->join(', ');
 
             $groupData = [
-                'condicion_envio_code' => Pedido::REPARTO_COURIER_INT,
-                'condicion_envio' => Pedido::REPARTO_COURIER,
+                'condicion_envio_code' => Pedido::REPARTO_COURIER_INT,//RECEPCION CURRIER
+                'condicion_envio' => Pedido::REPARTO_COURIER,//RECEPCION CURRIER
                 'producto' => $lista_productos,
                 'distribucion' => $zona,
                 'destino' => $firstProduct->env_destino,
