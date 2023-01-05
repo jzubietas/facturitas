@@ -358,7 +358,7 @@ class ClienteController extends Controller
     {
         $mirol = Auth::user()->rol;
         $users = User::where('users.estado', '1')
-            ->whereIn('users.rol', 'Asesor','ASESOR ADMINISTRATIVO')
+            ->whereIn('users.rol', ['Asesor','ASESOR ADMINISTRATIVO'])
             ->pluck('name', 'id');
         $porcentajes = Porcentaje::where('cliente_id', $cliente->id)->get();
 
