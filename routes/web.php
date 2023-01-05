@@ -554,6 +554,7 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     Route::post('operaciones.confirmaropbarras', [EnvioController::class, 'ConfirmarOPBarra'])->name('operaciones.confirmaropbarras');
     /* Cambiar estado a Motorizado */
     Route::post('operaciones.confirmar', [EnvioController::class, 'confirmarEstado'])->name('operaciones.confirmar');
+    Route::post('operaciones.confirmarrecepcionmotorizado', [EnvioController::class, 'confirmarEstadoRecepcionMotorizado'])->name('operaciones.confirmarrecepcionmotorizado');
     Route::post('operaciones.confirmar.revertir', [EnvioController::class, 'confirmarEstadoRevert'])->name('operaciones.confirmar.revertir');
 
     //Route::post('operaciones.confirmaradjuntomotorizado/{pedido}', [OperacionController::class, 'updateatendersinconfirmar'])->name('operaciones.updateatendersinconfirmar');

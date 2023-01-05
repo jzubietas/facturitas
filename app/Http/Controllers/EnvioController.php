@@ -1200,18 +1200,18 @@ class EnvioController extends Controller
 
                 if($pedido->condicion_envio_code==Pedido::ENVIO_MOTORIZADO_COURIER_INT)
                 {
-
-                    $btn .= '<li>
-                                <a href="" class="btn-sm text-secondary" data-target="#modal-confirmacion" data-toggle="modal" data-ide="' . $pedido->id . '" data-entregar-confirm="' . $pedido->id . '" data-destino="' . $pedido->destino . '" data-fechaenvio="' . $pedido->fecha . '" data-codigos="' . $pedido->codigos . '">
-                                    <i class="fas fa-envelope text-success"></i> A motorizado</a></li>
-                                </a>
-                            </li>';
+                    $btn.='<li>
+                        <a href="" data-target="#modal-envio" data-toggle="modal" data-recibir="'.$pedido->id.'" data-codigos="'.$pedido->codigos.'"><button class="btn btn-warning btn-sm"><i class="fas fa-check-circle"></i> Recibido</button></a>
+                    </li>';
 
                 }else if($pedido->condicion_envio_code==Pedido::RECEPCION_MOTORIZADO_INT)
                 {
-                    $btn.='<li>
-                            <a href="" data-target="#modal-envio" data-toggle="modal" data-recibir="'.$pedido->id.'" data-codigos="'.$pedido->codigos.'"><button class="btn btn-warning btn-sm"><i class="fas fa-check-circle"></i> Recibido</button></a>
-                        </li>';
+                    $btn .= '<li>
+                                <a href="" class="btn-sm text-secondary" data-target="#modal-confirmacion" data-toggle="modal" data-ide="' . $pedido->id . '" data-entregar-confirm="' . $pedido->id . '" data-destino="' . $pedido->destino . '" data-fechaenvio="' . $pedido->fecha . '" data-codigos="' . $pedido->codigos . '">
+                                    <i class="fas fa-envelope text-success"></i> Iniciar ruta</a></li>
+                                </a>
+                            </li>';
+
                 }
 
                 $btn .= '</ul>';
@@ -2641,6 +2641,25 @@ class EnvioController extends Controller
         PedidoMovimientoEstado::create([
             'pedido' => $request->hiddenCodigo,
             'condicion_envio_code' => Pedido::ENVIO_MOTORIZADO_COURIER_INT,
+            'notificado' => 0
+        ]);
+
+        return response()->json(['html' => $envio->id]);
+    }
+
+    public function confirmarEstadoRecepcionMotorizado(Request $request)
+    {
+        $envio = DireccionGrupo::where("id", $request->hiddenCodigo)->first();
+        $envio->update([
+            'condicion_envio' => Pedido::MOTORIZADO,
+            'condicion_envio_code' => Pedido::MOTORIZADO_INT,
+            //'condicion_envio' => Pedido::MOTORIZADO,
+            //'condicion_envio_code' => Pedido::MOTORIZADO_INT,
+        ]);
+
+        PedidoMovimientoEstado::create([
+            'pedido' => $request->hiddenCodigo,
+            'condicion_envio_code' => Pedido::MOTORIZADO_INT,
             'notificado' => 0
         ]);
 

@@ -79,7 +79,9 @@
       @include('pedidos.modal.verdireccionid')
       @include('pedidos.modal.editdireccionid')
       @include('pedidos.modal.destinoid')
-        @include('pedidos.modal.escaneaqr')
+    @include('pedidos.modal.escaneaqr')
+    @include('operaciones.modal.confirmacion')
+
     </div>
   </div>
 
@@ -200,6 +202,39 @@
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
       });
+
+      $('#modal-confirmacion').on('show.bs.modal', function (event) {
+            var button = $(event.relatedTarget)
+            var idunico = button.data('ide')
+            var codigos = button.data('codigos')
+
+            $('.titulo-confirmacion').html("Enviar sobre a Motorizado");
+
+            $("#hiddenCodigo").val(idunico)
+            $("#modal-confirmacion .textcode").html(codigos);
+        });
+
+        $(document).on("submit", "#formulario_confirmacion", function (evento) {
+            evento.preventDefault();
+            //validacion
+
+            var fd2 = new FormData();
+            fd2.append('hiddenCodigo', $('#hiddenCodigo').val());
+            $.ajax({
+                data: fd2,
+                processData: false,
+                contentType: false,
+                type: 'POST',
+                url: "{{ route('operaciones.confirmarrecepcionmotorizado') }}",
+                success: function (data) {
+                    $("#modal-confirmacion").modal("hide");
+                    $('#tablaPrincipal').DataTable().ajax.reload();
+
+                }
+            });
+        });
+
+
 
       $('#modal-envio').on('show.bs.modal', function (event) {
         //cuando abre el form de anular pedido
