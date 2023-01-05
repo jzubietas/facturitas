@@ -1852,10 +1852,18 @@
                 $(document).on("click", "#add_pago", function () {
                     console.log("click addpago");
 
-                    //var cantidad= $('#poperacion').val().length;
+                    var poperacion= $('#poperacion').val();
                     var nota = $('#pnota').val();
-                    //console.log(cantidad);
-
+                    if(!poperacion || poperacion.length===0){
+                        if(!nota){
+                            Swal.fire(
+                                'Error',
+                                'Ingrese nota o Núm. operación',
+                                'warning'
+                            );
+                            return;
+                        }
+                    }
 
                     if ($('#pbanco').val() == '') {
                         Swal.fire(
