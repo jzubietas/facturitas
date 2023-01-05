@@ -34,21 +34,21 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="card-body">
-                            <h4 class="text-center"></h4>
-
-                            <table id="tablaPrincipal{{Str::upper($motorizado->zona)}}" class="table table-striped">
-                                <thead>
-                                <tr>
-                                    <th scope="col">Código</th>
-                                    <th scope="col">Zona</th>
-                                    <th scope="col">Distrito</th>
-                                    <th scope="col">Acciones</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                </tbody>
-                            </table>
+                        <div class="card-body py-1">
+                            <div>
+                                <table id="tablaPrincipal{{Str::upper($motorizado->zona)}}" class="table table-striped">
+                                    <thead>
+                                    <tr>
+                                        <th scope="col">Código</th>
+                                        <th scope="col">Zona</th>
+                                        <th scope="col">Distrito</th>
+                                        <th scope="col">Acciones</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -188,7 +188,10 @@
                 stateSave: true,
                 serverSide: true,
                 searching: true,
-                "order": [[0, "desc"]],
+                bLengthMenu: false,
+                bInfo: false,
+                lengthChange: false,
+                order: [[0, "desc"]],
                 createdRow: function (row, data, dataIndex) {
                 },
                 columns: [
@@ -247,20 +250,20 @@
             });
             @endforeach
 
-            function getHtmlPrevisualizarAgruparData(rows,success) {
+            function getHtmlPrevisualizarAgruparData(rows, success) {
                 var html = rows.map(function (row) {
                     const ps = row.producto.split(',')
                     const productos = row.codigos.split(',').map(function (codigo, index) {
                         return `<b>${codigo}</b> - <i>${ps[index] || ''}</i>`
                     })
-                    return `${success?`<div class="col-12 alert alert-success">Grupos creados correctamente</div>`:``}<div class="col-md-4">
-<div class="card card-${success?'success':'dark'}">
+                    return `${success ? `<div class="col-12 alert alert-success">Grupos creados correctamente</div>` : ``}<div class="col-md-4">
+<div class="card card-${success ? 'success' : 'dark'}">
 <div class="card-header">
-${success?`Correlativo del paquete: <strong>${row.correlativo}</strong>`:`Cliente: <strong>${row.nombre}</strong> - <i>${row.celular}</i>`}
+${success ? `Correlativo del paquete: <strong>${row.correlativo}</strong>` : `Cliente: <strong>${row.nombre}</strong> - <i>${row.celular}</i>`}
 </div>
 <div class="card-body">
-${success?`Cliente: <strong>${row.nombre}</strong> - <i>${row.celular}</i>
-<hr>`:``}
+${success ? `Cliente: <strong>${row.nombre}</strong> - <i>${row.celular}</i>
+<hr>` : ``}
 ${productos.join('<hr>')}
 </div>
 <div class="card-footer">
