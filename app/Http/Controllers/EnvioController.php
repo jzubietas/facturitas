@@ -2836,4 +2836,15 @@ class EnvioController extends Controller
     }
 
 
+    public function VerificarZona(Request $request)
+    {
+        $zona_distrito = Distrito::where('distrito',$request->distrito)->first();
+
+        if($zona_distrito->zona == "OLVA"){
+            return response()->json(['html' => 0]);
+        }else{
+            return response()->json(['html' => 1]);
+        }
+
+    }
 }

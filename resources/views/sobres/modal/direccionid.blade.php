@@ -73,6 +73,22 @@
                                                     </button>
                                                 </div>
 
+                                                <div id="cnt-distritos" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+
+                                                    {!! Form::label('distrito', 'Distrito') !!}<br>
+
+                                                    <select name="distrito" id="distrito" class="distrito form-control"
+                                                            data-show-subtext="true" data-live-search="true"
+                                                            data-live-search-placeholder="Seleccione distrito">
+                                                        @foreach($distritos as $distrito)
+                                                            <option data-subtext="{{$distrito->zona}}"
+                                                                    value="{{$distrito->distrito}}">{{($distrito->distrito) }}</option>
+                                                        @endforeach
+                                                    </select>
+
+
+                                                </div>
+
 
                                                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                                     <i class="fa fa-user text-red" aria-hidden="true"></i>
@@ -102,22 +118,6 @@
 
                                                     {!! Form::label('referencia', 'Referencia') !!}
                                                     {!! Form::text('referencia', null, ['class' => 'form-control', 'placeholder' => 'Referencia', 'required' => 'required']) !!}
-                                                </div>
-
-                                                <div id="cnt-distritos" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-
-                                                    {!! Form::label('distrito', 'Distrito') !!}<br>
-
-                                                    <select name="distrito" id="distrito" class="distrito form-control"
-                                                            data-show-subtext="true" data-live-search="true"
-                                                            data-live-search-placeholder="Seleccione distrito">
-                                                        @foreach($distritos as $distrito)
-                                                            <option data-subtext="{{$distrito->zona}}"
-                                                                    value="{{$distrito->distrito}}">{{($distrito->distrito) }}</option>
-                                                        @endforeach
-                                                    </select>
-
-
                                                 </div>
 
                                                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -159,7 +159,7 @@
                             <div class="provincia d-none">
                                 <div class="row">
                                     <div class="col">
-                                        <h1>PROVINCIA</h1>
+                                        <h1>OLVA - PROVINCIA</h1>
 
                                         <div>
                                             <button type="button" id="modal-historial-provincia-a" href=""
