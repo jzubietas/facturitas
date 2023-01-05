@@ -471,7 +471,7 @@ class EnvioController extends Controller
 
                 return $btn;
             })
-            ->rawColumns(['action','condicion_envio'])
+            ->rawColumns(['action', 'condicion_envio'])
             ->make(true);
 
     }
@@ -2219,28 +2219,28 @@ class EnvioController extends Controller
         //add_query_filtros_por_roles_pedidos($pedidoQuery, 'u.identificador');
 
         $motorizados = User::query()->where('rol', '=', 'MOTORIZADO')->whereNotNull('zona')->get();
-        $color_zones=[];
-        $color_zones['NORTE']='warning';
-        $color_zones['CENTRO']='info';
-        $color_zones['SUR']='dark';
+        $color_zones = [];
+        $color_zones['NORTE'] = 'warning';
+        $color_zones['CENTRO'] = 'info';
+        $color_zones['SUR'] = 'dark';
         return Datatables::of(DB::table($pedidoQuery))
             ->addIndexColumn()
             ->editColumn('condicion_envio', function ($pedido) {
                 $color = Pedido::getColorByCondicionEnvio($pedido->condicion_envio);
                 return '<span class="badge badge-success w-100" style="background-color: ' . $color . '!important;">' . $pedido->condicion_envio . '</span>';
             })
-            ->addColumn('action', function ($pedido)use ($motorizados,$color_zones) {
-                $btn=[];
-               foreach ($motorizados as $motorizado) {
-                   $btn[] = "<li class='list-group-item text-center p-0'>
+            ->addColumn('action', function ($pedido) use ($motorizados, $color_zones) {
+                $btn = [];
+                foreach ($motorizados as $motorizado) {
+                    $btn[] = "<li class='list-group-item text-center p-0'>
 <button data-ajax-post='" . route('envios.distribuirsobres.asignarzona', ['pedido_id' => $pedido->id, 'zona' => Str::upper($motorizado->zona)]) . "'
- class='btn btn-".($color_zones[Str::upper($motorizado->zona)]??'info')." btn-sm btn-block my-0' type='button'>
+ class='btn btn-" . ($color_zones[Str::upper($motorizado->zona)] ?? 'info') . " btn-sm btn-block my-0' type='button'>
 <span class='spinner-border spinner-border-sm' role='status' aria-hidden='true' style='display: none'></span>
-  <span class='sr-only' style='display: none'>".(Str::ucfirst(Str::lower($motorizado->zona)))."</span>".(Str::ucfirst(Str::lower($motorizado->zona)))."</button></li>";
-               }
-               if(count($motorizados)==0){
-                   $btn[] ='<li class="list-group-item alert alert-warning p-8 text-center mb-0">No hay motorizados registrados</li>';
-               }
+  <span class='sr-only' style='display: none'>" . (Str::ucfirst(Str::lower($motorizado->zona))) . "</span>" . (Str::ucfirst(Str::lower($motorizado->zona))) . "</button></li>";
+                }
+                if (count($motorizados) == 0) {
+                    $btn[] = '<li class="list-group-item alert alert-warning p-8 text-center mb-0">No hay motorizados registrados</li>';
+                }
                 return "<ul class='list-group'>" . join('', $btn) . "</ul>";
             })
             ->rawColumns(['action', 'condicion_envio'])
@@ -2313,7 +2313,7 @@ class EnvioController extends Controller
             $lista_codigos = collect($pedidos)->pluck('codigo')->join(', ');
             $lista_productos = DetallePedido::wherein("pedido_id", collect($pedidos)->pluck('id'))->pluck('nombre_empresa')->join(', ');
 
-            $direcciongrupo = DireccionGrupo::create([
+            $groupData = [
                 'condicion_envio_code' => Pedido::REPARTO_COURIER_INT,
                 'condicion_envio' => Pedido::REPARTO_COURIER,
                 'producto' => $lista_productos,
@@ -2338,14 +2338,20 @@ class EnvioController extends Controller
                 'observacion' => $firstProduct->env_observacion,
                 'cantidad' => count($pedidos),
                 'motorizado_id' => $request->motorizado_id,
-            ]);
-            $grupos[] = $direcciongrupo;
-            foreach ($pedidos as $pedido) {
-                $pedido->update([
-                    //'env_zona_asignada' => null,
-                    'condicion_envio_code' => Pedido::REPARTO_COURIER_INT,
-                    'condicion_envio' => Pedido::REPARTO_COURIER,
-                ]);
+            ];
+
+            if ($request->get("visualizar") == '1') {
+                $grupos[] = $groupData;
+            } else {
+                $direcciongrupo = DireccionGrupo::create($groupData);
+                $grupos[] = $direcciongrupo;
+                foreach ($pedidos as $pedido) {
+                    $pedido->update([
+                        //'env_zona_asignada' => null,
+                        'condicion_envio_code' => Pedido::REPARTO_COURIER_INT,
+                        'condicion_envio' => Pedido::REPARTO_COURIER,
+                    ]);
+                }
             }
         }
         return $grupos;
