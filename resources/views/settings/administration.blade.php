@@ -85,7 +85,6 @@
 
                         </div>
 
-
                     </div>
                 </div>
             </div>
@@ -155,6 +154,61 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4>Titulares</h4>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>TITULAR</th>
+                                <th>ACCIÓN</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4>b</h4>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>TITULAR</th>
+                                <th>ACCIÓN</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
@@ -334,7 +388,7 @@
                 $.post('{{route('settings.store-time-clientes')}}', data)
                     .done(function (data) {
                         console.log(data)
-                        if(data.success){
+                        if (data.success) {
                             Swal.fire(
                                 '',
                                 'Activacion temporal realizada',
@@ -343,9 +397,9 @@
                             $("#user_id_tiempo").val('')
                             $("#cliente_id_tiempo").val('')
                             $("#pcantidad_pedido").val('')
-                           $("#pcantidad_tiempo").val('')
+                            $("#pcantidad_tiempo").val('')
                             $("#user_id_tiempo").selectpicker("refresh").trigger("change");
-                        }else{
+                        } else {
                             Swal.fire(
                                 '',
                                 'Los datos no fueron guardados',
@@ -355,15 +409,15 @@
                     })
                     .fail(function (data) {
                         console.log(data)
-                        if(data.responseJSON.errors){
+                        if (data.responseJSON.errors) {
                             Swal.fire(
                                 '',
-                                Object.keys(data.responseJSON.errors).map(function (key){
+                                Object.keys(data.responseJSON.errors).map(function (key) {
                                     return `<b>${data.responseJSON.errors[key][0]}</b>`
                                 }).join('<hr class="my-1"><br>'),
                                 'error'
                             )
-                        }else{
+                        } else {
                             Swal.fire(
                                 '',
                                 'Ocurrio un error al intentar guardar la información',
