@@ -28,7 +28,7 @@
                                 <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"
                                       style="display: none"></span>
                                     <span class="sr-only" style="display: none"></span>
-                                    <i class="fa fa-layer-group"></i>
+                                    <i class="fa fa-envelope-o" aria-hidden="true"></i>
                                     <b>Agrupar</b>
                                 </button>
                             </div>
