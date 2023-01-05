@@ -463,7 +463,7 @@ class EnvioController extends Controller
                     $btn .= '<ul class="list-unstyled pl-0">';
                     $btn .= '<li>
                                         <a href="" class="btn-sm text-secondary" data-target="#modal-confirmacion" data-toggle="modal" data-ide="' . $pedido->id . '" data-entregar-confirm="' . $pedido->id . '" data-destino="' . $pedido->destino . '" data-fechaenvio="' . $pedido->fecha . '" data-codigos="' . $pedido->codigos . '">
-                                            <i class="fas fa-envelope text-success"></i> A motorizado</a></li>
+                                            <i class="fas fa-envelope text-success"></i> Enviar a Motorizado</a></li>
                                         </a>
                                     </li>';
                     $btn .= '</ul>';
@@ -1213,7 +1213,8 @@ class EnvioController extends Controller
             //join('direccion_envios as de', 'direccion_grupos.id', 'de.direcciongrupo')
             ->join('clientes as c', 'c.id', 'direccion_grupos.cliente_id')
             ->join('users as u', 'u.id', 'c.user_id')
-            ->where('direccion_grupos.condicion_envio_code', Pedido::REPARTO_COURIER_INT)
+            //->where('direccion_grupos.condicion_envio_code', Pedido::REPARTO_COURIER_INT)
+            ->where('direccion_grupos.condicion_envio_code', Pedido::ENVIO_MOTORIZADO_COURIER_INT)
             ->activo();
 
         return Datatables::of(DB::table($grupos))
@@ -1223,6 +1224,7 @@ class EnvioController extends Controller
             })
             ->addColumn('action', function ($pedido) {
                 $btn = '';
+                $btn.='<a href="" data-target="#modal-envio" data-toggle="modal" data-recibir="'.$pedido->id.'" data-codigos="'.$pedido->codigos.'"><button class="btn btn-warning btn-sm"><i class="fas fa-check-circle"></i> Recibido</button></a>';
 
                     $btn .= '<ul class="list-unstyled pl-0">';
                     $btn .= '<li>
@@ -1611,6 +1613,26 @@ class EnvioController extends Controller
         ]);
 
         return response()->json(['html' => $pedido->id]);
+    }
+
+    public function RecibirMotorizado(Request $request)
+    {
+        $grupo = DireccionGrupo::where("id", $request->hiddenEnvio)->first();
+
+        $grupo->update([
+            'envio' => '2',
+            'modificador' => 'USER' . Auth::user()->id,
+            'condicion_envio' => Pedido::RECEPCION_MOTORIZADO,
+            'condicion_envio_code' => Pedido::RECEPCION_MOTORIZADO_INT
+        ]);
+
+        PedidoMovimientoEstado::create([
+            'pedido' => $request->hiddenEnvio,
+            'condicion_envio_code' => Pedido::RECEPCION_MOTORIZADO_INT,
+            'notificado' => 0
+        ]);
+
+        return response()->json(['html' => $grupo->id]);
     }
 
     public function Recibirid(Request $request)
@@ -2629,13 +2651,15 @@ class EnvioController extends Controller
     {
         $envio = DireccionGrupo::where("id", $request->hiddenCodigo)->first();
         $envio->update([
-            'condicion_envio' => Pedido::MOTORIZADO,
-            'condicion_envio_code' => Pedido::MOTORIZADO_INT,
+            'condicion_envio' => Pedido::ENVIO_MOTORIZADO_COURIER,
+            'condicion_envio_code' => Pedido::ENVIO_MOTORIZADO_COURIER_INT,
+            //'condicion_envio' => Pedido::MOTORIZADO,
+            //'condicion_envio_code' => Pedido::MOTORIZADO_INT,
         ]);
 
         PedidoMovimientoEstado::create([
             'pedido' => $request->hiddenCodigo,
-            'condicion_envio_code' => Pedido::MOTORIZADO_INT,
+            'condicion_envio_code' => Pedido::ENVIO_MOTORIZADO_COURIER_INT,
             'notificado' => 0
         ]);
 

@@ -66,7 +66,6 @@
 
             <th scope="col">Dirección de envío</th>
             <th scope="col">Estado de envio</th>
-            <th scope="col">Estado de sobre</th>
             <th scope="col">Acciones</th>
           </tr>
         </thead>
@@ -225,7 +224,7 @@
            processData: false,
            contentType: false,
            type: 'POST',
-           url:"{{ route('envios.recibiridlog') }}",
+           url:"{{ route('envios.recepcionarmotorizado') }}",
            success:function(data)
            {
             console.log(data);
@@ -334,8 +333,8 @@
           {data: 'codigos', name: 'codigos', },
           {data: 'user_id', name: 'user_id', },
           {
-            data: 'celulares',
-            name: 'celulares',
+            data: 'celular',
+            name: 'celular',
             render: function ( data, type, row, meta ) {
               return row.celulares+' - '+row.nombres
             },
@@ -393,23 +392,7 @@
                   return badge_estado;
               }
           },
-          {
-            data: 'envio',
-            name: 'envio',
-            render: function ( data, type, row, meta ) {
 
-                return '<span class="badge badge-danger">Enviar a Courier</span>';
-
-              /*
-              El estado del sobre cambia a 1 y luego cambia el estado del pedido
-              else if (row.envio=='1' && row.estado_sobre=='1'){
-                return '<span class="badge badge-info">Sobre por Enviar</span>';
-              }
-              */
-
-
-            },"visible":false,
-          },
           {
             data: 'action',
             name: 'action',
