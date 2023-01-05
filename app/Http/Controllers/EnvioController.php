@@ -2456,14 +2456,12 @@ class EnvioController extends Controller
             } else {
                 $direcciongrupo = DireccionGrupo::create($groupData);
                 $grupos[] = $direcciongrupo->refresh();
-                foreach ($pedidos as $pedido) {
-                    $pedido->update([
-                        'env_zona_asignada' => null,
-                        'estado_ruta'=>'1',
-                        'condicion_envio_code' => Pedido::REPARTO_COURIER_INT,
-                        'condicion_envio' => Pedido::REPARTO_COURIER,
-                    ]);
-                }
+                Pedido::whereIn('id', collect($pedidos)->pluck('id'))->update([
+                    'env_zona_asignada' => null,
+                    'estado_ruta'=>'1',
+                    'condicion_envio_code' => Pedido::REPARTO_COURIER_INT,
+                    'condicion_envio' => Pedido::REPARTO_COURIER,
+                ]);
             }
         }
         return $grupos;
