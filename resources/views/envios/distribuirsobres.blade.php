@@ -270,9 +270,9 @@
                                     buttom.find('.sr-only').hide()
 
                                     $('#tablaPrincipal').DataTable().ajax.reload();
-                                    $('#tablaPrincipalCentro').DataTable().ajax.reload();
-                                    $('#tablaPrincipalNorte').DataTable().ajax.reload();
-                                    $('#tablaPrincipalSur').DataTable().ajax.reload();
+                                    @foreach($motorizados as $m)
+                                    $('#tablaPrincipal{{Str::upper($m->zona)}}').DataTable().ajax.reload();
+                                    @endforeach
                                 })
                                 return false
                             }
