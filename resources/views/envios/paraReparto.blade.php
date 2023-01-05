@@ -49,6 +49,7 @@
                 <thead>
                 <tr>
                     <th scope="col">Item</th>
+                    <th scope="col">Zona</th>
                     <th scope="col">Código</th>
                     <th scope="col">Asesor</th>
                     <th scope="col">Cliente</th>
@@ -332,6 +333,11 @@
                     {
                         data: 'correlativo',
                         name: 'correlativo',
+
+                    },
+                    {
+                        data: 'distribucion',
+                        name: 'distribucion',
 
                     },
                     {
