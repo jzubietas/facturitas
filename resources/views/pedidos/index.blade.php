@@ -495,38 +495,6 @@
                     {
                         data: 'condicion_envio',
                         name: 'condicion_envio',
-                        render: function (data, type, row, meta) {
-                            if (row.condicion_code == 4 || row.estado == 0) {
-                                return '<span class="badge badge-danger">ANULADO</span>' //    'ANULADO';
-                            }
-                            if (row.pendiente_anulacion == 1) {
-                                return '<span class="badge badge-success">' + '{{\App\Models\Pedido::PENDIENTE_ANULACION }}' + '</span>';
-                            }
-
-                            var badge_estado= '';
-
-                            if(row.estado_sobre == 1){
-                                badge_estado += '<span class="badge badge-dark p-8" style="color: #fff; background-color: #347cc4; font-weight: 600; margin-bottom: -2px;border-radius: 4px 4px 0px 0px; font-size:8px;  padding: 4px 4px !important; font-weight: 500;">Direccion agregada</span>';
-                            }
-
-                            badge_estado += '<span class="badge badge-success w-100" style="background-color: '+row.condicion_envio_color+'!important;">'+row.condicion_envio+'</span>';
-
-
-                            return badge_estado;
-                            /*if (row.condicion_envio == 'ANULADO') {
-                                return '<span class="badge badge-info">ANULADO</span>';
-                            } else if (row.condicion_envio == 0) {
-                                return '<span class="badge badge-info">ANULADO</span>';
-                            } else if (row.condicion_envio == 1) {
-                                return '<span class="badge badge-info">PENDIENTE DE ENVIO</span>';
-                            } else if (row.condicion_envio == 2) {
-                                return '<span class="badge badge-info">EN REPARTO</span>';
-                            } else if (row.condicion_envio == 3) {
-                                return '<span class="badge badge-info">ENTREGADO</span>';
-                            } else {
-                                return '<span class="badge badge-info">' + data + '</span>' //data;
-                            }*/
-                        }
                     },//
 
                     /*
