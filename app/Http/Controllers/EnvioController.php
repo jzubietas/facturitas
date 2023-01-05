@@ -650,8 +650,8 @@ class EnvioController extends Controller
 
         $pedidos = null;
 
-        $pedidos_lima = DireccionGrupo::join('direccion_envios as de', 'direccion_grupos.id', 'de.direcciongrupo')
-            ->join('clientes as c', 'c.id', 'de.cliente_id')
+        $pedidos_lima = DireccionGrupo::/*join('direccion_envios as de', 'direccion_grupos.id', 'de.direcciongrupo')*/
+            join('clientes as c', 'c.id', 'direccion_grupos.cliente_id')
             ->join('users as u', 'u.id', 'c.user_id')
             ->where('direccion_grupos.estado', '1')
             ->whereIn('direccion_grupos.condicion_envio_code', [Pedido::ENTREGADO_CLIENTE_INT, Pedido::ENTREGADO_SIN_SOBRE_OPE_INT, Pedido::ENTREGADO_SIN_SOBRE_CLIENTE_INT])
@@ -659,15 +659,15 @@ class EnvioController extends Controller
                 'direccion_grupos.id',
                 'u.identificador as identificador',
                 DB::raw(" (select 'LIMA') as destino "),
-                'de.celular',
-                'de.nombre',
-                'de.cantidad',
+                'direccion_grupos.celular',
+                'direccion_grupos.nombre',
+                'direccion_grupos.cantidad',
                 'direccion_grupos.codigos',
                 'direccion_grupos.producto',
-                'de.direccion',
-                'de.referencia',
-                'de.observacion',
-                'de.distrito',
+                'direccion_grupos.direccion',
+                'direccion_grupos.referencia',
+                'direccion_grupos.observacion',
+                'direccion_grupos.distrito',
                 'direccion_grupos.created_at as fecha',
                 DB::raw("DATE_FORMAT(direccion_grupos.created_at, '%Y-%m-%d') as fechaentrega"),
                 'direccion_grupos.destino as destino2',
@@ -681,38 +681,9 @@ class EnvioController extends Controller
                 'direccion_grupos.correlativo'
             );
 
-        $pedidos_provincia = DireccionGrupo::join('gasto_envios as de', 'direccion_grupos.id', 'de.direcciongrupo')
-            ->join('clientes as c', 'c.id', 'de.cliente_id')
-            ->join('users as u', 'u.id', 'c.user_id')
-            ->where('direccion_grupos.estado', '1')
-            ->whereIn('direccion_grupos.condicion_envio', [Pedido::ENTREGADO_CLIENTE_INT, Pedido::ENTREGADO_SIN_SOBRE_OPE_INT, Pedido::ENTREGADO_SIN_SOBRE_CLIENTE_INT])
-            ->select(
-                'direccion_grupos.id',
-                'u.identificador as identificador',
-                DB::raw(" (select 'PROVINCIA') as destino "),
-                DB::raw(" (select '') as celular "),
-                DB::raw(" (select '') as nombre "),
-                'de.cantidad',
-                'direccion_grupos.codigos',
-                'direccion_grupos.producto',
-                'de.tracking as direccion',
-                'de.foto as referencia',
-                DB::raw(" (select '') as observacion "),
-                DB::raw(" (select '') as distrito "),
-                'direccion_grupos.created_at as fecha',
-                DB::raw("DATE_FORMAT(direccion_grupos.created_at, '%Y-%m-%d') as fechaentrega"),
-                'direccion_grupos.destino as destino2',
-                'direccion_grupos.distribucion',
-                'direccion_grupos.condicion_envio',
-                'direccion_grupos.condicion_envio_code',
-                'direccion_grupos.condicion_sobre',
-                'direccion_grupos.subcondicion_envio',
-                'direccion_grupos.foto1',
-                'direccion_grupos.foto2',
-                'direccion_grupos.correlativo'
-            );
 
-        $pedidos = $pedidos_lima->union($pedidos_provincia);
+
+        $pedidos = $pedidos_lima;
 
 
         if (Auth::user()->rol == "Operario") {

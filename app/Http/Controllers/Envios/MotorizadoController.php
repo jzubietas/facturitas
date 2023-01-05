@@ -17,8 +17,8 @@ class MotorizadoController extends Controller
     public function index(Request $request)
     {
         if ($request->has('datatable')) {
-            $query = DireccionGrupo::join('direccion_envios as de', 'direccion_grupos.id', 'de.direcciongrupo')
-                ->join('clientes as c', 'c.id', 'de.cliente_id')
+            $query = DireccionGrupo::/*join('direccion_envios as de', 'direccion_grupos.id', 'de.direcciongrupo')*/
+                join('clientes as c', 'c.id', 'direccion_grupos.cliente_id')
                 ->join('users as u', 'u.id', 'c.user_id')
                 ->where('direccion_grupos.condicion_envio_code', Pedido::RECEPCION_MOTORIZADO_INT)
                 ->where('direccion_grupos.estado', '1')
@@ -26,15 +26,15 @@ class MotorizadoController extends Controller
                     'direccion_grupos.id',
                     'u.identificador as identificador',
                     DB::raw(" (select 'LIMA') as destino "),
-                    'de.celular',
-                    'de.nombre',
-                    'de.cantidad',
+                    'direccion_grupos.celular',
+                    'direccion_grupos.nombre',
+                    'direccion_grupos.cantidad',
                     'direccion_grupos.codigos',
                     'direccion_grupos.producto',
-                    'de.direccion',
-                    'de.referencia',
-                    'de.observacion',
-                    'de.distrito',
+                    'direccion_grupos.direccion',
+                    'direccion_grupos.referencia',
+                    'direccion_grupos.observacion',
+                    'direccion_grupos.distrito',
                     DB::raw('(select DATE_FORMAT( direccion_grupos.created_at, "%Y-%m-%d")   from direccion_grupos dpa where dpa.id=direccion_grupos.id) as fecha'),
                     'direccion_grupos.destino as destino2',
                     'direccion_grupos.distribucion',
@@ -78,8 +78,8 @@ class MotorizadoController extends Controller
     public function confirmar(Request $request)
     {
         if ($request->has('datatable')) {
-            $query = DireccionGrupo::join('direccion_envios as de', 'direccion_grupos.id', 'de.direcciongrupo')
-                ->join('clientes as c', 'c.id', 'de.cliente_id')
+            $query = DireccionGrupo::/*join('direccion_envios as de', 'direccion_grupos.id', 'de.direcciongrupo')*/
+                join('clientes as c', 'c.id', 'direccion_grupos.cliente_id')
                 ->join('users as u', 'u.id', 'c.user_id')
                 ->where('direccion_grupos.condicion_envio_code', Pedido::CONFIRM_MOTORIZADO_INT)
                 ->where('direccion_grupos.estado', '1')
@@ -87,15 +87,15 @@ class MotorizadoController extends Controller
                     'direccion_grupos.id',
                     'u.identificador as identificador',
                     DB::raw(" (select 'LIMA') as destino "),
-                    'de.celular',
-                    'de.nombre',
-                    'de.cantidad',
+                    'direccion_grupos.celular',
+                    'direccion_grupos.nombre',
+                    'direccion_grupos.cantidad',
                     'direccion_grupos.codigos',
                     'direccion_grupos.producto',
-                    'de.direccion',
-                    'de.referencia',
-                    'de.observacion',
-                    'de.distrito',
+                    'direccion_grupos.direccion',
+                    'direccion_grupos.referencia',
+                    'direccion_grupos.observacion',
+                    'direccion_grupos.distrito',
                     DB::raw('(select DATE_FORMAT( direccion_grupos.created_at, "%Y-%m-%d")   from direccion_grupos dpa where dpa.id=direccion_grupos.id) as fecha'),
                     'direccion_grupos.destino as destino2',
                     'direccion_grupos.distribucion',
@@ -138,8 +138,8 @@ class MotorizadoController extends Controller
     public function confirmar_cliente(Request $request)
     {
         if ($request->has('datatable')) {
-            $query = DireccionGrupo::join('direccion_envios as de', 'direccion_grupos.id', 'de.direcciongrupo')
-                ->join('clientes as c', 'c.id', 'de.cliente_id')
+            $query = DireccionGrupo::/*join('direccion_envios as de', 'direccion_grupos.id', 'de.direcciongrupo')*/
+                join('clientes as c', 'c.id', 'direccion_grupos.cliente_id')
                 ->join('users as u', 'u.id', 'c.user_id')
                 ->where('direccion_grupos.condicion_envio_code', Pedido::CONFIRM_VALIDADA_CLIENTE_INT)
                 ->where('direccion_grupos.estado', '1')
@@ -147,15 +147,15 @@ class MotorizadoController extends Controller
                     'direccion_grupos.id',
                     'u.identificador as identificador',
                     DB::raw(" (select 'LIMA') as destino "),
-                    'de.celular',
-                    'de.nombre',
-                    'de.cantidad',
+                    'direccion_grupos.celular',
+                    'direccion_grupos.nombre',
+                    'direccion_grupos.cantidad',
                     'direccion_grupos.codigos',
                     'direccion_grupos.producto',
-                    'de.direccion',
-                    'de.referencia',
-                    'de.observacion',
-                    'de.distrito',
+                    'direccion_grupos.direccion',
+                    'direccion_grupos.referencia',
+                    'direccion_grupos.observacion',
+                    'direccion_grupos.distrito',
                     DB::raw('(select DATE_FORMAT( direccion_grupos.created_at, "%Y-%m-%d")   from direccion_grupos dpa where dpa.id=direccion_grupos.id) as fecha'),
                     'direccion_grupos.destino as destino2',
                     'direccion_grupos.distribucion',
