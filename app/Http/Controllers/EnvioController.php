@@ -2349,7 +2349,7 @@ class EnvioController extends Controller
                 $btn[] = "<li class='list-group-item text-center p-0'>
 <button data-ajax-post='" . route('envios.distribuirsobres.asignarzona', ['pedido_id' => $pedido->id, 'zona' => null, 'revertir_asignar_zona' => 1]) . "' class='btn btn-light btn-sm btn-block my-0' type='button'>
 <span class='spinner-border spinner-border-sm' role='status' aria-hidden='true' style='display: none'></span>
-  <span class='sr-only' style='display: none'>Excluir</span><i class='fa fa-arrow-down mr-2'></i>Excluir</button></li>";
+  <span class='sr-only' style='display: none'>Desagrupar</span>Desagrupar</button></li>";
                 return "<ul class='list-group'>" . join('', $btn) . "</ul>";
             })
             ->rawColumns(['action'])
