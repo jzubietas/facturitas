@@ -57,8 +57,8 @@ class GraficoMetasDelMes extends Widgets
     public function generarDataNoviembre($date)
     {
         if (auth()->user()->rol == User::ROL_LLAMADAS) {//HASTA MAÑANA
-            $id = auth()->user()->id;
-            $asesores = User::rolAsesor()->where('llamada', '=', $id)->get();
+            //$id = auth()->user()->id;
+            $asesores = [];//User::rolAsesor()->where('llamada', '=', $id)->get();
         } else {
             $encargado = null;
             if (auth()->user()->rol == User::ROL_ENCARGADO) {
@@ -75,9 +75,9 @@ class GraficoMetasDelMes extends Widgets
         }
         $progressData = [];
         foreach ($asesores as $asesor) {
-            if (auth()->user()->rol != User::ROL_ADMIN
-                && auth()->user()->rol != User::ROL_JEFE_LLAMADAS//HASTA MAÑANA
-                && auth()->user()->rol != User::ROL_LLAMADAS) {//HASTA MAÑANA
+            if (auth()->user()->rol != User::ROL_ADMIN){
+                //&& auth()->user()->rol != User::ROL_JEFE_LLAMADAS//HASTA MAÑANA
+                //&& auth()->user()->rol != User::ROL_LLAMADAS) {//HASTA MAÑANA
                 if (auth()->user()->rol != User::ROL_ENCARGADO) {
                     if (auth()->user()->id != $asesor->id) {
                         continue;
@@ -183,9 +183,9 @@ class GraficoMetasDelMes extends Widgets
         }
         $progressData = [];
         foreach ($asesores as $asesor) {
-            if (auth()->user()->rol != User::ROL_ADMIN
-                && auth()->user()->rol != User::ROL_JEFE_LLAMADAS//HASTA MAÑANA
-                && auth()->user()->rol != User::ROL_LLAMADAS) {//HASTA MAÑANA
+            if (auth()->user()->rol != User::ROL_ADMIN){
+                //&& auth()->user()->rol != User::ROL_JEFE_LLAMADAS//HASTA MAÑANA
+                // auth()->user()->rol != User::ROL_LLAMADAS) {//HASTA MAÑANA
                 if (auth()->user()->rol != User::ROL_ENCARGADO) {
                     if (auth()->user()->id != $asesor->id) {
                         continue;
