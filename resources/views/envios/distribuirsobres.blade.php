@@ -3,7 +3,7 @@
 @section('title', 'Envios | Sobres sin enviar')
 
 @section('content_header')
-    <h1>Distribución de sobres</h1>
+    <h1>DISTRIBUCION DE SOBRES</h1>
 @stop
 
 @section('content')
@@ -20,7 +20,7 @@
                     <div class="card card-{{$color_zones[Str::upper($motorizado->zona)]??'info'}}">
                         <div class="card-header">
                             <div class="d-flex justify-content-between">
-                                <h5>Distribucion {{Str::ucfirst(Str::lower($motorizado->zona))}}</h5>
+                                <h5> {{Str::upper($motorizado->zona)}}</h5>
                                 <div>
                                     <button type="button" class="btn btn-light buttom-agrupar"
                                             data-zona="{{Str::upper($motorizado->zona)}}"
