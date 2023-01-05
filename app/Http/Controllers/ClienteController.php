@@ -166,6 +166,9 @@ class ClienteController extends Controller
                 ->pluck('users.identificador');
 
             $data = $data->WhereIn("u.identificador", $usersasesores);
+        }elseif (Auth::user()->rol == User::ROL_ASESOR_ADMINISTRATIVO) {
+            //$asesorB=User::activo()->where('identificador','=','B')->pluck('id')
+            $data = $data->Where("u.identificador",'=','B');
         }
         //$data=$data->get();
 
