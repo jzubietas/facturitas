@@ -523,6 +523,9 @@
                 $("#tipotransferencia").val("").selectpicker("refresh");
                 $("#titulares").val("").selectpicker("refresh");
                 $("#pmonto").val("");
+                $("#poperacion").val("");
+                $("#pnota").val("");
+                $("#pimagen").val(null);
                 $("#add_pago").text("Guardar")
                 $("#add_pago").removeAttr("disabled")
             });
@@ -1671,6 +1674,7 @@
                             .reduce(function (a, b) {
                                 return Number(a) + Number(b);
                             }, 0);
+                        console.log(pageSaldo)
                         // Update footer
                         $(api.column(3).footer()).html('<input type="hidden" name="total_pedido_pagar" id="total_pedido_pagar" value="' + pageSaldo.toFixed(2) + '" />' +
                             'S/.' + separateComma(pageSaldo.toFixed(2)).toLocaleString("en-US"));
