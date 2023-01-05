@@ -2412,10 +2412,10 @@ class EnvioController extends Controller
             ->conDireccionEnvio()
             ->zonaAsignadaEnvio($zona)
             ->get()
-            ->groupBy('cliente_id');
+            ->groupBy([/*'cliente_id',*/'env_distrito','env_zona_asignada','env_direccion']);
 
         $grupos = [];
-        foreach ($pedidoClientes as $clienteId => $pedidos) {
+        foreach ($pedidoClientes as $grupo => $pedidos) {
             $firstProduct = collect($pedidos)->first();
             $cliente = $firstProduct->cliente;
             $lista_codigos = collect($pedidos)->pluck('codigo')->join(', ');
