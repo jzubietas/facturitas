@@ -184,21 +184,21 @@
                                         </div>
 
                                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                            {!! Form::label('tracking', 'Tracking') !!}
-                                            {!! Form::text('tracking', null, ['class' => 'form-control', 'placeholder' => 'Tracking', 'required' => 'required','maxlength' => 12]) !!}
-                                        </div>
-
-                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                             {!! Form::label('numregistro', 'Numero de Registro') !!}
                                             {!! Form::text('numregistro', null, ['class' => 'form-control', 'placeholder' => 'Número de registro', 'required' => 'required','maxlength' => 12]) !!}
                                         </div>
 
                                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                                            {!! Form::label('importe', 'Importe') !!}
+                                            {!! Form::label('tracking', 'Tracking') !!}
+                                            {!! Form::text('tracking', null, ['class' => 'form-control', 'placeholder' => 'Tracking', 'required' => 'required','maxlength' => 12]) !!}
+                                        </div>
+
+                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                            {!! Form::label('importe', 'Importe Olva') !!}
                                             <input
                                                 oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
                                                 type="text" maxlength="5" id="importe" name="importe"
-                                                placeholder="Importe" class="form-control number ob" step="0.01" min="0"
+                                                placeholder="Importe S/" class="form-control number ob" step="0.01" min="0"
                                                 data-type="text" data-msj="Ingrese una cantidad">
                                         </div>
 
