@@ -76,24 +76,6 @@ class Pedido extends Model
      * FIN CONSTANTES CONDICION ENVIO NUMERICO
      */
 
-    //envio
-    const ENVIO_CONFIRMAR_RECEPCION = '1';//ENVIADO CONFIRMAR RECEPCION
-    const ENVIO_RECIBIDO = '2';//ENVIADO RECIBIDO
-
-    //condicion de envio en cadena
-    const PENDIENTE_DE_ENVIO = 'PENDIENTE DE ENVIO';//1
-
-
-    //condicion de envio en entero
-    const PENDIENTE_DE_ENVIO_CODE = 1;
-    const EN_REPARTO_CODE = 2;
-    const ENTREGADO_CODE = 3;
-
-    const PORATENDDER = 1;
-
-
-    /* relacion de conciones de envio y enteros */
-
     public static $estadosCondicion = [
         'ANULADO' => 4,
         'POR ATENDER' => 1,
@@ -131,20 +113,22 @@ class Pedido extends Model
     ];
 
     public static $estadosCondicionEnvioCode = [
-
-        1 => 'POR ATENDER - OPE',
-        2 => 'EN ATENCION - OPE',
-        3 => 'ATENDIDO - OPE',
-        5 => 'ENVIADO - OPE',
-        6 => 'RECIBIDO - JEFE OPE',
-        12 => 'ENVIO A COURIER - JEFE OPE',
-        11 => 'RECEPCION - COURIER',
-        8 => 'REPARTO - COURIER',
-        9 => 'SEGUIMIENTO PROVINCIA - COURIER',
-        15 => 'MOTORIZADO',
-        10 => 'ENTREGADO - CLIENTE',
-        13 => 'ENTREGADO SIN SOBRE - OPE',
-        14 => 'ENTREGADO SIN SOBRE - CLIENTE'
+        1 => self::POR_ATENDER_OPE,
+        2 => self::EN_ATENCION_OPE,
+        3 => self::ATENDIDO_OPE,
+        5 => self::ENVIADO_OPE,
+        6 => self::RECIBIDO_JEFE_OPE,
+        12 => self::ENVIO_COURIER_JEFE_OPE,
+        11 => self::RECEPCION_COURIER,
+        8 => self::REPARTO_COURIER,
+        9 => self::SEGUIMIENTO_PROVINCIA_COURIER,
+        15 => self::MOTORIZADO,
+        10 => self::ENTREGADO_CLIENTE,
+        13 => self::ENTREGADO_SIN_SOBRE_OPE,
+        14 => self::ENTREGADO_SIN_SOBRE_CLIENTE,
+        16 => self::CONFIRM_MOTORIZADO,
+        17 => self::CONFIRM_VALIDADA_CLIENTE,
+        18 => self::RECEPCION_MOTORIZADO,
     ];
 
 
@@ -155,9 +139,10 @@ class Pedido extends Model
         'fecha_anulacion_confirm',
         'fecha_anulacion_denegada',
     ];
-    protected $appends=[
+    protected $appends = [
         'condicion_envio_color'
     ];
+
     /* public function user()
     {
         return $this->belongsTo('App\Models\User');
@@ -172,6 +157,7 @@ class Pedido extends Model
     {
         return $this->hasMany(ImagenAtencion::class, 'pedido_id');
     }
+
     public function detallePedido()
     {
         return $this->hasOne(DetallePedido::class);
@@ -194,7 +180,7 @@ class Pedido extends Model
 
     public function getCondicionEnvioColorAttribute()
     {
-        $condicion_envio = \Str::lower($this->condicion_envio??'');
+        $condicion_envio = \Str::lower($this->condicion_envio ?? '');
 
         if (\Str::contains($condicion_envio, "ope")) {
             return '#ffc107';
@@ -202,7 +188,7 @@ class Pedido extends Model
             return '#f97100';
         } elseif (\Str::contains($condicion_envio, "cliente")) {
             return '#b0deb3';
-        }else{
+        } else {
             return '#b0deb3';
         }
     }
@@ -238,23 +224,25 @@ class Pedido extends Model
 
     public function scopeSinZonaAsignadaEnvio($query)
     {
-        return $query->where(function ($query){
+        return $query->where(function ($query) {
             $query->whereNull($this->qualifyColumn('env_zona_asignada'));
-            $query->orWhere($this->qualifyColumn('env_zona_asignada'),'=','');
+            $query->orWhere($this->qualifyColumn('env_zona_asignada'), '=', '');
         });
     }
 
-    public function scopeZonaAsignadaEnvio($query,$zona)
+    public function scopeZonaAsignadaEnvio($query, $zona)
     {
         return $query->where($this->qualifyColumn('env_zona_asignada'), '=', $zona);
     }
+
     public function scopeConDireccionEnvio($query)
     {
         return $query->where($this->qualifyColumn('estado_sobre'), '=', 1);
     }
+
     public function scopeSinDireccionEnvio($query)
     {
-        return $query->where($this->qualifyColumn('estado_sobre'), '=',0);
+        return $query->where($this->qualifyColumn('estado_sobre'), '=', 0);
     }
 
     public function scopePagados($query)
@@ -298,7 +286,7 @@ class Pedido extends Model
                 DB::raw("users.identificador as identificador")
             )
             ->pluck('users.identificador');
-        return $query->whereIn($this->qualifyColumn('u.identificador'),  $usersasesores);
+        return $query->whereIn($this->qualifyColumn('u.identificador'), $usersasesores);
     }
 
     public function scoperoljefedellamada($query)
@@ -308,26 +296,26 @@ class Pedido extends Model
 
     public function scoperolasesor($query)
     {
-        $usersasesores = User::whereIn('users.rol', ['Asesor','Administrador','ASESOR ADMINISTRATIVO'])
-                ->where('users.estado', '1')
-                ->where('users.identificador', Auth::user()->identificador)
-                ->select(
-                    DB::raw("users.identificador as identificador")
-                )
-                ->pluck('users.identificador');
-        return $query->whereIn($this->qualifyColumn('u.identificador'),  $usersasesores);
+        $usersasesores = User::whereIn('users.rol', ['Asesor', 'Administrador', 'ASESOR ADMINISTRATIVO'])
+            ->where('users.estado', '1')
+            ->where('users.identificador', Auth::user()->identificador)
+            ->select(
+                DB::raw("users.identificador as identificador")
+            )
+            ->pluck('users.identificador');
+        return $query->whereIn($this->qualifyColumn('u.identificador'), $usersasesores);
     }
 
     public function scoperolencargado($query)
     {
         $usersasesores = User::where('users.rol', 'Asesor')
-                ->where('users.estado', '1')
-                ->where('users.supervisor', Auth::user()->id)
-                ->select(
-                    DB::raw("users.identificador as identificador")
-                )
-                ->pluck('users.identificador');
-        return $query->whereIn($this->qualifyColumn('u.identificador'),  $usersasesores);
+            ->where('users.estado', '1')
+            ->where('users.supervisor', Auth::user()->id)
+            ->select(
+                DB::raw("users.identificador as identificador")
+            )
+            ->pluck('users.identificador');
+        return $query->whereIn($this->qualifyColumn('u.identificador'), $usersasesores);
     }
 
     public function scopeCurrentUser($query)
@@ -389,7 +377,6 @@ class Pedido extends Model
         }
 
 
-
         if (in_array(User::ROL_JEFE_OPERARIO, $roles)) {
             if (auth()->user()->rol == User::ROL_JEFE_OPERARIO) {
 
@@ -407,8 +394,9 @@ class Pedido extends Model
         return $query;
     }
 
-    public static function getColorByCondicionEnvio($condicion_envio){
-        $condicion_envio = \Str::lower($condicion_envio??'');
+    public static function getColorByCondicionEnvio($condicion_envio)
+    {
+        $condicion_envio = \Str::lower($condicion_envio ?? '');
 
         if (\Str::contains($condicion_envio, "ope")) {
             return '#ffc107';
@@ -416,7 +404,7 @@ class Pedido extends Model
             return '#f97100';
         } elseif (\Str::contains($condicion_envio, "cliente")) {
             return '#b0deb3';
-        }else{
+        } else {
             return '#b0deb3';
         }
     }
