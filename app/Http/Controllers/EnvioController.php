@@ -2671,14 +2671,17 @@ class EnvioController extends Controller
         $envio->update([
             'foto1' => '',
             'foto2' => '',
-            'condicion_envio' => Pedido::REPARTO_COURIER,
-            'condicion_envio_code' => Pedido::REPARTO_COURIER_INT,
+            //'condicion_envio' => Pedido::REPARTO_COURIER,
+            //'condicion_envio_code' => Pedido::REPARTO_COURIER_INT,
+            'condicion_envio' => Pedido::RECEPCION_MOTORIZADO,
+            'condicion_envio_code' => Pedido::RECEPCION_MOTORIZADO_INT,
         ]);
 
 
         PedidoMovimientoEstado::create([
             'pedido' => $request->envio_id,
-            'condicion_envio_code' => Pedido::REPARTO_COURIER_INT,
+            //'condicion_envio_code' => Pedido::REPARTO_COURIER_INT,
+            'condicion_envio_code' => Pedido::RECEPCION_MOTORIZADO_INT,
             'notificado' => 0
         ]);
 

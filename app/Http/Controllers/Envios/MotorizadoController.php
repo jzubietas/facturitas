@@ -20,7 +20,8 @@ class MotorizadoController extends Controller
             $query = DireccionGrupo::/*join('direccion_envios as de', 'direccion_grupos.id', 'de.direcciongrupo')*/
                 join('clientes as c', 'c.id', 'direccion_grupos.cliente_id')
                 ->join('users as u', 'u.id', 'c.user_id')
-                ->where('direccion_grupos.condicion_envio_code', Pedido::RECEPCION_MOTORIZADO_INT)
+                //->where('direccion_grupos.condicion_envio_code', Pedido::RECEPCION_MOTORIZADO_INT)
+                ->where('direccion_grupos.condicion_envio_code', Pedido::MOTORIZADO_INT)
                 ->where('direccion_grupos.estado', '1')
                 ->select([
                     'direccion_grupos.id',
