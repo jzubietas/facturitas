@@ -183,7 +183,7 @@
                                             {!! Form::text('oficina', null, ['class' => 'form-control', 'placeholder' => 'Nombre', 'required' => 'required']) !!}
                                         </div>
 
-                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 mt-20">
                                             {!! Form::label('numregistro', 'Numero de Registro') !!}
                                             {!! Form::text('numregistro', null, ['class' => 'form-control', 'placeholder' => 'Número de registro', 'required' => 'required','maxlength' => 12]) !!}
                                         </div>
