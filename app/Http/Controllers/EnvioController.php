@@ -453,7 +453,9 @@ class EnvioController extends Controller
             ->addIndexColumn()
             ->editColumn('condicion_envio', function ($pedido) {
                 $color = Pedido::getColorByCondicionEnvio($pedido->condicion_envio);
-                return '<span class="badge badge-success w-100" style="background-color: ' . $color . '!important;">' . $pedido->condicion_envio . '</span>';
+                return '
+                <span class="badge badge-success text-white w-100" style="background-color:brown !important">LISTO PARA REPARTO</span>
+                    <span class="badge badge-success w-100" style="background-color: ' . $color . '!important;">' . $pedido->condicion_envio . '</span>';
             })
             ->addColumn('action', function ($pedido) {
                 $btn = '';
@@ -1185,7 +1187,7 @@ class EnvioController extends Controller
             ->join('clientes as c', 'c.id', 'direccion_grupos.cliente_id')
             ->join('users as u', 'u.id', 'c.user_id')
             //->where('direccion_grupos.condicion_envio_code', Pedido::REPARTO_COURIER_INT)
-            ->where('direccion_grupos.condicion_envio_code', Pedido::ENVIO_MOTORIZADO_COURIER_INT)
+            ->whereIn('direccion_grupos.condicion_envio_code', [Pedido::ENVIO_MOTORIZADO_COURIER_INT,Pedido::RECEPCION_MOTORIZADO_INT])
             ->activo();
 
         return Datatables::of(DB::table($grupos))
@@ -1195,16 +1197,26 @@ class EnvioController extends Controller
             })
             ->addColumn('action', function ($pedido) {
                 $btn = '';
-                $btn.='<a href="" data-target="#modal-envio" data-toggle="modal" data-recibir="'.$pedido->id.'" data-codigos="'.$pedido->codigos.'"><button class="btn btn-warning btn-sm"><i class="fas fa-check-circle"></i> Recibido</button></a>';
 
-                    $btn .= '<ul class="list-unstyled pl-0">';
+                $btn .= '<ul class="list-unstyled pl-0">';
+
+                if($pedido->condicion_envio_code==Pedido::ENVIO_MOTORIZADO_COURIER_INT)
+                {
+                    $btn.='<li>
+                        <a href="" data-target="#modal-envio" data-toggle="modal" data-recibir="'.$pedido->id.'" data-codigos="'.$pedido->codigos.'"><button class="btn btn-warning btn-sm"><i class="fas fa-check-circle"></i> Recibido</button></a>
+                    </li>';
+
+                }else if($pedido->condicion_envio_code==Pedido::RECEPCION_MOTORIZADO_INT)
+                {
                     $btn .= '<li>
-                                        <a href="" class="btn-sm text-secondary" data-target="#modal-confirmacion" data-toggle="modal" data-ide="' . $pedido->id . '" data-entregar-confirm="' . $pedido->id . '" data-destino="' . $pedido->destino . '" data-fechaenvio="' . $pedido->fecha . '" data-codigos="' . $pedido->codigos . '">
-                                            <i class="fas fa-envelope text-success"></i> A motorizado</a></li>
-                                        </a>
-                                    </li>';
-                    $btn .= '</ul>';
+                                <a href="" class="btn-sm text-secondary" data-target="#modal-confirmacion" data-toggle="modal" data-ide="' . $pedido->id . '" data-entregar-confirm="' . $pedido->id . '" data-destino="' . $pedido->destino . '" data-fechaenvio="' . $pedido->fecha . '" data-codigos="' . $pedido->codigos . '">
+                                    <i class="fas fa-envelope text-success"></i> Iniciar ruta</a></li>
+                                </a>
+                            </li>';
 
+                }
+
+                $btn .= '</ul>';
 
                 return $btn;
             })
@@ -2631,6 +2643,25 @@ class EnvioController extends Controller
         PedidoMovimientoEstado::create([
             'pedido' => $request->hiddenCodigo,
             'condicion_envio_code' => Pedido::ENVIO_MOTORIZADO_COURIER_INT,
+            'notificado' => 0
+        ]);
+
+        return response()->json(['html' => $envio->id]);
+    }
+
+    public function confirmarEstadoRecepcionMotorizado(Request $request)
+    {
+        $envio = DireccionGrupo::where("id", $request->hiddenCodigo)->first();
+        $envio->update([
+            'condicion_envio' => Pedido::MOTORIZADO,
+            'condicion_envio_code' => Pedido::MOTORIZADO_INT,
+            //'condicion_envio' => Pedido::MOTORIZADO,
+            //'condicion_envio_code' => Pedido::MOTORIZADO_INT,
+        ]);
+
+        PedidoMovimientoEstado::create([
+            'pedido' => $request->hiddenCodigo,
+            'condicion_envio_code' => Pedido::MOTORIZADO_INT,
             'notificado' => 0
         ]);
 
