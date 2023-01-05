@@ -469,13 +469,12 @@ class EnvioController extends Controller
 
 
 
-                return '
-                <span class="badge badge-success w-100" style="background-color: #00bc8c !important;
+                return ' <span class="badge badge-success" style="background-color: #00bc8c !important;
     padding: 4px 8px !important;
     font-size: 8px;
     margin-bottom: -4px;
     color: black !important;">Con ruta</span>
-                    <span class="badge badge-success w-100" style="background-color: ' . $color . '!important;">' . $pedido->condicion_envio . '</span>';
+                    <span class="badge badge-success" style="background-color: ' . $color . '!important;">' . $pedido->condicion_envio . '</span>';
             })
             ->addColumn('action', function ($pedido) {
                 $btn = '';
