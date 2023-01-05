@@ -253,7 +253,8 @@
                     const productos = row.codigos.split(',').map(function (codigo, index) {
                         return `<b>${codigo}</b> - <i>${ps[index] || ''}</i>`
                     })
-                    return `${success?`<div class="col-12 alert alert-success">Grupos creados correctamente</div>`:``}<div class="col-md-4">
+                    // ${success?`<div class="col-12 alert alert-success">Grupos creados correctamente</div>`:``}
+                    return `<div class="col-md-4">
 <div class="card card-${success?'success':'dark'}">
 <div class="card-header">
 ${success?`Correlativo del paquete: <strong>${row.correlativo}</strong>`:`Cliente: <strong>${row.nombre}</strong> - <i>${row.celular}</i>`}
@@ -267,6 +268,9 @@ ${productos.join('<hr>')}
 RUTA:<br>
 <b>${row.distribucion}</b> - ${row.distrito || ''}, ${row.direccion || ''}<br>
 <i><b>ref.</b> ${row.referencia || 'n/a'}</i>
+<div>
+
+</div>
 </div>
 </div>
 </div>`
@@ -299,7 +303,7 @@ RUTA:<br>
                     buttons: {
                         ok: {
                             text: 'Aceptar y agrupar',
-                            btnClass: 'btn-red',
+                            btnClass: 'btn-success',
                             action: function () {
                                 buttom.find('.spinner-border').show()
                                 buttom.find('.sr-only').show()
@@ -312,7 +316,7 @@ RUTA:<br>
                                     method: 'post'
                                 })
                                     .done(function (response) {
-                                        self.setTitle('Paquetes Creados');
+                                        self.setTitle('<h3 class="text-success font-24">Paquetes creados exitosamente</h3>');
                                         self.setContent(getHtmlPrevisualizarAgruparData(response, true))
                                         self.$$ok.hide();
                                         self.$$goSobres.show();
