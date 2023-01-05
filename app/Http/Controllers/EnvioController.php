@@ -2331,7 +2331,7 @@ class EnvioController extends Controller
 
                 }
                 $color = Pedido::getColorByCondicionEnvio($pedido->condicion_envio);
-                $badge_estado.= '<span class="badge badge-success w-100" style="background-color: ' . $color . '!important;">' . $pedido->condicion_envio . '</span>';
+                $badge_estado.= '<span class="badge badge-success py-2" style="background-color: ' . $color . '!important;">' . $pedido->condicion_envio . '</span>';
                 return $badge_estado;
             })
             ->addColumn('action', function ($pedido) use ($motorizados, $color_zones) {
