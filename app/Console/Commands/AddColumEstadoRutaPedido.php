@@ -7,7 +7,7 @@ use App\Models\Pedido;
 use Illuminate\Console\Command;
 use Illuminate\Database\Schema\Blueprint;
 
-class AddColumnEstadoRutaPedido extends Command
+class AddColumEstadoRutaPedido extends Command
 {
     /**
      * The name and signature of the console command.
