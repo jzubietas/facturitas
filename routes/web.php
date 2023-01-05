@@ -376,6 +376,7 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     /*Controller Envio*/
     Route::post('envios.recibirid', [EnvioController::class, 'Recibirid'])->name('envios.recibirid');
     Route::post('envios.recibiridlog', [EnvioController::class, 'RecibiridLog'])->name('envios.recibiridlog');
+    Route::post('envios.recepcionarmotorizado', [EnvioController::class, 'RecibirMotorizado'])->name('envios.recepcionarmotorizado');
     Route::post('envios.enviarid', [EnvioController::class, 'EnviarPedidoid'])->name('envios.enviarid');
     Route::post('envios.distribuirid', [EnvioController::class, 'DistribuirEnvioid'])->name('envios.distribuirid');
     Route::post('envios.changeImg', [EnvioController::class, 'changeImg'])->name('envios.changeImg');
