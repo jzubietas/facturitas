@@ -252,9 +252,41 @@ class OperacionController extends Controller
         return Datatables::of(DB::table($pedidos))
             ->addIndexColumn()
             ->addColumn('action', function ($pedido) {
-                $btn = '';
+                $btn = [];
+                $btn[] = '<div class="row">';
 
-                return $btn;
+                $btn[] = '<div class="col-6 d-flex justify-content-start text-left m-0 p-0">';
+                $btn[] = '<ul class="text-left list-inline text-left" aria-labelledby="dropdownMenuButton" >';
+                $btn[] = '<a href="' . route("operaciones.showatender", $pedido->id) . '" class="btn-sm dropdown-item" ><i class="fas fa-eye text-success"></i> Ver</a>';
+                if (\auth()->user()->can('operacion.editatender')) {
+                    $btn[] = '<a href="" class="btn-sm dropdown-item" data-target="#modal-editar-atencion" data-adj=' . $pedido->da_confirmar_descarga . ' data-atencion=' . $pedido->id . ' data-toggle="modal" ><i class="fa fa-paperclip text-primary" aria-hidden="true"></i> Editar Adjuntos</a>';
+                }
+                if (\auth()->user()->can('operacion.PDF')) {
+                    $btn[] = '<a href="' . route("pedidosPDF", $pedido->id) . '" class="btn-sm dropdown-item" target="_blank"><i class="fa fa-file-pdf text-warning"></i> PDF</a>';
+                }
+                $btn[] = '</ul>';
+                $btn[] = '</div>';
+
+                $btn[] = '<div class="col-6 d-flex justify-content-start text-left m-0 p-0">';
+                $btn[] = '<ul class="list-group text-left">';
+                if (\auth()->user()->can('operacion.enviar')) {
+                    if (Auth::user()->rol == "Jefe de operaciones" || Auth::user()->rol == "Administrador" || Auth::user()->rol == "Operario") {
+                        $btn[] = '<a href="" class="btn-sm dropdown-item" data-target="#modal-envio" data-pedido_sobre_text="CON SOBRE" data-envio=' . $pedido->id . ' data-codigo=' . $pedido->codigos . ' data-toggle="modal" ><i class="fa fa-envelope text-success" aria-hidden="true"></i>Envio con sobre</a>';
+                        $btn[] = '<a href="" class="btn-sm dropdown-item" data-target="#modal-sinenvio" data-pedido_sobre_text="SIN SOBRE" data-sinenvio=' . $pedido->id . ' data-codigo=' . $pedido->codigos . ' data-toggle="modal" ><i class="fa fa-times text-danger" aria-hidden="true"></i>Envio sin sobre</a>';
+                    }
+                }
+                if (\auth()->user()->can('operacion.atendidos.revertir')) {
+                    if (\Str::contains(\Str::lower($pedido->condicion_envio), 'courier')) {
+                        $btn[] = '<button data-toggle="tooltip" data-placement="top" title="El sobre ya ah sido recivido en courier, solo el courier tiene permiso de revertir" class="btn-sm dropdown-item" disabled><i class="fa fa-undo text-danger" aria-hidden="true"></i> Revertir a por atender</button>';
+                    } else {
+                        $btn[] = '<a href="" class="btn-sm dropdown-item" data-target="#modal-revertir-poratender" data-adjuntos="' . $pedido->adjuntos . '" data-revertir=' . $pedido->id . ' data-codigo=' . $pedido->codigos . ' data-toggle="modal" ><i class="fa fa-undo text-danger" aria-hidden="true"></i> Revertir a por atender</a>';
+                    }
+                }
+                $btn[] = '</ul>';
+                $btn[] = '</div>';
+                $btn[] = '</div>';
+
+                return join('', $btn);
             })
             ->addColumn('condicion_envio_color', function ($pedido) {
                 return Pedido::getColorByCondicionEnvio($pedido->condicion_envio);
@@ -493,9 +525,9 @@ class OperacionController extends Controller
             })
             ->addColumn('action', function ($pedido) {
                 $btn = [];
-                $btn[]='<a href="' . route("operaciones.showatender", $pedido->id) . '" class="m-1 btn btn-primary btn-sm"><i class="fas fa-eye"></i> Ver</a><br>';
-                if(\auth()->user()->can('operacion.PDF')){
-                    $btn[]= '<a href="'. route('pedidosPDF',$pedido->id). '" class="m-1 btn btn-primary btn-sm" target="_blank"><i class="fa fa-file-pdf"></i> PDF</a><br>';
+                $btn[] = '<a href="' . route("operaciones.showatender", $pedido->id) . '" class="m-1 btn btn-primary btn-sm"><i class="fas fa-eye"></i> Ver</a><br>';
+                if (\auth()->user()->can('operacion.PDF')) {
+                    $btn[] = '<a href="' . route('pedidosPDF', $pedido->id) . '" class="m-1 btn btn-primary btn-sm" target="_blank"><i class="fa fa-file-pdf"></i> PDF</a><br>';
                 }
                 /*if(\auth()->user()->can('operacion.enviar')){
                     if (Auth::user()->rol == "Jefe de operaciones" || Auth::user()->rol == "Administrador") {
@@ -508,7 +540,7 @@ class OperacionController extends Controller
                 }else{
                     $btn[] = '<a class="btn btn-success btn-sm" href="" data-target="#modal-revertir" data-revertir="' . $pedido->id . '" data-codigo="' . $pedido->codigo . '" data-toggle="modal" >Revertir</a>';
                 }*/
-                return "<div class='d-flex'>".join('',$btn)."</div>";
+                return "<div class='d-flex'>" . join('', $btn) . "</div>";
             })
             ->rawColumns(['action'])
             ->make(true);
@@ -1321,64 +1353,66 @@ class OperacionController extends Controller
         $detalle_pedidos = DetallePedido::where('pedido_id', $pedido->id)->first();
         $fecha = Carbon::now();
 
-        if($pedido->estado_sobre=='1')
-        {
-            if($pedido->destino=='LIMA'){
-                $direcciongrupo = DireccionPedido::where('direccion_pedidos.pedido_id',$pedido->id)->where("direccion_pedidos.estado",'1')->first();//->direcciongrupo;
-                $direcciongrupo->update(['estado'=>'0']);
+        if ($pedido->estado_sobre == '1') {
+            if ($pedido->destino == 'LIMA') {
+                $direcciongrupo = DireccionPedido::where('direccion_pedidos.pedido_id', $pedido->id)->where("direccion_pedidos.estado", '1')->first();//->direcciongrupo;
+                $direcciongrupo->update(['estado' => '0']);
 
-                $count_pedidos=DireccionPedido::where('direccion_pedidos.pedido_id',$pedido->id)->where("direccion_pedidos.estado",'1')->count();
-                if($count_pedidos==0)
-                {
-                    $grupo=DireccionGrupo::where('id',$direcciongrupo->direcciongrupo)->first();
-                    $grupo->update(['estado','0']);
+                $count_pedidos = DireccionPedido::where('direccion_pedidos.pedido_id', $pedido->id)->where("direccion_pedidos.estado", '1')->count();
+                if ($count_pedidos == 0) {
+                    $grupo = DireccionGrupo::where('id', $direcciongrupo->direcciongrupo)->first();
+                    $grupo->update(['estado', '0']);
 
-                    $envio=DireccionEnvio::where('direcciongrupo',$direcciongrupo->direcciongrupo)->first();
-                    $envio->update(['estado','0']);
-                }else{
-                    $grupo=DireccionGrupo::where('id',$direcciongrupo->direcciongrupo)->first();
+                    $envio = DireccionEnvio::where('direcciongrupo', $direcciongrupo->direcciongrupo)->first();
+                    $envio->update(['estado', '0']);
+                } else {
+                    $grupo = DireccionGrupo::where('id', $direcciongrupo->direcciongrupo)->first();
 
-                    $loscodigos=DireccionPedido::where('direcciongrupo', $direcciongrupo->direcciongrupo)
-                                ->pluck('codigo_pedido')/*->unique()*/->map(function($item){ return $item;})->join(',');
+                    $loscodigos = DireccionPedido::where('direcciongrupo', $direcciongrupo->direcciongrupo)
+                        ->pluck('codigo_pedido')/*->unique()*/ ->map(function ($item) {
+                            return $item;
+                        })->join(',');
 
-                    $loscodigosin=DireccionPedido::where('direcciongrupo', $direcciongrupo->direcciongrupo)
-                                    ->pluck('codigo_pedido')/*->unique()*/;
+                    $loscodigosin = DireccionPedido::where('direcciongrupo', $direcciongrupo->direcciongrupo)
+                        ->pluck('codigo_pedido')/*->unique()*/
+                    ;
 
                     //obtener producto con los codigos
-                    $losproductos=DetallePedido::whereIn('codigo', $loscodigosin)
-                                    ->pluck('nombre_empresa');//->map(function($item){ return $item;})->join(',');
+                    $losproductos = DetallePedido::whereIn('codigo', $loscodigosin)
+                        ->pluck('nombre_empresa');//->map(function($item){ return $item;})->join(',');
 
-                    $grupo->update(['codigos'=>$loscodigos,'producto'=>$losproductos]);
+                    $grupo->update(['codigos' => $loscodigos, 'producto' => $losproductos]);
 
                 }
                 //concatenar y sacar
-            }
-            else if($pedido->destino=='PROVINCIA'){
-                $direcciongrupo = GastoPedido::where('gasto_pedidos.pedido_id',$pedido->id)->where("gasto_pedidos.estado",'1')->first();//->direcciongrupo;
-                $direcciongrupo->update(['estado'=>'0']);
+            } else if ($pedido->destino == 'PROVINCIA') {
+                $direcciongrupo = GastoPedido::where('gasto_pedidos.pedido_id', $pedido->id)->where("gasto_pedidos.estado", '1')->first();//->direcciongrupo;
+                $direcciongrupo->update(['estado' => '0']);
 
-                $count_pedidos=GastoPedido::where('gasto_pedidos.pedido_id',$pedido->id)->where("gasto_pedidos.estado",'1')->count();
-                if($count_pedidos==0)
-                {
-                    $grupo=DireccionGrupo::where('id',$direcciongrupo->direcciongrupo)->first();
-                    $grupo->update(['estado','0']);
+                $count_pedidos = GastoPedido::where('gasto_pedidos.pedido_id', $pedido->id)->where("gasto_pedidos.estado", '1')->count();
+                if ($count_pedidos == 0) {
+                    $grupo = DireccionGrupo::where('id', $direcciongrupo->direcciongrupo)->first();
+                    $grupo->update(['estado', '0']);
 
-                    $envio=GastoEnvio::where('direcciongrupo',$direcciongrupo->direcciongrupo)->first();
-                    $envio->update(['estado','0']);
-                }else{
-                    $grupo=DireccionGrupo::where('id',$direcciongrupo->direcciongrupo)->first();
+                    $envio = GastoEnvio::where('direcciongrupo', $direcciongrupo->direcciongrupo)->first();
+                    $envio->update(['estado', '0']);
+                } else {
+                    $grupo = DireccionGrupo::where('id', $direcciongrupo->direcciongrupo)->first();
 
-                    $loscodigos=GastoPedido::where('direcciongrupo', $direcciongrupo->direcciongrupo)
-                                ->pluck('codigo_pedido')/*->unique()*/->map(function($item){ return $item;})->join(',');
+                    $loscodigos = GastoPedido::where('direcciongrupo', $direcciongrupo->direcciongrupo)
+                        ->pluck('codigo_pedido')/*->unique()*/ ->map(function ($item) {
+                            return $item;
+                        })->join(',');
 
-                    $loscodigosin=GastoPedido::where('direcciongrupo', $direcciongrupo->direcciongrupo)
-                                    ->pluck('codigo_pedido')/*->unique()*/;
+                    $loscodigosin = GastoPedido::where('direcciongrupo', $direcciongrupo->direcciongrupo)
+                        ->pluck('codigo_pedido')/*->unique()*/
+                    ;
 
                     //obtener producto con los codigos
-                    $losproductos=DetallePedido::whereIn('codigo', $loscodigosin)
-                                    ->pluck('nombre_empresa');//->map(function($item){ return $item;})->join(',');
+                    $losproductos = DetallePedido::whereIn('codigo', $loscodigosin)
+                        ->pluck('nombre_empresa');//->map(function($item){ return $item;})->join(',');
 
-                    $grupo->update(['codigos'=>$loscodigos,'producto'=>$losproductos]);
+                    $grupo->update(['codigos' => $loscodigos, 'producto' => $losproductos]);
                 }
 
             }
@@ -1391,14 +1425,10 @@ class OperacionController extends Controller
             'condicion_envio' => Pedido::ATENDIDO_OPE,
             'condicion_envio_code' => Pedido::ATENDIDO_OPE_INT,
             'modificador' => 'USER' . Auth::user()->id,
-            'estado_sobre'=> '0',
-            'destino'=>'',
-            'direccion'=>''
+            'estado_sobre' => '0',
+            'destino' => '',
+            'direccion' => ''
         ]);
-
-
-
-
 
 
         PedidoMovimientoEstado::where('pedido', $request->hiddenRevertirpedido)->delete();
@@ -1467,9 +1497,8 @@ class OperacionController extends Controller
         ]);
 
         $envio->update([
-            'estado'=>'0'
+            'estado' => '0'
         ]);
-
 
 
         //PedidoMovimientoEstado::where('pedido', $request->hiddenRevertirpedidoporatender)->delete();
