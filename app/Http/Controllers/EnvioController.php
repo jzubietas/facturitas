@@ -1222,7 +1222,7 @@ class EnvioController extends Controller
             ->join('clientes as c', 'c.id', 'direccion_grupos.cliente_id')
             ->join('users as u', 'u.id', 'c.user_id')
             //->where('direccion_grupos.condicion_envio_code', Pedido::REPARTO_COURIER_INT)
-            ->where('direccion_grupos.condicion_envio_code', Pedido::ENVIO_MOTORIZADO_COURIER_INT)
+            ->whereIn('direccion_grupos.condicion_envio_code', [Pedido::ENVIO_MOTORIZADO_COURIER_INT,Pedido::RECEPCION_MOTORIZADO_INT])
             ->activo();
 
         return Datatables::of(DB::table($grupos))
