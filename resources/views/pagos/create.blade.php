@@ -277,8 +277,6 @@
         var total_pedido = 0.00;
         var total_pago = 0.00;
 
-        //$(document).ready(function () {
-
         function eliminarPa(index) {
             total_pago = total_pago - subtotal_pago[index];
             $("#total_pago").html("S/. " + total_pago.toLocaleString("en-US"));
@@ -302,14 +300,6 @@
             $("#pimagen3").val("");
         }
 
-        /*function evaluarPa() {
-          if (total_pago > 0) {//total_pedido > 0 &&
-            $("#guardar").show();
-          } else {
-            $("#guardar").hide();
-          }
-        }*/
-
 
         $(document).ready(function () {
 
@@ -322,13 +312,6 @@
                         data: {"banco": $(this).val()},
                     }).done(function (data) {
                         console.log(data)
-
-
-                        //$("#user_id").html('');
-                        //$("#user_id").html(data.html);
-
-                        //$("#user_id").selectpicker("refresh").trigger("change");
-
                     });
 
 
@@ -347,12 +330,12 @@
                     "bInfo": false,
                     'ajax': {
                         url: "{{ route('cargar.pedidosclientetabla') }}",
-                        'data': {
-                            "cliente_id": $("#pcliente_id").val(),
-                            "diferencia": $("#diferencia").val(),
-                            "perdonar_deuda": 1
+                        data: {
+                            cliente_id: $("#pcliente_id").val(),
+                            diferencia: $("#diferencia").val(),
+                            perdonar_deuda: 1
                         },
-                        "type": "get",
+                        type: "get",
                     },
                     "fnCreatedRow": function (nRow, aData, iDataIndex) {
                         $(nRow).attr('id', aData["id"]);
@@ -387,8 +370,8 @@
                             data: 'diferencia',
                             name: 'diferencia',
                             render: function (data, type, row, meta) {
-                                return '<input type="hidden" name="numberdiferencia[' + row.id + ']" value="' + data + '"><span class="numberdiferencia">' + data + '</span></td>' +
-                                    '<input type="hidden" name="numbertotal[' + row.id + ']" value="' + data + '"><span class="numbertotal"></span></td>';
+                                return '<input data-diferencia type="hidden" name="numberdiferencia[' + row.id + ']" value="' + data + '"><span class="numberdiferencia">' + data + '</span></td>' +
+                                    '<input data-total type="hidden" name="numbertotal[' + row.id + ']" value="' + data + '"><span class="numbertotal"></span></td>';
                             },
                             "visible": true
                         },
@@ -407,6 +390,7 @@
                     ],
                     "footerCallback": function (row, data, start, end, display) {
                         var api = this.api();
+
                         nb_cols = 4;
                         api.columns().nodes().length;
                         var j = 2;
@@ -620,55 +604,6 @@
                 //aqui
             });
 
-            /*$(document).on("submit","#formulario",function(event){
-          event.preventDefault();
-          console.log("abrir");
-          var fd = new FormData();
-
-          fd.append("total_pedido_pagar", $("#total_pedido_pagar").val());
-          fd.append("total_pedido", $("#total_pedido").val());
-          fd.append("total_pago_pagar", $("#total_pago_pagar").val());
-          fd.append("total_pago", $("#total_pago").val());
-
-          var total_pedido_pagar = $("#total_pedido_pagar").val();
-          var total_pedido = document.getElementById('total_pedido').value;
-          var total_pago_pagar = document.getElementById('total_pago_pagar').value;
-          var total_pago = document.getElementById('total_pago').value;
-          var falta = total_pedido_pagar - total_pago_pagar;
-          falta = falta.toFixed(2);
-          imagen = document.getElementsByName("imagen[]");
-          var img = [];
-
-          let files=$('input[name="adjunto[]');
-
-          for(var i=0;i<imagen.length;i++){
-              img.push(imagen[i].value);
-          }
-
-          if(img.includes('') == true)
-          {
-            Swal.fire(
-                'Error',
-                'Seleccione una imagen para cada pago agregado',
-                'warning'
-              )
-          }
-
-          $('input[name="nombre_empresa[]"]').each(function(){
-            fd.append("nombre_empresa[]", this.value);
-          });
-
-
-        });*/
-
-            /*$("#formulario").submit(function(event){
-
-          event.preventDefault();
-          console.log("abrir")
-
-        var fd = new FormData();
-        }*/
-
             tabla_pagos = $('#tabla_pagos').DataTable({
                 "bPaginate": false,
                 "bFilter": false,
@@ -807,23 +742,10 @@
                     $(api.column(8).footer()).html('<input type="hidden" name="total_pago" id="total_pago" value="' + pageTotal.toFixed(2) + '"/>' +
                         'S/. ' + separateComma(pageTotal.toFixed(2)).toLocaleString("en-US"));
 
-                    //$( api.column( 9 ).footer() ).html('<input type="hidden" name="total_pago_pagar" id="total_pago_pagar" value="'+pageTotal.toFixed(2)+'" />'+
-                    //'S/.'+separateComma(pageTotal.toFixed(2)).toLocaleString("en-US") );
 
-                    //console.log("sumar nuevamente para total en pagos");
-                    //console.log("habia en diferencia "+$("#diferencia").val() );
-                    //console.log("sumare "+pageTotal);
                     $("#diferencia").val(pageTotal);
                     $("#saldo").val(0.00);
                     let uncliente = $("#pcliente_id").val();
-                    if (uncliente != '') {
-                        //$('#tabla_pedidos').DataTable().clear().destroy();
-                        //$("#tabla_pedidos").DataTable().ajax.reload();
-                    }
-
-
-                    //$("#tabla_pedidos").DataTable().ajax.reload();
-                    //tabla_pedidos.Databale().ajax.reload();
                     //calcular
                     diferenciaFaltante();
 
@@ -1024,6 +946,17 @@
 
             //$("#user_id").trigger("change");
 
+            function restartTotalDiferencia() {
+                var api=$('#tabla_pedidos').DataTable()
+                var pageSaldo=Array.from(api.column(3, {page: 'current'}).nodes().to$().find('input[data-total]'))
+                    .map(function(e){return parseFloat(e.value);})
+                    .reduce(function (a, b) {
+                        return Number(a) + Number(b);
+                    }, 0);
+                $(api.column(3).footer()).html('<input type="hidden" name="total_pedido_pagar" id="total_pedido_pagar" value="' + pageSaldo.toFixed(2) + '" />' +
+                    'S/.' + separateComma(pageSaldo.toFixed(2)).toLocaleString("en-US"));
+            }
+
             $(document).on("click", ".radiototal", function (event) {
                 event.preventDefault();
             });
@@ -1060,8 +993,8 @@
 
                     $(this).closest('tr').find("td").eq(3).find(":input").val(pedidosaldo.toFixed(2));
                     $(this).closest('tr').find("td").eq(3).find(".numberdiferencia").text(pedidosaldo.toFixed(2));
-                    let totalafterdifer1 = $(this).closest('tr').find("td").eq(2).find(".numbersaldo").val();
-                    let totalafterdifer2 = $(this).closest('tr').find("td").eq(3).find(".numberdiferencia").val();
+                    let totalafterdifer1 = parseFloat($(this).closest('tr').find("td").eq(2).find(".numbersaldo").val());
+                    let totalafterdifer2 = parseFloat($(this).closest('tr').find("td").eq(3).find(".numberdiferencia").val());
                     let totalafterdifer = parseFloat(totalafterdifer1 - totalafterdifer2);
                     $(this).closest('tr').find("td").eq(3).find(".numbertotal").val(totalafterdifer);
 
@@ -1205,6 +1138,8 @@
 
 
                 }
+                //$("#total_pedido_pagar")
+                restartTotalDiferencia()
                 return;
 
             });
@@ -1388,6 +1323,7 @@
                     //fin validar
 
                 }
+                restartTotalDiferencia()
                 return;
 
             });
@@ -1628,8 +1564,8 @@
                             data: 'diferencia',
                             name: 'diferencia',
                             render: function (data, type, row, meta) {
-                                return '<input type="hidden" name="numberdiferencia[' + row.id + ']" value="' + data + '"><span class="numberdiferencia">' + data + '</span></td>' +
-                                    '<input type="hidden" name="numbertotal[' + row.id + ']" value="' + data + '"><span class="numbertotal"></span></td>';
+                                return '<input data-diferencia type="hidden" name="numberdiferencia[' + row.id + ']" value="' + data + '"><span class="numberdiferencia">' + data + '</span></td>' +
+                                    '<input data-total type="hidden" name="numbertotal[' + row.id + ']" value="' + data + '"><span class="numbertotal"></span></td>';
                             },
                             "visible": true
                         },
@@ -1827,12 +1763,6 @@
                         var totalfilescarga1 = $('#pimagen1').get(0).files.length;
                         var totalfilescarga2 = $('#pimagen2').get(0).files.length;
                         var totalfilescarga3 = $('#pimagen3').get(0).files.length;
-                        //fd2.append('adjunto', $('input[type=file][name="pimagen"]')[0].files[0]);
-
-
-                        /*for (let i = 0; i < files.length; i++) {
-              fd4.append('pimagen1', $('input[type=file][name="pimagen1"]')[0].files[0]);
-            }*/
 
                         if (totalfilescarga1 > 0 && totalfilescarga2 > 0 && totalfilescarga3 > 0) {
 
@@ -1856,10 +1786,10 @@
                 $(document).on("click", "#add_pago", function () {
                     console.log("click addpago");
 
-                    var poperacion= $('#poperacion').val();
+                    var poperacion = $('#poperacion').val();
                     var nota = $('#pnota').val();
-                    if(!poperacion || poperacion.length===0){
-                        if(!nota){
+                    if (!poperacion || poperacion.length === 0) {
+                        if (!nota) {
                             Swal.fire(
                                 'Error',
                                 'Ingrese nota o Núm. operación',
@@ -1899,129 +1829,7 @@
                             'Seleccione la fecha',
                             'warning'
                         )
-                    }
-                    /*
-          else if ($('#poperacion').val() == '')
-          {
-            Swal.fire(
-              'Error',
-              'Ingrese un Núm. de la operacion',
-              'warning'
-            )
-          }
-          if($("#tipotransferencia").val()=='PLIN'){
-                    $("#poperacion").val("");
-          }else if($("#tipotransferencia").val()=='YAPE'){
-                    $("#poperacion").val("");
-          }
-          else {
-
-          if(cantidad <= 11){
-            if(nota == '')
-               {
-                console.log("aqui");
-                Swal.fire(
-                'Error',
-                'Debe Ingresar Nota',
-                'warning'
-              );}
-
-
-
-
-              else{
-
-            console.log("empieza logica 2");
-            if ($('#tipotransferencia').val() == 'INTERBANCARIO')
-            {
-              console.log("INTERBANCARIO")
-              if ($('#pbancoprocedencia').val() == '')
-              {
-                console.log("pbancoprocedencia vacio")
-                Swal.fire(
-                  'Error',
-                  'Seleccione Banco de procedencia',
-                  'warning'
-                )
-              }else if ($('#pbancoprocedencia').val() == 'OTROS')
-              {
-                console.log("pbancoprocedencia OTROS")
-                if ($('#otro_bancoprocedencia').val() == '')
-                {
-                  Swal.fire(
-                    'Error',
-                    'Seleccione Banco de procedencia',
-                    'warning'
-                  )
-                }else{
-
-                  console.log("aca");
-                  $("#tabla_pedidos tbody tr .radiototal").prop("checked",false).trigger("change");
-                  $("#tabla_pedidos tbody tr .radioadelanto").prop("checked",false).trigger("change");
-                  let files=$('#pimagen');
-                  var totalfilescarga = $('#pimagen').get(0).files.length;
-                  if(files.length!=totalfilescarga)
-                  {
-                    Swal.fire(
-                      'Error',
-                      'Debe ingresar la imagen adjunta',
-                      'warning'
-                    )
-                    return false;
-                  }else{
-                    deuda = !isNaN($('#pcantidad').val()) ? parseInt($('#pcantidad').val(), 10) : 0;
-                    pagado = !isNaN($('#pstock').val()) ? parseInt($('#pstock').val(), 10) : 0;
-                    agregarPago();
-                  }
-
-                }
-              }else{
-
-                console.log("aca");
-                $("#tabla_pedidos tbody tr .radiototal").prop("checked",false).trigger("change");
-                $("#tabla_pedidos tbody tr .radioadelanto").prop("checked",false).trigger("change");
-                let files=$('#pimagen');
-                var totalfilescarga = $('#pimagen').get(0).files.length;
-                if(files.length!=totalfilescarga)
-                {
-                  Swal.fire(
-                    'Error',
-                    'Debe ingresar la imagen adjunta',
-                    'warning'
-                  )
-                  return false;
-                }else{
-                  deuda = !isNaN($('#pcantidad').val()) ? parseInt($('#pcantidad').val(), 10) : 0;
-                  pagado = !isNaN($('#pstock').val()) ? parseInt($('#pstock').val(), 10) : 0;
-                  agregarPago();
-                }
-
-              }
-            }else
-            {
-              console.log("aca");
-              $("#tabla_pedidos tbody tr .radiototal").prop("checked",false).trigger("change");
-              $("#tabla_pedidos tbody tr .radioadelanto").prop("checked",false).trigger("change");
-              let files=$('#pimagen');
-              var totalfilescarga = $('#pimagen').get(0).files.length;
-              if(files.length!=totalfilescarga)
-              {
-                Swal.fire(
-                  'Error',
-                  'Debe ingresar la imagen adjunta',
-                  'warning'
-                )
-                return false;
-              }else{
-                deuda = !isNaN($('#pcantidad').val()) ? parseInt($('#pcantidad').val(), 10) : 0;
-                pagado = !isNaN($('#pstock').val()) ? parseInt($('#pstock').val(), 10) : 0;
-                agregarPago();
-
-              }
-            }
-              }
-          }*/
-                    else {
+                    } else {
 
                         console.log("empieza logica 2");
                         if ($('#tipotransferencia').val() == 'INTERBANCARIO') {
@@ -2108,222 +1916,8 @@
                     //}
                 });
 
-
-                /*$('#add_pago').click(function() {
-
-        });*/
             });
-            ///
-            /*$(document).on("click","#tabla_pedidos input.radiototal",function(e){
-          e.preventDefault();
-          console.log("aaaa");
-          var checked=$(this).is('checked');
-          if(checked)
-          {
-            console.log("marcado");
-          }else{
-            console.log("desmarcado");
-          }
 
-        });*/
-
-            /*$("").click(function(){
-          var checked=$(this).is('checked');
-          if(checked)
-          {
-            console.log("marcado");
-          }else{
-            console.log("desmarcado");
-          }
-        });*/
-
-            //eventos de datatable
-            /*$(document).on('click','.radiototal', function(e){
-          e.preventDefault();
-        });*/
-
-            /*$(document).on('mousedown keydown ','.radiototal', function(e){
-          e.preventDefault();
-          e.stopPropagation();
-
-          $checktotal=$(this);
-          var checked=$(this).is('checked');
-          if(checked){
-            console.log("checked");
-            $(this).trigger("change");
-          }else{
-            console.log("no");
-            $(this).trigger("change");
-
-          }
-        });*/
-
-            /*$checktotal=$(this);
-          var checked=$(this).is('checked');
-          if(checked){
-            console.log("checked")
-          }else{
-            console.log("no")
-
-            $checktotal.prop('checked', true);
-
-            let montopagos=parseFloat($("#diferencia").val().replace(",", ""));
-            if(montopagos==0 || montopagos==null || isNaN(montopagos)){
-              console.log("no hay pagos ingresados");
-              return false;
-            }
-
-            console.log("estaba sin marcar");
-            console.log("no estaba marcado radiototal");
-
-            let filedata=tabla_pedidos.row($(this).closest('tr')).data();
-            console.log(filedata)
-            let pedidosaldo=parseFloat(filedata.saldo);
-            console.log("saldo "+pedidosaldo);
-            console.log("montopagos "+montopagos);
-
-            if(pedidosaldo<=montopagos)
-            {
-              console.log("pedido "+pedidosaldo+"   < pago "+montopagos);
-              montopagos=(montopagos-pedidosaldo).toFixed(2);
-              console.log("diferencia "+montopagos);
-              $("#diferencia").val(montopagos);
-
-              $(this).closest('tr').find(".radioadelanto").prop("disabled",true);
-            }
-          }
-          return false;
-          let montopagos=parseFloat($("#diferencia").val().replace(",", ""));
-          if(montopagos==0 || montopagos==null || isNaN(montopagos)){
-            console.log("no hay pagos ingresados");
-            return false;
-          }
-          console.log("monto "+montopagos)
-          if(checked){
-            console.log("estaba marcado");
-            $checktotal=$(this);
-
-            let filedata=tabla_pedidos.row($(this).closest('tr')).data();
-            console.log(filedata)
-            let pedidosaldo=parseFloat(filedata.saldo);
-            console.log("saldo "+pedidosaldo);
-            console.log("montopagos "+montopagos);
-            console.log("revertir");
-            {
-              montopagos=(montopagos+pedidosaldo).toFixed(2);
-              console.log("diferencia "+montopagos);
-              $("#diferencia").val(montopagos);
-              $(this).closest('tr').find(".radioadelanto").prop("disabled",false);
-              $checktotal.prop("checked",false).attr("checked", false).removeAttr('checked');
-            }
-
-          }else{
-            console.log("estaba sin marcar");
-            console.log("no estaba marcado radiototal");
-            $checktotal=$(this);
-
-            let filedata=tabla_pedidos.row($(this).closest('tr')).data();
-            console.log(filedata)
-            let pedidosaldo=parseFloat(filedata.saldo);
-            console.log("saldo "+pedidosaldo);
-            console.log("montopagos "+montopagos);
-
-            if(pedidosaldo<=montopagos)
-            {
-              console.log("pedido "+pedidosaldo+"   < pago "+montopagos);
-              montopagos=(montopagos-pedidosaldo).toFixed(2);
-              console.log("diferencia "+montopagos);
-              $("#diferencia").val(montopagos);
-              $(this).closest('tr').find(".radioadelanto").prop("disabled",true);
-            }
-
-          }
-
-        });*/
-
-
-            /*$(document).on( 'click', '#tabla_pedidos input.radiototal', function (e) {
-          e.preventDefault();
-          var checked=$(this).is('checked');
-          let montopagos=parseFloat($("#diferencia").val().replace(",", ""));
-          if(montopagos==0 || montopagos==null || isNaN(montopagos)){
-            console.log("no hay pagos ingresados");
-            return false;
-          }
-          console.log("monto "+montopagos)
-          if(checked){
-
-            console.log("estaba marcado");
-            $checktotal=$(this);
-
-            let filedata=tabla_pedidos.row($(this).closest('tr')).data();
-            console.log(filedata)
-            let pedidosaldo=parseFloat(filedata.saldo);
-            console.log("saldo "+pedidosaldo);
-            console.log("montopagos "+montopagos);
-            console.log("revertir");
-
-
-            {
-
-              montopagos=(montopagos+pedidosaldo).toFixed(2);
-              console.log("diferencia "+montopagos);
-              $("#diferencia").val(montopagos);
-              $(this).closest('tr').find(".radioadelanto").prop("disabled",false);
-              $checktotal.prop("checked",false).attr("checked", false).removeAttr('checked');
-            }
-
-          }else{
-            console.log("estaba sin marcar");
-            console.log("no estaba marcado radiototal");
-            $checktotal=$(this);
-
-            let filedata=tabla_pedidos.row($(this).closest('tr')).data();
-            console.log(filedata)
-            let pedidosaldo=parseFloat(filedata.saldo);
-            console.log("saldo "+pedidosaldo);
-            console.log("montopagos "+montopagos);
-
-            if(pedidosaldo<=montopagos)
-            {
-              console.log("pedido "+pedidosaldo+"   < pago "+montopagos);
-              montopagos=(montopagos-pedidosaldo).toFixed(2);
-              console.log("diferencia "+montopagos);
-              $("#diferencia").val(montopagos);
-              $(this).closest('tr').find(".radioadelanto").prop("disabled",true);
-
-            }
-
-          }
-          return false;
-
-
-
-        });*/
-
-            ////
-            /*$("#tabla_pedidos").on( 'click', 'input.radioadelanto', function (e) {
-
-          let montopagos=$("#diferencia").val().replace(",", "");
-          if(montopagos==0 || montopagos==null){
-
-            return false;
-          }else{
-            if($(this).is(':checked') )
-            {
-              console.log("no estaba marcado radioadelanto")
-              $(this).closest('tr').find(".radiototal").prop("disabled",true);
-
-            }else{
-              console.log("si se encuentra marcado radioadelanto")
-              $(this).closest('tr').find(".radiototal").prop("disabled",false);
-
-            }
-            return true;
-          }
-
-        });*/
-            //////
             // AGREGANDO PAGOS
 
             function separateComma(val) {
@@ -2414,8 +2008,6 @@
                         url: "{{ route('pagos.addImgTempPagoPerdonar') }}",
                         success: function (data) {
                             console.log(data);
-                            //$("#modal-direccion").modal("hide");
-                            //$("#tablaPrincipal").DataTable().ajax.reload();
 
                             document.getElementById("picture1").setAttribute('src', "{{asset('imagenes/logo_facturas.png')}}");
                             document.getElementById("picture2").setAttribute('src', "{{asset('imagenes/logo_facturas.png')}}");
@@ -2708,7 +2300,7 @@
                                                 }).then((result) => {
                                                     if (result.isConfirmed) {
                                                         AgregarPagoTemporal();
-                                                    }else{
+                                                    } else {
                                                         $("#add_pago").text("Agregar")
                                                         $("#add_pago").removeAttr("disabled")
                                                     }
@@ -2721,7 +2313,7 @@
                                                 $("#add_pago").text("Agregar")
                                                 $("#add_pago").removeAttr("disabled")
                                             }
-                                        }else{
+                                        } else {
                                             $("#add_pago").text("Agregar")
                                             $("#add_pago").removeAttr("disabled")
                                         }
@@ -2783,8 +2375,6 @@
 
                 //valor de datatable la suma de columna total y columna saldo
 
-
-                //var sumatotal=$("#tabla_pedidos").
                 var strEx = $("#pmonto").val();//1,000.00
                 //primer paso: fuera coma
                 strEx = strEx.replace(",", "");//1000.00
@@ -2850,128 +2440,12 @@
             subtotal_pago = [];
             var contPa = 0;
 
-
-            /*$('#add_pedido').click(function() {
-          agregarPedido();
-        });*/
-
             function validarFormulario() {
                 //evento.preventDefault();
 
             }
 
-            //////
-
-            ////fin  document ready
         });
-
-
-        //function onclickradiototal(checkeds) {
-        //get id..and check if checked
-        //console.log(checkeds+' para total');
-        //console.log($(checkeds).attr("id"), checkeds.checked)
-
-        //}
-
-        //function onclickradioadelanto(checkeds) {
-        //get id..and check if checked
-        //console.log(checkeds+' para saldo');
-        //console.log($(checkeds).attr("id"), checkeds.checked)
-
-        //}
-
-
-        //});
-
-
-        //VALIDAR CAMPO FECHAS MAX DIA ACTUAL
-        //var today = new Date().toISOString().split('T')[0];
-        //document.getElementsByName("pfecha")[0].setAttribute('max', today);
-
-        //VALIDAR ANTES DE ENVIAR
-        /*document.addEventListener("DOMContentLoaded", function() {
-      document.getElementById("formulario").addEventListener('submit', validarFormulario);
-    });*/
-
-        // AGREGANDO PEDIDOS
-
-
-        /*function agregarPedido() {
-      datosPedido = document.getElementById('ppedido_id').value.split('_');
-      Pedido_delete = document.getElementById('ppedido_id').value
-
-      pedido_id = datosPedido[0];
-      codigo = datosPedido[1];
-      monto = datosPedido[2];
-      saldo = datosPedido[3];
-
-      if (pedido_id != "") {
-        subtotal_pedido[contPe] = saldo*1;
-        total_pedido = total_pedido + subtotal_pedido[contPe];
-
-        var filasPe = '<tr class="selected" id="filasPe' + contPe + '">' +
-          '<td>' + contPe + '</td>' +
-          '<td style="display:none;" ><input type="hidden" name="pedido_id[]" value="' + pedido_id + '">' + pedido_id + '</td>' +
-          '<td><input type="hidden" name="" value="">PED000' + pedido_id + '</td>' +
-          '<td><input type="hidden" name="" value="">' + codigo + '</td>' +
-          '<td><input type="hidden" name="" id= "numbermonto" value="">S/' + monto + '</td>' +
-          '<td><input type="hidden" name="" id= "numbersaldo" value="">S/' + saldo + '</td>' +
-          '<td><button type="button" class="btn btn-danger btn-sm" onclick="eliminarPe(' + contPe + ')"><i class="fas fa-trash-alt"></i></button></td>' +
-          '</tr>';
-        contPe++;
-        limpiarPe();
-
-        $("#total_pago").html("S/. " + separateComma(total_pago).toLocaleString("en-US"));
-
-        $("#total_pedido").html("S/. " + total_pedido.toLocaleString("en-US"));
-        $("#total_pedido_pagar").val(total_pedido.toLocaleString("en-US"));
-        evaluarPe();
-        diferenciaFaltante();
-        $('#tabla_pedidos').append(filasPe);
-        Remove_options(Pedido_delete);
-
-      } else {
-        Swal.fire(
-          'Error!',
-          'Error al agregar el pedido',
-          'warning')
-      }
-    }*/
-
-
-        /* function evaluarPe() {
-      if (total_pedido > 0 && total_pago > 0) {
-        $("#guardar").show();
-      } else {
-        $("#guardar").hide();
-      }
-    } */
-
-
-
-
-
-        //VALIDAR CAMPOS NUMERICO DE MONTO EN PAGOS
-
-
-        //VALIDANDO CAMPOS DE PAGOS
-        /*$(document).ready(function() {
-
-
-    });*/
-        // CAMBIAR IMAGEN
-        /* document.getElementById("imagen").addEventListener('change', cambiarImagen());
-
-    function cambiarImagen(event){
-        var file = event.target.files[0];
-
-        var reader = new FileReader();
-        reader.onload = (event) => {
-            document.getElementById("picture").setAttribute('src', event.target.result);
-        };
-
-        reader.readAsDataURL(file);
-    } */
 
         $(document).ready(function () {
 
