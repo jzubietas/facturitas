@@ -16,6 +16,7 @@
     <div class="row">
         @foreach($motorizados as $motorizado)
             <div class="col-4 container-{{Str::slug($motorizado->zona)}}">
+                <div class="table-responsive">
                 <div class="card card-{{$color_zones[Str::upper($motorizado->zona)]??'info'}}">
                     <div class="card-header">
                         <div class="d-flex justify-content-between">
@@ -50,6 +51,7 @@
                         </table>
                     </div>
                 </div>
+            </div>
             </div>
         @endforeach
 
