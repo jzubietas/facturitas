@@ -225,7 +225,7 @@
            processData: false,
            contentType: false,
            type: 'POST',
-           url:"{{ route('envios.recibiridlog') }}",
+           url:"{{ route('envios.recepcionarmotorizado') }}",
            success:function(data)
            {
             console.log(data);

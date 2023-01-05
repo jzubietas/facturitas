@@ -1260,6 +1260,7 @@ class EnvioController extends Controller
             })
             ->addColumn('action', function ($pedido) {
                 $btn = '';
+                $btn.='<a href="" data-target="#modal-envio" data-toggle="modal" data-recibir="'.$pedido->id.'" data-codigos="'.$pedido->codigos.'"><button class="btn btn-warning btn-sm"><i class="fas fa-check-circle"></i> Recibido</button></a>';
 
                 return $btn;
             })
@@ -1639,6 +1640,26 @@ class EnvioController extends Controller
         ]);
 
         return response()->json(['html' => $pedido->id]);
+    }
+
+    public function RecibirMotorizado(Request $request)
+    {
+        $grupo = DireccionGrupo::where("id", $request->hiddenEnvio)->first();
+
+        $grupo->update([
+            'envio' => '2',
+            'modificador' => 'USER' . Auth::user()->id,
+            'condicion_envio' => Pedido::RECEPCION_MOTORIZADO,
+            'condicion_envio_code' => Pedido::RECEPCION_MOTORIZADO_INT
+        ]);
+
+        PedidoMovimientoEstado::create([
+            'pedido' => $request->hiddenEnvio,
+            'condicion_envio_code' => Pedido::RECEPCION_MOTORIZADO_INT,
+            'notificado' => 0
+        ]);
+
+        return response()->json(['html' => $grupo->id]);
     }
 
     public function Recibirid(Request $request)
