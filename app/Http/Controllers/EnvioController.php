@@ -463,7 +463,7 @@ class EnvioController extends Controller
                     $btn .= '<ul class="list-unstyled pl-0">';
                     $btn .= '<li>
                                         <a href="" class="btn-sm text-secondary" data-target="#modal-confirmacion" data-toggle="modal" data-ide="' . $pedido->id . '" data-entregar-confirm="' . $pedido->id . '" data-destino="' . $pedido->destino . '" data-fechaenvio="' . $pedido->fecha . '" data-codigos="' . $pedido->codigos . '">
-                                            <i class="fas fa-envelope text-success"></i> A motorizado</a></li>
+                                            <i class="fas fa-envelope text-success"></i> Enviar a Motorizado</a></li>
                                         </a>
                                     </li>';
                     $btn .= '</ul>';
@@ -507,43 +507,8 @@ class EnvioController extends Controller
                 'direccion_grupos.correlativo as correlativo'
             );
 
-
-        $pedidos_provincia = DireccionGrupo::join('gasto_envios as de', 'direccion_grupos.id', 'de.direcciongrupo')
-            ->join('clientes as c', 'c.id', 'de.cliente_id')
-            ->join('users as u', 'u.id', 'c.user_id')
-            //  ->join('pedidos as p', 'p.codigo', 'direccion_grupos.codigos')
-
-            //  ->where('p.condicion_envio_code',Pedido::EN_REPARTO_INT)
-            ->where('direccion_grupos.condicion_envio_code', Pedido::REPARTO_COURIER_INT)
-            ->where('direccion_grupos.estado', '1')
-            ->select(
-                'direccion_grupos.id',
-                'u.identificador as identificador',
-                DB::raw(" (select 'PROVINCIA') as destino "),
-                DB::raw(" (select '') as celular "),
-                DB::raw(" (select '') as nombre "),
-                'de.cantidad',
-
-                'direccion_grupos.codigos',
-                'direccion_grupos.producto',
-
-                'de.tracking as direccion',
-                'de.foto as referencia',
-                DB::raw(" (select '') as observacion "),
-                DB::raw(" (select '') as distrito "),
-
-                DB::raw('(select DATE_FORMAT( direccion_grupos.created_at, "%Y-%m-%d")   from direccion_grupos dpa where dpa.id=direccion_grupos.id) as fecha'),
-                'direccion_grupos.destino as destino2',
-                'direccion_grupos.distribucion',
-                'direccion_grupos.condicion_envio',
-                'direccion_grupos.subcondicion_envio',
-                'direccion_grupos.condicion_sobre',
-                'direccion_grupos.correlativo as correlativo',
-            );
-
         if (Auth::user()->rol == "Asesor") {
             $pedidos_lima = $pedidos_lima->Where('u.identificador', Auth::user()->identificador);
-
 
         } else if (Auth::user()->rol == "Encargado") {
             $usersasesores = User::where('users.rol', 'Asesor')
@@ -570,9 +535,7 @@ class EnvioController extends Controller
 
         }
 
-
         $pedidos = $pedidos_lima->get();
-
 
         return Datatables::of($pedidos)
             ->addIndexColumn()
@@ -650,8 +613,8 @@ class EnvioController extends Controller
 
         $pedidos = null;
 
-        $pedidos_lima = DireccionGrupo::join('direccion_envios as de', 'direccion_grupos.id', 'de.direcciongrupo')
-            ->join('clientes as c', 'c.id', 'de.cliente_id')
+        $pedidos_lima = DireccionGrupo::/*join('direccion_envios as de', 'direccion_grupos.id', 'de.direcciongrupo')*/
+            join('clientes as c', 'c.id', 'direccion_grupos.cliente_id')
             ->join('users as u', 'u.id', 'c.user_id')
             ->where('direccion_grupos.estado', '1')
             ->whereIn('direccion_grupos.condicion_envio_code', [Pedido::ENTREGADO_CLIENTE_INT, Pedido::ENTREGADO_SIN_SOBRE_OPE_INT, Pedido::ENTREGADO_SIN_SOBRE_CLIENTE_INT])
@@ -659,15 +622,15 @@ class EnvioController extends Controller
                 'direccion_grupos.id',
                 'u.identificador as identificador',
                 DB::raw(" (select 'LIMA') as destino "),
-                'de.celular',
-                'de.nombre',
-                'de.cantidad',
+                'direccion_grupos.celular',
+                'direccion_grupos.nombre',
+                'direccion_grupos.cantidad',
                 'direccion_grupos.codigos',
                 'direccion_grupos.producto',
-                'de.direccion',
-                'de.referencia',
-                'de.observacion',
-                'de.distrito',
+                'direccion_grupos.direccion',
+                'direccion_grupos.referencia',
+                'direccion_grupos.observacion',
+                'direccion_grupos.distrito',
                 'direccion_grupos.created_at as fecha',
                 DB::raw("DATE_FORMAT(direccion_grupos.created_at, '%Y-%m-%d') as fechaentrega"),
                 'direccion_grupos.destino as destino2',
@@ -681,38 +644,9 @@ class EnvioController extends Controller
                 'direccion_grupos.correlativo'
             );
 
-        $pedidos_provincia = DireccionGrupo::join('gasto_envios as de', 'direccion_grupos.id', 'de.direcciongrupo')
-            ->join('clientes as c', 'c.id', 'de.cliente_id')
-            ->join('users as u', 'u.id', 'c.user_id')
-            ->where('direccion_grupos.estado', '1')
-            ->whereIn('direccion_grupos.condicion_envio', [Pedido::ENTREGADO_CLIENTE_INT, Pedido::ENTREGADO_SIN_SOBRE_OPE_INT, Pedido::ENTREGADO_SIN_SOBRE_CLIENTE_INT])
-            ->select(
-                'direccion_grupos.id',
-                'u.identificador as identificador',
-                DB::raw(" (select 'PROVINCIA') as destino "),
-                DB::raw(" (select '') as celular "),
-                DB::raw(" (select '') as nombre "),
-                'de.cantidad',
-                'direccion_grupos.codigos',
-                'direccion_grupos.producto',
-                'de.tracking as direccion',
-                'de.foto as referencia',
-                DB::raw(" (select '') as observacion "),
-                DB::raw(" (select '') as distrito "),
-                'direccion_grupos.created_at as fecha',
-                DB::raw("DATE_FORMAT(direccion_grupos.created_at, '%Y-%m-%d') as fechaentrega"),
-                'direccion_grupos.destino as destino2',
-                'direccion_grupos.distribucion',
-                'direccion_grupos.condicion_envio',
-                'direccion_grupos.condicion_envio_code',
-                'direccion_grupos.condicion_sobre',
-                'direccion_grupos.subcondicion_envio',
-                'direccion_grupos.foto1',
-                'direccion_grupos.foto2',
-                'direccion_grupos.correlativo'
-            );
 
-        $pedidos = $pedidos_lima->union($pedidos_provincia);
+
+        $pedidos = $pedidos_lima;
 
 
         if (Auth::user()->rol == "Operario") {
@@ -1250,7 +1184,8 @@ class EnvioController extends Controller
             //join('direccion_envios as de', 'direccion_grupos.id', 'de.direcciongrupo')
             ->join('clientes as c', 'c.id', 'direccion_grupos.cliente_id')
             ->join('users as u', 'u.id', 'c.user_id')
-            ->where('direccion_grupos.condicion_envio_code', Pedido::REPARTO_COURIER_INT)
+            //->where('direccion_grupos.condicion_envio_code', Pedido::REPARTO_COURIER_INT)
+            ->where('direccion_grupos.condicion_envio_code', Pedido::ENVIO_MOTORIZADO_COURIER_INT)
             ->activo();
 
         return Datatables::of(DB::table($grupos))
@@ -1261,6 +1196,15 @@ class EnvioController extends Controller
             ->addColumn('action', function ($pedido) {
                 $btn = '';
                 $btn.='<a href="" data-target="#modal-envio" data-toggle="modal" data-recibir="'.$pedido->id.'" data-codigos="'.$pedido->codigos.'"><button class="btn btn-warning btn-sm"><i class="fas fa-check-circle"></i> Recibido</button></a>';
+
+                    $btn .= '<ul class="list-unstyled pl-0">';
+                    $btn .= '<li>
+                                        <a href="" class="btn-sm text-secondary" data-target="#modal-confirmacion" data-toggle="modal" data-ide="' . $pedido->id . '" data-entregar-confirm="' . $pedido->id . '" data-destino="' . $pedido->destino . '" data-fechaenvio="' . $pedido->fecha . '" data-codigos="' . $pedido->codigos . '">
+                                            <i class="fas fa-envelope text-success"></i> A motorizado</a></li>
+                                        </a>
+                                    </li>';
+                    $btn .= '</ul>';
+
 
                 return $btn;
             })
@@ -2678,13 +2622,15 @@ class EnvioController extends Controller
     {
         $envio = DireccionGrupo::where("id", $request->hiddenCodigo)->first();
         $envio->update([
-            'condicion_envio' => Pedido::MOTORIZADO,
-            'condicion_envio_code' => Pedido::MOTORIZADO_INT,
+            'condicion_envio' => Pedido::ENVIO_MOTORIZADO_COURIER,
+            'condicion_envio_code' => Pedido::ENVIO_MOTORIZADO_COURIER_INT,
+            //'condicion_envio' => Pedido::MOTORIZADO,
+            //'condicion_envio_code' => Pedido::MOTORIZADO_INT,
         ]);
 
         PedidoMovimientoEstado::create([
             'pedido' => $request->hiddenCodigo,
-            'condicion_envio_code' => Pedido::MOTORIZADO_INT,
+            'condicion_envio_code' => Pedido::ENVIO_MOTORIZADO_COURIER_INT,
             'notificado' => 0
         ]);
 
