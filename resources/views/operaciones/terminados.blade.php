@@ -64,7 +64,6 @@
                     <th scope="col">Estado</th>
                     <th scope="col">Atendido por</th>
                     <th scope="col">Jefe</th>
-                    <th scope="col">Estado de sobre</th>
                     <th scope="col">Accion</th>
                 </tr>
                 </thead>
@@ -75,7 +74,6 @@
             @include('pedidos.modal.revertirid');
         </div>
     </div>
-
 @stop
 
 @section('css')
@@ -239,6 +237,9 @@
                     //console.log(row);
                 },
                 rowCallback: function (row, data, index) {
+                    $(function () {
+                        $('[data-toggle="tooltip"]',row).tooltip()
+                    })
                 },
                 initComplete: function (settings, json) {
 
@@ -290,69 +291,12 @@
                     {data: 'atendido_por', name: 'atendido_por',},
                     {data: 'jefe', name: 'jefe',},
                     {
-                        data: 'envio',
-                        name: 'envio',
-                        render: function (data, type, row, meta) {
-                            if (row.envio == 1) {
-                                return '<span class="badge badge-success">Enviado</span>' +
-                                    '<span class="badge badge-warning">Por confirmar recepcion</span>';
-                            } else if (row.envio == 2) {
-                                return '<span class="badge badge-success">Enviado</span>' +
-                                    '<span class="badge badge-info">Recibido</span>';
-                            } else if (row.envio == 3) {
-                                return '<span class="badge badge-dark">Sin envio</span>';
-                            } else {
-                                return '<span class="badge badge-danger">por enviar</span>';
-                            }
-                        }, "visible": false
-                    },
-
-                    {
                         data: 'action',
                         name: 'action',
                         orderable: false,
                         searchable: false,
                         sWidth: '20%',
-                        render: function (data, type, row, meta) {
-
-                            var urlver = '{{ route("operaciones.showatender", ":id") }}';
-                            urlver = urlver.replace(':id', row.id);
-                            data = data + '<a href="' + urlver + '" class="btn btn-primary btn-sm"><i class="fas fa-eye"></i> Ver</a><br>';
-
-                            var urledit = '{{ route("operaciones.editatender", ":id") }}';
-                            urledit = urledit.replace(':id', row.id);
-                            /*
-@can('operacion.editatender')
-                            data = data+'<a href="'+urledit+'" class="btn btn-warning btn-sm"><i class=""></i> Editar atención</a><br>';
-@endcan
-                            */
-                            var urlpdf = '{{ route("pedidosPDF", ":id") }}';
-                            urlpdf = urlpdf.replace(':id', row.id);
-                            @can('operacion.PDF')
-                                data = data + '<a href="' + urlpdf + '" class="btn btn-primary btn-sm" target="_blank"><i class="fa fa-file-pdf"></i> PDF</a><br>';
-                            //  data = data+'<a href="" data-target="#modal-envio-op" data-envio='+row.id+' data-toggle="modal" ><button class="btn btn-success btn-sm">Atender</button></a><br>';
-                            @endcan
-
-                                @can('operacion.enviar')
-                            if (row.envio == '0') {
-                                @if (Auth::user()->rol == "Jefe de operaciones" || Auth::user()->rol == "Administrador")
-
-                                    data = data + '<a href="" data-target="#modal-envio" data-envio=' + row.id + ' data-toggle="modal" ><button class="btn btn-success btn-sm">Enviar</button></a><br>';
-                                data = data + '<a href="" data-target="#modal-sinenvio" data-sinenvio=' + row.id + ' data-toggle="modal" ><button class="btn btn-dark btn-sm">Sin envío</button></a><br>';
-                                @endif
-
-                            }
-                            @endcan
-
-
-                                data = data + '<a href="" data-target="#modal-revertir" data-revertir=' + row.id + ' data-codigo=' + row.codigo + ' data-toggle="modal" ><button class="btn btn-success btn-sm">Revertir</button></a>';
-
-
-                            return data;
-                        }
                     },
-
-
                 ],
 
 

@@ -492,9 +492,23 @@ class OperacionController extends Controller
                 return Pedido::getColorByCondicionEnvio($pedido->condicion_envio);
             })
             ->addColumn('action', function ($pedido) {
-                $btn = '';
-
-                return $btn;
+                $btn = [];
+                $btn[]='<a href="' . route("operaciones.showatender", $pedido->id) . '" class="m-1 btn btn-primary btn-sm"><i class="fas fa-eye"></i> Ver</a><br>';
+                if(\auth()->user()->can('operacion.PDF')){
+                    $btn[]= '<a href="'. route('pedidosPDF',$pedido->id). '" class="m-1 btn btn-primary btn-sm" target="_blank"><i class="fa fa-file-pdf"></i> PDF</a><br>';
+                }
+                /*if(\auth()->user()->can('operacion.enviar')){
+                    if (Auth::user()->rol == "Jefe de operaciones" || Auth::user()->rol == "Administrador") {
+                        $btn[] = '<a class="btn btn-success btn-sm" href="" data-target="#modal-envio" data-envio=' . $pedido->id . ' data-toggle="modal" >Enviar</a><br>';
+                        $btn[] = '<a class="btn btn-dark btn-sm" href="" data-target="#modal-sinenvio" data-sinenvio="' . $pedido->id . '" data-toggle="modal" >Sin envío</a><br>';
+                    }
+                }
+                if(\Str::contains(\Str::lower($pedido->condicion_envio),'courier')) {
+                    $btn[] = '<button data-toggle="tooltip" data-placement="top" title="El sobre ya ah sido recivido en currier,  solo el currier tiene permiso de revertir" disabled class="btn btn-disabled btn-success btn-sm" data-target="#modal-revertir" data-revertir="' . $pedido->id . '" data-codigo="' . $pedido->codigo . '" data-toggle="modal" >Revertir</button>';
+                }else{
+                    $btn[] = '<a class="btn btn-success btn-sm" href="" data-target="#modal-revertir" data-revertir="' . $pedido->id . '" data-codigo="' . $pedido->codigo . '" data-toggle="modal" >Revertir</a>';
+                }*/
+                return "<div class='d-flex'>".join('',$btn)."</div>";
             })
             ->rawColumns(['action'])
             ->make(true);
