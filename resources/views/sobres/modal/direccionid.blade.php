@@ -198,7 +198,7 @@
                                             <input
                                                 oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
                                                 type="text" maxlength="5" id="importe" name="importe"
-                                                placeholder="Importe S/" class="form-control number ob" step="0.01" min="0"
+                                                placeholder="S/" class="form-control number ob" step="0.01" min="0"
                                                 data-type="text" data-msj="Ingrese una cantidad">
                                         </div>
 
