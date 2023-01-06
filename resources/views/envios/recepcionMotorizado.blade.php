@@ -147,7 +147,7 @@
                             </div>
                             <br>
                             <div class="cnt-scanner">
-                                <div class="qrscanner"  style="background-color: #222; border-radius: 16px; overflow: hidden" id="scanner">
+                                <div class="qrscanner"  style="background-color: #222; width:300px; height:300px; margin:auto; border-radius: 16px; overflow: hidden" id="scanner">
                                 </div>
                             </div>
                             <div>
