@@ -147,7 +147,16 @@
                             </div>
                             <br>
                             <div class="cnt-scanner">
-                                <div class="qrscanner"  style="background-color: #222; width:300px; height:200px; margin:auto; border-radius: 16px;" id="scanner">
+                                <div class="ocrloader">
+                                    <em></em>
+                                    <div>
+                                        <i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+                                        <i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+                                        <i></i><i></i><i></i>
+                                    </div>
+                                    <span></span>
+                                </div>
+                                <div class="qrscanner"  style="background-color: #222; width:300px; height:200px; margin:auto; border-radius: 16px; overflow:hidden;" id="scanner">
                                 </div>
                             </div>
                             <div>
@@ -155,7 +164,7 @@
                                 <p class="mb-0">CODIGO: <label id="code_ped" class="mb-0">Codigo:</label></p>
                                 <p class="mb-0">DISTRITO: <label id="dist_ped" class="mb-0">Distrito</label></p>
                                 <p class="mb-0">DIRECCIÓN: <label id="dir_ped" class="mb-0">Dirección</label></p>
-                                <a href="#" id="recepcion_btn" class="btn btn-warning font-weight-bold">Confirmar Pedido</a>
+                                <a href="#" id="recepcion_btn" class="btn btn-warning font-weight-bold" style="display:none;">Confirmar Pedido</a>
                                 <div class="mt-16">
                                 <textarea id="scannedTextMemo" class="textInput form-memo form-field-input textInput-readonly w-100" rows="3" readonly></textarea>
                                 </div>
@@ -193,7 +202,145 @@
 
   <style>
 
-      .qrPreviewVideo{width:100%; max-width:400px;border-radius: 16px; margin:auto;}
+      /* QR */
+
+      * {
+          margin: 0;
+          padding: 0;
+          box-sizing: border-box;
+      }
+      body {
+          height: 100vh;
+          position: relative;
+      }
+      .ocrloader {
+          width: 94px;
+          height: 77px;
+          position: absolute;
+          left: 50%;
+          top: 50%;
+          transform: translate(-50%, -50%);
+          backface-visibility: hidden;
+      span {
+          position: absolute;
+          left: 0;
+          top: 0;
+          width: 100%;
+          height: 20px;
+          background-color: rgba(45, 183, 183, 0.54);
+          z-index: 1;
+          transform: translateY(135%);
+          animation: move 0.7s cubic-bezier(0.15, 0.44, 0.76, 0.64);
+          animation-iteration-count: infinite;
+      }
+      > div {
+          z-index: 1;
+          position: absolute;
+          left: 50%;
+          top: 50%;
+          transform: translate(-50%, -50%);
+          width: 48%;
+          backface-visibility: hidden;
+      }
+      i {
+          display: block;
+          height: 1px;
+          background: #000;
+          margin: 0 auto 2px;
+          margin: 0 auto 2.2px;
+          backface-visibility: hidden;
+      &:nth-child(2) {
+           width: 75%;
+       }
+      &:nth-child(3) {
+           width: 81%;
+       }
+      &:nth-child(4) {
+           width: 87%;
+       }
+      &:nth-child(6) {
+           width: 71%;
+       }
+      &:nth-child(7) {
+           width: 81%;
+       }
+      &:nth-child(8) {
+           width: 65%;
+       }
+      &:nth-child(9) {
+           width: 83%;
+       }
+      &:nth-child(10) {
+           width: 75%;
+       }
+      &:nth-child(12) {
+           width: 86%;
+       }
+      &:nth-child(14) {
+           width: 65%;
+       }
+      &:nth-child(16) {
+           width: 75%;
+       }
+      &:nth-child(18) {
+           width: 83%;
+       }
+      }
+      &:before,
+      &:after,
+       em:after,
+       em:before {
+           border-color: #000;
+           content: "";
+           position: absolute;
+           width: 19px;
+           height: 16px;
+           border-style: solid;
+           border-width: 0px;
+       }
+      &:before {
+           left: 0;
+           top: 0;
+           border-left-width: 1px;
+           border-top-width: 1px;
+       }
+      &:after {
+           right: 0;
+           top: 0;
+           border-right-width: 1px;
+           border-top-width: 1px;
+       }
+      em:before {
+          left: 0;
+          bottom: 0;
+          border-left-width: 1px;
+          border-bottom-width: 1px;
+      }
+      em:after {
+          right: 0;
+          bottom: 0;
+          border-right-width: 1px;
+          border-bottom-width: 1px;
+      }
+      }
+
+      @keyframes move {
+          0%,
+          100% {
+              transform: translateY(135%);
+          }
+          50% {
+              transform: translateY(0%);
+          }
+          75% {
+              transform: translateY(272%);
+          }
+      }
+
+
+      /* FIN QR */
+
+      .qrPreviewVideo{width:100%; max-width:400px; max-height:300px; border-radius: 16px; margin:auto;}
 
     img:hover{
       transform: scale(1.2)
@@ -270,6 +417,7 @@
                             $('#code_ped').html(data.html);
                             $('#dist_ped').html(data.distrito);
                             $('#dir_ped').html(data.direccion);
+                            $('#recepcion_btn').css({'display':'block'});
 
                             $('#recepcion_btn').on('click', function (){
                                 $.ajax({
