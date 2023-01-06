@@ -147,17 +147,8 @@
                             </div>
                             <br>
                             <div class="cnt-scanner">
-                                <div class="ocrloader">
-                                    <em></em>
-                                    <div>
-                                        <i></i><i></i><i></i><i></i><i></i><i></i><i></i>
-                                        <i></i><i></i><i></i><i></i><i></i><i></i><i></i>
-                                        <i></i><i></i><i></i>
-                                    </div>
-                                    <span></span>
-                                </div>
-                                <div class="qrscanner"  style="background-color: #222; width:300px; height:200px; margin:auto; border-radius: 16px; overflow:hidden;" id="scanner">
-                                </div>
+                                <div class="qrscanner"  style="background-color: #222; width:200px; height:200px; margin:auto; border-radius: 16px; overflow:hidden;" id="scanner"></div>
+                                <img src="{{asset('images/codigo-qr.png')}}" style="200px;">
                             </div>
                             <div>
                                 <p class="mb-8 mt-16">Pedido Encontrado</p>
@@ -202,145 +193,9 @@
 
   <style>
 
-      /* QR */
-
-      * {
-          margin: 0;
-          padding: 0;
-          box-sizing: border-box;
-      }
-      body {
-          height: 100vh;
-          position: relative;
-      }
-      .ocrloader {
-          width: 94px;
-          height: 77px;
-          position: absolute;
-          left: 50%;
-          top: 50%;
-          transform: translate(-50%, -50%);
-          backface-visibility: hidden;
-      span {
-          position: absolute;
-          left: 0;
-          top: 0;
-          width: 100%;
-          height: 20px;
-          background-color: rgba(45, 183, 183, 0.54);
-          z-index: 1;
-          transform: translateY(135%);
-          animation: move 0.7s cubic-bezier(0.15, 0.44, 0.76, 0.64);
-          animation-iteration-count: infinite;
-      }
-      > div {
-          z-index: 1;
-          position: absolute;
-          left: 50%;
-          top: 50%;
-          transform: translate(-50%, -50%);
-          width: 48%;
-          backface-visibility: hidden;
-      }
-      i {
-          display: block;
-          height: 1px;
-          background: #000;
-          margin: 0 auto 2px;
-          margin: 0 auto 2.2px;
-          backface-visibility: hidden;
-      &:nth-child(2) {
-           width: 75%;
-       }
-      &:nth-child(3) {
-           width: 81%;
-       }
-      &:nth-child(4) {
-           width: 87%;
-       }
-      &:nth-child(6) {
-           width: 71%;
-       }
-      &:nth-child(7) {
-           width: 81%;
-       }
-      &:nth-child(8) {
-           width: 65%;
-       }
-      &:nth-child(9) {
-           width: 83%;
-       }
-      &:nth-child(10) {
-           width: 75%;
-       }
-      &:nth-child(12) {
-           width: 86%;
-       }
-      &:nth-child(14) {
-           width: 65%;
-       }
-      &:nth-child(16) {
-           width: 75%;
-       }
-      &:nth-child(18) {
-           width: 83%;
-       }
-      }
-      &:before,
-      &:after,
-       em:after,
-       em:before {
-           border-color: #000;
-           content: "";
-           position: absolute;
-           width: 19px;
-           height: 16px;
-           border-style: solid;
-           border-width: 0px;
-       }
-      &:before {
-           left: 0;
-           top: 0;
-           border-left-width: 1px;
-           border-top-width: 1px;
-       }
-      &:after {
-           right: 0;
-           top: 0;
-           border-right-width: 1px;
-           border-top-width: 1px;
-       }
-      em:before {
-          left: 0;
-          bottom: 0;
-          border-left-width: 1px;
-          border-bottom-width: 1px;
-      }
-      em:after {
-          right: 0;
-          bottom: 0;
-          border-right-width: 1px;
-          border-bottom-width: 1px;
-      }
-      }
-
-      @keyframes move {
-          0%,
-          100% {
-              transform: translateY(135%);
-          }
-          50% {
-              transform: translateY(0%);
-          }
-          75% {
-              transform: translateY(272%);
-          }
-      }
 
 
-      /* FIN QR */
-
-      .qrPreviewVideo{width:100%; max-width:400px; max-height:300px; border-radius: 16px; margin:auto;}
+      .qrPreviewVideo{width:100%; width:100%; border-radius: 16px; margin:auto;}
 
     img:hover{
       transform: scale(1.2)
