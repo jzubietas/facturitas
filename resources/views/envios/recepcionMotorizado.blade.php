@@ -152,9 +152,9 @@
                             </div>
                             <div>
                                 <p class="mb-8 mt-16">Pedido Encontrado</p>
-                                <p class="mb-8">CODIGO: <label id="code_ped">Codigo:</label></p>
-                                <p class="mb-8">DISTRITO: <label id="dist_ped">Distrito</label></p>
-                                <p class="mb-8">DIRECCIÓN: <label id="dir_ped">Dirección</label></p>
+                                <p class="mb-0">CODIGO: <label id="code_ped" class="mb-0">Codigo:</label></p>
+                                <p class="mb-0">DISTRITO: <label id="dist_ped" class="mb-0">Distrito</label></p>
+                                <p class="mb-0">DIRECCIÓN: <label id="dir_ped" class="mb-0">Dirección</label></p>
                                 <a href="#" id="recepcion_btn" class="btn btn-warning font-weight-bold">Confirmar Pedido</a>
                                 <div class="mt-16">
                                 <textarea id="scannedTextMemo" class="textInput form-memo form-field-input textInput-readonly w-100" rows="3" readonly></textarea>
@@ -280,12 +280,12 @@
                   });
               }
           });
-        /*
+
           var scannedTextMemo = document.getElementById("scannedTextMemo");
           if(scannedTextMemo)
           {
               scannedTextMemo.value = scannedText;
-          } */
+          }
           return false;
       }
 
