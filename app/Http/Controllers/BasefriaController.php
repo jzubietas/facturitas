@@ -276,9 +276,32 @@ class BasefriaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request,Cliente  $basefrium)
     {
-        //
+        //return $basefrium;
+        $request->validate([
+            //'nombre' => 'required',
+            //'dni' => 'required',
+            'celular' => 'required',
+            //'provincia' => 'required',
+            //'distrito' => 'required',
+            //'direccion' => 'required',
+            //'referencia' => 'required',
+            //'porcentaje' => 'required',
+        ]);
+
+        $basefrium->update([
+            'nombre' => $request->nombre,
+            'dni' => $request->dni,
+            'celular' => $request->celular,           
+            'tipo' => '0'
+        ]);
+        
+        if ($request->tipo === '1') {
+            return redirect()->route('clientes.index')->with('info', 'actualizado');
+        } else {
+            return redirect()->route('basefria')->with('info', 'actualizado');
+        }
     }
 
     /**

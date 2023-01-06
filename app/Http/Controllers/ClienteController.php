@@ -378,9 +378,6 @@ class ClienteController extends Controller
             'celular' => 'required',
         ]);
 
-        //validar numero en toda la base 
-        //$numero=Cliente::where('id',)
-
         $cliente->update($request->all());
 
         $idporcentaje = $request->idporcentaje;
