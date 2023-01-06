@@ -14,7 +14,7 @@
 
     <div class="card p-0">
         <div class="card-body p-0">
-            <table id="tablaPrincipal" style="width:100%;" class="table table-striped dt-responsive">
+            <table id="tablaPrincipal" style="width:100%;" class="table table-striped dt-responsive w-100">
                 <thead>
                 <tr>
                     <th scope="col">Item</th>

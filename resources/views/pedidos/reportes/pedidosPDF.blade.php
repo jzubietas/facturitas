@@ -66,7 +66,15 @@
         <tr >
           <th colspan="2" style="background: white">
               <span>{{ $pedido->empresas}} {{ $pedido->codigos }}</span><br>
-              <img src="@php echo $codigo_barras_img @endphp" width="200">
+              <div class="row">
+                  <div class="col-lg-6">
+                      <img src="@php echo $codigo_barras_img @endphp" width="200">
+                  </div>
+                  <div class="col-lg-6">
+                      <img src="@php echo $codigo_qr_img @endphp" width="200">
+                  </div>
+              </div>
+
               <h2>PEDIDO</h2>
           </th>
         </tr>

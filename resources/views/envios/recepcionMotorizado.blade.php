@@ -14,8 +14,8 @@
     </div> --}}
     {{-- @can('clientes.exportar') --}}
     <div class="float-right btn-group dropleft">
-        <button type="button" class="btn btn-option" data-toggle="modal" data-target="#modal-escanear" data-backdrop="static" style="margin-right:16px;" aria-haspopup="true" aria-expanded="false">
-            <i class="fa fa-barcode" aria-hidden="true"></i> Escanear
+        <button type="button" class="btn btn-option" data-toggle="modal" data-target="#modal-qr" data-backdrop="static" style="margin-right:16px;" aria-haspopup="true" aria-expanded="false">
+            <i class="fa fa-barcode" aria-hidden="true"></i> Escanear QR
         </button>
       <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         Exportar
@@ -45,14 +45,14 @@
             border: 0 !important;
         }
     </style>
-  <div class="card">
+  <div class="card w-100">
     <div class="card-body">
 
-        <ul class="nav nav-tabs mb-24" id="myTab" role="tablist">
-            <li class="nav-item">
+        <ul class="nav nav-tabs mb-24 mt-24" id="myTab" role="tablist">
+            <li class="nav-item w-50 text-center">
                 <a class="condicion-tabla nav-link activo active font-weight-bold" id="home-tab" data-toggle="tab" data-url="19" href="#home" role="tab" aria-controls="home" aria-selected="true">RECEPCION</a>
             </li>
-            <li class="nav-item">
+            <li class="nav-item w-50 text-center">
                 <a class="condicion-tabla nav-link font-weight-bold" id="profile-tab" data-toggle="tab" data-url="18" href="#profile" role="tab" aria-controls="profile" aria-selected="false">EN RUTA</a>
             </li>
         </ul>
@@ -69,7 +69,7 @@
           </tr>
         </tbody>
       </table><br> --}}
-      <table id="tablaPrincipal" class="table table-striped dt-responsive">
+      <table id="tablaPrincipal" class="table table-striped dt-responsive w-100">
         <thead>
           <tr>
             <th scope="col">Item</th>
@@ -100,6 +100,88 @@
     </div>
   </div>
 
+    <!-- Modal -->
+    <div class="modal fade" id="modal-qr" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" style="max-width: 800px!important;">
+            <div class="modal-content">
+                <div class="modal-header bg-success">
+                    <h5 class="titulo-confirmacion"  id="exampleModalLabel">Atender pedido</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                {{-- Form::Open(['route' => ['pedidos.atender', $pedido],'enctype'=>'multipart/form-data', 'id'=>'formulario','files'=>true]) --}}
+                <form id="formulario_confirmacion" name="formulariorecepcion" enctype="multipart/form-data">
+                    {{-- Form::Open(['route' => ['pedidos.envio', $pedido],'enctype'=>'multipart/form-data', 'id'=>'formulario','files'=>true]) --}}
+                    <input type="hidden" id="hiddenCodigo" name="hiddenCodigo">
+
+                    <div class="modal-body">
+
+                        <div class="row-element-set row-element-set-QRScanner">
+                            <!-- RECOMMENDED if your web app will not function without JavaScript enabled -->
+                            <noscript>
+                                <div class="row-element-set error_message">
+                                    Your web browser must have JavaScript enabled
+                                    in order for this application to display correctly.
+                                </div>
+                            </noscript>
+                            <div class="row-element-set error_message" id="secure-connection-message" style="display: none;" hidden >
+                                You may need to serve this page over a secure connection (https) to run JsQRScanner correctly.
+                            </div>
+                            <script>
+                                if (location.protocol != 'https:') {
+                                    document.getElementById('secure-connection-message').style='display: block';
+                                }
+                            </script>
+
+                            <div class="row-element">
+                                <div class="FlexPanel detailsPanel QRScannerShort">
+                                    <div class="FlexPanel shortInfoPanel">
+                                        <div class="gwt-HTML">
+                                            Escanea el código QR del sobre
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <br>
+                            <div class="row-element">
+                                <div class="qrscanner" id="scanner">
+                                </div>
+                            </div>
+                            <div class="row-element">
+                                <div class="form-field form-field-memo">
+                                    <div class="form-field-caption-panel">
+                                        <div class="gwt-Label form-field-caption">
+                                            Scanned text
+                                        </div>
+                                    </div>
+                                    <div class="FlexPanel form-field-input-panel">
+            <textarea id="scannedTextMemo" class="textInput form-memo form-field-input textInput-readonly" rows="3" readonly>
+            </textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    {{-- <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                      {!! Form::label('destino', 'Destino') !!}
+                      {!! Form::select('destino', $destinos , null, ['class' => 'form-control border border-secondary', 'data-live-search' => 'true', 'placeholder' => '---- SELECCIONE ----']) !!}
+                    </div> --}}
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        if (location.protocol != 'https:') {
+            document.getElementById('secure-connection-message').style='display: block';
+        }
+    </script>
+
 @stop
 
 @section('css')
@@ -108,6 +190,8 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.1/css/dataTables.bootstrap4.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.4.0/css/responsive.bootstrap4.min.css">
   <link rel="stylesheet" href="/css/admin_custom.css">
+    <link rel="stylesheet" href="{{asset('css/JsQRScanner.css')}}">
+
   <style>
     img:hover{
       transform: scale(1.2)
@@ -162,6 +246,86 @@
 
   <script src="https://momentjs.com/downloads/moment.js"></script>
   <script src="https://cdn.datatables.net/plug-ins/1.11.4/dataRender/datetime.js"></script>
+
+  <script type="text/javascript" src="{{asset('js/jsqrscanner.nocache.js')}}"></script>
+
+  <script type="text/javascript">
+      function onQRCodeScanned(scannedText)
+      {
+          var scannedTextMemo = document.getElementById("scannedTextMemo");
+          if(scannedTextMemo)
+          {
+              scannedTextMemo.value = scannedText;
+          }
+          var scannedTextMemoHist = document.getElementById("scannedTextMemoHist");
+          if(scannedTextMemoHist)
+          {
+              scannedTextMemoHist.value = scannedTextMemoHist.value + '\n' + scannedText;
+          }
+      }
+
+      function provideVideo()
+      {
+          var n = navigator;
+
+          if (n.mediaDevices && n.mediaDevices.getUserMedia)
+          {
+              return n.mediaDevices.getUserMedia({
+                  video: {
+                      facingMode: "environment"
+                  },
+                  audio: false
+              });
+          }
+
+          return Promise.reject('Your browser does not support getUserMedia');
+      }
+
+      function provideVideoQQ()
+      {
+          return navigator.mediaDevices.enumerateDevices()
+              .then(function(devices) {
+                  var exCameras = [];
+                  devices.forEach(function(device) {
+                      if (device.kind === 'videoinput') {
+                          exCameras.push(device.deviceId)
+                      }
+                  });
+
+                  return Promise.resolve(exCameras);
+              }).then(function(ids){
+                  if(ids.length === 0)
+                  {
+                      return Promise.reject('Could not find a webcam');
+                  }
+
+                  return navigator.mediaDevices.getUserMedia({
+                      video: {
+                          'optional': [{
+                              'sourceId': ids.length === 1 ? ids[0] : ids[1]//this way QQ browser opens the rear camera
+                          }]
+                      }
+                  });
+              });
+      }
+
+      //this function will be called when JsQRScanner is ready to use
+      function JsQRScannerReady()
+      {
+          //create a new scanner passing to it a callback function that will be invoked when
+          //the scanner succesfully scan a QR code
+          var jbScanner = new JsQRScanner(onQRCodeScanned);
+          //var jbScanner = new JsQRScanner(onQRCodeScanned, provideVideo);
+          //reduce the size of analyzed image to increase performance on mobile devices
+          jbScanner.setSnapImageMaxSize(300);
+          var scannerParentElement = document.getElementById("scanner");
+          if(scannerParentElement)
+          {
+              //append the jbScanner to an existing DOM element
+              jbScanner.appendTo(scannerParentElement);
+          }
+      }
+  </script>
 
   <script>
     $(document).ready(function () {
