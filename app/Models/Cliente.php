@@ -22,6 +22,8 @@ class Cliente extends Model
     const RECUPERADO = "RECUPERADO";
     const CASI_ABANDONO = "CASI ABANDONO";
 
+    const ANULADO='ANULADO';
+
 
     protected $guarded = ['id'];
     protected $dates=[
@@ -51,6 +53,15 @@ class Cliente extends Model
 
     public function direccion_grupos(){
         return $this->hasMany(DireccionGrupo::class,'cliente_id');
+    }
+
+    public function adjuntosFiles()
+    {
+        $data = setting("pedido." . $this->id . ".adjuntos_file");
+        if (is_array($data)) {
+            return $data;
+        }
+        return [];
     }
 
 }

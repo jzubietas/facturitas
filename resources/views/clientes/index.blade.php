@@ -91,6 +91,10 @@
             background-color: #4ac4e2 !important;
         }
 
+        .textred {
+            color: red !important;
+        }
+
         .bg-4 {
             background: linear-gradient(to right, rgb(240, 152, 25), rgb(237, 222, 93));
         }
@@ -257,6 +261,7 @@
                         },
                     },
                     "createdRow": function (row, data, dataIndex) {
+
                     },
                     "autoWidth": false,
                     rowCallback: function (row, data, index) {
@@ -513,29 +518,19 @@
                     },
                 ],
                 "createdRow": function (row, data, dataIndex) {
-                    if (data["pedidos_mes_deuda"] > 0 && data["pedidos_mes_deuda_antes"] == 0) {
-                        $(row).addClass('lighblue');
-                    } else if (data["pedidos_mes_deuda"] > 0 && data["pedidos_mes_deuda_antes"] > 0) {
-                        $(row).addClass('red');
-                    } else if (data["pedidos_mes_deuda"] == 0 && data["pedidos_mes_deuda_antes"] > 0) {
-                        $(row).addClass('red');
-                    }
-                    /*if(data["deuda"] == "0")
+                    if(data["situacion"]=='BLOQUEADO')
                     {
-                        $(row).addClass('white');
+                        $(row).addClass('textred');
+
                     }else{
-                      if ( (data["dateY"] - data["anio"]) == 0 )
-                      {
-                        if(   (data["dateM"] - data["mes"]) >= 0 &&  (data["dateM"] - data["mes"]) <2 )
-                        {
-                          $(row).addClass('lighblue');
-                        }else{
-                          $(row).addClass('red');
+                        if (data["pedidos_mes_deuda"] > 0 && data["pedidos_mes_deuda_antes"] == 0) {
+                            $(row).addClass('lighblue');
+                        } else if (data["pedidos_mes_deuda"] > 0 && data["pedidos_mes_deuda_antes"] > 0) {
+                            $(row).addClass('red');
+                        } else if (data["pedidos_mes_deuda"] == 0 && data["pedidos_mes_deuda_antes"] > 0) {
+                            $(row).addClass('red');
                         }
-                      }else{
-                        $(row).addClass('red');
-                      }
-                    }*/
+                    }
                 },
                 language: {
                     "decimal": "",
@@ -590,7 +585,7 @@
                 console.log(idcodigo)
                 $(".textcode").html(idcodigo);
                 $("#motivo").val('');
-                $("#responsable").val(idresponsable);
+                //$("#responsable").val(idresponsable);
 
             });
 
