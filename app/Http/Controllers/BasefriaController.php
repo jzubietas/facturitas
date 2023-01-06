@@ -236,7 +236,7 @@ class BasefriaController extends Controller
                     'icelular' => $letra,
                 ]);
         
-                return redirect()->route('basefria')->with('info', 'registrado');
+                return redirect()->route('basefria')->with('info', 'actualizado');
     }
 
     /**
