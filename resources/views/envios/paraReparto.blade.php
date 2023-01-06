@@ -32,20 +32,22 @@
 
     <div class="card">
         <div class="card-body">
-            {{-- <table cellspacing="5" cellpadding="5">
-              <tbody>
-                <tr>
-                  <td>Destino:</td>
-                  <td>
-                    <select name="destino" id="destino" class="form-control">
-                      <option value="LIMA">LIMA</option>
-                      <option value="PROVINCIA">PROVINCIA</option>
-                    </select>
-                  </td>
-                </tr>
-              </tbody>
-            </table><br> --}}
-            <table id="tablaPrincipal" style="width:100%;" class="table table-striped">
+
+            <ul class="nav nav-tabs mb-24" id="myTab" role="tablist">
+                <li class="nav-item">
+                    <a class="zona-tabla nav-link activo active font-weight-bold" id="home-tab" data-toggle="tab" data-url="NORTE" href="#home" role="tab" aria-controls="home" aria-selected="true">NORTE</a>
+                </li>
+                <li class="nav-item">
+                    <a class="zona-tabla nav-link font-weight-bold" id="profile-tab" data-toggle="tab" data-url="CENTRO" href="#profile" role="tab" aria-controls="profile" aria-selected="false">CENTRO</a>
+                </li>
+                <li class="nav-item">
+                    <a class="zona-tabla nav-link font-weight-bold" id="contact-tab" data-toggle="tab" data-url="SUR" href="#contact" role="tab" aria-controls="contact" aria-selected="false">SUR</a>
+                </li>
+            </ul>
+
+
+
+            <table id="tablaPrincipal" style="width:100%;" class="table table-striped mt-24">
                 <thead>
                 <tr>
                     <th scope="col">Item</th>
@@ -65,6 +67,23 @@
                 <tbody>
                 </tbody>
             </table>
+
+            </div>
+
+            {{-- <table cellspacing="5" cellpadding="5">
+              <tbody>
+                <tr>
+                  <td>Destino:</td>
+                  <td>
+                    <select name="destino" id="destino" class="form-control">
+                      <option value="LIMA">LIMA</option>
+                      <option value="PROVINCIA">PROVINCIA</option>
+                    </select>
+                  </td>
+                </tr>
+              </tbody>
+            </table><br> --}}
+
             @include('envios.modal.enviarid')
             @include('pedidos.modal.recibirid')
             {{--@include('sobres.modal.direccionid')--}}
@@ -137,6 +156,14 @@
 
 
         $(document).ready(function () {
+
+            $('.zona-tabla').on('click', function (){
+                $('.zona-tabla').removeClass("activo");
+                $(this).addClass("activo");
+                //var url = $(this).data("url");
+                $('#tablaPrincipal').DataTable().ajax.reload();
+
+            });
 
             $('#modal-confirmacion').on('show.bs.modal', function (event) {
                 var button = $(event.relatedTarget)
@@ -305,7 +332,13 @@
                 serverSide: true,
                 searching: true,
                 "order": [[0, "desc"]],
-                ajax: "{{ route('envios.pararepartotabla') }}",
+                ajax:{
+                    url: "{{ route('envios.pararepartotabla') }}",
+                    data: function(d){
+
+                        d.zona = $('.zona-tabla.activo').data("url");
+                    }
+                },
                 createdRow: function (row, data, dataIndex) {
                 },
                 rowCallback: function (row, data, index) {

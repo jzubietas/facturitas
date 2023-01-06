@@ -385,6 +385,7 @@ class EnvioController extends Controller
             ->join('clientes as c', 'c.id', 'direccion_grupos.cliente_id')
             ->join('users as u', 'u.id', 'c.user_id')
             ->where('direccion_grupos.condicion_envio_code', Pedido::REPARTO_COURIER_INT)
+            ->where('direccion_grupos.distribucion', $request->zona)
             ->activo();
 
         $pedidos_provincia = DireccionGrupo::join('gasto_envios as de', 'direccion_grupos.id', 'de.direcciongrupo')
@@ -496,6 +497,7 @@ class EnvioController extends Controller
             ->make(true);
 
     }
+
 
     public function Enviosenrepartotabla(Request $request)
     {
@@ -1791,6 +1793,7 @@ class EnvioController extends Controller
             $lista_codigos = '';
             $pedidos = $request->pedidos;
             $array_pedidos = explode(",", $pedidos);
+
 
             $data = DetallePedido::wherein("pedido_id", $array_pedidos)->get();
             foreach ($data as $dat) {
