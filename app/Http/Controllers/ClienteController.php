@@ -466,8 +466,8 @@ class ClienteController extends Controller
             setting()->save();
 
             $cliente->update([
-                'motivo' => $request->motivo,
-                'responsable' => $request->responsable,
+                'motivo_anulacion' => $request->motivo,
+                'responsable_anulacion' => $request->responsable,
                 //'condicion' => 'ANULADO',
                 //'condicion_code' => Pedido::ANULADO_INT,
                 //'modificador' => 'USER' . Auth::user()->id,
