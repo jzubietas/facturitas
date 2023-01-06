@@ -378,7 +378,7 @@ class EnvioController extends Controller
         $pedidos_lima = DireccionGrupo::select([
             'direccion_grupos.*',
             'u.identificador as user_identificador',
-            'u.name as nombre_motorizado',
+            'u.identificador as nombre_motorizado',
             //DB::raw(" (select 'LIMA') as destino "),
             DB::raw('(select DATE_FORMAT( direccion_grupos.created_at, "%Y-%m-%d")   from direccion_grupos dpa where dpa.id=direccion_grupos.id) as fecha_formato'),
         ])
