@@ -15,7 +15,8 @@
     {{-- @can('clientes.exportar') --}}
     <div class="float-right btn-group dropleft">
         <button type="button" class="btn btn-option" data-toggle="modal" data-target="#modal-qr" data-backdrop="static" style="margin-right:16px;" aria-haspopup="true" aria-expanded="false">
-            <i class="fa fa-barcode" aria-hidden="true"></i> Escanear QR
+            <i class="fa fa-qrcode" aria-hidden="true"></i>
+            Escanear QR
         </button>
       <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         Exportar
@@ -105,7 +106,8 @@
         <div class="modal-dialog" style="max-width: 800px!important;">
             <div class="modal-content">
                 <div class="modal-header bg-success">
-                    <h5 class="titulo-confirmacion"  id="exampleModalLabel">Atender pedido</h5>
+                    <h5 class="titulo-confirmacion"  id="exampleModalLabel"><i class="fa fa-qrcode" aria-hidden="true"></i>
+                         Escanear Pedido</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -137,28 +139,25 @@
                             <div class="row-element">
                                 <div class="FlexPanel detailsPanel QRScannerShort">
                                     <div class="FlexPanel shortInfoPanel">
-                                        <div class="gwt-HTML">
+                                        <div class="text-center">
                                             Escanea el código QR del sobre
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <br>
-                            <div class="row-element">
-                                <div class="qrscanner" id="scanner">
+                            <div class="cnt-scanner">
+                                <div class="qrscanner"  style="background-color: #222; border-radius: 16px;" id="scanner">
                                 </div>
                             </div>
-                            <div class="row-element">
-                                <div class="form-field form-field-memo">
-                                    <div class="form-field-caption-panel">
-                                        <div class="gwt-Label form-field-caption">
-                                            Scanned text
-                                        </div>
-                                    </div>
-                                    <div class="FlexPanel form-field-input-panel">
-            <textarea id="scannedTextMemo" class="textInput form-memo form-field-input textInput-readonly" rows="3" readonly>
-            </textarea>
-                                    </div>
+                            <div>
+                                <p class="mb-8 mt-16">Pedido Encontrado</p>
+                                <p class="mb-8">CODIGO: <label>Codigo:</label></p>
+                                <p class="mb-8">DISTRITO: <label>Distrito</label></p>
+                                <p class="mb-8">DIRECCIÓN: <label>Dirección</label></p>
+                                <a href="#" class="btn btn-warning font-weight-bold">Confirmar Pedido</a>
+                                <div class="mt-16">
+                                <textarea id="scannedTextMemo" class="textInput form-memo form-field-input textInput-readonly w-100" rows="3" readonly></textarea>
                                 </div>
                             </div>
                         </div>
@@ -190,7 +189,7 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.1/css/dataTables.bootstrap4.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.4.0/css/responsive.bootstrap4.min.css">
   <link rel="stylesheet" href="/css/admin_custom.css">
-    <link rel="stylesheet" href="{{asset('css/JsQRScanner.css')}}">
+
 
   <style>
     img:hover{
@@ -252,16 +251,23 @@
   <script type="text/javascript">
       function onQRCodeScanned(scannedText)
       {
+          $.ajax({
+              data: {id_pedido: scannedText},
+              processData: false,
+              contentType: false,
+              type: 'POST',
+              url: "{{ route('envio.escaneoqrg') }}",
+              success: function (data) {
+                  console.log(data);
+                  $('$code_ped').html(data.html);
+              }
+          });
+        /*
           var scannedTextMemo = document.getElementById("scannedTextMemo");
           if(scannedTextMemo)
           {
               scannedTextMemo.value = scannedText;
-          }
-          var scannedTextMemoHist = document.getElementById("scannedTextMemoHist");
-          if(scannedTextMemoHist)
-          {
-              scannedTextMemoHist.value = scannedTextMemoHist.value + '\n' + scannedText;
-          }
+          } */
       }
 
       function provideVideo()

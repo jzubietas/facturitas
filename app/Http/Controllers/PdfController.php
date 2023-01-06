@@ -525,7 +525,7 @@ class PdfController extends Controller
             $codigo_barras_img = generate_bar_code($codigo_barras);
 
             $funcion_qr = route('envio.escaneoqr',$codigo_barras);
-            $codigo_qr_img = generate_bar_code($funcion_qr,10,10,'black',true,"QRCODE");
+            $codigo_qr_img = generate_bar_code($codigo_barras,10,10,'black',true,"QRCODE");
 
 
         $pdf = PDF::loadView('pedidos.reportes.pedidosPDF', compact('pedidos', 'fecha','mirol','identificador', 'codigo_barras_img', 'codigo_qr_img'))

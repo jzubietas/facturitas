@@ -2888,4 +2888,25 @@ class EnvioController extends Controller
         }
 
     }
+
+    public function EscaneoQR(Request $request)
+    {
+        $pedido = Pedido::where("id", $request->hiddenEnvio)->first();
+
+        $pedido->update([
+            'envio' => '2',
+            'modificador' => 'USER' . Auth::user()->id,
+            'condicion_envio' => Pedido::ENVIO_COURIER_JEFE_OPE,
+            'condicion_envio_code' => Pedido::ENVIO_COURIER_JEFE_OPE_INT,
+
+        ]);
+
+        PedidoMovimientoEstado::create([
+            'pedido' => $request->hiddenEnvio,
+            'condicion_envio_code' => Pedido::RECEPCION_COURIER_INT,
+            'notificado' => 0
+        ]);
+
+        return response()->json(['html' => $pedido->id]);
+    }
 }
