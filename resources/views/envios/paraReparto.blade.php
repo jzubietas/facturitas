@@ -32,20 +32,22 @@
 
     <div class="card">
         <div class="card-body">
-            {{-- <table cellspacing="5" cellpadding="5">
-              <tbody>
-                <tr>
-                  <td>Destino:</td>
-                  <td>
-                    <select name="destino" id="destino" class="form-control">
-                      <option value="LIMA">LIMA</option>
-                      <option value="PROVINCIA">PROVINCIA</option>
-                    </select>
-                  </td>
-                </tr>
-              </tbody>
-            </table><br> --}}
-            <table id="tablaPrincipal" style="width:100%;" class="table table-striped">
+
+            <ul class="nav nav-tabs mb-24" id="myTab" role="tablist">
+                <li class="nav-item">
+                    <a class="zona-tabla nav-link activo active font-weight-bold" id="home-tab" data-toggle="tab" data-url="NORTE" href="#home" role="tab" aria-controls="home" aria-selected="true">NORTE</a>
+                </li>
+                <li class="nav-item">
+                    <a class="zona-tabla nav-link font-weight-bold" id="profile-tab" data-toggle="tab" data-url="CENTRO" href="#profile" role="tab" aria-controls="profile" aria-selected="false">CENTRO</a>
+                </li>
+                <li class="nav-item">
+                    <a class="zona-tabla nav-link font-weight-bold" id="contact-tab" data-toggle="tab" data-url="SUR" href="#contact" role="tab" aria-controls="contact" aria-selected="false">SUR</a>
+                </li>
+            </ul>
+
+
+
+            <table id="tablaPrincipal" style="width:100%;" class="table table-striped mt-24">
                 <thead>
                 <tr>
                     <th scope="col">Item</th>
@@ -65,6 +67,23 @@
                 <tbody>
                 </tbody>
             </table>
+
+            </div>
+
+            {{-- <table cellspacing="5" cellpadding="5">
+              <tbody>
+                <tr>
+                  <td>Destino:</td>
+                  <td>
+                    <select name="destino" id="destino" class="form-control">
+                      <option value="LIMA">LIMA</option>
+                      <option value="PROVINCIA">PROVINCIA</option>
+                    </select>
+                  </td>
+                </tr>
+              </tbody>
+            </table><br> --}}
+
             @include('envios.modal.enviarid')
             @include('pedidos.modal.recibirid')
             {{--@include('sobres.modal.direccionid')--}}
@@ -139,110 +158,13 @@
 
         $(document).ready(function () {
 
-            $(document).on("click","#desvincularConfirmar",function(event){
-
-                var rows_selected = tabla_pedidos.column(0).checkboxes.selected();
-                var $direcciongrupo = $("#direcciongrupo").val();
-                var $observaciongrupo = $("#observaciongrupo").val();
-                var pedidos=[];
-                $.each(rows_selected, function(index, rowId){
-                    console.log("ID PEDIDO  es "+  rowId);
-                    pedidos.push(rowId);
-                });
-
-
-                var let_pedidos=pedidos.length;
-
-                if(let_pedidos==0)
-                {
-                Swal.fire(
-                    'Error',
-                    'Debe elegir un pedido',
-                    'warning'
-                    )
-                    return;
-                }
-                $pedidos=pedidos.join(',');
-                console.log($pedidos);
-                console.log($direcciongrupo);
-                console.log($observaciongrupo);
-                var fd2=new FormData();
-                let direcciongrupo=$("#direcciongrupo").val();
-                let observaciongrupo=$("#observaciongrupo").val();
-                fd2.append('direcciongrupo', direcciongrupo);
-                fd2.append('observaciongrupo', observaciongrupo);
-                /*fd2.append('observaciongrupo', $('#observaciongrupo').val() );*/
-                fd2.append('pedidos', $pedidos);
-
-
-                $.ajax({
-                data: fd2,
-                processData: false,
-                contentType: false,
-                type: 'POST',
-                url:"{{ route('sobres.desvinculargrupo') }}",
-                success:function(data)
-                {
-                    console.log(data);
-                    $("#modal-desvincular").modal("hide");
-                    $("#tablaPrincipal").DataTable().ajax.reload();
-                }
-                });
-            })
-
-            $('#modal-desvincular').on('show.bs.modal', function (event) {
-
-                var button = $(event.relatedTarget)
-                var direcciongrupo = button.data('desvincular');
-                $("#direcciongrupo").val(direcciongrupo);
-                //$("#observaciongrupo").val(observaciongrupo);
-                tabla_pedidos.destroy();
-
-
-                tabla_pedidos=$('#tablaPrincipalpedidosagregar').DataTable({
-                responsive: true,
-                "bPaginate": false,
-                "bFilter": false,
-                "bInfo": false,
-                'ajax': {
-                    url:"{{ route('cargar.pedidosgrupotabla') }}",
-                    'data': { "direcciongrupo": direcciongrupo},
-                    "type": "get",
-                },
-                'columnDefs': [ {
-                    'targets': [0],
-                    'orderable': false,
-                }],
-                columns:[
-                    {
-                        "data": "pedido_id",
-                        'targets': [0],
-                        'checkboxes': {
-                            'selectRow': true
-                        },
-                        defaultContent: '',
-                        orderable: false,
-                    },
-                    {data: 'codigo_pedido', name: 'codigo_pedido',},
-                    {
-                        "data": 'empresa',
-                        "name": 'empresa',
-                        "render": function ( data, type, row, meta ) {
-                        return data;
-
-                        }
-                    },
-                ],
-                'select': {
-                    'style': 'multi',
-                    selector: 'td:first-child'
-                },
-                });
-
-                //$("#limaprovincia").val("").trigger("change");
+            $('.zona-tabla').on('click', function (){
+                $('.zona-tabla').removeClass("activo");
+                $(this).addClass("activo");
+                //var url = $(this).data("url");
+                $('#tablaPrincipal').DataTable().ajax.reload();
 
             });
-
 
             $('#modal-confirmacion').on('show.bs.modal', function (event) {
                 var button = $(event.relatedTarget)
@@ -411,7 +333,13 @@
                 serverSide: true,
                 searching: true,
                 "order": [[0, "desc"]],
-                ajax: "{{ route('envios.pararepartotabla') }}",
+                ajax:{
+                    url: "{{ route('envios.pararepartotabla') }}",
+                    data: function(d){
+
+                        d.zona = $('.zona-tabla.activo').data("url");
+                    }
+                },
                 createdRow: function (row, data, dataIndex) {
                 },
                 rowCallback: function (row, data, index) {
