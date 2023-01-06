@@ -1231,11 +1231,11 @@ class EnvioController extends Controller
                 $badge_estado='';
                 $badge_estado .= '<span class="badge badge-dark p-8" style="color: #fff; background-color: #347cc4; font-weight: 600; margin-bottom: -2px;border-radius: 4px 4px 0px 0px; font-size:8px;  padding: 4px 4px !important; font-weight: 500;">Direccion agregada</span>';
 
-                /*$badge_estado.='<span class="badge badge-success w-100" style="background-color: #00bc8c !important;
+                $badge_estado.='<span class="badge badge-success" style="background-color: #00bc8c !important;
                     padding: 4px 8px !important;
                     font-size: 8px;
                     margin-bottom: -4px;
-                    color: black !important;">Con ruta</span>';*/
+                    color: black !important;">Con ruta</span>';
                 $badge_estado .='<span class="badge badge-success w-100" style="background-color: ' . $color . '!important;">' . $grupo->condicion_envio . '</span>';
                 return $badge_estado;
             })
