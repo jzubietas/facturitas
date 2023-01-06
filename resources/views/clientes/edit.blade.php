@@ -257,12 +257,14 @@
             processData: false,
             contentType: false,
             type: 'POST',
+            data:'json',
             url:"{{ route('cliente.edit.celularduplicado') }}",
             success:function(data)
             {
-              if(data.status==true)
+              console.log(data)
+              if(data.html.status==true)
               {
-                //$("#formulario").trigger('submit');
+                $("#formulario").trigger('submit');
               }else{
                 Swal.fire(
                   'Error',

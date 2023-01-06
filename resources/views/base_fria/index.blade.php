@@ -9,7 +9,7 @@
 @section('content_header')
   <h1>Base fría
     @can('base_fria.create')
-      <a href="{{ route('clientes.createbf') }}" class="btn btn-info"><i class="fas fa-plus-circle"></i> Agregar</a>
+      <a href="{{ route('basefria.create') }}" class="btn btn-info"><i class="fas fa-plus-circle"></i> Agregar</a>
     @endcan
     @can('base_fria.exportar')
     <div class="float-right btn-group dropleft">
@@ -181,7 +181,7 @@ $(document).ready(function () {
           searchable: false,
           sWidth:'20%',
           render: function ( data, type, row, meta ) {
-            var urledit = '{{ route("clientes.editbf", ":id") }}';
+            var urledit = '{{ route("basefria.edit", ":id") }}';
             urledit = urledit.replace(':id', row.id);
 
             @can('base_fria.updatebf')

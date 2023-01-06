@@ -1691,7 +1691,8 @@ class ClienteController extends Controller
     {
 
         $request->celular;
-        $validar=Cliente::where('celular',$request->celular)->count();
+        $validar=Cliente::where('celular',$request->celular)->where('id','<>',$request->id)->count();
+        //return $validar;
         $status=true;
         $data='NO PUEDE CONTINUAR';
         if($validar>0)

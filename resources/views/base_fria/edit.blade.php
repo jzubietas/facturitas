@@ -9,7 +9,7 @@
 @section('content')
 
   <div class="card">
-    {!! Form::model($cliente, ['route' => ['clientes.update', $cliente], 'method' => 'put', 'id' => 'formulario']) !!}
+    {!! Form::model($cliente, ['route' => ['basefria.update', $cliente], 'method' => 'put', 'id' => 'formulario']) !!}
     <div class="border rounded card-body border-secondary">
       <div class="card-body">
         <div class="form-row">
@@ -122,7 +122,7 @@
             success:function(data)
             {
               console.log(data)
-              if(data.status==true)
+              if(data.html.status==true)
               {
                 //$("#formulario").trigger('submit');
               }else{
