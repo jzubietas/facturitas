@@ -257,6 +257,7 @@
           var scannedTextMemo = document.getElementById("scannedTextMemo");
           if(scannedTextMemo)
           {
+              alert("Pedido " + scannedText + " encontrado!");
               $.ajax({
                   processData: false,
                   contentType: false,
@@ -264,8 +265,8 @@
                   url: "{{ route('envio.escaneoqr',':id') }}".replace(':id',scannedText),
                   success: function (data) {
                       console.log(data);
-                      console.log({{ route('envio.escaneoqr',':id') }}.replace(':id',scannedText));
-                      alert("Pedido " + scannedText + " encontrado!");
+                      //console.log({{ route('envio.escaneoqr',':id') }}.replace(':id',scannedText));
+                      alert("Pedido " + scannedText + " localizado!");
                       $('#code_ped').html(data.html);
                       $('#dist_ped').html(data.distrito);
                       $('#dir_ped').html(data.direccion);
