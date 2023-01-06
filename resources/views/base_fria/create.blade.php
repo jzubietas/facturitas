@@ -1,6 +1,6 @@
 @extends('adminlte::page')
 
-@section('title', 'Agregar Cliente')
+@section('title', 'Agregar Base fria')
 
 @section('content_header')
   <h1>Agregar base frías</h1>
@@ -9,7 +9,7 @@
 @section('content')
 
   <div class="card">
-    {!! Form::open(['route' => 'clientes.storebf', 'id' => 'formulario']) !!}
+    {!! Form::open(['route' => 'basefria.store', 'id' => 'formulario']) !!}
     <div class="border rounded card-body border-secondary">
       <div class="card-body">
         <div class="form-row">

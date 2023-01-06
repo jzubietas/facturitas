@@ -200,43 +200,38 @@ class BasefriaController extends Controller
      */
     public function store(Request $request)
     {
-        //return $request->all();
-        //3
-        /* $request->validate([
-                'celular' => 'required|unique:clientes',*/
-                $asesor=User::where('id',$request->user_id)->first();
-                $celular=$request->celular;
-              
-                $validacion=Cliente::where('celular',$request->celular)->first();
-                $letra = $asesor->letra;
-                if ($validacion !== null) {
+
+        $request->validate([
+            'celular' => 'required|unique:clientes',
+        ]);
+
+        //return $request;
+        try {
+            DB::beginTransaction();
+
+            $cliente = Cliente::create([
+                'nombre' => $request->nombre,
+                'celular' => $request->celular,
+                /*'icelular'=> $request->icelular,*/
+                'user_id' => $request->user_id,
+                'tipo' => $request->tipo,
+                'provincia' => $request->provincia,
+                'distrito' => $request->distrito,
+                'direccion' => $request->direccion,
+                'referencia' => $request->referencia,
+                'dni' => $request->dni,
+                'deuda' => '0',
+                'pidio' => '0',
+                'estado' => '1'
+            ]);
+            DB::commit();
+        } catch (\Throwable $th) {
+            throw $th;
+            /* DB::rollback();
+            dd($th); */
+        }
+        return redirect()->route('basefria')->with('info', 'registrado');
         
-                    $validator = Validator::make($request->all(), [
-                        'celular' => 'required|unique:clientes',
-                    ], $messages);
-        
-                    if ($validator->fails()) {
-                        return redirect('clientes.createbf')
-                            ->withErrors($validator)
-                            ->withInput();
-                    }
-                }else{
-                    //cuando existe
-                }
-        
-        
-                $cliente = Cliente::create([
-                    'nombre' => $request->nombre,
-                    'celular' => $request->celular,
-                    'user_id' => $request->user_id,
-                    'tipo' => $request->tipo,
-                    'deuda' => '0',
-                    'pidio' => '0',
-                    'estado' => '1',
-                    'icelular' => $letra,
-                ]);
-        
-                return redirect()->route('basefria')->with('info', 'actualizado');
     }
 
     /**
