@@ -38,9 +38,24 @@
 @stop
 
 @section('content')
-
+    <style>
+        .activo{
+            background-color: #e74c3c !important;
+            color: white !important;
+            border: 0 !important;
+        }
+    </style>
   <div class="card">
     <div class="card-body">
+
+        <ul class="nav nav-tabs mb-24" id="myTab" role="tablist">
+            <li class="nav-item">
+                <a class="condicion-tabla nav-link activo active font-weight-bold" id="home-tab" data-toggle="tab" data-url="19" href="#home" role="tab" aria-controls="home" aria-selected="true">RECEPCION</a>
+            </li>
+            <li class="nav-item">
+                <a class="condicion-tabla nav-link font-weight-bold" id="profile-tab" data-toggle="tab" data-url="18" href="#profile" role="tab" aria-controls="profile" aria-selected="false">EN RUTA</a>
+            </li>
+        </ul>
       {{-- <table cellspacing="5" cellpadding="5">
         <tbody>
           <tr>
@@ -54,7 +69,7 @@
           </tr>
         </tbody>
       </table><br> --}}
-      <table id="tablaPrincipal" class="table table-striped">
+      <table id="tablaPrincipal" class="table table-striped dt-responsive">
         <thead>
           <tr>
             <th scope="col">Item</th>
@@ -88,6 +103,10 @@
 @stop
 
 @section('css')
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
+
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.1/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.4.0/css/responsive.bootstrap4.min.css">
   <link rel="stylesheet" href="/css/admin_custom.css">
   <style>
     img:hover{
@@ -137,10 +156,23 @@
 @section('js')
   {{--<script src="{{ asset('js/datatables.js') }}"></script>--}}
   <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.datatables.net/1.13.1/js/dataTables.bootstrap4.min.js"></script>
+  <script src="https://cdn.datatables.net/responsive/2.4.0/js/dataTables.responsive.min.js"></script>
   <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+
+  <script src="https://momentjs.com/downloads/moment.js"></script>
+  <script src="https://cdn.datatables.net/plug-ins/1.11.4/dataRender/datetime.js"></script>
 
   <script>
     $(document).ready(function () {
+
+        $('.condicion-tabla').on('click', function (){
+            $('.condicion-tabla').removeClass("activo");
+            $(this).addClass("activo");
+            //var url = $(this).data("url");
+            $('#tablaPrincipal').DataTable().ajax.reload();
+
+        });
 
         /************
          * ESCANEAR PEDIDO
@@ -354,7 +386,12 @@
 		serverSide: true,
         searching: true,
         "order": [[ 0, "desc" ]],
-        ajax: "{{ route('envios.recepcionmotorizadotabla') }}",
+        ajax:{ url: "{{ route('envios.recepcionmotorizadotabla') }}",
+                  data: function(d){
+
+                      d.condicion = $('.condicion-tabla.activo').data("url");
+                  }
+          },
         createdRow: function( row, data, dataIndex){
           //console.log(row);
         },

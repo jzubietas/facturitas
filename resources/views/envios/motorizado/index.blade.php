@@ -19,6 +19,7 @@
                 <tr>
                     <th scope="col">Item</th>
                     <th scope="col">Código</th>
+                    <th scope="col">Distrito</th>
                     <th scope="col">Asesor</th>
                     <th scope="col">Cliente</th>
                     <th scope="col">Fecha de Envio</th>
@@ -278,6 +279,7 @@
                             }
                         },
                     },
+                    {data: 'distrito', name: 'distrito',},
                     {data: 'identificador', name: 'identificador',},
                     {
                         data: 'celular',
