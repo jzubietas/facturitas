@@ -2724,6 +2724,14 @@ class EnvioController extends Controller
             //'condicion_envio_code' => Pedido::MOTORIZADO_INT,
         ]);
 
+        $codigos_paquete = collect(explode(",", $envio->codigos))->map(function($cod){return trim($cod);})->all();
+
+        Pedido::whereIn('codigo',$codigos_paquete)
+            ->update([
+                'condicion_envio_code' => Pedido::MOTORIZADO_INT,
+                'condicion_envio' => Pedido::MOTORIZADO
+            ]);
+
         PedidoMovimientoEstado::create([
             'pedido' => $request->hiddenCodigo,
             'condicion_envio_code' => Pedido::MOTORIZADO_INT,
@@ -2744,6 +2752,14 @@ class EnvioController extends Controller
             'condicion_envio' => Pedido::RECEPCION_MOTORIZADO,
             'condicion_envio_code' => Pedido::RECEPCION_MOTORIZADO_INT,
         ]);
+
+        $codigos_paquete = collect(explode(",", $envio->codigos))->map(function($cod){return trim($cod);})->all();
+
+        Pedido::whereIn('codigo',$codigos_paquete)
+            ->update([
+                'condicion_envio_code' => Pedido::RECEPCION_MOTORIZADO_INT,
+                'condicion_envio' => Pedido::RECEPCION_MOTORIZADO
+            ]);
 
 
         PedidoMovimientoEstado::create([
