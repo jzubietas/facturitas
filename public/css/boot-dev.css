@@ -1234,7 +1234,7 @@ margin: 2px;
 
 .tpl-snow > div{position:fixed;-webkit-animation:ease-in infinite normal;-moz-animation:ease-in infinite normal;animation:ease-in infinite normal;}
 
-.tpl-snow > div{z-index:9999999999999;width:30px;height:30px;background-image: url('../imagenes/pica.png'); background-repeat: no-repeat;    background-size: contain; -webkit-animation-name:nieve,horiz;-moz-animation-name:nieve,horiz;animation-name:nieve,horiz;}
+.tpl-snow > div{z-index:9999999999999;width:30px;height:30px;/*background-image: url('../imagenes/pica.png');*/ background-repeat: no-repeat;    background-size: contain; -webkit-animation-name:nieve,horiz;-moz-animation-name:nieve,horiz;animation-name:nieve,horiz;}
 .tpl-snow > div:nth-of-type(odd){width:15px; height:15px;-webkit-animation-name:nieve,horiz2;-moz-animation-name:nieve,horiz2;animation-name:nieve,horiz2;}
 
 .tpl-snow > div:nth-of-type(1){left:40px;-webkit-animation-duration:5.5s;-moz-animation-duration:5.5s;animation-duration:5.5s;-webkit-animation-delay:1s;-moz-animation-delay:1s;animation-delay:1s;}

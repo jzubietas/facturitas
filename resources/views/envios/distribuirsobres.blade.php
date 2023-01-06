@@ -24,13 +24,14 @@
                                 <div>
                                     <button type="button" class="btn btn-light buttom-agrupar"
                                             data-zona="{{Str::upper($motorizado->zona)}}"
+                                            data-table-save="#tablaPrincipal{{Str::upper($motorizado->zona)}}"
                                             data-ajax-action="{{route('envios.distribuirsobres.agrupar',['visualizar'=>1,'motorizado_id'=>$motorizado->id,'zona'=>Str::upper($motorizado->zona)])}}">
-                                <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"
-                                      style="display: none"></span>
-                                    <span class="sr-only" style="display: none"></span>
-                                    <i class="fa fa-envelope-o" aria-hidden="true"></i>
-                                    <b>Agrupar</b>
-                                </button>
+                                        <span class="spinner-border spinner-border-sm"
+                                              role="status" aria-hidden="true" style="display: none"></span>
+                                        <span class="sr-only" style="display: none"></span>
+                                        <i class="fa fa-envelope-o" aria-hidden="true"></i>
+                                        <b>Crear Paquetes</b>
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -39,7 +40,7 @@
                                 <table id="tablaPrincipal{{Str::upper($motorizado->zona)}}" class="table table-striped">
                                     <thead>
                                     <tr>
-                                        <th scope="col">Código</th>
+                                        <th scope="col">Cliente</th>
                                         <th scope="col">Zona</th>
                                         <th scope="col">Distrito</th>
                                         <th scope="col">Acciones</th>
@@ -60,28 +61,27 @@
 
     <div class="card">
         <div class="card-body">
-
-            <table id="tablaPrincipal" class="table table-striped">
-                <thead>
-                <tr>
-                    <th scope="col">Código</th>
-                    <th scope="col">Asesor</th>
-                    <th scope="col">PROVINCIA</th>
-                    <th scope="col">ZONA</th>
-                    <th scope="col">DISTRITO</th>
-                    <th scope="col">Razón social</th>
-
-                    <th scope="col">Dias</th>
-
-                    <th scope="col">Fecha de envio</th>
-                    <th scope="col">Estado de envio</th>
-                    <th scope="col">Observacion Devolucion</th>
-                    <th scope="col">Acciones</th>
-                </tr>
-                </thead>
-                <tbody>
-                </tbody>
-            </table>
+            <div class="table-responsive">
+                <table id="tablaPrincipal" class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th scope="col">PROVINCIA</th>
+                        <th scope="col">ZONA</th>
+                        <th scope="col">DISTRITO</th>
+                        <th scope="col">DIRECCION</th>
+                        <th scope="col">REFERENCIA</th>
+                        <th scope="col">CLIENTE</th>
+                        <th scope="col">TELEFONO</th>
+                        <th scope="col">Sobres</th>
+                        <th scope="col">Razón social</th>
+                        <th scope="col">Estado de envio</th>
+                        <th scope="col">Acciones</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 
@@ -106,53 +106,76 @@
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
         });
+        var insertIds = []
+
+        function createZoneRowTable(data, zona) {
+            console.log(data, zona)
+            return {
+                ...data,
+                cliente_recibe: data.cliente_recibe,
+                zona: data.zona,
+                zona_asignada: zona,
+                distrito: data.distrito,
+                action: `<button type="button" data-jqdetalle="${data.id}" class="btn btn-light buttom-agrupar d-flex align-items-center justify-content-center">
+                                        <i class="fa fa-layer-group mr-1"></i>
+                                        Detalle
+                                    </button>
+                                    <button type="button" data-revertir="${data.id}" class="btn btn-light buttom-agrupar d-flex align-items-center justify-content-center">
+                                        <i class="fa fa-undo-alt mr-1 text-danger"></i>
+                                        Revertir
+                                    </button>`,
+            }
+        }
+
         $(document).ready(function () {
             $('#tablaPrincipal').DataTable({
-                processing: false,
+                processing: true,
                 stateSave: true,
                 serverSide: true,
                 searching: true,
                 "order": [[0, "desc"]],
-                ajax: "{{ route('envios.distribuirsobrestabla') }}",
+                "search": {
+                    "regex": true
+                },
+                ajax: {
+                    url: "{{ route('envios.distribuirsobrestabla') }}",
+                    data: function (query) {
+                        query.exclude_ids = insertIds
+                    }
+                },
                 createdRow: function (row, data, dataIndex) {
                     //console.log(row);
 
                 },
                 rowCallback: function (row, data, index) {
-                    $('[data-ajax-post]', row).click(function () {
-                        const link = $(this).attr('data-ajax-post')
+                    const self = this
+                    $("[data-elTable]", row).click(function () {
+                        $("#tablaPrincipal [data-elTable]").attr('disabled', 'disabled')
                         $(this).find('.spinner-border').show()
                         $(this).find('.sr-only').show()
 
-                        $.post(link).always(function () {
-                            $(this).find('.spinner-border').hide()
-                            $(this).find('.sr-only').hide()
+                        var tableId = $(this).data('eltable');
+                        var zona = $(this).data('zona');
+                        insertIds.push(data.id)
 
-                            $('#tablaPrincipal').DataTable().ajax.reload();
-                            @foreach($motorizados as $m)
-                            $('#tablaPrincipal{{Str::upper($m->zona)}}').DataTable().ajax.reload();
-                            @endforeach
-                        })
+                        $(tableId).DataTable()
+                            .row.add(createZoneRowTable(data, zona)).draw(false);
+                        self.api().ajax.reload();
                     })
                 },
                 columns: [
-                    {data: 'codigo', name: 'codigo',},
-                    {data: 'users', name: 'users',},
-                    {data: 'env_destino', name: 'env_destino',},
-                    {data: 'env_zona', name: 'env_zona',},
-                    {data: 'env_distrito', name: 'env_distrito',},
-
-                    {data: 'empresas', name: 'empresas',},
-                    {data: 'dias', name: 'dias',},
-
-                    {data: 'fecha_envio_doc_fis', name: 'fecha_envio_doc_fis',},
+                    {data: 'provincia', name: 'provincia',},
+                    {data: 'zona', name: 'zona',},
+                    {data: 'distrito', name: 'distrito',},
+                    {data: 'direccion', name: 'direccion',},
+                    {data: 'referencia', name: 'referencia',},
+                    {data: 'cliente_recibe', name: 'cliente_recibe',},
+                    {data: 'telefono', name: 'telefono',},
+                    {data: 'codigos', name: 'codigos',},
+                    {data: 'productos', name: 'productos',},
                     {
                         data: 'condicion_envio',
                         name: 'condicion_envio',
-                    },
-                    {
-                        data: 'observacion_devuelto',
-                        name: 'observacion_devuelto',
                     },
                     {
                         data: 'action',
@@ -186,20 +209,20 @@
 
 
             const configDataTableZonas = {
-                processing: false,
+                /*processing: false,
                 stateSave: true,
-                serverSide: true,
+                serverSide: false,
                 searching: true,
                 bLengthMenu: false,
-                bInfo: false,
+                bInfo: false,*/
                 lengthChange: false,
                 order: [[0, "desc"]],
                 createdRow: function (row, data, dataIndex) {
                 },
                 columns: [
-                    {data: 'codigo', name: 'codigo',},
-                    {data: 'env_zona_asignada', name: 'env_zona_asignada',},
-                    {data: 'env_distrito', name: 'env_distrito',},
+                    {data: 'cliente_recibe', name: 'cliente_recibe',},
+                    {data: 'zona', name: 'zona',},
+                    {data: 'distrito', name: 'distrito',},
                     {
                         data: 'action',
                         name: 'action',
@@ -232,50 +255,152 @@
             @foreach($motorizados as $motorizado)
             $('#tablaPrincipal{{Str::upper($motorizado->zona)}}').DataTable({
                 ...configDataTableZonas,
-                ajax: "{{ route('envios.distribuirsobresporzona.table',['zona'=>Str::upper($motorizado->zona)]) }}",
                 rowCallback: function (row, data, index) {
-                    $('[data-ajax-post]', row).click(function () {
-                        const link = $(this).attr('data-ajax-post')
-                        $(this).find('.spinner-border').show()
-                        $(this).find('.sr-only').show()
-
-                        $.post(link).always(function () {
-                            $(this).find('.spinner-border').hide()
-                            $(this).find('.sr-only').hide()
-                            @foreach($motorizados as $m)
-                            $('#tablaPrincipal{{Str::upper($m->zona)}}').DataTable().ajax.reload();
-                            @endforeach
+                    var table = this;
+                    if (!$(row).data('setevents')) {
+                        $('[data-revertir]', row).click(function () {
+                            insertIds = insertIds.filter(function (id) {
+                                return id != data.id;
+                            })
                             $('#tablaPrincipal').DataTable().ajax.reload();
+                            table.api().row(row).remove().draw(false)
                         })
-                    })
-                },
+
+                        $('[data-jqdetalle]', row).click(function () {
+                            console.log(data)
+                            $.confirm({
+                                title: '¡Detalle del grupo!',
+                                columnClass: 'xlarge',
+                                content: getHtmlPrevisualizarAgrupar(data),
+                                type: 'orange',
+                                typeAnimated: true,
+                                buttons: {
+                                    cancelar: function () {
+                                        $('#tablaPrincipal').DataTable().ajax.reload();
+                                        return true
+                                    }
+                                },
+                                onContentReady: function () {
+                                    const self = this
+
+                                    function setEvents() {
+                                        console.debug(self.$content)
+                                        console.debug(self.$content.find('[data-jqdesagrupar]'))
+                                        self.$content.find('[data-jqdesagrupar]').click(function (e) {
+                                            $.ajax({
+                                                url: '{{route('envios.distribuirsobres.desagrupar')}}',
+                                                data: {
+                                                    grupo_id: e.target.dataset.jqdesagrupar,
+                                                    pedido_id: e.target.dataset.pedido_id,
+                                                },
+                                                method: 'delete'
+                                            })
+                                                .done(function (grupo) {
+                                                    $('#tablaPrincipal{{Str::upper($motorizado->zona)}}').DataTable().row(row).data(createZoneRowTable(grupo.data, '{{Str::upper($motorizado->zona)}}')).draw();
+                                                    if (grupo.data) {
+                                                        self.setContent(getHtmlPrevisualizarAgrupar(grupo.data))
+                                                    } else {
+                                                        self.close()
+                                                        $.alert('Desagrupado por completo')
+                                                    }
+                                                    setEvents()
+                                                })
+                                        })
+                                    }
+
+                                    setEvents();
+                                }
+                            })
+                        })
+                        $(row).data('setevents', 1)
+                    }
+                }
             });
             @endforeach
 
-            function getHtmlPrevisualizarAgruparData(rows,success) {
+            function getHtmlPrevisualizarAgrupar(row, success) {
+                return `
+<div class="card">
+    <div class="card-header">
+        <h4>Cliente: <strong>${row.cliente_recibe}</strong> - <i>${row.telefono}</i></h4>
+    </div>
+    <div class="card-body">
+        <div class="col-md-12">
+            <ul class="list-group">
+                <li class="list-group-item">
+                    <div class="row">
+                        <div class="col-4">
+                            <b>Codigo</b>
+                        </div>
+                        <div class="col-4">
+                            <b>Razon Social</b>
+                        </div>
+                        <div class="col-4 text-center">
+                            <b>Acciones</b>
+                        </div>
+                    </div>
+                </li>
+            ${row.pedidos.map(function (pedido) {
+                    return `
+                <li class="list-group-item">
+                    <div class="row">
+                        <div class="col-4">
+                            ${pedido.pivot.codigo}
+                        </div>
+                        <div class="col-4">
+                            ${pedido.pivot.razon_social}
+                        </div>
+                        <div class="col-4 text-center">
+                            ${row.pedidos.length > 1 ? `<button class="btn btn-danger" data-jqdesagrupar="${row.id}" data-pedido_id="${pedido.id}"><i class="fa fa-arrow-down"></i> Desagrupar</button>` : ''}
+                        </div>
+                    </div>
+                </li>`
+                }).join('')}
+            </ul>
+        </div>
+    </div>
+</div>`;
+            }
+
+            function getHtmlPrevisualizarAgruparData(rows, success) {
                 var html = rows.map(function (row) {
                     const ps = row.producto.split(',')
-                    const productos = row.codigos.split(',').map(function (codigo, index) {
-                        return `<b>${codigo}</b> - <i>${ps[index] || ''}</i>`
-                    })
+                    const productos = [`<li class="list-group-item">
+                                    <div class="row">
+                                        <div class="col-4 border-right">
+                                        <strong>${row.nombre||''}</strong> - <i>${row.celular||''}</i>
+                                        </div>
+                                        <div class="col-4 border-right">
+                                        <b>${row.distribucion||''}</b><hr class="my-2"> ${row.distrito || ''}, ${row.direccion || ''} <hr class="my-2"><i> ${row.referencia || ''}</i>
+                                        </div>
+                                        <div class="col-4">
+                                    ${row.codigos.split(',').map(function (codigo, index) {return `<b>${codigo}</b> - <i>${ps[index] || ''}</i>`}).join(`<hr class="my-2">`)}
+                                        </div>
+                                    </div>
+                                </li>`]
                     // ${success?`<div class="col-12 alert alert-success">Grupos creados correctamente</div>`:``}
-                    return `<div class="col-md-4">
-<div class="card card-${success?'success':'dark'}">
+                    return `<div class="col-md-12">
+<div class="card border card-dark">
 <div class="card-header">
-${success?`Correlativo del paquete: <strong>${row.correlativo}</strong>`:`Cliente: <strong>${row.nombre}</strong> - <i>${row.celular}</i>`}
+${success ? `Paquete: <strong>${row.correlativo||''}</strong>` : `Cliente: <strong>${row.nombre||''}</strong> - <i>${row.celular||''}</i>`}
 </div>
 <div class="card-body">
-${success?`Cliente: <strong>${row.nombre}</strong> - <i>${row.celular}</i>
-<hr>`:``}
-${productos.join('<hr>')}
-</div>
-<div class="card-footer">
-RUTA:<br>
-<b>${row.distribucion}</b> - ${row.distrito || ''}, ${row.direccion || ''}<br>
-<i><b>ref.</b> ${row.referencia || 'n/a'}</i>
-<div>
-
-</div>
+<ul class="list-group">
+    <li class="list-group-item">
+        <div class="row">
+            <div class="col-4 border-right text-center">
+            <b>Cliente</b>
+            </div>
+            <div class="col-4 border-right text-center">
+            <b>Dirección</b>
+            </div>
+            <div class="col-4 text-center">
+            <b>Productos</b>
+            </div>
+        </div>
+    </li>
+    ${productos.join('<hr>')}
+</ul>
 </div>
 </div>
 </div>`
@@ -283,26 +408,25 @@ RUTA:<br>
                 return `<div class="row">${html.join('')}</div>`;
             }
 
-            $(".buttom-agrupar[data-ajax-action]").click(function () {
+            $(".buttom-agrupar[data-table-save]").click(function () {
                 const buttom = $(this)
                 const link = buttom.attr('data-ajax-action')
+                const tableId = buttom.attr('data-table-save')
+                const zona = buttom.attr('data-zona')
+                const table = $(tableId).DataTable();
+                const grupos=Array.from(table.data()).map(function (item) {
+                    return item.id
+                })
+                if(grupos.length===0){
+                    return;
+                }
                 $.confirm({
-                    title: '¡Previsualizar y confirmar paquetes!',
+                    title: '¡Confirmar creación de paquetes!',
                     columnClass: 'xlarge',
-                    content: function () {
-                        var self = this;
-                        self.$$goSobres.hide();
-                        return $.ajax({
-                            url: link,
-                            dataType: 'json',
-                            method: 'post'
-                        }).done(function (response) {
-                            self.setContent(getHtmlPrevisualizarAgruparData(response));
-                        }).fail(function () {
-                            self.setContent('Error.');
-                        });
+                    content:function (){
+                        this.$$goSobres.hide();
+                        return '¿Estas seguro de crear el paquete con los sobres listados en la zona <b>'+zona+'</b>?'
                     },
-                    //content: '¿Estas seguro de crear el paquete con los sobres listados en la zona <b>'+$(this).data('zona')+'</b>?',
                     type: 'orange',
                     typeAnimated: true,
                     buttons: {
@@ -316,7 +440,12 @@ RUTA:<br>
                                 console.log(self)
                                 self.showLoading(true)
                                 $.ajax({
-                                    url: link.replace('visualizar=1', '').replace('visualizar', '_agrupar'),
+                                    url: link.replace('visualizar=1', '').replace('visualizar', '_agrupar').replace('?&', '?'),
+                                    data: {
+                                        groups: Array.from(table.data()).map(function (item) {
+                                            return item.id
+                                        })
+                                    },
                                     dataType: 'json',
                                     method: 'post'
                                 })
@@ -334,15 +463,14 @@ RUTA:<br>
                                         buttom.find('.sr-only').hide()
 
                                         $('#tablaPrincipal').DataTable().ajax.reload();
-                                        @foreach($motorizados as $m)
-                                        $('#tablaPrincipal{{Str::upper($m->zona)}}').DataTable().ajax.reload();
-                                        @endforeach
+                                        table.clear()
+                                            .draw();
                                     })
                                 return false
                             }
                         },
                         goSobres: {
-                            text: 'Ir a sobres para reparto',
+                            text: 'Visualizar en sobres para reparto',
                             btnClass: 'btn-success',
                             action: function () {
                                 window.open('{{route('envios.parareparto')}}', '_blank')

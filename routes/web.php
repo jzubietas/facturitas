@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\Envios\DistribucionController;
 use App\Http\Controllers\Envios\MotorizadoController;
 use App\Http\Controllers\ExcelController;
 use App\Http\Controllers\PagoController;
@@ -390,14 +391,11 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     Route::post('envios.distribuirid', [EnvioController::class, 'DistribuirEnvioid'])->name('envios.distribuirid');
     Route::post('envios.changeImg', [EnvioController::class, 'changeImg'])->name('envios.changeImg');
 
-    Route::post('envios.distribuirsobres/asignarzona', [EnvioController::class, 'AsignarZonaDistribuirSobres'])->name('envios.distribuirsobres.asignarzona');
-
-    Route::get('envios.distribuirsobres', [EnvioController::class, 'DistribuirSobres'])->name('envios.distribuirsobres');
-    Route::get('envios.distribuirsobrestabla', [EnvioController::class, 'DistribuirSobrestabla'])->name('envios.distribuirsobrestabla');
-
-
-    Route::get('envios.distribuirsobresporzona', [EnvioController::class, 'DistribuirSobresPorZonaTable'])->name('envios.distribuirsobresporzona.table');
-    Route::post('envios.distribuirsobres.agrupar', [EnvioController::class, 'DistribuirSobresAgrupar'])->name('envios.distribuirsobres.agrupar');
+    Route::get('envios.distribuirsobres', [DistribucionController::class, 'index'])->name('envios.distribuirsobres');
+    Route::get('envios.distribuirsobres/datatable', [DistribucionController::class, 'datatable'])->name('envios.distribuirsobrestabla');
+    Route::post('envios.distribuirsobres/asignarzona', [DistribucionController::class, 'asignarZona'])->name('envios.distribuirsobres.asignarzona');
+    Route::post('envios.distribuirsobres/agrupar', [DistribucionController::class, 'agrupar'])->name('envios.distribuirsobres.agrupar');
+    Route::delete('envios.distribuirsobres/desagrupar', [DistribucionController::class, 'desagrupar'])->name('envios.distribuirsobres.desagrupar');
 
     Route::get('envios.estadosobres', [EnvioController::class, 'Estadosobres'])->name('envios.estadosobres');
     Route::get('envios.estadosobrestabla', [EnvioController::class, 'Estadosobrestabla'])->name('envios.estadosobrestabla');

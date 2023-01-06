@@ -15,6 +15,7 @@ use App\Models\DireccionPedido;
 use App\Models\Distrito;
 use App\Models\GastoEnvio;
 use App\Models\GastoPedido;
+use App\Models\GrupoPedido;
 use App\Models\ImagenAtencion;
 use App\Models\ImagenPedido;
 use App\Models\User;
@@ -1405,8 +1406,6 @@ class EnvioController extends Controller
             $pedidos = $pedidos->WhereIn('u.identificador', $usersasesores);
         } else if (Auth::user()->rol == "Jefe de llamadas") {
             $pedidos = $pedidos->where('u.identificador', '<>', 'B');
-        } else {
-            $pedidos = $pedidos;
         }
 
         return Datatables::of(DB::table($pedidos))
@@ -1724,8 +1723,8 @@ class EnvioController extends Controller
     {
         $pedido_id = (int)$request->get('pedido_id');
         if ($pedido_id > 0) {
-            $pedido = Pedido::query()->find($pedido_id);
-            $dirgrupo = $pedido->direccionGrupos()->with('direccionEnvio', 'gastoEnvio')->first();
+            $pedido = Pedido::query()->with('direccionGrupo')->find($pedido_id);
+            $dirgrupo = optional($pedido->direccionGrupo);
             $distritos = Distrito::whereIn('provincia', ['LIMA', 'CALLAO'])
                 ->where('estado', '1')
                 ->WhereNotIn('distrito', ['CHACLACAYO', 'CIENEGUILLA', 'LURIN', 'PACHACAMAC', 'PUCUSANA', 'PUNTA HERMOSA', 'PUNTA NEGRA', 'SAN BARTOLO', 'SANTA MARIA DEL MAR'])
@@ -1748,9 +1747,9 @@ class EnvioController extends Controller
     {
         $pedido_id = (int)$request->get('pedido_id');
         if ($pedido_id > 0) {
-            $pedido = Pedido::query()->find($pedido_id);
-            $dirgrupo = $pedido->direccionGrupos()->with('direccionEnvio', 'gastoEnvio')->first();
-            $pedido->direccionGrupos()->update([
+            $pedido = Pedido::query()->with('direccionGrupo')->find($pedido_id);
+            $dirgrupo = $pedido->direccionGrupo;
+            $pedido->direccionGrupo()->update([
                 'nombre_cliente' => $request->nombre,
                 'celular_cliente' => $request->celular,
                 'direccion' => $request->direccion,
@@ -1761,7 +1760,7 @@ class EnvioController extends Controller
             if ($dirgrupo != null) {
                 if ($dirgrupo->direccionEnvio != null) {
                     DireccionEnvio::query()->where('estado', '=', 1)
-                        ->whereIn('direcciongrupo', $pedido->direccionGrupos()->pluck('id'))
+                        ->where('direcciongrupo', '=',$dirgrupo->id)
                         ->update([
                             'celular' => $request->celular,
                             'direccion' => $request->direccion,
@@ -1804,10 +1803,12 @@ class EnvioController extends Controller
             $lista_productos = '';
             $lista_codigos = '';
             $pedidos = $request->pedidos;
-            $array_pedidos = explode(",", $pedidos);
+            $array_pedidos = collect(explode(",", $pedidos))->filter()->map(function ($id) {
+                return intval($id);
+            })->all();
+            $attach_pedidos_data=[];
 
-
-            $data = DetallePedido::wherein("pedido_id", $array_pedidos)->get();
+            $data = DetallePedido::activo()->whereIn("pedido_id", $array_pedidos)->get();
             foreach ($data as $dat) {
                 $lista_productos .= $dat->nombre_empresa . ", ";
                 $lista_codigos .= $dat->codigo . ", ";
@@ -1824,12 +1825,19 @@ class EnvioController extends Controller
             $identi = User::find($usuario_id);
             $identi_id = $identi->identificador;
 
+            DB::beginTransaction();
+            $grupoPedido = GrupoPedido::create([
+                "zona" => $zona_distrito->zona,
+                "provincia" => $zona_distrito->provincia,
+                'distrito' => $zona_distrito->distrito,
+                'direccion' => $request->direccion,
+                'referencia' => $request->referencia,
+                'cliente_recibe' => $request->nombre,
+                'telefono' => $request->contacto,
+            ]);
+
             if ($request->destino == "LIMA") {
-
-
                 try {
-                    DB::beginTransaction();
-
                     $cantidad = $count_pedidos;
 
                     $modelData = [
@@ -1882,9 +1890,11 @@ class EnvioController extends Controller
                             'env_observacion' => $request->observacion,
                             'env_importe' => '',
                         ]);
-
-
-                        $dp_empresa = DetallePedido::where("pedido_id", $pedido_id)->first();
+                        $dp_empresa = DetallePedido::activo()->where("pedido_id", $pedido_id)->first();
+                        $attach_pedidos_data[$pedido->id]=[
+                            'razon_social'=>$dp_empresa->codigo,
+                            'codigo'=>$dp_empresa->nombre_empresa,
+                        ];
                         $direccionPedido = DireccionPedido::create([
                             'direccion_id' => $direccionLima->id,
                             'pedido_id' => $pedido_id,
@@ -1893,8 +1903,6 @@ class EnvioController extends Controller
                             'empresa' => $dp_empresa->nombre_empresa,
                             'estado' => '1'
                         ]);
-
-
                     }
 
                     if ($request->saveHistoricoLima == "1") {
@@ -1903,18 +1911,14 @@ class EnvioController extends Controller
                         ]);
                     }
 
-                    DB::commit();
                 } catch (\Throwable $th) {
                     throw $th;
                 }
 
             }
 
-
             if ($request->destino == "PROVINCIA") {
                 try {
-
-
                     $cliente = Cliente::where("id", $request->cliente_id)->first();
                     $count_pedidos = count((array)$array_pedidos);
 
@@ -1935,8 +1939,6 @@ class EnvioController extends Controller
                     } else {
                         $file_name = 'logo_facturas.png';
                     }
-
-                    DB::beginTransaction();
 
                     $modelData = [
                         'cliente_id' => $request->cliente_id,
@@ -1988,9 +1990,11 @@ class EnvioController extends Controller
                             'env_importe' => $request->importe,
                         ]);
 
-                        $dp_empresa = DetallePedido::where("pedido_id", $pedido_id)->first();
-
-                        $pedido = Pedido::find($pedido_id);
+                        $dp_empresa = DetallePedido::activo()->where("pedido_id", $pedido_id)->first();
+                        $attach_pedidos_data[$pedido->id]=[
+                            'razon_social'=>$dp_empresa->codigo,
+                            'codigo'=>$dp_empresa->nombre_empresa,
+                        ];
 
                     }
 
@@ -2002,15 +2006,15 @@ class EnvioController extends Controller
                     }
 
 
-                    DB::commit();
                 } catch (\Throwable $th) {
                     throw $th;
                 }
             }
 
+            $grupoPedido->pedidos()->attach($attach_pedidos_data);
+
+            DB::commit();
             return response()->json(['html' => $pedidos]);
-
-
         }
 
 
@@ -2243,243 +2247,6 @@ class EnvioController extends Controller
         ]);
 
         return response()->json(['html' => $pedido->id]);
-    }
-
-    public function AsignarZonaDistribuirSobres(Request $request)
-    {
-        $pedido = Pedido::query()->findOrFail($request->pedido_id);
-        if ($request->has('revertir_asignar_zona')) {
-            $pedido->update([
-                'env_zona_asignada' => null
-            ]);
-        } else {
-            $pedido->update([
-                'env_zona_asignada' => $request->zona
-            ]);
-        }
-        return response()->json($pedido);
-    }
-
-    public function Distribuirsobres()
-    {
-        $ver_botones_accion = 1;
-
-        if (Auth::user()->rol == "Asesor") {
-            $ver_botones_accion = 0;
-        } else if (Auth::user()->rol == "Super asesor") {
-            $ver_botones_accion = 0;
-        } else if (Auth::user()->rol == "Encargado") {
-            $ver_botones_accion = 1;
-        } else {
-            $ver_botones_accion = 1;
-        }
-
-
-        $_pedidos = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')
-            ->join('users as u', 'pedidos.user_id', 'u.id')
-            ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
-            ->select(
-                DB::raw("COUNT(u.identificador) AS total, u.identificador ")
-            )
-            ->where('pedidos.estado', '1')
-            ->whereIn('pedidos.condicion_envio_code', [Pedido::RECEPCION_COURIER_INT])
-            ->where('dp.estado', '1')
-            ->groupBy('u.identificador');
-
-
-        $distritos = Distrito::whereIn('provincia', ['LIMA', 'CALLAO'])
-            ->where('estado', '1')
-            ->WhereNotIn('distrito', ['CHACLACAYO', 'CIENEGUILLA', 'LURIN', 'PACHACAMAC', 'PUCUSANA', 'PUNTA HERMOSA', 'PUNTA NEGRA', 'SAN BARTOLO', 'SANTA MARIA DEL MAR'])
-            ->pluck('distrito', 'distrito');
-
-        $departamento = Departamento::where('estado', "1")
-            ->pluck('departamento', 'departamento');
-
-        $superasesor = User::where('rol', 'Super asesor')->count();
-
-        $_pedidos = $_pedidos->get();
-        $motorizados = User::query()->where('rol', '=', 'MOTORIZADO')->whereNotNull('zona')->get();
-
-        return view('envios.distribuirsobres', compact('superasesor', 'motorizados', 'ver_botones_accion', 'distritos', 'departamento', '_pedidos'));
-    }
-
-    public function DistribuirSobrestabla(Request $request)
-    {
-        $pedidoQuery = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')
-            ->join('users as u', 'pedidos.user_id', 'u.id')
-            ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
-            ->select([
-                'pedidos.*',
-                'u.identificador as users',
-                'dp.codigo as codigos',
-                'dp.nombre_empresa as empresas',
-                'dp.total as total',
-                'dp.envio_doc',
-                'dp.fecha_envio_doc',
-                'dp.cant_compro',
-                'dp.fecha_envio_doc_fis',
-                'dp.foto1',
-                'dp.foto2',
-                'dp.fecha_recepcion',
-                DB::raw("DATEDIFF(DATE(NOW()), DATE(pedidos.created_at)) AS dias")
-            ])
-            ->where('pedidos.estado', '1')
-            ->whereIn('pedidos.condicion_envio_code', [Pedido::RECEPCION_COURIER_INT])
-            ->where('dp.estado', '1')
-            ->conDireccionEnvio()
-            ->sinZonaAsignadaEnvio();
-
-        //add_query_filtros_por_roles_pedidos($pedidoQuery, 'u.identificador');
-
-        $motorizados = User::query()->where('rol', '=', 'MOTORIZADO')->whereNotNull('zona')->get();
-        $color_zones = [];
-        $color_zones['NORTE'] = 'warning';
-        $color_zones['CENTRO'] = 'info';
-        $color_zones['SUR'] = 'dark';
-        return Datatables::of(DB::table($pedidoQuery))
-            ->addIndexColumn()
-            ->editColumn('condicion_envio', function ($pedido) {
-                $badge_estado='';
-                if($pedido->estado_sobre=='1')
-                {
-                    $badge_estado .= '<span class="badge badge-dark p-8" style="color: #fff; background-color: #347cc4; font-weight: 600; margin-bottom: -2px;border-radius: 4px 4px 0px 0px; font-size:8px;  padding: 4px 4px !important; font-weight: 500;">Direccion agregada</span>';
-
-                }
-                $color = Pedido::getColorByCondicionEnvio($pedido->condicion_envio);
-                $badge_estado.= '<span class="badge badge-success py-2" style="background-color: ' . $color . '!important;">' . $pedido->condicion_envio . '</span>';
-                return $badge_estado;
-            })
-            ->addColumn('action', function ($pedido) use ($motorizados, $color_zones) {
-                $btn = [];
-                foreach ($motorizados as $motorizado) {
-                    $btn[] = "<div class='text-center p-1'>
-<button data-ajax-post='" . route('envios.distribuirsobres.asignarzona', ['pedido_id' => $pedido->id, 'zona' => Str::upper($motorizado->zona)]) . "'
- class='btn btn-" . ($color_zones[Str::upper($motorizado->zona)] ?? 'info') . " btn-sm btn-block my-0' type='button'>
-<span class='spinner-border spinner-border-sm' role='status' aria-hidden='true' style='display: none'></span>
-  <span class='sr-only' style='display: none'>" . (Str::upper($motorizado->zona)) . "</span>" . (Str::upper($motorizado->zona))  . "</button></div>";
-                }
-                if (count($motorizados) == 0) {
-                    $btn[] = '<li class="list-group-item alert alert-warning p-8 text-center mb-0">No hay motorizados registrados</li>';
-                }
-                return "<ul class='d-flex'>" . join('', $btn) . "</ul>";
-            })
-            ->rawColumns(['action', 'condicion_envio'])
-            ->make(true);
-
-    }
-
-    public function DistribuirSobresPorZonaTable(Request $request)
-    {
-        $zona = $request->get('zona');
-
-        $pedidoQuery = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')
-            ->join('users as u', 'pedidos.user_id', 'u.id')
-            ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
-            ->select([
-                'pedidos.*',
-                'u.identificador as users',
-                'dp.codigo as codigos',
-                'dp.nombre_empresa as empresas',
-                'dp.total as total',
-                'dp.envio_doc',
-                'dp.fecha_envio_doc',
-                'dp.cant_compro',
-                'dp.fecha_envio_doc_fis',
-                'dp.foto1',
-                'dp.foto2',
-                'dp.fecha_recepcion',
-                DB::raw("DATEDIFF(DATE(NOW()), DATE(pedidos.created_at)) AS dias")
-            ])
-            ->where('pedidos.estado', '1')
-            ->whereIn('pedidos.condicion_envio_code', [Pedido::RECEPCION_COURIER_INT])
-            ->where('dp.estado', '1')
-            ->conDireccionEnvio()
-            ->zonaAsignadaEnvio($zona);
-
-        //add_query_filtros_por_roles_pedidos($pedidoQuery, 'u.identificador');
-        return Datatables::of(DB::table($pedidoQuery->getQuery()))
-            ->addIndexColumn(true)
-            ->addIndexColumn()
-            ->addColumn('action', function ($pedido) {
-                $btn[] = "<li class='list-group-item text-center p-0'><button data-ajax-post='" . route('envios.distribuirsobres.asignarzona', ['pedido_id' => $pedido->id, 'zona' => null, 'revertir_asignar_zona' => 1]) . "' class='btn btn-light btn-sm btn-block my-0' type='button'>
-<span class='spinner-border spinner-border-sm' role='status' aria-hidden='true' style='display: none'></span>
-  <span class='sr-only' style='display: none'>Revertir</span><i class='fa fa-undo mr-2 text-danger'></i>Revertir</button></li>";
-                return "<ul class='list-group'>" . join('', $btn) . "</ul>";
-            })
-            ->rawColumns(['action'])
-            ->make(true);
-
-    }
-
-    public function DistribuirSobresAgrupar(Request $request)
-    {
-        $this->validate($request, [
-            'zona' => ['required', Rule::in(['NORTE', 'SUR', 'CENTRO'])],
-            'motorizado_id' => 'required'
-        ]);
-        $zona = $request->get('zona');
-
-        $pedidoClientes = Pedido::activo()->with('cliente')
-            ->whereIn('condicion_envio_code', [Pedido::RECEPCION_COURIER_INT])
-            ->conDireccionEnvio()
-            ->zonaAsignadaEnvio($zona)
-            ->get()
-            ->map(function ($item){
-                $item->_grupo_part=$item->env_distrito.'_'.$item->env_zona_asignada.'_'.$item->env_direccion;
-                return $item;
-            })
-            ->groupBy(['_grupo_part',/*'env_distrito','env_zona_asignada','env_direccion'*/]);
-
-        $grupos = [];
-        foreach ($pedidoClientes as $grupo => $pedidos) {
-            $firstProduct = collect($pedidos)->first();
-            $cliente = $firstProduct->cliente;
-            $lista_codigos = collect($pedidos)->pluck('codigo')->join(', ');
-            $lista_productos = DetallePedido::wherein("pedido_id", collect($pedidos)->pluck('id'))->pluck('nombre_empresa')->join(', ');
-
-            $groupData = [
-                'condicion_envio_code' => Pedido::REPARTO_COURIER_INT,//RECEPCION CURRIER
-                'condicion_envio' => Pedido::REPARTO_COURIER,//RECEPCION CURRIER
-                'producto' => $lista_productos,
-                'distribucion' => $zona,
-                'destino' => $firstProduct->env_destino,
-                'direccion' => $firstProduct->env_direccion,
-                'fecha_recepcion' => now(),
-                'codigos' => $lista_codigos,
-
-                'estado' => '1',
-
-                'cliente_id' => $cliente->id,
-                'user_id' => $firstProduct->user_id,
-
-                'nombre' =>$firstProduct->env_nombre_cliente_recibe,
-                'celular' => $firstProduct->env_celular_cliente_recibe,
-
-                'nombre_cliente' =>  $cliente->nombre,
-                'celular_cliente' => $cliente->celular,
-                'icelular_cliente' => $cliente->icelular,
-
-                'distrito' => $firstProduct->env_distrito,
-                'referencia' => $firstProduct->env_referencia,
-                'observacion' => $firstProduct->env_observacion,
-                'cantidad' => count($pedidos),
-                'motorizado_id' => $request->motorizado_id,
-            ];
-
-            if ($request->get("visualizar") == '1') {
-                $grupos[] = $groupData;
-            } else {
-                $direcciongrupo = DireccionGrupo::create($groupData);
-                $grupos[] = $direcciongrupo->refresh();
-                Pedido::whereIn('id', collect($pedidos)->pluck('id'))->update([
-                    'env_zona_asignada' => null,
-                    'estado_ruta'=>'1',
-                    'condicion_envio_code' => Pedido::REPARTO_COURIER_INT,
-                    'condicion_envio' => Pedido::REPARTO_COURIER,
-                ]);
-            }
-        }
-        return $grupos;
     }
 
     public function Estadosobres()
