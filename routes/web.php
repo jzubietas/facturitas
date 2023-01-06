@@ -78,10 +78,10 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     //Route::post('clientes.storebf', [BasefriaController::class, 'storebf'])->name('clientes.storebf');
 
     Route::post('cliente.edit.celularduplicado', [ClienteController::class, 'celularduplicado'])->name('cliente.edit.celularduplicado');
-    
 
-    
-    
+
+
+
     Route::post('clientedeleteRequest', [ClienteController::class, 'destroyid'])->name('clientedeleteRequest.post');
     Route::get('clientedeasesor', [ClienteController::class, 'clientedeasesor'])->name('cargar.clientedeasesor');
     Route::get('clientedeasesorparapagos', [ClienteController::class, 'clientedeasesor'])->name('cargar.clientedeasesorparapagos');
@@ -112,7 +112,7 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
 
     /*Controller Basefria*/
 
-    Route::resource('basefria', BasefriaController::class)->name('basefria');
+    Route::resource('basefria', BasefriaController::class)->names('basefria');
     Route::post('basefria.edit.celularduplicado', [BasefriaController::class, 'celularduplicado'])->name('basefria.edit.celularduplicado');
     Route::get('clientes.editbf/{cliente}/edit2', [BasefriaController::class, 'editbf'])->name('clientes.editbf');
 
