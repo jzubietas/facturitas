@@ -256,7 +256,7 @@
               processData: false,
               contentType: false,
               type: 'POST',
-              url: "{{ route('envio.escaneoqr') }}",
+              url: "{{ route('envio.escaneoqr',':id') }}".replace(':id',scannedText),
               success: function (data) {
                   console.log(data);
                   $('$code_ped').html(data.html);
