@@ -71,7 +71,7 @@
                       <img src="@php echo $codigo_barras_img @endphp" width="200">
                   </div><br><br>
                   <div class="col-lg-6 mt-8">
-                      <img src="@php echo $codigo_qr_img @endphp" width="200">
+                      <!--<img src="@php echo $codigo_qr_img @endphp" width="200">-->
                   </div>
               </div>
 
