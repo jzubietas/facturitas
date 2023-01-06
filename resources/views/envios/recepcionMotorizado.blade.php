@@ -193,7 +193,7 @@
 
   <style>
 
-      .qrPreviewVideo{width:100%;}
+      .qrPreviewVideo{width:100%; max-width:300px; max-height: 300px; border-radius: 16px; margin:auto;}
 
     img:hover{
       transform: scale(1.2)
@@ -254,39 +254,37 @@
   <script type="text/javascript">
       function onQRCodeScanned(scannedText)
       {
-          $.ajax({
-              processData: false,
-              contentType: false,
-              type: 'POST',
-              url: "{{ route('envio.escaneoqr',':id') }}".replace(':id',scannedText),
-              success: function (data) {
-                  console.log(data);
-                  $('#code_ped').html(data.html);
-                  $('#dist_ped').html(data.distrito);
-                  $('#dir_ped').html(data.direccion);
-
-                  $('#recepcion_btn').on('click', function (){
-                      $.ajax({
-                          data:{hiddenEnvio: data.html},
-                          type: 'POST',
-                          url: "{{ route('envios.recepcionarmotorizado') }}",
-                          success: function (data) {
-                              $('#code_ped').html("");
-                              $('#dist_ped').html("");
-                              $('#dir_ped').html("data.direccion");
-                              consolle.log("Pedido recepcionado");
-                          }
-                      });
-                  });
-              }
-          });
-
           var scannedTextMemo = document.getElementById("scannedTextMemo");
           if(scannedTextMemo)
           {
+              $.ajax({
+                  processData: false,
+                  contentType: false,
+                  type: 'POST',
+                  url: "{{ route('envio.escaneoqr',':id') }}".replace(':id',scannedText),
+                  success: function (data) {
+                      console.log(data);
+                      $('#code_ped').html(data.html);
+                      $('#dist_ped').html(data.distrito);
+                      $('#dir_ped').html(data.direccion);
+
+                      $('#recepcion_btn').on('click', function (){
+                          $.ajax({
+                              data:{hiddenEnvio: data.html},
+                              type: 'POST',
+                              url: "{{ route('envios.recepcionarmotorizado') }}",
+                              success: function (data) {
+                                  $('#code_ped').html("");
+                                  $('#dist_ped').html("");
+                                  $('#dir_ped').html("data.direccion");
+                                  consolle.log("Pedido recepcionado");
+                              }
+                          });
+                      });
+                  }
+              });
               scannedTextMemo.value = scannedText;
           }
-          return false;
       }
 
       function provideVideo()
