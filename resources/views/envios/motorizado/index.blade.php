@@ -145,15 +145,21 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-lg-6">
+                <div class="col-lg-4">
                    <div class="form-group">
-                     <label for="fecha_envio_doc_fis">Fecha de Envio</label>
+                     <label for="fecha_envio_doc_fis">Fecha de Envio (Sobres)</label>
                      <input class="form-control" id="fecha_envio_doc_fis" disabled="" name="fecha_envio_doc_fis" type="date" value="${data.fecha}">
                     </div>
                 </div>
-                <div class="col-lg-6">
+                <div class="col-lg-4">
                    <div class="form-group">
-                        <label for="fecha_recepcion">Fecha de Entrega</label>
+                        <label for="fecha_recepcion">Fecha de Entrega (Domicilio)</label>
+                        <input class="form-control" id="fecha_recepcion" name="fecha_recepcion" type="date" value="">
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                   <div class="form-group">
+                        <label for="fecha_recepcion">Fecha de Entrega (Recibe)</label>
                         <input class="form-control" id="fecha_recepcion" name="fecha_recepcion" type="date" value="">
                     </div>
                 </div>

@@ -155,6 +155,11 @@
 
         var tabla_historial_cliente = null;
 
+        function resetearcamposdelete() {
+            $('#motivo').val("");
+            //$('#responsable').val("");
+        }
+
         $(document).ready(function () {
 
             $.ajaxSetup({
