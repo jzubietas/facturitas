@@ -75,8 +75,8 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     Route::get('pedidosenvioclientetabla', [ClienteController::class, 'pedidosenvioclientetabla'])->name('cargar.pedidosenvioclientetabla');
     Route::get('clientescreatepago', [ClienteController::class, 'clientedeasesorpagos'])->name('clientescreatepago');
 
-    Route::get('clientes.createbf', [ClienteController::class, 'createbf'])->name('clientes.createbf');
-    Route::post('clientes.storebf', [ClienteController::class, 'storebf'])->name('clientes.storebf');
+    Route::get('clientes.createbf', [BasefriaController::class, 'createbf'])->name('clientes.createbf');
+    Route::post('clientes.storebf', [BasefriaController::class, 'storebf'])->name('clientes.storebf');
 
 
     Route::get('clientes.editbf/{cliente}/edit2', [ClienteController::class, 'editbf'])->name('clientes.editbf');

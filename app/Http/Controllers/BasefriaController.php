@@ -340,4 +340,65 @@ class BasefriaController extends Controller
 
         return redirect()->route('clientes.index')->with('info','registrado');
     }
+
+    public function createbf()
+    {
+        $usersB = User::where('users.estado', '1')
+            ->whereIn('rol', [User::ROL_ASESOR_ADMINISTRATIVO])
+            ->first();
+            
+        $users = collect();
+        $users->put($usersB->id, $usersB->identificador);
+        $usersall = User::select(
+            DB::raw("CONCAT(identificador,' (ex ',IFNULL(exidentificador,''),')') AS identificador"), 'id'
+        )
+            ->where('users.rol', 'Asesor')
+            ->where('users.estado', '1')
+            ->pluck('identificador', 'id');
+        foreach ($usersall as $key => $value) {
+            $users->put($key,$value);
+        }
+        return view('base_fria.create', compact('users'));
+    }
+
+    public function storebf(Request $request)
+    {
+        //return $request->all();
+        //3
+        /* $request->validate([
+                'celular' => 'required|unique:clientes',*/
+        $asesor=User::where('id',$request->user_id)->first();
+        $celular=$request->celular;
+      
+        $validacion=Cliente::where('celular',$request->celular)->first();
+        $letra = $asesor->letra;
+        if ($validacion !== null) {
+
+            $validator = Validator::make($request->all(), [
+                'celular' => 'required|unique:clientes',
+            ], $messages);
+
+            if ($validator->fails()) {
+                return redirect('clientes.createbf')
+                    ->withErrors($validator)
+                    ->withInput();
+            }
+        }else{
+            //cuando existe
+        }
+
+
+        $cliente = Cliente::create([
+            'nombre' => $request->nombre,
+            'celular' => $request->celular,
+            'user_id' => $request->user_id,
+            'tipo' => $request->tipo,
+            'deuda' => '0',
+            'pidio' => '0',
+            'estado' => '1',
+            'icelular' => $letra,
+        ]);
+
+        return redirect()->route('basefria')->with('info', 'registrado');
+    }
 }
