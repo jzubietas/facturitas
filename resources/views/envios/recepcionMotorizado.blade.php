@@ -152,10 +152,10 @@
                             </div>
                             <div>
                                 <p class="mb-8 mt-16">Pedido Encontrado</p>
-                                <p class="mb-8">CODIGO: <label>Codigo:</label></p>
-                                <p class="mb-8">DISTRITO: <label>Distrito</label></p>
-                                <p class="mb-8">DIRECCIÓN: <label>Dirección</label></p>
-                                <a href="#" class="btn btn-warning font-weight-bold">Confirmar Pedido</a>
+                                <p class="mb-8">CODIGO: <label id="code_ped">Codigo:</label></p>
+                                <p class="mb-8">DISTRITO: <label id="dist_ped">Distrito</label></p>
+                                <p class="mb-8">DIRECCIÓN: <label id="dir_ped">Dirección</label></p>
+                                <a href="#" id="recepcion_btn" class="btn btn-warning font-weight-bold">Confirmar Pedido</a>
                                 <div class="mt-16">
                                 <textarea id="scannedTextMemo" class="textInput form-memo form-field-input textInput-readonly w-100" rows="3" readonly></textarea>
                                 </div>
@@ -192,6 +192,9 @@
 
 
   <style>
+
+      .qrPreviewVideo{width:100%;}
+
     img:hover{
       transform: scale(1.2)
     }
@@ -252,14 +255,29 @@
       function onQRCodeScanned(scannedText)
       {
           $.ajax({
-              data: {id_pedido: scannedText},
               processData: false,
               contentType: false,
               type: 'POST',
               url: "{{ route('envio.escaneoqr',':id') }}".replace(':id',scannedText),
               success: function (data) {
                   console.log(data);
-                  $('$code_ped').html(data.html);
+                  $('#code_ped').html(data.html);
+                  $('#dist_ped').html(data.distrito);
+                  $('#dir_ped').html(data.direccion);
+
+                  $('#recepcion_btn').on('click', function (){
+                      $.ajax({
+                          data:{hiddenEnvio: data.html},
+                          type: 'POST',
+                          url: "{{ route('envios.recepcionarmotorizado') }}",
+                          success: function (data) {
+                              $('#code_ped').html("");
+                              $('#dist_ped').html("");
+                              $('#dir_ped').html("data.direccion");
+                              consolle.log("Pedido recepcionado");
+                          }
+                      });
+                  });
               }
           });
         /*
@@ -268,6 +286,7 @@
           {
               scannedTextMemo.value = scannedText;
           } */
+          return false;
       }
 
       function provideVideo()

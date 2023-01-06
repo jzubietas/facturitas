@@ -2891,9 +2891,9 @@ class EnvioController extends Controller
 
     public function EscaneoQR(Request $request)
     {
-        $pedido = Pedido::where("id", $request->hiddenEnvio)->first();
+        $pedido = Pedido::where("codigo", $request->id)->first();
 
-        $pedido->update([
+        /*$pedido->update([
             'envio' => '2',
             'modificador' => 'USER' . Auth::user()->id,
             'condicion_envio' => Pedido::ENVIO_COURIER_JEFE_OPE,
@@ -2905,8 +2905,8 @@ class EnvioController extends Controller
             'pedido' => $request->hiddenEnvio,
             'condicion_envio_code' => Pedido::RECEPCION_COURIER_INT,
             'notificado' => 0
-        ]);
+        ]);*/
 
-        return response()->json(['html' => $pedido->id]);
+        return response()->json(['html' => $pedido->id, 'distrito' => $pedido->distrito, 'direccion' => $pedido->direccion]);
     }
 }

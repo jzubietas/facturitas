@@ -262,7 +262,7 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     Route::get('envios.seguimientoprovinciatabla', [EnvioController::class, 'Seguimientoprovinciatabla'])->name('envios.seguimientoprovinciatabla');
     Route::get('envios.entregados', [EnvioController::class, 'Entregados'])->name('envios.entregados');
     Route::get('envios.entregadostabla', [EnvioController::class, 'Entregadostabla'])->name('envios.enviadostabla');
-    Route::get('envio.escaneoqr/{id}', [EnvioController::class, 'EscaneoQR'])->name('envio.escaneoqr');
+    Route::post('envio.escaneoqr/{id}', [EnvioController::class, 'EscaneoQR'])->name('envio.escaneoqr');
 
     Route::get('envios/motorizados', [MotorizadoController::class, 'index'])->name('envios.motorizados.index');
     Route::get('envios/motorizados/confirmar', [MotorizadoController::class, 'confirmar'])->name('envios.motorizados.confirmar');
