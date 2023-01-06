@@ -14,7 +14,7 @@ class AddColumPedidosDireccion extends Command
      *
      * @var string
      */
-    protected $signature = 'migrate:add-pedidos-direccion';
+    protected $signature = 'migrate:add-pedidos-direccion-dg';
 
     /**
      * The console command description.
@@ -40,7 +40,7 @@ class AddColumPedidosDireccion extends Command
      */
     public function handle()
     {
-        \Schema::table('pedidos', function (Blueprint $table) {
+        /*\Schema::table('pedidos', function (Blueprint $table) {
             $table->string("env_destino",250)->nullable()->after('estado_sobre')->comment('LIMA PROVINCIA');//LIMA PROVINCIA
             $table->string("env_distrito",250)->nullable()->after('env_destino')->comment('LIMA PROVINCIA');//LIMA - provincia
             $table->string("env_zona",250)->nullable()->after('env_distrito')->comment('NORTE SUR ESTE OESTE para LIMA PROVINCIA');//NORTE SUR ESTE OESTE para LIMA PROVINCIA
@@ -57,7 +57,15 @@ class AddColumPedidosDireccion extends Command
             $table->string("env_importe",250)->nullable()->after('env_observacion');//importe
             //$table->integer("direccion_grupo")->nullable()->after('env_importe');
             //$table->integer("celular_cliente_recibe",250)->nullable()->after('nombre_cliente');
+        });*/
+
+        \Schema::table('pedidos', function (Blueprint $table) {
+            $table->integer("direccion_grupo")->nullable()->after('estado_ruta');
         });
+
+
+
+
 
         return 0;
     }

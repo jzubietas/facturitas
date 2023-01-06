@@ -257,10 +257,10 @@
                         defaultContent: '',
                         orderable: false,
                     },
-                    {data: 'codigo_pedido', name: 'codigo_pedido',},
+                    {data: 'codigo', name: 'codigo',},
                     {
-                        "data": 'empresa',
-                        "name": 'empresa',
+                        "data": 'nombre_empresa',
+                        "name": 'nombre_empresa',
                         "render": function ( data, type, row, meta ) {
                         return data;
 
