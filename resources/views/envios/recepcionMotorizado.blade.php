@@ -256,7 +256,7 @@
               processData: false,
               contentType: false,
               type: 'POST',
-              url: "{{ route('envio.escaneoqrg') }}",
+              url: "{{ route('envio.escaneoqr') }}",
               success: function (data) {
                   console.log(data);
                   $('$code_ped').html(data.html);
