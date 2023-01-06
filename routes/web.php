@@ -61,7 +61,6 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
 
     Route::resource('clientes', ClienteController::class)->names('clientes');
 
-
     /* agregando rutas para permisos en opciones del modulo clientes (editar cada secciòn) */
 
     Route::get('clientes.edit.recuperado/{cliente}/edit2', [ClienteController::class, 'edit'])->name('clientes.edit.recuperado');
@@ -75,12 +74,14 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     Route::get('pedidosenvioclientetabla', [ClienteController::class, 'pedidosenvioclientetabla'])->name('cargar.pedidosenvioclientetabla');
     Route::get('clientescreatepago', [ClienteController::class, 'clientedeasesorpagos'])->name('clientescreatepago');
 
-    Route::get('clientes.createbf', [BasefriaController::class, 'createbf'])->name('clientes.createbf');
-    Route::post('clientes.storebf', [BasefriaController::class, 'storebf'])->name('clientes.storebf');
+    //Route::get('clientes.createbf', [BasefriaController::class, 'createbf'])->name('clientes.createbf');
+    //Route::post('clientes.storebf', [BasefriaController::class, 'storebf'])->name('clientes.storebf');
 
+    Route::post('cliente.edit.celularduplicado', [ClienteController::class, 'celularduplicado'])->name('cliente.edit.celularduplicado');
+    
 
-    Route::get('clientes.editbf/{cliente}/edit2', [ClienteController::class, 'editbf'])->name('clientes.editbf');
-
+    
+    
     Route::post('clientedeleteRequest', [ClienteController::class, 'destroyid'])->name('clientedeleteRequest.post');
     Route::get('clientedeasesor', [ClienteController::class, 'clientedeasesor'])->name('cargar.clientedeasesor');
     Route::get('clientedeasesorparapagos', [ClienteController::class, 'clientedeasesor'])->name('cargar.clientedeasesorparapagos');
@@ -110,6 +111,12 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     /*Controller Cliente*/
 
     /*Controller Basefria*/
+
+    Route::resource('basefria', BasefriaController::class)->name('basefria');
+    Route::post('basefria.edit.celularduplicado', [BasefriaController::class, 'celularduplicado'])->name('basefria.edit.celularduplicado');
+    Route::get('clientes.editbf/{cliente}/edit2', [BasefriaController::class, 'editbf'])->name('clientes.editbf');
+
+
     Route::post('basefriacliente/{cliente}', [BasefriaController::class, 'updatebf'])->name('updatebf');
 
     Route::post('basefriaclienteRequest', [BasefriaController::class, 'updatebfpost'])->name('basefriaRequest.post');

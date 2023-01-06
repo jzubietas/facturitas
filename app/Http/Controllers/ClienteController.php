@@ -378,6 +378,9 @@ class ClienteController extends Controller
             'celular' => 'required',
         ]);
 
+        //validar numero en toda la base 
+        //$numero=Cliente::where('id',)
+
         $cliente->update($request->all());
 
         $idporcentaje = $request->idporcentaje;
@@ -1681,6 +1684,24 @@ class ClienteController extends Controller
 
         return response()->json([
             "html" => view('clientes.response.modal_data_clientes_deuda', compact('messaje', 'pedidos', 'totalDeuda', 'cliente'))->render()
+        ]);
+    }
+
+    public function celularduplicado(Request $request)
+    {
+
+        $request->celular;
+        $validar=Cliente::where('celular',$request->celular)->count();
+        $status=true;
+        $data='NO PUEDE CONTINUAR';
+        if($validar>0)
+        {
+            $status=false;
+            $data='NO PUEDE CONTINUAR';            
+        }        
+
+        return response()->json([
+            "html" => array('status'=>$status,'data'=>$data)
         ]);
     }
 }

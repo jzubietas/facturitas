@@ -252,7 +252,7 @@ class PedidoController extends Controller
                 }
                 if($pedido->estado_ruta=='1')
                 {
-                    $badge_estado.='<span class="badge badge-success w-100" style="background-color: #00bc8c !important;
+                    $badge_estado.='<span class="badge badge-success" style="background-color: #00bc8c !important;
                     padding: 4px 8px !important;
                     font-size: 8px;
                     margin-bottom: -4px;
