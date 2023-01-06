@@ -81,8 +81,12 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
 
 
 
+    Route::middleware('authorize.pedido.anulled')
+        ->post('clientedeleteRequest', [ClienteController::class, 'destroyid'])
+        ->name('clientedeleteRequest.post');
 
-    Route::post('clientedeleteRequest', [ClienteController::class, 'destroyid'])->name('clientedeleteRequest.post');
+
+    //Route::post('clientedeleteRequest', [ClienteController::class, 'destroyid'])->name('clientedeleteRequest.post');
     Route::get('clientedeasesor', [ClienteController::class, 'clientedeasesor'])->name('cargar.clientedeasesor');
     Route::get('clientedeasesorparapagos', [ClienteController::class, 'clientedeasesor'])->name('cargar.clientedeasesorparapagos');
 
@@ -197,6 +201,8 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     Route::middleware('authorize.pedido.anulled')
         ->post('pedidodeleteRequest', [PedidoController::class, 'destroyid'])
         ->name('pedidodeleteRequest.post');
+
+    
 
 //Route::get('pedidos.destroyid', [PedidoController::class, 'destroyid'])->name('pedidos.destroyid');
 

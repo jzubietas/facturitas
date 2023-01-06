@@ -69,6 +69,7 @@
             </table>
             @include('clientes.modal.historialsituacion')
             @include('clientes.modal.modal_clientes_deudas')
+            @include('clientes.modal.modalid')
         </div>
     </div>
 
@@ -509,37 +510,6 @@
                         orderable: false,
                         searchable: false,
                         sWidth: '20%',
-                        render: function (data, type, row, meta) {
-                            var urledit = '{{ route("clientes.edit", ":id") }}';
-                            urledit = urledit.replace(':id', row.id);
-
-                            var urlshow = '{{ route("clientes.show", ":id") }}';
-                            urlshow = urlshow.replace(':id', row.id);
-
-                            @can('clientes.edit')
-                                data = data + '<a href="' + urledit + '" class="btn btn-warning btn-sm"><i class="fas fa-edit"></i> Editar</a>';
-                            @endcan
-
-                                @if($mirol !='Administradorsdsd')
-                                data = data + '<a href="' + urlshow + '" class="btn btn-info btn-sm"><i class="fas fa-eye"></i> Ver</a>';
-                            @endif
-
-                                @can('clientes.destroy')
-                                data = data + '<a href="" data-target="#modal-delete" data-toggle="modal" data-opcion="' + row.id + '"><button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i> Eliminar</button></a>';
-
-                            @endcan
-
-                                data = data + '<a href="" data-target="#modal-historial-situacion-cliente" data-toggle="modal" data-cliente="' + row.id + '"><button class="btn btn-success btn-sm"><i class="fas fa-trash-alt"></i> Historico</button></a>';
-                                if (
-                                    (row.pedidos_mes_deuda == 0 && row.pedidos_mes_deuda_antes > 0)||
-                                    (row.pedidos_mes_deuda > 0 && row.pedidos_mes_deuda_antes > 0)||
-                                    (row.pedidos_mes_deuda > 0 && row.pedidos_mes_deuda_antes == 0)
-                                ) {
-                                data = data + '<a href="" data-target="#modal_clientes_deudas_model" data-toggle="modal" data-cliente="' + row.id + '"><button class="btn btn-dark btn-sm"><i class="fas fa-money"></i> Deudas</button></a>';
-                            }
-
-                            return data;
-                        }
                     },
                 ],
                 "createdRow": function (row, data, dataIndex) {
@@ -589,6 +559,86 @@
                 },
 
             });
+
+            $('#modal-delete').on('hidden.bs.modal', function (event) {
+                $("#motivo").val('')
+                $("#anulacion_password").val('')
+                $("#attachments").val(null)
+            })
+
+            $('#modal-delete').on('show.bs.modal', function (event) {
+                //cuando abre el form de anular pedido
+                var button = $(event.relatedTarget)
+                var idunico = button.data('cliente')//id  basefria
+                var idresponsable = button.data('responsable')//id  basefria
+                var idcodigo = button.data('asesor')
+                //console.log(idunico);
+                $("#hiddenIDdelete").val(idunico);
+                if (idcodigo < 10) {
+                    idcodigo = 'CL' + idcodigo+'000'+idunico;
+                } else if (idcodigo < 100) {
+                    idcodigo = 'CL' + idcodigo+'00'+idunico;
+                } else if (idunico < 1000) {
+                    idcodigo = 'CL' + idcodigo+'0'+idunico;
+                } else {
+                    idcodigo = 'CL' + idcodigo+''+idunico;
+                }
+                //solo completo datos
+                //hiddenId
+                //
+                
+                console.log(idcodigo)
+                $(".textcode").html(idcodigo);
+                $("#motivo").val('');
+                $("#responsable").val(idresponsable);
+
+            });
+
+            $(document).on("submit", "#formdelete", function (evento) {
+                evento.preventDefault();
+                console.log("action delete action")
+                
+                var formData = new FormData();
+                formData.append("hiddenID", $("#hiddenIDdelete").val())
+
+                formData.append("motivo", $("#motivo").val())
+                formData.append("responsable", $("#responsable").val())
+                formData.append("anulacion_password", $("#anulacion_password").val())
+                if ($("#attachments")[0].files.length > 0) {
+                    var attachments = Array.from($("#attachments")[0].files)
+                    attachments.forEach(function (file) {
+                        formData.append("attachments[]", file, file.name)
+                    })
+                }
+                console.log(formData);
+                $.ajax({
+                    type: 'POST',
+                    url: "{{ route('clientedeleteRequest.post') }}",
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                }).done(function (data) {
+                    $("#modal-delete").modal("hide");
+                    resetearcamposdelete();
+                    $('#tablaPrincipal').DataTable().ajax.reload();
+                }).fail(function (err, error, errMsg) {
+                    console.log(arguments, err, errMsg)
+                    if (err.status == 401) {
+                        Swal.fire(
+                            'Error',
+                            'No autorizado para poder bloquear el cliente, ingrese una contraseña correcta',
+                            'error'
+                        )
+                    } else {
+                        Swal.fire(
+                            'Error',
+                            'Ocurrio un error: ' + errMsg,
+                            'error'
+                        )
+                    }
+                });
+            });
+
 
             $(document).on("keypress", '#tablaPrincipal_filter label input', function () {
                 console.log("aaaaa")
