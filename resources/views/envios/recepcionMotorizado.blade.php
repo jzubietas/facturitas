@@ -147,7 +147,7 @@
                             </div>
                             <br>
                             <div class="cnt-scanner">
-                                <div class="qrscanner"  style="background-color: #222; border-radius: 16px;" id="scanner">
+                                <div class="qrscanner"  style="background-color: #222; border-radius: 16px; overflow: hidden" id="scanner">
                                 </div>
                             </div>
                             <div>
@@ -193,7 +193,7 @@
 
   <style>
 
-      .qrPreviewVideo{width:100%; max-width:300px; max-height: 300px; border-radius: 16px; margin:auto;}
+      .qrPreviewVideo{width:100%; border-radius: 16px; margin:auto;}
 
     img:hover{
       transform: scale(1.2)
@@ -264,6 +264,8 @@
                   url: "{{ route('envio.escaneoqr',':id') }}".replace(':id',scannedText),
                   success: function (data) {
                       console.log(data);
+                      console.log({{ route('envio.escaneoqr',':id') }}.replace(':id',scannedText));
+                      alert("Pedido " + scannedText + " encontrado!");
                       $('#code_ped').html(data.html);
                       $('#dist_ped').html(data.distrito);
                       $('#dir_ped').html(data.direccion);
