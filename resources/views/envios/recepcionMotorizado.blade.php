@@ -148,7 +148,12 @@
                             <br>
                             <div class="cnt-scanner">
                                 <div class="qrscanner"  style="background-color: #222; width:200px; height:200px; margin:auto; border-radius: 16px; overflow:hidden;" id="scanner"></div>
-                                <img src="{{asset('images/codigo-qr.png')}}" style="200px;">
+                                <img src="{{asset('images/codigo-qr.png')}}" style="width: 150px;
+    opacity: 0.1;
+    position: absolute;
+    left: 50%;
+    top: 33%;
+    transform: translate(-50%, -50%);">
                             </div>
                             <div>
                                 <p class="mb-8 mt-16">Pedido Encontrado</p>
