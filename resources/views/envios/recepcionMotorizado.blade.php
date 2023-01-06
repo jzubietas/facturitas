@@ -147,7 +147,7 @@
                             </div>
                             <br>
                             <div class="cnt-scanner">
-                                <div class="qrscanner"  style="background-color: #222; width:300px; height:300px; margin:auto; border-radius: 16px; overflow: hidden" id="scanner">
+                                <div class="qrscanner"  style="background-color: #222; width:300px; height:300px; margin:auto; border-radius: 16px;" id="scanner">
                                 </div>
                             </div>
                             <div>
@@ -193,7 +193,7 @@
 
   <style>
 
-      .qrPreviewVideo{width:100%; border-radius: 16px; margin:auto;}
+      .qrPreviewVideo{width:100%; max-width:400px; max-width:300px; border-radius: 16px; margin:auto;}
 
     img:hover{
       transform: scale(1.2)
