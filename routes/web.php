@@ -112,7 +112,7 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     /*Controller Basefria*/
     Route::post('basefriacliente/{cliente}', [BasefriaController::class, 'updatebf'])->name('updatebf');
 
-    Route::post('basefriaclienteRequest', [BasefriaController::class, 'updatebfpost'])->name('basefriaRequest.post');
+    //Route::post('basefriaclienteRequest', [BasefriaController::class, 'updatebfpost'])->name('basefriaRequest.post');
 
     Route::get('basefria', [BasefriaController::class, 'index'])->name('basefria');//actualizado para serverside
 
