@@ -99,6 +99,7 @@
             @include('pedidos.modal.destinoid')
             @include('envios.modal.distribuir')
             @include('operaciones.modal.confirmacion')
+            @include('envios.modal.desvincularpedidos')
         </div>
     </div>
 
@@ -333,7 +334,7 @@
                 evento.preventDefault();
             });
 
-            $('#tablaPrincipal').DataTable({
+            let tabla_pedidos=$('#tablaPrincipal').DataTable({
                 processing: true,
                 stateSave: true,
                 serverSide: true,
