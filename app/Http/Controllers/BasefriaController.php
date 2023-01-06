@@ -174,7 +174,22 @@ class BasefriaController extends Controller
      */
     public function create()
     {
-        //
+        $usersB = User::where('users.estado', '1')
+            ->whereIn('rol', [User::ROL_ASESOR_ADMINISTRATIVO])
+            ->first();
+            
+        $users = collect();
+        $users->put($usersB->id, $usersB->identificador);
+        $usersall = User::select(
+            DB::raw("CONCAT(identificador,' (ex ',IFNULL(exidentificador,''),')') AS identificador"), 'id'
+        )
+            ->where('users.rol', 'Asesor')
+            ->where('users.estado', '1')
+            ->pluck('identificador', 'id');
+        foreach ($usersall as $key => $value) {
+            $users->put($key,$value);
+        }
+        return view('base_fria.create', compact('users'));
     }
 
     /**
@@ -185,7 +200,38 @@ class BasefriaController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
+        $request->validate([
+            'celular' => 'required|unique:clientes',
+        ]);
+
+        //return $request;
+        try {
+            DB::beginTransaction();
+
+            $cliente = Cliente::create([
+                'nombre' => $request->nombre,
+                'celular' => $request->celular,
+                /*'icelular'=> $request->icelular,*/
+                'user_id' => $request->user_id,
+                'tipo' => $request->tipo,
+                'provincia' => $request->provincia,
+                'distrito' => $request->distrito,
+                'direccion' => $request->direccion,
+                'referencia' => $request->referencia,
+                'dni' => $request->dni,
+                'deuda' => '0',
+                'pidio' => '0',
+                'estado' => '1'
+            ]);
+            DB::commit();
+        } catch (\Throwable $th) {
+            throw $th;
+            /* DB::rollback();
+            dd($th); */
+        }
+        return redirect()->route('basefria')->with('info', 'registrado');
+        
     }
 
     /**
@@ -205,9 +251,17 @@ class BasefriaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Cliente $basefrium)
     {
         //
+        //return $basefrium;
+        $mirol = Auth::user()->rol;
+        $users = User::where('users.estado', '1')
+            ->whereIn('users.rol', ['Asesor','ASESOR ADMINISTRATIVO'])
+            ->pluck('name', 'id');
+        $porcentajes = Porcentaje::where('cliente_id', $basefrium->id)->get();
+
+        return view('base_fria.edit', compact('basefrium', 'users', 'porcentajes', 'mirol'));
     }
 
     /**
@@ -217,9 +271,32 @@ class BasefriaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request,Cliente  $basefrium)
     {
-        //
+        //return $basefrium;
+        $request->validate([
+            //'nombre' => 'required',
+            //'dni' => 'required',
+            'celular' => 'required',
+            //'provincia' => 'required',
+            //'distrito' => 'required',
+            //'direccion' => 'required',
+            //'referencia' => 'required',
+            //'porcentaje' => 'required',
+        ]);
+
+        $basefrium->update([
+            'nombre' => $request->nombre,
+            'dni' => $request->dni,
+            'celular' => $request->celular,           
+            'tipo' => '0'
+        ]);
+        
+        if ($request->tipo === '1') {
+            return redirect()->route('clientes.index')->with('info', 'actualizado');
+        } else {
+            return redirect()->route('basefria')->with('info', 'actualizado');
+        }
     }
 
     /**
@@ -339,5 +416,23 @@ class BasefriaController extends Controller
         }
 
         return redirect()->route('clientes.index')->with('info','registrado');
+    }
+    
+    public function celularduplicado(Request $request)
+    {
+
+        $request->celular;
+        $validar=Cliente::where('celular',$request->celular)->count();
+        $status=true;
+        $data='NO PUEDE CONTINUAR';
+        if($validar>0)
+        {
+            $status=false;
+            $data='NO PUEDE CONTINUAR';            
+        }        
+
+        return response()->json([
+            "html" => array('status'=>$status,'data'=>$data)
+        ]);
     }
 }

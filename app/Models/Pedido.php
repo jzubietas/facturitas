@@ -173,9 +173,9 @@ class Pedido extends Model
         return $this->hasMany(PagoPedido::class);
     }
 
-    public function direccionGrupos()
+    public function direccionGrupo()
     {
-        return $this->hasMany(DireccionGrupo::class)->activo();
+        return $this->belongsTo(DireccionGrupo::class,'direccion_grupo');
     }
 
     public function getCondicionEnvioColorAttribute()

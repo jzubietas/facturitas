@@ -173,9 +173,33 @@ class ClienteController extends Controller
         //$data=$data->get();
 
         return datatables()->query(DB::table($data))//Datatables::of($data)
+
         ->addIndexColumn()
             ->addColumn('action', function ($row) {
                 $btn = "";
+
+                if(\auth()->user()->can('clientes.edit')) {
+                    
+                    $btn = $btn . '<a href="' . route('clientes.edit', $row->id) . '" class="btn btn-warning btn-sm"> <i class="fas fa-edit"></i> Editar</a>';
+                }
+
+                $btn = $btn . '<a href="' . route('clientes.show', $row->id) . '" class="btn btn-info btn-sm"> <i class="fas fa-eye"></i> Ver</a>';
+
+                if(\auth()->user()->can('clientes.destroy')) {
+                    
+                    $btn = $btn . '<a href="" data-target="#modal-delete" data-toggle="modal" data-cliente="'.$row->id.'" data-asesor="'.trim($row->identificador).'"><button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i> Bloquear</button></a>';
+                }
+
+                $btn = $btn . '<a href="" data-target="#modal-historial-situacion-cliente" data-toggle="modal" data-cliente="' . $row->id . '"><button class="btn btn-success btn-sm"><i class="fas fa-trash-alt"></i> Historico</button></a>';
+
+                if (
+                    ($row->pedidos_mes_deuda == 0 && $row->pedidos_mes_deuda_antes > 0)||
+                    ($row->pedidos_mes_deuda > 0 && $row->pedidos_mes_deuda_antes > 0)||
+                    ($row->pedidos_mes_deuda > 0 && $row->pedidos_mes_deuda_antes == 0)
+                ) {
+                    $btn = $btn. '<a href="" data-target="#modal_clientes_deudas_model" data-toggle="modal" data-cliente="' . $row->id . '"><button class="btn btn-dark btn-sm"><i class="fas fa-money"></i> Deudas</button></a>';
+                }
+
                 return $btn;
             })
             ->rawColumns(['action'])
@@ -416,12 +440,49 @@ class ClienteController extends Controller
 
     public function destroyid(Request $request)
     {
-        $cliente->where("id", $request->clienteId)
-            ->update([
-                'estado' => '0'
-            ]);
+        if (!$request->hiddenID) {
+            $html = '';
+        } else {
+            $cliente = Cliente::findOrFail($request->hiddenID);
+            $filePaths = [];
+            $files = $request->attachments;
+            if (is_array($files)) {
+                foreach ($files as $file) {
+                    if ($file instanceof UploadedFile) {
+                        $filePaths[] = $file->store("pedidos_adjuntos", "pstorage");
+                    }
+                }
+            }
 
-        return redirect()->route('clientes.index')->with('info', 'eliminado');
+            setting()->load();
+            foreach ($filePaths as $index => $path) {
+                $key = "pedido." . $cliente->id . ".adjuntos_file." . $index;
+                $keyd = "pedido." . $cliente->id . ".adjuntos_disk." . $index;
+                setting([
+                    $key => $path,
+                    $keyd => 'pstorage'
+                ]);
+            }
+            setting()->save();
+
+            $cliente->update([
+                'motivo_anulacion' => $request->motivo,
+                'responsable_anulacion' => $request->responsable,
+                //'condicion' => 'ANULADO',
+                //'condicion_code' => Pedido::ANULADO_INT,
+                //'modificador' => 'USER' . Auth::user()->id,
+                'user_anulacion_id' => Auth::user()->id,
+                'fecha_anulacion' => now(),
+                //'fecha_anulacion_confirm' => now(),
+                'estado' => '0',
+                'path_adjunto_anular' => null,
+                'path_adjunto_anular_disk' => 'pstorage',
+            ]);
+            
+            $html = $pedido;
+            
+        }
+        return response()->json(['html' => $html]);
     }
 
     public function createbf()
@@ -1681,6 +1742,25 @@ class ClienteController extends Controller
 
         return response()->json([
             "html" => view('clientes.response.modal_data_clientes_deuda', compact('messaje', 'pedidos', 'totalDeuda', 'cliente'))->render()
+        ]);
+    }
+
+    public function celularduplicado(Request $request)
+    {
+
+        $request->celular;
+        $validar=Cliente::where('celular',$request->celular)->where('id','<>',$request->id)->count();
+        //return $validar;
+        $status=true;
+        $data='NO PUEDE CONTINUAR';
+        if($validar>0)
+        {
+            $status=false;
+            $data='NO PUEDE CONTINUAR';            
+        }        
+
+        return response()->json([
+            "html" => array('status'=>$status,'data'=>$data)
         ]);
     }
 }

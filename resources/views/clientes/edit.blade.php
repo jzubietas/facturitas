@@ -14,6 +14,9 @@
     <div class="border rounded card-body border-secondary">
       <div class="card-body">
         <div class="form-row">
+
+          <input type="text" name="id" id="id" class="form-control" value="{{ $cliente->id }}">
+
           <div class="form-group col-lg-6">
             {!! Form::label('tipo', 'Tipo de cliente') !!}
               <input type="hidden" name="tipo" requerid value="1" class="form-control">
@@ -135,6 +138,13 @@
     document.getElementById("formulario").addEventListener('submit', validarFormulario);
     });
 
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+
+
     function validarFormulario(evento) {
       evento.preventDefault();
       var usuario = document.getElementById('user_id').value;
@@ -237,7 +247,36 @@
           )
         }
         else {
-          this.submit();
+          //valida numero que no exista
+          var fd2=new FormData();
+          fd2.append("celular", celular);
+          fd2.append("id", {{$cliente->id }});
+
+          $.ajax({
+            data: fd2,
+            processData: false,
+            contentType: false,
+            type: 'POST',
+            data:'json',
+            url:"{{ route('cliente.edit.celularduplicado') }}",
+            success:function(data)
+            {
+              console.log(data)
+              if(data.html.status==true)
+              {
+                $("#formulario").trigger('submit');
+              }else{
+                Swal.fire(
+                  'Error',
+                  'Se encontro un error',
+                  'warning'
+                )
+              }
+
+            }
+          })
+
+          
         }
     }
   </script>

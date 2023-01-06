@@ -9,10 +9,13 @@
 @section('content')
 
   <div class="card">
-    {!! Form::model($cliente, ['route' => ['clientes.update', $cliente], 'method' => 'put', 'id' => 'formulario']) !!}
+    {!! Form::model($basefrium, ['route' => ['basefria.update', $basefrium], 'method' => 'put', 'id' => 'formulario']) !!}
     <div class="border rounded card-body border-secondary">
       <div class="card-body">
         <div class="form-row">
+
+        <input type="text" name="id" id="id" class="form-control" value="{{ $basefrium->id }}">
+
           <div class="form-group col-lg-6">
             {!! Form::label('tipo', 'Tipo de cliente') !!}
               <input type="hidden" name="tipo" requerid value="0" class="form-control">
@@ -72,6 +75,13 @@
     document.getElementById("formulario").addEventListener('submit', validarFormulario); 
     });
 
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+
+
     function validarFormulario(evento) {
       evento.preventDefault();
       var usuario = document.getElementById('user_id').value;
@@ -99,8 +109,33 @@
           )
         }
         else {
-          this.submit();
-        }      
+          var fd2=new FormData();
+          fd2.append("celular", celular);
+          fd2.append("id", {{$basefrium->id }});
+
+          $.ajax({
+            data: fd2,
+            processData: false,
+            contentType: false,
+            type: 'POST',
+            url:"{{ route('cliente.edit.celularduplicado') }}",
+            success:function(data)
+            {
+              console.log(data)
+              if(data.html.status==true)
+              {
+                $("#formulario").trigger('submit');
+              }else{
+                Swal.fire(
+                  'Error',
+                  'Se encontro un error',
+                  'warning'
+                )
+              }
+
+            }
+        })
+      }
     }
   </script>
 @stop

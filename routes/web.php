@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\Envios\DistribucionController;
 use App\Http\Controllers\Envios\MotorizadoController;
 use App\Http\Controllers\ExcelController;
 use App\Http\Controllers\PagoController;
@@ -61,7 +62,6 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
 
     Route::resource('clientes', ClienteController::class)->names('clientes');
 
-
     /* agregando rutas para permisos en opciones del modulo clientes (editar cada secciòn) */
 
     Route::get('clientes.edit.recuperado/{cliente}/edit2', [ClienteController::class, 'edit'])->name('clientes.edit.recuperado');
@@ -75,13 +75,19 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     Route::get('pedidosenvioclientetabla', [ClienteController::class, 'pedidosenvioclientetabla'])->name('cargar.pedidosenvioclientetabla');
     Route::get('clientescreatepago', [ClienteController::class, 'clientedeasesorpagos'])->name('clientescreatepago');
 
-    Route::get('clientes.createbf', [ClienteController::class, 'createbf'])->name('clientes.createbf');
-    Route::post('clientes.storebf', [ClienteController::class, 'storebf'])->name('clientes.storebf');
+    //Route::get('clientes.createbf', [BasefriaController::class, 'createbf'])->name('clientes.createbf');
+    //Route::post('clientes.storebf', [BasefriaController::class, 'storebf'])->name('clientes.storebf');
+
+    Route::post('cliente.edit.celularduplicado', [ClienteController::class, 'celularduplicado'])->name('cliente.edit.celularduplicado');
 
 
-    Route::get('clientes.editbf/{cliente}/edit2', [ClienteController::class, 'editbf'])->name('clientes.editbf');
 
-    Route::post('clientedeleteRequest', [ClienteController::class, 'destroyid'])->name('clientedeleteRequest.post');
+    Route::middleware('authorize.pedido.anulled')
+        ->post('clientedeleteRequest', [ClienteController::class, 'destroyid'])
+        ->name('clientedeleteRequest.post');
+
+
+    //Route::post('clientedeleteRequest', [ClienteController::class, 'destroyid'])->name('clientedeleteRequest.post');
     Route::get('clientedeasesor', [ClienteController::class, 'clientedeasesor'])->name('cargar.clientedeasesor');
     Route::get('clientedeasesorparapagos', [ClienteController::class, 'clientedeasesor'])->name('cargar.clientedeasesorparapagos');
 
@@ -110,6 +116,12 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     /*Controller Cliente*/
 
     /*Controller Basefria*/
+    
+    Route::resource('basefria', BasefriaController::class)->names('basefria');
+    Route::post('basefria.edit.celularduplicado', [BasefriaController::class, 'celularduplicado'])->name('basefria.edit.celularduplicado');
+    Route::get('clientes.editbf/{cliente}/edit2', [BasefriaController::class, 'editbf'])->name('clientes.editbf');
+
+
     Route::post('basefriacliente/{cliente}', [BasefriaController::class, 'updatebf'])->name('updatebf');
 
     Route::post('basefriaclienteRequest', [BasefriaController::class, 'updatebfpost'])->name('basefriaRequest.post');
@@ -190,6 +202,8 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     Route::middleware('authorize.pedido.anulled')
         ->post('pedidodeleteRequest', [PedidoController::class, 'destroyid'])
         ->name('pedidodeleteRequest.post');
+
+    
 
 //Route::get('pedidos.destroyid', [PedidoController::class, 'destroyid'])->name('pedidos.destroyid');
 
@@ -386,14 +400,11 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     Route::post('envios.distribuirid', [EnvioController::class, 'DistribuirEnvioid'])->name('envios.distribuirid');
     Route::post('envios.changeImg', [EnvioController::class, 'changeImg'])->name('envios.changeImg');
 
-    Route::post('envios.distribuirsobres/asignarzona', [EnvioController::class, 'AsignarZonaDistribuirSobres'])->name('envios.distribuirsobres.asignarzona');
-
-    Route::get('envios.distribuirsobres', [EnvioController::class, 'DistribuirSobres'])->name('envios.distribuirsobres');
-    Route::get('envios.distribuirsobrestabla', [EnvioController::class, 'DistribuirSobrestabla'])->name('envios.distribuirsobrestabla');
-
-
-    Route::get('envios.distribuirsobresporzona', [EnvioController::class, 'DistribuirSobresPorZonaTable'])->name('envios.distribuirsobresporzona.table');
-    Route::post('envios.distribuirsobres.agrupar', [EnvioController::class, 'DistribuirSobresAgrupar'])->name('envios.distribuirsobres.agrupar');
+    Route::get('envios.distribuirsobres', [DistribucionController::class, 'index'])->name('envios.distribuirsobres');
+    Route::get('envios.distribuirsobres/datatable', [DistribucionController::class, 'datatable'])->name('envios.distribuirsobrestabla');
+    Route::post('envios.distribuirsobres/asignarzona', [DistribucionController::class, 'asignarZona'])->name('envios.distribuirsobres.asignarzona');
+    Route::post('envios.distribuirsobres/agrupar', [DistribucionController::class, 'agrupar'])->name('envios.distribuirsobres.agrupar');
+    Route::delete('envios.distribuirsobres/desagrupar', [DistribucionController::class, 'desagrupar'])->name('envios.distribuirsobres.desagrupar');
 
     Route::get('envios.estadosobres', [EnvioController::class, 'Estadosobres'])->name('envios.estadosobres');
     Route::get('envios.estadosobrestabla', [EnvioController::class, 'Estadosobrestabla'])->name('envios.estadosobrestabla');
