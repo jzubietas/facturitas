@@ -2907,6 +2907,55 @@ class EnvioController extends Controller
             'notificado' => 0
         ]);
 
-        return response()->json(['html' => $pedido->id]);
+        return response()->json(['html' => $pedido->codigo, 'distrito' => $pedido->distrito, 'direccion' => $pedido->direccion]);
+    }
+
+    public function RecibirPedidoMotorizado(Request $request)
+    {
+        /**********
+         * BUSCAMOS EL PEDIDO
+         */
+        $pedido = Pedido::with('direccionGrupo')->where("codigo", $request->id)
+            ->activo()
+            ->firstOrFail();
+
+        if($pedido->condicion_envio_code == Pedido::CONFIRM_MOTORIZADO_INT){
+            return response()->json(['html' => 0]);
+        }else{
+            /************
+             * ACTUALIZAMOS EL PEDIDO
+             */
+            $pedido->update([
+                'modificador' => 'USER' . Auth::user()->id,
+                'condicion_envio' => Pedido::CONFIRM_MOTORIZADO,
+                'condicion_envio_code' => Pedido::CONFIRM_MOTORIZADO_INT,
+            ]);
+
+            /*************
+             * BUSCAMOS EL PAQUETE
+             */
+            $paquete_sobres = $pedido->direccionGrupo;
+            $codigos_paquete = collect(explode(",", $paquete_sobres->codigos))->map(function($cod){return trim($cod);});
+
+            /*************
+             * SACAMOS LA CANTIDAD DE SOBRES YA RECIBIDOS DE ESTE PAQUETE
+             */
+            $sobres_ya_recibidos = Pedido::where('condicion_envio_code',Pedido::CONFIRM_MOTORIZADO_INT)
+                ->whereIn('codigo',$codigos_paquete)
+                ->count();
+            /*************
+             * SI la cantidad de paquetes recibidos es igual a la cantidad total del paquete, actualizamos el paquete
+             */
+            $sobres_restantes = $codigos_paquete->count() - $sobres_ya_recibidos;
+
+            if($sobres_restantes==0){
+                $paquete_sobres->update([
+                    'modificador' => 'USER' . Auth::user()->id,
+                    'condicion_envio' => Pedido::CONFIRM_MOTORIZADO,
+                    'condicion_envio_code' => Pedido::CONFIRM_MOTORIZADO_INT,
+                ]);
+            }
+            return response()->json(['html' => $pedido->id,'grupo'=>$paquete_sobres,'pedido'=>$pedido, 'distrito' => $pedido->distrito, 'direccion' => $pedido->direccion, 'sobres_recibidos' => $sobres_ya_recibidos, 'sobres_restantes' => $sobres_restantes]);
+        }
     }
 }
