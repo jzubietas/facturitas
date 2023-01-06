@@ -147,7 +147,7 @@
                             </div>
                             <br>
                             <div class="cnt-scanner">
-                                <div class="qrscanner"  style="background-color: #222; width:300px; height:300px; margin:auto; border-radius: 16px;" id="scanner">
+                                <div class="qrscanner"  style="background-color: #222; width:300px; height:200px; margin:auto; border-radius: 16px;" id="scanner">
                                 </div>
                             </div>
                             <div>
@@ -193,7 +193,7 @@
 
   <style>
 
-      .qrPreviewVideo{width:100%; max-width:400px; max-width:300px; border-radius: 16px; margin:auto;}
+      .qrPreviewVideo{width:100%; max-width:400px;border-radius: 16px; margin:auto;}
 
     img:hover{
       transform: scale(1.2)
@@ -257,35 +257,37 @@
           var scannedTextMemo = document.getElementById("scannedTextMemo");
           if(scannedTextMemo)
           {
-              alert("Pedido " + scannedText + " encontrado!");
-              $.ajax({
-                  processData: false,
-                  contentType: false,
-                  type: 'POST',
-                  url: "{{ route('envio.escaneoqr',':id') }}".replace(':id',scannedText),
-                  success: function (data) {
-                      console.log(data);
-                      //console.log({{ route('envio.escaneoqr',':id') }}.replace(':id',scannedText));
-                      alert("Pedido " + scannedText + " localizado!");
-                      $('#code_ped').html(data.html);
-                      $('#dist_ped').html(data.distrito);
-                      $('#dir_ped').html(data.direccion);
+                setTimeout(function(){
+                    $.ajax({
+                        processData: false,
+                        contentType: false,
+                        type: 'POST',
+                        url: "{{ route('envio.escaneoqr',':id') }}".replace(':id',scannedText),
+                        success: function (data) {
+                            console.log(data);
+                            //console.log({{ route('envio.escaneoqr',':id') }}.replace(':id',scannedText));
+                            alert("Pedido " + scannedText + " localizado!");
+                            $('#code_ped').html(data.html);
+                            $('#dist_ped').html(data.distrito);
+                            $('#dir_ped').html(data.direccion);
 
-                      $('#recepcion_btn').on('click', function (){
-                          $.ajax({
-                              data:{hiddenEnvio: data.html},
-                              type: 'POST',
-                              url: "{{ route('envios.recepcionarmotorizado') }}",
-                              success: function (data) {
-                                  $('#code_ped').html("");
-                                  $('#dist_ped').html("");
-                                  $('#dir_ped').html("data.direccion");
-                                  consolle.log("Pedido recepcionado");
-                              }
-                          });
-                      });
-                  }
-              });
+                            $('#recepcion_btn').on('click', function (){
+                                $.ajax({
+                                    data:{hiddenEnvio: data.html},
+                                    type: 'POST',
+                                    url: "{{ route('envios.recepcionarmotorizado') }}",
+                                    success: function (data) {
+                                        $('#code_ped').html("");
+                                        $('#dist_ped').html("");
+                                        $('#dir_ped').html("data.direccion");
+                                        consolle.log("Pedido recepcionado");
+                                    }
+                                });
+                            });
+                        }
+                    });
+                }, 200);
+
               scannedTextMemo.value = scannedText;
           }
       }
