@@ -478,17 +478,26 @@ class EnvioController extends Controller
             })
             ->addColumn('action', function ($pedido) {
                 $btn = '';
-
+                $btn .= '<ul class="list-unstyled pl-0">';
                 if (auth()->user()->can('envios.enviar')):
 
-                    $btn .= '<ul class="list-unstyled pl-0">';
+
                     $btn .= '<li>
                                         <a href="" class="btn-sm text-secondary" data-target="#modal-confirmacion" data-toggle="modal" data-ide="' . $pedido->id . '" data-entregar-confirm="' . $pedido->id . '" data-destino="' . $pedido->destino . '" data-fechaenvio="' . $pedido->fecha . '" data-codigos="' . $pedido->codigos . '">
                                             <i class="fas fa-envelope text-success"></i> Enviar a Motorizado</a></li>
                                         </a>
                                     </li>';
-                    $btn .= '</ul>';
+
                 endif;
+
+                $btn .= '<li>
+                            <a href="" class="btn-sm text-secondary" data-target="#modal-desvincular" data-toggle="modal" data-desvincular="'.$pedido->id.'">
+
+                                            <i class="fas fa-envelope text-danger"></i> Desagrupar
+                                </a>
+                            </li>';
+
+                $btn .= '</ul>';
 
                 return $btn;
             })

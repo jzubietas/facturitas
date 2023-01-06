@@ -73,6 +73,7 @@
             @include('pedidos.modal.destinoid')
             @include('envios.modal.distribuir')
             @include('operaciones.modal.confirmacion')
+            @include('envios.modal.desvincularpedidos')
         </div>
     </div>
 
@@ -137,6 +138,111 @@
 
 
         $(document).ready(function () {
+
+            $(document).on("click","#desvincularConfirmar",function(event){
+
+                var rows_selected = tabla_pedidos.column(0).checkboxes.selected();
+                var $direcciongrupo = $("#direcciongrupo").val();
+                var $observaciongrupo = $("#observaciongrupo").val();
+                var pedidos=[];
+                $.each(rows_selected, function(index, rowId){
+                    console.log("ID PEDIDO  es "+  rowId);
+                    pedidos.push(rowId);
+                });
+
+
+                var let_pedidos=pedidos.length;
+
+                if(let_pedidos==0)
+                {
+                Swal.fire(
+                    'Error',
+                    'Debe elegir un pedido',
+                    'warning'
+                    )
+                    return;
+                }
+                $pedidos=pedidos.join(',');
+                console.log($pedidos);
+                console.log($direcciongrupo);
+                console.log($observaciongrupo);
+                var fd2=new FormData();
+                let direcciongrupo=$("#direcciongrupo").val();
+                let observaciongrupo=$("#observaciongrupo").val();
+                fd2.append('direcciongrupo', direcciongrupo);
+                fd2.append('observaciongrupo', observaciongrupo);
+                /*fd2.append('observaciongrupo', $('#observaciongrupo').val() );*/
+                fd2.append('pedidos', $pedidos);
+
+
+                $.ajax({
+                data: fd2,
+                processData: false,
+                contentType: false,
+                type: 'POST',
+                url:"{{ route('sobres.desvinculargrupo') }}",
+                success:function(data)
+                {
+                    console.log(data);
+                    $("#modal-desvincular").modal("hide");
+                    $("#tablaPrincipal").DataTable().ajax.reload();
+                }
+                });
+            })
+
+            $('#modal-desvincular').on('show.bs.modal', function (event) {
+
+                var button = $(event.relatedTarget)
+                var direcciongrupo = button.data('desvincular');
+                $("#direcciongrupo").val(direcciongrupo);
+                //$("#observaciongrupo").val(observaciongrupo);
+                tabla_pedidos.destroy();
+
+
+                tabla_pedidos=$('#tablaPrincipalpedidosagregar').DataTable({
+                responsive: true,
+                "bPaginate": false,
+                "bFilter": false,
+                "bInfo": false,
+                'ajax': {
+                    url:"{{ route('cargar.pedidosgrupotabla') }}",
+                    'data': { "direcciongrupo": direcciongrupo},
+                    "type": "get",
+                },
+                'columnDefs': [ {
+                    'targets': [0],
+                    'orderable': false,
+                }],
+                columns:[
+                    {
+                        "data": "pedido_id",
+                        'targets': [0],
+                        'checkboxes': {
+                            'selectRow': true
+                        },
+                        defaultContent: '',
+                        orderable: false,
+                    },
+                    {data: 'codigo_pedido', name: 'codigo_pedido',},
+                    {
+                        "data": 'empresa',
+                        "name": 'empresa',
+                        "render": function ( data, type, row, meta ) {
+                        return data;
+
+                        }
+                    },
+                ],
+                'select': {
+                    'style': 'multi',
+                    selector: 'td:first-child'
+                },
+                });
+
+                //$("#limaprovincia").val("").trigger("change");
+
+            });
+
 
             $('#modal-confirmacion').on('show.bs.modal', function (event) {
                 var button = $(event.relatedTarget)
@@ -299,7 +405,7 @@
                 evento.preventDefault();
             });
 
-            $('#tablaPrincipal').DataTable({
+            let tabla_pedidos=$('#tablaPrincipal').DataTable({
                 processing: true,
                 stateSave: true,
                 serverSide: true,
