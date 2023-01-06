@@ -256,16 +256,17 @@ class BasefriaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Cliente $cliente)
+    public function edit(Cliente $basefrium)
     {
         //
+        //return $basefrium;
         $mirol = Auth::user()->rol;
         $users = User::where('users.estado', '1')
             ->whereIn('users.rol', ['Asesor','ASESOR ADMINISTRATIVO'])
             ->pluck('name', 'id');
-        $porcentajes = Porcentaje::where('cliente_id', $cliente->id)->get();
+        $porcentajes = Porcentaje::where('cliente_id', $basefrium->id)->get();
 
-        return view('basefria.edit', compact('cliente', 'users', 'porcentajes', 'mirol'));
+        return view('base_fria.edit', compact('basefrium', 'users', 'porcentajes', 'mirol'));
     }
 
     /**
