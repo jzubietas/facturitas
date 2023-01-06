@@ -106,7 +106,11 @@ class OperacionController extends Controller
                 'pedidos.condicion_envio',
                 'pedidos.condicion_envio_code',
                 'pedidos.estado_sobre',
-                DB::raw(" ( select count(ip.id) from imagen_pedidos ip inner join pedidos pedido on pedido.id=ip.pedido_id and pedido.id=pedidos.id where ip.estado=1 and ip.adjunto not in ('logo_facturas.png') ) as imagenes ")
+                DB::raw(" ( select count(ip.id) from imagen_pedidos ip inner join pedidos pedido on pedido.id=ip.pedido_id and pedido.id=pedidos.id where ip.estado=1 and ip.adjunto not in ('logo_facturas.png') ) as imagenes "),
+                'pedidos.pendiente_anulacion',
+                'pedidos.condicion_code',
+                'pedidos.estado',
+                'pedidos.estado_ruta'
             )
             ->where('pedidos.estado', '1')
             ->where('dp.estado', '1')
@@ -150,6 +154,34 @@ class OperacionController extends Controller
             ->addColumn('condicion_envio_color', function ($pedido) {
                 return Pedido::getColorByCondicionEnvio($pedido->condicion_envio);
             })
+            ->editColumn('condicion_envio', function ($pedido) {
+                $badge_estado='';
+                if($pedido->pendiente_anulacion=='1')
+                {
+                    $badge_estado.='<span class="badge badge-success">' . Pedido::PENDIENTE_ANULACION.'</span>';
+                    return $badge_estado;
+                }
+                if($pedido->condicion_code=='4' || $pedido->estado=='0')
+                {
+                    return '<span class="badge badge-danger">ANULADO</span>';
+                }
+                if($pedido->estado_sobre=='1')
+                {
+                    $badge_estado .= '<span class="badge badge-dark p-8" style="color: #fff; background-color: #347cc4; font-weight: 600; margin-bottom: -2px;border-radius: 4px 4px 0px 0px; font-size:8px;  padding: 4px 4px !important; font-weight: 500;">Direccion agregada</span>';
+
+                }
+                if($pedido->estado_ruta=='1')
+                {
+                    $badge_estado.='<span class="badge badge-success" style="background-color: #00bc8c !important;
+                    padding: 4px 8px !important;
+                    font-size: 8px;
+                    margin-bottom: -4px;
+                    color: black !important;">Con ruta</span>';
+                }
+                $color = Pedido::getColorByCondicionEnvio($pedido->condicion_envio);
+                $badge_estado.= '<span class="badge badge-success w-100" style="background-color: ' . $color . '!important;">' . $pedido->condicion_envio . '</span>';
+                return $badge_estado;
+            })
             ->addColumn('action', function ($pedido) {
                 $btn = '';
                 return $btn;
@@ -158,7 +190,7 @@ class OperacionController extends Controller
                 $btn = '';
                 return $btn;
             })
-            ->rawColumns(['action', 'action2'])
+            ->rawColumns(['action', 'action2','condicion_envio'])
             ->make(true);
 
     }
@@ -209,7 +241,11 @@ class OperacionController extends Controller
                 DB::raw(" (select u2.name from users u2 where u2.id=u.jefe) as jefe "),
                 DB::raw('DATE_FORMAT(dp.fecha_envio_doc_fis, "%d/%m/%Y") as fecha_envio_doc_fis'),
                 'dp.fecha_recepcion',
-                DB::raw(" (select count(ii.id) from imagen_atencions ii where ii.pedido_id=pedidos.id and ii.estado=1) as adjuntos ")
+                DB::raw(" (select count(ii.id) from imagen_atencions ii where ii.pedido_id=pedidos.id and ii.estado=1) as adjuntos "),
+                'pedidos.pendiente_anulacion',
+                'pedidos.estado',
+                'pedidos.estado_sobre',
+                'pedidos.estado_ruta',
             )
             ->where('pedidos.estado', '1')
             ->where('dp.estado', '1')
@@ -251,6 +287,34 @@ class OperacionController extends Controller
 
         return Datatables::of(DB::table($pedidos))
             ->addIndexColumn()
+            ->editColumn('condicion_envio', function ($pedido) {
+                $badge_estado='';
+                if($pedido->pendiente_anulacion=='1')
+                {
+                    $badge_estado.='<span class="badge badge-success">' . Pedido::PENDIENTE_ANULACION.'</span>';
+                    return $badge_estado;
+                }
+                if($pedido->condicion_code=='4' || $pedido->estado=='0')
+                {
+                    return '<span class="badge badge-danger">ANULADO</span>';
+                }
+                if($pedido->estado_sobre=='1')
+                {
+                    $badge_estado .= '<span class="badge badge-dark p-8" style="color: #fff; background-color: #347cc4; font-weight: 600; margin-bottom: -2px;border-radius: 4px 4px 0px 0px; font-size:8px;  padding: 4px 4px !important; font-weight: 500;">Direccion agregada</span>';
+
+                }
+                if($pedido->estado_ruta=='1')
+                {
+                    $badge_estado.='<span class="badge badge-success" style="background-color: #00bc8c !important;
+                    padding: 4px 8px !important;
+                    font-size: 8px;
+                    margin-bottom: -4px;
+                    color: black !important;">Con ruta</span>';
+                }
+                $color = Pedido::getColorByCondicionEnvio($pedido->condicion_envio);
+                $badge_estado.= '<span class="badge badge-success w-100" style="background-color: ' . $color . '!important;">' . $pedido->condicion_envio . '</span>';
+                return $badge_estado;
+            })
             ->addColumn('action', function ($pedido) {
                 $btn = [];
                 $btn[] = '<div class="row">';
@@ -291,7 +355,7 @@ class OperacionController extends Controller
             ->addColumn('condicion_envio_color', function ($pedido) {
                 return Pedido::getColorByCondicionEnvio($pedido->condicion_envio);
             })
-            ->rawColumns(['action'])
+            ->rawColumns(['action','condicion_envio'])
             ->make(true);
     }
 
@@ -391,20 +455,45 @@ class OperacionController extends Controller
                 ->pluck('users.identificador');
 
             $pedidos->WhereIn('u.identificador', $asesores);
-
-
         }
         return Datatables::of(DB::table($pedidos))
             ->addIndexColumn()
             ->addColumn('condicion_envio_color', function ($pedido) {
                 return Pedido::getColorByCondicionEnvio($pedido->condicion_envio);
             })
+            ->editColumn('condicion_envio', function ($pedido) {
+                $badge_estado='';
+                if($pedido->pendiente_anulacion=='1')
+                {
+                    $badge_estado.='<span class="badge badge-success">' . Pedido::PENDIENTE_ANULACION.'</span>';
+                    return $badge_estado;
+                }
+                if($pedido->condicion_code=='4' || $pedido->estado=='0')
+                {
+                    return '<span class="badge badge-danger">ANULADO</span>';
+                }
+                //if($pedido->estado_sobre=='1')
+                {
+                    $badge_estado .= '<span class="badge badge-dark p-8" style="color: #fff; background-color: #347cc4; font-weight: 600; margin-bottom: -2px;border-radius: 4px 4px 0px 0px; font-size:8px;  padding: 4px 4px !important; font-weight: 500;">Direccion agregada</span>';
+                }
+                if($pedido->estado_ruta=='1')
+                {
+                    $badge_estado.='<span class="badge badge-success" style="background-color: #00bc8c !important;
+                    padding: 4px 8px !important;
+                    font-size: 8px;
+                    margin-bottom: -4px;
+                    color: black !important;">Con ruta</span>';
+                }
+                $color = Pedido::getColorByCondicionEnvio($pedido->condicion_envio);
+                $badge_estado.= '<span class="badge badge-success w-100" style="background-color: ' . $color . '!important;">' . $pedido->condicion_envio . '</span>';
+                return $badge_estado;
+            })
             ->addColumn('action', function ($pedido) {
                 $btn = '';
 
                 return $btn;
             })
-            ->rawColumns(['action'])
+            ->rawColumns(['action','condicion_envio'])
             ->make(true);
     }
 
@@ -523,6 +612,34 @@ class OperacionController extends Controller
             ->addColumn('condicion_envio_color', function ($pedido) {
                 return Pedido::getColorByCondicionEnvio($pedido->condicion_envio);
             })
+            ->editColumn('condicion_envio', function ($pedido) {
+                $badge_estado='';
+                if($pedido->pendiente_anulacion=='1')
+                {
+                    $badge_estado.='<span class="badge badge-success">' . Pedido::PENDIENTE_ANULACION.'</span>';
+                    return $badge_estado;
+                }
+                if($pedido->condicion_code=='4' || $pedido->estado=='0')
+                {
+                    return '<span class="badge badge-danger">ANULADO</span>';
+                }
+                if($pedido->estado_sobre=='1')
+                {
+                    $badge_estado .= '<span class="badge badge-dark p-8" style="color: #fff; background-color: #347cc4; font-weight: 600; margin-bottom: -2px;border-radius: 4px 4px 0px 0px; font-size:8px;  padding: 4px 4px !important; font-weight: 500;">Direccion agregada</span>';
+
+                }
+                if($pedido->estado_ruta=='1')
+                {
+                    $badge_estado.='<span class="badge badge-success w-100" style="background-color: #00bc8c !important;
+                    padding: 4px 8px !important;
+                    font-size: 8px;
+                    margin-bottom: -4px;
+                    color: black !important;">Con ruta</span>';
+                }
+                $color = Pedido::getColorByCondicionEnvio($pedido->condicion_envio);
+                $badge_estado.= '<span class="badge badge-success w-100" style="background-color: ' . $color . '!important;">' . $pedido->condicion_envio . '</span>';
+                return $badge_estado;
+            })
             ->addColumn('action', function ($pedido) {
                 $btn = [];
                 $btn[] = '<a href="' . route("operaciones.showatender", $pedido->id) . '" class="m-1 btn btn-primary btn-sm"><i class="fas fa-eye"></i> Ver</a><br>';
@@ -542,7 +659,7 @@ class OperacionController extends Controller
                 }*/
                 return "<div class='d-flex'>" . join('', $btn) . "</div>";
             })
-            ->rawColumns(['action'])
+            ->rawColumns(['action','condicion_envio'])
             ->make(true);
     }
 

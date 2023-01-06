@@ -2116,12 +2116,15 @@ class PagoController extends Controller
 
         return Datatables::of(DB::table($pagos))
             ->addIndexColumn()
+            ->editColumn('total_pago', function ($pago) {
+                return money_f($pago->total_pago);
+            })
             ->addColumn('action', function ($pago) {
                 $btn = '';
 
                 return $btn;
             })
-            ->rawColumns(['action'])
+            ->rawColumns(['action','total_pago'])
             ->make(true);
 
     }
