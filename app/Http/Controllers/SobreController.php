@@ -501,16 +501,14 @@ class SobreController extends Controller
         } else {
             //$idrequest=explode("_",$request->direcciongrupo);
 
-            $direcciongrupo = DireccionGrupo::find($request->direcciongrupo);
-            $destino = $direcciongrupo->destino;
-
-            if($destino=='LIMA'){
-                $pedidos =  DireccionPedido::where("direcciongrupo",$request->direcciongrupo)
-                 ->where("estado",'1');
-            }else if($destino=='PROVINCIA'){
-                $pedidos =  GastoPedido::where("direcciongrupo",$request->direcciongrupo)
-                ->where("estado",'1');
-            }
+            //return $request->direcciongrupo;
+            $pedidos =  Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')
+                ->join('users as u', 'pedidos.user_id', 'u.id')
+                ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
+                ->select([
+                        'dp.pedido_id','dp.codigo','dp.nombre_empresa'
+                    ])
+                ->where("direccion_grupo",$request->direcciongrupo);
 
             $pedidos=$pedidos->get();
 
