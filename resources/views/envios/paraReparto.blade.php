@@ -29,7 +29,13 @@
 @stop
 
 @section('content')
-
+<style>
+    .activo{
+        background-color: #e74c3c !important;
+        color: white !important;
+        border: 0 !important;
+    }
+</style>
     <div class="card">
         <div class="card-body">
 
@@ -52,6 +58,7 @@
                 <tr>
                     <th scope="col">Item</th>
                     <th scope="col">Zona</th>
+                    <th scope="col">Motorizado</th>
                     <th scope="col">Código</th>
                     <th scope="col">Asesor</th>
                     <th scope="col">Cliente</th>
@@ -372,6 +379,11 @@
                     {
                         data: 'distribucion',
                         name: 'distribucion',
+
+                    },
+                    {
+                        data: 'nombre_motorizado',
+                        name: 'nombre_motorizado',
 
                     },
                     {
