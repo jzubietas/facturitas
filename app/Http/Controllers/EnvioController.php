@@ -1264,7 +1264,7 @@ class EnvioController extends Controller
 
                 return $btn;
             })
-            ->rawColumns(['action'])
+            ->rawColumns(['action','condicion_envio'])
             ->make(true);
 
     }
