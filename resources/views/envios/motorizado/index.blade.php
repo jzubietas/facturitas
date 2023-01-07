@@ -145,53 +145,61 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-lg-4">
+                <div class="col-lg-6">
                    <div class="form-group">
-                     <label for="fecha_envio_doc_fis">Fecha de Envio (Sobres)</label>
+                     <label for="fecha_envio_doc_fis">Fecha de Envio</label>
                      <input class="form-control" id="fecha_envio_doc_fis" disabled="" name="fecha_envio_doc_fis" type="date" value="${data.fecha}">
                     </div>
                 </div>
-                <div class="col-lg-4">
+                <div class="col-lg-6">
                    <div class="form-group">
-                        <label for="fecha_recepcion">Fecha de Entrega (Domicilio)</label>
-                        <input class="form-control" id="fecha_recepcion" name="fecha_recepcion" type="date" value="">
-                    </div>
-                </div>
-                <div class="col-lg-4">
-                   <div class="form-group">
-                        <label for="fecha_recepcion">Fecha de Entrega (Recibe)</label>
+                        <label for="fecha_recepcion">Fecha de Entrega</label>
                         <input class="form-control" id="fecha_recepcion" name="fecha_recepcion" type="date" value="">
                     </div>
                 </div>
             </div>
             <div class="row">
-                <div class="col-6">
+                <div class="col-4">
                     <div class="form-group">
                         <label for="foto1">Foto recibido 1</label>
                         <input class="form-control-file" id="adjunto1" name="adjunto1" type="file">
                     </div>
                 </div>
-                <div class="col-6">
+                <div class="col-4">
                     <div class="form-group">
                         <label for="foto2">Foto recibido 2</label>
                         <input class="form-control-file" id="adjunto2" name="adjunto2" type="file">
                     </div>
                 </div>
+                <div class="col-4">
+                    <div class="form-group">
+                        <label for="foto3">Foto recibido 3</label>
+                        <input class="form-control-file" id="adjunto3" name="adjunto3" type="file">
+                    </div>
+                </div>
             </div>
             <div class="row">
-                <div class="col-6">
+                <div class="col-4">
                     <div class="form-group">
                         <div class="image-wrapper">
                             <img id="picture1" src="https://sisfactura.dev/imagenes/logo_facturas.png"
-                                 alt="Imagen del pago" class="w-100" style="display: none">
+                                 alt="Imagen del pago" class="w-80" style="display: none">
                         </div>
                     </div>
                 </div>
-                <div class="col-6">
+                <div class="col-4">
                     <div class="form-group">
                         <div class="image-wrapper">
                             <img id="picture2" src="https://sisfactura.dev/imagenes/logo_facturas.png"
-                                 alt="Imagen del pago" class="w-100" style="display: none">
+                                 alt="Imagen del pago" class="w-80" style="display: none">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="form-group">
+                        <div class="image-wrapper">
+                            <img id="picture3" src="https://sisfactura.dev/imagenes/logo_facturas.png"
+                                 alt="Imagen del pago" class="w-80" style="display: none">
                         </div>
                     </div>
                 </div>
@@ -218,6 +226,13 @@
                                         self.$content.find("#picture2").attr('src', URL.createObjectURL(file))
                                     }
                                 })
+                                self.$content.find("#adjunto3").change(function (e) {
+                                    const [file] = e.target.files
+                                    if (file) {
+                                        self.$content.find("#picture3").show();
+                                        self.$content.find("#picture3").attr('src', URL.createObjectURL(file))
+                                    }
+                                })
                                 self.$content.find("form").on('submit', function (e) {
                                     e.preventDefault()
                                     if (!e.target.fecha_recepcion.value) {
@@ -240,6 +255,14 @@
                                         $.confirm({
                                             title: '¡Advertencia!',
                                             content: '<b>Adjunta la foto 2</b>',
+                                            type: 'orange'
+                                        })
+                                        return false;
+                                    }
+                                    if (e.target.adjunto3.files.length === 0) {
+                                        $.confirm({
+                                            title: '¡Advertencia!',
+                                            content: '<b>Adjunta la foto 3</b>',
                                             type: 'orange'
                                         })
                                         return false;
