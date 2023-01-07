@@ -365,6 +365,7 @@
       {
           //var scannedTextMemo = document.getElementById("scannedTextMemo");
     var codigo_pedido = "";
+          $('#scanner').removeClass("qr_success");
                 setTimeout(function(){
                     $.ajax({
                         processData: false,
@@ -378,7 +379,7 @@
                                 $('#mensaje-resultado').html('<span class="text-danger font-20 font-weight-bold">El pedido ya se encuentra Recibido</span>');
                                 return false;
                             }else{
-                                $('#scanner').removeClass("qr_success");
+
                                 $('#scanner').addClass("qr_success");
                                 $('#mensaje-resultado').html('<span class="text-success font-20 font-weight-bold">Se encontro el pedido</span>');
 
