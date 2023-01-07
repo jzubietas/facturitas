@@ -57,13 +57,13 @@
         }
         @keyframes  qr {
             0%{
-                transform: translate(-50%, -10%) scale(1);
+                transform: translate(-50%, -50%) scale(0.7);
             }
             50%{
-                transform: translate(-50%, -10%) scale(1.2);
+                transform: translate(-50%, -50%) scale(1);
             }
             100%{
-                transform:  translate(-50%, -10%) scale(1);
+                transform:  translate(-50%, -50%) scale(0.7);
             }
 
         }
@@ -197,13 +197,13 @@
                                 </div>
                             </div>
                             <br>
-                            <div class="cnt-scanner">
+                            <div class="cnt-scanner" style="position:relative;">
                                 <div class="qrscanner"  style="background-color: #222; width:200px; height:200px; margin:auto; border-radius: 16px; overflow:hidden;" id="scanner"></div>
                                 <img src="{{asset('images/codigo-qr.png')}}" id="placeholder-qr" style="width: 150px;
     opacity: 0.1;
     position: absolute;
     left: 50%;
-    top: 33%;
+    top: 50%;
     transform: translate(-50%, -50%);">
                             </div>
                             <div>
