@@ -161,19 +161,19 @@
             <div class="row">
                 <div class="col-4">
                     <div class="form-group">
-                        <label for="foto1">Foto recibido 1</label>
+                        <label for="foto1">Foto de los sobres</label>
                         <input class="form-control-file" id="adjunto1" name="adjunto1" type="file">
                     </div>
                 </div>
                 <div class="col-4">
                     <div class="form-group">
-                        <label for="foto2">Foto recibido 2</label>
+                        <label for="foto2">Foto del domicilio</label>
                         <input class="form-control-file" id="adjunto2" name="adjunto2" type="file">
                     </div>
                 </div>
                 <div class="col-4">
                     <div class="form-group">
-                        <label for="foto3">Foto recibido 3</label>
+                        <label for="foto3">Foto de quien recibe</label>
                         <input class="form-control-file" id="adjunto3" name="adjunto3" type="file">
                     </div>
                 </div>
@@ -182,24 +182,24 @@
                 <div class="col-4">
                     <div class="form-group">
                         <div class="image-wrapper">
-                            <img id="picture1" src="https://sisfactura.dev/imagenes/logo_facturas.png"
-                                 alt="Imagen del pago" class="w-80" style="display: none">
+                            <img id="picture1" src="{{ asset('imagenes/sobres.jpg') }}"
+                                alt="Imagen del pago" class="w-80 mh-100 h-100" style="display: block;">
                         </div>
                     </div>
                 </div>
                 <div class="col-4">
                     <div class="form-group">
                         <div class="image-wrapper">
-                            <img id="picture2" src="https://sisfactura.dev/imagenes/logo_facturas.png"
-                                 alt="Imagen del pago" class="w-80" style="display: none">
+                            <img id="picture2" src="{{ asset('imagenes/domicilio.jpg') }}"
+                                 alt="Imagen del pago" class="w-80 mh-100 h-100" style="display: block">
                         </div>
                     </div>
                 </div>
                 <div class="col-4">
                     <div class="form-group">
                         <div class="image-wrapper">
-                            <img id="picture3" src="https://sisfactura.dev/imagenes/logo_facturas.png"
-                                 alt="Imagen del pago" class="w-80" style="display: none">
+                            <img id="picture3" src="{{ asset('imagenes/recibe_sobre.jpg') }}"
+                                 alt="Imagen del pago" class="w-80 mh-100 h-100" style="display: block">
                         </div>
                     </div>
                 </div>
