@@ -21,3 +21,4 @@ cronlog.txt
 .well-known/
 *.cmd
 *.iso
+*.bat
