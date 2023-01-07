@@ -29,7 +29,7 @@
                                             <x-bs-progressbar :progress="$data_diciembre->progress">
                                                 <span> <b>{{$data_diciembre->progress}}%</b> - {{$data_diciembre->total}}/{{$data_diciembre->meta}}</span>
                                             </x-bs-progressbar>
-                                            <sub>% -  Pagados/ Asignados</sub>
+                                            <sub>% -  Pagados/ Meta</sub>
                                         </div>
                                     </div>
                                 </li>
