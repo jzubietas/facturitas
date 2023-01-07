@@ -257,63 +257,67 @@
                 ...configDataTableZonas,
                 rowCallback: function (row, data, index) {
                     var table = this;
-                    if (!$(row).data('setevents')) {
-                        $('[data-revertir]', row).click(function () {
-                            insertIds = insertIds.filter(function (id) {
-                                return id != data.id;
-                            })
-                            $('#tablaPrincipal').DataTable().ajax.reload();
-                            table.api().row(row).remove().draw(false)
+                    $('[data-revertir]', row).unbind();
+                    $('[data-jqdetalle]', row).unbind();
+
+                    $('[data-revertir]', row).click(function () {
+                        insertIds = insertIds.filter(function (id) {
+                            return id != data.id;
                         })
-
-                        $('[data-jqdetalle]', row).click(function () {
-                            console.log(data)
-                            $.confirm({
-                                title: '¡Detalle del grupo!',
-                                columnClass: 'xlarge',
-                                content: getHtmlPrevisualizarAgrupar(data),
-                                type: 'orange',
-                                typeAnimated: true,
-                                buttons: {
-                                    cancelar: function () {
-                                        $('#tablaPrincipal').DataTable().ajax.reload();
-                                        return true
-                                    }
-                                },
-                                onContentReady: function () {
-                                    const self = this
-
-                                    function setEvents() {
-                                        console.debug(self.$content)
-                                        console.debug(self.$content.find('[data-jqdesagrupar]'))
-                                        self.$content.find('[data-jqdesagrupar]').click(function (e) {
-                                            $.ajax({
-                                                url: '{{route('envios.distribuirsobres.desagrupar')}}',
-                                                data: {
-                                                    grupo_id: e.target.dataset.jqdesagrupar,
-                                                    pedido_id: e.target.dataset.pedido_id,
-                                                },
-                                                method: 'delete'
-                                            })
-                                                .done(function (grupo) {
-                                                    $('#tablaPrincipal{{Str::upper($motorizado->zona)}}').DataTable().row(row).data(createZoneRowTable(grupo.data, '{{Str::upper($motorizado->zona)}}')).draw();
-                                                    if (grupo.data) {
-                                                        self.setContent(getHtmlPrevisualizarAgrupar(grupo.data))
-                                                    } else {
-                                                        self.close()
-                                                        $.alert('Desagrupado por completo')
-                                                    }
-                                                    setEvents()
-                                                })
-                                        })
-                                    }
-
-                                    setEvents();
+                        $('#tablaPrincipal').DataTable().ajax.reload();
+                        table.api().row(row).remove().draw(false)
+                    })
+                    $('[data-jqdetalle]', row).click(function () {
+                        console.log(data)
+                        $.confirm({
+                            title: '¡Detalle del grupo!',
+                            columnClass: 'xlarge',
+                            content: getHtmlPrevisualizarAgrupar(data),
+                            type: 'orange',
+                            typeAnimated: true,
+                            buttons: {
+                                cancelar: function () {
+                                    $('#tablaPrincipal').DataTable().ajax.reload();
+                                    return true
                                 }
-                            })
+                            },
+                            onContentReady: function () {
+                                const self = this
+
+                                function setEvents() {
+                                    self.$content.find('[data-jqdesagrupar]').click(function (e) {
+                                        $.ajax({
+                                            url: '{{route('envios.distribuirsobres.desagrupar')}}',
+                                            data: {
+                                                grupo_id: e.target.dataset.jqdesagrupar,
+                                                pedido_id: e.target.dataset.pedido_id,
+                                            },
+                                            method: 'delete'
+                                        })
+                                            .done(function (grupo) {
+                                                $('#tablaPrincipal{{Str::upper($motorizado->zona)}}')
+                                                    .DataTable()
+                                                    .row(row)
+                                                    .data(createZoneRowTable(grupo.data, '{{Str::upper($motorizado->zona)}}'))
+                                                    .draw();
+                                                if (grupo.data) {
+                                                    self.setContent(getHtmlPrevisualizarAgrupar(grupo.data))
+                                                } else {
+                                                    self.close()
+                                                    $.alert('Desagrupado por completo')
+                                                }
+                                                setEvents()
+                                            })
+                                            .always(function () {
+                                                $('#tablaPrincipal').DataTable().ajax.reload();
+                                            })
+                                    })
+                                }
+
+                                setEvents();
+                            }
                         })
-                        $(row).data('setevents', 1)
-                    }
+                    })
                 }
             });
             @endforeach
@@ -368,13 +372,15 @@
                     const productos = [`<li class="list-group-item">
                                     <div class="row">
                                         <div class="col-4 border-right">
-                                        <strong>${row.nombre||''}</strong> - <i>${row.celular||''}</i>
+                                        <strong>${row.nombre || ''}</strong> - <i>${row.celular || ''}</i>
                                         </div>
                                         <div class="col-4 border-right">
-                                        <b>${row.distribucion||''}</b><hr class="my-2"> ${row.distrito || ''}, ${row.direccion || ''} <hr class="my-2"><i> ${row.referencia || ''}</i>
+                                        <b>${row.distribucion || ''}</b><hr class="my-2"> ${row.distrito || ''}, ${row.direccion || ''} <hr class="my-2"><i> ${row.referencia || ''}</i>
                                         </div>
                                         <div class="col-4">
-                                    ${row.codigos.split(',').map(function (codigo, index) {return `<b>${codigo}</b> - <i>${ps[index] || ''}</i>`}).join(`<hr class="my-2">`)}
+                                    ${row.codigos.split(',').map(function (codigo, index) {
+                        return `<b>${codigo}</b> - <i>${ps[index] || ''}</i>`
+                    }).join(`<hr class="my-2">`)}
                                         </div>
                                     </div>
                                 </li>`]
@@ -382,7 +388,7 @@
                     return `<div class="col-md-12">
 <div class="card border card-dark">
 <div class="card-header">
-${success ? `Paquete: <strong>${row.correlativo||''}</strong>` : `Cliente: <strong>${row.nombre||''}</strong> - <i>${row.celular||''}</i>`}
+${success ? `Paquete: <strong>${row.correlativo || ''}</strong>` : `Cliente: <strong>${row.nombre || ''}</strong> - <i>${row.celular || ''}</i>`}
 </div>
 <div class="card-body">
 <ul class="list-group">
@@ -414,18 +420,18 @@ ${success ? `Paquete: <strong>${row.correlativo||''}</strong>` : `Cliente: <stro
                 const tableId = buttom.attr('data-table-save')
                 const zona = buttom.attr('data-zona')
                 const table = $(tableId).DataTable();
-                const grupos=Array.from(table.data()).map(function (item) {
+                const grupos = Array.from(table.data()).map(function (item) {
                     return item.id
                 })
-                if(grupos.length===0){
+                if (grupos.length === 0) {
                     return;
                 }
                 $.confirm({
                     title: '¡Confirmar creación de paquetes!',
                     columnClass: 'xlarge',
-                    content:function (){
+                    content: function () {
                         this.$$goSobres.hide();
-                        return '¿Estas seguro de crear el paquete con los sobres listados en la zona <b>'+zona+'</b>?'
+                        return '¿Estas seguro de crear el paquete con los sobres listados en la zona <b>' + zona + '</b>?'
                     },
                     type: 'orange',
                     typeAnimated: true,
