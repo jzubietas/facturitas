@@ -156,13 +156,16 @@
     transform: translate(-50%, -50%);">
                             </div>
                             <div>
-                                <p class="mb-8 mt-16">Pedido Encontrado</p>
+                                <p class="mb-8 mt-16" id="mensaje-resultado"></p>
+                                <!--<p class="mb-0">PAQUETE: <label id="paquete_ped" class="mb-0">Paquete:</label></p>-->
                                 <p class="mb-0">CODIGO: <label id="code_ped" class="mb-0">Codigo:</label></p>
                                 <p class="mb-0">DISTRITO: <label id="dist_ped" class="mb-0">Distrito</label></p>
                                 <p class="mb-0">DIRECCIÓN: <label id="dir_ped" class="mb-0">Dirección</label></p>
+                                <p id="detalle_paquete" class="badge badge-warning font-14 p-12 text-left"></p>
                                 <a href="#" id="recepcion_btn" class="btn btn-warning font-weight-bold" style="display:none;">Confirmar Pedido</a>
+
                                 <div class="mt-16">
-                                <textarea id="scannedTextMemo" class="textInput form-memo form-field-input textInput-readonly w-100" rows="3" readonly></textarea>
+                                <!--<textarea id="scannedTextMemo" class="textInput form-memo form-field-input textInput-readonly w-100" rows="3" readonly></textarea>-->
                                 </div>
                             </div>
                         </div>
@@ -261,9 +264,8 @@
   <script type="text/javascript">
       function onQRCodeScanned(scannedText)
       {
-          var scannedTextMemo = document.getElementById("scannedTextMemo");
-          if(scannedTextMemo)
-          {
+          //var scannedTextMemo = document.getElementById("scannedTextMemo");
+    var codigo_pedido = "";
                 setTimeout(function(){
                     $.ajax({
                         processData: false,
@@ -273,31 +275,48 @@
                         success: function (data) {
                             console.log(data);
                             //console.log({{ route('envio.escaneoqr',':id') }}.replace(':id',scannedText));
-                            alert("Pedido " + scannedText + " localizado!");
-                            $('#code_ped').html(data.html);
-                            $('#dist_ped').html(data.distrito);
-                            $('#dir_ped').html(data.direccion);
-                            $('#recepcion_btn').css({'display':'block'});
+                            if(data.html == 0){
+                                $('#mensaje-resultado').html('<span class="text-danger font-20 font-weight-bold">El pedido ya se encuentra Recibido</span>');
+                                return false;
+                            }else{
+                                $('#mensaje-resultado').html('<span class="text-success font-20 font-weight-bold">Se encontro el pedido</span>');
 
-                            $('#recepcion_btn').on('click', function (){
-                                $.ajax({
-                                    data:{hiddenEnvio: data.html},
-                                    type: 'POST',
-                                    url: "{{ route('envios.recepcionarmotorizado') }}",
-                                    success: function (data) {
-                                        $('#code_ped').html("");
-                                        $('#dist_ped').html("");
-                                        $('#dir_ped').html("data.direccion");
-                                        consolle.log("Pedido recepcionado");
-                                    }
-                                });
-                            });
+                                $('#code_ped').html(data.html);
+                                $('#dist_ped').html(data.distrito);
+                                $('#dir_ped').html(data.direccion);
+                                $('#recepcion_btn').css({'display':'block'});
+                                $('#recepcion_btn').data("code",scannedText);
+
+                                if($('#recepcion_btn').data('asignado') != 1){
+                                    $('#recepcion_btn').on('click', function (){
+                                        $cod_actual = $(this).data("code");
+                                        $.ajax({
+                                            data:{id: $cod_actual},
+                                            type: 'POST',
+                                            url: "{{ route('envio.recibirpedidomotorizado') }}",
+                                            success: function (data) {
+                                                $('#code_ped').html("");
+                                                $('#dist_ped').html("");
+                                                $('#dir_ped').html("data.direccion");
+                                                $('#recepcion_btn').css({'display':'none'});
+                                                $('#detalle_paquete').html('<ul><li>' + data.sobres_recibidos + 'sobres ya fueron confirmados' + '</li><li>' + 'Quedan' + data.sobres_restantes + 'por confirmar </li>');
+                                                console.log(data.sobres_recibidos + ' sobres ya fueron cofirmados');
+                                                console.log("Quedan " + data.sobres_restantes + " por confirmar");
+                                                $('#tablaPrincipal').DataTable().ajax.reload();
+                                                return false;
+                                            }
+                                        });
+                                    });
+                                    $('#recepcion_btn').data('asignado',1);
+                                    $('#tablaPrincipal').DataTable().ajax.reload();
+                                }
+                            }
                         }
                     });
                 }, 200);
 
-              scannedTextMemo.value = scannedText;
-          }
+              //scannedTextMemo.value = scannedText;
+
       }
 
       function provideVideo()

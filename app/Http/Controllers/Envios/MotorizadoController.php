@@ -103,7 +103,10 @@ class MotorizadoController extends Controller
                     'direccion_grupos.condicion_envio',
                     'direccion_grupos.subcondicion_envio',
                     'direccion_grupos.condicion_sobre',
-                    'direccion_grupos.correlativo as correlativo'
+                    'direccion_grupos.correlativo as correlativo',
+                    'direccion_grupos.foto1',
+                    'direccion_grupos.foto2',
+                    'direccion_grupos.foto3'
                 ]);
             add_query_filtros_por_roles($query, 'u');
             return datatables()->query(DB::table($query))
@@ -116,7 +119,9 @@ class MotorizadoController extends Controller
                     $btn = '';
                     $btn .= '<ul class="list-unstyled pl-0">';
                     $btn .= '<li>
-                                    <button href="" class="btn btn-sm text-secondary" data-target="#modal-motorizado-entregar-confirm" data-toggle="modal" data-entregar-confirm="' . $pedido->id . '" data-destino="' . $pedido->destino . '" data-fechaenvio="' . $pedido->fecha . '" data-codigos="' . $pedido->codigos . '">
+                                    <button href="" class="btn btn-sm text-secondary" data-target="#modal-motorizado-entregar-confirm" data-toggle="modal" data-entregar-confirm="' . $pedido->id . '" data-destino="' . $pedido->destino . '" data-fechaenvio="' . $pedido->fecha . '" data-codigos="' . $pedido->codigos . '"
+                                        data-imagen1="'.\Storage::disk('pstorage')->url($pedido->foto1).'" data-imagen2="'.\Storage::disk('pstorage')->url($pedido->foto2).'" data-imagen3="'.\Storage::disk('pstorage')->url($pedido->foto3).'" 
+                                    >
                                         <i class="fas fa-envelope text-success"></i> A cliente
                                     </button>
                                 </li>';
