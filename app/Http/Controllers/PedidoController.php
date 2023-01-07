@@ -902,49 +902,40 @@ class PedidoController extends Controller
         if ($mirol == 'Llamadas') {
             $identi_asesor = User::where("identificador", $request->user_id)->where("unificado", "NO")->first();
             $fecha = Carbon::now()->format('dm');
-            $dia = Carbon::now()->toDateString();
+            $dia = Carbon::now();
             $numped = Pedido::join('clientes as c', 'c.id', 'pedidos.cliente_id')
                 ->join('users as u', 'c.user_id', 'u.id')
                 ->where("c.estado", "1")
                 ->where("c.tipo", "1")
-                ->where(DB::raw('Date(pedidos.created_at)'), $dia)
-                //->where("u.unificado","NO")
-                ->where('u.identificador', $request->user_id)//identificador de asesor relacionado a este usuario llamada
-                ->groupBy(DB::raw('Date(pedidos.created_at)'))
+                ->whereDate('pedidos.created_at', $dia)
+                ->where('u.identificador', $request->user_id)
                 ->count();
             $numped = $numped + 1;
 
         } else if ($mirol == 'Jefe de llamadas') {
             $identi_asesor = User::where("identificador", $request->user_id)->where("unificado", "NO")->first();
             $fecha = Carbon::now()->format('dm');
-            $dia = Carbon::now()->toDateString();
+            $dia = Carbon::now();
             $numped = Pedido::join('clientes as c', 'c.id', 'pedidos.cliente_id')
                 ->join('users as u', 'c.user_id', 'u.id')
                 ->where("c.estado", "1")
                 ->where("c.tipo", "1")
-                ->where(DB::raw('Date(pedidos.created_at)'), $dia)
-                //->where("u.unificado","NO")
-                ->where('u.identificador', $request->user_id)//identificador de asesor relacionado a este usuario llamada
-                ->groupBy(DB::raw('Date(pedidos.created_at)'))
+                ->whereDate('pedidos.created_at', $dia)
+                ->where('u.identificador', $request->user_id)
                 ->count();
             $numped = $numped + 1;
-            //$codigo=$identi_asesor->identificador."-".$fecha."-".$numped;
         } else {
             $identi_asesor = User::where("identificador", $request->user_id)->where("unificado", "NO")->first();
             $fecha = Carbon::now()->format('dm');
-            $dia = Carbon::now()->toDateString();
+            $dia = Carbon::now();
             $numped = Pedido::join('clientes as c', 'c.id', 'pedidos.cliente_id')
                 ->join('users as u', 'c.user_id', 'u.id')
                 ->where("c.estado", "1")
                 ->where("c.tipo", "1")
-                ->where(DB::raw('Date(pedidos.created_at)'), $dia)
-                //->where("u.unificado","NO")
+                ->whereDate('pedidos.created_at', $dia)
                 ->where('u.identificador', $request->user_id)
-                ->groupBy(DB::raw('Date(pedidos.created_at)'))
                 ->count();
             $numped = $numped + 1;
-
-            //$codigo=($identi_asesor->identificador."-".$fecha."-".$numped;
         }
         $cliente_AB = Cliente::where("id", $request->cliente_id)->first();
         $codigo = (($identi_asesor->identificador == 'B') ? $identi_asesor->identificador : intval($identi_asesor->identificador)) . (($cliente_AB->icelular != null) ? $cliente_AB->icelular : '') . "-" . $fecha . "-" . $numped;
@@ -1949,27 +1940,9 @@ class PedidoController extends Controller
             )
             ->where('pedidos.estado', '1')
             ->where('dp.estado', '1')
-            //->where('u.id', Auth::user()->id)
             ->where('pedidos.pagado', '<>', '2')
-            ->where('pedidos.da_confirmar_descarga', '1')
-            /*->groupBy(
-                'pedidos.id',
-                'c.id',
-                'c.nombre',
-                'c.icelular',
-                'c.celular',
-                'u.identificador',
-                'dp.codigo',
-                'dp.nombre_empresa',
-                'dp.total',
-                'pedidos.condicion',
-                'pedidos.motivo',
-                'pedidos.responsable',
-                'pedidos.created_at',
-                'pedidos.pagado'
-                )*/
+            ->where('pedidos.da_confirmar_descarga', '1')           
             ->orderBy('pedidos.created_at', 'DESC');
-        //->get();
         if (Auth::user()->rol == "Operario") {
             $asesores = User::where('users.rol', 'Asesor')
                 ->where('users.estado', '1')
@@ -2015,8 +1988,6 @@ class PedidoController extends Controller
 
         }
 
-        //$pedidos = $pedidos->get();
-
         return Datatables::of(DB::table($pedidos))
             ->addIndexColumn()
             ->addColumn('condicion_envio_color', function ($pedido) {
@@ -2040,7 +2011,7 @@ class PedidoController extends Controller
                 }
                 if($pedido->estado_ruta=='1')
                 {
-                    $badge_estado.='<span class="badge badge-success w-100" style="background-color: #00bc8c !important;
+                    $badge_estado.='<span class="badge badge-success w-50" style="background-color: #00bc8c !important;
                     padding: 4px 8px !important;
                     font-size: 8px;
                     margin-bottom: -4px;
