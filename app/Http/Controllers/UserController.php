@@ -284,14 +284,15 @@ class UserController extends Controller
         foreach ($users as $user) {
 
 
-            if ($user->identificador == 'B') {
+            if ($user->rol == 'ASESOR ADMINISTRATIVO') {
                 $html .= '<option style="color:black" value="' . $user->identificador . '">' . $user->identificador . '</option>';
-            } elseif ($user->identificador == 'ADMIN') {
+            } elseif ($user->rol == 'Administrador') {
                 $html .= '<option style="color:black" value="' . $user->identificador . '">' . $user->identificador . '</option>';
             } else {
-                /*if ($user->exidentificador == '01' || $user->exidentificador == '02') {
+                if ($user->exidentificador == '01' || $user->exidentificador == '02') {
                     $html .= '<option style="color:black" value="' . $user->identificador . '">' . $user->identificador . (($user->exidentificador != null) ? '  (' . $user->exidentificador . ')' : '') . '</option>';
-                }else */if ($user->exidentificador == 22 || $user->exidentificador == 21) {
+                }
+                else if ($user->exidentificador == '22' || $user->exidentificador == '21') {
                     $html .= '<option style="color:black" value="' . $user->identificador . '">' . $user->identificador . (($user->exidentificador != null) ? '  (' . $user->exidentificador . ')' : '') . '</option>';
                 } else {
                     if (intval($user->exidentificador) % 2 == 0) {
@@ -329,12 +330,16 @@ class UserController extends Controller
         $html = "";
         //$html = '<option value="">' . trans('---- SELECCIONE ASESOR ----') . '</option>';
         foreach ($users as $user) {
-            if ($user->identificador == 'B') {
+
+            if ($user->rol == 'ASESOR ADMINISTRATIVO') {
                 $html .= '<option style="color:black" value="' . $user->identificador . '">' . $user->identificador . '</option>';
-            } else {
-                /*if ($user->exidentificador == '01' || $user->exidentificador == '02') {
+            } elseif ($user->rol == 'Administrador') {
+                $html .= '<option style="color:black" value="' . $user->identificador . '">' . $user->identificador . '</option>';
+            }else {
+                if ($user->exidentificador == '01' || $user->exidentificador == '02') {
                     $html .= '<option style="color:black" value="' . $user->identificador . '">' . $user->identificador . (($user->exidentificador != null) ? '  (' . $user->exidentificador . ')' : '') . '</option>';
-                }else */if ($user->exidentificador == 22 || $user->exidentificador == 21) {
+                }else 
+                if ($user->exidentificador == '22' || $user->exidentificador == '21') {
                     $html .= '<option style="color:black" value="' . $user->identificador . '">' . $user->identificador . (($user->exidentificador != null) ? '  (' . $user->exidentificador . ')' : '') . '</option>';
                 } else {
 
