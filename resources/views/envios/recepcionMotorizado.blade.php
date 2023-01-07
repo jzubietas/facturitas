@@ -10,10 +10,7 @@
         <div class="co-lg-6">
             <div class="row">
                 <div class="col-lg-6">
-                    <button type="button" id="btn-qr" class="btn btn-option" data-toggle="modal" data-target="#modal-qr" data-backdrop="static" style="margin-right:16px;" aria-haspopup="true" aria-expanded="false">
-                        <i class="fa fa-qrcode" aria-hidden="true"></i>
-                        Escanear QR
-                    </button>
+
                 </div>
             </div>
             <!--
@@ -241,6 +238,11 @@
             </div>
         </div>
     </div>
+
+    <button type="button" id="btn-qr" class="btn btn-option" data-toggle="modal" data-target="#modal-qr" data-backdrop="static" style="margin-right:16px;" aria-haspopup="true" aria-expanded="false">
+        <i class="fa fa-qrcode" aria-hidden="true"></i>
+        Escanear QR
+    </button>
 
     <script>
         if (location.protocol != 'https:') {
