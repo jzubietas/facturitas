@@ -391,6 +391,13 @@
 
                                 $('#chatAudio')[0].play();
 
+                                const synth = window.speechSynthesis
+                                let text = "Pedido Reconocido"
+                                const utterThis = new SpeechSynthesisUtterance(text)
+
+                                synth.speak(utterThis)
+
+
                                 if($('#recepcion_btn').data('asignado') != 1){
                                     $('#recepcion_btn').on('click', function (){
                                         $cod_actual = $(this).data("code");
