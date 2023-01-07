@@ -6,10 +6,12 @@
 @push('js')
     <script>
         (function () {
-            var options = {{\Illuminate\Support\Js::from( $jsChart)}};
+            $(document).ready(function () {
+                var options = {{\Illuminate\Support\Js::from( $jsChart)}};
 
-            var chart = new ApexCharts(document.querySelector("#{{$genId}}"), options);
-            chart.render();
+                var chart = new ApexCharts(document.querySelector("#{{$genId}}"), options);
+                chart.render();
+            });
         })()
     </script>
 @endpush

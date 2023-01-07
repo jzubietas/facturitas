@@ -260,6 +260,10 @@
                             <div class="col-md-6">
                                 <x-grafico-pedidos-atendidos-anulados></x-grafico-pedidos-atendidos-anulados>
                             </div>
+
+                            <div class="col-lg-12">
+                                <x-grafico-pedido_cobranzas-del-dia></x-grafico-pedido_cobranzas-del-dia>
+                            </div>
                         </div>
                     </div>
                     <div class="col-md-12">
@@ -283,14 +287,14 @@
                     </div>
                 </div>
             </div>
-            --}}
+
             <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12 d-none">
                 <div class="card ">
                     <div class="card-body">
                         <div class="chart tab-pane active w-100" id="cobranzaxmes" style="height: 550px; "></div>
                     </div>
                 </div>
-            </div>
+            </div> --}}
         </div>
     </div>
     <div class="container-fluid">
