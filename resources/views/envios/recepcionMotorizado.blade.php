@@ -261,6 +261,8 @@
         Escanear QR
     </button>
 
+    <audio id="chatAudio"><source src="{{asset('sonidos/notificacion.mp3')}}" type="audio/mpeg"></audio>
+
     <script>
         if (location.protocol != 'https:') {
             document.getElementById('secure-connection-message').style='display: block';
@@ -279,7 +281,26 @@
 
   <style>
 
+      .qr_success{
+          animation: qr_success 1s ease-in forwards;
+      }
 
+
+@keyframes qr_success{
+    0%{
+        box-shadow: 1px 1px 0px green;
+    }
+
+    70%{
+        box-shadow: 1px 1px 24px green;
+    }
+
+    100%{
+
+        box-shadow: 1px 1px 0px green;
+
+    }
+}
 
       .qrPreviewVideo{width:100%; width:100%; border-radius: 16px; margin:auto;}
 
@@ -357,6 +378,8 @@
                                 $('#mensaje-resultado').html('<span class="text-danger font-20 font-weight-bold">El pedido ya se encuentra Recibido</span>');
                                 return false;
                             }else{
+                                $('#scanner').removeClass("qr_success");
+                                $('#scanner').addClass("qr_success");
                                 $('#mensaje-resultado').html('<span class="text-success font-20 font-weight-bold">Se encontro el pedido</span>');
 
                                 $('#code_ped').html(data.html);
@@ -364,6 +387,8 @@
                                 $('#dir_ped').html(data.direccion);
                                 $('#recepcion_btn').css({'display':'block'});
                                 $('#recepcion_btn').data("code",scannedText);
+
+                                $('#chatAudio')[0].play();
 
                                 if($('#recepcion_btn').data('asignado') != 1){
                                     $('#recepcion_btn').on('click', function (){
