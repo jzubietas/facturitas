@@ -2663,21 +2663,11 @@ class EnvioController extends Controller
     {
         $pedido = Pedido::where("codigo", $request->id)->first();
 
-        /*$pedido->update([
-            'envio' => '2',
-            'modificador' => 'USER' . Auth::user()->id,
-            'condicion_envio' => Pedido::ENVIO_COURIER_JEFE_OPE,
-            'condicion_envio_code' => Pedido::ENVIO_COURIER_JEFE_OPE_INT,
-
-        ]);
-
-        PedidoMovimientoEstado::create([
-            'pedido' => $request->hiddenEnvio,
-            'condicion_envio_code' => Pedido::RECEPCION_COURIER_INT,
-            'notificado' => 0
-        ]);*/
-
-        return response()->json(['html' => $pedido->codigo, 'distrito' => $pedido->distrito, 'direccion' => $pedido->direccion]);
+        if($pedido->condicion_envio_code == Pedido::CONFIRM_MOTORIZADO_INT){
+            return response()->json(['html' => 0]);
+        }else{
+            return response()->json(['html' => $pedido->codigo, 'distrito' => $pedido->distrito, 'direccion' => $pedido->direccion]);
+        }
     }
 
     public function RecibirPedidoMotorizado(Request $request)

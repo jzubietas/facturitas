@@ -371,68 +371,79 @@
           //var codigo_pedido = "";
           $('#scanner').removeClass("qr_success");
             codigo_pedido = true;
+setTimeout(function (){
+    $.ajax({
+        processData: false,
+        contentType: false,
+        type: 'POST',
+        url: "{{ route('envio.escaneoqr',':id') }}".replace(':id',scannedText),
+        success: function (data) {
+            console.log(data);
+            //console.log({{ route('envio.escaneoqr',':id') }}.replace(':id',scannedText));
+            if(data.html == 0){
+                $('#mensaje-resultado').html('<span class="text-danger font-20 font-weight-bold">El pedido ya se encuentra Recibido</span>');
+                $('#recepcion_btn').css({'display':'none'});
+                return false;
 
-                    $.ajax({
-                        processData: false,
-                        contentType: false,
-                        type: 'POST',
-                        url: "{{ route('envio.escaneoqr',':id') }}".replace(':id',scannedText),
-                        success: function (data) {
-                            console.log(data);
-                            //console.log({{ route('envio.escaneoqr',':id') }}.replace(':id',scannedText));
-                            if(data.html == 0){
-                                $('#mensaje-resultado').html('<span class="text-danger font-20 font-weight-bold">El pedido ya se encuentra Recibido</span>');
-                                return false;
-                            }else{
+            }else{
 
-                                $('#scanner').addClass("qr_success");
-                                $('#mensaje-resultado').html('<span class="text-success font-20 font-weight-bold">Se encontro el pedido</span>');
+                $('#scanner').addClass("qr_success");
+                $('#mensaje-resultado').html('<span class="text-success font-20 font-weight-bold">Se encontro el pedido</span>');
 
-                                $('#code_ped').html(data.html);
-                                $('#dist_ped').html(data.distrito);
-                                $('#dir_ped').html(data.direccion);
-                                $('#recepcion_btn').css({'display':'block'});
-                                $('#recepcion_btn').data("code",scannedText);
+                $('#code_ped').html(data.html);
+                $('#dist_ped').html(data.distrito);
+                $('#dir_ped').html(data.direccion);
+                $('#recepcion_btn').css({'display':'block'});
+                $('#recepcion_btn').data("code",scannedText);
+                $('#detalle_paquete').html("");
 
-                                $('#chatAudio')[0].play();
+                $('#chatAudio')[0].play();
 
-                                const synth = window.speechSynthesis
-                                if(!synth.pending){
-                                    let text = "Pedido Reconocido"
-                                    const utterThis = new SpeechSynthesisUtterance(text)
+                const synth = window.speechSynthesis
+                if(!synth.pending){
+                    let text = "Pedido Reconocido"
+                    const utterThis = new SpeechSynthesisUtterance(text)
 
-                                    synth.speak(utterThis)
-                                }
+                    synth.speak(utterThis)
+                }
 
-                                if($('#recepcion_btn').data('asignado') != 1){
-                                    $('#recepcion_btn').on('click', function (){
-                                        $cod_actual = $(this).data("code");
-                                        $.ajax({
-                                            data:{id: $cod_actual},
-                                            type: 'POST',
-                                            url: "{{ route('envio.recibirpedidomotorizado') }}",
-                                            success: function (data) {
-                                                $('#code_ped').html("");
-                                                $('#dist_ped').html("");
-                                                $('#dir_ped').html("");
-                                                $('#recepcion_btn').css({'display':'none'});
-                                                $('#detalle_paquete').html('<h4 class="font-20 font-weight-bold">Pedido Confirmado</h4><ul class="pl-0"><li><span class="text-danger">' + data.sobres_recibidos + '</span> sobres ya fueron confirmados' + '</li><li>' + 'Quedan <span class="text-danger">' + data.sobres_restantes + '</span> por confirmar </li>');
-                                                console.log(data.sobres_recibidos + ' sobres ya fueron cofirmados');
-                                                console.log("Quedan " + data.sobres_restantes + " por confirmar");
-                                                $('#mensaje-resultado').html('<span class="font-20 font-weight-bold">Escanear pedido</span>');
-                                                $('#tablaPrincipal').DataTable().ajax.reload();
-                                                return false;
-                                            }
-                                        });
-                                    });
-                                    $('#recepcion_btn').data('asignado',1);
+                if($('#recepcion_btn').data('asignado') != 1){
+
+                    $('#recepcion_btn').on('click', function (){
+                        $cod_actual = $(this).data("code");
+                        $.ajax({
+                            data:{id: $cod_actual},
+                            type: 'POST',
+                            url: "{{ route('envio.recibirpedidomotorizado') }}",
+                            success: function (data) {
+
+                                if(data.html == 0){
+                                    $('#mensaje-resultado').html('<span class="text-danger font-20 font-weight-bold">El pedido ya se encuentra Recibido</span>');
+                                }else{
+                                    $('#code_ped').html("");
+                                    $('#dist_ped').html("");
+                                    $('#dir_ped').html("");
+                                    $('#recepcion_btn').css({'display':'none'});
+                                    $('#detalle_paquete').html('<h4 class="font-20 font-weight-bold">Pedido Confirmado</h4><ul class="pl-0"><li><span class="text-danger">' + data.sobres_recibidos + '</span> sobres ya fueron confirmados' + '</li><li>' + 'Quedan <span class="text-danger">' + data.sobres_restantes + '</span> por confirmar </li>');
+                                    console.log(data.sobres_recibidos + ' sobres ya fueron cofirmados');
+                                    console.log("Quedan " + data.sobres_restantes + " por confirmar");
+                                    $('#mensaje-resultado').html('<span class="font-20 font-weight-bold">Escanear pedido</span>');
                                     $('#tablaPrincipal').DataTable().ajax.reload();
+                                    return false;
                                 }
                             }
-                        }
-                    }).always(function(){
-                        codigo_pedido = false;
+                        });
                     });
+                    $('#recepcion_btn').data('asignado',1);
+                    $('#tablaPrincipal').DataTable().ajax.reload();
+                }
+            }
+        }
+    }).always(function(){
+        codigo_pedido = false;
+    });
+},200);
+
 
 
               //scannedTextMemo.value = scannedText;
