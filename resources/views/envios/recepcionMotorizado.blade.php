@@ -57,13 +57,13 @@
         }
         @keyframes  qr {
             0%{
-                transform: translate(-50%, -50%) scale(1);
+                transform: translate(-50%, -10%) scale(1);
             }
             50%{
-                transform: translate(-50%, -50%) scale(1.2);
+                transform: translate(-50%, -10%) scale(1.2);
             }
             100%{
-                transform:  translate(-50%, -50%) scale(1);
+                transform:  translate(-50%, -10%) scale(1);
             }
 
         }
@@ -79,6 +79,7 @@
             text-shadow: 1px 2px 3px #00000063;
             transform: translate(-50%, 0px);
             border-radius: 12px;
+            z-index: 999;
         }
         .activo{
             background-color: #e74c3c !important;
@@ -92,7 +93,7 @@
             box-shadow: 0 0 white;
         }
     </style>
-  <div class="card w-100">
+  <div class="card w-100 pb-48">
     <div class="card-body p-0">
 
         <ul class="nav nav-tabs mb-24 mt-24" id="myTab" role="tablist">
@@ -153,7 +154,7 @@
 
     <!-- Modal -->
     <div class="modal fade" id="modal-qr" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" style="max-width: 800px!important;">
+        <div class="modal-dialog modal-dialog-centered" style="max-width: 800px!important;">
             <div class="modal-content br-16 cnt-shw">
                 <!--
                 <div class="modal-header">
