@@ -44,10 +44,10 @@
             {!! Form::label('celular', 'Celular*') !!}
             {!! Form::number('celular', null, ['class' => 'form-control', 'id' => 'celular', 'min' =>'0', 'max' => '999999999', 'maxlength' => '9', 'oninput' => 'maxLengthCheck(this)']) !!}
             @error('celular')
-              <small class="text-danger" style="font-size: 16px">{{ $message }}</small>
+              <small class="text-danger" style="font-size: 16px">{!! $message !!}</small>
             @enderror
-          </div> 
-        </div>  
+          </div>
+        </div>
       </div>
     </div>
     <div class="card-footer">
@@ -75,7 +75,7 @@
 
     //VALIDAR CAMPOS ANTES DE ENVIAR
     document.addEventListener("DOMContentLoaded", function() {
-    document.getElementById("formulario").addEventListener('submit', validarFormulario); 
+    document.getElementById("formulario").addEventListener('submit', validarFormulario);
     });
 
     function validarFormulario(evento) {
@@ -109,7 +109,7 @@
         Swal.fire({
             icon: 'warning',
             title: '¿Estás seguro?',
-            text: "Vas a guardar el número: " + celular + " como base fría",            
+            text: "Vas a guardar el número: " + celular + " como base fría",
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
             cancelButtonColor: '#d33',
@@ -119,7 +119,7 @@
               this.submit();
             }
           })
-      }      
+      }
     }
   </script>
 @stop
