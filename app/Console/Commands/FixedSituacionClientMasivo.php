@@ -6,7 +6,7 @@ use App\Jobs\PostCreatePedido;
 use App\Models\Cliente;
 use Illuminate\Console\Command;
 
-class FixedEstadoClientMasivo extends Command
+class FixedSituacionClientMasivo extends Command
 {
     /**
      * The name and signature of the console command.
