@@ -18,7 +18,7 @@ class MotorizadoController extends Controller
     {
         if ($request->has('datatable')) {
             $query = DireccionGrupo::/*join('direccion_envios as de', 'direccion_grupos.id', 'de.direcciongrupo')*/
-                join('clientes as c', 'c.id', 'direccion_grupos.cliente_id')
+            join('clientes as c', 'c.id', 'direccion_grupos.cliente_id')
                 ->join('users as u', 'u.id', 'c.user_id')
                 //->where('direccion_grupos.condicion_envio_code', Pedido::RECEPCION_MOTORIZADO_INT)
                 ->where('direccion_grupos.condicion_envio_code', Pedido::MOTORIZADO_INT)
@@ -44,6 +44,9 @@ class MotorizadoController extends Controller
                     'direccion_grupos.condicion_sobre',
                     'direccion_grupos.correlativo as correlativo'
                 ]);
+            if (\auth()->user()->rol == User::ROL_MOTORIZADO) {
+                $query = $query->where('direccion_grupos.motorizado_id', '=', auth()->id());
+            }
             add_query_filtros_por_roles($query, 'u');
             return datatables()->query(DB::table($query))
                 ->addIndexColumn()
@@ -69,7 +72,7 @@ class MotorizadoController extends Controller
 
                     return $btn;
                 })
-                ->rawColumns(['action','condicion_envio'])
+                ->rawColumns(['action', 'condicion_envio'])
                 ->toJson();
         }
         return view('envios.motorizado.index');
@@ -80,7 +83,7 @@ class MotorizadoController extends Controller
     {
         if ($request->has('datatable')) {
             $query = DireccionGrupo::/*join('direccion_envios as de', 'direccion_grupos.id', 'de.direcciongrupo')*/
-                join('clientes as c', 'c.id', 'direccion_grupos.cliente_id')
+            join('clientes as c', 'c.id', 'direccion_grupos.cliente_id')
                 ->join('users as u', 'u.id', 'c.user_id')
                 ->where('direccion_grupos.condicion_envio_code', Pedido::CONFIRM_MOTORIZADO_INT)
                 ->where('direccion_grupos.estado', '1')
@@ -108,7 +111,7 @@ class MotorizadoController extends Controller
                     'direccion_grupos.foto2',
                     'direccion_grupos.foto3'
                 ]);
-            add_query_filtros_por_roles($query, 'u');
+            //add_query_filtros_por_roles($query, 'u');
             return datatables()->query(DB::table($query))
                 ->addIndexColumn()
                 ->editColumn('condicion_envio', function ($pedido) {
@@ -120,7 +123,7 @@ class MotorizadoController extends Controller
                     $btn .= '<ul class="list-unstyled pl-0">';
                     $btn .= '<li>
                                     <button href="" class="btn btn-sm text-secondary" data-target="#modal-motorizado-entregar-confirm" data-toggle="modal" data-entregar-confirm="' . $pedido->id . '" data-destino="' . $pedido->destino . '" data-fechaenvio="' . $pedido->fecha . '" data-codigos="' . $pedido->codigos . '"
-                                        data-imagen1="'.\Storage::disk('pstorage')->url($pedido->foto1).'" data-imagen2="'.\Storage::disk('pstorage')->url($pedido->foto2).'" data-imagen3="'.\Storage::disk('pstorage')->url($pedido->foto3).'" 
+                                        data-imagen1="' . \Storage::disk('pstorage')->url($pedido->foto1) . '" data-imagen2="' . \Storage::disk('pstorage')->url($pedido->foto2) . '" data-imagen3="' . \Storage::disk('pstorage')->url($pedido->foto3) . '"
                                     >
                                         <i class="fas fa-envelope text-success"></i> A cliente
                                     </button>
@@ -134,7 +137,7 @@ class MotorizadoController extends Controller
 
                     return $btn;
                 })
-                ->rawColumns(['action','condicion_envio'])
+                ->rawColumns(['action', 'condicion_envio'])
                 ->toJson();
         }
         return view('envios.motorizado.confirmar');
@@ -145,7 +148,7 @@ class MotorizadoController extends Controller
     {
         if ($request->has('datatable')) {
             $query = DireccionGrupo::/*join('direccion_envios as de', 'direccion_grupos.id', 'de.direcciongrupo')*/
-                join('clientes as c', 'c.id', 'direccion_grupos.cliente_id')
+            join('clientes as c', 'c.id', 'direccion_grupos.cliente_id')
                 ->join('users as u', 'u.id', 'c.user_id')
                 ->where('direccion_grupos.condicion_envio_code', Pedido::CONFIRM_VALIDADA_CLIENTE_INT)
                 ->where('direccion_grupos.estado', '1')
