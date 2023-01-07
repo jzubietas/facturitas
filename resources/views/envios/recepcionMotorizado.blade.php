@@ -3,7 +3,29 @@
 @section('title', 'Lista de pedidos por confirmar')
 
 @section('content_header')
-  <h1>Recepcion para motorizados - ENVIOS
+    <div class="row border-bottom pb-16">
+        <div class="col-lg-6">
+            <h1 class="text-center font-20 font-weight-bold">Recepcion para motorizados - ENVIOS</h1>
+        </div>
+        <div class="co-lg-6">
+            <div class="row">
+                <div class="col-lg-6">
+
+                </div>
+            </div>
+            <!--
+            <div class="btn-group dropleft">
+
+                <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Exportar
+                </button>
+                <div class="dropdown-menu">
+                    <a href="" data-target="#modal-exportar" data-toggle="modal" class="dropdown-item" target="blank_"><img src="{{ asset('imagenes/icon-excel.png') }}"> Excel</a>
+                </div>
+            </div>-->
+        </div>
+    </div>
+
     {{-- <div class="float-right btn-group dropleft">
       <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         Exportar
@@ -13,21 +35,10 @@
       </div>
     </div> --}}
     {{-- @can('clientes.exportar') --}}
-    <div class="float-right btn-group dropleft">
-        <button type="button" class="btn btn-option" data-toggle="modal" data-target="#modal-qr" data-backdrop="static" style="margin-right:16px;" aria-haspopup="true" aria-expanded="false">
-            <i class="fa fa-qrcode" aria-hidden="true"></i>
-            Escanear QR
-        </button>
-      <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        Exportar
-      </button>
-      <div class="dropdown-menu">
-        <a href="" data-target="#modal-exportar" data-toggle="modal" class="dropdown-item" target="blank_"><img src="{{ asset('imagenes/icon-excel.png') }}"> Excel</a>
-      </div>
-    </div>
+
     @include('pedidos.modal.exportar', ['title' => 'Exportar pedidos POR ENVIAR', 'key' => '1'])
     {{-- @endcan --}}
-  </h1>
+
   @if($superasesor > 0)
   <br>
   <div class="bg-4">
@@ -40,21 +51,60 @@
 
 @section('content')
     <style>
+
+        #placeholder-qr{
+            animation: qr 1.5s ease-in-out infinite;
+        }
+        @keyframes  qr {
+            0%{
+                transform: translate(-50%, -50%) scale(1);
+            }
+            50%{
+                transform: translate(-50%, -50%) scale(1.2);
+            }
+            100%{
+                transform:  translate(-50%, -50%) scale(1);
+            }
+
+        }
+
+        #btn-qr{
+            margin-right: 16px;
+            position: fixed;
+            bottom: 16px;
+            left: 50%;
+            width: 300px;
+            background-color: #3498db !important;
+            color: white;
+            text-shadow: 1px 2px 3px #00000063;
+            transform: translate(-50%, 0px);
+            border-radius: 12px;
+        }
         .activo{
             background-color: #e74c3c !important;
             color: white !important;
             border: 0 !important;
         }
+        .content-wrapper{
+            background-color: white;
+        }
+        .card{
+            box-shadow: 0 0 white;
+        }
     </style>
   <div class="card w-100">
-    <div class="card-body">
+    <div class="card-body p-0">
 
         <ul class="nav nav-tabs mb-24 mt-24" id="myTab" role="tablist">
             <li class="nav-item w-50 text-center">
-                <a class="condicion-tabla nav-link activo active font-weight-bold" id="home-tab" data-toggle="tab" data-url="19" href="#home" role="tab" aria-controls="home" aria-selected="true">RECEPCION</a>
+                <a class="condicion-tabla nav-link activo active font-weight-bold" id="home-tab" data-toggle="tab" data-url="19" href="#home" role="tab" aria-controls="home" aria-selected="true">
+                    <i class="fa fa-inbox" aria-hidden="true"></i> RECEPCION
+                </a>
             </li>
             <li class="nav-item w-50 text-center">
-                <a class="condicion-tabla nav-link font-weight-bold" id="profile-tab" data-toggle="tab" data-url="18" href="#profile" role="tab" aria-controls="profile" aria-selected="false">EN RUTA</a>
+                <a class="condicion-tabla nav-link font-weight-bold" id="profile-tab" data-toggle="tab" data-url="18" href="#profile" role="tab" aria-controls="profile" aria-selected="false">
+                    <i class="fa fa-motorcycle" aria-hidden="true"></i> EN RUTA
+                </a>
             </li>
         </ul>
       {{-- <table cellspacing="5" cellpadding="5">
@@ -104,21 +154,21 @@
     <!-- Modal -->
     <div class="modal fade" id="modal-qr" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" style="max-width: 800px!important;">
-            <div class="modal-content">
-                <div class="modal-header bg-success">
-                    <h5 class="titulo-confirmacion"  id="exampleModalLabel"><i class="fa fa-qrcode" aria-hidden="true"></i>
-                         Escanear Pedido</h5>
+            <div class="modal-content br-16 cnt-shw">
+                <!--
+                <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
-                </div>
+                </div> -->
                 {{-- Form::Open(['route' => ['pedidos.atender', $pedido],'enctype'=>'multipart/form-data', 'id'=>'formulario','files'=>true]) --}}
                 <form id="formulario_confirmacion" name="formulariorecepcion" enctype="multipart/form-data">
                     {{-- Form::Open(['route' => ['pedidos.envio', $pedido],'enctype'=>'multipart/form-data', 'id'=>'formulario','files'=>true]) --}}
                     <input type="hidden" id="hiddenCodigo" name="hiddenCodigo">
 
                     <div class="modal-body">
-
+                        <h5 class="titulo-confirmacion text-center font-weight-bold"  id="exampleModalLabel"><i class="fa fa-qrcode" aria-hidden="true"></i>
+                            Escanear Pedido</h5>
                         <div class="row-element-set row-element-set-QRScanner">
                             <!-- RECOMMENDED if your web app will not function without JavaScript enabled -->
                             <noscript>
@@ -148,7 +198,7 @@
                             <br>
                             <div class="cnt-scanner">
                                 <div class="qrscanner"  style="background-color: #222; width:200px; height:200px; margin:auto; border-radius: 16px; overflow:hidden;" id="scanner"></div>
-                                <img src="{{asset('images/codigo-qr.png')}}" style="width: 150px;
+                                <img src="{{asset('images/codigo-qr.png')}}" id="placeholder-qr" style="width: 150px;
     opacity: 0.1;
     position: absolute;
     left: 50%;
@@ -175,13 +225,24 @@
                       {!! Form::label('destino', 'Destino') !!}
                       {!! Form::select('destino', $destinos , null, ['class' => 'form-control border border-secondary', 'data-live-search' => 'true', 'placeholder' => '---- SELECCIONE ----']) !!}
                     </div> --}}
-                    <div class="modal-footer">
+                    <div class="text-center">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
                     </div>
+                    <!--
+                    <div class="modal-footer">
+
+                    </div>-->
                 </form>
+                <hr>
+
             </div>
         </div>
     </div>
+
+    <button type="button" id="btn-qr" class="btn btn-option" data-toggle="modal" data-target="#modal-qr" data-backdrop="static" style="margin-right:16px;" aria-haspopup="true" aria-expanded="false">
+        <i class="fa fa-qrcode" aria-hidden="true"></i>
+        Escanear QR
+    </button>
 
     <script>
         if (location.protocol != 'https:') {
