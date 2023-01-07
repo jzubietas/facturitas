@@ -2545,15 +2545,18 @@ class EnvioController extends Controller
         $this->validate($request, [
             'adjunto1' => 'required|file',
             'adjunto2' => 'required|file',
+            'adjunto3' => 'required|file',
             'envio_id' => 'required',
             'fecha_recepcion' => 'required|date',
         ]);
         $file1 = $request->file('adjunto1')->store('entregas', 'pstorage');
         $file2 = $request->file('adjunto2')->store('entregas', 'pstorage');
+        $file3 = $request->file('adjunto3')->store('entregas', 'pstorage');
         $envio = DireccionGrupo::where("id", $request->envio_id)->first();
         $envio->update([
             'foto1' => $file1,
             'foto2' => $file2,
+            'foto3' => $file3,
             'atendido_por' => Auth::user()->name,
             'atendido_por_id' => Auth::user()->id,
             'fecha_recepcion' => $request->fecha_recepcion,

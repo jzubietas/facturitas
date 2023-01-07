@@ -78,7 +78,7 @@ class ClienteController extends Controller
         $data = Cliente:://CLIENTES SIN PEDIDOS
         join('users as u', 'clientes.user_id', 'u.id')
             ->leftjoin('pedidos as p', 'clientes.id', 'p.cliente_id')
-            ->where('clientes.estado', '1')
+            //->where('clientes.estado', '1')
             ->where('clientes.tipo', '1')
             ->groupBy(
                 'clientes.id',
@@ -100,6 +100,7 @@ class ClienteController extends Controller
                 'clientes.icelular',
                 'clientes.celular',
                 'clientes.estado',
+                'clientes.estado as estado_int',
                 'u.name as user',
                 'u.identificador',
                 'clientes.provincia',
@@ -174,20 +175,43 @@ class ClienteController extends Controller
 
         return datatables()->query(DB::table($data))//Datatables::of($data)
 
-        ->addIndexColumn()
+            ->addIndexColumn()
+            ->addColumn('estado_int', function ($cliente) {
+                if($cliente->estado=='0')
+                {
+                    return $cliente->estado;
+                }else{
+                    return $cliente->estado;
+                }
+
+
+            })
+            ->editColumn('estado', function ($cliente) {
+                $badge_estado='';
+                if($cliente->estado_int=='1')
+                {
+                    $badge_estado.= '<span class="badge badge-success w-100" style="background-color:red !important;">' . Cliente::ANULADO . '</span>';
+                    return $badge_estado;
+                }
+
+            })
             ->addColumn('action', function ($row) {
                 $btn = "";
 
                 if(\auth()->user()->can('clientes.edit')) {
-                    
-                    $btn = $btn . '<a href="' . route('clientes.edit', $row->id) . '" class="btn btn-warning btn-sm"> <i class="fas fa-edit"></i> Editar</a>';
+                    if($row->estado=='1')
+                    {
+                        $btn = $btn . '<a href="' . route('clientes.edit', $row->id) . '" class="btn btn-warning btn-sm"> <i class="fas fa-edit"></i> Editar</a>';
+                    }
                 }
 
                 $btn = $btn . '<a href="' . route('clientes.show', $row->id) . '" class="btn btn-info btn-sm"> <i class="fas fa-eye"></i> Ver</a>';
 
                 if(\auth()->user()->can('clientes.destroy')) {
-                    
-                    $btn = $btn . '<a href="" data-target="#modal-delete" data-toggle="modal" data-cliente="'.$row->id.'" data-asesor="'.trim($row->identificador).'"><button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i> Bloquear</button></a>';
+                    if($row->estado=='1')
+                    {
+                        $btn = $btn . '<a href="" data-target="#modal-delete" data-toggle="modal" data-cliente="'.$row->id.'" data-asesor="'.trim($row->identificador).'"><button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i> Bloquear</button></a>';
+                    }
                 }
 
                 $btn = $btn . '<a href="" data-target="#modal-historial-situacion-cliente" data-toggle="modal" data-cliente="' . $row->id . '"><button class="btn btn-success btn-sm"><i class="fas fa-trash-alt"></i> Historico</button></a>';
@@ -202,7 +226,7 @@ class ClienteController extends Controller
 
                 return $btn;
             })
-            ->rawColumns(['action'])
+            ->rawColumns(['action','estado','estado_int'])
             ->toJson();
         //}
     }
@@ -449,7 +473,7 @@ class ClienteController extends Controller
             if (is_array($files)) {
                 foreach ($files as $file) {
                     if ($file instanceof UploadedFile) {
-                        $filePaths[] = $file->store("pedidos_adjuntos", "pstorage");
+                        $filePaths[] = $file->store("clientes_adjuntos", "pstorage");
                     }
                 }
             }
@@ -465,9 +489,11 @@ class ClienteController extends Controller
             }
             setting()->save();
 
+            $nombre_Responsable=User::where('id',Auth::user()->id)->first()->name;
+
             $cliente->update([
                 'motivo_anulacion' => $request->motivo,
-                'responsable_anulacion' => $request->responsable,
+                'responsable_anulacion' => $nombre_Responsable,
                 //'condicion' => 'ANULADO',
                 //'condicion_code' => Pedido::ANULADO_INT,
                 //'modificador' => 'USER' . Auth::user()->id,
@@ -477,9 +503,10 @@ class ClienteController extends Controller
                 'estado' => '0',
                 'path_adjunto_anular' => null,
                 'path_adjunto_anular_disk' => 'pstorage',
+                'situacion'=>'BLOQUEADO',
             ]);
             
-            $html = $pedido;
+            $html = $cliente;
             
         }
         return response()->json(['html' => $html]);
