@@ -265,11 +265,11 @@ class UserController extends Controller
         } else if ($mirol == 'ASESOR ADMINISTRATIVO') {
 
             //$usersB = User::where("identificador", "ADMIN")->where("rol", "Administrador");
-            $users = User::where("identificador", "B")->where("rol", "ASESOR ADMINISTRATIVO");
+            $users = User::where("rol", "ASESOR ADMINISTRATIVO");
             //$users = $usersB->union($users);
 
         } else {
-            $usersB = User::where("identificador", "ADMIN")->where("rol", "Administrador");
+            $usersB = User::where("rol", "Administrador");
             $users = $usersB->union($users);
         }
 
@@ -322,8 +322,10 @@ class UserController extends Controller
             $users = $users->WhereNotIn("identificador", ['B']);
         } elseif ($mirol == 'Asesor') {
             $users = $users->where('id', Auth::user()->id)->where("rol", "Asesor");
-        } else {
-            $usersB = User::where("identificador", "B");//->where("rol", "Administrador");// ahora es "ASESOR ADMINISTRATIVO"
+        } else if ($mirol == 'ASESOR ADMINISTRATIVO') {
+            $users = User::where("rol", "ASESOR ADMINISTRATIVO");
+        }else{
+            $usersB = User::where("rol", "Administrador");
             $users = $usersB->union($users);
         }
         $users = $users->orderBy('exidentificador', 'ASC')->get();
