@@ -47,21 +47,7 @@ class StatusPedidoModelChange extends Command
             3 => 'ATENDIDO'
         ];*/
 
-        $MigracionVariablesPedidosEnvio = [
-            0 => 'ANULADO',
-            1 => 'POR ATENDER - OPE',
-            2 => 'EN ATENCION - OPE',
-            3 => 'ATENDIDO - OPE',
-            5 => 'ATENDIDO - JEFE OPE',
-            12 => 'RECEPCION - COURIER',
-            11 => 'CONFIRMACION - COURIER',
-            8 => 'REPARTO - COURIER',
-            9 => 'SEGUIMIENTO PROVINCIA - COURIER',
-            15 => 'MOTORIZADO',
-            10 => 'ENTREGADO - CLIENTE',
-            13 => 'ENTREGADO SIN SOBRE - OPE',
-            14 => 'ENTREGADO SIN SOBRE - CLIENTE'
-        ];
+        $MigracionVariablesPedidosEnvio = Pedido::$estadosCondicionEnvioCode;
 
         /*foreach($MigracionVariablesPedidos  as $status => $value){
             Pedido::where('condicion','=', $value)->update([
