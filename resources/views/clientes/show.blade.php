@@ -108,6 +108,64 @@
       </div>
     </div>
 
+<br> 
+
+                  @if($cliente->estado=='0')
+                    <div class="card mt-4 border rounded card-body border-secondary">
+                        <div class="card-header">
+                            <h4 class="text-bold">Detalle de anulación</h4>
+                        </div>
+                        <div class="card-body">
+                            <ul class="list-group">
+                                <li class="list-group-item">
+                                    Responsable <B>{{ $cliente->responsable_anulacion }}</B>
+                                </li>
+                                <li class="list-group-item">
+                                    Fecha de bloqueo
+                                    <b>{{ $cliente->fecha_anulacion}} {{optional($cliente->fecha_anulacion)->format('d-m-Y h:i')}}</b>
+                                </li>
+                                <li class="list-group-item">
+                                    Motivo de Bloqueo:
+                                    <b>{{$cliente->motivo_anulacion}}</b>
+                                </li>
+                                @if(count($cliente->adjuntosFiles())>0)
+                                    <li class="list-group-item bg-danger">
+                                        Adjuntos
+                                    </li>
+                                @endif
+                                <li class="list-group-item">
+                                    <div class="row">
+                                        @foreach($cliente->adjuntosFiles() as $file)
+                                            <div class="col-md-3">
+                                                <div class="card">
+                                                    <div class="card-body">
+                                                        <a target="_blank"
+                                                           href="{{Storage::disk($pedido->path_adjunto_anular_disk)->url($file)}}">
+                                                            @if(!Str::contains(Str::lower($file),'.pdf'))
+                                                                <img class="w-100"
+                                                                     src="{{Storage::disk($pedido->path_adjunto_anular_disk)->url($file)}}">
+                                                            @else
+                                                                <i class="fa fa-file-pdf"></i>
+                                                            @endif
+                                                            {{basename($file)}}
+                                                        </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                </li>
+
+
+                            </ul>
+                        </div>
+                    </div>
+                @endif
+                <br>
+
+
+          
+
     <div class="card-footer">
       {{--<button type="submit" class="btn btn-success"><i class="fas fa-save"></i> Guardar</button>--}}
       <button type = "button" onClick="history.back()" class="btn btn-danger btn-lg"><i class="fas fa-arrow-left"></i>ATRAS</button>

@@ -26,10 +26,6 @@
                         {!! Form::file('attachments[]', ['class' => 'form-control','multiple','id'=>'attachments','accept'=>"image/*"]) !!}
                     </div>
                     <div class="form-group col lg-12">
-                        {!! Form::label('responsable', 'Responsable de la anulación') !!}
-                        {!! Form::text('responsable', '', ['class' => 'form-control', 'placeholder' => 'Responsable', 'required' => 'required','readonly']) !!}
-                    </div>
-                    <div class="form-group col lg-12">
                         {!! Form::label('anulacion_password', 'Contraseña de anulaciòn') !!}
                         {!! Form::password('anulacion_password', ['class' => 'form-control', 'placeholder' => 'Contraseña de anulaciòn', 'required' => 'required',]) !!}
                     </div>
