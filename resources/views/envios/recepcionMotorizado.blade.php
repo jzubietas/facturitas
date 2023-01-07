@@ -361,11 +361,16 @@
   <script type="text/javascript" src="{{asset('js/jsqrscanner.nocache.js')}}"></script>
 
   <script type="text/javascript">
+          var codigo_pedido = false;
       function onQRCodeScanned(scannedText)
       {
+          if(codigo_pedido){
+              return
+          }
           //var scannedTextMemo = document.getElementById("scannedTextMemo");
-    var codigo_pedido = "";
+          //var codigo_pedido = "";
           $('#scanner').removeClass("qr_success");
+            codigo_pedido = true;
                 setTimeout(function(){
                     $.ajax({
                         processData: false,
@@ -424,6 +429,8 @@
                                 }
                             }
                         }
+                    }).always(function(){
+                        codigo_pedido = false;
                     });
                 }, 200);
 
