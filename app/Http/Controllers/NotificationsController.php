@@ -198,9 +198,6 @@ class NotificationsController extends Controller
                 $contador_pedidos_atender = $contador_pedidos_atender->WhereIn('u.identificador', $asesores);
 
 
-            } else {
-                $contador_pedidos_atender = $contador_pedidos_atender;
-
             }
 
             $contador_pedidos_atender = $contador_pedidos_atender->count();
@@ -419,11 +416,25 @@ class NotificationsController extends Controller
             ->where('condicion_envio_code', Pedido::ENTREGADO_CLIENTE_INT)
             ->count();
 
-        $contador_sobres_confirmar_recepcion = Pedido::where('estado',1)
-            ->where('condicion_envio_code', Pedido::ENVIO_COURIER_JEFE_OPE_INT)
-            ->where('pedidos.envio', '2')
-            ->where('pedidos.estado', '1')
+        $contador_sobres_confirmar_recepcion = DireccionGrupo::join('clientes as c', 'c.id', 'direccion_grupos.cliente_id')
+            ->join('users as u', 'u.id', 'c.user_id')
+            ->where('direccion_grupos.condicion_envio_code',Pedido::ENVIO_MOTORIZADO_COURIER_INT)
+            ->activo()
             ->count();
+
+
+        $en_motorizados_count = DireccionGrupo::join('clientes as c', 'c.id', 'direccion_grupos.cliente_id')
+            ->join('users as u', 'u.id', 'c.user_id')
+            ->where('direccion_grupos.condicion_envio_code', Pedido::MOTORIZADO_INT)
+            ->where('direccion_grupos.estado', '1');
+        if (\auth()->user()->rol == User::ROL_MOTORIZADO) {
+            $en_motorizados_count = $en_motorizados_count->where('direccion_grupos.motorizado_id', '=', auth()->id());
+        }
+
+        $en_motorizados_confirmar_count = DireccionGrupo::join('clientes as c', 'c.id', 'direccion_grupos.cliente_id')
+            ->join('users as u', 'u.id', 'c.user_id')
+            ->where('direccion_grupos.condicion_envio_code', Pedido::CONFIRM_MOTORIZADO_INT)
+            ->where('direccion_grupos.estado', '1');
 
         return [
             'icon' => 'fas fa-envelope',
@@ -437,7 +448,9 @@ class NotificationsController extends Controller
             'contador_pedidos_pen_anulacion' => $contador_pedidos_pen_anulacion,
             'contador_sobres_entregados' => $contador_sobres_entregados,
             'contador_sobres_confirmar_recepcion' => $contador_sobres_confirmar_recepcion,
-            'contador_jefe_op' => $contador_jefe_op
+            'contador_jefe_op' => $contador_jefe_op,
+            'contador_en_motorizados_count' => $en_motorizados_count->count(),
+            'contador_en_motorizados_confirmar_count' => $en_motorizados_confirmar_count->count(),
 
 
         ];
