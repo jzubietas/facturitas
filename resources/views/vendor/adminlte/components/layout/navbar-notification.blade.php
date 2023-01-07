@@ -73,7 +73,11 @@
                             insertDotMenu("i.dot_pedidos_atendidos_operacion_count",'.noti-pedidos-atendidos.noti-side',data.contador_pedidos_atendidos_operacion)
                             insertDotMenu("i.dot_pedidos_pen_anulacion_count",'.noti-pedidos-pen-anulacion.noti-side',data.contador_pedidos_pen_anulacion)
                             insertDotMenu("i.dot_sobres_entregados_count",'.noti-sobres-entregados.noti-side',data.contador_sobres_entregados)
-                            insertDotMenu("i.dot_sobres_confirmar_recepcion_count",'.noti-sobres-confirmar-recepcion.noti-side',data.contador_sobres_confirmar_recepcion)//data.contador_sobres_entregados)
+
+                            insertDotMenu("i.dot_sobres_confirmar_recepcion_count",'.dot-notify.noti-side',data.contador_sobres_confirmar_recepcion)
+
+                            insertDotMenu("i.dot_contador_en_motorizados_count",'.dot-notify.noti-side',data.contador_en_motorizados_count)
+                            insertDotMenu("i.dot_contador_en_motorizados_confirmar_count",'.dot-notify.noti-side',data.contador_en_motorizados_confirmar_count)
                             nLink.update(data);
                         })
 

@@ -14,7 +14,7 @@
               <input type="hidden" id="hiddenCodigo" name="hiddenCodigo">
 
               <div class="modal-body">
-                  <p>Esta seguro que desea enviar el sobre <strong class="textcode"></strong> a Motorizados</p>
+                  <p>Esta seguro que desea enviar el sobre <strong class="textcode"></strong> a Motorizados del <strong class="textzone"></strong></p>
               </div>
               {{-- <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 {!! Form::label('destino', 'Destino') !!}

@@ -279,11 +279,13 @@
                 var button = $(event.relatedTarget)
                 var idunico = button.data('ide')
                 var codigos = button.data('codigos')
+                var zona = button.data('zona')
 
                 $('.titulo-confirmacion').html("Enviar sobre a Motorizado");
 
                 $("#hiddenCodigo").val(idunico)
                 $("#modal-confirmacion .textcode").html(codigos);
+                $("#modal-confirmacion .textzone").html(zona);
             });
 
             $(document).on("submit", "#formulario_confirmacion", function (evento) {
@@ -441,20 +443,18 @@
                 stateSave: true,
                 serverSide: true,
                 searching: true,
-                "order": [[0, "desc"]],
+                order: [[0, "desc"]],
                 ajax:{
                     url: "{{ route('envios.pararepartotabla') }}",
                     data: function(d){
-
                         d.zona = $('.zona-tabla.activo').data("url");
-                    }
+                    },
                 },
                 createdRow: function (row, data, dataIndex) {
                 },
                 rowCallback: function (row, data, index) {
                     if (data.destino2 == 'PROVINCIA') {
                         $('td', row).css('color', 'red')
-
                     } else if (data.destino2 == 'LIMA') {
                         if (data.distribucion != null) {
                             if (data.distribucion == 'NORTE') {
@@ -464,12 +464,7 @@
                             } else if (data.distribucion == 'SUR') {
                                 //$('td', row).css('color','green')
                             }
-
-                        } else {
-
                         }
-
-
                     }
                 },
                 columns: [
@@ -594,8 +589,6 @@
                     }
                 },
             });
-
-
         });
     </script>
 
@@ -613,8 +606,9 @@
 
         //VALIDAR CAMPO CELULAR
         function maxLengthCheck(object) {
-            if (object.value.length > object.maxLength)
+            if (object.value.length > object.maxLength) {
                 object.value = object.value.slice(0, object.maxLength)
+            }
         }
 
         //VALIDAR ANTES DE ENVIAR
