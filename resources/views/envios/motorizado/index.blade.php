@@ -135,7 +135,7 @@
                         $.dialog({
                             title: '<h3 class="font-weight-bold">Entregas de motorizado</h3>',
                             type: 'green',
-                            columnClass: 'large',
+                            columnClass: 'xlarge',
                             content: `<div>
     <form enctype="multipart/form-data" class="card">
         <div class="card-body p-0">
@@ -183,7 +183,7 @@
                     <div class="form-group">
                         <div class="image-wrapper">
                             <img id="picture1" src="{{ asset('imagenes/sobres.jpg') }}"
-                                alt="Imagen del pago" class="w-80 mh-100 h-100" style="display: block;">
+                                alt="Imagen del pago" class="w-80 mh-90 h-90 img-fluid" style="display: block;">
                         </div>
                     </div>
                 </div>
@@ -191,7 +191,7 @@
                     <div class="form-group">
                         <div class="image-wrapper">
                             <img id="picture2" src="{{ asset('imagenes/domicilio.jpg') }}"
-                                 alt="Imagen del pago" class="w-80 mh-100 h-100" style="display: block">
+                                 alt="Imagen del pago" class="w-80 mh-90 h-90 img-fluid" style="display: block">
                         </div>
                     </div>
                 </div>
@@ -199,7 +199,7 @@
                     <div class="form-group">
                         <div class="image-wrapper">
                             <img id="picture3" src="{{ asset('imagenes/recibe_sobre.jpg') }}"
-                                 alt="Imagen del pago" class="w-80 mh-100 h-100" style="display: block">
+                                 alt="Imagen del pago" class="w-80 mh-90 h-90 img-fluid" style="display: block">
                         </div>
                     </div>
                 </div>
