@@ -371,7 +371,7 @@
           //var codigo_pedido = "";
           $('#scanner').removeClass("qr_success");
             codigo_pedido = true;
-                setTimeout(function(){
+
                     $.ajax({
                         processData: false,
                         contentType: false,
@@ -397,11 +397,12 @@
                                 $('#chatAudio')[0].play();
 
                                 const synth = window.speechSynthesis
-                                let text = "Pedido Reconocido"
-                                const utterThis = new SpeechSynthesisUtterance(text)
+                                if(!synth.pending){
+                                    let text = "Pedido Reconocido"
+                                    const utterThis = new SpeechSynthesisUtterance(text)
 
-                                synth.speak(utterThis)
-
+                                    synth.speak(utterThis)
+                                }
 
                                 if($('#recepcion_btn').data('asignado') != 1){
                                     $('#recepcion_btn').on('click', function (){
@@ -432,7 +433,7 @@
                     }).always(function(){
                         codigo_pedido = false;
                     });
-                }, 200);
+
 
               //scannedTextMemo.value = scannedText;
 
