@@ -265,11 +265,11 @@ class UserController extends Controller
         } else if ($mirol == 'ASESOR ADMINISTRATIVO') {
 
             //$usersB = User::where("identificador", "ADMIN")->where("rol", "Administrador");
-            $users = User::where("identificador", "B")->where("rol", "ASESOR ADMINISTRATIVO");
+            $users = User::where("rol", "ASESOR ADMINISTRATIVO");
             //$users = $usersB->union($users);
 
         } else {
-            $usersB = User::where("identificador", "ADMIN")->where("rol", "Administrador");
+            $usersB = User::where("rol", "Administrador");
             $users = $usersB->union($users);
         }
 
@@ -284,14 +284,15 @@ class UserController extends Controller
         foreach ($users as $user) {
 
 
-            if ($user->identificador == 'B') {
+            if ($user->rol == 'ASESOR ADMINISTRATIVO') {
                 $html .= '<option style="color:black" value="' . $user->identificador . '">' . $user->identificador . '</option>';
-            } elseif ($user->identificador == 'ADMIN') {
+            } elseif ($user->rol == 'Administrador') {
                 $html .= '<option style="color:black" value="' . $user->identificador . '">' . $user->identificador . '</option>';
             } else {
-                /*if ($user->exidentificador == '01' || $user->exidentificador == '02') {
+                if ($user->exidentificador == '01' || $user->exidentificador == '02') {
                     $html .= '<option style="color:black" value="' . $user->identificador . '">' . $user->identificador . (($user->exidentificador != null) ? '  (' . $user->exidentificador . ')' : '') . '</option>';
-                }else */if ($user->exidentificador == 22 || $user->exidentificador == 21) {
+                }
+                else if ($user->exidentificador == '22' || $user->exidentificador == '21') {
                     $html .= '<option style="color:black" value="' . $user->identificador . '">' . $user->identificador . (($user->exidentificador != null) ? '  (' . $user->exidentificador . ')' : '') . '</option>';
                 } else {
                     if (intval($user->exidentificador) % 2 == 0) {
@@ -321,20 +322,26 @@ class UserController extends Controller
             $users = $users->WhereNotIn("identificador", ['B']);
         } elseif ($mirol == 'Asesor') {
             $users = $users->where('id', Auth::user()->id)->where("rol", "Asesor");
-        } else {
-            $usersB = User::where("identificador", "B");//->where("rol", "Administrador");// ahora es "ASESOR ADMINISTRATIVO"
+        } else if ($mirol == 'ASESOR ADMINISTRATIVO') {
+            $users = User::where("rol", "ASESOR ADMINISTRATIVO");
+        }else{
+            $usersB = User::where("rol", "Administrador");
             $users = $usersB->union($users);
         }
         $users = $users->orderBy('exidentificador', 'ASC')->get();
         $html = "";
         //$html = '<option value="">' . trans('---- SELECCIONE ASESOR ----') . '</option>';
         foreach ($users as $user) {
-            if ($user->identificador == 'B') {
+
+            if ($user->rol == 'ASESOR ADMINISTRATIVO') {
                 $html .= '<option style="color:black" value="' . $user->identificador . '">' . $user->identificador . '</option>';
-            } else {
-                /*if ($user->exidentificador == '01' || $user->exidentificador == '02') {
+            } elseif ($user->rol == 'Administrador') {
+                $html .= '<option style="color:black" value="' . $user->identificador . '">' . $user->identificador . '</option>';
+            }else {
+                if ($user->exidentificador == '01' || $user->exidentificador == '02') {
                     $html .= '<option style="color:black" value="' . $user->identificador . '">' . $user->identificador . (($user->exidentificador != null) ? '  (' . $user->exidentificador . ')' : '') . '</option>';
-                }else */if ($user->exidentificador == 22 || $user->exidentificador == 21) {
+                }else 
+                if ($user->exidentificador == '22' || $user->exidentificador == '21') {
                     $html .= '<option style="color:black" value="' . $user->identificador . '">' . $user->identificador . (($user->exidentificador != null) ? '  (' . $user->exidentificador . ')' : '') . '</option>';
                 } else {
 
