@@ -63,23 +63,25 @@
   <table id="tabla" class="table ">
     @foreach ($pedidos as $pedido)
       <thead class="noselect">
-        <tr >
-          <th colspan="2" style="background: white">
-              <span>{{ $pedido->empresas}} {{ $pedido->codigos }}</span><br>
-              <div class="row">
-                  <div class="col-lg-6 mt-8">
-                      <img src="@php echo $codigo_barras_img @endphp" width="200">
-
-                  </div><br><br>
-                  <div class="col-lg-6 mt-8">
-
-                      <img src="@php echo $codigo_qr_img @endphp" width="200">
-                  </div>
+        <tr style="border-bottom: 1px dashed #888; padding-bottom:8px; ">
+          <th colspan="2">
+              <div style="background: white; border-right: 1px solid #CCC;">
+                  <span style="font-size: 16px;">{{ $pedido->empresas}} {{ $pedido->codigos }}</span><br>
+                  <img style="margin-top:12px;" src="@php echo $codigo_barras_img @endphp" width="200">
               </div>
-
-              <h2>PEDIDO</h2>
           </th>
+            <th>
+
+                <img src="@php echo $codigo_qr_img @endphp" width="100">
+                <p style="font-size:12px; color:#888;">Escanee el QR para recibir este pedido</p>
+            </th>
         </tr>
+      <tr>
+          <td colspan="3">
+              <h2>PEDIDO</h2>
+          </td>
+      </tr>
+
       </thead>
       <tbody>
         <tr class="noselect">
@@ -87,47 +89,47 @@
         @if ( ($mirol=="Asesor") && ($identificador=="06" || $identificador=="07" || $identificador=="08" || $identificador=="09" || $identificador=="10" ) )
             <td><br>{{ $pedido->codigos }}<br><br></td>
         @else
-            <th scope="row"><br><span class="textLayer">CODIGO</span><br><br></th>
-            <td><br><span class="textLayer">{{ $pedido->codigos }}</span><br><br></td>
+            <th scope="row"><br><span class="textLayer">CODIGO</span><br></th>
+            <td colspan="2"><br><span class="textLayer">{{ $pedido->codigos }}</span><br></td>
         @endif
         </tr>
         <tr>
           @if ( ($mirol=="Asesor") && ($identificador=="06" || $identificador=="07" || $identificador=="08" || $identificador=="09" || $identificador=="10" ) )
             <td>
-              <br>@php echo number_format($pedido->cantidad,2) @endphp<br><br>
+              <br>@php echo number_format($pedido->cantidad,2) @endphp<br>
             </td>
           @else
-            <th scope="row"><br>CANTIDAD<br><br></th>
-            <td>
-              <br>@php echo number_format($pedido->cantidad,2) @endphp<br><br>
+            <th scope="row"><br>CANTIDAD<br></th>
+            <td colspan="2">
+              <br>@php echo number_format($pedido->cantidad,2) @endphp<br>
             </td>
           @endif
         </tr>
         <tr>
           @if ( ($mirol=="Asesor") && ($identificador=="06" || $identificador=="07" || $identificador=="08" || $identificador=="09" || $identificador=="10" ) )
-            <td><br>{{ $pedido->ruc }}<br><br></td>
+            <td><br>{{ $pedido->ruc }}<br></td>
           @else
-            <th scope="row"><br>RUC<br><br></th>
-            <td><br>{{ $pedido->ruc }}<br><br></td>
+            <th scope="row"><br>RUC<br></th>
+            <td colspan="2"><br>{{ $pedido->ruc }}<br></td>
           @endif
 
         </tr>
         <tr>
           @if ( ($mirol=="Asesor") && ($identificador=="06" || $identificador=="07" || $identificador=="08" || $identificador=="09" || $identificador=="10" ) )
-            <td><br>{{ $pedido->empresas }}<br><br></td>
+            <td><br>{{ $pedido->empresas }}<br></td>
           @else
-            <th scope="row"><br>RAZON SOCIAL<br><br></th>
-            <td><br>{{ $pedido->empresas }}<br><br></td>
+            <th scope="row"><br>RAZON SOCIAL<br></th>
+            <td colspan="2"><br>{{ $pedido->empresas }}<br></td>
           @endif
 
 
         </tr>
         <tr>
           @if ( ($mirol=="Asesor") && ($identificador=="06" || $identificador=="07" || $identificador=="08" || $identificador=="09" || $identificador=="10" ) )
-                <td><br>{{ $pedido->mes }}<br><br></td>
+                <td><br>{{ $pedido->mes }}<br></td>
           @else
-            <td scope="row"><br>MES<br><br></td>
-            <td><br>{{ $pedido->mes }}<br><br></td>
+            <td scope="row"><br><b>MES</b><br></td>
+            <td colspan="2"> <br>{{ $pedido->mes }}<br></td>
           @endif
 
         </tr>
@@ -135,44 +137,44 @@
           @if ( ($mirol=="Asesor") && ($identificador=="06" || $identificador=="07" || $identificador=="08" || $identificador=="09" || $identificador=="10" ) )
             <td><br>{{ $pedido->anio }}<br><br></td>
           @else
-            <th scope="row"><br>AÑO<br><br></th>
-            <td><br>{{ $pedido->anio }}<br><br></td>
+            <th scope="row"><br>AÑO<br></th>
+            <td colspan="2"><br>{{ $pedido->anio }}<br></td>
           @endif
 
         </tr>
         <tr>
           @if ( ($mirol=="Asesor") && ($identificador=="06" || $identificador=="07" || $identificador=="08" || $identificador=="09" || $identificador=="10" ) )
-            <td><br>{{ $pedido->tipo_banca }}<br><br></td>
+            <td><br>{{ $pedido->tipo_banca }}<br></td>
           @else
-            <th scope="row"><br>FISICO O ELECTRONICO<br><br></th>
-            <td><br>{{ $pedido->tipo_banca }}<br><br></td>
+            <th scope="row"><br>FISICO O ELECTRONICO<br></th>
+            <td colspan="2"><br>{{ $pedido->tipo_banca }}<br></td>
           @endif
 
         </tr>
 
         @if ( ($mirol=="Asesor") && ($identificador=="06" || $identificador=="07" || $identificador=="08" || $identificador=="09" || $identificador=="10" ) )
           <tr>
-            <td colspan="2"><p>{{ $pedido->descripcion }}</div></p></td>
+            <td colspan="2"><p style="font-size: 14px;">{{ $pedido->descripcion }}</div></p></td>
           </tr>
         @else
           <tr>
             <th colspan="2" style="background: white">DESCRIPCIÓN</th>
           </tr>
           <tr>
-            <td colspan="2"><p>{{ $pedido->descripcion }}</div></p></td>
+            <td colspan="2"><p style="font-size: 14px;">{{ $pedido->descripcion }}</div></p></td>
           </tr>
         @endif
 
         @if ( ($mirol=="Asesor") && ($identificador=="06" || $identificador=="07" || $identificador=="08" || $identificador=="09" || $identificador=="10" ) )
           <tr>
-            <td colspan="2"><p>{{ $pedido->nota }}</p></td>
+            <td colspan="2"><p style="font-size: 16px;">{{ $pedido->nota }}</p></td>
           </tr>
         @else
           <tr>
             <th colspan="2" style="background: white">NOTA</th>
           </tr>
           <tr>
-            <td colspan="2"><p>{{ $pedido->nota }}</p></td>
+            <td colspan="2"><p style="font-size: 16px;">{{ $pedido->nota }}</p></td>
           </tr>
         @endif
 
