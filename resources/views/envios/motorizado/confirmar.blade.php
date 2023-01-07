@@ -226,25 +226,12 @@
                 let foto1 = button.data('imagen1');console.log(foto1);
                 let foto2 = button.data('imagen2');
                 let foto3 = button.data('imagen3');
+                $(".foto1").attr("src", foto1);
 
-                
-                var foto1g = "{{asset('storage')}}";
-                foto1g = foto1g.replace('storage', foto1);
-                foto1g = foto1g.replace(' ', '%20');
+                $(".foto2").attr("src", foto2);
 
-                $(".foto1").attr("src", foto1g);
 
-                var foto2g = "{{asset('storage')}}";
-                foto2g = foto2g.replace('storage', foto2);
-                foto2g = foto2g.replace(' ', '%20');
-
-                $(".foto2").attr("src", foto2g);
-
-                var foto3g = "{{asset('storage')}}";
-                foto3g = foto3g.replace('storage', foto3);
-                foto3g = foto3g.replace(' ', '%20');
-
-                $(".foto3").attr("src", foto3g);
+                $(".foto3").attr("src", foto3);
 
                 
                 

@@ -14,17 +14,17 @@
                         
                         <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4"><br>
                             <p>FOTO 1</p>
-                            <img class="foto1" src="" alt="FOTO 1" height="400px" width="400px" class="img-thumbnail">                        
+                            <img class="foto1" src="" alt="FOTO 1" height="400px" width="400px" class="img-fluid">                        
                         </div>
 
                         <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4"><br>
                             <p>FOTO 2</p>                            
-                            <img class="foto2" alt="FOTO 2" height="400px" width="400px" class="img-thumbnail">                        
+                            <img class="foto2" alt="FOTO 2" height="400px" width="400px" class="img-fluid">                        
                         </div>
 
                         <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4"><br>
                             <p>FOTO 3</p>                            
-                            <img class="foto3" alt="FOTO 3" height="400px" width="400px" class="img-thumbnail">                        
+                            <img class="foto3" alt="FOTO 3" height="400px" width="400px" class="img-fluid">                        
                         </div>
 
                     </div>
