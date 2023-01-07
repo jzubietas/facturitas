@@ -209,10 +209,26 @@
                             <div>
                                 <p class="mb-8 mt-16" id="mensaje-resultado"></p>
                                 <!--<p class="mb-0">PAQUETE: <label id="paquete_ped" class="mb-0">Paquete:</label></p>-->
-                                <p class="mb-0">CODIGO: <label id="code_ped" class="mb-0">Codigo:</label></p>
-                                <p class="mb-0">DISTRITO: <label id="dist_ped" class="mb-0">Distrito</label></p>
-                                <p class="mb-0">DIRECCIÓN: <label id="dir_ped" class="mb-0">Dirección</label></p>
-                                <p id="detalle_paquete" class="badge badge-warning font-14 p-12 text-left"></p>
+                                <table class="w-100">
+                                    <tr>
+                                        <td><p class="mb-0 font-weight-bold font-16">CODIGO:</p></td>
+                                        <td><label id="code_ped" class="mb-0 font-weight-normal">Codigo</label></td>
+                                    </tr>
+                                    <tr>
+                                        <td><p class="mb-0 font-weight-bold font-16">DISTRITO:</p></td>
+                                        <td><label id="dist_ped" class="mb-0 font-weight-normal">Distrito</label></td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <p class="mb-0 font-weight-bold font-16">DIRECCIÓN: </p>
+                                        </td>
+                                        <td>
+                                            <label id="dir_ped" class="mb-0 font-weight-normal">Dirección</label>
+                                        </td>
+                                    </tr>
+                                </table>
+
+                                <p id="detalle_paquete" class="badge badge-warning font-14 w-100 p-16 mt-12 text-left"></p>
                                 <a href="#" id="recepcion_btn" class="btn btn-warning font-weight-bold" style="display:none;">Confirmar Pedido</a>
 
                                 <div class="mt-16">
@@ -359,11 +375,12 @@
                                             success: function (data) {
                                                 $('#code_ped').html("");
                                                 $('#dist_ped').html("");
-                                                $('#dir_ped').html("data.direccion");
+                                                $('#dir_ped').html("");
                                                 $('#recepcion_btn').css({'display':'none'});
-                                                $('#detalle_paquete').html('<ul><li>' + data.sobres_recibidos + 'sobres ya fueron confirmados' + '</li><li>' + 'Quedan' + data.sobres_restantes + 'por confirmar </li>');
+                                                $('#detalle_paquete').html('<h4 class="font-20 font-weight-bold">Pedido Confirmado</h4><ul class="pl-0"><li><span class="text-danger">' + data.sobres_recibidos + '</span> sobres ya fueron confirmados' + '</li><li>' + 'Quedan <span class="text-danger">' + data.sobres_restantes + '</span> por confirmar </li>');
                                                 console.log(data.sobres_recibidos + ' sobres ya fueron cofirmados');
                                                 console.log("Quedan " + data.sobres_restantes + " por confirmar");
+                                                $('#mensaje-resultado').html('<span class="font-20 font-weight-bold">Escanear pedido</span>');
                                                 $('#tablaPrincipal').DataTable().ajax.reload();
                                                 return false;
                                             }
