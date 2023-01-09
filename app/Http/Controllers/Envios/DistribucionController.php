@@ -69,32 +69,6 @@ class DistribucionController extends Controller
                 'codigos' => DB::table('grupo_pedido_items')->selectRaw('GROUP_CONCAT(grupo_pedido_items.codigo)')->whereRaw('grupo_pedido_items.grupo_pedido_id=grupo_pedidos.id'),
                 'productos' => DB::table('grupo_pedido_items')->selectRaw('GROUP_CONCAT(grupo_pedido_items.razon_social)')->whereRaw('grupo_pedido_items.grupo_pedido_id=grupo_pedidos.id'),
             ]);
-        /*
-        $pedidoQuery = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')
-            ->join('users as u', 'pedidos.user_id', 'u.id')
-            ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
-            ->select([
-                'pedidos.*',
-                'u.identificador as users',
-                'dp.codigo as codigos',
-                'dp.nombre_empresa as empresas',
-                'dp.total as total',
-                'dp.envio_doc',
-                'dp.fecha_envio_doc',
-                'dp.cant_compro',
-                'dp.fecha_envio_doc_fis',
-                'dp.foto1',
-                'dp.foto2',
-                'dp.fecha_recepcion',
-                DB::raw("DATEDIFF(DATE(NOW()), DATE(pedidos.created_at)) AS dias")
-            ])
-            ->where('pedidos.estado', '1')
-            ->whereIn('pedidos.condicion_envio_code', [Pedido::RECEPCION_COURIER_INT])
-            ->where('dp.estado', '1')
-            ->conDireccionEnvio()
-            ->sinZonaAsignadaEnvio();
-*/
-        //add_query_filtros_por_roles_pedidos($pedidoQuery, 'u.identificador');
 
         $motorizados = User::query()->where('rol', '=', 'MOTORIZADO')->whereNotNull('zona')->get();
         $color_zones = [];
@@ -122,11 +96,22 @@ class DistribucionController extends Controller
 <span class="badge badge-success py-2" style="background-color: ' . $color . '!important;">' . Pedido::RECEPCION_COURIER . '</span>';
                 return $badge_estado;
             })
+            ->editColumn('zona', function ($pedido) {
+                return "<b>" . $pedido->zona . "</b>";
+            })
             ->addColumn('action', function ($pedido) use ($motorizados, $color_zones) {
                 $btn = [];
                 foreach ($motorizados as $motorizado) {
+                    if(Str::contains( $pedido->zona,$motorizado->zona)) {
+                        $addClass = 'border border-danger';
+                        $styleClass = 'box-shadow: rgb(84 84 84 / 40%) -5px 5px, rgb(157 157 157 / 10%) 0px 0px, rgb(229 229 229 / 5%) -25px 25px;';
+                    }else {
+                        $addClass = '';
+                        $styleClass = '';
+                    }
+
                     $btn[] = "<div class='text-center p-1'><button data-zona='$motorizado->zona' data-elTable='#tablaPrincipal" . Str::upper($motorizado->zona) . "' data-ajax-post='" . route('envios.distribuirsobres.asignarzona', ['grupo_pedido_id' => $pedido->id, 'motorizado_id' => $motorizado->id, 'zona' => Str::upper($motorizado->zona)]) . "'
- class='add-row-datatable  btn btn-" . ($color_zones[Str::upper($motorizado->zona)] ?? 'info') . " btn-sm btn-block my-0' type='button'>
+ class='add-row-datatable $addClass btn btn-" . ($color_zones[Str::upper($motorizado->zona)] ?? 'info') . " btn-sm btn-block my-0' type='button' style='$styleClass'>
 <span class='spinner-border spinner-border-sm' role='status' aria-hidden='true' style='display: none'></span>
   <span class='sr-only' style='display: none'>" . (Str::upper($motorizado->zona)) . "</span>" . (Str::upper($motorizado->zona)) . "</button></div>";
                 }
@@ -135,7 +120,7 @@ class DistribucionController extends Controller
                 }
                 return "<ul class='d-flex'>" . join('', $btn) . "</ul>";
             })
-            ->rawColumns(['action', 'condicion_envio', 'productos', 'codigos'])
+            ->rawColumns(['action', 'condicion_envio', 'productos', 'codigos','zona'])
             ->make(true);
 
     }
@@ -149,16 +134,6 @@ class DistribucionController extends Controller
         ]);
         $pedidoGrupo = GrupoPedido::query()->findOrFail($request->grupo_pedido_id);
 
-        /*$pedido = Pedido::query()->findOrFail($request->pedido_id);
-        if ($request->has('revertir_asignar_zona')) {
-            $pedido->update([
-                'env_zona_asignada' => null
-            ]);
-        } else {
-            $pedido->update([
-                'env_zona_asignada' => $request->zona
-            ]);
-        }*/
         return response()->json($pedidoGrupo);
     }
 
