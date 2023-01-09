@@ -753,7 +753,7 @@ setTimeout(function (){
               name: 'correlativo',
           },
           {data: 'codigos', name: 'codigos', },
-          {data: 'user_id', name: 'user_id', },
+          {data: 'user_id', name: 'user_id','visible':false },
           {
             data: 'celular',
             name: 'celular',

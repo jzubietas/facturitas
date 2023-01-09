@@ -2472,17 +2472,22 @@ class PagoController extends Controller
             $fecha_deposito = $request->fecha_deposito;
             $cont = 0;
 
-            while ($cont < count((array)$conciliar_list)) {
-                $movimiento = MovimientoBancario::where("id", $conciliar_list[$cont]);
-
-                $movimiento->update([
-                    'pago' => 1,
-                    'detpago' => $detalle_list[$cont],
-                    'cabpago' => $pago->id
-                ]);
-                $cont++;
-
+            if($request->condicion==Pago::ABONADO){
+                while ($cont < count((array)$conciliar_list)) {
+                    $movimiento = MovimientoBancario::where("id", $conciliar_list[$cont]);
+    
+                    $movimiento->update([
+                        'pago' => 1,
+                        'detpago' => $detalle_list[$cont],
+                        'cabpago' => $pago->id
+                    ]);
+                    $cont++;
+    
+                }
+                
             }
+
+            
 
             /*while ($cont < count((array)$detalle_id)) {
 
@@ -2503,8 +2508,17 @@ class PagoController extends Controller
             throw $th;
         }
 
-        return redirect()->route('administracion.porrevisar'/*,['q1'=>'12/11/2022','q2'=>'15/11/2022']*/)->with('info', 'actualizado');
-        //return redirect()->route('postSearch', ['q' => 4]);
+        if($request->mover_revisar=='revisar'){
+            return redirect()->route('administracion.porrevisar')->with('info', 'actualizado');            
+        }else if($request->mover_revisar=='observado'){
+            return redirect()->route('administracion.observados')->with('info', 'actualizado');
+        }else if($request->mover_revisar=='pendiente'){
+            return redirect()->route('administracion.pendientes')->with('info', 'actualizado');
+
+
+            //return redirect()->route('administracion.aprobados')->with('info', 'actualizado');
+        }
+        //return redirect()->route('administracion.porrevisar'/*,['q1'=>'12/11/2022','q2'=>'15/11/2022']*/)->with('info', 'actualizado');        
     }
 
     public function updateRevisarpost(Request $request)

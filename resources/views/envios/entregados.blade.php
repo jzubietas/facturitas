@@ -57,6 +57,7 @@
                     <th scope="col">Fecha de entrega</th>
                     <th scope="col">Foto 1</th>
                     <th scope="col">Foto 2</th>
+                    <th scope="col">Foto 3</th>
                     <th scope="col">Estado de envio</th>
                     <th scope="col">Acciones</th>
                 </tr>
@@ -118,6 +119,26 @@
             transition: all 0.5s ease;
             text-shadow: 10px 2px #6ac7c2;
         }
+
+        /*.fill {
+            object-fit: fill;
+            }*/
+
+        /*.contain {
+        object-fit: contain;
+        }*/
+
+        .cover {
+        object-fit: cover;
+        }
+
+       /* .none {
+        object-fit: none;
+        }
+
+        .scale-down {
+        object-fit: scale-down;
+        }*/
 
     </style>
 @stop
@@ -391,6 +412,10 @@
                     {
                         data: 'foto2',
                         name: 'foto2',
+                    },
+                    {
+                        data: 'foto3',
+                        name: 'foto3',
                     },
                     {
                         data: 'condicion_envio',

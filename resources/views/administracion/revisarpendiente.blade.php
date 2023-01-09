@@ -361,9 +361,10 @@
         <div class="col-10">
           <button type="button" id="aprobarrbtn" class="btn btn-success btn-lg"><i class="fas fa-save"></i> APROBAR</button>
           <button type="button" id="observarbtn" class="btn btn-danger btn-lg"><i class="fas fa-save"></i> OBSERVADO</button>
-          {{--<button type="button" id="pendientebtn" class="btn btn-warning btn-lg"><i class="fas fa-save"></i> PENDIENTE</button>--}}
         </div>
       </div>
+
+      <input type="hidden" name="mover_revisar" value="pendiente">
 
 
     </div>
