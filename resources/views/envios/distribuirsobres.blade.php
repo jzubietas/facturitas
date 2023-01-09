@@ -98,6 +98,11 @@
         .cod_dir_w{
             min-width: 200px;
         }
+
+        .cod_ped{
+            font-size:11px;
+            min-width: 100px;
+        }
     </style>
 @endpush
 
