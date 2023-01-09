@@ -84,6 +84,11 @@ class DistribucionController extends Controller
                     return ($index + 1) . ") <b>" . $codigo . "</b>";
                 })->join('<hr class="my-1"><br>');
             })
+            ->addColumn('codigos_search', function ($pedido) {
+                return collect(explode(',', $pedido->codigos))->map(function ($codigo, $index) {
+                    return $codigo;
+                })->join(',');
+            })
             ->addColumn('productos', function ($pedido) {
                 return collect(explode(',', $pedido->productos))->map(function ($codigo, $index) {
                     return ($index + 1) . ")  <b>" . $codigo . "</b>";
