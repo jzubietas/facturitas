@@ -2508,12 +2508,15 @@ class PagoController extends Controller
             throw $th;
         }
 
-        if($request->condicion==Pago::PENDIENTE){
-            return redirect()->route('administracion.pendientes')->with('info', 'actualizado');
-        }else if($request->condicion==Pago::OBSERVADO){
+        if($request->mover_revisar=='revisar'){
+            return redirect()->route('administracion.porrevisar')->with('info', 'actualizado');            
+        }else if($request->mover_revisar=='observado'){
             return redirect()->route('administracion.observados')->with('info', 'actualizado');
-        }else if($request->condicion==Pago::ABONADO){
-            return redirect()->route('administracion.aprobados')->with('info', 'actualizado');
+        }else if($request->mover_revisar=='pendiente'){
+            return redirect()->route('administracion.pendientes')->with('info', 'actualizado');
+
+
+            //return redirect()->route('administracion.aprobados')->with('info', 'actualizado');
         }
         //return redirect()->route('administracion.porrevisar'/*,['q1'=>'12/11/2022','q2'=>'15/11/2022']*/)->with('info', 'actualizado');        
     }

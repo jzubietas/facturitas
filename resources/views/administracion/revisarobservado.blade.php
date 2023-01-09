@@ -363,6 +363,8 @@
         </div>
       </div>
 
+      <input type="hidden" name="mover_revisar" value="observado">
+
 
     </div>
     <div class="card-footer" >
