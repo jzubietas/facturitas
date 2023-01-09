@@ -27,13 +27,14 @@ class GrupoPedido extends Model
             "provincia" => optional($distrito)->provincia ?? $pedido->env_destino ?? 'n/a',//LIMA
             'distrito' => optional($distrito)->distrito ?? $pedido->env_distrito ?? 'n/a',//LOS OLIVOS
             'direccion' => $pedido->env_direccion ?: 'n/a',//olva
-            'referencia' => $pedido->env_referencia ?: 'n/a',//olva
             'cliente_recibe' => $pedido->env_nombre_cliente_recibe ?? 'n/a',//olva
-            'telefono' => $pedido->env_celular_cliente_recibe ?? 'n/a',//n/a
         ];
         if($createAnother){
             return GrupoPedido::create($data);
         }
-        return GrupoPedido::updateOrCreate($data);
+        return GrupoPedido::updateOrCreate($data,[
+            'referencia' => $pedido->env_referencia ?: 'n/a',//olva
+            'telefono' => $pedido->env_celular_cliente_recibe ?? 'n/a',//n/a
+        ]);
     }
 }

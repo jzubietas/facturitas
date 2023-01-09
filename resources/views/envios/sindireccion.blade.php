@@ -337,14 +337,14 @@
         },
         columns: [
           {
-            data: 'correlativo',
-            name: 'correlativo',
+            data: 'codigo',
+            name: 'codigo',
 
           },
-          {data: 'identificador', name: 'identificador', },
+          {data: 'identificador', name: 'u.identificador', },
           {
             data: 'celular',
-            name: 'celular',
+            name: 'C.celular',
             render: function ( data, type, row, meta ) {
               return row.celulares+row.icelulares+'<br>'+row.nombres
             },
@@ -356,7 +356,7 @@
            },
           {
             data: 'empresas',
-            name: 'empresas',
+            name: 'dp.nombre_empresa',
             render: function ( data, type, row, meta ) {
               if(data==null){
                 return 'SIN EMPRESA';

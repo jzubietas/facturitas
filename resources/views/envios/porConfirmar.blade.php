@@ -433,22 +433,7 @@
             name: 'action',
             orderable: false,
             searchable: false,
-            sWidth:'20%',
-            render: function ( data, type, row, meta ) {
-              datass='';
-             
-                    datass = datass+ '<a href="" data-target="#modal-envio" data-toggle="modal" data-recibir="'+row.id+'" data-codigos="'+row.codigos+'"><button class="btn btn-warning btn-sm"><i class="fas fa-check-circle"></i> Recibido</button></a>';
-                 
-
-              if(row.destino == null && row.direccion =='0' && (row.envio*1) >0)
-              {
-                var urldireccion = '{{ route("envios.createdireccion", ":id") }}';
-                urldireccion = urldireccion.replace(':id', row.id);
-                data = data+'<a href="'+urldireccion+'" class="btn btn-dark btn-sm"><i class="fas fa-map"></i> Destino</a><br>';
-              }
-
-              return datass;
-            }
+            sWidth:'20%'
           },
         ],
         language: {
