@@ -98,7 +98,7 @@
             @include('pedidos.modal.editdireccionid')
             @include('pedidos.modal.destinoid')
             @include('envios.modal.distribuir')
-            @include('operaciones.modal.confirmacion')
+            @include('envios.modal.confirmacion')
             @include('envios.modal.desvincularpedidos')
         </div>
     </div>
