@@ -160,7 +160,7 @@ class Pedido extends Model
 
     public function detallePedido()
     {
-        return $this->hasOne(DetallePedido::class);
+        return $this->hasOne(DetallePedido::class)->activo();
     }
 
     public function detallePedidos()
