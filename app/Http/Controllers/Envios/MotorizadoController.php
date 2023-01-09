@@ -128,8 +128,7 @@ class MotorizadoController extends Controller
                     color: black !important;">Con ruta</span><span class="badge badge-success w-100" style="background-color: ' . $color . '!important;">' . $pedido->condicion_envio . '</span>';
                 })
                 ->addColumn('action', function ($pedido) {
-                    $btn = '';
-                    $btn .= '<ul class="list-unstyled pl-0">';
+                    $btn = '<ul class="list-unstyled pl-0">';
                     $btn .= '<li>
                                     <button href="" class="btn btn-sm text-secondary" data-target="#modal-motorizado-entregar-confirm" data-toggle="modal" data-entregar-confirm="' . $pedido->id . '" data-destino="' . $pedido->destino . '" data-fechaenvio="' . $pedido->fecha . '" data-codigos="' . $pedido->codigos . '"
                                         data-imagen1="' . \Storage::disk('pstorage')->url($pedido->foto1) . '" data-imagen2="' . \Storage::disk('pstorage')->url($pedido->foto2) . '" data-imagen3="' . \Storage::disk('pstorage')->url($pedido->foto3) . '"
