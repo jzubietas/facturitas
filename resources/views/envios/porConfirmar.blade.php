@@ -438,10 +438,9 @@
               datass='';
               @if($ver_botones_accion > 0)
                 @can('envios.enviar')
-                  if(row.envio=='2')
-                  {
+                  
                     datass = datass+ '<a href="" data-target="#modal-envio" data-toggle="modal" data-recibir="'+row.id+'" data-codigos="'+row.codigos+'"><button class="btn btn-warning btn-sm"><i class="fas fa-check-circle"></i> Recibido</button></a>';
-                  }
+                 
                 @endcan
               @endif
 
