@@ -17,7 +17,7 @@ class AlterPedidosTables extends Migration
             $table->timestamp('fecha_salida')->nullable();
         });
 
-        Schema::table('direccion_grupo', function (Blueprint $table) {          
+        Schema::table('direccion_grupos', function (Blueprint $table) {          
             $table->timestamp('fecha_salida')->nullable();
         });
     }
