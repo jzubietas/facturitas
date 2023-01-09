@@ -298,10 +298,13 @@ class ClienteController extends Controller
      */
     public function store(Request $request)
     {
-
+        //return $request->all();
         $request->validate([
             'celular' => 'required|unique:clientes',
         ]);
+
+        $user = User::where('id', $request->user_id)->first();//el asesor
+        $letra=$user->letra;
 
         try {
             DB::beginTransaction();
@@ -309,7 +312,7 @@ class ClienteController extends Controller
             $cliente = Cliente::create([
                 'nombre' => $request->nombre,
                 'celular' => $request->celular,
-                /*'icelular'=> $request->icelular,*/
+                'icelular'=> $letra,
                 'user_id' => $request->user_id,
                 'tipo' => $request->tipo,
                 'provincia' => $request->provincia,
@@ -321,36 +324,6 @@ class ClienteController extends Controller
                 'pidio' => '0',
                 'estado' => '1'
             ]);
-
-            $user = User::where('id', $request->user_id)->first();
-
-            if ($user->exidentificador == '01' ||
-                $user->exidentificador == '03' ||
-                $user->exidentificador == '05' ||
-                $user->exidentificador == '07' ||
-                $user->exidentificador == '09' ||
-                $user->exidentificador == '11' ||
-                $user->exidentificador == '13' ||
-                $user->exidentificador == '15' ||
-                $user->exidentificador == '17' ||
-                $user->exidentificador == '19'
-            ) {
-                $letra = "A";
-            }
-
-            if ($user->exidentificador == '02' ||
-                $user->exidentificador == '04' ||
-                $user->exidentificador == '06' ||
-                $user->exidentificador == '08' ||
-                $user->exidentificador == '10' ||
-                $user->exidentificador == '12' ||
-                $user->exidentificador == '14' ||
-                $user->exidentificador == '16' ||
-                $user->exidentificador == '18' ||
-                $user->exidentificador == '20'
-            ) {
-                $letra = "B";
-            }
 
             // ALMACENANDO PORCENTAJES
             $nombreporcentaje = $request->nombreporcentaje;
@@ -427,6 +400,12 @@ class ClienteController extends Controller
         ]);
 
         $cliente->update($request->all());
+
+        $user = User::where('id', $request->user_id)->first();//el asesor
+        $letra=$user->letra;
+        $cliente->update([
+            'icelular' =>$letra
+        ]);
 
         $idporcentaje = $request->idporcentaje;
         $valoresporcentaje = $request->porcentaje;

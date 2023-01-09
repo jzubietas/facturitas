@@ -196,6 +196,9 @@ class BasefriaController extends Controller
      */
     public function store(Request $request)
     {
+
+        $user = User::where('id', $request->user_id)->first();//el asesor
+        $letra=$user->letra;
         $searchCliente = Cliente::query()->with('user')->where('celular', '=', $request->celular)->first();
 
         $messages = [];
@@ -216,7 +219,7 @@ class BasefriaController extends Controller
             $cliente = Cliente::create([
                 'nombre' => $request->nombre,
                 'celular' => $request->celular,
-                /*'icelular'=> $request->icelular,*/
+                'icelular'=> $letra,
                 'user_id' => $request->user_id,
                 'tipo' => $request->tipo,
                 'provincia' => $request->provincia,
@@ -277,6 +280,8 @@ class BasefriaController extends Controller
      */
     public function update(Request $request, Cliente $basefrium)
     {
+        $user = User::where('id', $request->user_id)->first();//el asesor
+        $letra=$user->letra;
         //return $basefrium;
         $request->validate([
             //'nombre' => 'required',
@@ -293,6 +298,7 @@ class BasefriaController extends Controller
             'nombre' => $request->nombre,
             'dni' => $request->dni,
             'celular' => $request->celular,
+            'icelular' => $letra,
             'tipo' => '0'
         ]);
 
