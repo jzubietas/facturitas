@@ -94,6 +94,8 @@
     <style>
         .cod_dir{
             font-size:11px;
+        }
+        .cod_dir_w{
             min-width: 200px;
         }
     </style>
@@ -170,8 +172,8 @@
                     })
                 },
                 columns: [
-                    {data: 'codigos', name: 'codigos', sWidth: '8%',sClass:'cod_dir'},
-                    {data: 'productos', name: 'productos',searchable: true, sClass:'cod_dir'},
+                    {data: 'codigos', name: 'codigos', sWidth: '7%',sClass:'cod_dir'},
+                    {data: 'productos', name: 'productos',searchable: true, sClass:'cod_dir cod_dir_w'},
                     {data: 'cliente_recibe', name: 'cliente_recibe',},
                     {data: 'telefono', name: 'telefono',},
                     {data: 'provincia', name: 'provincia',},
