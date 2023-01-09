@@ -280,7 +280,9 @@
 
 
   <style>
-
+.table_custom.toolbar {
+    float: left;
+}
       .qr_success{
           animation: qr_success 1s ease-in forwards;
       }
@@ -731,9 +733,10 @@ setTimeout(function (){
       });*/
 
       $('#tablaPrincipal').DataTable({
+        dom: '<"toolbar">frtip',
         processing: true,
         stateSave:true,
-		serverSide: true,
+		    serverSide: true,
         searching: true,
         "order": [[ 0, "desc" ]],
         ajax:{ url: "{{ route('envios.recepcionmotorizadotabla') }}",
@@ -836,7 +839,11 @@ setTimeout(function (){
         },
       });
 
+      if ( ! $.fn.DataTable.isDataTable( '#tablaPrincipal' ) ) {
+          $('div.toolbar').html('<b><button class="btn btn-success">Generar</button></b>');
+      }
 
+      
 
     });
   </script>
