@@ -1139,7 +1139,7 @@ class EnvioController extends Controller
                 'dp.fecha_recepcion'
             )
             ->WhereIn('pedidos.condicion_envio_code', $filtros_code)
-            ->where('pedidos.envio', '2')
+            //->where('pedidos.envio', '2')
             ->where('pedidos.estado', '1');
 
         if (Auth::user()->rol == "Operario") {
