@@ -113,7 +113,7 @@
                   @if($cliente->estado=='0')
                     <div class="card mt-4 border rounded card-body border-secondary">
                         <div class="card-header">
-                            <h4 class="text-bold">Detalle de anulación</h4>
+                            <h4 class="text-bold">Detalle de bloqueo</h4>
                         </div>
                         <div class="card-body">
                             <ul class="list-group">
