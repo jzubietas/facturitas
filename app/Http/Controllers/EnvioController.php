@@ -751,7 +751,7 @@ class EnvioController extends Controller
                     $urlimagen1 = \Storage::disk('pstorage')->url($pedido->foto1);
 
                     $data = '<a href="" data-target="#modal-imagen" data-toggle="modal" data-imagen="' . $pedido->foto1 . '">
-                    <img src="' . $urlimagen1 . '" alt="' . $pedido->foto1 . '" height="200px" width="200px" id="imagen_' . $pedido->id . '-1" class="img-thumbnail">
+                    <img src="' . $urlimagen1 . '" alt="' . $pedido->foto1 . '" height="100px" width="100px" id="imagen_' . $pedido->id . '-1" class="img-thumbnail cover">
                     </a>
                     <a download href="' . $urlimagen1 . '" class="text-center"><button type="button" class="btn btn-secondary btn-md"> Descargar</button> </a>
                     <a href="" data-target="#modal-cambiar-imagen" data-toggle="modal" data-item="1" data-imagen="' . $pedido->foto1 . '" data-pedido="' . $pedido->id . '">
@@ -774,7 +774,7 @@ class EnvioController extends Controller
                     $urlimagen1 = \Storage::disk('pstorage')->url($pedido->foto2);
 
                     $data = '<a href="" data-target="#modal-imagen" data-toggle="modal" data-imagen="' . $pedido->foto2 . '">
-                    <img src="' . $urlimagen1 . '" alt="' . $pedido->foto2 . '" height="200px" width="200px" id="imagen_' . $pedido->id . '-2" class="img-thumbnail">
+                    <img src="' . $urlimagen1 . '" alt="' . $pedido->foto2 . '" height="100px" width="100px" id="imagen_' . $pedido->id . '-2" class="img-thumbnail cover">
                     </a>
                     <a download href="' . $urlimagen1 . '" class="text-center"><button type="button" class="btn btn-secondary btn-md"> Descargar</button> </a>
                     <a href="" data-target="#modal-cambiar-imagen" data-toggle="modal" data-item="2" data-imagen="' . $pedido->foto2 . '" data-pedido="' . $pedido->id . '">
@@ -797,7 +797,7 @@ class EnvioController extends Controller
                     $urlimagen1 = \Storage::disk('pstorage')->url($pedido->foto3);
 
                     $data = '<a href="" data-target="#modal-imagen" data-toggle="modal" data-imagen="' . $pedido->foto3 . '">
-                    <img src="' . $urlimagen1 . '" alt="' . $pedido->foto3 . '" height="200px" width="200px" id="imagen_' . $pedido->id . '-3" class="img-thumbnail">
+                    <img src="' . $urlimagen1 . '" alt="' . $pedido->foto3 . '" height="100px" width="100px" id="imagen_' . $pedido->id . '-3" class="img-thumbnail cover">
                     </a>
                     <a download href="' . $urlimagen1 . '" class="text-center"><button type="button" class="btn btn-secondary btn-md"> Descargar</button> </a>
                     <a href="" data-target="#modal-cambiar-imagen" data-toggle="modal" data-item="3" data-imagen="' . $pedido->foto3 . '" data-pedido="' . $pedido->id . '">

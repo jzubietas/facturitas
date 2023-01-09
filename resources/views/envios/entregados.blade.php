@@ -120,6 +120,26 @@
             text-shadow: 10px 2px #6ac7c2;
         }
 
+        /*.fill {
+            object-fit: fill;
+            }*/
+
+        /*.contain {
+        object-fit: contain;
+        }*/
+
+        .cover {
+        object-fit: cover;
+        }
+
+       /* .none {
+        object-fit: none;
+        }
+
+        .scale-down {
+        object-fit: scale-down;
+        }*/
+
     </style>
 @stop
 
