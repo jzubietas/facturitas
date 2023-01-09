@@ -422,6 +422,11 @@ class NotificationsController extends Controller
             ->activo()
             ->count();
 
+        $contador_sobres_confirmar_recepcion=Pedido::where('estado',1)
+            //->join('users as u', 'u.id', 'c.user_id')
+            ->where('condicion_envio_code', Pedido::ENVIO_COURIER_JEFE_OPE_INT)
+            ->count();
+
 
         $en_motorizados_count = DireccionGrupo::join('clientes as c', 'c.id', 'direccion_grupos.cliente_id')
             ->join('users as u', 'u.id', 'c.user_id')
