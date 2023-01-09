@@ -728,7 +728,7 @@ class EnvioController extends Controller
         return datatables()->query(\DB::table($pedidos))
             ->addIndexColumn()
             ->addColumn('condicion_envio_color', function ($pedido) {
-                
+
                 return Pedido::getColorByCondicionEnvio($pedido->condicion_envio);
             })
             ->editColumn('condicion_envio', function ($grupo) {
@@ -2704,7 +2704,7 @@ class EnvioController extends Controller
             ->activo()
             ->firstOrFail();
 
-        if($pedido->condicion_envio_code == Pedido::CONFIRM_MOTORIZADO_INT){
+        if($pedido->condicion_envio_code == Pedido::RECEPCION_MOTORIZADO_INT){
             return response()->json(['html' => 0]);
         }else{
             /************
@@ -2712,8 +2712,8 @@ class EnvioController extends Controller
              */
             $pedido->update([
                 'modificador' => 'USER' . Auth::user()->id,
-                'condicion_envio' => Pedido::CONFIRM_MOTORIZADO,
-                'condicion_envio_code' => Pedido::CONFIRM_MOTORIZADO_INT,
+                'condicion_envio' => Pedido::RECEPCION_MOTORIZADO,
+                'condicion_envio_code' => Pedido::RECEPCION_MOTORIZADO_INT,
             ]);
 
             /*************
@@ -2725,7 +2725,7 @@ class EnvioController extends Controller
             /*************
              * SACAMOS LA CANTIDAD DE SOBRES YA RECIBIDOS DE ESTE PAQUETE
              */
-            $sobres_ya_recibidos = Pedido::where('condicion_envio_code',Pedido::CONFIRM_MOTORIZADO_INT)
+            $sobres_ya_recibidos = Pedido::where('condicion_envio_code',Pedido::RECEPCION_MOTORIZADO_INT)
                 ->whereIn('codigo',$codigos_paquete)
                 ->count();
             /*************
@@ -2736,8 +2736,8 @@ class EnvioController extends Controller
             if($sobres_restantes==0){
                 $paquete_sobres->update([
                     'modificador' => 'USER' . Auth::user()->id,
-                    'condicion_envio' => Pedido::CONFIRM_MOTORIZADO,
-                    'condicion_envio_code' => Pedido::CONFIRM_MOTORIZADO_INT,
+                    'condicion_envio' => Pedido::RECEPCION_MOTORIZADO,
+                    'condicion_envio_code' => Pedido::RECEPCION_MOTORIZADO_INT,
                 ]);
             }
             return response()->json(['html' => $pedido->id,'grupo'=>$paquete_sobres,'pedido'=>$pedido, 'distrito' => $pedido->distrito, 'direccion' => $pedido->direccion, 'sobres_recibidos' => $sobres_ya_recibidos, 'sobres_restantes' => $sobres_restantes]);
