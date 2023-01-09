@@ -65,7 +65,7 @@
                 <table id="tablaPrincipal" class="table table-striped">
                     <thead>
                     <tr>
-                        <th scope="col">PROVINCIA</th>
+                        <th scope="col">PROV</th>
                         <th scope="col">ZONA</th>
                         <th scope="col">DISTRITO</th>
                         <th scope="col">DIRECCION</th>

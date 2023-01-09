@@ -118,7 +118,8 @@ class DistribucionController extends Controller
             ->addColumn('condicion_envio', function ($pedido) {
                 $badge_estado = '';
                 $color = Pedido::getColorByCondicionEnvio(Pedido::RECEPCION_COURIER);
-                $badge_estado .= '<span class="badge badge-success py-2" style="background-color: ' . $color . '!important;">' . Pedido::RECEPCION_COURIER . '</span>';
+                $badge_estado .= '<span class="badge badge-dark p-8" style="color: #fff; background-color: #347cc4; font-weight: 600; margin-bottom: -2px;border-radius: 4px 4px 0px 0px; font-size:8px;  padding: 4px 4px !important; font-weight: 500;">Direccion agregada</span>
+<span class="badge badge-success py-2" style="background-color: ' . $color . '!important;">' . Pedido::RECEPCION_COURIER . '</span>';
                 return $badge_estado;
             })
             ->addColumn('action', function ($pedido) use ($motorizados, $color_zones) {
