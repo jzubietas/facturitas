@@ -436,13 +436,9 @@
             sWidth:'20%',
             render: function ( data, type, row, meta ) {
               datass='';
-              @if($ver_botones_accion > 0)
-                @can('envios.enviar')
-                  
+             
                     datass = datass+ '<a href="" data-target="#modal-envio" data-toggle="modal" data-recibir="'+row.id+'" data-codigos="'+row.codigos+'"><button class="btn btn-warning btn-sm"><i class="fas fa-check-circle"></i> Recibido</button></a>';
                  
-                @endcan
-              @endif
 
               if(row.destino == null && row.direccion =='0' && (row.envio*1) >0)
               {
