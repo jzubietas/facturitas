@@ -675,6 +675,7 @@ class EnvioController extends Controller
                 'direccion_grupos.subcondicion_envio',
                 'direccion_grupos.foto1',
                 'direccion_grupos.foto2',
+                'direccion_grupos.foto3',
                 'direccion_grupos.correlativo'
             );
 
@@ -771,7 +772,7 @@ class EnvioController extends Controller
                     $urlimagen1 = \Storage::disk('pstorage')->url($pedido->foto2);
 
                     $data = '<a href="" data-target="#modal-imagen" data-toggle="modal" data-imagen="' . $pedido->foto2 . '">
-                    <img src="' . $urlimagen1 . '" alt="' . $pedido->foto2 . '" height="200px" width="200px" id="imagen_' . $pedido->id . '-1" class="img-thumbnail">
+                    <img src="' . $urlimagen1 . '" alt="' . $pedido->foto2 . '" height="200px" width="200px" id="imagen_' . $pedido->id . '-2" class="img-thumbnail">
                     </a>
                     <a download href="' . $urlimagen1 . '" class="text-center"><button type="button" class="btn btn-secondary btn-md"> Descargar</button> </a>
                     <a href="" data-target="#modal-cambiar-imagen" data-toggle="modal" data-item="2" data-imagen="' . $pedido->foto2 . '" data-pedido="' . $pedido->id . '">
@@ -779,6 +780,29 @@ class EnvioController extends Controller
 
                     if (Auth::user()->rol == "Asesor") {
                         $data .= '<a href="" data-target="#modal-delete-foto2" data-toggle="modal" data-deletefoto2="' . $pedido->id . '">
+                        <button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i></button>
+                        </a>';
+                    }
+                    return $data;
+                } else if ($pedido->condicion_envio_code == Pedido::ENTREGADO_SIN_SOBRE_OPE_INT) {
+                    return '<span class="badge badge-dark">Sin envio</span>';
+                } else {
+                    return '';
+                }
+            })
+            ->editColumn('foto3', function ($pedido) {
+                if ($pedido->foto3 != null) {
+                    $urlimagen1 = \Storage::disk('pstorage')->url($pedido->foto3);
+
+                    $data = '<a href="" data-target="#modal-imagen" data-toggle="modal" data-imagen="' . $pedido->foto3 . '">
+                    <img src="' . $urlimagen1 . '" alt="' . $pedido->foto3 . '" height="200px" width="200px" id="imagen_' . $pedido->id . '-3" class="img-thumbnail">
+                    </a>
+                    <a download href="' . $urlimagen1 . '" class="text-center"><button type="button" class="btn btn-secondary btn-md"> Descargar</button> </a>
+                    <a href="" data-target="#modal-cambiar-imagen" data-toggle="modal" data-item="3" data-imagen="' . $pedido->foto3 . '" data-pedido="' . $pedido->id . '">
+<button class="btn btn-danger btn-md">Cambiar</button></a>';
+
+                    if (Auth::user()->rol == "Asesor") {
+                        $data .= '<a href="" data-target="#modal-delete-foto3" data-toggle="modal" data-deletefoto3="' . $pedido->id . '">
                         <button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i></button>
                         </a>';
                     }

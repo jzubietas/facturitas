@@ -57,6 +57,7 @@
                     <th scope="col">Fecha de entrega</th>
                     <th scope="col">Foto 1</th>
                     <th scope="col">Foto 2</th>
+                    <th scope="col">Foto 3</th>
                     <th scope="col">Estado de envio</th>
                     <th scope="col">Acciones</th>
                 </tr>
@@ -391,6 +392,10 @@
                     {
                         data: 'foto2',
                         name: 'foto2',
+                    },
+                    {
+                        data: 'foto3',
+                        name: 'foto3',
                     },
                     {
                         data: 'condicion_envio',
