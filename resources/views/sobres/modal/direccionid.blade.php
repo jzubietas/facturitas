@@ -160,7 +160,7 @@
                                 <div class="row">
                                     <div class="col">
                                         <h1>OLVA - PROVINCIA</h1>
-
+                                        <h4 id="distrito-olva"></h4>
                                         <div>
                                             <button type="button" id="modal-historial-provincia-a" href=""
                                                     data-target="#modal-historial-provincia" data-toggle="modal"

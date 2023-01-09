@@ -37,7 +37,7 @@
                         </div>
                         <div class="card-body py-1">
                             <div>
-                                <table id="tablaPrincipal{{Str::upper($motorizado->zona)}}" class="table table-striped">
+                                <table id="tablaPrincipal{{Str::upper($motorizado->zona)}}" class="table table-striped font-12">
                                     <thead>
                                     <tr>
                                         <th scope="col">Cliente</th>
@@ -65,9 +65,9 @@
                 <table id="tablaPrincipal" class="table table-striped">
                     <thead>
                     <tr>
-                        <th scope="col">Sobres</th>
-                        <th scope="col">Razón social</th>
-                        <th scope="col">CLIENTE</th>
+                        <th scope="col" style="font-size:14px;">Sobres</th>
+                        <th scope="col" style="font-size:14px;">Razón social</th>
+                        <th scope="col">Quien recibe</th>
                         <th scope="col">TELEFONO</th>
                         <th scope="col">PROV</th>
                         <th scope="col">DISTRITO</th>
@@ -106,6 +106,9 @@
         .bg-zone{
             background: #dbffdf;
         }
+        .jconfirm-content{
+            overflow: hidden !important;
+        }
     </style>
 @endpush
 
@@ -132,14 +135,14 @@
                 zona: data.zona,
                 zona_asignada: zona,
                 distrito: data.distrito,
-                action: `<button type="button" data-jqdetalle="${data.id}" class="btn btn-light buttom-agrupar d-flex align-items-center justify-content-center">
-                                        <i class="fa fa-layer-group mr-1"></i>
-                                        Detalle
-                                    </button>
-                                    <button type="button" data-revertir="${data.id}" class="btn btn-light buttom-agrupar d-flex align-items-center justify-content-center">
-                                        <i class="fa fa-undo-alt mr-1 text-danger"></i>
-                                        Revertir
-                                    </button>`,
+                action: `<div class="d-flex">
+                            <button type="button" data-jqdetalle="${data.id}" class="btn btn-light buttom-agrupar d-flex align-items-center justify-content-center font-12">
+                                <i class="fa fa-layer-group mr-1"></i>Detalle
+                            </button>
+                            <button type="button" data-revertir="${data.id}" class="btn btn-light buttom-agrupar d-flex align-items-center justify-content-center font-12">
+                                <i class="fa fa-undo-alt mr-1 text-danger"></i> Revertir
+                            </button>
+                        </div>`,
             }
         }
 
@@ -382,48 +385,36 @@
             function getHtmlPrevisualizarAgruparData(rows, success) {
                 var html = rows.map(function (row) {
                     const ps = row.producto.split(',')
-                    const productos = [`<li class="list-group-item">
-                                    <div class="row">
-                                        <div class="col-4 border-right">
-                                        <strong>${row.nombre || ''}</strong> - <i>${row.celular || ''}</i>
-                                        </div>
-                                        <div class="col-4 border-right">
-                                        <b>${row.distribucion || ''}</b><hr class="my-2"> ${row.distrito || ''}, ${row.direccion || ''} <hr class="my-2"><i> ${row.referencia || ''}</i>
-                                        </div>
-                                        <div class="col-4">
-                                    ${row.codigos.split(',').map(function (codigo, index) {
-                        return `<b>${codigo}</b> - <i>${ps[index] || ''}</i>`
+                    return `
+                                        <tr>
+                                        <td>${row.celular || ''}</td>
+                                        <td>
+                                        ${row.codigos.split(',').map(function (codigo, index) {
+                                            return `<b>${codigo}</b>`
                     }).join(`<hr class="my-2">`)}
-                                        </div>
-                                    </div>
-                                </li>`]
-                    return `<div class="col-md-12">
-<div class="card border card-dark">
-<div class="card-header">
-${success ? `Paquete: <strong>${row.correlativo || ''}</strong>` : `Cliente: <strong>${row.nombre || ''}</strong> - <i>${row.celular || ''}</i>`}
-</div>
-<div class="card-body">
-<ul class="list-group">
-    <li class="list-group-item">
-        <div class="row">
-            <div class="col-4 border-right text-center">
-            <b>Cliente</b>
-            </div>
-            <div class="col-4 border-right text-center">
-            <b>Dirección</b>
-            </div>
-            <div class="col-4 text-center">
-            <b>Productos</b>
-            </div>
-        </div>
-    </li>
-    ${productos.join('<hr>')}
-</ul>
-</div>
-</div>
-</div>`
+                                        </td>
+                                        <td>
+                                        ${row.codigos.split(',').map(function (codigo, index) {
+                        return `<i>${ps[index] || ''}</i>`
+                    }).join(`<hr class="my-2">`)}
+                                        </td>
+                                        <td>
+                                        ${row.distrito || ''}
+                                        </td>
+                                        </tr>`
                 })
-                return `<div class="row">${html.join('')}</div>`;
+                return `<div class="row">
+<table class="table">
+                                        <tr>
+                                        <th class="bg-light">Teléfono</th>
+                                        <th class="bg-light">Codigo</th>
+                                        <th class="bg-light">Razon social</th>
+                                        <th class="bg-light">Distrito</th>
+                                        </tr>
+${html.join('')}
+</table>
+
+</div>`;
             }
 
             function getHtmlPrevisualizarPaqueteData(rows, success) {
