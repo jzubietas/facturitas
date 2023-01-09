@@ -98,6 +98,9 @@
         .cod_dir_w{
             min-width: 200px;
         }
+        .bg-zone{
+            background: #dbffdf;
+        }
     </style>
 @endpush
 
@@ -142,9 +145,9 @@
                 serverSide: true,
                 searching: true,
                 order: [[0, "desc"]],
-                search: {
+                /*search: {
                     regex: true
-                },
+                },*/
                 ajax: {
                     url: "{{ route('envios.distribuirsobrestabla') }}",
                     data: function (query) {
@@ -172,7 +175,7 @@
                     })
                 },
                 columns: [
-                    {data: 'codigos', name: 'codigos', sWidth: '7%',sClass:'cod_dir'},
+                    {data: 'codigos', name: 'codigos',searchable: true, sWidth: '7%',sClass:'cod_dir'},
                     {data: 'productos', name: 'productos',searchable: true, sClass:'cod_dir cod_dir_w'},
                     {data: 'cliente_recibe', name: 'cliente_recibe',},
                     {data: 'telefono', name: 'telefono',},
@@ -181,7 +184,7 @@
                     {data: 'direccion', name: 'direccion',},
                     {data: 'referencia', name: 'referencia',},
                     {data: 'condicion_envio', name: 'condicion_envio',},
-                    {data: 'zona', name: 'zona',},
+                    {data: 'zona', name: 'zona',sClass: 'bg-zone'},
                     {
                         data: 'action',
                         name: 'action',

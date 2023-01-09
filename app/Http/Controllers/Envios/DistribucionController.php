@@ -50,10 +50,33 @@ class DistribucionController extends Controller
     public function datatable(Request $request)
     {
         $query = GrupoPedido::query()->with('pedidos')
+            ->join('grupo_pedido_items', 'grupo_pedido_items.grupo_pedido_id', '=', 'grupo_pedidos.id')
             ->select([
-                'grupo_pedidos.*',
-                'codigos' => DB::table('grupo_pedido_items')->selectRaw('GROUP_CONCAT(grupo_pedido_items.codigo)')->whereRaw('grupo_pedido_items.grupo_pedido_id=grupo_pedidos.id'),
-                'productos' => DB::table('grupo_pedido_items')->selectRaw('GROUP_CONCAT(grupo_pedido_items.razon_social)')->whereRaw('grupo_pedido_items.grupo_pedido_id=grupo_pedidos.id'),
+                'grupo_pedidos.id',
+                DB::raw('GROUP_CONCAT(grupo_pedido_items.codigo) as codigos'),
+                DB::raw('GROUP_CONCAT(grupo_pedido_items.razon_social) as productos'),
+                'grupo_pedidos.zona',
+                'grupo_pedidos.provincia',
+                'grupo_pedidos.distrito',
+                'grupo_pedidos.direccion',
+                'grupo_pedidos.referencia',
+                'grupo_pedidos.cliente_recibe',
+                'grupo_pedidos.telefono',
+                'grupo_pedidos.created_at',
+                //'codigos' => DB::table('grupo_pedido_items')->selectRaw('GROUP_CONCAT(grupo_pedido_items.codigo)')->whereRaw('grupo_pedido_items.grupo_pedido_id=grupo_pedidos.id'),
+               // 'productos' => DB::table('grupo_pedido_items')->selectRaw('GROUP_CONCAT(grupo_pedido_items.razon_social)')->whereRaw('grupo_pedido_items.grupo_pedido_id=grupo_pedidos.id'),
+            ])
+            ->whereNull('grupo_pedidos.deleted_at')
+            ->groupBy([
+                'grupo_pedidos.id',
+                'grupo_pedidos.zona',
+                'grupo_pedidos.provincia',
+                'grupo_pedidos.distrito',
+                'grupo_pedidos.direccion',
+                'grupo_pedidos.referencia',
+                'grupo_pedidos.cliente_recibe',
+                'grupo_pedidos.telefono',
+                'grupo_pedidos.created_at',
             ]);
 
         $motorizados = User::query()->where('rol', '=', 'MOTORIZADO')->whereNotNull('zona')->get();
@@ -62,10 +85,17 @@ class DistribucionController extends Controller
         $color_zones['CENTRO'] = 'info';
         $color_zones['SUR'] = 'dark';
         if (is_array($request->exclude_ids) && count($request->exclude_ids) > 0) {
-            $query->whereNotIn('id', $request->exclude_ids);
+            $query->whereNotIn('grupo_pedidos.id', $request->exclude_ids);
         }
 
-        return datatables()->eloquent($query)
+        /*
+                $search_value = data_get($request->search, 'value');
+              /*if($search_value && !empty($search_value)){
+                    $query->orWhere('codigos','like','%'.$search_value.'%');
+                }
+        */
+
+        return \DataTables::of($query->get())
             ->addColumn('codigos', function ($pedido) {
                 return collect(explode(',', $pedido->codigos))->map(function ($codigo, $index) {
                     return ($index + 1) . ") <b>" . $codigo . "</b>";
@@ -94,10 +124,10 @@ class DistribucionController extends Controller
             ->addColumn('action', function ($pedido) use ($motorizados, $color_zones) {
                 $btn = [];
                 foreach ($motorizados as $motorizado) {
-                    if(Str::contains( $pedido->zona,$motorizado->zona)) {
+                    if (Str::contains($pedido->zona, $motorizado->zona)) {
                         $addClass = 'border border-danger';
                         $styleClass = 'box-shadow: rgb(84 84 84 / 40%) -5px 5px, rgb(157 157 157 / 10%) 0px 0px, rgb(229 229 229 / 5%) -25px 25px;';
-                    }else {
+                    } else {
                         $addClass = '';
                         $styleClass = '';
                     }
@@ -112,7 +142,7 @@ class DistribucionController extends Controller
                 }
                 return "<ul class='d-flex'>" . join('', $btn) . "</ul>";
             })
-            ->rawColumns(['action', 'condicion_envio', 'productos', 'codigos','zona'])
+            ->rawColumns(['action', 'condicion_envio', 'productos', 'codigos', 'zona'])
             ->make(true);
 
     }
@@ -220,7 +250,7 @@ class DistribucionController extends Controller
             ]);
         }
 
-        $grupoPedido = GrupoPedido::creteGroupByPedido($pedido, true);
+        $grupoPedido = GrupoPedido::createGroupByPedido($pedido, true);
         $grupoPedido->pedidos()->attach($pedido->id, [
             'razon_social' => $pedido->nombre_empresa,
             'codigo' => $pedido->codigo,
