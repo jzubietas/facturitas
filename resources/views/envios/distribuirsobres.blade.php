@@ -164,8 +164,8 @@
                     })
                 },
                 columns: [
-                    {data: 'codigos', name: 'codigos', sWidth:'8%',},
-                    {data: 'productos', name: 'productos',},
+                    {data: 'codigos', name: 'codigos', sWidth: '8%',},
+                    {data: 'productos', name: 'productos',searchable: true},
                     {data: 'cliente_recibe', name: 'cliente_recibe',},
                     {data: 'telefono', name: 'telefono',},
                     {data: 'provincia', name: 'provincia',},
@@ -269,7 +269,7 @@
                         $.confirm({
                             title: '¡Detalle del grupo!',
                             columnClass: 'xlarge',
-                            content: getHtmlPrevisualizarAgrupar(data),
+                            content: getHtmlPrevisualizarDesagrupar(data),
                             type: 'orange',
                             typeAnimated: true,
                             buttons: {
@@ -298,7 +298,7 @@
                                                     .data(createZoneRowTable(grupo.data, '{{Str::upper($motorizado->zona)}}'))
                                                     .draw();
                                                 if (grupo.data) {
-                                                    self.setContent(getHtmlPrevisualizarAgrupar(grupo.data))
+                                                    self.setContent(getHtmlPrevisualizarDesagrupar(grupo.data))
                                                 } else {
                                                     self.close()
                                                     $.alert('Desagrupado por completo')
@@ -319,7 +319,7 @@
             });
             @endforeach
 
-            function getHtmlPrevisualizarAgrupar(row, success) {
+            function getHtmlPrevisualizarDesagrupar(row, success) {
                 return `
 <div class="card">
     <div class="card-header">
@@ -364,6 +364,53 @@
             }
 
             function getHtmlPrevisualizarAgruparData(rows, success) {
+                var html = rows.map(function (row) {
+                    const ps = row.producto.split(',')
+                    const productos = [`<li class="list-group-item">
+                                    <div class="row">
+                                        <div class="col-4 border-right">
+                                        <strong>${row.nombre || ''}</strong> - <i>${row.celular || ''}</i>
+                                        </div>
+                                        <div class="col-4 border-right">
+                                        <b>${row.distribucion || ''}</b><hr class="my-2"> ${row.distrito || ''}, ${row.direccion || ''} <hr class="my-2"><i> ${row.referencia || ''}</i>
+                                        </div>
+                                        <div class="col-4">
+                                    ${row.codigos.split(',').map(function (codigo, index) {
+                        return `<b>${codigo}</b> - <i>${ps[index] || ''}</i>`
+                    }).join(`<hr class="my-2">`)}
+                                        </div>
+                                    </div>
+                                </li>`]
+                    return `<div class="col-md-12">
+<div class="card border card-dark">
+<div class="card-header">
+${success ? `Paquete: <strong>${row.correlativo || ''}</strong>` : `Cliente: <strong>${row.nombre || ''}</strong> - <i>${row.celular || ''}</i>`}
+</div>
+<div class="card-body">
+<ul class="list-group">
+    <li class="list-group-item">
+        <div class="row">
+            <div class="col-4 border-right text-center">
+            <b>Cliente</b>
+            </div>
+            <div class="col-4 border-right text-center">
+            <b>Dirección</b>
+            </div>
+            <div class="col-4 text-center">
+            <b>Productos</b>
+            </div>
+        </div>
+    </li>
+    ${productos.join('<hr>')}
+</ul>
+</div>
+</div>
+</div>`
+                })
+                return `<div class="row">${html.join('')}</div>`;
+            }
+
+            function getHtmlPrevisualizarPaqueteData(rows, success) {
                 var html = rows.map(function (row) {
                     const ps = row.producto.split(',')
                     const productos = [`<li class="list-group-item">
@@ -427,14 +474,28 @@ ${success ? `Paquete: <strong>${row.correlativo || ''}</strong>` : `Cliente: <st
                     title: '¡Confirmar creación de paquetes!',
                     columnClass: 'xlarge',
                     content: function () {
-                        this.$$goSobres.hide();
-                        return '¿Estas seguro de crear el paquete con los sobres listados en la zona <b>' + zona + '</b>?'
+                        const self = this
+                        self.$$goSobres.hide();
+                        //return '¿Estas seguro de crear el paquete con los sobres listados en la zona <b>' + zona + '</b>?'
+                        return $.ajax({
+                            url: link,
+                            data: {
+                                groups: Array.from(table.data()).map(function (item) {
+                                    return item.id
+                                })
+                            },
+                            dataType: 'json',
+                            method: 'post'
+                        })
+                            .done(function (response) {
+                                self.setContent(getHtmlPrevisualizarAgruparData(response))
+                            })
                     },
                     type: 'orange',
                     typeAnimated: true,
                     buttons: {
                         ok: {
-                            text: 'Aceptar y agrupar',
+                            text: 'Aceptar y crear paquetes',
                             btnClass: 'btn-success',
                             action: function () {
                                 buttom.find('.spinner-border').show()
@@ -454,7 +515,7 @@ ${success ? `Paquete: <strong>${row.correlativo || ''}</strong>` : `Cliente: <st
                                 })
                                     .done(function (response) {
                                         self.setTitle('<h3 class="text-success font-24">Paquetes creados exitosamente</h3>');
-                                        self.setContent(getHtmlPrevisualizarAgruparData(response, true))
+                                        self.setContent(getHtmlPrevisualizarPaqueteData(response, true))
                                         self.$$ok.hide();
                                         self.$$goSobres.show();
                                         self.$$cancelar.text("Cerrar");
