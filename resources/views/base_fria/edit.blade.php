@@ -14,7 +14,7 @@
       <div class="card-body">
         <div class="form-row">
 
-        <input type="text" name="id" id="id" class="form-control" value="{{ $basefrium->id }}">
+        <input type="hidden" name="id" id="id" class="form-control" value="{{ $basefrium->id }}">
 
           <div class="form-group col-lg-6">
             {!! Form::label('tipo', 'Tipo de cliente') !!}
