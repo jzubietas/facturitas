@@ -1154,7 +1154,7 @@ class EnvioController extends Controller
             $pedidos = $pedidos->WhereIn('u.identificador', $asesores);
 
         } else if (Auth::user()->rol == "Jefe de operaciones") {
-            $operarios = User::where('users.rol', 'Operario')
+            /*$operarios = User::where('users.rol', 'Operario')
                 ->where('users.estado', '1')
                 ->where('users.jefe', Auth::user()->id)
                 ->select(
@@ -1170,7 +1170,7 @@ class EnvioController extends Controller
                 )
                 ->pluck('users.identificador');
 
-            $pedidos = $pedidos->WhereIn('u.identificador', $asesores);
+            $pedidos = $pedidos->WhereIn('u.identificador', $asesores);*/
 
         } else if (Auth::user()->rol == "Asesor") {
             $pedidos = $pedidos->Where('u.identificador', Auth::user()->identificador);
