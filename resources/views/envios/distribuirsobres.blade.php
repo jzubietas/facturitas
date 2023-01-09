@@ -170,7 +170,7 @@
                     })
                 },
                 columns: [
-                    {data: 'codigos', name: 'codigos', sWidth: '8%'},
+                    {data: 'codigos', name: 'codigos', sWidth: '8%',sClass:'cod_dir'},
                     {data: 'productos', name: 'productos',searchable: true, sClass:'cod_dir'},
                     {data: 'cliente_recibe', name: 'cliente_recibe',},
                     {data: 'telefono', name: 'telefono',},
