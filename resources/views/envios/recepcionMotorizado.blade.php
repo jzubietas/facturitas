@@ -524,7 +524,51 @@ setTimeout(function (){
             //var url = $(this).data("url");
             $('#tablaPrincipal').DataTable().ajax.reload();
 
+            var $activeItem = $('.nav .active').html();
+            console.log($activeItem);
+
+            var id=$('.condicion-tabla.active').attr('id');
+            console.log(id)//profile-tab   home-tab
+            if($('.condicion-tabla.active').attr('id')=='home-tab')
+            {
+              $('div.toolbar').html('<div class="d-flex justify-content-center"><button id="iniciar-ruta-masiva" class="btn btn-success">Iniciar RUTA MASIVA</button></div>');
+            }else{
+              $('div.toolbar').html('');
+            }
+            //if ( ! $.fn.DataTable.isDataTable( '#tablaPrincipal' ) ) {
+                
+            //}
+
         });
+
+        $(document).on("click","#iniciar-ruta-masiva",function(){
+          //ajax iniciar ruta masiva
+         
+          $.ajax({
+              data: {
+                  /*envio_id:data.id,
+                  pedido:data.codigos*/
+              },
+              type: 'POST',
+              url: "{{ route('envios.recepcionmotorizado.iniciar_ruta_masiva') }}",
+          }).always(function (data){
+            console.log(data);
+              /*if(data.html=='1')
+              {
+                $('#tablaPrincipal').DataTable().ajax.reload();
+              }else{
+                Swal.fire(
+                    'Error',
+                    'No tiene el rol suficiente para esta operacion',
+                    'error'
+                )
+              }*/
+              //self.close()
+              //self.hideLoading(true)
+              
+          });
+
+        })
 
         /************
          * ESCANEAR PEDIDO
@@ -839,9 +883,7 @@ setTimeout(function (){
         },
       });
 
-      if ( ! $.fn.DataTable.isDataTable( '#tablaPrincipal' ) ) {
-          $('div.toolbar').html('<b><button class="btn btn-success">Generar</button></b>');
-      }
+     
 
       
 
