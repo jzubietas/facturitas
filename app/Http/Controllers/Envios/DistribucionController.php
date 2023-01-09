@@ -86,8 +86,8 @@ class DistribucionController extends Controller
             })
             ->addColumn('productos', function ($pedido) {
                 return collect(explode(',', $pedido->productos))->map(function ($codigo, $index) {
-                    return ($index + 1) . ")  <b>" . $codigo . "</b>";
-                })->join('<hr class="my-1"><br>');
+                    return ($index + 1) . ")" . $codigo;
+                })->join('<hr class="my-1">');
             })
             ->addColumn('condicion_envio', function ($pedido) {
                 $badge_estado = '';

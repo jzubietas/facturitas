@@ -91,6 +91,12 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
     <link rel="stylesheet" href="{{asset('vendor/fontawesome-free/css/v4-shims.min.css')}}">
     <link rel="stylesheet" href="{{asset('vendor/fontawesome-free/css/solid.min.css')}}">
+    <style>
+        .cod_dir{
+            font-size:11px;
+            min-width: 200px;
+        }
+    </style>
 @endpush
 
 @push('js')
@@ -164,8 +170,8 @@
                     })
                 },
                 columns: [
-                    {data: 'codigos', name: 'codigos', sWidth: '8%',},
-                    {data: 'productos', name: 'productos',searchable: true},
+                    {data: 'codigos', name: 'codigos', sWidth: '8%'},
+                    {data: 'productos', name: 'productos',searchable: true, sClass:'cod_dir'},
                     {data: 'cliente_recibe', name: 'cliente_recibe',},
                     {data: 'telefono', name: 'telefono',},
                     {data: 'provincia', name: 'provincia',},
