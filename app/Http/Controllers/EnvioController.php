@@ -487,7 +487,7 @@ class EnvioController extends Controller
 
 
                     $btn .= '<li>
-                                        <a href="" class="btn-sm text-secondary" data-target="#modal-confirmacion" data-toggle="modal" data-zona="' . $pedido->distribucion . '" data-ide="' . $pedido->id . '" data-entregar-confirm="' . $pedido->id . '" data-destino="' . $pedido->destino . '" data-fechaenvio="' . $pedido->fecha . '" data-codigos="' . $pedido->codigos . '">
+                                        <a href="" class="btn-sm text-secondary" data-target="#modal-confirmacion" data-toggle="modal" data-ide="' . $pedido->id . '" data-entregar-confirm="' . $pedido->id . '" data-destino="' . $pedido->destino . '" data-fechaenvio="' . $pedido->fecha . '" data-codigos="' . $pedido->codigos . '">
                                             <i class="fas fa-envelope text-success"></i> Enviar a Motorizado</a></li>
                                         </a>
                                     </li>';
@@ -728,7 +728,22 @@ class EnvioController extends Controller
         return datatables()->query(\DB::table($pedidos))
             ->addIndexColumn()
             ->addColumn('condicion_envio_color', function ($pedido) {
+                
                 return Pedido::getColorByCondicionEnvio($pedido->condicion_envio);
+            })
+            ->editColumn('condicion_envio', function ($grupo) {
+                $color = Pedido::getColorByCondicionEnvio($grupo->condicion_envio);
+
+                $badge_estado='';
+                $badge_estado .= '<span class="badge badge-dark p-8" style="color: #fff; background-color: #347cc4; font-weight: 600; margin-bottom: -2px;border-radius: 4px 4px 0px 0px; font-size:8px;  padding: 4px 4px !important; font-weight: 500;">Direccion agregada</span>';
+
+                $badge_estado.='<span class="badge badge-success" style="background-color: #00bc8c !important;
+                    padding: 4px 8px !important;
+                    font-size: 8px;
+                    margin-bottom: -4px;
+                    color: black !important;">Con ruta</span>';
+                $badge_estado .='<span class="badge badge-success w-100" style="background-color: ' . $color . '!important;">' . $grupo->condicion_envio . '</span>';
+                return $badge_estado;
             })
             ->editColumn('foto1', function ($pedido) {
                 if ($pedido->foto1 != null) {
@@ -2663,11 +2678,21 @@ class EnvioController extends Controller
     {
         $pedido = Pedido::where("codigo", $request->id)->first();
 
-        if($pedido->condicion_envio_code == Pedido::CONFIRM_MOTORIZADO_INT){
-            return response()->json(['html' => 0]);
-        }else{
-            return response()->json(['html' => $pedido->codigo, 'distrito' => $pedido->distrito, 'direccion' => $pedido->direccion]);
-        }
+        /*$pedido->update([
+            'envio' => '2',
+            'modificador' => 'USER' . Auth::user()->id,
+            'condicion_envio' => Pedido::ENVIO_COURIER_JEFE_OPE,
+            'condicion_envio_code' => Pedido::ENVIO_COURIER_JEFE_OPE_INT,
+
+        ]);
+
+        PedidoMovimientoEstado::create([
+            'pedido' => $request->hiddenEnvio,
+            'condicion_envio_code' => Pedido::RECEPCION_COURIER_INT,
+            'notificado' => 0
+        ]);*/
+
+        return response()->json(['html' => $pedido->codigo, 'distrito' => $pedido->distrito, 'direccion' => $pedido->direccion]);
     }
 
     public function RecibirPedidoMotorizado(Request $request)
