@@ -67,13 +67,13 @@
                     <tr>
                         <th scope="col">Sobres</th>
                         <th scope="col">Razón social</th>
-                        <th scope="col">Estado de envio</th>
                         <th scope="col">CLIENTE</th>
                         <th scope="col">TELEFONO</th>
                         <th scope="col">PROV</th>
                         <th scope="col">DISTRITO</th>
                         <th scope="col">DIRECCION</th>
                         <th scope="col">REFERENCIA</th>
+                        <th scope="col">Estado de envio</th>
                         <th scope="col">ZONA</th>
                         <th scope="col">Acciones</th>
                     </tr>
@@ -164,15 +164,15 @@
                     })
                 },
                 columns: [
-                    {data: 'codigos', name: 'codigos',},
+                    {data: 'codigos', name: 'codigos', sWidth:'8%',},
                     {data: 'productos', name: 'productos',},
-                    {data: 'condicion_envio', name: 'condicion_envio',},
                     {data: 'cliente_recibe', name: 'cliente_recibe',},
                     {data: 'telefono', name: 'telefono',},
                     {data: 'provincia', name: 'provincia',},
                     {data: 'distrito', name: 'distrito',},
                     {data: 'direccion', name: 'direccion',},
                     {data: 'referencia', name: 'referencia',},
+                    {data: 'condicion_envio', name: 'condicion_envio',},
                     {data: 'zona', name: 'zona',},
                     {
                         data: 'action',
