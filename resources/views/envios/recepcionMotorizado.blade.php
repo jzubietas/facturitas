@@ -749,10 +749,7 @@ setTimeout(function (){
         rowCallback: function (row, data, index) {
         },
         columns: [
-          <!--{
-              data: 'correlativo',
-              name: 'correlativo',
-          },-->
+
           {data: 'codigos', name: 'codigos', },
           {data: 'user_id', name: 'user_id','visible':false },
           {
