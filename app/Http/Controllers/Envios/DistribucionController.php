@@ -32,19 +32,6 @@ class DistribucionController extends Controller
             $ver_botones_accion = 1;
         }
 
-
-        $_pedidos = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')
-            ->join('users as u', 'pedidos.user_id', 'u.id')
-            ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
-            ->select(
-                DB::raw("COUNT(u.identificador) AS total, u.identificador ")
-            )
-            ->where('pedidos.estado', '1')
-            ->whereIn('pedidos.condicion_envio_code', [Pedido::RECEPCION_COURIER_INT])
-            ->where('dp.estado', '1')
-            ->groupBy('u.identificador');
-
-
         $distritos = Distrito::whereIn('provincia', ['LIMA', 'CALLAO'])
             ->where('estado', '1')
             ->WhereNotIn('distrito', ['CHACLACAYO', 'CIENEGUILLA', 'LURIN', 'PACHACAMAC', 'PUCUSANA', 'PUNTA HERMOSA', 'PUNTA NEGRA', 'SAN BARTOLO', 'SANTA MARIA DEL MAR'])
@@ -55,10 +42,9 @@ class DistribucionController extends Controller
 
         $superasesor = User::where('rol', 'Super asesor')->count();
 
-        $_pedidos = $_pedidos->get();
         $motorizados = User::query()->where('rol', '=', 'MOTORIZADO')->whereNotNull('zona')->get();
 
-        return view('envios.distribuirsobres', compact('superasesor', 'motorizados', 'ver_botones_accion', 'distritos', 'departamento', '_pedidos'));
+        return view('envios.distribuirsobres', compact('superasesor', 'motorizados', 'ver_botones_accion', 'distritos', 'departamento'));
     }
 
     public function datatable(Request $request)
@@ -78,11 +64,12 @@ class DistribucionController extends Controller
         if (is_array($request->exclude_ids) && count($request->exclude_ids) > 0) {
             $query->whereNotIn('id', $request->exclude_ids);
         }
+
         return datatables()->eloquent($query)
             ->addColumn('codigos', function ($pedido) {
                 return collect(explode(',', $pedido->codigos))->map(function ($codigo, $index) {
                     return ($index + 1) . ") <b>" . $codigo . "</b>";
-                })->join('<hr class="my-1"><br>');
+                })->join('<hr class="my-1">');
             })
             ->addColumn('codigos_search', function ($pedido) {
                 return collect(explode(',', $pedido->codigos))->map(function ($codigo, $index) {
