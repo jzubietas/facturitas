@@ -246,7 +246,7 @@
                                     if (e.target.adjunto1.files.length === 0) {
                                         $.confirm({
                                             title: '¡Advertencia!',
-                                            content: '<b>Adjunta la foto 1</b>',
+                                            content: '<b>Adjunta la Foto de los sobres</b>',
                                             type: 'orange'
                                         })
                                         return false;
@@ -254,7 +254,7 @@
                                     if (e.target.adjunto2.files.length === 0) {
                                         $.confirm({
                                             title: '¡Advertencia!',
-                                            content: '<b>Adjunta la foto 2</b>',
+                                            content: '<b>Adjunta la Foto del domicilio</b>',
                                             type: 'orange'
                                         })
                                         return false;
@@ -262,7 +262,7 @@
                                     if (e.target.adjunto3.files.length === 0) {
                                         $.confirm({
                                             title: '¡Advertencia!',
-                                            content: '<b>Adjunta la foto 3</b>',
+                                            content: '<b>Adjunta la Foto de quien recibe</b>',
                                             type: 'orange'
                                         })
                                         return false;
