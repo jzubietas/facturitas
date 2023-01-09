@@ -63,9 +63,10 @@ class BasefriaController extends Controller
                 'clientes.celular',
                 'u.identificador as identificador',
                 'u.rol',
-                'clientes.estado'
+                'clientes.estado',
+                'clientes.situacion'
             )
-            ->where('clientes.estado', '1')
+            //->where('clientes.estado', '1')
             ->where('clientes.tipo', '0');
 
         if (Auth::user()->rol == 'Llamadas') {

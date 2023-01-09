@@ -106,7 +106,9 @@
         transition: all 0.5s ease;
         text-shadow: 10px 2px #6ac7c2;
     }
-
+    .textred {
+            color: red !important;
+        }
   </style>
 @stop
 
@@ -209,6 +211,12 @@ $(document).ready(function () {
         ajax: "{{ route('basefriatabla') }}",
         initComplete:function(settings,json){
 
+        },
+        "createdRow": function (row, data, dataIndex) {
+          if(data["situacion"]=='BLOQUEADO')
+          {
+              $(row).addClass('textred');
+          }
         },
         columns: [
         {
