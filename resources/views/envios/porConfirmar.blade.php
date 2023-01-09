@@ -234,7 +234,7 @@
             console.log(data);
             $("#modal-envio .textcode").text('');
             $("#modal-envio").modal("hide");
-            $('#tablaPrincipal').DataTable().ajax.reload();
+            $('#tablaPrincipal').DataTable().ajax.reload( null, false);
            }
         });
       });
@@ -298,7 +298,7 @@
             if(data.html!=0)
             {
                 $("#modal-recibir").modal("hide");
-                $('#tablaPrincipal').DataTable().ajax.reload();
+                $('#tablaPrincipal').DataTable().ajax.reload( null, false);
             }else{
 
             }
