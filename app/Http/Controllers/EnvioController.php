@@ -2481,16 +2481,23 @@ class EnvioController extends Controller
             'fecha_salida'=>$request->fecha_salida
         ]);
 
-        $codigos_paquete = collect(explode(",", $envio->codigos))->map(function ($cod) {
+        /*$codigos_paquete = collect(explode(",", $envio->codigos))->map(function ($cod) {
             return trim($cod);
-        })->all();
+        })->all();*/
+        $codigos_paquete=Pedidos::where('direccion_grupo',$envio->id);
+        $codigos_paquete->update([
+            'condicion_envio_code' => Pedido::ENVIO_MOTORIZADO_COURIER_INT,
+            'condicion_envio' => Pedido::ENVIO_MOTORIZADO_COURIER,
+            'fecha_salida'=>$request->fecha_salida
+        ]);
 
-        Pedido::whereIn('codigo', $codigos_paquete)
+
+        /*Pedido::whereIn('codigo', $codigos_paquete)
             ->update([
                 'condicion_envio_code' => Pedido::ENVIO_MOTORIZADO_COURIER_INT,
                 'condicion_envio' => Pedido::ENVIO_MOTORIZADO_COURIER,
                 'fecha_salida'=>$request->fecha_salida
-            ]);
+            ]);*/
 
         PedidoMovimientoEstado::create([
             'pedido' => $request->hiddenCodigo,
