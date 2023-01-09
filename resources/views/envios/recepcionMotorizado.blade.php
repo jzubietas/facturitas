@@ -124,7 +124,7 @@
       <table id="tablaPrincipal" class="table table-striped dt-responsive w-100">
         <thead>
           <tr>
-            <th scope="col">Item</th>
+            <!--<th scope="col">Item</th>-->
             <th scope="col">Código</th>
             <th scope="col">Asesor</th>
             <th scope="col">Cliente</th>
@@ -749,10 +749,10 @@ setTimeout(function (){
         rowCallback: function (row, data, index) {
         },
         columns: [
-          {
+          <!--{
               data: 'correlativo',
               name: 'correlativo',
-          },
+          },-->
           {data: 'codigos', name: 'codigos', },
           {data: 'user_id', name: 'user_id','visible':false },
           {
