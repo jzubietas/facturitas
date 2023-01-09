@@ -226,8 +226,8 @@ class EnvioController extends Controller
                 [
                     'pedidos.*',
                     'c.nombre as nombres',
-                    'c.icelular as icelulares',
-                    'c.celular as celulares',
+                    'c.icelular',
+                    'c.celular',
                     'u.identificador',
                     'dp.nombre_empresa as empresas',
                 ]
@@ -247,7 +247,7 @@ class EnvioController extends Controller
 
                     $btn .= '<ul class="list-unstyled pl-0">';
                     $btn .= '<li>
-                                        <a href="" class="btn-sm text-secondary" data-target="#modal-confirmacion" data-toggle="modal" data-ide="' . $pedido->id . '" data-entregar-confirm="' . $pedido->id . '" data-destino="' . $pedido->destino . '" data-fechaenvio="' . $pedido->fecha . '" data-codigos="' . $pedido->codigos . '">
+                                        <a href="" class="btn-sm text-secondary" data-target="#modal-confirmacion" data-toggle="modal" data-ide="' . $pedido->id . '" data-entregar-confirm="' . $pedido->id . '" data-destino="' . $pedido->destino . '" data-fechaenvio="' . $pedido->created_at . '" data-codigos="' . $pedido->codigo . '">
                                             <i class="fas fa-envelope text-success"></i> A motorizado</a></li>
                                         </a>
                                     </li>';
