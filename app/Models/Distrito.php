@@ -20,7 +20,7 @@ class Distrito extends Model
                 'distrito',                                
                 //DB::raw("concat(distrito,' - ',zona) as distritonam as text"),
                 'zona'
-            ])->get();
+            ])->orderBy('distrito')->get();
             return $distritos;
     }
     
