@@ -521,8 +521,8 @@ class SobreController extends Controller
     public function EnvioDesvincular(Request $request)
     {
         //return $request->all();
-        $pedidos=$request->pedidos;
-        $direcciongrupo=$request->direcciongrupo;
+        $pedidos=$request->pedidos;/*7326,7327*/
+        $direcciongrupo=$request->direcciongrupo;/*9206*/
         $observaciongrupo=$request->observaciongrupo;
         if(!$request->pedidos)
         {
@@ -531,30 +531,39 @@ class SobreController extends Controller
         else{
             $array_pedidos=explode(",",$pedidos);
 
-            //return var_dump($array_pedidos);
-
             $direcciongrupolist = DireccionGrupo::find($request->direcciongrupo);
             //return $direcciongrupo;
             $destino = $direcciongrupolist->destino;
+            //return $destino;//LIMA
 
             if($destino == "LIMA"){
                 foreach($array_pedidos as $pedido_id)
                 {
-                    $data = DireccionPedido::where("pedido_id",$pedido_id)
-                    ->where("direcciongrupo",$direcciongrupo)->first();
+                    $data = DireccionPedido::where("pedido_id",$pedido_id)->where("direcciongrupo",$direcciongrupo)->first();
                     $data->update([
                         "estado"=>'0'
                     ]);
-                    $pedido = Pedido::where("id",$pedido_id)->first();
+                    $pedido = Pedido::where("id",$pedido_id)->where('direccion_grupo',$direcciongrupo)->first();
                     $pedido->update([
                         "condicion_envio"=>pedido::RECEPCION_COURIER,
                         "condicion_envio_code"=>pedido::RECEPCION_COURIER_INT,
-                        "observacion_devuelto"=>$observaciongrupo
+                        "observacion_devuelto"=>$observaciongrupo,
+                        "direccion_grupo"=>null
                     ]);
                 }
+                $codigos=DB::table('direccion_pedidos')->selectRaw('GROUP_CONCAT(direccion_pedidos.codigo)')->where('direccion_pedidos.direciongrupo',$direcciongrupo)->get();
+                $productos=DB::table('direccion_pedidos')->selectRaw('GROUP_CONCAT(direccion_pedidos.razon_social)')->where('direccion_pedidos.direciongrupo',$direcciongrupo)->get();
+
+                $direcciongrupo = DireccionGrupo::where("id",$direcciongrupo)->first();
+                $direcciongrupo->update([
+                    'codigo'=>$codigos,
+                    'producto'=>$productos
+                ]);
+
+
                 $direccionpedido = DireccionPedido::where("direcciongrupo",$direcciongrupo)->where("estado",'1')->get()->count();
                 if($direccionpedido==0){
-                    $direcciongrupo = DireccionGrupo::where("id",$direcciongrupo)->first();
+                    
                     $direcciongrupo->update([
                         "estado"=>'0'
                     ]);
@@ -567,16 +576,27 @@ class SobreController extends Controller
                         "estado"=>'0'
                     ]);
                     //return $pedido_id;
-                    $pedido = Pedido::where("id",$pedido_id)->first();
+                    $pedido = Pedido::where("id",$pedido_id)->where('direccion_grupo',$direcciongrupo)->first();
                     $pedido->update([
                         "condicion_envio"=>pedido::RECEPCION_COURIER,
                         "condicion_envio_code"=>pedido::RECEPCION_COURIER_INT,
-                        "observacion_devuelto"=>$observaciongrupo
+                        "observacion_devuelto"=>$observaciongrupo,
+                        "direccion_grupo"=>null
                     ]);
                 }
+                //actualizar concat en codigos y rucs
+
+                $codigos=DB::table('gasto_pedidos')->selectRaw('GROUP_CONCAT(gasto_pedidos.codigo)')->where('gasto_pedidos.direciongrupo',$direcciongrupo)->get();
+                $productos=DB::table('gasto_pedidos')->selectRaw('GROUP_CONCAT(gasto_pedidos.razon_social)')->where('gasto_pedidos.direciongrupo',$direcciongrupo)->get();
+
+                $direcciongrupo = DireccionGrupo::where("id",$direcciongrupo)->first();
+                $direcciongrupo->update([
+                    'codigo'=>$codigos,
+                    'producto'=>$productos
+                ]);
+
                 $direccionpedido = GastoPedido::where("direcciongrupo",$direcciongrupo)->where("estado",'1')->get()->count();
                 if($direccionpedido==0){
-                    $direcciongrupo = DireccionGrupo::where("id",$direcciongrupo)->first();
                     $direcciongrupo->update([
                         "estado"=>'0'
                     ]);
