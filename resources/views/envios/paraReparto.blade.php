@@ -282,7 +282,7 @@
                 var button = $(event.relatedTarget)
                 var idunico = button.data('ide')
                 var codigos = button.data('codigos')
-                var zona = button.data('zona')
+                var zona = button.data('distribucion')
 
                 $('.titulo-confirmacion').html("Enviar sobre a Motorizado");
 
@@ -295,8 +295,21 @@
                 evento.preventDefault();
                 //validacion
 
+
                 var fd2 = new FormData();
                 fd2.append('hiddenCodigo', $('#hiddenCodigo').val());
+                fd2.append('fecha_salida', $('#fecha_salida').val());
+
+                if($('#fecha_salida').val()=='')
+                {
+                    Swal.fire(
+                        'Error',
+                        'Complete fecha de salida para continuar',
+                        'warning'
+                    )
+                    return false;
+                }                
+                
                 $.ajax({
                     data: fd2,
                     processData: false,

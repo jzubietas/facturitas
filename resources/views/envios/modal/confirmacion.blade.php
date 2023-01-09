@@ -23,7 +23,7 @@
                 <div class="row">
                   <div class="col">
                     {!! Form::label('fecha_salida', 'Fecha de Salida') !!}
-                    {!! Form::date('fecha_salida', null, ['class' => 'form-control', 'id' => 'fecha_salida']) !!}
+                    {!! Form::date('fecha_salida', \Carbon\Carbon::now()->addDays(1), ['class' => 'form-control', 'id' => 'fecha_salida']) !!}
                   </div>
                 </div>
 

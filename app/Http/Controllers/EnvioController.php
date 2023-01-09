@@ -486,7 +486,8 @@ class EnvioController extends Controller
 
 
                     $btn .= '<li>
-                                        <a href="" class="btn-sm text-secondary" data-target="#modal-confirmacion" data-toggle="modal" data-ide="' . $pedido->id . '" data-entregar-confirm="' . $pedido->id . '" data-destino="' . $pedido->destino . '" data-fechaenvio="' . $pedido->fecha . '" data-codigos="' . $pedido->codigos . '">
+                                        <a href="" class="btn-sm text-secondary" data-target="#modal-confirmacion" data-toggle="modal" data-ide="' . $pedido->id . '" data-entregar-confirm="' . $pedido->id . '" data-destino="' . $pedido->destino . '" data-fechaenvio="' . $pedido->fecha . '" data-codigos="' . $pedido->codigos . '"
+                                            data-distribucion="'.$pedido->distribucion.'" >
                                             <i class="fas fa-envelope text-success"></i> Enviar a Motorizado</a></li>
                                         </a>
                                     </li>';
@@ -2453,8 +2454,7 @@ class EnvioController extends Controller
         $envio->update([
             'condicion_envio' => Pedido::ENVIO_MOTORIZADO_COURIER,
             'condicion_envio_code' => Pedido::ENVIO_MOTORIZADO_COURIER_INT,
-            //'condicion_envio' => Pedido::MOTORIZADO,
-            //'condicion_envio_code' => Pedido::MOTORIZADO_INT,
+            'fecha_salida'=>$request->fecha_salida
         ]);
 
         $codigos_paquete = collect(explode(",", $envio->codigos))->map(function ($cod) {
@@ -2464,7 +2464,8 @@ class EnvioController extends Controller
         Pedido::whereIn('codigo', $codigos_paquete)
             ->update([
                 'condicion_envio_code' => Pedido::ENVIO_MOTORIZADO_COURIER_INT,
-                'condicion_envio' => Pedido::ENVIO_MOTORIZADO_COURIER
+                'condicion_envio' => Pedido::ENVIO_MOTORIZADO_COURIER,
+                'fecha_salida'=>$request->fecha_salida
             ]);
 
         PedidoMovimientoEstado::create([
