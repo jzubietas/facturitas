@@ -28,6 +28,12 @@
                             <img class="foto3" alt="FOTO 3" height="400px" width="400px" class="img-fluid">
                         </div>
 
+                        <div class="col-lg-12">
+                            <div style="font-size: 11px; background-color: #fdf69d; padding: 8px; margin-top: 16px;">
+                                Recordar como Jefe de Operaciones debes de ser estricto en la verificación de fotos del motorizado, los motorizados deben cumplir con enviar las fotos de manera correcta, si fuera reinsidente el Jefe courier tiene la obligación de llamar la atención al motorizado.
+                            </div>
+                        </div>
+
                     </div>
 
                 </div>
