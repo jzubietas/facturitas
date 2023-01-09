@@ -2503,7 +2503,7 @@ class PagoController extends Controller
             throw $th;
         }
 
-        return redirect()->route('administracion.pendientes'/*,['q1'=>'12/11/2022','q2'=>'15/11/2022']*/)->with('info', 'actualizado');
+        return redirect()->route('administracion.porrevisar'/*,['q1'=>'12/11/2022','q2'=>'15/11/2022']*/)->with('info', 'actualizado');
         //return redirect()->route('postSearch', ['q' => 4]);
     }
 
