@@ -668,7 +668,7 @@ class EnvioController extends Controller
                 'direccion_grupos.observacion',
                 'direccion_grupos.distrito',
                 'direccion_grupos.created_at as fecha',
-                DB::raw("DATE_FORMAT(direccion_grupos.created_at, '%Y-%m-%d') as fechaentrega"),
+                DB::raw("DATE_FORMAT(direccion_grupos.fecha_recepcion, '%Y-%m-%d') as fechaentrega"),
                 'direccion_grupos.destino as destino2',
                 'direccion_grupos.distribucion',
                 'direccion_grupos.condicion_envio',
@@ -1227,6 +1227,13 @@ class EnvioController extends Controller
     {
         $tipo_consulta = $request->consulta;
 
+        if($request->fechaconsulta != null){
+            $fecha_consulta=Carbon::createFromFormat('d/m/Y', $request->fechaconsulta)->format('Y-m-d');
+        }else{
+            $fecha_consulta = null;
+        }
+
+
         if($tipo_consulta == "pedido"){
 
             $pedidos = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')
@@ -1343,6 +1350,9 @@ class EnvioController extends Controller
                 //->where('direccion_grupos.condicion_envio_code', Pedido::REPARTO_COURIER_INT)
                 //->whereIn('direccion_grupos.condicion_envio_code', [Pedido::ENVIO_MOTORIZADO_COURIER_INT,Pedido::RECEPCION_MOTORIZADO_INT])
                 ->whereIn('direccion_grupos.condicion_envio_code', [$request->condicion])
+                ->when($fecha_consulta != null, function($query)use($fecha_consulta){
+                    $query->where(DB::raw('DATE(direccion_grupos.fecha_salida)'), $fecha_consulta);
+                })
                 ->activo();
 
             return Datatables::of(DB::table($grupos))
@@ -1924,7 +1934,7 @@ class EnvioController extends Controller
     public function DireccionEnvio(Request $request)
     {
 
-
+        $attach_pedidos_data=[];
         $pedidos = $request->pedidos;
         if (!$request->pedidos) {
             return '0';
@@ -2591,7 +2601,7 @@ class EnvioController extends Controller
         /*$codigos_paquete = collect(explode(",", $envio->codigos))->map(function ($cod) {
             return trim($cod);
         })->all();*/
-        $codigos_paquete=Pedidos::where('direccion_grupo',$envio->id);
+        $codigos_paquete=Pedido::where('direccion_grupo',$envio->id);
         $codigos_paquete->update([
             'condicion_envio_code' => Pedido::ENVIO_MOTORIZADO_COURIER_INT,
             'condicion_envio' => Pedido::ENVIO_MOTORIZADO_COURIER,

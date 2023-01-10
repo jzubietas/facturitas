@@ -192,13 +192,13 @@
                 <div class="col-lg-6">
                    <div class="form-group">
                         <label for="fecha_recepcion">Fecha de Entrega</label>
-                        <input class="form-control" id="fecha_recepcion" name="fecha_recepcion" type="date" value="">
+                        <input class="form-control" id="fecha_recepcion" value="<?php echo date('Y-m-d'); ?>"  name="fecha_recepcion" type="date" value="">
                     </div>
                 </div>
             </div>
             <div class="row">
-                <div class="col-4">                
-                    <div class="input-group w-80">                        
+                <div class="col-4">
+                    <div class="input-group w-80">
                         <div class="custom-file w-90">
                             <input type="file" class="custom-file-input form-control-file" id="adjunto1" name="adjunto1" lang="es">
                             <label class="custom-file-label" for="adjunto1">Foto de los sobres</label>
@@ -207,10 +207,10 @@
                         <div class="input-group-append">
                             <button class="btn btn-danger" id="trash_adjunto1" type="button"><i class="fa fa-trash"></i></button>
                         </div>
-                    </div>                   
+                    </div>
                 </div>
                 <div class="col-4">
-                    <div class="input-group w-80">                        
+                    <div class="input-group w-80">
                         <div class="custom-file w-90">
                             <input type="file" class="custom-file-input form-control-file" id="adjunto2" name="adjunto2" lang="es">
                             <label class="custom-file-label" for="adjunto2">Foto del domicilio</label>
@@ -219,10 +219,10 @@
                         <div class="input-group-append">
                             <button class="btn btn-danger" id="trash_adjunto2" type="button"><i class="fa fa-trash"></i></button>
                         </div>
-                    </div>   
+                    </div>
                 </div>
                 <div class="col-4">
-                    <div class="input-group w-80">                        
+                    <div class="input-group w-80">
                         <div class="custom-file w-90">
                             <input type="file" class="custom-file-input form-control-file" id="adjunto3" name="adjunto3" lang="es">
                             <label class="custom-file-label" for="adjunto3">Foto de quien recibe</label>
@@ -231,11 +231,11 @@
                         <div class="input-group-append">
                             <button class="btn btn-danger" id="trash_adjunto3" type="button"><i class="fa fa-trash"></i></button>
                         </div>
-                    </div>  
+                    </div>
                 </div>
             </div>
             <div class="row">
-                <div class="col-4">
+                <div class="col-4 mt-12">
                     <div class="form-group">
                         <div class="image-wrapper">
                             <img id="picture1" src="{{ asset('imagenes/sobres.jpg') }}"
@@ -243,7 +243,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-4">
+                <div class="col-4 mt-12">
                     <div class="form-group">
                         <div class="image-wrapper">
                             <img id="picture2" src="{{ asset('imagenes/domicilio.jpg') }}"
@@ -251,7 +251,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-4">
+                <div class="col-4 mt-12">
                     <div class="form-group">
                         <div class="image-wrapper">
                             <img id="picture3" src="{{ asset('imagenes/recibe_sobre.jpg') }}"

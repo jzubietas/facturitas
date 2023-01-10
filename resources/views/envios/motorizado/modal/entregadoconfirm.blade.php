@@ -14,18 +14,18 @@
 
                         <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4"><br>
                             <p class="font-weight-bold">Foto de los sobres</p>
-                            <img class="foto1" src="" alt="FOTO 1" height="400px" width="400px" class="img-fluid">
+                            <img class="foto1 w-100" src="" alt="FOTO 1" class="img-fluid">
 
                         </div>
 
                         <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4"><br>
                             <p class="font-weight-bold">Foto del domicilio</p>
-                            <img class="foto2" alt="FOTO 2" height="400px" width="400px" class="img-fluid">
+                            <img class="foto2 w-100" alt="FOTO 2" class="img-fluid">
                         </div>
 
                         <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4"><br>
                             <p class="font-weight-bold">Foto de quien recibe</p>
-                            <img class="foto3" alt="FOTO 3" height="400px" width="400px" class="img-fluid">
+                            <img class="foto3 w-100" alt="FOTO 3" class="img-fluid">
                         </div>
 
                         <div class="col-lg-12">
