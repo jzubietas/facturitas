@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\Templates\PlantillaMotorizadoConfirmarExportMultiple;
 use App\Exports\ArticulosExport;
 use App\Exports\BaseFriaPorAsesorExport;
 use App\Exports\BasesFriasExport;
@@ -64,6 +65,12 @@ class ExcelController extends Controller
     // {
     //     return Excel::download(new ClientesExport, 'Lista de Clientes.xlsx');
     // }
+
+    public function enviosMotorizadoconfirmarExcel(Request $request)
+    {
+        return (new PlantillaMotorizadoConfirmarExportMultiple($request->user_id/*,$request->hasta*/))
+                ->download('Lista de Motorizado Confirmar.xlsx');
+    }
 
     public function analisisExcel(Request $request)
     {

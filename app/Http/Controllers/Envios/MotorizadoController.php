@@ -140,6 +140,7 @@ class MotorizadoController extends Controller
     //estado motorizado confirmar
     public function confirmar(Request $request)
     {
+        $users_motorizado=User::where('rol','MOTORIZADO')->where('estado','1')->pluck('name','id');
         if ($request->has('datatable')) {
             $query = DireccionGrupo::/*join('direccion_envios as de', 'direccion_grupos.id', 'de.direcciongrupo')*/
             join('clientes as c', 'c.id', 'direccion_grupos.cliente_id')
@@ -202,7 +203,7 @@ class MotorizadoController extends Controller
                 ->rawColumns(['action', 'condicion_envio'])
                 ->toJson();
         }
-        return view('envios.motorizado.confirmar');
+        return view('envios.motorizado.confirmar',compact('users_motorizado'));
     }
 
     //estado confirmar cliente
