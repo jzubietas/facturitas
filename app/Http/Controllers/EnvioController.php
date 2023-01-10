@@ -1224,67 +1224,173 @@ class EnvioController extends Controller
 
     public function Enviosrecepcionmotorizadotabla(Request $request)
     {
-        $pedidos = null;
-        $filtros_code = [12];
+        $tipo_consulta = $request->consulta;
 
-        $grupos = DireccionGrupo::select([
-            'direccion_grupos.*',
-            'u.identificador as user_identificador',
-            //DB::raw(" (select 'LIMA') as destino "),
-            DB::raw('(select DATE_FORMAT( direccion_grupos.created_at, "%Y-%m-%d")   from direccion_grupos dpa where dpa.id=direccion_grupos.id) as fecha_formato'),
-        ])
-            //join('direccion_envios as de', 'direccion_grupos.id', 'de.direcciongrupo')
-            ->join('clientes as c', 'c.id', 'direccion_grupos.cliente_id')
-            ->join('users as u', 'u.id', 'c.user_id')
-            //->where('direccion_grupos.condicion_envio_code', Pedido::REPARTO_COURIER_INT)
-            //->whereIn('direccion_grupos.condicion_envio_code', [Pedido::ENVIO_MOTORIZADO_COURIER_INT,Pedido::RECEPCION_MOTORIZADO_INT])
-            ->whereIn('direccion_grupos.condicion_envio_code', [$request->condicion])
-            ->activo();
+        if($tipo_consulta == "pedido"){
 
-        return Datatables::of(DB::table($grupos))
-            ->addIndexColumn()
-            ->addColumn('condicion_envio_color', function ($grupo) {
-                return Pedido::getColorByCondicionEnvio($grupo->condicion_envio);
-            })
-            ->editColumn('condicion_envio', function ($grupo) {
-                $color = Pedido::getColorByCondicionEnvio($grupo->condicion_envio);
+            $pedidos = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')
+                ->join('users as u', 'pedidos.user_id', 'u.id')
+                ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
+                ->select([
+                    'pedidos.id',
+                    'pedidos.cliente_id',
 
-                $badge_estado = '';
-                $badge_estado .= '<span class="badge badge-dark p-8" style="color: #fff; background-color: #347cc4; font-weight: 600; margin-bottom: -2px;border-radius: 4px 4px 0px 0px; font-size:8px;  padding: 4px 4px !important; font-weight: 500;">Direccion agregada</span>';
+                    'u.identificador as users',
+                    'u.id as user_id',
+                    'dp.codigo as codigos',
+                    'dp.nombre_empresa as empresas',
+                    'dp.total as total',
+                    'pedidos.condicion',
+                    'pedidos.created_at as fecha',
+                    'pedidos.condicion_envio',
+                    'pedidos.envio',
+                    'pedidos.codigo',
+                    'pedidos.destino',
+                    'pedidos.direccion',
+                    'dp.envio_doc',
+                    'dp.fecha_envio_doc',
+                    'dp.cant_compro',
+                    'dp.fecha_envio_doc_fis',
+                    'dp.foto1',
+                    'dp.foto2',
+                    'dp.fecha_recepcion',
+                    'pedidos.devuelto',
+                    'pedidos.cant_devuelto',
+                    'pedidos.returned_at',
+                    'pedidos.observacion_devuelto',
+                    DB::raw("DATEDIFF(DATE(NOW()), DATE(pedidos.created_at)) AS dias")
+                ])
+                ->where('pedidos.estado', '1')
+                ->whereIn('pedidos.condicion_envio_code', [$request->condicion])
+                ->where('dp.estado', '1');
 
-                $badge_estado .= '<span class="badge badge-success" style="background-color: #00bc8c !important;
+            if (Auth::user()->rol == "Operario") {
+                $asesores = User::where('users.rol', 'Asesor')
+                    ->where('users.estado', '1')
+                    ->Where('users.operario', Auth::user()->id)
+                    ->select(
+                        DB::raw("users.identificador as identificador")
+                    )
+                    ->pluck('users.identificador');
+
+                $pedidos = $pedidos->WhereIn('u.identificador', $asesores);
+
+            } else if (Auth::user()->rol == "Jefe de operaciones") {
+                $operarios = User::where('users.rol', 'Operario')
+                    ->where('users.estado', '1')
+                    ->where('users.jefe', Auth::user()->id)
+                    ->select(
+                        DB::raw("users.id as id")
+                    )
+                    ->pluck('users.id');
+
+                $asesores = User::where('users.rol', 'Asesor')
+                    ->where('users.estado', '1')
+                    ->WhereIn('users.operario', $operarios)
+                    ->select(
+                        DB::raw("users.identificador as identificador")
+                    )
+                    ->pluck('users.identificador');
+
+                $pedidos = $pedidos->WhereIn('u.identificador', $asesores);
+
+            } else if (Auth::user()->rol == "Asesor") {
+                $pedidos = $pedidos->Where('u.identificador', Auth::user()->identificador);
+
+            } else if (Auth::user()->rol == "Super asesor") {
+                $pedidos = $pedidos->Where('u.identificador', Auth::user()->identificador);
+
+            } else if (Auth::user()->rol == "Encargado") {
+
+                $usersasesores = User::where('users.rol', 'Asesor')
+                    ->where('users.estado', '1')
+                    ->where('users.supervisor', Auth::user()->id)
+                    ->select(
+                        DB::raw("users.identificador as identificador")
+                    )
+                    ->pluck('users.identificador');
+
+                $pedidos = $pedidos->WhereIn('u.identificador', $usersasesores);
+            }
+            return Datatables::of(DB::table($pedidos))
+                ->addIndexColumn()
+                ->addColumn('action', function ($pedido) {
+                    $btn = '';
+                    //if($pedido->condicion_envio_code==13)
+
+                    return $btn;
+                })
+                ->rawColumns(['action'])
+                ->make(true);
+
+
+
+        }else if($tipo_consulta == "paquete"){
+
+            $pedidos = null;
+            $filtros_code = [12];
+
+            $grupos = DireccionGrupo::select([
+                'direccion_grupos.*',
+                'u.identificador as user_identificador',
+                //DB::raw(" (select 'LIMA') as destino "),
+                DB::raw('(select DATE_FORMAT( direccion_grupos.created_at, "%Y-%m-%d")   from direccion_grupos dpa where dpa.id=direccion_grupos.id) as fecha_formato'),
+            ])
+                //join('direccion_envios as de', 'direccion_grupos.id', 'de.direcciongrupo')
+                ->join('clientes as c', 'c.id', 'direccion_grupos.cliente_id')
+                ->join('users as u', 'u.id', 'c.user_id')
+                //->where('direccion_grupos.condicion_envio_code', Pedido::REPARTO_COURIER_INT)
+                //->whereIn('direccion_grupos.condicion_envio_code', [Pedido::ENVIO_MOTORIZADO_COURIER_INT,Pedido::RECEPCION_MOTORIZADO_INT])
+                ->whereIn('direccion_grupos.condicion_envio_code', [$request->condicion])
+                ->activo();
+
+            return Datatables::of(DB::table($grupos))
+                ->addIndexColumn()
+                ->addColumn('condicion_envio_color', function ($grupo) {
+                    return Pedido::getColorByCondicionEnvio($grupo->condicion_envio);
+                })
+                ->editColumn('condicion_envio', function ($grupo) {
+                    $color = Pedido::getColorByCondicionEnvio($grupo->condicion_envio);
+
+                    $badge_estado = '';
+                    $badge_estado .= '<span class="badge badge-dark p-8" style="color: #fff; background-color: #347cc4; font-weight: 600; margin-bottom: -2px;border-radius: 4px 4px 0px 0px; font-size:8px;  padding: 4px 4px !important; font-weight: 500;">Direccion agregada</span>';
+
+                    $badge_estado .= '<span class="badge badge-success" style="background-color: #00bc8c !important;
                     padding: 4px 8px !important;
                     font-size: 8px;
                     margin-bottom: -4px;
                     color: black !important;">Con ruta</span>';
-                $badge_estado .= '<span class="badge badge-success w-100" style="background-color: ' . $color . '!important;">' . $grupo->condicion_envio . '</span>';
-                return $badge_estado;
-            })
-            ->addColumn('action', function ($pedido) {
-                $btn = '';
+                    $badge_estado .= '<span class="badge badge-success w-100" style="background-color: ' . $color . '!important;">' . $grupo->condicion_envio . '</span>';
+                    return $badge_estado;
+                })
+                ->addColumn('action', function ($pedido) {
+                    $btn = '';
 
-                $btn .= '<ul class="list-unstyled pl-0">';
+                    $btn .= '<ul class="list-unstyled pl-0">';
 
-                if ($pedido->condicion_envio_code == Pedido::ENVIO_MOTORIZADO_COURIER_INT) {
-                    $btn .= '<li>
+                    if ($pedido->condicion_envio_code == Pedido::ENVIO_MOTORIZADO_COURIER_INT) {
+                        $btn .= '<li>
                         <a href="" data-target="#modal-envio" data-toggle="modal" data-recibir="' . $pedido->id . '" data-codigos="' . $pedido->codigos . '"><button class="btn btn-warning btn-sm"><i class="fas fa-check-circle"></i> Recibido</button></a>
                     </li>';
 
-                } else if ($pedido->condicion_envio_code == Pedido::RECEPCION_MOTORIZADO_INT) {
-                    $btn .= '<li>
+                    } else if ($pedido->condicion_envio_code == Pedido::RECEPCION_MOTORIZADO_INT) {
+                        $btn .= '<li>
                                 <a href="" class="btn-sm text-secondary" data-target="#modal-confirmacion" data-toggle="modal" data-ide="' . $pedido->id . '" data-entregar-confirm="' . $pedido->id . '" data-destino="' . $pedido->destino . '" data-fechaenvio="' . $pedido->fecha . '" data-codigos="' . $pedido->codigos . '">
                                     <i class="fas fa-envelope text-success"></i> Iniciar ruta</a></li>
                                 </a>
                             </li>';
 
-                }
+                    }
 
-                $btn .= '</ul>';
+                    $btn .= '</ul>';
 
-                return $btn;
-            })
-            ->rawColumns(['action', 'condicion_envio'])
-            ->make(true);
+                    return $btn;
+                })
+                ->rawColumns(['action', 'condicion_envio'])
+                ->make(true);
+
+        }
+
 
     }
 
@@ -2722,7 +2828,9 @@ class EnvioController extends Controller
 
     public function VerificarZona(Request $request)
     {
-        $zona_distrito = Distrito::where('distrito', $request->distrito)->first();
+        $zona_distrito = Distrito::where('distrito', $request->distrito)
+            ->where('provincia','LIMA')
+                ->first();
 
         if ($zona_distrito->zona == "OLVA") {
             return response()->json(['html' => 0]);

@@ -54,9 +54,29 @@
             </div>
         @endforeach
     </div>
+    <style>
+        .activo{
+            background-color: #e74c3c !important;
+            color: white !important;
+            border: 0 !important;
+        }
+    </style>
 
     <div class="card">
         <div class="card-body">
+
+            <ul class="nav nav-tabs mb-24 mt-24" id="myTab" role="tablist">
+                <li class="nav-item w-50 text-center">
+                    <a class="condicion-tabla nav-link activo active font-weight-bold" id="home-tab" data-toggle="tab" data-url="11" href="#home" role="tab" aria-controls="home" aria-selected="true">
+                        <i class="fa fa-inbox" aria-hidden="true"></i> RECEPCIÓN
+                    </a>
+                </li>
+                <li class="nav-item w-50 text-center">
+                    <a class="condicion-tabla nav-link font-weight-bold" id="profile-tab" data-toggle="tab" data-url="10" href="#profile" role="tab" aria-controls="profile" aria-selected="false">
+                        <i class="fa fa-motorcycle" aria-hidden="true"></i> ENTREGADOS
+                    </a>
+                </li>
+            </ul>
 
             <table id="tablaPrincipal" class="table table-striped">
                 <thead>
@@ -173,12 +193,21 @@
     <script src="https://cdn.datatables.net/select/1.5.0/js/dataTables.select.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.0.943/pdf.min.js"></script>
 
-    <script
-        src="https://gyrocode.github.io/jquery-datatables-checkboxes/1.2.12/js/dataTables.checkboxes.min.js"></script>
+    <script src="https://gyrocode.github.io/jquery-datatables-checkboxes/1.2.12/js/dataTables.checkboxes.min.js"></script>
 
 
 
     <script>
+
+        $('.condicion-tabla').on('click', function (){
+            $('.condicion-tabla').removeClass("activo");
+            $(this).addClass("activo");
+            //var url = $(this).data("url");
+            $('#tablaPrincipal').DataTable().ajax.reload();
+
+        });
+
+
         var tablehistoricolima = null;
         tablehistoricolima = $('#tablaHistorialLima').DataTable({
             "bPaginate": false, "bFilter": false, "bInfo": false, "length": 3,
@@ -1199,7 +1228,13 @@
                 serverSide: true,
                 searching: true,
                 "order": [[0, "desc"]],
-                ajax: "{{ route('envios.estadosobrestabla') }}",
+                //ajax: "{{ route('envios.estadosobrestabla') }}",
+                ajax:{ url: "{{ route('envios.recepcionmotorizadotabla') }}",
+                    data: function(d){
+                        d.consulta = "pedido";
+                        d.condicion = $('.condicion-tabla.activo').data("url");
+                    }
+                },
                 createdRow: function (row, data, dataIndex) {
                     //console.log(row);
                 },
