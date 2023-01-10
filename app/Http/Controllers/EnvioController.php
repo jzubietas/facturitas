@@ -2692,10 +2692,9 @@ class EnvioController extends Controller
                 'motorizado_sustento_text' => $request->sustento_text,
             ]);
             foreach ($grupo->pedidos as $pedido) {
-                PedidoMotorizadoHistory::query()->updateOrCreate([
+                PedidoMotorizadoHistory::query()->create([
                     'pedido_id' => $pedido->id,
                     'direccion_grupo_id' => $grupo->id,
-                ], [
                     //'pedido_grupo_id' => null,
                     'status' => '1',
                     'sustento_text' => $request->sustento_text,
@@ -2717,10 +2716,9 @@ class EnvioController extends Controller
                 'motorizado_sustento_foto' => $path,
             ]);
             foreach ($grupo->pedidos as $pedido) {
-                PedidoMotorizadoHistory::query()->updateOrCreate([
+                PedidoMotorizadoHistory::query()->create([
                     'pedido_id' => $pedido->id,
                     'direccion_grupo_id' => $grupo->id,
-                ], [
                     //'pedido_grupo_id' => null,
                     'status' => '2',
                     'sustento_text' => $request->sustento_text,
