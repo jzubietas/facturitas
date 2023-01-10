@@ -13,9 +13,11 @@ class AlterDireccionGrupoTable extends Migration
      */
     public function up()
     {
-       Schema::table('direccion_grupos',function (Blueprint $table){
-           $table->text('codigos_confirmados')->nullable()->after('codigos');
-       });
+        if(!Schema::hasColumn('direccion_grupos','codigos_confirmados')) {
+            Schema::table('direccion_grupos', function (Blueprint $table) {
+                $table->text('codigos_confirmados')->nullable()->after('codigos');
+            });
+        }
     }
 
     /**
