@@ -1073,6 +1073,7 @@ class EnvioController extends Controller
 
     public function Enviosrecepcionmotorizado()
     {
+        $fecha_consulta = Carbon::now()->format('d/m/Y');
         $condiciones = [
             "1" => 1,
             "2" => 2,
@@ -1116,7 +1117,7 @@ class EnvioController extends Controller
             $ver_botones_accion = 1;
         }
 
-        return view('envios.recepcionMotorizado', compact('condiciones', 'distritos', 'direcciones', 'destinos', 'superasesor', 'ver_botones_accion', 'departamento'));
+        return view('envios.recepcionMotorizado', compact('condiciones', 'distritos', 'direcciones', 'destinos', 'superasesor', 'ver_botones_accion', 'departamento','fecha_consulta'));
     }
 
     public function Enviosporconfirmartabla(Request $request)
@@ -1225,7 +1226,10 @@ class EnvioController extends Controller
     public function Enviosrecepcionmotorizadotabla(Request $request)
     {
         $pedidos = null;
+
+        //10/01/2023
         $filtros_code = [12];
+        $fecha_consulta=Carbon::createFromFormat('d/m/Y', $request->fechaconsulta)->format('Y-m-d');
 
         $grupos = DireccionGrupo::select([
             'direccion_grupos.*',
@@ -1239,6 +1243,8 @@ class EnvioController extends Controller
             //->where('direccion_grupos.condicion_envio_code', Pedido::REPARTO_COURIER_INT)
             //->whereIn('direccion_grupos.condicion_envio_code', [Pedido::ENVIO_MOTORIZADO_COURIER_INT,Pedido::RECEPCION_MOTORIZADO_INT])
             ->whereIn('direccion_grupos.condicion_envio_code', [$request->condicion])
+            //->whereDate('direccion_grupos.fecha_salida',$request->fechaconsulta)
+            ->where(DB::raw('DATE(direccion_grupos.fecha_salida)'), $fecha_consulta)
             ->activo();
 
         return Datatables::of(DB::table($grupos))
