@@ -42,11 +42,11 @@
         @foreach ($_pedidos as $pedido)
             <div class="col-2">
                 <div class="card card-warning">
-                    <div class="card-header">
-                        <h5>ASESOR {{ $pedido->identificador }}</h5>
+                    <div class="card-header p-8">
+                        <h5 class="mb-0 font-16 text-center">ASESOR {{ $pedido->identificador }}</h5>
                     </div>
-                    <div class="card-body">
-                        <h4 class="text-center">
+                    <div class="card-body pt-8 pb-8">
+                        <h4 class="text-center mb-0">
                             <b>{{ $pedido->total }}</b>
                         </h4>
                     </div>

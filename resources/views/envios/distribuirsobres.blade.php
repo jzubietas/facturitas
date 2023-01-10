@@ -40,7 +40,7 @@
                                 <table id="tablaPrincipal{{Str::upper($motorizado->zona)}}" class="table table-striped font-12">
                                     <thead>
                                     <tr>
-                                        <th scope="col">Cliente</th>
+                                        <th scope="col">Códigos</th>
                                         <th scope="col">Zona</th>
                                         <th scope="col">Distrito</th>
                                         <th scope="col">Acciones</th>
@@ -131,7 +131,7 @@
             console.log(data, zona)
             return {
                 ...data,
-                cliente_recibe: data.cliente_recibe,
+                codigos: data.codigos,
                 zona: data.zona,
                 zona_asignada: zona,
                 distrito: data.distrito,
@@ -236,7 +236,7 @@
                 createdRow: function (row, data, dataIndex) {
                 },
                 columns: [
-                    {data: 'cliente_recibe', name: 'cliente_recibe',},
+                    {data: 'codigos', name: 'codigos',},
                     {data: 'zona', name: 'zona',},
                     {data: 'distrito', name: 'distrito',},
                     {
@@ -521,11 +521,12 @@ ${success ? `Paquete: <strong>${row.correlativo || ''}</strong>` : `Cliente: <st
                                     method: 'post'
                                 })
                                     .done(function (response) {
-                                        self.setTitle('<h3 class="text-success font-24">Paquetes creados exitosamente</h3>');
+                                        self.close();
+                                       /* self.setTitle('<h3 class="text-success font-24">Paquetes creados exitosamente</h3>');
                                         self.setContent(getHtmlPrevisualizarPaqueteData(response, true))
                                         self.$$ok.hide();
                                         self.$$goSobres.show();
-                                        self.$$cancelar.text("Cerrar");
+                                        self.$$cancelar.text("Cerrar");*/
                                     })
                                     .always(function () {
                                         self.hideLoading(true)

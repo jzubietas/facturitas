@@ -62,11 +62,12 @@ class BasefriaController extends Controller
                 'clientes.icelular',
                 'clientes.celular',
                 'u.identificador as identificador',
-                'u.rol'
+                'u.rol',
+                'clientes.estado',
+                'clientes.situacion'
             )
-            ->where('clientes.estado', '1')
+            //->where('clientes.estado', '1')
             ->where('clientes.tipo', '0');
-        //->get();
 
         if (Auth::user()->rol == 'Llamadas') {
             $usersasesores = User::where('users.rol', 'Asesor')
@@ -132,8 +133,22 @@ class BasefriaController extends Controller
 
         return Datatables::of($data)
             ->addIndexColumn()
-            ->addColumn('action', function ($row) {
+            ->editColumn('action', function ($row) {
                 $btn = "";
+                
+                $btn = $btn . '<a href="" data-target="#modal-convertir" data-toggle="modal" data-opcion="' . $row->id . '"><button class="btn btn-info btn-sm"><i class="fas fa-person"></i> Convertir a cliente</button></a>';
+
+                if (auth()->user()->can('base_fria.edit')):
+                    $btn = $btn.'<a href="'.route('basefria.edit', $row->id).'" class="btn btn-warning btn-sm"><i class="fas fa-edit"></i> Editar</a>';
+                endif;
+
+                //if(\auth()->user()->can('clientes.destroy')) {
+                    if($row->estado=='1')
+                    {
+                        $btn = $btn . '<a href="" data-target="#modal-delete" data-toggle="modal" data-cliente="'.$row->id.'" data-asesor="'.trim($row->identificador).'"><button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i> Bloquear</button></a>';
+                    }
+                //}
+
                 return $btn;
             })
             ->rawColumns(['action'])
@@ -318,6 +333,52 @@ class BasefriaController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function destroyid(Request $request)
+    {
+        if (!$request->hiddenID) {
+            $html = '';
+        } else {
+            $cliente = Cliente::findOrFail($request->hiddenID);
+            $filePaths = [];
+            $files = $request->attachments;
+            if (is_array($files)) {
+                foreach ($files as $file) {
+                    if ($file instanceof UploadedFile) {
+                        $filePaths[] = $file->store("clientes_adjuntos", "pstorage");
+                    }
+                }
+            }
+
+            setting()->load();
+            foreach ($filePaths as $index => $path) {
+                $key = "pedido." . $cliente->id . ".adjuntos_file." . $index;
+                $keyd = "pedido." . $cliente->id . ".adjuntos_disk." . $index;
+                setting([
+                    $key => $path,
+                    $keyd => 'pstorage'
+                ]);
+            }
+            setting()->save();
+
+            $nombre_Responsable=User::where('id',Auth::user()->id)->first()->name;
+
+            $cliente->update([
+                'motivo_anulacion' => $request->motivo,
+                'responsable_anulacion' => $nombre_Responsable,
+                'user_anulacion_id' => Auth::user()->id,
+                'fecha_anulacion' => now(),
+                'estado' => '0',
+                'path_adjunto_anular' => null,
+                'path_adjunto_anular_disk' => 'pstorage',
+                'situacion'=>'BLOQUEADO',
+            ]);
+            
+            $html = $cliente;
+            
+        }
+        return response()->json(['html' => $html]);
     }
 
     public function updatebfpost(Request $request)

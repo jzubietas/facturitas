@@ -96,6 +96,18 @@
   <div class="card w-100 pb-48">
     <div class="card-body p-0">
 
+      <table cellspacing="5" cellpadding="5" class="table-responsive">
+          <tbody>
+            <tr>
+              <td>Fecha</td>
+              <td><input type="text" value="{{$fecha_consulta}}" id="fecha_consulta" name="fecha_consulta" class="form-control" autocomplete="off"></td>
+              <td></td>
+    
+
+            </tr>
+          </tbody>
+        </table><br>
+
         <ul class="nav nav-tabs mb-24 mt-24" id="myTab" role="tablist">
             <li class="nav-item w-50 text-center">
                 <a class="condicion-tabla nav-link activo active font-weight-bold" id="home-tab" data-toggle="tab" data-url="19" href="#home" role="tab" aria-controls="home" aria-selected="true">
@@ -124,12 +136,12 @@
       <table id="tablaPrincipal" class="table table-striped dt-responsive w-100">
         <thead>
           <tr>
-            <th scope="col">Item</th>
+            <!--<th scope="col">Item</th>-->
             <th scope="col">Código</th>
             <th scope="col">Asesor</th>
             <th scope="col">Cliente</th>
             <th scope="col">Razón social</th>
-            <th scope="col">Fecha de registro</th>
+            <th scope="col">Fecha de salida</th>
 
             <th scope="col">Dirección de envío</th>
             <th scope="col">Estado de envio</th>
@@ -274,6 +286,7 @@
 
 @section('css')
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
 
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.1/css/dataTables.bootstrap4.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.4.0/css/responsive.bootstrap4.min.css">
@@ -281,7 +294,9 @@
 
 
   <style>
-
+.table_custom.toolbar {
+    float: left;
+}
       .qr_success{
           animation: qr_success 1s ease-in forwards;
       }
@@ -517,13 +532,66 @@ setTimeout(function (){
   <script>
     $(document).ready(function () {
 
+      $("#fecha_consulta").datepicker({
+        onSelect: function () {
+          $('#tablaPrincipal').DataTable().ajax.reload();
+          console.log("minimo "+$(this).val());
+          //localStorage.setItem('dateMin', $(this).datepicker('getDate') );
+          //localStorage.setItem('dateMin', $(this).val() );
+        }, changeMonth: true, changeYear: true , dateFormat:"dd/mm/yy"
+      });
+
         $('.condicion-tabla').on('click', function (){
             $('.condicion-tabla').removeClass("activo");
             $(this).addClass("activo");
             //var url = $(this).data("url");
             $('#tablaPrincipal').DataTable().ajax.reload();
 
+            var $activeItem = $('.nav .active').html();
+            console.log($activeItem);
+
+            var id=$('.condicion-tabla.active').attr('id');
+            console.log(id)//profile-tab   home-tab
+            if($('.condicion-tabla.active').attr('id')=='home-tab')
+            {
+              $('div.toolbar').html('<div class="d-flex justify-content-center"><button id="iniciar-ruta-masiva" class="btn btn-success">Iniciar RUTA MASIVA</button></div>');
+            }else{
+              $('div.toolbar').html('');
+            }
+            //if ( ! $.fn.DataTable.isDataTable( '#tablaPrincipal' ) ) {
+                
+            //}
+
         });
+
+        $(document).on("click","#iniciar-ruta-masiva",function(){
+          //ajax iniciar ruta masiva
+         
+          $.ajax({
+              data: {
+                  /*envio_id:data.id,
+                  pedido:data.codigos*/
+              },
+              type: 'POST',
+              url: "{{ route('envios.recepcionmotorizado.iniciar_ruta_masiva') }}",
+          }).always(function (data){
+            console.log(data);
+              /*if(data.html=='1')
+              {
+                $('#tablaPrincipal').DataTable().ajax.reload();
+              }else{
+                Swal.fire(
+                    'Error',
+                    'No tiene el rol suficiente para esta operacion',
+                    'error'
+                )
+              }*/
+              //self.close()
+              //self.hideLoading(true)
+              
+          });
+
+        })
 
         /************
          * ESCANEAR PEDIDO
@@ -732,14 +800,15 @@ setTimeout(function (){
       });*/
 
       $('#tablaPrincipal').DataTable({
+        dom: '<"toolbar">frtip',
         processing: true,
         stateSave:true,
-		serverSide: true,
+		    serverSide: true,
         searching: true,
         "order": [[ 0, "desc" ]],
         ajax:{ url: "{{ route('envios.recepcionmotorizadotabla') }}",
                   data: function(d){
-
+                      d.fechaconsulta = $("#fecha_consulta").val();
                       d.condicion = $('.condicion-tabla.activo').data("url");
                   }
           },
@@ -749,10 +818,7 @@ setTimeout(function (){
         rowCallback: function (row, data, index) {
         },
         columns: [
-          {
-              data: 'correlativo',
-              name: 'correlativo',
-          },
+
           {data: 'codigos', name: 'codigos', },
           {data: 'user_id', name: 'user_id','visible':false },
           {
@@ -765,7 +831,11 @@ setTimeout(function (){
             //searchable: true
         },
           {data: 'producto', name: 'producto'},
-          {data: 'fecha_formato', name: 'fecha_formato'},
+          {
+            data: 'fecha_salida', 
+            name: 'fecha_salida',
+            //render: $.fn.dataTable.render.moment('DD/MM/YYYY', 'YYYY-MM-DD')
+          },
           {
             data:'direccion',
             name:'direccion',"visible":false,
@@ -837,7 +907,9 @@ setTimeout(function (){
         },
       });
 
+     
 
+      
 
     });
   </script>

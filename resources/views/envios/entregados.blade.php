@@ -55,9 +55,9 @@
                     <th scope="col">Código</th>
                     <th scope="col">Razón social</th>
                     <th scope="col">Fecha de entrega</th>
-                    <th scope="col">Foto 1</th>
-                    <th scope="col">Foto 2</th>
-                    <th scope="col">Foto 3</th>
+                    <th scope="col">Foto del sobre</th>
+                    <th scope="col">Foto del domicilio</th>
+                    <th scope="col">Foto de quien recibe</th>
                     <th scope="col">Estado de envio</th>
                     <th scope="col">Acciones</th>
                 </tr>
