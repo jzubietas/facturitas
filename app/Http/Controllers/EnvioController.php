@@ -1227,7 +1227,11 @@ class EnvioController extends Controller
     {
         $tipo_consulta = $request->consulta;
 
-        $fecha_consulta=Carbon::createFromFormat('d/m/Y', $request->fechaconsulta)->format('Y-m-d');
+        if($request->fechaconsulta != null){
+            $fecha_consulta=Carbon::createFromFormat('d/m/Y', $request->fechaconsulta)->format('Y-m-d');
+        }else{
+            $fecha_consulta = null;
+        }
 
 
         if($tipo_consulta == "pedido"){
@@ -1346,7 +1350,9 @@ class EnvioController extends Controller
                 //->where('direccion_grupos.condicion_envio_code', Pedido::REPARTO_COURIER_INT)
                 //->whereIn('direccion_grupos.condicion_envio_code', [Pedido::ENVIO_MOTORIZADO_COURIER_INT,Pedido::RECEPCION_MOTORIZADO_INT])
                 ->whereIn('direccion_grupos.condicion_envio_code', [$request->condicion])
-                ->where(DB::raw('DATE(direccion_grupos.fecha_salida)'), $fecha_consulta)
+                ->when($fecha_consulta != null, function($query)use($fecha_consulta){
+                    $query->where(DB::raw('DATE(direccion_grupos.fecha_salida)'), $fecha_consulta);
+                })
                 ->activo();
 
             return Datatables::of(DB::table($grupos))
@@ -1928,7 +1934,7 @@ class EnvioController extends Controller
     public function DireccionEnvio(Request $request)
     {
 
-
+        $attach_pedidos_data=[];
         $pedidos = $request->pedidos;
         if (!$request->pedidos) {
             return '0';
