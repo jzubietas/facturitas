@@ -2896,6 +2896,13 @@ class EnvioController extends Controller
                 return trim($cod);
             });
 
+            $codigos_confirmados = collect(explode(",", $paquete_sobres->codigos_confirmados??''))->map(function ($cod) {
+                return trim($cod);
+            })->filter()->values();
+
+            $codigos_confirmados->push($request->id);
+
+
             /*************
              * SACAMOS LA CANTIDAD DE SOBRES YA RECIBIDOS DE ESTE PAQUETE
              */
@@ -2912,6 +2919,10 @@ class EnvioController extends Controller
                     'modificador' => 'USER' . Auth::user()->id,
                     'condicion_envio' => Pedido::RECEPCION_MOTORIZADO,
                     'condicion_envio_code' => Pedido::RECEPCION_MOTORIZADO_INT,
+                ]);
+            }else{
+                $paquete_sobres->update([
+                    'codigos_confirmados' => $codigos_confirmados->join(',')
                 ]);
             }
             return response()->json(['html' => $pedido->id, 'grupo' => $paquete_sobres, 'pedido' => $pedido, 'distrito' => $pedido->distrito, 'direccion' => $pedido->direccion, 'sobres_recibidos' => $sobres_ya_recibidos, 'sobres_restantes' => $sobres_restantes]);
