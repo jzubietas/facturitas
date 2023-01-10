@@ -473,6 +473,14 @@ return [
                     'icon' => 'fas fa-check-circle',
                     'active' => ['envios'],
                 ],
+
+                [
+                    'text' => 'Confirmar foto',
+                    'route' => 'envios.motorizados.confirmar',
+                    'can' => 'operacion.confirmmotorizado',
+                    'icon' => 'fas fa-check-circle dot_contador_en_motorizados_confirmar_count',
+                    'active' => ['enviados'],
+                ]
             ],
         ],
 
@@ -493,13 +501,6 @@ return [
                     'route' => 'envios.motorizados.index',
                     'can' => 'operacion.motorizado',
                     'icon' => 'fas fa-check-circle dot_contador_en_motorizados_count',
-                    'active' => ['enviados'],
-                ],
-                [
-                    'text' => 'Motorizado Confirmar',
-                    'route' => 'envios.motorizados.confirmar',
-                    'can' => 'operacion.confirmmotorizado',
-                    'icon' => 'fas fa-check-circle dot_contador_en_motorizados_confirmar_count',
                     'active' => ['enviados'],
                 ]
                 ]
