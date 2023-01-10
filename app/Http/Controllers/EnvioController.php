@@ -1253,6 +1253,7 @@ class EnvioController extends Controller
                     'pedidos.condicion_envio',
                     'pedidos.envio',
                     'pedidos.codigo',
+                    'pedidos.codigos_confirmados',
                     'pedidos.destino',
                     'pedidos.direccion',
                     'dp.envio_doc',

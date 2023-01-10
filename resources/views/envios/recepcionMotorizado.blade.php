@@ -136,7 +136,7 @@
       <table id="tablaPrincipal" class="table table-striped dt-responsive w-100">
         <thead>
           <tr>
-            <!--<th scope="col">Item</th>-->
+            <th scope="col">Item</th>
             <th scope="col">Código</th>
             <th scope="col">Asesor</th>
             <th scope="col">Cliente</th>
@@ -822,7 +822,7 @@ setTimeout(function (){
         rowCallback: function (row, data, index) {
         },
         columns: [
-
+            {data: 'correlativo', name: 'correlativo'},
           {
               data: 'codigos',
               name: 'codigos',
@@ -831,10 +831,24 @@ setTimeout(function (){
                   //var codigos_ped = row.codigos.split(',').map(function(n) {return Number(n);});
                   //var codigos_ped = row.codigos.split(",").map(Number);
                   var codigos_ped = row.codigos.split(',');
+
+
+                  //console.log(row);
+                  var codigos_conf_ped = (row.codigos_confirmados||'').split(',');
+
+                  console.log(codigos_conf_ped);
+
                   var lista_codigos ='<div class="row">';
+
                   $.each(codigos_ped , function(index, val) {
-                      lista_codigos += '<div class="col-lg-6">' + val +'</div>';
+                      //lista_codigos += '<div class="col-lg-6">' + val +'</div>';
+                      if(codigos_conf_ped.includes(val.trim())){
+                          lista_codigos += '<div class="col-lg-6"><span class="text-success">' + val +'</span></div>';
+                      }else{
+                          lista_codigos += '<div class="col-lg-6">' + val +'</div>';
+                      }
                   });
+
                   lista_codigos += '</div>';
 
                   return lista_codigos;
