@@ -98,19 +98,13 @@ class DistribucionController extends Controller
         $items=$query->get();
         return \DataTables::of($items)
             ->addColumn('codigos', function ($pedido) {
-                return collect(explode(',', $pedido->codigos))->map(function ($codigo, $index) {
-                    return ($index + 1) . ") <b>" . $codigo . "</b>";
-                })->join('<hr class="my-1">');
+                return collect(explode(',', $pedido->codigos))->map(fn($codigo, $index) => ($index + 1) . ") <b>" . $codigo . "</b>")->join('<hr class="my-1">');
             })
             ->addColumn('codigos_search', function ($pedido) {
-                return collect(explode(',', $pedido->codigos))->map(function ($codigo, $index) {
-                    return $codigo;
-                })->join(',');
+                return collect(explode(',', $pedido->codigos))->map(fn($codigo, $index) => $codigo)->join(',');
             })
             ->addColumn('productos', function ($pedido) {
-                return collect(explode(',', $pedido->productos))->map(function ($codigo, $index) {
-                    return ($index + 1) . ")" . $codigo;
-                })->join('<hr class="my-1">');
+                return collect(explode(',', $pedido->productos))->map(fn($codigo, $index) => ($index + 1) . ")" . $codigo)->join('<hr class="my-1">');
             })
             ->addColumn('condicion_envio', function ($pedido) {
                 $badge_estado = '';
