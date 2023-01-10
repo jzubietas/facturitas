@@ -28,19 +28,17 @@ Sheet::macro('styleCells', function (Sheet $sheet, string $cellRange, array $sty
 
 class PagemotorizadoConfirmar extends Export implements WithColumnFormatting, FromCollection, WithHeadings, ShouldAutoSize, WithEvents
 {
-    public static $motorizado='';
-    public static $hasta='';
-
-    public function __construct($motorizado,$hasta)
+    public int $user_motorizado_h=0;
+    public string $fecha_envio_h='';
+    public function __construct($user_motorizado_p,$fecha_envio_p)
     {
         parent::__construct();
-        self::$motorizado=$motorizado;
-        self::$hasta=$hasta;
+        $this->user_motorizado_h=$user_motorizado_p;
+        $this->fecha_envio_h=$fecha_envio_p;
     }
-
     public function collection()
     {
-        $direccion=DireccionGrupo::/*where('direccion_grupos.motorizado_id','45')->*/where('direccion_grupos.estado','1')
+        $direccion=DireccionGrupo::where('direccion_grupos.estado','1')
             ->join('users as u', 'direccion_grupos.user_id', 'u.id')
             ->join('clientes as c', 'direccion_grupos.cliente_id', 'c.id')
             ->select([
@@ -55,8 +53,8 @@ class PagemotorizadoConfirmar extends Export implements WithColumnFormatting, Fr
                 'direccion_grupos.referencia',
                 'direccion_grupos.condicion_envio',
             ])
-            ->where('direccion_grupos.motorizado_id',self::$motorizado)
-            ->where('cast(direccion_grupos.fecha_recepcion as date)',self::$hasta);
+            ->where('direccion_grupos.motorizado_id',$this->user_motorizado_h)
+            ->where('cast(direccion_grupos.fecha_recepcion as date)',$this->fecha_envio_h);
 
         return  $direccion->get();
     }

@@ -68,7 +68,8 @@ class ExcelController extends Controller
 
     public function enviosMotorizadoconfirmarExcel(Request $request)
     {
-        return (new PlantillaMotorizadoConfirmarMultiple($request->user_id,$request->hasta))
+        var_dump($request);
+        return (new PlantillaMotorizadoConfirmarMultiple($request->user_motorizado,$request->fecha_envio))
                 ->download('Lista de Motorizado Confirmar.xlsx');
     }
 

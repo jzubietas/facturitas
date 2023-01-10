@@ -10,17 +10,17 @@ use Illuminate\Http\Request;
 class PlantillaMotorizadoConfirmarMultiple implements WithMultipleSheets
 {
     use Exportable;
-    protected $motorizado;
-    protected $hasta;
-    public function __construct($motorizado,$hasta)
+    public int $user_motorizado_p;
+    public string $fecha_envio_p;
+    public function __construct($user_motorizado,$fecha_envio)
     {
-        $this->motorizado=$motorizado;
-        $this->hasta=$hasta;
+        $this->user_motorizado_p=$user_motorizado;
+        $this->fecha_envio_p=$fecha_envio;
     }
     public function sheets(): array
     {
         return [
-            new PagemotorizadoConfirmar(),
+            new PagemotorizadoConfirmar($this->user_motorizado_p,$this->fecha_envio_p),
         ];
     }
 }
