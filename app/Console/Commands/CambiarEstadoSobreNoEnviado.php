@@ -56,7 +56,8 @@ class CambiarEstadoSobreNoEnviado extends Command
             ->get();
 
         foreach ($grupos as $grupo) {
-            $this->warn('Pedido por enviar a con direccion: '.$grupo->id);
+            DB::beginTransaction();
+            $this->warn('Pedido por enviar a con direccion: ' . $grupo->id);
             $grupoPedido = GrupoPedido::query()->create([
                 'zona' => $grupo->distribucion,
                 'provincia' => $grupo->destino,
@@ -66,6 +67,7 @@ class CambiarEstadoSobreNoEnviado extends Command
                 'cliente_recibe' => $grupo->nombre_cliente,
                 'telefono' => $grupo->celular,
             ]);
+
             $grupoPedido->pedidos()->attach($grupo->pedidos()->select('pedidos.*', 'detalle_pedidos.nombre_empresa')
                 ->join('detalle_pedidos', 'pedidos.id', '=', 'detalle_pedidos.pedido_id')
                 ->where('pedidos.estado', '=', '1')
@@ -77,6 +79,7 @@ class CambiarEstadoSobreNoEnviado extends Command
                         'codigo' => $pedido->codigo,
                     ]
                 ]));
+
             $grupo->pedidos()->where('pedidos.estado', '=', '1')->update([
                 'condicion_envio' => Pedido::RECEPCION_COURIER,
                 'condicion_envio_code' => Pedido::RECEPCION_COURIER_INT,
@@ -93,8 +96,11 @@ class CambiarEstadoSobreNoEnviado extends Command
                 ])
                 ->update([
                     'pedido_grupo_id' => $grupoPedido->id,
+                    'old_direccion_grupo_id' => $grupo->id,
                 ]);
-            $this->info('[Success] Pedido por enviar a con direccion: '.$grupo->id);
+            DB::commit();
+
+            $this->info('[Success] Pedido por enviar a con direccion: [' . $grupo->id.'] --  ['.$grupoPedido->id.']');
         }
         return 0;
     }

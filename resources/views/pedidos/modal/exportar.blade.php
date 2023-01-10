@@ -16,7 +16,7 @@
       @elseif($key === '2')
         {!! Form::open(['route' => ['entregadosporfechasexcel'], 'method' => 'POST', 'target' => 'blanck_']) !!}
       @elseif($key === '3')
-        {!! Form::open(['route' => ['pedidosExcel'], 'method' => 'POST', 'target' => 'blanck_']) !!}
+        {!! Form::open(['route' => ['pedidosExcel'], 'method' => 'GET', 'target' => 'blanck_']) !!}
       @elseif($key === '4')
         {!! Form::open(['route' => ['mispedidosExcel'], 'method' => 'POST', 'target' => 'blanck_']) !!}
       @elseif($key === '5')
@@ -33,12 +33,12 @@
         {!! Form::open(['route' => ['pedidosentregadosExcel'], 'method' => 'POST', 'target' => 'blanck_']) !!}
 
         @elseif($key === '11')
-        {!! Form::open(['route' => ['estadosobresexcel'], 'method' => 'POST', 'target' => 'blanck_']) !!} 
+        {!! Form::open(['route' => ['estadosobresexcel'], 'method' => 'POST', 'target' => 'blanck_']) !!}
       @endif
 
             <div class="card-body">
               <div class="form-row">
-                <div class="form-group col-lg-12" style="text-align: center; font-size:16px">                  
+                <div class="form-group col-lg-12" style="text-align: center; font-size:16px">
                   <div class="form-row">
                     <div class="col-lg-12">
                       {!! Form::label('anio', 'Elija el rango de fechas del reporte') !!} <br><br>
@@ -56,7 +56,7 @@
                   </div>
                 </div>
               </div>
-            </div>    
+            </div>
             <div class="card-footer">
               <button type="submit" class="btn btn-success"><i class="fas fa-save"></i> Consultar</button>
             </div>

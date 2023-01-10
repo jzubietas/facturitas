@@ -9,6 +9,7 @@ use App\Models\DireccionGrupo;
 use App\Models\Distrito;
 use App\Models\GrupoPedido;
 use App\Models\Pedido;
+use App\Models\PedidoMotorizadoHistory;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -49,7 +50,7 @@ class DistribucionController extends Controller
 
     public function datatable(Request $request)
     {
-        $query = GrupoPedido::query()->with('pedidos')
+        $query = GrupoPedido::query()->with(['pedidos', 'motorizadoHistories'])
             ->join('grupo_pedido_items', 'grupo_pedido_items.grupo_pedido_id', '=', 'grupo_pedidos.id')
             ->select([
                 'grupo_pedidos.id',
@@ -64,7 +65,7 @@ class DistribucionController extends Controller
                 'grupo_pedidos.telefono',
                 'grupo_pedidos.created_at',
                 //'codigos' => DB::table('grupo_pedido_items')->selectRaw('GROUP_CONCAT(grupo_pedido_items.codigo)')->whereRaw('grupo_pedido_items.grupo_pedido_id=grupo_pedidos.id'),
-               // 'productos' => DB::table('grupo_pedido_items')->selectRaw('GROUP_CONCAT(grupo_pedido_items.razon_social)')->whereRaw('grupo_pedido_items.grupo_pedido_id=grupo_pedidos.id'),
+                // 'productos' => DB::table('grupo_pedido_items')->selectRaw('GROUP_CONCAT(grupo_pedido_items.razon_social)')->whereRaw('grupo_pedido_items.grupo_pedido_id=grupo_pedidos.id'),
             ])
             ->whereNull('grupo_pedidos.deleted_at')
             ->groupBy([
@@ -123,6 +124,9 @@ class DistribucionController extends Controller
             })
             ->addColumn('action', function ($pedido) use ($motorizados, $color_zones) {
                 $btn = [];
+                if ($pedido->motorizadoHistories->count() > 0) {
+                    $btn [] = '<button data-motorizado-history="' . $pedido->motorizadoHistories->count() . '" class="btn btn-light rounded-circle"><i class="fa fa-motorcycle"></i></button>';
+                }
                 foreach ($motorizados as $motorizado) {
                     if (Str::contains($pedido->zona, $motorizado->zona)) {
                         $addClass = 'border border-danger';
@@ -218,6 +222,13 @@ class DistribucionController extends Controller
                     'condicion_envio' => Pedido::REPARTO_COURIER,
                     'direccion_grupo' => $direcciongrupo->id,
                 ]);
+                PedidoMotorizadoHistory::query()
+                    ->where([
+                        'pedido_grupo_id' => $grupo->id,
+                    ])
+                    ->update([
+                        'direccion_grupo_id' => $direcciongrupo->id,
+                    ]);
                 $grupo->delete();
             }
         }

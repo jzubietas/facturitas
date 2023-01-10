@@ -377,6 +377,7 @@
   <script type="text/javascript" src="{{asset('js/jsqrscanner.nocache.js')}}"></script>
 
   <script type="text/javascript">
+
           var codigo_pedido = false;
       function onQRCodeScanned(scannedText)
       {
@@ -808,7 +809,7 @@ setTimeout(function (){
         "order": [[ 0, "desc" ]],
         ajax:{ url: "{{ route('envios.recepcionmotorizadotabla') }}",
                   data: function(d){
-                      d.fechaconsulta = $("#fecha_consulta").val();
+                      d.consulta = "paquete";
                       d.condicion = $('.condicion-tabla.activo').data("url");
                   }
           },
@@ -819,7 +820,23 @@ setTimeout(function (){
         },
         columns: [
 
-          {data: 'codigos', name: 'codigos', },
+          {
+              data: 'codigos',
+              name: 'codigos',
+              render: function ( data, type, row, meta ) {
+                  //var codigos_ped = JSON.parse("[" + row.codigos + "]");
+                  //var codigos_ped = row.codigos.split(',').map(function(n) {return Number(n);});
+                  //var codigos_ped = row.codigos.split(",").map(Number);
+                  var codigos_ped = row.codigos.split(',');
+                  var lista_codigos ='<div class="row">';
+                  $.each(codigos_ped , function(index, val) {
+                      lista_codigos += '<div class="col-lg-6">' + val +'</div>';
+                  });
+                  lista_codigos += '</div>';
+
+                  return lista_codigos;
+              }
+          },
           {data: 'user_id', name: 'user_id','visible':false },
           {
             data: 'celular',
