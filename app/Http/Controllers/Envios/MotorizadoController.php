@@ -44,9 +44,11 @@ class MotorizadoController extends Controller
                     'direccion_grupos.estado',
                     'direccion_grupos.motorizado_status',
                 ]);
+
             if (\auth()->user()->rol == User::ROL_MOTORIZADO) {
                 $query = $query->where('direccion_grupos.motorizado_id', '=', auth()->id());
             }
+
             $tab = ($request->tab ?: '');
             switch ($tab) {
                 case 'entregado':
