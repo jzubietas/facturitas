@@ -32,6 +32,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Js;
 use PDF;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Validator;
@@ -229,56 +230,94 @@ class PedidoController extends Controller
         }*/
         //$pedidos=$pedidos->get();
 
+        $miidentificador = Auth::user()->name;
         return Datatables::of(DB::table($pedidos))
             ->addIndexColumn()
             ->addColumn('condicion_envio_color', function ($pedido) {
                 return Pedido::getColorByCondicionEnvio($pedido->condicion_envio);
             })
             ->editColumn('condicion_envio', function ($pedido) {
-                $badge_estado='';
-                if($pedido->pendiente_anulacion=='1')
-                {
-                    $badge_estado.='<span class="badge badge-success">' . Pedido::PENDIENTE_ANULACION.'</span>';
+                $badge_estado = '';
+                if ($pedido->pendiente_anulacion == '1') {
+                    $badge_estado .= '<span class="badge badge-success">' . Pedido::PENDIENTE_ANULACION . '</span>';
                     return $badge_estado;
                 }
-                if($pedido->condicion_code=='4' || $pedido->estado=='0')
-                {
+                if ($pedido->condicion_code == '4' || $pedido->estado == '0') {
                     return '<span class="badge badge-danger">ANULADO</span>';
                 }
-                if($pedido->estado_sobre=='1')
-                {
+                if ($pedido->estado_sobre == '1') {
                     $badge_estado .= '<span class="badge badge-dark p-8" style="color: #fff; background-color: #347cc4; font-weight: 600; margin-bottom: -2px;border-radius: 4px 4px 0px 0px; font-size:8px;  padding: 4px 4px !important; font-weight: 500;">Direccion agregada</span>';
 
                 }
-                if($pedido->estado_ruta=='1')
-                {
-                    $badge_estado.='<span class="badge badge-success" style="background-color: #00bc8c !important;
+                if ($pedido->estado_ruta == '1') {
+                    $badge_estado .= '<span class="badge badge-success" style="background-color: #00bc8c !important;
                     padding: 4px 8px !important;
                     font-size: 8px;
                     margin-bottom: -4px;
                     color: black !important;">Con ruta</span>';
                 }
                 $color = Pedido::getColorByCondicionEnvio($pedido->condicion_envio);
-                $badge_estado.= '<span class="badge badge-success w-100" style="background-color: ' . $color . '!important;">' . $pedido->condicion_envio . '</span>';
+                $badge_estado .= '<span class="badge badge-success w-100" style="background-color: ' . $color . '!important;">' . $pedido->condicion_envio . '</span>';
                 return $badge_estado;
             })
-            ->addColumn('action', function ($pedido) {
-                $btn ='';
-                if($pedido->estado_sobre==1) {
-                    if(\auth()->user()->can('envios.direccionenvio.editar')) {
-                        $btn = '<button class="btn btn-sm btn-info dropdown-item" data-jqconfirm="' . $pedido->id . '"><i class="fa fa-map-marker-alt text-info mr-8"></i>Editar direccion de envio</button>';
+            ->addColumn('action', function ($pedido) use ($miidentificador) {
+                $btn = [];
+
+                $btn[] = '<div><ul class="" aria-labelledby="dropdownMenuButton">';
+
+                if ($pedido->condicion_envio_code==Pedido::ENTREGADO_CLIENTE_INT) {
+                    $grupo=DireccionGrupo::query()->whereIn('direccion_grupos.id',Pedido::query()->select('pedidos.direccion_grupo')->where('pedidos.id','=',$pedido->id))->first();
+                    if($grupo!=null ) {
+                        $fotos = [
+                            'foto1' => foto_url($grupo->foto1),
+                            'foto2' => foto_url($grupo->foto2),
+                            'foto3' => foto_url($grupo->foto3),
+                        ];
+                        if (collect($fotos)->values()->filter()->count() > 0) {
+                            $btn[] = '<button data-verforotos=\'' . json_encode($fotos) . '\' class="btn-sm dropdown-item"><i class="fa fa-file-pdf text-dark"></i> Ver Fotos</button>';
+                        } else {
+                            $btn[] = '<button disabled class="btn-sm dropdown-item"><i class="fa fa-file-pdf text-dark"></i> Sin Fotos</button>';
+                        }
                     }
-                }else{
-                    $btn = '';
                 }
-                return $btn;
+                if (can('pedidos.pedidosPDF')) {
+                    $btn[] = '<a href="' . route("pedidosPDF", $pedido->id) . '" class="btn-sm dropdown-item" target="_blank"><i class="fa fa-file-pdf text-primary"></i> Ver PDF</a>';
+                }
+                if (can('pedidos.show')) {
+                    $btn[] = '<a href="' . route("pedidos.show", $pedido->id) . '" class="btn-sm dropdown-item"><i class="fas fa-eye text-success"></i> Ver pedido</a>';
+                }
+                if (can('pedidos.edit')) {
+                    if ($pedido->condicion_pa == 0) {
+                        $btn[] = '<a href="' . route("pedidos.edit", $pedido->id) . '" class="btn-sm dropdown-item"><i class="fas fa-edit text-warning" aria-hidden="true"></i> Editar</a>';
+                    }
+                }
+                if (can('pedidos.destroy')) {
+                    if ($pedido->estado == 0) {
+                        $btn[] = '<a href="#" class="btn-sm dropdown-item" data-target="#modal-restaurar" data-toggle="modal" data-restaurar="' . $pedido->id . '" data-codigo=' . $pedido->codigo . '><i class="fas fa-check text-secondary"></i> Restaurar</a>';
+                    } else {
+                        if (!$pedido->pendiente_anulacion) {
+                            if ($pedido->condicion_pa == 0) {
+                                $btn[] = '<a href="" class="btn-sm dropdown-item" data-target="#modal-delete" data-toggle="modal" data-delete="' . $pedido->id . '" data-codigo=' . $pedido->codigo . ' data-responsable="'.$miidentificador.'"><i class="fas fa-trash-alt text-danger"></i> Anular</a>';
+                            }
+                        }
+                    }
+
+                }
+                if ($pedido->estado_sobre == 1) {
+                    if (\auth()->user()->can('envios.direccionenvio.editar')) {
+                        $btn[] = '<button class="btn btn-sm btn-info dropdown-item" data-jqconfirm="' . $pedido->id . '"><i class="fa fa-map-marker-alt text-info mr-8"></i>Editar direccion de envio</button>';
+                    }
+                }
+                $btn[] = '</ul></div>';
+                return join('', $btn);
             })
-            ->rawColumns(['action','condicion_envio'])
+            ->rawColumns(['action', 'condicion_envio'])
             ->make(true);
     }
 
 
-    public function indexperdonarcurriertabla(Request $request)
+    public
+    function indexperdonarcurriertabla(Request $request)
     {
         $mirol = Auth::user()->rol;
         $pedidos = null;
@@ -428,7 +467,8 @@ class PedidoController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    public function deudoresoncreate(Request $request)
+    public
+    function deudoresoncreate(Request $request)
     {
         $deudores = Cliente::where('estado', '1')
             //->where('user_id', Auth::user()->id)
@@ -443,7 +483,8 @@ class PedidoController extends Controller
         //return response()->json($deudores);
     }
 
-    public function clientesenpedidos(Request $request)
+    public
+    function clientesenpedidos(Request $request)
     {
         $clientes1 = Cliente::
         join('users as u', 'clientes.user_id', 'u.id')
@@ -485,7 +526,8 @@ class PedidoController extends Controller
         return response()->json($clientes1);
     }
 
-    public function clientesenruconcreate(Request $request)
+    public
+    function clientesenruconcreate(Request $request)
     {
         $clientes_ruc = Cliente::
         where('clientes.estado', '1')
@@ -506,7 +548,8 @@ class PedidoController extends Controller
         return response()->json($clientes_ruc);
     }
 
-    public function asesortiempo(Request $request)//clientes
+    public
+    function asesortiempo(Request $request)//clientes
     {
         $mirol = Auth::user()->rol;
         $html = '<option value="">' . trans('---- SELECCIONE ASESOR ----') . '</option>';
@@ -539,7 +582,8 @@ class PedidoController extends Controller
         return response()->json(['html' => $html]);
     }
 
-    public function create()
+    public
+    function create()
     {
         $dateM = Carbon::now()->format('m');
         $dateY = Carbon::now()->format('Y');
@@ -612,7 +656,8 @@ class PedidoController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    public function validarrelacionruc(Request $request)
+    public
+    function validarrelacionruc(Request $request)
     {
         $ruc_registrar = $request->agregarruc;
         $cliente_registrar = $request->cliente_id_ruc;
@@ -651,7 +696,8 @@ class PedidoController extends Controller
 
     }
 
-    public function pedidoobteneradjuntoRequest(Request $request)
+    public
+    function pedidoobteneradjuntoRequest(Request $request)
     {
         $buscar_pedido = $request->pedido;
 
@@ -677,7 +723,8 @@ class PedidoController extends Controller
         return response()->json(['html' => $html, 'cantidad' => count($array_html)]);
     }
 
-    public function pedidoobteneradjuntoOPRequest(Request $request)
+    public
+    function pedidoobteneradjuntoOPRequest(Request $request)
     {
         $buscar_pedido = $request->pedido;
 
@@ -701,7 +748,8 @@ class PedidoController extends Controller
         return response()->json(['html' => $html, 'cantidad' => count($array_html)]);
     }
 
-    public function ruc(Request $request)//rucs
+    public
+    function ruc(Request $request)//rucs
     {
         if (!$request->cliente_id || $request->cliente_id == '') {
             $html = '<option value="">' . trans('---- SELECCIONE ----') . '</option>';
@@ -718,7 +766,8 @@ class PedidoController extends Controller
         return response()->json(['html' => $html]);
     }
 
-    public function rucnombreempresa(Request $request)//rucs
+    public
+    function rucnombreempresa(Request $request)//rucs
     {
         if (!$request->ruc || $request->ruc == '') {
             $html = '<option value="">' . trans('---- SELECCIONE ----') . '</option>';
@@ -732,7 +781,8 @@ class PedidoController extends Controller
         return response()->json(['html' => $html]);
     }
 
-    public function infopdf(Request $request)//rucs
+    public
+    function infopdf(Request $request)//rucs
     {
         if (!$request->infocopiar) {
             $html = '<option value="">' . trans('---- SELECCIONE ----') . '</option>';
@@ -772,7 +822,8 @@ class PedidoController extends Controller
         return response()->json(['html' => $html]);
     } */
 
-    public function cliente()//clientes
+    public
+    function cliente()//clientes
     {
         $html = '<option value="">' . trans('---- SELECCIONE CLIENTE ----') . '</option>';
         $clientes = Cliente::where('clientes.user_id', Auth::user()->id)
@@ -785,7 +836,8 @@ class PedidoController extends Controller
     }
 
 
-    public function clientedeudaparaactivar(Request $request)//clientes
+    public
+    function clientedeudaparaactivar(Request $request)//clientes
     {
         if (!$request->user_id || $request->user_id == '') {
             $html = '<option value="">' . trans('---- SELECCIONE CLIENTE ----') . '</option>';
@@ -803,8 +855,8 @@ class PedidoController extends Controller
                     'clientes.activado_tiempo',
                     'clientes.activado_pedido',
                     'clientes.temporal_update',
-                    DB::raw(" (select count(ped.id) from pedidos ped where ped.cliente_id=clientes.id and ped.pago in (0,1) and ped.pagado in (0,1) and ped.created_at >='".now()->startOfMonth()->format("Y-m-d H:i:s")."' and ped.estado=1) as pedidos_mes_deuda "),
-                    DB::raw(" (select count(ped2.id) from pedidos ped2 where ped2.cliente_id=clientes.id and ped2.pago in (0,1) and ped2.pagado in (0,1) and ped2.created_at <='".now()->startOfMonth()->subMonth()->endOfMonth()->endOfDay()->format("Y-m-d H:i:s")."'  and ped2.estado=1) as pedidos_mes_deuda_antes ")
+                    DB::raw(" (select count(ped.id) from pedidos ped where ped.cliente_id=clientes.id and ped.pago in (0,1) and ped.pagado in (0,1) and ped.created_at >='" . now()->startOfMonth()->format("Y-m-d H:i:s") . "' and ped.estado=1) as pedidos_mes_deuda "),
+                    DB::raw(" (select count(ped2.id) from pedidos ped2 where ped2.cliente_id=clientes.id and ped2.pago in (0,1) and ped2.pagado in (0,1) and ped2.created_at <='" . now()->startOfMonth()->subMonth()->endOfMonth()->endOfDay()->format("Y-m-d H:i:s") . "'  and ped2.estado=1) as pedidos_mes_deuda_antes ")
                 ]);
             foreach ($clientes as $cliente) {
                 if ($cliente->pedidos_mes_deuda > 0 || $cliente->pedidos_mes_deuda_antes > 0) {
@@ -815,7 +867,8 @@ class PedidoController extends Controller
         return response()->json(['html' => $html]);
     }
 
-    public function clientedeasesordeuda(Request $request)//clientes
+    public
+    function clientedeasesordeuda(Request $request)//clientes
     {
         if (!$request->user_id || $request->user_id == '') {
             $html = '<option value="">' . trans('---- SELECCIONE CLIENTE ----') . '</option>';
@@ -835,7 +888,8 @@ class PedidoController extends Controller
         return response()->json(['html' => $html]);
     }
 
-    public function tipobanca(Request $request)//pedidoscliente
+    public
+    function tipobanca(Request $request)//pedidoscliente
     {
         if (!$request->cliente_id || $request->cliente_id == '') {
             $html = '<option value="">' . trans('---- SELECCIONE ----') . '</option>';
@@ -849,7 +903,8 @@ class PedidoController extends Controller
         return response()->json(['html' => $html]);
     }
 
-    public function AgregarRuc(Request $request)
+    public
+    function AgregarRuc(Request $request)
     {
         $ruc = Ruc::where('num_ruc', $request->agregarruc)->first();
 
@@ -891,7 +946,8 @@ class PedidoController extends Controller
 
     }
 
-    public function pedidosstore(Request $request)
+    public
+    function pedidosstore(Request $request)
     {
 
         //return $request->all();
@@ -1034,7 +1090,7 @@ class PedidoController extends Controller
                 $cliente_AB->update([
                     'situacion' => 'RECUPERADO ABANDONO'
                 ]);
-            }else if ($cliente_AB->situacion == 'BASE FRIA') {
+            } else if ($cliente_AB->situacion == 'BASE FRIA') {
                 $cliente_AB->update([
                     'situacion' => 'NUEVO'
                 ]);
@@ -1192,7 +1248,8 @@ class PedidoController extends Controller
      * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Pedido $pedido)
+    public
+    function show(Pedido $pedido)
     {
         //ver pedido anulado y activo
         $pedidos = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')
@@ -1306,7 +1363,8 @@ class PedidoController extends Controller
      * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Pedido $pedido)
+    public
+    function edit(Pedido $pedido)
     {
         $mirol = Auth::user()->rol;
         $meses = [
@@ -1407,7 +1465,8 @@ class PedidoController extends Controller
      * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Pedido $pedido)
+    public
+    function update(Request $request, Pedido $pedido)
     {/*return $request->all();*/
         $detallepedido = DetallePedido::where('pedido_id', $pedido->id)->first();
         try {
@@ -1501,7 +1560,8 @@ class PedidoController extends Controller
      * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Request $request, Pedido $pedido)
+    public
+    function destroy(Request $request, Pedido $pedido)
     {
         $detalle_pedidos = DetallePedido::find($pedido->id);
         $pedido->update([
@@ -1531,7 +1591,8 @@ class PedidoController extends Controller
         return redirect()->route('pedidos.index')->with('info', 'eliminado');
     }
 
-    public function destroyid(Request $request)
+    public
+    function destroyid(Request $request)
     {
         if (!$request->hiddenID) {
             $html = '';
@@ -1611,7 +1672,8 @@ class PedidoController extends Controller
         return response()->json(['html' => $html]);
     }
 
-    public function destroyidpedidoadjuntooperaciones(Request $request)
+    public
+    function destroyidpedidoadjuntooperaciones(Request $request)
     {
         if (!$request->hiddenID) {
             $html = '';
@@ -1632,7 +1694,8 @@ class PedidoController extends Controller
         return response()->json(['html' => $html]);
     }
 
-    public function Restaurarid(Request $request)
+    public
+    function Restaurarid(Request $request)
     {
         if (!$request->hiddenID) {
             $html = '';
@@ -1655,12 +1718,14 @@ class PedidoController extends Controller
         return response()->json(['html' => $html]);
     }
 
-    public function viewVentas()
+    public
+    function viewVentas()
     {
         return view('ventas.reportes.index');
     }
 
-    public function MisPedidos()
+    public
+    function MisPedidos()
     {
         $dateMin = Carbon::now()->subDays(4)->format('d/m/Y');
         $dateMax = Carbon::now()->format('d/m/Y');
@@ -1677,7 +1742,8 @@ class PedidoController extends Controller
         return view('pedidos.misPedidos', compact('destinos', 'superasesor', 'dateMin', 'dateMax', 'mirol'));
     }
 
-    public function mispedidostabla(Request $request)
+    public
+    function mispedidostabla(Request $request)
     {
         $pedidos = null;
 
@@ -1780,7 +1846,8 @@ class PedidoController extends Controller
             ->make(true);
     }
 
-    public function Pagados()//PEDIDOS PAGADOS
+    public
+    function Pagados()//PEDIDOS PAGADOS
     {
         $dateMin = Carbon::now()->subDays(4)->format('d/m/Y');
         $dateMax = Carbon::now()->format('d/m/Y');
@@ -1837,7 +1904,8 @@ class PedidoController extends Controller
         return view('pedidos.pagados', compact('pedidos', 'superasesor', 'dateMin', 'dateMax', 'miidentificador'));
     }
 
-    public function Pagadostabla()
+    public
+    function Pagadostabla()
     {
         $dateMin = Carbon::now()->subDays(4)->format('d/m/Y');
         $dateMax = Carbon::now()->format('d/m/Y');
@@ -1898,7 +1966,8 @@ class PedidoController extends Controller
 
     }
 
-    public function SinPagos()//PEDIDOS POR COBRAR
+    public
+    function SinPagos()//PEDIDOS POR COBRAR
     {
 
         $miidentificador = User::where("id", Auth::user()->id)->first()->identificador;
@@ -1908,7 +1977,8 @@ class PedidoController extends Controller
         return view('pedidos.sinPagos', compact('superasesor', 'miidentificador'));
     }
 
-    public function SinPagostabla()
+    public
+    function SinPagostabla()
     {
         $pedidos = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')
             ->join('users as u', 'pedidos.user_id', 'u.id')
@@ -1941,7 +2011,7 @@ class PedidoController extends Controller
             ->where('pedidos.estado', '1')
             ->where('dp.estado', '1')
             ->where('pedidos.pagado', '<>', '2')
-            ->where('pedidos.da_confirmar_descarga', '1')           
+            ->where('pedidos.da_confirmar_descarga', '1')
             ->orderBy('pedidos.created_at', 'DESC');
         if (Auth::user()->rol == "Operario") {
             $asesores = User::where('users.rol', 'Asesor')
@@ -1994,31 +2064,27 @@ class PedidoController extends Controller
                 return Pedido::getColorByCondicionEnvio($pedido->condicion_envio);
             })
             ->editColumn('condicion_envio', function ($pedido) {
-                $badge_estado='';
-                if($pedido->pendiente_anulacion=='1')
-                {
-                    $badge_estado.='<span class="badge badge-success">' . Pedido::PENDIENTE_ANULACION.'</span>';
+                $badge_estado = '';
+                if ($pedido->pendiente_anulacion == '1') {
+                    $badge_estado .= '<span class="badge badge-success">' . Pedido::PENDIENTE_ANULACION . '</span>';
                     return $badge_estado;
                 }
-                if($pedido->condicion_code=='4' || $pedido->estado=='0')
-                {
+                if ($pedido->condicion_code == '4' || $pedido->estado == '0') {
                     return '<span class="badge badge-danger">ANULADO</span>';
                 }
-                if($pedido->estado_sobre=='1')
-                {
+                if ($pedido->estado_sobre == '1') {
                     $badge_estado .= '<span class="badge badge-dark p-8" style="color: #fff; background-color: #347cc4; font-weight: 600; margin-bottom: -2px;border-radius: 4px 4px 0px 0px; font-size:8px;  padding: 4px 4px !important; font-weight: 500;">Direccion agregada</span>';
 
                 }
-                if($pedido->estado_ruta=='1')
-                {
-                    $badge_estado.='<span class="badge badge-success w-50" style="background-color: #00bc8c !important;
+                if ($pedido->estado_ruta == '1') {
+                    $badge_estado .= '<span class="badge badge-success w-50" style="background-color: #00bc8c !important;
                     padding: 4px 8px !important;
                     font-size: 8px;
                     margin-bottom: -4px;
                     color: black !important;">Con ruta</span>';
                 }
                 $color = Pedido::getColorByCondicionEnvio($pedido->condicion_envio);
-                $badge_estado.= '<span class="badge badge-success w-100" style="background-color: ' . $color . '!important;">' . $pedido->condicion_envio . '</span>';
+                $badge_estado .= '<span class="badge badge-success w-100" style="background-color: ' . $color . '!important;">' . $pedido->condicion_envio . '</span>';
                 return $badge_estado;
             })
             ->addColumn('action', function ($pedido) {
@@ -2026,13 +2092,14 @@ class PedidoController extends Controller
 
                 return $btn;
             })
-            ->rawColumns(['action','condicion_envio'])
+            ->rawColumns(['action', 'condicion_envio'])
             ->make(true);
 
     }
 
 
-    public function EnAtenciontabla(Request $request)
+    public
+    function EnAtenciontabla(Request $request)
     {
         if (Auth::user()->rol == "Operario") {
 
@@ -2205,7 +2272,8 @@ class PedidoController extends Controller
             ->make(true);
     }
 
-    public function EnAtencion()
+    public
+    function EnAtencion()
     {
         $dateMin = Carbon::now()->subDays(4)->format('d/m/Y');
         $dateMax = Carbon::now()->format('d/m/Y');
@@ -2383,7 +2451,8 @@ class PedidoController extends Controller
     }
 
 
-    public function cargarAtendidos(Request $request)//pedidoscliente
+    public
+    function cargarAtendidos(Request $request)//pedidoscliente
     {
         if (Auth::user()->rol == "Operario") {
             $pedidos = Pedido::join('users as u', 'pedidos.user_id', 'u.id')
@@ -2507,7 +2576,8 @@ class PedidoController extends Controller
     }
 
 
-    public function Atender(Request $request, Pedido $pedido)
+    public
+    function Atender(Request $request, Pedido $pedido)
     {
         $detalle_pedidos = DetallePedido::where('pedido_id', $pedido->id)->first();
         $fecha = Carbon::now();
@@ -2576,7 +2646,8 @@ class PedidoController extends Controller
     }
 
 
-    public function Enviar(Request $request, Pedido $pedido)
+    public
+    function Enviar(Request $request, Pedido $pedido)
     {
         $detalle_pedidos = DetallePedido::where('pedido_id', $pedido->id)->first();
         $fecha = Carbon::now();
@@ -2594,7 +2665,8 @@ class PedidoController extends Controller
     }
 
 
-    public function Destino(Request $request, Pedido $pedido)
+    public
+    function Destino(Request $request, Pedido $pedido)
     {
         $pedido->update([
             'destino' => $request->destino,
@@ -2604,7 +2676,8 @@ class PedidoController extends Controller
         return redirect()->route('envios.index')->with('info', 'actualizado');
     }
 
-    public function SinEnviar(Pedido $pedido)
+    public
+    function SinEnviar(Pedido $pedido)
     {
         $detalle_pedidos = DetallePedido::where('pedido_id', $pedido->id)->first();
         $fecha = Carbon::now();
@@ -2626,7 +2699,8 @@ class PedidoController extends Controller
     }
 
 
-    public function DescargarAdjunto($adjunto)
+    public
+    function DescargarAdjunto($adjunto)
     {
         $destinationPath = base_path("public/storage/adjuntos/" . $adjunto);
         /* $destinationPath = storage_path("app/public/adjuntos/".$pedido->adjunto); */
@@ -2634,14 +2708,16 @@ class PedidoController extends Controller
         return response()->download($destinationPath);
     }
 
-    public function DescargarGastos($adjunto)
+    public
+    function DescargarGastos($adjunto)
     {
         $destinationPath = base_path("public/storage/gastos/" . $adjunto);
 
         return response()->download($destinationPath);
     }
 
-    public function changeImg(Request $request)
+    public
+    function changeImg(Request $request)
     {
         $item = $request->item;
         $pedido = $request->pedido;
@@ -2669,7 +2745,8 @@ class PedidoController extends Controller
     }
 
 
-    public function Recibir(Pedido $pedido)
+    public
+    function Recibir(Pedido $pedido)
     {
         $pedido->update([
             'envio' => '2',
@@ -2680,7 +2757,8 @@ class PedidoController extends Controller
     }
 
 
-    public function EnviarPedido(Request $request, Pedido $pedido)//'notificacion' => 'Nuevo pedido creado'
+    public
+    function EnviarPedido(Request $request, Pedido $pedido)//'notificacion' => 'Nuevo pedido creado'
     {
         $detalle_pedidos = DetallePedido::where('pedido_id', $pedido->id)->first();
 
@@ -2752,14 +2830,16 @@ class PedidoController extends Controller
         return redirect()->route('envios.index')->with('info', 'actualizado');
     }
 
-    public function DescargarImagen($imagen)
+    public
+    function DescargarImagen($imagen)
     {
         $destinationPath = base_path("public/storage/entregas/" . $imagen);
 
         return response()->download($destinationPath);
     }
 
-    public function eliminarFoto1(Pedido $pedido)
+    public
+    function eliminarFoto1(Pedido $pedido)
     {
         $detallepedido = DetallePedido::find($pedido->id);
         $detallepedido->update([
@@ -2768,7 +2848,8 @@ class PedidoController extends Controller
         return redirect()->route('envios.enviados')->with('info', 'actualizado');
     }
 
-    public function eliminarFoto2(Pedido $pedido)
+    public
+    function eliminarFoto2(Pedido $pedido)
     {
         $detallepedido = DetallePedido::find($pedido->id);
         $detallepedido->update([
@@ -2777,7 +2858,8 @@ class PedidoController extends Controller
         return redirect()->route('envios.enviados')->with('info', 'actualizado');
     }
 
-    public function validadContenidoPedido(Request $request)
+    public
+    function validadContenidoPedido(Request $request)
     {
         $pedidos_repetidos = Pedido::join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
             ->join('users as u', 'pedidos.user_id', 'u.id')
@@ -2831,7 +2913,8 @@ class PedidoController extends Controller
         ]);
     }
 
-    public function ConfirmarAnular(Request $request)
+    public
+    function ConfirmarAnular(Request $request)
     {
         if ($request->get('action') == 'confirm_anulled_cancel') {
             $pedido = Pedido::findOrFail($request->pedido_id);

@@ -72,6 +72,9 @@ class Pedido extends Model
     const RECEPCION_MOTORIZADO_INT = 18;
     const ENVIO_MOTORIZADO_COURIER_INT = 19; // 19
 
+    const ESTADO_MOTORIZADO_OBSERVADO=1;
+    const ESTADO_MOTORIZADO_NO_CONTESTO=2;
+
     /**************
      * FIN CONSTANTES CONDICION ENVIO NUMERICO
      */
@@ -83,52 +86,23 @@ class Pedido extends Model
         'ATENDIDO' => 3,
     ];
 
-    public static $estadosCondicionCode = [
-        4 => 'ANULADO',
-        1 => 'POR ATENDER - OPE',
-        2 => 'EN ATENCION - OPE',
-        3 => 'ATENDIDO - OPE',
-    ];
-
-    /******************
-     * CONDICION DE ENVIO
-     */
-
-    public static $estadosCondicionEnvio = [
-
-        'POR ATENDER - OPE' => 1,
-        'EN ATENCION - OPE' => 2,
-        'ATENDIDO - OPE' => 3,
-        'ENVIADO - OPE' => 5,
-        'RECIBIDO - JEFE OPE' => 6,
-        'ENVIO A COURIER - JEFE OPE' => 12,
-        'RECEPCION - COURIER' => 11,
-        'REPARTO - COURIER' => 8,
-        'SEGUIMIENTO PROVINCIA - COURIER' => 9,
-        'MOTORIZADO' => 15,
-        'ENTREGADO - CLIENTE' => 10,
-        'ENTREGADO SIN SOBRE - OPE' => 13,
-        'ENTREGADO SIN SOBRE - CLIENTE' => 14
-
-    ];
-
     public static $estadosCondicionEnvioCode = [
-        1 => self::POR_ATENDER_OPE,
-        2 => self::EN_ATENCION_OPE,
-        3 => self::ATENDIDO_OPE,
-        5 => self::ENVIADO_OPE,
-        6 => self::RECIBIDO_JEFE_OPE,
-        12 => self::ENVIO_COURIER_JEFE_OPE,
-        11 => self::RECEPCION_COURIER,
-        8 => self::REPARTO_COURIER,
-        9 => self::SEGUIMIENTO_PROVINCIA_COURIER,
-        15 => self::MOTORIZADO,
-        10 => self::ENTREGADO_CLIENTE,
-        13 => self::ENTREGADO_SIN_SOBRE_OPE,
-        14 => self::ENTREGADO_SIN_SOBRE_CLIENTE,
-        16 => self::CONFIRM_MOTORIZADO,
-        17 => self::CONFIRM_VALIDADA_CLIENTE,
-        18 => self::RECEPCION_MOTORIZADO,
+        self::POR_ATENDER_OPE_INT => self::POR_ATENDER_OPE,
+        self::EN_ATENCION_OPE_INT => self::EN_ATENCION_OPE,
+        self::ATENDIDO_OPE_INT => self::ATENDIDO_OPE,
+        self::ENVIADO_OPE_INT => self::ENVIADO_OPE,
+        self::RECIBIDO_JEFE_OPE_INT => self::RECIBIDO_JEFE_OPE,
+        self::ENVIO_COURIER_JEFE_OPE_INT => self::ENVIO_COURIER_JEFE_OPE,
+        self::RECEPCION_COURIER_INT => self::RECEPCION_COURIER,
+        self::REPARTO_COURIER_INT => self::REPARTO_COURIER,
+        self::SEGUIMIENTO_PROVINCIA_COURIER_INT => self::SEGUIMIENTO_PROVINCIA_COURIER,
+        self::MOTORIZADO_INT => self::MOTORIZADO,
+        self::ENTREGADO_CLIENTE_INT => self::ENTREGADO_CLIENTE,
+        self::ENTREGADO_SIN_SOBRE_OPE_INT => self::ENTREGADO_SIN_SOBRE_OPE,
+        self::ENTREGADO_SIN_SOBRE_CLIENTE_INT => self::ENTREGADO_SIN_SOBRE_CLIENTE,
+        self::CONFIRM_MOTORIZADO_INT => self::CONFIRM_MOTORIZADO,
+        self::CONFIRM_VALIDADA_CLIENTE_INT => self::CONFIRM_VALIDADA_CLIENTE,
+        self::RECEPCION_MOTORIZADO_INT => self::RECEPCION_MOTORIZADO,
     ];
 
 
@@ -175,7 +149,7 @@ class Pedido extends Model
 
     public function direccionGrupo()
     {
-        return $this->belongsTo(DireccionGrupo::class,'direccion_grupo');
+        return $this->belongsTo(DireccionGrupo::class, 'direccion_grupo');
     }
 
     public function getCondicionEnvioColorAttribute()

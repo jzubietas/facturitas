@@ -18,6 +18,7 @@ use App\Models\GastoPedido;
 use App\Models\GrupoPedido;
 use App\Models\ImagenAtencion;
 use App\Models\ImagenPedido;
+use App\Models\PedidoMotorizadoHistory;
 use App\Models\User;
 use App\Models\Pedido;
 use App\Models\Porcentaje;
@@ -826,7 +827,7 @@ class EnvioController extends Controller
 
                 return $btn;
             })
-            ->rawColumns(['action', 'foto1', 'foto2','foto3', 'condicion_envio'])
+            ->rawColumns(['action', 'foto1', 'foto2', 'foto3', 'condicion_envio'])
             ->make(true);
 
     }
@@ -2134,7 +2135,6 @@ class EnvioController extends Controller
             'condicion_sobre' => 'SIN ENVIO',
             'codigos' => $data->codigo,
             'producto' => $data->nombre_empresa,
-
         ])->id;
 
         $direccion_grupo = DireccionGrupo::find($direccion_grupo_id);
@@ -2565,35 +2565,85 @@ class EnvioController extends Controller
 
     public function confirmarEstadoConfirm(Request $request)
     {
-        $this->validate($request, [
-            'adjunto1' => 'required|file',
-            'adjunto2' => 'required|file',
-            'adjunto3' => 'required|file',
-            'envio_id' => 'required',
-            'fecha_recepcion' => 'required|date',
-        ]);
-        $file1 = $request->file('adjunto1')->store('entregas', 'pstorage');
-        $file2 = $request->file('adjunto2')->store('entregas', 'pstorage');
-        $file3 = $request->file('adjunto3')->store('entregas', 'pstorage');
-        $envio = DireccionGrupo::where("id", $request->envio_id)->first();
-        $envio->update([
-            'foto1' => $file1,
-            'foto2' => $file2,
-            'foto3' => $file3,
-            'atendido_por' => Auth::user()->name,
-            'atendido_por_id' => Auth::user()->id,
-            'fecha_recepcion' => $request->fecha_recepcion,
-            'condicion_envio' => Pedido::CONFIRM_MOTORIZADO,
-            'condicion_envio_code' => Pedido::CONFIRM_MOTORIZADO_INT,
-        ]);
+        $action = $request->action;
+        if ($action == 'update_status_observado') {
+            $this->validate($request, [
+                'grupo_id' => 'required',
+                'sustento_text' => 'required',
+            ]);
 
-        PedidoMovimientoEstado::create([
-            'pedido' => $request->pedido_id,
-            'condicion_envio_code' => Pedido::CONFIRM_MOTORIZADO_INT,
-            'notificado' => 0
-        ]);
+            $grupo = DireccionGrupo::query()->with('pedidos')->findOrFail($request->grupo_id);
+            $grupo->update([
+                'motorizado_status' => '1',
+                'motorizado_sustento_text' => $request->sustento_text,
+            ]);
+            foreach ($grupo->pedidos as $pedido) {
+                PedidoMotorizadoHistory::query()->updateOrCreate([
+                    'pedido_id' => $pedido->id,
+                    'direccion_grupo_id' => $grupo->id,
+                ], [
+                    //'pedido_grupo_id' => null,
+                    'status' => '1',
+                    'sustento_text' => $request->sustento_text,
+                    //'sustento_foto' => null,
+                ]);
+            }
 
-        return response()->json(['html' => $envio->id]);
+        } elseif ($action == 'update_status_no_contesto') {
+            $this->validate($request, [
+                'grupo_id' => 'required',
+                'sustento_text' => 'required',
+                'sustento_foto' => 'required|file',
+            ]);
+            $grupo = DireccionGrupo::query()->with('pedidos')->findOrFail($request->grupo_id);
+            $path = $request->file('sustento_foto')->store('sobres/no_contesto', 'pstorage');
+            $grupo->update([
+                'motorizado_status' => '2',
+                'motorizado_sustento_text' => $request->sustento_text,
+                'motorizado_sustento_foto' => $path,
+            ]);
+            foreach ($grupo->pedidos as $pedido) {
+                PedidoMotorizadoHistory::query()->updateOrCreate([
+                    'pedido_id' => $pedido->id,
+                    'direccion_grupo_id' => $grupo->id,
+                ], [
+                    //'pedido_grupo_id' => null,
+                    'status' => '2',
+                    'sustento_text' => $request->sustento_text,
+                    'sustento_foto' => $path,
+                ]);
+            }
+        } else {
+            $this->validate($request, [
+                'adjunto1' => 'required|file',
+                'adjunto2' => 'required|file',
+                'adjunto3' => 'required|file',
+                'envio_id' => 'required',
+                'fecha_recepcion' => 'required|date',
+            ]);
+            $file1 = $request->file('adjunto1')->store('entregas', 'pstorage');
+            $file2 = $request->file('adjunto2')->store('entregas', 'pstorage');
+            $file3 = $request->file('adjunto3')->store('entregas', 'pstorage');
+            $envio = DireccionGrupo::where("id", $request->envio_id)->first();
+            $envio->update([
+                'foto1' => $file1,
+                'foto2' => $file2,
+                'foto3' => $file3,
+                'atendido_por' => Auth::user()->name,
+                'atendido_por_id' => Auth::user()->id,
+                'fecha_recepcion' => $request->fecha_recepcion,
+                'condicion_envio' => Pedido::CONFIRM_MOTORIZADO,
+                'condicion_envio_code' => Pedido::CONFIRM_MOTORIZADO_INT,
+            ]);
+
+            PedidoMovimientoEstado::create([
+                'pedido' => $request->pedido_id,
+                'condicion_envio_code' => Pedido::CONFIRM_MOTORIZADO_INT,
+                'notificado' => 0
+            ]);
+
+            return response()->json(['html' => $envio->id]);
+        }
     }
 
     public function confirmarEstadoConfirmRevert(Request $request)

@@ -150,3 +150,18 @@ if (!function_exists("add_query_filtros_por_roles_pedidos")) {
         return $query;
     }
 }
+if (!function_exists("can")) {
+    function can($can)
+    {
+        return \auth()->user()->can($can);
+    }
+}
+if (!function_exists("foto_url")) {
+    function foto_url($path,$disk='pstorage')
+    {
+        if(!$path){
+            return $path;
+        }
+        return Storage::disk($disk)->url($path);
+    }
+}
