@@ -124,7 +124,7 @@
       <table id="tablaPrincipal" class="table table-striped dt-responsive w-100">
         <thead>
           <tr>
-            <th scope="col">Item</th>
+            <!--<th scope="col">Item</th>-->
             <th scope="col">Código</th>
             <th scope="col">Asesor</th>
             <th scope="col">Cliente</th>
@@ -218,6 +218,7 @@
                                         <td><p class="mb-0 font-weight-bold font-16">DISTRITO:</p></td>
                                         <td><label id="dist_ped" class="mb-0 font-weight-normal">Distrito</label></td>
                                     </tr>
+                                    <!--
                                     <tr>
                                         <td>
                                             <p class="mb-0 font-weight-bold font-16">DIRECCIÓN: </p>
@@ -225,7 +226,7 @@
                                         <td>
                                             <label id="dir_ped" class="mb-0 font-weight-normal">Dirección</label>
                                         </td>
-                                    </tr>
+                                    </tr>-->
                                 </table>
 
                                 <p id="detalle_paquete" class="badge badge-warning font-14 w-100 p-16 mt-12 text-left"></p>
@@ -392,7 +393,7 @@ setTimeout(function (){
 
                 $('#code_ped').html(data.html);
                 $('#dist_ped').html(data.distrito);
-                $('#dir_ped').html(data.direccion);
+                //$('#dir_ped').html(data.direccion);
                 $('#recepcion_btn').css({'display':'block'});
                 $('#recepcion_btn').data("code",scannedText);
                 $('#detalle_paquete').html("");
@@ -422,7 +423,7 @@ setTimeout(function (){
                                 }else{
                                     $('#code_ped').html("");
                                     $('#dist_ped').html("");
-                                    $('#dir_ped').html("");
+                                    //$('#dir_ped').html("");
                                     $('#recepcion_btn').css({'display':'none'});
                                     $('#detalle_paquete').html('<h4 class="font-20 font-weight-bold">Pedido Confirmado</h4><ul class="pl-0"><li><span class="text-danger">' + data.sobres_recibidos + '</span> sobres ya fueron confirmados' + '</li><li>' + 'Quedan <span class="text-danger">' + data.sobres_restantes + '</span> por confirmar </li>');
                                     console.log(data.sobres_recibidos + ' sobres ya fueron cofirmados');
@@ -748,10 +749,7 @@ setTimeout(function (){
         rowCallback: function (row, data, index) {
         },
         columns: [
-          {
-              data: 'correlativo',
-              name: 'correlativo',
-          },
+
           {data: 'codigos', name: 'codigos', },
           {data: 'user_id', name: 'user_id','visible':false },
           {

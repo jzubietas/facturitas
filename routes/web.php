@@ -122,6 +122,13 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     Route::get('clientes.editbf/{cliente}/edit2', [BasefriaController::class, 'editbf'])->name('clientes.editbf');
 
 
+
+    Route::middleware('authorize.pedido.anulled')
+        ->post('basefriadeleteRequest', [BasefriaController::class, 'destroyid'])
+        ->name('basefriadeleteRequest.post');
+
+
+
     Route::post('basefriacliente/{cliente}', [BasefriaController::class, 'updatebf'])->name('updatebf');
 
     Route::post('basefriaclienteRequest', [BasefriaController::class, 'updatebfpost'])->name('basefriaRequest.post');

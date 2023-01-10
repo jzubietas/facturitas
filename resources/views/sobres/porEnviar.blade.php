@@ -1266,6 +1266,8 @@
                             /**********
                              * CARGAMOS EL FORMULARIO DE PROVINCIA
                              */
+                            $('#limaprovincia  option[value="P"]').prop("selected", true);
+                            $('#distrito-olva').html(distrito_seleccionado);
                             console.log("La zona es Olva");
                             if (!$(".lima").hasClass("d-none")) {
                                 $(".lima").addClass("d-none");

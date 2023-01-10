@@ -59,6 +59,7 @@
                         </tbody>
                     </table>
                     @include('base_fria.modal.convertirid')
+                    @include('base_fria.modal.modalid')
                 </div>
             </div>
 
@@ -105,7 +106,9 @@
         transition: all 0.5s ease;
         text-shadow: 10px 2px #6ac7c2;
     }
-
+    .textred {
+            color: red !important;
+        }
   </style>
 @stop
 
@@ -116,7 +119,91 @@
 <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
 <script>
+  function resetearcamposdelete() {
+            $('#motivo').val("");
+            //$('#responsable').val("");
+        }
+
 $(document).ready(function () {
+
+    $('#modal-delete').on('hidden.bs.modal', function (event) {
+        $("#motivo").val('')
+        $("#anulacion_password").val('')
+        $("#attachments").val(null)
+    })
+
+    $('#modal-delete').on('show.bs.modal', function (event) {
+      //cuando abre el form de anular pedido
+      var button = $(event.relatedTarget)
+      var idunico = button.data('cliente')//id  basefria
+      var idresponsable = button.data('responsable')//id  basefria
+      var idcodigo = button.data('asesor')
+      //console.log(idunico);
+      $("#hiddenIDdelete").val(idunico);
+      if (idcodigo < 10) {
+          idcodigo = 'BF' + idcodigo+'000'+idunico;
+      } else if (idcodigo < 100) {
+          idcodigo = 'BF' + idcodigo+'00'+idunico;
+      } else if (idunico < 1000) {
+          idcodigo = 'BF' + idcodigo+'0'+idunico;
+      } else {
+          idcodigo = 'BF' + idcodigo+''+idunico;
+      }
+      //solo completo datos
+      //hiddenId
+      //
+      
+      console.log(idcodigo)
+      $(".textcode").html(idcodigo);
+      $("#motivo").val('');
+      //$("#responsable").val(idresponsable);
+
+  });
+
+    $(document).on("submit", "#formdelete", function (evento) {
+        evento.preventDefault();
+        console.log("action delete action")
+        
+        var formData = new FormData();
+        formData.append("hiddenID", $("#hiddenIDdelete").val())
+
+        formData.append("motivo", $("#motivo").val())
+        formData.append("responsable", $("#responsable").val())
+        formData.append("anulacion_password", $("#anulacion_password").val())
+        if ($("#attachments")[0].files.length > 0) {
+            var attachments = Array.from($("#attachments")[0].files)
+            attachments.forEach(function (file) {
+                formData.append("attachments[]", file, file.name)
+            })
+        }
+        console.log(formData);
+        $.ajax({
+            type: 'POST',
+            url: "{{ route('basefriadeleteRequest.post') }}",
+            data: formData,
+            processData: false,
+            contentType: false,
+        }).done(function (data) {
+            $("#modal-delete").modal("hide");
+            resetearcamposdelete();
+            $('#tablaPrincipal').DataTable().ajax.reload();
+        }).fail(function (err, error, errMsg) {
+            console.log(arguments, err, errMsg)
+            if (err.status == 401) {
+                Swal.fire(
+                    'Error',
+                    'No autorizado para poder bloquear el cliente, ingrese una contraseña correcta',
+                    'error'
+                )
+            } else {
+                Swal.fire(
+                    'Error',
+                    'Ocurrio un error: ' + errMsg,
+                    'error'
+                )
+            }
+        });
+    });
 
     $('#tablaserverside').DataTable({
         processing: true,
@@ -124,6 +211,12 @@ $(document).ready(function () {
         ajax: "{{ route('basefriatabla') }}",
         initComplete:function(settings,json){
 
+        },
+        "createdRow": function (row, data, dataIndex) {
+          if(data["situacion"]=='BLOQUEADO')
+          {
+              $(row).addClass('textred');
+          }
         },
         columns: [
         {
@@ -180,26 +273,6 @@ $(document).ready(function () {
           orderable: false,
           searchable: false,
           sWidth:'20%',
-          render: function ( data, type, row, meta ) {
-            var urledit = '{{ route("basefria.edit", ":id") }}';
-            urledit = urledit.replace(':id', row.id);
-
-            @can('base_fria.updatebf')
-              data = data+'<a href="" data-target="#modal-convertir" data-toggle="modal" data-opcion="'+row.id+'"><button class="btn btn-info btn-sm">Convertir a cliente</button></a>';
-            @endcan
-            @can('base_fria.edit')
-              data = data+'<a href="'+urledit+'" class="btn btn-warning btn-sm"><i class="fas fa-edit"></i> Editar</a>';
-
-              //$btn = $btn.'<a href="'.route('clientes.editbf', $row).'" class="btn btn-warning btn-sm"><i class="fas fa-edit"></i> Editar</a>'
-
-            @endcan
-
-            //@can('clientes.destroy')
-              //data = data+'<a href="" data-target="#modal-delete" data-toggle="modal" data-opcion="'+row.id+'"><button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i> Eliminar</button></a>';
-            //@endcan
-
-            return data;
-          }
         },
         ],
         language: {
