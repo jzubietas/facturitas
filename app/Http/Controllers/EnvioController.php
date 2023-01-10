@@ -668,7 +668,7 @@ class EnvioController extends Controller
                 'direccion_grupos.observacion',
                 'direccion_grupos.distrito',
                 'direccion_grupos.created_at as fecha',
-                DB::raw("DATE_FORMAT(direccion_grupos.created_at, '%Y-%m-%d') as fechaentrega"),
+                DB::raw("DATE_FORMAT(direccion_grupos.fecha_recepcion, '%Y-%m-%d') as fechaentrega"),
                 'direccion_grupos.destino as destino2',
                 'direccion_grupos.distribucion',
                 'direccion_grupos.condicion_envio',
