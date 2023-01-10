@@ -2701,16 +2701,16 @@ class EnvioController extends Controller
                 'motorizado_status' => '1',
                 'motorizado_sustento_text' => $request->sustento_text,
             ]);
-            foreach ($grupo->pedidos as $pedido) {
+            //foreach ($grupo->pedidos as $pedido) {
                 PedidoMotorizadoHistory::query()->create([
-                    'pedido_id' => $pedido->id,
+                    'pedido_id' => '0',
                     'direccion_grupo_id' => $grupo->id,
                     //'pedido_grupo_id' => null,
                     'status' => '1',
                     'sustento_text' => $request->sustento_text,
                     //'sustento_foto' => null,
                 ]);
-            }
+            //}
 
         } elseif ($action == 'update_status_no_contesto') {
             $this->validate($request, [
@@ -2725,16 +2725,16 @@ class EnvioController extends Controller
                 'motorizado_sustento_text' => $request->sustento_text,
                 'motorizado_sustento_foto' => $path,
             ]);
-            foreach ($grupo->pedidos as $pedido) {
+            //foreach ($grupo->pedidos as $pedido) {
                 PedidoMotorizadoHistory::query()->create([
-                    'pedido_id' => $pedido->id,
+                    'pedido_id' => '0',
                     'direccion_grupo_id' => $grupo->id,
                     //'pedido_grupo_id' => null,
                     'status' => '2',
                     'sustento_text' => $request->sustento_text,
                     'sustento_foto' => $path,
                 ]);
-            }
+            //}
         } else {
             $this->validate($request, [
                 'adjunto1' => 'required|file',
