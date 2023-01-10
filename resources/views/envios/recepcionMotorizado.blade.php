@@ -535,6 +535,7 @@ setTimeout(function (){
 
       $("#fecha_consulta").datepicker({
         onSelect: function () {
+
           $('#tablaPrincipal').DataTable().ajax.reload();
           console.log("minimo "+$(this).val());
           //localStorage.setItem('dateMin', $(this).datepicker('getDate') );
@@ -810,6 +811,7 @@ setTimeout(function (){
         "order": [[ 0, "desc" ]],
         ajax:{ url: "{{ route('envios.recepcionmotorizadotabla') }}",
                   data: function(d){
+                      d.fechaconsulta = $("#fecha_consulta").val();
                       d.consulta = "paquete";
                       d.condicion = $('.condicion-tabla.activo').data("url");
                   }
