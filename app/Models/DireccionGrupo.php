@@ -69,4 +69,9 @@ class DireccionGrupo extends Model
         return $this->hasMany(DireccionEnvio::class, 'direcciongrupo');
     }
 
+    public function pedidos()
+    {
+        return $this->hasMany(Pedido::class, 'direccion_grupo');
+    }
+
 }

@@ -263,6 +263,7 @@
                 processing: true,
                 serverSide: true,
                 searching: true,
+                stateSave:true,
                 "order": [[0, "desc"]],
                 ajax: "{{ route('pedidostabla') }}",
                 "createdRow": function (row, data, dataIndex) {
@@ -277,7 +278,7 @@
                 },
                 rowCallback: function (row, data, index) {
                     var pedidodiferencia = data.diferencia;
-                    //pedidodiferencia=0;
+
                     if (data.condicion_code == 4 || data.estado == 0) {
                         $('td:eq(11)', row).css('background', '#ff7400').css('color', '#ffffff').css('text-align', 'center').css('font-weight', 'bold');
                     }else {
@@ -339,6 +340,50 @@
                                 },
                             }
                         });
+                    })
+
+                    $('[data-verforotos]',row).click(function () {
+                        var data=$(this).data('verforotos')
+                        $.dialog({
+                            columnClass:'xlarge',
+                            title:'Fotos confirmadas',
+                            type:'green',
+                            content:function (){
+                                return `<div class="row">
+${data.foto1?`
+<div class="col-md-4">
+<div class="card">
+<div class="card-header d-none"><h5>Foto de los sobres</h5></div>
+<div class="card-body">
+<img src="${data.foto1}" class="w-100">
+</div>
+</div>
+</div>
+`:''}
+${data.foto2?`
+<div class="col-md-4">
+<div class="card">
+<div class="card-header d-none"><h5>Foto del domicilio</h5></div>
+<div class="card-body">
+<img src="${data.foto2}" class="w-100">
+</div>
+</div>
+</div>
+`:''}
+${data.foto3?`
+<div class="col-md-4">
+<div class="card">
+<div class="card-header d-none"><h5>Foto de quien recibe</h5></div>
+<div class="card-body">
+<img src="${data.foto3}" class="w-100">
+</div>
+</div>
+</div>
+`:''}
+</div>`
+                            }
+                        })
+
                     })
                 },
                 initComplete: function (settings, json) {
@@ -536,46 +581,6 @@
                         orderable: false,
                         searchable: false,
                         sWidth: '20%',
-                        render: function (data, type, row, meta) {
-                            var urlpdf = '{{ route("pedidosPDF", ":id") }}';
-                            urlpdf = urlpdf.replace(':id', row.id);
-                            var urlshow = '{{ route("pedidos.show", ":id") }}';
-                            urlshow = urlshow.replace(':id', row.id);
-                            //Guardamos el ID
-                            localStorage.setItem('PreviousID', row.id);
-
-                            var urledit = '{{ route("pedidos.edit", ":id") }}';
-                            urledit = urledit.replace(':id', row.id);
-                            var oldadata=data;
-                            data = '<div><ul class="" aria-labelledby="dropdownMenuButton">';
-                            @can('pedidos.pedidosPDF')
-                                data = data + '<a href="' + urlpdf + '" class="btn-sm dropdown-item" target="_blank"><i class="fa fa-file-pdf text-primary"></i> Ver PDF</a>';
-                            @endcan
-                            @can('pedidos.show')
-                                data = data + '<a href="' + urlshow + '" class="btn-sm dropdown-item"><i class="fas fa-eye text-success"></i> Ver pedido</a>';
-                            @endcan
-                            @can('pedidos.edit')
-                            if (row.condicion_pa == 0) {
-                                data = data + '<a href="' + urledit + '" class="btn-sm dropdown-item"><i class="fas fa-edit text-warning" aria-hidden="true"></i> Editar</a>';
-                            }
-                            @endcan
-                                @can('pedidos.destroy')
-                            if (row.estado == 0) {
-                                data = data + '<a href="#" class="btn-sm dropdown-item" data-target="#modal-restaurar" data-toggle="modal" data-restaurar="' + row.id + '" data-codigo='+row.codigo+'><i class="fas fa-check text-secondary"></i> Restaurar</a>';
-                            } else {
-                                if (!row.pendiente_anulacion) {
-                                    console.log(row.pendiente_anulacion)
-                                    if (row.condicion_pa == 0) {
-                                        data = data + '<a href="" class="btn-sm dropdown-item" data-target="#modal-delete" data-toggle="modal" data-delete="' + row.id + '" data-codigo='+row.codigo+' data-responsable="{{ $miidentificador }}"><i class="fas fa-trash-alt text-danger"></i> Anular</a>';
-                                    }
-                                }
-                            }
-
-                            @endcan
-                                data = data +oldadata+ '</ul></div>';
-
-                            return data;
-                        }
                     },
                 ],
                 language: {

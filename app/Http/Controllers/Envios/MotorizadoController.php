@@ -20,9 +20,6 @@ class MotorizadoController extends Controller
             $query = DireccionGrupo::/*join('direccion_envios as de', 'direccion_grupos.id', 'de.direcciongrupo')*/
             join('clientes as c', 'c.id', 'direccion_grupos.cliente_id')
                 ->join('users as u', 'u.id', 'c.user_id')
-                //->where('direccion_grupos.condicion_envio_code', Pedido::RECEPCION_MOTORIZADO_INT)
-                ->where('direccion_grupos.condicion_envio_code', Pedido::MOTORIZADO_INT)
-                ->where('direccion_grupos.estado', '1')
                 ->select([
                     'direccion_grupos.id',
                     'u.identificador as identificador',
@@ -42,10 +39,48 @@ class MotorizadoController extends Controller
                     'direccion_grupos.condicion_envio',
                     'direccion_grupos.subcondicion_envio',
                     'direccion_grupos.condicion_sobre',
-                    'direccion_grupos.correlativo as correlativo'
+                    'direccion_grupos.correlativo as correlativo',
+                    'direccion_grupos.condicion_envio_code',
+                    'direccion_grupos.estado',
+                    'direccion_grupos.motorizado_status',
                 ]);
+
             if (\auth()->user()->rol == User::ROL_MOTORIZADO) {
                 $query = $query->where('direccion_grupos.motorizado_id', '=', auth()->id());
+            }
+
+            $tab = ($request->tab ?: '');
+            switch ($tab) {
+                case 'entregado':
+                    $query
+                        ->where('direccion_grupos.estado', '1')
+                        ->where('direccion_grupos.condicion_envio_code', Pedido::CONFIRM_MOTORIZADO_INT);
+                    break;
+                case 'no_contesto':
+                    $query
+                        ->where('direccion_grupos.estado', '1')
+                        ->where('direccion_grupos.condicion_envio_code', Pedido::MOTORIZADO_INT)
+                        ->where('direccion_grupos.motorizado_status', Pedido::ESTADO_MOTORIZADO_NO_CONTESTO);
+                    break;
+                case 'observado':
+                    $query->where('direccion_grupos.estado', '1');
+                    $query->where('direccion_grupos.condicion_envio_code', Pedido::MOTORIZADO_INT);
+                    $query->where('direccion_grupos.motorizado_status', Pedido::ESTADO_MOTORIZADO_OBSERVADO);
+                    /*$query->where(function ($query) {
+                        //$query->where('direccion_grupos.estado', '0');
+                        //$query->where('direccion_grupos.condicion_envio', Pedido::ANULADO);
+                        $query->orWhere(function ($query) {
+                            $query->where('direccion_grupos.condicion_envio_code', Pedido::MOTORIZADO_INT);
+                            $query->where('direccion_grupos.motorizado_status', Pedido::ESTADO_MOTORIZADO_OBSERVADO);
+                        });
+                    });*/
+                    break;
+                default:
+                    //$query->where('direccion_grupos.condicion_envio_code', Pedido::RECEPCION_MOTORIZADO_INT)
+                    $query
+                        ->where('direccion_grupos.estado', '1')
+                        ->where('direccion_grupos.condicion_envio_code', Pedido::MOTORIZADO_INT)
+                        ->whereNotIn('direccion_grupos.motorizado_status', [Pedido::ESTADO_MOTORIZADO_OBSERVADO, Pedido::ESTADO_MOTORIZADO_NO_CONTESTO]);
             }
             //add_query_filtros_por_roles($query, 'u');
             return datatables()->query(DB::table($query))
@@ -59,20 +94,39 @@ class MotorizadoController extends Controller
                     margin-bottom: -4px;
                     color: black !important;">Con ruta</span><span class="badge badge-success w-100" style="background-color: ' . $color . '!important;">' . $pedido->condicion_envio . '</span>';
                 })
-                ->addColumn('action', function ($pedido) {
-                    $btn = '<ul class="list-unstyled pl-0 d-flex mt-sm-20">';
-                    $btn .= '<li class="p-8">
-                                    <button class="btn btn-sm text-white bg-primary" data-jqconfirm="' . $pedido->id . '">
+                ->addColumn('action', function ($pedido) use ($tab) {
+
+                    $btn = '<ul class="list-unstyled mt-sm-20">';
+                    switch ($tab) {
+                        case 'entregado':
+
+                            break;
+                        case 'no_contesto':
+
+                            break;
+                        case 'observado':
+
+                            break;
+                        default:
+                            $btn .= '<li class="pt-8">
+                                    <button class="btn btn-sm text-white bg-success" data-jqconfirm="general" data-jqconfirm-id="' . $pedido->id . '">
                                         <i class="fa fa-motorcycle text-white" aria-hidden="true"></i>
-                                        A confirmacion
+                                        Adjuntar fotos
                                     </button>
                                 </li>';
-                    $btn .= '<li class="p-8">
-                                <button class="btn btn-sm text-white btn-danger" data-jqconfirmcancel="' . $pedido->id . '" data-jqconfirm-type="revertir">
-                                    <i class="fas fa-arrow-left text-white"></i>
-                                    Revertir a reparto
+                            $btn .= '<li class="pt-8">
+                                <button class="btn btn-sm text-white btn-dark" data-jqconfirm="observado" data-jqconfirm-id="' . $pedido->id . '">
+                                    <i class="fas fa-eye text-white"></i>
+                                    Observado
                                 </button>
                             </li>';
+                            $btn .= '<li class="pt-8">
+                                <button class="btn btn-sm text-white btn-danger" data-jqconfirm="no_contesto" data-jqconfirm-id="' . $pedido->id . '">
+                                    <i class="fas fa-phone-slash text-white"></i>
+                                    No contesto
+                                </button>
+                            </li>';
+                    }
                     $btn .= '</ul>';
 
                     return $btn;
