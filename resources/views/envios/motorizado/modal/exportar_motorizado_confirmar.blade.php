@@ -27,7 +27,7 @@
                         <div class="col-lg-6">
                           <label>Motorizado&nbsp;</label>
 
-                          {!! Form::select('user_motorizado', $users_motorizado, null, ['class' => 'form-control selectpicker border border-secondary', 'id' => 'user_motorizado','data-live-search' => 'true', 'placeholder' => '---- SELECCIONE USUARIO ----']) !!}
+                          {!! Form::select('user_motorizado', $users_motorizado, null, ['class' => 'form-control selectpicker border border-secondary', 'placeholder' => '---- SELECCIONE USUARIO ----']) !!}
                         </div>
                         <div class="col-lg-6">
                           <label>Fecha&nbsp;</label>
