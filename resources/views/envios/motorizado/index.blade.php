@@ -6,14 +6,45 @@
     <h1 class="text-center">
         <i class="fa fa-motorcycle text-primary" aria-hidden="true"></i> Motorizado
     </h1>
+    @if(now()>now()->startOfDay()->addHours(16)->addMinutes(30) && now()<now()->startOfDay()->addHours(17))
+        <div class="alert alert-warning">
+            LOS SOBRES NO ENTREGADOS A TIEMPO AFECTARAN SU PORCENTAJE DE ENTREGA
+        </div>
+    @endif
 @stop
 
 @section('content')
 
     @include('envios.motorizado.modal.entregado')
 
-    <div class="card p-0">
-        <div class="card-body p-0">
+    <div class="card">
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link active" id="general-tab" data-toggle="tab" href="#general" role="tab"
+                   aria-controls="general" aria-selected="true" data-action="general">
+                    EN MOTORIZADO
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="entregado-tab" data-toggle="tab" href="#entregado" role="tab"
+                   aria-controls="entregado" aria-selected="false" data-action="entregado">
+                    ENTREGADO
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="no_contesto-tab" data-toggle="tab" href="#no_contesto" role="tab"
+                   aria-controls="no_contesto" aria-selected="false" data-action="no_contesto">
+                    NO CONTESTO
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="observado-tab" data-toggle="tab" href="#observado" role="tab"
+                   aria-controls="observado" aria-selected="false" data-action="observado">
+                    OBSERVADOS
+                </a>
+            </li>
+        </ul>
+        <div class="card-body px-1">
             <table id="tablaPrincipal" style="width:100%;" class="table table-striped dt-responsive w-100">
                 <thead>
                 <tr>
@@ -44,19 +75,21 @@
 
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.1/css/dataTables.bootstrap4.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.4.0/css/responsive.bootstrap4.min.css">
-<style>
-    @media(max-width:32rem){
-        div.dataTables_wrapper div.dataTables_filter input{
-            width: 200px !important;
+    <style>
+        @media (max-width: 32rem) {
+            div.dataTables_wrapper div.dataTables_filter input {
+                width: 200px !important;
+            }
+
+            .content-wrapper {
+                background-color: white !important;
+            }
+
+            .card {
+                box-shadow: 0 0 1px white !important;
+            }
         }
-        .content-wrapper{
-            background-color: white !important;
-        }
-        .card{
-            box-shadow: 0 0 1px white !important;
-        }
-    }
-</style>
+    </style>
 @endpush
 
 @section('js')
@@ -76,7 +109,7 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             });
-            $('#tablaPrincipal').DataTable({
+            const datatable = $('#tablaPrincipal').DataTable({
                 responsive: {
                     details: {
                         renderer: $.fn.dataTable.Responsive.renderer.listHiddenNodes()
@@ -87,50 +120,55 @@
                 serverSide: true,
                 searching: true,
                 order: [[0, "desc"]],
-                ajax: "{{ route('envios.motorizados.index',['datatable'=>1]) }}",
+                ajax: {
+                    url: "{{ route('envios.motorizados.index',['datatable'=>1]) }}",
+                    data: function (q) {
+                        q.tab = $('a[data-toggle="tab"].active').data('action')
+                    }
+                },
                 createdRow: function (row, data, dataIndex) {
 
                 },
                 rowCallback: function (row, data, index) {
                     console.log(row)
                     if (data.destino2 == 'PROVINCIA') {
-                        $('td', row).css('color', 'red')
+                        $('td', row).css('color', '#20c997')
                     }
                     $('[data-jqconfirmcancel]', row).click(function () {
 
-                        $.confirm({
-                            type: 'red',
-                            title: '¡Revertir Envio!',
-                            content: 'Confirme si desea revertir el envio <b>'+data.codigos+'</b>',
-                            buttons: {
-                                ok:{
-                                    text:'Si, confirmar',
-                                    btnClass:'btn-red',
-                                    action:function (){
-                                        const self=this;
-                                        self.showLoading(true)
-                                        $.ajax({
-                                            data: {
-                                                envio_id:data.id
-                                            },
-                                            //operaciones.confirmar.revertir
-                                            type: 'POST',
-                                            url: "{{ route('operaciones.confirmar.revertir') }}",
-                                        }).always(function (){
-                                            self.close()
-                                            self.hideLoading(true)
-                                            $('#tablaPrincipal').DataTable().ajax.reload();
-                                        });
+                            $.confirm({
+                                type: 'red',
+                                title: '¡Revertir Envio!',
+                                content: 'Confirme si desea revertir el envio <b>' + data.codigos + '</b>',
+                                buttons: {
+                                    ok: {
+                                        text: 'Si, confirmar',
+                                        btnClass: 'btn-red',
+                                        action: function () {
+                                            const self = this;
+                                            self.showLoading(true)
+                                            $.ajax({
+                                                data: {
+                                                    envio_id: data.id
+                                                },
+                                                //operaciones.confirmar.revertir
+                                                type: 'POST',
+                                                url: "{{ route('operaciones.confirmar.revertir') }}",
+                                            }).always(function () {
+                                                self.close()
+                                                self.hideLoading(true)
+                                                $('#tablaPrincipal').DataTable().ajax.reload();
+                                            });
+                                        }
+                                    },
+                                    cancel: {
+                                        text: 'No'
                                     }
-                                },
-                                cancel:{
-                                    text:'No'
                                 }
-                            }
-                        })
+                            })
                         }
                     );
-                    $('[data-jqconfirm]', row).click(function () {
+                    $('[data-jqconfirm=general]', row).click(function () {
 
                         $.dialog({
                             title: '<h3 class="font-weight-bold">Entregas de motorizado</h3>',
@@ -267,8 +305,8 @@
                                         })
                                         return false;
                                     }
-                                    var fd2=new FormData(e.target);
-                                    fd2.set('envio_id',data.id)
+                                    var fd2 = new FormData(e.target);
+                                    fd2.set('envio_id', data.id)
                                     self.showLoading(true)
                                     $.ajax({
                                         data: fd2,
@@ -279,6 +317,155 @@
                                     }).done(function () {
                                         self.close()
                                         $('#tablaPrincipal').DataTable().ajax.reload();
+                                    }).always(function () {
+                                        self.hideLoading(true)
+                                    });
+                                })
+                            },
+                        });
+                    })
+                    $('[data-jqconfirm=observado]', row).click(function () {
+
+                        $.dialog({
+                            title: '<h3 class="font-weight-bold">Marcar como observado</h3>',
+                            type: 'green',
+                            columnClass: 'large',
+                            content: `<div>
+    <form enctype="multipart/form-data" class="card">
+        <div class="card-body p-0">
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <h5>Paquete de pedido: <b>${data.codigos}</b></h5>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                   <div class="form-group">
+                         <label for="sustento_text">Ingrese su Sustento</label>
+                     <textarea class="form-control" id="sustento_text" name="sustento_text" required placeholder="Ingrese su Sustento" rows="7"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer text-center">
+            <button type="submit" class="btn btn-info" id="atender">
+<i class="fa fa-save"></i>
+Enviar</button>
+        </div>
+    </form>
+</div>`,
+                            onContentReady: function () {
+                                const self = this
+                                self.$content.find("form").on('submit', function (e) {
+                                    e.preventDefault()
+                                    if (!e.target.sustento_text.value) {
+                                        $.confirm({
+                                            title: '¡Advertencia!',
+                                            content: '<b>Ingresa el sustento para continuar</b>',
+                                            type: 'orange'
+                                        })
+                                        return false;
+                                    }
+                                    self.showLoading(true)
+                                    $.ajax({
+                                        data: {
+                                            grupo_id: data.id,
+                                            sustento_text: e.target.sustento_text.value
+                                        },
+                                        type: 'POST',
+                                        url: "{{ route('operaciones.confirmarmotorizado',['action'=>'update_status_observado']) }}"
+                                    }).done(function () {
+                                        self.close()
+                                        $('#tablaPrincipal').DataTable().ajax.reload(null, false);
+                                    }).always(function () {
+                                        self.hideLoading(true)
+                                    });
+                                })
+                            },
+                        });
+                    })
+                    $('[data-jqconfirm=no_contesto]', row).click(function () {
+                        $.dialog({
+                            title: '<h3 class="font-weight-bold">Marcar como "NO CONTESTO"</h3>',
+                            type: 'green',
+                            columnClass: 'xlarge',
+                            content: `<div>
+    <form enctype="multipart/form-data" class="card">
+        <div class="card-body p-0">
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <h5>Paquete de pedido: <b>${data.codigos}</b></h5>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                   <div class="form-group">
+                         <label for="sustento_text">Ingrese su Sustento</label>
+                     <textarea class="form-control" id="sustento_text"  name="sustento_text" required placeholder="Ingrese su Sustento" rows="5"></textarea>
+                    </div>
+                </div>
+                <div class="col-lg-12">
+                   <div class="form-group">
+                         <label for="sustento_foto">Adjuntar foto de las llamadas que realizo</label>
+                     <input type="file" class="form-control" id="sustento_foto"  name="sustento_foto" required >
+                    </div>
+                </div>
+                <div class="col-lg-12" style="display: none" id="sustento_foto_img_content">
+                   <div class="card">
+<div class="card-body">
+<img src="" id="sustento_foto_img" class="w-50">
+</div>
+</div>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer text-center">
+            <button type="submit" class="btn btn-info" id="atender">
+<i class="fa fa-save"></i>
+Enviar</button>
+        </div>
+    </form>
+</div>`,
+                            onContentReady: function () {
+                                const self = this
+                                self.$content.find("#sustento_foto").change(function (e) {
+                                    const [file] = e.target.files
+                                    if (file) {
+                                        self.$content.find("#sustento_foto_img_content").show();
+                                        self.$content.find("#sustento_foto_img").attr('src', URL.createObjectURL(file))
+                                    }
+                                })
+
+                                self.$content.find("form").on('submit', function (e) {
+                                    e.preventDefault()
+                                    if (!e.target.sustento_text.value) {
+                                        $.confirm({
+                                            title: '¡Advertencia!',
+                                            content: '<b>Ingresa el sustento para continuar</b>',
+                                            type: 'orange'
+                                        })
+                                        return false;
+                                    }
+                                    if (e.target.sustento_foto.files.length === 0) {
+                                        $.confirm({
+                                            title: '¡Advertencia!',
+                                            content: '<b>Adjunta la foto de llamadas realizadas</b>',
+                                            type: 'orange'
+                                        })
+                                        return false;
+                                    }
+                                    var fd2 = new FormData(e.target);
+                                    fd2.set('grupo_id', data.id)
+                                    self.showLoading(true)
+                                    $.ajax({
+                                        data: fd2,
+                                        processData: false,
+                                        contentType: false,
+                                        type: 'POST',
+                                        url: "{{ route('operaciones.confirmarmotorizado',['action'=>'update_status_no_contesto']) }}"
+                                    }).done(function () {
+                                        self.close()
+                                        $('#tablaPrincipal').DataTable().ajax.reload(null, false);
                                     }).always(function () {
                                         self.hideLoading(true)
                                     });
@@ -398,6 +585,15 @@
                     }
                 },
             });
+
+            $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+                console.log(
+                    'target: ',
+                    e.target, // newly activated tab
+                    e.relatedTarget, // previous active tab
+                )
+                $('#tablaPrincipal').DataTable().draw(false);
+            })
         });
     </script>
 
