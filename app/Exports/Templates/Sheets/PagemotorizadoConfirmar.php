@@ -26,33 +26,37 @@ Sheet::macro('styleCells', function (Sheet $sheet, string $cellRange, array $sty
     $sheet->getDelegate()->getStyle($cellRange)->applyFromArray($style);
 });
 
-class PageMotorizadoConfirmar extends Export implements WithColumnFormatting, FromCollection, WithHeadings, ShouldAutoSize, WithEvents
+class PagemotorizadoConfirmar extends Export implements WithColumnFormatting, FromCollection, WithHeadings, ShouldAutoSize, WithEvents
 {
-    public static $fecharuta='';
+    public static $motorizado='';
+    public static $hasta='';
 
-    public function __construct($ids)
+    public function __construct($motorizado,$hasta)
     {
         parent::__construct();
-        self::$fecharuta=$ids;
+        self::$motorizado=$motorizado;
+        self::$hasta=$hasta;
     }
 
     public function collection()
     {
-        $direccion=DireccionGrupo::where('direccion_grupos.motorizado_id','45')->where('direccion_grupos.estado','1')
+        $direccion=DireccionGrupo::/*where('direccion_grupos.motorizado_id','45')->*/where('direccion_grupos.estado','1')
             ->join('users as u', 'direccion_grupos.user_id', 'u.id')
             ->join('clientes as c', 'direccion_grupos.cliente_id', 'c.id')
             ->select([
                 'direccion_grupos.correlativo',
                 'direccion_grupos.codigos',
                 'u.identificador',
-                'c.name',
+                'c.nombre',
                 'direccion_grupos.fecha_recepcion',
                 'direccion_grupos.producto',
-                'direccion_grupos.env_destino',
-                'direccion_grupos.env_direccion',
-                'direccion_grupos.env_referencia',
+                'direccion_grupos.destino',
+                'direccion_grupos.direccion',
+                'direccion_grupos.referencia',
                 'direccion_grupos.condicion_envio',
-            ]);
+            ])
+            ->where('direccion_grupos.motorizado_id',self::$motorizado)
+            ->where('cast(direccion_grupos.fecha_recepcion as date)',self::$hasta);
 
         return  $direccion->get();
     }
@@ -86,7 +90,7 @@ class PageMotorizadoConfirmar extends Export implements WithColumnFormatting, Fr
         $model->nuevo_campo = //nuevo campo
      */
         //$model->fehca_formato=$model->created_at->format('');
-       
+
         /*$model->eneroa = Pedido::where('estado', '1')->whereYear(DB::raw('Date(created_at)'), self::$fecharuta)->where('cliente_id', $model->id)
             ->where(DB::raw('MONTH(created_at)'), '1')->count();
         $model->eneroa=($model->eneroa<0)? 0:$model->eneroa;
@@ -118,12 +122,12 @@ class PageMotorizadoConfirmar extends Export implements WithColumnFormatting, Fr
             "correlativo"=>"ITEM"
             ,"codigos"=>"Codigo"
             ,"identificador"=>"Asesor"
-            ,"name"=>"Cliente"
+            ,"nombre"=>"Cliente"
             ,"fecha_recepcion"=>"Fecha de Envio"
             ,"producto"=>"Razon Social"
-            ,"env_destino"=>"Destino"
-            ,"env_direccion"=>"Direccion de Envio"
-            ,"env_referencia"=>"Referencia"
+            ,"destino"=>"Destino"
+            ,"direccion"=>"Direccion de Envio"
+            ,"referencia"=>"Referencia"
             ,"condicion_envio"=>"Estado de Envio"
         ];
     }
@@ -137,14 +141,14 @@ class PageMotorizadoConfirmar extends Export implements WithColumnFormatting, Fr
 
     public function registerEvents(): array
     {
-        /*return [
+        return [
             AfterSheet::class => [self::class, 'afterSheet']
-        ];*/
+        ];
     }
 
     public static function afterSheet(AfterSheet $event){
 
-       
+
         $color_recurente='a9def9';
         $color_recuperadoabandono='3a86ff';
         $color_recuperadoreciente='00b4d8';
