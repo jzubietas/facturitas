@@ -1073,6 +1073,7 @@ class EnvioController extends Controller
 
     public function Enviosrecepcionmotorizado()
     {
+        $fecha_consulta = Carbon::now()->format('d/m/Y');
         $condiciones = [
             "1" => 1,
             "2" => 2,
@@ -1116,7 +1117,7 @@ class EnvioController extends Controller
             $ver_botones_accion = 1;
         }
 
-        return view('envios.recepcionMotorizado', compact('condiciones', 'distritos', 'direcciones', 'destinos', 'superasesor', 'ver_botones_accion', 'departamento'));
+        return view('envios.recepcionMotorizado', compact('condiciones', 'distritos', 'direcciones', 'destinos', 'superasesor', 'ver_botones_accion', 'departamento','fecha_consulta'));
     }
 
     public function Enviosporconfirmartabla(Request $request)
