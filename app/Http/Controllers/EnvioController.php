@@ -2879,6 +2879,22 @@ class EnvioController extends Controller
         if ($pedido->condicion_envio_code == Pedido::RECEPCION_MOTORIZADO_INT) {
             return response()->json(['html' => 0]);
         } else {
+            /*************
+             * BUSCAMOS EL PAQUETE
+             */
+            $paquete_sobres = $pedido->direccionGrupo;
+            $codigos_paquete = collect(explode(",", $paquete_sobres->codigos))
+                ->map(fn($cod) => trim($cod))
+                ->filter()->values();
+
+            $codigos_confirmados = collect(explode(",", $paquete_sobres->codigos_confirmados??''))
+                ->map(fn($cod) => trim($cod))
+                ->filter(fn($cod) => !empty($cod) && $cod!=trim($request->id))
+                ->values();
+
+            $codigos_confirmados->push($request->id);
+
+            DB::beginTransaction();
             /************
              * ACTUALIZAMOS EL PEDIDO
              */
@@ -2887,20 +2903,6 @@ class EnvioController extends Controller
                 'condicion_envio' => Pedido::RECEPCION_MOTORIZADO,
                 'condicion_envio_code' => Pedido::RECEPCION_MOTORIZADO_INT,
             ]);
-
-            /*************
-             * BUSCAMOS EL PAQUETE
-             */
-            $paquete_sobres = $pedido->direccionGrupo;
-            $codigos_paquete = collect(explode(",", $paquete_sobres->codigos))->map(function ($cod) {
-                return trim($cod);
-            });
-
-            $codigos_confirmados = collect(explode(",", $paquete_sobres->codigos_confirmados??''))->map(function ($cod) {
-                return trim($cod);
-            })->filter()->values();
-
-            $codigos_confirmados->push($request->id);
 
 
             /*************
@@ -2925,6 +2927,7 @@ class EnvioController extends Controller
                     'codigos_confirmados' => $codigos_confirmados->join(',')
                 ]);
             }
+            DB::commit();
             return response()->json(['html' => $pedido->id, 'grupo' => $paquete_sobres, 'pedido' => $pedido, 'distrito' => $pedido->distrito, 'direccion' => $pedido->direccion, 'sobres_recibidos' => $sobres_ya_recibidos, 'sobres_restantes' => $sobres_restantes]);
         }
     }
