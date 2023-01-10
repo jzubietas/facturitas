@@ -138,6 +138,7 @@
           <tr>
             <th scope="col">Item</th>
             <th scope="col">Código</th>
+              <th scope="col">Acciones</th>
             <th scope="col">Asesor</th>
             <th scope="col">Cliente</th>
             <th scope="col">Razón social</th>
@@ -145,7 +146,7 @@
 
             <th scope="col">Dirección de envío</th>
             <th scope="col">Estado de envio</th>
-            <th scope="col">Acciones</th>
+
           </tr>
         </thead>
         <tbody>

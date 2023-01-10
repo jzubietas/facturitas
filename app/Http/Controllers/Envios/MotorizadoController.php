@@ -111,21 +111,22 @@ class MotorizadoController extends Controller
                             $btn .= '<li class="pt-8">
                                     <button class="btn btn-sm text-white bg-success" data-jqconfirm="general" data-jqconfirm-id="' . $pedido->id . '">
                                         <i class="fa fa-motorcycle text-white" aria-hidden="true"></i>
-                                        Entregar
+                                        Entregado
                                     </button>
                                 </li>';
+                            $btn .= '<li class="pt-8">
+                                <button class="btn btn-sm text-white btn-danger" data-jqconfirm="no_contesto" data-jqconfirm-id="' . $pedido->id . '">
+                                    <i class="fas fa-phone-slash text-white"></i>
+                                    No contesta
+                                </button>
+                            </li>';
                             $btn .= '<li class="pt-8">
                                 <button class="btn btn-sm text-white btn-dark" data-jqconfirm="observado" data-jqconfirm-id="' . $pedido->id . '">
                                     <i class="fas fa-eye text-white"></i>
                                     Observado
                                 </button>
                             </li>';
-                            $btn .= '<li class="pt-8">
-                                <button class="btn btn-sm text-white btn-danger" data-jqconfirm="no_contesto" data-jqconfirm-id="' . $pedido->id . '">
-                                    <i class="fas fa-phone-slash text-white"></i>
-                                    No contesto
-                                </button>
-                            </li>';
+
                     }
                     $btn .= '</ul>';
 
@@ -160,7 +161,7 @@ class MotorizadoController extends Controller
                     'direccion_grupos.referencia',
                     'direccion_grupos.observacion',
                     'direccion_grupos.distrito',
-                    DB::raw('DATE_FORMAT(direccion_grupos.fecha_recepcion, "%Y-%m-%d") as fecha'),           
+                    DB::raw('DATE_FORMAT(direccion_grupos.fecha_recepcion, "%Y-%m-%d") as fecha'),
                     'direccion_grupos.destino as destino2',
                     'direccion_grupos.distribucion',
                     'direccion_grupos.condicion_envio',
