@@ -159,7 +159,7 @@ class MotorizadoController extends Controller
                     'direccion_grupos.referencia',
                     'direccion_grupos.observacion',
                     'direccion_grupos.distrito',
-                    DB::raw('(select DATE_FORMAT( direccion_grupos.created_at, "%Y-%m-%d")   from direccion_grupos dpa where dpa.id=direccion_grupos.id) as fecha'),
+                    DB::raw('DATE_FORMAT(direccion_grupos.fecha_recepcion, "%Y-%m-%d") as fecha'),           
                     'direccion_grupos.destino as destino2',
                     'direccion_grupos.distribucion',
                     'direccion_grupos.condicion_envio',

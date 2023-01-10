@@ -2587,16 +2587,23 @@ class EnvioController extends Controller
             'fecha_salida'=>$request->fecha_salida
         ]);
 
-        $codigos_paquete = collect(explode(",", $envio->codigos))->map(function ($cod) {
+        /*$codigos_paquete = collect(explode(",", $envio->codigos))->map(function ($cod) {
             return trim($cod);
-        })->all();
+        })->all();*/
+        $codigos_paquete=Pedidos::where('direccion_grupo',$envio->id);
+        $codigos_paquete->update([
+            'condicion_envio_code' => Pedido::ENVIO_MOTORIZADO_COURIER_INT,
+            'condicion_envio' => Pedido::ENVIO_MOTORIZADO_COURIER,
+            'fecha_salida'=>$request->fecha_salida
+        ]);
 
-        Pedido::whereIn('codigo', $codigos_paquete)
+
+        /*Pedido::whereIn('codigo', $codigos_paquete)
             ->update([
                 'condicion_envio_code' => Pedido::ENVIO_MOTORIZADO_COURIER_INT,
                 'condicion_envio' => Pedido::ENVIO_MOTORIZADO_COURIER,
                 'fecha_salida'=>$request->fecha_salida
-            ]);
+            ]);*/
 
         PedidoMovimientoEstado::create([
             'pedido' => $request->hiddenCodigo,
@@ -2911,4 +2918,36 @@ class EnvioController extends Controller
             return response()->json(['html' => $pedido->id, 'grupo' => $paquete_sobres, 'pedido' => $pedido, 'distrito' => $pedido->distrito, 'direccion' => $pedido->direccion, 'sobres_recibidos' => $sobres_ya_recibidos, 'sobres_restantes' => $sobres_restantes]);
         }
     }
+
+    public function IniciarRutaMasiva(Request $request)
+    {
+        $rol=Auth::user()->rol;
+        $zona_=null;
+        $motorizadoid=null;
+
+        if($rol=='MOTORIZADO')
+        {
+            $usuario=User::where('id',Auth::user()->id)->first();
+            $zona=$usuario->zona;
+            $motorizadoid=$usuario->id;
+            $direcciones=DireccionGrupo::where('motorizado_id',$motorizadoid)->where('distribucion',$zona)->where('condicion_envio_code',Pedido::RECEPCION_MOTORIZADO_INT);
+            $direcciones->update([
+                'condicion_envio_code'=>Pedido::MOTORIZADO_INT
+            ]);
+        }else if($rol==User::ROL_ADMIN)
+        {
+            $direcciones=DireccionGrupo::where('condicion_envio_code',Pedido::RECEPCION_MOTORIZADO_INT);
+            $direcciones->update([
+                'condicion_envio_code'=>Pedido::MOTORIZADO_INT
+            ]);
+        }else{
+            return response()->json(['html'=>'0']);
+        }
+
+        return response()->json(['html'=>'1']);
+
+    }
+
+
+    
 }

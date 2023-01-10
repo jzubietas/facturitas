@@ -197,23 +197,41 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-4">
-                    <div class="form-group">
-                        <label for="foto1">Foto de los sobres</label>
-                        <input class="form-control-file" id="adjunto1" name="adjunto1" type="file">
-                    </div>
+                <div class="col-4">                
+                    <div class="input-group w-80">                        
+                        <div class="custom-file w-90">
+                            <input type="file" class="custom-file-input form-control-file" id="adjunto1" name="adjunto1" lang="es">
+                            <label class="custom-file-label" for="adjunto1">Foto de los sobres</label>
+                            <div class="invalid-feedback">Example invalid custom file feedback</div>
+                        </div>
+                        <div class="input-group-append">
+                            <button class="btn btn-danger" id="trash_adjunto1" type="button"><i class="fa fa-trash"></i></button>
+                        </div>
+                    </div>                   
                 </div>
                 <div class="col-4">
-                    <div class="form-group">
-                        <label for="foto2">Foto del domicilio</label>
-                        <input class="form-control-file" id="adjunto2" name="adjunto2" type="file">
-                    </div>
+                    <div class="input-group w-80">                        
+                        <div class="custom-file w-90">
+                            <input type="file" class="custom-file-input form-control-file" id="adjunto2" name="adjunto2" lang="es">
+                            <label class="custom-file-label" for="adjunto2">Foto del domicilio</label>
+                            <div class="invalid-feedback">Example invalid custom file feedback</div>
+                        </div>
+                        <div class="input-group-append">
+                            <button class="btn btn-danger" id="trash_adjunto2" type="button"><i class="fa fa-trash"></i></button>
+                        </div>
+                    </div>   
                 </div>
                 <div class="col-4">
-                    <div class="form-group">
-                        <label for="foto3">Foto de quien recibe</label>
-                        <input class="form-control-file" id="adjunto3" name="adjunto3" type="file">
-                    </div>
+                    <div class="input-group w-80">                        
+                        <div class="custom-file w-90">
+                            <input type="file" class="custom-file-input form-control-file" id="adjunto3" name="adjunto3" lang="es">
+                            <label class="custom-file-label" for="adjunto3">Foto de quien recibe</label>
+                            <div class="invalid-feedback">Example invalid custom file feedback</div>
+                        </div>
+                        <div class="input-group-append">
+                            <button class="btn btn-danger" id="trash_adjunto3" type="button"><i class="fa fa-trash"></i></button>
+                        </div>
+                    </div>  
                 </div>
             </div>
             <div class="row">
@@ -271,6 +289,16 @@
                                         self.$content.find("#picture3").attr('src', URL.createObjectURL(file))
                                     }
                                 })
+                                self.$content.find("#trash_adjunto1").click(function (e) {
+                                    self.$content.find("#picture1").attr('src', "{{ asset('imagenes/sobres.jpg') }}")
+                                })
+                                self.$content.find("#trash_adjunto2").click(function (e) {
+                                    self.$content.find("#picture2").attr('src', "{{ asset('imagenes/domicilio.jpg') }}")
+                                })
+                                self.$content.find("#trash_adjunto3").click(function (e) {
+                                    self.$content.find("#picture3").attr('src', "{{ asset('imagenes/recibe_sobre.jpg') }}")
+                                })
+
                                 self.$content.find("form").on('submit', function (e) {
                                     e.preventDefault()
                                     if (!e.target.fecha_recepcion.value) {
