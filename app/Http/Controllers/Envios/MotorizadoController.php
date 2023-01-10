@@ -111,7 +111,7 @@ class MotorizadoController extends Controller
                             $btn .= '<li class="pt-8">
                                     <button class="btn btn-sm text-white bg-success" data-jqconfirm="general" data-jqconfirm-id="' . $pedido->id . '">
                                         <i class="fa fa-motorcycle text-white" aria-hidden="true"></i>
-                                        Adjuntar fotos
+                                        Entregar
                                     </button>
                                 </li>';
                             $btn .= '<li class="pt-8">
