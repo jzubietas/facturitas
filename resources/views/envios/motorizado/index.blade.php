@@ -132,7 +132,7 @@
                 rowCallback: function (row, data, index) {
                     console.log(row)
                     if (data.destino2 == 'PROVINCIA') {
-                        $('td', row).css('color', 'red')
+                        $('td', row).css('color', '#20c997')
                     }
                     $('[data-jqconfirmcancel]', row).click(function () {
 

@@ -77,6 +77,10 @@ class CambiarEstadoSobreNoEnviado extends Command
                         'codigo' => $pedido->codigo,
                     ]
                 ]));
+            $grupo->pedidos()->where('pedidos.estado', '=', '1')->update([
+                'condicion_envio' => Pedido::RECEPCION_COURIER,
+                'condicion_envio_code' => Pedido::RECEPCION_COURIER_INT,
+            ]);
 
             $grupo->update([
                 'estado' => 0
