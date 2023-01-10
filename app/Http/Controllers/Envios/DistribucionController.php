@@ -95,8 +95,13 @@ class DistribucionController extends Controller
                     $query->orWhere('codigos','like','%'.$search_value.'%');
                 }
         */
-
-        return \DataTables::of($query->get())
+        $items=$query->get()->map(function (GrupoPedido $pedido){
+            $pedido->motorizado_histories=$pedido->motorizadoHistories->groupBy('pedido_grupo_id')->values()->map(function ($grupos){
+                return collect($grupos)->first();
+            });
+            return $pedido;
+        });
+        return \DataTables::of($items)
             ->addColumn('codigos', function ($pedido) {
                 return collect(explode(',', $pedido->codigos))->map(function ($codigo, $index) {
                     return ($index + 1) . ") <b>" . $codigo . "</b>";
