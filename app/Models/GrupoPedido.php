@@ -24,14 +24,14 @@ class GrupoPedido extends Model
     public static function createGroupByPedido(Pedido $pedido, $createAnother = false)
     {
         return self::createGroupByArray([
-            "zona" =>$pedido->env_zona,
+            "zona" => $pedido->env_zona,
             "provincia" => $pedido->env_destino,
-            'distrito' =>$pedido->env_distrito,
+            'distrito' => $pedido->env_distrito,
             'direccion' => $pedido->env_direccion,
             'referencia' => $pedido->env_referencia,
-            'cliente_recibe' =>$pedido->env_nombre_cliente_recibe,
+            'cliente_recibe' => $pedido->env_nombre_cliente_recibe,
             'telefono' => $pedido->env_celular_cliente_recibe,
-        ],$createAnother);
+        ], $createAnother);
     }
 
     public static function createGroupByArray($array, $createAnother = false)
@@ -51,5 +51,10 @@ class GrupoPedido extends Model
             'referencia' => data_get($array, 'referencia') ?: 'n/a',//olva
             'telefono' => data_get($array, 'telefono') ?? 'n/a',//n/a
         ]);
+    }
+
+    public function motorizadoHistories()
+    {
+        return $this->hasMany(PedidoMotorizadoHistory::class,'pedido_grupo_id')->orderByDesc('pedido_motorizado_histories.created_at');
     }
 }
