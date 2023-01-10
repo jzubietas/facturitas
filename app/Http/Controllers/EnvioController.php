@@ -2848,7 +2848,7 @@ class EnvioController extends Controller
 
     public function EscaneoQR(Request $request)
     {
-        $pedido = Pedido::where("codigo", $request->id)->first();
+        $pedido = Pedido::where("codigo", $request->id)->firstOrFail();
 
         /*$pedido->update([
             'envio' => '2',
@@ -2888,11 +2888,10 @@ class EnvioController extends Controller
                 ->filter()->values();
 
             $codigos_confirmados = collect(explode(",", $paquete_sobres->codigos_confirmados??''))
+                ->push($pedido->codigo)
                 ->map(fn($cod) => trim($cod))
-                ->filter(fn($cod) => !empty($cod) && $cod!=trim($request->id))
+                ->filter()
                 ->values();
-
-            $codigos_confirmados->push($request->id);
 
             DB::beginTransaction();
             /************
@@ -2922,11 +2921,10 @@ class EnvioController extends Controller
                     'condicion_envio' => Pedido::RECEPCION_MOTORIZADO,
                     'condicion_envio_code' => Pedido::RECEPCION_MOTORIZADO_INT,
                 ]);
-            }else{
-                $paquete_sobres->update([
-                    'codigos_confirmados' => $codigos_confirmados->join(',')
-                ]);
             }
+            $paquete_sobres->update([
+                'codigos_confirmados' => $codigos_confirmados->unique()->join(',')
+            ]);
             DB::commit();
             return response()->json(['html' => $pedido->id, 'grupo' => $paquete_sobres, 'pedido' => $pedido, 'distrito' => $pedido->distrito, 'direccion' => $pedido->direccion, 'sobres_recibidos' => $sobres_ya_recibidos, 'sobres_restantes' => $sobres_restantes]);
         }
