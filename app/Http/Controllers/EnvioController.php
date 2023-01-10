@@ -2731,6 +2731,13 @@ class EnvioController extends Controller
                 return trim($cod);
             });
 
+            $codigos_confirmados = collect(explode(",", $paquete_sobres->codigos_confirmados??''))->map(function ($cod) {
+                return trim($cod);
+            })->filter()->values();
+
+            $codigos_confirmados->push($request->id);
+
+
             /*************
              * SACAMOS LA CANTIDAD DE SOBRES YA RECIBIDOS DE ESTE PAQUETE
              */
@@ -2748,8 +2755,44 @@ class EnvioController extends Controller
                     'condicion_envio' => Pedido::RECEPCION_MOTORIZADO,
                     'condicion_envio_code' => Pedido::RECEPCION_MOTORIZADO_INT,
                 ]);
+            }else{
+                $paquete_sobres->update([
+                    'codigos_confirmados' => $codigos_confirmados->join(',')
+                ]);
             }
             return response()->json(['html' => $pedido->id, 'grupo' => $paquete_sobres, 'pedido' => $pedido, 'distrito' => $pedido->distrito, 'direccion' => $pedido->direccion, 'sobres_recibidos' => $sobres_ya_recibidos, 'sobres_restantes' => $sobres_restantes]);
         }
     }
+
+    public function IniciarRutaMasiva(Request $request)
+    {
+        $rol=Auth::user()->rol;
+        $zona_=null;
+        $motorizadoid=null;
+
+        if($rol=='MOTORIZADO')
+        {
+            $usuario=User::where('id',Auth::user()->id)->first();
+            $zona=$usuario->zona;
+            $motorizadoid=$usuario->id;
+            $direcciones=DireccionGrupo::where('motorizado_id',$motorizadoid)->where('distribucion',$zona)->where('condicion_envio_code',Pedido::RECEPCION_MOTORIZADO_INT);
+            $direcciones->update([
+                'condicion_envio_code'=>Pedido::MOTORIZADO_INT
+            ]);
+        }else if($rol==User::ROL_ADMIN)
+        {
+            $direcciones=DireccionGrupo::where('condicion_envio_code',Pedido::RECEPCION_MOTORIZADO_INT);
+            $direcciones->update([
+                'condicion_envio_code'=>Pedido::MOTORIZADO_INT
+            ]);
+        }else{
+            return response()->json(['html'=>'0']);
+        }
+
+        return response()->json(['html'=>'1']);
+
+    }
+
+
+
 }
