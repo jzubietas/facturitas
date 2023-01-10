@@ -111,7 +111,7 @@ class MotorizadoController extends Controller
                             $btn .= '<li class="pt-8">
                                     <button class="btn btn-sm text-white bg-success" data-jqconfirm="general" data-jqconfirm-id="' . $pedido->id . '">
                                         <i class="fa fa-motorcycle text-white" aria-hidden="true"></i>
-                                        Adjuntar fotos
+                                        Entregar
                                     </button>
                                 </li>';
                             $btn .= '<li class="pt-8">
@@ -159,7 +159,7 @@ class MotorizadoController extends Controller
                     'direccion_grupos.referencia',
                     'direccion_grupos.observacion',
                     'direccion_grupos.distrito',
-                    DB::raw('(select DATE_FORMAT( direccion_grupos.created_at, "%Y-%m-%d")   from direccion_grupos dpa where dpa.id=direccion_grupos.id) as fecha'),
+                    DB::raw('DATE_FORMAT(direccion_grupos.fecha_recepcion, "%Y-%m-%d") as fecha'),           
                     'direccion_grupos.destino as destino2',
                     'direccion_grupos.distribucion',
                     'direccion_grupos.condicion_envio',
