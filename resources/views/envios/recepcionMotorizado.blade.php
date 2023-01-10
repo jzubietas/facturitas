@@ -102,7 +102,7 @@
               <td>Fecha</td>
               <td><input type="text" value="{{$fecha_consulta}}" id="fecha_consulta" name="fecha_consulta" class="form-control" autocomplete="off"></td>
               <td></td>
-    
+
 
             </tr>
           </tbody>
@@ -567,7 +567,7 @@ setTimeout(function (){
 
         $(document).on("click","#iniciar-ruta-masiva",function(){
           //ajax iniciar ruta masiva
-         
+
           $.ajax({
               data: {
                   /*envio_id:data.id,
@@ -577,6 +577,7 @@ setTimeout(function (){
               url: "{{ route('envios.recepcionmotorizado.iniciar_ruta_masiva') }}",
           }).always(function (data){
             console.log(data);
+              $('#tablaPrincipal').DataTable().ajax.reload();
               /*if(data.html=='1')
               {
                 $('#tablaPrincipal').DataTable().ajax.reload();
@@ -589,7 +590,7 @@ setTimeout(function (){
               }*/
               //self.close()
               //self.hideLoading(true)
-              
+
           });
 
         })
@@ -849,7 +850,7 @@ setTimeout(function (){
         },
           {data: 'producto', name: 'producto'},
           {
-            data: 'fecha_salida', 
+            data: 'fecha_salida',
             name: 'fecha_salida',
             //render: $.fn.dataTable.render.moment('DD/MM/YYYY', 'YYYY-MM-DD')
           },
@@ -924,9 +925,9 @@ setTimeout(function (){
         },
       });
 
-     
 
-      
+
+
 
     });
   </script>

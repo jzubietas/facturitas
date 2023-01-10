@@ -2591,7 +2591,7 @@ class EnvioController extends Controller
         /*$codigos_paquete = collect(explode(",", $envio->codigos))->map(function ($cod) {
             return trim($cod);
         })->all();*/
-        $codigos_paquete=Pedidos::where('direccion_grupo',$envio->id);
+        $codigos_paquete=Pedido::where('direccion_grupo',$envio->id);
         $codigos_paquete->update([
             'condicion_envio_code' => Pedido::ENVIO_MOTORIZADO_COURIER_INT,
             'condicion_envio' => Pedido::ENVIO_MOTORIZADO_COURIER,
@@ -2959,5 +2959,5 @@ class EnvioController extends Controller
     }
 
 
-    
+
 }
