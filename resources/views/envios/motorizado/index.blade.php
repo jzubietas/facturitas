@@ -409,6 +409,7 @@ Enviar</button>
                          <label for="sustento_foto">Adjuntar foto de las llamadas que realizo</label>
                      <input type="file" class="form-control" id="sustento_foto"  name="sustento_foto" required >
                     </div>
+                    <div class="alert alert-warning">Adjunte una imagen que demuestre como minimo 5 llamadas hacia el cliente</div>
                 </div>
                 <div class="col-lg-12" style="display: none" id="sustento_foto_img_content">
                    <div class="card">
