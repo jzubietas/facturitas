@@ -213,6 +213,7 @@ class DistribucionController extends Controller
                 'observacion' => $firstProduct->env_observacion,
                 'cantidad' => count($pedidos),
                 'motorizado_id' => $request->motorizado_id,
+                'identificador' => $cliente->user->identificador,
             ];
 
             if ($request->get("visualizar") == '1') {
