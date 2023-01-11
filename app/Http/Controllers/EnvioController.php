@@ -488,7 +488,7 @@ class EnvioController extends Controller
 
                     $btn .= '<li>
                                         <a href="" class="btn-sm text-secondary" data-target="#modal-confirmacion" data-toggle="modal" data-ide="' . $pedido->id . '" data-entregar-confirm="' . $pedido->id . '" data-destino="' . $pedido->destino . '" data-fechaenvio="' . $pedido->fecha . '" data-codigos="' . $pedido->codigos . '"
-                                            data-distribucion="'.$pedido->distribucion.'" >
+                                            data-distribucion="' . $pedido->distribucion . '" >
                                             <i class="fas fa-envelope text-success"></i> Enviar a Motorizado</a></li>
                                         </a>
                                     </li>';
@@ -1117,7 +1117,7 @@ class EnvioController extends Controller
             $ver_botones_accion = 1;
         }
 
-        return view('envios.recepcionMotorizado', compact('condiciones', 'distritos', 'direcciones', 'destinos', 'superasesor', 'ver_botones_accion', 'departamento','fecha_consulta'));
+        return view('envios.recepcionMotorizado', compact('condiciones', 'distritos', 'direcciones', 'destinos', 'superasesor', 'ver_botones_accion', 'departamento', 'fecha_consulta'));
     }
 
     public function Enviosporconfirmartabla(Request $request)
@@ -1227,14 +1227,14 @@ class EnvioController extends Controller
     {
         $tipo_consulta = $request->consulta;
 
-        if($request->fechaconsulta != null){
-            $fecha_consulta=Carbon::createFromFormat('d/m/Y', $request->fechaconsulta)->format('Y-m-d');
-        }else{
+        if ($request->fechaconsulta != null) {
+            $fecha_consulta = Carbon::createFromFormat('d/m/Y', $request->fechaconsulta)->format('Y-m-d');
+        } else {
             $fecha_consulta = null;
         }
 
 
-        if($tipo_consulta == "pedido"){
+        if ($tipo_consulta == "pedido") {
 
             $pedidos = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')
                 ->join('users as u', 'pedidos.user_id', 'u.id')
@@ -1333,8 +1333,7 @@ class EnvioController extends Controller
                 ->make(true);
 
 
-
-        }else if($tipo_consulta == "paquete"){
+        } else if ($tipo_consulta == "paquete") {
 
             $pedidos = null;
             $filtros_code = [12];
@@ -1351,9 +1350,7 @@ class EnvioController extends Controller
                 //->where('direccion_grupos.condicion_envio_code', Pedido::REPARTO_COURIER_INT)
                 //->whereIn('direccion_grupos.condicion_envio_code', [Pedido::ENVIO_MOTORIZADO_COURIER_INT,Pedido::RECEPCION_MOTORIZADO_INT])
                 ->whereIn('direccion_grupos.condicion_envio_code', [$request->condicion])
-                ->when($fecha_consulta != null, function($query)use($fecha_consulta){
-                    $query->where(DB::raw('DATE(direccion_grupos.fecha_salida)'), $fecha_consulta);
-                })
+                ->where(DB::raw('DATE(direccion_grupos.fecha_salida)'), $fecha_consulta)
                 ->activo();
 
             return Datatables::of(DB::table($grupos))
@@ -1935,7 +1932,7 @@ class EnvioController extends Controller
     public function DireccionEnvio(Request $request)
     {
 
-        $attach_pedidos_data=[];
+
         $pedidos = $request->pedidos;
         if (!$request->pedidos) {
             return '0';
@@ -2596,17 +2593,17 @@ class EnvioController extends Controller
         $envio->update([
             'condicion_envio' => Pedido::ENVIO_MOTORIZADO_COURIER,
             'condicion_envio_code' => Pedido::ENVIO_MOTORIZADO_COURIER_INT,
-            'fecha_salida'=>$request->fecha_salida
+            'fecha_salida' => $request->fecha_salida
         ]);
 
         /*$codigos_paquete = collect(explode(",", $envio->codigos))->map(function ($cod) {
             return trim($cod);
         })->all();*/
-        $codigos_paquete=Pedido::where('direccion_grupo',$envio->id);
+        $codigos_paquete = Pedido::where('direccion_grupo', $envio->id);
         $codigos_paquete->update([
             'condicion_envio_code' => Pedido::ENVIO_MOTORIZADO_COURIER_INT,
             'condicion_envio' => Pedido::ENVIO_MOTORIZADO_COURIER,
-            'fecha_salida'=>$request->fecha_salida
+            'fecha_salida' => $request->fecha_salida
         ]);
 
 
@@ -2702,16 +2699,16 @@ class EnvioController extends Controller
                 'motorizado_status' => '1',
                 'motorizado_sustento_text' => $request->sustento_text,
             ]);
-            //foreach ($grupo->pedidos as $pedido) {
+            foreach ($grupo->pedidos as $pedido) {
                 PedidoMotorizadoHistory::query()->create([
-                    'pedido_id' => '0',
+                    'pedido_id' => $pedido->id,
                     'direccion_grupo_id' => $grupo->id,
                     //'pedido_grupo_id' => null,
                     'status' => '1',
                     'sustento_text' => $request->sustento_text,
                     //'sustento_foto' => null,
                 ]);
-            //}
+            }
 
         } elseif ($action == 'update_status_no_contesto') {
             $this->validate($request, [
@@ -2726,16 +2723,16 @@ class EnvioController extends Controller
                 'motorizado_sustento_text' => $request->sustento_text,
                 'motorizado_sustento_foto' => $path,
             ]);
-            //foreach ($grupo->pedidos as $pedido) {
+            foreach ($grupo->pedidos as $pedido) {
                 PedidoMotorizadoHistory::query()->create([
-                    'pedido_id' => '0',
+                    'pedido_id' => $pedido->id,
                     'direccion_grupo_id' => $grupo->id,
                     //'pedido_grupo_id' => null,
                     'status' => '2',
                     'sustento_text' => $request->sustento_text,
                     'sustento_foto' => $path,
                 ]);
-            //}
+            }
         } else {
             $this->validate($request, [
                 'adjunto1' => 'required|file',
@@ -2846,8 +2843,8 @@ class EnvioController extends Controller
     public function VerificarZona(Request $request)
     {
         $zona_distrito = Distrito::where('distrito', $request->distrito)
-            ->where('provincia','LIMA')
-                ->first();
+            ->where('provincia', 'LIMA')
+            ->first();
 
         if ($zona_distrito->zona == "OLVA") {
             return response()->json(['html' => 0]);
@@ -2890,21 +2887,6 @@ class EnvioController extends Controller
         if ($pedido->condicion_envio_code == Pedido::RECEPCION_MOTORIZADO_INT) {
             return response()->json(['html' => 0]);
         } else {
-            /*************
-             * BUSCAMOS EL PAQUETE
-             */
-            $paquete_sobres = $pedido->direccionGrupo;
-            $codigos_paquete = collect(explode(",", $paquete_sobres->codigos))
-                ->map(fn($cod) => trim($cod))
-                ->filter()->values();
-
-            $codigos_confirmados = collect(explode(",", $paquete_sobres->codigos_confirmados??''))
-                ->push($pedido->codigo)
-                ->map(fn($cod) => trim($cod))
-                ->filter()
-                ->values();
-
-            DB::beginTransaction();
             /************
              * ACTUALIZAMOS EL PEDIDO
              */
@@ -2943,33 +2925,47 @@ class EnvioController extends Controller
 
     public function IniciarRutaMasiva(Request $request)
     {
-        $rol=Auth::user()->rol;
-        $zona_=null;
-        $motorizadoid=null;
+        $rol = Auth::user()->rol;
+        $zona_ = null;
+        $motorizadoid = null;
 
-        if($rol=='MOTORIZADO')
-        {
-            $usuario=User::where('id',Auth::user()->id)->first();
-            $zona=$usuario->zona;
-            $motorizadoid=$usuario->id;
-            $direcciones=DireccionGrupo::where('motorizado_id',$motorizadoid)->where('distribucion',$zona)->where('condicion_envio_code',Pedido::RECEPCION_MOTORIZADO_INT);
+        if ($rol == 'MOTORIZADO') {
+            $usuario = User::where('id', Auth::user()->id)->first();
+            $zona = $usuario->zona;
+            $motorizadoid = $usuario->id;
+            $direcciones = DireccionGrupo::where('motorizado_id', $motorizadoid)->where('distribucion', $zona)->where('condicion_envio_code', Pedido::RECEPCION_MOTORIZADO_INT);
             $direcciones->update([
-                'condicion_envio_code'=>Pedido::MOTORIZADO_INT
+                'condicion_envio_code' => Pedido::MOTORIZADO_INT
             ]);
-        }else if($rol==User::ROL_ADMIN)
-        {
-            $direcciones=DireccionGrupo::where('condicion_envio_code',Pedido::RECEPCION_MOTORIZADO_INT);
+        } else if ($rol == User::ROL_ADMIN) {
+            $direcciones = DireccionGrupo::where('condicion_envio_code', Pedido::RECEPCION_MOTORIZADO_INT);
             $direcciones->update([
-                'condicion_envio_code'=>Pedido::MOTORIZADO_INT
+                'condicion_envio_code' => Pedido::MOTORIZADO_INT
             ]);
-        }else{
-            return response()->json(['html'=>'0']);
+        } else {
+            return response()->json(['html' => '0']);
         }
 
-        return response()->json(['html'=>'1']);
+        return response()->json(['html' => '1']);
 
     }
 
+    public function SobresDevueltos(Request $request)
+    {
+        $motorizados = User::query()->where('rol', '=', 'MOTORIZADO')->whereNotNull('zona')->get();
 
+        return view('envios.sobresdevueltos', compact('motorizados'));
+    }
 
+    public function SobresDevueltosData(Request $request)
+    {
+        if ($request->has('datatable')) {
+            $pedidos_observados = DireccionGrupo::where('motorizado_id', $request->id)
+                ->get();
+            if (\auth()->user()->rol == User::ROL_MOTORIZADO) {
+                $pedidos_observados = $pedidos_observados->where('direccion_grupos.motorizado_id', '=', auth()->id());
+            }
+            return datatables()->query(DB::table($pedidos_observados));
+        }
+    }
 }
