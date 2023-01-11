@@ -207,14 +207,14 @@ class MotorizadoController extends Controller
                 ->addColumn('action', function ($pedido) {
                     $btn = '<ul class="list-unstyled pl-0">';
                     $btn .= '<li>
-                                    <button href="" class="btn btn-sm text-secondary" data-target="#modal-motorizado-entregar-confirm" data-toggle="modal" data-entregar-confirm="' . $pedido->id . '" data-destino="' . $pedido->destino . '" data-fechaenvio="' . $pedido->fecha . '" data-codigos="' . $pedido->codigos . '"
+                                    <button href="" class="btn btn-sm text-secondary text-left" data-target="#modal-motorizado-entregar-confirm" data-toggle="modal" data-entregar-confirm="' . $pedido->id . '" data-destino="' . $pedido->destino . '" data-fechaenvio="' . $pedido->fecha . '" data-codigos="' . $pedido->codigos . '"
                                         data-imagen1="' . \Storage::disk('pstorage')->url($pedido->foto1) . '" data-imagen2="' . \Storage::disk('pstorage')->url($pedido->foto2) . '" data-imagen3="' . \Storage::disk('pstorage')->url($pedido->foto3) . '"
                                     >
-                                        <i class="fas fa-envelope text-success"></i> A cliente
+                                        <i class="fas fa-envelope text-success"></i> Confirmar fotos
                                     </button>
                                 </li>';
                     $btn .= '<li>
-                                    <button class="btn btn-sm text-danger" data-jqconfirm="' . $pedido->id . '" data-jqconfirm-type="revertir">
+                                    <button class="btn btn-sm text-danger  text-left" data-jqconfirm="' . $pedido->id . '" data-jqconfirm-type="revertir">
                                         <i class="fas fa-arrow-left text-danger"></i> Revertir
                                     </button>
                                 </li>';
