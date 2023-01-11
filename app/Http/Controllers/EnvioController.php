@@ -1350,7 +1350,11 @@ class EnvioController extends Controller
                 //->where('direccion_grupos.condicion_envio_code', Pedido::REPARTO_COURIER_INT)
                 //->whereIn('direccion_grupos.condicion_envio_code', [Pedido::ENVIO_MOTORIZADO_COURIER_INT,Pedido::RECEPCION_MOTORIZADO_INT])
                 ->whereIn('direccion_grupos.condicion_envio_code', [$request->condicion])
+<<<<<<<<< Temporary merge branch 1
+                ->when($fecha_consulta != null, function($query)use($fecha_consulta){
+=========
                 ->when($fecha_consulta != null, function ($query) use ($fecha_consulta) {
+>>>>>>>>> Temporary merge branch 2
                     $query->where(DB::raw('DATE(direccion_grupos.fecha_salida)'), $fecha_consulta);
                 })
                 ->activo();
@@ -1982,7 +1986,12 @@ class EnvioController extends Controller
 
     public function DireccionEnvio(Request $request)
     {
+
+<<<<<<<<< Temporary merge branch 1
+        $attach_pedidos_data=[];
+=========
         $attach_pedidos_data = [];
+>>>>>>>>> Temporary merge branch 2
         $pedidos = $request->pedidos;
         if (!$request->pedidos) {
             return '0';
@@ -2750,6 +2759,16 @@ class EnvioController extends Controller
                 'motorizado_sustento_text' => $request->sustento_text,
             ]);
             //foreach ($grupo->pedidos as $pedido) {
+<<<<<<<<< Temporary merge branch 1
+                PedidoMotorizadoHistory::query()->create([
+                    'pedido_id' => '0',
+                    'direccion_grupo_id' => $grupo->id,
+                    //'pedido_grupo_id' => null,
+                    'status' => '1',
+                    'sustento_text' => $request->sustento_text,
+                    //'sustento_foto' => null,
+                ]);
+=========
             PedidoMotorizadoHistory::query()->create([
                 'pedido_id' => '0',
                 'direccion_grupo_id' => $grupo->id,
@@ -2758,6 +2777,7 @@ class EnvioController extends Controller
                 'sustento_text' => $request->sustento_text,
                 //'sustento_foto' => null,
             ]);
+>>>>>>>>> Temporary merge branch 2
             //}
 
         } elseif ($action == 'update_status_no_contesto') {
@@ -2774,6 +2794,16 @@ class EnvioController extends Controller
                 'motorizado_sustento_foto' => $path,
             ]);
             //foreach ($grupo->pedidos as $pedido) {
+<<<<<<<<< Temporary merge branch 1
+                PedidoMotorizadoHistory::query()->create([
+                    'pedido_id' => '0',
+                    'direccion_grupo_id' => $grupo->id,
+                    //'pedido_grupo_id' => null,
+                    'status' => '2',
+                    'sustento_text' => $request->sustento_text,
+                    'sustento_foto' => $path,
+                ]);
+=========
             PedidoMotorizadoHistory::query()->create([
                 'pedido_id' => '0',
                 'direccion_grupo_id' => $grupo->id,
@@ -2782,6 +2812,7 @@ class EnvioController extends Controller
                 'sustento_text' => $request->sustento_text,
                 'sustento_foto' => $path,
             ]);
+>>>>>>>>> Temporary merge branch 2
             //}
         } else {
             $this->validate($request, [
@@ -2945,7 +2976,11 @@ class EnvioController extends Controller
                 ->map(fn($cod) => trim($cod))
                 ->filter()->values();
 
+<<<<<<<<< Temporary merge branch 1
+            $codigos_confirmados = collect(explode(",", $paquete_sobres->codigos_confirmados??''))
+=========
             $codigos_confirmados = collect(explode(",", $paquete_sobres->codigos_confirmados ?? ''))
+>>>>>>>>> Temporary merge branch 2
                 ->push($pedido->codigo)
                 ->map(fn($cod) => trim($cod))
                 ->filter()
