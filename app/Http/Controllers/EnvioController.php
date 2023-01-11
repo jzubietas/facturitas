@@ -483,7 +483,7 @@ class EnvioController extends Controller
             ->addColumn('action', function ($pedido) {
                 $btn = '';
                 $btn .= '<ul class="list-unstyled pl-0">';
-                if (auth()->user()->can('envios.enviar')):
+                //if (auth()->user()->can('envios.enviar')):
 
 
                     $btn .= '<li>
@@ -493,7 +493,7 @@ class EnvioController extends Controller
                                         </a>
                                     </li>';
 
-                endif;
+                //endif;
 
                 $btn .= '<li>
                             <a href="" class="btn-sm text-secondary" data-target="#modal-desvincular" data-toggle="modal" data-desvincular="' . $pedido->id . '">
@@ -1983,6 +1983,8 @@ class EnvioController extends Controller
 
     public function DireccionEnvio(Request $request)
     {
+
+
         $attach_pedidos_data = [];
         $pedidos = $request->pedidos;
         if (!$request->pedidos) {
@@ -2751,6 +2753,7 @@ class EnvioController extends Controller
                 'motorizado_sustento_text' => $request->sustento_text,
             ]);
             //foreach ($grupo->pedidos as $pedido) {
+
             PedidoMotorizadoHistory::query()->create([
                 'pedido_id' => '0',
                 'direccion_grupo_id' => $grupo->id,
@@ -2759,7 +2762,6 @@ class EnvioController extends Controller
                 'sustento_text' => $request->sustento_text,
                 //'sustento_foto' => null,
             ]);
-            //}
 
         } elseif ($action == 'update_status_no_contesto') {
             $this->validate($request, [
@@ -2775,6 +2777,7 @@ class EnvioController extends Controller
                 'motorizado_sustento_foto' => $path,
             ]);
             //foreach ($grupo->pedidos as $pedido) {
+
             PedidoMotorizadoHistory::query()->create([
                 'pedido_id' => '0',
                 'direccion_grupo_id' => $grupo->id,
@@ -2783,7 +2786,6 @@ class EnvioController extends Controller
                 'sustento_text' => $request->sustento_text,
                 'sustento_foto' => $path,
             ]);
-            //}
         } else {
             $this->validate($request, [
                 'adjunto1' => 'required|file',
@@ -2840,6 +2842,12 @@ class EnvioController extends Controller
     {
         $envio = DireccionGrupo::where("id", $request->hiddenMotorizadoEntregarConfirm)->first();
         $envio->update([
+            'condicion_envio' => Pedido::ENTREGADO_CLIENTE,
+            'condicion_envio_code' => Pedido::ENTREGADO_CLIENTE_INT,
+        ]);
+
+        $pedidos=Pedido::where('direccion_grupo',$request->hiddenMotorizadoEntregarConfirm)->where('estado','1');
+        $pedidos->update([
             'condicion_envio' => Pedido::ENTREGADO_CLIENTE,
             'condicion_envio_code' => Pedido::ENTREGADO_CLIENTE_INT,
         ]);
@@ -2945,6 +2953,7 @@ class EnvioController extends Controller
             $codigos_paquete = collect(explode(",", $paquete_sobres->codigos))
                 ->map(fn($cod) => trim($cod))
                 ->filter()->values();
+
 
             $codigos_confirmados = collect(explode(",", $paquete_sobres->codigos_confirmados ?? ''))
                 ->push($pedido->codigo)
