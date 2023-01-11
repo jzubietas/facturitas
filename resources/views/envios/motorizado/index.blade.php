@@ -66,7 +66,7 @@
                     <th scope="col">Distrito</th>
                     <th scope="col">Asesor</th>
                     <th scope="col">Cliente</th>
-                    <th scope="col">Fecha de Envio</th>
+                    <th scope="col">Fecha de Salida</th>
                     <th scope="col">Razón social</th>
                     <th scope="col">Destino</th>
                     <th scope="col">Dirección de envío</th>
@@ -562,8 +562,8 @@ Enviar</button>
                         },
                     },
                     {
-                        data: 'fecha',
-                        name: 'fecha',
+                        data: 'fecha_salida',
+                        name: 'fecha_salida',
                         render: $.fn.dataTable.render.moment('DD/MM/YYYY')
                     },
                     {
