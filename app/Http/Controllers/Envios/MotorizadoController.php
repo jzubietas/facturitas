@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Envios;
 
 use App\Http\Controllers\Controller;
 use App\Models\DireccionGrupo;
+use App\Models\GrupoPedido;
 use App\Models\Pedido;
 use App\Models\User;
 use Carbon\Carbon;
@@ -21,7 +22,7 @@ class MotorizadoController extends Controller
         if ($request->fechaconsulta != null) {
             try {
                 $fecha_consulta = Carbon::createFromFormat('d/m/Y', $request->fechaconsulta);
-            }catch (\Exception $ex){
+            } catch (\Exception $ex) {
                 $fecha_consulta = now();
             }
         } else {
@@ -81,16 +82,16 @@ class MotorizadoController extends Controller
             return datatables()->query(DB::table($query))
                 ->addIndexColumn()
                 ->editColumn('fecha_salida', function ($pedido) {
-                    if($pedido->fecha_salida!=null) {
+                    if ($pedido->fecha_salida != null) {
                         return Carbon::parse($pedido->fecha_salida)->format('d-m-Y');
-                    }else{
+                    } else {
                         return '';
                     }
                 })
                 ->editColumn('fecha_recepcion', function ($pedido) {
-                    if($pedido->fecha_recepcion!=null) {
+                    if ($pedido->fecha_recepcion != null) {
                         return Carbon::parse($pedido->fecha_recepcion)->format('d-m-Y h:i A');
-                    }else{
+                    } else {
                         return '';
                     }
                 })
@@ -110,7 +111,7 @@ class MotorizadoController extends Controller
                         case 'entregado':
                         case 'no_contesto':
                         case 'observado':
-                            if ($pedido->estado = 1 && ($pedido->condicion_envio_code==Pedido::MOTORIZADO_INT||$pedido->condicion_envio_code==Pedido::CONFIRM_MOTORIZADO_INT)) {
+                            if ($pedido->estado = 1 && ($pedido->condicion_envio_code == Pedido::MOTORIZADO_INT || $pedido->condicion_envio_code == Pedido::CONFIRM_MOTORIZADO_INT)) {
                                 $btn .= '<li class="pt-8">
                                 <button class="btn btn-sm text-white btn-danger"
                                 data-jqconfirm="revertir"
@@ -302,5 +303,79 @@ class MotorizadoController extends Controller
         return response()->json([
             'success' => true
         ]);
+    }
+
+
+    public function devueltos(Request $request)
+    {
+        $motorizados = User::select([
+            'id',
+            'zona',
+            DB::raw(" (select count(*) from pedidos inner join direccion_grupos b on pedidos.direccion_grupo=b.id where b.motorizado_status in (" . Pedido::ESTADO_MOTORIZADO_OBSERVADO . "," . Pedido::ESTADO_MOTORIZADO_NO_CONTESTO . ") and b.motorizado_id=users.id and b.estado=1) as devueltos")
+        ])
+            ->where('rol', '=', User::ROL_MOTORIZADO)
+            ->whereNotNull('zona')
+            ->activo()
+            ->get();
+
+        return view('envios.sobresdevueltos', compact('motorizados'));
+    }
+
+    public function devueltos_datatable(Request $request)
+    {
+        if ($request->has('datatable')) {
+            $pedidos_observados = Pedido::join('direccion_grupos', 'pedidos.direccion_grupo', 'direccion_grupos.id')
+                ->select([
+                    'pedidos.*',
+                ])
+                ->whereIn('direccion_grupos.motorizado_status', [Pedido::ESTADO_MOTORIZADO_OBSERVADO, Pedido::ESTADO_MOTORIZADO_NO_CONTESTO])
+                ->where('direccion_grupos.estado', '1')
+                ->where('direccion_grupos.motorizado_id', $request->motorizado_id);
+
+            return datatables()->query(DB::table($pedidos_observados))
+                ->addColumn('action', function ($pedido) {
+                    $btn = '';
+                    if (auth()->user()->can('envios.enviar')):
+
+                        $btn .= '<ul class="list-unstyled pl-0">';
+
+                        $btn .= '<li>
+                                <button type="button" data-target="' . route('envios.devueltos.recibir', $pedido->id) . '" data-toggle="jqconfirm"  class="btn btn-warning btn-sm"><i class="fas fa-check-circle"></i> Recibido</button>
+                            </li>';
+                        $btn .= '</ul>';
+                    endif;
+
+                    return $btn;
+                })
+                ->rawColumns(['action'])
+                ->make(true);
+        }
+    }
+
+    public function devueltos_recibir(Request $request, Pedido $pedido)
+    {
+        $grupo = $pedido->direcciongrupo;
+        $pgroup = GrupoPedido::createGroupByPedido($pedido);
+        if ($grupo->pedidos()->activo()->count() <= 1) {
+            $grupo->update([
+                'estado' => 0
+            ]);
+        } else {
+            $pedido->update([
+                'direccion_grupo' => null
+            ]);
+            $pedidosKeyValue = $grupo->pedidos()
+                ->activo()
+                ->join('detalle_pedidos', 'detalle_pedidos.pedido_id', 'pedidos.id')
+                ->where('detalle_pedidos.estado', '1')
+                ->pluck('detalle_pedidos.nombre_empresa', 'pedidos.id');
+
+            $grupo->update([
+                'codigos' => $pedidosKeyValue->keys()->join(','),
+                'producto' => $pedidosKeyValue->values()->join(','),
+            ]);
+        }
+
+        return $pgroup;
     }
 }

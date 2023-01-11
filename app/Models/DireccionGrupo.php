@@ -97,7 +97,7 @@ class DireccionGrupo extends Model
         return $this->hasMany(Pedido::class, 'direccion_grupo');
     }
 
-    public static function desvincularPedido(self $grupo, Pedido $pedido,$sustento=null)
+    public static function desvincularPedido(self $grupo, Pedido $pedido,$sustento=null,$solodesvincular=false)
     {
         if ($grupo->pedidos()->count() > 1) {
             $newgrupo = $grupo->replicate()->fill([

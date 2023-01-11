@@ -486,7 +486,7 @@ class EnvioController extends Controller
                 //if (auth()->user()->can('envios.enviar')):
 
 
-                    $btn .= '<li>
+                $btn .= '<li>
                                         <a href="" class="btn-sm text-secondary" data-target="#modal-confirmacion" data-toggle="modal" data-ide="' . $pedido->id . '" data-entregar-confirm="' . $pedido->id . '" data-destino="' . $pedido->destino . '" data-fechaenvio="' . $pedido->fecha . '" data-codigos="' . $pedido->codigos . '"
                                             data-distribucion="' . $pedido->distribucion . '" >
                                             <i class="fas fa-envelope text-success"></i> Enviar a Motorizado</a></li>
@@ -895,10 +895,9 @@ class EnvioController extends Controller
         $arreglo = [Pedido::ENTREGADO_SIN_SOBRE_OPE_INT, Pedido::ENTREGADO_SIN_SOBRE_CLIENTE_INT];
 
         $pedidos = DireccionGrupo::/*join('direccion_envios as de', 'direccion_grupos.id', 'de.direcciongrupo')*/
-            join('clientes as c', 'c.id', 'direccion_grupos.cliente_id')
+        join('clientes as c', 'c.id', 'direccion_grupos.cliente_id')
             ->join('users as u', 'u.id', 'c.user_id')
             ->where('direccion_grupos.estado', '1')
-
             ->whereNotIn('direccion_grupos.condicion_envio_code', $arreglo)
             ->select(
                 'direccion_grupos.id',
@@ -922,7 +921,8 @@ class EnvioController extends Controller
             try {
                 $min = Carbon::createFromFormat('Y-m-d', $request->desde);//2022-11-25
                 $pedidos = $pedidos->whereDate('direccion_grupos.created_at', $min);
-            }catch (Exception $ex){}
+            } catch (Exception $ex) {
+            }
         }
 
         return Datatables::of($pedidos)
@@ -1134,7 +1134,7 @@ class EnvioController extends Controller
         if ($request->fechaconsulta != null) {
             try {
                 $fecha_consulta = Carbon::createFromFormat('d/m/Y', $request->fechaconsulta);
-            }catch (Exception $ex){
+            } catch (Exception $ex) {
                 $fecha_consulta = now();
             }
 
@@ -1187,8 +1187,7 @@ class EnvioController extends Controller
                 ->where('pedidos.estado', '1')
                 ->whereIn('pedidos.condicion_envio_code', [$request->condicion])
                 ->where('dp.estado', '1');
-        }
-        else if ($tipo_consulta == "paquete") {
+        } else if ($tipo_consulta == "paquete") {
 
             $pedidos = null;
             $filtros_code = [12];
@@ -1204,7 +1203,7 @@ class EnvioController extends Controller
                 ->join('users as u', 'u.id', 'c.user_id')
                 //->where('direccion_grupos.condicion_envio_code', Pedido::REPARTO_COURIER_INT)
                 //->whereIn('direccion_grupos.condicion_envio_code', [Pedido::ENVIO_MOTORIZADO_COURIER_INT,Pedido::RECEPCION_MOTORIZADO_INT])
-                ->whereIn('direccion_grupos.condicion_envio_code', explode(",",$url_tabla))
+                ->whereIn('direccion_grupos.condicion_envio_code', explode(",", $url_tabla))
                 ->when($fecha_consulta != null, function ($query) use ($fecha_consulta) {
                     $query->whereDate('direccion_grupos.fecha_salida', $fecha_consulta);
                 })
@@ -2354,8 +2353,8 @@ class EnvioController extends Controller
 
     public function Estadosobrestabla(Request $request)
     {
-        $opcion=$request->opcion;
-        if($opcion=='recepcionado' || $opcion=='anulado'){
+        $opcion = $request->opcion;
+        if ($opcion == 'recepcionado' || $opcion == 'anulado') {
             $pedidos = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')
                 ->join('users as u', 'pedidos.user_id', 'u.id')
                 ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
@@ -2677,7 +2676,7 @@ class EnvioController extends Controller
             'condicion_envio_code' => Pedido::ENTREGADO_CLIENTE_INT,
         ]);
 
-        $pedidos=Pedido::where('direccion_grupo',$request->hiddenMotorizadoEntregarConfirm)->where('estado','1');
+        $pedidos = Pedido::where('direccion_grupo', $request->hiddenMotorizadoEntregarConfirm)->where('estado', '1');
         $pedidos->update([
             'condicion_envio' => Pedido::ENTREGADO_CLIENTE,
             'condicion_envio_code' => Pedido::ENTREGADO_CLIENTE_INT,
@@ -2856,52 +2855,4 @@ class EnvioController extends Controller
 
     }
 
-    public function SobresDevueltos(Request $request)
-    {
-        $motorizados = User::
-            select([
-                'id',
-                'zona',
-                DB::raw(" (select count(a.id) from pedidos a inner join direccion_grupos b on a.direccion_grupo=b.id where b.motorizado_status='2') as devueltos ")
-            ])
-            ->where('rol', '=', User::ROL_MOTORIZADO)->whereNotNull('zona')
-            ->where('estado','=','1')
-            ->groupBy('id','zona','name')->get();
-
-        return view('envios.sobresdevueltos', compact('motorizados'));
-    }
-
-    public function SobresDevueltosData(Request $request)
-    {
-        if ($request->has('datatable')) {
-            $pedidos_observados=Pedido::join('direccion_grupos as c', 'pedidos.direccion_grupo', 'c.id')
-                ->select([
-                    'pedidos.id',
-                    'pedidos.codigo',
-                    'pedidos.env_zona',
-                    'pedidos.env_distrito'
-                ])
-                //->where('c.motorizado_status','1')
-                ->where('c.estado','1');
-
-            //$pedidos_observados = DireccionGrupo::where('motorizado_id', $request->id)->whereEstado('1');//->where('motorizado_status','1');
-            return datatables()->query(DB::table($pedidos_observados))
-                ->addColumn('action', function ($pedido) {
-                    $btn = '';
-                    if (auth()->user()->can('envios.enviar')):
-
-                        $btn .= '<ul class="list-unstyled pl-0">';
-
-                        $btn .= '<li>
-                                <a href="" data-target="#modal-envio" data-toggle="modal" data-recibir="' . $pedido->id . '" data-codigos="' . $pedido->codigo . '"><button class="btn btn-warning btn-sm"><i class="fas fa-check-circle"></i> Recibido</button></a>
-                            </li>';
-                        $btn .= '</ul>';
-                    endif;
-
-                    return $btn;
-                })
-                ->rawColumns(['action'])
-                ->make(true);
-        }
-    }
 }
