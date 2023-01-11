@@ -24,7 +24,7 @@
             <a href="" data-target="#modal-historial" data-toggle="modal"><button class="btn btn-danger btn-sm">Deudores</button></a>
 
             @if($mirol =='Administrador')
-              
+
             @endif
             <div class="pr-2 btn border-0 rounded text-right">
               <small class="rounded mb-2 bg-danger text-white" style="font-size: 16px">Desactivado</small>
@@ -68,13 +68,15 @@
          </div>
 
           <div class="form-group col-lg-2">
+              {{$mes_selected}}
           {!! Form::label('pmes', 'Mes') !!}
-          {!! Form::select('pmes', $meses , '0', ['class' => 'form-control border selectpicker border-secondary', 'data-live-search' => 'true', 'placeholder' => '---- SELECCIONE ----']) !!}
+          {!! Form::select('pmes', $meses , $mes_selected, ['class' => 'form-control border selectpicker border-secondary', 'data-live-search' => 'true', 'placeholder' => '---- SELECCIONE ----']) !!}
           </div>
 
           <div class="form-group col-lg-2">
+              {{$anno_selected}}
           {!! Form::label('panio', 'Año') !!}
-          {!! Form::select('panio', $anios , '2022', ['class' => 'form-control border selectpicker border-secondary', 'data-live-search' => 'true', 'placeholder' => '---- SELECCIONE ----']) !!}
+          {!! Form::select('panio', $anios , $anno_selected, ['class' => 'form-control border selectpicker border-secondary', 'data-live-search' => 'true', 'placeholder' => '---- SELECCIONE ----']) !!}
           </div>
 
           <div class="form-group col-lg-3 d-flex justify-content-center align-items-center">

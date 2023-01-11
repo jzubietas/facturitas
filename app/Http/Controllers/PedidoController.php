@@ -591,6 +591,12 @@ class PedidoController extends Controller
     public
     function create()
     {
+        //setlocale(LC_ALL,"es_ES");
+        //\Carbon\Carbon::setLocale('es');
+        $fecha = \Carbon\Carbon::now()->locale('es-PE');
+        $mes_selected = trim(strtoupper($fecha->translatedFormat('F')));
+        $anno_selected = trim($fecha->format("Y"));
+
         $dateM = Carbon::now()->format('m');
         $dateY = Carbon::now()->format('Y');
 
@@ -652,7 +658,7 @@ class PedidoController extends Controller
 
         $mirol = Auth::user()->rol;
 
-        return view('pedidos.create', compact('users', 'dateM', 'dateY', 'meses', 'anios', 'fecha', 'numped', 'mirol'));
+        return view('pedidos.create', compact('users', 'dateM', 'dateY', 'meses', 'anios', 'fecha', 'numped', 'mirol','mes_selected','anno_selected'));
     }
 
     /**
