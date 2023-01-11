@@ -591,11 +591,11 @@ class PedidoController extends Controller
     public
     function create()
     {
-        setlocale(LC_ALL,"es_ES");
-        \Carbon\Carbon::setLocale('es');
-        $fecha = \Carbon\Carbon::now();
-        $mes_selected = $fecha->format("F");
-        $anno_selected = $fecha->format("Y");
+        //setlocale(LC_ALL,"es_ES");
+        //\Carbon\Carbon::setLocale('es');
+        $fecha = \Carbon\Carbon::now()->locale('es-PE');
+        $mes_selected = trim(strtoupper($fecha->translatedFormat('F')));
+        $anno_selected = trim($fecha->format("Y"));
 
         $dateM = Carbon::now()->format('m');
         $dateY = Carbon::now()->format('Y');
