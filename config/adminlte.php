@@ -502,10 +502,16 @@ return [
                     'can' => 'motorizado.enruta',
                     'icon' => 'fas fa-check-circle dot_contador_en_motorizados_count',
                     'active' => ['enviados'],
+                ],
+                [
+                    'text' => 'Sobres Devueltos',
+                    'route' => 'envios.devueltos',
+                    'can' => 'motorizado.devuelto',
+                    'icon' => 'fas fa-check-circle dot_contador_en_motorizados_count',
+                    'active' => ['enviados'],
                 ]
-                ]
-            ],
-
+            ]
+        ],
         [
             'text' => 'Pagos',
             'icon' => 'fas fa-cash-register',

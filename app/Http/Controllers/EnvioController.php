@@ -3104,7 +3104,15 @@ class EnvioController extends Controller
 
     public function SobresDevueltos(Request $request)
     {
-        $motorizados = User::query()->where('rol', '=', 'MOTORIZADO')->whereNotNull('zona')->get();
+        $motorizados = User::
+            select([
+                'id',
+                'zona',
+                DB::raw(" (select count(a.id) from pedidos a inner join direccion_grupos b on a.direccion_grupo=b.id where b.motorizado_status='2') as devueltos ")
+            ])
+            ->where('rol', '=', User::ROL_MOTORIZADO)->whereNotNull('zona')
+            ->where('estado','=','1')
+            ->groupBy('id','zona','name')->get();
 
         return view('envios.sobresdevueltos', compact('motorizados'));
     }
@@ -3112,12 +3120,34 @@ class EnvioController extends Controller
     public function SobresDevueltosData(Request $request)
     {
         if ($request->has('datatable')) {
-            $pedidos_observados = DireccionGrupo::where('motorizado_id', $request->id)
-                ->get();
-            if (\auth()->user()->rol == User::ROL_MOTORIZADO) {
-                $pedidos_observados = $pedidos_observados->where('direccion_grupos.motorizado_id', '=', auth()->id());
-            }
-            return datatables()->query(DB::table($pedidos_observados));
+            $pedidos_observados=Pedido::join('direccion_grupos as c', 'pedidos.direccion_grupo', 'c.id')
+                ->select([
+                    'pedidos.id',
+                    'pedidos.codigo',
+                    'pedidos.env_zona',
+                    'pedidos.env_distrito'
+                ])
+                //->where('c.motorizado_status','1')
+                ->where('c.estado','1');
+
+            //$pedidos_observados = DireccionGrupo::where('motorizado_id', $request->id)->whereEstado('1');//->where('motorizado_status','1');
+            return datatables()->query(DB::table($pedidos_observados))
+                ->addColumn('action', function ($pedido) {
+                    $btn = '';
+                    if (auth()->user()->can('envios.enviar')):
+
+                        $btn .= '<ul class="list-unstyled pl-0">';
+
+                        $btn .= '<li>
+                                <a href="" data-target="#modal-envio" data-toggle="modal" data-recibir="' . $pedido->id . '" data-codigos="' . $pedido->codigo . '"><button class="btn btn-warning btn-sm"><i class="fas fa-check-circle"></i> Recibido</button></a>
+                            </li>';
+                        $btn .= '</ul>';
+                    endif;
+
+                    return $btn;
+                })
+                ->rawColumns(['action'])
+                ->make(true);
         }
     }
 }

@@ -68,7 +68,7 @@
                                     <div class="d-flex justify-content-between">
                                         <h5> MOTORIZADO {{Str::upper($motorizado->zona)}}</h5>
                                         <div>
-                                            <h6>Sobres devueltos: <span>0</span></h6>
+                                            <h6>Sobres devueltos: <span>{{$motorizado->devueltos}}</span></h6>
                                         </div>
                                     </div>
                                 </div>
@@ -95,7 +95,7 @@
             </div>
         </div>
 
-      @include('pedidos.modal.confirmar_recepcion_log')
+      @include('pedidos.modal.confirmar_recepcion_log'){{--confirmar recepcion es el recibido--}}}
       @include('envios.modal.enviarid')
       @include('pedidos.modal.recibirid')
       @include('pedidos.modal.verdireccionid')
@@ -210,14 +210,16 @@
   <script type="text/javascript">
 
       const configDataTableZonas = {
+          serverSide: true,
+          searching: true,
           lengthChange: false,
           order: [[0, "desc"]],
-          createdRow: function (row, data, dataIndex) {
-          },
+          /*createdRow: function (row, data, dataIndex) {
+          },*/
           columns: [
-              {data: 'codigos', name: 'codigos',},
-              {data: 'zona', name: 'zona',},
-              {data: 'distrito', name: 'distrito',},
+              {data: 'codigo', name: 'codigo',},
+              {data: 'env_zona', name: 'env_zona',},
+              {data: 'env_distrito', name: 'env_distrito',},
               {
                   data: 'action',
                   name: 'action',
@@ -251,71 +253,15 @@
       @foreach($motorizados as $motorizado)
       $('#tablaPrincipal{{Str::upper($motorizado->zona)}}').DataTable({
           ...configDataTableZonas,
-          ajax: "{{ route('envios.datasobresdevueltos',['datatable'=>1,'id'=> $motorizado->id]) }}",
-          rowCallback: function (row, data, index) {
-              var table = this;
-              $('[data-revertir]', row).unbind();
-              $('[data-jqdetalle]', row).unbind();
+          ajax: {
+              url: "{{ route('envios.datasobresdevueltos',['datatable'=>'1']) }}",
+              data: function (d) {
+                  d.id={{$motorizado->id}}
+              },
+          },
+          /*rowCallback: function (row, data, index) {
 
-              $('[data-revertir]', row).click(function () {
-                  insertIds = insertIds.filter(function (id) {
-                      return id != data.id;
-                  })
-                  $('#tablaPrincipal').DataTable().ajax.reload();
-                  table.api().row(row).remove().draw(false)
-              })
-              $('[data-jqdetalle]', row).click(function () {
-                  console.log(data)
-                  $.confirm({
-                      title: '¡Detalle del grupo!',
-                      columnClass: 'xlarge',
-                      content: getHtmlPrevisualizarDesagrupar(data),
-                      type: 'orange',
-                      typeAnimated: true,
-                      buttons: {
-                          cancelar: function () {
-                              $('#tablaPrincipal').DataTable().ajax.reload();
-                              return true
-                          }
-                      },
-                      onContentReady: function () {
-                          const self = this
-
-                          function setEvents() {
-                              self.$content.find('[data-jqdesagrupar]').click(function (e) {
-                                  $.ajax({
-                                      url: '{{route('envios.distribuirsobres.desagrupar')}}',
-                                      data: {
-                                          grupo_id: e.target.dataset.jqdesagrupar,
-                                          pedido_id: e.target.dataset.pedido_id,
-                                      },
-                                      method: 'delete'
-                                  })
-                                      .done(function (grupo) {
-                                          $('#tablaPrincipal{{Str::upper($motorizado->zona)}}')
-                                              .DataTable()
-                                              .row(row)
-                                              .data(createZoneRowTable(grupo.data, '{{Str::upper($motorizado->zona)}}'))
-                                              .draw();
-                                          if (grupo.data) {
-                                              self.setContent(getHtmlPrevisualizarDesagrupar(grupo.data))
-                                          } else {
-                                              self.close()
-                                              $.alert('Desagrupado por completo')
-                                          }
-                                          setEvents()
-                                      })
-                                      .always(function () {
-                                          $('#tablaPrincipal').DataTable().ajax.reload();
-                                      })
-                              })
-                          }
-
-                          setEvents();
-                      }
-                  })
-              })
-          }
+          }*/
       });
       @endforeach
   </script>

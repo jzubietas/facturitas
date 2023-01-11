@@ -65,6 +65,14 @@
     <div class="card">
         <div class="card-body">
 
+            <table class="table-responsive">
+                <tbody>
+                <tr>
+                    <td style='text-align:center; vertical-align:middle'><input type="text" value="" id="fecha_consulta" name="fecha_consulta" class="form-control" autocomplete="off"></td>
+                </tr>
+                </tbody>
+            </table>
+
             <ul class="nav nav-tabs mb-24 mt-24" id="myTab" role="tablist">
                 <li class="nav-item w-25 text-center">
                     <a class="condicion-tabla nav-link activo active font-weight-bold" id="home-tab" data-toggle="tab" data-url="11" data-tipo="recepcion" data-consulta="tablaPrincipal"  href="#recibidos" role="tab" aria-controls="home" aria-selected="true">
