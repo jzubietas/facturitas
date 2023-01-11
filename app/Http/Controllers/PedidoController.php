@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\PedidoAnulledEvent;
 use App\Events\PedidoAtendidoEvent;
 use App\Events\PedidoEntregadoEvent;
 use App\Events\PedidoEvent;
@@ -1629,11 +1630,7 @@ class PedidoController extends Controller
              * FISICA - sin banca
              * ELECTRONICA - bancarizado
              */
-            $is_fisico = $pedido->detallePedidos()->whereIn('detalle_pedidos.tipo_banca', [
-                'FISICO - banca',
-                'FISICO - sin banca',
-                'FISICA - sin banca',
-            ])->count();
+            $is_fisico = $pedido->detallePedido()->where('detalle_pedidos.tipo_banca','like','FISICO%')->count();
             if ($is_fisico == 0 && $pedido->condicion_code == Pedido::ATENDIDO_INT) {
                 //pendiente de anulacion
                 $pedido->update([
@@ -1660,12 +1657,11 @@ class PedidoController extends Controller
                     'path_adjunto_anular' => null,
                     'path_adjunto_anular_disk' => 'pstorage',
                 ]);
-                //$detalle_pedidos = DetallePedido::find($request->hiddenID);
-                $detalle_pedidos = DetallePedido::where('pedido_id', $request->hiddenID)->first();
 
-                $detalle_pedidos->update([
+                $detalle_pedidos = $pedido->detallePedidos()->update([
                     'estado' => '0'
                 ]);
+                event(new PedidoAnulledEvent($pedido));
                 $html = $detalle_pedidos;
             }
 
@@ -2954,14 +2950,6 @@ class PedidoController extends Controller
                 }
             }
         }
-        $pedido->update([
-            'condicion' => 'ANULADO',
-            'condicion_code' => Pedido::ANULADO_INT,
-            'user_anulacion_id' => Auth::user()->id,
-            'fecha_anulacion_confirm' => now(),
-            'estado' => '0',
-            'pendiente_anulacion' => '0',
-        ]);
         setting()->load();
         foreach ($filePaths as $index => $path) {
             $key = "pedido." . $pedido->id . ".nota_credito_file." . $index;
@@ -2972,11 +2960,22 @@ class PedidoController extends Controller
             ]);
         }
         setting()->save();
-        $detalle_pedidos = DetallePedido::where('pedido_id', $request->pedido_id)->first();
 
-        $detalle_pedidos->update([
+        $pedido->update([
+            'condicion' => 'ANULADO',
+            'condicion_code' => Pedido::ANULADO_INT,
+            'user_anulacion_id' => Auth::user()->id,
+            'fecha_anulacion_confirm' => now(),
+            'estado' => '0',
+            'pendiente_anulacion' => '0',
+        ]);
+
+        $pedido->detallePedidos()->update([
             'estado' => '0'
         ]);
+
+        event(new PedidoAnulledEvent($pedido));
+
         return response()->json([
             "success" => 1
         ]);

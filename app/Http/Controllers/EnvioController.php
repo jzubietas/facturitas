@@ -2766,7 +2766,7 @@ class EnvioController extends Controller
         } elseif ($action == 'update_status_no_contesto') {
             $this->validate($request, [
                 'grupo_id' => 'required',
-                'sustento_text' => 'required',
+                //'sustento_text' => 'required',
                 'sustento_foto' => 'required|file',
             ]);
             $grupo = DireccionGrupo::query()->with('pedidos')->findOrFail($request->grupo_id);
