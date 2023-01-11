@@ -87,7 +87,7 @@ class MotorizadoController extends Controller
                         return '';
                     }
                 })
-                ->editColumn('fecha_reparto', function ($pedido) {
+                ->editColumn('fecha_recepcion', function ($pedido) {
                     if($pedido->fecha_recepcion!=null) {
                         return Carbon::parse($pedido->fecha_recepcion)->format('d-m-Y h:i A');
                     }else{
