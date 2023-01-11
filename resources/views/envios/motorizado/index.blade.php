@@ -71,6 +71,7 @@
                     <th scope="col">Asesor</th>
                     <th scope="col">Cliente</th>
                     <th scope="col">Fecha de Salida</th>
+                    <th scope="col">Fecha de Entrega</th>
                     <th scope="col">Razón social</th>
                     <th scope="col">Destino</th>
                     <th scope="col">Dirección de envío</th>
@@ -222,6 +223,7 @@
                     <h5>Sobre de pedido: <b>${data.codigos}</b></h5>
                 </div>
             </div>
+            {{--
             <div class="row">
                 <div class="col-lg-6">
                    <div class="form-group">
@@ -236,7 +238,8 @@
                     </div>
                 </div>
             </div>
-            <div class="row">
+            --}}
+            <div class="row mt-2">
                 <div class="col-4">
                     <div class="input-group w-80">
                         <div class="custom-file w-90">
@@ -341,14 +344,14 @@
 
                                 self.$content.find("form").on('submit', function (e) {
                                     e.preventDefault()
-                                    if (!e.target.fecha_recepcion.value) {
+                                    /*if (!e.target.fecha_recepcion.value) {
                                         $.confirm({
                                             title: '¡Advertencia!',
                                             content: '<b>Ingresa la fecha de Entrega</b>',
                                             type: 'orange'
                                         })
                                         return false;
-                                    }
+                                    }*/
                                     if (e.target.adjunto1.files.length === 0) {
                                         $.confirm({
                                             title: '¡Advertencia!',
@@ -647,6 +650,11 @@ Enviar</button>
                     {
                         data: 'fecha_salida',
                         name: 'fecha_salida',
+                        //render: $.fn.dataTable.render.moment('DD/MM/YYYY')
+                    },
+                    {
+                        data: 'fecha_reparto',
+                        name: 'fecha_reparto',
                         //render: $.fn.dataTable.render.moment('DD/MM/YYYY')
                     },
                     {

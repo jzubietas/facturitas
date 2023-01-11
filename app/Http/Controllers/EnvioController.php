@@ -2595,7 +2595,7 @@ class EnvioController extends Controller
                 'adjunto2' => 'required|file',
                 'adjunto3' => 'required|file',
                 'envio_id' => 'required',
-                'fecha_recepcion' => 'required|date',
+                //'fecha_recepcion' => 'required|date',
             ]);
             $file1 = $request->file('adjunto1')->store('entregas', 'pstorage');
             $file2 = $request->file('adjunto2')->store('entregas', 'pstorage');
@@ -2607,7 +2607,7 @@ class EnvioController extends Controller
                 'foto3' => $file3,
                 'atendido_por' => Auth::user()->name,
                 'atendido_por_id' => Auth::user()->id,
-                'fecha_recepcion' => $request->fecha_recepcion,
+                'fecha_recepcion' => now(),
                 'condicion_envio' => Pedido::CONFIRM_MOTORIZADO,
                 'condicion_envio_code' => Pedido::CONFIRM_MOTORIZADO_INT,
             ]);

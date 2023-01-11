@@ -81,7 +81,18 @@ class MotorizadoController extends Controller
             return datatables()->query(DB::table($query))
                 ->addIndexColumn()
                 ->editColumn('fecha_salida', function ($pedido) {
-                    return Carbon::parse($pedido->fecha_salida)->format('d-m-Y h:i A');
+                    if($pedido->fecha_salida!=null) {
+                        return Carbon::parse($pedido->fecha_salida)->format('d-m-Y');
+                    }else{
+                        return '';
+                    }
+                })
+                ->editColumn('fecha_reparto', function ($pedido) {
+                    if($pedido->fecha_recepcion!=null) {
+                        return Carbon::parse($pedido->fecha_recepcion)->format('d-m-Y h:i A');
+                    }else{
+                        return '';
+                    }
                 })
                 ->editColumn('condicion_envio', function ($pedido) {
                     $color = Pedido::getColorByCondicionEnvio($pedido->condicion_envio);
