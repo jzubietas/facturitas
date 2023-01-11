@@ -210,13 +210,6 @@
   <script type="text/javascript">
 
       const configDataTableZonas = {
-          /*processing: false,
-          stateSave: true,*/
-          serverSide: false,
-          searching: true,
-          /*bLengthMenu: false,
-          bInfo: false, */
-
           lengthChange: false,
           order: [[0, "desc"]],
           createdRow: function (row, data, dataIndex) {

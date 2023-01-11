@@ -680,10 +680,7 @@ class EnvioController extends Controller
                 'direccion_grupos.foto3',
                 'direccion_grupos.correlativo'
             );
-
-
         $pedidos = $pedidos_lima;
-
 
         if (Auth::user()->rol == "Operario") {
 
@@ -1131,15 +1128,190 @@ class EnvioController extends Controller
     public function Enviosrecepcionmotorizadotabla(Request $request)
     {
         $tipo_consulta = $request->consulta;
-
+        //SI ES QUE EXISTE UNA FECHA
         if ($request->fechaconsulta != null) {
             $fecha_consulta = Carbon::createFromFormat('d/m/Y', $request->fechaconsulta)->format('Y-m-d');
         } else {
             $fecha_consulta = null;
         }
+        // OBTENEMOS EL TIPO
+        if ($request->tipo != null) {
+            $tipo_tabla = $request->tipo;
+        } else {
+            $tipo_tabla = null;
+        }
+        //OBTENEMOS EL CODIGO DE CONDICION
+        if ($request->url != null) {
+            $url_tabla = $request->url;
+        } else {
+            $url_tabla = null;
+        }
 
 
-        if ($tipo_consulta == "pedido") {
+        if ($tipo_consulta == "tabla" & $tipo_tabla == "entregados") {
+
+                $pedidos_lima = DireccionGrupo::/*join('direccion_envios as de', 'direccion_grupos.id', 'de.direcciongrupo')*/
+                join('clientes as c', 'c.id', 'direccion_grupos.cliente_id')
+                    ->join('users as u', 'u.id', 'c.user_id')
+                    ->where('direccion_grupos.estado', '1')
+                    ->whereIn('direccion_grupos.condicion_envio_code', explode(",", $url_tabla))
+                    ->select([
+                        'direccion_grupos.*',
+                        'direccion_grupos.codigos as codigo',
+                        'direccion_grupos.identificador as users',
+                        'direccion_grupos.producto as empresas',
+                        DB::raw("DATE_FORMAT(direccion_grupos.fecha_recepcion, '%Y-%m-%d') as fechaentrega"),
+                    ]);
+                $pedidos = $pedidos_lima;
+
+                if (Auth::user()->rol == "Operario") {
+
+                    $asesores = User::where('users.rol', 'Asesor')
+                        ->where('users.estado', '1')
+                        ->Where('users.operario', Auth::user()->id)
+                        ->select(
+                            DB::raw("users.id as id")
+                        )
+                        ->pluck('users.id');
+                    $pedidos = $pedidos->Where('u.identificador', Auth::user()->identificador);
+
+                } else if (Auth::user()->rol == "Jefe de operaciones") {
+
+                    $operarios = User::where('users.rol', 'Operario')
+                        ->where('users.estado', '1')
+                        ->where('users.jefe', Auth::user()->id)
+                        ->select(
+                            DB::raw("users.id as id")
+                        )
+                        ->pluck('users.id');
+
+                    $asesores = User::where('users.rol', 'Asesor')
+                        ->where('users.estado', '1')
+                        ->WhereIn('users.operario', $operarios)
+                        ->select(
+                            DB::raw("users.id as id")
+                        )
+                        ->pluck('users.id');
+                    $pedidos = $pedidos->Where('u.identificador', Auth::user()->identificador);
+
+
+                } else if (Auth::user()->rol == "Asesor") {
+
+                    $pedidos = $pedidos->Where('u.identificador', Auth::user()->identificador);
+
+                } else if (Auth::user()->rol == "Encargado") {
+
+                } else {
+
+                }
+
+                return datatables()->query(\DB::table($pedidos))
+                    ->addIndexColumn()
+                    ->addColumn('condicion_envio_color', function ($pedido) {
+
+                        return Pedido::getColorByCondicionEnvio($pedido->condicion_envio);
+                    })
+                    ->editColumn('condicion_envio', function ($grupo) {
+                        $color = Pedido::getColorByCondicionEnvio($grupo->condicion_envio);
+
+                        $badge_estado = '';
+                        $badge_estado .= '<span class="badge badge-dark p-8" style="color: #fff; background-color: #347cc4; font-weight: 600; margin-bottom: -2px;border-radius: 4px 4px 0px 0px; font-size:8px;  padding: 4px 4px !important; font-weight: 500;">Direccion agregada</span>';
+
+                        $badge_estado .= '<span class="badge badge-success" style="background-color: #00bc8c !important;
+                    padding: 4px 8px !important;
+                    font-size: 8px;
+                    margin-bottom: -4px;
+                    color: black !important;">Con ruta</span>';
+                        $badge_estado .= '<span class="badge badge-success w-100" style="background-color: ' . $color . '!important;">' . $grupo->condicion_envio . '</span>';
+                        return $badge_estado;
+                    })
+                    ->editColumn('foto1', function ($pedido) {
+                        if ($pedido->foto1 != null) {
+                            $urlimagen1 = \Storage::disk('pstorage')->url($pedido->foto1);
+
+                            $data = '<a href="" data-target="#modal-imagen" data-toggle="modal" data-imagen="' . $pedido->foto1 . '">
+                    <img src="' . $urlimagen1 . '" alt="' . $pedido->foto1 . '" height="100px" width="100px" id="imagen_' . $pedido->id . '-1" class="img-thumbnail cover">
+                    </a>
+                    <a download href="' . $urlimagen1 . '" class="text-center"><button type="button" class="btn btn-secondary btn-md"> Descargar</button> </a>
+                    <a href="" data-target="#modal-cambiar-imagen" data-toggle="modal" data-item="1" data-imagen="' . $pedido->foto1 . '" data-pedido="' . $pedido->id . '">
+                    <button class="btn btn-danger btn-md">Cambiar</button></a>';
+
+                            if (Auth::user()->rol == "Asesor") {
+                                $data .= '<a href="" data-target="#modal-delete-foto1" data-toggle="modal" data-deletefoto1="' . $pedido->id . '">
+                        <button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i></button>
+                        </a>';
+                            }
+                            return $data;
+                        } else if ($pedido->condicion_envio_code == Pedido::ENTREGADO_SIN_SOBRE_OPE_INT) {
+                            return '<span class="badge badge-dark">Sin envio</span>';
+                        } else {
+                            return '';
+                        }
+                    })
+                    ->editColumn('foto2', function ($pedido) {
+                        if ($pedido->foto2 != null) {
+                            $urlimagen1 = \Storage::disk('pstorage')->url($pedido->foto2);
+
+                            $data = '<a href="" data-target="#modal-imagen" data-toggle="modal" data-imagen="' . $pedido->foto2 . '">
+                    <img src="' . $urlimagen1 . '" alt="' . $pedido->foto2 . '" height="100px" width="100px" id="imagen_' . $pedido->id . '-2" class="img-thumbnail cover">
+                    </a>
+                    <a download href="' . $urlimagen1 . '" class="text-center"><button type="button" class="btn btn-secondary btn-md"> Descargar</button> </a>
+                    <a href="" data-target="#modal-cambiar-imagen" data-toggle="modal" data-item="2" data-imagen="' . $pedido->foto2 . '" data-pedido="' . $pedido->id . '">
+                    <button class="btn btn-danger btn-md">Cambiar</button></a>';
+
+                            if (Auth::user()->rol == "Asesor") {
+                                $data .= '<a href="" data-target="#modal-delete-foto2" data-toggle="modal" data-deletefoto2="' . $pedido->id . '">
+                        <button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i></button>
+                        </a>';
+                            }
+                            return $data;
+                        } else if ($pedido->condicion_envio_code == Pedido::ENTREGADO_SIN_SOBRE_OPE_INT) {
+                            return '<span class="badge badge-dark">Sin envio</span>';
+                        } else {
+                            return '';
+                        }
+                    })
+                    ->editColumn('foto3', function ($pedido) {
+                        if ($pedido->foto3 != null) {
+                            $urlimagen1 = \Storage::disk('pstorage')->url($pedido->foto3);
+
+                            $data = '<a href="" data-target="#modal-imagen" data-toggle="modal" data-imagen="' . $pedido->foto3 . '">
+                    <img src="' . $urlimagen1 . '" alt="' . $pedido->foto3 . '" height="100px" width="100px" id="imagen_' . $pedido->id . '-3" class="img-thumbnail cover">
+                    </a>
+                    <a download href="' . $urlimagen1 . '" class="text-center"><button type="button" class="btn btn-secondary btn-md"> Descargar</button> </a>
+                    <a href="" data-target="#modal-cambiar-imagen" data-toggle="modal" data-item="3" data-imagen="' . $pedido->foto3 . '" data-pedido="' . $pedido->id . '">
+                    <button class="btn btn-danger btn-md">Cambiar</button></a>';
+
+                            if (Auth::user()->rol == "Asesor") {
+                                $data .= '<a href="" data-target="#modal-delete-foto3" data-toggle="modal" data-deletefoto3="' . $pedido->id . '">
+                        <button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i></button>
+                        </a>';
+                            }
+                            return $data;
+                        } else if ($pedido->condicion_envio_code == Pedido::ENTREGADO_SIN_SOBRE_OPE_INT) {
+                            return '<span class="badge badge-dark">Sin envio</span>';
+                        } else {
+                            return '';
+                        }
+                    })
+                    ->addColumn('action', function ($pedido) {
+                        $btn = '';
+                        if ($pedido->condicion_envio_code == 13) {
+                            $btn .= '<button class="btn btn-sm text-white bg-primary"
+                                    data-jqconfirm="' . $pedido->id . '">
+                                        <i class="fa fa-motorcycle text-white" aria-hidden="true"></i> A revertir
+                                    </button>';
+
+                        }
+
+                        return $btn;
+                    })
+                    ->rawColumns(['action', 'foto1', 'foto2', 'foto3', 'condicion_envio'])
+                    ->make(true);
+
+
+        }
+        else if ( $tipo_consulta == "tabla" & $tipo_tabla == "recepcion"){
 
             $pedidos = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')
                 ->join('users as u', 'pedidos.user_id', 'u.id')
@@ -1175,7 +1347,7 @@ class EnvioController extends Controller
                     DB::raw("DATEDIFF(DATE(NOW()), DATE(pedidos.created_at)) AS dias")
                 ])
                 ->where('pedidos.estado', '1')
-                ->whereIn('pedidos.condicion_envio_code', [$request->condicion])
+                ->whereIn('pedidos.condicion_envio_code', explode(",", $url_tabla)) // ['11']
                 ->where('dp.estado', '1');
 
             if (Auth::user()->rol == "Operario") {
@@ -1237,8 +1409,10 @@ class EnvioController extends Controller
                 ->rawColumns(['action'])
                 ->make(true);
 
-
-        } else if ($tipo_consulta == "paquete") {
+        }
+        /*
+        else if ($tipo_consulta == "pedido") {}
+        else if ($tipo_consulta == "paquete") {
 
             $pedidos = null;
             $filtros_code = [12];
@@ -1254,7 +1428,7 @@ class EnvioController extends Controller
                 ->join('users as u', 'u.id', 'c.user_id')
                 //->where('direccion_grupos.condicion_envio_code', Pedido::REPARTO_COURIER_INT)
                 //->whereIn('direccion_grupos.condicion_envio_code', [Pedido::ENVIO_MOTORIZADO_COURIER_INT,Pedido::RECEPCION_MOTORIZADO_INT])
-                ->whereIn('direccion_grupos.condicion_envio_code', [$request->condicion])
+                ->whereIn('direccion_grupos.condicion_envio_code', $url_tabla)
                 ->when($fecha_consulta != null, function ($query) use ($fecha_consulta) {
                     $query->where(DB::raw('DATE(direccion_grupos.fecha_salida)'), $fecha_consulta);
                 })
@@ -1306,8 +1480,7 @@ class EnvioController extends Controller
                 ->make(true);
 
         }
-
-
+        */
     }
 
 
@@ -2670,7 +2843,7 @@ class EnvioController extends Controller
         } elseif ($action == 'update_status_no_contesto') {
             $this->validate($request, [
                 'grupo_id' => 'required',
-                'sustento_text' => 'required',
+                //'sustento_text' => 'required',
                 'sustento_foto' => 'required|file',
             ]);
             $grupo = DireccionGrupo::query()->with('pedidos')->findOrFail($request->grupo_id);

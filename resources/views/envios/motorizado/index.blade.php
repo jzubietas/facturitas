@@ -17,7 +17,20 @@
 
     @include('envios.motorizado.modal.entregado')
 
-    <div class="card">
+    <div class="card p-48">
+
+        <table cellspacing="5" cellpadding="5" class="table-responsive">
+            <tbody>
+            <tr>
+
+                <td><input type="date" value="{{$fecha_consulta}}" id="fecha_consulta" name="fecha_consulta" class="form-control" autocomplete="off"></td>
+                <td></td>
+
+
+            </tr>
+            </tbody>
+        </table><br>
+
         <ul class="nav nav-tabs" id="myTab" role="tablist">
             <li class="nav-item">
                 <a class="nav-link active" id="general-tab" data-toggle="tab" href="#general" role="tab"
@@ -104,6 +117,16 @@
 
     <script>
         $(document).ready(function () {
+
+            $("#fecha_consulta").on('change', function(){
+                //var fecha_formateada = $(this).val().replaceAll('-', '/');
+                var fecha_format = $(this).val().split("-")
+                var fecha_formateada = fecha_format[2] + "/" + fecha_format[1] + "/" + fecha_format[0];
+                $(this).data('fecha',fecha_formateada);
+                console.log(fecha_formateada);
+                $('#tablaPrincipal').DataTable().ajax.reload();
+            });
+
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -123,6 +146,8 @@
                 ajax: {
                     url: "{{ route('envios.motorizados.index',['datatable'=>1]) }}",
                     data: function (q) {
+                        //q.fechaconsulta = $("#fecha_consulta").val();
+                        q.fechaconsulta = $("#fecha_consulta").data("fecha");
                         q.tab = $('a[data-toggle="tab"].active').data('action')
                     }
                 },
@@ -426,12 +451,14 @@ Enviar</button>
                 </div>
             </div>
             <div class="row">
+                <!--
                 <div class="col-lg-12">
                    <div class="form-group">
                          <label for="sustento_text">Ingrese su Sustento</label>
                      <textarea class="form-control" id="sustento_text"  name="sustento_text" required placeholder="Ingrese su Sustento" rows="5"></textarea>
                     </div>
                 </div>
+                -->
                 <div class="col-lg-12">
                    <div class="form-group">
                          <label for="sustento_foto">Adjuntar foto de las llamadas que realizo</label>
@@ -467,6 +494,7 @@ Enviar</button>
 
                                 self.$content.find("form").on('submit', function (e) {
                                     e.preventDefault()
+                                    /*
                                     if (!e.target.sustento_text.value) {
                                         $.confirm({
                                             title: '¡Advertencia!',
@@ -474,7 +502,7 @@ Enviar</button>
                                             type: 'orange'
                                         })
                                         return false;
-                                    }
+                                    }*/
                                     if (e.target.sustento_foto.files.length === 0) {
                                         $.confirm({
                                             title: '¡Advertencia!',

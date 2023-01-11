@@ -285,7 +285,6 @@
                     document.getElementById("picture").setAttribute('src', event.target.result);
                 };
                 reader.readAsDataURL(file);
-
             });
 
             $('#tablaPrincipal').DataTable({
