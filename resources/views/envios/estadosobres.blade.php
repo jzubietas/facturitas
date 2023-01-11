@@ -57,10 +57,12 @@
     <div class="card">
         <div class="card-body">
 
-            <table class="table-responsive">
-                <tbody>
-                <tr>
-                    <td style='text-align:center; vertical-align:middle'><input type="text" value="" id="buscador_global" name="buscador_global" class="form-control" autocomplete="off"></td>
+            <table class="table-responsive" style="border-collapse: collapse;">
+                <tbody class="table-responsive">
+                <tr class="table-responsive">
+                    <td class="table-responsive col-4 mx-auto">
+                        <input type="text" value="" id="buscador_global" name="buscador_global" class="form-control" autocomplete="off">
+                    </td>
                 </tr>
                 </tbody>
             </table>
@@ -78,7 +80,7 @@
                        aria-controls="received"
                        aria-selected="true">
                         <i class="fa fa-inbox" aria-hidden="true"></i> RECEPCIÓN
-                        <sup><span class="badge badge-light count_estadosobres_received">0</span></sup>
+                        <sup><span class="badge badge-light count_estadosobres_received">{{$count_recepcionados}}</span></sup>
                     </a>
                 </li>
                 <li class="nav-item text-center">
@@ -93,7 +95,7 @@
                        aria-controls="delivered"
                        aria-selected="false">
                         <i class="fa fa-motorcycle" aria-hidden="true"></i> ENTREGADOS
-                        <sup><span class="badge badge-light count_estadosobres_delivered">0</span></sup>
+                        <sup><span class="badge badge-light count_estadosobres_delivered">{{$count_entregados}}</span></sup>
                     </a>
                 </li>
 
@@ -109,7 +111,7 @@
                        aria-controls="annulled"
                        aria-selected="false">
                         <i class="fa fa-motorcycle" aria-hidden="true"></i> ANULADOS
-                        <sup><span class="badge badge-light count_estadosobres_annulled">0</span></sup>
+                        <sup><span class="badge badge-light count_estadosobres_annulled">{{$count_anulados}}</span></sup>
                     </a>
                 </li>
             </ul>
@@ -557,14 +559,15 @@
 
             $("#buscador_global").on('change keyup', function(){
                 tablaRecepcionados.search( this.value ).draw();
-                //var info_tablaRecepcionados = tablaRecepcionados.rows( {search:'applied'} ).count();
-                var info_tablaRecepcionados = tablaRecepcionados.page.info().recordsDisplay
-                //table.page.info().recordsDisplay
-                console.log("en recepcionados "+info_tablaRecepcionados)
                 tablaEntregados.search( this.value ).draw();
+                tablaAnulados.search( this.value ).draw();
+
+                var info_tablaRecepcionados = tablaRecepcionados.page.info().recordsDisplay
+                console.log("en recepcionados "+info_tablaRecepcionados)
+
                 var info_tablaEntregados = tablaEntregados.page.info().recordsDisplay
                 console.log("en entregados "+info_tablaEntregados)
-                tablaAnulados.search( this.value ).draw();
+
                 var info_tablaAnulados = tablaAnulados.page.info().recordsDisplay
                 console.log("en anulados "+info_tablaAnulados)
 
@@ -592,7 +595,8 @@
                 processing: true,
                 stateSave: true,
                 serverSide: true,
-                searching: true,
+                searching: false,
+                "bFilter": false,
                 "order": [[0, "desc"]],
                 ajax: {
                     url: "{{ route('envios.estadosobrestabla') }}",
@@ -730,7 +734,8 @@
                 autoload: false,
                 stateSave: true,
                 serverSide: true,
-                searching: true,
+                searching: false,
+                "bFilter": false,
                 "order": [[5, "desc"]],
                 ajax: {
                     url: "{{ route('envios.estadosobrestabla') }}",
@@ -893,7 +898,8 @@
                 autoload: false,
                 stateSave: true,
                 serverSide: true,
-                searching: true,
+                searching: false,
+                "bFilter": false,
                 "order": [[5, "desc"]],
                 ajax: {
                     url: "{{ route('envios.estadosobrestabla') }}",

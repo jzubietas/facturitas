@@ -2290,6 +2290,28 @@ class EnvioController extends Controller
 
     public function Estadosobres()
     {
+        $matriz_contadores_recepcionado_anulados= Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')
+            ->join('users as u', 'pedidos.user_id', 'u.id')
+            ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id');
+
+
+        $count_recepcionados=$matriz_contadores_recepcionado_anulados
+            ->where('pedidos.estado', '1')
+            ->whereIn('pedidos.condicion_envio_code', [Pedido::RECEPCION_COURIER_INT])
+            ->count();
+        $count_anulados=$matriz_contadores_recepcionado_anulados
+        ->where('pedidos.estado', '0')
+        ->whereIn('pedidos.condicion_code', [Pedido::ANULADO_INT])
+        ->count();
+        $count_entregados = DireccionGrupo::
+            join('clientes as c', 'c.id', 'direccion_grupos.cliente_id')
+            ->join('users as u', 'u.id', 'c.user_id')
+            ->where('direccion_grupos.estado', '1')
+            ->whereIn('direccion_grupos.condicion_envio_code', [Pedido::ENTREGADO_CLIENTE_INT, Pedido::ENTREGADO_SIN_SOBRE_OPE_INT, Pedido::ENTREGADO_SIN_SOBRE_CLIENTE_INT])
+            ->count();
+
+
+
         $ver_botones_accion = 1;
 
         if (Auth::user()->rol == "Asesor") {
@@ -2327,7 +2349,7 @@ class EnvioController extends Controller
 
         $_pedidos = $_pedidos->get();
 
-        return view('envios.estadosobres', compact('superasesor', 'ver_botones_accion', 'distritos', 'departamento', '_pedidos'));
+        return view('envios.estadosobres', compact('superasesor', 'ver_botones_accion', 'distritos', 'departamento', '_pedidos','count_recepcionados','count_anulados','count_entregados'));
     }
 
     public function Estadosobrestabla(Request $request)
@@ -2352,11 +2374,14 @@ class EnvioController extends Controller
                     'dp.foto2',
                     'dp.fecha_recepcion',
                     DB::raw("DATEDIFF(DATE(NOW()), DATE(pedidos.created_at)) AS dias")
-                ])
-                ->where('pedidos.estado', '1')
-                //if()
-                ->whereIn('pedidos.condicion_envio_code', [Pedido::RECEPCION_COURIER_INT])
-                ->where('dp.estado', '1');
+                ]);
+            if($opcion=='recepcionado')
+            {
+                $pedidos=$pedidos->where('pedidos.estado', '1')->whereIn('pedidos.condicion_envio_code', [Pedido::RECEPCION_COURIER_INT]);
+            }else if($opcion=='anulado')
+            {
+                $pedidos=$pedidos->where('pedidos.estado', '0')->whereIn('pedidos.condicion', [Pedido::RECEPCION_COURIER_INT]);
+            }
         }
         else if($opcion=='entregado'){
             $pedidos = DireccionGrupo::/*join('direccion_envios as de', 'direccion_grupos.id', 'de.direcciongrupo')*/
