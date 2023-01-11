@@ -2922,7 +2922,7 @@ class EnvioController extends Controller
             /*************
              * BUSCAMOS EL PAQUETE
              */
-            $paquete_sobres = $pedido->direcciongrupo;
+            $paquete_sobres = $pedido->direccionGrupo;
             $codigos_paquete = collect(explode(",", $paquete_sobres->codigos))
                 ->map(fn($cod) => trim($cod))
                 ->filter()->values();
@@ -2997,5 +2997,22 @@ class EnvioController extends Controller
 
     }
 
+    public function SobresDevueltos(Request $request)
+    {
+        $motorizados = User::query()->where('rol', '=', 'MOTORIZADO')->whereNotNull('zona')->get();
 
+        return view('envios.sobresdevueltos', compact('motorizados'));
+    }
+
+    public function SobresDevueltosData(Request $request)
+    {
+        if ($request->has('datatable')) {
+            $pedidos_observados = DireccionGrupo::where('motorizado_id', $request->id)
+                ->get();
+            if (\auth()->user()->rol == User::ROL_MOTORIZADO) {
+                $pedidos_observados = $pedidos_observados->where('direccion_grupos.motorizado_id', '=', auth()->id());
+            }
+            return datatables()->query(DB::table($pedidos_observados));
+        }
+    }
 }
