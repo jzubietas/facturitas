@@ -2380,7 +2380,7 @@ class EnvioController extends Controller
                 $pedidos=$pedidos->where('pedidos.estado', '1')->whereIn('pedidos.condicion_envio_code', [Pedido::RECEPCION_COURIER_INT]);
             }else if($opcion=='anulado')
             {
-                $pedidos=$pedidos->where('pedidos.estado', '0')->whereIn('pedidos.condicion', [Pedido::RECEPCION_COURIER_INT]);
+                $pedidos=$pedidos->where('pedidos.estado', '0')->whereIn('pedidos.condicion_code', [Pedido::ANULADO_INT]);
             }
         }
         else if($opcion=='entregado'){
