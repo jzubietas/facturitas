@@ -958,6 +958,12 @@
             }
 
             $(document).on("click", ".radiototal", function (event) {
+                //todo:remover luego
+                setTimeout(function () {
+                    if($('.radiototal').filter(':checked').length>0) {
+                        $("#consideradevolucion").removeClass('d-none')
+                    }
+                },100)
                 event.preventDefault();
             });
 
