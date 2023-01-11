@@ -263,7 +263,7 @@ class PedidoController extends Controller
             ->addColumn('action', function ($pedido) use ($miidentificador) {
                 $btn = [];
 
-                $btn[] = '<div><ul class="" aria-labelledby="dropdownMenuButton" style="display: grid;grid-template-columns: repeat(2, minmax(0, 1fr)); gap:0.7rem">';
+                $btn[] = '<div><ul class="m-0 p-1" aria-labelledby="dropdownMenuButton" style="display: grid;grid-template-columns: repeat(2, minmax(0, 1fr)); gap:0.7rem">';
 
                 if ($pedido->condicion_envio_code == Pedido::ENTREGADO_CLIENTE_INT) {
                     $grupo = DireccionGrupo::query()->find($pedido->direccion_grupo);
