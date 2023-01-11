@@ -884,7 +884,7 @@ class EnvioController extends Controller
             $ver_botones_accion = 1;
         }
 
-        $dateMin = Carbon::now()/*->subDays(4)*/ ->format('d/m/Y');
+        $dateMin = Carbon::now()->format('Y-m-d');
 
         return view('envios.rutaenvio', compact('condiciones', 'distritos', 'direcciones', 'destinos', 'superasesor', 'ver_botones_accion', 'departamento', 'dateMin', 'distribuir', 'rol'));
     }
