@@ -1759,7 +1759,6 @@ class EnvioController extends Controller
         $pedido = Pedido::with(['detallePedido'])->where("id", $request->hiddenEnvio)->first();
 
         $pedido->update([
-            //'envio' => '2',
             'modificador' => 'USER' . Auth::user()->id,
             'condicion_envio' => Pedido::RECEPCION_COURIER,
             'condicion_envio_code' => Pedido::RECEPCION_COURIER_INT,
@@ -1867,8 +1866,8 @@ class EnvioController extends Controller
     {
         $pedido_id = (int)$request->get('pedido_id');
         if ($pedido_id > 0) {
-            $pedido = Pedido::query()->with('direccionGrupo')->find($pedido_id);
-            $dirgrupo = $pedido->direccionGrupo;
+            $pedido = Pedido::query()->with('direcciongrupo')->find($pedido_id);
+            $dirgrupo = $pedido->direcciongrupo;
             if ($dirgrupo != null) {
                 if ($dirgrupo->condicion_envio_code == Pedido::ENTREGADO_CLIENTE_INT) {
                     return response()->json([
@@ -1909,8 +1908,8 @@ class EnvioController extends Controller
     {
         $pedido_id = (int)$request->get('pedido_id');
         if ($pedido_id > 0) {
-            $pedido = Pedido::query()->with('direccionGrupo')->findOrFail($pedido_id);
-            $dirgrupo = $pedido->direccionGrupo;
+            $pedido = Pedido::query()->with('direcciongrupo')->findOrFail($pedido_id);
+            $dirgrupo = $pedido->direcciongrupo;
             if ($dirgrupo != null) {
                 if ($dirgrupo->condicion_envio_code == Pedido::CONFIRM_MOTORIZADO_INT) {
                     return response()->json([
@@ -2912,7 +2911,7 @@ class EnvioController extends Controller
         /**********
          * BUSCAMOS EL PEDIDO
          */
-        $pedido = Pedido::with('direccionGrupo')->where("codigo", $request->id)
+        $pedido = Pedido::with('direcciongrupo')->where("codigo", $request->id)
             ->activo()
             ->firstOrFail();
 
@@ -2922,7 +2921,7 @@ class EnvioController extends Controller
             /*************
              * BUSCAMOS EL PAQUETE
              */
-            $paquete_sobres = $pedido->direccionGrupo;
+            $paquete_sobres = $pedido->direcciongrupo;
             $codigos_paquete = collect(explode(",", $paquete_sobres->codigos))
                 ->map(fn($cod) => trim($cod))
                 ->filter()->values();
