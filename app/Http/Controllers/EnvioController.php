@@ -2947,11 +2947,8 @@ class EnvioController extends Controller
                 ->map(fn($cod) => trim($cod))
                 ->filter()->values();
 
-<<<<<<<<< Temporary merge branch 1
-            $codigos_confirmados = collect(explode(",", $paquete_sobres->codigos_confirmados??''))
-=========
+
             $codigos_confirmados = collect(explode(",", $paquete_sobres->codigos_confirmados ?? ''))
->>>>>>>>> Temporary merge branch 2
                 ->push($pedido->codigo)
                 ->map(fn($cod) => trim($cod))
                 ->filter()
