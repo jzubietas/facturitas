@@ -383,6 +383,36 @@
             //$('#pmes').selectpicker('refresh');
             //$('#panio').selectpicker('refresh');
 
+            /*$(document).on("change","#pmes",function(){
+                console.log("sss")
+                let ptipo_banca=$("#ptipo_banca").val().split('-')[0];
+                console.log(ptipo_banca);
+            })*/
+
+            $(document).on("change","#panio",function(){
+                let anno_filter=parseInt($(this).val());
+                console.log(anno_filter)
+                let ptipo_banca=$.trim($("#ptipo_banca").val().split('-')[0]);
+                if (ptipo_banca==''){
+                }else{
+                    //console.log(ptipo_banca);
+                    if(ptipo_banca=='FISICO')
+                    {
+                        if(  anno_filter=={{$anno_selected}}   ||  anno_filter==({{$anno_selected}}-1) )
+                        {
+                        }else{
+                            Swal.fire(
+                                'Error',
+                                'No puede seleccionar este año, elija otra opcion por favor',
+                                'warning'
+                            );
+                        }
+
+                    }
+                }
+
+            })
+
             $("#previsualizar_modal_pedido").on('show.bs.modal',function () {
                 let pruc = $('#pruc').val();
                 let pempresa = $('#pempresa').val();
