@@ -263,7 +263,7 @@ class PedidoController extends Controller
             ->addColumn('action', function ($pedido) use ($miidentificador) {
                 $btn = [];
 
-                $btn[] = '<div><ul class="" aria-labelledby="dropdownMenuButton">';
+                $btn[] = '<div><ul class="" aria-labelledby="dropdownMenuButton" style="display: grid;grid-template-columns: repeat(2, minmax(0, 1fr)); gap:0.7rem">';
 
                 if ($pedido->condicion_envio_code == Pedido::ENTREGADO_CLIENTE_INT) {
                     $grupo = DireccionGrupo::query()->find($pedido->direccion_grupo);
@@ -274,30 +274,32 @@ class PedidoController extends Controller
                             'foto3' => foto_url($grupo->foto3),
                         ];
                         if (collect($fotos)->values()->filter()->count() > 0) {
-                            $btn[] = '<button data-verforotos=\'' . json_encode($fotos) . '\' class="btn-sm dropdown-item"><i class="fa fa-file-pdf text-dark"></i> Ver Fotos</button>';
+                            $btn[] = '<button style="font-size:11px" data-verforotos=\'' . json_encode($fotos) . '\' class="m-0 p-2 btn-sm dropdown-item text-wrap"><i class="fa fa-file-pdf text-dark"></i> Ver Fotos</button>';
                         } else {
-                            $btn[] = '<button disabled class="btn-sm dropdown-item"><i class="fa fa-file-pdf text-dark"></i> Sin Fotos</button>';
+                            $btn[] = '<button style="font-size:11px" disabled class="m-0 p-2 btn-sm dropdown-item"><i class="fa fa-file-pdf text-dark text-wrap"></i> Sin Fotos</button>';
                         }
+                    }else{
+                        $btn[] = '<button style="font-size:11px" disabled class="m-0 p-2 btn-sm dropdown-item"><i class="fa fa-file-pdf text-dark text-wrap"></i> Sin Fotos</button>';
                     }
                 }
                 if (can('pedidos.pedidosPDF')) {
-                    $btn[] = '<a href="' . route("pedidosPDF", $pedido->id) . '" class="btn-sm dropdown-item" target="_blank"><i class="fa fa-file-pdf text-primary"></i> Ver PDF</a>';
+                    $btn[] = '<a style="font-size:11px" href="' . route("pedidosPDF", $pedido->id) . '" class="m-0 p-2 btn-sm dropdown-item text-wrap" target="_blank"><i class="fa fa-file-pdf text-primary"></i> Ver PDF</a>';
                 }
                 if (can('pedidos.show')) {
-                    $btn[] = '<a href="' . route("pedidos.show", $pedido->id) . '" class="btn-sm dropdown-item"><i class="fas fa-eye text-success"></i> Ver pedido</a>';
+                    $btn[] = '<a style="font-size:11px" href="' . route("pedidos.show", $pedido->id) . '" class="m-0 p-2 btn-sm dropdown-item text-wrap"><i class="fas fa-eye text-success"></i> Ver pedido</a>';
                 }
                 if (can('pedidos.edit')) {
                     if ($pedido->condicion_pa == 0) {
-                        $btn[] = '<a href="' . route("pedidos.edit", $pedido->id) . '" class="btn-sm dropdown-item"><i class="fas fa-edit text-warning" aria-hidden="true"></i> Editar</a>';
+                        $btn[] = '<a style="font-size:11px" href="' . route("pedidos.edit", $pedido->id) . '" class="m-0 p-2 btn-sm dropdown-item text-wrap"><i class="fas fa-edit text-warning" aria-hidden="true"></i> Editar</a>';
                     }
                 }
                 if (can('pedidos.destroy')) {
                     if ($pedido->estado == 0) {
-                        $btn[] = '<a href="#" class="btn-sm dropdown-item" data-target="#modal-restaurar" data-toggle="modal" data-restaurar="' . $pedido->id . '" data-codigo=' . $pedido->codigo . '><i class="fas fa-check text-secondary"></i> Restaurar</a>';
+                        $btn[] = '<a style="font-size:11px" href="#" class="m-0 p-2 btn-sm dropdown-item text-wrap" data-target="#modal-restaurar" data-toggle="modal" data-restaurar="' . $pedido->id . '" data-codigo=' . $pedido->codigo . '><i class="fas fa-check text-secondary"></i> Restaurar</a>';
                     } else {
                         if (!$pedido->pendiente_anulacion) {
                             if ($pedido->condicion_pa == 0) {
-                                $btn[] = '<a href="" class="btn-sm dropdown-item" data-target="#modal-delete" data-toggle="modal" data-delete="' . $pedido->id . '" data-codigo=' . $pedido->codigo . ' data-responsable="' . $miidentificador . '"><i class="fas fa-trash-alt text-danger"></i> Anular</a>';
+                                $btn[] = '<a style="font-size:11px" href="" class="m-0 p-2 btn-sm dropdown-item text-wrap" data-target="#modal-delete" data-toggle="modal" data-delete="' . $pedido->id . '" data-codigo=' . $pedido->codigo . ' data-responsable="' . $miidentificador . '"><i class="fas fa-trash-alt text-danger"></i> Anular</a>';
                             }
                         }
                     }
@@ -305,9 +307,10 @@ class PedidoController extends Controller
                 }
                 if (\auth()->user()->can('envios.direccionenvio.editar')) {
                     if ($pedido->estado_sobre == 1) {
-                        $btn[] = '<button class="btn btn-sm btn-info dropdown-item" data-jqconfirm="' . $pedido->id . '"><i class="fa fa-map-marker-alt text-info mr-8"></i>Editar direccion de envio</button>';
+                        $btn[] = '<button style="font-size:11px" class="m-0 p-2 btn btn-sm btn-info dropdown-item text-break text-wrap" data-jqconfirm="' . $pedido->id . '"><i class="fa fa-map-marker-alt text-info mr-8"></i>Editar direccion de envio</button>';
                     }
                 }
+
                 $btn[] = '</ul></div>';
                 return join('', $btn);
             })

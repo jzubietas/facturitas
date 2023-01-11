@@ -1872,10 +1872,19 @@ class EnvioController extends Controller
             if ($dirgrupo != null) {
                 if ($dirgrupo->condicion_envio_code == Pedido::ENTREGADO_CLIENTE_INT) {
                     return response()->json([
-                        'html'=>'<div class="alert alert-warning">Este pedido ya fue entregado</div>',
-                        'success'=>false,
-                        'pedido'=>$pedido,
-                        'dirgrupo'=>$dirgrupo,
+                        'html' => '<div class="alert alert-warning">Este pedido ya fue entregado</div>',
+                        'success' => false,
+                        'pedido' => $pedido,
+                        'dirgrupo' => $dirgrupo,
+                    ]);
+                }
+            } else {
+                if ($pedido->estado_sobre == 0) {
+                    return response()->json([
+                        'html' => '<div class="alert alert-warning">Este no tiene direccion agregada</div>',
+                        'success' => false,
+                        'pedido' => $pedido,
+                        'dirgrupo' => $dirgrupo,
                     ]);
                 }
             }
@@ -1893,15 +1902,15 @@ class EnvioController extends Controller
             $departamento = Departamento::where('estado', "1")
                 ->pluck('departamento', 'departamento');
             return response()->json([
-                'html'=>view('sobres.modal.modal_editar_envio_ajax', compact('pedido', 'dirgrupo', 'distritos', 'departamento'))->render(),
-                'success'=>true,
-                'pedido'=>$pedido,
-                'dirgrupo'=>$dirgrupo,
+                'html' => view('sobres.modal.modal_editar_envio_ajax', compact('pedido', 'dirgrupo', 'distritos', 'departamento'))->render(),
+                'success' => true,
+                'pedido' => $pedido,
+                'dirgrupo' => $dirgrupo,
             ]);
         }
         return response()->json([
-            'html'=>'<h5>Pedido no encontrado</h5>',
-            'success'=>false,
+            'html' => '<h5>Pedido no encontrado</h5>',
+            'success' => false,
         ]);
     }
 
@@ -1911,23 +1920,6 @@ class EnvioController extends Controller
         if ($pedido_id > 0) {
             $pedido = Pedido::query()->with('direcciongrupo')->findOrFail($pedido_id);
             $dirgrupo = $pedido->direcciongrupo;
-            if ($dirgrupo != null) {
-                if ($dirgrupo->condicion_envio_code == Pedido::CONFIRM_MOTORIZADO_INT) {
-                    return response()->json([
-                        'suucess' => false
-                    ]);
-                }
-                $dirgrupo->update([
-                    'nombre_cliente' => $request->nombre,
-                    'celular_cliente' => $request->celular,
-                    'direccion' => $request->direccion,
-                    'referencia' => $request->referencia,
-                    'distrito' => $request->distrito,
-                    'observacion' => $request->observacion,
-                    'cambio_direccion_sustento' => $request->cambio_direccion_sustento,
-                ]);
-
-            }
             if ($pedido->condicion_envio_code == Pedido::CONFIRM_MOTORIZADO_INT) {
                 return response()->json([
                     'suucess' => false
@@ -1955,6 +1947,32 @@ class EnvioController extends Controller
                     'env_importe' => $request->importe,
                     'env_rotulo' => $routulo,
                 ]);
+            }
+
+            if ($dirgrupo != null) {
+                if ($dirgrupo->condicion_envio_code == Pedido::CONFIRM_MOTORIZADO_INT) {
+                    return response()->json([
+                        'suucess' => false
+                    ]);
+                }
+                $dirgrupo = DireccionGrupo::desvincularPedido($dirgrupo, $pedido);
+                $dirgrupo->update([
+                    'nombre_cliente' => $request->nombre,
+                    'celular_cliente' => $request->celular,
+                    'direccion' => $request->direccion,
+                    'referencia' => $request->referencia,
+                    'distrito' => $request->distrito,
+                    'observacion' => $request->observacion,
+                    'cambio_direccion_sustento' => $request->cambio_direccion_sustento,
+                ]);
+
+
+            } else {
+                if ($pedido->estado_sobre == 0) {
+                    return response()->json([
+                        'suucess' => false
+                    ]);
+                }
             }
         }
         return response()->json([

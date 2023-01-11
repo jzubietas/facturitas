@@ -74,4 +74,35 @@ class DireccionGrupo extends Model
         return $this->hasMany(Pedido::class, 'direccion_grupo');
     }
 
+    public static function desvincularPedido(self $grupo, Pedido $pedido)
+    {
+        if ($grupo->pedidos()->count() > 1) {
+            $newgrupo = $grupo->replicate()->fill([
+                'motorizado_status' => Pedido::ESTADO_MOTORIZADO_OBSERVADO,
+                'motorizado_sustento_text' => $pedido->cambio_direccion_sustento,
+            ]);
+            $newgrupo->save();
+
+            $newgrupo->update([
+                'correlativo' => 'ENV' . $newgrupo->id,
+            ]);
+
+            $pedido->update([
+                'direccion_grupo' => $newgrupo->id
+            ]);
+            $detalle = $pedido->detallePedido;
+
+            $grupo->update([
+                'codigos' => collect(explode(',', $grupo->codigos))->map(fn($c) => trim($c))->filter()->filter(fn($c) => $c != $pedido->codigo)->join(','),
+                'producto' => collect(explode(',', $grupo->producto))->map(fn($c) => trim($c))->filter()->filter(fn($c) => $c != $detalle->nombre_empresa)->join(','),
+            ]);
+            return $newgrupo;
+        } else {
+            $grupo->update([
+                'motorizado_status' => Pedido::ESTADO_MOTORIZADO_OBSERVADO,
+                'motorizado_sustento_text' => $pedido->cambio_direccion_sustento,
+            ]);
+            return $grupo;
+        }
+    }
 }

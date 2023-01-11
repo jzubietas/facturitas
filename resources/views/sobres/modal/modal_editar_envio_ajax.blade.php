@@ -20,6 +20,23 @@
                     <div class="col-12">
                         <h1>LIMA</h1>
                     </div>
+
+                    <div id="cnt-distritos" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                        {!! Form::label('distrito', 'Distrito') !!}<br>
+                        <select name="distrito" id="distrito" class="distrito form-control"
+                                data-show-subtext="true" data-live-search="true"
+                                data-live-search-placeholder="Seleccione distrito">
+                            @foreach(collect($distritos)->groupBy('zona') as $zona=>$items)
+                                <optgroup label="{{$zona}}">
+                                    @foreach($items as $distrito)
+                                        <option data-subtext="{{$distrito->zona}}"
+                                                {{$pedido->env_distrito==$distrito->distrito?'selected':''}}
+                                                value="{{$distrito->distrito}}">{{($distrito->distrito) }}</option>
+                                    @endforeach
+                                </optgroup>
+                            @endforeach
+                        </select>
+                    </div>
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                         <i class="fa fa-user text-red" aria-hidden="true"></i>
                         <input type="hidden" name="direccion_id" id="direccion_id">
@@ -47,22 +64,6 @@
                         {!! Form::text('referencia', $pedido->env_referencia, ['class' => 'form-control', 'placeholder' => 'Referencia', 'required' => 'required']) !!}
                     </div>
 
-                    <div id="cnt-distritos" class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                        {!! Form::label('distrito', 'Distrito') !!}<br>
-                        <select name="distrito" id="distrito" class="distrito form-control"
-                                data-show-subtext="true" data-live-search="true"
-                                data-live-search-placeholder="Seleccione distrito">
-                            @foreach(collect($distritos)->groupBy('zona') as $zona=>$items)
-                                <optgroup label="{{$zona}}">
-                                    @foreach($items as $distrito)
-                                        <option data-subtext="{{$distrito->zona}}"
-                                                {{$pedido->env_distrito==$distrito->distrito?'selected':''}}
-                                                value="{{$distrito->distrito}}">{{($distrito->distrito) }}</option>
-                                    @endforeach
-                                </optgroup>
-                            @endforeach
-                        </select>
-                    </div>
 
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                         {!! Form::label('observacion', 'Observacion') !!}
