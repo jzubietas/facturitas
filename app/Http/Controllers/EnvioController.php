@@ -895,132 +895,38 @@ class EnvioController extends Controller
 
     public function Enviosrutaenviotabla(Request $request)
     {
-
-
         $arreglo = [Pedido::ENTREGADO_SIN_SOBRE_OPE_INT, Pedido::ENTREGADO_SIN_SOBRE_CLIENTE_INT];
 
+        $pedidos = DireccionGrupo::/*join('direccion_envios as de', 'direccion_grupos.id', 'de.direcciongrupo')*/
+            join('clientes as c', 'c.id', 'direccion_grupos.cliente_id')
+            ->join('users as u', 'u.id', 'c.user_id')
+            ->where('direccion_grupos.estado', '1')
+
+            ->whereNotIn('direccion_grupos.condicion_envio_code', $arreglo)
+            ->select(
+                'direccion_grupos.id',
+                'direccion_grupos.correlativo',
+                'u.identificador as identificador',
+                'direccion_grupos.destino',
+                'direccion_grupos.celular',
+                'direccion_grupos.nombre',
+                'direccion_grupos.cantidad',
+                'direccion_grupos.codigos',
+                'direccion_grupos.producto',
+                DB::raw(" (CASE WHEN direccion_grupos.destino='LIMA' then direccion_grupos.env_direccion else direccion_grupos.tracking end) as direccion "),
+                DB::raw(" (CASE WHEN direccion_grupos.destino='LIMA' then direccion_grupos.env_referencia else direccion_grupos.env_rotulo end) as referencia "),
+                DB::raw(" (CASE WHEN direccion_grupos.destino='LIMA' then direccion_grupos.env_observacion else 'OLVA COURIER' end) as observacion "),
+                'direccion_grupos.env_distrito as distrito',
+                'direccion_grupos.created_at as fecha',
+                'direccion_grupos.env_distribucion distribucion',
+                'direccion_grupos.condicion_envio condicion_sobre',
+                DB::raw('DATE(direccion_grupos.created_at) fecha2')
+            );
 
         if ($request->desde) {
-
-
             $min = Carbon::createFromFormat('d/m/Y', $request->desde)->format('Y-m-d');//2022-11-25
-            $pedidos_lima = DireccionGrupo::join('direccion_envios as de', 'direccion_grupos.id', 'de.direcciongrupo')
-                ->join('clientes as c', 'c.id', 'de.cliente_id')
-                ->join('users as u', 'u.id', 'c.user_id')
-                ->where('direccion_grupos.estado', '1')
-                ->where(DB::raw('DATE(direccion_grupos.created_at)'), $min)
-                ->whereNotIn('direccion_grupos.condicion_envio_code', $arreglo)
-                ->select(
-                    'direccion_grupos.id',
-                    'u.identificador as identificador',
-                    DB::raw(" (select 'LIMA') as destino "),
-                    'de.celular',
-                    'de.nombre',
-                    'de.cantidad',
-                    'direccion_grupos.codigos',
-                    'direccion_grupos.producto',
-                    'de.direccion',
-                    'de.referencia',
-                    'de.observacion',
-                    'de.distrito',
-                    'direccion_grupos.created_at as fecha',
-                    'direccion_grupos.destino as destino2',
-                    'direccion_grupos.distribucion',
-                    'direccion_grupos.condicion_sobre',
-                    'direccion_grupos.correlativo',
-                    DB::raw('DATE(direccion_grupos.created_at) fecha2')
-                );
-
-            $pedidos_provincia = DireccionGrupo::join('gasto_envios as de', 'direccion_grupos.id', 'de.direcciongrupo')
-                ->join('clientes as c', 'c.id', 'de.cliente_id')
-                ->join('users as u', 'u.id', 'c.user_id')
-                ->where('direccion_grupos.estado', '1')
-                ->where(DB::raw('DATE(direccion_grupos.created_at)'), $min)
-                ->whereNotIn('direccion_grupos.condicion_envio_code', $arreglo)
-                ->select(
-                    'direccion_grupos.id',
-                    'u.identificador as identificador',
-                    DB::raw(" (select 'PROVINCIA') as destino "),
-                    DB::raw(" (select '') as celular "),
-                    DB::raw(" (select '') as nombre "),
-                    'de.cantidad',
-                    'direccion_grupos.codigos',
-                    'direccion_grupos.producto',
-                    'de.tracking as direccion',
-                    'de.foto as referencia',
-                    DB::raw(" (select '') as observacion "),
-                    DB::raw(" (select '') as distrito "),
-                    'direccion_grupos.created_at as fecha',
-                    'direccion_grupos.destino as destino2',
-                    'direccion_grupos.distribucion',
-                    'direccion_grupos.condicion_sobre',
-                    'direccion_grupos.correlativo',
-                    DB::raw('DATE(direccion_grupos.created_at) fecha2')
-                );
-
-
-        } else {
-
-
-            $pedidos_lima = DireccionGrupo::join('direccion_envios as de', 'direccion_grupos.id', 'de.direcciongrupo')
-                ->join('clientes as c', 'c.id', 'de.cliente_id')
-                ->join('users as u', 'u.id', 'c.user_id')
-                ->where('direccion_grupos.estado', '1')
-                ->whereNotIn('direccion_grupos.condicion_envio_code', $arreglo)
-                ->select(
-                    'direccion_grupos.id',
-                    'u.identificador as identificador',
-                    DB::raw(" (select 'LIMA') as destino "),
-                    'de.celular',
-                    'de.nombre',
-                    'de.cantidad',
-                    'direccion_grupos.codigos',
-                    'direccion_grupos.producto',
-                    'de.direccion',
-                    'de.referencia',
-                    'de.observacion',
-                    'de.distrito',
-                    'direccion_grupos.created_at as fecha',
-                    'direccion_grupos.destino as destino2',
-                    'direccion_grupos.distribucion',
-                    'direccion_grupos.condicion_sobre',
-                    'direccion_grupos.correlativo',
-
-                );
-
-
-            $pedidos_provincia = DireccionGrupo::join('gasto_envios as de', 'direccion_grupos.id', 'de.direcciongrupo')
-                ->join('clientes as c', 'c.id', 'de.cliente_id')
-                ->join('users as u', 'u.id', 'c.user_id')
-                ->where('direccion_grupos.estado', '1')
-                ->whereNotIn('direccion_grupos.condicion_envio_code', $arreglo)
-                ->select(
-                    'direccion_grupos.id',
-                    'u.identificador as identificador',
-                    DB::raw(" (select 'PROVINCIA') as destino "),
-                    DB::raw(" (select '') as celular "),
-                    DB::raw(" (select '') as nombre "),
-                    'de.cantidad',
-                    'direccion_grupos.codigos',
-                    'direccion_grupos.producto',
-                    DB::raw(" (select '') as observacion "),
-                    'de.foto as referencia',
-                    'de.tracking as direccion',
-                    DB::raw(" (select '') as distrito "),
-                    'direccion_grupos.created_at as fecha',
-                    'direccion_grupos.destino as destino2',
-                    'direccion_grupos.distribucion',
-                    'direccion_grupos.condicion_sobre',
-                    'direccion_grupos.correlativo'
-                );
-
-
+            $pedidos=$pedidos->where(DB::raw('DATE(direccion_grupos.created_at)'), $min);
         }
-
-
-        $pedidos = $pedidos_lima->union($pedidos_provincia);
-        $pedidos = $pedidos->get();
-
 
         return Datatables::of($pedidos)
             ->addIndexColumn()
@@ -1030,7 +936,6 @@ class EnvioController extends Controller
             })
             ->rawColumns(['action'])
             ->make(true);
-
 
     }
 
@@ -3027,7 +2932,15 @@ class EnvioController extends Controller
 
     public function SobresDevueltos(Request $request)
     {
-        $motorizados = User::query()->where('rol', '=', 'MOTORIZADO')->whereNotNull('zona')->get();
+        $motorizados = User::
+            select([
+                'id',
+                'zona',
+                DB::raw(" (select count(a.id) from pedidos a inner join direccion_grupos b on a.direccion_grupo=b.id where b.motorizado_status='2') as devueltos ")
+            ])
+            ->where('rol', '=', User::ROL_MOTORIZADO)->whereNotNull('zona')
+            ->where('estado','=','1')
+            ->groupBy('id','zona','name')->get();
 
         return view('envios.sobresdevueltos', compact('motorizados'));
     }
@@ -3035,12 +2948,34 @@ class EnvioController extends Controller
     public function SobresDevueltosData(Request $request)
     {
         if ($request->has('datatable')) {
-            $pedidos_observados = DireccionGrupo::where('motorizado_id', $request->id)
-                ->get();
-            if (\auth()->user()->rol == User::ROL_MOTORIZADO) {
-                $pedidos_observados = $pedidos_observados->where('direccion_grupos.motorizado_id', '=', auth()->id());
-            }
-            return datatables()->query(DB::table($pedidos_observados));
+            $pedidos_observados=Pedido::join('direccion_grupos as c', 'pedidos.direccion_grupo', 'c.id')
+                ->select([
+                    'pedidos.id',
+                    'pedidos.codigo',
+                    'pedidos.env_zona',
+                    'pedidos.env_distrito'
+                ])
+                //->where('c.motorizado_status','1')
+                ->where('c.estado','1');
+
+            //$pedidos_observados = DireccionGrupo::where('motorizado_id', $request->id)->whereEstado('1');//->where('motorizado_status','1');
+            return datatables()->query(DB::table($pedidos_observados))
+                ->addColumn('action', function ($pedido) {
+                    $btn = '';
+                    if (auth()->user()->can('envios.enviar')):
+
+                        $btn .= '<ul class="list-unstyled pl-0">';
+
+                        $btn .= '<li>
+                                <a href="" data-target="#modal-envio" data-toggle="modal" data-recibir="' . $pedido->id . '" data-codigos="' . $pedido->codigo . '"><button class="btn btn-warning btn-sm"><i class="fas fa-check-circle"></i> Recibido</button></a>
+                            </li>';
+                        $btn .= '</ul>';
+                    endif;
+
+                    return $btn;
+                })
+                ->rawColumns(['action'])
+                ->make(true);
         }
     }
 }
