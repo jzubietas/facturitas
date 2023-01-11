@@ -190,7 +190,7 @@ class ClienteController extends Controller
                 $badge_estado='';
                 if($cliente->estado_int=='1')
                 {
-                    $badge_estado.= '<span class="badge badge-success w-100" style="background-color:red !important;">' . Cliente::ANULADO . '</span>';
+                    $badge_estado.= '<span class="badge badge-success" style="background-color:red !important;">' . Cliente::ANULADO . '</span>';
                     return $badge_estado;
                 }
 
@@ -484,9 +484,9 @@ class ClienteController extends Controller
                 'path_adjunto_anular_disk' => 'pstorage',
                 'situacion'=>'BLOQUEADO',
             ]);
-            
+
             $html = $cliente;
-            
+
         }
         return response()->json(['html' => $html]);
     }
@@ -1762,8 +1762,8 @@ class ClienteController extends Controller
         if($validar>0)
         {
             $status=false;
-            $data='NO PUEDE CONTINUAR';            
-        }        
+            $data='NO PUEDE CONTINUAR';
+        }
 
         return response()->json([
             "html" => array('status'=>$status,'data'=>$data)

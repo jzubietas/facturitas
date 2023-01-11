@@ -226,7 +226,7 @@
                 <div class="col-lg-6">
                    <div class="form-group">
                      <label for="fecha_envio_doc_fis">Fecha de Envio</label>
-                     <input class="form-control" id="fecha_envio_doc_fis" disabled="" name="fecha_envio_doc_fis" type="date" value="${data.fecha}">
+                     <input class="form-control" id="fecha_envio_doc_fis" disabled="" name="fecha_envio_doc_fis" type="date" value="${(data.fecha_salida||'').split(' ')[0]}">
                     </div>
                 </div>
                 <div class="col-lg-6">
