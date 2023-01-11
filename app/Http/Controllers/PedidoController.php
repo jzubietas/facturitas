@@ -265,9 +265,9 @@ class PedidoController extends Controller
 
                 $btn[] = '<div><ul class="" aria-labelledby="dropdownMenuButton">';
 
-                if ($pedido->condicion_envio_code==Pedido::ENTREGADO_CLIENTE_INT) {
-                    $grupo=DireccionGrupo::query()->whereIn('direccion_grupos.id',Pedido::query()->select('pedidos.direccion_grupo')->where('pedidos.id','=',$pedido->id))->first();
-                    if($grupo!=null ) {
+                if ($pedido->condicion_envio_code == Pedido::ENTREGADO_CLIENTE_INT) {
+                    $grupo = DireccionGrupo::query()->find($pedido->direccion_grupo);
+                    if ($grupo != null) {
                         $fotos = [
                             'foto1' => foto_url($grupo->foto1),
                             'foto2' => foto_url($grupo->foto2),
@@ -297,14 +297,14 @@ class PedidoController extends Controller
                     } else {
                         if (!$pedido->pendiente_anulacion) {
                             if ($pedido->condicion_pa == 0) {
-                                $btn[] = '<a href="" class="btn-sm dropdown-item" data-target="#modal-delete" data-toggle="modal" data-delete="' . $pedido->id . '" data-codigo=' . $pedido->codigo . ' data-responsable="'.$miidentificador.'"><i class="fas fa-trash-alt text-danger"></i> Anular</a>';
+                                $btn[] = '<a href="" class="btn-sm dropdown-item" data-target="#modal-delete" data-toggle="modal" data-delete="' . $pedido->id . '" data-codigo=' . $pedido->codigo . ' data-responsable="' . $miidentificador . '"><i class="fas fa-trash-alt text-danger"></i> Anular</a>';
                             }
                         }
                     }
 
                 }
-                if ($pedido->estado_sobre == 1) {
-                    if (\auth()->user()->can('envios.direccionenvio.editar')) {
+                if (\auth()->user()->can('envios.direccionenvio.editar')) {
+                    if ($pedido->estado_sobre == 1) {
                         $btn[] = '<button class="btn btn-sm btn-info dropdown-item" data-jqconfirm="' . $pedido->id . '"><i class="fa fa-map-marker-alt text-info mr-8"></i>Editar direccion de envio</button>';
                     }
                 }

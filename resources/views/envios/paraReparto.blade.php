@@ -207,7 +207,7 @@
                     )
                     return;
                 }
-                $pedidos = pedidos.join(',');
+                var $pedidos = pedidos.join(',');
                 console.log($pedidos);
                 console.log($direcciongrupo);
                 console.log($observaciongrupo);

@@ -15,6 +15,7 @@ use App\Models\DireccionPedido;
 use App\Models\Distrito;
 use App\Models\GastoEnvio;
 use App\Models\GastoPedido;
+use App\Models\GrupoPedido;
 use App\Models\ImagenAtencion;
 use App\Models\ImagenPedido;
 use App\Models\User;
@@ -49,7 +50,7 @@ class SobreController extends Controller
 
     public function cargadistritos()
     {
-        $dis=Distrito::cargaDistrito();
+        $dis = Distrito::cargaDistrito();
         return $dis;
     }
 
@@ -57,249 +58,240 @@ class SobreController extends Controller
     {
         $ver_botones_accion = 1;
 
-        if(Auth::user()->rol == "Asesor")
-        {
+        if (Auth::user()->rol == "Asesor") {
             $ver_botones_accion = 0;
-        }else if(Auth::user()->rol == "Super asesor"){
+        } else if (Auth::user()->rol == "Super asesor") {
             $ver_botones_accion = 0;
-        }else if(Auth::user()->rol == "Encargado"){
+        } else if (Auth::user()->rol == "Encargado") {
             $ver_botones_accion = 1;
-        }else{
+        } else {
             $ver_botones_accion = 1;
         }
 
         $distritos = Distrito::whereIn('provincia', ['LIMA', 'CALLAO'])
-                            ->where('estado', '1')
-                            ->WhereNotIn('distrito' ,['CHACLACAYO','CIENEGUILLA','LURIN','PACHACAMAC','PUCUSANA','PUNTA HERMOSA','PUNTA NEGRA','SAN BARTOLO','SANTA MARIA DEL MAR'])
-                            ->select([
-                                'distrito',
-                                DB::raw("concat(distrito,' - ',zona) as distritonam"),
-                                'zona'
-                            ])->orderBy('distrito')->get();
-                            //->pluck('zona', 'distrito');
+            ->where('estado', '1')
+            ->WhereNotIn('distrito', ['CHACLACAYO', 'CIENEGUILLA', 'LURIN', 'PACHACAMAC', 'PUCUSANA', 'PUNTA HERMOSA', 'PUNTA NEGRA', 'SAN BARTOLO', 'SANTA MARIA DEL MAR'])
+            ->select([
+                'distrito',
+                DB::raw("concat(distrito,' - ',zona) as distritonam"),
+                'zona'
+            ])->orderBy('distrito')->get();
+        //->pluck('zona', 'distrito');
 
         $departamento = Departamento::where('estado', "1")
-                ->pluck('departamento', 'departamento');
+            ->pluck('departamento', 'departamento');
 
         $superasesor = User::where('rol', 'Super asesor')->count();
 
-        return view('sobres.porEnviar', compact('superasesor','ver_botones_accion','distritos','departamento'));
+        return view('sobres.porEnviar', compact('superasesor', 'ver_botones_accion', 'distritos', 'departamento'));
     }
 
     public function Sobresporenviartabla(Request $request)
     {
-        $pedidos=null;
+        $pedidos = null;
 
         $pedidos = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')
-                ->join('users as u', 'pedidos.user_id', 'u.id')
-                ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
-                ->select(
-                    'pedidos.id',
-                    'pedidos.cliente_id',
-                    // 'c.nombre as nombres',
-                    // 'c.celular as celulares',
-                    'u.identificador as users',
-                    'u.id as user_id',
-                    'dp.codigo as codigos',
-                     'dp.nombre_empresa as empresas',
-                    'dp.total as total',
-                    'pedidos.condicion',
-                    'pedidos.created_at as fecha',
-                    'pedidos.condicion_envio',
-                    'pedidos.envio',
-                    'pedidos.codigo',
-                    'pedidos.destino',
-                    'pedidos.direccion',
-                    'pedidos.da_confirmar_descarga',
-                    'dp.envio_doc',
-                    'dp.fecha_envio_doc',
-                    'dp.cant_compro',
-                    'dp.fecha_envio_doc_fis',
-                    'dp.foto1',
-                    'dp.foto2',
-                    'dp.fecha_recepcion',
-                    'pedidos.devuelto',
-                    'pedidos.cant_devuelto',
-                    'pedidos.returned_at',
-                    'pedidos.observacion_devuelto',
-                    'pedidos.estado_sobre',
-                    'pedidos.estado_ruta',
-                    'pedidos.pendiente_anulacion',
-                )
-                ->where('pedidos.estado', '1')
-                //->whereIn('pedidos.envio', [Pedido::ENVIO_CONFIRMAR_RECEPCION,Pedido::ENVIO_RECIBIDO]) // ENVIADO CONFIRMAR RECEPCION Y ENVIADO RECIBIDO
-                ->whereIn('pedidos.condicion_envio_code', [Pedido::RECIBIDO_JEFE_OPE_INT,Pedido::RECEPCION_COURIER_INT,Pedido::ENVIO_COURIER_JEFE_OPE_INT]) // ENVIADO CONFIRMAR RECEPCION Y ENVIADO RECIBIDO
-                ->where('dp.estado', '1')
-                ->sinDireccionEnvio();
-                /*->groupBy(
-                    'pedidos.id',
-                    'pedidos.cliente_id',
-                    'c.nombre',
-                    'c.celular',
-                    'u.identificador',
-                    'dp.codigo',
-                    'dp.nombre_empresa',
-                    'dp.total',
-                    'pedidos.condicion',
-                    'pedidos.created_at',
-                    'pedidos.condicion_envio',
-                    'pedidos.envio',
-                    'pedidos.destino',
-                    'pedidos.direccion',
-                    'pedidos.estado_sobre',
-                    'dp.envio_doc',
-                    'dp.fecha_envio_doc',
-                    'dp.cant_compro',
-                    'dp.fecha_envio_doc_fis',
-                    'dp.foto1',
-                    'dp.foto2',
-                    'dp.fecha_recepcion'
-                );*/
-        if(Auth::user()->rol == "Operario"){
+            ->join('users as u', 'pedidos.user_id', 'u.id')
+            ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
+            ->select(
+                'pedidos.id',
+                'pedidos.cliente_id',
+                // 'c.nombre as nombres',
+                // 'c.celular as celulares',
+                'u.identificador as users',
+                'u.id as user_id',
+                'dp.codigo as codigos',
+                'dp.nombre_empresa as empresas',
+                'dp.total as total',
+                'pedidos.condicion',
+                'pedidos.created_at as fecha',
+                'pedidos.condicion_envio',
+                'pedidos.envio',
+                'pedidos.codigo',
+                'pedidos.destino',
+                'pedidos.direccion',
+                'pedidos.da_confirmar_descarga',
+                'dp.envio_doc',
+                'dp.fecha_envio_doc',
+                'dp.cant_compro',
+                'dp.fecha_envio_doc_fis',
+                'dp.foto1',
+                'dp.foto2',
+                'dp.fecha_recepcion',
+                'pedidos.devuelto',
+                'pedidos.cant_devuelto',
+                'pedidos.returned_at',
+                'pedidos.observacion_devuelto',
+                'pedidos.estado_sobre',
+                'pedidos.estado_ruta',
+                'pedidos.pendiente_anulacion',
+            )
+            ->where('pedidos.estado', '1')
+            //->whereIn('pedidos.envio', [Pedido::ENVIO_CONFIRMAR_RECEPCION,Pedido::ENVIO_RECIBIDO]) // ENVIADO CONFIRMAR RECEPCION Y ENVIADO RECIBIDO
+            ->whereIn('pedidos.condicion_envio_code', [Pedido::RECIBIDO_JEFE_OPE_INT, Pedido::RECEPCION_COURIER_INT, Pedido::ENVIO_COURIER_JEFE_OPE_INT]) // ENVIADO CONFIRMAR RECEPCION Y ENVIADO RECIBIDO
+            ->where('dp.estado', '1')
+            ->sinDireccionEnvio();
+        /*->groupBy(
+            'pedidos.id',
+            'pedidos.cliente_id',
+            'c.nombre',
+            'c.celular',
+            'u.identificador',
+            'dp.codigo',
+            'dp.nombre_empresa',
+            'dp.total',
+            'pedidos.condicion',
+            'pedidos.created_at',
+            'pedidos.condicion_envio',
+            'pedidos.envio',
+            'pedidos.destino',
+            'pedidos.direccion',
+            'pedidos.estado_sobre',
+            'dp.envio_doc',
+            'dp.fecha_envio_doc',
+            'dp.cant_compro',
+            'dp.fecha_envio_doc_fis',
+            'dp.foto1',
+            'dp.foto2',
+            'dp.fecha_recepcion'
+        );*/
+        if (Auth::user()->rol == "Operario") {
             $asesores = User::where('users.rol', 'Asesor')
-                -> where('users.estado', '1')
-                -> Where('users.operario',Auth::user()->id)
+                ->where('users.estado', '1')
+                ->Where('users.operario', Auth::user()->id)
                 ->select(
                     DB::raw("users.identificador as identificador")
                 )
                 ->pluck('users.identificador');
 
-            $pedidos=$pedidos->WhereIn('u.identificador',$asesores);
+            $pedidos = $pedidos->WhereIn('u.identificador', $asesores);
 
-        }else if(Auth::user()->rol == "Jefe de operaciones"){
+        } else if (Auth::user()->rol == "Jefe de operaciones") {
             $operarios = User::where('users.rol', 'Operario')
-                -> where('users.estado', '1')
-                -> where('users.jefe', Auth::user()->id)
+                ->where('users.estado', '1')
+                ->where('users.jefe', Auth::user()->id)
                 ->select(
                     DB::raw("users.id as id")
                 )
                 ->pluck('users.id');
 
             $asesores = User::where('users.rol', 'Asesor')
-                -> where('users.estado', '1')
-                ->WhereIn('users.operario',$operarios)
+                ->where('users.estado', '1')
+                ->WhereIn('users.operario', $operarios)
                 ->select(
                     DB::raw("users.identificador as identificador")
                 )
                 ->pluck('users.identificador');
 
-            $pedidos=$pedidos->WhereIn('u.identificador',$asesores);
+            $pedidos = $pedidos->WhereIn('u.identificador', $asesores);
 
-        }else if(Auth::user()->rol == "Asesor"){
-            $pedidos=$pedidos->Where('u.identificador',Auth::user()->identificador);
+        } else if (Auth::user()->rol == "Asesor") {
+            $pedidos = $pedidos->Where('u.identificador', Auth::user()->identificador);
 
-        }
-        else if(Auth::user()->rol == "Super asesor"){
-            $pedidos=$pedidos->Where('u.identificador',Auth::user()->identificador);
+        } else if (Auth::user()->rol == "Super asesor") {
+            $pedidos = $pedidos->Where('u.identificador', Auth::user()->identificador);
 
-        }
-        else if(Auth::user()->rol == "Encargado"){
+        } else if (Auth::user()->rol == "Encargado") {
 
             $usersasesores = User::where('users.rol', 'Asesor')
-                -> where('users.estado', '1')
-                -> where('users.supervisor', Auth::user()->id)
+                ->where('users.estado', '1')
+                ->where('users.supervisor', Auth::user()->id)
                 ->select(
                     DB::raw("users.identificador as identificador")
                 )
                 ->pluck('users.identificador');
 
-            $pedidos=$pedidos->whereIn('u.identificador',$usersasesores);
+            $pedidos = $pedidos->whereIn('u.identificador', $usersasesores);
         }
         return Datatables::of(DB::table($pedidos))
-                    ->addIndexColumn()
-                    ->addColumn('condicion_envio_color', function ($pedido) {
-                        return Pedido::getColorByCondicionEnvio($pedido->condicion_envio);
-                    })
-                    ->editColumn('condicion_envio', function ($pedido) {
-                        $badge_estado='';
-                        if($pedido->pendiente_anulacion=='1')
-                        {
-                            $badge_estado.='<span class="badge badge-success">' + '{{\App\Models\Pedido::PENDIENTE_ANULACION }}';
-                            return $badge_estado;
-                        }
-                        if($pedido->estado_sobre=='1')
-                        {
-                            $badge_estado .= '<span class="badge badge-dark p-8" style="color: #fff; background-color: #347cc4; font-weight: 600; margin-bottom: -2px;border-radius: 4px 4px 0px 0px; font-size:8px;  padding: 4px 4px !important; font-weight: 500;">Direccion agregada</span>';
-                        }
-                        if($pedido->estado_ruta=='1')
-                        {
-                            $badge_estado.='<span class="badge badge-success " style="background-color: #00bc8c !important;
+            ->addIndexColumn()
+            ->addColumn('condicion_envio_color', function ($pedido) {
+                return Pedido::getColorByCondicionEnvio($pedido->condicion_envio);
+            })
+            ->editColumn('condicion_envio', function ($pedido) {
+                $badge_estado = '';
+                if ($pedido->pendiente_anulacion == '1') {
+                    $badge_estado .= '<span class="badge badge-success">' + '{{\App\Models\Pedido::PENDIENTE_ANULACION }}';
+                    return $badge_estado;
+                }
+                if ($pedido->estado_sobre == '1') {
+                    $badge_estado .= '<span class="badge badge-dark p-8" style="color: #fff; background-color: #347cc4; font-weight: 600; margin-bottom: -2px;border-radius: 4px 4px 0px 0px; font-size:8px;  padding: 4px 4px !important; font-weight: 500;">Direccion agregada</span>';
+                }
+                if ($pedido->estado_ruta == '1') {
+                    $badge_estado .= '<span class="badge badge-success " style="background-color: #00bc8c !important;
                             padding: 4px 8px !important;
                             font-size: 8px;
                             margin-bottom: -4px;
                             color: black !important;">Con ruta</span>';
-                        }
-                        $color = Pedido::getColorByCondicionEnvio($pedido->condicion_envio);
-                        $badge_estado.= '<span class="badge badge-success w-100" style="background-color: ' . $color . '!important;">' . $pedido->condicion_envio . '</span>';
-                        return $badge_estado;
-                    })
-                    ->addColumn('action', function($pedido){
-                        $btn='';
-                        return $btn;
-                    })
-                    ->rawColumns(['action','condicion_envio'])
-                    ->make(true);
+                }
+                $color = Pedido::getColorByCondicionEnvio($pedido->condicion_envio);
+                $badge_estado .= '<span class="badge badge-success w-100" style="background-color: ' . $color . '!important;">' . $pedido->condicion_envio . '</span>';
+                return $badge_estado;
+            })
+            ->addColumn('action', function ($pedido) {
+                $btn = '';
+                return $btn;
+            })
+            ->rawColumns(['action', 'condicion_envio'])
+            ->make(true);
 
     }
 
     public function sobreenvioshistorial(Request $request)
     {
-        if(!$request->provincialima)
-        {
-            $historicos=DireccionEnvio::where("id",0)->get();
+        if (!$request->provincialima) {
+            $historicos = DireccionEnvio::where("id", 0)->get();
             return Datatables::of($historicos)
-                     ->addIndexColumn()
-                     ->addColumn('action', function($historico){
-                         $btn='';
-                         return $btn;
-                     })
-                     ->rawColumns(['action'])
-                     ->make(true);
+                ->addIndexColumn()
+                ->addColumn('action', function ($historico) {
+                    $btn = '';
+                    return $btn;
+                })
+                ->rawColumns(['action'])
+                ->make(true);
 
-        }else{
-            $mirol=Auth::user()->rol;
+        } else {
+            $mirol = Auth::user()->rol;
             $query = null;
-            if($request->provincialima=="PROVINCIA")
-            {
-                $query=GastoEnvio::select(
+            if ($request->provincialima == "PROVINCIA") {
+                $query = GastoEnvio::select(
                     'gasto_envios.*',
                     'clientes.nombre',
                     'clientes.celular as recibe',
-                    )
-                    ->join('clientes','clientes.id','=','gasto_envios.cliente_id')
-                ->where('gasto_envios.estado', '1')
-                ->where("gasto_envios.salvado",'1')
-                ->where('gasto_envios.cliente_id', $request->cliente_id);
+                )
+                    ->join('clientes', 'clientes.id', '=', 'gasto_envios.cliente_id')
+                    ->where('gasto_envios.estado', '1')
+                    ->where("gasto_envios.salvado", '1')
+                    ->where('gasto_envios.cliente_id', $request->cliente_id);
 
                 return Datatables::of($query)
-                     ->addIndexColumn()
-                     ->addColumn('action', function($historico){
-                         $btn='';
-                         return $btn;
-                     })
-                     ->rawColumns(['action'])
-                     ->make(true);
+                    ->addIndexColumn()
+                    ->addColumn('action', function ($historico) {
+                        $btn = '';
+                        return $btn;
+                    })
+                    ->rawColumns(['action'])
+                    ->make(true);
 
-            }else if($request->provincialima=="LIMA")
-            {
-                $query=DireccionEnvio::query()->select(
-                        'direccion_envios.*',
-                        'clientes.nombre',
-                        'clientes.celular as recibe',
-                        )
+            } else if ($request->provincialima == "LIMA") {
+                $query = DireccionEnvio::query()->select(
+                    'direccion_envios.*',
+                    'clientes.nombre',
+                    'clientes.celular as recibe',
+                )
                     ->where('direccion_envios.estado', '1')
-                    ->join('clientes','clientes.id','=','direccion_envios.cliente_id')
-                    ->where("direccion_envios.salvado",'1')
-                    ->where('direccion_envios.cliente_id','=', $request->cliente_id);
+                    ->join('clientes', 'clientes.id', '=', 'direccion_envios.cliente_id')
+                    ->where("direccion_envios.salvado", '1')
+                    ->where('direccion_envios.cliente_id', '=', $request->cliente_id);
                 //$historicos=$query->get();
                 return Datatables::of($query)
-                     ->addIndexColumn()
-                     ->addColumn('action', function($historico){
-                         $btn='';
-                         return $btn;
-                     })
-                     ->rawColumns(['action'])
-                     ->make(true);
+                    ->addIndexColumn()
+                    ->addColumn('action', function ($historico) {
+                        $btn = '';
+                        return $btn;
+                    })
+                    ->rawColumns(['action'])
+                    ->make(true);
 
             }
 
@@ -319,7 +311,7 @@ class SobreController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function show(Pedido $pedido)
@@ -330,7 +322,7 @@ class SobreController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function edit(Pedido $pedido)
@@ -341,8 +333,8 @@ class SobreController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Pedido $pedido)
@@ -369,66 +361,64 @@ class SobreController extends Controller
             $destinationPath = base_path('public/storage/adjuntos/');
             $cont = 0;
 
-                if (isset($files)){
-                    foreach ($files as $file){
-                        $file_name = Carbon::now()->second.$file->getClientOriginalName(); //Get file original name
-                        $file->move($destinationPath , $file_name);
+            if (isset($files)) {
+                foreach ($files as $file) {
+                    $file_name = Carbon::now()->second . $file->getClientOriginalName(); //Get file original name
+                    $file->move($destinationPath, $file_name);
 
-                        ImagenPedido::create([
-                            'pedido_id' => $pedido->id,
-                            'adjunto' => $file_name,
-                            'estado' => '1'
-                        ]);
-
-                        $cont++;
-                    }
-                }
-
-                while ($contP < count((array)$codigo)) {
-                    $detallepedido->update([
-                        'codigo' => $codigo[$contP],
-                        'nombre_empresa' => $nombre_empresa[$contP],
-                        'mes' => $mes[$contP],
-                        'anio' => $anio[$contP],
-                        'ruc' => $ruc[$contP],
-                        'cantidad' => $cantidad[$contP],
-                        'tipo_banca' => $tipo_banca[$contP],
-                        'porcentaje' => $porcentaje[$contP],
-                        'ft' => ($cantidad[$contP]*$porcentaje[$contP])/100,
-                        'courier' => $courier[$contP],
-                        'total' => (($cantidad[$contP]*$porcentaje[$contP])/100)+$courier[$contP],
-                        'saldo' => (($cantidad[$contP]*$porcentaje[$contP])/100)+$courier[$contP],
-                        'descripcion' => $descripcion[$contP],
-                        'nota' => $nota[$contP]
+                    ImagenPedido::create([
+                        'pedido_id' => $pedido->id,
+                        'adjunto' => $file_name,
+                        'estado' => '1'
                     ]);
 
-                    $contP++;
+                    $cont++;
                 }
+            }
 
-                //ACTUALIZAR PORCENTAJE EN CLIENTE
-                $porcentaje = Porcentaje::where('cliente_id', $pedido->cliente_id)
+            while ($contP < count((array)$codigo)) {
+                $detallepedido->update([
+                    'codigo' => $codigo[$contP],
+                    'nombre_empresa' => $nombre_empresa[$contP],
+                    'mes' => $mes[$contP],
+                    'anio' => $anio[$contP],
+                    'ruc' => $ruc[$contP],
+                    'cantidad' => $cantidad[$contP],
+                    'tipo_banca' => $tipo_banca[$contP],
+                    'porcentaje' => $porcentaje[$contP],
+                    'ft' => ($cantidad[$contP] * $porcentaje[$contP]) / 100,
+                    'courier' => $courier[$contP],
+                    'total' => (($cantidad[$contP] * $porcentaje[$contP]) / 100) + $courier[$contP],
+                    'saldo' => (($cantidad[$contP] * $porcentaje[$contP]) / 100) + $courier[$contP],
+                    'descripcion' => $descripcion[$contP],
+                    'nota' => $nota[$contP]
+                ]);
+
+                $contP++;
+            }
+
+            //ACTUALIZAR PORCENTAJE EN CLIENTE
+            $porcentaje = Porcentaje::where('cliente_id', $pedido->cliente_id)
                 ->where('nombre', $detallepedido->tipo_banca);
-                $porcentaje->update([
-                    'porcentaje' => $detallepedido->porcentaje
-                ]);
+            $porcentaje->update([
+                'porcentaje' => $detallepedido->porcentaje
+            ]);
 
-                //ACTUALIZAR MODIFICACION AL PEDIDO
-                $pedido->update([
-                    'modificador' => 'USER'.Auth::user()->id
-                ]);
+            //ACTUALIZAR MODIFICACION AL PEDIDO
+            $pedido->update([
+                'modificador' => 'USER' . Auth::user()->id
+            ]);
 
             DB::commit();
-            }
-        catch (\Throwable $th) {
+        } catch (\Throwable $th) {
             throw $th;
             /*DB::rollback();
             dd($th);*/
         }
 
-        if(Auth::user()->rol == "Asesor"){
+        if (Auth::user()->rol == "Asesor") {
             return redirect()->route('pedidos.mispedidos')->with('info', 'actualizado');
-        }
-        else
+        } else
             return redirect()->route('pedidos.index')->with('info', 'actualizado');
 
 
@@ -437,7 +427,7 @@ class SobreController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy(Request $request, Pedido $pedido)
@@ -447,7 +437,7 @@ class SobreController extends Controller
             'motivo' => $request->motivo,
             'responsable' => $request->responsable,
             'condicion' => 'ANULADO',
-            'modificador' => 'USER'.Auth::user()->id,
+            'modificador' => 'USER' . Auth::user()->id,
             'estado' => '0'
         ]);
 
@@ -459,9 +449,9 @@ class SobreController extends Controller
         $cliente = Cliente::find($pedido->cliente_id);
 
         $pedido_deuda = Pedido::where('cliente_id', $pedido->cliente_id)//CONTAR LA CANTIDAD DE PEDIDOS QUE DEBE
-                                ->where('pagado', '0')
-                                ->count();
-        if($pedido_deuda == 0){//SINO DEBE NINGUN PEDIDO EL ESTADO DEL CLIENTE PASA A NO DEUDA(CERO)
+        ->where('pagado', '0')
+            ->count();
+        if ($pedido_deuda == 0) {//SINO DEBE NINGUN PEDIDO EL ESTADO DEL CLIENTE PASA A NO DEUDA(CERO)
             $cliente->update([
                 'deuda' => '0'
             ]);
@@ -473,150 +463,117 @@ class SobreController extends Controller
     public function destroyid(Request $request)
     {
         if (!$request->hiddenID) {
-            $html='';
+            $html = '';
         } else {
             Pedido::find($request->hiddenID)->update([
                 'motivo' => $request->motivo,
                 'responsable' => $request->responsable,
                 'condicion' => 'ANULADO',
-                'modificador' => 'USER'.Auth::user()->id,
+                'modificador' => 'USER' . Auth::user()->id,
                 'estado' => '0'
             ]);
 
             //$detalle_pedidos = DetallePedido::find($request->hiddenID);
-            $detalle_pedidos = DetallePedido::where('pedido_id',$request->hiddenID)->first() ;
+            $detalle_pedidos = DetallePedido::where('pedido_id', $request->hiddenID)->first();
 
             $detalle_pedidos->update([
                 'estado' => '0'
             ]);
 
-            $html=$detalle_pedidos;
+            $html = $detalle_pedidos;
         }
         return response()->json(['html' => $html]);
     }
+
     public function pedidosgrupotabla(Request $request)
     {
-        $pedidos=null;
+        $pedidos = null;
         if (!$request->direcciongrupo) {
         } else {
             //$idrequest=explode("_",$request->direcciongrupo);
 
             //return $request->direcciongrupo;
-            $pedidos =  Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')
+            $pedidos = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')
                 ->join('users as u', 'pedidos.user_id', 'u.id')
                 ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
                 ->select([
-                        'dp.pedido_id','dp.codigo','dp.nombre_empresa'
-                    ])
-                ->where("direccion_grupo",$request->direcciongrupo);
+                    'dp.pedido_id', 'dp.codigo', 'dp.nombre_empresa'
+                ])
+                ->where("direccion_grupo", $request->direcciongrupo);
 
-            $pedidos=$pedidos->get();
+            $pedidos = $pedidos->get();
 
             return Datatables::of($pedidos)
-                    ->addIndexColumn()
-                    ->make(true);
+                ->addIndexColumn()
+                ->make(true);
         }
     }
 
     public function EnvioDesvincular(Request $request)
     {
         //return $request->all();
-        $pedidos=$request->pedidos;/*7326,7327*/
-        $direcciongrupo=$request->direcciongrupo;/*9206*/
-        $observaciongrupo=$request->observaciongrupo;
-        if(!$request->pedidos)
-        {
+        $pedidos = $request->pedidos;/*7326,7327*/
+        $direcciongrupoId = $request->direcciongrupo;/*9206*/
+        $observaciongrupo = $request->observaciongrupo;
+        if (!$request->pedidos) {
             return '0';
-        }
-        else{
-            $array_pedidos=explode(",",$pedidos);
+        } else {
+            $array_pedidos_codigos_remove = collect(explode(",", $pedidos))->map(fn($cod) => trim($cod))->filter()->values();
 
-            $direcciongrupolist = DireccionGrupo::find($request->direcciongrupo);
-            //return $direcciongrupo;
-            $destino = $direcciongrupolist->destino;
-            //return $destino;//LIMA
+            $direcciongrupo = DireccionGrupo::findOrFail($direcciongrupoId);
 
-            if($destino == "LIMA"){
-                foreach($array_pedidos as $pedido_id)
-                {
-                    $data = DireccionPedido::where("pedido_id",$pedido_id)->where("direcciongrupo",$direcciongrupo)->first();
-                    $data->update([
-                        "estado"=>'0'
-                    ]);
-                    $pedido = Pedido::where("id",$pedido_id)->where('direccion_grupo',$direcciongrupo)->first();
-                    $pedido->update([
-                        "condicion_envio"=>pedido::RECEPCION_COURIER,
-                        "condicion_envio_code"=>pedido::RECEPCION_COURIER_INT,
-                        "observacion_devuelto"=>$observaciongrupo,
-                        "direccion_grupo"=>null
-                    ]);
-                }
-                $codigos=DB::table('direccion_pedidos')->selectRaw('GROUP_CONCAT(direccion_pedidos.codigo)')->where('direccion_pedidos.direciongrupo',$direcciongrupo)->get();
-                $productos=DB::table('direccion_pedidos')->selectRaw('GROUP_CONCAT(direccion_pedidos.razon_social)')->where('direccion_pedidos.direciongrupo',$direcciongrupo)->get();
+            $filterRemove = collect(explode(",", $direcciongrupo->codigos))->map(fn($cod) => trim($cod))
+                ->filter()
+                ->values()
+                ->filter(fn($cod) => !in_array($cod, $array_pedidos_codigos_remove->all()));
 
-                $direcciongrupo = DireccionGrupo::where("id",$direcciongrupo)->first();
+            $nuevos_codigos = Pedido::whereIn("pedidos.codigo", $filterRemove)
+                ->join('detalle_pedidos', 'detalle_pedidos.pedido_id', '=', 'pedidos.id')
+                ->where('direccion_grupo', $direcciongrupo->id)
+                ->select(['pedidos.codigo','detalle_pedidos.nombre_empresa'])
+                ->pluck('pedidos.codigo','detalle_pedidos.nombre_empresa');
+
+            DB::beginTransaction();
+            if (count($filterRemove) > 0) {
                 $direcciongrupo->update([
-                    'codigo'=>$codigos,
-                    'producto'=>$productos
+                    'codigo' => $nuevos_codigos->keys()->join(','),
+                    'producto' => $nuevos_codigos->values()->join(','),
                 ]);
-
-
-                $direccionpedido = DireccionPedido::where("direcciongrupo",$direcciongrupo)->where("estado",'1')->get()->count();
-                if($direccionpedido==0){
-                    
-                    $direcciongrupo->update([
-                        "estado"=>'0'
-                    ]);
-                }
-            }else if($destino = "PROVINCIA"){
-                foreach($array_pedidos as $pedido_id)
-                {
-                    $data = GastoPedido::where("pedido_id",$pedido_id)->where("direcciongrupo",$direcciongrupo)->first();
-                    $data->update([
-                        "estado"=>'0'
-                    ]);
-                    //return $pedido_id;
-                    $pedido = Pedido::where("id",$pedido_id)->where('direccion_grupo',$direcciongrupo)->first();
-                    $pedido->update([
-                        "condicion_envio"=>pedido::RECEPCION_COURIER,
-                        "condicion_envio_code"=>pedido::RECEPCION_COURIER_INT,
-                        "observacion_devuelto"=>$observaciongrupo,
-                        "direccion_grupo"=>null
-                    ]);
-                }
-                //actualizar concat en codigos y rucs
-
-                $codigos=DB::table('gasto_pedidos')->selectRaw('GROUP_CONCAT(gasto_pedidos.codigo)')->where('gasto_pedidos.direciongrupo',$direcciongrupo)->get();
-                $productos=DB::table('gasto_pedidos')->selectRaw('GROUP_CONCAT(gasto_pedidos.razon_social)')->where('gasto_pedidos.direciongrupo',$direcciongrupo)->get();
-
-                $direcciongrupo = DireccionGrupo::where("id",$direcciongrupo)->first();
+            } else {
                 $direcciongrupo->update([
-                    'codigo'=>$codigos,
-                    'producto'=>$productos
+                    'codigo' => $nuevos_codigos->keys()->join(','),
+                    'producto' => $nuevos_codigos->values()->join(','),
+                    "estado" => '0'
                 ]);
-
-                $direccionpedido = GastoPedido::where("direcciongrupo",$direcciongrupo)->where("estado",'1')->get()->count();
-                if($direccionpedido==0){
-                    $direcciongrupo->update([
-                        "estado"=>'0'
-                    ]);
-                }
             }
 
+            $pedidos=Pedido::activo()->whereIn("pedidos.codigo", $array_pedidos_codigos_remove->all())
+                ->where('direccion_grupo', $direcciongrupo->id)->get();
 
+            if(count($pedidos)>0) {
+                $first = $pedidos->first();
+                $grupoPedido = GrupoPedido::createGroupByPedido($first);
+                $grupoPedido->pedidos()->syncWithoutDetaching($pedidos->mapWithKeys(fn($p) => [$p->id => [
+                    'razon_social' => $p->nombre_empresa,
+                    'code' => $p->codigo,
+                ]])->all());
 
-
-
-
-            return response()->json(['html' => $array_pedidos]);
-
-
+                Pedido::whereIn("codigo", $array_pedidos_codigos_remove)
+                    ->activo()
+                    ->where('direccion_grupo', $direcciongrupo->id)
+                    ->update([
+                        "condicion_envio" => pedido::RECEPCION_COURIER,
+                        "condicion_envio_code" => pedido::RECEPCION_COURIER_INT,
+                        "observacion_devuelto" => $observaciongrupo,
+                        "direccion_grupo" => null
+                    ]);
+            }
+            DB::commit();
+            return response()->json(['html' => $array_pedidos_codigos_remove]);
         }
 
 
         //$pedido=Pedido::where("id",$request->)
-
-
 
 
         //return redirect()->route('envios.index')->with('info','actualizado');
