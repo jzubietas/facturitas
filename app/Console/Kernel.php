@@ -30,8 +30,10 @@ class Kernel extends ConsoleKernel
         $schedule->command('backup:database')
             ->dailyAt('13:15');
 
-        $schedule->command('estado:migrar_con_direccion')
+        /*
+         * $schedule->command('estado:migrar_con_direccion')
             ->dailyAt('17:00');
+        */
     }
 
     /**

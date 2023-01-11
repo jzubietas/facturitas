@@ -166,7 +166,7 @@
                 },
                 "drawCallback": function(settings) {
                     console.log(settings.json);
-                    $("#tablaPrincipal").DataTable().columns().header()[11].innerText = $('a[data-toggle="tab"].active').data('action-name')
+                    $("#tablaPrincipal").DataTable().columns().header()[12].innerText = $('a[data-toggle="tab"].active').data('action-name')
                 },
                 rowCallback: function (row, data, index) {
 
