@@ -29,7 +29,7 @@
     @include('pedidos.modal.copiarinfo')
     @include('pedidos.modal.historial')
     @include('pedidos.modal.historial2')
-    
+
 
 
     <x-simple-modal id="previsualizar_modal_pedido" title="Previsualizar Pedido" size="lg">
@@ -379,6 +379,9 @@
 
     <script>
         $(document).ready(function () {
+
+            //$('#pmes').selectpicker('refresh');
+            //$('#panio').selectpicker('refresh');
 
             $("#previsualizar_modal_pedido").on('show.bs.modal',function () {
                 let pruc = $('#pruc').val();
@@ -976,7 +979,7 @@ __________________________________
                 });
             });
 
-            
+
 
             $("#formulario2").submit(function (event) {
                 event.preventDefault();
