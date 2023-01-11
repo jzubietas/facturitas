@@ -22,7 +22,7 @@ class MotorizadoController extends Controller
 
         if ($request->fechaconsulta != null) {
             $fecha_consulta_rec = Carbon::createFromFormat('d/m/Y', $request->fechaconsulta)->format('Y-m-d');
-            dd($fecha_consulta_rec);
+            //dd($fecha_consulta_rec);
         } else {
             $fecha_consulta_rec = null;
         }
@@ -36,29 +36,7 @@ class MotorizadoController extends Controller
                     $query->whereDate('direccion_grupos.fecha_salida', $fecha_consulta_rec);
                 })
                 ->select([
-                    'direccion_grupos.id',
-                    'u.identificador as identificador',
-                    DB::raw(" (select 'LIMA') as destino "),
-                    'direccion_grupos.celular',
-                    'direccion_grupos.nombre',
-                    'direccion_grupos.cantidad',
-                    'direccion_grupos.codigos',
-                    'direccion_grupos.producto',
-                    'direccion_grupos.direccion',
-                    'direccion_grupos.referencia',
-                    'direccion_grupos.observacion',
-                    'direccion_grupos.distrito',
-                    DB::raw('(select DATE_FORMAT( direccion_grupos.created_at, "%Y-%m-%d")   from direccion_grupos dpa where dpa.id=direccion_grupos.id) as fecha'),
-                    'direccion_grupos.destino as destino2',
-                    'direccion_grupos.distribucion',
-                    'direccion_grupos.condicion_envio',
-                    'direccion_grupos.subcondicion_envio',
-                    'direccion_grupos.condicion_sobre',
-                    'direccion_grupos.correlativo as correlativo',
-                    'direccion_grupos.condicion_envio_code',
-                    'direccion_grupos.estado',
-                    'direccion_grupos.motorizado_status',
-                    'direccion_grupos.motorizado_sustento_text',
+                    'direccion_grupos.*',
                 ]);
 
             if (\auth()->user()->rol == User::ROL_MOTORIZADO) {
