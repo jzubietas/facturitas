@@ -29,28 +29,30 @@
 @stop
 
 @section('content')
-<style>
-    .activo{
-        background-color: #e74c3c !important;
-        color: white !important;
-        border: 0 !important;
-    }
-</style>
+    <style>
+        .activo {
+            background-color: #e74c3c !important;
+            color: white !important;
+            border: 0 !important;
+        }
+    </style>
     <div class="card">
         <div class="card-body">
 
             <ul class="nav nav-tabs mb-24" id="myTab" role="tablist">
                 <li class="nav-item">
-                    <a class="zona-tabla nav-link activo active font-weight-bold" id="home-tab" data-toggle="tab" data-url="NORTE" href="#home" role="tab" aria-controls="home" aria-selected="true">NORTE</a>
+                    <a class="zona-tabla nav-link activo active font-weight-bold" id="home-tab" data-toggle="tab"
+                       data-url="NORTE" href="#home" role="tab" aria-controls="home" aria-selected="true">NORTE</a>
                 </li>
                 <li class="nav-item">
-                    <a class="zona-tabla nav-link font-weight-bold" id="profile-tab" data-toggle="tab" data-url="CENTRO" href="#profile" role="tab" aria-controls="profile" aria-selected="false">CENTRO</a>
+                    <a class="zona-tabla nav-link font-weight-bold" id="profile-tab" data-toggle="tab" data-url="CENTRO"
+                       href="#profile" role="tab" aria-controls="profile" aria-selected="false">CENTRO</a>
                 </li>
                 <li class="nav-item">
-                    <a class="zona-tabla nav-link font-weight-bold" id="contact-tab" data-toggle="tab" data-url="SUR" href="#contact" role="tab" aria-controls="contact" aria-selected="false">SUR</a>
+                    <a class="zona-tabla nav-link font-weight-bold" id="contact-tab" data-toggle="tab" data-url="SUR"
+                       href="#contact" role="tab" aria-controls="contact" aria-selected="false">SUR</a>
                 </li>
             </ul>
-
 
 
             <table id="tablaPrincipal" style="width:100%;" class="table table-striped mt-24">
@@ -75,32 +77,32 @@
                 </tbody>
             </table>
 
-            </div>
-
-            {{-- <table cellspacing="5" cellpadding="5">
-              <tbody>
-                <tr>
-                  <td>Destino:</td>
-                  <td>
-                    <select name="destino" id="destino" class="form-control">
-                      <option value="LIMA">LIMA</option>
-                      <option value="PROVINCIA">PROVINCIA</option>
-                    </select>
-                  </td>
-                </tr>
-              </tbody>
-            </table><br> --}}
-
-            @include('envios.modal.enviarid')
-            @include('pedidos.modal.recibirid')
-            {{--@include('sobres.modal.direccionid')--}}
-            @include('pedidos.modal.verdireccionid')
-            @include('pedidos.modal.editdireccionid')
-            @include('pedidos.modal.destinoid')
-            @include('envios.modal.distribuir')
-            @include('envios.modal.confirmacion')
-            @include('envios.modal.desvincularpedidos')
         </div>
+
+        {{-- <table cellspacing="5" cellpadding="5">
+          <tbody>
+            <tr>
+              <td>Destino:</td>
+              <td>
+                <select name="destino" id="destino" class="form-control">
+                  <option value="LIMA">LIMA</option>
+                  <option value="PROVINCIA">PROVINCIA</option>
+                </select>
+              </td>
+            </tr>
+          </tbody>
+        </table><br> --}}
+
+        @include('envios.modal.enviarid')
+        @include('pedidos.modal.recibirid')
+        {{--@include('sobres.modal.direccionid')--}}
+        @include('pedidos.modal.verdireccionid')
+        @include('pedidos.modal.editdireccionid')
+        @include('pedidos.modal.destinoid')
+        @include('envios.modal.distribuir')
+        @include('envios.modal.confirmacion')
+        @include('envios.modal.desvincularpedidos')
+    </div>
     </div>
 
 @stop
@@ -161,7 +163,8 @@
 
     <script src="https://momentjs.com/downloads/moment.js"></script>
     <script src="https://cdn.datatables.net/plug-ins/1.11.4/dataRender/datetime.js"></script>
-    <script src="https://gyrocode.github.io/jquery-datatables-checkboxes/1.2.12/js/dataTables.checkboxes.min.js"></script>
+    <script
+        src="https://gyrocode.github.io/jquery-datatables-checkboxes/1.2.12/js/dataTables.checkboxes.min.js"></script>
 
     <script>
 
@@ -174,7 +177,7 @@
                 }
             });
 
-            $('.zona-tabla').on('click', function (){
+            $('.zona-tabla').on('click', function () {
                 $('.zona-tabla').removeClass("activo");
                 $(this).addClass("activo");
                 //var url = $(this).data("url");
@@ -182,36 +185,35 @@
 
             });
 
-            $(document).on("click","#desvincularConfirmar",function(event){
+            $(document).on("click", "#desvincularConfirmar", function (event) {
 
                 var rows_selected = tabla_pedidos.column(0).checkboxes.selected();
                 var $direcciongrupo = $("#direcciongrupo").val();
                 var $observaciongrupo = $("#observaciongrupo").val();
-                var pedidos=[];
-                $.each(rows_selected, function(index, rowId){
-                    console.log("ID PEDIDO  es "+  rowId);
+                var pedidos = [];
+                $.each(rows_selected, function (index, rowId) {
+                    console.log("ID PEDIDO  es " + rowId);
                     pedidos.push(rowId);
                 });
 
 
-                var let_pedidos=pedidos.length;
+                var let_pedidos = pedidos.length;
 
-                if(let_pedidos==0)
-                {
-                Swal.fire(
-                    'Error',
-                    'Debe elegir un pedido',
-                    'warning'
+                if (let_pedidos == 0) {
+                    Swal.fire(
+                        'Error',
+                        'Debe elegir un pedido',
+                        'warning'
                     )
                     return;
                 }
-                $pedidos=pedidos.join(',');
+                var $pedidos = pedidos.join(',');
                 console.log($pedidos);
                 console.log($direcciongrupo);
                 console.log($observaciongrupo);
-                var fd2=new FormData();
-                let direcciongrupo=$("#direcciongrupo").val();
-                let observaciongrupo=$("#observaciongrupo").val();
+                var fd2 = new FormData();
+                let direcciongrupo = $("#direcciongrupo").val();
+                let observaciongrupo = $("#observaciongrupo").val();
                 fd2.append('direcciongrupo', direcciongrupo);
                 fd2.append('observaciongrupo', observaciongrupo);
                 /*fd2.append('observaciongrupo', $('#observaciongrupo').val() );*/
@@ -219,17 +221,16 @@
 
 
                 $.ajax({
-                data: fd2,
-                processData: false,
-                contentType: false,
-                type: 'POST',
-                url:"{{ route('sobres.desvinculargrupo') }}",
-                success:function(data)
-                {
-                    console.log(data);
-                    $("#modal-desvincular").modal("hide");
-                    $("#tablaPrincipal").DataTable().ajax.reload();
-                }
+                    data: fd2,
+                    processData: false,
+                    contentType: false,
+                    type: 'POST',
+                    url: "{{ route('sobres.desvinculargrupo') }}",
+                    success: function (data) {
+                        console.log(data);
+                        $("#modal-desvincular").modal("hide");
+                        $("#tablaPrincipal").DataTable().ajax.reload();
+                    }
                 });
             })
 
@@ -242,44 +243,40 @@
                 tabla_pedidos.destroy();
 
 
-                tabla_pedidos=$('#tablaPrincipalpedidosagregar').DataTable({
-                responsive: true,
-                "bPaginate": false,
-                "bFilter": false,
-                "bInfo": false,
-                'ajax': {
-                    url:"{{ route('cargar.pedidosgrupotabla') }}",
-                    'data': { "direcciongrupo": direcciongrupo},
-                    "type": "get",
-                },
-                'columnDefs': [ {
-                    'targets': [0],
-                    'orderable': false,
-                }],
-                columns:[
-                    {
-                        "data": "pedido_id",
+                tabla_pedidos = $('#tablaPrincipalpedidosagregar').DataTable({
+                    responsive: true,
+                    "bPaginate": false,
+                    "bFilter": false,
+                    "bInfo": false,
+                    'ajax': {
+                        url: "{{ route('cargar.pedidosgrupotabla') }}",
+                        'data': {"direcciongrupo": direcciongrupo},
+                        "type": "get",
+                    },
+                    'columnDefs': [{
                         'targets': [0],
-                        'checkboxes': {
-                            'selectRow': true
+                        'orderable': false,
+                    }],
+                    columns: [
+                        {
+                            "data": "pedido_id",
+                            'targets': [0],
+                            'checkboxes': {
+                                'selectRow': true
+                            },
+                            defaultContent: '',
+                            orderable: false,
                         },
-                        defaultContent: '',
-                        orderable: false,
+                        {data: 'codigo', name: 'codigo',},
+                        {
+                            "data": 'nombre_empresa',
+                            "name": 'nombre_empresa',
+                        },
+                    ],
+                    'select': {
+                        'style': 'multi',
+                        selector: 'td:first-child'
                     },
-                    {data: 'codigo', name: 'codigo',},
-                    {
-                        "data": 'nombre_empresa',
-                        "name": 'nombre_empresa',
-                        "render": function ( data, type, row, meta ) {
-                        return data;
-
-                        }
-                    },
-                ],
-                'select': {
-                    'style': 'multi',
-                    selector: 'td:first-child'
-                },
                 });
 
             });
@@ -306,16 +303,15 @@
                 fd2.append('hiddenCodigo', $('#hiddenCodigo').val());
                 fd2.append('fecha_salida', $('#fecha_salida').val());
 
-                if($('#fecha_salida').val()=='')
-                {
+                if ($('#fecha_salida').val() == '') {
                     Swal.fire(
                         'Error',
                         'Complete fecha de salida para continuar',
                         'warning'
                     )
                     return false;
-                }                
-                
+                }
+
                 $.ajax({
                     data: fd2,
                     processData: false,
@@ -460,15 +456,15 @@
                 evento.preventDefault();
             });
 
-            let tabla_pedidos=$('#tablaPrincipal').DataTable({
+            let tabla_pedidos = $('#tablaPrincipal').DataTable({
                 processing: true,
                 stateSave: true,
                 serverSide: true,
                 searching: true,
                 order: [[0, "desc"]],
-                ajax:{
+                ajax: {
                     url: "{{ route('envios.pararepartotabla') }}",
-                    data: function(d){
+                    data: function (d) {
                         d.zona = $('.zona-tabla.activo').data("url");
                     },
                 },
