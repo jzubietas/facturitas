@@ -182,7 +182,7 @@ class DistribucionController extends Controller
                 'distribucion' => $zona,
                 'destino' => $firstProduct->env_destino,
                 'direccion' => $firstProduct->env_direccion,
-                'fecha_recepcion' => now(),
+                //'fecha_recepcion' => now(),
                 'codigos' => $lista_codigos,
 
                 'estado' => '1',
