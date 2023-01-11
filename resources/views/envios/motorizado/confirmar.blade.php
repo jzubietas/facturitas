@@ -5,7 +5,21 @@
 @section('content_header')
     <h1>
         Confirmar Motorizados
+
+        <div class="float-right btn-group dropleft">
+            <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
+                    aria-expanded="false">
+                Exportar
+            </button>
+            <div class="dropdown-menu">
+                <a href="" data-target="#modal-exportar" data-toggle="modal" class="dropdown-item" target="blank_"><img
+                        src="{{ asset('imagenes/icon-excel.png') }}"> Excel</a>
+            </div>
+        </div>
+        @include('envios.motorizado.modal.exportar_motorizado_confirmar', ['title' => 'Exportar Confirmar Motorizado', 'key' => '1'])
+
     </h1>
+
 @stop
 
 @section('content')

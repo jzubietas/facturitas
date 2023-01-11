@@ -344,7 +344,7 @@
           {data: 'identificador', name: 'u.identificador', },
           {
             data: 'celular',
-            name: 'C.celular',
+            name: 'c.celular',
             render: function ( data, type, row, meta ) {
               return row.celulares+row.icelulares+'<br>'+row.nombres
             },
