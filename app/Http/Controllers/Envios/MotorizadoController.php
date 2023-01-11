@@ -293,6 +293,7 @@ class MotorizadoController extends Controller
             'motorizado_status' => 0,
             'motorizado_sustento_text' => '',
             'motorizado_sustento_foto' => '',
+            'fecha_recepcion' => null,
         ]);
         $grupo->pedidos()->activo()->update([
             'condicion_envio' => Pedido::MOTORIZADO,
