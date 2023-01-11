@@ -82,7 +82,7 @@ class FixedPedidosPagado extends Command
             }
         }
 
-        /*collect($result)
+       collect($result)
             ->filter(function ($result) {
                 return ($result['total_cobro'] == $result['total_pagado'])
                     && ($result['detalle_pagos_monto'] == $result['pago_pedidos_abono'])
@@ -96,7 +96,7 @@ class FixedPedidosPagado extends Command
                         'pago' => 1
                     ]);
                 return $result;
-            });*/
+            });
 
         $result = collect($result)
             ->filter(function ($result) {

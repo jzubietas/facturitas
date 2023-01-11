@@ -46,7 +46,7 @@ class Pedido extends Model
     const ENTREGADO_CLIENTE = 'ENTREGADO - CLIENTE'; // 10
     const ENTREGADO_SIN_SOBRE_OPE = 'ATENDIDO: ENTREGADO SIN SOBRE - OPE'; // 13
     const ENTREGADO_SIN_SOBRE_CLIENTE = 'ENTREGADO SIN SOBRE - CLIENTE'; // 14
-    const CONFIRM_MOTORIZADO = 'CONFIRMACION - MOTORIZADO'; // 16
+    const CONFIRM_MOTORIZADO = 'PRE ENTREGADO A CLIENTE - MOTORIZADO'; // 16/PRE ENTREGADO A CLIENTE - MOTORIZADO  //CONFIRMACION - MOTORIZADO
     const CONFIRM_VALIDADA_CLIENTE = 'CONFIRMACION VALIDADA - CLIENTE'; // 17
     const RECEPCION_MOTORIZADO = 'RECEPCION - MOTORIZADO'; // 18
     const ENVIO_MOTORIZADO_COURIER = 'ENVIO A MOTORIZADO - COURIER'; // 19
@@ -152,7 +152,7 @@ class Pedido extends Model
         return $this->hasMany(PagoPedido::class);
     }
 
-    public function direccionGrupo()
+    public function direcciongrupo()
     {
         return $this->belongsTo(DireccionGrupo::class, 'direccion_grupo');
     }

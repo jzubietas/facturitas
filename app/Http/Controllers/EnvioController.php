@@ -1350,7 +1350,13 @@ class EnvioController extends Controller
                 //->where('direccion_grupos.condicion_envio_code', Pedido::REPARTO_COURIER_INT)
                 //->whereIn('direccion_grupos.condicion_envio_code', [Pedido::ENVIO_MOTORIZADO_COURIER_INT,Pedido::RECEPCION_MOTORIZADO_INT])
                 ->whereIn('direccion_grupos.condicion_envio_code', [$request->condicion])
-                ->where(DB::raw('DATE(direccion_grupos.fecha_salida)'), $fecha_consulta)
+<<<<<<<<< Temporary merge branch 1
+                ->when($fecha_consulta != null, function($query)use($fecha_consulta){
+=========
+                ->when($fecha_consulta != null, function ($query) use ($fecha_consulta) {
+>>>>>>>>> Temporary merge branch 2
+                    $query->where(DB::raw('DATE(direccion_grupos.fecha_salida)'), $fecha_consulta);
+                })
                 ->activo();
 
             return Datatables::of(DB::table($grupos))
@@ -1758,7 +1764,6 @@ class EnvioController extends Controller
         $pedido = Pedido::with(['detallePedido'])->where("id", $request->hiddenEnvio)->first();
 
         $pedido->update([
-            //'envio' => '2',
             'modificador' => 'USER' . Auth::user()->id,
             'condicion_envio' => Pedido::RECEPCION_COURIER,
             'condicion_envio_code' => Pedido::RECEPCION_COURIER_INT,
@@ -1866,8 +1871,18 @@ class EnvioController extends Controller
     {
         $pedido_id = (int)$request->get('pedido_id');
         if ($pedido_id > 0) {
-            $pedido = Pedido::query()->with('direccionGrupo')->find($pedido_id);
-            $dirgrupo = optional($pedido->direccionGrupo);
+            $pedido = Pedido::query()->with('direcciongrupo')->find($pedido_id);
+            $dirgrupo = $pedido->direcciongrupo;
+            if ($dirgrupo != null) {
+                if ($dirgrupo->condicion_envio_code == Pedido::ENTREGADO_CLIENTE_INT) {
+                    return response()->json([
+                        'html'=>'<div class="alert alert-warning">Este pedido ya fue entregado</div>',
+                        'success'=>false,
+                        'pedido'=>$pedido,
+                        'dirgrupo'=>$dirgrupo,
+                    ]);
+                }
+            }
             $distritos = Distrito::whereIn('provincia', ['LIMA', 'CALLAO'])
                 ->where('estado', '1')
                 ->WhereNotIn('distrito', ['CHACLACAYO', 'CIENEGUILLA', 'LURIN', 'PACHACAMAC', 'PUCUSANA', 'PUNTA HERMOSA', 'PUNTA NEGRA', 'SAN BARTOLO', 'SANTA MARIA DEL MAR'])
@@ -1881,47 +1896,69 @@ class EnvioController extends Controller
                 });
             $departamento = Departamento::where('estado', "1")
                 ->pluck('departamento', 'departamento');
-            return view('sobres.modal.modal_editar_envio_ajax', compact('pedido', 'dirgrupo', 'distritos', 'departamento'));
+            return response()->json([
+                'html'=>view('sobres.modal.modal_editar_envio_ajax', compact('pedido', 'dirgrupo', 'distritos', 'departamento'))->render(),
+                'success'=>true,
+                'pedido'=>$pedido,
+                'dirgrupo'=>$dirgrupo,
+            ]);
         }
-        return '';
+        return response()->json([
+            'html'=>'<h5>Pedido no encontrado</h5>',
+            'success'=>false,
+        ]);
     }
 
     public function updateDireccionGrupo(Request $request)
     {
         $pedido_id = (int)$request->get('pedido_id');
         if ($pedido_id > 0) {
-            $pedido = Pedido::query()->with('direccionGrupo')->find($pedido_id);
-            $dirgrupo = $pedido->direccionGrupo;
-            $pedido->direccionGrupo()->update([
-                'nombre_cliente' => $request->nombre,
-                'celular_cliente' => $request->celular,
-                'direccion' => $request->direccion,
-                'referencia' => $request->referencia,
-                'distrito' => $request->distrito,
-                'observacion' => $request->observacion,
-            ]);
+            $pedido = Pedido::query()->with('direcciongrupo')->findOrFail($pedido_id);
+            $dirgrupo = $pedido->direcciongrupo;
             if ($dirgrupo != null) {
-                if ($dirgrupo->direccionEnvio != null) {
-                    DireccionEnvio::query()->where('estado', '=', 1)
-                        ->where('direcciongrupo', '=', $dirgrupo->id)
-                        ->update([
-                            'celular' => $request->celular,
-                            'direccion' => $request->direccion,
-                            'referencia' => $request->referencia,
-                            'distrito' => $request->distrito,
-                            'observacion' => $request->observacion,
-                        ]);
-                } else {
-                    /*GastoEnvio::query()->where('estado', '=', 1)
-                         ->whereIn('direcciongrupo', $pedido->direccionGrupos()->pluck('id'))
-                         ->update([
-                             'celular' => $request->celular,
-                             'direccion' => $request->direccion,
-                             'referencia' => $request->referencia,
-                             'distrito' => $request->distrito,
-                             'observacion' => $request->observacion,
-                         ]);*/
+                if ($dirgrupo->condicion_envio_code == Pedido::CONFIRM_MOTORIZADO_INT) {
+                    return response()->json([
+                        'suucess' => false
+                    ]);
                 }
+                $dirgrupo->update([
+                    'nombre_cliente' => $request->nombre,
+                    'celular_cliente' => $request->celular,
+                    'direccion' => $request->direccion,
+                    'referencia' => $request->referencia,
+                    'distrito' => $request->distrito,
+                    'observacion' => $request->observacion,
+                    'cambio_direccion_sustento' => $request->cambio_direccion_sustento,
+                ]);
+
+            }
+            if ($pedido->condicion_envio_code == Pedido::CONFIRM_MOTORIZADO_INT) {
+                return response()->json([
+                    'suucess' => false
+                ]);
+            }
+            if (Str::upper($pedido->destino ?: '') != 'PROVINCIA') {
+                $pedido->update([
+                    'env_nombre_cliente_recibe' => $request->nombre,
+                    'env_celular_cliente_recibe' => $request->celular,
+                    'env_direccion' => $request->direccion,
+                    'env_referencia' => $request->referencia,
+                    'env_distrito' => $request->distrito,
+                    'env_observacion' => $request->observacion,
+                    'cambio_direccion_sustento' => $request->cambio_direccion_sustento,
+                ]);
+            } else {
+                $routulo = '';
+                if ($request->hasFile('rotulo')) {
+                    $routulo = $request->file('rotulo')->store('pedidos/rotulos', 'pstorage');
+                }
+                $pedido->update([
+                    'cambio_direccion_sustento' => $request->cambio_direccion_sustento,
+                    'env_numregistro' => $request->numregistro,
+                    'env_tracking' => $request->tracking,
+                    'env_importe' => $request->importe,
+                    'env_rotulo' => $routulo,
+                ]);
             }
         }
         return response()->json([
@@ -1932,7 +1969,11 @@ class EnvioController extends Controller
     public function DireccionEnvio(Request $request)
     {
 
-
+<<<<<<<<< Temporary merge branch 1
+        $attach_pedidos_data=[];
+=========
+        $attach_pedidos_data = [];
+>>>>>>>>> Temporary merge branch 2
         $pedidos = $request->pedidos;
         if (!$request->pedidos) {
             return '0';
@@ -2699,16 +2740,27 @@ class EnvioController extends Controller
                 'motorizado_status' => '1',
                 'motorizado_sustento_text' => $request->sustento_text,
             ]);
-            foreach ($grupo->pedidos as $pedido) {
+            //foreach ($grupo->pedidos as $pedido) {
+<<<<<<<<< Temporary merge branch 1
                 PedidoMotorizadoHistory::query()->create([
-                    'pedido_id' => $pedido->id,
+                    'pedido_id' => '0',
                     'direccion_grupo_id' => $grupo->id,
                     //'pedido_grupo_id' => null,
                     'status' => '1',
                     'sustento_text' => $request->sustento_text,
                     //'sustento_foto' => null,
                 ]);
-            }
+=========
+            PedidoMotorizadoHistory::query()->create([
+                'pedido_id' => '0',
+                'direccion_grupo_id' => $grupo->id,
+                //'pedido_grupo_id' => null,
+                'status' => '1',
+                'sustento_text' => $request->sustento_text,
+                //'sustento_foto' => null,
+            ]);
+>>>>>>>>> Temporary merge branch 2
+            //}
 
         } elseif ($action == 'update_status_no_contesto') {
             $this->validate($request, [
@@ -2723,16 +2775,27 @@ class EnvioController extends Controller
                 'motorizado_sustento_text' => $request->sustento_text,
                 'motorizado_sustento_foto' => $path,
             ]);
-            foreach ($grupo->pedidos as $pedido) {
+            //foreach ($grupo->pedidos as $pedido) {
+<<<<<<<<< Temporary merge branch 1
                 PedidoMotorizadoHistory::query()->create([
-                    'pedido_id' => $pedido->id,
+                    'pedido_id' => '0',
                     'direccion_grupo_id' => $grupo->id,
                     //'pedido_grupo_id' => null,
                     'status' => '2',
                     'sustento_text' => $request->sustento_text,
                     'sustento_foto' => $path,
                 ]);
-            }
+=========
+            PedidoMotorizadoHistory::query()->create([
+                'pedido_id' => '0',
+                'direccion_grupo_id' => $grupo->id,
+                //'pedido_grupo_id' => null,
+                'status' => '2',
+                'sustento_text' => $request->sustento_text,
+                'sustento_foto' => $path,
+            ]);
+>>>>>>>>> Temporary merge branch 2
+            //}
         } else {
             $this->validate($request, [
                 'adjunto1' => 'required|file',
@@ -2880,13 +2943,32 @@ class EnvioController extends Controller
         /**********
          * BUSCAMOS EL PEDIDO
          */
-        $pedido = Pedido::with('direccionGrupo')->where("codigo", $request->id)
+        $pedido = Pedido::with('direcciongrupo')->where("codigo", $request->id)
             ->activo()
             ->firstOrFail();
 
         if ($pedido->condicion_envio_code == Pedido::RECEPCION_MOTORIZADO_INT) {
             return response()->json(['html' => 0]);
         } else {
+            /*************
+             * BUSCAMOS EL PAQUETE
+             */
+            $paquete_sobres = $pedido->direccionGrupo;
+            $codigos_paquete = collect(explode(",", $paquete_sobres->codigos))
+                ->map(fn($cod) => trim($cod))
+                ->filter()->values();
+
+<<<<<<<<< Temporary merge branch 1
+            $codigos_confirmados = collect(explode(",", $paquete_sobres->codigos_confirmados??''))
+=========
+            $codigos_confirmados = collect(explode(",", $paquete_sobres->codigos_confirmados ?? ''))
+>>>>>>>>> Temporary merge branch 2
+                ->push($pedido->codigo)
+                ->map(fn($cod) => trim($cod))
+                ->filter()
+                ->values();
+
+            DB::beginTransaction();
             /************
              * ACTUALIZAMOS EL PEDIDO
              */

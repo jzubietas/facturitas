@@ -263,10 +263,10 @@
                 processing: true,
                 serverSide: true,
                 searching: true,
-                stateSave:true,
-                "order": [[0, "desc"]],
+                stateSave: true,
+                order: [[0, "desc"]],
                 ajax: "{{ route('pedidostabla') }}",
-                "createdRow": function (row, data, dataIndex) {
+                createdRow: function (row, data, dataIndex) {
                     if (data["estado"] == "1") {
                         if (data.pendiente_anulacion == 1) {
                             $('td', row).css('background', 'red').css('font-weight', 'bold');
@@ -274,14 +274,13 @@
                     } else {
                         $(row).addClass('textred');
                     }
-
                 },
                 rowCallback: function (row, data, index) {
                     var pedidodiferencia = data.diferencia;
 
                     if (data.condicion_code == 4 || data.estado == 0) {
                         $('td:eq(11)', row).css('background', '#ff7400').css('color', '#ffffff').css('text-align', 'center').css('font-weight', 'bold');
-                    }else {
+                    } else {
                         if (pedidodiferencia == null) {
                             $('td:eq(11)', row).css('background', '#ca3a3a').css('color', '#ffffff').css('text-align', 'center').css('font-weight', 'bold');
                         } else {
@@ -293,23 +292,26 @@
                         }
                     }
 
-                    $('[data-jqconfirm]',row).click(function () {
+                    $('[data-jqconfirm]', row).click(function () {
                         $.confirm({
                             title: 'Editar direccion de envio',
                             content: function () {
                                 var self = this;
                                 return $.ajax({
-                                    url: '{{route('pedidos.envios.get-direccion')}}?pedido_id='+data.id,
-                                    //dataType: 'json',
+                                    url: '{{route('pedidos.envios.get-direccion')}}?pedido_id=' + data.id,
+                                    dataType: 'json',
                                     method: 'get'
                                 }).done(function (response) {
                                     console.log(response);
 
-                                    self.setContent(response);
+                                    self.setContent(response.html);
+                                    if (!response.success) {
+                                        self.$$confirm.hide();
+                                    }
                                     //self.setContent('Description: ' + response.description);
                                     //self.setContentAppend('<br>Version: ' + response.version);
                                     //self.setTitle(response.name);
-                                }).fail(function(e){
+                                }).fail(function (e) {
                                     console.error(e)
                                     self.setContent('Ocurrio un error');
                                 });
@@ -318,20 +320,27 @@
                                 confirm: {
                                     text: 'Actualizar',
                                     btnClass: 'btn-success',
-                                    action: function(){
+                                    action: function () {
                                         var self = this;
                                         self.showLoading(true)
                                         console.log(self.$content.find('form')[0])
+                                        const form = self.$content.find('form')[0];
+                                        const data = new FormData(form)
+
+                                        /*if (form.rotulo.files.length > 0) {
+                                            data.append('rotulo', form.rotulo.files[0])
+                                        }*/
+
                                         $.ajax({
-                                            data: new FormData(self.$content.find('form')[0]),
+                                            data: data,
                                             processData: false,
                                             contentType: false,
                                             type: 'POST',
                                             url: "{{route('pedidos.envios.update-direccion')}}",
                                         }).always(function () {
-                                                self.close();
-                                                $('#tablaPrincipal').DataTable().ajax.reload();
-                                            });
+                                            self.close();
+                                            $('#tablaPrincipal').DataTable().ajax.reload();
+                                        });
                                         return false
                                     }
                                 },
@@ -342,15 +351,15 @@
                         });
                     })
 
-                    $('[data-verforotos]',row).click(function () {
-                        var data=$(this).data('verforotos')
+                    $('[data-verforotos]', row).click(function () {
+                        var data = $(this).data('verforotos')
                         $.dialog({
-                            columnClass:'xlarge',
-                            title:'Fotos confirmadas',
-                            type:'green',
-                            content:function (){
+                            columnClass: 'xlarge',
+                            title: 'Fotos confirmadas',
+                            type: 'green',
+                            content: function () {
                                 return `<div class="row">
-${data.foto1?`
+${data.foto1 ? `
 <div class="col-md-4">
 <div class="card">
 <div class="card-header d-none"><h5>Foto de los sobres</h5></div>
@@ -359,8 +368,8 @@ ${data.foto1?`
 </div>
 </div>
 </div>
-`:''}
-${data.foto2?`
+` : ''}
+${data.foto2 ? `
 <div class="col-md-4">
 <div class="card">
 <div class="card-header d-none"><h5>Foto del domicilio</h5></div>
@@ -369,8 +378,8 @@ ${data.foto2?`
 </div>
 </div>
 </div>
-`:''}
-${data.foto3?`
+` : ''}
+${data.foto3 ? `
 <div class="col-md-4">
 <div class="card">
 <div class="card-header d-none"><h5>Foto de quien recibe</h5></div>
@@ -379,7 +388,7 @@ ${data.foto3?`
 </div>
 </div>
 </div>
-`:''}
+` : ''}
 </div>`
                             }
                         })
@@ -446,25 +455,25 @@ ${data.foto3?`
                         name: 'total',
                         render: $.fn.dataTable.render.number(',', '.', 2, '')
                     },
-                    {{--
-                        {data: 'condicion_code',
-                            name: 'condicion_code',
-                            render: function ( data, type, row, meta ) {
-                                if(row.pendiente_anulacion){
-                                    return '{{\App\Models\Pedido::PENDIENTE_ANULACION}}';
+                        {{--
+                            {data: 'condicion_code',
+                                name: 'condicion_code',
+                                render: function ( data, type, row, meta ) {
+                                    if(row.pendiente_anulacion){
+                                        return '{{\App\Models\Pedido::PENDIENTE_ANULACION}}';
+                        }
+                        if(row.condicion_code==1){
+                            return '{{\App\Models\Pedido::POR_ATENDER }}';
+                        }else if(row.condicion_code==2){
+                            return '{{\App\Models\Pedido::EN_PROCESO_ATENCION }}';
+                        }else if(row.condicion_code==3){
+                            return '{{\App\Models\Pedido::ATENDIDO }}';
+                        }else if(row.condicion_code==4||row.estado==0){
+                            return '{{\App\Models\Pedido::ANULADO }}';
+                        }
                     }
-                    if(row.condicion_code==1){
-                        return '{{\App\Models\Pedido::POR_ATENDER }}';
-                    }else if(row.condicion_code==2){
-                        return '{{\App\Models\Pedido::EN_PROCESO_ATENCION }}';
-                    }else if(row.condicion_code==3){
-                        return '{{\App\Models\Pedido::ATENDIDO }}';
-                    }else if(row.condicion_code==4||row.estado==0){
-                        return '{{\App\Models\Pedido::ANULADO }}';
-                    }
-                }
-            },
-                    --}}
+                },
+                        --}}
                     {
                         data: 'condicion_pa',
                         name: 'condicion_pa',
