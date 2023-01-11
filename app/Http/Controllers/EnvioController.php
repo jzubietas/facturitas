@@ -1983,11 +1983,8 @@ class EnvioController extends Controller
     public function DireccionEnvio(Request $request)
     {
 
-<<<<<<<<< Temporary merge branch 1
-        $attach_pedidos_data=[];
-=========
+
         $attach_pedidos_data = [];
->>>>>>>>> Temporary merge branch 2
         $pedidos = $request->pedidos;
         if (!$request->pedidos) {
             return '0';
