@@ -2354,6 +2354,7 @@ class EnvioController extends Controller
                     DB::raw("DATEDIFF(DATE(NOW()), DATE(pedidos.created_at)) AS dias")
                 ])
                 ->where('pedidos.estado', '1')
+                //if()
                 ->whereIn('pedidos.condicion_envio_code', [Pedido::RECEPCION_COURIER_INT])
                 ->where('dp.estado', '1');
         }
