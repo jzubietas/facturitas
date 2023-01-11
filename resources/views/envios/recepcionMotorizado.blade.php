@@ -100,7 +100,7 @@
           <tbody class="w-100">
             <tr  class="w-100">
               <td>Fecha</td>
-              <td align="center"><input type="text" value="{{$fecha_consulta}}" id="fecha_consulta" name="fecha_consulta" class="form-control" autocomplete="off"></td>
+                <td><input type="date" value="{{$fecha_consulta}}" id="fecha_consulta" name="fecha_consulta" class="form-control" autocomplete="off"></td>
               <td></td>
 
 
@@ -534,15 +534,164 @@ setTimeout(function (){
   <script>
     $(document).ready(function () {
 
-      $("#fecha_consulta").datepicker({
-        onSelect: function () {
+        $("#fecha_consulta").on('change', function(){
+            //var fecha_formateada = $(this).val().replaceAll('-', '/');
+            var fecha_format = $(this).val().split("-")
+            var fecha_formateada = fecha_format[2] + "/" + fecha_format[1] + "/" + fecha_format[0];
+            $(this).data('fecha',fecha_formateada);
+            console.log(fecha_formateada);
+            $('#tablaPrincipal').DataTable().ajax.reload();
+        });
 
-          $('#tablaPrincipal').DataTable().ajax.reload();
-          console.log("minimo "+$(this).val());
-          //localStorage.setItem('dateMin', $(this).datepicker('getDate') );
-          //localStorage.setItem('dateMin', $(this).val() );
-        }, changeMonth: true, changeYear: true , dateFormat:"dd/mm/yy"
-      });
+        $('#tablaPrincipal').DataTable({
+            dom: '<"toolbar">frtip',
+            processing: true,
+            stateSave:true,
+            serverSide: true,
+            searching: true,
+            "order": [[ 0, "desc" ]],
+            ajax:{ url: "{{ route('envios.recepcionmotorizadotabla') }}",
+                data: function(d){
+                    d.fechaconsulta = $("#fecha_consulta").data("fecha");
+                    d.consulta = "paquete";
+                    d.condicion = $('.condicion-tabla.activo').data("url");
+                }
+            },
+            createdRow: function( row, data, dataIndex){
+                //console.log(row);
+            },
+            rowCallback: function (row, data, index) {
+            },
+            columns: [
+                {data: 'correlativo', name: 'correlativo'},
+                {
+                    data: 'codigos',
+                    name: 'codigos',
+                    render: function ( data, type, row, meta ) {
+                        //var codigos_ped = JSON.parse("[" + row.codigos + "]");
+                        //var codigos_ped = row.codigos.split(',').map(function(n) {return Number(n);});
+                        //var codigos_ped = row.codigos.split(",").map(Number);
+                        var codigos_ped = row.codigos.split(',');
+
+
+                        //console.log(row);
+                        var codigos_conf_ped = (row.codigos_confirmados||'').split(',');
+
+                        console.log(codigos_conf_ped);
+
+                        var lista_codigos ='<div class="row">';
+
+                        $.each(codigos_ped , function(index, val) {
+                            //lista_codigos += '<div class="col-lg-6">' + val +'</div>';
+                            if(codigos_conf_ped.includes(val.trim())){
+                                lista_codigos += '<div class="col-lg-6"><span class="text-success">' + val +'</span></div>';
+                            }else{
+                                lista_codigos += '<div class="col-lg-6">' + val +'</div>';
+                            }
+                        });
+
+                        lista_codigos += '</div>';
+
+                        return lista_codigos;
+                    }
+                },
+                {data: 'user_id', name: 'user_id','visible':false },
+                {
+                    data: 'celular',
+                    name: 'celular',
+                    render: function ( data, type, row, meta ) {
+                        return row.celulares+' - '+row.nombres
+                    },
+                    "visible":false
+                    //searchable: true
+                },
+                {data: 'producto', name: 'producto'},
+                {
+                    data: 'fecha_salida',
+                    name: 'fecha_salida',
+                    //render: $.fn.dataTable.render.moment('DD/MM/YYYY', 'YYYY-MM-DD')
+                },
+                {
+                    data:'direccion',
+                    name:'direccion',"visible":false,
+                    render: function ( data, type, row, meta ) {
+                        //console.log(data);
+                        datas='';
+                        if(data!=null)
+                        {
+                            return data;
+                            /*if(data=='0')
+                            {
+                              return '<span class="badge badge-danger">REGISTRE DIRECCION</span>';
+                            }else if(data=='LIMA')
+                            {
+                              var urlshow = '{{ route("pedidos.show", ":id") }}';
+                  urlshow = urlshow.replace(':id', row.id);
+
+                  return '<a href="" data-target="#modal-verdireccion" data-toggle="modal" data-dirreccion="'+row.id+'"><button class="btn btn-primary btn-sm"><i class="fas fa-eye"></i> Ver</button></a>';
+                }
+                else if(data=='PROVINCIA')
+                {
+                  return '<span class="badge badge-info">ENVIO A PROVINCIA</span>';
+                }else{
+                  return '<span class="badge badge-info">PROBLEMAS CON REGISTRO DE DESTINO</span>';
+                }
+*/
+                            //return datas;
+
+                        }else{
+                            return 'REGISTRE DIRECCION';
+                        }
+                        //return 'REGISTRE DIRECCION';
+                    },
+                },
+                {
+                    data: 'condicion_envio',
+                    name: 'condicion_envio',
+
+                },
+
+                {
+                    data: 'action',
+                    name: 'action',
+                    orderable: false,
+                    searchable: false,
+                    sWidth:'20%',
+
+                },
+            ],
+            language: {
+                "decimal": "",
+                "emptyTable": "No hay información",
+                "info": "Mostrando del _START_ al _END_ de _TOTAL_ Entradas",
+                "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
+                "infoFiltered": "(Filtrado de _MAX_ total entradas)",
+                "infoPostFix": "",
+                "thousands": ",",
+                "lengthMenu": "Mostrar _MENU_ Entradas",
+                "loadingRecords": "Cargando...",
+                "processing": "Procesando...",
+                "search": "Buscar:",
+                "zeroRecords": "Sin resultados encontrados",
+                "paginate": {
+                    "first": "Primero",
+                    "last": "Ultimo",
+                    "next": "Siguiente",
+                    "previous": "Anterior"
+                }
+            },
+        });
+
+        /*
+              $("#fecha_consulta").datepicker({
+                onSelect: function () {
+
+                  $('#tablaPrincipal').DataTable().ajax.reload();
+                  console.log("minimo "+$(this).val());
+                  //localStorage.setItem('dateMin', $(this).datepicker('getDate') );
+                  //localStorage.setItem('dateMin', $(this).val() );
+                }, changeMonth: true, changeYear: true , dateFormat:"dd/mm/yy"
+              }); */
 
         $('.condicion-tabla').on('click', function (){
             $('.condicion-tabla').removeClass("activo");
@@ -803,144 +952,7 @@ setTimeout(function (){
         $("#hiddenAtender").val(idunico);
       });*/
 
-      $('#tablaPrincipal').DataTable({
-        dom: '<"toolbar">frtip',
-        processing: true,
-        stateSave:true,
-		    serverSide: true,
-        searching: true,
-        "order": [[ 0, "desc" ]],
-        ajax:{ url: "{{ route('envios.recepcionmotorizadotabla') }}",
-                  data: function(d){
-                      d.fechaconsulta = $("#fecha_consulta").val();
-                      d.consulta = "paquete";
-                      d.condicion = $('.condicion-tabla.activo').data("url");
-                  }
-          },
-        createdRow: function( row, data, dataIndex){
-          //console.log(row);
-        },
-        rowCallback: function (row, data, index) {
-        },
-        columns: [
-            {data: 'correlativo', name: 'correlativo'},
-          {
-              data: 'codigos',
-              name: 'codigos',
-              render: function ( data, type, row, meta ) {
-                  //var codigos_ped = JSON.parse("[" + row.codigos + "]");
-                  //var codigos_ped = row.codigos.split(',').map(function(n) {return Number(n);});
-                  //var codigos_ped = row.codigos.split(",").map(Number);
-                  var codigos_ped = row.codigos.split(',');
 
-
-                  //console.log(row);
-                  var codigos_conf_ped = (row.codigos_confirmados||'').split(',');
-
-                  console.log(codigos_conf_ped);
-
-                  var lista_codigos ='<div class="row">';
-
-                  $.each(codigos_ped , function(index, val) {
-                      //lista_codigos += '<div class="col-lg-6">' + val +'</div>';
-                      if(codigos_conf_ped.includes(val.trim())){
-                          lista_codigos += '<div class="col-lg-6"><span class="text-success">' + val +'</span></div>';
-                      }else{
-                          lista_codigos += '<div class="col-lg-6">' + val +'</div>';
-                      }
-                  });
-
-                  lista_codigos += '</div>';
-
-                  return lista_codigos;
-              }
-          },
-          {data: 'user_id', name: 'user_id','visible':false },
-          {
-            data: 'celular',
-            name: 'celular',
-            render: function ( data, type, row, meta ) {
-              return row.celulares+' - '+row.nombres
-            },
-            "visible":false
-            //searchable: true
-        },
-          {data: 'producto', name: 'producto'},
-          {
-            data: 'fecha_salida',
-            name: 'fecha_salida',
-            //render: $.fn.dataTable.render.moment('DD/MM/YYYY', 'YYYY-MM-DD')
-          },
-          {
-            data:'direccion',
-            name:'direccion',"visible":false,
-            render: function ( data, type, row, meta ) {
-              //console.log(data);
-              datas='';
-              if(data!=null)
-              {
-                return data;
-                /*if(data=='0')
-                {
-                  return '<span class="badge badge-danger">REGISTRE DIRECCION</span>';
-                }else if(data=='LIMA')
-                {
-                  var urlshow = '{{ route("pedidos.show", ":id") }}';
-                  urlshow = urlshow.replace(':id', row.id);
-
-                  return '<a href="" data-target="#modal-verdireccion" data-toggle="modal" data-dirreccion="'+row.id+'"><button class="btn btn-primary btn-sm"><i class="fas fa-eye"></i> Ver</button></a>';
-                }
-                else if(data=='PROVINCIA')
-                {
-                  return '<span class="badge badge-info">ENVIO A PROVINCIA</span>';
-                }else{
-                  return '<span class="badge badge-info">PROBLEMAS CON REGISTRO DE DESTINO</span>';
-                }
-*/
-                //return datas;
-
-              }else{
-                return 'REGISTRE DIRECCION';
-              }
-              //return 'REGISTRE DIRECCION';
-            },
-          },
-          {
-              data: 'condicion_envio',
-              name: 'condicion_envio',
-
-          },
-
-          {
-            data: 'action',
-            name: 'action',
-            orderable: false,
-            searchable: false,
-            sWidth:'20%',
-
-          },
-        ],
-        language: {
-          "decimal": "",
-          "emptyTable": "No hay información",
-          "info": "Mostrando del _START_ al _END_ de _TOTAL_ Entradas",
-          "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
-          "infoFiltered": "(Filtrado de _MAX_ total entradas)",
-          "infoPostFix": "",
-          "thousands": ",",
-          "lengthMenu": "Mostrar _MENU_ Entradas",
-          "loadingRecords": "Cargando...",
-          "processing": "Procesando...",
-          "search": "Buscar:",
-          "zeroRecords": "Sin resultados encontrados",
-          "paginate": {
-            "first": "Primero",
-            "last": "Ultimo",
-            "next": "Siguiente",
-            "previous": "Anterior"
-          }
-        },
-      });
 
 
 
