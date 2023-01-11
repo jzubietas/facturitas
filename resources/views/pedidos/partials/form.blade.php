@@ -68,7 +68,7 @@
          </div>
 
           <div class="form-group col-lg-2">
-              
+
           {!! Form::label('pmes', 'Mes') !!}
           {!! Form::select('pmes', $meses , $mes_selected, ['class' => 'form-control border selectpicker border-secondary', 'data-live-search' => 'true', 'placeholder' => '---- SELECCIONE ----']) !!}
           </div>
