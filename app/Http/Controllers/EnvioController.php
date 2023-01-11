@@ -2776,16 +2776,7 @@ class EnvioController extends Controller
                 'motorizado_sustento_foto' => $path,
             ]);
             //foreach ($grupo->pedidos as $pedido) {
-<<<<<<<<< Temporary merge branch 1
-                PedidoMotorizadoHistory::query()->create([
-                    'pedido_id' => '0',
-                    'direccion_grupo_id' => $grupo->id,
-                    //'pedido_grupo_id' => null,
-                    'status' => '2',
-                    'sustento_text' => $request->sustento_text,
-                    'sustento_foto' => $path,
-                ]);
-=========
+
             PedidoMotorizadoHistory::query()->create([
                 'pedido_id' => '0',
                 'direccion_grupo_id' => $grupo->id,
@@ -2794,8 +2785,6 @@ class EnvioController extends Controller
                 'sustento_text' => $request->sustento_text,
                 'sustento_foto' => $path,
             ]);
->>>>>>>>> Temporary merge branch 2
-            //}
         } else {
             $this->validate($request, [
                 'adjunto1' => 'required|file',
