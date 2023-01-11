@@ -2301,7 +2301,7 @@ class EnvioController extends Controller
             ->count();
         $count_anulados=$matriz_contadores_recepcionado_anulados
         ->where('pedidos.estado', '0')
-        ->whereIn('pedidos.condicion_code', [Pedido::ANULADO_INT])
+        //->whereIn('pedidos.condicion_code', [Pedido::ANULADO_INT])
         ->count();
         $count_entregados = DireccionGrupo::
             join('clientes as c', 'c.id', 'direccion_grupos.cliente_id')
