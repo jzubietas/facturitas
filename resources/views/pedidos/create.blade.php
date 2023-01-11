@@ -413,6 +413,30 @@
 
             })
 
+            $(document).on("change","#ptipo_banca",function(){
+                let anno_filter=parseInt($("#panio").val());
+                console.log(anno_filter)
+                let ptipo_banca=$.trim($(this).val().split('-')[0]);
+                if (ptipo_banca==''){
+                }else{
+                    if(ptipo_banca=='FISICO')
+                    {
+                        if(  anno_filter=={{$anno_selected}}   ||  anno_filter==({{$anno_selected}}-1) )
+                        {
+                        }else{
+                            Swal.fire(
+                                'Error',
+                                'No puede seleccionar este año, elija otra opcion por favor',
+                                'warning'
+                            );
+                            $(this).val('')
+                        }
+
+                    }
+                }
+
+            })
+
             $("#previsualizar_modal_pedido").on('show.bs.modal',function () {
                 let pruc = $('#pruc').val();
                 let pempresa = $('#pempresa').val();
