@@ -1350,11 +1350,7 @@ class EnvioController extends Controller
                 //->where('direccion_grupos.condicion_envio_code', Pedido::REPARTO_COURIER_INT)
                 //->whereIn('direccion_grupos.condicion_envio_code', [Pedido::ENVIO_MOTORIZADO_COURIER_INT,Pedido::RECEPCION_MOTORIZADO_INT])
                 ->whereIn('direccion_grupos.condicion_envio_code', [$request->condicion])
-<<<<<<<<< Temporary merge branch 1
-                ->when($fecha_consulta != null, function($query)use($fecha_consulta){
-=========
                 ->when($fecha_consulta != null, function ($query) use ($fecha_consulta) {
->>>>>>>>> Temporary merge branch 2
                     $query->where(DB::raw('DATE(direccion_grupos.fecha_salida)'), $fecha_consulta);
                 })
                 ->activo();
