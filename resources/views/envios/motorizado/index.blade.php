@@ -647,7 +647,7 @@ Enviar</button>
                     {
                         data: 'fecha_salida',
                         name: 'fecha_salida',
-                        render: $.fn.dataTable.render.moment('DD/MM/YYYY')
+                        //render: $.fn.dataTable.render.moment('DD/MM/YYYY')
                     },
                     {
                         data: 'producto',

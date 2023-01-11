@@ -80,6 +80,9 @@ class MotorizadoController extends Controller
             //add_query_filtros_por_roles($query, 'u');
             return datatables()->query(DB::table($query))
                 ->addIndexColumn()
+                ->editColumn('fecha_salida', function ($pedido) {
+                    return Carbon::parse($pedido->fecha_salida)->format('d-m-Y h:i A');
+                })
                 ->editColumn('condicion_envio', function ($pedido) {
                     $color = Pedido::getColorByCondicionEnvio($pedido->condicion_envio);
 
