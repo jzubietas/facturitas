@@ -35,8 +35,10 @@ class DireccionGrupo extends Model
     const NULL = 'NULL';
 
     protected $guarded = ['id'];
-    protected $casts = [
-        'fecha_recepcion' => 'date'
+    protected $dates = [
+        'fecha_recepcion',
+        'fecha_salida',
+        'fecha',
     ];
 
     protected static function booted()
