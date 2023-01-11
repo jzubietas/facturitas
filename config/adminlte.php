@@ -393,33 +393,33 @@ return [
         [
             'text' => 'Courier',
             'icon' => 'fas fa-people-carry',
-            'can' => 'envios.modulo',
+            'can' => 'courier.modulo',
             'submenu' => [
                 [
                     'text' => 'Estado Sobres',
                     'route' => 'envios.estadosobres',
-                    'can' => 'envios.estadosobre',
+                    'can' => 'courier.estadosobres',
                     'icon' => 'fas fa-check-circle',
                     'active' => ['envios estadosobres'],
                 ],
                 [
                     'text' => 'Recepción de sobres',
                     'route' => 'envios.porconfirmar',
-                    'can' => 'envios.porconfirmar',
+                    'can' => 'courier.recepcionsobres',
                     'icon' => 'fas fa-check-circle dot_sobres_confirmar_recepcion_count',
                     'active' => ['envios'],
                 ],
                 [
                     'text' => 'Sobres con direccion',
                     'route' => 'envios.distribuirsobres',
-                    'can' => 'envios.condireccion',
+                    'can' => 'courier.sobrescondireccion',
                     'icon' => 'fas fa-check-circle',
                     'active' => ['envios con direccion'],
                 ],
                 [
                     'text' => 'Sobres sin direccion',
                     'route' => 'envios.sindireccion',
-                    'can' => 'envios.sindireccion',
+                    'can' => 'courier.sobressindireccion',
                     'icon' => 'fas fa-check-circle',
                     'active' => ['envios sin direccion'],
                 ],
@@ -427,7 +427,7 @@ return [
                 [
                     'text' => 'Sobres para reparto',
                     'route' => 'envios.parareparto',
-                    'can' => 'envios.parareparto',
+                    'can' => 'courier.sobresparareparto',
                     'icon' => 'fas fa-check-circle',
                     'active' => ['envios para reparto'],
                 ],
@@ -461,7 +461,7 @@ return [
                 [
                     'text' => 'Sobre entregados',
                     'route' => 'envios.entregados',
-                    'can' => 'envios.enviados',
+                    'can' => 'courier.sobresentregados',
                     'icon' => 'fas fa-check-circle',//dot_sobres_entregados_count
                     //'icon' => 'noti-sobres-entregados noti-side',
                     'active' => ['enviados'],
@@ -469,7 +469,7 @@ return [
                 [
                     'text' => 'Sobres en Ruta',
                     'route' => 'envios.rutaenvio',
-                    'can' => 'envios.rutaenvio',
+                    'can' => 'courier.sobresenruta',
                     'icon' => 'fas fa-check-circle',
                     'active' => ['envios'],
                 ],
@@ -477,7 +477,7 @@ return [
                 [
                     'text' => 'Confirmar foto',
                     'route' => 'envios.motorizados.confirmar',
-                    'can' => 'operacion.confirmmotorizado',
+                    'can' => 'courier.confirmarfoto',
                     'icon' => 'fas fa-check-circle dot_contador_en_motorizados_confirmar_count',
                     'active' => ['enviados'],
                 ]
@@ -487,19 +487,19 @@ return [
         [
             'text' => 'Motorizado',
             'icon' => 'fa fa-motorcycle',
-            'can' => 'envios.modulo',
+            'can' => 'motorizado.modulo',
             'submenu' => [
                 [
                     'text' => 'Recepción motorizado',
                     'route' => 'envios.recepcionmotorizado',
-                    'can' => 'operacion.motorizado.recepcion',
+                    'can' => 'motorizado.recepcion',
                     'icon' => 'fas fa-check-circle dot_sobres_confirmar_recepcion_motorizado_count',
                     'active' => ['envios recepcion motorizado'],
                 ],
                 [
                     'text' => 'Motorizado en ruta',
                     'route' => 'envios.motorizados.index',
-                    'can' => 'operacion.motorizado',
+                    'can' => 'motorizado.enruta',
                     'icon' => 'fas fa-check-circle dot_contador_en_motorizados_count',
                     'active' => ['enviados'],
                 ]
