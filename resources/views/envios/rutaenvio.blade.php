@@ -1,4 +1,4 @@
-@extends('adminlte::page')modal
+@extends('adminlte::page')
 
 @section('title', 'Rutas de Envio')
 
@@ -41,7 +41,7 @@
             <td>Fecha</td>
             <td><input type="text" value="{{$dateMin}}" id="min" name="min" class="form-control" autocomplete="off"></td>
             <td></td>
-  
+
 
           </tr>
         </tbody>
@@ -222,7 +222,7 @@
         fd2.append('distribuir', $('#distribuir').val() );
 
         // modal para distribucion
-        
+
         $.ajax({
           data: fd2,
           processData: false,
@@ -320,7 +320,7 @@
           },
         },
         rowCallback: function (row, data, index) {
-            
+
               if(data.destino2=='PROVINCIA'){
                 $('td', row).css('color','red')
 
@@ -369,7 +369,7 @@
           },
           {data: 'identificador', name: 'identificador',sWidth:'5%' },
 
-          
+
           {
             data: 'celular',
             name: 'celular',
@@ -379,7 +379,7 @@
           },
 
 
-        
+
           {
             data: 'nombre',
             name: 'nombre',
@@ -493,12 +493,12 @@
                 datass=datass+'<a  href="#" data-target="#modal-distribuir" data-toggle="modal" data-distribuir="'+row.id+'">'+
                   '<button class="btn btn-success btn-sm">'+
                     '<i class="fas fa-envelope"></i> Distribuir'+
-                    '</button>'+                    
+                    '</button>'+
                     '</a>';
 
                //datass = datass+ '<a href="" data-target="#modal-revertir" data-toggle="modal" data-recibir="'+row.id+'"><button class="btn btn-info btn-sm"><i class="fas fa-trash"></i> REVERTIR</button></a>';
-               
-               
+
+
                datass = datass+ '<a href="" data-target="#modal-desvincular" data-toggle="modal" data-desvincular="'+row.id+'">'+
                     '<button class="btn btn-danger btn-sm">'+
                       '<i class="fas fa-trash"></i>Sin enviar'+
@@ -721,7 +721,7 @@ tabla_pedidos=$('#tablaPrincipalpedidosagregar').DataTable({
               //busca en general
               $('#tablaPrincipal').DataTable().ajax.reload();
 
-            
+
 
             $('#tablaPrincipal').DataTable().ajax.reload();
           });
