@@ -593,7 +593,7 @@
              */
             tablaRecepcionados=$('#tablaRecepcionados').DataTable({
                 processing: true,
-                stateSave: true,
+                stateSave: false,
                 serverSide: true,
                 searching: false,
                 "bFilter": false,
@@ -732,7 +732,7 @@
             tablaEntregados=$('#tablaEntregados').DataTable({
                 processing: true,
                 autoload: false,
-                stateSave: true,
+                stateSave: false,
                 serverSide: true,
                 searching: false,
                 "bFilter": false,
@@ -896,7 +896,7 @@
             tablaAnulados=$('#tablaAnulados').DataTable({
                 processing: true,
                 autoload: false,
-                stateSave: true,
+                stateSave: false,
                 serverSide: true,
                 searching: false,
                 "bFilter": false,
