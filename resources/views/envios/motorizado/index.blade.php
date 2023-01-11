@@ -23,7 +23,7 @@
             <tbody>
             <tr>
 
-                <td><input type="date" value="{{$fecha_consulta}}" id="fecha_consulta" name="fecha_consulta" class="form-control" autocomplete="off"></td>
+                <td><input type="date" value="{{$fecha_consulta->format('Y-m-d')}}" id="fecha_consulta" name="fecha_consulta" class="form-control" autocomplete="off"></td>
                 <td></td>
 
 

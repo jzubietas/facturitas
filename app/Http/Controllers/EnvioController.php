@@ -1132,9 +1132,14 @@ class EnvioController extends Controller
 
         //SI ES QUE EXISTE UNA FECHA
         if ($request->fechaconsulta != null) {
-            $fecha_consulta = Carbon::createFromFormat('d/m/Y', $request->fechaconsulta)->format('Y-m-d');
+            try {
+                $fecha_consulta = Carbon::createFromFormat('d/m/Y', $request->fechaconsulta);
+            }catch (Exception $ex){
+                $fecha_consulta = now();
+            }
+
         } else {
-            $fecha_consulta = null;
+            $fecha_consulta = now();
         }
 
         //OBTENEMOS EL CODIGO DE CONDICION
@@ -1201,7 +1206,7 @@ class EnvioController extends Controller
                 //->whereIn('direccion_grupos.condicion_envio_code', [Pedido::ENVIO_MOTORIZADO_COURIER_INT,Pedido::RECEPCION_MOTORIZADO_INT])
                 ->whereIn('direccion_grupos.condicion_envio_code', explode(",",$url_tabla))
                 ->when($fecha_consulta != null, function ($query) use ($fecha_consulta) {
-                    $query->where(DB::raw('DATE(direccion_grupos.fecha_salida)'), $fecha_consulta);
+                    $query->whereDate('direccion_grupos.fecha_salida', $fecha_consulta);
                 })
                 ->activo();
 

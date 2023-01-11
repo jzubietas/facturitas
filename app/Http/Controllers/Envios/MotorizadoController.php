@@ -18,13 +18,14 @@ class MotorizadoController extends Controller
     public function index(Request $request)
     {
 
-        $fecha_consulta = Carbon::now()->format('Y-m-d');
-
         if ($request->fechaconsulta != null) {
-            $fecha_consulta_rec = Carbon::createFromFormat('d/m/Y', $request->fechaconsulta)->format('Y-m-d');
-            //dd($fecha_consulta_rec);
+            try {
+                $fecha_consulta = Carbon::createFromFormat('d/m/Y', $request->fechaconsulta);
+            }catch (\Exception $ex){
+                $fecha_consulta = now();
+            }
         } else {
-            $fecha_consulta_rec = null;
+            $fecha_consulta = now();
         }
 
 
@@ -32,8 +33,8 @@ class MotorizadoController extends Controller
             $query = DireccionGrupo::/*join('direccion_envios as de', 'direccion_grupos.id', 'de.direcciongrupo')*/
             join('clientes as c', 'c.id', 'direccion_grupos.cliente_id')
                 ->join('users as u', 'u.id', 'c.user_id')
-                ->when($fecha_consulta_rec != null, function ($query) use ($fecha_consulta_rec) {
-                    $query->whereDate('direccion_grupos.fecha_salida', $fecha_consulta_rec);
+                ->when($fecha_consulta != null, function ($query) use ($fecha_consulta) {
+                    $query->whereDate('direccion_grupos.fecha_salida', $fecha_consulta);
                 })
                 ->select([
                     'direccion_grupos.*',
