@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\Envios\DireccionGrupoController;
 use App\Http\Controllers\Envios\DistribucionController;
 use App\Http\Controllers\Envios\MotorizadoController;
 use App\Http\Controllers\ExcelController;
@@ -291,6 +292,7 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     Route::get('envios/motorizados', [MotorizadoController::class, 'index'])->name('envios.motorizados.index');
     Route::get('envios/motorizados/confirmar', [MotorizadoController::class, 'confirmar'])->name('envios.motorizados.confirmar');
     Route::get('envios/motorizados/confirmar-cliente', [MotorizadoController::class, 'confirmar_cliente'])->name('envios.motorizados.confirmar.cliente');
+    Route::post('envios/motorizados/{grupo}/revertir', [MotorizadoController::class, 'revertir'])->name('envios.motorizados.revertir');
 
     Route::get('envios.devueltos', [EnvioController::class, 'SobresDevueltos'])->name('envios.devueltos');
     Route::get('envios.datasobresdevueltos', [EnvioController::class, 'SobresDevueltosData'])->name('envios.datasobresdevueltos');
@@ -601,6 +603,8 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     Route::post('operaciones.confirmarmotorizadoconfirm', [EnvioController::class, 'confirmarEstadoConfirmConfirm'])->name('operaciones.confirmarmotorizadoconfirm');
     Route::post('operaciones.confirmarmotorizadoconfirmdismiss', [EnvioController::class, 'confirmarEstadoConfirmConfirmDismiss'])->name('operaciones.confirmarmotorizadoconfirmdismiss');
     Route::post('operaciones.confirmarcliente', [EnvioController::class, 'confirmarEstadoConfirmValidada'])->name('operaciones.confirmarcliente');
+
+    Route::get('direcciongrupo/{grupo}/no_contesto/get_sustentos_adjuntos',[DireccionGrupoController::class,'get_sustentos_adjuntos'])->name('direcciongrupo.no-contesto.get-sustentos-adjuntos');
 
     /* Route::group(['middleware' => ['permission:pedidos.index']], function () {
         Route::get('pedidos.index', [PedidoController::class, 'index']);

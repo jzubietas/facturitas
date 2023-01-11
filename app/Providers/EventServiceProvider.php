@@ -3,10 +3,12 @@
 namespace App\Providers;
 
 use App\Events\PagoEvent;
+use App\Events\PedidoAnulledEvent;
 use App\Events\PedidoAtendidoEvent;
 use App\Events\PedidoEntregadoEvent;
 use App\Events\PedidoEvent;
 use App\Listeners\PagoListener;
+use App\Listeners\PedidoAnulledListener;
 use App\Listeners\PedidoAtendidoListener;
 use App\Listeners\PedidoEntregadoListener;
 use App\Listeners\PedidoListener;
@@ -42,6 +44,9 @@ class EventServiceProvider extends ServiceProvider
         PagoEvent::class => [
             PagoListener::class,
         ],
+        PedidoAnulledEvent::class => [
+            PedidoAnulledListener::class
+        ]
     ];
 
     /**

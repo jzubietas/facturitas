@@ -22,7 +22,7 @@ class MotorizadoController extends Controller
 
         if ($request->fechaconsulta != null) {
             $fecha_consulta_rec = Carbon::createFromFormat('d/m/Y', $request->fechaconsulta)->format('Y-m-d');
-            dd($fecha_consulta_rec);
+            //dd($fecha_consulta_rec);
         } else {
             $fecha_consulta_rec = null;
         }
@@ -36,28 +36,7 @@ class MotorizadoController extends Controller
                     $query->whereDate('direccion_grupos.fecha_salida', $fecha_consulta_rec);
                 })
                 ->select([
-                    'direccion_grupos.id',
-                    'u.identificador as identificador',
-                    DB::raw(" (select 'LIMA') as destino "),
-                    'direccion_grupos.celular',
-                    'direccion_grupos.nombre',
-                    'direccion_grupos.cantidad',
-                    'direccion_grupos.codigos',
-                    'direccion_grupos.producto',
-                    'direccion_grupos.direccion',
-                    'direccion_grupos.referencia',
-                    'direccion_grupos.observacion',
-                    'direccion_grupos.distrito',
-                    DB::raw('(select DATE_FORMAT( direccion_grupos.created_at, "%Y-%m-%d")   from direccion_grupos dpa where dpa.id=direccion_grupos.id) as fecha'),
-                    'direccion_grupos.destino as destino2',
-                    'direccion_grupos.distribucion',
-                    'direccion_grupos.condicion_envio',
-                    'direccion_grupos.subcondicion_envio',
-                    'direccion_grupos.condicion_sobre',
-                    'direccion_grupos.correlativo as correlativo',
-                    'direccion_grupos.condicion_envio_code',
-                    'direccion_grupos.estado',
-                    'direccion_grupos.motorizado_status',
+                    'direccion_grupos.*',
                 ]);
 
             if (\auth()->user()->rol == User::ROL_MOTORIZADO) {
@@ -78,7 +57,7 @@ class MotorizadoController extends Controller
                         ->where('direccion_grupos.motorizado_status', Pedido::ESTADO_MOTORIZADO_NO_CONTESTO);
                     break;
                 case 'observado':
-                    $query->where('direccion_grupos.estado', '1');
+                    //$query->where('direccion_grupos.estado', '1');
                     $query->where('direccion_grupos.condicion_envio_code', Pedido::MOTORIZADO_INT);
                     $query->where('direccion_grupos.motorizado_status', Pedido::ESTADO_MOTORIZADO_OBSERVADO);
                     /*$query->where(function ($query) {
@@ -114,13 +93,39 @@ class MotorizadoController extends Controller
                     $btn = '<ul class="list-unstyled mt-sm-20">';
                     switch ($tab) {
                         case 'entregado':
+                        case 'no_contesto':
+                        case 'observado':
+                            if ($pedido->estado = 1 && ($pedido->condicion_envio_code==Pedido::MOTORIZADO_INT||$pedido->condicion_envio_code==Pedido::CONFIRM_MOTORIZADO_INT)) {
+                                $btn .= '<li class="pt-8">
+                                <button class="btn btn-sm text-white btn-danger"
+                                data-jqconfirm="revertir"
+                                data-jqconfirm-id="' . $pedido->id . '"
+                                data-jqconfirm-action="' . route('envios.motorizados.revertir', $pedido->id) . '"
+                                >
+                                    <i class="fas fa-undo text-white"></i>
+                                    Revertir
+                                </button>
+                            </li>';
+                            }
+                            break;
+                        default:
+
+                    }
+                    switch ($tab) {
+                        case 'entregado':
 
                             break;
                         case 'no_contesto':
-
+                            $btn .= '<li class="pt-8">
+                                    <button class="btn btn-sm text-white bg-success" data-motorizado-history="no_contesto"
+                                    data-jqconfirm-action="' . route('direcciongrupo.no-contesto.get-sustentos-adjuntos', $pedido->id) . '">
+                                        <i class="fa fa-motorcycle text-white" aria-hidden="true"></i>
+                                        Ver adjuntos
+                                    </button>
+                                </li>';
                             break;
                         case 'observado':
-
+                            $btn .= '<hr class="my-2"><p class="text-wrap text-break"><i>' . $pedido->motorizado_sustento_text . '</i></p>';
                             break;
                         default:
                             $btn .= '<li class="pt-8">
@@ -156,7 +161,7 @@ class MotorizadoController extends Controller
     //estado motorizado confirmar
     public function confirmar(Request $request)
     {
-        $users_motorizado=User::where('rol','MOTORIZADO')->where('estado','1')->pluck('name','id');
+        $users_motorizado = User::where('rol', 'MOTORIZADO')->where('estado', '1')->pluck('name', 'id');
         if ($request->has('datatable')) {
             $query = DireccionGrupo::/*join('direccion_envios as de', 'direccion_grupos.id', 'de.direcciongrupo')*/
             join('clientes as c', 'c.id', 'direccion_grupos.cliente_id')
@@ -219,7 +224,7 @@ class MotorizadoController extends Controller
                 ->rawColumns(['action', 'condicion_envio'])
                 ->toJson();
         }
-        return view('envios.motorizado.confirmar',compact('users_motorizado'));
+        return view('envios.motorizado.confirmar', compact('users_motorizado'));
     }
 
     //estado confirmar cliente
@@ -263,5 +268,23 @@ class MotorizadoController extends Controller
                 ->toJson();
         }
         return view('envios.motorizado.confirmar_cliente');
+    }
+
+    public function revertir(DireccionGrupo $grupo)
+    {
+        $grupo->update([
+            'condicion_envio' => Pedido::MOTORIZADO,
+            'condicion_envio_code' => Pedido::MOTORIZADO_INT,
+            'motorizado_status' => 0,
+            'motorizado_sustento_text' => '',
+            'motorizado_sustento_foto' => '',
+        ]);
+        $grupo->pedidos()->activo()->update([
+            'condicion_envio' => Pedido::MOTORIZADO,
+            'condicion_envio_code' => Pedido::MOTORIZADO_INT,
+        ]);
+        return response()->json([
+            'success' => true
+        ]);
     }
 }

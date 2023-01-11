@@ -34,24 +34,28 @@
         <ul class="nav nav-tabs" id="myTab" role="tablist">
             <li class="nav-item">
                 <a class="nav-link active" id="general-tab" data-toggle="tab" href="#general" role="tab"
+                   data-action-name="Acciones"
                    aria-controls="general" aria-selected="true" data-action="general">
                     EN MOTORIZADO
                 </a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" id="entregado-tab" data-toggle="tab" href="#entregado" role="tab"
+                   data-action-name="Acciones"
                    aria-controls="entregado" aria-selected="false" data-action="entregado">
                     ENTREGADO
                 </a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" id="no_contesto-tab" data-toggle="tab" href="#no_contesto" role="tab"
+                   data-action-name="Acciones"
                    aria-controls="no_contesto" aria-selected="false" data-action="no_contesto">
                     NO CONTESTO
                 </a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" id="observado-tab" data-toggle="tab" href="#observado" role="tab"
+                   data-action-name="Acciones/Sustento"
                    aria-controls="observado" aria-selected="false" data-action="observado">
                     OBSERVADOS
                 </a>
@@ -66,7 +70,7 @@
                     <th scope="col">Distrito</th>
                     <th scope="col">Asesor</th>
                     <th scope="col">Cliente</th>
-                    <th scope="col">Fecha de Envio</th>
+                    <th scope="col">Fecha de Salida</th>
                     <th scope="col">Razón social</th>
                     <th scope="col">Destino</th>
                     <th scope="col">Dirección de envío</th>
@@ -103,6 +107,7 @@
             }
         }
     </style>
+    @include('partials.css.time_line_css')
 @endpush
 
 @section('js')
@@ -151,48 +156,58 @@
                         q.tab = $('a[data-toggle="tab"].active').data('action')
                     }
                 },
+                initComplete: function () {
+
+                },
                 createdRow: function (row, data, dataIndex) {
 
                 },
+                "drawCallback": function(settings) {
+                    console.log(settings.json);
+                    $("#tablaPrincipal").DataTable().columns().header()[11].innerText = $('a[data-toggle="tab"].active').data('action-name')
+                },
                 rowCallback: function (row, data, index) {
-                    console.log(row)
-                    if (data.destino2 == 'PROVINCIA') {
+
+                    if (data.destino == 'PROVINCIA') {
                         $('td', row).css('color', '#20c997')
                     }
+                    if (data.estado == 0) {
+                        $('td', row).css('color', 'red')
+                    }
+
                     $('[data-jqconfirmcancel]', row).click(function () {
 
-                            $.confirm({
-                                type: 'red',
-                                title: '¡Revertir Envio!',
-                                content: 'Confirme si desea revertir el envio <b>' + data.codigos + '</b>',
-                                buttons: {
-                                    ok: {
-                                        text: 'Si, confirmar',
-                                        btnClass: 'btn-red',
-                                        action: function () {
-                                            const self = this;
-                                            self.showLoading(true)
-                                            $.ajax({
-                                                data: {
-                                                    envio_id: data.id
-                                                },
-                                                //operaciones.confirmar.revertir
-                                                type: 'POST',
-                                                url: "{{ route('operaciones.confirmar.revertir') }}",
-                                            }).always(function () {
-                                                self.close()
-                                                self.hideLoading(true)
-                                                $('#tablaPrincipal').DataTable().ajax.reload();
-                                            });
-                                        }
-                                    },
-                                    cancel: {
-                                        text: 'No'
+                        $.confirm({
+                            type: 'red',
+                            title: '¡Revertir Envio!',
+                            content: 'Confirme si desea revertir el envio <b>' + data.codigos + '</b>',
+                            buttons: {
+                                ok: {
+                                    text: 'Si, confirmar',
+                                    btnClass: 'btn-red',
+                                    action: function () {
+                                        const self = this;
+                                        self.showLoading(true)
+                                        $.ajax({
+                                            data: {
+                                                envio_id: data.id
+                                            },
+                                            //operaciones.confirmar.revertir
+                                            type: 'POST',
+                                            url: "{{ route('operaciones.confirmar.revertir') }}",
+                                        }).always(function () {
+                                            self.close()
+                                            self.hideLoading(true)
+                                            $('#tablaPrincipal').DataTable().ajax.reload();
+                                        });
                                     }
+                                },
+                                cancel: {
+                                    text: 'No'
                                 }
-                            })
-                        }
-                    );
+                            }
+                        })
+                    });
                     $('[data-jqconfirm=general]', row).click(function () {
 
                         $.dialog({
@@ -451,14 +466,6 @@ Enviar</button>
                 </div>
             </div>
             <div class="row">
-                <!--
-                <div class="col-lg-12">
-                   <div class="form-group">
-                         <label for="sustento_text">Ingrese su Sustento</label>
-                     <textarea class="form-control" id="sustento_text"  name="sustento_text" required placeholder="Ingrese su Sustento" rows="5"></textarea>
-                    </div>
-                </div>
-                -->
                 <div class="col-lg-12">
                    <div class="form-group">
                          <label for="sustento_foto">Adjuntar foto de las llamadas que realizo</label>
@@ -494,15 +501,6 @@ Enviar</button>
 
                                 self.$content.find("form").on('submit', function (e) {
                                     e.preventDefault()
-                                    /*
-                                    if (!e.target.sustento_text.value) {
-                                        $.confirm({
-                                            title: '¡Advertencia!',
-                                            content: '<b>Ingresa el sustento para continuar</b>',
-                                            type: 'orange'
-                                        })
-                                        return false;
-                                    }*/
                                     if (e.target.sustento_foto.files.length === 0) {
                                         $.confirm({
                                             title: '¡Advertencia!',
@@ -529,6 +527,91 @@ Enviar</button>
                                 })
                             },
                         });
+                    })
+                    $('[data-motorizado-history]', row).click(function () {
+                        const action = $(this).data('jqconfirm-action')
+                        $.confirm({
+                            title: 'Historial de adjuntos de llamadas',
+                            type: 'info',
+                            columnClass: 'xlarge',
+                            content: function () {
+                                const self = this
+                                return $.get(action).done(function (response) {
+                                    const data = {
+                                        motorizado_histories: response
+                                    }
+                                    const html = `
+                               <section class="timeline_area section_padding_130">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <!-- Timeline Area-->
+                <div class="apland-timeline-area">
+                    ${data.motorizado_histories.map(function (h) {
+                                        return `
+                    <!-- Single Timeline Content-->
+                    <div class="single-timeline-area">
+                        <div class="timeline-date wow fadeInLeft" data-wow-delay="0.1s" style="visibility: visible; animation-delay: 0.1s; animation-name: fadeInLeft;">
+                            <p>${h.created_at_format}</p>
+                        </div>
+                        <div class="row">
+                            <div class="col-12 col-md-9 col-lg-6">
+                                <div class="single-timeline-content wow fadeInLeft position-relative" data-wow-delay="0.3s" style="visibility: visible; animation-delay: 0.3s; animation-name: fadeInLeft;">
+                                    <div class="timeline-icon position-absolute" style="top: -12px;left: -9px;">
+                                        <i class="fa fa-paperclip" aria-hidden="true"></i>
+                                    </div>
+
+                                    <div class="timeline-text w-100">
+                                        <img src="${h.sustento_foto_link}" class="w-100">
+                                        ${h.sustento_text ? `<hr class="my-2">
+                                        <h4><b>Sustento</b></h4>
+                                        <p class="text-wrap text-break"> ${h.sustento_text || ''}</p>` : ''}
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>`
+                                    })}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+                                `;
+                                    self.setContent(html)
+                                });
+                            }
+                        })
+                    })
+
+                    $('[data-jqconfirm=revertir]', row).click(function () {
+                        const action = $(this).data('jqconfirm-action')
+                        $.confirm({
+                            type: 'red',
+                            title: `Confirmación`,
+                            content: `¿Estas seguro de revertir el paquete <b>ENV${data.id}</b><br> a <b>RECEPCION - MOTORIZADO</b>?`,
+                            buttons: {
+                                revertir: {
+                                    btnClass: 'btn-red',
+                                    action: function () {
+                                        const self=this
+                                        self.showLoading(true)
+                                        $.post(action, {
+
+                                        })
+                                            .done(function (data) {
+                                                self.close()
+                                            })
+                                            .always(function () {
+                                                self.hideLoading(true)
+                                                $('#tablaPrincipal').DataTable().draw(false)
+                                            })
+                                    }
+                                },
+                                cancelar: {}
+                            }
+                        })
                     })
                 },
                 columns: [
@@ -562,8 +645,8 @@ Enviar</button>
                         },
                     },
                     {
-                        data: 'fecha',
-                        name: 'fecha',
+                        data: 'fecha_salida',
+                        name: 'fecha_salida',
                         render: $.fn.dataTable.render.moment('DD/MM/YYYY')
                     },
                     {

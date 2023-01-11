@@ -308,6 +308,16 @@ class Pedido extends Model
     }
 
     /**
+     * @param Pedido $pedido
+     * @return \Illuminate\Contracts\Foundation\Application|mixed|\setting|(\setting&\Illuminate\Contracts\Foundation\Application)
+     * text: pedido.[pedido_id].adjuntos_file.[index]
+     * text: pedido.[pedido_id].adjuntos_disk.[index]
+     */
+    public static function getAnuladosAdjuntos(self $pedido){
+        return setting("pedido." . $pedido->id);
+    }
+
+    /**
      * @param Builder $query
      * @param $roles
      */

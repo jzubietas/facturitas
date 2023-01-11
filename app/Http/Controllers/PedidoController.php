@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Events\PedidoAnulledEvent;
 use App\Events\PedidoAtendidoEvent;
 use App\Events\PedidoEntregadoEvent;
 use App\Events\PedidoEvent;
@@ -278,7 +279,7 @@ class PedidoController extends Controller
                         } else {
                             $btn[] = '<button style="font-size:11px" disabled class="m-0 p-2 btn-sm dropdown-item"><i class="fa fa-file-pdf text-dark text-wrap"></i> Sin Fotos</button>';
                         }
-                    }else{
+                    } else {
                         $btn[] = '<button style="font-size:11px" disabled class="m-0 p-2 btn-sm dropdown-item"><i class="fa fa-file-pdf text-dark text-wrap"></i> Sin Fotos</button>';
                     }
                 }
@@ -297,9 +298,11 @@ class PedidoController extends Controller
                     if ($pedido->estado == 0) {
                         $btn[] = '<a style="font-size:11px" href="#" class="m-0 p-2 btn-sm dropdown-item text-wrap" data-target="#modal-restaurar" data-toggle="modal" data-restaurar="' . $pedido->id . '" data-codigo=' . $pedido->codigo . '><i class="fas fa-check text-secondary"></i> Restaurar</a>';
                     } else {
-                        if (!$pedido->pendiente_anulacion) {
-                            if ($pedido->condicion_pa == 0) {
-                                $btn[] = '<a style="font-size:11px" href="" class="m-0 p-2 btn-sm dropdown-item text-wrap" data-target="#modal-delete" data-toggle="modal" data-delete="' . $pedido->id . '" data-codigo=' . $pedido->codigo . ' data-responsable="' . $miidentificador . '"><i class="fas fa-trash-alt text-danger"></i> Anular</a>';
+                        if ($pedido->condicion_envio_code != Pedido::ENTREGADO_CLIENTE_INT) {
+                            if (!$pedido->pendiente_anulacion) {
+                                if ($pedido->condicion_pa == 0) {
+                                    $btn[] = '<a style="font-size:11px" href="" class="m-0 p-2 btn-sm dropdown-item text-wrap" data-target="#modal-delete" data-toggle="modal" data-delete="' . $pedido->id . '" data-codigo=' . $pedido->codigo . ' data-responsable="' . $miidentificador . '"><i class="fas fa-trash-alt text-danger"></i> Anular</a>';
+                                }
                             }
                         }
                     }
@@ -1629,11 +1632,7 @@ class PedidoController extends Controller
              * FISICA - sin banca
              * ELECTRONICA - bancarizado
              */
-            $is_fisico = $pedido->detallePedidos()->whereIn('detalle_pedidos.tipo_banca', [
-                'FISICO - banca',
-                'FISICO - sin banca',
-                'FISICA - sin banca',
-            ])->count();
+            $is_fisico = $pedido->detallePedido()->where('detalle_pedidos.tipo_banca', 'like', 'FISICO%')->count();
             if ($is_fisico == 0 && $pedido->condicion_code == Pedido::ATENDIDO_INT) {
                 //pendiente de anulacion
                 $pedido->update([
@@ -1660,12 +1659,11 @@ class PedidoController extends Controller
                     'path_adjunto_anular' => null,
                     'path_adjunto_anular_disk' => 'pstorage',
                 ]);
-                //$detalle_pedidos = DetallePedido::find($request->hiddenID);
-                $detalle_pedidos = DetallePedido::where('pedido_id', $request->hiddenID)->first();
 
-                $detalle_pedidos->update([
+                $detalle_pedidos = $pedido->detallePedidos()->update([
                     'estado' => '0'
                 ]);
+                event(new PedidoAnulledEvent($pedido));
                 $html = $detalle_pedidos;
             }
 
@@ -1696,8 +1694,7 @@ class PedidoController extends Controller
         return response()->json(['html' => $html]);
     }
 
-    public
-    function Restaurarid(Request $request)
+    public function Restaurarid(Request $request)
     {
         if (!$request->hiddenID) {
             $html = '';
@@ -1832,8 +1829,10 @@ class PedidoController extends Controller
                     }
 
                     if (Auth::user()->rol == "Administrador") {
-                        if (!$pedido->pendiente_anulacion) {
-                            $btn = $btn . '<a href="" class="btn-sm dropdown-item" data-target="#modal-delete" data-toggle="modal" data-delete="' . $pedido->id . '"><i class="fas fa-trash-alt text-danger"></i> Anular pedido</a>';
+                        if ($pedido->condicion_envio_code != Pedido::ENTREGADO_CLIENTE_INT) {
+                            if (!$pedido->pendiente_anulacion) {
+                                $btn = $btn . '<a href="" class="btn-sm dropdown-item" data-target="#modal-delete" data-toggle="modal" data-delete="' . $pedido->id . '"><i class="fas fa-trash-alt text-danger"></i> Anular pedido</a>';
+                            }
                         }
                     }
 
@@ -2945,6 +2944,11 @@ class PedidoController extends Controller
                 "success" => 0,
             ]);
         }
+        if ($pedido->condicion_envio_code == Pedido::ENTREGADO_CLIENTE_INT) {
+            return response()->json([
+                "success" => 0,
+            ]);
+        }
         $filePaths = [];
         $files = $request->attachments;
         if (is_array($files)) {
@@ -2954,14 +2958,6 @@ class PedidoController extends Controller
                 }
             }
         }
-        $pedido->update([
-            'condicion' => 'ANULADO',
-            'condicion_code' => Pedido::ANULADO_INT,
-            'user_anulacion_id' => Auth::user()->id,
-            'fecha_anulacion_confirm' => now(),
-            'estado' => '0',
-            'pendiente_anulacion' => '0',
-        ]);
         setting()->load();
         foreach ($filePaths as $index => $path) {
             $key = "pedido." . $pedido->id . ".nota_credito_file." . $index;
@@ -2972,11 +2968,22 @@ class PedidoController extends Controller
             ]);
         }
         setting()->save();
-        $detalle_pedidos = DetallePedido::where('pedido_id', $request->pedido_id)->first();
 
-        $detalle_pedidos->update([
+        $pedido->update([
+            'condicion' => 'ANULADO',
+            'condicion_code' => Pedido::ANULADO_INT,
+            'user_anulacion_id' => Auth::user()->id,
+            'fecha_anulacion_confirm' => now(),
+            'estado' => '0',
+            'pendiente_anulacion' => '0',
+        ]);
+
+        $pedido->detallePedidos()->update([
             'estado' => '0'
         ]);
+
+        event(new PedidoAnulledEvent($pedido));
+
         return response()->json([
             "success" => 1
         ]);

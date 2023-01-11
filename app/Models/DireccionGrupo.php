@@ -49,6 +49,27 @@ class DireccionGrupo extends Model
         });
     }
 
+    public function scopeObservado($query)
+    {
+        return $query->where($this->qualifyColumn('motorizado_status'), Pedido::ESTADO_MOTORIZADO_OBSERVADO);
+    }
+
+    public function scopeNoContesto($query)
+    {
+        return $query->where($this->qualifyColumn('motorizado_status'), Pedido::ESTADO_MOTORIZADO_NO_CONTESTO);
+    }
+
+    public function scopeContestoNoObservado($query)
+    {
+        return $query->whereNotIn($this->qualifyColumn('motorizado_status'), [Pedido::ESTADO_MOTORIZADO_OBSERVADO, Pedido::ESTADO_MOTORIZADO_NO_CONTESTO]);
+    }
+
+
+    public function motorizadoHistories()
+    {
+        return $this->hasMany(PedidoMotorizadoHistory::class, 'direccion_grupo_id')->orderByDesc('created_at');
+    }
+
     public function gastoEnvio()
     {
         return $this->hasOne(GastoEnvio::class, 'direcciongrupo');
@@ -74,12 +95,12 @@ class DireccionGrupo extends Model
         return $this->hasMany(Pedido::class, 'direccion_grupo');
     }
 
-    public static function desvincularPedido(self $grupo, Pedido $pedido)
+    public static function desvincularPedido(self $grupo, Pedido $pedido,$sustento=null)
     {
         if ($grupo->pedidos()->count() > 1) {
             $newgrupo = $grupo->replicate()->fill([
                 'motorizado_status' => Pedido::ESTADO_MOTORIZADO_OBSERVADO,
-                'motorizado_sustento_text' => $pedido->cambio_direccion_sustento,
+                'motorizado_sustento_text' => $sustento??$pedido->cambio_direccion_sustento,
             ]);
             $newgrupo->save();
 
@@ -100,7 +121,7 @@ class DireccionGrupo extends Model
         } else {
             $grupo->update([
                 'motorizado_status' => Pedido::ESTADO_MOTORIZADO_OBSERVADO,
-                'motorizado_sustento_text' => $pedido->cambio_direccion_sustento,
+                'motorizado_sustento_text' => $sustento??$pedido->cambio_direccion_sustento,
             ]);
             return $grupo;
         }
