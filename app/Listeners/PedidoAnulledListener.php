@@ -27,7 +27,8 @@ class PedidoAnulledListener
      */
     public function handle(PedidoAnulledEvent $event)
     {
-        $grupo = DireccionGrupo::desvincularPedido($event->pedido->direcciongrupo, $event->pedido, 'Anulado: ' . $event->pedido->motivo);
+        $message=($event->pedido->pendiente_anulacion?'Pendiente de anulacion: ':'Anulado: ');
+        $grupo = DireccionGrupo::desvincularPedido($event->pedido->direcciongrupo, $event->pedido, $message . $event->pedido->motivo);
         $grupo->update([
             'estado' => 0
         ]);
