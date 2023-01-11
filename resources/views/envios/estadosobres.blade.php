@@ -73,44 +73,128 @@
                 </tbody>
             </table>
 
-            <ul class="nav nav-tabs mb-24 mt-24" id="myTab" role="tablist">
-                <li class="nav-item w-50 text-center">
-                    <a class="condicion-tabla nav-link activo active font-weight-bold" id="home-tab" data-toggle="tab" data-url="11" href="#home" role="tab" aria-controls="home" aria-selected="true">
+            <ul class="nav nav-pills nav-justified nav-tabs mb-24 mt-24" id="myTab" role="tablist">
+                <li class="nav-item text-center">
+                    <a class="condicion-tabla nav-link activo active font-weight-bold"
+                       id="received-tab"
+                       data-toggle="tab"
+                       data-url="11"
+                       data-tipo="recepcion"
+                       data-consulta="tablaPrincipal"
+                       href="#received"
+                       role="tab"
+                       aria-controls="received"
+                       aria-selected="true">
                         <i class="fa fa-inbox" aria-hidden="true"></i> RECEPCIÓN
                     </a>
                 </li>
-                <li class="nav-item w-50 text-center">
-                    <a class="condicion-tabla nav-link font-weight-bold" id="profile-tab" data-toggle="tab" data-url="10" href="#profile" role="tab" aria-controls="profile" aria-selected="false">
+                <li class="nav-item text-center">
+                    <a class="condicion-tabla nav-link font-weight-bold"
+                       id="delivered-tab"
+                       data-toggle="tab"
+                       data-url="10,13,14"
+                       data-tipo="entregados"
+                       data-consulta="tablaEntregados"
+                       href="#delivered"
+                       role="tab"
+                       aria-controls="delivered"
+                       aria-selected="false">
                         <i class="fa fa-motorcycle" aria-hidden="true"></i> ENTREGADOS
+                    </a>
+                </li>
+
+                <li class="nav-item text-center">
+                    <a class="condicion-tabla nav-link font-weight-bold"
+                       id="annulled-tab"
+                       data-toggle="tab"
+                       data-url="AN"
+                       data-tipo="anulados"
+                       data-consulta="tablaAnulados"
+                       href="#annulled"
+                       role="tab"
+                       aria-controls="annulled"
+                       aria-selected="false">
+                        <i class="fa fa-motorcycle" aria-hidden="true"></i> ANULADOS
                     </a>
                 </li>
             </ul>
 
-            <table id="tablaPrincipal" class="table table-striped">
-                <thead>
-                <tr>
-                    <th scope="col">Item</th>
-                    <th scope="col">Código</th>
-                    <th scope="col">Asesor</th>
-                    {{-- <th scope="col">Cliente</th> --}}
-                    <th scope="col">Razón social</th>
+            <div class="tab-content" id="myTabContent">
+                <div class="tab-pane fade show active" id="received" role="tabpanel" aria-labelledby="received-tab">
+                    <table id="tablaRecepcionados" class="table table-striped w-100" >
+                        <thead>
+                        <tr>
+                            <th scope="col">Item</th>
+                            <th scope="col">Código</th>
+                            <th scope="col">Asesor</th>
+                            <th scope="col">Razón social</th>
+                            <th scope="col">Dias</th>
+                            <th scope="col">Fecha de registro</th>
+                            <th scope="col">Fecha de envio</th>
+                            <th scope="col">Fecha de entrega</th>
+                            <th scope="col">Destino</th>
+                            <th scope="col">Dirección de envío</th>
+                            <th scope="col">Estado de envio</th>
+                            <th scope="col">Estado de sobre</th>
+                            <th scope="col">Observacion Devolucion</th>
+                            <th scope="col">Acciones</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
 
-                    <th scope="col">Dias</th>
+                <div class="tab-pane fade" id="delivered" role="tabpanel" aria-labelledby="delivered-tab">
+                    <table id="tablaEntregados" class="table table-striped w-100" >
+                        <thead>
+                        <tr>
+                            <th scope="col">Item</th>
+                            <th scope="col">Asesor</th>
+                            <th scope="col">Cliente</th>
+                            <th scope="col">Código</th>
+                            <th scope="col">Razón social</th>
+                            <th scope="col">Fecha de entrega</th>
+                            <th scope="col">Foto del sobre</th>
+                            <th scope="col">Foto del domicilio</th>
+                            <th scope="col">Foto de quien recibe</th>
+                            <th scope="col">Estado de envio</th>
+                            <th scope="col">Acciones</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
 
-                    <th scope="col">Fecha de registro</th>
-                    <th scope="col">Fecha de envio</th>
-                    <th scope="col">Fecha de entrega</th>
-                    <th scope="col">Destino</th>
-                    <th scope="col">Dirección de envío</th>
-                    <th scope="col">Estado de envio</th>
-                    <th scope="col">Estado de sobre</th>
-                    <th scope="col">Observacion Devolucion</th>
-                    <th scope="col">Acciones</th>
-                </tr>
-                </thead>
-                <tbody>
-                </tbody>
-            </table>
+                <div class="tab-pane fade" id="annulled" role="tabpanel" aria-labelledby="annulled-tab">
+                    <table id="tablaAnulados" class="table table-striped w-100">
+                        <thead>
+                        <tr>
+                            <th scope="col">Item</th>
+                            <th scope="col">Código</th>
+                            <th scope="col">Asesor</th>
+                            <th scope="col">Razón social</th>
+                            <th scope="col">Dias</th>
+                            <th scope="col">Fecha de registro</th>
+                            <th scope="col">Fecha de envio</th>
+                            <th scope="col">Fecha de entrega</th>
+                            <th scope="col">Destino</th>
+                            <th scope="col">Dirección de envío</th>
+                            <th scope="col">Estado de envio</th>
+                            <th scope="col">Estado de sobre</th>
+                            <th scope="col">Observacion Devolucion</th>
+                            <th scope="col">Acciones</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+
+
             {{--@include('sobres.modal.direccionid')--}}
 
             @include('sobres.modal.historialLima')
@@ -208,11 +292,16 @@
     <script>
 
         $('.condicion-tabla').on('click', function (){
+            var tabla_load = $(this).data('consulta');
             $('.condicion-tabla').removeClass("activo");
             $(this).addClass("activo");
+            //$('#' + tabla_load).DataTable.init();
             //var url = $(this).data("url");
-            $('#tablaPrincipal').DataTable().ajax.reload();
+            //$('#tablaPrincipal').DataTable().ajax.reload();
 
+            if ( ! $.fn.DataTable.isDataTable( '#' + tabla_load ) ) {
+                $('#' + tabla_load).dataTable();
+            }
         });
 
 
@@ -1230,27 +1319,373 @@
                 });
             });
 
-            $('#tablaPrincipal').DataTable({
+            /********************
+             * TABLA SOBRES RECIBIDOS
+             */
+            $('#tablaRecepcionados').DataTable({
                 processing: true,
                 stateSave: true,
                 serverSide: true,
                 searching: true,
                 "order": [[0, "desc"]],
-                //ajax: "{{ route('envios.estadosobrestabla') }}",
-                ajax:{ url: "{{ route('envios.recepcionmotorizadotabla') }}",
-                    data: function(d){
-                        d.consulta = "pedido";
-                        d.condicion = $('.condicion-tabla.activo').data("url");
-                    }
+                ajax: {
+                    url: "{{ route('envios.estadosobrestabla') }}",
+                    data: function (d) {
+                        d.opcion = 'recepcionado';
+                    },
                 },
                 createdRow: function (row, data, dataIndex) {
-                    //console.log(row);
                 },
                 rowCallback: function (row, data, index) {
                     console.log(data);
                     if (data.devuelto != null) {
                         $('td', row).css('color', '#cf0a0a');
                     }
+                },
+                columns: [
+                    {
+                        data: 'id',
+                        name: 'id',
+                        render: function (data, type, row, meta) {
+                            if (row.id < 10) {
+                                return 'PED000' + row.id;
+                            } else if (row.id < 100) {
+                                return 'PED00' + row.id;
+                            } else if (row.id < 1000) {
+                                return 'PED0' + row.id;
+                            } else {
+                                return 'PED' + row.id;
+                            }
+                        }, "visible": false
+                    },
+                    {data: 'codigo', name: 'codigo',},
+                    {data: 'users', name: 'users',},
+
+                    {data: 'empresas', name: 'empresas',},
+                    {data: 'dias', name: 'dias',},
+
+                    {data: 'fecha_envio_doc', name: 'fecha_envio_doc', "visible": false},
+                    {data: 'fecha_envio_doc_fis', name: 'fecha_envio_doc_fis',},
+                    {data: 'fecha_recepcion', name: 'fecha_recepcion', "visible": false},
+                    {data: 'destino', name: 'destino', "visible": false},
+                    {
+                        data: 'direccion',
+                        name: 'direccion',
+                        "visible": false,
+                        render: function (data, type, row, meta) {
+                            datas = '';
+                            if (data != null) {
+                                return data;
+                            } else {
+                                return '<span class="badge badge-danger">REGISTRE DIRECCION</span>';
+                            }
+                            //return 'REGISTRE DIRECCION';
+                        },
+                    },
+                    {
+                        data: 'condicion_envio',
+                        name: 'condicion_envio',
+                        render: function (data, type, row, meta) {
+                            var badge_estado = '';
+                            if (row.estado_sobre == 1) {
+                                badge_estado += '<span class="badge badge-dark p-8" style="color: #fff; background-color: #347cc4; font-weight: 600; margin-bottom: -2px;border-radius: 4px 4px 0px 0px; font-size:8px;  padding:6px;">Direccion agregada</span>';
+                            }
+                            badge_estado += '<span class="badge badge-success" style="background-color:' + row.condicion_envio_color + ' !important;" >' + data + '</span>';
+                            return badge_estado;
+                        }
+                    },
+                    {
+                        data: 'envio',
+                        name: 'envio',
+                        render: function (data, type, row, meta) {
+                            if (row.envio == '1') {
+                                return '<span class="badge badge-danger">Por confirmar recepcion</span>';
+                            } else {
+                                return '<span class="badge badge-info">Recibido</span>';
+                            }
+                        },
+                        "visible": false
+                    },
+                    {
+                        data: 'observacion_devuelto',
+                        name: 'observacion_devuelto',
+                        render: function (data, type, row, meta) {
+                            if (data != null) {
+                                return data;
+                            } else {
+                                return ''
+                            }
+                        },
+                        "visible": true
+                    },
+                    {
+                        data: 'action',
+                        name: 'action',
+                        orderable: false,
+                        searchable: false,
+                        sWidth: '20%',
+                        "visible": false,
+                        render: function (data, type, row, meta) {
+                            datass = '';
+
+
+                            return datass;
+                        }
+                    },
+                ],
+                language: {
+                    "decimal": "",
+                    "emptyTable": "No hay información",
+                    "info": "Mostrando del _START_ al _END_ de _TOTAL_ Entradas",
+                    "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
+                    "infoFiltered": "(Filtrado de _MAX_ total entradas)",
+                    "infoPostFix": "",
+                    "thousands": ",",
+                    "lengthMenu": "Mostrar _MENU_ Entradas",
+                    "loadingRecords": "Cargando...",
+                    "processing": "Procesando...",
+                    "search": "Buscar:",
+                    "zeroRecords": "Sin resultados encontrados",
+                    "paginate": {
+                        "first": "Primero",
+                        "last": "Ultimo",
+                        "next": "Siguiente",
+                        "previous": "Anterior"
+                    }
+                },
+            });
+
+            /********************
+             * TABLA SOBRES ENTREGADOS
+             */
+
+            $('#tablaEntregados').DataTable({
+                processing: true,
+                autoload: false,
+                stateSave: true,
+                serverSide: true,
+                searching: true,
+                "order": [[5, "desc"]],
+                ajax: {
+                    url: "{{ route('envios.estadosobrestabla') }}",
+                    data: function (d) {
+                        d.opcion = 'entregado';
+                    },
+                },
+                createdRow: function (row, data, dataIndex) {
+                },
+                rowCallback: function (row, data, index) {
+
+                    if (data.destino2 == 'PROVINCIA') {
+                        $('td', row).css('color', 'red')
+                    } else if (data.destino2 == 'LIMA') {
+                        if (data.distribucion != null) {
+                            if (data.distribucion == 'NORTE') {
+                                //$('td', row).css('color','blue')
+                            } else if (data.distribucion == 'CENTRO') {
+                                //$('td', row).css('color','yellow')
+                            } else if (data.distribucion == 'SUR') {
+                                //$('td', row).css('color','green')
+                            }
+                        } else {
+                        }
+                    }
+
+                    $('[data-jqconfirm]', row).click(function () {
+                        $.confirm({
+                            type: 'red',
+                            title: '¡Revertir Envio!',
+                            content: 'Confirme si desea revertir el envio <b>'+data.codigos+'</b>',
+                            buttons: {
+                                ok:{
+                                    text:'Si, confirmar',
+                                    btnClass:'btn-red',
+                                    action:function (){
+                                        const self=this;
+                                        self.showLoading(true)
+                                        $.ajax({
+                                            data: {
+                                                envio_id:data.id,
+                                                pedido:data.codigos
+                                            },
+                                            type: 'POST',
+                                            url: "{{ route('operaciones.revertirhaciaatendido') }}",
+                                        }).always(function (){
+                                            self.close()
+                                            self.hideLoading(true)
+                                            $('#tablaPrincipal').DataTable().ajax.reload();
+                                        });
+                                    }
+                                },
+                                cancel:{
+                                    text:'No'
+                                }
+                            }
+                        })
+                    });
+                },
+                columns: [
+                    {
+                        data: 'correlativo',
+                        name: 'correlativo'
+
+                    },
+                    {
+                        data: 'identificador',
+                        name: 'identificador',
+                    },
+                    {
+                        data: 'celular',
+                        name: 'celular',
+                        render: function (data, type, row, meta) {
+                            return row.celular + ' - ' + row.nombre
+                        },
+                    },
+                    {
+                        data: 'codigos',
+                        name: 'codigos',
+                        render: function (data, type, row, meta) {
+                            if (data == null) {
+                                return 'SIN PEDIDOS';
+                            } else {
+                                var returndata = '';
+                                var jsonArray = data.split(",");
+                                $.each(jsonArray, function (i, item) {
+                                    returndata += item + '<br>';
+                                });
+                                return returndata;
+                            }
+                        }
+                    },
+                    {
+                        data: 'producto',
+                        name: 'producto',
+                        render: function (data, type, row, meta) {
+                            if (data == null) {
+                                return 'SIN RUCS';
+                            } else {
+                                var numm = 0;
+                                var returndata = '';
+                                var jsonArray = data.split(",");
+                                $.each(jsonArray, function (i, item) {
+                                    numm++;
+                                    returndata += numm + ": " + item + '<br>';
+
+                                });
+                                return returndata;
+                            }
+                        }
+                    },
+                    {
+                        data: 'fechaentrega',
+                        name: 'fechaentrega',
+                        //render: $.fn.dataTable.render.moment('DD/MM/YYYY')
+                    },
+                    {
+                        data: 'foto1',
+                        name: 'foto1',
+                    },
+                    {
+                        data: 'foto2',
+                        name: 'foto2',
+                    },
+                    {
+                        data: 'foto3',
+                        name: 'foto3',
+                    },
+                    {
+                        data: 'condicion_envio',
+                        name: 'condicion_envio',
+                    },
+                    {data: 'action', name: 'action', orderable: false, searchable: false,sWidth:'20%'},
+
+                ],
+                language: {
+                    "decimal": "",
+                    "emptyTable": "No hay información",
+                    "info": "Mostrando del _START_ al _END_ de _TOTAL_ Entradas",
+                    "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
+                    "infoFiltered": "(Filtrado de _MAX_ total entradas)",
+                    "infoPostFix": "",
+                    "thousands": ",",
+                    "lengthMenu": "Mostrar _MENU_ Entradas",
+                    "loadingRecords": "Cargando...",
+                    "processing": "Procesando...",
+                    "search": "Buscar:",
+                    "zeroRecords": "Sin resultados encontrados",
+                    "paginate": {
+                        "first": "Primero",
+                        "last": "Ultimo",
+                        "next": "Siguiente",
+                        "previous": "Anterior"
+                    }
+                },
+            });
+
+            $('#tablaAnulados').DataTable({
+                processing: true,
+                autoload: false,
+                stateSave: true,
+                serverSide: true,
+                searching: true,
+                "order": [[5, "desc"]],
+                ajax: {
+                    url: "{{ route('envios.estadosobrestabla') }}",
+                    data: function (d) {
+                        d.opcion = 'anulado';
+                    },
+                },
+                createdRow: function (row, data, dataIndex) {
+                },
+                rowCallback: function (row, data, index) {
+
+                    if (data.destino2 == 'PROVINCIA') {
+                        $('td', row).css('color', 'red')
+                    } else if (data.destino2 == 'LIMA') {
+                        if (data.distribucion != null) {
+                            if (data.distribucion == 'NORTE') {
+                                //$('td', row).css('color','blue')
+                            } else if (data.distribucion == 'CENTRO') {
+                                //$('td', row).css('color','yellow')
+                            } else if (data.distribucion == 'SUR') {
+                                //$('td', row).css('color','green')
+                            }
+                        } else {
+                        }
+                    }
+
+                    $('[data-jqconfirm]', row).click(function () {
+                        $.confirm({
+                            type: 'red',
+                            title: '¡Revertir Envio!',
+                            content: 'Confirme si desea revertir el envio <b>'+data.codigos+'</b>',
+                            buttons: {
+                                ok:{
+                                    text:'Si, confirmar',
+                                    btnClass:'btn-red',
+                                    action:function (){
+                                        const self=this;
+                                        self.showLoading(true)
+                                        $.ajax({
+                                            data: {
+                                                envio_id:data.id,
+                                                pedido:data.codigos
+                                            },
+                                            type: 'POST',
+                                            url: "{{ route('operaciones.revertirhaciaatendido') }}",
+                                        }).always(function (){
+                                            self.close()
+                                            self.hideLoading(true)
+                                            $('#tablaPrincipal').DataTable().ajax.reload();
+                                        });
+                                    }
+                                },
+                                cancel:{
+                                    text:'No'
+                                }
+                            }
+                        })
+                    });
                 },
                 columns: [
                     {

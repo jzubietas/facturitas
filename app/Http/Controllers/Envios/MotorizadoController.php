@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\DireccionGrupo;
 use App\Models\Pedido;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -16,10 +17,24 @@ class MotorizadoController extends Controller
     //estado motorizado
     public function index(Request $request)
     {
+
+        $fecha_consulta = Carbon::now()->format('Y-m-d');
+
+        if ($request->fechaconsulta != null) {
+            $fecha_consulta_rec = Carbon::createFromFormat('d/m/Y', $request->fechaconsulta)->format('Y-m-d');
+            dd($fecha_consulta_rec);
+        } else {
+            $fecha_consulta_rec = null;
+        }
+
+
         if ($request->has('datatable')) {
             $query = DireccionGrupo::/*join('direccion_envios as de', 'direccion_grupos.id', 'de.direcciongrupo')*/
             join('clientes as c', 'c.id', 'direccion_grupos.cliente_id')
                 ->join('users as u', 'u.id', 'c.user_id')
+                ->when($fecha_consulta_rec != null, function ($query) use ($fecha_consulta_rec) {
+                    $query->whereDate('direccion_grupos.fecha_salida', $fecha_consulta_rec);
+                })
                 ->select([
                     'direccion_grupos.id',
                     'u.identificador as identificador',
@@ -135,7 +150,7 @@ class MotorizadoController extends Controller
                 ->rawColumns(['action', 'condicion_envio'])
                 ->toJson();
         }
-        return view('envios.motorizado.index');
+        return view('envios.motorizado.index', compact('fecha_consulta'));
     }
 
     //estado motorizado confirmar
