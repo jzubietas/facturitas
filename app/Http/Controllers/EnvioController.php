@@ -483,7 +483,7 @@ class EnvioController extends Controller
             ->addColumn('action', function ($pedido) {
                 $btn = '';
                 $btn .= '<ul class="list-unstyled pl-0">';
-                if (auth()->user()->can('envios.enviar')):
+                //if (auth()->user()->can('envios.enviar')):
 
 
                     $btn .= '<li>
@@ -493,7 +493,7 @@ class EnvioController extends Controller
                                         </a>
                                     </li>';
 
-                endif;
+                //endif;
 
                 $btn .= '<li>
                             <a href="" class="btn-sm text-secondary" data-target="#modal-desvincular" data-toggle="modal" data-desvincular="' . $pedido->id . '">
@@ -2841,6 +2841,12 @@ class EnvioController extends Controller
     {
         $envio = DireccionGrupo::where("id", $request->hiddenMotorizadoEntregarConfirm)->first();
         $envio->update([
+            'condicion_envio' => Pedido::ENTREGADO_CLIENTE,
+            'condicion_envio_code' => Pedido::ENTREGADO_CLIENTE_INT,
+        ]);
+
+        $pedidos=Pedido::where('direccion_grupo',$request->hiddenMotorizadoEntregarConfirm)->where('estado','1');
+        $pedidos->update([
             'condicion_envio' => Pedido::ENTREGADO_CLIENTE,
             'condicion_envio_code' => Pedido::ENTREGADO_CLIENTE_INT,
         ]);
