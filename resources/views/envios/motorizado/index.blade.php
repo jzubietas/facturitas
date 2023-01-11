@@ -653,8 +653,8 @@ Enviar</button>
                         //render: $.fn.dataTable.render.moment('DD/MM/YYYY')
                     },
                     {
-                        data: 'fecha_reparto',
-                        name: 'fecha_reparto',
+                        data: 'fecha_recepcion',
+                        name: 'fecha_recepcion',
                         //render: $.fn.dataTable.render.moment('DD/MM/YYYY')
                     },
                     {
