@@ -49,6 +49,22 @@ class DireccionGrupo extends Model
         });
     }
 
+    public function scopeObservado($query)
+    {
+        return $query->where($this->qualifyColumn('motorizado_status'), Pedido::ESTADO_MOTORIZADO_OBSERVADO);
+    }
+
+    public function scopeNoContesto($query)
+    {
+        return $query->where($this->qualifyColumn('motorizado_status'), Pedido::ESTADO_MOTORIZADO_NO_CONTESTO);
+    }
+
+    public function scopeContestoNoObservado($query)
+    {
+        return $query->whereNotIn($this->qualifyColumn('motorizado_status'), [Pedido::ESTADO_MOTORIZADO_OBSERVADO, Pedido::ESTADO_MOTORIZADO_NO_CONTESTO]);
+    }
+
+
     public function gastoEnvio()
     {
         return $this->hasOne(GastoEnvio::class, 'direcciongrupo');

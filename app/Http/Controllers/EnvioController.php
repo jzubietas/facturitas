@@ -1788,7 +1788,8 @@ class EnvioController extends Controller
 
     public function RecibirMotorizado(Request $request)
     {
-        $grupo = DireccionGrupo::where("id", $request->hiddenEnvio)->first();
+        $grupo = DireccionGrupo::query()->findOrFail($request->hiddenEnvio);
+
 
         $grupo->update([
             'envio' => '2',
