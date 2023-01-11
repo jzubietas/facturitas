@@ -2580,6 +2580,7 @@ class EnvioController extends Controller
             $grupo->update([
                 'motorizado_status' => '1',
                 'motorizado_sustento_text' => $request->sustento_text,
+                'fecha' => now(),
             ]);
             //foreach ($grupo->pedidos as $pedido) {
 
@@ -2604,6 +2605,7 @@ class EnvioController extends Controller
                 'motorizado_status' => '2',
                 'motorizado_sustento_text' => $request->sustento_text,
                 'motorizado_sustento_foto' => $path,
+                'fecha' => now(),
             ]);
             //foreach ($grupo->pedidos as $pedido) {
 

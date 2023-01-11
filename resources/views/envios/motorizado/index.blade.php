@@ -588,7 +588,6 @@ Enviar</button>
                             }
                         })
                     })
-
                     $('[data-jqconfirm=revertir]', row).click(function () {
                         const action = $(this).data('jqconfirm-action')
                         $.confirm({

@@ -1669,9 +1669,9 @@ class PedidoController extends Controller
                 $detalle_pedidos = $pedido->detallePedidos()->update([
                     'estado' => '0'
                 ]);
-                event(new PedidoAnulledEvent($pedido));
                 $html = $detalle_pedidos;
             }
+            event(new PedidoAnulledEvent($pedido));
 
 
         }
