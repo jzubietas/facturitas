@@ -497,6 +497,35 @@ return [
         ],
 
         [
+            'text' => 'Motorizado',
+            'icon' => 'fa fa-motorcycle',
+            'can' => 'envios.modulo',
+            'submenu' => [
+                    [
+                        'text' => 'Recepción motorizado',
+                        'route' => 'envios.recepcionmotorizado',
+                        'can' => 'operacion.motorizado.recepcion',
+                        'icon' => 'fas fa-check-circle dot_sobres_confirmar_recepcion_motorizado_count',
+                        'active' => ['envios recepcion motorizado'],
+                    ],
+                    [
+                        'text' => 'Motorizado en ruta',
+                        'route' => 'envios.motorizados.index',
+                        'can' => 'operacion.motorizado',
+                        'icon' => 'fas fa-check-circle dot_contador_en_motorizados_count',
+                        'active' => ['enviados'],
+                    ],
+                    [
+                        'text' => 'Sobres devueltos',
+                        'route' => 'envios.devueltos',
+                        'can' => 'operacion.motorizado',
+                        'icon' => 'fas fa-check-circle dot_contador_en_motorizados_count',
+                        'active' => ['enviados'],
+                    ]
+                ]
+            ],
+
+        [
             'text' => 'Pagos',
             'icon' => 'fas fa-cash-register',
             'can' => 'pagos.modulo',

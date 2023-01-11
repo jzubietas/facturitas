@@ -292,6 +292,9 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     Route::get('envios/motorizados/confirmar', [MotorizadoController::class, 'confirmar'])->name('envios.motorizados.confirmar');
     Route::get('envios/motorizados/confirmar-cliente', [MotorizadoController::class, 'confirmar_cliente'])->name('envios.motorizados.confirmar.cliente');
 
+    Route::get('envios.devueltos', [EnvioController::class, 'SobresDevueltos'])->name('envios.devueltos');
+    Route::get('envios.datasobresdevueltos', [EnvioController::class, 'SobresDevueltosData'])->name('envios.datasobresdevueltos');
+
 
     /*Envios routes */
 
