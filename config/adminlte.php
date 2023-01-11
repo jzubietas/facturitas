@@ -466,14 +466,13 @@ return [
                     //'icon' => 'noti-sobres-entregados noti-side',
                     'active' => ['enviados'],
                 ],
-                /*[
+                [
                     'text' => 'Sobres en Ruta',
                     'route' => 'envios.rutaenvio',
                     'can' => 'courier.sobresenruta',
                     'icon' => 'fas fa-check-circle',
                     'active' => ['envios'],
-                ],*/
-
+                ],
                 [
                     'text' => 'Confirmar foto',
                     'route' => 'envios.motorizados.confirmar',
