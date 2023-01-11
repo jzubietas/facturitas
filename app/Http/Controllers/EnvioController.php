@@ -910,19 +910,19 @@ class EnvioController extends Controller
                 'direccion_grupos.cantidad',
                 'direccion_grupos.codigos',
                 'direccion_grupos.producto',
-                DB::raw(" (CASE WHEN direccion_grupos.destino='LIMA' then direccion_grupos.env_direccion else direccion_grupos.tracking end) as direccion "),
-                DB::raw(" (CASE WHEN direccion_grupos.destino='LIMA' then direccion_grupos.env_referencia else direccion_grupos.env_rotulo end) as referencia "),
-                DB::raw(" (CASE WHEN direccion_grupos.destino='LIMA' then direccion_grupos.env_observacion else 'OLVA COURIER' end) as observacion "),
-                'direccion_grupos.env_distrito as distrito',
+                'direccion_grupos.direccion',
+                'direccion_grupos.referencia',
+                'direccion_grupos.observacion',
+                'direccion_grupos.distrito',
                 'direccion_grupos.created_at as fecha',
-                'direccion_grupos.env_distribucion distribucion',
-                'direccion_grupos.condicion_envio condicion_sobre',
-                DB::raw('DATE(direccion_grupos.created_at) fecha2')
+                'direccion_grupos.distribucion',
             );
 
         if ($request->desde) {
-            $min = Carbon::createFromFormat('d/m/Y', $request->desde)->format('Y-m-d');//2022-11-25
-            $pedidos=$pedidos->where(DB::raw('DATE(direccion_grupos.created_at)'), $min);
+            try {
+                $min = Carbon::createFromFormat('Y-m-d', $request->desde);//2022-11-25
+                $pedidos = $pedidos->whereDate('direccion_grupos.created_at', $min);
+            }catch (Exception $ex){}
         }
 
         return Datatables::of($pedidos)
@@ -2720,7 +2720,7 @@ class EnvioController extends Controller
 
     public function confirmarEstado(Request $request)
     {
-        $envio = DireccionGrupo::where("id", $request->hiddenCodigo)->first();
+        $envio = DireccionGrupo::query()->findOrFail($request->hiddenCodigo);
         $envio->update([
             'condicion_envio' => Pedido::ENVIO_MOTORIZADO_COURIER,
             'condicion_envio_code' => Pedido::ENVIO_MOTORIZADO_COURIER_INT,
@@ -2730,8 +2730,7 @@ class EnvioController extends Controller
         /*$codigos_paquete = collect(explode(",", $envio->codigos))->map(function ($cod) {
             return trim($cod);
         })->all();*/
-        $codigos_paquete = Pedido::where('direccion_grupo', $envio->id);
-        $codigos_paquete->update([
+        $envio->pedidos()->activo()->update([
             'condicion_envio_code' => Pedido::ENVIO_MOTORIZADO_COURIER_INT,
             'condicion_envio' => Pedido::ENVIO_MOTORIZADO_COURIER,
             'fecha_salida' => $request->fecha_salida
