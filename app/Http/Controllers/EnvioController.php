@@ -2553,99 +2553,49 @@ class EnvioController extends Controller
         return view('envios.estadosobres', compact('superasesor', 'ver_botones_accion', 'distritos', 'departamento', '_pedidos'));
     }
 
-
     public function Estadosobrestabla(Request $request)
     {
-        $pedidos = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')
-            ->join('users as u', 'pedidos.user_id', 'u.id')
-            ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
-            ->select([
-                'pedidos.id',
-                'pedidos.cliente_id',
-
-                'u.identificador as users',
-                'u.id as user_id',
-                'dp.codigo as codigos',
-                'dp.nombre_empresa as empresas',
-                'dp.total as total',
-                'pedidos.condicion',
-                'pedidos.created_at as fecha',
-                'pedidos.condicion_envio',
-                'pedidos.envio',
-                'pedidos.codigo',
-                'pedidos.destino',
-                'pedidos.direccion',
-                'dp.envio_doc',
-                'dp.fecha_envio_doc',
-                'dp.cant_compro',
-                'dp.fecha_envio_doc_fis',
-                'dp.foto1',
-                'dp.foto2',
-                'dp.fecha_recepcion',
-                'pedidos.devuelto',
-                'pedidos.cant_devuelto',
-                'pedidos.returned_at',
-                'pedidos.observacion_devuelto',
-                DB::raw("DATEDIFF(DATE(NOW()), DATE(pedidos.created_at)) AS dias")
-            ])
-            ->where('pedidos.estado', '1')
-            ->whereIn('pedidos.condicion_envio_code', [Pedido::RECEPCION_COURIER_INT])
-            ->where('dp.estado', '1');
-
-        if (Auth::user()->rol == "Operario") {
-            $asesores = User::where('users.rol', 'Asesor')
-                ->where('users.estado', '1')
-                ->Where('users.operario', Auth::user()->id)
-                ->select(
-                    DB::raw("users.identificador as identificador")
-                )
-                ->pluck('users.identificador');
-
-            $pedidos = $pedidos->WhereIn('u.identificador', $asesores);
-
-        } else if (Auth::user()->rol == "Jefe de operaciones") {
-            $operarios = User::where('users.rol', 'Operario')
-                ->where('users.estado', '1')
-                ->where('users.jefe', Auth::user()->id)
-                ->select(
-                    DB::raw("users.id as id")
-                )
-                ->pluck('users.id');
-
-            $asesores = User::where('users.rol', 'Asesor')
-                ->where('users.estado', '1')
-                ->WhereIn('users.operario', $operarios)
-                ->select(
-                    DB::raw("users.identificador as identificador")
-                )
-                ->pluck('users.identificador');
-
-            $pedidos = $pedidos->WhereIn('u.identificador', $asesores);
-
-        } else if (Auth::user()->rol == "Asesor") {
-            $pedidos = $pedidos->Where('u.identificador', Auth::user()->identificador);
-
-        } else if (Auth::user()->rol == "Super asesor") {
-            $pedidos = $pedidos->Where('u.identificador', Auth::user()->identificador);
-
-        } else if (Auth::user()->rol == "Encargado") {
-
-            $usersasesores = User::where('users.rol', 'Asesor')
-                ->where('users.estado', '1')
-                ->where('users.supervisor', Auth::user()->id)
-                ->select(
-                    DB::raw("users.identificador as identificador")
-                )
-                ->pluck('users.identificador');
-
-            $pedidos = $pedidos->WhereIn('u.identificador', $usersasesores);
+        $opcion=$request->opcion;
+        if($opcion=='recepcionado' || $opcion=='anulado'){
+            $pedidos = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')
+                ->join('users as u', 'pedidos.user_id', 'u.id')
+                ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
+                ->select([
+                    'pedidos.*',
+                    'u.identificador as users',
+                    'dp.codigo as codigos',
+                    'dp.nombre_empresa as empresas',
+                    'dp.total as total',
+                    'pedidos.created_at as fecha',
+                    'dp.envio_doc',
+                    'dp.fecha_envio_doc',
+                    'dp.cant_compro',
+                    'dp.fecha_envio_doc_fis',
+                    'dp.foto1',
+                    'dp.foto2',
+                    'dp.fecha_recepcion',
+                    DB::raw("DATEDIFF(DATE(NOW()), DATE(pedidos.created_at)) AS dias")
+                ])
+                ->where('pedidos.estado', '1')
+                ->whereIn('pedidos.condicion_envio_code', [Pedido::RECEPCION_COURIER_INT])
+                ->where('dp.estado', '1');
         }
+        else if($opcion=='entregado'){
+            $pedidos = DireccionGrupo::/*join('direccion_envios as de', 'direccion_grupos.id', 'de.direcciongrupo')*/
+            join('clientes as c', 'c.id', 'direccion_grupos.cliente_id')
+                ->join('users as u', 'u.id', 'c.user_id')
+                ->where('direccion_grupos.estado', '1')
+                ->whereIn('direccion_grupos.condicion_envio_code', [Pedido::ENTREGADO_CLIENTE_INT, Pedido::ENTREGADO_SIN_SOBRE_OPE_INT, Pedido::ENTREGADO_SIN_SOBRE_CLIENTE_INT])
+                ->select(
+                    'direccion_grupos.*',
+                    DB::raw("DATE_FORMAT(direccion_grupos.fecha_recepcion, '%Y-%m-%d') as fechaentrega"),
+                );
+        }
+
         return Datatables::of(DB::table($pedidos))
             ->addIndexColumn()
             ->addColumn('action', function ($pedido) {
                 $btn = '';
-                //if($pedido->condicion_envio_code==13)
-
                 return $btn;
             })
             ->rawColumns(['action'])
