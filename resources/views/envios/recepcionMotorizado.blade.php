@@ -97,10 +97,10 @@
     <div class="card-body p-0">
 
       <table cellspacing="5" cellpadding="5" class="table-responsive">
-          <tbody>
-            <tr>
+          <tbody class="w-100">
+            <tr  class="w-100">
               <td>Fecha</td>
-              <td><input type="text" value="{{$fecha_consulta}}" id="fecha_consulta" name="fecha_consulta" class="form-control" autocomplete="off"></td>
+              <td align="center"><input type="text" value="{{$fecha_consulta}}" id="fecha_consulta" name="fecha_consulta" class="form-control" autocomplete="off"></td>
               <td></td>
 
 
