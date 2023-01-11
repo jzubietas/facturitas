@@ -279,7 +279,7 @@ class PedidoController extends Controller
                         } else {
                             $btn[] = '<button style="font-size:11px" disabled class="m-0 p-2 btn-sm dropdown-item"><i class="fa fa-file-pdf text-dark text-wrap"></i> Sin Fotos</button>';
                         }
-                    }else{
+                    } else {
                         $btn[] = '<button style="font-size:11px" disabled class="m-0 p-2 btn-sm dropdown-item"><i class="fa fa-file-pdf text-dark text-wrap"></i> Sin Fotos</button>';
                     }
                 }
@@ -298,9 +298,11 @@ class PedidoController extends Controller
                     if ($pedido->estado == 0) {
                         $btn[] = '<a style="font-size:11px" href="#" class="m-0 p-2 btn-sm dropdown-item text-wrap" data-target="#modal-restaurar" data-toggle="modal" data-restaurar="' . $pedido->id . '" data-codigo=' . $pedido->codigo . '><i class="fas fa-check text-secondary"></i> Restaurar</a>';
                     } else {
-                        if (!$pedido->pendiente_anulacion) {
-                            if ($pedido->condicion_pa == 0) {
-                                $btn[] = '<a style="font-size:11px" href="" class="m-0 p-2 btn-sm dropdown-item text-wrap" data-target="#modal-delete" data-toggle="modal" data-delete="' . $pedido->id . '" data-codigo=' . $pedido->codigo . ' data-responsable="' . $miidentificador . '"><i class="fas fa-trash-alt text-danger"></i> Anular</a>';
+                        if ($pedido->condicion_envio_code != Pedido::ENTREGADO_CLIENTE_INT) {
+                            if (!$pedido->pendiente_anulacion) {
+                                if ($pedido->condicion_pa == 0) {
+                                    $btn[] = '<a style="font-size:11px" href="" class="m-0 p-2 btn-sm dropdown-item text-wrap" data-target="#modal-delete" data-toggle="modal" data-delete="' . $pedido->id . '" data-codigo=' . $pedido->codigo . ' data-responsable="' . $miidentificador . '"><i class="fas fa-trash-alt text-danger"></i> Anular</a>';
+                                }
                             }
                         }
                     }
@@ -1630,7 +1632,7 @@ class PedidoController extends Controller
              * FISICA - sin banca
              * ELECTRONICA - bancarizado
              */
-            $is_fisico = $pedido->detallePedido()->where('detalle_pedidos.tipo_banca','like','FISICO%')->count();
+            $is_fisico = $pedido->detallePedido()->where('detalle_pedidos.tipo_banca', 'like', 'FISICO%')->count();
             if ($is_fisico == 0 && $pedido->condicion_code == Pedido::ATENDIDO_INT) {
                 //pendiente de anulacion
                 $pedido->update([
@@ -1692,8 +1694,7 @@ class PedidoController extends Controller
         return response()->json(['html' => $html]);
     }
 
-    public
-    function Restaurarid(Request $request)
+    public function Restaurarid(Request $request)
     {
         if (!$request->hiddenID) {
             $html = '';
@@ -1828,8 +1829,10 @@ class PedidoController extends Controller
                     }
 
                     if (Auth::user()->rol == "Administrador") {
-                        if (!$pedido->pendiente_anulacion) {
-                            $btn = $btn . '<a href="" class="btn-sm dropdown-item" data-target="#modal-delete" data-toggle="modal" data-delete="' . $pedido->id . '"><i class="fas fa-trash-alt text-danger"></i> Anular pedido</a>';
+                        if ($pedido->condicion_envio_code != Pedido::ENTREGADO_CLIENTE_INT) {
+                            if (!$pedido->pendiente_anulacion) {
+                                $btn = $btn . '<a href="" class="btn-sm dropdown-item" data-target="#modal-delete" data-toggle="modal" data-delete="' . $pedido->id . '"><i class="fas fa-trash-alt text-danger"></i> Anular pedido</a>';
+                            }
                         }
                     }
 
@@ -2937,6 +2940,11 @@ class PedidoController extends Controller
         ]);
         $pedido = Pedido::findOrFail($request->pedido_id);
         if ($pedido->pendiente_anulacion != '1') {
+            return response()->json([
+                "success" => 0,
+            ]);
+        }
+        if ($pedido->condicion_envio_code == Pedido::ENTREGADO_CLIENTE_INT) {
             return response()->json([
                 "success" => 0,
             ]);
