@@ -136,7 +136,7 @@
                             <th scope="col">Razón social</th>
                             <th scope="col">Dias en Oficina</th>
                             <th scope="col">Fecha de registro</th>
-                            <th scope="col">Fecha de recepcion</th>
+                            <th scope="col">Fecha de recepcion courier</th>
                             <th scope="col">Fecha de entrega</th>
                             <th scope="col">Destino</th>
                             <th scope="col">Dirección de envío</th>
