@@ -656,7 +656,7 @@
             var fecha_formateada = fecha_format[2] + "/" + fecha_format[1] + "/" + fecha_format[0];
             $(this).data('fecha',fecha_formateada);
             console.log(fecha_formateada);
-            $('#tablaPrincipal').DataTable().ajax.reload();
+            $('.table').DataTable().ajax.reload();
         });
 
             $('#tablaPrincipal').DataTable({
