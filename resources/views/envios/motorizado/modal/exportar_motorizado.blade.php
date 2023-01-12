@@ -12,9 +12,9 @@
 
 
       @if($key === '1')
-        {!! Form::open(['route' => ['envios.motorizadoconfirmar.Excel'], 'method' => 'POST', 'target' => 'blanck_']) !!}
+        {!! Form::open(['route' => ['envios.motorizadoconfirmar.Excel'], 'method' => 'POST', 'target' => 'blanck_','id'=>'form_motorizadoconfirmar']) !!}
       @elseif($key === '2')
-        {!! Form::open(['route' => ['entregadosporfechasexcel'], 'method' => 'POST', 'target' => 'blanck_']) !!}
+        {!! Form::open(['route' => ['envios.recepcionmotorizado.Excel'], 'method' => 'POST', 'target' => 'blanck_','id'=>'form_recepcionmotorizado']) !!}
       @endif
 
             <div class="card-body">
@@ -27,11 +27,11 @@
                         <div class="col-lg-6">
                           <label>Motorizado&nbsp;</label>
 
-                          {!! Form::select('user_motorizado', $users_motorizado, null, ['class' => 'form-control selectpicker border border-secondary', 'placeholder' => '---- SELECCIONE USUARIO ----']) !!}
+                          {!! Form::select('user_motorizado', $users_motorizado, '', ['id'=>'user_motorizado','class' => 'form-control selectpicker border border-secondary', 'placeholder' => ' SELECCIONE USUARIO ']) !!}
                         </div>
                         <div class="col-lg-6">
                           <label>Fecha&nbsp;</label>
-                          {!! Form::date('fecha_envio', \Carbon\Carbon::now(), ['class' => 'form-control']); !!}
+                          {!! Form::date('fecha_envio', \Carbon\Carbon::now(), ['id'=>'fecha_envio','class' => 'form-control']); !!}
                         </div>
                       </div>
                     </div>

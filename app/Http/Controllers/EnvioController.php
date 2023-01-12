@@ -1009,6 +1009,7 @@ class EnvioController extends Controller
 
     public function Enviosrecepcionmotorizado()
     {
+        $users_motorizado = User::where('rol', 'MOTORIZADO')->where('estado', '1')->pluck('name', 'id');
         //$fecha_consulta = Carbon::now()->format('d/m/Y');
         $fecha_consulta = Carbon::now()->format('Y-m-d');
         $condiciones = [
@@ -1054,7 +1055,7 @@ class EnvioController extends Controller
             $ver_botones_accion = 1;
         }
 
-        return view('envios.recepcionMotorizado', compact('condiciones', 'distritos', 'direcciones', 'destinos', 'superasesor', 'ver_botones_accion', 'departamento', 'fecha_consulta'));
+        return view('envios.recepcionMotorizado', compact('condiciones', 'distritos', 'direcciones', 'destinos', 'superasesor', 'ver_botones_accion', 'departamento', 'fecha_consulta','users_motorizado'));
     }
 
     public function Enviosporconfirmartabla(Request $request)

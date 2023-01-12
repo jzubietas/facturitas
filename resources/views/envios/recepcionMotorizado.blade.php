@@ -7,22 +7,30 @@
         <div class="col-lg-6">
             <h1 class="text-center font-20 font-weight-bold">Recepcion para motorizados - ENVIOS</h1>
         </div>
-        <div class="co-lg-6">
-            <div class="row">
-                <div class="col-lg-6">
+        <div class="col-lg-6">
+            <div class="row mx-auto d-flex justify-content-center">
+                <div class="col-lg-12 ">
+                    <div class="btn-group">
 
+                        <?php if (Auth::user()->rol == 'Jefe de courier' || Auth::user()->rol == 'Administrador' ){ ?>
+                        <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
+                                aria-expanded="false">
+                            Exportar
+                        </button>
+                        <?php } ?>
+
+                        <div class="dropdown-menu">
+                            <a href="" data-target="#modal-exportar" data-toggle="modal" class="dropdown-item" target="blank_"><img
+                                    src="{{ asset('imagenes/icon-excel.png') }}"> Excel</a>
+
+                        </div>
+                    </div>
                 </div>
             </div>
-            <!--
-            <div class="btn-group dropleft">
 
-                <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Exportar
-                </button>
-                <div class="dropdown-menu">
-                    <a href="" data-target="#modal-exportar" data-toggle="modal" class="dropdown-item" target="blank_"><img src="{{ asset('imagenes/icon-excel.png') }}"> Excel</a>
-                </div>
-            </div>-->
+
+            @include('envios.motorizado.modal.exportar_motorizado', ['title' => 'Exportar Recepcion Motorizado', 'key' => '2'])
+
         </div>
     </div>
 
@@ -532,6 +540,35 @@ setTimeout(function (){
 
   <script>
     $(document).ready(function () {
+
+        $(document).on("submit", "#form_recepcionmotorizado", function (event) {
+            event.preventDefault();
+            var oForm = $(this);
+
+            let  user_motivov=$("#user_motorizado").val();
+            let  fecha_env=$("#fecha_envio").val();
+            //console.log(fecha_env)
+            if (user_motivov == '') {
+                Swal.fire(
+                    'Error',
+                    'Seleccione el usuario a generar el reporte.',
+                    'warning'
+                )
+                return true;
+            }else if (fecha_env == '') {
+                Swal.fire(
+                    'Error',
+                    'Elija una fecha de reporte.',
+                    'warning'
+                )
+                return true;
+            }else{
+                console.log(fecha_env)
+                oForm.trigger('submit');
+                return true;
+            }
+
+        });
 
         $("#fecha_consulta").on('change', function(){
             //var fecha_formateada = $(this).val().replaceAll('-', '/');
