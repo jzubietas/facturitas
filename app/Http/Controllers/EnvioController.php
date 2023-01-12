@@ -2484,7 +2484,6 @@ class EnvioController extends Controller
                             </a>
                       <div class="card-body bg-transparent p-0">
                         <h5 class="card-title"></h5>
-                        <p class="card-text">.</p>
                         <a download href="' . $urlimagen1 . '" class="text-center"><button type="button" class="btn btn-secondary btn-md"> Descargar</button> </a>
                         <a href="" data-target="#modal-cambiar-imagen" data-toggle="modal" data-item="1" data-imagen="' . $pedido->foto1 . '" data-pedido="' . $pedido->id . '">
 <button class="btn btn-danger btn-md">Cambiar</button></a>';
@@ -2515,7 +2514,6 @@ class EnvioController extends Controller
                             </a>
                       <div class="card-body bg-transparent p-0">
                         <h5 class="card-title"></h5>
-                        <p class="card-text">.</p>
                         <a download href="' . $urlimagen1 . '" class="text-center"><button type="button" class="btn btn-secondary btn-md"> Descargar</button> </a>
                         <a href="" data-target="#modal-cambiar-imagen" data-toggle="modal" data-item="2" data-imagen="' . $pedido->foto2 . '" data-pedido="' . $pedido->id . '">
 <button class="btn btn-danger btn-md">Cambiar</button></a>';
@@ -2545,7 +2543,6 @@ class EnvioController extends Controller
                             </a>
                       <div class="card-body bg-transparent p-0">
                         <h5 class="card-title"></h5>
-                        <p class="card-text">.</p>
                         <a download href="' . $urlimagen1 . '" class="text-center"><button type="button" class="btn btn-secondary btn-md"> Descargar</button> </a>
                         <a href="" data-target="#modal-cambiar-imagen" data-toggle="modal" data-item="3" data-imagen="' . $pedido->foto3 . '" data-pedido="' . $pedido->id . '">
 <button class="btn btn-danger btn-md">Cambiar</button></a>';
