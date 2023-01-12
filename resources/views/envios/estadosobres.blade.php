@@ -799,14 +799,17 @@
                     {
                         data: 'foto1',
                         name: 'foto1',
+                        sWidth:'5%'
                     },
                     {
                         data: 'foto2',
                         name: 'foto2',
+                        sWidth:'5%'
                     },
                     {
                         data: 'foto3',
                         name: 'foto3',
+                        sWidth:'5%'
                     },
                     {
                         data: 'condicion_envio',

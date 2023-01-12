@@ -2478,11 +2478,15 @@ class EnvioController extends Controller
                     if ($pedido->foto1 != null) {
                         $urlimagen1 = \Storage::disk('pstorage')->url($pedido->foto1);
 
-                        $data = '<a href="" data-target="#modal-imagen" data-toggle="modal" data-imagen="' . $pedido->foto1 . '">
-                    <img src="' . $urlimagen1 . '" alt="' . $pedido->foto1 . '" height="100px" width="100px" id="imagen_' . $pedido->id . '-1" class="img-thumbnail cover">
-                    </a>
-                    <a download href="' . $urlimagen1 . '" class="text-center"><button type="button" class="btn btn-secondary btn-md"> Descargar</button> </a>
-                    <a href="" data-target="#modal-cambiar-imagen" data-toggle="modal" data-item="1" data-imagen="' . $pedido->foto1 . '" data-pedido="' . $pedido->id . '">
+                        $data='<div class="card bg-transparent text-center border-none border-left-0 shadow-none " style="width: 8rem;border: none;">
+                          <a href="" data-target="#modal-imagen" data-toggle="modal" data-imagen="' . $pedido->foto1 . '">
+                            <img src="' . $urlimagen1 . '" alt="' . $pedido->foto1 . '" height="100px" width="100px" id="imagen_' . $pedido->id . '-1" class="img-thumbnail cover text-center">
+                            </a>
+                      <div class="card-body bg-transparent p-0">
+                        <h5 class="card-title"></h5>
+                        <p class="card-text">.</p>
+                        <a download href="' . $urlimagen1 . '" class="text-center"><button type="button" class="btn btn-secondary btn-md"> Descargar</button> </a>
+                        <a href="" data-target="#modal-cambiar-imagen" data-toggle="modal" data-item="1" data-imagen="' . $pedido->foto1 . '" data-pedido="' . $pedido->id . '">
 <button class="btn btn-danger btn-md">Cambiar</button></a>';
 
                         if (Auth::user()->rol == "Asesor") {
@@ -2490,6 +2494,10 @@ class EnvioController extends Controller
                         <button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i></button>
                         </a>';
                         }
+
+                        $data.='</div>
+                    </div>';
+
                         return $data;
                     } else if ($pedido->condicion_envio_code == Pedido::ENTREGADO_SIN_SOBRE_OPE_INT) {
                         return '<span class="badge badge-dark">Sin envio</span>';
@@ -2501,18 +2509,25 @@ class EnvioController extends Controller
                     if ($pedido->foto2 != null) {
                         $urlimagen1 = \Storage::disk('pstorage')->url($pedido->foto2);
 
-                        $data = '<a href="" data-target="#modal-imagen" data-toggle="modal" data-imagen="' . $pedido->foto2 . '">
-                    <img src="' . $urlimagen1 . '" alt="' . $pedido->foto2 . '" height="100px" width="100px" id="imagen_' . $pedido->id . '-2" class="img-thumbnail cover">
-                    </a>
-                    <a download href="' . $urlimagen1 . '" class="text-center"><button type="button" class="btn btn-secondary btn-md"> Descargar</button> </a>
-                    <a href="" data-target="#modal-cambiar-imagen" data-toggle="modal" data-item="2" data-imagen="' . $pedido->foto2 . '" data-pedido="' . $pedido->id . '">
+                        $data='<div class="card bg-transparent text-center border-none border-left-0 shadow-none " style="width: 8rem;border: none;">
+                          <a href="" data-target="#modal-imagen" data-toggle="modal" data-imagen="' . $pedido->foto2 . '">
+                            <img src="' . $urlimagen1 . '" alt="' . $pedido->foto2 . '" height="100px" width="100px" id="imagen_' . $pedido->id . '-1" class="img-thumbnail cover text-center">
+                            </a>
+                      <div class="card-body bg-transparent p-0">
+                        <h5 class="card-title"></h5>
+                        <p class="card-text">.</p>
+                        <a download href="' . $urlimagen1 . '" class="text-center"><button type="button" class="btn btn-secondary btn-md"> Descargar</button> </a>
+                        <a href="" data-target="#modal-cambiar-imagen" data-toggle="modal" data-item="1" data-imagen="' . $pedido->foto2 . '" data-pedido="' . $pedido->id . '">
 <button class="btn btn-danger btn-md">Cambiar</button></a>';
 
                         if (Auth::user()->rol == "Asesor") {
-                            $data .= '<a href="" data-target="#modal-delete-foto2" data-toggle="modal" data-deletefoto2="' . $pedido->id . '">
+                            $data .= '<a href="" data-target="#modal-delete-foto1" data-toggle="modal" data-deletefoto1="' . $pedido->id . '">
                         <button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i></button>
                         </a>';
                         }
+
+                        $data.='</div>
+                    </div>';
                         return $data;
                     } else if ($pedido->condicion_envio_code == Pedido::ENTREGADO_SIN_SOBRE_OPE_INT) {
                         return '<span class="badge badge-dark">Sin envio</span>';
@@ -2524,18 +2539,25 @@ class EnvioController extends Controller
                     if ($pedido->foto3 != null) {
                         $urlimagen1 = \Storage::disk('pstorage')->url($pedido->foto3);
 
-                        $data = '<a href="" data-target="#modal-imagen" data-toggle="modal" data-imagen="' . $pedido->foto3 . '">
-                    <img src="' . $urlimagen1 . '" alt="' . $pedido->foto3 . '" height="100px" width="100px" id="imagen_' . $pedido->id . '-3" class="img-thumbnail cover">
-                    </a>
-                    <a download href="' . $urlimagen1 . '" class="text-center"><button type="button" class="btn btn-secondary btn-md"> Descargar</button> </a>
-                    <a href="" data-target="#modal-cambiar-imagen" data-toggle="modal" data-item="3" data-imagen="' . $pedido->foto3 . '" data-pedido="' . $pedido->id . '">
+                        $data='<div class="card bg-transparent text-center border-none border-left-0 shadow-none " style="width: 8rem;border: none;">
+                          <a href="" data-target="#modal-imagen" data-toggle="modal" data-imagen="' . $pedido->foto3 . '">
+                            <img src="' . $urlimagen1 . '" alt="' . $pedido->foto3 . '" height="100px" width="100px" id="imagen_' . $pedido->id . '-1" class="img-thumbnail cover text-center">
+                            </a>
+                      <div class="card-body bg-transparent p-0">
+                        <h5 class="card-title"></h5>
+                        <p class="card-text">.</p>
+                        <a download href="' . $urlimagen1 . '" class="text-center"><button type="button" class="btn btn-secondary btn-md"> Descargar</button> </a>
+                        <a href="" data-target="#modal-cambiar-imagen" data-toggle="modal" data-item="1" data-imagen="' . $pedido->foto3 . '" data-pedido="' . $pedido->id . '">
 <button class="btn btn-danger btn-md">Cambiar</button></a>';
 
                         if (Auth::user()->rol == "Asesor") {
-                            $data .= '<a href="" data-target="#modal-delete-foto3" data-toggle="modal" data-deletefoto3="' . $pedido->id . '">
+                            $data .= '<a href="" data-target="#modal-delete-foto1" data-toggle="modal" data-deletefoto1="' . $pedido->id . '">
                         <button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i></button>
                         </a>';
                         }
+
+                        $data.='</div>
+                    </div>';
                         return $data;
                     } else if ($pedido->condicion_envio_code == Pedido::ENTREGADO_SIN_SOBRE_OPE_INT) {
                         return '<span class="badge badge-dark">Sin envio</span>';
