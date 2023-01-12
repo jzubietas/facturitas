@@ -162,14 +162,82 @@
                     <th scope="col">Estado de envio</th>
                     <th scope="col">Accion</th>
 
-                </tr>
-                </thead>
-                <tbody>
-                </tbody>
-            </table>
-            @include('pedidos.modal.confirmar_recepcion_log')
-            @include('envios.modal.enviarid')
-            @include('pedidos.modal.recibirid')
+          </tr>
+        </thead>
+        <tbody>
+        </tbody>
+      </table>
+
+        <!--
+        MODULO PARA LOGISTICA
+        -->
+
+        <div class="row">
+            @foreach($motorizados as $motorizado)
+                <div class="col-lg-4 container-{{Str::slug($motorizado->zona)}}">
+                    <div class="table-responsive">
+                        <div class="card card-{{$color_zones[Str::upper($motorizado->zona)]??'success'}}">
+                            <div class="card-header pt-8 pb-8">
+                                <div class="d-flex justify-content-between">
+                                    <h5 class="mb-0 font-16"> MOTORIZADO {{Str::upper($motorizado->zona)}}</h5>
+                                    <div>
+
+                                        <h6 class="mb-0"><a class="btn btn-sm btn-danger" href="#">Exportar</a></span>
+                                        </h6>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-body py-1">
+                                <div>
+
+                                    <ul  class="nav nav-tabs" style="font-size:11px !important;" id="myTab{{Str::slug($motorizado->zona)}}"
+                                         role="tablist">
+                                        <li class="nav-item">
+                                            <a class="nav-link active" id="general-tab" data-vista="18" data-zona="{{Str::slug($motorizado->zona)}}" data-toggle="tab"
+                                               href="#general" role="tab"
+                                               data-tab="motorizado"
+                                               aria-controls="general" aria-selected="true" data-action="general">
+                                                RECEPCIÓN
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" id="entregado-tab" data-vista="19" data-zona="{{Str::slug($motorizado->zona)}}" data-toggle="tab" href="#entregado"
+                                               role="tab"
+                                               data-tab="entregado"
+                                               aria-controls="entregado" aria-selected="false" data-action="entregado">
+                                                EN RUTA
+                                            </a>
+                                        </li>
+                                    </ul>
+
+                                    <table id="tablaPrincipal{{Str::upper($motorizado->zona)}}"
+                                           class="tabla-data table table-striped dt-responsive w-100">
+                                        <thead>
+                                        <tr>
+                                            <!--<th scope="col">Item</th>-->
+                                            <th scope="col">Código</th>
+                                            <th scope="col">Teléfono</th>
+                                            <th scope="col">Zona</th>
+                                            <th scope="col">Distrito</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            @endforeach
+
+
+        </div>
+
+        @include('pedidos.modal.confirmar_recepcion_log')
+      @include('pedidos.modal.confirmar_recepcion_log')
+      @include('envios.modal.enviarid')
+      @include('pedidos.modal.recibirid')
 
             @include('pedidos.modal.verdireccionid')
             @include('pedidos.modal.editdireccionid')
@@ -555,8 +623,8 @@
         }
     </script>
 
-    <script>
-        $(document).ready(function () {
+  <script>
+    $(document).ready(function () {
 
             $(document).on("submit", "#form_recepcionmotorizado", function (event) {
                 let user_motivov = $("#user_motorizado").val();
@@ -582,14 +650,14 @@
 
             });
 
-            $("#fecha_consulta").on('change', function () {
-                //var fecha_formateada = $(this).val().replaceAll('-', '/');
-                var fecha_format = $(this).val().split("-")
-                var fecha_formateada = fecha_format[2] + "/" + fecha_format[1] + "/" + fecha_format[0];
-                $(this).data('fecha', fecha_formateada);
-                console.log(fecha_formateada);
-                $('#tablaPrincipal').DataTable().ajax.reload();
-            });
+        $("#fecha_consulta").on('change', function(){
+            //var fecha_formateada = $(this).val().replaceAll('-', '/');
+            var fecha_format = $(this).val().split("-")
+            var fecha_formateada = fecha_format[2] + "/" + fecha_format[1] + "/" + fecha_format[0];
+            $(this).data('fecha',fecha_formateada);
+            console.log(fecha_formateada);
+            $('#tablaPrincipal').DataTable().ajax.reload();
+        });
 
             $('#tablaPrincipal').DataTable({
                 dom: '<"toolbar">frtip',
