@@ -444,7 +444,7 @@ return new class extends Migration
             $table->string('foto1', 100)->nullable();
             $table->string('foto2', 100)->nullable();
             $table->string('foto3', 100)->nullable();
-            $table->date('fecha_recepcion')->nullable();
+            $table->timestamp('fecha_recepcion')->nullable();
             $table->string('atendido_por', 100)->nullable();
             $table->integer('atendido_por_id')->nullable();
             $table->string('nombre_cliente', 100)->nullable();
@@ -460,7 +460,7 @@ return new class extends Migration
             $table->string('identificador')->nullable()->comment('campo agregado 09-12-22');
             $table->string('celular', 30)->nullable()->comment('campo agregado 09-12-22');
             $table->string('nombre', 100)->nullable()->comment('campo agregado 09-12-22');
-            $table->date('fecha')->nullable()->comment('campo agregado 09-12-22');
+            $table->timestamp('fecha')->nullable()->comment('campo agregado 09-12-22');
             $table->integer('cantidad')->nullable()->comment('campo agregado 09-12-22');
             $table->decimal('importe', 10)->nullable()->default(0);
             $table->string('direccion')->nullable()->comment('campo agregado 09-12-22 tracking');
