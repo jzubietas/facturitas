@@ -16,6 +16,7 @@ use App\Models\DireccionPedido;
 use App\Models\Distrito;
 use App\Models\GastoEnvio;
 use App\Models\GastoPedido;
+use App\Models\GrupoPedido;
 use App\Models\ImagenAtencion;
 use App\Models\ImagenPedido;
 use App\Models\Pago;
@@ -1702,6 +1703,16 @@ class PedidoController extends Controller
 
     public function Restaurarid(Request $request)
     {
+        /************
+         * BUSCAMOS EL PEDIDO
+         */
+        $pedido = Pedido::where('id',$request->hiddenID);
+        /************
+         * BUSCAMOS EL GRUPO O PAQUETE DEL PEDIDO
+         */
+        $grupo_pedido = DireccionGrupo::where('id', $pedido->direccion_grupo);
+
+
         if (!$request->hiddenID) {
             $html = '';
         } else {
@@ -1717,7 +1728,15 @@ class PedidoController extends Controller
             $detalle_pedidos->update([
                 'estado' => '1',
             ]);
+
+            $grupo_pedido->update([
+                'motorizado_status'=> '0',
+            ]);
+
             $html = $detalle_pedidos;
+
+
+
         }
 
         return response()->json(['html' => $html]);
