@@ -64,6 +64,25 @@ class GrupoPedido extends Model
         ]);
     }
 
+    public static function desvincularPedido(Pedido $pedido, $asignarOtro = false, $attach = false)
+    {
+        $grupopedido = GrupoPedido::query()
+            ->select('grupo_pedidos.*')
+            ->join('grupo_pedido_items', 'grupo_pedido_items.grupo_pedido_id', 'grupo_pedidos.id')
+            ->where('grupo_pedido_items.pedido_id', $pedido->id)
+            ->get();
+        foreach ($grupopedido as $grupop) {
+            if ($grupop->pedidos()->count() > 1) {
+                $grupop->pedidos()->detach($pedido->id);
+            } else {
+                $grupop->delete();
+            }
+        }
+        if ($asignarOtro) {
+            self::createGroupByPedido($pedido, true, $attach);
+        }
+    }
+
     public function motorizadoHistories()
     {
         return $this->hasMany(PedidoMotorizadoHistory::class, 'pedido_grupo_id')->orderByDesc('pedido_motorizado_histories.created_at');
