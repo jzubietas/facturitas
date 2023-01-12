@@ -126,14 +126,14 @@
 
             <ul class="nav nav-tabs mb-24 mt-24" id="myTab" role="tablist">
                 <li class="nav-item w-50 text-center">
-                    <a class="condicion-tabla nav-link activo active font-weight-bold" id="home-tab" data-toggle="tab"
-                       data-url="19" href="#home" role="tab" aria-controls="home" aria-selected="true">
+                    <a class="condicion-tabla nav-link activo active font-weight-bold" id="recepcion-tab" data-toggle="tab"
+                       data-url="19" href="#recepcion" role="tab" aria-controls="recepcion" aria-selected="true">
                         <i class="fa fa-inbox" aria-hidden="true"></i> RECEPCION
                     </a>
                 </li>
                 <li class="nav-item w-50 text-center">
-                    <a class="condicion-tabla nav-link font-weight-bold" id="profile-tab" data-toggle="tab"
-                       data-url="18" href="#profile" role="tab" aria-controls="profile" aria-selected="false">
+                    <a class="condicion-tabla nav-link font-weight-bold" id="enruta-tab" data-toggle="tab"
+                       data-url="18" href="#enruta" role="tab" aria-controls="enruta" aria-selected="false">
                         <i class="fa fa-motorcycle" aria-hidden="true"></i> EN RUTA
                     </a>
                 </li>
@@ -704,7 +704,9 @@
                         a.tab = $("#myTab{{Str::slug($motorizado->zona)}} li>a.active").data('tab');
                         a.motorizado_id = {{ $motorizado->id }};
                         a.zona = "{{ Str::upper($motorizado->zona)}}";
-                        a.vista = $("#myTab{{Str::slug($motorizado->zona)}} li>a.active").data('vista');
+                        let vista =$('ul#myTab li.nav-item>a.active').attr('id');//18 19
+                        vista=$('#'+vista).data('url');
+                        a.vista = vista;
                     }
                 },
             });
@@ -857,25 +859,25 @@
                     }
                 },
                 "fnDrawCallback": function () {
+                    $('.count_estadosobres_annulled').html(this.fnSettings().fnRecordsDisplay());
 
-                    let id_activotab = $('ul#myTab li.nav-item>a.active').attr('id');
-                    console.log(id_activotab)
-
-                    switch (id_activotab) {
-                        case 'profile-tab':
+                    switch ($('ul#myTab li.nav-item>a.active').attr('id')) {
+                        case 'enruta-tab':
                             $('div.toolbar').html('<div class="d-flex justify-content-center">' +
                                 '<button id="export-ruta-masiva" class="btn btn-secondary">EXPORTAR RUTA MASIVA</button>' +
                                 '<button id="iniciar-ruta-masiva" class="btn btn-success">INICIAR RUTA MASIVA</button>' +
                                 '</div>');
+
+                            //
                             break;
-                        case 'home-tab':
+                        case 'recepcion-tab':
                             $('div.toolbar').html('<div class="d-flex justify-content-center">' +
                                 '<button id="export-recepcion" class="btn btn-success">EXPORTAR RECEPCION</button>' +
                                 '</div>');
+
+                            //
                             break;
                     }
-
-
                 }
             });
 
