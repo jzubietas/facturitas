@@ -322,26 +322,33 @@ class MotorizadoController extends Controller
             ->join('users', 'users.id', 'direccion_grupos.motorizado_id')
             ->select([
                 'pedidos.*',
-                'direccion_grupos.fecha as grupo_fecha',
                 'direccion_grupos.fecha_salida as grupo_fecha_salida',
                 'direccion_grupos.motorizado_status',
                 'users.zona',
             ])
             ->whereIn('direccion_grupos.motorizado_status', [Pedido::ESTADO_MOTORIZADO_OBSERVADO, Pedido::ESTADO_MOTORIZADO_NO_CONTESTO])
-           // ->where('direccion_grupos.estado', '1')
-            ->activo()
-            ->whereNotNull('direccion_grupos.fecha')
+            // ->where('direccion_grupos.estado', '1')
+            //->activo()
+            //->whereNotNull('direccion_grupos.fecha')
             ->whereNotNull('direccion_grupos.fecha_salida')
+            ->whereNotNull('direccion_grupos.motorizado_id')
             ->get()
             ->groupBy('zona')
             ->map(function ($pedidos) {
                 $total = 0;
                 foreach ($pedidos as $pedido) {
-                    $fecha_salida = Carbon::parse($pedido->grupo_fecha_salida);
-                    $fecha = Carbon::parse($pedido->grupo_fecha);
-                    $count = $fecha_salida->diffInDays($fecha);
-                    if ($count >= 3) {
-                        $total++;
+                    if ($pedido->grupo_fecha_salida != null) {
+                        $fecha_salida = Carbon::parse($pedido->grupo_fecha_salida)->startOfDay();
+                        $fecha = now()->startOfDay();
+                        if ($fecha_salida > $fecha) {
+                            $count = 0;
+                        } else {
+                            $count = $fecha_salida->diffInDays($fecha);
+                        }
+                        if ($count > 3) {
+                            dump($pedido->toArray());
+                            $total++;
+                        }
                     }
                 }
                 return $total;
@@ -357,29 +364,41 @@ class MotorizadoController extends Controller
         $pedidos_observados = Pedido::join('direccion_grupos', 'pedidos.direccion_grupo', 'direccion_grupos.id')
             ->select([
                 'pedidos.*',
-                'direccion_grupos.fecha as grupo_fecha',
                 'direccion_grupos.fecha_salida as grupo_fecha_salida',
                 'direccion_grupos.motorizado_status',
             ])
             ->whereIn('direccion_grupos.motorizado_status', [Pedido::ESTADO_MOTORIZADO_OBSERVADO, Pedido::ESTADO_MOTORIZADO_NO_CONTESTO])
             //->where('direccion_grupos.estado', '1')
-            ->activo()
+            //->activo()
+            ->whereNotNull('direccion_grupos.fecha_salida')
             ->where('direccion_grupos.motorizado_id', $request->motorizado_id);
 
         return datatables()->query(DB::table($pedidos_observados))
+            ->addColumn('codigo', function ($pedido) {
+                if ($pedido->estado = 0 || $pedido->pendiente_anulacion) {
+                    return '<div class="badge badge-danger p-2">' . $pedido->codigo . '</div>';
+                } else {
+                    return '<div class="badge badge-light p-2">' . $pedido->codigo . '</div>';
+                }
+            })
             ->addColumn('situacion_color', function ($pedido) {
-                if ($pedido->grupo_fecha != null) {
-                    if ($pedido->grupo_fecha_salida != null) {
-                        $fecha_salida = Carbon::parse($pedido->grupo_fecha_salida);
-                        $fecha = Carbon::parse($pedido->grupo_fecha);
+                if ($pedido->grupo_fecha_salida != null) {
+                    $fecha_salida = Carbon::parse($pedido->grupo_fecha_salida)->startOfDay();
+                    $fecha = now()->startOfDay();
+                    if ($fecha_salida > $fecha) {
+                        $count = 0;
+                    } else {
                         $count = $fecha_salida->diffInDays($fecha);
-                        if ($count >= 3) {
-                            return 'red';
-                        } elseif ($count >= 2) {
-                            return 'orange';
-                        } else {
-                            return 'yellow';
-                        }
+                    }
+
+                    if ($count > 3) {
+                        return '#e74c3c';
+                    } elseif ($count >= 3) {
+                        return '#fd7e14';
+                    } elseif ($count >= 2) {
+                        return '#ffc107';
+                    } else {
+                        return 'rgb(255 255 234)';
                     }
                 }
                 return '';
@@ -393,20 +412,30 @@ class MotorizadoController extends Controller
                     $btn .= '<li>
                                 <button type="button" data-target="' . route('envios.devueltos.recibir', $pedido->id) . '" data-toggle="jqconfirm"  class="btn btn-warning btn-sm"><i class="fas fa-check-circle"></i> Recibido</button>
                             </li>';
+
                     $btn .= '</ul>';
                 endif;
 
                 return $btn;
             })
-            ->rawColumns(['action'])
+            ->rawColumns(['action', 'codigo'])
             ->make(true);
     }
 
     public function devueltos_recibir(Request $request, Pedido $pedido)
     {
         $grupo = $pedido->direcciongrupo;
-        $pgroup = GrupoPedido::createGroupByPedido($pedido);
+        if ($pedido->estado = 0) {
+            if ($grupo != null) {
+                $grupo->update([
+                    'motorizado_status' => 3,
+                ]);
+            }
+        }
+
         $detalle = $pedido->detallePedido;
+
+        $pgroup = GrupoPedido::createGroupByPedido($pedido);
         $pgroup->pedidos()->attach([
             $pedido->id => [
                 'codigo' => $pedido->codigo,
