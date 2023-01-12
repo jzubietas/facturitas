@@ -35,127 +35,272 @@
 
 @section('content')
 
-    <div class="card">
-        <div class="card-body">
-            <table cellspacing="5" cellpadding="5" class="table-responsive">
-                <tbody>
-                <tr>
-                    <td>Fecha</td>
-                    <td><input type="date" value="{{$dateMin}}" id="min" name="min" class="form-control"
-                               autocomplete="off"></td>
-                    <td></td>
-                </tr>
-                </tbody>
-            </table>
-            <br>
-            {{-- <table cellspacing="5" cellpadding="5">
-              <tbody>
-                <tr>
-                  <td>Destino:</td>
-                  <td>
-                    <select name="destino" id="destino" class="form-control">
-                      <option value="LIMA">LIMA</option>
-                      <option value="PROVINCIA">PROVINCIA</option>
-                    </select>
-                  </td>
-                </tr>
-              </tbody>
-            </table><br> --}}
-            <table id="tablaPrincipal" style="width:100%;" class="table table-striped">
-                <thead>
-                <tr>
-                    <th scope="col" class="text-center">Item</th>
-                    <th scope="col" class="text-center">Asesor</th>
-                    <th scope="col" class="text-center">Cliente</th>
-                    <th scope="col" class="text-center">Nombre</th>
-                    <th scope="col" class="text-center">Fecha</th>
-                    <th scope="col" class="text-center">QTY</th>
-                    <th scope="col" class="text-center">Codigos</th>
-                    <th scope="col" class="text-center">Producto</th>
-                    <th scope="col" class="text-center">Direccion</th>
-                    <th width="5px" scope="col" class="text-center">Referencia</th>
-                    <th scope="col" class="text-center">Observacion</th>
-                    <th scope="col" class="text-center">Distrito</th>
-                    <th scope="col" class="text-center">Destino</th>
-                    <th scope="col" class="text-center">Acciones</th>
-                </tr>
-                </thead>
-                <tbody>
-                </tbody>
-            </table>
-            @include('envios.modal.enviarid')
-            @include('pedidos.modal.recibirid')
-            @include('pedidos.modal.verdireccionid')
-            @include('pedidos.modal.editdireccionid')
-            @include('pedidos.modal.destinoid')
-            @include('envios.modal.distribuir')
-            @include('envios.modal.desvincularpedidos')
+    <div class="card p-48">
+
+        <table cellspacing="5" cellpadding="5" class="table-responsive">
+            <tbody>
+            <tr>
+
+                <td><p class="font-20 font-weight-bold">Buscar por fecha de salida:</p>
+                    <input type="date" value="{{$fecha_consulta->format('Y-m-d')}}" id="fecha_consulta"
+                           name="fecha_consulta" class="form-control" autocomplete="off"></td>
+                <td></td>
+
+
+            </tr>
+            </tbody>
+        </table>
+        <br>
+
+        <div class="row">
+            @foreach($motorizados as $motorizado)
+                <div class="col-lg-4 container-{{Str::slug($motorizado->zona)}}">
+                    <div class="table-responsive">
+                        <div class="card card-{{$color_zones[Str::upper($motorizado->zona)]??'success'}}">
+                            <div class="card-header pt-8 pb-8">
+                                <div class="d-flex justify-content-between">
+                                    <h5 class="mb-0 font-16"> MOTORIZADO {{Str::upper($motorizado->zona)}}</h5>
+                                    <div>
+                                        <!--
+                                        <h6 class="mb-0">Sobres devueltos/observados: <span>{{$motorizado->devueltos}}</span>
+                                        </h6>-->
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-body py-1">
+                                <div>
+
+                                    <ul  class="nav nav-tabs" style="font-size:11px !important;" id="myTab{{Str::slug($motorizado->zona)}}"
+                                        role="tablist">
+                                        <li class="nav-item">
+                                            <a class="nav-link active" id="general-tab" data-zona="{{Str::slug($motorizado->zona)}}" data-toggle="tab"
+                                               href="#general" role="tab"
+                                               data-tab="motorizado"
+                                               aria-controls="general" aria-selected="true" data-action="general">
+                                                EN MOTORIZADO
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" id="entregado-tab" data-zona="{{Str::slug($motorizado->zona)}}" data-toggle="tab" href="#entregado"
+                                               role="tab"
+                                               data-tab="entregado"
+                                               aria-controls="entregado" aria-selected="false" data-action="entregado">
+                                                ENTREGADO
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" id="no_contesto-tab" data-zona="{{Str::slug($motorizado->zona)}}" data-toggle="tab"
+                                               href="#no_contesto" role="tab"
+                                               data-tab="no_contesto"
+                                               aria-controls="no_contesto" aria-selected="false"
+                                               data-action="no_contesto">
+                                                NO CONTESTO
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link" id="observado-tab" data-toggle="tab" href="#observado"
+                                               role="tab"
+                                               data-tab="observado"
+                                               aria-controls="observado" aria-selected="false" data-action="observado">
+                                                OBSERVADOS
+                                            </a>
+                                        </li>
+                                    </ul>
+
+                                    <table id="tablaPrincipal{{Str::upper($motorizado->zona)}}"
+                                           class="table table-striped dt-responsive w-100">
+                                        <thead>
+                                        <tr>
+                                            <!--<th scope="col">Item</th>-->
+                                            <th scope="col">Código</th>
+                                            <th scope="col">Teléfono</th>
+                                            <th scope="col">Zona</th>
+                                            <th scope="col">Distrito</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            @endforeach
+
+
         </div>
     </div>
 
 @stop
 
-@section('css')
-    <link rel="stylesheet" href="/css/admin_custom.css">
-    <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+@push('css')
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
+
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.1/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.4.0/css/responsive.bootstrap4.min.css">
     <style>
-        img:hover {
-            transform: scale(1.2)
-        }
+        @media (max-width: 32rem) {
+            div.dataTables_wrapper div.dataTables_filter input {
+                width: 200px !important;
+            }
 
-        .bg-4 {
-            background: linear-gradient(to right, rgb(240, 152, 25), rgb(237, 222, 93));
-        }
+            .content-wrapper {
+                background-color: white !important;
+            }
 
-        .t-stroke {
-            color: transparent;
-            -moz-text-stroke-width: 2px;
-            -webkit-text-stroke-width: 2px;
-            -moz-text-stroke-color: #000000;
-            -webkit-text-stroke-color: #ffffff;
-        }
-
-        .t-shadow-halftone2 {
-            position: relative;
-        }
-
-        .t-shadow-halftone2::after {
-            content: "AWESOME TEXT";
-            font-size: 10rem;
-            letter-spacing: 0px;
-            background-size: 100%;
-            -webkit-text-fill-color: transparent;
-            -moz-text-fill-color: transparent;
-            -webkit-background-clip: text;
-            -moz-background-clip: text;
-            -moz-text-stroke-width: 0;
-            -webkit-text-stroke-width: 0;
-            position: absolute;
-            text-align: center;
-            left: 0px;
-            right: 0;
-            top: 0px;
-            z-index: -1;
-            background-color: #ff4c00;
-            transition: all 0.5s ease;
-            text-shadow: 10px 2px #6ac7c2;
+            .card {
+                box-shadow: 0 0 1px white !important;
+            }
         }
     </style>
-@stop
+    @include('partials.css.time_line_css')
+@endpush
+
+@push('css')
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
+
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.1/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.4.0/css/responsive.bootstrap4.min.css">
+    <style>
+        @media (max-width: 32rem) {
+            div.dataTables_wrapper div.dataTables_filter input {
+                width: 200px !important;
+            }
+
+            .content-wrapper {
+                background-color: white !important;
+            }
+
+            .card {
+                box-shadow: 0 0 1px white !important;
+            }
+        }
+    </style>
+    @include('partials.css.time_line_css')
+@endpush
 
 @section('js')
-    {{--<script src="{{ asset('js/datatables.js') }}"></script>--}}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.1/js/dataTables.bootstrap4.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.4.0/js/dataTables.responsive.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
 
     <script src="https://momentjs.com/downloads/moment.js"></script>
     <script src="https://cdn.datatables.net/plug-ins/1.11.4/dataRender/datetime.js"></script>
-    <script
-        src="https://gyrocode.github.io/jquery-datatables-checkboxes/1.2.12/js/dataTables.checkboxes.min.js"></script>
 
     <script>
-        var tabla_pedidos = null;
         $(document).ready(function () {
+
+            $("#fecha_consulta").on('change', function () {
+                //var fecha_formateada = $(this).val().replaceAll('-', '/');
+                var fecha_format = $(this).val().split("-")
+                var fecha_formateada = fecha_format[2] + "/" + fecha_format[1] + "/" + fecha_format[0];
+                $(this).data('fecha', fecha_formateada);
+                console.log(fecha_formateada);
+                $('#tablaPrincipal').DataTable().ajax.reload();
+            });
+
+            const configDataTableZonas = {
+                serverSide: true,
+                searching: false,
+                lengthChange: false,
+                order: [[0, "desc"]],
+                createdRow: function (row, data, dataIndex) {
+
+                },
+                rowCallback: function (row, data, index) {
+                    $('[data-toggle=jqconfirm]', row).click(function () {
+                        const action = $(this).data('target')
+                        $.confirm({
+                            type: 'orange',
+                            title: 'Confirmar recepción',
+                            content: `Esta seguro de confirmar la recepción del Pedido <b>${data.codigo}</b>`,
+                            buttons: {
+                                confirmar: {
+                                    btnClass: 'btn-warning',
+                                    action: function () {
+                                        const self = this
+                                        self.showLoading(true)
+                                        $.post(action, {}).done(function () {
+
+                                        })
+                                            .always(function () {
+                                                self.hideLoading(true)
+                                            })
+                                    }
+                                },
+                                cancelar: {}
+                            }
+                        })
+                    })
+                },
+                columns: [
+                    {data: 'codigos', name: 'codigos',},
+                    {data: 'celular', name: 'celular',},
+                    {data: 'distribucion', name: 'distribucion',},
+                    {data: 'distrito', name: 'distrito',},
+
+                ],
+                language: {
+                    "decimal": "",
+                    "emptyTable": "No hay información",
+                    "info": "_START_ - _END_ / _TOTAL_",
+                    "infoEmpty": "0 Entradas",
+                    "infoFiltered": "(Filtrado de _MAX_ total entradas)",
+                    "infoPostFix": "",
+                    "thousands": ",",
+                    "lengthMenu": "Mostrar _MENU_ Entradas",
+                    "loadingRecords": "Cargando...",
+                    "processing": ``,
+                    "search": "Buscar:",
+                    "zeroRecords": "Sin resultados encontrados",
+                    "paginate": {
+                        "first": "Primero",
+                        "last": "Ultimo",
+                        "next": "Siguiente",
+                        "previous": "Anterior"
+                    }
+                },
+            }
+
+            @foreach($motorizados as $motorizado)
+            $('#tablaPrincipal{{Str::upper($motorizado->zona)}}').DataTable({
+                ...configDataTableZonas,
+                ajax: {
+                    url:"{{route('envios.rutaenviotabla',['datatable'=>'1'])}}",
+                    data:function (a) {
+                        a.fechaconsulta = $("#fecha_consulta").data("fecha");
+                        a.tab=$("#myTab{{Str::slug($motorizado->zona)}} li>a.active").data('tab');
+                        a.motorizado_id = {{ $motorizado->id }};
+                        a.zona = "{{ Str::upper($motorizado->zona)}}";
+                    }
+                },
+            });
+            @endforeach
+
+            @foreach($motorizados as $motorizado)
+                var tt= $("#myTab{{Str::upper($motorizado->zona)}}")[0];
+
+            $('a[data-toggle="tab"]',tt).on('shown.bs.tab', function (e) {
+                let zona = $(this).data('zona');
+                $('#tablaPrincipal{{Str::upper($motorizado->zona)}}').DataTable().ajax.reload();
+            })
+/*
+            $('#myTab{{Str::upper($motorizado->zona)}} a[data-toggle=tab]').on('shown.bs.tab',function (e) {
+                console.log(
+                    'target: ',
+                    e.target, // newly activated tab
+                    e.relatedTarget, // previous active tab
+                )
+                $('#tablaPrincipal{{Str::upper($motorizado->zona)}}').DataTable().ajax.reload();
+
+            });*/
+            @endforeach
+
+
+
 
             $.ajaxSetup({
                 headers: {
@@ -163,588 +308,7 @@
                 }
             });
 
-            tabla_pedidos = $('#tablaPrincipalpedidosagregar').DataTable({
-                responsive: true,
-                "bPaginate": false,
-                "bFilter": false,
-                "bInfo": false,
-                columns:
-                    [
-                        {
-                            data: 'id'
-                        },
-                        {
-                            data: 'codigo'
-                        },
-                        {
-                            data: 'saldo'
-                        }
-                    ],
-                language: {
-                    "decimal": "",
-                    "emptyTable": "No hay información",
-                    "info": "Mostrando del _START_ al _END_ de _TOTAL_ Entradas",
-                    "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
-                    "infoFiltered": "(Filtrado de _MAX_ total entradas)",
-                    "infoPostFix": "",
-                    "thousands": ",",
-                    "lengthMenu": "Mostrar _MENU_ Entradas",
-                    "loadingRecords": "Cargando...",
-                    "processing": "Procesando...",
-                    "search": "Buscar:",
-                    "zeroRecords": "Sin resultados encontrados",
-                    "paginate": {
-                        "first": "Primero",
-                        "last": "Ultimo",
-                        "next": "Siguiente",
-                        "previous": "Anterior"
-                    }
-                }
-            });
-
-            $(document).on("submit", "#formulario", function (evento) {
-                evento.preventDefault();
-                var fd = new FormData();
-            });
-
-            $('#modal-distribuir').on('show.bs.modal', function (event) {
-                var button = $(event.relatedTarget)
-                var idunico = button.data('distribuir')
-                console.log("distribuir " + idunico);
-                $("#modal-distribuir #hiddenDistribuir").val(idunico);
-            });
-
-            $(document).on("submit", "#formulariodistribuir", function (evento) {
-                evento.preventDefault();
-                console.log("form distribuir")
-                //validacion
-
-                var fd2 = new FormData();
-
-                fd2.append('hiddenDistribuir', $('#hiddenDistribuir').val());
-                fd2.append('distribuir', $('#distribuir').val());
-
-                // modal para distribucion
-
-                $.ajax({
-                    data: fd2,
-                    processData: false,
-                    contentType: false,
-                    type: 'POST',
-                    url: "{{ route('envios.distribuirid') }}",
-                    success: function (data) {
-                        $("#modal-distribuir").modal("hide");
-                        $('#tablaPrincipal').DataTable().ajax.reload();
-
-                    }
-                });
-
-
-            });
-
-            $('#modal-enviar').on('show.bs.modal', function (event) {
-                //cuando abre el form de anular pedido
-                var button = $(event.relatedTarget)
-                var idunico = button.data('enviar')//pedido
-                $("#hiddenEnviar").val(idunico)
-                if (idunico < 10) {
-                    idunico = 'PED000' + idunico;
-                } else if (idunico < 100) {
-                    idunico = 'PED00' + idunico;
-                } else if (idunico < 1000) {
-                    idunico = 'PED0' + idunico;
-                } else {
-                    idunico = 'PED' + idunico;
-                }
-                $("#modal-enviar .textcode").html(idunico);
-
-            });
-
-            $('#modal-recibir').on('show.bs.modal', function (event) {
-                var button = $(event.relatedTarget)
-                var idunico = button.data('recibir')//pedido
-                $("#hiddenRecibir").val(idunico)
-                if (idunico < 10) {
-                    idunico = 'PED000' + idunico;
-                } else if (idunico < 100) {
-                    idunico = 'PED00' + idunico;
-                } else if (idunico < 1000) {
-                    idunico = 'PED0' + idunico;
-                } else {
-                    idunico = 'PED' + idunico;
-                }
-                $("#modal-recibir .textcode").html(idunico);
-
-
-            });
-
-            $(document).on("submit", "#formularioenviar", function (evento) {
-                evento.preventDefault();
-            });
-
-            $(document).on("submit", "#formulariorecibir", function (evento) {
-                evento.preventDefault();
-                var formData = $("#formulariorecibir").serialize();
-
-                $.ajax({
-                    type: 'POST',
-                    url: "{{ route('envios.recibirid') }}",
-                    data: formData,
-                }).done(function (data) {
-                    if (data.html != 0) {
-                        $("#modal-recibir").modal("hide");
-                        $('#tablaPrincipal').DataTable().ajax.reload();
-                    } else {
-
-                    }
-                    /*
-                    //resetearcamposdelete();
-                     */
-                });
-
-            });
-
-
-            $('#tablaPrincipal').DataTable({
-                processing: true,
-                stateSave: true,
-                serverSide: true,
-                searching: true,
-                "order": [[0, "desc"]],
-                ajax: {
-                    url: "{{ route('envios.rutaenviotabla') }}",
-                    data: function (d) {
-                        //d.asesores = $("#asesores_pago").val();
-                        d.desde = $("#min").val();
-                        // d.general = $("#general").val();
-
-                        console.log(d.desde);
-                    },
-                },
-                rowCallback: function (row, data, index) {
-
-                    if (data.destino2 == 'PROVINCIA') {
-                        $('td', row).css('color', 'red')
-
-                    } else if (data.destino2 == 'LIMA') {
-                        if (data.distribucion != null) {
-                            if (data.distribucion == 'NORTE') {
-                                //$('td', row).css('color','blue')
-                                $('td:eq(9)', row).css('background', '#A5F1E9');
-                            } else if (data.distribucion == 'CENTRO') {
-                                //$('td', row).css('color','yellow')
-                                $('td:eq(9)', row).css('background', '#F0FF42');
-                            } else if (data.distribucion == 'SUR') {
-                                //$('td', row).css('color','green')
-                                $('td:eq(9)', row).css('background', '#B6E2A1');
-                            }
-
-                        } else {
-
-                        }
-
-
-                    }
-
-                },
-                columns: [
-                    {
-                        data: 'id',
-                        name: 'id', "visible": false,
-                        render: function (data, type, row, meta) {
-                            if (row.id < 10) {
-                                return 'ENV000' + row.id;
-                            } else if (row.id < 100) {
-                                return 'ENV00' + row.id;
-                            } else if (row.id < 1000) {
-                                return 'ENV0' + row.id;
-                            } else {
-                                return 'ENV' + row.id;
-                            }
-                        }
-                    },
-                    {data: 'identificador', name: 'identificador', sWidth: '5%'},
-
-
-                    {
-                        data: 'celular',
-                        name: 'celular',
-                        render: function (data, type, row, meta) {
-                            return row.celular + ' - ' + row.nombre
-                        },
-                    },
-
-
-                    {
-                        data: 'nombre',
-                        name: 'nombre',
-                        "visible": false,
-                        render: function (data, type, row, meta) {
-                            return data;
-                        },
-                    },
-                    {data: 'fecha', name: 'fecha', sWidth: '5%'},
-                    {data: 'cantidad', name: 'cantidad', sWidth: '5%'},
-                    {
-                        data: 'codigos',
-                        name: 'codigos',
-                        render: function (data, type, row, meta) {
-                            if (data == null) {
-                                return 'SIN PEDIDOS';
-                            } else {
-                                var returndata = '';
-                                var jsonArray = data.split(",");
-                                $.each(jsonArray, function (i, item) {
-                                    returndata += item + '<br>';
-                                });
-                                return returndata;
-                            }
-                        }
-                    },
-                    {
-                        data: 'producto',
-                        name: 'producto',
-                        render: function (data, type, row, meta) {
-                            if (data == null) {
-                                return 'SIN RUCS';
-                            } else {
-                                var numm = 0;
-                                var returndata = '';
-                                var jsonArray = data.split(",");
-                                $.each(jsonArray, function (i, item) {
-                                    numm++;
-                                    returndata += numm + ": " + item + '<br>';
-
-                                });
-                                return returndata;
-                            }
-                        }
-                    },
-                    {data: 'direccion', name: 'direccion',},
-                    {
-                        data: 'referencia',
-                        name: 'referencia',
-                        sWidth: '10%',
-                        render: function (data, type, row, meta) {
-                            var datal = "";
-                            if (row.destino == 'LIMA') {
-                                return data;
-
-                            } else if (row.destino == 'PROVINCIA') {
-                                urladjunto = '{{ route("pedidos.descargargastos", ":id") }}';
-                                urladjunto = urladjunto.replace(':id', data);
-                                datal = datal + '<p><a href="' + urladjunto + '">' + data + '</a><p>';
-                                return datal;
-                            }
-                        }
-                    },
-                    {
-                        data: 'observacion',
-                        name: 'observacion',
-                        sWidth: '10%',
-                    },
-                    {
-                        data: 'distrito',
-                        name: 'distrito', "visible": true,
-                        render: function (data, type, row, meta) {
-                            if (data != null) {
-                                return data;
-                            } else {
-                                return '';
-                            }
-                        }
-                    },
-                    {
-                        data: 'destino2',
-                        name: 'destino2', "visible": false,
-                        render: function (data, type, row, meta) {
-                            if (data != null) {
-                                return data;
-                            } else {
-                                return '';
-                            }
-                        }
-                    },
-                    {
-                        data: 'action',
-                        name: 'action',
-                        orderable: false,
-                        searchable: false,
-                        "visible": true,
-                        //sWidth:'20%',
-                        render: function (data, type, row, meta) {
-                            //datass='<div class="dropdown"><button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Opciones</button><div class="dropdown-menu" aria-labelledby="dropdownMenuButton">';
-                            datass = "";
-                            //si es lima
-
-                            if ("{{$rol}}" == 'Administrador' || "{{$rol}}" == 'Logística') {
-                                if (row.destino == 'LIMA')
-
-                                    //datass = datass+ '<a href="" data-target="#modal-revertir" data-toggle="modal" data-recibir="'+row.id+'"><button class="btn btn-info btn-sm"><i class="fas fa-trash"></i> REVERTIR</button></a>';
-                                    datass = datass + '<a  href="#" data-target="#modal-distribuir" data-toggle="modal" data-distribuir="' + row.id + '">' +
-                                        '<button class="btn btn-success btn-sm">' +
-                                        '<i class="fas fa-envelope"></i> Distribuir' +
-                                        '</button>' +
-                                        '</a>';
-
-                                //datass = datass+ '<a href="" data-target="#modal-revertir" data-toggle="modal" data-recibir="'+row.id+'"><button class="btn btn-info btn-sm"><i class="fas fa-trash"></i> REVERTIR</button></a>';
-
-
-                                datass = datass + '<a href="" data-target="#modal-desvincular" data-toggle="modal" data-desvincular="' + row.id + '">' +
-                                    '<button class="btn btn-danger btn-sm">' +
-                                    '<i class="fas fa-trash"></i>Sin enviar' +
-                                    '</button>' +
-                                    '</a>' + '</div></div>';
-
-                            }
-
-
-                            return datass;
-                        }
-                    },
-                ],
-                language: {
-                    "decimal": "",
-                    "emptyTable": "No hay información",
-                    "info": "Mostrando del _START_ al _END_ de _TOTAL_ Entradas",
-                    "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
-                    "infoFiltered": "(Filtrado de _MAX_ total entradas)",
-                    "infoPostFix": "",
-                    "thousands": ",",
-                    "lengthMenu": "Mostrar _MENU_ Entradas",
-                    "loadingRecords": "Cargando...",
-                    "processing": "Procesando...",
-                    "search": "Buscar:",
-                    "zeroRecords": "Sin resultados encontrados",
-                    "paginate": {
-                        "first": "Primero",
-                        "last": "Ultimo",
-                        "next": "Siguiente",
-                        "previous": "Anterior"
-                    }
-                },
-            });
-
-
-            $(document).on("click", "#desvincularConfirmar", function (event) {
-
-                var rows_selected = tabla_pedidos.column(0).checkboxes.selected();
-                var $direcciongrupo = $("#direcciongrupo").val();
-                var $observaciongrupo = $("#observaciongrupo").val();
-                var pedidos = [];
-                $.each(rows_selected, function (index, rowId) {
-                    console.log("ID PEDIDO  es " + rowId);
-                    pedidos.push(rowId);
-                });
-
-
-                var let_pedidos = pedidos.length;
-
-                if (let_pedidos == 0) {
-                    Swal.fire(
-                        'Error',
-                        'Debe elegir un pedido',
-                        'warning'
-                    )
-                    return;
-                }
-                $pedidos = pedidos.join(',');
-                console.log($pedidos);
-                console.log($direcciongrupo);
-                console.log($observaciongrupo);
-                var fd2 = new FormData();
-                let direcciongrupo = $("#direcciongrupo").val();
-                let observaciongrupo = $("#observaciongrupo").val();
-                fd2.append('direcciongrupo', direcciongrupo);
-                fd2.append('observaciongrupo', observaciongrupo);
-                /*fd2.append('observaciongrupo', $('#observaciongrupo').val() );*/
-                fd2.append('pedidos', $pedidos);
-
-
-                $.ajax({
-                    data: fd2,
-                    processData: false,
-                    contentType: false,
-                    type: 'POST',
-                    url: "{{ route('sobres.desvinculargrupo') }}",
-                    success: function (data) {
-                        console.log(data);
-                        $("#modal-desvincular").modal("hide");
-                        $("#tablaPrincipal").DataTable().ajax.reload();
-                    }
-                });
-            })
-
-
-            $('#modal-desvincular').on('show.bs.modal', function (event) {
-
-                var button = $(event.relatedTarget)
-                var direcciongrupo = button.data('desvincular');
-                $("#direcciongrupo").val(direcciongrupo);
-//$("#observaciongrupo").val(observaciongrupo);
-                tabla_pedidos.destroy();
-
-
-                tabla_pedidos = $('#tablaPrincipalpedidosagregar').DataTable({
-                    responsive: true,
-                    "bPaginate": false,
-                    "bFilter": false,
-                    "bInfo": false,
-                    'ajax': {
-                        url: "{{ route('cargar.pedidosgrupotabla') }}",
-                        'data': {"direcciongrupo": direcciongrupo},
-                        "type": "get",
-                    },
-                    'columnDefs': [{
-                        'targets': [0],
-                        'orderable': false,
-                    }],
-                    columns: [
-                        {
-                            "data": "pedido_id",
-                            'targets': [0],
-                            'checkboxes': {
-                                'selectRow': true
-                            },
-                            defaultContent: '',
-                            orderable: false,
-                        },
-                        {data: 'codigo_pedido', name: 'codigo_pedido',},
-                        {
-                            "data": 'empresa',
-                            "name": 'empresa',
-                            "render": function (data, type, row, meta) {
-                                return data;
-
-                            }
-                        },
-                    ],
-                    'select': {
-                        'style': 'multi',
-                        selector: 'td:first-child'
-                    },
-                });
-
-//$("#limaprovincia").val("").trigger("change");
-
-            });
-
-
         });
-    </script>
-
-    @if (session('info') == 'registrado' || session('info') == 'actualizado' || session('info') == 'eliminado')
-        <script>
-            Swal.fire(
-                'Pedido {{ session('info') }} correctamente',
-                '',
-                'success'
-            )
-        </script>
-    @endif
-
-    <script>
-
-        //VALIDAR CAMPO CELULAR
-        function maxLengthCheck(object) {
-            if (object.value.length > object.maxLength)
-                object.value = object.value.slice(0, object.maxLength)
-        }
-
-        //VALIDAR ANTES DE ENVIAR
-        /*document.addEventListener("DOMContentLoaded", function() {
-        document.getElementById("formulario").addEventListener('submit', validarFormulario);
-        });*/
-
-        function validarFormulario(evento) {
-            evento.preventDefault();
-            var condicion = document.getElementById('condicion').value;
-            var foto1 = document.getElementById('foto1').value;
-            var pfoto1 = document.getElementById('pfoto1').value;
-            var foto2 = document.getElementById('foto2').value;
-            var pfoto2 = document.getElementById('pfoto2').value;
-
-            if (condicion == 3) {
-                if (foto1 == '' && pfoto1 == '') {
-                    Swal.fire(
-                        'Error',
-                        'Para dar por ENTREGADO debe registrar la foto 1',
-                        'warning'
-                    )
-                } else if (foto2 == '' && pfoto2 == '') {
-                    Swal.fire(
-                        'Error',
-                        'Para dar por ENTREGADO debe registrar la foto 2',
-                        'warning'
-                    )
-                } else {
-                    this.submit();
-                }
-            } else {
-                this.submit();
-            }
-        }
-    </script>
-
-    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
-
-    <script>
-        /* Custom filtering function which will search data in column four between two values */
-        $(document).ready(function () {
-
-
-            $(document).on("keyup", "#general", function () {
-                console.log($(this).val())
-                if (!$(this).val()) {
-                    return;
-                }
-                $("#min").val("");
-                //busca en general
-                $('#tablaPrincipal').DataTable().ajax.reload();
-
-                $('#tablaPrincipal').DataTable().ajax.reload();
-            });
-
-            /*$("#min").datepicker({
-                onSelect: function () {
-                    $('#tablaPrincipal').DataTable().draw(false);
-                    console.log("minimo " + $(this).val());
-                    //localStorage.setItem('dateMin', $(this).datepicker('getDate') );
-                    //localStorage.setItem('dateMin', $(this).val() );
-                },
-                changeDay: true,
-                changeMonth: true,
-                changeYear: true,
-                dateFormat: "dd/mm/yy"
-            });*/
-            $("#min").change(function () {
-                $('#tablaPrincipal').DataTable().draw(false);
-            })
-
-
-            /*$("#destino", this).on( 'keyup change', function () {
-              if ( table.column(i).search() !== this.value ) {
-                  table
-                      .column(8)
-                      .search( this.value )
-                      .draw();
-                }
-            } );*/
-
-        });
-
-
-    </script>
-    <script>
-        /*if (localStorage.getItem('dateMin') )
-        {
-          $( "#min" ).val(localStorage.getItem('dateMin')).trigger("change");
-        }else{
-          localStorage.setItem('dateMin', "{{$dateMin}}" );
-    }*/
-
-        //console.log(localStorage.getItem('dateMin'));
-
     </script>
 
 @stop
