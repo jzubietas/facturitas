@@ -581,11 +581,12 @@
              * TABLA SOBRES RECIBIDOS
              */
             tablaRecepcionados=$('#tablaRecepcionados').DataTable({
+                dom: '<"top"i>rt<"bottom"lp><"clear">',
                 processing: true,
                 stateSave: false,
                 serverSide: true,
                 searching: true,
-                "bFilter": true,
+                "bFilter": false,
                 "order": [[0, "desc"]],
                 ajax: {
                     url: "{{ route('envios.estadosobrestabla') }}",
@@ -714,11 +715,12 @@
              */
 
             tablaEntregados=$('#tablaEntregados').DataTable({
+                dom: '<"top"i>rt<"bottom"lp><"clear">',
                 processing: true,
                 stateSave: false,
                 serverSide: true,
                 searching: true,
-                "bFilter": true,
+                "bFilter": false,
                 "order": [[5, "desc"]],
                 ajax: {
                     url: "{{ route('envios.estadosobrestabla') }}",
@@ -835,11 +837,12 @@
             });
 
             tablaAnulados=$('#tablaAnulados').DataTable({
+                dom: '<"top"i>rt<"bottom"lp><"clear">',
                 processing: true,
                 stateSave: false,
                 serverSide: true,
                 searching: true,
-                "bFilter": true,
+                "bFilter": false,
                 "order": [[5, "desc"]],
                 ajax: {
                     url: "{{ route('envios.estadosobrestabla') }}",
