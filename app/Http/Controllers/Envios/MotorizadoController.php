@@ -14,6 +14,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Yajra\DataTables\DataTables;
 
 class MotorizadoController extends Controller
 {
@@ -695,5 +696,91 @@ class MotorizadoController extends Controller
 
         }
 
+    }
+
+    public function EnviosrecepcionmotorizadotablaGeneral(Request $request)
+    {
+        $tipo_vista = $request->vista;
+
+        $tipo_consulta = $request->consulta;
+
+        //SI ES QUE EXISTE UNA FECHA
+        if ($request->fechaconsulta != null) {
+            try {
+                $fecha_consulta = Carbon::createFromFormat('d/m/Y', $request->fechaconsulta);
+            } catch (Exception $ex) {
+                $fecha_consulta = now();
+            }
+
+        } else {
+            $fecha_consulta = now();
+        }
+
+        //OBTENEMOS EL CODIGO DE CONDICION
+        if ($request->condicion != null) {
+            $url_tabla = $request->condicion;
+        } else {
+            $url_tabla = null;
+        }
+
+        $pedidos = null;
+        $filtros_code = [12];
+
+        // SI EXISTE UNA VISTA
+        if ($request->vista != null) {
+            try {
+                $vista_consulta = Carbon::createFromFormat('d/m/Y', $request->vista);
+            } catch (\Exception $ex) {
+                $vista_consulta = now();
+            }
+        } else {
+            $vista_consulta = now();
+        }
+
+        // SI EXISTE UNA FECHA
+        if ($request->fechaconsulta != null) {
+            try {
+                $fecha_consulta = Carbon::createFromFormat('d/m/Y', $request->fechaconsulta);
+            } catch (\Exception $ex) {
+                $fecha_consulta = now();
+            }
+        } else {
+            $fecha_consulta = now();
+        }
+
+        // SI SE ESPERA RESULTADOS PARA UNA TABLA
+        if ($request->has('datatable')) {
+            $query = DireccionGrupo::
+            join('clientes as c', 'c.id', 'direccion_grupos.cliente_id')
+                ->join('users as u', 'u.id', 'c.user_id')
+                ->when($fecha_consulta != null, function ($query) use ($fecha_consulta) {
+                    $query->whereDate('direccion_grupos.fecha_salida', $fecha_consulta);
+                })
+                ->where('direccion_grupos.motorizado_id', '=', $request->motorizado_id)
+
+                ->select([
+                    'direccion_grupos.*',
+                ]);
+
+            $tab = ($request->tab ?: '');
+            switch ($tab) {
+                case 'recepcion':
+                    $query
+                        ->where('direccion_grupos.estado', '1')
+                        ->where('direccion_grupos.condicion_envio_code', $request->vista);
+                    break;
+                case 'ruta':
+                    $query
+                        ->where('direccion_grupos.estado', '1')
+                        ->where('direccion_grupos.condicion_envio_code', $request->vista);
+                    break;
+            }
+
+            return datatables()->query(DB::table($query))
+                ->addIndexColumn()
+                ->rawColumns(['action', 'condicion_envio'])
+                ->toJson();
+
+        }
     }
 }
