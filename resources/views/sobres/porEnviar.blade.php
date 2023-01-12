@@ -735,6 +735,7 @@
                     }
                     //paso provincia validacion
                     if (combo_limaprovincia == "P") {
+                        fd2.append('distrito', val_distrito);
                         fd2.append('departamento', val_departamento);
                         fd2.append('oficina', val_oficina);
                         fd2.append('tracking', val_tracking);

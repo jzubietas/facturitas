@@ -1952,13 +1952,18 @@ class EnvioController extends Controller
                 $pedido_id = $request->pedido_id;
                 $contPe = 0;
 
+                $destino_temp=$request->destino;
+                if($destino_temp=='PROVINCIA'){
+                    $destino_temp='LIMA';
+                }
+
                 foreach ($array_pedidos as $pedido_id) {
                     $pedido = Pedido::find($pedido_id);
                     $pedido->update([
                         'estado_sobre' => '1',
                         'destino' => $request->destino,
                         'direccion' => $request->direccion,
-                        'env_destino' => $request->destino,
+                        'env_destino' => $destino_temp,
                         'env_distrito' => $request->distrito,
                         'env_zona' => $zona_distrito->zona,
                         'env_nombre_cliente_recibe' => $request->nombre,
@@ -1995,7 +2000,7 @@ class EnvioController extends Controller
                     ]);
                 }
             }
-
+            $file_name_temp='';
             if ($request->destino == "PROVINCIA") {
 
                 $cliente = Cliente::where("id", $request->cliente_id)->first();
@@ -2014,9 +2019,11 @@ class EnvioController extends Controller
 
                 if (isset($files)) {
                     $file_name = Carbon::now()->second . $files->getClientOriginalName();
+                    $file_name_temp=$file_name;
                     $files->move($destinationPath, $file_name);
                 } else {
                     $file_name = 'logo_facturas.png';
+                    $file_name_temp=$file_name;
                 }
 
                 $modelData = [
@@ -2054,13 +2061,13 @@ class EnvioController extends Controller
                         'direccion' => 'PROVINCIA',
                         //'condicion_envio' => Pedido::SEGUIMIENTO_PROVINCIA_COURIER,
                         //'condicion_envio_code' => Pedido::SEGUIMIENTO_PROVINCIA_COURIER_INT,
-                        'env_destino' => $request->destino,
+                        'env_destino' => 'LIMA',
                         'env_distrito' => 'LOS OLIVOS',
                         'env_zona' => 'NORTE',
                         'env_nombre_cliente_recibe' => 'OLVA',
                         'env_celular_cliente_recibe' => 'OLVA',
                         'env_cantidad' => $count_pedidos,
-                        'env_direccion' => '',
+                        'env_direccion' => 'OLVA',
                         'env_tracking' => $request->tracking,
                         'env_referencia' => '',
                         'env_numregistro' => $request->numregistro,
@@ -2091,10 +2098,10 @@ class EnvioController extends Controller
                     "zona" => $zona_distrito->zona,
                     "provincia" => $zona_distrito->provincia,
                     'distrito' => $zona_distrito->distrito,
-                    'direccion' => $request->direccion,
-                    'referencia' => $request->referencia,
-                    'cliente_recibe' => $request->nombre,
-                    'telefono' => $request->contacto,
+                    'direccion' => ( ($request->destino=='PROVINCIA')? 'OLVA':$request->direccion ),
+                    'referencia' => ( ($request->destino=='PROVINCIA')? $request->tracking:$request->referencia ),
+                    'cliente_recibe' => ($request->nombre ),
+                    'telefono' => ( $request->contacto ),
                 ]);
                 $grupoPedido->pedidos()->syncWithoutDetaching($attach_pedidos_data);
             }
