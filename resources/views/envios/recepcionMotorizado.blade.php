@@ -551,7 +551,7 @@ setTimeout(function (){
             "order": [[ 0, "desc" ]],
             ajax:{ url: "{{ route('envios.recepcionmotorizadotabla') }}",
                 data: function(d){
-                    q.fechaconsulta = $("#fecha_consulta").data("fecha");
+                    d.fechaconsulta = $("#fecha_consulta").data("fecha");
                     d.consulta = "paquete";
                     d.condicion = $('.condicion-tabla.activo').data("url");
                 }

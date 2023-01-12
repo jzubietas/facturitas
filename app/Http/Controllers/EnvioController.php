@@ -2417,7 +2417,7 @@ class EnvioController extends Controller
                 ->whereIn('direccion_grupos.condicion_envio_code', [Pedido::ENTREGADO_CLIENTE_INT, Pedido::ENTREGADO_SIN_SOBRE_OPE_INT, Pedido::ENTREGADO_SIN_SOBRE_CLIENTE_INT])
                 ->select(
                     'direccion_grupos.*',
-                    DB::raw("DATE_FORMAT(direccion_grupos.fecha_recepcion, '%Y-%m-%d') as fechaentrega"),
+                    DB::raw("DATE_FORMAT(direccion_grupos.fecha_recepcion, '%Y-%m-%d %H:%i:%s') as fechaentrega"),
                 );
         }
 
