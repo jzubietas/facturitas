@@ -1035,29 +1035,6 @@
                 },
                 "fnDrawCallback": function () {
                     $('.count_estadosobres_annulled_courier').html(this.fnSettings().fnRecordsDisplay());
-                    /*alert( oSettings.fnRecordsTotal() );
-                    alert( oSettings.fnRecordsDisplay() );
-                    alert( oSettings.fnDisplayEnd() );*/
-                    //$('.condicion-tabla').removeClass("active");
-                    //$('#annulled-tabs').addClass("active");
-
-                    //$('.condicion-tabla').removeClass("active");
-
-                    let a1=$('#tablaRecepcionados').dataTable().fnSettings().fnRecordsDisplay();
-                    let a2=$('#tablaEntregados').dataTable().fnSettings().fnRecordsDisplay();
-                    let a3=this.fnSettings().fnRecordsDisplay();
-
-                    if(a1>0){
-                        $('#myTab a[href="#received"]').tab('show')
-                        //$('#received-tab').addClass("active").tab('show');
-                    }else if(a2>0){
-                        $('#myTab a[href="#delivered"]').tab('show')
-                        //$('#delivered-tab').addClass("active").tab('show');
-                    }else if(a3>0){
-                        $('#myTab a[href="#annulled"]').tab('show')
-                        //$('#annulled-tab').addClass("active").tab('show');
-                    }
-
                 }
             });
 
@@ -1202,17 +1179,17 @@
 
                     let a1=$('#tablaRecepcionados').dataTable().fnSettings().fnRecordsDisplay();
                     let a2=$('#tablaEntregados').dataTable().fnSettings().fnRecordsDisplay();
-                    let a3=this.fnSettings().fnRecordsDisplay();
+                    let a3=$('#tablaAnulados_courier').dataTable().fnSettings().fnRecordsDisplay();
+                    let a4=this.fnSettings().fnRecordsDisplay();
 
                     if(a1>0){
                         $('#myTab a[href="#received"]').tab('show')
-                        //$('#received-tab').addClass("active").tab('show');
                     }else if(a2>0){
                         $('#myTab a[href="#delivered"]').tab('show')
-                        //$('#delivered-tab').addClass("active").tab('show');
                     }else if(a3>0){
+                        $('#myTab a[href="#annulled_courier"]').tab('show')
+                    }else if(a4>0){
                         $('#myTab a[href="#annulled"]').tab('show')
-                        //$('#annulled-tab').addClass("active").tab('show');
                     }
 
                 }
