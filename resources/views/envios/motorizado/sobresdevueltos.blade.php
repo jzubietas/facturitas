@@ -253,6 +253,31 @@
                             }
                         })
                     })
+                    $('[data-toggle=jqconfirmfoto]', row).click(function () {
+                        const action = $(this).data('target')
+                        $.confirm({
+                            type: 'orange',
+                            title: 'Foto de NO CONTESTO',
+                            columnClass: 'large',
+                            content: `<img src="${action}" class="w-100">`,
+                            buttons: {
+                                ok: {}
+                            }
+                        })
+                    })
+                    $('[data-toggle=jqconfirmtext]', row).click(function () {
+                        const action = $(this).data('target')
+                        console.log($(this),action)
+                        $.confirm({
+                            columnClass: 'large',
+                            type: 'orange',
+                            title: 'Sustento de OBSERVADO',
+                            content: `Sustento: <b>${action}</b>`,
+                            buttons: {
+                                cerrar: {}
+                            }
+                        })
+                    })
                 },
                 columns: [
                     {data: 'codigo', name: 'codigo',},

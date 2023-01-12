@@ -139,84 +139,60 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             });
-            const datatable = $('#tablaPrincipal').DataTable({
-                responsive: {
-                    details: {
-                        renderer: $.fn.dataTable.Responsive.renderer.listHiddenNodes()
-                    }
-                },
-                processing: true,
-                stateSave: true,
-                serverSide: true,
-                searching: true,
-                order: [[0, "desc"]],
-                ajax: {
-                    url: "{{ route('envios.motorizados.index',['datatable'=>1]) }}",
-                    data: function (q) {
-                        //q.fechaconsulta = $("#fecha_consulta").val();
-                        q.fechaconsulta = $("#fecha_consulta").data("fecha");
-                        q.tab = $('a[data-toggle="tab"].active').data('action')
-                    }
-                },
-                initComplete: function () {
+            function renderButtomsDataTable(row, data) {
+                if (data.destino == 'PROVINCIA') {
+                    $('td', row).css('color', '#20c997')
+                }
+                if (data.estado == 0) {
+                    $('td', row).css('color', 'red')
+                }
+                $('[data-jqconfirmcancel]', row).unbind();
+                $('[data-jqconfirm=general]', row).unbind();
+                $('[data-jqconfirm=observado]', row).unbind();
+                $('[data-jqconfirm=no_contesto]', row).unbind();
+                $('[data-motorizado-history]', row).unbind();
+                $('[data-jqconfirm=revertir]', row).unbind();
 
-                },
-                createdRow: function (row, data, dataIndex) {
+                $('[data-jqconfirmcancel]', row).click(function () {
 
-                },
-                "drawCallback": function(settings) {
-                    console.log(settings.json);
-                    $("#tablaPrincipal").DataTable().columns().header()[12].innerText = $('a[data-toggle="tab"].active').data('action-name')
-                },
-                rowCallback: function (row, data, index) {
-
-                    if (data.destino == 'PROVINCIA') {
-                        $('td', row).css('color', '#20c997')
-                    }
-                    if (data.estado == 0) {
-                        $('td', row).css('color', 'red')
-                    }
-
-                    $('[data-jqconfirmcancel]', row).click(function () {
-
-                        $.confirm({
-                            type: 'red',
-                            title: '¡Revertir Envio!',
-                            content: 'Confirme si desea revertir el envio <b>' + data.codigos + '</b>',
-                            buttons: {
-                                ok: {
-                                    text: 'Si, confirmar',
-                                    btnClass: 'btn-red',
-                                    action: function () {
-                                        const self = this;
-                                        self.showLoading(true)
-                                        $.ajax({
-                                            data: {
-                                                envio_id: data.id
-                                            },
-                                            //operaciones.confirmar.revertir
-                                            type: 'POST',
-                                            url: "{{ route('operaciones.confirmar.revertir') }}",
-                                        }).always(function () {
-                                            self.close()
-                                            self.hideLoading(true)
-                                            $('#tablaPrincipal').DataTable().ajax.reload();
-                                        });
-                                    }
-                                },
-                                cancel: {
-                                    text: 'No'
+                    $.confirm({
+                        type: 'red',
+                        title: '¡Revertir Envio!',
+                        content: 'Confirme si desea revertir el envio <b>' + data.codigos + '</b>',
+                        buttons: {
+                            ok: {
+                                text: 'Si, confirmar',
+                                btnClass: 'btn-red',
+                                action: function () {
+                                    const self = this;
+                                    self.showLoading(true)
+                                    $.ajax({
+                                        data: {
+                                            envio_id: data.id
+                                        },
+                                        //operaciones.confirmar.revertir
+                                        type: 'POST',
+                                        url: "{{ route('operaciones.confirmar.revertir') }}",
+                                    }).always(function () {
+                                        self.close()
+                                        self.hideLoading(true)
+                                        $('#tablaPrincipal').DataTable().ajax.reload();
+                                    });
                                 }
+                            },
+                            cancel: {
+                                text: 'No'
                             }
-                        })
-                    });
-                    $('[data-jqconfirm=general]', row).click(function () {
+                        }
+                    })
+                });
+                $('[data-jqconfirm=general]', row).click(function () {
 
-                        $.dialog({
-                            title: '<h3 class="font-weight-bold">Entregas de motorizado</h3>',
-                            type: 'green',
-                            columnClass: 'xlarge',
-                            content: `<div>
+                    $.dialog({
+                        title: '<h3 class="font-weight-bold">Entregas de motorizado</h3>',
+                        type: 'green',
+                        columnClass: 'xlarge',
+                        content: `<div>
     <form enctype="multipart/form-data" class="card">
         <div class="card-body p-0">
             <div class="row">
@@ -240,49 +216,49 @@
                 </div>
             </div>
             --}}
-            <div class="row mt-2">
-                <div class="col-4">
-                    <div class="input-group w-80">
-                        <div class="custom-file w-90">
-                            <input type="file" class="custom-file-input form-control-file" id="adjunto1" name="adjunto1" lang="es">
-                            <label class="custom-file-label" for="adjunto1">Foto de los sobres</label>
-                            <div class="invalid-feedback">Example invalid custom file feedback</div>
+                        <div class="row mt-2">
+                            <div class="col-12 col-md-4">
+                                <div class="input-group w-80">
+                                    <div class="custom-file w-90">
+                                        <input type="file" class="custom-file-input form-control-file" id="adjunto1" name="adjunto1" lang="es">
+                                        <label class="custom-file-label" for="adjunto1">Foto de los sobres</label>
+                                        <div class="invalid-feedback">Example invalid custom file feedback</div>
+                                    </div>
+                                    <div class="input-group-append">
+                                        <button class="btn btn-danger" id="trash_adjunto1" type="button"><i class="fa fa-trash"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-4">
+                                <div class="input-group w-80">
+                                    <div class="custom-file w-90">
+                                        <input type="file" class="custom-file-input form-control-file" id="adjunto2" name="adjunto2" lang="es">
+                                        <label class="custom-file-label" for="adjunto2">Foto del domicilio</label>
+                                        <div class="invalid-feedback">Example invalid custom file feedback</div>
+                                    </div>
+                                    <div class="input-group-append">
+                                        <button class="btn btn-danger" id="trash_adjunto2" type="button"><i class="fa fa-trash"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-4">
+                                <div class="input-group w-80">
+                                    <div class="custom-file w-90">
+                                        <input type="file" class="custom-file-input form-control-file" id="adjunto3" name="adjunto3" lang="es">
+                                        <label class="custom-file-label" for="adjunto3">Foto de quien recibe</label>
+                                        <div class="invalid-feedback">Example invalid custom file feedback</div>
+                                    </div>
+                                    <div class="input-group-append">
+                                        <button class="btn btn-danger" id="trash_adjunto3" type="button"><i class="fa fa-trash"></i></button>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="input-group-append">
-                            <button class="btn btn-danger" id="trash_adjunto1" type="button"><i class="fa fa-trash"></i></button>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-4">
-                    <div class="input-group w-80">
-                        <div class="custom-file w-90">
-                            <input type="file" class="custom-file-input form-control-file" id="adjunto2" name="adjunto2" lang="es">
-                            <label class="custom-file-label" for="adjunto2">Foto del domicilio</label>
-                            <div class="invalid-feedback">Example invalid custom file feedback</div>
-                        </div>
-                        <div class="input-group-append">
-                            <button class="btn btn-danger" id="trash_adjunto2" type="button"><i class="fa fa-trash"></i></button>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-4">
-                    <div class="input-group w-80">
-                        <div class="custom-file w-90">
-                            <input type="file" class="custom-file-input form-control-file" id="adjunto3" name="adjunto3" lang="es">
-                            <label class="custom-file-label" for="adjunto3">Foto de quien recibe</label>
-                            <div class="invalid-feedback">Example invalid custom file feedback</div>
-                        </div>
-                        <div class="input-group-append">
-                            <button class="btn btn-danger" id="trash_adjunto3" type="button"><i class="fa fa-trash"></i></button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-4 mt-12">
-                    <div class="form-group">
-                        <div class="image-wrapper">
-                            <img id="picture1" src="{{ asset('imagenes/sobres.jpg') }}"
+                        <div class="row">
+                            <div class="col-4 mt-12">
+                                <div class="form-group">
+                                    <div class="image-wrapper">
+                                        <img id="picture1" src="{{ asset('imagenes/sobres.jpg') }}"
                                 alt="Imagen del pago" class="w-80 mh-90 h-90 img-fluid" style="display: block;">
                         </div>
                     </div>
@@ -310,99 +286,99 @@
         </div>
     </form>
 </div>`,
-                            onContentReady: function () {
-                                const self = this
-                                self.$content.find("#adjunto1").change(function (e) {
-                                    const [file] = e.target.files
-                                    if (file) {
-                                        self.$content.find("#picture1").show();
-                                        self.$content.find("#picture1").attr('src', URL.createObjectURL(file))
-                                    }
-                                })
-                                self.$content.find("#adjunto2").change(function (e) {
-                                    const [file] = e.target.files
-                                    if (file) {
-                                        self.$content.find("#picture2").show();
-                                        self.$content.find("#picture2").attr('src', URL.createObjectURL(file))
-                                    }
-                                })
-                                self.$content.find("#adjunto3").change(function (e) {
-                                    const [file] = e.target.files
-                                    if (file) {
-                                        self.$content.find("#picture3").show();
-                                        self.$content.find("#picture3").attr('src', URL.createObjectURL(file))
-                                    }
-                                })
-                                self.$content.find("#trash_adjunto1").click(function (e) {
-                                    self.$content.find("#picture1").attr('src', "{{ asset('imagenes/sobres.jpg') }}")
-                                })
-                                self.$content.find("#trash_adjunto2").click(function (e) {
-                                    self.$content.find("#picture2").attr('src', "{{ asset('imagenes/domicilio.jpg') }}")
-                                })
-                                self.$content.find("#trash_adjunto3").click(function (e) {
-                                    self.$content.find("#picture3").attr('src', "{{ asset('imagenes/recibe_sobre.jpg') }}")
-                                })
+                        onContentReady: function () {
+                            const self = this
+                            self.$content.find("#adjunto1").change(function (e) {
+                                const [file] = e.target.files
+                                if (file) {
+                                    self.$content.find("#picture1").show();
+                                    self.$content.find("#picture1").attr('src', URL.createObjectURL(file))
+                                }
+                            })
+                            self.$content.find("#adjunto2").change(function (e) {
+                                const [file] = e.target.files
+                                if (file) {
+                                    self.$content.find("#picture2").show();
+                                    self.$content.find("#picture2").attr('src', URL.createObjectURL(file))
+                                }
+                            })
+                            self.$content.find("#adjunto3").change(function (e) {
+                                const [file] = e.target.files
+                                if (file) {
+                                    self.$content.find("#picture3").show();
+                                    self.$content.find("#picture3").attr('src', URL.createObjectURL(file))
+                                }
+                            })
+                            self.$content.find("#trash_adjunto1").click(function (e) {
+                                self.$content.find("#picture1").attr('src', "{{ asset('imagenes/sobres.jpg') }}")
+                            })
+                            self.$content.find("#trash_adjunto2").click(function (e) {
+                                self.$content.find("#picture2").attr('src', "{{ asset('imagenes/domicilio.jpg') }}")
+                            })
+                            self.$content.find("#trash_adjunto3").click(function (e) {
+                                self.$content.find("#picture3").attr('src', "{{ asset('imagenes/recibe_sobre.jpg') }}")
+                            })
 
-                                self.$content.find("form").on('submit', function (e) {
-                                    e.preventDefault()
-                                    /*if (!e.target.fecha_recepcion.value) {
-                                        $.confirm({
-                                            title: '¡Advertencia!',
-                                            content: '<b>Ingresa la fecha de Entrega</b>',
-                                            type: 'orange'
-                                        })
-                                        return false;
-                                    }*/
-                                    if (e.target.adjunto1.files.length === 0) {
-                                        $.confirm({
-                                            title: '¡Advertencia!',
-                                            content: '<b>Adjunta la Foto de los sobres</b>',
-                                            type: 'orange'
-                                        })
-                                        return false;
-                                    }
-                                    if (e.target.adjunto2.files.length === 0) {
-                                        $.confirm({
-                                            title: '¡Advertencia!',
-                                            content: '<b>Adjunta la Foto del domicilio</b>',
-                                            type: 'orange'
-                                        })
-                                        return false;
-                                    }
-                                    if (e.target.adjunto3.files.length === 0) {
-                                        $.confirm({
-                                            title: '¡Advertencia!',
-                                            content: '<b>Adjunta la Foto de quien recibe</b>',
-                                            type: 'orange'
-                                        })
-                                        return false;
-                                    }
-                                    var fd2 = new FormData(e.target);
-                                    fd2.set('envio_id', data.id)
-                                    self.showLoading(true)
-                                    $.ajax({
-                                        data: fd2,
-                                        processData: false,
-                                        contentType: false,
-                                        type: 'POST',
-                                        url: "{{ route('operaciones.confirmarmotorizado') }}"
-                                    }).done(function () {
-                                        self.close()
-                                        $('#tablaPrincipal').DataTable().ajax.reload();
-                                    }).always(function () {
-                                        self.hideLoading(true)
-                                    });
-                                })
-                            },
-                        });
-                    })
-                    $('[data-jqconfirm=observado]', row).click(function () {
+                            self.$content.find("form").on('submit', function (e) {
+                                e.preventDefault()
+                                /*if (!e.target.fecha_recepcion.value) {
+                                    $.confirm({
+                                        title: '¡Advertencia!',
+                                        content: '<b>Ingresa la fecha de Entrega</b>',
+                                        type: 'orange'
+                                    })
+                                    return false;
+                                }*/
+                                if (e.target.adjunto1.files.length === 0) {
+                                    $.confirm({
+                                        title: '¡Advertencia!',
+                                        content: '<b>Adjunta la Foto de los sobres</b>',
+                                        type: 'orange'
+                                    })
+                                    return false;
+                                }
+                                if (e.target.adjunto2.files.length === 0) {
+                                    $.confirm({
+                                        title: '¡Advertencia!',
+                                        content: '<b>Adjunta la Foto del domicilio</b>',
+                                        type: 'orange'
+                                    })
+                                    return false;
+                                }
+                                if (e.target.adjunto3.files.length === 0) {
+                                    $.confirm({
+                                        title: '¡Advertencia!',
+                                        content: '<b>Adjunta la Foto de quien recibe</b>',
+                                        type: 'orange'
+                                    })
+                                    return false;
+                                }
+                                var fd2 = new FormData(e.target);
+                                fd2.set('envio_id', data.id)
+                                self.showLoading(true)
+                                $.ajax({
+                                    data: fd2,
+                                    processData: false,
+                                    contentType: false,
+                                    type: 'POST',
+                                    url: "{{ route('operaciones.confirmarmotorizado') }}"
+                                }).done(function () {
+                                    self.close()
+                                    $('#tablaPrincipal').DataTable().ajax.reload();
+                                }).always(function () {
+                                    self.hideLoading(true)
+                                });
+                            })
+                        },
+                    });
+                })
+                $('[data-jqconfirm=observado]', row).click(function () {
 
-                        $.dialog({
-                            title: '<h3 class="font-weight-bold">Marcar como observado</h3>',
-                            type: 'green',
-                            columnClass: 'large',
-                            content: `<div>
+                    $.dialog({
+                        title: '<h3 class="font-weight-bold">Marcar como observado</h3>',
+                        type: 'green',
+                        columnClass: 'large',
+                        content: `<div>
     <form enctype="multipart/form-data" class="card">
         <div class="card-body p-0">
             <div class="row">
@@ -426,42 +402,42 @@ Enviar</button>
         </div>
     </form>
 </div>`,
-                            onContentReady: function () {
-                                const self = this
-                                self.$content.find("form").on('submit', function (e) {
-                                    e.preventDefault()
-                                    if (!e.target.sustento_text.value) {
-                                        $.confirm({
-                                            title: '¡Advertencia!',
-                                            content: '<b>Ingresa el sustento para continuar</b>',
-                                            type: 'orange'
-                                        })
-                                        return false;
-                                    }
-                                    self.showLoading(true)
-                                    $.ajax({
-                                        data: {
-                                            grupo_id: data.id,
-                                            sustento_text: e.target.sustento_text.value
-                                        },
-                                        type: 'POST',
-                                        url: "{{ route('operaciones.confirmarmotorizado',['action'=>'update_status_observado']) }}"
-                                    }).done(function () {
-                                        self.close()
-                                        $('#tablaPrincipal').DataTable().ajax.reload(null, false);
-                                    }).always(function () {
-                                        self.hideLoading(true)
-                                    });
-                                })
-                            },
-                        });
-                    })
-                    $('[data-jqconfirm=no_contesto]', row).click(function () {
-                        $.dialog({
-                            title: '<h3 class="font-weight-bold">Marcar como "NO CONTESTO"</h3>',
-                            type: 'green',
-                            columnClass: 'xlarge',
-                            content: `<div>
+                        onContentReady: function () {
+                            const self = this
+                            self.$content.find("form").on('submit', function (e) {
+                                e.preventDefault()
+                                if (!e.target.sustento_text.value) {
+                                    $.confirm({
+                                        title: '¡Advertencia!',
+                                        content: '<b>Ingresa el sustento para continuar</b>',
+                                        type: 'orange'
+                                    })
+                                    return false;
+                                }
+                                self.showLoading(true)
+                                $.ajax({
+                                    data: {
+                                        grupo_id: data.id,
+                                        sustento_text: e.target.sustento_text.value
+                                    },
+                                    type: 'POST',
+                                    url: "{{ route('operaciones.confirmarmotorizado',['action'=>'update_status_observado']) }}"
+                                }).done(function () {
+                                    self.close()
+                                    $('#tablaPrincipal').DataTable().ajax.reload(null, false);
+                                }).always(function () {
+                                    self.hideLoading(true)
+                                });
+                            })
+                        },
+                    });
+                })
+                $('[data-jqconfirm=no_contesto]', row).click(function () {
+                    $.dialog({
+                        title: '<h3 class="font-weight-bold">Marcar como "NO CONTESTO"</h3>',
+                        type: 'green',
+                        columnClass: 'xlarge',
+                        content: `<div>
     <form enctype="multipart/form-data" class="card">
         <div class="card-body p-0">
             <div class="row">
@@ -493,58 +469,58 @@ Enviar</button>
         </div>
     </form>
 </div>`,
-                            onContentReady: function () {
-                                const self = this
-                                self.$content.find("#sustento_foto").change(function (e) {
-                                    const [file] = e.target.files
-                                    if (file) {
-                                        self.$content.find("#sustento_foto_img_content").show();
-                                        self.$content.find("#sustento_foto_img").attr('src', URL.createObjectURL(file))
-                                    }
-                                })
+                        onContentReady: function () {
+                            const self = this
+                            self.$content.find("#sustento_foto").change(function (e) {
+                                const [file] = e.target.files
+                                if (file) {
+                                    self.$content.find("#sustento_foto_img_content").show();
+                                    self.$content.find("#sustento_foto_img").attr('src', URL.createObjectURL(file))
+                                }
+                            })
 
-                                self.$content.find("form").on('submit', function (e) {
-                                    e.preventDefault()
-                                    if (e.target.sustento_foto.files.length === 0) {
-                                        $.confirm({
-                                            title: '¡Advertencia!',
-                                            content: '<b>Adjunta la foto de llamadas realizadas</b>',
-                                            type: 'orange'
-                                        })
-                                        return false;
-                                    }
-                                    var fd2 = new FormData(e.target);
-                                    fd2.set('grupo_id', data.id)
-                                    self.showLoading(true)
-                                    $.ajax({
-                                        data: fd2,
-                                        processData: false,
-                                        contentType: false,
-                                        type: 'POST',
-                                        url: "{{ route('operaciones.confirmarmotorizado',['action'=>'update_status_no_contesto']) }}"
-                                    }).done(function () {
-                                        self.close()
-                                        $('#tablaPrincipal').DataTable().ajax.reload(null, false);
-                                    }).always(function () {
-                                        self.hideLoading(true)
-                                    });
-                                })
-                            },
-                        });
-                    })
-                    $('[data-motorizado-history]', row).click(function () {
-                        const action = $(this).data('jqconfirm-action')
-                        $.confirm({
-                            title: 'Historial de adjuntos de llamadas',
-                            type: 'info',
-                            columnClass: 'xlarge',
-                            content: function () {
-                                const self = this
-                                return $.get(action).done(function (response) {
-                                    const data = {
-                                        motorizado_histories: response
-                                    }
-                                    const html = `
+                            self.$content.find("form").on('submit', function (e) {
+                                e.preventDefault()
+                                if (e.target.sustento_foto.files.length === 0) {
+                                    $.confirm({
+                                        title: '¡Advertencia!',
+                                        content: '<b>Adjunta la foto de llamadas realizadas</b>',
+                                        type: 'orange'
+                                    })
+                                    return false;
+                                }
+                                var fd2 = new FormData(e.target);
+                                fd2.set('grupo_id', data.id)
+                                self.showLoading(true)
+                                $.ajax({
+                                    data: fd2,
+                                    processData: false,
+                                    contentType: false,
+                                    type: 'POST',
+                                    url: "{{ route('operaciones.confirmarmotorizado',['action'=>'update_status_no_contesto']) }}"
+                                }).done(function () {
+                                    self.close()
+                                    $('#tablaPrincipal').DataTable().ajax.reload(null, false);
+                                }).always(function () {
+                                    self.hideLoading(true)
+                                });
+                            })
+                        },
+                    });
+                })
+                $('[data-motorizado-history]', row).click(function () {
+                    const action = $(this).data('jqconfirm-action')
+                    $.confirm({
+                        title: 'Historial de adjuntos de llamadas',
+                        type: 'info',
+                        columnClass: 'xlarge',
+                        content: function () {
+                            const self = this
+                            return $.get(action).done(function (response) {
+                                const data = {
+                                    motorizado_histories: response
+                                }
+                                const html = `
                                <section class="timeline_area section_padding_130">
     <div class="container">
         <div class="row">
@@ -552,7 +528,7 @@ Enviar</button>
                 <!-- Timeline Area-->
                 <div class="apland-timeline-area">
                     ${data.motorizado_histories.map(function (h) {
-                                        return `
+                                    return `
                     <!-- Single Timeline Content-->
                     <div class="single-timeline-area">
                         <div class="timeline-date wow fadeInLeft" data-wow-delay="0.1s" style="visibility: visible; animation-delay: 0.1s; animation-name: fadeInLeft;">
@@ -576,46 +552,78 @@ Enviar</button>
                             </div>
                         </div>
                     </div>`
-                                    })}
+                                })}
                 </div>
             </div>
         </div>
     </div>
 </section>
                                 `;
-                                    self.setContent(html)
-                                });
-                            }
-                        })
+                                self.setContent(html)
+                            });
+                        }
                     })
-                    $('[data-jqconfirm=revertir]', row).click(function () {
-                        const action = $(this).data('jqconfirm-action')
-                        $.confirm({
-                            type: 'red',
-                            title: `Confirmación`,
-                            content: `¿Estas seguro de revertir el paquete <b>ENV${data.id}</b><br> a <b>RECEPCION - MOTORIZADO</b>?`,
-                            buttons: {
-                                revertir: {
-                                    btnClass: 'btn-red',
-                                    action: function () {
-                                        const self=this
-                                        self.showLoading(true)
-                                        $.post(action, {
+                })
+                $('[data-jqconfirm=revertir]', row).click(function () {
+                    const action = $(this).data('jqconfirm-action')
+                    $.confirm({
+                        type: 'red',
+                        title: `Confirmación`,
+                        content: `¿Estas seguro de revertir el paquete <b>ENV${data.id}</b><br> a <b>RECEPCION - MOTORIZADO</b>?`,
+                        buttons: {
+                            revertir: {
+                                btnClass: 'btn-red',
+                                action: function () {
+                                    const self=this
+                                    self.showLoading(true)
+                                    $.post(action, {
 
+                                    })
+                                        .done(function (data) {
+                                            self.close()
                                         })
-                                            .done(function (data) {
-                                                self.close()
-                                            })
-                                            .always(function () {
-                                                self.hideLoading(true)
-                                                $('#tablaPrincipal').DataTable().draw(false)
-                                            })
-                                    }
-                                },
-                                cancelar: {}
-                            }
-                        })
+                                        .always(function () {
+                                            self.hideLoading(true)
+                                            $('#tablaPrincipal').DataTable().draw(false)
+                                        })
+                                }
+                            },
+                            cancelar: {}
+                        }
                     })
+                })
+            }
+            const datatable = $('#tablaPrincipal').DataTable({
+                responsive: {
+                    details: {
+                        renderer: $.fn.dataTable.Responsive.renderer.listHiddenNodes()
+                    }
+                },
+                processing: true,
+                stateSave: true,
+                serverSide: true,
+                searching: true,
+                order: [[0, "desc"]],
+                ajax: {
+                    url: "{{ route('envios.motorizados.index',['datatable'=>1]) }}",
+                    data: function (q) {
+                        //q.fechaconsulta = $("#fecha_consulta").val();
+                        q.fechaconsulta = $("#fecha_consulta").data("fecha");
+                        q.tab = $('a[data-toggle="tab"].active').data('action')
+                    }
+                },
+                initComplete: function () {
+
+                },
+                createdRow: function (row, data, dataIndex) {
+
+                },
+                drawCallback: function(settings) {
+                    console.log(settings.json);
+                    $("#tablaPrincipal").DataTable().columns().header()[12].innerText = $('a[data-toggle="tab"].active').data('action-name')
+                },
+                rowCallback: function (row, data, index) {
+                    renderButtomsDataTable(row,data)
                 },
                 columns: [
                     {
@@ -733,7 +741,12 @@ Enviar</button>
                     }
                 },
             });
-
+            datatable.on( 'responsive-display', function ( e, datatable, row, showHide, update ) {
+                console.log( 'Details for row '+row.index()+' '+(showHide ? 'shown' : 'hidden') );
+                if(showHide) {
+                    renderButtomsDataTable($(row.node()).siblings('.child'), row.data())
+                }
+            } );
             $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
                 console.log(
                     'target: ',
