@@ -389,7 +389,7 @@
 
     <style>
         .table_custom.toolbar {
-                float: left;
+            float: left;
         }
 
         .qr_success {
@@ -783,6 +783,14 @@
 
                 }
             });
+
+
+
+            /*foreach*/
+
+        @foreach($motorizados as $motorizado)
+            
+        @@endforeach
 
             /*
                   $("#fecha_consulta").datepicker({
