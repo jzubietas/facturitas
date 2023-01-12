@@ -335,12 +335,12 @@
                                     </thead>
                                     <tbody>
                                     @php
-                                        $contPa = 0;
-                                        $sumPa = 0;
+                                        $contPaDev = 0;
+                                        $sumPaDev = 0;
                                     @endphp
                                     @foreach ($devoluciones as $devolucion)
                                         <tr>
-                                            <td>{{ $contPa + 1 }}</td>
+                                            <td>{{ $contPaDev + 1 }}</td>
                                             <td>{{ $devolucion->code_id }}</td>
                                             <td>{{ $devolucion->bank_destino }}</td>
                                             <td>{{$devolucion->amount_format}}</td>
@@ -369,8 +369,8 @@
                                             </td>
                                         </tr>
                                         @php
-                                            $sumPa = $sumPa + $devolucion->amount;
-                                            $contPa++;
+                                            $sumPaDev = $sumPaDev + $devolucion->amount;
+                                            $contPaDev++;
                                         @endphp
                                         @include('pagos.modals.modalimagen')
                                     @endforeach
@@ -379,7 +379,7 @@
                                     <th style="text-align: center">TOTAL</th>
                                     <th></th>
                                     <th></th>
-                                    <th><h4><?php echo money_f($sumPa) ?></h4></th>
+                                    <th><h4><?php echo money_f($sumPaDev) ?></h4></th>
                                     <th></th>
                                     </tfoot>
                                 </table>
