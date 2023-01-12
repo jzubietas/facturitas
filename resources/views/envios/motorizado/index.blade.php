@@ -23,7 +23,7 @@
             <tbody>
             <tr>
 
-                <td><p class="font-20 font-weight-bold">Buscar por fecha de salida:</p>
+                <td><p class="font-20 font-weight-bold">Buscar por fecha de Ruta:</p>
                     <input type="date" value="{{$fecha_consulta->format('Y-m-d')}}" id="fecha_consulta" name="fecha_consulta" class="form-control" autocomplete="off"></td>
                 <td></td>
 
