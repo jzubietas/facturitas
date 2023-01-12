@@ -317,7 +317,7 @@ class MotorizadoController extends Controller
             ->whereNotNull('zona')
             ->activo()
             ->get();
-        
+
         $pedidos_observados_count = Pedido::join('direccion_grupos', 'pedidos.direccion_grupo', 'direccion_grupos.id')
             ->join('users', 'users.id', 'direccion_grupos.motorizado_id')
             ->select([
@@ -369,7 +369,7 @@ class MotorizadoController extends Controller
 
             return datatables()->query(DB::table($pedidos_observados))
                 ->addColumn('situacion_color', function ($pedido) {
-                    if ($pedido->fecha_salida != null) {
+                    if ($pedido->grupo_fecha != null) {
                         if ($pedido->grupo_fecha_salida != null) {
                             $fecha_salida = Carbon::parse($pedido->grupo_fecha_salida);
                             $fecha = Carbon::parse($pedido->grupo_fecha);
