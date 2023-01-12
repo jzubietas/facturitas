@@ -167,6 +167,79 @@
                 <tbody>
                 </tbody>
             </table>
+
+            <!--
+            MODULO PARA LOGISTICA
+            -->
+
+            <div class="row">
+                @foreach($motorizados as $motorizado)
+                    <div class="col-lg-4 container-{{Str::slug($motorizado->zona)}}">
+                        <div class="table-responsive">
+                            <div class="card card-{{$color_zones[Str::upper($motorizado->zona)]??'success'}}">
+                                <div class="card-header pt-8 pb-8">
+                                    <div class="d-flex justify-content-between">
+                                        <h5 class="mb-0 font-16"> MOTORIZADO {{Str::upper($motorizado->zona)}}</h5>
+                                        <div>
+
+                                            <h6 class="mb-0"><a class="btn btn-sm btn-danger"
+                                                                href="#">Exportar</a></span>
+                                            </h6>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-body py-1">
+                                    <div>
+
+                                        <ul class="nav nav-tabs" style="font-size:11px !important;"
+                                            id="myTab{{Str::slug($motorizado->zona)}}"
+                                            role="tablist">
+                                            <li class="nav-item">
+                                                <a class="nav-link active" id="general-tab" data-vista="18"
+                                                   data-zona="{{Str::slug($motorizado->zona)}}" data-toggle="tab"
+                                                   href="#general" role="tab"
+                                                   data-tab="motorizado"
+                                                   aria-controls="general" aria-selected="true" data-action="general">
+                                                    RECEPCIÓN
+                                                </a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a class="nav-link" id="entregado-tab" data-vista="19"
+                                                   data-zona="{{Str::slug($motorizado->zona)}}" data-toggle="tab"
+                                                   href="#entregado"
+                                                   role="tab"
+                                                   data-tab="entregado"
+                                                   aria-controls="entregado" aria-selected="false"
+                                                   data-action="entregado">
+                                                    EN RUTA
+                                                </a>
+                                            </li>
+                                        </ul>
+
+                                        <table id="tablaPrincipal{{Str::upper($motorizado->zona)}}"
+                                               class="tabla-data table table-striped dt-responsive w-100">
+                                            <thead>
+                                            <tr>
+                                                <!--<th scope="col">Item</th>-->
+                                                <th scope="col">Código</th>
+                                                <th scope="col">Teléfono</th>
+                                                <th scope="col">Zona</th>
+                                                <th scope="col">Distrito</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
+
+
+            </div>
+
             @include('pedidos.modal.confirmar_recepcion_log')
             @include('envios.modal.enviarid')
             @include('pedidos.modal.recibirid')
@@ -558,6 +631,95 @@
     <script>
         $(document).ready(function () {
 
+            const configDataTableZonas = {
+                serverSide: true,
+                searching: true,
+                lengthChange: false,
+                order: [[0, "desc"]],
+                createdRow: function (row, data, dataIndex) {
+
+                },
+                rowCallback: function (row, data, index) {
+                    $('[data-toggle=jqconfirm]', row).click(function () {
+                        const action = $(this).data('target')
+                        $.confirm({
+                            type: 'orange',
+                            title: 'Confirmar recepción',
+                            content: `Esta seguro de confirmar la recepción del Pedido <b>${data.codigo}</b>`,
+                            buttons: {
+                                confirmar: {
+                                    btnClass: 'btn-warning',
+                                    action: function () {
+                                        const self = this
+                                        self.showLoading(true)
+                                        $.post(action, {}).done(function () {
+
+                                        })
+                                            .always(function () {
+                                                self.hideLoading(true)
+                                            })
+                                    }
+                                },
+                                cancelar: {}
+                            }
+                        })
+                    })
+                },
+                columns: [
+                    {data: 'codigos', name: 'codigos',},
+                    {data: 'celular', name: 'celular',},
+                    {data: 'distribucion', name: 'distribucion',},
+                    {data: 'distrito', name: 'distrito',},
+
+                ],
+                language: {
+                    "decimal": "",
+                    "emptyTable": "No hay información",
+                    "info": "_START_ - _END_ / _TOTAL_",
+                    "infoEmpty": "0 Entradas",
+                    "infoFiltered": "(Filtrado de _MAX_ total entradas)",
+                    "infoPostFix": "",
+                    "thousands": ",",
+                    "lengthMenu": "Mostrar _MENU_ Entradas",
+                    "loadingRecords": "Cargando...",
+                    "processing": ``,
+                    "search": "Buscar:",
+                    "zeroRecords": "Sin resultados encontrados",
+                    "paginate": {
+                        "first": "Primero",
+                        "last": "Ultimo",
+                        "next": "Siguiente",
+                        "previous": "Anterior"
+                    }
+                },
+            }
+
+            @foreach($motorizados as $motorizado)
+            $('#tablaPrincipal{{Str::upper($motorizado->zona)}}').DataTable({
+                ...configDataTableZonas,
+                ajax: {
+                    url: "{{route('envios.recepcionmotorizadotablageneral',['datatable'=>'1'])}}",
+                    data: function (a) {
+                        a.fechaconsulta = $("#fecha_consulta").data("fecha");
+                        a.tab = $("#myTab{{Str::slug($motorizado->zona)}} li>a.active").data('tab');
+                        a.motorizado_id = {{ $motorizado->id }};
+                        a.zona = "{{ Str::upper($motorizado->zona)}}";
+                        a.vista = $("#myTab{{Str::slug($motorizado->zona)}} li>a.active").data('vista');
+                    }
+                },
+            });
+            @endforeach
+
+            @foreach($motorizados as $motorizado)
+            var tt = $("#myTab{{Str::upper($motorizado->zona)}}")[0];
+
+            $('a[data-toggle="tab"]', tt).on('shown.bs.tab', function (e) {
+                let zona = $(this).data('zona');
+                $('#tablaPrincipal{{Str::upper($motorizado->zona)}}').DataTable().ajax.reload();
+            })
+            @endforeach
+
+
             $(document).on("submit", "#form_recepcionmotorizado", function (event) {
                 let user_motivov = $("#user_motorizado").val();
                 let fecha_env = $("#fecha_envio").val();
@@ -589,6 +751,7 @@
                 $(this).data('fecha', fecha_formateada);
                 console.log(fecha_formateada);
                 $('#tablaPrincipal').DataTable().ajax.reload();
+                $('.tabla-data').DataTable().ajax.reload();
             });
 
             $('#tablaPrincipal').DataTable({
@@ -601,7 +764,7 @@
                 ajax: {
                     url: "{{ route('envios.recepcionmotorizadotabla') }}",
                     data: function (d) {
-                        d.fechaconsulta = $("#fecha_consulta").val();
+                        d.fechaconsulta = $("#fecha_consulta").data("fecha");
                         d.consulta = "paquete";
                         d.condicion = $('.condicion-tabla.activo').data("url");
                     }
@@ -719,8 +882,6 @@
             /*
                   $("#fecha_consulta").datepicker({
                     onSelect: function () {
-                  $("#fecha_consulta").datepicker({
-                    onSelect: function () {
 
                       $('#tablaPrincipal').DataTable().ajax.reload();
                       console.log("minimo "+$(this).val());
@@ -735,6 +896,20 @@
                 //var url = $(this).data("url");
                 $('#tablaPrincipal').DataTable().ajax.reload();
 
+                var $activeItem = $('.nav .active').html();
+                console.log($activeItem);
+
+                var id = $('.condicion-tabla.active').attr('id');
+                console.log(id)//profile-tab   home-tab
+                if ($('.condicion-tabla.active').attr('id') == 'home-tab') {
+
+                    $('div.toolbar').html('<div class="d-flex justify-content-center"><button id="iniciar-ruta-masiva" class="btn btn-success">Iniciar RUTA MASIVA</button></div>');
+
+                } else {
+                    $('div.toolbar').html('');
+                }
+                //if ( ! $.fn.DataTable.isDataTable( '#tablaPrincipal' ) ) {
+                //}
 
             });
 
