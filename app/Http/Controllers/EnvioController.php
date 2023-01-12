@@ -912,6 +912,17 @@ class EnvioController extends Controller
 
     public function Enviosrutaenviotabla(Request $request)
     {
+        // SI EXISTE UNA VISTA
+        if ($request->vista != null) {
+            try {
+                $vista_consulta = Carbon::createFromFormat('d/m/Y', $request->vista);
+            } catch (\Exception $ex) {
+                $vista_consulta = now();
+            }
+        } else {
+            $vista_consulta = now();
+        }
+
         // SI EXISTE UNA FECHA
         if ($request->fechaconsulta != null) {
             try {
@@ -1007,6 +1018,16 @@ class EnvioController extends Controller
 
     public function Enviosrecepcionmotorizado()
     {
+
+        $motorizados = User::select([
+            'id',
+            'zona',
+            DB::raw(" (select count(*) from pedidos inner join direccion_grupos b on pedidos.direccion_grupo=b.id where b.motorizado_status in (" . Pedido::ESTADO_MOTORIZADO_OBSERVADO . "," . Pedido::ESTADO_MOTORIZADO_NO_CONTESTO . ") and b.motorizado_id=users.id and b.estado=1) as devueltos")
+        ])->where('rol', '=', User::ROL_MOTORIZADO)
+            ->whereNotNull('zona')
+            ->activo()
+            ->get();
+
         $users_motorizado = User::where('rol', 'MOTORIZADO')->where('estado', '1')->pluck('name', 'id');
         //$fecha_consulta = Carbon::now()->format('d/m/Y');
         $fecha_consulta = Carbon::now()->format('Y-m-d');
@@ -1053,7 +1074,7 @@ class EnvioController extends Controller
             $ver_botones_accion = 1;
         }
 
-        return view('envios.recepcionMotorizado', compact('condiciones', 'distritos', 'direcciones', 'destinos', 'superasesor', 'ver_botones_accion', 'departamento', 'fecha_consulta','users_motorizado'));
+        return view('envios.recepcionMotorizado', compact('condiciones', 'distritos', 'direcciones', 'destinos', 'superasesor', 'ver_botones_accion', 'departamento', 'fecha_consulta','users_motorizado', 'motorizados'));
     }
 
     public function Enviosporconfirmartabla(Request $request)
@@ -1294,6 +1315,93 @@ class EnvioController extends Controller
 
         }
 
+    }
+
+
+    public function EnviosrecepcionmotorizadotablaGeneral(Request $request)
+    {
+        $tipo_vista = $request->vista;
+
+        $tipo_consulta = $request->consulta;
+
+        //SI ES QUE EXISTE UNA FECHA
+        if ($request->fechaconsulta != null) {
+            try {
+                $fecha_consulta = Carbon::createFromFormat('d/m/Y', $request->fechaconsulta);
+            } catch (Exception $ex) {
+                $fecha_consulta = now();
+            }
+
+        } else {
+            $fecha_consulta = now();
+        }
+
+        //OBTENEMOS EL CODIGO DE CONDICION
+        if ($request->condicion != null) {
+            $url_tabla = $request->condicion;
+        } else {
+            $url_tabla = null;
+        }
+
+        $pedidos = null;
+        $filtros_code = [12];
+
+        // SI EXISTE UNA VISTA
+        if ($request->vista != null) {
+            try {
+                $vista_consulta = Carbon::createFromFormat('d/m/Y', $request->vista);
+            } catch (\Exception $ex) {
+                $vista_consulta = now();
+            }
+        } else {
+            $vista_consulta = now();
+        }
+
+        // SI EXISTE UNA FECHA
+        if ($request->fechaconsulta != null) {
+            try {
+                $fecha_consulta = Carbon::createFromFormat('d/m/Y', $request->fechaconsulta);
+            } catch (\Exception $ex) {
+                $fecha_consulta = now();
+            }
+        } else {
+            $fecha_consulta = now();
+        }
+
+        // SI SE ESPERA RESULTADOS PARA UNA TABLA
+        if ($request->has('datatable')) {
+            $query = DireccionGrupo::
+            join('clientes as c', 'c.id', 'direccion_grupos.cliente_id')
+                ->join('users as u', 'u.id', 'c.user_id')
+                ->when($fecha_consulta != null, function ($query) use ($fecha_consulta) {
+                    $query->whereDate('direccion_grupos.fecha_salida', $fecha_consulta);
+                })
+                ->where('direccion_grupos.motorizado_id', '=', $request->motorizado_id)
+
+                ->select([
+                    'direccion_grupos.*',
+                ]);
+
+            $tab = ($request->tab ?: '');
+            switch ($tab) {
+                case 'recepcion':
+                    $query
+                        ->where('direccion_grupos.estado', '1')
+                        ->where('direccion_grupos.condicion_envio_code', $request->vista);
+                    break;
+                case 'ruta':
+                    $query
+                        ->where('direccion_grupos.estado', '1')
+                        ->where('direccion_grupos.condicion_envio_code', $request->vista);
+                    break;
+            }
+
+            return datatables()->query(DB::table($query))
+                ->addIndexColumn()
+                ->rawColumns(['action', 'condicion_envio'])
+                ->toJson();
+
+        }
     }
 
 

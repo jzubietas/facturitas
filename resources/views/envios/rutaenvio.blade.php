@@ -259,6 +259,7 @@
                         a.tab=$("#myTab{{Str::slug($motorizado->zona)}} li>a.active").data('tab');
                         a.motorizado_id = {{ $motorizado->id }};
                         a.zona = "{{ Str::upper($motorizado->zona)}}";
+                        a.vista = "envio_ruta";
                     }
                 },
             });
@@ -271,16 +272,6 @@
                 let zona = $(this).data('zona');
                 $('#tablaPrincipal{{Str::upper($motorizado->zona)}}').DataTable().ajax.reload();
             })
-/*
-            $('#myTab{{Str::upper($motorizado->zona)}} a[data-toggle=tab]').on('shown.bs.tab',function (e) {
-                console.log(
-                    'target: ',
-                    e.target, // newly activated tab
-                    e.relatedTarget, // previous active tab
-                )
-                $('#tablaPrincipal{{Str::upper($motorizado->zona)}}').DataTable().ajax.reload();
-
-            });*/
             @endforeach
 
 
