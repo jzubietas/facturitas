@@ -815,7 +815,7 @@
                         data: 'condicion_envio',
                         name: 'condicion_envio',
                     },
-                    {data: 'action', name: 'action', orderable: false, searchable: false,sWidth:'20%'},
+                    {data: 'action', name: 'action', orderable: false, searchable: false,sWidth:'20%',"visible":false},
 
                 ],
                 language: {
