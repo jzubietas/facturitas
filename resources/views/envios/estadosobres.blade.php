@@ -61,7 +61,16 @@
                 <tbody class="table-responsive">
                 <tr class="table-responsive">
                     <td class="table-responsive col-4 mx-auto">
-                        <input type="text" value="" id="buscador_global" name="buscador_global" class="form-control" autocomplete="off">
+
+                        <div class="input-group mb-3">
+                            <input id="buscador_global" name="buscador_global" value=""
+                                   type="text" class="form-control" autocomplete="off"
+                                   placeholder="Ingrese su búsqueda" aria-label="Recipient's username" aria-describedby="basic-addon2">
+                            <div class="input-group-append">
+                                <button class="btn btn-success" id="btn_buscar" type="button">Buscar</button>
+                            </div>
+                        </div>
+
                     </td>
                 </tr>
                 </tbody>
@@ -80,7 +89,7 @@
                        aria-controls="received"
                        aria-selected="true">
                         <i class="fa fa-inbox" aria-hidden="true"></i> RECEPCIÓN
-                        <sup><span class="badge badge-light count_estadosobres_received">{{$count_recepcionados}}</span></sup>
+                        <sup><span class="badge badge-light count_estadosobres_received">0</span></sup>
                     </a>
                 </li>
                 <li class="nav-item text-center">
@@ -95,7 +104,7 @@
                        aria-controls="delivered"
                        aria-selected="false">
                         <i class="fa fa-motorcycle" aria-hidden="true"></i> ENTREGADOS
-                        <sup><span class="badge badge-light count_estadosobres_delivered">{{$count_entregados}}</span></sup>
+                        <sup><span class="badge badge-light count_estadosobres_delivered">0</span></sup>
                     </a>
                 </li>
 
@@ -111,7 +120,7 @@
                        aria-controls="annulled"
                        aria-selected="false">
                         <i class="fa fa-motorcycle" aria-hidden="true"></i> ANULADOS
-                        <sup><span class="badge badge-light count_estadosobres_annulled">{{$count_anulados}}</span></sup>
+                        <sup><span class="badge badge-light count_estadosobres_annulled">0</span></sup>
                     </a>
                 </li>
             </ul>
@@ -557,36 +566,16 @@
                 }
             });
 
-            $("#buscador_global").on('change keyup', function(){
-                tablaRecepcionados.search( this.value ).draw();
-                tablaEntregados.search( this.value ).draw();
-                tablaAnulados.search( this.value ).draw();
+            $('#btn_buscar').click(function(){
+                let valor=$("#buscador_global").val();
 
-                var info_tablaRecepcionados = tablaRecepcionados.page.info().recordsDisplay
-                console.log("en recepcionados "+info_tablaRecepcionados)
+                tablaRecepcionados.search( valor ).draw();
+                tablaEntregados.search( valor ).draw();
+                tablaAnulados.search( valor ).draw();
 
-                var info_tablaEntregados = tablaEntregados.page.info().recordsDisplay
-                console.log("en entregados "+info_tablaEntregados)
+            });
 
-                var info_tablaAnulados = tablaAnulados.page.info().recordsDisplay
-                console.log("en anulados "+info_tablaAnulados)
 
-                $('.count_estadosobres_received').html(info_tablaRecepcionados)
-                $('.count_estadosobres_delivered').html(info_tablaEntregados)
-                $('.count_estadosobres_anulled').html(info_tablaAnulados)
-                if(info_tablaRecepcionados>0){
-
-                }
-            })
-
-            //boton buscador general
-            /*$(document).on('change','#buscador_global',function(e){
-
-            });*/
-
-            /*$('#myInput').on( 'keyup', function () {
-                table.search( this.value ).draw();
-            } );*/
 
             /********************
              * TABLA SOBRES RECIBIDOS
@@ -595,8 +584,8 @@
                 processing: true,
                 stateSave: false,
                 serverSide: true,
-                searching: false,
-                "bFilter": false,
+                searching: true,
+                "bFilter": true,
                 "order": [[0, "desc"]],
                 ajax: {
                     url: "{{ route('envios.estadosobrestabla') }}",
@@ -607,26 +596,13 @@
                 createdRow: function (row, data, dataIndex) {
                 },
                 rowCallback: function (row, data, index) {
-                    console.log(data);
-                    if (data.devuelto != null) {
-                        $('td', row).css('color', '#cf0a0a');
-                    }
+
                 },
                 columns: [
                     {
-                        data: 'id',
-                        name: 'id',
-                        render: function (data, type, row, meta) {
-                            if (row.id < 10) {
-                                return 'PED000' + row.id;
-                            } else if (row.id < 100) {
-                                return 'PED00' + row.id;
-                            } else if (row.id < 1000) {
-                                return 'PED0' + row.id;
-                            } else {
-                                return 'PED' + row.id;
-                            }
-                        }, "visible": false
+                        data: 'correlativo',
+                        name: 'correlativo',
+                        "visible": false
                     },
                     {data: 'codigo', name: 'codigo',},
                     {data: 'users', name: 'users',},
@@ -723,7 +699,15 @@
                         "previous": "Anterior"
                     }
                 },
+                "fnDrawCallback": function () {
+                    $('.count_estadosobres_received').html(this.fnSettings().fnRecordsDisplay());
+                    /*alert( oSettings.fnRecordsTotal() );
+                    alert( oSettings.fnRecordsDisplay() );
+                    alert( oSettings.fnDisplayEnd() );*/
+                }
             });
+
+
 
             /********************
              * TABLA SOBRES ENTREGADOS
@@ -731,11 +715,10 @@
 
             tablaEntregados=$('#tablaEntregados').DataTable({
                 processing: true,
-                autoload: false,
                 stateSave: false,
                 serverSide: true,
-                searching: false,
-                "bFilter": false,
+                searching: true,
+                "bFilter": true,
                 "order": [[5, "desc"]],
                 ajax: {
                     url: "{{ route('envios.estadosobrestabla') }}",
@@ -746,54 +729,6 @@
                 createdRow: function (row, data, dataIndex) {
                 },
                 rowCallback: function (row, data, index) {
-
-                    if (data.destino2 == 'PROVINCIA') {
-                        $('td', row).css('color', 'red')
-                    } else if (data.destino2 == 'LIMA') {
-                        if (data.distribucion != null) {
-                            if (data.distribucion == 'NORTE') {
-                                //$('td', row).css('color','blue')
-                            } else if (data.distribucion == 'CENTRO') {
-                                //$('td', row).css('color','yellow')
-                            } else if (data.distribucion == 'SUR') {
-                                //$('td', row).css('color','green')
-                            }
-                        } else {
-                        }
-                    }
-
-                    $('[data-jqconfirm]', row).click(function () {
-                        $.confirm({
-                            type: 'red',
-                            title: '¡Revertir Envio!',
-                            content: 'Confirme si desea revertir el envio <b>'+data.codigos+'</b>',
-                            buttons: {
-                                ok:{
-                                    text:'Si, confirmar',
-                                    btnClass:'btn-red',
-                                    action:function (){
-                                        const self=this;
-                                        self.showLoading(true)
-                                        $.ajax({
-                                            data: {
-                                                envio_id:data.id,
-                                                pedido:data.codigos
-                                            },
-                                            type: 'POST',
-                                            url: "{{ route('operaciones.revertirhaciaatendido') }}",
-                                        }).always(function (){
-                                            self.close()
-                                            self.hideLoading(true)
-                                            $('#tablaPrincipal').DataTable().ajax.reload();
-                                        });
-                                    }
-                                },
-                                cancel:{
-                                    text:'No'
-                                }
-                            }
-                        })
-                    });
                 },
                 columns: [
                     {
@@ -891,15 +826,20 @@
                         "previous": "Anterior"
                     }
                 },
+                "fnDrawCallback": function () {
+                    $('.count_estadosobres_delivered').html(this.fnSettings().fnRecordsDisplay());
+                    /*alert( oSettings.fnRecordsTotal() );
+                    alert( oSettings.fnRecordsDisplay() );
+                    alert( oSettings.fnDisplayEnd() );*/
+                }
             });
 
             tablaAnulados=$('#tablaAnulados').DataTable({
                 processing: true,
-                autoload: false,
                 stateSave: false,
                 serverSide: true,
-                searching: false,
-                "bFilter": false,
+                searching: true,
+                "bFilter": true,
                 "order": [[5, "desc"]],
                 ajax: {
                     url: "{{ route('envios.estadosobrestabla') }}",
@@ -910,54 +850,6 @@
                 createdRow: function (row, data, dataIndex) {
                 },
                 rowCallback: function (row, data, index) {
-
-                    if (data.destino2 == 'PROVINCIA') {
-                        $('td', row).css('color', 'red')
-                    } else if (data.destino2 == 'LIMA') {
-                        if (data.distribucion != null) {
-                            if (data.distribucion == 'NORTE') {
-                                //$('td', row).css('color','blue')
-                            } else if (data.distribucion == 'CENTRO') {
-                                //$('td', row).css('color','yellow')
-                            } else if (data.distribucion == 'SUR') {
-                                //$('td', row).css('color','green')
-                            }
-                        } else {
-                        }
-                    }
-
-                    $('[data-jqconfirm]', row).click(function () {
-                        $.confirm({
-                            type: 'red',
-                            title: '¡Revertir Envio!',
-                            content: 'Confirme si desea revertir el envio <b>'+data.codigos+'</b>',
-                            buttons: {
-                                ok:{
-                                    text:'Si, confirmar',
-                                    btnClass:'btn-red',
-                                    action:function (){
-                                        const self=this;
-                                        self.showLoading(true)
-                                        $.ajax({
-                                            data: {
-                                                envio_id:data.id,
-                                                pedido:data.codigos
-                                            },
-                                            type: 'POST',
-                                            url: "{{ route('operaciones.revertirhaciaatendido') }}",
-                                        }).always(function (){
-                                            self.close()
-                                            self.hideLoading(true)
-                                            $('#tablaPrincipal').DataTable().ajax.reload();
-                                        });
-                                    }
-                                },
-                                cancel:{
-                                    text:'No'
-                                }
-                            }
-                        })
-                    });
                 },
                 columns: [
                     {
@@ -1070,8 +962,13 @@
                         "previous": "Anterior"
                     }
                 },
+                "fnDrawCallback": function () {
+                    $('.count_estadosobres_annulled').html(this.fnSettings().fnRecordsDisplay());
+                    /*alert( oSettings.fnRecordsTotal() );
+                    alert( oSettings.fnRecordsDisplay() );
+                    alert( oSettings.fnDisplayEnd() );*/
+                }
             });
-
 
         });
     </script>
