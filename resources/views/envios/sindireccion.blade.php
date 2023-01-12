@@ -348,8 +348,8 @@
             },
           },
           {
-            data: 'fecha_recepcion_sobre',
-            name: 'fecha_recepcion_sobre',
+            data: 'updated_at',
+            name: 'pedidos.updated_at',
             //render: $.fn.dataTable.render.moment( 'DD/MM/YYYY' )
            },
           {
