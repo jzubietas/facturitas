@@ -60,7 +60,7 @@
                           @elseif($titular=='ALFREDO ALEJANDRO GABRIEL MONTALVO')
                           <button class="button mx-2 p-2 btn-navigate-titular btn btn-success btn-lg rounded text-white" type="button" step_number="2" titular="{{$titular}}">{{$titular}}</button>
                             @elseif($titular=='SABINA LACHOS')
-                          <button class="button mx-2 p-2 btn-navigate-titular btn btn-success btn-lg rounded text-white" type="button" step_number="2" titular="{{$titular}}">{{$titular}}</button>
+                          <button class="button mx-2 p-2 btn-navigate-titular btn btn-info btn-lg rounded text-white" type="button" step_number="2" titular="{{$titular}}">{{$titular}}</button>
                         @endif
 
                       @endforeach

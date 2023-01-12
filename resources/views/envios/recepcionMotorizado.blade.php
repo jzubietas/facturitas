@@ -705,18 +705,28 @@ setTimeout(function (){
             console.log(id)//profile-tab   home-tab
             if($('.condicion-tabla.active').attr('id')=='home-tab')
             {
+
               $('div.toolbar').html('<div class="d-flex justify-content-center"><button id="iniciar-ruta-masiva" class="btn btn-success">Iniciar RUTA MASIVA</button></div>');
+
             }else{
               $('div.toolbar').html('');
             }
             //if ( ! $.fn.DataTable.isDataTable( '#tablaPrincipal' ) ) {
-                
             //}
 
         });
 
         $(document).on("click","#iniciar-ruta-masiva",function(){
           //ajax iniciar ruta masiva
+
+            @if(!in_array(auth()->user()->rol,[\App\Models\User::ROL_ADMIN,\App\Models\User::ROL_MOTORIZADO]))
+            Swal.fire(
+                'Error',
+                'No tiene permiso de ejecutar esta acción',
+                'error'
+            )
+            return;
+                @endif
 
           $.ajax({
               data: {

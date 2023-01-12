@@ -30,7 +30,7 @@
                         <th scope="col">Cliente</th>
                         <th scope="col">Razón social</th>
                         <th scope="col">Asesor</th>
-                        <th scope="col">Fecha de registro</th>{{--fecha hora--}}
+                        <th scope="col">Fecha de atención</th>{{--fecha hora--}}
                         <th scope="col">Tipo de Banca</th>
                         <th scope="col">Adjuntos</th>
                         <th scope="col">Estado</th>

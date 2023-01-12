@@ -119,7 +119,7 @@
                        role="tab"
                        aria-controls="annulled"
                        aria-selected="false">
-                        <i class="fa fa-motorcycle" aria-hidden="true"></i> ANULADOS
+                        <i class="fa fa-times-circle" aria-hidden="true"></i> ANULADOS
                         <sup><span class="badge badge-light count_estadosobres_annulled">0</span></sup>
                     </a>
                 </li>
@@ -208,7 +208,7 @@
 
         </div>
     </div>
-
+    @include('pedidos.modal.imagenid')
 @stop
 
 @section('css')
@@ -569,14 +569,20 @@
                 }
             });
 
-            $('#btn_buscar').click(function(){
+            function applySearch(e) {
+                console.log(e)
                 let valor=$("#buscador_global").val();
-
+                valor=(valor||'').trim()
                 tablaRecepcionados.search( valor ).draw();
                 tablaEntregados.search( valor ).draw();
                 tablaAnulados.search( valor ).draw();
+            }
 
+            $('#btn_buscar').click(applySearch);
+            $("#buscador_global").bind('paste',function () {
+                setTimeout(applySearch,100)
             });
+            $('#buscador_global').change(applySearch);
 
 
 
