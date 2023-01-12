@@ -331,8 +331,6 @@
 
                 }
 
-
-
               }
         },
         columns: [
@@ -350,8 +348,8 @@
             },
           },
           {
-            data: 'updated_at',
-            name: 'updated_at',
+            data: 'fecha_recepcion_sobre',
+            name: 'fecha_recepcion_sobre',
             //render: $.fn.dataTable.render.moment( 'DD/MM/YYYY' )
            },
           {

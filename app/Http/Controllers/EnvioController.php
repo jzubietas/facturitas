@@ -232,6 +232,7 @@ class EnvioController extends Controller
                     'c.celular',
                     'u.identificador',
                     'dp.nombre_empresa as empresas',
+                    'pedidos.updated_at as fecha_recepcion_sobre'
                 ]
             )->where('condicion_envio_code', Pedido::RECEPCION_COURIER_INT)
             ->where('estado_sobre', '0');
