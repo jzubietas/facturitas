@@ -27,8 +27,10 @@ class GrupoPedido extends Model
             "zona" => $pedido->env_zona,
             "provincia" => $pedido->env_destino,
             'distrito' => $pedido->env_distrito,
-            'direccion' => $pedido->env_direccion,
-            'referencia' => $pedido->env_referencia,
+            //'direccion' => $pedido->env_direccion,
+            //'referencia' => $pedido->env_referencia,
+            'direccion' => ( ($pedido->destino=='PROVINCIA')? 'OLVA':$pedido->direccion ),
+            'referencia' => ( ($pedido->destino=='PROVINCIA')? $pedido->tracking:$pedido->referencia ),
             'cliente_recibe' => $pedido->env_nombre_cliente_recibe,
             'telefono' => $pedido->env_celular_cliente_recibe,
         ], $createAnother);

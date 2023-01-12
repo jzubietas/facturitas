@@ -675,6 +675,29 @@ setTimeout(function (){
                     "previous": "Anterior"
                 }
             },
+            "fnDrawCallback": function () {
+
+                let id_activotab=$('ul#myTab li.nav-item>a.active').attr('id');
+                console.log(id_activotab)
+
+                switch(id_activotab)
+                {
+                    case 'profile-tab':
+                        $('div.toolbar').html('<div class="d-flex justify-content-center">' +
+                            '<button id="export-ruta-masiva" class="btn btn-secondary">EXPORTAR RUTA MASIVA</button>' +
+                            '<button id="iniciar-ruta-masiva" class="btn btn-success">INICIAR RUTA MASIVA</button>' +
+                            '</div>');
+                        break;
+                    case 'home-tab':
+                        $('div.toolbar').html('<div class="d-flex justify-content-center">' +
+                            '<button id="export-recepcion" class="btn btn-success">EXPORTAR RECEPCION</button>' +
+                            '</div>');
+                        break;
+                }
+
+
+
+            }
         });
 
         /*
@@ -694,21 +717,6 @@ setTimeout(function (){
             //var url = $(this).data("url");
             $('#tablaPrincipal').DataTable().ajax.reload();
 
-            var $activeItem = $('.nav .active').html();
-            console.log($activeItem);
-
-            var id=$('.condicion-tabla.active').attr('id');
-            console.log(id)//profile-tab   home-tab
-            if($('.condicion-tabla.active').attr('id')=='home-tab')
-            {
-
-              $('div.toolbar').html('<div class="d-flex justify-content-center"><button id="iniciar-ruta-masiva" class="btn btn-success">Iniciar RUTA MASIVA</button></div>');
-
-            }else{
-              $('div.toolbar').html('');
-            }
-            //if ( ! $.fn.DataTable.isDataTable( '#tablaPrincipal' ) ) {
-            //}
 
         });
 
