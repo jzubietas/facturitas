@@ -1862,21 +1862,16 @@ class EnvioController extends Controller
                         'suucess' => false
                     ]);
                 } else {
-                    $grupopedido = GrupoPedido::query()->select('grupo_pedidos.*')
-                        ->join('grupo_pedido_items', 'grupo_pedido_items.grupo_pedido_id', 'grupo_pedidos.id')
-                        ->where('grupo_pedido_items.pedido_id', $pedido->id)
-                        ->get();
-
-                    foreach ($grupopedido as $grupo) {
-                        $grupo->pedidos()->detach($pedido->id);
-                    }
-                    GrupoPedido::createGroupByPedido($pedido, true,true);
+                    GrupoPedido::desvincularPedido($pedido,true,true);
                 }
             }
             return response()->json([
                 'suucess' => true
             ]);
         }
+        return response()->json([
+            'suucess' => false
+        ]);
     }
 
     public function DireccionEnvio(Request $request)

@@ -80,7 +80,7 @@
                                     <div class="card-body py-1">
                                         <div>
                                             <table id="tablaPrincipal{{Str::upper($motorizado->zona)}}"
-                                                   class="table table-striped font-12">
+                                                   class="table font-12">
                                                 <thead>
                                                 <tr>
                                                     <th scope="col">Códigos</th>
