@@ -181,7 +181,7 @@
                             <th scope="col">Código</th>
                             <th scope="col">Asesor</th>
                             <th scope="col">Razón social</th>
-                            <th scope="col">Dias en Oficina</th>
+                            <th scope="col">Dias en Anulacion</th>
                             <th scope="col">Fecha de registro</th>
                             <th scope="col">Fecha de anulacion</th>
                             <th scope="col">Fecha de entrega</th>
