@@ -3,19 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Exports\Templates\PlantillaMotorizadoConfirmarMultiple;
-use App\Exports\ArticulosExport;
 use App\Exports\BaseFriaPorAsesorExport;
 use App\Exports\BasesFriasExport;
 use App\Exports\ClientesExport;
 use App\Exports\Clientesv2Export;
-use App\Exports\ClientesPedidosExport;
 use App\Exports\ClientesAbandonosExport;
 use App\Exports\Templates\PlantillaExportMultipleLlamada;
 use App\Exports\Templates\PlantillaExportMultiple;
 use App\Exports\Templates\PlantillaExportRutaenvioMultiple;
 use App\Exports\Templates\PlantillaRecepcionMotorizadoMultiple;
-use App\Exports\Templates\PlantillaRutaenvioExportMultiple;
-use App\Exports\ClientesSituacionExport;///
 use App\Exports\PedidosPorEnviarPorFechasExport;
 use App\Exports\EntregadosPorFechasExport;
 use App\Exports\MisPagosExport;
@@ -34,31 +30,17 @@ use App\Exports\PedidosExport;
 use App\Exports\PedidosOperacionesExport;
 use App\Exports\PedidosPagosGeneralExport;
 use App\Exports\PedidosPagadosExport;
-use App\Exports\PedidosPorAsesoresExport;
 use App\Exports\PedidosPorAsesorExport;
 use App\Exports\PedidosPorAtenderExport;
 use App\Exports\PedidosPorEnviarExport;
-use App\Exports\PedidosPorFechasExport;
 use App\Exports\PedidosSinPagosExport;
 use App\Exports\PagosPorRevisarExport;
 use App\Exports\UsuariosExport;
 use App\Exports\MovimientosExport;
 use App\Exports\SobresRutaEnvioExport;
-use App\Exports\EnviosLimaExport;
-use App\Exports\EnviosLima1Export;
 use App\Exports\EstadoSobresExport;
 
-
-//use App\Exports\EnviosLimanorteExport;
-//use App\Exports\EnviosLimacentroExport;
-//use App\Exports\EnviosLimasurExport;
-use App\Models\Pedido;
-use App\Models\Pago;
-use Carbon\Carbon;
-use Maatwebsite\Excel\Facades\Excel;
-
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 
 class ExcelController extends Controller
 {
@@ -69,7 +51,7 @@ class ExcelController extends Controller
     public function enviosRecepcionmotorizadoExcel(Request $request)
     {
         return (new PlantillaRecepcionMotorizadoMultiple($request->user_motorizado,$request->fecha_envio))
-            ->download('Lista de Motorizado Confirmar.xlsx');
+            ->download('Lista de Recepcion Motorizado.xlsx');
     }
     public function enviosMotorizadoconfirmarExcel(Request $request)
     {

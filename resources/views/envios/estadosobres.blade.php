@@ -110,6 +110,22 @@
 
                 <li class="nav-item text-center">
                     <a class="condicion-tabla nav-link font-weight-bold"
+                       id="annulled_courier-tab"
+                       data-toggle="tab"
+                       data-url="AN"
+                       data-tipo="anulados"
+                       data-consulta="tablaAnulados"
+                       href="#annulled_courier"
+                       role="tab"
+                       aria-controls="annulled_courier"
+                       aria-selected="false">
+                        <i class="fa fa-times-circle" aria-hidden="true"></i> Anulados - recepcionados por Courier
+                        <sup><span class="badge badge-light count_estadosobres_annulled_courier">0</span></sup>
+                    </a>
+                </li>
+
+                <li class="nav-item text-center">
+                    <a class="condicion-tabla nav-link font-weight-bold"
                        id="annulled-tab"
                        data-toggle="tab"
                        data-url="AN"
@@ -119,7 +135,7 @@
                        role="tab"
                        aria-controls="annulled"
                        aria-selected="false">
-                        <i class="fa fa-times-circle" aria-hidden="true"></i> ANULADOS
+                        <i class="fa fa-times-circle" aria-hidden="true"></i> Anulados sin recepcion por Courier
                         <sup><span class="badge badge-light count_estadosobres_annulled">0</span></sup>
                     </a>
                 </li>
@@ -173,6 +189,30 @@
                     </table>
                 </div>
 
+                <div class="tab-pane fade" id="annulled_courier" role="tabpanel" aria-labelledby="annulled_courier-tab">
+                    <table id="tablaAnulados_courier" class="table table-striped w-100">
+                        <thead>
+                        <tr>
+                            <th scope="col">Item</th>
+                            <th scope="col">Código</th>
+                            <th scope="col">Asesor</th>
+                            <th scope="col">Razón social</th>
+                            <th scope="col">Dias en Anulacion</th>
+                            <th scope="col">Fecha de registro</th>
+                            <th scope="col">Fecha de anulacion</th>
+                            <th scope="col">Fecha de entrega</th>
+                            <th scope="col">Destino</th>
+                            <th scope="col">Dirección de envío</th>
+                            <th scope="col">Estado de envio</th>
+                            <th scope="col">Estado de sobre</th>
+                            <th scope="col">Observacion Devolucion</th>
+                            <th scope="col">Acciones</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
                 <div class="tab-pane fade" id="annulled" role="tabpanel" aria-labelledby="annulled-tab">
                     <table id="tablaAnulados" class="table table-striped w-100">
                         <thead>
@@ -401,6 +441,7 @@
         let tablaRecepcionados=null;
         let tablaEntregados=null;
         let tablaAnulados=null;
+        let tablaAnulados_courier=null;
         $(document).ready(function () {
 
 
@@ -576,6 +617,7 @@
                 tablaRecepcionados.search( valor ).draw();
                 tablaEntregados.search( valor ).draw();
                 tablaAnulados.search( valor ).draw();
+                tablaAnulados_courier.search( valor ).draw();
             }
 
             $('#btn_buscar').click(applySearch);
@@ -859,6 +901,163 @@
                     if(a1>0 && a2>0 && a3>0){
                         $('#delivered-tab').addClass("active");
                     }*/
+                }
+            });
+
+            tablaAnulados_courier=$('#tablaAnulados_courier').DataTable({
+                dom: '<"top"i>rt<"bottom"lp><"clear">',
+                processing: true,
+                stateSave: false,
+                serverSide: true,
+                searching: true,
+                "bFilter": false,
+                "order": [[5, "desc"]],
+                ajax: {
+                    url: "{{ route('envios.estadosobrestabla') }}",
+                    data: function (d) {
+                        d.opcion = 'anulado_courier';
+                    },
+                },
+                createdRow: function (row, data, dataIndex) {
+                    if (data["estado"] == "1") {
+                        if (data.pendiente_anulacion == 1) {
+                            $('td', row).css('background', 'red').css('font-weight', 'bold');
+                        }
+                    } else {
+                        $(row).addClass('textred');
+                    }
+
+                },
+                rowCallback: function (row, data, index) {
+                },
+                columns: [
+                    {
+                        data: 'id',
+                        name: 'id',
+                        render: function (data, type, row, meta) {
+                            if (row.id < 10) {
+                                return 'PED000' + row.id;
+                            } else if (row.id < 100) {
+                                return 'PED00' + row.id;
+                            } else if (row.id < 1000) {
+                                return 'PED0' + row.id;
+                            } else {
+                                return 'PED' + row.id;
+                            }
+                        }, "visible": false
+                    },
+                    {data: 'codigo', name: 'codigo',},
+                    {data: 'users', name: 'users',},
+
+                    {data: 'empresas', name: 'empresas',},
+                    {data: 'dias', name: 'dias',},
+
+                    {data: 'fecha_envio_doc', name: 'fecha_envio_doc', "visible": false},
+                    {data: 'fecha_recepcion_courier_anulado', name: 'fecha_recepcion_courier_anulado',},
+                    {data: 'fecha_recepcion', name: 'fecha_recepcion', "visible": false},
+                    {data: 'destino', name: 'destino', "visible": false},
+                    {
+                        data: 'direccion',
+                        name: 'direccion',
+                        "visible": false,
+                        render: function (data, type, row, meta) {
+                            datas = '';
+                            if (data != null) {
+                                return data;
+                            } else {
+                                return '<span class="badge badge-danger">REGISTRE DIRECCION</span>';
+                            }
+                            //return 'REGISTRE DIRECCION';
+                        },
+                    },
+                    {
+                        data: 'condicion_envio',
+                        name: 'condicion_envio',
+                    },
+                    {
+                        data: 'envio',
+                        name: 'envio',
+                        render: function (data, type, row, meta) {
+                            if (row.envio == '1') {
+                                return '<span class="badge badge-danger">Por confirmar recepcion</span>';
+                            } else {
+                                return '<span class="badge badge-info">Recibido</span>';
+                            }
+                        },
+                        "visible": false
+                    },
+                    {
+                        data: 'observacion_devuelto',
+                        name: 'observacion_devuelto',
+                        render: function (data, type, row, meta) {
+                            if (data != null) {
+                                return data;
+                            } else {
+                                return ''
+                            }
+                        },
+                        "visible": true
+                    },
+                    {
+                        data: 'action',
+                        name: 'action',
+                        orderable: false,
+                        searchable: false,
+                        sWidth: '20%',
+                        "visible": false,
+                        render: function (data, type, row, meta) {
+                            datass = '';
+
+
+                            return datass;
+                        }
+                    },
+                ],
+                language: {
+                    "decimal": "",
+                    "emptyTable": "No hay información",
+                    "info": "Mostrando del _START_ al _END_ de _TOTAL_ Entradas",
+                    "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
+                    "infoFiltered": "(Filtrado de _MAX_ total entradas)",
+                    "infoPostFix": "",
+                    "thousands": ",",
+                    "lengthMenu": "Mostrar _MENU_ Entradas",
+                    "loadingRecords": "Cargando...",
+                    "processing": '<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i><span class="sr-only">Cargando...</span> ',
+                    "search": "Buscar:",
+                    "zeroRecords": "Sin resultados encontrados",
+                    "paginate": {
+                        "first": "Primero",
+                        "last": "Ultimo",
+                        "next": "Siguiente",
+                        "previous": "Anterior"
+                    }
+                },
+                "fnDrawCallback": function () {
+                    $('.count_estadosobres_annulled_courier').html(this.fnSettings().fnRecordsDisplay());
+                    /*alert( oSettings.fnRecordsTotal() );
+                    alert( oSettings.fnRecordsDisplay() );
+                    alert( oSettings.fnDisplayEnd() );*/
+                    //$('.condicion-tabla').removeClass("active");
+                    //$('#annulled-tabs').addClass("active");
+
+                    //$('.condicion-tabla').removeClass("active");
+
+                    let a1=$('#tablaRecepcionados').dataTable().fnSettings().fnRecordsDisplay();
+                    let a2=$('#tablaEntregados').dataTable().fnSettings().fnRecordsDisplay();
+                    let a3=this.fnSettings().fnRecordsDisplay();
+
+                    if(a1>0){
+                        $('#myTab a[href="#received"]').tab('show')
+                        //$('#received-tab').addClass("active").tab('show');
+                    }else if(a2>0){
+                        $('#myTab a[href="#delivered"]').tab('show')
+                        //$('#delivered-tab').addClass("active").tab('show');
+                    }else if(a3>0){
+                        $('#myTab a[href="#annulled"]').tab('show')
+                        //$('#annulled-tab').addClass("active").tab('show');
+                    }
+
                 }
             });
 

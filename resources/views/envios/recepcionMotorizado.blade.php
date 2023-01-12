@@ -540,29 +540,24 @@ setTimeout(function (){
     $(document).ready(function () {
 
         $(document).on("submit", "#form_recepcionmotorizado", function (event) {
-            event.preventDefault();
-            var oForm = $(this);
-
             let  user_motivov=$("#user_motorizado").val();
             let  fecha_env=$("#fecha_envio").val();
             //console.log(fecha_env)
-            if (user_motivov == '') {
+            if (!user_motivov) {
                 Swal.fire(
                     'Error',
                     'Seleccione el usuario a generar el reporte.',
                     'warning'
                 )
+                event.preventDefault();
                 return true;
-            }else if (fecha_env == '') {
+            }else if (!fecha_env) {
                 Swal.fire(
                     'Error',
                     'Elija una fecha de reporte.',
                     'warning'
                 )
-                return true;
-            }else{
-                console.log(fecha_env)
-                oForm.trigger('submit');
+                event.preventDefault();
                 return true;
             }
 

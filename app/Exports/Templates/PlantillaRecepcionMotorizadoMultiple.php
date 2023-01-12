@@ -10,17 +10,17 @@ use Illuminate\Http\Request;
 class PlantillaRecepcionMotorizadoMultiple implements WithMultipleSheets
 {
     use Exportable;
-    public int $user_motorizado_p;
-    public string $fecha_envio_p;
-    public function __construct($user_motorizado,$fecha_envio)
+    public int $motorizado_id;
+    public string $fecha_envio;
+    public function __construct($motorizado_id, $fecha_envio)
     {
-        $this->user_motorizado_p=$user_motorizado;
-        $this->fecha_envio_p=$fecha_envio;
+        $this->motorizado_id=$motorizado_id;
+        $this->fecha_envio=$fecha_envio;
     }
     public function sheets(): array
     {
         return [
-            new PagerecepcionMotorizado($this->user_motorizado_p,$this->fecha_envio_p),
+            new PagerecepcionMotorizado($this->motorizado_id,$this->fecha_envio),
         ];
     }
 }
