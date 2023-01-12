@@ -1053,7 +1053,7 @@ class EnvioController extends Controller
             $ver_botones_accion = 1;
         }
 
-        return view('envios.recepcionMotorizado', compact('condiciones', 'distritos', 'direcciones', 'destinos', 'superasesor', 'ver_botones_accion', 'departamento', 'fecha_consulta','users_motorizado'));
+        return view('envios.recepcionMotorizado', compact('condiciones', 'distritos', 'direcciones', 'destinos', 'superasesor', 'ver_botones_accion', 'departamento', 'fecha_consulta', 'users_motorizado'));
     }
 
     public function Enviosporconfirmartabla(Request $request)
@@ -1687,7 +1687,7 @@ class EnvioController extends Controller
         $grupo = DireccionGrupo::query()->findOrFail($request->hiddenEnvio);
 
         $grupo->update([
-            'fecha_recepcion_motorizado'=>Carbon::now(),
+            'fecha_recepcion_motorizado' => Carbon::now(),
             'envio' => '2',
             'modificador' => 'USER' . Auth::user()->id,
             'condicion_envio' => Pedido::RECEPCION_MOTORIZADO,
@@ -1847,12 +1847,12 @@ class EnvioController extends Controller
             }
 
             if ($dirgrupo != null) {
-                if ($dirgrupo->condicion_envio_code == Pedido::CONFIRM_MOTORIZADO_INT) {
+                if (in_array($dirgrupo->condicion_envio_code, [Pedido::CONFIRM_MOTORIZADO_INT, Pedido::ENTREGADO_CLIENTE_INT,])) {
                     return response()->json([
                         'suucess' => false
                     ]);
                 }
-                $dirgrupo = DireccionGrupo::desvincularPedido($dirgrupo, $pedido);
+                $dirgrupo = DireccionGrupo::desvincularPedido($dirgrupo, $pedido, $request->cambio_direccion_sustento);
                 $dirgrupo->update([
                     'nombre_cliente' => $request->nombre,
                     'celular_cliente' => $request->celular,
@@ -1870,7 +1870,7 @@ class EnvioController extends Controller
                         'suucess' => false
                     ]);
                 } else {
-                    GrupoPedido::desvincularPedido($pedido,true,true);
+                    GrupoPedido::desvincularPedido($pedido, true, true);
                 }
             }
             return response()->json([
@@ -2387,7 +2387,7 @@ class EnvioController extends Controller
     public function Estadosobrestabla(Request $request)
     {
         $opcion = $request->opcion;
-        if ($opcion == 'recepcionado' || $opcion == 'anulado') {
+        if ($opcion == 'recepcionado' || $opcion == 'anulado' || $opcion == 'anulado_courier') {
             $pedidos = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')
                 ->join('users as u', 'pedidos.user_id', 'u.id')
                 ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
@@ -2412,7 +2412,9 @@ class EnvioController extends Controller
             if ($opcion == 'recepcionado') {
                 $pedidos = $pedidos->where('pedidos.estado', '1')->whereIn('pedidos.condicion_envio_code', [Pedido::RECEPCION_COURIER_INT]);
             } else if ($opcion == 'anulado') {
-                $pedidos = $pedidos->where('pedidos.estado', '0');
+                $pedidos = $pedidos->where('pedidos.estado', '0')->whereNull('pedidos.direccion_grupo');
+            } else if ($opcion == 'anulado_courier') {
+                $pedidos = $pedidos->where('pedidos.estado', '0')->whereNotNull('pedidos.direccion_grupo');
             }
         } else if ($opcion == 'entregado') {
             $pedidos = DireccionGrupo::/*join('direccion_envios as de', 'direccion_grupos.id', 'de.direcciongrupo')*/
@@ -2426,7 +2428,7 @@ class EnvioController extends Controller
                 );
         }
 
-        if ($opcion == 'recepcionado' || $opcion == 'anulado') {
+        if ($opcion == 'recepcionado' || $opcion == 'anulado' || $opcion == 'anulado_courier') {
             return Datatables::of(DB::table($pedidos))
                 ->addColumn('condicion_envio_color', function ($pedido) {
                     return Pedido::getColorByCondicionEnvio($pedido->condicion_envio);
