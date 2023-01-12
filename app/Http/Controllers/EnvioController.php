@@ -2394,7 +2394,7 @@ class EnvioController extends Controller
                     'dp.envio_doc',
                     'dp.fecha_envio_doc',
                     'dp.cant_compro',
-                    DB::raw('  as fecha_envio_doc_fis')
+                    //DB::raw('  as fecha_envio_doc_fis')
                     'dp.fecha_envio_doc_fis as fecha_envio_doc_fis',
                     'dp.foto1',
                     'dp.foto2',
