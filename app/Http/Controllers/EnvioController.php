@@ -2402,11 +2402,14 @@ class EnvioController extends Controller
                     $badge_estado .= '<span class="badge badge-success" style="background-color: ' . $color . '!important;">' . $pedido->condicion_envio . '</span>';
                     return $badge_estado;
                 })
-                >rawColumns([ 'condicion_envio'])
+                ->addColumn('action', function ($pedido) {
+                    $btn = [];
+                    return join('', $btn);
+                })
+                ->rawColumns([ 'action','condicion_envio_color','condicion_envio'])
                 ->make(true);
         }else if($opcion=='entregado'){
             return Datatables::of(DB::table($pedidos))
-                ->addIndexColumn()
                 ->editColumn('condicion_envio', function ($pedido) {
                     $color = Pedido::getColorByCondicionEnvio($pedido->condicion_envio);
 
@@ -2423,7 +2426,11 @@ class EnvioController extends Controller
                     $badge_estado .= '<span class="badge badge-success" style="background-color: ' . $color . '!important;">' . $pedido->condicion_envio . '</span>';
                     return $badge_estado;
                 })
-                ->rawColumns([ 'condicion_envio'])
+                ->addColumn('action', function ($pedido) {
+                    $btn = [];
+                    return join('', $btn);
+                })
+                ->rawColumns([ 'action','condicion_envio'])
                 ->make(true);
         }
 
