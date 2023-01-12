@@ -126,15 +126,17 @@
 
             <ul class="nav nav-tabs mb-24 mt-24" id="myTab" role="tablist">
                 <li class="nav-item w-50 text-center">
-                    <a class="condicion-tabla nav-link activo active font-weight-bold" id="home-tab" data-toggle="tab"
-                       data-url="19" href="#home" role="tab" aria-controls="home" aria-selected="true">
+                    <a class="condicion-tabla nav-link activo active font-weight-bold" id="recepcion-tab" data-toggle="tab"
+                       data-url="19" href="#recepcion" role="tab" aria-controls="recepcion" aria-selected="true">
                         <i class="fa fa-inbox" aria-hidden="true"></i> RECEPCION
+                        <sup><span class="badge badge-light count_recepcionmotorizados_receptioned_courier">0</span></sup>
                     </a>
                 </li>
                 <li class="nav-item w-50 text-center">
-                    <a class="condicion-tabla nav-link font-weight-bold" id="profile-tab" data-toggle="tab"
-                       data-url="18" href="#profile" role="tab" aria-controls="profile" aria-selected="false">
+                    <a class="condicion-tabla nav-link font-weight-bold" id="enruta-tab" data-toggle="tab"
+                       data-url="18" href="#enruta" role="tab" aria-controls="enruta" aria-selected="false">
                         <i class="fa fa-motorcycle" aria-hidden="true"></i> EN RUTA
+                        <sup><span class="badge badge-light count_recepcionmotorizados_inroutes_courier">0</span></sup>
                     </a>
                 </li>
             </ul>
@@ -195,29 +197,29 @@
                                             id="myTab{{Str::slug($motorizado->zona)}}"
                                             role="tablist">
                                             <li class="nav-item">
-                                                <a class="nav-link active" id="general-tab" data-vista="18"
+                                                <a class="nav-link active" id="recepcionhijo-tab" data-vista="18"
                                                    data-zona="{{Str::slug($motorizado->zona)}}" data-toggle="tab"
-                                                   href="#general" role="tab"
-                                                   data-tab="motorizado"
-                                                   aria-controls="general" aria-selected="true" data-action="general">
+                                                   href="#recepcionhijo{{Str::slug($motorizado->zona)}}" role="tab"
+                                                   data-tab="recepcionhijo"
+                                                   aria-controls="recepcionhijo" aria-selected="true" data-action="recepcionhijo">
                                                     RECEPCIÓN
                                                 </a>
                                             </li>
                                             <li class="nav-item">
-                                                <a class="nav-link" id="entregado-tab" data-vista="19"
+                                                <a class="nav-link" id="enrutahijo-tab" data-vista="19"
                                                    data-zona="{{Str::slug($motorizado->zona)}}" data-toggle="tab"
-                                                   href="#entregado"
+                                                   href="#enrutahijo{{Str::slug($motorizado->zona)}}"
                                                    role="tab"
-                                                   data-tab="entregado"
-                                                   aria-controls="entregado" aria-selected="false"
-                                                   data-action="entregado">
+                                                   data-tab="enrutahijo"
+                                                   aria-controls="enrutahijo" aria-selected="false"
+                                                   data-action="enrutahijo">
                                                     EN RUTA
                                                 </a>
                                             </li>
                                         </ul>
 
                                         <table id="tablaPrincipal{{Str::upper($motorizado->zona)}}"
-                                               class="tabla-data table table-striped dt-responsive w-100">
+                                               class="tabla-data table table-hijo table-striped dt-responsive w-100">
                                             <thead>
                                             <tr>
                                                 <!--<th scope="col">Item</th>-->
@@ -700,11 +702,14 @@
                 ajax: {
                     url: "{{route('envios.recepcionmotorizadotablageneral',['datatable'=>'1'])}}",
                     data: function (a) {
-                        a.fechaconsulta = $("#fecha_consulta").data("fecha");
+                        a.consulta = 'paquete';
+                        a.fechaconsulta = $("#fecha_consulta").val();
                         a.tab = $("#myTab{{Str::slug($motorizado->zona)}} li>a.active").data('tab');
                         a.motorizado_id = {{ $motorizado->id }};
                         a.zona = "{{ Str::upper($motorizado->zona)}}";
-                        a.vista = $("#myTab{{Str::slug($motorizado->zona)}} li>a.active").data('vista');
+                        let vista =$('ul#myTab li.nav-item>a.active').attr('id');//18 19
+                        vista=$('#'+vista).data('url');
+                        a.vista = vista;
                     }
                 },
             });
@@ -858,24 +863,33 @@
                 },
                 "fnDrawCallback": function () {
 
-                    let id_activotab = $('ul#myTab li.nav-item>a.active').attr('id');
-                    console.log(id_activotab)
 
-                    switch (id_activotab) {
-                        case 'profile-tab':
+                    switch ($('ul#myTab li.nav-item>a.active').attr('id')) {
+                        case 'recepcion-tab':
+                            console.log("marque en recepcion")
+                            $('.count_recepcionmotorizados_receptioned_courier').html(this.fnSettings().fnRecordsDisplay());
+                            $('div.toolbar').html('<div class="d-flex justify-content-center">' +
+                                '<button id="export-recepcion" class="btn btn-success">EXPORTAR RECEPCION</button>' +
+                                '</div>');
+                            //
+                            @foreach($motorizados as $motorizado)
+                                $('a[href="#recepcionhijo{{Str::slug($motorizado->zona)}}"] ').tab('show');
+                            @endforeach
+
+                            break;
+                        case 'enruta-tab':
+                            console.log("marque en ruta")
+                            $('.count_recepcionmotorizados_inroutes_courier').html(this.fnSettings().fnRecordsDisplay());
                             $('div.toolbar').html('<div class="d-flex justify-content-center">' +
                                 '<button id="export-ruta-masiva" class="btn btn-secondary">EXPORTAR RUTA MASIVA</button>' +
                                 '<button id="iniciar-ruta-masiva" class="btn btn-success">INICIAR RUTA MASIVA</button>' +
                                 '</div>');
-                            break;
-                        case 'home-tab':
-                            $('div.toolbar').html('<div class="d-flex justify-content-center">' +
-                                '<button id="export-recepcion" class="btn btn-success">EXPORTAR RECEPCION</button>' +
-                                '</div>');
+
+                            @foreach($motorizados as $motorizado)
+                                $('a[href="#recepcionhijo{{Str::slug($motorizado->zona)}}"]').tab('show');
+                            @endforeach
                             break;
                     }
-
-
                 }
             });
 
