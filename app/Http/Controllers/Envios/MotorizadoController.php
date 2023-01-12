@@ -346,7 +346,6 @@ class MotorizadoController extends Controller
                             $count = $fecha_salida->diffInDays($fecha);
                         }
                         if ($count > 3) {
-                            dump($pedido->toArray());
                             $total++;
                         }
                     }
