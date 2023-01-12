@@ -409,8 +409,10 @@ class MotorizadoController extends Controller
                         return '#fd7e14';
                     } elseif ($count >= 2) {
                         return '#ffc107';
-                    } else {
+                    } elseif($count >= 1) {
                         return 'rgb(255 255 234)';
+                    } else {
+                        return '';
                     }
                 }
                 return '';

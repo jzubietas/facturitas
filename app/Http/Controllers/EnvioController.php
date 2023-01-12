@@ -1162,20 +1162,18 @@ class EnvioController extends Controller
     public function Enviosrecepcionmotorizadotabla(Request $request)
     {
         $tipo_consulta = $request->consulta;
-        $fecha_actual=Carbon::now()->format('Y-m-d');
+        $fecha_actual = Carbon::now()->startOfDay();
 
         //SI ES QUE EXISTE UNA FECHA
         if ($request->fechaconsulta != null) {
             try {
-                $fecha_consulta = Carbon::createFromFormat('d/m/Y', $request->fechaconsulta)->format('Y-m-d');
+                $fecha_consulta = Carbon::createFromFormat('d/m/Y', $request->fechaconsulta);
             } catch (Exception $ex) {
-                $fecha_consulta = now();
-
-
+                $fecha_consulta = now()->startOfDay();
             }
 
         } else {
-            $fecha_consulta = now();
+            $fecha_consulta = now()->startOfDay();
         }
 
         //OBTENEMOS EL CODIGO DE CONDICION
@@ -1272,15 +1270,21 @@ class EnvioController extends Controller
 
                     if ($pedido->condicion_envio_code == Pedido::ENVIO_MOTORIZADO_COURIER_INT) {
 
-                        if($fecha_actual==$fecha_consulta)
-                        {
+                        if ($fecha_actual == $fecha_consulta) {
                             $btn .= '<li>
-                                <a href="" data-target="#modal-envio" data-toggle="modal" data-recibir="' . $pedido->id . '" data-codigos="' . $pedido->codigos . '"><button class="btn btn-warning btn-sm"><i class="fas fa-check-circle"></i> Recibido</button></a>
+                                <button data-target="#modal-envio" data-toggle="modal" data-accion="recibir" data-recibir="' . $pedido->id . '" data-codigos="' . $pedido->codigos . '"  class="btn btn-warning btn-sm"><i class="fas fa-check-circle"></i> Recibido</button>
                             </li>';
-                        }
-                        $btn .= ' <li>
-                        <a href="" data-target="#modal-envio" data-toggle="modal" data-accion="rechazar" data-recibir="' . $pedido->id . '" data-codigos="' . $pedido->codigos . '"><button class="btn btn-danger btn-sm mt-8"><i class="fa fa-times-circle-o" aria-hidden="true"></i>No recibido</button></a>
+                            $btn .= ' <li>
+                        <button data-target="#modal-envio" data-toggle="modal" data-accion="rechazar" data-recibir="' . $pedido->id . '" data-codigos="' . $pedido->codigos . '" class="btn btn-danger btn-sm mt-8"><i class="fa fa-times-circle-o" aria-hidden="true"></i>No recibido</button>
                     </li>';
+                        } else {
+                            $btn .= '<li>
+                                <button disabled class="btn btn-warning btn-sm"><i class="fas fa-check-circle"></i> Recibido</button>
+                            </li>';
+                            $btn .= ' <li>
+                        <button disabled class="btn btn-danger btn-sm mt-8"><i class="fa fa-times-circle-o" aria-hidden="true"></i>No recibido</button>
+                    </li>';
+                        }
 
                     } else if ($pedido->condicion_envio_code == Pedido::RECEPCION_MOTORIZADO_INT) {
                         $btn .= '<li>
@@ -1688,17 +1692,15 @@ class EnvioController extends Controller
     {
         $accion = $request->hiddenAccion;
         //$grupo = DireccionGrupo::query()->findOrFail($request->hiddenEnvio);
-        $grupo = DireccionGrupo::where('id',$request->hiddenEnvio);
+        $grupo = DireccionGrupo::where('id', $request->hiddenEnvio);
 
-        if($accion == "recibir"){
+        if ($accion == "recibir") {
 
-        $grupo->update([
-            'fecha_recepcion_motorizado' => Carbon::now(),
-            'envio' => '2',
-            'modificador' => 'USER' . Auth::user()->id,
-            'condicion_envio' => Pedido::RECEPCION_MOTORIZADO,
-            'condicion_envio_code' => Pedido::RECEPCION_MOTORIZADO_INT
-        ]);
+            $grupo->update([
+                'fecha_recepcion_motorizado' => Carbon::now(),
+                'condicion_envio' => Pedido::RECEPCION_MOTORIZADO,
+                'condicion_envio_code' => Pedido::RECEPCION_MOTORIZADO_INT
+            ]);
 
             PedidoMovimientoEstado::create([
                 'pedido' => $request->hiddenEnvio,
@@ -1708,15 +1710,15 @@ class EnvioController extends Controller
 
             return response()->json(['html' => "Grupo recibido"]);
 
-        }else if($accion == "rechazar"){
+        } else if ($accion == "rechazar") {
 
             $grupo->update([
-                'fecha_recepcion_motorizado'=>Carbon::now(),
+                'fecha_recepcion_motorizado' => Carbon::now(),
                 /*'envio' => '2',*/
                 //'modificador' => 'USER' . Auth::user()->id,
                 'condicion_envio' => Pedido::REPARTO_COURIER,
                 'condicion_envio_code' => Pedido::REPARTO_COURIER_INT,
-                'motorizado_status' => 3
+                'motorizado_status' => Pedido::ESTADO_MOTORIZADO_NO_RECIBIDO
             ]);
 
             PedidoMovimientoEstado::create([
@@ -1982,9 +1984,9 @@ class EnvioController extends Controller
                 $pedido_id = $request->pedido_id;
                 $contPe = 0;
 
-                $destino_temp=$request->destino;
-                if($destino_temp=='PROVINCIA'){
-                    $destino_temp='LIMA';
+                $destino_temp = $request->destino;
+                if ($destino_temp == 'PROVINCIA') {
+                    $destino_temp = 'LIMA';
                 }
 
                 foreach ($array_pedidos as $pedido_id) {
@@ -2030,7 +2032,7 @@ class EnvioController extends Controller
                     ]);
                 }
             }
-            $file_name_temp='';
+            $file_name_temp = '';
             if ($request->destino == "PROVINCIA") {
 
                 $cliente = Cliente::where("id", $request->cliente_id)->first();
@@ -2049,11 +2051,11 @@ class EnvioController extends Controller
 
                 if (isset($files)) {
                     $file_name = Carbon::now()->second . $files->getClientOriginalName();
-                    $file_name_temp=$file_name;
+                    $file_name_temp = $file_name;
                     $files->move($destinationPath, $file_name);
                 } else {
                     $file_name = 'logo_facturas.png';
-                    $file_name_temp=$file_name;
+                    $file_name_temp = $file_name;
                 }
 
                 $modelData = [
@@ -2128,10 +2130,10 @@ class EnvioController extends Controller
                     "zona" => $zona_distrito->zona,
                     "provincia" => $zona_distrito->provincia,
                     'distrito' => $zona_distrito->distrito,
-                    'direccion' => ( ($request->destino=='PROVINCIA')? 'OLVA':$request->direccion ),
-                    'referencia' => ( ($request->destino=='PROVINCIA')? $request->tracking:$request->referencia ),
-                    'cliente_recibe' => ($request->nombre ),
-                    'telefono' => ( $request->contacto ),
+                    'direccion' => (($request->destino == 'PROVINCIA') ? 'OLVA' : $request->direccion),
+                    'referencia' => (($request->destino == 'PROVINCIA') ? $request->tracking : $request->referencia),
+                    'cliente_recibe' => ($request->nombre),
+                    'telefono' => ($request->contacto),
                 ]);
                 $grupoPedido->pedidos()->syncWithoutDetaching($attach_pedidos_data);
             }
