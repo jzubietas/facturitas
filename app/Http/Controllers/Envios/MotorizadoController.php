@@ -390,17 +390,17 @@ class MotorizadoController extends Controller
                 return Carbon::parse($pedido->grupo_fecha_salida)->format('d-m-Y h:i A');
             })
             ->addColumn('detalle', function ($pedido) {
-                $html='';
+                $html = '';
                 if ($pedido->estado = 0 || $pedido->pendiente_anulacion) {
-                    $html.= '<div class="badge badge-danger p-2">ANULADO</div>';
-                } else if($pedido->motorizado_status==Pedido::ESTADO_MOTORIZADO_OBSERVADO){
-                    $html.= '<div class="badge badge-info p-2">OBSERVADO</div>';
-                    $html.= '<button data-toggle="jqconfirmtext" data-target="'.$pedido->motorizado_sustento_text.'" class="btn btn-light btn-sm"><i class="fa fa-envelope-open-text"></i> Ver Sustento</button>';
-                } else{
-                    $html.= '<div class="badge badge-warning p-2">NO CONTESTA</div>';
-                    $html.= '<button data-toggle="jqconfirmfoto" data-target="'.\Storage::disk('pstorage')->url($pedido->motorizado_sustento_foto).'" class="btn btn-light btn-sm"><i class="fa fa-photo-video"></i>Ver foto</button>';
+                    $html .= '<div class="badge badge-danger p-2">ANULADO</div>';
+                } else if ($pedido->motorizado_status == Pedido::ESTADO_MOTORIZADO_OBSERVADO) {
+                    $html .= '<div class="badge badge-info p-2">OBSERVADO</div>';
+                    $html .= '<button data-toggle="jqconfirmtext" data-target="' . $pedido->motorizado_sustento_text . '" class="btn btn-light btn-sm"><i class="fa fa-envelope-open-text"></i> Ver Sustento</button>';
+                } else {
+                    $html .= '<div class="badge badge-warning p-2">NO CONTESTA</div>';
+                    $html .= '<button data-toggle="jqconfirmfoto" data-target="' . \Storage::disk('pstorage')->url($pedido->motorizado_sustento_foto) . '" class="btn btn-light btn-sm"><i class="fa fa-photo-video"></i>Ver foto</button>';
                 }
-                return  $html;
+                return $html;
             })
             ->addColumn('situacion_color', function ($pedido) {
                 if ($pedido->grupo_fecha_salida != null) {
@@ -418,7 +418,7 @@ class MotorizadoController extends Controller
                         return '#fd7e14';
                     } elseif ($count >= 2) {
                         return '#ffc107';
-                    } elseif($count >= 1) {
+                    } elseif ($count >= 1) {
                         return 'rgb(255 255 234)';
                     } else {
                         return '';
@@ -441,7 +441,7 @@ class MotorizadoController extends Controller
 
                 return $btn;
             })
-            ->rawColumns(['action', 'codigo','detalle'])
+            ->rawColumns(['action', 'codigo', 'detalle'])
             ->make(true);
     }
 
@@ -547,7 +547,7 @@ class MotorizadoController extends Controller
             $ver_botones_accion = 1;
         }
 
-        return view('envios.recepcionMotorizado', compact('condiciones', 'distritos', 'direcciones', 'destinos', 'superasesor', 'ver_botones_accion', 'departamento', 'fecha_consulta','users_motorizado', 'motorizados'));
+        return view('envios.recepcionMotorizado', compact('condiciones', 'distritos', 'direcciones', 'destinos', 'superasesor', 'ver_botones_accion', 'departamento', 'fecha_consulta', 'users_motorizado', 'motorizados'));
     }
 
     public function Enviosrecepcionmotorizadotabla(Request $request)
@@ -558,9 +558,10 @@ class MotorizadoController extends Controller
         //SI ES QUE EXISTE UNA FECHA
         if ($request->fechaconsulta != null) {
             try {
-                $fecha_consulta = Carbon::createFromFormat('d/m/Y', $request->fechaconsulta)->startOfDay();
+                $fecha_consulta = Carbon::parse($request->fechaconsulta)->startOfDay();
             } catch (\Exception $ex) {
                 $fecha_consulta = now()->startOfDay();
+                throw $ex;
             }
         } else {
             $fecha_consulta = now()->startOfDay();
@@ -653,20 +654,29 @@ class MotorizadoController extends Controller
                     $badge_estado .= '<span class="badge badge-success" style="background-color: ' . $color . '!important;">' . $grupo->condicion_envio . '</span>';
                     return $badge_estado;
                 })
-                ->addColumn('action', function ($pedido) use ($fecha_consulta, $fecha_actual) {
+                ->addColumn('action', function ($direcciongrupo) use ($fecha_consulta, $fecha_actual) {
                     $btn = '';
 
                     $btn .= '<ul class="list-unstyled pl-0">';
 
-                    if ($pedido->condicion_envio_code == Pedido::ENVIO_MOTORIZADO_COURIER_INT) {
+                    if ($direcciongrupo->condicion_envio_code == Pedido::ENVIO_MOTORIZADO_COURIER_INT) {
 
-                        if ($fecha_actual == $fecha_consulta) {
+                        if ($fecha_actual >= $fecha_consulta) {
                             $btn .= '<li>
-                                <button data-target="#modal-envio" data-toggle="modal" data-accion="recibir" data-recibir="' . $pedido->id . '" data-codigos="' . $pedido->codigos . '"  class="btn btn-warning btn-sm"><i class="fas fa-check-circle"></i> Recibido</button>
+                                <button data-target="#modal-envio" data-toggle="modal" data-accion="recibir" data-recibir="' . $direcciongrupo->id . '" data-codigos="' . $direcciongrupo->codigos . '"  class="btn btn-warning btn-sm"><i class="fas fa-check-circle"></i> Recibido</button>
                             </li>';
-                            $btn .= ' <li>
-                        <button data-target="#modal-envio" data-toggle="modal" data-accion="rechazar" data-recibir="' . $pedido->id . '" data-codigos="' . $pedido->codigos . '" class="btn btn-danger btn-sm mt-8"><i class="fa fa-times-circle-o" aria-hidden="true"></i>No recibido</button>
-                    </li>';
+                            if(Pedido::query()->where('direccion_grupo',$direcciongrupo->id)->count()==1) {
+                                $btn .= ' <li>
+                                            <button data-target="#modal-envio" data-toggle="modal" data-accion="rechazar" data-recibir="' . $direcciongrupo->id . '" data-codigos="' . $direcciongrupo->codigos . '" class="btn btn-danger btn-sm mt-8"><i class="fa fa-times-circle-o" aria-hidden="true"></i>No recibido</button>
+                                        </li>';
+                            }else{
+                                $btn .= ' <li>
+                                            <button
+                                            data-target="' . route('envios.recepcionmotorizado.pedidos', $direcciongrupo->id) . '"
+                                            data-targetone="' . route('envios.recepcionarmotorizado') . '"
+                                            data-toggle="jqconfirm" class="btn btn-danger btn-sm mt-8"><i class="fa fa-times-circle-o" aria-hidden="true"></i>No recibido</button>
+                                        </li>';
+                            }
 
                         } else {
                             $btn .= '<li>
@@ -677,9 +687,9 @@ class MotorizadoController extends Controller
                     </li>';
                         }
 
-                    } else if ($pedido->condicion_envio_code == Pedido::RECEPCION_MOTORIZADO_INT) {
+                    } else if ($direcciongrupo->condicion_envio_code == Pedido::RECEPCION_MOTORIZADO_INT) {
                         $btn .= '<li>
-                                <a href="" class="btn-sm text-secondary" data-target="#modal-confirmacion" data-toggle="modal" data-ide="' . $pedido->id . '" data-entregar-confirm="' . $pedido->id . '" data-destino="' . $pedido->destino . '" data-fechaenvio="' . $pedido->fecha . '" data-codigos="' . $pedido->codigos . '">
+                                <a href="" class="btn-sm text-secondary" data-target="#modal-confirmacion" data-toggle="modal" data-ide="' . $direcciongrupo->id . '" data-entregar-confirm="' . $direcciongrupo->id . '" data-destino="' . $direcciongrupo->destino . '" data-fechaenvio="' . $direcciongrupo->fecha . '" data-codigos="' . $direcciongrupo->codigos . '">
                                     <i class="fas fa-envelope text-success"></i> Iniciar ruta</a></li>
                                 </a>
                             </li>';
@@ -756,7 +766,6 @@ class MotorizadoController extends Controller
                     $query->whereDate('direccion_grupos.fecha_salida', $fecha_consulta);
                 })
                 ->where('direccion_grupos.motorizado_id', '=', $request->motorizado_id)
-
                 ->select([
                     'direccion_grupos.*',
                 ]);
@@ -781,5 +790,13 @@ class MotorizadoController extends Controller
                 ->toJson();
 
         }
+    }
+
+    public function getPedidos(DireccionGrupo $grupo)
+    {
+        return response()->json([
+            'grupo' => $grupo,
+            'pedidos' => $grupo->pedidos()->with('detallePedido')->get(),
+        ]);
     }
 }
