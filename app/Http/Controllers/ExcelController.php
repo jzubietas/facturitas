@@ -13,6 +13,7 @@ use App\Exports\ClientesAbandonosExport;
 use App\Exports\Templates\PlantillaExportMultipleLlamada;
 use App\Exports\Templates\PlantillaExportMultiple;
 use App\Exports\Templates\PlantillaExportRutaenvioMultiple;
+use App\Exports\Templates\PlantillaRecepcionMotorizadoMultiple;
 use App\Exports\Templates\PlantillaRutaenvioExportMultiple;
 use App\Exports\ClientesSituacionExport;///
 use App\Exports\PedidosPorEnviarPorFechasExport;
@@ -65,10 +66,13 @@ class ExcelController extends Controller
     // {
     //     return Excel::download(new ClientesExport, 'Lista de Clientes.xlsx');
     // }
-
+    public function enviosRecepcionmotorizadoExcel(Request $request)
+    {
+        return (new PlantillaRecepcionMotorizadoMultiple($request->user_motorizado,$request->fecha_envio))
+            ->download('Lista de Motorizado Confirmar.xlsx');
+    }
     public function enviosMotorizadoconfirmarExcel(Request $request)
     {
-        var_dump($request);
         return (new PlantillaMotorizadoConfirmarMultiple($request->user_motorizado,$request->fecha_envio))
                 ->download('Lista de Motorizado Confirmar.xlsx');
     }

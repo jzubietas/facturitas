@@ -13,10 +13,10 @@
             </button>
             <div class="dropdown-menu">
                 <a href="" data-target="#modal-exportar" data-toggle="modal" class="dropdown-item" target="blank_"><img
-                        src="{{ asset('imagenes/icon-excel.png') }}"> Excel</a>
+                            src="{{ asset('imagenes/icon-excel.png') }}"> Excel</a>
             </div>
         </div>
-        @include('envios.motorizado.modal.exportar_motorizado_confirmar', ['title' => 'Exportar Confirmar Motorizado', 'key' => '1'])
+        @include('envios.motorizado.modal.exportar_motorizado', ['title' => 'Exportar Confirmar Motorizado', 'key' => '1'])
 
     </h1>
 
@@ -88,30 +88,30 @@
                         $.confirm({
                             type: 'red',
                             title: '¡Revertir Envio!',
-                            content: 'Confirme si desea revertir el envio <b>'+data.codigos+'</b>',
+                            content: 'Confirme si desea revertir el envio <b>' + data.codigos + '</b>',
                             buttons: {
-                                ok:{
-                                    text:'Si, confirmar',
-                                    btnClass:'btn-red',
-                                    action:function (){
-                                        const self=this;
+                                ok: {
+                                    text: 'Si, confirmar',
+                                    btnClass: 'btn-red',
+                                    action: function () {
+                                        const self = this;
                                         self.showLoading(true)
                                         $.ajax({
                                             data: {
-                                                envio_id:data.id
+                                                envio_id: data.id
                                             },
                                             //operaciones.confirmar.revertir
                                             type: 'POST',
                                             url: "{{ route('operaciones.confirmarmotorizado.revertir') }}",
-                                        }).always(function (){
+                                        }).always(function () {
                                             self.close()
                                             self.hideLoading(true)
                                             $('#tablaPrincipal').DataTable().ajax.reload();
                                         });
                                     }
                                 },
-                                cancel:{
-                                    text:'No'
+                                cancel: {
+                                    text: 'No'
                                 }
                             }
                         })
@@ -237,7 +237,8 @@
                 $(".textcode").html(idcodigo);
                 $("#hiddenMotorizadoEntregarConfirm").val(idunico)
 
-                let foto1 = button.data('imagen1');console.log(foto1);
+                let foto1 = button.data('imagen1');
+                console.log(foto1);
                 let foto2 = button.data('imagen2');
                 let foto3 = button.data('imagen3');
                 $(".foto1").attr("src", foto1);
@@ -247,11 +248,7 @@
 
                 $(".foto3").attr("src", foto3);
 
-                
-                
 
-
-               
             })
 
             $(document).on("submit", "#formulariomotorizadoentregarconfirm", function (evento) {
