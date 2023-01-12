@@ -1692,7 +1692,7 @@ class EnvioController extends Controller
     {
         $accion = $request->hiddenAccion;
         //$grupo = DireccionGrupo::query()->findOrFail($request->hiddenEnvio);
-        $grupo = DireccionGrupo::where('id', $request->hiddenEnvio);
+        $grupo = DireccionGrupo::query()->findOrFail($request->hiddenEnvio);
 
         if ($accion == "recibir") {
 
