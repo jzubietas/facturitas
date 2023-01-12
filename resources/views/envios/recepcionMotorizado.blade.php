@@ -394,7 +394,7 @@
 
     <style>
         .table_custom.toolbar {
-                float: left;
+            float: left;
         }
 
         .qr_success {
@@ -628,8 +628,8 @@
         }
     </script>
 
-    <script>
-        $(document).ready(function () {
+  <script>
+    $(document).ready(function () {
 
             const configDataTableZonas = {
                 serverSide: true,
@@ -1167,7 +1167,8 @@
             });*/
 
 
-        });
+        })
+            ;
     </script>
 
     @if (session('info') == 'registrado' || session('info') == 'actualizado' || session('info') == 'eliminado')
