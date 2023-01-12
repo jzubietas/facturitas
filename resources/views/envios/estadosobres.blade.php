@@ -569,14 +569,20 @@
                 }
             });
 
-            $('#btn_buscar').click(function(){
+            function applySearch(e) {
+                console.log(e)
                 let valor=$("#buscador_global").val();
-
+                valor=(valor||'').trim()
                 tablaRecepcionados.search( valor ).draw();
                 tablaEntregados.search( valor ).draw();
                 tablaAnulados.search( valor ).draw();
+            }
 
+            $('#btn_buscar').click(applySearch);
+            $("#buscador_global").bind('paste',function () {
+                setTimeout(applySearch,100)
             });
+            $('#buscador_global').change(applySearch);
 
 
 
