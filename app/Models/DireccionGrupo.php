@@ -97,13 +97,25 @@ class DireccionGrupo extends Model
         return $this->hasMany(Pedido::class, 'direccion_grupo');
     }
 
-    public static function desvincularPedido(self $grupo, Pedido $pedido,$sustento=null,$solodesvincular=false)
+    public static function restructurarCodigos(self $grupo)
+    {
+        $relacion = $grupo->pedidos()
+            ->join('detalle_pedidos', 'detalle_pedidos.pedido_id', 'pedidos.id')
+            ->pluck('detalle_pedidos.nombre_empresa', 'pedidos.codigo');
+        $grupo->update([
+            'codigos' => $relacion->keys()->join(', '),
+            'producto' => $relacion->values()->join(', '),
+        ]);
+    }
+
+    public static function desvincularPedido(self $grupo, Pedido $pedido, $sustento = null, $motorizado_status = Pedido::ESTADO_MOTORIZADO_OBSERVADO)
     {
         if ($grupo->pedidos()->count() > 1) {
             $newgrupo = $grupo->replicate()->fill([
-                'motorizado_status' => Pedido::ESTADO_MOTORIZADO_OBSERVADO,
-                'motorizado_sustento_text' => $sustento??$pedido->cambio_direccion_sustento,
+                'motorizado_status' => $motorizado_status,
+                'motorizado_sustento_text' => $sustento,
             ]);
+
             $newgrupo->save();
 
             $newgrupo->update([
@@ -113,19 +125,16 @@ class DireccionGrupo extends Model
             $pedido->update([
                 'direccion_grupo' => $newgrupo->id
             ]);
-            $detalle = $pedido->detallePedido;
-
-            $grupo->update([
-                'codigos' => collect(explode(',', $grupo->codigos))->map(fn($c) => trim($c))->filter()->filter(fn($c) => $c != $pedido->codigo)->join(','),
-                'producto' => collect(explode(',', $grupo->producto))->map(fn($c) => trim($c))->filter()->filter(fn($c) => $c != $detalle->nombre_empresa)->join(','),
-            ]);
+            self::restructurarCodigos($newgrupo);
+            self::restructurarCodigos($grupo);
             return $newgrupo;
         } else {
             $grupo->update([
-                'motorizado_status' => Pedido::ESTADO_MOTORIZADO_OBSERVADO,
-                'motorizado_sustento_text' => $sustento??$pedido->cambio_direccion_sustento,
+                'motorizado_status' => $motorizado_status,
+                'motorizado_sustento_text' => $sustento,
             ]);
             return $grupo;
         }
     }
+
 }
