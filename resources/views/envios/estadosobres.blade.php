@@ -47,11 +47,11 @@
         @endforeach
     </div>
     <style>
-        .activo{
+        /*.activo{
             background-color: #e74c3c !important;
             color: white !important;
             border: 0 !important;
-        }
+        }*/
     </style>
 
     <div class="card">
@@ -61,7 +61,16 @@
                 <tbody class="table-responsive">
                 <tr class="table-responsive">
                     <td class="table-responsive col-4 mx-auto">
-                        <input type="text" value="" id="buscador_global" name="buscador_global" class="form-control" autocomplete="off">
+
+                        <div class="input-group mb-3">
+                            <input id="buscador_global" name="buscador_global" value=""
+                                   type="text" class="form-control" autocomplete="off"
+                                   placeholder="Ingrese su búsqueda" aria-label="Recipient's username" aria-describedby="basic-addon2">
+                            <div class="input-group-append">
+                                <button class="btn btn-success" id="btn_buscar" type="button">Buscar</button>
+                            </div>
+                        </div>
+
                     </td>
                 </tr>
                 </tbody>
@@ -80,7 +89,7 @@
                        aria-controls="received"
                        aria-selected="true">
                         <i class="fa fa-inbox" aria-hidden="true"></i> RECEPCIÓN
-                        <sup><span class="badge badge-light count_estadosobres_received">{{$count_recepcionados}}</span></sup>
+                        <sup><span class="badge badge-light count_estadosobres_received">0</span></sup>
                     </a>
                 </li>
                 <li class="nav-item text-center">
@@ -95,7 +104,7 @@
                        aria-controls="delivered"
                        aria-selected="false">
                         <i class="fa fa-motorcycle" aria-hidden="true"></i> ENTREGADOS
-                        <sup><span class="badge badge-light count_estadosobres_delivered">{{$count_entregados}}</span></sup>
+                        <sup><span class="badge badge-light count_estadosobres_delivered">0</span></sup>
                     </a>
                 </li>
 
@@ -111,7 +120,7 @@
                        aria-controls="annulled"
                        aria-selected="false">
                         <i class="fa fa-motorcycle" aria-hidden="true"></i> ANULADOS
-                        <sup><span class="badge badge-light count_estadosobres_annulled">{{$count_anulados}}</span></sup>
+                        <sup><span class="badge badge-light count_estadosobres_annulled">0</span></sup>
                     </a>
                 </li>
             </ul>
@@ -125,9 +134,9 @@
                             <th scope="col">Código</th>
                             <th scope="col">Asesor</th>
                             <th scope="col">Razón social</th>
-                            <th scope="col">Dias</th>
+                            <th scope="col">Dias en Oficina</th>
                             <th scope="col">Fecha de registro</th>
-                            <th scope="col">Fecha de envio</th>
+                            <th scope="col">Fecha de recepcion courier</th>
                             <th scope="col">Fecha de entrega</th>
                             <th scope="col">Destino</th>
                             <th scope="col">Dirección de envío</th>
@@ -172,9 +181,9 @@
                             <th scope="col">Código</th>
                             <th scope="col">Asesor</th>
                             <th scope="col">Razón social</th>
-                            <th scope="col">Dias</th>
+                            <th scope="col">Dias en Anulacion</th>
                             <th scope="col">Fecha de registro</th>
-                            <th scope="col">Fecha de envio</th>
+                            <th scope="col">Fecha de anulacion</th>
                             <th scope="col">Fecha de entrega</th>
                             <th scope="col">Destino</th>
                             <th scope="col">Dirección de envío</th>
@@ -271,6 +280,9 @@
 
         .modal-lg {
             max-width: 80%;
+        }
+        .textred {
+            color: red !important;
         }
     </style>
 @stop
@@ -557,45 +569,26 @@
                 }
             });
 
-            $("#buscador_global").on('change keyup', function(){
-                tablaRecepcionados.search( this.value ).draw();
-                tablaEntregados.search( this.value ).draw();
-                tablaAnulados.search( this.value ).draw();
+            $('#btn_buscar').click(function(){
+                let valor=$("#buscador_global").val();
 
-                var info_tablaRecepcionados = tablaRecepcionados.page.info().recordsDisplay
-                console.log("en recepcionados "+info_tablaRecepcionados)
+                tablaRecepcionados.search( valor ).draw();
+                tablaEntregados.search( valor ).draw();
+                tablaAnulados.search( valor ).draw();
 
-                var info_tablaEntregados = tablaEntregados.page.info().recordsDisplay
-                console.log("en entregados "+info_tablaEntregados)
+            });
 
-                var info_tablaAnulados = tablaAnulados.page.info().recordsDisplay
-                console.log("en anulados "+info_tablaAnulados)
 
-                $('.count_estadosobres_received').html(info_tablaRecepcionados)
-                $('.count_estadosobres_delivered').html(info_tablaEntregados)
-                $('.count_estadosobres_anulled').html(info_tablaAnulados)
-                if(info_tablaRecepcionados>0){
-
-                }
-            })
-
-            //boton buscador general
-            /*$(document).on('change','#buscador_global',function(e){
-
-            });*/
-
-            /*$('#myInput').on( 'keyup', function () {
-                table.search( this.value ).draw();
-            } );*/
 
             /********************
              * TABLA SOBRES RECIBIDOS
              */
             tablaRecepcionados=$('#tablaRecepcionados').DataTable({
+                dom: '<"top"i>rt<"bottom"lp><"clear">',
                 processing: true,
                 stateSave: false,
                 serverSide: true,
-                searching: false,
+                searching: true,
                 "bFilter": false,
                 "order": [[0, "desc"]],
                 ajax: {
@@ -607,26 +600,13 @@
                 createdRow: function (row, data, dataIndex) {
                 },
                 rowCallback: function (row, data, index) {
-                    console.log(data);
-                    if (data.devuelto != null) {
-                        $('td', row).css('color', '#cf0a0a');
-                    }
+
                 },
                 columns: [
                     {
-                        data: 'id',
-                        name: 'id',
-                        render: function (data, type, row, meta) {
-                            if (row.id < 10) {
-                                return 'PED000' + row.id;
-                            } else if (row.id < 100) {
-                                return 'PED00' + row.id;
-                            } else if (row.id < 1000) {
-                                return 'PED0' + row.id;
-                            } else {
-                                return 'PED' + row.id;
-                            }
-                        }, "visible": false
+                        data: 'correlativo',
+                        name: 'correlativo',
+                        "visible": false
                     },
                     {data: 'codigo', name: 'codigo',},
                     {data: 'users', name: 'users',},
@@ -635,7 +615,7 @@
                     {data: 'dias', name: 'dias',},
 
                     {data: 'fecha_envio_doc', name: 'fecha_envio_doc', "visible": false},
-                    {data: 'fecha_envio_doc_fis', name: 'fecha_envio_doc_fis',},
+                    {data: 'fecha_recepcion_courier_anulado', name: 'fecha_recepcion_courier_anulado',},
                     {data: 'fecha_recepcion', name: 'fecha_recepcion', "visible": false},
                     {data: 'destino', name: 'destino', "visible": false},
                     {
@@ -655,14 +635,6 @@
                     {
                         data: 'condicion_envio',
                         name: 'condicion_envio',
-                        render: function (data, type, row, meta) {
-                            var badge_estado = '';
-                            if (row.estado_sobre == 1) {
-                                badge_estado += '<span class="badge badge-dark p-8" style="color: #fff; background-color: #347cc4; font-weight: 600; margin-bottom: -2px;border-radius: 4px 4px 0px 0px; font-size:8px;  padding:6px;">Direccion agregada</span>';
-                            }
-                            badge_estado += '<span class="badge badge-success" style="background-color:' + row.condicion_envio_color + ' !important;" >' + data + '</span>';
-                            return badge_estado;
-                        }
                     },
                     {
                         data: 'envio',
@@ -713,7 +685,7 @@
                     "thousands": ",",
                     "lengthMenu": "Mostrar _MENU_ Entradas",
                     "loadingRecords": "Cargando...",
-                    "processing": "Procesando...",
+                    "processing": '<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i><span class="sr-only">Cargando...</span> ',
                     "search": "Buscar:",
                     "zeroRecords": "Sin resultados encontrados",
                     "paginate": {
@@ -723,18 +695,38 @@
                         "previous": "Anterior"
                     }
                 },
+                "fnDrawCallback": function () {
+                    $('.count_estadosobres_received').html(this.fnSettings().fnRecordsDisplay());
+                    /*alert( oSettings.fnRecordsTotal() );
+                    alert( oSettings.fnRecordsDisplay() );
+                    alert( oSettings.fnDisplayEnd() );*/
+                    //condicion-tabla
+                    //$('.condicion-tabla').removeClass("active");
+                    //$('#received-tab').addClass("active");
+
+                    /*let a1=tablaRecepcionados.fnSettings().fnRecordsDisplay();
+                    let a2=tablaEntregados.fnSettings().fnRecordsDisplay();
+                    let a3=tablaAnulados.fnSettings().fnRecordsDisplay();
+
+                    if(a1>0 && a2>0 && a3>0){
+                        $('#received-tab').addClass("active");
+                    }*/
+
+                }
             });
+
+
 
             /********************
              * TABLA SOBRES ENTREGADOS
              */
 
             tablaEntregados=$('#tablaEntregados').DataTable({
+                dom: '<"top"i>rt<"bottom"lp><"clear">',
                 processing: true,
-                autoload: false,
                 stateSave: false,
                 serverSide: true,
-                searching: false,
+                searching: true,
                 "bFilter": false,
                 "order": [[5, "desc"]],
                 ajax: {
@@ -746,54 +738,6 @@
                 createdRow: function (row, data, dataIndex) {
                 },
                 rowCallback: function (row, data, index) {
-
-                    if (data.destino2 == 'PROVINCIA') {
-                        $('td', row).css('color', 'red')
-                    } else if (data.destino2 == 'LIMA') {
-                        if (data.distribucion != null) {
-                            if (data.distribucion == 'NORTE') {
-                                //$('td', row).css('color','blue')
-                            } else if (data.distribucion == 'CENTRO') {
-                                //$('td', row).css('color','yellow')
-                            } else if (data.distribucion == 'SUR') {
-                                //$('td', row).css('color','green')
-                            }
-                        } else {
-                        }
-                    }
-
-                    $('[data-jqconfirm]', row).click(function () {
-                        $.confirm({
-                            type: 'red',
-                            title: '¡Revertir Envio!',
-                            content: 'Confirme si desea revertir el envio <b>'+data.codigos+'</b>',
-                            buttons: {
-                                ok:{
-                                    text:'Si, confirmar',
-                                    btnClass:'btn-red',
-                                    action:function (){
-                                        const self=this;
-                                        self.showLoading(true)
-                                        $.ajax({
-                                            data: {
-                                                envio_id:data.id,
-                                                pedido:data.codigos
-                                            },
-                                            type: 'POST',
-                                            url: "{{ route('operaciones.revertirhaciaatendido') }}",
-                                        }).always(function (){
-                                            self.close()
-                                            self.hideLoading(true)
-                                            $('#tablaPrincipal').DataTable().ajax.reload();
-                                        });
-                                    }
-                                },
-                                cancel:{
-                                    text:'No'
-                                }
-                            }
-                        })
-                    });
                 },
                 columns: [
                     {
@@ -855,20 +799,23 @@
                     {
                         data: 'foto1',
                         name: 'foto1',
+                        sWidth:'5%'
                     },
                     {
                         data: 'foto2',
                         name: 'foto2',
+                        sWidth:'5%'
                     },
                     {
                         data: 'foto3',
                         name: 'foto3',
+                        sWidth:'5%'
                     },
                     {
                         data: 'condicion_envio',
                         name: 'condicion_envio',
                     },
-                    {data: 'action', name: 'action', orderable: false, searchable: false,sWidth:'20%'},
+                    {data: 'action', name: 'action', orderable: false, searchable: false,sWidth:'20%',"visible":false},
 
                 ],
                 language: {
@@ -881,7 +828,7 @@
                     "thousands": ",",
                     "lengthMenu": "Mostrar _MENU_ Entradas",
                     "loadingRecords": "Cargando...",
-                    "processing": "Procesando...",
+                    "processing": '<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i><span class="sr-only">Cargando...</span> ',
                     "search": "Buscar:",
                     "zeroRecords": "Sin resultados encontrados",
                     "paginate": {
@@ -891,14 +838,30 @@
                         "previous": "Anterior"
                     }
                 },
+                "fnDrawCallback": function () {
+                    $('.count_estadosobres_delivered').html(this.fnSettings().fnRecordsDisplay());
+                    /*alert( oSettings.fnRecordsTotal() );
+                    alert( oSettings.fnRecordsDisplay() );
+                    alert( oSettings.fnDisplayEnd() );*/
+                    //$('.condicion-tabla').removeClass("active");
+                    //$('#delivered-tab').addClass("active");
+
+                    /*let a1=tablaRecepcionados.fnSettings().fnRecordsDisplay();
+                    let a2=tablaEntregados.fnSettings().fnRecordsDisplay();
+                    let a3=tablaAnulados.fnSettings().fnRecordsDisplay();
+
+                    if(a1>0 && a2>0 && a3>0){
+                        $('#delivered-tab').addClass("active");
+                    }*/
+                }
             });
 
             tablaAnulados=$('#tablaAnulados').DataTable({
+                dom: '<"top"i>rt<"bottom"lp><"clear">',
                 processing: true,
-                autoload: false,
                 stateSave: false,
                 serverSide: true,
-                searching: false,
+                searching: true,
                 "bFilter": false,
                 "order": [[5, "desc"]],
                 ajax: {
@@ -908,56 +871,16 @@
                     },
                 },
                 createdRow: function (row, data, dataIndex) {
-                },
-                rowCallback: function (row, data, index) {
-
-                    if (data.destino2 == 'PROVINCIA') {
-                        $('td', row).css('color', 'red')
-                    } else if (data.destino2 == 'LIMA') {
-                        if (data.distribucion != null) {
-                            if (data.distribucion == 'NORTE') {
-                                //$('td', row).css('color','blue')
-                            } else if (data.distribucion == 'CENTRO') {
-                                //$('td', row).css('color','yellow')
-                            } else if (data.distribucion == 'SUR') {
-                                //$('td', row).css('color','green')
-                            }
-                        } else {
+                    if (data["estado"] == "1") {
+                        if (data.pendiente_anulacion == 1) {
+                            $('td', row).css('background', 'red').css('font-weight', 'bold');
                         }
+                    } else {
+                        $(row).addClass('textred');
                     }
 
-                    $('[data-jqconfirm]', row).click(function () {
-                        $.confirm({
-                            type: 'red',
-                            title: '¡Revertir Envio!',
-                            content: 'Confirme si desea revertir el envio <b>'+data.codigos+'</b>',
-                            buttons: {
-                                ok:{
-                                    text:'Si, confirmar',
-                                    btnClass:'btn-red',
-                                    action:function (){
-                                        const self=this;
-                                        self.showLoading(true)
-                                        $.ajax({
-                                            data: {
-                                                envio_id:data.id,
-                                                pedido:data.codigos
-                                            },
-                                            type: 'POST',
-                                            url: "{{ route('operaciones.revertirhaciaatendido') }}",
-                                        }).always(function (){
-                                            self.close()
-                                            self.hideLoading(true)
-                                            $('#tablaPrincipal').DataTable().ajax.reload();
-                                        });
-                                    }
-                                },
-                                cancel:{
-                                    text:'No'
-                                }
-                            }
-                        })
-                    });
+                },
+                rowCallback: function (row, data, index) {
                 },
                 columns: [
                     {
@@ -982,7 +905,7 @@
                     {data: 'dias', name: 'dias',},
 
                     {data: 'fecha_envio_doc', name: 'fecha_envio_doc', "visible": false},
-                    {data: 'fecha_envio_doc_fis', name: 'fecha_envio_doc_fis',},
+                    {data: 'fecha_recepcion_courier_anulado', name: 'fecha_recepcion_courier_anulado',},
                     {data: 'fecha_recepcion', name: 'fecha_recepcion', "visible": false},
                     {data: 'destino', name: 'destino', "visible": false},
                     {
@@ -1002,14 +925,6 @@
                     {
                         data: 'condicion_envio',
                         name: 'condicion_envio',
-                        render: function (data, type, row, meta) {
-                            var badge_estado = '';
-                            if (row.estado_sobre == 1) {
-                                badge_estado += '<span class="badge badge-dark p-8" style="color: #fff; background-color: #347cc4; font-weight: 600; margin-bottom: -2px;border-radius: 4px 4px 0px 0px; font-size:8px;  padding:6px;">Direccion agregada</span>';
-                            }
-                            badge_estado += '<span class="badge badge-success" style="background-color:' + row.condicion_envio_color + ' !important;" >' + data + '</span>';
-                            return badge_estado;
-                        }
                     },
                     {
                         data: 'envio',
@@ -1060,7 +975,7 @@
                     "thousands": ",",
                     "lengthMenu": "Mostrar _MENU_ Entradas",
                     "loadingRecords": "Cargando...",
-                    "processing": "Procesando...",
+                    "processing": '<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i><span class="sr-only">Cargando...</span> ',
                     "search": "Buscar:",
                     "zeroRecords": "Sin resultados encontrados",
                     "paginate": {
@@ -1070,8 +985,33 @@
                         "previous": "Anterior"
                     }
                 },
-            });
+                "fnDrawCallback": function () {
+                    $('.count_estadosobres_annulled').html(this.fnSettings().fnRecordsDisplay());
+                    /*alert( oSettings.fnRecordsTotal() );
+                    alert( oSettings.fnRecordsDisplay() );
+                    alert( oSettings.fnDisplayEnd() );*/
+                    //$('.condicion-tabla').removeClass("active");
+                    //$('#annulled-tabs').addClass("active");
 
+                    //$('.condicion-tabla').removeClass("active");
+
+                    let a1=$('#tablaRecepcionados').dataTable().fnSettings().fnRecordsDisplay();
+                    let a2=$('#tablaEntregados').dataTable().fnSettings().fnRecordsDisplay();
+                    let a3=this.fnSettings().fnRecordsDisplay();
+
+                    if(a1>0){
+                        $('#myTab a[href="#received"]').tab('show')
+                        //$('#received-tab').addClass("active").tab('show');
+                    }else if(a2>0){
+                        $('#myTab a[href="#delivered"]').tab('show')
+                        //$('#delivered-tab').addClass("active").tab('show');
+                    }else if(a3>0){
+                        $('#myTab a[href="#annulled"]').tab('show')
+                        //$('#annulled-tab').addClass("active").tab('show');
+                    }
+
+                }
+            });
 
         });
     </script>

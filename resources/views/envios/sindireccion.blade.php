@@ -50,7 +50,7 @@
             <th scope="col">Código</th>
             <th scope="col">Asesor</th>
             <th scope="col">Cliente</th>
-            <th scope="col">Fecha de Envio</th>
+            <th scope="col">Fecha de Recepcion Courier</th>
             <th scope="col">Razón social</th>
             <th scope="col">Destino</th>
             <th scope="col">Dirección de envío</th>
@@ -331,8 +331,6 @@
 
                 }
 
-
-
               }
         },
         columns: [
@@ -350,8 +348,8 @@
             },
           },
           {
-            data: 'created_at',
-            name: 'created_at',
+            data: 'fecha_recepcion_courier',
+            name: 'pedidos.fecha_recepcion_courier',
             //render: $.fn.dataTable.render.moment( 'DD/MM/YYYY' )
            },
           {

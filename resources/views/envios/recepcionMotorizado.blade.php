@@ -143,7 +143,6 @@
             <th scope="col">Cliente</th>
             <th scope="col">Razón social</th>
             <th scope="col">Fecha de salida</th>
-
             <th scope="col">Dirección de envío</th>
             <th scope="col">Estado de envio</th>
 
