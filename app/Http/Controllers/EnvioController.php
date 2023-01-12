@@ -830,8 +830,31 @@ class EnvioController extends Controller
 
     }
 
-    public function Enviosrutaenvio()
+    public function Enviosrutaenvio(Request $request)
     {
+
+        $motorizados = User::select([
+            'id',
+            'zona',
+            DB::raw(" (select count(*) from pedidos inner join direccion_grupos b on pedidos.direccion_grupo=b.id where b.motorizado_status in (" . Pedido::ESTADO_MOTORIZADO_OBSERVADO . "," . Pedido::ESTADO_MOTORIZADO_NO_CONTESTO . ") and b.motorizado_id=users.id and b.estado=1) as devueltos")
+        ])     ->where('rol', '=', User::ROL_MOTORIZADO)
+            ->whereNotNull('zona')
+            ->activo()
+            ->get();
+
+
+
+
+        if ($request->fechaconsulta != null) {
+            try {
+                $fecha_consulta = Carbon::createFromFormat('d/m/Y', $request->fechaconsulta);
+            } catch (\Exception $ex) {
+                $fecha_consulta = now();
+            }
+        } else {
+            $fecha_consulta = now();
+        }
+
 
         $rol = Auth::user()->rol;
         $distribuir = [
@@ -887,53 +910,65 @@ class EnvioController extends Controller
 
         $dateMin = Carbon::now()->format('Y-m-d');
 
-        return view('envios.rutaenvio', compact('condiciones', 'distritos', 'direcciones', 'destinos', 'superasesor', 'ver_botones_accion', 'departamento', 'dateMin', 'distribuir', 'rol'));
+        return view('envios.rutaenvio', compact('condiciones', 'distritos', 'direcciones', 'destinos', 'superasesor', 'ver_botones_accion', 'departamento', 'dateMin', 'distribuir', 'rol','fecha_consulta','motorizados'));
     }
 
 
     public function Enviosrutaenviotabla(Request $request)
     {
-        $arreglo = [Pedido::ENTREGADO_SIN_SOBRE_OPE_INT, Pedido::ENTREGADO_SIN_SOBRE_CLIENTE_INT];
-
-        $pedidos = DireccionGrupo::/*join('direccion_envios as de', 'direccion_grupos.id', 'de.direcciongrupo')*/
-        join('clientes as c', 'c.id', 'direccion_grupos.cliente_id')
-            ->join('users as u', 'u.id', 'c.user_id')
-            ->where('direccion_grupos.estado', '1')
-            ->whereNotIn('direccion_grupos.condicion_envio_code', $arreglo)
-            ->select(
-                'direccion_grupos.id',
-                'direccion_grupos.correlativo',
-                'u.identificador as identificador',
-                'direccion_grupos.destino',
-                'direccion_grupos.celular',
-                'direccion_grupos.nombre',
-                'direccion_grupos.cantidad',
-                'direccion_grupos.codigos',
-                'direccion_grupos.producto',
-                'direccion_grupos.direccion',
-                'direccion_grupos.referencia',
-                'direccion_grupos.observacion',
-                'direccion_grupos.distrito',
-                'direccion_grupos.created_at as fecha',
-                'direccion_grupos.distribucion',
-            );
-
-        if ($request->desde) {
+        // SI EXISTE UNA FECHA
+        if ($request->fechaconsulta != null) {
             try {
-                $min = Carbon::createFromFormat('Y-m-d', $request->desde);//2022-11-25
-                $pedidos = $pedidos->whereDate('direccion_grupos.created_at', $min);
-            } catch (Exception $ex) {
+                $fecha_consulta = Carbon::createFromFormat('d/m/Y', $request->fechaconsulta);
+            } catch (\Exception $ex) {
+                $fecha_consulta = now();
             }
+        } else {
+            $fecha_consulta = now();
         }
 
-        return Datatables::of($pedidos)
-            ->addIndexColumn()
-            ->addColumn('action', function ($pedido) {
-                $btn = '';
-                return $btn;
-            })
-            ->rawColumns(['action'])
-            ->make(true);
+        // SI SE ESPERA RESULTADOS PARA UNA TABLA
+        if ($request->has('datatable')) {
+            $query = DireccionGrupo::
+            join('clientes as c', 'c.id', 'direccion_grupos.cliente_id')
+                ->join('users as u', 'u.id', 'c.user_id')
+                ->when($fecha_consulta != null, function ($query) use ($fecha_consulta) {
+                    $query->whereDate('direccion_grupos.fecha_salida', $fecha_consulta);
+                })
+                ->where('direccion_grupos.motorizado_id', '=', $request->motorizado_id)
+                ->select([
+                    'direccion_grupos.*',
+                ]);
+            
+            $tab = ($request->tab ?: '');
+            switch ($tab) {
+                case 'entregado':
+                    $query
+                        ->where('direccion_grupos.estado', '1')
+                        ->where('direccion_grupos.condicion_envio_code', Pedido::CONFIRM_MOTORIZADO_INT);
+                    break;
+                case 'no_contesto':
+                    $query
+                        ->where('direccion_grupos.estado', '1')
+                        ->where('direccion_grupos.condicion_envio_code', Pedido::MOTORIZADO_INT)
+                        ->where('direccion_grupos.motorizado_status', Pedido::ESTADO_MOTORIZADO_NO_CONTESTO);
+                    break;
+                case 'observado':
+                    $query->where('direccion_grupos.condicion_envio_code', Pedido::MOTORIZADO_INT);
+                    $query->where('direccion_grupos.motorizado_status', Pedido::ESTADO_MOTORIZADO_OBSERVADO);
+                    break;
+                default:
+                    $query
+                        ->where('direccion_grupos.estado', '1')
+                        ->where('direccion_grupos.condicion_envio_code', Pedido::MOTORIZADO_INT)
+                        ->whereNotIn('direccion_grupos.motorizado_status', [Pedido::ESTADO_MOTORIZADO_OBSERVADO, Pedido::ESTADO_MOTORIZADO_NO_CONTESTO]);
+            }
+
+            return datatables()->query(DB::table($query))
+                ->addIndexColumn()
+                ->rawColumns(['action', 'condicion_envio'])
+                ->toJson();
+        }
 
     }
 
@@ -1827,12 +1862,25 @@ class EnvioController extends Controller
                     return response()->json([
                         'suucess' => false
                     ]);
+                } else {
+
+
+                    $grupopedido = GrupoPedido::query()->select('grupo_pedidos.*')
+                        ->join('grupo_pedido_items', 'grupo_pedido_items.grupo_pedido_id', 'grupo_pedidos.id')
+                        ->where('grupo_pedido_items.pedido_id', $pedido->id)
+                        ->first();
+
+                    if ($grupopedido == NULL) {
+
+                    }
+
+
                 }
             }
+            return response()->json([
+                'suucess' => true
+            ]);
         }
-        return response()->json([
-            'suucess' => true
-        ]);
     }
 
     public function DireccionEnvio(Request $request)
