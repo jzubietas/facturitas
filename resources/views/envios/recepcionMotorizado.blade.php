@@ -168,7 +168,6 @@
                 </tbody>
             </table>
             @include('pedidos.modal.confirmar_recepcion_log')
-            @include('pedidos.modal.confirmar_recepcion_log')
             @include('envios.modal.enviarid')
             @include('pedidos.modal.recibirid')
 
@@ -718,6 +717,8 @@
             });
 
             /*
+                  $("#fecha_consulta").datepicker({
+                    onSelect: function () {
                   $("#fecha_consulta").datepicker({
                     onSelect: function () {
 
