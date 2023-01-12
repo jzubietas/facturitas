@@ -1162,13 +1162,16 @@ class EnvioController extends Controller
     public function Enviosrecepcionmotorizadotabla(Request $request)
     {
         $tipo_consulta = $request->consulta;
+        $fecha_actual=Carbon::now()->format('Y-m-d');
 
         //SI ES QUE EXISTE UNA FECHA
         if ($request->fechaconsulta != null) {
             try {
-                $fecha_consulta = Carbon::createFromFormat('d/m/Y', $request->fechaconsulta);
+                $fecha_consulta = Carbon::createFromFormat('d/m/Y', $request->fechaconsulta)->format('Y-m-d');
             } catch (Exception $ex) {
                 $fecha_consulta = now();
+
+
             }
 
         } else {
@@ -1262,15 +1265,20 @@ class EnvioController extends Controller
                     $badge_estado .= '<span class="badge badge-success" style="background-color: ' . $color . '!important;">' . $grupo->condicion_envio . '</span>';
                     return $badge_estado;
                 })
-                ->addColumn('action', function ($pedido) {
+                ->addColumn('action', function ($pedido) use ($fecha_consulta, $fecha_actual) {
                     $btn = '';
 
                     $btn .= '<ul class="list-unstyled pl-0">';
 
                     if ($pedido->condicion_envio_code == Pedido::ENVIO_MOTORIZADO_COURIER_INT) {
-                        $btn .= '<li>
-                        <a href="" data-target="#modal-envio" data-toggle="modal" data-recibir="' . $pedido->id . '" data-codigos="' . $pedido->codigos . '"><button class="btn btn-warning btn-sm"><i class="fas fa-check-circle"></i> Recibido</button></a>
-                    </li>';
+
+                        if($fecha_actual==$fecha_consulta)
+                        {
+                            $btn .= '<li>
+                                <a href="" data-target="#modal-envio" data-toggle="modal" data-recibir="' . $pedido->id . '" data-codigos="' . $pedido->codigos . '"><button class="btn btn-warning btn-sm"><i class="fas fa-check-circle"></i> Recibido</button></a>
+                            </li>';
+                        }
+
 
                     } else if ($pedido->condicion_envio_code == Pedido::RECEPCION_MOTORIZADO_INT) {
                         $btn .= '<li>
