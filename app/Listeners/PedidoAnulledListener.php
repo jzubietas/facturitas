@@ -27,11 +27,13 @@ class PedidoAnulledListener
      */
     public function handle(PedidoAnulledEvent $event)
     {
-        $message=($event->pedido->pendiente_anulacion?'Pendiente de anulacion: ':'Anulado: ');
-        $grupo = DireccionGrupo::desvincularPedido($event->pedido->direcciongrupo, $event->pedido, $message . $event->pedido->motivo);
-        $grupo->update([
-            'estado' => 0
-        ]);
+        if($event->pedido->direcciongrupo!=null) {
+            $message = ($event->pedido->pendiente_anulacion ? 'Pendiente de anulacion: ' : 'Anulado: ');
+            $grupo = DireccionGrupo::desvincularPedido($event->pedido->direcciongrupo, $event->pedido, $message . $event->pedido->motivo);
+            $grupo->update([
+                'estado' => 0
+            ]);
+        }
         return $grupo;
     }
 }

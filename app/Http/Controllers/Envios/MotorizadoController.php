@@ -328,7 +328,7 @@ class MotorizadoController extends Controller
                 'users.zona',
             ])
             ->whereIn('direccion_grupos.motorizado_status', [Pedido::ESTADO_MOTORIZADO_OBSERVADO, Pedido::ESTADO_MOTORIZADO_NO_CONTESTO])
-            ->where('direccion_grupos.estado', '1')
+           // ->where('direccion_grupos.estado', '1')
             ->activo()
             ->whereNotNull('direccion_grupos.fecha')
             ->whereNotNull('direccion_grupos.fecha_salida')
@@ -354,54 +354,52 @@ class MotorizadoController extends Controller
 
     public function devueltos_datatable(Request $request)
     {
-        if ($request->has('datatable')) {
-            $pedidos_observados = Pedido::join('direccion_grupos', 'pedidos.direccion_grupo', 'direccion_grupos.id')
-                ->select([
-                    'pedidos.*',
-                    'direccion_grupos.fecha as grupo_fecha',
-                    'direccion_grupos.fecha_salida as grupo_fecha_salida',
-                    'direccion_grupos.motorizado_status',
-                ])
-                ->whereIn('direccion_grupos.motorizado_status', [Pedido::ESTADO_MOTORIZADO_OBSERVADO, Pedido::ESTADO_MOTORIZADO_NO_CONTESTO])
-                ->where('direccion_grupos.estado', '1')
-                ->activo()
-                ->where('direccion_grupos.motorizado_id', $request->motorizado_id);
+        $pedidos_observados = Pedido::join('direccion_grupos', 'pedidos.direccion_grupo', 'direccion_grupos.id')
+            ->select([
+                'pedidos.*',
+                'direccion_grupos.fecha as grupo_fecha',
+                'direccion_grupos.fecha_salida as grupo_fecha_salida',
+                'direccion_grupos.motorizado_status',
+            ])
+            ->whereIn('direccion_grupos.motorizado_status', [Pedido::ESTADO_MOTORIZADO_OBSERVADO, Pedido::ESTADO_MOTORIZADO_NO_CONTESTO])
+            //->where('direccion_grupos.estado', '1')
+            ->activo()
+            ->where('direccion_grupos.motorizado_id', $request->motorizado_id);
 
-            return datatables()->query(DB::table($pedidos_observados))
-                ->addColumn('situacion_color', function ($pedido) {
-                    if ($pedido->grupo_fecha != null) {
-                        if ($pedido->grupo_fecha_salida != null) {
-                            $fecha_salida = Carbon::parse($pedido->grupo_fecha_salida);
-                            $fecha = Carbon::parse($pedido->grupo_fecha);
-                            $count = $fecha_salida->diffInDays($fecha);
-                            if ($count >= 3) {
-                                return 'red';
-                            } elseif ($count >= 2) {
-                                return 'orange';
-                            } else {
-                                return 'yellow';
-                            }
+        return datatables()->query(DB::table($pedidos_observados))
+            ->addColumn('situacion_color', function ($pedido) {
+                if ($pedido->grupo_fecha != null) {
+                    if ($pedido->grupo_fecha_salida != null) {
+                        $fecha_salida = Carbon::parse($pedido->grupo_fecha_salida);
+                        $fecha = Carbon::parse($pedido->grupo_fecha);
+                        $count = $fecha_salida->diffInDays($fecha);
+                        if ($count >= 3) {
+                            return 'red';
+                        } elseif ($count >= 2) {
+                            return 'orange';
+                        } else {
+                            return 'yellow';
                         }
                     }
-                    return '';
-                })
-                ->addColumn('action', function ($pedido) {
-                    $btn = '';
-                    if (auth()->user()->can('envios.enviar')):
+                }
+                return '';
+            })
+            ->addColumn('action', function ($pedido) {
+                $btn = '';
+                if (auth()->user()->can('envios.enviar')):
 
-                        $btn .= '<ul class="list-unstyled pl-0" data-group="' . $pedido->direccion_grupo . '">';
+                    $btn .= '<ul class="list-unstyled pl-0" data-group="' . $pedido->direccion_grupo . '">';
 
-                        $btn .= '<li>
+                    $btn .= '<li>
                                 <button type="button" data-target="' . route('envios.devueltos.recibir', $pedido->id) . '" data-toggle="jqconfirm"  class="btn btn-warning btn-sm"><i class="fas fa-check-circle"></i> Recibido</button>
                             </li>';
-                        $btn .= '</ul>';
-                    endif;
+                    $btn .= '</ul>';
+                endif;
 
-                    return $btn;
-                })
-                ->rawColumns(['action'])
-                ->make(true);
-        }
+                return $btn;
+            })
+            ->rawColumns(['action'])
+            ->make(true);
     }
 
     public function devueltos_recibir(Request $request, Pedido $pedido)
