@@ -134,7 +134,7 @@
                             <th scope="col">Código</th>
                             <th scope="col">Asesor</th>
                             <th scope="col">Razón social</th>
-                            <th scope="col">Dias</th>
+                            <th scope="col">Dias en Oficina</th>
                             <th scope="col">Fecha de registro</th>
                             <th scope="col">Fecha de envio</th>
                             <th scope="col">Fecha de entrega</th>
@@ -181,7 +181,7 @@
                             <th scope="col">Código</th>
                             <th scope="col">Asesor</th>
                             <th scope="col">Razón social</th>
-                            <th scope="col">Dias</th>
+                            <th scope="col">Dias en Oficina</th>
                             <th scope="col">Fecha de registro</th>
                             <th scope="col">Fecha de envio</th>
                             <th scope="col">Fecha de entrega</th>
@@ -700,6 +700,18 @@
                     /*alert( oSettings.fnRecordsTotal() );
                     alert( oSettings.fnRecordsDisplay() );
                     alert( oSettings.fnDisplayEnd() );*/
+                    //condicion-tabla
+                    $('.condicion-tabla').removeClass("active");
+                    $('#received-tab').addClass("active");
+
+                    /*let a1=tablaRecepcionados.fnSettings().fnRecordsDisplay();
+                    let a2=tablaEntregados.fnSettings().fnRecordsDisplay();
+                    let a3=tablaAnulados.fnSettings().fnRecordsDisplay();
+
+                    if(a1>0 && a2>0 && a3>0){
+                        $('#received-tab').addClass("active");
+                    }*/
+
                 }
             });
 
@@ -828,6 +840,16 @@
                     /*alert( oSettings.fnRecordsTotal() );
                     alert( oSettings.fnRecordsDisplay() );
                     alert( oSettings.fnDisplayEnd() );*/
+                    $('.condicion-tabla').removeClass("active");
+                    $('#delivered-tab').addClass("active");
+
+                    /*let a1=tablaRecepcionados.fnSettings().fnRecordsDisplay();
+                    let a2=tablaEntregados.fnSettings().fnRecordsDisplay();
+                    let a3=tablaAnulados.fnSettings().fnRecordsDisplay();
+
+                    if(a1>0 && a2>0 && a3>0){
+                        $('#delivered-tab').addClass("active");
+                    }*/
                 }
             });
 
@@ -965,6 +987,17 @@
                     /*alert( oSettings.fnRecordsTotal() );
                     alert( oSettings.fnRecordsDisplay() );
                     alert( oSettings.fnDisplayEnd() );*/
+                    $('.condicion-tabla').removeClass("active");
+                    $('#annulled-tabs').addClass("active");
+
+                    /*let a1=tablaRecepcionados.fnSettings().fnRecordsDisplay();
+                    let a2=tablaEntregados.fnSettings().fnRecordsDisplay();
+                    let a3=tablaAnulados.fnSettings().fnRecordsDisplay();
+
+                    if(a1>0 && a2>0 && a3>0){
+                        $('#annulled-tabs').addClass("active");
+                    }*/
+
                 }
             });
 
