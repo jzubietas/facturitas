@@ -355,7 +355,7 @@ class MotorizadoController extends Controller
             ->filter(fn($p) => $p > 0)
             ->map(fn($total, $zona) => $zona . ' debe ' . $total);
 
-        return view('envios.sobresdevueltos', compact('motorizados', 'pedidos_observados_count'));
+        return view('envios.motorizado.sobresdevueltos', compact('motorizados', 'pedidos_observados_count'));
     }
 
     public function devueltos_datatable(Request $request)
@@ -373,12 +373,25 @@ class MotorizadoController extends Controller
             ->where('direccion_grupos.motorizado_id', $request->motorizado_id);
 
         return datatables()->query(DB::table($pedidos_observados))
-            ->addColumn('codigo', function ($pedido) {
+            ->editColumn('codigo', function ($pedido) {
                 if ($pedido->estado = 0 || $pedido->pendiente_anulacion) {
                     return '<div class="badge badge-danger p-2">' . $pedido->codigo . '</div>';
                 } else {
                     return '<div class="badge badge-light p-2">' . $pedido->codigo . '</div>';
                 }
+            })
+            ->editColumn('grupo_fecha_salida', function ($pedido) {
+                return Carbon::parse($pedido->grupo_fecha_salida)->format('d-m-Y h:i A');
+            })
+            ->addColumn('detalle', function ($pedido) {
+                if ($pedido->estado = 0 || $pedido->pendiente_anulacion) {
+                    return '<div class="badge badge-danger p-2">ANULADO</div>';
+                } else if($pedido->motorizado_status==Pedido::ESTADO_MOTORIZADO_OBSERVADO){
+                    return '<div class="badge badge-info p-2">OBSERVADO</div>';
+                } else{
+                    return '<div class="badge badge-warning p-2">NO CONTESTA</div>';
+                }
+                return  '';
             })
             ->addColumn('situacion_color', function ($pedido) {
                 if ($pedido->grupo_fecha_salida != null) {
@@ -417,7 +430,7 @@ class MotorizadoController extends Controller
 
                 return $btn;
             })
-            ->rawColumns(['action', 'codigo'])
+            ->rawColumns(['action', 'codigo','detalle'])
             ->make(true);
     }
 
@@ -427,7 +440,7 @@ class MotorizadoController extends Controller
         if ($pedido->estado = 0) {
             if ($grupo != null) {
                 $grupo->update([
-                    'motorizado_status' => 3,
+                    'motorizado_status' => Pedido::ESTADO_MOTORIZADO_RE_RECIBIDO,
                 ]);
             }
         }

@@ -86,6 +86,8 @@
                                                     <th scope="col">Códigos</th>
                                                     <th scope="col">Distrito</th>
                                                     <th scope="col">Razón social</th>
+                                                    <th scope="col">Fecha Ruta</th>
+                                                    <th scope="col">Detalle</th>
                                                     <th scope="col">Acciones</th>
                                                 </tr>
                                                 </thead>
@@ -123,7 +125,7 @@
 
     <style>
         .table_custom.toolbar {
-                float: left;
+            float: left;
         }
 
         .qr_success {
@@ -226,12 +228,6 @@
 
                 },
                 rowCallback: function (row, data, index) {
-                    if(data.motorizado_status==1){
-                        $('td',row).css('color','black');
-                    }
-                    if(data.motorizado_status==2){
-                        $('td',row).css('color','#225e9b');
-                    }
                     $('td',row).css('background',data.situacion_color);
                     $('[data-toggle=jqconfirm]', row).click(function () {
                         const action = $(this).data('target')
@@ -262,6 +258,13 @@
                     {data: 'codigo', name: 'codigo',},
                     {data: 'env_zona', name: 'env_zona',},
                     {data: 'env_distrito', name: 'env_distrito',},
+                    {data: 'grupo_fecha_salida', name: 'fecha_salida',sWidth: '12%'},
+                    {
+                        data: 'detalle',
+                        name: 'detalle',
+                        orderable: false,
+                        searchable: false,
+                    },
                     {
                         data: 'action',
                         name: 'action',
