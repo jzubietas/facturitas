@@ -2393,12 +2393,12 @@ class EnvioController extends Controller
                     'dp.envio_doc',
                     'dp.fecha_envio_doc',
                     'dp.cant_compro',
-                    DB::raw(" (CASE WHEN pedidos.condicion='ANULADO' THEN pedidos.updated_at
+                    DB::raw(" (CASE WHEN pedidos.condicion='ANULADO' THEN pedidos.fecha_anulacion
                                     else pedidos.fecha_recepcion_courier end) as fecha_recepcion_courier_anulado "),
                     'dp.foto1',
                     'dp.foto2',
                     'dp.fecha_recepcion',
-                    DB::raw(" (CASE WHEN pedidos.condicion='ANULADO' THEN DATEDIFF(DATE(NOW()), DATE(pedidos.updated_at))
+                    DB::raw(" (CASE WHEN pedidos.condicion='ANULADO' THEN DATEDIFF(DATE(NOW()), DATE(pedidos.fecha_anulacion))
                                     else DATEDIFF(DATE(NOW()), DATE(pedidos.fecha_recepcion_courier)) end) as dias "),
                 ]);
             if($opcion=='recepcionado')
