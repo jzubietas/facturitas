@@ -226,6 +226,13 @@
 
                 },
                 rowCallback: function (row, data, index) {
+                    if(data.motorizado_status==1){
+                        $('td',row).css('color','black');
+                    }
+                    if(data.motorizado_status==2){
+                        $('td',row).css('color','#225e9b');
+                    }
+                    $('td',row).css('background',data.situacion_color);
                     $('[data-toggle=jqconfirm]', row).click(function () {
                         const action = $(this).data('target')
                         $.confirm({
@@ -301,6 +308,15 @@
                 'Pedido {{ session('info') }} correctamente',
                 '',
                 'success'
+            )
+        </script>
+    @endif
+    @if ($pedidos_observados_count->count()>0)
+        <script>
+            Swal.fire(
+                'Alerta',
+                'El Motorizado {{$pedidos_observados_count->join(', ')}} sobres por entregar, por favor brindar solucion urgente, ya sea con el motorizado o corregirlo en el sistema (si fuera el caso) con el administrador',
+                'danger'
             )
         </script>
     @endif

@@ -317,8 +317,39 @@ class MotorizadoController extends Controller
             ->whereNotNull('zona')
             ->activo()
             ->get();
+        
+        $pedidos_observados_count = Pedido::join('direccion_grupos', 'pedidos.direccion_grupo', 'direccion_grupos.id')
+            ->join('users', 'users.id', 'direccion_grupos.motorizado_id')
+            ->select([
+                'pedidos.*',
+                'direccion_grupos.fecha as grupo_fecha',
+                'direccion_grupos.fecha_salida as grupo_fecha_salida',
+                'direccion_grupos.motorizado_status',
+                'users.zona',
+            ])
+            ->whereIn('direccion_grupos.motorizado_status', [Pedido::ESTADO_MOTORIZADO_OBSERVADO, Pedido::ESTADO_MOTORIZADO_NO_CONTESTO])
+            ->where('direccion_grupos.estado', '1')
+            ->activo()
+            ->whereNotNull('direccion_grupos.fecha')
+            ->whereNotNull('direccion_grupos.fecha_salida')
+            ->get()
+            ->groupBy('zona')
+            ->map(function ($pedidos) {
+                $total = 0;
+                foreach ($pedidos as $pedido) {
+                    $fecha_salida = Carbon::parse($pedido->grupo_fecha_salida);
+                    $fecha = Carbon::parse($pedido->grupo_fecha);
+                    $count = $fecha_salida->diffInDays($fecha);
+                    if ($count >= 3) {
+                        $total++;
+                    }
+                }
+                return $total;
+            })
+            ->filter(fn($p) => $p > 0)
+            ->map(fn($total, $zona) => $zona . ' debe ' . $total);
 
-        return view('envios.sobresdevueltos', compact('motorizados'));
+        return view('envios.sobresdevueltos', compact('motorizados', 'pedidos_observados_count'));
     }
 
     public function devueltos_datatable(Request $request)
@@ -327,17 +358,38 @@ class MotorizadoController extends Controller
             $pedidos_observados = Pedido::join('direccion_grupos', 'pedidos.direccion_grupo', 'direccion_grupos.id')
                 ->select([
                     'pedidos.*',
+                    'direccion_grupos.fecha as grupo_fecha',
+                    'direccion_grupos.fecha_salida as grupo_fecha_salida',
+                    'direccion_grupos.motorizado_status',
                 ])
                 ->whereIn('direccion_grupos.motorizado_status', [Pedido::ESTADO_MOTORIZADO_OBSERVADO, Pedido::ESTADO_MOTORIZADO_NO_CONTESTO])
                 ->where('direccion_grupos.estado', '1')
+                ->activo()
                 ->where('direccion_grupos.motorizado_id', $request->motorizado_id);
 
             return datatables()->query(DB::table($pedidos_observados))
+                ->addColumn('situacion_color', function ($pedido) {
+                    if ($pedido->fecha_salida != null) {
+                        if ($pedido->grupo_fecha_salida != null) {
+                            $fecha_salida = Carbon::parse($pedido->grupo_fecha_salida);
+                            $fecha = Carbon::parse($pedido->grupo_fecha);
+                            $count = $fecha_salida->diffInDays($fecha);
+                            if ($count >= 3) {
+                                return 'red';
+                            } elseif ($count >= 2) {
+                                return 'orange';
+                            } else {
+                                return 'yellow';
+                            }
+                        }
+                    }
+                    return '';
+                })
                 ->addColumn('action', function ($pedido) {
                     $btn = '';
                     if (auth()->user()->can('envios.enviar')):
 
-                        $btn .= '<ul class="list-unstyled pl-0">';
+                        $btn .= '<ul class="list-unstyled pl-0" data-group="' . $pedido->direccion_grupo . '">';
 
                         $btn .= '<li>
                                 <button type="button" data-target="' . route('envios.devueltos.recibir', $pedido->id) . '" data-toggle="jqconfirm"  class="btn btn-warning btn-sm"><i class="fas fa-check-circle"></i> Recibido</button>
@@ -356,6 +408,14 @@ class MotorizadoController extends Controller
     {
         $grupo = $pedido->direcciongrupo;
         $pgroup = GrupoPedido::createGroupByPedido($pedido);
+        $detalle = $pedido->detallePedido;
+        $pgroup->pedidos()->attach([
+            $pedido->id => [
+                'codigo' => $pedido->codigo,
+                'razon_social' => $detalle->nombre_empresa,
+            ]
+        ]);
+
         if ($grupo->pedidos()->activo()->count() <= 1) {
             $grupo->update([
                 'estado' => 0
