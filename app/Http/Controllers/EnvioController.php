@@ -1212,7 +1212,7 @@ class EnvioController extends Controller
                     'dp.fecha_envio_doc_fis',
                     'dp.foto1',
                     'dp.foto2',
-                    'dp.fecha_recepcion',
+                    'pedidos.created_at as fecha_salida_recepcion_motorizado',
                     'pedidos.devuelto',
                     'pedidos.cant_devuelto',
                     'pedidos.returned_at',
@@ -1229,6 +1229,7 @@ class EnvioController extends Controller
 
             $grupos = DireccionGrupo::select([
                 'direccion_grupos.*',
+                'direccion_grupos.fecha_recepcion_motorizado as fecha_salida_recepcion_motorizado',
                 'u.identificador as user_identificador',
                 //DB::raw(" (select 'LIMA') as destino "),
                 DB::raw('(select DATE_FORMAT( direccion_grupos.created_at, "%Y-%m-%d")   from direccion_grupos dpa where dpa.id=direccion_grupos.id) as fecha_formato'),
@@ -1679,8 +1680,8 @@ class EnvioController extends Controller
     {
         $grupo = DireccionGrupo::query()->findOrFail($request->hiddenEnvio);
 
-
         $grupo->update([
+            'fecha_recepcion_motorizado'=>Carbon::now(),
             'envio' => '2',
             'modificador' => 'USER' . Auth::user()->id,
             'condicion_envio' => Pedido::RECEPCION_MOTORIZADO,

@@ -146,13 +146,11 @@
           <tr>
             <th scope="col">Item</th>
             <th scope="col">Código</th>
-              <th scope="col">Acciones</th>
-            <th scope="col">Asesor</th>
-            <th scope="col">Cliente</th>
             <th scope="col">Razón social</th>
             <th scope="col">Fecha de salida</th>
             <th scope="col">Dirección de envío</th>
             <th scope="col">Estado de envio</th>
+              <th scope="col">Accion</th>
 
           </tr>
         </thead>
@@ -604,13 +602,8 @@ setTimeout(function (){
                     data: 'codigos',
                     name: 'codigos',
                     render: function ( data, type, row, meta ) {
-                        //var codigos_ped = JSON.parse("[" + row.codigos + "]");
-                        //var codigos_ped = row.codigos.split(',').map(function(n) {return Number(n);});
-                        //var codigos_ped = row.codigos.split(",").map(Number);
                         var codigos_ped = row.codigos.split(',');
 
-
-                        //console.log(row);
                         var codigos_conf_ped = (row.codigos_confirmados||'').split(',');
 
                         console.log(codigos_conf_ped);
@@ -631,21 +624,10 @@ setTimeout(function (){
                         return lista_codigos;
                     }
                 },
-                {data: 'user_id', name: 'user_id','visible':false },
-                {
-                    data: 'celular',
-                    name: 'celular',
-                    render: function ( data, type, row, meta ) {
-                        return row.celulares+' - '+row.nombres
-                    },
-                    "visible":false
-                    //searchable: true
-                },
                 {data: 'producto', name: 'producto'},
                 {
-                    data: 'fecha_salida',
-                    name: 'fecha_salida',
-                    //render: $.fn.dataTable.render.moment('DD/MM/YYYY', 'YYYY-MM-DD')
+                    data: 'fecha_salida_recepcion_motorizado',
+                    name: 'fecha_salida_recepcion_motorizado',
                 },
                 {
                     data:'direccion',
@@ -656,29 +638,10 @@ setTimeout(function (){
                         if(data!=null)
                         {
                             return data;
-                            /*if(data=='0')
-                            {
-                              return '<span class="badge badge-danger">REGISTRE DIRECCION</span>';
-                            }else if(data=='LIMA')
-                            {
-                              var urlshow = '{{ route("pedidos.show", ":id") }}';
-                  urlshow = urlshow.replace(':id', row.id);
-
-                  return '<a href="" data-target="#modal-verdireccion" data-toggle="modal" data-dirreccion="'+row.id+'"><button class="btn btn-primary btn-sm"><i class="fas fa-eye"></i> Ver</button></a>';
-                }
-                else if(data=='PROVINCIA')
-                {
-                  return '<span class="badge badge-info">ENVIO A PROVINCIA</span>';
-                }else{
-                  return '<span class="badge badge-info">PROBLEMAS CON REGISTRO DE DESTINO</span>';
-                }
-*/
-                            //return datas;
 
                         }else{
                             return 'REGISTRE DIRECCION';
                         }
-                        //return 'REGISTRE DIRECCION';
                     },
                 },
                 {
