@@ -365,6 +365,8 @@ class MotorizadoController extends Controller
                 'pedidos.*',
                 'direccion_grupos.fecha_salida as grupo_fecha_salida',
                 'direccion_grupos.motorizado_status',
+                'direccion_grupos.motorizado_sustento_text',
+                'direccion_grupos.motorizado_sustento_foto',
             ])
             ->whereIn('direccion_grupos.motorizado_status', [Pedido::ESTADO_MOTORIZADO_OBSERVADO, Pedido::ESTADO_MOTORIZADO_NO_CONTESTO])
             //->where('direccion_grupos.estado', '1')
@@ -384,14 +386,17 @@ class MotorizadoController extends Controller
                 return Carbon::parse($pedido->grupo_fecha_salida)->format('d-m-Y h:i A');
             })
             ->addColumn('detalle', function ($pedido) {
+                $html='';
                 if ($pedido->estado = 0 || $pedido->pendiente_anulacion) {
-                    return '<div class="badge badge-danger p-2">ANULADO</div>';
+                    $html.= '<div class="badge badge-danger p-2">ANULADO</div>';
                 } else if($pedido->motorizado_status==Pedido::ESTADO_MOTORIZADO_OBSERVADO){
-                    return '<div class="badge badge-info p-2">OBSERVADO</div>';
+                    $html.= '<div class="badge badge-info p-2">OBSERVADO</div>';
+                    $html.= '<button data-toggle="jqconfirmtext" data-target="'.$pedido->motorizado_sustento_text.'" class="btn btn-light btn-sm"><i class="fa fa-envelope-open-text"></i> Ver Sustento</button>';
                 } else{
-                    return '<div class="badge badge-warning p-2">NO CONTESTA</div>';
+                    $html.= '<div class="badge badge-warning p-2">NO CONTESTA</div>';
+                    $html.= '<button data-toggle="jqconfirmfoto" data-target="'.\Storage::disk('pstorage')->url($pedido->motorizado_sustento_foto).'" class="btn btn-light btn-sm"><i class="fa fa-photo-video"></i>Ver foto</button>';
                 }
-                return  '';
+                return  $html;
             })
             ->addColumn('situacion_color', function ($pedido) {
                 if ($pedido->grupo_fecha_salida != null) {
