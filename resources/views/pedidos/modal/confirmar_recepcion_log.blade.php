@@ -3,7 +3,7 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header bg-success">
-        <h5 class="modal-title" id="exampleModalLabel">Confirmar recepción</h5>
+        <h5 class="modal-title" id="titulo_modal">Confirmar recepción</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -11,8 +11,9 @@
       <form id="formulariorecepcion" name="formulariorecepcion" enctype="multipart/form-data">
       {{-- Form::Open(['route' => ['pedidos.envio', $pedido],'enctype'=>'multipart/form-data', 'id'=>'formulario','files'=>true]) --}}
       <input type="hidden" id="hiddenEnvio" name="hiddenEnvio">
+          <input type="hidden" id="hiddenAccion" name="hiddenAccion">
       <div class="modal-body">
-        <p>Esta seguro de confirmar la recepción del Pedido <strong class="textcode"></strong></p>
+        <p id="mensaje_modal">Esta seguro de confirmar la recepción del Pedido <strong class="textcode"></strong></p>
       </div>
       {{-- <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
         {!! Form::label('destino', 'Destino') !!}

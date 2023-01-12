@@ -1268,8 +1268,12 @@ class EnvioController extends Controller
                     $btn .= '<ul class="list-unstyled pl-0">';
 
                     if ($pedido->condicion_envio_code == Pedido::ENVIO_MOTORIZADO_COURIER_INT) {
-                        $btn .= '<li>
-                        <a href="" data-target="#modal-envio" data-toggle="modal" data-recibir="' . $pedido->id . '" data-codigos="' . $pedido->codigos . '"><button class="btn btn-warning btn-sm"><i class="fas fa-check-circle"></i> Recibido</button></a>
+                        $btn .= '
+                    <li>
+                        <a href="" data-target="#modal-envio" data-toggle="modal" data-accion="recibir" data-recibir="' . $pedido->id . '" data-codigos="' . $pedido->codigos . '"><button class="btn btn-warning btn-sm"><i class="fas fa-check-circle"></i> Recibido</button></a>
+                    </li>
+                    <li>
+                        <a href="" data-target="#modal-envio" data-toggle="modal" data-accion="rechazar" data-recibir="' . $pedido->id . '" data-codigos="' . $pedido->codigos . '"><button class="btn btn-danger btn-sm mt-8"><i class="fa fa-times-circle-o" aria-hidden="true"></i>No recibido</button></a>
                     </li>';
 
                     } else if ($pedido->condicion_envio_code == Pedido::RECEPCION_MOTORIZADO_INT) {
@@ -1676,23 +1680,48 @@ class EnvioController extends Controller
 
     public function RecibirMotorizado(Request $request)
     {
-        $grupo = DireccionGrupo::query()->findOrFail($request->hiddenEnvio);
+        $accion = $request->hiddenAccion;
+        //$grupo = DireccionGrupo::query()->findOrFail($request->hiddenEnvio);
+        $grupo = DireccionGrupo::where('id',$request->hiddenEnvio);
 
-        $grupo->update([
-            'fecha_recepcion_motorizado'=>Carbon::now(),
-            'envio' => '2',
-            'modificador' => 'USER' . Auth::user()->id,
-            'condicion_envio' => Pedido::RECEPCION_MOTORIZADO,
-            'condicion_envio_code' => Pedido::RECEPCION_MOTORIZADO_INT
-        ]);
+        if($accion == "recibir"){
 
-        PedidoMovimientoEstado::create([
-            'pedido' => $request->hiddenEnvio,
-            'condicion_envio_code' => Pedido::RECEPCION_MOTORIZADO_INT,
-            'notificado' => 0
-        ]);
+            $grupo->update([
+                'fecha_recepcion_motorizado'=>Carbon::now(),
+                'envio' => '2',
+                'modificador' => 'USER' . Auth::user()->id,
+                'condicion_envio' => Pedido::RECEPCION_MOTORIZADO,
+                'condicion_envio_code' => Pedido::RECEPCION_MOTORIZADO_INT
+            ]);
 
-        return response()->json(['html' => $grupo->id]);
+            PedidoMovimientoEstado::create([
+                'pedido' => $request->hiddenEnvio,
+                'condicion_envio_code' => Pedido::RECEPCION_MOTORIZADO_INT,
+                'notificado' => 0
+            ]);
+
+            return response()->json(['html' => "Grupo recibido"]);
+
+        }else if($accion == "rechazar"){
+
+            $grupo->update([
+                'fecha_recepcion_motorizado'=>Carbon::now(),
+                /*'envio' => '2',*/
+                //'modificador' => 'USER' . Auth::user()->id,
+                'condicion_envio' => Pedido::REPARTO_COURIER,
+                'condicion_envio_code' => Pedido::REPARTO_COURIER_INT,
+                'motorizado_status' => 3
+            ]);
+
+            PedidoMovimientoEstado::create([
+                'pedido' => $request->hiddenEnvio,
+                'condicion_envio_code' => Pedido::REPARTO_COURIER_INT,
+                'notificado' => 0
+            ]);
+
+            return response()->json(['html' => "Grupo rechazado"]);
+
+        }
     }
 
     public function Recibirid(Request $request)

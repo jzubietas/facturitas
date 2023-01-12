@@ -157,6 +157,7 @@
         <tbody>
         </tbody>
       </table>
+        @include('pedidos.modal.confirmar_recepcion_log')
       @include('pedidos.modal.confirmar_recepcion_log')
       @include('envios.modal.enviarid')
       @include('pedidos.modal.recibirid')
@@ -853,10 +854,22 @@ setTimeout(function (){
         //cuando abre el form de anular pedido
         var button = $(event.relatedTarget)
         var idunico = button.data('recibir')
+
         var codigos = button.data('codigos')
+          var accion = button.data('accion')
 
         $(".textcode").html(codigos);
         $("#hiddenEnvio").val(idunico);
+          $("#hiddenAccion").val(accion);
+
+        if(accion == "recibir"){
+            $('#titulo_modal').html("Confirmar recepción");
+            $('#mensaje_modal').html("Esta seguro de confirmar la recepción del Pedido <b>" +  codigos + "</b>");
+        }else if(accion == "rechazar"){
+            $('#titulo_modal').html("Rechazar recepción");
+            $('#mensaje_modal').html("Esta seguro de rechazar el recibido el pedido <b>" +  codigos + "</b>");
+        }
+
 
       });
 
