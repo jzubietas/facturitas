@@ -21,9 +21,9 @@ class GrupoPedido extends Model
         ]);
     }
 
-    public static function createGroupByPedido(Pedido $pedido, $createAnother = false)
+    public static function createGroupByPedido(Pedido $pedido, $createAnother = false, $attach = false)
     {
-        return self::createGroupByArray([
+        $grupo = self::createGroupByArray([
             "zona" => $pedido->env_zona,
             "provincia" => $pedido->env_destino,
             'distrito' => $pedido->env_distrito,
@@ -32,6 +32,15 @@ class GrupoPedido extends Model
             'cliente_recibe' => $pedido->env_nombre_cliente_recibe,
             'telefono' => $pedido->env_celular_cliente_recibe,
         ], $createAnother);
+        if ($attach) {
+            $grupo->pedidos()->attach([
+                $pedido->id => [
+                    "codigo" => $pedido->codigo,
+                    "razon_social" => $pedido->detallePedido->nombre_empresa,
+                ]
+            ]);
+        }
+        return $grupo;
     }
 
     public static function createGroupByArray($array, $createAnother = false)
@@ -55,6 +64,6 @@ class GrupoPedido extends Model
 
     public function motorizadoHistories()
     {
-        return $this->hasMany(PedidoMotorizadoHistory::class,'pedido_grupo_id')->orderByDesc('pedido_motorizado_histories.created_at');
+        return $this->hasMany(PedidoMotorizadoHistory::class, 'pedido_grupo_id')->orderByDesc('pedido_motorizado_histories.created_at');
     }
 }
