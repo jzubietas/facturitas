@@ -147,6 +147,7 @@ class AdministracionController extends Controller
             "EPIFANIO SOLANO HUAMAN" => 'EPIFANIO SOLANO HUAMAN',
             "NIKSER DENIS ORE RIVEROS" => 'NIKSER DENIS ORE RIVEROS',
             "ALFREDO ALEJANDRO GABRIEL MONTALVO" => 'ALFREDO ALEJANDRO GABRIEL MONTALVO'
+            ,"SABINA LACHOS" => 'SABINA LACHOS'
         ];
 
         $bancos = [
@@ -322,6 +323,7 @@ class AdministracionController extends Controller
             "EPIFANIO SOLANO HUAMAN" => 'EPIFANIO SOLANO HUAMAN',
             "NIKSER DENIS ORE RIVEROS" => 'NIKSER DENIS ORE RIVEROS',
             "ALFREDO ALEJANDRO GABRIEL MONTALVO" => 'ALFREDO ALEJANDRO GABRIEL MONTALVO'
+            ,"SABINA LACHOS" => 'SABINA LACHOS'
         ];
 
         $bancos = [
@@ -487,6 +489,7 @@ class AdministracionController extends Controller
             "EPIFANIO SOLANO HUAMAN" => 'EPIFANIO SOLANO HUAMAN',
             "NIKSER DENIS ORE RIVEROS" => 'NIKSER DENIS ORE RIVEROS',
             "ALFREDO ALEJANDRO GABRIEL MONTALVO" => 'ALFREDO ALEJANDRO GABRIEL MONTALVO'
+            ,"SABINA LACHOS" => 'SABINA LACHOS'
         ];
 
         $bancos = [
