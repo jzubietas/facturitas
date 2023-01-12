@@ -281,6 +281,9 @@
         .modal-lg {
             max-width: 80%;
         }
+        .textred {
+            color: red !important;
+        }
     </style>
 @stop
 
@@ -632,14 +635,6 @@
                     {
                         data: 'condicion_envio',
                         name: 'condicion_envio',
-                        render: function (data, type, row, meta) {
-                            var badge_estado = '';
-                            if (row.estado_sobre == 1) {
-                                badge_estado += '<span class="badge badge-dark p-8" style="color: #fff; background-color: #347cc4; font-weight: 600; margin-bottom: -2px;border-radius: 4px 4px 0px 0px; font-size:8px;  padding:6px;">Direccion agregada</span>';
-                            }
-                            badge_estado += '<span class="badge badge-success" style="background-color:' + row.condicion_envio_color + ' !important;" >' + data + '</span>';
-                            return badge_estado;
-                        }
                     },
                     {
                         data: 'envio',
@@ -851,6 +846,14 @@
                     },
                 },
                 createdRow: function (row, data, dataIndex) {
+                    if (data["estado"] == "1") {
+                        if (data.pendiente_anulacion == 1) {
+                            $('td', row).css('background', 'red').css('font-weight', 'bold');
+                        }
+                    } else {
+                        $(row).addClass('textred');
+                    }
+
                 },
                 rowCallback: function (row, data, index) {
                 },
@@ -897,14 +900,6 @@
                     {
                         data: 'condicion_envio',
                         name: 'condicion_envio',
-                        render: function (data, type, row, meta) {
-                            var badge_estado = '';
-                            if (row.estado_sobre == 1) {
-                                badge_estado += '<span class="badge badge-dark p-8" style="color: #fff; background-color: #347cc4; font-weight: 600; margin-bottom: -2px;border-radius: 4px 4px 0px 0px; font-size:8px;  padding:6px;">Direccion agregada</span>';
-                            }
-                            badge_estado += '<span class="badge badge-success" style="background-color:' + row.condicion_envio_color + ' !important;" >' + data + '</span>';
-                            return badge_estado;
-                        }
                     },
                     {
                         data: 'envio',

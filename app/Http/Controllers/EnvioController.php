@@ -939,7 +939,7 @@ class EnvioController extends Controller
                 ->select([
                     'direccion_grupos.*',
                 ]);
-            
+
             $tab = ($request->tab ?: '');
             switch ($tab) {
                 case 'entregado':
@@ -2437,14 +2437,13 @@ class EnvioController extends Controller
                     }
                     if ($pedido->estado_sobre == '1') {
                         $badge_estado .= '<span class="badge badge-dark p-8" style="color: #fff; background-color: #347cc4; font-weight: 600; margin-bottom: -2px;border-radius: 4px 4px 0px 0px; font-size:8px;  padding: 4px 4px !important; font-weight: 500;">Direccion agregada</span>';
-
                     }
                     if ($pedido->estado_ruta == '1') {
                         $badge_estado .= '<span class="badge badge-success" style="background-color: #00bc8c !important;
-                    padding: 4px 8px !important;
-                    font-size: 8px;
-                    margin-bottom: -4px;
-                    color: black !important;">Con ruta</span>';
+                            padding: 4px 8px !important;
+                            font-size: 8px;
+                            margin-bottom: -4px;
+                            color: black !important;">Con ruta</span>';
                     }
                     $color = Pedido::getColorByCondicionEnvio($pedido->condicion_envio);
                     $badge_estado .= '<span class="badge badge-success" style="background-color: ' . $color . '!important;">' . $pedido->condicion_envio . '</span>';
@@ -2474,11 +2473,80 @@ class EnvioController extends Controller
                     $badge_estado .= '<span class="badge badge-success" style="background-color: ' . $color . '!important;">' . $pedido->condicion_envio . '</span>';
                     return $badge_estado;
                 })
+                ->editColumn('foto1', function ($pedido) {
+                    if ($pedido->foto1 != null) {
+                        $urlimagen1 = \Storage::disk('pstorage')->url($pedido->foto1);
+
+                        $data = '<a href="" data-target="#modal-imagen" data-toggle="modal" data-imagen="' . $pedido->foto1 . '">
+                    <img src="' . $urlimagen1 . '" alt="' . $pedido->foto1 . '" height="100px" width="100px" id="imagen_' . $pedido->id . '-1" class="img-thumbnail cover">
+                    </a>
+                    <a download href="' . $urlimagen1 . '" class="text-center"><button type="button" class="btn btn-secondary btn-md"> Descargar</button> </a>
+                    <a href="" data-target="#modal-cambiar-imagen" data-toggle="modal" data-item="1" data-imagen="' . $pedido->foto1 . '" data-pedido="' . $pedido->id . '">
+<button class="btn btn-danger btn-md">Cambiar</button></a>';
+
+                        if (Auth::user()->rol == "Asesor") {
+                            $data .= '<a href="" data-target="#modal-delete-foto1" data-toggle="modal" data-deletefoto1="' . $pedido->id . '">
+                        <button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i></button>
+                        </a>';
+                        }
+                        return $data;
+                    } else if ($pedido->condicion_envio_code == Pedido::ENTREGADO_SIN_SOBRE_OPE_INT) {
+                        return '<span class="badge badge-dark">Sin envio</span>';
+                    } else {
+                        return '';
+                    }
+                })
+                ->editColumn('foto2', function ($pedido) {
+                    if ($pedido->foto2 != null) {
+                        $urlimagen1 = \Storage::disk('pstorage')->url($pedido->foto2);
+
+                        $data = '<a href="" data-target="#modal-imagen" data-toggle="modal" data-imagen="' . $pedido->foto2 . '">
+                    <img src="' . $urlimagen1 . '" alt="' . $pedido->foto2 . '" height="100px" width="100px" id="imagen_' . $pedido->id . '-2" class="img-thumbnail cover">
+                    </a>
+                    <a download href="' . $urlimagen1 . '" class="text-center"><button type="button" class="btn btn-secondary btn-md"> Descargar</button> </a>
+                    <a href="" data-target="#modal-cambiar-imagen" data-toggle="modal" data-item="2" data-imagen="' . $pedido->foto2 . '" data-pedido="' . $pedido->id . '">
+<button class="btn btn-danger btn-md">Cambiar</button></a>';
+
+                        if (Auth::user()->rol == "Asesor") {
+                            $data .= '<a href="" data-target="#modal-delete-foto2" data-toggle="modal" data-deletefoto2="' . $pedido->id . '">
+                        <button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i></button>
+                        </a>';
+                        }
+                        return $data;
+                    } else if ($pedido->condicion_envio_code == Pedido::ENTREGADO_SIN_SOBRE_OPE_INT) {
+                        return '<span class="badge badge-dark">Sin envio</span>';
+                    } else {
+                        return '';
+                    }
+                })
+                ->editColumn('foto3', function ($pedido) {
+                    if ($pedido->foto3 != null) {
+                        $urlimagen1 = \Storage::disk('pstorage')->url($pedido->foto3);
+
+                        $data = '<a href="" data-target="#modal-imagen" data-toggle="modal" data-imagen="' . $pedido->foto3 . '">
+                    <img src="' . $urlimagen1 . '" alt="' . $pedido->foto3 . '" height="100px" width="100px" id="imagen_' . $pedido->id . '-3" class="img-thumbnail cover">
+                    </a>
+                    <a download href="' . $urlimagen1 . '" class="text-center"><button type="button" class="btn btn-secondary btn-md"> Descargar</button> </a>
+                    <a href="" data-target="#modal-cambiar-imagen" data-toggle="modal" data-item="3" data-imagen="' . $pedido->foto3 . '" data-pedido="' . $pedido->id . '">
+<button class="btn btn-danger btn-md">Cambiar</button></a>';
+
+                        if (Auth::user()->rol == "Asesor") {
+                            $data .= '<a href="" data-target="#modal-delete-foto3" data-toggle="modal" data-deletefoto3="' . $pedido->id . '">
+                        <button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i></button>
+                        </a>';
+                        }
+                        return $data;
+                    } else if ($pedido->condicion_envio_code == Pedido::ENTREGADO_SIN_SOBRE_OPE_INT) {
+                        return '<span class="badge badge-dark">Sin envio</span>';
+                    } else {
+                        return '';
+                    }
+                })
                 ->addColumn('action', function ($pedido) {
                     $btn = [];
                     return join('', $btn);
                 })
-                ->rawColumns([ 'action','condicion_envio'])
+                ->rawColumns([ 'foto1','foto2','foto3','action','condicion_envio'])
                 ->make(true);
         }
 
