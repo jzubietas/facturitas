@@ -69,7 +69,7 @@
                     <th scope="col">Item</th>
                     <th scope="col">Código</th>
                     <th scope="col">Distrito</th>
-                    <th scope="col">Asesor</th>
+                    <!--<th scope="col">Asesor</th>-->
                     <th scope="col">Cliente</th>
                     <th scope="col">Fecha de Salida</th>
                     <th scope="col">Fecha de Entrega</th>
@@ -166,7 +166,7 @@
                 },
                 "drawCallback": function(settings) {
                     console.log(settings.json);
-                    $("#tablaPrincipal").DataTable().columns().header()[12].innerText = $('a[data-toggle="tab"].active').data('action-name')
+                    $("#tablaPrincipal").DataTable().columns().header()[11].innerText = $('a[data-toggle="tab"].active').data('action-name')
                 },
                 rowCallback: function (row, data, index) {
 
@@ -639,7 +639,7 @@ Enviar</button>
                         },
                     },
                     {data: 'distrito', name: 'distrito',},
-                    {data: 'identificador', name: 'identificador',},
+                    //{data: 'identificador', name: 'identificador',},
                     {
                         data: 'celular',
                         name: 'celular',
