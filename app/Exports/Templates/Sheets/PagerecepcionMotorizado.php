@@ -26,7 +26,7 @@ Sheet::macro('styleCells', function (Sheet $sheet, string $cellRange, array $sty
     $sheet->getDelegate()->getStyle($cellRange)->applyFromArray($style);
 });
 
-class PagemotorizadoConfirmar extends Export implements WithColumnFormatting, FromCollection, WithHeadings, ShouldAutoSize, WithEvents
+class PagerecepcionMotorizado extends Export implements WithColumnFormatting, FromCollection, WithHeadings, ShouldAutoSize, WithEvents
 {
     public int $user_motorizado_h=0;
     public string $fecha_envio_h='';
@@ -66,7 +66,7 @@ class PagemotorizadoConfirmar extends Export implements WithColumnFormatting, Fr
     public function title(): string
     {
         //return parent::title();//Por defecto se toma del nombre de la clase de php, en este caso seria "Pagina One" de titulo
-        return 'Motorizado Confirmar'.$this->user_motorizado_h.' '.$this->fecha_envio_h;;
+        return 'Recepcion Motorizado '.$this->user_motorizado_h.' '.$this->fecha_envio_h;
     }
 
     public function columnWidths(): array
