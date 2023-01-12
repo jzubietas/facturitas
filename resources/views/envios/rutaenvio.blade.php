@@ -3,24 +3,7 @@
 @section('title', 'Rutas de Envio')
 
 @section('content_header')
-    <h1>Rutas de envio - ENVIOS
 
-        <div class="float-right btn-group dropleft">
-
-            <?php if (Auth::user()->rol == 'Administrador' || Auth::user()->rol == 'Logística'){ ?>
-            <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
-                    aria-expanded="false">
-                Exportar
-            </button>
-            <?php } ?>
-
-
-            <div class="dropdown-menu">
-                <a href="" data-target="#modal-exportar" data-toggle="modal" class="dropdown-item" target="blank_"><img
-                        src="{{ asset('imagenes/icon-excel.png') }}"> Excel</a>
-
-            </div>
-        </div>
         @include('envios.modal.exportar', ['title' => 'Exportar RUTAS DE ENVIAR', 'key' => '1'])
     </h1>
     @if($superasesor > 0)
@@ -108,7 +91,7 @@
                                     </ul>
 
                                     <table id="tablaPrincipal{{Str::upper($motorizado->zona)}}"
-                                           class="table table-striped dt-responsive w-100">
+                                           class="tabla-data table table-striped dt-responsive w-100">
                                         <thead>
                                         <tr>
                                             <!--<th scope="col">Item</th>-->
@@ -199,7 +182,8 @@
                 var fecha_formateada = fecha_format[2] + "/" + fecha_format[1] + "/" + fecha_format[0];
                 $(this).data('fecha', fecha_formateada);
                 console.log(fecha_formateada);
-                $('#tablaPrincipal').DataTable().ajax.reload();
+                $('.tabla-data').DataTable().ajax.reload();
+
             });
 
             const configDataTableZonas = {
