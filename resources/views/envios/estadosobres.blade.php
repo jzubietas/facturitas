@@ -47,11 +47,11 @@
         @endforeach
     </div>
     <style>
-        .activo{
+        /*.activo{
             background-color: #e74c3c !important;
             color: white !important;
             border: 0 !important;
-        }
+        }*/
     </style>
 
     <div class="card">
@@ -615,7 +615,7 @@
                     {data: 'dias', name: 'dias',},
 
                     {data: 'fecha_envio_doc', name: 'fecha_envio_doc', "visible": false},
-                    {data: 'fecha_envio_doc_fis', name: 'fecha_envio_doc_fis',},
+                    {data: 'fecha_recepcion_courier_anulado', name: 'fecha_recepcion_courier_anulado',},
                     {data: 'fecha_recepcion', name: 'fecha_recepcion', "visible": false},
                     {data: 'destino', name: 'destino', "visible": false},
                     {
@@ -685,7 +685,7 @@
                     "thousands": ",",
                     "lengthMenu": "Mostrar _MENU_ Entradas",
                     "loadingRecords": "Cargando...",
-                    "processing": "Procesando...",
+                    "processing": '<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i><span class="sr-only">Cargando...</span> ',
                     "search": "Buscar:",
                     "zeroRecords": "Sin resultados encontrados",
                     "paginate": {
@@ -701,8 +701,8 @@
                     alert( oSettings.fnRecordsDisplay() );
                     alert( oSettings.fnDisplayEnd() );*/
                     //condicion-tabla
-                    $('.condicion-tabla').removeClass("active");
-                    $('#received-tab').addClass("active");
+                    //$('.condicion-tabla').removeClass("active");
+                    //$('#received-tab').addClass("active");
 
                     /*let a1=tablaRecepcionados.fnSettings().fnRecordsDisplay();
                     let a2=tablaEntregados.fnSettings().fnRecordsDisplay();
@@ -825,7 +825,7 @@
                     "thousands": ",",
                     "lengthMenu": "Mostrar _MENU_ Entradas",
                     "loadingRecords": "Cargando...",
-                    "processing": "Procesando...",
+                    "processing": '<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i><span class="sr-only">Cargando...</span> ',
                     "search": "Buscar:",
                     "zeroRecords": "Sin resultados encontrados",
                     "paginate": {
@@ -840,8 +840,8 @@
                     /*alert( oSettings.fnRecordsTotal() );
                     alert( oSettings.fnRecordsDisplay() );
                     alert( oSettings.fnDisplayEnd() );*/
-                    $('.condicion-tabla').removeClass("active");
-                    $('#delivered-tab').addClass("active");
+                    //$('.condicion-tabla').removeClass("active");
+                    //$('#delivered-tab').addClass("active");
 
                     /*let a1=tablaRecepcionados.fnSettings().fnRecordsDisplay();
                     let a2=tablaEntregados.fnSettings().fnRecordsDisplay();
@@ -902,7 +902,7 @@
                     {data: 'dias', name: 'dias',},
 
                     {data: 'fecha_envio_doc', name: 'fecha_envio_doc', "visible": false},
-                    {data: 'fecha_envio_doc_fis', name: 'fecha_envio_doc_fis',},
+                    {data: 'fecha_recepcion_courier_anulado', name: 'fecha_recepcion_courier_anulado',},
                     {data: 'fecha_recepcion', name: 'fecha_recepcion', "visible": false},
                     {data: 'destino', name: 'destino', "visible": false},
                     {
@@ -972,7 +972,7 @@
                     "thousands": ",",
                     "lengthMenu": "Mostrar _MENU_ Entradas",
                     "loadingRecords": "Cargando...",
-                    "processing": "Procesando...",
+                    "processing": '<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i><span class="sr-only">Cargando...</span> ',
                     "search": "Buscar:",
                     "zeroRecords": "Sin resultados encontrados",
                     "paginate": {
@@ -987,16 +987,25 @@
                     /*alert( oSettings.fnRecordsTotal() );
                     alert( oSettings.fnRecordsDisplay() );
                     alert( oSettings.fnDisplayEnd() );*/
-                    $('.condicion-tabla').removeClass("active");
-                    $('#annulled-tabs').addClass("active");
+                    //$('.condicion-tabla').removeClass("active");
+                    //$('#annulled-tabs').addClass("active");
 
-                    /*let a1=tablaRecepcionados.fnSettings().fnRecordsDisplay();
-                    let a2=tablaEntregados.fnSettings().fnRecordsDisplay();
-                    let a3=tablaAnulados.fnSettings().fnRecordsDisplay();
+                    //$('.condicion-tabla').removeClass("active");
 
-                    if(a1>0 && a2>0 && a3>0){
-                        $('#annulled-tabs').addClass("active");
-                    }*/
+                    let a1=$('#tablaRecepcionados').dataTable().fnSettings().fnRecordsDisplay();
+                    let a2=$('#tablaEntregados').dataTable().fnSettings().fnRecordsDisplay();
+                    let a3=this.fnSettings().fnRecordsDisplay();
+
+                    if(a1>0){
+                        $('#myTab a[href="#received"]').tab('show')
+                        //$('#received-tab').addClass("active").tab('show');
+                    }else if(a2>0){
+                        $('#myTab a[href="#delivered"]').tab('show')
+                        //$('#delivered-tab').addClass("active").tab('show');
+                    }else if(a3>0){
+                        $('#myTab a[href="#annulled"]').tab('show')
+                        //$('#annulled-tab').addClass("active").tab('show');
+                    }
 
                 }
             });

@@ -219,8 +219,6 @@ class EnvioController extends Controller
 
     public function Enviossindirecciontabla(Request $request)
     {
-        $pedidos = null;
-
         $pedidos = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')
             ->join('users as u', 'pedidos.user_id', 'u.id')
             ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
@@ -232,7 +230,6 @@ class EnvioController extends Controller
                     'c.celular',
                     'u.identificador',
                     'dp.nombre_empresa as empresas',
-                    //'pedidos.updated_at as fecha_recepcion_sobre'
                 ]
             )->where('condicion_envio_code', Pedido::RECEPCION_COURIER_INT)
             ->where('estado_sobre', '0');
@@ -1650,6 +1647,7 @@ class EnvioController extends Controller
         $pedido = Pedido::with(['detallePedido'])->where("id", $request->hiddenEnvio)->first();
 
         $pedido->update([
+            'fecha_recepcion_courier'=>Carbon::now(),
             'modificador' => 'USER' . Auth::user()->id,
             'condicion_envio' => Pedido::RECEPCION_COURIER,
             'condicion_envio_code' => Pedido::RECEPCION_COURIER_INT,
@@ -2395,12 +2393,13 @@ class EnvioController extends Controller
                     'dp.envio_doc',
                     'dp.fecha_envio_doc',
                     'dp.cant_compro',
-                    //DB::raw('  as fecha_envio_doc_fis')
-                    'dp.fecha_envio_doc_fis as fecha_envio_doc_fis',
+                    DB::raw(" (CASE WHEN pedidos.condicion='ANULADO' THEN pedidos.updated_at
+                                    else pedidos.fecha_recepcion_courier end) as fecha_recepcion_courier_anulado "),
                     'dp.foto1',
                     'dp.foto2',
                     'dp.fecha_recepcion',
-                    DB::raw("DATEDIFF(DATE(NOW()), DATE(pedidos.created_at)) AS dias")
+                    DB::raw(" (CASE WHEN pedidos.condicion='ANULADO' THEN DATEDIFF(DATE(NOW()), DATE(pedidos.updated_at))
+                                    else DATEDIFF(DATE(NOW()), DATE(pedidos.fecha_recepcion_courier)) end) as dias "),
                 ]);
             if($opcion=='recepcionado')
             {
