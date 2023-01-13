@@ -504,7 +504,6 @@ class MotorizadoController extends Controller
 
     public function Enviosrecepcionmotorizado()
     {
-
         $motorizados = User::select([
             'id',
             'zona',

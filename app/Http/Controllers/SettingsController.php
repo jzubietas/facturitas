@@ -99,5 +99,6 @@ class SettingsController extends Controller
     public function authorizationMotorizado(Request $request, User $user)
     {
         DireccionGrupo::clearNoRecibidoAuthorization($user->id);
+        return $user->id;
     }
 }
