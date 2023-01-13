@@ -94,7 +94,7 @@
 
         <div class="small-box bg-secondary">
             <div class="inner">
-                <h5> PEDIDOS CREADOS {{  \Carbon\Carbon::now()->format('d-m-Y') }}</h5>
+                <h5> PEDIDOS CREADOS {{  \Carbon\Carbon::now()->format('d-m-Y') }}  <span class="badge badge-light">{{$_pedidos_totalpedidosdia}}</span></h5>
             </div>
             <div class="row">
                 @foreach ($_pedidos as $pedido)
