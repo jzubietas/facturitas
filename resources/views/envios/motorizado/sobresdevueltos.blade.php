@@ -65,7 +65,7 @@
             <div class="container-full">
                 <div class="row">
                     @foreach($motorizados as $motorizado)
-                        <div class="col-lg-6 container-{{Str::slug($motorizado->zona)}}">
+                        <div class="col-lg-4 container-{{Str::slug($motorizado->zona)}}">
                             <div class="table-responsive">
                                 <div class="card card-{{$color_zones[Str::upper($motorizado->zona)]??'info'}}">
                                     <div class="card-header">
@@ -88,6 +88,7 @@
                                                     <th scope="col">Razón social</th>
                                                     <th scope="col">Fecha Ruta</th>
                                                     <th scope="col">Detalle</th>
+                                                    <th scope="col">Ver</th>
                                                     <th scope="col">Acciones</th>
                                                 </tr>
                                                 </thead>
@@ -287,6 +288,12 @@
                     {
                         data: 'detalle',
                         name: 'detalle',
+                        orderable: false,
+                        searchable: false,
+                    },
+                    {
+                        data: 'Ver',
+                        name: 'Ver',
                         orderable: false,
                         searchable: false,
                     },
