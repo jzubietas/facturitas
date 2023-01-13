@@ -151,6 +151,16 @@
             transition: all 0.5s ease;
             text-shadow: 10px 2px #6ac7c2;
         }
+
+        .darkblue {
+            color: #021691 !important;
+        }
+        .red {
+            color: red !important;
+        }
+        .green {
+            color: green !important;
+        }
     </style>
 @stop
 
@@ -469,21 +479,36 @@
                     },
                 },
                 createdRow: function (row, data, dataIndex) {
+                    if(data["estado"]=='1')
+                    {
+                        if(data["destino2"]=='PROVINCIA')
+                        {
+                            $(row).addClass('green');
+                        }else if(data["destino2"]=='LIMA')
+                        {
+                            if(data["distribucion"]=='OLVA')
+                            {
+                                $(row).addClass('darkblue');
+                            }else if(data["distribucion"]=='LIMA')
+                            {
+                                //$(row).addClass('darkblue');
+                            }
+                        }
+                    }else if(data["estado"]==0){
+                        $(row).addClass('red');
+                    }
                 },
                 rowCallback: function (row, data, index) {
-                    if (data.destino2 == 'PROVINCIA') {
+                    /*if (data.destino2 == 'PROVINCIA') {
                         $('td', row).css('color', 'red')
                     } else if (data.destino2 == 'LIMA') {
                         if (data.distribucion != null) {
                             if (data.distribucion == 'NORTE') {
-                                //$('td', row).css('color','blue')
                             } else if (data.distribucion == 'CENTRO') {
-                                //$('td', row).css('color','yellow')
                             } else if (data.distribucion == 'SUR') {
-                                //$('td', row).css('color','green')
                             }
                         }
-                    }
+                    }*/
                 },
                 columns: [
                     {
