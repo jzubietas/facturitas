@@ -193,7 +193,7 @@
                                                 <div class="row d-none">
                                     @endif
 
-                <div class="row">
+
                     @foreach($motorizados as $motorizado)
                         <div class="col-lg-4 container-{{Str::slug($motorizado->zona)}}">
                             <div class="table-responsive">
