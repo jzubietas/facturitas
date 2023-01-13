@@ -75,6 +75,7 @@ if (!function_exists("get_color_role")) {
             'Asistente de Pagos' => ['#28a745', '#fff'],
 
             'Logística' => '#795548',
+            'Jefe de courier' => '#795548',
             'Operario' => '#03a9f4',
             'FORMACIÓN' => '#20c997',
             'PRACTICANTE' => '#9e9e9e',
