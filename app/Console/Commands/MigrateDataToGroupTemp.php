@@ -66,12 +66,10 @@ class MigrateDataToGroupTemp extends Command
              */
             $first = \Arr::first($pedidos);
             $grupoPedido = GrupoPedido::createGroupByPedido($first);
-            $grupoPedido->pedidos()->sync(collect($pedidos)->mapWithKeys(function ($p){
-                return [$p->id=>[
-                    'razon_social'=>$p->nombre_empresa,
-                    'codigo'=>$p->codigo,
-                ]];
-            })->all());
+            $grupoPedido->pedidos()->sync(collect($pedidos)->mapWithKeys(fn($p) => [$p->id=>[
+                'razon_social'=>$p->nombre_empresa,
+                'codigo'=>$p->codigo,
+            ]])->all());
         }
         return 0;
     }
