@@ -249,7 +249,6 @@ class UserController extends Controller
 
     public function Asesorcombo(Request $request)
     {
-
         $mirol = Auth::user()->rol;
         $users = null;
         $users = User::where('estado', '1')->where("rol", "Asesor");
@@ -269,8 +268,10 @@ class UserController extends Controller
             //$users = $usersB->union($users);
 
         } else {
-            $usersB = User::where("rol", "Administrador");
+
+            $usersB = User::whereIn("rol", ["Administrador","ASESOR ADMINISTRATIVO"]);
             $users = $usersB->union($users);
+
         }
 
 
@@ -323,7 +324,7 @@ class UserController extends Controller
         } else if ($mirol == 'ASESOR ADMINISTRATIVO') {
             $users = User::where("rol", "ASESOR ADMINISTRATIVO");
         }else{
-            $usersB = User::where("rol", "Administrador");
+            $usersB = User::whereIn("rol", ["Administrador","ASESOR ADMINISTRATIVO"]);
             $users = $usersB->union($users);
         }
         $users = $users->orderBy('exidentificador', 'ASC')->get();

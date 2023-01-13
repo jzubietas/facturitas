@@ -442,13 +442,14 @@
         let tablaEntregados=null;
         let tablaAnulados=null;
         let tablaAnulados_courier=null;
+        let timeout;
         $(document).ready(function () {
 
             $('#modal-imagen').on('show.bs.modal', function (event) {
                 var button = $(event.relatedTarget)
                 var idunico = button.data('imagen');
                 var urlimage = '{{ asset(":id") }}';
-                urlimage = urlimage.replace(':id', idunico);
+                urlimage = urlimage.replace(':id', 'storage/'+idunico);
                 $("#modal-imagen .img-thumbnail").attr("src", urlimage);
             });
 
@@ -618,6 +619,7 @@
 
             function applySearch(e) {
                 console.log(e)
+                console.log("vacio");
                 let valor=$("#buscador_global").val();
                 valor=(valor||'').trim()
                 tablaRecepcionados.search( valor ).draw();
@@ -631,8 +633,7 @@
                 setTimeout(applySearch,100)
             });
             $('#buscador_global').change(applySearch);
-
-
+            $('#buscador_global').keydown(applySearch);
 
             /********************
              * TABLA SOBRES RECIBIDOS
