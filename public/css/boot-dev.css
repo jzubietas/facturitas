@@ -20,6 +20,10 @@ body{
     transform-origin: bottom left;
 }
 
+d-none{
+    display: none !important;
+}
+
 #santa_navidad{
     position: absolute;
     right: 0;

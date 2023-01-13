@@ -261,7 +261,7 @@
                         </div>
                     @endforeach
                 </div>
-            
+
             @include('pedidos.modal.confirmar_recepcion_log')
             @include('envios.modal.enviarid')
             @include('pedidos.modal.recibirid')
