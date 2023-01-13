@@ -229,6 +229,7 @@
 
                 },
                 rowCallback: function (row, data, index) {
+                    var table=this.api()
                     $('td',row).css('background',data.situacion_color);
                     $('[data-toggle=jqconfirm]', row).click(function () {
                         const action = $(this).data('target')
@@ -247,6 +248,7 @@
                                         })
                                             .always(function () {
                                                 self.hideLoading(true)
+                                                table.draw(false)
                                             })
                                     }
                                 },
