@@ -251,7 +251,7 @@ class PedidoController extends Controller
                 }
                 if ($pedido->motorizado_status == Pedido::ESTADO_MOTORIZADO_OBSERVADO) {
                     $badge_estado .= '<span class="badge badge-dark p-8" style="color: #fff; background-color: #cd11af; font-weight: 600; margin-bottom: -2px;border-radius: 4px 4px 0px 0px; font-size:8px;  padding: 4px 4px !important; ">Observado</span>';
-                }elseif ($pedido->motorizado_status == Pedido::ESTADO_MOTORIZADO_NO_CONTESTO) {
+                } elseif ($pedido->motorizado_status == Pedido::ESTADO_MOTORIZADO_NO_CONTESTO) {
                     $badge_estado .= '<span class="badge badge-dark p-8" style="color: #fff; background-color: #ff0014; font-weight: 600; margin-bottom: -2px;border-radius: 4px 4px 0px 0px; font-size:8px;  padding: 4px 4px !important;">No Contesto</span>';
                 }
                 if ($pedido->estado_sobre == '1') {
@@ -1713,37 +1713,48 @@ class PedidoController extends Controller
         /************
          * BUSCAMOS EL PEDIDO
          */
-        $pedido = Pedido::where('id',$request->hiddenID);
+        $pedido = Pedido::findOrFail($request->hiddenID);
         /************
          * BUSCAMOS EL GRUPO O PAQUETE DEL PEDIDO
          */
-        $grupo_pedido = DireccionGrupo::where('id', $pedido->direccion_grupo);
+        $grupo_pedido = $pedido->direcciongrupo;
 
 
         if (!$request->hiddenID) {
             $html = '';
         } else {
-            Pedido::find($request->hiddenID)->update([
-                'condicion' => Pedido::POR_ATENDER,
-                'condicion_code' => Pedido::POR_ATENDER_INT,
-                'modificador' => 'USER' . Auth::user()->id,
-                'estado' => '1',
-                'pendiente_anulacion' => '0'
-            ]);
-            $detalle_pedidos = DetallePedido::where('pedido_id', $request->hiddenID)->first();
-
-            $detalle_pedidos->update([
+            $pedido->detallePedido()->update([
                 'estado' => '1',
             ]);
+            if ($grupo_pedido != null) {
 
-            $grupo_pedido->update([
-                'motorizado_status'=> '0',
-            ]);
+                $pedido->update([
+                    'condicion' => Pedido::POR_ATENDER,
+                    'condicion_code' => Pedido::POR_ATENDER_INT,
+                    'condicion_envio' => Pedido::RECEPCION_COURIER,
+                    'condicion_envio_code' => Pedido::RECEPCION_COURIER_INT,
+                    'modificador' => 'USER' . Auth::user()->id,
+                    'estado' => '1',
+                    'pendiente_anulacion' => '0'
+                ]);
+                if ($pedido->estado_sobre == 1) {
+                    GrupoPedido::createGroupByPedido($pedido, false, true);
+                }
+                $grupo_pedido->update([
+                    'motorizado_status' => '0',
+                    'estado' => '0',
+                ]);
+            } else {
+                $pedido->update([
+                    'condicion' => Pedido::POR_ATENDER,
+                    'condicion_code' => Pedido::POR_ATENDER_INT,
+                    'modificador' => 'USER' . Auth::user()->id,
+                    'estado' => '1',
+                    'pendiente_anulacion' => '0'
+                ]);
+            }
 
-            $html = $detalle_pedidos;
-
-
-
+            $html = '1';
         }
 
         return response()->json(['html' => $html]);

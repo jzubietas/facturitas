@@ -114,11 +114,11 @@
                 <tbody class="w-100">
                 <tr class="w-100">
                     <td>Fecha</td>
-                    <td><input type="date" value="{{$fecha_consulta}}" id="fecha_consulta" name="fecha_consulta"
-                               class="form-control" autocomplete="off"></td>
+                    <td>
+                        <input type="date" value="{{$fecha_consulta}}" id="fecha_consulta" name="fecha_consulta"
+                               class="form-control" autocomplete="off">
+                    </td>
                     <td></td>
-
-
                 </tr>
                 </tbody>
             </table>
@@ -238,8 +238,6 @@
                         </div>
                     </div>
                 @endforeach
-
-
             </div>
 
             @include('pedidos.modal.confirmar_recepcion_log')
@@ -469,6 +467,7 @@
             text-shadow: 10px 2px #6ac7c2;
         }
     </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
 @stop
 
 @section('js')
@@ -480,6 +479,7 @@
 
     <script src="https://momentjs.com/downloads/moment.js"></script>
     <script src="https://cdn.datatables.net/plug-ins/1.11.4/dataRender/datetime.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
 
     <script type="text/javascript" src="{{asset('js/jsqrscanner.nocache.js')}}"></script>
 
@@ -769,7 +769,7 @@
                 ajax: {
                     url: "{{ route('envios.recepcionmotorizadotabla') }}",
                     data: function (d) {
-                        d.fechaconsulta = $("#fecha_consulta").data("fecha");
+                        d.fechaconsulta = $("#fecha_consulta").val();
                         d.consulta = "paquete";
                         d.condicion = $('.condicion-tabla.activo').data("url");
                     }
@@ -778,6 +778,43 @@
                     //console.log(row);
                 },
                 rowCallback: function (row, data, index) {
+                    $("[data-toggle=jqconfirm]",row).click(function () {
+                        const action=$(this).data('target')
+                        const actionPost=$(this).data('target-post')
+                        const count=$(this).data('count')
+                        $.confirm({
+                            title:'Confirmar no recibido',
+                            type:'red',
+                            content:function (){
+                                const self=this
+                                if(count=='1'){
+                                    return `<p>Esta seguro de confirmar la recepción del Pedido <strong class="textcode">${data.codigos}</strong></p>`
+                                }else {
+                                    self.showLoading(true)
+                                    return $.get(action).done(function (data) {
+                                        self.setContent(``)
+                                    }).always(function () {
+                                        self.hideLoading(true)
+                                    })
+                                }
+                            },
+                            buttons:{
+                                no_recibido:{
+                                    text:'No recibido',
+                                    btnClass:'btn-red',
+                                    action:function () {
+                                        const self=this
+                                        self.showLoading(true)
+                                        $.post(actionPost).always(function () {
+                                            self.hideLoading(true)
+                                            $('#tablaPrincipal').DataTable().draw(false)
+                                        })
+                                    }
+                                },
+                                cancelar:{}
+                            }
+                        })
+                    })
                 },
                 columns: [
                     {data: 'correlativo', name: 'correlativo'},
