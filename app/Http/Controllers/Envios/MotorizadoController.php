@@ -381,9 +381,9 @@ class MotorizadoController extends Controller
         return datatables()->query(DB::table($pedidos_observados))
             ->editColumn('codigo', function ($pedido) {
                 if ($pedido->estado = 0 || $pedido->pendiente_anulacion) {
-                    return '<div class="badge badge-danger p-2">' . $pedido->codigo . '</div>';
+                    return '<div class="p-2">' . $pedido->codigo . '</div>';
                 } else {
-                    return '<div class="badge badge-light p-2">' . $pedido->codigo . '</div>';
+                    return '<div class="p-2">' . $pedido->codigo . '</div>';
                 }
             })
             ->editColumn('grupo_fecha_salida', function ($pedido) {
@@ -392,16 +392,29 @@ class MotorizadoController extends Controller
             ->addColumn('detalle', function ($pedido) {
                 $html = '';
                 if ($pedido->estado = 0 || $pedido->pendiente_anulacion) {
-                    $html .= '<div class="badge badge-danger p-2">ANULADO</div>';
+                    $html .= '<div class="p-2">ANULADO</div>';
                 } else if ($pedido->motorizado_status == Pedido::ESTADO_MOTORIZADO_OBSERVADO) {
-                    $html .= '<div class="badge badge-info p-2">OBSERVADO</div>';
-                    $html .= '<button data-toggle="jqconfirmtext" data-target="' . $pedido->motorizado_sustento_text . '" class="btn btn-light btn-sm"><i class="fa fa-envelope-open-text"></i> Ver Sustento</button>';
+                    $html .= '<div class="p-2">OBSERVADO</div>';
+                    //$html .= '<button data-toggle="jqconfirmtext" data-target="' . $pedido->motorizado_sustento_text . '" class="btn btn-light btn-sm"><i class="fa fa-envelope-open-text"></i> Ver Sustento</button>';
                 } else {
-                    $html .= '<div class="badge badge-warning p-2">NO CONTESTA</div>';
-                    $html .= '<button data-toggle="jqconfirmfoto" data-target="' . \Storage::disk('pstorage')->url($pedido->motorizado_sustento_foto) . '" class="btn btn-light btn-sm"><i class="fa fa-photo-video"></i>Ver foto</button>';
+                    $html .= '<div class="p-2">NO CONTESTA</div>';
+                    //$html .= '<button data-toggle="jqconfirmfoto" data-target="' . \Storage::disk('pstorage')->url($pedido->motorizado_sustento_foto) . '" class="btn btn-light btn-sm"><i class="fa fa-photo-video"></i>Ver foto</button>';
                 }
                 return $html;
             })
+
+            ->addColumn('Ver', function ($pedido) {
+                $html = '';
+                if ($pedido->estado = 0 || $pedido->pendiente_anulacion) {
+                    $html .= '';
+                } else if ($pedido->motorizado_status == Pedido::ESTADO_MOTORIZADO_OBSERVADO) {
+                    $html .= '<button data-toggle="jqconfirmtext" data-target="' . $pedido->motorizado_sustento_text . '" class="btn btn-light btn-sm font-12"><i class="fa fa-envelope-open-text"></i> Ver Sustento</button>';
+                } else {
+                    $html .= '<button data-toggle="jqconfirmfoto" data-target="' . \Storage::disk('pstorage')->url($pedido->motorizado_sustento_foto) . '" class="btn btn-light btn-sm font-12"><i class="fa fa-photo-video"></i>Ver foto</button>';
+                }
+                return $html;
+            })
+
             ->addColumn('situacion_color', function ($pedido) {
                 if ($pedido->grupo_fecha_salida != null) {
                     $fecha_salida = Carbon::parse($pedido->grupo_fecha_salida)->startOfDay();
@@ -441,7 +454,7 @@ class MotorizadoController extends Controller
 
                 return $btn;
             })
-            ->rawColumns(['action', 'codigo', 'detalle'])
+            ->rawColumns(['action', 'codigo', 'detalle', 'Ver'])
             ->make(true);
     }
 
