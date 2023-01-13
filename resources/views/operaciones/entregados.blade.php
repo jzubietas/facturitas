@@ -498,21 +498,21 @@
 
               if(row.condicion_envio_code==5)
               {
-                  data = data+'<a href="" data-target="#modal-envio-op" data-group="1" class="btn-sm dropdown-item" data-envio='+row.id+' data-code="'+ row.codigos +'" data-toggle="modal" ><i class="fa fa-envelope text-success" aria-hidden="true"></i> Confirmar</a>';
-                data = data+'<p data-target="#" class="btn-sm pl-16 text-gray mb-0" data-envio='+row.id+' data-code="'+ row.codigos +'" data-toggle="" disabled><i class="fa fa-envelope text-gray" aria-hidden="true"></i> ENVIO A COURIER</p>';
+                  data = data+'<a href="" data-target="#modal-envio-op" data-group="1" class="btn-sm dropdown-item" data-envio='+row.id+' data-code="'+ row.codigos +'" data-toggle="modal" ><i class="fa fa-envelope text-success" aria-hidden="true"></i> Recepcion</a>';
+                data = data+'<p data-target="#" class="btn-sm pl-16 text-gray mb-0" data-envio='+row.id+' data-code="'+ row.codigos +'" data-toggle="" disabled><i class="fa fa fa-motorcycle text-gray" aria-hidden="true"></i> ENVIO A COURIER</p>';
                 data = data+'<a href="" data-target="#modal-revertir" class="btn-sm dropdown-item" data-revertir='+row.id+'  data-codigo='+row.codigo+' data-toggle="modal" ><i class="fa fa-times text-danger" aria-hidden="true"></i> Revertir</a>';
               }
 
                 if(row.condicion_envio_code==6)
                 {
-                    data = data+'<p data-target="text-gray" class="btn-sm pl-16 mb-0" data-envio='+row.id+' data-code="'+ row.codigos +'" data-toggle="" disabled><i class="fa fa-envelope text-gray " aria-hidden="true"></i> Confirmar</p>';
-                    data = data+'<a href="" data-target="#modal-envio-op" data-group="2" class="btn-sm dropdown-item " data-envio='+row.id+' data-code="'+ row.codigos +'" data-toggle="modal" ><i class="fa fa-envelope text-success" aria-hidden="true"></i> ENVIO A COURIER</a>';
+                    data = data+'<p data-target="text-gray" class="btn-sm pl-16 mb-0" data-envio='+row.id+' data-code="'+ row.codigos +'" data-toggle="" disabled><i class="fa fa-envelope text-gray " aria-hidden="true"></i> Recepcion</p>';
+                    data = data+'<a href="" data-target="#modal-envio-op" data-group="2" class="btn-sm dropdown-item " data-envio='+row.id+' data-code="'+ row.codigos +'" data-toggle="modal" ><i class="fa fa fa-motorcycle text-success" aria-hidden="true"></i> ENVIO A COURIER</a>';
                     data = data+'<a href="" data-target="#modal-revertir" class="btn-sm dropdown-item" data-revertir='+row.id+'  data-codigo='+row.codigo+' data-toggle="modal" ><i class="fa fa-times text-danger" aria-hidden="true"></i> Revertir</a>';
                 }
 
               if(row.condicion_envio_code == 13)
               {
-                  data = data+'<a href="" class="btn-sm dropdown-item" data-target="#modal-envio" data-code="'+ row.codigos +'" data-envio='+row.id+' data-toggle="modal" ><i class="fa fa-check text-success" aria-hidden="true"></i> Confirmar</a>';
+                  data = data+'<a href="" class="btn-sm dropdown-item" data-target="#modal-envio" data-code="'+ row.codigos +'" data-envio='+row.id+' data-toggle="modal" ><i class="fa fa-check text-success" aria-hidden="true"></i> Recepcion</a>';
                   data = data+'<a href="" data-target="#modal-revertir" class="btn-sm dropdown-item" data-revertir='+row.id+' data-codigo='+row.codigo+' data-toggle="modal" ><i class="fa fa-times text-danger" aria-hidden="true"></i> Revertir</a>';
               }
 
