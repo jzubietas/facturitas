@@ -458,10 +458,17 @@ class MotorizadoController extends Controller
 
     public function devueltos_recibir(Request $request, Pedido $pedido)
     {
+        /*********
+         * IDENTIFICAMOS AL GRUPO
+         */
         $grupo = $pedido->direcciongrupo;
-
+        /*************
+         * RECUPERAMOS LA RAZON SOCIAL
+         */
         $detalle = $pedido->detallePedidos()->first();
-
+        /**************
+         * CREAMOS EL GRUPO TEMPORAL
+         */
         $pgroup = GrupoPedido::createGroupByPedido($pedido);
         $pgroup->pedidos()->syncWithoutDetaching([
             $pedido->id => [
@@ -469,6 +476,7 @@ class MotorizadoController extends Controller
                 'razon_social' => $detalle->nombre_empresa,
             ]
         ]);
+
         if ($grupo != null) {
             if ($grupo->pedidos()->activo()->count() <= 1) {
                 $grupo->update([
