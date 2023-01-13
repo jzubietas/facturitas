@@ -187,7 +187,7 @@
             @if(in_array(auth()->user()->rol,[\App\Models\User::ROL_JEFE_COURIER,\App\Models\User::ROL_ADMIN]))
                                         <div class="row">
                                     @else
-                                                <div class="row d-none>
+                                                <div class="row d-none">
                                     @endif
 
                 <div class="row">
