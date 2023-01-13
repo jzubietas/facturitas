@@ -449,7 +449,7 @@
                 var button = $(event.relatedTarget)
                 var idunico = button.data('imagen');
                 var urlimage = '{{ asset(":id") }}';
-                urlimage = urlimage.replace(':id', idunico);
+                urlimage = urlimage.replace(':id', 'storage/'+idunico);
                 $("#modal-imagen .img-thumbnail").attr("src", urlimage);
             });
 
