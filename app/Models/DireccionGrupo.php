@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Traits\CommonModel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
 
 class DireccionGrupo extends Model
 {
@@ -117,6 +118,11 @@ class DireccionGrupo extends Model
 
     public static function desvincularPedido(self $grupo, Pedido $pedido, $sustento = null, $motorizado_status = Pedido::ESTADO_MOTORIZADO_OBSERVADO)
     {
+        return self::desvincularPedidos($grupo, collect([$pedido]), $sustento, $motorizado_status);
+    }
+
+    public static function desvincularPedidos(self $grupo, Collection $pedidos, $sustento = null, $motorizado_status = Pedido::ESTADO_MOTORIZADO_OBSERVADO)
+    {
         if ($grupo->pedidos()->count() > 1) {
             $newgrupo = $grupo->replicate()->fill([
                 'motorizado_status' => $motorizado_status,
@@ -129,9 +135,11 @@ class DireccionGrupo extends Model
                 'correlativo' => 'ENV' . $newgrupo->id,
             ]);
 
-            $pedido->update([
-                'direccion_grupo' => $newgrupo->id
-            ]);
+            foreach ($pedidos as $pedido) {
+                $pedido->update([
+                    'direccion_grupo' => $newgrupo->id
+                ]);
+            }
             self::restructurarCodigos($newgrupo);
             self::restructurarCodigos($grupo);
             return $newgrupo;
