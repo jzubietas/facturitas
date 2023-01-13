@@ -134,7 +134,7 @@ class EnvioController extends Controller
                 $badge_estado = '';
                 $color = Pedido::getColorByCondicionEnvio($pedido->condicion_envio);
                 if ($pedido->estado_sobre == '1') {
-                    $badge_estado .= '<span class="badge badge-dark p-8" style="color: #fff; background-color: #347cc4; font-weight: 600; margin-bottom: -2px;border-radius: 4px 4px 0px 0px; font-size:8px;  padding: 4px 4px !important; font-weight: 500;">Direccion agregada</span>';
+                    $badge_estado .= '<span class="badge badge-dark p-8" style="color: #fff; background-color: #347cc4; font-weight: 600; margin-bottom: -2px;border-radius: 4px 4px 0px 0px; font-size:8px;  padding: 4px 4px !important;">Direccion agregada</span>';
                 }
 
                 $badge_estado .= '<span class="badge badge-success" style="background-color: ' . $color . '!important;">' . $pedido->condicion_envio . '</span>';
@@ -1537,8 +1537,6 @@ class EnvioController extends Controller
             } else {
                 $grupo->update([
                     'fecha_recepcion_motorizado' => Carbon::now(),
-                    /*'envio' => '2',*/
-                    //'modificador' => 'USER' . Auth::user()->id,
                     'condicion_envio' => Pedido::REPARTO_COURIER,
                     'condicion_envio_code' => Pedido::REPARTO_COURIER_INT,
                     'motorizado_status' => Pedido::ESTADO_MOTORIZADO_NO_RECIBIDO
@@ -1552,7 +1550,6 @@ class EnvioController extends Controller
             ]);
 
             return response()->json(['html' => "Grupo rechazado"]);
-
         }
     }
 
