@@ -25,6 +25,10 @@
                       {!! Form::label('fecha_salida', 'Fecha de ruta') !!}
                     <!--{!! Form::date('fecha_salida', \Carbon\Carbon::now()->addDays(1), ['class' => 'form-control', 'id' => 'fecha_salida']) !!}-->
                       {!! Form::date('fecha_salida', \Carbon\Carbon::now(), ['class' => 'form-control', 'id' => 'fecha_salida']) !!}
+
+                      <p id="mensaje_fecha_salida">
+
+                      </p>
                   </div>
                 </div>
 

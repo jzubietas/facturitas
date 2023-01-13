@@ -309,6 +309,25 @@
                 $("#hiddenCodigo").val(idunico)
                 $("#modal-confirmacion .textcode").html(codigos);
                 $("#modal-confirmacion .textzone").html(zona);
+
+                $('#fecha_salida').on('change',function(){
+                    fecha_actual = $(this).val();
+
+                    console.log(fecha_actual);
+                    console.log(new Date().getTime());
+
+                    if(new Date(fecha_actual).getTime() > new Date().getTime())
+                    {
+                        $('#mensaje_fecha_salida').html('<p class="bagde badge-warning p-8 font-weight-bold mt-16 br-8"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> La fecha indicada es mayor a la fecha actual.</p>');
+                        console.log("La fecha es mayor a la actual");
+                    }else if (new Date(fecha_actual).getTime() < new Date().getTime()){
+                        $('#mensaje_fecha_salida').html('<p class="bagde badge-warning p-8 font-weight-bold mt-16 br-8"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> La fecha indicada es menor a la fecha actual.</p>');
+                        console.log("La fecha es menor a la actual");
+                    }else if (new Date(fecha_actual).getTime() == new Date().getTime()){
+                        $('#mensaje_fecha_salida').html('');
+                    }
+                });
+
             });
 
             $(document).on("submit", "#formulario_confirmacion", function (evento) {
