@@ -84,8 +84,8 @@
                                                 <thead>
                                                 <tr>
                                                     <th scope="col">Códigos</th>
+
                                                     <th scope="col">Distrito</th>
-                                                    <th scope="col">Razón social</th>
                                                     <th scope="col">Fecha Ruta</th>
                                                     <th scope="col">Detalle</th>
                                                     <th scope="col">Ver</th>
@@ -282,8 +282,15 @@
                 },
                 columns: [
                     {data: 'codigo', name: 'codigo',},
-                    {data: 'env_zona', name: 'env_zona',},
-                    {data: 'env_distrito', name: 'env_distrito',},
+                    //{data: 'env_zona', name: 'env_zona',},
+                    {
+                        data: 'env_distrito',
+                        name: 'env_distrito',
+                        render: function (data, type, row, meta) {
+
+                                return row.env_distrito + "<br>" + row.zona;
+
+                        },},
                     {data: 'grupo_fecha_salida', name: 'fecha_salida',sWidth: '12%'},
                     {
                         data: 'detalle',
