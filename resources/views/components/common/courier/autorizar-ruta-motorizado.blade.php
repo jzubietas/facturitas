@@ -1,6 +1,6 @@
 
 @foreach($motorizadosAuthorizaciones as $id=>$cantidad)
-    <div id="notificacion-pedidos-no-recibidos" style="position: fixed;
+    <div id="notificacion-pedidos-no-recibidos-{{$id}}" style="position: fixed;
     bottom: 16px;
     right: 16px;
     width: 400px;
@@ -32,7 +32,9 @@
             $(document).ready(function () {
                 $(document).on('click','[data-authorization-button]',function () {
                     const action=$(this).data('authorization-button')
-                    $.post(action)
+                    $.post(action).done(function (id) {
+                        $("notificacion-pedidos-no-recibidos-"+id).remove()
+                    })
                 })
             })
         })()
