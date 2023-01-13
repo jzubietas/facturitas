@@ -478,7 +478,7 @@ class EnvioController extends Controller
                     $btn .= '<li>
                             <a href="" class="btn-sm text-secondary" data-target="#modal-desvincular" data-toggle="modal" data-desvincular="' . $grupo->id . '">
 
-                                            <i class="fas fa-envelope text-danger"></i> Desagrupar
+                                            <i class="fas fa-envelope text-danger"></i> Retornar a sobres con dirección
                                 </a>
                             </li>';
                 }

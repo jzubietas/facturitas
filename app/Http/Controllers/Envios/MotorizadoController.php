@@ -402,7 +402,6 @@ class MotorizadoController extends Controller
                 }
                 return $html;
             })
-
             ->addColumn('Ver', function ($pedido) {
                 $html = '';
                 if ($pedido->estado = 0 || $pedido->pendiente_anulacion) {
@@ -414,7 +413,6 @@ class MotorizadoController extends Controller
                 }
                 return $html;
             })
-
             ->addColumn('situacion_color', function ($pedido) {
                 if ($pedido->grupo_fecha_salida != null) {
                     $fecha_salida = Carbon::parse($pedido->grupo_fecha_salida)->startOfDay();
@@ -443,13 +441,13 @@ class MotorizadoController extends Controller
                 $btn = '';
                 //if (auth()->user()->can('envios.enviar')):
 
-                    $btn .= '<ul class="list-unstyled pl-0" data-group="' . $pedido->direccion_grupo . '">';
+                $btn .= '<ul class="list-unstyled pl-0" data-group="' . $pedido->direccion_grupo . '">';
 
-                    $btn .= '<li>
+                $btn .= '<li>
                                 <button type="button" data-target="' . route('envios.devueltos.recibir', $pedido->id) . '" data-toggle="jqconfirm"  class="btn btn-warning btn-sm"><i class="fas fa-check-circle"></i> Recibido</button>
                             </li>';
 
-                    $btn .= '</ul>';
+                $btn .= '</ul>';
                 //endif;
 
                 return $btn;
@@ -461,13 +459,6 @@ class MotorizadoController extends Controller
     public function devueltos_recibir(Request $request, Pedido $pedido)
     {
         $grupo = $pedido->direcciongrupo;
-        if ($pedido->estado = 0) {
-            if ($grupo != null) {
-                $grupo->update([
-                    'motorizado_status' => Pedido::ESTADO_MOTORIZADO_RE_RECIBIDO,
-                ]);
-            }
-        }
 
         $detalle = $pedido->detallePedidos()->first();
 
@@ -478,24 +469,30 @@ class MotorizadoController extends Controller
                 'razon_social' => $detalle->nombre_empresa,
             ]
         ]);
+        if ($grupo != null) {
+            if ($grupo->pedidos()->activo()->count() <= 1) {
+                $grupo->update([
+                    'estado' => 0,
+                ]);
+            } else {
+                $pedido->update([
+                    'direccion_grupo' => null
+                ]);
+                DireccionGrupo::restructurarCodigos($grupo);
+            }
 
-        if ($grupo->pedidos()->activo()->count() <= 1) {
-            $grupo->update([
-                'estado' => 0
-            ]);
+            if ($pedido->estado = 0) {
+                $grupo->update([
+                    'motorizado_status' => Pedido::ESTADO_MOTORIZADO_RE_RECIBIDO,
+                ]);
+            } else {
+                $grupo->update([
+                    'motorizado_status' => 0,
+                ]);
+            }
         } else {
             $pedido->update([
                 'direccion_grupo' => null
-            ]);
-            $pedidosKeyValue = $grupo->pedidos()
-                ->activo()
-                ->join('detalle_pedidos', 'detalle_pedidos.pedido_id', 'pedidos.id')
-                ->where('detalle_pedidos.estado', '1')
-                ->pluck('detalle_pedidos.nombre_empresa', 'pedidos.id');
-
-            $grupo->update([
-                'codigos' => $pedidosKeyValue->keys()->join(','),
-                'producto' => $pedidosKeyValue->values()->join(','),
             ]);
         }
 
