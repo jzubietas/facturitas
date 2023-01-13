@@ -468,7 +468,7 @@ class EnvioController extends Controller
                 $btn .= '<li>
                                         <a href="" class="btn-sm text-secondary" data-target="#modal-confirmacion" data-toggle="modal" data-ide="' . $grupo->id . '" data-entregar-confirm="' . $grupo->id . '" data-destino="' . $grupo->destino . '" data-fechaenvio="' . $grupo->fecha . '" data-codigos="' . $grupo->codigos . '"
                                             data-distribucion="' . $grupo->distribucion . '" >
-                                            <i class="fas fa-envelope text-success"></i> Enviar a Motorizado</a></li>
+                                            <i class="fa fa-motorcycle text-success" aria-hidden="true"></i> Enviar a Motorizado</a></li>
                                         </a>
                                     </li>';
 
@@ -476,7 +476,7 @@ class EnvioController extends Controller
                 $btn .= '<li>
                             <a href="" class="btn-sm text-secondary" data-target="#modal-desvincular" data-toggle="modal" data-desvincular="' . $grupo->id . '">
 
-                                            <i class="fas fa-envelope text-danger"></i> Retornar a sobres con dirección
+                                            <i class="fa fa-undo text-danger" aria-hidden="true"></i> Retornar a sobres con dirección
                                 </a>
                             </li>';
                 $btn .= '</ul>';
