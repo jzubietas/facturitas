@@ -64,7 +64,7 @@ class PagerecepcionMotorizado extends Export implements WithColumnFormatting, Fr
             $direccion = $direccion->where('direccion_grupos.motorizado_id', $this->motorizado_id);
         }
         if (!$this->fecha_envio_h) {
-            $direccion = $direccion->where('cast(direccion_grupos.fecha_recepcion as date)', $this->fecha_envio_h);
+            $direccion = $direccion->where('cast(direccion_grupos.fecha_salida as date)', $this->fecha_envio_h);
         }
 
         return $direccion->get();
