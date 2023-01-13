@@ -124,8 +124,12 @@
             </table>
             <br>
 
+
             @if(in_array(auth()->user()->rol,[\App\Models\User::ROL_MOTORIZADO,\App\Models\User::ROL_ADMIN]))
                 <ul class="nav nav-tabs mb-24 mt-24" id="myTab" role="tablist">
+            @else
+                        <ul class="nav nav-tabs mb-24 mt-24 d-none" id="myTab" role="tablist">
+            @endif
                     <li class="nav-item w-50 text-center">
                         <a class="condicion-tabla nav-link activo active font-weight-bold" id="recepcion-tab"
                            data-toggle="tab"
@@ -156,7 +160,11 @@
                     </tr>
                   </tbody>
                 </table><br> --}}
-                <table id="tablaPrincipal" class="table table-striped dt-responsive w-100">
+                        @if(in_array(auth()->user()->rol,[\App\Models\User::ROL_MOTORIZADO,\App\Models\User::ROL_ADMIN]))
+                            <table id="tablaPrincipal" class="table table-striped dt-responsive w-100">
+                                @else
+                                    <table id="tablaPrincipal" class="table table-striped dt-responsive w-100 d-none">
+                                        @endif
                     <thead>
                     <tr>
                         <th scope="col">Item</th>
@@ -172,11 +180,16 @@
                     <tbody>
                     </tbody>
                 </table>
-            @endif
+
             <!--
             MODULO PARA LOGISTICA
             -->
             @if(in_array(auth()->user()->rol,[\App\Models\User::ROL_JEFE_COURIER,\App\Models\User::ROL_ADMIN]))
+                                        <div class="row">
+                                    @else
+                                                <div class="row d-none">
+                                    @endif
+
                 <div class="row">
                     @foreach($motorizados as $motorizado)
                         <div class="col-lg-4 container-{{Str::slug($motorizado->zona)}}">
@@ -248,7 +261,7 @@
                         </div>
                     @endforeach
                 </div>
-            @endif
+
             @include('pedidos.modal.confirmar_recepcion_log')
             @include('envios.modal.enviarid')
             @include('pedidos.modal.recibirid')
