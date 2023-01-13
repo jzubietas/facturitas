@@ -444,7 +444,13 @@
         let tablaAnulados_courier=null;
         $(document).ready(function () {
 
-
+            $('#modal-imagen').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget)
+                var idunico = button.data('imagen');
+                var urlimage = '{{ asset(":id") }}';
+                urlimage = urlimage.replace(':id', idunico);
+                $("#modal-imagen .img-thumbnail").attr("src", urlimage);
+            });
 
             $(document).on("click", "#change_imagen", function () {
                 var fd2 = new FormData();
@@ -745,21 +751,6 @@
                 },
                 "fnDrawCallback": function () {
                     $('.count_estadosobres_received').html(this.fnSettings().fnRecordsDisplay());
-                    /*alert( oSettings.fnRecordsTotal() );
-                    alert( oSettings.fnRecordsDisplay() );
-                    alert( oSettings.fnDisplayEnd() );*/
-                    //condicion-tabla
-                    //$('.condicion-tabla').removeClass("active");
-                    //$('#received-tab').addClass("active");
-
-                    /*let a1=tablaRecepcionados.fnSettings().fnRecordsDisplay();
-                    let a2=tablaEntregados.fnSettings().fnRecordsDisplay();
-                    let a3=tablaAnulados.fnSettings().fnRecordsDisplay();
-
-                    if(a1>0 && a2>0 && a3>0){
-                        $('#received-tab').addClass("active");
-                    }*/
-
                 }
             });
 
@@ -1169,13 +1160,6 @@
                 },
                 "fnDrawCallback": function () {
                     $('.count_estadosobres_annulled').html(this.fnSettings().fnRecordsDisplay());
-                    /*alert( oSettings.fnRecordsTotal() );
-                    alert( oSettings.fnRecordsDisplay() );
-                    alert( oSettings.fnDisplayEnd() );*/
-                    //$('.condicion-tabla').removeClass("active");
-                    //$('#annulled-tabs').addClass("active");
-
-                    //$('.condicion-tabla').removeClass("active");
 
                     let a1=$('#tablaRecepcionados').dataTable().fnSettings().fnRecordsDisplay();
                     let a2=$('#tablaEntregados').dataTable().fnSettings().fnRecordsDisplay();
