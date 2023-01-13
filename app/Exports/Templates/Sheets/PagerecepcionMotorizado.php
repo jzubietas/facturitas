@@ -117,7 +117,12 @@ class PagerecepcionMotorizado extends Export implements WithColumnFormatting, Fr
     public function columnFormats(): array
     {
         return [
-            'E' => NumberFormat::FORMAT_DATE_YYYYMMDD
+            'E' => NumberFormat::FORMAT_DATE_YYYYMMDD,
+            'F' => NumberFormat::FORMAT_TEXT,
+            'G' => NumberFormat::FORMAT_TEXT,
+            'H' => NumberFormat::FORMAT_TEXT,
+            'I' => NumberFormat::FORMAT_TEXT,
+            'J' => NumberFormat::FORMAT_TEXT,
         ];
     }
 
@@ -130,7 +135,7 @@ class PagerecepcionMotorizado extends Export implements WithColumnFormatting, Fr
 
     public static function afterSheet(AfterSheet $event)
     {
-        $color_R = 'a9def9';
+        $color_R = 'ff5733';
         $color__ = '3a86ff';
         $color_A = '00b4d8';
         $color_C = 'b5e48c';
