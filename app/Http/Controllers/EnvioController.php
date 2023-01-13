@@ -1466,9 +1466,11 @@ class EnvioController extends Controller
             $grupoPedido = GrupoPedido::createGroupByPedido($pedido);
 
             if (!$grupoPedido->pedidos()->where('pedidos.id', '=', $pedido->id)->exists()) {
-                $grupoPedido->pedidos()->attach($pedido->id, [
-                    'razon_social' => $detalle->nombre_empresa,
-                    'codigo' => $pedido->codigo,
+                $grupoPedido->pedidos()->syncWithoutDetaching([
+                    $pedido->id=> [
+                        'razon_social' => $detalle->nombre_empresa,
+                        'codigo' => $pedido->codigo,
+                    ]
                 ]);
             }
         }

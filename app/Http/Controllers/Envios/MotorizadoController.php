@@ -472,7 +472,7 @@ class MotorizadoController extends Controller
         $detalle = $pedido->detallePedidos()->first();
 
         $pgroup = GrupoPedido::createGroupByPedido($pedido);
-        $pgroup->pedidos()->attach([
+        $pgroup->pedidos()->syncWithoutDetaching([
             $pedido->id => [
                 'codigo' => $pedido->codigo,
                 'razon_social' => $detalle->nombre_empresa,
