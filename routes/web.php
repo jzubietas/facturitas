@@ -279,6 +279,7 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     Route::get('envios.sindirecciontabla', [EnvioController::class, 'Enviossindirecciontabla'])->name('envios.sindirecciontabla');
 
     Route::get('envios.parareparto', [EnvioController::class, 'Enviosparareparto'])->name('envios.parareparto');
+    Route::get('envios.parareparto/{grupo}/revertir_con_direccion', [EnvioController::class, 'EnviosparareparRevertir'])->name('envios.parareparto.revertir-con-direccion');
     Route::get('envios.pararepartotabla', [EnvioController::class, 'Enviospararepartotabla'])->name('envios.pararepartotabla');
     Route::get('envios.enreparto', [EnvioController::class, 'Enviosenreparto'])->name('envios.enreparto');
     Route::get('envios.enrepartotabla', [EnvioController::class, 'Enviosenrepartotabla'])->name('envios.enrepartotabla');
