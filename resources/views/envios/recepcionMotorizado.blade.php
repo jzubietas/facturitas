@@ -162,11 +162,8 @@
                     </tr>
                   </tbody>
                 </table><br> --}}
-                        @if(in_array(auth()->user()->rol,[\App\Models\User::ROL_MOTORIZADO,\App\Models\User::ROL_ADMIN]))
-                            <div id="tablaPrincipal" class="table table-striped dt-responsive w-100">
-                                @else
-                                    <table id="tablaPrincipal" class="table table-striped dt-responsive w-100 d-none">
-                                        @endif
+
+                                    <table id="tablaPrincipal" class="table table-striped dt-responsive w-100">
                     <thead>
                     <tr>
                         <th scope="col">Item</th>
@@ -182,7 +179,7 @@
                     <tbody>
                     </tbody>
                 </table>
-                            </div>
+                </div>
 
             <!--
             MODULO PARA LOGISTICA
