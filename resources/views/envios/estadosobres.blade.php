@@ -442,6 +442,7 @@
         let tablaEntregados=null;
         let tablaAnulados=null;
         let tablaAnulados_courier=null;
+        let timeout;
         $(document).ready(function () {
 
             $('#modal-imagen').on('show.bs.modal', function (event) {
@@ -618,6 +619,7 @@
 
             function applySearch(e) {
                 console.log(e)
+                console.log("vacio");
                 let valor=$("#buscador_global").val();
                 valor=(valor||'').trim()
                 tablaRecepcionados.search( valor ).draw();
@@ -631,8 +633,7 @@
                 setTimeout(applySearch,100)
             });
             $('#buscador_global').change(applySearch);
-
-
+            $('#buscador_global').keydown(applySearch);
 
             /********************
              * TABLA SOBRES RECIBIDOS
