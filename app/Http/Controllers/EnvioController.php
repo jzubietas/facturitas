@@ -2318,10 +2318,11 @@ class EnvioController extends Controller
                             <img src="' . $urlimagen1 . '" alt="' . $pedido->foto1 . '" height="50px" width="50px" id="imagen_' . $pedido->id . '-1" class=" text-center">
                             </a>
                       <div class="card-body bg-transparent p-0">
-                        <h5 class="card-title"></h5>
-                        <a download href="' . $urlimagen1 . '" class="text-center btn btn-block btn-outline-secondary">Descargar </a>
-                        <a href="" data-target="#modal-cambiar-imagen" data-toggle="modal" data-item="1" data-imagen="' . $pedido->foto1 . '" data-pedido="' . $pedido->id . '" class="btn btn-block btn-outline-danger">
-Cambiar</a>';
+                        <h5 class="card-title"></h5>';
+
+
+                        //$data='<a download href="' . $urlimagen1 . '" class="text-center btn btn-block btn-outline-secondary">Descargar </a>';
+                        //$data='<a href="" data-target="#modal-cambiar-imagen" data-toggle="modal" data-item="1" data-imagen="' . $pedido->foto1 . '" data-pedido="' . $pedido->id . '" class="btn btn-block btn-outline-danger">Cambiar</a>';
 
                         if (Auth::user()->rol == "Asesor") {
                             $data .= '<a href="" data-target="#modal-delete-foto1" data-toggle="modal" data-deletefoto1="' . $pedido->id . '">
@@ -2348,10 +2349,10 @@ Cambiar</a>';
                             <img src="' . $urlimagen1 . '" alt="' . $pedido->foto2 . '" height="50px" width="50px" id="imagen_' . $pedido->id . '-1" class=" text-center">
                             </a>
                       <div class="card-body bg-transparent p-0">
-                        <h5 class="card-title"></h5>
-                        <a download href="' . $urlimagen1 . '" class="text-center btn btn-block btn-outline-secondary">Descargar </a>
-                        <a href="" data-target="#modal-cambiar-imagen" data-toggle="modal" data-item="2" data-imagen="' . $pedido->foto2 . '" data-pedido="' . $pedido->id . '" class="btn btn-block btn-outline-danger">
-Cambiar</a>';
+                        <h5 class="card-title"></h5>';
+
+                        //$data='<a download href="' . $urlimagen1 . '" class="text-center btn btn-block btn-outline-secondary">Descargar </a>';
+                        //$data='<a href="" data-target="#modal-cambiar-imagen" data-toggle="modal" data-item="2" data-imagen="' . $pedido->foto2 . '" data-pedido="' . $pedido->id . '" class="btn btn-block btn-outline-danger">Cambiar</a>';
 
                         if (Auth::user()->rol == "Asesor") {
                             $data .= '<a href="" data-target="#modal-delete-foto2" data-toggle="modal" data-deletefoto1="' . $pedido->id . '">
@@ -2377,10 +2378,10 @@ Cambiar</a>';
                             <img src="' . $urlimagen1 . '" alt="' . $pedido->foto3 . '" height="50px" width="50px" id="imagen_' . $pedido->id . '-1" class=" text-center">
                             </a>
                       <div class="card-body bg-transparent p-0">
-                        <h5 class="card-title"></h5>
-                        <a download href="' . $urlimagen1 . '" class="text-center btn btn-block btn-outline-secondary"> Descargar </a>
-                        <a href="" data-target="#modal-cambiar-imagen" data-toggle="modal" data-item="3" data-imagen="' . $pedido->foto3 . '" data-pedido="' . $pedido->id . '" class="btn btn-block btn-outline-danger">
-Cambiar</a>';
+                        <h5 class="card-title"></h5>';
+
+                        //$data='<a download href="' . $urlimagen1 . '" class="text-center btn btn-block btn-outline-secondary"> Descargar </a>';
+                        //$data='<a href="" data-target="#modal-cambiar-imagen" data-toggle="modal" data-item="3" data-imagen="' . $pedido->foto3 . '" data-pedido="' . $pedido->id . '" class="btn btn-block btn-outline-danger">Cambiar</a>';
 
                         if (Auth::user()->rol == "Asesor") {
                             $data .= '<a href="" data-target="#modal-delete-foto3" data-toggle="modal" data-deletefoto1="' . $pedido->id . '">
