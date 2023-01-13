@@ -482,12 +482,22 @@ class EnvioController extends Controller
                                 </a>
                             </li>';
                 }
+                $btn .= '<li>
+                            <a href="" class="btn-sm text-secondary" data-target="#modal-desvincular" data-toggle="modal" data-desvincular="' . $grupo->id . '">
+
+                                            <i class="fas fa-undo text-danger"></i> Retornar a con dirección
+                                </a>
+                            </li>';
                 $btn .= '</ul>';
 
                 return $btn;
             })
             ->rawColumns(['action', 'condicion_envio'])
             ->make(true);
+
+    }
+
+    public function EnviosparareparRevertir(DireccionGrupo $grupo){
 
     }
 
