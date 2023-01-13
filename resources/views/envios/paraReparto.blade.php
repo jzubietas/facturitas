@@ -155,9 +155,11 @@
         .darkblue {
             color: #021691 !important;
         }
+
         .red {
             color: red !important;
         }
+
         .green {
             color: green !important;
         }
@@ -194,9 +196,12 @@
                 $('#tablaPrincipal').DataTable().ajax.reload();
 
             });
-
+            var tabla_pedidos;
             $(document).on("click", "#desvincularConfirmar", function (event) {
-
+                if(!tabla_pedidos) {
+                    console.log("var tabla_pedido is null")
+                    return ;
+                }
                 var rows_selected = tabla_pedidos.column(0).checkboxes.selected();
                 var $direcciongrupo = $("#direcciongrupo").val();
                 var $observaciongrupo = $("#observaciongrupo").val();
@@ -250,7 +255,9 @@
                 var direcciongrupo = button.data('desvincular');
                 $("#direcciongrupo").val(direcciongrupo);
                 //$("#observaciongrupo").val(observaciongrupo);
-                tabla_pedidos.destroy();
+                if(tabla_pedidos!=null) {
+                    tabla_pedidos.destroy();
+                }
 
 
                 tabla_pedidos = $('#tablaPrincipalpedidosagregar').DataTable({
@@ -466,7 +473,7 @@
                 evento.preventDefault();
             });
 
-            let tabla_pedidos = $('#tablaPrincipal').DataTable({
+            let tabla_pedidos_principal = $('#tablaPrincipal').DataTable({
                 processing: true,
                 stateSave: true,
                 serverSide: true,
@@ -479,22 +486,17 @@
                     },
                 },
                 createdRow: function (row, data, dataIndex) {
-                    if(data["estado"]=='1')
-                    {
-                        if(data["destino2"]=='PROVINCIA')
-                        {
+                    if (data["estado"] == '1') {
+                        if (data["destino2"] == 'PROVINCIA') {
                             $(row).addClass('green');
-                        }else if(data["destino2"]=='LIMA')
-                        {
-                            if(data["distribucion"]=='OLVA')
-                            {
+                        } else if (data["destino2"] == 'LIMA') {
+                            if (data["distribucion"] == 'OLVA') {
                                 $(row).addClass('darkblue');
-                            }else if(data["distribucion"]=='LIMA')
-                            {
+                            } else if (data["distribucion"] == 'LIMA') {
                                 //$(row).addClass('darkblue');
                             }
                         }
-                    }else if(data["estado"]==0){
+                    } else if (data["estado"] == 0) {
                         $(row).addClass('red');
                     }
                 },

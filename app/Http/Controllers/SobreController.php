@@ -514,7 +514,7 @@ class SobreController extends Controller
         //return $request->all();
         $pedidos = $request->pedidos;/*7326,7327*/
         $direcciongrupoId = $request->direcciongrupo;/*9206*/
-        $observaciongrupo = $request->observaciongrupo;
+        //$observaciongrupo = $request->observaciongrupo;
         if (!$request->pedidos) {
             return '0';
         } else {
@@ -531,7 +531,7 @@ class SobreController extends Controller
                     $pedido->update([
                         "condicion_envio" => pedido::RECEPCION_COURIER,
                         "condicion_envio_code" => pedido::RECEPCION_COURIER_INT,
-                        "observacion_devuelto" => $observaciongrupo,
+                        //"observacion_devuelto" => $observaciongrupo,
                         "direccion_grupo" => null
                     ]);
                 }
