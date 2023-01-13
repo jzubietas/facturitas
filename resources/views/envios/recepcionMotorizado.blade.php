@@ -129,12 +129,14 @@
                     <a class="condicion-tabla nav-link activo active font-weight-bold" id="recepcion-tab" data-toggle="tab"
                        data-url="19" href="#recepcion" role="tab" aria-controls="recepcion" aria-selected="true">
                         <i class="fa fa-inbox" aria-hidden="true"></i> RECEPCION
+                        <sup><span class="badge badge-light count_recepcionmotorizados_receptioned_courier">0</span></sup>
                     </a>
                 </li>
                 <li class="nav-item w-50 text-center">
                     <a class="condicion-tabla nav-link font-weight-bold" id="enruta-tab" data-toggle="tab"
                        data-url="18" href="#enruta" role="tab" aria-controls="enruta" aria-selected="false">
                         <i class="fa fa-motorcycle" aria-hidden="true"></i> EN RUTA
+                        <sup><span class="badge badge-light count_recepcionmotorizados_inroutes_courier">0</span></sup>
                     </a>
                 </li>
             </ul>
@@ -195,29 +197,29 @@
                                             id="myTab{{Str::slug($motorizado->zona)}}"
                                             role="tablist">
                                             <li class="nav-item">
-                                                <a class="nav-link active" id="general-tab" data-vista="18"
+                                                <a class="nav-link active" id="recepcionhijo{{Str::slug($motorizado->zona)}}-tab" data-vista="18"
                                                    data-zona="{{Str::slug($motorizado->zona)}}" data-toggle="tab"
-                                                   href="#general" role="tab"
-                                                   data-tab="motorizado"
-                                                   aria-controls="general" aria-selected="true" data-action="general">
+                                                   href="#recepcionhijo{{Str::slug($motorizado->zona)}}" role="tab"
+                                                   data-tab="recepcionhijo{{Str::slug($motorizado->zona)}}"
+                                                   aria-controls="recepcionhijo{{Str::slug($motorizado->zona)}}" aria-selected="true" data-action="recepcionhijo">
                                                     RECEPCIÓN
                                                 </a>
                                             </li>
                                             <li class="nav-item">
-                                                <a class="nav-link" id="entregado-tab" data-vista="19"
+                                                <a class="nav-link" id="enrutahijo{{Str::slug($motorizado->zona)}}-tab" data-vista="19"
                                                    data-zona="{{Str::slug($motorizado->zona)}}" data-toggle="tab"
-                                                   href="#entregado"
+                                                   href="#enrutahijo{{Str::slug($motorizado->zona)}}"
                                                    role="tab"
-                                                   data-tab="entregado"
-                                                   aria-controls="entregado" aria-selected="false"
-                                                   data-action="entregado">
+                                                   data-tab="enrutahijo{{Str::slug($motorizado->zona)}}"
+                                                   aria-controls="enrutahijo{{Str::slug($motorizado->zona)}}" aria-selected="false"
+                                                   data-action="enrutahijo">
                                                     EN RUTA
                                                 </a>
                                             </li>
                                         </ul>
 
                                         <table id="tablaPrincipal{{Str::upper($motorizado->zona)}}"
-                                               class="tabla-data table table-striped dt-responsive w-100">
+                                               class="tabla-data table table-hijo table-striped dt-responsive w-100">
                                             <thead>
                                             <tr>
                                                 <!--<th scope="col">Item</th>-->
@@ -700,7 +702,8 @@
                 ajax: {
                     url: "{{route('envios.recepcionmotorizadotablageneral',['datatable'=>'1'])}}",
                     data: function (a) {
-                        a.fechaconsulta = $("#fecha_consulta").data("fecha");
+                        a.consulta = 'paquete';
+                        a.fechaconsulta = $("#fecha_consulta").val();
                         a.tab = $("#myTab{{Str::slug($motorizado->zona)}} li>a.active").data('tab');
                         a.motorizado_id = {{ $motorizado->id }};
                         a.zona = "{{ Str::upper($motorizado->zona)}}";
@@ -896,23 +899,29 @@
                     }
                 },
                 "fnDrawCallback": function () {
-                    $('.count_estadosobres_annulled').html(this.fnSettings().fnRecordsDisplay());
+
 
                     switch ($('ul#myTab li.nav-item>a.active').attr('id')) {
+                        case 'recepcion-tab':
+                            $('.count_recepcionmotorizados_inroutes_courier').html(0);
+                            $('.count_recepcionmotorizados_receptioned_courier').html(this.fnSettings().fnRecordsDisplay());
+                            $('div.toolbar').html('<div class="d-flex justify-content-center">' +
+                                '<button id="export-recepcion" class="btn btn-success">EXPORTAR RECEPCION</button>' +
+                                '</div>');
+                            @foreach($motorizados as $motorizado)
+                                $('#recepcionhijo{{Str::slug($motorizado->zona)}}-tab').tab('show');
+                            @endforeach
+                            break;
                         case 'enruta-tab':
+                            $('.count_recepcionmotorizados_receptioned_courier').html(0);
+                            $('.count_recepcionmotorizados_inroutes_courier').html(this.fnSettings().fnRecordsDisplay());
                             $('div.toolbar').html('<div class="d-flex justify-content-center">' +
                                 '<button id="export-ruta-masiva" class="btn btn-secondary">EXPORTAR RUTA MASIVA</button>' +
                                 '<button id="iniciar-ruta-masiva" class="btn btn-success">INICIAR RUTA MASIVA</button>' +
                                 '</div>');
-
-                            //
-                            break;
-                        case 'recepcion-tab':
-                            $('div.toolbar').html('<div class="d-flex justify-content-center">' +
-                                '<button id="export-recepcion" class="btn btn-success">EXPORTAR RECEPCION</button>' +
-                                '</div>');
-
-                            //
+                            @foreach($motorizados as $motorizado)
+                                $("#enrutahijo{{Str::slug($motorizado->zona)}}-tab").tab('show');
+                            @endforeach
                             break;
                     }
                 }

@@ -561,7 +561,6 @@ class MotorizadoController extends Controller
                 $fecha_consulta = Carbon::parse($request->fechaconsulta)->startOfDay();
             } catch (\Exception $ex) {
                 $fecha_consulta = now()->startOfDay();
-                throw $ex;
             }
         } else {
             $fecha_consulta = now()->startOfDay();
@@ -714,86 +713,125 @@ class MotorizadoController extends Controller
 
     public function EnviosrecepcionmotorizadotablaGeneral(Request $request)
     {
-        $tipo_vista = $request->vista;
-
         $tipo_consulta = $request->consulta;
+        $fecha_actual = Carbon::now()->startOfDay();
+        $fecha_consulta=$request->fechaconsulta;
+        $url_tabla = $request->vista;
 
-        //SI ES QUE EXISTE UNA FECHA
-        if ($request->fechaconsulta != null) {
-            try {
-                $fecha_consulta = Carbon::createFromFormat('d/m/Y', $request->fechaconsulta);
-            } catch (Exception $ex) {
-                $fecha_consulta = now();
-            }
-
-        } else {
-            $fecha_consulta = now();
-        }
-
-        //OBTENEMOS EL CODIGO DE CONDICION
-        if ($request->condicion != null) {
-            $url_tabla = $request->condicion;
-        } else {
-            $url_tabla = null;
-        }
-
-        $pedidos = null;
-        $filtros_code = [12];
-
-        // SI EXISTE UNA VISTA
-        if ($request->vista != null) {
-            try {
-                $vista_consulta = Carbon::createFromFormat('d/m/Y', $request->vista);
-            } catch (\Exception $ex) {
-                $vista_consulta = now();
-            }
-        } else {
-            $vista_consulta = now();
-        }
-
-        // SI EXISTE UNA FECHA
-        if ($request->fechaconsulta != null) {
-            try {
-                $fecha_consulta = Carbon::createFromFormat('d/m/Y', $request->fechaconsulta);
-            } catch (\Exception $ex) {
-                $fecha_consulta = now();
-            }
-        } else {
-            $fecha_consulta = now();
-        }
-
-        // SI SE ESPERA RESULTADOS PARA UNA TABLA
-        if ($request->has('datatable')) {
-            $query = DireccionGrupo::
-            join('clientes as c', 'c.id', 'direccion_grupos.cliente_id')
-                ->join('users as u', 'u.id', 'c.user_id')
-                ->when($fecha_consulta != null, function ($query) use ($fecha_consulta) {
-                    $query->whereDate('direccion_grupos.fecha_salida', $fecha_consulta);
-                })
-                ->where('direccion_grupos.motorizado_id', '=', $request->motorizado_id)
+        if ($tipo_consulta == "pedido") {
+            $pedidos = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')
+                ->join('users as u', 'pedidos.user_id', 'u.id')
+                ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
                 ->select([
-                    'direccion_grupos.*',
-                ]);
+                    'pedidos.id',
+                    'pedidos.cliente_id',
 
-            $tab = ($request->tab ?: '');
-            switch ($tab) {
-                case 'recepcion':
-                    $query
-                        ->where('direccion_grupos.estado', '1')
-                        ->where('direccion_grupos.condicion_envio_code', $request->vista);
-                    break;
-                case 'ruta':
-                    $query
-                        ->where('direccion_grupos.estado', '1')
-                        ->where('direccion_grupos.condicion_envio_code', $request->vista);
-                    break;
-            }
+                    'u.identificador as users',
+                    'u.id as user_id',
+                    'dp.codigo as codigos',
+                    'dp.nombre_empresa as empresas',
+                    'dp.total as total',
+                    'pedidos.condicion',
+                    'pedidos.created_at as fecha',
+                    'pedidos.condicion_envio',
+                    'pedidos.envio',
+                    'pedidos.codigo',
+                    'pedidos.codigos_confirmados',
+                    'pedidos.destino',
+                    'pedidos.direccion',
+                    'dp.envio_doc',
+                    'dp.fecha_envio_doc',
+                    'dp.cant_compro',
+                    'dp.fecha_envio_doc_fis',
+                    'dp.foto1',
+                    'dp.foto2',
+                    'pedidos.created_at as fecha_salida_recepcion_motorizado',
+                    'pedidos.devuelto',
+                    'pedidos.cant_devuelto',
+                    'pedidos.returned_at',
+                    'pedidos.observacion_devuelto',
+                    DB::raw("DATEDIFF(DATE(NOW()), DATE(pedidos.created_at)) AS dias")
+                ])
+                ->where('pedidos.estado', '1')
+                ->whereIn('pedidos.condicion_envio_code', [$request->condicion])
+                ->where('dp.estado', '1');
+        }
+        else if ($tipo_consulta == "paquete")
+        {
+            $pedidos = null;
+            $filtros_code = [12];
 
-            return datatables()->query(DB::table($query))
-                ->addIndexColumn()
+            $grupos = DireccionGrupo::select([
+                'direccion_grupos.*',
+                'direccion_grupos.fecha_recepcion_motorizado as fecha_salida_recepcion_motorizado',
+                'u.identificador as user_identificador',
+                DB::raw('(select DATE_FORMAT( direccion_grupos.created_at, "%Y-%m-%d")   from direccion_grupos dpa where dpa.id=direccion_grupos.id) as fecha_formato'),
+            ])
+                ->join('clientes as c', 'c.id', 'direccion_grupos.cliente_id')
+                ->join('users as u', 'u.id', 'c.user_id')
+                ->whereIn('direccion_grupos.condicion_envio_code', explode(",", $url_tabla))
+                ->whereDate('direccion_grupos.fecha_salida',$request->fechaconsulta)
+                ->where('direccion_grupos.motorizado_id',$request->motorizado_id)
+                ->where('direccion_grupos.distribucion', 'LIKE', '%'.$request->ZONA.'%')
+                ->activo();
+
+            return Datatables::of(DB::table($grupos))
+                ->addColumn('condicion_envio_color', function ($grupo) {
+                    return Pedido::getColorByCondicionEnvio($grupo->condicion_envio);
+                })
+                ->editColumn('condicion_envio', function ($grupo) {
+                    $color = Pedido::getColorByCondicionEnvio($grupo->condicion_envio);
+
+                    $badge_estado = '';
+                    $badge_estado .= '<span class="badge badge-dark p-8" style="color: #fff; background-color: #347cc4; font-weight: 600; margin-bottom: -2px;border-radius: 4px 4px 0px 0px; font-size:8px;  padding: 4px 4px !important; font-weight: 500;">Direccion agregada</span>';
+
+                    $badge_estado .= '<span class="badge badge-success" style="background-color: #00bc8c !important;
+                    padding: 4px 8px !important;
+                    font-size: 8px;
+                    margin-bottom: -4px;
+                    color: black !important;">Con ruta</span>';
+                    $badge_estado .= '<span class="badge badge-success" style="background-color: ' . $color . '!important;">' . $grupo->condicion_envio . '</span>';
+                    return $badge_estado;
+                })
+                ->addColumn('action', function ($pedido) use ($fecha_consulta, $fecha_actual) {
+                    $btn = '';
+
+                    $btn .= '<ul class="list-unstyled pl-0">';
+
+                    if ($pedido->condicion_envio_code == Pedido::ENVIO_MOTORIZADO_COURIER_INT) {
+
+                        if ($fecha_actual == $fecha_consulta) {
+                            $btn .= '<li>
+                                <button data-target="#modal-envio" data-toggle="modal" data-accion="recibir" data-recibir="' . $pedido->id . '" data-codigos="' . $pedido->codigos . '"  class="btn btn-warning btn-sm"><i class="fas fa-check-circle"></i> Recibido</button>
+                            </li>';
+                            $btn .= ' <li>
+                        <button data-target="#modal-envio" data-toggle="modal" data-accion="rechazar" data-recibir="' . $pedido->id . '" data-codigos="' . $pedido->codigos . '" class="btn btn-danger btn-sm mt-8"><i class="fa fa-times-circle-o" aria-hidden="true"></i>No recibido</button>
+                    </li>';
+
+                        } else {
+                            $btn .= '<li>
+                                <button disabled class="btn btn-warning btn-sm"><i class="fas fa-check-circle"></i> Recibido</button>
+                            </li>';
+                            $btn .= ' <li>
+                        <button disabled class="btn btn-danger btn-sm mt-8"><i class="fa fa-times-circle-o" aria-hidden="true"></i>No recibido</button>
+                    </li>';
+                        }
+
+                    } else if ($pedido->condicion_envio_code == Pedido::RECEPCION_MOTORIZADO_INT) {
+                        $btn .= '<li>
+                                <a href="" class="btn-sm text-secondary" data-target="#modal-confirmacion" data-toggle="modal" data-ide="' . $pedido->id . '" data-entregar-confirm="' . $pedido->id . '" data-destino="' . $pedido->destino . '" data-fechaenvio="' . $pedido->fecha . '" data-codigos="' . $pedido->codigos . '">
+                                    <i class="fas fa-envelope text-success"></i> Iniciar ruta</a></li>
+                                </a>
+                            </li>';
+
+                    }
+
+                    $btn .= '</ul>';
+
+                    return $btn;
+                })
                 ->rawColumns(['action', 'condicion_envio'])
-                ->toJson();
-
+                ->make(true);
         }
     }
 
