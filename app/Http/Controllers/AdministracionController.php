@@ -116,6 +116,26 @@ class AdministracionController extends Controller
 
         return Datatables::of(DB::table($pagos))
             ->addIndexColumn()
+            ->editColumn('id', function ($pago) {
+                //$cv=$pago->cantidad_voucher;
+                //$cp=$pago->cantidad_pedido;
+                //$unido= ( ($cv>1)? 'V':'I' )+''+( ($cp>1)? 'V':'I' );
+                $fecha_created=Carbon::parse($pago->created_at);
+                $dd=$fecha_created->format('d');
+                $mm=$fecha_created->format('m');
+
+                $unido=$dd.$mm;
+                if($pago->id<10){
+                    return 'PAG000'.$pago->users.'-'.$unido.'-'.$pago->id;
+                }else if($pago->id<100){
+                    return 'PAG00'.$pago->users.'-'.$unido.'-'.$pago->id;
+                }else if($pago->id<1000){
+                    return 'PAG0'.$pago->users.'-'.$unido.'-'.$pago->id;
+                }else{
+                    return 'PAG'.$pago->users.'-'.$unido.'-'.$pago->id;
+                }
+
+            })
             ->addColumn('action', function ($pago) {
                 $btn = '';
 
@@ -129,7 +149,7 @@ class AdministracionController extends Controller
 
                 return $btn;
             })
-            ->rawColumns(['action'])
+            ->rawColumns(['action','id'])
             ->make(true);
     }
 
@@ -292,6 +312,26 @@ class AdministracionController extends Controller
 
         return Datatables::of(DB::table($pagos))
             ->addIndexColumn()
+            ->editColumn('id', function ($pago) {
+                //$cv=$pago->cantidad_voucher;
+                //$cp=$pago->cantidad_pedido;
+                //$unido= ( ($cv>1)? 'V':'I' )+''+( ($cp>1)? 'V':'I' );
+                $fecha_created=Carbon::parse($pago->created_at);
+                $dd=$fecha_created->format('d');
+                $mm=$fecha_created->format('m');
+
+                $unido=$dd.$mm;
+                if($pago->id<10){
+                    return 'PAG000'.$pago->users.'-'.$unido.'-'.$pago->id;
+                }else if($pago->id<100){
+                    return 'PAG00'.$pago->users.'-'.$unido.'-'.$pago->id;
+                }else if($pago->id<1000){
+                    return 'PAG0'.$pago->users.'-'.$unido.'-'.$pago->id;
+                }else{
+                    return 'PAG'.$pago->users.'-'.$unido.'-'.$pago->id;
+                }
+
+            })
             ->addColumn('action', function ($pago) {
                 $btn = '';
 
@@ -305,7 +345,7 @@ class AdministracionController extends Controller
 
                 return $btn;
             })
-            ->rawColumns(['action'])
+            ->rawColumns(['action','id'])
             ->make(true);
     }
 
@@ -415,7 +455,7 @@ class AdministracionController extends Controller
 
         $pagos = Pago::join('users as u', 'pagos.user_id', 'u.id')
             ->join('clientes as c', 'pagos.cliente_id', 'c.id')
-            ->select('pagos.id as id',
+            ->select(['pagos.id as id',
                 DB::raw(" (CASE WHEN pagos.id<10 THEN concat('PAG',u.identificador,'-',
                                 IF ( (select count(dpago.id) from detalle_pagos dpago where dpago.pago_id=pagos.id and dpago.estado in (1) )>1,'V','I' )  ,
                                 IF ( (select count(ppedidos.id) from pago_pedidos ppedidos where ppedidos.pago_id=pagos.id and ppedidos.estado in (1) ) >1,'V','I' ),
@@ -445,8 +485,9 @@ class AdministracionController extends Controller
                 DB::raw(" (select count(dpago.id) from detalle_pagos dpago where dpago.pago_id=pagos.id and dpago.estado in (1) ) as cantidad_voucher "),
                 DB::raw(" (select count(ppedidos.id) from pago_pedidos ppedidos where ppedidos.pago_id=pagos.id and ppedidos.estado in (1)  ) as cantidad_pedido "),
                 DB::raw(" ( select GROUP_CONCAT(ppp.codigo) from pago_pedidos ped inner join pedidos ppp on ped.pedido_id =ppp.id where pagos.id=ped.pago_id and ped.estado=1 and ppp.estado=1 and ped.pagado in (1,2)) as codigos "),
-                DB::raw(" (select sum(ped2.abono) from pago_pedidos ped2 where ped2.pago_id =pagos.id and ped2.estado=1 and ped2.pagado in (1,2) ) as total_pago ")
-            )
+                DB::raw(" (select sum(ped2.abono) from pago_pedidos ped2 where ped2.pago_id =pagos.id and ped2.estado=1 and ped2.pagado in (1,2) ) as total_pago "),
+                'pagos.created_at'
+            ])
             //->where('pagos.user_id',$request->asesores)
             ->whereIn('pagos.condicion', [Pago::OBSERVADO])
             ->where('pagos.estado', '1');
@@ -463,6 +504,26 @@ class AdministracionController extends Controller
 
         return Datatables::of(DB::table($pagos))
             ->addIndexColumn()
+            ->editColumn('id', function ($pago) {
+                //$cv=$pago->cantidad_voucher;
+                //$cp=$pago->cantidad_pedido;
+                //$unido= ( ($cv>1)? 'V':'I' )+''+( ($cp>1)? 'V':'I' );
+                $fecha_created=Carbon::parse($pago->created_at);
+                $dd=$fecha_created->format('d');
+                $mm=$fecha_created->format('m');
+
+                $unido=$dd.$mm;
+                if($pago->id<10){
+                    return 'PAG000'.$pago->users.'-'.$unido.'-'.$pago->id;
+                }else if($pago->id<100){
+                    return 'PAG00'.$pago->users.'-'.$unido.'-'.$pago->id;
+                }else if($pago->id<1000){
+                    return 'PAG0'.$pago->users.'-'.$unido.'-'.$pago->id;
+                }else{
+                    return 'PAG'.$pago->users.'-'.$unido.'-'.$pago->id;
+                }
+
+            })
             ->addColumn('action', function ($pago) {
                 $btn = '';
                 if (Auth::user()->rol == "Administrador") {
@@ -472,7 +533,7 @@ class AdministracionController extends Controller
                 }
                 return $btn;
             })
-            ->rawColumns(['action'])
+            ->rawColumns(['action','id'])
             ->make(true);
     }
 
@@ -657,7 +718,8 @@ class AdministracionController extends Controller
                 DB::raw(" (select count(dpago.id) from detalle_pagos dpago where dpago.pago_id=pagos.id and dpago.estado in (1) ) as cantidad_voucher "),
                 DB::raw(" (select count(ppedidos.id) from pago_pedidos ppedidos where ppedidos.pago_id=pagos.id and ppedidos.estado in (1)  ) as cantidad_pedido "),
                 DB::raw(" ( select GROUP_CONCAT(ppp.codigo) from pago_pedidos ped inner join pedidos ppp on ped.pedido_id =ppp.id where pagos.id=ped.pago_id and ped.estado=1 and ppp.estado=1 and ped.pagado in (1,2)) as codigos "),
-                DB::raw(" (select sum(ped2.abono) from pago_pedidos ped2 where ped2.pago_id =pagos.id and ped2.estado=1 and ped2.pagado in (1,2) ) as total_pago ")
+                DB::raw(" (select sum(ped2.abono) from pago_pedidos ped2 where ped2.pago_id =pagos.id and ped2.estado=1 and ped2.pagado in (1,2) ) as total_pago "),
+                'pagos.created_at'
             )
             ->whereIn('pagos.condicion', [Pago::ABONADO])
             ->where('pagos.estado', '1');
@@ -671,6 +733,26 @@ class AdministracionController extends Controller
 
         return Datatables::of(DB::table($pagos))
             ->addIndexColumn()
+            ->editColumn('id', function ($pago) {
+                //$cv=$pago->cantidad_voucher;
+                //$cp=$pago->cantidad_pedido;
+                //$unido= ( ($cv>1)? 'V':'I' )+''+( ($cp>1)? 'V':'I' );
+                $fecha_created=Carbon::parse($pago->created_at);
+                $dd=$fecha_created->format('d');
+                $mm=$fecha_created->format('m');
+
+                $unido=$dd.$mm;
+                if($pago->id<10){
+                    return 'PAG000'.$pago->users.'-'.$unido.'-'.$pago->id;
+                }else if($pago->id<100){
+                    return 'PAG00'.$pago->users.'-'.$unido.'-'.$pago->id;
+                }else if($pago->id<1000){
+                    return 'PAG0'.$pago->users.'-'.$unido.'-'.$pago->id;
+                }else{
+                    return 'PAG'.$pago->users.'-'.$unido.'-'.$pago->id;
+                }
+
+            })
             ->addColumn('action', function ($pago) {
                 $btn = '';
                 if (Auth::user()->rol == "Administrador") {
@@ -679,7 +761,7 @@ class AdministracionController extends Controller
                 }
                 return $btn;
             })
-            ->rawColumns(['action'])
+            ->rawColumns(['action','id'])
             ->make(true);
     }
 

@@ -54,14 +54,10 @@ class PagerecepcionMotorizado extends Export implements WithColumnFormatting, Fr
                                 ) as contacto_recibe_tracking"),
                 'direccion_grupos.producto',
                 'direccion_grupos.cantidad as QTY',
-                'u.identificador',
-                'c.nombre',
-                'direccion_grupos.fecha_recepcion',
-
-                'direccion_grupos.destino',
+                'direccion_grupos.nombre_cliente',
                 'direccion_grupos.direccion',
                 'direccion_grupos.referencia',
-                'direccion_grupos.condicion_envio',
+                'direccion_grupos.distrito',
             ]);
         if (!$this->motorizado_id) {
             $direccion = $direccion->where('direccion_grupos.motorizado_id', $this->motorizado_id);
