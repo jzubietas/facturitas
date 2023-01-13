@@ -136,11 +136,11 @@ class PagerecepcionMotorizado extends Export implements WithColumnFormatting, Fr
     public static function afterSheet(AfterSheet $event)
     {
         $color_R = 'ff5733';
-        $color__ = '3a86ff';
-        $color_A = '00b4d8';
-        $color_C = 'b5e48c';
-        $color_N = 'b5e48c';
-        $color_V = 'b5e35e';
+        $color__ = '090000';
+        $color_A = 'faf01c';
+        $color_C = '1cfaf3';
+        $color_N = 'e18b16';
+        $color_V = '6acf0c';
 
         $style_R = array(
             'fill' => array(
