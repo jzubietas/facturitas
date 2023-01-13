@@ -288,7 +288,7 @@
                         name: 'env_distrito',
                         render: function (data, type, row, meta) {
 
-                                return row.env_distrito + "<br>" + row.zona;
+                                return row.env_distrito + "<br>" + "<b>" + row.env_zona + "</b>";
 
                         },},
                     {data: 'grupo_fecha_salida', name: 'fecha_salida',sWidth: '12%'},
