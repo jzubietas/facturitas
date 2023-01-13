@@ -51,6 +51,7 @@ class PagerecepcionMotorizado extends Export implements WithColumnFormatting, Fr
                 'direccion_grupos.codigos',
                 DB::raw("(CASE when direccion_grupos.destino='LIMA' then  direccion_grupos.nombre
                                     when direccion_grupos.destino='PROVINCIA' then  direccion_grupos.direccion
+                                    else '' end
                                 ) as contacto_recibe_tracking"),
                 'direccion_grupos.producto',
                 'direccion_grupos.cantidad as QTY',
