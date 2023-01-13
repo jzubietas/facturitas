@@ -19,7 +19,7 @@
                     <input id="direcciongrupo" name="direcciongrupo" value="" type="hidden">
 
                     <h5 class="modal-title" id="exampleModalLabel">
-                        <div class="alert alert-warning">Que código desea retirar del grupo</div>
+                        <div class="alert alert-warning">Que código desea retornar a SOBRES CON DIRECCION</div>
                     </h5>
 
                     <div class="row">

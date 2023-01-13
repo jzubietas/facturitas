@@ -379,6 +379,17 @@ class MotorizadoController extends Controller
             ->where('direccion_grupos.motorizado_id', $request->motorizado_id);
 
         return datatables()->query(DB::table($pedidos_observados))
+            ->addColumn('ordering_data', function ($pedido) {
+                if ($pedido->estado = 0 || $pedido->pendiente_anulacion) {
+                    return 4;
+                } else if ($pedido->motorizado_status == Pedido::ESTADO_MOTORIZADO_OBSERVADO) {
+                    return 1;
+                }  else if ($pedido->motorizado_status == Pedido::ESTADO_MOTORIZADO_NO_RECIBIDO) {
+                    return 3;
+                } else {
+                    return 2;
+                }
+            })
             ->editColumn('codigo', function ($pedido) {
                 if ($pedido->estado = 0 || $pedido->pendiente_anulacion) {
                     return '<div class="p-2">' . $pedido->codigo . '</div>';
@@ -457,6 +468,7 @@ class MotorizadoController extends Controller
 
                 return $btn;
             })
+            ->orderColumn('ordering_data', 'ASC')
             ->rawColumns(['action', 'codigo', 'detalle', 'Ver'])
             ->make(true);
     }
