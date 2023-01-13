@@ -396,6 +396,9 @@ class MotorizadoController extends Controller
                 } else if ($pedido->motorizado_status == Pedido::ESTADO_MOTORIZADO_OBSERVADO) {
                     $html .= '<div class="p-2">OBSERVADO</div>';
                     //$html .= '<button data-toggle="jqconfirmtext" data-target="' . $pedido->motorizado_sustento_text . '" class="btn btn-light btn-sm"><i class="fa fa-envelope-open-text"></i> Ver Sustento</button>';
+                }  else if ($pedido->motorizado_status == Pedido::ESTADO_MOTORIZADO_NO_RECIBIDO) {
+                    $html .= '<div class="p-2">NO RECIBIDO</div>';
+                    //$html .= '<button data-toggle="jqconfirmtext" data-target="' . $pedido->motorizado_sustento_text . '" class="btn btn-light btn-sm"><i class="fa fa-envelope-open-text"></i> Ver Sustento</button>';
                 } else {
                     $html .= '<div class="p-2">NO CONTESTA</div>';
                     //$html .= '<button data-toggle="jqconfirmfoto" data-target="' . \Storage::disk('pstorage')->url($pedido->motorizado_sustento_foto) . '" class="btn btn-light btn-sm"><i class="fa fa-photo-video"></i>Ver foto</button>';
@@ -408,8 +411,10 @@ class MotorizadoController extends Controller
                     $html .= '';
                 } else if ($pedido->motorizado_status == Pedido::ESTADO_MOTORIZADO_OBSERVADO) {
                     $html .= '<button data-toggle="jqconfirmtext" data-target="' . $pedido->motorizado_sustento_text . '" class="btn btn-light btn-sm font-12"><i class="fa fa-envelope-open-text"></i> Ver Sustento</button>';
-                } else {
+                } else if ($pedido->motorizado_status == Pedido::ESTADO_MOTORIZADO_NO_CONTESTO) {
                     $html .= '<button data-toggle="jqconfirmfoto" data-target="' . \Storage::disk('pstorage')->url($pedido->motorizado_sustento_foto) . '" class="btn btn-light btn-sm font-12"><i class="fa fa-photo-video"></i>Ver foto</button>';
+                } else if ($pedido->motorizado_status == Pedido::ESTADO_MOTORIZADO_NO_RECIBIDO) {
+                    $html .= '';
                 }
                 return $html;
             })
@@ -629,7 +634,8 @@ class MotorizadoController extends Controller
                 ->where('pedidos.estado', '1')
                 ->whereIn('pedidos.condicion_envio_code', [$request->condicion])
                 ->where('dp.estado', '1');
-        } else if ($tipo_consulta == "paquete") {
+        }
+        else if ($tipo_consulta == "paquete") {
 
             $pedidos = null;
             $filtros_code = [12];
@@ -650,6 +656,7 @@ class MotorizadoController extends Controller
                 ->when($fecha_consulta != null, function ($query) use ($fecha_consulta) {
                     $query->whereDate('direccion_grupos.fecha_salida', $fecha_consulta);
                 })
+                ->where('direccion_grupos.motorizado_status','=',0)
                 ->activo();
 
             if (\auth()->user()->rol == User::ROL_MOTORIZADO) {
@@ -660,6 +667,13 @@ class MotorizadoController extends Controller
                 ->addIndexColumn()
                 ->addColumn('condicion_envio_color', function ($grupo) {
                     return Pedido::getColorByCondicionEnvio($grupo->condicion_envio);
+                })
+                ->editColumn('fecha_salida', function ($grupo) {
+                    try {
+                        return Carbon::parse($grupo->fecha_salida)->format('d-m-Y');
+                    }catch (\Exception $ex){
+                        return $grupo->fecha_salida;
+                    }
                 })
                 ->editColumn('condicion_envio', function ($grupo) {
                     $color = Pedido::getColorByCondicionEnvio($grupo->condicion_envio);
@@ -683,13 +697,22 @@ class MotorizadoController extends Controller
                     if ($direcciongrupo->condicion_envio_code == Pedido::ENVIO_MOTORIZADO_COURIER_INT) {
 
                         if ($fecha_actual >= $fecha_consulta) {
-                            $btn .= '<li>
-                                <button data-target="#modal-envio" data-toggle="modal" data-accion="recibir" data-recibir="' . $direcciongrupo->id . '" data-codigos="' . $direcciongrupo->codigos . '"  class="btn btn-warning btn-sm"><i class="fas fa-check-circle"></i> Recibido</button>
-                            </li>';
                             $count = Pedido::query()->where('direccion_grupo', $direcciongrupo->id)->count();
+                            $btn .= ' <li>
+                                            <button
+                                            data-btncolor="orange"
+                                            data-btntext="Recibido"
+                                            data-count="' . $count . '"
+                                            data-target="' . route('envios.recepcionmotorizado.pedidos', $direcciongrupo->id) . '"
+                                            data-target-post="' . route('envios.recepcionarmotorizado', ['hiddenEnvio' => $direcciongrupo->id, 'hiddenAccion' => 'recibir']) . '"
+                                            data-toggle="jqconfirm" class="btn btn-warning btn-sm"><i class="fas fa-check-circle"></i> Recibido</button>
+                                        </li>';
+
                             if ($count == 1) {
                                 $btn .= ' <li>
                                             <button
+                                            data-btncolor="red"
+                                            data-btntext="No recibido"
                                             data-target="' . route('envios.recepcionarmotorizado') . '"
                                             data-target-post="' . route('envios.recepcionarmotorizado', ['hiddenEnvio' => $direcciongrupo->id, 'hiddenAccion' => 'rechazar']) . '"
                                             data-count="' . $count . '"
@@ -698,6 +721,8 @@ class MotorizadoController extends Controller
                             } else {
                                 $btn .= ' <li>
                                             <button
+                                            data-btncolor="red"
+                                            data-btntext="No recibido"
                                             data-count="' . $count . '"
                                             data-target="' . route('envios.recepcionmotorizado.pedidos', $direcciongrupo->id) . '"
                                             data-target-post="' . route('envios.recepcionarmotorizado', ['hiddenEnvio' => $direcciongrupo->id, 'hiddenAccion' => 'rechazar']) . '"
