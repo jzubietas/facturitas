@@ -152,4 +152,37 @@ class DireccionGrupo extends Model
         }
     }
 
+    public static function addNoRecibidoAuthorization(self $grupo)
+    {
+        setting()->load();
+        $motorizado_id = $grupo->motorizado_id;
+        $key = "motorizado.authorization.ruta.paquetes.$motorizado_id";
+        $result = setting($key, []);
+        $result[] = $grupo->id;
+        setting([
+            $key => collect($result)->unique()->values()->all()
+        ])->save();
+    }
+
+    /**
+     * @param $motorizadoId
+     * @return array
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Psr\Container\NotFoundExceptionInterface
+     */
+
+    public static function getNoRecibidoAuthorization($motorizadoId)
+    {
+        setting()->load();
+        $key = "motorizado.authorization.ruta.paquetes.$motorizadoId";
+        return setting($key, []);
+    }
+
+    public static function clearNoRecibidoAuthorization($motorizadoId)
+    {
+        setting()->load();
+        $key = "motorizado.authorization.ruta.paquetes.$motorizadoId";
+        setting()->forget($key);
+        setting()->save();
+    }
 }
