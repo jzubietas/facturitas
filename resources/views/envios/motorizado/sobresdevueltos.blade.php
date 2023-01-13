@@ -88,6 +88,7 @@
                                                     <th scope="col">Razón social</th>
                                                     <th scope="col">Fecha Ruta</th>
                                                     <th scope="col">Detalle</th>
+                                                    <th scope="col">Ver</th>
                                                     <th scope="col">Acciones</th>
                                                 </tr>
                                                 </thead>
