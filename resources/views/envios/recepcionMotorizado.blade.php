@@ -126,10 +126,12 @@
 
 
             @if(in_array(auth()->user()->rol,[\App\Models\User::ROL_MOTORIZADO,\App\Models\User::ROL_ADMIN]))
-                <ul class="nav nav-tabs mb-24 mt-24" id="myTab" role="tablist">
+                <div class="moto-container">
             @else
-                        <ul class="nav nav-tabs mb-24 mt-24 d-none" id="myTab" role="tablist">
+                <div class="moto-container d-none">
             @endif
+
+                   <ul class="nav nav-tabs mb-24 mt-24" id="myTab" role="tablist">
                     <li class="nav-item w-50 text-center">
                         <a class="condicion-tabla nav-link activo active font-weight-bold" id="recepcion-tab"
                            data-toggle="tab"
@@ -160,11 +162,8 @@
                     </tr>
                   </tbody>
                 </table><br> --}}
-                        @if(in_array(auth()->user()->rol,[\App\Models\User::ROL_MOTORIZADO,\App\Models\User::ROL_ADMIN]))
-                            <table id="tablaPrincipal" class="table table-striped dt-responsive w-100">
-                                @else
-                                    <table id="tablaPrincipal" class="table table-striped dt-responsive w-100 d-none">
-                                        @endif
+
+                                    <table id="tablaPrincipal" class="table table-striped dt-responsive w-100">
                     <thead>
                     <tr>
                         <th scope="col">Item</th>
@@ -180,6 +179,7 @@
                     <tbody>
                     </tbody>
                 </table>
+                </div>
 
             <!--
             MODULO PARA LOGISTICA
@@ -190,7 +190,7 @@
                                                 <div class="row d-none">
                                     @endif
 
-                <div class="row">
+
                     @foreach($motorizados as $motorizado)
                         <div class="col-lg-4 container-{{Str::slug($motorizado->zona)}}">
                             <div class="table-responsive">
