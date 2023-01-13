@@ -291,6 +291,12 @@
                         searchable: false,
                     },
                     {
+                        data: 'Ver',
+                        name: 'Ver',
+                        orderable: false,
+                        searchable: false,
+                    },
+                    {
                         data: 'action',
                         name: 'action',
                         orderable: false,
