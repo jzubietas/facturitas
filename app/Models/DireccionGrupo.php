@@ -102,10 +102,17 @@ class DireccionGrupo extends Model
         $relacion = $grupo->pedidos()
             ->join('detalle_pedidos', 'detalle_pedidos.pedido_id', 'pedidos.id')
             ->pluck('detalle_pedidos.nombre_empresa', 'pedidos.codigo');
-        $grupo->update([
-            'codigos' => $relacion->keys()->join(', '),
-            'producto' => $relacion->values()->join(', '),
-        ]);
+        if ($relacion->count() > 0) {
+            $grupo->update([
+                'codigos' => $relacion->keys()->join(', '),
+                'producto' => $relacion->values()->join(', '),
+            ]);
+        } else {
+            $grupo->update([
+                'estado' => 0,
+                'motorizado_status' => 0
+            ]);
+        }
     }
 
     public static function desvincularPedido(self $grupo, Pedido $pedido, $sustento = null, $motorizado_status = Pedido::ESTADO_MOTORIZADO_OBSERVADO)
