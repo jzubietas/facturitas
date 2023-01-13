@@ -28,7 +28,7 @@ Sheet::macro('styleCells', function (Sheet $sheet, string $cellRange, array $sty
 
 class PagerecepcionMotorizado extends Export implements WithColumnFormatting, FromCollection, WithHeadings, ShouldAutoSize, WithEvents
 {
-    use RemembersRowNumber;
+    //use RemembersRowNumber;
 
     public int $motorizado_id = 0;
     public string $fecha_envio_h = '';
