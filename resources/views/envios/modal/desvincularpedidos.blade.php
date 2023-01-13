@@ -4,7 +4,7 @@
         <div class="modal-content">
             <div class="modal-header bg-success">
                 <h5 class="modal-title" id="exampleModalLabel">
-                    Desagrupar pedidos
+                    Retornar a sobres con dirección
                 </h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
