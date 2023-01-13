@@ -64,6 +64,17 @@
 *ES IMPORTANTE PAGAR EL ENVIO*
 
 *TOTAL A PAGAR={{money_f($totalDeuda)}}*
+
+_______________________________________________________________________________
+
+CUENTAS BANCARIAS
+
+@foreach($cuentas_bancarias as $titula=>$cuentas)
+{{$titula}}
+@foreach($cuentas as $cuenta)
+    {{$cuenta->numero}} - {{$cuenta->entidad_bancaria}} ({{$cuenta->tipo}})
+@endforeach
+@endforeach
 </textarea>
 
             </div>
