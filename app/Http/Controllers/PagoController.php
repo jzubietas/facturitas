@@ -1406,23 +1406,15 @@ class PagoController extends Controller
     {
         $pagos = Pago::join('users as u', 'pagos.user_id', 'u.id')
             ->join('clientes as c', 'pagos.cliente_id', 'c.id')
-            ->select('pagos.id',
-                DB::raw(" (CASE WHEN pagos.id<10 THEN concat('PAG',u.identificador,'-',
-                                IF ( (select count(dpago.id) from detalle_pagos dpago where dpago.pago_id=pagos.id and dpago.estado in (1) )>1,'V','I' )  ,
-                                IF ( (select count(ppedidos.id) from pago_pedidos ppedidos where ppedidos.pago_id=pagos.id and ppedidos.estado in (1) ) >1,'V','I' ),
+            ->select(['pagos.id',
+                DB::raw(" (CASE WHEN pagos.id<10 THEN concat('PAG',u.identificador,'-',DATE_FORMAT(pagos.created_at, '%d%m'),
                                 '-',pagos.id
                                 )
-                            WHEN pagos.id<100  THEN concat('PAG',u.identificador,'-',
-                                IF ( (select count(dpago.id) from detalle_pagos dpago where dpago.pago_id=pagos.id and dpago.estado in (1) )>1,'V','I' )  ,
-                                IF ( (select count(ppedidos.id) from pago_pedidos ppedidos where ppedidos.pago_id=pagos.id and ppedidos.estado in (1) ) >1,'V','I' ),
+                            WHEN pagos.id<100  THEN concat('PAG',u.identificador,'-',DATE_FORMAT(pagos.created_at, '%d%m'),
                                 '-',pagos.id)
-                            WHEN pagos.id<1000  THEN concat('PAG',u.identificador,'-',
-                                IF ( (select count(dpago.id) from detalle_pagos dpago where dpago.pago_id=pagos.id and dpago.estado in (1) )>1,'V','I' )  ,
-                                IF ( (select count(ppedidos.id) from pago_pedidos ppedidos where ppedidos.pago_id=pagos.id and ppedidos.estado in (1) ) >1,'V','I' ),
+                            WHEN pagos.id<1000  THEN concat('PAG',u.identificador,'-',DATE_FORMAT(pagos.created_at, '%d%m'),
                                 '-',pagos.id)
-                            ELSE concat('PAG',u.identificador,'-',
-                                IF ( (select count(dpago.id) from detalle_pagos dpago where dpago.pago_id=pagos.id and dpago.estado in (1) )>1,'V','I' )  ,
-                                IF ( (select count(ppedidos.id) from pago_pedidos ppedidos where ppedidos.pago_id=pagos.id and ppedidos.estado in (1) ) >1,'V','I' ),
+                            ELSE concat('PAG',u.identificador,'-',DATE_FORMAT(pagos.created_at, '%d%m'),
                                 '-',pagos.id) END) AS id2"),
                 'u.name as users',
                 'c.celular', //cliente
@@ -1430,7 +1422,8 @@ class PagoController extends Controller
                 'pagos.observacion',
                 'pagos.condicion',
                 'pagos.estado',
-                'pagos.created_at as fecha')
+                'pagos.created_at as fecha'
+            ])
             ->where('pagos.id', $pago->id)
             ->groupBy('pagos.id',
                 'u.name',
@@ -2139,7 +2132,7 @@ class PagoController extends Controller
 
         return Datatables::of(DB::table($pagos))
             ->addIndexColumn()
-            ->editColumn('id', function ($pago) {
+            ->editColumn('code', function ($pago) {
                 //$cv=$pago->cantidad_voucher;
                 //$cp=$pago->cantidad_pedido;
                 //$unido= ( ($cv>1)? 'V':'I' )+''+( ($cp>1)? 'V':'I' );
@@ -2167,7 +2160,7 @@ class PagoController extends Controller
 
                 return $btn;
             })
-            ->rawColumns(['action','total_pago','id'])
+            ->rawColumns(['action','total_pago','code'])
             ->make(true);
 
     }
@@ -2302,6 +2295,26 @@ class PagoController extends Controller
             }
             return datatables()
                 ->query(DB::table($pagos))
+                ->editColumn('code', function ($pago) {
+                    //$cv=$pago->cantidad_voucher;
+                    //$cp=$pago->cantidad_pedido;
+                    //$unido= ( ($cv>1)? 'V':'I' )+''+( ($cp>1)? 'V':'I' );
+                    $fecha_created=Carbon::parse($pago->created_at);
+                    $dd=$fecha_created->format('d');
+                    $mm=$fecha_created->format('m');
+
+                    $unido=$dd.$mm;
+                    if($pago->id<10){
+                        return 'PAG000'.$pago->identifica.'-'.$unido.'-'.$pago->id;
+                    }else if($pago->id<100){
+                        return 'PAG00'.$pago->identifica.'-'.$unido.'-'.$pago->id;
+                    }else if($pago->id<1000){
+                        return 'PAG0'.$pago->identifica.'-'.$unido.'-'.$pago->id;
+                    }else{
+                        return 'PAG'.$pago->identifica.'-'.$unido.'-'.$pago->id;
+                    }
+
+                })
                 ->addIndexColumn()
                 ->addColumn('action', function ($pago) {
                     $btn = '';

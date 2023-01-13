@@ -151,8 +151,8 @@
         },
         columns: [
         {
-            data: 'id',
-            name: 'id',
+            data: 'code',
+            name: 'code',
         },
         {
           data: 'codigos'
