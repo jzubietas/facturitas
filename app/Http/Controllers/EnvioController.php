@@ -1484,17 +1484,31 @@ class EnvioController extends Controller
     public function RecibirMotorizado(Request $request)
     {
         $accion = $request->hiddenAccion;
-        //$grupo = DireccionGrupo::query()->findOrFail($request->hiddenEnvio);
         $grupo = DireccionGrupo::query()->findOrFail($request->hiddenEnvio);
 
+        $pedidosIds = $grupo->pedidos()->pluck('id');
         if ($accion == "recibir") {
+            if ($request->has('pedidos')) {
+                $pedidos = Pedido::query()->whereIn('id', $request->pedidos)->get();
+                if ($pedidos->count() > 0) {
+                    $diff = $pedidosIds->diff($request->pedidos);
+                    if ($diff->count() > 0) {
+                        $grupo = DireccionGrupo::desvincularPedidos($grupo, $pedidos, null, 0);
+                    }
+                    $grupo->update([
+                        'fecha_recepcion_motorizado' => Carbon::now(),
+                        'condicion_envio' => Pedido::RECEPCION_MOTORIZADO,
+                        'condicion_envio_code' => Pedido::RECEPCION_MOTORIZADO_INT
+                    ]);
+                }
 
-            $grupo->update([
-                'fecha_recepcion_motorizado' => Carbon::now(),
-                'condicion_envio' => Pedido::RECEPCION_MOTORIZADO,
-                'condicion_envio_code' => Pedido::RECEPCION_MOTORIZADO_INT
-            ]);
-
+            } else {
+                $grupo->update([
+                    'fecha_recepcion_motorizado' => Carbon::now(),
+                    'condicion_envio' => Pedido::RECEPCION_MOTORIZADO,
+                    'condicion_envio_code' => Pedido::RECEPCION_MOTORIZADO_INT
+                ]);
+            }
             PedidoMovimientoEstado::create([
                 'pedido' => $request->hiddenEnvio,
                 'condicion_envio_code' => Pedido::RECEPCION_MOTORIZADO_INT,
@@ -1504,20 +1518,23 @@ class EnvioController extends Controller
             return response()->json(['html' => "Grupo recibido"]);
 
         } else if ($accion == "rechazar") {
-            if ($request->has('pedido_id')) {
-                $pedido = Pedido::query()->findOrFail($request->pedido_id);
-                $grupo = DireccionGrupo::desvincularPedido($grupo, $pedido, 'No recibido', Pedido::ESTADO_MOTORIZADO_NO_RECIBIDO);
-                $grupo->update([
-                    'fecha_recepcion_motorizado' => Carbon::now(),
-                    'condicion_envio' => Pedido::REPARTO_COURIER,
-                    'condicion_envio_code' => Pedido::REPARTO_COURIER_INT,
-                    'motorizado_status' => Pedido::ESTADO_MOTORIZADO_NO_RECIBIDO
-                ]);
+            if ($request->has('pedidos')) {
+                $pedidos = Pedido::query()->whereIn('id', $request->pedidos)->get();
+                if ($pedidos->count() > 0) {
+                    $diff = $pedidosIds->diff($request->pedidos);
+                    if ($diff->count() > 0) {
+                        DireccionGrupo::desvincularPedidos($grupo, $pedidos, 'No recibido', Pedido::ESTADO_MOTORIZADO_NO_RECIBIDO);
+                    } else {
+                        $grupo->update([
+                            'motorizado_status' => Pedido::ESTADO_MOTORIZADO_NO_RECIBIDO,
+                            'motorizado_sustento_text' => 'No recibido',
+                        ]);
+                    }
+                }
             } else {
                 $grupo->update([
-                    'fecha_recepcion_motorizado' => Carbon::now(),
-                    'condicion_envio' => Pedido::REPARTO_COURIER,
-                    'condicion_envio_code' => Pedido::REPARTO_COURIER_INT,
+                    //'fecha_recepcion_motorizado' => Carbon::now(),
+                    'motorizado_sustento_text' => 'No recibido',
                     'motorizado_status' => Pedido::ESTADO_MOTORIZADO_NO_RECIBIDO
                 ]);
             }
