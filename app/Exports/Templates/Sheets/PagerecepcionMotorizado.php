@@ -59,12 +59,13 @@ class PagerecepcionMotorizado extends Export implements WithColumnFormatting, Fr
                 'direccion_grupos.direccion',
                 'direccion_grupos.referencia',
                 'direccion_grupos.distrito',
-            ]);
-        if (!$this->motorizado_id) {
+            ])
+        ->where('direccion_grupos.estado','=','1');
+        if ($this->motorizado_id!=0) {
             $direccion = $direccion->where('direccion_grupos.motorizado_id', $this->motorizado_id);
         }
-        if (!$this->fecha_envio_h) {
-            $direccion = $direccion->where('cast(direccion_grupos.fecha_salida as date)', $this->fecha_envio_h);
+        if ($this->fecha_envio_h!='') {
+            $direccion = $direccion->whereDate('direccion_grupos.fecha_salida', $this->fecha_envio_h);
         }
 
         return $direccion->get();

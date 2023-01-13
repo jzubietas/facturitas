@@ -17,45 +17,47 @@
 
     @include('envios.motorizado.modal.entregado')
 
-    <div class="card p-48">
+    <div class="card p-0">
 
         <table cellspacing="5" cellpadding="5" class="table-responsive">
             <tbody>
             <tr>
-
-                <td><p class="font-20 font-weight-bold">Buscar por fecha de Ruta:</p>
-                    <input type="date" value="{{$fecha_consulta->format('Y-m-d')}}" id="fecha_consulta" name="fecha_consulta" class="form-control" autocomplete="off"></td>
-                <td></td>
-
-
+                <td>
+                    <div class="input-group mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text font-weight-bold font-12" id="inputGroup-sizing-default">Fecha de Ruta:</span>
+                        </div>
+                        <input type="date" value="{{$fecha_consulta->format('Y-m-d')}}" id="fecha_consulta" name="fecha_consulta" class="form-control" autocomplete="off">
+                    </div>
+                </td>
             </tr>
             </tbody>
-        </table><br>
+        </table>
 
-        <ul class="nav nav-tabs" id="myTab" role="tablist">
-            <li class="nav-item">
-                <a class="nav-link active" id="general-tab" data-toggle="tab" href="#general" role="tab"
+        <ul class="nav nav-tabs" style="font-size:10px;" id="myTab" role="tablist">
+            <li class="nav-item w-25">
+                <a class="nav-link active p-8" id="general-tab" data-toggle="tab" href="#general" role="tab"
                    data-action-name="Acciones"
                    aria-controls="general" aria-selected="true" data-action="general">
                     EN MOTORIZADO
                 </a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" id="entregado-tab" data-toggle="tab" href="#entregado" role="tab"
+            <li class="nav-item w-25">
+                <a class="nav-link p-8" id="entregado-tab" data-toggle="tab" href="#entregado" role="tab"
                    data-action-name="Acciones"
                    aria-controls="entregado" aria-selected="false" data-action="entregado">
                     ENTREGADO
                 </a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" id="no_contesto-tab" data-toggle="tab" href="#no_contesto" role="tab"
+            <li class="nav-item w-25">
+                <a class="nav-link p-8" id="no_contesto-tab" data-toggle="tab" href="#no_contesto" role="tab"
                    data-action-name="Acciones"
                    aria-controls="no_contesto" aria-selected="false" data-action="no_contesto">
                     NO CONTESTO
                 </a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" id="observado-tab" data-toggle="tab" href="#observado" role="tab"
+            <li class="nav-item w-25">
+                <a class="nav-link p-8" id="observado-tab" data-toggle="tab" href="#observado" role="tab"
                    data-action-name="Acciones/Sustento"
                    aria-controls="observado" aria-selected="false" data-action="observado">
                     OBSERVADOS
@@ -63,7 +65,7 @@
             </li>
         </ul>
         <div class="card-body px-1">
-            <table id="tablaPrincipal" style="width:100%;" class="table table-striped dt-responsive w-100">
+            <table id="tablaPrincipal" style="width:100%;" class="table table-striped dt-responsive w-100 font-11">
                 <thead>
                 <tr>
                     <th scope="col">Item</th>
@@ -131,6 +133,8 @@
                 var fecha_formateada = fecha_format[2] + "/" + fecha_format[1] + "/" + fecha_format[0];
                 $(this).data('fecha',fecha_formateada);
                 console.log(fecha_formateada);
+
+                $('#myTab a[href="#general"]').tab('show')
                 $('#tablaPrincipal').DataTable().ajax.reload();
             });
 
@@ -599,6 +603,7 @@ Enviar</button>
                         renderer: $.fn.dataTable.Responsive.renderer.listHiddenNodes()
                     }
                 },
+                lengthChange: false,
                 processing: true,
                 stateSave: true,
                 serverSide: true,
@@ -740,6 +745,23 @@ Enviar</button>
                         "previous": "Anterior"
                     }
                 },
+                "fnDrawCallback": function () {
+                    let activepage=$('a[data-toggle="tab"].active').data('action');
+                    let contador_tabla='';
+                    contador_tabla=$("#tablaPrincipal").dataTable().fnSettings().fnRecordsDisplay();
+                    switch(activepage)
+                    {
+                        case 'general':
+                            if(contador_tabla==0)$('#myTab a[href="#entregado"]').tab('show').trigger('click')
+                            break;
+                        case 'entregado':
+                            if(contador_tabla==0)$('#myTab a[href="#no_contesto"]').tab('show').trigger('click')
+                            break;
+                        case 'no_contesto':
+                            if(contador_tabla==0)$('#myTab a[href="#observado"]').tab('show').trigger('click')
+                            break;
+                    }
+                }
             });
             datatable.on( 'responsive-display', function ( e, datatable, row, showHide, update ) {
                 console.log( 'Details for row '+row.index()+' '+(showHide ? 'shown' : 'hidden') );

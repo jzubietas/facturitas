@@ -207,8 +207,13 @@
                                                                     MOTORIZADO {{Str::upper($motorizado->zona)}}</h5>
                                                                 <div>
 
-                                                                    <h6 class="mb-0"><a class="btn btn-sm btn-danger"
-                                                                                        href="#">Exportar</a></span>
+                                                                    <h6 class="mb-0">
+                                                                        <a target="_blank" class="btn btn-sm btn-danger"
+                                                                                        href="{{ route('envios.recepcionmotorizado.Excel',['user_motorizado'=>$motorizado->id,'fecha_envio'=>'2023-01-13']) }}">
+                                                                            <i class="fa fa-file-excel"></i>
+                                                                            Excel
+                                                                        </a>
+
                                                                     </h6>
                                                                 </div>
                                                             </div>

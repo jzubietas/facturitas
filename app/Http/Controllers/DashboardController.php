@@ -41,6 +41,12 @@ class DashboardController extends Controller
 
         $_pedidos = $_pedidos->get();
 
+        $_pedidos_totalpedidosdia = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')
+            ->join('users as u', 'pedidos.user_id', 'u.id')
+            ->where('pedidos.estado', '1')
+            ->where(DB::raw('CAST(pedidos.created_at as date)'), '=', Carbon::now()->format('Y-m-d'))
+            ->count();
+
 
         /**
          * $_pedidos_mes_op = null;
@@ -370,7 +376,7 @@ class DashboardController extends Controller
                 'conteo',
                 'cobranzaxmes',
                 '_pedidos',
-                //'_pedidos_mes_op'
+                '_pedidos_totalpedidosdia'
             )
         );
     }
