@@ -376,18 +376,17 @@ class EnvioController extends Controller
 
     public function Enviospararepartotabla(Request $request)
     {
-        $zona_aux=$request->zona;
-        $lazona='';
-        switch ($zona_aux)
-        {
+        $zona_aux = $request->zona;
+        $lazona = '';
+        switch ($zona_aux) {
             case 'NORTE':
-                $lazona=array('NORTE','OLVA');
+                $lazona = array('NORTE', 'OLVA');
                 break;
             case 'CENTRO':
-                $lazona=array('CENTRO','CENTRO SUR','CENTRO OESTE','CENTRO NORTE','CENTRO ESTE','ESTE','OESTE');
+                $lazona = array('CENTRO', 'CENTRO SUR', 'CENTRO OESTE', 'CENTRO NORTE', 'CENTRO ESTE', 'ESTE', 'OESTE');
                 break;
             case 'SUR':
-                $lazona=array('SUR');
+                $lazona = array('SUR');
                 break;
         }
 
@@ -474,14 +473,12 @@ class EnvioController extends Controller
                                     </li>';
 
                 //endif;
-                if(Pedido::query()->where('direccion_grupo',$grupo->id)->count()>1) {
-                    $btn .= '<li>
+                $btn .= '<li>
                             <a href="" class="btn-sm text-secondary" data-target="#modal-desvincular" data-toggle="modal" data-desvincular="' . $grupo->id . '">
 
                                             <i class="fa fa-undo text-danger" aria-hidden="true"></i> Retornar a sobres con dirección
                                 </a>
                             </li>';
-                }
                 $btn .= '</ul>';
 
                 return $btn;
@@ -562,13 +559,13 @@ class EnvioController extends Controller
 
                 //if (auth()->user()->can('envios.enviar')):
 
-                    $btn .= '<ul class="list-unstyled pl-0">';
-                    $btn .= '<li>
+                $btn .= '<ul class="list-unstyled pl-0">';
+                $btn .= '<li>
                                         <a href="" class="btn-sm text-secondary" data-target="#modal-confirmacion" data-toggle="modal" data-ide="' . $pedido->id . '" data-entregar-confirm="' . $pedido->id . '" data-destino="' . $pedido->destino . '" data-fechaenvio="' . $pedido->fecha . '" data-codigos="' . $pedido->codigos . '">
                                             <i class="fas fa-envelope text-success"></i> A motorizado</a></li>
                                         </a>
                                     </li>';
-                    $btn .= '</ul>';
+                $btn .= '</ul>';
                 //endif;
 
                 return $btn;
@@ -1467,7 +1464,7 @@ class EnvioController extends Controller
 
             if (!$grupoPedido->pedidos()->where('pedidos.id', '=', $pedido->id)->exists()) {
                 $grupoPedido->pedidos()->syncWithoutDetaching([
-                    $pedido->id=> [
+                    $pedido->id => [
                         'razon_social' => $detalle->nombre_empresa,
                         'codigo' => $pedido->codigo,
                     ]
