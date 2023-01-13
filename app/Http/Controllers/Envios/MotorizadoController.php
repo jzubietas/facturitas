@@ -392,12 +392,12 @@ class MotorizadoController extends Controller
             ->addColumn('detalle', function ($pedido) {
                 $html = '';
                 if ($pedido->estado = 0 || $pedido->pendiente_anulacion) {
-                    $html .= '<div class="badge badge-danger p-2">ANULADO</div>';
+                    $html .= '<div class="p-2">ANULADO</div>';
                 } else if ($pedido->motorizado_status == Pedido::ESTADO_MOTORIZADO_OBSERVADO) {
-                    $html .= '<div class="badge badge-info p-2">OBSERVADO</div>';
+                    $html .= '<div class="p-2">OBSERVADO</div>';
                     $html .= '<button data-toggle="jqconfirmtext" data-target="' . $pedido->motorizado_sustento_text . '" class="btn btn-light btn-sm"><i class="fa fa-envelope-open-text"></i> Ver Sustento</button>';
                 } else {
-                    $html .= '<div class="badge badge-warning p-2">NO CONTESTA</div>';
+                    $html .= '<div class="p-2">NO CONTESTA</div>';
                     $html .= '<button data-toggle="jqconfirmfoto" data-target="' . \Storage::disk('pstorage')->url($pedido->motorizado_sustento_foto) . '" class="btn btn-light btn-sm"><i class="fa fa-photo-video"></i>Ver foto</button>';
                 }
                 return $html;

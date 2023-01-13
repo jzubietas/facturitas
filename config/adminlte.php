@@ -499,7 +499,7 @@ return [
                     'text' => 'Motorizado en ruta',
                     'route' => 'envios.motorizados.index',
                     'can' => 'motorizado.enruta',
-                    'icon' => 'fas fa-check-circle dot_contador_en_motorizados_count',
+                    'icon' => 'fas fa-check-circle',
                     'active' => ['enviados'],
                 ],
                 [
