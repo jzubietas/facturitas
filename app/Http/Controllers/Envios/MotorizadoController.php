@@ -652,6 +652,10 @@ class MotorizadoController extends Controller
                 })
                 ->activo();
 
+            if (\auth()->user()->rol == User::ROL_MOTORIZADO) {
+                $grupos->where('direccion_grupos.motorizado_id',\auth()->id());
+            }
+
             return Datatables::of(DB::table($grupos))
                 ->addIndexColumn()
                 ->addColumn('condicion_envio_color', function ($grupo) {
@@ -661,7 +665,7 @@ class MotorizadoController extends Controller
                     $color = Pedido::getColorByCondicionEnvio($grupo->condicion_envio);
 
                     $badge_estado = '';
-                    $badge_estado .= '<span class="badge badge-dark p-8" style="color: #fff; background-color: #347cc4; font-weight: 600; margin-bottom: -2px;border-radius: 4px 4px 0px 0px; font-size:8px;  padding: 4px 4px !important; font-weight: 500;">Direccion agregada</span>';
+                    $badge_estado .= '<span class="badge badge-dark p-8" style="color: #fff; background-color: #347cc4; font-weight: 600; margin-bottom: -2px;border-radius: 4px 4px 0px 0px; font-size:8px;  padding: 4px 4px !important;">Direccion agregada</span>';
 
                     $badge_estado .= '<span class="badge badge-success" style="background-color: #00bc8c !important;
                     padding: 4px 8px !important;

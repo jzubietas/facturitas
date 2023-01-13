@@ -28,7 +28,7 @@ Sheet::macro('styleCells', function (Sheet $sheet, string $cellRange, array $sty
 
 class PagerecepcionMotorizado extends Export implements WithColumnFormatting, FromCollection, WithHeadings, ShouldAutoSize, WithEvents
 {
-    use RemembersRowNumber;
+    //use RemembersRowNumber;
 
     public int $motorizado_id = 0;
     public string $fecha_envio_h = '';
@@ -51,6 +51,7 @@ class PagerecepcionMotorizado extends Export implements WithColumnFormatting, Fr
                 'direccion_grupos.codigos',
                 DB::raw("(CASE when direccion_grupos.destino='LIMA' then  direccion_grupos.nombre
                                     when direccion_grupos.destino='PROVINCIA' then  direccion_grupos.direccion
+                                    else '' end
                                 ) as contacto_recibe_tracking"),
                 'direccion_grupos.producto',
                 'direccion_grupos.cantidad as QTY',
@@ -63,7 +64,7 @@ class PagerecepcionMotorizado extends Export implements WithColumnFormatting, Fr
             $direccion = $direccion->where('direccion_grupos.motorizado_id', $this->motorizado_id);
         }
         if (!$this->fecha_envio_h) {
-            $direccion = $direccion->where('cast(direccion_grupos.fecha_recepcion as date)', $this->fecha_envio_h);
+            $direccion = $direccion->where('cast(direccion_grupos.fecha_salida as date)', $this->fecha_envio_h);
         }
 
         return $direccion->get();
@@ -116,7 +117,12 @@ class PagerecepcionMotorizado extends Export implements WithColumnFormatting, Fr
     public function columnFormats(): array
     {
         return [
-            'E' => NumberFormat::FORMAT_DATE_YYYYMMDD
+            'E' => NumberFormat::FORMAT_DATE_YYYYMMDD,
+            'F' => NumberFormat::FORMAT_TEXT,
+            'G' => NumberFormat::FORMAT_TEXT,
+            'H' => NumberFormat::FORMAT_TEXT,
+            'I' => NumberFormat::FORMAT_TEXT,
+            'J' => NumberFormat::FORMAT_TEXT,
         ];
     }
 
@@ -129,12 +135,12 @@ class PagerecepcionMotorizado extends Export implements WithColumnFormatting, Fr
 
     public static function afterSheet(AfterSheet $event)
     {
-        $color_R = 'a9def9';
-        $color__ = '3a86ff';
-        $color_A = '00b4d8';
-        $color_C = 'b5e48c';
-        $color_N = 'b5e48c';
-        $color_V = 'b5e35e';
+        $color_R = 'ff5733';
+        $color__ = '090000';
+        $color_A = 'faf01c';
+        $color_C = '1cfaf3';
+        $color_N = 'e18b16';
+        $color_V = '6acf0c';
 
         $style_R = array(
             'fill' => array(
