@@ -22,7 +22,6 @@
         <table cellspacing="5" cellpadding="5" class="table-responsive">
             <tbody>
             <tr>
-
                 <td>
                     <div class="input-group mb-3">
                         <div class="input-group-prepend">
@@ -30,8 +29,7 @@
                         </div>
                         <input type="date" value="{{$fecha_consulta->format('Y-m-d')}}" id="fecha_consulta" name="fecha_consulta" class="form-control" autocomplete="off">
                     </div>
-
-                    </td>
+                </td>
             </tr>
             </tbody>
         </table>
@@ -135,6 +133,8 @@
                 var fecha_formateada = fecha_format[2] + "/" + fecha_format[1] + "/" + fecha_format[0];
                 $(this).data('fecha',fecha_formateada);
                 console.log(fecha_formateada);
+
+                $('#myTab a[href="#general"]').tab('show')
                 $('#tablaPrincipal').DataTable().ajax.reload();
             });
 
@@ -745,6 +745,23 @@ Enviar</button>
                         "previous": "Anterior"
                     }
                 },
+                "fnDrawCallback": function () {
+                    let activepage=$('a[data-toggle="tab"].active').data('action');
+                    let contador_tabla='';
+                    contador_tabla=$("#tablaPrincipal").dataTable().fnSettings().fnRecordsDisplay();
+                    switch(activepage)
+                    {
+                        case 'general':
+                            if(contador_tabla==0)$('#myTab a[href="#entregado"]').tab('show').trigger('click')
+                            break;
+                        case 'entregado':
+                            if(contador_tabla==0)$('#myTab a[href="#no_contesto"]').tab('show').trigger('click')
+                            break;
+                        case 'no_contesto':
+                            if(contador_tabla==0)$('#myTab a[href="#observado"]').tab('show').trigger('click')
+                            break;
+                    }
+                }
             });
             datatable.on( 'responsive-display', function ( e, datatable, row, showHide, update ) {
                 console.log( 'Details for row '+row.index()+' '+(showHide ? 'shown' : 'hidden') );
