@@ -35,7 +35,7 @@ class GrupoPedido extends Model
             'telefono' => $pedido->env_celular_cliente_recibe,
         ], $createAnother);
         if ($attach) {
-            $grupo->pedidos()->attach([
+            $grupo->pedidos()->syncWithoutDetaching([
                 $pedido->id => [
                     "codigo" => $pedido->codigo,
                     "razon_social" => $pedido->detallePedido->nombre_empresa,

@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\View\Components\common\BsProgressbar;
+use App\View\Components\common\courier\AutorizarRutaMotorizado;
 use App\View\Components\dashboard\graficos\borras\PedidosPorDia;
 use App\View\Components\dashboard\graficos\CobranzasMesesProgressBar;
 use App\View\Components\dashboard\graficos\GraficoMetaCobranzas;
@@ -52,6 +53,8 @@ class AppServiceProvider extends ServiceProvider
         \Blade::component('grafico-cobranzas-meses-progressbar', CobranzasMesesProgressBar::class);
 
         \Blade::component('grafico-pedido_cobranzas-del-dia', GraficoPedidoCobranzasDelDia::class);
+
+        \Blade::component('common-autorizar-ruta-motorizado', AutorizarRutaMotorizado::class);
 
         Carbon::setUTF8(true);
         Carbon::setLocale(config('app.locale'));

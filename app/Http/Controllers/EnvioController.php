@@ -390,7 +390,7 @@ class EnvioController extends Controller
             ->where('direccion_grupos.condicion_envio_code', Pedido::REPARTO_COURIER_INT)
             ->where('direccion_grupos.distribucion', $request->zona)
             ->activo();
-
+/*
         $pedidos_provincia = DireccionGrupo::join('gasto_envios as de', 'direccion_grupos.id', 'de.direcciongrupo')
             ->join('clientes as c', 'c.id', 'de.cliente_id')
             ->join('users as u', 'u.id', 'c.user_id')
@@ -423,7 +423,7 @@ class EnvioController extends Controller
                 'direccion_grupos.condicion_sobre',
                 'direccion_grupos.correlativo as correlativo',
             );
-
+*/
         if (Auth::user()->rol == "Asesor") {
             $pedidos_lima = $pedidos_lima->Where('u.identificador', Auth::user()->identificador);
 
@@ -479,28 +479,28 @@ class EnvioController extends Controller
     color: black !important;">Con ruta</span>
                     <span class="badge badge-success" style="background-color: ' . $color . '!important;">' . $pedido->condicion_envio . '</span>';
             })
-            ->addColumn('action', function ($pedido) {
+            ->addColumn('action', function ($grupo) {
                 $btn = '';
                 $btn .= '<ul class="list-unstyled pl-0">';
                 //if (auth()->user()->can('envios.enviar')):
 
 
                 $btn .= '<li>
-                                        <a href="" class="btn-sm text-secondary" data-target="#modal-confirmacion" data-toggle="modal" data-ide="' . $pedido->id . '" data-entregar-confirm="' . $pedido->id . '" data-destino="' . $pedido->destino . '" data-fechaenvio="' . $pedido->fecha . '" data-codigos="' . $pedido->codigos . '"
-                                            data-distribucion="' . $pedido->distribucion . '" >
+                                        <a href="" class="btn-sm text-secondary" data-target="#modal-confirmacion" data-toggle="modal" data-ide="' . $grupo->id . '" data-entregar-confirm="' . $grupo->id . '" data-destino="' . $grupo->destino . '" data-fechaenvio="' . $grupo->fecha . '" data-codigos="' . $grupo->codigos . '"
+                                            data-distribucion="' . $grupo->distribucion . '" >
                                             <i class="fas fa-envelope text-success"></i> Enviar a Motorizado</a></li>
                                         </a>
                                     </li>';
 
                 //endif;
-
-                $btn .= '<li>
-                            <a href="" class="btn-sm text-secondary" data-target="#modal-desvincular" data-toggle="modal" data-desvincular="' . $pedido->id . '">
+                if(Pedido::query()->where('direccion_grupo',$grupo->id)->count()>1) {
+                    $btn .= '<li>
+                            <a href="" class="btn-sm text-secondary" data-target="#modal-desvincular" data-toggle="modal" data-desvincular="' . $grupo->id . '">
 
                                             <i class="fas fa-envelope text-danger"></i> Desagrupar
                                 </a>
                             </li>';
-
+                }
                 $btn .= '</ul>';
 
                 return $btn;

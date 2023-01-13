@@ -518,65 +518,29 @@ class SobreController extends Controller
         if (!$request->pedidos) {
             return '0';
         } else {
-            $array_pedidos_codigos_remove = collect(explode(",", $pedidos))->map(fn($cod) => trim($cod))->filter()->values();
+            $removePedidosIds = collect(explode(",", $pedidos))->map(fn($cod) => trim($cod))->filter()->values();
 
             $direcciongrupo = DireccionGrupo::findOrFail($direcciongrupoId);
 
-            $filterRemove = collect(explode(",", $direcciongrupo->codigos))->map(fn($cod) => trim($cod))
-                ->filter()
-                ->values()
-                ->filter(fn($cod) => !in_array($cod, $array_pedidos_codigos_remove->all()));
-
-            $nuevos_codigos = Pedido::whereIn("pedidos.codigo", $filterRemove)
-                ->join('detalle_pedidos', 'detalle_pedidos.pedido_id', '=', 'pedidos.id')
-                ->where('direccion_grupo', $direcciongrupo->id)
-                ->select(['pedidos.codigo','detalle_pedidos.nombre_empresa'])
-                ->pluck('pedidos.codigo','detalle_pedidos.nombre_empresa');
+            $pedidos = Pedido::whereIn("pedidos.id", $removePedidosIds)->where('direccion_grupo', $direcciongrupo->id)->get();
 
             DB::beginTransaction();
-            if (count($filterRemove) > 0) {
-                $direcciongrupo->update([
-                    'codigo' => $nuevos_codigos->keys()->join(','),
-                    'producto' => $nuevos_codigos->values()->join(','),
-                ]);
-            } else {
-                $direcciongrupo->update([
-                    'codigo' => $nuevos_codigos->keys()->join(','),
-                    'producto' => $nuevos_codigos->values()->join(','),
-                    "estado" => '0'
-                ]);
-            }
-
-            $pedidos=Pedido::activo()->whereIn("pedidos.codigo", $array_pedidos_codigos_remove->all())
-                ->where('direccion_grupo', $direcciongrupo->id)->get();
-
-            if(count($pedidos)>0) {
-                $first = $pedidos->first();
-                $grupoPedido = GrupoPedido::createGroupByPedido($first);
-                $grupoPedido->pedidos()->syncWithoutDetaching($pedidos->mapWithKeys(fn($p) => [$p->id => [
-                    'razon_social' => $p->nombre_empresa,
-                    'code' => $p->codigo,
-                ]])->all());
-
-                Pedido::whereIn("codigo", $array_pedidos_codigos_remove)
-                    ->activo()
-                    ->where('direccion_grupo', $direcciongrupo->id)
-                    ->update([
+            if (count($pedidos) > 0) {
+                foreach ($pedidos as $pedido) {
+                    GrupoPedido::createGroupByPedido($pedido, false, true);
+                    $pedido->update([
                         "condicion_envio" => pedido::RECEPCION_COURIER,
                         "condicion_envio_code" => pedido::RECEPCION_COURIER_INT,
                         "observacion_devuelto" => $observaciongrupo,
                         "direccion_grupo" => null
                     ]);
+                }
             }
+            DireccionGrupo::restructurarCodigos($direcciongrupo);
             DB::commit();
-            return response()->json(['html' => $array_pedidos_codigos_remove]);
+            return response()->json(['html' => $removePedidosIds]);
         }
 
-
-        //$pedido=Pedido::where("id",$request->)
-
-
-        //return redirect()->route('envios.index')->with('info','actualizado');
     }
 
 

@@ -229,7 +229,7 @@
                     success: function (data) {
                         console.log(data);
                         $("#modal-desvincular").modal("hide");
-                        $("#tablaPrincipal").DataTable().ajax.reload();
+                        $("#tablaPrincipal").DataTable().draw(false);
                     }
                 });
             })

@@ -456,7 +456,7 @@ class MotorizadoController extends Controller
             }
         }
 
-        $detalle = $pedido->detallePedido;
+        $detalle = $pedido->detallePedidos()->first();
 
         $pgroup = GrupoPedido::createGroupByPedido($pedido);
         $pgroup->pedidos()->attach([

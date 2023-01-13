@@ -5,15 +5,15 @@
 @section('adminlte_css')
     <style>
         @foreach(get_color_role() as $rol=>$color)
-            .bg-{{Str::slug($rol)}} {
+            .bg-{{Str::slug($rol)}}  {
             @if(is_array($color))
-            background: {{$color[0]}}!important;;
-            color: {{$color[1]}}!important;;
+             background: {{$color[0]}} !important;;
+            color: {{$color[1]}} !important;;
             @else
-            background: {{$color}};
-            color: #000!important;
+             background: {{$color}};
+            color: #000 !important;
             @endif
-            font-weight: bold!important;;
+             font-weight: bold !important;;
         }
         @endforeach
     </style>
@@ -63,45 +63,7 @@
         @endif
 
     </div>
-
-    <div id="notificacion-pedidos-no-recibidos" style="position: fixed;
-    bottom: 16px;
-    right: 16px;
-    width: 400px;
-    height: 250px;
-    background-color: #b14237e0;
-    z-index: 999;
-    border-radius: 8px; color:white; padding:24px;">
-
-
-        <i class="fa fa-exclamation-triangle text-warning font-36" aria-hidden="true"></i>
-        <h3 class="font-24 mt-12 font-weight-bold">SOBRES NO RECIBIDOS</h3>
-        <p>Actualmente hay <b>X</b> sobres no recibidos de parte de los motorizados, autorice la ruta para que puedan salir a Reparto</p>
-        <a href="#" data-target="modal-autorizar-ruta" data-toggle="modal" class="btn btn-success">Autorizar Ruta</a>
-    </div>
-
-    <!-- Modal -->
-    <div class="modal fade" id="modal-autorizar-ruta" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header bg-danger">
-                    <h5 class="modal-title" id="exampleModalLabel">Autorizar ruta</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <p>Ingrese un sustento antes de autorizar la ruta de los motorizados:</p>
-                    <textarea class="form-control" placeholder="Ingrese un sustento"></textarea>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                    <button type="submit" class="btn btn-danger" id="borrate">Confirmar</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
+    <x-common-autorizar-ruta-motorizado></x-common-autorizar-ruta-motorizado>
 @stop
 
 @section('adminlte_js')
