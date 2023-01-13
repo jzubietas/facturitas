@@ -124,122 +124,131 @@
             </table>
             <br>
 
-            <ul class="nav nav-tabs mb-24 mt-24" id="myTab" role="tablist">
-                <li class="nav-item w-50 text-center">
-                    <a class="condicion-tabla nav-link activo active font-weight-bold" id="recepcion-tab" data-toggle="tab"
-                       data-url="19" href="#recepcion" role="tab" aria-controls="recepcion" aria-selected="true">
-                        <i class="fa fa-inbox" aria-hidden="true"></i> RECEPCION
-                        <sup><span class="badge badge-light count_recepcionmotorizados_receptioned_courier">0</span></sup>
-                    </a>
-                </li>
-                <li class="nav-item w-50 text-center">
-                    <a class="condicion-tabla nav-link font-weight-bold" id="enruta-tab" data-toggle="tab"
-                       data-url="18" href="#enruta" role="tab" aria-controls="enruta" aria-selected="false">
-                        <i class="fa fa-motorcycle" aria-hidden="true"></i> EN RUTA
-                        <sup><span class="badge badge-light count_recepcionmotorizados_inroutes_courier">0</span></sup>
-                    </a>
-                </li>
-            </ul>
-            {{-- <table cellspacing="5" cellpadding="5">
-              <tbody>
-                <tr>
-                  <td>Destino:</td>
-                  <td>
-                    <select name="destino" id="destino" class="form-control">
-                      <option value="LIMA">LIMA</option>
-                      <option value="PROVINCIA">PROVINCIA</option>
-                    </select>
-                  </td>
-                </tr>
-              </tbody>
-            </table><br> --}}
-            <table id="tablaPrincipal" class="table table-striped dt-responsive w-100">
-                <thead>
-                <tr>
-                    <th scope="col">Item</th>
-                    <th scope="col">Código</th>
-                    <th scope="col">Razón social</th>
-                    <th scope="col">Fecha de salida</th>
-                    <th scope="col">Dirección de envío</th>
-                    <th scope="col">Estado de envio</th>
-                    <th scope="col">Accion</th>
+            @if(in_array(auth()->user()->rol,[\App\Models\User::ROL_MOTORIZADO,\App\Models\User::ROL_ADMIN]))
+                <ul class="nav nav-tabs mb-24 mt-24" id="myTab" role="tablist">
+                    <li class="nav-item w-50 text-center">
+                        <a class="condicion-tabla nav-link activo active font-weight-bold" id="recepcion-tab"
+                           data-toggle="tab"
+                           data-url="19" href="#recepcion" role="tab" aria-controls="recepcion" aria-selected="true">
+                            <i class="fa fa-inbox" aria-hidden="true"></i> RECEPCION
+                            <sup><span class="badge badge-light count_recepcionmotorizados_receptioned_courier">0</span></sup>
+                        </a>
+                    </li>
+                    <li class="nav-item w-50 text-center">
+                        <a class="condicion-tabla nav-link font-weight-bold" id="enruta-tab" data-toggle="tab"
+                           data-url="18" href="#enruta" role="tab" aria-controls="enruta" aria-selected="false">
+                            <i class="fa fa-motorcycle" aria-hidden="true"></i> EN RUTA
+                            <sup><span
+                                    class="badge badge-light count_recepcionmotorizados_inroutes_courier">0</span></sup>
+                        </a>
+                    </li>
+                </ul>
+                {{-- <table cellspacing="5" cellpadding="5">
+                  <tbody>
+                    <tr>
+                      <td>Destino:</td>
+                      <td>
+                        <select name="destino" id="destino" class="form-control">
+                          <option value="LIMA">LIMA</option>
+                          <option value="PROVINCIA">PROVINCIA</option>
+                        </select>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table><br> --}}
+                <table id="tablaPrincipal" class="table table-striped dt-responsive w-100">
+                    <thead>
+                    <tr>
+                        <th scope="col">Item</th>
+                        <th scope="col">Código</th>
+                        <th scope="col">Razón social</th>
+                        <th scope="col">Fecha de salida</th>
+                        <th scope="col">Dirección de envío</th>
+                        <th scope="col">Estado de envio</th>
+                        <th scope="col">Accion</th>
 
-                </tr>
-                </thead>
-                <tbody>
-                </tbody>
-            </table>
-
+                    </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            @endif
             <!--
             MODULO PARA LOGISTICA
             -->
+            @if(in_array(auth()->user()->rol,[\App\Models\User::ROL_JEFE_COURIER,\App\Models\User::ROL_ADMIN]))
+                <div class="row">
+                    @foreach($motorizados as $motorizado)
+                        <div class="col-lg-4 container-{{Str::slug($motorizado->zona)}}">
+                            <div class="table-responsive">
+                                <div class="card card-{{$color_zones[Str::upper($motorizado->zona)]??'success'}}">
+                                    <div class="card-header pt-8 pb-8">
+                                        <div class="d-flex justify-content-between">
+                                            <h5 class="mb-0 font-16"> MOTORIZADO {{Str::upper($motorizado->zona)}}</h5>
+                                            <div>
 
-            <div class="row">
-                @foreach($motorizados as $motorizado)
-                    <div class="col-lg-4 container-{{Str::slug($motorizado->zona)}}">
-                        <div class="table-responsive">
-                            <div class="card card-{{$color_zones[Str::upper($motorizado->zona)]??'success'}}">
-                                <div class="card-header pt-8 pb-8">
-                                    <div class="d-flex justify-content-between">
-                                        <h5 class="mb-0 font-16"> MOTORIZADO {{Str::upper($motorizado->zona)}}</h5>
-                                        <div>
-
-                                            <h6 class="mb-0"><a class="btn btn-sm btn-danger"
-                                                                href="#">Exportar</a></span>
-                                            </h6>
+                                                <h6 class="mb-0"><a class="btn btn-sm btn-danger"
+                                                                    href="#">Exportar</a></span>
+                                                </h6>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="card-body py-1">
-                                    <div>
+                                    <div class="card-body py-1">
+                                        <div>
 
-                                        <ul class="nav nav-tabs" style="font-size:11px !important;"
-                                            id="myTab{{Str::slug($motorizado->zona)}}"
-                                            role="tablist">
-                                            <li class="nav-item">
-                                                <a class="nav-link active" id="recepcionhijo{{Str::slug($motorizado->zona)}}-tab" data-vista="18"
-                                                   data-zona="{{Str::slug($motorizado->zona)}}" data-toggle="tab"
-                                                   href="#recepcionhijo{{Str::slug($motorizado->zona)}}" role="tab"
-                                                   data-tab="recepcionhijo{{Str::slug($motorizado->zona)}}"
-                                                   aria-controls="recepcionhijo{{Str::slug($motorizado->zona)}}" aria-selected="true" data-action="recepcionhijo">
-                                                    RECEPCIÓN
-                                                </a>
-                                            </li>
-                                            <li class="nav-item">
-                                                <a class="nav-link" id="enrutahijo{{Str::slug($motorizado->zona)}}-tab" data-vista="19"
-                                                   data-zona="{{Str::slug($motorizado->zona)}}" data-toggle="tab"
-                                                   href="#enrutahijo{{Str::slug($motorizado->zona)}}"
-                                                   role="tab"
-                                                   data-tab="enrutahijo{{Str::slug($motorizado->zona)}}"
-                                                   aria-controls="enrutahijo{{Str::slug($motorizado->zona)}}" aria-selected="false"
-                                                   data-action="enrutahijo">
-                                                    EN RUTA
-                                                </a>
-                                            </li>
-                                        </ul>
+                                            <ul class="nav nav-tabs" style="font-size:11px !important;"
+                                                id="myTab{{Str::slug($motorizado->zona)}}"
+                                                role="tablist">
+                                                <li class="nav-item">
+                                                    <a class="nav-link active"
+                                                       id="recepcionhijo{{Str::slug($motorizado->zona)}}-tab"
+                                                       data-vista="18"
+                                                       data-zona="{{Str::slug($motorizado->zona)}}" data-toggle="tab"
+                                                       href="#recepcionhijo{{Str::slug($motorizado->zona)}}" role="tab"
+                                                       data-tab="recepcionhijo{{Str::slug($motorizado->zona)}}"
+                                                       aria-controls="recepcionhijo{{Str::slug($motorizado->zona)}}"
+                                                       aria-selected="true" data-action="recepcionhijo">
+                                                        RECEPCIÓN
+                                                    </a>
+                                                </li>
+                                                <li class="nav-item">
+                                                    <a class="nav-link"
+                                                       id="enrutahijo{{Str::slug($motorizado->zona)}}-tab"
+                                                       data-vista="19"
+                                                       data-zona="{{Str::slug($motorizado->zona)}}" data-toggle="tab"
+                                                       href="#enrutahijo{{Str::slug($motorizado->zona)}}"
+                                                       role="tab"
+                                                       data-tab="enrutahijo{{Str::slug($motorizado->zona)}}"
+                                                       aria-controls="enrutahijo{{Str::slug($motorizado->zona)}}"
+                                                       aria-selected="false"
+                                                       data-action="enrutahijo">
+                                                        EN RUTA
+                                                    </a>
+                                                </li>
+                                            </ul>
 
-                                        <table id="tablaPrincipal{{Str::upper($motorizado->zona)}}"
-                                               class="tabla-data table table-hijo table-striped dt-responsive w-100">
-                                            <thead>
-                                            <tr>
-                                                <!--<th scope="col">Item</th>-->
-                                                <th scope="col">Código</th>
-                                                <th scope="col">Teléfono</th>
-                                                <th scope="col">Zona</th>
-                                                <th scope="col">Distrito</th>
-                                            </tr>
-                                            </thead>
-                                            <tbody>
-                                            </tbody>
-                                        </table>
+                                            <table id="tablaPrincipal{{Str::upper($motorizado->zona)}}"
+                                                   class="tabla-data table table-hijo table-striped dt-responsive w-100">
+                                                <thead>
+                                                <tr>
+                                                    <!--<th scope="col">Item</th>-->
+                                                    <th scope="col">Código</th>
+                                                    <th scope="col">Teléfono</th>
+                                                    <th scope="col">Zona</th>
+                                                    <th scope="col">Distrito</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                </tbody>
+                                            </table>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                @endforeach
-            </div>
-
+                    @endforeach
+                </div>
+            @endif
             @include('pedidos.modal.confirmar_recepcion_log')
             @include('envios.modal.enviarid')
             @include('pedidos.modal.recibirid')
@@ -630,8 +639,49 @@
         }
     </script>
 
-  <script>
-    $(document).ready(function () {
+    <script>
+        $(document).ready(function () {
+
+            function getHtmlPrevisualizarDesagrupar(row, success) {
+                return `
+<div class="card">
+    <div class="card-body">
+        <div class="col-md-12">
+            <ul class="list-group">
+                <li class="list-group-item">
+                    <div class="row">
+                        <div class="col-4">
+                            <b>Codigo</b>
+                        </div>
+                        <div class="col-4">
+                            <b>Razon Social</b>
+                        </div>
+                        <div class="col-4 text-center">
+                            <b>Acciones</b>
+                        </div>
+                    </div>
+                </li>
+            ${row.pedidos.map(function (pedido) {
+                    return `
+                <li class="list-group-item">
+                    <div class="row">
+                        <div class="col-4">
+                            ${pedido.codigo}
+                        </div>
+                        <div class="col-4">
+                            ${pedido.detalle_pedido.nombre_empresa}
+                        </div>
+                        <div class="col-4 text-center">
+                            ${row.pedidos.length > 1 ? `<button class="btn btn-danger" data-jqdesagrupar="${row.id}" data-pedido_id="${pedido.id}"><i class="fa fa-close"></i> NO RECIBIDO</button>` : ''}
+                        </div>
+                    </div>
+                </li>`
+                }).join('')}
+            </ul>
+        </div>
+    </div>
+</div>`;
+            }
 
             const configDataTableZonas = {
                 serverSide: true,
@@ -656,10 +706,9 @@
                                         self.showLoading(true)
                                         $.post(action, {}).done(function () {
 
+                                        }).always(function () {
+                                            self.hideLoading(true)
                                         })
-                                            .always(function () {
-                                                self.hideLoading(true)
-                                            })
                                     }
                                 },
                                 cancelar: {}
@@ -707,8 +756,8 @@
                         a.tab = $("#myTab{{Str::slug($motorizado->zona)}} li>a.active").data('tab');
                         a.motorizado_id = {{ $motorizado->id }};
                         a.zona = "{{ Str::upper($motorizado->zona)}}";
-                        let vista =$('ul#myTab li.nav-item>a.active').attr('id');//18 19
-                        vista=$('#'+vista).data('url');
+                        let vista = $('ul#myTab li.nav-item>a.active').attr('id');//18 19
+                        vista = $('#' + vista).data('url');
                         a.vista = vista;
                     }
                 },
@@ -778,32 +827,61 @@
                     //console.log(row);
                 },
                 rowCallback: function (row, data, index) {
-                    $("[data-toggle=jqconfirm]",row).click(function () {
-                        const action=$(this).data('target')
-                        const actionPost=$(this).data('target-post')
-                        const count=$(this).data('count')
+                    $("[data-toggle=jqconfirm]", row).click(function () {
+                        const action = $(this).data('target')
+                        const actionPost = $(this).data('target-post')
+                        const count = $(this).data('count')
                         $.confirm({
-                            title:'Confirmar no recibido',
-                            type:'red',
-                            content:function (){
-                                const self=this
-                                if(count=='1'){
+                            title: 'Confirmar no recibido',
+                            type: 'red',
+                            columnClass: 'xlarge',
+                            content: function () {
+                                const self = this
+                                if (count == '1') {
                                     return `<p>Esta seguro de confirmar la recepción del Pedido <strong class="textcode">${data.codigos}</strong></p>`
-                                }else {
+                                } else {
                                     self.showLoading(true)
                                     return $.get(action).done(function (data) {
-                                        self.setContent(``)
+                                        self.setContent(getHtmlPrevisualizarDesagrupar(data.grupo))
                                     }).always(function () {
                                         self.hideLoading(true)
                                     })
                                 }
                             },
-                            buttons:{
-                                no_recibido:{
-                                    text:'No recibido',
-                                    btnClass:'btn-red',
-                                    action:function () {
-                                        const self=this
+                            onContentReady: function () {
+                                const self = this
+                                this.$content.find("[data-jqdesagrupar]").click(function () {
+                                    const pedido_id = $(this).data('pedido_id')
+                                   $.confirm({
+                                       title:'Confirmar no recibido',
+                                       buttons:{
+                                           no_recibido:{
+                                               text:'No recibido',
+                                               btnClass:'btn-red',
+                                               action:function () {
+                                                   self.showLoading(true)
+                                                   $.post(actionPost, {
+                                                       pedido_id: pedido_id
+                                                   }).done(function () {
+                                                       self.close()
+                                                   })
+                                                       .always(function () {
+                                                           self.hideLoading(true)
+                                                           $('#tablaPrincipal').DataTable().draw(false)
+                                                       })
+                                               }
+                                           },
+                                           cancelar:{}
+                                       }
+                                   })
+                                })
+                            },
+                            buttons: {
+                                no_recibido: {
+                                    text: 'No recibido',
+                                    btnClass: 'btn-red',
+                                    action: function () {
+                                        const self = this
                                         self.showLoading(true)
                                         $.post(actionPost).always(function () {
                                             self.hideLoading(true)
@@ -811,7 +889,7 @@
                                         })
                                     }
                                 },
-                                cancelar:{}
+                                cancelar: {}
                             }
                         })
                     })
@@ -909,9 +987,9 @@
                                 '<button id="export-recepcion" class="btn btn-success">EXPORTAR RECEPCION</button>' +
                                 '</div>');
                             @foreach($motorizados as $motorizado)
-                                $('#recepcionhijo{{Str::slug($motorizado->zona)}}-tab').tab('show');
+                            $('#recepcionhijo{{Str::slug($motorizado->zona)}}-tab').tab('show');
                             @endforeach
-                            break;
+                                break;
                         case 'enruta-tab':
                             $('.count_recepcionmotorizados_receptioned_courier').html(0);
                             $('.count_recepcionmotorizados_inroutes_courier').html(this.fnSettings().fnRecordsDisplay());
@@ -920,9 +998,9 @@
                                 '<button id="iniciar-ruta-masiva" class="btn btn-success">INICIAR RUTA MASIVA</button>' +
                                 '</div>');
                             @foreach($motorizados as $motorizado)
-                                $("#enrutahijo{{Str::slug($motorizado->zona)}}-tab").tab('show');
+                            $("#enrutahijo{{Str::slug($motorizado->zona)}}-tab").tab('show');
                             @endforeach
-                            break;
+                                break;
                     }
                 }
             });
@@ -1216,7 +1294,7 @@
 
 
         })
-            ;
+        ;
     </script>
 
     @if (session('info') == 'registrado' || session('info') == 'actualizado' || session('info') == 'eliminado')

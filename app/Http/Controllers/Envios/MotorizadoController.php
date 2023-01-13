@@ -664,20 +664,21 @@ class MotorizadoController extends Controller
                             $btn .= '<li>
                                 <button data-target="#modal-envio" data-toggle="modal" data-accion="recibir" data-recibir="' . $direcciongrupo->id . '" data-codigos="' . $direcciongrupo->codigos . '"  class="btn btn-warning btn-sm"><i class="fas fa-check-circle"></i> Recibido</button>
                             </li>';
-                            $count=Pedido::query()->where('direccion_grupo',$direcciongrupo->id)->count();
-                            if($count==1) {
+                            $count = Pedido::query()->where('direccion_grupo', $direcciongrupo->id)->count();
+                            if ($count == 1) {
                                 $btn .= ' <li>
                                             <button
                                             data-target="' . route('envios.recepcionarmotorizado') . '"
-                                            data-target-post="' . route('envios.recepcionarmotorizado',['hiddenEnvio'=>$direcciongrupo->id,'hiddenAccion'=>'rechazar']) . '"
-                                            data-count="'.$count.'"
+                                            data-target-post="' . route('envios.recepcionarmotorizado', ['hiddenEnvio' => $direcciongrupo->id, 'hiddenAccion' => 'rechazar']) . '"
+                                            data-count="' . $count . '"
                                             data-toggle="jqconfirm" class="btn btn-danger btn-sm mt-8"><i class="fa fa-times-circle-o" aria-hidden="true"></i>No recibido</button>
                                         </li>';
-                            }else{
+                            } else {
                                 $btn .= ' <li>
                                             <button
-                                            data-count="'.$count.'"
+                                            data-count="' . $count . '"
                                             data-target="' . route('envios.recepcionmotorizado.pedidos', $direcciongrupo->id) . '"
+                                            data-target-post="' . route('envios.recepcionarmotorizado', ['hiddenEnvio' => $direcciongrupo->id, 'hiddenAccion' => 'rechazar']) . '"
                                             data-toggle="jqconfirm" class="btn btn-danger btn-sm mt-8"><i class="fa fa-times-circle-o" aria-hidden="true"></i>No recibido</button>
                                         </li>';
                             }
@@ -715,7 +716,7 @@ class MotorizadoController extends Controller
     {
         $tipo_consulta = $request->consulta;
         $fecha_actual = Carbon::now()->startOfDay();
-        $fecha_consulta=$request->fechaconsulta;
+        $fecha_consulta = $request->fechaconsulta;
         $url_tabla = $request->vista;
 
         if ($tipo_consulta == "pedido") {
@@ -755,9 +756,7 @@ class MotorizadoController extends Controller
                 ->where('pedidos.estado', '1')
                 ->whereIn('pedidos.condicion_envio_code', [$request->condicion])
                 ->where('dp.estado', '1');
-        }
-        else if ($tipo_consulta == "paquete")
-        {
+        } else if ($tipo_consulta == "paquete") {
             $pedidos = null;
             $filtros_code = [12];
 
@@ -770,9 +769,9 @@ class MotorizadoController extends Controller
                 ->join('clientes as c', 'c.id', 'direccion_grupos.cliente_id')
                 ->join('users as u', 'u.id', 'c.user_id')
                 ->whereIn('direccion_grupos.condicion_envio_code', explode(",", $url_tabla))
-                ->whereDate('direccion_grupos.fecha_salida',$request->fechaconsulta)
-                ->where('direccion_grupos.motorizado_id',$request->motorizado_id)
-                ->where('direccion_grupos.distribucion', 'LIKE', '%'.$request->ZONA.'%')
+                ->whereDate('direccion_grupos.fecha_salida', $request->fechaconsulta)
+                ->where('direccion_grupos.motorizado_id', $request->motorizado_id)
+                ->where('direccion_grupos.distribucion', 'LIKE', '%' . $request->ZONA . '%')
                 ->activo();
 
             return Datatables::of(DB::table($grupos))
@@ -835,11 +834,11 @@ class MotorizadoController extends Controller
         }
     }
 
-    public function getPedidos(DireccionGrupo $grupo)
+    public function getPedidos($grupo)
     {
+        $grupo = DireccionGrupo::with(['pedidos.detallePedido'])->findOrFail($grupo);
         return response()->json([
             'grupo' => $grupo,
-            'pedidos' => $grupo->pedidos()->with('detallePedido')->get(),
         ]);
     }
 }
