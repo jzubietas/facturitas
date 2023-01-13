@@ -372,7 +372,7 @@ class MotorizadoController extends Controller
                 'direccion_grupos.motorizado_sustento_text',
                 'direccion_grupos.motorizado_sustento_foto',
             ])
-            ->whereIn('direccion_grupos.motorizado_status', [Pedido::ESTADO_MOTORIZADO_OBSERVADO, Pedido::ESTADO_MOTORIZADO_NO_CONTESTO])
+            ->whereIn('direccion_grupos.motorizado_status', [Pedido::ESTADO_MOTORIZADO_OBSERVADO, Pedido::ESTADO_MOTORIZADO_NO_CONTESTO, Pedido::ESTADO_MOTORIZADO_NO_RECIBIDO])
             //->where('direccion_grupos.estado', '1')
             //->activo()
             ->whereNotNull('direccion_grupos.fecha_salida')
