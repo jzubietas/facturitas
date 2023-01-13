@@ -777,17 +777,38 @@
                 rowCallback: function (row, data, index) {
                     $("[data-toggle=jqconfirm]",row).click(function () {
                         const action=$(this).data('target')
+                        const actionPost=$(this).data('target-post')
+                        const count=$(this).data('count')
                         $.confirm({
-                            title:'',
-                            type:'green',
+                            title:'Confirmar no recibido',
+                            type:'red',
                             content:function (){
                                 const self=this
-                                self.showLoading(true)
-                                return $.get(action).done(function (data){
-                                    self.setContent(``)
-                                }).always(function (){
-                                    self.hideLoading(true)
-                                })
+                                if(count=='1'){
+                                    return `<p>Esta seguro de confirmar la recepción del Pedido <strong class="textcode">${data.codigos}</strong></p>`
+                                }else {
+                                    self.showLoading(true)
+                                    return $.get(action).done(function (data) {
+                                        self.setContent(``)
+                                    }).always(function () {
+                                        self.hideLoading(true)
+                                    })
+                                }
+                            },
+                            buttons:{
+                                no_recibido:{
+                                    text:'No recibido',
+                                    btnClass:'btn-red',
+                                    action:function () {
+                                        const self=this
+                                        self.showLoading(true)
+                                        $.post(actionPost).always(function () {
+                                            self.hideLoading(true)
+                                            $('#tablaPrincipal').DataTable().draw(false)
+                                        })
+                                    }
+                                },
+                                cancelar:{}
                             }
                         })
                     })

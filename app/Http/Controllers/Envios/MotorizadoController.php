@@ -665,15 +665,20 @@ class MotorizadoController extends Controller
                             $btn .= '<li>
                                 <button data-target="#modal-envio" data-toggle="modal" data-accion="recibir" data-recibir="' . $direcciongrupo->id . '" data-codigos="' . $direcciongrupo->codigos . '"  class="btn btn-warning btn-sm"><i class="fas fa-check-circle"></i> Recibido</button>
                             </li>';
-                            if(Pedido::query()->where('direccion_grupo',$direcciongrupo->id)->count()==1) {
+                            $count=Pedido::query()->where('direccion_grupo',$direcciongrupo->id)->count();
+                            if($count==1) {
                                 $btn .= ' <li>
-                                            <button data-target="#modal-envio" data-toggle="modal" data-accion="rechazar" data-recibir="' . $direcciongrupo->id . '" data-codigos="' . $direcciongrupo->codigos . '" class="btn btn-danger btn-sm mt-8"><i class="fa fa-times-circle-o" aria-hidden="true"></i>No recibido</button>
+                                            <button
+                                            data-target="' . route('envios.recepcionarmotorizado') . '"
+                                            data-target-post="' . route('envios.recepcionarmotorizado',['hiddenEnvio'=>$direcciongrupo->id,'hiddenAccion'=>'rechazar']) . '"
+                                            data-count="'.$count.'"
+                                            data-toggle="jqconfirm" class="btn btn-danger btn-sm mt-8"><i class="fa fa-times-circle-o" aria-hidden="true"></i>No recibido</button>
                                         </li>';
                             }else{
                                 $btn .= ' <li>
                                             <button
+                                            data-count="'.$count.'"
                                             data-target="' . route('envios.recepcionmotorizado.pedidos', $direcciongrupo->id) . '"
-                                            data-targetone="' . route('envios.recepcionarmotorizado') . '"
                                             data-toggle="jqconfirm" class="btn btn-danger btn-sm mt-8"><i class="fa fa-times-circle-o" aria-hidden="true"></i>No recibido</button>
                                         </li>';
                             }
