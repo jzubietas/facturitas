@@ -458,6 +458,7 @@ return [
                     'icon' => 'fas fa-check-circle',
                     'active' => ['enviados'],
                 ],*/
+                /*
                 [
                     'text' => 'Sobre entregados',
                     'route' => 'envios.entregados',
@@ -465,7 +466,7 @@ return [
                     'icon' => 'fas fa-check-circle',//dot_sobres_entregados_count
                     //'icon' => 'noti-sobres-entregados noti-side',
                     'active' => ['enviados'],
-                ],
+                ],*/
                 [
                     'text' => 'Sobres en Ruta',
                     'route' => 'envios.rutaenvio',
