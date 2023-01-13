@@ -2648,6 +2648,7 @@ class EnvioController extends Controller
             $file2 = $request->file('adjunto2')->store('entregas', 'pstorage');
             $file3 = $request->file('adjunto3')->store('entregas', 'pstorage');
             $envio = DireccionGrupo::where("id", $request->envio_id)->first();
+
             $envio->update([
                 'foto1' => $file1,
                 'foto2' => $file2,
@@ -2658,6 +2659,18 @@ class EnvioController extends Controller
                 'condicion_envio' => Pedido::CONFIRM_MOTORIZADO,
                 'condicion_envio_code' => Pedido::CONFIRM_MOTORIZADO_INT,
             ]);
+
+            $paquete_sobres = $envio;
+
+            $codigos_paquete = collect(explode(",", $paquete_sobres->codigos))
+                ->map(fn($cod) => trim($cod))
+                ->filter()->values();
+
+            Pedido::whereIn('codigo', $codigos_paquete)
+                ->update([
+                    'condicion_envio' => Pedido::CONFIRM_MOTORIZADO,
+                    'condicion_envio_code' => Pedido::CONFIRM_MOTORIZADO_INT,
+                ]);
 
             PedidoMovimientoEstado::create([
                 'pedido' => $request->pedido_id,
