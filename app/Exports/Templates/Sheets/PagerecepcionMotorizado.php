@@ -28,6 +28,8 @@ Sheet::macro('styleCells', function (Sheet $sheet, string $cellRange, array $sty
 
 class PagerecepcionMotorizado extends Export implements WithColumnFormatting, FromCollection, WithHeadings, ShouldAutoSize, WithEvents
 {
+    use RemembersRowNumber;
+
     public int $motorizado_id = 0;
     public string $fecha_envio_h = '';
 
@@ -44,12 +46,18 @@ class PagerecepcionMotorizado extends Export implements WithColumnFormatting, Fr
             ->join('users as u', 'direccion_grupos.user_id', 'u.id')
             ->join('clientes as c', 'direccion_grupos.cliente_id', 'c.id')
             ->select([
+                DB::raw('concat(direccion_grupos.celular) as celular_recibe'),
                 'direccion_grupos.correlativo',
                 'direccion_grupos.codigos',
+                DB::raw("(CASE when direccion_grupos.destino='LIMA' then  direccion_grupos.nombre
+                                    when direccion_grupos.destino='PROVINCIA' then  direccion_grupos.direccion
+                                ) as contacto_recibe_tracking"),
+                'direccion_grupos.producto',
+                'direccion_grupos.cantidad as QTY',
                 'u.identificador',
                 'c.nombre',
                 'direccion_grupos.fecha_recepcion',
-                'direccion_grupos.producto',
+
                 'direccion_grupos.destino',
                 'direccion_grupos.direccion',
                 'direccion_grupos.referencia',
@@ -89,6 +97,7 @@ class PagerecepcionMotorizado extends Export implements WithColumnFormatting, Fr
 
     public function map($model): array
     {
+        //$model->Periodo=strval(str_pad($model->Periodo,2,"0"));
         return parent::map($model);
     }
 
