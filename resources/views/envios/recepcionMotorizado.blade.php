@@ -123,8 +123,8 @@
                 </tbody>
             </table>
             <br>
-
-            @if(in_array(auth()->user()->rol,[\App\Models\User::ROL_JEFE_COURIER,\App\Models\User::ROL_ADMIN]))
+            
+            @if(in_array(auth()->user()->rol,[\App\Models\User::ROL_MOTORIZADO,\App\Models\User::ROL_ADMIN]))
 
                 <ul class="nav nav-tabs mb-24 mt-24" id="myTab" role="tablist">
                     <li class="nav-item w-50 text-center">
@@ -178,7 +178,7 @@
             <!--
             MODULO PARA LOGISTICA
             -->
-            @if(in_array(auth()->user()->rol,[\App\Models\User::ROL_MOTORIZADO,\App\Models\User::ROL_ADMIN]))
+            @if(in_array(auth()->user()->rol,[\App\Models\User::ROL_JEFE_COURIER,\App\Models\User::ROL_ADMIN]))
                 <div class="row">
                     @foreach($motorizados as $motorizado)
                         <div class="col-lg-4 container-{{Str::slug($motorizado->zona)}}">
