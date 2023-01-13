@@ -239,7 +239,7 @@
         /*rowCallback: function (row, data, index) {
         },*/
         initComplete:function(settings,json){
-          
+
         },
         columns: [
           {
@@ -250,20 +250,6 @@
           {
               data: 'id',
               name: 'id',
-              render: function ( data, type, row, meta ) {
-                var cantidadvoucher=row.cantidad_voucher;
-                var cantidadpedido=row.cantidad_pedido;
-                var unido= ( (cantidadvoucher>1)? 'V':'I' )+''+( (cantidadpedido>1)? 'V':'I' );
-                if(row.id<10){
-                  return 'PAG'+row.users+'-'+unido+'-'+row.id;
-                }else if(row.id<100){
-                  return 'PAG'+row.users+'-'+unido+'-'+row.id;
-                }else if(row.id<1000){
-                  return 'PAG'+row.users+'-'+unido+'-'+row.id;
-                }else{
-                  return 'PAG'+row.users+'-'+unido+'-'+row.id;
-                }
-              }
           },
           {
             data: 'id2'

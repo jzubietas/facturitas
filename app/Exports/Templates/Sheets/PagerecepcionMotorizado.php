@@ -28,7 +28,7 @@ Sheet::macro('styleCells', function (Sheet $sheet, string $cellRange, array $sty
 
 class PagerecepcionMotorizado extends Export implements WithColumnFormatting, FromCollection, WithHeadings, ShouldAutoSize, WithEvents
 {
-    use RemembersRowNumber;
+    //use RemembersRowNumber;
 
     public int $motorizado_id = 0;
     public string $fecha_envio_h = '';
@@ -51,23 +51,20 @@ class PagerecepcionMotorizado extends Export implements WithColumnFormatting, Fr
                 'direccion_grupos.codigos',
                 DB::raw("(CASE when direccion_grupos.destino='LIMA' then  direccion_grupos.nombre
                                     when direccion_grupos.destino='PROVINCIA' then  direccion_grupos.direccion
+                                    else '' end
                                 ) as contacto_recibe_tracking"),
                 'direccion_grupos.producto',
                 'direccion_grupos.cantidad as QTY',
-                'u.identificador',
-                'c.nombre',
-                'direccion_grupos.fecha_recepcion',
-
-                'direccion_grupos.destino',
+                'direccion_grupos.nombre_cliente',
                 'direccion_grupos.direccion',
                 'direccion_grupos.referencia',
-                'direccion_grupos.condicion_envio',
+                'direccion_grupos.distrito',
             ]);
         if (!$this->motorizado_id) {
             $direccion = $direccion->where('direccion_grupos.motorizado_id', $this->motorizado_id);
         }
         if (!$this->fecha_envio_h) {
-            $direccion = $direccion->where('cast(direccion_grupos.fecha_recepcion as date)', $this->fecha_envio_h);
+            $direccion = $direccion->where('cast(direccion_grupos.fecha_salida as date)', $this->fecha_envio_h);
         }
 
         return $direccion->get();
@@ -82,16 +79,16 @@ class PagerecepcionMotorizado extends Export implements WithColumnFormatting, Fr
     public function columnWidths(): array
     {
         return [
-            'A' => 8 //ITEM
-            , 'B' => 8 //CODIGO
-            , 'C' => 8 //ASESOR
-            , 'D' => 8 //Cliente
-            , 'E' => 8 //FECHA ENVIO
-            , 'F' => 8 //RAZON SOCIAL
-            , 'G' => 8 //DESTINO
-            , 'H' => 8 //DIRECCION ENVIO
+            'A' => 8 //CELULAR QUIEN RECIBE
+            , 'B' => 8 //ME RO
+            , 'C' => 8 //CODIGO
+            , 'D' => 8 //NOMBRE DE qUIEN RECIBE
+            , 'E' => 8 //RAZON SOCIAL
+            , 'F' => 8 //QTY
+            , 'G' => 8 //CLIENTE
+            , 'H' => 8 //DIRECCION
             , 'I' => 8 //REFERENCIA
-            , 'J' => 8 //ESTADO DE ENVIO
+            , 'J' => 8 //DISTRITO
         ];
     }
 
@@ -104,23 +101,28 @@ class PagerecepcionMotorizado extends Export implements WithColumnFormatting, Fr
     public function fields(): array
     {
         return [
-            "correlativo" => "ITEM"
-            , "codigos" => "Codigo"
-            , "identificador" => "Asesor"
-            , "nombre" => "Cliente"
-            , "fecha_recepcion" => "Fecha de Envio"
-            , "producto" => "Razon Social"
-            , "destino" => "Destino"
-            , "direccion" => "Direccion de Envio"
-            , "referencia" => "Referencia"
-            , "condicion_envio" => "Estado de Envio"
+            "celular_recibe" => "QUIEN RECIBE"
+            , "correlativo" => "ME RO"
+            , "codigos" => "CODIGO"
+            , "contacto_recibe_tracking" => "NOMBRE DE QUIEN RECIBE"
+            , "producto" => "PRODUCTO/RAZON SOCIAL"
+            , "QTY" => "QTY"
+            , "nombre_cliente" => "CLIENTE"
+            , "direccion" => "DIRECCION"
+            , "referencia" => "REFERENCIA"
+            , "distrito" => "DISTRITO"
         ];
     }
 
     public function columnFormats(): array
     {
         return [
-            'E' => NumberFormat::FORMAT_DATE_YYYYMMDD
+            'E' => NumberFormat::FORMAT_DATE_YYYYMMDD,
+            'F' => NumberFormat::FORMAT_TEXT,
+            'G' => NumberFormat::FORMAT_TEXT,
+            'H' => NumberFormat::FORMAT_TEXT,
+            'I' => NumberFormat::FORMAT_TEXT,
+            'J' => NumberFormat::FORMAT_TEXT,
         ];
     }
 
@@ -133,66 +135,146 @@ class PagerecepcionMotorizado extends Export implements WithColumnFormatting, Fr
 
     public static function afterSheet(AfterSheet $event)
     {
-        $color_recurente = 'a9def9';
-        $color_recuperadoabandono = '3a86ff';
-        $color_recuperadoreciente = '00b4d8';
-        $color_nuevo = 'b5e48c';
-        $color_basefria = 'ffffff';
-        $color_abandono = 'd62828';
-        $color_abandonoreciente = 'fca311';
-        $color_default = 'eff7f6';
+        $color_R = 'ff5733';
+        $color__ = '090000';
+        $color_A = 'faf01c';
+        $color_C = '1cfaf3';
+        $color_N = 'e18b16';
+        $color_V = '6acf0c';
 
-        $style_recurrente = array(
+        $style_R = array(
             'fill' => array(
                 'fillType' => Fill::FILL_SOLID,
-                'startColor' => array('argb' => $color_recurente)
+                'startColor' => array('argb' => $color_R)
             )
         );
-        $style_recuperadoabandono = array(
+        $style__ = array(
             'fill' => array(
                 'fillType' => Fill::FILL_SOLID,
-                'startColor' => array('argb' => $color_recuperadoabandono)
+                'startColor' => array('argb' => $color__)
             )
         );
-        $style_recuperadoreciente = array(
+        $style_A = array(
             'fill' => array(
                 'fillType' => Fill::FILL_SOLID,
-                'startColor' => array('argb' => $color_recuperadoreciente)
+                'startColor' => array('argb' => $color_A)
             )
         );
-        $style_nuevo = array(
+        $style_C = array(
             'fill' => array(
                 'fillType' => Fill::FILL_SOLID,
-                'startColor' => array('argb' => $color_nuevo)
+                'startColor' => array('argb' => $color_C)
             )
         );
-        $style_basefria = array(
+        $style_V = array(
             'fill' => array(
                 'fillType' => Fill::FILL_SOLID,
-                'startColor' => array('argb' => $color_basefria)
+                'startColor' => array('argb' => $color_V)
             )
         );
-        $style_abandono = array(
-            'fill' => array(
-                'fillType' => Fill::FILL_SOLID,
-                'startColor' => array('argb' => $color_abandono)
-            )
-        );
-        $style_abandonoreciente = array(
-            'fill' => array(
-                'fillType' => Fill::FILL_SOLID,
-                'startColor' => array('argb' => $color_abandonoreciente)
-            )
-        );
-        $styledefault = array(
+                /*$styledefault = array(
             'fill' => array(
                 'fillType' => Fill::FILL_SOLID,
                 'startColor' => array('argb' => $color_default)
             )
-        );
+        );*/
 
         $row_cell_ = 14;
-        $letter_cell = 'N';
+        $letter_cell = 'J';
+
+        $event->sheet->styleCells(
+            'A1',
+            [
+                'alignment' => [
+                    'horizontal' => Alignment::HORIZONTAL_CENTER,
+                ],
+                'fill' => [
+                    'fillType' => Fill::FILL_SOLID,
+                    'color' => ['argb' =>$color_R]
+                ]
+            ]
+        );
+        $event->sheet->styleCells(
+            'B1',
+            [
+                'alignment' => [
+                    'horizontal' => Alignment::HORIZONTAL_CENTER,
+                ],
+                'fill' => [
+                    'fillType' => Fill::FILL_SOLID,
+                    'color' => ['argb' =>$color__]
+                ]
+            ]
+        );
+        $event->sheet->styleCells(
+            'C1:E1',
+            [
+                'alignment' => [
+                    'horizontal' => Alignment::HORIZONTAL_CENTER,
+                ],
+                'fill' => [
+                    'fillType' => Fill::FILL_SOLID,
+                    'color' => ['argb' =>$color_A]
+                ]
+            ]
+        );
+        $event->sheet->styleCells(
+            'F1',
+            [
+                'alignment' => [
+                    'horizontal' => Alignment::HORIZONTAL_CENTER,
+                ],
+                'fill' => [
+                    'fillType' => Fill::FILL_SOLID,
+                    'color' => ['argb' =>$color_N]
+                ]
+            ]
+        );
+        $event->sheet->styleCells(
+            'G1',
+            [
+                'alignment' => [
+                    'horizontal' => Alignment::HORIZONTAL_CENTER,
+                ],
+                'fill' => [
+                    'fillType' => Fill::FILL_SOLID,
+                    'color' => ['argb' =>$color_A]
+                ]
+            ]
+        );
+        $event->sheet->styleCells(
+            'H1:I1',
+            [
+                'alignment' => [
+                    'horizontal' => Alignment::HORIZONTAL_CENTER,
+                ],
+                'fill' => [
+                    'fillType' => Fill::FILL_SOLID,
+                    'color' => ['argb' =>$color_C]
+                ]
+            ]
+        );
+        $event->sheet->styleCells(
+            'J1',
+            [
+                'alignment' => [
+                    'horizontal' => Alignment::HORIZONTAL_CENTER,
+                ],
+                'fill' => [
+                    'fillType' => Fill::FILL_SOLID,
+                    'color' => ['argb' =>$color_A]
+                ]
+            ]
+        );
+
+        foreach ($event->sheet->getRowIterator() as $row)
+        {
+            if ($row->getRowIndex() == 1) continue;
+            /*if($event->sheet->getCellByColumnAndRow($row_cell_,$row->getRowIndex())->getValue()=='RECURRENTE')
+            {*/
+                $event->sheet->getStyle($letter_cell.$row->getRowIndex())->applyFromArray($style_V);
+            //}
+        }
 
     }
 }

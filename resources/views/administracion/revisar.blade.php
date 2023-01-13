@@ -3,8 +3,7 @@
 @section('title', 'Detalle de pagos')
 
 @section('content_header')
-    <h1>DETALLE DEL <b>PAGO</b>:PAG{{ $pago->users }}-{{$pago->cantidad_voucher}}{{$pago->cantidad_pedido}}
-        -{{ $pago->id }}</h1>
+    <h1>DETALLE DEL <b>PAGO</b>:{{ $pago->codigo_mostrar }}</h1>
     {{-- <a href="" data-target="#modal-historial-{{ $pago->id }}" data-toggle="modal"><button class="btn btn-info btn-sm">Historial</button></a> --}}
     {{-- @include('contratos.modals.modalHistorial') --}}
 @stop
