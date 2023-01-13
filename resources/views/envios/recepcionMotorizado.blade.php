@@ -647,9 +647,6 @@
             function getHtmlPrevisualizarDesagrupar(row, success) {
                 return `
 <div class="card">
-    <div class="card-header">
-        <h4>Cliente: <strong>${row.cliente_recibe}</strong> - <i>${row.telefono}</i></h4>
-    </div>
     <div class="card-body">
         <div class="col-md-12">
             <ul class="list-group">
@@ -671,13 +668,13 @@
                 <li class="list-group-item">
                     <div class="row">
                         <div class="col-4">
-                            ${pedido.pivot.codigo}
+                            ${pedido.codigo}
                         </div>
                         <div class="col-4">
-                            ${pedido.pivot.razon_social}
+                            ${pedido.detalle_pedido.nombre_empresa}
                         </div>
                         <div class="col-4 text-center">
-                            ${row.pedidos.length > 1 ? `<button class="btn btn-danger" data-jqdesagrupar="${row.id}" data-pedido_id="${pedido.id}"><i class="fa fa-arrow-down"></i> Desagrupar</button>` : ''}
+                            ${row.pedidos.length > 1 ? `<button class="btn btn-danger" data-jqdesagrupar="${row.id}" data-pedido_id="${pedido.id}"><i class="fa fa-close"></i> NO RECIBIDO</button>` : ''}
                         </div>
                     </div>
                 </li>`
@@ -839,6 +836,7 @@
                         $.confirm({
                             title: 'Confirmar no recibido',
                             type: 'red',
+                            columnClass: 'xlarge',
                             content: function () {
                                 const self = this
                                 if (count == '1') {
@@ -851,6 +849,34 @@
                                         self.hideLoading(true)
                                     })
                                 }
+                            },
+                            onContentReady: function () {
+                                const self = this
+                                this.$content.find("[data-jqdesagrupar]").click(function () {
+                                    const pedido_id = $(this).data('pedido_id')
+                                   $.confirm({
+                                       title:'Confirmar no recibido',
+                                       buttons:{
+                                           no_recibido:{
+                                               text:'No recibido',
+                                               btnClass:'btn-red',
+                                               action:function () {
+                                                   self.showLoading(true)
+                                                   $.post(actionPost, {
+                                                       pedido_id: pedido_id
+                                                   }).done(function () {
+                                                       self.close()
+                                                   })
+                                                       .always(function () {
+                                                           self.hideLoading(true)
+                                                           $('#tablaPrincipal').DataTable().draw(false)
+                                                       })
+                                               }
+                                           },
+                                           cancelar:{}
+                                       }
+                                   })
+                                })
                             },
                             buttons: {
                                 no_recibido: {

@@ -678,6 +678,7 @@ class MotorizadoController extends Controller
                                             <button
                                             data-count="' . $count . '"
                                             data-target="' . route('envios.recepcionmotorizado.pedidos', $direcciongrupo->id) . '"
+                                            data-target-post="' . route('envios.recepcionarmotorizado', ['hiddenEnvio' => $direcciongrupo->id, 'hiddenAccion' => 'rechazar']) . '"
                                             data-toggle="jqconfirm" class="btn btn-danger btn-sm mt-8"><i class="fa fa-times-circle-o" aria-hidden="true"></i>No recibido</button>
                                         </li>';
                             }

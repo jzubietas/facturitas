@@ -1017,7 +1017,6 @@ class EnvioController extends Controller
     }
 
 
-
     public function Enviosporconfirmartabla(Request $request)
     {
         $pedidos = null;
@@ -1120,7 +1119,6 @@ class EnvioController extends Controller
             ->make(true);
 
     }
-
 
 
     public function Enviosporrecibir()
@@ -1527,15 +1525,25 @@ class EnvioController extends Controller
             return response()->json(['html' => "Grupo recibido"]);
 
         } else if ($accion == "rechazar") {
-
-            $grupo->update([
-                'fecha_recepcion_motorizado' => Carbon::now(),
-                /*'envio' => '2',*/
-                //'modificador' => 'USER' . Auth::user()->id,
-                'condicion_envio' => Pedido::REPARTO_COURIER,
-                'condicion_envio_code' => Pedido::REPARTO_COURIER_INT,
-                'motorizado_status' => Pedido::ESTADO_MOTORIZADO_NO_RECIBIDO
-            ]);
+            if ($request->has('pedido_id')) {
+                $pedido = Pedido::query()->findOrFail($request->pedido_id);
+                $grupo = DireccionGrupo::desvincularPedido($grupo, $pedido, 'No recibido', Pedido::ESTADO_MOTORIZADO_NO_RECIBIDO);
+                $grupo->update([
+                    'fecha_recepcion_motorizado' => Carbon::now(),
+                    'condicion_envio' => Pedido::REPARTO_COURIER,
+                    'condicion_envio_code' => Pedido::REPARTO_COURIER_INT,
+                    'motorizado_status' => Pedido::ESTADO_MOTORIZADO_NO_RECIBIDO
+                ]);
+            } else {
+                $grupo->update([
+                    'fecha_recepcion_motorizado' => Carbon::now(),
+                    /*'envio' => '2',*/
+                    //'modificador' => 'USER' . Auth::user()->id,
+                    'condicion_envio' => Pedido::REPARTO_COURIER,
+                    'condicion_envio_code' => Pedido::REPARTO_COURIER_INT,
+                    'motorizado_status' => Pedido::ESTADO_MOTORIZADO_NO_RECIBIDO
+                ]);
+            }
 
             PedidoMovimientoEstado::create([
                 'pedido' => $request->hiddenEnvio,
