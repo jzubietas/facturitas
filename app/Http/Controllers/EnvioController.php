@@ -1523,20 +1523,21 @@ class EnvioController extends Controller
                 if ($pedidos->count() > 0) {
                     $diff = $pedidosIds->diff($request->pedidos);
                     if ($diff->count() > 0) {
-                        DireccionGrupo::desvincularPedidos($grupo, $pedidos, 'No recibido', Pedido::ESTADO_MOTORIZADO_NO_RECIBIDO);
+                        $grupo = DireccionGrupo::desvincularPedidos($grupo, $pedidos, 'No recibido', Pedido::ESTADO_MOTORIZADO_NO_RECIBIDO);
                     } else {
                         $grupo->update([
                             'motorizado_status' => Pedido::ESTADO_MOTORIZADO_NO_RECIBIDO,
                             'motorizado_sustento_text' => 'No recibido',
                         ]);
                     }
+                    DireccionGrupo::addNoRecibidoAuthorization($grupo);
                 }
             } else {
                 $grupo->update([
-                    //'fecha_recepcion_motorizado' => Carbon::now(),
                     'motorizado_sustento_text' => 'No recibido',
                     'motorizado_status' => Pedido::ESTADO_MOTORIZADO_NO_RECIBIDO
                 ]);
+                DireccionGrupo::addNoRecibidoAuthorization($grupo);
             }
 
             PedidoMovimientoEstado::create([

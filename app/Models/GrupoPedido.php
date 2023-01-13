@@ -35,10 +35,11 @@ class GrupoPedido extends Model
             'telefono' => $pedido->env_celular_cliente_recibe,
         ], $createAnother);
         if ($attach) {
+            $detalle = $pedido->detallePedidos()->orderBy('detalle_pedidos.created_at')->first();
             $grupo->pedidos()->syncWithoutDetaching([
                 $pedido->id => [
                     "codigo" => $pedido->codigo,
-                    "razon_social" => $pedido->detallePedido->nombre_empresa,
+                    "razon_social" => $detalle->nombre_empresa,
                 ]
             ]);
         }
