@@ -262,24 +262,24 @@
                             <div class="col-4 mt-12">
                                 <div class="form-group">
                                     <div class="image-wrapper">
-                                        <img id="picture1" src="{{ asset('imagenes/sobres.jpg') }}"
-                                alt="Imagen del pago" class="w-80 mh-90 h-90 img-fluid" style="display: block;">
+                                        <img id="picture1" src="{{ asset('imagenes/motorizado_preview/sobres.png') }}"
+                                alt="Imagen del pago" class="img-fluid w-100" style="display: block;" width="300" height="300">
                         </div>
                     </div>
                 </div>
                 <div class="col-4 mt-12">
                     <div class="form-group">
                         <div class="image-wrapper">
-                            <img id="picture2" src="{{ asset('imagenes/domicilio.jpg') }}"
-                                 alt="Imagen del pago" class="w-80 mh-90 h-90 img-fluid" style="display: block">
+                            <img id="picture2" src="{{ asset('imagenes/motorizado_preview/domicilio.png') }}"
+                                 alt="Imagen del pago" class="img-fluid w-100" style="display: block" width="300" height="300">
                         </div>
                     </div>
                 </div>
                 <div class="col-4 mt-12">
                     <div class="form-group">
                         <div class="image-wrapper">
-                            <img id="picture3" src="{{ asset('imagenes/recibe_sobre.jpg') }}"
-                                 alt="Imagen del pago" class="w-80 mh-90 h-90 img-fluid" style="display: block">
+                            <img id="picture3" src="{{ asset('imagenes/motorizado_preview/recibe_sobre.png') }}"
+                                 alt="Imagen del pago" class="img-fluid w-100" style="display: block" width="300" height="300">
                         </div>
                     </div>
                 </div>
