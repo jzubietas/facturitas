@@ -59,7 +59,8 @@ class PagerecepcionMotorizado extends Export implements WithColumnFormatting, Fr
                 'direccion_grupos.direccion',
                 'direccion_grupos.referencia',
                 'direccion_grupos.distrito',
-            ]);
+            ])
+        ->where('direccion_grupos.estado','=','1');
         if (!$this->motorizado_id) {
             $direccion = $direccion->where('direccion_grupos.motorizado_id', $this->motorizado_id);
         }
