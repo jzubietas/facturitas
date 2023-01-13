@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 /* use Validator; */
 
 use App\Models\Cliente;
+use App\Models\CuentaBancaria;
 use App\Models\DetallePedido;
 use App\Models\PagoPedido;
 use App\Models\Pedido;
@@ -1722,7 +1723,7 @@ class ClienteController extends Controller
 
         $messajeKey = array_rand($mensajesRandom);
         $messaje = $mensajesRandom[$messajeKey];
-        $pedidos = Pedido::query()->with(['cliente', 'pagoPedidos', 'detallePedidos'])
+        $pedidos = Pedido::query()->with(['cliente', 'pagoPedidos', 'detallePedido'])
             ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
             ->select(
                 'pedidos.id',
@@ -1741,13 +1742,20 @@ class ClienteController extends Controller
             ->get()
             ->map(function (Pedido $pedido) {
                 $pedido->adelanto = $pedido->pagoPedidos()->whereEstado(1)->sum('abono');
-                // $pedido->deuda_total = $pedido->detallePedidos()->sum("saldo");
+                $pedido->deuda_total = $pedido->detallePedidos()->sum("saldo");
                 return $pedido;
-            });
+            })->filter(fn(Pedido $pedido) => $pedido->adelanto<=($pedido->deuda_total-3));
         $totalDeuda = $pedidos->sum('diferencia');
 
+        $cuentas_bancarias=CuentaBancaria::query()
+            ->select(['cuenta_bancarias.*','entidad_bancarias.nombre as entidad_bancaria','titulares.nombre as titular_cuenta'])
+            ->join('entidad_bancarias','entidad_bancarias.id','cuenta_bancarias.banco')
+            ->join('titulares','titulares.id','cuenta_bancarias.titular')
+            ->activo()
+            ->get()
+            ->groupBy('titular_cuenta');
         return response()->json([
-            "html" => view('clientes.response.modal_data_clientes_deuda', compact('messaje', 'pedidos', 'totalDeuda', 'cliente'))->render()
+            "html" => view('clientes.response.modal_data_clientes_deuda', compact('messaje', 'pedidos', 'totalDeuda', 'cliente','cuentas_bancarias'))->render()
         ]);
     }
 
