@@ -134,7 +134,7 @@ class EnvioController extends Controller
                 $badge_estado = '';
                 $color = Pedido::getColorByCondicionEnvio($pedido->condicion_envio);
                 if ($pedido->estado_sobre == '1') {
-                    $badge_estado .= '<span class="badge badge-dark p-8" style="color: #fff; background-color: #347cc4; font-weight: 600; margin-bottom: -2px;border-radius: 4px 4px 0px 0px; font-size:8px;  padding: 4px 4px !important; font-weight: 500;">Direccion agregada</span>';
+                    $badge_estado .= '<span class="badge badge-dark p-8" style="color: #fff; background-color: #347cc4; font-weight: 600; margin-bottom: -2px;border-radius: 4px 4px 0px 0px; font-size:8px;  padding: 4px 4px !important;">Direccion agregada</span>';
                 }
 
                 $badge_estado .= '<span class="badge badge-success" style="background-color: ' . $color . '!important;">' . $pedido->condicion_envio . '</span>';
@@ -376,6 +376,21 @@ class EnvioController extends Controller
 
     public function Enviospararepartotabla(Request $request)
     {
+        $zona_aux=$request->zona;
+        $lazona='';
+        switch ($zona_aux)
+        {
+            case 'NORTE':
+                $lazona=array('NORTE','OLVA');
+                break;
+            case 'CENTRO':
+                $lazona=array('CENTRO','CENTRO SUR','CENTRO OESTE','CENTRO NORTE','CENTRO ESTE','ESTE','OESTE');
+                break;
+            case 'SUR':
+                $lazona=array('SUR');
+                break;
+        }
+
         $pedidos_lima = DireccionGrupo::select([
             'direccion_grupos.*',
             'u.identificador as user_identificador',
@@ -388,41 +403,8 @@ class EnvioController extends Controller
             //->join('users as u', 'u.id', 'c.user_id')
             ->LeftJoin('users as u', 'u.id', 'direccion_grupos.motorizado_id')
             ->where('direccion_grupos.condicion_envio_code', Pedido::REPARTO_COURIER_INT)
-            ->where('direccion_grupos.distribucion', $request->zona)
+            ->whereIn('direccion_grupos.distribucion', $lazona)
             ->activo();
-
-        $pedidos_provincia = DireccionGrupo::join('gasto_envios as de', 'direccion_grupos.id', 'de.direcciongrupo')
-            ->join('clientes as c', 'c.id', 'de.cliente_id')
-            ->join('users as u', 'u.id', 'c.user_id')
-            //  ->join('pedidos as p', 'p.codigo', 'direccion_grupos.codigos')
-
-            //  ->where('p.condicion_envio_code',Pedido::EN_REPARTO_INT)
-            ->where('direccion_grupos.condicion_envio_code', Pedido::REPARTO_COURIER_INT)
-            ->where('direccion_grupos.estado', '1')
-            ->select(
-                'direccion_grupos.id',
-                'u.identificador as identificador',
-                DB::raw(" (select 'PROVINCIA') as destino "),
-                DB::raw(" (select '') as celular "),
-                DB::raw(" (select '') as nombre "),
-                'de.cantidad',
-
-                'direccion_grupos.codigos',
-                'direccion_grupos.producto',
-
-                'de.tracking as direccion',
-                'de.foto as referencia',
-                DB::raw(" (select '') as observacion "),
-                DB::raw(" (select '') as distrito "),
-
-                DB::raw('(select DATE_FORMAT( direccion_grupos.created_at, "%Y-%m-%d")   from direccion_grupos dpa where dpa.id=direccion_grupos.id) as fecha'),
-                'direccion_grupos.destino as destino2',
-                'direccion_grupos.distribucion',
-                'direccion_grupos.condicion_envio',
-                'direccion_grupos.subcondicion_envio',
-                'direccion_grupos.condicion_sobre',
-                'direccion_grupos.correlativo as correlativo',
-            );
 
         if (Auth::user()->rol == "Asesor") {
             $pedidos_lima = $pedidos_lima->Where('u.identificador', Auth::user()->identificador);
@@ -479,28 +461,27 @@ class EnvioController extends Controller
     color: black !important;">Con ruta</span>
                     <span class="badge badge-success" style="background-color: ' . $color . '!important;">' . $pedido->condicion_envio . '</span>';
             })
-            ->addColumn('action', function ($pedido) {
+            ->addColumn('action', function ($grupo) {
                 $btn = '';
                 $btn .= '<ul class="list-unstyled pl-0">';
                 //if (auth()->user()->can('envios.enviar')):
 
-
                 $btn .= '<li>
-                                        <a href="" class="btn-sm text-secondary" data-target="#modal-confirmacion" data-toggle="modal" data-ide="' . $pedido->id . '" data-entregar-confirm="' . $pedido->id . '" data-destino="' . $pedido->destino . '" data-fechaenvio="' . $pedido->fecha . '" data-codigos="' . $pedido->codigos . '"
-                                            data-distribucion="' . $pedido->distribucion . '" >
+                                        <a href="" class="btn-sm text-secondary" data-target="#modal-confirmacion" data-toggle="modal" data-ide="' . $grupo->id . '" data-entregar-confirm="' . $grupo->id . '" data-destino="' . $grupo->destino . '" data-fechaenvio="' . $grupo->fecha . '" data-codigos="' . $grupo->codigos . '"
+                                            data-distribucion="' . $grupo->distribucion . '" >
                                             <i class="fas fa-envelope text-success"></i> Enviar a Motorizado</a></li>
                                         </a>
                                     </li>';
 
                 //endif;
-
-                $btn .= '<li>
-                            <a href="" class="btn-sm text-secondary" data-target="#modal-desvincular" data-toggle="modal" data-desvincular="' . $pedido->id . '">
+                if(Pedido::query()->where('direccion_grupo',$grupo->id)->count()>1) {
+                    $btn .= '<li>
+                            <a href="" class="btn-sm text-secondary" data-target="#modal-desvincular" data-toggle="modal" data-desvincular="' . $grupo->id . '">
 
                                             <i class="fas fa-envelope text-danger"></i> Desagrupar
                                 </a>
                             </li>';
-
+                }
                 $btn .= '</ul>';
 
                 return $btn;
@@ -509,7 +490,6 @@ class EnvioController extends Controller
             ->make(true);
 
     }
-
 
     public function Enviosenrepartotabla(Request $request)
     {
@@ -580,7 +560,7 @@ class EnvioController extends Controller
             ->addColumn('action', function ($pedido) {
                 $btn = '';
 
-                if (auth()->user()->can('envios.enviar')):
+                //if (auth()->user()->can('envios.enviar')):
 
                     $btn .= '<ul class="list-unstyled pl-0">';
                     $btn .= '<li>
@@ -589,7 +569,7 @@ class EnvioController extends Controller
                                         </a>
                                     </li>';
                     $btn .= '</ul>';
-                endif;
+                //endif;
 
                 return $btn;
             })
@@ -1537,8 +1517,6 @@ class EnvioController extends Controller
             } else {
                 $grupo->update([
                     'fecha_recepcion_motorizado' => Carbon::now(),
-                    /*'envio' => '2',*/
-                    //'modificador' => 'USER' . Auth::user()->id,
                     'condicion_envio' => Pedido::REPARTO_COURIER,
                     'condicion_envio_code' => Pedido::REPARTO_COURIER_INT,
                     'motorizado_status' => Pedido::ESTADO_MOTORIZADO_NO_RECIBIDO
@@ -1552,7 +1530,6 @@ class EnvioController extends Controller
             ]);
 
             return response()->json(['html' => "Grupo rechazado"]);
-
         }
     }
 

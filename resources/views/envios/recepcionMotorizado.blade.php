@@ -123,9 +123,8 @@
                 </tbody>
             </table>
             <br>
-            
-            @if(in_array(auth()->user()->rol,[\App\Models\User::ROL_MOTORIZADO,\App\Models\User::ROL_ADMIN]))
 
+            @if(in_array(auth()->user()->rol,[\App\Models\User::ROL_MOTORIZADO,\App\Models\User::ROL_ADMIN]))
                 <ul class="nav nav-tabs mb-24 mt-24" id="myTab" role="tablist">
                     <li class="nav-item w-50 text-center">
                         <a class="condicion-tabla nav-link activo active font-weight-bold" id="recepcion-tab"
@@ -173,7 +172,6 @@
                     <tbody>
                     </tbody>
                 </table>
-
             @endif
             <!--
             MODULO PARA LOGISTICA

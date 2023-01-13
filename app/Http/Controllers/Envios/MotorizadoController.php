@@ -441,7 +441,7 @@ class MotorizadoController extends Controller
             })
             ->addColumn('action', function ($pedido) {
                 $btn = '';
-                if (auth()->user()->can('envios.enviar')):
+                //if (auth()->user()->can('envios.enviar')):
 
                     $btn .= '<ul class="list-unstyled pl-0" data-group="' . $pedido->direccion_grupo . '">';
 
@@ -450,7 +450,7 @@ class MotorizadoController extends Controller
                             </li>';
 
                     $btn .= '</ul>';
-                endif;
+                //endif;
 
                 return $btn;
             })
@@ -469,7 +469,7 @@ class MotorizadoController extends Controller
             }
         }
 
-        $detalle = $pedido->detallePedido;
+        $detalle = $pedido->detallePedidos()->first();
 
         $pgroup = GrupoPedido::createGroupByPedido($pedido);
         $pgroup->pedidos()->attach([
