@@ -1,3 +1,4 @@
+{{--
 <div id="notificacion-pedidos-no-recibidos" style="position: fixed;
     bottom: 16px;
     right: 16px;
@@ -11,3 +12,5 @@
     <p>Actualmente hay <b>X</b> sobres no recibidos de parte de los motorizados, autorice la ruta para que puedan salir a Reparto</p>
     <a href="#" data-target="modal-autorizar-ruta" data-toggle="modal" class="btn btn-success">Autorizar Ruta</a>
 </div>
+
+--}}
