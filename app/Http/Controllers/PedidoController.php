@@ -283,12 +283,12 @@ class PedidoController extends Controller
                             'foto3' => foto_url($grupo->foto3),
                         ];
                         if (collect($fotos)->values()->filter()->count() > 0) {
-                            $btn[] = '<button style="font-size:11px" data-verforotos=\'' . json_encode($fotos) . '\' class="m-0 p-2 btn-sm dropdown-item text-wrap"><i class="fa fa-file-pdf text-dark"></i> Ver Fotos</button>';
+                            $btn[] = '<button style="font-size:11px" data-verforotos=\'' . json_encode($fotos) . '\' class="m-0 p-2 btn-sm dropdown-item text-wrap"><i class="fa-camera text-dark text-dark"></i> Ver Fotos</button>';
                         } else {
-                            $btn[] = '<button style="font-size:11px" disabled class="m-0 p-2 btn-sm dropdown-item"><i class="fa fa-file-pdf text-dark text-wrap"></i> Sin Fotos</button>';
+                            $btn[] = '<button style="font-size:11px" disabled class="m-0 p-2 btn-sm dropdown-item"><i class="fa fa-camera text-dark text-wrap"></i> Sin Fotos</button>';
                         }
                     } else {
-                        $btn[] = '<button style="font-size:11px" disabled class="m-0 p-2 btn-sm dropdown-item"><i class="fa fa-file-pdf text-dark text-wrap"></i> Sin Fotos</button>';
+                        $btn[] = '<button style="font-size:11px" disabled class="m-0 p-2 btn-sm dropdown-item"><i class="fa fa-camera text-dark text-wrap" aria-hidden="true"></i>Sin Fotos</button>';
                     }
                 }
                 if (can('pedidos.pedidosPDF')) {
