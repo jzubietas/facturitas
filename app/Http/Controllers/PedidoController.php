@@ -288,7 +288,7 @@ class PedidoController extends Controller
                             $btn[] = '<button style="font-size:11px" disabled class="m-0 p-2 btn-sm dropdown-item"><i class="fa fa-camera text-dark text-wrap"></i> Sin Fotos</button>';
                         }
                     } else {
-                        $btn[] = '<button style="font-size:11px" disabled class="m-0 p-2 btn-sm dropdown-item"><i class="fa fa-camera text-dark text-wrap" aria-hidden="true"></i>Sin Fotos</button>';
+                        $btn[] = '<button style="font-size:11px" disabled class="m-0 p-2 btn-sm dropdown-item"><i class="fa fa-camera text-dark text-wrap" aria-hidden="true"></i> Sin Fotos</button>';
                     }
                 }
                 if (can('pedidos.pedidosPDF')) {
