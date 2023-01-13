@@ -79,6 +79,8 @@
                             insertDotMenu("i.dot_contador_en_motorizados_count",'.dot-notify.noti-side',data.contador_en_motorizados_count)
                             insertDotMenu("i.dot_contador_en_motorizados_confirmar_count",'.dot-notify.noti-side',data.contador_en_motorizados_confirmar_count)
                             nLink.update(data);
+
+                            $("#alert-authorization").html(data.authorization_courier);
                         })
 
 

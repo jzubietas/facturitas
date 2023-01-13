@@ -315,7 +315,7 @@ class MotorizadoController extends Controller
         $motorizados = User::select([
             'id',
             'zona',
-            DB::raw(" (select count(*) from pedidos inner join direccion_grupos b on pedidos.direccion_grupo=b.id where b.motorizado_status in (" . Pedido::ESTADO_MOTORIZADO_OBSERVADO . "," . Pedido::ESTADO_MOTORIZADO_NO_CONTESTO . ") and b.motorizado_id=users.id and b.estado=1) as devueltos")
+            DB::raw(" (select count(*) from pedidos inner join direccion_grupos b on pedidos.direccion_grupo=b.id where b.motorizado_status in (" . Pedido::ESTADO_MOTORIZADO_OBSERVADO . "," . Pedido::ESTADO_MOTORIZADO_NO_CONTESTO . "," . Pedido::ESTADO_MOTORIZADO_NO_RECIBIDO . ") and b.motorizado_id=users.id and b.estado=1) as devueltos")
         ])
             ->where('rol', '=', User::ROL_MOTORIZADO)
             ->whereNotNull('zona')
@@ -330,7 +330,7 @@ class MotorizadoController extends Controller
                 'direccion_grupos.motorizado_status',
                 'users.zona',
             ])
-            ->whereIn('direccion_grupos.motorizado_status', [Pedido::ESTADO_MOTORIZADO_OBSERVADO, Pedido::ESTADO_MOTORIZADO_NO_CONTESTO])
+            ->whereIn('direccion_grupos.motorizado_status', [Pedido::ESTADO_MOTORIZADO_OBSERVADO, Pedido::ESTADO_MOTORIZADO_NO_CONTESTO, Pedido::ESTADO_MOTORIZADO_NO_RECIBIDO])
             // ->where('direccion_grupos.estado', '1')
             //->activo()
             //->whereNotNull('direccion_grupos.fecha')
@@ -407,7 +407,7 @@ class MotorizadoController extends Controller
                 } else if ($pedido->motorizado_status == Pedido::ESTADO_MOTORIZADO_OBSERVADO) {
                     $html .= '<div class="p-2">OBSERVADO</div>';
                     //$html .= '<button data-toggle="jqconfirmtext" data-target="' . $pedido->motorizado_sustento_text . '" class="btn btn-light btn-sm"><i class="fa fa-envelope-open-text"></i> Ver Sustento</button>';
-                }  else if ($pedido->motorizado_status == Pedido::ESTADO_MOTORIZADO_NO_RECIBIDO) {
+                } else if ($pedido->motorizado_status == Pedido::ESTADO_MOTORIZADO_NO_RECIBIDO) {
                     $html .= '<div class="p-2">NO RECIBIDO</div>';
                     //$html .= '<button data-toggle="jqconfirmtext" data-target="' . $pedido->motorizado_sustento_text . '" class="btn btn-light btn-sm"><i class="fa fa-envelope-open-text"></i> Ver Sustento</button>';
                 } else {
@@ -479,41 +479,31 @@ class MotorizadoController extends Controller
          * IDENTIFICAMOS AL GRUPO
          */
         $grupo = $pedido->direcciongrupo;
-        /*************
-         * RECUPERAMOS LA RAZON SOCIAL
-         */
-        $detalle = $pedido->detallePedidos()->first();
+
         /**************
          * CREAMOS EL GRUPO TEMPORAL
          */
-        $pgroup = GrupoPedido::createGroupByPedido($pedido);
-        $pgroup->pedidos()->syncWithoutDetaching([
-            $pedido->id => [
-                'codigo' => $pedido->codigo,
-                'razon_social' => $detalle->nombre_empresa,
-            ]
-        ]);
+        $pgroup = GrupoPedido::createGroupByPedido($pedido,false,true);
 
         if ($grupo != null) {
             if ($grupo->pedidos()->activo()->count() <= 1) {
                 $grupo->update([
                     'estado' => 0,
                 ]);
+                if ($pedido->estado = 0) {
+                    $grupo->update([
+                        'motorizado_status' => Pedido::ESTADO_MOTORIZADO_RE_RECIBIDO,
+                    ]);
+                } else {
+                    $grupo->update([
+                        'motorizado_status' => 0,
+                    ]);
+                }
             } else {
                 $pedido->update([
                     'direccion_grupo' => null
                 ]);
                 DireccionGrupo::restructurarCodigos($grupo);
-            }
-
-            if ($pedido->estado = 0) {
-                $grupo->update([
-                    'motorizado_status' => Pedido::ESTADO_MOTORIZADO_RE_RECIBIDO,
-                ]);
-            } else {
-                $grupo->update([
-                    'motorizado_status' => 0,
-                ]);
             }
         } else {
             $pedido->update([
@@ -526,7 +516,6 @@ class MotorizadoController extends Controller
 
     public function Enviosrecepcionmotorizado()
     {
-
         $motorizados = User::select([
             'id',
             'zona',
@@ -646,8 +635,7 @@ class MotorizadoController extends Controller
                 ->where('pedidos.estado', '1')
                 ->whereIn('pedidos.condicion_envio_code', [$request->condicion])
                 ->where('dp.estado', '1');
-        }
-        else if ($tipo_consulta == "paquete") {
+        } else if ($tipo_consulta == "paquete") {
 
             $pedidos = null;
             $filtros_code = [12];
@@ -668,11 +656,11 @@ class MotorizadoController extends Controller
                 ->when($fecha_consulta != null, function ($query) use ($fecha_consulta) {
                     $query->whereDate('direccion_grupos.fecha_salida', $fecha_consulta);
                 })
-                ->where('direccion_grupos.motorizado_status','=',0)
+                ->where('direccion_grupos.motorizado_status', '=', 0)
                 ->activo();
 
             if (\auth()->user()->rol == User::ROL_MOTORIZADO) {
-                $grupos->where('direccion_grupos.motorizado_id',\auth()->id());
+                $grupos->where('direccion_grupos.motorizado_id', \auth()->id());
             }
 
             return Datatables::of(DB::table($grupos))
@@ -683,7 +671,7 @@ class MotorizadoController extends Controller
                 ->editColumn('fecha_salida', function ($grupo) {
                     try {
                         return Carbon::parse($grupo->fecha_salida)->format('d-m-Y');
-                    }catch (\Exception $ex){
+                    } catch (\Exception $ex) {
                         return $grupo->fecha_salida;
                     }
                 })
@@ -708,8 +696,9 @@ class MotorizadoController extends Controller
 
                     if ($direcciongrupo->condicion_envio_code == Pedido::ENVIO_MOTORIZADO_COURIER_INT) {
 
-                        if ($fecha_actual >= $fecha_consulta) {
+                        if ($fecha_actual == $fecha_consulta) {
                             $count = Pedido::query()->where('direccion_grupo', $direcciongrupo->id)->count();
+
                             $btn .= ' <li>
                                             <button
                                             data-btncolor="orange"
@@ -752,12 +741,31 @@ class MotorizadoController extends Controller
                         }
 
                     } else if ($direcciongrupo->condicion_envio_code == Pedido::RECEPCION_MOTORIZADO_INT) {
-                        $btn .= '<li>
-                                <a href="" class="btn-sm text-secondary" data-target="#modal-confirmacion" data-toggle="modal" data-ide="' . $direcciongrupo->id . '" data-entregar-confirm="' . $direcciongrupo->id . '" data-destino="' . $direcciongrupo->destino . '" data-fechaenvio="' . $direcciongrupo->fecha . '" data-codigos="' . $direcciongrupo->codigos . '">
-                                    <i class="fas fa-envelope text-success"></i> Iniciar ruta</a></li>
-                                </a>
+                        if ($fecha_actual == $fecha_consulta) {
+                            if (\auth()->user()->rol == User::ROL_MOTORIZADO) {
+                                if (count(DireccionGrupo::getNoRecibidoAuthorization($direcciongrupo->motorizado_id)) == 0) {
+                                    $btn .= '<li>
+                                <button class="btn btn-sm text-secondary" data-target="#modal-confirmacion" data-toggle="modal" data-ide="' . $direcciongrupo->id . '" data-entregar-confirm="' . $direcciongrupo->id . '" data-destino="' . $direcciongrupo->destino . '" data-fechaenvio="' . $direcciongrupo->fecha . '" data-codigos="' . $direcciongrupo->codigos . '">
+                                    <i class="fas fa-envelope text-success"></i> Iniciar ruta
+                                </button>
+                            </li>';
+                                } else {
+                                    $btn .= '<li>
+                                <button class="btn btn-sm text-secondary" disabled title="No autorizado">
+                                    <i class="fas fa-envelope text-success"></i> Iniciar ruta
+                                </button>
+                            </li>';
+                                }
+                            } else {
+                                $btn .= '<li>
+                                <button class="btn btn-sm text-secondary" data-target="#modal-confirmacion" data-toggle="modal" data-ide="' . $direcciongrupo->id . '" data-entregar-confirm="' . $direcciongrupo->id . '" data-destino="' . $direcciongrupo->destino . '" data-fechaenvio="' . $direcciongrupo->fecha . '" data-codigos="' . $direcciongrupo->codigos . '">
+                                    <i class="fas fa-envelope text-success"></i> Iniciar ruta
+                                </button>
                             </li>';
 
+                            }
+
+                        }
                     }
 
                     $btn .= '</ul>';

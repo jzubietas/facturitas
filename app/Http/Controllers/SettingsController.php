@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cliente;
+use App\Models\DireccionGrupo;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -37,7 +38,7 @@ class SettingsController extends Controller
 
         return response()->json([
             "success" => true,
-            'updated'=>$cliente
+            'updated' => $cliente
         ]);
     }
 
@@ -93,5 +94,11 @@ class SettingsController extends Controller
         setting([$request->key => bcrypt($request->value)])
             ->save();
         return setting()->all();
+    }
+
+    public function authorizationMotorizado(Request $request, User $user)
+    {
+        DireccionGrupo::clearNoRecibidoAuthorization($user->id);
+        return $user->id;
     }
 }

@@ -7,6 +7,7 @@ use App\Models\DireccionGrupo;
 use App\Models\Pedido;
 use App\Models\PedidoMovimientoEstado;
 use App\Models\User;
+use App\View\Components\common\courier\AutorizarRutaMotorizado;
 use Illuminate\Http\Request;
 use App\Notifications\InvoicePaid;
 use Illuminate\Support\Facades\Auth;
@@ -457,8 +458,7 @@ class NotificationsController extends Controller
             'contador_jefe_op' => $contador_jefe_op,
             'contador_en_motorizados_count' => $en_motorizados_count->count(),
             'contador_en_motorizados_confirmar_count' => $en_motorizados_confirmar_count->count(),
-
-
+            'authorization_courier'=>\Blade::renderComponent(new AutorizarRutaMotorizado())
         ];
     }
 

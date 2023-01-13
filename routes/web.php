@@ -47,6 +47,7 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     Route::post('/setting/administrador/time-clientes', [SettingsController::class, 'settingTimeClienteStore'])->name('settings.store-time-clientes');
 
     Route::post('/setting/store', [SettingsController::class, 'settingStore'])->name('settings.store-setting');
+    Route::post('/setting/authorizar/motorizado/{user}', [SettingsController::class, 'authorizationMotorizado'])->name('settings.authorization-motorizado');
 
 
     Route::get('/search/cliente', [DashboardController::class, 'searchCliente'])->name('dashboard.search-cliente');

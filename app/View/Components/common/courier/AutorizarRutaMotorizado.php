@@ -4,10 +4,13 @@ namespace App\View\Components\common\courier;
 
 use App\Models\DireccionGrupo;
 use App\Models\Pedido;
+use App\Models\User;
 use Illuminate\View\Component;
 
 class AutorizarRutaMotorizado extends Component
 {
+
+
     /**
      * Create a new component instance.
      *
@@ -25,11 +28,26 @@ class AutorizarRutaMotorizado extends Component
      */
     public function render()
     {
-        $grupos = DireccionGrupo::query()->activo()->where('motorizado_status', Pedido::ESTADO_MOTORIZADO_NO_RECIBIDO)
-            ->join('users', 'users.id', 'direccion_grupos.motorizado_id')
-            ->select(['direccion_grupos.id', 'direccion_grupos.motorizado_id', 'users.zona'])
-            ->get()
-            ->groupBy('zona');
-        return view('components.common.courier.autorizar-ruta-motorizado');
+        $zonemotorizados=[];
+        if (auth()->user()->rol == \App\Models\User::ROL_JEFE_COURIER) {
+            $motorizados = User::query()->activo()->rol(User::ROL_MOTORIZADO)->get();
+            $motorizadosAuthorizaciones = [];
+            foreach ($motorizados as $motorizado) {
+                $zonemotorizados[$motorizado->id] = $motorizado->zona;
+                if (!isset($motorizadosAuthorizaciones[$motorizado->id])) {
+                    $motorizadosAuthorizaciones[$motorizado->id] = 0;
+                }
+                $motorizadosAuthorizaciones[$motorizado->id] += count(DireccionGrupo::getNoRecibidoAuthorization($motorizado->id));
+            }
+
+            foreach ($motorizadosAuthorizaciones as $zona => $cantidad) {
+                if ($cantidad == 0) {
+                    unset($motorizadosAuthorizaciones[$zona]);
+                }
+            }
+        } else {
+            $motorizadosAuthorizaciones = [];
+        }
+        return view('components.common.courier.autorizar-ruta-motorizado', compact('motorizadosAuthorizaciones','zonemotorizados'));
     }
 }

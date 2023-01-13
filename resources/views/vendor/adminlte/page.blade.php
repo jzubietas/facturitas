@@ -63,7 +63,9 @@
         @endif
 
     </div>
-    <x-common-autorizar-ruta-motorizado></x-common-autorizar-ruta-motorizado>
+    <div id="alert-authorization">
+        <x-common-autorizar-ruta-motorizado></x-common-autorizar-ruta-motorizado>
+    </div>
 @stop
 
 @section('adminlte_js')
