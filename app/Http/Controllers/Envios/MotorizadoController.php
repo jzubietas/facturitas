@@ -395,10 +395,10 @@ class MotorizadoController extends Controller
                     $html .= '<div class="p-2">ANULADO</div>';
                 } else if ($pedido->motorizado_status == Pedido::ESTADO_MOTORIZADO_OBSERVADO) {
                     $html .= '<div class="p-2">OBSERVADO</div>';
-                    $html .= '<button data-toggle="jqconfirmtext" data-target="' . $pedido->motorizado_sustento_text . '" class="btn btn-light btn-sm"><i class="fa fa-envelope-open-text"></i> Ver Sustento</button>';
+                    //$html .= '<button data-toggle="jqconfirmtext" data-target="' . $pedido->motorizado_sustento_text . '" class="btn btn-light btn-sm"><i class="fa fa-envelope-open-text"></i> Ver Sustento</button>';
                 } else {
                     $html .= '<div class="p-2">NO CONTESTA</div>';
-                    $html .= '<button data-toggle="jqconfirmfoto" data-target="' . \Storage::disk('pstorage')->url($pedido->motorizado_sustento_foto) . '" class="btn btn-light btn-sm"><i class="fa fa-photo-video"></i>Ver foto</button>';
+                    //$html .= '<button data-toggle="jqconfirmfoto" data-target="' . \Storage::disk('pstorage')->url($pedido->motorizado_sustento_foto) . '" class="btn btn-light btn-sm"><i class="fa fa-photo-video"></i>Ver foto</button>';
                 }
                 return $html;
             })
@@ -454,7 +454,7 @@ class MotorizadoController extends Controller
 
                 return $btn;
             })
-            ->rawColumns(['action', 'codigo', 'detalle'])
+            ->rawColumns(['action', 'codigo', 'detalle', 'Ver'])
             ->make(true);
     }
 
