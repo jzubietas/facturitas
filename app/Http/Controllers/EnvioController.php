@@ -248,7 +248,7 @@ class EnvioController extends Controller
                     $btn .= '<ul class="list-unstyled pl-0">';
                     $btn .= '<li>
                                         <a href="" class="btn-sm text-secondary" data-target="#modal-confirmacion" data-toggle="modal" data-ide="' . $pedido->id . '" data-entregar-confirm="' . $pedido->id . '" data-destino="' . $pedido->destino . '" data-fechaenvio="' . $pedido->created_at . '" data-codigos="' . $pedido->codigo . '">
-                                            <i class="fas fa-envelope text-success"></i> A motorizado</a></li>
+                                            <i class="fas fa-envelope text-danger"></i> Entregado sin envio</a></li>
                                         </a>
                                     </li>';
                     $btn .= '</ul>';
@@ -1914,7 +1914,7 @@ class EnvioController extends Controller
                         //'condicion_envio_code' => Pedido::SEGUIMIENTO_PROVINCIA_COURIER_INT,
                         'env_destino' => 'LIMA',
                         'env_distrito' => 'LOS OLIVOS',
-                        'env_zona' => 'NORTE',
+                        'env_zona' => 'OLVA',
                         'env_nombre_cliente_recibe' => 'OLVA',
                         'env_celular_cliente_recibe' => 'OLVA',
                         'env_cantidad' => $count_pedidos,
@@ -2449,17 +2449,46 @@ class EnvioController extends Controller
 
                     break;
             }
-        } else if ($area_accion == "jefe_op") {
+        } if ($area_accion == "maria") {
             switch ($condicion_code_actual) {
-                /*********
-                 *  JEFE DE OPERACIONES
-                 */
                 case 5:
+                    $nuevo_estado = Pedido::RECIBIDO_JEFE_OPE_INT;
+                    $respuesta = "El pedido se envió a Logistica correctamente.";
+                    $nombre_accion = Pedido::$estadosCondicionEnvioCode[$nuevo_estado];
+
+                    break;
+            }
+        }
+        if ($area_accion == "courier") {
+            switch ($condicion_code_actual) {
+                case 6:
                     $nuevo_estado = Pedido::ENVIO_COURIER_JEFE_OPE_INT;
                     $respuesta = "El pedido se envió a Logistica correctamente.";
                     $nombre_accion = Pedido::$estadosCondicionEnvioCode[$nuevo_estado];
 
                     break;
+            }
+        }
+        else if ($area_accion == "jefe_op") {
+            switch ($condicion_code_actual) {
+                /*********
+                 *  JEFE DE OPERACIONES
+                 */
+                case 5:
+                    $nuevo_estado = Pedido::RECIBIDO_JEFE_OPE_INT;
+                    $respuesta = "El pedido se envió a Logistica correctamente.";
+                    $nombre_accion = Pedido::$estadosCondicionEnvioCode[$nuevo_estado];
+
+                    break;
+
+                case 6:
+                    $nuevo_estado = Pedido::ENVIO_COURIER_JEFE_OPE_INT;
+                    $respuesta = "El pedido se envió a Logistica correctamente.";
+                    $nombre_accion = Pedido::$estadosCondicionEnvioCode[$nuevo_estado];
+
+                    break;
+
+
 
                 /*********
                  * CONFIRMACION DE PEDIDOS SIN SOBRE
@@ -2526,6 +2555,28 @@ class EnvioController extends Controller
 
         return response()->json(['html' => $envio->id]);
     }
+
+    public function confirmarEntregaSinEnvio(Request $request)
+    {
+        $pedido = Pedido::query()->findOrFail($request->hiddenCodigo);
+
+        $pedido->update([
+            'condicion_envio' => Pedido::ENTREGADO_SIN_SOBRE_CLIENTE,
+            'condicion_envio_code' => Pedido::ENTREGADO_SIN_SOBRE_CLIENTE_INT,
+            //'fecha_salida' => $request->fecha_salida
+        ]);
+
+        PedidoMovimientoEstado::create([
+            'pedido' => $request->hiddenCodigo,
+            'condicion_envio_code' => Pedido::ENTREGADO_SIN_SOBRE_CLIENTE_INT,
+            'notificado' => 0
+        ]);
+
+        return response()->json(['html' => $pedido->id]);
+    }
+
+
+
 
     public function confirmarEstadoRecepcionMotorizado(Request $request)
     {

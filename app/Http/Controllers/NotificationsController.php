@@ -440,6 +440,27 @@ class NotificationsController extends Controller
             ->where('direccion_grupos.condicion_envio_code', Pedido::CONFIRM_MOTORIZADO_INT)
             ->where('direccion_grupos.estado', '1');
 
+        $sobres_devueltos= Pedido::join('direccion_grupos', 'pedidos.direccion_grupo', 'direccion_grupos.id')
+            ->select([
+                'pedidos.*',
+                'direccion_grupos.fecha_salida as grupo_fecha_salida',
+                'direccion_grupos.motorizado_status',
+                'direccion_grupos.motorizado_sustento_text',
+                'direccion_grupos.motorizado_sustento_foto',
+            ])
+            ->whereIn('direccion_grupos.motorizado_status', [Pedido::ESTADO_MOTORIZADO_OBSERVADO, Pedido::ESTADO_MOTORIZADO_NO_CONTESTO, Pedido::ESTADO_MOTORIZADO_NO_RECIBIDO])
+            //->where('direccion_grupos.estado', '1')
+            //->activo()
+            ->whereNotNull('direccion_grupos.fecha_salida')
+            ->count();
+        if($sobres_devueltos > 0){
+            $icono_sobres_devueltos = "fa fa-exclamation-triangle text-warning warning";
+        }else{
+            $icono_sobres_devueltos = "";
+        }
+
+
+
         return [
             'icon' => 'fas fa-envelope',
             'label' => count(auth()->user()->unreadNotifications) + count($devoluciones),
@@ -456,6 +477,7 @@ class NotificationsController extends Controller
             'contador_jefe_op' => $contador_jefe_op,
             'contador_en_motorizados_count' => $en_motorizados_count->count(),
             'contador_en_motorizados_confirmar_count' => $en_motorizados_confirmar_count->count(),
+            'contador_sobres_devueltos' => $icono_sobres_devueltos,
             'authorization_courier'=>\Blade::renderComponent(new AutorizarRutaMotorizado())
         ];
     }

@@ -507,7 +507,7 @@ return [
                     'text' => 'Sobres por Devolver',
                     'route' => 'envios.devueltos',
                     'can' => 'motorizado.devuelto',
-                    'icon' => 'fas fa-check-circle dot_contador_en_motorizados_count',
+                    'icon' => 'fas fa-check-circle dot_contador_sobres_devueltos',
                     'active' => ['enviados'],
                 ]
             ]
