@@ -48,11 +48,10 @@ class GrupoPedido extends Model
 
     public static function createGroupByArray($array, $createAnother = false)
     {
-        $distrito = Distrito::query()->where('distrito', '=', data_get($array, 'distrito'))->first();
-        $zona = \Str::lower(optional($distrito)->zona ?? data_get($array, 'zona') ?? '');
+        $zona = \Str::lower(data_get($array, 'zona') ?? '');
         if ($zona == 'olva') {
             $data = [
-                "zona" => optional($distrito)->zona ?? data_get($array, 'zona') ?? 'n/a',
+                "zona" => data_get($array, 'zona'),
             ];
             $data2 = [
                 "provincia" => 'OLVA',//LIMA
@@ -66,8 +65,9 @@ class GrupoPedido extends Model
                 return GrupoPedido::create(array_merge($data, $data2));
             }*/
         } else {
+            $distrito = Distrito::query()->where('distrito', '=', data_get($array, 'distrito'))->first();
             $data = [
-                "zona" => optional($distrito)->zona ?? data_get($array, 'zona') ?? 'n/a',
+                "zona" => data_get($array, 'zona') ?? 'n/a',
                 "provincia" => optional($distrito)->provincia ?? data_get($array, 'provincia') ?? 'n/a',//LIMA
                 'distrito' => optional($distrito)->distrito ?? data_get($array, 'distrito') ?? 'n/a',//LOS OLIVOS
                 'direccion' => data_get($array, 'direccion') ?: 'n/a',//olva
