@@ -27,7 +27,8 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text font-weight-bold font-12" id="inputGroup-sizing-default">Fecha de Ruta:</span>
                         </div>
-                        <input type="date" value="{{$fecha_consulta->format('Y-m-d')}}" id="fecha_consulta" name="fecha_consulta" class="form-control" autocomplete="off">
+                        <input type="date" value="{{$fecha_consulta->format('Y-m-d')}}" id="fecha_consulta"
+                               name="fecha_consulta" class="form-control" autocomplete="off">
                     </div>
                 </td>
             </tr>
@@ -127,11 +128,11 @@
     <script>
         $(document).ready(function () {
 
-            $("#fecha_consulta").on('change', function(){
+            $("#fecha_consulta").on('change', function () {
                 //var fecha_formateada = $(this).val().replaceAll('-', '/');
                 var fecha_format = $(this).val().split("-")
                 var fecha_formateada = fecha_format[2] + "/" + fecha_format[1] + "/" + fecha_format[0];
-                $(this).data('fecha',fecha_formateada);
+                $(this).data('fecha', fecha_formateada);
                 console.log(fecha_formateada);
 
                 $('#myTab a[href="#general"]').tab('show')
@@ -143,6 +144,7 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             });
+
             function renderButtomsDataTable(row, data) {
                 if (data.destino == 'PROVINCIA') {
                     $('td', row).css('color', '#20c997')
@@ -263,6 +265,7 @@
                                 <div class="form-group">
                                     <div class="image-wrapper">
                                         <img id="picture1" src="{{ asset('imagenes/motorizado_preview/sobres.png') }}"
+                                        data-src="{{ asset('imagenes/motorizado_preview/sobres.png') }}"
                                 alt="Imagen del pago" class="img-fluid w-100" style="display: block;" width="300" height="300">
                         </div>
                     </div>
@@ -271,6 +274,7 @@
                     <div class="form-group">
                         <div class="image-wrapper">
                             <img id="picture2" src="{{ asset('imagenes/motorizado_preview/domicilio.png') }}"
+                            data-src="{{ asset('imagenes/motorizado_preview/domicilio.png') }}"
                                  alt="Imagen del pago" class="img-fluid w-100" style="display: block" width="300" height="300">
                         </div>
                     </div>
@@ -279,6 +283,7 @@
                     <div class="form-group">
                         <div class="image-wrapper">
                             <img id="picture3" src="{{ asset('imagenes/motorizado_preview/recibe_sobre.png') }}"
+                            data-src="{{ asset('imagenes/motorizado_preview/recibe_sobre.png') }}"
                                  alt="Imagen del pago" class="img-fluid w-100" style="display: block" width="300" height="300">
                         </div>
                     </div>
@@ -314,13 +319,16 @@
                                 }
                             })
                             self.$content.find("#trash_adjunto1").click(function (e) {
-                                self.$content.find("#picture1").attr('src', "{{ asset('imagenes/sobres.jpg') }}")
+                                self.$content.find("#picture1").attr('src', self.$content.find("#picture1").data('src'))
+                                self.$content.find("#adjunto1").val(null)
                             })
                             self.$content.find("#trash_adjunto2").click(function (e) {
-                                self.$content.find("#picture2").attr('src', "{{ asset('imagenes/domicilio.jpg') }}")
+                                self.$content.find("#picture2").attr('src', self.$content.find("#picture2").data('src'))
+                                self.$content.find("#adjunto2").val(null)
                             })
                             self.$content.find("#trash_adjunto3").click(function (e) {
-                                self.$content.find("#picture3").attr('src', "{{ asset('imagenes/recibe_sobre.jpg') }}")
+                                self.$content.find("#picture3").attr('src', self.$content.find("#picture3").data('src'))
+                                self.$content.find("#adjunto3").val(null)
                             })
 
                             self.$content.find("form").on('submit', function (e) {
@@ -578,11 +586,9 @@ Enviar</button>
                             revertir: {
                                 btnClass: 'btn-red',
                                 action: function () {
-                                    const self=this
+                                    const self = this
                                     self.showLoading(true)
-                                    $.post(action, {
-
-                                    })
+                                    $.post(action, {})
                                         .done(function (data) {
                                             self.close()
                                         })
@@ -597,6 +603,7 @@ Enviar</button>
                     })
                 })
             }
+
             const datatable = $('#tablaPrincipal').DataTable({
                 responsive: {
                     details: {
@@ -623,12 +630,12 @@ Enviar</button>
                 createdRow: function (row, data, dataIndex) {
 
                 },
-                drawCallback: function(settings) {
+                drawCallback: function (settings) {
                     console.log(settings.json);
                     $("#tablaPrincipal").DataTable().columns().header()[12].innerText = $('a[data-toggle="tab"].active').data('action-name')
                 },
                 rowCallback: function (row, data, index) {
-                    renderButtomsDataTable(row,data)
+                    renderButtomsDataTable(row, data)
                 },
                 columns: [
                     {
@@ -746,29 +753,28 @@ Enviar</button>
                     }
                 },
                 "fnDrawCallback": function () {
-                    let activepage=$('a[data-toggle="tab"].active').data('action');
-                    let contador_tabla='';
-                    contador_tabla=$("#tablaPrincipal").dataTable().fnSettings().fnRecordsDisplay();
-                    switch(activepage)
-                    {
+                    let activepage = $('a[data-toggle="tab"].active').data('action');
+                    let contador_tabla = '';
+                    contador_tabla = $("#tablaPrincipal").dataTable().fnSettings().fnRecordsDisplay();
+                    switch (activepage) {
                         case 'general':
-                            if(contador_tabla==0)$('#myTab a[href="#entregado"]').tab('show').trigger('click')
+                            if (contador_tabla == 0) $('#myTab a[href="#entregado"]').tab('show').trigger('click')
                             break;
                         case 'entregado':
-                            if(contador_tabla==0)$('#myTab a[href="#no_contesto"]').tab('show').trigger('click')
+                            if (contador_tabla == 0) $('#myTab a[href="#no_contesto"]').tab('show').trigger('click')
                             break;
                         case 'no_contesto':
-                            if(contador_tabla==0)$('#myTab a[href="#observado"]').tab('show').trigger('click')
+                            if (contador_tabla == 0) $('#myTab a[href="#observado"]').tab('show').trigger('click')
                             break;
                     }
                 }
             });
-            datatable.on( 'responsive-display', function ( e, datatable, row, showHide, update ) {
-                console.log( 'Details for row '+row.index()+' '+(showHide ? 'shown' : 'hidden') );
-                if(showHide) {
+            datatable.on('responsive-display', function (e, datatable, row, showHide, update) {
+                console.log('Details for row ' + row.index() + ' ' + (showHide ? 'shown' : 'hidden'));
+                if (showHide) {
                     renderButtomsDataTable($(row.node()).siblings('.child'), row.data())
                 }
-            } );
+            });
             $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
                 console.log(
                     'target: ',
