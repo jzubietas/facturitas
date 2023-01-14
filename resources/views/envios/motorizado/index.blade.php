@@ -738,7 +738,7 @@ Enviar</button>
                     })
                 })
             }
-            const datatable = $('#tablaPrincipal').DataTable({
+            datatableenmotorizado = $('#tablaPrincipal').DataTable({
                 responsive: {
                     details: {
                         renderer: $.fn.dataTable.Responsive.renderer.listHiddenNodes()
