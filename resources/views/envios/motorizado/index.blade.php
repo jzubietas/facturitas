@@ -1043,14 +1043,25 @@ Enviar</button>
                     renderButtomsDataTable($(row.node()).siblings('.child'), row.data())
                 }
             } );
-            $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
-                console.log(
-                    'target: ',
-                    e.target,
-                    e.relatedTarget,
-                )
-                $('#tablaPrincipal').DataTable().draw(false);
-            })*/
+            datatableentregado.on( 'responsive-display', function ( e, datatable, row, showHide, update ) {
+                console.log( 'Details for row '+row.index()+' '+(showHide ? 'shown' : 'hidden') );
+                if(showHide) {
+                    renderButtomsDataTable($(row.node()).siblings('.child'), row.data())
+                }
+            } );
+            datatablenocontesto.on( 'responsive-display', function ( e, datatable, row, showHide, update ) {
+                console.log( 'Details for row '+row.index()+' '+(showHide ? 'shown' : 'hidden') );
+                if(showHide) {
+                    renderButtomsDataTable($(row.node()).siblings('.child'), row.data())
+                }
+            } );
+            datatableobservado.on( 'responsive-display', function ( e, datatable, row, showHide, update ) {
+                console.log( 'Details for row '+row.index()+' '+(showHide ? 'shown' : 'hidden') );
+                if(showHide) {
+                    renderButtomsDataTable($(row.node()).siblings('.child'), row.data())
+                }
+            } );
+            
         });
     </script>
 
