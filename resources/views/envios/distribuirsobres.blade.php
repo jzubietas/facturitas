@@ -242,7 +242,7 @@
                     })
                 },
                 columns: [
-                    {data: 'codigos', name: 'codigos', searchable: true, sWidth: '7%', sClass: 'cod_dir'},
+                    {data: 'codigos', name: 'codigos', searchable: true, sWidth: '10%', sClass: 'cod_dir'},
                     {data: 'productos', name: 'productos', searchable: true, sClass: 'cod_dir cod_dir_w'},
                     {data: 'cliente_recibe', name: 'cliente_recibe',},
                     {data: 'telefono', name: 'telefono',},

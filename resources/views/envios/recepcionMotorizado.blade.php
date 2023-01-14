@@ -883,6 +883,9 @@
                                     //console.log(row);
                                 },
                                 rowCallback: function (row, data, index) {
+                                    if(data.cambio_direccion_at!=null){
+                                        $('td',row).css('color','#0069e0')
+                                    }
                                     $("[data-toggle=jqconfirm]", row).click(function () {
                                         const action = $(this).data('target')
                                         const actionPost = $(this).data('target-post')
