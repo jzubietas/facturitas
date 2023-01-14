@@ -75,6 +75,11 @@ class DireccionGrupo extends Model
         return $this->hasMany(PedidoMotorizadoHistory::class, 'direccion_grupo_id')->orderByDesc('created_at');
     }
 
+    public function motorizado()
+    {
+        return $this->belongsTo(User::class, 'motorizado_id');
+    }
+
     public function gastoEnvio()
     {
         return $this->hasOne(GastoEnvio::class, 'direcciongrupo');
