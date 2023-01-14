@@ -129,7 +129,7 @@
     <script>
         $(document).ready(function() {
 
-            new AutoNumeric('.decimal', 1.8);
+            //new AutoNumeric('.decimal', 1.8);
 
         });
 
