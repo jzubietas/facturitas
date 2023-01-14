@@ -18,7 +18,12 @@ class AlterPedidosFecharecepcionOpcourierTables extends Migration
             $table->string('exidentificador',100)->nullable()->after('identificador');
             $table->string('icelular_asesor',1)->nullable()->after('exidentificador');
             $table->string('icelular_cliente',1)->nullable()->after('icelular_asesor');
-            //$table->timestamp('fecha_envio_op_courier')->nullable()->after('fecha_recepcion_courier');
+            //
+
+            if(!Schema::hasColumn('pedidos','fecha_envio_op_courier'))
+            {
+            $table->timestamp('fecha_envio_op_courier')->nullable()->after('fecha_recepcion_courier');
+            }
 
         });
     }
