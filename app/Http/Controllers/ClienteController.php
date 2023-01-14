@@ -382,7 +382,10 @@ class ClienteController extends Controller
         $users = User::where('users.estado', '1')
             ->whereIn('users.rol', ['Asesor','ASESOR ADMINISTRATIVO'])
             ->pluck('name', 'id');
-        $porcentajes = Porcentaje::where('cliente_id', $cliente->id)->get();
+        $porcentajes = Porcentaje::where('cliente_id', $cliente->id)->get()->map(function ($porcentaje,$index){
+            $porcentaje->rownumber=$index+1;
+            return $porcentaje;
+        });
 
         return view('clientes.edit', compact('cliente', 'users', 'porcentajes', 'mirol'));
     }
@@ -1725,8 +1728,9 @@ class ClienteController extends Controller
         $messaje = $mensajesRandom[$messajeKey];
         $pedidos = Pedido::query()->with(['cliente', 'pagoPedidos', 'detallePedido'])
             ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
-            ->select(
+            ->select([
                 'pedidos.id',
+                'pedidos.codigo',
                 'pedidos.created_at',
                 'dp.nombre_empresa',
                 'dp.cantidad',
@@ -1735,7 +1739,7 @@ class ClienteController extends Controller
                 'dp.courier',
                 'dp.total',
                 'dp.saldo as diferencia',
-            )
+            ])
             ->where('pedidos.created_at', '<=', now()->subDays(7)->format('Y-m-d H:i:s'))
             ->where('pedidos.cliente_id', $cliente->id)
             ->where('pedidos.condicion_code', '<>', Pedido::ANULADO_INT)
