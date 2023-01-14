@@ -1037,7 +1037,7 @@ Enviar</button>
                     $('.count_motorizados_entregado').html(this.fnSettings().fnRecordsDisplay());
                 }
             });
-            datatable.on( 'responsive-display', function ( e, datatable, row, showHide, update ) {
+            datatableenmotorizado.on( 'responsive-display', function ( e, datatable, row, showHide, update ) {
                 console.log( 'Details for row '+row.index()+' '+(showHide ? 'shown' : 'hidden') );
                 if(showHide) {
                     renderButtomsDataTable($(row.node()).siblings('.child'), row.data())
@@ -1061,7 +1061,7 @@ Enviar</button>
                     renderButtomsDataTable($(row.node()).siblings('.child'), row.data())
                 }
             } );
-            
+
         });
     </script>
 
