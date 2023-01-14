@@ -63,9 +63,7 @@
             <th scope="col">Asesor</th>
             <th scope="col">Cliente</th>
             <th scope="col">Razón social</th>
-            <th scope="col">Fecha de registro</th>
-            <th scope="col">Fecha de envio</th>
-            <th scope="col">Fecha de entrega</th>
+              <th scope="col">Fecha Envio Courier</th>
             <th scope="col">Destino</th>
             <th scope="col">Dirección de envío</th>
             <th scope="col">Estado de envio</th>
@@ -358,9 +356,7 @@
             //searchable: true
         },
           {data: 'empresas', name: 'empresas'},
-          {data: 'fecha_envio_doc', name: 'fecha_envio_doc', "visible":false},
-          {data: 'fecha_envio_doc_fis', name: 'fecha_envio_doc_fis', },
-          {data: 'fecha_recepcion', name: 'fecha_recepcion',"visible":false },
+          {data: 'fecha_envio_op_courier', name: 'fecha_envio_op_courier',"visible":true },
           {data: 'destino', name: 'destino',"visible":false },
           {
             data:'direccion',
@@ -371,29 +367,11 @@
               if(data!=null)
               {
                 return data;
-                /*if(data=='0')
-                {
-                  return '<span class="badge badge-danger">REGISTRE DIRECCION</span>';
-                }else if(data=='LIMA')
-                {
-                  var urlshow = '{{ route("pedidos.show", ":id") }}';
-                  urlshow = urlshow.replace(':id', row.id);
 
-                  return '<a href="" data-target="#modal-verdireccion" data-toggle="modal" data-dirreccion="'+row.id+'"><button class="btn btn-primary btn-sm"><i class="fas fa-eye"></i> Ver</button></a>';
-                }
-                else if(data=='PROVINCIA')
-                {
-                  return '<span class="badge badge-info">ENVIO A PROVINCIA</span>';
-                }else{
-                  return '<span class="badge badge-info">PROBLEMAS CON REGISTRO DE DESTINO</span>';
-                }
-*/
-                //return datas;
 
               }else{
                 return 'REGISTRE DIRECCION';
               }
-              //return 'REGISTRE DIRECCION';
             },
           },
           {

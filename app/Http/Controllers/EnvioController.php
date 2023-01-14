@@ -1002,7 +1002,7 @@ class EnvioController extends Controller
         $pedidos = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')
             ->join('users as u', 'pedidos.user_id', 'u.id')
             ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
-            ->select(
+            ->select([
                 'pedidos.id',
                 'pedidos.correlativo as id2',
                 'c.nombre as nombres',
@@ -1024,8 +1024,9 @@ class EnvioController extends Controller
                 'dp.fecha_envio_doc_fis',
                 'dp.foto1',
                 'dp.foto2',
-                'dp.fecha_recepcion'
-            )
+                'dp.fecha_recepcion',
+                'pedidos.fecha_envio_op_courier'
+            ])
             ->WhereIn('pedidos.condicion_envio_code', $filtros_code)
             //->where('pedidos.envio', '2')
             ->where('pedidos.estado', '1');
@@ -2154,6 +2155,7 @@ class EnvioController extends Controller
         $pedido->update([
             'envio' => '2',
             'modificador' => 'USER' . Auth::user()->id,
+            'fecha_envio_op_courier'=>Carbon::now(),
             'condicion_envio' => Pedido::RECIBIDO_JEFE_OPE,
             'condicion_envio_code' => Pedido::RECIBIDO_JEFE_OPE_INT,
 
