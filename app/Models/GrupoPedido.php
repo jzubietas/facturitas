@@ -29,8 +29,8 @@ class GrupoPedido extends Model
             'distrito' => $pedido->env_distrito,
             //'direccion' => $pedido->env_direccion,
             //'referencia' => $pedido->env_referencia,
-            'direccion' => ( ($pedido->destino=='PROVINCIA')? 'OLVA':$pedido->direccion ),
-            'referencia' => ( ($pedido->destino=='PROVINCIA')? $pedido->tracking:$pedido->referencia ),
+            'direccion' => (($pedido->destino == 'PROVINCIA') ? 'OLVA' : $pedido->direccion),
+            'referencia' => (($pedido->destino == 'PROVINCIA') ? $pedido->tracking : $pedido->referencia),
             'cliente_recibe' => $pedido->env_nombre_cliente_recibe,
             'telefono' => $pedido->env_celular_cliente_recibe,
         ], $createAnother);
@@ -49,20 +49,39 @@ class GrupoPedido extends Model
     public static function createGroupByArray($array, $createAnother = false)
     {
         $distrito = Distrito::query()->where('distrito', '=', data_get($array, 'distrito'))->first();
-        $data = [
-            "zona" => optional($distrito)->zona ?? data_get($array, 'zona') ?? 'n/a',
-            "provincia" => optional($distrito)->provincia ?? data_get($array, 'provincia') ?? 'n/a',//LIMA
-            'distrito' => optional($distrito)->distrito ?? data_get($array, 'distrito') ?? 'n/a',//LOS OLIVOS
-            'direccion' => data_get($array, 'direccion') ?: 'n/a',//olva
-            'cliente_recibe' => data_get($array, 'cliente_recibe') ?? 'n/a',//olva
-        ];
-        if ($createAnother) {
-            return GrupoPedido::create($data);
+        $zona = \Str::lower(optional($distrito)->zona ?? data_get($array, 'zona') ?? '');
+        if ($zona == 'olva') {
+            $data = [
+                "zona" => optional($distrito)->zona ?? data_get($array, 'zona') ?? 'n/a',
+            ];
+            $data2 = [
+                "provincia" => optional($distrito)->provincia ?? data_get($array, 'provincia') ?? 'n/a',//LIMA
+                'distrito' => optional($distrito)->distrito ?? data_get($array, 'distrito') ?? 'n/a',//LOS OLIVOS
+                'direccion' => data_get($array, 'direccion') ?: 'n/a',//olva
+                'cliente_recibe' => data_get($array, 'cliente_recibe') ?? 'n/a',//olva
+                'referencia' => data_get($array, 'referencia') ?: 'n/a',//olva
+                'telefono' => data_get($array, 'telefono') ?? 'n/a',//n/a
+            ];
+            /*if ($createAnother) {
+                return GrupoPedido::create(array_merge($data, $data2));
+            }*/
+        } else {
+            $data = [
+                "zona" => optional($distrito)->zona ?? data_get($array, 'zona') ?? 'n/a',
+                "provincia" => optional($distrito)->provincia ?? data_get($array, 'provincia') ?? 'n/a',//LIMA
+                'distrito' => optional($distrito)->distrito ?? data_get($array, 'distrito') ?? 'n/a',//LOS OLIVOS
+                'direccion' => data_get($array, 'direccion') ?: 'n/a',//olva
+                'cliente_recibe' => data_get($array, 'cliente_recibe') ?? 'n/a',//olva
+            ];
+            $data2 = [
+                'referencia' => data_get($array, 'referencia') ?: 'n/a',//olva
+                'telefono' => data_get($array, 'telefono') ?? 'n/a',//n/a
+            ];
+            if ($createAnother) {
+                return GrupoPedido::create(array_merge($data, $data2));
+            }
         }
-        return GrupoPedido::updateOrCreate($data, [
-            'referencia' => data_get($array, 'referencia') ?: 'n/a',//olva
-            'telefono' => data_get($array, 'telefono') ?? 'n/a',//n/a
-        ]);
+        return GrupoPedido::updateOrCreate($data, $data2);
     }
 
     public static function desvincularPedido(Pedido $pedido, $asignarOtro = false, $attach = false)

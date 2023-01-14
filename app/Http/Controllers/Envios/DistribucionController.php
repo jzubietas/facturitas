@@ -95,7 +95,22 @@ class DistribucionController extends Controller
                     $query->orWhere('codigos','like','%'.$search_value.'%');
                 }
         */
-        $items=$query->get();
+        $items = $query->get()->map(function ($grupo) {
+            $codigos = explode(',', $grupo->codigos);
+            $productos = explode(',', $grupo->productos);
+            $codigosNames = [];
+            foreach ($codigos as $key => $codigo) {
+                $codigosNames[$codigo] = $productos[$key];
+            }
+            sort($codigos);
+            $productos=[];
+            foreach ($codigos as $codigo) {
+                $productos[]=$codigosNames[$codigo];
+            }
+            $grupo->codigos=join(',',$codigos);
+            $grupo->productos=join(',',$productos);
+            return $grupo;
+        });
         return \DataTables::of($items)
             ->addColumn('codigos', function ($pedido) {
                 return collect(explode(',', $pedido->codigos))->map(fn($codigo, $index) => ($index + 1) . ") <b>" . $codigo . "</b>")->join('<hr class="my-1">');
