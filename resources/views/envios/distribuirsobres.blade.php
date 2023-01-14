@@ -391,6 +391,7 @@
                     })
                 }
             });
+
             @endforeach
 
             function getHtmlPrevisualizarDesagrupar(row, success) {
@@ -633,6 +634,15 @@ ${success ? `Paquete: <strong>${row.correlativo || ''}</strong>` : `Cliente: <st
                     table.draw(false);
                 }
             })
+            function closeIt()
+            {
+                motorizados.forEach(function (motorizado) {
+                    const zona = motorizado.zona.toUpperCase()
+                    const table = $('#tablaPrincipal' + zona).DataTable();
+                    localStorage.setItem(zona + '.envios.distribuirsobres', JSON.stringify(Array.from(table.data())));
+                })
+            }
+            window.onbeforeunload = closeIt;
             $('#tablaPrincipal').DataTable().draw(false);
         });
     </script>
