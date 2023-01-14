@@ -275,8 +275,6 @@ class NotificationsController extends Controller
             $contador_pedidos_atendidos = $contador_pedidos_atendidos->WhereIn('u.identificador', $asesores);
 
 
-        } else {
-            $contador_pedidos_atendidos = $contador_pedidos_atendidos;
         }
 
         $contador_pedidos_atendidos = $contador_pedidos_atendidos->count();
@@ -327,7 +325,7 @@ class NotificationsController extends Controller
                 )
                 ->pluck('users.identificador');
 
-            $pedidos = $contador_pedidos_atendidos_operacion->WhereIn('u.identificador', $asesores);
+             $contador_pedidos_atendidos_operacion->WhereIn('u.identificador', $asesores);
 
 
         } else if (Auth::user()->rol == "Jefe de operaciones") {
@@ -347,7 +345,7 @@ class NotificationsController extends Controller
                 )
                 ->pluck('users.identificador');
 
-            $pedidos = $contador_pedidos_atendidos_operacion->WhereIn('u.identificador', $asesores);
+            $contador_pedidos_atendidos_operacion->WhereIn('u.identificador', $asesores);
 
 
         }

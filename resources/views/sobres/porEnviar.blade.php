@@ -530,6 +530,7 @@
             $(".lima").addClass("d-none");
 
             $(document).on("change", "#limaprovincia", function () {
+                $("#distrito").val("").selectpicker("refresh")
                 switch ($(this).val()) {
                     case 'L':
                         console.log("e L");
