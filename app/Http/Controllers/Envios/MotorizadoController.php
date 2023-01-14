@@ -35,6 +35,7 @@ class MotorizadoController extends Controller
 
 
         if ($request->has('datatable')) {
+            //request tab  //enmotorizado//
             $query = DireccionGrupo::/*join('direccion_envios as de', 'direccion_grupos.id', 'de.direcciongrupo')*/
             join('clientes as c', 'c.id', 'direccion_grupos.cliente_id')
                 ->join('users as u', 'u.id', 'c.user_id')
@@ -56,27 +57,17 @@ class MotorizadoController extends Controller
                         ->where('direccion_grupos.estado', '1')
                         ->where('direccion_grupos.condicion_envio_code', Pedido::CONFIRM_MOTORIZADO_INT);
                     break;
-                case 'no_contesto':
+                case 'nocontesto':
                     $query
                         ->where('direccion_grupos.estado', '1')
                         ->where('direccion_grupos.condicion_envio_code', Pedido::MOTORIZADO_INT)
                         ->where('direccion_grupos.motorizado_status', Pedido::ESTADO_MOTORIZADO_NO_CONTESTO);
                     break;
                 case 'observado':
-                    //$query->where('direccion_grupos.estado', '1');
                     $query->where('direccion_grupos.condicion_envio_code', Pedido::MOTORIZADO_INT);
                     $query->where('direccion_grupos.motorizado_status', Pedido::ESTADO_MOTORIZADO_OBSERVADO);
-                    /*$query->where(function ($query) {
-                        //$query->where('direccion_grupos.estado', '0');
-                        //$query->where('direccion_grupos.condicion_envio', Pedido::ANULADO);
-                        $query->orWhere(function ($query) {
-                            $query->where('direccion_grupos.condicion_envio_code', Pedido::MOTORIZADO_INT);
-                            $query->where('direccion_grupos.motorizado_status', Pedido::ESTADO_MOTORIZADO_OBSERVADO);
-                        });
-                    });*/
                     break;
                 default:
-                    //$query->where('direccion_grupos.condicion_envio_code', Pedido::RECEPCION_MOTORIZADO_INT)
                     $query
                         ->where('direccion_grupos.estado', '1')
                         ->where('direccion_grupos.condicion_envio_code', Pedido::MOTORIZADO_INT)
@@ -135,7 +126,7 @@ class MotorizadoController extends Controller
                         case 'entregado':
 
                             break;
-                        case 'no_contesto':
+                        case 'nocontesto':
                             $btn .= '<li class="pt-8">
                                     <button class="btn btn-sm text-white bg-success" data-motorizado-history="no_contesto"
                                     data-jqconfirm-action="' . route('direcciongrupo.no-contesto.get-sustentos-adjuntos', $pedido->id) . '">
