@@ -224,7 +224,7 @@
                 serverSide: true,
                 searching: true,
                 lengthChange: false,
-                //"order": [ 'ordering_data', 'asc' ],
+                order: [[3, 'desc']],
                 createdRow: function (row, data, dataIndex) {
 
                 },

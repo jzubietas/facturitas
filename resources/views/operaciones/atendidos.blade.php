@@ -374,11 +374,7 @@
                             'warning'
                         )
                         return false;
-                    } else {
-
                     }
-                } else {
-                    return false
                 }
 
                 function submitForm() {
