@@ -259,16 +259,20 @@
 
         $(document).ready(function () {
 
-            $("#fecha_consulta").on('change', function(){
-                //var fecha_formateada = $(this).val().replaceAll('-', '/');
-                var fecha_format = $(this).val().split("-")
-                var fecha_formateada = fecha_format[2] + "/" + fecha_format[1] + "/" + fecha_format[0];
-                $(this).data('fecha', fecha_formateada);
-                console.log(fecha_formateada);
+            function applySearch(e) {
+                console.log(e)
+                let valor=$("#buscador_global").val();
+                valor=(valor||'').trim()
+                datatableenmotorizado.search( valor ).draw();
+                datatableentregado.search( valor ).draw();
+                datatablenocontesto.search( valor ).draw();
+                datatableobservado.search( valor ).draw();
+            }
 
-                $('#myTab a[href="#general"]').tab('show')
-                $('#tablaPrincipal').DataTable().ajax.reload();
-            });*/
+            $('#buscador_global').change(applySearch);
+            $('#buscador_global').keydown(applySearch);
+            $('#fecha_consulta').change(applySearch);
+            $('#fecha_consulta').keydown(applySearch);
 
             $.ajaxSetup({
                 headers: {
