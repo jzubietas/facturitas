@@ -1696,6 +1696,7 @@ class EnvioController extends Controller
 
             if ($dirgrupo != null) {
                 if (in_array($dirgrupo->condicion_envio_code, [Pedido::CONFIRM_MOTORIZADO_INT, Pedido::ENTREGADO_CLIENTE_INT,])) {
+                    //aca madanar a observados
                     return response()->json([
                         'suucess' => false
                     ]);
@@ -1710,8 +1711,6 @@ class EnvioController extends Controller
                     'observacion' => $request->observacion,
                     'cambio_direccion_sustento' => $request->cambio_direccion_sustento,
                 ]);
-
-
             } else {
                 if ($pedido->estado_sobre == 0) {
                     return response()->json([
