@@ -1372,14 +1372,7 @@ Enviar</button>
                     renderButtomsDataTable($(row.node()).siblings('.child'), row.data())
                 }
             } );
-            /*$('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
-                console.log(
-                    'target: ',
-                    e.target,
-                    e.relatedTarget,
-                )
-                $('#tablaPrincipal').DataTable().draw(false);
-            })*/
+            
         });
     </script>
 
