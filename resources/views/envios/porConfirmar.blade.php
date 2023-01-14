@@ -63,7 +63,7 @@
             <th scope="col">Asesor</th>
             <th scope="col">Cliente</th>
             <th scope="col">Razón social</th>
-              <th scope="col">Fecha Envio Courier</th>
+              <th scope="col">Fecha Envio a Courier</th>
             <th scope="col">Destino</th>
             <th scope="col">Dirección de envío</th>
             <th scope="col">Estado de envio</th>
