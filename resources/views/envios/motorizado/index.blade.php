@@ -27,8 +27,7 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text font-weight-bold font-12" id="inputGroup-sizing-default">Fecha de Ruta:</span>
                         </div>
-                        <input type="date" value="{{$fecha_consulta->format('Y-m-d')}}" id="fecha_consulta"
-                               name="fecha_consulta" class="form-control" autocomplete="off">
+                        <input type="date" value="{{$fecha_consulta->format('Y-m-d')}}" id="fecha_consulta" name="fecha_consulta" class="form-control" autocomplete="off">
                     </div>
                 </td>
                 <td>
@@ -279,7 +278,6 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             });
-
             function renderButtomsDataTable(row, data) {
                 if (data.destino == 'PROVINCIA') {
                     $('td', row).css('color', '#20c997')
@@ -400,7 +398,6 @@
                                 <div class="form-group">
                                     <div class="image-wrapper">
                                         <img id="picture1" src="{{ asset('imagenes/motorizado_preview/sobres.png') }}"
-                                        data-src="{{ asset('imagenes/motorizado_preview/sobres.png') }}"
                                 alt="Imagen del pago" class="img-fluid w-100" style="display: block;" width="300" height="300">
                         </div>
                     </div>
@@ -409,7 +406,6 @@
                     <div class="form-group">
                         <div class="image-wrapper">
                             <img id="picture2" src="{{ asset('imagenes/motorizado_preview/domicilio.png') }}"
-                            data-src="{{ asset('imagenes/motorizado_preview/domicilio.png') }}"
                                  alt="Imagen del pago" class="img-fluid w-100" style="display: block" width="300" height="300">
                         </div>
                     </div>
@@ -418,7 +414,6 @@
                     <div class="form-group">
                         <div class="image-wrapper">
                             <img id="picture3" src="{{ asset('imagenes/motorizado_preview/recibe_sobre.png') }}"
-                            data-src="{{ asset('imagenes/motorizado_preview/recibe_sobre.png') }}"
                                  alt="Imagen del pago" class="img-fluid w-100" style="display: block" width="300" height="300">
                         </div>
                     </div>
@@ -454,16 +449,13 @@
                                 }
                             })
                             self.$content.find("#trash_adjunto1").click(function (e) {
-                                self.$content.find("#picture1").attr('src', self.$content.find("#picture1").data('src'))
-                                self.$content.find("#adjunto1").val(null)
+                                self.$content.find("#picture1").attr('src', "{{ asset('imagenes/sobres.jpg') }}")
                             })
                             self.$content.find("#trash_adjunto2").click(function (e) {
-                                self.$content.find("#picture2").attr('src', self.$content.find("#picture2").data('src'))
-                                self.$content.find("#adjunto2").val(null)
+                                self.$content.find("#picture2").attr('src', "{{ asset('imagenes/domicilio.jpg') }}")
                             })
                             self.$content.find("#trash_adjunto3").click(function (e) {
-                                self.$content.find("#picture3").attr('src', self.$content.find("#picture3").data('src'))
-                                self.$content.find("#adjunto3").val(null)
+                                self.$content.find("#picture3").attr('src', "{{ asset('imagenes/recibe_sobre.jpg') }}")
                             })
 
                             self.$content.find("form").on('submit', function (e) {
@@ -598,7 +590,7 @@ Enviar</button>
                          <label for="sustento_foto">Adjuntar foto de las llamadas que realizo</label>
                      <input type="file" class="form-control" id="sustento_foto"  name="sustento_foto" required >
                     </div>
-                    <div class="alert alert-warning">Adjunte una captura de imagen que demuestre como minimo 5 llamadas hacia el cliente</div>
+                    <div class="alert alert-warning">Adjunte una imagen que demuestre como minimo 5 llamadas hacia el cliente</div>
                 </div>
                 <div class="col-lg-12" style="display: none" id="sustento_foto_img_content">
                    <div class="card">
@@ -721,9 +713,11 @@ Enviar</button>
                             revertir: {
                                 btnClass: 'btn-red',
                                 action: function () {
-                                    const self = this
+                                    const self=this
                                     self.showLoading(true)
-                                    $.post(action, {})
+                                    $.post(action, {
+
+                                    })
                                         .done(function (data) {
                                             self.close()
                                         })
@@ -738,7 +732,8 @@ Enviar</button>
                     })
                 })
             }
-            datatableenmotorizado = $('#tablaPrincipal').DataTable({
+            datatableenmotorizado = $('#tablaEnmotorizado').DataTable({
+                dom: '<"top"i>rt<"bottom"lp><"clear">',
                 responsive: {
                     details: {
                         renderer: $.fn.dataTable.Responsive.renderer.listHiddenNodes()
@@ -763,12 +758,12 @@ Enviar</button>
                 createdRow: function (row, data, dataIndex) {
 
                 },
-                drawCallback: function (settings) {
+                drawCallback: function(settings) {
                     console.log(settings.json);
                     $("#tablaPrincipal").DataTable().columns().header()[12].innerText = $('a[data-toggle="tab"].active').data('action-name')
                 },
                 rowCallback: function (row, data, index) {
-                    renderButtomsDataTable(row, data)
+                    renderButtomsDataTable(row,data)
                 },
                 columns: [
                     {
@@ -1037,6 +1032,322 @@ Enviar</button>
                     $('.count_motorizados_entregado').html(this.fnSettings().fnRecordsDisplay());
                 }
             });
+            datatablenocontesto = $('#tablaNocontesto').DataTable({
+                dom: '<"top"i>rt<"bottom"lp><"clear">',
+                responsive: {
+                    details: {
+                        renderer: $.fn.dataTable.Responsive.renderer.listHiddenNodes()
+                    }
+                },
+                lengthChange: false,
+                processing: true,
+                stateSave: true,
+                serverSide: true,
+                searching: true,
+                order: [[0, "desc"]],
+                ajax: {
+                    url: "{{ route('envios.motorizados.index',['datatable'=>1]) }}",
+                    data: function (q) {
+                        q.fechaconsulta = $("#fecha_consulta").val();
+                        q.tab = 'nocontesto'
+                    }
+                },
+                initComplete: function () {
+
+                },
+                createdRow: function (row, data, dataIndex) {
+
+                },
+                drawCallback: function(settings) {
+                    console.log(settings.json);
+                    $("#tablaPrincipal").DataTable().columns().header()[12].innerText = $('a[data-toggle="tab"].active').data('action-name')
+                },
+                rowCallback: function (row, data, index) {
+                    renderButtomsDataTable(row,data)
+                },
+                columns: [
+                    {
+                        data: 'correlativo',
+                        name: 'correlativo',
+                    },
+                    {
+                        data: 'codigos',
+                        name: 'codigos',
+                        render: function (data, type, row, meta) {
+                            if (data == null) {
+                                return 'SIN PEDIDOS';
+                            } else {
+                                var returndata = '';
+                                var jsonArray = data.split(",");
+                                $.each(jsonArray, function (i, item) {
+                                    returndata += item + '<br>';
+                                });
+                                return returndata;
+                            }
+                        },
+                    },
+                    {data: 'distrito', name: 'distrito',},
+                    {data: 'identificador', name: 'identificador',},
+                    {
+                        data: 'celular',
+                        name: 'celular',
+                        render: function (data, type, row, meta) {
+                            return row.celular + '<br>' + row.nombre
+                        },
+                    },
+                    {
+                        data: 'fecha_salida',
+                        name: 'fecha_salida',
+                    },
+                    {
+                        data: 'fecha_recepcion',
+                        name: 'fecha_recepcion',
+                    },
+                    {
+                        data: 'producto',
+                        name: 'producto',
+                        render: function (data, type, row, meta) {
+                            if (data == null) {
+                                return 'SIN RUCS';
+                            } else {
+                                var numm = 0;
+                                var returndata = '';
+                                var jsonArray = data.split(",");
+                                $.each(jsonArray, function (i, item) {
+                                    numm++;
+                                    returndata += numm + ": " + item + '<br>';
+
+                                });
+                                return returndata;
+                            }
+                        }
+                    },
+                    {data: 'destino', name: 'destino',},
+                    {
+                        data: 'direccion',
+                        name: 'direccion',
+                        render: function (data, type, row, meta) {
+                            if (data != null) {
+                                return data;
+                            } else {
+                                return '<span class="badge badge-info">REGISTRE DIRECCION</span>';
+                            }
+                        },
+                    },
+                    {
+                        data: 'referencia',
+                        name: 'referencia',
+                        sWidth: '10%',
+                        render: function (data, type, row, meta) {
+                            var datal = "";
+                            if (row.destino == 'LIMA') {
+                                return data;
+                            } else if (row.destino == 'PROVINCIA') {
+                                var urladjunto = '{{ route("pedidos.descargargastos", ":id") }}'.replace(':id', data);
+                                datal = datal + '<p><a href="' + urladjunto + '">' + data + '</a><p>';
+                                return datal;
+                            }
+                        }
+                    },
+                    {data: 'condicion_envio', name: 'condicion_envio',},
+                    {
+                        data: 'action',
+                        name: 'action',
+                        orderable: false,
+                        searchable: false,
+                        sWidth: '10%',
+                    },
+                ],
+                language: {
+                    "decimal": "",
+                    "emptyTable": "No hay información",
+                    "info": "Mostrando del _START_ al _END_ de _TOTAL_ Entradas",
+                    "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
+                    "infoFiltered": "(Filtrado de _MAX_ total entradas)",
+                    "infoPostFix": "",
+                    "thousands": ",",
+                    "lengthMenu": "Mostrar _MENU_ Entradas",
+                    "loadingRecords": "Cargando...",
+                    "processing": "Procesando...",
+                    "search": "Buscar:",
+                    "zeroRecords": "Sin resultados encontrados",
+                    "paginate": {
+                        "first": "Primero",
+                        "last": "Ultimo",
+                        "next": "Siguiente",
+                        "previous": "Anterior"
+                    }
+                },
+                "fnDrawCallback": function () {
+                    $('.count_motorizados_nocontesto').html(this.fnSettings().fnRecordsDisplay());
+                }
+            });
+            datatableobservado = $('#tablaObservado').DataTable({
+                dom: '<"top"i>rt<"bottom"lp><"clear">',
+                responsive: {
+                    details: {
+                        renderer: $.fn.dataTable.Responsive.renderer.listHiddenNodes()
+                    }
+                },
+                lengthChange: false,
+                processing: true,
+                stateSave: true,
+                serverSide: true,
+                searching: true,
+                order: [[0, "desc"]],
+                ajax: {
+                    url: "{{ route('envios.motorizados.index',['datatable'=>1]) }}",
+                    data: function (q) {
+                        q.fechaconsulta = $("#fecha_consulta").val();
+                        q.tab = 'observado'
+                    }
+                },
+                initComplete: function () {
+
+                },
+                createdRow: function (row, data, dataIndex) {
+
+                },
+                drawCallback: function(settings) {
+                    console.log(settings.json);
+                    $("#tablaPrincipal").DataTable().columns().header()[12].innerText = $('a[data-toggle="tab"].active').data('action-name')
+                },
+                rowCallback: function (row, data, index) {
+                    renderButtomsDataTable(row,data)
+                },
+                columns: [
+                    {
+                        data: 'correlativo',
+                        name: 'correlativo',
+                    },
+                    {
+                        data: 'codigos',
+                        name: 'codigos',
+                        render: function (data, type, row, meta) {
+                            if (data == null) {
+                                return 'SIN PEDIDOS';
+                            } else {
+                                var returndata = '';
+                                var jsonArray = data.split(",");
+                                $.each(jsonArray, function (i, item) {
+                                    returndata += item + '<br>';
+                                });
+                                return returndata;
+                            }
+                        },
+                    },
+                    {data: 'distrito', name: 'distrito',},
+                    {data: 'identificador', name: 'identificador',},
+                    {
+                        data: 'celular',
+                        name: 'celular',
+                        render: function (data, type, row, meta) {
+                            return row.celular + '<br>' + row.nombre
+                        },
+                    },
+                    {
+                        data: 'fecha_salida',
+                        name: 'fecha_salida',
+                    },
+                    {
+                        data: 'fecha_recepcion',
+                        name: 'fecha_recepcion',
+                    },
+                    {
+                        data: 'producto',
+                        name: 'producto',
+                        render: function (data, type, row, meta) {
+                            if (data == null) {
+                                return 'SIN RUCS';
+                            } else {
+                                var numm = 0;
+                                var returndata = '';
+                                var jsonArray = data.split(",");
+                                $.each(jsonArray, function (i, item) {
+                                    numm++;
+                                    returndata += numm + ": " + item + '<br>';
+
+                                });
+                                return returndata;
+                            }
+                        }
+                    },
+                    {data: 'destino', name: 'destino',},
+                    {
+                        data: 'direccion',
+                        name: 'direccion',
+                        render: function (data, type, row, meta) {
+                            if (data != null) {
+                                return data;
+                            } else {
+                                return '<span class="badge badge-info">REGISTRE DIRECCION</span>';
+                            }
+                        },
+                    },
+                    {
+                        data: 'referencia',
+                        name: 'referencia',
+                        sWidth: '10%',
+                        render: function (data, type, row, meta) {
+                            var datal = "";
+                            if (row.destino == 'LIMA') {
+                                return data;
+                            } else if (row.destino == 'PROVINCIA') {
+                                var urladjunto = '{{ route("pedidos.descargargastos", ":id") }}'.replace(':id', data);
+                                datal = datal + '<p><a href="' + urladjunto + '">' + data + '</a><p>';
+                                return datal;
+                            }
+                        }
+                    },
+                    {data: 'condicion_envio', name: 'condicion_envio',},
+                    {
+                        data: 'action',
+                        name: 'action',
+                        orderable: false,
+                        searchable: false,
+                        sWidth: '10%',
+                    },
+                ],
+                language: {
+                    "decimal": "",
+                    "emptyTable": "No hay información",
+                    "info": "Mostrando del _START_ al _END_ de _TOTAL_ Entradas",
+                    "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
+                    "infoFiltered": "(Filtrado de _MAX_ total entradas)",
+                    "infoPostFix": "",
+                    "thousands": ",",
+                    "lengthMenu": "Mostrar _MENU_ Entradas",
+                    "loadingRecords": "Cargando...",
+                    "processing": "Procesando...",
+                    "search": "Buscar:",
+                    "zeroRecords": "Sin resultados encontrados",
+                    "paginate": {
+                        "first": "Primero",
+                        "last": "Ultimo",
+                        "next": "Siguiente",
+                        "previous": "Anterior"
+                    }
+                },
+                "fnDrawCallback": function () {
+                    $('.count_motorizados_observado').html(this.fnSettings().fnRecordsDisplay());
+
+                    let a1=$('#tablaEnmotorizado').dataTable().fnSettings().fnRecordsDisplay();
+                    let a2=$('#tablaEntregado').dataTable().fnSettings().fnRecordsDisplay();
+                    let a3=$('#tablaNocontesto').dataTable().fnSettings().fnRecordsDisplay();
+                    let a4=this.fnSettings().fnRecordsDisplay();
+
+                    if(a1>0){
+                        $('#myTab a[href="#enmotorizado"]').tab('show')
+                    }else if(a2>0){
+                        $('#myTab a[href="#entregado"]').tab('show')
+                    }else if(a3>0){
+                        $('#myTab a[href="#nocontesto"]').tab('show')
+                    }else if(a4>0){
+                        $('#myTab a[href="#observado"]').tab('show')
+                    }
+                }
+            });
+
             datatableenmotorizado.on( 'responsive-display', function ( e, datatable, row, showHide, update ) {
                 console.log( 'Details for row '+row.index()+' '+(showHide ? 'shown' : 'hidden') );
                 if(showHide) {
