@@ -273,16 +273,6 @@
             $('#fecha_consulta').change(applySearch);
             $('#fecha_consulta').keydown(applySearch);
 
-            /*$("#fecha_consulta").on('change', function(){
-                var fecha_format = $(this).val().split("-")
-                var fecha_formateada = fecha_format[2] + "/" + fecha_format[1] + "/" + fecha_format[0];
-                $(this).data('fecha',fecha_formateada);
-                console.log(fecha_formateada);
-
-                $('#myTab a[href="#general"]').tab('show')
-                $('#tablaPrincipal').DataTable().ajax.reload();
-            });*/
-
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
