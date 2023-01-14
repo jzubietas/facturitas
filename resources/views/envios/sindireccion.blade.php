@@ -137,9 +137,14 @@
     $(document).ready(function () {
 
     $('#modal-confirmacion').on('show.bs.modal', function (event) {
+
+
         var button = $(event.relatedTarget)
         var idunico = button.data('ide')
         var codigos = button.data('codigos')
+
+        $('.titulo-confirmacion').html("Entregado sin envio");
+        $('#msj-modal').html("Esta seguro de confirmar la entrega sin envio del pedido <b>" + codigos + "</b>");
 
         $('.titulo-confirmacion').html("Enviar sobre a Motorizado");
 
@@ -149,20 +154,20 @@
 
     $(document).on("submit", "#formulario_confirmacion", function (evento) {
         evento.preventDefault();
-        //validacion
 
         var fd2 = new FormData();
-        fd2.append('hiddenCodigo', $('#hiddenCodigo').val() );
+
+        fd2.append('hiddenCodigo', $('#hiddenCodigo').val());
+
         $.ajax({
             data: fd2,
             processData: false,
             contentType: false,
             type: 'POST',
-            url:"{{ route('operaciones.confirmar') }}",
+            url:"{{ route('operaciones.confirmarentregasinenvio') }}",
             success:function(data){
                 $("#modal-confirmacion").modal("hide");
                 $('#tablaPrincipal').DataTable().ajax.reload();
-
             }
         });
     });
