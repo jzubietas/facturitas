@@ -20,7 +20,10 @@
                     <div class="card card-{{$color_zones[Str::upper($motorizado->zona)]??'info'}}">
                         <div class="card-header">
                             <div class="d-flex justify-content-between">
-                                <h5> {{Str::upper($motorizado->zona)}}</h5>
+                                <h5> {{Str::upper($motorizado->zona)}}
+                                    <sup><span class="badge badge-light count_distribuirsobres_{{Str::lower($motorizado->zona)}}">0</span></sup>
+                                </h5>
+
                                 <div>
                                     <button type="button" class="btn btn-light buttom-agrupar"
                                             data-zona="{{Str::upper($motorizado->zona)}}"
@@ -389,6 +392,10 @@
                             }
                         })
                     })
+                },
+                "fnDrawCallback": function ()
+                {
+                    $(".count_distribuirsobres_{{Str::lower($motorizado->zona)}}").html(this.fnSettings().fnRecordsDisplay());
                 }
             });
 
