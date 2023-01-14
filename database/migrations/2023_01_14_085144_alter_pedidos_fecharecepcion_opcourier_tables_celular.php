@@ -15,7 +15,7 @@ class AlterPedidosFecharecepcionOpcourierTablesCelular extends Migration
     {
         //
         Schema::table('pedidos', function (Blueprint $table) {
-            if(!Schema::hasColumn('pedidos','fecha_envio_op_courier'))
+            if(!Schema::hasColumn('pedidos','celular_cliente'))
             {
                 $table->timestamp('celular_cliente')->nullable()->after('icelular_asesor');
             }
