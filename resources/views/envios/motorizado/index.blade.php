@@ -1372,7 +1372,7 @@ Enviar</button>
                     renderButtomsDataTable($(row.node()).siblings('.child'), row.data())
                 }
             } );
-            
+
         });
     </script>
 
