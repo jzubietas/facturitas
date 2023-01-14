@@ -1094,7 +1094,12 @@ class PedidoController extends Controller
                 'notificacion' => 'Nuevo pedido creado',
                 'modificador' => 'USER0' . Auth::user()->id,
                 'pagado' => '0',
-                'direccion' => '0'
+                'direccion' => '0',
+                'identificador'=>$identi_asesor->identificador,
+                'exidentificador'=>$identi_asesor->exidentificador,
+                'icelular_asesor'=>$identi_asesor->letra,
+                'icelular_cliente'=>$cliente_AB->icelular,
+                'celular_cliente'=>$cliente_AB->celular,
             ]);
 
             $pedido->update([
