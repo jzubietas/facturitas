@@ -55,12 +55,12 @@ class GrupoPedido extends Model
                 "zona" => optional($distrito)->zona ?? data_get($array, 'zona') ?? 'n/a',
             ];
             $data2 = [
-                "provincia" => optional($distrito)->provincia ?? data_get($array, 'provincia') ?? 'n/a',//LIMA
-                'distrito' => optional($distrito)->distrito ?? data_get($array, 'distrito') ?? 'n/a',//LOS OLIVOS
-                'direccion' => data_get($array, 'direccion') ?: 'n/a',//olva
-                'cliente_recibe' => data_get($array, 'cliente_recibe') ?? 'n/a',//olva
-                'referencia' => data_get($array, 'referencia') ?: 'n/a',//olva
-                'telefono' => data_get($array, 'telefono') ?? 'n/a',//n/a
+                "provincia" => 'OLVA',//LIMA
+                'distrito' => 'OLVA',//LOS OLIVOS
+                'direccion' => 'OLVA',//olva
+                'cliente_recibe' => 'OLVA',//olva
+                'referencia' => '--',//olva
+                'telefono' => '--',//n/a
             ];
             /*if ($createAnother) {
                 return GrupoPedido::create(array_merge($data, $data2));
