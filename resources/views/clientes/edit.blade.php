@@ -99,7 +99,7 @@
                       <div class="form-group">
                         <label>{{ $porcentaje->nombre }}</label>
                         <input type="hidden" name="idporcentaje[]" value={{ $porcentaje->id }}>
-                        <input type="number" step="0.1" name="porcentaje[]" id="porcentaje1" min="0" class="form-control porcentaje-banca" value={{ $porcentaje->porcentaje}} required>
+                        <input type="text" step="0.1" name="porcentaje[]" id="porcentaje1" min="1.7" class="form-control porcentaje-banca decimal" value={{ $porcentaje->porcentaje}} required>
                       </div>
                     </div>
 
@@ -125,6 +125,15 @@
 @stop
 
 @section('js')
+    <script src="https://unpkg.com/autonumeric@4.6.0/dist/autoNumeric.min.js"></script>
+    <script>
+        $(document).ready(function() {
+
+            new AutoNumeric('.decimal', 1.7);
+
+        });
+
+    </script>
   <script>
     //VALIDAR CAMPO CELULAR
     function maxLengthCheck(object)
@@ -143,6 +152,35 @@
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
     });
+
+    $(document).on('change blur','#porcentaje1,#porcentaje2,#porcentaje3,#porcentaje4' ,function(event){
+        console.log(event.target.id);
+
+        let val=parseFloat($(this).val());
+        if(isNaN(val))
+        {
+            Swal.fire(
+                'Ingrese un numero valido mayor o igual a 1.7',
+                '',
+                'warning'
+            )
+        }else{
+            console.log("no es nan")
+            if(val>=1.7)
+            {
+
+            }else{
+                Swal.fire(
+                    'Ingrese un numero mayor o igual a 1.7',
+                    '',
+                    'warning'
+                )
+                $(this).val(1.70)
+            }
+        }
+
+    })
+
 
 
     function validarFormulario(evento) {
@@ -276,7 +314,7 @@
             }
           })
 
-          
+
         }
     }
   </script>
