@@ -37,7 +37,8 @@
                         </div>
                         <div class="card-body py-1">
                             <div>
-                                <table id="tablaPrincipal{{Str::upper($motorizado->zona)}}" class="table table-striped font-12">
+                                <table id="tablaPrincipal{{Str::upper($motorizado->zona)}}"
+                                       class="table table-striped font-12">
                                     <thead>
                                     <tr>
                                         <th scope="col">Códigos</th>
@@ -92,21 +93,24 @@
     <link rel="stylesheet" href="{{asset('vendor/fontawesome-free/css/v4-shims.min.css')}}">
     <link rel="stylesheet" href="{{asset('vendor/fontawesome-free/css/solid.min.css')}}">
     <style>
-        .cod_dir{
-            font-size:11px;
+        .cod_dir {
+            font-size: 11px;
         }
-        .cod_dir_w{
+
+        .cod_dir_w {
             min-width: 200px;
         }
 
-        .cod_ped{
-            font-size:11px;
+        .cod_ped {
+            font-size: 11px;
             min-width: 100px;
         }
-        .bg-zone{
+
+        .bg-zone {
             background: #dbffdf;
         }
-        .jconfirm-content{
+
+        .jconfirm-content {
             overflow: hidden !important;
         }
     </style>
@@ -149,6 +153,7 @@
         }
 
         $(document).ready(function () {
+
             $('#tablaPrincipal').DataTable({
                 processing: true,
                 stateSave: true,
@@ -181,14 +186,17 @@
 
                         $(tableId).DataTable()
                             .row.add(createZoneRowTable(data, zona)).draw(false);
+
+                        localStorage.setItem(zona + '.envios.distribuirsobres', JSON.stringify(Array.from($("#tablaPrincipal"+zona).DataTable().data())));
+
                         self.api().ajax.reload();
                     })
-                    $('[data-motorizado-history]',row).click(function () {
+                    $('[data-motorizado-history]', row).click(function () {
                         $.confirm({
-                            title:'Historial de adjuntos de llamadas',
-                            type:'info',
+                            title: 'Historial de adjuntos de llamadas',
+                            type: 'info',
                             columnClass: 'xlarge',
-                            content:function () {
+                            content: function () {
                                 return `
                                <section class="timeline_area section_padding_130">
     <div class="container">
@@ -197,7 +205,7 @@
                 <!-- Timeline Area-->
                 <div class="apland-timeline-area">
                     ${data.motorizado_histories.map(function (h) {
-                        return `
+                                    return `
                     <!-- Single Timeline Content-->
                     <div class="single-timeline-area">
                         <div class="timeline-date wow fadeInLeft" data-wow-delay="0.1s" style="visibility: visible; animation-delay: 0.1s; animation-name: fadeInLeft;">
@@ -219,7 +227,7 @@
                             </div>
                         </div>
                     </div>`
-                    })}
+                                })}
                 </div>
             </div>
         </div>
@@ -231,8 +239,8 @@
                     })
                 },
                 columns: [
-                    {data: 'codigos', name: 'codigos',searchable: true, sWidth: '7%',sClass:'cod_dir'},
-                    {data: 'productos', name: 'productos',searchable: true, sClass:'cod_dir cod_dir_w'},
+                    {data: 'codigos', name: 'codigos', searchable: true, sWidth: '7%', sClass: 'cod_dir'},
+                    {data: 'productos', name: 'productos', searchable: true, sClass: 'cod_dir cod_dir_w'},
                     {data: 'cliente_recibe', name: 'cliente_recibe',},
                     {data: 'telefono', name: 'telefono',},
                     {data: 'provincia', name: 'provincia',},
@@ -240,7 +248,7 @@
                     {data: 'direccion', name: 'direccion',},
                     {data: 'referencia', name: 'referencia',},
                     {data: 'condicion_envio', name: 'condicion_envio',},
-                    {data: 'zona', name: 'zona',sClass: 'bg-zone'},
+                    {data: 'zona', name: 'zona', sClass: 'bg-zone'},
                     {
                         data: 'action',
                         name: 'action',
@@ -270,7 +278,6 @@
                     }
                 },
             });
-
 
             const configDataTableZonas = {
                 /*processing: false,
@@ -384,6 +391,7 @@
                     })
                 }
             });
+
             @endforeach
 
             function getHtmlPrevisualizarDesagrupar(row, success) {
@@ -438,7 +446,7 @@
                                         <td>${row.celular || ''}</td>
                                         <td>
                                         ${row.codigos.split(',').map(function (codigo, index) {
-                                            return `<b>${codigo}</b>`
+                        return `<b>${codigo}</b>`
                     }).join(`<hr class="my-2">`)}
                                         </td>
                                         <td>
@@ -570,11 +578,11 @@ ${success ? `Paquete: <strong>${row.correlativo || ''}</strong>` : `Cliente: <st
                                 })
                                     .done(function (response) {
                                         self.close();
-                                       /* self.setTitle('<h3 class="text-success font-24">Paquetes creados exitosamente</h3>');
-                                        self.setContent(getHtmlPrevisualizarPaqueteData(response, true))
-                                        self.$$ok.hide();
-                                        self.$$goSobres.show();
-                                        self.$$cancelar.text("Cerrar");*/
+                                        /* self.setTitle('<h3 class="text-success font-24">Paquetes creados exitosamente</h3>');
+                                         self.setContent(getHtmlPrevisualizarPaqueteData(response, true))
+                                         self.$$ok.hide();
+                                         self.$$goSobres.show();
+                                         self.$$cancelar.text("Cerrar");*/
                                     })
                                     .always(function () {
                                         self.hideLoading(true)
@@ -603,6 +611,39 @@ ${success ? `Paquete: <strong>${row.correlativo || ''}</strong>` : `Cliente: <st
                     }
                 });
             })
+
+            const motorizados = {{\Illuminate\Support\Js::from($motorizados)}};
+            motorizados.forEach(function (motorizado) {
+                const zona = motorizado.zona.toUpperCase()
+                const localdata = localStorage.getItem(zona + '.envios.distribuirsobres');
+                if (localdata) {
+                    var currentDate;
+                    try {
+                        currentDate = JSON.parse(localdata)
+                    } catch (e) {
+                        currentDate = [];
+                    }
+                    insertIds = currentDate.map(function (data) {
+                        return data.id
+                    })
+
+                    const table = $('#tablaPrincipal' + zona).DataTable();
+                    currentDate.forEach(function (data) {
+                        table.row.add(createZoneRowTable(data, zona))
+                    })
+                    table.draw(false);
+                }
+            })
+            function closeIt()
+            {
+                motorizados.forEach(function (motorizado) {
+                    const zona = motorizado.zona.toUpperCase()
+                    const table = $('#tablaPrincipal' + zona).DataTable();
+                    localStorage.setItem(zona + '.envios.distribuirsobres', JSON.stringify(Array.from(table.data())));
+                })
+            }
+            window.onbeforeunload = closeIt;
+            $('#tablaPrincipal').DataTable().draw(false);
         });
     </script>
 

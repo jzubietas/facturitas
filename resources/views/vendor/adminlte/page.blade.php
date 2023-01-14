@@ -71,4 +71,15 @@
 @section('adminlte_js')
     @stack('js')
     @yield('js')
+    <script>
+        $(document).ready(function () {
+            if(document.location.href!='{{route('envios.distribuirsobres')}}'){
+                for (var key in localStorage){
+                    if(key.includes('.envios.distribuirsobres')){
+                        localStorage.removeItem(key)
+                    }
+                }
+            }
+        })
+    </script>
 @stop
