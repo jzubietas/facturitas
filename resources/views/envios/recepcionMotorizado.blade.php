@@ -682,7 +682,7 @@
                     <script>
                         $(document).ready(function () {
 
-                            function getHtmlPrevisualizarDesagrupar(row, success) {
+                            function getHtmlPrevisualizarDesagrupar(row, text) {
                                 return `
 <form>
 <div class="card">
@@ -692,7 +692,7 @@
                 <li class="list-group-item">
                     <div class="row">
                         <div class="col-4">
-                            <b>No Recibido</b>
+                            <b>${text}</b>
                         </div>
                         <div class="col-4">
                             <b>Codigo</b>
@@ -840,15 +840,20 @@
                                 }
 
                             });
-
+                            var timeoutMessage;
                             $("#fecha_consulta").on('change', function () {
 
                                 //mostrar alert
-                                Swal.fire(
-                                    'Warning',
-                                    'La fecha colocada es posterior o anterior a la fecha habitual (1 dia)',
-                                    'warning'
-                                )
+                                if(timeoutMessage){
+                                    clearTimeout(timeoutMessage)
+                                }
+                                timeoutMessage=setTimeout(function () {
+                                    Swal.fire(
+                                        'Warning',
+                                        'La fecha colocada es posterior o anterior a la fecha habitual (1 dia)',
+                                        'warning'
+                                    )
+                                },300)
 
                                 //var fecha_formateada = $(this).val().replaceAll('-', '/');
                                 var fecha_format = $(this).val().split("-")
@@ -895,7 +900,7 @@
                                                 } else {
                                                     self.showLoading(true)
                                                     return $.get(action).done(function (data) {
-                                                        self.setContent(getHtmlPrevisualizarDesagrupar(data.grupo))
+                                                        self.setContent(getHtmlPrevisualizarDesagrupar(data.grupo,btntext))
                                                     }).always(function () {
                                                         self.hideLoading(true)
                                                     })
