@@ -842,6 +842,14 @@
                             });
 
                             $("#fecha_consulta").on('change', function () {
+
+                                //mostrar alert
+                                Swal.fire(
+                                    'Warning',
+                                    'La fecha colocada es posterior o anterior a la fecha habitual (1 dia)',
+                                    'warning'
+                                )
+
                                 //var fecha_formateada = $(this).val().replaceAll('-', '/');
                                 var fecha_format = $(this).val().split("-")
                                 var fecha_formateada = fecha_format[2] + "/" + fecha_format[1] + "/" + fecha_format[0];
