@@ -1665,58 +1665,59 @@ class EnvioController extends Controller
         if ($pedido_id > 0) {
             $pedido = Pedido::query()->with('direcciongrupo')->findOrFail($pedido_id);
             $dirgrupo = $pedido->direcciongrupo;
-            if ($pedido->condicion_envio_code == Pedido::CONFIRM_MOTORIZADO_INT) {
-                return response()->json([
-                    'suucess' => false
-                ]);
-            }
             if (Str::upper($pedido->destino ?: '') != 'PROVINCIA') {//para lima
-                $pedido->update([
-                    'env_nombre_cliente_recibe' => $request->nombre,
-                    'env_celular_cliente_recibe' => $request->celular,
-                    'env_direccion' => $request->direccion,
-                    'env_referencia' => $request->referencia,
-                    'env_distrito' => $request->distrito,
-                    'env_observacion' => $request->observacion,
-                    'cambio_direccion_sustento' => $request->cambio_direccion_sustento,
-                ]);
-            } else {//para provincia
-                $routulo = '';
-                if ($request->hasFile('rotulo')) {
-                    $routulo = $request->file('rotulo')->store('pedidos/rotulos', 'pstorage');
-                }
-                $pedido->update([
-                    'cambio_direccion_sustento' => $request->cambio_direccion_sustento,
-                    'env_numregistro' => $request->numregistro,
-                    'env_tracking' => $request->tracking,
-                    'env_importe' => $request->importe,
-                    'env_rotulo' => $routulo,
-                ]);
-            }
-
-            if ($dirgrupo != null) {
-                if (in_array($dirgrupo->condicion_envio_code, [Pedido::CONFIRM_MOTORIZADO_INT, Pedido::ENTREGADO_CLIENTE_INT,])) {
-                    //aca madanar a observados
-                    return response()->json([
-                        'suucess' => false
-                    ]);
-                }
-                $dirgrupo = DireccionGrupo::desvincularPedido($dirgrupo, $pedido, $request->cambio_direccion_sustento);
-                $dirgrupo->update([
-                    'nombre_cliente' => $request->nombre,
-                    'celular_cliente' => $request->celular,
+                $data = [
+                    'zona' => $pedido->env_zona,
+                    'destino' => $pedido->destino,
+                    'nombre_cliente_recibe' => $request->nombre,
+                    'celular_cliente_recibe' => $request->celular,
                     'direccion' => $request->direccion,
                     'referencia' => $request->referencia,
                     'distrito' => $request->distrito,
                     'observacion' => $request->observacion,
                     'cambio_direccion_sustento' => $request->cambio_direccion_sustento,
-                ]);
+                ];
+            } else {//para provincia
+                $routulo = '';
+                if ($request->hasFile('rotulo')) {
+                    $routulo = $request->file('rotulo')->store('pedidos/rotulos', 'pstorage');
+                }
+                $data = [
+                    'zona' => $pedido->env_zona,
+                    'destino' => $pedido->destino,
+                    'cambio_direccion_sustento' => $request->cambio_direccion_sustento,
+                    'env_numregistro' => $request->numregistro,
+                    'env_tracking' => $request->tracking,
+                    'env_importe' => $request->importe,
+                    'env_rotulo' => $routulo,
+                ];
+            }
+
+            if ($dirgrupo != null) {
+                DireccionGrupo::cambiarDireccion($dirgrupo, $pedido, $data);
             } else {
-                if ($pedido->estado_sobre == 0) {
-                    return response()->json([
-                        'suucess' => false
+                if (Str::upper($pedido->destino ?: '') != 'PROVINCIA') {//para lima
+                    $pedido->update([
+                        'env_nombre_cliente_recibe' => $data['nombre_cliente_recibe'],
+                        'env_celular_cliente_recibe' => $data['celular_cliente_recibe'],
+                        'env_direccion' => $data['direccion'],
+                        'env_referencia' => $data['referencia'],
+                        'env_distrito' => $data['distrito'],
+                        'env_observacion' => $data['observacion'],
+                        'cambio_direccion_sustento' => null,
+                        'cambio_direccion_at' => null,
                     ]);
                 } else {
+                    $pedido->update([
+                        'env_numregistro' => $data['env_numregistro'],
+                        'env_tracking' => $data['env_tracking'],
+                        'env_importe' => $data['env_importe'],
+                        'env_rotulo' => $data['env_rotulo'],
+                        'cambio_direccion_at' => null,
+                        'cambio_direccion_sustento' => null,
+                    ]);
+                }
+                if ($pedido->condicion_envio_code == Pedido::RECEPCION_COURIER_INT) {
                     GrupoPedido::desvincularPedido($pedido, true, true);
                 }
             }
@@ -2154,7 +2155,7 @@ class EnvioController extends Controller
         $pedido->update([
             'envio' => '2',
             'modificador' => 'USER' . Auth::user()->id,
-            'fecha_envio_op_courier'=>Carbon::now(),
+            'fecha_envio_op_courier' => Carbon::now(),
             'condicion_envio' => Pedido::RECIBIDO_JEFE_OPE,
             'condicion_envio_code' => Pedido::RECIBIDO_JEFE_OPE_INT,
 

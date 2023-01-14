@@ -25,7 +25,7 @@ class MotorizadoController extends Controller
 
         if ($request->fechaconsulta != null) {
             try {
-                $fecha_consulta = Carbon::createFromFormat('d/m/Y', $request->fechaconsulta);
+                $fecha_consulta = Carbon::parse($request->fechaconsulta);
             } catch (\Exception $ex) {
                 $fecha_consulta = now();
             }
@@ -107,7 +107,8 @@ class MotorizadoController extends Controller
                         case 'no_contesto':
                         case 'observado':
                             if ($pedido->estado = 1 && ($pedido->condicion_envio_code == Pedido::MOTORIZADO_INT || $pedido->condicion_envio_code == Pedido::CONFIRM_MOTORIZADO_INT)) {
-                                $btn .= '<li class="pt-8">
+                                if($pedido->cambio_direccion_at==null) {
+                                    $btn .= '<li class="pt-8">
                                 <button class="btn btn-sm text-white btn-danger"
                                 data-jqconfirm="revertir"
                                 data-jqconfirm-id="' . $pedido->id . '"
@@ -117,6 +118,7 @@ class MotorizadoController extends Controller
                                     Revertir
                                 </button>
                             </li>';
+                                }
                             }
                             break;
                         default:

@@ -2,14 +2,24 @@
     <input type="hidden" name="pedido_id" value="{{$pedido->id}}">
     <div class="contenedor-formulario">
         @if($dirgrupo!=null)
-            <div class="alert alert-warning">
-                El pedido ya esta en ruta, debe agregar un sustento
-            </div>
+            @if(in_array($dirgrupo->condicion_envio_code,[\App\Models\Pedido::RECEPCION_MOTORIZADO_INT,\App\Models\Pedido::MOTORIZADO_INT]))
+                <div class="alert alert-warning">
+                    El pedido ya esta en ruta, debe agregar un sustento
+                </div>
+            @else
+                <div class="alert alert-warning">
+                    El pedido se encuentra en
+                    <b class="badge badge-success" style="background: {{\App\Models\Pedido::getColorByCondicionEnvio($dirgrupo->condicion_envio)}}!important;">
+                        {{$dirgrupo->condicion_envio}}
+                    </b>,<br> debe agregar un sustento
+                </div>
+            @endif
             <div class="row">
                 <div class="col-md-12">
                     <div class="form-group">
                         <label for="cambio_direccion_sustento">Ingresar sustento para el cambio de dirección</label>
-                        <textarea id="cambio_direccion_sustento" class="form-control" name="cambio_direccion_sustento">{{$pedido->cambio_direccion_sustento??''}}</textarea>
+                        <textarea id="cambio_direccion_sustento" class="form-control"
+                                  name="cambio_direccion_sustento">{{$pedido->cambio_direccion_sustento??''}}</textarea>
                     </div>
                 </div>
             </div>
@@ -49,7 +59,7 @@
                         <i class="fa fa-phone text-red" aria-hidden="true"></i>
                         {!! Form::label('celular', 'Telefono del contacto quien recibe') !!}
                         <span class="badge badge-pill badge-secondary">9 digitos</span>
-                        {!! Form::number('celular', $pedido->env_celular_cliente_recibe, ['class' => 'form-control', 'id' => 'celular', 'min' =>'0', 'max' => '999999999', 'maxlength' => '9', 'oninput' => 'maxLengthCheck(this)','placeholder' => '9 digitos']) !!}
+                        {!! Form::number('celular', $pedido->env_celular_cliente_recibe, ['class' => 'form-control', 'id' => 'celular', 'min' =>'0', 'max' => '9', 'maxlength' => '9', 'oninput' => 'maxLengthCheck(this)','placeholder' => '9 digitos']) !!}
                     </div>
 
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">

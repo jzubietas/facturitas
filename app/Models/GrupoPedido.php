@@ -42,6 +42,11 @@ class GrupoPedido extends Model
                     "razon_social" => $detalle->nombre_empresa,
                 ]
             ]);
+            $pedido->update([
+                'condicion_envio_code' => Pedido::RECEPCION_COURIER_INT,
+                'condicion_envio' => Pedido::RECEPCION_COURIER,
+                'estado_sobre' => 1,
+            ]);
         }
         return $grupo;
     }
@@ -99,8 +104,9 @@ class GrupoPedido extends Model
             }
         }
         if ($asignarOtro) {
-            self::createGroupByPedido($pedido, true, $attach);
+            return self::createGroupByPedido($pedido, true, $attach);
         }
+        return true;
     }
 
     public function motorizadoHistories()

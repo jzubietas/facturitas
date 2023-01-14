@@ -45,7 +45,13 @@ class RestructurarDireccionGrupo extends Command
     public function handle()
     {
         $query = DireccionGrupo::query()
-            ->where('estado', '=', '1')
+           ->where(function ($query){
+               $query->where('estado', '=', '1');
+               $query->orWhere(function ($query){
+                   $query->where('estado', '=', '0');
+                   $query->where('motorizado_status', '<>', '0');
+               });
+           })
             ->orderBy('created_at');
 
         $this->progress = $this->output->createProgressBar($query->count());
