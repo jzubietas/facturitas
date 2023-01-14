@@ -384,7 +384,7 @@ class MotorizadoController extends Controller
                     return 4;
                 } else if ($pedido->motorizado_status == Pedido::ESTADO_MOTORIZADO_OBSERVADO) {
                     return 1;
-                }  else if ($pedido->motorizado_status == Pedido::ESTADO_MOTORIZADO_NO_RECIBIDO) {
+                } else if ($pedido->motorizado_status == Pedido::ESTADO_MOTORIZADO_NO_RECIBIDO) {
                     return 3;
                 } else {
                     return 2;
@@ -428,6 +428,20 @@ class MotorizadoController extends Controller
                     $html .= '';
                 }
                 return $html;
+            })
+            ->addColumn('contador_dias', function ($pedido) {
+                if ($pedido->grupo_fecha_salida != null) {
+                    $fecha_salida = Carbon::parse($pedido->grupo_fecha_salida)->startOfDay();
+                    $fecha = now()->startOfDay();
+                    if ($fecha_salida > $fecha) {
+                        $count = 0;
+                    } else {
+                        $count = $fecha_salida->diffInDays($fecha);
+                    }
+
+                    return $count;
+                }
+                return 0;
             })
             ->addColumn('situacion_color', function ($pedido) {
                 if ($pedido->grupo_fecha_salida != null) {
@@ -483,7 +497,7 @@ class MotorizadoController extends Controller
         /**************
          * CREAMOS EL GRUPO TEMPORAL
          */
-        $pgroup = GrupoPedido::createGroupByPedido($pedido,false,true);
+        $pgroup = GrupoPedido::createGroupByPedido($pedido, false, true);
 
         if ($grupo != null) {
             if ($grupo->pedidos()->activo()->count() <= 1) {
