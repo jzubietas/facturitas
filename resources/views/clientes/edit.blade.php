@@ -99,7 +99,7 @@
                       <div class="form-group">
                         <label>{{ $porcentaje->nombre }}</label>
                         <input type="hidden" name="idporcentaje[]" value={{ $porcentaje->id }}>
-                        <input type="text" step="0.1" name="porcentaje[]" id="porcentaje1" min="1.7" class="form-control porcentaje-banca decimal" value={{ $porcentaje->porcentaje}} required>
+                        <input type="text" step="0.1" name="porcentaje[]" id="porcentaje{{$porcentaje->rownumber }}" min="1.7" class="form-control porcentaje-banca decimal" value={{ $porcentaje->porcentaje}} required>
                       </div>
                     </div>
 
@@ -164,9 +164,10 @@
                 '',
                 'warning'
             )
+            $(this).val(1.8)
         }else{
             console.log("no es nan")
-            if(val>=1.7)
+            if(val>=1.8)
             {
 
             }else{
@@ -175,7 +176,7 @@
                     '',
                     'warning'
                 )
-                $(this).val(1.80)
+                $(this).val(1.8)
             }
         }
 
