@@ -9,6 +9,10 @@ body{
     color: #50cd1c!important;
 }
 
+.ancho_condicion_envio_global{
+    width:800px !important;
+}
+
 #gorro_navidad{
     width: 24px;
     position: absolute;

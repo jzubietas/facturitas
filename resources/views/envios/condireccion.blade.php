@@ -398,7 +398,7 @@
 
             }
           },
-          {data: 'condicion_envio', name: 'condicion_envio', },
+          {data: 'condicion_envio', name: 'condicion_envio',className:'ancho_condicion_envio_global' },
           {
             data: 'action',
             name: 'action',

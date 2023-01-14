@@ -129,7 +129,7 @@
     <script>
         $(document).ready(function() {
 
-            new AutoNumeric('.decimal', 1.7);
+            new AutoNumeric('.decimal', 1.8);
 
         });
 
@@ -160,7 +160,7 @@
         if(isNaN(val))
         {
             Swal.fire(
-                'Ingrese un numero valido mayor o igual a 1.7',
+                'Ingrese un numero valido mayor a 1.7',
                 '',
                 'warning'
             )
@@ -171,11 +171,11 @@
 
             }else{
                 Swal.fire(
-                    'Ingrese un numero mayor o igual a 1.7',
+                    'Ingrese un numero mayor a 1.7',
                     '',
                     'warning'
                 )
-                $(this).val(1.70)
+                $(this).val(1.80)
             }
         }
 
