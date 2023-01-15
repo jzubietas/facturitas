@@ -473,6 +473,39 @@
                 }
             });
 
+            $(document).on('change',"#tracking, #numregistro",function(event){
+
+                let id_element=event.target.id;
+                let val_element=$(this).val();
+                switch(id_element)
+                {
+                    case 'tracking':
+                        /*if()
+                        Swal.fire(
+                            'Error',
+                            'Debe ingresar el detalle del pedido',
+                            'warning'
+                        )*/
+                        break;
+                    case 'numregistro':
+
+                        break;
+                }
+                $.ajax({
+                    data: {'element':id_element,'value':val_element,'from':'direcccionenvio'},
+                    type: 'POST',
+                    url: "{{ route('envios.validacion_direccionenvio') }}",
+                    success: function (data) {
+                        console.log(data);
+                        $("#modal-direccion").modal("hide");
+                        $("#tablaPrincipal").DataTable().ajax.reload();
+                    }
+                });
+
+            });
+
+
+
             /*$("#tracking").bind('keypress', function(event) {
               var regex = new RegExp("^[0-9]{2}+[0-1]{2}$");
               var key = String.fromCharCode(!event.charCode ? event.which : event.charCode);

@@ -472,6 +472,9 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
 
     Route::get('tipomovimiento', [MovimientoController::class, 'tipomovimiento'])->name('cargar.tipomovimiento');
     Route::post('validar_repetido', [MovimientoController::class, 'repeat'])->name('validar_repetido');
+
+    Route::post('envios.validacion_direccionenvio', [EnvioController::class, 'valida_direccionenvio'])->name('envios.validacion_direccionenvio');
+
     Route::post('register_movimiento', [MovimientoController::class, 'register'])->name('register_movimiento');
 
     Route::post('movimientodeleteRequest', [MovimientoController::class, 'destroyid'])->name('movimientodeleteRequest.post');
