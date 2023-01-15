@@ -635,6 +635,7 @@
                 console.log(val_direccion)
                 let val_referencia = $("#referencia").val();
                 let val_distrito = $("#distrito").val();
+                console.log(val_distrito)
                 let val_observacion = $("#observacion").val();
                 let saveHistoricoLima = ($('#saveHistoricoLima').is(':checked')) ? '1' : '0';
                 let saveHistoricoProvincia = ($('#saveHistoricoProvincia').is(':checked')) ? '1' : '0';
