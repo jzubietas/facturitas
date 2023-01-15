@@ -544,6 +544,7 @@ class OperacionController extends Controller
                     DB::raw("  (CASE  when pedidos.destino='LIMA' then (select gg.created_at from direccion_pedidos gg where gg.pedido_id=pedidos.id limit 1) " .
                         "when pedidos.destino='PROVINCIA' then (select g.created_at from gasto_pedidos g where g.pedido_id=pedidos.id limit 1) " .
                         "else '' end) as fecha_envio_sobre "),
+                    DB::raw(" (select count(ii.id) from imagen_atencions ii where ii.pedido_id=pedidos.id and ii.estado=1) as adjuntos "),
                 ]
             )
             ->where('pedidos.estado', '1')
