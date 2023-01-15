@@ -90,7 +90,7 @@ class DistribucionController extends Controller
             $query->whereNotIn('grupo_pedidos.id', $request->exclude_ids);
         }
 
-        $search_value = trim(data_get($request->search, 'value', '')??'');
+        $search_value = trim(data_get($request->search, 'value', '') ?? '');
         if (!empty($search_value)) {
             $query->where(function ($query) use ($search_value) {
                 $cols = ['grupo_pedidos.zona',
@@ -249,38 +249,41 @@ class DistribucionController extends Controller
     public function desagrupar(Request $request)
     {
         $grupo = GrupoPedido::query()->findOrFail($request->grupo_id);
-        $pedido = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')
-            ->select([
-                'pedidos.*',
-                'detalle_pedidos.nombre_empresa'
-            ])
-            ->join('detalle_pedidos', 'pedidos.id', 'detalle_pedidos.pedido_id')
-            ->activo()
-            ->where('detalle_pedidos.estado', '1')
-            ->findOrFail($request->pedido_id);
+        $pedido = Pedido::activo()->findOrFail($request->pedido_id);
 
         DB::beginTransaction();
         $detach = $grupo->pedidos()->detach([$pedido->id]);
 
-        if ($grupo->pedidos()->count() == 0) {
-            $grupo->delete();
-            return response()->json([
-                'data' => null,
-                'pedido' => $pedido,
-                'detach' => $detach,
-                'success' => true
-            ]);
+        if ($pedido->estado != 0) {
+
+            if ($grupo->pedidos()->count() == 0) {
+                $grupo->delete();
+                return response()->json([
+                    'data' => null,
+                    'pedido' => $pedido,
+                    'detach' => $detach,
+                    'success' => true
+                ]);
+            }
+
+            $grupoPedido = GrupoPedido::createGroupByPedido($pedido, true, true);
         }
-
-        $grupoPedido = GrupoPedido::createGroupByPedido($pedido, true);
-        $grupoPedido->pedidos()->attach($pedido->id, [
-            'razon_social' => $pedido->nombre_empresa,
-            'codigo' => $pedido->codigo,
-        ]);
-
         DB::commit();
+        $grupo=$grupo->refresh()->load(['pedidos']);
+        $grupo->codigos = $grupo->pedidos
+            ->pluck('codigo')
+            ->sort()
+            ->values()
+            ->map(fn($codigo, $index) => ($index + 1) . ") <b>" . $codigo . "</b>")
+            ->join('<hr class="my-1">');
+        $grupo->productos = $grupo->pedidos
+            ->sortBy(fn($pedido) => $pedido->codigo)
+            ->pluck('pivot.razon_social')
+            ->map(fn($codigo, $index) => ($index + 1) . ") <b>" . $codigo . "</b>")
+            ->join('<hr class="my-1">');
+
         return response()->json([
-            'data' => $grupo->refresh()->load(['pedidos']),
+            'data' => $grupo,
             'grupo2' => $grupoPedido,
             'pedido' => $pedido,
             'detach' => $detach,
