@@ -90,9 +90,20 @@ class DistribucionController extends Controller
             $query->whereNotIn('grupo_pedidos.id', $request->exclude_ids);
         }
 
-        $search_value = data_get($request->search, 'value', '');
+        $search_value = trim(data_get($request->search, 'value', '')??'');
         if (!empty($search_value)) {
             $query->where(function ($query) use ($search_value) {
+                $cols = ['grupo_pedidos.zona',
+                    'grupo_pedidos.provincia',
+                    'grupo_pedidos.distrito',
+                    'grupo_pedidos.direccion',
+                    'grupo_pedidos.referencia',
+                    'grupo_pedidos.cliente_recibe',
+                    'grupo_pedidos.telefono',];
+                foreach ($cols as $col) {
+                    $query->orWhere($col, 'like', '%' . $search_value . '%');
+                }
+
                 $query->orWhereIn('grupo_pedidos.id',
                     DB::table('grupo_pedido_items')
                         ->where('grupo_pedido_items.codigo', 'like', '%' . $search_value . '%')
