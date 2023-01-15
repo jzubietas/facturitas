@@ -884,7 +884,7 @@
                                 },
                                 rowCallback: function (row, data, index) {
                                     if(data.cambio_direccion_at!=null){
-                                        $('td',row).css('color','#0069e0')
+                                        $('td', row).css('background', 'rgba(17,129,255,0.35)')
                                     }
                                     $("[data-toggle=jqconfirm]", row).click(function () {
                                         const action = $(this).data('target')
@@ -892,6 +892,7 @@
                                         const count = $(this).data('count')
                                         const btncolor = $(this).data('btncolor')
                                         const btntext = $(this).data('btntext')
+                                        const isrecibido = $(this).data('recibido')=='1'
                                         $.confirm({
                                             title: 'Confirmar '+btntext,
                                             type: btncolor||'blue',
@@ -899,7 +900,13 @@
                                             content: function () {
                                                 const self = this
                                                 if (count == '1') {
-                                                    return `<p>Esta seguro de confirmar la recepción del Pedido <strong class="textcode">${data.codigos}</strong></p>`
+                                                    if(isrecibido) {
+                                                        return `<p>Esta seguro de confirmar la recepción del Pedido <strong class="textcode">${data.codigos}</strong></p>  ${data.cambio_direccion_at != null?`<div class="col-12">
+                    <p class="alert alert-warning">Datos de la dirección fueron modificados, ¿desea continuar?.</p>
+                  </div>`:''}`
+                                                    }else{
+                                                        return `<p>Esta seguro de rechazar la recepción del Pedido <strong class="textcode">${data.codigos}</strong></p>`
+                                                    }
                                                 } else {
                                                     self.showLoading(true)
                                                     return $.get(action).done(function (data) {

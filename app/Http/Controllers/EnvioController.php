@@ -466,7 +466,7 @@ class EnvioController extends Controller
                 //if (auth()->user()->can('envios.enviar')):
 
                 $btn .= '<li>
-                                        <a href="" class="btn-sm text-secondary" data-target="#modal-confirmacion" data-toggle="modal" data-ide="' . $grupo->id . '" data-entregar-confirm="' . $grupo->id . '" data-destino="' . $grupo->destino . '" data-fechaenvio="' . $grupo->fecha . '" data-codigos="' . $grupo->codigos . '"
+                                        <a href="" class="btn-sm text-secondary" data-target="#modal-confirmacion" data-toggle="jqconfirm" data-ide="' . $grupo->id . '" data-entregar-confirm="' . $grupo->id . '" data-destino="' . $grupo->destino . '" data-fechaenvio="' . $grupo->fecha . '" data-codigos="' . $grupo->codigos . '"
                                             data-distribucion="' . $grupo->distribucion . '" >
                                             <i class="fa fa-motorcycle text-success" aria-hidden="true"></i> Enviar a Motorizado</a></li>
                                         </a>
@@ -1499,7 +1499,8 @@ class EnvioController extends Controller
                     $grupo->update([
                         'fecha_recepcion_motorizado' => Carbon::now(),
                         'condicion_envio' => Pedido::RECEPCION_MOTORIZADO,
-                        'condicion_envio_code' => Pedido::RECEPCION_MOTORIZADO_INT
+                        'condicion_envio_code' => Pedido::RECEPCION_MOTORIZADO_INT,
+                        'cambio_direccion_at' => null
                     ]);
                 }
 
@@ -1507,7 +1508,8 @@ class EnvioController extends Controller
                 $grupo->update([
                     'fecha_recepcion_motorizado' => Carbon::now(),
                     'condicion_envio' => Pedido::RECEPCION_MOTORIZADO,
-                    'condicion_envio_code' => Pedido::RECEPCION_MOTORIZADO_INT
+                    'condicion_envio_code' => Pedido::RECEPCION_MOTORIZADO_INT,
+                    'cambio_direccion_at' => null
                 ]);
             }
             PedidoMovimientoEstado::create([
@@ -1529,6 +1531,7 @@ class EnvioController extends Controller
                         $grupo->update([
                             'motorizado_status' => Pedido::ESTADO_MOTORIZADO_NO_RECIBIDO,
                             'motorizado_sustento_text' => 'No recibido',
+                            'cambio_direccion_at' => null
                         ]);
                     }
                     DireccionGrupo::addNoRecibidoAuthorization($grupo);
@@ -1536,7 +1539,8 @@ class EnvioController extends Controller
             } else {
                 $grupo->update([
                     'motorizado_sustento_text' => 'No recibido',
-                    'motorizado_status' => Pedido::ESTADO_MOTORIZADO_NO_RECIBIDO
+                    'motorizado_status' => Pedido::ESTADO_MOTORIZADO_NO_RECIBIDO,
+                    'cambio_direccion_at' => null
                 ]);
                 DireccionGrupo::addNoRecibidoAuthorization($grupo);
             }
@@ -1739,8 +1743,6 @@ class EnvioController extends Controller
         if (!$request->pedidos) {
             return '0';
         } else {
-
-
 
 
             $_destino = $request->destino;
@@ -1957,13 +1959,13 @@ class EnvioController extends Controller
                         'cliente_recibe' => ($request->nombre),
                         'telefono' => ($request->contacto),
                     ]);
-                }else{
+                } else {
                     $grupoPedido = GrupoPedido::createGroupByArray([
                         "zona" => 'OLVA',
                         "provincia" => 'OLVA',
                         'distrito' => '--',
                         'direccion' => 'OLVA',
-                        'referencia' =>  $request->tracking ,
+                        'referencia' => $request->tracking,
                         'cliente_recibe' => $request->nombre,
                         'telefono' => $request->contacto,
                     ]);
@@ -2463,7 +2465,8 @@ class EnvioController extends Controller
 
                     break;
             }
-        } if ($area_accion == "maria") {
+        }
+        if ($area_accion == "maria") {
             switch ($condicion_code_actual) {
                 case 5:
                     $nuevo_estado = Pedido::RECIBIDO_JEFE_OPE_INT;
@@ -2482,8 +2485,7 @@ class EnvioController extends Controller
 
                     break;
             }
-        }
-        else if ($area_accion == "jefe_op") {
+        } else if ($area_accion == "jefe_op") {
             switch ($condicion_code_actual) {
                 /*********
                  *  JEFE DE OPERACIONES
@@ -2501,7 +2503,6 @@ class EnvioController extends Controller
                     $nombre_accion = Pedido::$estadosCondicionEnvioCode[$nuevo_estado];
 
                     break;
-
 
 
                 /*********
@@ -2541,7 +2542,8 @@ class EnvioController extends Controller
         $envio->update([
             'condicion_envio' => Pedido::ENVIO_MOTORIZADO_COURIER,
             'condicion_envio_code' => Pedido::ENVIO_MOTORIZADO_COURIER_INT,
-            'fecha_salida' => $request->fecha_salida
+            'fecha_salida' => $request->fecha_salida,
+            'cambio_direccion_at' => null,
         ]);
 
         /*$codigos_paquete = collect(explode(",", $envio->codigos))->map(function ($cod) {
@@ -2550,7 +2552,8 @@ class EnvioController extends Controller
         $envio->pedidos()->activo()->update([
             'condicion_envio_code' => Pedido::ENVIO_MOTORIZADO_COURIER_INT,
             'condicion_envio' => Pedido::ENVIO_MOTORIZADO_COURIER,
-            'fecha_salida' => $request->fecha_salida
+            'fecha_salida' => $request->fecha_salida,
+            'cambio_direccion_at' => null
         ]);
 
 
@@ -2588,8 +2591,6 @@ class EnvioController extends Controller
 
         return response()->json(['html' => $pedido->id]);
     }
-
-
 
 
     public function confirmarEstadoRecepcionMotorizado(Request $request)
@@ -2832,9 +2833,9 @@ class EnvioController extends Controller
 
     public function VerificarZona(Request $request)
     {
-        $search=str_replace('+',' ',$request->distrito);
+        $search = str_replace('+', ' ', $request->distrito);
         $zona_distrito = Distrito::where('distrito', $search)
-            ->whereIn('provincia', ['LIMA','CALLAO'])
+            ->whereIn('provincia', ['LIMA', 'CALLAO'])
             ->first();
 
         if ($zona_distrito->zona == "OLVA") {

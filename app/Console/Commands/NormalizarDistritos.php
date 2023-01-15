@@ -83,6 +83,7 @@ class NormalizarDistritos extends Command
             ->update([
                 'env_nombre_cliente_recibe' => 'OLVA CURRIER',
                 'env_celular_cliente_recibe' => '--',
+                'destino' => 'PROVINCIA',
                 'env_zona' => 'OLVA',
                 'env_direccion' => 'OLVA',
                 'env_distrito' => 'LOS OLIVOS',
@@ -93,6 +94,7 @@ class NormalizarDistritos extends Command
                 'env_nombre_cliente_recibe' => 'OLVA CURRIER',
                 'env_celular_cliente_recibe' => '--',
                 'env_zona' => 'OLVA',
+                'destino' => 'PROVINCIA',
                 'env_direccion' => 'OLVA',
                 'env_distrito' => 'LOS OLIVOS',
             ]);

@@ -695,6 +695,7 @@ class MotorizadoController extends Controller
 
                             $btn .= ' <li>
                                             <button
+                                            data-recibido="1"
                                             data-btncolor="orange"
                                             data-btntext="Recibido"
                                             data-count="' . $count . '"
@@ -706,6 +707,7 @@ class MotorizadoController extends Controller
                             if ($count == 1) {
                                 $btn .= ' <li>
                                             <button
+                                            data-recibido="0"
                                             data-btncolor="red"
                                             data-btntext="No recibido"
                                             data-target="' . route('envios.recepcionarmotorizado') . '"
@@ -716,6 +718,7 @@ class MotorizadoController extends Controller
                             } else {
                                 $btn .= ' <li>
                                             <button
+                                            data-recibido="0"
                                             data-btncolor="red"
                                             data-btntext="No recibido"
                                             data-count="' . $count . '"
