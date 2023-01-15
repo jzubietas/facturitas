@@ -410,7 +410,7 @@ class OperacionController extends Controller
             )
             ->where('pedidos.estado', '1')
             ->where('dp.estado', '1')
-            ->where('pedidos.condicion_code', Pedido::ATENDIDO_INT)
+            //->where('pedidos.condicion_code', Pedido::ATENDIDO_INT)
             ->whereIn('pedidos.condicion_envio_code', [Pedido::ENVIADO_OPE_INT, Pedido::ENTREGADO_SIN_SOBRE_OPE_INT, Pedido::RECIBIDO_JEFE_OPE_INT]);
 
         //->whereIn('pedidos.envio', ['0'])
@@ -433,7 +433,7 @@ class OperacionController extends Controller
             $pedidos->WhereIn('u.identificador', $asesores);
 
 
-        } else if (Auth::user()->rol == "Jefe de operaciones") {
+        } else if (Auth::user()->rol == User::ROL_JEFE_OPERARIO) {
             /*$operarios = User::where('users.rol', 'Operario')
                 ->where('users.estado', '1')
                 ->where('users.jefe', Auth::user()->id)
