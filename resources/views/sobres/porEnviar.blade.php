@@ -560,6 +560,12 @@
 
                         //$(".contenedor-formulario").removeClass("col-4");
                         //$(".contenedor-pdf").removeClass("col-4");
+                        //limpiar campos
+                        $('#nombre').val('')
+                        $('#celular').val('')
+                        $('#direccion').val('')
+                        $('#referencia').val('')
+                        $('#observacion').val('')
 
                         break;
                     case 'P':
@@ -584,6 +590,11 @@
                         //$("#tablaPrincipalpedidosagregar").columns.adjust().draw();
 
                         break;
+                        $('#numregistro').val('')
+                        $('#tracking').val('')
+                        $('#importe').val('')
+                        $('#rotulo').val('')
+
                     default:
                         if (!$(".lima").hasClass("d-none")) {
                             $(".lima").addClass("d-none");
@@ -621,8 +632,10 @@
                 let val_nombre = $("#nombre").val();
                 let val_contacto = $("#celular").val();
                 let val_direccion = $("#direccion").val();
+                console.log(val_direccion)
                 let val_referencia = $("#referencia").val();
                 let val_distrito = $("#distrito").val();
+                console.log(val_distrito)
                 let val_observacion = $("#observacion").val();
                 let saveHistoricoLima = ($('#saveHistoricoLima').is(':checked')) ? '1' : '0';
                 let saveHistoricoProvincia = ($('#saveHistoricoProvincia').is(':checked')) ? '1' : '0';
@@ -648,6 +661,7 @@
                 } else {
 
                     if (combo_limaprovincia == "L") {
+                        console.log(combo_limaprovincia)
                         if (val_nombre == "") {
                             Swal.fire(
                                 'Error',
@@ -676,7 +690,7 @@
                                 'warning'
                             )
                             return;
-                        } else if (val_distrito == "") {
+                        } else if (val_distrito == "" || val_distrito== null) {
                             Swal.fire(
                                 'Error',
                                 'Debe seleccionar un distrito',
@@ -1255,6 +1269,8 @@
 
             $("#distrito").on('change', function(){
                 var distrito_seleccionado = $(this).val();
+                distrito_seleccionado=distrito_seleccionado.replace('+', ' ');
+                console.log(distrito_seleccionado)
 
                 $.ajax({
                     data: {
