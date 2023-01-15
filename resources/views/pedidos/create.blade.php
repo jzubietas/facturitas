@@ -448,6 +448,7 @@
                                 'No puede seleccionar este año para banca fisica, elija otra opcion por favor',
                                 'warning'
                             );
+                            $("#panio").val({{$anno_selected}})
                         }
 
                     }else if(ptipo_banca=='ELECTRONICA')
@@ -456,6 +457,7 @@
                         {
 
                         }else{
+                            if(anno_filter)
                             //2023= 2023
                             Swal.fire(
                                 'Error',

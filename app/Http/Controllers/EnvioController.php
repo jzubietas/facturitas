@@ -1909,17 +1909,8 @@ class EnvioController extends Controller
                 $identi = User::find($usuario_id);
                 $identi_id = $identi->identificador;
 
-                /*$files = $request->file('rotulo');
-                $destinationPath = base_path('public/storage/gastos/');
+                $file_name = $request->file('rotulo')->store('entregas','pstorage');
 
-                if (isset($files)) {
-                    $file_name = Carbon::now()->second . $files->getClientOriginalName();
-                    $file_name_temp = $file_name;
-                    $files->move($destinationPath, $file_name);
-                } else {
-                    $file_name = 'logo_facturas.png';
-                    $file_name_temp = $file_name;
-                }*/
 
                 $modelData = [
                     'cliente_id' => $request->cliente_id,
@@ -1966,7 +1957,7 @@ class EnvioController extends Controller
                         'env_tracking' => $request->tracking,
                         'env_referencia' => '',
                         'env_numregistro' => $request->numregistro,
-                        'env_rotulo' => $request->file('rotulo')->store('entregas','pstorage'),
+                        'env_rotulo' => $file_name,
                         'env_observacion' => '',
                         'env_importe' => $request->importe,
                     ]);
