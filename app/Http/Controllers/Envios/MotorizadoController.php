@@ -288,6 +288,7 @@ class MotorizadoController extends Controller
         $grupo->update([
             'condicion_envio' => Pedido::MOTORIZADO,
             'condicion_envio_code' => Pedido::MOTORIZADO_INT,
+            'condicion_envio_at'=>now(),
             'motorizado_status' => 0,
             'motorizado_sustento_text' => '',
             'motorizado_sustento_foto' => '',
@@ -296,6 +297,7 @@ class MotorizadoController extends Controller
         $grupo->pedidos()->activo()->update([
             'condicion_envio' => Pedido::MOTORIZADO,
             'condicion_envio_code' => Pedido::MOTORIZADO_INT,
+            'condicion_envio_at'=>now(),
         ]);
         return response()->json([
             'success' => true

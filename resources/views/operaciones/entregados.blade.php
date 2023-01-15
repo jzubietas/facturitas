@@ -144,7 +144,11 @@
         /************
          * ESCANEAR PEDIDO
          */
+        $('#modal-escanear').on('hidden.bs.modal', function (e) {
+            $('#respuesta_barra').html("");
+            $('#pedidos-procesados').html("");
 
+        })
         $('#modal-escanear').on('shown.bs.modal', function (event) {
 
             var button = $(event.relatedTarget)
@@ -166,7 +170,7 @@
 
             $('#close-scan').on('click', function (){
                 console.log("actualizamos la tabla");
-                $('#tablaPrincipal').DataTable().ajax.reload();
+                $('#tablaPrincipal').DataTable().draw(false);
             });
         })
 
@@ -207,8 +211,9 @@
                     }else{
                         $('#pedidos-procesados').append("<li> <i class='fa fa-check text-success'></i> " + data.codigo + "</li>");
                     }
-
                 }
+            }).always(function (){
+                $('#tablaPrincipal').DataTable().draw(false);
             });
 
             $(this).val("");

@@ -1260,6 +1260,7 @@ class EnvioController extends Controller
             $envio->update([
                 'condicion_envio' => Pedido::ENTREGADO_CLIENTE,
                 'condicion_envio_code' => Pedido::ENTREGADO_CLIENTE_INT,
+                'condicion_envio_at'=>now(),
 
             ]);
 
@@ -1457,6 +1458,7 @@ class EnvioController extends Controller
             'modificador' => 'USER' . Auth::user()->id,
             'condicion_envio' => Pedido::RECEPCION_COURIER,
             'condicion_envio_code' => Pedido::RECEPCION_COURIER_INT,
+            'condicion_envio_at'=>now(),
         ]);
 
         if ($pedido->estado_sobre) {
@@ -1500,7 +1502,8 @@ class EnvioController extends Controller
                         'fecha_recepcion_motorizado' => Carbon::now(),
                         'condicion_envio' => Pedido::RECEPCION_MOTORIZADO,
                         'condicion_envio_code' => Pedido::RECEPCION_MOTORIZADO_INT,
-                        'cambio_direccion_at' => null
+                        'cambio_direccion_at' => null,
+                        'condicion_envio_at'=>now(),
                     ]);
                 }
 
@@ -1509,13 +1512,14 @@ class EnvioController extends Controller
                     'fecha_recepcion_motorizado' => Carbon::now(),
                     'condicion_envio' => Pedido::RECEPCION_MOTORIZADO,
                     'condicion_envio_code' => Pedido::RECEPCION_MOTORIZADO_INT,
-                    'cambio_direccion_at' => null
+                    'cambio_direccion_at' => null,
+                    'condicion_envio_at'=>now(),
                 ]);
             }
             PedidoMovimientoEstado::create([
                 'pedido' => $request->hiddenEnvio,
                 'condicion_envio_code' => Pedido::RECEPCION_MOTORIZADO_INT,
-                'notificado' => 0
+                'notificado' => 0,
             ]);
 
             return response()->json(['html' => "Grupo recibido"]);
@@ -1548,7 +1552,7 @@ class EnvioController extends Controller
             PedidoMovimientoEstado::create([
                 'pedido' => $request->hiddenEnvio,
                 'condicion_envio_code' => Pedido::REPARTO_COURIER_INT,
-                'notificado' => 0
+                'notificado' => 0,
             ]);
 
             return response()->json(['html' => "Grupo rechazado"]);
@@ -1571,14 +1575,16 @@ class EnvioController extends Controller
                 'estado_sobre' => '1',
                 'condicion_envio' => Pedido::REPARTO_COURIER,
                 'condicion_envio_code' => Pedido::REPARTO_COURIER_INT,
-                'modificador' => 'USER' . Auth::user()->id
+                'condicion_envio_at'=>now(),
+                'modificador' => 'USER' . Auth::user()->id,
             ]);
 
             $direccion_grupos->update([
                 'condicion_envio' => Pedido::REPARTO_COURIER,
                 'condicion_envio_code' => Pedido::REPARTO_COURIER_INT,
+                'condicion_envio_at'=>now(),
                 'modificador' => 'USER' . Auth::user()->id,
-                'pedido_id' => $request->hiddenRecibir
+                'pedido_id' => $request->hiddenRecibir,
             ]);
 
 
@@ -1594,6 +1600,7 @@ class EnvioController extends Controller
                 'estado_sobre' => '1',
                 'condicion_envio' => Pedido::SEGUIMIENTO_PROVINCIA_COURIER,
                 'condicion_envio_code' => Pedido::SEGUIMIENTO_PROVINCIA_COURIER_INT,
+                'condicion_envio_at'=>now(),
                 'modificador' => 'USER' . Auth::user()->id
             ]);
 
@@ -1602,6 +1609,7 @@ class EnvioController extends Controller
 
                 'condicion_envio' => Pedido::SEGUIMIENTO_PROVINCIA_COURIER,
                 'condicion_envio_code' => Pedido::SEGUIMIENTO_PROVINCIA_COURIER_INT,
+                'condicion_envio_at'=>now(),
                 'modificador' => 'USER' . Auth::user()->id,
                 'pedido_id' => $request->hiddenRecibir
             ]);
@@ -2043,6 +2051,7 @@ class EnvioController extends Controller
             //'condicion_envio_code' => DireccionGrupo::CE_ENTREGADO_CODE,
             'condicion_envio' => Pedido::ENTREGADO_SIN_SOBRE_OPE,
             'condicion_envio_code' => Pedido::ENTREGADO_SIN_SOBRE_OPE_INT,
+            'condicion_envio_at'=>now(),
 
             //  'condicion_envio' => 'ENTREGADO',
             //  'condicion_envio_code' => 10 ,
@@ -2054,8 +2063,6 @@ class EnvioController extends Controller
             'fecha_recepcion' => $fecha,
             'atendido_por' => Auth::user()->name,
             'atendido_por_id' => Auth::user()->id,
-            'condicion_envio' => Pedido::ENTREGADO_SIN_SOBRE_OPE,
-            'condicion_envio_code' => Pedido::ENTREGADO_SIN_SOBRE_OPE,
             'pedido_id' => $request->hiddenSinenvio
         ]);
 
@@ -2071,6 +2078,7 @@ class EnvioController extends Controller
 
             'condicion_envio' => Pedido::ENTREGADO_SIN_SOBRE_OPE,
             'condicion_envio_code' => Pedido::ENTREGADO_SIN_SOBRE_OPE_INT,
+            'condicion_envio_at'=>now(),
 
             'condicion_sobre' => 'SIN ENVIO',
             'codigos' => $data->codigo,
@@ -2126,7 +2134,8 @@ class EnvioController extends Controller
             'fecha_envio_atendido_op'=>Carbon::now(),
             'condicion_envio' => Pedido::ENVIADO_OPE,
             'condicion_envio_code' => Pedido::ENVIADO_OPE_INT,
-            'modificador' => 'USER' . Auth::user()->id
+            'modificador' => 'USER' . Auth::user()->id,
+            'condicion_envio_at'=>now(),
         ]);
 
         PedidoMovimientoEstado::create([
@@ -2150,13 +2159,12 @@ class EnvioController extends Controller
         $pedido = Pedido::where("id", $request->hiddenEnvio)->first();
 
         $pedido->update([
-            'envio' => '2',
             'modificador' => 'USER' . Auth::user()->id,
             'condicion_envio' => Pedido::ENTREGADO_SIN_SOBRE_CLIENTE,
             'condicion_envio_code' => Pedido::ENTREGADO_SIN_SOBRE_CLIENTE_INT,
-
+            'condicion_envio_at'=>now(),
+            'fecha_recepcion_courier' => now()
         ]);
-
         PedidoMovimientoEstado::create([
             'pedido' => $request->hiddenEnvio,
             'condicion_envio_code' => Pedido::ENTREGADO_SIN_SOBRE_CLIENTE_INT,
@@ -2176,6 +2184,7 @@ class EnvioController extends Controller
             'fecha_envio_op_courier' => Carbon::now(),
             'condicion_envio' => Pedido::RECIBIDO_JEFE_OPE,
             'condicion_envio_code' => Pedido::RECIBIDO_JEFE_OPE_INT,
+            'condicion_envio_at'=>now(),
 
         ]);
 
@@ -2197,6 +2206,7 @@ class EnvioController extends Controller
             'modificador' => 'USER' . Auth::user()->id,
             'condicion_envio' => Pedido::ENVIO_COURIER_JEFE_OPE,
             'condicion_envio_code' => Pedido::ENVIO_COURIER_JEFE_OPE_INT,
+            'condicion_envio_at'=>now(),
 
         ]);
 
@@ -2526,6 +2536,8 @@ class EnvioController extends Controller
                 'modificador' => 'USER' . Auth::user()->id,
                 'condicion_envio' => $nombre_accion,
                 'condicion_envio_code' => $nuevo_estado,
+                'condicion_envio_at'=>now(),
+                'fecha_recepcion_courier' => now()
             ]);
 
             PedidoMovimientoEstado::create([
@@ -2544,6 +2556,7 @@ class EnvioController extends Controller
         $envio->update([
             'condicion_envio' => Pedido::ENVIO_MOTORIZADO_COURIER,
             'condicion_envio_code' => Pedido::ENVIO_MOTORIZADO_COURIER_INT,
+            'condicion_envio_at'=>now(),
             'fecha_salida' => $request->fecha_salida,
             'cambio_direccion_at' => null,
         ]);
@@ -2553,6 +2566,7 @@ class EnvioController extends Controller
         })->all();*/
         $envio->pedidos()->activo()->update([
             'condicion_envio_code' => Pedido::ENVIO_MOTORIZADO_COURIER_INT,
+            'condicion_envio_at'=>now(),
             'condicion_envio' => Pedido::ENVIO_MOTORIZADO_COURIER,
             'fecha_salida' => $request->fecha_salida,
             'cambio_direccion_at' => null
@@ -2582,6 +2596,7 @@ class EnvioController extends Controller
         $pedido->update([
             'condicion_envio' => Pedido::ENTREGADO_SIN_SOBRE_CLIENTE,
             'condicion_envio_code' => Pedido::ENTREGADO_SIN_SOBRE_CLIENTE_INT,
+            'condicion_envio_at'=>now(),
             //'fecha_salida' => $request->fecha_salida
         ]);
 
@@ -2601,6 +2616,7 @@ class EnvioController extends Controller
         $envio->update([
             'condicion_envio' => Pedido::MOTORIZADO,
             'condicion_envio_code' => Pedido::MOTORIZADO_INT,
+            'condicion_envio_at'=>now(),
             //'condicion_envio' => Pedido::MOTORIZADO,
             //'condicion_envio_code' => Pedido::MOTORIZADO_INT,
         ]);
@@ -2612,6 +2628,7 @@ class EnvioController extends Controller
         Pedido::whereIn('codigo', $codigos_paquete)
             ->update([
                 'condicion_envio_code' => Pedido::MOTORIZADO_INT,
+                'condicion_envio_at'=>now(),
                 'condicion_envio' => Pedido::MOTORIZADO
             ]);
 
@@ -2634,6 +2651,7 @@ class EnvioController extends Controller
             //'condicion_envio_code' => Pedido::REPARTO_COURIER_INT,
             'condicion_envio' => Pedido::RECEPCION_MOTORIZADO,
             'condicion_envio_code' => Pedido::RECEPCION_MOTORIZADO_INT,
+            'condicion_envio_at'=>now(),
         ]);
 
         $codigos_paquete = collect(explode(",", $envio->codigos))->map(function ($cod) {
@@ -2643,6 +2661,7 @@ class EnvioController extends Controller
         Pedido::whereIn('codigo', $codigos_paquete)
             ->update([
                 'condicion_envio_code' => Pedido::RECEPCION_MOTORIZADO_INT,
+                'condicion_envio_at'=>now(),
                 'condicion_envio' => Pedido::RECEPCION_MOTORIZADO
             ]);
 
@@ -2729,6 +2748,7 @@ class EnvioController extends Controller
                 'fecha_recepcion' => now(),
                 'condicion_envio' => Pedido::CONFIRM_MOTORIZADO,
                 'condicion_envio_code' => Pedido::CONFIRM_MOTORIZADO_INT,
+                'condicion_envio_at'=>now(),
             ]);
 
             $paquete_sobres = $envio;
@@ -2741,11 +2761,13 @@ class EnvioController extends Controller
                 ->update([
                     'condicion_envio' => Pedido::CONFIRM_MOTORIZADO,
                     'condicion_envio_code' => Pedido::CONFIRM_MOTORIZADO_INT,
+                    'condicion_envio_at'=>now(),
                 ]);
 
             PedidoMovimientoEstado::create([
                 'pedido' => $request->pedido_id,
                 'condicion_envio_code' => Pedido::CONFIRM_MOTORIZADO_INT,
+                'condicion_envio_at'=>now(),
                 'notificado' => 0
             ]);
 
@@ -2761,6 +2783,7 @@ class EnvioController extends Controller
             'foto2' => '',
             'condicion_envio' => Pedido::MOTORIZADO,
             'condicion_envio_code' => Pedido::MOTORIZADO_INT,
+            'condicion_envio_at'=>now(),
         ]);
 
         PedidoMovimientoEstado::create([
@@ -2778,12 +2801,14 @@ class EnvioController extends Controller
         $envio->update([
             'condicion_envio' => Pedido::ENTREGADO_CLIENTE,
             'condicion_envio_code' => Pedido::ENTREGADO_CLIENTE_INT,
+            'condicion_envio_at'=>now(),
         ]);
 
         $pedidos = Pedido::where('direccion_grupo', $request->hiddenMotorizadoEntregarConfirm)->where('estado', '1');
         $pedidos->update([
             'condicion_envio' => Pedido::ENTREGADO_CLIENTE,
             'condicion_envio_code' => Pedido::ENTREGADO_CLIENTE_INT,
+            'condicion_envio_at'=>now(),
         ]);
 
         PedidoMovimientoEstado::create([
@@ -2821,6 +2846,7 @@ class EnvioController extends Controller
         $envio->update([
             'condicion_envio' => Pedido::CONFIRM_VALIDADA_CLIENTE,
             'condicion_envio_code' => Pedido::CONFIRM_VALIDADA_CLIENTE_INT,
+            'condicion_envio_at'=>now(),
         ]);
 
         PedidoMovimientoEstado::create([
@@ -2904,6 +2930,7 @@ class EnvioController extends Controller
                 'modificador' => 'USER' . Auth::user()->id,
                 'condicion_envio' => Pedido::RECEPCION_MOTORIZADO,
                 'condicion_envio_code' => Pedido::RECEPCION_MOTORIZADO_INT,
+                'condicion_envio_at'=>now(),
             ]);
 
 
@@ -2923,6 +2950,7 @@ class EnvioController extends Controller
                     'modificador' => 'USER' . Auth::user()->id,
                     'condicion_envio' => Pedido::RECEPCION_MOTORIZADO,
                     'condicion_envio_code' => Pedido::RECEPCION_MOTORIZADO_INT,
+                    'condicion_envio_at'=>now(),
                 ]);
             }
             $paquete_sobres->update([
@@ -2945,12 +2973,16 @@ class EnvioController extends Controller
             $motorizadoid = $usuario->id;
             $direcciones = DireccionGrupo::where('motorizado_id', $motorizadoid)->where('distribucion', $zona)->where('condicion_envio_code', Pedido::RECEPCION_MOTORIZADO_INT);
             $direcciones->update([
-                'condicion_envio_code' => Pedido::MOTORIZADO_INT
+                'condicion_envio_code' => Pedido::MOTORIZADO_INT,
+                'condicion_envio_at'=>now(),
+                'condicion_envio' => Pedido::MOTORIZADO,
             ]);
         } else if ($rol == User::ROL_ADMIN) {
             $direcciones = DireccionGrupo::where('condicion_envio_code', Pedido::RECEPCION_MOTORIZADO_INT);
             $direcciones->update([
-                'condicion_envio_code' => Pedido::MOTORIZADO_INT
+                'condicion_envio_code' => Pedido::MOTORIZADO_INT,
+                'condicion_envio_at'=>now(),
+                'condicion_envio' => Pedido::MOTORIZADO,
             ]);
         } else {
             return response()->json(['html' => '0']);

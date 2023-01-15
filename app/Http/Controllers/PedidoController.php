@@ -1089,6 +1089,7 @@ class PedidoController extends Controller
                 'pago' => '0',
                 'condicion_envio' => Pedido::POR_ATENDER_OPE,
                 'condicion_envio_code' => Pedido::POR_ATENDER_INT,
+                'condicion_envio_at'=>now(),
                 'estado' => '1',
                 'codigo' => $codigo,
                 'notificacion' => 'Nuevo pedido creado',
@@ -1738,6 +1739,7 @@ class PedidoController extends Controller
                     'condicion_code' => Pedido::POR_ATENDER_INT,
                     'condicion_envio' => Pedido::RECEPCION_COURIER,
                     'condicion_envio_code' => Pedido::RECEPCION_COURIER_INT,
+                    'condicion_envio_at'=>now(),
                     'modificador' => 'USER' . Auth::user()->id,
                     'estado' => '1',
                     'pendiente_anulacion' => '0'

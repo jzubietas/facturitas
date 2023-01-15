@@ -193,6 +193,7 @@ class DistribucionController extends Controller
 
             $groupData = [
                 'condicion_envio_code' => Pedido::REPARTO_COURIER_INT,//RECEPCION CURRIER
+                'condicion_envio_at'=>now(),
                 'condicion_envio' => Pedido::REPARTO_COURIER,//RECEPCION CURRIER
                 'producto' => $lista_productos,
                 'distribucion' => $zona,
@@ -230,6 +231,7 @@ class DistribucionController extends Controller
                     'env_zona_asignada' => null,
                     'estado_ruta' => '1',
                     'condicion_envio_code' => Pedido::REPARTO_COURIER_INT,
+                    'condicion_envio_at'=>now(),
                     'condicion_envio' => Pedido::REPARTO_COURIER,
                     'direccion_grupo' => $direcciongrupo->id,
                 ]);
