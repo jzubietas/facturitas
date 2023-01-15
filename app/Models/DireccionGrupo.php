@@ -109,12 +109,34 @@ class DireccionGrupo extends Model
     {
         $relacion = $grupo->pedidos()
             ->join('detalle_pedidos', 'detalle_pedidos.pedido_id', 'pedidos.id')
-            ->pluck('detalle_pedidos.nombre_empresa', 'pedidos.codigo');
+            ->select([
+                'pedidos.codigo',
+                'detalle_pedidos.nombre_empresa',
+                DB::raw("(case when pedidos.destino='PROVINCIA' and pedidos.env_zona='OLVA' when pedidos.env_tracking
+                                when pedidos.destino='LIMA' then pedidos.env_direccion
+                                  end
+                 ) as direccion"),
+                DB::raw("(case when pedidos.destino='PROVINCIA' and pedidos.env_zona='OLVA' when pedidos.env_numregistro
+                                when pedidos.destino='LIMA' then pedidos.env_referencia
+                                  end
+                 ) as referencia"),
+                DB::raw("(case when pedidos.destino='PROVINCIA' and pedidos.env_zona='OLVA' when pedidos.env_rotulo
+                                when pedidos.destino='LIMA' then pedidos.env_observacion
+                                  end
+                 ) as observacion"),
+            ])
+            ->get();
+            //->pluck('detalle_pedidos.nombre_empresa', 'pedidos.codigo');
+
         if ($relacion->count() > 0) {
             $grupo->update([
-                'codigos' => $relacion->keys()->join(', '),
-                'producto' => $relacion->values()->join(', '),
+                'codigos' => $relacion->codigo->join(', '),
+                'producto' => $relacion->nombre_empresa->join(', '),//$relacion->values()->join(', '),
+                'direccion'=>$relacion->direccion->join(', '),
+                'referencia'=>$relacion->referencia->join(', '),
+                'observacion'=>$relacion->observacion->join(', '),
             ]);
+
         } else {
             $grupo->update([
                 'estado' => 0,

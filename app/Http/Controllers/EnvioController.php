@@ -460,6 +460,26 @@ class EnvioController extends Controller
     color: black !important;">Con ruta</span>
                     <span class="badge badge-success" style="background-color: ' . $color . '!important;">' . $pedido->condicion_envio . '</span>';
             })
+            ->editColumn('direccion', function ($pedido) {
+                if($pedido->destino=='LIMA')
+                {
+
+                }
+                else if($pedido->destino=='PROVINCIA')
+                {
+
+                }
+            })
+            ->editColumn('referencia', function ($pedido) {
+                if($pedido->destino=='LIMA')
+                {
+
+                }
+                else if($pedido->destino=='PROVINCIA')
+                {
+
+                }
+            })
             ->addColumn('action', function ($grupo) {
                 $btn = '';
                 $btn .= '<ul class="list-unstyled pl-0">';
