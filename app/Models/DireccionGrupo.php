@@ -107,15 +107,46 @@ class DireccionGrupo extends Model
 
     public static function restructurarCodigos(self $grupo)
     {
-        $relacion = $grupo->pedidos()
-            ->join('detalle_pedidos', 'detalle_pedidos.pedido_id', 'pedidos.id')
-            ->pluck('detalle_pedidos.nombre_empresa', 'pedidos.codigo');
+        if($grupo->distribucion='OLVA')
+        {
+            $relacion = $grupo->pedidos()
+                ->join('detalle_pedidos', 'detalle_pedidos.pedido_id', 'pedidos.id')
+                ->select([
+                    'pedidos.codigo',
+                    'detalle_pedidos.nombre_empresa',
+                    DB::raw("(case when pedidos.destino='PROVINCIA' when pedidos.env_tracking
+                                when pedidos.destino='LIMA' then pedidos.env_direccion
+                                  end) as direccion"),
+                    DB::raw("(case when pedidos.destino='PROVINCIA' when pedidos.env_numregistro
+                                when pedidos.destino='LIMA' then pedidos.env_referencia
+                                  end) as referencia"),
+                    DB::raw("(case when pedidos.destino='PROVINCIA' when pedidos.env_rotulo
+                                when pedidos.destino='LIMA' then pedidos.env_observacion
+                                  end) as observacion"),
+                ])
+                ->get();
+        }else{
+            $relacion = $grupo->pedidos()
+                ->join('detalle_pedidos', 'detalle_pedidos.pedido_id', 'pedidos.id')
+                ->select([
+                    'pedidos.codigo',
+                    'detalle_pedidos.nombre_empresa',
+                    'pedidos.env_direccion as direccion',
+                    'pedidos.env_referencia as referencia',
+                    'pedidos.env_observacion as observacion'
+                ])
+                ->get();
+        }
         if ($relacion->count() > 0) {
 
             $grupo->update([
-                'codigos' => $relacion->keys()->join(', '),
-                'producto' => $relacion->values()->join(', '),
+                'codigos' => $relacion->codigo->join(', '),
+                'producto' => $relacion->nombre_empresa->join(', '),//$relacion->values()->join(', '),
+                'direccion'=>$relacion->direccion->join(', '),
+                'referencia'=>$relacion->referencia->join(', '),
+                'observacion'=>$relacion->observacion->join(', '),
             ]);
+
         } else {
             $grupo->update([
                 'estado' => 0,
