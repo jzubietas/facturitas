@@ -321,7 +321,7 @@ class OperacionController extends Controller
 
                 $btn[] = '<div class="col-6 d-flex justify-content-start text-left m-0 p-0">';
                 $btn[] = '<ul class="text-left list-inline text-left" aria-labelledby="dropdownMenuButton" >';
-                $btn[] = '<a href="' . route("operaciones.showatender", $pedido->id) . '" class="btn-sm dropdown-item" ><i class="fas fa-eye text-success"></i> Ver</a>';
+                //$btn[] = '<a href="' . route("operaciones.showatender", $pedido->id) . '" class="btn-sm dropdown-item" ><i class="fas fa-eye text-success"></i> Ver</a>';
                 if (\auth()->user()->can('operacion.editatender')) {
                     $btn[] = '<a href="" class="btn-sm dropdown-item" data-target="#modal-editar-atencion" data-adj=' . $pedido->da_confirmar_descarga . ' data-atencion=' . $pedido->id . ' data-toggle="modal" ><i class="fa fa-paperclip text-primary" aria-hidden="true"></i> Editar Adjuntos</a>';
                 }
