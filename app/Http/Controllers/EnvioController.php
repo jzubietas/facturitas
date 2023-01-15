@@ -1909,7 +1909,7 @@ class EnvioController extends Controller
                 $identi = User::find($usuario_id);
                 $identi_id = $identi->identificador;
 
-                $files = $request->file('rotulo');
+                /*$files = $request->file('rotulo');
                 $destinationPath = base_path('public/storage/gastos/');
 
                 if (isset($files)) {
@@ -1919,7 +1919,7 @@ class EnvioController extends Controller
                 } else {
                     $file_name = 'logo_facturas.png';
                     $file_name_temp = $file_name;
-                }
+                }*/
 
                 $modelData = [
                     'cliente_id' => $request->cliente_id,
