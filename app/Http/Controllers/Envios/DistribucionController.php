@@ -51,11 +51,11 @@ class DistribucionController extends Controller
     public function datatable(Request $request)
     {
         $query = GrupoPedido::query()->with(['pedidos', 'motorizadoHistories'])
-            ->join('grupo_pedido_items', 'grupo_pedido_items.grupo_pedido_id', '=', 'grupo_pedidos.id')
+            //->join('grupo_pedido_items', 'grupo_pedido_items.grupo_pedido_id', '=', 'grupo_pedidos.id')
             ->select([
                 'grupo_pedidos.id',
-                DB::raw('GROUP_CONCAT(grupo_pedido_items.codigo) as codigos'),
-                DB::raw('GROUP_CONCAT(grupo_pedido_items.razon_social) as productos'),
+                //DB::raw('GROUP_CONCAT(grupo_pedido_items.codigo) as codigos'),
+                //DB::raw('GROUP_CONCAT(grupo_pedido_items.razon_social) as productos'),
                 'grupo_pedidos.zona',
                 'grupo_pedidos.provincia',
                 'grupo_pedidos.distrito',
@@ -67,8 +67,8 @@ class DistribucionController extends Controller
                 //'codigos' => DB::table('grupo_pedido_items')->selectRaw('GROUP_CONCAT(grupo_pedido_items.codigo)')->whereRaw('grupo_pedido_items.grupo_pedido_id=grupo_pedidos.id'),
                 // 'productos' => DB::table('grupo_pedido_items')->selectRaw('GROUP_CONCAT(grupo_pedido_items.razon_social)')->whereRaw('grupo_pedido_items.grupo_pedido_id=grupo_pedidos.id'),
             ])
-            ->whereNull('grupo_pedidos.deleted_at')
-            ->groupBy([
+            //->whereNull('grupo_pedidos.deleted_at')
+            /*->groupBy([
                 'grupo_pedidos.id',
                 'grupo_pedidos.zona',
                 'grupo_pedidos.provincia',
@@ -78,7 +78,8 @@ class DistribucionController extends Controller
                 'grupo_pedidos.cliente_recibe',
                 'grupo_pedidos.telefono',
                 'grupo_pedidos.created_at',
-            ]);
+            ])*/
+        ;
 
         $motorizados = User::query()->where('rol', '=', 'MOTORIZADO')->whereNotNull('zona')->get();
         $color_zones = [];
@@ -89,37 +90,26 @@ class DistribucionController extends Controller
             $query->whereNotIn('grupo_pedidos.id', $request->exclude_ids);
         }
 
-        /*
-                $search_value = data_get($request->search, 'value');
-              /*if($search_value && !empty($search_value)){
-                    $query->orWhere('codigos','like','%'.$search_value.'%');
-                }
-        */
-        $items = $query->get()->map(function ($grupo) {
-            $codigos = explode(',', $grupo->codigos);
-            $productos = explode(',', $grupo->productos);
-            $codigosNames = [];
-            foreach ($codigos as $key => $codigo) {
-                $codigosNames[$codigo] = $productos[$key];
-            }
-            sort($codigos);
-            $productos=[];
-            foreach ($codigos as $codigo) {
-                $productos[]=$codigosNames[$codigo];
-            }
-            $grupo->codigos=join(',',$codigos);
-            $grupo->productos=join(',',$productos);
-            return $grupo;
-        });
+        $search_value = data_get($request->search, 'value', '');
+        if (!empty($search_value)) {
+            $query->where(function ($query) use ($search_value) {
+                $query->orWhereIn('grupo_pedidos.id',
+                    DB::table('grupo_pedido_items')
+                        ->where('grupo_pedido_items.codigo', 'like', '%' . $search_value . '%')
+                        ->orWhere('grupo_pedido_items.razon_social', 'like', '%' . $search_value . '%')
+                        ->select('grupo_pedido_items.grupo_pedido_id')
+                );
+            });
+        }
+
+        $items = $query->get();
         return \DataTables::of($items)
-            ->addColumn('codigos', function ($pedido) {
-                return collect(explode(',', $pedido->codigos))->map(fn($codigo, $index) => ($index + 1) . ") <b>" . $codigo . "</b>")->join('<hr class="my-1">');
+            ->addColumn('codigos', function (GrupoPedido $grupo) {
+                return $grupo->pedidos->pluck('codigo')->sort()
+                    ->values()->map(fn($codigo, $index) => ($index + 1) . ") <b>" . $codigo . "</b>")->join('<hr class="my-1">');
             })
-            ->addColumn('codigos_search', function ($pedido) {
-                return collect(explode(',', $pedido->codigos))->map(fn($codigo, $index) => $codigo)->join(',');
-            })
-            ->addColumn('productos', function ($pedido) {
-                return collect(explode(',', $pedido->productos))->map(fn($codigo, $index) => ($index + 1) . ")" . $codigo)->join('<hr class="my-1">');
+            ->addColumn('productos', function (GrupoPedido $grupo) {
+                return $grupo->pedidos->sortBy(fn($pedido) => $pedido->codigo)->pluck('pivot.razon_social')->map(fn($codigo, $index) => ($index + 1) . ") <b>" . $codigo . "</b>")->join('<hr class="my-1">');
             })
             ->addColumn('condicion_envio', function ($pedido) {
                 $badge_estado = '';

@@ -1740,7 +1740,8 @@ class EnvioController extends Controller
             return '0';
         } else {
 
-            $zona_distrito = Distrito::where('distrito', $request->distrito)->first();
+
+
 
             $_destino = $request->destino;
             $_pedido = Pedido::find($request->cod_pedido);
@@ -1771,6 +1772,7 @@ class EnvioController extends Controller
 
             DB::beginTransaction();
             if ($request->destino == "LIMA") {
+                $zona_distrito = Distrito::where('distrito', $request->distrito)->first();
                 $cantidad = $count_pedidos;
 
                 $modelData = [
@@ -1945,15 +1947,27 @@ class EnvioController extends Controller
             }
 
             if (count($attach_pedidos_data) > 0) {
-                $grupoPedido = GrupoPedido::createGroupByArray([
-                    "zona" => $zona_distrito->zona,
-                    "provincia" => $zona_distrito->provincia,
-                    'distrito' => $zona_distrito->distrito,
-                    'direccion' => (($request->destino == 'PROVINCIA') ? 'OLVA' : $request->direccion),
-                    'referencia' => (($request->destino == 'PROVINCIA') ? $request->tracking : $request->referencia),
-                    'cliente_recibe' => ($request->nombre),
-                    'telefono' => ($request->contacto),
-                ]);
+                if ($request->destino == "LIMA") {
+                    $grupoPedido = GrupoPedido::createGroupByArray([
+                        "zona" => $zona_distrito->zona,
+                        "provincia" => $zona_distrito->provincia,
+                        'distrito' => $zona_distrito->distrito,
+                        'direccion' => (($request->destino == 'PROVINCIA') ? 'OLVA' : $request->direccion),
+                        'referencia' => (($request->destino == 'PROVINCIA') ? $request->tracking : $request->referencia),
+                        'cliente_recibe' => ($request->nombre),
+                        'telefono' => ($request->contacto),
+                    ]);
+                }else{
+                    $grupoPedido = GrupoPedido::createGroupByArray([
+                        "zona" => 'OLVA',
+                        "provincia" => 'OLVA',
+                        'distrito' => '--',
+                        'direccion' => 'OLVA',
+                        'referencia' =>  $request->tracking ,
+                        'cliente_recibe' => $request->nombre,
+                        'telefono' => $request->contacto,
+                    ]);
+                }
                 $grupoPedido->pedidos()->syncWithoutDetaching($attach_pedidos_data);
             }
             DB::commit();
