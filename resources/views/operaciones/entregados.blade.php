@@ -476,11 +476,11 @@
             sWidth:'20%',
             render: function ( data, type, row, meta ) {
 
-              var urlver = '{{ route("operaciones.showatender", ":id") }}';
-              urlver = urlver.replace(':id', row.id);
+              //var urlver = '{{ route("operaciones.showatender", ":id") }}';
+              //urlver = urlver.replace(':id', row.id);
 
               data = '<div><ul class="" aria-labelledby="dropdownMenuButton">';
-              data = data + '<a href="' + urlver + '" class="btn-sm dropdown-item" ><i class="fas fa-eye text-success"></i> Ver</a>';
+              //data = data + '<a href="' + urlver + '" class="btn-sm dropdown-item" ><i class="fas fa-eye text-success"></i> Ver</a>';
 
 /*
               var urledit = '{{ route("operaciones.editatender", ":id") }}';
