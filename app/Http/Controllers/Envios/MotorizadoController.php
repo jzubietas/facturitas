@@ -104,7 +104,7 @@ class MotorizadoController extends Controller
                     $btn = '<ul class="list-unstyled mt-sm-20">';
                     switch ($tab) {
                         case 'entregado':
-                        case 'no_contesto':
+                        case 'nocontesto':
                         case 'observado':
                             if ($pedido->estado = 1 && ($pedido->condicion_envio_code == Pedido::MOTORIZADO_INT || $pedido->condicion_envio_code == Pedido::CONFIRM_MOTORIZADO_INT)) {
                                 if ($pedido->cambio_direccion_at == null) {

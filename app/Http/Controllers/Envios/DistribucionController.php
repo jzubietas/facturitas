@@ -180,69 +180,134 @@ class DistribucionController extends Controller
             'motorizado_id' => 'required',
             'groups' => 'required|array',
         ]);
-        $groups = GrupoPedido::query()->with(['pedidos'])->whereIn('id', $request->groups)->get();
+        $groups = GrupoPedido::query()->whereIn('id', $request->groups)->get();
 
         $zona = $request->get('zona');
 
-        foreach ($groups as $grupo) {
-            $pedidos = $grupo->pedidos;
-            $firstProduct = collect($pedidos)->first();
-            $cliente = $firstProduct->cliente;
-            $lista_codigos = collect($pedidos)->pluck('codigo')->join(',');
-            $lista_productos = DetallePedido::wherein("pedido_id", collect($pedidos)->pluck('id'))->pluck('nombre_empresa')->join(',');
-
-            $groupData = [
-                'condicion_envio_code' => Pedido::REPARTO_COURIER_INT,//RECEPCION CURRIER
-                'condicion_envio_at'=>now(),
-                'condicion_envio' => Pedido::REPARTO_COURIER,//RECEPCION CURRIER
-                'producto' => $lista_productos,
-                'distribucion' => $zona,
-                'destino' => $firstProduct->env_destino,
-                'direccion' => $firstProduct->env_direccion,
-                //'fecha_recepcion' => now(),
-                'codigos' => $lista_codigos,
-
-                'estado' => '1',
-
-                'cliente_id' => $cliente->id,
-                'user_id' => $firstProduct->user_id,
-
-                'nombre' => $firstProduct->env_nombre_cliente_recibe,
-                'celular' => $firstProduct->env_celular_cliente_recibe,
-
-                'nombre_cliente' => $cliente->nombre,
-                'celular_cliente' => $cliente->celular,
-                'icelular_cliente' => $cliente->icelular,
-
-                'distrito' => $firstProduct->env_distrito,
-                'referencia' => $firstProduct->env_referencia,
-                'observacion' => $firstProduct->env_observacion,
-                'cantidad' => count($pedidos),
-                'motorizado_id' => $request->motorizado_id,
-                'identificador' => $cliente->user->identificador,
-            ];
-
-            if ($request->get("visualizar") == '1') {
-                $grupos[] = $groupData;
-            } else {
-                $direcciongrupo = DireccionGrupo::create($groupData);
-                $grupos[] = $direcciongrupo->refresh();
-                Pedido::whereIn('id', collect($pedidos)->pluck('id'))->update([
-                    'env_zona_asignada' => null,
-                    'estado_ruta' => '1',
-                    'condicion_envio_code' => Pedido::REPARTO_COURIER_INT,
-                    'condicion_envio_at'=>now(),
-                    'condicion_envio' => Pedido::REPARTO_COURIER,
-                    'direccion_grupo' => $direcciongrupo->id,
+        function createDireccionGrupo($grupo, $groupData, $pedidosIds)
+        {
+            unset($groupData['pedido_id']);
+            unset($groupData['pedido_codigo']);
+            unset($groupData['pedido_nombre_empresa']);
+            $direcciongrupo = DireccionGrupo::create($groupData);
+            Pedido::whereIn('id', $pedidosIds)->update([
+                'env_zona_asignada' => null,
+                'estado_ruta' => '1',
+                'condicion_envio' => Pedido::REPARTO_COURIER,
+                'condicion_envio_code' => Pedido::REPARTO_COURIER_INT,
+                'condicion_envio_at' => now(),
+                'direccion_grupo' => $direcciongrupo->id,
+            ]);
+            PedidoMotorizadoHistory::query()
+                ->where([
+                    'pedido_grupo_id' => $grupo->id,
+                ])
+                ->update([
+                    'direccion_grupo_id' => $direcciongrupo->id,
                 ]);
-                PedidoMotorizadoHistory::query()
-                    ->where([
-                        'pedido_grupo_id' => $grupo->id,
-                    ])
-                    ->update([
-                        'direccion_grupo_id' => $direcciongrupo->id,
-                    ]);
-                $grupo->delete();
+            $grupo->delete();
+            DireccionGrupo::restructurarCodigos($direcciongrupo);
+            return $direcciongrupo;
+        }
+
+        $grupos = [];
+        foreach ($groups as $grupo) {
+            $pedidos = $grupo->pedidos()
+                ->join('detalle_pedidos', 'detalle_pedidos.pedido_id', '=', 'pedidos.id')
+                ->where('detalle_pedidos.estado', '1')
+                ->select([
+                    'pedidos.*',
+                    'detalle_pedidos.nombre_empresa'
+                ])
+                ->activo()
+                ->get();
+            if ($grupo->zona != 'OLVA') {
+                $firstProduct = collect($pedidos)->first();
+                $cliente = $firstProduct->cliente;
+                $lista_codigos = $pedidos->pluck('codigo')->join(',');
+                $lista_productos = $pedidos->pluck('nombre_empresa')->join(',');;
+                $groupData = [
+                    'condicion_envio_code' => Pedido::REPARTO_COURIER_INT,//RECEPCION CURRIER
+                    'condicion_envio_at' => now(),
+                    'condicion_envio' => Pedido::REPARTO_COURIER,//RECEPCION CURRIER
+                    'distribucion' => $zona,
+                    'destino' => $firstProduct->env_destino,
+                    'direccion' => $firstProduct->env_direccion,//nro treking
+
+                    'estado' => '1',
+
+                    'codigos' => $lista_codigos,
+                    'producto' => $lista_productos,
+
+                    'cliente_id' => $cliente->id,
+                    'user_id' => $firstProduct->user_id,
+
+                    'nombre' => $firstProduct->env_nombre_cliente_recibe,
+                    'celular' => $firstProduct->env_celular_cliente_recibe,
+
+                    'nombre_cliente' => $cliente->nombre,
+                    'celular_cliente' => $cliente->celular,
+                    'icelular_cliente' => $cliente->icelular,
+
+                    'distrito' => $firstProduct->env_distrito,
+                    'referencia' => $firstProduct->env_referencia,//nro registro
+                    'observacion' => $firstProduct->env_observacion,//rotulo
+                    'motorizado_id' => $request->motorizado_id,
+                    'identificador' => $cliente->user->identificador,
+                ];
+                if ($request->get("visualizar") == '1') {
+                    $grupos[] = $groupData;
+                } else {
+                    $grupos[] = createDireccionGrupo($grupo, $groupData, collect($pedidos)->pluck('id'))->refresh();
+                }
+            } else {
+                $dividir = $pedidos->map(function (Pedido $pedido) use ($grupo, $request) {
+                    $cliente = $pedido->cliente;
+                    return [
+                        'condicion_envio_code' => Pedido::REPARTO_COURIER_INT,//RECEPCION CURRIER
+                        'condicion_envio_at' => now(),
+                        'condicion_envio' => Pedido::REPARTO_COURIER,//RECEPCION CURRIER
+                        'distribucion' => $grupo->zona,
+                        'destino' => $pedido->env_destino,
+                        'direccion' => $pedido->env_tracking,//nro treking
+                        //'fecha_recepcion' => now(),
+
+                        'estado' => '1',
+
+                        'cliente_id' => $cliente->id,
+                        'user_id' => $pedido->user_id,
+                        'pedido_id' => $pedido->id,
+                        'pedido_codigo' => $pedido->codigo,
+                        'pedido_nombre_empresa' => $pedido->nombre_empresa,
+
+                        'nombre' => $pedido->env_nombre_cliente_recibe,
+                        'celular' => $pedido->env_celular_cliente_recibe,
+
+                        'nombre_cliente' => $cliente->nombre,
+                        'celular_cliente' => $cliente->celular,
+                        'icelular_cliente' => $cliente->icelular,
+
+                        'distrito' => $pedido->env_distrito,
+                        'referencia' => $pedido->env_numregistro,//nro registro
+                        'observacion' => $pedido->env_rotulo,//rotulo
+                        'motorizado_id' => $request->motorizado_id,
+                        'identificador' => $cliente->user->identificador,
+                    ];
+                })
+                    ->groupBy(fn($data) => join('_', [$data['distribucion'], $data['direccion']]))
+                    ->values();
+                foreach ($dividir as $items) {
+                    $citems = collect($items);
+                    $pedidos = $citems->pluck('pedido_id');
+                    $groupData = $citems->first();
+                    if ($request->get("visualizar") == '1') {
+                        $groupData['codigos'] = $citems->pluck('pedido_codigo')->join(', ');
+                        $groupData['producto'] = $citems->pluck('pedido_nombre_empresa')->join(', ');
+                        $grupos[] = $groupData;
+                    } else {
+                        $grupos[] = createDireccionGrupo($grupo, $groupData, $pedidos)->refresh();
+                    }
+                }
             }
         }
         return $grupos;
@@ -271,7 +336,7 @@ class DistribucionController extends Controller
             $grupoPedido = GrupoPedido::createGroupByPedido($pedido, true, true);
         }
         DB::commit();
-        $grupo=$grupo->refresh()->load(['pedidos']);
+        $grupo = $grupo->refresh()->load(['pedidos']);
         $grupo->codigos = $grupo->pedidos
             ->pluck('codigo')
             ->sort()
