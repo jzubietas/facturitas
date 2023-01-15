@@ -2123,7 +2123,7 @@ class EnvioController extends Controller
         $pedido->update([
             //'envio' => '1',
             'estado_sinconsobre'=>'1',
-            'fecha_envio_atendido_op'=>Carbon::now();
+            'fecha_envio_atendido_op'=>Carbon::now(),
             'condicion_envio' => Pedido::ENVIADO_OPE,
             'condicion_envio_code' => Pedido::ENVIADO_OPE_INT,
             'modificador' => 'USER' . Auth::user()->id
