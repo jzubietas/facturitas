@@ -1966,7 +1966,7 @@ class EnvioController extends Controller
                         'env_tracking' => $request->tracking,
                         'env_referencia' => '',
                         'env_numregistro' => $request->numregistro,
-                        'env_rotulo' => $file_name,
+                        'env_rotulo' => $request->file('rotulo')->store('entregas','pstorage'),
                         'env_observacion' => '',
                         'env_importe' => $request->importe,
                     ]);
