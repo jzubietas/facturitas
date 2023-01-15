@@ -390,12 +390,14 @@
             })*/
 
             $(document).on("change","#panio",function(){
+                //obtengo banca
+                let ptipo_banca=$.trim($("#ptipo_banca").val().split('-')[0]);
+                //obtengo anio
                 let anno_filter=parseInt($(this).val());
                 console.log(anno_filter)
-                let ptipo_banca=$.trim($("#ptipo_banca").val().split('-')[0]);
+
                 if (ptipo_banca==''){
                 }else{
-                    //console.log(ptipo_banca);
                     if(ptipo_banca=='FISICO')
                     {
                         if(  anno_filter=={{$anno_selected}}   ||  anno_filter==({{$anno_selected}}-1) )
@@ -403,20 +405,37 @@
                         }else{
                             Swal.fire(
                                 'Error',
-                                'No puede seleccionar este año, elija otra opcion por favor',
+                                'No puede seleccionar este año para banca fisica, elija otra opcion por favor',
                                 'warning'
                             );
                         }
 
+                    }else if(ptipo_banca=='ELECTRONICA')
+                    {
+                        if(anno_filter=={{$anno_selected}})
+                        {
+
+                        }else{
+                            //2023= 2023
+                            Swal.fire(
+                                'Error',
+                                'No puede seleccionar este año para banca eletronica',
+                                'warning'
+                            );
+                            $("#panio").val({{$anno_selected}})
+                        }
                     }
                 }
 
             })
 
             $(document).on("change","#ptipo_banca",function(){
+                //obtengo banca
+                let ptipo_banca=$.trim($(this).val().split('-')[0]);
+                //obtengo anio
                 let anno_filter=parseInt($("#panio").val());
                 console.log(anno_filter)
-                let ptipo_banca=$.trim($(this).val().split('-')[0]);
+
                 if (ptipo_banca==''){
                 }else{
                     if(ptipo_banca=='FISICO')
@@ -426,15 +445,27 @@
                         }else{
                             Swal.fire(
                                 'Error',
-                                'No puede seleccionar este año, elija otra opcion por favor',
+                                'No puede seleccionar este año para banca fisica, elija otra opcion por favor',
                                 'warning'
                             );
-                            $(this).val('')
                         }
 
+                    }else if(ptipo_banca=='ELECTRONICA')
+                    {
+                        if(anno_filter=={{$anno_selected}})
+                        {
+
+                        }else{
+                            //2023= 2023
+                            Swal.fire(
+                                'Error',
+                                'No puede seleccionar este año para banca eletronica',
+                                'warning'
+                            );
+                            $("#panio").val({{$anno_selected}})
+                        }
                     }
                 }
-
             })
 
             $("#previsualizar_modal_pedido").on('show.bs.modal',function () {
