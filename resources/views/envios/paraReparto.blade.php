@@ -164,6 +164,7 @@
             color: green !important;
         }
     </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
 @stop
 
 @section('js')
@@ -177,8 +178,7 @@
     <script src="https://cdn.datatables.net/plug-ins/1.11.4/dataRender/datetime.js"></script>
     <script
         src="https://gyrocode.github.io/jquery-datatables-checkboxes/1.2.12/js/dataTables.checkboxes.min.js"></script>
-
-    {{--<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.21.0/moment.min.js"></script>--}}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
     <script>
 
         moment().format();
@@ -215,9 +215,9 @@
             });
             var tabla_pedidos;
             $(document).on("click", "#desvincularConfirmar", function (event) {
-                if(!tabla_pedidos) {
+                if (!tabla_pedidos) {
                     console.log("var tabla_pedido is null")
-                    return ;
+                    return;
                 }
                 var rows_selected = tabla_pedidos.column(0).checkboxes.selected();
                 var $direcciongrupo = $("#direcciongrupo").val();
@@ -272,7 +272,7 @@
                 var direcciongrupo = button.data('desvincular');
                 $("#direcciongrupo").val(direcciongrupo);
                 //$("#observaciongrupo").val(observaciongrupo);
-                if(tabla_pedidos!=null) {
+                if (tabla_pedidos != null) {
                     tabla_pedidos.destroy();
                 }
 
@@ -313,95 +313,6 @@
                     },
                 });
 
-            });
-
-            $('#modal-confirmacion').on('show.bs.modal', function (event) {
-                var button = $(event.relatedTarget)
-                var idunico = button.data('ide')
-                var codigos = button.data('codigos')
-                var zona = button.data('distribucion')
-
-                $('.titulo-confirmacion').html("Enviar sobre a Motorizado");
-
-                $("#hiddenCodigo").val(idunico)
-                $("#modal-confirmacion .textcode").html(codigos);
-                $("#modal-confirmacion .textzone").html(zona);
-
-                $('#fecha_salida').on('change',function(){
-
-                    var dateA = moment($(this).val()).format("YYYY-MM-DD");
-                    var dateB = moment().format("YYYY-MM-DD");
-
-                    console.log('Difference is ', dateA.diff(dateB), 'milliseconds');
-
-
-                    fecha_input = moment($(this).val()).format("DD-MM-YYYY");
-                    console.log(fecha_input);
-                    let fecha_actual=moment().format("DD-MM-YYYY");
-                    console.log(fecha_actual);
-
-
-
-
-
-
-                    var days = workingDays('05/03/2018', '13/03/2018');
-
-
-                    console.log(fecha_actual);
-                    console.log(moment().format("YYYY-MM-DD"));
-
-
-                    console.log(days);
-
-
-                    console.log(fecha_actual);
-                    console.log(new Date().getTime());
-
-                    if(new Date(fecha_actual).getTime() > new Date().getTime())
-                    {
-                        $('#mensaje_fecha_salida').html('<p class="bagde badge-warning p-8 font-weight-bold mt-16 br-8"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> La fecha indicada es mayor a la fecha actual.</p>');
-                        console.log("La fecha es mayor a la actual");
-                    }else if (new Date(fecha_actual).getTime() < new Date().getTime()){
-                        $('#mensaje_fecha_salida').html('<p class="bagde badge-warning p-8 font-weight-bold mt-16 br-8"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> La fecha indicada es menor a la fecha actual.</p>');
-                        console.log("La fecha es menor a la actual");
-                    }else if (new Date(fecha_actual).getTime() == new Date().getTime()){
-                        $('#mensaje_fecha_salida').html('');
-                    }
-                });
-
-            });
-
-            $(document).on("submit", "#formulario_confirmacion", function (evento) {
-                evento.preventDefault();
-                //validacion
-
-
-                var fd2 = new FormData();
-                fd2.append('hiddenCodigo', $('#hiddenCodigo').val());
-                fd2.append('fecha_salida', $('#fecha_salida').val());
-
-                if ($('#fecha_salida').val() == '') {
-                    Swal.fire(
-                        'Error',
-                        'Complete fecha de salida para continuar',
-                        'warning'
-                    )
-                    return false;
-                }
-
-                $.ajax({
-                    data: fd2,
-                    processData: false,
-                    contentType: false,
-                    type: 'POST',
-                    url: "{{ route('operaciones.confirmar') }}",
-                    success: function (data) {
-                        $("#modal-confirmacion").modal("hide");
-                        $('#tablaPrincipal').DataTable().ajax.reload();
-
-                    }
-                });
             });
 
 
@@ -562,6 +473,89 @@
                     }
                 },
                 rowCallback: function (row, data, index) {
+                    if (data.cambio_direccion_at != null) {
+                        $('td', row).css('background', 'rgba(17,129,255,0.35)')
+                    }
+                    $("[data-toggle=jqconfirm]", row).click(function (e) {
+                        e.preventDefault()
+                        $.confirm({
+                            type: 'green',
+                            title: 'Enviar sobre a Motorizado',
+                            columnClass: 'large',
+                            content: `<div>
+                <div class="row">
+                  <div class="col-12">
+                    <p>Esta seguro que desea enviar el sobre <strong>${data.codigos}</strong> a Motorizados del <strong class="textzone">${data.distribucion}</strong></p>
+                  </div>
+                  ${data.cambio_direccion_at != null?`<div class="col-12">
+                    <p class="alert alert-warning"><b>Datos de la dirección fueron modificados, ¿desea continuar?.</b><br> En caso contrario cierre esta ventana y haga click en el boton <b>Retornar a sobres con dirección</b></p>
+                  </div>`:''}
+                </div>
+
+                <div class="row">
+                  <div class="col">
+                      <label for="fecha_salida">Fecha de ruta</label>
+                      <input class="form-control fecha_salida" id="fecha_salida" name="fecha_salida" type="date" value="{{now()->format('Y-m-d')}}">
+                      <p class="mensaje_fecha_salida">
+
+                      </p>
+                  </div>
+                </div>
+
+              </div>`,
+                            buttons: {
+                                cerrar: {
+                                    btnClass:'btn-dark'
+                                },
+                                confirmar: {
+                                    btnClass:'btn-success',
+                                    action: function () {
+                                        const self = this;
+                                        var fd2 = new FormData();
+                                        const fecha=self.$content.find('input.fecha_salida').val();
+                                        fd2.append('hiddenCodigo', data.id);
+                                        fd2.append('fecha_salida', fecha);
+
+                                        if (!fecha) {
+                                            Swal.fire(
+                                                'Error',
+                                                'Complete fecha de salida para continuar',
+                                                'warning'
+                                            )
+                                            return false;
+                                        }
+                                        self.showLoading(true)
+                                        $.ajax({
+                                            data: fd2,
+                                            processData: false,
+                                            contentType: false,
+                                            type: 'POST',
+                                            url: "{{ route('operaciones.confirmar') }}",
+                                        }).done(function () {
+                                            self.close()
+                                            $('#tablaPrincipal').DataTable().draw(false);
+                                        }).always(function () {
+                                            self.hideLoading(true)
+                                        });
+                                    }
+                                }
+                            },
+                            onContentReady: function () {
+                                const self = this;
+                                const $content = this.$content;
+                                $content.find('input.fecha_salida').on('change', function () {
+                                    let fecha_actual = moment();
+                                    if (fecha_actual.valueOf() > new Date().getTime()) {
+                                        $content.find('.mensaje_fecha_salida').html('<p class="bagde badge-warning p-8 font-weight-bold mt-16 br-8"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> La fecha indicada es mayor a la fecha actual.</p>');
+                                    } else if (fecha_actual.valueOf() < new Date().getTime()) {
+                                        $content.find('.mensaje_fecha_salida').html('<p class="bagde badge-warning p-8 font-weight-bold mt-16 br-8"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> La fecha indicada es menor a la fecha actual.</p>');
+                                    } else if (fecha_actual.valueOf() === new Date().getTime()) {
+                                        $content.find('.mensaje_fecha_salida').html('');
+                                    }
+                                });
+                            }
+                        })
+                    })
                     /*if (data.destino2 == 'PROVINCIA') {
                         $('td', row).css('color', 'red')
                     } else if (data.destino2 == 'LIMA') {

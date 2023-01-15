@@ -147,6 +147,7 @@ class DireccionGrupo extends Model
             }
         }
         switch ($grupo->condicion_envio_code) {
+            case Pedido::REPARTO_COURIER_INT:
             case Pedido::ENVIO_COURIER_JEFE_OPE_INT:
             case Pedido::ENVIO_MOTORIZADO_COURIER_INT:
                 if (\Str::upper($data['zona']) != 'OLVA') {
