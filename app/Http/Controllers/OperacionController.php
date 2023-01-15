@@ -321,7 +321,7 @@ class OperacionController extends Controller
 
                 $btn[] = '<div class="col-6 d-flex justify-content-start text-left m-0 p-0">';
                 $btn[] = '<ul class="text-left list-inline text-left" aria-labelledby="dropdownMenuButton" >';
-                $btn[] = '<a href="' . route("operaciones.showatender", $pedido->id) . '" class="btn-sm dropdown-item" ><i class="fas fa-eye text-success"></i> Ver</a>';
+                //$btn[] = '<a href="' . route("operaciones.showatender", $pedido->id) . '" class="btn-sm dropdown-item" ><i class="fas fa-eye text-success"></i> Ver</a>';
                 if (\auth()->user()->can('operacion.editatender')) {
                     $btn[] = '<a href="" class="btn-sm dropdown-item" data-target="#modal-editar-atencion" data-adj=' . $pedido->da_confirmar_descarga . ' data-atencion=' . $pedido->id . ' data-toggle="modal" ><i class="fa fa-paperclip text-primary" aria-hidden="true"></i> Editar Adjuntos</a>';
                 }
@@ -410,7 +410,7 @@ class OperacionController extends Controller
             )
             ->where('pedidos.estado', '1')
             ->where('dp.estado', '1')
-            ->where('pedidos.condicion_code', Pedido::ATENDIDO_INT)
+            //->where('pedidos.condicion_code', Pedido::ATENDIDO_INT)
             ->whereIn('pedidos.condicion_envio_code', [Pedido::ENVIADO_OPE_INT, Pedido::ENTREGADO_SIN_SOBRE_OPE_INT, Pedido::RECIBIDO_JEFE_OPE_INT]);
 
         //->whereIn('pedidos.envio', ['0'])
@@ -433,8 +433,8 @@ class OperacionController extends Controller
             $pedidos->WhereIn('u.identificador', $asesores);
 
 
-        } else if (Auth::user()->rol == "Jefe de operaciones") {
-            $operarios = User::where('users.rol', 'Operario')
+        } else if (Auth::user()->rol == User::ROL_JEFE_OPERARIO) {
+            /*$operarios = User::where('users.rol', 'Operario')
                 ->where('users.estado', '1')
                 ->where('users.jefe', Auth::user()->id)
                 ->select(
@@ -452,9 +452,9 @@ class OperacionController extends Controller
                         ->select(
                             DB::raw("users.identificador as identificador")
                         ) )*/
-                ->pluck('users.identificador');
+                /*->pluck('users.identificador');*/
 
-            $pedidos->WhereIn('u.identificador', $asesores);
+            //$pedidos->WhereIn('u.identificador', $asesores);
         }
         return Datatables::of(DB::table($pedidos))
             ->addIndexColumn()
@@ -544,6 +544,7 @@ class OperacionController extends Controller
                     DB::raw("  (CASE  when pedidos.destino='LIMA' then (select gg.created_at from direccion_pedidos gg where gg.pedido_id=pedidos.id limit 1) " .
                         "when pedidos.destino='PROVINCIA' then (select g.created_at from gasto_pedidos g where g.pedido_id=pedidos.id limit 1) " .
                         "else '' end) as fecha_envio_sobre "),
+                    DB::raw(" (select count(ii.id) from imagen_atencions ii where ii.pedido_id=pedidos.id and ii.estado=1) as adjuntos "),
                 ]
             )
             ->where('pedidos.estado', '1')
@@ -646,6 +647,12 @@ class OperacionController extends Controller
                 if (\auth()->user()->can('operacion.PDF')) {
                     $btn[] = '<a href="' . route('pedidosPDF', $pedido->id) . '" class="m-1 btn btn-primary btn-sm" target="_blank"><i class="fa fa-file-pdf"></i> PDF</a><br>';
                 }
+
+                if(\auth()->user()->rol==User::ROL_ADMIN || \auth()->user()->rol==User::ROL_JEFE_OPERARIO)
+                if($pedido->condicion_envio=='ENTREGADO SIN SOBRE - CLIENTE'){
+                    $btn[] = '<a href="" class="btn-sm dropdown-item" data-target="#modal-revertir-ajefeop" data-adjuntos="' . $pedido->adjuntos . '" data-revertir=' . $pedido->id . ' data-codigo=' . $pedido->codigos . ' data-toggle="modal" ><i class="fa fa-undo text-danger" aria-hidden="true"></i> Revertir a Jefe de Operaciones</a>';
+                }
+
                 /*if(\auth()->user()->can('operacion.enviar')){
                     if (Auth::user()->rol == "Jefe de operaciones" || Auth::user()->rol == "Administrador") {
                         $btn[] = '<a class="btn btn-success btn-sm" href="" data-target="#modal-envio" data-envio=' . $pedido->id . ' data-toggle="modal" >Enviar</a><br>';
@@ -1595,6 +1602,42 @@ class OperacionController extends Controller
         PedidoMovimientoEstado::create([
             'pedido' => $request->hiddenRevertirpedidoporatender,
             'condicion_envio_code' => Pedido::POR_ATENDER_OPE_INT,
+            'notificado' => 0
+        ]);
+
+        return response()->json(['html' => $pedido->id]);
+
+    }
+
+    public function Revertirajefeop(Request $request)
+    {
+        $pedido = Pedido::where("id", $request->ajefeoperevertir)->first();
+        $detalle_pedidos = DetallePedido::where('pedido_id', $pedido->id)->first();
+        $fecha = Carbon::now();
+
+        $pedido->update([
+            //'envio' => '0',
+            'condicion_envio' => Pedido::ENVIADO_OPE,
+            'condicion_envio_code' => Pedido::ENVIADO_OPE_INT,
+            'condicion' => Pedido::ENVIADO_OPE,
+            'condicion_code' => Pedido::ENVIADO_OPE_INT,
+            'modificador' => 'USER' . Auth::user()->id
+        ]);
+
+        $pedido->detallePedidos()->activo()->update([
+            "cant_compro" => 0
+        ]);
+        //liberar adjuntos
+        $imagenesatencion_ = ImagenAtencion::where("pedido_id", $request->ajefeoperevertir);//->where("confirm", '0');
+        $imagenesatencion_->update([
+            'estado' => '0'
+        ]);
+
+        PedidoMovimientoEstado::where('pedido', $request->ajefeoperevertir)->delete();
+
+        PedidoMovimientoEstado::create([
+            'pedido' => $request->ajefeoperevertir,
+            'condicion_envio_code' => Pedido::ENVIADO_OPE_INT,
             'notificado' => 0
         ]);
 

@@ -72,6 +72,7 @@
             </table>
 
             @include('pedidos.modal.revertirid');
+            @include('operaciones.modal.revertirajefeop')
         </div>
     </div>
 @stop
@@ -216,6 +217,38 @@
                 $(".textcode").html(idunico);
                 $("#motivo").val('');
                 $("#responsable").val(idresponsable);
+            });
+
+            $('#modal-revertir-ajefeop').on('show.bs.modal', function (event) {
+                //cuando abre el form de anular pedido
+                var button = $(event.relatedTarget)
+                var idunico = button.data('revertir')//
+                var idcodigo = button.data('codigo')
+                var idadjuntos = button.data('adjuntos')
+                $(".textcode").html(idcodigo);
+                $(".textcantadjunto").html(idadjuntos);
+                $("#ajefeoperevertir").val(idunico);
+            });
+
+            $(document).on("submit", "#formulariorevertirajefeop", function (evento) {
+                evento.preventDefault();
+                var fd = new FormData();
+                fd.append('ajefeoperevertir', $("#ajefeoperevertir").val());
+
+                $.ajax({
+                    data: fd,
+                    processData: false,
+                    contentType: false,
+                    type: 'POST',
+                    url: "{{ route('operaciones.revertirajefeop') }}",
+                    success: function (data) {
+                        console.log(data);
+                        $("#modal-revertir-ajefeop .textcode").text('');
+                        $("#modal-revertir-ajefeop .textcantadjunto").text('');
+                        $("#modal-revertir-ajefeop").modal("hide");
+                        $('#tablaPrincipal').DataTable().ajax.reload();
+                    }
+                });
             });
 
             $('#tablaPrincipal').DataTable({
