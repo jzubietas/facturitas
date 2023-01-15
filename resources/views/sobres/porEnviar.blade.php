@@ -471,56 +471,59 @@
                 }
             });
 
-            $(document).on('change',"#tracking, #numregistro",function(event){
+            $(document).on('change keyup',"#tracking, #numregistro",function(event){
 
                 let id_element=event.target.id;
+                console.log("aaaa")
                 let val_element=$(this).val();
                 switch(id_element)
                 {
                     case 'tracking':
-                        let ntrack=val_element.lenght;
+                        let ntrack=val_element.length;
                         console.log("n "+ntrack)
-                        if(ntrack<10)
+                        if(ntrack>9)
                         {
-                            Swal.fire(
-                                'Error',
-                                'Ingrese numero de tracking correcto',
-                                'warning'
-                            )
-                            return false;
+                            $.ajax({
+                                data: {'element':id_element,'value':val_element,'from':'direcccionenvio'},
+                                type: 'POST',
+                                url: "{{ route('envios.validacion_direccionenvio') }}",
+                                success: function (data) {
+                                    console.log(data);
+                                    if(data.response=='1'){
+                                        Swal.fire(
+                                            'Error',
+                                            'Informacion repetida con el campo '+data.element,
+                                            'warning'
+                                        )
+                                    }
+                                }
+                            });
                         }
                         break;
                     case 'numregistro':
-                        let nreg=val_element.lenght;
+                        let nreg=val_element.length;
                         console.log("n2 "+nreg)
-                        if(nreg<12)
+                        if(nreg>11)
                         {
-                            Swal.fire(
-                                'Error',
-                                'Ingrese numero de registro correcto',
-                                'warning'
-                            )
-                            return false;
+                            $.ajax({
+                                data: {'element':id_element,'value':val_element,'from':'direcccionenvio'},
+                                type: 'POST',
+                                url: "{{ route('envios.validacion_direccionenvio') }}",
+                                success: function (data) {
+                                    console.log(data);
+                                    if(data.response=='1'){
+                                        Swal.fire(
+                                            'Error',
+                                            'Informacion repetida con el campo '+data.element,
+                                            'warning'
+                                        )
+                                    }
+                                }
+                            });
                         }
                         break;
                 }
-                $.ajax({
-                    data: {'element':id_element,'value':val_element,'from':'direcccionenvio'},
-                    type: 'POST',
-                    url: "{{ route('envios.validacion_direccionenvio') }}",
-                    success: function (data) {
-                        console.log(data);
-                        if(data.response=='1'){
-                            Swal.fire(
-                                'Error',
-                                'Informacion repetida con el campo '+data.element,
-                                'warning'
-                            )
-                        }
-                        //$("#modal-direccion").modal("hide");
-                        //$("#tablaPrincipal").DataTable().ajax.reload();
-                    }
-                });
+
 
             });
 
