@@ -312,6 +312,15 @@ class PedidoController extends Controller
                                     $btn[] = '<a style="font-size:11px" href="" class="m-0 p-2 btn-sm dropdown-item text-wrap" data-target="#modal-delete" data-toggle="modal" data-delete="' . $pedido->id . '" data-codigo=' . $pedido->codigo . ' data-responsable="' . $miidentificador . '"><i class="fas fa-trash-alt text-danger"></i> Anular</a>';
                                 }
                             }
+                        }else{
+                            if( auth()->user()->rol==User::ROL_ADMIN)
+                            {
+                                if ($pedido->condicion_pa == 0)
+                                {
+                                    $btn[] = '<a style="font-size:11px" href="" class="m-0 p-2 btn-sm dropdown-item text-wrap" data-target="#modal-delete" data-toggle="modal" data-delete="' . $pedido->id . '" data-codigo=' . $pedido->codigo . ' data-responsable="' . $miidentificador . '"><i class="fas fa-trash-alt text-danger"></i> Anular</a>';
+                                }
+
+                            }
                         }
                     }
 
