@@ -178,8 +178,25 @@
     <script
         src="https://gyrocode.github.io/jquery-datatables-checkboxes/1.2.12/js/dataTables.checkboxes.min.js"></script>
 
+    {{--<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.21.0/moment.min.js"></script>--}}
     <script>
 
+        moment().format();
+
+        function workingDays(dateFrom, dateTo) {
+            var from = moment(dateFrom, 'DD/MM/YYY'),
+                to = moment(dateTo, 'DD/MM/YYY'),
+                days = 0;
+
+            while (!from.isAfter(to)) {
+                // Si no es sabado ni domingo
+                if (from.isoWeekday() !== 6 && from.isoWeekday() !== 7) {
+                    days++;
+                }
+                from.add(1, 'days');
+            }
+            return days;
+        }
 
         $(document).ready(function () {
 
@@ -311,7 +328,32 @@
                 $("#modal-confirmacion .textzone").html(zona);
 
                 $('#fecha_salida').on('change',function(){
-                    fecha_actual = $(this).val();
+
+                    var dateA = moment($(this).val()).format("YYYY-MM-DD");
+                    var dateB = moment().format("YYYY-MM-DD");
+
+                    console.log('Difference is ', dateA.diff(dateB), 'milliseconds');
+
+
+                    fecha_input = moment($(this).val()).format("DD-MM-YYYY");
+                    console.log(fecha_input);
+                    let fecha_actual=moment().format("DD-MM-YYYY");
+                    console.log(fecha_actual);
+
+
+
+
+
+
+                    var days = workingDays('05/03/2018', '13/03/2018');
+
+
+                    console.log(fecha_actual);
+                    console.log(moment().format("YYYY-MM-DD"));
+
+
+                    console.log(days);
+
 
                     console.log(fecha_actual);
                     console.log(new Date().getTime());
