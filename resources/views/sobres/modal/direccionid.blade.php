@@ -94,7 +94,7 @@
                                                     <i class="fa fa-user text-red" aria-hidden="true"></i>
                                                     <input type="hidden" name="direccion_id" id="direccion_id">
                                                     {!! Form::label('nombre', 'Nombre del contacto quien recibe') !!}
-                                                    {!! Form::text('nombre', null, ['class' => 'form-control', 'placeholder' => 'Nombre', 'required' => 'required']) !!}
+                                                    {!! Form::text('nombre', null, ['class' => 'form-control', 'placeholder' => 'Nombre', 'required' => 'required','autocomplete' => 'off']) !!}
                                                 </div>
 
 
@@ -110,19 +110,19 @@
                                                     <i class="fa fa-street-view text-red" aria-hidden="true"></i>
 
                                                     {!! Form::label('direccion', 'Direccion') !!}
-                                                    {!! Form::text('direccion', null, ['class' => 'form-control', 'placeholder' => 'Direccion', 'required' => 'required']) !!}
+                                                    {!! Form::text('direccion', null, ['class' => 'form-control', 'placeholder' => 'Direccion', 'required' => 'required','autocomplete' => 'off']) !!}
                                                 </div>
 
                                                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                                     <i class="fa fa-commenting-o text-red" aria-hidden="true"></i>
 
                                                     {!! Form::label('referencia', 'Referencia') !!}
-                                                    {!! Form::text('referencia', null, ['class' => 'form-control', 'placeholder' => 'Referencia', 'required' => 'required']) !!}
+                                                    {!! Form::text('referencia', null, ['class' => 'form-control', 'placeholder' => 'Referencia', 'required' => 'required','autocomplete' => 'off']) !!}
                                                 </div>
 
                                                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                                     {!! Form::label('observacion', 'Observacion') !!}
-                                                    {!! Form::text('observacion', null, ['class' => 'form-control', 'placeholder' => 'Observacion', 'required' => 'required']) !!}
+                                                    {!! Form::text('observacion', null, ['class' => 'form-control', 'placeholder' => 'Observacion', 'required' => 'required','autocomplete' => 'off']) !!}
                                                 </div>
 
                                                 {{--<button type="button" id="saveHistoricoLima" class="btn btn-danger btn-md"><i class="fa"></i>GRABA HISTORICO</button>--}}
@@ -180,7 +180,7 @@
 
                                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 d-none">
                                             {!! Form::label('oficina', 'Oficina') !!}
-                                            {!! Form::text('oficina', null, ['class' => 'form-control', 'placeholder' => 'Nombre', 'required' => 'required']) !!}
+                                            {!! Form::text('oficina', null, ['class' => 'form-control', 'placeholder' => 'Nombre', 'required' => 'required','autocomplete' => 'off']) !!}
                                         </div>
 
                                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 mt-20">
