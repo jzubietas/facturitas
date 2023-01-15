@@ -1255,6 +1255,7 @@
 
             $("#distrito").on('change', function(){
                 var distrito_seleccionado = $(this).val();
+                distrito_seleccionado=distrito_seleccionado.replace('+', ' ');
 
                 $.ajax({
                     data: {
