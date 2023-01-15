@@ -57,6 +57,7 @@
             <th scope="col">Dirección de envío</th>
             <th scope="col">Referencia</th>
             --}}
+            <th scope="col">Dias</th>
             <th scope="col">Estado de envio</th><!--ENTREGADO - RECIBIDO-->
             <th scope="col">Acciones</th>
           </tr>
@@ -183,7 +184,6 @@
       });
 
 
-
       $(document).on("submit", "#formulario", function (evento) {
         evento.preventDefault();
         var fd = new FormData();
@@ -226,7 +226,6 @@
         $("#modal-enviar .textcode").html(idunico);
 
       });
-
 
 
       $(document).on("change","#foto1",function(event){
@@ -312,7 +311,7 @@
         stateSave:true,
 		serverSide: true,
         searching: true,
-        "order": [[ 0, "desc" ]],
+        "order": [[ 3, "asc" ]],
         ajax: "{{ route('envios.sindirecciontabla') }}",
         createdRow: function( row, data, dataIndex){
         },
@@ -344,14 +343,13 @@
           {
             data: 'codigo',
             name: 'codigo',
-
           },
           {data: 'identificador', name: 'u.identificador', },
           {
             data: 'celular',
             name: 'c.celular',
             render: function ( data, type, row, meta ) {
-              return row.celulares+row.icelulares+'<br>'+row.nombres
+              return row.celular+'-'+row.icelular+'<br>'+row.nombres
             },
           },
           {
@@ -405,6 +403,7 @@
             }
           },
             */
+          {data: 'dias', name: 'fecha_recepcion_courier', },
           {data: 'condicion_envio', name: 'condicion_envio', },
           {
             data: 'action',

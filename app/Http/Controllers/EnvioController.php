@@ -240,6 +240,18 @@ class EnvioController extends Controller
                 $color = Pedido::getColorByCondicionEnvio($pedido->condicion_envio);
                 return '<span class="badge badge-success" style="background-color: ' . $color . '!important;">' . $pedido->condicion_envio . '</span>';
             })
+            ->editColumn('fecha_recepcion_courier', function ($pedido) {
+                if($pedido->fecha_recepcion_courier){
+                    return Carbon::parse($pedido->fecha_recepcion_courier)->format('d-m-Y h:i A');
+                }
+                return '--';
+            })
+            ->addColumn('dias', function ($pedido) {
+                if($pedido->fecha_recepcion_courier){
+                    return Carbon::parse($pedido->fecha_recepcion_courier)->diffInDays().' dias';
+                }
+                return '--';
+            })
             ->addColumn('action', function ($pedido) {
                 $btn = '';
 

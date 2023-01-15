@@ -115,6 +115,7 @@ class Pedido extends Model
         'fecha_anulacion_confirm',
         'fecha_anulacion_denegada',
         'cambio_direccion_at',
+        'fecha_recepcion_courier',
     ];
     protected $appends = [
         'condicion_envio_color'
