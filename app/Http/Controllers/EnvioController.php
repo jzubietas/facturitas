@@ -2818,8 +2818,9 @@ class EnvioController extends Controller
 
     public function VerificarZona(Request $request)
     {
-        $zona_distrito = Distrito::where('distrito', $request->distrito)
-            ->where('provincia', 'LIMA')
+        $search=str_replace('+',' ',$request->distrito);
+        $zona_distrito = Distrito::where('distrito', $search)
+            ->whereIn('provincia', ['LIMA','CALLAO'])
             ->first();
 
         if ($zona_distrito->zona == "OLVA") {
