@@ -337,6 +337,7 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     Route::post('operaciones.envioid', [EnvioController::class, 'Enviarid'])->name('operaciones.envioid');
     Route::post('operaciones.revertirenvioid', [OperacionController::class, 'Revertirenvio'])->name('operaciones.revertirenvioid');
     Route::post('operaciones.revertirenvioidporatender', [OperacionController::class, 'Revertirenvioporatender'])->name('operaciones.revertirenvioidporatender');
+    Route::post('operaciones.revertirajefeop', [OperacionController::class, 'Revertirajefeop'])->name('operaciones.revertirajefeop');
     Route::post('operaciones.sinenvioid', [EnvioController::class, 'SinEnviarid'])->name('operaciones.sinenvioid');
     Route::post('operaciones.revertirhaciaatendido', [OperacionController::class, 'Revertirhaciaatendido'])->name('operaciones.revertirhaciaatendido');
 

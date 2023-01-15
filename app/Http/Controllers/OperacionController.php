@@ -648,7 +648,7 @@ class OperacionController extends Controller
                 }
 
                 if($pedido->condicion_envio=='ENTREGADO SIN SOBRE - CLIENTE'){
-                    $btn[] = '<button data-toggle="tooltip" data-placement="top" title="El sobre ya ah sido recivido en courier, solo el courier tiene permiso de revertir" class="btn-sm dropdown-item" disabled><i class="fa fa-undo text-danger" aria-hidden="true"></i> Revertir a Jefe de Operaciones</button>';
+                    $btn[] = '<a href="" class="btn-sm dropdown-item" data-target="#modal-revertir-poratender" data-adjuntos="' . $pedido->adjuntos . '" data-revertir=' . $pedido->id . ' data-codigo=' . $pedido->codigos . ' data-toggle="modal" ><i class="fa fa-undo text-danger" aria-hidden="true"></i> Revertir a Jefe de Operaciones</a>';
                 }
 
                 /*if(\auth()->user()->can('operacion.enviar')){
@@ -1600,6 +1600,42 @@ class OperacionController extends Controller
         PedidoMovimientoEstado::create([
             'pedido' => $request->hiddenRevertirpedidoporatender,
             'condicion_envio_code' => Pedido::POR_ATENDER_OPE_INT,
+            'notificado' => 0
+        ]);
+
+        return response()->json(['html' => $pedido->id]);
+
+    }
+
+    public function Revertirajefeop(Request $request)
+    {
+        $pedido = Pedido::where("id", $request->ajefeoperevertir)->first();
+        $detalle_pedidos = DetallePedido::where('pedido_id', $pedido->id)->first();
+        $fecha = Carbon::now();
+
+        $pedido->update([
+            //'envio' => '0',
+            'condicion_envio' => Pedido::ENVIADO_OPE,
+            'condicion_envio_code' => Pedido::ENVIADO_OPE_INT,
+            'condicion' => Pedido::ENVIADO_OPE,
+            'condicion_code' => Pedido::ENVIADO_OPE_INT,
+            'modificador' => 'USER' . Auth::user()->id
+        ]);
+
+        $pedido->detallePedidos()->activo()->update([
+            "cant_compro" => 0
+        ]);
+        //liberar adjuntos
+        $imagenesatencion_ = ImagenAtencion::where("pedido_id", $request->ajefeoperevertir);//->where("confirm", '0');
+        $imagenesatencion_->update([
+            'estado' => '0'
+        ]);
+
+        PedidoMovimientoEstado::where('pedido', $request->ajefeoperevertir)->delete();
+
+        PedidoMovimientoEstado::create([
+            'pedido' => $request->ajefeoperevertir,
+            'condicion_envio_code' => Pedido::ENVIADO_OPE_INT,
             'notificado' => 0
         ]);
 
