@@ -632,6 +632,7 @@
                 let val_nombre = $("#nombre").val();
                 let val_contacto = $("#celular").val();
                 let val_direccion = $("#direccion").val();
+                console.log(val_direccion)
                 let val_referencia = $("#referencia").val();
                 let val_distrito = $("#distrito").val();
                 let val_observacion = $("#observacion").val();
@@ -659,6 +660,7 @@
                 } else {
 
                     if (combo_limaprovincia == "L") {
+                        console.log(combo_limaprovincia)
                         if (val_nombre == "") {
                             Swal.fire(
                                 'Error',
