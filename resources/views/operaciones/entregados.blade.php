@@ -15,9 +15,13 @@
     </div>
     @endcan --}}
     <div class="float-right btn-group dropleft">
-        <button type="button" class="btn btn-option" data-toggle="modal" data-target="#modal-escanear" data-backdrop="static" style="margin-right:16px;" aria-haspopup="true" aria-expanded="false">
-            <i class="fa fa-barcode" aria-hidden="true"></i> Escaneo Envio Courier
+        <button type="button" class="btn btn-option" data-accion="maria" data-toggle="modal" data-target="#modal-escanear" data-backdrop="static" style="margin-right:16px;" aria-haspopup="true" aria-expanded="false">
+            <i class="fa fa-barcode" aria-hidden="true"></i> RECEPCIONAR PEDIDOS
         </button>
+        <button type="button" class="btn btn-option" data-accion="courier" data-toggle="modal" data-target="#modal-escanear" data-backdrop="static" style="margin-right:16px;" aria-haspopup="true" aria-expanded="false">
+            <i class="fa fa-barcode" aria-hidden="true"></i> ENVIAR A COURIER
+        </button>
+
       <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         Exportar
       </button>
@@ -141,9 +145,16 @@
          * ESCANEAR PEDIDO
          */
 
-        $('#modal-escanear').on('shown.bs.modal', function () {
+        $('#modal-escanear').on('shown.bs.modal', function (event) {
+
+            var button = $(event.relatedTarget)
+            var accion = button.data('accion')
+            //$('#codigo_confirmar').data('action',accion);
+
+            $('#respuesta_barra').html("");
+
             $('#codigo_confirmar').focus();
-            $('#codigo_accion').val("jefe_op");
+            $('#codigo_accion').val(accion);
             $('#titulo-scan').html("Escanear para enviar a <span class='text-success'>Courier</span> | Confirmar <span class='text-success'>sobres sin envío</span>");
             console.log($('#codigo_accion').val());
             $('#modal-escanear').on('click', function(){
@@ -164,6 +175,10 @@
             var codigo_caturado = $(this).val();
             var codigo_mejorado = codigo_caturado.replace(/['']+/g, '-');
             var codigo_accion = $('#codigo_accion').val();
+
+            console.log(codigo_accion);
+            //var codigo_action = $(this).data('action');
+
             console.log("El codigo es: " + codigo_mejorado);
             /*************
              * Enviamos la orden al controlaor

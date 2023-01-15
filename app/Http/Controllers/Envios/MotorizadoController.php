@@ -25,7 +25,7 @@ class MotorizadoController extends Controller
 
         if ($request->fechaconsulta != null) {
             try {
-                $fecha_consulta = Carbon::createFromFormat('d/m/Y', $request->fechaconsulta);
+                $fecha_consulta = Carbon::parse($request->fechaconsulta);
             } catch (\Exception $ex) {
                 $fecha_consulta = now();
             }
@@ -107,7 +107,8 @@ class MotorizadoController extends Controller
                         case 'no_contesto':
                         case 'observado':
                             if ($pedido->estado = 1 && ($pedido->condicion_envio_code == Pedido::MOTORIZADO_INT || $pedido->condicion_envio_code == Pedido::CONFIRM_MOTORIZADO_INT)) {
-                                $btn .= '<li class="pt-8">
+                                if ($pedido->cambio_direccion_at == null) {
+                                    $btn .= '<li class="pt-8">
                                 <button class="btn btn-sm text-white btn-danger"
                                 data-jqconfirm="revertir"
                                 data-jqconfirm-id="' . $pedido->id . '"
@@ -117,6 +118,7 @@ class MotorizadoController extends Controller
                                     Revertir
                                 </button>
                             </li>';
+                                }
                             }
                             break;
                         default:
@@ -367,7 +369,8 @@ class MotorizadoController extends Controller
             //->where('direccion_grupos.estado', '1')
             //->activo()
             ->whereNotNull('direccion_grupos.fecha_salida')
-            ->where('direccion_grupos.motorizado_id', $request->motorizado_id);
+            ->where('direccion_grupos.motorizado_id', $request->motorizado_id)
+            ->orderBy('direccion_grupos.fecha_salida');
 
         return datatables()->query(DB::table($pedidos_observados))
             ->addColumn('ordering_data', function ($pedido) {
@@ -375,7 +378,7 @@ class MotorizadoController extends Controller
                     return 4;
                 } else if ($pedido->motorizado_status == Pedido::ESTADO_MOTORIZADO_OBSERVADO) {
                     return 1;
-                }  else if ($pedido->motorizado_status == Pedido::ESTADO_MOTORIZADO_NO_RECIBIDO) {
+                } else if ($pedido->motorizado_status == Pedido::ESTADO_MOTORIZADO_NO_RECIBIDO) {
                     return 3;
                 } else {
                     return 2;
@@ -474,7 +477,7 @@ class MotorizadoController extends Controller
         /**************
          * CREAMOS EL GRUPO TEMPORAL
          */
-        $pgroup = GrupoPedido::createGroupByPedido($pedido,false,true);
+        $pgroup = GrupoPedido::createGroupByPedido($pedido, false, true);
 
         if ($grupo != null) {
             if ($grupo->pedidos()->activo()->count() <= 1) {

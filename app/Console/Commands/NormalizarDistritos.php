@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Models\Distrito;
+use App\Models\Pedido;
 use Illuminate\Console\Command;
 
 class NormalizarDistritos extends Command
@@ -41,12 +42,12 @@ class NormalizarDistritos extends Command
         Distrito::query()
             ->whereIn('distrito', [
                 'ANCON',
-               // 'CALLAO - MI PERU',
+                // 'CALLAO - MI PERU',
                 'CARABAYLLO',
                 'COMAS',
                 'COMAS - COLLIQUE',
                 'INDEPENDENCIA',
-               // 'SANTA ROSA',
+                // 'SANTA ROSA',
                 'VENTANILLA',
                 'SAN MARTIN DE PORRES',
             ])
@@ -60,23 +61,50 @@ class NormalizarDistritos extends Command
             ])
             ->delete();
 
-        Distrito::query()->create([
+        Distrito::query()->updateOrCreate([
             'distrito' => 'LURIN',
             'zona' => 'SUR',
             'provincia' => 'LIMA',
         ]);
 
-        Distrito::query()->create([
+        Distrito::query()->updateOrCreate([
             'distrito' => 'PACHACAMAC',
             'zona' => 'SUR',
             'provincia' => 'LIMA',
         ]);
-        Distrito::query()->create([
+        Distrito::query()->updateOrCreate([
             'distrito' => 'MANCHAY',
             'zona' => 'SUR',
             'provincia' => 'LIMA',
         ]);
-
+        $distritosOlva = Distrito::query()->where('zona', 'OLVA')->pluck('distrito');
+        Pedido::query()
+            ->whereIn('env_distrito', $distritosOlva)
+            ->update([
+                'env_nombre_cliente_recibe' => 'OLVA CURRIER',
+                'env_celular_cliente_recibe' => '--',
+                'env_zona' => 'OLVA',
+                'env_direccion' => 'OLVA',
+                'env_distrito' => 'LOS OLIVOS',
+            ]);
+        Pedido::query()
+            ->where('env_nombre_cliente_recibe','like','%OLVA%')
+            ->update([
+                'env_nombre_cliente_recibe' => 'OLVA CURRIER',
+                'env_celular_cliente_recibe' => '--',
+                'env_zona' => 'OLVA',
+                'env_direccion' => 'OLVA',
+                'env_distrito' => 'LOS OLIVOS',
+            ]);
+        Pedido::query()
+            ->where('destino','=','PROVINCIA')
+            ->update([
+                'env_nombre_cliente_recibe' => 'OLVA CURRIER',
+                'env_celular_cliente_recibe' => '--',
+                'env_zona' => 'OLVA',
+                'env_direccion' => 'OLVA',
+                'env_distrito' => 'LOS OLIVOS',
+            ]);
         return 0;
     }
 }

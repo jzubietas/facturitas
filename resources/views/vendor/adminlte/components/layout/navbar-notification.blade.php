@@ -58,6 +58,22 @@
                         parent.append('<i class="'+dotClass.split('.').join(' ').trim()+'">'+value+'</i>');
                     }
                 }
+
+                function insertIconMenu(child,dotClass,value) {
+                    var parent= $(child).parent();
+                    var epa = parent.find(dotClass);
+
+                    $('.warning').remove();
+
+                    if(epa.length>0){
+                        epa.html(value);
+                    }else{
+                        parent.append('<i class="'+value+'"></i>');
+                    }
+
+
+                }
+
                 let updateNotification = (nLink) => {
                     // Make an ajax call to the configured url. The response should be
                     // an object with the new data. The supported properties are:
@@ -78,9 +94,11 @@
 
                             insertDotMenu("i.dot_contador_en_motorizados_count",'.dot-notify.noti-side',data.contador_en_motorizados_count)
                             insertDotMenu("i.dot_contador_en_motorizados_confirmar_count",'.dot-notify.noti-side',data.contador_en_motorizados_confirmar_count)
+                            insertIconMenu("i.dot_contador_sobres_devueltos",'.dot-notify.noti-side',data.contador_sobres_devueltos)
+                            console.log(data.contador_sobres_devueltos);
                             nLink.update(data);
 
-                            $("#alert-authorization").html(data.authorization_courier);
+
                         })
 
 

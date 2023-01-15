@@ -54,8 +54,9 @@ class MotorizadoAutoNoRecibido extends Command
             ->get();
 
         foreach ($grupos as $grupo) {
+            $motorizado=$grupo->motorizado;
             $grupo->update([
-                'motorizado_sustento_text' => 'Marcado como no recibido de forma automatica por el sistema, ya que no se tomo acción al terminar el dia',
+                'motorizado_sustento_text' => 'Este pedido fue Devuelto automáticamente por el sistema ya que no fue Recibido por el motorizado '.optional($motorizado)->zona,
                 'motorizado_status' => Pedido::ESTADO_MOTORIZADO_NO_RECIBIDO
             ]);
         }
