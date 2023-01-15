@@ -690,7 +690,7 @@
                                 'warning'
                             )
                             return;
-                        } else if (val_distrito == "") {
+                        } else if (val_distrito == "" || val_distrito== null) {
                             Swal.fire(
                                 'Error',
                                 'Debe seleccionar un distrito',
