@@ -52,9 +52,11 @@
             <th scope="col">Cliente</th>
             <th scope="col">Fecha de Recepcion Courier</th>
             <th scope="col">Razón social</th>
+            {{--
             <th scope="col">Destino</th>
             <th scope="col">Dirección de envío</th>
             <th scope="col">Referencia</th>
+            --}}
             <th scope="col">Estado de envio</th><!--ENTREGADO - RECIBIDO-->
             <th scope="col">Acciones</th>
           </tr>
@@ -368,6 +370,7 @@
               }
             }
           },
+          /*
           {data: 'env_destino', name: 'env_destino', },
           {
             data:'env_direccion',
@@ -401,6 +404,7 @@
 
             }
           },
+            */
           {data: 'condicion_envio', name: 'condicion_envio', },
           {
             data: 'action',
