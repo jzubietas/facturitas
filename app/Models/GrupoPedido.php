@@ -46,6 +46,7 @@ class GrupoPedido extends Model
                 $pedido->update([
                     'condicion_envio_code' => Pedido::RECEPCION_COURIER_INT,
                     'condicion_envio' => Pedido::RECEPCION_COURIER,
+                    'condicion_envio_at'=>now(),
                     'estado_sobre' => 1,
                 ]);
             }

@@ -51,6 +51,7 @@ class MigrateCondicionEnvioGrupoPedido extends Command
                     ->update([
                         'condicion_envio_code' => $grupo->condicion_envio_code,
                         'condicion_envio' => $grupo->condicion_envio,
+                        'condicion_envio_at'=>now(),
                     ]);
                 $this->progress->advance();
             }

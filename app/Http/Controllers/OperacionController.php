@@ -816,6 +816,7 @@ class OperacionController extends Controller
             'condicion_code' => $request->condicion,
             'condicion_envio' => Pedido::$estadosCondicionEnvioCode[$request->condicion],
             'condicion_envio_code' => $request->condicion,
+            'condicion_envio_at'=>now(),
             'sustento_adjunto' => $request->sustento,
             'modificador' => 'USER' . Auth::user()->id,
             'da_confirmar_descarga' => 0,
@@ -1548,6 +1549,7 @@ class OperacionController extends Controller
             'envio' => '0',
             'condicion_envio' => Pedido::ATENDIDO_OPE,
             'condicion_envio_code' => Pedido::ATENDIDO_OPE_INT,
+            'condicion_envio_at'=>now(),
             'modificador' => 'USER' . Auth::user()->id,
             'estado_sobre' => '0',
             'destino' => '',
@@ -1583,6 +1585,7 @@ class OperacionController extends Controller
             'envio' => '0',
             'condicion_envio' => Pedido::POR_ATENDER_OPE,
             'condicion_envio_code' => Pedido::POR_ATENDER_OPE_INT,
+            'condicion_envio_at'=>now(),
             'condicion' => Pedido::POR_ATENDER_OPE,
             'condicion_code' => Pedido::POR_ATENDER_OPE_INT,
             'modificador' => 'USER' . Auth::user()->id
@@ -1619,6 +1622,7 @@ class OperacionController extends Controller
             //'envio' => '0',
             'condicion_envio' => Pedido::ENVIADO_OPE,
             'condicion_envio_code' => Pedido::ENVIADO_OPE_INT,
+            'condicion_envio_at'=>now(),
             'condicion' => Pedido::ENVIADO_OPE,
             'condicion_code' => Pedido::ENVIADO_OPE_INT,
             'modificador' => 'USER' . Auth::user()->id
