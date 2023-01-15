@@ -385,7 +385,6 @@
                 console.log(file);
                 var reader = new FileReader();
                 reader.onload = (event) => {
-
                     pdfjsLib.getDocument(event.target.result).then((pdf) => {
                         $("#my_pdf_viewer").removeClass("d-none");
                         //cargar frame
@@ -413,7 +412,6 @@
 
                 };
                 reader.readAsDataURL(file);
-
             });
 
             window.render = function () {
@@ -1396,6 +1394,11 @@
                         'targets': [0], /* column index */
                         'orderable': false, /* true or false */
                     }],
+                    rowCallback: function (row, data, index) {
+                        if(data.da_confirmar_descarga!='1') {
+                            $('input[type=checkbox]', row).attr('disabled','disabled')
+                        }
+                    },
                     columns: [
                         {
                             "data": "id",
