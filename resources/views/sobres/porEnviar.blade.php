@@ -560,6 +560,12 @@
 
                         //$(".contenedor-formulario").removeClass("col-4");
                         //$(".contenedor-pdf").removeClass("col-4");
+                        //limpiar campos
+                        $('#nombre').val('')
+                        $('#celular').val('')
+                        $('#direccion').val('')
+                        $('#referencia').val('')
+                        $('#observacion').val('')
 
                         break;
                     case 'P':
@@ -584,6 +590,11 @@
                         //$("#tablaPrincipalpedidosagregar").columns.adjust().draw();
 
                         break;
+                        $('#numregistro').val('')
+                        $('#tracking').val('')
+                        $('#importe').val('')
+                        $('#rotulo').val('')
+
                     default:
                         if (!$(".lima").hasClass("d-none")) {
                             $(".lima").addClass("d-none");
