@@ -646,6 +646,11 @@ class OperacionController extends Controller
                 if (\auth()->user()->can('operacion.PDF')) {
                     $btn[] = '<a href="' . route('pedidosPDF', $pedido->id) . '" class="m-1 btn btn-primary btn-sm" target="_blank"><i class="fa fa-file-pdf"></i> PDF</a><br>';
                 }
+
+                if($pedido->condicion_envio=='ENTREGADO SIN SOBRE - CLIENTE'){
+                    $btn[] = '<button data-toggle="tooltip" data-placement="top" title="El sobre ya ah sido recivido en courier, solo el courier tiene permiso de revertir" class="btn-sm dropdown-item" disabled><i class="fa fa-undo text-danger" aria-hidden="true"></i> Revertir a Jefe de Operaciones</button>';
+                }
+
                 /*if(\auth()->user()->can('operacion.enviar')){
                     if (Auth::user()->rol == "Jefe de operaciones" || Auth::user()->rol == "Administrador") {
                         $btn[] = '<a class="btn btn-success btn-sm" href="" data-target="#modal-envio" data-envio=' . $pedido->id . ' data-toggle="modal" >Enviar</a><br>';
