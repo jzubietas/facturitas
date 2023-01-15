@@ -129,6 +129,7 @@ class DireccionGrupo extends Model
             //->pluck('detalle_pedidos.nombre_empresa', 'pedidos.codigo');
 
         if ($relacion->count() > 0) {
+
             $grupo->update([
                 'codigos' => $relacion->codigo->join(', '),
                 'producto' => $relacion->nombre_empresa->join(', '),//$relacion->values()->join(', '),
@@ -143,6 +144,7 @@ class DireccionGrupo extends Model
                 'motorizado_status' => 0
             ]);
         }
+
     }
 
     public static function cambiarDireccion(self $grupo, Pedido $pedido, array $data)
