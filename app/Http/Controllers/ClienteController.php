@@ -778,10 +778,14 @@ class ClienteController extends Controller
 
             $idrequest = $request->cliente_id;
             $pedidos = Pedido::join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
-                ->select('pedidos.id',
+                ->select(
+                    [
+                        'pedidos.id',
                     'dp.codigo',
                     'dp.nombre_empresa',
+                    'pedidos.da_confirmar_descarga',
                 //DB::raw(" (select dd.nombre_empresa from detalle_pedidos de where de.pedido_id=direcion_grupos.id) as clientes "),
+                    ]
                 )
                 ->where('pedidos.cliente_id', $idrequest)
                 ->where('pedidos.estado', '1')
