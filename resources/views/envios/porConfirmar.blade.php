@@ -202,7 +202,7 @@
                         $('#respuesta_barra').addClass(data.class);
                         $('#respuesta_barra').html(data.html);
                         $('#pedidos-procesados').html(`<ul>${codigos_agregados.map(function (codigo) {
-                            return `<li>${codigo}</li>`
+                            return `<li><i class="fa fa-check text-success"></i>${codigo}</li>`
                         }).join('')}</ul>`);
                         $('#tablaPrincipal').DataTable().draw(false)
                     }
