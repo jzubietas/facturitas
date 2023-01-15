@@ -648,6 +648,7 @@ class OperacionController extends Controller
                     $btn[] = '<a href="' . route('pedidosPDF', $pedido->id) . '" class="m-1 btn btn-primary btn-sm" target="_blank"><i class="fa fa-file-pdf"></i> PDF</a><br>';
                 }
 
+                if(\auth()->user()->rol==User::ROL_ADMIN || \auth()->user()->rol==User::ROL_JEFE_OPERARIO)
                 if($pedido->condicion_envio=='ENTREGADO SIN SOBRE - CLIENTE'){
                     $btn[] = '<a href="" class="btn-sm dropdown-item" data-target="#modal-revertir-ajefeop" data-adjuntos="' . $pedido->adjuntos . '" data-revertir=' . $pedido->id . ' data-codigo=' . $pedido->codigos . ' data-toggle="modal" ><i class="fa fa-undo text-danger" aria-hidden="true"></i> Revertir a Jefe de Operaciones</a>';
                 }
