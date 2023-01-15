@@ -24,13 +24,11 @@
             </div>
             <div class="modal-footer">
                 <div class="d-flex justify-content-between w-100">
-                    
+
                     <button class="btn btn-success" id="attachmentsButtom">
                         Confirmar
                     </button>
-                    <button class="btn btn-danger" id="attachmentsButtomRechazar">
-                        Rechazar Anulacion
-                    </button>
+
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
                 </div>
             </div>
