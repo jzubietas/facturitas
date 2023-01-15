@@ -478,15 +478,30 @@
                 switch(id_element)
                 {
                     case 'tracking':
-                        /*if()
-                        Swal.fire(
-                            'Error',
-                            'Debe ingresar el detalle del pedido',
-                            'warning'
-                        )*/
+                        let ntrack=val_element.lenght;
+                        console.log("n "+ntrack)
+                        if(ntrack<10)
+                        {
+                            Swal.fire(
+                                'Error',
+                                'Ingrese numero de tracking correcto',
+                                'warning'
+                            )
+                            return false;
+                        }
                         break;
                     case 'numregistro':
-
+                        let nreg=val_element.lenght;
+                        console.log("n2 "+nreg)
+                        if(nreg<12)
+                        {
+                            Swal.fire(
+                                'Error',
+                                'Ingrese numero de registro correcto',
+                                'warning'
+                            )
+                            return false;
+                        }
                         break;
                 }
                 $.ajax({
@@ -495,8 +510,15 @@
                     url: "{{ route('envios.validacion_direccionenvio') }}",
                     success: function (data) {
                         console.log(data);
-                        $("#modal-direccion").modal("hide");
-                        $("#tablaPrincipal").DataTable().ajax.reload();
+                        if(data.response=='1'){
+                            Swal.fire(
+                                'Error',
+                                'Informacion repetida con el campo '+data.element,
+                                'warning'
+                            )
+                        }
+                        //$("#modal-direccion").modal("hide");
+                        //$("#tablaPrincipal").DataTable().ajax.reload();
                     }
                 });
 

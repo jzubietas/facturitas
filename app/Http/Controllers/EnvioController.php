@@ -3025,7 +3025,31 @@ Ver Rotulo</a>')
 
     public function valida_direccionenvio(Request $request)
     {
+        $element=$request->element;
+        $value_=$request->value;
+        $from_=$request->from;
 
+        switch($element)
+        {
+            case 'tracking':
+                $count_tracking=Pedido::where('env_tracking','=',$value_)->count();
+                if($count_tracking>0){
+                    $arr=array('response'=>1,'element'=>'tracking');
+                    return response()->json($arr);
+                }else{
+                    return response()->json(['response' => '0']);
+                }
+                break;
+            case 'numregistro':
+                $count_nregistro=Pedido::where('env_numregistro','=',$value_)->count();
+                if($count_nregistro>0){
+                    $arr=array('response'=>1,'element'=>'num.registro');
+                    return response()->json($arr);
+                }else{
+                    return response()->json(['response' => '0']);
+                }
+                break;
+        }
 
     }
 
