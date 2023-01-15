@@ -647,17 +647,6 @@
                         data: 'referencia',
                         name: 'referencia',
                         sWidth: '10%',
-                        render: function (data, type, row, meta) {
-                            if (row.destino == 'PROVINCIA') {
-                                var datal = "";
-                                urladjunto = '{{ route("pedidos.descargargastos", ":id") }}';
-                                urladjunto = urladjunto.replace(':id', data);
-                                datal = datal + '<p><a href="' + urladjunto + '">' + data + '</a><p>';
-                                return datal;
-                            } else {
-                                return data;
-                            }
-                        }
                     },
                     {data: 'condicion_envio', name: 'condicion_envio',},
                     {

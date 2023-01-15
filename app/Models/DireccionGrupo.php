@@ -114,13 +114,13 @@ class DireccionGrupo extends Model
                 ->select([
                     'pedidos.codigo',
                     'detalle_pedidos.nombre_empresa',
-                    DB::raw("(case when pedidos.destino='PROVINCIA' when pedidos.env_tracking
+                    \DB::raw("(case when pedidos.destino='PROVINCIA' then pedidos.env_tracking
                                 when pedidos.destino='LIMA' then pedidos.env_direccion
                                   end) as direccion"),
-                    DB::raw("(case when pedidos.destino='PROVINCIA' when pedidos.env_numregistro
+                    \DB::raw("(case when pedidos.destino='PROVINCIA' then pedidos.env_numregistro
                                 when pedidos.destino='LIMA' then pedidos.env_referencia
                                   end) as referencia"),
-                    DB::raw("(case when pedidos.destino='PROVINCIA' when pedidos.env_rotulo
+                    \DB::raw("(case when pedidos.destino='PROVINCIA' then pedidos.env_rotulo
                                 when pedidos.destino='LIMA' then pedidos.env_observacion
                                   end) as observacion"),
                 ])
@@ -138,15 +138,14 @@ class DireccionGrupo extends Model
                 ->get();
         }
         if ($relacion->count() > 0) {
-
             $grupo->update([
-                'codigos' => $relacion->codigo->join(', '),
-                'producto' => $relacion->nombre_empresa->join(', '),//$relacion->values()->join(', '),
-                'direccion'=>$relacion->direccion->join(', '),
-                'referencia'=>$relacion->referencia->join(', '),
-                'observacion'=>$relacion->observacion->join(', '),
+                'codigos' => $relacion->pluck('codigo')->join(', '),
+                'producto' => $relacion->pluck('nombre_empresa')->join(', '),
+                'direccion'=>$relacion->pluck('direccion')->trim()->unique()->join(', '),
+                'referencia'=>$relacion->pluck('referencia')->trim()->unique()->join(', '),
+                'observacion'=>$relacion->pluck('observacion')->trim()->unique()->join(', '),
+                'cantidad'=>$relacion->count(),
             ]);
-
         } else {
             $grupo->update([
                 'estado' => 0,

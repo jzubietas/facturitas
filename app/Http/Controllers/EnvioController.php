@@ -241,14 +241,14 @@ class EnvioController extends Controller
                 return '<span class="badge badge-success" style="background-color: ' . $color . '!important;">' . $pedido->condicion_envio . '</span>';
             })
             ->editColumn('fecha_recepcion_courier', function ($pedido) {
-                if($pedido->fecha_recepcion_courier){
+                if ($pedido->fecha_recepcion_courier) {
                     return Carbon::parse($pedido->fecha_recepcion_courier)->format('d-m-Y h:i A');
                 }
                 return '--';
             })
             ->addColumn('dias', function ($pedido) {
-                if($pedido->fecha_recepcion_courier){
-                    return Carbon::parse($pedido->fecha_recepcion_courier)->diffInDays().' dias';
+                if ($pedido->fecha_recepcion_courier) {
+                    return Carbon::parse($pedido->fecha_recepcion_courier)->diffInDays() . ' dias';
                 }
                 return '--';
             })
@@ -472,26 +472,28 @@ class EnvioController extends Controller
     color: black !important;">Con ruta</span>
                     <span class="badge badge-success" style="background-color: ' . $color . '!important;">' . $pedido->condicion_envio . '</span>';
             })
-            /*->editColumn('direccion', function ($pedido) {
-                if($pedido->destino=='LIMA')
-                {
-
+            ->editColumn('direccion', function ($pedido) {
+                if ($pedido->distribucion == 'OLVA') {
+                    return collect(explode(',', $pedido->direccion))->trim()->unique()->join(', ');
                 }
-                else if($pedido->destino=='PROVINCIA')
-                {
-
+                return $pedido->direccion;
+            })
+            ->editColumn('referencia', function ($pedido) {
+                if ($pedido->distribucion == 'OLVA') {
+                    $html = collect(explode(',', $pedido->referencia))->trim()->unique()->join(', ');
+                    if ($pedido->observacion) {
+                        $html .= collect(explode(',', $pedido->observacion))
+                            ->trim()
+                            ->unique()
+                            ->map(fn($observacion) => '<a class="btn btn-icon p-0" target="_blank" href="' . \Storage::disk('pstorage')->url($observacion) . '">
+<i class="fa fa-file-pdf"></i>
+Ver Rotulo</a>')
+                            ->join('');
+                    }
+                    return $html;
                 }
-            })*/
-            /*->editColumn('referencia', function ($pedido) {
-                if($pedido->destino=='LIMA')
-                {
-
-                }
-                else if($pedido->destino=='PROVINCIA')
-                {
-
-                }
-            })*/
+                return $pedido->referencia;
+            })
             ->addColumn('action', function ($grupo) {
                 $btn = '';
                 $btn .= '<ul class="list-unstyled pl-0">';
@@ -515,7 +517,7 @@ class EnvioController extends Controller
 
                 return $btn;
             })
-            ->rawColumns(['action', 'condicion_envio'])
+            ->rawColumns(['action', 'condicion_envio','referencia'])
             ->make(true);
 
     }
@@ -2162,8 +2164,8 @@ class EnvioController extends Controller
 
         $pedido->update([
             //'envio' => '1',
-            'estado_sinconsobre'=>'1',
-            'fecha_envio_atendido_op'=>Carbon::now(),
+            'estado_sinconsobre' => '1',
+            'fecha_envio_atendido_op' => Carbon::now(),
             'condicion_envio' => Pedido::ENVIADO_OPE,
             'condicion_envio_code' => Pedido::ENVIADO_OPE_INT,
             'modificador' => 'USER' . Auth::user()->id,
@@ -2371,8 +2373,7 @@ class EnvioController extends Controller
                 })
                 ->rawColumns(['action', 'condicion_envio_color', 'condicion_envio'])
                 ->make(true);
-        }
-        else if ($opcion == 'entregado') {
+        } else if ($opcion == 'entregado') {
             return Datatables::of(DB::table($pedidos))
                 ->editColumn('condicion_envio', function ($pedido) {
                     $color = Pedido::getColorByCondicionEnvio($pedido->condicion_envio);
