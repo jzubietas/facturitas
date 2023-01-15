@@ -72,7 +72,7 @@
             </table>
 
             @include('pedidos.modal.revertirid');
-            @include('operaciones.modal.revertirporatender')
+            @include('operaciones.modal.revertirajefeop')
         </div>
     </div>
 @stop
