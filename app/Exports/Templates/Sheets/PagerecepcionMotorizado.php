@@ -32,12 +32,14 @@ class PagerecepcionMotorizado extends Export implements WithColumnFormatting, Fr
 
     public int $motorizado_id = 0;
     public string $fecha_envio_h = '';
+    public int $condicion_envio_h = 0;
 
-    public function __construct($user_motorizado_p, $fecha_envio_p)
+    public function __construct($user_motorizado_p, $fecha_envio_p,$condicion_envio_p)
     {
         parent::__construct();
         $this->motorizado_id = $user_motorizado_p;
         $this->fecha_envio_h = $fecha_envio_p;
+        $this->condicion_envio_h = $condicion_envio_p;
     }
 
     public function collection()
@@ -66,6 +68,9 @@ class PagerecepcionMotorizado extends Export implements WithColumnFormatting, Fr
         }
         if ($this->fecha_envio_h!='') {
             $direccion = $direccion->whereDate('direccion_grupos.fecha_salida', $this->fecha_envio_h);
+        }
+        if ($this->condicion_envio_h!='') {
+            $direccion = $direccion->where('direccion_grupos.condicion_envio_code', $this->condicion_envio_h);
         }
 
         /*->when($fecha_consulta != null, function ($query) use ($fecha_consulta) {
