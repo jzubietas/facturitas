@@ -116,6 +116,10 @@ class DistribucionController extends Controller
                 );
             });
         }
+        /*if(auth()->user()->rol==User::ROL_ENCARGADO)
+        {
+
+        }*/
 
         $items = $query->get();
         return \DataTables::of($items)
