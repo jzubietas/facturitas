@@ -208,11 +208,10 @@
                                                                 <div>
 
                                                                     <h6 class="mb-0">
-                                                                        <a target="_blank" class="btn btn-sm btn-danger"
-                                                                                        href="{{ route('envios.recepcionmotorizado.Excel',['user_motorizado'=>$motorizado->id,'fecha_envio'=>'2023-01-13']) }}">
-                                                                            <i class="fa fa-file-excel"></i>
-                                                                            Excel
-                                                                        </a>
+                                                                        <button class="btn btn-sm btn-danger exportar_zona" data-motorizado="{{$motorizado->id}}">
+                                                                            <i class="fa fa-file-excel"></i>Excel
+
+                                                                        </button>
 
                                                                     </h6>
                                                                 </div>
@@ -681,6 +680,23 @@
 
                     <script>
                         $(document).ready(function () {
+
+                            $(document).on('click','.exportar_zona',function(event){
+                                event.preventDefault();
+                                $motorizado = $(this).data('motorizado');
+                                $fecha = $("#fecha_consulta").val();
+                                console.log($motorizado);
+                                console.log($fecha)
+
+                               //abrir modal y setear valores
+                                $("#user_motorizado").val($motorizado);
+                                $("#user_motorizado").selectpicker('refresh')
+                                $("#fecha_envio").val($fecha)
+                                $("#modal-exportar").modal('show');
+
+
+                            })
+
 
                             function getHtmlPrevisualizarDesagrupar(row, text) {
                                 return `
