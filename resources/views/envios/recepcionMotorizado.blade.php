@@ -843,8 +843,8 @@
                             var timeoutMessage;
                             $("#fecha_consulta").on('change', function () {
 
-                                var dateA = moment($(this).val()).format("YYYY-MM-DD");
-                                var dateB = moment(new Date()).format("YYYY-MM-DD");
+                                var dateA = moment($(this).val());
+                                var dateB = moment(new Date());
                                 let diff=dateA.diff(dateB)
                                 console.log('Diferencia es ', diff, 'days');
 
