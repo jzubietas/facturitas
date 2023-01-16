@@ -237,6 +237,7 @@
             $(document).on("submit", "#formularioatender", function (evento) {
                 evento.preventDefault();
                 var cant_compro = document.getElementById('cant_compro').value;
+                var cant_compro_confirm = document.getElementById('cant_compro_confirm').value;
                 var cant_compro_attachment = document.getElementById('adjunto_total_attachment');//adjuntos en el servidor
                 if (!cant_compro_attachment) {
                     cant_compro_attachment = 0
@@ -293,11 +294,13 @@
                     });
                 }
 
+                let c_conf=cant_compro_attachment+cant_compro;
+
                 if (cant_compro != cant_compro_attachment) {
                     Swal.fire({
                         icon: 'warning',
                         title: 'Aviso',
-                        html: `La cantidad de archivos es (${cant_compro_attachment}) y es diferente a la cantidad de facturas (${cant_compro})<br> <b>¿Desea continuar?</b>`,
+                        html: `La cantidad de archivos es (`+c_conf+`) y es diferente a la cantidad de facturas (${cant_compro})<br> <b>¿Desea continuar?</b>`,
                         confirmButtonText: 'Aceptar y continuar',
                         showCancelButton: true,
                         confirmButtonColor: '#3085d6',
@@ -324,6 +327,7 @@
                 $(".textcode").html(idcodigo);
                 $("#hiddenAtender").val(idunico);
                 $("#cant_compro").val(cant_compro);
+                $("#cant_compro_confirm").val(cant_compro);
 
                 $("#adjunto").val(null);
                 $("#condicion").val('2');

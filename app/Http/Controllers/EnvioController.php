@@ -232,6 +232,7 @@ class EnvioController extends Controller
                     'dp.nombre_empresa as empresas',
                 ]
             )->where('condicion_envio_code', Pedido::RECEPCION_COURIER_INT)
+            ->activo(1)
             ->where('estado_sobre', '0');
 
         return Datatables::of($pedidos)
