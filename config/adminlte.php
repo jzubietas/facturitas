@@ -433,13 +433,13 @@ return [
                 ],
 
 
-                [
+                /*[
                     'text' => 'Sobres por recibir',
                     'route' => 'envios.porrecibir',
                     'can' => 'envios.porrecibir',
                     'icon' => 'fas fa-check-circle',
                     'active' => ['envios'],
-                ],
+                ],*/
 
 
 
