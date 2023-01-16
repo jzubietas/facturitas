@@ -842,10 +842,12 @@
                             });
                             var timeoutMessage;
                             $("#fecha_consulta").on('change', function () {
+                                console.log($(this).val());
+                                console.log(new Date())
 
                                 var dateA = moment($(this).val());
                                 var dateB = moment(new Date());
-                                let diff=dateA.diff(dateB, 'days')
+                                let diff=dateB.diff(dateA, 'days')
                                 console.log('Diferencia es ', diff, 'days');
 
                                 //mostrar alert
