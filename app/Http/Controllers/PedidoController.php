@@ -2969,8 +2969,7 @@ class PedidoController extends Controller
         ]);
     }
 
-    public
-    function ConfirmarAnular(Request $request)
+    public function ConfirmarAnular(Request $request)
     {
         if ($request->get('action') == 'confirm_anulled_cancel') {
             $pedido = Pedido::findOrFail($request->pedido_id);
@@ -2999,11 +2998,7 @@ class PedidoController extends Controller
                 "success" => 0,
             ]);
         }
-        if ($pedido->condicion_envio_code == Pedido::ENTREGADO_CLIENTE_INT) {
-            return response()->json([
-                "success" => 0,
-            ]);
-        }
+
         $filePaths = [];
         $files = $request->attachments;
         if (is_array($files)) {
