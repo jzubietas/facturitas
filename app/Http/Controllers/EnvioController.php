@@ -2498,8 +2498,6 @@ Ver Rotulo</a>')
          * IDENTIFICAMOS LOS DATOS GLOBALES
          */
         $pedido = Pedido::where("codigo", $codigo)->firstOrFail();
-        $grupo = $pedido->direccion_grupo;
-        $codigo_pedido_actual = $pedido->id;
         $condicion_code_actual = $pedido->condicion_envio_code;
 
         /************
@@ -2664,8 +2662,7 @@ Ver Rotulo</a>')
                     break;
 
                 case "sobres_en_reparto":
-                    $codigo = $pedido-> direcciongrupo;
-                    //$envio = DireccionGrupo::query()->findOrFail($codigo);
+                    $envio = $pedido-> direcciongrupo;
                     $envio->update([
                         'condicion_envio' => Pedido::ENVIO_MOTORIZADO_COURIER,
                         'condicion_envio_code' => Pedido::ENVIO_MOTORIZADO_COURIER_INT,
