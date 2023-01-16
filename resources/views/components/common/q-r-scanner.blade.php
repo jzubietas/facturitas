@@ -92,6 +92,10 @@
             @endif
             codigos_agregados.push(codigo_mejorado)
             codigos_agregados = codigos_agregados.filter((v, i, a) => a.indexOf(v) === i)
+
+            $('#pedidos-procesados').html(`<ul>${codigos_agregados.map(function (codigo) {
+                return `<li><i class="fa fa-check text-success"></i>${codigo}</li>`
+            }).join('')}</ul>`);
             $(this).val("");
             return false;
         });
@@ -123,18 +127,11 @@
                 type: 'POST',
                 url: "{{ route('operaciones.confirmaropbarras') }}",
                 success: function (data) {
-                    if (data.codigo && data.codigo != '0') {
-                        codigos_agregados.push(data.codigo)
-                        codigos_agregados = codigos_agregados.filter((v, i, a) => a.indexOf(v) === i)
-                    }
-                    console.log(data);
+                    codigos_agregados=[]
                     $('#respuesta_barra').removeClass("text-danger");
                     $('#respuesta_barra').removeClass("text-success");
                     $('#respuesta_barra').addClass(data.class);
                     $('#respuesta_barra').html(data.html);
-                    $('#pedidos-procesados').html(`<ul>${codigos_agregados.map(function (codigo) {
-                        return `<li><i class="fa fa-check text-success"></i>${codigo}</li>`
-                    }).join('')}</ul>`);
                     @foreach($tablesIds as $table)
                     $('{{$table}}').DataTable().draw(false)
                     @endforeach
