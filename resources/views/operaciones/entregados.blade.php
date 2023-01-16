@@ -15,6 +15,12 @@
     </div>
     @endcan --}}
     <div class="float-right btn-group dropleft">
+        {{--
+        <button type="button" class="btn btn-option" data-toggle="modal" data-target="#modal-escanear-temp" data-backdrop="static" style="margin-right:16px;" aria-haspopup="true" aria-expanded="false">
+            <i class="fa fa-barcode" aria-hidden="true"></i> ESCANEO TEMPORAL
+        </button>
+        --}}
+
         <button type="button" class="btn btn-option" data-accion="maria" data-responsable="maria_recepcion" data-toggle="modal" data-target="#modal-escanear" data-backdrop="static" style="margin-right:16px;" aria-haspopup="true" aria-expanded="false">
             <i class="fa fa-barcode" aria-hidden="true"></i> RECEPCIONAR PEDIDOS
         </button>
@@ -82,6 +88,48 @@
     </div>
   </div>
 
+{{--
+
+  <!-- Modal -->
+  <div class="modal fade" id="modal-escanear-temp" tabindex="-1" aria-labelledby="exampleModalLabel-temp" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+          <div class="modal-content br-16 cnt-shw border-0">
+              <div class="modal-header">
+                  <h5 class="modal-title font-weight-bold" id="exampleModalLabel-temp"><i class="fa fa-barcode mr-12" aria-hidden="true"></i>
+                      <span id="titulo-scan-temp">Escanear Pedido</span></h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                  </button>
+              </div>
+              <div class="modal-body text-center">
+
+                  <div class="row">
+                      <div class="col-lg-6 border-right">
+                          <h4 class="font-16">Por favor, escanee el documento para confirmarlo:</h4>
+
+                          <img src="{{asset('imagenes/scan.gif')}}" width="80%"><br>
+                          <br>
+                          <input type="text" value="" id="codigo_confirmar_temp" name="hiddenCodigo" style="opacity: 0;width: 100%;">
+                      </div>
+                      <div class="col-lg-6 text-left pl-20">
+                          <h4 class="font-16 font-weight-bold">Pedidos procesados:</h4>
+                          <ul id="pedidos-procesados-temp">
+
+                          </ul>
+                          <textarea id="json_result_temp" rows="10"></textarea>
+                      </div>
+                  </div>
+
+
+              </div>
+              <div class="modal-footer">
+                  <button class="btn btn-success" id="close-scan" data-dismiss="modal">Aceptar</button>
+              </div>
+          </div>
+      </div>
+  </div>
+
+--}}
 @stop
 
 @section('css')
@@ -147,7 +195,6 @@
         $('#modal-escanear').on('hidden.bs.modal', function (e) {
             $('#respuesta_barra').html("");
             $('#pedidos-procesados').html("");
-
         })
         $('#modal-escanear').on('shown.bs.modal', function (event) {
 
@@ -231,6 +278,32 @@
          */
 
 
+        {{--
+
+///temporal
+
+        var temp_codigos_agregados=[]
+        $('#modal-escanear-temp').on('hidden.bs.modal', function (e) {
+            $('#pedidos-procesados-temp').html("");
+            $('#json_result_temp').html("");
+        })
+        $('#codigo_confirmar_temp').change(function (event) {
+            event.preventDefault();
+            var codigo_caturado = $(this).val();
+            var codigo_mejorado = codigo_caturado.replace(/['']+/g, '-');
+            temp_codigos_agregados.push(codigo_mejorado.trim())
+            temp_codigos_agregados=temp_codigos_agregados.filter((v, i, a) => a.indexOf(v) === i)
+            $('#json_result_temp').html(JSON.stringify(temp_codigos_agregados));
+            $('#pedidos-procesados-temp').html(`<ul>${temp_codigos_agregados.map(function (codigo) {
+                return `<li><i class="fa fa-check text-success"></i>${codigo}</li>`
+            }).join('')}</ul>`);
+
+            $(this).val("");
+            return false;
+        });
+
+// end temporal
+        --}}
         $.ajaxSetup({
         headers: {
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
