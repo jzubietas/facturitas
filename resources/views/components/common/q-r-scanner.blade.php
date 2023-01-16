@@ -122,7 +122,11 @@
                 type: 'POST',
                 url: "{{ route('operaciones.confirmaropbarras') }}",
                 success: function (data) {
-                    codigos_agregados=[]
+                    codigos_agregados = data.codigos_no_procesados
+                    $('#pedidos-procesados').html(`<b class="text-danger w-100">codigos no procesados:</b><ul>${codigos_agregados.map(function (codigo) {
+                        return `<li><i class="fa fa-window-close text-danger"></i>${codigo}</li>`
+                    }).join('')}</ul>`);
+
                     $('#respuesta_barra').removeClass("text-danger");
                     $('#respuesta_barra').removeClass("text-success");
                     $('#respuesta_barra').addClass(data.class);

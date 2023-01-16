@@ -2498,19 +2498,23 @@ Ver Rotulo</a>')
 
         $codigos_procesados = array();
         $codigos_no_procesados = array();
-
+        $respuesta = "";
         foreach ($codigos as $codigo) {
             /*************
              * IDENTIFICAMOS LOS DATOS GLOBALES
              */
-            $pedido = Pedido::where("codigo", $codigo)->firstOrFail();
+            $pedido = Pedido::where("codigo", $codigo)->first();
+            if($pedido==null){
+                $codigos_no_procesados[]=$codigo;
+                continue;
+            }
             $condicion_code_actual = $pedido->condicion_envio_code;
 
             /************
              * SETEAMOS VALORES POR DEFECTO
              */
             $nuevo_estado = $condicion_code_actual;
-            $respuesta = "";
+
 
             // SI SON SOBRES DEVUELTOS
             if ($accion == "sobres_devuelto") {
