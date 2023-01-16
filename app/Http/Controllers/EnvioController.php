@@ -2482,6 +2482,119 @@ Ver Rotulo</a>')
 
     }
 
+    public function ValidarOPBarra(Request $request)
+    {
+
+
+        //VARIABLES GLOBALES
+        $responsable = $request->responsable;
+        $accion = $request->accion;
+        $codigo = $request->codigo;
+
+        //BUSCAMOS EL PEDIDO
+
+        $pedido = Pedido::where("codigo", $codigo)->first();
+        $condicion_code_actual = $pedido->condicion_envio_code;
+
+        if ($pedido == null) {
+            return response()->json([
+                'success' => true
+            ]);
+        }
+
+        /************
+         * SETEAMOS VALORES POR DEFECTO
+         */
+        $nuevo_estado = $condicion_code_actual;
+
+
+        // SI SON SOBRES DEVUELTOS
+        if ($accion == "sobres_devuelto") {
+            $condicion_code_actual = 100;
+        }
+
+        /**************
+         * SETEAMOS OPCION ADICIONAL
+         */
+        // SI EXISTE UNA OPCION ADICIONAL LA INICIALIZAMOS AQUI
+        if (isset($request->extra)) {
+            $opcion_adicional = $request->extra;
+        } else {
+            $opcion_adicional = "";
+        }
+        /*************
+         * SETEAMOS EL NUEVO ESTADO Y EL MENSAJE DE CONFIRMACION
+         */
+
+        switch ($responsable) {
+
+            // FERNANDEZ RECEPCIONA LOS SOBRES
+            case "fernandez_recepcion":
+
+                switch ($condicion_code_actual) {
+                    case Pedido::ENVIO_COURIER_JEFE_OPE_INT: // 8
+                        $nuevo_estado = Pedido::RECEPCION_COURIER_INT; // 19
+                        $respuesta = "El jefe Courier recepciono correctamente el pedido";
+                        break;
+                }
+                break;
+
+            // ENVIA SOBRES A MOTORIZADO
+            case "fernandez_reparto":
+
+                switch ($condicion_code_actual) {
+                    case Pedido::REPARTO_COURIER_INT: // 8
+                        $nuevo_estado = Pedido::ENVIO_MOTORIZADO_COURIER_INT; // 19
+                        $respuesta = "El sobre se envió a motorizado correctamente.";
+                        break;
+                }
+                break;
+            // CONFIRMA SOBRES DEVUELTOS
+            case "fernandez_devuelto":
+                switch ($condicion_code_actual) {
+                    case 100: // CODIGO EN DURO
+                        $nuevo_estado = Pedido::RECEPCION_COURIER_INT; // 11
+                        $respuesta = "El sobre fue devuelto exitosamente.";
+                        break;
+                }
+                break;
+            //ENVIO A COURIER JEFE OPE
+            case "maria_courier":
+                switch ($condicion_code_actual) {
+                    case Pedido::RECIBIDO_JEFE_OPE_INT:
+                        $nuevo_estado = Pedido::ENVIO_COURIER_JEFE_OPE_INT;
+                        $respuesta = "El pedido se envió a Logistica correctamente.";
+                        break;
+                }
+                break;
+            // RECEPCION DE SOBRE POR MARIA
+            case "maria_recepcion":
+                switch ($condicion_code_actual) {
+                    case Pedido::ENVIADO_OPE_INT:
+                        $nuevo_estado = Pedido::RECIBIDO_JEFE_OPE_INT;
+                        $respuesta = "El sobre se recibio correctamente.";
+                        break;
+                }
+                break;
+            // ENTREGA MARIA SIN SOBRE
+            case "maria_entregado_sin_sobre":
+                switch ($condicion_code_actual) {
+                    case Pedido::ENTREGADO_SIN_SOBRE_OPE_INT: // 13
+                        $nuevo_estado = Pedido::ENTREGADO_SIN_SOBRE_CLIENTE_INT; // 14
+                        $respuesta = "El pedido sin sobre se confirmo correctamente.";
+                        break;
+                }
+                break;
+        }
+        /***************
+         * COMPROBAMOS SI YA ESTA ATENDIDO EL PEDIDO
+         */
+        return response()->json([
+            'success' => $pedido->condicion_envio_code == $nuevo_estado
+        ]);
+
+    }
+
     public function ConfirmarOPBarra(Request $request)
     {
         /*************
@@ -2504,8 +2617,8 @@ Ver Rotulo</a>')
              * IDENTIFICAMOS LOS DATOS GLOBALES
              */
             $pedido = Pedido::where("codigo", $codigo)->first();
-            if($pedido==null){
-                $codigos_no_procesados[]=$codigo;
+            if ($pedido == null) {
+                $codigos_no_procesados[] = $codigo;
                 continue;
             }
             $condicion_code_actual = $pedido->condicion_envio_code;
@@ -2744,7 +2857,8 @@ Ver Rotulo</a>')
         return response()->json(['html' => $respuesta, 'class' => "text-success", 'codigos_procesados' => $codigos_procesados, 'codigos_no_procesados' => $codigos_no_procesados]);
     }
 
-    public function confirmarEstado(Request $request)
+    public
+    function confirmarEstado(Request $request)
     {
         $envio = DireccionGrupo::query()->findOrFail($request->hiddenCodigo);
         $envio->update([
@@ -2783,7 +2897,8 @@ Ver Rotulo</a>')
         return response()->json(['html' => $envio->id]);
     }
 
-    public function confirmarEntregaSinEnvio(Request $request)
+    public
+    function confirmarEntregaSinEnvio(Request $request)
     {
         $pedido = Pedido::query()->findOrFail($request->hiddenCodigo);
 
@@ -2804,7 +2919,8 @@ Ver Rotulo</a>')
     }
 
 
-    public function confirmarEstadoRecepcionMotorizado(Request $request)
+    public
+    function confirmarEstadoRecepcionMotorizado(Request $request)
     {
         $envio = DireccionGrupo::where("id", $request->hiddenCodigo)->first();
         $envio->update([
@@ -2835,7 +2951,8 @@ Ver Rotulo</a>')
         return response()->json(['html' => $envio->id]);
     }
 
-    public function confirmarEstadoRevert(Request $request)
+    public
+    function confirmarEstadoRevert(Request $request)
     {
         $envio = DireccionGrupo::where("id", $request->envio_id)->first();
         $envio->update([
@@ -2870,7 +2987,8 @@ Ver Rotulo</a>')
         return response()->json(['html' => $envio->id]);
     }
 
-    public function confirmarEstadoConfirm(Request $request)
+    public
+    function confirmarEstadoConfirm(Request $request)
     {
         $action = $request->action;
         if ($action == 'update_status_observado') {
@@ -2969,7 +3087,8 @@ Ver Rotulo</a>')
         }
     }
 
-    public function confirmarEstadoConfirmRevert(Request $request)
+    public
+    function confirmarEstadoConfirmRevert(Request $request)
     {
         $envio = DireccionGrupo::where("id", $request->envio_id)->first();
         $envio->update([
@@ -2989,7 +3108,8 @@ Ver Rotulo</a>')
         return response()->json(['html' => $envio->id]);
     }
 
-    public function confirmarEstadoConfirmConfirm(Request $request)
+    public
+    function confirmarEstadoConfirmConfirm(Request $request)
     {
         $envio = DireccionGrupo::where("id", $request->hiddenMotorizadoEntregarConfirm)->first();
         $envio->update([
@@ -3014,7 +3134,8 @@ Ver Rotulo</a>')
         return response()->json(['html' => $envio->id]);
     }
 
-    public function confirmarEstadoConfirmDismiss(Request $request)
+    public
+    function confirmarEstadoConfirmDismiss(Request $request)
     {
         //$hiddenAtender = $request->hiddenMotorizadoEntregarConfirm;
         /*$pedido = Pedido::where("id", $hiddenAtender)->first();
@@ -3024,7 +3145,8 @@ Ver Rotulo</a>')
         ]);*/
     }
 
-    public function confirmarEstadoConfirmConfirmDismiss(Request $request)
+    public
+    function confirmarEstadoConfirmConfirmDismiss(Request $request)
     {
         //$hiddenAtender = $request->hiddenMotorizadoEntregarConfirm;
         /*$pedido = Pedido::where("id", $hiddenAtender)->first();
@@ -3034,7 +3156,8 @@ Ver Rotulo</a>')
         ]);*/
     }
 
-    public function confirmarEstadoConfirmValidada(Request $request)
+    public
+    function confirmarEstadoConfirmValidada(Request $request)
     {
         $envio = DireccionGrupo::where("id", $request->hiddenCodigo)->first();
         $envio->update([
@@ -3053,7 +3176,8 @@ Ver Rotulo</a>')
     }
 
 
-    public function VerificarZona(Request $request)
+    public
+    function VerificarZona(Request $request)
     {
         $search = str_replace('+', ' ', $request->distrito);
         $zona_distrito = Distrito::where('distrito', $search)
@@ -3068,7 +3192,8 @@ Ver Rotulo</a>')
 
     }
 
-    public function EscaneoQR(Request $request)
+    public
+    function EscaneoQR(Request $request)
     {
         $pedido = Pedido::where("codigo", $request->id)->firstOrFail();
 
@@ -3089,7 +3214,8 @@ Ver Rotulo</a>')
         return response()->json(['html' => $pedido->codigo, 'distrito' => $pedido->distrito, 'direccion' => $pedido->direccion]);
     }
 
-    public function RecibirPedidoMotorizado(Request $request)
+    public
+    function RecibirPedidoMotorizado(Request $request)
     {
         /**********
          * BUSCAMOS EL PEDIDO
@@ -3155,7 +3281,8 @@ Ver Rotulo</a>')
         }
     }
 
-    public function IniciarRutaMasiva(Request $request)
+    public
+    function IniciarRutaMasiva(Request $request)
     {
         $rol = Auth::user()->rol;
         $zona_ = null;
@@ -3186,7 +3313,8 @@ Ver Rotulo</a>')
 
     }
 
-    public function valida_direccionenvio(Request $request)
+    public
+    function valida_direccionenvio(Request $request)
     {
         $element = $request->element;
         $value_ = $request->value;

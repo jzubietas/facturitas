@@ -599,6 +599,7 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     /* Escaneo e códdigos de Barras  */
 
     Route::post('operaciones.confirmaropbarras', [EnvioController::class, 'ConfirmarOPBarra'])->name('operaciones.confirmaropbarras');
+    Route::post('operaciones.validaropbarras', [EnvioController::class, 'ValidarOPBarra'])->name('operaciones.validaropbarras');
     /* Cambiar estado a Motorizado */
     Route::post('operaciones.confirmar', [EnvioController::class, 'confirmarEstado'])->name('operaciones.confirmar');
     Route::post('operaciones.confirmarentregasinenvio', [EnvioController::class, 'confirmarEntregaSinEnvio'])->name('operaciones.confirmarentregasinenvio');
