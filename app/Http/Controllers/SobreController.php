@@ -125,6 +125,7 @@ class SobreController extends Controller
                 'pedidos.estado_sobre',
                 'pedidos.estado_ruta',
                 'pedidos.pendiente_anulacion',
+                'pedidos.estado',
             )
             ->where('pedidos.estado', '1')
             //->whereIn('pedidos.envio', [Pedido::ENVIO_CONFIRMAR_RECEPCION,Pedido::ENVIO_RECIBIDO]) // ENVIADO CONFIRMAR RECEPCION Y ENVIADO RECIBIDO
