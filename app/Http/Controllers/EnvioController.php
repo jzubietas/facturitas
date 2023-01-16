@@ -2581,7 +2581,6 @@ Ver Rotulo</a>')
                         $nombre_accion = Pedido::$estadosCondicionEnvioCode[$nuevo_estado];
 
                         break;
-                }
                 break;
 
         }

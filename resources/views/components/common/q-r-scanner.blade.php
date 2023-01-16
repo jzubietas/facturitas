@@ -11,6 +11,13 @@
                     <h5 class="modal-title font-weight-bold" id="exampleModalLabel"><i class="fa fa-barcode mr-12"
                                                                                        aria-hidden="true"></i> <span
                             id="titulo-scan">Escanear {{$moduleTitle}}</span></h5>
+                    <div id="option-modal-extra">
+                        @if($withFecha)
+                            Seleccione una fecha para el escaneo:
+                                <input id="fecha_escaneo" type="date" value="{{now()->format('Y-m-d')}}" class="form-control">
+                        @endif
+
+                    </div>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -64,8 +71,8 @@
             });
         })
         $('#modal-escanear').on('hidden.bs.modal', function () {
+            $('#respuesta_barra').html('')
             $('#pedidos-procesados').html('')
-            $('#respuesta_barra').html('');
             $('#modal-escanear').unbind()
         })
         var codigos_agregados = [];
@@ -80,13 +87,18 @@
             var data = {{\Illuminate\Support\Js::from($ajaxparams)}};
             data.hiddenCodigo = codigo_mejorado
             data.ducument_code = codigo_mejorado
+            @if($withFecha)
+                data.fecha_salida = $('#fecha_escaneo').val()
+            @endif
             $.ajax({
                 data: data,
                 type: 'POST',
                 url: "{{ route('operaciones.confirmaropbarras') }}",
                 success: function (data) {
-                    codigos_agregados.push(data.codigo)
-                    codigos_agregados = codigos_agregados.filter((v, i, a) => a.indexOf(v) === i)
+                    if(data.codigo && data.codigo!='0') {
+                        codigos_agregados.push(data.codigo)
+                        codigos_agregados = codigos_agregados.filter((v, i, a) => a.indexOf(v) === i)
+                    }
                     console.log(data);
                     $('#respuesta_barra').removeClass("text-danger");
                     $('#respuesta_barra').removeClass("text-success");

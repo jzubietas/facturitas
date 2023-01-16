@@ -14,6 +14,7 @@
                     responsable="fernandez_devuelto"
                     accion="sobres_devuelto"
                     tipo="pedido"
+                    :tables-ids="collect($motorizados)->map(fn ($motorizado)=> '#tablaPrincipal'.Str::upper($motorizado->zona))->all()"
                 ></x-common-button-qr-scanner>
             </div>
         </div>

@@ -14,6 +14,8 @@ class QRScanner extends Component
     public $ajaxparams = [];
     public $tablesIds = [];
 
+    public $withFecha = false;
+
     /**
      * @param string $moduleTitle
      * @param string $responsable
@@ -21,7 +23,7 @@ class QRScanner extends Component
      * @param string $tipo
      * @param array $extras
      */
-    public function __construct(string $moduleTitle, string $responsable, string $accion, string $tipo, array $extras = [], array $tablesIds = [])
+    public function __construct(string $moduleTitle, string $responsable, string $accion, string $tipo, array $extras = [], array $tablesIds = [], $withFecha = false)
     {
         $this->moduleTitle = $moduleTitle;
         $this->responsable = $responsable;
@@ -29,6 +31,7 @@ class QRScanner extends Component
         $this->tipo = $tipo;
         $this->extras = $extras;
         $this->tablesIds = $tablesIds;
+        $this->withFecha = $withFecha;
         $this->ajaxparams = [
             'responsable' => $responsable,
             'accion' => $accion,
