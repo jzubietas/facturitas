@@ -42,8 +42,12 @@ class DistribucionController extends Controller
             ->pluck('departamento', 'departamento');
 
         $superasesor = User::where('rol', 'Super asesor')->count();
+        $motorizados=null;
+        if(auth()->user()->rol!=User::ROL_ENCARGADO)
+        {
+            $motorizados = User::query()->where('rol', '=', 'MOTORIZADO')->whereNotNull('zona')->get();
+        }
 
-        $motorizados = User::query()->where('rol', '=', 'MOTORIZADO')->whereNotNull('zona')->get();
 
         return view('envios.distribuirsobres', compact('superasesor', 'motorizados', 'ver_botones_accion', 'distritos', 'departamento'));
     }
