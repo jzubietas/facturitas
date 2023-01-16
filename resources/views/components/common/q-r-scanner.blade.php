@@ -14,7 +14,8 @@
                     <div id="option-modal-extra">
                         @if($withFecha)
                             Seleccione una fecha para el escaneo:
-                                <input id="fecha_escaneo" type="date" value="{{now()->format('Y-m-d')}}" class="form-control">
+                            <input id="fecha_escaneo" type="date" value="{{now()->format('Y-m-d')}}"
+                                   class="form-control">
                         @endif
 
                     </div>
@@ -46,7 +47,7 @@
 
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-success" id="close-scan" data-dismiss="modal">Aceptar</button>
+                    <button class="btn btn-success" id="close-scan">Aceptar</button>
                 </div>
             </div>
         </div>
@@ -66,7 +67,6 @@
             $('#modal-escanear').on('click', function () {
                 console.log("focus");
                 $('#codigo_confirmar').focus();
-
                 return false;
             });
         })
@@ -90,12 +90,40 @@
             @if($withFecha)
                 data.fecha_salida = $('#fecha_escaneo').val()
             @endif
+            codigos_agregados.push(codigo_mejorado)
+            codigos_agregados = codigos_agregados.filter((v, i, a) => a.indexOf(v) === i)
+            $(this).val("");
+            return false;
+        });
+
+        /***********
+         * FIN ESCANEAR MOUSE
+         */
+
+        $("#close-scan").click(function (e) {
+            e.preventDefault();
+            if (codigos_agregados.length === 0) {
+                return;
+            }
+            var codigo_caturado = ($(this).val() || '').trim();
+            $('#codigo_confirmar').val('')
+            var codigo_mejorado = codigo_caturado.replace(/['']+/g, '-');
+            if (!codigo_mejorado) {
+                return
+            }
+            var data = {{\Illuminate\Support\Js::from($ajaxparams)}};
+            data.codigos = codigos_agregados
+            data.ducument_code = codigo_mejorado
+            @if($withFecha)
+                data.fecha_salida = $('#fecha_escaneo').val()
+            @endif
+
             $.ajax({
                 data: data,
                 type: 'POST',
                 url: "{{ route('operaciones.confirmaropbarras') }}",
                 success: function (data) {
-                    if(data.codigo && data.codigo!='0') {
+                    if (data.codigo && data.codigo != '0') {
                         codigos_agregados.push(data.codigo)
                         codigos_agregados = codigos_agregados.filter((v, i, a) => a.indexOf(v) === i)
                     }
@@ -115,10 +143,6 @@
 
             $(this).val("");
             return false;
-        });
-
-        /***********
-         * FIN ESCANEAR MOUSE
-         */
+        })
     </script>
 @endpush
