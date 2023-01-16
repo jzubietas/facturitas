@@ -607,7 +607,18 @@ __________________________________
                                 'warning'
                             )
 
-
+                        } else if (data.html == '|tmp_time') {
+                            Swal.fire(
+                                'Error',
+                                'El tiempo dado para registrar pedidos expiro para el cliente seleccionado.',
+                                'warning'
+                            )
+                        } else if (data.html == '|tmp_count') {
+                            Swal.fire(
+                                'Error',
+                                'El cliente supero la cantidad dada para crearle pedidos extras.',
+                                'warning'
+                            )
                         } else {
                             var urlpdf = '{{ route('pedidosPDF', ':id') }}';
                             urlpdf = urlpdf.replace(':id', data.html);

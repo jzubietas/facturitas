@@ -312,11 +312,9 @@ class PedidoController extends Controller
                                     $btn[] = '<a style="font-size:11px" href="" class="m-0 p-2 btn-sm dropdown-item text-wrap" data-target="#modal-delete" data-toggle="modal" data-delete="' . $pedido->id . '" data-codigo=' . $pedido->codigo . ' data-responsable="' . $miidentificador . '"><i class="fas fa-trash-alt text-danger"></i> Anular</a>';
                                 }
                             }
-                        }else{
-                            if( auth()->user()->rol==User::ROL_ADMIN)
-                            {
-                                if ($pedido->condicion_pa == 0)
-                                {
+                        } else {
+                            if (auth()->user()->rol == User::ROL_ADMIN) {
+                                if ($pedido->condicion_pa == 0) {
                                     $btn[] = '<a style="font-size:11px" href="" class="m-0 p-2 btn-sm dropdown-item text-wrap" data-target="#modal-delete" data-toggle="modal" data-delete="' . $pedido->id . '" data-codigo=' . $pedido->codigo . ' data-responsable="' . $miidentificador . '"><i class="fas fa-trash-alt text-danger"></i> Anular</a>';
                                 }
 
@@ -645,9 +643,9 @@ class PedidoController extends Controller
             "DICIEMBRE" => 'DICIEMBRE',
         ];
 
-        $anios=[
-            ($dateY-1)=>($dateY-1),
-            $dateY=>$dateY
+        $anios = [
+            ($dateY - 1) => ($dateY - 1),
+            $dateY => $dateY
         ];
 
         $anios = [
@@ -971,15 +969,9 @@ class PedidoController extends Controller
 
     }
 
-    public
-    function pedidosstore(Request $request)
+    public function pedidosstore(Request $request)
     {
-
-        //return $request->all();
-        $numped = "";
         $mirol = Auth::user()->rol;//
-        $codigo = "";
-        $identi_asesor = null;
         if ($mirol == 'Llamadas') {
             $identi_asesor = User::where("identificador", $request->user_id)->where("unificado", "NO")->first();
             $fecha = Carbon::now()->format('dm');
@@ -1020,20 +1012,15 @@ class PedidoController extends Controller
         }
         $cliente_AB = Cliente::where("id", $request->cliente_id)->first();
         $codigo = (($identi_asesor->identificador == 'B') ? $identi_asesor->identificador : intval($identi_asesor->identificador)) . (($cliente_AB->icelular != null) ? $cliente_AB->icelular : '') . "-" . $fecha . "-" . $numped;
-        //return $codigo;
-
 
         $request->validate([
             'cliente_id' => 'required',
         ]);
-        //validar
-        ///
-        //$request->cliente_id
-
-        //$cliente = Cliente::find($request->cliente_id);
-
 
         $arreglo = array("ASESOR ADMINISTRATIVO", "Administrador",);
+
+
+        $cliente_deuda = Cliente::findOrFail($request->cliente_id);
 
         if (!(in_array($mirol, $arreglo))) {
             //calcular con activacion temporal
@@ -1041,44 +1028,39 @@ class PedidoController extends Controller
             //sino darle bloqueado por 3 maximo en el mes
             //sino  alerta deniega registrar
 
-            $cliente_deuda = Cliente::where("id", $request->cliente_id)
-                ->get([
-                        'clientes.id',
-                        'clientes.crea_temporal',
-                        'clientes.activado_tiempo',
-                        'clientes.activado_pedido',
-                        'clientes.temporal_update',
-                        DB::raw(" (select count(ped.id) from pedidos ped where ped.cliente_id=clientes.id and ped.pago in (0,1) and ped.pagado in (0,1) and ped.created_at >='" . now()->startOfMonth()->format("Y-m-d H:i:s") . "' and ped.estado=1) as pedidos_mes_deuda "),
-                        DB::raw(" (select count(ped2.id) from pedidos ped2 where ped2.cliente_id=clientes.id and ped2.pago in (0,1) and ped2.pagado in (0,1) and ped2.created_at <='" . now()->startOfMonth()->subMonth()->endOfMonth()->endOfDay()->format("Y-m-d H:i:s") . "'  and ped2.estado=1) as pedidos_mes_deuda_antes ")
-                    ]
-                )->first();
-
-
             if ($cliente_deuda->crea_temporal == 1) {
-
-
+                $now = now();
+                $temporal_update = $cliente_deuda->temporal_update;
+                if ($temporal_update < $now) {
+                    return response()->json([
+                        'html' => "|tmp_time",
+                    ]);
+                }
+                $limitepedidos = $cliente_deuda->activado_pedido;
+                if ($limitepedidos <= 0) {
+                    return response()->json([
+                        'html' => "|tmp_count",
+                    ]);
+                }
             } else {
 
+                $pedidos_mes_deuda = $cliente_deuda->pedidos()->noPagados()->whereDate('pedidos.created_at', '>=', now()->startOfMonth())->activo()->count();
+                $pedidos_mes_deuda_antes = $cliente_deuda->pedidos()->noPagados()->where('pedidos.created_at', '<=', now()->startOfMonth()->subMonth()->endOfMonth()->endOfDay())->activo()->count();
 
-                if ($cliente_deuda->pedidos_mes_deuda > 0 && $cliente_deuda->pedidos_mes_deuda_antes == 0) {
-                    if ($cliente_deuda->pedidos_mes_deuda > 4) {
+                if ($pedidos_mes_deuda > 0 && $pedidos_mes_deuda_antes == 0) {
+                    if ($pedidos_mes_deuda > 4) {
                         $html = "|4";
                         return response()->json(['html' => $html]);
                     }
-                } else if ($cliente_deuda->pedidos_mes_deuda > 0 && $cliente_deuda->pedidos_mes_deuda_antes > 0) {
+                } else if ($pedidos_mes_deuda > 0 && $pedidos_mes_deuda_antes > 0) {
                     $html = "|0";
                     return response()->json(['html' => $html]);
-                } else if ($cliente_deuda->pedidos_mes_deuda == 0 && $cliente_deuda->pedidos_mes_deuda_antes > 0) {
+                } else if ($pedidos_mes_deuda == 0 && $pedidos_mes_deuda_antes > 0) {
                     $html = "|0";
                     return response()->json(['html' => $html]);
                 }
             }
-
-
         }
-
-        //return $cliente_deuda->pedidos_mes_deuda;
-
 
         try {
 
@@ -1094,23 +1076,33 @@ class PedidoController extends Controller
                 'pago' => '0',
                 'condicion_envio' => Pedido::POR_ATENDER_OPE,
                 'condicion_envio_code' => Pedido::POR_ATENDER_INT,
-                'condicion_envio_at'=>now(),
+                'condicion_envio_at' => now(),
                 'estado' => '1',
                 'codigo' => $codigo,
                 'notificacion' => 'Nuevo pedido creado',
                 'modificador' => 'USER0' . Auth::user()->id,
                 'pagado' => '0',
                 'direccion' => '0',
-                'identificador'=>$identi_asesor->identificador,
-                'exidentificador'=>$identi_asesor->exidentificador,
-                'icelular_asesor'=>$identi_asesor->letra,
-                'icelular_cliente'=>$cliente_AB->icelular,
-                'celular_cliente'=>$cliente_AB->celular,
+                'identificador' => $identi_asesor->identificador,
+                'exidentificador' => $identi_asesor->exidentificador,
+                'icelular_asesor' => $identi_asesor->letra,
+                'icelular_cliente' => $cliente_AB->icelular,
+                'celular_cliente' => $cliente_AB->celular,
             ]);
 
             $pedido->update([
                 "correlativo" => $pedido->id_code
             ]);
+            if ($cliente_deuda->crea_temporal == 1) {
+                $limitepedidos = $cliente_deuda->activado_pedido;
+                $limitepedidos--;
+                if ($limitepedidos < 0) {
+                    $limitepedidos = 0;
+                }
+                $cliente_deuda->update([
+                    'activado_pedido' => $limitepedidos
+                ]);
+            }
 
             if ($cliente_AB->situacion == 'ABANDONO RECIENTE') {
                 $cliente_AB->update([
@@ -1128,7 +1120,6 @@ class PedidoController extends Controller
 
 
             // ALMACENANDO DETALLES
-            $codigo = $codigo;//$request->codigo; actualizado para codigo autogenerado
             $codigo_generado = $codigo;
             $nombre_empresa = $request->nombre_empresa;
             $mes = $request->mes;
@@ -1142,24 +1133,13 @@ class PedidoController extends Controller
             $nota = $request->nota;
 
             $files = $request->file('adjunto');
-            //return $files;
-            //$files = $request->adjunto;
-            $destinationPath = base_path('public/storage/adjuntos/');
-
-            $cont = 0;
-            $fileList = [];
-
 
             if (isset($files)) {
-
-                $cont = 0;
                 foreach ($files as $file) {
-                    $file_name = Carbon::now()->second . $file->getClientOriginalName();
-                    $file->move($destinationPath, $file_name);
-
+                    $file_name = $file->store('adjuntos', 'pstorage');
                     ImagenPedido::create([
                         'pedido_id' => $pedido->id,
-                        'adjunto' => $file_name,
+                        'adjunto' => basename($file_name),
                         'estado' => '1'
                     ]);
                 }
@@ -1169,41 +1149,7 @@ class PedidoController extends Controller
                     'adjunto' => 'logo_facturas.png',
                     'estado' => '1'
                 ]);
-                $cont = 0;
-                $fileList[$cont] = array(
-                    'file_name' => 'logo_facturas.png',
-                );
             }
-            /*
-                        if (isset($files)) {
-                            $destinationPath = base_path('public/storage/adjuntos/');
-                            $cont = 0;
-                            $file_name = Carbon::now()->second . $files->getClientOriginalName();
-                            $fileList[$cont] = array(
-                                'file_name' => $file_name,
-                            );
-                            $files->move($destinationPath, $file_name);
-
-                            ImagenPedido::create([
-                                'pedido_id' => $pedido->id,
-                                'adjunto' => $file_name,
-                                'estado' => '1'
-                            ]);
-
-                            //$cont++;
-                            //}
-                        } else {
-                            ImagenPedido::create([
-                                'pedido_id' => $pedido->id,
-                                'adjunto' => 'logo_facturas.png',
-                                'estado' => '1'
-                            ]);
-                            $cont = 0;
-                            $fileList[$cont] = array(
-                                'file_name' => 'logo_facturas.png',
-                            );
-
-                        }*/
 
             $contP = 0;
 
@@ -1226,16 +1172,12 @@ class PedidoController extends Controller
                     'descripcion' => $descripcion[$contP],
                     'nota' => $nota[$contP],
                     'estado' => '1',//,
-                    //'adjunto' => $fileList[$contP]['file_name']
                 ]);
 
                 $contP++;
 
                 //ACTUALIZAR DEUDA
                 $cliente = Cliente::find($request->cliente_id);
-
-                $fecha = Carbon::now()->format('dm');
-                $dia = Carbon::now()->toDateString();
                 //
                 $dateMinWhere = Carbon::now()->subDays(60)->format('d/m/Y');
                 $dateMin = Carbon::now()->subDays(30)->format('d/m/Y');
@@ -1264,12 +1206,8 @@ class PedidoController extends Controller
             $html = $pedido->id;
         } catch (\Throwable $th) {
             throw $th;
-            $html = "0";
-            /* DB::rollback();
-            dd($th); */
         }
         return response()->json(['html' => $html]);
-        //return redirect()->route('pedidosPDF', $pedido)->with('info', 'registrado');
     }
 
     /**
@@ -1744,7 +1682,7 @@ class PedidoController extends Controller
                     'condicion_code' => Pedido::POR_ATENDER_INT,
                     'condicion_envio' => Pedido::RECEPCION_COURIER,
                     'condicion_envio_code' => Pedido::RECEPCION_COURIER_INT,
-                    'condicion_envio_at'=>now(),
+                    'condicion_envio_at' => now(),
                     'modificador' => 'USER' . Auth::user()->id,
                     'estado' => '1',
                     'pendiente_anulacion' => '0'
@@ -2253,7 +2191,7 @@ class PedidoController extends Controller
                 ->where('dp.estado', '1')
                 ->WhereIn('pedidos.user_id', $asesores)
                 //->where('u.jefe', Auth::user()->id)
-                ->where('pedidos.condicion', Pedido: EN_PROCESO_ATENCION)
+                ->where('pedidos.condicion', Pedido::EN_PROCESO_ATENCION)
                 ->groupBy(
                     'pedidos.id',
                     'c.nombre',
@@ -2328,8 +2266,7 @@ class PedidoController extends Controller
             ->make(true);
     }
 
-    public
-    function EnAtencion()
+    public function EnAtencion()
     {
         $dateMin = Carbon::now()->subDays(4)->format('d/m/Y');
         $dateMax = Carbon::now()->format('d/m/Y');
@@ -2374,7 +2311,7 @@ class PedidoController extends Controller
                 ->where('dp.estado', '1')
                 ->WhereIn('u.identificador', $asesores)
                 //->where('u.operario', Auth::user()->id)
-                ->where('pedidos.condicion', Pedido: EN_PROCESO_ATENCION)
+                ->where('pedidos.condicion', Pedido::EN_PROCESO_ATENCION)
                 ->groupBy(
                     'pedidos.id',
                     'c.nombre',
@@ -2772,8 +2709,7 @@ class PedidoController extends Controller
         return response()->download($destinationPath);
     }
 
-    public
-    function changeImg(Request $request)
+    public function changeImg(Request $request)
     {
         $item = $request->item;
         $pedido = $request->pedido;
@@ -2781,11 +2717,7 @@ class PedidoController extends Controller
 
         if (isset($file)) {
             $destinationPath = base_path('public/storage/entregas/');
-            $cont = 0;
             $file_name = Carbon::now()->second . $file->getClientOriginalName();
-            $fileList[$cont] = array(
-                'file_name' => $file_name,
-            );
             $file->move($destinationPath, $file_name);
             $html = $file_name;
 
