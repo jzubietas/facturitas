@@ -2493,6 +2493,7 @@ Ver Rotulo</a>')
         $accion = $request->accion;
         $codigo = $request->hiddenCodigo;
         $tipo = $request->tipo; // PEDIDO O PAQUETE
+        $is_verification = $request->verification; // PEDIDO O PAQUETE
 
         $codigos = $request->codigos;
         if(!is_array($codigos)){

@@ -13,6 +13,7 @@
                 tipo="grupo"
                 accion="sobres_reparto"
                 :tables-ids="['#tablaPrincipal']"
+                :extras="[]"
             ></x-common-button-qr-scanner>
             <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
                     aria-expanded="false">
