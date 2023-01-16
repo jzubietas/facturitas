@@ -2497,7 +2497,7 @@ Ver Rotulo</a>')
         /*************
          * IDENTIFICAMOS LOS DATOS GLOBALES
          */
-        $pedido = Pedido::where("codigo", $codigo)->first();
+        $pedido = Pedido::where("codigo", $codigo)->firstOrFail();
         $grupo = $pedido->direccion_grupo;
         $codigo_pedido_actual = $pedido->id;
         $condicion_code_actual = $pedido->condicion_envio_code;
