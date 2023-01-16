@@ -465,10 +465,10 @@ class OperacionController extends Controller
                 $badge_estado='';
                 if($pedido->pendiente_anulacion=='1')
                 {
-                    $badge_estado.='<span class="badge badge-success">' . Pedido::PENDIENTE_ANULACION.'</span>';
+                    $badge_estado.='<span class="badge badge-danger">' . Pedido::PENDIENTE_ANULACION.'</span>';
                     return $badge_estado;
                 }
-                if($pedido->condicion_code=='4' || $pedido->estado=='0')
+                if($pedido->estado=='0')
                 {
                     return '<span class="badge badge-danger">ANULADO</span>';
                 }

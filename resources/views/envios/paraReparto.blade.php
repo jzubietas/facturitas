@@ -6,13 +6,22 @@
     <h1>Lista de pedidos para reparto - ENVIOS
 
         <div class="float-right btn-group dropleft">
+            <x-common-button-qr-scanner
+                module-title="Sobres para reparto"
+                with-fecha
+                responsable="fernandez_reparto"
+                tipo="grupo"
+                accion="sobres_reparto"
+                :tables-ids="['#tablaPrincipal']"
+            ></x-common-button-qr-scanner>
             <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
                     aria-expanded="false">
                 Exportar
             </button>
             <div class="dropdown-menu">
-                <a href="" data-target="#modal-exportar" data-toggle="modal" class="dropdown-item" target="blank_"><img
-                        src="{{ asset('imagenes/icon-excel.png') }}"> Excel</a>
+                <a href="" data-target="#modal-exportar" data-toggle="modal" class="dropdown-item" target="blank_">
+                    <img src="{{ asset('imagenes/icon-excel.png') }}"> Excel
+                </a>
             </div>
         </div>
         @include('pedidos.modal.exportar', ['title' => 'Exportar pedidos POR ENVIAR', 'key' => '1'])
@@ -103,8 +112,6 @@
         @include('envios.modal.confirmacion')
         @include('envios.modal.desvincularpedidos')
     </div>
-    </div>
-
 @stop
 
 @section('css')

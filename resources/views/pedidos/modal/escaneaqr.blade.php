@@ -4,6 +4,7 @@
     <div class="modal-content br-16 cnt-shw border-0">
       <div class="modal-header">
         <h5 class="modal-title font-weight-bold" id="exampleModalLabel"><i class="fa fa-barcode mr-12" aria-hidden="true"></i> <span id="titulo-scan">Escanear Pedido</span></h5>
+          <div id="option-modal-extra"></div>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -18,6 +19,7 @@
 
                  <input type="text" value="" id="codigo_confirmar" name="hiddenCodigo" style="opacity: 0">
                  <input type="text" value="12" id="codigo_accion" name="accion" style="opacity: 0">
+                 <input type="hidden" value="" id="codigo_responsable" name="codigo_responsable">
 
                  <p id="respuesta_barra"></p>
              </div>

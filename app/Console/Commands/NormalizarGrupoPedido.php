@@ -48,7 +48,7 @@ class NormalizarGrupoPedido extends Command
 
         $query = Pedido::query()->activo()
             ->where('condicion_envio_code', Pedido::RECEPCION_COURIER_INT)
-            ->where('estado_sobre','1')
+            ->where('estado_sobre', '1')
             ->orderBy('pedidos.id');
         $this->progress = $this->output->createProgressBar($query->count());
         $query->chunk(1000, function ($pedidos) {

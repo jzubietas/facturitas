@@ -3,9 +3,20 @@
 @section('title', 'Lista de pedidos por confirmar')
 
 @section('content_header')
-    <div class="row border-bottom pb-16">
-        <div class="col-lg-12">
-            <h1 class="font-20 font-weight-bold">Sobres Devueltos</h1>
+    <div class="border-bottom pb-16 w-100">
+        <div class="d-flex justify-content-between align-content-center">
+            <div>
+                <h1 class="font-20 font-weight-bold">Sobres Devueltos</h1>
+            </div>
+            <div>
+                <x-common-button-qr-scanner
+                    module-title="Sobres Devueltos"
+                    responsable="fernandez_devuelto"
+                    accion="sobres_devuelto"
+                    tipo="pedido"
+                    :tables-ids="collect($motorizados)->map(fn ($motorizado)=> '#tablaPrincipal'.Str::upper($motorizado->zona))->all()"
+                ></x-common-button-qr-scanner>
+            </div>
         </div>
     </div>
 
@@ -229,8 +240,8 @@
 
                 },
                 rowCallback: function (row, data, index) {
-                    var table=this.api()
-                    $('td',row).css('background',data.situacion_color);
+                    var table = this.api()
+                    $('td', row).css('background', data.situacion_color);
                     $('[data-toggle=jqconfirm]', row).click(function () {
                         const action = $(this).data('target')
                         $.confirm({
@@ -270,7 +281,7 @@
                     })
                     $('[data-toggle=jqconfirmtext]', row).click(function () {
                         const action = $(this).data('target')
-                        console.log($(this),action)
+                        console.log($(this), action)
                         $.confirm({
                             columnClass: 'large',
                             type: 'orange',
@@ -290,10 +301,11 @@
                         name: 'env_distrito',
                         render: function (data, type, row, meta) {
 
-                                return row.env_distrito + "<br>" + "<b>" + row.env_zona + "</b>";
+                            return row.env_distrito + "<br>" + "<b>" + row.env_zona + "</b>";
 
-                        },},
-                    {data: 'grupo_fecha_salida', name: 'fecha_salida',sWidth: '12%'},
+                        },
+                    },
+                    {data: 'grupo_fecha_salida', name: 'fecha_salida', sWidth: '12%'},
                     {
                         data: 'detalle',
                         name: 'detalle',
