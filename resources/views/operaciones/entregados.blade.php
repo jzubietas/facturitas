@@ -154,6 +154,11 @@
             var button = $(event.relatedTarget)
             var accion = button.data('accion')
             var responsable = button.data('responsable')
+             if(accion == "confirmacion_operaciones"){
+                 $('#titulo-scan').html("Confirmar <span class='text-success'>sobres sin envío</span>");
+             }else if (accion == "envio_courier_operaciones"){
+                 $('#titulo-scan').html("Escanear para enviar a <span class='text-success'>Courier</span></span>");
+             }
             //$('#codigo_confirmar').data('action',accion);
 
             $('#respuesta_barra').html("");
