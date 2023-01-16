@@ -2440,31 +2440,77 @@ class EnvioController extends Controller
         $nuevo_estado = $condicion_code_actual; // 11
         $nombre_accion = Pedido::$estadosCondicionEnvioCode[$condicion_code_actual]; // JEFE_OP_CONF
 
-        if ($area_accion == "fernandez") {
-            switch ($condicion_code_actual) {
-                case 12:
-                    $nuevo_estado = Pedido::RECEPCION_COURIER_INT;
-                    $respuesta = "El sobre se recibio correctamente.";
-                    $nombre_accion = Pedido::$estadosCondicionEnvioCode[$nuevo_estado];
 
-                    break;
-            }
-        } if ($area_accion == "maria") {
-            switch ($condicion_code_actual) {
-                case 5:
-                    $nuevo_estado = Pedido::RECIBIDO_JEFE_OPE_INT;
-                    $respuesta = "El pedido se envió a Logistica correctamente.";
-                    $nombre_accion = Pedido::$estadosCondicionEnvioCode[$nuevo_estado];
-
-                    break;
-            }
+        if(isset($request->extra)){
+            $opcion_adicional = $request->extra;
+        }else{
+            $opcion_adicional = "";
         }
-        if ($area_accion == "courier") {
-            switch ($condicion_code_actual) {
-                case 6:
-                    $nuevo_estado = Pedido::ENVIO_COURIER_JEFE_OPE_INT;
-                    $respuesta = "El pedido se envió a Logistica correctamente.";
-                    $nombre_accion = Pedido::$estadosCondicionEnvioCode[$nuevo_estado];
+
+        switch ($area_accion) {
+            case "fernandez":
+                switch ($condicion_code_actual) {
+                    case Pedido::ENVIO_COURIER_JEFE_OPE_INT:
+                        $nuevo_estado = Pedido::RECEPCION_COURIER_INT;
+                        $respuesta = "El sobre se recibio correctamente.";
+                        $nombre_accion = Pedido::$estadosCondicionEnvioCode[$nuevo_estado];
+                        break;
+                }
+                break;
+            case "maria":
+                switch ($condicion_code_actual) {
+                    case Pedido::ENVIADO_OPE_INT:
+                        $nuevo_estado = Pedido::RECIBIDO_JEFE_OPE_INT;
+                        $respuesta = "El pedido se envió a Logistica correctamente.";
+                        $nombre_accion = Pedido::$estadosCondicionEnvioCode[$nuevo_estado];
+                        break;
+                    case Pedido::ENTREGADO_SIN_SOBRE_OPE_INT:
+                        $nuevo_estado = Pedido::ENTREGADO_SIN_SOBRE_CLIENTE_INT;
+                        $respuesta = "El pedido sin sobre se confirmo correctamente.";
+                        $nombre_accion = Pedido::$estadosCondicionEnvioCode[$nuevo_estado];
+                        break;
+                }
+                break;
+            case "courier":
+                switch ($condicion_code_actual) {
+                    case Pedido::RECIBIDO_JEFE_OPE_INT:
+                        $nuevo_estado = Pedido::ENVIO_COURIER_JEFE_OPE_INT;
+                        $respuesta = "El pedido se envió a Logistica correctamente.";
+                        $nombre_accion = Pedido::$estadosCondicionEnvioCode[$nuevo_estado];
+
+                        break;
+                }
+                break;
+            case "jefe_op":
+                switch ($condicion_code_actual) {
+                    /*********
+                     *  JEFE DE OPERACIONES
+                     */
+                    case Pedido::ENVIADO_OPE_INT:
+                        $nuevo_estado = Pedido::RECIBIDO_JEFE_OPE_INT;
+                        $respuesta = "El pedido se envió a Logistica correctamente.";
+                        $nombre_accion = Pedido::$estadosCondicionEnvioCode[$nuevo_estado];
+
+                        break;
+
+                    case Pedido::RECIBIDO_JEFE_OPE_INT:
+                        $nuevo_estado = Pedido::ENVIO_COURIER_JEFE_OPE_INT;
+                        $respuesta = "El pedido se envió a Logistica correctamente.";
+                        $nombre_accion = Pedido::$estadosCondicionEnvioCode[$nuevo_estado];
+
+                        break;
+
+                    /*********
+                     * CONFIRMACION DE PEDIDOS SIN SOBRE
+                     */
+                    case Pedido::ENTREGADO_SIN_SOBRE_OPE_INT:
+                        $nuevo_estado = Pedido::ENTREGADO_SIN_SOBRE_CLIENTE_INT;
+                        $respuesta = "El pedido sin sobre se confirmo correctamente.";
+                        $nombre_accion = Pedido::$estadosCondicionEnvioCode[$nuevo_estado];
+
+                        break;
+                }
+                break;
 
                     break;
             }

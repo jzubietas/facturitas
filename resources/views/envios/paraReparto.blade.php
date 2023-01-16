@@ -6,6 +6,10 @@
     <h1>Lista de pedidos para reparto - ENVIOS
 
         <div class="float-right btn-group dropleft">
+            <button type="button" class="btn btn-option" data-toggle="modal" data-target="#modal-escanear"
+                    data-backdrop="static" style="margin-right:16px;" aria-haspopup="true" aria-expanded="false">
+                <i class="fa fa-barcode" aria-hidden="true"></i> Escanear
+            </button>
             <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
                     aria-expanded="false">
                 Exportar
@@ -102,6 +106,7 @@
         @include('envios.modal.distribuir')
         @include('envios.modal.confirmacion')
         @include('envios.modal.desvincularpedidos')
+        @include('pedidos.modal.escaneaqr')
     </div>
     </div>
 
@@ -182,6 +187,83 @@
 
 
         $(document).ready(function () {
+
+            /************
+             * ESCANEAR PEDIDO
+             */
+
+            $('#modal-escanear').on('shown.bs.modal', function () {
+                $('#codigo_confirmar').focus();
+                $('#codigo_accion').val("reparto");
+                $('#titulo-scan').html("Escanear para confirmar la <span class='text-success'>Recepción de sobres</span>");
+                $('#pedidos-procesados').html('')
+                $('#respuesta_barra').html('');
+                $('#option-modal-extra').html('Seleccione una fecha para el escaneo: <input id="fecha_escaneo" type="date" value="">')
+
+                $('#modal-escanear').on('click', function () {
+                    console.log("focus");
+                    $('#codigo_confirmar').focus();
+
+                    return false;
+                });
+            })
+            $('#modal-escanear').on('hidden.bs.modal', function () {
+                $('#pedidos-procesados').html('')
+                $('#respuesta_barra').html('');
+                $('#modal-escanear').unbind()
+            })
+            var codigos_agregados = [];
+            $('#codigo_confirmar').change(function (event) {
+                event.preventDefault();
+                var codigo_caturado = ($(this).val()||'').trim();
+                $('#codigo_confirmar').val('')
+                var codigo_mejorado = codigo_caturado.replace(/['']+/g, '-');
+                if(!codigo_mejorado){
+                    return
+                }
+                var codigo_accion = $('#codigo_accion').val();
+                console.log("El codigo es: " + codigo_mejorado);
+                /*************
+                 * Enviamos la orden al controlaor
+                 * @type {FormData}
+                 */
+                const fecha= $('#fecha_escaneo').val();
+
+                var fd_scan = new FormData();
+
+                fd_scan.append('hiddenCodigo', codigo_mejorado);
+                fd_scan.append('accion', codigo_accion);
+                fd_scan.append('fecha_salida', fecha);
+
+                $.ajax({
+                    data: fd_scan,
+                    processData: false,
+                    contentType: false,
+                    type: 'POST',
+                    url: "{{ route('operaciones.confirmaropbarras') }}",
+                    success: function (data) {
+                        codigos_agregados.push(data.codigo)
+                        codigos_agregados = codigos_agregados.filter((v, i, a) => a.indexOf(v) === i)
+                        console.log(data);
+                        $('#respuesta_barra').removeClass("text-danger");
+                        $('#respuesta_barra').removeClass("text-success");
+                        $('#respuesta_barra').addClass(data.class);
+                        $('#respuesta_barra').html(data.html);
+                        $('#pedidos-procesados').html(`<ul>${codigos_agregados.map(function (codigo) {
+                            return `<li><i class="fa fa-check text-success"></i>${codigo}</li>`
+                        }).join('')}</ul>`);
+                        $('#tablaPrincipal').DataTable().draw(false)
+                    }
+                });
+
+                $(this).val("");
+                return false;
+            });
+
+            /***********
+             * FIN ESCANEAR MOUSE
+             */
+
 
             $.ajaxSetup({
                 headers: {
