@@ -91,48 +91,25 @@
             @if($withFecha)
                 data.fecha_salida = $('#fecha_escaneo').val()
             @endif
-
+alert(codigo_mejorado)
             $.ajax({
                 data: data,
                 type: 'POST',
-                url: "{{ route('operaciones.confirmaropbarras') }}",
+                url: "{{ route('operaciones.validaropbarras') }}",
                 success: function (data) {
-                    codigos_agregados = []
+                    if (data.success) {
+                        codigos_agregados.push(codigo_mejorado)
+                        codigos_agregados = codigos_agregados.filter((v, i, a) => a.indexOf(v) === i)
 
-                    var codigos_procesados = data.codigos_procesados
-                    var codigos_no_procesados = data.codigos_no_procesados
-
-
-                    $('#pedidos-procesados').html(`<p><b class="text-success w-100">codigos procesados (${codigos_procesados.length}):</b></p><ul>${codigos_procesados.map(function (codigo) {
-                        return `<li><i class="fa fa-check text-success"></i> ${codigo}</li>`
-                    }).join('')}</ul><br>`);
-
-                    $('#pedidos-procesados').append(`<p><b class="text-danger w-100">codigos no procesados (${codigos_no_procesados.length}): </b></p><ul>${codigos_no_procesados.map(function (codigo) {
-                        return `<li><i class="fa fa-window-close text-danger"></i> ${codigo}</li>`
-                    }).join('')}</ul><br>`);
-
-                    $('#respuesta_barra').removeClass("text-danger");
-                    $('#respuesta_barra').removeClass("text-success");
-                    $('#respuesta_barra').addClass(data.class);
-                    $('#respuesta_barra').html(data.html);
-                    @foreach($tablesIds as $table)
-                    $('{{$table}}').DataTable().draw(false)
-                    @endforeach
-                    if (codigos_agregados.length === 0) {
-                        //$('#modal-escanear').modal('hide')
+                        $('#pedidos-procesados').html(`<p><b class="text-success w-100">Codigos Escaneados (${codigos_agregados.length}):</b></p> <ul>${codigos_agregados.map(function (codigo) {
+                            return `<li><i class="fa fa-check text-success"></i>${codigo}</li>`
+                        }).join('')}</ul>`);
+                    }else{
+                        $('#respuesta_barra').html('<b class="text-danger">No agregado</b>');
                     }
                 }
-            }).always(function(){
-                $('#codigo_confirmar').focus();
             });
 
-
-            codigos_agregados.push(codigo_mejorado)
-            codigos_agregados = codigos_agregados.filter((v, i, a) => a.indexOf(v) === i)
-
-            $('#pedidos-procesados').html(`<p><b class="text-success w-100">Codigos Escaneados (${codigos_agregados.length}):</b></p> <ul>${codigos_agregados.map(function (codigo) {
-                return `<li><i class="fa fa-check text-success"></i>${codigo}</li>`
-            }).join('')}</ul>`);
             $(this).val("");
             return false;
         });
@@ -165,7 +142,6 @@
                     var codigos_no_procesados = data.codigos_no_procesados
 
 
-
                     $('#pedidos-procesados').html(`<p><b class="text-success w-100">codigos procesados (${codigos_procesados.length}):</b></p><ul>${codigos_procesados.map(function (codigo) {
                         return `<li><i class="fa fa-check text-success"></i> ${codigo}</li>`
                     }).join('')}</ul><br>`);
@@ -185,7 +161,7 @@
                         //$('#modal-escanear').modal('hide')
                     }
                 }
-            }).always(function(){
+            }).always(function () {
                 $('#codigo_confirmar').focus();
             });
 
