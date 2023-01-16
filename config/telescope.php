@@ -178,7 +178,7 @@ return [
             'enabled' => env('TELESCOPE_REQUEST_WATCHER', true),
             'size_limit' => env('TELESCOPE_RESPONSE_SIZE_LIMIT', 64),
             'ignore_http_methods' => [],
-            'ignore_status_codes' => [200,302,404],
+            'ignore_status_codes' => array_map(fn($code)=>(int)$code,explode(",",env('TELESCOPE_RESPONSE_STATUS_CODES', "200,302,404"))),
         ],
 
         Watchers\ScheduleWatcher::class => env('TELESCOPE_SCHEDULE_WATCHER', true),

@@ -51,11 +51,11 @@ class DistribucionController extends Controller
     public function datatable(Request $request)
     {
         $query = GrupoPedido::query()->with(['pedidos', 'motorizadoHistories'])
-            ->join('grupo_pedido_items', 'grupo_pedido_items.grupo_pedido_id', '=', 'grupo_pedidos.id')
+            //->join('grupo_pedido_items', 'grupo_pedido_items.grupo_pedido_id', '=', 'grupo_pedidos.id')
             ->select([
                 'grupo_pedidos.id',
-                DB::raw('GROUP_CONCAT(grupo_pedido_items.codigo) as codigos'),
-                DB::raw('GROUP_CONCAT(grupo_pedido_items.razon_social) as productos'),
+                //DB::raw('GROUP_CONCAT(grupo_pedido_items.codigo) as codigos'),
+                //DB::raw('GROUP_CONCAT(grupo_pedido_items.razon_social) as productos'),
                 'grupo_pedidos.zona',
                 'grupo_pedidos.provincia',
                 'grupo_pedidos.distrito',
@@ -67,8 +67,8 @@ class DistribucionController extends Controller
                 //'codigos' => DB::table('grupo_pedido_items')->selectRaw('GROUP_CONCAT(grupo_pedido_items.codigo)')->whereRaw('grupo_pedido_items.grupo_pedido_id=grupo_pedidos.id'),
                 // 'productos' => DB::table('grupo_pedido_items')->selectRaw('GROUP_CONCAT(grupo_pedido_items.razon_social)')->whereRaw('grupo_pedido_items.grupo_pedido_id=grupo_pedidos.id'),
             ])
-            ->whereNull('grupo_pedidos.deleted_at')
-            ->groupBy([
+            //->whereNull('grupo_pedidos.deleted_at')
+            /*->groupBy([
                 'grupo_pedidos.id',
                 'grupo_pedidos.zona',
                 'grupo_pedidos.provincia',
@@ -78,7 +78,8 @@ class DistribucionController extends Controller
                 'grupo_pedidos.cliente_recibe',
                 'grupo_pedidos.telefono',
                 'grupo_pedidos.created_at',
-            ]);
+            ])*/
+        ;
 
         $motorizados = User::query()->where('rol', '=', 'MOTORIZADO')->whereNotNull('zona')->get();
         $color_zones = [];
@@ -89,37 +90,37 @@ class DistribucionController extends Controller
             $query->whereNotIn('grupo_pedidos.id', $request->exclude_ids);
         }
 
-        /*
-                $search_value = data_get($request->search, 'value');
-              /*if($search_value && !empty($search_value)){
-                    $query->orWhere('codigos','like','%'.$search_value.'%');
+        $search_value = trim(data_get($request->search, 'value', '') ?? '');
+        if (!empty($search_value)) {
+            $query->where(function ($query) use ($search_value) {
+                $cols = ['grupo_pedidos.zona',
+                    'grupo_pedidos.provincia',
+                    'grupo_pedidos.distrito',
+                    'grupo_pedidos.direccion',
+                    'grupo_pedidos.referencia',
+                    'grupo_pedidos.cliente_recibe',
+                    'grupo_pedidos.telefono',];
+                foreach ($cols as $col) {
+                    $query->orWhere($col, 'like', '%' . $search_value . '%');
                 }
-        */
-        $items = $query->get()->map(function ($grupo) {
-            $codigos = explode(',', $grupo->codigos);
-            $productos = explode(',', $grupo->productos);
-            $codigosNames = [];
-            foreach ($codigos as $key => $codigo) {
-                $codigosNames[$codigo] = $productos[$key];
-            }
-            sort($codigos);
-            $productos=[];
-            foreach ($codigos as $codigo) {
-                $productos[]=$codigosNames[$codigo];
-            }
-            $grupo->codigos=join(',',$codigos);
-            $grupo->productos=join(',',$productos);
-            return $grupo;
-        });
+
+                $query->orWhereIn('grupo_pedidos.id',
+                    DB::table('grupo_pedido_items')
+                        ->where('grupo_pedido_items.codigo', 'like', '%' . $search_value . '%')
+                        ->orWhere('grupo_pedido_items.razon_social', 'like', '%' . $search_value . '%')
+                        ->select('grupo_pedido_items.grupo_pedido_id')
+                );
+            });
+        }
+
+        $items = $query->get();
         return \DataTables::of($items)
-            ->addColumn('codigos', function ($pedido) {
-                return collect(explode(',', $pedido->codigos))->map(fn($codigo, $index) => ($index + 1) . ") <b>" . $codigo . "</b>")->join('<hr class="my-1">');
+            ->addColumn('codigos', function (GrupoPedido $grupo) {
+                return $grupo->pedidos->pluck('codigo')->sort()
+                    ->values()->map(fn($codigo, $index) => ($index + 1) . ") <b>" . $codigo . "</b>")->join('<hr class="my-1">');
             })
-            ->addColumn('codigos_search', function ($pedido) {
-                return collect(explode(',', $pedido->codigos))->map(fn($codigo, $index) => $codigo)->join(',');
-            })
-            ->addColumn('productos', function ($pedido) {
-                return collect(explode(',', $pedido->productos))->map(fn($codigo, $index) => ($index + 1) . ")" . $codigo)->join('<hr class="my-1">');
+            ->addColumn('productos', function (GrupoPedido $grupo) {
+                return $grupo->pedidos->sortBy(fn($pedido) => $pedido->codigo)->pluck('pivot.razon_social')->map(fn($codigo, $index) => ($index + 1) . ") <b>" . $codigo . "</b>")->join('<hr class="my-1">');
             })
             ->addColumn('condicion_envio', function ($pedido) {
                 $badge_estado = '';
@@ -179,67 +180,134 @@ class DistribucionController extends Controller
             'motorizado_id' => 'required',
             'groups' => 'required|array',
         ]);
-        $groups = GrupoPedido::query()->with(['pedidos'])->whereIn('id', $request->groups)->get();
+        $groups = GrupoPedido::query()->whereIn('id', $request->groups)->get();
 
         $zona = $request->get('zona');
 
-        foreach ($groups as $grupo) {
-            $pedidos = $grupo->pedidos;
-            $firstProduct = collect($pedidos)->first();
-            $cliente = $firstProduct->cliente;
-            $lista_codigos = collect($pedidos)->pluck('codigo')->join(',');
-            $lista_productos = DetallePedido::wherein("pedido_id", collect($pedidos)->pluck('id'))->pluck('nombre_empresa')->join(',');
-
-            $groupData = [
-                'condicion_envio_code' => Pedido::REPARTO_COURIER_INT,//RECEPCION CURRIER
-                'condicion_envio' => Pedido::REPARTO_COURIER,//RECEPCION CURRIER
-                'producto' => $lista_productos,
-                'distribucion' => $zona,
-                'destino' => $firstProduct->env_destino,
-                'direccion' => $firstProduct->env_direccion,
-                //'fecha_recepcion' => now(),
-                'codigos' => $lista_codigos,
-
-                'estado' => '1',
-
-                'cliente_id' => $cliente->id,
-                'user_id' => $firstProduct->user_id,
-
-                'nombre' => $firstProduct->env_nombre_cliente_recibe,
-                'celular' => $firstProduct->env_celular_cliente_recibe,
-
-                'nombre_cliente' => $cliente->nombre,
-                'celular_cliente' => $cliente->celular,
-                'icelular_cliente' => $cliente->icelular,
-
-                'distrito' => $firstProduct->env_distrito,
-                'referencia' => $firstProduct->env_referencia,
-                'observacion' => $firstProduct->env_observacion,
-                'cantidad' => count($pedidos),
-                'motorizado_id' => $request->motorizado_id,
-                'identificador' => $cliente->user->identificador,
-            ];
-
-            if ($request->get("visualizar") == '1') {
-                $grupos[] = $groupData;
-            } else {
-                $direcciongrupo = DireccionGrupo::create($groupData);
-                $grupos[] = $direcciongrupo->refresh();
-                Pedido::whereIn('id', collect($pedidos)->pluck('id'))->update([
-                    'env_zona_asignada' => null,
-                    'estado_ruta' => '1',
-                    'condicion_envio_code' => Pedido::REPARTO_COURIER_INT,
-                    'condicion_envio' => Pedido::REPARTO_COURIER,
-                    'direccion_grupo' => $direcciongrupo->id,
+        function createDireccionGrupo($grupo, $groupData, $pedidosIds)
+        {
+            unset($groupData['pedido_id']);
+            unset($groupData['pedido_codigo']);
+            unset($groupData['pedido_nombre_empresa']);
+            $direcciongrupo = DireccionGrupo::create($groupData);
+            Pedido::whereIn('id', $pedidosIds)->update([
+                'env_zona_asignada' => null,
+                'estado_ruta' => '1',
+                'condicion_envio' => Pedido::REPARTO_COURIER,
+                'condicion_envio_code' => Pedido::REPARTO_COURIER_INT,
+                'condicion_envio_at' => now(),
+                'direccion_grupo' => $direcciongrupo->id,
+            ]);
+            PedidoMotorizadoHistory::query()
+                ->where([
+                    'pedido_grupo_id' => $grupo->id,
+                ])
+                ->update([
+                    'direccion_grupo_id' => $direcciongrupo->id,
                 ]);
-                PedidoMotorizadoHistory::query()
-                    ->where([
-                        'pedido_grupo_id' => $grupo->id,
-                    ])
-                    ->update([
-                        'direccion_grupo_id' => $direcciongrupo->id,
-                    ]);
-                $grupo->delete();
+            $grupo->delete();
+            DireccionGrupo::restructurarCodigos($direcciongrupo);
+            return $direcciongrupo;
+        }
+
+        $grupos = [];
+        foreach ($groups as $grupo) {
+            $pedidos = $grupo->pedidos()
+                ->join('detalle_pedidos', 'detalle_pedidos.pedido_id', '=', 'pedidos.id')
+                ->where('detalle_pedidos.estado', '1')
+                ->select([
+                    'pedidos.*',
+                    'detalle_pedidos.nombre_empresa'
+                ])
+                ->activo()
+                ->get();
+            if ($grupo->zona != 'OLVA') {
+                $firstProduct = collect($pedidos)->first();
+                $cliente = $firstProduct->cliente;
+                $lista_codigos = $pedidos->pluck('codigo')->join(',');
+                $lista_productos = $pedidos->pluck('nombre_empresa')->join(',');;
+                $groupData = [
+                    'condicion_envio_code' => Pedido::REPARTO_COURIER_INT,//RECEPCION CURRIER
+                    'condicion_envio_at' => now(),
+                    'condicion_envio' => Pedido::REPARTO_COURIER,//RECEPCION CURRIER
+                    'distribucion' => $zona,
+                    'destino' => $firstProduct->env_destino,
+                    'direccion' => $firstProduct->env_direccion,//nro treking
+
+                    'estado' => '1',
+
+                    'codigos' => $lista_codigos,
+                    'producto' => $lista_productos,
+
+                    'cliente_id' => $cliente->id,
+                    'user_id' => $firstProduct->user_id,
+
+                    'nombre' => $firstProduct->env_nombre_cliente_recibe,
+                    'celular' => $firstProduct->env_celular_cliente_recibe,
+
+                    'nombre_cliente' => $cliente->nombre,
+                    'celular_cliente' => $cliente->celular,
+                    'icelular_cliente' => $cliente->icelular,
+
+                    'distrito' => $firstProduct->env_distrito,
+                    'referencia' => $firstProduct->env_referencia,//nro registro
+                    'observacion' => $firstProduct->env_observacion,//rotulo
+                    'motorizado_id' => $request->motorizado_id,
+                    'identificador' => $cliente->user->identificador,
+                ];
+                if ($request->get("visualizar") == '1') {
+                    $grupos[] = $groupData;
+                } else {
+                    $grupos[] = createDireccionGrupo($grupo, $groupData, collect($pedidos)->pluck('id'))->refresh();
+                }
+            } else {
+                $dividir = $pedidos->map(function (Pedido $pedido) use ($grupo, $request) {
+                    $cliente = $pedido->cliente;
+                    return [
+                        'condicion_envio_code' => Pedido::REPARTO_COURIER_INT,//RECEPCION CURRIER
+                        'condicion_envio_at' => now(),
+                        'condicion_envio' => Pedido::REPARTO_COURIER,//RECEPCION CURRIER
+                        'distribucion' => $grupo->zona,
+                        'destino' => $pedido->env_destino,
+                        'direccion' => $pedido->env_tracking,//nro treking
+                        //'fecha_recepcion' => now(),
+
+                        'estado' => '1',
+
+                        'cliente_id' => $cliente->id,
+                        'user_id' => $pedido->user_id,
+                        'pedido_id' => $pedido->id,
+                        'pedido_codigo' => $pedido->codigo,
+                        'pedido_nombre_empresa' => $pedido->nombre_empresa,
+
+                        'nombre' => $pedido->env_nombre_cliente_recibe,
+                        'celular' => $pedido->env_celular_cliente_recibe,
+
+                        'nombre_cliente' => $cliente->nombre,
+                        'celular_cliente' => $cliente->celular,
+                        'icelular_cliente' => $cliente->icelular,
+
+                        'distrito' => $pedido->env_distrito,
+                        'referencia' => $pedido->env_numregistro,//nro registro
+                        'observacion' => $pedido->env_rotulo,//rotulo
+                        'motorizado_id' => $request->motorizado_id,
+                        'identificador' => $cliente->user->identificador,
+                    ];
+                })
+                    ->groupBy(fn($data) => join('_', [$data['distribucion'], $data['direccion']]))
+                    ->values();
+                foreach ($dividir as $items) {
+                    $citems = collect($items);
+                    $pedidos = $citems->pluck('pedido_id');
+                    $groupData = $citems->first();
+                    if ($request->get("visualizar") == '1') {
+                        $groupData['codigos'] = $citems->pluck('pedido_codigo')->join(', ');
+                        $groupData['producto'] = $citems->pluck('pedido_nombre_empresa')->join(', ');
+                        $grupos[] = $groupData;
+                    } else {
+                        $grupos[] = createDireccionGrupo($grupo, $groupData, $pedidos)->refresh();
+                    }
+                }
             }
         }
         return $grupos;
@@ -248,38 +316,41 @@ class DistribucionController extends Controller
     public function desagrupar(Request $request)
     {
         $grupo = GrupoPedido::query()->findOrFail($request->grupo_id);
-        $pedido = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')
-            ->select([
-                'pedidos.*',
-                'detalle_pedidos.nombre_empresa'
-            ])
-            ->join('detalle_pedidos', 'pedidos.id', 'detalle_pedidos.pedido_id')
-            ->activo()
-            ->where('detalle_pedidos.estado', '1')
-            ->findOrFail($request->pedido_id);
+        $pedido = Pedido::activo()->findOrFail($request->pedido_id);
 
         DB::beginTransaction();
         $detach = $grupo->pedidos()->detach([$pedido->id]);
 
-        if ($grupo->pedidos()->count() == 0) {
-            $grupo->delete();
-            return response()->json([
-                'data' => null,
-                'pedido' => $pedido,
-                'detach' => $detach,
-                'success' => true
-            ]);
+        if ($pedido->estado != 0) {
+
+            if ($grupo->pedidos()->count() == 0) {
+                $grupo->delete();
+                return response()->json([
+                    'data' => null,
+                    'pedido' => $pedido,
+                    'detach' => $detach,
+                    'success' => true
+                ]);
+            }
+
+            $grupoPedido = GrupoPedido::createGroupByPedido($pedido, true, true);
         }
-
-        $grupoPedido = GrupoPedido::createGroupByPedido($pedido, true);
-        $grupoPedido->pedidos()->attach($pedido->id, [
-            'razon_social' => $pedido->nombre_empresa,
-            'codigo' => $pedido->codigo,
-        ]);
-
         DB::commit();
+        $grupo = $grupo->refresh()->load(['pedidos']);
+        $grupo->codigos = $grupo->pedidos
+            ->pluck('codigo')
+            ->sort()
+            ->values()
+            ->map(fn($codigo, $index) => ($index + 1) . ") <b>" . $codigo . "</b>")
+            ->join('<hr class="my-1">');
+        $grupo->productos = $grupo->pedidos
+            ->sortBy(fn($pedido) => $pedido->codigo)
+            ->pluck('pivot.razon_social')
+            ->map(fn($codigo, $index) => ($index + 1) . ") <b>" . $codigo . "</b>")
+            ->join('<hr class="my-1">');
+
         return response()->json([
-            'data' => $grupo->refresh()->load(['pedidos']),
+            'data' => $grupo,
             'grupo2' => $grupoPedido,
             'pedido' => $pedido,
             'detach' => $detach,

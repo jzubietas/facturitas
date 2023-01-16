@@ -67,16 +67,11 @@
              <input type="text" name="pempresa" id="pempresa" class="form-control" placeholder="Nombre de empresa..." disabled>
          </div>
 
-          <div class="form-group col-lg-2">
-
-          {!! Form::label('pmes', 'Mes') !!}
-          {!! Form::select('pmes', $meses , $mes_selected, ['class' => 'form-control border selectpicker border-secondary', 'data-live-search' => 'true', 'placeholder' => '---- SELECCIONE ----']) !!}
-          </div>
-
-          <div class="form-group col-lg-2">
-
-          {!! Form::label('panio', 'Año') !!}
-          {!! Form::select('panio', $anios , $anno_selected, ['class' => 'form-control border selectpicker border-secondary', 'data-live-search' => 'true', 'placeholder' => '---- SELECCIONE ----']) !!}
+          <div class="form-group col-lg-3">
+              {!! Form::label('ptipo_banca', 'Tipo de comprobante y banca') !!}
+              <select name="ptipo_banca" id="ptipo_banca" class="border form-control border-secondary">
+                  <option value="">---- SELECCIONE ----</option>
+              </select>
           </div>
 
           <div class="form-group col-lg-3 d-flex justify-content-center align-items-center">
@@ -104,17 +99,25 @@
             {!! Form::label('pcantidad', 'Cantidad') !!}
               <input type="text" name="pcantidad" id="pcantidad" step="0.01" min="0" class="form-control number ob" data-type="text" data-msj="Ingrese una cantidad" placeholder="Cantidad...">
           </div>
-          <div class="form-group col-lg-3">
-            {!! Form::label('ptipo_banca', 'Tipo de comprobante y banca') !!}
-            <select name="ptipo_banca" id="ptipo_banca" class="border form-control border-secondary">
-              <option value="">---- SELECCIONE ----</option>
-            </select>
-          </div>
-          <div class="form-group col-lg-2">
+
+            <div class="form-group col-lg-2">
+
+                {!! Form::label('pmes', 'Mes') !!}
+                {!! Form::select('pmes', $meses , $mes_selected, ['class' => 'form-control border selectpicker border-secondary', 'data-live-search' => 'true', 'placeholder' => '---- SELECCIONE ----']) !!}
+            </div>
+
+            <div class="form-group col-lg-2">
+
+                {!! Form::label('panio', 'Año') !!}
+                {!! Form::select('panio', $anios , $anno_selected, ['class' => 'form-control border selectpicker border-secondary', 'data-live-search' => 'true', 'placeholder' => '---- SELECCIONE ----']) !!}
+            </div>
+
+
+          <div class="form-group col-lg-1">
             {!! Form::label('pporcentaje', 'Porcentaje(%)') !!}
               <input type="number" name="pporcentaje" id="pporcentaje" step="0.1" min="0" class="form-control" placeholder="Porcentaje..." disabled>
           </div>
-          <div class="form-group col-lg-2">
+          <div class="form-group col-lg-1">
             {!! Form::label('pcourier', 'Courier(S/)') !!}
               {{-- <input type="number" name="pcourier" id="pcourier" step="0.01" min="0" class="form-control" placeholder="Courier..."> --}}
               <input type="text" name="pcourier" id="pcourier" step="0.01" min="0" class="form-control number" value="0" placeholder="Courier...">

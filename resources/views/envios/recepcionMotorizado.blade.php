@@ -208,11 +208,10 @@
                                                                 <div>
 
                                                                     <h6 class="mb-0">
-                                                                        <a target="_blank" class="btn btn-sm btn-danger"
-                                                                                        href="{{ route('envios.recepcionmotorizado.Excel',['user_motorizado'=>$motorizado->id,'fecha_envio'=>'2023-01-13']) }}">
-                                                                            <i class="fa fa-file-excel"></i>
-                                                                            Excel
-                                                                        </a>
+                                                                        <button class="btn btn-sm btn-danger exportar_zona" data-motorizado="{{$motorizado->id}}">
+                                                                            <i class="fa fa-file-excel"></i>Excel
+
+                                                                        </button>
 
                                                                     </h6>
                                                                 </div>
@@ -682,6 +681,23 @@
                     <script>
                         $(document).ready(function () {
 
+                            $(document).on('click','.exportar_zona',function(event){
+                                event.preventDefault();
+                                $motorizado = $(this).data('motorizado');
+                                $fecha = $("#fecha_consulta").val();
+                                console.log($motorizado);
+                                console.log($fecha)
+
+                               //abrir modal y setear valores
+                                $("#user_motorizado").val($motorizado);
+                                $("#user_motorizado").selectpicker('refresh')
+                                $("#fecha_envio").val($fecha)
+                                $("#modal-exportar").modal('show');
+
+
+                            })
+
+
                             function getHtmlPrevisualizarDesagrupar(row, text) {
                                 return `
 <form>
@@ -842,6 +858,13 @@
                             });
                             var timeoutMessage;
                             $("#fecha_consulta").on('change', function () {
+                                console.log($(this).val());
+                                console.log(new Date())
+
+                                var dateA = moment($(this).val());
+                                var dateB = moment(new Date());
+                                let diff=dateB.diff(dateA, 'days')
+                                console.log('Diferencia es ', diff, 'days');
 
                                 //mostrar alert
                                 if(timeoutMessage){
@@ -883,12 +906,16 @@
                                     //console.log(row);
                                 },
                                 rowCallback: function (row, data, index) {
+                                    if(data.cambio_direccion_at!=null){
+                                        $('td', row).css('background', 'rgba(17,129,255,0.35)')
+                                    }
                                     $("[data-toggle=jqconfirm]", row).click(function () {
                                         const action = $(this).data('target')
                                         const actionPost = $(this).data('target-post')
                                         const count = $(this).data('count')
                                         const btncolor = $(this).data('btncolor')
                                         const btntext = $(this).data('btntext')
+                                        const isrecibido = $(this).data('recibido')=='1'
                                         $.confirm({
                                             title: 'Confirmar '+btntext,
                                             type: btncolor||'blue',
@@ -896,7 +923,13 @@
                                             content: function () {
                                                 const self = this
                                                 if (count == '1') {
-                                                    return `<p>Esta seguro de confirmar la recepción del Pedido <strong class="textcode">${data.codigos}</strong></p>`
+                                                    if(isrecibido) {
+                                                        return `<p>Esta seguro de confirmar la recepción del Pedido <strong class="textcode">${data.codigos}</strong></p>  ${data.cambio_direccion_at != null?`<div class="col-12">
+                    <p class="alert alert-warning">Datos de la dirección fueron modificados, ¿desea continuar?.</p>
+                  </div>`:''}`
+                                                    }else{
+                                                        return `<p>Esta seguro de rechazar la recepción del Pedido <strong class="textcode">${data.codigos}</strong></p>`
+                                                    }
                                                 } else {
                                                     self.showLoading(true)
                                                     return $.get(action).done(function (data) {

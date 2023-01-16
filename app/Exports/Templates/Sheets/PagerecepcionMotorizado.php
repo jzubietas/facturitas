@@ -68,6 +68,10 @@ class PagerecepcionMotorizado extends Export implements WithColumnFormatting, Fr
             $direccion = $direccion->whereDate('direccion_grupos.fecha_salida', $this->fecha_envio_h);
         }
 
+        /*->when($fecha_consulta != null, function ($query) use ($fecha_consulta) {
+            $query->whereDate('direccion_grupos.fecha_salida', $fecha_consulta);
+        })*/
+
         return $direccion->get();
     }
 

@@ -2,18 +2,18 @@
 
 namespace App\Console\Commands;
 
-use App\Models\DireccionGrupo;
+use App\Models\GrupoPedido;
 use App\Models\Pedido;
 use Illuminate\Console\Command;
 
-class MigrateCondicionEnvioGrupoPedido extends Command
+class NormalizarGrupoPedido extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'normalizar:condicion_evio:grupopedido';
+    protected $signature = 'normalizar:grupo-pedido';
 
     /**
      * The console command description.
@@ -21,7 +21,7 @@ class MigrateCondicionEnvioGrupoPedido extends Command
      * @var string
      */
     protected $description = 'Command description';
-    protected $table = [];
+
     protected $progress;
 
     /**
@@ -41,18 +41,19 @@ class MigrateCondicionEnvioGrupoPedido extends Command
      */
     public function handle()
     {
-        $query = DireccionGrupo::query()->activo()
-            ->orderBy('created_at');
-        $this->progress = $this->output->createProgressBar($query->count());
+        \Schema::disableForeignKeyConstraints();
+        \DB::table('grupo_pedido_items')->truncate();
+        GrupoPedido::truncate();
+        \Schema::enableForeignKeyConstraints();
 
-        $query->chunk(1000, function ($grupos) {
-            foreach ($grupos as $grupo) {
-                $grupo->pedidos()->activo()
-                    ->update([
-                        'condicion_envio_code' => $grupo->condicion_envio_code,
-                        'condicion_envio' => $grupo->condicion_envio,
-                        'condicion_envio_at'=>now(),
-                    ]);
+        $query = Pedido::query()->activo()
+            ->where('condicion_envio_code', Pedido::RECEPCION_COURIER_INT)
+            ->where('estado_sobre','1')
+            ->orderBy('pedidos.id');
+        $this->progress = $this->output->createProgressBar($query->count());
+        $query->chunk(1000, function ($pedidos) {
+            foreach ($pedidos as $pedido) {
+                GrupoPedido::createGroupByPedido($pedido, false, true);
                 $this->progress->advance();
             }
         });

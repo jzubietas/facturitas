@@ -242,7 +242,7 @@
                     })
                 },
                 columns: [
-                    {data: 'codigos', name: 'codigos', searchable: true, sWidth: '7%', sClass: 'cod_dir'},
+                    {data: 'codigos', name: 'codigos', searchable: true, sWidth: '10%', sClass: 'cod_dir'},
                     {data: 'productos', name: 'productos', searchable: true, sClass: 'cod_dir cod_dir_w'},
                     {data: 'cliente_recibe', name: 'cliente_recibe',},
                     {data: 'telefono', name: 'telefono',},
@@ -434,7 +434,7 @@
                             ${pedido.pivot.razon_social}
                         </div>
                         <div class="col-4 text-center">
-                            ${row.pedidos.length > 1 ? `<button class="btn btn-danger" data-jqdesagrupar="${row.id}" data-pedido_id="${pedido.id}"><i class="fa fa-arrow-down"></i> Desagrupar</button>` : ''}
+                            ${(row.pedidos.length > 1 && pedido.env_zona!='OLVA') ? `<button class="btn btn-danger" data-jqdesagrupar="${row.id}" data-pedido_id="${pedido.id}"><i class="fa fa-arrow-down"></i> Desagrupar</button>` : '<button class="btn btn-danger" disabled><i class="fa fa-arrow-down"></i> Desagrupar</button>'}
                         </div>
                     </div>
                 </li>`

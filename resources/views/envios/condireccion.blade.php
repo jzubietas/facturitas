@@ -311,7 +311,7 @@
         },
         rowCallback: function (row, data, index) {
               if(data.destino2=='PROVINCIA'){
-                $('td', row).css('color','red')
+                $('td', row).addClass('ancho_condicion_envio_global')
 
               }else if(data.destino2=='LIMA'){
                 if(data.distribucion!=null)
@@ -398,7 +398,7 @@
 
             }
           },
-          {data: 'condicion_envio', name: 'condicion_envio', },
+          {data: 'condicion_envio', name: 'condicion_envio' },
           {
             data: 'action',
             name: 'action',

@@ -17,6 +17,7 @@ use App\View\Components\dashboard\graficos\QtyPedidoFisicoElectronicos;
 use App\View\Components\dashboard\graficos\TopClientesPedidos;
 use App\View\Components\dashboard\tablas\FisElecJefeOperaciones;
 use Carbon\Carbon;
+use Illuminate\Support\Collection;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -37,6 +38,14 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        Collection::macro('trim',function (){
+            return $this->map(function ($item){
+                if(is_string($item)){
+                    return trim($item);
+                }
+               return  $item;
+            });
+        });
         \Blade::component('grafico-pedidos-mes-count-progress-bar', PedidosMesCountProgressBar::class);
         \Blade::component('grafico-meta-pedidos-progress-bar', PedidosAsignadosProgressBar::class);
         \Blade::component('grafico-pedidos-por-dia', PedidosPorDia::class);

@@ -764,6 +764,9 @@ Enviar</button>
                 },
                 rowCallback: function (row, data, index) {
                     renderButtomsDataTable(row,data)
+                    if (data.cambio_direccion_at!=null) {
+                        $('td', row).css('background', 'rgba(17,129,255,0.35)')
+                    }
                 },
                 columns: [
                     {
@@ -1299,7 +1302,7 @@ Enviar</button>
                             }
                         }
                     },
-                    {data: 'condicion_envio', name: 'condicion_envio',},
+                    {data: 'condicion_envio', name: 'condicion_envio',className:'ancho_condicion_envio_global'},
                     {
                         data: 'action',
                         name: 'action',

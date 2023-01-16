@@ -185,8 +185,16 @@
     <script src="https://cdn.datatables.net/plug-ins/1.11.4/dataRender/datetime.js"></script>
 
     <!--  <script src="{{ asset('js/datatables.js') }}"></script>-->
-
     <script>
+        //VALIDAR CAMPO CELULAR
+        function maxLengthCheck(object)
+        {
+            if (object.value.length > object.maxLength)
+                object.value = object.value.slice(0, object.maxLength)
+        }
+    </script>
+    <script>
+
         $(document).ready(function () {
             //moment.updateLocale(moment.locale(), { invalidDate: "Invalid Date Example" });
             //$.fn.dataTable.moment('DD-MMM-Y HH:mm:ss');
@@ -301,7 +309,8 @@
                                     url: '{{route('pedidos.envios.get-direccion')}}?pedido_id=' + data.id,
                                     dataType: 'json',
                                     method: 'get'
-                                }).done(function (response) {
+                                })
+                                    .done(function (response) {
                                     console.log(response);
 
                                     self.setContent(response.html);
@@ -311,7 +320,8 @@
                                     //self.setContent('Description: ' + response.description);
                                     //self.setContentAppend('<br>Version: ' + response.version);
                                     //self.setTitle(response.name);
-                                }).fail(function (e) {
+                                })
+                                    .fail(function (e) {
                                     console.error(e)
                                     self.setContent('Ocurrio un error');
                                 });
@@ -322,7 +332,6 @@
                                     btnClass: 'btn-success',
                                     action: function () {
                                         var self = this;
-                                        self.showLoading(true)
                                         console.log(self.$content.find('form')[0])
                                         const form = self.$content.find('form')[0];
                                         const data = new FormData(form)
@@ -330,7 +339,16 @@
                                         /*if (form.rotulo.files.length > 0) {
                                             data.append('rotulo', form.rotulo.files[0])
                                         }*/
+                                        if(data.get('celular').length!=9){
+                                            $.alert({
+                                                title: 'Alerta!',
+                                                content: '¡El numero de celular debe tener 9 digitos!',
+                                            });
+                                            return false
 
+                                        }
+
+                                        self.showLoading(true)
                                         $.ajax({
                                             data: data,
                                             processData: false,

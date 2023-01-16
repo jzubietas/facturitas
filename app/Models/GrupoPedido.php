@@ -18,7 +18,7 @@ class GrupoPedido extends Model
         return $this->belongsToMany(Pedido::class, 'grupo_pedido_items')->withPivot([
             'razon_social',
             'codigo',
-        ]);
+        ])->orderByPivot('razon_social','asc');
     }
 
     public static function createGroupByPedido(Pedido $pedido, $createAnother = false, $attach = false)
@@ -42,6 +42,14 @@ class GrupoPedido extends Model
                     "razon_social" => $detalle->nombre_empresa,
                 ]
             ]);
+            if ($pedido->condicion_envio_code != Pedido::RECEPCION_COURIER_INT) {
+                $pedido->update([
+                    'condicion_envio_code' => Pedido::RECEPCION_COURIER_INT,
+                    'condicion_envio' => Pedido::RECEPCION_COURIER,
+                    'condicion_envio_at'=>now(),
+                    'estado_sobre' => 1,
+                ]);
+            }
         }
         return $grupo;
     }
@@ -99,8 +107,9 @@ class GrupoPedido extends Model
             }
         }
         if ($asignarOtro) {
-            self::createGroupByPedido($pedido, true, $attach);
+            return self::createGroupByPedido($pedido, true, $attach);
         }
+        return true;
     }
 
     public function motorizadoHistories()

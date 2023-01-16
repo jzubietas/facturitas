@@ -326,6 +326,9 @@
                 $("#cant_compro").val(cant_compro);
 
                 $("#adjunto").val(null);
+                $("#condicion").val('2');
+
+                //setear combo por atender
 
                 $.ajax({
                     url: "{{ route('operaciones.editatencion',':id') }}".replace(':id', idunico),

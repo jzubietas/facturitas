@@ -25,7 +25,7 @@ class MotorizadoController extends Controller
 
         if ($request->fechaconsulta != null) {
             try {
-                $fecha_consulta = Carbon::createFromFormat('d/m/Y', $request->fechaconsulta);
+                $fecha_consulta = Carbon::parse($request->fechaconsulta);
             } catch (\Exception $ex) {
                 $fecha_consulta = now();
             }
@@ -104,10 +104,11 @@ class MotorizadoController extends Controller
                     $btn = '<ul class="list-unstyled mt-sm-20">';
                     switch ($tab) {
                         case 'entregado':
-                        case 'no_contesto':
+                        case 'nocontesto':
                         case 'observado':
                             if ($pedido->estado = 1 && ($pedido->condicion_envio_code == Pedido::MOTORIZADO_INT || $pedido->condicion_envio_code == Pedido::CONFIRM_MOTORIZADO_INT)) {
-                                $btn .= '<li class="pt-8">
+                                if ($pedido->cambio_direccion_at == null) {
+                                    $btn .= '<li class="pt-8">
                                 <button class="btn btn-sm text-white btn-danger"
                                 data-jqconfirm="revertir"
                                 data-jqconfirm-id="' . $pedido->id . '"
@@ -117,6 +118,7 @@ class MotorizadoController extends Controller
                                     Revertir
                                 </button>
                             </li>';
+                                }
                             }
                             break;
                         default:
@@ -286,6 +288,7 @@ class MotorizadoController extends Controller
         $grupo->update([
             'condicion_envio' => Pedido::MOTORIZADO,
             'condicion_envio_code' => Pedido::MOTORIZADO_INT,
+            'condicion_envio_at'=>now(),
             'motorizado_status' => 0,
             'motorizado_sustento_text' => '',
             'motorizado_sustento_foto' => '',
@@ -294,6 +297,7 @@ class MotorizadoController extends Controller
         $grupo->pedidos()->activo()->update([
             'condicion_envio' => Pedido::MOTORIZADO,
             'condicion_envio_code' => Pedido::MOTORIZADO_INT,
+            'condicion_envio_at'=>now(),
         ]);
         return response()->json([
             'success' => true
@@ -367,7 +371,8 @@ class MotorizadoController extends Controller
             //->where('direccion_grupos.estado', '1')
             //->activo()
             ->whereNotNull('direccion_grupos.fecha_salida')
-            ->where('direccion_grupos.motorizado_id', $request->motorizado_id);
+            ->where('direccion_grupos.motorizado_id', $request->motorizado_id)
+            ->orderBy('direccion_grupos.fecha_salida');
 
         return datatables()->query(DB::table($pedidos_observados))
             ->addColumn('ordering_data', function ($pedido) {
@@ -419,20 +424,6 @@ class MotorizadoController extends Controller
                     $html .= '';
                 }
                 return $html;
-            })
-            ->addColumn('contador_dias', function ($pedido) {
-                if ($pedido->grupo_fecha_salida != null) {
-                    $fecha_salida = Carbon::parse($pedido->grupo_fecha_salida)->startOfDay();
-                    $fecha = now()->startOfDay();
-                    if ($fecha_salida > $fecha) {
-                        $count = 0;
-                    } else {
-                        $count = $fecha_salida->diffInDays($fecha);
-                    }
-
-                    return $count;
-                }
-                return 0;
             })
             ->addColumn('situacion_color', function ($pedido) {
                 if ($pedido->grupo_fecha_salida != null) {
@@ -706,6 +697,7 @@ class MotorizadoController extends Controller
 
                             $btn .= ' <li>
                                             <button
+                                            data-recibido="1"
                                             data-btncolor="orange"
                                             data-btntext="Recibido"
                                             data-count="' . $count . '"
@@ -717,6 +709,7 @@ class MotorizadoController extends Controller
                             if ($count == 1) {
                                 $btn .= ' <li>
                                             <button
+                                            data-recibido="0"
                                             data-btncolor="red"
                                             data-btntext="No recibido"
                                             data-target="' . route('envios.recepcionarmotorizado') . '"
@@ -727,6 +720,7 @@ class MotorizadoController extends Controller
                             } else {
                                 $btn .= ' <li>
                                             <button
+                                            data-recibido="0"
                                             data-btncolor="red"
                                             data-btntext="No recibido"
                                             data-count="' . $count . '"

@@ -385,7 +385,6 @@
                 console.log(file);
                 var reader = new FileReader();
                 reader.onload = (event) => {
-
                     pdfjsLib.getDocument(event.target.result).then((pdf) => {
                         $("#my_pdf_viewer").removeClass("d-none");
                         //cargar frame
@@ -413,7 +412,6 @@
 
                 };
                 reader.readAsDataURL(file);
-
             });
 
             window.render = function () {
@@ -472,6 +470,64 @@
                     return false;
                 }
             });
+
+            $(document).on('change keyup',"#tracking, #numregistro",function(event){
+
+                let id_element=event.target.id;
+                console.log("aaaa")
+                let val_element=$(this).val();
+                switch(id_element)
+                {
+                    case 'tracking':
+                        let ntrack=val_element.length;
+                        console.log("n "+ntrack)
+                        if(ntrack>9)
+                        {
+                            $.ajax({
+                                data: {'element':id_element,'value':val_element,'from':'direcccionenvio'},
+                                type: 'POST',
+                                url: "{{ route('envios.validacion_direccionenvio') }}",
+                                success: function (data) {
+                                    console.log(data);
+                                    if(data.response=='1'){
+                                        Swal.fire(
+                                            'Error',
+                                            'Informacion repetida con el campo '+data.element,
+                                            'warning'
+                                        )
+                                    }
+                                }
+                            });
+                        }
+                        break;
+                    case 'numregistro':
+                        let nreg=val_element.length;
+                        console.log("n2 "+nreg)
+                        if(nreg>11)
+                        {
+                            $.ajax({
+                                data: {'element':id_element,'value':val_element,'from':'direcccionenvio'},
+                                type: 'POST',
+                                url: "{{ route('envios.validacion_direccionenvio') }}",
+                                success: function (data) {
+                                    console.log(data);
+                                    if(data.response=='1'){
+                                        Swal.fire(
+                                            'Error',
+                                            'Informacion repetida con el campo '+data.element,
+                                            'warning'
+                                        )
+                                    }
+                                }
+                            });
+                        }
+                        break;
+                }
+
+
+            });
+
+
 
             /*$("#tracking").bind('keypress', function(event) {
               var regex = new RegExp("^[0-9]{2}+[0-1]{2}$");
@@ -560,6 +616,12 @@
 
                         //$(".contenedor-formulario").removeClass("col-4");
                         //$(".contenedor-pdf").removeClass("col-4");
+                        //limpiar campos
+                        $('#nombre').val('')
+                        $('#celular').val('')
+                        $('#direccion').val('')
+                        $('#referencia').val('')
+                        $('#observacion').val('')
 
                         break;
                     case 'P':
@@ -584,6 +646,11 @@
                         //$("#tablaPrincipalpedidosagregar").columns.adjust().draw();
 
                         break;
+                        $('#numregistro').val('')
+                        $('#tracking').val('')
+                        $('#importe').val('')
+                        $('#rotulo').val('')
+
                     default:
                         if (!$(".lima").hasClass("d-none")) {
                             $(".lima").addClass("d-none");
@@ -621,8 +688,10 @@
                 let val_nombre = $("#nombre").val();
                 let val_contacto = $("#celular").val();
                 let val_direccion = $("#direccion").val();
+                console.log(val_direccion)
                 let val_referencia = $("#referencia").val();
                 let val_distrito = $("#distrito").val();
+                console.log(val_distrito)
                 let val_observacion = $("#observacion").val();
                 let saveHistoricoLima = ($('#saveHistoricoLima').is(':checked')) ? '1' : '0';
                 let saveHistoricoProvincia = ($('#saveHistoricoProvincia').is(':checked')) ? '1' : '0';
@@ -648,6 +717,7 @@
                 } else {
 
                     if (combo_limaprovincia == "L") {
+                        console.log(combo_limaprovincia)
                         if (val_nombre == "") {
                             Swal.fire(
                                 'Error',
@@ -676,7 +746,7 @@
                                 'warning'
                             )
                             return;
-                        } else if (val_distrito == "") {
+                        } else if (val_distrito == "" || val_distrito== null) {
                             Swal.fire(
                                 'Error',
                                 'Debe seleccionar un distrito',
@@ -1255,6 +1325,8 @@
 
             $("#distrito").on('change', function(){
                 var distrito_seleccionado = $(this).val();
+                distrito_seleccionado=distrito_seleccionado.replace('+', ' ');
+                console.log(distrito_seleccionado)
 
                 $.ajax({
                     data: {
@@ -1380,6 +1452,11 @@
                         'targets': [0], /* column index */
                         'orderable': false, /* true or false */
                     }],
+                    rowCallback: function (row, data, index) {
+                        if(data.da_confirmar_descarga!='1') {
+                            $('input[type=checkbox]', row).attr('disabled','disabled')
+                        }
+                    },
                     columns: [
                         {
                             "data": "id",

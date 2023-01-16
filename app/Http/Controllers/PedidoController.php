@@ -312,6 +312,15 @@ class PedidoController extends Controller
                                     $btn[] = '<a style="font-size:11px" href="" class="m-0 p-2 btn-sm dropdown-item text-wrap" data-target="#modal-delete" data-toggle="modal" data-delete="' . $pedido->id . '" data-codigo=' . $pedido->codigo . ' data-responsable="' . $miidentificador . '"><i class="fas fa-trash-alt text-danger"></i> Anular</a>';
                                 }
                             }
+                        }else{
+                            if( auth()->user()->rol==User::ROL_ADMIN)
+                            {
+                                if ($pedido->condicion_pa == 0)
+                                {
+                                    $btn[] = '<a style="font-size:11px" href="" class="m-0 p-2 btn-sm dropdown-item text-wrap" data-target="#modal-delete" data-toggle="modal" data-delete="' . $pedido->id . '" data-codigo=' . $pedido->codigo . ' data-responsable="' . $miidentificador . '"><i class="fas fa-trash-alt text-danger"></i> Anular</a>';
+                                }
+
+                            }
                         }
                     }
 
@@ -636,19 +645,15 @@ class PedidoController extends Controller
             "DICIEMBRE" => 'DICIEMBRE',
         ];
 
+        $anios=[
+            ($dateY-1)=>($dateY-1),
+            $dateY=>$dateY
+        ];
+
         $anios = [
-            "2020" => '2020',
-            "2021" => '2021',
+
             "2022" => '2022',
             "2023" => '2023',
-            "2024" => '2024',
-            "2025" => '2025',
-            "2026" => '2026',
-            "2027" => '2027',
-            "2028" => '2028',
-            "2029" => '2029',
-            "2030" => '2030',
-            "2031" => '2031',
         ];
 
         /*$rucs = Ruc::where('user_id', Auth::user()->id)
@@ -1089,6 +1094,7 @@ class PedidoController extends Controller
                 'pago' => '0',
                 'condicion_envio' => Pedido::POR_ATENDER_OPE,
                 'condicion_envio_code' => Pedido::POR_ATENDER_INT,
+                'condicion_envio_at'=>now(),
                 'estado' => '1',
                 'codigo' => $codigo,
                 'notificacion' => 'Nuevo pedido creado',
@@ -1738,6 +1744,7 @@ class PedidoController extends Controller
                     'condicion_code' => Pedido::POR_ATENDER_INT,
                     'condicion_envio' => Pedido::RECEPCION_COURIER,
                     'condicion_envio_code' => Pedido::RECEPCION_COURIER_INT,
+                    'condicion_envio_at'=>now(),
                     'modificador' => 'USER' . Auth::user()->id,
                     'estado' => '1',
                     'pendiente_anulacion' => '0'
@@ -2962,8 +2969,7 @@ class PedidoController extends Controller
         ]);
     }
 
-    public
-    function ConfirmarAnular(Request $request)
+    public function ConfirmarAnular(Request $request)
     {
         if ($request->get('action') == 'confirm_anulled_cancel') {
             $pedido = Pedido::findOrFail($request->pedido_id);
@@ -2992,11 +2998,7 @@ class PedidoController extends Controller
                 "success" => 0,
             ]);
         }
-        if ($pedido->condicion_envio_code == Pedido::ENTREGADO_CLIENTE_INT) {
-            return response()->json([
-                "success" => 0,
-            ]);
-        }
+
         $filePaths = [];
         $files = $request->attachments;
         if (is_array($files)) {
