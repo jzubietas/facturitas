@@ -42,7 +42,7 @@ class DistribucionController extends Controller
             ->pluck('departamento', 'departamento');
 
         $superasesor = User::where('rol', 'Super asesor')->count();
-        $motorizados=null;
+        $motorizados=[];
         if(auth()->user()->rol!=User::ROL_ENCARGADO)
         {
             $motorizados = User::query()->where('rol', '=', 'MOTORIZADO')->whereNotNull('zona')->get();
