@@ -2663,8 +2663,8 @@ Ver Rotulo</a>')
                     break;
 
                 case "sobres_en_reparto":
-
-                    $envio = DireccionGrupo::query()->findOrFail($codigo);
+                    $codigo = $pedido-> direcciongrupo;
+                    //$envio = DireccionGrupo::query()->findOrFail($codigo);
                     $envio->update([
                         'condicion_envio' => Pedido::ENVIO_MOTORIZADO_COURIER,
                         'condicion_envio_code' => Pedido::ENVIO_MOTORIZADO_COURIER_INT,
