@@ -260,9 +260,9 @@ class EnvioController extends Controller
 
                     $btn .= '<ul class="list-unstyled pl-0">';
                     $btn .= '<li>
-                                        <a href="" class="btn-sm text-secondary" data-target="#modal-confirmacion" data-toggle="modal" data-ide="' . $pedido->id . '" data-entregar-confirm="' . $pedido->id . '" data-destino="' . $pedido->destino . '" data-fechaenvio="' . $pedido->created_at . '" data-codigos="' . $pedido->codigo . '">
-                                            <i class="fas fa-envelope text-danger"></i> Entregado sin envio</a></li>
-                                        </a>
+                                        <button class="btn btn-sm text-secondary" data-target="' . route('operaciones.confirmarentregasinenvio', ['hiddenCodigo' => $pedido->codigo]) . '" data-toggle="jqconfirm">
+                                            <i class="fas fa-envelope text-danger"></i> Entregado sin envio
+                                        </button>
                                     </li>';
                     $btn .= '</ul>';
                 endif;
@@ -2324,7 +2324,11 @@ Ver Rotulo</a>')
             join('clientes as c', 'c.id', 'direccion_grupos.cliente_id')
                 ->join('users as u', 'u.id', 'c.user_id')
                 ->where('direccion_grupos.estado', '1')
-                ->whereIn('direccion_grupos.condicion_envio_code', [Pedido::ENTREGADO_CLIENTE_INT, Pedido::ENTREGADO_SIN_SOBRE_OPE_INT, Pedido::ENTREGADO_SIN_SOBRE_CLIENTE_INT])
+                ->whereIn('direccion_grupos.condicion_envio_code', [
+                    Pedido::ENTREGADO_CLIENTE_INT,
+                    Pedido::ENTREGADO_SIN_SOBRE_OPE_INT,
+                    Pedido::ENTREGADO_SIN_SOBRE_CLIENTE_INT
+                ])
                 ->select(
                     'direccion_grupos.*',
                     DB::raw("DATE_FORMAT(direccion_grupos.fecha_recepcion, '%Y-%m-%d %H:%i:%s') as fechaentrega"),
@@ -2775,7 +2779,7 @@ Ver Rotulo</a>')
                     break;
 
                 case "sobres_en_reparto":
-                    $envio = $pedido-> direcciongrupo;
+                    $envio = $pedido->direcciongrupo;
                     $envio->update([
                         'condicion_envio' => Pedido::ENVIO_MOTORIZADO_COURIER,
                         'condicion_envio_code' => Pedido::ENVIO_MOTORIZADO_COURIER_INT,
@@ -2882,10 +2886,9 @@ Ver Rotulo</a>')
         return response()->json(['html' => $envio->id]);
     }
 
-    public
-    function confirmarEntregaSinEnvio(Request $request)
+    public function confirmarEntregaSinEnvio(Request $request)
     {
-        $pedido = Pedido::query()->findOrFail($request->hiddenCodigo);
+        $pedido = Pedido::query()->findOrFail($request->get('pedido_id', $request->get('hiddenCodigo')));
 
         $pedido->update([
             'condicion_envio' => Pedido::ENTREGADO_SIN_SOBRE_CLIENTE,
@@ -2894,8 +2897,25 @@ Ver Rotulo</a>')
             //'fecha_salida' => $request->fecha_salida
         ]);
 
+        $grupo = DireccionGrupo::createByPedido($pedido);
+        if ($request->hasFile('adjunto1')) {
+            $grupo->update([
+                'foto1' => $request->file('adjunto1')->store('entregados_sin_envio', 'pstorage'),
+            ]);
+        }
+        if ($request->hasFile('adjunto2')) {
+            $grupo->update([
+                'foto2' => $request->file('adjunto2')->store('entregados_sin_envio', 'pstorage'),
+            ]);
+        }
+        if ($request->hasFile('adjunto3')) {
+            $grupo->update([
+                'foto3' => $request->file('adjunto3')->store('entregados_sin_envio', 'pstorage'),
+            ]);
+        }
+
         PedidoMovimientoEstado::create([
-            'pedido' => $request->hiddenCodigo,
+            'pedido' => $pedido->id,
             'condicion_envio_code' => Pedido::ENTREGADO_SIN_SOBRE_CLIENTE_INT,
             'notificado' => 0
         ]);
