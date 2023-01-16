@@ -36,17 +36,24 @@ class PedidoAnulledListener
                 'estado' => 0
             ]);
 
-            if ($event->pedido->direcciongrupo->fecha_salida == null || $event->pedido->direcciongrupo->fecha_salida->startOfDay() != now()->startOfDay()) {
+            if (in_array($event->pedido->condicion_envio_code, [Pedido::ENTREGADO_SIN_SOBRE_OPE_INT, Pedido::ENTREGADO_CLIENTE_INT])) {
                 $grupo->update([
                     'motorizado_status' => 0,
-                    'motorizado_sustento_text' => '',
+                    'motorizado_sustento_text' => 'Anulado',
                 ]);
+            } else {
+                if ($event->pedido->direcciongrupo->fecha_salida == null || $event->pedido->direcciongrupo->fecha_salida->startOfDay() != now()->startOfDay()) {
+                    $grupo->update([
+                        'motorizado_status' => 0,
+                        'motorizado_sustento_text' => '',
+                    ]);
+                }
             }
             $ids = GrupoPedido::query()
                 ->join('grupo_pedido_items', 'grupo_pedido_items.grupo_pedido_id', 'grupo_pedidos.id')
                 ->where('grupo_pedido_items.pedido_id', $event->pedido->id)
                 ->pluck('grupo_pedidos.id');
-            if($ids->count()>0) {
+            if ($ids->count() > 0) {
                 GrupoPedido::query()->whereIn('id', $ids)->delete();
             }
             return $grupo;
