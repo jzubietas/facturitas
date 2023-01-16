@@ -2495,6 +2495,11 @@ Ver Rotulo</a>')
         $tipo = $request->tipo; // PEDIDO O PAQUETE
 
         $codigos = $request->codigos;
+        if(!is_array($codigos)){
+            if(!$codigo) {
+                $codigos = [$codigo];
+            }
+        }
 
         $codigos_procesados = array();
         $codigos_no_procesados = array();
