@@ -2506,6 +2506,11 @@ Ver Rotulo</a>')
          */
         $nuevo_estado = $condicion_code_actual;
         $respuesta = "";
+        // SI SON SOBRES DEVUELTOS
+        if ($accion == "sobres_devueltos") {
+            $condicion_code_actual = 100;
+        }
+
         /**************
          * SETEAMOS OPCION ADICIONAL
          */
@@ -2520,6 +2525,25 @@ Ver Rotulo</a>')
          */
 
         switch ($responsable) {
+            // ENVIA SOBRES A MOTORIZADO
+            case "fernandez_reparto":
+
+                switch ($condicion_code_actual) {
+                    case Pedido::REPARTO_COURIER_INT: // 8
+                        $nuevo_estado = Pedido::ENVIO_MOTORIZADO_COURIER_INT; // 19
+                        $respuesta = "El sobre se envió a motorizado correctamente.";
+                        break;
+                }
+                break;
+            // CONFIRMA SOBRES DEVUELTOS
+            case "fernandez_devolucion":
+                switch ($condicion_code_actual) {
+                    case 100: // CODIGO EN DURO
+                        $nuevo_estado = Pedido::RECEPCION_COURIER_INT; // 11
+                        $respuesta = "El sobre se envió a motorizado correctamente.";
+                        break;
+                }
+                break;
             //ENVIO A COURIER JEFE OPE
             case "maria_courier":
                 switch ($condicion_code_actual) {
@@ -2541,64 +2565,16 @@ Ver Rotulo</a>')
             // ENTREGA MARIA SIN SOBRE
             case "maria_entregado_sin_sobre":
                 switch ($condicion_code_actual) {
-                    case Pedido::ENTREGADO_SIN_SOBRE_OPE_INT:
-                        $nuevo_estado = Pedido::ENTREGADO_SIN_SOBRE_CLIENTE_INT;
+                    case Pedido::ENTREGADO_SIN_SOBRE_OPE_INT: // 13
+                        $nuevo_estado = Pedido::ENTREGADO_SIN_SOBRE_CLIENTE_INT; // 14
                         $respuesta = "El pedido sin sobre se confirmo correctamente.";
                         break;
                 }
                 break;
-
-
-            case "jefe_op":
-                switch ($condicion_code_actual) {
-                    /*********
-                     *  JEFE DE OPERACIONES
-                     */
-                    case Pedido::ENVIADO_OPE_INT:
-                        $nuevo_estado = Pedido::RECIBIDO_JEFE_OPE_INT;
-                        $respuesta = "El pedido se envió a Logistica correctamente.";
-                        $nombre_accion = Pedido::$estadosCondicionEnvioCode[$nuevo_estado];
-
-                        break;
-
-                    case Pedido::RECIBIDO_JEFE_OPE_INT:
-                        $nuevo_estado = Pedido::ENVIO_COURIER_JEFE_OPE_INT;
-                        $respuesta = "El pedido se envió a Logistica correctamente.";
-                        $nombre_accion = Pedido::$estadosCondicionEnvioCode[$nuevo_estado];
-
-                        break;
-
-                    /*********
-                     * CONFIRMACION DE PEDIDOS SIN SOBRE
-                     */
-                    case Pedido::ENTREGADO_SIN_SOBRE_OPE_INT:
-                        $nuevo_estado = Pedido::ENTREGADO_SIN_SOBRE_CLIENTE_INT;
-                        $respuesta = "El pedido sin sobre se confirmo correctamente.";
-                        $nombre_accion = Pedido::$estadosCondicionEnvioCode[$nuevo_estado];
-
-                        break;
-
-                        break;
-
-                    case Pedido::RECIBIDO_JEFE_OPE_INT:
-                        $nuevo_estado = Pedido::ENVIO_COURIER_JEFE_OPE_INT;
-                        $respuesta = "El pedido se envió a Logistica correctamente.";
-                        $nombre_accion = Pedido::$estadosCondicionEnvioCode[$nuevo_estado];
-
-                        break;
-
-                    /*********
-                     * CONFIRMACION DE PEDIDOS SIN SOBRE
-                     */
-                    case Pedido::ENTREGADO_SIN_SOBRE_OPE_INT:
-                        $nuevo_estado = Pedido::ENTREGADO_SIN_SOBRE_CLIENTE_INT;
-                        $respuesta = "El pedido sin sobre se confirmo correctamente.";
-                        $nombre_accion = Pedido::$estadosCondicionEnvioCode[$nuevo_estado];
-
-                        break;
-                }
         }
-
+        /***************
+         * COMPROBAMOS SI YA ESTA ATENDIDO EL PEDIDO
+         */
         if ($pedido->condicion_envio_code == $nuevo_estado) {
             return response()->json(['html' => "Este pedido ya ah sido procesado anteriormente", 'class' => "text-danger", 'codigo' => 0]);
         } else {
@@ -2701,22 +2677,6 @@ Ver Rotulo</a>')
                     }
                     break;
             }
-
-
-            $pedido->update([
-                'modificador' => 'USER' . Auth::user()->id,
-                'condicion_envio' => $nombre_accion,
-                'condicion_envio_code' => $nuevo_estado,
-                'condicion_envio_at' => now(),
-                'fecha_recepcion_courier' => now()
-            ]);
-
-            PedidoMovimientoEstado::create([
-                'pedido' => $codigo_pedido_actual,
-                'condicion_envio_code' => $condicion_code_actual,
-                'notificado' => "0"
-            ]);
-
             return response()->json(['html' => $respuesta, 'class' => "text-success", 'codigo' => $request->hiddenCodigo]);
         }
     }
