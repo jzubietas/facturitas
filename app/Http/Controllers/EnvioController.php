@@ -2507,8 +2507,9 @@ Ver Rotulo</a>')
          */
         $nuevo_estado = $condicion_code_actual;
         $respuesta = "";
+
         // SI SON SOBRES DEVUELTOS
-        if ($accion == "sobres_devueltos") {
+        if ($accion == "sobres_devuelto") {
             $condicion_code_actual = 100;
         }
 
@@ -2526,6 +2527,18 @@ Ver Rotulo</a>')
          */
 
         switch ($responsable) {
+
+            // FERNANDEZ RECEPCIONA LOS SOBRES
+            case "fernandez_recepcion":
+
+                switch ($condicion_code_actual) {
+                    case Pedido::ENVIO_COURIER_JEFE_OPE_INT: // 8
+                        $nuevo_estado = Pedido::RECEPCION_COURIER_INT; // 19
+                        $respuesta = "El jefe Courier recepciono correctamente el pedido";
+                        break;
+                }
+                break;
+
             // ENVIA SOBRES A MOTORIZADO
             case "fernandez_reparto":
 
@@ -2537,20 +2550,20 @@ Ver Rotulo</a>')
                 }
                 break;
             // CONFIRMA SOBRES DEVUELTOS
-            case "fernandez_devolucion":
+            case "fernandez_devuelto":
                 switch ($condicion_code_actual) {
                     case 100: // CODIGO EN DURO
                         $nuevo_estado = Pedido::RECEPCION_COURIER_INT; // 11
-                        $respuesta = "El sobre se envió a motorizado correctamente.";
+                        $respuesta = "El sobre fue devuelto exitosamente.";
                         break;
                 }
                 break;
             //ENVIO A COURIER JEFE OPE
             case "maria_courier":
                 switch ($condicion_code_actual) {
-                    case Pedido::ENVIO_COURIER_JEFE_OPE_INT:
-                        $nuevo_estado = Pedido::RECEPCION_COURIER_INT;
-                        $respuesta = "El sobre se recibio correctamente.";
+                    case Pedido::RECIBIDO_JEFE_OPE_INT:
+                        $nuevo_estado = Pedido::ENVIO_COURIER_JEFE_OPE_INT;
+                        $respuesta = "El pedido se envió a Logistica correctamente.";
                         break;
                 }
                 break;
@@ -2559,7 +2572,7 @@ Ver Rotulo</a>')
                 switch ($condicion_code_actual) {
                     case Pedido::ENVIADO_OPE_INT:
                         $nuevo_estado = Pedido::RECIBIDO_JEFE_OPE_INT;
-                        $respuesta = "El pedido se envió a Logistica correctamente.";
+                        $respuesta = "El sobre se recibio correctamente.";
                         break;
                 }
                 break;
@@ -2580,20 +2593,57 @@ Ver Rotulo</a>')
             return response()->json(['html' => "Este pedido ya ah sido procesado anteriormente", 'class' => "text-danger", 'codigo' => 0]);
         } else {
             switch ($accion) {
+
+                case "recepcionar_sobres":
+
+                    $pedido->update([
+                        'fecha_recepcion_courier' => Carbon::now(),
+                        'modificador' => 'USER' . Auth::user()->id,
+                        'condicion_envio' => Pedido::RECEPCION_COURIER,
+                        'condicion_envio_code' => Pedido::RECEPCION_COURIER_INT,
+                        'condicion_envio_at' => now(),
+                    ]);
+
+                    if ($pedido->estado_sobre) {
+                        $detalle = $pedido->detallePedido;
+                        $grupoPedido = GrupoPedido::createGroupByPedido($pedido);
+
+                        if (!$grupoPedido->pedidos()->where('pedidos.id', '=', $pedido->id)->exists()) {
+                            $grupoPedido->pedidos()->syncWithoutDetaching([
+                                $pedido->id => [
+                                    'razon_social' => $detalle->nombre_empresa,
+                                    'codigo' => $pedido->codigo,
+                                ]
+                            ]);
+                        }
+                    }
+
+                    PedidoMovimientoEstado::create([
+                        'pedido' => $request->hiddenEnvio,
+                        'condicion_envio_code' => Pedido::RECEPCION_COURIER_INT,
+                        'notificado' => 0
+                    ]);
+
+                    break;
+
                 case "confirmacion_operaciones":
 
                     $pedido->update([
+                        'envio' => '2',
                         'modificador' => 'USER' . Auth::user()->id,
-                        'condicion_envio' => Pedido::ENTREGADO_SIN_SOBRE_CLIENTE,
-                        'condicion_envio_code' => Pedido::ENTREGADO_SIN_SOBRE_CLIENTE_INT,
+                        'fecha_envio_op_courier' => Carbon::now(),
+                        'condicion_envio' => Pedido::RECIBIDO_JEFE_OPE,
+                        'condicion_envio_code' => Pedido::RECIBIDO_JEFE_OPE_INT,
                         'condicion_envio_at' => now(),
-                        'fecha_recepcion_courier' => now()
+
                     ]);
+
                     PedidoMovimientoEstado::create([
                         'pedido' => $request->hiddenEnvio,
-                        'condicion_envio_code' => Pedido::ENTREGADO_SIN_SOBRE_CLIENTE_INT,
+                        'condicion_envio_code' => Pedido::RECIBIDO_JEFE_OPE_INT,
                         'notificado' => 0
                     ]);
+
                     break;
 
                 case "envio_courier_operaciones":
@@ -2614,8 +2664,8 @@ Ver Rotulo</a>')
                     break;
 
                 case "sobres_en_reparto":
-
-                    $envio = DireccionGrupo::query()->findOrFail($codigo);
+                    $codigo = $pedido-> direcciongrupo;
+                    //$envio = DireccionGrupo::query()->findOrFail($codigo);
                     $envio->update([
                         'condicion_envio' => Pedido::ENVIO_MOTORIZADO_COURIER,
                         'condicion_envio_code' => Pedido::ENVIO_MOTORIZADO_COURIER_INT,
@@ -2639,7 +2689,7 @@ Ver Rotulo</a>')
                     ]);
                     break;
 
-                case "sobres_devueltos":
+                case "sobres_devuelto":
 
                     /*********
                      * IDENTIFICAMOS AL GRUPO
