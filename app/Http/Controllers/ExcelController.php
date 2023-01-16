@@ -50,7 +50,7 @@ class ExcelController extends Controller
     // }
     public function enviosRecepcionmotorizadoExcel(Request $request)
     {
-        return (new PlantillaRecepcionMotorizadoMultiple($request->user_motorizado,$request->fecha_envio))
+        return (new PlantillaRecepcionMotorizadoMultiple($request->user_motorizado,$request->fecha_envio,$request->condicion_envio))
             ->download('Lista de Recepcion Motorizado.xlsx');
     }
     public function enviosMotorizadoconfirmarExcel(Request $request)
