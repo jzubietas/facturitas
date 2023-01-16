@@ -845,7 +845,7 @@
 
                                 var dateA = moment($(this).val());
                                 var dateB = moment(new Date());
-                                let diff=dateA.diff(dateB)
+                                let diff=dateA.diff(dateB, 'days')
                                 console.log('Diferencia es ', diff, 'days');
 
                                 //mostrar alert
