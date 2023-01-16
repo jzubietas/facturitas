@@ -2484,8 +2484,6 @@ Ver Rotulo</a>')
 
     public function ValidarOPBarra(Request $request)
     {
-
-
         //VARIABLES GLOBALES
         $responsable = $request->responsable;
         $accion = $request->accion;
@@ -2496,17 +2494,17 @@ Ver Rotulo</a>')
         $pedido = Pedido::where("codigo", $codigo)->first();
         $condicion_code_actual = $pedido->condicion_envio_code;
 
+        /************
+         * SETEAMOS VALORES POR DEFECTO
+         */
+        $respuesta = "";
+        $nuevo_estado = $condicion_code_actual;
+        /*
         if ($pedido == null) {
             return response()->json([
                 'success' => true
             ]);
-        }
-
-        /************
-         * SETEAMOS VALORES POR DEFECTO
-         */
-        $nuevo_estado = $condicion_code_actual;
-
+        } */
 
         // SI SON SOBRES DEVUELTOS
         if ($accion == "sobres_devuelto") {
@@ -2534,18 +2532,15 @@ Ver Rotulo</a>')
                 switch ($condicion_code_actual) {
                     case Pedido::ENVIO_COURIER_JEFE_OPE_INT: // 8
                         $nuevo_estado = Pedido::RECEPCION_COURIER_INT; // 19
-                        $respuesta = "El jefe Courier recepciono correctamente el pedido";
                         break;
                 }
                 break;
 
             // ENVIA SOBRES A MOTORIZADO
             case "fernandez_reparto":
-
                 switch ($condicion_code_actual) {
                     case Pedido::REPARTO_COURIER_INT: // 8
                         $nuevo_estado = Pedido::ENVIO_MOTORIZADO_COURIER_INT; // 19
-                        $respuesta = "El sobre se envió a motorizado correctamente.";
                         break;
                 }
                 break;
@@ -2554,7 +2549,6 @@ Ver Rotulo</a>')
                 switch ($condicion_code_actual) {
                     case 100: // CODIGO EN DURO
                         $nuevo_estado = Pedido::RECEPCION_COURIER_INT; // 11
-                        $respuesta = "El sobre fue devuelto exitosamente.";
                         break;
                 }
                 break;
@@ -2563,7 +2557,6 @@ Ver Rotulo</a>')
                 switch ($condicion_code_actual) {
                     case Pedido::RECIBIDO_JEFE_OPE_INT:
                         $nuevo_estado = Pedido::ENVIO_COURIER_JEFE_OPE_INT;
-                        $respuesta = "El pedido se envió a Logistica correctamente.";
                         break;
                 }
                 break;
@@ -2572,7 +2565,6 @@ Ver Rotulo</a>')
                 switch ($condicion_code_actual) {
                     case Pedido::ENVIADO_OPE_INT:
                         $nuevo_estado = Pedido::RECIBIDO_JEFE_OPE_INT;
-                        $respuesta = "El sobre se recibio correctamente.";
                         break;
                 }
                 break;
@@ -2581,7 +2573,6 @@ Ver Rotulo</a>')
                 switch ($condicion_code_actual) {
                     case Pedido::ENTREGADO_SIN_SOBRE_OPE_INT: // 13
                         $nuevo_estado = Pedido::ENTREGADO_SIN_SOBRE_CLIENTE_INT; // 14
-                        $respuesta = "El pedido sin sobre se confirmo correctamente.";
                         break;
                 }
                 break;
@@ -2589,9 +2580,16 @@ Ver Rotulo</a>')
         /***************
          * COMPROBAMOS SI YA ESTA ATENDIDO EL PEDIDO
          */
+        if ($pedido->condicion_envio_code == $nuevo_estado) {
+            return response()->json(['html' => "Este pedido ya ah sido procesado anteriormente", 'class' => "text-danger", 'codigo' => 0,'error'=>1]);
+        }else{
+            return response()->json(['html' => "Escaneado Correctamente", 'class' => "text-success", 'codigo' => $codigo,'error'=>0]);
+        }
+        /*
         return response()->json([
             'success' => $pedido->condicion_envio_code == $nuevo_estado
         ]);
+        */
 
     }
 

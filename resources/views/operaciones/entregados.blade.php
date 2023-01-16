@@ -183,48 +183,91 @@
             });
         })
 
+        codigos_agregados = []
+        var data = {}
         $('#codigo_confirmar').change(function (event) {
             event.preventDefault();
+
+
             var codigo_caturado = $(this).val();
             var codigo_mejorado = codigo_caturado.replace(/['']+/g, '-');
             var codigo_accion = $('#codigo_accion').val();
             var codigo_responsable = $('#codigo_responsable').val();
 
             console.log(codigo_accion);
-            //var codigo_action = $(this).data('action');
-
             console.log("El codigo es: " + codigo_mejorado);
-            /*************
-             * Enviamos la orden al controlaor
-             * @type {FormData}
-             */
-            var fd_scan = new FormData();
 
-            fd_scan.append( 'hiddenCodigo', codigo_mejorado );
-            fd_scan.append( 'accion', codigo_accion );
-            fd_scan.append( 'responsable', codigo_responsable );
+
+            data.codigo = codigo_mejorado
+            data.accion = codigo_accion
+            data.responsable = codigo_responsable
 
             $.ajax({
-                data: fd_scan,
-                processData: false,
-                contentType: false,
+                data: data,
                 type: 'POST',
-                url:"{{ route('operaciones.confirmaropbarras') }}",
-                success:function(data)
-                {
-                    console.log(data);
+                url: "{{ route('operaciones.validaropbarras') }}",
+                success: function (data) {
+
+                    if (data.error == 1) {
+                        $('#respuesta_barra').html('<span class="' + data.class + '">El Pedido ya se procesó anteriormente.</span>');
+                    } else if (data.error == 0) {
+
+                        codigos_agregados.push(data.codigo);
+                        codigos_agregados = codigos_agregados.filter((v, i, a) => a.indexOf(v) === i)
+                    }
+                    $('#pedidos-procesados').html(`<p><b class="text-success w-100">codigos Escaneados (${codigos_agregados.length}):</b></p><ul>${codigos_agregados.map(function (codigo) {
+                        return `<li><i class="fa fa-check text-success"></i> ${codigo}</li>`
+                    }).join('')}</ul><br>`);
+                }
+            }).always(function () {
+                $('#codigo_confirmar').focus();
+            });
+
+            $(this).val("");
+        });
+
+        $("#close-scan").click(function (e) {
+            e.preventDefault();
+            console.log(codigos_agregados)
+
+            if (codigos_agregados.length === 0) {
+                return;
+            }
+
+            data.codigos = codigos_agregados
+
+
+            $.ajax({
+                data: data,
+                type: 'POST',
+                url: "{{ route('operaciones.confirmaropbarras') }}",
+                success: function (data) {
+                    codigos_agregados = []
+
+                    var codigos_procesados = data.codigos_procesados
+                    var codigos_no_procesados = data.codigos_no_procesados
+
+                    $('#pedidos-procesados').html(`<p><b class="text-success w-100">codigos procesados (${codigos_procesados.length}):</b></p><ul>${codigos_procesados.map(function (codigo) {
+                        return `<li><i class="fa fa-check text-success"></i> ${codigo}</li>`
+                    }).join('')}</ul><br>`);
+/*
+                    $('#pedidos-procesados').append(`<p><b class="text-danger w-100">codigos no procesados (${codigos_no_procesados.length}): </b></p><ul>${codigos_no_procesados.map(function (codigo) {
+                        return `<li><i class="fa fa-window-close text-danger"></i> ${codigo}</li>`
+                    }).join('')}</ul><br>`);
+
+ */
+
                     $('#respuesta_barra').removeClass("text-danger");
                     $('#respuesta_barra').removeClass("text-success");
                     $('#respuesta_barra').addClass(data.class);
                     $('#respuesta_barra').html(data.html);
-                    if(data.codigo == 0){
 
-                    }else{
-                        $('#pedidos-procesados').append("<li> <i class='fa fa-check text-success'></i> " + data.codigo + "</li>");
+                    if (codigos_agregados.length === 0) {
+                        //$('#modal-escanear').modal('hide')
                     }
                 }
-            }).always(function (){
-                $('#tablaPrincipal').DataTable().draw(false);
+            }).always(function(){
+                $('#codigo_confirmar').focus();
             });
 
             $(this).val("");
