@@ -2493,6 +2493,13 @@ Ver Rotulo</a>')
         $nuevo_estado = $condicion_code_actual; // 11
         $nombre_accion = Pedido::$estadosCondicionEnvioCode[$condicion_code_actual]; // JEFE_OP_CONF
 
+
+        if(isset($request->extra)){
+            $opcion_adicional = $request->extra;
+        }else{
+            $opcion_adicional = "";
+        }
+
         switch ($area_accion) {
             case "fernandez":
                 switch ($condicion_code_actual) {
@@ -2538,6 +2545,25 @@ Ver Rotulo</a>')
                         $nombre_accion = Pedido::$estadosCondicionEnvioCode[$nuevo_estado];
 
                         break;
+
+                    case Pedido::RECIBIDO_JEFE_OPE_INT:
+                        $nuevo_estado = Pedido::ENVIO_COURIER_JEFE_OPE_INT;
+                        $respuesta = "El pedido se envió a Logistica correctamente.";
+                        $nombre_accion = Pedido::$estadosCondicionEnvioCode[$nuevo_estado];
+
+                        break;
+
+                    /*********
+                     * CONFIRMACION DE PEDIDOS SIN SOBRE
+                     */
+                    case Pedido::ENTREGADO_SIN_SOBRE_OPE_INT:
+                        $nuevo_estado = Pedido::ENTREGADO_SIN_SOBRE_CLIENTE_INT;
+                        $respuesta = "El pedido sin sobre se confirmo correctamente.";
+                        $nombre_accion = Pedido::$estadosCondicionEnvioCode[$nuevo_estado];
+
+                        break;
+                }
+                break;
 
                     case Pedido::RECIBIDO_JEFE_OPE_INT:
                         $nuevo_estado = Pedido::ENVIO_COURIER_JEFE_OPE_INT;
