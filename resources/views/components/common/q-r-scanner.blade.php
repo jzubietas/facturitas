@@ -80,7 +80,7 @@
             event.preventDefault();
             var codigo_caturado = ($(this).val() || '').trim();
             $('#codigo_confirmar').val('')
-            var codigo_mejorado = codigo_caturado.replace(/['']+/g, '-');
+            var codigo_mejorado = codigo_caturado.replace(/['']+/g, '-').replaceAll("'", '-').replaceAll("(", '*');
             if (!codigo_mejorado) {
                 return
             }
