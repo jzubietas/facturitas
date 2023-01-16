@@ -46,6 +46,12 @@
 
                                                     </div>
 
+                                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 d-none">
+                                                        {!! Form::label('cant_compro_confirm', 'Total de facturas adjuntadas') !!}
+                                                        {!! Form::number('cant_compro_confirm', '', ['class' => 'form-control', 'id' => 'cant_compro_confirm']) !!}
+
+                                                    </div>
+
                                                     <hr>
                                                 </div>
                                                 <div class="row">
