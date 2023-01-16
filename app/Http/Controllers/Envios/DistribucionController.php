@@ -134,26 +134,31 @@ class DistribucionController extends Controller
             })
             ->addColumn('action', function ($pedido) use ($motorizados, $color_zones) {
                 $btn = [];
-                if ($pedido->motorizadoHistories->count() > 0) {
-                    $btn [] = '<button data-motorizado-history="' . $pedido->motorizadoHistories->count() . '" class="btn btn-light rounded-circle"><i class="fa fa-motorcycle"></i></button>';
-                }
-                foreach ($motorizados as $motorizado) {
-                    if (Str::contains($pedido->zona, $motorizado->zona)) {
-                        $addClass = 'border border-danger';
-                        $styleClass = 'box-shadow: rgb(84 84 84 / 40%) -5px 5px, rgb(157 157 157 / 10%) 0px 0px, rgb(229 229 229 / 5%) -25px 25px;';
-                    } else {
-                        $addClass = '';
-                        $styleClass = '';
-                    }
 
-                    $btn[] = "<div class='text-center p-1'><button data-zona='$motorizado->zona' data-elTable='#tablaPrincipal" . Str::upper($motorizado->zona) . "' data-ajax-post='" . route('envios.distribuirsobres.asignarzona', ['grupo_pedido_id' => $pedido->id, 'motorizado_id' => $motorizado->id, 'zona' => Str::upper($motorizado->zona)]) . "'
+                if(auth()->user()->rol!=User::ROL_ENCARGADO)
+                {
+                    if ($pedido->motorizadoHistories->count() > 0) {
+                        $btn [] = '<button data-motorizado-history="' . $pedido->motorizadoHistories->count() . '" class="btn btn-light rounded-circle"><i class="fa fa-motorcycle"></i></button>';
+                    }
+                    foreach ($motorizados as $motorizado) {
+                        if (Str::contains($pedido->zona, $motorizado->zona)) {
+                            $addClass = 'border border-danger';
+                            $styleClass = 'box-shadow: rgb(84 84 84 / 40%) -5px 5px, rgb(157 157 157 / 10%) 0px 0px, rgb(229 229 229 / 5%) -25px 25px;';
+                        } else {
+                            $addClass = '';
+                            $styleClass = '';
+                        }
+
+                        $btn[] = "<div class='text-center p-1'><button data-zona='$motorizado->zona' data-elTable='#tablaPrincipal" . Str::upper($motorizado->zona) . "' data-ajax-post='" . route('envios.distribuirsobres.asignarzona', ['grupo_pedido_id' => $pedido->id, 'motorizado_id' => $motorizado->id, 'zona' => Str::upper($motorizado->zona)]) . "'
  class='add-row-datatable $addClass btn btn-" . ($color_zones[Str::upper($motorizado->zona)] ?? 'info') . " btn-sm btn-block my-0' type='button' style='$styleClass'>
 <span class='spinner-border spinner-border-sm' role='status' aria-hidden='true' style='display: none'></span>
   <span class='sr-only' style='display: none'>" . (Str::upper($motorizado->zona)) . "</span>" . (Str::upper($motorizado->zona)) . "</button></div>";
+                    }
+                    if (count($motorizados) == 0) {
+                        $btn[] = '<li class="list-group-item alert alert-warning p-8 text-center mb-0">No hay motorizados registrados</li>';
+                    }
                 }
-                if (count($motorizados) == 0) {
-                    $btn[] = '<li class="list-group-item alert alert-warning p-8 text-center mb-0">No hay motorizados registrados</li>';
-                }
+
                 return "<ul class='d-flex'>" . join('', $btn) . "</ul>";
             })
             ->rawColumns(['action', 'condicion_envio', 'productos', 'codigos', 'zona'])
