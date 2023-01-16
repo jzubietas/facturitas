@@ -134,6 +134,9 @@
                     @foreach($tablesIds as $table)
                     $('{{$table}}').DataTable().draw(false)
                     @endforeach
+                    if (codigos_agregados.length === 0) {
+                        $('#modal-escanear').modal('hide')
+                    }
                 }
             });
 
