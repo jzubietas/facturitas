@@ -106,18 +106,13 @@
 
         $("#close-scan").click(function (e) {
             e.preventDefault();
+            console.log(codigos_agregados)
             if (codigos_agregados.length === 0) {
                 return;
             }
-            var codigo_caturado = ($(this).val() || '').trim();
-            $('#codigo_confirmar').val('')
-            var codigo_mejorado = codigo_caturado.replace(/['']+/g, '-');
-            if (!codigo_mejorado) {
-                return
-            }
+
             var data = {{\Illuminate\Support\Js::from($ajaxparams)}};
             data.codigos = codigos_agregados
-            data.ducument_code = codigo_mejorado
             @if($withFecha)
                 data.fecha_salida = $('#fecha_escaneo').val()
             @endif
