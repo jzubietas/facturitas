@@ -29,6 +29,9 @@ class Cliente extends Model
     protected $dates=[
         'temporal_update'
     ];
+    protected $casts=[
+        'activado_pedido'=>'integer'
+    ];
 
     public function user()
     {
