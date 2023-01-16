@@ -14,8 +14,7 @@
                     <div id="option-modal-extra">
                         @if($withFecha)
                             Seleccione una fecha para el escaneo:
-                            <input id="fecha_escaneo" type="date" value="{{now()->format('Y-m-d')}}"
-                                   class="form-control">
+                            <input id="fecha_escaneo" type="date" value="{{now()->format('Y-m-d')}}" class="form-control">
                         @endif
 
                     </div>
@@ -47,8 +46,7 @@
 
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-success" id="close-scan">Aceptar</button>
-                    <button class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+                    <button class="btn btn-success" id="close-scan" data-dismiss="modal">Aceptar</button>
                 </div>
             </div>
         </div>
@@ -58,7 +56,7 @@
         /************
          * ESCANEAR PEDIDO
          */
-        var codigos_agregados = [];
+
         $('#modal-escanear').on('shown.bs.modal', function () {
             $('#codigo_confirmar').focus();
             $('#codigo_accion').val("fernandez");
@@ -68,6 +66,7 @@
             $('#modal-escanear').on('click', function () {
                 console.log("focus");
                 $('#codigo_confirmar').focus();
+
                 return false;
             });
         })
@@ -75,38 +74,42 @@
             $('#respuesta_barra').html('')
             $('#pedidos-procesados').html('')
             $('#modal-escanear').unbind()
-            codigos_agregados = [];
         })
-
+        var codigos_agregados = [];
         $('#codigo_confirmar').change(function (event) {
             event.preventDefault();
             var codigo_caturado = ($(this).val() || '').trim();
             $('#codigo_confirmar').val('')
-            var codigo_mejorado = codigo_caturado.replace(/['']+/g, '-');
+            var codigo_mejorado = codigo_caturado.replace(/['']+/g, '-').replaceAll("'", '-').replaceAll("(", '*');
             if (!codigo_mejorado) {
                 return
             }
             var data = {{\Illuminate\Support\Js::from($ajaxparams)}};
-            data.codigo = codigo_mejorado
+            data.hiddenCodigo = codigo_mejorado
+            data.ducument_code = codigo_mejorado
             @if($withFecha)
                 data.fecha_salida = $('#fecha_escaneo').val()
             @endif
-alert(codigo_mejorado)
             $.ajax({
                 data: data,
                 type: 'POST',
-                url: "{{ route('operaciones.validaropbarras') }}",
+                url: "{{ route('operaciones.confirmaropbarras') }}",
                 success: function (data) {
-                    if (data.success) {
-                        codigos_agregados.push(codigo_mejorado)
+                    if(data.codigo && data.codigo!='0') {
+                        codigos_agregados.push(data.codigo)
                         codigos_agregados = codigos_agregados.filter((v, i, a) => a.indexOf(v) === i)
-
-                        $('#pedidos-procesados').html(`<p><b class="text-success w-100">Codigos Escaneados (${codigos_agregados.length}):</b></p> <ul>${codigos_agregados.map(function (codigo) {
-                            return `<li><i class="fa fa-check text-success"></i>${codigo}</li>`
-                        }).join('')}</ul>`);
-                    }else{
-                        $('#respuesta_barra').html('<b class="text-danger">No agregado</b>');
                     }
+                    console.log(data);
+                    $('#respuesta_barra').removeClass("text-danger");
+                    $('#respuesta_barra').removeClass("text-success");
+                    $('#respuesta_barra').addClass(data.class);
+                    $('#respuesta_barra').html(data.html);
+                    $('#pedidos-procesados').html(`<ul>${codigos_agregados.map(function (codigo) {
+                        return `<li><i class="fa fa-check text-success"></i>${codigo}</li>`
+                    }).join('')}</ul>`);
+                    @foreach($tablesIds as $table)
+                    $('{{$table}}').DataTable().draw(false)
+                    @endforeach
                 }
             });
 
@@ -117,56 +120,5 @@ alert(codigo_mejorado)
         /***********
          * FIN ESCANEAR MOUSE
          */
-
-        $("#close-scan").click(function (e) {
-            e.preventDefault();
-            console.log(codigos_agregados)
-            if (codigos_agregados.length === 0) {
-                return;
-            }
-
-            var data = {{\Illuminate\Support\Js::from($ajaxparams)}};
-            data.codigos = codigos_agregados
-            @if($withFecha)
-                data.fecha_salida = $('#fecha_escaneo').val()
-            @endif
-
-            $.ajax({
-                data: data,
-                type: 'POST',
-                url: "{{ route('operaciones.confirmaropbarras') }}",
-                success: function (data) {
-                    codigos_agregados = []
-
-                    var codigos_procesados = data.codigos_procesados
-                    var codigos_no_procesados = data.codigos_no_procesados
-
-
-                    $('#pedidos-procesados').html(`<p><b class="text-success w-100">codigos procesados (${codigos_procesados.length}):</b></p><ul>${codigos_procesados.map(function (codigo) {
-                        return `<li><i class="fa fa-check text-success"></i> ${codigo}</li>`
-                    }).join('')}</ul><br>`);
-
-                    $('#pedidos-procesados').append(`<p><b class="text-danger w-100">codigos no procesados (${codigos_no_procesados.length}): </b></p><ul>${codigos_no_procesados.map(function (codigo) {
-                        return `<li><i class="fa fa-window-close text-danger"></i> ${codigo}</li>`
-                    }).join('')}</ul><br>`);
-
-                    $('#respuesta_barra').removeClass("text-danger");
-                    $('#respuesta_barra').removeClass("text-success");
-                    $('#respuesta_barra').addClass(data.class);
-                    $('#respuesta_barra').html(data.html);
-                    @foreach($tablesIds as $table)
-                    $('{{$table}}').DataTable().draw(false)
-                    @endforeach
-                    if (codigos_agregados.length === 0) {
-                        //$('#modal-escanear').modal('hide')
-                    }
-                }
-            }).always(function () {
-                $('#codigo_confirmar').focus();
-            });
-
-            $(this).val("");
-            return false;
-        })
     </script>
 @endpush

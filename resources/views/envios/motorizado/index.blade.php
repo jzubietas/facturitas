@@ -397,7 +397,9 @@
                             <div class="col-4 mt-12">
                                 <div class="form-group">
                                     <div class="image-wrapper">
-                                        <img id="picture1" src="{{ asset('imagenes/motorizado_preview/sobres.png') }}"
+                                        <img id="picture1"
+                                            src="{{ asset('imagenes/motorizado_preview/sobres.png') }}"
+                                            data-src="{{ asset('imagenes/motorizado_preview/sobres.png') }}"
                                 alt="Imagen del pago" class="img-fluid w-100" style="display: block;" width="300" height="300">
                         </div>
                     </div>
@@ -405,7 +407,9 @@
                 <div class="col-4 mt-12">
                     <div class="form-group">
                         <div class="image-wrapper">
-                            <img id="picture2" src="{{ asset('imagenes/motorizado_preview/domicilio.png') }}"
+                            <img id="picture2"
+                            src="{{ asset('imagenes/motorizado_preview/domicilio.png') }}"
+                            data-src="{{ asset('imagenes/motorizado_preview/domicilio.png') }}"
                                  alt="Imagen del pago" class="img-fluid w-100" style="display: block" width="300" height="300">
                         </div>
                     </div>
@@ -413,7 +417,9 @@
                 <div class="col-4 mt-12">
                     <div class="form-group">
                         <div class="image-wrapper">
-                            <img id="picture3" src="{{ asset('imagenes/motorizado_preview/recibe_sobre.png') }}"
+                            <img id="picture3"
+                            src="{{ asset('imagenes/motorizado_preview/recibe_sobre.png') }}"
+                            data-src="{{ asset('imagenes/motorizado_preview/recibe_sobre.png') }}"
                                  alt="Imagen del pago" class="img-fluid w-100" style="display: block" width="300" height="300">
                         </div>
                     </div>
@@ -449,13 +455,16 @@
                                 }
                             })
                             self.$content.find("#trash_adjunto1").click(function (e) {
-                                self.$content.find("#picture1").attr('src', "{{ asset('imagenes/sobres.jpg') }}")
+                                self.$content.find("#picture1").attr('src',self.$content.find("#picture1").data('src'))
+                                self.$content.find("#adjunto1").val(null)
                             })
                             self.$content.find("#trash_adjunto2").click(function (e) {
-                                self.$content.find("#picture2").attr('src', "{{ asset('imagenes/domicilio.jpg') }}")
+                                self.$content.find("#picture2").attr('src', self.$content.find("#picture2").data('src'))
+                                self.$content.find("#adjunto2").val(null)
                             })
                             self.$content.find("#trash_adjunto3").click(function (e) {
-                                self.$content.find("#picture3").attr('src', "{{ asset('imagenes/recibe_sobre.jpg') }}")
+                                self.$content.find("#picture3").attr('src', self.$content.find("#picture2").data('src'))
+                                self.$content.find("#adjunto3").val(null)
                             })
 
                             self.$content.find("form").on('submit', function (e) {

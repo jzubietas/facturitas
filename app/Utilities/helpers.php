@@ -15,7 +15,7 @@ if (!function_exists("generate_bar_code")) {
      * @return object|string
      * @throws \Com\Tecnick\Barcode\Exception
      */
-    function generate_bar_code($data, int $width = -2, int $height = -100, string $color = 'black', bool $exportUrlData = true, string $type = "C39")
+    function generate_bar_code($data, int $width = -2, int $height = -70, string $color = 'black', bool $exportUrlData = true, string $type = "C128A")
     {
         $barcode = new \Com\Tecnick\Barcode\Barcode();
 
