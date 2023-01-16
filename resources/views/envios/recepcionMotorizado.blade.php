@@ -685,11 +685,23 @@
                                 event.preventDefault();
                                 $motorizado = $(this).data('motorizado');
                                 $fecha = $("#fecha_consulta").val();
-                                console.log($motorizado);
+                                $("#user_motorizado").val($motorizado);
+                                $("#user_motorizado").selectpicker('refresh')
+                                $("#fecha_envio").val($fecha)
+                                $("#modal-exportar").modal('show');
+                            })
+
+                            $(document).on('click','.exportar_tabla',function(event){
+                                event.preventDefault();
+                                $url=$(this).data('url');
+                                //$motorizado = $(this).data('motorizado');
+                                $fecha = $("#fecha_consulta").val();
+                                //console.log($motorizado);
                                 console.log($fecha)
 
-                               //abrir modal y setear valores
-                                $("#user_motorizado").val($motorizado);
+                                //abrir modal y setear valores
+                                $("#condicion_envio").val($url);
+                                $("#user_motorizado").val('');
                                 $("#user_motorizado").selectpicker('refresh')
                                 $("#fecha_envio").val($fecha)
                                 $("#modal-exportar").modal('show');
@@ -1064,7 +1076,7 @@
                                             $('.count_recepcionmotorizados_inroutes_courier').html(0);
                                             $('.count_recepcionmotorizados_receptioned_courier').html(this.fnSettings().fnRecordsDisplay());
                                             $('div.toolbar').html('<div class="d-flex justify-content-center">' +
-                                                '<button id="export-recepcion" class="btn btn-success">EXPORTAR RECEPCION</button>' +
+                                                '<button class="btn btn-success exportar_tabla" data-url="19">EXPORTAR RECEPCION</button>' +
                                                 '</div>');
                                             @foreach($motorizados as $motorizado)
                                             $('#recepcionhijo{{Str::slug($motorizado->zona)}}-tab').tab('show');
@@ -1074,7 +1086,7 @@
                                             $('.count_recepcionmotorizados_receptioned_courier').html(0);
                                             $('.count_recepcionmotorizados_inroutes_courier').html(this.fnSettings().fnRecordsDisplay());
                                             $('div.toolbar').html('<div class="d-flex justify-content-center">' +
-                                                '<button id="export-ruta-masiva" class="btn btn-secondary">EXPORTAR RUTA MASIVA</button>' +
+                                                '<button class="btn btn-secondary exportar_tabla" data-url="18">EXPORTAR RUTA MASIVA</button>' +
                                                 '<button id="iniciar-ruta-masiva" class="btn btn-success">INICIAR RUTA MASIVA</button>' +
                                                 '</div>');
                                             @foreach($motorizados as $motorizado)

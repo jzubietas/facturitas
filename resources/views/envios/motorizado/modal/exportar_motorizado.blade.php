@@ -33,6 +33,10 @@
                           <label>Fecha&nbsp;</label>
                           {!! Form::date('fecha_envio', \Carbon\Carbon::now(), ['id'=>'fecha_envio','class' => 'form-control']); !!}
                         </div>
+                          <select id="condicion_envio" name="condicion_envio" class="d-nonea">
+                              <option value="19">19</option>
+                              <option value="18">18</option>
+                          </select>
                       </div>
                     </div>
                   </div>
