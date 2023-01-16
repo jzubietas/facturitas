@@ -15,10 +15,10 @@
     </div>
     @endcan --}}
     <div class="float-right btn-group dropleft">
-        <button type="button" class="btn btn-option" data-accion="maria" data-responsable="maria_recepcion" data-toggle="modal" data-target="#modal-escanear" data-backdrop="static" style="margin-right:16px;" aria-haspopup="true" aria-expanded="false">
+        <button type="button" class="btn btn-option" data-accion="confirmacion_operaciones" data-responsable="maria_recepcion" data-toggle="modal" data-target="#modal-escanear" data-backdrop="static" style="margin-right:16px;" aria-haspopup="true" aria-expanded="false">
             <i class="fa fa-barcode" aria-hidden="true"></i> RECEPCIONAR PEDIDOS
         </button>
-        <button type="button" class="btn btn-option" data-accion="courier" data-responsable="maria_courier" data-toggle="modal" data-target="#modal-escanear" data-backdrop="static" style="margin-right:16px;" aria-haspopup="true" aria-expanded="false">
+        <button type="button" class="btn btn-option" data-accion="envio_courier_operaciones" data-responsable="maria_courier" data-toggle="modal" data-target="#modal-escanear" data-backdrop="static" style="margin-right:16px;" aria-haspopup="true" aria-expanded="false">
             <i class="fa fa-barcode" aria-hidden="true"></i> ENVIAR A COURIER
         </button>
 
