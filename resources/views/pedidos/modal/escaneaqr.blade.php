@@ -19,6 +19,7 @@
 
                  <input type="text" value="" id="codigo_confirmar" name="hiddenCodigo" style="opacity: 0">
                  <input type="text" value="12" id="codigo_accion" name="accion" style="opacity: 0">
+                 <input type="hidden" value="" id="codigo_responsable" name="codigo_responsable">
 
                  <p id="respuesta_barra"></p>
              </div>
