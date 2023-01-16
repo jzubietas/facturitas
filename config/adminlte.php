@@ -325,7 +325,7 @@ return [
                 [
                     'text' => 'Sobres por enviar',
                     'route' => 'sobres.porenviar',
-                    'can' => 'pedidos.pagados',
+                    'can' => 'pedidos.sobresporenviar',
                     'icon' => 'fas fa-check-circle',
                     'active' => ['pedidos pagados'],
                 ],
