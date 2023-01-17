@@ -471,28 +471,26 @@
                 }
             });
 
-            $(document).on('change keyup',"#tracking, #numregistro",function(event){
+            $(document).on('change keyup', "#tracking, #numregistro", function (event) {
 
-                let id_element=event.target.id;
+                let id_element = event.target.id;
                 console.log("aaaa")
-                let val_element=$(this).val();
-                switch(id_element)
-                {
+                let val_element = $(this).val();
+                switch (id_element) {
                     case 'tracking':
-                        let ntrack=val_element.length;
-                        console.log("n "+ntrack)
-                        if(ntrack>9)
-                        {
+                        let ntrack = val_element.length;
+                        console.log("n " + ntrack)
+                        if (ntrack > 9) {
                             $.ajax({
-                                data: {'element':id_element,'value':val_element,'from':'direcccionenvio'},
+                                data: {'element': id_element, 'value': val_element, 'from': 'direcccionenvio'},
                                 type: 'POST',
                                 url: "{{ route('envios.validacion_direccionenvio') }}",
                                 success: function (data) {
                                     console.log(data);
-                                    if(data.response=='1'){
+                                    if (data.response == '1') {
                                         Swal.fire(
                                             'Error',
-                                            'Informacion repetida con el campo '+data.element,
+                                            'Informacion repetida con el campo ' + data.element,
                                             'warning'
                                         )
                                     }
@@ -501,20 +499,19 @@
                         }
                         break;
                     case 'numregistro':
-                        let nreg=val_element.length;
-                        console.log("n2 "+nreg)
-                        if(nreg>11)
-                        {
+                        let nreg = val_element.length;
+                        console.log("n2 " + nreg)
+                        if (nreg > 11) {
                             $.ajax({
-                                data: {'element':id_element,'value':val_element,'from':'direcccionenvio'},
+                                data: {'element': id_element, 'value': val_element, 'from': 'direcccionenvio'},
                                 type: 'POST',
                                 url: "{{ route('envios.validacion_direccionenvio') }}",
                                 success: function (data) {
                                     console.log(data);
-                                    if(data.response=='1'){
+                                    if (data.response == '1') {
                                         Swal.fire(
                                             'Error',
-                                            'Informacion repetida con el campo '+data.element,
+                                            'Informacion repetida con el campo ' + data.element,
                                             'warning'
                                         )
                                     }
@@ -526,7 +523,6 @@
 
 
             });
-
 
 
             /*$("#tracking").bind('keypress', function(event) {
@@ -746,7 +742,7 @@
                                 'warning'
                             )
                             return;
-                        } else if (val_distrito == "" || val_distrito== null) {
+                        } else if (val_distrito == "" || val_distrito == null) {
                             Swal.fire(
                                 'Error',
                                 'Debe seleccionar un distrito',
@@ -814,7 +810,8 @@
                         fd2.append('importe', val_importe);
 
                         for (let i = 0; i < files.length; i++) {
-                            fd2.append('rotulo', $('input[type=file][name="rotulo"]')[0].files[0]);
+                            var file = $('input[type=file][name="rotulo"]')[0].files[0]
+                            fd2.append('rotulo', file, file.name);
                         }
 
                         fd2.append('saveHistoricoProvincia', saveHistoricoProvincia);
@@ -1155,8 +1152,8 @@
             })
 
             $("#formdireccion input,#formdireccion select").change(function () {
-                var form=$("#formdireccion")[0];
-                var msg=''
+                var form = $("#formdireccion")[0];
+                var msg = ''
                 if ($(form.nombre).val() && $(form.nombre).data('old_value') != $(form.nombre).val()) {
                     msg += '1'
                 }
@@ -1175,11 +1172,11 @@
                 if ($(form.observacion).val() && $(form.observacion).data('old_value') != $(form.observacion).val()) {
                     msg += '1'
                 }
-                if(msg.length>0){
+                if (msg.length > 0) {
                     $("#saveHistoricoLimaEditar").removeAttr('disabled')
-                }else{
-                    $("#saveHistoricoLimaEditar").attr('disabled','disabled')
-                    $("#saveHistoricoLimaEditar").prop('checked',false)
+                } else {
+                    $("#saveHistoricoLimaEditar").attr('disabled', 'disabled')
+                    $("#saveHistoricoLimaEditar").prop('checked', false)
                 }
             })
 
@@ -1323,9 +1320,9 @@
 
             });
 
-            $("#distrito").on('change', function(){
+            $("#distrito").on('change', function () {
                 var distrito_seleccionado = $(this).val();
-                distrito_seleccionado=distrito_seleccionado.replace('+', ' ');
+                distrito_seleccionado = distrito_seleccionado.replace('+', ' ');
                 console.log(distrito_seleccionado)
 
                 $.ajax({
@@ -1336,7 +1333,7 @@
                     url: "{{ route('envios.verificarzona') }}",
                     success: function (data) {
                         console.log(data);
-                        if(data.html == 0){
+                        if (data.html == 0) {
                             /**********
                              * CARGAMOS EL FORMULARIO DE PROVINCIA
                              */
@@ -1365,7 +1362,6 @@
 
                 return false;
             });
-
 
 
             //inicio tabla pedidos
@@ -1453,8 +1449,8 @@
                         'orderable': false, /* true or false */
                     }],
                     rowCallback: function (row, data, index) {
-                        if(data.da_confirmar_descarga!='1') {
-                            $('input[type=checkbox]', row).attr('disabled','disabled')
+                        if (data.da_confirmar_descarga != '1') {
+                            $('input[type=checkbox]', row).attr('disabled', 'disabled')
                         }
                     },
                     columns: [
