@@ -155,7 +155,7 @@
             var accion = button.data('accion')
             var responsable = button.data('responsable')
              if(accion == "confirmacion_operaciones"){
-                 $('#titulo-scan').html("Confirmar <span class='text-success'>sobres sin envío</span>");
+                 $('#titulo-scan').html("Confirmar <span class='text-success'>Sobres</span>");
              }else if (accion == "envio_courier_operaciones"){
                  $('#titulo-scan').html("Escanear para enviar a <span class='text-success'>Courier</span></span>");
              }
@@ -168,8 +168,6 @@
             $('#codigo_accion').val(accion);
             $('#codigo_responsable').val(responsable);
 
-            $('#titulo-scan').html("Escanear para enviar a <span class='text-success'>Courier</span> | Confirmar <span class='text-success'>sobres sin envío</span>");
-            console.log($('#codigo_accion').val());
             $('#modal-escanear').on('click', function(){
                 console.log("focus");
                 $('#codigo_confirmar').focus();
