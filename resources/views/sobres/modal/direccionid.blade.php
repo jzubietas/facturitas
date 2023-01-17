@@ -168,7 +168,8 @@
                                                 <i class="fas fa-envelope"></i>
                                                 Historial
                                             </button>
-                                            <button type="button" id="set_cliente_clear_provincia" class="btn btn-outline-danger btn-sm" style="display: none">
+                                            <button type="button" id="set_cliente_clear_provincia"
+                                                    class="btn btn-outline-danger btn-sm" style="display: none">
                                                 Limpiar
                                             </button>
                                         </div>
@@ -207,7 +208,7 @@
                                                 <div class="col-10">
                                                     {!! Form::label('rotulo', 'Rotulo') !!}
                                                     @csrf
-                                                    {!! Form::file('rotulo', ['class' => 'form-control-file', 'accept' =>'pdf/*']) !!}
+                                                    {!! Form::file('rotulo', ['class' => 'form-control-file', 'accept' =>'.pdf,application/pdf']) !!}
                                                 </div>
                                                 <div
                                                     class="col-2 d-none justify-content-center align-items-center drop-rotulo">
@@ -227,7 +228,8 @@
                                             <div class="form-check form-switch">
                                                 <input class="form-check-input" type="checkbox"
                                                        id="saveHistoricoProvincia"><!--checked-->
-                                                <label class="form-check-label font-weight-bold" for="saveHistoricoProvincia">
+                                                <label class="form-check-label font-weight-bold"
+                                                       for="saveHistoricoProvincia">
                                                     Grabar registro en historico
                                                 </label>
                                             </div>
@@ -249,39 +251,14 @@
                             </div>
 
                         </div>
-                        <div class="col-lg-4 viewpdf d-none contenedor-pdf border border-primary"><!--PDF-->
-                            <div class="row ">
-                                <div class="col">
-
-                                    <div id="my_pdf_viewer" class="d-none">
-
-
-                                        <div id="navigation_controls" class="row">
-                                                
-                                            <button id="go_previous" class="btn btn-xs btn-info col">Atras</button>
-                                                <input id="current_page" class="form-control col" value="1"
-                                                       type="number"/>
-                                                
-                                            <button id="go_next" class="btn btn-xs  btn-info col">Siguiente</button>
-                                        </div>
-
-                                          
-
-                                        <div id="zoom_controls" class="d-none">
-                                                
-                                            <button id="zoom_in">+</button>
-                                                
-                                            <button id="zoom_out">-</button>
-                                        </div>
-                                    </div>
-                                    <div id="canvas_container">
-                                            
-                                        <canvas id="pdf_renderer"></canvas>
-                                    </div>
-
-
-                                </div>
-                            </div>
+                        <div class="col-lg-4 viewpdf d-none contenedor-pdf border border-primary p-0"><!--PDF-->
+                            <object id="pdf_renderer_object" data="" type="application/pdf"
+                                    class="d-none w-100"
+                                    height="1200" typemustmatch>
+                                <canvas id="pdf_renderer">
+                                    <p>You don't have a PDF plugin, but you can <a target="_blank" href="myfile.pdf">download the PDF file.</a></p>
+                                </canvas>
+                            </object>
                         </div>
                     </div>
                     <div class="row" id="show_direccion_is_disabled">
