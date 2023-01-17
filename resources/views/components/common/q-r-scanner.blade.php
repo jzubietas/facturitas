@@ -177,6 +177,8 @@
                         Swal.fire({
                             icon: 'success',
                             title: 'Pedido identificado',
+                            color: '#FFF',
+                            background: '#79b358',
                             showConfirmButton: false,
                             timer: 600
                         })
@@ -184,7 +186,7 @@
                         codigos_agregados.push(data.codigo);
                         codigos_agregados = codigos_agregados.filter((v, i, a) => a.indexOf(v) === i)
 
-                        $('#pedidos-procesados').append('<table class="table"><tr><td>'+ data.codigo +'</td><td>'+ data.zona +'</td><td>'+ data.cantidad +' Sobres</td></tr></table>');
+                        $('#pedidos-procesados').append('<table class="table '+ data.clase_confirmada +' mb-0"><tr><td class="pb-8 pt-8">'+ data.codigo +'</td><td class="pb-8 pt-8">'+ data.zona +'</td><td class="pb-8 pt-8">'+ data.cantidad_recibida +'/'+ data.cantidad + '</td></tr></table>');
                     }
 
 
