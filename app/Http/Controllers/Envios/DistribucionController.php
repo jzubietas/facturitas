@@ -148,7 +148,7 @@ class DistribucionController extends Controller
 
         }*/
 
-        $items = $query->get();
+        $items = $query->get()->filter(fn(GrupoPedido $grupo) => $grupo->pedidos->count()>0);
         return \DataTables::of($items)
             ->addColumn('codigos', function (GrupoPedido $grupo) {
                 return $grupo->pedidos->pluck('codigo')->sort()
