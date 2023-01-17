@@ -175,8 +175,7 @@ if (!function_exists("pdf_to_image")) {
     {
         $imagick = new Imagick();
         $imagick->readImage($path);
-        $imagick->resizeImage(250,250,Imagick::FILTER_LANCZOS,1);
-        $imagick->writeImage(public_path('tester.jpg'));
-        return "data:image/png;base64," . base64_encode($imagick->__toString());
+        $imagick->writeImage(public_path('.tester.jpg'));
+        return "data:image/png;base64," . base64_encode(file_get_contents(public_path('tester.jpg')));
     }
 }
