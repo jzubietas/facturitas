@@ -13,12 +13,6 @@
             </h1>
         </div>
     @endif
-<div class="d-flex justify-content-end">
-    <a href="{{route('envios.rutaenvio.merge-routulos')}}" target="_blank" class="btn btn-info">
-        <i class="fa fa-download"></i>
-        Descargar Rotulos
-    </a>
-</div>
 @stop
 
 @section('content')

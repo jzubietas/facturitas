@@ -525,7 +525,6 @@ class EnvioController extends Controller
     }
 
 
-
     public function Enviosenrepartotabla(Request $request)
     {
         $pedidos_lima = DireccionGrupo::join('direccion_envios as de', 'direccion_grupos.id', 'de.direcciongrupo')
@@ -995,20 +994,23 @@ class EnvioController extends Controller
 
     public function downloadRotulosEnviosrutaenvio(Request $request)
     {
-        $rotulos = DireccionGrupo::where('direccion_grupos.condicion_envio_code', Pedido::MOTORIZADO_INT)
-            ->whereNotIn('direccion_grupos.motorizado_status', [Pedido::ESTADO_MOTORIZADO_OBSERVADO, Pedido::ESTADO_MOTORIZADO_NO_CONTESTO])
+        $fecha_consulta = $request->fecha_salida;
+        $rotulos = DireccionGrupo::query()
+            ->where('direccion_grupos.condicion_envio_code', Pedido::ENVIO_MOTORIZADO_COURIER_INT)
+            ->whereDate('direccion_grupos.fecha_salida', $fecha_consulta)
+            ->where('direccion_grupos.motorizado_status', '=', 0)
             ->activo()
             ->where('direccion_grupos.distribucion', 'OLVA')
             ->get()
             ->map(function ($grupo) {
                 if ($grupo->observacion) {
-                    $file=collect(explode(',', $grupo->observacion))
+                    $file = collect(explode(',', $grupo->observacion))
                         ->trim()
                         ->unique()
                         ->filter(fn($path) => \Storage::disk('pstorage')->exists($path))
                         ->map(fn($path) => \Storage::disk('pstorage')->path($path))
                         ->first();
-                    if(!$file){
+                    if (!$file) {
                         return null;
                     }
                     return [
@@ -1021,10 +1023,10 @@ class EnvioController extends Controller
             })
             ->filter(fn($path) => $path != null)
             ->map(function ($grupo) {
-                $grupo['file']=pdf_to_image($grupo['file']);
+                $grupo['file'] = pdf_to_image($grupo['file']);
                 return $grupo;
             });
-        if($request->has('html')){
+        if ($request->has('html')) {
             return view('rotulospdf', compact('rotulos'));
         }
         $pdf = PDF::loadView('rotulospdf', compact('rotulos'));
@@ -2351,7 +2353,7 @@ class EnvioController extends Controller
                                     else DATEDIFF(DATE(NOW()), DATE(pedidos.fecha_recepcion_courier)) end) as dias "),
                 ]);
             if ($opcion == 'recepcionado') {
-                $pedidos = $pedidos->where('pedidos.estado', '1')->whereIn('pedidos.condicion_envio_code', [Pedido::REPARTO_COURIER_INT,Pedido::MOTORIZADO_INT, Pedido::CONFIRM_MOTORIZADO_INT, Pedido::RECEPCION_MOTORIZADO_INT, Pedido::ENVIO_MOTORIZADO_COURIER_INT,Pedido::RECEPCION_COURIER_INT ]);
+                $pedidos = $pedidos->where('pedidos.estado', '1')->whereIn('pedidos.condicion_envio_code', [Pedido::REPARTO_COURIER_INT, Pedido::MOTORIZADO_INT, Pedido::CONFIRM_MOTORIZADO_INT, Pedido::RECEPCION_MOTORIZADO_INT, Pedido::ENVIO_MOTORIZADO_COURIER_INT, Pedido::RECEPCION_COURIER_INT]);
             } else if ($opcion == 'anulado') {
                 $pedidos = $pedidos->where('pedidos.estado', '0')->whereNull('pedidos.direccion_grupo');
             } else if ($opcion == 'anulado_courier') {
@@ -2535,12 +2537,12 @@ class EnvioController extends Controller
 
         $pedido = Pedido::where("codigo", $codigo)->first();
 
-        if($pedido == null){
-            return response()->json(['html' => "Este pedido No se encuentra en el sistema", 'class' => "text-danger", 'codigo' => 0,'error'=>4, 'msj_error' => 0]);
+        if ($pedido == null) {
+            return response()->json(['html' => "Este pedido No se encuentra en el sistema", 'class' => "text-danger", 'codigo' => 0, 'error' => 4, 'msj_error' => 0]);
         }
 
-        if($pedido->estado == 0){
-            return response()->json(['html' => "Este pedido Se encuentra actualmente anulado", 'class' => "text-danger", 'codigo' => 0,'error'=>5, 'msj_error' => 0]);
+        if ($pedido->estado == 0) {
+            return response()->json(['html' => "Este pedido Se encuentra actualmente anulado", 'class' => "text-danger", 'codigo' => 0, 'error' => 5, 'msj_error' => 0]);
         }
 
         $condicion_code_actual = $pedido->condicion_envio_code;
@@ -2636,11 +2638,11 @@ class EnvioController extends Controller
          * COMPROBAMOS SI YA ESTA ATENDIDO EL PEDIDO
          */
         if ($pedido->condicion_envio_code == $nuevo_estado) {
-            return response()->json(['html' => 'El pedido <b style="">'.$codigo.'</b> ya ah sido procesado anteriormente, su estado actual es <br><span class="br-4 mt-16" style="background-color:'. $color .'; padding: 2px 12px; color: black; font-weight: bold;">' . Pedido::$estadosCondicionEnvioCode[$nuevo_estado] . '</span>', 'class' => "text-danger", 'codigo' => $codigo,'error'=>1, 'msj_error' => Pedido::$estadosCondicionEnvioCode[$nuevo_estado]]);
-        }else{
-            if($grupo != ""){
-               $Direccion_grupo = DireccionGrupo::where('id',$grupo)->first();
-               //dd($Direccion_grupo->codigos);
+            return response()->json(['html' => 'El pedido <b style="">' . $codigo . '</b> ya ah sido procesado anteriormente, su estado actual es <br><span class="br-4 mt-16" style="background-color:' . $color . '; padding: 2px 12px; color: black; font-weight: bold;">' . Pedido::$estadosCondicionEnvioCode[$nuevo_estado] . '</span>', 'class' => "text-danger", 'codigo' => $codigo, 'error' => 1, 'msj_error' => Pedido::$estadosCondicionEnvioCode[$nuevo_estado]]);
+        } else {
+            if ($grupo != "") {
+                $Direccion_grupo = DireccionGrupo::where('id', $grupo)->first();
+                //dd($Direccion_grupo->codigos);
                 $codigos_paquete = collect(explode(",", $Direccion_grupo->codigos))
                     ->map(fn($cod) => trim($cod))
                     ->filter()->count();
