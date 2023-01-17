@@ -862,7 +862,7 @@ class MotorizadoController extends Controller
                 ->editColumn('distrito', function ($pedido) {
 
                     if ($pedido->distribucion == 'OLVA') {
-                        $html = collect(explode(',', $pedido->referencia))->trim()->unique()->join(', ');
+                        $html = "";
                         if ($pedido->observacion) {
                             $html .= collect(explode(',', $pedido->observacion))
                                 ->trim()

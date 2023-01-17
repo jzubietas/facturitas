@@ -2491,9 +2491,17 @@ Ver Rotulo</a>')
 
         //BUSCAMOS EL PEDIDO
 
-        $pedido = Pedido::where("codigo", $codigo)->first();
-        $condicion_code_actual = $pedido->condicion_envio_code;
+        $pedido = Pedido::where("codigo", $codigo)>first();
 
+        if($pedido == null){
+            return response()->json(['html' => "Este pedido No se encuentra en el sistema", 'class' => "text-danger", 'codigo' => 0,'error'=>4, 'msj_error' => 0]);
+        }
+
+        if($pedido->estado == 0){
+            return response()->json(['html' => "Este pedido Se encuentra actualmente anulado", 'class' => "text-danger", 'codigo' => 0,'error'=>5, 'msj_error' => 0]);
+        }
+
+        $condicion_code_actual = $pedido->condicion_envio_code;
         $grupo = "";
 
         /************
