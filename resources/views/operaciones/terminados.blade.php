@@ -119,6 +119,9 @@
             transition: all 0.5s ease;
             text-shadow: 10px 2px #6ac7c2;
         }
+        .textred {
+            color: red !important;
+        }
     </style>
 @stop
 
@@ -268,6 +271,14 @@
                 },
                 createdRow: function (row, data, dataIndex) {
                     //console.log(row);
+                    /*if (data["estado"] == "1") {
+                        if (data.pendiente_anulacion == 1) {
+                            $('td', row).css('background', 'red').css('font-weight', 'bold');
+                        }
+                    } else*/ if (data["estado"] == "0"){
+                        $(row).addClass('textred');
+                    }
+
                 },
                 rowCallback: function (row, data, index) {
                     $(function () {

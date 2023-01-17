@@ -38,7 +38,7 @@
     <div class="page" style="@if($loop->index==1)
 page-break-before: always;
 page-break-after: always;
-    @elseif($loop->index>1)
+    @elseif($loop->index>1 && $loop->index<count($rotulos)-1)
     page-break-after: always;
 @endif">
         <table style="width: 100%">
@@ -68,7 +68,7 @@ page-break-after: always;
                 </td>
             </tr>
         </table>
-        <div class="footer" style="text-align: right">
+        <div class="footer" style="text-align: left">
             @foreach($rotulo['producto'] as $grupos)
                 <h3>{{$grupos}}</h3>
             @endforeach

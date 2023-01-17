@@ -525,38 +525,6 @@ class EnvioController extends Controller
     }
 
 
-    public function downloadRotulosEnviosparareparto(Request $request)
-    {
-        $rotulos = DireccionGrupo::where('direccion_grupos.condicion_envio_code', Pedido::REPARTO_COURIER_INT)
-            ->where('direccion_grupos.distribucion', 'OLVA')
-            ->activo()
-            ->get()
-            ->map(function ($grupo) {
-                if ($grupo->observacion) {
-                    return [
-                        'codigos' => explode(',', $grupo->codigos),
-                        'producto' => explode(',', $grupo->producto),
-                        'file' => collect(explode(',', $grupo->observacion))
-                            ->trim()
-                            ->unique()
-                            ->filter(fn($path) => \Storage::disk('pstorage')->exists($path))
-                            ->map(fn($path) => \Storage::disk('pstorage')->path($path))
-                            ->first()
-                    ];
-                }
-                return null;
-            })
-            ->filter(fn($path) => $path != null)
-            ->map(function ($grupo) {
-                $grupo['file']=pdf_to_image($grupo['file']);
-                return $grupo;
-            });
-        if($request->has('html')){
-            return view('rotulospdf', compact('rotulos'));
-        }
-        $pdf = PDF::loadView('rotulospdf', compact('rotulos'));
-        return $pdf->stream('resume.pdf');
-    }
 
     public function Enviosenrepartotabla(Request $request)
     {
@@ -1022,6 +990,45 @@ class EnvioController extends Controller
                 ->toJson();
         }
 
+    }
+
+
+    public function downloadRotulosEnviosrutaenvio(Request $request)
+    {
+        $rotulos = DireccionGrupo::where('direccion_grupos.condicion_envio_code', Pedido::MOTORIZADO_INT)
+            ->whereNotIn('direccion_grupos.motorizado_status', [Pedido::ESTADO_MOTORIZADO_OBSERVADO, Pedido::ESTADO_MOTORIZADO_NO_CONTESTO])
+            ->activo()
+            ->where('direccion_grupos.distribucion', 'OLVA')
+            ->get()
+            ->map(function ($grupo) {
+                if ($grupo->observacion) {
+                    $file=collect(explode(',', $grupo->observacion))
+                        ->trim()
+                        ->unique()
+                        ->filter(fn($path) => \Storage::disk('pstorage')->exists($path))
+                        ->map(fn($path) => \Storage::disk('pstorage')->path($path))
+                        ->first();
+                    if(!$file){
+                        return null;
+                    }
+                    return [
+                        'codigos' => explode(',', $grupo->codigos),
+                        'producto' => explode(',', $grupo->producto),
+                        'file' => $file
+                    ];
+                }
+                return null;
+            })
+            ->filter(fn($path) => $path != null)
+            ->map(function ($grupo) {
+                $grupo['file']=pdf_to_image($grupo['file']);
+                return $grupo;
+            });
+        if($request->has('html')){
+            return view('rotulospdf', compact('rotulos'));
+        }
+        $pdf = PDF::loadView('rotulospdf', compact('rotulos'));
+        return $pdf->stream('resume.pdf');
     }
 
     public function Enviosporconfirmar()
@@ -2537,6 +2544,7 @@ class EnvioController extends Controller
         }
 
         $condicion_code_actual = $pedido->condicion_envio_code;
+        $color = $pedido->condicion_envio_color;
         $grupo = "";
 
         /************
@@ -2628,7 +2636,7 @@ class EnvioController extends Controller
          * COMPROBAMOS SI YA ESTA ATENDIDO EL PEDIDO
          */
         if ($pedido->condicion_envio_code == $nuevo_estado) {
-            return response()->json(['html' => "Este pedido ya ah sido procesado anteriormente, su estado actual es " . Pedido::$estadosCondicionEnvioCode[$nuevo_estado], 'class' => "text-danger", 'codigo' => $codigo,'error'=>1, 'msj_error' => Pedido::$estadosCondicionEnvioCode[$nuevo_estado]]);
+            return response()->json(['html' => 'El pedido <b style="">'.$codigo.'</b> ya ah sido procesado anteriormente, su estado actual es <br><span class="br-4 mt-16" style="background-color:'. $color .'; padding: 2px 12px; color: black; font-weight: bold;">' . Pedido::$estadosCondicionEnvioCode[$nuevo_estado] . '</span>', 'class' => "text-danger", 'codigo' => $codigo,'error'=>1, 'msj_error' => Pedido::$estadosCondicionEnvioCode[$nuevo_estado]]);
         }else{
             if($grupo != ""){
                $Direccion_grupo = DireccionGrupo::where('id',$grupo)->first();

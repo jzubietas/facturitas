@@ -74,6 +74,7 @@
                 return false;
             });*/
         })
+
         $('#modal-escanear').on('hidden.bs.modal', function () {
             $('#respuesta_barra').html('')
             $('#pedidos-procesados').html('')
@@ -122,7 +123,7 @@
                             timer: 1500
                         })
 
-                        $('#respuesta_barra').html('<span class="'+ data.class +'">El Pedido <b>'+ data.codigo +'</b> ya se procesó anteriormente, su estado actual es <b>'+ data.msj_error +'</b></span>');
+                        $('#respuesta_barra').html('<span class="'+ data.class +'">'+ data.html +'</b></span>');
 
                     }else if(data.error == 4){
 
@@ -276,12 +277,23 @@
                     $('#respuesta_barra').removeClass("text-success");
                     $('#respuesta_barra').addClass(data.class);
                     $('#respuesta_barra').html(data.html);
+
+
+                    setTimeout(function(){
+                        console.log("cerrar modal");
+                        $('#pedidos-procesados').html("");
+                        $('#modal-escanear').modal('hide');
+                    },300);
+
+
                     @foreach($tablesIds as $table)
                     $('{{$table}}').DataTable().draw(false)
                     @endforeach
                     if (codigos_agregados.length === 0) {
                         //$('#modal-escanear').modal('hide')
                     }
+
+
                 }
             }).always(function(){
                 $('#codigo_confirmar').focus();

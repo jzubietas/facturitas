@@ -59,6 +59,7 @@ class MotorizadoAutoNoRecibido extends Command
                 'motorizado_sustento_text' => 'Este pedido fue Devuelto automáticamente por el sistema ya que no fue Recibido por el motorizado '.optional($motorizado)->zona,
                 'motorizado_status' => Pedido::ESTADO_MOTORIZADO_NO_RECIBIDO
             ]);
+            $this->info("Codigo: ".$grupo->codigos);
         }
         return 0;
     }
