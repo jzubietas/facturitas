@@ -17,7 +17,11 @@
 
                  <img src="{{asset('imagenes/scan.gif')}}" width="80%"><br>
 
-                 <input type="text" value="" id="codigo_confirmar" name="hiddenCodigo" style="opacity: 0">
+                 <input type="text" value="" id="codigo_confirmar" placeholder="00-0000-0" name="hiddenCodigo" style="opacity: 0.5;
+    border: 1px solid #bbbbbb;
+    border-radius: 4px;
+    padding: 8px;
+    font-size: 20px;">
                  <input type="text" value="12" id="codigo_accion" name="accion" style="opacity: 0">
                  <input type="hidden" value="" id="codigo_responsable" name="codigo_responsable">
 
