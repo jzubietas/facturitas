@@ -804,7 +804,7 @@ Enviar</button>
                         data: 'celular',
                         name: 'celular',
                         render: function (data, type, row, meta) {
-                            return row.celular + '<br>' + row.nombre
+                            return '<a href="tel:' + row.celular +'">' + row.celular + '</a><br>' + row.nombre
                         },
                     },
                     {
