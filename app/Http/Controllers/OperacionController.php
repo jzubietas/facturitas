@@ -542,8 +542,8 @@ class OperacionController extends Controller
                     DB::raw(" (select count(ii.id) from imagen_atencions ii where ii.pedido_id=pedidos.id and ii.estado=1) as adjuntos "),
                 ]
             )
-            ->where('pedidos.estado', '1')
-            ->where('dp.estado', '1')
+            //->where('pedidos.estado', '1')
+            //->where('dp.estado', '1')
             ->whereIn('pedidos.condicion_envio_code', [
                 Pedido::RECEPCION_COURIER_INT
                 , Pedido::REPARTO_COURIER_INT
