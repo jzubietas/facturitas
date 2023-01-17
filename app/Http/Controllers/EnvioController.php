@@ -2530,7 +2530,7 @@ class EnvioController extends Controller
 
         //BUSCAMOS EL PEDIDO
 
-        $pedido = Pedido::where("codigo", $codigo)>first();
+        $pedido = Pedido::where("codigo", $codigo)->first();
 
         if($pedido == null){
             return response()->json(['html' => "Este pedido No se encuentra en el sistema", 'class' => "text-danger", 'codigo' => 0,'error'=>4, 'msj_error' => 0]);
