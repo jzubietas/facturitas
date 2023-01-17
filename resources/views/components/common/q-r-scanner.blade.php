@@ -111,8 +111,24 @@
                 success: function (data) {
 
                     if(data.error == 1){
-                        $('#respuesta_barra').html('<span class="'+ data.class +'">El Pedido ya se procesó anteriormente.</span>');
+
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'El Pedido ya se procesó anteriormente',
+                            showConfirmButton: false,
+                            timer: 1500
+                        })
+
+                        $('#respuesta_barra').html('<span class="'+ data.class +'">El Pedido ya se procesó anteriormente, su estado actual es <b>'+ data.msj_error +'</b></span>');
+
                     }else if(data.error == 0){
+
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Pedido identificado',
+                            showConfirmButton: false,
+                            timer: 1000
+                        })
 
                         codigos_agregados.push(data.codigo);
                         codigos_agregados = codigos_agregados.filter((v, i, a) => a.indexOf(v) === i)
@@ -124,6 +140,13 @@
 
 
                     }else if(data.error == 3){
+
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Pedido identificado',
+                            showConfirmButton: false,
+                            timer: 1000
+                        })
                         console.log(data);
                         codigos_agregados.push(data.codigo);
                         codigos_agregados = codigos_agregados.filter((v, i, a) => a.indexOf(v) === i)
