@@ -48,6 +48,13 @@ class fixedFilesBin extends Command
                 $pedido->update([
                     'observacion' => $new
                 ]);
+            }else{
+                $new = \Str::replace(".bin", '.pdf', $file);
+                if (\Storage::disk('pstorage')->exists($new)) {
+                    $pedido->update([
+                        'observacion' => $new
+                    ]);
+                }
             }
         }
         return 0;
