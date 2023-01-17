@@ -2638,14 +2638,32 @@ class EnvioController extends Controller
         if ($pedido->condicion_envio_code == $nuevo_estado) {
             return response()->json(['html' => 'El pedido <b style="">'.$codigo.'</b> ya ah sido procesado anteriormente, su estado actual es <br><span class="br-4 mt-16" style="background-color:'. $color .'; padding: 2px 12px; color: black; font-weight: bold;">' . Pedido::$estadosCondicionEnvioCode[$nuevo_estado] . '</span>', 'class' => "text-danger", 'codigo' => $codigo,'error'=>1, 'msj_error' => Pedido::$estadosCondicionEnvioCode[$nuevo_estado]]);
         }else{
+
+
+
             if($grupo != ""){
                $Direccion_grupo = DireccionGrupo::where('id',$grupo)->first();
                //dd($Direccion_grupo->codigos);
                 $codigos_paquete = collect(explode(",", $Direccion_grupo->codigos))
                     ->map(fn($cod) => trim($cod))
-                    ->filter()->count();
+                    ->filter()->values();
 
-                return response()->json(['html' => "Escaneado Correctamente", 'class' => "text-success", 'codigo' => $codigo, 'error' => 3, 'zona' => $Direccion_grupo->distribucion, 'cantidad' => $codigos_paquete]);
+                /*************
+                 * SACAMOS LA CANTIDAD DE SOBRES YA RECIBIDOS DE ESTE PAQUETE
+                 */
+                $sobres_ya_recibidos = Pedido::where('condicion_envio_code', Pedido::ENVIO_MOTORIZADO_COURIER_INT)
+                    ->whereIn('codigo', $codigos_paquete)
+                    ->count();
+
+                $sobres_restantes = $codigos_paquete->count() - $sobres_ya_recibidos;
+
+                $clase_confirmado = "";
+                if($sobres_restantes == 0){
+                    $clase_confirmado = "text-success";
+                }
+
+
+                return response()->json(['html' => "Escaneado Correctamente", 'class' => "text-success", 'codigo' => $codigo, 'error' => 3, 'zona' => $Direccion_grupo->distribucion, 'cantidad' => $codigos_paquete->count(), 'cantidad_recibida' => $sobres_ya_recibidos, 'clase_confirmada' => $clase_confirmado]);
             }
             return response()->json(['html' => "Escaneado Correctamente", 'class' => "text-success", 'codigo' => $codigo, 'error' => 0]);
         }
