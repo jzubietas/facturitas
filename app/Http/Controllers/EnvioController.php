@@ -543,9 +543,11 @@ class EnvioController extends Controller
                 return null;
             })
             ->filter(fn($path) => $path!=null);
+
         $combinador = new Merger();
 
         foreach ($rotulos as $documento) {
+            return pdf_to_image($documento);
             $combinador->addFile($documento);
         }
 

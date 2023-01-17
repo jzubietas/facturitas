@@ -115,7 +115,7 @@ if (!function_exists("add_query_filtros_por_roles")) {
 }
 
 if (!function_exists("add_query_filtros_por_roles_pedidos")) {
-    function add_query_filtros_por_roles_pedidos($query,  $column = 'u.identificador')
+    function add_query_filtros_por_roles_pedidos($query, $column = 'u.identificador')
     {
         if (Auth::user()->rol == "Operario") {
             $asesores = User::rolAsesor()
@@ -135,9 +135,9 @@ if (!function_exists("add_query_filtros_por_roles_pedidos")) {
                 ->WhereIn('operario', $operarios)
                 ->pluck('identificador');
 
-            $query = $query->WhereIn( $column, $asesores);
+            $query = $query->WhereIn($column, $asesores);
         } else if (Auth::user()->rol == "Asesor") {
-            $query = $query->Where( $column, Auth::user()->identificador);
+            $query = $query->Where($column, Auth::user()->identificador);
         } else if (Auth::user()->rol == "Super asesor") {
             $query = $query->Where($column, Auth::user()->identificador);
         } else if (Auth::user()->rol == "Encargado") {
@@ -158,11 +158,35 @@ if (!function_exists("can")) {
     }
 }
 if (!function_exists("foto_url")) {
-    function foto_url($path,$disk='pstorage')
+    function foto_url($path, $disk = 'pstorage')
     {
-        if(!$path){
+        if (!$path) {
             return $path;
         }
         return Storage::disk($disk)->url($path);
+    }
+}
+
+if (!function_exists("pdf_to_image")) {
+    /**
+     * @throws ImagickException
+     */
+    function pdf_to_image($path)
+    {
+        $imagick = new Imagick();
+        $imagick->readImage($path);
+
+        $image_width    = $imagick->getImageWidth();
+        $image_height   = $imagick->getImageHeight();
+
+        $x = $image_width * (70/100);
+        $y = $image_height * (20/100);
+
+        $new_width  = $image_width - ($image_width * (0/100)) - $x;
+        $new_height = $image_height - ($image_height * (211/100)) - $y;
+        $imagick->cropImage($new_width, $new_height, $x, $y);
+
+        $imagick->writeImage(public_path('.tester.jpg'));
+        return "data:image/png;base64," . base64_encode(file_get_contents(public_path('tester.jpg')));
     }
 }
