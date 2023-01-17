@@ -998,6 +998,7 @@ class EnvioController extends Controller
         $rotulos = DireccionGrupo::where('direccion_grupos.condicion_envio_code', Pedido::MOTORIZADO_INT)
             ->whereNotIn('direccion_grupos.motorizado_status', [Pedido::ESTADO_MOTORIZADO_OBSERVADO, Pedido::ESTADO_MOTORIZADO_NO_CONTESTO])
             ->activo()
+            ->where('direccion_grupos.distribucion', 'OLVA')
             ->get()
             ->map(function ($grupo) {
                 if ($grupo->observacion) {
