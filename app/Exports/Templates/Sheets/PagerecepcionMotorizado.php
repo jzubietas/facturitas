@@ -44,10 +44,12 @@ class PagerecepcionMotorizado extends Export implements WithColumnFormatting, Fr
 
     public function collection()
     {
+        DB::statement(DB::raw('set @rownum=0'));
         $direccion = DireccionGrupo::where('direccion_grupos.estado', '1')
             ->join('users as u', 'direccion_grupos.user_id', 'u.id')
             ->join('clientes as c', 'direccion_grupos.cliente_id', 'c.id')
             ->select([
+                DB::raw('@rownum  := @rownum  + 1 AS rownum'),
                 DB::raw('concat(direccion_grupos.celular) as celular_recibe'),
                 'direccion_grupos.correlativo',
                 'direccion_grupos.codigos',
@@ -112,7 +114,7 @@ class PagerecepcionMotorizado extends Export implements WithColumnFormatting, Fr
     {
         return [
             "celular_recibe" => "QUIEN RECIBE"
-            , "correlativo" => "ME RO"
+            , "rownum" => "NUM"
             , "codigos" => "CODIGO"
             , "contacto_recibe_tracking" => "NOMBRE DE QUIEN RECIBE"
             , "producto" => "PRODUCTO/RAZON SOCIAL"
