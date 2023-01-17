@@ -127,7 +127,7 @@
                             icon: 'success',
                             title: 'Pedido identificado',
                             showConfirmButton: false,
-                            timer: 1000
+                            timer: 600
                         })
 
                         codigos_agregados.push(data.codigo);
@@ -145,7 +145,7 @@
                             icon: 'success',
                             title: 'Pedido identificado',
                             showConfirmButton: false,
-                            timer: 1000
+                            timer: 600
                         })
                         console.log(data);
                         codigos_agregados.push(data.codigo);
