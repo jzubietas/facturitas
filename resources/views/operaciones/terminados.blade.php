@@ -275,7 +275,7 @@
                         if (data.pendiente_anulacion == 1) {
                             $('td', row).css('background', 'red').css('font-weight', 'bold');
                         }
-                    } else*/ {
+                    } else*/ if (data["estado"] == "0"){
                         $(row).addClass('textred');
                     }
 
