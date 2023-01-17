@@ -2344,7 +2344,7 @@ class EnvioController extends Controller
                                     else DATEDIFF(DATE(NOW()), DATE(pedidos.fecha_recepcion_courier)) end) as dias "),
                 ]);
             if ($opcion == 'recepcionado') {
-                $pedidos = $pedidos->where('pedidos.estado', '1')->whereIn('pedidos.condicion_envio_code', [Pedido::RECEPCION_COURIER_INT]);
+                $pedidos = $pedidos->where('pedidos.estado', '1')->whereIn('pedidos.condicion_envio_code', [Pedido::REPARTO_COURIER_INT,Pedido::MOTORIZADO_INT, Pedido::CONFIRM_MOTORIZADO_INT, Pedido::RECEPCION_MOTORIZADO_INT, Pedido::ENVIO_MOTORIZADO_COURIER_INT,Pedido::RECEPCION_COURIER_INT ]);
             } else if ($opcion == 'anulado') {
                 $pedidos = $pedidos->where('pedidos.estado', '0')->whereNull('pedidos.direccion_grupo');
             } else if ($opcion == 'anulado_courier') {
