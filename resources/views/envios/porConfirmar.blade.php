@@ -145,6 +145,7 @@
     <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
 
     <script>
+        let tablaPrincipal=null;
         $(document).ready(function () {
 
             $.ajaxSetup({
@@ -152,6 +153,9 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             });
+    /*tablaPrincipal*/
+
+
 
             $('#modal-envio').on('show.bs.modal', function (event) {
                 //cuando abre el form de anular pedido
@@ -263,7 +267,7 @@
               $("#hiddenAtender").val(idunico);
             });*/
 
-            $('#tablaPrincipal').DataTable({
+            tablaPrincipal=$('#tablaPrincipal').DataTable({
                 processing: true,
                 stateSave: true,
                 serverSide: true,
@@ -382,6 +386,29 @@
                     }
                 },
             });
+
+            $("#id").bind('paste', function(e) {
+                var ctl = $(this);
+
+            });
+
+            $(".input[type='search']").bind("paste",function(){
+                var ctl = $(this);
+                setTimeout(function() {
+                    var value = $("input[type='search']").val();
+                    console.log(value);
+                    let value_in=value.replace('(', '*').replace("'", '-');
+                    console.log(value_in);
+                    tablaPrincipal.search( value_in ).draw();
+                }, 100);
+            })
+
+            /*$(document).bind('paste',".dataTables_filter input[type='search']",function(e){
+
+            });*/
+            /*.on('search.dt', function() {
+
+            });*/
 
 
         });
