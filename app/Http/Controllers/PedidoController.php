@@ -1011,7 +1011,26 @@ class PedidoController extends Controller
             $numped = $numped + 1;
         }
         $cliente_AB = Cliente::where("id", $request->cliente_id)->first();
-        $codigo = (($identi_asesor->identificador == 'B') ? $identi_asesor->identificador : intval($identi_asesor->identificador)) . (($cliente_AB->icelular != null) ? $cliente_AB->icelular : '') . "-" . $fecha . "-" . $numped;
+
+        //calculo de letras
+        $codigo=null;
+        if($identi_asesor->identificador=='B')
+        {
+            $codigo=$identi_asesor->identificador;
+        }else{
+            $codigo=intval($identi_asesor->identificador);
+        }
+        if($cliente_AB->icelular != null)
+        {
+            if($identi_asesor->identificador!='B')
+            {
+                $codigo=$codigo.$cliente_AB->icelular;
+            }
+        }
+        $codigo=$codigo. "-" . $fecha . "-" . $numped;
+
+        //$codigo = (($identi_asesor->identificador == 'B') ? $identi_asesor->identificador : intval($identi_asesor->identificador)) .
+          //          (($cliente_AB->icelular != null) ? $cliente_AB->icelular : '') . "-" . $fecha . "-" . $numped;
 
         $request->validate([
             'cliente_id' => 'required',
