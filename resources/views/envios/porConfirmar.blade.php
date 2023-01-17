@@ -389,7 +389,7 @@
                 eventFired('Order');
             }).on('search.dt', function () {
                 var input = $('.dataTables_filter input')[0];
-                
+
             }).on('page.dt', function () {
                     eventFired('Page');
                 })
