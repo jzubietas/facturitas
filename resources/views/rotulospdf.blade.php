@@ -14,7 +14,7 @@ page-break-after: always;
                     @foreach(collect($rotulo['codigos'])->chunk(2) as $grupos)
                         <tr>
                             @foreach($grupos as $item)
-                                <td>
+                                <td style="text-align: left;">
                                     <b>{{$item}}</b>
                                 </td>
                             @endforeach
@@ -36,7 +36,7 @@ page-break-after: always;
                     @foreach(collect($rotulo['producto'])->chunk(2) as $grupos)
                         <tr>
                             @foreach($grupos as $item)
-                                <td>
+                                <td style="text-align: left;">
                                     <b>{{$item}}</b>
                                 </td>
                             @endforeach
