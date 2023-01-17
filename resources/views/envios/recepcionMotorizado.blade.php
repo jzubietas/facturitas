@@ -10,21 +10,30 @@
         <div class="col-lg-6">
             <div class="row mx-auto d-flex justify-content-center">
                 <div class="col-lg-12 ">
-                    <div class="btn-group">
+                    <div class="d-flex justify-content-between">
+                        <div class="btn-group">
 
-                        <?php if (Auth::user()->rol == 'Jefe de courier' || Auth::user()->rol == 'Administrador'){ ?>
-                        <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown"
-                                aria-haspopup="true"
-                                aria-expanded="false">
-                            Exportar
-                        </button>
-                        <?php } ?>
+                            <?php if (Auth::user()->rol == 'Jefe de courier' || Auth::user()->rol == 'Administrador'){ ?>
+                            <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown"
+                                    aria-haspopup="true"
+                                    aria-expanded="false">
+                                Exportar
+                            </button>
+                            <?php } ?>
 
-                        <div class="dropdown-menu">
-                            <a href="" data-target="#modal-exportar" data-toggle="modal" class="dropdown-item"
-                               target="blank_"><img
-                                    src="{{ asset('imagenes/icon-excel.png') }}"> Excel</a>
+                            <div class="dropdown-menu">
+                                <a href="" data-target="#modal-exportar" data-toggle="modal" class="dropdown-item"
+                                   target="blank_"><img
+                                        src="{{ asset('imagenes/icon-excel.png') }}"> Excel</a>
 
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-end">
+                            <button id="download_rotulos" data-href="{{route('envios.rutaenvio.merge-routulos')}}"
+                                    class="btn btn-info">
+                                <i class="fa fa-download"></i>
+                                Descargar Rotulos
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -208,7 +217,9 @@
                                                                 <div>
 
                                                                     <h6 class="mb-0">
-                                                                        <button class="btn btn-sm btn-danger exportar_zona" data-motorizado="{{$motorizado->id}}">
+                                                                        <button
+                                                                            class="btn btn-sm btn-danger exportar_zona"
+                                                                            data-motorizado="{{$motorizado->id}}">
                                                                             <i class="fa fa-file-excel"></i>Excel
 
                                                                         </button>
@@ -681,7 +692,7 @@
                     <script>
                         $(document).ready(function () {
 
-                            $(document).on('click','.exportar_zona',function(event){
+                            $(document).on('click', '.exportar_zona', function (event) {
                                 event.preventDefault();
                                 $motorizado = $(this).data('motorizado');
                                 $fecha = $("#fecha_consulta").val();
@@ -691,9 +702,9 @@
                                 $("#modal-exportar").modal('show');
                             })
 
-                            $(document).on('click','.exportar_tabla',function(event){
+                            $(document).on('click', '.exportar_tabla', function (event) {
                                 event.preventDefault();
-                                $url=$(this).data('url');
+                                $url = $(this).data('url');
                                 //$motorizado = $(this).data('motorizado');
                                 $fecha = $("#fecha_consulta").val();
                                 //console.log($motorizado);
@@ -875,20 +886,20 @@
 
                                 var dateA = moment($(this).val());
                                 var dateB = moment(new Date());
-                                let diff=dateB.diff(dateA, 'days')
+                                let diff = dateB.diff(dateA, 'days')
                                 console.log('Diferencia es ', diff, 'days');
 
                                 //mostrar alert
-                                if(timeoutMessage){
+                                if (timeoutMessage) {
                                     clearTimeout(timeoutMessage)
                                 }
-                                timeoutMessage=setTimeout(function () {
+                                timeoutMessage = setTimeout(function () {
                                     Swal.fire(
                                         'Warning',
                                         'La fecha colocada es posterior o anterior a la fecha habitual (1 dia)',
                                         'warning'
                                     )
-                                },300)
+                                }, 300)
 
                                 //var fecha_formateada = $(this).val().replaceAll('-', '/');
                                 var fecha_format = $(this).val().split("-")
@@ -918,7 +929,7 @@
                                     //console.log(row);
                                 },
                                 rowCallback: function (row, data, index) {
-                                    if(data.cambio_direccion_at!=null){
+                                    if (data.cambio_direccion_at != null) {
                                         $('td', row).css('background', 'rgba(17,129,255,0.35)')
                                     }
                                     $("[data-toggle=jqconfirm]", row).click(function () {
@@ -927,25 +938,25 @@
                                         const count = $(this).data('count')
                                         const btncolor = $(this).data('btncolor')
                                         const btntext = $(this).data('btntext')
-                                        const isrecibido = $(this).data('recibido')=='1'
+                                        const isrecibido = $(this).data('recibido') == '1'
                                         $.confirm({
-                                            title: 'Confirmar '+btntext,
-                                            type: btncolor||'blue',
+                                            title: 'Confirmar ' + btntext,
+                                            type: btncolor || 'blue',
                                             columnClass: 'xlarge',
                                             content: function () {
                                                 const self = this
                                                 if (count == '1') {
-                                                    if(isrecibido) {
-                                                        return `<p>Esta seguro de confirmar la recepción del Pedido <strong class="textcode">${data.codigos}</strong></p>  ${data.cambio_direccion_at != null?`<div class="col-12">
+                                                    if (isrecibido) {
+                                                        return `<p>Esta seguro de confirmar la recepción del Pedido <strong class="textcode">${data.codigos}</strong></p>  ${data.cambio_direccion_at != null ? `<div class="col-12">
                     <p class="alert alert-warning">Datos de la dirección fueron modificados, ¿desea continuar?.</p>
-                  </div>`:''}`
-                                                    }else{
+                  </div>` : ''}`
+                                                    } else {
                                                         return `<p>Esta seguro de rechazar la recepción del Pedido <strong class="textcode">${data.codigos}</strong></p>`
                                                     }
                                                 } else {
                                                     self.showLoading(true)
                                                     return $.get(action).done(function (data) {
-                                                        self.setContent(getHtmlPrevisualizarDesagrupar(data.grupo,btntext))
+                                                        self.setContent(getHtmlPrevisualizarDesagrupar(data.grupo, btntext))
                                                     }).always(function () {
                                                         self.hideLoading(true)
                                                     })
@@ -954,7 +965,7 @@
                                             buttons: {
                                                 no_recibido: {
                                                     text: btntext,
-                                                    btnClass: 'btn-'+btncolor,
+                                                    btnClass: 'btn-' + btncolor,
                                                     action: function () {
                                                         const self = this
                                                         if (count == '1') {
@@ -965,7 +976,7 @@
                                                                     $('#tablaPrincipal').DataTable().draw(false)
                                                                 })
                                                         } else {
-                                                            if(!self.$content.find('form').serialize()){
+                                                            if (!self.$content.find('form').serialize()) {
                                                                 $.confirm("Seleccione un pedido")
                                                                 return false;
                                                             }
@@ -1457,6 +1468,11 @@
                                         .draw();
                                 }
                             });
+
+                            $("#download_rotulos").click(function () {
+                                const url = $(this).data('href')
+                                window.open(url+'?fecha_salida='+$("#fecha_consulta").val(), '_blank');
+                            })
 
                         });
                     </script>
