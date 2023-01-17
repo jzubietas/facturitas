@@ -391,6 +391,7 @@ class EnvioController extends Controller
     public function Enviospararepartotabla(Request $request)
     {
         $zona_aux = $request->zona;
+        //$buscador_global = $request->buscador_global;
         $lazona = '';
         switch ($zona_aux) {
             case 'NORTE':

@@ -53,6 +53,14 @@
     <div class="card">
         <div class="card-body">
 
+            <div class="row">
+                <div class="col-3 mx-auto">
+                    <input id="buscador_global" name="buscador_global" value=""
+                           type="text" class="form-control" autocomplete="off"
+                           placeholder="Ingrese su búsqueda" aria-label="Recipient's username" aria-describedby="basic-addon2">
+                </div>
+            </div>
+
             <ul class="nav nav-tabs mb-24" id="myTab" role="tablist">
                 <li class="nav-item">
                     <a class="zona-tabla nav-link activo active font-weight-bold" id="home-tab" data-toggle="tab"
@@ -69,27 +77,84 @@
             </ul>
 
 
-            <table id="tablaPrincipal" style="width:100%;" class="table table-striped mt-24">
-                <thead>
-                <tr>
-                    <th scope="col">Item</th>
-                    <th scope="col">Zona</th>
-                    <th scope="col">Motorizado</th>
-                    <th scope="col">Código</th>
-                    <th scope="col">Asesor</th>
-                    <th scope="col">Cliente</th>
-                    <th scope="col">Fecha de Envio</th>
-                    <th scope="col">Razón social</th>
-                    <th scope="col">Destino</th>
-                    <th scope="col">Dirección de envío</th>
-                    <th scope="col">Referencia</th>
-                    <th scope="col">Estado de envio</th><!--ENTREGADO - RECIBIDO-->
-                    <th scope="col">Acciones</th>
-                </tr>
-                </thead>
-                <tbody>
-                </tbody>
-            </table>
+
+            <div class="tab-content" id="myTabContent">
+                <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="received-tab">
+                    <table id="tablaPrincipal_norte" style="width:100%;" class="table table-striped mt-24">
+                        <thead>
+                        <tr>
+                            <th scope="col">Item</th>
+                            <th scope="col">Zona</th>
+                            <th scope="col">Motorizado</th>
+                            <th scope="col">Código</th>
+                            <th scope="col">Asesor</th>
+                            <th scope="col">Cliente</th>
+                            <th scope="col">Fecha de Envio</th>
+                            <th scope="col">Razón social</th>
+                            <th scope="col">Destino</th>
+                            <th scope="col">Dirección de envío</th>
+                            <th scope="col">Referencia</th>
+                            <th scope="col">Estado de envio</th>
+                            <th scope="col">Acciones</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="received-tab">
+                    <table id="tablaPrincipal_centro" style="width:100%;" class="table table-striped mt-24">
+                        <thead>
+                        <tr>
+                            <th scope="col">Item</th>
+                            <th scope="col">Zona</th>
+                            <th scope="col">Motorizado</th>
+                            <th scope="col">Código</th>
+                            <th scope="col">Asesor</th>
+                            <th scope="col">Cliente</th>
+                            <th scope="col">Fecha de Envio</th>
+                            <th scope="col">Razón social</th>
+                            <th scope="col">Destino</th>
+                            <th scope="col">Dirección de envío</th>
+                            <th scope="col">Referencia</th>
+                            <th scope="col">Estado de envio</th>
+                            <th scope="col">Acciones</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="received-tab">
+                    <table id="tablaPrincipal_sur" style="width:100%;" class="table table-striped mt-24">
+                        <thead>
+                        <tr>
+                            <th scope="col">Item</th>
+                            <th scope="col">Zona</th>
+                            <th scope="col">Motorizado</th>
+                            <th scope="col">Código</th>
+                            <th scope="col">Asesor</th>
+                            <th scope="col">Cliente</th>
+                            <th scope="col">Fecha de Envio</th>
+                            <th scope="col">Razón social</th>
+                            <th scope="col">Destino</th>
+                            <th scope="col">Dirección de envío</th>
+                            <th scope="col">Referencia</th>
+                            <th scope="col">Estado de envio</th>
+                            <th scope="col">Acciones</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+
+            <br>
+
+
+
 
         </div>
 
@@ -192,7 +257,9 @@
         src="https://gyrocode.github.io/jquery-datatables-checkboxes/1.2.12/js/dataTables.checkboxes.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
     <script>
-
+let tabla_pedidos_principal_norte=null;
+let tabla_pedidos_principal_centro=null;
+let tabla_pedidos_principal_sur=null;
         moment().format();
 
         function workingDays(dateFrom, dateTo) {
@@ -218,11 +285,17 @@
                 }
             });
 
+            $(document).on('change keyup','#buscador_global',function(){
+                tabla_pedidos_principal_norte.search($(this).val()).draw();
+                tabla_pedidos_principal_centro.search($(this).val()).draw();
+                tabla_pedidos_principal_sur.search($(this).val()).draw();
+            })
+
             $('.zona-tabla').on('click', function () {
                 $('.zona-tabla').removeClass("activo");
                 $(this).addClass("activo");
                 //var url = $(this).data("url");
-                $('#tablaPrincipal').DataTable().ajax.reload();
+                //$('#tablaPrincipal').DataTable().ajax.reload();
 
             });
             var tabla_pedidos;
@@ -457,7 +530,8 @@
                 evento.preventDefault();
             });
 
-            let tabla_pedidos_principal = $('#tablaPrincipal').DataTable({
+            tabla_pedidos_principal_norte = $('#tablaPrincipal_norte').DataTable({
+                dom: '<"top"i>rt<"bottom"lp><"clear">',
                 processing: true,
                 stateSave: true,
                 serverSide: true,
@@ -466,7 +540,8 @@
                 ajax: {
                     url: "{{ route('envios.pararepartotabla') }}",
                     data: function (d) {
-                        d.zona = $('.zona-tabla.activo').data("url");
+                        d.zona = 'NORTE';//$('.zona-tabla.activo').data("url");
+                        //d.buscador_global=$('#buscador_global').val();
                     },
                 },
                 createdRow: function (row, data, dataIndex) {
@@ -690,6 +765,499 @@
                     }
                 },
             });
+
+            tabla_pedidos_principal_centro = $('#tablaPrincipal_centro').DataTable({
+                dom: '<"top"i>rt<"bottom"lp><"clear">',
+                processing: true,
+                stateSave: true,
+                serverSide: true,
+                searching: true,
+                order: [[0, "desc"]],
+                ajax: {
+                    url: "{{ route('envios.pararepartotabla') }}",
+                    data: function (d) {
+                        d.zona = 'CENTRO'//$('.zona-tabla.activo').data("url");
+                        //d.buscador_global=$('#buscador_global').val();
+                    },
+                },
+                createdRow: function (row, data, dataIndex) {
+                    if (data["estado"] == '1') {
+                        if (data["destino2"] == 'PROVINCIA') {
+                            $(row).addClass('green');
+                        } else if (data["destino2"] == 'LIMA') {
+                            if (data["distribucion"] == 'OLVA') {
+                                $(row).addClass('darkblue');
+                            } else if (data["distribucion"] == 'LIMA') {
+                                //$(row).addClass('darkblue');
+                            }
+                        }
+                    } else if (data["estado"] == 0) {
+                        $(row).addClass('red');
+                    }
+                },
+                rowCallback: function (row, data, index) {
+                    if (data.cambio_direccion_at != null) {
+                        $('td', row).css('background', 'rgba(17,129,255,0.35)')
+                    }
+                    $("[data-toggle=jqconfirm]", row).click(function (e) {
+                        e.preventDefault()
+                        $.confirm({
+                            type: 'green',
+                            title: 'Enviar sobre a Motorizado',
+                            columnClass: 'large',
+                            content: `<div>
+                <div class="row">
+                  <div class="col-12">
+                    <p>Esta seguro que desea enviar el sobre <strong>${data.codigos}</strong> a Motorizados del <strong class="textzone">${data.distribucion}</strong></p>
+                  </div>
+                  ${data.cambio_direccion_at != null?`<div class="col-12">
+                    <p class="alert alert-warning"><b>Datos de la dirección fueron modificados, ¿desea continuar?.</b><br> En caso contrario cierre esta ventana y haga click en el boton <b>Retornar a sobres con dirección</b></p>
+                  </div>`:''}
+                </div>
+
+                <div class="row">
+                  <div class="col">
+                      <label for="fecha_salida">Fecha de ruta</label>
+                      <input class="form-control fecha_salida" id="fecha_salida" name="fecha_salida" type="date" value="{{now()->format('Y-m-d')}}">
+                      <p class="mensaje_fecha_salida">
+
+                      </p>
+                  </div>
+                </div>
+
+              </div>`,
+                            buttons: {
+                                cerrar: {
+                                    btnClass:'btn-dark'
+                                },
+                                confirmar: {
+                                    btnClass:'btn-success',
+                                    action: function () {
+                                        const self = this;
+                                        var fd2 = new FormData();
+                                        const fecha=self.$content.find('input.fecha_salida').val();
+                                        fd2.append('hiddenCodigo', data.id);
+                                        fd2.append('fecha_salida', fecha);
+
+                                        if (!fecha) {
+                                            Swal.fire(
+                                                'Error',
+                                                'Complete fecha de salida para continuar',
+                                                'warning'
+                                            )
+                                            return false;
+                                        }
+                                        self.showLoading(true)
+                                        $.ajax({
+                                            data: fd2,
+                                            processData: false,
+                                            contentType: false,
+                                            type: 'POST',
+                                            url: "{{ route('operaciones.confirmar') }}",
+                                        }).done(function () {
+                                            self.close()
+                                            $('#tablaPrincipal').DataTable().draw(false);
+                                        }).always(function () {
+                                            self.hideLoading(true)
+                                        });
+                                    }
+                                }
+                            },
+                            onContentReady: function () {
+                                const self = this;
+                                const $content = this.$content;
+                                $content.find('input.fecha_salida').on('change', function () {
+                                    let fecha_actual = moment();
+                                    if (fecha_actual.valueOf() > new Date().getTime()) {
+                                        $content.find('.mensaje_fecha_salida').html('<p class="bagde badge-warning p-8 font-weight-bold mt-16 br-8"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> La fecha indicada es mayor a la fecha actual.</p>');
+                                    } else if (fecha_actual.valueOf() < new Date().getTime()) {
+                                        $content.find('.mensaje_fecha_salida').html('<p class="bagde badge-warning p-8 font-weight-bold mt-16 br-8"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> La fecha indicada es menor a la fecha actual.</p>');
+                                    } else if (fecha_actual.valueOf() === new Date().getTime()) {
+                                        $content.find('.mensaje_fecha_salida').html('');
+                                    }
+                                });
+                            }
+                        })
+                    })
+                    /*if (data.destino2 == 'PROVINCIA') {
+                        $('td', row).css('color', 'red')
+                    } else if (data.destino2 == 'LIMA') {
+                        if (data.distribucion != null) {
+                            if (data.distribucion == 'NORTE') {
+                            } else if (data.distribucion == 'CENTRO') {
+                            } else if (data.distribucion == 'SUR') {
+                            }
+                        }
+                    }*/
+                },
+                columns: [
+                    {
+                        data: 'correlativo',
+                        name: 'correlativo',
+
+                    },
+                    {
+                        data: 'distribucion',
+                        name: 'distribucion',
+
+                    },
+                    {
+                        data: 'nombre_motorizado',
+                        name: 'nombre_motorizado',
+
+                    },
+                    {
+                        data: 'codigos',
+                        name: 'codigos',
+                        render: function (data, type, row, meta) {
+                            if (data == null) {
+                                return 'SIN PEDIDOS';
+                            } else {
+                                var returndata = '';
+                                var jsonArray = data.split(",");
+                                $.each(jsonArray, function (i, item) {
+                                    returndata += item + '<br>';
+                                });
+                                return returndata;
+                            }
+                        },
+                    },
+                    {data: 'user_identificador', name: 'user_identificador',},
+                    {
+                        data: 'celular',
+                        name: 'celular',
+                        render: function (data, type, row, meta) {
+                            return row.celular + '<br>' + row.nombre
+                        },
+                    },
+                    {
+                        data: 'fecha_formato',
+                        name: 'fecha_formato',
+                        render: $.fn.dataTable.render.moment('DD/MM/YYYY')
+                    },
+                    {
+                        data: 'producto',
+                        name: 'producto',
+                        render: function (data, type, row, meta) {
+                            if (data == null) {
+                                return 'SIN RUCS';
+                            } else {
+                                var numm = 0;
+                                var returndata = '';
+                                var jsonArray = data.split(",");
+                                $.each(jsonArray, function (i, item) {
+                                    numm++;
+                                    returndata += numm + ": " + item + '<br>';
+
+                                });
+                                return returndata;
+                            }
+                        }
+                    },
+                    {data: 'destino', name: 'destino',},
+                    {
+                        data: 'direccion',
+                        name: 'direccion',
+                        render: function (data, type, row, meta) {
+                            if (data != null) {
+                                return data;
+                            } else {
+                                return '<span class="badge badge-info">REGISTRE DIRECCION</span>';
+                            }
+                        },
+                    },
+                    {
+                        data: 'referencia',
+                        name: 'referencia',
+                        sWidth: '10%',
+                    },
+                    {data: 'condicion_envio', name: 'condicion_envio',},
+                    {
+                        data: 'action',
+                        name: 'action',
+                        orderable: false,
+                        searchable: false,
+                        sWidth: '10%',
+                    },
+                ],
+                language: {
+                    "decimal": "",
+                    "emptyTable": "No hay información",
+                    "info": "Mostrando del _START_ al _END_ de _TOTAL_ Entradas",
+                    "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
+                    "infoFiltered": "(Filtrado de _MAX_ total entradas)",
+                    "infoPostFix": "",
+                    "thousands": ",",
+                    "lengthMenu": "Mostrar _MENU_ Entradas",
+                    "loadingRecords": "Cargando...",
+                    "processing": "Procesando...",
+                    "search": "Buscar:",
+                    "zeroRecords": "Sin resultados encontrados",
+                    "paginate": {
+                        "first": "Primero",
+                        "last": "Ultimo",
+                        "next": "Siguiente",
+                        "previous": "Anterior"
+                    }
+                },
+            });
+
+            tabla_pedidos_principal_sur = $('#tablaPrincipal_sur').DataTable({
+                dom: '<"top"i>rt<"bottom"lp><"clear">',
+                processing: true,
+                stateSave: true,
+                serverSide: true,
+                searching: true,
+                order: [[0, "desc"]],
+                ajax: {
+                    url: "{{ route('envios.pararepartotabla') }}",
+                    data: function (d) {
+                        d.zona = 'SUR';//$('.zona-tabla.activo').data("url");
+                        //d.buscador_global=$('#buscador_global').val();
+                    },
+                },
+                createdRow: function (row, data, dataIndex) {
+                    if (data["estado"] == '1') {
+                        if (data["destino2"] == 'PROVINCIA') {
+                            $(row).addClass('green');
+                        } else if (data["destino2"] == 'LIMA') {
+                            if (data["distribucion"] == 'OLVA') {
+                                $(row).addClass('darkblue');
+                            } else if (data["distribucion"] == 'LIMA') {
+                                //$(row).addClass('darkblue');
+                            }
+                        }
+                    } else if (data["estado"] == 0) {
+                        $(row).addClass('red');
+                    }
+                },
+                rowCallback: function (row, data, index) {
+                    if (data.cambio_direccion_at != null) {
+                        $('td', row).css('background', 'rgba(17,129,255,0.35)')
+                    }
+                    $("[data-toggle=jqconfirm]", row).click(function (e) {
+                        e.preventDefault()
+                        $.confirm({
+                            type: 'green',
+                            title: 'Enviar sobre a Motorizado',
+                            columnClass: 'large',
+                            content: `<div>
+                <div class="row">
+                  <div class="col-12">
+                    <p>Esta seguro que desea enviar el sobre <strong>${data.codigos}</strong> a Motorizados del <strong class="textzone">${data.distribucion}</strong></p>
+                  </div>
+                  ${data.cambio_direccion_at != null?`<div class="col-12">
+                    <p class="alert alert-warning"><b>Datos de la dirección fueron modificados, ¿desea continuar?.</b><br> En caso contrario cierre esta ventana y haga click en el boton <b>Retornar a sobres con dirección</b></p>
+                  </div>`:''}
+                </div>
+
+                <div class="row">
+                  <div class="col">
+                      <label for="fecha_salida">Fecha de ruta</label>
+                      <input class="form-control fecha_salida" id="fecha_salida" name="fecha_salida" type="date" value="{{now()->format('Y-m-d')}}">
+                      <p class="mensaje_fecha_salida">
+
+                      </p>
+                  </div>
+                </div>
+
+              </div>`,
+                            buttons: {
+                                cerrar: {
+                                    btnClass:'btn-dark'
+                                },
+                                confirmar: {
+                                    btnClass:'btn-success',
+                                    action: function () {
+                                        const self = this;
+                                        var fd2 = new FormData();
+                                        const fecha=self.$content.find('input.fecha_salida').val();
+                                        fd2.append('hiddenCodigo', data.id);
+                                        fd2.append('fecha_salida', fecha);
+
+                                        if (!fecha) {
+                                            Swal.fire(
+                                                'Error',
+                                                'Complete fecha de salida para continuar',
+                                                'warning'
+                                            )
+                                            return false;
+                                        }
+                                        self.showLoading(true)
+                                        $.ajax({
+                                            data: fd2,
+                                            processData: false,
+                                            contentType: false,
+                                            type: 'POST',
+                                            url: "{{ route('operaciones.confirmar') }}",
+                                        }).done(function () {
+                                            self.close()
+                                            $('#tablaPrincipal').DataTable().draw(false);
+                                        }).always(function () {
+                                            self.hideLoading(true)
+                                        });
+                                    }
+                                }
+                            },
+                            onContentReady: function () {
+                                const self = this;
+                                const $content = this.$content;
+                                $content.find('input.fecha_salida').on('change', function () {
+                                    let fecha_actual = moment();
+                                    if (fecha_actual.valueOf() > new Date().getTime()) {
+                                        $content.find('.mensaje_fecha_salida').html('<p class="bagde badge-warning p-8 font-weight-bold mt-16 br-8"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> La fecha indicada es mayor a la fecha actual.</p>');
+                                    } else if (fecha_actual.valueOf() < new Date().getTime()) {
+                                        $content.find('.mensaje_fecha_salida').html('<p class="bagde badge-warning p-8 font-weight-bold mt-16 br-8"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> La fecha indicada es menor a la fecha actual.</p>');
+                                    } else if (fecha_actual.valueOf() === new Date().getTime()) {
+                                        $content.find('.mensaje_fecha_salida').html('');
+                                    }
+                                });
+                            }
+                        })
+                    })
+                    /*if (data.destino2 == 'PROVINCIA') {
+                        $('td', row).css('color', 'red')
+                    } else if (data.destino2 == 'LIMA') {
+                        if (data.distribucion != null) {
+                            if (data.distribucion == 'NORTE') {
+                            } else if (data.distribucion == 'CENTRO') {
+                            } else if (data.distribucion == 'SUR') {
+                            }
+                        }
+                    }*/
+                },
+                columns: [
+                    {
+                        data: 'correlativo',
+                        name: 'correlativo',
+
+                    },
+                    {
+                        data: 'distribucion',
+                        name: 'distribucion',
+
+                    },
+                    {
+                        data: 'nombre_motorizado',
+                        name: 'nombre_motorizado',
+
+                    },
+                    {
+                        data: 'codigos',
+                        name: 'codigos',
+                        render: function (data, type, row, meta) {
+                            if (data == null) {
+                                return 'SIN PEDIDOS';
+                            } else {
+                                var returndata = '';
+                                var jsonArray = data.split(",");
+                                $.each(jsonArray, function (i, item) {
+                                    returndata += item + '<br>';
+                                });
+                                return returndata;
+                            }
+                        },
+                    },
+                    {data: 'user_identificador', name: 'user_identificador',},
+                    {
+                        data: 'celular',
+                        name: 'celular',
+                        render: function (data, type, row, meta) {
+                            return row.celular + '<br>' + row.nombre
+                        },
+                    },
+                    {
+                        data: 'fecha_formato',
+                        name: 'fecha_formato',
+                        render: $.fn.dataTable.render.moment('DD/MM/YYYY')
+                    },
+                    {
+                        data: 'producto',
+                        name: 'producto',
+                        render: function (data, type, row, meta) {
+                            if (data == null) {
+                                return 'SIN RUCS';
+                            } else {
+                                var numm = 0;
+                                var returndata = '';
+                                var jsonArray = data.split(",");
+                                $.each(jsonArray, function (i, item) {
+                                    numm++;
+                                    returndata += numm + ": " + item + '<br>';
+
+                                });
+                                return returndata;
+                            }
+                        }
+                    },
+                    {data: 'destino', name: 'destino',},
+                    {
+                        data: 'direccion',
+                        name: 'direccion',
+                        render: function (data, type, row, meta) {
+                            if (data != null) {
+                                return data;
+                            } else {
+                                return '<span class="badge badge-info">REGISTRE DIRECCION</span>';
+                            }
+                        },
+                    },
+                    {
+                        data: 'referencia',
+                        name: 'referencia',
+                        sWidth: '10%',
+                    },
+                    {data: 'condicion_envio', name: 'condicion_envio',},
+                    {
+                        data: 'action',
+                        name: 'action',
+                        orderable: false,
+                        searchable: false,
+                        sWidth: '10%',
+                    },
+                ],
+                language: {
+                    "decimal": "",
+                    "emptyTable": "No hay información",
+                    "info": "Mostrando del _START_ al _END_ de _TOTAL_ Entradas",
+                    "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
+                    "infoFiltered": "(Filtrado de _MAX_ total entradas)",
+                    "infoPostFix": "",
+                    "thousands": ",",
+                    "lengthMenu": "Mostrar _MENU_ Entradas",
+                    "loadingRecords": "Cargando...",
+                    "processing": "Procesando...",
+                    "search": "Buscar:",
+                    "zeroRecords": "Sin resultados encontrados",
+                    "paginate": {
+                        "first": "Primero",
+                        "last": "Ultimo",
+                        "next": "Siguiente",
+                        "previous": "Anterior"
+                    }
+                },
+                "fnDrawCallback": function () {
+                    let a1=$('#tablaPrincipal_norte').dataTable().fnSettings().fnRecordsDisplay();
+                    let a2=$('#tablaPrincipal_centro').dataTable().fnSettings().fnRecordsDisplay();
+                    let a3=this.fnSettings().fnRecordsDisplay();
+
+                    if(a1>0){
+                        $('.zona-tabla').removeClass("activo").removeClass("active");
+                        $('#home-tab').addClass("active");
+                        $('#myTab a[href="#home"]').tab('show')
+                    }else if(a2>0){
+                        $('.zona-tabla').removeClass("activo");
+                        $('#profile-tab').addClass("active");
+                        $('#myTab a[href="#profile"]').tab('show')
+                    }else if(a3>0){
+                        $('.zona-tabla').removeClass("activo");
+                        $('#contact-tab').addClass("active");
+                        $('#myTab a[href="#contact"]').tab('show')
+                    }
+                }
+            });
+
+
         });
     </script>
 
