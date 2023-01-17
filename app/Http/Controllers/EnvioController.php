@@ -552,7 +552,8 @@ class EnvioController extends Controller
                 return $grupo;
             });
 
-        return view('rotulospdf', compact('rotulos'));
+        $pdf = PDF::loadView('rotulospdf', compact('rotulos'));
+        return $pdf->stream('resume.pdf');
     }
 
     public function Enviosenrepartotabla(Request $request)
