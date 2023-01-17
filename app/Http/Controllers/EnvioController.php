@@ -532,31 +532,26 @@ class EnvioController extends Controller
             ->get()
             ->map(function ($grupo) {
                 if ($grupo->observacion) {
-                    return collect(explode(',', $grupo->observacion))
-                        ->trim()
-                        ->unique()
-                        ->filter(fn($path) => \Storage::disk('pstorage')->exists($path))
-                        ->map(fn($path) => \Storage::disk('pstorage')->path($path))
-                        ->first();
+                    return [
+                        'codigos' => explode(',', $grupo->codigos),
+                        'producto' => explode(',', $grupo->producto),
+                        'file' => collect(explode(',', $grupo->observacion))
+                            ->trim()
+                            ->unique()
+                            ->filter(fn($path) => \Storage::disk('pstorage')->exists($path))
+                            ->map(fn($path) => \Storage::disk('pstorage')->path($path))
+                            ->first()
+                    ];
                 }
                 return null;
             })
-            ->filter(fn($path) => $path!=null);
+            ->filter(fn($path) => $path != null)
+            ->map(function ($grupo) {
+                $grupo['file']=pdf_to_image($grupo['file']);
+                return $grupo;
+            });
 
-        $combinador = new Merger();
-
-        foreach ($rotulos as $documento) {
-            return pdf_to_image($documento);
-            $combinador->addFile($documento);
-        }
-
-        $salida = $combinador->merge();
-        return response($salida,200,[
-            'Content-type'=>'application/pdf',
-            'Content-disposition'=>'inline; filename=rotulos.pdf',
-            'content-Transfer-Encoding'=>'binary',
-            'Accept-Ranges'=>'bytes',
-        ]);
+        return view('rotulospdf', compact('rotulos'));
     }
 
     public function Enviosenrepartotabla(Request $request)
@@ -2623,18 +2618,18 @@ class EnvioController extends Controller
          * COMPROBAMOS SI YA ESTA ATENDIDO EL PEDIDO
          */
         if ($pedido->condicion_envio_code == $nuevo_estado) {
-            return response()->json(['html' => "Este pedido ya ah sido procesado anteriormente, su estado actual es " . Pedido::$estadosCondicionEnvioCode[$nuevo_estado], 'class' => "text-danger", 'codigo' => 0,'error'=>1, 'msj_error' => Pedido::$estadosCondicionEnvioCode[$nuevo_estado]]);
-        }else{
-            if($grupo != ""){
-               $Direccion_grupo = DireccionGrupo::where('id',$grupo)->first();
-               //dd($Direccion_grupo->codigos);
+            return response()->json(['html' => "Este pedido ya ah sido procesado anteriormente, su estado actual es " . Pedido::$estadosCondicionEnvioCode[$nuevo_estado], 'class' => "text-danger", 'codigo' => 0, 'error' => 1, 'msj_error' => Pedido::$estadosCondicionEnvioCode[$nuevo_estado]]);
+        } else {
+            if ($grupo != "") {
+                $Direccion_grupo = DireccionGrupo::where('id', $grupo)->first();
+                //dd($Direccion_grupo->codigos);
                 $codigos_paquete = collect(explode(",", $Direccion_grupo->codigos))
                     ->map(fn($cod) => trim($cod))
                     ->filter()->count();
 
-                return response()->json(['html' => "Escaneado Correctamente", 'class' => "text-success", 'codigo' => $codigo,'error'=>3, 'zona' => $Direccion_grupo->distribucion, 'cantidad'=> $codigos_paquete]);
+                return response()->json(['html' => "Escaneado Correctamente", 'class' => "text-success", 'codigo' => $codigo, 'error' => 3, 'zona' => $Direccion_grupo->distribucion, 'cantidad' => $codigos_paquete]);
             }
-            return response()->json(['html' => "Escaneado Correctamente", 'class' => "text-success", 'codigo' => $codigo,'error'=>0]);
+            return response()->json(['html' => "Escaneado Correctamente", 'class' => "text-success", 'codigo' => $codigo, 'error' => 0]);
         }
         /*
         return response()->json([

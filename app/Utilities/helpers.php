@@ -176,17 +176,7 @@ if (!function_exists("pdf_to_image")) {
         $imagick = new Imagick();
         $imagick->readImage($path);
 
-        $image_width    = $imagick->getImageWidth();
-        $image_height   = $imagick->getImageHeight();
-
-        $x = $image_width * (70/100);
-        $y = $image_height * (20/100);
-
-        $new_width  = $image_width - ($image_width * (0/100)) - $x;
-        $new_height = $image_height - ($image_height * (211/100)) - $y;
-        $imagick->cropImage($new_width, $new_height, $x, $y);
-
         $imagick->writeImage(public_path('.tester.jpg'));
-        return "data:image/png;base64," . base64_encode(file_get_contents(public_path('tester.jpg')));
+        return "data:image/png;base64," . base64_encode(file_get_contents(public_path('.tester.jpg')));
     }
 }
