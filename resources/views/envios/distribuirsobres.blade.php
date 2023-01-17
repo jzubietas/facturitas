@@ -77,6 +77,7 @@
                         <th scope="col">DISTRITO</th>
                         <th scope="col">DIRECCION</th>
                         <th scope="col">REFERENCIA</th>
+                        <th scope="col">FECHA</th>
                         <th scope="col">Estado de envio</th>
                         <th scope="col">ZONA</th>
                         <th scope="col">Acciones</th>
@@ -250,6 +251,7 @@
                     {data: 'distrito', name: 'distrito',},
                     {data: 'direccion', name: 'direccion',},
                     {data: 'referencia', name: 'referencia',},
+                    {data: 'fecha_producto', name: 'fecha_producto',sClass: 'cod_dir'},
                     {data: 'condicion_envio', name: 'condicion_envio',},
                     {data: 'zona', name: 'zona', sClass: 'bg-zone'},
                     {
