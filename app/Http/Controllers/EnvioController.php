@@ -29,6 +29,7 @@ use App\Notifications\PedidoNotification;
 use Carbon\Carbon;
 use Exception;
 
+use iio\libmergepdf\Merger;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Maatwebsite\Excel\Concerns\Exportable;
@@ -487,9 +488,7 @@ class EnvioController extends Controller
                         $html .= collect(explode(',', $pedido->observacion))
                             ->trim()
                             ->unique()
-                            ->map(fn($observacion) => '<a class="btn btn-icon p-0" target="_blank" href="' . \Storage::disk('pstorage')->url($observacion) . '">
-<i class="fa fa-file-pdf"></i>
-Ver Rotulo</a>')
+                            ->map(fn($observacion) => '<a class="btn btn-icon p-0" target="_blank" href="' . \Storage::disk('pstorage')->url($observacion) . '"><i class="fa fa-file-pdf"></i>Ver Rotulo</a>')
                             ->join('');
                     }
                     return $html;
@@ -522,6 +521,40 @@ Ver Rotulo</a>')
             ->rawColumns(['action', 'condicion_envio', 'referencia'])
             ->make(true);
 
+    }
+
+
+    public function downloadRotulosEnviosparareparto()
+    {
+        $rotulos = DireccionGrupo::where('direccion_grupos.condicion_envio_code', Pedido::REPARTO_COURIER_INT)
+            ->where('direccion_grupos.distribucion', 'OLVA')
+            ->activo()
+            ->get()
+            ->map(function ($grupo) {
+                if ($grupo->observacion) {
+                    return collect(explode(',', $grupo->observacion))
+                        ->trim()
+                        ->unique()
+                        ->filter(fn($path) => \Storage::disk('pstorage')->exists($path))
+                        ->map(fn($path) => \Storage::disk('pstorage')->url($path))
+                        ->first();
+                }
+                return null;
+            })
+            ->filter(fn($path) => $path!=null);
+        $combinador = new Merger();
+
+        foreach ($rotulos as $documento) {
+            $combinador->addFile($documento);
+        }
+
+        $salida = $combinador->merge();
+        return response($salida,200,[
+            'Content-type'=>'application/pdf',
+            'Content-disposition'=>'inline; filename=rotulos.pdf',
+            'content-Transfer-Encoding'=>'binary',
+            'Accept-Ranges'=>'bytes',
+        ]);
     }
 
     public function Enviosenrepartotabla(Request $request)
@@ -2584,9 +2617,9 @@ Ver Rotulo</a>')
          * COMPROBAMOS SI YA ESTA ATENDIDO EL PEDIDO
          */
         if ($pedido->condicion_envio_code == $nuevo_estado) {
-            return response()->json(['html' => "Este pedido ya ah sido procesado anteriormente", 'class' => "text-danger", 'codigo' => 0,'error'=>1]);
-        }else{
-            return response()->json(['html' => "Escaneado Correctamente", 'class' => "text-success", 'codigo' => $codigo,'error'=>0]);
+            return response()->json(['html' => "Este pedido ya ah sido procesado anteriormente", 'class' => "text-danger", 'codigo' => 0, 'error' => 1]);
+        } else {
+            return response()->json(['html' => "Escaneado Correctamente", 'class' => "text-success", 'codigo' => $codigo, 'error' => 0]);
         }
         /*
         return response()->json([
@@ -3315,8 +3348,7 @@ Ver Rotulo</a>')
 
     }
 
-    public
-    function valida_direccionenvio(Request $request)
+    public function valida_direccionenvio(Request $request)
     {
         $element = $request->element;
         $value_ = $request->value;
@@ -3344,5 +3376,6 @@ Ver Rotulo</a>')
         }
 
     }
+
 
 }
