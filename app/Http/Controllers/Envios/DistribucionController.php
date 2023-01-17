@@ -62,7 +62,9 @@ class DistribucionController extends Controller
                         ->where('supervisor', Auth::user()->id)
                         ->pluck('id');
                     $belongsToMany->whereIn('pedidos.user_id', $usersasesores);
+                    $belongsToMany->where('pedidos.env_celular_cliente_recibe', '<>','999999999');
                 }
+                $belongsToMany->where('pedidos.estado', '1');
             },
             'motorizadoHistories'
         ])
