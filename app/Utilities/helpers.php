@@ -175,6 +175,6 @@ if (!function_exists("pdf_to_image")) {
     {
         $imagick = new Imagick();
         $imagick->readImage($path);
-        return "data:image/png;base64," . base64_encode($imagick->getImagesBlob());
+        return "data:image/png;base64," . base64_encode($imagick->__toString());
     }
 }
