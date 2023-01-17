@@ -120,8 +120,13 @@
                             return `<li><i class="fa fa-check text-success"></i> ${codigo}</li>`
                         }).join('')}</ul><br>`);
 
+
+
                     }else if(data.error == 3){
                         console.log(data);
+                        codigos_agregados.push(data.codigo);
+                        codigos_agregados = codigos_agregados.filter((v, i, a) => a.indexOf(v) === i)
+                        
                         $('#pedidos-procesados').append('<table class="table"><tr><td>'+ data.codigo +'</td><td>'+ data.zona +'</td><td>'+ data.cantidad +' Sobres</td></tr></table>');
                     }
 
@@ -145,27 +150,9 @@
                     */
                 }
             }).always(function(){
-                $('#codigo_confirmar').focus();
+                //$('#codigo_confirmar').focus();
             });
 
-
-
-
-            /*
-            var data = {{\Illuminate\Support\Js::from($ajaxparams)}};
-            data.hiddenCodigo = codigo_mejorado
-            data.ducument_code = codigo_mejorado
-            @if($withFecha)
-                data.fecha_salida = $('#fecha_escaneo').val()
-            @endif
-
-
-            $('#pedidos-procesados').html(`<p><b class="text-success w-100">Codigos Escaneados (${codigos_agregados.length}):</b></p> <ul>${codigos_agregados.map(function (codigo) {
-                return `<li><i class="fa fa-check text-success"></i>${codigo}</li>`
-            }).join('')}</ul>`);
-            $(this).val("");
-             */
-            return false;
         });
 
         /***********
@@ -174,16 +161,18 @@
 
         $("#close-scan").click(function (e) {
             e.preventDefault();
-            console.log(codigos_agregados)
-            if (codigos_agregados.length === 0) {
-                return;
-            }
 
             var data = {{\Illuminate\Support\Js::from($ajaxparams)}};
             data.codigos = codigos_agregados
             @if($withFecha)
                 data.fecha_salida = $('#fecha_escaneo').val()
             @endif
+/*
+            if (codigos_agregados.length === 0) {
+                return;
+            }
+
+ */
 
             $.ajax({
                 data: data,
