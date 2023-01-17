@@ -1246,11 +1246,11 @@ let tabla_pedidos_principal_sur=null;
                         $('#home-tab').addClass("active");
                         $('#myTab a[href="#home"]').tab('show')
                     }else if(a2>0){
-                        $('.zona-tabla').removeClass("activo");
+                        $('.zona-tabla').removeClass("activo").removeClass("active");
                         $('#profile-tab').addClass("active");
                         $('#myTab a[href="#profile"]').tab('show')
                     }else if(a3>0){
-                        $('.zona-tabla').removeClass("activo");
+                        $('.zona-tabla').removeClass("activo").removeClass("active");
                         $('#contact-tab').addClass("active");
                         $('#myTab a[href="#contact"]').tab('show')
                     }
