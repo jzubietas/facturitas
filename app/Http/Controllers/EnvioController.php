@@ -525,7 +525,7 @@ class EnvioController extends Controller
     }
 
 
-    public function downloadRotulosEnviosparareparto()
+    public function downloadRotulosEnviosparareparto(Request $request)
     {
         $rotulos = DireccionGrupo::where('direccion_grupos.condicion_envio_code', Pedido::REPARTO_COURIER_INT)
             ->where('direccion_grupos.distribucion', 'OLVA')
@@ -551,15 +551,15 @@ class EnvioController extends Controller
                 $grupo['file']=pdf_to_image($grupo['file']);
                 return $grupo;
             });
-
+        if($request->has('html')){
+            return view('rotulospdf', compact('rotulos'));
+        }
         $pdf = PDF::loadView('rotulospdf', compact('rotulos'));
         return $pdf->stream('resume.pdf');
     }
 
     public function Enviosenrepartotabla(Request $request)
     {
-        $pedidos = null;
-
         $pedidos_lima = DireccionGrupo::join('direccion_envios as de', 'direccion_grupos.id', 'de.direcciongrupo')
             ->join('clientes as c', 'c.id', 'de.cliente_id')
             ->join('users as u', 'u.id', 'c.user_id')
