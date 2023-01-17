@@ -61,7 +61,7 @@ class RestructurarDireccionGrupo extends Command
                 if ($grupo->estado = 1) {
                     $grupo->pedidos()->activo()->update([
                         'condicion_envio' => $grupo->condicion_envio,
-                        'condicion_envio_code' => $grupo->condicion_envio,
+                        'condicion_envio_code' => $grupo->condicion_envio_code,
                     ]);
                 }
                 $this->progress->advance();
