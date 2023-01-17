@@ -536,7 +536,7 @@ class EnvioController extends Controller
                         ->trim()
                         ->unique()
                         ->filter(fn($path) => \Storage::disk('pstorage')->exists($path))
-                        ->map(fn($path) => \Storage::disk('pstorage')->url($path))
+                        ->map(fn($path) => \Storage::disk('pstorage')->path($path))
                         ->first();
                 }
                 return null;
