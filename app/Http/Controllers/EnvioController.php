@@ -1795,9 +1795,7 @@ Ver Rotulo</a>')
             $lista_productos = '';
             $lista_codigos = '';
             $pedidos = $request->pedidos;
-            $array_pedidos = collect(explode(",", $pedidos))->filter()->map(function ($id) {
-                return intval($id);
-            })->all();
+            $array_pedidos = collect(explode(",", $pedidos))->filter()->map(fn($id) => intval($id))->all();
 
             $data = DetallePedido::activo()->whereIn("pedido_id", $array_pedidos)->get();
             foreach ($data as $dat) {
