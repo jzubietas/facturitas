@@ -68,7 +68,7 @@ page-break-after: always;
                 </td>
             </tr>
         </table>
-        <div class="footer" style="text-align: right">
+        <div class="footer" style="text-align: left">
             @foreach($rotulo['producto'] as $grupos)
                 <h3>{{$grupos}}</h3>
             @endforeach
