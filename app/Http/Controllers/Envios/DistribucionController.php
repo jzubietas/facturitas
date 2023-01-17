@@ -167,6 +167,10 @@ class DistribucionController extends Controller
             ->editColumn('zona', function ($pedido) {
                 return "<b>" . $pedido->zona . "</b>";
             })
+            ->addColumn('fecha_producto', function (GrupoPedido $grupo) {
+                return $grupo->pedidos->sortBy(fn($pedido) => $pedido->codigo)->pluck('created_at')
+                    ->map(fn($codigo, $index) => ($index + 1) . ") <b>" . $codigo->format('d-m-Y') . "</b>")->join('<hr class="my-1">');
+            })
             ->addColumn('action', function ($pedido) use ($motorizados, $color_zones) {
                 $btn = [];
 
@@ -195,7 +199,7 @@ class DistribucionController extends Controller
 
                 return "<ul class='d-flex'>" . join('', $btn) . "</ul>";
             })
-            ->rawColumns(['action', 'condicion_envio', 'productos', 'codigos', 'zona'])
+            ->rawColumns(['action', 'condicion_envio', 'productos', 'codigos', 'zona','fecha_producto'])
             ->make(true);
 
     }
