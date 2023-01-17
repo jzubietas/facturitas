@@ -43,12 +43,15 @@ class DireccionGrupoZona extends Command
             ->activo()
             ->where('condicion_envio_code', Pedido::REPARTO_COURIER_INT)
             ->whereNotNull('motorizado_id')
+            ->where('celular','<>','OLVA')
             ->get();
 
         foreach ($dir as $item) {
-            $item->update([
-                'distribucion' => $item->motorizado->zona
-            ]);
+            if($item->nombre_cliente) {
+                $item->update([
+                    'distribucion' => $item->motorizado->zona
+                ]);
+            }
         }
         return 0;
     }
