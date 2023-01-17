@@ -20,10 +20,12 @@
         .pagenum:before {
             content: counter(page);
         }
-        .page{
+
+        .page {
             position: relative;
             height: 27cm;
         }
+
         @page {
             size: 21cm 29.7cm;
             margin: 7mm 7mm 7mm 7mm;
@@ -47,15 +49,16 @@ page-break-after: always;
                 <td style="width: 50%;">
 
                     <table style="width: 100%">
-                        @foreach(collect($rotulo['codigos'])->chunk(2) as $grupos)
-                            <tr>
-                                @foreach($grupos as $item)
-                                    <td style="text-align: right;">
-                                        <b>{{$item}}</b>
-                                    </td>
-                                @endforeach
-                            </tr>
+                        <tr>
+                        @foreach(collect($rotulo['codigos'])->reverse()->chunk(2)->reverse() as $grupos)
+
+                                <td style="text-align: right;">
+                                    @foreach($grupos as $item)
+                                        <b>{{$item}}</b><br>
+                                    @endforeach
+                                </td>
                         @endforeach
+                        </tr>
                     </table>
                 </td>
             </tr>
@@ -67,7 +70,7 @@ page-break-after: always;
         </table>
         <div class="footer" style="text-align: right">
             @foreach($rotulo['producto'] as $grupos)
-                <b>{{$grupos}}</b><br>
+                <h3>{{$grupos}}</h3>
             @endforeach
         </div>
     </div>
