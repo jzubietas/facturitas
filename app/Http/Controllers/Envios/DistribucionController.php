@@ -280,7 +280,7 @@ class DistribucionController extends Controller
                         'condicion_envio_code' => Pedido::REPARTO_COURIER_INT,//RECEPCION CURRIER
                         'condicion_envio_at' => now(),
                         'condicion_envio' => Pedido::REPARTO_COURIER,//RECEPCION CURRIER
-                        'distribucion' => $zona,
+                        'distribucion' => $grupo->zona,
                         'destino' => $pedido->env_destino,
                         'direccion' => $pedido->env_tracking,//nro treking
                         //'fecha_recepcion' => now(),
