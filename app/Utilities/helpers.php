@@ -179,8 +179,8 @@ if (!function_exists("pdf_to_image")) {
         $image_width    = $imagick->getImageWidth();
         $image_height   = $imagick->getImageHeight();
 
-        $x = $image_width * (0/100);
-        $y = $image_height * (0/100);
+        $x = $image_width * (70/100);
+        $y = $image_height * (20/100);
 
         $new_width  = $image_width - ($image_width * (0/100)) - $x;
         $new_height = $image_height - ($image_height * (211/100)) - $y;
