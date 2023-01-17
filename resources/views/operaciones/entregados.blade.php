@@ -213,7 +213,7 @@
                             icon: 'warning',
                             title: 'El Pedido ya se procesó anteriormente.',
                             showConfirmButton: false,
-                            timer: 1000
+                            timer: 600
                         })
 
                     } else if (data.error == 0) {
@@ -221,7 +221,7 @@
                             icon: 'success',
                             title: 'Pedido identificado',
                             showConfirmButton: false,
-                            timer: 1000
+                            timer: 600
                         })
                         codigos_agregados.push(data.codigo);
                         codigos_agregados = codigos_agregados.filter((v, i, a) => a.indexOf(v) === i)
