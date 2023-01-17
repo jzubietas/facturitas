@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use App\Traits\CommonModel;
+use Auth;
+use DB;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -167,16 +169,7 @@ class Pedido extends Model
     public function getCondicionEnvioColorAttribute()
     {
         $condicion_envio = \Str::lower($this->condicion_envio ?? '');
-
-        if (\Str::contains($condicion_envio, "ope")) {
-            return '#ffc107';
-        } elseif (\Str::contains($condicion_envio, "courier") || \Str::contains($condicion_envio, "motorizado")) {
-            return '#f97100';
-        } elseif (\Str::contains($condicion_envio, "cliente")) {
-            return '#b0deb3';
-        } else {
-            return '#b0deb3';
-        }
+        return self::getColorByCondicionEnvio($condicion_envio);
     }
 
     public function getIdCodeAttribute()
