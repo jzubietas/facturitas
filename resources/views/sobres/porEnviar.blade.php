@@ -49,6 +49,8 @@
                     <th scope="col">Asesor</th>
                     {{-- <th scope="col">Cliente</th> --}}
                     <th scope="col">Razón social</th>
+                    <th scope="col">Nombre Cliente</th>
+                    <th scope="col">Telefono Cliente</th>
                     <th scope="col">Fecha de registro</th>
                     <th scope="col">Fecha de envio</th>
                     <th scope="col">Fecha de entrega</th>
