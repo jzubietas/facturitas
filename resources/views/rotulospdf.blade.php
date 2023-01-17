@@ -1,5 +1,10 @@
 @foreach($rotulos as $rotulo)
-<table>
+<table style="@if($loop->index==1)
+page-break-before: always;
+page-break-after: always;
+    @elseif($loop->index>1)
+    page-break-after: always;
+@endif">
     <tr>
         <td>
             {{join(',',$rotulo['codigos'])}}
