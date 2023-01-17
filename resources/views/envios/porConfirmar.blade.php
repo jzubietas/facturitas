@@ -385,12 +385,12 @@
                         "previous": "Anterior"
                     }
                 },
-            }).on('order.dt', function () {
+            })/*.on('order.dt', function () {
                 //eventFired('Order');
-            }).on('search.dt', function () {
+            })*//*.on('search.dt', function () {
                 var input = $('.dataTables_filter input')[0];
 
-            }).on('page.dt', function () {
+            })*//*.on('page.dt', function () {
                     //eventFired('Page');
                 })
                 .on('search.dt', function(e) {
@@ -400,7 +400,7 @@
                 console.log(input.value)
                 tablaPrincipal.search( value_in ).draw();
                 //e.stopPropagation()
-            });
+            })*/;
 
         });
     </script>
