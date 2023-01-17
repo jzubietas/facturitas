@@ -11,6 +11,7 @@ use App\Models\GrupoPedido;
 use App\Models\Pedido;
 use App\Models\PedidoMotorizadoHistory;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -42,9 +43,8 @@ class DistribucionController extends Controller
             ->pluck('departamento', 'departamento');
 
         $superasesor = User::where('rol', 'Super asesor')->count();
-        $motorizados=[];
-        if(auth()->user()->rol!=User::ROL_ENCARGADO)
-        {
+        $motorizados = [];
+        if (auth()->user()->rol != User::ROL_ENCARGADO) {
             $motorizados = User::query()->where('rol', '=', 'MOTORIZADO')->whereNotNull('zona')->get();
         }
 
@@ -54,7 +54,18 @@ class DistribucionController extends Controller
 
     public function datatable(Request $request)
     {
-        $query = GrupoPedido::query()->with(['pedidos', 'motorizadoHistories'])
+        $query = GrupoPedido::query()->with([
+            'pedidos' => function (BelongsToMany $belongsToMany) {
+                if (auth()->user()->rol == User::ROL_ENCARGADO) {
+                    $usersasesores = User::whereIn('rol', [User::ROL_ASESOR, User::ROL_ASESOR_ADMINISTRATIVO])
+                        ->where('estado', '1')
+                        ->where('supervisor', Auth::user()->id)
+                        ->pluck('id');
+                    $belongsToMany->whereIn('pedidos.user_id', $usersasesores);
+                }
+            },
+            'motorizadoHistories'
+        ])
             //->join('grupo_pedido_items', 'grupo_pedido_items.grupo_pedido_id', '=', 'grupo_pedidos.id')
             ->select([
                 'grupo_pedidos.id',
@@ -159,8 +170,7 @@ class DistribucionController extends Controller
             ->addColumn('action', function ($pedido) use ($motorizados, $color_zones) {
                 $btn = [];
 
-                if(auth()->user()->rol!=User::ROL_ENCARGADO)
-                {
+                if (auth()->user()->rol != User::ROL_ENCARGADO) {
                     if ($pedido->motorizadoHistories->count() > 0) {
                         $btn [] = '<button data-motorizado-history="' . $pedido->motorizadoHistories->count() . '" class="btn btn-light rounded-circle"><i class="fa fa-motorcycle"></i></button>';
                     }
@@ -290,7 +300,7 @@ class DistribucionController extends Controller
                     $grupos[] = createDireccionGrupo($grupo, $groupData, collect($pedidos)->pluck('id'))->refresh();
                 }
             } else {
-                $dividir = $pedidos->map(function (Pedido $pedido) use ($grupo, $request,$zona) {
+                $dividir = $pedidos->map(function (Pedido $pedido) use ($grupo, $request, $zona) {
                     $cliente = $pedido->cliente;
                     return [
                         'condicion_envio_code' => Pedido::REPARTO_COURIER_INT,//RECEPCION CURRIER

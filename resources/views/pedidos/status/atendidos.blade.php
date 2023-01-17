@@ -93,7 +93,9 @@
 
             function openConfirmDownloadDocuments(action, idc, codigo) {
                 $.confirm({
-                    title: '<h5>Detalle de atencion de pedido <b class="allow-copy">' + codigo + '</b></h5>',
+                    title: `
+<h5>Detalle de atencion de pedido <b class="allow-copy">${codigo}</b></h5>
+`,
                     columnClass: 'col-md-6 col-md-offset-4 col-sm-6 col-sm-offset-3 col-xs-10 col-xs-offset-1',
                     buttons: {
                         confirm: {
@@ -169,6 +171,16 @@
 </li>`
                             html += `</div>`
                             self.setContentAppend(html);
+                            if(response.cliente){
+                                self.setTitle(`
+<div class="d-flex justify-content-between w-100 align-content-center">
+<h5>Cliente: <b class="allow-copy">${response.cliente.nombre}</b></h5>
+<h5 class="text-right">Telf: <b class="allow-copy">${response.cliente.celular}</b></h5>
+</div>
+<hr class="my-0">
+<h5>Detalle de atencion de pedido <b class="allow-copy">${response.detalle_pedido.codigo}</b></h5>
+`)
+                            }
                         }).fail(function () {
                             self.setContent('Ocurrio un error.');
                         });
