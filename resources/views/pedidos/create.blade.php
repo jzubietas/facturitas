@@ -393,6 +393,7 @@
                 //obtengo banca
                 let ptipo_banca=$.trim($("#ptipo_banca").val().split('-')[0]);
                 //obtengo anio
+                console.log("banca "+ptipo_banca)
                 let anno_filter=parseInt($(this).val());
                 console.log(anno_filter)
 
@@ -400,29 +401,49 @@
                 }else{
                     if(ptipo_banca=='FISICO')
                     {
-                        if(  anno_filter=={{$anno_selected}}   ||  anno_filter==({{$anno_selected}}-1) )
+                        if(isNaN(anno_filter))
                         {
+                            console.log("anno is nan")
                         }else{
-                            Swal.fire(
-                                'Error',
-                                'No puede seleccionar este año para banca fisica, elija otra opcion por favor',
-                                'warning'
-                            );
+                            if(anno_filter!='')
+                            {
+                                if(  anno_filter=={{$anno_selected}}   ||  anno_filter==({{$anno_selected}}-1) )
+                                {
+                                }else{
+                                    Swal.fire(
+                                        'Error',
+                                        'No puede seleccionar este año para banca fisica, elija otra opcion por favor',
+                                        'warning'
+                                    );
+                                    $("#panio").val('').selectpicker('refresh')
+                                }
+                            }
                         }
+
+
 
                     }else if(ptipo_banca=='ELECTRONICA')
                     {
-                        if(anno_filter=={{$anno_selected}})
+                        if(isNaN(anno_filter))
                         {
-
+                            console.log("anno is nan")
                         }else{
-                            //2023= 2023
-                            Swal.fire(
-                                'Error',
-                                'No puede seleccionar este año para banca eletronica',
-                                'warning'
-                            );
-                            $("#panio").val({{$anno_selected}})
+                            if(anno_filter!='')
+                            {
+                                if(anno_filter=={{$anno_selected}})
+                                {
+
+                                }else{
+                                    //2023= 2023
+                                    Swal.fire(
+                                        'Error',
+                                        'No puede seleccionar este año para banca eletronica',
+                                        'warning'
+                                    );
+                                    //return false;
+                                    $("#panio").val('').selectpicker('refresh')
+                                }
+                            }
                         }
                     }
                 }
@@ -433,6 +454,7 @@
                 //obtengo banca
                 let ptipo_banca=$.trim($(this).val().split('-')[0]);
                 //obtengo anio
+                console.log("banca "+ptipo_banca)
                 let anno_filter=parseInt($("#panio").val());
                 console.log(anno_filter)
 
@@ -440,32 +462,51 @@
                 }else{
                     if(ptipo_banca=='FISICO')
                     {
-                        if(  anno_filter=={{$anno_selected}}   ||  anno_filter==({{$anno_selected}}-1) )
+                        if(isNaN(anno_filter))
                         {
+                            console.log("anno is nan")
                         }else{
-                            Swal.fire(
-                                'Error',
-                                'No puede seleccionar este año para banca fisica, elija otra opcion por favor',
-                                'warning'
-                            );
-                            $("#panio").val({{$anno_selected}})
+                            if(anno_filter!='')
+                            {
+                                if(  anno_filter=={{$anno_selected}}   ||  anno_filter==({{$anno_selected}}-1) )
+                                {
+                                }else{
+                                    Swal.fire(
+                                        'Error',
+                                        'No puede seleccionar este año para banca fisica, elija otra opcion por favor',
+                                        'warning'
+                                    );
+                                    //return false;
+                                    $("#panio").val('').selectpicker('refresh')
+                                }
+                            }
                         }
 
                     }else if(ptipo_banca=='ELECTRONICA')
                     {
-                        if(anno_filter=={{$anno_selected}})
+                        if(isNaN(anno_filter))
                         {
-
+                            console.log("anno is nan")
                         }else{
-                            if(anno_filter)
-                            //2023= 2023
-                            Swal.fire(
-                                'Error',
-                                'No puede seleccionar este año para banca eletronica',
-                                'warning'
-                            );
-                            $("#panio").val({{$anno_selected}})
+                            if(anno_filter!='')
+                            {
+                                if(anno_filter=={{$anno_selected}})
+                                {
+
+                                }else{
+                                    if(anno_filter)
+                                        //2023= 2023
+                                        Swal.fire(
+                                            'Error',
+                                            'No puede seleccionar este año para banca eletronica',
+                                            'warning'
+                                        );
+                                    //return false;
+                                    $("#panio").val('').selectpicker('refresh');
+                                }
+                            }
                         }
+
                     }
                 }
             })
