@@ -108,7 +108,7 @@ class DireccionGrupo extends Model
     public static function restructurarCodigos(self $grupo)
     {
         if ($grupo->distribucion = 'OLVA') {
-            $relacion = $grupo->pedidos()
+            $relacion = $grupo->pedidos()->activo()
                 ->join('detalle_pedidos', 'detalle_pedidos.pedido_id', 'pedidos.id')
                 ->select([
                     'pedidos.codigo',
@@ -125,7 +125,7 @@ class DireccionGrupo extends Model
                 ])
                 ->get();
         } else {
-            $relacion = $grupo->pedidos()
+            $relacion = $grupo->pedidos()->activo()
                 ->join('detalle_pedidos', 'detalle_pedidos.pedido_id', 'pedidos.id')
                 ->select([
                     'pedidos.codigo',
