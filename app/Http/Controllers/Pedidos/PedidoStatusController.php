@@ -551,13 +551,15 @@ class PedidoStatusController extends Controller
        $ruc=$pedido->detallePedido->ruc;
        $total=$pedido->detallePedido->cantidad;
        $banca=$pedido->detallePedido->tipo_banca;
-       $fecha=$pedido->created_at->format('m-y');
+       $fecha=$pedido->created_at->format('y-m');
         return response()->json([
+            "cliente"=>$pedido->cliente,
+            "detalle_pedido"=>$pedido->detallePedido,
             "data" => $pedido->imagenAtencion()->activo()->get(),
             "sustento" => ($pedido->da_confirmar_descarga==0?$pedido->sustento_adjunto:null),
             'copyText'=>"$empresa - $fecha
 $ruc
-".$total."
+".money_f($total)."
 $banca"
         ]);
     }
