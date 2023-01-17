@@ -66,7 +66,7 @@
         <tr style="border-bottom: 1px dashed #888; padding-bottom:8px; ">
           <th colspan="2">
               <div style="background: white; border-right: 1px solid #CCC;">
-                  <span style="font-size: 16px;">{{ $pedido->empresas}} {{ $pedido->codigos }}</span><br>
+                  <span style="font-size: 16px;">{{ $pedido->empresas}}<br>{{ $pedido->codigos }}</span><br>
                   <img style="margin-top:12px;" src="@php echo $codigo_barras_img @endphp" width="200">
               </div>
           </th>
