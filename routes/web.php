@@ -273,6 +273,7 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     Route::get('envios.porrecibirtabla', [EnvioController::class, 'Enviosporrecibirtabla'])->name('envios.porrecibirtabla');
     Route::get('envios.rutaenvio', [EnvioController::class, 'Enviosrutaenvio'])->name('envios.rutaenvio');
     Route::get('envios.rutaenviotabla', [EnvioController::class, 'Enviosrutaenviotabla'])->name('envios.rutaenviotabla');
+    Route::get('envios.rutaenvio/merge_routulos', [EnvioController::class, 'downloadRotulosEnviosrutaenvio'])->name('envios.rutaenvio.merge-routulos');
 
     Route::get('envios.condireccion', [EnvioController::class, 'Envioscondireccion'])->name('envios.condireccion');
     Route::get('envios.condirecciontabla', [EnvioController::class, 'Envioscondirecciontabla'])->name('envios.condirecciontabla');
@@ -281,7 +282,6 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
 
     Route::get('envios.parareparto', [EnvioController::class, 'Enviosparareparto'])->name('envios.parareparto');
     Route::get('envios.pararepartotabla', [EnvioController::class, 'Enviospararepartotabla'])->name('envios.pararepartotabla');
-    Route::get('envios.parareparto/merge_routulos', [EnvioController::class, 'downloadRotulosEnviosparareparto'])->name('envios.parareparto.merge-routulos');
 
 
     Route::get('envios.enreparto', [EnvioController::class, 'Enviosenreparto'])->name('envios.enreparto');

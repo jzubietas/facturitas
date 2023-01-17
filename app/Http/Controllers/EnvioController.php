@@ -525,38 +525,6 @@ class EnvioController extends Controller
     }
 
 
-    public function downloadRotulosEnviosparareparto(Request $request)
-    {
-        $rotulos = DireccionGrupo::where('direccion_grupos.condicion_envio_code', Pedido::REPARTO_COURIER_INT)
-            ->where('direccion_grupos.distribucion', 'OLVA')
-            ->activo()
-            ->get()
-            ->map(function ($grupo) {
-                if ($grupo->observacion) {
-                    return [
-                        'codigos' => explode(',', $grupo->codigos),
-                        'producto' => explode(',', $grupo->producto),
-                        'file' => collect(explode(',', $grupo->observacion))
-                            ->trim()
-                            ->unique()
-                            ->filter(fn($path) => \Storage::disk('pstorage')->exists($path))
-                            ->map(fn($path) => \Storage::disk('pstorage')->path($path))
-                            ->first()
-                    ];
-                }
-                return null;
-            })
-            ->filter(fn($path) => $path != null)
-            ->map(function ($grupo) {
-                $grupo['file']=pdf_to_image($grupo['file']);
-                return $grupo;
-            });
-        if($request->has('html')){
-            return view('rotulospdf', compact('rotulos'));
-        }
-        $pdf = PDF::loadView('rotulospdf', compact('rotulos'));
-        return $pdf->stream('resume.pdf');
-    }
 
     public function Enviosenrepartotabla(Request $request)
     {
@@ -1022,6 +990,40 @@ class EnvioController extends Controller
                 ->toJson();
         }
 
+    }
+
+
+    public function downloadRotulosEnviosrutaenvio(Request $request)
+    {
+        $rotulos = DireccionGrupo::where('direccion_grupos.condicion_envio_code', Pedido::MOTORIZADO_INT)
+            ->whereNotIn('direccion_grupos.motorizado_status', [Pedido::ESTADO_MOTORIZADO_OBSERVADO, Pedido::ESTADO_MOTORIZADO_NO_CONTESTO])
+            ->activo()
+            ->get()
+            ->map(function ($grupo) {
+                if ($grupo->observacion) {
+                    return [
+                        'codigos' => explode(',', $grupo->codigos),
+                        'producto' => explode(',', $grupo->producto),
+                        'file' => collect(explode(',', $grupo->observacion))
+                            ->trim()
+                            ->unique()
+                            ->filter(fn($path) => \Storage::disk('pstorage')->exists($path))
+                            ->map(fn($path) => \Storage::disk('pstorage')->path($path))
+                            ->first()
+                    ];
+                }
+                return null;
+            })
+            ->filter(fn($path) => $path != null)
+            ->map(function ($grupo) {
+                $grupo['file']=pdf_to_image($grupo['file']);
+                return $grupo;
+            });
+        if($request->has('html')){
+            return view('rotulospdf', compact('rotulos'));
+        }
+        $pdf = PDF::loadView('rotulospdf', compact('rotulos'));
+        return $pdf->stream('resume.pdf');
     }
 
     public function Enviosporconfirmar()

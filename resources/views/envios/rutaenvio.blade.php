@@ -3,9 +3,8 @@
 @section('title', 'Rutas de Envio')
 
 @section('content_header')
+@include('envios.modal.exportar', ['title' => 'Exportar RUTAS DE ENVIAR', 'key' => '1'])
 
-        @include('envios.modal.exportar', ['title' => 'Exportar RUTAS DE ENVIAR', 'key' => '1'])
-    </h1>
     @if($superasesor > 0)
         <br>
         <div class="bg-4">
@@ -14,6 +13,12 @@
             </h1>
         </div>
     @endif
+<div class="d-flex justify-content-end">
+    <a href="{{route('envios.rutaenvio.merge-routulos')}}" target="_blank" class="btn btn-info">
+        <i class="fa fa-download"></i>
+        Descargar Rotulos
+    </a>
+</div>
 @stop
 
 @section('content')
