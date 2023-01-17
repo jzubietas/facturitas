@@ -177,7 +177,7 @@ if (!function_exists("pdf_to_image")) {
         $imagick->readImage($path);
         $imagick->trimImage(0.1);
         $imagick->setImageFormat('jpg');
-        $imagick->cropImage(538,569,50,100);
+        $imagick->cropImage(538,569,50,50);
         //$imagick->writeImage(public_path('.tester.tmp'));
         return "data:image/png;base64," . base64_encode($imagick->getImageBlob());//file_get_contents(public_path('.tester.tmp')));
     }
