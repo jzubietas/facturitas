@@ -6,13 +6,13 @@ page-break-after: always;
     page-break-after: always;
 @endif">
         <tr>
-            <td>
+            <td style="width: 50%;">
 
             </td>
-            <td>
+            <td style="width: 50%;">
                 <table style="width: 100%">
                     @foreach(collect($rotulo['codigos'])->chunk(2) as $grupos)
-                        <tr style="width: 50%;">
+                        <tr>
                             @foreach($grupos as $item)
                                 <td>
                                     <b>{{$item}}</b>
@@ -29,12 +29,12 @@ page-break-after: always;
             </td>
         </tr>
         <tr>
-            <td>
+            <td style="width: 50%;">
             </td>
-            <td>
+            <td style="width: 50%;">
                 <table style="width: 100%">
                     @foreach(collect($rotulo['producto'])->chunk(2) as $grupos)
-                        <tr style="width: 50%;">
+                        <tr>
                             @foreach($grupos as $item)
                                 <td>
                                     <b>{{$item}}</b>
