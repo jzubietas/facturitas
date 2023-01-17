@@ -208,6 +208,30 @@
 
                     if (data.error == 1) {
                         $('#respuesta_barra').html('<span class="' + data.class + '">El Pedido ya se procesó anteriormente.</span>');
+
+                        let timerInterval
+                        Swal.fire({
+                            title: 'Auto close alert!',
+                            html: 'I will close in <b></b> milliseconds.',
+                            timer: 2000,
+                            timerProgressBar: true,
+                            didOpen: () => {
+                                Swal.showLoading()
+                                const b = Swal.getHtmlContainer().querySelector('b')
+                                timerInterval = setInterval(() => {
+                                    b.textContent = Swal.getTimerLeft()
+                                }, 100)
+                            },
+                            willClose: () => {
+                                clearInterval(timerInterval)
+                            }
+                        }).then((result) => {
+                            /* Read more about handling dismissals below */
+                            if (result.dismiss === Swal.DismissReason.timer) {
+                                console.log('I was closed by the timer')
+                            }
+                        })
+
                     } else if (data.error == 0) {
 
                         codigos_agregados.push(data.codigo);

@@ -2494,6 +2494,8 @@ Ver Rotulo</a>')
         $pedido = Pedido::where("codigo", $codigo)->first();
         $condicion_code_actual = $pedido->condicion_envio_code;
 
+        $grupo = "";
+
         /************
          * SETEAMOS VALORES POR DEFECTO
          */
@@ -2541,6 +2543,8 @@ Ver Rotulo</a>')
                 switch ($condicion_code_actual) {
                     case Pedido::REPARTO_COURIER_INT: // 8
                         $nuevo_estado = Pedido::ENVIO_MOTORIZADO_COURIER_INT; // 19
+                        $grupo = $pedido->direccion_grupo;
+
                         break;
                 }
                 break;
@@ -2581,8 +2585,17 @@ Ver Rotulo</a>')
          * COMPROBAMOS SI YA ESTA ATENDIDO EL PEDIDO
          */
         if ($pedido->condicion_envio_code == $nuevo_estado) {
-            return response()->json(['html' => "Este pedido ya ah sido procesado anteriormente", 'class' => "text-danger", 'codigo' => 0,'error'=>1]);
+            return response()->json(['html' => "Este pedido ya ah sido procesado anteriormente, su estado actual es " . Pedido::$estadosCondicionEnvioCode[$nuevo_estado], 'class' => "text-danger", 'codigo' => 0,'error'=>1]);
         }else{
+            if($grupo != ""){
+               $Direccion_grupo = DireccionGrupo::where('id',$grupo)->first();
+               //dd($Direccion_grupo->codigos);
+                $codigos_paquete = collect(explode(",", $Direccion_grupo->codigos))
+                    ->map(fn($cod) => trim($cod))
+                    ->filter()->count();
+
+                return response()->json(['html' => "Escaneado Correctamente", 'class' => "text-success", 'codigo' => $codigo,'error'=>3, 'zona' => $Direccion_grupo->distribucion, 'cantidad'=> $codigos_paquete]);
+            }
             return response()->json(['html' => "Escaneado Correctamente", 'class' => "text-success", 'codigo' => $codigo,'error'=>0]);
         }
         /*
@@ -2651,7 +2664,7 @@ Ver Rotulo</a>')
                 case "fernandez_recepcion":
 
                     switch ($condicion_code_actual) {
-                        case Pedido::ENVIO_COURIER_JEFE_OPE_INT: // 8
+                        case Pedido::ENVIO_COURIER_JEFE_OPE_INT: // 12
                             $nuevo_estado = Pedido::RECEPCION_COURIER_INT; // 19
                             $respuesta = "El jefe Courier recepciono correctamente el pedido";
                             break;
@@ -2680,8 +2693,8 @@ Ver Rotulo</a>')
                 //ENVIO A COURIER JEFE OPE
                 case "maria_courier":
                     switch ($condicion_code_actual) {
-                        case Pedido::RECIBIDO_JEFE_OPE_INT:
-                            $nuevo_estado = Pedido::ENVIO_COURIER_JEFE_OPE_INT;
+                        case Pedido::RECIBIDO_JEFE_OPE_INT: // 6
+                            $nuevo_estado = Pedido::ENVIO_COURIER_JEFE_OPE_INT; // 12
                             $respuesta = "El pedido se envió a Logistica correctamente.";
                             break;
                     }
@@ -2689,8 +2702,8 @@ Ver Rotulo</a>')
                 // RECEPCION DE SOBRE POR MARIA
                 case "maria_recepcion":
                     switch ($condicion_code_actual) {
-                        case Pedido::ENVIADO_OPE_INT:
-                            $nuevo_estado = Pedido::RECIBIDO_JEFE_OPE_INT;
+                        case Pedido::ENVIADO_OPE_INT; // 5
+                            $nuevo_estado = Pedido::RECIBIDO_JEFE_OPE_INT; // 6
                             $respuesta = "El sobre se recibio correctamente.";
                             break;
                     }
@@ -2784,7 +2797,7 @@ Ver Rotulo</a>')
                         ]);
                         break;
 
-                    case "sobres_en_reparto":
+                    case "sobres_reparto":
                         $envio = $pedido->direcciongrupo;
                         $envio->update([
                             'condicion_envio' => Pedido::ENVIO_MOTORIZADO_COURIER,

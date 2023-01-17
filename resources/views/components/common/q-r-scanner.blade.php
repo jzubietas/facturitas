@@ -42,9 +42,7 @@
                         </div>
                         <div class="col-lg-6 text-left pl-20">
                             <h4 class="font-16 font-weight-bold">{{$moduleTitle}} procesados:</h4>
-                            <ul id="pedidos-procesados">
-
-                            </ul>
+                            <div id="pedidos-procesados"></div>
                         </div>
                     </div>
 
@@ -117,11 +115,17 @@
 
                         codigos_agregados.push(data.codigo);
                         codigos_agregados = codigos_agregados.filter((v, i, a) => a.indexOf(v) === i)
+
+                        $('#pedidos-procesados').html(`<p><b class="text-success w-100">codigos Escaneados (${codigos_agregados.length}):</b></p><ul>${codigos_agregados.map(function (codigo) {
+                            return `<li><i class="fa fa-check text-success"></i> ${codigo}</li>`
+                        }).join('')}</ul><br>`);
+
+                    }else if(data.error == 3){
+                        console.log(data);
+                        $('#pedidos-procesados').append('<table class="table"><tr><td>'+ data.codigo +'</td><td>'+ data.zona +'</td><td>'+ data.cantidad +' Sobres</td></tr></table>');
                     }
 
-                    $('#pedidos-procesados').html(`<p><b class="text-success w-100">codigos Escaneados (${codigos_agregados.length}):</b></p><ul>${codigos_agregados.map(function (codigo) {
-                        return `<li><i class="fa fa-check text-success"></i> ${codigo}</li>`
-                    }).join('')}</ul><br>`);
+
 
                     /*
                                         $('#pedidos-procesados').append(`<p><b class="text-danger w-100">codigos no procesados (${codigos_no_procesados.length}): </b></p><ul>${codigos_no_procesados.map(function (codigo) {
