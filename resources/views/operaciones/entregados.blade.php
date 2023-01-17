@@ -212,6 +212,8 @@
                         Swal.fire({
                             icon: 'warning',
                             title: 'El Pedido ya se procesó anteriormente.',
+                            color: '#FFF',
+                            background: '#9f2916',
                             showConfirmButton: false,
                             timer: 600
                         })
@@ -220,6 +222,8 @@
                         Swal.fire({
                             icon: 'success',
                             title: 'Pedido identificado',
+                            color: '#FFF',
+                            background: '#79b358',
                             showConfirmButton: false,
                             timer: 600
                         })

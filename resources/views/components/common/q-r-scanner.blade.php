@@ -42,7 +42,7 @@
                         </div>
                         <div class="col-lg-6 text-left pl-20">
                             <h4 class="font-16 font-weight-bold">{{$moduleTitle}} procesados:</h4>
-                            <div id="pedidos-procesados"></div>
+                            <div id="pedidos-procesados" class="text-center mt-36"></div>
                         </div>
                     </div>
 
@@ -115,17 +115,48 @@
                         Swal.fire({
                             icon: 'error',
                             title: 'El Pedido ya se procesó anteriormente',
+                            color: '#FFF',
+                            background: '#9f2916',
                             showConfirmButton: false,
                             timer: 1500
                         })
 
                         $('#respuesta_barra').html('<span class="'+ data.class +'">El Pedido ya se procesó anteriormente, su estado actual es <b>'+ data.msj_error +'</b></span>');
 
+                    }else if(data.error == 4){
+
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'El pedido no se encontró en el sistema',
+                            color: '#FFF',
+                            background: '#9f2916',
+                            showConfirmButton: false,
+                            timer: 1500
+                        })
+
+                        $('#respuesta_barra').html('<span class="'+ data.class +'">'+ data.html + '</span>');
+
+                    }
+                    else if(data.error == 5){
+
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'El pedido esta anulado',
+                            color: '#FFF',
+                            background: '#9f2916',
+                            showConfirmButton: false,
+                            timer: 1500
+                        })
+
+                        $('#respuesta_barra').html('<span class="'+ data.class +'">'+ data.html + '</span>');
+
                     }else if(data.error == 0){
 
                         Swal.fire({
                             icon: 'success',
                             title: 'Pedido identificado',
+                            color: '#FFF',
+                            background: '#79b358',
                             showConfirmButton: false,
                             timer: 600
                         })
@@ -225,9 +256,14 @@
                     var codigos_procesados = data.codigos_procesados
                     var codigos_no_procesados = data.codigos_no_procesados
 
+                    /*
                     $('#pedidos-procesados').html(`<p><b class="text-success w-100">codigos procesados (${codigos_procesados.length}):</b></p><ul>${codigos_procesados.map(function (codigo) {
                         return `<li><i class="fa fa-check text-success"></i> ${codigo}</li>`
-                    }).join('')}</ul><br>`);
+                    }).join('')}</ul><br>`);*/
+
+                    $('#pedidos-procesados').html(`<h2 class="font-weight-bold"><i class="fa fa-check text-success" aria-hidden="true"></i> ${codigos_procesados.length} </h2><h4>Pedidos Procesados</h4><p>Siga Escaneando pedidos</p>`);
+
+
 /*
                     $('#pedidos-procesados').append(`<p><b class="text-danger w-100">codigos no procesados (${codigos_no_procesados.length}): </b></p><ul>${codigos_no_procesados.map(function (codigo) {
                         return `<li><i class="fa fa-window-close text-danger"></i> ${codigo}</li>`
