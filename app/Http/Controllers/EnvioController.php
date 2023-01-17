@@ -406,14 +406,15 @@ class EnvioController extends Controller
         $pedidos_lima = DireccionGrupo::select([
             'direccion_grupos.*',
             'u.identificador as user_identificador',
-            'u.identificador as nombre_motorizado',
+            'um.identificador as nombre_motorizado',
             //DB::raw(" (select 'LIMA') as destino "),
             DB::raw('(select DATE_FORMAT( direccion_grupos.created_at, "%Y-%m-%d")   from direccion_grupos dpa where dpa.id=direccion_grupos.id) as fecha_formato'),
         ])
             //join('direccion_envios as de', 'direccion_grupos.id', 'de.direcciongrupo')
             ->join('clientes as c', 'c.id', 'direccion_grupos.cliente_id')
             //->join('users as u', 'u.id', 'c.user_id')
-            ->LeftJoin('users as u', 'u.id', 'direccion_grupos.motorizado_id')
+            ->LeftJoin('users as u', 'u.id', 'direccion_grupos.user_id')
+            ->LeftJoin('users as um', 'um.id', 'direccion_grupos.motorizado_id')
             ->where('direccion_grupos.condicion_envio_code', Pedido::REPARTO_COURIER_INT)
             ->whereIn('direccion_grupos.distribucion', $lazona)
             ->activo();
