@@ -386,12 +386,12 @@
                     }
                 },
             }).on('order.dt', function () {
-                eventFired('Order');
+                //eventFired('Order');
             }).on('search.dt', function () {
                 var input = $('.dataTables_filter input')[0];
 
             }).on('page.dt', function () {
-                    eventFired('Page');
+                    //eventFired('Page');
                 })
                 .on('search.dt', function(e) {
                 e.preventDefault();
