@@ -274,13 +274,13 @@ class DistribucionController extends Controller
                     $grupos[] = createDireccionGrupo($grupo, $groupData, collect($pedidos)->pluck('id'))->refresh();
                 }
             } else {
-                $dividir = $pedidos->map(function (Pedido $pedido) use ($grupo, $request) {
+                $dividir = $pedidos->map(function (Pedido $pedido) use ($grupo, $request,$zona) {
                     $cliente = $pedido->cliente;
                     return [
                         'condicion_envio_code' => Pedido::REPARTO_COURIER_INT,//RECEPCION CURRIER
                         'condicion_envio_at' => now(),
                         'condicion_envio' => Pedido::REPARTO_COURIER,//RECEPCION CURRIER
-                        'distribucion' => $grupo->zona,
+                        'distribucion' => $zona,
                         'destino' => $pedido->env_destino,
                         'direccion' => $pedido->env_tracking,//nro treking
                         //'fecha_recepcion' => now(),
