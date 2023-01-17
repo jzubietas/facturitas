@@ -115,7 +115,7 @@ if (!function_exists("add_query_filtros_por_roles")) {
 }
 
 if (!function_exists("add_query_filtros_por_roles_pedidos")) {
-    function add_query_filtros_por_roles_pedidos($query,  $column = 'u.identificador')
+    function add_query_filtros_por_roles_pedidos($query, $column = 'u.identificador')
     {
         if (Auth::user()->rol == "Operario") {
             $asesores = User::rolAsesor()
@@ -135,9 +135,9 @@ if (!function_exists("add_query_filtros_por_roles_pedidos")) {
                 ->WhereIn('operario', $operarios)
                 ->pluck('identificador');
 
-            $query = $query->WhereIn( $column, $asesores);
+            $query = $query->WhereIn($column, $asesores);
         } else if (Auth::user()->rol == "Asesor") {
-            $query = $query->Where( $column, Auth::user()->identificador);
+            $query = $query->Where($column, Auth::user()->identificador);
         } else if (Auth::user()->rol == "Super asesor") {
             $query = $query->Where($column, Auth::user()->identificador);
         } else if (Auth::user()->rol == "Encargado") {
@@ -158,11 +158,23 @@ if (!function_exists("can")) {
     }
 }
 if (!function_exists("foto_url")) {
-    function foto_url($path,$disk='pstorage')
+    function foto_url($path, $disk = 'pstorage')
     {
-        if(!$path){
+        if (!$path) {
             return $path;
         }
         return Storage::disk($disk)->url($path);
+    }
+}
+
+if (!function_exists("pdf_to_image")) {
+    /**
+     * @throws ImagickException
+     */
+    function pdf_to_image($path)
+    {
+        $imagick = new Imagick();
+        $imagick->readImage($path);
+        return "data:image/png;base64," . base64_encode($imagick->getImagesBlob());
     }
 }
