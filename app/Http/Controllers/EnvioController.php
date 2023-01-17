@@ -2541,6 +2541,7 @@ class EnvioController extends Controller
         }
 
         $condicion_code_actual = $pedido->condicion_envio_code;
+        $color = $pedido->condicion_envio_color;
         $grupo = "";
 
         /************
@@ -2632,7 +2633,7 @@ class EnvioController extends Controller
          * COMPROBAMOS SI YA ESTA ATENDIDO EL PEDIDO
          */
         if ($pedido->condicion_envio_code == $nuevo_estado) {
-            return response()->json(['html' => "Este pedido ya ah sido procesado anteriormente, su estado actual es " . Pedido::$estadosCondicionEnvioCode[$nuevo_estado], 'class' => "text-danger", 'codigo' => $codigo,'error'=>1, 'msj_error' => Pedido::$estadosCondicionEnvioCode[$nuevo_estado]]);
+            return response()->json(['html' => 'El pedido <b style="">'.$codigo.'</b> ya ah sido procesado anteriormente, su estado actual es <br><span class="br-4 mt-16" style="background-color:'. $color .'; padding: 2px 12px; color: black; font-weight: bold;">' . Pedido::$estadosCondicionEnvioCode[$nuevo_estado] . '</span>', 'class' => "text-danger", 'codigo' => $codigo,'error'=>1, 'msj_error' => Pedido::$estadosCondicionEnvioCode[$nuevo_estado]]);
         }else{
             if($grupo != ""){
                $Direccion_grupo = DireccionGrupo::where('id',$grupo)->first();

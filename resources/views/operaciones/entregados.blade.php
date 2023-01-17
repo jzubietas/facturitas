@@ -207,7 +207,7 @@
                 success: function (data) {
 
                     if (data.error == 1) {
-                        $('#respuesta_barra').html('<span class="' + data.class + '">El Pedido ya se procesó anteriormente.</span>');
+                        $('#respuesta_barra').html('<span class="'+ data.class +'">'+ data.html +'</b></span>');
 
                         Swal.fire({
                             icon: 'warning',
@@ -234,6 +234,7 @@
                     $('#pedidos-procesados').html(`<p><b class="text-success w-100">codigos Escaneados (${codigos_agregados.length}):</b></p><ul>${codigos_agregados.map(function (codigo) {
                         return `<li><i class="fa fa-check text-success"></i> ${codigo}</li>`
                     }).join('')}</ul><br>`);
+
                 }
             }).always(function () {
                 $('#codigo_confirmar').focus();
@@ -277,6 +278,12 @@
                     $('#respuesta_barra').removeClass("text-success");
                     $('#respuesta_barra').addClass(data.class);
                     $('#respuesta_barra').html(data.html);
+
+                    setTimeout(function(){
+                        console.log("cerrar modal");
+                        $('#pedidos-procesados').html("");
+                        $('#modal-escanear').modal('hide');
+                    },300);
 
                     if (codigos_agregados.length === 0) {
                         //$('#modal-escanear').modal('hide')
