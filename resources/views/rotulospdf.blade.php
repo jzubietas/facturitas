@@ -1,3 +1,8 @@
+<html>
+<head>
+    <meta charset="utf-8">
+</head>
+<body onload="window.print()">
 @foreach($rotulos as $rotulo)
     <table style="@if($loop->index==1)
 page-break-before: always;
@@ -47,3 +52,6 @@ page-break-after: always;
         </tr>
     </table>
 @endforeach
+
+</body>
+</html>
