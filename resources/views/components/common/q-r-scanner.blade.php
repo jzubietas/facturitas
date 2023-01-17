@@ -14,7 +14,7 @@
                     <div id="option-modal-extra">
                         @if($withFecha)
                             Seleccione una fecha para el escaneo:
-                            <input id="fecha_escaneo" type="date" value="{{now()->format('Y-m-d')}}"
+                            <input id="fecha_escaneo" type="date"
                                    class="form-control">
                         @endif
 
@@ -67,11 +67,12 @@
             $('#titulo-scan').html("Escanear para confirmar - <span class='text-success'>{{$moduleTitle}}</span>");
             $('#pedidos-procesados').html('')
             $('#respuesta_barra').html('');
+            /*
             $('#modal-escanear').on('click', function () {
                 console.log("focus");
                 $('#codigo_confirmar').focus();
                 return false;
-            });
+            });*/
         })
         $('#modal-escanear').on('hidden.bs.modal', function () {
             $('#respuesta_barra').html('')
@@ -126,7 +127,7 @@
                         console.log(data);
                         codigos_agregados.push(data.codigo);
                         codigos_agregados = codigos_agregados.filter((v, i, a) => a.indexOf(v) === i)
-                        
+
                         $('#pedidos-procesados').append('<table class="table"><tr><td>'+ data.codigo +'</td><td>'+ data.zona +'</td><td>'+ data.cantidad +' Sobres</td></tr></table>');
                     }
 
@@ -164,8 +165,25 @@
 
             var data = {{\Illuminate\Support\Js::from($ajaxparams)}};
             data.codigos = codigos_agregados
+
+            var fecha_salida_validacion = $('#fecha_escaneo').val();
+
             @if($withFecha)
+            if(fecha_salida_validacion == ""){
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Debe ingresar una fecha',
+                    showConfirmButton: false,
+                    timer: 1000
+                })
+
+                return false;
+            }else{
                 data.fecha_salida = $('#fecha_escaneo').val()
+            }
+
+
+
             @endif
 /*
             if (codigos_agregados.length === 0) {
