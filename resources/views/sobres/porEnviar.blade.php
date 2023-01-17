@@ -386,10 +386,10 @@
                 $("#pdf_renderer_object").removeClass('d-none')
 
                 setTimeout(function () {
-                    $("#pdf_renderer_object").attr('data',URL.createObjectURL(file))
+                    $("#pdf_renderer_object").attr('data', URL.createObjectURL(file))
 
-                    $("#pdf_renderer_object").css('height',($("#pdf_renderer_object").parents('.viewpdf').width()+50)+'px')
-                },50)
+                    $("#pdf_renderer_object").css('height', ($("#pdf_renderer_object").parents('.viewpdf').width() + 50) + 'px')
+                }, 50)
 
                 console.log(file);
                 /*var reader = new FileReader();
@@ -592,6 +592,9 @@
 
             $(document).on("change", "#limaprovincia", function () {
                 $("#distrito").val("").selectpicker("refresh")
+                $('#pdf_renderer_object').attr('data', null)
+                $('#rotulo').val(null)
+
                 switch ($(this).val()) {
                     case 'L':
                         console.log("e L");
@@ -1022,7 +1025,7 @@
             $(document).on("click", "#droprotulo", function () {
                 $("#rotulo").val("");
                 $(".drop-rotulo").addClass("d-none");
-                $("#pdf_renderer_object").attr("data",null);
+                $("#pdf_renderer_object").attr("data", null);
                 $("#pdf_renderer_object").addClass("d-none");
             });
             $("#set_cliente_clear_provincia").click(function () {
@@ -1377,7 +1380,7 @@
 
             //inicio tabla pedidos
             $('#modal-direccion').on('hide.bs.modal', function (event) {
-                $("#pdf_renderer_object").attr("data",'');
+                $("#pdf_renderer_object").attr("data", '');
                 $("#pdf_renderer_object").addClass("d-none");
             })
             $('#modal-direccion').on('show.bs.modal', function (event) {
