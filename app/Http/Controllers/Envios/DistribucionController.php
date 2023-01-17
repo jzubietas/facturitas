@@ -114,6 +114,22 @@ class DistribucionController extends Controller
                         ->orWhere('grupo_pedido_items.razon_social', 'like', '%' . $search_value . '%')
                         ->select('grupo_pedido_items.grupo_pedido_id')
                 );
+
+                /*if(auth()->user()->rol==User::ROL_ENCARGADO)
+                {
+                    $usersasesores = User::whereIn('users.rol', [User::ROL_ASESOR,User::ROL_ASESOR_ADMINISTRATIVO])
+                        ->where('users.estado', '1')
+                        ->where('users.supervisor', Auth::user()->id)
+                        ->select(
+                            DB::raw("users.id as id")
+                        )
+                        ->pluck('users.id');
+
+                    $query->where('grupo_pedidos.id',
+                      DB::table('grupo_pedidos_items')
+                        ->where('grupo_pedidos_items.cliente_id');
+                    );
+                }*/
             });
         }
         /*if(auth()->user()->rol==User::ROL_ENCARGADO)
