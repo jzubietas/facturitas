@@ -1002,15 +1002,19 @@ class EnvioController extends Controller
             ->get()
             ->map(function ($grupo) {
                 if ($grupo->observacion) {
+                    $file=collect(explode(',', $grupo->observacion))
+                        ->trim()
+                        ->unique()
+                        ->filter(fn($path) => \Storage::disk('pstorage')->exists($path))
+                        ->map(fn($path) => \Storage::disk('pstorage')->path($path))
+                        ->first();
+                    if(!$file){
+                        return null;
+                    }
                     return [
                         'codigos' => explode(',', $grupo->codigos),
                         'producto' => explode(',', $grupo->producto),
-                        'file' => collect(explode(',', $grupo->observacion))
-                            ->trim()
-                            ->unique()
-                            ->filter(fn($path) => \Storage::disk('pstorage')->exists($path))
-                            ->map(fn($path) => \Storage::disk('pstorage')->path($path))
-                            ->first()
+                        'file' => $file
                     ];
                 }
                 return null;
