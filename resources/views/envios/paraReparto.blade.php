@@ -15,6 +15,10 @@
                 :tables-ids="['#tablaPrincipal']"
                 :extras="[]"
             ></x-common-button-qr-scanner>
+            <a href="{{route('envios.parareparto.merge-routulos')}}" target="_blank" class="btn btn-info">
+                <i class="fa fa-download"></i>
+                Descargar Rotulos
+            </a>
             <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
                     aria-expanded="false">
                 Exportar
