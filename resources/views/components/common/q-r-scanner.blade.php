@@ -88,7 +88,8 @@
             event.preventDefault();
 
             var codigo_caturado = ($(this).val() || '').trim();
-            var codigo_mejorado = codigo_caturado.replace(/['']+/g, '-');
+            
+            var codigo_mejorado = codigo_caturado.replace(/['']+/g, '-').replaceAll("'", '-').replaceAll("(", '*');
             var codigo_accion = $('#codigo_accion').val();
             var codigo_responsable = $('#codigo_responsable').val();
             $('#codigo_confirmar').val('')
