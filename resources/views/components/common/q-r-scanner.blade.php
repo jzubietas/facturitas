@@ -88,7 +88,7 @@
             event.preventDefault();
 
             var codigo_caturado = ($(this).val() || '').trim();
-            
+
             var codigo_mejorado = codigo_caturado.replace(/['']+/g, '-').replaceAll("'", '-').replaceAll("(", '*');
             var codigo_accion = $('#codigo_accion').val();
             var codigo_responsable = $('#codigo_responsable').val();
@@ -122,7 +122,7 @@
                             timer: 1500
                         })
 
-                        $('#respuesta_barra').html('<span class="'+ data.class +'">El Pedido ya se procesó anteriormente, su estado actual es <b>'+ data.msj_error +'</b></span>');
+                        $('#respuesta_barra').html('<span class="'+ data.class +'">El Pedido <b>'+ data.codigo +'</b> ya se procesó anteriormente, su estado actual es <b>'+ data.msj_error +'</b></span>');
 
                     }else if(data.error == 4){
 
