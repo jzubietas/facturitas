@@ -1673,6 +1673,8 @@
                     //   },
                     // },
                     {data: 'empresas', name: 'empresas',},
+                    {data: 'nombres', name: 'c.nombre',},
+                    {data: 'celulares', name: 'c.celular',},
                     {data: 'fecha_envio_doc', name: 'fecha_envio_doc', "visible": false},
                     {data: 'fecha_envio_doc_fis', name: 'fecha_envio_doc_fis',},
                     {data: 'fecha_recepcion', name: 'fecha_recepcion', "visible": false},
