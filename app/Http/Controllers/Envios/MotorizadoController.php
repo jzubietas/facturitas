@@ -858,6 +858,27 @@ class MotorizadoController extends Controller
                     $badge_estado .= '<span class="badge badge-success" style="background-color: ' . $color . '!important;">' . $grupo->condicion_envio . '</span>';
                     return $badge_estado;
                 })
+
+                ->editColumn('distrito', function ($pedido) {
+
+                    if ($pedido->distribucion == 'OLVA') {
+                        $html = collect(explode(',', $pedido->referencia))->trim()->unique()->join(', ');
+                        if ($pedido->observacion) {
+                            $html .= collect(explode(',', $pedido->observacion))
+                                ->trim()
+                                ->unique()
+                                ->map(fn($observacion) => '<a class="btn btn-icon p-0" target="_blank" href="' . \Storage::disk('pstorage')->url($observacion) . '">
+<i class="fa fa-file-pdf"></i>
+Ver Rotulo</a>')
+                                ->join('');
+                        }
+                        return $html;
+                    }
+                    return $pedido->distrito;
+                })
+
+
+
                 ->addColumn('action', function ($pedido) use ($fecha_consulta, $fecha_actual) {
                     $btn = '';
 
@@ -895,7 +916,7 @@ class MotorizadoController extends Controller
 
                     return $btn;
                 })
-                ->rawColumns(['action', 'condicion_envio'])
+                ->rawColumns(['action', 'condicion_envio','distrito'])
                 ->make(true);
         }
     }
