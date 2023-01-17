@@ -40,15 +40,15 @@ class MotorizadoAutoNoRecibido extends Command
      */
     public function handle()
     {
-        if (now() < now()->startOfDay()->addHours(19)) {
-            $ask = $this->confirm("Se esta ejecutando antes de las 07:00 PM,¿Continuar?");
+        if (now() < now()->startOfDay()->addHours(15)->subMinute()) {
+            $ask = $this->confirm("Se esta ejecutando antes de las 03:00 PM,¿Continuar?");
             if (!$ask) {
                 return 0;
             }
         }
 
         $grupos = DireccionGrupo::where('direccion_grupos.condicion_envio_code', Pedido::ENVIO_MOTORIZADO_COURIER_INT)
-            ->whereDate('direccion_grupos.fecha_salida', now())
+            ->where('direccion_grupos.fecha_salida','<',now()->startOfDay()->addHours(15))
             ->where('direccion_grupos.motorizado_status', '=', 0)
             ->activo()
             ->get();

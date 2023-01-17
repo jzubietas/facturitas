@@ -31,7 +31,7 @@ class Kernel extends ConsoleKernel
             ->dailyAt('13:15');
 
         $schedule->command('motorizado:auto-no-recibido')
-            ->dailyAt('23:59');
+            ->dailyAt('15:00');
 
         /*
          * $schedule->command('estado:migrar_con_direccion')

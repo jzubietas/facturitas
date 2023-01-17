@@ -1614,8 +1614,8 @@ class PedidoController extends Controller
              * FISICA - sin banca
              * ELECTRONICA - bancarizado
              */
-            $is_fisico = $pedido->detallePedido()->where('detalle_pedidos.tipo_banca', 'like', 'FISICO%')->count();
-            if ($is_fisico == 0 && $pedido->condicion_code == Pedido::ATENDIDO_INT) {
+            //$is_fisico = $pedido->detallePedido()->where('detalle_pedidos.tipo_banca', 'like', 'FISICO%')->count();
+            if (/*$is_fisico == 0 &&*/ $pedido->condicion_code == Pedido::ATENDIDO_INT) {
                 //pendiente de anulacion
                 $pedido->update([
                     'motivo' => $request->motivo,
