@@ -385,31 +385,22 @@
                         "previous": "Anterior"
                     }
                 },
+            }).on('order.dt', function () {
+                eventFired('Order');
+            }).on('search.dt', function () {
+                var input = $('.dataTables_filter input')[0];
+                
+            }).on('page.dt', function () {
+                    eventFired('Page');
+                })
+                .on('search.dt', function(e) {
+                e.preventDefault();
+                var input = $('.dataTables_filter input')[0];
+                let value_in=input.value.replace('(', '*').replace("'", '-');
+                console.log(input.value)
+                tablaPrincipal.search( value_in ).draw();
+                //e.stopPropagation()
             });
-
-            $("#id").bind('paste', function(e) {
-                var ctl = $(this);
-
-            });
-
-            $(".input[type='search']").bind("paste",function(){
-                var ctl = $(this);
-                setTimeout(function() {
-                    var value = $("input[type='search']").val();
-                    console.log(value);
-                    let value_in=value.replace('(', '*').replace("'", '-');
-                    console.log(value_in);
-                    tablaPrincipal.search( value_in ).draw();
-                }, 100);
-            })
-
-            /*$(document).bind('paste',".dataTables_filter input[type='search']",function(e){
-
-            });*/
-            /*.on('search.dt', function() {
-
-            });*/
-
 
         });
     </script>
