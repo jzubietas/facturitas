@@ -107,8 +107,7 @@ class DireccionGrupo extends Model
 
     public static function restructurarCodigos(self $grupo)
     {
-        if($grupo->distribucion='OLVA')
-        {
+        if ($grupo->distribucion = 'OLVA') {
             $relacion = $grupo->pedidos()
                 ->join('detalle_pedidos', 'detalle_pedidos.pedido_id', 'pedidos.id')
                 ->select([
@@ -125,7 +124,7 @@ class DireccionGrupo extends Model
                                   end) as observacion"),
                 ])
                 ->get();
-        }else{
+        } else {
             $relacion = $grupo->pedidos()
                 ->join('detalle_pedidos', 'detalle_pedidos.pedido_id', 'pedidos.id')
                 ->select([
@@ -141,10 +140,10 @@ class DireccionGrupo extends Model
             $grupo->update([
                 'codigos' => $relacion->pluck('codigo')->join(', '),
                 'producto' => $relacion->pluck('nombre_empresa')->join(', '),
-                'direccion'=>$relacion->pluck('direccion')->trim()->unique()->join(', '),
-                'referencia'=>$relacion->pluck('referencia')->trim()->unique()->join(', '),
-                'observacion'=>$relacion->pluck('observacion')->trim()->unique()->join(', '),
-                'cantidad'=>$relacion->count(),
+                'direccion' => $relacion->pluck('direccion')->trim()->unique()->join(', '),
+                'referencia' => $relacion->pluck('referencia')->trim()->unique()->join(', '),
+                'observacion' => $relacion->pluck('observacion')->trim()->unique()->join(', '),
+                'cantidad' => $relacion->count(),
             ]);
         } else {
             $grupo->update([
@@ -325,6 +324,46 @@ class DireccionGrupo extends Model
                 return false;
         }
         return true;
+    }
+
+    public static function createByPedido(Pedido $pedido)
+    {
+        $groupData = [
+            'condicion_envio_code' => $pedido->condicion_envio_code,
+            'condicion_envio_at' =>  $pedido->condicion_envio_at,
+            'condicion_envio' => $pedido->condicion_envio,
+            'distribucion' => $pedido->env_zona,
+            'destino' => $pedido->env_destino,
+            'direccion' => $pedido->env_direccion,
+            'estado' => '1',
+
+            'cliente_id' => $pedido->cliente_id,
+            'user_id' => $pedido->user_id,
+
+            'nombre' => $pedido->env_nombre_cliente_recibe,
+            'celular' => $pedido->env_celular_cliente_recibe,
+
+            'nombre_cliente' => $pedido->cliente->nombre,
+            'celular_cliente' => $pedido->cliente->celular,
+            'icelular_cliente' => $pedido->cliente->icelular,
+
+            'distrito' => $pedido->env_distrito,
+            'referencia' => $pedido->env_referencia,//nro registro
+            'observacion' => $pedido->env_observacion,//rotulo
+            'motorizado_id' => 0,
+            'identificador' => $pedido->cliente->user->identificador,
+        ];
+        if ($pedido->env_zona == 'OLVA') {
+            $groupData['direccion'] = $pedido->env_tracking;
+            $groupData['referencia'] = $pedido->env_referencia;
+            $groupData['observacion'] = $pedido->env_observacion;
+        }
+        $grupo = DireccionGrupo::create($groupData);
+        $pedido->update([
+            'direccion_grupo' => $grupo->id
+        ]);
+        DireccionGrupo::restructurarCodigos($grupo);
+        return $grupo;
     }
 
     public static function desvincularPedido(self $grupo, Pedido $pedido, $sustento = null, $motorizado_status = Pedido::ESTADO_MOTORIZADO_OBSERVADO)

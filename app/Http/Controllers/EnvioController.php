@@ -29,6 +29,7 @@ use App\Notifications\PedidoNotification;
 use Carbon\Carbon;
 use Exception;
 
+use iio\libmergepdf\Merger;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Maatwebsite\Excel\Concerns\Exportable;
@@ -260,9 +261,9 @@ class EnvioController extends Controller
 
                     $btn .= '<ul class="list-unstyled pl-0">';
                     $btn .= '<li>
-                                        <a href="" class="btn-sm text-secondary" data-target="#modal-confirmacion" data-toggle="modal" data-ide="' . $pedido->id . '" data-entregar-confirm="' . $pedido->id . '" data-destino="' . $pedido->destino . '" data-fechaenvio="' . $pedido->created_at . '" data-codigos="' . $pedido->codigo . '">
-                                            <i class="fas fa-envelope text-danger"></i> Entregado sin envio</a></li>
-                                        </a>
+                                        <button class="btn btn-sm text-secondary" data-target="' . route('operaciones.confirmarentregasinenvio', ['hiddenCodigo' => $pedido->codigo]) . '" data-toggle="jqconfirm">
+                                            <i class="fas fa-envelope text-danger"></i> Entregado sin envio
+                                        </button>
                                     </li>';
                     $btn .= '</ul>';
                 endif;
@@ -390,6 +391,7 @@ class EnvioController extends Controller
     public function Enviospararepartotabla(Request $request)
     {
         $zona_aux = $request->zona;
+        //$buscador_global = $request->buscador_global;
         $lazona = '';
         switch ($zona_aux) {
             case 'NORTE':
@@ -406,14 +408,15 @@ class EnvioController extends Controller
         $pedidos_lima = DireccionGrupo::select([
             'direccion_grupos.*',
             'u.identificador as user_identificador',
-            'u.identificador as nombre_motorizado',
+            'um.identificador as nombre_motorizado',
             //DB::raw(" (select 'LIMA') as destino "),
             DB::raw('(select DATE_FORMAT( direccion_grupos.created_at, "%Y-%m-%d")   from direccion_grupos dpa where dpa.id=direccion_grupos.id) as fecha_formato'),
         ])
             //join('direccion_envios as de', 'direccion_grupos.id', 'de.direcciongrupo')
             ->join('clientes as c', 'c.id', 'direccion_grupos.cliente_id')
             //->join('users as u', 'u.id', 'c.user_id')
-            ->LeftJoin('users as u', 'u.id', 'direccion_grupos.motorizado_id')
+            ->LeftJoin('users as u', 'u.id', 'direccion_grupos.user_id')
+            ->LeftJoin('users as um', 'um.id', 'direccion_grupos.motorizado_id')
             ->where('direccion_grupos.condicion_envio_code', Pedido::REPARTO_COURIER_INT)
             ->whereIn('direccion_grupos.distribucion', $lazona)
             ->activo();
@@ -486,9 +489,7 @@ class EnvioController extends Controller
                         $html .= collect(explode(',', $pedido->observacion))
                             ->trim()
                             ->unique()
-                            ->map(fn($observacion) => '<a class="btn btn-icon p-0" target="_blank" href="' . \Storage::disk('pstorage')->url($observacion) . '">
-<i class="fa fa-file-pdf"></i>
-Ver Rotulo</a>')
+                            ->map(fn($observacion) => '<a class="btn btn-icon p-0" target="_blank" href="' . \Storage::disk('pstorage')->url($observacion) . '"><i class="fa fa-file-pdf"></i>Ver Rotulo</a>')
                             ->join('');
                     }
                     return $html;
@@ -521,6 +522,42 @@ Ver Rotulo</a>')
             ->rawColumns(['action', 'condicion_envio', 'referencia'])
             ->make(true);
 
+    }
+
+
+    public function downloadRotulosEnviosparareparto()
+    {
+        $rotulos = DireccionGrupo::where('direccion_grupos.condicion_envio_code', Pedido::REPARTO_COURIER_INT)
+            ->where('direccion_grupos.distribucion', 'OLVA')
+            ->activo()
+            ->get()
+            ->map(function ($grupo) {
+                if ($grupo->observacion) {
+                    return collect(explode(',', $grupo->observacion))
+                        ->trim()
+                        ->unique()
+                        ->filter(fn($path) => \Storage::disk('pstorage')->exists($path))
+                        ->map(fn($path) => \Storage::disk('pstorage')->path($path))
+                        ->first();
+                }
+                return null;
+            })
+            ->filter(fn($path) => $path!=null);
+
+        $combinador = new Merger();
+
+        foreach ($rotulos as $documento) {
+            return pdf_to_image($documento);
+            $combinador->addFile($documento);
+        }
+
+        $salida = $combinador->merge();
+        return response($salida,200,[
+            'Content-type'=>'application/pdf',
+            'Content-disposition'=>'inline; filename=rotulos.pdf',
+            'content-Transfer-Encoding'=>'binary',
+            'Accept-Ranges'=>'bytes',
+        ]);
     }
 
     public function Enviosenrepartotabla(Request $request)
@@ -1794,9 +1831,7 @@ Ver Rotulo</a>')
             $lista_productos = '';
             $lista_codigos = '';
             $pedidos = $request->pedidos;
-            $array_pedidos = collect(explode(",", $pedidos))->filter()->map(function ($id) {
-                return intval($id);
-            })->all();
+            $array_pedidos = collect(explode(",", $pedidos))->filter()->map(fn($id) => intval($id))->all();
 
             $data = DetallePedido::activo()->whereIn("pedido_id", $array_pedidos)->get();
             foreach ($data as $dat) {
@@ -2324,7 +2359,11 @@ Ver Rotulo</a>')
             join('clientes as c', 'c.id', 'direccion_grupos.cliente_id')
                 ->join('users as u', 'u.id', 'c.user_id')
                 ->where('direccion_grupos.estado', '1')
-                ->whereIn('direccion_grupos.condicion_envio_code', [Pedido::ENTREGADO_CLIENTE_INT, Pedido::ENTREGADO_SIN_SOBRE_OPE_INT, Pedido::ENTREGADO_SIN_SOBRE_CLIENTE_INT])
+                ->whereIn('direccion_grupos.condicion_envio_code', [
+                    Pedido::ENTREGADO_CLIENTE_INT,
+                    Pedido::ENTREGADO_SIN_SOBRE_OPE_INT,
+                    Pedido::ENTREGADO_SIN_SOBRE_CLIENTE_INT
+                ])
                 ->select(
                     'direccion_grupos.*',
                     DB::raw("DATE_FORMAT(direccion_grupos.fecha_recepcion, '%Y-%m-%d %H:%i:%s') as fechaentrega"),
@@ -2916,10 +2955,9 @@ Ver Rotulo</a>')
         return response()->json(['html' => $envio->id]);
     }
 
-    public
-    function confirmarEntregaSinEnvio(Request $request)
+    public function confirmarEntregaSinEnvio(Request $request)
     {
-        $pedido = Pedido::query()->findOrFail($request->hiddenCodigo);
+        $pedido = Pedido::query()->findOrFail($request->get('pedido_id', $request->get('hiddenCodigo')));
 
         $pedido->update([
             'condicion_envio' => Pedido::ENTREGADO_SIN_SOBRE_CLIENTE,
@@ -2928,8 +2966,25 @@ Ver Rotulo</a>')
             //'fecha_salida' => $request->fecha_salida
         ]);
 
+        $grupo = DireccionGrupo::createByPedido($pedido);
+        if ($request->hasFile('adjunto1')) {
+            $grupo->update([
+                'foto1' => $request->file('adjunto1')->store('entregados_sin_envio', 'pstorage'),
+            ]);
+        }
+        if ($request->hasFile('adjunto2')) {
+            $grupo->update([
+                'foto2' => $request->file('adjunto2')->store('entregados_sin_envio', 'pstorage'),
+            ]);
+        }
+        if ($request->hasFile('adjunto3')) {
+            $grupo->update([
+                'foto3' => $request->file('adjunto3')->store('entregados_sin_envio', 'pstorage'),
+            ]);
+        }
+
         PedidoMovimientoEstado::create([
-            'pedido' => $request->hiddenCodigo,
+            'pedido' => $pedido->id,
             'condicion_envio_code' => Pedido::ENTREGADO_SIN_SOBRE_CLIENTE_INT,
             'notificado' => 0
         ]);
@@ -3332,8 +3387,7 @@ Ver Rotulo</a>')
 
     }
 
-    public
-    function valida_direccionenvio(Request $request)
+    public function valida_direccionenvio(Request $request)
     {
         $element = $request->element;
         $value_ = $request->value;
@@ -3361,5 +3415,6 @@ Ver Rotulo</a>')
         }
 
     }
+
 
 }

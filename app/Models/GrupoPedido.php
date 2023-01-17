@@ -73,7 +73,10 @@ class GrupoPedido extends Model
                 return GrupoPedido::create(array_merge($data, $data2));
             }*/
         } else {
-            $distrito = Distrito::query()->where('distrito', '=', data_get($array, 'distrito'))->first();
+            $distrito = Distrito::query()
+                ->where('distrito', '=', data_get($array, 'distrito'))
+                ->whereIn('provincia',['LIMA','CALLAO'])
+                ->first();
             $data = [
                 "zona" => data_get($array, 'zona') ?? 'n/a',
                 "provincia" => optional($distrito)->provincia ?? data_get($array, 'provincia') ?? 'n/a',//LIMA
