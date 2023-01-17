@@ -971,13 +971,14 @@ class EnvioController extends Controller
         // SI EXISTE UNA FECHA
         if ($request->fechaconsulta != null) {
             try {
-                $fecha_consulta = Carbon::createFromFormat('d/m/Y', $request->fechaconsulta);
+                $fecha_consulta = Carbon::createFromFormat('Y-m-d', $request->fechaconsulta);
             } catch (\Exception $ex) {
-                $fecha_consulta = now();
+                $fecha_consulta = Carbon::now()->format('Y-m-d');
             }
         } else {
-            $fecha_consulta = now();
+            $fecha_consulta = Carbon::now()->format('Y-m-d');
         }
+        return $fecha_consulta;
 
         // SI SE ESPERA RESULTADOS PARA UNA TABLA
         if ($request->has('datatable')) {

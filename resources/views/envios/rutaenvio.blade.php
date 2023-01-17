@@ -24,10 +24,25 @@
             <tbody>
             <tr>
 
-                <td><p class="font-20 font-weight-bold">Buscar por fecha de salida:</p>
+                <td>
+                    <p class="font-20 font-weight-bold">Buscar por fecha de salida:</p>
                     <input type="date" value="{{$fecha_consulta->format('Y-m-d')}}" id="fecha_consulta"
                            name="fecha_consulta" class="form-control" autocomplete="off"></td>
-                <td></td>
+                <td>
+
+                </td>
+                <td>
+                    <p class="font-20 font-weight-bold">Buscar general:</p>
+                    <div class="input-group ">
+                        <input id="buscador_global" name="buscador_global" value=""
+                               type="text" class="form-control" autocomplete="off"
+                               placeholder="Ingrese su búsqueda" aria-label="Recipient's username" aria-describedby="basic-addon2">
+                        <div class="input-group-append">
+                            <button class="btn btn-success" id="btn_buscar" type="button">Buscar</button>
+                        </div>
+                    </div>
+
+                </td>
 
 
             </tr>
@@ -176,15 +191,24 @@
     <script>
         $(document).ready(function () {
 
-            $("#fecha_consulta").on('change', function () {
-                //var fecha_formateada = $(this).val().replaceAll('-', '/');
-                var fecha_format = $(this).val().split("-")
-                var fecha_formateada = fecha_format[2] + "/" + fecha_format[1] + "/" + fecha_format[0];
-                $(this).data('fecha', fecha_formateada);
-                console.log(fecha_formateada);
-                $('.tabla-data').DataTable().ajax.reload();
+            function applySearch(e) {
+                let valor=$("#buscador_global").val();
+                console.log("busqueda "+valor)
+                $('.table').DataTable().search( valor ).draw();
+            }
 
+            $("#buscador_global").bind('paste',function () {
+                setTimeout(applySearch,100)
             });
+            $('#buscador_global').change(applySearch);
+            $('#buscador_global').keyup(applySearch);
+
+            //$("#fecha_consulta").on('change', function () {
+                //var fecha_formateada = $(this).val().replaceAll('-', '/');
+                //$(this).data('fecha', fecha_formateada);
+                //console.log(fecha_formateada);
+                //$('.tabla-data').DataTable().ajax.reload();
+            //});
 
             const configDataTableZonas = {
                 serverSide: true,
@@ -246,8 +270,10 @@
                         "next": "Siguiente",
                         "previous": "Anterior"
                     }
-                },
+                }
             }
+
+            let contadores=[];
 
             @foreach($motorizados as $motorizado)
             $('#tablaPrincipal{{Str::upper($motorizado->zona)}}').DataTable({
@@ -255,15 +281,31 @@
                 ajax: {
                     url:"{{route('envios.rutaenviotabla',['datatable'=>'1'])}}",
                     data:function (a) {
-                        a.fechaconsulta = $("#fecha_consulta").data("fecha");
+                        a.fechaconsulta = $("#fecha_consulta").val();
                         a.tab=$("#myTab{{Str::slug($motorizado->zona)}} li>a.active").data('tab');
                         a.motorizado_id = {{ $motorizado->id }};
                         a.zona = "{{ Str::upper($motorizado->zona)}}";
                         a.vista = "envio_ruta";
                     }
                 },
+                "fnDrawCallback": function () {
+                    contadores.push({
+                        zona : "{{Str::upper($motorizado->zona)}}",
+                        Item : $("#tablaPrincipal{{Str::upper($motorizado->zona)}}").dataTable().fnSettings().fnRecordsDisplay()
+                    });
+                }
             });
             @endforeach
+
+            //console.log(contadores);
+            for( const arr of contadores ) {
+                //form.action += "&ws=true";
+                console.log("aaaa")
+                console.log(arr.Item);
+                console.log(arr.zona);
+            }
+
+
 
             @foreach($motorizados as $motorizado)
                 var tt= $("#myTab{{Str::upper($motorizado->zona)}}")[0];
