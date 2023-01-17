@@ -209,34 +209,24 @@
                     if (data.error == 1) {
                         $('#respuesta_barra').html('<span class="' + data.class + '">El Pedido ya se procesó anteriormente.</span>');
 
-                        let timerInterval
                         Swal.fire({
-                            title: 'Auto close alert!',
-                            html: 'I will close in <b></b> milliseconds.',
-                            timer: 2000,
-                            timerProgressBar: true,
-                            didOpen: () => {
-                                Swal.showLoading()
-                                const b = Swal.getHtmlContainer().querySelector('b')
-                                timerInterval = setInterval(() => {
-                                    b.textContent = Swal.getTimerLeft()
-                                }, 100)
-                            },
-                            willClose: () => {
-                                clearInterval(timerInterval)
-                            }
-                        }).then((result) => {
-                            /* Read more about handling dismissals below */
-                            if (result.dismiss === Swal.DismissReason.timer) {
-                                console.log('I was closed by the timer')
-                            }
+                            icon: 'warning',
+                            title: 'El Pedido ya se procesó anteriormente.',
+                            showConfirmButton: false,
+                            timer: 1000
                         })
 
                     } else if (data.error == 0) {
-
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Pedido identificado',
+                            showConfirmButton: false,
+                            timer: 1000
+                        })
                         codigos_agregados.push(data.codigo);
                         codigos_agregados = codigos_agregados.filter((v, i, a) => a.indexOf(v) === i)
                     }
+
                     $('#pedidos-procesados').html(`<p><b class="text-success w-100">codigos Escaneados (${codigos_agregados.length}):</b></p><ul>${codigos_agregados.map(function (codigo) {
                         return `<li><i class="fa fa-check text-success"></i> ${codigo}</li>`
                     }).join('')}</ul><br>`);
