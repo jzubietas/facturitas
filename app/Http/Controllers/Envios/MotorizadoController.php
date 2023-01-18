@@ -834,7 +834,7 @@ class MotorizadoController extends Controller
             ])
                 ->join('clientes as c', 'c.id', 'direccion_grupos.cliente_id')
                 ->join('users as u', 'u.id', 'c.user_id')
-                ->whereIn('direccion_grupos.condicion_envio_code', explode(",", $url_tabla))
+                ->whereIn('direccion_grupos.condicion_envio_code', explode(",", $request->vista))
                 ->whereDate('direccion_grupos.fecha_salida', $request->fechaconsulta)
                 ->where('direccion_grupos.motorizado_id', $request->motorizado_id)
                 ->where('direccion_grupos.distribucion', 'LIKE', '%' . $request->ZONA . '%')
