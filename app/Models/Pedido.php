@@ -74,10 +74,10 @@ class Pedido extends Model
     const RECEPCION_MOTORIZADO_INT = 18;
     const ENVIO_MOTORIZADO_COURIER_INT = 19; // 19
 
-    const ESTADO_MOTORIZADO_OBSERVADO=1;
-    const ESTADO_MOTORIZADO_NO_CONTESTO=2;
-    const ESTADO_MOTORIZADO_NO_RECIBIDO=3;
-    const ESTADO_MOTORIZADO_RE_RECIBIDO=4;
+    const ESTADO_MOTORIZADO_OBSERVADO = 1;
+    const ESTADO_MOTORIZADO_NO_CONTESTO = 2;
+    const ESTADO_MOTORIZADO_NO_RECIBIDO = 3;
+    const ESTADO_MOTORIZADO_RE_RECIBIDO = 4;
 
     /**************
      * FIN CONSTANTES CONDICION ENVIO NUMERICO
@@ -164,6 +164,14 @@ class Pedido extends Model
     public function direcciongrupo()
     {
         return $this->belongsTo(DireccionGrupo::class, 'direccion_grupo');
+    }
+
+    public function grupoPedidos()
+    {
+        return $this->belongsToMany(GrupoPedido::class, 'grupo_pedido_items')->withPivot([
+            'razon_social',
+            'codigo',
+        ])->orderByPivot('razon_social', 'asc');
     }
 
     public function getCondicionEnvioColorAttribute()
@@ -313,7 +321,8 @@ class Pedido extends Model
      * text: pedido.[pedido_id].adjuntos_file.[index]
      * text: pedido.[pedido_id].adjuntos_disk.[index]
      */
-    public static function getAnuladosAdjuntos(self $pedido){
+    public static function getAnuladosAdjuntos(self $pedido)
+    {
         return setting("pedido." . $pedido->id);
     }
 

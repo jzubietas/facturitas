@@ -43,13 +43,14 @@ class RegresarSobresRecepcionCourier extends Command
     public function handle()
     {
         $codigos = $this->option('codigos');
-        $table=[];
-        $codigosarray=[];
+        $table = [];
+        $codigosarray = [];
         if (!empty($codigos)) {
             $codigosarray = collect(explode(',', $codigos))->filter()->trim()->all();
             $pedidos = Pedido::query()->with('direcciongrupo')->activo()->whereIn('codigo', $codigosarray)->get();
             foreach ($pedidos as $pedido) {
-
+                $cond = $pedido->condicion_envio;
+                $exists = (int)in_array($pedido->codigo, $codigosarray);
                 if ($pedido->direcciongrupo != null) {
                     $pedido->update([
                         'direccion_grupo' => null
@@ -64,18 +65,23 @@ class RegresarSobresRecepcionCourier extends Command
                     'condicion_envio_at' => now(),
                 ]);
                 if ($pedido->estado_sobre) {
-                    GrupoPedido::createGroupByPedido($pedido,false,true);
+                    if($pedido->grupoPedidos()->exists()){
+                        \DB::table('grupo_pedido_items')->where('pedido_id','=',$pedido->id)->delete();
+                    }
+                    GrupoPedido::createGroupByPedido($pedido, false, true);
                 }
-                $table[]=[
+                $table[] = [
                     $pedido->codigo,
-                    ($pedido->direcciongrupo != null?'yes':'no'),
+                    ($pedido->direcciongrupo != null ? 'yes' : 'no'),
                     $pedido->estado_sobre,
+                    $cond,
                     $pedido->condicion_envio,
+                    $exists,
                 ];
             }
         }
-        $this->table(['codigos'],collect($codigosarray)->map(fn($c)=>[$c]));
-        $this->table(['codigo','grupo','con direccion','condicion'],$table);
+        $this->table(['codigos'], collect($codigosarray)->map(fn($c) => [$c]));
+        $this->table(['codigo', 'grupo', 'con direccion', 'condicion old', 'condicion new', 'encontrado'], $table);
         return 0;
     }
 }
