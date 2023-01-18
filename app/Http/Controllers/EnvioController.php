@@ -2692,15 +2692,12 @@ class EnvioController extends Controller
         /*************
          * RECUPERAMOS VARIABLES
          */
-
         //VARIABLES GLOBALES
         $responsable = $request->responsable;
         $accion = $request->accion;
         $codigo = $request->codigo;
         $tipo = $request->tipo; // PEDIDO O PAQUETE
-
         $codigos = $request->codigos;
-
         $codigos_procesados = array();
         $codigos_no_procesados = array();
         $respuesta = "";
@@ -2921,6 +2918,11 @@ class EnvioController extends Controller
                         break;
 
                     case "sobres_reparto":
+
+                        $pedido->update([
+                            'pedido_scaneo'=>1
+                        ]);
+
                         /*
                         $envio = $pedido->direccionGrupo;
                         $envio->update([
@@ -2998,9 +3000,7 @@ class EnvioController extends Controller
             $color = $pedido->condicion_envio_color;
 
             if($pedido -> condicion_envio_code == Pedido::ENVIO_MOTORIZADO_COURIER_INT){
-
                 return response()->json(['html' => 'El pedido <b style="">'.$codigo.'</b> ya ah sido procesado anteriormente, su estado actual es <br><span class="br-4 mt-16" style="background-color:'. $color .'; padding: 2px 12px; color: black; font-weight: bold;">' . Pedido::$estadosCondicionEnvioCode[$nuevo_estado] . '</span>', 'class' => "text-danger", 'codigo' => $codigo,'error'=>4, 'msj_error' => Pedido::$estadosCondicionEnvioCode[$nuevo_estado]]);
-
             }
 
             if($Direccion_grupo -> condicion_envio_code == Pedido::ENVIO_MOTORIZADO_COURIER_INT){
@@ -3012,15 +3012,6 @@ class EnvioController extends Controller
                 ->map(fn($cod) => trim($cod))
                 ->filter()->values();
 
-            $pedido->update([
-                'modificador' => 'USER' . Auth::user()->id,
-                'fecha_envio_op_courier' => Carbon::now(),
-                'condicion_envio' => Pedido::ENVIO_MOTORIZADO_COURIER,
-                'condicion_envio_code' => Pedido::ENVIO_MOTORIZADO_COURIER_INT,
-                'condicion_envio_at' => now(),
-                'pedido_scaneo' => 1
-            ]);
-
             /*************
              * SACAMOS LA CANTIDAD DE SOBRES YA RECIBIDOS DE ESTE PAQUETE
              */
@@ -3029,20 +3020,11 @@ class EnvioController extends Controller
                 ->count();
 
             $sobres_restantes = $codigos_paquete->count() - $sobres_ya_recibidos;
-
-
-
             $clase_confirmado = "";
+
+
             if($sobres_restantes == 0){
-
-                $Direccion_grupo->update([
-                    'condicion_envio' => Pedido::ENVIO_MOTORIZADO_COURIER,
-                    'condicion_envio_code' => Pedido::ENVIO_MOTORIZADO_COURIER_INT,
-                    'condicion_envio_at' => now(),
-                    'fecha_salida' => $request->fecha_salida,
-                    'cambio_direccion_at' => null,
-                ]);
-
+                DireccionGrupo::cambiarCondicionEnvio($Direccion_grupo, Pedido::ENVIO_MOTORIZADO_COURIER_INT);
                 $clase_confirmado = "text-success";
             }
 
