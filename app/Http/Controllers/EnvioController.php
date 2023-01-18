@@ -1586,7 +1586,7 @@ class EnvioController extends Controller
                 }
 
             } else {
-                DireccionGrupo::cambiarCondicionEnvio(
+                $grupo = DireccionGrupo::cambiarCondicionEnvio(
                     $grupo,
                     Pedido::RECEPCION_MOTORIZADO_INT,
                     [
@@ -1594,6 +1594,10 @@ class EnvioController extends Controller
                     ]
                 );
             }
+
+            $grupo->update([
+                'codigos_confirmados' => $grupo->codigos
+            ]);
             PedidoMovimientoEstado::create([
                 'pedido' => $request->hiddenEnvio,
                 'condicion_envio_code' => Pedido::RECEPCION_MOTORIZADO_INT,
@@ -3014,7 +3018,7 @@ class EnvioController extends Controller
     public function confirmarEstadoRevert(Request $request)
     {
         $envio = DireccionGrupo::where("id", $request->envio_id)->first();
-        DireccionGrupo::cambiarCondicionEnvio($envio,Pedido::RECEPCION_MOTORIZADO_INT,[
+        DireccionGrupo::cambiarCondicionEnvio($envio, Pedido::RECEPCION_MOTORIZADO_INT, [
             'foto1' => '',
             'foto2' => '',
         ]);
