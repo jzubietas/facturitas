@@ -350,6 +350,7 @@ class DireccionGrupo extends Model
             'distrito' => $pedido->env_distrito,
             'referencia' => $pedido->env_referencia,//nro registro
             'observacion' => $pedido->env_observacion,//rotulo
+            'gmlink' => $pedido->env_gmlink,
             'motorizado_id' => 0,
             'identificador' => $pedido->cliente->user->identificador,
         ];

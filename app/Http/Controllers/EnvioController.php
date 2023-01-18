@@ -1870,6 +1870,7 @@ class EnvioController extends Controller
                     'nombre' => $request->nombre,
                     'celular' => $request->contacto,
                     'observacion' => $request->observacion,
+                    'gmlink' => $request->gmlink,
                     //'direcciongrupo' => $direccion_grupo_id,
                     'cantidad' => $cantidad,
                     'destino' => $request->destino,
@@ -1915,6 +1916,7 @@ class EnvioController extends Controller
                         'env_numregistro' => '',
                         'env_rotulo' => '',
                         'env_observacion' => $request->observacion,
+                        'env_gmlink' => $request->gmlink,
                         'env_importe' => '',
                     ]);
                     $dp_empresa = DetallePedido::activo()->where("pedido_id", $pedido_id)->first();
@@ -2134,15 +2136,10 @@ class EnvioController extends Controller
             'pedido_id' => $request->hiddenSinenvio
         ]);
 
-        /**/
-        $cliente = Cliente::where("id", $pedido->cliente_id)->first();
-
-        $data = DetallePedido::where("pedido_id", $request->hiddenSinenvio)->first();
-
         $direccion_grupo_id = DireccionGrupo::create([
             'estado' => '1',
             'destino' => 'LIMA',
-            'distribucion' => '',
+            'distribucion' => $pedido->env_zona,
 
             'condicion_envio' => Pedido::ENTREGADO_SIN_SOBRE_OPE,
             'condicion_envio_code' => Pedido::ENTREGADO_SIN_SOBRE_OPE_INT,
@@ -2153,33 +2150,11 @@ class EnvioController extends Controller
             'producto' => $data->nombre_empresa,
         ])->id;
 
-        $direccion_grupo = DireccionGrupo::find($direccion_grupo_id);
-        $direccion_grupo->correlativo = 'ENV' . $direccion_grupo_id;
-        $direccion_grupo->save();
-
-        $direccionLima = DireccionEnvio::create([
-            'cliente_id' => $pedido->cliente_id,
-            'distrito' => 'LIMA',
-            'direccion' => '',
-            'referencia' => '',
-            'nombre' => $cliente->nombre,
-            'celular' => $cliente->celular,
-            'observacion' => '',
-            'direcciongrupo' => $direccion_grupo_id,
-            'cantidad' => 1,
-            'destino' => 'LIMA',
-            'estado' => '1',
-            "salvado" => "0"
-        ]);
-
-
-        $direccionPedido = DireccionPedido::create([
-            'direccion_id' => $direccionLima->id,
-            'pedido_id' => $pedido->id,
-            'codigo_pedido' => $detalle_pedidos->codigo,
-            'direcciongrupo' => $direccion_grupo_id,
-            'empresa' => $detalle_pedidos->nombre_empresa,
-            'estado' => '1'
+        $pedido->update([
+            'direccion_grupo'=>$direccion_grupo_id,
+            'condicion_envio' => Pedido::ENTREGADO_SIN_SOBRE_OPE,
+            'condicion_envio_code' => Pedido::ENTREGADO_SIN_SOBRE_OPE_INT,
+            'condicion_envio_at' => now(),
         ]);
 
         return response()->json(['html' => $pedido->id]);
