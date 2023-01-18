@@ -2918,6 +2918,11 @@ class EnvioController extends Controller
                         break;
 
                     case "sobres_reparto":
+
+                        $pedido->update([
+                            'pedido_scaneo'=>1
+                        ]);
+
                         /*
                         $envio = $pedido->direccionGrupo;
                         $envio->update([
@@ -2995,9 +3000,7 @@ class EnvioController extends Controller
             $color = $pedido->condicion_envio_color;
 
             if($pedido -> condicion_envio_code == Pedido::ENVIO_MOTORIZADO_COURIER_INT){
-
                 return response()->json(['html' => 'El pedido <b style="">'.$codigo.'</b> ya ah sido procesado anteriormente, su estado actual es <br><span class="br-4 mt-16" style="background-color:'. $color .'; padding: 2px 12px; color: black; font-weight: bold;">' . Pedido::$estadosCondicionEnvioCode[$nuevo_estado] . '</span>', 'class' => "text-danger", 'codigo' => $codigo,'error'=>4, 'msj_error' => Pedido::$estadosCondicionEnvioCode[$nuevo_estado]]);
-
             }
 
             if($Direccion_grupo -> condicion_envio_code == Pedido::ENVIO_MOTORIZADO_COURIER_INT){
@@ -3009,8 +3012,6 @@ class EnvioController extends Controller
                 ->map(fn($cod) => trim($cod))
                 ->filter()->values();
 
-
-
             /*************
              * SACAMOS LA CANTIDAD DE SOBRES YA RECIBIDOS DE ESTE PAQUETE
              */
@@ -3019,10 +3020,9 @@ class EnvioController extends Controller
                 ->count();
 
             $sobres_restantes = $codigos_paquete->count() - $sobres_ya_recibidos;
-
-
-
             $clase_confirmado = "";
+
+
             if($sobres_restantes == 0){
                 DireccionGrupo::cambiarCondicionEnvio($Direccion_grupo, Pedido::ENVIO_MOTORIZADO_COURIER_INT);
                 $clase_confirmado = "text-success";
