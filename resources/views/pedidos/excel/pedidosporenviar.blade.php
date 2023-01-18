@@ -34,7 +34,7 @@
     @foreach ($pedidosLima as $pedido)
       <tr>
         <td>{{ $cont + 1 }}</td>
-        <td>{{ $pedido->id_asesor }}</td>
+        <td>{{ $pedido->identificador_asesor }}</td>
         <td>{{ $pedido->nombre_asesor }}</td>
         <td>{{ $pedido->codigo }}</td>
         <td>{{ $pedido->fecha_registro }}</td>
