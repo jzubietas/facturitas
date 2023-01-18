@@ -78,7 +78,6 @@
 @section('css')
     <link rel="stylesheet" href="/css/admin_custom.css">
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.0.943/pdf_viewer.css">
-
     <style>
 
         .bootstrap-select.btn-group .btn .filter-option {
@@ -142,10 +141,10 @@
     </style>
     <style>
         /*#canvas_container {
-                width: 200px !important;
-                height: 400px !important;
-                overflow: auto;
-            }*/
+        width: 200px !important;
+        height: 400px !important;
+        overflow: auto;
+        }*/
         /* #canvas_container {
              background: #333;
              text-align: center;
@@ -703,6 +702,7 @@
                 let val_distrito = $("#distrito").val();
                 console.log(val_distrito)
                 let val_observacion = $("#observacion").val();
+                let val_gmlink = $("#gmlink").val();
                 let saveHistoricoLima = ($('#saveHistoricoLima').is(':checked')) ? '1' : '0';
                 let saveHistoricoProvincia = ($('#saveHistoricoProvincia').is(':checked')) ? '1' : '0';
 
@@ -836,6 +836,7 @@
                         fd2.append('referencia', val_referencia);
                         fd2.append('distrito', val_distrito);
                         fd2.append('observacion', val_observacion);
+                        fd2.append('gmlink', val_gmlink);
 
                         fd2.append('saveHistoricoLima', saveHistoricoLima);
                     }

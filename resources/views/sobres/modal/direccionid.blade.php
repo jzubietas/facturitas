@@ -35,10 +35,7 @@
                                     <tbody>
                                     </tbody>
                                 </table>
-
-
                             </div>
-
                         </div>
                         <div class="col-4 contenedor-formulario"><!--formulario-->
                             <div class="row">
@@ -123,6 +120,11 @@
                                                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                                     {!! Form::label('observacion', 'Observacion') !!}
                                                     {!! Form::text('observacion', null, ['class' => 'form-control', 'placeholder' => 'Observacion', 'required' => 'required','autocomplete' => 'off']) !!}
+                                                </div>
+
+                                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                    {!! Form::label('gmlink', 'Link Google Map') !!}
+                                                    {!! Form::text('gmlink', null, ['class' => 'form-control', 'placeholder' => 'Ejem: https://goo.gl/maps/*********', 'required' => 'required','autocomplete' => 'off']) !!}
                                                 </div>
 
                                                 {{--<button type="button" id="saveHistoricoLima" class="btn btn-danger btn-md"><i class="fa"></i>GRABA HISTORICO</button>--}}

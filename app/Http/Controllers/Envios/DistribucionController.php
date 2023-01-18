@@ -290,6 +290,7 @@ class DistribucionController extends Controller
 
                     'nombre' => $firstProduct->env_nombre_cliente_recibe,
                     'celular' => $firstProduct->env_celular_cliente_recibe,
+                    'gmlink' => $firstProduct->env_gmlink,
 
                     'nombre_cliente' => $cliente->nombre,
                     'celular_cliente' => $cliente->celular,
