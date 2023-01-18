@@ -108,7 +108,6 @@
                                            class="tabla-data table table-striped dt-responsive w-100">
                                         <thead>
                                         <tr>
-                                            <!--<th scope="col">Item</th>-->
                                             <th scope="col">Código</th>
                                             <th scope="col">Teléfono</th>
                                             <th scope="col">Zona</th>
