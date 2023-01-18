@@ -188,12 +188,12 @@
 
                                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 mt-20">
                                             {!! Form::label('numregistro', 'Numero de Registro') !!}
-                                            {!! Form::text('numregistro', null, ['class' => 'form-control', 'placeholder' => 'Número de registro', 'required' => 'required','maxlength' => 12]) !!}
+                                            {!! Form::text('numregistro', null, ['class' => 'form-control', 'placeholder' => 'Número de registro', 'required' => 'required','maxlength' => 12,'pattern'=>'\d*']) !!}
                                         </div>
 
                                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                             {!! Form::label('tracking', 'Tracking') !!}
-                                            {!! Form::text('tracking', null, ['class' => 'form-control', 'placeholder' => 'Tracking', 'required' => 'required','maxlength' => 12]) !!}
+                                            {!! Form::text('tracking', null, ['class' => 'form-control', 'placeholder' => 'Tracking', 'required' => 'required','maxlength' => 12,'pattern'=>'\d*']) !!}
                                         </div>
 
                                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">

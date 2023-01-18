@@ -1958,13 +1958,13 @@ class EnvioController extends Controller
                         'html' => "El Nro de tracking '$request->tracking' ya se encuentra registrado en otro pedido ($pexists->codigo)",
                     ]);
                 }
-                if($request->numregistro==intval($request->numregistro)){
+                if($request->numregistro!=intval($request->numregistro)){
                     return response()->json([
                         'success' => false,
-                        'html' => "El Nro de tracking $request->numregistro contine caracteres no permitidos, corrija porfavor",
+                        'html' => "El Nro de registro $request->numregistro contine caracteres no permitidos, corrija porfavor, ".intval($request->numregistro),
                     ]);
                 }
-                if($request->tracking==intval($request->tracking)){
+                if($request->tracking!=intval($request->tracking)){
                     return response()->json([
                         'success' => false,
                         'html' => "El Nro de tracking $request->tracking contine caracteres no permitidos, corrija porfavor",

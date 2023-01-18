@@ -484,7 +484,15 @@
             $(document).on('change keyup', "#tracking, #numregistro", function (event) {
 
                 let id_element = event.target.id;
-                console.log("aaaa")
+                if(isNaN(parseInt(event.target.value))||parseInt(event.target.value)!=event.target.value){
+                    Swal.fire(
+                        'Error',
+                        `El codigo ${event.target.value} no tiene el formato correcto, se va a limpiar el campo`,
+                        'warning'
+                    )
+                    event.target.value=''
+                    return false
+                }
                 let val_element = $(this).val();
                 switch (id_element) {
                     case 'tracking':
