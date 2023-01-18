@@ -107,7 +107,7 @@ class PagerecepcionMotorizado extends Export implements WithColumnFormatting, Fr
     public function map($model): array
     {
         //$model->Periodo=strval(str_pad($model->Periodo,2,"0"));
-        $model->codigos=implode(explode(',',$model->codigos),'<br>');
+        $model->codigos=implode('<br>',explode(',',$model->codigos));
         $model->producto=explode(',',$model->producto);
         $ae=[];
         for($i=1;$i<count($model->producto);$i++)
