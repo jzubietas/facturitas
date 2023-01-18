@@ -114,7 +114,7 @@ class PagerecepcionMotorizado extends Export implements WithColumnFormatting, Fr
         {
             array_push($ae,$i.") ".$model->producto[$i]);
         }
-        $model->producto=implode($ae,'<br>');
+        $model->producto=implode('<br>',$ae);
 
         //$model->producto=implode(explode(',',$model->producto),'<br>');
         return parent::map($model);
