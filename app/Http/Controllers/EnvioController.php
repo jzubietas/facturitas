@@ -2514,8 +2514,13 @@ class EnvioController extends Controller
 
         $pedido = Pedido::where("codigo", $codigo)->first();
 
+
         if($pedido == null){
             return response()->json(['html' => "Este pedido No se encuentra en el sistema", 'class' => "text-danger", 'codigo' => 0,'error'=>4, 'msj_error' => 0]);
+        }
+
+        if($pedido->estado == 1 and $pedido->pendiente_anulacion == 1){
+            return response()->json(['html' => "Este pedido se encuentra pendiente de anulación", 'class' => "text-danger", 'codigo' => 0,'error'=>5, 'msj_error' => 0]);
         }
 
         if($pedido->estado == 0){
