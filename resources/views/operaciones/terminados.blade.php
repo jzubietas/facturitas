@@ -73,6 +73,7 @@
 
             @include('pedidos.modal.revertirid');
             @include('operaciones.modal.revertirajefeop')
+            @include('operaciones.modal.CorreccionAtencion')
         </div>
     </div>
 @stop
@@ -148,6 +149,83 @@
                 $(".textcode").html("PED" + idunico);
                 $("#hiddenEnvio").val(idunico);
 
+            });
+
+            $('#modal-correccion-op').on('show.bs.modal', function (event) {
+                //cuando abre el form de anular pedido
+                var button = $(event.relatedTarget)
+                var idunico = button.data('correccion')
+                var confirmo_descarga = button.data('adj')
+
+                $(".textcode").html("PED" + idunico);
+                $("#correccion").val(idunico);
+                $('#conf_descarga').val(confirmo_descarga);
+
+                /*if (confirmo_descarga == 1) {*/
+                    $('#sustento_adjunto').css({'display': 'block'});
+                /*} else {
+                    $('#sustento_adjunto').css({'display': 'none'});
+                }*/
+                $.ajax({
+                    type: 'POST',
+                    url: "{{ route('operaciones.datossubidaadj',':id') }}".replace(':id', idunico),
+                    data: idunico,
+                    success: function (data) {
+                        console.log(data);
+                        console.log(data.pedidos[0]['cant_compro']);
+
+                        $('#cant_compro').val(data.pedidos[0]['cant_compro']);
+                        $('#fecha_envio_doc').val(data.pedidos[0]['fecha_envio_doc']);
+
+                    }
+                }).done(function (data) {
+                });
+                $.ajax({
+                    url: "{{ route('operaciones.editatencion',':id') }}".replace(':id', idunico),
+                    data: idunico,
+                    method: 'POST',
+                    success: function (data) {
+                        console.log(data)
+                        console.log("obtuve las imagenes atencion del pedido " + idunico)
+                        $('#listado_adjuntos').html("");
+                        $('#listado_adjuntos_antes').html(data);
+                        console.log(data);
+                    }
+                });
+
+
+            });
+
+            $('#modal-delete-adjunto').on('show.bs.modal', function (event) {
+                //cuando abre el form de anular pedido
+                var button = $(event.relatedTarget)
+                var img_pedidoid = button.data('imgid')
+                var imgadjunto = button.data('imgadjunto')
+                var imgadjuntoconfirm = button.data('imgadjuntoconfirm')
+                $(".textcode").html("PED" + img_pedidoid);
+                $("#eliminar_pedido_id").val(img_pedidoid);
+                $("#eliminar_pedido_id_imagen").val(imgadjunto);
+                $("#eliminar_pedido_id_confirmado").val(imgadjuntoconfirm);
+            });
+
+            $(document).on("click", "#cerrarmodalatender", function (evento) {
+                evento.preventDefault();
+                console.log("no atender")
+                var fd = new FormData();
+                fd.append('correccion', $("#correccion").val());
+                $.ajax({
+                    data: fd,
+                    processData: false,
+                    contentType: false,
+                    type: 'POST',
+                    url: "{{ route('operaciones.atenderiddismiss') }}",
+                    success: function (data) {
+                        console.log(data);
+                        $("#modal-editar-atencion .textcode").text('');
+                        $("#modal-editar-atencion").modal("hide");
+                        $('#tablaPrincipal').DataTable().ajax.reload();
+                    }
+                });
             });
 
             $(document).on("submit", "#formulario_atender_op", function (evento) {
