@@ -6,7 +6,7 @@
         .footer {
             width: 100%;
             text-align: center;
-            position: absolute;
+            /*position: absolute;*/
         }
 
         .header {
@@ -22,13 +22,13 @@
         }
 
         .page {
-            position: relative;
-            height: 27cm;
+            /*position: relative;*/
+            height: 20cm;
         }
 
         @page {
-            size: 21cm 29.7cm;
-            margin: 7mm 7mm 7mm 7mm;
+            size: 29.7cm 21cm ;
+            margin: 1mm 1mm 4mm 10mm;
             /* change the margins as you want them to be. */
         }
     </style>
@@ -36,39 +36,32 @@
 <body onload="window.print()">
 @foreach($rotulos as $rotulo)
     <div class="page" style="@if($loop->index==1)
-page-break-before: always;
 page-break-after: always;
     @elseif($loop->index>1 && $loop->index<count($rotulos)-1)
     page-break-after: always;
 @endif">
         <table style="width: 100%">
             <tr>
-                <td style="width: 50%;">
-
-                </td>
-                <td style="width: 50%;">
-
-                    <table style="width: 100%">
-                        <tr>
-                        @foreach(collect($rotulo['codigos'])->reverse()->chunk(2)->reverse() as $grupos)
-
-                                <td style="text-align: right;">
-                                    @foreach($grupos as $item)
-                                        <b>{{$item}}</b><br>
-                                    @endforeach
-                                </td>
-                        @endforeach
-                        </tr>
-                    </table>
-                </td>
-            </tr>
-            <tr>
                 <td colspan="2">
                     <img src="{{$rotulo['file']}}">
                 </td>
+                <td>
+
+                    <table style="width: 100%;padding-right: 15mm">
+                        @foreach(collect($rotulo['codigos'])->reverse()->chunk(2)->reverse() as $grupos)
+                            <tr>
+                                @foreach($grupos as $item)
+                                    <td style="text-align: right;">
+                                        <b>{{$item}}</b><br>
+                                    </td>
+                                @endforeach
+                            </tr>
+                        @endforeach
+                    </table>
+                </td>
             </tr>
         </table>
-        <div class="footer" style="text-align: left">
+        <div class="footer" style="text-align: left; padding-left: 8mm">
             @foreach($rotulo['producto'] as $grupos)
                 <h3>{{$grupos}}</h3>
             @endforeach

@@ -1030,7 +1030,7 @@ class EnvioController extends Controller
         if ($request->has('html')) {
             return view('rotulospdf', compact('rotulos'));
         }
-        $pdf = PDF::loadView('rotulospdf', compact('rotulos'));
+        $pdf = PDF::loadView('rotulospdf', compact('rotulos'))->setPaper('a4', 'portrait');
         return $pdf->stream('resume.pdf');
     }
 
