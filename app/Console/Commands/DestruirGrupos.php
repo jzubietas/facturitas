@@ -56,7 +56,6 @@ class DestruirGrupos extends Command
         $this->progress = $this->output->createProgressBar($query->count());
         $query->chunk(1000, function ($direcciongrupos) {
             foreach ($direcciongrupos as $grupo) {
-
                 DireccionGrupo::restructurarCodigos($grupo);
                 $this->progress->advance();
             }
