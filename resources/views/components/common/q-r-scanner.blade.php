@@ -73,7 +73,7 @@
                             id="titulo-scan">Escanear {{$moduleTitle}}</span></h5>
                     <div id="option-modal-extra">
                         @if($withFecha)
-                            Seleccione una fecha para el escaneo:
+                            Seleccione una fecha de ruta:
                             <input id="fecha_escaneo" type="date"
                                    class="form-control">
                         @endif
@@ -115,8 +115,15 @@
 
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-success" id="close-scan">Aceptar</button>
-                    <button class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+                    <div class="row">
+                        <div class="col-lg-6">
+
+                        </div>
+                        <div class="col-lg-6">
+                            <button class="btn btn-success" id="close-scan">Aceptar</button>
+                            <button class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -133,6 +140,16 @@
             $('#titulo-scan').html("Escanear para confirmar - <span class='text-success'>{{$moduleTitle}}</span>");
             $('#pedidos-procesados').html('')
             $('#respuesta_barra').html('');
+
+            $('#modo_fast').on('change', function(){
+                if($(this).is(':checked')){
+                    console.log("desaparece aceptar");
+                    $('#close-scan').fadeOut();
+                }else{
+                    console.log("aparece aceptar");
+                    $('#close-scan').fadeIn();
+                }
+            });
             /*
             $('#modal-escanear').on('click', function () {
                 console.log("focus");
@@ -167,7 +184,9 @@
                 data.fecha_salida = $('#fecha_escaneo').val()
             @endif
 
-             if($('#modo_fast').prop("checked", true)){
+             if($('#modo_fast').is(':checked')){
+
+
                 console.log("Modo fast activado");
 
                 @if($withFecha)

@@ -2538,11 +2538,11 @@ class EnvioController extends Controller
         $responsable = $request->responsable;
         $accion = $request->accion;
         $codigo = $request->codigo;
-
-        //BUSCAMOS EL PEDIDO
-
         $pedido = Pedido::where("codigo", $codigo)->first();
 
+        /************
+         * VALIDACIONES GENERALES
+         */
 
         if ($pedido == null) {
             return response()->json(['html' => "Este pedido No se encuentra en el sistema", 'class' => "text-danger", 'codigo' => 0, 'error' => 4, 'msj_error' => 0]);
@@ -2555,6 +2555,7 @@ class EnvioController extends Controller
         if ($pedido->estado == 0) {
             return response()->json(['html' => "Este pedido Se encuentra actualmente anulado", 'class' => "text-danger", 'codigo' => 0, 'error' => 5, 'msj_error' => 0]);
         }
+        // FIN VALIDACIONES GENERALES
 
         $condicion_code_actual = $pedido->condicion_envio_code;
         $color = $pedido->condicion_envio_color;
@@ -2565,13 +2566,6 @@ class EnvioController extends Controller
          */
         $respuesta = "";
         $nuevo_estado = $condicion_code_actual;
-        /*
-        if ($pedido == null) {
-            return response()->json([
-                'success' => true
-            ]);
-        } */
-
         // SI SON SOBRES DEVUELTOS
         if ($accion == "sobres_devuelto") {
             $condicion_code_actual = 100;
@@ -2589,9 +2583,7 @@ class EnvioController extends Controller
         /*************
          * SETEAMOS EL NUEVO ESTADO Y EL MENSAJE DE CONFIRMACION
          */
-
         switch ($responsable) {
-
             // FERNANDEZ RECEPCIONA LOS SOBRES
             case "fernandez_recepcion":
 
@@ -2645,46 +2637,15 @@ class EnvioController extends Controller
                 }
                 break;
         }
+
         /***************
          * COMPROBAMOS SI YA ESTA ATENDIDO EL PEDIDO
          */
         if ($pedido->condicion_envio_code == $nuevo_estado) {
             return response()->json(['html' => 'El pedido <b style="">' . $codigo . '</b> ya ah sido procesado anteriormente, su estado actual es <br><span class="br-4 mt-16" style="background-color:' . $color . '; padding: 2px 12px; color: black; font-weight: bold;">' . Pedido::$estadosCondicionEnvioCode[$nuevo_estado] . '</span>', 'class' => "text-danger", 'codigo' => $codigo, 'error' => 1, 'msj_error' => Pedido::$estadosCondicionEnvioCode[$nuevo_estado]]);
         } else {
-
-
-            if ($grupo != "") {
-                $Direccion_grupo = DireccionGrupo::where('id', $grupo)->first();
-                //dd($Direccion_grupo->codigos);
-                $codigos_paquete = collect(explode(",", $Direccion_grupo->codigos))
-                    ->map(fn($cod) => trim($cod))
-                    ->filter()->values();
-
-                /*************
-                 * SACAMOS LA CANTIDAD DE SOBRES YA RECIBIDOS DE ESTE PAQUETE
-                 */
-                $sobres_ya_recibidos = Pedido::where('condicion_envio_code', Pedido::ENVIO_MOTORIZADO_COURIER_INT)
-                    ->whereIn('codigo', $codigos_paquete)
-                    ->count();
-
-                $sobres_restantes = $codigos_paquete->count() - $sobres_ya_recibidos;
-
-                $clase_confirmado = "";
-                if ($sobres_restantes == 0) {
-                    $clase_confirmado = "text-success";
-                }
-
-
-                return response()->json(['html' => "Escaneado Correctamente", 'class' => "text-success", 'codigo' => $codigo, 'error' => 3, 'zona' => $Direccion_grupo->distribucion, 'cantidad' => $codigos_paquete->count(), 'cantidad_recibida' => $sobres_ya_recibidos, 'clase_confirmada' => $clase_confirmado]);
-            }
             return response()->json(['html' => "Escaneado Correctamente", 'class' => "text-success", 'codigo' => $codigo, 'error' => 0]);
         }
-        /*
-        return response()->json([
-            'success' => $pedido->condicion_envio_code == $nuevo_estado
-        ]);
-        */
-
     }
 
     public function ConfirmarOPBarra(Request $request)
@@ -2702,22 +2663,17 @@ class EnvioController extends Controller
         $codigos_no_procesados = array();
         $respuesta = "";
 
-        $fecha_salida = $request->fecha_salida;
-
         /*************
          * IDENTIFICAMOS LOS DATOS GLOBALES
          */
         $pedido = Pedido::where("codigo", $codigo)->first();
-
-
-
         if ($pedido == null) {
             $codigos_no_procesados[] = $codigo;
-
         }
 
-        //dd($pedido);
-
+        /**************
+         * VALIDACIONES GLOBALES
+         */
         if($pedido == null){
             return response()->json(['html' => "Este pedido No se encuentra en el sistema", 'class' => "text-danger", 'codigo' => 0,'error'=>4, 'msj_error' => 0]);
         }
@@ -2730,38 +2686,41 @@ class EnvioController extends Controller
             return response()->json(['html' => "Este pedido Se encuentra actualmente anulado", 'class' => "text-danger", 'codigo' => 0,'error'=>5, 'msj_error' => 0]);
         }
 
-        /*************
-         * SOBRES PARA REPARTO
-         */
+        $condicion_code_actual = $pedido->condicion_envio_code;
+
+        /***************************************************************************************
+         * SOBRES PARA REPARTO - PARTE 1
+         ***************************************************************************************/
+
+        // SI ES QUE ENVIAN UNA FECHA DE SALIDA
+        if(isset($request->fecha_salida)){
+            $fecha_salida = $request->fecha_salida;
+        }else{
+            $fecha_salida = "";
+        }
 
         if($responsable == "fernandez_reparto"){
             $color = $pedido->condicion_envio_color;
             if($pedido -> condicion_envio_code == Pedido::ENVIO_MOTORIZADO_COURIER_INT){
-
-                //return response()->json(['html' => 'El pedido <b style="">'.$codigo.'</b> ya ah sido procesado anteriormente, su estado actual es <br><span class="br-4 mt-16" style="background-color:'. $color .'; padding: 2px 12px; color: black; font-weight: bold;">' . Pedido::$estadosCondicionEnvioCode[$nuevo_estado] . '</span>', 'class' => "text-danger", 'codigo' => $codigo,'error'=>4, 'msj_error' => Pedido::$estadosCondicionEnvioCode[$nuevo_estado]]);
-                return response()->json(['html' => 'El pedido <b style="">'.$codigo.'</b> ya ah sido procesado anteriormente', 'class' => "text-danger", 'codigo' => $codigo,'error'=>4]);
-
+                return response()->json(['html' => 'El pedido <b style="">'.$codigo.'</b> ya ah sido procesado anteriormente, su estado actual es <br><span class="br-4 mt-16" style="background-color:'. $color .'; padding: 2px 12px; color: black; font-weight: bold;">' . Pedido::$estadosCondicionEnvioCode[$condicion_code_actual] . '</span>', 'class' => "text-danger", 'codigo' => $codigo,'error'=>4, 'msj_error' => Pedido::$estadosCondicionEnvioCode[$condicion_code_actual]]);
             }
         }
 
+        /***************************************************************************************
+         * SOBRES PARA REPARTO - FIN PARTE 1
+         ***************************************************************************************/
 
+        // VALIDACIONES PARA LA DIRECCION GRUPO
         $grupo = $pedido->direccion_grupo;
-
 
         if($grupo == null){
             return response()->json(['html' => "Este pedido No cuenta con una dirección", 'class' => "text-danger", 'codigo' => 0,'error'=>4, 'Estado_actual' => $pedido -> condicion_envio_code, 'msj_error' => 0]);
         }
 
-        $condicion_code_actual = $pedido->condicion_envio_code;
-
         /************
          * SETEAMOS VALORES POR DEFECTO
          */
         $nuevo_estado = $condicion_code_actual;
-
-
-
-
 
         foreach ($codigos as $codigo) {
 
@@ -2850,14 +2809,12 @@ class EnvioController extends Controller
              * COMPROBAMOS SI YA ESTA ATENDIDO EL PEDIDO
              */
             if ($pedido->condicion_envio_code == $nuevo_estado) {
-                //return response()->json(['html' => "Este pedido ya ah sido procesado anteriormente", 'class' => "text-danger", 'codigo' => 0]);
+                return response()->json(['html' => "Este pedido ya ah sido procesado anteriormente", 'class' => "text-danger", 'codigo' => 0]);
                 $codigos_no_procesados[] = $codigo;
-
             } else {
                 switch ($accion) {
 
                     case "recepcionar_sobres":
-
                         $pedido->update([
                             'fecha_recepcion_courier' => Carbon::now(),
                             'modificador' => 'USER' . Auth::user()->id,
@@ -2891,7 +2848,6 @@ class EnvioController extends Controller
                     case "confirmacion_operaciones":
 
                         $pedido->update([
-                            'envio' => '2',
                             'modificador' => 'USER' . Auth::user()->id,
                             'fecha_envio_op_courier' => Carbon::now(),
                             'condicion_envio' => Pedido::RECIBIDO_JEFE_OPE,
@@ -2905,7 +2861,6 @@ class EnvioController extends Controller
                             'condicion_envio_code' => Pedido::RECIBIDO_JEFE_OPE_INT,
                             'notificado' => 0
                         ]);
-
                         break;
 
                     case "envio_courier_operaciones":
@@ -2931,31 +2886,6 @@ class EnvioController extends Controller
                             'pedido_scaneo'=> '1',
                             'fecha_salida'=> $fecha_salida,
                         ]);
-
-                        /*
-                        $envio = $pedido->direccionGrupo;
-                        $envio->update([
-                            'condicion_envio' => Pedido::ENVIO_MOTORIZADO_COURIER,
-                            'condicion_envio_code' => Pedido::ENVIO_MOTORIZADO_COURIER_INT,
-                            'condicion_envio_at' => now(),
-                            'fecha_salida' => $request->fecha_salida,
-                            'cambio_direccion_at' => null,
-                        ]);
-
-                        $envio->pedidos()->activo()->update([
-                            'condicion_envio_code' => Pedido::ENVIO_MOTORIZADO_COURIER_INT,
-                            'condicion_envio_at' => now(),
-                            'condicion_envio' => Pedido::ENVIO_MOTORIZADO_COURIER,
-                            'fecha_salida' => $request->fecha_salida,
-                            'cambio_direccion_at' => null
-                        ]);
-
-                        PedidoMovimientoEstado::create([
-                            'pedido' => $request->hiddenCodigo,
-                            'condicion_envio_code' => Pedido::ENVIO_MOTORIZADO_COURIER_INT,
-                            'notificado' => 0
-                        ]);
-                        */
 
                         break;
 
@@ -3002,8 +2932,10 @@ class EnvioController extends Controller
             }
 
         }
-
-        if($grupo != ""){
+        /***************************************************************************************
+         * SOBRES PARA REPARTO - FIN PARTE 2
+         ***************************************************************************************/
+        if($grupo != "" and $responsable == "fernandez_reparto"){
 
             $Direccion_grupo = DireccionGrupo::where('id',$grupo)->first();
             $color = $pedido->condicion_envio_color;
@@ -3033,21 +2965,18 @@ class EnvioController extends Controller
 
             $total=$Direccion_grupo->pedidos()->count();
             $escaneados=$Direccion_grupo->pedidos()->where('pedido_scaneo','1')->count();
-/*
+            /*
             if($total==$escaneados){
                 DireccionGrupo::cambiarCondicionEnvio($Direccion_grupo, Pedido::ENVIO_MOTORIZADO_COURIER_INT);
             }*/
 
             if($sobres_restantes == 0){
                 DireccionGrupo::cambiarCondicionEnvio($Direccion_grupo, Pedido::ENVIO_MOTORIZADO_COURIER_INT);
-
                 $Direccion_grupo->update([
                     'fecha_salida'=> $fecha_salida,
                 ]);
-
                 $clase_confirmado = "text-success";
             }
-
 
             return response()->json(['html' => "Escaneado Correctamente", 'class' => "text-success", 'codigo' => $codigo, 'error' => 3, 'zona' => $Direccion_grupo->distribucion, 'cantidad' => $codigos_paquete->count(), 'cantidad_recibida' => $sobres_ya_recibidos, 'clase_confirmada' => $clase_confirmado]);
         }
