@@ -3038,7 +3038,7 @@ class EnvioController extends Controller
             return response()->json(['html' => "Escaneado Correctamente", 'class' => "text-success", 'codigo' => $codigo, 'error' => 3, 'zona' => $Direccion_grupo->distribucion, 'cantidad' => $codigos_paquete->count(), 'cantidad_recibida' => $sobres_ya_recibidos, 'clase_confirmada' => $clase_confirmado]);
         }
 
-        return response()->json(['html' => $respuesta, 'class' => "text-success", 'codigos_procesados' => $codigos_procesados, 'codigos_no_procesados' => $codigos_no_procesados, 'error' => 0, 'Condicion actual'=> Pedido::$estadosCondicionEnvioCode[$pedido->condicon_envio_code]]);
+        return response()->json(['html' => $respuesta, 'class' => "text-success",'error' => 0, 'Condicion actual'=> Pedido::$estadosCondicionEnvioCode[$pedido->condicon_envio_code]]);
 
     }
 
