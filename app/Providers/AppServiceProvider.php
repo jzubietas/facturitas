@@ -40,12 +40,13 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         Collection::macro('trim',function (){
-            return $this->map(function ($item){
+            $data= $this->map(function ($item){
                 if(is_string($item)){
                     return trim($item);
                 }
                return  $item;
-            });
+            })->filter(fn($item) => !!$item);
+            return collect($data);
         });
         \Blade::component('grafico-pedidos-mes-count-progress-bar', PedidosMesCountProgressBar::class);
         \Blade::component('grafico-meta-pedidos-progress-bar', PedidosAsignadosProgressBar::class);

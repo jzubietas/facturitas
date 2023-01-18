@@ -1586,7 +1586,7 @@ class EnvioController extends Controller
                 }
 
             } else {
-                DireccionGrupo::cambiarCondicionEnvio(
+                $grupo = DireccionGrupo::cambiarCondicionEnvio(
                     $grupo,
                     Pedido::RECEPCION_MOTORIZADO_INT,
                     [
@@ -1594,6 +1594,10 @@ class EnvioController extends Controller
                     ]
                 );
             }
+
+            $grupo->update([
+                'codigos_confirmados' => $grupo->codigos
+            ]);
             PedidoMovimientoEstado::create([
                 'pedido' => $request->hiddenEnvio,
                 'condicion_envio_code' => Pedido::RECEPCION_MOTORIZADO_INT,
@@ -1836,7 +1840,6 @@ class EnvioController extends Controller
 
             $lista_productos = '';
             $lista_codigos = '';
-            $pedidos = $request->pedidos;
             $array_pedidos = collect(explode(",", $pedidos))->filter()->map(fn($id) => intval($id))->all();
 
             $data = DetallePedido::activo()->whereIn("pedido_id", $array_pedidos)->get();
@@ -1944,6 +1947,13 @@ class EnvioController extends Controller
             $file_name_temp = '';
             if ($request->destino == "PROVINCIA") {
 
+                if ($pexists = Pedido::activo()->where('env_tracking', '=', $request->tracking)->first()) {
+                    return response()->json([
+                        'success' => false,
+                        'html' => "El Nro de tracking '$request->tracking' ya se encuentra registrado en otro pedido ($pexists->codigo)",
+                    ]);
+                }
+
                 $cliente = Cliente::where("id", $request->cliente_id)->first();
                 $count_pedidos = count((array)$array_pedidos);
 
@@ -1994,7 +2004,7 @@ class EnvioController extends Controller
                         //'condicion_envio' => Pedido::SEGUIMIENTO_PROVINCIA_COURIER,
                         //'condicion_envio_code' => Pedido::SEGUIMIENTO_PROVINCIA_COURIER_INT,
                         'env_destino' => 'LIMA',
-                        'env_distrito' => 'LOS OLIVOS',
+                        'env_distrito' => $request->get('distrito') ?? 'LOS OLIVOS',
                         'env_zona' => 'OLVA',
                         'env_nombre_cliente_recibe' => 'OLVA',
                         'env_celular_cliente_recibe' => 'OLVA',
@@ -2050,7 +2060,9 @@ class EnvioController extends Controller
                 $grupoPedido->pedidos()->syncWithoutDetaching($attach_pedidos_data);
             }
             DB::commit();
-            return response()->json(['html' => $pedidos]);
+            return response()->json([
+                'success' => true,
+                'html' => $pedidos]);
         }
 
         return redirect()->route('envios.index')->with('info', 'actualizado');
@@ -3014,7 +3026,7 @@ class EnvioController extends Controller
     public function confirmarEstadoRevert(Request $request)
     {
         $envio = DireccionGrupo::where("id", $request->envio_id)->first();
-        DireccionGrupo::cambiarCondicionEnvio($envio,Pedido::RECEPCION_MOTORIZADO_INT,[
+        DireccionGrupo::cambiarCondicionEnvio($envio, Pedido::RECEPCION_MOTORIZADO_INT, [
             'foto1' => '',
             'foto2' => '',
         ]);

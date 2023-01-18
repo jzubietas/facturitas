@@ -886,9 +886,18 @@
                         type: 'POST',
                         url: "{{ route('envios.direccion') }}",
                         success: function (data) {
-                            console.log(data);
-                            $("#modal-direccion").modal("hide");
-                            $("#tablaPrincipal").DataTable().ajax.reload();
+                            console.log(data)
+                            if (!data.success) {
+                                Swal.fire(
+                                    'Error',
+                                    data.html,
+                                    'warning'
+                                )
+                                return false;
+                            } else {
+                                $("#modal-direccion").modal("hide");
+                                $("#tablaPrincipal").DataTable().ajax.reload();
+                            }
                         }
                     });
                 }

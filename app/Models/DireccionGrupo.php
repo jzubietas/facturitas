@@ -137,17 +137,22 @@ class DireccionGrupo extends Model
                 ->get();
         }
         if ($relacion->count() > 0) {
+            $codigos = $relacion->pluck('codigo')->trim();
+            $confirmados = collect(explode(',', $grupo->codigos_confirmados))->trim()
+                ->filter(fn($c) => in_array($c, $codigos->all()));
             $grupo->update([
-                'codigos' => $relacion->pluck('codigo')->join(', '),
-                'producto' => $relacion->pluck('nombre_empresa')->join(', '),
-                'direccion' => $relacion->pluck('direccion')->trim()->unique()->join(', '),
-                'referencia' => $relacion->pluck('referencia')->trim()->unique()->join(', '),
-                'observacion' => $relacion->pluck('observacion')->trim()->unique()->join(', '),
+                'codigos' => $codigos->join(','),
+                'producto' => $relacion->pluck('nombre_empresa')->trim()->join(','),
+                'direccion' => $relacion->pluck('direccion')->trim()->unique()->join(','),
+                'referencia' => $relacion->pluck('referencia')->trim()->unique()->join(','),
+                'observacion' => $relacion->pluck('observacion')->trim()->unique()->join(','),
                 'cantidad' => $relacion->count(),
+                'codigos_confirmados' => $confirmados->unique()->join(','),
             ]);
         } else {
             $grupo->update([
                 'estado' => 0,
+                'codigos_confirmados' => '',
                 'motorizado_status' => 0
             ]);
         }
@@ -418,7 +423,7 @@ class DireccionGrupo extends Model
 
     public static function moverAMotorizadoOlva(self $grupo)
     {
-        if($grupo->activo==1 && $grupo->distribucion=='OLVA') {
+        if ($grupo->activo == 1 && $grupo->distribucion == 'OLVA') {
             $data = [
                 'condicion_envio' => Pedido::$estadosCondicionEnvioCode[Pedido::MOTORIZADO_INT],
                 'condicion_envio_code' => Pedido::MOTORIZADO_INT,
@@ -435,8 +440,8 @@ class DireccionGrupo extends Model
             self::restructurarCodigos($grupo);
             self::restructurarCodigos($grupoolva);
             return $grupoolva;
-        }else{
-            self::cambiarCondicionEnvio($grupo,Pedido::MOTORIZADO_INT);
+        } else {
+            self::cambiarCondicionEnvio($grupo, Pedido::MOTORIZADO_INT);
         }
         return $grupo;
     }
