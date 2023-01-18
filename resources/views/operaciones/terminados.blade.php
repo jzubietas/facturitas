@@ -73,6 +73,7 @@
 
             @include('pedidos.modal.revertirid');
             @include('operaciones.modal.revertirajefeop')
+            @include('operaciones.modal.CorreccionAtencion')
         </div>
     </div>
 @stop
@@ -148,6 +149,182 @@
                 $(".textcode").html("PED" + idunico);
                 $("#hiddenEnvio").val(idunico);
 
+            });
+
+            $('#modal-correccion-op').on('show.bs.modal', function (event) {
+                //cuando abre el form de anular pedido
+                var button = $(event.relatedTarget)
+                var idunico = button.data('correccion')
+                var confirmo_descarga = button.data('adj')
+
+                $(".textcode").html("PED" + idunico);
+                $("#correccion").val(idunico);
+                $('#conf_descarga').val(confirmo_descarga);
+
+                /*if (confirmo_descarga == 1) {*/
+                    $('#sustento_adjunto').css({'display': 'block'});
+                /*} else {
+                    $('#sustento_adjunto').css({'display': 'none'});
+                }*/
+                $.ajax({
+                    type: 'POST',
+                    url: "{{ route('operaciones.datossubidaadj',':id') }}".replace(':id', idunico),
+                    data: idunico,
+                    success: function (data) {
+                        console.log(data);
+                        console.log(data.pedidos[0]['cant_compro']);
+
+                        $('#cant_compro').val(data.pedidos[0]['cant_compro']);
+                        $('#fecha_envio_doc').val(data.pedidos[0]['fecha_envio_doc']);
+
+                    }
+                }).done(function (data) {
+                });
+                $.ajax({
+                    url: "{{ route('operaciones.editatencion',':id') }}".replace(':id', idunico),
+                    data: idunico,
+                    method: 'POST',
+                    success: function (data) {
+                        console.log(data)
+                        console.log("obtuve las imagenes atencion del pedido " + idunico)
+                        $('#listado_adjuntos').html("");
+                        $('#listado_adjuntos_antes').html(data);
+                        console.log(data);
+                    }
+                });
+
+            });
+
+            $(document).on("submit", "#formulariocorreccionatender", function (evento) {
+                evento.preventDefault();
+                console.log("")
+                var cant_compro = $('#cant_compro').val();
+                var cant_compro_attachment =  $('#adjunto_total_attachment').val();
+                let cnf_adjunto = $("#conf_descarga").val();
+
+                if (!cant_compro_attachment) {
+                    cant_compro_attachment = 0
+                } else {
+                    cant_compro_attachment = parseInt(cant_compro_attachment.value);
+                    if (isNaN(cant_compro_attachment)) {
+                        cant_compro_attachment = 0;
+                    }
+                }
+                if (cant_compro_attachment == 0) {
+                    Swal.fire(
+                        'Error',
+                        'No hay archivos adjuntados',
+                        'warning'
+                    )
+                    return false;
+                }
+
+                if (!cant_compro) {
+                    cant_compro = 0;
+                }
+                cant_compro = parseInt(cant_compro);
+
+                if (isNaN(cant_compro)) {
+                    cant_compro = 0;
+                }
+                if (cant_compro == 0) {
+                    Swal.fire(
+                        'Error',
+                        'Debe colocar la cantidad de archivos',
+                        'warning'
+                    )
+                    return false;
+                }
+
+                if (cnf_adjunto == 1) {
+                    var sustento = $('#sustento_data').val();
+
+                    if (!sustento) {
+                        Swal.fire(
+                            'Error',
+                            'Ingrese un sustento para continuar',
+                            'warning'
+                        )
+                        return false;
+                    } else if (sustento.length < 50) {
+                        Swal.fire(
+                            'Error',
+                            'Debe ingresar al menos 50 caracteres ('+sustento.length+'/50)',
+                            'warning'
+                        )
+                        return false;
+                    }
+                }
+
+                function submitForm() {
+                    var data =   new FormData( $("#formulariocorreccionatender"));
+                    data.delete('adjunto')
+                    data.delete('adjunto[]')
+                    $.ajax({
+                        data: data,
+                        processData: false,
+                        contentType: false,
+                        type: 'POST',
+                        url: "{{ route('operaciones.atenderid') }}",
+                        success: function (data) {
+                            console.log(data);
+                            $("#modal-correccion-op .textcode").text('');
+                            $("#modal-correccion-op").modal("hide");
+                            $('#tablaPrincipal').DataTable().ajax.reload();
+                        }
+                    });
+                }
+
+                if (cant_compro != cant_compro_attachment) {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Aviso',
+                        html: `La cantidad de archivos es (${cant_compro_attachment}) y es diferente a la cantidad de facturas (${cant_compro})<br><b>¿Desea continuar?</b>`,
+                        confirmButtonText: 'Aceptar y continuar',
+                        showCancelButton: true,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            submitForm()
+                        } else if (result.isDenied) {
+                        }
+                    })
+                } else {
+                    submitForm()
+                }
+            });
+
+            /*$('#modal-delete-adjunto').on('show.bs.modal', function (event) {
+                //cuando abre el form de anular pedido
+                var button = $(event.relatedTarget)
+                var img_pedidoid = button.data('imgid')
+                var imgadjunto = button.data('imgadjunto')
+                var imgadjuntoconfirm = button.data('imgadjuntoconfirm')
+                $(".textcode").html("PED" + img_pedidoid);
+                $("#eliminar_pedido_id").val(img_pedidoid);
+                $("#eliminar_pedido_id_imagen").val(imgadjunto);
+                $("#eliminar_pedido_id_confirmado").val(imgadjuntoconfirm);
+            });*/
+
+            $(document).on("click", "#cerrarmodalatender", function (evento) {
+                evento.preventDefault();
+                console.log("no atender")
+                var fd = new FormData();
+                fd.append('correccion', $("#correccion").val());
+                $.ajax({
+                    data: fd,
+                    processData: false,
+                    contentType: false,
+                    type: 'POST',
+                    url: "{{ route('operaciones.corregircerrar') }}",
+                    success: function (data) {
+                        console.log(data);
+                        $("#modal-correccion-op .textcode").text('');
+                        $("#modal-correccion-op").modal("hide");
+                        $('#tablaPrincipal').DataTable().ajax.reload();
+                    }
+                });
             });
 
             $(document).on("submit", "#formulario_atender_op", function (evento) {

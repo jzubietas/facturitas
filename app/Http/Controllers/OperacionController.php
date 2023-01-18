@@ -657,6 +657,11 @@ class OperacionController extends Controller
                     $btn[] = '<a href="" class="btn-sm dropdown-item" data-target="#modal-revertir-ajefeop" data-adjuntos="' . $pedido->adjuntos . '" data-revertir=' . $pedido->id . ' data-codigo=' . $pedido->codigos . ' data-toggle="modal" ><i class="fa fa-undo text-danger" aria-hidden="true"></i> Revertir a Jefe de Operaciones</a>';
                 }
 
+                if(in_array($pedido->condicion_envio_code,[Pedido::RECIBIDO_JEFE_OPE_INT,Pedido::ENVIADO_OPE_INT]))
+                {
+                    $btn[] = '<a href="" class="btn-sm dropdown-item" data-target="#modal-correccion-op" data-adjuntos="' . $pedido->adjuntos . '" data-correccion=' . $pedido->id . ' data-codigo=' . $pedido->codigos . ' data-toggle="modal" ><i class="fa fa-deaf"></i> Correccion</a>';
+                }
+
                 /*if(\auth()->user()->can('operacion.enviar')){
                     if (Auth::user()->rol == "Jefe de operaciones" || Auth::user()->rol == "Administrador") {
                         $btn[] = '<a class="btn btn-success btn-sm" href="" data-target="#modal-envio" data-envio=' . $pedido->id . ' data-toggle="modal" >Enviar</a><br>';
@@ -797,6 +802,16 @@ class OperacionController extends Controller
     public function Atenderiddismiss(Request $request)
     {
         $hiddenAtender = $request->hiddenAtender;
+        $pedido = Pedido::where("id", $hiddenAtender)->first();
+        $imagenesatencion_ = ImagenAtencion::where("pedido_id", $hiddenAtender)->where("confirm", '0');
+        $imagenesatencion_->update([
+            'estado' => '0'
+        ]);
+    }
+
+    public function Corregircerrar(Request $request)
+    {
+        $hiddenAtender = $request->correccion;
         $pedido = Pedido::where("id", $hiddenAtender)->first();
         $imagenesatencion_ = ImagenAtencion::where("pedido_id", $hiddenAtender)->where("confirm", '0');
         $imagenesatencion_->update([
