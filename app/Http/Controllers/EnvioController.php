@@ -2702,6 +2702,8 @@ class EnvioController extends Controller
         $codigos_no_procesados = array();
         $respuesta = "";
 
+        $fecha_salida = $request->fecha_salida;
+
         /*************
          * IDENTIFICAMOS LOS DATOS GLOBALES
          */
@@ -2747,7 +2749,7 @@ class EnvioController extends Controller
 
 
         if($grupo == null){
-            return response()->json(['html' => "Este pedido No cuenta con una dirección", 'class' => "text-danger", 'codigo' => 0,'error'=>4, 'msj_error' => 0]);
+            return response()->json(['html' => "Este pedido No cuenta con una dirección", 'class' => "text-danger", 'codigo' => 0,'error'=>4, 'Estado_actual' => $pedido -> condicion_envio_code, 'msj_error' => 0]);
         }
 
         $condicion_code_actual = $pedido->condicion_envio_code;
@@ -2926,7 +2928,8 @@ class EnvioController extends Controller
                     case "sobres_reparto":
 
                         $pedido->update([
-                            'pedido_scaneo'=>1
+                            'pedido_scaneo'=> '1',
+                            'fecha_salida'=> $fecha_salida,
                         ]);
 
                         /*
@@ -3037,6 +3040,11 @@ class EnvioController extends Controller
 
             if($sobres_restantes == 0){
                 DireccionGrupo::cambiarCondicionEnvio($Direccion_grupo, Pedido::ENVIO_MOTORIZADO_COURIER_INT);
+
+                $Direccion_grupo->update([
+                    'fecha_salida'=> $fecha_salida,
+                ]);
+
                 $clase_confirmado = "text-success";
             }
 
