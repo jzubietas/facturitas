@@ -65,6 +65,9 @@ class RegresarSobresRecepcionCourier extends Command
                     'condicion_envio_at' => now(),
                 ]);
                 if ($pedido->estado_sobre) {
+                    if($pedido->grupoPedidos()->exists()){
+                        \DB::table('grupo_pedido_items')->where('pedido_id','=',$pedido->id)->delete();
+                    }
                     GrupoPedido::createGroupByPedido($pedido, false, true);
                 }
                 $table[] = [
