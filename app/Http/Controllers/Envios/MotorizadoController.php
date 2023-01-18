@@ -76,6 +76,13 @@ class MotorizadoController extends Controller
             //add_query_filtros_por_roles($query, 'u');
             return datatables()->query(DB::table($query))
                 ->addIndexColumn()
+                ->editColumn('gmlink', function ($pedido) {
+                    if ($pedido->gmlink != null && \Str::contains($pedido->gmlink, 'http')) {
+                        return '<a href="' . $pedido->gmlink . '" target="_blank"><i class="fa fa-external-link"></i>Ir al Link</a>';
+                    } else {
+                        return '--';
+                    }
+                })
                 ->editColumn('fecha_salida', function ($pedido) {
                     if ($pedido->fecha_salida != null) {
                         return Carbon::parse($pedido->fecha_salida)->format('d-m-Y');
@@ -165,7 +172,7 @@ class MotorizadoController extends Controller
 
                     return $btn;
                 })
-                ->rawColumns(['action', 'condicion_envio'])
+                ->rawColumns(['action', 'condicion_envio', 'gmlink'])
                 ->toJson();
         }
         return view('envios.motorizado.index', compact('fecha_consulta'));
@@ -288,7 +295,7 @@ class MotorizadoController extends Controller
         $grupo->update([
             'condicion_envio' => Pedido::MOTORIZADO,
             'condicion_envio_code' => Pedido::MOTORIZADO_INT,
-            'condicion_envio_at'=>now(),
+            'condicion_envio_at' => now(),
             'motorizado_status' => 0,
             'motorizado_sustento_text' => '',
             'motorizado_sustento_foto' => '',
@@ -297,7 +304,7 @@ class MotorizadoController extends Controller
         $grupo->pedidos()->activo()->update([
             'condicion_envio' => Pedido::MOTORIZADO,
             'condicion_envio_code' => Pedido::MOTORIZADO_INT,
-            'condicion_envio_at'=>now(),
+            'condicion_envio_at' => now(),
         ]);
         return response()->json([
             'success' => true
@@ -858,7 +865,6 @@ class MotorizadoController extends Controller
                     $badge_estado .= '<span class="badge badge-success" style="background-color: ' . $color . '!important;">' . $grupo->condicion_envio . '</span>';
                     return $badge_estado;
                 })
-
                 ->editColumn('distrito', function ($pedido) {
 
                     if ($pedido->distribucion == 'OLVA') {
@@ -876,9 +882,6 @@ Ver Rotulo</a>')
                     }
                     return $pedido->distrito;
                 })
-
-
-
                 ->addColumn('action', function ($pedido) use ($fecha_consulta, $fecha_actual) {
                     $btn = '';
 
@@ -916,7 +919,7 @@ Ver Rotulo</a>')
 
                     return $btn;
                 })
-                ->rawColumns(['action', 'condicion_envio','distrito'])
+                ->rawColumns(['action', 'condicion_envio', 'distrito'])
                 ->make(true);
         }
     }

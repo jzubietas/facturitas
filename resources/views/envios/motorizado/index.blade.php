@@ -110,12 +110,12 @@
                         <th scope="col">Item</th>
                         <th scope="col">Código</th>
                         <th scope="col">Distrito</th>
-                        <th scope="col">Asesor</th>
+                        <th scope="col">Destino</th>
                         <th scope="col">Cliente</th>
                         <th scope="col">Fecha de Salida</th>
                         <th scope="col">Fecha de Entrega</th>
                         <th scope="col">Razón social</th>
-                        <th scope="col">Destino</th>
+                        <th scope="col">Google Maps</th>
                         <th scope="col">Dirección de envío</th>
                         <th scope="col">Referencia</th>
                         <th scope="col">Estado de envio</th><!--ENTREGADO - RECIBIDO-->
@@ -799,7 +799,7 @@ Enviar</button>
                         },
                     },
                     {data: 'distrito', name: 'distrito',},
-                    {data: 'identificador', name: 'identificador',},
+                    {data: 'destino', name: 'destino',},
                     {
                         data: 'celular',
                         name: 'celular',
@@ -834,7 +834,7 @@ Enviar</button>
                             }
                         }
                     },
-                    {data: 'destino', name: 'destino',},
+                    {data: 'gmlink', name: 'gmlink',},
                     {
                         data: 'direccion',
                         name: 'direccion',
@@ -1099,7 +1099,7 @@ Enviar</button>
                         },
                     },
                     {data: 'distrito', name: 'distrito',},
-                    {data: 'identificador', name: 'identificador',visible:false},
+                    {data: 'identificador', name: 'identificador',},
                     {
                         data: 'celular',
                         name: 'celular',
@@ -1134,7 +1134,7 @@ Enviar</button>
                             }
                         }
                     },
-                    {data: 'gmlink', name: 'gmlink',},
+                    {data: 'destino', name: 'destino',},
                     {
                         data: 'direccion',
                         name: 'direccion',
