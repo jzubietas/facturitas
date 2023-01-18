@@ -45,7 +45,7 @@ class PedidosPorEnviarExport implements FromView, ShouldAutoSize
             //->where('dp.estado', '1')
             //->where('pedidos.envio', '<>', '0')
             //->where('pedidos.direccion', '1')
-            ->where('pedidos.destino', 'LIMA')
+            //->where('pedidos.destino', 'LIMA')
             //->where('di.provincia', 'LIMA')
             ->whereIn('pedidos.condicion_envio_code', [
                 Pedido::EN_ATENCION_OPE_INT,
