@@ -789,13 +789,11 @@ class ClienteController extends Controller
                 )
                 ->where('pedidos.cliente_id', $idrequest)
                 ->where('pedidos.estado', '1')
-                ->where('dp.estado', '1')
-                //->where('pedidos.envio', '1')
-                //->where('pedidos.condicion_envio', 1)
                 ->sinDireccionEnvio()
                 ->whereIn('pedidos.condicion_envio_code', [
+                    Pedido::EN_ATENCION_OPE_INT,
+                    Pedido::POR_ATENDER_OPE_INT,Pedido::ATENDIDO_OPE_INT,Pedido::ENVIO_COURIER_JEFE_OPE_INT,
                     Pedido::RECIBIDO_JEFE_OPE_INT,
-                    Pedido::ENVIO_COURIER_JEFE_OPE_INT,
                     Pedido::RECEPCION_COURIER_INT,
                 ]);
             //->whereIn('pedidos.envio', [Pedido::ENVIO_CONFIRMAR_RECEPCION, Pedido::ENVIO_RECIBIDO]);
