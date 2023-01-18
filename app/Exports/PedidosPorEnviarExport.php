@@ -38,7 +38,7 @@ class PedidosPorEnviarExport implements FromView, ShouldAutoSize
                 'pedidos.env_nombre_cliente_recibe as nombre_recibe',
                 'pedidos.env_celular_cliente_recibe as celular_contacto',
                 'pedidos.env_zona as zona',
-                'pedidos.condicion as estado_pedido',
+                'pedidos.condicion_envio as estado_pedido',
                 'pedidos.condicion_envio as estado_envio'
             ])
             ->where('pedidos.estado', '1')
