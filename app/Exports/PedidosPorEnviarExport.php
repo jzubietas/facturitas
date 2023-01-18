@@ -16,44 +16,53 @@ class PedidosPorEnviarExport implements FromView, ShouldAutoSize
     use Exportable;
 
     public function pedidosLima($request) {
+
         $pedidosLima = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')
             ->join('users as u', 'pedidos.user_id', 'u.id')
             ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
-            ->join('distritos as di', 'di.distrito', 'pedidos.env_distrito')
             ->select([
                 'pedidos.id',
-                'u.identificador as id_asesor',
-                'u.name as nombre_asesor',
-                'pedidos.codigo as codigo',
-                DB::raw('DATE_FORMAT(pedidos.created_at, "%d/%m/%Y") as fecha_registro'),
-                'c.nombre as nombre_cliente',
-                'c.icelular as icelular_cliente',
-                'c.celular as celular_cliente',
-                'dp.nombre_empresa as empresa',
-                'dp.cantidad as cantidad',
-                'dp.fecha_envio_doc as fecha_elaboracion',
-                'pedidos.env_distrito as distrito',
-                'pedidos.env_direccion as direccion',
-                'pedidos.env_referencia as referencia',
-                'pedidos.env_nombre_cliente_recibe as nombre_recibe',
-                'pedidos.env_celular_cliente_recibe as celular_contacto',
-                'pedidos.env_zona as zona',
-                'pedidos.condicion as estado_pedido',
-                'pedidos.condicion_envio as estado_envio'
+                'pedidos.cliente_id',
+                'c.nombre as nombres',
+                'c.celular as celulares',
+                'u.identificador as users',
+                'u.id as user_id',
+                'dp.codigo as codigos',
+                'dp.nombre_empresa as empresas',
+                'dp.total as total',
+                'pedidos.condicion',
+                'pedidos.created_at as fecha',
+                'pedidos.condicion_envio',
+                'pedidos.envio',
+                'pedidos.codigo',
+                'pedidos.destino',
+                'pedidos.direccion',
+                'pedidos.da_confirmar_descarga',
+                'dp.envio_doc',
+                'dp.fecha_envio_doc',
+                'dp.cant_compro',
+                'dp.fecha_envio_doc_fis',
+                'dp.foto1',
+                'dp.foto2',
+                'dp.fecha_recepcion',
+                'pedidos.devuelto',
+                'pedidos.cant_devuelto',
+                'pedidos.returned_at',
+                'pedidos.observacion_devuelto',
+                'pedidos.estado_sobre',
+                'pedidos.estado_ruta',
+                'pedidos.pendiente_anulacion',
+                'pedidos.estado',
             ])
             ->where('pedidos.estado', '1')
-            //->where('dp.estado', '1')
-            //->where('pedidos.envio', '<>', '0')
-            //->where('pedidos.direccion', '1')
-            ->where('pedidos.destino', 'LIMA')
-            //->where('di.provincia', 'LIMA')
             ->whereIn('pedidos.condicion_envio_code', [
                 Pedido::EN_ATENCION_OPE_INT,
                 Pedido::POR_ATENDER_OPE_INT,Pedido::ATENDIDO_OPE_INT,Pedido::ENVIO_COURIER_JEFE_OPE_INT,
                 Pedido::RECIBIDO_JEFE_OPE_INT,
-                Pedido::RECEPCION_COURIER_INT,]
-            )
+                Pedido::RECEPCION_COURIER_INT,
+            ])
             ->whereBetween(DB::raw('DATE(pedidos.created_at)'), [$request->desde, $request->hasta])
+            ->sinDireccionEnvio()
             ->orderBy('pedidos.created_at', 'DESC')
             ->get();
 
