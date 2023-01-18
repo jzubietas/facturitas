@@ -39,24 +39,36 @@ class fixedFilesBin extends Command
      */
     public function handle()
     {
-        $pedidos = DireccionGrupo::query()->activo()->where('observacion', 'like', '%.bin')->get();
+        $grupos = DireccionGrupo::query()->activo()->where('observacion', 'like', '%.bin')->get();
+        $pedidos = Pedido::query()->activo()->where('env_rotulo', 'like', '%.bin')->get();
+        $this->fixedName($grupos, 'grupos', 'observacion');
+        $this->fixedName($pedidos, 'pedidos', 'env_rotulo');
+        return 0;
+    }
+
+    public function fixedName($pedidos, $type, $key)
+    {
+        $this->warn("Cargando " . $type);
+        $progress = $this->output->createProgressBar($pedidos->count());
         foreach ($pedidos as $pedido) {
-            $file = $pedido->observacion;
+            $file = $pedido->$key;
             if (\Storage::disk('pstorage')->exists($file)) {
                 $new = \Str::replace(".bin", '.pdf', $file);
                 \Storage::disk('pstorage')->move($file, $new);
                 $pedido->update([
-                    'observacion' => $new
+                    $key => $new
                 ]);
-            }else{
+            } else {
                 $new = \Str::replace(".bin", '.pdf', $file);
                 if (\Storage::disk('pstorage')->exists($new)) {
                     $pedido->update([
-                        'observacion' => $new
+                        $key => $new
                     ]);
                 }
             }
+            $progress->advance();
         }
-        return 0;
+        $this->info("Finish Cargando " . $type);
+        $progress->finish();
     }
 }

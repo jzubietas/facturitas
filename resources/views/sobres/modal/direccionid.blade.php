@@ -9,7 +9,7 @@
                 </button>
             </div>
 
-            <form id="formdireccion" name="formdireccion">
+            <form id="formdireccion" name="formdireccion" autocomplete="off">
                 <div class="modal-body">
                     <p class="d-none">Ingrese la dirección de envío del pedido: <strong class="textcode">PED000</strong>
                     </p>

@@ -893,6 +893,9 @@
                                     data.html,
                                     'warning'
                                 )
+                                $("#rotulo").val(null)
+                                $("#numregistro").val(null)
+                                $("#tracking").val(null)
                                 return false;
                             } else {
                                 $("#modal-direccion").modal("hide");

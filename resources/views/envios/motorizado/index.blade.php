@@ -1099,7 +1099,7 @@ Enviar</button>
                         },
                     },
                     {data: 'distrito', name: 'distrito',},
-                    {data: 'identificador', name: 'identificador',},
+                    {data: 'identificador', name: 'identificador',visible:false},
                     {
                         data: 'celular',
                         name: 'celular',
@@ -1134,7 +1134,7 @@ Enviar</button>
                             }
                         }
                     },
-                    {data: 'destino', name: 'destino',},
+                    {data: 'gmlink', name: 'gmlink',},
                     {
                         data: 'direccion',
                         name: 'direccion',

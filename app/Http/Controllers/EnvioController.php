@@ -1947,10 +1947,27 @@ class EnvioController extends Controller
             $file_name_temp = '';
             if ($request->destino == "PROVINCIA") {
 
-                if ($pexists = Pedido::activo()->where('env_tracking', '=', $request->tracking)->first()) {
+                if ($pexists = Pedido::activo()
+                    ->where(function ($query) use ($request) {
+                        $query->where('env_numregistro', '=', trim($request->numregistro))
+                            ->orWhere('env_tracking', '=', trim($request->tracking));
+                    })
+                    ->first()) {
                     return response()->json([
                         'success' => false,
                         'html' => "El Nro de tracking '$request->tracking' ya se encuentra registrado en otro pedido ($pexists->codigo)",
+                    ]);
+                }
+                if($request->numregistro==intval($request->numregistro)){
+                    return response()->json([
+                        'success' => false,
+                        'html' => "El Nro de tracking $request->numregistro contine caracteres no permitidos, corrija porfavor",
+                    ]);
+                }
+                if($request->tracking==intval($request->tracking)){
+                    return response()->json([
+                        'success' => false,
+                        'html' => "El Nro de tracking $request->tracking contine caracteres no permitidos, corrija porfavor",
                     ]);
                 }
 
@@ -3425,12 +3442,12 @@ class EnvioController extends Controller
     public function valida_direccionenvio(Request $request)
     {
         $element = $request->element;
-        $value_ = $request->value;
+        $value = $request->value;
         $from_ = $request->from;
 
         switch ($element) {
             case 'tracking':
-                $count_tracking = Pedido::where('env_tracking', '=', $value_)->count();
+                $count_tracking = Pedido::activo()->where('env_tracking', '=', $value)->count();
                 if ($count_tracking > 0) {
                     $arr = array('response' => 1, 'element' => 'tracking');
                     return response()->json($arr);
@@ -3439,7 +3456,7 @@ class EnvioController extends Controller
                 }
                 break;
             case 'numregistro':
-                $count_nregistro = Pedido::where('env_numregistro', '=', $value_)->count();
+                $count_nregistro = Pedido::activo()->where('env_numregistro', '=', $value)->count();
                 if ($count_nregistro > 0) {
                     $arr = array('response' => 1, 'element' => 'num.registro');
                     return response()->json($arr);
