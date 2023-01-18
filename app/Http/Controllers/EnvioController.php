@@ -2692,15 +2692,12 @@ class EnvioController extends Controller
         /*************
          * RECUPERAMOS VARIABLES
          */
-
         //VARIABLES GLOBALES
         $responsable = $request->responsable;
         $accion = $request->accion;
         $codigo = $request->codigo;
         $tipo = $request->tipo; // PEDIDO O PAQUETE
-
         $codigos = $request->codigos;
-
         $codigos_procesados = array();
         $codigos_no_procesados = array();
         $respuesta = "";
@@ -3012,14 +3009,7 @@ class EnvioController extends Controller
                 ->map(fn($cod) => trim($cod))
                 ->filter()->values();
 
-            $pedido->update([
-                'modificador' => 'USER' . Auth::user()->id,
-                'fecha_envio_op_courier' => Carbon::now(),
-                'condicion_envio' => Pedido::ENVIO_MOTORIZADO_COURIER,
-                'condicion_envio_code' => Pedido::ENVIO_MOTORIZADO_COURIER_INT,
-                'condicion_envio_at' => now(),
-                'pedido_scaneo' => 1
-            ]);
+
 
             /*************
              * SACAMOS LA CANTIDAD DE SOBRES YA RECIBIDOS DE ESTE PAQUETE
@@ -3034,15 +3024,7 @@ class EnvioController extends Controller
 
             $clase_confirmado = "";
             if($sobres_restantes == 0){
-
-                $Direccion_grupo->update([
-                    'condicion_envio' => Pedido::ENVIO_MOTORIZADO_COURIER,
-                    'condicion_envio_code' => Pedido::ENVIO_MOTORIZADO_COURIER_INT,
-                    'condicion_envio_at' => now(),
-                    'fecha_salida' => $request->fecha_salida,
-                    'cambio_direccion_at' => null,
-                ]);
-
+                DireccionGrupo::cambiarCondicionEnvio($Direccion_grupo, Pedido::ENVIO_MOTORIZADO_COURIER_INT);
                 $clase_confirmado = "text-success";
             }
 
