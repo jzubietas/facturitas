@@ -2744,6 +2744,12 @@ class EnvioController extends Controller
 
 
         $grupo = $pedido->direccion_grupo;
+
+
+        if($grupo == null){
+            return response()->json(['html' => "Este pedido No cuenta con una dirección", 'class' => "text-danger", 'codigo' => 0,'error'=>4, 'msj_error' => 0]);
+        }
+
         $condicion_code_actual = $pedido->condicion_envio_code;
 
         /************
