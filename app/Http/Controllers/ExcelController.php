@@ -335,7 +335,6 @@ class ExcelController extends Controller
     {
         return (new PedidosPorEnviarExport)
                 ->pedidosLima($request)
-                ->pedidosProvincia($request)
                 ->download('Lista de Pedidos por Enviar.xlsx');
     }
 
