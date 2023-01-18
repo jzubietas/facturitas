@@ -247,7 +247,6 @@
                     {data: 'celular', name: 'celular',},
                     {data: 'distribucion', name: 'distribucion',},
                     {data: 'distrito', name: 'distrito',},
-
                 ],
                 language: {
                     "decimal": "",
@@ -295,15 +294,11 @@
             });
             @endforeach
 
-            //console.log(contadores);
-            for( const arr of contadores ) {
-                //form.action += "&ws=true";
+            /*for( const arr of contadores ) {
                 console.log("aaaa")
                 console.log(arr.Item);
                 console.log(arr.zona);
-            }
-
-
+            }*/
 
             @foreach($motorizados as $motorizado)
                 var tt= $("#myTab{{Str::upper($motorizado->zona)}}")[0];
