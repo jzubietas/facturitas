@@ -78,7 +78,6 @@
 @section('css')
     <link rel="stylesheet" href="/css/admin_custom.css">
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.0.943/pdf_viewer.css">
-
     <style>
 
         .bootstrap-select.btn-group .btn .filter-option {
@@ -142,10 +141,10 @@
     </style>
     <style>
         /*#canvas_container {
-                width: 200px !important;
-                height: 400px !important;
-                overflow: auto;
-            }*/
+        width: 200px !important;
+        height: 400px !important;
+        overflow: auto;
+        }*/
         /* #canvas_container {
              background: #333;
              text-align: center;
@@ -390,7 +389,7 @@
                 setTimeout(function () {
                     $("#pdf_renderer_object").attr('data', URL.createObjectURL(file))
 
-                    $("#pdf_renderer_object").css('height', ($("#pdf_renderer_object").parents('.viewpdf').width() + 50) + 'px')
+                    $("#pdf_renderer_object").css('height', ($("#pdf_renderer_object").parents('.viewpdf').height() + 50) + 'px')
                 }, 50)
 
                 console.log(file);
@@ -485,7 +484,15 @@
             $(document).on('change keyup', "#tracking, #numregistro", function (event) {
 
                 let id_element = event.target.id;
-                console.log("aaaa")
+                if(isNaN(parseInt(event.target.value))||parseInt(event.target.value)!=event.target.value){
+                    Swal.fire(
+                        'Error',
+                        `El codigo ${event.target.value} no tiene el formato correcto, se va a limpiar el campo`,
+                        'warning'
+                    )
+                    event.target.value=''
+                    return false
+                }
                 let val_element = $(this).val();
                 switch (id_element) {
                     case 'tracking':
@@ -703,6 +710,7 @@
                 let val_distrito = $("#distrito").val();
                 console.log(val_distrito)
                 let val_observacion = $("#observacion").val();
+                let val_gmlink = $("#gmlink").val();
                 let saveHistoricoLima = ($('#saveHistoricoLima').is(':checked')) ? '1' : '0';
                 let saveHistoricoProvincia = ($('#saveHistoricoProvincia').is(':checked')) ? '1' : '0';
 
@@ -836,6 +844,7 @@
                         fd2.append('referencia', val_referencia);
                         fd2.append('distrito', val_distrito);
                         fd2.append('observacion', val_observacion);
+                        fd2.append('gmlink', val_gmlink);
 
                         fd2.append('saveHistoricoLima', saveHistoricoLima);
                     }
@@ -885,9 +894,21 @@
                         type: 'POST',
                         url: "{{ route('envios.direccion') }}",
                         success: function (data) {
-                            console.log(data);
-                            $("#modal-direccion").modal("hide");
-                            $("#tablaPrincipal").DataTable().ajax.reload();
+                            console.log(data)
+                            if (!data.success) {
+                                Swal.fire(
+                                    'Error',
+                                    data.html,
+                                    'warning'
+                                )
+                                $("#rotulo").val(null)
+                                $("#numregistro").val(null)
+                                $("#tracking").val(null)
+                                return false;
+                            } else {
+                                $("#modal-direccion").modal("hide");
+                                $("#tablaPrincipal").DataTable().ajax.reload();
+                            }
                         }
                     });
                 }
@@ -1746,7 +1767,7 @@
                         render: function (data, type, row, meta) {
                             datass = '';
 
-                            @if (Auth::user()->rol == "Asesor" || Auth::user()->rol == "Administrador" || Auth::user()->rol=='Llamadas')
+                            @if (Auth::user()->rol == "Asesor" || Auth::user()->rol == "Administrador" || Auth::user()->rol=='Llamadas' || Auth::user()->rol=='Encargado')
 
                                 datass = datass + '<button type="button" class="btn btn-dark btn-sm ' + (row.da_confirmar_descarga == '1' ? '' : '') + '" data-target="#modal-direccion" data-toggle="modal" data-pedido_codigo="' + row.codigo + '" data-confirm_descarga="' + row.da_confirmar_descarga + '" data-cliente="' + row.cliente_id + '" data-asesor="' + row.user_id + '" data-direccion="' + row.id + '" data-codigo="' + row.id + '"><i class="fa  ' + (row.da_confirmar_descarga != '1' ? 'fa-exclamation-triangle text-warning font-12 mr-8' : 'fa-map-marker-alt text-success mr-8') + '" aria-hidden="true"></i> Direccion</button>';
                             @endif

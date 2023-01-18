@@ -525,7 +525,6 @@ class EnvioController extends Controller
     }
 
 
-
     public function Enviosenrepartotabla(Request $request)
     {
         $pedidos_lima = DireccionGrupo::join('direccion_envios as de', 'direccion_grupos.id', 'de.direcciongrupo')
@@ -946,7 +945,7 @@ class EnvioController extends Controller
         } else {
             $fecha_consulta = Carbon::now()->format('Y-m-d');
         }
-        return $fecha_consulta;
+        //return $fecha_consulta;
 
         // SI SE ESPERA RESULTADOS PARA UNA TABLA
         if ($request->has('datatable')) {
@@ -1577,24 +1576,28 @@ class EnvioController extends Controller
                     if ($diff->count() > 0) {
                         $grupo = DireccionGrupo::desvincularPedidos($grupo, $pedidos, null, 0);
                     }
-                    $grupo->update([
-                        'fecha_recepcion_motorizado' => Carbon::now(),
-                        'condicion_envio' => Pedido::RECEPCION_MOTORIZADO,
-                        'condicion_envio_code' => Pedido::RECEPCION_MOTORIZADO_INT,
-                        'cambio_direccion_at' => null,
-                        'condicion_envio_at' => now(),
-                    ]);
+                    DireccionGrupo::cambiarCondicionEnvio(
+                        $grupo,
+                        Pedido::RECEPCION_MOTORIZADO_INT,
+                        [
+                            'fecha_recepcion_motorizado' => Carbon::now(),
+                        ]
+                    );
                 }
 
             } else {
-                $grupo->update([
-                    'fecha_recepcion_motorizado' => Carbon::now(),
-                    'condicion_envio' => Pedido::RECEPCION_MOTORIZADO,
-                    'condicion_envio_code' => Pedido::RECEPCION_MOTORIZADO_INT,
-                    'cambio_direccion_at' => null,
-                    'condicion_envio_at' => now(),
-                ]);
+                $grupo = DireccionGrupo::cambiarCondicionEnvio(
+                    $grupo,
+                    Pedido::RECEPCION_MOTORIZADO_INT,
+                    [
+                        'fecha_recepcion_motorizado' => Carbon::now(),
+                    ]
+                );
             }
+
+            $grupo->update([
+                'codigos_confirmados' => $grupo->codigos
+            ]);
             PedidoMovimientoEstado::create([
                 'pedido' => $request->hiddenEnvio,
                 'condicion_envio_code' => Pedido::RECEPCION_MOTORIZADO_INT,
@@ -1870,6 +1873,7 @@ class EnvioController extends Controller
                     'nombre' => $request->nombre,
                     'celular' => $request->contacto,
                     'observacion' => $request->observacion,
+                    'gmlink' => $request->gmlink,
                     //'direcciongrupo' => $direccion_grupo_id,
                     'cantidad' => $cantidad,
                     'destino' => $request->destino,
@@ -1915,6 +1919,7 @@ class EnvioController extends Controller
                         'env_numregistro' => '',
                         'env_rotulo' => '',
                         'env_observacion' => $request->observacion,
+                        'env_gmlink' => $request->gmlink,
                         'env_importe' => '',
                     ]);
                     $dp_empresa = DetallePedido::activo()->where("pedido_id", $pedido_id)->first();
@@ -1942,6 +1947,30 @@ class EnvioController extends Controller
             }
             $file_name_temp = '';
             if ($request->destino == "PROVINCIA") {
+
+                if ($pexists = Pedido::activo()
+                    ->where(function ($query) use ($request) {
+                        $query->where('env_numregistro', '=', trim($request->numregistro))
+                            ->orWhere('env_tracking', '=', trim($request->tracking));
+                    })
+                    ->first()) {
+                    return response()->json([
+                        'success' => false,
+                        'html' => "El Nro de tracking '$request->tracking' ya se encuentra registrado en otro pedido ($pexists->codigo)",
+                    ]);
+                }
+                if($request->numregistro!=intval($request->numregistro)){
+                    return response()->json([
+                        'success' => false,
+                        'html' => "El Nro de registro $request->numregistro contine caracteres no permitidos, corrija porfavor, ".intval($request->numregistro),
+                    ]);
+                }
+                if($request->tracking!=intval($request->tracking)){
+                    return response()->json([
+                        'success' => false,
+                        'html' => "El Nro de tracking $request->tracking contine caracteres no permitidos, corrija porfavor",
+                    ]);
+                }
 
                 $cliente = Cliente::where("id", $request->cliente_id)->first();
                 $count_pedidos = count((array)$array_pedidos);
@@ -1993,7 +2022,7 @@ class EnvioController extends Controller
                         //'condicion_envio' => Pedido::SEGUIMIENTO_PROVINCIA_COURIER,
                         //'condicion_envio_code' => Pedido::SEGUIMIENTO_PROVINCIA_COURIER_INT,
                         'env_destino' => 'LIMA',
-                        'env_distrito' => 'LOS OLIVOS',
+                        'env_distrito' => $request->get('distrito') ?? 'LOS OLIVOS',
                         'env_zona' => 'OLVA',
                         'env_nombre_cliente_recibe' => 'OLVA',
                         'env_celular_cliente_recibe' => 'OLVA',
@@ -2049,7 +2078,9 @@ class EnvioController extends Controller
                 $grupoPedido->pedidos()->syncWithoutDetaching($attach_pedidos_data);
             }
             DB::commit();
-            return response()->json(['html' => $pedidos]);
+            return response()->json([
+                'success' => true,
+                'html' => $pedidos]);
         }
 
         return redirect()->route('envios.index')->with('info', 'actualizado');
@@ -2134,15 +2165,10 @@ class EnvioController extends Controller
             'pedido_id' => $request->hiddenSinenvio
         ]);
 
-        /**/
-        $cliente = Cliente::where("id", $pedido->cliente_id)->first();
-
-        $data = DetallePedido::where("pedido_id", $request->hiddenSinenvio)->first();
-
         $direccion_grupo_id = DireccionGrupo::create([
             'estado' => '1',
             'destino' => 'LIMA',
-            'distribucion' => '',
+            'distribucion' => $pedido->env_zona,
 
             'condicion_envio' => Pedido::ENTREGADO_SIN_SOBRE_OPE,
             'condicion_envio_code' => Pedido::ENTREGADO_SIN_SOBRE_OPE_INT,
@@ -2153,33 +2179,11 @@ class EnvioController extends Controller
             'producto' => $data->nombre_empresa,
         ])->id;
 
-        $direccion_grupo = DireccionGrupo::find($direccion_grupo_id);
-        $direccion_grupo->correlativo = 'ENV' . $direccion_grupo_id;
-        $direccion_grupo->save();
-
-        $direccionLima = DireccionEnvio::create([
-            'cliente_id' => $pedido->cliente_id,
-            'distrito' => 'LIMA',
-            'direccion' => '',
-            'referencia' => '',
-            'nombre' => $cliente->nombre,
-            'celular' => $cliente->celular,
-            'observacion' => '',
-            'direcciongrupo' => $direccion_grupo_id,
-            'cantidad' => 1,
-            'destino' => 'LIMA',
-            'estado' => '1',
-            "salvado" => "0"
-        ]);
-
-
-        $direccionPedido = DireccionPedido::create([
-            'direccion_id' => $direccionLima->id,
-            'pedido_id' => $pedido->id,
-            'codigo_pedido' => $detalle_pedidos->codigo,
-            'direcciongrupo' => $direccion_grupo_id,
-            'empresa' => $detalle_pedidos->nombre_empresa,
-            'estado' => '1'
+        $pedido->update([
+            'direccion_grupo' => $direccion_grupo_id,
+            'condicion_envio' => Pedido::ENTREGADO_SIN_SOBRE_OPE,
+            'condicion_envio_code' => Pedido::ENTREGADO_SIN_SOBRE_OPE_INT,
+            'condicion_envio_at' => now(),
         ]);
 
         return response()->json(['html' => $pedido->id]);
@@ -2355,7 +2359,7 @@ class EnvioController extends Controller
                                     else DATEDIFF(DATE(NOW()), DATE(pedidos.fecha_recepcion_courier)) end) as dias "),
                 ]);
             if ($opcion == 'recepcionado') {
-                $pedidos = $pedidos->where('pedidos.estado', '1')->whereIn('pedidos.condicion_envio_code', [Pedido::REPARTO_COURIER_INT,Pedido::MOTORIZADO_INT, Pedido::CONFIRM_MOTORIZADO_INT, Pedido::RECEPCION_MOTORIZADO_INT, Pedido::ENVIO_MOTORIZADO_COURIER_INT,Pedido::RECEPCION_COURIER_INT ]);
+                $pedidos = $pedidos->where('pedidos.estado', '1')->whereIn('pedidos.condicion_envio_code', [Pedido::REPARTO_COURIER_INT, Pedido::MOTORIZADO_INT, Pedido::CONFIRM_MOTORIZADO_INT, Pedido::RECEPCION_MOTORIZADO_INT, Pedido::ENVIO_MOTORIZADO_COURIER_INT, Pedido::RECEPCION_COURIER_INT]);
             } else if ($opcion == 'anulado') {
                 $pedidos = $pedidos->where('pedidos.estado', '0')->whereNull('pedidos.direccion_grupo');
             } else if ($opcion == 'anulado_courier') {
@@ -2540,16 +2544,16 @@ class EnvioController extends Controller
         $pedido = Pedido::where("codigo", $codigo)->first();
 
 
-        if($pedido == null){
-            return response()->json(['html' => "Este pedido No se encuentra en el sistema", 'class' => "text-danger", 'codigo' => 0,'error'=>4, 'msj_error' => 0]);
+        if ($pedido == null) {
+            return response()->json(['html' => "Este pedido No se encuentra en el sistema", 'class' => "text-danger", 'codigo' => 0, 'error' => 4, 'msj_error' => 0]);
         }
 
         if($pedido->pendiente_anulacion == 1){
             return response()->json(['html' => "Este pedido se encuentra <b>pendiente de anulación</b>", 'class' => "text-danger", 'codigo' => 0,'error'=>6, 'msj_error' => 0]);
         }
 
-        if($pedido->estado == 0){
-            return response()->json(['html' => "Este pedido Se encuentra actualmente anulado", 'class' => "text-danger", 'codigo' => 0,'error'=>5, 'msj_error' => 0]);
+        if ($pedido->estado == 0) {
+            return response()->json(['html' => "Este pedido Se encuentra actualmente anulado", 'class' => "text-danger", 'codigo' => 0, 'error' => 5, 'msj_error' => 0]);
         }
 
         $condicion_code_actual = $pedido->condicion_envio_code;
@@ -2645,14 +2649,13 @@ class EnvioController extends Controller
          * COMPROBAMOS SI YA ESTA ATENDIDO EL PEDIDO
          */
         if ($pedido->condicion_envio_code == $nuevo_estado) {
-            return response()->json(['html' => 'El pedido <b style="">'.$codigo.'</b> ya ah sido procesado anteriormente, su estado actual es <br><span class="br-4 mt-16" style="background-color:'. $color .'; padding: 2px 12px; color: black; font-weight: bold;">' . Pedido::$estadosCondicionEnvioCode[$nuevo_estado] . '</span>', 'class' => "text-danger", 'codigo' => $codigo,'error'=>1, 'msj_error' => Pedido::$estadosCondicionEnvioCode[$nuevo_estado]]);
-        }else{
+            return response()->json(['html' => 'El pedido <b style="">' . $codigo . '</b> ya ah sido procesado anteriormente, su estado actual es <br><span class="br-4 mt-16" style="background-color:' . $color . '; padding: 2px 12px; color: black; font-weight: bold;">' . Pedido::$estadosCondicionEnvioCode[$nuevo_estado] . '</span>', 'class' => "text-danger", 'codigo' => $codigo, 'error' => 1, 'msj_error' => Pedido::$estadosCondicionEnvioCode[$nuevo_estado]]);
+        } else {
 
 
-
-            if($grupo != ""){
-               $Direccion_grupo = DireccionGrupo::where('id',$grupo)->first();
-               //dd($Direccion_grupo->codigos);
+            if ($grupo != "") {
+                $Direccion_grupo = DireccionGrupo::where('id', $grupo)->first();
+                //dd($Direccion_grupo->codigos);
                 $codigos_paquete = collect(explode(",", $Direccion_grupo->codigos))
                     ->map(fn($cod) => trim($cod))
                     ->filter()->values();
@@ -2667,7 +2670,7 @@ class EnvioController extends Controller
                 $sobres_restantes = $codigos_paquete->count() - $sobres_ya_recibidos;
 
                 $clase_confirmado = "";
-                if($sobres_restantes == 0){
+                if ($sobres_restantes == 0) {
                     $clase_confirmado = "text-success";
                 }
 
@@ -3129,28 +3132,10 @@ class EnvioController extends Controller
     }
 
 
-    public
-    function confirmarEstadoRecepcionMotorizado(Request $request)
+    public function confirmarEstadoRecepcionMotorizado(Request $request)
     {
         $envio = DireccionGrupo::where("id", $request->hiddenCodigo)->first();
-        $envio->update([
-            'condicion_envio' => Pedido::MOTORIZADO,
-            'condicion_envio_code' => Pedido::MOTORIZADO_INT,
-            'condicion_envio_at' => now(),
-            //'condicion_envio' => Pedido::MOTORIZADO,
-            //'condicion_envio_code' => Pedido::MOTORIZADO_INT,
-        ]);
-
-        $codigos_paquete = collect(explode(",", $envio->codigos))->map(function ($cod) {
-            return trim($cod);
-        })->all();
-
-        Pedido::whereIn('codigo', $codigos_paquete)
-            ->update([
-                'condicion_envio_code' => Pedido::MOTORIZADO_INT,
-                'condicion_envio_at' => now(),
-                'condicion_envio' => Pedido::MOTORIZADO
-            ]);
+        DireccionGrupo::moverAMotorizadoOlva($envio);
 
         PedidoMovimientoEstado::create([
             'pedido' => $request->hiddenCodigo,
@@ -3161,32 +3146,13 @@ class EnvioController extends Controller
         return response()->json(['html' => $envio->id]);
     }
 
-    public
-    function confirmarEstadoRevert(Request $request)
+    public function confirmarEstadoRevert(Request $request)
     {
         $envio = DireccionGrupo::where("id", $request->envio_id)->first();
-        $envio->update([
+        DireccionGrupo::cambiarCondicionEnvio($envio, Pedido::RECEPCION_MOTORIZADO_INT, [
             'foto1' => '',
             'foto2' => '',
-            //'condicion_envio' => Pedido::REPARTO_COURIER,
-            //'condicion_envio_code' => Pedido::REPARTO_COURIER_INT,
-            'condicion_envio' => Pedido::RECEPCION_MOTORIZADO,
-            'condicion_envio_code' => Pedido::RECEPCION_MOTORIZADO_INT,
-            'condicion_envio_at' => now(),
         ]);
-
-        $codigos_paquete = collect(explode(",", $envio->codigos))->map(function ($cod) {
-            return trim($cod);
-        })->all();
-
-        Pedido::whereIn('codigo', $codigos_paquete)
-            ->update([
-                'condicion_envio_code' => Pedido::RECEPCION_MOTORIZADO_INT,
-                'condicion_envio_at' => now(),
-                'condicion_envio' => Pedido::RECEPCION_MOTORIZADO
-            ]);
-
-
         PedidoMovimientoEstado::create([
             'pedido' => $request->envio_id,
             //'condicion_envio_code' => Pedido::REPARTO_COURIER_INT,
@@ -3489,6 +3455,62 @@ class EnvioController extends Controller
             DB::commit();
             return response()->json(['html' => $pedido->id, 'grupo' => $paquete_sobres, 'pedido' => $pedido, 'distrito' => $pedido->distrito, 'direccion' => $pedido->direccion, 'sobres_recibidos' => $sobres_ya_recibidos, 'sobres_restantes' => $sobres_restantes]);
         }
+
+        /*
+         /**********
+         * BUSCAMOS EL PEDIDO
+         * /
+        $pedido = Pedido::with('direcciongrupo')->where("codigo", $request->id)
+            ->activo()
+            ->firstOrFail();
+        /*************
+         * BUSCAMOS EL PAQUETE
+         * /
+        $paquete_sobres = $pedido->direccionGrupo;
+        $codigos_paquete = collect(explode(",", $paquete_sobres->codigos))
+            ->map(fn($cod) => trim($cod))
+            ->filter()->values();
+
+
+        $codigos_confirmados = collect(explode(",", $paquete_sobres->codigos_confirmados ?? ''))
+            ->map(fn($cod) => trim($cod))
+            ->filter()
+            ->values();
+
+        if ($codigos_confirmados->contains($pedido->codigo)) {
+            return response()->json(['html' => 0]);
+        } else {
+            $codigos_confirmados->push($pedido->codigo);
+            $codigos_confirmados=$codigos_confirmados->unique();
+            DB::beginTransaction();
+            /************
+             * ACTUALIZAMOS EL PEDIDO
+             * /
+            $pedido->update([
+                'modificador' => 'USER' . Auth::user()->id,
+                /*'condicion_envio' => Pedido::RECEPCION_MOTORIZADO,
+                'condicion_envio_code' => Pedido::RECEPCION_MOTORIZADO_INT,
+                'condicion_envio_at' => now(),* /
+            ]);
+
+            /*************
+             * SI la cantidad de paquetes recibidos es igual a la cantidad total del paquete, actualizamos el paquete
+             * /
+            $sobres_restantes = $codigos_paquete->count() - $codigos_confirmados->count();
+
+            if ($sobres_restantes == 0) {
+                DireccionGrupo::cambiarCondicionEnvio($paquete_sobres,Pedido::RECEPCION_MOTORIZADO_INT,[
+
+                    'modificador' => 'USER' . Auth::user()->id,
+                ]);
+            }
+            $paquete_sobres->update([
+                'codigos_confirmados' => $codigos_confirmados->join(',')
+            ]);
+            DB::commit();
+            return response()->json(['html' => $pedido->id, 'grupo' => $paquete_sobres, 'pedido' => $pedido, 'distrito' => $pedido->distrito, 'direccion' => $pedido->direccion, 'sobres_recibidos' => $sobres_ya_recibidos, 'sobres_restantes' => $sobres_restantes]);
+        }
+         */
     }
 
     public
@@ -3526,12 +3548,12 @@ class EnvioController extends Controller
     public function valida_direccionenvio(Request $request)
     {
         $element = $request->element;
-        $value_ = $request->value;
+        $value = $request->value;
         $from_ = $request->from;
 
         switch ($element) {
             case 'tracking':
-                $count_tracking = Pedido::where('env_tracking', '=', $value_)->count();
+                $count_tracking = Pedido::activo()->where('env_tracking', '=', $value)->count();
                 if ($count_tracking > 0) {
                     $arr = array('response' => 1, 'element' => 'tracking');
                     return response()->json($arr);
@@ -3540,7 +3562,7 @@ class EnvioController extends Controller
                 }
                 break;
             case 'numregistro':
-                $count_nregistro = Pedido::where('env_numregistro', '=', $value_)->count();
+                $count_nregistro = Pedido::activo()->where('env_numregistro', '=', $value)->count();
                 if ($count_nregistro > 0) {
                     $arr = array('response' => 1, 'element' => 'num.registro');
                     return response()->json($arr);

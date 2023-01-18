@@ -125,7 +125,7 @@ class DireccionGrupo extends Model
                 ])
                 ->get();
         } else {
-            $relacion =$grupo->pedidos()->activo()
+            $relacion = $grupo->pedidos()->activo()
                 ->join('detalle_pedidos', 'detalle_pedidos.pedido_id', 'pedidos.id')
                 ->select([
                     'pedidos.codigo',
@@ -137,17 +137,22 @@ class DireccionGrupo extends Model
                 ->get();
         }
         if ($relacion->count() > 0) {
+            $codigos = $relacion->pluck('codigo')->trim();
+            $confirmados = collect(explode(',', $grupo->codigos_confirmados))->trim()
+                ->filter(fn($c) => in_array($c, $codigos->all()));
             $grupo->update([
-                'codigos' => $relacion->pluck('codigo')->join(', '),
-                'producto' => $relacion->pluck('nombre_empresa')->join(', '),
-                'direccion' => $relacion->pluck('direccion')->trim()->unique()->join(', '),
-                'referencia' => $relacion->pluck('referencia')->trim()->unique()->join(', '),
-                'observacion' => $relacion->pluck('observacion')->trim()->unique()->join(', '),
+                'codigos' => $codigos->join(','),
+                'producto' => $relacion->pluck('nombre_empresa')->trim()->join(','),
+                'direccion' => $relacion->pluck('direccion')->trim()->unique()->join(','),
+                'referencia' => $relacion->pluck('referencia')->trim()->unique()->join(','),
+                'observacion' => $relacion->pluck('observacion')->trim()->unique()->join(','),
                 'cantidad' => $relacion->count(),
+                'codigos_confirmados' => $confirmados->unique()->join(','),
             ]);
         } else {
             $grupo->update([
                 'estado' => 0,
+                'codigos_confirmados' => '',
                 'motorizado_status' => 0
             ]);
         }
@@ -330,7 +335,7 @@ class DireccionGrupo extends Model
     {
         $groupData = [
             'condicion_envio_code' => $pedido->condicion_envio_code,
-            'condicion_envio_at' =>  $pedido->condicion_envio_at,
+            'condicion_envio_at' => $pedido->condicion_envio_at,
             'condicion_envio' => $pedido->condicion_envio,
             'distribucion' => $pedido->env_zona,
             'destino' => $pedido->env_destino,
@@ -350,6 +355,7 @@ class DireccionGrupo extends Model
             'distrito' => $pedido->env_distrito,
             'referencia' => $pedido->env_referencia,//nro registro
             'observacion' => $pedido->env_observacion,//rotulo
+            'gmlink' => $pedido->env_gmlink,
             'motorizado_id' => 0,
             'identificador' => $pedido->cliente->user->identificador,
         ];
@@ -412,6 +418,45 @@ class DireccionGrupo extends Model
         setting([
             $key => collect($result)->unique()->values()->all()
         ])->save();
+    }
+
+
+    public static function moverAMotorizadoOlva(self $grupo)
+    {
+        if ($grupo->activo == 1 && $grupo->distribucion == 'OLVA') {
+            $data = [
+                'condicion_envio' => Pedido::$estadosCondicionEnvioCode[Pedido::MOTORIZADO_INT],
+                'condicion_envio_code' => Pedido::MOTORIZADO_INT,
+                'condicion_envio_at' => now(),
+                'cambio_direccion_at' => null,
+            ];
+            $grupoolva = DireccionGrupo::query()->activo()
+                ->where('condicion_envio_code', Pedido::MOTORIZADO_INT)
+                ->where('distribucion', 'OLVA')
+                ->first();
+
+            $data['direccion_grupo'] = $grupoolva->id;
+            $grupo->pedidos()->update($data);
+            self::restructurarCodigos($grupo);
+            self::restructurarCodigos($grupoolva);
+            return $grupoolva;
+        } else {
+            self::cambiarCondicionEnvio($grupo, Pedido::MOTORIZADO_INT);
+        }
+        return $grupo;
+    }
+
+    public static function cambiarCondicionEnvio(self $grupo, int $condicion_envio, $extras = [])
+    {
+        $data = [
+            'condicion_envio' => Pedido::$estadosCondicionEnvioCode[$condicion_envio],
+            'condicion_envio_code' => $condicion_envio,
+            'condicion_envio_at' => now(),
+            'cambio_direccion_at' => null,
+        ];
+        $grupo->update(array_merge($data, $extras));
+        $grupo->pedidos()->update($data);
+        return $grupo;
     }
 
     /**

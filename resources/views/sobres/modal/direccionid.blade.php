@@ -9,7 +9,7 @@
                 </button>
             </div>
 
-            <form id="formdireccion" name="formdireccion">
+            <form id="formdireccion" name="formdireccion" autocomplete="off">
                 <div class="modal-body">
                     <p class="d-none">Ingrese la dirección de envío del pedido: <strong class="textcode">PED000</strong>
                     </p>
@@ -35,10 +35,7 @@
                                     <tbody>
                                     </tbody>
                                 </table>
-
-
                             </div>
-
                         </div>
                         <div class="col-4 contenedor-formulario"><!--formulario-->
                             <div class="row">
@@ -125,6 +122,11 @@
                                                     {!! Form::text('observacion', null, ['class' => 'form-control', 'placeholder' => 'Observacion', 'required' => 'required','autocomplete' => 'off']) !!}
                                                 </div>
 
+                                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                    {!! Form::label('gmlink', 'Link Google Map') !!}
+                                                    {!! Form::text('gmlink', null, ['class' => 'form-control', 'placeholder' => 'Ejem: https://goo.gl/maps/*********', 'required' => 'required','autocomplete' => 'off']) !!}
+                                                </div>
+
                                                 {{--<button type="button" id="saveHistoricoLima" class="btn btn-danger btn-md"><i class="fa"></i>GRABA HISTORICO</button>--}}
                                                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                                     <br>
@@ -186,12 +188,12 @@
 
                                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 mt-20">
                                             {!! Form::label('numregistro', 'Numero de Registro') !!}
-                                            {!! Form::text('numregistro', null, ['class' => 'form-control', 'placeholder' => 'Número de registro', 'required' => 'required','maxlength' => 12]) !!}
+                                            {!! Form::text('numregistro', null, ['class' => 'form-control', 'placeholder' => 'Número de registro', 'required' => 'required','maxlength' => 12,'pattern'=>'\d*']) !!}
                                         </div>
 
                                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                             {!! Form::label('tracking', 'Tracking') !!}
-                                            {!! Form::text('tracking', null, ['class' => 'form-control', 'placeholder' => 'Tracking', 'required' => 'required','maxlength' => 12]) !!}
+                                            {!! Form::text('tracking', null, ['class' => 'form-control', 'placeholder' => 'Tracking', 'required' => 'required','maxlength' => 12,'pattern'=>'\d*']) !!}
                                         </div>
 
                                         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">

@@ -6,14 +6,14 @@ use App\Models\DireccionGrupo;
 use App\Models\Pedido;
 use Illuminate\Console\Command;
 
-class DireccionGrupoZona extends Command
+class MasivaEstadoFinalEnvio extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'direcciongrupo:zona';
+    protected $signature = 'masiva:estadofinal:envio';
 
     /**
      * The console command description.
@@ -39,20 +39,21 @@ class DireccionGrupoZona extends Command
      */
     public function handle()
     {
-        $dir = DireccionGrupo::query()->with('motorizado')
-            ->activo()
-            ->where('condicion_envio_code', Pedido::REPARTO_COURIER_INT)
-            ->whereNotNull('motorizado_id')
-            ->where('celular','<>','OLVA')
+        $pedidos = Pedido::query()->activo()
+            ->where('pedidos.condicion_envio_code', '=', Pedido::ENVIO_COURIER_JEFE_OPE_INT)
             ->get();
+        $count = $pedidos->count();
+        $result = [];
+        $progress = $this->output->createProgressBar($count);
+        foreach ($pedidos as $pedido)
+        {
 
-        foreach ($dir as $item) {
-            if($item->nombre_cliente) {
-                $item->update([
-                    'distribucion' => $item->motorizado->zona
-                ]);
-            }
+            $grupo=DireccionGrupo::createByPedido($pedido);
+            DireccionGrupo::cambiarCondicionEnvio($grupo,Pedido::ENTREGADO_CLIENTE_INT);
+            $progress->advance();
         }
+        $progress->finish();
+
         return 0;
     }
 }
