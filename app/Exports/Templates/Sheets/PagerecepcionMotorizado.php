@@ -14,6 +14,7 @@ use Maatwebsite\Excel\Concerns\WithColumnWidths;
 use PhpOffice\PhpSpreadsheet\Cell\DataType;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Concerns\WithBackgroundColor;
+use Maatwebsite\Excel\Concerns\WithStyles;
 
 use \Maatwebsite\Excel\Sheet;
 use Maatwebsite\Excel\Events\AfterSheet;
@@ -21,12 +22,13 @@ use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithEvents;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
+use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
 Sheet::macro('styleCells', function (Sheet $sheet, string $cellRange, array $style) {
     $sheet->getDelegate()->getStyle($cellRange)->applyFromArray($style);
 });
 
-class PagerecepcionMotorizado extends Export implements WithColumnFormatting, FromCollection, WithHeadings, ShouldAutoSize, WithEvents
+class PagerecepcionMotorizado extends Export implements WithStyles,WithColumnFormatting, FromCollection, WithHeadings, ShouldAutoSize, WithEvents
 {
     //use RemembersRowNumber;
 
@@ -107,16 +109,15 @@ class PagerecepcionMotorizado extends Export implements WithColumnFormatting, Fr
     public function map($model): array
     {
         //$model->Periodo=strval(str_pad($model->Periodo,2,"0"));
-        $model->codigos=implode('<br>',explode(',',$model->codigos));
+        $model->codigos=implode('\n',explode(',',$model->codigos));
         $model->producto=explode(',',$model->producto);
         $ae=[];
         for($i=1;$i<count($model->producto);$i++)
         {
             array_push($ae,$i.") ".$model->producto[$i]);
         }
-        $model->producto=implode('<br>',$ae);
+        $model->producto=implode('\n',$ae);
 
-        //$model->producto=implode(explode(',',$model->producto),'<br>');
         return parent::map($model);
     }
 
@@ -139,6 +140,7 @@ class PagerecepcionMotorizado extends Export implements WithColumnFormatting, Fr
     public function columnFormats(): array
     {
         return [
+            //'C' => ['alignment' => ['wrapText' => true]],
             'E' => NumberFormat::FORMAT_DATE_YYYYMMDD,
             'F' => NumberFormat::FORMAT_TEXT,
             'G' => NumberFormat::FORMAT_TEXT,
@@ -298,6 +300,15 @@ class PagerecepcionMotorizado extends Export implements WithColumnFormatting, Fr
             //}
         }
 
+    }
+
+    public function styles(Worksheet $sheet)
+    {
+        // TODO: Implement styles() method.
+        return [
+            'C'    => ['alignment' => ['wrapText' => true]],
+            'E'    => ['alignment' => ['wrapText' => true]],
+        ];
     }
 }
 
