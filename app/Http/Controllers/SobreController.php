@@ -129,6 +129,7 @@ class SobreController extends Controller
             ])
             ->where('pedidos.estado', '1')
             ->whereIn('pedidos.condicion_envio_code', [
+                Pedido::EN_ATENCION_OPE_INT,
                 Pedido::POR_ATENDER_OPE_INT,Pedido::ATENDIDO_OPE_INT,Pedido::ENVIO_COURIER_JEFE_OPE_INT,
                 Pedido::RECIBIDO_JEFE_OPE_INT,
                 Pedido::RECEPCION_COURIER_INT,
