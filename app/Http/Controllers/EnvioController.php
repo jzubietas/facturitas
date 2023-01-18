@@ -3022,6 +3022,12 @@ class EnvioController extends Controller
             $sobres_restantes = $codigos_paquete->count() - $sobres_ya_recibidos;
             $clase_confirmado = "";
 
+            $total=$Direccion_grupo->pedidos()->count();
+            $escaneados=$Direccion_grupo->pedidos()->where('pedido_scaneo','1')->count();
+/*
+            if($total==$escaneados){
+                DireccionGrupo::cambiarCondicionEnvio($Direccion_grupo, Pedido::ENVIO_MOTORIZADO_COURIER_INT);
+            }*/
 
             if($sobres_restantes == 0){
                 DireccionGrupo::cambiarCondicionEnvio($Direccion_grupo, Pedido::ENVIO_MOTORIZADO_COURIER_INT);
@@ -3032,7 +3038,7 @@ class EnvioController extends Controller
             return response()->json(['html' => "Escaneado Correctamente", 'class' => "text-success", 'codigo' => $codigo, 'error' => 3, 'zona' => $Direccion_grupo->distribucion, 'cantidad' => $codigos_paquete->count(), 'cantidad_recibida' => $sobres_ya_recibidos, 'clase_confirmada' => $clase_confirmado]);
         }
 
-        return response()->json(['html' => $respuesta, 'class' => "text-success", 'codigos_procesados' => $codigos_procesados, 'codigos_no_procesados' => $codigos_no_procesados, 'error' => 0]);
+        return response()->json(['html' => $respuesta, 'class' => "text-success", 'codigos_procesados' => $codigos_procesados, 'codigos_no_procesados' => $codigos_no_procesados, 'error' => 0, 'Condicion actual'=> Pedido::$estadosCondicionEnvioCode[$pedido->condicon_envio_code]]);
 
     }
 
