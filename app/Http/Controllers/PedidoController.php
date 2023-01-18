@@ -158,7 +158,7 @@ class PedidoController extends Controller
                     DB::raw('DATE_FORMAT(pedidos.updated_at, "%d/%m/%Y") as fecha2_up'),
                     DB::raw('DATE_FORMAT(pedidos.updated_at, "%Y-%m-%d %H:%i:%s") as fecha_up'),
                     'dp.saldo as diferencia',
-                    'direccion_grupos.motorizado_status',
+                    'direccion_grupos.motorizado_status'
                 ]
             );
         //->where('pendiente_anulacion', '<>', 1)
@@ -242,6 +242,10 @@ class PedidoController extends Controller
             })
             ->editColumn('condicion_envio', function ($pedido) {
                 $badge_estado = '';
+                if ($pedido->codigo_regularizado == '1') {
+                    $badge_estado .= '<span class="badge badge-dark p-8" style="color: #fff; background-color: #347cc4; font-weight: 600; margin-bottom: -2px;border-radius: 4px 4px 0px 0px; font-size:8px;  padding: 4px 4px !important;">REGULARIZACION</span>';
+
+                }
                 if ($pedido->pendiente_anulacion == '1') {
                     $badge_estado .= '<span class="badge badge-success">' . Pedido::PENDIENTE_ANULACION . '</span>';
                     return $badge_estado;
