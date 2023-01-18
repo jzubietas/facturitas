@@ -2,6 +2,66 @@
         data-backdrop="static" style="margin-right:16px;" aria-haspopup="true" aria-expanded="false">
     <i class="fa fa-barcode" aria-hidden="true"></i> Escanear
 </button>
+<style>
+    .switch_box{
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-pack: center;
+        -ms-flex-pack: center;
+        justify-content: center;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        align-items: center;
+        -webkit-box-flex: 1;
+        -ms-flex: 1;
+        flex: 1;
+    }
+
+    /* Switch 1 Specific Styles Start */
+
+    input[type="checkbox"].switch_1{
+        font-size: 16px;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        width: 3.5em;
+        height: 1.5em;
+        background: #ddd;
+        border-radius: 3em;
+        position: relative;
+        cursor: pointer;
+        outline: none;
+        -webkit-transition: all .2s ease-in-out;
+        transition: all .2s ease-in-out;
+    }
+
+    input[type="checkbox"].switch_1:checked{
+        background: #0ebeff;
+    }
+
+    input[type="checkbox"].switch_1:after{
+        position: absolute;
+        content: "";
+        width: 1.5em;
+        height: 1.5em;
+        border-radius: 50%;
+        background: #fff;
+        -webkit-box-shadow: 0 0 .25em rgba(0,0,0,.3);
+        box-shadow: 0 0 .25em rgba(0,0,0,.3);
+        -webkit-transform: scale(.7);
+        transform: scale(.7);
+        left: 0;
+        -webkit-transition: all .2s ease-in-out;
+        transition: all .2s ease-in-out;
+    }
+
+    input[type="checkbox"].switch_1:checked:after{
+        left: calc(100% - 1.5em);
+    }
+
+    /* Switch 1 Specific Style End */
+</style>
 @push('js')
     <!-- Modal -->
     <div class="modal fade" id="modal-escanear" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -19,6 +79,12 @@
                         @endif
 
                     </div>
+
+                    <div class="switch_box box_1">
+                        <input type="checkbox" class="switch_1" id="modo_fast">
+                        <i class="fa fa-bolt ml-8 text-gray" aria-hidden="true"></i>
+                    </div>
+
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -101,6 +167,35 @@
                 data.fecha_salida = $('#fecha_escaneo').val()
             @endif
 
+             if($('#modo_fast').prop("checked", true)){
+                console.log("Modo fast activado");
+
+                @if($withFecha)
+                var fecha_salida_validacion = $('#fecha_escaneo').val();
+                if(fecha_salida_validacion == ""){
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Debe ingresar una fecha',
+                        showConfirmButton: false,
+                        timer: 1000
+                    })
+
+                    return false;
+                }else{
+                    data.fecha_salida = $('#fecha_escaneo').val()
+                }
+                @endif
+
+                codigos_agregados.push(data.codigo);
+                codigos_agregados = codigos_agregados.filter((v, i, a) => a.indexOf(v) === i)
+                data.codigos = codigos_agregados
+
+                ConfirmarOPBarra(data)
+                return false;
+            }
+
+
+
             /*********
              * CONFIRMAMOS CODIGO
              * @type {string}
@@ -111,7 +206,9 @@
                 type: 'POST',
                 url: "{{ route('operaciones.validaropbarras') }}",
                 success: function (data) {
-
+                    /*****************
+                     * VERIFICACIONES DE RESPUESTAS
+                     */
                     if(data.error == 1){
 
                         Swal.fire({
@@ -144,6 +241,19 @@
                         Swal.fire({
                             icon: 'error',
                             title: 'El pedido esta anulado',
+                            color: '#FFF',
+                            background: '#9f2916',
+                            showConfirmButton: false,
+                            timer: 1500
+                        })
+
+                        $('#respuesta_barra').html('<span class="'+ data.class +'">'+ data.html + '</span>');
+
+                    }else if(data.error == 6){
+
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Pedido Pendiente de anulación',
                             color: '#FFF',
                             background: '#9f2916',
                             showConfirmButton: false,
@@ -214,10 +324,6 @@
 
         });
 
-        /***********
-         * FIN ESCANEAR MOUSE
-         */
-
         $("#close-scan").click(function (e) {
             e.preventDefault();
 
@@ -239,61 +345,179 @@
             }else{
                 data.fecha_salida = $('#fecha_escaneo').val()
             }
-
-
-
             @endif
-/*
-            if (codigos_agregados.length === 0) {
-                return;
-            }
 
- */
+            //MAndamos el Ajax
+
+            ConfirmarOPBarra(data)
+
+            $(this).val("");
+            return false;
+        });
+
+        /***********
+         * FIN ESCANEAR MOUSE
+         */
+function ConfirmarOPBarra(data){
 
             $.ajax({
                 data: data,
                 type: 'POST',
                 url: "{{ route('operaciones.confirmaropbarras') }}",
                 success: function (data) {
+
+                    console.log(data.error);
                     codigos_agregados = []
 
                     var codigos_procesados = data.codigos_procesados
                     var codigos_no_procesados = data.codigos_no_procesados
 
+                    /*****************
+                     * VERIFICACIONES DE RESPUESTAS
+                     */
+                    if(data.error == 1){
+
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'El Pedido ya se procesó anteriormente',
+                            color: '#FFF',
+                            background: '#9f2916',
+                            showConfirmButton: false,
+                            timer: 1500
+                        })
+
+                        $('#respuesta_barra').html('<span class="'+ data.class +'">'+ data.html +'</b></span>');
+
+                    }else if(data.error == 3){
+
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Pedido identificado',
+                            color: '#FFF',
+                            background: '#79b358',
+                            showConfirmButton: false,
+                            timer: 600
+                        })
+                        console.log(data);
+                        codigos_agregados.push(data.codigo);
+                        codigos_agregados = codigos_agregados.filter((v, i, a) => a.indexOf(v) === i)
+
+                        $('#pedidos-procesados').append('<table class="table '+ data.clase_confirmada +' mb-0"><tr><td class="pb-8 pt-8">'+ data.codigo +'</td><td class="pb-8 pt-8">'+ data.zona +'</td><td class="pb-8 pt-8">'+ data.cantidad_recibida +'/'+ data.cantidad + '</td></tr></table>');
+                    }else if(data.error == 4){
+
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'El pedido no se encontró en el sistema',
+                            color: '#FFF',
+                            background: '#9f2916',
+                            showConfirmButton: false,
+                            timer: 1500
+                        })
+
+                        $('#respuesta_barra').html('<span class="'+ data.class +'">'+ data.html + '</span>');
+
+                    }
+                    else if(data.error == 5){
+
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'El pedido esta anulado',
+                            color: '#FFF',
+                            background: '#9f2916',
+                            showConfirmButton: false,
+                            timer: 1500
+                        })
+
+                        $('#respuesta_barra').html('<span class="'+ data.class +'">'+ data.html + '</span>');
+
+                    }else if(data.error == 6){
+
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Pedido Pendiente de anulación',
+                            color: '#FFF',
+                            background: '#9f2916',
+                            showConfirmButton: false,
+                            timer: 1500
+                        })
+
+                        $('#respuesta_barra').html('<span class="'+ data.class +'">'+ data.html + '</span>');
+
+                    }else if(data.error == 0) {
+
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Pedido identificado',
+                            color: '#FFF',
+                            background: '#79b358',
+                            showConfirmButton: false,
+                            timer: 600
+                        })
+                    }else if(data.error == 7) {
+
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'El Paquete de pedidos ya fue enviado',
+                            color: '#FFF',
+                            background: '#ffc107',
+                            showConfirmButton: false,
+                            timer: 600
+                        })
+                    }
+
                     /*
                     $('#pedidos-procesados').html(`<p><b class="text-success w-100">codigos procesados (${codigos_procesados.length}):</b></p><ul>${codigos_procesados.map(function (codigo) {
                         return `<li><i class="fa fa-check text-success"></i> ${codigo}</li>`
                     }).join('')}</ul><br>`);*/
-
-                    $('#pedidos-procesados').html(`<h2 class="font-weight-bold"><i class="fa fa-check text-success" aria-hidden="true"></i> ${codigos_procesados.length} </h2><h4>Pedidos Procesados</h4><p>Siga Escaneando pedidos</p>`);
-
-
 /*
-                    $('#pedidos-procesados').append(`<p><b class="text-danger w-100">codigos no procesados (${codigos_no_procesados.length}): </b></p><ul>${codigos_no_procesados.map(function (codigo) {
-                        return `<li><i class="fa fa-window-close text-danger"></i> ${codigo}</li>`
-                    }).join('')}</ul><br>`);
+                    if(data.error == 0){
+                        $('#pedidos-procesados').html(`<h2 class="font-weight-bold"><i class="fa fa-check text-success" aria-hidden="true"></i> ${codigos_procesados.length} </h2><h4>Pedidos Procesados</h4><p>Siga Escaneando pedidos</p>`);
 
- */
-
-                    $('#respuesta_barra').removeClass("text-danger");
-                    $('#respuesta_barra').removeClass("text-success");
-                    $('#respuesta_barra').addClass(data.class);
-                    $('#respuesta_barra').html(data.html);
+                        $('#respuesta_barra').removeClass("text-danger");
+                        $('#respuesta_barra').removeClass("text-success");
+                        $('#respuesta_barra').addClass(data.class);
+                        $('#respuesta_barra').html(data.html);
 
 
-                    setTimeout(function(){
-                        console.log("cerrar modal");
-                        $('#pedidos-procesados').html("");
-                        $('#modal-escanear').modal('hide');
-                    },300);
+                        setTimeout(function(){
+                            console.log("cerrar modal");
+                            //$('#pedidos-procesados').html("");
+                            //$('#modal-escanear').modal('hide');
+                        },300);
 
 
-                    @foreach($tablesIds as $table)
-                    $('{{$table}}').DataTable().draw(false)
-                    @endforeach
-                    if (codigos_agregados.length === 0) {
-                        //$('#modal-escanear').modal('hide')
-                    }
+                        @foreach($tablesIds as $table)
+                        $('{{$table}}').DataTable().draw(false)
+                        @endforeach
+                        if (codigos_agregados.length === 0) {
+                            //$('#modal-escanear').modal('hide')
+                        }
+
+                    }else if(data.error == 3){
+
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Pedido identificado',
+                            color: '#FFF',
+                            background: '#79b358',
+                            showConfirmButton: false,
+                            timer: 600
+                        })
+                        console.log(data);
+                        codigos_agregados.push(data.codigo);
+                        codigos_agregados = codigos_agregados.filter((v, i, a) => a.indexOf(v) === i)
+
+                        $('#pedidos-procesados').append('<table class="table '+ data.clase_confirmada +' mb-0"><tr><td class="pb-8 pt-8">'+ data.codigo +'</td><td class="pb-8 pt-8">'+ data.zona +'</td><td class="pb-8 pt-8">'+ data.cantidad_recibida +'/'+ data.cantidad + '</td></tr></table>');
+                    }*/
+
+                    /*
+                                        $('#pedidos-procesados').append(`<p><b class="text-danger w-100">codigos no procesados (${codigos_no_procesados.length}): </b></p><ul>${codigos_no_procesados.map(function (codigo) {
+                                            return `<li><i class="fa fa-window-close text-danger"></i> ${codigo}</li>`
+                                        }).join('')}</ul><br>`);
+
+                     */
+
+
 
 
                 }
@@ -301,8 +525,9 @@
                 $('#codigo_confirmar').focus();
             });
 
-            $(this).val("");
+
             return false;
-        })
+        }
+
     </script>
 @endpush

@@ -2544,8 +2544,8 @@ class EnvioController extends Controller
             return response()->json(['html' => "Este pedido No se encuentra en el sistema", 'class' => "text-danger", 'codigo' => 0,'error'=>4, 'msj_error' => 0]);
         }
 
-        if($pedido->estado == 1 and $pedido->pendiente_anulacion == 1){
-            return response()->json(['html' => "Este pedido se encuentra pendiente de anulación", 'class' => "text-danger", 'codigo' => 0,'error'=>5, 'msj_error' => 0]);
+        if($pedido->pendiente_anulacion == 1){
+            return response()->json(['html' => "Este pedido se encuentra <b>pendiente de anulación</b>", 'class' => "text-danger", 'codigo' => 0,'error'=>6, 'msj_error' => 0]);
         }
 
         if($pedido->estado == 0){
@@ -2693,7 +2693,7 @@ class EnvioController extends Controller
         //VARIABLES GLOBALES
         $responsable = $request->responsable;
         $accion = $request->accion;
-        $codigo = $request->hiddenCodigo;
+        $codigo = $request->codigo;
         $tipo = $request->tipo; // PEDIDO O PAQUETE
 
         $codigos = $request->codigos;
@@ -2701,22 +2701,61 @@ class EnvioController extends Controller
         $codigos_procesados = array();
         $codigos_no_procesados = array();
         $respuesta = "";
-        foreach ($codigos as $codigo) {
-            /*************
-             * IDENTIFICAMOS LOS DATOS GLOBALES
-             */
-            $pedido = Pedido::where("codigo", $codigo)->first();
-            if ($pedido == null) {
-                $codigos_no_procesados[] = $codigo;
-                continue;
+
+        /*************
+         * IDENTIFICAMOS LOS DATOS GLOBALES
+         */
+        $pedido = Pedido::where("codigo", $codigo)->first();
+
+
+
+        if ($pedido == null) {
+            $codigos_no_procesados[] = $codigo;
+
+        }
+
+        //dd($pedido);
+
+        if($pedido == null){
+            return response()->json(['html' => "Este pedido No se encuentra en el sistema", 'class' => "text-danger", 'codigo' => 0,'error'=>4, 'msj_error' => 0]);
+        }
+
+        if($pedido->pendiente_anulacion == 1){
+            return response()->json(['html' => "Este pedido se encuentra <b>pendiente de anulación</b>", 'class' => "text-danger", 'codigo' => 0,'error'=>6, 'msj_error' => 0]);
+        }
+
+        if($pedido->estado == 0){
+            return response()->json(['html' => "Este pedido Se encuentra actualmente anulado", 'class' => "text-danger", 'codigo' => 0,'error'=>5, 'msj_error' => 0]);
+        }
+
+        /*************
+         * SOBRES PARA REPARTO
+         */
+
+        if($responsable == "fernandez_reparto"){
+            $color = $pedido->condicion_envio_color;
+            if($pedido -> condicion_envio_code == Pedido::ENVIO_MOTORIZADO_COURIER_INT){
+
+                //return response()->json(['html' => 'El pedido <b style="">'.$codigo.'</b> ya ah sido procesado anteriormente, su estado actual es <br><span class="br-4 mt-16" style="background-color:'. $color .'; padding: 2px 12px; color: black; font-weight: bold;">' . Pedido::$estadosCondicionEnvioCode[$nuevo_estado] . '</span>', 'class' => "text-danger", 'codigo' => $codigo,'error'=>4, 'msj_error' => Pedido::$estadosCondicionEnvioCode[$nuevo_estado]]);
+                return response()->json(['html' => 'El pedido <b style="">'.$codigo.'</b> ya ah sido procesado anteriormente', 'class' => "text-danger", 'codigo' => $codigo,'error'=>4]);
+
             }
-            $condicion_code_actual = $pedido->condicion_envio_code;
+        }
 
-            /************
-             * SETEAMOS VALORES POR DEFECTO
-             */
-            $nuevo_estado = $condicion_code_actual;
 
+        $grupo = $pedido->direccion_grupo;
+        $condicion_code_actual = $pedido->condicion_envio_code;
+
+        /************
+         * SETEAMOS VALORES POR DEFECTO
+         */
+        $nuevo_estado = $condicion_code_actual;
+
+
+
+
+
+        foreach ($codigos as $codigo) {
 
             // SI SON SOBRES DEVUELTOS
             if ($accion == "sobres_devuelto") {
@@ -2735,6 +2774,8 @@ class EnvioController extends Controller
             /*************
              * SETEAMOS EL NUEVO ESTADO Y EL MENSAJE DE CONFIRMACION
              */
+
+            $response = "";
 
             switch ($responsable) {
 
@@ -2756,6 +2797,7 @@ class EnvioController extends Controller
                         case Pedido::REPARTO_COURIER_INT: // 8
                             $nuevo_estado = Pedido::ENVIO_MOTORIZADO_COURIER_INT; // 19
                             $respuesta = "El sobre se envió a motorizado correctamente.";
+                            $grupo = $pedido->direccion_grupo;
                             break;
                     }
                     break;
@@ -2876,7 +2918,8 @@ class EnvioController extends Controller
                         break;
 
                     case "sobres_reparto":
-                        $envio = $pedido->direcciongrupo;
+                        /*
+                        $envio = $pedido->direccionGrupo;
                         $envio->update([
                             'condicion_envio' => Pedido::ENVIO_MOTORIZADO_COURIER,
                             'condicion_envio_code' => Pedido::ENVIO_MOTORIZADO_COURIER_INT,
@@ -2898,6 +2941,8 @@ class EnvioController extends Controller
                             'condicion_envio_code' => Pedido::ENVIO_MOTORIZADO_COURIER_INT,
                             'notificado' => 0
                         ]);
+                        */
+
                         break;
 
                     case "sobres_devuelto":
@@ -2943,7 +2988,67 @@ class EnvioController extends Controller
             }
 
         }
-        return response()->json(['html' => $respuesta, 'class' => "text-success", 'codigos_procesados' => $codigos_procesados, 'codigos_no_procesados' => $codigos_no_procesados]);
+
+        if($grupo != ""){
+
+            $Direccion_grupo = DireccionGrupo::where('id',$grupo)->first();
+            $color = $pedido->condicion_envio_color;
+
+            if($pedido -> condicion_envio_code == Pedido::ENVIO_MOTORIZADO_COURIER_INT){
+
+                return response()->json(['html' => 'El pedido <b style="">'.$codigo.'</b> ya ah sido procesado anteriormente, su estado actual es <br><span class="br-4 mt-16" style="background-color:'. $color .'; padding: 2px 12px; color: black; font-weight: bold;">' . Pedido::$estadosCondicionEnvioCode[$nuevo_estado] . '</span>', 'class' => "text-danger", 'codigo' => $codigo,'error'=>4, 'msj_error' => Pedido::$estadosCondicionEnvioCode[$nuevo_estado]]);
+
+            }
+
+            if($Direccion_grupo -> condicion_envio_code == Pedido::ENVIO_MOTORIZADO_COURIER_INT){
+                return response()->json(['error' => 7]);
+            }
+
+            //dd($Direccion_grupo->codigos);
+            $codigos_paquete = collect(explode(",", $Direccion_grupo->codigos))
+                ->map(fn($cod) => trim($cod))
+                ->filter()->values();
+
+            $pedido->update([
+                'modificador' => 'USER' . Auth::user()->id,
+                'fecha_envio_op_courier' => Carbon::now(),
+                'condicion_envio' => Pedido::ENVIO_MOTORIZADO_COURIER,
+                'condicion_envio_code' => Pedido::ENVIO_MOTORIZADO_COURIER_INT,
+                'condicion_envio_at' => now(),
+                'pedido_scaneo' => 1
+            ]);
+
+            /*************
+             * SACAMOS LA CANTIDAD DE SOBRES YA RECIBIDOS DE ESTE PAQUETE
+             */
+            $sobres_ya_recibidos = Pedido::where('pedido_scaneo', 1)
+                ->whereIn('codigo', $codigos_paquete)
+                ->count();
+
+            $sobres_restantes = $codigos_paquete->count() - $sobres_ya_recibidos;
+
+
+
+            $clase_confirmado = "";
+            if($sobres_restantes == 0){
+
+                $Direccion_grupo->update([
+                    'condicion_envio' => Pedido::ENVIO_MOTORIZADO_COURIER,
+                    'condicion_envio_code' => Pedido::ENVIO_MOTORIZADO_COURIER_INT,
+                    'condicion_envio_at' => now(),
+                    'fecha_salida' => $request->fecha_salida,
+                    'cambio_direccion_at' => null,
+                ]);
+
+                $clase_confirmado = "text-success";
+            }
+
+
+            return response()->json(['html' => "Escaneado Correctamente", 'class' => "text-success", 'codigo' => $codigo, 'error' => 3, 'zona' => $Direccion_grupo->distribucion, 'cantidad' => $codigos_paquete->count(), 'cantidad_recibida' => $sobres_ya_recibidos, 'clase_confirmada' => $clase_confirmado]);
+        }
+
+        return response()->json(['html' => $respuesta, 'class' => "text-success", 'codigos_procesados' => $codigos_procesados, 'codigos_no_procesados' => $codigos_no_procesados, 'error' => 0]);
+
     }
 
     public
