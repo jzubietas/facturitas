@@ -74,6 +74,7 @@
                 return false;
             });*/
         })
+
         $('#modal-escanear').on('hidden.bs.modal', function () {
             $('#respuesta_barra').html('')
             $('#pedidos-procesados').html('')
@@ -122,7 +123,7 @@
                             timer: 1500
                         })
 
-                        $('#respuesta_barra').html('<span class="'+ data.class +'">El Pedido <b>'+ data.codigo +'</b> ya se procesó anteriormente, su estado actual es <b>'+ data.msj_error +'</b></span>');
+                        $('#respuesta_barra').html('<span class="'+ data.class +'">'+ data.html +'</b></span>');
 
                     }else if(data.error == 4){
 
@@ -176,6 +177,8 @@
                         Swal.fire({
                             icon: 'success',
                             title: 'Pedido identificado',
+                            color: '#FFF',
+                            background: '#79b358',
                             showConfirmButton: false,
                             timer: 600
                         })
@@ -183,7 +186,7 @@
                         codigos_agregados.push(data.codigo);
                         codigos_agregados = codigos_agregados.filter((v, i, a) => a.indexOf(v) === i)
 
-                        $('#pedidos-procesados').append('<table class="table"><tr><td>'+ data.codigo +'</td><td>'+ data.zona +'</td><td>'+ data.cantidad +' Sobres</td></tr></table>');
+                        $('#pedidos-procesados').append('<table class="table '+ data.clase_confirmada +' mb-0"><tr><td class="pb-8 pt-8">'+ data.codigo +'</td><td class="pb-8 pt-8">'+ data.zona +'</td><td class="pb-8 pt-8">'+ data.cantidad_recibida +'/'+ data.cantidad + '</td></tr></table>');
                     }
 
 
@@ -276,12 +279,23 @@
                     $('#respuesta_barra').removeClass("text-success");
                     $('#respuesta_barra').addClass(data.class);
                     $('#respuesta_barra').html(data.html);
+
+
+                    setTimeout(function(){
+                        console.log("cerrar modal");
+                        $('#pedidos-procesados').html("");
+                        $('#modal-escanear').modal('hide');
+                    },300);
+
+
                     @foreach($tablesIds as $table)
                     $('{{$table}}').DataTable().draw(false)
                     @endforeach
                     if (codigos_agregados.length === 0) {
                         //$('#modal-escanear').modal('hide')
                     }
+
+
                 }
             }).always(function(){
                 $('#codigo_confirmar').focus();

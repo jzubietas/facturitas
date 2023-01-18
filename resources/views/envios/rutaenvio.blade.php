@@ -3,9 +3,8 @@
 @section('title', 'Rutas de Envio')
 
 @section('content_header')
+@include('envios.modal.exportar', ['title' => 'Exportar RUTAS DE ENVIAR', 'key' => '1'])
 
-        @include('envios.modal.exportar', ['title' => 'Exportar RUTAS DE ENVIAR', 'key' => '1'])
-    </h1>
     @if($superasesor > 0)
         <br>
         <div class="bg-4">

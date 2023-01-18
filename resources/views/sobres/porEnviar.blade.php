@@ -49,6 +49,8 @@
                     <th scope="col">Asesor</th>
                     {{-- <th scope="col">Cliente</th> --}}
                     <th scope="col">Razón social</th>
+                    <th scope="col">Nombre Cliente</th>
+                    <th scope="col">Telefono Cliente</th>
                     <th scope="col">Fecha de registro</th>
                     <th scope="col">Fecha de envio</th>
                     <th scope="col">Fecha de entrega</th>
@@ -1671,6 +1673,8 @@
                     //   },
                     // },
                     {data: 'empresas', name: 'empresas',},
+                    {data: 'nombres', name: 'c.nombre',},
+                    {data: 'celulares', name: 'c.celular',},
                     {data: 'fecha_envio_doc', name: 'fecha_envio_doc', "visible": false},
                     {data: 'fecha_envio_doc_fis', name: 'fecha_envio_doc_fis',},
                     {data: 'fecha_recepcion', name: 'fecha_recepcion', "visible": false},

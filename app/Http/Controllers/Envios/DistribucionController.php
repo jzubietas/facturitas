@@ -62,7 +62,9 @@ class DistribucionController extends Controller
                         ->where('supervisor', Auth::user()->id)
                         ->pluck('id');
                     $belongsToMany->whereIn('pedidos.user_id', $usersasesores);
+                    $belongsToMany->where('pedidos.env_celular_cliente_recibe', '<>', '999999999');
                 }
+                $belongsToMany->where('pedidos.estado', '1');
             },
             'motorizadoHistories'
         ])
@@ -148,7 +150,7 @@ class DistribucionController extends Controller
 
         }*/
 
-        $items = $query->get()->filter(fn(GrupoPedido $grupo) => $grupo->pedidos->count()>0);
+        $items = $query->get()->filter(fn(GrupoPedido $grupo) => $grupo->pedidos->count() > 0);
         return \DataTables::of($items)
             ->addColumn('codigos', function (GrupoPedido $grupo) {
                 return $grupo->pedidos->pluck('codigo')->sort()
@@ -166,6 +168,10 @@ class DistribucionController extends Controller
             })
             ->editColumn('zona', function ($pedido) {
                 return "<b>" . $pedido->zona . "</b>";
+            })
+            ->addColumn('fecha_producto', function (GrupoPedido $grupo) {
+                return $grupo->pedidos->sortBy(fn($pedido) => $pedido->codigo)->pluck('created_at')
+                    ->map(fn($codigo, $index) => ($index + 1) . ") <b>" . $codigo->format('d-m-Y') . "</b>")->join('<hr class="my-1">');
             })
             ->addColumn('action', function ($pedido) use ($motorizados, $color_zones) {
                 $btn = [];
@@ -195,7 +201,7 @@ class DistribucionController extends Controller
 
                 return "<ul class='d-flex'>" . join('', $btn) . "</ul>";
             })
-            ->rawColumns(['action', 'condicion_envio', 'productos', 'codigos', 'zona'])
+            ->rawColumns(['action', 'condicion_envio', 'productos', 'codigos', 'zona', 'fecha_producto'])
             ->make(true);
 
     }
@@ -212,6 +218,32 @@ class DistribucionController extends Controller
         return response()->json($pedidoGrupo);
     }
 
+    private function createDireccionGrupo($grupo, $groupData, $pedidosIds)
+    {
+        unset($groupData['pedido_id']);
+        unset($groupData['pedido_codigo']);
+        unset($groupData['pedido_nombre_empresa']);
+        $direcciongrupo = DireccionGrupo::create($groupData);
+        Pedido::whereIn('id', $pedidosIds)->update([
+            'env_zona_asignada' => null,
+            'estado_ruta' => '1',
+            'condicion_envio' => Pedido::REPARTO_COURIER,
+            'condicion_envio_code' => Pedido::REPARTO_COURIER_INT,
+            'condicion_envio_at' => now(),
+            'direccion_grupo' => $direcciongrupo->id,
+        ]);
+        PedidoMotorizadoHistory::query()
+            ->where([
+                'pedido_grupo_id' => $grupo->id,
+            ])
+            ->update([
+                'direccion_grupo_id' => $direcciongrupo->id,
+            ]);
+        $grupo->delete();
+        DireccionGrupo::restructurarCodigos($direcciongrupo);
+        return $direcciongrupo;
+    }
+
     public function agrupar(Request $request)
     {
         $this->validate($request, [
@@ -223,31 +255,6 @@ class DistribucionController extends Controller
 
         $zona = $request->get('zona');
 
-        function createDireccionGrupo($grupo, $groupData, $pedidosIds)
-        {
-            unset($groupData['pedido_id']);
-            unset($groupData['pedido_codigo']);
-            unset($groupData['pedido_nombre_empresa']);
-            $direcciongrupo = DireccionGrupo::create($groupData);
-            Pedido::whereIn('id', $pedidosIds)->update([
-                'env_zona_asignada' => null,
-                'estado_ruta' => '1',
-                'condicion_envio' => Pedido::REPARTO_COURIER,
-                'condicion_envio_code' => Pedido::REPARTO_COURIER_INT,
-                'condicion_envio_at' => now(),
-                'direccion_grupo' => $direcciongrupo->id,
-            ]);
-            PedidoMotorizadoHistory::query()
-                ->where([
-                    'pedido_grupo_id' => $grupo->id,
-                ])
-                ->update([
-                    'direccion_grupo_id' => $direcciongrupo->id,
-                ]);
-            $grupo->delete();
-            DireccionGrupo::restructurarCodigos($direcciongrupo);
-            return $direcciongrupo;
-        }
 
         $grupos = [];
         foreach ($groups as $grupo) {
@@ -297,7 +304,7 @@ class DistribucionController extends Controller
                 if ($request->get("visualizar") == '1') {
                     $grupos[] = $groupData;
                 } else {
-                    $grupos[] = createDireccionGrupo($grupo, $groupData, collect($pedidos)->pluck('id'))->refresh();
+                    $grupos[] = $this->createDireccionGrupo($grupo, $groupData, collect($pedidos)->pluck('id'))->refresh();
                 }
             } else {
                 $dividir = $pedidos->map(function (Pedido $pedido) use ($grupo, $request, $zona) {
@@ -344,7 +351,7 @@ class DistribucionController extends Controller
                         $groupData['producto'] = $citems->pluck('pedido_nombre_empresa')->join(', ');
                         $grupos[] = $groupData;
                     } else {
-                        $grupos[] = createDireccionGrupo($grupo, $groupData, $pedidos)->refresh();
+                        $grupos[] = $this->createDireccionGrupo($grupo, $groupData, $pedidos)->refresh();
                     }
                 }
             }

@@ -525,38 +525,6 @@ class EnvioController extends Controller
     }
 
 
-    public function downloadRotulosEnviosparareparto(Request $request)
-    {
-        $rotulos = DireccionGrupo::where('direccion_grupos.condicion_envio_code', Pedido::REPARTO_COURIER_INT)
-            ->where('direccion_grupos.distribucion', 'OLVA')
-            ->activo()
-            ->get()
-            ->map(function ($grupo) {
-                if ($grupo->observacion) {
-                    return [
-                        'codigos' => explode(',', $grupo->codigos),
-                        'producto' => explode(',', $grupo->producto),
-                        'file' => collect(explode(',', $grupo->observacion))
-                            ->trim()
-                            ->unique()
-                            ->filter(fn($path) => \Storage::disk('pstorage')->exists($path))
-                            ->map(fn($path) => \Storage::disk('pstorage')->path($path))
-                            ->first()
-                    ];
-                }
-                return null;
-            })
-            ->filter(fn($path) => $path != null)
-            ->map(function ($grupo) {
-                $grupo['file']=pdf_to_image($grupo['file']);
-                return $grupo;
-            });
-        if($request->has('html')){
-            return view('rotulospdf', compact('rotulos'));
-        }
-        $pdf = PDF::loadView('rotulospdf', compact('rotulos'));
-        return $pdf->stream('resume.pdf');
-    }
 
     public function Enviosenrepartotabla(Request $request)
     {
@@ -1023,6 +991,48 @@ class EnvioController extends Controller
                 ->toJson();
         }
 
+    }
+
+
+    public function downloadRotulosEnviosrutaenvio(Request $request)
+    {
+        $fecha_consulta = $request->fecha_salida;
+        $rotulos = DireccionGrupo::query()
+            ->where('direccion_grupos.condicion_envio_code', Pedido::ENVIO_MOTORIZADO_COURIER_INT)
+            ->whereDate('direccion_grupos.fecha_salida', $fecha_consulta)
+            ->where('direccion_grupos.motorizado_status', '=', 0)
+            ->activo()
+            ->where('direccion_grupos.distribucion', 'OLVA')
+            ->get()
+            ->map(function ($grupo) {
+                if ($grupo->observacion) {
+                    $file = collect(explode(',', $grupo->observacion))
+                        ->trim()
+                        ->unique()
+                        ->filter(fn($path) => \Storage::disk('pstorage')->exists($path))
+                        ->map(fn($path) => \Storage::disk('pstorage')->path($path))
+                        ->first();
+                    if (!$file) {
+                        return null;
+                    }
+                    return [
+                        'codigos' => explode(',', $grupo->codigos),
+                        'producto' => explode(',', $grupo->producto),
+                        'file' => $file
+                    ];
+                }
+                return null;
+            })
+            ->filter(fn($path) => $path != null)
+            ->map(function ($grupo) {
+                $grupo['file'] = pdf_to_image($grupo['file']);
+                return $grupo;
+            });
+        if ($request->has('html')) {
+            return view('rotulospdf', compact('rotulos'));
+        }
+        $pdf = PDF::loadView('rotulospdf', compact('rotulos'))->setPaper('a4', 'portrait');
+        return $pdf->stream('resume.pdf');
     }
 
     public function Enviosporconfirmar()
@@ -2345,7 +2355,7 @@ class EnvioController extends Controller
                                     else DATEDIFF(DATE(NOW()), DATE(pedidos.fecha_recepcion_courier)) end) as dias "),
                 ]);
             if ($opcion == 'recepcionado') {
-                $pedidos = $pedidos->where('pedidos.estado', '1')->whereIn('pedidos.condicion_envio_code', [Pedido::RECEPCION_COURIER_INT]);
+                $pedidos = $pedidos->where('pedidos.estado', '1')->whereIn('pedidos.condicion_envio_code', [Pedido::REPARTO_COURIER_INT,Pedido::MOTORIZADO_INT, Pedido::CONFIRM_MOTORIZADO_INT, Pedido::RECEPCION_MOTORIZADO_INT, Pedido::ENVIO_MOTORIZADO_COURIER_INT,Pedido::RECEPCION_COURIER_INT ]);
             } else if ($opcion == 'anulado') {
                 $pedidos = $pedidos->where('pedidos.estado', '0')->whereNull('pedidos.direccion_grupo');
             } else if ($opcion == 'anulado_courier') {
@@ -2538,6 +2548,7 @@ class EnvioController extends Controller
         }
 
         $condicion_code_actual = $pedido->condicion_envio_code;
+        $color = $pedido->condicion_envio_color;
         $grupo = "";
 
         /************
@@ -2629,16 +2640,34 @@ class EnvioController extends Controller
          * COMPROBAMOS SI YA ESTA ATENDIDO EL PEDIDO
          */
         if ($pedido->condicion_envio_code == $nuevo_estado) {
-            return response()->json(['html' => "Este pedido ya ah sido procesado anteriormente, su estado actual es " . Pedido::$estadosCondicionEnvioCode[$nuevo_estado], 'class' => "text-danger", 'codigo' => $codigo,'error'=>1, 'msj_error' => Pedido::$estadosCondicionEnvioCode[$nuevo_estado]]);
+            return response()->json(['html' => 'El pedido <b style="">'.$codigo.'</b> ya ah sido procesado anteriormente, su estado actual es <br><span class="br-4 mt-16" style="background-color:'. $color .'; padding: 2px 12px; color: black; font-weight: bold;">' . Pedido::$estadosCondicionEnvioCode[$nuevo_estado] . '</span>', 'class' => "text-danger", 'codigo' => $codigo,'error'=>1, 'msj_error' => Pedido::$estadosCondicionEnvioCode[$nuevo_estado]]);
         }else{
+
+
+
             if($grupo != ""){
                $Direccion_grupo = DireccionGrupo::where('id',$grupo)->first();
                //dd($Direccion_grupo->codigos);
                 $codigos_paquete = collect(explode(",", $Direccion_grupo->codigos))
                     ->map(fn($cod) => trim($cod))
-                    ->filter()->count();
+                    ->filter()->values();
 
-                return response()->json(['html' => "Escaneado Correctamente", 'class' => "text-success", 'codigo' => $codigo, 'error' => 3, 'zona' => $Direccion_grupo->distribucion, 'cantidad' => $codigos_paquete]);
+                /*************
+                 * SACAMOS LA CANTIDAD DE SOBRES YA RECIBIDOS DE ESTE PAQUETE
+                 */
+                $sobres_ya_recibidos = Pedido::where('condicion_envio_code', Pedido::ENVIO_MOTORIZADO_COURIER_INT)
+                    ->whereIn('codigo', $codigos_paquete)
+                    ->count();
+
+                $sobres_restantes = $codigos_paquete->count() - $sobres_ya_recibidos;
+
+                $clase_confirmado = "";
+                if($sobres_restantes == 0){
+                    $clase_confirmado = "text-success";
+                }
+
+
+                return response()->json(['html' => "Escaneado Correctamente", 'class' => "text-success", 'codigo' => $codigo, 'error' => 3, 'zona' => $Direccion_grupo->distribucion, 'cantidad' => $codigos_paquete->count(), 'cantidad_recibida' => $sobres_ya_recibidos, 'clase_confirmada' => $clase_confirmado]);
             }
             return response()->json(['html' => "Escaneado Correctamente", 'class' => "text-success", 'codigo' => $codigo, 'error' => 0]);
         }

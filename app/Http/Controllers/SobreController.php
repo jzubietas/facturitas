@@ -96,8 +96,8 @@ class SobreController extends Controller
             ->select(
                 'pedidos.id',
                 'pedidos.cliente_id',
-                // 'c.nombre as nombres',
-                // 'c.celular as celulares',
+                 'c.nombre as nombres',
+                 'c.celular as celulares',
                 'u.identificador as users',
                 'u.id as user_id',
                 'dp.codigo as codigos',
