@@ -40,7 +40,7 @@ page-break-after: always;
     @elseif($loop->index>1 && $loop->index<count($rotulos)-1)
     page-break-after: always;
 @endif">
-        <table style="width: 100%">
+        <table style="width: 100%; max-width: 600px;">
             <tr>
                 <td colspan="2">
                     <img src="{{$rotulo['file']}}">
@@ -61,7 +61,7 @@ page-break-after: always;
                 </td>
             </tr>
         </table>
-        <div class="footer" style="text-align: left; padding-left: 8mm">
+        <div class="footer" style="text-align: left; padding-left: 8mm; width:100%; white-space: nowrap">
             @foreach($rotulo['producto'] as $grupos)
                 <h3>{{$grupos}}</h3>
             @endforeach
