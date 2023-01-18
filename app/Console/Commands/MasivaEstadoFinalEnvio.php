@@ -40,28 +40,20 @@ class MasivaEstadoFinalEnvio extends Command
     public function handle()
     {
         $pedidos = Pedido::query()->activo()
-            ->where('pedidos.condicion_envio_code', '=', 12)
-            ->where('pedidos.condicion_envio', '=', "ENVIO A COURIER - JEFE OPE")
+            ->where('pedidos.condicion_envio_code', '=', Pedido::ENVIO_COURIER_JEFE_OPE_INT)
             ->get();
-        $count = 0;
+        $count = $pedidos->count();
         $result = [];
+        $progress = $this->output->createProgressBar($count);
         foreach ($pedidos as $pedido)
         {
-            $grupo=DireccionGrupo::createByPedido($pedido->codigo);
-            DireccionGrupo::where('id',$grupo->id)->get()
-                ->update([
-                    'condicion_envio_code' => Pedido::ENTREGADO_CLIENTE_INT,
-                    'condicion_envio' => Pedido::ENTREGADO_CLIENTE
-                ]);
-            $elpedido=Pedido::where('codigo',$pedido->codigo)->first();
-            $elpedido->update([
-                'direccion_grupo' => $grupo->id,
-                'condicion_envio_code' => Pedido::ENTREGADO_CLIENTE_INT,
-                'condicion_envio' => Pedido::ENTREGADO_CLIENTE
-            ]);
 
+            $grupo=DireccionGrupo::createByPedido($pedido);
+            DireccionGrupo::cambiarCondicionEnvio($grupo,Pedido::ENTREGADO_CLIENTE_INT);
+            $progress->advance();
         }
-        
+        $progress->finish();
+
         return 0;
     }
 }
