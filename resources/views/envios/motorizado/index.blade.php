@@ -424,6 +424,10 @@
                         </div>
                     </div>
                 </div>
+                <div class="col-lg-12">
+                                <h6>Observacion (Opcional):</h6>
+                                <textarea class="form-control mb-20" rowspan="3" id="observacion" name="observacion" placeholder="Si tiene una observación, ingresela aquí"></textarea>
+                                </div>
             </div>
         </div>
         <div class="card-footer text-center">
