@@ -389,7 +389,7 @@
                 setTimeout(function () {
                     $("#pdf_renderer_object").attr('data', URL.createObjectURL(file))
 
-                    $("#pdf_renderer_object").css('height', ($("#pdf_renderer_object").parents('.viewpdf').width() + 50) + 'px')
+                    $("#pdf_renderer_object").css('height', ($("#pdf_renderer_object").parents('.viewpdf').height() + 50) + 'px')
                 }, 50)
 
                 console.log(file);
