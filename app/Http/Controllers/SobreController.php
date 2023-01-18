@@ -93,7 +93,7 @@ class SobreController extends Controller
         $pedidos = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')
             ->join('users as u', 'pedidos.user_id', 'u.id')
             ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
-            ->select(
+            ->select([
                 'pedidos.id',
                 'pedidos.cliente_id',
                  'c.nombre as nombres',
@@ -126,36 +126,15 @@ class SobreController extends Controller
                 'pedidos.estado_ruta',
                 'pedidos.pendiente_anulacion',
                 'pedidos.estado',
-            )
+            ])
             ->where('pedidos.estado', '1')
-            //->whereIn('pedidos.envio', [Pedido::ENVIO_CONFIRMAR_RECEPCION,Pedido::ENVIO_RECIBIDO]) // ENVIADO CONFIRMAR RECEPCION Y ENVIADO RECIBIDO
-            ->whereIn('pedidos.condicion_envio_code', [Pedido::RECIBIDO_JEFE_OPE_INT, Pedido::RECEPCION_COURIER_INT, Pedido::ENVIO_COURIER_JEFE_OPE_INT]) // ENVIADO CONFIRMAR RECEPCION Y ENVIADO RECIBIDO
-            ->where('dp.estado', '1')
+            ->whereIn('pedidos.condicion_envio_code', [
+                Pedido::POR_ATENDER_OPE_INT,Pedido::ATENDIDO_OPE_INT,Pedido::ENVIO_COURIER_JEFE_OPE_INT,
+                Pedido::RECIBIDO_JEFE_OPE_INT,
+                Pedido::RECEPCION_COURIER_INT,
+                ])
             ->sinDireccionEnvio();
-        /*->groupBy(
-            'pedidos.id',
-            'pedidos.cliente_id',
-            'c.nombre',
-            'c.celular',
-            'u.identificador',
-            'dp.codigo',
-            'dp.nombre_empresa',
-            'dp.total',
-            'pedidos.condicion',
-            'pedidos.created_at',
-            'pedidos.condicion_envio',
-            'pedidos.envio',
-            'pedidos.destino',
-            'pedidos.direccion',
-            'pedidos.estado_sobre',
-            'dp.envio_doc',
-            'dp.fecha_envio_doc',
-            'dp.cant_compro',
-            'dp.fecha_envio_doc_fis',
-            'dp.foto1',
-            'dp.foto2',
-            'dp.fecha_recepcion'
-        );*/
+
         if (Auth::user()->rol == "Operario") {
             $asesores = User::where('users.rol', 'Asesor')
                 ->where('users.estado', '1')
