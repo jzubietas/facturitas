@@ -809,6 +809,16 @@ class OperacionController extends Controller
         ]);
     }
 
+    public function Corregircerrar(Request $request)
+    {
+        $hiddenAtender = $request->correccion;
+        $pedido = Pedido::where("id", $hiddenAtender)->first();
+        $imagenesatencion_ = ImagenAtencion::where("pedido_id", $hiddenAtender)->where("confirm", '0');
+        $imagenesatencion_->update([
+            'estado' => '0'
+        ]);
+    }
+
     public function Atenderid(Request $request)
     {
         $hiddenAtender = $request->hiddenAtender;

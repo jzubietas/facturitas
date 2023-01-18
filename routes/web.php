@@ -324,6 +324,7 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
 
 
     Route::post('operaciones.atenderiddismiss', [OperacionController::class, 'Atenderiddismiss'])->name('operaciones.atenderiddismiss');
+    Route::post('operaciones.corregircerrar', [OperacionController::class, 'Corregircerrar'])->name('operaciones.corregircerrar');
     Route::get('operaciones.editatender/{pedido}', [OperacionController::class, 'editAtender'])->name('operaciones.editatender');
     Route::post('operaciones.editatencion/{pedido}', [OperacionController::class, 'editAtencion'])->name('operaciones.editatencion');
     Route::post('operaciones.editatencionsinconfirmar/{pedido}', [OperacionController::class, 'editatencionsinconfirmar'])->name('operaciones.editatencionsinconfirmar');
