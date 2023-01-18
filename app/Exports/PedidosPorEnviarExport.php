@@ -22,7 +22,7 @@ class PedidosPorEnviarExport implements FromView, ShouldAutoSize
             ->join('distritos as di', 'di.distrito', 'pedidos.env_distrito')
             ->select([
                 'pedidos.id',
-                'u.identificador as id_asesor',
+                'u.identificador as identificador_asesor',
                 'u.name as nombre_asesor',
                 'pedidos.codigo as codigo',
                 DB::raw('DATE_FORMAT(pedidos.created_at, "%d/%m/%Y") as fecha_registro'),
