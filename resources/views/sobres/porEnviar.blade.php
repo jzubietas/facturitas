@@ -52,12 +52,7 @@
                     <th scope="col">Nombre Cliente</th>
                     <th scope="col">Telefono Cliente</th>
                     <th scope="col">Fecha de registro</th>
-                    <th scope="col">Fecha de envio</th>
-                    <th scope="col">Fecha de entrega</th>
-                    <th scope="col">Destino</th>
-                    <th scope="col">Dirección de envío</th>
                     <th scope="col">Estado de envio</th>
-                    <th scope="col">Estado de sobre</th>
                     <th scope="col">Observacion Devolucion</th>
                     <th scope="col">Acciones</th>
                 </tr>
@@ -1686,65 +1681,13 @@
                     },
                     {data: 'codigo', name: 'codigo',},
                     {data: 'users', name: 'users',},
-                    // {
-                    //   data: 'celulares',
-                    //   name: 'celulares',
-                    //   render: function ( data, type, row, meta ) {
-                    //     return row.celulares+' - '+row.nombres
-                    //   },
-                    // },
                     {data: 'empresas', name: 'empresas',},
                     {data: 'nombres', name: 'nombres',},
                     {data: 'celulares', name: 'celulares',},
                     {data: 'fecha', name: 'fecha', "visible": true},
-                    {data: 'fecha_envio_doc_fis', name: 'fecha_envio_doc_fis',},
-                    {data: 'fecha_recepcion', name: 'fecha_recepcion', "visible": false},
-                    {data: 'destino', name: 'destino', "visible": false},
-                    {
-                        data: 'direccion',
-                        name: 'direccion',
-                        "visible": false,
-                        render: function (data, type, row, meta) {
-                            datas = '';
-                            if (data != null) {
-                                return data;
-                                /*if(data=='0')
-                                {
-                                  return '<span class="badge badge-danger">REGISTRE DIRECCION</span>';
-                                }else if(data=='LIMA')
-                                {
-                                  var urlshow = '{{ route("pedidos.show", ":id") }}';
-                  urlshow = urlshow.replace(':id', row.id);
-
-                  return '<a href="" data-target="#modal-verdireccion" data-toggle="modal" data-dirreccion="'+row.id+'"><button class="btn btn-primary btn-sm"><i class="fas fa-eye"></i> Ver</button></a>';
-                }
-                else if(data=='PROVINCIA')
-                {
-                  return '<span class="badge badge-info">ENVIO A PROVINCIA</span>';
-                }else{
-                  return '<span class="badge badge-info">PROBLEMAS CON REGISTRO DE DESTINO</span>';
-                }*/
-                            } else {
-                                return '<span class="badge badge-danger">REGISTRE DIRECCION</span>';
-                            }
-                            //return 'REGISTRE DIRECCION';
-                        },
-                    },
                     {
                         data: 'condicion_envio',
                         name: 'condicion_envio',
-                    },
-                    {
-                        data: 'envio',
-                        name: 'envio',
-                        render: function (data, type, row, meta) {
-                            if (row.envio == '1') {
-                                return '<span class="badge badge-danger">Por confirmar recepcion</span>';
-                            } else {
-                                return '<span class="badge badge-info">Recibido</span>';
-                            }
-                        },
-                        "visible": false
                     },
                     {
                         data: 'observacion_devuelto',
