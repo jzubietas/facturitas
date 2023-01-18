@@ -64,6 +64,8 @@ class MotorizadoAutoNoRecibido extends Command
                 ]);
                 $this->info("Codigo: " . $grupo->codigos);
             }
+        }else{
+
         }
         return 0;
     }

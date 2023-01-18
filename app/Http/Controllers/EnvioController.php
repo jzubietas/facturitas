@@ -1481,48 +1481,45 @@ class EnvioController extends Controller
 
     public function Seguimientoprovinciatabla(Request $request)
     {
-        $pedidos = null;
-
-
-        $pedidos_provincia = DireccionGrupo::join('gasto_envios as de', 'direccion_grupos.id', 'de.direcciongrupo')
-            ->join('clientes as c', 'c.id', 'de.cliente_id')
-            ->join('users as u', 'u.id', 'c.user_id')
-            ->where('direccion_grupos.estado', '1')
+        $pedidos_provincia = DireccionGrupo::join('clientes', 'clientes.id', 'direccion_grupos.cliente_id')
+            ->join('users', 'users.id', 'clientes.user_id')
+            ->activo()
             ->where('direccion_grupos.condicion_envio_code', Pedido::SEGUIMIENTO_PROVINCIA_COURIER_INT)
-            ->select(
-                'direccion_grupos.id',
-                'u.identificador as identificador',
-                DB::raw(" (select 'PROVINCIA') as destino "),
-                DB::raw(" (select '') as celular "),
-                DB::raw(" (select '') as nombre "),
-                'de.cantidad',
-                'direccion_grupos.codigos',
-                'direccion_grupos.producto',
-                'de.tracking as direccion',
-                'de.foto as referencia',
-                DB::raw(" (select '') as observacion "),
-                DB::raw(" (select '') as distrito "),
-                DB::raw('(select DATE_FORMAT( direccion_grupos.created_at, "%Y-%m-%d")   from direccion_grupos dpa where dpa.id=direccion_grupos.id) as fecha'),
-                'direccion_grupos.destino as destino2',
-                'direccion_grupos.distribucion',
-                'direccion_grupos.condicion_envio',
-                'direccion_grupos.subcondicion_envio',
-                'direccion_grupos.condicion_sobre',
-            );
+            ->where('direccion_grupos.distribucion', 'OLVA')
+            ->select([
+                'direccion_grupos.*',
+                "clientes.celular as cliente_celular",
+                "clientes.nombre as cliente_nombre",
+            ]);
 
-        $pedidos = $pedidos_provincia;
-        $pedidos = $pedidos->get();
-
-        return Datatables::of($pedidos)
+        return Datatables::of(DB::table($pedidos_provincia))
             ->addIndexColumn()
+            ->editColumn('created_at', function ($pedido) {
+                if ($pedido->created_at != null) {
+                    return Carbon::parse($pedido->created_at)->format('d-m-Y h:i A');
+                } else {
+                    return '';
+                }
+            })
+            ->editColumn('referencia', function ($pedido) {
+                if($pedido->destino=='LIMA')
+                {
+                    return $pedido->referencia;
+
+                }else if($pedido->destino=='PROVINCIA'){
+                    return '<p><a target="_blank" href="'.\Storage::disk('pstorage')->url($pedido->observacion).'">'.$pedido->referencia.'</a><p>';
+                }
+                return '';
+            })
             ->addColumn('condicion_envio_color', function ($pedido) {
                 return Pedido::getColorByCondicionEnvio($pedido->condicion_envio);
             })
             ->addColumn('action', function ($pedido) {
                 $btn = '';
+                $btn .= '<button data-target="#modal-enviar" data-toggle="jqconfirm" class="btn btn-success btn-sm"><i class="fas fa-envelope"></i> Entregado</button>';
                 return $btn;
             })
-            ->rawColumns(['action'])
+            ->rawColumns(['action','referencia'])
             ->make(true);
 
     }
