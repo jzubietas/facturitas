@@ -1674,7 +1674,7 @@
                     // },
                     {data: 'empresas', name: 'empresas',},
                     {data: 'nombres', name: 'nombres',},
-                    {data: 'celulares', name: 'celulars',},
+                    {data: 'celulares', name: 'celulares',},
                     {data: 'fecha_envio_doc', name: 'fecha_envio_doc', "visible": false},
                     {data: 'fecha_envio_doc_fis', name: 'fecha_envio_doc_fis',},
                     {data: 'fecha_recepcion', name: 'fecha_recepcion', "visible": false},
