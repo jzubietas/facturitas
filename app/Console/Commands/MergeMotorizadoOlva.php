@@ -6,14 +6,14 @@ use App\Models\DireccionGrupo;
 use App\Models\Pedido;
 use Illuminate\Console\Command;
 
-class DireccionGrupoZona extends Command
+class MergeMotorizadoOlva extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'direcciongrupo:zona';
+    protected $signature = 'direcciongrupo:merge:olva';
 
     /**
      * The console command description.
@@ -39,20 +39,22 @@ class DireccionGrupoZona extends Command
      */
     public function handle()
     {
-        $dir = DireccionGrupo::query()->with('motorizado')
-            ->activo()
-            ->where('condicion_envio_code', Pedido::REPARTO_COURIER_INT)
-            ->whereNotNull('motorizado_id')
-            ->where('celular','<>','OLVA')
+        $grupos = DireccionGrupo::query()->activo()
+            ->where('condicion_envio_code', Pedido::MOTORIZADO_INT)
+            ->where('distribucion', 'OLVA')
             ->get();
+        if ($grupos->count() > 0) {
+            $first = $grupos->pop();
 
-        foreach ($dir as $item) {
-            if($item->nombre_cliente) {
-                $item->update([
-                    'distribucion' => $item->motorizado->zona
+            foreach ($grupos as $p) {
+                $p->pedidos()->update([
+                    'direccion_grupo' => $first->id
                 ]);
+                DireccionGrupo::restructurarCodigos($p);
             }
+            DireccionGrupo::restructurarCodigos($first);
         }
+
         return 0;
     }
 }

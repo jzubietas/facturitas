@@ -30,13 +30,11 @@ class Kernel extends ConsoleKernel
         $schedule->command('backup:database')
             ->dailyAt('13:15');
 
-        $schedule->command('motorizado:auto-no-recibido')
+        $schedule->command('motorizado:auto-no-recibido',[
+            '--all',
+        ])
             ->dailyAt('15:00');
 
-        /*
-         * $schedule->command('estado:migrar_con_direccion')
-            ->dailyAt('17:00');
-        */
     }
 
     /**
