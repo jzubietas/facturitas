@@ -1394,6 +1394,16 @@
                                         console.log(pedidos_escaneados)
                                         //limpio campo
                                         $("#codigo_comprobar").val('');
+                                        //comprobar cuantos faltanm
+                                        count_ped_=$('#pedidos-recepcion .item_recepcionado').length;//total pedidos
+                                        count_ped =$('#pedidos-recepcion .item_recepcionado[style*="display: none"]').length;//pe ocultos
+                                        console.log(count_ped);
+                                        let calc_=count_ped_-count_ped;
+                                        if(calc_==0)
+                                        {
+                                            pedidos_escaneados=[];
+                                            //evento cerrar
+                                        }
                                     }
 
                                     /*if($.inArray(codigo_mejorado,pedidos_escaneados))
