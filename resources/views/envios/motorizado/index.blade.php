@@ -339,22 +339,6 @@
                     <h5>Sobre de pedido: <b>${data.codigos}</b></h5>
                 </div>
             </div>
-            {{--
-            <div class="row">
-                <div class="col-lg-6">
-                   <div class="form-group">
-                     <label for="fecha_envio_doc_fis">Fecha de Envio</label>
-                     <input class="form-control" id="fecha_envio_doc_fis" disabled="" name="fecha_envio_doc_fis" type="date" value="${(data.fecha_salida||'').split(' ')[0]}">
-                    </div>
-                </div>
-                <div class="col-lg-6">
-                   <div class="form-group">
-                        <label for="fecha_recepcion">Fecha de Entrega</label>
-                        <input class="form-control" id="fecha_recepcion" value="<?php echo date('Y-m-d'); ?>"  name="fecha_recepcion" type="date" value="">
-                    </div>
-                </div>
-            </div>
-            --}}
                         <div class="row mt-2">
                             <div class="col-12 col-md-4">
                                 <div class="input-group w-80">
