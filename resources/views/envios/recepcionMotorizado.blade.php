@@ -555,6 +555,12 @@
 
                         var codigo_pedido = false;
 
+                        $.ajaxSetup({
+                            headers: {
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                            }
+                        });
+
                         function onQRCodeScanned(scannedText) {
                             if (codigo_pedido) {
                                 return
@@ -1304,7 +1310,7 @@
                              * FIN ESCANEAR MOUSE
                              */
 
-                            $('#modal-scan-comparador"').on('show.bs.modal', function (event) {
+                            $('#modal-scan-comparador').on('show.bs.modal', function (event) {
                                 var button = $(event.relatedTarget)
                                 var zona = button.data('zona');
 
@@ -1327,11 +1333,7 @@
 
                             });
 
-                            $.ajaxSetup({
-                                headers: {
-                                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                                }
-                            });
+
 
                             $('#modal-confirmacion').on('show.bs.modal', function (event) {
                                 var button = $(event.relatedTarget)
