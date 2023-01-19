@@ -176,7 +176,7 @@
                                                                             RECEPCIÓN
                                                                         </a>
                                                                     </li>
-                                                                    <li class="nav-item">
+                                                                    <!--<li class="nav-item">
                                                                         <a class="nav-link"
                                                                            id="enrutahijo{{Str::slug($motorizado->zona)}}-tab"
                                                                            data-vista="19"
@@ -190,7 +190,7 @@
                                                                            data-action="enrutahijo">
                                                                             EN RUTA
                                                                         </a>
-                                                                    </li>
+                                                                    </li>-->
                                                                 </ul>
 
                                                                 <table
@@ -487,7 +487,7 @@
                             //valor=(valor||'').trim()
 
 
-                            $(".tabla-data").search( valor ).draw();
+                            $(".tabla-data").DataTable().search( valor ).draw();
                             //tabla_pedidos_principal_centro.search( valor ).draw();
                             //tabla_pedidos_principal_sur.search( valor ).draw();
                         }
@@ -859,9 +859,9 @@
                                         a.tab = $("#myTab{{Str::slug($motorizado->zona)}} li>a.active").data('tab');
                                         a.motorizado_id = {{ $motorizado->id }};
                                         a.zona = "{{ Str::upper($motorizado->zona)}}";
-                                        let vista = $('ul#myTab li.nav-item>a.active').attr('id');//18 19
-                                        vista = $('#' + vista).data('url');
-                                        a.vista = vista;
+                                        //let vista = 18;//18 19
+                                        //vista = $('#' + vista).data('url');
+                                        a.vista = 19;
                                     }
                                 },
                             });
