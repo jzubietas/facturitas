@@ -3027,6 +3027,9 @@ class PedidoController extends Controller
             $grupo->update([
                 'condicion_envio' => Pedido::ENVIO_COURIER_JEFE_OPE,
                 'condicion_envio_code' => Pedido::ENVIO_COURIER_JEFE_OPE_INT,
+                'foto1'=>'',
+                'foto2'=>'',
+                'foto3'=>'',
                 //'condicion_envio_at'=>now(),
                 //'condicion' => Pedido::ENVIO_COURIER_JEFE_OPE,
                 //'condicion_code' => Pedido::ENVIO_COURIER_JEFE_OPE_INT,
