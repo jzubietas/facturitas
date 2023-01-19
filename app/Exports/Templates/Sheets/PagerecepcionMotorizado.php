@@ -140,8 +140,8 @@ class PagerecepcionMotorizado extends Export implements WithStyles,WithColumnFor
     public function columnFormats(): array
     {
         return [
-            //'C' => ['alignment' => ['wrapText' => true]],
-            'E' => NumberFormat::FORMAT_DATE_YYYYMMDD,
+            'C' => NumberFormat::FORMAT_TEXT,
+            'E' => NumberFormat::FORMAT_TEXT,
             'F' => NumberFormat::FORMAT_TEXT,
             'G' => NumberFormat::FORMAT_TEXT,
             'H' => NumberFormat::FORMAT_TEXT,
