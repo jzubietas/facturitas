@@ -1392,6 +1392,8 @@
                                         pedidos_escaneados.push(codigo_mejorado);
                                         console.log("nuevo lista pedidos escaneados")
                                         console.log(pedidos_escaneados)
+                                        //limpio campo
+                                        $("#codigo_comprobar").val('');
                                     }
 
                                     /*if($.inArray(codigo_mejorado,pedidos_escaneados))
