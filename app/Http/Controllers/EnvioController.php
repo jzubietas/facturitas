@@ -2555,6 +2555,9 @@ class EnvioController extends Controller
         // FIN VALIDACIONES GENERALES
 
         $condicion_code_actual = $pedido->condicion_envio_code;
+
+        //dd($condicion_code_actual);
+
         $color = $pedido->condicion_envio_color;
         $grupo = "";
 
@@ -2684,7 +2687,7 @@ class EnvioController extends Controller
         }
 
         $condicion_code_actual = $pedido->condicion_envio_code;
-
+        $grupo = $pedido->direccion_grupo;
         /***************************************************************************************
          * SOBRES PARA REPARTO - PARTE 1
          ***************************************************************************************/
@@ -2697,6 +2700,12 @@ class EnvioController extends Controller
         }
 
         if($responsable == "fernandez_reparto"){
+
+            // VALIDACIONES PARA LA DIRECCION GRUPO
+            if($grupo == null){
+                return response()->json(['html' => "Este pedido No cuenta con una dirección", 'class' => "text-danger", 'codigo' => 0,'error'=>4, 'Estado_actual' => $pedido -> condicion_envio_code, 'msj_error' => 0]);
+            }
+
             $color = $pedido->condicion_envio_color;
             if($pedido -> condicion_envio_code == Pedido::ENVIO_MOTORIZADO_COURIER_INT){
                 return response()->json(['html' => 'El pedido <b style="">'.$codigo.'</b> ya ah sido procesado anteriormente, su estado actual es <br><span class="br-4 mt-16" style="background-color:'. $color .'; padding: 2px 12px; color: black; font-weight: bold;">' . Pedido::$estadosCondicionEnvioCode[$condicion_code_actual] . '</span>', 'class' => "text-danger", 'codigo' => $codigo,'error'=>4, 'msj_error' => Pedido::$estadosCondicionEnvioCode[$condicion_code_actual]]);
@@ -2706,13 +2715,6 @@ class EnvioController extends Controller
         /***************************************************************************************
          * SOBRES PARA REPARTO - FIN PARTE 1
          ***************************************************************************************/
-
-        // VALIDACIONES PARA LA DIRECCION GRUPO
-        $grupo = $pedido->direccion_grupo;
-
-        if($grupo == null){
-            return response()->json(['html' => "Este pedido No cuenta con una dirección", 'class' => "text-danger", 'codigo' => 0,'error'=>4, 'Estado_actual' => $pedido -> condicion_envio_code, 'msj_error' => 0]);
-        }
 
         /************
          * SETEAMOS VALORES POR DEFECTO
@@ -2738,8 +2740,6 @@ class EnvioController extends Controller
             /*************
              * SETEAMOS EL NUEVO ESTADO Y EL MENSAJE DE CONFIRMACION
              */
-
-            $response = "";
 
             switch ($responsable) {
 
@@ -2875,6 +2875,7 @@ class EnvioController extends Controller
                             'condicion_envio_code' => Pedido::ENVIO_COURIER_JEFE_OPE_INT,
                             'notificado' => 0
                         ]);
+
                         break;
 
                     case "sobres_reparto":
@@ -2925,10 +2926,13 @@ class EnvioController extends Controller
                         }
                         break;
                 }
-                $codigos_procesados[] = $codigo;
             }
+            //return response()->json(['html' => "Pedidos Procesados correctamente", 'error'=>10, 'Condicion actual'=> Pedido::$estadosCondicionEnvioCode[$pedido->condicion_envio_code]]);
+            return response()->json(['html' => $respuesta, 'class' => "text-success",'error' => 0, 'Condicion actual'=> Pedido::$estadosCondicionEnvioCode[$pedido->condicion_envio_code]]);
+            //return response()->json(['html' => $respuesta]);
 
         }
+
         /***************************************************************************************
          * SOBRES PARA REPARTO - FIN PARTE 2
          ***************************************************************************************/
@@ -2977,8 +2981,6 @@ class EnvioController extends Controller
 
             return response()->json(['html' => "Escaneado Correctamente", 'class' => "text-success", 'codigo' => $codigo, 'error' => 3, 'zona' => $Direccion_grupo->distribucion, 'cantidad' => $codigos_paquete->count(), 'cantidad_recibida' => $sobres_ya_recibidos, 'clase_confirmada' => $clase_confirmado]);
         }
-
-        return response()->json(['html' => $respuesta, 'class' => "text-success",'error' => 0, 'Condicion actual'=> Pedido::$estadosCondicionEnvioCode[$pedido->condicon_envio_code]]);
 
     }
 

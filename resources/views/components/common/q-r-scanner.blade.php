@@ -213,8 +213,6 @@
                 return false;
             }
 
-
-
             /*********
              * CONFIRMAMOS CODIGO
              * @type {string}
@@ -483,6 +481,10 @@ function ConfirmarOPBarra(data){
                             timer: 600
                         })
                     }
+
+                    setTimeout(function (){
+                        $('#respuesta_barra').fadeOut();
+                    },600);
 
                     /*
                     $('#pedidos-procesados').html(`<p><b class="text-success w-100">codigos procesados (${codigos_procesados.length}):</b></p><ul>${codigos_procesados.map(function (codigo) {

@@ -787,6 +787,7 @@ class MotorizadoController extends Controller
 
     public function EnviosrecepcionmotorizadotablaGeneral(Request $request)
     {
+
         $tipo_consulta = $request->consulta;
         $fecha_actual = Carbon::now()->startOfDay();
         $fecha_consulta = $request->fechaconsulta;
@@ -847,80 +848,87 @@ class MotorizadoController extends Controller
                 ->where('direccion_grupos.distribucion', 'LIKE', '%' . $request->ZONA . '%')
                 ->activo();
 
-            return Datatables::of(DB::table($grupos))
-                ->addColumn('condicion_envio_color', function ($grupo) {
-                    return Pedido::getColorByCondicionEnvio($grupo->condicion_envio);
-                })
-                ->editColumn('condicion_envio', function ($grupo) {
-                    $color = Pedido::getColorByCondicionEnvio($grupo->condicion_envio);
 
-                    $badge_estado = '';
-                    $badge_estado .= '<span class="badge badge-dark p-8" style="color: #fff; background-color: #347cc4; font-weight: 600; margin-bottom: -2px;border-radius: 4px 4px 0px 0px; font-size:8px;  padding: 4px 4px !important; font-weight: 500;">Direccion agregada</span>';
+if($request->con == 1){
+    return response(json_encode($grupos));
+}else{
+    return Datatables::of(DB::table($grupos))
+        ->addColumn('condicion_envio_color', function ($grupo) {
+            return Pedido::getColorByCondicionEnvio($grupo->condicion_envio);
+        })
+        ->editColumn('condicion_envio', function ($grupo) {
+            $color = Pedido::getColorByCondicionEnvio($grupo->condicion_envio);
 
-                    $badge_estado .= '<span class="badge badge-success" style="background-color: #00bc8c !important;
+            $badge_estado = '';
+            $badge_estado .= '<span class="badge badge-dark p-8" style="color: #fff; background-color: #347cc4; font-weight: 600; margin-bottom: -2px;border-radius: 4px 4px 0px 0px; font-size:8px;  padding: 4px 4px !important; font-weight: 500;">Direccion agregada</span>';
+
+            $badge_estado .= '<span class="badge badge-success" style="background-color: #00bc8c !important;
                     padding: 4px 8px !important;
                     font-size: 8px;
                     margin-bottom: -4px;
                     color: black !important;">Con ruta</span>';
-                    $badge_estado .= '<span class="badge badge-success" style="background-color: ' . $color . '!important;">' . $grupo->condicion_envio . '</span>';
-                    return $badge_estado;
-                })
-                ->editColumn('distrito', function ($pedido) {
+            $badge_estado .= '<span class="badge badge-success" style="background-color: ' . $color . '!important;">' . $grupo->condicion_envio . '</span>';
+            return $badge_estado;
+        })
+        ->editColumn('distrito', function ($pedido) {
 
-                    if ($pedido->distribucion == 'OLVA') {
-                        $html = "";
-                        if ($pedido->observacion) {
-                            $html .= collect(explode(',', $pedido->observacion))
-                                ->trim()
-                                ->unique()
-                                ->map(fn($observacion) => '<a class="btn btn-icon p-0" target="_blank" href="' . \Storage::disk('pstorage')->url($observacion) . '">
+            if ($pedido->distribucion == 'OLVA') {
+                $html = "";
+                if ($pedido->observacion) {
+                    $html .= collect(explode(',', $pedido->observacion))
+                        ->trim()
+                        ->unique()
+                        ->map(fn($observacion) => '<a class="btn btn-icon p-0" target="_blank" href="' . \Storage::disk('pstorage')->url($observacion) . '">
 <i class="fa fa-file-pdf"></i>
 Ver Rotulo</a>')
-                                ->join('');
-                        }
-                        return $html;
-                    }
-                    return $pedido->distrito;
-                })
-                ->addColumn('action', function ($pedido) use ($fecha_consulta, $fecha_actual) {
-                    $btn = '';
+                        ->join('');
+                }
+                return $html;
+            }
+            return $pedido->distrito;
+        })
+        ->addColumn('action', function ($pedido) use ($fecha_consulta, $fecha_actual) {
+            $btn = '';
 
-                    $btn .= '<ul class="list-unstyled pl-0">';
+            $btn .= '<ul class="list-unstyled pl-0">';
 
-                    if ($pedido->condicion_envio_code == Pedido::ENVIO_MOTORIZADO_COURIER_INT) {
+            if ($pedido->condicion_envio_code == Pedido::ENVIO_MOTORIZADO_COURIER_INT) {
 
-                        if ($fecha_actual == $fecha_consulta) {
-                            $btn .= '<li>
+                if ($fecha_actual == $fecha_consulta) {
+                    $btn .= '<li>
                                 <button data-target="#modal-envio" data-toggle="modal" data-accion="recibir" data-recibir="' . $pedido->id . '" data-codigos="' . $pedido->codigos . '"  class="btn btn-warning btn-sm"><i class="fas fa-check-circle"></i> Recibido</button>
                             </li>';
-                            $btn .= ' <li>
+                    $btn .= ' <li>
                         <button data-target="#modal-envio" data-toggle="modal" data-accion="rechazar" data-recibir="' . $pedido->id . '" data-codigos="' . $pedido->codigos . '" class="btn btn-danger btn-sm mt-8"><i class="fa fa-times-circle-o" aria-hidden="true"></i>No recibido</button>
                     </li>';
 
-                        } else {
-                            $btn .= '<li>
+                } else {
+                    $btn .= '<li>
                                 <button disabled class="btn btn-warning btn-sm"><i class="fas fa-check-circle"></i> Recibido</button>
                             </li>';
-                            $btn .= ' <li>
+                    $btn .= ' <li>
                         <button disabled class="btn btn-danger btn-sm mt-8"><i class="fa fa-times-circle-o" aria-hidden="true"></i>No recibido</button>
                     </li>';
-                        }
+                }
 
-                    } else if ($pedido->condicion_envio_code == Pedido::RECEPCION_MOTORIZADO_INT) {
-                        $btn .= '<li>
+            } else if ($pedido->condicion_envio_code == Pedido::RECEPCION_MOTORIZADO_INT) {
+                $btn .= '<li>
                                 <a href="" class="btn-sm text-secondary" data-target="#modal-confirmacion" data-toggle="modal" data-ide="' . $pedido->id . '" data-entregar-confirm="' . $pedido->id . '" data-destino="' . $pedido->destino . '" data-fechaenvio="' . $pedido->fecha . '" data-codigos="' . $pedido->codigos . '">
                                     <i class="fas fa-envelope text-success"></i> Iniciar ruta</a></li>
                                 </a>
                             </li>';
 
-                    }
+            }
 
-                    $btn .= '</ul>';
+            $btn .= '</ul>';
 
-                    return $btn;
-                })
-                ->rawColumns(['action', 'condicion_envio', 'distrito'])
-                ->make(true);
+            return $btn;
+        })
+        ->rawColumns(['action', 'condicion_envio', 'distrito'])
+        ->make(true);
+}
+
+
         }
     }
 

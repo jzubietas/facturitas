@@ -217,6 +217,11 @@
                                                                 <div>
 
                                                                     <h6 class="mb-0">
+                                                                        <button data-toggle="modal" data-target="#modal-scan-comparador"
+                                                                            class="btn btn-sm btn-option"
+                                                                            data-zona="{{$motorizado->zona}}">
+                                                                            <i class="fa fa-barcode"></i> Comprobar archivos
+                                                                        </button>
                                                                         <button
                                                                             class="btn btn-sm btn-danger exportar_zona"
                                                                             data-motorizado="{{$motorizado->id}}">
@@ -430,11 +435,14 @@
                     <source src="{{asset('sonidos/notificacion.mp3')}}" type="audio/mpeg">
                 </audio>
 
+                @include('pedidos.modal.barraComparativa')
+
                 <script>
                     if (location.protocol != 'https:') {
                         document.getElementById('secure-connection-message').style = 'display: block';
                     }
                 </script>
+
 
                 @stop
 
@@ -691,6 +699,10 @@
 
                     <script>
                         $(document).ready(function () {
+
+                            $('#zona-consulta').on('change', function(){
+
+                            });
 
                             $(document).on('click', '.exportar_zona', function (event) {
                                 event.preventDefault();
@@ -1234,6 +1246,29 @@
                             /***********
                              * FIN ESCANEAR MOUSE
                              */
+
+                            $('#modal-scan-comparador"').on('show.bs.modal', function (event) {
+                                var button = $(event.relatedTarget)
+                                var zona = button.data('zona');
+
+                                var fd2 = new FormData();
+                                fd2.append('zona', zona);
+                                fd2.append('con', 1);
+
+                                $.ajax({
+                                    data: fd2,
+                                    processData: false,
+                                    contentType: false,
+                                    type: 'POST',
+                                    url: "{{ route('operaciones.confirmarrecepcionmotorizado') }}",
+                                    success: function (data) {
+                                        $("#modal-confirmacion").modal("hide");
+                                        $('#tablaPrincipal').DataTable().ajax.reload();
+
+                                    }
+                                });
+
+                            });
 
                             $.ajaxSetup({
                                 headers: {
