@@ -577,7 +577,7 @@ class MotorizadoController extends Controller
         if( in_array(auth()->user()->rol,[User::ROL_ADMIN,User::ROL_JEFE_COURIER]) )
         {
             return view('envios.recepcionMotorizado_index', compact('condiciones', 'distritos', 'direcciones', 'destinos', 'superasesor', 'ver_botones_accion', 'departamento', 'fecha_consulta', 'users_motorizado', 'motorizados'));
-        }else if(auth()->user()->rol==User::ROL_OPERARIO)
+        }else if(auth()->user()->rol==User::ROL_MOTORIZADO)
         {
             return view('envios.recepcionMotorizado', compact('condiciones', 'distritos', 'direcciones', 'destinos', 'superasesor', 'ver_botones_accion', 'departamento', 'fecha_consulta', 'users_motorizado', 'motorizados'));
         }
