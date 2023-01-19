@@ -6,11 +6,14 @@ use App\Traits\CommonModel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
 
-class DireccionGrupo extends Model
+class DireccionGrupo extends Model implements HasMedia
 {
     use HasFactory;
     use CommonModel;
+    use InteractsWithMedia;
 
     //condicion_envio
     const CE_EN_REPARTO = "EN REPARTO";//1
