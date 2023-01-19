@@ -556,6 +556,7 @@
 
                         var codigo_pedido = false;
                         let tablaPrincipal=null;
+                        let pedidos_escaneados=[];
 
                         $.ajaxSetup({
                             headers: {
@@ -1347,6 +1348,8 @@
                             $('#modal-scan-comparador').on('show.bs.modal', function (event) {
                                 var button = $(event.relatedTarget)
                                 var zona = button.data('zona');
+                                pedidos_escaneados=[];
+                                $("#codigo_comprobar").val('')
 
                                 $.ajax({
                                     //processData: false,
@@ -1370,24 +1373,50 @@
 
                                 $('#codigo_comprobar').change(function (event) {
                                     event.preventDefault();
+                                    console.log("evento ");
 
                                     var codigo_caturado = ($(this).val() || '').trim();
                                     var codigo_mejorado = codigo_caturado.replace(/['']+/g, '-').replaceAll("'", '-').replaceAll("(", '*');
+                                    console.log("codigo_mejorado"+codigo_mejorado);
+                                    console.log("lista de pedidos escaneados")
+                                    console.log(pedidos_escaneados);
 
-                                    $('.item_recepcionado').each(function(){
-                                        var ide = $(this).attr('id');
-                                        if(ide == codigo_mejorado){
-                                            console.log("codigo encontrado");
-                                            $('#'+codigo_mejorado).fadeOut();
-                                            $("#pedidos-escaneados").append('<li><i class="fa fa-check text-success mr-8" aria-hidden="true"></i>'+ codigo_mejorado +'</li>');
-                                        }
-                                    });
+                                    if($.inArray(codigo_mejorado, pedidos_escaneados) !== -1)
+                                    {
+                                        console.log("codigo se encuentra repetido en lista");
+                                        console.log(pedidos_escaneados);
+                                    }else{
+                                        console.log("codigo encontrado");
+                                        $('#'+codigo_mejorado).fadeOut();
+                                        $("#pedidos-escaneados").append('<li><i class="fa fa-check text-success mr-8" aria-hidden="true"></i>'+ codigo_mejorado +'</li>');
+                                        pedidos_escaneados.push(codigo_mejorado);
+                                        console.log("nuevo lista pedidos escaneados")
+                                        console.log(pedidos_escaneados)
+                                    }
+
+                                    /*if($.inArray(codigo_mejorado,pedidos_escaneados))
+                                    {
+
+                                    }else{
+
+                                    }*/
+
+                                    //$('.item_recepcionado').each(function(){
+                                        //var ide = $(this).attr('id');
+                                        //valida duplicado
+
+                                        //if(ide == codigo_mejorado){
+
+                                        //}
+
+
+                                    //});
 /*
                                     $('#'+codigo_mejorado).fadeOut();
                                     $("#pedidos-escaneados").append('<li>'+ codigo_mejorado +'</li>');
 
  */
-                                    return false;
+                                    //return false;
                                 });
                             });
 
