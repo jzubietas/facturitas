@@ -28,7 +28,7 @@ Sheet::macro('styleCells', function (Sheet $sheet, string $cellRange, array $sty
     $sheet->getDelegate()->getStyle($cellRange)->applyFromArray($style);
 });
 
-class PagerecepcionMotorizado extends Export implements WithStyles,WithColumnFormatting, FromCollection, WithHeadings, ShouldAutoSize, WithEvents
+class PagerecepcionMotorizado extends Export implements WithStyles,WithColumnFormatting, FromCollection, WithHeadings, ShouldAutoSize, WithEvents,WithColumnWidths
 {
     //use RemembersRowNumber;
 
@@ -66,7 +66,8 @@ class PagerecepcionMotorizado extends Export implements WithStyles,WithColumnFor
                 'direccion_grupos.referencia',
                 'direccion_grupos.distrito',
             ])
-        ->where('direccion_grupos.estado','=','1');
+        ->where('direccion_grupos.estado','=','1')
+        ->orderBy('concat(direccion_grupos.celular) as celular_recibe','desc');
         if ($this->motorizado_id!=0) {
             $direccion = $direccion->where('direccion_grupos.motorizado_id', $this->motorizado_id);
         }
@@ -93,24 +94,29 @@ class PagerecepcionMotorizado extends Export implements WithStyles,WithColumnFor
     public function columnWidths(): array
     {
         return [
-            'A' => 8 //CELULAR QUIEN RECIBE
-            , 'B' => 8 //ME RO
-            , 'C' => 8 //CODIGO
-            , 'D' => 8 //NOMBRE DE qUIEN RECIBE
-            , 'E' => 8 //RAZON SOCIAL
-            , 'F' => 8 //QTY
-            , 'G' => 8 //CLIENTE
-            , 'H' => 8 //DIRECCION
-            , 'I' => 8 //REFERENCIA
-            , 'J' => 8 //DISTRITO
+            'A' => 13.57 //CELULAR QUIEN RECIBE
+            , 'B' => 3.57 //ME RO
+            , 'C' => 11.29 //CODIGO
+            , 'D' => 13.57 //NOMBRE DE qUIEN RECIBE
+            , 'E' => 33.57 //RAZON SOCIAL
+            , 'F' => 3.57 //QTY
+            , 'G' => 13.57 //CLIENTE
+            , 'H' => 33.57 //DIRECCION
+            , 'I' => 37.29 //REFERENCIA
+            , 'J' => 13.57 //DISTRITO
         ];
+
     }
 
     public function map($model): array
     {
         //$model->Periodo=strval(str_pad($model->Periodo,2,"0"));
-        //$model->codigos=implode('\n',explode(',',$model->codigos));
-        //$model->producto=explode(',',$model->producto);
+        $model->codigos=implode("\n",explode(',',$model->codigos));
+        $aci=0;
+        $model->producto=collect(explode(',',$model->producto))->map(function ($codigo,$index){
+            return ($index+1).') '.$codigo;
+
+        })->join("\n");
         /*$ae=[];
         for($i=1;$i<count($model->producto);$i++)
         {
@@ -140,8 +146,8 @@ class PagerecepcionMotorizado extends Export implements WithStyles,WithColumnFor
     public function columnFormats(): array
     {
         return [
-            //'C' => ['alignment' => ['wrapText' => true]],
-            'E' => NumberFormat::FORMAT_DATE_YYYYMMDD,
+            'C' => NumberFormat::FORMAT_TEXT,
+            'E' => NumberFormat::FORMAT_TEXT,
             'F' => NumberFormat::FORMAT_TEXT,
             'G' => NumberFormat::FORMAT_TEXT,
             'H' => NumberFormat::FORMAT_TEXT,
@@ -205,6 +211,9 @@ class PagerecepcionMotorizado extends Export implements WithStyles,WithColumnFor
 
         $row_cell_ = 14;
         $letter_cell = 'J';
+
+        $event->sheet->getStyle('C')->getAlignment()->setWrapText(true);
+        $event->sheet->getStyle('E')->getAlignment()->setWrapText(true);
 
         $event->sheet->styleCells(
             'A1',
@@ -306,8 +315,21 @@ class PagerecepcionMotorizado extends Export implements WithStyles,WithColumnFor
     {
         // TODO: Implement styles() method.
         return [
-            'C'    => ['alignment' => ['wrapText' => true]],
-            'E'    => ['alignment' => ['wrapText' => true]],
+            'A' => [
+                'alignment' => [
+                    'wrapText' => true,
+                ],
+            ],
+            'B' => [
+                'alignment' => [
+                    'wrapText' => true,
+                ],
+            ],
+            'C' => [
+                'alignment' => [
+                    'wrapText' => true,
+                ],
+            ],
         ];
     }
 }
