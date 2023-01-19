@@ -292,6 +292,7 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
 
     Route::get('envios.enreparto', [EnvioController::class, 'Enviosenreparto'])->name('envios.enreparto');
     Route::get('envios.enrepartotabla', [EnvioController::class, 'Enviosenrepartotabla'])->name('envios.enrepartotabla');
+
     Route::get('envios.seguimientoprovincia', [EnvioController::class, 'Seguimientoprovincia'])->name('envios.seguimientoprovincia');
     Route::get('envios.seguimientoprovinciatabla', [EnvioController::class, 'Seguimientoprovinciatabla'])->name('envios.seguimientoprovinciatabla');
     Route::post('envios.seguimientoprovincia.update', [EnvioController::class, 'SeguimientoprovinciaUpdate'])->name('envios.seguimientoprovincia.update');
@@ -351,6 +352,11 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     Route::post('operaciones.revertirenvioid', [OperacionController::class, 'Revertirenvio'])->name('operaciones.revertirenvioid');
     Route::post('operaciones.revertirenvioidporatender', [OperacionController::class, 'Revertirenvioporatender'])->name('operaciones.revertirenvioidporatender');
     Route::post('operaciones.revertirajefeop', [OperacionController::class, 'Revertirajefeop'])->name('operaciones.revertirajefeop');
+
+    Route::post('operaciones.revertiraenviocourier', [PedidoController::class, 'Revertiraenviocourier'])->name('operaciones.revertiraenviocourier');
+
+
+
     Route::post('operaciones.sinenvioid', [EnvioController::class, 'SinEnviarid'])->name('operaciones.sinenvioid');
     Route::post('operaciones.revertirhaciaatendido', [OperacionController::class, 'Revertirhaciaatendido'])->name('operaciones.revertirhaciaatendido');
 

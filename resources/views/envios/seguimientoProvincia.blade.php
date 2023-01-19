@@ -214,13 +214,47 @@
 
         function renderEventButtonAction(row, data, index) {
             $('[data-toggle="jqconfirm"]', row).click(function () {
-                const subcondiciones = [
-                    'RECEPCIONADO',
-                    'EN CAMINO',
-                    'EN TIENDA/AGENTE',
-                    'ENTREGADO',
-                    'NO ENTREGADO',
-                ];
+                const target = $(this).data('target')
+                var condiciones = [];
+
+                if (data.condicion_envio_code == '{{\App\Models\Pedido::RECEPCIONADO_OLVA_INT}}') {
+                    condiciones = [
+                        {
+                            label: '{{\App\Models\Pedido::EN_CAMINO_OLVA}}',
+                            value: '{{\App\Models\Pedido::EN_CAMINO_OLVA_INT}}',
+                        },
+                        {
+                            label: '{{\App\Models\Pedido::EN_TIENDA_AGENTE_OLVA}}',
+                            value: '{{\App\Models\Pedido::EN_TIENDA_AGENTE_OLVA_INT}}',
+                        },
+                    ];
+                } else if (data.condicion_envio_code == '{{\App\Models\Pedido::EN_CAMINO_OLVA_INT}}') {
+                    condiciones = [
+                        {
+                            label: '{{\App\Models\Pedido::EN_TIENDA_AGENTE_OLVA}}',
+                            value: '{{\App\Models\Pedido::EN_TIENDA_AGENTE_OLVA_INT}}',
+                        },
+                    ];
+                } else if (data.condicion_envio_code == '{{\App\Models\Pedido::EN_TIENDA_AGENTE_OLVA_INT}}') {
+                    condiciones = [
+                        {
+                            label: '{{\App\Models\Pedido::ENTREGADO_PROVINCIA}}',
+                            value: '{{\App\Models\Pedido::ENTREGADO_PROVINCIA_INT}}',
+                        },
+                        {
+                            label: '{{\App\Models\Pedido::NO_ENTREGADO_OLVA}}',
+                            value: '{{\App\Models\Pedido::NO_ENTREGADO_OLVA_INT}}',
+                        },
+                    ];
+                } else {
+                    condiciones = [
+                        {
+                            label: '{{\App\Models\Pedido::RECEPCIONADO_OLVA}}',
+                            value: '{{\App\Models\Pedido::RECEPCIONADO_OLVA_INT}}',
+                        },
+                    ]
+                }
+
                 $.dialog({
                     columnClass: 'large',
                     title: 'Cambiar estado',
@@ -231,22 +265,24 @@
             <div class="form-group">
                 <label>Seguimiento de envio</label>
                 <select class="form-control select_subcondicion_envio">
-                    ${subcondiciones.map(function (subcond) {
-                        return `<option ${data.subcondicion_envio == subcond ? 'selected' : ''} value="${subcond}">${subcond}</option>`
+                    ${condiciones.map(function (subcond) {
+                        return `<option ${data.condicion_envio_code == subcond.value ? 'selected' : ''} value="${subcond.value}">${subcond.label}</option>`
                     }).join('')}
                 </select>
             </div>
     </div>
-    <div class="col-md-12">
+${data.condicion_envio_code == '{{\App\Models\Pedido::EN_TIENDA_AGENTE_OLVA_INT}}' ? `
+<div class="col-md-12">
         <strong>Adjuntar estado de olva</strong>
         <div id="attachmentfiles" class="border border-dark rounded d-flex justify-content-center align-items-center mb-4 position-relative" style="height: 400px">
             <i class="fa fa-upload"></i>
             <div class="result_picture position-absolute" style="display: block;top: 0;left: 0;bottom: 0;right: 0;text-align: center;">
-        <img src="" class="h-100">
-    </div>
+                <img src="" class="h-100">
+            </div>
         </div>
-        <div class="alert alert-warning">Puede copiar y pegar la imagen</div>
-    </div>
+        <div class="alert alert-warning">Puede copiar y pegar la imagen o hacer click en el recuadro para seleccionar un archivo</div>
+</div>
+` : ''}
 </div>
 </div>
 <div class="jconfirm-buttons">
@@ -273,7 +309,6 @@
                                 }
                             })
                         });
-
                         window.document.onpaste = function (event) {
                             var items = (event.clipboardData || event.originalEvent.clipboardData).items;
                             console.log(items);
@@ -299,36 +334,98 @@
                             self.close()
                         })
                         this.$content.find('button.btn-ok').click(function () {
-                            dataForm.subcondicion_envio = self.$content.find('select.select_subcondicion_envio').val()
-                            console.log(dataForm)
-                            if(!dataForm.file){
-                                $.alert('Imagen requerida: Seleccione o pegue una imagen para continuar')
-                                return;
-                            }
-                            self.showLoading(true)
-                            var fd = new FormData();
-                            Object.keys(dataForm).forEach(function (key) {
-                                if (key == 'file' && dataForm[key]) {
-                                    fd.append(key, dataForm[key], dataForm[key].name);
-                                } else {
-                                    fd.append(key, dataForm[key]);
-                                }
-                            })
+                            dataForm.condicion_envio_code = self.$content.find('select.select_subcondicion_envio').val()
 
-                            $.ajax({
-                                url: '{{route('envios.seguimientoprovincia.update')}}',
-                                data: fd,
-                                method: 'POST',
-                                processData: false,
-                                contentType: false,
-                            })
-                                .done(function () {
-                                    self.close()
+                            if (dataForm.condicion_envio_code == '{{\App\Models\Pedido::ENTREGADO_PROVINCIA_INT}}' ||
+                                dataForm.condicion_envio_code == '{{\App\Models\Pedido::NO_ENTREGADO_OLVA_INT}}'
+                            ) {
+                                if (!dataForm.file) {
+                                    $.alert('Imagen requerida: Seleccione o pegue una imagen para continuar')
+                                    return;
+                                }
+                            } else {
+                                delete dataForm.file;
+                            }
+
+                            function submitEvent() {
+                                self.showLoading(true)
+                                var fd = new FormData();
+                                Object.keys(dataForm).forEach(function (key) {
+                                    if (key == 'file' && dataForm[key]) {
+                                        fd.append(key, dataForm[key], dataForm[key].name);
+                                    } else {
+                                        fd.append(key, dataForm[key]);
+                                    }
                                 })
-                                .always(function () {
-                                    self.hideLoading(true)
-                                    $(row).parents('table').DataTable().draw(false)
+
+                                $.ajax({
+                                    url: '{{route('envios.seguimientoprovincia.update')}}',
+                                    data: fd,
+                                    method: 'POST',
+                                    processData: false,
+                                    contentType: false,
                                 })
+                                    .done(function () {
+                                        self.close()
+                                    })
+                                    .always(function () {
+                                        self.hideLoading(true)
+                                        $(row).parents('table').DataTable().draw(false)
+                                    })
+                            }
+
+                            if (dataForm.condicion_envio_code == '{{\App\Models\Pedido::NO_ENTREGADO_OLVA_INT}}') {
+                                $.confirm({
+                                    title: '¡Confirmación!',
+                                    content: `ESTAS SEGURO QUE EL SOBRE <b>${data.codigos}</b> NO A SIDO RECIVIDO POR EL CLIENTE`,
+                                    buttons: {
+                                        confirmar: {
+                                            btnClass: 'btn-success',
+                                            action: function () {
+                                                $.confirm({
+                                                    title: '¡Confirmación!',
+                                                    content: `YA REVISASTE SI VERDADERAMENTE EL SOBRE <b>${data.codigos}</b> NO A SIDO RECIBIDO`,
+                                                    buttons: {
+                                                        confirmar: {
+                                                            text:'Si, Confirmar',
+                                                            btnClass: 'btn-success',
+                                                            action: function () {
+                                                                submitEvent()
+                                                            }
+                                                        },
+                                                        cancelar: function () {
+
+                                                        },
+                                                    }
+                                                });
+                                            }
+                                        },
+                                        cancelar: function () {
+
+                                        },
+                                    }
+                                });
+                            } else  if (dataForm.condicion_envio_code == '{{\App\Models\Pedido::ENTREGADO_PROVINCIA_INT}}') {
+                                $.confirm({
+                                    title: '¡Confirmación!',
+                                    content: `ESTAS SEGURO QUE EL SOBRE <b>${data.codigos}</b> A SIDO RECIVIDO POR EL CLIENTE`,
+                                    buttons: {
+                                        confirmar: {
+                                            text:'Si, Confirmar y finalizar',
+                                            btnClass: 'btn-success',
+                                            action: function () {
+                                                submitEvent()
+                                            }
+                                        },
+                                        cancelar: function () {
+
+                                        },
+                                    }
+                                });
+                            } else {
+                                submitEvent()
+                            }
+
                         })
                     },
                     onDestroy: function () {

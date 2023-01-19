@@ -12,7 +12,7 @@
       <input type="hidden" id="ajefeoperevertir" name="ajefeoperevertir">
       <div class="modal-body">
         <p>Confirme si desea revertir el pedido <strong class="textcode">PED000</strong> a Jefe de Operaciones</p>
-        <p>Recuerde que tiene <strong class="textcantadjunto"></strong> archivos adjunto(s)</p>
+        <p class="d-none">Recuerde que tiene <strong class="textcantadjunto"></strong> archivos adjunto(s)</p>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>

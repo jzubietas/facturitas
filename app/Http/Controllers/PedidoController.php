@@ -2993,4 +2993,55 @@ class PedidoController extends Controller
             "success" => 1
         ]);
     }
+
+    public function Revertiraenviocourier(Request $request)
+    {
+        //llega pedido
+        //llega grupo
+        //ENTREGADO CLIENTE  DESTRUIR GRUPOS y VOLVER A ENVIO COURIER - JEFE OPE
+        $fecha = Carbon::now();
+        if($request->tipoajax=='pedido')
+        {
+            $pedido = Pedido::where("id", $request->aenviocourierrevertir)->first();
+            $detalle_pedidos = DetallePedido::where('pedido_id', $pedido->id)->first();
+            $pedido->update([
+                'condicion_envio' => Pedido::ENVIO_COURIER_JEFE_OPE,
+                'condicion_envio_code' => Pedido::ENVIO_COURIER_JEFE_OPE_INT,
+                'condicion_envio_at'=>now(),
+                'condicion' => Pedido::ENVIO_COURIER_JEFE_OPE,
+                'condicion_code' => Pedido::ENVIO_COURIER_JEFE_OPE_INT,
+                'modificador' => 'USER' . Auth::user()->id
+            ]);
+            /*$pedido->detallePedidos()->activo()->update([
+                "cant_compro" => 0
+            ]);
+            //liberar adjuntos
+            $imagenesatencion_ = ImagenAtencion::where("pedido_id", $request->ajefeoperevertir);//->where("confirm", '0');
+            $imagenesatencion_->update([
+                'estado' => '0'
+            ]);*/
+
+        }else if($request->tipoajax=='grupo')
+        {
+            $grupo = DireccionGrupo::where("id", $request->aenviocourierrevertir)->first();
+            $grupo->update([
+                'condicion_envio' => Pedido::ENVIO_COURIER_JEFE_OPE,
+                'condicion_envio_code' => Pedido::ENVIO_COURIER_JEFE_OPE_INT,
+                'foto1'=>'',
+                'foto2'=>'',
+                'foto3'=>'',
+                //'condicion_envio_at'=>now(),
+                //'condicion' => Pedido::ENVIO_COURIER_JEFE_OPE,
+                //'condicion_code' => Pedido::ENVIO_COURIER_JEFE_OPE_INT,
+                //'modificador' => 'USER' . Auth::user()->id
+            ]);
+            $pedido=Pedido::where('direccion_grupo',$request->aenviocourierrevertir)
+                ->update([
+                    'condicion_envio' => Pedido::ENVIO_COURIER_JEFE_OPE,
+                    'condicion_envio_code' => Pedido::ENVIO_COURIER_JEFE_OPE_INT,
+                    //'condicion_envio_at'=>now(),
+                    ]);
+        }
+        return response()->json(['html' => $request->aenviocourierrevertir]);
+    }
 }

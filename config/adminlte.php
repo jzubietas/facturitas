@@ -480,6 +480,13 @@ return [
                     'can' => 'courier.confirmarfoto',
                     'icon' => 'fas fa-check-circle dot_contador_en_motorizados_confirmar_count',
                     'active' => ['enviados'],
+                ],
+                [
+                    'text' => 'Seguimiento provincia',
+                    'route' => 'envios.seguimientoprovincia',
+                    'can' => 'courier.seguimientoprovincia',
+                    'icon' => 'fas fa-check-circle',
+                    'active' => ['enviados'],
                 ]
             ],
         ],
