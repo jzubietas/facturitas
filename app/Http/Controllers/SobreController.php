@@ -513,12 +513,22 @@ class SobreController extends Controller
             if (count($pedidos) > 0) {
                 foreach ($pedidos as $pedido) {
                     GrupoPedido::createGroupByPedido($pedido, false, true);
-                    $pedido->update([
-                        "condicion_envio" => pedido::RECEPCION_COURIER,
-                        "condicion_envio_code" => pedido::RECEPCION_COURIER_INT,
-                        //"observacion_devuelto" => $observaciongrupo,
-                        "direccion_grupo" => null
-                    ]);
+                    if($request->tipoajax==2)
+                    {
+                        $pedido->update([
+                            "condicion_envio" => pedido::ENVIO_COURIER_JEFE_OPE,
+                            "condicion_envio_code" => pedido::ENVIO_COURIER_JEFE_OPE_INT,
+                            "direccion_grupo" => null
+                        ]);
+                    }else{
+                        $pedido->update([
+                            "condicion_envio" => pedido::RECEPCION_COURIER,
+                            "condicion_envio_code" => pedido::RECEPCION_COURIER_INT,
+                            //"observacion_devuelto" => $observaciongrupo,
+                            "direccion_grupo" => null
+                        ]);
+                    }
+
                 }
             }
             DireccionGrupo::restructurarCodigos($direcciongrupo);
