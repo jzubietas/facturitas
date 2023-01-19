@@ -24,9 +24,9 @@ use Maatwebsite\Excel\Concerns\WithEvents;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
-Sheet::macro('styleCells', function (Sheet $sheet, string $cellRange, array $style) {
+/*Sheet::macro('styleCells', function (Sheet $sheet, string $cellRange, array $style) {
     $sheet->getDelegate()->getStyle($cellRange)->applyFromArray($style);
-});
+});*/
 
 class PagerecepcionMotorizado extends Export implements WithStyles,WithColumnFormatting, FromCollection, WithHeadings, ShouldAutoSize, WithEvents
 {
@@ -109,8 +109,8 @@ class PagerecepcionMotorizado extends Export implements WithStyles,WithColumnFor
     public function map($model): array
     {
         //$model->Periodo=strval(str_pad($model->Periodo,2,"0"));
-        $model->codigos=implode('\n',explode(',',$model->codigos));
-        $model->producto=implode('\n',explode(',',$model->producto));
+        $model->codigos=implode("\n",explode(',',$model->codigos));
+        $model->producto=implode("\n",explode(',',$model->producto));
         /*$ae=[];
         for($i=1;$i<count($model->producto);$i++)
         {
