@@ -31,12 +31,12 @@ class DireccionGrupo extends Model implements HasMedia
 
 
     //subcondicion_envio
-    const SCE_REGISTRADO = 'REGISTRADO';
-    const SCE_EN_CAMINO = 'EN CAMINO';
-    const SCE_EN_TIENDA_AGENTE = 'EN TIENDA/AGENTE';
-    const SCE_ENTREGADO = 'ENTREGADO';
-    const SCE_NO_ENTREGADO = 'NO ENTREGADO';
-    const NULL = 'NULL';
+    const SCE_RECEPCIONADO = 'RECEPCIONADO - OLVA';
+    const SCE_EN_CAMINO = 'EN CAMINO - OLVA';
+    const SCE_EN_TIENDA_AGENTE = 'EN TIENDA/AGENTE - OLVA';
+    const SCE_ENTREGADO = 'ENTREGADO - OLVA';
+    const SCE_NO_ENTREGADO = 'NO ENTREGADO - OLVA';
+
 
     protected $guarded = ['id'];
     protected $dates = [

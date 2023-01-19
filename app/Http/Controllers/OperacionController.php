@@ -566,7 +566,7 @@ class OperacionController extends Controller
             ->whereIn('pedidos.condicion_envio_code', [
                 Pedido::RECEPCION_COURIER_INT
                 , Pedido::REPARTO_COURIER_INT
-                , Pedido::SEGUIMIENTO_PROVINCIA_COURIER_INT
+                , Pedido::RECEPCIONADO_OLVA_INT
                 , Pedido::ENTREGADO_CLIENTE_INT
                 , Pedido::RECEPCION_COURIER_INT
                 , Pedido::ENVIO_COURIER_JEFE_OPE_INT

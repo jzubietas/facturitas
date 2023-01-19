@@ -259,14 +259,14 @@ class EnvioController extends Controller
 
                 //if (auth()->user()->can('envios.enviar')):
 
-                    $btn .= '<ul class="list-unstyled pl-0">';
-                    $btn .= '<li>
+                $btn .= '<ul class="list-unstyled pl-0">';
+                $btn .= '<li>
                                         <button class="btn btn-sm text-secondary" data-target="' . route('operaciones.confirmarentregasinenvio', ['hiddenCodigo' => $pedido->codigo]) . '" data-toggle="jqconfirm">
                                             <i class="fas fa-envelope text-danger"></i> Entregado sin envio
                                         </button>
                                     </li>';
-                    $btn .= '</ul>';
-               // endif;
+                $btn .= '</ul>';
+                // endif;
 
                 return $btn;
             })
@@ -1481,16 +1481,27 @@ class EnvioController extends Controller
     public function SeguimientoprovinciaUpdate(Request $request)
     {
         $grupo = DireccionGrupo::findOrFail($request->direccion_grupo_id);
-        $collectionName = 'subcondicion_envio.' . Str::slug($request->subcondicion_envio);
-        $medias = $grupo->getMedia($collectionName);
-        foreach ($medias as $media) {
-            //$grupo->deleteMedia($media);
+        if (in_array($request->condicion_envio_code, [Pedido::ENTREGADO_PROVINCIA_INT, Pedido::NO_ENTREGADO_OLVA_INT])) {
+            $collectionName = 'subcondicion_envio.' . Str::slug(Pedido::$estadosCondicionEnvioCode[$request->condicion_envio_code]);
+            $medias = $grupo->getMedia($collectionName);
+            foreach ($medias as $media) {
+                $grupo->deleteMedia($media);
+            }
+            $grupo->addMedia($request->file('file'))
+                ->toMediaCollection($collectionName, 'pstorage');
+
+            if ($request->condicion_envio_code == Pedido::ENTREGADO_PROVINCIA_INT) {
+                DireccionGrupo::cambiarCondicionEnvio($grupo, Pedido::ENTREGADO_PROVINCIA_INT);
+            }else{
+                DireccionGrupo::cambiarCondicionEnvio($grupo, Pedido::NO_ENTREGADO_OLVA_INT);
+                $grupo->update([
+                    'motorizado_status'=>Pedido::ESTADO_MOTORIZADO_NO_RECIBIDO,
+                    'motorizado_sustento_text'=>'No entregado olva'
+                ]);
+            }
+        } else {
+            DireccionGrupo::cambiarCondicionEnvio($grupo, $request->condicion_envio_code);
         }
-        $grupo->addMedia($request->file('file'))
-            ->toMediaCollection($collectionName, 'pstorage');
-        $grupo->update([
-            'subcondicion_envio' => $request->subcondicion_envio
-        ]);
         return $grupo;
     }
 
@@ -1499,8 +1510,13 @@ class EnvioController extends Controller
         $pedidos_provincia = DireccionGrupo::join('clientes', 'clientes.id', 'direccion_grupos.cliente_id')
             ->join('users', 'users.id', 'clientes.user_id')
             ->activo()
-            ->where('direccion_grupos.condicion_envio_code', Pedido::SEGUIMIENTO_PROVINCIA_COURIER_INT)
+            ->whereIn('direccion_grupos.condicion_envio_code', [
+                Pedido::RECEPCIONADO_OLVA_INT,
+                Pedido::EN_CAMINO_OLVA_INT,
+                Pedido::EN_TIENDA_AGENTE_OLVA_INT,
+            ])
             ->where('direccion_grupos.distribucion', 'OLVA')
+            ->where('direccion_grupos.motorizado_status', '0')
             ->select([
                 'direccion_grupos.*',
                 "clientes.celular as cliente_celular",
@@ -1517,26 +1533,34 @@ class EnvioController extends Controller
                 }
             })
             ->editColumn('referencia', function ($pedido) {
-                if ($pedido->destino == 'LIMA') {
-                    return $pedido->referencia;
-
-                } else if ($pedido->destino == 'PROVINCIA') {
-                    return '<p><a target="_blank" href="' . \Storage::disk('pstorage')->url($pedido->observacion) . '">' . $pedido->referencia . '</a><p>';
-                }
-                return '';
+                return '<p><a target="_blank" href="' . \Storage::disk('pstorage')->url($pedido->observacion) . '">' . $pedido->referencia . '</a><p>';
             })
             ->addColumn('condicion_envio', function ($pedido) {
                 $color = Pedido::getColorByCondicionEnvio($pedido->condicion_envio);
-                $html= '<span class="badge badge-success">' . $pedido->subcondicion_envio . '</span>';
-                $html.= '<span class="badge badge-success" style="background-color: ' . $color . '!important;">' . $pedido->condicion_envio . '</span>';
+                $html = '<span class="badge badge-success" style="background-color: ' . $color . '!important;">' . $pedido->condicion_envio . '</span>';
                 return $html;
             })
             ->addColumn('action', function ($pedido) {
-                $btn = '';
-                $btn .= '<button data-target="#modal-enviar" data-toggle="jqconfirm" class="btn btn-success btn-sm"><i class="fas fa-envelope"></i> Entregado</button>';
+                switch ($pedido->condicion_envio_code) {
+                    case Pedido::RECEPCIONADO_OLVA_INT:
+                        $btn = '<button data-target="'.DireccionGrupo::SCE_EN_CAMINO.'" data-toggle="jqconfirm" class="btn btn-primary btn-sm"><i class="fas fa-car"></i> ACTUALIZAR ESTADO</button>';
+                        break;
+                    case Pedido::EN_CAMINO_OLVA_INT:
+                        $btn = '<button data-target="'.DireccionGrupo::SCE_EN_TIENDA_AGENTE.'" data-toggle="jqconfirm" class="btn btn-dark btn-sm"><i class="fas fa-home"></i>ACTUALIZAR ESTADO</button>';
+                        break;
+                    case Pedido::EN_TIENDA_AGENTE_OLVA_INT:
+                        $btn = '<button data-target="'.DireccionGrupo::SCE_ENTREGADO.'" data-toggle="jqconfirm" class="btn btn-warning btn-sm"><i class="fas fa-envelope"></i>ACTUALIZAR ESTADO</button>';
+                        break;
+                    case Pedido::ENTREGADO_PROVINCIA_INT:
+                    case Pedido::NO_ENTREGADO_OLVA_INT:
+                        $btn = '';
+                        break;
+                    default:
+                        $btn = '<button data-target="'.DireccionGrupo::SCE_RECEPCIONADO.'" data-toggle="jqconfirm" class="btn btn-info btn-sm"><i class="fa fa-hand-holding"></i> ACTUALIZAR ESTADO</button>';
+                }
                 return $btn;
             })
-            ->rawColumns(['action', 'referencia','condicion_envio'])
+            ->rawColumns(['action', 'referencia', 'condicion_envio'])
             ->make(true);
 
     }
@@ -1717,8 +1741,8 @@ class EnvioController extends Controller
 
                 'envio' => '2',
                 'estado_sobre' => '1',
-                'condicion_envio' => Pedido::SEGUIMIENTO_PROVINCIA_COURIER,
-                'condicion_envio_code' => Pedido::SEGUIMIENTO_PROVINCIA_COURIER_INT,
+                'condicion_envio' => Pedido::RECEPCIONADO_OLVA,
+                'condicion_envio_code' => Pedido::RECEPCIONADO_OLVA_INT,
                 'condicion_envio_at' => now(),
                 'modificador' => 'USER' . Auth::user()->id
             ]);
@@ -1726,8 +1750,8 @@ class EnvioController extends Controller
 
             $direccion_grupos->update([
 
-                'condicion_envio' => Pedido::SEGUIMIENTO_PROVINCIA_COURIER,
-                'condicion_envio_code' => Pedido::SEGUIMIENTO_PROVINCIA_COURIER_INT,
+                'condicion_envio' => Pedido::RECEPCIONADO_OLVA,
+                'condicion_envio_code' => Pedido::RECEPCIONADO_OLVA_INT,
                 'condicion_envio_at' => now(),
                 'modificador' => 'USER' . Auth::user()->id,
                 'pedido_id' => $request->hiddenRecibir
@@ -2725,7 +2749,7 @@ class EnvioController extends Controller
             $fecha_salida = "";
         }
 
-        if($responsable == "fernandez_reparto"){
+        if ($responsable == "fernandez_reparto") {
 
             /**************
              * VALIDACIONES GLOBALES
@@ -2743,8 +2767,8 @@ class EnvioController extends Controller
             }
 
             // VALIDACIONES PARA LA DIRECCION GRUPO
-            if($grupo == null){
-                return response()->json(['html' => "Este pedido No cuenta con una dirección", 'class' => "text-danger", 'codigo' => 0,'error'=>4, 'Estado_actual' => $pedido -> condicion_envio_code, 'msj_error' => 0]);
+            if ($grupo == null) {
+                return response()->json(['html' => "Este pedido No cuenta con una dirección", 'class' => "text-danger", 'codigo' => 0, 'error' => 4, 'Estado_actual' => $pedido->condicion_envio_code, 'msj_error' => 0]);
             }
 
             $condicion_code_actual = $pedido->condicion_envio_code;
@@ -2756,14 +2780,13 @@ class EnvioController extends Controller
         }
 
 
+        /*
+                $grupo = $pedido->direccion_grupo;
 
-/*
-        $grupo = $pedido->direccion_grupo;
-
-        if ($grupo == null) {
-            return response()->json(['html' => "Este pedido No cuenta con una dirección", 'class' => "text-danger", 'codigo' => 0, 'error' => 4, 'Estado_actual' => $pedido->condicion_envio_code, 'msj_error' => 0]);
-        }
-*/
+                if ($grupo == null) {
+                    return response()->json(['html' => "Este pedido No cuenta con una dirección", 'class' => "text-danger", 'codigo' => 0, 'error' => 4, 'Estado_actual' => $pedido->condicion_envio_code, 'msj_error' => 0]);
+                }
+        */
 
         /************
          * SETEAMOS VALORES POR DEFECTO
@@ -2977,7 +3000,7 @@ class EnvioController extends Controller
                 }
             }
             //return response()->json(['html' => "Pedidos Procesados correctamente", 'error'=>10, 'Condicion actual'=> Pedido::$estadosCondicionEnvioCode[$pedido->condicion_envio_code]]);
-            return response()->json(['html' => $respuesta, 'class' => "text-success",'error' => 0, 'Condicion actual'=> Pedido::$estadosCondicionEnvioCode[$pedido->condicion_envio_code]]);
+            return response()->json(['html' => $respuesta, 'class' => "text-success", 'error' => 0, 'Condicion actual' => Pedido::$estadosCondicionEnvioCode[$pedido->condicion_envio_code]]);
             //return response()->json(['html' => $respuesta]);
 
         }
@@ -3144,8 +3167,7 @@ class EnvioController extends Controller
         return response()->json(['html' => $envio->id]);
     }
 
-    public
-    function confirmarEstadoConfirm(Request $request)
+    public function confirmarEstadoConfirm(Request $request)
     {
         $action = $request->action;
         if ($action == 'update_status_observado') {
@@ -3265,23 +3287,15 @@ class EnvioController extends Controller
         return response()->json(['html' => $envio->id]);
     }
 
-    public
-    function confirmarEstadoConfirmConfirm(Request $request)
+    public function confirmarEstadoConfirmConfirm(Request $request)
     {
         $envio = DireccionGrupo::where("id", $request->hiddenMotorizadoEntregarConfirm)->first();
-        $envio->update([
-            'condicion_envio' => Pedido::ENTREGADO_CLIENTE,
-            'condicion_envio_code' => Pedido::ENTREGADO_CLIENTE_INT,
-            'condicion_envio_at' => now(),
-        ]);
 
-        $pedidos = Pedido::where('direccion_grupo', $request->hiddenMotorizadoEntregarConfirm)->where('estado', '1');
-        $pedidos->update([
-            'condicion_envio' => Pedido::ENTREGADO_CLIENTE,
-            'condicion_envio_code' => Pedido::ENTREGADO_CLIENTE_INT,
-            'condicion_envio_at' => now(),
-        ]);
-
+        if ($envio->distribucion == 'OLVA') {
+            DireccionGrupo::cambiarCondicionEnvio($envio, Pedido::RECEPCIONADO_OLVA_INT);
+        } else {
+            DireccionGrupo::cambiarCondicionEnvio($envio, Pedido::ENTREGADO_CLIENTE_INT);
+        }
         PedidoMovimientoEstado::create([
             'pedido' => $request->hiddenMotorizadoEntregarConfirm,
             'condicion_envio_code' => Pedido::ENTREGADO_CLIENTE_INT,
@@ -3291,8 +3305,7 @@ class EnvioController extends Controller
         return response()->json(['html' => $envio->id]);
     }
 
-    public
-    function confirmarEstadoConfirmDismiss(Request $request)
+    public function confirmarEstadoConfirmDismiss(Request $request)
     {
         //$hiddenAtender = $request->hiddenMotorizadoEntregarConfirm;
         /*$pedido = Pedido::where("id", $hiddenAtender)->first();

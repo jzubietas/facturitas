@@ -43,19 +43,23 @@ class Pedido extends Model
     const ENVIO_COURIER_JEFE_OPE = 'ENVIO A COURIER - JEFE OPE'; // 12
     const RECEPCION_COURIER = 'RECEPCION - COURIER'; // 11
     const REPARTO_COURIER = 'REPARTO - COURIER'; // 8
-    const SEGUIMIENTO_PROVINCIA_COURIER = 'SEGUIMIENTO PROVINCIA - COURIER'; // 9
+
     const MOTORIZADO = 'MOTORIZADO'; // 15
     const ENTREGADO_CLIENTE = 'ENTREGADO - CLIENTE'; // 10
     const ENTREGADO_SIN_SOBRE_OPE = 'ATENDIDO: ENTREGADO SIN SOBRE - OPE'; // 13
-    const ENTREGADO_SIN_SOBRE_CLIENTE = 'ENTREGADO SIN SOBRE - CLIENTE'; // 14
+    const ENTREGADO_SIN_SOBRE_CLIENTE = 'ENTREGADO SIN ENVIO - CLIENTE'; // 14
 
-    const ENTREGADO_SIN_ENVIO_CLIENTE = 'ENTREGADO SIN ENVIO - CLIENTE'; // 20
     const CONFIRM_MOTORIZADO = 'PRE* ENTREGADO A CLIENTE - MOTORIZADO'; // 16/PRE ENTREGADO A CLIENTE - MOTORIZADO  //CONFIRMACION - MOTORIZADO
     const CONFIRM_VALIDADA_CLIENTE = 'CONFIRMACION VALIDADA - CLIENTE'; // 17
     const RECEPCION_MOTORIZADO = 'RECEPCION - MOTORIZADO'; // 18
     const ENVIO_MOTORIZADO_COURIER = 'ENVIO A MOTORIZADO - COURIER'; // 19
 
-    const ENTREGADO_PROVINCIA = 'ENTREGADO_PROVINCIA'; // 19
+    const RECEPCIONADO_OLVA = 'RECEPCIONADO - OLVA'; // 9
+    const EN_CAMINO_OLVA = 'EN CAMINO - OLVA'; // 22
+    const EN_TIENDA_AGENTE_OLVA = 'EN TIENDA/AGENTE - OLVA';//23
+    const NO_ENTREGADO_OLVA = 'NO ENTREGADO - OLVA';//24
+    const ENTREGADO_PROVINCIA = 'ENTREGADO - PROVINCIA'; // 21
+
 
     /**************
      * CONSTANTES CONDICION ENVIO NUMERICO
@@ -68,18 +72,21 @@ class Pedido extends Model
     const ENVIO_COURIER_JEFE_OPE_INT = 12;
     const RECEPCION_COURIER_INT = 11;
     const REPARTO_COURIER_INT = 8;
-    const SEGUIMIENTO_PROVINCIA_COURIER_INT = 9;
+    const RECEPCIONADO_OLVA_INT = 9;
     const MOTORIZADO_INT = 15;
     const ENTREGADO_CLIENTE_INT = 10;
     const ENTREGADO_SIN_SOBRE_OPE_INT = 13;
     const ENTREGADO_SIN_SOBRE_CLIENTE_INT = 14;
 
-    const ENTREGADO_SIN_ENVIO_CLIENTE_INT = 20;
     const CONFIRM_MOTORIZADO_INT = 16;
     const CONFIRM_VALIDADA_CLIENTE_INT = 17;
     const RECEPCION_MOTORIZADO_INT = 18;
     const ENVIO_MOTORIZADO_COURIER_INT = 19; // 19
     const ENTREGADO_PROVINCIA_INT = 21; // 19
+
+    const EN_CAMINO_OLVA_INT = 22;
+    const EN_TIENDA_AGENTE_OLVA_INT = 23;
+    const NO_ENTREGADO_OLVA_INT = 24;
 
     const ESTADO_MOTORIZADO_OBSERVADO = 1;
     const ESTADO_MOTORIZADO_NO_CONTESTO = 2;
@@ -106,7 +113,7 @@ class Pedido extends Model
         self::ENVIO_COURIER_JEFE_OPE_INT => self::ENVIO_COURIER_JEFE_OPE,
         self::RECEPCION_COURIER_INT => self::RECEPCION_COURIER,
         self::REPARTO_COURIER_INT => self::REPARTO_COURIER,
-        self::SEGUIMIENTO_PROVINCIA_COURIER_INT => self::SEGUIMIENTO_PROVINCIA_COURIER,
+        self::RECEPCIONADO_OLVA_INT => self::RECEPCIONADO_OLVA,
         self::MOTORIZADO_INT => self::MOTORIZADO,
         self::ENTREGADO_CLIENTE_INT => self::ENTREGADO_CLIENTE,
         self::ENTREGADO_SIN_SOBRE_OPE_INT => self::ENTREGADO_SIN_SOBRE_OPE,
@@ -115,8 +122,10 @@ class Pedido extends Model
         self::CONFIRM_VALIDADA_CLIENTE_INT => self::CONFIRM_VALIDADA_CLIENTE,
         self::RECEPCION_MOTORIZADO_INT => self::RECEPCION_MOTORIZADO,
         self::ENVIO_MOTORIZADO_COURIER_INT => self::ENVIO_MOTORIZADO_COURIER,
-
-
+        self::ENTREGADO_PROVINCIA_INT => self::ENTREGADO_PROVINCIA,
+        self::EN_CAMINO_OLVA_INT => self::EN_CAMINO_OLVA,
+        self::EN_TIENDA_AGENTE_OLVA_INT => self::EN_TIENDA_AGENTE_OLVA,
+        self::NO_ENTREGADO_OLVA_INT => self::NO_ENTREGADO_OLVA,
     ];
 
 
@@ -403,9 +412,9 @@ class Pedido extends Model
     {
         $condicion_envio = \Str::lower($condicion_envio ?? '');
 
-        if (\Str::contains($condicion_envio, "olva")) {
+        if (\Str::contains($condicion_envio, "olva")||$condicion_envio==\Str::lower(Pedido::ENTREGADO_PROVINCIA)) {
             return '#ffe007';
-        }elseif (\Str::contains($condicion_envio, "ope")) {
+        } elseif (\Str::contains($condicion_envio, "ope")) {
             return '#23cafd';
         } elseif (\Str::contains($condicion_envio, "courier") || \Str::contains($condicion_envio, "motorizado")) {
             return '#f97100';
