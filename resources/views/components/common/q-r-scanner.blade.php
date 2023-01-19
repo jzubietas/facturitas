@@ -170,7 +170,6 @@
 
         $('#codigo_confirmar').change(function (event) {
             event.preventDefault();
-
             var codigo_caturado = ($(this).val() || '').trim();
 
             var codigo_mejorado = codigo_caturado.replace(/['']+/g, '-').replaceAll("'", '-').replaceAll("(", '*');
@@ -400,7 +399,7 @@ function ConfirmarOPBarra(data){
                             color: '#FFF',
                             background: '#9f2916',
                             showConfirmButton: false,
-                            timer: 1500
+                            timer: 800
                         })
 
                         $('#respuesta_barra').html('<span class="'+ data.class +'">'+ data.html +'</b></span>');
@@ -428,7 +427,7 @@ function ConfirmarOPBarra(data){
                             color: '#FFF',
                             background: '#9f2916',
                             showConfirmButton: false,
-                            timer: 1500
+                            timer: 800
                         })
 
                         $('#respuesta_barra').html('<span class="'+ data.class +'">'+ data.html + '</span>');
@@ -442,7 +441,7 @@ function ConfirmarOPBarra(data){
                             color: '#FFF',
                             background: '#9f2916',
                             showConfirmButton: false,
-                            timer: 1500
+                            timer: 800
                         })
 
                         $('#respuesta_barra').html('<span class="'+ data.class +'">'+ data.html + '</span>');
@@ -455,7 +454,7 @@ function ConfirmarOPBarra(data){
                             color: '#FFF',
                             background: '#9f2916',
                             showConfirmButton: false,
-                            timer: 1500
+                            timer: 800
                         })
 
                         $('#respuesta_barra').html('<span class="'+ data.class +'">'+ data.html + '</span>');
@@ -485,6 +484,8 @@ function ConfirmarOPBarra(data){
                             showConfirmButton: false,
                             timer: 600
                         })
+
+                        $('#respuesta_barra').html('<span class="'+ data.class +'">'+ data.html + '</span>');
                     }
 
                     setTimeout(function (){
