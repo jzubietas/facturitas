@@ -219,7 +219,7 @@
                                                                     <h6 class="mb-0">
                                                                         <button data-toggle="modal" data-target="#modal-scan-comparador"
                                                                             class="btn btn-sm btn-option"
-                                                                            data-zona="{{$motorizado->zona}}">
+                                                                            data-zona="{{$motorizado->zona}}" data-motorizado="{{$motorizado->id}}" data-vista="">
                                                                             <i class="fa fa-barcode"></i> Comprobar archivos
                                                                         </button>
                                                                         <button
@@ -1304,27 +1304,51 @@
                              * FIN ESCANEAR MOUSE
                              */
 
-                            $('#modal-scan-comparador"').on('show.bs.modal', function (event) {
+                            $('#modal-scan-comparador').on('show.bs.modal', function (event) {
                                 var button = $(event.relatedTarget)
                                 var zona = button.data('zona');
 
-                                var fd2 = new FormData();
-                                fd2.append('zona', zona);
-                                fd2.append('con', 1);
-
                                 $.ajax({
-                                    data: fd2,
-                                    processData: false,
-                                    contentType: false,
+                                    //processData: false,
+                                    //contentType: false,
                                     type: 'POST',
-                                    url: "{{ route('operaciones.confirmarrecepcionmotorizado') }}",
+                                    url: "{{ route('operaciones.comparacionmotorizado') }}",
+                                    data: {
+                                        'fechaconsulta':$("#fecha_consulta").val(),
+                                        'motorizado_id' : button.data('motorizado'),
+                                        'zona' : button.data('zona'),
+                                            },
                                     success: function (data) {
-                                        $("#modal-confirmacion").modal("hide");
-                                        $('#tablaPrincipal').DataTable().ajax.reload();
-
+                                        var lista = "";
+                                        jQuery.each(data.grupo, function(index, item) {
+                                            lista += '<li id="'+item+'" class="item_recepcionado"><i class="fa fa-envelope text-warning mr-8" aria-hidden="true"></i> '+item+'</li>';
+                                            //$('#pedidos-recepcion').append('<li id="'+item+'" class="item_recepcionado">'+item+'</li>');
+                                        });
+                                        $('#pedidos-recepcion').html(lista);
                                     }
                                 });
 
+                                $('#codigo_comprobar').change(function (event) {
+                                    event.preventDefault();
+
+                                    var codigo_caturado = ($(this).val() || '').trim();
+                                    var codigo_mejorado = codigo_caturado.replace(/['']+/g, '-').replaceAll("'", '-').replaceAll("(", '*');
+
+                                    $('.item_recepcionado').each(function(){
+                                        var ide = $(this).attr('id');
+                                        if(ide == codigo_mejorado){
+                                            console.log("codigo encontrado");
+                                            $('#'+codigo_mejorado).fadeOut();
+                                            $("#pedidos-escaneados").append('<li><i class="fa fa-check text-success mr-8" aria-hidden="true"></i>'+ codigo_mejorado +'</li>');
+                                        }
+                                    });
+/*
+                                    $('#'+codigo_mejorado).fadeOut();
+                                    $("#pedidos-escaneados").append('<li>'+ codigo_mejorado +'</li>');
+
+ */
+                                    return false;
+                                });
                             });
 
                             $.ajaxSetup({
