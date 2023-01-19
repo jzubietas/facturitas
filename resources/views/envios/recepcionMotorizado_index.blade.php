@@ -449,6 +449,9 @@
                             transition: all 0.5s ease;
                             text-shadow: 10px 2px #6ac7c2;
                         }
+                        .dataTables_filter {
+                            display: none;
+                        }
                     </style>
                     <link rel="stylesheet"
                           href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
@@ -851,6 +854,7 @@
                             @foreach($motorizados as $motorizado)
                             $('#tablaPrincipal{{Str::upper($motorizado->zona)}}').DataTable({
                                 ...configDataTableZonas,
+                                "bFilter": false,
                                 ajax: {
                                     url: "{{route('envios.recepcionmotorizadotablageneral',['datatable'=>'1'])}}",
                                     data: function (a) {
