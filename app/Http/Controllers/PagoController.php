@@ -2845,7 +2845,6 @@ class PagoController extends Controller
             ->with(['pago', 'pago.user'])
             ->where('banco', $request->banco)
             ->where('titular', $request->titular)
-            //->where('cuenta', $request->cuenta)
             ->where('monto', $request->monto)
             ->where('fecha', $request->fecha)
             ->whereIn('pago_id',
@@ -2853,7 +2852,6 @@ class PagoController extends Controller
                     ->where('pagos.estado', 1)
                     ->join('users', 'users.id', '=', 'pagos.user_id')
                     ->where('cliente_id', $request->cliente_id)
-            //->where('users.identificador', $request->asesor)
             )
             ->limit(5)
             ->get();
