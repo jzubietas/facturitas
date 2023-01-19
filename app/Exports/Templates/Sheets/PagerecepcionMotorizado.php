@@ -109,14 +109,14 @@ class PagerecepcionMotorizado extends Export implements WithStyles,WithColumnFor
     public function map($model): array
     {
         //$model->Periodo=strval(str_pad($model->Periodo,2,"0"));
-        $model->codigos=implode('\n',explode(',',$model->codigos));
-        $model->producto=explode(',',$model->producto);
-        $ae=[];
+        //$model->codigos=implode('\n',explode(',',$model->codigos));
+        //$model->producto=explode(',',$model->producto);
+        /*$ae=[];
         for($i=1;$i<count($model->producto);$i++)
         {
             array_push($ae,$i.") ".$model->producto[$i]);
         }
-        $model->producto=implode('\n',$ae);
+        $model->producto=implode('\n',$ae);*/
 
         return parent::map($model);
     }
