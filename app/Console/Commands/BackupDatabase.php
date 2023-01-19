@@ -59,7 +59,7 @@ host=$h
 ";
         file_put_contents($credentialsFile, $data);
         try {
-            $this->executeCommand("mysqldump --skip-tz-utc --defaults-extra-file=\"$credentialsFile\" --routines $database > $filename");
+            $this->executeCommand("mysqldump --defaults-extra-file=\"$credentialsFile\" --skip-tz-utc  --routines $database > $filename");
             unlink($credentialsFile);
         } catch (\Exception $ex) {
             unlink($credentialsFile);
