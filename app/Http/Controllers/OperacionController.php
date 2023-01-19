@@ -390,7 +390,6 @@ class OperacionController extends Controller
                     'u.identificador as users',
                     'dp.codigo as codigos',
                     'dp.nombre_empresa as empresas',
-                    //DB::raw('DATE_FORMAT(pedidos.created_at, "%d/%m/%Y") as fecha'),
                     DB::raw('(DATE_FORMAT(pedidos.created_at, "%Y-%m-%d %h:%i:%s")) as fecha'),
                     'dp.envio_doc',
                     'dp.fecha_envio_doc',
@@ -410,29 +409,17 @@ class OperacionController extends Controller
             )
             ->where('pedidos.estado', '1')
             ->where('dp.estado', '1')
-            //->where('pedidos.condicion_code', Pedido::ATENDIDO_INT)
             ->whereIn('pedidos.condicion_envio_code', [Pedido::ENVIADO_OPE_INT, Pedido::ENTREGADO_SIN_SOBRE_OPE_INT, Pedido::RECIBIDO_JEFE_OPE_INT]);
 
-        //->whereIn('pedidos.envio', ['0'])
-        //->whereBetween( 'pedidos.created_at', [$min, $max]);
-
         if (Auth::user()->rol == "Operario") {
-
             $asesores = User::whereIN('users.rol', ['Asesor', 'Administrador', 'ASESOR ADMINISTRATIVO'])
                 ->where('users.estado', '1')
                 ->Where('users.operario', Auth::user()->id)
                 ->select(
                     DB::raw("users.identificador as identificador")
-                )/*->union(
-                    User::where("id","33")
-                        ->select(
-                            DB::raw("users.identificador as identificador")
-                        ) )*/
+                )
                 ->pluck('users.identificador');
-
             $pedidos->WhereIn('u.identificador', $asesores);
-
-
         } else if (Auth::user()->rol == User::ROL_JEFE_OPERARIO) {
             $operarios = User::where('users.rol', 'Operario')
                 ->where('users.estado', '1')
@@ -441,14 +428,12 @@ class OperacionController extends Controller
                     DB::raw("users.id as id")
                 )
                 ->pluck('users.id');
-
-            $asesores = User::whereIN('users.rol', ['Asesor', 'Administrador', 'ASESOR ADMINISTRATIVO'])
-                ->where('users.estado', '1')
+            $asesores = User::whereIN('users.rol', [User::ROL_ASESOR, User::ROL_ADMIN,User::ROL_ASESOR_ADMINISTRATIVO])
                 ->WhereIn('users.operario', $operarios)
                 ->select(
                     DB::raw("users.identificador as identificador")
-                );
-
+                )
+                ->activo();
             $pedidos->WhereIn('u.identificador', $asesores);
         }
         return Datatables::of(DB::table($pedidos))
@@ -484,9 +469,35 @@ class OperacionController extends Controller
                 return $badge_estado;
             })
             ->addColumn('action', function ($pedido) {
-                $btn = '';
+                $btn = [];
 
-                return $btn;
+                if (auth()->user()->can('operacion.PDF')):
+                    $btn[] = '<a href="'.route("pedidosPDF", $pedido->id).'" class="btn-sm dropdown-item" target="_blank"><i class="fa fa-file-pdf text-primary"></i> PDF</a>';
+                endif;
+
+                /*if ( in_array( auth()->user()->rol,[User::ROL_JEFE_OPERARIO,User::ROL_ADMIN]) ):
+                    $btn[]='<a href="" data-target="#modal-envio"  class="btn-sm dropdown-item" data-envio='.$pedido->id.' data-toggle="modal" >Enviar</a><br>';
+                    $btn[]='<a href="" data-target="#modal-sinenvio"  class="btn-sm dropdown-item" data-sinenvio='.$pedido->id.' data-toggle="modal" ><i class="fa fa-times text-danger" aria-hidden="true"></i> Sin envío</a><br>';
+                endif;*/
+
+                if($pedido->condicion_envio_code==5):
+                    $btn[]='<a href="" data-target="#modal-envio-op" data-group="1" class="btn-sm dropdown-item" data-envio='.$pedido->id.' data-code="'.$pedido->codigos.'" data-toggle="modal" ><i class="fa fa-envelope text-success" aria-hidden="true"></i> Recepcion</a>';
+                    $btn[]='<a data-target="#" class="btn-sm pl-16 text-gray mb-0" data-envio='.$pedido->id.' data-code="'.$pedido->codigos.'" data-toggle="" disabled><i class="fa fa fa-motorcycle text-gray" aria-hidden="true"></i> ENVIO A COURIER</a>';
+                    $btn[]='<a href="" data-target="#modal-revertir" class="btn-sm dropdown-item" data-revertir='.$pedido->id.'  data-codigo='.$pedido->codigo.' data-toggle="modal" ><i class="fa fa-times text-danger" aria-hidden="true"></i> Revertir</a>';
+                endif;
+
+                if($pedido->condicion_envio_code==6):
+                    $btn[]='<a data-target="text-gray" class="btn-sm pl-16 mb-0" data-envio='.$pedido->id.' data-code="'.$pedido->codigos.'" data-toggle="" disabled><i class="fa fa-envelope text-gray " aria-hidden="true"></i> Recepcion</a>';
+                    $btn[]='<a href="" data-target="#modal-envio-op" data-group="2" class="btn-sm dropdown-item " data-envio='.$pedido->id.' data-code="'.$pedido->codigos.'" data-toggle="modal" ><i class="fa fa fa-motorcycle text-success" aria-hidden="true"></i> ENVIO A COURIER</a>';
+                    $btn[]='<a href="" data-target="#modal-revertir" class="btn-sm dropdown-item" data-revertir='.$pedido->id.'  data-codigo='.$pedido->codigo.' data-toggle="modal" ><i class="fa fa-times text-danger" aria-hidden="true"></i> Revertir</a>';
+                endif;
+
+                if($pedido->condicion_envio_code == 13):
+                    $btn[]='<a href="" class="btn-sm dropdown-item" data-target="#modal-envio" data-code="'.$pedido->codigos.'" data-envio='.$pedido->id.' data-toggle="modal" ><i class="fa fa-check text-success" aria-hidden="true"></i> Recepcion</a>';
+                    $btn[]='<a href="" data-target="#modal-revertir" class="btn-sm dropdown-item" data-revertir='.$pedido->id.' data-codigo='.$pedido->codigo.' data-toggle="modal" ><i class="fa fa-times text-danger" aria-hidden="true"></i> Revertir</a>';
+                endif;
+
+                return "<ul class='d-flex'>" . join('', $btn) . "</ul>";
             })
             ->rawColumns(['action','condicion_envio'])
             ->make(true);
