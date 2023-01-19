@@ -1189,6 +1189,9 @@
                             $('#modal-scan-comparador').on('show.bs.modal', function (event) {
                                 var button = $(event.relatedTarget)
                                 var zona = button.data('zona');
+
+                                $('#pedidos-escaneados').html("");
+
                                 pedidos_escaneados=[];
                                 $("#codigo_comprobar").val('')
 
