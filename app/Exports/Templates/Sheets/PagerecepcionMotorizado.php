@@ -206,22 +206,8 @@ class PagerecepcionMotorizado extends Export implements WithStyles,WithColumnFor
         $row_cell_ = 14;
         $letter_cell = 'J';
 
-        $event->sheet->styleCells(
-            'C',
-            [
-                'alignment' => [
-                    'wrapText' => true,
-                ],
-            ]
-        );
-        $event->sheet->styleCells(
-            'E',
-            [
-                'alignment' => [
-                    'wrapText' => true,
-                ],
-            ]
-        );
+        $event->sheet->getStyle('C')->getAlignment()->setWrapText(true);
+        $event->sheet->getStyle('E')->getAlignment()->setWrapText(true);
 
         $event->sheet->styleCells(
             'A1',
