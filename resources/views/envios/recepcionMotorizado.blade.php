@@ -217,10 +217,12 @@
                                                                 <div>
 
                                                                     <h6 class="mb-0">
-                                                                        <button data-toggle="modal" data-target="#modal-scan-comparador"
-                                                                            class="btn btn-sm btn-option"
-                                                                            data-zona="{{$motorizado->zona}}">
-                                                                            <i class="fa fa-barcode"></i> Comprobar archivos
+                                                                        <button data-toggle="modal"
+                                                                                data-target="#modal-scan-comparador"
+                                                                                class="btn btn-sm btn-option"
+                                                                                data-zona="{{$motorizado->zona}}">
+                                                                            <i class="fa fa-barcode"></i> Comprobar
+                                                                            archivos
                                                                         </button>
                                                                         <button
                                                                             class="btn btn-sm btn-danger exportar_zona"
@@ -556,7 +558,14 @@
                         var codigo_pedido = false;
 
                         function onQRCodeScanned(scannedText) {
+                            console.log(arguments)
                             if (codigo_pedido) {
+                                return
+                            }
+                            if(!scannedText){
+                                return
+                            }
+                            if(scannedText=='Requested device not found'){
                                 return
                             }
                             //var scannedTextMemo = document.getElementById("scannedTextMemo");
@@ -701,7 +710,7 @@
                     <script>
                         $(document).ready(function () {
 
-                            $('#zona-consulta').on('change', function(){
+                            $('#zona-consulta').on('change', function () {
 
                             });
 
@@ -789,7 +798,7 @@
                                     const btntext = $(this).data('btntext')
                                     const isrecibido = $(this).data('recibido') == '1'
                                     $.confirm({
-                                        title: 'Confirmar ' + btntext+ ' a PARA REPARTO',
+                                        title: 'Confirmar ' + btntext + ' a PARA REPARTO',
                                         type: btncolor || 'blue',
                                         columnClass: 'xlarge',
                                         content: function () {
@@ -848,6 +857,7 @@
                                     })
                                 })
                             }
+
                             const configDataTableZonas = {
                                 serverSide: true,
                                 searching: true,
@@ -859,6 +869,13 @@
                                 rowCallback: function (row, data, index) {
                                     addEventButtonRetornar(row, data)
                                 },
+                                'columnDefs': [
+                                    {responsivePriority: 3, targets: 1},
+                                    {responsivePriority: 2, targets: 2},
+                                    {responsivePriority: 1, targets: 3},
+                                    {responsivePriority: 5, targets: 0},
+                                    {responsivePriority: 4, targets: 4}
+                                ],
                                 columns: [
                                     {data: 'codigos', name: 'codigos',},
                                     {data: 'celular', name: 'celular',},
@@ -907,12 +924,12 @@
                                 },
                             });
                             $('#tablaPrincipal{{Str::upper($motorizado->zona)}}').DataTable()
-                                .on( 'responsive-display', function ( e, datatable, row, showHide, update ) {
-                                console.log( 'Details for row '+row.index()+' '+(showHide ? 'shown' : 'hidden') );
-                                    if(showHide) {
+                                .on('responsive-display', function (e, datatable, row, showHide, update) {
+                                    console.log('Details for row ' + row.index() + ' ' + (showHide ? 'shown' : 'hidden'));
+                                    if (showHide) {
                                         addEventButtonRetornar($(row.node()).siblings('.child'), row.data())
                                     }
-                            } );
+                                });
                             @endforeach
 
                             @foreach($motorizados as $motorizado)
@@ -1304,7 +1321,7 @@
                              * FIN ESCANEAR MOUSE
                              */
 
-                            $('#modal-scan-comparador"').on('show.bs.modal', function (event) {
+                            $('#modal-scan-comparador').on('show.bs.modal', function (event) {
                                 var button = $(event.relatedTarget)
                                 var zona = button.data('zona');
 
@@ -1563,7 +1580,7 @@
 
                             $("#download_rotulos").click(function () {
                                 const url = $(this).data('href')
-                                window.open(url+'?fecha_salida='+$("#fecha_consulta").val(), '_blank');
+                                window.open(url + '?fecha_salida=' + $("#fecha_consulta").val(), '_blank');
                             })
 
                         });

@@ -849,6 +849,10 @@ class MotorizadoController extends Controller
                 ->activo();
 
             return Datatables::of(DB::table($grupos))
+
+                ->addColumn('codigos', function ($grupo) {
+                    return collect(explode(',',$grupo->codigos))->trim()->join("<br>");
+                })
                 ->addColumn('condicion_envio_color', function ($grupo) {
                     return Pedido::getColorByCondicionEnvio($grupo->condicion_envio);
                 })
@@ -904,7 +908,7 @@ Ver Rotulo</a>')
 
                     return $btn;
                 })
-                ->rawColumns(['action', 'condicion_envio', 'distrito'])
+                ->rawColumns(['action', 'condicion_envio', 'distrito','codigos'])
                 ->make(true);
         }
     }
