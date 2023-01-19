@@ -881,52 +881,30 @@ if($request->con == 1){
                         ->map(fn($observacion) => '<a class="btn btn-icon p-0" target="_blank" href="' . \Storage::disk('pstorage')->url($observacion) . '">
 <i class="fa fa-file-pdf"></i>
 Ver Rotulo</a>')
-                        ->join('');
-                }
-                return $html;
-            }
-            return $pedido->distrito;
-        })
-        ->addColumn('action', function ($pedido) use ($fecha_consulta, $fecha_actual) {
-            $btn = '';
+                                ->join('');
+                        }
+                        return $html;
+                    }
+                    return $pedido->distrito;
+                })
+                ->addColumn('action', function ($direcciongrupo) use ($fecha_consulta, $fecha_actual) {
+                    $btn = '';
 
             $btn .= '<ul class="list-unstyled pl-0">';
 
-            if ($pedido->condicion_envio_code == Pedido::ENVIO_MOTORIZADO_COURIER_INT) {
-
-                if ($fecha_actual == $fecha_consulta) {
-                    $btn .= '<li>
-                                <button data-target="#modal-envio" data-toggle="modal" data-accion="recibir" data-recibir="' . $pedido->id . '" data-codigos="' . $pedido->codigos . '"  class="btn btn-warning btn-sm"><i class="fas fa-check-circle"></i> Recibido</button>
-                            </li>';
-                    $btn .= ' <li>
-                        <button data-target="#modal-envio" data-toggle="modal" data-accion="rechazar" data-recibir="' . $pedido->id . '" data-codigos="' . $pedido->codigos . '" class="btn btn-danger btn-sm mt-8"><i class="fa fa-times-circle-o" aria-hidden="true"></i>No recibido</button>
-                    </li>';
-
-                } else {
-                    $btn .= '<li>
-                                <button disabled class="btn btn-warning btn-sm"><i class="fas fa-check-circle"></i> Recibido</button>
-                            </li>';
-                    $btn .= ' <li>
-                        <button disabled class="btn btn-danger btn-sm mt-8"><i class="fa fa-times-circle-o" aria-hidden="true"></i>No recibido</button>
-                    </li>';
-                }
-
-            } else if ($pedido->condicion_envio_code == Pedido::RECEPCION_MOTORIZADO_INT) {
-                $btn .= '<li>
-                                <a href="" class="btn-sm text-secondary" data-target="#modal-confirmacion" data-toggle="modal" data-ide="' . $pedido->id . '" data-entregar-confirm="' . $pedido->id . '" data-destino="' . $pedido->destino . '" data-fechaenvio="' . $pedido->fecha . '" data-codigos="' . $pedido->codigos . '">
-                                    <i class="fas fa-envelope text-success"></i> Iniciar ruta</a></li>
-                                </a>
-                            </li>';
-
-            }
-
-            $btn .= '</ul>';
-
-            return $btn;
-        })
-        ->rawColumns(['action', 'condicion_envio', 'distrito'])
-        ->make(true);
-}
+                    if ($direcciongrupo->condicion_envio_code == Pedido::ENVIO_MOTORIZADO_COURIER_INT) {
+                        $count = Pedido::query()->where('direccion_grupo', $direcciongrupo->id)->count();
+                        $btn .= ' <li>
+                                            <button
+                                            data-recibido="0"
+                                            data-btncolor="red"
+                                            data-btntext="Retornar"
+                                            data-count="' . $count . '"
+                                            data-target="' . route('envios.recepcionmotorizado.pedidos', $direcciongrupo->id) . '"
+                                            data-target-post="' . route('envios.recepcionarmotorizado', ['hiddenEnvio' => $direcciongrupo->id, 'hiddenAccion' => 'retornar_para_reparto']) . '"
+                                            data-toggle="jqconfirm" class="btn btn-danger btn-sm mt-8"><i class="fa fa-times-circle-o" aria-hidden="true"></i>Retornar</button>
+                                        </li>';
+                    }
 
 
         }

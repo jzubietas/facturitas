@@ -171,8 +171,8 @@
                     url: "{{ route('operaciones.datossubidaadj',':id') }}".replace(':id', idunico),
                     data: idunico,
                     success: function (data) {
-                        console.log(data);
-                        console.log(data.pedidos[0]['cant_compro']);
+                        //console.log(data);
+                        console.log(data.pedidos[0]['cant_compro']+" traje como cantidad  hacia el input");
 
                         $('#cant_compro').val(data.pedidos[0]['cant_compro']);
                         $('#fecha_envio_doc').val(data.pedidos[0]['fecha_envio_doc']);
@@ -185,22 +185,65 @@
                     data: idunico,
                     method: 'POST',
                     success: function (data) {
-                        console.log(data)
+                        //console.log(data)
                         console.log("obtuve las imagenes atencion del pedido " + idunico)
                         $('#listado_adjuntos').html("");
                         $('#listado_adjuntos_antes').html(data);
-                        console.log(data);
+                        //console.log(data);
                     }
                 });
 
             });
 
+            $(document).on("click", "#cargar_adjunto", function (evento) {
+                let idunico = $("#correccion").val();
+                console.log(idunico);
+                $('#cargar_adjunto').attr("disabled", true);
+                $('#cargar_adjunto').html('Subiendo archivos...');
+                //e.preventDefault();
+                let cant_compro = $("#cant_compro").val();
+                if (cant_compro == '') $("#cant_compro").val(0);
+                var data = new FormData(document.getElementById("formulariocorreccionatender"));
+                $("#loading_upload_attachment_file").show()
+                $("#adjunto").hide()
+                $.ajax({
+                    type: 'POST',
+                    url: "{{ route('operaciones.updateatendersinconfirmar',':id') }}".replace(':id', idunico),
+                    data: data,
+                    processData: false,
+                    contentType: false,
+                    success: function (data) {
+                        $('#cargar_adjunto').prop("disabled", false);
+                        $('#cargar_adjunto').text('Subir Informacion');
+                        //console.log(data)
+                        console.log("obtuve las imagenes atencion del pedido " + idunico)
+                        $('#listado_adjuntos').html(data);
+                    }
+                })
+                    .done(function (data) {
+                        $("#adjunto").val(null)
+                    })
+                    .always(function () {
+                        $("#adjunto").show()
+                        $("#loading_upload_attachment_file").hide()
+                    });
+                return false;
+
+
+            });
+
+            $(document).on("change", "#adjunto", function (evento) {
+                $("#cargar_adjunto").trigger("click");
+            });
+
             $(document).on("submit", "#formulariocorreccionatender", function (evento) {
                 evento.preventDefault();
-                console.log("")
-                var cant_compro = $('#cant_compro').val();
-                var cant_compro_attachment =  $('#adjunto_total_attachment').val();
+                console.log("correccion atender")
+
                 let cnf_adjunto = $("#conf_descarga").val();
+
+                var cant_compro = document.getElementById('cant_compro').value;
+                var cant_compro_attachment = document.getElementById('adjunto_total_attachment');//adjuntos en el servidor
 
                 if (!cant_compro_attachment) {
                     cant_compro_attachment = 0
@@ -274,12 +317,15 @@
                         }
                     });
                 }
+                console.log("cant_compro_attachment "+cant_compro_attachment)
+                console.log("cant_compro "+cant_compro)
+                let c_conf=cant_compro_attachment+cant_compro;
 
                 if (cant_compro != cant_compro_attachment) {
                     Swal.fire({
                         icon: 'warning',
                         title: 'Aviso',
-                        html: `La cantidad de archivos es (${cant_compro_attachment}) y es diferente a la cantidad de facturas (${cant_compro})<br><b>¿Desea continuar?</b>`,
+                        html: `La cantidad de archivos es (${c_conf}) y es diferente a la cantidad de facturas (${cant_compro})<br><b>¿Desea continuar?</b>`,
                         confirmButtonText: 'Aceptar y continuar',
                         showCancelButton: true,
                         confirmButtonColor: '#3085d6',
