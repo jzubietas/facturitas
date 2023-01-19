@@ -353,6 +353,29 @@
                 $("#eliminar_pedido_id_confirmado").val(imgadjuntoconfirm);
             });*/
 
+            $(document).on("submit", "#formulariorevertirporatender", function (evento) {
+                evento.preventDefault();
+                var fd = new FormData();
+                fd.append('codigo', $("#hiddenRevertirpedidoporatender").val());
+
+                $.ajax({
+                    data: fd,
+                    processData: false,
+                    contentType: false,
+                    type: 'POST',
+                    url: "{{ route('operaciones.revertirenvioidporatender') }}",
+                    success: function (data) {
+                        console.log(data);
+                        $("#modal-revertir-poratender .textcode").text('');
+                        $("#modal-revertir-poratender .textcantadjunto").text('');
+                        $("#modal-revertir-poratender").modal("hide");
+                        $('#tablaPrincipal').DataTable().ajax.reload();
+                    }
+                });
+            });
+
+
+
             $(document).on("click", "#cerrarmodalatender", function (evento) {
                 evento.preventDefault();
                 console.log("no atender")

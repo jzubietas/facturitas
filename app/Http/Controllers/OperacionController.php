@@ -686,12 +686,14 @@ class OperacionController extends Controller
                         $btn[] = '<a class="btn btn-success btn-sm" href="" data-target="#modal-envio" data-envio=' . $pedido->id . ' data-toggle="modal" >Enviar</a><br>';
                         $btn[] = '<a class="btn btn-dark btn-sm" href="" data-target="#modal-sinenvio" data-sinenvio="' . $pedido->id . '" data-toggle="modal" >Sin envío</a><br>';
                     }
-                }
-                if(\Str::contains(\Str::lower($pedido->condicion_envio),'courier')) {
-                    $btn[] = '<button data-toggle="tooltip" data-placement="top" title="El sobre ya ah sido recivido en currier,  solo el currier tiene permiso de revertir" disabled class="btn btn-disabled btn-success btn-sm" data-target="#modal-revertir" data-revertir="' . $pedido->id . '" data-codigo="' . $pedido->codigo . '" data-toggle="modal" >Revertir</button>';
-                }else{
-                    $btn[] = '<a class="btn btn-success btn-sm" href="" data-target="#modal-revertir" data-revertir="' . $pedido->id . '" data-codigo="' . $pedido->codigo . '" data-toggle="modal" >Revertir</a>';
                 }*/
+                //\Str::contains(\Str::lower($pedido->condicion_envio),'courier')
+                if($pedido->condicion_envio_code==Pedido::ENVIO_COURIER_JEFE_OPE_INT    ) {
+                    $btn[] = '<a class="btn btn-success btn-sm" href="" data-target="#modal-revertir" data-revertir="' . $pedido->id . '" data-codigo="' . $pedido->codigo . '" data-toggle="modal" >Revertir</a>';
+                    //$btn[] = '<button data-toggle="tooltip" data-placement="top" title="El sobre ya ah sido recivido en currier,  solo el currier tiene permiso de revertir" disabled class="btn btn-disabled btn-success btn-sm" data-target="#modal-revertir" data-revertir="' . $pedido->id . '" data-codigo="' . $pedido->codigo . '" data-toggle="modal" >Revertir</button>';
+                }else{
+
+                }
                 return "<div class='d-flex'>" . join('', $btn) . "</div>";
             })
             ->rawColumns(['action','condicion_envio'])
