@@ -1191,7 +1191,7 @@
                                 var zona = button.data('zona');
 
                                 $('#pedidos-escaneados').html("");
-
+                                $('#pedidos-escaneados').html("");
                                 pedidos_escaneados=[];
                                 $("#codigo_comprobar").val('')
 
@@ -1211,6 +1211,8 @@
                                             lista += '<li id="'+item+'" class="item_recepcionado"><i class="fa fa-envelope text-warning mr-8" aria-hidden="true"></i> '+item+'</li>';
                                             //$('#pedidos-recepcion').append('<li id="'+item+'" class="item_recepcionado">'+item+'</li>');
                                         });
+                                        $('.pedidos-escaneados').html("");
+                                        $('.pedidos').html("");
                                         $('#pedidos-recepcion').html(lista);
 
                                         $('#codigo_comprobar').change(function (event) {
@@ -1233,8 +1235,6 @@
                                         });
                                     }
                                 });
-<<<<<<< HEAD
-=======
 
                                 $('#codigo_comprobar').change(function (event) {
                                     event.preventDefault();
