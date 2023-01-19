@@ -242,7 +242,7 @@
 
 
             {{--@include('sobres.modal.direccionid')--}}
-
+            @include('envios.modal.revertiraenviocourier')
             @include('sobres.modal.historialLima')
             @include('sobres.modal.historialProvincia')
 
@@ -722,12 +722,6 @@
                         searchable: false,
                         sWidth: '20%',
                         "visible": false,
-                        render: function (data, type, row, meta) {
-                            datass = '';
-
-
-                            return datass;
-                        }
                     },
                 ],
                 language: {
@@ -855,8 +849,7 @@
                         data: 'condicion_envio',
                         name: 'condicion_envio',
                     },
-                    {data: 'action', name: 'action', orderable: false, searchable: false,sWidth:'20%',"visible":false},
-
+                    {data: 'action', name: 'action', orderable: false, searchable: false,sWidth:'20%'},
                 ],
                 language: {
                     "decimal": "",
@@ -894,6 +887,28 @@
                         $('#delivered-tab').addClass("active");
                     }*/
                 }
+            });
+
+            $(document).on("submit", "#formulariorevertiraenviocouroer", function (evento) {
+                evento.preventDefault();
+                var fd = new FormData();
+                fd.append('aenviocourierrevertir', $("#aenviocouriererevertir").val());
+                fd.append('tipoajax','grupo');
+
+                $.ajax({
+                    data: fd,
+                    processData: false,
+                    contentType: false,
+                    type: 'POST',
+                    url: "{{ route('operaciones.revertiraenviocourier') }}",
+                    success: function (data) {
+                        console.log(data);
+                        $("#modal-revertir-ajefeop .textcode").text('');
+                        $("#modal-revertir-ajefeop .textcantadjunto").text('');
+                        $("#modal-revertir-ajefeop").modal("hide");
+                        $('#tablaPrincipal').DataTable().ajax.reload();
+                    }
+                });
             });
 
             tablaAnulados_courier=$('#tablaAnulados_courier').DataTable({
@@ -997,12 +1012,6 @@
                         searchable: false,
                         sWidth: '20%',
                         "visible": false,
-                        render: function (data, type, row, meta) {
-                            datass = '';
-
-
-                            return datass;
-                        }
                     },
                 ],
                 language: {
@@ -1131,12 +1140,6 @@
                         searchable: false,
                         sWidth: '20%',
                         "visible": false,
-                        render: function (data, type, row, meta) {
-                            datass = '';
-
-
-                            return datass;
-                        }
                     },
                 ],
                 language: {

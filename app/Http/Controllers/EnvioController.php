@@ -2446,8 +2446,9 @@ class EnvioController extends Controller
                     $badge_estado .= '<span class="badge badge-success" style="background-color: ' . $color . '!important;">' . $pedido->condicion_envio . '</span>';
                     return $badge_estado;
                 })
-                ->addColumn('action', function ($pedido) {
+                ->addColumn('action', function ($pedido) use ($opcion) {
                     $btn = [];
+
                     return join('', $btn);
                 })
                 ->rawColumns(['action', 'condicion_envio_color', 'condicion_envio'])
@@ -2559,11 +2560,18 @@ class EnvioController extends Controller
                         return '';
                     }
                 })
-                ->addColumn('action', function ($pedido) {
+                ->editColumn('action', function ($pedido) use ($opcion) {
                     $btn = [];
+                    //if($opcion=='entregado')
+                    {
+                        if(\auth()->user()->rol==User::ROL_ADMIN)
+                        if($pedido->condicion_envio_code==Pedido::ENTREGADO_CLIENTE_INT){
+                            $btn[] = '<a href="" class="btn-sm dropdown-item" data-target="#modal-revertir-aenviocourier" data-revertir=' . $pedido->id . ' data-codigo=' . $pedido->codigos . ' data-toggle="modal" ><i class="fa fa-undo text-danger" aria-hidden="true"></i> Revertir a <br>Envio Courier</a>';
+                        }
+                    }
                     return join('', $btn);
                 })
-                ->rawColumns(['foto1', 'foto2', 'foto3', 'action', 'condicion_envio'])
+                ->rawColumns(['foto1', 'foto2', 'foto3', 'action', 'condicion_envio','action'])
                 ->make(true);
         }
 
