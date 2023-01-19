@@ -257,7 +257,7 @@ class EnvioController extends Controller
             ->addColumn('action', function ($pedido) {
                 $btn = '';
 
-                if (auth()->user()->can('envios.enviar')):
+                //if (auth()->user()->can('envios.enviar')):
 
                     $btn .= '<ul class="list-unstyled pl-0">';
                     $btn .= '<li>
@@ -266,7 +266,7 @@ class EnvioController extends Controller
                                         </button>
                                     </li>';
                     $btn .= '</ul>';
-                endif;
+               // endif;
 
                 return $btn;
             })
