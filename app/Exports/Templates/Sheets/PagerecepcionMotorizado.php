@@ -93,16 +93,16 @@ class PagerecepcionMotorizado extends Export implements WithStyles,WithColumnFor
     public function columnWidths(): array
     {
         return [
-            'A' => 8 //CELULAR QUIEN RECIBE
-            , 'B' => 8 //ME RO
-            , 'C' => 8 //CODIGO
-            , 'D' => 8 //NOMBRE DE qUIEN RECIBE
-            , 'E' => 8 //RAZON SOCIAL
-            , 'F' => 8 //QTY
-            , 'G' => 8 //CLIENTE
-            , 'H' => 8 //DIRECCION
-            , 'I' => 8 //REFERENCIA
-            , 'J' => 8 //DISTRITO
+            'A' => 2 //CELULAR QUIEN RECIBE
+            , 'B' => 2 //ME RO
+            , 'C' => 2 //CODIGO
+            , 'D' => 2 //NOMBRE DE qUIEN RECIBE
+            , 'E' => 2 //RAZON SOCIAL
+            , 'F' => 2 //QTY
+            , 'G' => 2 //CLIENTE
+            , 'H' => 2 //DIRECCION
+            , 'I' => 2 //REFERENCIA
+            , 'J' => 2 //DISTRITO
         ];
     }
 
@@ -205,6 +205,23 @@ class PagerecepcionMotorizado extends Export implements WithStyles,WithColumnFor
 
         $row_cell_ = 14;
         $letter_cell = 'J';
+
+        $event->sheet->styleCells(
+            'C',
+            [
+                'alignment' => [
+                    'wrapText' => true,
+                ],
+            ]
+        );
+        $event->sheet->styleCells(
+            'E',
+            [
+                'alignment' => [
+                    'wrapText' => true,
+                ],
+            ]
+        );
 
         $event->sheet->styleCells(
             'A1',
