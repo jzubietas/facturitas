@@ -574,7 +574,15 @@ class MotorizadoController extends Controller
             $ver_botones_accion = 1;
         }
 
-        return view('envios.recepcionMotorizado', compact('condiciones', 'distritos', 'direcciones', 'destinos', 'superasesor', 'ver_botones_accion', 'departamento', 'fecha_consulta', 'users_motorizado', 'motorizados'));
+        if( in_array(auth()->user()->rol,[User::ROL_ADMIN,User::ROL_JEFE_COURIER]) )
+        {
+            return view('envios.recepcionMotorizado_index', compact('condiciones', 'distritos', 'direcciones', 'destinos', 'superasesor', 'ver_botones_accion', 'departamento', 'fecha_consulta', 'users_motorizado', 'motorizados'));
+        }else if(auth()->user()->rol==User::ROL_OPERARIO)
+        {
+            return view('envios.recepcionMotorizado', compact('condiciones', 'distritos', 'direcciones', 'destinos', 'superasesor', 'ver_botones_accion', 'departamento', 'fecha_consulta', 'users_motorizado', 'motorizados'));
+        }
+
+
     }
 
     public function Enviosrecepcionmotorizadotabla(Request $request)
