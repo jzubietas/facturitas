@@ -28,7 +28,7 @@ Sheet::macro('styleCells', function (Sheet $sheet, string $cellRange, array $sty
     $sheet->getDelegate()->getStyle($cellRange)->applyFromArray($style);
 });
 
-class PagerecepcionMotorizado extends Export implements WithStyles,WithColumnFormatting, FromCollection, WithHeadings, ShouldAutoSize, WithEvents
+class PagerecepcionMotorizado extends Export implements WithStyles,WithColumnFormatting, FromCollection, WithHeadings, ShouldAutoSize, WithEvents,WithColumnWidths
 {
     //use RemembersRowNumber;
 
