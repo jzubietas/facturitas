@@ -889,10 +889,19 @@
                 }
             });
 
-            $(document).on("submit", "#formulariorevertiraenviocouroer", function (evento) {
+            $('#modal-revertir-aenviocourier').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget)
+                var idunico = button.data('revertir');
+                var idunicoc = button.data('codigo');
+                console.log(idunico)
+                $("#modal-revertir-aenviocourier .textcode").html(idunicoc)
+                $("#aenviocourierrevertir").val(idunico);
+            });
+
+            $(document).on("submit", "#formulariorevertiraenviocourier", function (evento) {
                 evento.preventDefault();
                 var fd = new FormData();
-                fd.append('aenviocourierrevertir', $("#aenviocouriererevertir").val());
+                fd.append('aenviocourierrevertir', $("#aenviocourierrevertir").val());
                 fd.append('tipoajax','grupo');
 
                 $.ajax({
@@ -903,10 +912,10 @@
                     url: "{{ route('operaciones.revertiraenviocourier') }}",
                     success: function (data) {
                         console.log(data);
-                        $("#modal-revertir-ajefeop .textcode").text('');
-                        $("#modal-revertir-ajefeop .textcantadjunto").text('');
-                        $("#modal-revertir-ajefeop").modal("hide");
-                        $('#tablaPrincipal').DataTable().ajax.reload();
+                        $("#modal-revertir-aenviocourier .textcode").text('');
+                        $("#modal-revertir-aenviocourier .textcantadjunto").text('');
+                        $("#modal-revertir-aenviocourier").modal("hide");
+                        $('#tablaEntregados').DataTable().ajax.reload();
                     }
                 });
             });

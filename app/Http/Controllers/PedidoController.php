@@ -3027,12 +3027,18 @@ class PedidoController extends Controller
             $grupo->update([
                 'condicion_envio' => Pedido::ENVIO_COURIER_JEFE_OPE,
                 'condicion_envio_code' => Pedido::ENVIO_COURIER_JEFE_OPE_INT,
-                'condicion_envio_at'=>now(),
+                //'condicion_envio_at'=>now(),
                 //'condicion' => Pedido::ENVIO_COURIER_JEFE_OPE,
                 //'condicion_code' => Pedido::ENVIO_COURIER_JEFE_OPE_INT,
                 //'modificador' => 'USER' . Auth::user()->id
             ]);
+            $pedido=Pedido::where('direccion_grupo',$request->aenviocourierrevertir)
+                ->update([
+                    'condicion_envio' => Pedido::ENVIO_COURIER_JEFE_OPE,
+                    'condicion_envio_code' => Pedido::ENVIO_COURIER_JEFE_OPE_INT,
+                    //'condicion_envio_at'=>now(),
+                    ]);
         }
-        return response()->json(['html' => $pedido->id]);
+        return response()->json(['html' => $request->aenviocourierrevertir]);
     }
 }
