@@ -68,6 +68,7 @@
                                    placeholder="Ingrese su búsqueda" aria-label="Recipient's username" aria-describedby="basic-addon2">
                             <div class="input-group-append">
                                 <button class="btn btn-success" id="btn_buscar" type="button">Buscar</button>
+                                <button class="btn btn-option" id="btn_buscar_scan" data-toggle="modal" data-target="#modal-escanear-estado-sobre" type="button">Escanear</button>
                             </div>
                         </div>
 
@@ -245,6 +246,7 @@
 
             @include('sobres.modal.historialLima')
             @include('sobres.modal.historialProvincia')
+            @include('pedidos.modal.escanear_estado_sobres')
 
         </div>
     </div>
@@ -452,6 +454,42 @@
                 urlimage = urlimage.replace(':id', 'storage/'+idunico);
                 $("#modal-imagen .img-thumbnail").attr("src", urlimage);
             });
+
+            $('#modal-escanear-estado-sobre').on('show.bs.modal', function (event) {
+
+                $('#input-info-pedido').change(function (event) {
+                    event.preventDefault();
+                    var codigo_caturado = ($(this).val() || '').trim();
+                    var codigo_mejorado = codigo_caturado.replace(/['']+/g, '-').replaceAll("'", '-').replaceAll("(", '*');
+
+                    $.ajax({
+                        type: 'POST',
+                        url: "{{ route('escaneo.estado_pedidos') }}",
+                        data: {
+                            'codigo' : codigo_mejorado,
+                        },
+                        success: function (data) {
+                            console.log(data.error);
+                            codigos_agregados = []
+
+                            var codigos_procesados = data.codigos_procesados
+                            var codigos_no_procesados = data.codigos_no_procesados
+
+
+                            setTimeout(function (){
+                                $('#respuesta_barra').fadeOut();
+                            },2200);
+
+                        }
+                    }).always(function(){
+                        $('#codigo_confirmar').focus();
+                    });
+
+                    return false;
+                });
+            });
+
+
 
             $(document).on("click", "#change_imagen", function () {
                 var fd2 = new FormData();
