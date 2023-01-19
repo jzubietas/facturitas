@@ -557,6 +557,12 @@
 
                         var codigo_pedido = false;
 
+                        $.ajaxSetup({
+                            headers: {
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                            }
+                        });
+
                         function onQRCodeScanned(scannedText) {
                             console.log(arguments)
                             if (codigo_pedido) {
@@ -1344,11 +1350,7 @@
 
                             });
 
-                            $.ajaxSetup({
-                                headers: {
-                                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                                }
-                            });
+
 
                             $('#modal-confirmacion').on('show.bs.modal', function (event) {
                                 var button = $(event.relatedTarget)

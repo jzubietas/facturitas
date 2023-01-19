@@ -4,16 +4,7 @@
 
 @section('content_header')
   <h1>Lista de pedidos ENTREGADOS - OPERACIONES
-    {{-- @can('pedidos.exportar')
-    <div class="float-right btn-group dropleft">
-      <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        Exportar
-      </button>
-      <div class="dropdown-menu">
-        <a href="{{ route('pedidosatendidosExcel') }}" class="dropdown-item"><img src="{{ asset('imagenes/icon-excel.png') }}"> EXCEL</a>
-      </div>
-    </div>
-    @endcan --}}
+    
     <div class="float-right btn-group dropleft">
         <button type="button" class="btn btn-option" data-accion="confirmacion_operaciones" data-responsable="maria_recepcion" data-toggle="modal" data-target="#modal-escanear" data-backdrop="static" style="margin-right:16px;" aria-haspopup="true" aria-expanded="false">
             <i class="fa fa-barcode" aria-hidden="true"></i> RECEPCIONAR PEDIDOS
