@@ -13,6 +13,14 @@
                     <div class="d-flex justify-content-between">
                         <div class="btn-group">
 
+
+                            <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown"
+                                    aria-haspopup="true"
+                                    aria-expanded="false">
+                                Exportar
+                            </button>
+
+
                             <div class="dropdown-menu">
                                 <a href="" data-target="#modal-exportar" data-toggle="modal" class="dropdown-item"
                                    target="blank_"><img
@@ -31,13 +39,13 @@
                 </div>
             </div>
 
+
             @include('envios.motorizado.modal.exportar_motorizado', ['title' => 'Exportar Recepcion Motorizado', 'key' => '2'])
 
         </div>
     </div>
 
     @include('pedidos.modal.exportar', ['title' => 'Exportar pedidos POR ENVIAR', 'key' => '1'])
-    {{-- @endcan --}}
 
     @if($superasesor > 0)
         <br>
@@ -115,67 +123,120 @@
 
             <br>
 
-                <div class="moto-container">
 
-                    <ul class="nav nav-tabs mb-24 mt-24" id="myTab" role="tablist">
-                                <li class="nav-item w-50 text-center">
-                                    <a class="condicion-tabla nav-link activo active font-weight-bold"
-                                       id="recepcion-tab"
-                                       data-toggle="tab"
-                                       data-url="19" href="#recepcion" role="tab" aria-controls="recepcion"
-                                       aria-selected="true">
-                                        <i class="fa fa-inbox" aria-hidden="true"></i> RECEPCION
-                                        <sup><span
-                                                class="badge badge-light count_recepcionmotorizados_receptioned_courier">0</span></sup>
-                                    </a>
-                                </li>
-                                <li class="nav-item w-50 text-center">
-                                    <a class="condicion-tabla nav-link font-weight-bold" id="enruta-tab"
-                                       data-toggle="tab"
-                                       data-url="18" href="#enruta" role="tab" aria-controls="enruta"
-                                       aria-selected="false">
-                                        <i class="fa fa-motorcycle" aria-hidden="true"></i> EN RUTA
-                                        <sup><span
-                                                class="badge badge-light count_recepcionmotorizados_inroutes_courier">0</span></sup>
-                                    </a>
-                                </li>
-                            </ul>
+                                <div class="row">
 
-                    <table id="tablaPrincipal" class="table table-striped dt-responsive w-100">
-                                <thead>
-                                <tr>
-                                    <th scope="col">Item</th>
-                                    <th scope="col">Código</th>
-                                    <th scope="col">Razón social</th>
-                                    <th scope="col">Fecha de salida</th>
-                                    <th scope="col">Dirección de envío</th>
-                                    <th scope="col">Estado de envio</th>
-                                    <th scope="col">Accion</th>
+                                        @foreach($motorizados as $motorizado)
+                                            <div class="col-lg-4 container-{{Str::slug($motorizado->zona)}}">
+                                                <div class="table-responsive">
+                                                    <div
+                                                        class="card card-{{$color_zones[Str::upper($motorizado->zona)]??'success'}}">
+                                                        <div class="card-header pt-8 pb-8">
+                                                            <div class="d-flex justify-content-between">
+                                                                <h5 class="mb-0 font-16">
+                                                                    MOTORIZADO {{Str::upper($motorizado->zona)}}</h5>
+                                                                <div>
 
-                                </tr>
-                                </thead>
-                                <tbody>
-                                </tbody>
-                            </table>
+                                                                    <h6 class="mb-0">
+                                                                        <button data-toggle="modal" data-target="#modal-scan-comparador"
+                                                                            class="btn btn-sm btn-option"
+                                                                            data-zona="{{$motorizado->zona}}" data-motorizado="{{$motorizado->id}}" data-vista="">
+                                                                            <i class="fa fa-barcode"></i> Comprobar archivos
+                                                                        </button>
+                                                                        <button
+                                                                            class="btn btn-sm btn-danger exportar_zona"
+                                                                            data-motorizado="{{$motorizado->id}}">
+                                                                            <i class="fa fa-file-excel"></i>Excel
 
+                                                                        </button>
+
+                                                                    </h6>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="card-body py-1">
+                                                            <div>
+
+                                                                <ul class="nav nav-tabs"
+                                                                    style="font-size:11px !important;"
+                                                                    id="myTab{{Str::slug($motorizado->zona)}}"
+                                                                    role="tablist">
+                                                                    <li class="nav-item">
+                                                                        <a class="nav-link active"
+                                                                           id="recepcionhijo{{Str::slug($motorizado->zona)}}-tab"
+                                                                           data-vista="18"
+                                                                           data-zona="{{Str::slug($motorizado->zona)}}"
+                                                                           data-toggle="tab"
+                                                                           href="#recepcionhijo{{Str::slug($motorizado->zona)}}"
+                                                                           role="tab"
+                                                                           data-tab="recepcionhijo{{Str::slug($motorizado->zona)}}"
+                                                                           aria-controls="recepcionhijo{{Str::slug($motorizado->zona)}}"
+                                                                           aria-selected="true"
+                                                                           data-action="recepcionhijo">
+                                                                            RECEPCIÓN
+                                                                        </a>
+                                                                    </li>
+                                                                    <li class="nav-item">
+                                                                        <a class="nav-link"
+                                                                           id="enrutahijo{{Str::slug($motorizado->zona)}}-tab"
+                                                                           data-vista="19"
+                                                                           data-zona="{{Str::slug($motorizado->zona)}}"
+                                                                           data-toggle="tab"
+                                                                           href="#enrutahijo{{Str::slug($motorizado->zona)}}"
+                                                                           role="tab"
+                                                                           data-tab="enrutahijo{{Str::slug($motorizado->zona)}}"
+                                                                           aria-controls="enrutahijo{{Str::slug($motorizado->zona)}}"
+                                                                           aria-selected="false"
+                                                                           data-action="enrutahijo">
+                                                                            EN RUTA
+                                                                        </a>
+                                                                    </li>
+                                                                </ul>
+
+                                                                <table
+                                                                    id="tablaPrincipal{{Str::upper($motorizado->zona)}}"
+                                                                    class="tabla-data table table-hijo table-striped dt-responsive w-100">
+                                                                    <thead>
+                                                                    <tr>
+                                                                        <!--<th scope="col">Item</th>-->
+                                                                        <th scope="col">Código</th>
+                                                                        <th scope="col">Teléfono</th>
+                                                                        <th scope="col">Zona</th>
+                                                                        <th scope="col">Distrito</th>
+                                                                        <th scope="col">Acciones</th>
+                                                                    </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        @endforeach
+                                    </div>
+
+
+
+                            </div>
                 </div>
 
-                @include('pedidos.modal.confirmar_recepcion_log')
-                @include('envios.modal.enviarid')
-                @include('pedidos.modal.recibirid')
+            @include('pedidos.modal.confirmar_recepcion_log')
+            @include('envios.modal.enviarid')
+            @include('pedidos.modal.recibirid')
 
-                @include('pedidos.modal.verdireccionid')
-                @include('pedidos.modal.editdireccionid')
-                @include('pedidos.modal.destinoid')
-                @include('pedidos.modal.escaneaqr')
-                @include('operaciones.modal.confirmacion')
+            @include('pedidos.modal.verdireccionid')
+            @include('pedidos.modal.editdireccionid')
+            @include('pedidos.modal.destinoid')
+            @include('pedidos.modal.escaneaqr')
+            @include('operaciones.modal.confirmacion')
 
-                <!-- Modal -->
+
                 <div class="modal fade" id="modal-qr" tabindex="-1" aria-labelledby="exampleModalLabel"
                      aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered" style="max-width: 800px!important;">
                         <div class="modal-content br-16 cnt-shw">
-
 
                             <form id="formulario_confirmacion" name="formulariorecepcion" enctype="multipart/form-data">
 
@@ -229,7 +290,7 @@
                                         </div>
                                         <div>
                                             <p class="mb-8 mt-16" id="mensaje-resultado"></p>
-
+                                            <!--<p class="mb-0">PAQUETE: <label id="paquete_ped" class="mb-0">Paquete:</label></p>-->
                                             <table class="w-100">
                                                 <tr>
                                                     <td><p class="mb-0 font-weight-bold font-16">CODIGO:</p></td>
@@ -241,7 +302,15 @@
                                                     <td><label id="dist_ped"
                                                                class="mb-0 font-weight-normal">Distrito</label></td>
                                                 </tr>
-
+                                                <!--
+                                                <tr>
+                                                    <td>
+                                                        <p class="mb-0 font-weight-bold font-16">DIRECCIÓN: </p>
+                                                    </td>
+                                                    <td>
+                                                        <label id="dir_ped" class="mb-0 font-weight-normal">Dirección</label>
+                                                    </td>
+                                                </tr>-->
                                             </table>
 
                                             <p id="detalle_paquete"
@@ -250,17 +319,23 @@
                                                style="display:none;">Confirmar Pedido</a>
 
                                             <div class="mt-16">
-
+                                                <!--<textarea id="scannedTextMemo" class="textInput form-memo form-field-input textInput-readonly w-100" rows="3" readonly></textarea>-->
                                             </div>
                                         </div>
                                     </div>
 
                                 </div>
-
+                                {{-- <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                  {!! Form::label('destino', 'Destino') !!}
+                                  {!! Form::select('destino', $destinos , null, ['class' => 'form-control border border-secondary', 'data-live-search' => 'true', 'placeholder' => '---- SELECCIONE ----']) !!}
+                                </div> --}}
                                 <div class="text-center">
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
                                 </div>
+                                <!--
+                                <div class="modal-footer">
 
+                                </div>-->
                             </form>
                             <hr>
 
@@ -410,7 +485,9 @@
                             //console.log("vacio");
                             let valor=$("#buscador_global").val();
                             //valor=(valor||'').trim()
-                            tablaPrincipal.search( valor ).draw();
+
+
+                            $(".tabla-data").search( valor ).draw();
                             //tabla_pedidos_principal_centro.search( valor ).draw();
                             //tabla_pedidos_principal_sur.search( valor ).draw();
                         }
@@ -857,218 +934,34 @@
                                 var fecha_formateada = fecha_format[2] + "/" + fecha_format[1] + "/" + fecha_format[0];
                                 $(this).data('fecha', fecha_formateada);
                                 console.log(fecha_formateada);
-                                $('#tablaPrincipal').DataTable().ajax.reload();
+
                                 $('.tabla-data').DataTable().ajax.reload();
                             });
 
-                            tablaPrincipal=$('#tablaPrincipal').DataTable({
-                                dom: '<"toolbar">frtip',
-                                processing: true,
-                                stateSave: true,
-                                serverSide: true,
-                                searching: true,
-                                "order": [[0, "desc"]],
-                                ajax: {
-                                    url: "{{ route('envios.recepcionmotorizadotabla') }}",
-                                    data: function (d) {
-                                        d.fechaconsulta = $("#fecha_consulta").val();
-                                        d.consulta = "paquete";
-                                        d.condicion = $('.condicion-tabla.activo').data("url");
-                                    }
-                                },
-                                createdRow: function (row, data, dataIndex) {
-                                    //console.log(row);
-                                },
-                                rowCallback: function (row, data, index) {
-                                    if (data.cambio_direccion_at != null) {
-                                        $('td', row).css('background', 'rgba(17,129,255,0.35)')
-                                    }
-                                    $("[data-toggle=jqconfirm]", row).click(function () {
-                                        const action = $(this).data('target')
-                                        const actionPost = $(this).data('target-post')
-                                        const count = $(this).data('count')
-                                        const btncolor = $(this).data('btncolor')
-                                        const btntext = $(this).data('btntext')
-                                        const isrecibido = $(this).data('recibido') == '1'
-                                        $.confirm({
-                                            title: 'Confirmar ' + btntext,
-                                            type: btncolor || 'blue',
-                                            columnClass: 'xlarge',
-                                            content: function () {
-                                                const self = this
-                                                if (count == '1') {
-                                                    if (isrecibido) {
-                                                        return `<p>Esta seguro de confirmar la recepción del Pedido <strong class="textcode">${data.codigos}</strong></p>  ${data.cambio_direccion_at != null ? `<div class="col-12">
-                    <p class="alert alert-warning">Datos de la dirección fueron modificados, ¿desea continuar?.</p>
-                  </div>` : ''}`
-                                                    } else {
-                                                        return `<p>Esta seguro de rechazar la recepción del Pedido <strong class="textcode">${data.codigos}</strong></p>`
-                                                    }
-                                                } else {
-                                                    self.showLoading(true)
-                                                    return $.get(action).done(function (data) {
-                                                        self.setContent(getHtmlPrevisualizarDesagrupar(data.grupo, btntext))
-                                                    }).always(function () {
-                                                        self.hideLoading(true)
-                                                    })
-                                                }
-                                            },
-                                            buttons: {
-                                                no_recibido: {
-                                                    text: btntext,
-                                                    btnClass: 'btn-' + btncolor,
-                                                    action: function () {
-                                                        const self = this
-                                                        if (count == '1') {
-                                                            self.showLoading(true)
-                                                            $.post(actionPost)
-                                                                .always(function () {
-                                                                    self.hideLoading(true)
-                                                                    $('#tablaPrincipal').DataTable().draw(false)
-                                                                })
-                                                        } else {
-                                                            if (!self.$content.find('form').serialize()) {
-                                                                $.confirm("Seleccione un pedido")
-                                                                return false;
-                                                            }
-                                                            self.showLoading(true)
-                                                            $.post(actionPost, self.$content.find('form').serialize()).done(function () {
-                                                                self.close()
-                                                            })
-                                                                .always(function () {
-                                                                    self.hideLoading(true)
-                                                                    $('#tablaPrincipal').DataTable().draw(false)
-                                                                })
-                                                        }
+                            /*switch ($('ul#myTab li.nav-item>a.active').attr('id')) {
+                                case 'recepcion-tab':
+                                    $('.count_recepcionmotorizados_inroutes_courier').html(0);
+                                    $('.count_recepcionmotorizados_receptioned_courier').html(this.fnSettings().fnRecordsDisplay());
+                                    $('div.toolbar').html('<div class="d-flex justify-content-center">' +
+                                        '<button class="btn btn-success exportar_tabla" data-url="19">EXPORTAR RECEPCION</button>' +
+                                        '</div>');
+                                    @foreach($motorizados as $motorizado)
+                                    $('#recepcionhijo{{Str::slug($motorizado->zona)}}-tab').tab('show');
+                                    @endforeach
+                                        break;
+                                case 'enruta-tab':
+                                    $('.count_recepcionmotorizados_receptioned_courier').html(0);
+                                    $('.count_recepcionmotorizados_inroutes_courier').html(this.fnSettings().fnRecordsDisplay());
+                                    $('div.toolbar').html('<div class="d-flex justify-content-center">' +
+                                        '<button class="btn btn-secondary exportar_tabla" data-url="18">EXPORTAR RUTA MASIVA</button>' +
+                                        '<button id="iniciar-ruta-masiva" class="btn btn-success">INICIAR RUTA MASIVA</button>' +
+                                        '</div>');
+                                    @foreach($motorizados as $motorizado)
+                                    $("#enrutahijo{{Str::slug($motorizado->zona)}}-tab").tab('show');
+                                    @endforeach
+                                        break;
+                            }*/
 
-                                                    }
-                                                },
-                                                cancelar: {}
-                                            }
-                                        })
-                                    })
-                                },
-                                columns: [
-                                    {data: 'correlativo', name: 'correlativo'},
-                                    {
-                                        data: 'codigos',
-                                        name: 'codigos',
-                                        render: function (data, type, row, meta) {
-                                            var codigos_ped = row.codigos.split(',');
-
-                                            var codigos_conf_ped = (row.codigos_confirmados || '').split(',');
-
-                                            console.log(codigos_conf_ped);
-
-                                            var lista_codigos = '<div class="row">';
-
-                                            $.each(codigos_ped, function (index, val) {
-                                                //lista_codigos += '<div class="col-lg-6">' + val +'</div>';
-                                                if (codigos_conf_ped.includes(val.trim())) {
-                                                    lista_codigos += '<div class="col-lg-6"><span class="text-success">' + val + '</span></div>';
-                                                } else {
-                                                    lista_codigos += '<div class="col-lg-6">' + val + '</div>';
-                                                }
-                                            });
-
-                                            lista_codigos += '</div>';
-
-                                            return lista_codigos;
-                                        }
-                                    },
-                                    {data: 'producto', name: 'producto'},
-                                    {
-                                        data: 'fecha_salida',
-                                        name: 'fecha_salida',
-                                    },
-                                    {
-                                        data: 'direccion',
-                                        name: 'direccion', "visible": false,
-                                        render: function (data, type, row, meta) {
-                                            //console.log(data);
-                                            datas = '';
-                                            if (data != null) {
-                                                return data;
-
-                                            } else {
-                                                return 'REGISTRE DIRECCION';
-                                            }
-                                        },
-                                    },
-                                    {
-                                        data: 'condicion_envio',
-                                        name: 'condicion_envio',
-
-                                    },
-
-                                    {
-                                        data: 'action',
-                                        name: 'action',
-                                        orderable: false,
-                                        searchable: false,
-                                        sWidth: '20%',
-
-                                    },
-                                ],
-                                language: {
-                                    "decimal": "",
-                                    "emptyTable": "No hay información",
-                                    "info": "Mostrando del _START_ al _END_ de _TOTAL_ Entradas",
-                                    "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
-                                    "infoFiltered": "(Filtrado de _MAX_ total entradas)",
-                                    "infoPostFix": "",
-                                    "thousands": ",",
-                                    "lengthMenu": "Mostrar _MENU_ Entradas",
-                                    "loadingRecords": "Cargando...",
-                                    "processing": "Procesando...",
-                                    "search": "Buscar:",
-                                    "zeroRecords": "Sin resultados encontrados",
-                                    "paginate": {
-                                        "first": "Primero",
-                                        "last": "Ultimo",
-                                        "next": "Siguiente",
-                                        "previous": "Anterior"
-                                    }
-                                },
-                                "fnDrawCallback": function () {
-
-
-                                    switch ($('ul#myTab li.nav-item>a.active').attr('id')) {
-                                        case 'recepcion-tab':
-                                            $('.count_recepcionmotorizados_inroutes_courier').html(0);
-                                            $('.count_recepcionmotorizados_receptioned_courier').html(this.fnSettings().fnRecordsDisplay());
-                                            $('div.toolbar').html('<div class="d-flex justify-content-center">' +
-                                                '<button class="btn btn-success exportar_tabla" data-url="19">EXPORTAR RECEPCION</button>' +
-                                                '</div>');
-                                            @foreach($motorizados as $motorizado)
-                                            $('#recepcionhijo{{Str::slug($motorizado->zona)}}-tab').tab('show');
-                                            @endforeach
-                                                break;
-                                        case 'enruta-tab':
-                                            $('.count_recepcionmotorizados_receptioned_courier').html(0);
-                                            $('.count_recepcionmotorizados_inroutes_courier').html(this.fnSettings().fnRecordsDisplay());
-                                            $('div.toolbar').html('<div class="d-flex justify-content-center">' +
-                                                '<button class="btn btn-secondary exportar_tabla" data-url="18">EXPORTAR RUTA MASIVA</button>' +
-                                                '<button id="iniciar-ruta-masiva" class="btn btn-success">INICIAR RUTA MASIVA</button>' +
-                                                '</div>');
-                                            @foreach($motorizados as $motorizado)
-                                            $("#enrutahijo{{Str::slug($motorizado->zona)}}-tab").tab('show');
-                                            @endforeach
-                                                break;
-                                    }
-                                }
-                            });
-
-                            /*
-                                  $("#fecha_consulta").datepicker({
-                                    onSelect: function () {
-
-                                      $('#tablaPrincipal').DataTable().ajax.reload();
-                                      console.log("minimo "+$(this).val());
-                                      //localStorage.setItem('dateMin', $(this).datepicker('getDate') );
-                                      //localStorage.setItem('dateMin', $(this).val() );
-                                    }, changeMonth: true, changeYear: true , dateFormat:"dd/mm/yy"
-                                  }); */
 
                             $('.condicion-tabla').on('click', function () {
                                 $('.condicion-tabla').removeClass("activo");
@@ -1092,45 +985,6 @@
                                 //}
 
                             });
-
-                            $(document).on("click", "#iniciar-ruta-masiva", function () {
-                                //ajax iniciar ruta masiva
-
-                                @if(!in_array(auth()->user()->rol,[\App\Models\User::ROL_ADMIN,\App\Models\User::ROL_MOTORIZADO]))
-                                Swal.fire(
-                                    'Error',
-                                    'No tiene permiso de ejecutar esta acción',
-                                    'error'
-                                )
-                                return;
-                                @endif
-
-                                $.ajax({
-                                    data: {
-                                        /*envio_id:data.id,
-                                        pedido:data.codigos*/
-                                    },
-                                    type: 'POST',
-                                    url: "{{ route('envios.recepcionmotorizado.iniciar_ruta_masiva') }}",
-                                }).always(function (data) {
-                                    console.log(data);
-                                    $('#tablaPrincipal').DataTable().ajax.reload();
-                                    /*if(data.html=='1')
-                                    {
-                                      $('#tablaPrincipal').DataTable().ajax.reload();
-                                    }else{
-                                      Swal.fire(
-                                          'Error',
-                                          'No tiene el rol suficiente para esta operacion',
-                                          'error'
-                                      )
-                                    }*/
-                                    //self.close()
-                                    //self.hideLoading(true)
-
-                                });
-
-                            })
 
                             /************
                              * ESCANEAR PEDIDO
@@ -1304,7 +1158,6 @@
                                 });
                             });
 
-
                             $('#modal-envio').on('show.bs.modal', function (event) {
                                 //cuando abre el form de anular pedido
                                 var button = $(event.relatedTarget)
@@ -1419,17 +1272,7 @@
 
                             });
 
-
-                            /*$('#modal-atender').on('show.bs.modal', function (event) {
-                              var button = $(event.relatedTarget)
-                              var idunico = button.data('atender')
-                              $(".textcode").html("PED"+idunico);
-                              $("#hiddenAtender").val(idunico);
-                            });*/
-
-
-                        })
-                        ;
+                        });
                     </script>
 
                     @if (session('info') == 'registrado' || session('info') == 'actualizado' || session('info') == 'eliminado')
@@ -1444,16 +1287,10 @@
 
                     <script>
 
-                        //VALIDAR CAMPO CELULAR
                         function maxLengthCheck(object) {
                             if (object.value.length > object.maxLength)
                                 object.value = object.value.slice(0, object.maxLength)
                         }
-
-                        //VALIDAR ANTES DE ENVIAR
-                        /*document.addEventListener("DOMContentLoaded", function() {
-                        document.getElementById("formulario").addEventListener('submit', validarFormulario);
-                        });*/
 
                         function validarFormulario(evento) {
                             evento.preventDefault();
