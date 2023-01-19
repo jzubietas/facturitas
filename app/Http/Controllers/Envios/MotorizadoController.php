@@ -893,11 +893,11 @@ Ver Rotulo</a>')
                                             <button
                                             data-recibido="0"
                                             data-btncolor="red"
-                                            data-btntext="No recibido"
+                                            data-btntext="Retornar"
                                             data-count="' . $count . '"
                                             data-target="' . route('envios.recepcionmotorizado.pedidos', $direcciongrupo->id) . '"
                                             data-target-post="' . route('envios.recepcionarmotorizado', ['hiddenEnvio' => $direcciongrupo->id, 'hiddenAccion' => 'retornar_para_reparto']) . '"
-                                            data-toggle="jqconfirm" class="btn btn-danger btn-sm mt-8"><i class="fa fa-times-circle-o" aria-hidden="true"></i>No recibido</button>
+                                            data-toggle="jqconfirm" class="btn btn-danger btn-sm mt-8"><i class="fa fa-times-circle-o" aria-hidden="true"></i>Retornar</button>
                                         </li>';
                     }
 

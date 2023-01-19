@@ -783,7 +783,7 @@
                                         const btntext = $(this).data('btntext')
                                         const isrecibido = $(this).data('recibido') == '1'
                                         $.confirm({
-                                            title: 'Confirmar ' + btntext+ ' y retornar a PARA REPARTO',
+                                            title: 'Confirmar ' + btntext+ ' a PARA REPARTO',
                                             type: btncolor || 'blue',
                                             columnClass: 'xlarge',
                                             content: function () {
