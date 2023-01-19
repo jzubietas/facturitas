@@ -3,33 +3,7 @@
 @section('title', 'Lista de pedidos por enviar')
 
 @section('content_header')
-    <h1>Lista de pedidos por enviar - ENVIOS
-        {{-- <div class="float-right btn-group dropleft">
-          <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            Exportar
-          </button>
-          <div class="dropdown-menu">
-            <a href="{{ route('pedidosporenviarExcel') }}" class="dropdown-item"><img src="{{ asset('imagenes/icon-excel.png') }}"> EXCEL</a>
-          </div>
-        </div> --}}
-        {{-- @can('clientes.exportar') --}}
-        <div class="float-right btn-group dropleft">
-
-            <?php if (Auth::user()->rol == 'Administrador' || Auth::user()->rol == 'Logística'){ ?>
-            <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
-                    aria-expanded="false">
-                Exportar
-            </button>
-            <?php } ?>
-
-            <div class="dropdown-menu">
-                <a href="" data-target="#modal-exportar" data-toggle="modal" class="dropdown-item" target="blank_"><img
-                        src="{{ asset('imagenes/icon-excel.png') }}"> Excel</a>
-            </div>
-        </div>
-        @include('pedidos.modal.exportar', ['title' => 'Exportar pedidos POR ENVIAR', 'key' => '1'])
-        {{-- @endcan --}}
-    </h1>
+    <h1>Lista de SEGUIMIENTO A PROVINCIA</h1>
     @if($superasesor > 0)
         <br>
         <div class="bg-4">
@@ -102,36 +76,6 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             });
-
-            $(document).on("submit", "#formularioenviar", function (evento) {
-                evento.preventDefault();
-                console.log("form enviarid")
-                //validacion
-
-                var fd2 = new FormData();
-                let files = $('input[name="pimagen')
-                var fileitem = $("#DPitem").val();
-
-                fd2.append('hiddenEnviar', $('#hiddenEnviar').val());
-                fd2.append('fecha_envio_doc_fis', $('#fecha_envio_doc_fis').val());
-                fd2.append('fecha_recepcion', $('#fecha_recepcion').val());
-                fd2.append('foto1', $('input[type=file][id="foto1"]')[0].files[0]);
-                fd2.append('foto2', $('input[type=file][id="foto2"]')[0].files[0]);
-                fd2.append('condicion', $('#condicion').val());
-
-                $.ajax({
-                    data: fd2,
-                    processData: false,
-                    contentType: false,
-                    type: 'POST',
-                    url: "{{ route('envios.enviarid') }}",
-                    success: function (data) {
-                        $("#modal-enviar").modal("hide");
-                        $('#tablaPrincipal').DataTable().ajax.reload();
-                    }
-                });
-            });
-
 
             $('#tablaPrincipal').DataTable({
                 processing: true,
@@ -234,12 +178,6 @@
                     {
                         data: 'condicion_envio',
                         name: 'condicion_envio',
-                        render: function (data, type, row, meta) {
-                            var badge_estado = ''
-                            badge_estado += '<span class="badge badge-success" style="background-color: ' + row.condicion_envio_color + '!important;">' + row.condicion_envio + '</span>';
-                            return badge_estado;
-                        }
-
                     },
                     {
                         data: 'action',
@@ -276,6 +214,13 @@
 
         function renderEventButtonAction(row, data, index) {
             $('[data-toggle="jqconfirm"]', row).click(function () {
+                const subcondiciones = [
+                    'RECEPCIONADO',
+                    'EN CAMINO',
+                    'EN TIENDA/AGENTE',
+                    'ENTREGADO',
+                    'NO ENTREGADO',
+                ];
                 $.dialog({
                     columnClass: 'large',
                     title: 'Cambiar estado',
@@ -283,36 +228,37 @@
 <div class="p-3">
 <div class="row">
     <div class="col-md-12">
-        <span>Adjuntar estado de olva</span>
-        <div id="attachmentfiles" class="border border-dark rounded d-flex justify-content-center align-items-center mb-4" style="height: 50px">
-            <i class="fa fa-upload"></i>
-            <span></span>
-        </div>
-    </div>
-    <div class="col-md-12 result_picture">
-        <img src="" style="max-height: 350px">
+            <div class="form-group">
+                <label>Seguimiento de envio</label>
+                <select class="form-control select_subcondicion_envio">
+                    ${subcondiciones.map(function (subcond) {
+                        return `<option ${data.subcondicion_envio == subcond ? 'selected' : ''} value="${subcond}">${subcond}</option>`
+                    }).join('')}
+                </select>
+            </div>
     </div>
     <div class="col-md-12">
-        <div class="form-group">
-            <label>Seguimiento de envio</label>
-            <select class="form-control" >
-                <option>RECEPCIONADO</option>
-                <option>EN CAMINO</option>
-                <option>EN TIENDA/AGENTE</option>
-                <option>ENTREGADO</option>
-                <option>NO ENTREGADO</option>
-            </select>
+        <strong>Adjuntar estado de olva</strong>
+        <div id="attachmentfiles" class="border border-dark rounded d-flex justify-content-center align-items-center mb-4 position-relative" style="height: 400px">
+            <i class="fa fa-upload"></i>
+            <div class="result_picture position-absolute" style="display: block;top: 0;left: 0;bottom: 0;right: 0;text-align: center;">
+        <img src="" class="h-100">
+    </div>
         </div>
+        <div class="alert alert-warning">Puede copiar y pegar la imagen</div>
     </div>
 </div>
 </div>
 <div class="jconfirm-buttons">
-<button type="button" class="btn-ok btn btn-success" disabled="">Cambiar estado</button>
+<button type="button" class="btn-ok btn btn-success">Cambiar estado</button>
 <button type="button" class="btn-cancel btn btn-default">cancelar</button>
 </div>
 `,
                     onContentReady: function () {
                         var self = this;
+                        const dataForm = {
+                            direccion_grupo_id: data.id
+                        }
                         this.$content.find('.result_picture').hide()
                         this.$content.find('#attachmentfiles').click(function () {
                             var file = document.createElement('input');
@@ -322,6 +268,7 @@
                                 if (file.files.length > 0) {
                                     self.$content.find('.result_picture').css('display', 'block')
                                     console.log(URL.createObjectURL(file.files[0]))
+                                    dataForm.file = file.files[0]
                                     self.$content.find('.result_picture>img').attr('src', URL.createObjectURL(file.files[0]))
                                 }
                             })
@@ -344,11 +291,44 @@
                                 self.$content.find('.result_picture').css('display', 'block')
                                 console.log(URL.createObjectURL(files[0]))
                                 self.$content.find('.result_picture>img').attr('src', URL.createObjectURL(files[0]))
+                                dataForm.file = files[0]
                             }
                         }
 
+                        this.$content.find('button.btn-cancel').click(function () {
+                            self.close()
+                        })
                         this.$content.find('button.btn-ok').click(function () {
+                            dataForm.subcondicion_envio = self.$content.find('select.select_subcondicion_envio').val()
+                            console.log(dataForm)
+                            if(!dataForm.file){
+                                $.alert('Imagen requerida: Seleccione o pegue una imagen para continuar')
+                                return;
+                            }
+                            self.showLoading(true)
+                            var fd = new FormData();
+                            Object.keys(dataForm).forEach(function (key) {
+                                if (key == 'file' && dataForm[key]) {
+                                    fd.append(key, dataForm[key], dataForm[key].name);
+                                } else {
+                                    fd.append(key, dataForm[key]);
+                                }
+                            })
 
+                            $.ajax({
+                                url: '{{route('envios.seguimientoprovincia.update')}}',
+                                data: fd,
+                                method: 'POST',
+                                processData: false,
+                                contentType: false,
+                            })
+                                .done(function () {
+                                    self.close()
+                                })
+                                .always(function () {
+                                    self.hideLoading(true)
+                                    $(row).parents('table').DataTable().draw(false)
+                                })
                         })
                     },
                     onDestroy: function () {

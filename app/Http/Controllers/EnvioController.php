@@ -532,7 +532,7 @@ class EnvioController extends Controller
             ->join('users as u', 'u.id', 'c.user_id')
             ->where('direccion_grupos.condicion_envio_code', Pedido::REPARTO_COURIER_INT)
             ->where('direccion_grupos.estado', '1')
-            ->select(
+            ->select([
                 'direccion_grupos.id',
                 'u.identificador as identificador',
                 DB::raw(" (select 'LIMA') as destino "),
@@ -552,7 +552,7 @@ class EnvioController extends Controller
                 'direccion_grupos.subcondicion_envio',
                 'direccion_grupos.condicion_sobre',
                 'direccion_grupos.correlativo as correlativo'
-            );
+            ]);
 
         if (Auth::user()->rol == "Asesor") {
             $pedidos_lima = $pedidos_lima->Where('u.identificador', Auth::user()->identificador);
@@ -1450,21 +1450,20 @@ class EnvioController extends Controller
             ->pluck('departamento', 'departamento');
 
         $direcciones = DireccionEnvio::join('direccion_pedidos as dp', 'direccion_envios.id', 'dp.direccion_id')
-            ->select('direccion_envios.id',
+            ->select([
+                'direccion_envios.id',
                 'direccion_envios.distrito',
                 'direccion_envios.direccion',
                 'direccion_envios.referencia',
                 'direccion_envios.nombre',
                 'direccion_envios.celular',
                 'dp.pedido_id as pedido_id',
-            )
+            ])
             ->where('direccion_envios.estado', '1')
             ->where('dp.estado', '1')
             ->get();
 
         $superasesor = User::where('rol', 'Super asesor')->count();
-
-        $ver_botones_accion = 1;
 
         if (Auth::user()->rol == "Asesor") {
             $ver_botones_accion = 0;
@@ -1477,6 +1476,22 @@ class EnvioController extends Controller
         }
 
         return view('envios.seguimientoProvincia', compact('condiciones', 'distritos', 'direcciones', 'destinos', 'superasesor', 'ver_botones_accion', 'departamento', 'distribuir'));
+    }
+
+    public function SeguimientoprovinciaUpdate(Request $request)
+    {
+        $grupo = DireccionGrupo::findOrFail($request->direccion_grupo_id);
+        $collectionName = 'subcondicion_envio.' . Str::slug($request->subcondicion_envio);
+        $medias = $grupo->getMedia($collectionName);
+        foreach ($medias as $media) {
+            //$grupo->deleteMedia($media);
+        }
+        $grupo->addMedia($request->file('file'))
+            ->toMediaCollection($collectionName, 'pstorage');
+        $grupo->update([
+            'subcondicion_envio' => $request->subcondicion_envio
+        ]);
+        return $grupo;
     }
 
     public function Seguimientoprovinciatabla(Request $request)
@@ -1510,15 +1525,18 @@ class EnvioController extends Controller
                 }
                 return '';
             })
-            ->addColumn('condicion_envio_color', function ($pedido) {
-                return Pedido::getColorByCondicionEnvio($pedido->condicion_envio);
+            ->addColumn('condicion_envio', function ($pedido) {
+                $color = Pedido::getColorByCondicionEnvio($pedido->condicion_envio);
+                $html= '<span class="badge badge-success">' . $pedido->subcondicion_envio . '</span>';
+                $html.= '<span class="badge badge-success" style="background-color: ' . $color . '!important;">' . $pedido->condicion_envio . '</span>';
+                return $html;
             })
             ->addColumn('action', function ($pedido) {
                 $btn = '';
                 $btn .= '<button data-target="#modal-enviar" data-toggle="jqconfirm" class="btn btn-success btn-sm"><i class="fas fa-envelope"></i> Entregado</button>';
                 return $btn;
             })
-            ->rawColumns(['action', 'referencia'])
+            ->rawColumns(['action', 'referencia','condicion_envio'])
             ->make(true);
 
     }

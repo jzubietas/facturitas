@@ -887,7 +887,6 @@ Ver Rotulo</a>')
 
                     $btn .= '<ul class="list-unstyled pl-0">';
 
-                    if ($direcciongrupo->condicion_envio_code == Pedido::ENVIO_MOTORIZADO_COURIER_INT) {
                         $count = Pedido::query()->where('direccion_grupo', $direcciongrupo->id)->count();
                         $btn .= ' <li>
                                             <button
@@ -899,7 +898,6 @@ Ver Rotulo</a>')
                                             data-target-post="' . route('envios.recepcionarmotorizado', ['hiddenEnvio' => $direcciongrupo->id, 'hiddenAccion' => 'retornar_para_reparto']) . '"
                                             data-toggle="jqconfirm" class="btn btn-danger btn-sm mt-8"><i class="fa fa-times-circle-o" aria-hidden="true"></i>Retornar</button>
                                         </li>';
-                    }
 
                     $btn .= '</ul>';
 
