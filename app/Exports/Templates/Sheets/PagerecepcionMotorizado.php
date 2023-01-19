@@ -109,8 +109,8 @@ class PagerecepcionMotorizado extends Export implements WithStyles,WithColumnFor
     public function map($model): array
     {
         //$model->Periodo=strval(str_pad($model->Periodo,2,"0"));
-        //$model->codigos=implode('\n',explode(',',$model->codigos));
-        //$model->producto=explode(',',$model->producto);
+        $model->codigos=implode('\n',explode(',',$model->codigos));
+        $model->producto=implode('\n',explode(',',$model->producto));
         /*$ae=[];
         for($i=1;$i<count($model->producto);$i++)
         {
@@ -140,7 +140,7 @@ class PagerecepcionMotorizado extends Export implements WithStyles,WithColumnFor
     public function columnFormats(): array
     {
         return [
-            //'C' => ['alignment' => ['wrapText' => true]],
+            'C' => ['alignment' => ['wrapText' => true]],
             'E' => NumberFormat::FORMAT_DATE_YYYYMMDD,
             'F' => NumberFormat::FORMAT_TEXT,
             'G' => NumberFormat::FORMAT_TEXT,
@@ -306,8 +306,21 @@ class PagerecepcionMotorizado extends Export implements WithStyles,WithColumnFor
     {
         // TODO: Implement styles() method.
         return [
-            'C'    => ['alignment' => ['wrapText' => true]],
-            'E'    => ['alignment' => ['wrapText' => true]],
+            'A' => [
+                'alignment' => [
+                    'wrapText' => true,
+                ],
+            ],
+            'B' => [
+                'alignment' => [
+                    'wrapText' => true,
+                ],
+            ],
+            'C' => [
+                'alignment' => [
+                    'wrapText' => true,
+                ],
+            ],
         ];
     }
 }
