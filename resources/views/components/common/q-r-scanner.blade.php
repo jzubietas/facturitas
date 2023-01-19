@@ -460,16 +460,21 @@ function ConfirmarOPBarra(data){
 
                         $('#respuesta_barra').html('<span class="'+ data.class +'">'+ data.html + '</span>');
 
+                        $('#tablaPrincipal').DataTable().ajax.reload();
+
                     }else if(data.error == 0) {
 
                         Swal.fire({
                             icon: 'success',
-                            title: 'Pedido identificado',
+                            title: 'Pedido Procesado',
                             color: '#FFF',
                             background: '#79b358',
                             showConfirmButton: false,
                             timer: 600
                         })
+
+                        $('#respuesta_barra').html('<span class="'+ data.class +'">'+ data.html + '</span>');
+
                     }else if(data.error == 7) {
 
                         Swal.fire({
@@ -484,7 +489,7 @@ function ConfirmarOPBarra(data){
 
                     setTimeout(function (){
                         $('#respuesta_barra').fadeOut();
-                    },600);
+                    },2200);
 
                     /*
                     $('#pedidos-procesados').html(`<p><b class="text-success w-100">codigos procesados (${codigos_procesados.length}):</b></p><ul>${codigos_procesados.map(function (codigo) {
