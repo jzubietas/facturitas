@@ -59,7 +59,7 @@ host=$h
 ";
         file_put_contents($credentialsFile, $data);
         try {
-            $this->executeCommand("mysqldump --defaults-extra-file=\"$credentialsFile\" --routines $database > $filename");
+            $this->executeCommand("mysqldump --skip-tz-utc --defaults-extra-file=\"$credentialsFile\" --routines $database > $filename");
             unlink($credentialsFile);
         } catch (\Exception $ex) {
             unlink($credentialsFile);
@@ -70,9 +70,7 @@ host=$h
 
     public function deleteBackups($cout = 10)
     {
-        $files = collect(\File::files(storage_path("backups")))->sortByDesc(function ($file) {
-            return $file->getFilename();
-        })->chunk($cout)->all();
+        $files = collect(\File::files(storage_path("backups")))->sortByDesc(fn($file) => $file->getFilename())->chunk($cout)->all();
 
         unset($files[0]);
         foreach ($files as $groups) {
