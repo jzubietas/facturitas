@@ -412,9 +412,9 @@ function ConfirmarOPBarra(data){
                             color: '#FFF',
                             background: '#79b358',
                             showConfirmButton: false,
-                            width: '800px',
+                            width: '1000px',
                             height: '800px',
-                            timer: 1000
+                            timer: 1300
                         })
                         console.log(data);
                         codigos_agregados.push(data.codigo);
