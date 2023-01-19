@@ -399,7 +399,7 @@ function ConfirmarOPBarra(data){
                             color: '#FFF',
                             background: '#9f2916',
                             showConfirmButton: false,
-                            timer: 800
+                            timer: 500
                         })
 
                         $('#respuesta_barra').html('<span class="'+ data.class +'">'+ data.html +'</b></span>');
@@ -412,7 +412,9 @@ function ConfirmarOPBarra(data){
                             color: '#FFF',
                             background: '#79b358',
                             showConfirmButton: false,
-                            timer: 600
+                            width: '800px',
+                            height: '800px',
+                            timer: 1000
                         })
                         console.log(data);
                         codigos_agregados.push(data.codigo);
@@ -427,7 +429,7 @@ function ConfirmarOPBarra(data){
                             color: '#FFF',
                             background: '#9f2916',
                             showConfirmButton: false,
-                            timer: 800
+                            timer: 500
                         })
 
                         $('#respuesta_barra').html('<span class="'+ data.class +'">'+ data.html + '</span>');
@@ -441,7 +443,7 @@ function ConfirmarOPBarra(data){
                             color: '#FFF',
                             background: '#9f2916',
                             showConfirmButton: false,
-                            timer: 800
+                            timer: 500
                         })
 
                         $('#respuesta_barra').html('<span class="'+ data.class +'">'+ data.html + '</span>');
@@ -454,7 +456,7 @@ function ConfirmarOPBarra(data){
                             color: '#FFF',
                             background: '#9f2916',
                             showConfirmButton: false,
-                            timer: 800
+                            timer: 500
                         })
 
                         $('#respuesta_barra').html('<span class="'+ data.class +'">'+ data.html + '</span>');
@@ -469,7 +471,7 @@ function ConfirmarOPBarra(data){
                             color: '#FFF',
                             background: '#79b358',
                             showConfirmButton: false,
-                            timer: 600
+                            timer: 500
                         })
 
                         $('#respuesta_barra').html('<span class="'+ data.class +'">'+ data.html + '</span>');
@@ -482,15 +484,17 @@ function ConfirmarOPBarra(data){
                             color: '#FFF',
                             background: '#ffc107',
                             showConfirmButton: false,
-                            timer: 600
+                            timer: 500
                         })
 
                         $('#respuesta_barra').html('<span class="'+ data.class +'">'+ data.html + '</span>');
                     }
-
+/*
                     setTimeout(function (){
                         $('#respuesta_barra').fadeOut();
                     },2200);
+
+ */
 
                     /*
                     $('#pedidos-procesados').html(`<p><b class="text-success w-100">codigos procesados (${codigos_procesados.length}):</b></p><ul>${codigos_procesados.map(function (codigo) {
