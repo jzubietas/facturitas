@@ -327,161 +327,81 @@
                             type: 'green',
                             columnClass: 'xlarge',
                             content: `<div>
-    <form enctype="multipart/form-data" class="card">
-        <div class="card-body p-0">
-            <div class="row">
+   <div class="p-2">
+    <form enctype="multipart/form-data" class="">
+         <div class="row">
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                    <h5>Sobre de pedido: <b>${data.codigo}</b></h5>
+                    <h6>Sobre: <b>${data.codigo}</b></h6>
                 </div>
-            </div>
-             <div class="row mt-2">
-                                <div class="col-12 col-md-4">
-                                    <div class="input-group w-80">
-                                        <div class="custom-file w-90">
-                                            <input type="file" class="custom-file-input form-control-file" id="adjunto1" name="adjunto1" lang="es">
-                                            <label class="custom-file-label" for="adjunto1">Foto de los sobres</label>
-                                            <div class="invalid-feedback">Example invalid custom file feedback</div>
-                                        </div>
-                                        <div class="input-group-append">
-                                            <button class="btn btn-danger" id="trash_adjunto1" type="button"><i class="fa fa-trash"></i></button>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-12 col-md-4">
-                                    <div class="input-group w-80">
-                                        <div class="custom-file w-90">
-                                            <input type="file" class="custom-file-input form-control-file" id="adjunto2" name="adjunto2" lang="es">
-                                            <label class="custom-file-label" for="adjunto2">Foto del domicilio</label>
-                                            <div class="invalid-feedback">Example invalid custom file feedback</div>
-                                        </div>
-                                        <div class="input-group-append">
-                                            <button class="btn btn-danger" id="trash_adjunto2" type="button"><i class="fa fa-trash"></i></button>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-12 col-md-4">
-                                    <div class="input-group w-80">
-                                        <div class="custom-file w-90">
-                                            <input type="file" class="custom-file-input form-control-file" id="adjunto3" name="adjunto3" lang="es">
-                                            <label class="custom-file-label" for="adjunto3">Foto de quien recibe</label>
-                                            <div class="invalid-feedback">Example invalid custom file feedback</div>
-                                        </div>
-                                        <div class="input-group-append">
-                                            <button class="btn btn-danger" id="trash_adjunto3" type="button"><i class="fa fa-trash"></i></button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-4 mt-12">
-                                    <div class="form-group">
-                                        <div class="image-wrapper">
-                                            <img id="picture1"
-                                            src="{{ asset('imagenes/motorizado_preview/sobres.png') }}"
-                                            data-src="{{ asset('imagenes/motorizado_preview/sobres.png') }}"
-                                alt="Imagen del pago" class="img-fluid" style="display: block;height: 300px;width: auto;">
-                        </div>
-                    </div>
-                </div>
-                <div class="col-4 mt-12">
-                    <div class="form-group">
-                        <div class="image-wrapper">
-                            <img id="picture2"
-                            src="{{ asset('imagenes/motorizado_preview/domicilio.png') }}"
-                            data-src="{{ asset('imagenes/motorizado_preview/domicilio.png') }}"
-                                 alt="Imagen del pago" class="img-fluid" style="display: block;height: 300px;width: auto;">
-                        </div>
-                    </div>
-                </div>
-                <div class="col-4 mt-12">
-                    <div class="form-group">
-                        <div class="image-wrapper">
-                            <img id="picture3"
-                            src="{{ asset('imagenes/motorizado_preview/recibe_sobre.png') }}"
-                            data-src="{{ asset('imagenes/motorizado_preview/recibe_sobre.png') }}"
-                                 alt="Imagen del pago" class="img-fluid" style="display: block;height: 300px;width: auto;">
-                        </div>
-                    </div>
-                </div>
+<div class="col-md-12">
+ <div class="alert alert-warning mb-0">Subir la captura de la imagen donde especifica que el cliente no quiere el sobre.</div>
+ <div class="alert alert-warning mb-1">Es importante que en la captura se mencione el ruc de la empresa.</div>
+</div>
+<div class="col-md-12">
+        <strong>Adjuntar estado de olva</strong>
+           <input type="file" id="attachmentfiles_file">
+        <div id="attachmentfiles" class="border border-dark rounded d-flex justify-content-center align-items-center mb-4 position-relative" style="height: 400px">
+            <i class="fa fa-upload"></i>
+            <div class="result_picture position-absolute" style="display: block;top: 0;left: 0;bottom: 0;right: 0;text-align: center;">
+                <img src="" class="h-100">
             </div>
         </div>
+        <div class="alert alert-warning" style="background: #ffc10726;font-size: 10px;padding: 0;">Puede copiar y pegar la imagen o hacer click en el recuadro para seleccionar un archivo</div>
+</div>
+            </div>
         <div class="card-footer text-center">
             <button type="submit" class="btn btn-info" id="atender">Confirmar</button>
         </div>
     </form>
+</div>
 </div>`,
                             onContentReady: function () {
                                 const self = this
-                                self.$content.find("#adjunto1").change(function (e) {
-                                    const [file] = e.target.files
-                                    if (file) {
-                                        self.$content.find("#picture1").show();
-                                        self.$content.find("#picture1").attr('src', URL.createObjectURL(file))
+                                var dataForm = {}
+                                window.document.onpaste = function (event) {
+                                    var items = (event.clipboardData || event.originalEvent.clipboardData).items;
+                                    console.log(items);
+                                    console.log((event.clipboardData || event.originalEvent.clipboardData));
+                                    var files = []
+                                    for (index in items) {
+                                        var item = items[index];
+                                        if (item.kind === 'file') {
+                                            // adds the file to your dropzone instance
+                                            var file = item.getAsFile()
+                                            files.push(file)
+                                        }
                                     }
-                                })
-                                self.$content.find("#adjunto2").change(function (e) {
-                                    const [file] = e.target.files
-                                    if (file) {
-                                        self.$content.find("#picture2").show();
-                                        self.$content.find("#picture2").attr('src', URL.createObjectURL(file))
+                                    if (files.length > 0) {
+                                        self.$content.find('.result_picture').css('display', 'block')
+                                        console.log(URL.createObjectURL(files[0]))
+                                        self.$content.find('.result_picture>img').attr('src', URL.createObjectURL(files[0]))
+                                        dataForm.file = files[0]
                                     }
-                                })
-                                self.$content.find("#adjunto3").change(function (e) {
-                                    const [file] = e.target.files
-                                    if (file) {
-                                        self.$content.find("#picture3").show();
-                                        self.$content.find("#picture3").attr('src', URL.createObjectURL(file))
+                                }
+                                this.$content.find('.result_picture').hide()
+                                this.$content.find('#attachmentfiles_file').change(function () {
+                                    var file=$(this)[0];
+                                    if (file.files.length > 0) {
+                                        self.$content.find('.result_picture').css('display', 'block')
+                                        console.log(URL.createObjectURL(file.files[0]))
+                                        dataForm.file = file.files[0]
+                                        self.$content.find('.result_picture>img').attr('src', URL.createObjectURL(file.files[0]))
                                     }
-                                })
-                                self.$content.find("#trash_adjunto1").click(function (e) {
-                                    self.$content.find("#picture1").attr('src',self.$content.find("#picture1").data('src'))
-                                    self.$content.find("#adjunto1").val(null)
-                                })
-                                self.$content.find("#trash_adjunto2").click(function (e) {
-                                    self.$content.find("#picture2").attr('src', self.$content.find("#picture2").data('src'))
-                                    self.$content.find("#adjunto2").val(null)
-                                })
-                                self.$content.find("#trash_adjunto3").click(function (e) {
-                                    self.$content.find("#picture3").attr('src', self.$content.find("#picture2").data('src'))
-                                    self.$content.find("#adjunto3").val(null)
-                                })
+                                });
 
                                 self.$content.find("form").on('submit', function (e) {
                                     e.preventDefault()
-                                    /*if (!e.target.fecha_recepcion.value) {
+                                    if (!dataForm.file) {
                                         $.confirm({
                                             title: '¡Advertencia!',
-                                            content: '<b>Ingresa la fecha de Entrega</b>',
-                                            type: 'orange'
-                                        })
-                                        return false;
-                                    }*/
-                                    if (e.target.adjunto1.files.length === 0) {
-                                        $.confirm({
-                                            title: '¡Advertencia!',
-                                            content: '<b>Adjunta la Foto de los sobres</b>',
-                                            type: 'orange'
-                                        })
-                                        return false;
-                                    }
-                                    if (e.target.adjunto2.files.length === 0) {
-                                        $.confirm({
-                                            title: '¡Advertencia!',
-                                            content: '<b>Adjunta la Foto del domicilio</b>',
-                                            type: 'orange'
-                                        })
-                                        return false;
-                                    }
-                                    if (e.target.adjunto3.files.length === 0) {
-                                        $.confirm({
-                                            title: '¡Advertencia!',
-                                            content: '<b>Adjunta la Foto de quien recibe</b>',
+                                            content: '<b>Adjunta la foto de la captura</b>',
                                             type: 'orange'
                                         })
                                         return false;
                                     }
                                     var fd2 = new FormData(e.target);
                                     fd2.set('pedido_id', data.id)
+                                    fd2.set('adjunto1', dataForm.file, dataForm.file.name)
                                     self.showLoading(true)
                                     $.ajax({
                                         data: fd2,
@@ -496,6 +416,9 @@
                                         self.hideLoading(true)
                                     });
                                 })
+                            },
+                            onDestroy: function () {
+                                window.document.onpaste = null
                             },
                         })
                     })
