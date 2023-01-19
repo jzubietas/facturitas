@@ -93,16 +93,16 @@ class PagerecepcionMotorizado extends Export implements WithStyles,WithColumnFor
     public function columnWidths(): array
     {
         return [
-            'A' => 8 //CELULAR QUIEN RECIBE
-            , 'B' => 8 //ME RO
-            , 'C' => 8 //CODIGO
-            , 'D' => 8 //NOMBRE DE qUIEN RECIBE
-            , 'E' => 8 //RAZON SOCIAL
-            , 'F' => 8 //QTY
-            , 'G' => 8 //CLIENTE
-            , 'H' => 8 //DIRECCION
-            , 'I' => 8 //REFERENCIA
-            , 'J' => 8 //DISTRITO
+            'A' => 13.57 //CELULAR QUIEN RECIBE
+            , 'B' => 3.57 //ME RO
+            , 'C' => 11.29 //CODIGO
+            , 'D' => 13.57 //NOMBRE DE qUIEN RECIBE
+            , 'E' => 33.57 //RAZON SOCIAL
+            , 'F' => 3.57 //QTY
+            , 'G' => 13.57 //CLIENTE
+            , 'H' => 33.57 //DIRECCION
+            , 'I' => 37.29 //REFERENCIA
+            , 'J' => 13.57 //DISTRITO
         ];
 
     }
@@ -111,7 +111,11 @@ class PagerecepcionMotorizado extends Export implements WithStyles,WithColumnFor
     {
         //$model->Periodo=strval(str_pad($model->Periodo,2,"0"));
         $model->codigos=implode("\n",explode(',',$model->codigos));
-        $model->producto=implode("\n",explode(',',$model->producto));
+        $aci=0;
+        $model->producto=collect(explode(',',$model->producto))->map(function ($codigo,$index){
+            return ($index+1).') '.$codigo;
+
+        })->join("\n");
         /*$ae=[];
         for($i=1;$i<count($model->producto);$i++)
         {
