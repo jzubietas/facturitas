@@ -329,9 +329,9 @@ class PagoController extends Controller
 
         $titulares = [
             "EPIFANIO SOLANO HUAMAN" => 'EPIFANIO SOLANO HUAMAN',
-            "NIKSER DENIS ORE RIVEROS" => 'NIKSER DENIS ORE RIVEROS',
             "ALFREDO ALEJANDRO GABRIEL MONTALVO" => 'ALFREDO ALEJANDRO GABRIEL MONTALVO',
             "SABINA LACHOS" => 'SABINA LACHOS',
+            "NIKSER DENIS ORE RIVEROS" => 'NIKSER DENIS ORE RIVEROS',
         ];
 
         return view('pagos.create', compact('idcliente_request', 'clientes', 'pedidos', 'bancos', 'tipotransferencia', 'titulares', 'users', 'bancos_procedencia'));
@@ -1572,7 +1572,9 @@ class PagoController extends Controller
 
         $titulares = [
             "EPIFANIO SOLANO HUAMAN" => 'EPIFANIO SOLANO HUAMAN',
-            "NIKSER DENIS ORE RIVEROS" => 'NIKSER DENIS ORE RIVEROS'
+            "ALFREDO ALEJANDRO GABRIEL MONTALVO" => 'ALFREDO ALEJANDRO GABRIEL MONTALVO',
+            "SABINA LACHOS" => 'SABINA LACHOS',
+            "NIKSER DENIS ORE RIVEROS" => 'NIKSER DENIS ORE RIVEROS',
         ];
 
         return view('pagos.edit', compact('pago', 'pagos', 'clientes', 'pedidos', 'bancos', 'listaPedidos', 'listaPagos', 'tipotransferencia', 'titulares', 'bancos_procedencia'));
@@ -2376,7 +2378,9 @@ class PagoController extends Controller
 
         $titulares = [
             "EPIFANIO SOLANO HUAMAN" => 'EPIFANIO SOLANO HUAMAN',
-            "NIKSER DENIS ORE RIVEROS" => 'NIKSER DENIS ORE RIVEROS'
+            "ALFREDO ALEJANDRO GABRIEL MONTALVO" => 'ALFREDO ALEJANDRO GABRIEL MONTALVO',
+            "SABINA LACHOS" => 'SABINA LACHOS',
+            "NIKSER DENIS ORE RIVEROS" => 'NIKSER DENIS ORE RIVEROS',
         ];
 
         $pagos = Pago::join('users as u', 'pagos.user_id', 'u.id')
@@ -2841,20 +2845,31 @@ class PagoController extends Controller
 
     public function validadContenidoPago(Request $request)
     {
-        $pagos_repetidos = DetallePago::query()
-            ->with(['pago', 'pago.user'])
-            ->where('banco', $request->banco)
+        // $request->all();
+        //return $request->titular;
+        $titular_c=trim($request->titular);
+        $fecha_c=trim($request->fecha);
+        $monto_c=trim($request->monto);
+        $monto_c=str_replace(',','',$monto_c);
+
+        $pago_ids=Pago::query()->distinct()->select('pagos.id')
+            ->where('pagos.estado','=', '1')
+            ->join('users as u', 'u.id',  'pagos.user_id')
+            ->where('cliente_id', $request->cliente_id)->get();
+        //return $pago_ids;
+        //return $titular_c;
+        //return $request->fecha;
+        $pagos_repetidos = DetallePago::
+            //->with(['pago', 'pago.user'])
+            where('banco', $request->banco)
             ->where('titular', $request->titular)
-            ->where('monto', $request->monto)
-            ->where('fecha', $request->fecha)
-            ->whereIn('pago_id',
-                Pago::query()->distinct()->select('pagos.id')
-                    ->where('pagos.estado', 1)
-                    ->join('users', 'users.id', '=', 'pagos.user_id')
-                    ->where('cliente_id', $request->cliente_id)
-            )
+            ->where('detalle_pagos.monto', $monto_c)
+            ->where('detalle_pagos.fecha', $fecha_c)//2023-01-18
+            ->whereIn('pago_id',$pago_ids)
             ->limit(5)
             ->get();
+
+        //return $pagos_repetidos;
 
         return response()->json([
             'codigos' => $pagos_repetidos->map(function ($dp) {

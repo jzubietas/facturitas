@@ -51,9 +51,9 @@
                         id="titular_movimientos" data-live-search="true">
                     <option value="">---- SELECCIONE TITULAR ----</option>
                     <option value="EPIFANIO SOLANO HUAMAN">EPIFANIO SOLANO HUAMAN</option>
-                    <option value="NIKSER DENIS ORE RIVEROS">NIKSER DENIS ORE RIVEROS</option>
                     <option value="ALFREDO ALEJANDRO GABRIEL MONTALVO">ALFREDO ALEJANDRO GABRIEL MONTALVO</option>
                     <option value="SABINA LACHOS">SABINA LACHOS</option>
+                    <option value="NIKSER DENIS ORE RIVEROS">NIKSER DENIS ORE RIVEROS</option>
                 </select>
             </div>
             <div class="col-lg-4 d-none">
