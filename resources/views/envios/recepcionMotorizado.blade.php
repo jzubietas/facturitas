@@ -119,18 +119,19 @@
     <div class="card w-100 pb-48">
         <div class="card-body p-0">
 
-            <table cellspacing="5" cellpadding="5" class="table-responsive">
-                <tbody class="w-100">
-                <tr class="w-100">
-                    <td>Fecha</td>
-                    <td>
-                        <input type="date" value="{{$fecha_consulta}}" id="fecha_consulta" name="fecha_consulta"
-                               class="form-control" autocomplete="off">
-                    </td>
-                    <td></td>
-                </tr>
-                </tbody>
-            </table>
+
+            <div class="row">
+                <div class="col-6 ">
+                    <input type="date" value="{{$fecha_consulta}}" id="fecha_consulta" name="fecha_consulta"
+                           class="form-control mx-auto" autocomplete="off">
+                </div>
+                <div class="col-6 mx-auto">
+                    <input id="buscador_global" name="buscador_global" value=""
+                           type="text" class="form-control" autocomplete="off"
+                           placeholder="Ingrese su búsqueda" aria-label="Recipient's username" aria-describedby="basic-addon2">
+                </div>
+            </div>
+
             <br>
 
 
@@ -217,12 +218,10 @@
                                                                 <div>
 
                                                                     <h6 class="mb-0">
-                                                                        <button data-toggle="modal"
-                                                                                data-target="#modal-scan-comparador"
-                                                                                class="btn btn-sm btn-option"
-                                                                                data-zona="{{$motorizado->zona}}">
-                                                                            <i class="fa fa-barcode"></i> Comprobar
-                                                                            archivos
+                                                                        <button data-toggle="modal" data-target="#modal-scan-comparador"
+                                                                            class="btn btn-sm btn-option"
+                                                                            data-zona="{{$motorizado->zona}}" data-motorizado="{{$motorizado->id}}" data-vista="">
+                                                                            <i class="fa fa-barcode"></i> Comprobar archivos
                                                                         </button>
                                                                         <button
                                                                             class="btn btn-sm btn-danger exportar_zona"
@@ -556,12 +555,31 @@
                     <script type="text/javascript">
 
                         var codigo_pedido = false;
+                        let tablaPrincipal=null;
+                        let pedidos_escaneados=[];
 
                         $.ajaxSetup({
                             headers: {
                                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                             }
                         });
+
+                        function applySearch(e) {
+                            console.log(e)
+                            //console.log("vacio");
+                            let valor=$("#buscador_global").val();
+                            //valor=(valor||'').trim()
+                            tablaPrincipal.search( valor ).draw();
+                            //tabla_pedidos_principal_centro.search( valor ).draw();
+                            //tabla_pedidos_principal_sur.search( valor ).draw();
+                        }
+
+                        $('#btn_buscar').click(applySearch);
+                        $("#buscador_global").bind('paste',function () {
+                            setTimeout(applySearch,100)
+                        });
+                        $('#buscador_global').change(applySearch);
+                        $('#buscador_global').keydown(applySearch);
 
                         function onQRCodeScanned(scannedText) {
                             console.log(arguments)
@@ -1002,7 +1020,7 @@
                                 $('.tabla-data').DataTable().ajax.reload();
                             });
 
-                            $('#tablaPrincipal').DataTable({
+                            tablaPrincipal=$('#tablaPrincipal').DataTable({
                                 dom: '<"toolbar">frtip',
                                 processing: true,
                                 stateSave: true,
@@ -1330,27 +1348,89 @@
                             $('#modal-scan-comparador').on('show.bs.modal', function (event) {
                                 var button = $(event.relatedTarget)
                                 var zona = button.data('zona');
-
-                                var fd2 = new FormData();
-                                fd2.append('zona', zona);
-                                fd2.append('con', 1);
+                                pedidos_escaneados=[];
+                                $("#codigo_comprobar").val('')
 
                                 $.ajax({
-                                    data: fd2,
-                                    processData: false,
-                                    contentType: false,
+                                    //processData: false,
+                                    //contentType: false,
                                     type: 'POST',
-                                    url: "{{ route('operaciones.confirmarrecepcionmotorizado') }}",
+                                    url: "{{ route('operaciones.comparacionmotorizado') }}",
+                                    data: {
+                                        'fechaconsulta':$("#fecha_consulta").val(),
+                                        'motorizado_id' : button.data('motorizado'),
+                                        'zona' : button.data('zona'),
+                                            },
                                     success: function (data) {
-                                        $("#modal-confirmacion").modal("hide");
-                                        $('#tablaPrincipal').DataTable().ajax.reload();
-
+                                        var lista = "";
+                                        jQuery.each(data.grupo, function(index, item) {
+                                            lista += '<li id="'+item+'" class="item_recepcionado"><i class="fa fa-envelope text-warning mr-8" aria-hidden="true"></i> '+item+'</li>';
+                                            //$('#pedidos-recepcion').append('<li id="'+item+'" class="item_recepcionado">'+item+'</li>');
+                                        });
+                                        $('#pedidos-recepcion').html(lista);
                                     }
                                 });
 
+                                $('#codigo_comprobar').change(function (event) {
+                                    event.preventDefault();
+                                    console.log("evento ");
+
+                                    var codigo_caturado = ($(this).val() || '').trim();
+                                    var codigo_mejorado = codigo_caturado.replace(/['']+/g, '-').replaceAll("'", '-').replaceAll("(", '*');
+                                    console.log("codigo_mejorado"+codigo_mejorado);
+                                    console.log("lista de pedidos escaneados")
+                                    console.log(pedidos_escaneados);
+
+                                    if($.inArray(codigo_mejorado, pedidos_escaneados) !== -1)
+                                    {
+                                        console.log("codigo se encuentra repetido en lista");
+                                        console.log(pedidos_escaneados);
+                                    }else{
+                                        console.log("codigo encontrado");
+                                        $('#'+codigo_mejorado).fadeOut();
+                                        $("#pedidos-escaneados").append('<li><i class="fa fa-check text-success mr-8" aria-hidden="true"></i>'+ codigo_mejorado +'</li>');
+                                        pedidos_escaneados.push(codigo_mejorado);
+                                        console.log("nuevo lista pedidos escaneados")
+                                        console.log(pedidos_escaneados)
+                                        //limpio campo
+                                        $("#codigo_comprobar").val('');
+                                        //comprobar cuantos faltanm
+                                        count_ped_=$('#pedidos-recepcion .item_recepcionado').length;//total pedidos
+                                        count_ped =$('#pedidos-recepcion .item_recepcionado[style*="display: none"]').length;//pe ocultos
+                                        console.log(count_ped);
+                                        let calc_=count_ped_-count_ped;
+                                        if(calc_==0)
+                                        {
+                                            pedidos_escaneados=[];
+                                            //evento cerrar
+                                        }
+                                    }
+
+                                    /*if($.inArray(codigo_mejorado,pedidos_escaneados))
+                                    {
+
+                                    }else{
+
+                                    }*/
+
+                                    //$('.item_recepcionado').each(function(){
+                                        //var ide = $(this).attr('id');
+                                        //valida duplicado
+
+                                        //if(ide == codigo_mejorado){
+
+                                        //}
+
+
+                                    //});
+/*
+                                    $('#'+codigo_mejorado).fadeOut();
+                                    $("#pedidos-escaneados").append('<li>'+ codigo_mejorado +'</li>');
+
+ */
+                                    //return false;
+                                });
                             });
-
-
 
                             $('#modal-confirmacion').on('show.bs.modal', function (event) {
                                 var button = $(event.relatedTarget)
@@ -1582,7 +1662,7 @@
 
                             $("#download_rotulos").click(function () {
                                 const url = $(this).data('href')
-                                window.open(url + '?fecha_salida=' + $("#fecha_consulta").val(), '_blank');
+                                window.open(url+'?fecha_salida='+$("#fecha_consulta").val(), '_blank');
                             })
 
                         });

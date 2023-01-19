@@ -686,12 +686,14 @@ class OperacionController extends Controller
                         $btn[] = '<a class="btn btn-success btn-sm" href="" data-target="#modal-envio" data-envio=' . $pedido->id . ' data-toggle="modal" >Enviar</a><br>';
                         $btn[] = '<a class="btn btn-dark btn-sm" href="" data-target="#modal-sinenvio" data-sinenvio="' . $pedido->id . '" data-toggle="modal" >Sin envío</a><br>';
                     }
-                }
-                if(\Str::contains(\Str::lower($pedido->condicion_envio),'courier')) {
-                    $btn[] = '<button data-toggle="tooltip" data-placement="top" title="El sobre ya ah sido recivido en currier,  solo el currier tiene permiso de revertir" disabled class="btn btn-disabled btn-success btn-sm" data-target="#modal-revertir" data-revertir="' . $pedido->id . '" data-codigo="' . $pedido->codigo . '" data-toggle="modal" >Revertir</button>';
-                }else{
-                    $btn[] = '<a class="btn btn-success btn-sm" href="" data-target="#modal-revertir" data-revertir="' . $pedido->id . '" data-codigo="' . $pedido->codigo . '" data-toggle="modal" >Revertir</a>';
                 }*/
+                //\Str::contains(\Str::lower($pedido->condicion_envio),'courier')
+                if($pedido->condicion_envio_code==Pedido::ENVIO_COURIER_JEFE_OPE_INT    ) {
+                    $btn[] = '<a class="btn btn-success btn-sm" href="" data-target="#modal-revertir-ajefeop" data-revertir="' . $pedido->id . '" data-codigo="' . $pedido->codigo . '" data-toggle="modal" >Revertir</a>';
+                    //$btn[] = '<button data-toggle="tooltip" data-placement="top" title="El sobre ya ah sido recivido en currier,  solo el currier tiene permiso de revertir" disabled class="btn btn-disabled btn-success btn-sm" data-target="#modal-revertir" data-revertir="' . $pedido->id . '" data-codigo="' . $pedido->codigo . '" data-toggle="modal" >Revertir</button>';
+                }else{
+
+                }
                 return "<div class='d-flex'>" . join('', $btn) . "</div>";
             })
             ->rawColumns(['action','condicion_envio'])
@@ -1712,28 +1714,28 @@ class OperacionController extends Controller
 
         $pedido->update([
             //'envio' => '0',
-            'condicion_envio' => Pedido::ENVIADO_OPE,
-            'condicion_envio_code' => Pedido::ENVIADO_OPE_INT,
+            'condicion_envio' => Pedido::RECIBIDO_JEFE_OPE,
+            'condicion_envio_code' => Pedido::RECIBIDO_JEFE_OPE_INT,
             'condicion_envio_at'=>now(),
-            'condicion' => Pedido::ENVIADO_OPE,
-            'condicion_code' => Pedido::ENVIADO_OPE_INT,
+            'condicion' => Pedido::RECIBIDO_JEFE_OPE,
+            'condicion_code' => Pedido::RECIBIDO_JEFE_OPE_INT,
             'modificador' => 'USER' . Auth::user()->id
         ]);
 
-        $pedido->detallePedidos()->activo()->update([
+        /*$pedido->detallePedidos()->activo()->update([
             "cant_compro" => 0
         ]);
         //liberar adjuntos
         $imagenesatencion_ = ImagenAtencion::where("pedido_id", $request->ajefeoperevertir);//->where("confirm", '0');
         $imagenesatencion_->update([
             'estado' => '0'
-        ]);
+        ]);*/
 
         PedidoMovimientoEstado::where('pedido', $request->ajefeoperevertir)->delete();
 
         PedidoMovimientoEstado::create([
             'pedido' => $request->ajefeoperevertir,
-            'condicion_envio_code' => Pedido::ENVIADO_OPE_INT,
+            'condicion_envio_code' => Pedido::RECIBIDO_JEFE_OPE_INT,
             'notificado' => 0
         ]);
 

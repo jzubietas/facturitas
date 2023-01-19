@@ -921,4 +921,27 @@ Ver Rotulo</a>')
             'grupo' => $grupo,
         ]);
     }
+
+
+    public function ComparacionMotorizado(Request $request)
+    {
+
+
+            $grupos = Pedido::select([
+                'pedidos.codigo'])
+                ->join('direccion_grupos', 'direccion_grupos.id', 'pedidos.direccion_grupo')
+                ->where('direccion_grupos.estado',1)
+                ->where('direccion_grupos.condicion_envio_code',19)
+                ->whereDate('direccion_grupos.fecha_salida', Carbon::parse($request->fechaconsulta))
+                ->where('direccion_grupos.motorizado_id', $request->motorizado_id)
+                ->where('direccion_grupos.motorizado_status', 0)
+                //->where('direccion_grupos.distribucion', 'LIKE', '%' . $request->zona . '%')
+                ->activo()
+                ->get();
+
+                return response()->json([
+                    'grupo' => $grupos->pluck('codigo'),
+                ]);
+
+        }
 }
