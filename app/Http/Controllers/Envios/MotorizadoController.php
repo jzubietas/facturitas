@@ -785,9 +785,9 @@ class MotorizadoController extends Controller
 
     }
 
+
     public function EnviosrecepcionmotorizadotablaGeneral(Request $request)
     {
-
         $tipo_consulta = $request->consulta;
         $fecha_actual = Carbon::now()->startOfDay();
         $fecha_consulta = $request->fechaconsulta;
@@ -848,37 +848,33 @@ class MotorizadoController extends Controller
                 ->where('direccion_grupos.distribucion', 'LIKE', '%' . $request->ZONA . '%')
                 ->activo();
 
+            return Datatables::of(DB::table($grupos))
+                ->addColumn('condicion_envio_color', function ($grupo) {
+                    return Pedido::getColorByCondicionEnvio($grupo->condicion_envio);
+                })
+                ->editColumn('condicion_envio', function ($grupo) {
+                    $color = Pedido::getColorByCondicionEnvio($grupo->condicion_envio);
 
-if($request->con == 1){
-    return response(json_encode($grupos));
-}else{
-    return Datatables::of(DB::table($grupos))
-        ->addColumn('condicion_envio_color', function ($grupo) {
-            return Pedido::getColorByCondicionEnvio($grupo->condicion_envio);
-        })
-        ->editColumn('condicion_envio', function ($grupo) {
-            $color = Pedido::getColorByCondicionEnvio($grupo->condicion_envio);
+                    $badge_estado = '';
+                    $badge_estado .= '<span class="badge badge-dark p-8" style="color: #fff; background-color: #347cc4; font-weight: 600; margin-bottom: -2px;border-radius: 4px 4px 0px 0px; font-size:8px;  padding: 4px 4px !important; font-weight: 500;">Direccion agregada</span>';
 
-            $badge_estado = '';
-            $badge_estado .= '<span class="badge badge-dark p-8" style="color: #fff; background-color: #347cc4; font-weight: 600; margin-bottom: -2px;border-radius: 4px 4px 0px 0px; font-size:8px;  padding: 4px 4px !important; font-weight: 500;">Direccion agregada</span>';
-
-            $badge_estado .= '<span class="badge badge-success" style="background-color: #00bc8c !important;
+                    $badge_estado .= '<span class="badge badge-success" style="background-color: #00bc8c !important;
                     padding: 4px 8px !important;
                     font-size: 8px;
                     margin-bottom: -4px;
                     color: black !important;">Con ruta</span>';
-            $badge_estado .= '<span class="badge badge-success" style="background-color: ' . $color . '!important;">' . $grupo->condicion_envio . '</span>';
-            return $badge_estado;
-        })
-        ->editColumn('distrito', function ($pedido) {
+                    $badge_estado .= '<span class="badge badge-success" style="background-color: ' . $color . '!important;">' . $grupo->condicion_envio . '</span>';
+                    return $badge_estado;
+                })
+                ->editColumn('distrito', function ($pedido) {
 
-            if ($pedido->distribucion == 'OLVA') {
-                $html = "";
-                if ($pedido->observacion) {
-                    $html .= collect(explode(',', $pedido->observacion))
-                        ->trim()
-                        ->unique()
-                        ->map(fn($observacion) => '<a class="btn btn-icon p-0" target="_blank" href="' . \Storage::disk('pstorage')->url($observacion) . '">
+                    if ($pedido->distribucion == 'OLVA') {
+                        $html = "";
+                        if ($pedido->observacion) {
+                            $html .= collect(explode(',', $pedido->observacion))
+                                ->trim()
+                                ->unique()
+                                ->map(fn($observacion) => '<a class="btn btn-icon p-0" target="_blank" href="' . \Storage::disk('pstorage')->url($observacion) . '">
 <i class="fa fa-file-pdf"></i>
 Ver Rotulo</a>')
                                 ->join('');
@@ -890,10 +886,10 @@ Ver Rotulo</a>')
                 ->addColumn('action', function ($direcciongrupo) use ($fecha_consulta, $fecha_actual) {
                     $btn = '';
 
-            $btn .= '<ul class="list-unstyled pl-0">';
+                    $btn .= '<ul class="list-unstyled pl-0">';
 
-                        $count = Pedido::query()->where('direccion_grupo', $direcciongrupo->id)->count();
-                        $btn .= ' <li>
+                    $count = Pedido::query()->where('direccion_grupo', $direcciongrupo->id)->count();
+                    $btn .= ' <li>
                                             <button
                                             data-recibido="0"
                                             data-btncolor="red"
@@ -904,7 +900,12 @@ Ver Rotulo</a>')
                                             data-toggle="jqconfirm" class="btn btn-danger btn-sm mt-8"><i class="fa fa-times-circle-o" aria-hidden="true"></i>Retornar</button>
                                         </li>';
 
+                    $btn .= '</ul>';
 
+                    return $btn;
+                })
+                ->rawColumns(['action', 'condicion_envio', 'distrito'])
+                ->make(true);
         }
     }
 

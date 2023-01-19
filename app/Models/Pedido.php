@@ -48,10 +48,14 @@ class Pedido extends Model
     const ENTREGADO_CLIENTE = 'ENTREGADO - CLIENTE'; // 10
     const ENTREGADO_SIN_SOBRE_OPE = 'ATENDIDO: ENTREGADO SIN SOBRE - OPE'; // 13
     const ENTREGADO_SIN_SOBRE_CLIENTE = 'ENTREGADO SIN SOBRE - CLIENTE'; // 14
+
+    const ENTREGADO_SIN_ENVIO_CLIENTE = 'ENTREGADO SIN ENVIO - CLIENTE'; // 20
     const CONFIRM_MOTORIZADO = 'PRE* ENTREGADO A CLIENTE - MOTORIZADO'; // 16/PRE ENTREGADO A CLIENTE - MOTORIZADO  //CONFIRMACION - MOTORIZADO
     const CONFIRM_VALIDADA_CLIENTE = 'CONFIRMACION VALIDADA - CLIENTE'; // 17
     const RECEPCION_MOTORIZADO = 'RECEPCION - MOTORIZADO'; // 18
     const ENVIO_MOTORIZADO_COURIER = 'ENVIO A MOTORIZADO - COURIER'; // 19
+
+    const ENTREGADO_PROVINCIA = 'ENTREGADO_PROVINCIA'; // 19
 
     /**************
      * CONSTANTES CONDICION ENVIO NUMERICO
@@ -69,10 +73,13 @@ class Pedido extends Model
     const ENTREGADO_CLIENTE_INT = 10;
     const ENTREGADO_SIN_SOBRE_OPE_INT = 13;
     const ENTREGADO_SIN_SOBRE_CLIENTE_INT = 14;
+
+    const ENTREGADO_SIN_ENVIO_CLIENTE_INT = 20;
     const CONFIRM_MOTORIZADO_INT = 16;
     const CONFIRM_VALIDADA_CLIENTE_INT = 17;
     const RECEPCION_MOTORIZADO_INT = 18;
     const ENVIO_MOTORIZADO_COURIER_INT = 19; // 19
+    const ENTREGADO_PROVINCIA_INT = 21; // 19
 
     const ESTADO_MOTORIZADO_OBSERVADO = 1;
     const ESTADO_MOTORIZADO_NO_CONTESTO = 2;
@@ -396,8 +403,10 @@ class Pedido extends Model
     {
         $condicion_envio = \Str::lower($condicion_envio ?? '');
 
-        if (\Str::contains($condicion_envio, "ope")) {
-            return '#ffc107';
+        if (\Str::contains($condicion_envio, "olva")) {
+            return '#ffe007';
+        }elseif (\Str::contains($condicion_envio, "ope")) {
+            return '#23cafd';
         } elseif (\Str::contains($condicion_envio, "courier") || \Str::contains($condicion_envio, "motorizado")) {
             return '#f97100';
         } elseif (\Str::contains($condicion_envio, "cliente")) {
