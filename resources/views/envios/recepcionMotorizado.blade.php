@@ -870,18 +870,18 @@
                                     addEventButtonRetornar(row, data)
                                 },
                                 'columnDefs': [
-                                    {responsivePriority: 3, targets: 1},
-                                    {responsivePriority: 2, targets: 2},
-                                    {responsivePriority: 1, targets: 3},
-                                    {responsivePriority: 5, targets: 0},
-                                    {responsivePriority: 4, targets: 4}
+                                    {responsivePriority: 1, targets: 0},
+                                    {responsivePriority: 5, targets: 1},
+                                    {responsivePriority: 3, targets: 2},
+                                    {responsivePriority: 4, targets: 3},
+                                    {responsivePriority: 2, targets: 4}
                                 ],
                                 columns: [
                                     {data: 'codigos', name: 'codigos',},
                                     {data: 'celular', name: 'celular',},
                                     {data: 'distribucion', name: 'distribucion',},
                                     {data: 'distrito', name: 'distrito',},
-                                    {data: 'action', name: 'action',},
+                                    {data: 'action', name: 'action',sWidth:'5%'},
 
                                 ],
                                 language: {

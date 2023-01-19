@@ -901,7 +901,8 @@ Ver Rotulo</a>')
                                             data-count="' . $count . '"
                                             data-target="' . route('envios.recepcionmotorizado.pedidos', $direcciongrupo->id) . '"
                                             data-target-post="' . route('envios.recepcionarmotorizado', ['hiddenEnvio' => $direcciongrupo->id, 'hiddenAccion' => 'retornar_para_reparto']) . '"
-                                            data-toggle="jqconfirm" class="btn btn-danger btn-sm mt-8"><i class="fa fa-times-circle-o" aria-hidden="true"></i>Retornar</button>
+                                            data-toggle="jqconfirm" class="btn btn-danger btn-sm mt-8"
+                                            style="font-size: 8px;"><i class="fa fa-times-circle-o" aria-hidden="true"></i>Retornar</button>
                                         </li>';
 
                     $btn .= '</ul>';
