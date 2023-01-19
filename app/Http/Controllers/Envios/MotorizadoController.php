@@ -935,7 +935,7 @@ Ver Rotulo</a>')
                 ->whereDate('direccion_grupos.fecha_salida', Carbon::parse($request->fechaconsulta))
                 ->where('direccion_grupos.motorizado_id', $request->motorizado_id)
                 ->where('direccion_grupos.motorizado_status', 0)
-                ->where('direccion_grupos.distribucion', 'LIKE', '%' . $request->zona . '%')
+                //->where('direccion_grupos.distribucion', 'LIKE', '%' . $request->zona . '%')
                 ->activo()
                 ->get();
 
