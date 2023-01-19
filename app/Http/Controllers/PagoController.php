@@ -329,9 +329,9 @@ class PagoController extends Controller
 
         $titulares = [
             "EPIFANIO SOLANO HUAMAN" => 'EPIFANIO SOLANO HUAMAN',
-            "NIKSER DENIS ORE RIVEROS" => 'NIKSER DENIS ORE RIVEROS',
             "ALFREDO ALEJANDRO GABRIEL MONTALVO" => 'ALFREDO ALEJANDRO GABRIEL MONTALVO',
             "SABINA LACHOS" => 'SABINA LACHOS',
+            "NIKSER DENIS ORE RIVEROS" => 'NIKSER DENIS ORE RIVEROS',
         ];
 
         return view('pagos.create', compact('idcliente_request', 'clientes', 'pedidos', 'bancos', 'tipotransferencia', 'titulares', 'users', 'bancos_procedencia'));
@@ -1572,7 +1572,9 @@ class PagoController extends Controller
 
         $titulares = [
             "EPIFANIO SOLANO HUAMAN" => 'EPIFANIO SOLANO HUAMAN',
-            "NIKSER DENIS ORE RIVEROS" => 'NIKSER DENIS ORE RIVEROS'
+            "ALFREDO ALEJANDRO GABRIEL MONTALVO" => 'ALFREDO ALEJANDRO GABRIEL MONTALVO',
+            "SABINA LACHOS" => 'SABINA LACHOS',
+            "NIKSER DENIS ORE RIVEROS" => 'NIKSER DENIS ORE RIVEROS',
         ];
 
         return view('pagos.edit', compact('pago', 'pagos', 'clientes', 'pedidos', 'bancos', 'listaPedidos', 'listaPagos', 'tipotransferencia', 'titulares', 'bancos_procedencia'));
@@ -2376,7 +2378,9 @@ class PagoController extends Controller
 
         $titulares = [
             "EPIFANIO SOLANO HUAMAN" => 'EPIFANIO SOLANO HUAMAN',
-            "NIKSER DENIS ORE RIVEROS" => 'NIKSER DENIS ORE RIVEROS'
+            "ALFREDO ALEJANDRO GABRIEL MONTALVO" => 'ALFREDO ALEJANDRO GABRIEL MONTALVO',
+            "SABINA LACHOS" => 'SABINA LACHOS',
+            "NIKSER DENIS ORE RIVEROS" => 'NIKSER DENIS ORE RIVEROS',
         ];
 
         $pagos = Pago::join('users as u', 'pagos.user_id', 'u.id')
