@@ -319,6 +319,7 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     Route::get('operaciones.bancarizacion', [OperacionController::class, 'Bancarizacion'])->name('operaciones.bancarizacion');
     Route::get('operaciones.bancarizaciontabla', [OperacionController::class, 'Bancarizaciontabla'])->name('operaciones.bancarizaciontabla');
     Route::post('operaciones.atenderid', [OperacionController::class, 'Atenderid'])->name('operaciones.atenderid');
+    Route::post('operaciones.correccionajax', [OperacionController::class, 'CorreccionAccion'])->name('operaciones.correccionajax');
 
     Route::post('envios.recepcionmotorizado.iniciar_ruta_masiva', [EnvioController::class, 'IniciarRutaMasiva'])->name('envios.recepcionmotorizado.iniciar_ruta_masiva');
 

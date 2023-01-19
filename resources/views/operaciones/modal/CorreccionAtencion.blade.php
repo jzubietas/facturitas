@@ -75,19 +75,12 @@
                                       color:#D9D9D9;
                                   }
                               </style>
-                              <textarea name="sustento" id="sustento_data" class="form-control" cols="30" rows="5" placeholder="El asesor ya envio los archivos adjuntos al cliente, justifique porque esta editando el adjuntar archivos. (Ese sustento se le pasara al cliente)"></textarea>
+                              <textarea name="sustento" id="sustento_data" class="form-control" cols="30" rows="5"
+                                        placeholder="El asesor ya envio los archivos adjuntos al cliente, justifique porque esta
+                                        editando el adjuntar archivos. (Ese sustento se le pasara al cliente)">
+                              </textarea>
                           </div>
-                        <div class="row">
 
-
-                          <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
-                            {!! Form::label('condicion', 'Estado') !!}
-
-                            <select name="condicion" class="form-control" id="condicion">
-                              <option value="{{\App\Models\Pedido::ATENDIDO_INT}}" >{{\App\Models\Pedido::ATENDIDO_OPE}}</option>
-                            </select>
-                          </div>
-                        </div>
                       </div>
                     </div>
                   </div>

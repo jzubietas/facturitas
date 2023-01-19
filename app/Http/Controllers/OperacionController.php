@@ -659,7 +659,7 @@ class OperacionController extends Controller
 
                 if(in_array($pedido->condicion_envio_code,[Pedido::RECIBIDO_JEFE_OPE_INT,Pedido::ENVIADO_OPE_INT]))
                 {
-                    $btn[] = '<a href="" class="btn-sm dropdown-item" data-target="#modal-correccion-op" data-adjuntos="' . $pedido->adjuntos . '" data-correccion=' . $pedido->id . ' data-codigo=' . $pedido->codigos . ' data-toggle="modal" ><i class="fa fa-deaf"></i> Correccion</a>';
+                    $btn[] = '<a href="#" data-backdrop="static" data-keyboard="false" class="btn-sm dropdown-item" data-target="#modal-correccion-op" data-adjuntos="' . $pedido->adjuntos . '" data-correccion=' . $pedido->id . ' data-codigo=' . $pedido->codigos . ' data-toggle="modal" ><i class="fa fa-deaf"></i> Correccion</a>';
                 }
 
                 /*if(\auth()->user()->can('operacion.enviar')){
@@ -937,6 +937,60 @@ class OperacionController extends Controller
                 'cant_compro' => $request->cant_compro,
             ]);
         } */
+
+        return redirect()->route('operaciones.poratender')->with('info', 'actualizado');
+    }
+
+    public function CorreccionAccion(Request $request)
+    {
+        $hiddenAtender = $request->correccion;
+
+        $fecha = Carbon::now();
+
+        $pedido = Pedido::where("id", $hiddenAtender)->first();
+        if ($pedido->imagenAtencion()->activo()->count() < 1) {
+            abort(402);
+        }
+
+        $pedido->update([
+            'condicion' => Pedido::$estadosCondicionEnvioCode[$request->condicion],
+            'condicion_code' => $request->condicion,
+            'condicion_envio' => Pedido::$estadosCondicionEnvioCode[$request->condicion],
+            'condicion_envio_code' => $request->condicion,
+            'condicion_envio_at'=>now(),
+            'sustento_adjunto' => $request->sustento,
+            'modificador' => 'USER' . Auth::user()->id,
+            'da_confirmar_descarga' => 0,
+        ]);
+
+        $pedido->detallePedidos()->activo()->update([
+            "cant_compro" => $request->cant_compro
+        ]);
+
+        PedidoMovimientoEstado::create([
+            'pedido' => $request->correccion,
+            'condicion_envio_code' => $request->condicion,
+            'notificado' => 0
+        ]);
+
+        /*if ($request->condicion == "3") {
+            $pedido->update([
+                'notificacion' => 'Pedido atendido'
+            ]);
+
+            event(new PedidoAtendidoEvent($pedido));
+        }*/
+
+
+        $destinationPath = base_path('public/storage/adjuntos/');
+
+        $cont = 0;
+
+        $pedido->imagenAtencion()
+            ->where("confirm", '0')
+            ->update([
+                'confirm' => '1'
+            ]);
 
         return redirect()->route('operaciones.poratender')->with('info', 'actualizado');
     }
