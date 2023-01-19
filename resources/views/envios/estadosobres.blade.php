@@ -443,6 +443,7 @@
         let tablaAnulados=null;
         let tablaAnulados_courier=null;
         let timeout;
+        let tablaprincipalrevertiraenviocourier=null;
         $(document).ready(function () {
 
             $('#modal-imagen').on('show.bs.modal', function (event) {
@@ -894,15 +895,102 @@
                 var idunico = button.data('revertir');
                 var idunicoc = button.data('codigo');
                 console.log(idunico)
+
+                //$("#direcciongrupo").val(direcciongrupo);
+                //$("#observaciongrupo").val(observaciongrupo);
+                if (tablaprincipalrevertiraenviocourier != null) {
+                    tablaprincipalrevertiraenviocourier.destroy();
+                }
+
+                tablaprincipalrevertiraenviocourier=$('#tablaPrincipalrevertiraenviocourier').DataTable({
+                    responsive: true,
+                    "bPaginate": false,
+                    "bFilter": false,
+                    "bInfo": false,
+                    'ajax': {
+                        url: "{{ route('cargar.pedidosgrupotabla') }}",
+                        'data': {"direcciongrupo": idunico},
+                        "type": "get",
+                    },
+                    'columnDefs': [{
+                        'targets': [0],
+                        'orderable': false,
+                    }],
+                    columns: [
+                        {
+                            "data": "pedido_id",
+                            'targets': [0],
+                            'checkboxes': {
+                                'selectRow': true
+                            },
+                            defaultContent: '',
+                            orderable: false,
+                        },
+                        {data: 'codigo', name: 'codigo',},
+                        {
+                            "data": 'nombre_empresa',
+                            "name": 'nombre_empresa',
+                        },
+                    ],
+                    'select': {
+                        'style': 'multi',
+                        selector: 'td:first-child'
+                    },
+                });
+
                 $("#modal-revertir-aenviocourier .textcode").html(idunicoc)
                 $("#aenviocourierrevertir").val(idunico);
             });
 
             $(document).on("submit", "#formulariorevertiraenviocourier", function (evento) {
                 evento.preventDefault();
+
+                if (!tablaprincipalrevertiraenviocourier) {
+                    console.log("var tabla_pedido is null")
+                    return;
+                }
+                var rows_selected = tablaprincipalrevertiraenviocourier.column(0).checkboxes.selected();
+                var $direcciongrupo = $("#aenviocourierrevertir").val();
+                var pedidos_revertir = [];
+                $.each(rows_selected, function (index, rowId) {
+                    console.log("ID PEDIDO  es " + rowId);
+                    pedidos_revertir.push(rowId);
+                });
+                var let_pedidos = pedidos_revertir.length;
+                if (let_pedidos == 0) {
+                    Swal.fire(
+                        'Error',
+                        'Debe elegir un pedido',
+                        'warning'
+                    )
+                    return;
+                }
+                var $pedidos = pedidos_revertir.join(',');
+                console.log($pedidos);
+                console.log($direcciongrupo);
+                var fd2 = new FormData();
+
+
                 var fd = new FormData();
-                fd.append('aenviocourierrevertir', $("#aenviocourierrevertir").val());
-                fd.append('tipoajax','grupo');
+                fd2.append('direcciongrupo', $direcciongrupo);
+                fd2.append('pedidos', $pedidos);
+                fd2.append('observaciongrupo', '');
+                fd2.append('tipoajax',2);
+
+                $.ajax({
+                    data: fd2,
+                    processData: false,
+                    contentType: false,
+                    type: 'POST',
+                    url: "{{ route('sobres.desvinculargrupo') }}",
+                    success: function (data) {
+                        console.log(data);
+                        $("#modal-revertir-aenviocourier").modal("hide");
+                        $("#tablaEntregados").DataTable().ajax.reload();
+                    }
+                });
+
+
 
                 $.ajax({
                     data: fd,
