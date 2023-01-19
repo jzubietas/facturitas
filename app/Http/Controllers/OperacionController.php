@@ -471,6 +471,10 @@ class OperacionController extends Controller
             ->addColumn('action', function ($pedido) {
                 $btn = [];
 
+                $btn[] = '<div class="row">';
+                $btn[] = '<div class="col-12 d-flex justify-content-start text-left m-0 p-0">';
+                $btn[] = '<ul class="text-left list-inline text-left" aria-labelledby="dropdownMenuButton" >';
+
                 if (auth()->user()->can('operacion.PDF')):
                     $btn[] = '<a href="'.route("pedidosPDF", $pedido->id).'" class="btn-sm dropdown-item" target="_blank"><i class="fa fa-file-pdf text-primary"></i> PDF</a>';
                 endif;
@@ -481,21 +485,25 @@ class OperacionController extends Controller
                 endif;*/
 
                 if($pedido->condicion_envio_code==5):
-                    $btn[]='<a href="" data-target="#modal-envio-op" data-group="1" class="btn-sm dropdown-item" data-envio='.$pedido->id.' data-code="'.$pedido->codigos.'" data-toggle="modal" ><i class="fa fa-envelope text-success" aria-hidden="true"></i> Recepcion</a>';
-                    $btn[]='<a data-target="#" class="btn-sm pl-16 text-gray mb-0" data-envio='.$pedido->id.' data-code="'.$pedido->codigos.'" data-toggle="" disabled><i class="fa fa fa-motorcycle text-gray" aria-hidden="true"></i> ENVIO A COURIER</a>';
-                    $btn[]='<a href="" data-target="#modal-revertir" class="btn-sm dropdown-item" data-revertir='.$pedido->id.'  data-codigo='.$pedido->codigo.' data-toggle="modal" ><i class="fa fa-times text-danger" aria-hidden="true"></i> Revertir</a>';
+                    $btn[]='<li><a href="" data-target="#modal-envio-op" data-group="1" class="btn-sm dropdown-item" data-envio='.$pedido->id.' data-code="'.$pedido->codigos.'" data-toggle="modal" ><i class="fa fa-envelope text-success" aria-hidden="true"></i> Recepcion</a></li>';
+                    $btn[]='<li><p data-target="#" class="btn-sm pl-16 text-gray mb-0" data-envio='.$pedido->id.' data-code="'.$pedido->codigos.'" data-toggle="" disabled><i class="fa fa fa-motorcycle text-gray" aria-hidden="true"></i> ENVIO A COURIER</p></li>';
+                    $btn[]='<li><a href="" data-target="#modal-revertir" class="btn-sm dropdown-item" data-revertir='.$pedido->id.'  data-codigo='.$pedido->codigo.' data-toggle="modal" ><i class="fa fa-times text-danger" aria-hidden="true"></i> Revertir</a></li>';
                 endif;
 
                 if($pedido->condicion_envio_code==6):
-                    $btn[]='<a data-target="text-gray" class="btn-sm pl-16 mb-0" data-envio='.$pedido->id.' data-code="'.$pedido->codigos.'" data-toggle="" disabled><i class="fa fa-envelope text-gray " aria-hidden="true"></i> Recepcion</a>';
-                    $btn[]='<a href="" data-target="#modal-envio-op" data-group="2" class="btn-sm dropdown-item " data-envio='.$pedido->id.' data-code="'.$pedido->codigos.'" data-toggle="modal" ><i class="fa fa fa-motorcycle text-success" aria-hidden="true"></i> ENVIO A COURIER</a>';
-                    $btn[]='<a href="" data-target="#modal-revertir" class="btn-sm dropdown-item" data-revertir='.$pedido->id.'  data-codigo='.$pedido->codigo.' data-toggle="modal" ><i class="fa fa-times text-danger" aria-hidden="true"></i> Revertir</a>';
+                    $btn[]='<li><p data-target="text-gray" class="btn-sm pl-16 mb-0" data-envio='.$pedido->id.' data-code="'.$pedido->codigos.'" data-toggle="" disabled><i class="fa fa-envelope text-gray " aria-hidden="true"></i> Recepcion</p></li>';
+                    $btn[]='<li><a href="" data-target="#modal-envio-op" data-group="2" class="btn-sm dropdown-item " data-envio='.$pedido->id.' data-code="'.$pedido->codigos.'" data-toggle="modal" ><i class="fa fa fa-motorcycle text-success" aria-hidden="true"></i> ENVIO A COURIER</a></li>';
+                    $btn[]='<li><a href="" data-target="#modal-revertir" class="btn-sm dropdown-item" data-revertir='.$pedido->id.'  data-codigo='.$pedido->codigo.' data-toggle="modal" ><i class="fa fa-times text-danger" aria-hidden="true"></i> Revertir</a></li>';
                 endif;
 
                 if($pedido->condicion_envio_code == 13):
-                    $btn[]='<a href="" class="btn-sm dropdown-item" data-target="#modal-envio" data-code="'.$pedido->codigos.'" data-envio='.$pedido->id.' data-toggle="modal" ><i class="fa fa-check text-success" aria-hidden="true"></i> Recepcion</a>';
-                    $btn[]='<a href="" data-target="#modal-revertir" class="btn-sm dropdown-item" data-revertir='.$pedido->id.' data-codigo='.$pedido->codigo.' data-toggle="modal" ><i class="fa fa-times text-danger" aria-hidden="true"></i> Revertir</a>';
+                    $btn[]='<li><a href="" class="btn-sm dropdown-item" data-target="#modal-envio" data-code="'.$pedido->codigos.'" data-envio='.$pedido->id.' data-toggle="modal" ><i class="fa fa-check text-success" aria-hidden="true"></i> Recepcion</a></li>';
+                    $btn[]='<li><a href="" data-target="#modal-revertir" class="btn-sm dropdown-item" data-revertir='.$pedido->id.' data-codigo='.$pedido->codigo.' data-toggle="modal" ><i class="fa fa-times text-danger" aria-hidden="true"></i> Revertir</a></li>';
                 endif;
+
+                $btn[] = '<div class="row">';
+                $btn[] = '<div class="col-12 d-flex justify-content-start text-left m-0 p-0">';
+                $btn[] = '<ul class="text-left list-inline text-left" aria-labelledby="dropdownMenuButton" >';
 
                 return "<ul class='d-flex'>" . join('', $btn) . "</ul>";
             })
