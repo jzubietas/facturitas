@@ -11,7 +11,7 @@
             <form id="formulariorevertiraenviocourier" name="formulariorevertiraenviocourier" enctype="multipart/form-data">
                 <input type="hidden" id="aenviocourierrevertir" name="aenviocourierrevertir">
                 <div class="modal-body">
-                    <p>Confirme si desea revertir el pedido <strong class="textcode">PED000</strong> a Envio Courier</p>
+                    <p>Confirme si desea revertir el o los pedidos <strong class="textcode d-none">PED000</strong> a Envio Courier</p>
                     <p class="d-none">Recuerde que tiene <strong class="textcantadjunto"></strong> archivos adjunto(s)</p>
 
                     <div class="row">
