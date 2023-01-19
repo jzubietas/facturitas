@@ -81,7 +81,7 @@
                     </div>
 
                     <div class="switch_box box_1">
-                        <input type="checkbox" class="switch_1" id="modo_fast">
+                        <input type="checkbox" class="switch_1" id="modo_fast" @if($reparto == 1) checked @endif>
                         <i class="fa fa-bolt ml-8 text-gray" aria-hidden="true"></i>
                     </div>
 
@@ -134,12 +134,16 @@
          * ESCANEAR PEDIDO
          */
         var codigos_agregados = [];
+
         $('#modal-escanear').on('shown.bs.modal', function () {
             $('#codigo_confirmar').focus();
             $('#codigo_accion').val("fernandez");
+
             $('#titulo-scan').html("Escanear para confirmar - <span class='text-success'>{{$moduleTitle}}</span>");
             $('#pedidos-procesados').html('')
             $('#respuesta_barra').html('');
+
+
 
             $('#modo_fast').on('change', function(){
                 if($(this).is(':checked')){
@@ -150,12 +154,6 @@
                     $('#close-scan').fadeIn();
                 }
             });
-            /*
-            $('#modal-escanear').on('click', function () {
-                console.log("focus");
-                $('#codigo_confirmar').focus();
-                return false;
-            });*/
         })
 
         $('#modal-escanear').on('hidden.bs.modal', function () {
