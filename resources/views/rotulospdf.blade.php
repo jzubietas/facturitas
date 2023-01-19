@@ -61,7 +61,7 @@ page-break-after: always;
                 </td>
             </tr>
         </table>
-        <div class="footer" style="text-align: left; padding-left: 8mm; width:100%; white-space: nowrap">
+        <div class="footer" style="text-align: left; padding-left: 8mm; width:100%; max-width: 480px; white-space: nowrap">
             <ul>
                 @foreach($rotulo['producto'] as $grupos)
                     <li syle="font-size:20px;">{{$grupos}}</li>
