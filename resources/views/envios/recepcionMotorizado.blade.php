@@ -1209,8 +1209,29 @@
                                             //$('#pedidos-recepcion').append('<li id="'+item+'" class="item_recepcionado">'+item+'</li>');
                                         });
                                         $('#pedidos-recepcion').html(lista);
+
+                                        $('#codigo_comprobar').change(function (event) {
+                                            event.preventDefault();
+
+                                            var codigo_caturado = ($(this).val() || '').trim();
+                                            var codigo_mejorado = codigo_caturado.replace(/['']+/g, '-').replaceAll("'", '-').replaceAll("(", '*');
+
+                                            $('.item_recepcionado').each(function(){
+                                                var ide = $(this).attr('id');
+                                                if(ide == codigo_mejorado){
+                                                    console.log("codigo encontrado");
+                                                    $('#'+codigo_mejorado).fadeOut();
+                                                    $("#pedidos-escaneados").append('<li><i class="fa fa-check text-success mr-8" aria-hidden="true"></i>'+ codigo_mejorado +'</li>');
+                                                }else{
+
+                                                }
+                                            });
+                                            return false;
+                                        });
                                     }
                                 });
+<<<<<<< HEAD
+=======
 
                                 $('#codigo_comprobar').change(function (event) {
                                     event.preventDefault();
@@ -1271,6 +1292,7 @@
  */
                                     //return false;
                                 });
+>>>>>>> prod
                             });
 
                             $('#modal-confirmacion').on('show.bs.modal', function (event) {

@@ -2761,16 +2761,20 @@ class EnvioController extends Controller
                 }
 
                 if ($pedido->pendiente_anulacion == 1) {
-                    return response()->json(['html' => "Este pedido se encuentra <b>pendiente de anulación</b>", 'class' => "text-danger", 'codigo' => 0, 'error' => 6, 'msj_error' => 0]);
+                    return response()->json(['html' => "Este pedido se encuentra <b>pendiente de anulación</b>", 'class' => "text-danger", 'codigo' => 0, 'error' => 6, 'msj_error' => 0, 'estado' => $pedido->condicion_envio]);
                 }
 
                 if ($pedido->estado == 0) {
-                    return response()->json(['html' => "Este pedido Se encuentra actualmente anulado", 'class' => "text-danger", 'codigo' => 0, 'error' => 5, 'msj_error' => 0]);
+                    return response()->json(['html' => "Este pedido Se encuentra actualmente anulado", 'class' => "text-danger", 'codigo' => 0, 'error' => 5, 'msj_error' => 0, 'estado' => $pedido->condicion_envio]);
+                }
+
+                if ($pedido->estado_sobre == 0) {
+                    return response()->json(['html' => "Este pedido no tiene una dirección regisrada", 'class' => "text-danger", 'codigo' => 0, 'error' => 5, 'msj_error' => 0, 'estado' => $pedido->condicion_envio]);
                 }
 
                 // VALIDACIONES PARA LA DIRECCION GRUPO
                 if ($grupo == null) {
-                    return response()->json(['html' => "Este pedido No cuenta con una dirección", 'class' => "text-danger", 'codigo' => 0, 'error' => 4, 'Estado_actual' => $pedido->condicion_envio_code, 'msj_error' => 0]);
+                    return response()->json(['html' => "Este pedido No esta preparado para reparto", 'class' => "text-danger", 'codigo' => 0, 'error' => 4, 'Estado_actual' => $pedido->condicion_envio_code, 'msj_error' => 0]);
                 }
 
                 $condicion_code_actual = $pedido->condicion_envio_code;
@@ -2780,8 +2784,6 @@ class EnvioController extends Controller
                     return response()->json(['html' => 'El pedido <b style="">' . $codigo . '</b> ya ah sido procesado anteriormente, su estado actual es <br><span class="br-4 mt-16" style="background-color:' . $color . '; padding: 2px 12px; color: black; font-weight: bold;">' . Pedido::$estadosCondicionEnvioCode[$condicion_code_actual] . '</span>', 'class' => "text-danger", 'codigo' => $codigo, 'error' => 4, 'msj_error' => Pedido::$estadosCondicionEnvioCode[$condicion_code_actual]]);
                 }
             }
-
-
             /*
                     $grupo = $pedido->direccion_grupo;
 

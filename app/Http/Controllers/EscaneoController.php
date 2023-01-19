@@ -34,4 +34,13 @@ class EscaneoController extends Controller
 
         return response()->json(['html' => $pedido->codigo, 'distrito' => $pedido->distrito, 'direccion' => $pedido->direccion]);
     }
+
+    public function EstadoSobresScan(Request $request)
+    {
+        $detalle_pedido = Pedido::where('codigo',$request->codigo)->first();
+
+        return response()->json(['pedido' => $detalle_pedido]);
+    }
+
+
 }
