@@ -766,6 +766,76 @@
 `;
                             }
 
+
+                            function addEventButtonRetornar(row, data) {
+                                $("[data-toggle=jqconfirm]", row).unbind()
+                                $("[data-toggle=jqconfirm]", row).click(function () {
+                                    const action = $(this).data('target')
+                                    const actionPost = $(this).data('target-post')
+                                    const count = $(this).data('count')
+                                    const btncolor = $(this).data('btncolor')
+                                    const btntext = $(this).data('btntext')
+                                    const isrecibido = $(this).data('recibido') == '1'
+                                    $.confirm({
+                                        title: 'Confirmar ' + btntext+ ' a PARA REPARTO',
+                                        type: btncolor || 'blue',
+                                        columnClass: 'xlarge',
+                                        content: function () {
+                                            const self = this
+                                            if (count == '1') {
+                                                if (isrecibido) {
+                                                    return `<p>Esta seguro de confirmar la recepción del Pedido <strong class="textcode">${data.codigos}</strong></p>  ${data.cambio_direccion_at != null ? `<div class="col-12">
+                    <p class="alert alert-warning">Datos de la dirección fueron modificados, ¿desea continuar?.</p>
+                  </div>` : ''}`
+                                                } else {
+                                                    return `<p>Esta seguro de retornar a PARA REPARTO el pedido <strong class="textcode">${data.codigos}</strong></p>`
+                                                }
+                                            } else {
+                                                self.showLoading(true)
+                                                return $.get(action).done(function (data) {
+                                                    self.setContent(getHtmlPrevisualizarDesagrupar(data.grupo, btntext))
+                                                }).always(function () {
+                                                    self.hideLoading(true)
+                                                })
+                                            }
+                                        },
+                                        buttons: {
+                                            no_recibido: {
+                                                text: btntext,
+                                                btnClass: 'btn-' + btncolor,
+                                                action: function () {
+                                                    const self = this
+                                                    if (count == '1') {
+                                                        self.showLoading(true)
+                                                        $.post(actionPost)
+                                                            .always(function () {
+                                                                self.hideLoading(true)
+                                                                $('#tablaPrincipal').DataTable().draw(false)
+                                                                $(row).parents('table').DataTable().draw(false)
+                                                            })
+                                                    } else {
+                                                        if (!self.$content.find('form').serialize()) {
+                                                            $.confirm("Seleccione un pedido")
+                                                            return false;
+                                                        }
+                                                        self.showLoading(true)
+                                                        $.post(actionPost, self.$content.find('form').serialize()).done(function () {
+                                                            self.close()
+                                                        })
+                                                            .always(function () {
+                                                                self.hideLoading(true)
+                                                                $('#tablaPrincipal').DataTable().draw(false)
+                                                                $(row).parents('table').DataTable().draw(false)
+                                                            })
+                                                    }
+
+                                                }
+                                            },
+                                            cancelar: {}
+                                        }
+                                    })
+                                })
+                            }
                             const configDataTableZonas = {
                                 serverSide: true,
                                 searching: true,
@@ -775,72 +845,7 @@
 
                                 },
                                 rowCallback: function (row, data, index) {
-                                    $("[data-toggle=jqconfirm]", row).click(function () {
-                                        const action = $(this).data('target')
-                                        const actionPost = $(this).data('target-post')
-                                        const count = $(this).data('count')
-                                        const btncolor = $(this).data('btncolor')
-                                        const btntext = $(this).data('btntext')
-                                        const isrecibido = $(this).data('recibido') == '1'
-                                        $.confirm({
-                                            title: 'Confirmar ' + btntext+ ' a PARA REPARTO',
-                                            type: btncolor || 'blue',
-                                            columnClass: 'xlarge',
-                                            content: function () {
-                                                const self = this
-                                                if (count == '1') {
-                                                    if (isrecibido) {
-                                                        return `<p>Esta seguro de confirmar la recepción del Pedido <strong class="textcode">${data.codigos}</strong></p>  ${data.cambio_direccion_at != null ? `<div class="col-12">
-                    <p class="alert alert-warning">Datos de la dirección fueron modificados, ¿desea continuar?.</p>
-                  </div>` : ''}`
-                                                    } else {
-                                                        return `<p>Esta seguro de retornar a PARA REPARTO el pedido <strong class="textcode">${data.codigos}</strong></p>`
-                                                    }
-                                                } else {
-                                                    self.showLoading(true)
-                                                    return $.get(action).done(function (data) {
-                                                        self.setContent(getHtmlPrevisualizarDesagrupar(data.grupo, btntext))
-                                                    }).always(function () {
-                                                        self.hideLoading(true)
-                                                    })
-                                                }
-                                            },
-                                            buttons: {
-                                                no_recibido: {
-                                                    text: btntext,
-                                                    btnClass: 'btn-' + btncolor,
-                                                    action: function () {
-                                                        const self = this
-                                                        if (count == '1') {
-                                                            self.showLoading(true)
-                                                            $.post(actionPost)
-                                                                .always(function () {
-                                                                    self.hideLoading(true)
-                                                                    $('#tablaPrincipal').DataTable().draw(false)
-                                                                    $(row).parents('table').DataTable().draw(false)
-                                                                })
-                                                        } else {
-                                                            if (!self.$content.find('form').serialize()) {
-                                                                $.confirm("Seleccione un pedido")
-                                                                return false;
-                                                            }
-                                                            self.showLoading(true)
-                                                            $.post(actionPost, self.$content.find('form').serialize()).done(function () {
-                                                                self.close()
-                                                            })
-                                                                .always(function () {
-                                                                    self.hideLoading(true)
-                                                                    $('#tablaPrincipal').DataTable().draw(false)
-                                                                    $(row).parents('table').DataTable().draw(false)
-                                                                })
-                                                        }
-
-                                                    }
-                                                },
-                                                cancelar: {}
-                                            }
-                                        })
-                                    })
+                                    addEventButtonRetornar(row, data)
                                 },
                                 columns: [
                                     {data: 'codigos', name: 'codigos',},
@@ -889,6 +894,13 @@
                                     }
                                 },
                             });
+                            $('#tablaPrincipal{{Str::upper($motorizado->zona)}}').DataTable()
+                                .on( 'responsive-display', function ( e, datatable, row, showHide, update ) {
+                                console.log( 'Details for row '+row.index()+' '+(showHide ? 'shown' : 'hidden') );
+                                    if(showHide) {
+                                        addEventButtonRetornar($(row.node()).siblings('.child'), row.data())
+                                    }
+                            } );
                             @endforeach
 
                             @foreach($motorizados as $motorizado)
