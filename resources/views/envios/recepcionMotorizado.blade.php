@@ -783,7 +783,7 @@
                                         const btntext = $(this).data('btntext')
                                         const isrecibido = $(this).data('recibido') == '1'
                                         $.confirm({
-                                            title: 'Confirmar ' + btntext,
+                                            title: 'Confirmar ' + btntext+ ' y retornar a PARA REPARTO',
                                             type: btncolor || 'blue',
                                             columnClass: 'xlarge',
                                             content: function () {
@@ -794,7 +794,7 @@
                     <p class="alert alert-warning">Datos de la dirección fueron modificados, ¿desea continuar?.</p>
                   </div>` : ''}`
                                                     } else {
-                                                        return `<p>Esta seguro de rechazar la recepción del Pedido <strong class="textcode">${data.codigos}</strong></p>`
+                                                        return `<p>Esta seguro de retornar a PARA REPARTO el pedido <strong class="textcode">${data.codigos}</strong></p>`
                                                     }
                                                 } else {
                                                     self.showLoading(true)
