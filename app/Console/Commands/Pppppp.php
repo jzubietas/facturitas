@@ -47,7 +47,7 @@ class Pppppp extends Command
                 'condicion_envio_code' => $grupo->condicion_envio_code,
                 'condicion_envio_at' =>  $grupo->condicion_envio_at,
             ];
-            $grupo->update($data);
+            //$grupo->update($data);
             $grupo->pedidos()->update($data);
         }
         return 0;
