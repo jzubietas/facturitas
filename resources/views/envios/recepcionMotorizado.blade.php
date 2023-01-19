@@ -119,18 +119,19 @@
     <div class="card w-100 pb-48">
         <div class="card-body p-0">
 
-            <table cellspacing="5" cellpadding="5" class="table-responsive">
-                <tbody class="w-100">
-                <tr class="w-100">
-                    <td>Fecha</td>
-                    <td>
-                        <input type="date" value="{{$fecha_consulta}}" id="fecha_consulta" name="fecha_consulta"
-                               class="form-control" autocomplete="off">
-                    </td>
-                    <td></td>
-                </tr>
-                </tbody>
-            </table>
+
+            <div class="row">
+                <div class="col-6 ">
+                    <input type="date" value="{{$fecha_consulta}}" id="fecha_consulta" name="fecha_consulta"
+                           class="form-control mx-auto" autocomplete="off">
+                </div>
+                <div class="col-6 mx-auto">
+                    <input id="buscador_global" name="buscador_global" value=""
+                           type="text" class="form-control" autocomplete="off"
+                           placeholder="Ingrese su búsqueda" aria-label="Recipient's username" aria-describedby="basic-addon2">
+                </div>
+            </div>
+
             <br>
 
 
@@ -554,12 +555,30 @@
                     <script type="text/javascript">
 
                         var codigo_pedido = false;
+                        let tablaPrincipal=null;
 
                         $.ajaxSetup({
                             headers: {
                                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                             }
                         });
+
+                        function applySearch(e) {
+                            console.log(e)
+                            //console.log("vacio");
+                            let valor=$("#buscador_global").val();
+                            //valor=(valor||'').trim()
+                            tablaPrincipal.search( valor ).draw();
+                            //tabla_pedidos_principal_centro.search( valor ).draw();
+                            //tabla_pedidos_principal_sur.search( valor ).draw();
+                        }
+
+                        $('#btn_buscar').click(applySearch);
+                        $("#buscador_global").bind('paste',function () {
+                            setTimeout(applySearch,100)
+                        });
+                        $('#buscador_global').change(applySearch);
+                        $('#buscador_global').keydown(applySearch);
 
                         function onQRCodeScanned(scannedText) {
                             console.log(arguments)
@@ -1000,7 +1019,7 @@
                                 $('.tabla-data').DataTable().ajax.reload();
                             });
 
-                            $('#tablaPrincipal').DataTable({
+                            tablaPrincipal=$('#tablaPrincipal').DataTable({
                                 dom: '<"toolbar">frtip',
                                 processing: true,
                                 stateSave: true,
