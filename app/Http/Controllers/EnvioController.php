@@ -2706,26 +2706,12 @@ class EnvioController extends Controller
         /*************
          * IDENTIFICAMOS LOS DATOS GLOBALES
          */
-        $pedido = Pedido::where("codigo", $codigo)->first();
+        $pedido = Pedido::whereIn("codigo", $codigos)->first();
+
         if ($pedido == null) {
             $codigos_no_procesados[] = $codigo;
         }
-
-        /**************
-         * VALIDACIONES GLOBALES
-         */
-        if ($pedido == null) {
-            return response()->json(['html' => "Este pedido No se encuentra en el sistema", 'class' => "text-danger", 'codigo' => 0, 'error' => 4, 'msj_error' => 0]);
-        }
-
-        if ($pedido->pendiente_anulacion == 1) {
-            return response()->json(['html' => "Este pedido se encuentra <b>pendiente de anulación</b>", 'class' => "text-danger", 'codigo' => 0, 'error' => 6, 'msj_error' => 0]);
-        }
-
-        if ($pedido->estado == 0) {
-            return response()->json(['html' => "Este pedido Se encuentra actualmente anulado", 'class' => "text-danger", 'codigo' => 0, 'error' => 5, 'msj_error' => 0]);
-        }
-
+        //dd($pedido);
         $condicion_code_actual = $pedido->condicion_envio_code;
         $grupo = $pedido->direccion_grupo;
         /***************************************************************************************
@@ -2741,10 +2727,27 @@ class EnvioController extends Controller
 
         if($responsable == "fernandez_reparto"){
 
+            /**************
+             * VALIDACIONES GLOBALES
+             */
+            if ($pedido == null) {
+                return response()->json(['html' => "Este pedido No se encuentra en el sistema", 'class' => "text-danger", 'codigo' => 0, 'error' => 4, 'msj_error' => 0]);
+            }
+
+            if ($pedido->pendiente_anulacion == 1) {
+                return response()->json(['html' => "Este pedido se encuentra <b>pendiente de anulación</b>", 'class' => "text-danger", 'codigo' => 0, 'error' => 6, 'msj_error' => 0]);
+            }
+
+            if ($pedido->estado == 0) {
+                return response()->json(['html' => "Este pedido Se encuentra actualmente anulado", 'class' => "text-danger", 'codigo' => 0, 'error' => 5, 'msj_error' => 0]);
+            }
+
             // VALIDACIONES PARA LA DIRECCION GRUPO
             if($grupo == null){
                 return response()->json(['html' => "Este pedido No cuenta con una dirección", 'class' => "text-danger", 'codigo' => 0,'error'=>4, 'Estado_actual' => $pedido -> condicion_envio_code, 'msj_error' => 0]);
             }
+
+            $condicion_code_actual = $pedido->condicion_envio_code;
 
             $color = $pedido->condicion_envio_color;
             if ($pedido->condicion_envio_code == Pedido::ENVIO_MOTORIZADO_COURIER_INT) {
@@ -2752,16 +2755,15 @@ class EnvioController extends Controller
             }
         }
 
-        /***************************************************************************************
-         * SOBRES PARA REPARTO - FIN PARTE 1
-         ***************************************************************************************/
 
-        // VALIDACIONES PARA LA DIRECCION GRUPO
+
+/*
         $grupo = $pedido->direccion_grupo;
 
         if ($grupo == null) {
             return response()->json(['html' => "Este pedido No cuenta con una dirección", 'class' => "text-danger", 'codigo' => 0, 'error' => 4, 'Estado_actual' => $pedido->condicion_envio_code, 'msj_error' => 0]);
         }
+*/
 
         /************
          * SETEAMOS VALORES POR DEFECTO
