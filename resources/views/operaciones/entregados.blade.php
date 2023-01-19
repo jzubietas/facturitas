@@ -4,7 +4,7 @@
 
 @section('content_header')
   <h1>Lista de pedidos ENTREGADOS - OPERACIONES
-    
+
     <div class="float-right btn-group dropleft">
         <button type="button" class="btn btn-option" data-accion="confirmacion_operaciones" data-responsable="maria_recepcion" data-toggle="modal" data-target="#modal-escanear" data-backdrop="static" style="margin-right:16px;" aria-haspopup="true" aria-expanded="false">
             <i class="fa fa-barcode" aria-hidden="true"></i> RECEPCIONAR PEDIDOS
@@ -22,14 +22,6 @@
     </div>
     @include('pedidos.modal.exportar', ['title' => 'Exportar pedidos entregados', 'key' => '10'])
   </h1>
-  @if($superasesor > 0)
-  <br>
-  <div class="bg-4">
-    <h1 class="t-stroke t-shadow-halftone2" style="text-align: center">
-      asesores con privilegios superiores: {{ $superasesor }}
-    </h1>
-  </div>
-  @endif
 @stop
 
 @section('content')
@@ -55,11 +47,9 @@
             <th scope="col">Razón social</th>
             <th scope="col">Asesor</th>
             <th scope="col">Fecha de registro</th>
-            <th scope="col">Destino</th>
             <th scope="col">Estado</th>
             <th scope="col">Atendido por</th>
             <th scope="col">Jefe</th>
-            <th scope="col">Estado de sobre</th>
             <th scope="col">Acciones</th>
           </tr>
         </thead>
@@ -76,10 +66,21 @@
 @stop
 
 @section('css')
-  {{-- <link rel="stylesheet" href="../css/admin_custom.css"> --}}
   <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
 
   <style>
+
+      table {
+          display: table;
+          border-collapse:separate;
+          border-spacing: 0px;
+          border:0px;
+      }
+
+      table td {
+          margin: 0px;
+          padding:0px;
+      }
     .bg-4{
       background: linear-gradient(to right, rgb(240, 152, 25), rgb(237, 222, 93));
     }
@@ -530,6 +531,7 @@
       });
 
       $('#tablaPrincipal').DataTable({
+          //dom: '<"top"i>rt',
         processing: true,
         stateSave:true,
 		serverSide: true,
@@ -538,34 +540,19 @@
         ajax: {
           url: "{{ route('operaciones.entregadostabla') }}",
           data: function (d) {
-            //d.asesores = $("#asesores_pago").val();
             d.min = $("#min").val();
             d.max = $("#max").val();
-
           },
         },
-        createdRow: function( row, data, dataIndex){
-          //console.log(row);
-        },
-        rowCallback: function (row, data, index) {
-        },
-        initComplete:function(settings,json){
-
-        },
+        createdRow: function( row, data, dataIndex){},
+        rowCallback: function (row, data, index) {},
+        initComplete:function(settings,json){},
         columns: [
           {
               data: 'id',
-              name: 'id',
+              name: 'correlativo',
               render: function ( data, type, row, meta ) {
-                if(row.id<10){
-                  return 'PED000'+row.id;
-                }else if(row.id<100){
-                  return 'PED00'+row.id;
-                }else if(row.id<1000){
-                  return 'PED0'+row.id;
-                }else{
-                  return 'PED'+row.id;
-                }
+                  return row.correlativo;
               }
           },
           {data: 'codigos', name: 'codigos', },
@@ -575,118 +562,16 @@
             data: 'fecha',
             name: 'fecha',
             render:$.fn.dataTable.render.moment('YYYY-MM-DD HH:mm:ss', 'DD/MM/YYYY HH:mm:ss' ),
-            "visible":true,
           },
-          {data: 'destino', name: 'destino',"visible":false },
-          /*{
-              data: 'condicion',
-              name: 'condicion',
-              render: function ( data, type, row, meta ) {
-                  if(row.condicion =='ANULADO'){
-                      return '<span class="badge badge-info">ANULADO</span>'
-                  }else if(row.condicion == 0){
-                      return '<span class="badge badge-info">ANULADO</span>'
-                  }else if(row.condicion == 1){
-                      return '<span class="badge badge-info">PENDIENTE</span>'
-                  }else if(row.condicion == 2){
-                      return '<span class="badge badge-info">EN REPARTO</span>'
-                  }else if(row.condicion == 3){
-                      return '<span class="badge badge-info">ENTREGADO</span>'
-                  }else{
-                      return  '<span class="badge badge-info">'+data+'</span>' ;
-                  }
-              }
-          },*/
-            {
-                data: 'condicion_envio',
-                name: 'condicion_envio',
-            },
+            {data: 'condicion_envio',name: 'condicion_envio',},
           {data: 'atendido_por', name: 'atendido_por', },
           {data: 'jefe', name: 'jefe', },
-          {
-              data: 'envio',
-              name: 'envio',
-              render: function ( data, type, row, meta ) {
-                if(row.envio==1){
-                  return '<span class="badge badge-success">Enviado</span>'+
-                        '<span class="badge badge-warning">Por confirmar recepcion</span>';
-                }else if(row.envio==2){
-                  return '<span class="badge badge-success">Enviado</span>'+
-                          '<span class="badge badge-info">Recibido</span>';
-                }else if(row.envio==3){
-                  return '<span class="badge badge-dark">Sin envio</span>';
-                }else{
-                  return '<span class="badge badge-danger">por enviar</span>';
-                }
-              },"visible":false
-          },
           {
             data: 'action',
             name: 'action',
             orderable: false,
             searchable: false,
             sWidth:'20%',
-            render: function ( data, type, row, meta ) {
-
-              //var urlver = '{{ route("operaciones.showatender", ":id") }}';
-              //urlver = urlver.replace(':id', row.id);
-
-              data = '<div><ul class="" aria-labelledby="dropdownMenuButton">';
-              //data = data + '<a href="' + urlver + '" class="btn-sm dropdown-item" ><i class="fas fa-eye text-success"></i> Ver</a>';
-
-/*
-              var urledit = '{{ route("operaciones.editatender", ":id") }}';
-              urledit = urledit.replace(':id', row.id);
-              @can('operacion.editatender')
-                data = data+'<a href="'+urledit+'" class="btn-sm dropdown-item"><i class="fas fa-edit text-warning" aria-hidden="true"></i> Editar atención</a>';
-              @endcan
-                */
-              var urlpdf = '{{ route("pedidosPDF", ":id") }}';
-              urlpdf = urlpdf.replace(':id', row.id);
-              @can('operacion.PDF')
-                data = data+'<a href="'+urlpdf+'" class="btn-sm dropdown-item" target="_blank"><i class="fa fa-file-pdf text-primary"></i>  PDF</a>';
-
-              @endcan
-
-
-
-              @can('operacion.enviar')
-                if (row.envio == '0')
-                {
-                  @if (Auth::user()->rol == "Jefe de operaciones" || Auth::user()->rol == "Administrador")
-
-                    data = data+'<a href="" data-target="#modal-envio"  class="btn-sm dropdown-item" data-envio='+row.id+' data-toggle="modal" >Enviar</a><br>';
-                    data = data+'<a href="" data-target="#modal-sinenvio"  class="btn-sm dropdown-item" data-sinenvio='+row.id+' data-toggle="modal" ><i class="fa fa-times text-danger" aria-hidden="true"></i> Sin envío</a><br>';
-                  @endif
-
-                }
-              @endcan
-
-
-              if(row.condicion_envio_code==5)
-              {
-                  data = data+'<a href="" data-target="#modal-envio-op" data-group="1" class="btn-sm dropdown-item" data-envio='+row.id+' data-code="'+ row.codigos +'" data-toggle="modal" ><i class="fa fa-envelope text-success" aria-hidden="true"></i> Recepcion</a>';
-                data = data+'<p data-target="#" class="btn-sm pl-16 text-gray mb-0" data-envio='+row.id+' data-code="'+ row.codigos +'" data-toggle="" disabled><i class="fa fa fa-motorcycle text-gray" aria-hidden="true"></i> ENVIO A COURIER</p>';
-                data = data+'<a href="" data-target="#modal-revertir" class="btn-sm dropdown-item" data-revertir='+row.id+'  data-codigo='+row.codigo+' data-toggle="modal" ><i class="fa fa-times text-danger" aria-hidden="true"></i> Revertir</a>';
-              }
-
-                if(row.condicion_envio_code==6)
-                {
-                    data = data+'<p data-target="text-gray" class="btn-sm pl-16 mb-0" data-envio='+row.id+' data-code="'+ row.codigos +'" data-toggle="" disabled><i class="fa fa-envelope text-gray " aria-hidden="true"></i> Recepcion</p>';
-                    data = data+'<a href="" data-target="#modal-envio-op" data-group="2" class="btn-sm dropdown-item " data-envio='+row.id+' data-code="'+ row.codigos +'" data-toggle="modal" ><i class="fa fa fa-motorcycle text-success" aria-hidden="true"></i> ENVIO A COURIER</a>';
-                    data = data+'<a href="" data-target="#modal-revertir" class="btn-sm dropdown-item" data-revertir='+row.id+'  data-codigo='+row.codigo+' data-toggle="modal" ><i class="fa fa-times text-danger" aria-hidden="true"></i> Revertir</a>';
-                }
-
-              if(row.condicion_envio_code == 13)
-              {
-                  data = data+'<a href="" class="btn-sm dropdown-item" data-target="#modal-envio" data-code="'+ row.codigos +'" data-envio='+row.id+' data-toggle="modal" ><i class="fa fa-check text-success" aria-hidden="true"></i> Recepcion</a>';
-                  data = data+'<a href="" data-target="#modal-revertir" class="btn-sm dropdown-item" data-revertir='+row.id+' data-codigo='+row.codigo+' data-toggle="modal" ><i class="fa fa-times text-danger" aria-hidden="true"></i> Revertir</a>';
-              }
-
-                data = data + '</ul></div>';
-
-              return data;
-            }
           },
         ],
         language: {
