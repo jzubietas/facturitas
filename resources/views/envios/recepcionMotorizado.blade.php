@@ -1186,6 +1186,10 @@
                              * FIN ESCANEAR MOUSE
                              */
 
+                            $('#modal-scan-comparador').on('hidden.bs.modal	', function (event) {
+                                $("#pedidos-recepcion").html("")
+                                $("#pedidos-escaneados").html("")
+                            });
                             $('#modal-scan-comparador').on('show.bs.modal', function (event) {
                                 var button = $(event.relatedTarget)
                                 var zona = button.data('zona');
@@ -1234,7 +1238,7 @@
                                                     }
                                                 });
                                             }
-                                            
+
                                             return false;
                                         });
                                     }
