@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Traits\CommonModel;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -67,11 +68,16 @@ class Pago extends Model
 
     public function getCodeIdAttribute()
     {
-        $cantidadvoucher = $this->detalle_pagos()->whereEstado(1)->count();
-        $cantidadpedido = $this->pago_pedidos()->whereEstado(1)->count();
+        //$cantidadvoucher = $this->detalle_pagos()->whereEstado(1)->count();
+        //$cantidadpedido = $this->pago_pedidos()->whereEstado(1)->count();
         $users = $this->user->identificador;
 
-        $unido = ($cantidadvoucher > 1) ? 'V' : 'I' . (($cantidadpedido > 1) ? 'V' : 'I');
+        $fecha_created=Carbon::parse($this->created_at);
+        $dd=$fecha_created->format('d');
+        $mm=$fecha_created->format('m');
+        $unido=$dd.$mm;
+
+        //$unido = ($cantidadvoucher > 1) ? 'V' : 'I' . (($cantidadpedido > 1) ? 'V' : 'I');
         if ($this->id < 10) {
             return 'PAG' . $users . '-' . $unido . '-' . $this->id;
         } else if ($this->id < 100) {
