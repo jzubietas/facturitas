@@ -617,6 +617,7 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     Route::post('operaciones.confirmarrecepcionmotorizado', [EnvioController::class, 'confirmarEstadoRecepcionMotorizado'])->name('operaciones.confirmarrecepcionmotorizado');
     Route::post('operaciones.confirmar.revertir', [EnvioController::class, 'confirmarEstadoRevert'])->name('operaciones.confirmar.revertir');
 
+    Route::post('operaciones.comparacionmotorizado', [MotorizadoController::class, 'ComparacionMotorizado'])->name('operaciones.comparacionmotorizado');
     //Route::post('operaciones.confirmaradjuntomotorizado/{pedido}', [OperacionController::class, 'updateatendersinconfirmar'])->name('operaciones.updateatendersinconfirmar');
 
     Route::post('operaciones.confirmarmotorizado', [EnvioController::class, 'confirmarEstadoConfirm'])->name('operaciones.confirmarmotorizado');
