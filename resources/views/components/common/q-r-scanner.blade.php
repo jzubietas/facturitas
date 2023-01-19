@@ -392,7 +392,7 @@ function ConfirmarOPBarra(data){
                      * VERIFICACIONES DE RESPUESTAS
                      */
                     if(data.error == 1){
-
+                        $('#respuesta_barra').html("");
                         Swal.fire({
                             icon: 'error',
                             title: 'El Pedido ya se procesó anteriormente',
@@ -405,7 +405,7 @@ function ConfirmarOPBarra(data){
                         $('#respuesta_barra').html('<span class="'+ data.class +'">'+ data.html +'</b></span>');
 
                     }else if(data.error == 3){
-
+                        $('#respuesta_barra').html("");
                         Swal.fire({
                             icon: 'success',
                             title: 'Pedido identificado',
@@ -422,7 +422,7 @@ function ConfirmarOPBarra(data){
 
                         $('#pedidos-procesados').html('<table class="table '+ data.clase_confirmada +' mb-0"><tr><td class="pb-8 pt-8">'+ data.codigo +'</td><td class="pb-8 pt-8">'+ data.zona +'</td><td class="pb-8 pt-8">'+ data.cantidad_recibida +'/'+ data.cantidad + '</td></tr></table>');
                     }else if(data.error == 4){
-
+                        $('#respuesta_barra').html("");
                         Swal.fire({
                             icon: 'error',
                             title: 'El pedido no se encontró en el sistema',
@@ -436,7 +436,7 @@ function ConfirmarOPBarra(data){
 
                     }
                     else if(data.error == 5){
-
+                        $('#respuesta_barra').html("");
                         Swal.fire({
                             icon: 'error',
                             title: 'El pedido esta anulado',
@@ -449,7 +449,7 @@ function ConfirmarOPBarra(data){
                         $('#respuesta_barra').html('<span class="'+ data.class +'">'+ data.html + '</span>');
 
                     }else if(data.error == 6){
-
+                        $('#respuesta_barra').html("");
                         Swal.fire({
                             icon: 'error',
                             title: 'Pedido Pendiente de anulación',
@@ -464,20 +464,20 @@ function ConfirmarOPBarra(data){
                         $('#tablaPrincipal').DataTable().ajax.reload();
 
                     }else if(data.error == 0) {
-
+                        $('#respuesta_barra').html("");
                         Swal.fire({
                             icon: 'success',
                             title: 'Pedido Procesado',
                             color: '#FFF',
                             background: '#79b358',
                             showConfirmButton: false,
-                            timer: 500
+                            timer: 1000
                         })
 
                         $('#respuesta_barra').html('<span class="'+ data.class +'">'+ data.html + '</span>');
 
                     }else if(data.error == 7) {
-
+                        $('#respuesta_barra').html("");
                         Swal.fire({
                             icon: 'error',
                             title: 'El Paquete de pedidos ya fue enviado',
