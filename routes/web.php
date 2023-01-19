@@ -20,6 +20,7 @@ use App\Http\Controllers\MovimientoController;
 use App\Http\Controllers\SobreController;
 use App\Http\Controllers\OperacionController;
 use App\Http\Controllers\AdministracionController;
+use App\Http\Controllers\EscaneoController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -38,6 +39,8 @@ Route::middleware(['guest'])->get('/', function () {
 });
 
 Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->group(function () {
+
+    Route::post('envio.escaneoqr/{id}', [EscaneoController::class, 'EscaneoQR'])->name('envio.escaneoqr');
 
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
     Route::get('/dashboard/widgets-fetch', [DashboardController::class, 'widgets'])->name('dashboard.widgets');
