@@ -14,7 +14,9 @@
                 accion="sobres_reparto"
                 :tables-ids="['#tablaPrincipal_norte']"
                 :extras="[]"
+                :reparto='1'
             ></x-common-button-qr-scanner>
+
             <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
                     aria-expanded="false">
                 Exportar
