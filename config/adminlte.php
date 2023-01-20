@@ -484,7 +484,7 @@ return [
                 [
                     'text' => 'Seguimiento provincia',
                     'route' => 'envios.seguimientoprovincia',
-                    'can' => 'courier.seguimientoprovincia',
+                    'can' => 'envios.seguimientoprovincia',
                     'icon' => 'fas fa-check-circle',
                     'active' => ['enviados'],
                 ]
