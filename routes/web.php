@@ -100,6 +100,7 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     Route::get('clientedeasesorparapagos', [ClienteController::class, 'clientedeasesor'])->name('cargar.clientedeasesorparapagos');
 
     Route::get('clientestabla', [ClienteController::class, 'indextabla'])->name('clientestabla');
+    Route::get('pedidos.recoger.clientes', [ClienteController::class, 'clienteslistarecoger'])->name('pedidos.recoger.clientes');
     Route::get('clientestablasituacion', [ClienteController::class, 'clientestablasituacion'])->name('clientestablasituacion');
 
     Route::get('clientes.abandonos', [ClienteController::class, 'indexabandono'])->name('clientes.abandonos');
