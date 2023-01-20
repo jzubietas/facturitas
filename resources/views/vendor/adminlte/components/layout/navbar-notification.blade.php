@@ -97,7 +97,7 @@
                             insertIconMenu("i.dot_contador_sobres_devueltos",'.dot-notify.noti-side',data.contador_sobres_devueltos)
                             console.log(data.contador_sobres_devueltos);
                             nLink.update(data);
-
+                            $("#alert-authorization").html(data.authorization_courier)
 
                         })
 

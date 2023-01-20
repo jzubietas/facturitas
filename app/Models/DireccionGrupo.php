@@ -82,7 +82,6 @@ class DireccionGrupo extends Model implements HasMedia
     public function scopeReprogramados($query)
     {
         //$this->reprogramacion_at != null && $this->reprogramacion_accept_at == null;
-
         return $query->whereNotNull($this->qualifyColumn('reprogramacion_at'))
             ->whereNull($this->qualifyColumn('reprogramacion_accept_at'));
     }
