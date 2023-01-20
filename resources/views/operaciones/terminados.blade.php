@@ -480,20 +480,11 @@
                 $("#ajefeoperevertir").val(idunico);
             });
 
-            $('#modal-revertir-asindireccion').on('show.bs.modal', function (event) {
-                var button = $(event.relatedTarget)
-                var idunico = button.data('revertir')
-                var idcodigo = button.data('codigo')
-                var idadjuntos = button.data('adjuntos')
-                $(".textcode").html(idcodigo);
-                $(".textcantadjunto").html(idadjuntos);
-                $("#asindireccionrevertir").val(idunico);
-            });
-
             $(document).on("submit", "#formulariorevertirajefeop", function (evento) {
                 evento.preventDefault();
                 var fd = new FormData();
-                fd.append('asindireccionrevertir', $("#asindireccionrevertir").val());
+                console.log($("#ajefeoperevertir").val());
+                fd.append('ajefeoperevertir', $("#ajefeoperevertir").val());
 
                 $.ajax({
                     data: fd,
@@ -510,6 +501,18 @@
                     }
                 });
             });
+
+            $('#modal-revertir-asindireccion').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget)
+                var idunico = button.data('revertir')
+                var idcodigo = button.data('codigo')
+                var idadjuntos = button.data('adjuntos')
+                $(".textcode").html(idcodigo);
+                $(".textcantadjunto").html(idadjuntos);
+                $("#asindireccionrevertir").val(idunico);
+            });
+
+
 
             $(document).on("submit", "#formulariorevertirasindireccion", function (evento) {
                 evento.preventDefault();

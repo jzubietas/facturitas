@@ -2491,7 +2491,9 @@ class EnvioController extends Controller
                             }
                         }
                     }
-                    $badge_estado .= '<span class="badge badge-success" style="background-color: ' . $color . '!important;">' . $pedido->condicion_envio . $subestado . '</span>';
+                    $badge_estado .= '<span class="badge badge-success" style="background-color: ' .
+                                            $color . '!important;">' .
+                                            $pedido->condicion_envio . $subestado . '</span>';
                     return $badge_estado;
                 })
                 ->addColumn('action', function ($pedido) {
@@ -2515,7 +2517,9 @@ class EnvioController extends Controller
                     margin-bottom: -4px;
                     color: black !important;">Con ruta</span>';
 
-                    $badge_estado .= '<span class="badge badge-success" style="background-color: ' . $color . '!important;">' . $pedido->condicion_envio . '</span>';
+                    $badge_estado .= '<span class="badge badge-success" style="background-color: ' . $color . '!important;">' .
+                        $pedido->condicion_envio .
+                        '</span>';
                     return $badge_estado;
                 })
                 ->editColumn('foto1', function ($pedido) {
@@ -2813,17 +2817,6 @@ class EnvioController extends Controller
             if ($pedido->condicion_envio_code == Pedido::ENVIO_MOTORIZADO_COURIER_INT) {
                 return response()->json(['html' => 'El pedido <b style="">' . $codigo . '</b> ya ah sido procesado anteriormente, su estado actual es <br><span class="br-4 mt-16" style="background-color:' . $color . '; padding: 2px 12px; color: black; font-weight: bold;">' . Pedido::$estadosCondicionEnvioCode[$condicion_code_actual] . '</span>', 'class' => "text-danger", 'codigo' => $codigo, 'error' => 4, 'msj_error' => Pedido::$estadosCondicionEnvioCode[$condicion_code_actual]]);
             }
-        } else {
-
-            $pedido = Pedido::where("codigo", $codigo)->first();
-
-            if ($pedido == null) {
-                return response()->json(['html' => "Este pedido No se encuentra en el sistema", 'class' => "text-danger", 'codigo' => 0, 'error' => 4, 'msj_error' => 0]);
-            }
-
-            if ($pedido->pendiente_anulacion == 1) {
-                return response()->json(['html' => "Este pedido se encuentra <b>pendiente de anulación</b>", 'class' => "text-danger", 'codigo' => 0, 'error' => 6, 'msj_error' => 0, 'estado' => $pedido->condicion_envio]);
-            }
         }
         /*
                 $grupo = $pedido->direccion_grupo;
@@ -2839,7 +2832,26 @@ class EnvioController extends Controller
 
         foreach ($codigos as $codigo) {
 
+            if ($responsable == "fernandez_reparto") {
+                if ($pedido->estado_sobre == 0) {
+                    return response()->json(['html' => "Este pedido no tiene una dirección regisrada", 'class' => "text-danger", 'codigo' => 0, 'error' => 5, 'msj_error' => 0, 'estado' => $pedido->condicion_envio]);
+                }
+
+                // VALIDACIONES PARA LA DIRECCION GRUPO
+                if ($grupo == null) {
+                    return response()->json(['html' => "Este pedido No esta preparado para reparto", 'class' => "text-danger", 'codigo' => 0, 'error' => 4, 'Estado_actual' => $pedido->condicion_envio_code, 'msj_error' => 0]);
+                }
+            }
+
             $pedido = Pedido::where("codigo", $codigo)->first();
+
+            if ($pedido == null) {
+                return response()->json(['html' => "Este pedido No se encuentra en el sistema", 'class' => "text-danger", 'codigo' => 0, 'error' => 4, 'msj_error' => 0]);
+            }
+
+            if ($pedido->pendiente_anulacion == 1) {
+                return response()->json(['html' => "Este pedido se encuentra <b>pendiente de anulación</b>", 'class' => "text-danger", 'codigo' => 0, 'error' => 6, 'msj_error' => 0, 'estado' => $pedido->condicion_envio]);
+            }
 
             if ($pedido == null) {
                 $codigos_no_procesados[] = $codigo;
@@ -2874,8 +2886,10 @@ class EnvioController extends Controller
 
                     switch ($condicion_code_actual) {
                         case Pedido::ENVIO_COURIER_JEFE_OPE_INT: // 12
-                            $nuevo_estado = Pedido::RECEPCION_COURIER_INT; // 19
+                            $nuevo_estado = Pedido::RECEPCION_COURIER_INT; // 11
                             $respuesta = "El jefe Courier recepciono correctamente el pedido";
+
+                            //dd("El nuevo estado es: " . $nuevo_estado);
                             break;
 
                     }
@@ -2942,9 +2956,12 @@ class EnvioController extends Controller
                 return response()->json(['html' => "Este pedido ya ah sido procesado anteriormente", 'class' => "text-danger", 'codigo' => 0]);
                 $codigos_no_procesados[] = $codigo;
             } else {
+
                 switch ($accion) {
 
                     case "recepcionar_sobres":
+
+
                         $pedido->update([
                             'fecha_recepcion_courier' => Carbon::now(),
                             'modificador' => 'USER' . Auth::user()->id,
