@@ -3123,8 +3123,8 @@ class EnvioController extends Controller
         $pedido = Pedido::query()->findOrFail($request->get('pedido_id', $request->get('hiddenCodigo')));
 
         $pedido->update([
-            'condicion_envio' => Pedido::ENTREGADO_SIN_SOBRE_CLIENTE,
-            'condicion_envio_code' => Pedido::ENTREGADO_SIN_SOBRE_CLIENTE_INT,
+            'condicion_envio' => Pedido::ENTREGADO_SIN_ENVIO_CLIENTE,
+            'condicion_envio_code' => Pedido::ENTREGADO_SIN_ENVIO_CLIENTE_INT,
             'condicion_envio_at' => now(),
             //'fecha_salida' => $request->fecha_salida
         ]);

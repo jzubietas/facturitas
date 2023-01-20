@@ -1186,9 +1186,16 @@
                              * FIN ESCANEAR MOUSE
                              */
 
+                            $('#modal-scan-comparador').on('hidden.bs.modal	', function (event) {
+                                $("#pedidos-recepcion").html("")
+                                $("#pedidos-escaneados").html("")
+                            });
                             $('#modal-scan-comparador').on('show.bs.modal', function (event) {
                                 var button = $(event.relatedTarget)
                                 var zona = button.data('zona');
+
+                                $('#pedidos-escaneados').html("");
+                                $('#pedidos-escaneados').html("");
                                 pedidos_escaneados=[];
                                 $("#codigo_comprobar").val('')
 
@@ -1208,6 +1215,8 @@
                                             lista += '<li id="'+item+'" class="item_recepcionado"><i class="fa fa-envelope text-warning mr-8" aria-hidden="true"></i> '+item+'</li>';
                                             //$('#pedidos-recepcion').append('<li id="'+item+'" class="item_recepcionado">'+item+'</li>');
                                         });
+                                        $('.pedidos-escaneados').html("");
+                                        $('.pedidos').html("");
                                         $('#pedidos-recepcion').html(lista);
 
                                         $('#codigo_comprobar').change(function (event) {
@@ -1216,22 +1225,24 @@
                                             var codigo_caturado = ($(this).val() || '').trim();
                                             var codigo_mejorado = codigo_caturado.replace(/['']+/g, '-').replaceAll("'", '-').replaceAll("(", '*');
 
-                                            $('.item_recepcionado').each(function(){
-                                                var ide = $(this).attr('id');
-                                                if(ide == codigo_mejorado){
-                                                    console.log("codigo encontrado");
-                                                    $('#'+codigo_mejorado).fadeOut();
-                                                    $("#pedidos-escaneados").append('<li><i class="fa fa-check text-success mr-8" aria-hidden="true"></i>'+ codigo_mejorado +'</li>');
-                                                }else{
+                                            if(!codigo_mejorado){
+                                                $('.item_recepcionado').each(function(){
+                                                    var ide = $(this).attr('id');
 
-                                                }
-                                            });
+                                                    if(ide == codigo_mejorado){
+                                                        console.log("codigo encontrado");
+                                                        $('#'+ codigo_mejorado ).fadeOut();
+                                                        $("#pedidos-escaneados").append('<li><i class="fa fa-check text-success mr-8" aria-hidden="true"></i>'+ codigo_mejorado +'</li>');
+                                                    }else{
+
+                                                    }
+                                                });
+                                            }
+
                                             return false;
                                         });
                                     }
                                 });
-<<<<<<< HEAD
-=======
 
                                 $('#codigo_comprobar').change(function (event) {
                                     event.preventDefault();
