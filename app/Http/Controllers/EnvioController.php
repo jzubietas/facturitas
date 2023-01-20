@@ -1933,7 +1933,7 @@ class EnvioController extends Controller
             $identi_id = $identi->identificador;
 
             $zona_distrito = Distrito::where('distrito', $request->distrito)
-                ->whereIn('provincia',['LIMA','PROVINCIA'])->first();
+                ->whereIn('provincia',['LIMA','CALLAO'])->first();
             DB::beginTransaction();
             if ($request->destino == "LIMA") {
 
