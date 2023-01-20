@@ -37,6 +37,7 @@
             {{-- Configured right links --}}
             @each('adminlte::partials.navbar.menu-item', $adminlte->menu('navbar-right'), 'item')
 
+
             {{-- User menu link --}}
             @if(Auth::user())
                 @if(config('adminlte.usermenu_enabled'))

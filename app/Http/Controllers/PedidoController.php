@@ -328,6 +328,7 @@ class PedidoController extends Controller
                     }
 
                 }
+
                 if (\auth()->user()->can('envios.direccionenvio.editar')) {
                     if ($pedido->estado_sobre == 1) {
                         $btn[] = '<button style="font-size:11px" class="m-0 p-2 btn btn-sm btn-info dropdown-item text-break text-wrap" data-jqconfirm="' . $pedido->id . '"><i class="fa fa-map-marker-alt text-info mr-8"></i>Editar direccion de envio</button>';

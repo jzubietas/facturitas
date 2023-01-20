@@ -68,7 +68,7 @@
                                    placeholder="Ingrese su búsqueda" aria-label="Recipient's username" aria-describedby="basic-addon2">
                             <div class="input-group-append">
                                 <button class="btn btn-success" id="btn_buscar" type="button">Buscar</button>
-                                <button class="btn btn-option" id="btn_buscar_scan" data-toggle="modal" data-target="#modal-escanear-estado-sobre" type="button">Escanear</button>
+                                <!--<button class="btn btn-option" id="btn_buscar_scan" data-toggle="modal" data-target="#modal-escanear-estado-sobre" type="button">Escanear</button>-->
                             </div>
                         </div>
 
