@@ -12,17 +12,20 @@
 
 
       @if($key === '1')
-        {!! Form::open(['route' => ['envios.motorizadoconfirmar.Excel'], 'method' => 'POST', 'target' => 'blanck_','id'=>'form_motorizadoconfirmar']) !!}
+        {!! Form::open(['route' => ['envios.motorizadoconfirmar.Excel'], 'method' => 'POST', 'target' => '_blank','id'=>'form_motorizadoconfirmar']) !!}
       @elseif($key === '2')
-        {!! Form::open(['route' => ['envios.recepcionmotorizado.Excel'], 'method' => 'POST', 'target' => 'blanck_','id'=>'form_recepcionmotorizado']) !!}
+        {!! Form::open(['route' => ['envios.recepcionmotorizado.Excel'], 'method' => 'POST', 'target' => '_blank','id'=>'form_recepcionmotorizado']) !!}
+        @elseif($key === '3')
+        {!! Form::open(['route' => ['envios.recepcionmotorizado.Excel',['historial'=>1]], 'method' => 'POST', 'target' => '_blank','id'=>'form_recepcionmotorizado']) !!}
       @endif
+
 
             <div class="card-body">
               <div class="form-row">
                 <div class="form-group col-lg-12" style="text-align: center; font-size:16px">
                   <div class="form-row">
                     <div class="col-lg-12">
-                      {!! Form::label('anio', 'Seleccion de Motorizado y fechass') !!} <br><br>
+                      {!! Form::label('anio', 'Seleccion de Motorizado y fechas') !!} <br><br>
                       <div class="form-row">
                         <div class="col-lg-6">
                           <label>Motorizado&nbsp;</label>
@@ -34,8 +37,8 @@
                           {!! Form::date('fecha_envio', \Carbon\Carbon::now(), ['id'=>'fecha_envio','class' => 'form-control']); !!}
                         </div>
                           <select id="condicion_envio" name="condicion_envio" class="d-none">
-                              <option value="19">19</option>
                               <option value="18">18</option>
+                              <option value="19">19</option>
                           </select>
                       </div>
                     </div>

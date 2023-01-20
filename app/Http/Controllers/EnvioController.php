@@ -917,7 +917,8 @@ class EnvioController extends Controller
 
         $dateMin = Carbon::now()->format('Y-m-d');
 
-        return view('envios.rutaenvio', compact('condiciones', 'distritos', 'direcciones', 'destinos', 'superasesor', 'ver_botones_accion', 'departamento', 'dateMin', 'distribuir', 'rol', 'fecha_consulta', 'motorizados'));
+        $users_motorizado = User::where('rol', 'MOTORIZADO')->where('estado', '1')->pluck('name', 'id');
+        return view('envios.rutaenvio', compact('condiciones', 'users_motorizado', 'distritos', 'direcciones', 'destinos', 'superasesor', 'ver_botones_accion', 'departamento', 'dateMin', 'distribuir', 'rol', 'fecha_consulta', 'motorizados'));
     }
 
 
@@ -982,8 +983,16 @@ class EnvioController extends Controller
                         ->where('direccion_grupos.condicion_envio_code', Pedido::MOTORIZADO_INT)
                         ->whereNotIn('direccion_grupos.motorizado_status', [Pedido::ESTADO_MOTORIZADO_OBSERVADO, Pedido::ESTADO_MOTORIZADO_NO_CONTESTO]);
             }
-
-            return datatables()->query(DB::table($query))
+            $query = DB::table($query);
+            if (!data_get($request->search, 'value')) {
+                $request->merge([
+                    'search'=>[
+                        "value"=>$request->search_value,
+                        "regex"=>(bool)data_get($request->search, 'regex'),
+                    ]
+                ]);
+            }
+            return datatables()->query($query)
                 ->addIndexColumn()
                 ->rawColumns(['action', 'condicion_envio'])
                 ->toJson();
@@ -2449,7 +2458,7 @@ class EnvioController extends Controller
                 ->addColumn('condicion_envio_color', function ($pedido) {
                     return Pedido::getColorByCondicionEnvio($pedido->condicion_envio);
                 })
-                ->editColumn('condicion_envio', function ($pedido)use ($opcion) {
+                ->editColumn('condicion_envio', function ($pedido) use ($opcion) {
                     $badge_estado = '';
                     if ($pedido->pendiente_anulacion == '1') {
                         $badge_estado .= '<span class="badge badge-success">' . Pedido::PENDIENTE_ANULACION . '</span>';
@@ -2482,7 +2491,9 @@ class EnvioController extends Controller
                             }
                         }
                     }
-                    $badge_estado .= '<span class="badge badge-success" style="background-color: ' . $color . '!important;">' . $pedido->condicion_envio . $subestado . '</span>';
+                    $badge_estado .= '<span class="badge badge-success" style="background-color: ' .
+                                            $color . '!important;">' .
+                                            $pedido->condicion_envio . $subestado . '</span>';
                     return $badge_estado;
                 })
                 ->addColumn('action', function ($pedido) {
@@ -2506,7 +2517,9 @@ class EnvioController extends Controller
                     margin-bottom: -4px;
                     color: black !important;">Con ruta</span>';
 
-                    $badge_estado .= '<span class="badge badge-success" style="background-color: ' . $color . '!important;">' . $pedido->condicion_envio . '</span>';
+                    $badge_estado .= '<span class="badge badge-success" style="background-color: ' . $color . '!important;">' .
+                        $pedido->condicion_envio .
+                        '</span>';
                     return $badge_estado;
                 })
                 ->editColumn('foto1', function ($pedido) {
@@ -2770,7 +2783,6 @@ class EnvioController extends Controller
         }
 
 
-
         if ($responsable == "fernandez_reparto") {
 
             $pedido = Pedido::where("codigo", $codigo)->first();
@@ -2982,7 +2994,7 @@ class EnvioController extends Controller
 
                     case "confirmacion_operaciones":
 
-                        if($nuevo_estado == Pedido::RECIBIDO_JEFE_OPE_INT){
+                        if ($nuevo_estado == Pedido::RECIBIDO_JEFE_OPE_INT) {
                             $pedido->update([
                                 'modificador' => 'USER' . Auth::user()->id,
                                 'fecha_envio_op_courier' => Carbon::now(),
@@ -2997,7 +3009,7 @@ class EnvioController extends Controller
                                 'condicion_envio_code' => Pedido::RECIBIDO_JEFE_OPE_INT,
                                 'notificado' => 0
                             ]);
-                        }else if($nuevo_estado == Pedido::ENTREGADO_SIN_SOBRE_CLIENTE_INT){
+                        } else if ($nuevo_estado == Pedido::ENTREGADO_SIN_SOBRE_CLIENTE_INT) {
                             $pedido->update([
                                 'modificador' => 'USER' . Auth::user()->id,
                                 'fecha_envio_op_courier' => Carbon::now(),
