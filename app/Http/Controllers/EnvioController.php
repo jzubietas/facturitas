@@ -1542,20 +1542,23 @@ class EnvioController extends Controller
             ->addColumn('action', function ($pedido) {
                 switch ($pedido->condicion_envio_code) {
                     case Pedido::RECEPCIONADO_OLVA_INT:
-                        $btn = '<button data-target="' . DireccionGrupo::SCE_EN_CAMINO . '" data-toggle="jqconfirm" class="btn btn-primary btn-sm"><i class="fas fa-car"></i> ACTUALIZAR ESTADO</button>';
+                        $btn = '<button data-target="" data-toggle="jqconfirm" class="btn btn-primary btn-sm"><i class="fas fa-car"></i> ACTUALIZAR ESTADO</button>';
                         break;
                     case Pedido::EN_CAMINO_OLVA_INT:
-                        $btn = '<button data-target="' . DireccionGrupo::SCE_EN_TIENDA_AGENTE . '" data-toggle="jqconfirm" class="btn btn-dark btn-sm"><i class="fas fa-home"></i>ACTUALIZAR ESTADO</button>';
+                        $btn = '<button data-target="" data-toggle="jqconfirm" class="btn btn-dark btn-sm"><i class="fas fa-home"></i>ACTUALIZAR ESTADO</button>';
                         break;
                     case Pedido::EN_TIENDA_AGENTE_OLVA_INT:
-                        $btn = '<button data-target="' . DireccionGrupo::SCE_ENTREGADO . '" data-toggle="jqconfirm" class="btn btn-warning btn-sm"><i class="fas fa-envelope"></i>ACTUALIZAR ESTADO</button>';
+                        $btn = '<button data-target="" data-toggle="jqconfirm" class="btn btn-warning btn-sm"><i class="fas fa-envelope"></i>ACTUALIZAR ESTADO</button>';
                         break;
                     case Pedido::ENTREGADO_PROVINCIA_INT:
                     case Pedido::NO_ENTREGADO_OLVA_INT:
                         $btn = '';
                         break;
                     default:
-                        $btn = '<button data-target="' . DireccionGrupo::SCE_RECEPCIONADO . '" data-toggle="jqconfirm" class="btn btn-info btn-sm"><i class="fa fa-hand-holding"></i> ACTUALIZAR ESTADO</button>';
+                        $btn = '<button data-target="" data-toggle="jqconfirm" class="btn btn-info btn-sm"><i class="fa fa-hand-holding"></i> ACTUALIZAR ESTADO</button>';
+                }
+                if (!in_array(\auth()->user()->rol, [User::ROL_JEFE_COURIER, User::ROL_ADMIN])) {
+                    $btn = '';
                 }
                 return $btn;
             })
