@@ -917,7 +917,8 @@ class EnvioController extends Controller
 
         $dateMin = Carbon::now()->format('Y-m-d');
 
-        return view('envios.rutaenvio', compact('condiciones', 'distritos', 'direcciones', 'destinos', 'superasesor', 'ver_botones_accion', 'departamento', 'dateMin', 'distribuir', 'rol', 'fecha_consulta', 'motorizados'));
+        $users_motorizado = User::where('rol', 'MOTORIZADO')->where('estado', '1')->pluck('name', 'id');
+        return view('envios.rutaenvio', compact('condiciones', 'users_motorizado','distritos', 'direcciones', 'destinos', 'superasesor', 'ver_botones_accion', 'departamento', 'dateMin', 'distribuir', 'rol', 'fecha_consulta', 'motorizados'));
     }
 
 

@@ -3,8 +3,6 @@
 @section('title', 'Rutas de Envio')
 
 @section('content_header')
-@include('envios.modal.exportar', ['title' => 'Exportar RUTAS DE ENVIAR', 'key' => '1'])
-
     @if($superasesor > 0)
         <br>
         <div class="bg-4">
@@ -61,6 +59,13 @@
                                         <!--
                                         <h6 class="mb-0">Sobres devueltos/observados: <span>{{$motorizado->devueltos}}</span>
                                         </h6>-->
+                                        <button
+                                            class="btn btn-sm btn-danger exportar_zona"
+                                            data-motorizado="{{$motorizado->id}}">
+                                            <i class="fa fa-file-excel"></i>Excel
+
+                                        </button>
+
                                     </div>
                                 </div>
                             </div>
@@ -108,7 +113,7 @@
                                            class="tabla-data table table-striped dt-responsive w-100">
                                         <thead>
                                         <tr>
-                                            
+
                                             <th scope="col">Código</th>
                                             <th scope="col">Teléfono</th>
                                             <th scope="col">Zona</th>
@@ -129,6 +134,7 @@
         </div>
     </div>
 
+    @include('envios.motorizado.modal.exportar_motorizado', ['title' => 'Exportar Recepcion Motorizado','key' => '3'])
 @stop
 
 @push('css')
@@ -190,6 +196,13 @@
     <script>
         $(document).ready(function () {
 
+
+
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
             function applySearch(e) {
                 let valor=$("#buscador_global").val();
                 console.log("busqueda "+valor)
@@ -311,14 +324,15 @@
             @endforeach
 
 
-
-
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
-
+            $(document).on('click', '.exportar_zona', function (event) {
+                event.preventDefault();
+                $motorizado = $(this).data('motorizado');
+                $fecha = $("#fecha_consulta").val();
+                $("#user_motorizado").val($motorizado);
+                $("#user_motorizado").selectpicker('refresh')
+                $("#fecha_envio").val($fecha)
+                $("#modal-exportar").modal('show');
+            })
         });
     </script>
 
