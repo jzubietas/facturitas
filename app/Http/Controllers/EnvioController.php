@@ -2449,7 +2449,7 @@ class EnvioController extends Controller
                 ->addColumn('condicion_envio_color', function ($pedido) {
                     return Pedido::getColorByCondicionEnvio($pedido->condicion_envio);
                 })
-                ->editColumn('condicion_envio', function ($pedido) {
+                ->editColumn('condicion_envio', function ($pedido)use ($opcion) {
                     $badge_estado = '';
                     if ($pedido->pendiente_anulacion == '1') {
                         $badge_estado .= '<span class="badge badge-success">' . Pedido::PENDIENTE_ANULACION . '</span>';
@@ -2471,13 +2471,15 @@ class EnvioController extends Controller
                     $color = Pedido::getColorByCondicionEnvio($pedido->condicion_envio);
 
                     $subestado = '';
-                    if (in_array($pedido->condicion_envio_code, [Pedido::MOTORIZADO_INT, Pedido::RECEPCION_MOTORIZADO_INT])) {
-                        if ($pedido->motorizado_status == Pedido::ESTADO_MOTORIZADO_OBSERVADO) {
-                            $subestado .= '|| OBSERVADO';
-                        } elseif ($pedido->motorizado_status == Pedido::ESTADO_MOTORIZADO_NO_CONTESTO) {
-                            $subestado .= '|| NO CONTESTO';
-                        } elseif ($pedido->motorizado_status == Pedido::ESTADO_MOTORIZADO_NO_RECIBIDO) {
-                            $subestado .= '|| NO RECIBIDO';
+                    if ($opcion == 'entregado') {
+                        if (in_array($pedido->condicion_envio_code, [Pedido::MOTORIZADO_INT, Pedido::RECEPCION_MOTORIZADO_INT])) {
+                            if ($pedido->motorizado_status == Pedido::ESTADO_MOTORIZADO_OBSERVADO) {
+                                $subestado .= '|| OBSERVADO';
+                            } elseif ($pedido->motorizado_status == Pedido::ESTADO_MOTORIZADO_NO_CONTESTO) {
+                                $subestado .= '|| NO CONTESTO';
+                            } elseif ($pedido->motorizado_status == Pedido::ESTADO_MOTORIZADO_NO_RECIBIDO) {
+                                $subestado .= '|| NO RECIBIDO';
+                            }
                         }
                     }
                     $badge_estado .= '<span class="badge badge-success" style="background-color: ' . $color . '!important;">' . $pedido->condicion_envio . $subestado . '</span>';
