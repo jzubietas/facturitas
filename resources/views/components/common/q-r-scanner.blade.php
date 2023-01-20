@@ -254,7 +254,7 @@
 
                         Swal.fire({
                             icon: 'error',
-                            title: 'El pedido esta anulado',
+                            title: 'El pedido No tiene direcion',
                             color: '#FFF',
                             background: '#9f2916',
                             showConfirmButton: false,
