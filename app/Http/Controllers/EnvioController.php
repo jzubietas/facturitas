@@ -1678,7 +1678,7 @@ class EnvioController extends Controller
                             'cambio_direccion_at' => null
                         ]);
                     }
-                    DireccionGrupo::addNoRecibidoAuthorization($grupo);
+                    DireccionGrupo::addSolicitudAuthorization($grupo);
                 }
             } else {
                 $grupo->update([
@@ -1686,7 +1686,7 @@ class EnvioController extends Controller
                     'motorizado_status' => Pedido::ESTADO_MOTORIZADO_NO_RECIBIDO,
                     'cambio_direccion_at' => null
                 ]);
-                DireccionGrupo::addNoRecibidoAuthorization($grupo);
+                DireccionGrupo::addSolicitudAuthorization($grupo);
             }
             return response()->json(['html' => "Grupo rechazado"]);
         } else if ($accion == "retornar_para_reparto") {

@@ -18,7 +18,7 @@ class GrupoPedido extends Model
         return $this->belongsToMany(Pedido::class, 'grupo_pedido_items')->withPivot([
             'razon_social',
             'codigo',
-        ])->orderByPivot('razon_social','asc');
+        ])->orderByPivot('razon_social', 'asc');
     }
 
     public static function createGroupByPedido(Pedido $pedido, $createAnother = false, $attach = false)
@@ -36,6 +36,7 @@ class GrupoPedido extends Model
         ], $createAnother);
         if ($attach) {
             $detalle = $pedido->detallePedidos()->orderBy('detalle_pedidos.created_at')->first();
+            \DB::table('grupo_pedido_items')->where('pedido_id',$pedido->id)->delete();
             $grupo->pedidos()->syncWithoutDetaching([
                 $pedido->id => [
                     "codigo" => $pedido->codigo,
@@ -47,7 +48,7 @@ class GrupoPedido extends Model
                     'condicion_envio_code' => Pedido::RECEPCION_COURIER_INT,
                     'condicion_envio' => Pedido::RECEPCION_COURIER,
                     'condicion_envio_at'=>now(),
-                    'estado_sobre' => 1,
+                    //'estado_sobre' => 1,
                 ]);
             }
         }
@@ -75,7 +76,7 @@ class GrupoPedido extends Model
         } else {
             $distrito = Distrito::query()
                 ->where('distrito', '=', data_get($array, 'distrito'))
-                ->whereIn('provincia',['LIMA','CALLAO'])
+                ->whereIn('provincia', ['LIMA', 'CALLAO'])
                 ->first();
             $data = [
                 "zona" => data_get($array, 'zona') ?? 'n/a',
