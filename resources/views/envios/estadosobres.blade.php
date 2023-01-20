@@ -470,16 +470,11 @@
                             'codigo' : codigo_mejorado,
                         },
                         success: function (data) {
-                            console.log(data.error);
-                            codigos_agregados = []
+                            console.log(data);
+                            var InfoString = "";
 
-                            var codigos_procesados = data.codigos_procesados
-                            var codigos_no_procesados = data.codigos_no_procesados
-
-
-                            setTimeout(function (){
-                                $('#respuesta_barra').fadeOut();
-                            },2200);
+                            InfoString += data.codigo
+                            $('#info-pedido').html();
 
                         }
                     }).always(function(){
