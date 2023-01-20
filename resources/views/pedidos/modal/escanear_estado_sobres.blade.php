@@ -30,7 +30,7 @@
     border-radius: 4px;
     padding: 4px;
     font-size: 17px;">
-        <button class="btn btn-success" id="close-scan" data-dismiss="modal">Cerrar</button>
+        <button class="btn btn-danger" data-dismiss="modal">Cerrar</button>
       </div>
     </div>
   </div>

@@ -67,6 +67,8 @@
 
     {{-- Navbar right links --}}
     <ul class="navbar-nav ml-auto">
+
+        <button class="btn btn-sm btn-option br-8 font-11 font-weight-bold" id="btn_buscar_scan" data-toggle="modal" data-target="#modal-escanear-estado-sobre" type="button"><i class="fa fa-barcode" aria-hidden="true"></i> Buscar</button>
         {{-- Custom right links --}}
         @yield('content_top_nav_right')
 
@@ -87,5 +89,4 @@
             @include('adminlte::partials.navbar.menu-item-right-sidebar-toggler')
         @endif
     </ul>
-
 </nav>
