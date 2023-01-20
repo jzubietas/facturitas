@@ -33,7 +33,7 @@
                 $(document).on('click','[data-authorization-button]',function () {
                     const action=$(this).data('authorization-button')
                     $.post(action).done(function (id) {
-                        $("notificacion-pedidos-no-recibidos-"+id).remove()
+                        $("#notificacion-pedidos-no-recibidos-"+id).remove()
                     })
                 })
             })

@@ -145,7 +145,15 @@ class MotorizadoController extends Controller
                                 </li>';
                             break;
                         case 'observado':
-                            $btn .= '<hr class="my-2"><p class="text-wrap text-break"><i>' . $pedido->motorizado_sustento_text . '</i></p>';
+                            $btn .= '<li class="pt-8">
+                                <button class="btn btn-sm text-white btn-info"
+                                data-jqconfirm="reprogramar"
+                                data-jqconfirm-id="' . $pedido->id . '"
+                                data-jqconfirm-action="' . route('envios.motorizados.reprogramar', $pedido->id) . '"
+                                >
+                                    Reprogramar
+                                </button>
+                            </li>';
                             break;
                         default:
                             $btn .= '<li class="pt-8">
@@ -311,6 +319,29 @@ class MotorizadoController extends Controller
         ]);
     }
 
+    public function reprogramar(DireccionGrupo $grupo, Request $request)
+    {
+        $this->validate($request, [
+            'fecha_salida' => 'required|date',
+            'adjunto' => 'required|file',
+        ], [
+            'fecha_salida.required' => 'La fecha de reprogramacion es requerida',
+            'fecha_salida.date' => 'La fecha de reprogramacion no tiene el formato correcto',
+            'adjunto.required' => 'Es requerido una captura de pantalla',
+            'adjunto.file' => 'La captura de pantalla debe ser un archivo',
+        ]);
+
+        $grupo->update([
+            'reprogramacion_at' => Carbon::parse($request->fecha_salida),
+            'reprogramacion_solicitud_user_id' => \auth()->id(),
+            'reprogramacion_solicitud_at' => now(),
+        ]);
+        $grupo->addMedia($request->file('adjunto'))
+            ->toMediaCollection('reprogramacion_adjunto');
+
+        DireccionGrupo::addSolicitudAuthorization($grupo,'reprogramacion');
+        return $grupo;
+    }
 
     public function devueltos(Request $request)
     {
@@ -506,8 +537,8 @@ class MotorizadoController extends Controller
                 $pedido->update([
                     'direccion_grupo' => null
                 ]);
-                DireccionGrupo::restructurarCodigos($grupo);
             }
+            DireccionGrupo::restructurarCodigos($grupo);
         } else {
             $pedido->update([
                 'direccion_grupo' => null
@@ -574,11 +605,9 @@ class MotorizadoController extends Controller
             $ver_botones_accion = 1;
         }
 
-        if( in_array(auth()->user()->rol,[User::ROL_ADMIN,User::ROL_JEFE_COURIER]) )
-        {
+        if (in_array(auth()->user()->rol, [User::ROL_ADMIN, User::ROL_JEFE_COURIER])) {
             return view('envios.recepcionMotorizado_index', compact('condiciones', 'distritos', 'direcciones', 'destinos', 'superasesor', 'ver_botones_accion', 'departamento', 'fecha_consulta', 'users_motorizado', 'motorizados'));
-        }else if(auth()->user()->rol==User::ROL_MOTORIZADO)
-        {
+        } else if (auth()->user()->rol == User::ROL_MOTORIZADO) {
             return view('envios.recepcionMotorizado', compact('condiciones', 'distritos', 'direcciones', 'destinos', 'superasesor', 'ver_botones_accion', 'departamento', 'fecha_consulta', 'users_motorizado', 'motorizados'));
         }
 
@@ -757,7 +786,7 @@ class MotorizadoController extends Controller
                     } else if ($direcciongrupo->condicion_envio_code == Pedido::RECEPCION_MOTORIZADO_INT) {
                         if ($fecha_actual == $fecha_consulta) {
                             if (\auth()->user()->rol == User::ROL_MOTORIZADO) {
-                                if (count(DireccionGrupo::getNoRecibidoAuthorization($direcciongrupo->motorizado_id)) == 0) {
+                                if (count(DireccionGrupo::getSolicitudAuthorization($direcciongrupo->motorizado_id)) == 0) {
                                     $btn .= '<li>
                                 <button class="btn btn-sm text-secondary" data-target="#modal-confirmacion" data-toggle="modal" data-ide="' . $direcciongrupo->id . '" data-entregar-confirm="' . $direcciongrupo->id . '" data-destino="' . $direcciongrupo->destino . '" data-fechaenvio="' . $direcciongrupo->fecha . '" data-codigos="' . $direcciongrupo->codigos . '">
                                     <i class="fas fa-envelope text-success"></i> Iniciar ruta
@@ -857,9 +886,8 @@ class MotorizadoController extends Controller
                 ->activo();
 
             return Datatables::of(DB::table($grupos))
-
                 ->addColumn('codigos', function ($grupo) {
-                    return collect(explode(',',$grupo->codigos))->trim()->join("<br>");
+                    return collect(explode(',', $grupo->codigos))->trim()->join("<br>");
                 })
                 ->addColumn('condicion_envio_color', function ($grupo) {
                     return Pedido::getColorByCondicionEnvio($grupo->condicion_envio);
@@ -917,7 +945,7 @@ Ver Rotulo</a>')
 
                     return $btn;
                 })
-                ->rawColumns(['action', 'condicion_envio', 'distrito','codigos'])
+                ->rawColumns(['action', 'condicion_envio', 'distrito', 'codigos'])
                 ->make(true);
         }
     }
@@ -935,21 +963,21 @@ Ver Rotulo</a>')
     {
 
 
-            $grupos = Pedido::select([
-                'pedidos.codigo'])
-                ->join('direccion_grupos', 'direccion_grupos.id', 'pedidos.direccion_grupo')
-                ->where('direccion_grupos.estado',1)
-                ->where('direccion_grupos.condicion_envio_code',19)
-                ->whereDate('direccion_grupos.fecha_salida', Carbon::parse($request->fechaconsulta))
-                ->where('direccion_grupos.motorizado_id', $request->motorizado_id)
-                ->where('direccion_grupos.motorizado_status', 0)
-                //->where('direccion_grupos.distribucion', 'LIKE', '%' . $request->zona . '%')
-                ->activo()
-                ->get();
+        $grupos = Pedido::select([
+            'pedidos.codigo'])
+            ->join('direccion_grupos', 'direccion_grupos.id', 'pedidos.direccion_grupo')
+            ->where('direccion_grupos.estado', 1)
+            ->where('direccion_grupos.condicion_envio_code', 19)
+            ->whereDate('direccion_grupos.fecha_salida', Carbon::parse($request->fechaconsulta))
+            ->where('direccion_grupos.motorizado_id', $request->motorizado_id)
+            ->where('direccion_grupos.motorizado_status', 0)
+            //->where('direccion_grupos.distribucion', 'LIKE', '%' . $request->zona . '%')
+            ->activo()
+            ->get();
 
-                return response()->json([
-                    'grupo' => $grupos->pluck('codigo'),
-                ]);
+        return response()->json([
+            'grupo' => $grupos->pluck('codigo'),
+        ]);
 
-        }
+    }
 }
