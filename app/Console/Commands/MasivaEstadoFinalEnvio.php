@@ -53,7 +53,6 @@ class MasivaEstadoFinalEnvio extends Command
         $progress = $this->output->createProgressBar($count);
         foreach ($pedidos as $pedido)
         {
-
             $grupo=DireccionGrupo::createByPedido($pedido);
             DireccionGrupo::cambiarCondicionEnvio($grupo,Pedido::ENTREGADO_CLIENTE_INT);
             $progress->advance();
