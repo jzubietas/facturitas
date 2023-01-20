@@ -481,7 +481,7 @@
                                 InfoString += '<tr><td class="font-weight-bold p-8 pt-0 pb-0">Codigo</td><td>' + data.pedido.codigo + '</td><td class="font-weight-bold p-8">Estado</td><td><span class="bagde p-8 br-12 font-weight-bold" style="background-color: '+ data.pedido.condicion_envio_color +'">' +data.pedido.condicion_envio + '<s/pan></td></tr>';
                                 InfoString += '<tr><td class="font-weight-bold p-8 pt-0 pb-0"></td><td></td><td class="font-weight-bold p-8"></td><td></td></tr>';
                                 // SI TIENE DIRECCION
-                                if(data.pedido.direcciongrupo == null){
+                                if(data.pedido.estado_sobre == 0){
 
                                     InfoString += '<tr><td class="font-weight-bold p-8">Tiene Direccion</td><td colspan="3"> NO TIENE DIRECCION</td></tr>';
                                 }else{
