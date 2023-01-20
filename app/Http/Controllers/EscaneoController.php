@@ -21,13 +21,14 @@ class EscaneoController extends Controller
     /**
      * Handle the incoming request.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function __invoke(Request $request)
     {
         //
     }
+
     public function EscaneoQR(Request $request)
     {
         $pedido = Pedido::where("codigo", $request->id)->firstOrFail();
@@ -37,10 +38,22 @@ class EscaneoController extends Controller
 
     public function EstadoSobresScan(Request $request)
     {
-        $detalle_pedido = Pedido::where('codigo',$request->codigo)->first();
 
-        return response()->json(['pedido' => $detalle_pedido]);
+        $detalle_pedido = Pedido::with('direcciongrupo.motorizado')
+            ->where('codigo', $request->codigo)
+            ->first();
+
+        if($detalle_pedido == null){
+            return response()->json(['codigo'=>0]);
+        }else{
+            return response()->json(['pedido' => $detalle_pedido,'codigo'=>1]);
+        }
+
+
+
+        //data.pedido
+        //data.pedido.direcciongrupo
+        //data.pedido.direcciongrupo.motorizado
+        //data.pedido.direcciongrupo.motorizado.zona
     }
-
-
 }
