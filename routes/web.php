@@ -310,6 +310,7 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     Route::get('envios/motorizados/confirmar', [MotorizadoController::class, 'confirmar'])->name('envios.motorizados.confirmar');
     Route::get('envios/motorizados/confirmar-cliente', [MotorizadoController::class, 'confirmar_cliente'])->name('envios.motorizados.confirmar.cliente');
     Route::post('envios/motorizados/{grupo}/revertir', [MotorizadoController::class, 'revertir'])->name('envios.motorizados.revertir');
+    Route::post('envios/motorizados/{grupo}/reprogramar', [MotorizadoController::class, 'reprogramar'])->name('envios.motorizados.reprogramar');
 
     Route::get('envios.devueltos', [MotorizadoController::class, 'devueltos'])->name('envios.devueltos');
     Route::get('envios.datasobresdevueltos', [MotorizadoController::class, 'devueltos_datatable'])->name('envios.datasobresdevueltos');

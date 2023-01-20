@@ -43,6 +43,9 @@ class EscaneoController extends Controller
             ->where('codigo', $request->codigo)
             ->first();
 
+        $detalle_pedido->foto1 = \Storage::disk('pstorage')->url($detalle_pedido->foto1);
+
+
         if($detalle_pedido == null){
             return response()->json(['codigo'=>0]);
         }else{

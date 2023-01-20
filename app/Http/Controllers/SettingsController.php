@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Cliente;
 use App\Models\DireccionGrupo;
+use App\Models\Pedido;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -96,9 +97,24 @@ class SettingsController extends Controller
         return setting()->all();
     }
 
-    public function authorizationMotorizado(Request $request, User $user)
+    public function authorizationMotorizado(Request $request,  $user)
     {
-        DireccionGrupo::clearNoRecibidoAuthorization($user->id);
+        if ($request->has('direccion_grupo') && $request->get('action') == 'reprogramacion') {
+            $direccion = DireccionGrupo::query()->findOrFail($request->direccion_grupo);
+
+            DireccionGrupo::cambiarCondicionEnvio($direccion, Pedido::RECEPCION_MOTORIZADO_INT, [
+               // 'fecha_salida' => $direccion->reprogramacion_at,
+                'reprogramacion_accept_user_id' => auth()->id(),
+                'reprogramacion_accept_at' => now(),
+                'motorizado_status' => Pedido::ESTADO_MOTORIZADO_OBSERVADO,
+                'motorizado_sustento_text' => 'Por reprogramar a la fecha '.$direccion->reprogramacion_at->format('d-m-Y'),
+            ]);
+
+            DireccionGrupo::clearSolicitudAuthorization($user, 'reprogramacion');
+            return $direccion->id;
+        } else {
+            DireccionGrupo::clearSolicitudAuthorization($user);
+        }
         return $user->id;
     }
 }

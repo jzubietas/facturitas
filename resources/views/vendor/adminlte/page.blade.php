@@ -85,6 +85,7 @@
 
             $('#modal-escanear-estado-sobre').on('show.bs.modal', function (event) {
                 $('#info-pedido').html('<div class="text-center"><img src="{{asset('imagenes/scan.gif')}}" width="300" class="mr-8"><h5 class="font-weight-bold">Escanee un pedido para saber sus detalles</h5></div>');
+                $('#input-info-pedido').focus();
                 $('#input-info-pedido').val("");
 
                 $('#input-info-pedido').change(function (event) {
@@ -106,7 +107,7 @@
                                 $('#input-info-pedido').val("");
 
                                 var InfoString = '<h4 class="font-16 font-weight-bold">Información del pedido:</h4> <table class="table w-100">';
-                                InfoString += '<tr><td class="font-weight-bold p-8 pt-0 pb-0">Codigo</td><td>' + data.pedido.codigo + '</td><td class="font-weight-bold p-8">Estado</td><td><span class="bagde p-8 br-12 font-weight-bold" style="background-color: '+ data.pedido.condicion_envio_color +'">' +data.pedido.condicion_envio + '<s/pan></td></tr>';
+                                InfoString += '<tr><td class="font-weight-bold p-8 pt-0 pb-0">Codigo</td><td>' + data.pedido.codigo + '</td><td class="font-weight-bold p-8">Estado</td><td style="width: 250px;"><span class="bagde p-8 br-12 font-weight-bold" style="font-size:12px; background-color: '+ data.pedido.condicion_envio_color +'">' +data.pedido.condicion_envio + '<s/pan></td></tr>';
                                 InfoString += '<tr><td class="font-weight-bold p-8 pt-0 pb-0"></td><td></td><td class="font-weight-bold p-8"></td><td></td></tr>';
                                 // SI TIENE DIRECCION
                                 if(data.pedido.estado_sobre == 0){
@@ -115,14 +116,14 @@
                                 }else {
 
                                     InfoString += '<tr><td colspan="4" class="font-weight-bold p-8" style="background-color:#ededed;"><i class="fa fa-map-marker text-success mr-12" aria-hidden="true"></i> DIRECCION</td></tr>';
-                                    InfoString += '<tr><td class="font-weight-bold p-8 pt-0 pb-0">Dirección</td><td>' + data.pedido.env_direccion + '</td>';
+                                    InfoString += '<tr><td class="font-weight-bold">Dirección</td><td>' + data.pedido.env_direccion + '</td>';
                                     if (data.pedido.env_zona == 'OLVA') {
                                         InfoString += '<tr>';
                                     } else {
                                         InfoString += '<td class="font-weight-bold p-8">Distrito</td><td>' + data.pedido.env_distrito + '</td></tr>';
                                     }
 
-                                    InfoString += '<tr><td class="font-weight-bold p-8 pt-0 pb-0">Zona</td><td>' + data.pedido.env_zona + '</td><td class="font-weight-bold p-8">Destino</td><td>' + data.pedido.env_destino + '</td></tr>';
+                                    InfoString += '<tr><td class="font-weight-bold">Zona</td><td>' + data.pedido.env_zona + '</td><td class="font-weight-bold p-8">Destino</td><td>' + data.pedido.env_destino + '</td></tr>';
 
                                 }
                                 // SI ESTA ASIGNADO A UN MOTORIZADO
@@ -140,7 +141,8 @@
                                         }
                                         InfoString += '<tr><td colspan="4" class="font-weight-bold p8 pt-8 pb-8" style="background-color:#ededed;"><i class="fa fa-motorcycle text-primary mr-12" aria-hidden="true"></i> COURIER</td></tr>';
                                         InfoString += '<tr><td class="font-weight-bold p-8 pt-0 pb-0">Nombre Motorizado</td><td>'+ data.pedido.direcciongrupo.motorizado.name +'</td><td class="font-weight-bold p-8">Zona motorizado</td><td>'+ data.pedido.direcciongrupo.motorizado.zona +'</td></tr>';
-                                        InfoString += '<tr><td class="font-weight-bold p-8 pt-0 pb-0">Zona</td><td>'+ data.pedido.direcciongrupo.distribucion +'</td><td class="font-weight-bold p-8">Fecha de salida</td><td>'+ env_fecha_salida  +'</td></tr>';
+                                        InfoString += '<tr><td class="font-weight-bold p-8 pt-0 pb-0">Zona</td><td>'+ data.pedido.direcciongrupo.distribucion +'</td><td class="font-weight-bold p-8">Fecha de salida</td><td>'+ data.pedido.direcciongrupo.fecha_salida_format  +'</td></tr>';
+                                        InfoString += '<tr><td class="font-weight-bold p-8 pt-0 pb-0">ID Grupo</td><td>'+ data.pedido.direcciongrupo.id +'</td><td class="font-weight-bold p-8">Estado Grupo</td><td><span class="bagde p-8 br-12 font-weight-bold font-11" style="background-color: #f97100; padding: 4px 16px !important; background-color: '+ data.pedido.condicion_envio_color +'">'+ data.pedido.direcciongrupo.condicion_envio  +'</span></td></tr>';
 
                                         //SI TIENE MOTORIZADO
                                         if(data.pedido.condicion_envio_code == 10){
