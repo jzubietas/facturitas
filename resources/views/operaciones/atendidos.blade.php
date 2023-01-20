@@ -675,24 +675,6 @@
                         data: 'condicion_envio',
                         name: 'condicion_envio',
                         sWidth: '10%',
-                        render: function (data, type, row, meta) {
-                            var badge_estado = '';
-                            if (row.estado_sobre == 1) {
-                                badge_estado += '<span class="badge badge-dark p-8" style="color: #fff; background-color: #347cc4; font-weight: 600; margin-bottom: -2px;border-radius: 4px 4px 0px 0px; font-size:8px;  padding:6px;">Direccion agregada</span>';
-                            }
-                            badge_estado += '<span class="badge badge-success" style="background-color:' + row.condicion_envio_color + ' !important;" >' + data + '</span>';
-                            return badge_estado;
-                            /*
-                            if (row.condicion_code == 1) {
-                                return '<span class="badge badge-success" style="background-color:' + row.condicion_envio_color + ' !important;" >' + '{{\App\Models\Pedido::POR_ATENDER_OPE }}' + '</span>';
-                            } else if (row.condicion_code == 2) {
-                                return '<span class="badge badge-success" style="background-color:' + row.condicion_envio_color + ' !important;" >' + '{{\App\Models\Pedido::EN_ATENCION_OPE }}' + '</span>';
-                            } else if (row.condicion_code == 3) {
-                                return '<span class="badge badge-success" style="background-color:' + row.condicion_envio_color + ' !important;" >' + '{{\App\Models\Pedido::ATENDIDO_OPE }}' + '</span>';
-                            } else if (row.condicion_code == 4) {
-                                return '<span class="badge badge-success" style="background-color:' + row.condicion_envio_color + ' !important;" >' + '{{\App\Models\Pedido::ANULADO }}' + '</span>';
-                            }*/
-                        }
                     },
                     {data: 'atendido_por', name: 'atendido_por',},
                     {data: 'jefe', name: 'jefe',},
