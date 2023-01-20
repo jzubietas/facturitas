@@ -302,6 +302,7 @@
 
                     $('[data-jqconfirm]', row).click(function () {
                         $.confirm({
+                            columnClass: 'large',
                             title: 'Editar direccion de envio',
                             content: function () {
                                 var self = this;
@@ -365,6 +366,23 @@
                                 cancel: function () {
 
                                 },
+                            },
+                            onContentReady:function (){
+
+                                var self = this;
+                                //console.log(self.$content.find('form')[0])
+                                const form = self.$content.find('form')[0];
+                                const data = new FormData(form)
+                                console.log("aa")
+                                console.log(form)
+                                //this.buttons.ok.disable();
+                                //$(select).selectpicker('refresh');
+                                //form.distrito.addClass('selectpicker')
+                                self.$content.find('select#distrito').selectpicker('refresh');
+                                //console.log("a")
+
+                                //$(self.$).selectpicker();
+                                //console.log("aa");
                             }
                         });
                     })

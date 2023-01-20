@@ -45,6 +45,13 @@ class DireccionGrupo extends Model implements HasMedia
         'fecha',
         'cambio_direccion_at',
         'fecha_recepcion_motorizado',
+        'reprogramacion_at',
+        'reprogramacion_solicitud_at',
+        'reprogramacion_accept_at',
+    ];
+
+    protected $appends = [
+        'is_reprogramado'
     ];
 
     protected static function booted()
@@ -70,6 +77,14 @@ class DireccionGrupo extends Model implements HasMedia
     public function scopeContestoNoObservado($query)
     {
         return $query->whereNotIn($this->qualifyColumn('motorizado_status'), [Pedido::ESTADO_MOTORIZADO_OBSERVADO, Pedido::ESTADO_MOTORIZADO_NO_CONTESTO]);
+    }
+
+    public function scopeReprogramados($query)
+    {
+        //$this->reprogramacion_at != null && $this->reprogramacion_accept_at == null;
+
+        return $query->whereNotNull($this->qualifyColumn('reprogramacion_at'))
+            ->whereNull($this->qualifyColumn('reprogramacion_accept_at'));
     }
 
 
@@ -106,6 +121,11 @@ class DireccionGrupo extends Model implements HasMedia
     public function pedidos()
     {
         return $this->hasMany(Pedido::class, 'direccion_grupo');
+    }
+
+    public function getIsReprogramadoAttribute()
+    {
+        return $this->reprogramacion_at != null && $this->reprogramacion_accept_at == null;
     }
 
     public static function restructurarCodigos(self $grupo)
@@ -206,51 +226,28 @@ class DireccionGrupo extends Model implements HasMedia
                             'cambio_direccion_sustento' => $data['cambio_direccion_sustento'],
                             'cambio_direccion_at' => now(),
                         ]);
-                        GrupoPedido::desvincularPedido($pedido, false, true);
+                        GrupoPedido::createGroupByPedido($pedido, false, true);
                     } else {
-                        if ($pedido->env_distrito != $data['distrito']) {
-                            $pedido->update([
-                                'direccion_grupo' => null,
-                            ]);
-                            DireccionGrupo::restructurarCodigos($grupo);
-                            $grupo->update([
-                                'estado' => 0,
-                                'motorizado_status' => 0,
-                                'motorizado_sustento_text' => 'Los pedidos fueron enviados a con direccion, por motivo de cambio de dirección',
-                            ]);
-                            $pedido->update([
-                                'env_nombre_cliente_recibe' => $data['nombre_cliente_recibe'],
-                                'env_celular_cliente_recibe' => $data['celular_cliente_recibe'],
-                                'env_direccion' => $data['direccion'],
-                                'env_referencia' => $data['referencia'],
-                                'env_distrito' => $data['distrito'],
-                                'env_observacion' => $data['observacion'],
-                                'cambio_direccion_sustento' => $data['cambio_direccion_sustento'],
-                                'cambio_direccion_at' => null,
-                            ]);
-                            GrupoPedido::createGroupByPedido($pedido, false, true);
-                        } else {
-                            $grupo->update([
-                                'nombre_cliente' => $data['nombre_cliente_recibe'],
-                                'celular_cliente' => $data['celular_cliente_recibe'],
-                                'direccion' => $data['direccion'],
-                                'referencia' => $data['referencia'],
-                                'distrito' => $data['distrito'],
-                                'observacion' => $data['observacion'],
-                                'cambio_direccion_sustento' => $data['cambio_direccion_sustento'],
-                                'cambio_direccion_at' => now(),
-                            ]);
-                            $pedido->update([
-                                'env_nombre_cliente_recibe' => $data['nombre_cliente_recibe'],
-                                'env_celular_cliente_recibe' => $data['celular_cliente_recibe'],
-                                'env_direccion' => $data['direccion'],
-                                'env_referencia' => $data['referencia'],
-                                'env_distrito' => $data['distrito'],
-                                'env_observacion' => $data['observacion'],
-                                'cambio_direccion_sustento' => $data['cambio_direccion_sustento'],
-                                'cambio_direccion_at' => now(),
-                            ]);
-                        }
+                        $grupo->update([
+                            'nombre_cliente' => $data['nombre_cliente_recibe'],
+                            'celular_cliente' => $data['celular_cliente_recibe'],
+                            'direccion' => $data['direccion'],
+                            'referencia' => $data['referencia'],
+                            'distrito' => $data['distrito'],
+                            'observacion' => $data['observacion'],
+                            'cambio_direccion_sustento' => $data['cambio_direccion_sustento'],
+                            'cambio_direccion_at' => now(),
+                        ]);
+                        $pedido->update([
+                            'env_nombre_cliente_recibe' => $data['nombre_cliente_recibe'],
+                            'env_celular_cliente_recibe' => $data['celular_cliente_recibe'],
+                            'env_direccion' => $data['direccion'],
+                            'env_referencia' => $data['referencia'],
+                            'env_distrito' => $data['distrito'],
+                            'env_observacion' => $data['observacion'],
+                            'cambio_direccion_sustento' => $data['cambio_direccion_sustento'],
+                            'cambio_direccion_at' => now(),
+                        ]);
                     }
                 } else {
                     $pedido->update([
@@ -269,45 +266,19 @@ class DireccionGrupo extends Model implements HasMedia
                     $cantidad = $grupo->pedidos()->count();
                     if ($cantidad > 1) {
                         $grupo = DireccionGrupo::desvincularPedido($grupo, $pedido, $data['cambio_direccion_sustento']);
-                        $grupo->update([
-                            'nombre_cliente' => $data['nombre_cliente_recibe'],
-                            'celular_cliente' => $data['celular_cliente_recibe'],
-                            'direccion' => $data['direccion'],
-                            'referencia' => $data['referencia'],
-                            'distrito' => $data['distrito'],
-                            'observacion' => $data['observacion'],
-                            'cambio_direccion_sustento' => $data['cambio_direccion_sustento'],
-                            'cambio_direccion_at' => null,
-                        ]);
-                    } else {
-                        if ($pedido->env_distrito != $data['distrito']) {
-                            $grupo->update([
-                                'nombre_cliente' => $data['nombre_cliente_recibe'],
-                                'celular_cliente' => $data['celular_cliente_recibe'],
-                                'direccion' => $data['direccion'],
-                                'referencia' => $data['referencia'],
-                                'distrito' => $data['distrito'],
-                                'observacion' => $data['observacion'],
-                                'cambio_direccion_sustento' => $data['cambio_direccion_sustento'],
-                                'motorizado_status' => Pedido::ESTADO_MOTORIZADO_OBSERVADO,
-                                'motorizado_sustento_text' => 'Cambio de dirección: ' . $data['cambio_direccion_sustento'],
-                                'cambio_direccion_at' => null,
-                            ]);
-                        } else {
-                            $grupo->update([
-                                'nombre_cliente' => $data['nombre_cliente_recibe'],
-                                'celular_cliente' => $data['celular_cliente_recibe'],
-                                'direccion' => $data['direccion'],
-                                'referencia' => $data['referencia'],
-                                'distrito' => $data['distrito'],
-                                'observacion' => $data['observacion'],
-                                //'motorizado_status' => 0,
-                                'motorizado_sustento_text' => 'Cambio de dirección: ' . $data['cambio_direccion_sustento'],
-                                'cambio_direccion_sustento' => $data['cambio_direccion_sustento'],
-                                'cambio_direccion_at' => now(),
-                            ]);
-                        }
                     }
+                    $grupo->update([
+                        'nombre_cliente' => $data['nombre_cliente_recibe'],
+                        'celular_cliente' => $data['celular_cliente_recibe'],
+                        'direccion' => $data['direccion'],
+                        'referencia' => $data['referencia'],
+                        'distrito' => $data['distrito'],
+                        'observacion' => $data['observacion'],
+                        'cambio_direccion_sustento' => $data['cambio_direccion_sustento'],
+                        'motorizado_status' => Pedido::ESTADO_MOTORIZADO_OBSERVADO,
+                        'motorizado_sustento_text' => 'Cambio de dirección: ' . $data['cambio_direccion_sustento'],
+                        'cambio_direccion_at' => null,
+                    ]);
                     $pedido->update([
                         'env_nombre_cliente_recibe' => $data['nombre_cliente_recibe'],
                         'env_celular_cliente_recibe' => $data['celular_cliente_recibe'],
@@ -316,14 +287,15 @@ class DireccionGrupo extends Model implements HasMedia
                         'env_distrito' => $data['distrito'],
                         'env_observacion' => $data['observacion'],
                         'cambio_direccion_sustento' => $data['cambio_direccion_sustento'],
+                        'cambio_direccion_at' => now(),
                     ]);
                 } else {
                     $pedido->update([
-                        'cambio_direccion_sustento' => $data['cambio_direccion_sustento'],
                         'env_numregistro' => $data['env_numregistro'],
                         'env_tracking' => $data['env_tracking'],
                         'env_importe' => $data['env_importe'],
                         'env_rotulo' => $data['env_rotulo'],
+                        'cambio_direccion_sustento' => $data['cambio_direccion_sustento'],
                         'cambio_direccion_at' => now(),
                     ]);
                 }
@@ -461,18 +433,6 @@ class DireccionGrupo extends Model implements HasMedia
         }
     }
 
-    public static function addNoRecibidoAuthorization(self $grupo)
-    {
-        setting()->load();
-        $motorizado_id = $grupo->motorizado_id;
-        $key = "motorizado.authorization.ruta.paquetes.$motorizado_id";
-        $result = setting($key, []);
-        $result[] = $grupo->id;
-        setting([
-            $key => collect($result)->unique()->values()->all()
-        ])->save();
-    }
-
 
     public static function moverAMotorizadoOlva(self $grupo)
     {
@@ -512,6 +472,19 @@ class DireccionGrupo extends Model implements HasMedia
         return $grupo;
     }
 
+
+    public static function addSolicitudAuthorization(self $grupo, $key = 'paquetes')
+    {
+        setting()->load();
+        $motorizado_id = $grupo->motorizado_id;
+        $key = "motorizado.authorization.ruta.$key.$motorizado_id";
+        $result = setting($key, []);
+        $result[] = $grupo->id;
+        setting([
+            $key => collect($result)->unique()->values()->all()
+        ])->save();
+    }
+
     /**
      * @param $motorizadoId
      * @return array
@@ -519,17 +492,17 @@ class DireccionGrupo extends Model implements HasMedia
      * @throws \Psr\Container\NotFoundExceptionInterface
      */
 
-    public static function getNoRecibidoAuthorization($motorizadoId)
+    public static function getSolicitudAuthorization($motorizadoId, $key = 'paquetes')
     {
         setting()->load();
-        $key = "motorizado.authorization.ruta.paquetes.$motorizadoId";
+        $key = "motorizado.authorization.ruta.$key.$motorizadoId";
         return setting($key, []);
     }
 
-    public static function clearNoRecibidoAuthorization($motorizadoId)
+    public static function clearSolicitudAuthorization($motorizadoId, $key = 'paquetes')
     {
         setting()->load();
-        $key = "motorizado.authorization.ruta.paquetes.$motorizadoId";
+        $key = "motorizado.authorization.ruta.$key.$motorizadoId";
         setting()->forget($key);
         setting()->save();
     }
