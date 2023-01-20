@@ -176,7 +176,7 @@
                                                                             RECEPCIÓN
                                                                         </a>
                                                                     </li>
-                                                                    <li class="nav-item">
+                                                                    <!--<li class="nav-item">
                                                                         <a class="nav-link"
                                                                            id="enrutahijo{{Str::slug($motorizado->zona)}}-tab"
                                                                            data-vista="19"
@@ -190,7 +190,7 @@
                                                                            data-action="enrutahijo">
                                                                             EN RUTA
                                                                         </a>
-                                                                    </li>
+                                                                    </li>-->
                                                                 </ul>
 
                                                                 <table
@@ -449,6 +449,9 @@
                             transition: all 0.5s ease;
                             text-shadow: 10px 2px #6ac7c2;
                         }
+                        .dataTables_filter {
+                            display: none;
+                        }
                     </style>
                     <link rel="stylesheet"
                           href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
@@ -487,7 +490,7 @@
                             //valor=(valor||'').trim()
 
 
-                            $(".tabla-data").search( valor ).draw();
+                            $(".tabla-data").DataTable().search( valor ).draw();
                             //tabla_pedidos_principal_centro.search( valor ).draw();
                             //tabla_pedidos_principal_sur.search( valor ).draw();
                         }
@@ -851,6 +854,7 @@
                             @foreach($motorizados as $motorizado)
                             $('#tablaPrincipal{{Str::upper($motorizado->zona)}}').DataTable({
                                 ...configDataTableZonas,
+                                "bFilter": false,
                                 ajax: {
                                     url: "{{route('envios.recepcionmotorizadotablageneral',['datatable'=>'1'])}}",
                                     data: function (a) {
@@ -859,9 +863,9 @@
                                         a.tab = $("#myTab{{Str::slug($motorizado->zona)}} li>a.active").data('tab');
                                         a.motorizado_id = {{ $motorizado->id }};
                                         a.zona = "{{ Str::upper($motorizado->zona)}}";
-                                        let vista = $('ul#myTab li.nav-item>a.active').attr('id');//18 19
-                                        vista = $('#' + vista).data('url');
-                                        a.vista = vista;
+                                        //let vista = 18;//18 19
+                                        //vista = $('#' + vista).data('url');
+                                        a.vista = 19;
                                     }
                                 },
                             });

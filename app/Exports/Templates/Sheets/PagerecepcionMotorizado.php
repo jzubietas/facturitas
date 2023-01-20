@@ -66,8 +66,8 @@ class PagerecepcionMotorizado extends Export implements WithStyles,WithColumnFor
                 'direccion_grupos.referencia',
                 'direccion_grupos.distrito',
             ])
-        ->where('direccion_grupos.estado','=','1')
-        ->orderBy('concat(direccion_grupos.celular) as celular_recibe','desc');
+        ->where('direccion_grupos.estado','=','1');
+        //->orderBy('concat(direccion_grupos.celular)','desc');
         if ($this->motorizado_id!=0) {
             $direccion = $direccion->where('direccion_grupos.motorizado_id', $this->motorizado_id);
         }
