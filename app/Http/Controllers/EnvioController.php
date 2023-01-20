@@ -2707,6 +2707,11 @@ class EnvioController extends Controller
                     case Pedido::ENVIADO_OPE_INT:
                         $nuevo_estado = Pedido::RECIBIDO_JEFE_OPE_INT;
                         break;
+
+                    case Pedido::ENTREGADO_SIN_SOBRE_OPE_INT: // 13
+                        $nuevo_estado = Pedido::ENTREGADO_SIN_SOBRE_CLIENTE_INT; // 14
+                        $respuesta = "El pedido sin sobre se confirmo correctamente.";
+                        break;
                 }
                 break;
             // ENTREGA MARIA SIN SOBRE
@@ -2759,6 +2764,8 @@ class EnvioController extends Controller
             $fecha_salida = "";
         }
 
+
+
         if ($responsable == "fernandez_reparto") {
 
             $pedido = Pedido::where("codigo", $codigo)->first();
@@ -2792,6 +2799,17 @@ class EnvioController extends Controller
             $color = $pedido->condicion_envio_color;
             if ($pedido->condicion_envio_code == Pedido::ENVIO_MOTORIZADO_COURIER_INT) {
                 return response()->json(['html' => 'El pedido <b style="">' . $codigo . '</b> ya ah sido procesado anteriormente, su estado actual es <br><span class="br-4 mt-16" style="background-color:' . $color . '; padding: 2px 12px; color: black; font-weight: bold;">' . Pedido::$estadosCondicionEnvioCode[$condicion_code_actual] . '</span>', 'class' => "text-danger", 'codigo' => $codigo, 'error' => 4, 'msj_error' => Pedido::$estadosCondicionEnvioCode[$condicion_code_actual]]);
+            }
+        }else{
+
+            $pedido = Pedido::where("codigo", $codigo)->first();
+
+            if ($pedido == null) {
+                return response()->json(['html' => "Este pedido No se encuentra en el sistema", 'class' => "text-danger", 'codigo' => 0, 'error' => 4, 'msj_error' => 0]);
+            }
+
+            if ($pedido->pendiente_anulacion == 1) {
+                return response()->json(['html' => "Este pedido se encuentra <b>pendiente de anulación</b>", 'class' => "text-danger", 'codigo' => 0, 'error' => 6, 'msj_error' => 0, 'estado' => $pedido->condicion_envio]);
             }
         }
         /*
@@ -2846,6 +2864,7 @@ class EnvioController extends Controller
                             $nuevo_estado = Pedido::RECEPCION_COURIER_INT; // 19
                             $respuesta = "El jefe Courier recepciono correctamente el pedido";
                             break;
+
                     }
                     break;
 
@@ -2884,6 +2903,11 @@ class EnvioController extends Controller
                         case Pedido::ENVIADO_OPE_INT; // 5
                             $nuevo_estado = Pedido::RECIBIDO_JEFE_OPE_INT; // 6
                             $respuesta = "El sobre se recibio correctamente.";
+                            break;
+
+                        case Pedido::ENTREGADO_SIN_SOBRE_OPE_INT: // 13
+                            $nuevo_estado = Pedido::ENTREGADO_SIN_SOBRE_CLIENTE_INT; // 14
+                            $respuesta = "El pedido sin sobre se confirmo correctamente.";
                             break;
                     }
                     break;
@@ -2940,20 +2964,39 @@ class EnvioController extends Controller
 
                     case "confirmacion_operaciones":
 
-                        $pedido->update([
-                            'modificador' => 'USER' . Auth::user()->id,
-                            'fecha_envio_op_courier' => Carbon::now(),
-                            'condicion_envio' => Pedido::RECIBIDO_JEFE_OPE,
-                            'condicion_envio_code' => Pedido::RECIBIDO_JEFE_OPE_INT,
-                            'condicion_envio_at' => now(),
+                        if($nuevo_estado == Pedido::RECIBIDO_JEFE_OPE_INT){
+                            $pedido->update([
+                                'modificador' => 'USER' . Auth::user()->id,
+                                'fecha_envio_op_courier' => Carbon::now(),
+                                'condicion_envio' => Pedido::RECIBIDO_JEFE_OPE,
+                                'condicion_envio_code' => Pedido::RECIBIDO_JEFE_OPE_INT,
+                                'condicion_envio_at' => now(),
 
-                        ]);
+                            ]);
 
-                        PedidoMovimientoEstado::create([
-                            'pedido' => $request->hiddenEnvio,
-                            'condicion_envio_code' => Pedido::RECIBIDO_JEFE_OPE_INT,
-                            'notificado' => 0
-                        ]);
+                            PedidoMovimientoEstado::create([
+                                'pedido' => $request->hiddenEnvio,
+                                'condicion_envio_code' => Pedido::RECIBIDO_JEFE_OPE_INT,
+                                'notificado' => 0
+                            ]);
+                        }else if($nuevo_estado == Pedido::ENTREGADO_SIN_SOBRE_CLIENTE_INT){
+                            $pedido->update([
+                                'modificador' => 'USER' . Auth::user()->id,
+                                'fecha_envio_op_courier' => Carbon::now(),
+                                'condicion_envio' => Pedido::ENTREGADO_SIN_SOBRE_CLIENTE,
+                                'condicion_envio_code' => Pedido::ENTREGADO_SIN_SOBRE_CLIENTE_INT,
+                                'condicion_envio_at' => now(),
+
+                            ]);
+
+                            PedidoMovimientoEstado::create([
+                                'pedido' => $request->hiddenEnvio,
+                                'condicion_envio_code' => Pedido::ENTREGADO_SIN_SOBRE_CLIENTE_INT,
+                                'notificado' => 0
+                            ]);
+                        }
+
+
                         break;
 
                     case "envio_courier_operaciones":
