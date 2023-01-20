@@ -62,6 +62,7 @@
 
             @include('sobres.modal.historialLima')
             @include('sobres.modal.historialProvincia')
+            @include('sobres.modal.modal_recoger_sobre')
 
         </div>
     </div>
@@ -338,6 +339,8 @@
 
     <script>
         let tablaPrincipal=null;
+        let tablaClienteLista=null;
+        let tablaPedidosLista=null;
         $(document).ready(function () {
 
             $(document).on("click", "#change_imagen", function () {
@@ -1648,17 +1651,55 @@
                 });
             });
 
+            //datatable-clientes-lista-recojer
+
+            const configDataTableLanguages = {
+                language: {
+                    "decimal": "",
+                    "emptyTable": "No hay información",
+                    "info": "_START_ - _END_ / _TOTAL_",
+                    "infoEmpty": "0 Entradas",
+                    "infoFiltered": "(Filtrado de _MAX_ total entradas)",
+                    "infoPostFix": "",
+                    "thousands": ",",
+                    "lengthMenu": "Mostrar _MENU_ Entradas",
+                    "loadingRecords": "Cargando...",
+                    "processing": ``,
+                    "search": "Buscar:",
+                    "zeroRecords": "Sin resultados encontrados",
+                    "paginate": {
+                        "first": "Primero",
+                        "last": "Ultimo",
+                        "next": "Siguiente",
+                        "previous": "Anterior"
+                    }
+                },
+            }
+
+            tablaClienteLista=$('#datatable-clientes-lista-recojer').DataTable({
+                ...configDataTableLanguages,
+                processing: true,
+                stateSave: true,
+                serverSide: true,
+                searching: true,
+                "order": [[0, "desc"]],
+                createdRow: function (row, data, dataIndex) {},
+                ajax: {
+                    url: "{{ route('pedidos.recoger.clientes') }}",
+                    data: function (d) {
+                        //d.opcion = 'anulado_courier';
+                    },
+                },
+                columns: [
+                    {data: 'id', name: 'id',},
+                    {data: 'user_id', name: 'user_id',},
+                    {data: 'celular', name: 'celular',},
+                    {data: 'action', name: 'action',},
+                ],
+            });
+
             tablaPrincipal=$('#tablaPrincipal').DataTable({
                 dom: 'Bfritp',
-                buttons: [
-                    {
-                        text: 'RECOGER',
-                        className: 'btn btn-danger',
-                        action: function ( e, dt, node, config ) {
-                            alert( 'RECOGER' );
-                        }
-                    }
-                ],
                 processing: true,
                 stateSave: true,
                 serverSide: true,
@@ -1765,6 +1806,18 @@
                         "previous": "Anterior"
                     }
                 },
+                buttons: [
+                    {
+                        text: 'RECOGER',
+                        className: 'btn btn-danger',
+                        action: function ( e, dt, node, config ) {
+
+                            $('#modal-recoger-sobre').modal("show");
+                            //alert( 'RECOGER' );
+                            //data-jqconfirm=
+                        }
+                    }
+                ],
             });
 
             $('#tablaPrincipal tbody').on( 'click', 'button', function () {
@@ -1772,6 +1825,10 @@
                 console.log( "got the data" ); //This alert is never reached
                 console.log(data)
                 console.log( data.id +"'id: "+ data.cliente_id );
+
+                $('[data-jqconfirm]', row).click(function () {
+
+                });
             } );
 
 

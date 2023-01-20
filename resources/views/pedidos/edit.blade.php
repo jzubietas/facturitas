@@ -373,7 +373,7 @@
                         nombre_empresa = $("#pempresa").val();
                         mes = $("#pmes").val();
                         anio = $("#panio").val();
-                         = $("#pruc").val();
+                        ruc= $("#pruc").val();
                         console.log(ruc)
                         /* cantidad = $("#pcantidad").val(); */
                         tipo_banca = datosTipoBanca[0];
