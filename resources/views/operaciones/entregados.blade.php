@@ -197,7 +197,18 @@
                 type: 'POST',
                 url: "{{ route('operaciones.validaropbarras') }}",
                 success: function (data) {
-
+                    if (data.error == 0) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Pedido identificado',
+                            color: '#FFF',
+                            background: '#79b358',
+                            showConfirmButton: false,
+                            timer: 600
+                        })
+                        codigos_agregados.push(data.codigo);
+                        codigos_agregados = codigos_agregados.filter((v, i, a) => a.indexOf(v) === i)
+                    }else
                     if (data.error == 1) {
                         $('#respuesta_barra').html('<span class="'+ data.class +'">'+ data.html +'</b></span>');
 
@@ -210,17 +221,44 @@
                             timer: 600
                         })
 
-                    } else if (data.error == 0) {
+                    }else if(data.error == 4){
+                        $('#respuesta_barra').html("");
                         Swal.fire({
-                            icon: 'success',
-                            title: 'Pedido identificado',
+                            icon: 'error',
+                            title: 'El pedido no se encontró en el sistema',
                             color: '#FFF',
-                            background: '#79b358',
+                            background: '#9f2916',
                             showConfirmButton: false,
-                            timer: 600
+                            timer: 1500
                         })
-                        codigos_agregados.push(data.codigo);
-                        codigos_agregados = codigos_agregados.filter((v, i, a) => a.indexOf(v) === i)
+
+                        $('#respuesta_barra').html('<span class="'+ data.class +'">'+ data.html + '</span>');
+
+                    }
+                    else if(data.error == 5){
+                        $('#respuesta_barra').html("");
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'El pedido esta anulado',
+                            color: '#FFF',
+                            background: '#9f2916',
+                            showConfirmButton: false,
+                            timer: 1500
+                        })
+                        $('#respuesta_barra').html('<span class="'+ data.class +'">'+ data.html + '</span>');
+                    }else if(data.error == 6){
+                        $('#respuesta_barra').html("");
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Pedido Pendiente de anulación',
+                            color: '#FFF',
+                            background: '#9f2916',
+                            showConfirmButton: false,
+                            timer: 1500
+                        })
+
+                        $('#respuesta_barra').html('<span class="'+ data.class +'">'+ data.html + '</span>');
+
                     }
 
                     $('#pedidos-procesados').html(`<p><b class="text-success w-100">codigos Escaneados (${codigos_agregados.length}):</b></p><ul>${codigos_agregados.map(function (codigo) {

@@ -54,7 +54,7 @@ class MasivaEstadoFinalEnvio extends Command
         foreach ($pedidos as $pedido)
         {
             $grupo=DireccionGrupo::createByPedido($pedido);
-            DireccionGrupo::cambiarCondicionEnvio($grupo,Pedido::ENTREGADO_CLIENTE_INT);
+            DireccionGrupo::cambiarCondicionEnvio($grupo,Pedido::ENTREGADO_SIN_SOBRE_CLIENTE_INT);
             $progress->advance();
         }
         $progress->finish();

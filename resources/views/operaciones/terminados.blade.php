@@ -71,7 +71,7 @@
                 </tbody>
             </table>
 
-            @include('pedidos.modal.revertirid');
+            @include('pedidos.modal.revertirid')
             @include('operaciones.modal.revertirajefeop')
             @include('operaciones.modal.revertirasindireccion')
             @include('operaciones.modal.CorreccionAtencion')
