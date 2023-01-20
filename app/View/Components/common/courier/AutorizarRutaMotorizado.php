@@ -30,20 +30,25 @@ class AutorizarRutaMotorizado extends Component
     public function render()
     {
         $zonemotorizados = [];
-        if (auth()->user()->rol == \App\Models\User::ROL_JEFE_COURIER) {
-            $motorizados = User::query()->activo()->rol(User::ROL_MOTORIZADO)->get();
-            $motorizadosAuthorizaciones = [];
-            foreach ($motorizados as $motorizado) {
-                $zonemotorizados[$motorizado->id] = $motorizado->zona;
-                $count = count(DireccionGrupo::getSolicitudAuthorization($motorizado->id));
-                if ($count > 0) {
-                    $motorizadosAuthorizaciones[$motorizado->id] = $count;
+        $motorizadosAuthorizaciones = [];
+        $reprogramados = [];
+        if (auth()->user()->rol == User::ROL_JEFE_COURIER) {
+            if (auth()->user()->rol == \App\Models\User::ROL_JEFE_COURIER) {
+                $motorizados = User::query()->activo()->rol(User::ROL_MOTORIZADO)->get();
+                $motorizadosAuthorizaciones = [];
+                foreach ($motorizados as $motorizado) {
+                    $zonemotorizados[$motorizado->id] = $motorizado->zona;
+                    $count = count(DireccionGrupo::getSolicitudAuthorization($motorizado->id));
+                    if ($count > 0) {
+                        $motorizadosAuthorizaciones[$motorizado->id] = $count;
+                    }
                 }
+            } else {
+                $motorizadosAuthorizaciones = [];
             }
-
-        } else {
-            $motorizadosAuthorizaciones = [];
+            $reprogramados = DireccionGrupo::query()->reprogramados()->activo()->get();
         }
-        return view('components.common.courier.autorizar-ruta-motorizado', compact('motorizadosAuthorizaciones', 'zonemotorizados'));
+
+        return view('components.common.courier.autorizar-ruta-motorizado', compact('motorizadosAuthorizaciones', 'zonemotorizados', 'reprogramados'));
     }
 }

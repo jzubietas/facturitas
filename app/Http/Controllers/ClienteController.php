@@ -53,6 +53,40 @@ class ClienteController extends Controller
         return view('clientes.index', compact('anios', 'dateM', 'dateY', 'superasesor', 'mirol'));
     }
 
+    public function clienteslistarecoger(Request $request)
+    {
+        $data = Cliente::
+            join('users as u', 'clientes.user_id', 'u.id')
+            ->leftjoin('pedidos as p', 'clientes.id', 'p.cliente_id')
+            ->select([
+                'clientes.*'
+            ])
+            ->where('clientes.estado', '1')
+            ->where('clientes.tipo', '1');
+
+
+        return datatables()->query(DB::table($data))//Datatables::of($data)
+            ->addIndexColumn()
+            ->editColumn('estado', function ($cliente) {
+
+                //$color = Pedido::getColorByCondicionEnvio($pedido->condicion_envio);
+                //$badge_estado .= '<span class="badge badge-success" style="background-color: ' . $color . '!important;">' . $pedido->condicion_envio . '</span>';
+                //return $badge_estado;
+                return '<span class="badge badge-success">aa</span>';
+                /*$badge_estado='';
+                if($cliente->estado_int=='1')
+                {
+                    $badge_estado.= '<span class="badge badge-success" style="background-color:red !important;">' . Cliente::ANULADO . '</span>';
+                    return $badge_estado;
+                }*/
+            })
+            ->addColumn('action', function ($row) {
+                return '<button class="btn btn-success">Elegir</button>';
+            })
+            ->rawColumns(['action','estado'])
+            ->toJson();
+
+    }
     public function indextabla(Request $request)
     {
         //

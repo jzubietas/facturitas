@@ -1306,7 +1306,7 @@
  */
                                     //return false;
                                 });
->>>>>>> prod
+
                             });
 
                             $('#modal-confirmacion').on('show.bs.modal', function (event) {
