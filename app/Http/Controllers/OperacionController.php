@@ -564,6 +564,7 @@ class OperacionController extends Controller
             //->where('pedidos.estado', '1')
             //->where('dp.estado', '1')
             ->whereIn('pedidos.condicion_envio_code', [
+                Pedido::RECIBIDO_JEFE_OPE_INT,
                 Pedido::RECEPCION_COURIER_INT
                 , Pedido::REPARTO_COURIER_INT
                 , Pedido::RECEPCIONADO_OLVA_INT
