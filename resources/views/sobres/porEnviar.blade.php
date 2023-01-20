@@ -1682,6 +1682,7 @@
                 stateSave: true,
                 serverSide: true,
                 searching: true,
+                "displayStart": 5,
                 "order": [[0, "desc"]],
                 createdRow: function (row, data, dataIndex) {},
                 ajax: {
