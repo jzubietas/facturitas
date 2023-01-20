@@ -41,8 +41,8 @@
                     <th scope="col">Fecha de Envio</th>
                     <th scope="col">Razón social</th>
                     <th scope="col">Destino</th>
-                    <th scope="col">Referencia</th>
-                    <th scope="col">Rotulo</th>
+                    <th scope="col">Tracking</th>
+                    <th scope="col">Numero de registro</th>
                     <th scope="col">Estado de envio</th><!--ENTREGADO - RECIBIDO-->
                     <th scope="col">Acciones</th>
                 </tr>
