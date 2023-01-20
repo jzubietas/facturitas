@@ -73,6 +73,7 @@
 
             @include('pedidos.modal.revertirid');
             @include('operaciones.modal.revertirajefeop')
+            @include('operaciones.modal.revertirasindireccion')
             @include('operaciones.modal.CorreccionAtencion')
         </div>
     </div>
@@ -479,10 +480,20 @@
                 $("#ajefeoperevertir").val(idunico);
             });
 
+            $('#modal-revertir-asindireccion').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget)
+                var idunico = button.data('revertir')
+                var idcodigo = button.data('codigo')
+                var idadjuntos = button.data('adjuntos')
+                $(".textcode").html(idcodigo);
+                $(".textcantadjunto").html(idadjuntos);
+                $("#asindireccionrevertir").val(idunico);
+            });
+
             $(document).on("submit", "#formulariorevertirajefeop", function (evento) {
                 evento.preventDefault();
                 var fd = new FormData();
-                fd.append('ajefeoperevertir', $("#ajefeoperevertir").val());
+                fd.append('asindireccionrevertir', $("#asindireccionrevertir").val());
 
                 $.ajax({
                     data: fd,
@@ -495,6 +506,27 @@
                         $("#modal-revertir-ajefeop .textcode").text('');
                         $("#modal-revertir-ajefeop .textcantadjunto").text('');
                         $("#modal-revertir-ajefeop").modal("hide");
+                        $('#tablaPrincipal').DataTable().ajax.reload();
+                    }
+                });
+            });
+
+            $(document).on("submit", "#formulariorevertirasindireccion", function (evento) {
+                evento.preventDefault();
+                var fd = new FormData();
+                fd.append('asindireccionrevertir', $("#asindireccionrevertir").val());
+
+                $.ajax({
+                    data: fd,
+                    processData: false,
+                    contentType: false,
+                    type: 'POST',
+                    url: "{{ route('operaciones.revertirasindireccion') }}",
+                    success: function (data) {
+                        console.log(data);
+                        $("#modal-revertir-asindireccion .textcode").text('');
+                        $("#modal-revertir-asindireccion .textcantadjunto").text('');
+                        $("#modal-revertir-asindireccion").modal("hide");
                         $('#tablaPrincipal').DataTable().ajax.reload();
                     }
                 });

@@ -674,7 +674,7 @@ class OperacionController extends Controller
 
                 if(\auth()->user()->rol==User::ROL_ADMIN || \auth()->user()->rol==User::ROL_JEFE_OPERARIO)
                 if($pedido->condicion_envio_code==Pedido::ENTREGADO_SIN_ENVIO_CLIENTE_INT){
-                    $btn[] = '<a href="" class="btn-sm dropdown-item" data-target="#modal-revertir-ajefeop" data-adjuntos="' . $pedido->adjuntos . '" data-revertir=' . $pedido->id . ' data-codigo=' . $pedido->codigos . ' data-toggle="modal" ><i class="fa fa-undo text-danger" aria-hidden="true"></i> Revertir a Jefe de Operaciones</a>';
+                    $btn[] = '<a href="" class="btn-sm dropdown-item" data-target="#modal-revertir-asindireccion" data-adjuntos="' . $pedido->adjuntos . '" data-revertir=' . $pedido->id . ' data-codigo=' . $pedido->codigos . ' data-toggle="modal" ><i class="fa fa-undo text-danger" aria-hidden="true"></i> Revertir a Sobres sin Direccion</a>';
                 }
 
                 if(\auth()->user()->rol==User::ROL_ADMIN || \auth()->user()->rol==User::ROL_JEFE_OPERARIO)
@@ -1744,6 +1744,36 @@ class OperacionController extends Controller
             'condicion_envio_code' => Pedido::RECIBIDO_JEFE_OPE_INT,
             'notificado' => 0
         ]);
+
+        return response()->json(['html' => $pedido->id]);
+
+    }
+
+    public function Revertirasindireccion(Request $request)
+    {
+        $pedido = Pedido::where("id", $request->asindireccionrevertir)->first();
+        $detalle_pedidos = DetallePedido::where('pedido_id', $pedido->id)->first();
+        $fecha = Carbon::now();
+
+        $grupo=$pedido->direccion_grupo;
+
+        $pedido->update([
+            //'envio' => '0',
+            'condicion_envio' => Pedido::RECIBIDO_JEFE_OPE,
+            'condicion_envio_code' => Pedido::RECIBIDO_JEFE_OPE_INT,
+            'condicion_envio_at'=>now(),
+            'condicion' => Pedido::RECIBIDO_JEFE_OPE,
+            'condicion_code' => Pedido::RECIBIDO_JEFE_OPE_INT,
+            'direccion_grupo' => null,
+            'modificador' => 'USER' . Auth::user()->id
+        ]);
+        //$detalle_pedidos->update([]);
+
+        if(!$grupo):
+            $gp=$pedido->direcciongrupo;
+            if(!gp)
+                $gp->update(['estado'=>"0","motorizado_status" =>0]);
+        endif;
 
         return response()->json(['html' => $pedido->id]);
 
