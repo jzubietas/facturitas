@@ -69,16 +69,31 @@ class ClienteController extends Controller
             ->addIndexColumn()
             ->editColumn('estado', function ($cliente) {
 
-                //$color = Pedido::getColorByCondicionEnvio($pedido->condicion_envio);
-                //$badge_estado .= '<span class="badge badge-success" style="background-color: ' . $color . '!important;">' . $pedido->condicion_envio . '</span>';
-                //return $badge_estado;
                 return '<span class="badge badge-success">aa</span>';
-                /*$badge_estado='';
-                if($cliente->estado_int=='1')
-                {
-                    $badge_estado.= '<span class="badge badge-success" style="background-color:red !important;">' . Cliente::ANULADO . '</span>';
-                    return $badge_estado;
-                }*/
+
+            })
+            ->addColumn('action', function ($row) {
+                return '<button class="btn btn-success">Elegir</button>';
+            })
+            ->rawColumns(['action','estado'])
+            ->toJson();
+
+    }
+
+    public function pedidosclienteslistarecoger(Request $request)
+    {
+        $data = Pedido::
+        join('clientes as c', 'pedidos.cliente_id', 'c.id')
+        ->join('users as u', 'c.user_id', 'u.id')
+            ->select([
+                'pedidos.*'
+            ])
+            ->where('pedidos.estado', '1');
+
+        return datatables()->query(DB::table($data))
+        ->addIndexColumn()
+            ->editColumn('estado', function ($pedido) {
+                return '<span class="badge badge-success">aa</span>';
             })
             ->addColumn('action', function ($row) {
                 return '<button class="btn btn-success">Elegir</button>';

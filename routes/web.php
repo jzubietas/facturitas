@@ -101,6 +101,7 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
 
     Route::get('clientestabla', [ClienteController::class, 'indextabla'])->name('clientestabla');
     Route::get('pedidos.recoger.clientes', [ClienteController::class, 'clienteslistarecoger'])->name('pedidos.recoger.clientes');
+    Route::get('pedidos.recoger.clientes.pedidos', [ClienteController::class, 'pedidosclienteslistarecoger'])->name('pedidos.recoger.clientes.pedidos');
     Route::get('clientestablasituacion', [ClienteController::class, 'clientestablasituacion'])->name('clientestablasituacion');
 
     Route::get('clientes.abandonos', [ClienteController::class, 'indexabandono'])->name('clientes.abandonos');

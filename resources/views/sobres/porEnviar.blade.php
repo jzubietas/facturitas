@@ -1698,6 +1698,28 @@
                 ],
             });
 
+            tablaPedidosLista=$('#datatable-pedidos-lista-recojer').DataTable({
+                ...configDataTableLanguages,
+                processing: true,
+                stateSave: true,
+                serverSide: true,
+                searching: true,
+                "order": [[0, "desc"]],
+                createdRow: function (row, data, dataIndex) {},
+                ajax: {
+                    url: "{{ route('pedidos.recoger.clientes.pedidos') }}",
+                    data: function (d) {
+                        //d.opcion = 'anulado_courier';
+                    },
+                },
+                columns: [
+                    {data: 'id', name: 'id',},
+                    {data: 'codigo', name: 'codigo',},
+                    {data: 'condicion_envio', name: 'condicion_envio',},
+                    {data: 'action', name: 'action',},
+                ],
+            });
+
             tablaPrincipal=$('#tablaPrincipal').DataTable({
                 dom: 'Bfritp',
                 processing: true,
