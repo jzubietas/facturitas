@@ -375,6 +375,56 @@ class DireccionGrupo extends Model implements HasMedia
         return $grupo;
     }
 
+    public static function reagruparByPedido(DireccionGrupo $oldgrupo, Pedido $pedido,$condicion_envio_code)
+    {
+
+        $groupData = [
+            'condicion_envio_code' => $condicion_envio_code,
+            'condicion_envio' => Pedido::$estadosCondicionEnvioCode[$condicion_envio_code],
+            'distribucion' => $oldgrupo->env_zona,
+            'destino' => $oldgrupo->env_destino,
+            'direccion' => $oldgrupo->env_direccion,
+            'estado' => '1',
+
+            'cliente_id' => $oldgrupo->cliente_id,
+            'user_id' => $oldgrupo->user_id,
+
+            'nombre' => $oldgrupo->nombre,
+            'celular' => $oldgrupo->celular,
+
+            'nombre_cliente' => $oldgrupo->nombre_cliente,
+            'celular_cliente' => $oldgrupo->celular_cliente,
+            'icelular_cliente' => $oldgrupo->icelular_cliente,
+
+            'distrito' => $oldgrupo->distrito,
+            'referencia' => $oldgrupo->referencia,//nro registro
+            'observacion' => $oldgrupo->observacion,//rotulo
+            'gmlink' => $oldgrupo->gmlink,
+            'motorizado_id' => $oldgrupo->motorizado_id,
+            'identificador' => $oldgrupo->identificador,
+        ];
+
+        $grupo = DireccionGrupo::where($groupData)->first();
+
+        if($grupo==null){
+            $grupo=$oldgrupo->replicate();
+            $grupo->save();
+        }
+
+        $pedido->update([
+            'direccion_grupo' => $grupo->id
+        ]);
+
+        $pedido->update([
+            'direccion_grupo' => $grupo->id
+        ]);
+
+        DireccionGrupo::restructurarCodigos($oldgrupo);
+        DireccionGrupo::restructurarCodigos($grupo);
+        DireccionGrupo::cambiarCondicionEnvio($grupo,$condicion_envio_code);
+        return $grupo;
+    }
+
     public static function desvincularPedido(self $grupo, Pedido $pedido, $sustento = null, $motorizado_status = Pedido::ESTADO_MOTORIZADO_OBSERVADO)
     {
         return self::desvincularPedidos($grupo, collect([$pedido]), $sustento, $motorizado_status);

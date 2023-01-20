@@ -2798,6 +2798,11 @@ class EnvioController extends Controller
 
             $pedido = Pedido::where("codigo", $codigo)->first();
             $grupo = $pedido->direccion_grupo;
+
+            if ($grupo == null) {
+                return response()->json(['html' => "Este pedido No esta preparado para reparto", 'class' => "text-danger", 'codigo' => 0, 'error' => 4, 'Estado_actual' => $pedido->condicion_envio_code, 'msj_error' => 0]);
+            }
+
             /**************
              * VALIDACIONES GLOBALES
              */
@@ -2818,9 +2823,7 @@ class EnvioController extends Controller
             }
 
             // VALIDACIONES PARA LA DIRECCION GRUPO
-            if ($grupo == null) {
-                return response()->json(['html' => "Este pedido No esta preparado para reparto", 'class' => "text-danger", 'codigo' => 0, 'error' => 4, 'Estado_actual' => $pedido->condicion_envio_code, 'msj_error' => 0]);
-            }
+
 
             $condicion_code_actual = $pedido->condicion_envio_code;
 
@@ -3122,36 +3125,58 @@ class EnvioController extends Controller
             $Direccion_grupo = DireccionGrupo::where('id', $grupo)->first();
             $color = $pedido->condicion_envio_color;
 
+            //YA SE PROCESO EL PEDIDO
             if ($pedido->condicion_envio_code == Pedido::ENVIO_MOTORIZADO_COURIER_INT) {
                 return response()->json(['html' => 'El pedido <b style="">' . $codigo . '</b> ya ah sido procesado anteriormente, su estado actual es <br><span class="br-4 mt-16" style="background-color:' . $color . '; padding: 2px 12px; color: black; font-weight: bold;">' . Pedido::$estadosCondicionEnvioCode[$nuevo_estado] . '</span>', 'class' => "text-danger", 'codigo' => $codigo, 'error' => 4, 'msj_error' => Pedido::$estadosCondicionEnvioCode[$nuevo_estado]]);
             }
-
+            //EL PAQUETE YA FUE ENVIADO
             if ($Direccion_grupo->condicion_envio_code == Pedido::ENVIO_MOTORIZADO_COURIER_INT) {
                 return response()->json(['error' => 7]);
             }
 
-            //dd($Direccion_grupo->codigos);
+            $pedido->update([
+                'fecha_salida'=> $fecha_salida
+            ]);
+
+            //SACAMOS EL TOTAL DE PEDIDOS ACTUAL
+            $total = $Direccion_grupo->pedidos()->count();
+
+            // CREAMOS UN NUEVO GRUPO CON EL PEDIDO Y LO SACAMOS DEL GRUPO ACTUAL
+            $gruponuevo = DireccionGrupo::reagruparByPedido($Direccion_grupo, $pedido,Pedido::ENVIO_MOTORIZADO_COURIER_INT);
+
+            $gruponuevo->update([
+                'fecha_salida'=> $fecha_salida
+            ]);
+
+            //CANTIDAD DE PEDIDOS DEL NUEVO GRUPO
+            $sobres_ya_recibidos = $gruponuevo->pedidos()->count();
+
+/*
             $codigos_paquete = collect(explode(",", $Direccion_grupo->codigos))
                 ->map(fn($cod) => trim($cod))
                 ->filter()->values();
-
+*/
             /*************
              * SACAMOS LA CANTIDAD DE SOBRES YA RECIBIDOS DE ESTE PAQUETE
              */
+    /*
             $sobres_ya_recibidos = Pedido::where('pedido_scaneo', 1)
                 ->whereIn('codigo', $codigos_paquete)
                 ->count();
 
             $sobres_restantes = $codigos_paquete->count() - $sobres_ya_recibidos;
+
+*/
+            $sobres_restantes = $total - $sobres_ya_recibidos;
             $clase_confirmado = "";
 
-            $total = $Direccion_grupo->pedidos()->count();
             $escaneados = $Direccion_grupo->pedidos()->where('pedido_scaneo', '1')->count();
+
             /*
             if($total==$escaneados){
                 DireccionGrupo::cambiarCondicionEnvio($Direccion_grupo, Pedido::ENVIO_MOTORIZADO_COURIER_INT);
             }*/
-
+/*
             if ($sobres_restantes == 0) {
                 DireccionGrupo::cambiarCondicionEnvio($Direccion_grupo, Pedido::ENVIO_MOTORIZADO_COURIER_INT);
                 $Direccion_grupo->update([
@@ -3159,13 +3184,13 @@ class EnvioController extends Controller
                 ]);
                 $clase_confirmado = "text-success";
             }
-
+*/
             if ($Direccion_grupo->distribucion === 'OLVA') {
                 $zona = 'OLVA';
             } else {
                 $zona = $Direccion_grupo->motorizado->zona;
             }
-            return response()->json(['html' => "Escaneado Correctamente", 'class' => "text-success", 'codigo' => $codigo, 'error' => 3, 'zona' => $zona, 'cantidad' => $codigos_paquete->count(), 'cantidad_recibida' => $sobres_ya_recibidos, 'clase_confirmada' => $clase_confirmado, 'Pedidos procesados' => $codigos_procesados]);
+            return response()->json(['html' => "Escaneado Correctamente", 'class' => "text-success", 'codigo' => $codigo, 'error' => 3, 'zona' => $zona, 'cantidad' => $total, 'cantidad_recibida' => $sobres_ya_recibidos, 'clase_confirmada' => $clase_confirmado, 'Pedidos procesados' => $codigos_procesados]);
         }
 
         return response()->json(['html' => $respuesta, 'class' => "text-success", 'error' => 0, 'Pedidos procesados' => $codigos_procesados, 'Pedidos no procesados' => $codigos_procesados]);
