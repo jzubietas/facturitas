@@ -1540,8 +1540,17 @@ class EnvioController extends Controller
                     return '';
                 }
             })
+            ->editColumn('direccion', function ($pedido) {
+                return collect(explode(',',$pedido->direccion))->trim()->map(fn($f)=>'<b>'.$f.'</b>')->join('<br>');
+            })
             ->editColumn('referencia', function ($pedido) {
-                return '<p><a target="_blank" href="' . \Storage::disk('pstorage')->url($pedido->observacion) . '">' . $pedido->referencia . '</a><p>';
+                $html= collect(explode(',',$pedido->referencia))->trim()->map(fn($f)=>'<b>'.$f.'</b>')->join('<br>').'<br>';
+
+
+                $html.= collect(explode(',',$pedido->observacion))->trim()->map(fn($f)=>'<a target="_blank" href="' . \Storage::disk('pstorage')->url($f) . '"><i class="fa fa-file-pdf"></i>Ver Rutulo</a>')->join('<br>');
+
+                $html.= '<p>';
+                return $html;
             })
             ->addColumn('condicion_envio', function ($pedido) {
                 $color = Pedido::getColorByCondicionEnvio($pedido->condicion_envio);
@@ -1571,7 +1580,7 @@ class EnvioController extends Controller
                 }
                 return $btn;
             })
-            ->rawColumns(['action', 'referencia', 'condicion_envio'])
+            ->rawColumns(['action', 'referencia', 'condicion_envio','direccion'])
             ->make(true);
 
     }
@@ -1933,7 +1942,7 @@ class EnvioController extends Controller
             $identi_id = $identi->identificador;
 
             $zona_distrito = Distrito::where('distrito', $request->distrito)
-                ->whereIn('provincia',['LIMA','PROVINCIA'])->first();
+                ->whereIn('provincia',['LIMA','CALLAO'])->first();
             DB::beginTransaction();
             if ($request->destino == "LIMA") {
 

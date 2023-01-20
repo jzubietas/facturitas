@@ -74,7 +74,7 @@ class MigrarOlvaSeguimiento extends Command
         $progress->finish();
 
         $permission = Permission::create([
-            'name' => 'courier.seguimientoprovincia',
+            'name' => 'envios.seguimientoprovincia',
             'description' => 'Courier',
             'modulo' => 'Courier',
             'guard_name' => 'web',
