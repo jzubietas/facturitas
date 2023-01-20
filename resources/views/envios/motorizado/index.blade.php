@@ -27,13 +27,15 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text font-weight-bold font-12" id="inputGroup-sizing-default">Fecha de Ruta:</span>
                         </div>
-                        <input type="date" value="{{$fecha_consulta->format('Y-m-d')}}" id="fecha_consulta" name="fecha_consulta" class="form-control" autocomplete="off">
+                        <input type="date" value="{{$fecha_consulta->format('Y-m-d')}}" id="fecha_consulta"
+                               name="fecha_consulta" class="form-control" autocomplete="off">
                     </div>
                 </td>
                 <td>
                     <input id="buscador_global" name="buscador_global" value=""
                            type="text" class="form-control" autocomplete="off"
-                           placeholder="Ingrese su búsqueda" aria-label="Recipient's username" aria-describedby="basic-addon2">
+                           placeholder="Ingrese su búsqueda" aria-label="Recipient's username"
+                           aria-describedby="basic-addon2">
                 </td>
             </tr>
             </tbody>
@@ -104,7 +106,7 @@
 
         <div class="tab-content" id="myTabContent">
             <div class="tab-pane fade show active" id="enmotorizado" role="tabpanel" aria-labelledby="enmotorizado-tab">
-                <table id="tablaEnmotorizado" class="table table-striped w-100" >
+                <table id="tablaEnmotorizado" class="table table-striped w-100">
                     <thead>
                     <tr>
                         <th scope="col">Item</th>
@@ -128,7 +130,7 @@
             </div>
 
             <div class="tab-pane fade show" id="entregado" role="tabpanel" aria-labelledby="entregado-tab">
-                <table id="tablaEntregado" class="table table-striped w-100" >
+                <table id="tablaEntregado" class="table table-striped w-100">
                     <thead>
                     <tr>
                         <th scope="col">Item</th>
@@ -152,7 +154,7 @@
             </div>
 
             <div class="tab-pane fade show" id="nocontesto" role="tabpanel" aria-labelledby="nocontesto-tab">
-                <table id="tablaNocontesto" class="table table-striped w-100" >
+                <table id="tablaNocontesto" class="table table-striped w-100">
                     <thead>
                     <tr>
                         <th scope="col">Item</th>
@@ -176,7 +178,7 @@
             </div>
 
             <div class="tab-pane fade show" id="observado" role="tabpanel" aria-labelledby="observado-tab">
-                <table id="tablaObservado" class="table table-striped w-100" >
+                <table id="tablaObservado" class="table table-striped w-100">
                     <thead>
                     <tr>
                         <th scope="col">Item</th>
@@ -185,11 +187,11 @@
                         <th scope="col">Asesor</th>
                         <th scope="col">Cliente</th>
                         <th scope="col">Fecha de Salida</th>
-                        <th scope="col">Fecha de Entrega</th>
                         <th scope="col">Razón social</th>
                         <th scope="col">Destino</th>
                         <th scope="col">Dirección de envío</th>
                         <th scope="col">Referencia</th>
+                        <th scope="col">Observacion Sustento</th>
                         <th scope="col">Estado de envio</th><!--ENTREGADO - RECIBIDO-->
                         <th scope="col">Acciones</th>
                     </tr>
@@ -240,18 +242,18 @@
     <script src="https://cdn.datatables.net/plug-ins/1.11.4/dataRender/datetime.js"></script>
 
     <script>
-        let datatableenmotorizado=null;
-        let datatableentregado=null;
-        let datatablenocontesto=null;
-        let datatableobservado=null;
+        let datatableenmotorizado = null;
+        let datatableentregado = null;
+        let datatablenocontesto = null;
+        let datatableobservado = null;
 
-        $('.condicion-tabla').on('click', function (){
+        $('.condicion-tabla').on('click', function () {
             console.log("aaaa");
             var tabla_load = $(this).data('consulta');
-            console.log("tabla_load "+tabla_load)
+            console.log("tabla_load " + tabla_load)
             $('.condicion-tabla').removeClass("activo");
             $(this).addClass("activo");
-            if ( ! $.fn.DataTable.isDataTable( '#' + tabla_load ) ) {
+            if (!$.fn.DataTable.isDataTable('#' + tabla_load)) {
                 $('#' + tabla_load).dataTable();
             }
         });
@@ -260,12 +262,12 @@
 
             function applySearch(e) {
                 console.log(e)
-                let valor=$("#buscador_global").val();
-                valor=(valor||'').trim()
-                datatableenmotorizado.search( valor ).draw();
-                datatableentregado.search( valor ).draw();
-                datatablenocontesto.search( valor ).draw();
-                datatableobservado.search( valor ).draw();
+                let valor = $("#buscador_global").val();
+                valor = (valor || '').trim()
+                datatableenmotorizado.search(valor).draw();
+                datatableentregado.search(valor).draw();
+                datatablenocontesto.search(valor).draw();
+                datatableobservado.search(valor).draw();
             }
 
             $('#buscador_global').change(applySearch);
@@ -278,6 +280,7 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             });
+
             function renderButtomsDataTable(row, data) {
                 if (data.destino == 'PROVINCIA') {
                     $('td', row).css('color', '#20c997')
@@ -443,7 +446,7 @@
                                 }
                             })
                             self.$content.find("#trash_adjunto1").click(function (e) {
-                                self.$content.find("#picture1").attr('src',self.$content.find("#picture1").data('src'))
+                                self.$content.find("#picture1").attr('src', self.$content.find("#picture1").data('src'))
                                 self.$content.find("#adjunto1").val(null)
                             })
                             self.$content.find("#trash_adjunto2").click(function (e) {
@@ -710,11 +713,9 @@ Enviar</button>
                             revertir: {
                                 btnClass: 'btn-red',
                                 action: function () {
-                                    const self=this
+                                    const self = this
                                     self.showLoading(true)
-                                    $.post(action, {
-
-                                    })
+                                    $.post(action, {})
                                         .done(function (data) {
                                             self.close()
                                         })
@@ -728,7 +729,88 @@ Enviar</button>
                         }
                     })
                 })
+
+                $('[data-jqconfirm="reprogramar"]', row).click(function () {
+                    const action = $(this).data('jqconfirm-action')
+                    $.confirm({
+                        title: 'Reprogramar fecha de envio',
+                        type: 'orange',
+                        columnClass: 'large',
+                        content: `
+<div class="p-0">
+<form>
+<div class="form-group">
+<input class="form-control" type="date" name="fecha_salida" value="${moment().add(1, 'day').format('YYYY-MM-DD')}">
+</div>
+<div class="form-group">
+<label>Adjuntar captura de pantalla</label>
+<input class="form-control" type="file" name="adjunto">
+</div>
+
+<div class="w-100">
+<img src="" class="h-100 image-preview-file" style="max-width: 100%">
+</div>
+
+</form>
+</div>
+`,
+                        buttons: {
+                            reprogramar: {
+                                btnClass: 'btn-info',
+                                action: function () {
+                                    const self = this;
+                                    const form = self.$content.find('form')[0];
+                                    const now = moment().startOf('day');
+                                    const now3day = moment().add(1, 'day');
+                                    const date = moment(form.fecha_salida.value)
+                                    if (date < now) {
+                                        $.alert('No puedes seleccionar una fecha menor a la actual, seleccione otra fecha porfavor', 'Alerta')
+                                        return false
+                                    }
+                                    if (date > now3day) {
+                                        $.alert('No puedes seleccionar una fecha mayor al dia siguiente de la actual, seleccione otra fecha porfavor', 'Alerta')
+                                        return false
+                                    }
+
+                                    if (form.adjunto.files.length === 0) {
+                                        $.alert('Es necesario adjuntar una captura de pantalla', 'Alerta')
+                                        return false
+                                    }
+                                    const fd = new FormData()
+                                    fd.append('fecha_salida', form.fecha_salida.value)
+                                    fd.append('adjunto', form.adjunto.files[0], form.adjunto.files[0].name)
+                                    self.showLoading(true)
+                                    $.ajax({
+                                        url: action,
+                                        processData: false,
+                                        contentType: false,
+                                        data: fd,
+                                        method: 'POST'
+                                    })
+                                        .done(function () {
+                                            self.close()
+                                            $(row).parents('table').DataTable().draw(false)
+                                        })
+                                        .always(function () {
+                                            self.hideLoading(true)
+                                        })
+                                    return false
+                                }
+                            },
+                            cancel: {}
+                        },
+                        onContentReady: function () {
+                            const self = this;
+                            const form = self.$content.find('form')[0];
+                            $(form.adjunto).change(function (e) {
+                                $("img.image-preview-file").attr('src', URL.createObjectURL(e.target.files[0]))
+                            })
+
+                        }
+                    })
+                })
             }
+
             datatableenmotorizado = $('#tablaEnmotorizado').DataTable({
                 dom: '<"top"i>rt<"bottom"lp><"clear">',
                 responsive: {
@@ -755,13 +837,13 @@ Enviar</button>
                 createdRow: function (row, data, dataIndex) {
 
                 },
-                drawCallback: function(settings) {
+                drawCallback: function (settings) {
                     console.log(settings.json);
                     $("#tablaPrincipal").DataTable().columns().header()[12].innerText = $('a[data-toggle="tab"].active').data('action-name')
                 },
                 rowCallback: function (row, data, index) {
-                    renderButtomsDataTable(row,data)
-                    if (data.cambio_direccion_at!=null) {
+                    renderButtomsDataTable(row, data)
+                    if (data.cambio_direccion_at != null) {
                         $('td', row).css('background', 'rgba(17,129,255,0.35)')
                     }
                 },
@@ -792,7 +874,7 @@ Enviar</button>
                         data: 'celular',
                         name: 'celular',
                         render: function (data, type, row, meta) {
-                            return '<a href="tel:' + row.celular +'">' + row.celular + '</a><br>' + row.nombre
+                            return '<a href="tel:' + row.celular + '">' + row.celular + '</a><br>' + row.nombre
                         },
                     },
                     {
@@ -908,12 +990,12 @@ Enviar</button>
                 createdRow: function (row, data, dataIndex) {
 
                 },
-                drawCallback: function(settings) {
+                drawCallback: function (settings) {
                     console.log(settings.json);
                     $("#tablaPrincipal").DataTable().columns().header()[12].innerText = $('a[data-toggle="tab"].active').data('action-name')
                 },
                 rowCallback: function (row, data, index) {
-                    renderButtomsDataTable(row,data)
+                    renderButtomsDataTable(row, data)
                 },
                 columns: [
                     {
@@ -1058,12 +1140,12 @@ Enviar</button>
                 createdRow: function (row, data, dataIndex) {
 
                 },
-                drawCallback: function(settings) {
+                drawCallback: function (settings) {
                     console.log(settings.json);
                     $("#tablaPrincipal").DataTable().columns().header()[12].innerText = $('a[data-toggle="tab"].active').data('action-name')
                 },
                 rowCallback: function (row, data, index) {
-                    renderButtomsDataTable(row,data)
+                    renderButtomsDataTable(row, data)
                 },
                 columns: [
                     {
@@ -1208,12 +1290,12 @@ Enviar</button>
                 createdRow: function (row, data, dataIndex) {
 
                 },
-                drawCallback: function(settings) {
+                drawCallback: function (settings) {
                     console.log(settings.json);
                     $("#tablaPrincipal").DataTable().columns().header()[12].innerText = $('a[data-toggle="tab"].active').data('action-name')
                 },
                 rowCallback: function (row, data, index) {
-                    renderButtomsDataTable(row,data)
+                    renderButtomsDataTable(row, data)
                 },
                 columns: [
                     {
@@ -1248,10 +1330,6 @@ Enviar</button>
                     {
                         data: 'fecha_salida',
                         name: 'fecha_salida',
-                    },
-                    {
-                        data: 'fecha_recepcion',
-                        name: 'fecha_recepcion',
                     },
                     {
                         data: 'producto',
@@ -1299,7 +1377,14 @@ Enviar</button>
                             }
                         }
                     },
-                    {data: 'condicion_envio', name: 'condicion_envio',className:'ancho_condicion_envio_global'},
+                    {
+                        data: 'motorizado_sustento_text',
+                        name: 'motorizado_sustento_text',
+                        render: function (data) {
+                            return `<hr class="my-2"><p class="text-wrap text-break"><i>${data}</i></p>`
+                        }
+                    },
+                    {data: 'condicion_envio', name: 'condicion_envio', className: 'ancho_condicion_envio_global'},
                     {
                         data: 'action',
                         name: 'action',
@@ -1331,47 +1416,47 @@ Enviar</button>
                 "fnDrawCallback": function () {
                     $('.count_motorizados_observado').html(this.fnSettings().fnRecordsDisplay());
 
-                    let a1=$('#tablaEnmotorizado').dataTable().fnSettings().fnRecordsDisplay();
-                    let a2=$('#tablaEntregado').dataTable().fnSettings().fnRecordsDisplay();
-                    let a3=$('#tablaNocontesto').dataTable().fnSettings().fnRecordsDisplay();
-                    let a4=this.fnSettings().fnRecordsDisplay();
+                    let a1 = $('#tablaEnmotorizado').dataTable().fnSettings().fnRecordsDisplay();
+                    let a2 = $('#tablaEntregado').dataTable().fnSettings().fnRecordsDisplay();
+                    let a3 = $('#tablaNocontesto').dataTable().fnSettings().fnRecordsDisplay();
+                    let a4 = this.fnSettings().fnRecordsDisplay();
 
-                    if(a1>0){
+                    if (a1 > 0) {
                         $('#myTab a[href="#enmotorizado"]').tab('show')
-                    }else if(a2>0){
+                    } else if (a2 > 0) {
                         $('#myTab a[href="#entregado"]').tab('show')
-                    }else if(a3>0){
+                    } else if (a3 > 0) {
                         $('#myTab a[href="#nocontesto"]').tab('show')
-                    }else if(a4>0){
+                    } else if (a4 > 0) {
                         $('#myTab a[href="#observado"]').tab('show')
                     }
                 }
             });
 
-            datatableenmotorizado.on( 'responsive-display', function ( e, datatable, row, showHide, update ) {
-                console.log( 'Details for row '+row.index()+' '+(showHide ? 'shown' : 'hidden') );
-                if(showHide) {
+            datatableenmotorizado.on('responsive-display', function (e, datatable, row, showHide, update) {
+                console.log('Details for row ' + row.index() + ' ' + (showHide ? 'shown' : 'hidden'));
+                if (showHide) {
                     renderButtomsDataTable($(row.node()).siblings('.child'), row.data())
                 }
-            } );
-            datatableentregado.on( 'responsive-display', function ( e, datatable, row, showHide, update ) {
-                console.log( 'Details for row '+row.index()+' '+(showHide ? 'shown' : 'hidden') );
-                if(showHide) {
+            });
+            datatableentregado.on('responsive-display', function (e, datatable, row, showHide, update) {
+                console.log('Details for row ' + row.index() + ' ' + (showHide ? 'shown' : 'hidden'));
+                if (showHide) {
                     renderButtomsDataTable($(row.node()).siblings('.child'), row.data())
                 }
-            } );
-            datatablenocontesto.on( 'responsive-display', function ( e, datatable, row, showHide, update ) {
-                console.log( 'Details for row '+row.index()+' '+(showHide ? 'shown' : 'hidden') );
-                if(showHide) {
+            });
+            datatablenocontesto.on('responsive-display', function (e, datatable, row, showHide, update) {
+                console.log('Details for row ' + row.index() + ' ' + (showHide ? 'shown' : 'hidden'));
+                if (showHide) {
                     renderButtomsDataTable($(row.node()).siblings('.child'), row.data())
                 }
-            } );
-            datatableobservado.on( 'responsive-display', function ( e, datatable, row, showHide, update ) {
-                console.log( 'Details for row '+row.index()+' '+(showHide ? 'shown' : 'hidden') );
-                if(showHide) {
+            });
+            datatableobservado.on('responsive-display', function (e, datatable, row, showHide, update) {
+                console.log('Details for row ' + row.index() + ' ' + (showHide ? 'shown' : 'hidden'));
+                if (showHide) {
                     renderButtomsDataTable($(row.node()).siblings('.child'), row.data())
                 }
-            } );
+            });
 
         });
     </script>
