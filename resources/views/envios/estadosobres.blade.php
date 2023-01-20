@@ -505,9 +505,14 @@
                                         if(data.pedido.direcciongrupo.motorizado == null){
                                             InfoString += '<tr><td class="font-weight-bold p-8">Se encuentra en Reparto?</td><td colspan="3"> NO</td></tr>';
                                         }else{
+                                            if(data.pedido.direcciongrupo.fecha_salida == null){
+                                                var env_fecha_salida = "Fecha no asignada";
+                                            }else{
+                                                var env_fecha_salida = data.pedido.direcciongrupo.fecha_salida;
+                                            }
                                             InfoString += '<tr><td colspan="4" class="font-weight-bold p8 pt-8 pb-8" style="background-color:#ededed;"><i class="fa fa-motorcycle text-primary mr-12" aria-hidden="true"></i> COURIER</td></tr>';
                                             InfoString += '<tr><td class="font-weight-bold p-8 pt-0 pb-0">Nombre Motorizado</td><td>'+ data.pedido.direcciongrupo.motorizado.name +'</td><td class="font-weight-bold p-8">Zona motorizado</td><td>'+ data.pedido.direcciongrupo.motorizado.zona +'</td></tr>';
-                                            InfoString += '<tr><td class="font-weight-bold p-8 pt-0 pb-0">Zona</td><td>'+ data.pedido.direcciongrupo.distribucion +'</td><td class="font-weight-bold p-8">Fecha de salida</td><td>'+data.pedido.direcciongrupo.fecha_salida+'</td></tr>';
+                                            InfoString += '<tr><td class="font-weight-bold p-8 pt-0 pb-0">Zona</td><td>'+ data.pedido.direcciongrupo.distribucion +'</td><td class="font-weight-bold p-8">Fecha de salida</td><td>'+ env_fecha_salida  +'</td></tr>';
 
                                             //SI TIENE MOTORIZADO
                                             if(data.pedido.condicion_envio_code == 10){
