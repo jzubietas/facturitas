@@ -70,10 +70,15 @@
                                         <div class="form-group col-lg-2">
                                             {!! Form::label('pruc', 'RUC') !!}
 
-                                            <input type="number" name="pruc" id="pruc" value="{{ $pedido->ruc}}"
-                                                   step="1" min="0" max="99999999999" maxlength="11"
-                                                   oninput="maxLengthCheck(this)" class="form-control"
-                                                   placeholder="RUC..." readonly>
+                                            @if ($mirol =='Administrador')
+                                                {!! Form::select('pruc', $rucs , $pedido->ruc, ['class' => 'form-control selectpicker border border-secondary', 'data-live-search' => 'true', 'placeholder' => '---- SELECCIONE ----']) !!}
+                                            @else
+                                                <input type="number" name="pruc" id="pruc" value="{{ $pedido->ruc}}"
+                                                       step="1" min="0" max="99999999999" maxlength="11"
+                                                       oninput="maxLengthCheck(this)" class="form-control"
+                                                       placeholder="RUC..." readonly>
+                                            @endif
+
                                         </div>
                                         <div class="form-group col-lg-2">
                                             {!! Form::label('pcantidad', 'Cantidad') !!}

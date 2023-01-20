@@ -1395,7 +1395,7 @@ class PedidoController extends Controller
         $pedidos = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')
             ->join('users as u', 'pedidos.user_id', 'u.id')
             ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
-            ->select(
+            ->select([
                 'pedidos.id',
                 'c.nombre as nombres',
                 'c.celular as celulares',
@@ -1416,7 +1416,7 @@ class PedidoController extends Controller
                 'dp.total',
                 'pedidos.condicion as condiciones',
                 'pedidos.created_at as fecha'
-            )
+            ])
             ->where('pedidos.estado', '1')
             ->where('pedidos.id', $pedido->id)
             ->where('dp.estado', '1')
@@ -1445,9 +1445,31 @@ class PedidoController extends Controller
             ->orderBy('pedidos.created_at', 'DESC')
             ->get();
 
+        if(auth()->user()->rol==User::ROL_ADMIN)
+        {
+            $rucs = Ruc::join('clientes as c', 'rucs.cliente_id', 'c.id')
+                ->select([
+                    'rucs.num_ruc as num_ruc',
+                    DB::raw(" concat(rucs.num_ruc,'',rucs.empresa ) as empresa")
+                ])
+                ->where('rucs.cliente_id', $pedido->cliente_id)
+                ->pluck('empresa','num_ruc');
+        }else{
+            $ruc=$pedido->ruc;
+            $rucn=$pedido->empresas;
+            $rucs=Ruc::join('clientes as c', 'rucs.cliente_id', 'c.id')
+                ->select([
+                    'rucs.num_ruc as num_ruc',
+                    DB::raw(" concat(rucs.num_ruc,'',rucs.empresa ) as empresa")
+                ])
+                ->where('rucs.cliente_id', $pedido->cliente_id)
+                ->where('rucs.num_ruc',$ruc)
+                ->pluck('empresa','num_ruc');
+        }
+
         $imagenes = ImagenPedido::where('imagen_pedidos.pedido_id', $pedido->id)->get();
 
-        return view('pedidos.edit', compact('pedido', 'pedidos', 'meses', 'anios', 'porcentajes', 'imagenes', 'mirol'));
+        return view('pedidos.edit', compact('pedido', 'pedidos', 'meses', 'anios', 'porcentajes', 'imagenes', 'mirol','rucs'));
     }
 
     /**
