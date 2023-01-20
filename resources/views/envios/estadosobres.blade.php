@@ -1041,8 +1041,7 @@
                 console.log($direcciongrupo);
                 var fd2 = new FormData();
 
-
-                var fd = new FormData();
+                //var fd = new FormData();
                 fd2.append('direcciongrupo', $direcciongrupo);
                 fd2.append('pedidos', $pedidos);
                 fd2.append('observaciongrupo', '');
@@ -1061,14 +1060,12 @@
                     }
                 });
 
-
-
-                $.ajax({
+                /*$.ajax({
                     data: fd,
                     processData: false,
                     contentType: false,
                     type: 'POST',
-                    url: "{{ route('operaciones.revertiraenviocourier') }}",
+                    url: "{{-- route('operaciones.revertiraenviocourier') --}}",
                     success: function (data) {
                         console.log(data);
                         $("#modal-revertir-aenviocourier .textcode").text('');
@@ -1076,7 +1073,7 @@
                         $("#modal-revertir-aenviocourier").modal("hide");
                         $('#tablaEntregados').DataTable().ajax.reload();
                     }
-                });
+                });*/
             });
 
             tablaAnulados_courier=$('#tablaAnulados_courier').DataTable({
