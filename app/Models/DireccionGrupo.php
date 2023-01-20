@@ -51,7 +51,8 @@ class DireccionGrupo extends Model implements HasMedia
     ];
 
     protected $appends = [
-        'is_reprogramado'
+        'is_reprogramado',
+        'fecha_salida_format'
     ];
 
     protected static function booted()
@@ -126,6 +127,11 @@ class DireccionGrupo extends Model implements HasMedia
     public function getIsReprogramadoAttribute()
     {
         return $this->reprogramacion_at != null && $this->reprogramacion_accept_at == null;
+    }
+
+    public function getFechaSalidaFormatAttribute()
+    {
+        return optional($this->fecha_salida)->format('d-m-Y');
     }
 
     public static function restructurarCodigos(self $grupo)
