@@ -15,12 +15,12 @@
           <div class="row">
              <div class="col-lg-6 border-right text-left">
                  <h5 class="font-weight-bold"> Listado de codigos de hoy </h5>
-                 <ul id="pedidos-recepcion" class="list-unstyled"></ul>
+                 <div class="row" id="pedidos-recepcion"></div>
              </div>
 
               <div class="col-lg-6 text-left pl-20">
                   <h5 class="font-weight-bold"> Listado ya escaneados</h5>
-                  <ul id="pedidos-escaneados" class="list-unstyled"></ul>
+                  <div id="pedidos-escaneados" class="row"></div>
               </div>
           </div>
       </div>

@@ -1211,10 +1211,13 @@
                                             },
                                     success: function (data) {
                                         var lista = "";
+                                        alert("Pero no mietas pe!");
                                         jQuery.each(data.grupo, function(index, item) {
-                                            lista += '<li id="'+item+'" class="item_recepcionado"><i class="fa fa-envelope text-warning mr-8" aria-hidden="true"></i> '+item+'</li>';
+                                            lista += '<div id="'+item+'" class="item_recepcionado col-lg-6"><i class="fa fa-envelope text-warning mr-8" aria-hidden="true"></i> '+item+'</div>';
                                             //$('#pedidos-recepcion').append('<li id="'+item+'" class="item_recepcionado">'+item+'</li>');
                                         });
+
+
                                         $('.pedidos-escaneados').html("");
                                         $('.pedidos').html("");
                                         $('#pedidos-recepcion').html(lista);
@@ -1232,7 +1235,7 @@
                                                     if(ide == codigo_mejorado){
                                                         console.log("codigo encontrado");
                                                         $('#'+ codigo_mejorado ).fadeOut();
-                                                        $("#pedidos-escaneados").append('<li><i class="fa fa-check text-success mr-8" aria-hidden="true"></i>'+ codigo_mejorado +'</li>');
+                                                        $("#pedidos-escaneados").append('<div class="col-lg-6"><i class="fa fa-check text-success mr-8" aria-hidden="true"></i>'+ codigo_mejorado +'</div>');
                                                     }else{
 
                                                     }
@@ -1261,7 +1264,7 @@
                                     }else{
                                         console.log("codigo encontrado");
                                         $('#'+codigo_mejorado).fadeOut();
-                                        $("#pedidos-escaneados").append('<li><i class="fa fa-check text-success mr-8" aria-hidden="true"></i>'+ codigo_mejorado +'</li>');
+                                        $("#pedidos-escaneados").append('<div class="col-lg-6"><i class="fa fa-check text-success mr-8" aria-hidden="true"></i>'+ codigo_mejorado +'</div>');
                                         pedidos_escaneados.push(codigo_mejorado);
                                         console.log("nuevo lista pedidos escaneados")
                                         console.log(pedidos_escaneados)

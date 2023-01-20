@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cliente;
+use App\Models\DireccionGrupo;
 use App\Models\PedidoMotorizadoHistory;
 use App\Models\User;
 use App\Models\Pedido;
@@ -42,8 +43,9 @@ class EscaneoController extends Controller
         $detalle_pedido = Pedido::with('direcciongrupo.motorizado')
             ->where('codigo', $request->codigo)
             ->first();
+        $direc=DireccionGrupo::find($detalle_pedido->pedido_id);
 
-        $detalle_pedido->foto1 = \Storage::disk('pstorage')->url($detalle_pedido->foto1);
+        //$detalle_pedido->url = \Storage::disk('pstorage');
 
 
         if($detalle_pedido == null){

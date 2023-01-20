@@ -1061,12 +1061,20 @@
                                         'zona' : button.data('zona'),
                                             },
                                     success: function (data) {
-                                        var lista = "";
-                                        jQuery.each(data.grupo, function(index, item) {
-                                            lista += '<li id="'+item+'" class="item_recepcionado"><i class="fa fa-envelope text-warning mr-8" aria-hidden="true"></i> '+item+'</li>';
-                                            //$('#pedidos-recepcion').append('<li id="'+item+'" class="item_recepcionado">'+item+'</li>');
-                                        });
-                                        $('#pedidos-recepcion').html(lista);
+                                        if(data.codigo == 0){
+                                            Swal.fire(
+                                                'Error',
+                                                'El pedido no se encontro',
+                                                'warning'
+                                            )
+                                        }else{
+                                            var lista = "";
+                                            jQuery.each(data.grupo, function(index, item) {
+                                                lista += '<div id="'+item+'" class="item_recepcionado col-lg-6"><i class="fa fa-envelope text-warning mr-8" aria-hidden="true"></i> '+item+'</div>';
+                                                //$('#pedidos-recepcion').append('<li id="'+item+'" class="item_recepcionado">'+item+'</li>');
+                                            });
+                                            $('#pedidos-recepcion').html(lista);
+                                        }
                                     }
                                 });
 
@@ -1085,9 +1093,12 @@
                                         console.log("codigo se encuentra repetido en lista");
                                         console.log(pedidos_escaneados);
                                     }else{
+                                        if($('#'+codigo_mejorado).length===0){
+                                            return;
+                                        }
                                         console.log("codigo encontrado");
                                         $('#'+codigo_mejorado).fadeOut();
-                                        $("#pedidos-escaneados").append('<li><i class="fa fa-check text-success mr-8" aria-hidden="true"></i>'+ codigo_mejorado +'</li>');
+                                        $("#pedidos-escaneados").append('<div class="col-lg-6"><i class="fa fa-check text-success mr-8" aria-hidden="true"></i>'+ codigo_mejorado +'</div>');
                                         pedidos_escaneados.push(codigo_mejorado);
                                         console.log("nuevo lista pedidos escaneados")
                                         console.log(pedidos_escaneados)
