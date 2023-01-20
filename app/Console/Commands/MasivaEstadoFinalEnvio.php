@@ -40,7 +40,13 @@ class MasivaEstadoFinalEnvio extends Command
     public function handle()
     {
         $pedidos = Pedido::query()->activo()
-            ->where('pedidos.condicion_envio_code', '=', Pedido::ENVIO_COURIER_JEFE_OPE_INT)
+            //->where('pedidos.condicion_envio_code', '=', Pedido::ENVIO_COURIER_JEFE_OPE_INT)
+            ->whereIn('codigo',['B-3012-5',
+                'B-3012-4',
+                'B-2812-10',
+                'B-0201-9',
+                'B-0201-11',
+                'B-0201-12'])
             ->get();
         $count = $pedidos->count();
         $result = [];
