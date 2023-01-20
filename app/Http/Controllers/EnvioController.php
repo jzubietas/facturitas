@@ -2509,7 +2509,9 @@ class EnvioController extends Controller
                     margin-bottom: -4px;
                     color: black !important;">Con ruta</span>';
 
-                    $badge_estado .= '<span class="badge badge-success" style="background-color: ' . $color . '!important;">' . $pedido->condicion_envio . '</span>';
+                    $badge_estado .= '<span class="badge badge-success" style="background-color: ' . $color . '!important;">' .
+                        $pedido->condicion_envio .
+                        '</span>';
                     return $badge_estado;
                 })
                 ->editColumn('foto1', function ($pedido) {
