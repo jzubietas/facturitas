@@ -254,7 +254,7 @@
 
                         Swal.fire({
                             icon: 'error',
-                            title: 'El pedido esta anulado',
+                            title: 'El pedido No tiene direcion',
                             color: '#FFF',
                             background: '#9f2916',
                             showConfirmButton: false,
@@ -437,7 +437,7 @@ function ConfirmarOPBarra(data){
                         $('#respuesta_barra').html("");
                         Swal.fire({
                             icon: 'error',
-                            title: 'El pedido esta anulado',
+                            title: 'El pedido no tiene dirección',
                             color: '#FFF',
                             background: '#9f2916',
                             showConfirmButton: false,
