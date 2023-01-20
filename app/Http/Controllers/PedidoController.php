@@ -1460,7 +1460,7 @@ class PedidoController extends Controller
             $rucs=Ruc::join('clientes as c', 'rucs.cliente_id', 'c.id')
                 ->select([
                     'rucs.num_ruc as num_ruc',
-                    DB::raw(" concat(rucs.num_ruc,' ',rucs.empresa ) as empresa")
+                    DB::raw(" concat(rucs.num_ruc,'  ',rucs.empresa ) as empresa")
                 ])
                 ->where('rucs.cliente_id', $pedido->cliente_id)
                 ->where('rucs.num_ruc',$ruc)
