@@ -16,7 +16,7 @@
                   <div id="info-pedido">
                       <div class="text-center">
                       <img src="{{asset('imagenes/scan.gif')}}" width="300" class="mr-8">
-                      <h4>Escanee un pedido para saber sus detalles</h4>
+                      <h5 class="font-weight-bold">Escanee un pedido para saber sus detalles</h5>
                       </div>
                   </div>
               </div>
@@ -25,7 +25,6 @@
 
       </div>
       <div class="modal-footer">
-
           <input type="text" value="" id="input-info-pedido" placeholder="00-0000-0" name="hiddenCodigo" style="opacity: 0.5;
     border: 1px solid #bbbbbb;
     border-radius: 4px;

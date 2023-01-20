@@ -454,9 +454,12 @@
                 var urlimage = '{{ asset(":id") }}';
                 urlimage = urlimage.replace(':id', 'storage/'+idunico);
                 $("#modal-imagen .img-thumbnail").attr("src", urlimage);
+
             });
 
             $('#modal-escanear-estado-sobre').on('show.bs.modal', function (event) {
+                $('#info-pedido').html('<div class="text-center"><img src="{{asset('imagenes/scan.gif')}}" width="300" class="mr-8"><h5 class="font-weight-bold">Escanee un pedido para saber sus detalles</h5></div>');
+                $('#input-info-pedido').html("");
 
                 $('#input-info-pedido').change(function (event) {
                     event.preventDefault();
