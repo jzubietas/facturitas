@@ -220,7 +220,7 @@ class OperacionController extends Controller
     {
         $pedidos = Pedido::join('users as u', 'pedidos.user_id', 'u.id')
             ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
-            ->select(
+            ->select([
                 'pedidos.id',
                 'pedidos.correlativo as id2',
                 'u.identificador as users',
@@ -246,9 +246,7 @@ class OperacionController extends Controller
                 'pedidos.estado',
                 'pedidos.estado_sobre',
                 'pedidos.estado_ruta',
-            )
-            ->where('pedidos.estado', '1')
-            ->where('dp.estado', '1')
+            ])->activo()
             ->where('pedidos.condicion_envio_code', Pedido::ATENDIDO_OPE_INT);
 
         if (Auth::user()->rol == "Operario") {
@@ -289,6 +287,7 @@ class OperacionController extends Controller
             ->addIndexColumn()
             ->editColumn('condicion_envio', function ($pedido) {
                 $badge_estado='';
+                $color = Pedido::getColorByCondicionEnvio($pedido->condicion_envio);
                 if($pedido->pendiente_anulacion=='1')
                 {
                     $badge_estado.='<span class="badge badge-success">' . Pedido::PENDIENTE_ANULACION.'</span>';
@@ -300,7 +299,10 @@ class OperacionController extends Controller
                 }
                 if($pedido->estado_sobre=='1')
                 {
-                    $badge_estado .= '<span class="badge badge-dark p-8" style="color: #fff; background-color: #347cc4; font-weight: 600; margin-bottom: -2px;border-radius: 4px 4px 0px 0px; font-size:8px;  padding: 4px 4px !important; font-weight: 500;">Direccion agregada</span>';
+                    $badge_estado .= '<span class="badge badge-dark p-8"
+                        style="color: #fff; background-color: #347cc4; font-weight: 600;
+                        margin-bottom: -2px;border-radius: 4px 4px 0px 0px; font-size:8px;
+                        padding: 4px 4px !important; font-weight: 500;">Direccion agregada</span>';
 
                 }
                 if($pedido->estado_ruta=='1')
@@ -311,8 +313,9 @@ class OperacionController extends Controller
                     margin-bottom: -4px;
                     color: black !important;">Con ruta</span>';
                 }
-                $color = Pedido::getColorByCondicionEnvio($pedido->condicion_envio);
+
                 $badge_estado.= '<span class="badge badge-success" style="background-color: ' . $color . '!important;">' . $pedido->condicion_envio . '</span>';
+
                 return $badge_estado;
             })
             ->addColumn('action', function ($pedido) {
@@ -487,18 +490,18 @@ class OperacionController extends Controller
                 if($pedido->condicion_envio_code==5):
                     $btn[]='<li><a href="" data-target="#modal-envio-op" data-group="1" class="btn-sm dropdown-item" data-envio='.$pedido->id.' data-code="'.$pedido->codigos.'" data-toggle="modal" ><i class="fa fa-envelope text-success" aria-hidden="true"></i> Recepcion</a></li>';
                     $btn[]='<li><p data-target="#" class="btn-sm pl-16 text-gray mb-0" data-envio='.$pedido->id.' data-code="'.$pedido->codigos.'" data-toggle="" disabled><i class="fa fa fa-motorcycle text-gray" aria-hidden="true"></i> ENVIO A COURIER</p></li>';
-                    $btn[]='<li><a href="" data-target="#modal-revertir" class="btn-sm dropdown-item" data-revertir='.$pedido->id.'  data-codigo='.$pedido->codigo.' data-toggle="modal" ><i class="fa fa-times text-danger" aria-hidden="true"></i> Revertir</a></li>';
+                    $btn[]='<li><a href="" data-target="#modal-revertir" class="btn-sm dropdown-item" data-revertir='.$pedido->id.'  data-codigo='.$pedido->codigo.' data-toggle="modal" ><i class="fa fa-times text-danger" aria-hidden="true"></i> Revertir a LISTO PARA ENVIO</a></li>';
                 endif;
 
                 if($pedido->condicion_envio_code==6):
                     $btn[]='<li><p data-target="text-gray" class="btn-sm pl-16 mb-0" data-envio='.$pedido->id.' data-code="'.$pedido->codigos.'" data-toggle="" disabled><i class="fa fa-envelope text-gray " aria-hidden="true"></i> Recepcion</p></li>';
                     $btn[]='<li><a href="" data-target="#modal-envio-op" data-group="2" class="btn-sm dropdown-item " data-envio='.$pedido->id.' data-code="'.$pedido->codigos.'" data-toggle="modal" ><i class="fa fa fa-motorcycle text-success" aria-hidden="true"></i> ENVIO A COURIER</a></li>';
-                    $btn[]='<li><a href="" data-target="#modal-revertir" class="btn-sm dropdown-item" data-revertir='.$pedido->id.'  data-codigo='.$pedido->codigo.' data-toggle="modal" ><i class="fa fa-times text-danger" aria-hidden="true"></i> Revertir</a></li>';
+                    $btn[]='<li><a href="" data-target="#modal-revertir" class="btn-sm dropdown-item" data-revertir='.$pedido->id.'  data-codigo='.$pedido->codigo.' data-toggle="modal" ><i class="fa fa-times text-danger" aria-hidden="true"></i> Revertir a LISTO PARA ENVIO</a></li>';
                 endif;
 
                 if($pedido->condicion_envio_code == 13):
                     $btn[]='<li><a href="" class="btn-sm dropdown-item" data-target="#modal-envio" data-code="'.$pedido->codigos.'" data-envio='.$pedido->id.' data-toggle="modal" ><i class="fa fa-check text-success" aria-hidden="true"></i> Recepcion</a></li>';
-                    $btn[]='<li><a href="" data-target="#modal-revertir" class="btn-sm dropdown-item" data-revertir='.$pedido->id.' data-codigo='.$pedido->codigo.' data-toggle="modal" ><i class="fa fa-times text-danger" aria-hidden="true"></i> Revertir</a></li>';
+                    $btn[]='<li><a href="" data-target="#modal-revertir" class="btn-sm dropdown-item" data-revertir='.$pedido->id.' data-codigo='.$pedido->codigo.' data-toggle="modal" ><i class="fa fa-times text-danger" aria-hidden="true"></i> Revertir a LISTO PARA ENVIO</a></li>';
                 endif;
 
                 $btn[] = '<div class="row">';
@@ -564,6 +567,7 @@ class OperacionController extends Controller
             //->where('pedidos.estado', '1')
             //->where('dp.estado', '1')
             ->whereIn('pedidos.condicion_envio_code', [
+                Pedido::RECIBIDO_JEFE_OPE_INT,
                 Pedido::RECEPCION_COURIER_INT
                 , Pedido::REPARTO_COURIER_INT
                 , Pedido::RECEPCIONADO_OLVA_INT
@@ -1574,105 +1578,38 @@ class OperacionController extends Controller
 
     public function Revertirenvio(Request $request)
     {
+        //a listo para envio    ATENDIDO OPE  3
         $pedido = Pedido::where("id", $request->hiddenRevertirpedido)->first();
-        $detalle_pedidos = DetallePedido::where('pedido_id', $pedido->id)->first();
-        $fecha = Carbon::now();
-
-        if ($pedido->estado_sobre == '1') {
-            if ($pedido->destino == 'LIMA') {
-                $direcciongrupo = DireccionPedido::where('direccion_pedidos.pedido_id', $pedido->id)->where("direccion_pedidos.estado", '1')->first();//->direcciongrupo;
-                $direcciongrupo->update(['estado' => '0']);
-
-                $count_pedidos = DireccionPedido::where('direccion_pedidos.pedido_id', $pedido->id)->where("direccion_pedidos.estado", '1')->count();
-                if ($count_pedidos == 0) {
-                    $grupo = DireccionGrupo::where('id', $direcciongrupo->direcciongrupo)->first();
-                    $grupo->update(['estado', '0']);
-
-                    $envio = DireccionEnvio::where('direcciongrupo', $direcciongrupo->direcciongrupo)->first();
-                    $envio->update(['estado', '0']);
-                } else {
-                    $grupo = DireccionGrupo::where('id', $direcciongrupo->direcciongrupo)->first();
-
-                    $loscodigos = DireccionPedido::where('direcciongrupo', $direcciongrupo->direcciongrupo)
-                        ->pluck('codigo_pedido')/*->unique()*/ ->map(function ($item) {
-                            return $item;
-                        })->join(',');
-
-                    $loscodigosin = DireccionPedido::where('direcciongrupo', $direcciongrupo->direcciongrupo)
-                        ->pluck('codigo_pedido')/*->unique()*/
-                    ;
-
-                    //obtener producto con los codigos
-                    $losproductos = DetallePedido::whereIn('codigo', $loscodigosin)
-                        ->pluck('nombre_empresa');//->map(function($item){ return $item;})->join(',');
-
-                    $grupo->update(['codigos' => $loscodigos, 'producto' => $losproductos]);
-
-                }
-                //concatenar y sacar
-            } else if ($pedido->destino == 'PROVINCIA') {
-                $direcciongrupo = GastoPedido::where('gasto_pedidos.pedido_id', $pedido->id)->where("gasto_pedidos.estado", '1')->first();//->direcciongrupo;
-                $direcciongrupo->update(['estado' => '0']);
-
-                $count_pedidos = GastoPedido::where('gasto_pedidos.pedido_id', $pedido->id)->where("gasto_pedidos.estado", '1')->count();
-                if ($count_pedidos == 0) {
-                    $grupo = DireccionGrupo::where('id', $direcciongrupo->direcciongrupo)->first();
-                    $grupo->update(['estado', '0']);
-
-                    $envio = GastoEnvio::where('direcciongrupo', $direcciongrupo->direcciongrupo)->first();
-                    $envio->update(['estado', '0']);
-                } else {
-                    $grupo = DireccionGrupo::where('id', $direcciongrupo->direcciongrupo)->first();
-
-                    $loscodigos = GastoPedido::where('direcciongrupo', $direcciongrupo->direcciongrupo)
-                        ->pluck('codigo_pedido')/*->unique()*/ ->map(function ($item) {
-                            return $item;
-                        })->join(',');
-
-                    $loscodigosin = GastoPedido::where('direcciongrupo', $direcciongrupo->direcciongrupo)
-                        ->pluck('codigo_pedido')/*->unique()*/
-                    ;
-
-                    //obtener producto con los codigos
-                    $losproductos = DetallePedido::whereIn('codigo', $loscodigosin)
-                        ->pluck('nombre_empresa');//->map(function($item){ return $item;})->join(',');
-
-                    $grupo->update(['codigos' => $loscodigos, 'producto' => $losproductos]);
-                }
-
-            }
-            //buscar el direccion grupo para desvincular
-
-        }
+        //$detalle_pedidos = DetallePedido::where('pedido_id', $pedido->id)->first();
+        //$fecha = Carbon::now();
 
         $pedido->update([
-            'envio' => '0',
             'condicion_envio' => Pedido::ATENDIDO_OPE,
             'condicion_envio_code' => Pedido::ATENDIDO_OPE_INT,
             'condicion_envio_at'=>now(),
-            'modificador' => 'USER' . Auth::user()->id,
-            'estado_sobre' => '0',
-            'destino' => '',
-            'direccion' => ''
+            'condicion' => Pedido::ATENDIDO_OPE,
+            'condicion_code' => Pedido::ATENDIDO_OPE_INT,
+            'modificador' => 'USER' . Auth::user()->id
         ]);
 
+        /*$pedido->detallePedidos()->activo()->update([
+            "cant_compro" => 0
+        ]);*/
+        //liberar adjuntos
+        /*$imagenesatencion_ = ImagenAtencion::where("pedido_id", $request->hiddenRevertirpedidoporatender);//->where("confirm", '0');
+        $imagenesatencion_->update([
+            'estado' => '0'
+        ]);*/
 
         PedidoMovimientoEstado::where('pedido', $request->hiddenRevertirpedido)->delete();
 
         PedidoMovimientoEstado::create([
             'pedido' => $request->hiddenRevertirpedido,
-            'condicion_envio_code' => Pedido::ATENDIDO_OPE_INT,
+            'condicion_envio_code' => Pedido::POR_ATENDER_OPE_INT,
             'notificado' => 0
         ]);
 
-
-        /*$detalle_pedidos->update([
-            'fecha_envio_doc_fis' => $fecha,
-        ]);*/
-
         return response()->json(['html' => $pedido->id]);
-
-        //return redirect()->route('operaciones.atendidos')->with('info','actualizado');
     }
 
     public function Revertirenvioporatender(Request $request)

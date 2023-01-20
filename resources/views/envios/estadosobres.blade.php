@@ -454,9 +454,12 @@
                 var urlimage = '{{ asset(":id") }}';
                 urlimage = urlimage.replace(':id', 'storage/'+idunico);
                 $("#modal-imagen .img-thumbnail").attr("src", urlimage);
+
             });
 
             $('#modal-escanear-estado-sobre').on('show.bs.modal', function (event) {
+                $('#info-pedido').html('<div class="text-center"><img src="{{asset('imagenes/scan.gif')}}" width="300" class="mr-8"><h5 class="font-weight-bold">Escanee un pedido para saber sus detalles</h5></div>');
+                $('#input-info-pedido').html("");
 
                 $('#input-info-pedido').change(function (event) {
                     event.preventDefault();
@@ -471,16 +474,56 @@
                         },
                         success: function (data) {
                             console.log(data);
-                            var InfoString = "<table><tr>";
-                            InfoString += '<td class="font-weight-bold">Codigo</td><td>' + data.pedido.codigo + '</td>';
-                            InfoString += '</tr><tr>';
-                            InfoString += '<td class="font-weight-bold">Estado</td><td>' +data.pedido.condicion_envio + '</td>';
-                            InfoString += '</tr><tr>';
-                            InfoString += '<td class="font-weight-bold">Creado por</td><td>' +data.pedido.creador + '</td>';
-                            InfoString += '</tr><tr>';
-                            InfoString += '<td class="font-weight-bold">Fecha creación</td><td>' +data.pedido.created_at + '</td>';
-                            InfoString += '</tr>';
+                            if(data.codigo == 0){
+                                $('#info-pedido').html('<div class="text-danger text-center"><i class="fa fa-exclamation-triangle font-44" aria-hidden="true"></i><br><h4 class="font-weight-bold">Este pedido no se encuentra en el sistema</h4></div>');
+                            }else if(data.codigo == 1){
+                                var InfoString = '<h4 class="font-16 font-weight-bold">Información del pedido:</h4> <table class="table w-100">';
+                                InfoString += '<tr><td class="font-weight-bold p-8 pt-0 pb-0">Codigo</td><td>' + data.pedido.codigo + '</td><td class="font-weight-bold p-8">Estado</td><td><span class="bagde p-8 br-12 font-weight-bold" style="background-color: '+ data.pedido.condicion_envio_color +'">' +data.pedido.condicion_envio + '<s/pan></td></tr>';
+                                InfoString += '<tr><td class="font-weight-bold p-8 pt-0 pb-0"></td><td></td><td class="font-weight-bold p-8"></td><td></td></tr>';
+                                // SI TIENE DIRECCION
+                                if(data.pedido.estado_sobre == 0){
 
+                                    InfoString += '<tr><td class="font-weight-bold p-8">Tiene Direccion</td><td colspan="3"> NO TIENE DIRECCION</td></tr>';
+                                }else {
+
+                                    InfoString += '<tr><td colspan="4" class="font-weight-bold p-8" style="background-color:#ededed;"><i class="fa fa-map-marker text-success mr-12" aria-hidden="true"></i> DIRECCION</td></tr>';
+                                    InfoString += '<tr><td class="font-weight-bold p-8 pt-0 pb-0">Dirección</td><td>' + data.pedido.env_direccion + '</td>';
+                                    if (data.pedido.env_zona == 'OLVA') {
+                                        InfoString += '<tr>';
+                                    } else {
+                                        InfoString += '<td class="font-weight-bold p-8">Distrito</td><td>' + data.pedido.env_distrito + '</td></tr>';
+                                    }
+
+                                    InfoString += '<tr><td class="font-weight-bold p-8 pt-0 pb-0">Zona</td><td>' + data.pedido.env_zona + '</td><td class="font-weight-bold p-8">Destino</td><td>' + data.pedido.env_destino + '</td></tr>';
+
+                                }
+                                // SI ESTA ASIGNADO A UN MOTORIZADO
+                                    if(data.pedido.direccion_grupo == null) {
+                                        InfoString += '<tr><td class="font-weight-bold p-8">Esta asignado a una zona?</td><td colspan="3"> NO</td></tr>';
+                                    }else{
+                                        //SI TIENE MOTORIZADO
+                                        if(data.pedido.direcciongrupo.motorizado == null){
+                                            InfoString += '<tr><td class="font-weight-bold p-8">Se encuentra en Reparto?</td><td colspan="3"> NO</td></tr>';
+                                        }else{
+                                            if(data.pedido.direcciongrupo.fecha_salida == null){
+                                                var env_fecha_salida = "Fecha no asignada";
+                                            }else{
+                                                var env_fecha_salida = data.pedido.direcciongrupo.fecha_salida;
+                                            }
+                                            InfoString += '<tr><td colspan="4" class="font-weight-bold p8 pt-8 pb-8" style="background-color:#ededed;"><i class="fa fa-motorcycle text-primary mr-12" aria-hidden="true"></i> COURIER</td></tr>';
+                                            InfoString += '<tr><td class="font-weight-bold p-8 pt-0 pb-0">Nombre Motorizado</td><td>'+ data.pedido.direcciongrupo.motorizado.name +'</td><td class="font-weight-bold p-8">Zona motorizado</td><td>'+ data.pedido.direcciongrupo.motorizado.zona +'</td></tr>';
+                                            InfoString += '<tr><td class="font-weight-bold p-8 pt-0 pb-0">Zona</td><td>'+ data.pedido.direcciongrupo.distribucion +'</td><td class="font-weight-bold p-8">Fecha de salida</td><td>'+ env_fecha_salida  +'</td></tr>';
+
+                                            //SI TIENE MOTORIZADO
+                                            if(data.pedido.condicion_envio_code == 10){
+                                                InfoString += '<tr><td colspan="4" class="font-weight-bold p8 pt-8 pb-8" style="background-color:#ededed;"><i class="fa fa-paperclip text-danger mr-12" aria-hidden="true"></i> ADJUNTOS</td></tr>';
+                                                InfoString += '<tr><td><img style="width:150px; height: 150px; object-fit:cover;" src="'+ data.pedido.direcciongrupo.foto1 +'"></td><td><img style="width:150px; height: 150px; object-fit:cover;" src="'+ data.pedido.direcciongrupo.foto2 +'"></td><td class="font-weight-bold p-8"><img style="width:150px; height: 150px; object-fit:cover;" src="'+ data.pedido.direcciongrupo.foto3 +'"></td><td></td></tr>';
+                                            }else{
+                                                InfoString += '<tr><td class="font-weight-bold p-8">Tiene adjuntos?</td><td colspan="3"> NO</td></tr>';
+                                            }
+                                        }
+                                    }
+                                }
                             $('#info-pedido').html(InfoString);
 
                         }
@@ -1010,8 +1053,7 @@
                 console.log($direcciongrupo);
                 var fd2 = new FormData();
 
-
-                var fd = new FormData();
+                //var fd = new FormData();
                 fd2.append('direcciongrupo', $direcciongrupo);
                 fd2.append('pedidos', $pedidos);
                 fd2.append('observaciongrupo', '');
@@ -1030,14 +1072,12 @@
                     }
                 });
 
-
-
-                $.ajax({
+                /*$.ajax({
                     data: fd,
                     processData: false,
                     contentType: false,
                     type: 'POST',
-                    url: "{{ route('operaciones.revertiraenviocourier') }}",
+                    url: "{{-- route('operaciones.revertiraenviocourier') --}}",
                     success: function (data) {
                         console.log(data);
                         $("#modal-revertir-aenviocourier .textcode").text('');
@@ -1045,7 +1085,7 @@
                         $("#modal-revertir-aenviocourier").modal("hide");
                         $('#tablaEntregados').DataTable().ajax.reload();
                     }
-                });
+                });*/
             });
 
             tablaAnulados_courier=$('#tablaAnulados_courier').DataTable({
