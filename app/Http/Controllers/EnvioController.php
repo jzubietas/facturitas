@@ -2482,7 +2482,9 @@ class EnvioController extends Controller
                             }
                         }
                     }
-                    $badge_estado .= '<span class="badge badge-success" style="background-color: ' . $color . '!important;">' . $pedido->condicion_envio . $subestado . '</span>';
+                    $badge_estado .= '<span class="badge badge-success" style="background-color: ' .
+                                            $color . '!important;">' .
+                                            $pedido->condicion_envio . $subestado . '</span>';
                     return $badge_estado;
                 })
                 ->addColumn('action', function ($pedido) {
