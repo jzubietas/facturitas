@@ -51,7 +51,8 @@ class DireccionGrupo extends Model implements HasMedia
     ];
 
     protected $appends = [
-        'is_reprogramado'
+        'is_reprogramado',
+        'fecha_salida_format'
     ];
 
     protected static function booted()
@@ -125,6 +126,11 @@ class DireccionGrupo extends Model implements HasMedia
     public function getIsReprogramadoAttribute()
     {
         return $this->reprogramacion_at != null && $this->reprogramacion_accept_at == null;
+    }
+
+    public function getFechaSalidaFormatAttribute()
+    {
+        return optional($this->fecha_salida)->format('d-m-Y');
     }
 
     public static function restructurarCodigos(self $grupo)
@@ -343,6 +349,56 @@ class DireccionGrupo extends Model implements HasMedia
             'direccion_grupo' => $grupo->id
         ]);
         DireccionGrupo::restructurarCodigos($grupo);
+        return $grupo;
+    }
+
+    public static function reagruparByPedido(DireccionGrupo $oldgrupo, Pedido $pedido,$condicion_envio_code)
+    {
+
+        $groupData = [
+            'condicion_envio_code' => $condicion_envio_code,
+            'condicion_envio' => Pedido::$estadosCondicionEnvioCode[$condicion_envio_code],
+            'distribucion' => $oldgrupo->env_zona,
+            'destino' => $oldgrupo->env_destino,
+            'direccion' => $oldgrupo->env_direccion,
+            'estado' => '1',
+
+            'cliente_id' => $oldgrupo->cliente_id,
+            'user_id' => $oldgrupo->user_id,
+
+            'nombre' => $oldgrupo->nombre,
+            'celular' => $oldgrupo->celular,
+
+            'nombre_cliente' => $oldgrupo->nombre_cliente,
+            'celular_cliente' => $oldgrupo->celular_cliente,
+            'icelular_cliente' => $oldgrupo->icelular_cliente,
+
+            'distrito' => $oldgrupo->distrito,
+            'referencia' => $oldgrupo->referencia,//nro registro
+            'observacion' => $oldgrupo->observacion,//rotulo
+            'gmlink' => $oldgrupo->gmlink,
+            'motorizado_id' => $oldgrupo->motorizado_id,
+            'identificador' => $oldgrupo->identificador,
+        ];
+
+        $grupo = DireccionGrupo::where($groupData)->first();
+
+        if($grupo==null){
+            $grupo=$oldgrupo->replicate();
+            $grupo->save();
+        }
+
+        $pedido->update([
+            'direccion_grupo' => $grupo->id
+        ]);
+
+        $pedido->update([
+            'direccion_grupo' => $grupo->id
+        ]);
+
+        DireccionGrupo::restructurarCodigos($oldgrupo);
+        DireccionGrupo::restructurarCodigos($grupo);
+        DireccionGrupo::cambiarCondicionEnvio($grupo,$condicion_envio_code);
         return $grupo;
     }
 

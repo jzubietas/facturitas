@@ -115,11 +115,11 @@
 
                 </div>
                 <div class="modal-footer">
-                    <div class="row">
+                    <div class="row w-100">
                         <div class="col-lg-6">
 
                         </div>
-                        <div class="col-lg-6">
+                        <div class="col-lg-6 text-right">
                             <button class="btn btn-success" id="close-scan">Aceptar</button>
                             <button class="btn btn-danger" data-dismiss="modal">Cerrar</button>
                         </div>
@@ -144,6 +144,10 @@
             $('#respuesta_barra').html('');
 
 
+            if($('#modo_fast').is(':checked')){
+                console.log("modo speed");
+                $('#close-scan').fadeOut();
+            }
 
             $('#modo_fast').on('change', function(){
                 if($(this).is(':checked')){
@@ -161,6 +165,8 @@
             $('#pedidos-procesados').html('')
             $('#modal-escanear').unbind()
             codigos_agregados = [];
+
+
         })
 
 
