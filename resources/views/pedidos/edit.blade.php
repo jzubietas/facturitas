@@ -368,7 +368,6 @@
                         var numFinal = parseFloat(strEx);
                         courier = numFinal * 1;
 
-                        select * f
 
                         codigo = $("#pcodigo").val();
                         nombre_empresa = $("#pempresa").val();
