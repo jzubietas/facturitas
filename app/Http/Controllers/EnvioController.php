@@ -2471,7 +2471,7 @@ class EnvioController extends Controller
                     $color = Pedido::getColorByCondicionEnvio($pedido->condicion_envio);
 
                     $subestado = '';
-                    if (in_array($pedido->condicion_envio_envio, [Pedido::MOTORIZADO_INT, Pedido::RECEPCION_MOTORIZADO_INT])) {
+                    if (in_array($pedido->condicion_envio_code, [Pedido::MOTORIZADO_INT, Pedido::RECEPCION_MOTORIZADO_INT])) {
                         if ($pedido->motorizado_status == Pedido::ESTADO_MOTORIZADO_OBSERVADO) {
                             $subestado .= '|| OBSERVADO';
                         } elseif ($pedido->motorizado_status == Pedido::ESTADO_MOTORIZADO_NO_CONTESTO) {
