@@ -471,10 +471,17 @@
                         },
                         success: function (data) {
                             console.log(data);
-                            var InfoString = "";
+                            var InfoString = "<table><tr>";
+                            InfoString += '<td class="font-weight-bold">Codigo</td><td>' + data.pedido.codigo + '</td>';
+                            InfoString += '</tr><tr>';
+                            InfoString += '<td class="font-weight-bold">Estado</td><td>' +data.pedido.condicion_envio + '</td>';
+                            InfoString += '</tr><tr>';
+                            InfoString += '<td class="font-weight-bold">Creado por</td><td>' +data.pedido.creador + '</td>';
+                            InfoString += '</tr><tr>';
+                            InfoString += '<td class="font-weight-bold">Fecha creación</td><td>' +data.pedido.created_at + '</td>';
+                            InfoString += '</tr>';
 
-                            InfoString += data.codigo
-                            $('#info-pedido').html();
+                            $('#info-pedido').html(InfoString);
 
                         }
                     }).always(function(){
