@@ -368,11 +368,14 @@
                         var numFinal = parseFloat(strEx);
                         courier = numFinal * 1;
 
+                        select * f
+
                         codigo = $("#pcodigo").val();
                         nombre_empresa = $("#pempresa").val();
                         mes = $("#pmes").val();
                         anio = $("#panio").val();
-                        ruc = $("#pruc").val();
+                         = $("#pruc").val();
+                        console.log(ruc)
                         /* cantidad = $("#pcantidad").val(); */
                         tipo_banca = datosTipoBanca[0];
                         porcentaje = $("#pporcentaje").val();
