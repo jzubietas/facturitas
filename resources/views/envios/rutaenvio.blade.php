@@ -110,7 +110,7 @@
                                     </ul>
 
                                     <table id="tablaPrincipal{{Str::upper($motorizado->zona)}}"
-                                           class="tabla-data table table-striped dt-responsive w-100">
+                                           class="tablaPrincipal tabla-data table table-striped dt-responsive w-100">
                                         <thead>
                                         <tr>
 
@@ -206,7 +206,7 @@
             function applySearch(e) {
                 let valor=$("#buscador_global").val();
                 console.log("busqueda "+valor)
-                $('.table').DataTable().search( valor ).draw();
+                $('.tablaPrincipal').DataTable().search( valor ).draw(false);
             }
 
             $("#buscador_global").bind('paste',function () {
@@ -215,12 +215,7 @@
             $('#buscador_global').change(applySearch);
             $('#buscador_global').keyup(applySearch);
 
-            //$("#fecha_consulta").on('change', function () {
-                //var fecha_formateada = $(this).val().replaceAll('-', '/');
-                //$(this).data('fecha', fecha_formateada);
-                //console.log(fecha_formateada);
-                //$('.tabla-data').DataTable().ajax.reload();
-            //});
+            $("#fecha_consulta").on('change',applySearch);
 
             const configDataTableZonas = {
                 serverSide: true,
@@ -297,6 +292,7 @@
                         a.motorizado_id = {{ $motorizado->id }};
                         a.zona = "{{ Str::upper($motorizado->zona)}}";
                         a.vista = "envio_ruta";
+                        a.search_value =$("#buscador_global").val();
                     }
                 },
                 "fnDrawCallback": function () {
