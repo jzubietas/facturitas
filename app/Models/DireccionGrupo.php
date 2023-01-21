@@ -352,7 +352,7 @@ class DireccionGrupo extends Model implements HasMedia
         return $grupo;
     }
 
-    public static function reagruparByPedido(DireccionGrupo $oldgrupo, Pedido $pedido,$condicion_envio_code)
+    public static function reagruparByPedido(DireccionGrupo $oldgrupo, Pedido $pedido, $condicion_envio_code)
     {
 
         $groupData = [
@@ -383,8 +383,8 @@ class DireccionGrupo extends Model implements HasMedia
 
         $grupo = DireccionGrupo::where($groupData)->first();
 
-        if($grupo==null){
-            $grupo=$oldgrupo->replicate();
+        if ($grupo == null) {
+            $grupo = $oldgrupo->replicate();
             $grupo->save();
         }
 
@@ -398,7 +398,7 @@ class DireccionGrupo extends Model implements HasMedia
 
         DireccionGrupo::restructurarCodigos($oldgrupo);
         DireccionGrupo::restructurarCodigos($grupo);
-        DireccionGrupo::cambiarCondicionEnvio($grupo,$condicion_envio_code);
+        DireccionGrupo::cambiarCondicionEnvio($grupo, $condicion_envio_code);
         return $grupo;
     }
 
@@ -453,10 +453,15 @@ class DireccionGrupo extends Model implements HasMedia
                 ->where('distribucion', 'OLVA')
                 ->first();
 
-            $data['direccion_grupo'] = $grupoolva->id;
-            $grupo->pedidos()->update($data);
-            self::restructurarCodigos($grupo);
-            self::restructurarCodigos($grupoolva);
+            if ($grupoolva == null) {
+                $grupoolva = $grupo;
+                self::cambiarCondicionEnvio($grupo, Pedido::MOTORIZADO_INT);
+            } else {
+                $data['direccion_grupo'] = $grupoolva->id;
+                $grupo->pedidos()->update($data);
+                self::restructurarCodigos($grupo);
+                self::restructurarCodigos($grupoolva);
+            }
             return $grupoolva;
         } else {
             self::cambiarCondicionEnvio($grupo, Pedido::MOTORIZADO_INT);
