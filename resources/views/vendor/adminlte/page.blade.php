@@ -88,8 +88,10 @@
                 $('#input-info-pedido').focus();
                 $('#input-info-pedido').val("");
 
+                $('#input-info-pedido').unbind();
                 $('#input-info-pedido').change(function (event) {
                     event.preventDefault();
+
                     var codigo_caturado = ($(this).val() || '').trim();
                     var codigo_mejorado = codigo_caturado.replace(/['']+/g, '-').replaceAll("'", '-').replaceAll("(", '*');
 
