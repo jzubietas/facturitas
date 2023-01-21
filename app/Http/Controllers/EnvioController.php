@@ -3657,13 +3657,13 @@ class EnvioController extends Controller
             $motorizadoid = $usuario->id;
             $direcciones = DireccionGrupo::where('motorizado_id', $motorizadoid)->where('condicion_envio_code', Pedido::RECEPCION_MOTORIZADO_INT)->get();
             foreach ($direcciones as $grupo){
-                DireccionGrupo::cambiarCondicionEnvio($grupo,Pedido::MOTORIZADO_INT);
+                DireccionGrupo::moverAMotorizadoOlva($grupo);
             }
 
         } else if ($rol == User::ROL_ADMIN) {
             $direcciones = DireccionGrupo::where('condicion_envio_code', Pedido::RECEPCION_MOTORIZADO_INT)->get();
             foreach ($direcciones as $grupo){
-                DireccionGrupo::cambiarCondicionEnvio($grupo,Pedido::MOTORIZADO_INT);
+                DireccionGrupo::moverAMotorizadoOlva($grupo);
             }
         } else {
             return response()->json(['html' => '0']);
