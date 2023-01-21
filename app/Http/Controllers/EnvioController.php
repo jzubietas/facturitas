@@ -3645,8 +3645,7 @@ class EnvioController extends Controller
          */
     }
 
-    public
-    function IniciarRutaMasiva(Request $request)
+    public function IniciarRutaMasiva(Request $request)
     {
         $rol = Auth::user()->rol;
         $zona_ = null;
@@ -3656,7 +3655,7 @@ class EnvioController extends Controller
             $usuario = User::where('id', Auth::user()->id)->first();
             $zona = $usuario->zona;
             $motorizadoid = $usuario->id;
-            $direcciones = DireccionGrupo::where('motorizado_id', $motorizadoid)->where('distribucion', $zona)->where('condicion_envio_code', Pedido::RECEPCION_MOTORIZADO_INT);
+            $direcciones = DireccionGrupo::where('motorizado_id', $motorizadoid)->where('condicion_envio_code', Pedido::RECEPCION_MOTORIZADO_INT);
             $direcciones->update([
                 'condicion_envio_code' => Pedido::MOTORIZADO_INT,
                 'condicion_envio_at' => now(),
