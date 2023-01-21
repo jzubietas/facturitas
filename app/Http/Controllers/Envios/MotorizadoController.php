@@ -970,8 +970,6 @@ Ver Rotulo</a>')
 
     public function ComparacionMotorizado(Request $request)
     {
-
-
         $grupos = Pedido::select([
             'pedidos.codigo'])
             ->join('direccion_grupos', 'direccion_grupos.id', 'pedidos.direccion_grupo')
@@ -984,9 +982,17 @@ Ver Rotulo</a>')
             ->activo()
             ->get();
 
-        return response()->json([
-            'grupo' => $grupos->pluck('codigo'),
-        ]);
 
+        if($grupos->count()){
+            return response()->json([
+                'grupo' => $grupos->pluck('codigo'),
+                'codigo'=> 1
+            ]);
+        }else{
+            return response()->json([
+                'grupo' => [],
+                'codigo' =>0
+            ]);
+        }
     }
 }
