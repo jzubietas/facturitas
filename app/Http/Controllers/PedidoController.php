@@ -318,7 +318,7 @@ class PedidoController extends Controller
                                 }
                             }
                         } else {
-                            if (in_array(auth()->user()->rol,[User::ROL_ADMIN,User::ROL_JEFE_LLAMADAS]  )) {
+                            if (in_array(auth()->user()->rol, [User::ROL_ADMIN, User::ROL_JEFE_LLAMADAS])) {
                                 if ($pedido->condicion_pa == 0) {
                                     $btn[] = '<a style="font-size:11px" href="" class="m-0 p-2 btn-sm dropdown-item text-wrap" data-target="#modal-delete" data-toggle="modal" data-delete="' . $pedido->id . '" data-codigo=' . $pedido->codigo . ' data-responsable="' . $miidentificador . '"><i class="fas fa-trash-alt text-danger"></i> Anular</a>';
                                 }
@@ -334,6 +334,18 @@ class PedidoController extends Controller
                         $btn[] = '<button style="font-size:11px" class="m-0 p-2 btn btn-sm btn-info dropdown-item text-break text-wrap" data-jqconfirm="' . $pedido->id . '"><i class="fa fa-map-marker-alt text-info mr-8"></i>Editar direccion de envio</button>';
                     }
                 }
+
+                if($pedido->da_confirmar_descarga) {
+                    $btn[] = '<button data-jqconfirmdetalle="jqConfirm" data-target="' . route("pedidos.estados.detalle-atencion", $pedido->id) . '"
+                                    data-idc="' . $pedido->id . '"
+                                    data-codigo="' . $pedido->codigos . '"
+                                    class="btn btn-primary btn-sm mx-2" ' . (($pedido->da_confirmar_descarga == 0 && !empty($pedido->sustento_adjunto)) ? 'style="border: 3px solid #dc3545!important;"' : '') . '
+                                    ' . (($pedido->da_confirmar_descarga == 0 && !empty($pedido->sustento_adjunto)) ? ' data-toggle="tooltip" data-placement="top" title="Los archivos de este pedido fueron editados"' : '') . '
+                                     >
+                                    <i class="fa fa-eye"></i> Adjuntos Descargados
+                                </button>';
+                }
+
 
                 $btn[] = '</ul></div>';
                 return join('', $btn);
@@ -352,7 +364,7 @@ class PedidoController extends Controller
         $pedidos = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')
             ->join('users as u', 'pedidos.user_id', 'u.id')
             ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
-            ->select(
+            ->select([
                 'pedidos.id',
                 'c.nombre as nombres',
                 'c.icelular as icelulares',
@@ -374,7 +386,7 @@ class PedidoController extends Controller
                 'pedidos.pago',
                 'pedidos.pagado',
                 'pedidos.envio'
-            )
+            ])
             ->whereIn('pedidos.condicion_code', [Pedido::POR_ATENDER_INT, Pedido::EN_PROCESO_ATENCION_INT, Pedido::ATENDIDO_INT, Pedido::ANULADO_INT])
             ->whereIn('pedidos.pagado', ['1'])
             ->whereIn('pedidos.pago', ['1'])
@@ -472,10 +484,7 @@ class PedidoController extends Controller
                 ->pluck('users.identificador');
 
             $pedidos = $pedidos->WhereIn('u.identificador', $usersasesores);
-        } else {
-            $pedidos = $pedidos;
         }
-        //$pedidos=$pedidos->get();
 
         return Datatables::of(DB::table($pedidos))
             ->addIndexColumn()
@@ -494,8 +503,7 @@ class PedidoController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    public
-    function deudoresoncreate(Request $request)
+    public function deudoresoncreate(Request $request)
     {
         $deudores = Cliente::where('estado', '1')
             //->where('user_id', Auth::user()->id)
@@ -510,8 +518,7 @@ class PedidoController extends Controller
         //return response()->json($deudores);
     }
 
-    public
-    function clientesenpedidos(Request $request)
+    public function clientesenpedidos(Request $request)
     {
         $clientes1 = Cliente::
         join('users as u', 'clientes.user_id', 'u.id')
@@ -1019,24 +1026,21 @@ class PedidoController extends Controller
         $cliente_AB = Cliente::where("id", $request->cliente_id)->first();
 
         //calculo de letras
-        $codigo=null;
-        if($identi_asesor->identificador=='B')
-        {
-            $codigo=$identi_asesor->identificador;
-        }else{
-            $codigo=intval($identi_asesor->identificador);
+        $codigo = null;
+        if ($identi_asesor->identificador == 'B') {
+            $codigo = $identi_asesor->identificador;
+        } else {
+            $codigo = intval($identi_asesor->identificador);
         }
-        if($cliente_AB->icelular != null)
-        {
-            if($identi_asesor->identificador!='B')
-            {
-                $codigo=$codigo.$cliente_AB->icelular;
+        if ($cliente_AB->icelular != null) {
+            if ($identi_asesor->identificador != 'B') {
+                $codigo = $codigo . $cliente_AB->icelular;
             }
         }
-        $codigo=$codigo. "-" . $fecha . "-" . $numped;
+        $codigo = $codigo . "-" . $fecha . "-" . $numped;
 
         //$codigo = (($identi_asesor->identificador == 'B') ? $identi_asesor->identificador : intval($identi_asesor->identificador)) .
-          //          (($cliente_AB->icelular != null) ? $cliente_AB->icelular : '') . "-" . $fecha . "-" . $numped;
+        //          (($cliente_AB->icelular != null) ? $cliente_AB->icelular : '') . "-" . $fecha . "-" . $numped;
 
         $request->validate([
             'cliente_id' => 'required',
@@ -1446,31 +1450,30 @@ class PedidoController extends Controller
             ->orderBy('pedidos.created_at', 'DESC')
             ->get();
 
-        if(auth()->user()->rol==User::ROL_ADMIN)
-        {
+        if (auth()->user()->rol == User::ROL_ADMIN) {
             $rucs = Ruc::join('clientes as c', 'rucs.cliente_id', 'c.id')
                 ->select([
                     'rucs.num_ruc as num_ruc',
                     DB::raw(" concat(rucs.num_ruc,'',rucs.empresa ) as empresa")
                 ])
                 ->where('rucs.cliente_id', $pedido->cliente_id)
-                ->pluck('empresa','num_ruc');
-        }else{
-            $ruc=$pedido->ruc;
-            $rucn=$pedido->empresas;
-            $rucs=Ruc::join('clientes as c', 'rucs.cliente_id', 'c.id')
+                ->pluck('empresa', 'num_ruc');
+        } else {
+            $ruc = $pedido->ruc;
+            $rucn = $pedido->empresas;
+            $rucs = Ruc::join('clientes as c', 'rucs.cliente_id', 'c.id')
                 ->select([
                     'rucs.num_ruc as num_ruc',
                     DB::raw(" concat(rucs.num_ruc,'  ',rucs.empresa ) as empresa")
                 ])
                 ->where('rucs.cliente_id', $pedido->cliente_id)
-                ->where('rucs.num_ruc',$ruc)
-                ->pluck('empresa','num_ruc');
+                ->where('rucs.num_ruc', $ruc)
+                ->pluck('empresa', 'num_ruc');
         }
 
         $imagenes = ImagenPedido::where('imagen_pedidos.pedido_id', $pedido->id)->get();
 
-        return view('pedidos.edit', compact('pedido', 'pedidos', 'meses', 'anios', 'porcentajes', 'imagenes', 'mirol','rucs'));
+        return view('pedidos.edit', compact('pedido', 'pedidos', 'meses', 'anios', 'porcentajes', 'imagenes', 'mirol', 'rucs'));
     }
 
     /**
@@ -3024,14 +3027,13 @@ class PedidoController extends Controller
         //llega grupo
         //ENTREGADO CLIENTE  DESTRUIR GRUPOS y VOLVER A ENVIO COURIER - JEFE OPE
         $fecha = Carbon::now();
-        if($request->tipoajax=='pedido')
-        {
+        if ($request->tipoajax == 'pedido') {
             $pedido = Pedido::where("id", $request->aenviocourierrevertir)->first();
             $detalle_pedidos = DetallePedido::where('pedido_id', $pedido->id)->first();
             $pedido->update([
                 'condicion_envio' => Pedido::ENVIO_COURIER_JEFE_OPE,
                 'condicion_envio_code' => Pedido::ENVIO_COURIER_JEFE_OPE_INT,
-                'condicion_envio_at'=>now(),
+                'condicion_envio_at' => now(),
                 'condicion' => Pedido::ENVIO_COURIER_JEFE_OPE,
                 'condicion_code' => Pedido::ENVIO_COURIER_JEFE_OPE_INT,
                 'modificador' => 'USER' . Auth::user()->id
@@ -3045,26 +3047,25 @@ class PedidoController extends Controller
                 'estado' => '0'
             ]);*/
 
-        }else if($request->tipoajax=='grupo')
-        {
+        } else if ($request->tipoajax == 'grupo') {
             $grupo = DireccionGrupo::where("id", $request->aenviocourierrevertir)->first();
             $grupo->update([
                 'condicion_envio' => Pedido::ENVIO_COURIER_JEFE_OPE,
                 'condicion_envio_code' => Pedido::ENVIO_COURIER_JEFE_OPE_INT,
-                'foto1'=>'',
-                'foto2'=>'',
-                'foto3'=>'',
+                'foto1' => '',
+                'foto2' => '',
+                'foto3' => '',
                 //'condicion_envio_at'=>now(),
                 //'condicion' => Pedido::ENVIO_COURIER_JEFE_OPE,
                 //'condicion_code' => Pedido::ENVIO_COURIER_JEFE_OPE_INT,
                 //'modificador' => 'USER' . Auth::user()->id
             ]);
-            $pedido=Pedido::where('direccion_grupo',$request->aenviocourierrevertir)
+            $pedido = Pedido::where('direccion_grupo', $request->aenviocourierrevertir)
                 ->update([
                     'condicion_envio' => Pedido::ENVIO_COURIER_JEFE_OPE,
                     'condicion_envio_code' => Pedido::ENVIO_COURIER_JEFE_OPE_INT,
                     //'condicion_envio_at'=>now(),
-                    ]);
+                ]);
         }
         return response()->json(['html' => $request->aenviocourierrevertir]);
     }

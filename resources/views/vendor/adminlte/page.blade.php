@@ -149,7 +149,10 @@
                                         //SI TIENE MOTORIZADO
                                         if(data.pedido.condicion_envio_code == 10){
                                             InfoString += '<tr><td colspan="4" class="font-weight-bold p8 pt-8 pb-8" style="background-color:#ededed;"><i class="fa fa-paperclip text-danger mr-12" aria-hidden="true"></i> ADJUNTOS</td></tr>';
-                                            InfoString += '<tr><td><img style="width:150px; height: 150px; object-fit:cover;" src="'+ data.pedido.direcciongrupo.foto1 +'"></td><td><img style="width:150px; height: 150px; object-fit:cover;" src="'+ data.pedido.direcciongrupo.foto2 +'"></td><td class="font-weight-bold p-8"><img style="width:150px; height: 150px; object-fit:cover;" src="'+ data.pedido.direcciongrupo.foto3 +'"></td><td></td></tr>';
+                                            InfoString += '<tr><td><img style="width:150px; height: 150px; object-fit:cover;" src="/storage/'+ data.pedido.direcciongrupo.foto1 +'"></td>' +
+                                                '<td><img style="width:150px; height: 150px; object-fit:cover;" src="/storage/'+ data.pedido.direcciongrupo.foto2 +'"></td>' +
+                                                '<td class="font-weight-bold p-8"><img style="width:150px; height: 150px; object-fit:cover;" src="/storage/'+ data.pedido.direcciongrupo.foto3 +'"></td>' +
+                                                '<td></td></tr>';
                                         }else{
                                             InfoString += '<tr><td class="font-weight-bold p-8">Tiene adjuntos?</td><td colspan="3"> NO</td></tr>';
                                         }
