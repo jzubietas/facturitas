@@ -3655,19 +3655,16 @@ class EnvioController extends Controller
             $usuario = User::where('id', Auth::user()->id)->first();
             $zona = $usuario->zona;
             $motorizadoid = $usuario->id;
-            $direcciones = DireccionGrupo::where('motorizado_id', $motorizadoid)->where('condicion_envio_code', Pedido::RECEPCION_MOTORIZADO_INT);
-            $direcciones->update([
-                'condicion_envio_code' => Pedido::MOTORIZADO_INT,
-                'condicion_envio_at' => now(),
-                'condicion_envio' => Pedido::MOTORIZADO,
-            ]);
+            $direcciones = DireccionGrupo::where('motorizado_id', $motorizadoid)->where('condicion_envio_code', Pedido::RECEPCION_MOTORIZADO_INT)->get();
+            foreach ($direcciones as $grupo){
+                DireccionGrupo::cambiarCondicionEnvio($grupo,Pedido::MOTORIZADO_INT);
+            }
+
         } else if ($rol == User::ROL_ADMIN) {
-            $direcciones = DireccionGrupo::where('condicion_envio_code', Pedido::RECEPCION_MOTORIZADO_INT);
-            $direcciones->update([
-                'condicion_envio_code' => Pedido::MOTORIZADO_INT,
-                'condicion_envio_at' => now(),
-                'condicion_envio' => Pedido::MOTORIZADO,
-            ]);
+            $direcciones = DireccionGrupo::where('condicion_envio_code', Pedido::RECEPCION_MOTORIZADO_INT)->get();
+            foreach ($direcciones as $grupo){
+                DireccionGrupo::cambiarCondicionEnvio($grupo,Pedido::MOTORIZADO_INT);
+            }
         } else {
             return response()->json(['html' => '0']);
         }
