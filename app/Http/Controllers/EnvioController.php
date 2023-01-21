@@ -1010,6 +1010,7 @@ class EnvioController extends Controller
             ->where('direccion_grupos.motorizado_status', '=', 0)
             ->activo()
             ->where('direccion_grupos.distribucion', 'OLVA')
+            ->orderBy('direccion_grupos.identificador')
             ->get()
             ->map(function ($grupo) {
                 if ($grupo->observacion) {
