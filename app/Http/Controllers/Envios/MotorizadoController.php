@@ -106,6 +106,19 @@ class MotorizadoController extends Controller
                     margin-bottom: -4px;
                     color: black !important;">Con ruta</span><span class="badge badge-success" style="background-color: ' . $color . '!important;">' . $pedido->condicion_envio . '</span>';
                 })
+
+                ->editColumn('codigos', function ($pedido) {
+                   return collect(explode(',',$pedido->codigos))
+                       ->map(fn($c, $index) => ($index+1).") <b>$c</b>")
+                       ->join("<br>");
+                })
+
+                ->editColumn('producto', function ($pedido) {
+                    return collect(explode(',',$pedido->producto))
+                        ->map(fn($c, $index) => ($index+1).") <b>$c</b>")
+                        ->join("<br>");
+                })
+
                 ->addColumn('action', function ($pedido) use ($tab) {
 
                     $btn = '<ul class="list-unstyled mt-sm-20">';
@@ -184,7 +197,7 @@ class MotorizadoController extends Controller
 
                     return $btn;
                 })
-                ->rawColumns(['action', 'condicion_envio', 'gmlink'])
+                ->rawColumns(['action', 'condicion_envio', 'gmlink','codigos','producto'])
                 ->toJson();
         }
         return view('envios.motorizado.index', compact('fecha_consulta'));
@@ -227,9 +240,24 @@ class MotorizadoController extends Controller
             //add_query_filtros_por_roles($query, 'u');
             return datatables()->query(DB::table($query))
                 ->addIndexColumn()
+                ->editColumn('codigos', function ($pedido) {
+                    return collect(explode(',',$pedido->codigos))
+                        ->map(fn($c, $index) => ($index+1).") <b>$c</b>")
+                        ->join("<br>");
+                })
+                ->editColumn('producto', function ($pedido) {
+                    return collect(explode(',',$pedido->producto))
+                        ->map(fn($c, $index) => ($index+1).") <b>$c</b>")
+                        ->join("<br>");
+                })
+                ->editColumn('direccion', function ($pedido) {
+                    return collect(explode(',',$pedido->direccion))
+                        ->map(fn($c, $index) => ($index+1).") <b>$c</b>")
+                        ->join("<br>");
+                })
                 ->editColumn('condicion_envio', function ($pedido) {
                     $color = Pedido::getColorByCondicionEnvio($pedido->condicion_envio);
-                    return '<span class="badge badge-dark p-8" style="color: #fff; background-color: #347cc4; font-weight: 600; margin-bottom: -2px;border-radius: 4px 4px 0px 0px; font-size:8px;  padding: 4px 4px !important; font-weight: 500;">Direccion agregada</span><span class="badge badge-success" style="background-color: #00bc8c !important;
+                    return '<span class="badge badge-dark p-8" style="color: #fff; background-color: #347cc4; font-weight: 600; margin-bottom: -2px;border-radius: 4px 4px 0px 0px; font-size:8px;  padding: 4px 4px !important;">Direccion agregada</span><span class="badge badge-success" style="background-color: #00bc8c !important;
                     padding: 4px 8px !important;
                     font-size: 8px;
                     margin-bottom: -4px;
@@ -237,23 +265,19 @@ class MotorizadoController extends Controller
                 })
                 ->addColumn('action', function ($pedido) {
                     $btn = '<ul class="list-unstyled pl-0">';
-                    $btn .= '<li>
-                                    <button href="" class="btn btn-sm text-secondary text-left" data-target="#modal-motorizado-entregar-confirm" data-toggle="modal" data-entregar-confirm="' . $pedido->id . '" data-destino="' . $pedido->destino . '" data-fechaenvio="' . $pedido->fecha . '" data-codigos="' . $pedido->codigos . '"
-                                        data-imagen1="' . \Storage::disk('pstorage')->url($pedido->foto1) . '" data-imagen2="' . \Storage::disk('pstorage')->url($pedido->foto2) . '" data-imagen3="' . \Storage::disk('pstorage')->url($pedido->foto3) . '"
-                                    >
+
+                    $btn .= '<li><button href="" class="btn btn-sm text-secondary text-left" data-target="#modal-motorizado-entregar-confirm" data-toggle="modal" data-entregar-confirm="' . $pedido->id . '" data-destino="' . $pedido->destino . '" data-fechaenvio="' . $pedido->fecha . '" data-codigos="' . $pedido->codigos . '"
+                                        data-imagen1="' . \Storage::disk('pstorage')->url($pedido->foto1) . '" data-imagen2="' . \Storage::disk('pstorage')->url($pedido->foto2) . '" data-imagen3="' . \Storage::disk('pstorage')->url($pedido->foto3) . '">
                                         <i class="fas fa-camera text-success"></i> Confirmar fotos
-                                    </button>
-                                </li>';
-                    $btn .= '<li>
-                                    <button class="btn btn-sm text-danger  text-left" data-jqconfirm="' . $pedido->id . '" data-jqconfirm-type="revertir">
-                                        <i class="fas fa-arrow-left text-danger"></i> Revertir
-                                    </button>
-                                </li>';
+                                    </button></li>';
+
+                    $btn .= '<li><button class="btn btn-sm text-danger  text-left" data-jqconfirm="' . $pedido->id . '" data-jqconfirm-type="revertir"><i class="fas fa-arrow-left text-danger"></i> Revertir</button></li>';
+
                     $btn .= '</ul>';
 
                     return $btn;
                 })
-                ->rawColumns(['action', 'condicion_envio'])
+                ->rawColumns(['action', 'condicion_envio','codigos','producto','direccion'])
                 ->toJson();
         }
         return view('envios.motorizado.confirmar', compact('users_motorizado'));

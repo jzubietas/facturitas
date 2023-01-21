@@ -125,18 +125,6 @@
                     {
                         data: 'codigos',
                         name: 'codigos',
-                        render: function (data, type, row, meta) {
-                            if (data == null) {
-                                return 'SIN PEDIDOS';
-                            } else {
-                                var returndata = '';
-                                var jsonArray = data.split(",");
-                                $.each(jsonArray, function (i, item) {
-                                    returndata += item + '<br>';
-                                });
-                                return returndata;
-                            }
-                        },
                     },
                     {data: 'identificador', name: 'identificador',},
                     {
@@ -154,21 +142,6 @@
                     {
                         data: 'producto',
                         name: 'producto',
-                        render: function (data, type, row, meta) {
-                            if (data == null) {
-                                return 'SIN RUCS';
-                            } else {
-                                var numm = 0;
-                                var returndata = '';
-                                var jsonArray = data.split(",");
-                                $.each(jsonArray, function (i, item) {
-                                    numm++;
-                                    returndata += numm + ": " + item + '<br>';
-
-                                });
-                                return returndata;
-                            }
-                        }
                     },
                     {data: 'destino', name: 'destino',},
                     {
