@@ -932,7 +932,7 @@
                         tablaPrincipal = $('#tablaPrincipal').DataTable({
                             dom: '<"toolbar">frtip',
                             processing: true,
-                            stateSave: true,
+                            stateSave: false,
                             serverSide: true,
                             searching: true,
                             "order": [[0, "desc"]],
