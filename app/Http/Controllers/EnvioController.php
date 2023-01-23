@@ -1592,13 +1592,9 @@ class EnvioController extends Controller
 
     public function actionQuitarDireccion(Request $request)
     {
-        //llega o pedido o paquete//llegan envios
-        //validar si envio existe
-
         $pedidos=Pedido::where('id',$request->quitardireccion)->where('estado',1)->first();
-        if(!$pedidos)
+        if($pedidos)
         {
-            //$pedidos=Pedido::with(['detallePedido'])->where('direccion_grupo',$dg->id);
             $direccion_g=$pedidos->direccion_grupo;
 
             $pedidos->update([
@@ -1621,6 +1617,7 @@ class EnvioController extends Controller
                     'env_importe'=>null,
                     'estado_ruta'=>0,
                     'estado_sobre'=>0,
+                    'estado_consinsobre'=>0,
                 ]);
             $pedidos->update([
                 'direccion_grupo'=>null
@@ -1634,7 +1631,7 @@ class EnvioController extends Controller
             ]);
             //desarmo el grupo
 
-            if(!$direccion_g)
+            if($direccion_g)
             {
                 $ddp=DireccionGrupo::where('id',$direccion_g)->where('estado',1)->first();
                 if(!$ddp)                DireccionGrupo::restructurarCodigos($ddp);
