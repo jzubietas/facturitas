@@ -247,6 +247,7 @@
             @include('sobres.modal.historialLima')
             @include('sobres.modal.historialProvincia')
             @include('pedidos.modal.escanear_estado_sobres')
+            @include('envios.modal.confirmar_quitardireccion')
 
         </div>
     </div>
@@ -455,6 +456,36 @@
                 urlimage = urlimage.replace(':id', 'storage/'+idunico);
                 $("#modal-imagen .img-thumbnail").attr("src", urlimage);
 
+            });
+
+            $('#modal-quitardireccion').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget)
+                var idunico = button.data('quitardireccion')
+                var codigo = button.data('code')
+                $(".textcode").html(codigo);
+                $("#quitardireccion").val(idunico);
+            });
+
+            $(document).on("submit", "#formularioquitardireccion", function (evento) {
+                evento.preventDefault();
+                var fd = new FormData();
+                var data = new FormData(document.getElementById("formularioquitardireccion"));
+
+                fd.append('quitardireccion', $("#quitardireccion").val());
+
+                $.ajax({
+                    data: data,
+                    processData: false,
+                    contentType: false,
+                    type: 'POST',
+                    url: "{{ route('envios.quitardireccion') }}",
+                    success: function (data) {
+                        console.log(data);
+                        $("#modal-quitardireccion .textcode").text('');
+                        $("#modal-quitardireccion").modal("hide");
+                        $('#tablaPrincipal').DataTable().ajax.reload(null, false);
+                    }
+                });
             });
 
 
@@ -670,10 +701,8 @@
                     },
                     {data: 'codigo', name: 'codigo',},
                     {data: 'users', name: 'users',},
-
                     {data: 'empresas', name: 'empresas',},
                     {data: 'dias', name: 'dias',},
-
                     {data: 'fecha_envio_doc', name: 'fecha_envio_doc', "visible": false},
                     {data: 'fecha_recepcion_courier_anulado', name: 'fecha_recepcion_courier_anulado',},
                     {data: 'fecha_recepcion', name: 'fecha_recepcion', "visible": false},
@@ -726,7 +755,7 @@
                         orderable: false,
                         searchable: false,
                         sWidth: '20%',
-                        "visible": false,
+                        "visible": true,
                     },
                 ],
                 language: {
