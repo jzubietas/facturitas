@@ -170,9 +170,9 @@ class DireccionGrupo extends Model implements HasMedia
                 ->filter(fn($c) => in_array($c, $codigos->all()));
             $grupo->update([
                 'codigos' => $codigos->join(','),
-                'producto' => $relacion->pluck('nombre_empresa')->trim()->map(fn($txt)=>\Str::replace(',',' - ',$txt))->join(','),
-                'direccion' => $relacion->pluck('direccion')->trim()->map(fn($txt)=>\Str::replace(',',' - ',$txt))->unique()->join(','),
-                'referencia' => $relacion->pluck('referencia')->trim()->map(fn($txt)=>\Str::replace(',',' - ',$txt))->unique()->join(','),
+                'producto' => $relacion->pluck('nombre_empresa')->trim()->map(fn($txt) => \Str::replace(',', ' - ', $txt))->join(','),
+                'direccion' => $relacion->pluck('direccion')->trim()->map(fn($txt) => \Str::replace(',', ' - ', $txt))->unique()->join(','),
+                'referencia' => $relacion->pluck('referencia')->trim()->map(fn($txt) => \Str::replace(',', ' - ', $txt))->unique()->join(','),
                 'observacion' => $relacion->pluck('observacion')->trim()->unique()->join(','),
                 'cantidad' => $relacion->count(),
                 'codigos_confirmados' => $confirmados->unique()->join(','),
@@ -479,6 +479,31 @@ class DireccionGrupo extends Model implements HasMedia
         ];
         $grupo->update(array_merge($data, $extras));
         $grupo->pedidos()->update($data);
+
+        if ($grupo->distribucion == 'OLVA' && $grupo->condicion_envio_code == Pedido::RECEPCIONADO_OLVA_INT) {
+            self::dividirCondicionEnvioOlva($grupo);
+        }
+
+        return $grupo;
+    }
+
+
+    public static function dividirCondicionEnvioOlva(self $grupo)
+    {
+        $pgrupos = $grupo->pedidos->groupBy(fn(Pedido $pedido) => $pedido->env_zona . '_' . $pedido->env_tracking)->values();
+        foreach ($pgrupos as $index => $pgrupo) {
+            if ($index > 0) {
+                $model = $grupo->replicate();
+                $model->save();
+                foreach ($pgrupo as $pedido) {
+                    $pedido->update([
+                        'direccion_grupo' => $model->id
+                    ]);
+                }
+                DireccionGrupo::restructurarCodigos($model);
+            }
+        }
+        DireccionGrupo::restructurarCodigos($grupo);
         return $grupo;
     }
 

@@ -43,23 +43,11 @@ class SeparCondicionEnvioRecepcionOlva extends Command
             ->activo()
             ->whereCondicionEnvioCode(Pedido::RECEPCIONADO_OLVA_INT)
             ->get();
-        $this->info("cantidad: ".$grupos->count());
+        $this->info("cantidad: " . $grupos->count());
         foreach ($grupos as $grupo) {
-            $pgrupos = $grupo->pedidos->groupBy(fn(Pedido $pedido) => $pedido->env_zona . '_' . $pedido->env_tracking)->values();
-            foreach ($pgrupos as $index => $pgrupo) {
-                if ($index > 0) {
-                    $model = $grupo->replicate();
-                    $model->save();
-                    $this->info("gid: ".$model->id);
-                    foreach ($pgrupo as $pedido) {
-                        $pedido->update([
-                            'direccion_grupo' => $model->id
-                        ]);
-                    }
-                    DireccionGrupo::restructurarCodigos($model);
-                }
-            }
-            DireccionGrupo::restructurarCodigos($grupo);
+            $this->warn("Dividiendo ...  ENV-" . $grupo->id);
+            DireccionGrupo::dividirCondicionEnvioOlva($grupo);
+            $this->info("Dividiendo Success ENV-" . $grupo->id);
         }
         return 0;
     }
