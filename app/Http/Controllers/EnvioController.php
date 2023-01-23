@@ -2495,7 +2495,8 @@ class EnvioController extends Controller
                 ->whereIn('direccion_grupos.condicion_envio_code', [
                     Pedido::ENTREGADO_CLIENTE_INT,
                     Pedido::ENTREGADO_SIN_SOBRE_OPE_INT,
-                    Pedido::ENTREGADO_SIN_SOBRE_CLIENTE_INT
+                    Pedido::ENTREGADO_SIN_SOBRE_CLIENTE_INT,
+                    Pedido::ENTREGADO_SIN_ENVIO_CLIENTE_INT,
                 ])
                 ->select(
                     'direccion_grupos.*',

@@ -119,6 +119,12 @@ class MotorizadoController extends Controller
                         ->join("<br>");
                 })
 
+                ->editColumn('direccion', function ($pedido) {
+                    return collect(explode(',',$pedido->direccion))
+                        ->map(fn($c, $index) => ($index+1).") <b>$c</b>")
+                        ->join("<br>");
+                })
+
                 ->addColumn('action', function ($pedido) use ($tab) {
 
                     $btn = '<ul class="list-unstyled mt-sm-20">';
@@ -197,7 +203,7 @@ class MotorizadoController extends Controller
 
                     return $btn;
                 })
-                ->rawColumns(['action', 'condicion_envio', 'gmlink','codigos','producto'])
+                ->rawColumns(['action', 'condicion_envio', 'gmlink','codigos','producto','direccion'])
                 ->toJson();
         }
         return view('envios.motorizado.index', compact('fecha_consulta'));
