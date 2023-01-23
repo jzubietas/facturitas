@@ -391,16 +391,19 @@ class EnvioController extends Controller
     {
         $zona_aux = $request->zona;
         //$buscador_global = $request->buscador_global;
-        $lazona = '';
+        $motorizado = '';
         switch ($zona_aux) {
             case 'NORTE':
                 $lazona = array('NORTE', 'OLVA');
+                $motorizado=User::where('rol',User::ROL_MOTORIZADO)->where('zona','NORTE')->first()->id;
                 break;
             case 'CENTRO':
                 $lazona = array('CENTRO', 'CENTRO SUR', 'CENTRO OESTE', 'CENTRO NORTE', 'CENTRO ESTE', 'ESTE', 'OESTE');
+                $motorizado=User::where('rol',User::ROL_MOTORIZADO)->where('zona','CENTRO')->first()->id;
                 break;
             case 'SUR':
                 $lazona = array('SUR');
+                $motorizado=User::where('rol',User::ROL_MOTORIZADO)->where('zona','SUR')->first()->id;
                 break;
         }
 
@@ -417,7 +420,8 @@ class EnvioController extends Controller
             ->LeftJoin('users as u', 'u.id', 'direccion_grupos.user_id')
             ->LeftJoin('users as um', 'um.id', 'direccion_grupos.motorizado_id')
             ->where('direccion_grupos.condicion_envio_code', Pedido::REPARTO_COURIER_INT)
-            ->whereIn('direccion_grupos.distribucion', $lazona)
+            ->where('motorizado_id',$motorizado)
+            //->whereIn('direccion_grupos.distribucion', $lazona)
             ->activo();
 
         if (Auth::user()->rol == "Asesor") {
@@ -1586,6 +1590,40 @@ class EnvioController extends Controller
 
     }
 
+    public function actionQuitarDireccion(Request $request)
+    {
+        $pedido = Pedido::with(['detallePedido'])->where("id", $request->quitardireccion)->first();
+
+        $pedido->update([
+            'fecha_recepcion_courier' => Carbon::now(),
+            'modificador' => 'USER' . Auth::user()->id,
+            'condicion_envio' => Pedido::RECEPCION_COURIER,
+            'condicion_envio_code' => Pedido::RECEPCION_COURIER_INT,
+            'condicion_envio_at' => now(),
+        ]);
+
+        if ($pedido->estado_sobre) {
+            $detalle = $pedido->detallePedido;
+            $grupoPedido = GrupoPedido::createGroupByPedido($pedido);
+
+            if (!$grupoPedido->pedidos()->where('pedidos.id', '=', $pedido->id)->exists()) {
+                $grupoPedido->pedidos()->syncWithoutDetaching([
+                    $pedido->id => [
+                        'razon_social' => $detalle->nombre_empresa,
+                        'codigo' => $pedido->codigo,
+                    ]
+                ]);
+            }
+        }
+
+        PedidoMovimientoEstado::create([
+            'pedido' => $request->hiddenEnvio,
+            'condicion_envio_code' => Pedido::RECEPCION_COURIER_INT,
+            'notificado' => 0
+        ]);
+
+        return response()->json(['html' => $pedido->id]);
+    }
     public function recibiridLog(Request $request)
     {
         $pedido = Pedido::with(['detallePedido'])->where("id", $request->hiddenEnvio)->first();
@@ -2511,7 +2549,12 @@ class EnvioController extends Controller
                 ->addColumn('action', function ($pedido) use ($opcion) {
                     $btn = [];
                     if($opcion=='recepcionado'):
-
+                        $btn[] = '<button type="button" class="btn btn-warning btn-sm" data-target="#modal-quitardireccion"
+                                        data-toggle="modal"
+                                        data-recibir="' . $pedido->id . '"
+                                        data-codigos="' . $pedido->codigos . '">
+                                        <i class="fas fa-check-circle"></i>
+                                        Quitar direccion</a>';
                     endif;
                     return join('', $btn);
                 })
