@@ -80,6 +80,7 @@
             @include('pedidos.modal.sinenvioid')
             @include('pedidos.modal.envioid')
             @include('pedidos.modal.EditarAtencion')
+            @include('operaciones.modal.VerAdjuntosAtencion')
             @include('pedidos.modal.DeleteAdjuntoid')
         </div>
     </div>
@@ -150,6 +151,46 @@
 
             $(document).on("change", "#adjunto", function (evento) {
                 $("#cargar_adjunto").trigger("click");
+            });
+
+            $('#modal-veradjuntos-atencion').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget)
+                var idunico = button.data('veradjuntos')
+                var confirmo_descarga = button.data('adj')
+
+                $(".textcode").html("PED" + idunico);
+                $("#veradjuntos").val(idunico);
+                $('#conf_descarga').val(confirmo_descarga);
+
+                $.ajax({
+                    type: 'POST',
+                    url: "{{ route('operaciones.datossubidaadj',':id') }}".replace(':id', idunico),
+                    data: idunico,
+                    success: function (data) {
+                        console.log(data);
+                        console.log(data.pedidos[0]['cant_compro']);
+
+                        $('#cant_compro').val(data.pedidos[0]['cant_compro']);
+                        $('#fecha_envio_doc').val(data.pedidos[0]['fecha_envio_doc']);
+
+                    }
+                }).done(function (data) {
+                });
+
+                //recupera imagenes adjuntas
+                $.ajax({
+                    url: "{{ route('operaciones.veratencion',':id') }}".replace(':id', idunico),
+                    data: idunico,
+                    method: 'POST',
+                    success: function (data) {
+                        console.log(data)
+                        console.log("obtuve las imagenes atencion del pedido " + idunico)
+                        $('#listado_adjuntos_ver').html("");
+                        $('#listado_adjuntos_antes_ver').html(data);
+                        console.log(data);
+                    }
+                });
+
             });
 
             $('#modal-editar-atencion').on('show.bs.modal', function (event) {

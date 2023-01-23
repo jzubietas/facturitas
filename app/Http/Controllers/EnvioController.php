@@ -2508,8 +2508,11 @@ class EnvioController extends Controller
                                             $pedido->condicion_envio . $subestado . '</span>';
                     return $badge_estado;
                 })
-                ->addColumn('action', function ($pedido) {
+                ->addColumn('action', function ($pedido) use ($opcion) {
                     $btn = [];
+                    if($opcion=='recepcionado'):
+
+                    endif;
                     return join('', $btn);
                 })
                 ->rawColumns(['action', 'condicion_envio_color', 'condicion_envio'])

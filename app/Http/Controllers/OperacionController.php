@@ -324,10 +324,17 @@ class OperacionController extends Controller
 
                 $btn[] = '<div class="col-6 d-flex justify-content-start text-left m-0 p-0">';
                 $btn[] = '<ul class="text-left list-inline text-left" aria-labelledby="dropdownMenuButton" >';
-                $btn[] = '<a href="' . route("operaciones.showatender", $pedido->id) . '" class="btn-sm dropdown-item" ><i class="fas fa-eye text-success"></i> Ver</a>';
+                //$btn[] = '<a href="' . route("operaciones.showatender", $pedido->id) . '" class="btn-sm dropdown-item" ><i class="fas fa-eye text-success"></i> Ver</a>';
                 if (\auth()->user()->can('operacion.editatender')) {
-                    $btn[] = '<a href="" class="btn-sm dropdown-item" data-target="#modal-editar-atencion" data-adj=' . $pedido->da_confirmar_descarga . ' data-atencion=' . $pedido->id . ' data-toggle="modal" ><i class="fa fa-paperclip text-primary" aria-hidden="true"></i> Editar Adjuntos</a>';
+                    $btn[] = '<a href="" class="btn-sm dropdown-item" data-target="#modal-editar-atencion" data-adj=' . $pedido->da_confirmar_descarga . ' data-atencion=' . $pedido->id . ' data-toggle="modal" >
+                                <i class="fa fa-paperclip text-primary" aria-hidden="true"></i>
+                                Editar Adjuntos
+                               </a>';
                 }
+                $btn[] = '<a href="" class="btn-sm dropdown-item" data-target="#modal-veradjuntos-atencion" data-adj=' . $pedido->da_confirmar_descarga . ' data-veradjuntos=' . $pedido->id . ' data-toggle="modal" >
+                                <i class="fa fa-paperclip text-primary" aria-hidden="true"></i>
+                                Ver Adjuntos
+                               </a>';
                 if (\auth()->user()->can('operacion.PDF')) {
                     $btn[] = '<a href="' . route("pedidosPDF", $pedido->id) . '" class="btn-sm dropdown-item" target="_blank"><i class="fa fa-file-pdf text-warning"></i> PDF</a>';
                 }
@@ -671,7 +678,7 @@ class OperacionController extends Controller
             })
             ->addColumn('action', function ($pedido) {
                 $btn = [];
-                $btn[] = '<a href="' . route("operaciones.showatender", $pedido->id) . '" class="m-1 btn btn-primary btn-sm"><i class="fas fa-eye"></i> Ver</a><br>';
+                //$btn[] = '<a href="' . route("operaciones.showatender", $pedido->id) . '" class="m-1 btn btn-primary btn-sm"><i class="fas fa-eye"></i> Ver</a><br>';
                 if (\auth()->user()->can('operacion.PDF')) {
                     $btn[] = '<a href="' . route('pedidosPDF', $pedido->id) . '" class="m-1 btn btn-primary btn-sm" target="_blank"><i class="fa fa-file-pdf"></i> PDF</a><br>';
                 }
@@ -1149,6 +1156,54 @@ class OperacionController extends Controller
         $imagenes = ImagenAtencion::where('imagen_atencions.pedido_id', $pedido->id)->where('estado', '1')->where('confirm', '1')->get();
 
         return view('pedidos.modal.ContenidoModal.ListadoAdjuntos', compact('imagenes', 'pedido'));
+        //return response()->json(compact('pedido', 'pedidos', 'imagenespedido', 'imagenes'));
+    }
+
+    public function verAtencion(Pedido $pedido)
+    {
+        $pedidos = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')
+            ->join('users as u', 'pedidos.user_id', 'u.id')
+            ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
+            ->select([
+                'pedidos.id',
+                'c.nombre as nombres',
+                'c.celular as celulares',
+                'u.name as users',
+                'dp.codigo as codigos',
+                'dp.nombre_empresa as empresas',
+                'dp.mes',
+                'dp.anio',
+                'dp.ruc',
+                'dp.cantidad',
+                'dp.tipo_banca',
+                'dp.porcentaje',
+                'dp.courier',
+                'dp.ft',
+                'dp.descripcion',
+                'dp.nota',
+                'dp.adjunto',
+                'dp.total',
+
+                'pedidos.condicion as condiciones',
+                'pedidos.envio',
+                'pedidos.condicion_envio',
+                'dp.envio_doc',
+                'dp.fecha_envio_doc',
+                'dp.cant_compro',
+                'dp.fecha_envio_doc_fis',
+                'dp.fecha_recepcion',
+                'pedidos.created_at as fecha'
+            ])
+            ->where('pedidos.estado', '1')
+            ->where('pedidos.id', $pedido->id)
+            ->where('dp.estado', '1')
+            ->orderBy('pedidos.created_at', 'DESC')
+            ->get();
+
+        $imagenespedido = ImagenPedido::where('imagen_pedidos.pedido_id', $pedido->id)->where('estado', '1')->get();
+        $imagenes = ImagenAtencion::where('imagen_atencions.pedido_id', $pedido->id)->where('estado', '1')->where('confirm', '1')->get();
+
+        return view('operaciones.modal.ContenidoModal.ListadoAdjuntos', compact('imagenes', 'pedido'));
         //return response()->json(compact('pedido', 'pedidos', 'imagenespedido', 'imagenes'));
     }
 
