@@ -335,14 +335,14 @@ class PedidoController extends Controller
                     }
                 }
 
-                if($pedido->da_confirmar_descarga) {
+                if ($pedido->da_confirmar_descarga) {
                     $btn[] = '<button data-jqconfirmdetalle="jqConfirm" data-target="' . route("pedidos.estados.detalle-atencion", $pedido->id) . '"
                                     data-idc="' . $pedido->id . '"
                                     data-codigo="' . $pedido->codigos . '"
-                                    class="btn btn-primary btn-sm mx-2" ' . (($pedido->da_confirmar_descarga == 0 && !empty($pedido->sustento_adjunto)) ? 'style="border: 3px solid #dc3545!important;"' : '') . '
+                                    class="btn btn-light btn-sm text-left" ' . (($pedido->da_confirmar_descarga == 0 && !empty($pedido->sustento_adjunto)) ? 'style="border: 3px solid #dc3545!important;"' : '') . '
                                     ' . (($pedido->da_confirmar_descarga == 0 && !empty($pedido->sustento_adjunto)) ? ' data-toggle="tooltip" data-placement="top" title="Los archivos de este pedido fueron editados"' : '') . '
                                      >
-                                    <i class="fa fa-eye"></i> Adjuntos Descargados
+                                    <i class="fa fa-file"></i> Adjuntos
                                 </button>';
                 }
 
@@ -355,8 +355,7 @@ class PedidoController extends Controller
     }
 
 
-    public
-    function indexperdonarcurriertabla(Request $request)
+    public function indexperdonarcurriertabla(Request $request)
     {
         $mirol = Auth::user()->rol;
         $pedidos = null;

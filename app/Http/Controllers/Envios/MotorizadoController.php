@@ -277,6 +277,11 @@ class MotorizadoController extends Controller
                         ->map(fn($c, $index) => ($index+1).") <b>$c</b>")
                         ->join("<br>");
                 })
+                ->editColumn('referencia', function ($pedido) {
+                    return collect(explode(',',$pedido->referencia))
+                        ->map(fn($c, $index) => ($index+1).") <b>$c</b>")
+                        ->join("<br>");
+                })
                 ->editColumn('condicion_envio', function ($pedido) {
                     $color = Pedido::getColorByCondicionEnvio($pedido->condicion_envio);
                     return '<span class="badge badge-dark p-8" style="color: #fff; background-color: #347cc4; font-weight: 600; margin-bottom: -2px;border-radius: 4px 4px 0px 0px; font-size:8px;  padding: 4px 4px !important;">Direccion agregada</span><span class="badge badge-success" style="background-color: #00bc8c !important;
@@ -299,7 +304,7 @@ class MotorizadoController extends Controller
 
                     return $btn;
                 })
-                ->rawColumns(['action', 'condicion_envio','codigos','producto','direccion'])
+                ->rawColumns(['action', 'condicion_envio','codigos','producto','direccion','referencia'])
                 ->toJson();
         }
         return view('envios.motorizado.confirmar', compact('users_motorizado'));
