@@ -170,9 +170,9 @@ class DireccionGrupo extends Model implements HasMedia
                 ->filter(fn($c) => in_array($c, $codigos->all()));
             $grupo->update([
                 'codigos' => $codigos->join(','),
-                'producto' => $relacion->pluck('nombre_empresa')->trim()->join(','),
-                'direccion' => $relacion->pluck('direccion')->trim()->unique()->join(','),
-                'referencia' => $relacion->pluck('referencia')->trim()->unique()->join(','),
+                'producto' => $relacion->pluck('nombre_empresa')->trim()->map(fn($txt)=>\Str::replace(',',' - ',$txt))->join(','),
+                'direccion' => $relacion->pluck('direccion')->trim()->map(fn($txt)=>\Str::replace(',',' - ',$txt))->unique()->join(','),
+                'referencia' => $relacion->pluck('referencia')->trim()->map(fn($txt)=>\Str::replace(',',' - ',$txt))->unique()->join(','),
                 'observacion' => $relacion->pluck('observacion')->trim()->unique()->join(','),
                 'cantidad' => $relacion->count(),
                 'codigos_confirmados' => $confirmados->unique()->join(','),
