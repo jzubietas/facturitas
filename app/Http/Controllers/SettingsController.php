@@ -97,19 +97,27 @@ class SettingsController extends Controller
         return setting()->all();
     }
 
-    public function authorizationMotorizado(Request $request,  $user)
+    public function authorizationMotorizado(Request $request, $user)
     {
         if ($request->has('direccion_grupo') && $request->get('action') == 'reprogramacion') {
             $direccion = DireccionGrupo::query()->findOrFail($request->direccion_grupo);
 
-            DireccionGrupo::cambiarCondicionEnvio($direccion, Pedido::RECEPCION_MOTORIZADO_INT, [
-               // 'fecha_salida' => $direccion->reprogramacion_at,
+            DireccionGrupo::cambiarCondicionEnvio($direccion, Pedido::ENVIO_MOTORIZADO_COURIER_INT, [
+                'fecha_salida' => $direccion->reprogramacion_at,
                 'reprogramacion_accept_user_id' => auth()->id(),
                 'reprogramacion_accept_at' => now(),
-                'motorizado_status' => Pedido::ESTADO_MOTORIZADO_OBSERVADO,
-                'motorizado_sustento_text' => 'Por reprogramar a la fecha '.$direccion->reprogramacion_at->format('d-m-Y'),
+                'motorizado_status' => 0,
+                'motorizado_sustento_text' => 'Por reprogramar a la fecha ' . $direccion->reprogramacion_at->format('d-m-Y'),
             ]);
 
+            DireccionGrupo::clearSolicitudAuthorization($user, 'reprogramacion');
+            return $direccion->id;
+        } elseif ($request->has('direccion_grupo') && $request->get('action') == 'cancel_reprogramacion') {
+            $direccion = DireccionGrupo::query()->findOrFail($request->direccion_grupo);
+
+            $direccion->update([
+                'reprogramacion_at' => null,
+            ]);
             DireccionGrupo::clearSolicitudAuthorization($user, 'reprogramacion');
             return $direccion->id;
         } else {

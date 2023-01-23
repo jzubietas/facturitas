@@ -339,7 +339,8 @@
         <div class="card-body p-0">
             <div class="row">
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                    <h5>Sobre de pedido: <b>${data.codigos}</b></h5>
+                    <h5>Sobre de pedido:</h5>
+                    <div class="d-flex" style=" flex-wrap: wrap; column-gap: 2rem; ">${data.codigos.split('<br>').join('')}</div>
                 </div>
             </div>
                         <div class="row mt-2">

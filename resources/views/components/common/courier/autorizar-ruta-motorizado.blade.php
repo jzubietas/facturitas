@@ -31,10 +31,10 @@
     right: 16px;
     width: 400px;
     height: auto;
-    background-color: #00b972;
+    background-color:#f39c12;
     z-index: 999;
-    border-radius: 8px; color:white; padding:24px;">
-        <i class="fa fa-exclamation-triangle text-warning font-36" aria-hidden="true"></i>
+    border-radius: 8px; color:black; padding:24px;">
+        <i class="fa fa-exclamation-triangle text-white font-36" aria-hidden="true"></i>
         <h3 class="font-24 mt-12 font-weight-bold">SOBRE REPROGRAMADO</h3>
         <p>
             El motorizado <b>{{$grupo->motorizado->zona}}</b> a reprogramado el pedido <b>{{$grupo->codigos}}</b> para
@@ -46,14 +46,28 @@
                 <img src="{{$grupo->getFirstMedia('reprogramacion_adjunto')->getFullUrl()}}" class="w-100">
             </a>
         </div>
-        <button data-loading-text="Autorizando reprogramación ..."
-                data-btn-text="Aceptar reprogramación"
-                data-reprogramacion-button="{{route('settings.authorization-motorizado',['user'=>$grupo->id,'direccion_grupo'=>$grupo->id,'action'=>'reprogramacion'])}}"
-                class="btn btn-warning">
+        <div class="row">
+            <div class="col-12 col-md-6">
+                <button data-loading-text="Autorizando reprogramación ..."
+                        data-btn-text="Aceptar reprogramación"
+                        data-reprogramacion-button="{{route('settings.authorization-motorizado',['user'=>$grupo->id,'direccion_grupo'=>$grupo->id,'action'=>'reprogramacion'])}}"
+                        class="btn btn-success">
             <span style="display: none" class="spinner-border spinner-border-sm" role="status"
                   aria-hidden="true"></span>
-            Aceptar reprogramación
-        </button>
+                    Aceptar reprogramación
+                </button>
+            </div>
+            <div class="col-12 col-md-6">
+                <button data-loading-text="Autorizando reprogramación ..."
+                        data-btn-text="Aceptar reprogramación"
+                        data-reprogramacion-button="{{route('settings.authorization-motorizado',['user'=>$grupo->id,'direccion_grupo'=>$grupo->id,'action'=>'cancel_reprogramacion'])}}"
+                        class="btn btn-danger">
+            <span style="display: none" class="spinner-border spinner-border-sm" role="status"
+                  aria-hidden="true"></span>
+                    Cancel reprogramación
+                </button>
+            </div>
+        </div>
     </div>
 @endforeach
 @push('js')

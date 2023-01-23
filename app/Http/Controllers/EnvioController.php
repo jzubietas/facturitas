@@ -3662,8 +3662,7 @@ class EnvioController extends Controller
         ]);*/
     }
 
-    public
-    function confirmarEstadoConfirmConfirmDismiss(Request $request)
+    public function confirmarEstadoConfirmConfirmDismiss(Request $request)
     {
         //$hiddenAtender = $request->hiddenMotorizadoEntregarConfirm;
         /*$pedido = Pedido::where("id", $hiddenAtender)->first();
@@ -3673,8 +3672,7 @@ class EnvioController extends Controller
         ]);*/
     }
 
-    public
-    function confirmarEstadoConfirmValidada(Request $request)
+    public function confirmarEstadoConfirmValidada(Request $request)
     {
         $envio = DireccionGrupo::where("id", $request->hiddenCodigo)->first();
         $envio->update([
