@@ -441,7 +441,7 @@ class DireccionGrupo extends Model implements HasMedia
 
     public static function moverAMotorizadoOlva(self $grupo)
     {
-        if ($grupo->activo == 1 && $grupo->distribucion == 'OLVA') {
+        if ($grupo->distribucion == 'OLVA') {
             $data = [
                 'condicion_envio' => Pedido::$estadosCondicionEnvioCode[Pedido::MOTORIZADO_INT],
                 'condicion_envio_code' => Pedido::MOTORIZADO_INT,
@@ -451,8 +451,9 @@ class DireccionGrupo extends Model implements HasMedia
             $grupoolva = DireccionGrupo::query()->activo()
                 ->where('condicion_envio_code', Pedido::MOTORIZADO_INT)
                 ->where('distribucion', 'OLVA')
+                ->orderBy('created_at')
                 ->first();
-
+dump($grupoolva);
             if ($grupoolva == null) {
                 $grupoolva = $grupo;
                 self::cambiarCondicionEnvio($grupo, Pedido::MOTORIZADO_INT);

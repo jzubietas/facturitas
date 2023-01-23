@@ -109,7 +109,7 @@ class MotorizadoController extends Controller
 
                 ->editColumn('codigos', function ($pedido) {
                    return collect(explode(',',$pedido->codigos))
-                       ->map(fn($c, $index) => ($index+1).") <b>$c</b>")
+                       ->map(fn($c, $index) => "<span>".($index+1).") <b>$c</b></span>")
                        ->join("<br>");
                 })
 
