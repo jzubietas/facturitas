@@ -1,12 +1,10 @@
 <?php
 
-namespace App\Console\Commands;
+namespace App\Console\Commands\normalizar;
 
 use App\Models\DireccionGrupo;
 use App\Models\Pedido;
 use Illuminate\Console\Command;
-use Spatie\Permission\Models\Permission;
-use Spatie\Permission\Models\Role;
 
 class MigrarOlvaSeguimiento extends Command
 {

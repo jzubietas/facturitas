@@ -1,19 +1,18 @@
 <?php
 
-namespace App\Console\Commands;
+namespace App\Console\Commands\normalizar;
 
 use App\Models\DireccionGrupo;
-use App\Models\Pedido;
 use Illuminate\Console\Command;
 
-class SeparCondicionEnvioRecepcionOlva extends Command
+class MasivaCodigoProductoDireccionGrupo extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'olva:separar';
+    protected $signature = 'masiva:codigoproducto:direcciongrupo';
 
     /**
      * The console command description.
@@ -39,16 +38,19 @@ class SeparCondicionEnvioRecepcionOlva extends Command
      */
     public function handle()
     {
-        $grupos = DireccionGrupo::query()
-            ->activo()
-            ->whereCondicionEnvioCode(Pedido::RECEPCIONADO_OLVA_INT)
+        $grupos = DireccionGrupo::query()->activo()
+            //->where('pedidos.condicion_envio_code', '=', Pedido::ENVIO_COURIER_JEFE_OPE_INT)
             ->get();
-        $this->info("cantidad: " . $grupos->count());
-        foreach ($grupos as $grupo) {
-            $this->warn("Dividiendo ...  ENV-" . $grupo->id);
-            DireccionGrupo::dividirCondicionEnvioOlva($grupo);
-            $this->info("Dividiendo Success ENV-" . $grupo->id);
+        $count = $grupos->count();
+        $result = [];
+        $progress = $this->output->createProgressBar($count);
+        foreach ($grupos as $grupo)
+        {
+            DireccionGrupo::restructurarCodigos($grupo);
+            $progress->advance();
         }
+        $progress->finish();
+
         return 0;
     }
 }

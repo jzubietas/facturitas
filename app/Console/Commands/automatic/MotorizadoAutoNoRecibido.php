@@ -1,11 +1,10 @@
 <?php
 
-namespace App\Console\Commands;
+namespace App\Console\Commands\automatic;
 
 use App\Models\DireccionGrupo;
 use App\Models\Pedido;
 use Illuminate\Console\Command;
-use Illuminate\Support\Facades\DB;
 
 class MotorizadoAutoNoRecibido extends Command
 {

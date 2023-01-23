@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Console\Commands;
+namespace App\Console\Commands\normalizar;
 
 use App\Models\DireccionGrupo;
 use Illuminate\Console\Command;

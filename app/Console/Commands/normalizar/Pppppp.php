@@ -1,9 +1,8 @@
 <?php
 
-namespace App\Console\Commands;
+namespace App\Console\Commands\normalizar;
 
 use App\Models\DireccionGrupo;
-use App\Models\Pedido;
 use Illuminate\Console\Command;
 
 class Pppppp extends Command
