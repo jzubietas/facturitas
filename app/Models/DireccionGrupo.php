@@ -453,7 +453,6 @@ class DireccionGrupo extends Model implements HasMedia
                 ->where('distribucion', 'OLVA')
                 ->orderBy('created_at')
                 ->first();
-dump($grupoolva);
             if ($grupoolva == null) {
                 $grupoolva = $grupo;
                 self::cambiarCondicionEnvio($grupo, Pedido::MOTORIZADO_INT);
