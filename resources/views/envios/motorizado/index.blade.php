@@ -741,7 +741,7 @@ Enviar</button>
 <div class="p-0">
 <form>
 <div class="form-group">
-<input class="form-control" type="date" name="fecha_salida" value="${moment().add(1, 'day').format('YYYY-MM-DD')}">
+<input disabled="disabled" class="form-control" type="date" name="fecha_salida" value="${moment().add(1, 'day').format('YYYY-MM-DD')}">
 </div>
 <div class="form-group">
 <label>Adjuntar captura de pantalla</label>

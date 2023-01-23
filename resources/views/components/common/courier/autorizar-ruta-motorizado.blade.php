@@ -39,8 +39,11 @@
         <p>
             El motorizado <b>{{$grupo->motorizado->zona}}</b> a reprogramado el pedido <b>{{$grupo->codigos}}</b> para
             la fecha <b>{{$grupo->reprogramacion_at->format('d-m-Y')}}</b><br>
-            <b>Celular del cliente: {{$grupo->celular_cliente}}</b>
+            <b>Celular del cliente: <a href="tel:{{$grupo->celular_cliente}}">{{$grupo->celular_cliente}}</a></b>
         </p>
+        <div class="alert alert-danger">
+            Es necesario llamar al motorizado y al cliente para aceptar la reprogramación.
+        </div>
         <div class="my-4">
             <a href="{{$grupo->getFirstMedia('reprogramacion_adjunto')->getFullUrl()}}" target="_blank">
                 <img src="{{$grupo->getFirstMedia('reprogramacion_adjunto')->getFullUrl()}}" class="w-100">
