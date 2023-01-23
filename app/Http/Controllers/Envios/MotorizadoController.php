@@ -125,6 +125,22 @@ class MotorizadoController extends Controller
                         ->join("<br>");
                 })
 
+                ->editColumn('referencia', function ($pedido) {
+                    /*
+                     var datal = "";
+                            if (row.destino == 'LIMA') {
+                                return data;
+                            } else if (row.destino == 'PROVINCIA') {
+                                var urladjunto = '{{ route("pedidos.descargargastos", ":id") }}'.replace(':id', data);
+                                datal = datal + '<p><a href="' + urladjunto + '">' + data + '</a><p>';
+                                return datal;
+                            }
+                     */
+                    return collect(explode(',',$pedido->referencia))
+                        ->map(fn($c, $index) => ($index+1).") <b>$c</b>")
+                        ->join("<br>");
+                })
+
                 ->addColumn('action', function ($pedido) use ($tab) {
 
                     $btn = '<ul class="list-unstyled mt-sm-20">';
@@ -203,7 +219,7 @@ class MotorizadoController extends Controller
 
                     return $btn;
                 })
-                ->rawColumns(['action', 'condicion_envio', 'gmlink','codigos','producto','direccion'])
+                ->rawColumns(['action', 'condicion_envio', 'gmlink','codigos','producto','direccion','referencia'])
                 ->toJson();
         }
         return view('envios.motorizado.index', compact('fecha_consulta'));

@@ -892,17 +892,7 @@ Enviar</button>
                     {
                         data: 'referencia',
                         name: 'referencia',
-                        sWidth: '10%',
-                        render: function (data, type, row, meta) {
-                            var datal = "";
-                            if (row.destino == 'LIMA') {
-                                return data;
-                            } else if (row.destino == 'PROVINCIA') {
-                                var urladjunto = '{{ route("pedidos.descargargastos", ":id") }}'.replace(':id', data);
-                                datal = datal + '<p><a href="' + urladjunto + '">' + data + '</a><p>';
-                                return datal;
-                            }
-                        }
+                        sWidth: '10%'
                     },
                     {data: 'condicion_envio', name: 'condicion_envio',},
                     {
