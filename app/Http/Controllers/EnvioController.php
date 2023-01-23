@@ -1592,37 +1592,58 @@ class EnvioController extends Controller
 
     public function actionQuitarDireccion(Request $request)
     {
-        $pedido = Pedido::with(['detallePedido'])->where("id", $request->quitardireccion)->first();
+        //llega o pedido o paquete//llegan envios
+        //validar si envio existe
 
-        $pedido->update([
-            'fecha_recepcion_courier' => Carbon::now(),
-            'modificador' => 'USER' . Auth::user()->id,
-            'condicion_envio' => Pedido::RECEPCION_COURIER,
-            'condicion_envio_code' => Pedido::RECEPCION_COURIER_INT,
-            'condicion_envio_at' => now(),
-        ]);
+        $pedidos=Pedido::where('id',$request->quitardireccion)->where('estado',1)->first();
+        if(!$pedidos)
+        {
+            //$pedidos=Pedido::with(['detallePedido'])->where('direccion_grupo',$dg->id);
+            $direccion_g=$pedidos->direccion_grupo;
 
-        if ($pedido->estado_sobre) {
-            $detalle = $pedido->detallePedido;
-            $grupoPedido = GrupoPedido::createGroupByPedido($pedido);
-
-            if (!$grupoPedido->pedidos()->where('pedidos.id', '=', $pedido->id)->exists()) {
-                $grupoPedido->pedidos()->syncWithoutDetaching([
-                    $pedido->id => [
-                        'razon_social' => $detalle->nombre_empresa,
-                        'codigo' => $pedido->codigo,
-                    ]
+            $pedidos->update([
+                    'destino'=>null,
+                    'direccion'=>null,
+                    'env_destino'=>null,
+                    'env_distrito'=>null,
+                    'env_zona'=>null,
+                    'env_zona_asignada'=>null,
+                    'env_nombre_cliente_recibe'=>null,
+                    'env_celular_cliente_recibe'=>null,
+                    'env_cantidad'=>null,
+                    'env_direccion'=>null,
+                    'env_tracking'=>null,
+                    'env_referencia'=>null,
+                    'env_numregistro'=>null,
+                    'env_rotulo'=>null,
+                    'env_observacion'=>null,
+                    'env_gmlink'=>null,
+                    'env_importe'=>null,
+                    'estado_ruta'=>0,
+                    'estado_sobre'=>0,
                 ]);
+            $pedidos->update([
+                'direccion_grupo'=>null
+            ]);
+            $pedidos->update([
+                'fecha_recepcion_courier' => null,
+                //'modificador' => 'USER' . Auth::user()->id,
+                'condicion_envio' => Pedido::RECEPCION_COURIER,
+                'condicion_envio_code' => Pedido::RECEPCION_COURIER_INT,
+                'condicion_envio_at' => now(),
+            ]);
+            //desarmo el grupo
+
+            if(!$direccion_g)
+            {
+                $ddp=DireccionGrupo::where('id',$direccion_g)->where('estado',1)->first();
+                if(!$ddp)                DireccionGrupo::restructurarCodigos($ddp);
             }
+
+            return response()->json(['html' => $pedidos->id]);
         }
 
-        PedidoMovimientoEstado::create([
-            'pedido' => $request->hiddenEnvio,
-            'condicion_envio_code' => Pedido::RECEPCION_COURIER_INT,
-            'notificado' => 0
-        ]);
-
-        return response()->json(['html' => $pedido->id]);
+        return response()->json(['html' => '']);
     }
     public function recibiridLog(Request $request)
     {
@@ -2549,12 +2570,15 @@ class EnvioController extends Controller
                 ->addColumn('action', function ($pedido) use ($opcion) {
                     $btn = [];
                     if($opcion=='recepcionado'):
-                        $btn[] = '<button type="button" class="btn btn-warning btn-sm" data-target="#modal-quitardireccion"
+                        if ($pedido->estado_sobre == '1'):
+                            $btn[] = '<button type="button" class="btn btn-warning btn-sm" data-target="#modal-quitardireccion"
                                         data-toggle="modal"
-                                        data-recibir="' . $pedido->id . '"
+                                        data-quitardireccion="' . $pedido->id . '"
                                         data-codigos="' . $pedido->codigos . '">
                                         <i class="fas fa-check-circle"></i>
                                         Quitar direccion</a>';
+                        endif;
+
                     endif;
                     return join('', $btn);
                 })
