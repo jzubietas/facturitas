@@ -53,36 +53,9 @@ class MigrarOlvaSeguimiento extends Command
                 'motorizado_sustento_text' => 0,
                 'motorizado_sustento_foto' => '',
             ]);
-
             $progress->advance();
         }
         $progress->finish();
-        $grupos = DireccionGrupo::query()
-            ->activo()
-            ->where('distribucion', 'OLVA')
-            ->where('condicion_envio', 'SEGUIMIENTO PROVINCIA - COURIER')
-            ->get();
-        $progress = $this->output->createProgressBar($grupos->count());
-        foreach ($grupos as $grupo) {
-            DireccionGrupo::cambiarCondicionEnvio($grupo, Pedido::ENTREGADO_CLIENTE_INT, [
-                'motorizado_status' => 0,
-                'motorizado_sustento_text' => 0,
-                'motorizado_sustento_foto' => '',
-            ]);
-            $progress->advance();
-        }
-        $progress->finish();
-
-        $permission = Permission::create([
-            'name' => 'envios.seguimientoprovincia',
-            'description' => 'Courier',
-            'modulo' => 'Courier',
-            'guard_name' => 'web',
-        ]);
-        $roles = Role::query()->where('name', 'Administrador')->get();
-        foreach ($roles as $role){
-            $role->permissions()->syncWithoutDetaching($permission->id);
-        }
         return 0;
     }
 }
