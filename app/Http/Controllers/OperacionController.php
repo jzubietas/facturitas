@@ -676,9 +676,16 @@ class OperacionController extends Controller
             })
             ->addColumn('action', function ($pedido) {
                 $btn = [];
+
+                //$btn[] = '<div><ul class="m-0 p-1" aria-labelledby="dropdownMenuButton" style="display: grid;grid-template-columns: repeat(2, minmax(0, 1fr)); gap:0.7rem">';
+                $btn[] = '<div><ul class="m-0 p-1" aria-labelledby="dropdownMenuButton">';
+
                 //$btn[] = '<a href="' . route("operaciones.showatender", $pedido->id) . '" class="m-1 btn btn-primary btn-sm"><i class="fas fa-eye"></i> Ver</a><br>';
                 if (\auth()->user()->can('operacion.PDF')) {
-                    $btn[] = '<a href="' . route('pedidosPDF', $pedido->id) . '" class="m-1 btn btn-primary btn-sm" target="_blank"><i class="fa fa-file-pdf"></i> PDF</a><br>';
+                    $btn[] = '<a class="btn-sm dropdown-item" href="' . route('pedidosPDF', $pedido->id) . '" class="m-1 btn btn-primary btn-sm" target="_blank">
+                        <i class="fa fa-file-pdf"></i>
+                        PDF
+                        </a>';
                 }
 
                 $btn[] = '<a href="" class="btn-sm dropdown-item" data-target="#modal-veradjuntos-atencion" data-adj=' . $pedido->da_confirmar_descarga . ' data-veradjuntos=' . $pedido->id . ' data-toggle="modal" >
@@ -693,11 +700,11 @@ class OperacionController extends Controller
 
                 if(\auth()->user()->rol==User::ROL_ADMIN || \auth()->user()->rol==User::ROL_JEFE_OPERARIO)
                 if($pedido->condicion_envio_code==Pedido::ENTREGADO_SIN_SOBRE_CLIENTE_INT){
-                    $btn[] = '<a href="" class="btn-sm dropdown-item" data-target="#modal-revertir-ajefeop" data-adjuntos="' . $pedido->adjuntos . '" data-revertir=' . $pedido->id . ' data-codigo=' . $pedido->codigos . ' data-toggle="modal" ><i class="fa fa-undo text-danger" aria-hidden="true"></i> Revertir a Jefe de Operaciones</a>';
+                    $btn[] = '<a href="" class="btn-sm dropdown-item" data-target="#modal-revertir-ajefeop" data-adjuntos="' . $pedido->adjuntos . '" data-revertir=' . $pedido->id . ' data-codigo=' . $pedido->codigos . ' data-toggle="modal" ><i class="fa fa-undo text-danger" aria-hidden="true"></i> Revertir a Jefe OPE</a>';
                 }
 
                 if($pedido->condicion_envio_code==Pedido::ENVIO_COURIER_JEFE_OPE_INT    ) {
-                    $btn[] = '<a class="btn btn-success btn-sm" href="" data-target="#modal-revertir-ajefeop" data-revertir="' . $pedido->id . '" data-codigo="' . $pedido->codigo . '" data-toggle="modal" >Revertir</a>';
+                    $btn[] = '<a class="btn-sm dropdown-item" href="#" data-target="#modal-revertir-ajefeop" data-revertir="' . $pedido->id . '" data-codigo="' . $pedido->codigo . '" data-toggle="modal" >Revertir</a>';
                     //$btn[] = '<button data-toggle="tooltip" data-placement="top" title="El sobre ya ah sido recivido en currier,  solo el currier tiene permiso de revertir" disabled class="btn btn-disabled btn-success btn-sm" data-target="#modal-revertir" data-revertir="' . $pedido->id . '" data-codigo="' . $pedido->codigo . '" data-toggle="modal" >Revertir</button>';
                 }
 
@@ -714,7 +721,9 @@ class OperacionController extends Controller
                 }*/
                 //\Str::contains(\Str::lower($pedido->condicion_envio),'courier')
 
-                return "<div class='d-flex'>" . join('', $btn) . "</div>";
+                $btn[] = '</ul></div>';
+
+                return join('', $btn);
             })
             ->rawColumns(['action','condicion_envio'])
             ->make(true);
