@@ -73,7 +73,7 @@ class ClienteController extends Controller
 
             })
             ->addColumn('action', function ($row) {
-                return '<button class="btn btn-success">Elegir</button>';
+                return '<button class="btn btn-success elegir">Elegir</button>';
             })
             ->rawColumns(['action','estado'])
             ->toJson();

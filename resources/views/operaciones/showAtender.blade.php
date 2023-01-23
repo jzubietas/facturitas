@@ -3,17 +3,8 @@
 @section('title', 'Ver  pedido')
 
 @section('content_header')
-  @foreach ($pedidos as $pedido)
-    @if ($pedido->id < 10)
-      <h1>Pedido: PED000{{ $pedido->id }}</h1>
-    @elseif($pedido->id < 100)
-      <h1>Pedido: PED00{{ $pedido->id }}</h1>
-    @elseif($pedido->id < 1000)
-      <h1>>Pedido: PED0{{ $pedido->id }}</h1>
-    @else
-      <h1>Pedido: PED{{ $pedido->id }}</h1>
-    @endif
-  @endforeach
+    <h1>{{$pedido->correlativo}}</h1>
+
 @stop
 
 @section('content')
@@ -23,10 +14,10 @@
         <div class="border rounded card-body border-secondary" style="text-align: center">
           <div class="card-body">
             <div class="form-row">
-              <div class="form-group col-lg-4">
+              <!--<div class="form-group col-lg-4">
                 <label for="id_ingresomaterial">Cliente</label>
                 <p>{{ $pedido->nombres }} - {{ $pedido->celulares }}</p>
-              </div>
+              </div>-->
               <div class="form-group col-lg-4">
                 <label for="id_ingresomaterial">Asesor</label>
                 <p>{{ $pedido->users }}</p>

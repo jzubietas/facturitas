@@ -1699,27 +1699,21 @@
                 ],
             });
 
-            tablaPedidosLista=$('#datatable-pedidos-lista-recojer').DataTable({
+            tablaPedidosLista = $('#datatable-pedidos-lista-recojer').DataTable({
                 ...configDataTableLanguages,
-                processing: true,
-                stateSave: true,
-                serverSide: true,
-                searching: true,
-                "order": [[0, "desc"]],
-                createdRow: function (row, data, dataIndex) {},
-                ajax: {
-                    url: "{{ route('pedidos.recoger.clientes.pedidos') }}",
-                    data: function (d) {
-                        //d.opcion = 'anulado_courier';
-                    },
-                },
-                columns: [
-                    {data: 'id', name: 'id',},
-                    {data: 'codigo', name: 'codigo',},
-                    {data: 'condicion_envio', name: 'condicion_envio',},
-                    {data: 'action', name: 'action',},
-                ],
+                "bPaginate": false,
+                "bFilter": false,
+                "bInfo": false,
+                columns:
+                    [
+                        {data: 'id', name: 'id',},
+                        {data: 'codigo', name: 'codigo',},
+                        {data: 'condicion_envio', name: 'condicion_envio',},
+                        {data: 'action', name: 'action',},
+                    ],
             });
+
+
 
             tablaPrincipal=$('#tablaPrincipal').DataTable({
                 dom: 'Bfritp',
@@ -1841,6 +1835,40 @@
                         }
                     }
                 ],
+            });
+
+            $('#datatable-clientes-lista-recojer').on( 'click', 'button.elegir', function () {
+                console.log("datatable-clientes-lista-recojer");
+                var data = tablaClienteLista.row( $(this).parents('tr') ).data();
+                console.log(data);
+                console.log( "The ID is: "+ data.id +" user id : "+ data.user_id +" celular:"+ data.celular+" action" +  data.action );
+            } );
+
+            $('#modal-recoger-sobre').on('show.bs.modal', function (event) {
+
+                $('#datatable-pedidos-lista-recojer').DataTable().clear().destroy();
+
+                /*tablaPedidosLista=$('#datatable-pedidos-lista-recojer').DataTable({
+                    ...configDataTableLanguages,
+                    processing: true,
+                    stateSave: true,
+                    serverSide: true,
+                    searching: true,
+                    "order": [[0, "desc"]],
+                    createdRow: function (row, data, dataIndex) {},
+                    ajax: {
+                        url: "{{ route('pedidos.recoger.clientes.pedidos') }}",
+                        data: function (d) {
+                            //d.opcion = 'anulado_courier';
+                        },
+                    },
+                    columns: [
+                        {data: 'id', name: 'id',},
+                        {data: 'codigo', name: 'codigo',},
+                        {data: 'condicion_envio', name: 'condicion_envio',},
+                        {data: 'action', name: 'action',},
+                    ],
+                });*/
             });
 
             $('#tablaPrincipal tbody').on( 'click', 'button', function () {
