@@ -1595,7 +1595,7 @@ class EnvioController extends Controller
         $pedidos=Pedido::where('id',$request->quitardireccion)->where('estado',1)->first();
         if($pedidos)
         {
-            $direccion_g=$pedidos->direccion_grupo;
+            $direccion_g=$pedidos->direcciongrupo;
 
             $pedidos->update([
                     'destino'=>null,
@@ -1633,8 +1633,7 @@ class EnvioController extends Controller
 
             if($direccion_g)
             {
-                $ddp=DireccionGrupo::where('id',$direccion_g)->where('estado',1)->first();
-                if(!$ddp)                DireccionGrupo::restructurarCodigos($ddp);
+                DireccionGrupo::restructurarCodigos($direccion_g);
             }
 
             return response()->json(['html' => $pedidos->id]);
