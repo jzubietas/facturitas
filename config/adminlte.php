@@ -487,6 +487,13 @@ return [
                     'can' => 'envios.seguimientoprovincia',
                     'icon' => 'fas fa-check-circle',
                     'active' => ['enviados'],
+                ],
+                [
+                    'text' => 'Math rotulos',
+                    'route' => 'envios.matchrotulos',
+                    'can' => 'envios.seguimientoprovincia',
+                    'icon' => 'fas fa-check-circle',
+                    'active' => ['enviados'],
                 ]
             ],
         ],

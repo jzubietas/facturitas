@@ -1434,6 +1434,133 @@ class EnvioController extends Controller
         ]);
     }
 
+    public function MatchRotulos()
+    {
+
+        $distribuir = [
+            "NORTE" => 'NORTE',
+            "CENTRO" => 'CENTRO',
+            "SUR" => 'SUR',
+        ];
+
+        $condiciones = [
+            "1" => 1,
+            "2" => 2,
+            "3" => 3
+        ];
+
+        $destinos = [
+            "LIMA" => 'LIMA',
+            "PROVINCIA" => 'PROVINCIA'
+        ];
+
+        $distritos = Distrito::whereIn('provincia', ['LIMA', 'CALLAO'])
+            ->where('estado', '1')
+            ->pluck('distrito', 'distrito');
+
+        $departamento = Departamento::where('estado', "1")
+            ->pluck('departamento', 'departamento');
+
+        $direcciones = DireccionEnvio::join('direccion_pedidos as dp', 'direccion_envios.id', 'dp.direccion_id')
+            ->select([
+                'direccion_envios.id',
+                'direccion_envios.distrito',
+                'direccion_envios.direccion',
+                'direccion_envios.referencia',
+                'direccion_envios.nombre',
+                'direccion_envios.celular',
+                'dp.pedido_id as pedido_id',
+            ])
+            ->where('direccion_envios.estado', '1')
+            ->where('dp.estado', '1')
+            ->get();
+
+        $superasesor = User::where('rol', 'Super asesor')->count();
+
+        if (Auth::user()->rol == "Asesor") {
+            $ver_botones_accion = 0;
+        } else if (Auth::user()->rol == "Super asesor") {
+            $ver_botones_accion = 0;
+        } else if (Auth::user()->rol == "Encargado") {
+            $ver_botones_accion = 1;
+        } else {
+            $ver_botones_accion = 1;
+        }
+
+        return view('envios.matchRotulos', compact('condiciones', 'distritos', 'direcciones', 'destinos', 'superasesor', 'ver_botones_accion', 'departamento', 'distribuir'));
+    }
+
+    public function MatchRotulostabla(Request $request)
+    {
+        $pedidos_provincia = DireccionGrupo::join('clientes', 'clientes.id', 'direccion_grupos.cliente_id')
+            ->join('users', 'users.id', 'clientes.user_id')
+            ->activo()
+            ->whereIn('direccion_grupos.condicion_envio_code', [
+                Pedido::RECEPCIONADO_OLVA_INT,
+                Pedido::EN_CAMINO_OLVA_INT,
+                Pedido::EN_TIENDA_AGENTE_OLVA_INT,
+            ])
+            ->where('direccion_grupos.distribucion', 'OLVA')
+            ->where('direccion_grupos.motorizado_status', '0')
+            ->select([
+                'direccion_grupos.*',
+                "clientes.celular as cliente_celular",
+                "clientes.nombre as cliente_nombre",
+            ]);
+
+        return Datatables::of(DB::table($pedidos_provincia))
+            ->addIndexColumn()
+            ->editColumn('created_at', function ($pedido) {
+                if ($pedido->created_at != null) {
+                    return Carbon::parse($pedido->created_at)->format('d-m-Y h:i A');
+                } else {
+                    return '';
+                }
+            })
+            ->editColumn('direccion', function ($pedido) {
+                return collect(explode(',',$pedido->direccion))->trim()->map(fn($f)=>'<b>'.$f.'</b>')->join('<br>');
+            })
+            ->editColumn('referencia', function ($pedido) {
+                $html= collect(explode(',',$pedido->referencia))->trim()->map(fn($f)=>'<b>'.$f.'</b>')->join('<br>').'<br>';
+
+
+                $html.= collect(explode(',',$pedido->observacion))->trim()->map(fn($f)=>'<a target="_blank" href="' . \Storage::disk('pstorage')->url($f) . '"><i class="fa fa-file-pdf"></i>Ver Rutulo</a>')->join('<br>');
+
+                $html.= '<p>';
+                return $html;
+            })
+            ->addColumn('condicion_envio', function ($pedido) {
+                $color = Pedido::getColorByCondicionEnvio($pedido->condicion_envio);
+                $html = '<span class="badge badge-success" style="background-color: ' . $color . '!important;">' . $pedido->condicion_envio . '</span>';
+                return $html;
+            })
+            ->addColumn('action', function ($pedido) {
+                switch ($pedido->condicion_envio_code) {
+                    case Pedido::RECEPCIONADO_OLVA_INT:
+                        $btn = '<button data-target="" data-toggle="jqconfirm" class="btn btn-primary btn-sm"><i class="fas fa-car"></i> ACTUALIZAR ESTADO</button>';
+                        break;
+                    case Pedido::EN_CAMINO_OLVA_INT:
+                        $btn = '<button data-target="" data-toggle="jqconfirm" class="btn btn-dark btn-sm"><i class="fas fa-home"></i>ACTUALIZAR ESTADO</button>';
+                        break;
+                    case Pedido::EN_TIENDA_AGENTE_OLVA_INT:
+                        $btn = '<button data-target="" data-toggle="jqconfirm" class="btn btn-warning btn-sm"><i class="fas fa-envelope"></i>ACTUALIZAR ESTADO</button>';
+                        break;
+                    case Pedido::ENTREGADO_PROVINCIA_INT:
+                    case Pedido::NO_ENTREGADO_OLVA_INT:
+                        $btn = '';
+                        break;
+                    default:
+                        $btn = '<button data-target="" data-toggle="jqconfirm" class="btn btn-info btn-sm"><i class="fa fa-hand-holding"></i> ACTUALIZAR ESTADO</button>';
+                }
+                if (!in_array(\auth()->user()->rol, [User::ROL_JEFE_COURIER, User::ROL_ADMIN])) {
+                    $btn = '';
+                }
+                return $btn;
+            })
+            ->rawColumns(['action', 'referencia', 'condicion_envio','direccion'])
+            ->make(true);
+
+    }
 
     public function Seguimientoprovincia()
     {
