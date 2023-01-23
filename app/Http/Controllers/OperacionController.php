@@ -657,12 +657,10 @@ class OperacionController extends Controller
                 if($pedido->estado_sobre=='1')
                 {
                     $badge_estado .= '<span class="badge badge-dark p-8" style="color: #fff; background-color: #347cc4; font-weight: 600; margin-bottom: -2px;border-radius: 4px 4px 0px 0px; font-size:8px;  padding: 4px 4px !important; font-weight: 500;">Direccion agregada</span>';
-
                 }
                 if($pedido->estado_consinsobre=='1')
                 {
                     $badge_estado .= '<span class="badge badge-dark p-8" style="color: #fff; background-color: #347cc4; font-weight: 600; margin-bottom: -2px;border-radius: 4px 4px 0px 0px; font-size:8px;  padding: 4px 4px !important; font-weight: 500;">CON SOBRE</span>';
-
                 }
                 if($pedido->estado_ruta=='1')
                 {
@@ -682,6 +680,11 @@ class OperacionController extends Controller
                 if (\auth()->user()->can('operacion.PDF')) {
                     $btn[] = '<a href="' . route('pedidosPDF', $pedido->id) . '" class="m-1 btn btn-primary btn-sm" target="_blank"><i class="fa fa-file-pdf"></i> PDF</a><br>';
                 }
+
+                $btn[] = '<a href="" class="btn-sm dropdown-item" data-target="#modal-veradjuntos-atencion" data-adj=' . $pedido->da_confirmar_descarga . ' data-veradjuntos=' . $pedido->id . ' data-toggle="modal" >
+                                <i class="fa fa-paperclip text-primary" aria-hidden="true"></i>
+                                Ver Adjuntos
+                               </a>';
 
                 if(\auth()->user()->rol==User::ROL_ADMIN || \auth()->user()->rol==User::ROL_JEFE_OPERARIO)
                 if($pedido->condicion_envio_code==Pedido::ENTREGADO_SIN_ENVIO_CLIENTE_INT){
