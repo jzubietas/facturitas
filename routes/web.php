@@ -296,7 +296,7 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     Route::get('envios.enrepartotabla', [EnvioController::class, 'Enviosenrepartotabla'])->name('envios.enrepartotabla');
 
     Route::get('envios.matchrotulos', [EnvioController::class, 'MatchRotulos'])->name('envios.matchrotulos');
-    Route::get('envios.matchrotulostabla', [EnvioController::class, 'MatchRotulostabla'])->name('envios.matchrotulostabla');
+    Route::get('envios.matchRotulostabla', [EnvioController::class, 'MatchRotulostabla'])->name('envios.matchRotulostabla');
 
     Route::get('envios.seguimientoprovincia', [EnvioController::class, 'Seguimientoprovincia'])->name('envios.seguimientoprovincia');
     Route::get('envios.seguimientoprovinciatabla', [EnvioController::class, 'Seguimientoprovinciatabla'])->name('envios.seguimientoprovinciatabla');

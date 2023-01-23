@@ -3,15 +3,8 @@
 @section('title', 'Lista de pedidos por enviar')
 
 @section('content_header')
-    <h1>Lista de SEGUIMIENTO A PROVINCIA</h1>
-    @if($superasesor > 0)
-        <br>
-        <div class="bg-4">
-            <h1 class="t-stroke t-shadow-halftone2" style="text-align: center">
-                asesores con privilegios superiores: {{ $superasesor }}
-            </h1>
-        </div>
-    @endif
+    <h1>Match Rotulos con seguimiento</h1>
+
 @stop
 
 @section('content')
