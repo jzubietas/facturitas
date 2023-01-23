@@ -214,16 +214,15 @@
                     },
                 },
                 drawCallback: function (settings) {
-                    setTimeout(function () {
-                        $("[data-jqconfirm=jqConfirm]").on('click', function (e) {
-                            openConfirmDownloadDocuments($(e.target).data('target'), $(e.target).data('idc'), $(e.target).data('codigo'))
-                        })
-                    }, 100)
+
                 },
                 createdRow: function (row, data, dataIndex) {
 
                 },
                 rowCallback: function (row, data, index) {
+                    $("[data-jqconfirm=jqConfirm]",row).on('click', function (e) {
+                        openConfirmDownloadDocuments($(e.target).data('target'), $(e.target).data('idc'), $(e.target).data('codigo'))
+                    })
                     if (data.pendiente_anulacion == 1) {
                         $('td', row).css('background', 'red').css('font-weight', 'bold');
                     }

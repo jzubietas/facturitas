@@ -1010,6 +1010,7 @@ class EnvioController extends Controller
             ->where('direccion_grupos.motorizado_status', '=', 0)
             ->activo()
             ->where('direccion_grupos.distribucion', 'OLVA')
+            ->orderBy('direccion_grupos.identificador')
             ->get()
             ->map(function ($grupo) {
                 if ($grupo->observacion) {
@@ -3644,8 +3645,7 @@ class EnvioController extends Controller
          */
     }
 
-    public
-    function IniciarRutaMasiva(Request $request)
+    public function IniciarRutaMasiva(Request $request)
     {
         $rol = Auth::user()->rol;
         $zona_ = null;
@@ -3655,19 +3655,16 @@ class EnvioController extends Controller
             $usuario = User::where('id', Auth::user()->id)->first();
             $zona = $usuario->zona;
             $motorizadoid = $usuario->id;
-            $direcciones = DireccionGrupo::where('motorizado_id', $motorizadoid)->where('distribucion', $zona)->where('condicion_envio_code', Pedido::RECEPCION_MOTORIZADO_INT);
-            $direcciones->update([
-                'condicion_envio_code' => Pedido::MOTORIZADO_INT,
-                'condicion_envio_at' => now(),
-                'condicion_envio' => Pedido::MOTORIZADO,
-            ]);
+            $direcciones = DireccionGrupo::where('motorizado_id', $motorizadoid)->where('condicion_envio_code', Pedido::RECEPCION_MOTORIZADO_INT)->get();
+            foreach ($direcciones as $grupo){
+                DireccionGrupo::moverAMotorizadoOlva($grupo);
+            }
+
         } else if ($rol == User::ROL_ADMIN) {
-            $direcciones = DireccionGrupo::where('condicion_envio_code', Pedido::RECEPCION_MOTORIZADO_INT);
-            $direcciones->update([
-                'condicion_envio_code' => Pedido::MOTORIZADO_INT,
-                'condicion_envio_at' => now(),
-                'condicion_envio' => Pedido::MOTORIZADO,
-            ]);
+            $direcciones = DireccionGrupo::where('condicion_envio_code', Pedido::RECEPCION_MOTORIZADO_INT)->get();
+            foreach ($direcciones as $grupo){
+                DireccionGrupo::moverAMotorizadoOlva($grupo);
+            }
         } else {
             return response()->json(['html' => '0']);
         }

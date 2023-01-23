@@ -820,7 +820,7 @@ Enviar</button>
                 },
                 lengthChange: false,
                 processing: true,
-                stateSave: true,
+                stateSave: false,
                 serverSide: true,
                 searching: true,
                 order: [[0, "desc"]],
@@ -855,18 +855,6 @@ Enviar</button>
                     {
                         data: 'codigos',
                         name: 'codigos',
-                        render: function (data, type, row, meta) {
-                            if (data == null) {
-                                return 'SIN PEDIDOS';
-                            } else {
-                                var returndata = '';
-                                var jsonArray = data.split(",");
-                                $.each(jsonArray, function (i, item) {
-                                    returndata += item + '<br>';
-                                });
-                                return returndata;
-                            }
-                        },
                     },
                     {data: 'distrito', name: 'distrito',},
                     {data: 'destino', name: 'destino',},
@@ -888,21 +876,6 @@ Enviar</button>
                     {
                         data: 'producto',
                         name: 'producto',
-                        render: function (data, type, row, meta) {
-                            if (data == null) {
-                                return 'SIN RUCS';
-                            } else {
-                                var numm = 0;
-                                var returndata = '';
-                                var jsonArray = data.split(",");
-                                $.each(jsonArray, function (i, item) {
-                                    numm++;
-                                    returndata += numm + ": " + item + '<br>';
-
-                                });
-                                return returndata;
-                            }
-                        }
                     },
                     {data: 'gmlink', name: 'gmlink',},
                     {
@@ -973,7 +946,7 @@ Enviar</button>
                 },
                 lengthChange: false,
                 processing: true,
-                stateSave: true,
+                stateSave: false,
                 serverSide: true,
                 searching: true,
                 order: [[0, "desc"]],
@@ -1123,7 +1096,7 @@ Enviar</button>
                 },
                 lengthChange: false,
                 processing: true,
-                stateSave: true,
+                stateSave: false,
                 serverSide: true,
                 searching: true,
                 order: [[0, "desc"]],
@@ -1273,7 +1246,7 @@ Enviar</button>
                 },
                 lengthChange: false,
                 processing: true,
-                stateSave: true,
+                stateSave: false,
                 serverSide: true,
                 searching: true,
                 order: [[0, "desc"]],

@@ -267,6 +267,73 @@
 
             });
 
+            function openConfirmDownloadDocuments(action, idc, codigo) {
+                $.confirm({
+                    title: `
+<h5>Detalle de atencion de pedido <b class="allow-copy">${codigo}</b></h5>
+`,
+                    columnClass: 'col-md-6 col-md-offset-4 col-sm-6 col-sm-offset-3 col-xs-10 col-xs-offset-1',
+                    buttons: {
+                        cancel: {
+                            text: 'Cerrar',
+                            btnClass: 'btn-outline-dark',
+                            action: function () {
+                                return true
+                            }
+                        },
+                    },
+                    draggable:false,
+                    backgroundDismiss: function () {
+                        return false; // modal wont close.
+                    },
+                    content: function () {
+                        var self = this;
+                        return $.ajax({
+                            url: action,
+                            dataType: 'json',
+                            method: 'get'
+                        }).done(function (response) {
+                            var html = `<div class="list-group">`
+                            // html += `<li class="list-group-item bg-dark">Codigo: ${codigo}</li>`
+                            if (response.sustento) {
+                                html += `<li class="list-group-item text-wrap">
+<h6 class="alert alert-warning text-center font-weight-bold">Los archivos de este pedido fueron modificados</h6>
+<b>Sustento del facturador:</b>
+<textarea readonly class="form-control w-100" rows="6" style=" color: red; font-weight: bold; background: white; ">${response.sustento}</textarea>
+</li>`
+                            }
+                            html += `<li class="list-group-item text-left"><h5 class="font-weight-bold">Adjuntos descargados</h5></li>`
+                            html += response.data.map(function (item) {
+                                return `<li class="list-group-item">
+<a href="${item.link}" download class="d-flex justify-content-between"><span>Descargar </span> <span><i class="fa fa-file mx-2"></i>${item.adjunto} <i class="fa fa-download mx-2"></i></span></a>
+</li>`
+                            }).join('')
+
+                            html += `</div>`
+                            self.setContentAppend(html);
+                            if(response.cliente){
+                                self.setTitle(`
+<div class="d-flex justify-content-between w-100 align-content-center">
+<h5>Cliente: <b class="allow-copy">${response.cliente.nombre}</b></h5>
+<h5 class="text-right">Telf: <b class="allow-copy">${response.cliente.celular}</b></h5>
+</div>
+<hr class="my-0">
+<h5>Detalle de atencion de pedido <b class="allow-copy">${response.detalle_pedido.codigo}</b></h5>
+`)
+                            }
+                        }).fail(function () {
+                            self.setContent('Ocurrio un error.');
+                        });
+                    },
+                    onContentReady: function () {
+                        const self = this
+                        self.$content.find('#copy_pedido_buttom').click(function () {
+                            self.$content.find('#copy_pedido_text').select();
+                            window.document.execCommand("copy");
+                        })
+                    },
+                });
+            }
             var tablaPrincipal = $('#tablaPrincipal').DataTable({
                 processing: true,
                 serverSide: true,
@@ -429,6 +496,10 @@ ${data.foto3 ? `
                             }
                         })
 
+                    })
+
+                    $("[data-jqconfirmdetalle=jqConfirm]",row).on('click', function (e) {
+                        openConfirmDownloadDocuments($(e.target).data('target'), $(e.target).data('idc'), $(e.target).data('codigo'))
                     })
                 },
                 initComplete: function (settings, json) {
