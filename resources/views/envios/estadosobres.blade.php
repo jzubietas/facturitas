@@ -483,7 +483,7 @@
                         console.log(data);
                         $("#modal-quitardireccion .textcode").text('');
                         $("#modal-quitardireccion").modal("hide");
-                        $('#tablaPrincipal').DataTable().ajax.reload(null, false);
+                        $('#tablaRecepcionados').DataTable().ajax.reload(null, false);
                     }
                 });
             });
