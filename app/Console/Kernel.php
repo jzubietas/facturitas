@@ -37,6 +37,9 @@ class Kernel extends ConsoleKernel
         ])
             ->dailyAt('15:00');
 
+        $schedule->command('motorizado:send-observado')
+            ->dailyAt('23:59');
+
     }
 
     /**

@@ -106,25 +106,21 @@ class MotorizadoController extends Controller
                     margin-bottom: -4px;
                     color: black !important;">Con ruta</span><span class="badge badge-success" style="background-color: ' . $color . '!important;">' . $pedido->condicion_envio . '</span>';
                 })
-
                 ->editColumn('codigos', function ($pedido) {
-                   return collect(explode(',',$pedido->codigos))
-                       ->map(fn($c, $index) => "<span>".($index+1).") <b>$c</b></span>")
-                       ->join("<br>");
+                    return collect(explode(',', $pedido->codigos))
+                        ->map(fn($c, $index) => "<span>" . ($index + 1) . ") <b>$c</b></span>")
+                        ->join("<br>");
                 })
-
                 ->editColumn('producto', function ($pedido) {
-                    return collect(explode(',',$pedido->producto))
-                        ->map(fn($c, $index) => ($index+1).") <b>$c</b>")
+                    return collect(explode(',', $pedido->producto))
+                        ->map(fn($c, $index) => ($index + 1) . ") <b>$c</b>")
                         ->join("<br>");
                 })
-
                 ->editColumn('direccion', function ($pedido) {
-                    return collect(explode(',',$pedido->direccion))
-                        ->map(fn($c, $index) => ($index+1).") <b>$c</b>")
+                    return collect(explode(',', $pedido->direccion))
+                        ->map(fn($c, $index) => ($index + 1) . ") <b>$c</b>")
                         ->join("<br>");
                 })
-
                 ->editColumn('referencia', function ($pedido) {
                     /*
                      var datal = "";
@@ -136,11 +132,10 @@ class MotorizadoController extends Controller
                                 return datal;
                             }
                      */
-                    return collect(explode(',',$pedido->referencia))
-                        ->map(fn($c, $index) => ($index+1).") <b>$c</b>")
+                    return collect(explode(',', $pedido->referencia))
+                        ->map(fn($c, $index) => ($index + 1) . ") <b>$c</b>")
                         ->join("<br>");
                 })
-
                 ->addColumn('action', function ($pedido) use ($tab) {
 
                     $btn = '<ul class="list-unstyled mt-sm-20">';
@@ -219,7 +214,7 @@ class MotorizadoController extends Controller
 
                     return $btn;
                 })
-                ->rawColumns(['action', 'condicion_envio', 'gmlink','codigos','producto','direccion','referencia'])
+                ->rawColumns(['action', 'condicion_envio', 'gmlink', 'codigos', 'producto', 'direccion', 'referencia'])
                 ->toJson();
         }
         return view('envios.motorizado.index', compact('fecha_consulta'));
@@ -263,23 +258,23 @@ class MotorizadoController extends Controller
             return datatables()->query(DB::table($query))
                 ->addIndexColumn()
                 ->editColumn('codigos', function ($pedido) {
-                    return collect(explode(',',$pedido->codigos))
-                        ->map(fn($c, $index) => ($index+1).") <b>$c</b>")
+                    return collect(explode(',', $pedido->codigos))
+                        ->map(fn($c, $index) => ($index + 1) . ") <b>$c</b>")
                         ->join("<br>");
                 })
                 ->editColumn('producto', function ($pedido) {
-                    return collect(explode(',',$pedido->producto))
-                        ->map(fn($c, $index) => ($index+1).") <b>$c</b>")
+                    return collect(explode(',', $pedido->producto))
+                        ->map(fn($c, $index) => ($index + 1) . ") <b>$c</b>")
                         ->join("<br>");
                 })
                 ->editColumn('direccion', function ($pedido) {
-                    return collect(explode(',',$pedido->direccion))
-                        ->map(fn($c, $index) => ($index+1).") <b>$c</b>")
+                    return collect(explode(',', $pedido->direccion))
+                        ->map(fn($c, $index) => ($index + 1) . ") <b>$c</b>")
                         ->join("<br>");
                 })
                 ->editColumn('referencia', function ($pedido) {
-                    return collect(explode(',',$pedido->referencia))
-                        ->map(fn($c, $index) => ($index+1).") <b>$c</b>")
+                    return collect(explode(',', $pedido->referencia))
+                        ->map(fn($c, $index) => ($index + 1) . ") <b>$c</b>")
                         ->join("<br>");
                 })
                 ->editColumn('condicion_envio', function ($pedido) {
@@ -294,7 +289,7 @@ class MotorizadoController extends Controller
                     $btn = '<ul class="list-unstyled pl-0">';
 
                     $btn .= '<li><button href="" class="btn btn-sm text-secondary text-left"
- data-target="'.route('operaciones.confirmarmotorizadoconfirm',['hiddenMotorizadoEntregarConfirm'=>$pedido->id]).'"
+ data-target="' . route('operaciones.confirmarmotorizadoconfirm', ['hiddenMotorizadoEntregarConfirm' => $pedido->id]) . '"
   data-toggle="jqConfirm"
    data-entregar-confirm="' . $pedido->id . '"
     data-destino="' . $pedido->destino . '"
@@ -312,7 +307,7 @@ class MotorizadoController extends Controller
 
                     return $btn;
                 })
-                ->rawColumns(['action', 'condicion_envio','codigos','producto','direccion','referencia'])
+                ->rawColumns(['action', 'condicion_envio', 'codigos', 'producto', 'direccion', 'referencia'])
                 ->toJson();
         }
         return view('envios.motorizado.confirmar', compact('users_motorizado'));
@@ -427,8 +422,12 @@ class MotorizadoController extends Controller
                 'direccion_grupos.motorizado_status',
                 'users.zona',
             ])
-            ->whereIn('direccion_grupos.motorizado_status', [Pedido::ESTADO_MOTORIZADO_OBSERVADO, Pedido::ESTADO_MOTORIZADO_NO_CONTESTO, Pedido::ESTADO_MOTORIZADO_NO_RECIBIDO])
-            // ->where('direccion_grupos.estado', '1')
+            ->whereIn('direccion_grupos.motorizado_status', [
+                Pedido::ESTADO_MOTORIZADO_OBSERVADO,
+                Pedido::ESTADO_MOTORIZADO_NO_CONTESTO,
+                Pedido::ESTADO_MOTORIZADO_NO_RECIBIDO
+            ])
+            //->where('direccion_grupos.estado', '1')
             //->activo()
             //->whereNotNull('direccion_grupos.fecha')
             ->whereNotNull('direccion_grupos.fecha_salida')
@@ -504,13 +503,13 @@ class MotorizadoController extends Controller
                 $html = '';
                 if ($pedido->estado = 0 || $pedido->pendiente_anulacion) {
                     $html .= '<div class="p-2">ANULADO</div>';
-                }else if ($pedido->motorizado_status == Pedido::ESTADO_MOTORIZADO_OBSERVADO && $pedido->reprogramacion_at!=null) {
+                } else if ($pedido->motorizado_status == Pedido::ESTADO_MOTORIZADO_OBSERVADO && $pedido->reprogramacion_at != null) {
                     $html .= '<div class="p-2">OBSERVADO <b class="badge badge-dark">REPROGRAMAR</b></div>';
                     //$html .= '<button data-toggle="jqconfirmtext" data-target="' . $pedido->motorizado_sustento_text . '" class="btn btn-light btn-sm"><i class="fa fa-envelope-open-text"></i> Ver Sustento</button>';
-                }  else if ($pedido->motorizado_status == Pedido::ESTADO_MOTORIZADO_OBSERVADO) {
+                } else if ($pedido->motorizado_status == Pedido::ESTADO_MOTORIZADO_OBSERVADO) {
                     $html .= '<div class="p-2">OBSERVADO</div>';
                     //$html .= '<button data-toggle="jqconfirmtext" data-target="' . $pedido->motorizado_sustento_text . '" class="btn btn-light btn-sm"><i class="fa fa-envelope-open-text"></i> Ver Sustento</button>';
-                }else if ($pedido->motorizado_status == Pedido::ESTADO_MOTORIZADO_NO_RECIBIDO) {
+                } else if ($pedido->motorizado_status == Pedido::ESTADO_MOTORIZADO_NO_RECIBIDO) {
                     $html .= '<div class="p-2">NO RECIBIDO</div>';
                     //$html .= '<button data-toggle="jqconfirmtext" data-target="' . $pedido->motorizado_sustento_text . '" class="btn btn-light btn-sm"><i class="fa fa-envelope-open-text"></i> Ver Sustento</button>';
                 } else {
@@ -565,7 +564,15 @@ class MotorizadoController extends Controller
                 $btn .= '<li>
                                 <button type="button"
                                 data-target="' . route('envios.devueltos.recibir', $pedido->id) . '"
-                                data-toggle="jqconfirm"  class="'.($pedido->reprogramacion_at!=null?'border border-primary':'').' btn btn-warning btn-sm"><i class="fas fa-check-circle"></i> Recibido</button>
+                                data-toggle="jqconfirm"  class="' . ($pedido->reprogramacion_at != null ? 'border border-primary' : '') . ' btn btn-warning btn-sm"><i class="fas fa-check-circle"></i> Recibido</button>
+                            </li>';
+
+                $btn .= '<li>
+                                <button type="button"
+                                data-target="' . route('envios.devueltos.recibir', ['pedido' => $pedido->id, 'action' => 'send_motorizado']) . '"
+                                data-toggle="jqconfirmmotorizado"  class="' . ($pedido->reprogramacion_at != null ? 'border border-primary' : '') . ' w-100 btn btn-info mt-2 btn-sm">
+                                <i class="fa fa-motorcycle "></i>
+</button>
                             </li>';
 
                 $btn .= '</ul>';
@@ -580,43 +587,66 @@ class MotorizadoController extends Controller
 
     public function devueltos_recibir(Request $request, Pedido $pedido)
     {
+        $action = $request->get('action');
         /*********
          * IDENTIFICAMOS AL GRUPO
          */
         $grupo = $pedido->direcciongrupo;
 
-        /**************
-         * CREAMOS EL GRUPO TEMPORAL
-         */
-        $pgroup = GrupoPedido::createGroupByPedido($pedido, false, true);
+        if ($action == 'send_motorizado') {
+            if ($grupo->pedidos()->count() > 1) {
+                $newgrupo = $grupo->replicate();
 
-        if ($grupo != null) {
-            if ($grupo->pedidos()->activo()->count() <= 1) {
-                $grupo->update([
-                    'estado' => 0,
+                $newgrupo->save();
+                $pedido->update([
+                    'direccion_grupo' => $newgrupo->id,
                 ]);
-                if ($pedido->estado = 0) {
+                DireccionGrupo::restructurarCodigos($grupo);
+                DireccionGrupo::restructurarCodigos($newgrupo);
+                $grupo = $newgrupo;
+            }
+
+            DireccionGrupo::cambiarCondicionEnvio($grupo, Pedido::MOTORIZADO_INT, [
+                'fecha_salida' => now(),
+                'fecha_salida_old_at' => $grupo->fecha_salida,
+                'motorizado_status' => 0,
+                'motorizado_sustento_text' => '',
+            ]);
+            return $grupo;
+        } else {
+            /**************
+             * CREAMOS EL GRUPO TEMPORAL
+             */
+            $pgroup = GrupoPedido::createGroupByPedido($pedido, false, true);
+
+            if ($grupo != null) {
+                if ($grupo->pedidos()->activo()->count() <= 1) {
                     $grupo->update([
-                        'motorizado_status' => Pedido::ESTADO_MOTORIZADO_RE_RECIBIDO,
+                        'estado' => 0,
                     ]);
+                    if ($pedido->estado = 0) {
+                        $grupo->update([
+                            'motorizado_status' => Pedido::ESTADO_MOTORIZADO_RE_RECIBIDO,
+                        ]);
+                    } else {
+                        $grupo->update([
+                            'motorizado_status' => 0,
+                        ]);
+                    }
                 } else {
-                    $grupo->update([
-                        'motorizado_status' => 0,
+                    $pedido->update([
+                        'direccion_grupo' => null
                     ]);
                 }
+                DireccionGrupo::restructurarCodigos($grupo);
             } else {
                 $pedido->update([
                     'direccion_grupo' => null
                 ]);
             }
-            DireccionGrupo::restructurarCodigos($grupo);
-        } else {
-            $pedido->update([
-                'direccion_grupo' => null
-            ]);
-        }
 
-        return $pgroup;
+            return $pgroup;
+        }
     }
 
     public function Enviosrecepcionmotorizado()
@@ -1042,15 +1072,15 @@ Ver Rotulo</a>')
             ->get();
 
 
-        if($grupos->count()){
+        if ($grupos->count()) {
             return response()->json([
                 'grupo' => $grupos->pluck('codigo'),
-                'codigo'=> 1
+                'codigo' => 1
             ]);
-        }else{
+        } else {
             return response()->json([
                 'grupo' => [],
-                'codigo' =>0
+                'codigo' => 0
             ]);
         }
     }

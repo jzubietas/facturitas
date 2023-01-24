@@ -402,6 +402,16 @@ class DireccionGrupo extends Model implements HasMedia
         return $grupo;
     }
 
+    public static function observarGrupo(self $grupo, $sustento = null, $motorizado_status = Pedido::ESTADO_MOTORIZADO_OBSERVADO)
+    {
+        $grupo->update([
+            'motorizado_status' => $motorizado_status,
+            'motorizado_sustento_text' => $sustento,
+        ]);
+
+        return $grupo;
+    }
+
     public static function desvincularPedido(self $grupo, Pedido $pedido, $sustento = null, $motorizado_status = Pedido::ESTADO_MOTORIZADO_OBSERVADO)
     {
         return self::desvincularPedidos($grupo, collect([$pedido]), $sustento, $motorizado_status);
