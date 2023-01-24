@@ -19,10 +19,14 @@ class CourierRegistrosController extends Controller
         $superasesor = User::where('rol', 'Super asesor')->count();
         return view('courier_registro.index', compact('superasesor' ));
     }
-
     public function indextabla(Request $request)
     {
-        $courier = CourierRegistro::where('id','<>', '0')/*->where('relacionado','0')*/;
+        $courier = CourierRegistro::where('id','<>', '0')
+            ->select([
+                'courier_registros.*',
+                DB::raw("(select a.direccion from direccion_grupos a where a.direccion is not null and a.direccion<>'' and  courier_registros.courier_registro=a.direccion and a.courier_failed_sync_at is null) as permitir")
+        ])
+        /*->where('relacionado','0')*/;
         return Datatables::of(DB::table($courier))
             ->addIndexColumn()
             ->editColumn('relacionado', function($courier){
@@ -44,7 +48,9 @@ class CourierRegistrosController extends Controller
                 $btn .= '<ul class="list-unstyled pl-0">';
                 if($courier->relacionado=="0")
                 {
-                    $btn .= '<li>
+                    if($courier->permitir==null)
+                    {
+                        $btn .= '<li>
                             <a href="" class="btn-sm text-warning" data-target="#modal-relacionar-registro_courier"
                                 data-toggle="modal" data-ide="' . $courier->id . '"
                                 data-status="' . $courier->status . '" data-relacionado="' . $courier->relacionado . '"
@@ -52,11 +58,9 @@ class CourierRegistrosController extends Controller
                                 <i class="fas fa-envelope text-success"></i> Relacionar</a></li>
                             </a>
                         </li>';
-                }/*else{
-                    $btn .= '<li><span class="badge badge-success">Relacionado</span></li>
-                            </a>
-                        </li>';
-                }*/
+                    }
+
+                }
                 $btn .= '</ul>';
                 return $btn;
             })
