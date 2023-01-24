@@ -70,8 +70,12 @@
 @stop
 
 @section('css')
-    <link rel="stylesheet" href="/css/admin_custom.css">
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.0.943/pdf_viewer.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.1/css/jquery.dataTables.min.csss">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.csss">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.1/css/dataTables.bootstrap4.min.csss">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
+
     <style>
 
         .bootstrap-select.btn-group .btn .filter-option {
@@ -100,6 +104,10 @@
             -webkit-text-stroke-width: 2px;
             -moz-text-stroke-color: #000000;
             -webkit-text-stroke-color: #ffffff;
+        }
+
+        .dataTables_filter{
+            float: left !important;
         }
 
         .t-shadow-halftone2 {
@@ -156,15 +164,19 @@
         .modal-lg {
             max-width: 80%;
         }
+        .dataTables_filter
+        {
+
+        }
     </style>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
+
 @stop
 
 @section('js')
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.1/js/dataTables.bootstrap4.min.js"></script>
     <script src="https://cdn.datatables.net/select/1.5.0/js/dataTables.select.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.0.943/pdf.min.js"></script>
 
@@ -472,6 +484,18 @@
                 this.value = this.value.replace(/[^0-9]/g, '');
             });
 
+            $('#recojo_pedido_quienrecibe_nombre').on('input', function () {
+                this.value = this.value.replace(/[^a-zA-Z >]/g, '');
+            });
+
+            $('#recojo_pedido_quienrecibe_celular').on('input', function () {
+                this.value = this.value.replace(/[^0-9]/g, '');
+            });
+
+            $('#recojo_pedido_direccion,#recojo_pedido_referencia,#recojo_pedido_observacion').on('input', function () {
+                this.value = this.value.replace(/[^0-9 -a-zA-Z]/g, '');
+            });
+
             $("#direccion", '#referencia', '#observacion').bind('keypress', function (event) {
                 var regex = new RegExp("^[a-zA-Z0-9 ]+$");
                 var key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
@@ -597,6 +621,10 @@
 
             $(".provincia").addClass("d-none");
             $(".lima").addClass("d-none");
+
+            $(document).on("change", "#recojo_destino", function () {
+                $("#distrito").val("").selectpicker("refresh")
+            });
 
             $(document).on("change", "#limaprovincia", function () {
                 $("#distrito").val("").selectpicker("refresh")
@@ -1841,6 +1869,11 @@
                 console.log( "The ID is: "+ data.id +" user id : "+ data.user_id +" celular:"+ data.celular+" action" +  data.action );
                 //disparar la otra tabla
                 //pinto la clase span
+
+                $(".card_clientes").hide()
+                $(".card_pedidos").show()
+                $(".card_form").show()
+
                 $("span.nombre_cliente_recojo").html(data.nombre)
                 $("#recojo_cliente").val(data.id)
                 $("#recojo_cliente_name").val(data.nombre)
@@ -1878,6 +1911,7 @@
                             {data: 'action', name: 'action',},
                         ],
                 });
+                $("#distrito_recoger").val("").selectpicker("refresh")
             } );
 
             $(document).on("submit","#formrecojo",function(event) {
@@ -1885,13 +1919,21 @@
                 let recojo_cliente = $("#recojo_cliente").val();
                 let recojo_pedido = $("#recojo_pedido").val();
                 let recojo_fecha = $("#recojo_fecha").val();
-                let recojo_descripcion = $("#recojo_descripcion").val();
+                let recojo_pedido_quienrecibe_nombre = $("#recojo_pedido_quienrecibe_nombre").val();
+                let recojo_pedido_quienrecibe_celular = $("#recojo_pedido_quienrecibe_celular").val();
+                let recojo_pedido_direccion = $("#recojo_pedido_direccion").val();
+                let recojo_pedido_referencia = $("#recojo_pedido_referencia").val();
+                let recojo_pedido_observacion = $("#recojo_pedido_observacion").val();
 
                 var fd_courier = new FormData();
                 fd_courier.append('recojo_cliente', recojo_cliente);
                 fd_courier.append('recojo_pedido', recojo_pedido);
                 fd_courier.append('recojo_fecha', recojo_fecha);
-                fd_courier.append('recojo_descripcion', recojo_descripcion);
+                fd_courier.append('recojo_pedido_quienrecibe_nombre', recojo_pedido_quienrecibe_nombre);
+                fd_courier.append('recojo_pedido_quienrecibe_celular', recojo_pedido_quienrecibe_celular);
+                fd_courier.append('recojo_pedido_direccion', recojo_pedido_direccion);
+                fd_courier.append('recojo_pedido_referencia', recojo_pedido_referencia);
+                fd_courier.append('recojo_pedido_observacion', recojo_pedido_observacion);
                 $.ajax({
                     data: fd_courier,
                     processData: false,
@@ -1899,11 +1941,22 @@
                     type: 'POST',
                     url: "{{ route('registrar_recojer_pedido') }}",
                     success: function (data) {
+
                     }
                 });
             });
 
+            $(document).on("click",".btn-cancel-recojo",function(){
+                $(".card_pedidos").hide();
+                $(".card_form").hide();
+                $(".card_clientes").show();
+            });
+
             $('#modal-recoger-sobre').on('show.bs.modal', function (event) {
+
+                $(".card_clientes").show()
+                $(".card_pedidos").hide()
+                $(".card_form").hide()
 
                 $("#recojo_cliente").val("")
                 $("#recojo_cliente_name").val("")
@@ -1919,6 +1972,10 @@
                     stateSave: false,
                     serverSide: true,
                     searching: true,
+                    lengthMenu: [
+                        [5, -1],
+                        [5, 'All'],
+                    ],
                     "order": [[0, "desc"]],
                     createdRow: function (row, data, dataIndex) {},
                     ajax: {
