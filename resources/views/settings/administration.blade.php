@@ -99,8 +99,8 @@
                 </div>
                 <div class="card-body">
                     <div class="form-group">
-                        <button class="btn btn-success" type="button" id="courierregistros">
-                            Banedja de Registros de Courier
+                        <button class="btn btn-warning" type="button" id="courierregistros">
+                            Bandeja de Registros de Courier
                         </button>
                     </div>
                 </div>
