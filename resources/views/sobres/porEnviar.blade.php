@@ -176,6 +176,9 @@
     <script
         src="https://gyrocode.github.io/jquery-datatables-checkboxes/1.2.12/js/dataTables.checkboxes.min.js"></script>
 
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.7/jquery.inputmask.min.js"></script>
+
     <script>
         var tablehistoricolima = null;
         tablehistoricolima = $('#tablaHistorialLima').DataTable({
@@ -338,9 +341,9 @@
     </script>
 
     <script>
-        let tablaPrincipal=null;
-        let tablaClienteLista=null;
-        let tablaPedidosLista=null;
+        let tablaPrincipal = null;
+        let tablaClienteLista = null;
+        let tablaPedidosLista = null;
         $(document).ready(function () {
 
             $(document).on("click", "#change_imagen", function () {
@@ -484,7 +487,7 @@
             $(document).on('change keyup', "#tracking, #numregistro", function (event) {
 
                 let id_element = event.target.id;
-                if(isNaN(parseInt(event.target.value))||parseInt(event.target.value)!=event.target.value){
+                /*if(isNaN(parseInt(event.target.value))||parseInt(event.target.value)!=event.target.value){
                     Swal.fire(
                         'Error',
                         `El codigo ${event.target.value} no tiene el formato correcto, se va a limpiar el campo`,
@@ -492,7 +495,7 @@
                     )
                     event.target.value=''
                     return false
-                }
+                }*/
                 let val_element = $(this).val();
                 switch (id_element) {
                     case 'tracking':
@@ -567,15 +570,17 @@
                 });
             });
 
-
-            $("#tracking").bind('keypress', function (event) {
+            /*$("#tracking").inputmask({
+                regex: "\d+-\d{2}"
+            });*/
+            /*$("#tracking").bind('keypress', function (event) {
                 var regex = new RegExp("^[0-9]+$");
                 var key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
                 if (!regex.test(key)) {
                     event.preventDefault();
                     return false;
                 }
-            });
+            });*/
 
             $("#numregistro").bind('keypress', function (event) {
                 var regex = new RegExp("^[0-9]+$");
@@ -1675,7 +1680,7 @@
                 },
             }
 
-            tablaClienteLista=$('#datatable-clientes-lista-recojer').DataTable({
+            tablaClienteLista = $('#datatable-clientes-lista-recojer').DataTable({
                 ...configDataTableLanguages,
                 processing: true,
                 stateSave: true,
@@ -1683,7 +1688,8 @@
                 searching: true,
                 "displayStart": 5,
                 "order": [[0, "desc"]],
-                createdRow: function (row, data, dataIndex) {},
+                createdRow: function (row, data, dataIndex) {
+                },
                 ajax: {
                     url: "{{ route('pedidos.recoger.clientes') }}",
                     data: function (d) {
@@ -1713,8 +1719,7 @@
             });
 
 
-
-            tablaPrincipal=$('#tablaPrincipal').DataTable({
+            tablaPrincipal = $('#tablaPrincipal').DataTable({
                 dom: 'Bfritp',
                 processing: true,
                 stateSave: true,
@@ -1826,7 +1831,7 @@
                     {
                         text: 'RECOGER',
                         className: 'btn btn-danger',
-                        action: function ( e, dt, node, config ) {
+                        action: function (e, dt, node, config) {
 
                             $('#modal-recoger-sobre').modal("show");
                             //alert( 'RECOGER' );
@@ -1836,12 +1841,12 @@
                 ],
             });
 
-            $('#datatable-clientes-lista-recojer').on( 'click', 'button.elegir', function () {
+            $('#datatable-clientes-lista-recojer').on('click', 'button.elegir', function () {
                 console.log("datatable-clientes-lista-recojer");
-                var data = tablaClienteLista.row( $(this).parents('tr') ).data();
+                var data = tablaClienteLista.row($(this).parents('tr')).data();
                 console.log(data);
-                console.log( "The ID is: "+ data.id +" user id : "+ data.user_id +" celular:"+ data.celular+" action" +  data.action );
-            } );
+                console.log("The ID is: " + data.id + " user id : " + data.user_id + " celular:" + data.celular + " action" + data.action);
+            });
 
             $('#modal-recoger-sobre').on('show.bs.modal', function (event) {
 
@@ -1870,16 +1875,16 @@
                 });*/
             });
 
-            $('#tablaPrincipal tbody').on( 'click', 'button', function () {
-                var data = tablaPrincipal.row( $(this).closest('tr') ).data();
-                console.log( "got the data" ); //This alert is never reached
+            $('#tablaPrincipal tbody').on('click', 'button', function () {
+                var data = tablaPrincipal.row($(this).closest('tr')).data();
+                console.log("got the data"); //This alert is never reached
                 console.log(data)
-                console.log( data.id +"'id: "+ data.cliente_id );
+                console.log(data.id + "'id: " + data.cliente_id);
 
                 $('[data-jqconfirm]', row).click(function () {
 
                 });
-            } );
+            });
 
 
         });

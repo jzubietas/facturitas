@@ -68,6 +68,8 @@
     <script src="https://momentjs.com/downloads/moment.js"></script>
     <script src="https://cdn.datatables.net/plug-ins/1.11.4/dataRender/datetime.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.7/jquery.inputmask.min.js"></script>
+
     <script>
         $(document).ready(function () {
 
@@ -82,13 +84,82 @@
                 stateSave: true,
                 serverSide: true,
                 searching: true,
-                "order": [[0, "desc"]],
+                /*  "order": [[0, "desc"]],*/
                 ajax: "{{ route('envios.seguimientoprovinciatabla') }}",
                 createdRow: function (row, data, dataIndex) {
                     //console.log(row);
                 },
                 rowCallback: function (row, data, index) {
                     renderEventButtonAction(row, data, index)
+                    if (data.courier_failed_sync_at != null) {
+                        $('td', row).css('background', 'red')
+                    }
+                    $('[data-jqconfirm="edit_tracking"]', row).click(function () {
+                        const action = $(this).data('action');
+                        $.confirm({
+                            title: 'Editar Tracking',
+                            type: 'red',
+                            content: `<div class="p-2">
+<div class="form-group">
+<label>Número de registro</label>
+<input class="form-control" type="text" placeholder="000000000000" name="numregistro" value="${data.referencia}">
+</div>
+<div class="form-group">
+<label>Ingresar Tracking</label>
+<input class="form-control" type="text" placeholder="00000000-{{now()->format('y')}}" name="tracking" value="${data.direccion}" data-inputmask-regex="\\d+-\\d{2}">
+</div>
+</div>`,
+                            buttons: {
+                                actualizar: {
+                                    btnClass: 'btn-success',
+                                    action: function () {
+                                        const self = this
+
+                                        const data = {
+                                            tracking: self.$content.find('input[name=tracking]').val(),
+                                            numregistro: self.$content.find('input[name=numregistro]').val(),
+                                        }
+                                        if (data.tracking.includes('__')) {
+                                            $.alert(`El tracking ingresado no tiene el formato correcto`);
+                                            return false;
+                                        }
+                                        if (!data.numregistro) {
+                                            $.alert(`El numero de registro ingresado no tiene el formato correcto`);
+                                            return false;
+                                        }
+                                        self.showLoading(true)
+                                        $.post(action, data).done(function (data) {
+                                            if (data.success) {
+                                                self.close()
+                                            } else {
+                                                if (data.existencias) {
+                                                    $.alert(`El codigo que intentas actualizar ya se encuentra registrado en otro pedido con codigo (<b>${data.codigos.join(', ')}</b>)`);
+                                                } else {
+                                                    $.alert(`Ocurrio un error al actualizar, revise si ha ingresado correctamente los datos`);
+                                                }
+                                            }
+                                        }).always(function () {
+                                            self.hideLoading(true)
+                                            $('#tablaPrincipal').DataTable().draw(false)
+                                        })
+                                        return false
+                                    }
+                                },
+                                cancelar: {}
+                            },
+                            onContentReady: function () {
+                                const self = this
+                                self.$content.find('input[name=tracking]').inputmask();
+                                const value = data.direccion
+                                const year = parseInt(value.substring(value.length - 2, value.length))
+                                const currentyear = parseInt((new Date()).getFullYear().toString().substring(2, 4))
+                                if (!isNaN(year) && year > 19 && year <= currentyear) {
+                                    self.$content.find('input[name=tracking]').val(value.substring(value.length - 2, 0) + '-' + year)
+                                }
+                            }
+
+                        })
+                    })
                 },
                 columns: [
                     {
@@ -160,7 +231,7 @@
                     },
 
                     {
-                        data: 'direccion',
+                        data: 'direccion_format',
                         name: 'direccion',
                         render: function (data, type, row, meta) {
                             if (data != null) {
@@ -171,12 +242,12 @@
                         },
                     },
                     {
-                        data: 'referencia',
+                        data: 'referencia_format',
                         name: 'referencia',
                         sWidth: '10%'
                     },
                     {
-                        data: 'condicion_envio',
+                        data: 'condicion_envio_format',
                         name: 'condicion_envio',
                     },
                     {
@@ -387,7 +458,7 @@ ${data.condicion_envio_code == '{{\App\Models\Pedido::EN_TIENDA_AGENTE_OLVA_INT}
                                                     content: `YA REVISASTE SI VERDADERAMENTE EL SOBRE <b>${data.codigos}</b> NO A SIDO RECIBIDO`,
                                                     buttons: {
                                                         confirmar: {
-                                                            text:'Si, Confirmar',
+                                                            text: 'Si, Confirmar',
                                                             btnClass: 'btn-success',
                                                             action: function () {
                                                                 submitEvent()
@@ -405,13 +476,13 @@ ${data.condicion_envio_code == '{{\App\Models\Pedido::EN_TIENDA_AGENTE_OLVA_INT}
                                         },
                                     }
                                 });
-                            } else  if (dataForm.condicion_envio_code == '{{\App\Models\Pedido::ENTREGADO_PROVINCIA_INT}}') {
+                            } else if (dataForm.condicion_envio_code == '{{\App\Models\Pedido::ENTREGADO_PROVINCIA_INT}}') {
                                 $.confirm({
                                     title: '¡Confirmación!',
                                     content: `ESTAS SEGURO QUE EL SOBRE <b>${data.codigos}</b> A SIDO RECIVIDO POR EL CLIENTE`,
                                     buttons: {
                                         confirmar: {
-                                            text:'Si, Confirmar y finalizar',
+                                            text: 'Si, Confirmar y finalizar',
                                             btnClass: 'btn-success',
                                             action: function () {
                                                 submitEvent()

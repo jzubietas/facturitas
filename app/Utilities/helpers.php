@@ -177,8 +177,22 @@ if (!function_exists("pdf_to_image")) {
         $imagick->readImage($path);
         $imagick->trimImage(0.1);
         $imagick->setImageFormat('jpg');
-        $imagick->cropImage(538,569,20,30);
+        $imagick->cropImage(538, 569, 20, 30);
         //$imagick->writeImage(public_path('.tester.tmp'));
         return "data:image/png;base64," . base64_encode($imagick->getImageBlob());//file_get_contents(public_path('.tester.tmp')));
+    }
+}
+
+if (!function_exists("get_olva_tracking")) {
+    function get_olva_tracking($tracking, $year = 23)
+    {
+        $response = Http::acceptJson()
+            ->get('https://reports.olvaexpress.pe/webservice/rest/getTrackingInformation', [
+                'tracking' => $tracking,
+                'emision' => $year,
+                'apikey' => 'a82e5d192fae9bbfee43a964024498e87dfecb884b67c7e95865a3bb07b607dd',
+                'details' => 1
+            ]);
+        return $response->json();
     }
 }
