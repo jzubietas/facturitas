@@ -41,6 +41,7 @@ class CourierRegistrosController extends Controller
         $registro = CourierRegistro::create([
             'courier_registro' => $numregistro,
             'user_created'=>auth()->user()->id,
+            'status'=>"1"
         ]);
         $html="ok|0";
         return response()->json(['html' => $html]);
