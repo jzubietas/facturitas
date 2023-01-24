@@ -57,11 +57,13 @@ class ClienteController extends Controller
     {
         $data = Cliente::
             join('users as u', 'clientes.user_id', 'u.id')
-            ->leftjoin('pedidos as p', 'clientes.id', 'p.cliente_id')
+            //->leftjoin('pedidos as p', 'clientes.id', 'p.cliente_id')
             ->select([
                 'clientes.*'
             ])
             ->where('clientes.estado', '1')
+            ->whereNotNull('clientes.situacion')
+            ->whereNotIn('clientes.situacion',['BASE FRIA','ABANDONO','ABANDONO RECIENTE','BLOQUEADO'])
             ->where('clientes.tipo', '1');
 
 
@@ -88,7 +90,14 @@ class ClienteController extends Controller
             ->select([
                 'pedidos.*'
             ])
-            ->where('pedidos.estado', '1');
+            ->where("estado_sobre","1")
+            ->where('pedidos.cliente_id',$request->cliente_id)
+            ->where('pedidos.estado', '1')
+        ->whereIn('condicion_envio_code',
+            [Pedido::ENTREGADO_SIN_SOBRE_CLIENTE_INT,Pedido::ENTREGADO_SIN_ENVIO_CLIENTE,
+                Pedido::ENTREGADO_CLIENTE_INT,Pedido::RECEPCIONADO_OLVA,
+                Pedido::EN_CAMINO_OLVA,Pedido::EN_TIENDA_AGENTE_OLVA,Pedido::ENTREGADO_PROVINCIA
+                ]);
 
         return datatables()->query(DB::table($data))
         ->addIndexColumn()
@@ -96,7 +105,7 @@ class ClienteController extends Controller
                 return '<span class="badge badge-success">aa</span>';
             })
             ->addColumn('action', function ($row) {
-                return '<button class="btn btn-success">Elegir</button>';
+                return '<button class="btn btn-success elegir">Elegir</button>';
             })
             ->rawColumns(['action','estado'])
             ->toJson();

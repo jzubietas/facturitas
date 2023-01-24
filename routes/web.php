@@ -105,6 +105,8 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     Route::get('pedidos.recoger.clientes.pedidos', [ClienteController::class, 'pedidosclienteslistarecoger'])->name('pedidos.recoger.clientes.pedidos');
     Route::get('clientestablasituacion', [ClienteController::class, 'clientestablasituacion'])->name('clientestablasituacion');
 
+    Route::get('registros.asesor.lista', [EnvioController::class, 'registrosasesor'])->name('registros.asesor.lista');
+
     Route::get('clientes.abandonos', [ClienteController::class, 'indexabandono'])->name('clientes.abandonos');
 
     Route::get('clientes.abandonos.recientes', [ClienteController::class, 'indexRecientes'])->name('clientes.abandonos.recientes');
@@ -255,6 +257,9 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
 
     Route::post('envios.direccion', [EnvioController::class, 'DireccionEnvio'])->name('envios.direccion');
     Route::post('envios.desvincular', [SobreController::class, 'EnvioDesvincular'])->name('envios.desvincular');
+
+    Route::post('registrar_recojer_pedido', [SobreController::class, 'RegistrarRecojo'])->name('registrar_recojer_pedido');
+
     Route::get('envios.createdireccion/{pedido}', [EnvioController::class, 'createDireccion'])->name('envios.createdireccion');
     Route::post('envios.updatedireccion/{direccion}', [EnvioController::class, 'UpdateDireccionEnvio'])->name('envios.updatedireccion');
 
@@ -436,6 +441,7 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
 
     Route::get('pedidosgrupotabla', [SobreController::class, 'pedidosgrupotabla'])->name('cargar.pedidosgrupotabla');
     Route::post('sobres.desvinculargrupo', [SobreController::class, 'EnvioDesvincular'])->name('sobres.desvinculargrupo');
+    Route::post('relacionar_envio_courierregistro', [CourierRegistrosController::class, 'Relacionar'])->name('relacionar_envio_courierregistro');
     Route::get('sobreenvioshistorial', [SobreController::class, 'sobreenvioshistorial'])->name('sobreenvioshistorial');
     /*Controller Sobres*/
 

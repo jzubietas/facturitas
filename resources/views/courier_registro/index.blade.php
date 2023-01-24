@@ -1,6 +1,6 @@
 @extends('adminlte::page')
 
-@section('title', 'Administracion | Movimientos Bancarios')
+@section('title', 'Courier | Courier Registros')
 
 @section('content_header')
     <h1>Lista de Registros Courier
@@ -22,6 +22,7 @@
         </div>
 
         @include('courier_registro.modals.AddRegistro')
+        @include('courier_registro.modals.modal_registros_asesor')
     </h1>
     <br>
     <div class="d-flex justify-content-between align-items-center">
@@ -68,6 +69,7 @@
                     <th scope="col">Registro</th>
                     <th scope="col">Registrado</th>
                     <th scope="col">Actualizado</th>
+                    <th scope="col">Relacionado</th>
                     <th scope="col">Estado</th>
                     <th scope="col">Acciones</th>
                 </tr>
@@ -85,6 +87,10 @@
     <!--<link rel="stylesheet" href="../css/admin_custom.css">-->
     <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
     <style>
+        .content-header h1
+        {
+            font-size:1.0rem !important;
+        }
         .yellow {
             color: #fcd00e !important;
         }
@@ -202,6 +208,7 @@
     <script src="https://cdn.datatables.net/plug-ins/1.11.4/dataRender/datetime.js"></script>
 
     <script>
+        let tablaregistrosasesorLista=null;
 
         $(document).ready(function () {
 
@@ -210,6 +217,112 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             });
+
+            const configDataTableLanguages = {
+                language: {
+                    "decimal": "",
+                    "emptyTable": "No hay información",
+                    "info": "_START_ - _END_ / _TOTAL_",
+                    "infoEmpty": "0 Entradas",
+                    "infoFiltered": "(Filtrado de _MAX_ total entradas)",
+                    "infoPostFix": "",
+                    "thousands": ",",
+                    "lengthMenu": "Mostrar _MENU_ Entradas",
+                    "loadingRecords": "Cargando...",
+                    "processing": ``,
+                    "search": "Buscar:",
+                    "zeroRecords": "Sin resultados encontrados",
+                    "paginate": {
+                        "first": "Primero",
+                        "last": "Ultimo",
+                        "next": "Siguiente",
+                        "previous": "Anterior"
+                    }
+                },
+            }
+
+            $('#modal-relacionar-registro_courier').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget)
+                $("#courierreg").val(button.data('courierreg'));
+
+                $('#datatable-registros-asesor').DataTable().clear().destroy();
+
+                tablaregistrosasesorLista=$('#datatable-registros-asesor').DataTable({
+                    ...configDataTableLanguages,
+                    "dom": 'lrtip',
+                    processing: true,
+                    pagging: true,
+                    stateSave: true,
+                    serverSide: true,
+                    searching: true,
+                    "order": [[0, "desc"]],
+                    createdRow: function (row, data, dataIndex) {},
+                    ajax: {
+                        url: "{{ route('registros.asesor.lista') }}",
+                        data: function (d) {
+                            console.log(d);
+                            d.length=5;
+                        },
+                    },
+                    columns: [
+                        {data: 'id', name: 'id',},
+                        {data: 'direccion', name: 'direccion',},
+                        {data: 'referencia', name: 'referencia',},
+                        {data: 'creacion', name: 'creacion',},
+                        {data: 'importe', name: 'importe',},
+                        {data: 'action', name: 'action',},
+                    ],
+                });
+            });
+
+            $('#datatable-registros-asesor tbody').on( 'click', '.elegir', function () {
+                var data = tablaregistrosasesorLista.row( $(this).closest('tr') ).data()
+                let courierreg=$("#courierreg").val()
+                console.log("idenvio "+data.id)
+                let dataid=data.id
+                console.log("importe "+data.importe)
+                console.log("tracking "+data.direccion)
+                let aparicion = data.direccion.indexOf(',');
+                console.log(aparicion)
+                console.log("numregistro "+data.referencia)
+                console.log("fecha "+data.creacion)
+                if(aparicion!==-1){
+                    Swal.fire(
+                        'Envio contiene mas de un tracking',
+                        '',
+                        'warning'
+                    )
+                }else{
+                    Swal.fire({
+                        icon: 'warning',
+                        title: 'Advertencia',
+                        html: 'Esta seguro de realizar el math a este envio <b>'+data.correlativo+'</b>',
+                        showDenyButton: true,
+                        confirmButtonText: 'Estoy de acuerdo',
+                        denyButtonText: 'Cancelar',
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            var fd_courier = new FormData();
+                            fd_courier.append('courierregistro', courierreg);
+                            fd_courier.append('direcciongrupo', dataid);
+                            $.ajax({
+                                data: fd_courier,
+                                processData: false,
+                                contentType: false,
+                                type: 'POST',
+                                url: "{{ route('relacionar_envio_courierregistro') }}",
+                                success: function (data) {
+                                    console.log(data);
+                                    $("#modal-relacionar-registro_courier").modal("hide");
+                                    $("#datatable-registros-asesor").DataTable().ajax.reload();
+                                }
+                            });
+
+                        }
+                    });
+                }
+
+            } );
 
             $("#numregistro").bind('keypress', function (event) {
                 var regex = new RegExp("^[0-9]+$");
@@ -366,6 +479,10 @@
                     {
                         data: 'updated_at',
                         name: 'updated_at',
+                    },
+                    {
+                        data: 'relacionado',
+                        name: 'relacionado',
                     },
                     {
                         data: 'status',

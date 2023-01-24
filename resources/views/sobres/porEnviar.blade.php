@@ -1655,8 +1655,6 @@
                 });
             });
 
-            //datatable-clientes-lista-recojer
-
             const configDataTableLanguages = {
                 language: {
                     "decimal": "",
@@ -1682,22 +1680,11 @@
 
             tablaClienteLista = $('#datatable-clientes-lista-recojer').DataTable({
                 ...configDataTableLanguages,
-                processing: true,
-                stateSave: true,
-                serverSide: true,
-                searching: true,
-                "displayStart": 5,
-                "order": [[0, "desc"]],
-                createdRow: function (row, data, dataIndex) {
-                },
-                ajax: {
-                    url: "{{ route('pedidos.recoger.clientes') }}",
-                    data: function (d) {
-                        //d.opcion = 'anulado_courier';
-                    },
-                },
+                "bPaginate": false,
+                "bFilter": false,
+                "bInfo": false,
                 columns: [
-                    {data: 'id', name: 'id',},
+                    {data: 'id', name: 'id',"visible":false},
                     {data: 'user_id', name: 'user_id',},
                     {data: 'celular', name: 'celular',},
                     {data: 'action', name: 'action',},
@@ -1711,15 +1698,14 @@
                 "bInfo": false,
                 columns:
                     [
-                        {data: 'id', name: 'id',},
+                        {data: 'id', name: 'id',"visible":false},
                         {data: 'codigo', name: 'codigo',},
                         {data: 'condicion_envio', name: 'condicion_envio',},
                         {data: 'action', name: 'action',},
                     ],
             });
 
-
-            tablaPrincipal = $('#tablaPrincipal').DataTable({
+            tablaPrincipal=$('#tablaPrincipal').DataTable({
                 dom: 'Bfritp',
                 processing: true,
                 stateSave: true,
@@ -1841,21 +1827,43 @@
                 ],
             });
 
-            $('#datatable-clientes-lista-recojer').on('click', 'button.elegir', function () {
-                console.log("datatable-clientes-lista-recojer");
-                var data = tablaClienteLista.row($(this).parents('tr')).data();
+            $('#datatable-pedidos-lista-recojer tbody').on( 'click', 'button.elegir', function () {
+                var data = tablaPedidosLista.row( $(this).parents('tr') ).data();
                 console.log(data);
-                console.log("The ID is: " + data.id + " user id : " + data.user_id + " celular:" + data.celular + " action" + data.action);
-            });
+                $("span.nombre_cliente_recojo").html(data.nombre)
+                $("#recojo_pedido").val(data.id)
+                $("#recojo_pedido_codigo").val(data.codigo)
+                if(data.direccion_grupo==null)
+                $("#recojo_pedido_grupo").val ( ((data.direccion_grupo==null)? 'SIN GRUPO':data.direccion_grupo) )
+                $("span.destino_recojo").html(data.env_destino);
+                $("span.distrito_recojo").html(data.env_distrito);
+                $("span.direccion_recojo").html(data.env_direccion);
+            })
 
-            $('#modal-recoger-sobre').on('show.bs.modal', function (event) {
+            $('#datatable-clientes-lista-recojer tbody').on( 'click', 'button.elegir', function () {
+                var data = tablaClienteLista.row( $(this).parents('tr') ).data();
+                console.log(data);
+                console.log( "The ID is: "+ data.id +" user id : "+ data.user_id +" celular:"+ data.celular+" action" +  data.action );
+                //disparar la otra tabla
+                //pinto la clase span
+                $("span.nombre_cliente_recojo").html(data.nombre)
+                $("#recojo_cliente").val(data.id)
+                $("#recojo_cliente_name").val(data.nombre)
+
+                $("#recojo_pedido").val("")
+                $("#recojo_pedido_codigo").val("")
+                $("#recojo_pedido_grupo").val ("")
+
+                $("span.destino_recojo").html("");
+                $("span.distrito_recojo").html("");
+                $("span.direccion_recojo").html("");
 
                 $('#datatable-pedidos-lista-recojer').DataTable().clear().destroy();
 
-                /*tablaPedidosLista=$('#datatable-pedidos-lista-recojer').DataTable({
+                tablaPedidosLista = $('#datatable-pedidos-lista-recojer').DataTable({
                     ...configDataTableLanguages,
                     processing: true,
-                    stateSave: true,
+                    stateSave: false,
                     serverSide: true,
                     searching: true,
                     "order": [[0, "desc"]],
@@ -1863,28 +1871,87 @@
                     ajax: {
                         url: "{{ route('pedidos.recoger.clientes.pedidos') }}",
                         data: function (d) {
-                            //d.opcion = 'anulado_courier';
+                            d.length=5;
+                            d.cliente_id=data.id;
+                        },
+                    },
+                    columns:
+                        [
+                            {data: 'id', name: 'id',"visible":false},
+                            {data: 'codigo', name: 'codigo',},
+                            {data: 'condicion_envio', name: 'condicion_envio',},
+                            {data: 'action', name: 'action',},
+                        ],
+                });
+            } );
+
+            $(document).on("submit","#formrecojo",function(event) {
+                event.preventDefault();
+                let recojo_cliente = $("#recojo_cliente").val();
+                let recojo_pedido = $("#recojo_pedido").val();
+                let recojo_fecha = $("#recojo_fecha").val();
+                let recojo_descripcion = $("#recojo_descripcion").val();
+
+                var fd_courier = new FormData();
+                fd_courier.append('recojo_cliente', recojo_cliente);
+                fd_courier.append('recojo_pedido', recojo_pedido);
+                fd_courier.append('recojo_fecha', recojo_fecha);
+                fd_courier.append('recojo_descripcion', recojo_descripcion);
+                $.ajax({
+                    data: fd_courier,
+                    processData: false,
+                    contentType: false,
+                    type: 'POST',
+                    url: "{{ route('registrar_recojer_pedido') }}",
+                    success: function (data) {
+                    }
+                });
+            });
+
+            $('#modal-recoger-sobre').on('show.bs.modal', function (event) {
+
+                $("#recojo_cliente").val("")
+                $("#recojo_cliente_name").val("")
+                $("#recojo_pedido").val("")
+                $("#recojo_pedido_codigo").val("")
+                $("#recojo_pedido_grupo").val("")
+
+                $('#datatable-clientes-lista-recojer').DataTable().clear().destroy();
+
+                tablaClienteLista=$('#datatable-clientes-lista-recojer').DataTable({
+                    ...configDataTableLanguages,
+                    processing: true,
+                    stateSave: false,
+                    serverSide: true,
+                    searching: true,
+                    "order": [[0, "desc"]],
+                    createdRow: function (row, data, dataIndex) {},
+                    ajax: {
+                        url: "{{ route('pedidos.recoger.clientes') }}",
+                        data: function (d) {
+                            //d.length=5;
                         },
                     },
                     columns: [
-                        {data: 'id', name: 'id',},
-                        {data: 'codigo', name: 'codigo',},
-                        {data: 'condicion_envio', name: 'condicion_envio',},
+                        {data: 'id', name: 'id',"visible":false},
+                        {data: 'nombre', name: 'nombre',},
+                        {data: 'celular', name: 'celular',},
                         {data: 'action', name: 'action',},
                     ],
-                });*/
+                });
+
+
             });
 
             $('#tablaPrincipal tbody').on('click', 'button', function () {
                 var data = tablaPrincipal.row($(this).closest('tr')).data();
                 console.log("got the data"); //This alert is never reached
                 console.log(data)
-                console.log(data.id + "'id: " + data.cliente_id);
 
-                $('[data-jqconfirm]', row).click(function () {
+                /*$('[data-jqconfirm]', row).click(function () {
 
-                });
-            });
+                });*/
+            } );
 
 
         });
@@ -1911,7 +1978,6 @@
         /* Custom filtering function which will search data in column four between two values */
         $(document).ready(function () {
 
-
             /*$("#destino", this).on( 'keyup change', function () {
               if ( table.column(i).search() !== this.value ) {
                   table
@@ -1920,7 +1986,6 @@
                       .draw();
                 }*/
             //} );
-
 
         });
     </script>

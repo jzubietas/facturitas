@@ -16,6 +16,7 @@
                     <div class="card-body border border-secondary rounded">
                         <div class="row">
                             <div clas="col-12">
+
                                 <div class="table-responsive">
                                     <table id="datatable-clientes-lista-recojer"
                                            class="table table-striped table-bordered nowrap"
@@ -48,13 +49,13 @@
                     <div class="card-body border border-secondary rounded">
                         <div class="row">
                             <div clas="col-12">
+
                                 <div class="table-responsives">
                                     <table id="datatable-pedidos-lista-recojer" class="table table-striped" style="text-align: center;width:100%;">
                                         <thead>
-                                        <h4 style="text-align: center"><strong>Listado de pedidos del cliente seleccionado</strong></h4>
+                                        <h4 style="text-align: center"><strong>Listado de pedidos del cliente <span class="badge badge-success nombre_cliente_recojo"></span></strong></h4>
                                         <tr>
                                             <th scope="col">Item</th>
-                                            <th scope="col">Id</th>
                                             <th scope="col">Codigo</th>
                                             <th scope="col">Condicion</th>
                                             <th scope="col">Accion</th>
@@ -77,20 +78,70 @@
                     <img class="card-img-top d-none" src="..." alt="Image cap">
                     <div class="card-body border border-secondary rounded">
 
-                        <form id="forma" name="forma" role="form">
+                        <form id="formrecojo" name="formrecojo" role="form">
+
+                            <input type="hidden" id="recojo_cliente" name="recojo_cliente">
+                            <input type="hidden" id="recojo_pedido" name="recojo_pedido">
+
                             <div class="form-group">
-                                <label for="exampleFormControlInput1">Email address</label>
-                                <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="name@example.com">
+                                <label for="recojo_cliente_name">Cliente</label>
+                                <input type="text" class="form-control" id="recojo_cliente_name" placeholder="Cliente" readonly>
                             </div>
 
                             <div class="form-group">
-                                <label for="exampleFormControlTextarea1">Example textarea</label>
-                                <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                                <label for="recojo_pedido_codigo">Pedido</label>
+                                <input type="text" class="form-control" id="recojo_pedido_codigo" placeholder="Pedido" readonly>
                             </div>
 
-                            <button type="submit" class="btn btn-primary">Accion</button>
+                            <div class="form-group">
+                                <label for="recojo_pedido_grupo">Grupo</label>
+                                <input type="text" class="form-control" id="recojo_pedido_grupo" placeholder="Grupo" readonly>
+                            </div>
+
+                            <div class="form-group">
+                                {!! Form::label('recojo_fecha', 'Fecha de recojo') !!}
+                                {!! Form::dateTimeLocal('recojo_fecha', \Carbon\Carbon::now(), ['class' => 'form-control', 'id' => 'recojo_fecha']) !!}
+                            </div>
+
+                            <div class="form-group">
+                                <label for="recojo_descripcion">Descripcion</label>
+                                <textarea class="form-control" id="recojo_descripcion" rows="3"></textarea>
+                            </div>
+
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-primary">Registrar recojo</button>
+                            </div>
 
                         </form>
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col">
+                                        <span>Destino</span>
+                                    </div>
+                                    <div class="col">
+                                        <span class="destino_recojo"></span>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        <span>Distrito</span>
+                                    </div>
+                                    <div class="col">
+                                        <span class="distrito_recojo"></span>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        <span>Direccion</span>
+                                    </div>
+                                    <div class="col">
+                                        <span class="direccion_recojo"></span>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
 
                     </div>
                     <div class="card-footer">

@@ -535,7 +535,29 @@ class SobreController extends Controller
             DB::commit();
             return response()->json(['html' => $removePedidosIds]);
         }
-
+    }
+    public function RegistrarRecojo(Request $request)
+    {
+        //return $request->all();
+        $recojo_cliente = $request->recojo_cliente;
+        $recojo_pedido = $request->recojo_pedido;
+        $recojo_fecha = $request->recojo_fecha;
+        $recojo_descripcion = $request->recojo_descripcion;
+        $pedido=Pedido::where('estado_sobre',"1")->where("estado",1)->where("id",$recojo_pedido)->where("cliente_id",$recojo_cliente)->first();
+        if($pedido)
+        {
+            //mandar a sobre con direccion
+            $dg=DireccionGrupo::where('id',$pedido->direccion_grupo)->where("estado","1");
+            if($dg)
+            {
+                GrupoPedido::createGroupByPedido($pedido, true, true);
+                return response()->json(['html' => 1]);
+            }else{
+                return response()->json(['html' => 0]);
+            }
+        }else{
+            return response()->json(['html' => 0]);
+        }
     }
 
 
