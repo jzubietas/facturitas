@@ -234,7 +234,13 @@
                         method: 'POST',
                         success: function (data) {
                             let datas=data.html;
-                            if($datas==1){
+                            if(datas==2){
+                                Swal.fire(
+                                    'Error',
+                                    'Ocurrio un error',
+                                    'warning'
+                                )
+                            }else if(datas==1){
                                 Swal.fire(
                                     'Error',
                                     'Ya existe un registro con esta informacion',

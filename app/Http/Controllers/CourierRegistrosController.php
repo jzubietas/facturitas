@@ -47,16 +47,21 @@ class CourierRegistrosController extends Controller
     }
     public function validarregister(Request $request)
     {
-        $numregistro = $request->numregistro;
-        $count=CourierRegistro::where('courier_registro',$numregistro)->where('status','1')->count();
-        if($count)
-        {
-            if($count>0){
-                return response()->json(['html' => 1]);
-            }else{
-                return response()->json(['html' => 0]);
+        if($request->numregistro){
+            $numregistro = trim($request->numregistro);
+            $count=CourierRegistro::where('courier_registro',$numregistro)->where('status','1')->count();
+            if($count)
+            {
+                if($count>0){
+                    return response()->json(['html' => 1]);
+                }else{
+                    return response()->json(['html' => 0]);
+                }
             }
+        }else{
+            return response()->json(['html' => 2]);
         }
+
     }
 
 }
