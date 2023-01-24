@@ -595,7 +595,6 @@
                 }
             });
 
-
             $(".provincia").addClass("d-none");
             $(".lima").addClass("d-none");
 
