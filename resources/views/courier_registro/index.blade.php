@@ -5,8 +5,8 @@
 @section('content_header')
     <h1>Lista de Registros Courier
 
-        <a href="" data-target="#modal-addcourierregistro" data-toggle="modal">
-            <button class="btn btn-info btn-sm"><i class="fas fa-plus-circle"></i> Agregar</button>
+        <a href="" data-target="#modal-addcourierregistro" data-toggle="modal" data-backdrop="static">
+            <button class="btn btn-info btn-sm" ><i class="fas fa-plus-circle"></i> Agregar</button>
         </a>
         {{-- @endcan --}}
         {{-- @can('pagos.exportar')--}}
@@ -313,7 +313,7 @@
                     success: function (data) {
                         console.log("ejecutar pago");
                         $("#numregistro").html("");
-                        $("#modal-addcourierregistro").modal("hide");
+                        //$("#modal-addcourierregistro").modal("hide");
                         $('#tablaPrincipal').DataTable().ajax.reload();
                         Swal.fire(
                             'Registro correctamente ingresado',
