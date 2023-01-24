@@ -94,6 +94,23 @@
             <div class="card">
                 <div class="card-header">
                     <h3>
+                        Botones de accion
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <div class="form-group">
+                        <button class="btn btn-success" type="button" id="courierregistros">
+                            Banedja de Registros de Courier
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3>
                         Adjuntar imagenes para mostrar en ver deuda de cliente
                     </h3>
                 </div>
