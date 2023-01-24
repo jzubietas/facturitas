@@ -1650,8 +1650,6 @@
                 });
             });
 
-            //datatable-clientes-lista-recojer
-
             const configDataTableLanguages = {
                 language: {
                     "decimal": "",
@@ -1677,19 +1675,9 @@
 
             tablaClienteLista=$('#datatable-clientes-lista-recojer').DataTable({
                 ...configDataTableLanguages,
-                processing: true,
-                stateSave: true,
-                serverSide: true,
-                searching: true,
-                "displayStart": 5,
-                "order": [[0, "desc"]],
-                createdRow: function (row, data, dataIndex) {},
-                ajax: {
-                    url: "{{ route('pedidos.recoger.clientes') }}",
-                    data: function (d) {
-                        //d.opcion = 'anulado_courier';
-                    },
-                },
+                "bPaginate": false,
+                "bFilter": false,
+                "bInfo": false,
                 columns: [
                     {data: 'id', name: 'id',},
                     {data: 'user_id', name: 'user_id',},
@@ -1711,8 +1699,6 @@
                         {data: 'action', name: 'action',},
                     ],
             });
-
-
 
             tablaPrincipal=$('#tablaPrincipal').DataTable({
                 dom: 'Bfritp',
@@ -1836,18 +1822,29 @@
                 ],
             });
 
-            $('#datatable-clientes-lista-recojer').on( 'click', 'button.elegir', function () {
-                console.log("datatable-clientes-lista-recojer");
+            $('#datatable-pedidos-lista-recojer tbody').on( 'click', 'button.elegir', function () {
+                var data = tablaPedidosLista.row( $(this).parents('tr') ).data();
+                console.log(data);
+                $("span.nombre_cliente_recojo").html(data.nombre)
+                $("#recojo_pedido").val(data.id)
+                $("#recojo_pedido_codigo").val(data.codigo)
+                if(data.direccion_grupo==null)
+                $("#recojo_pedido_grupo").val ( ((data.direccion_grupo==null)? 'SIN GRUPO':data.direccion_grupo) )
+            })
+
+            $('#datatable-clientes-lista-recojer tbody').on( 'click', 'button.elegir', function () {
                 var data = tablaClienteLista.row( $(this).parents('tr') ).data();
                 console.log(data);
                 console.log( "The ID is: "+ data.id +" user id : "+ data.user_id +" celular:"+ data.celular+" action" +  data.action );
-            } );
-
-            $('#modal-recoger-sobre').on('show.bs.modal', function (event) {
+                //disparar la otra tabla
+                //pinto la clase span
+                $("span.nombre_cliente_recojo").html(data.nombre)
+                $("#recojo_cliente").val(data.id)
+                $("#recojo_cliente_name").val(data.nombre)
 
                 $('#datatable-pedidos-lista-recojer').DataTable().clear().destroy();
 
-                /*tablaPedidosLista=$('#datatable-pedidos-lista-recojer').DataTable({
+                tablaPedidosLista = $('#datatable-pedidos-lista-recojer').DataTable({
                     ...configDataTableLanguages,
                     processing: true,
                     stateSave: true,
@@ -1858,16 +1855,49 @@
                     ajax: {
                         url: "{{ route('pedidos.recoger.clientes.pedidos') }}",
                         data: function (d) {
-                            //d.opcion = 'anulado_courier';
+                            d.length=5;
+                            d.cliente_id=data.id;
+                        },
+                    },
+                    columns:
+                        [
+                            {data: 'id', name: 'id',},
+                            {data: 'codigo', name: 'codigo',},
+                            {data: 'condicion_envio', name: 'condicion_envio',},
+                            {data: 'action', name: 'action',},
+                        ],
+                });
+
+
+            } );
+
+            $('#modal-recoger-sobre').on('show.bs.modal', function (event) {
+
+                $('#datatable-clientes-lista-recojer').DataTable().clear().destroy();
+
+                tablaClienteLista=$('#datatable-clientes-lista-recojer').DataTable({
+                    ...configDataTableLanguages,
+                    processing: true,
+                    stateSave: true,
+                    serverSide: true,
+                    searching: true,
+                    "order": [[0, "desc"]],
+                    createdRow: function (row, data, dataIndex) {},
+                    ajax: {
+                        url: "{{ route('pedidos.recoger.clientes') }}",
+                        data: function (d) {
+                            d.length=5;
                         },
                     },
                     columns: [
                         {data: 'id', name: 'id',},
-                        {data: 'codigo', name: 'codigo',},
-                        {data: 'condicion_envio', name: 'condicion_envio',},
+                        {data: 'nombre', name: 'nombre',},
+                        {data: 'celular', name: 'celular',},
                         {data: 'action', name: 'action',},
                     ],
-                });*/
+                });
+
+
             });
 
             $('#tablaPrincipal tbody').on( 'click', 'button', function () {
@@ -1876,9 +1906,9 @@
                 console.log(data)
                 console.log( data.id +"'id: "+ data.cliente_id );
 
-                $('[data-jqconfirm]', row).click(function () {
+                /*$('[data-jqconfirm]', row).click(function () {
 
-                });
+                });*/
             } );
 
 
@@ -1906,7 +1936,6 @@
         /* Custom filtering function which will search data in column four between two values */
         $(document).ready(function () {
 
-
             /*$("#destino", this).on( 'keyup change', function () {
               if ( table.column(i).search() !== this.value ) {
                   table
@@ -1915,7 +1944,6 @@
                       .draw();
                 }*/
             //} );
-
 
         });
     </script>
