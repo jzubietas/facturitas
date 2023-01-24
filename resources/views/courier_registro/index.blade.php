@@ -220,7 +220,7 @@
                 }
             });
 
-            $(document).on("change keyup","#numregistro",function(){
+            $(document).on("keyup","#numregistro",function(){
                 let len=$(this).val().length;
                 let numregistro = $("#numregistro").val();
                 console.log(len);
