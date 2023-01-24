@@ -76,14 +76,22 @@ class SobreController extends Controller
                 DB::raw("concat(distrito,' - ',zona) as distritonam"),
                 'zona'
             ])->orderBy('distrito')->get();
-        //->pluck('zona', 'distrito');
+
+        $distritos_recojo = Distrito::whereIn('provincia', ['LIMA', 'CALLAO'])
+            ->where('estado', '1')
+            ->WhereNotIn('distrito', ['CHACLACAYO', 'CIENEGUILLA', 'LURIN', 'PACHACAMAC', 'PUCUSANA', 'PUNTA HERMOSA', 'PUNTA NEGRA', 'SAN BARTOLO', 'SANTA MARIA DEL MAR'])
+            ->select([
+                'distrito',
+                DB::raw("concat(distrito,' - ',zona) as distritonam"),
+                'zona'
+            ])->orderBy('distrito')->get();
 
         $departamento = Departamento::where('estado', "1")
             ->pluck('departamento', 'departamento');
 
         $superasesor = User::where('rol', 'Super asesor')->count();
 
-        return view('sobres.porEnviar', compact('superasesor', 'ver_botones_accion', 'distritos', 'departamento'));
+        return view('sobres.porEnviar', compact('superasesor', 'ver_botones_accion', 'distritos','distritos_recojo', 'departamento'));
     }
 
     public function Sobresporenviartabla(Request $request)
@@ -542,7 +550,11 @@ class SobreController extends Controller
         $recojo_cliente = $request->recojo_cliente;
         $recojo_pedido = $request->recojo_pedido;
         $recojo_fecha = $request->recojo_fecha;
-        $recojo_descripcion = $request->recojo_descripcion;
+        $recojo_pedido_quienrecibe_nombre = $request->recojo_pedido_quienrecibe_nombre;
+        $recojo_pedido_quienrecibe_celular = $request->recojo_pedido_quienrecibe_celular;
+        $recojo_pedido_direccion = $request->recojo_pedido_direccion;
+        $recojo_pedido_referencia = $request->recojo_pedido_referencia;
+        $recojo_pedido_observacion = $request->recojo_pedido_observacion;
         $pedido=Pedido::where('estado_sobre',"1")->where("estado",1)->where("id",$recojo_pedido)->where("cliente_id",$recojo_cliente)->first();
         if($pedido)
         {
