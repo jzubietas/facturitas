@@ -90,6 +90,7 @@ class ClienteController extends Controller
             ->select([
                 'pedidos.*'
             ])
+            ->where("estado_sobre","1")
             ->where('pedidos.cliente_id',$request->cliente_id)
             ->where('pedidos.estado', '1')
         ->whereIn('condicion_envio_code',

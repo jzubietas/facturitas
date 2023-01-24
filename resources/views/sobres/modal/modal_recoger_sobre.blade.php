@@ -83,7 +83,6 @@
                             <input type="hidden" id="recojo_cliente" name="recojo_cliente">
                             <input type="hidden" id="recojo_pedido" name="recojo_pedido">
 
-
                             <div class="form-group">
                                 <label for="recojo_cliente_name">Cliente</label>
                                 <input type="text" class="form-control" id="recojo_cliente_name" placeholder="Cliente" readonly>
@@ -112,9 +111,6 @@
                             <div class="form-group">
                                 <button type="submit" class="btn btn-primary">Registrar recojo</button>
                             </div>
-
-
-                            <!---->
 
                         </form>
                         <div class="card">
