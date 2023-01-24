@@ -13,7 +13,7 @@
             </button>
             <div class="dropdown-menu">
                 <a href="" data-target="#modal-exportar" data-toggle="modal" class="dropdown-item" target="blank_"><img
-                            src="{{ asset('imagenes/icon-excel.png') }}"> Excel</a>
+                        src="{{ asset('imagenes/icon-excel.png') }}"> Excel</a>
             </div>
         </div>
         @include('envios.motorizado.modal.exportar_motorizado', ['title' => 'Exportar Confirmar Motorizado', 'key' => '1'])
@@ -116,6 +116,63 @@
                             }
                         })
                     })
+                    $("[data-toggle=jqConfirm]", row).click(function () {
+                        const targetLink = $(this).data('target')
+                        const imagen1 = $(this).data('imagen1')
+                        const imagen2 = $(this).data('imagen2')
+                        const imagen3 = $(this).data('imagen3')
+                        $.confirm({
+                            title: 'Entregas de motorizado Confirmaciones',
+                            type: 'green',
+                            columnClass: 'xlarge',
+                            content: `<div class="p-4">
+<div class="row">
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4"><br>
+                            <p class="font-weight-bold">Foto de los sobres</p>
+                            ${imagen1 ? `<img class="foto1 w-100" src="${imagen1}" alt="FOTO 1">` : ''}
+                        </div>
+
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4"><br>
+                            <p class="font-weight-bold">Foto del domicilio</p>
+                            ${imagen2 ? `<img class="foto2 w-100" src="${imagen2}" alt="FOTO 2">` : ''}
+                        </div>
+
+                        <div class="col-lg-4 col-md-4 col-sm-4 col-xs-4"><br>
+                            <p class="font-weight-bold">Foto de quien recibe</p>
+                            ${imagen3 ? `<img class="foto3 w-100" src="${imagen3}" alt="FOTO 3">` : ''}
+                        </div>
+
+                        <div class="col-lg-12">
+                            <div style="font-size: 11px; background-color: #fdf69d; padding: 8px; margin-top: 16px;">
+                                Recordar como Jefe de Operaciones debes de ser estricto en la verificación de fotos del motorizado, los motorizados deben cumplir con enviar las fotos de manera correcta, si fuera reinsidente el Jefe courier tiene la obligación de llamar la atención al motorizado.
+                            </div>
+                        </div>
+
+                    </div>
+</div>`,
+                            buttons: {
+                                Cerrar: {
+                                    btnClass: 'btn-secondary'
+                                },
+                                confirmar: {
+                                    btnClass: 'btn-info',
+                                    action: function () {
+                                        const self=this
+                                        self.showLoading(true)
+                                        $.post(targetLink)
+                                            .done(function () {
+                                                self.close()
+                                            })
+                                            .always(function () {
+                                                self.showLoading(false)
+                                                $('#tablaPrincipal').DataTable().draw(false)
+                                            })
+                                        return false
+                                    }
+                                }
+                            }
+                        })
+                    })
                 },
                 columns: [
                     {
@@ -205,7 +262,7 @@
                 //adjunta dos fotos
                 var button = $(event.relatedTarget)
                 var idunico = button.data('entregar-confirm')//
-                //console.log(idunico);
+
                 var idcodigo = button.data('codigos')//
                 $(".textcode").html(idcodigo);
                 $("#hiddenMotorizadoEntregarConfirm").val(idunico)
@@ -218,10 +275,7 @@
 
                 $(".foto2").attr("src", foto2);
 
-
                 $(".foto3").attr("src", foto3);
-
-
             })
 
             $(document).on("submit", "#formulariomotorizadoentregarconfirm", function (evento) {
