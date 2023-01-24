@@ -5,7 +5,7 @@
 @section('content_header')
     <h1>Lista de Registros Courier
 
-        <a href="" data-target="#modal-add-movimientos" data-toggle="modal">
+        <a href="" data-target="#modal-addcourierregistro" data-toggle="modal">
             <button class="btn btn-info btn-sm"><i class="fas fa-plus-circle"></i> Agregar</button>
         </a>
         {{-- @endcan --}}
@@ -53,13 +53,7 @@
             </div>
 
         </div>
-        <div>
-            <div class="card bg-danger">
-                <div class="card-body">
-                    <h5>SIN CONCILIAR: <b>{{$movimientosSinConciliar}}</b></h5>
-                </div>
-            </div>
-        </div>
+
     </div>
 @stop
 
@@ -74,7 +68,6 @@
                     <th scope="col">Registro</th>
                     <th scope="col">Registrado</th>
                     <th scope="col">Actualizado</th>
-                    <th scope="col">Eliminado</th>
                     <th scope="col">Estado</th>
                     <th scope="col">Acciones</th>
                 </tr>
@@ -212,6 +205,21 @@
 
         $(document).ready(function () {
 
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+
+            $("#numregistro").bind('keypress', function (event) {
+                var regex = new RegExp("^[0-9]+$");
+                var key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
+                if (!regex.test(key)) {
+                    event.preventDefault();
+                    return false;
+                }
+            });
+
             $(document).on("click", "#registrar_registros", function (e) {
                 e.preventDefault();
 
@@ -226,233 +234,65 @@
                     return;
                 }
 
-               {
-                    $.ajax({
-                        //async:false,
-                        url: "{{ route('validar_repetido') }}",
-                        data: {"banco": banco, "tipo": tipotrans, "titulares": titular, "monto": monto, "fecha": fecha},
-                        method: 'POST',
-                        success: function (data) {
-                            console.log(data.html);
-                            var dataresponse = data.html.split("|");
-
-                            if (dataresponse[0] == "bloqueo") {
-                                let movim = dataresponse[1];
-                                if (movim < 10) {
-                                    movim = 'MOV000' + movim;
-                                } else if (movim < 100) {
-                                    movim = 'MOV00' + movim;
-                                } else if (movim < 1000) {
-                                    movim = 'MOV0' + movim;
-                                } else {
-                                    movim = 'MOV' + movim;
-                                }
-
-                                var htmlContent = "<input placeholder='text' class='swal2-input' id='swal-input1'>" +
-                                    "<input placeholder='link' class='swal2-input' id='swal-input2'>"
-
-                                Swal.fire({
-                                    title: "Deseas continuar con el registro?",
-                                    html: 'La misma informacion se encuentra registrado en el movimiento <b>' + movim + '</b>',
-                                    icon: 'warning',
-                                    showCancelButton: true,
-                                    confirmButtonColor: '#3085d6',
-                                    cancelButtonColor: '#d33',
-                                    confirmButtonText: 'Si, continuar!'
-                                }).then((result) => {
-                                    console.log(result);
-                                    if (result.value == true) {
-                                        //$("#formulario").trigger("submit");
-
-
-                                        $.ajax({
-                                            //async:false,
-                                            url: "{{ route('register_movimiento') }}",
-                                            data: {
-                                                "banco": banco,
-                                                "tipo": tipotrans,
-                                                "titulares": titular,
-                                                "monto": monto,
-                                                "fecha": fecha,
-                                                "descrip_otros": descrip_otros
-                                            },
-                                            method: 'POST',
-                                            success: function (data) {
-                                                console.log("ejecutar pago");
-                                                $("#monto").val("");
-                                                $("#fecha").val("");
-                                                $("#tipotransferencia").html("");
-                                                $("#tipotransferencia").selectpicker("refresh");
-                                                $('#tablaPrincipal').DataTable().ajax.reload();
-                                                $("#banco").trigger("change");
-                                                Swal.fire(
-                                                    'Pago registrado correctamente',
-                                                    '',
-                                                    'success'
-                                                )
-                                            }
-
-                                        });
-
-                                        //$("#registrar_movimientos").prop("")
-                                        //$("#registrar_movimientos").prop( "disabled", true );
-                                        //$("#modal-add-movimientos").modal("hide");
-
-                                    } else {
-                                        //$("#banco").val("").selectpicker('refresh');
-                                        //$("#tipotransferencia").val("").selectpicker('refresh');
-                                        $("#descrip_otros").val("").html("");
-                                        //$("#titulares").val("").selectpicker('refresh');
-                                        $("#monto").val("");
-                                        $("#fecha").val("");
-
-                                        //$("#modal-add-movimientos").modal("hide");
-                                    }
-                                })
-                            } else if (dataresponse[0] == "sigue") {
-                                $.ajax({
-                                    //async:false,
-                                    url: "{{ route('register_movimiento') }}",
-                                    data: {
-                                        "banco": banco,
-                                        "tipo": tipotrans,
-                                        "titulares": titular,
-                                        "monto": monto,
-                                        "fecha": fecha,
-                                        "descrip_otros": descrip_otros
-                                    },
-                                    method: 'POST',
-                                    success: function (data) {
-                                        console.log("ejecutar pago");
-                                        $("#monto").val("");
-                                        $("#fecha").val("");
-                                        $("#tipotransferencia").html("");
-                                        $("#tipotransferencia").selectpicker("refresh");
-                                        $('#tablaPrincipal').DataTable().ajax.reload();
-                                        $("#banco").trigger("change");
-                                        Swal.fire(
-                                            'Pago registrado correctamente',
-                                            '',
-                                            'success'
-                                        )
-                                    }
-
-                                });
-
-                                //$("#formulario").trigger("submit")
-                            }
-                        }
-                    });
-
-
-                }
-                // var oForm = $(this);
-                //var formId = oForm.attr("id");
-                //var firstValue = oForm.find("input").first().val();
-                //alert("Form '" + formId + " is being submitted, value of first input is: " + firstValue);
-                // Do stuff
-                //return false;
+                $.ajax({
+                    //async:false,
+                    url: "{{ route('register_courier_registros') }}",
+                    data: {
+                        "numregistro": numregistro
+                    },
+                    method: 'POST',
+                    success: function (data) {
+                        console.log("ejecutar pago");
+                        $("#numregistro").html("");
+                        $('#tablaPrincipal').DataTable().ajax.reload();
+                        Swal.fire(
+                            'Registro correctamente ingresado',
+                            '',
+                            'success'
+                        )
+                    }
+                });
             })
 
-            $("#tipotransferencia").html("");
-            $("#tipotransferencia").selectpicker("refresh");
+            $(document).on("submit","#formaddcourierregistro",function(event){
+                event.preventDefault();
+                let numregistro = $("#numregistro").val();
 
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                if (numregistro == '') {
+                    Swal.fire(
+                        'Error',
+                        'Ingrese un numero de registro valido',
+                        'warning'
+                    )
+                    return;
                 }
-            });
 
-            $(document).on("change", "#banco", function (event) {
-
-                console.log("banco change");
                 $.ajax({
-                    url: "{{ route('cargar.tipomovimiento') }}?banco=" + $(this).val(),
-                    method: 'GET',
+                    url: "{{ route('register_courier_registros') }}",
+                    data: {
+                        "numregistro": numregistro
+                    },
+                    method: 'POST',
                     success: function (data) {
-                        //carga ajax a combo
-                        $('#tipotransferencia').html(data.html);
-                        $("#tipotransferencia").selectpicker("refresh");
-                    }
-                });
-            });
-
-            $(".descrip_otros").hide();
-
-            $(document).on("change", "#tipotransferencia", function (event) {
-                if ($(this).val() == 'OTROS' || $(this).val() == 'YAPE' || $(this).val() == 'PAGO YAPE' || $(this).val() == 'ABON YAPE') {
-                    //$("#descrip_otros").prop("visibled",none);
-                    $(".descrip_otros").show();
-                } else {
-                    $(".descrip_otros").hide();
-                }
-            });
-
-            $(document).on("change", "#banco_movimientos", function (event) {
-
-                console.log("banco_movimientos change");
-                $.ajax({
-                    url: "{{ route('cargar.tipomovimiento') }}?banco=" + $(this).val(),
-                    method: 'GET',
-                    success: function (data) {
-                        //carga ajax a combo
-                        $('#tipo_movimientos').html(data.html);
-                        $("#tipo_movimientos").selectpicker("refresh");
+                        console.log("ejecutar pago");
+                        $("#numregistro").html("");
+                        $("#modal-addcourierregistro").modal("hide");
                         $('#tablaPrincipal').DataTable().ajax.reload();
+                        Swal.fire(
+                            'Registro correctamente ingresado',
+                            '',
+                            'success'
+                        )
                     }
                 });
             });
 
-            $(document).on("change", "#tipo_movimientos", function (event) {
-                $('#tablaPrincipal').DataTable().ajax.reload();
-            });
-            $(document).on("change", "#titular_movimientos", function (event) {
-                $('#tablaPrincipal').DataTable().ajax.reload();
+            $('#modal-addcourierregistro').on('show.bs.modal', function (event) {
+                $("#numregistro").val("");
             });
 
-
-            $(document).on("click", ".btn-navigate-titular", function () {
-                let titular__ = $(this).attr("titular");
-                console.log(titular__);
-                localStorage.setItem('titular', titular__);
-            });
-
-            $(document).on("click", ".btn-navigate-banco", function (e) {
-                //e.preventDefault();
-                let banco__ = $(this).attr("banco");
-                console.log(banco__);
-                localStorage.setItem('banco', banco__);
-                //return true;
-            });
-
-            $('#modal-add-movimientos').on('show.bs.modal', function (event) {
-                navigateToFormStep(1);
-                $("#registrar_movimientos").prop("disabled", false);
-            });
-
-            //para opcion eliminar  movimientos
-            $('#modal-delete').on('show.bs.modal', function (event) {
-                var button = $(event.relatedTarget)
-                var idunico = button.data('delete')
-                $("#hiddenIDdelete").val(idunico);
-                if (idunico < 10) {
-                    idunico = 'MOV000' + idunico;
-                } else if (idunico < 100) {
-                    idunico = 'MOV00' + idunico;
-                } else if (idunico < 1000) {
-                    idunico = 'MOV0' + idunico;
-                } else {
-                    idunico = 'MOV' + idunico;
-                }
-                $(".textcode").html(idunico);
-            });
-
-            //submit para form eliminar pago
             $(document).on("submit", "#formdelete", function (evento) {
                 evento.preventDefault();
-                console.log("validar delete");
-                clickformdelete();
-
             })
 
             $('#tablaPrincipal').DataTable({
@@ -462,131 +302,44 @@
                 searching: true,
                 "order": [[0, "desc"]],
                 ajax: {
-                    url: "{{ route('movimientostabla') }}",
+                    url: "{{ route('courierregistrotabla') }}",
                     data: function (d) {
-                        d.banco = $("#banco_movimientos").val();
-                        d.tipo = $("#tipo_movimientos").val();
-                        d.titular = $("#titular_movimientos").val();
+                        //d.banco = $("#banco_movimientos").val();
+                        //d.tipo = $("#tipo_movimientos").val();
+                        //d.titular = $("#titular_movimientos").val();
                     },
                 },
                 rowCallback: function (row, data, index) {
-                    //console.log(data.pago)
-                    if (data.pago == "SIN CONCILIAR") {
-                        $('td:eq(6)', row).css('color', 'red');
-                    }
                 },
                 initComplete: function (settings, json) {
-                    /*if (localStorage. getItem("search_tabla") === null) {
-                      //no existe
-                    }else{
-                      $('#tablaPrincipal_filter label input').val(localStorage.getItem("search_tabla") ).change();
-                    }*/
                 },
                 columns: [
                     {
                         data: 'id',
                         name: 'id',
-                        render: function (data, type, row, meta) {
-                            if (row.id < 10) {
-                                return 'MOV000' + row.id;
-                            } else if (row.id < 100) {
-                                return 'MOV00' + row.id;
-                            } else if (row.id < 1000) {
-                                return 'MOV0' + row.id;
-                            } else {
-                                return 'MOV' + row.id;
-                            }
-                        }
                     },
                     {
-                        data: 'id2',
-                        name: 'id2',
-                        "visible": false,
+                        data: 'courier_registro', name: 'courier_registro'
                     },
                     {
-                        data: 'banco', name: 'banco'
-                    },
-                    {//asesor
-                        data: 'titular',
-                        name: 'titular',
-                        render: function (data, type, row, meta) {
-                            if (data == 'EPIFANIO SOLANO HUAMAN') {
-                                data = 'EPIFANIO';
-                            } else if (data == 'NIKSER DENIS ORE RIVEROS') {
-                                data = 'DENIS';
-                            } else {
-                                data = '';
-                            }
-                            return data;
-                        }
+                        data: 'created_at',
+                        name: 'created_at',
+                        //render: $.fn.dataTable.render.moment('DD/MM/YYYY')
                     },
                     {
-                        data: 'fecha',
-                        name: 'fecha',
-                        render: $.fn.dataTable.render.moment('DD/MM/YYYY')
-                    },
-                    /*{
-                      data: 'fecha2',
-                      name: 'fecha2',"visible":false
-                      //render: $.fn.dataTable.render.moment( 'DD/MM/YYYY' )
-                    },*/
-                    {//observacion
-                        data: 'tipo',
-                        name: 'tipo',
-                        render: function (data, type, row, meta) {
-                            if (row.descripcion_otros == null) {
-                                return data;
-                            } else {
-                                return data + '<br>(' + row.descripcion_otros + ')';
-                            }
-                        }
-                    },
-
-                    {//cliente
-                        data: 'importe', name: 'importe'
+                        data: 'updated_at',
+                        name: 'updated_at',
                     },
                     {
-                        data: 'pago',
-                        name: 'pago',
-                        render: function (data, type, row, meta) {
-                            /*if(data==null || data==0 || data=='0')
-                            {
-                              return 'SIN CONCILIAR';
-                            }else{
-                              return "CONCILIADO";
-                            }*/
-                            return data;
-                        }
-                    },//estado de pago
+                        data: 'status',
+                        name: 'status',
+                    },
                     {
                         data: 'action',
                         name: 'action',
                         orderable: false,
                         searchable: false,
                         sWidth: '20%',
-                        render: function (data, type, row, meta) {
-                            var urlcreate = '{{ route("movimientos.show", ":id") }}';
-                            var urledit = '{{ route("movimientos.edit", ":id") }}';
-                            var urlshow = '{{ route("movimientos.show", ":id") }}';
-                            urlcreate = urlcreate.replace(':id', row.id);
-                            urledit = urledit.replace(':id', row.id);
-                            urlshow = urlshow.replace(':id', row.id);
-                            @can('movimientos.create')
-                                data = data + '<a href="' + urlcreate + '" class="btn btn-info btn-sm">Crear</a>';
-                            @endcan
-                                @can('movimientos.edit')
-                                data = data + '<a href="' + urledit + '" class="btn btn-info btn-sm">Editar</a>';
-                            @endcan
-
-                                data = data + '<a href="' + urlshow + '" class="btn btn-info btn-sm">Ver</a>';
-
-                            if (row.pago == 'SIN CONCILIAR') {
-                                //data = data+'<a href="" data-target="#modal-update" data-toggle="modal" data-update="'+row.id+'"><button class="btn btn-warning btn-sm"><i class="fas fa-trash-alt"></i> Editar</button></a><br><br>';
-                                data = data + '<a href="" data-target="#modal-delete" data-toggle="modal" data-delete="' + row.id + '"><button class="btn btn-danger btn-sm"><i class="fas fa-trash-alt"></i> Eliminar</button></a>';
-                            }
-
-                            return data;
-                        }
                     },
                 ],
                 language: {

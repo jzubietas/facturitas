@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ClienteController;
+use App\Http\Controllers\CourierRegistrosController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\Envios\DireccionGrupoController;
 use App\Http\Controllers\Envios\DistribucionController;
@@ -295,6 +296,8 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     Route::get('envios.enreparto', [EnvioController::class, 'Enviosenreparto'])->name('envios.enreparto');
     Route::get('envios.enrepartotabla', [EnvioController::class, 'Enviosenrepartotabla'])->name('envios.enrepartotabla');
 
+
+
     Route::get('envios.matchrotulos', [EnvioController::class, 'MatchRotulos'])->name('envios.matchrotulos');
     Route::get('envios.matchRotulostabla', [EnvioController::class, 'MatchRotulostabla'])->name('envios.matchRotulostabla');
 
@@ -496,6 +499,9 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
 
     Route::get('movimientos.actualiza', [MovimientoController::class, 'actualiza'])->name('movimientos.actualiza');
     Route::get('movimientostabla', [MovimientoController::class, 'indextabla'])->name('movimientostabla');//actualizado para serverside
+
+
+
     Route::get('movimientostablaconciliar', [MovimientoController::class, 'indextablaconciliar'])->name('movimientostablaconciliar');//actualizado para serverside
 
     Route::get('tipomovimiento', [MovimientoController::class, 'tipomovimiento'])->name('cargar.tipomovimiento');
@@ -504,6 +510,10 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     Route::post('envios.validacion_direccionenvio', [EnvioController::class, 'valida_direccionenvio'])->name('envios.validacion_direccionenvio');
 
     Route::post('register_movimiento', [MovimientoController::class, 'register'])->name('register_movimiento');
+
+    Route::get('courierregistro', [CourierRegistrosController::class, 'indexi'])->name('courierregistro');
+    Route::get('courierregistrotabla', [CourierRegistrosController::class, 'indextabla'])->name('courierregistrotabla');
+    Route::post('register_courier_registros', [CourierRegistrosController::class, 'register'])->name('register_courier_registros');
 
     Route::post('movimientodeleteRequest', [MovimientoController::class, 'destroyid'])->name('movimientodeleteRequest.post');
     /* Movimiento */
