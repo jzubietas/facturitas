@@ -78,10 +78,10 @@
                     <img class="card-img-top d-none" src="..." alt="Image cap">
                     <div class="card-body border border-secondary rounded">
 
-                        <form id="forma" name="forma" role="form">
+                        <form id="formrecojo" name="formrecojo" role="form">
 
-                            <input type="text" id="recojo_cliente" name="recojo_cliente">
-                            <input type="text" id="recojo_pedido" name="recojo_pedido">
+                            <input type="hidden" id="recojo_cliente" name="recojo_cliente">
+                            <input type="hidden" id="recojo_pedido" name="recojo_pedido">
 
 
                             <div class="form-group">
@@ -100,13 +100,52 @@
                             </div>
 
                             <div class="form-group">
-                                <label for="exampleFormControlTextarea1">Descripcion</label>
-                                <textarea class="form-control" id="recojo_" rows="3"></textarea>
+                                {!! Form::label('recojo_fecha', 'Fecha de recojo') !!}
+                                {!! Form::dateTimeLocal('recojo_fecha', \Carbon\Carbon::now(), ['class' => 'form-control', 'id' => 'recojo_fecha']) !!}
                             </div>
 
-                            <button type="submit" class="btn btn-primary">Registrar recojo</button>
+                            <div class="form-group">
+                                <label for="recojo_descripcion">Descripcion</label>
+                                <textarea class="form-control" id="recojo_descripcion" rows="3"></textarea>
+                            </div>
+
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-primary">Registrar recojo</button>
+                            </div>
+
+
+                            <!---->
 
                         </form>
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col">
+                                        <span>Destino</span>
+                                    </div>
+                                    <div class="col">
+                                        <span class="destino_recojo"></span>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        <span>Distrito</span>
+                                    </div>
+                                    <div class="col">
+                                        <span class="distrito_recojo"></span>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        <span>Direccion</span>
+                                    </div>
+                                    <div class="col">
+                                        <span class="direccion_recojo"></span>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
 
                     </div>
                     <div class="card-footer">

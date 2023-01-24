@@ -91,7 +91,12 @@ class ClienteController extends Controller
                 'pedidos.*'
             ])
             ->where('pedidos.cliente_id',$request->cliente_id)
-            ->where('pedidos.estado', '1');
+            ->where('pedidos.estado', '1')
+        ->whereIn('condicion_envio_code',
+            [Pedido::ENTREGADO_SIN_SOBRE_CLIENTE_INT,Pedido::ENTREGADO_SIN_ENVIO_CLIENTE,
+                Pedido::ENTREGADO_CLIENTE_INT,Pedido::RECEPCIONADO_OLVA,
+                Pedido::EN_CAMINO_OLVA,Pedido::EN_TIENDA_AGENTE_OLVA,Pedido::ENTREGADO_PROVINCIA
+                ]);
 
         return datatables()->query(DB::table($data))
         ->addIndexColumn()

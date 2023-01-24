@@ -257,6 +257,9 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
 
     Route::post('envios.direccion', [EnvioController::class, 'DireccionEnvio'])->name('envios.direccion');
     Route::post('envios.desvincular', [SobreController::class, 'EnvioDesvincular'])->name('envios.desvincular');
+
+    Route::post('registrar_recojer_pedido', [SobreController::class, 'RegistrarRecojo'])->name('registrar_recojer_pedido');
+
     Route::get('envios.createdireccion/{pedido}', [EnvioController::class, 'createDireccion'])->name('envios.createdireccion');
     Route::post('envios.updatedireccion/{direccion}', [EnvioController::class, 'UpdateDireccionEnvio'])->name('envios.updatedireccion');
 
