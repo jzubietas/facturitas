@@ -99,9 +99,9 @@
                 </div>
                 <div class="card-body">
                     <div class="form-group">
-                        <button class="btn btn-warning" type="button" id="courierregistros">
+                        <a href="{{ route("courierregistro") }}" class="btn btn-warning" type="button" id="courierregistros">
                             Bandeja de Registros de Courier
-                        </button>
+                        </a>
                     </div>
                 </div>
             </div>
