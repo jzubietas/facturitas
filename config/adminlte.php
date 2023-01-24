@@ -488,7 +488,7 @@ return [
                     'icon' => 'fas fa-check-circle',
                     'active' => ['enviados'],
                 ],
-                [
+                /*[
                     'text' => 'Courier',
                     'route' => 'courierregistro',
                     'can' => 'envios.seguimientoprovincia',
@@ -501,7 +501,7 @@ return [
                     'can' => 'envios.seguimientoprovincia',
                     'icon' => 'fas fa-check-circle',
                     'active' => ['enviados'],
-                ]
+                ]*/
             ],
         ],
 
