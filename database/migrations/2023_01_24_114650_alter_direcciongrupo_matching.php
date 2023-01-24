@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AlterCourierRegistros extends Migration
+class AlterDirecciongrupoMatching extends Migration
 {
     /**
      * Run the migrations.
@@ -14,10 +14,12 @@ class AlterCourierRegistros extends Migration
     public function up()
     {
         //
-        Schema::table('courier_registros',function (Blueprint $table){
-            if(!Schema::hasColumn('courier_registros','status')) {
-                $table->integer('status')->default('0')->after('deleted_at')->comment('es la columna para etiquetar status');
+        Schema::table('direccion_grupos',function (Blueprint $table){
+            if(!Schema::hasColumn('direccion_grupos','relacionado'))
+            {
+                $table->integer('relacionado')->default('0')->comment('es la columna para etiquetar relacionado con courier');
             }
+
         });
     }
 

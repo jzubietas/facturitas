@@ -3907,5 +3907,33 @@ class EnvioController extends Controller
 
     }
 
+    public function registrosasesor(Request $request)
+    {
+        $data = DireccionGrupo::
+            join('users as u', 'direccion_grupos.user_id', 'u.id')
+            //direccion,referencia,observacion
+            ->select([
+                'direccion_grupos.*',
+                Db::raw("date_format(direccion_grupos.created_at,'%d-%m-%Y') as creacion")
+            ])
+            ->where('direccion_grupos.estado', '1')
+            ->where('direccion_grupos.distribucion', 'OLVA')
+            ->whereIn('direccion_grupos.destino',['LIMA','PROVINCIA'])
+            ->where('direccion_grupos.direccion','<>','SIN TRACKING')
+            ->where('relacionado','0');
+
+        return datatables()->query(DB::table($data))//Datatables::of($data)
+        ->addIndexColumn()
+            ->editColumn('estado', function ($cliente) {
+                return '<span class="badge badge-success">aa</span>';
+            })
+            ->addColumn('action', function ($row) {
+                return '<button class="btn btn-success elegir">Elegir</button>';
+            })
+            ->rawColumns(['action','estado'])
+            ->toJson();
+
+    }
+
 
 }

@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\CourierRegistro;
+use App\Models\DireccionGrupo;
 use App\Models\MovimientoBancario;
+use App\Models\Pedido;
 use App\Models\User;
 use Carbon\Carbon;
 use DataTables;
@@ -12,7 +14,6 @@ use Illuminate\Support\Facades\DB;
 
 class CourierRegistrosController extends Controller
 {
-
     public function indexi()
     {
         $superasesor = User::where('rol', 'Super asesor')->count();
@@ -21,17 +22,45 @@ class CourierRegistrosController extends Controller
 
     public function indextabla(Request $request)
     {
-        $courier = CourierRegistro::where('id','<>', '0');
+        $courier = CourierRegistro::where('id','<>', '0')/*->where('relacionado','0')*/;
         return Datatables::of(DB::table($courier))
             ->addIndexColumn()
-            ->addColumn('estado', function($courier){
-                return '1';
+            ->editColumn('relacionado', function($courier){
+                if($courier->relacionado=='1')
+                {
+                    return '<span class="bagde bagde-success">Relacionado</span>';
+                }
+                return 'Sin relacionar';
+            })
+            ->editColumn('status', function($courier){
+                if($courier->status=='1')
+                {
+                    return '<span class="badge badge-warning">Activo</span>';
+                }
+                return 'Sin relacionar';
             })
             ->addColumn('action', function($courier){
                 $btn='';
+                $btn .= '<ul class="list-unstyled pl-0">';
+                if($courier->relacionado=="0")
+                {
+                    $btn .= '<li>
+                            <a href="" class="btn-sm text-warning" data-target="#modal-relacionar-registro_courier"
+                                data-toggle="modal" data-ide="' . $courier->id . '"
+                                data-status="' . $courier->status . '" data-relacionado="' . $courier->relacionado . '"
+                                data-courierreg="'.$courier->id.'">
+                                <i class="fas fa-envelope text-success"></i> Relacionar</a></li>
+                            </a>
+                        </li>';
+                }/*else{
+                    $btn .= '<li><span class="badge badge-success">Relacionado</span></li>
+                            </a>
+                        </li>';
+                }*/
+                $btn .= '</ul>';
                 return $btn;
             })
-            ->rawColumns(['action'])
+            ->rawColumns(['action','status','relacionado'])
             ->make(true);
     }
     public function register(Request $request)
@@ -61,6 +90,34 @@ class CourierRegistrosController extends Controller
             }
         }else{
             return response()->json(['html' => 2]);
+        }
+
+    }
+
+    public function Relacionar(Request $request)
+    {
+        $courierregistro = $request->courierregistro;
+        $env = $request->direcciongrupo;
+        if ($request->direcciongrupo && $request->courierregistro) {
+            $row_courierregistro = CourierRegistro::findOrFail($courierregistro);
+            $row_env=DireccionGrupo::findOrFail($env);
+            DB::beginTransaction();
+            $row_courierregistro->update([
+                "user_updated" => auth()->user()->id,
+                "relacionado" => "1",
+                "rel_direcciongrupo" => $row_env->id,
+                "rel_fechdp"=>$row_env->fecha,
+                "rel_importe"=>$row_env->importe,
+                "rel_tracking"=>$row_env->direccion,
+                "rel_userid"=>$row_env->user_id,
+                "rel_fecharel"=>now(),
+            ]);
+            $row_env->update(['relacionado'=>"1"]);
+            DB::commit();
+            return response()->json(['html' => $row_env->id]);
+        }
+        else{
+            return response()->json(['html' => 0]);
         }
 
     }
