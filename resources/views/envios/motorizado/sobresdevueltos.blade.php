@@ -292,6 +292,34 @@
                             }
                         })
                     })
+                    if (data.motorizado_status == {{\App\Models\Pedido::ESTADO_MOTORIZADO_OBSERVADO}}) {
+                        $('[data-toggle=jqconfirmmotorizado]', row).click(function () {
+                            const target=$(this).data('target')
+                            $.confirm({
+                                title: '¿Estas seguro de enviar a motorizado?',
+                                columnClass: 'large',
+                                content: `<div class="alert alert-warning">
+                                   <span> El Pedido <b>${data.codigo}</b> sera enviado a motorizado con la fecha actual para que pueda adjuntar las fotos</span>
+                                    </div>`,
+                                buttons: {
+                                    cancelar: {},
+                                    aceptar: {
+                                        btnClass: 'btn-info',
+                                        action: function () {
+                                            const self = this
+                                            self.showLoading(true)
+                                            $.post(target).done(function (data) {
+                                                self.close()
+                                            }).always(function () {
+                                                self.showLoading(false)
+                                                $(row).parents('table').DataTable().draw(false)
+                                            })
+                                        }
+                                    }
+                                }
+                            })
+                        })
+                    }
                 },
                 columns: [
                     {data: 'codigo', name: 'codigo',},

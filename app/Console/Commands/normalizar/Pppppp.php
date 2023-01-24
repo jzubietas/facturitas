@@ -39,6 +39,7 @@ class Pppppp extends Command
     public function handle()
     {
         $direcciongrupo = DireccionGrupo::query()->activo()->get();
+        $progress=$this->output->createProgressBar($direcciongrupo->count());
         foreach ($direcciongrupo as $grupo) {
             DireccionGrupo::restructurarCodigos($grupo);
             $data = [
@@ -48,7 +49,9 @@ class Pppppp extends Command
             ];
             //$grupo->update($data);
             $grupo->pedidos()->update($data);
+            $progress->advance();
         }
+        $progress->finish();
         return 0;
     }
 }
