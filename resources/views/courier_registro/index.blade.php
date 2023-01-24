@@ -220,6 +220,37 @@
                 }
             });
 
+            $(document).on("change keyup","#numregistro",function(){
+                let len=$(this).val().length;
+                let numregistro = $("#numregistro").val();
+                console.log(len);
+                if(len==12){
+                    //validar existente
+                    $.ajax({
+                        url: "{{ route('validar_register_courier_registros') }}",
+                        data: {
+                            "numregistro": numregistro
+                        },
+                        method: 'POST',
+                        success: function (data) {
+                            let datas=data.html;
+                            if($datas==1){
+                                Swal.fire(
+                                    'Error',
+                                    'Ya existe un registro con esta informacion',
+                                    'warning'
+                                )
+                                //bloquear form
+                                $('#addform').prop("disabled",true)
+                                return;
+                            }else{
+                                $('#addform').prop("disabled",false)
+                            }
+                        }
+                    });
+                }
+            });
+
             $(document).on("click", "#registrar_registros", function (e) {
                 e.preventDefault();
 

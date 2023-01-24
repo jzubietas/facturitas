@@ -45,5 +45,18 @@ class CourierRegistrosController extends Controller
         $html="ok|0";
         return response()->json(['html' => $html]);
     }
+    public function validarregister(Request $request)
+    {
+        $numregistro = $request->numregistro;
+        $count=CourierRegistro::where('courier_registro',$numregistro)->where('status','1')->count();
+        if($count)
+        {
+            if($count>0){
+                return response()->json(['html' => 1]);
+            }else{
+                return response()->json(['html' => 0]);
+            }
+        }
+    }
 
 }

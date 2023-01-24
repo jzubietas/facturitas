@@ -514,6 +514,7 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     Route::get('courierregistro', [CourierRegistrosController::class, 'indexi'])->name('courierregistro');
     Route::get('courierregistrotabla', [CourierRegistrosController::class, 'indextabla'])->name('courierregistrotabla');
     Route::post('register_courier_registros', [CourierRegistrosController::class, 'register'])->name('register_courier_registros');
+    Route::post('validar_register_courier_registros', [CourierRegistrosController::class, 'validarregister'])->name('validar_register_courier_registros');
 
     Route::post('movimientodeleteRequest', [MovimientoController::class, 'destroyid'])->name('movimientodeleteRequest.post');
     /* Movimiento */

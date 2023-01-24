@@ -41,7 +41,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary"  data-dismiss="modal">Cerrar</button>
-                    <button type="submit" class="btn btn-info">Confirmar</button>
+                    <button type="submit" class="btn btn-info" id="addform">Confirmar</button>
                 </div>
             {{ Form::Close() }}
         </div>
