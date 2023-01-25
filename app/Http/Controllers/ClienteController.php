@@ -7,6 +7,7 @@ namespace App\Http\Controllers;
 use App\Models\Cliente;
 use App\Models\CuentaBancaria;
 use App\Models\DetallePedido;
+use App\Models\DireccionEnvio;
 use App\Models\PagoPedido;
 use App\Models\Pedido;
 use App\Models\Porcentaje;
@@ -101,6 +102,29 @@ class ClienteController extends Controller
 
         return datatables()->query(DB::table($data))
         ->addIndexColumn()
+            ->editColumn('estado', function ($pedido) {
+                return '<span class="badge badge-success">aa</span>';
+            })
+            ->addColumn('action', function ($row) {
+                return '<button class="btn btn-success elegir">Elegir</button>';
+            })
+            ->rawColumns(['action','estado'])
+            ->toJson();
+
+    }
+
+    public function historialrecoger(Request $request)
+    {
+        $data = DireccionEnvio::
+            select([
+                'direccion_envios.*'
+            ])
+            ->where('direccion_envios.cliente_id',$request->cliente_id)
+            ->where('direccion_envios.salvado','1')
+            ->where("direccion_envios.estado","1");
+
+        return datatables()->query(DB::table($data))
+            ->addIndexColumn()
             ->editColumn('estado', function ($pedido) {
                 return '<span class="badge badge-success">aa</span>';
             })
