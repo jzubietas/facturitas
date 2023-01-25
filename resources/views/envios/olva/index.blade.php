@@ -91,10 +91,11 @@
                 },
                 rowCallback: function (row, data, index) {
                     $('[data-jqconfirm="notificado"]', row).click(function () {
+                        const form_action = $(this).data('action')
                         $.dialog({
                             columnClass: 'large',
-                            type:'green',
-                            title:'Notificado',
+                            type: 'green',
+                            title: 'Notificado',
                             content: `
 <div class="p-3">
 <div class="row">
@@ -161,7 +162,25 @@
                                     self.close()
                                 })
                                 this.$content.find('button.btn-ok').click(function () {
-                                    dataForm.condicion_envio_code = self.$content.find('select.select_subcondicion_envio').val()
+                                    const fd = new FormData()
+                                    fd.append('file', dataForm.file, dataForm.file.name)
+                                    self.showLoading(true)
+                                    $.ajax({
+                                        url: form_action,
+                                        data: fd,
+                                        processData: false,
+                                        contentType: false,
+                                        type: 'POST',
+                                    }).done(function (r) {
+                                        self.close()
+                                        if (!r.success) {
+                                            $.alert('Ya se a ingresado una imagen para el dia de hoy')
+                                        }
+
+                                    }).always(function () {
+                                        self.hideLoading(true)
+                                        $('#tablaPrincipal').DataTable().draw(false)
+                                    })
                                 })
                             },
                             onDestroy: function () {

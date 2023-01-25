@@ -60,6 +60,7 @@ class SyncOlvaJob implements ShouldQueue
                         'courier_estado' => $estado,
                         'courier_data' => $result,
                         'courier_failed_sync_at' => null,
+                        'add_screenshot_at' => null,
                     ]);
                     foreach ($direccionGrupo->pedidos as $pedido) {
                         $pedido->update([

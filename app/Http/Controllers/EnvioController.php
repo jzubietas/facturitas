@@ -1656,7 +1656,8 @@ class EnvioController extends Controller
             }
             $grupo->update([
                 'direccion' => trim($request->tracking),
-                'referencia' =>  trim($request->numregistro)
+                'referencia' =>  trim($request->numregistro),
+                'courier_failed_sync_at'=>null
             ]);
             $grupo->pedidos()->update([
                 'env_tracking' => trim($request->tracking),

@@ -7,14 +7,14 @@ use App\Models\DireccionGrupo;
 use App\Models\Pedido;
 use Illuminate\Console\Command;
 
-class OlvaSync extends Command
+class ResetSendScreenEncargadoOlvaSync extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'olva:sync';
+    protected $signature = 'olva:encargado:tienda_reset';
 
     /**
      * The console command description.
@@ -40,10 +40,13 @@ class OlvaSync extends Command
      */
     public function handle()
     {
-        $grupos = DireccionGrupo::query()->inOlva()->whereNull('courier_failed_sync_at')->get();
-        foreach ($grupos as $grupo) {
-            SyncOlvaJob::dispatch($grupo->id)->onQueue('olva');
-        }
+        $grupos = DireccionGrupo::query()
+            ->activo()
+            ->where('condicion_envio_code', Pedido::EN_TIENDA_AGENTE_OLVA_INT)
+            ->whereNotNull('add_screenshot_at')
+            ->update([
+                'add_screenshot_at' => null
+            ]);
 
         return 0;
     }

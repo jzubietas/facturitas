@@ -86,14 +86,16 @@ class OlvaController extends Controller
             ->whereNull('direccion_grupos.courier_failed_sync_at')
             ->where('direccion_grupos.distribucion', 'OLVA')
             ->where('direccion_grupos.motorizado_status', '0')
+            ->whereNull('direccion_grupos.add_screenshot_at')
             ->select([
                 'direccion_grupos.*',
                 "clientes.celular as cliente_celular",
                 "clientes.nombre as cliente_nombre",
             ]);
 
-        add_query_filtros_por_roles_pedidos($pedidos_provincia,'users.identificador');
-        return datatables()->query(    DB::table($pedidos_provincia)
+        add_query_filtros_por_roles_pedidos($pedidos_provincia, 'users.identificador');
+
+        return datatables()->query(DB::table($pedidos_provincia)
             ->orderByDesc('courier_failed_sync_at')
             ->orderByDesc('id'))
             ->addIndexColumn()
@@ -131,7 +133,7 @@ class OlvaController extends Controller
                 return $html;
             })
             ->addColumn('action', function ($pedido) {
-                return '<button data-jqconfirm="notificado" class="btn btn-warning">Notificado</button>';
+                return '<button data-action="' . route('envios.olva.store', $pedido->id) . '" data-jqconfirm="notificado" class="btn btn-warning">Notificado</button>';
             })
             ->rawColumns(['action', 'referencia_format', 'condicion_envio_format', 'direccion_format'])
             ->make(true);
@@ -140,18 +142,39 @@ class OlvaController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, DireccionGrupo $grupo)
     {
-        //
+        $this->validate($request, [
+            'file' => 'required|file'
+        ]);
+        if ($grupo->add_screenshot_at == null) {
+            $file = $request->file('file');
+            $grupo->addMedia($file)
+                ->usingFileName(\Str::random(5) . '_' . $file->getClientOriginalName())
+                ->toMediaCollection('tienda_olva_notificado');
+
+            $grupo->update([
+                'add_screenshot_at' => now()
+            ]);
+        } else {
+            return response()->json([
+                'data' => $grupo,
+                'success' => false
+            ]);
+        }
+        return response()->json([
+            'data' => $grupo,
+            'success' => true
+        ]);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -162,7 +185,7 @@ class OlvaController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -173,8 +196,8 @@ class OlvaController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -185,7 +208,7 @@ class OlvaController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)

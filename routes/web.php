@@ -306,6 +306,7 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     Route::post('envios.seguimientoprovincia.update', [EnvioController::class, 'SeguimientoprovinciaUpdate'])->name('envios.seguimientoprovincia.update');
 
     Route::get('envios/olva', [OlvaController::class, 'index'])->name('envios.olva.index');
+    Route::post('envios/olva/{grupo}', [OlvaController::class, 'store'])->name('envios.olva.store');
     Route::get('envios/olva/datatable', [OlvaController::class, 'table'])->name('envios.olva.table');
 
     Route::get('envios.entregados', [EnvioController::class, 'Entregados'])->name('envios.entregados');
