@@ -92,6 +92,7 @@ class OlvaController extends Controller
                 "clientes.nombre as cliente_nombre",
             ]);
 
+        add_query_filtros_por_roles_pedidos($pedidos_provincia,'users.identificador');
         return datatables()->query(    DB::table($pedidos_provincia)
             ->orderByDesc('courier_failed_sync_at')
             ->orderByDesc('id'))
