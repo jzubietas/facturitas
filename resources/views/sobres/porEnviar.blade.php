@@ -106,10 +106,6 @@
             -webkit-text-stroke-color: #ffffff;
         }
 
-        .dataTables_filter{
-            float: left !important;
-        }
-
         .t-shadow-halftone2 {
             position: relative;
         }
@@ -496,7 +492,7 @@
             });
 
             $('#recojo_pedido_direccion,#recojo_pedido_referencia,#recojo_pedido_observacion').on('input', function () {
-                this.value = this.value.replace(/[^0-9 -a-zA-Z]/g, '');
+                this.value = this.value.replace(/[^0-9 a-zA-Z]/g, '');
             });
 
             $("#direccion", '#referencia', '#observacion').bind('keypress', function (event) {
@@ -1970,6 +1966,14 @@
                 $("#recojo_pedido").val("")
                 $("#recojo_pedido_codigo").val("")
                 $("#recojo_pedido_grupo").val("")
+                $("#distrito_recoger").val("").selectpicker("refresh")
+                $("#recojo_pedido_direccion").val("")
+                $("#recojo_pedido_quienrecibe_nombre").val("")
+                $("#recojo_pedido_quienrecibe_celular").val("")
+                $("#recojo_pedido_direccion").val("")
+                $("#recojo_pedido_referencia").val("")
+                $("#recojo_pedido_observacion").val("")
+
 
                 $('#datatable-clientes-lista-recojer').DataTable().clear().destroy();
 

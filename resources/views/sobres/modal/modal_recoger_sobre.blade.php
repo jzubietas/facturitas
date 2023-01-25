@@ -136,17 +136,17 @@
 
                                         <div class="form-group col-md-12">
                                             <label for="recojo_pedido_direccion">Direccion</label>
-                                            <input required type="text" class="form-control" id="recojo_pedido_direccion" placeholder="Direccion" >
+                                            <input required type="text" class="form-control" id="recojo_pedido_direccion" placeholder="Direccion" autocomplete="off">
                                         </div>
 
                                         <div class="form-group col-md-12">
                                             <label for="recojo_pedido_referencia">Referencia</label>
-                                            <input type="text" class="form-control" id="recojo_pedido_referencia" placeholder="Referencia" >
+                                            <input type="text" class="form-control" id="recojo_pedido_referencia" placeholder="Referencia" autocomplete="off">
                                         </div>
 
                                         <div class="form-group col-md-12">
                                             <label for="recojo_pedido_observacion">Observacion</label>
-                                            <input type="text" class="form-control" id="recojo_pedido_observacion" placeholder="Observacion" >
+                                            <input type="text" class="form-control" id="recojo_pedido_observacion" placeholder="Observacion" autocomplete="off">
                                         </div>
 
                                     </div>
