@@ -563,12 +563,21 @@ class SobreController extends Controller
             $dg=DireccionGrupo::where('id',$pedido->direccion_grupo)->where("estado","1");
             if($dg)
             {
-                //*cambio destino del pedido*/
-                //registro movimientos
                 PedidoMovimientoEstado::create([
-                    'pedido' => $request->hiddenEnvio,
+                    'pedido' => $recojo_pedido,
                     'condicion_envio_code' => Pedido::RECEPCION_COURIER_INT,
-                    'notificado' => 0
+                    'notificado' => 0,
+                    'json_envio'=>json_encode(array(
+                        "recojo"=>true,
+                        "recojo_cliente"=> $recojo_cliente,
+                        "recojo_pedido"=>$recojo_pedido,
+                        "recojo_fecha"=>$recojo_fecha,
+                        "recojo_pedido_quienrecibe_nombre"=>$recojo_pedido_quienrecibe_nombre,
+                        "recojo_pedido_quienrecibe_celular"=>$recojo_pedido_quienrecibe_celular,
+                        "recojo_pedido_direccion"=>$recojo_pedido_direccion,
+                        "recojo_pedido_referencia"=>$recojo_pedido_referencia,
+                        "recojo_pedido_observacion"=>$recojo_pedido_observacion,
+                    ))
                 ]);
 
                 GrupoPedido::createGroupByPedido($pedido, true, true);
