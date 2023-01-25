@@ -32,7 +32,7 @@ class Kernel extends ConsoleKernel
         $schedule->command('backup:database')
             ->dailyAt('13:15');
 
-        $schedule->command('motorizado:auto-no-recibido',[
+        $schedule->command('motorizado:auto-no-recibido', [
             '--all',
         ])
             ->dailyAt('15:00');
@@ -42,6 +42,9 @@ class Kernel extends ConsoleKernel
 
         $schedule->command('olva:sync')
             ->dailyAt('20:00');
+
+        $schedule->command('olva:move-tienda-agente')
+            ->dailyAt('00:00');
 
     }
 
