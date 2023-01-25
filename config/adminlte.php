@@ -488,6 +488,13 @@ return [
                     'icon' => 'fas fa-check-circle',
                     'active' => ['enviados'],
                 ],
+                [
+                    'text' => 'Encargado Tienda/Agente',
+                    'route' => 'envios.olva.index',
+                    'can' => 'envios.encargado.tienda_agente',
+                    'icon' => 'fas fa-check-circle',
+                    'active' => ['enviados'],
+                ],
                 /*[
                     'text' => 'Courier',
                     'route' => 'courierregistro',

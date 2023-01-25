@@ -3,7 +3,7 @@
 @section('title', 'Lista de pedidos por enviar')
 
 @section('content_header')
-    <h1>Lista de SEGUIMIENTO A PROVINCIA</h1>
+    <h1>Lista de Envios en TIENDA/AGENTE para el encargado</h1>
     @if($superasesor > 0)
         <br>
         <div class="bg-4">
