@@ -24,8 +24,8 @@ class CourierRegistrosController extends Controller
         $courier = CourierRegistro::where('id','<>', '0')
             ->select([
                 'courier_registros.*',
-                DB::raw("(select a.referencia from direccion_grupos a where a.referencia is not null and a.referencia<>'' and  courier_registros.courier_registro=a.referencia and a.courier_failed_sync_at is null) as permitir"),
-                DB::raw("(select a.correlativo from direccion_grupos a where a.referencia is not null and a.referencia<>'' and  courier_registros.courier_registro=a.referencia and a.courier_failed_sync_at is null) as direcciongrupo_correlativo")
+                DB::raw("(select a.referencia from direccion_grupos a where a.estado=1 and a.referencia is not null and a.referencia<>'' and  courier_registros.courier_registro=a.referencia and a.courier_failed_sync_at is null limit 1) as permitir"),
+                DB::raw("(select a.correlativo from direccion_grupos a where a.estado=1 and a.referencia is not null and a.referencia<>'' and  courier_registros.courier_registro=a.referencia and a.courier_failed_sync_at is null limit 1) as direcciongrupo_correlativo")
         ])
         /*->where('relacionado','0')*/;
         return Datatables::of(DB::table($courier))
