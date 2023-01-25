@@ -63,6 +63,7 @@
             @include('sobres.modal.historialLima')
             @include('sobres.modal.historialProvincia')
             @include('sobres.modal.modal_recoger_sobre')
+            @include('sobres.modal.historialenvio')
 
         </div>
     </div>
@@ -188,29 +189,30 @@
         src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.7/jquery.inputmask.min.js"></script>
 
     <script>
-        var tablehistoricolima = null;
-        tablehistoricolima = $('#tablaHistorialLima').DataTable({
-            "bPaginate": false, "bFilter": false, "bInfo": false, "length": 3,
-            columns:
-                [
-                    {data: 'nombre'},
-                    {data: 'recibe'},
-                    {data: 'direccion'},
-                    {data: 'referencia'},
-                    {data: 'distrito'},
-                    {data: 'observacion'},
-                    {data: null},
-                ],
-        });
 
-        var tablehistoricoprovincia = null;
-        tablehistoricoprovincia = $('#tablaHistorialProvincia').DataTable({
-            "bPaginate": false, "bFilter": false, "bInfo": false, "length": 3,
-            columns:
-                [
-                    {data: 'id'}, {data: 'tracking'}, {data: 'numregistro'}, {data: null},
-                ],
-        });
+
+        const configDataTableLanguages = {
+            language: {
+                "decimal": "",
+                "emptyTable": "No hay información",
+                "info": "_START_ - _END_ / _TOTAL_",
+                "infoEmpty": "0 Entradas",
+                "infoFiltered": "(Filtrado de _MAX_ total entradas)",
+                "infoPostFix": "",
+                "thousands": ",",
+                "lengthMenu": "Mostrar _MENU_ Entradas",
+                "loadingRecords": "Cargando...",
+                "processing": ``,
+                "search": "Buscar:",
+                "zeroRecords": "Sin resultados encontrados",
+                "paginate": {
+                    "first": "Primero",
+                    "last": "Ultimo",
+                    "next": "Siguiente",
+                    "previous": "Anterior"
+                }
+            },
+        }
 
         var myState = {
             pdf: null,
@@ -224,63 +226,12 @@
 
     </script>
 
-
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+    <script src="{{ asset("js/sobres.porenviar.js") }}"></script>
 
     <script>
         $(document).ready(function () {
-
-            //.val('test2').trigger('change');
-
-            /*$(document).on("click","#saveHistoricoLima",function(){
-
-              let cliente=$("#cliente_id").val();
-              let nombre=$("#nombre").val();
-              let celular=$("#celular").val();
-              let direccion=$("#direccion").val();
-              let referencia=$("#referencia").val();
-              let distrito=$("#distrito").val();
-              let observacion=$("#observacion").val();
-              var fd2=new FormData();
-
-              $.ajax({
-                  data: fd2,
-                  processData: false,
-                  contentType: false,
-                  type: 'POST',
-                  url:"{{ route('envios.direccion') }}",
-          success:function(data)
-          {
-            console.log(data);
-            $("#modal-direccion").modal("hide");
-            $("#tablaPrincipal").DataTable().ajax.reload();
-          }
-        });
-
-    });*/
-
-            /*$(document).on("click","#saveHistoricoProvincia",function(){
-
-              var fd2=new FormData();
-              let cliente=$("#cliente_id").val();
-              let tracking=$("#tracking").val();
-              let numregistro=$("#numregistro").val();
-              $.ajax({
-                  data: fd2,
-                  processData: false,
-                  contentType: false,
-                  type: 'POST',
-                  url:"{{ route('envios.direccion') }}",
-          success:function(data)
-          {
-            console.log(data);
-            $("#modal-direccion").modal("hide");
-            $("#tablaPrincipal").DataTable().ajax.reload();
-
-          }
-        });
-
-    });*/
 
             $(document).on("click", "#go_previous", function (e) {
                 e.preventDefault();
@@ -350,9 +301,17 @@
 
     <script>
         let tablaPrincipal = null;
-        let tablaClienteLista = null;
-        let tablaPedidosLista = null;
+
         $(document).ready(function () {
+
+            window.limpiar_campos_historico_recojo = function ()
+            {
+                $("#recojo_pedido_quienrecibe_nombre").val("");
+                $("#recojo_pedido_quienrecibe_celular").val("");
+                $("#recojo_pedido_direccion").val("");
+                $("#recojo_pedido_referencia").val("");
+                $("#recojo_pedido_observacion").val("");
+            }
 
             $(document).on("click", "#change_imagen", function () {
                 var fd2 = new FormData();
@@ -404,35 +363,6 @@
                 }, 50)
 
                 console.log(file);
-                /*var reader = new FileReader();
-                reader.onload = (event) => {
-                    pdfjsLib.getDocument(event.target.result).then((pdf) => {
-                        $("#my_pdf_viewer").removeClass("d-none");
-                        //cargar frame
-                        myState.pdf = pdf;
-                        render();
-                        thePDF = pdf;
-                        numPages = pdf.numPages;
-                        myState.currentPage = 1;
-                        $("#current_page").val(myState.currentPage)
-                        pdf.getPage(1).then(handlePages);
-
-                        if (myState.currentPage == myState.pdf._pdfInfo.numPages) {
-
-                            $("#go_next").addClass("d-none");
-                            $("#go_previous").addClass("d-none");
-                            $("#current_page").addClass("d-none");
-                        } else {
-                            $("#go_next").removeClass("d-none");
-                            $("#go_previous").removeClass("d-none");
-                            $("#current_page").removeClass("d-none");
-                        }
-
-
-                    });
-
-                };
-                reader.readAsDataURL(file);*/
             });
 
             window.render = function () {
@@ -441,14 +371,10 @@
 
                     var ctx = canvas.getContext('2d');
                     var viewport = page.getViewport(1);
-                    canvas.width = viewport.width;//viewport.width;
-                    canvas.height = viewport.height;//viewport.height;
-
-                    //canvas.width  = 100%;
-                    //canvas.height = 400;
+                    canvas.width = viewport.width;
+                    canvas.height = viewport.height;
                     canvas.style.width = '100%';
                     canvas.style.height = '100%';
-
                     page.render({
                         canvasContext: ctx,
                         viewport: viewport
@@ -459,20 +385,16 @@
 
             window.handlePages = function (page) {
                 var viewport = page.getViewport(1);
-                //We'll create a canvas for each page to draw it on
                 var canvas = document.createElement("canvas");
                 canvas.style.display = "block";
                 var context = canvas.getContext('2d');
                 canvas.height = viewport.height;
                 canvas.width = viewport.width;
 
-                //Draw it on the canvas
                 page.render({canvasContext: context, viewport: viewport});
 
-                //Add it to the web page
                 document.body.appendChild(canvas);
 
-                //Move to next page
                 currPage++;
                 if (thePDF !== null && currPage <= numPages) {
                     thePDF.getPage(currPage).then(handlePages);
@@ -507,15 +429,6 @@
             $(document).on('change keyup', "#tracking, #numregistro", function (event) {
 
                 let id_element = event.target.id;
-                /*if(isNaN(parseInt(event.target.value))||parseInt(event.target.value)!=event.target.value){
-                    Swal.fire(
-                        'Error',
-                        `El codigo ${event.target.value} no tiene el formato correcto, se va a limpiar el campo`,
-                        'warning'
-                    )
-                    event.target.value=''
-                    return false
-                }*/
                 let val_element = $(this).val();
                 switch (id_element) {
                     case 'tracking':
@@ -561,19 +474,7 @@
                         }
                         break;
                 }
-
-
             });
-
-
-            /*$("#tracking").bind('keypress', function(event) {
-              var regex = new RegExp("^[0-9]{2}+[0-1]{2}$");
-              var key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
-              if (!regex.test(key)) {
-                event.preventDefault();
-                return false;
-              }
-            });*/
 
             $('input.number').keyup(function (event) {
                 console.log("number")
@@ -589,18 +490,6 @@
                         .replace(/\B(?=(\d{3})+(?!\d)\.?)/g, ",");
                 });
             });
-
-            /*$("#tracking").inputmask({
-                regex: "\d+-\d{2}"
-            });*/
-            /*$("#tracking").bind('keypress', function (event) {
-                var regex = new RegExp("^[0-9]+$");
-                var key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
-                if (!regex.test(key)) {
-                    event.preventDefault();
-                    return false;
-                }
-            });*/
 
             $("#numregistro").bind('keypress', function (event) {
                 var regex = new RegExp("^[0-9]+$");
@@ -644,8 +533,6 @@
                         }
                         $(".lima").removeClass("d-none");
 
-                        /*.removeClass('col-md-2')
-                        .addClass('col-md-3')*/
                         if ($(".contenedor-tabla").hasClass("col-4")) {
                             $(".contenedor-tabla").removeClass("col-4");
                             $(".contenedor-tabla").addClass("col-6");
@@ -656,12 +543,7 @@
                         }
 
                         tabla_pedidos.columns.adjust().draw();
-                        //$("#tablaPrincipalpedidosagregar").DataTable().ajax.reload();
-                        //$("#tablaPrincipalpedidosagregar").columns.adjust().draw();
 
-                        //$(".contenedor-formulario").removeClass("col-4");
-                        //$(".contenedor-pdf").removeClass("col-4");
-                        //limpiar campos
                         $('#nombre').val('')
                         $('#celular').val('')
                         $('#direccion').val('')
@@ -687,9 +569,6 @@
                             $(".contenedor-formulario").addClass("col-4");
                         }
                         tabla_pedidos.columns.adjust().draw();
-                        //$("#tablaPrincipalpedidosagregar").DataTable().ajax.reload();
-                        //$("#tablaPrincipalpedidosagregar").columns.adjust().draw();
-
                         break;
                         $('#numregistro').val('')
                         $('#tracking').val('')
@@ -721,7 +600,6 @@
 
             $(document).on("click", "#direccionConfirmar", function (event) {
                 var fd2 = new FormData();
-                //return false;
                 let val_direccion_id = $("#direccion_id").val();
                 let val_cliente = $("#cliente_id").val();
                 let val_cod_pedido = $("#cod_pedido").val();
@@ -803,23 +681,6 @@
 
                     } else if (combo_limaprovincia == "P") {
                         var cont_rotulo = files.length;
-                        /*if(val_departamento=="")
-                        {
-                          Swal.fire(
-                            'Error',
-                            'Debe selecionar departamento',
-                            'warning'
-                          )
-                          return;
-                        }else if(val_oficina=="")
-                        {
-                          Swal.fire(
-                            'Error',
-                            'Debe ingresar oficina',
-                            'warning'
-                          )
-                          return;
-                        }else */
                         if (val_tracking == "") {
                             Swal.fire(
                                 'Error',
@@ -850,7 +711,6 @@
                             return;
                         }
                     }
-                    //paso provincia validacion
                     if (combo_limaprovincia == "P") {
                         fd2.append('distrito', val_distrito);
                         fd2.append('departamento', val_departamento);
@@ -898,11 +758,7 @@
                 }
 
                 $pedidos = pedidos.join(',');
-                //fd2.append('pedidos', JSON.stringify(pedidos) );
                 fd2.append('pedidos', $pedidos);
-
-                console.log("finalizo registro");
-
                 function sendAjax() {
                     if (val_direccion_id) {
                         if (combo_limaprovincia == "L") {
@@ -1067,11 +923,6 @@
 
 
             });
-            /*$(document).on("submit","#formdireccion",function(event){
-              event.preventDefault();
-              console.log("aa");
-
-            });*/
 
             $(document).on("click", "#droprotulo", function () {
                 $("#rotulo").val("");
@@ -1079,6 +930,8 @@
                 $("#pdf_renderer_object").attr("data", null);
                 $("#pdf_renderer_object").addClass("d-none");
             });
+
+
             $("#set_cliente_clear_provincia").click(function () {
                 var form = $("#formdireccion")[0]
                 form.direccion_id.value = ''
@@ -1245,145 +1098,40 @@
                 }
             })
 
-            $('#modal-historial-lima').on('show.bs.modal', function (event) {
-                console.log(tablehistoricolima)
-                if (tablehistoricolima != null) {
-                    tablehistoricolima.destroy();
-                }
-                $("#set_cliente_clear").hide()
-                let provincialima = "LIMA";
-                let clienteidlima = $("#modal-historial-lima-a").attr("data-cliente");
-                tablehistoricolima = $('#tablaHistorialLima').DataTable({
-                    "bPaginate": true,
-                    "bFilter": true,
-                    "bInfo": true,
-                    "bAutoWidth": false,
-                    "pageLength": 5,
-                    "order": [[0, "asc"]],
-                    'ajax': {
-                        url: "{{ route('sobreenvioshistorial') }}",
-                        'data': {"provincialima": provincialima, "cliente_id": clienteidlima},
-                        "type": "get",
-                    },
-                    rowCallback: function (row, data, index) {
-                        $('.button_provincia_lima', row).click(function (e) {
-                            const json = $(this).data('json');
-                            const selectedData = ((json && typeof json != 'string') ? json : JSON.parse($(this).data('json')))
-                            console.log(selectedData)
-                            var form = $("#formdireccion")[0]
 
-                            form.direccion_id.value = selectedData.id;
 
-                            form.nombre.value = selectedData.nombre;
 
-                            form.celular.value = selectedData.celular;
 
-                            form.direccion.value = selectedData.direccion;
+            $(document).on('click','.button_load_history_recojo',function (e) {
+                const json = $(this).data('json');
+                const selectedData = ((json && typeof json != 'string') ? json : JSON.parse($(this).data('json')))
+                console.log(selectedData)
+                var form = $("#formrecojo")[0];
 
-                            form.referencia.value = selectedData.referencia;
+                form.direccion_id.value = selectedData.id;
+                form.nombre.value = selectedData.nombre;
+                form.celular.value = selectedData.celular;
+                form.direccion.value = selectedData.direccion;
+                form.referencia.value = selectedData.referencia;
+                $(form.distrito).val(selectedData.distrito).trigger('change');
 
-                            $(form.distrito).val(selectedData.distrito).trigger('change');
+                form.observacion.value = selectedData.observacion;
 
-                            form.observacion.value = selectedData.observacion;
+                $(form.direccion_id).data('old_value', selectedData.id);
+                $(form.nombre).data('old_value', form.nombre.value);
+                $(form.celular).data('old_value', form.celular.value);
+                $(form.direccion).data('old_value', form.direccion.value);
+                $(form.referencia).data('old_value', form.referencia.value);
+                $(form.distrito).data('old_value', form.distrito.value);
+                $(form.observacion).data('old_value', form.observacion.value);
 
-                            $(form.direccion_id).data('old_value', selectedData.id);
-                            $(form.nombre).data('old_value', form.nombre.value);
-                            $(form.celular).data('old_value', form.celular.value);
-                            $(form.direccion).data('old_value', form.direccion.value);
-                            $(form.referencia).data('old_value', form.referencia.value);
-                            $(form.distrito).data('old_value', form.distrito.value);
-                            $(form.observacion).data('old_value', form.observacion.value);
+                /*$("#modal-historial-lima").modal('hide')
+                $("#set_cliente_clear").show()
+                $("#saveHistoricoLima").parent().hide()
+                $("#saveHistoricoLimaEditar").parent().show()*/
+            })
 
-                            $("#modal-historial-lima").modal('hide')
-                            $("#set_cliente_clear").show()
-                            $("#saveHistoricoLima").parent().hide()
-                            $("#saveHistoricoLimaEditar").parent().show()
-                        })
-                    },
-                    columns:
-                        [
-                            {
-                                data: 'nombre',
-                                name: 'nombre',
-                                sWidth: '30%',
-                                render: function (data, type, row, meta) {
-                                    return data;
-                                }
-                            },
-                            {
-                                data: 'recibe',
-                                name: 'recibe',
-                                sWidth: '15%',
-                                render: function (data, type, row, meta) {
-                                    return data;
-                                }
-                            },
-                            {
-                                data: 'direccion',
-                                name: 'direccion',
-                                sWidth: '15%',
-                                render: function (data, type, row, meta) {
-                                    return data;
-                                }
-                            },
-                            {
-                                data: 'referencia',
-                                name: 'referencia',
-                                sWidth: '15%',
-                                render: function (data, type, row, meta) {
-                                    return data;
-                                }
-                            },
-                            {
-                                data: 'distrito',
-                                name: 'distrito',
-                                sWidth: '15%',
-                                render: function (data, type, row, meta) {
-                                    return data;
-                                }
-                            },
-                            {
-                                data: 'observacion',
-                                name: 'observacion',
-                                sWidth: '15%',
-                                render: function (data, type, row, meta) {
-                                    return data;
-                                }
-                            },
-                            {
-                                data: 'action',
-                                name: 'action',
-                                sWidth: '20%',
-                                render: function (data, type, row, meta) {
-                                    data = data +
-                                        `<button class="btn btn-danger btn-sm button_provincia_lima" data-json='${JSON.stringify(row)}' data-provincia="${row.id}"><i class="fas fa-check-circle"></i></button>`;
-                                    return data;
-                                },
-                            }
-                        ],
-                    language: {
-                        "decimal": "",
-                        "emptyTable": "No hay información",
-                        "info": "Mostrando del _START_ al _END_ de _TOTAL_ Entradas",
-                        "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
-                        "infoFiltered": "(Filtrado de _MAX_ total entradas)",
-                        "infoPostFix": "",
-                        "thousands": ",",
-                        "lengthMenu": "Mostrar _MENU_ Entradas",
-                        "loadingRecords": "Cargando...",
-                        "processing": "Procesando...",
-                        "search": "Buscar:",
-                        "zeroRecords": "Sin resultados encontrados",
-                        "paginate": {
-                            "first": "Primero",
-                            "last": "Ultimo",
-                            "next": "Siguiente",
-                            "previous": "Anterior"
-                        }
-                    },
-                });
 
-            });
 
             $("#distrito").on('change', function () {
                 var distrito_seleccionado = $(this).val();
@@ -1479,26 +1227,6 @@
 
                 $("#modal-historial-lima-a").attr("data-cliente", cliente);
                 $("#modal-historial-provincia-a").attr("data-cliente", cliente);
-
-
-                /*$('#distrito').select2({
-                    dropdownParent: $("#modal-direccion"),
-                    data: [
-                      {id: 'test1', text: 'January', subText: "Test1"},
-                      {id: 'test2', text: 'February', subText: "Test2"},
-                      {id: 'test3', text: 'March', subText: "Test3"}
-                    ],
-                    placeholder: 'Selecciona un distrito',
-                    escapeMarkup: function (markup) {
-                      return markup;
-                    },
-                    templateResult: function (d) {
-                      return '<span>'+d.text+'</span><span class="pull-right subtext">'+d.subText+'</span>';
-                    },
-                    templateSelection: function (d) {
-                      return d.text + ' ( ' + d.subText + ')';
-                    }
-                });*/
 
                 console.log("carga modales")
                 tabla_pedidos.destroy();
@@ -1679,29 +1407,6 @@
                 });
             });
 
-            const configDataTableLanguages = {
-                language: {
-                    "decimal": "",
-                    "emptyTable": "No hay información",
-                    "info": "_START_ - _END_ / _TOTAL_",
-                    "infoEmpty": "0 Entradas",
-                    "infoFiltered": "(Filtrado de _MAX_ total entradas)",
-                    "infoPostFix": "",
-                    "thousands": ",",
-                    "lengthMenu": "Mostrar _MENU_ Entradas",
-                    "loadingRecords": "Cargando...",
-                    "processing": ``,
-                    "search": "Buscar:",
-                    "zeroRecords": "Sin resultados encontrados",
-                    "paginate": {
-                        "first": "Primero",
-                        "last": "Ultimo",
-                        "next": "Siguiente",
-                        "previous": "Anterior"
-                    }
-                },
-            }
-
             tablaClienteLista = $('#datatable-clientes-lista-recojer').DataTable({
                 ...configDataTableLanguages,
                 "bPaginate": false,
@@ -1863,6 +1568,21 @@
                 $("span.distrito_recojo").html(data.env_distrito);
                 $("span.direccion_recojo").html(data.env_direccion);
             })
+
+            $(document).on("click",".btn-charge-history",function(){
+                console.log($("#recojo_cliente").val())
+                let clienteid=$("#recojo_cliente").val();
+                if(clienteid!=''){
+                    //cargar modal
+                    //
+                    $("#modal-historico-recojo").modal("show");
+                }
+            })
+
+            /*$('#datatable-historial-recojer tbody').on( 'click', 'button.elegir', function () {
+
+            })*/
+
 
             $('#datatable-clientes-lista-recojer tbody').on( 'click', 'button.elegir', function () {
                 var data = tablaClienteLista.row( $(this).parents('tr') ).data();
