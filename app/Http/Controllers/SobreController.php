@@ -18,6 +18,7 @@ use App\Models\GastoPedido;
 use App\Models\GrupoPedido;
 use App\Models\ImagenAtencion;
 use App\Models\ImagenPedido;
+use App\Models\PedidoMovimientoEstado;
 use App\Models\User;
 use App\Models\Pedido;
 use App\Models\Porcentaje;
@@ -562,6 +563,14 @@ class SobreController extends Controller
             $dg=DireccionGrupo::where('id',$pedido->direccion_grupo)->where("estado","1");
             if($dg)
             {
+                //*cambio destino del pedido*/
+                //registro movimientos
+                PedidoMovimientoEstado::create([
+                    'pedido' => $request->hiddenEnvio,
+                    'condicion_envio_code' => Pedido::RECEPCION_COURIER_INT,
+                    'notificado' => 0
+                ]);
+
                 GrupoPedido::createGroupByPedido($pedido, true, true);
                 return response()->json(['html' => 1]);
             }else{
