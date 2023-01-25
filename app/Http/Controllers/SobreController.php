@@ -551,6 +551,7 @@ class SobreController extends Controller
         $recojo_cliente = $request->recojo_cliente;
         $recojo_pedido = $request->recojo_pedido;
         $recojo_fecha = $request->recojo_fecha;
+        $recojo_distrito=$request->recojo_distrito;
         $recojo_pedido_quienrecibe_nombre = $request->recojo_pedido_quienrecibe_nombre;
         $recojo_pedido_quienrecibe_celular = $request->recojo_pedido_quienrecibe_celular;
         $recojo_pedido_direccion = $request->recojo_pedido_direccion;
@@ -563,12 +564,44 @@ class SobreController extends Controller
             $dg=DireccionGrupo::where('id',$pedido->direccion_grupo)->where("estado","1");
             if($dg)
             {
-                //*cambio destino del pedido*/
-                //registro movimientos
                 PedidoMovimientoEstado::create([
-                    'pedido' => $request->hiddenEnvio,
-                    'condicion_envio_code' => Pedido::RECEPCION_COURIER_INT,
-                    'notificado' => 0
+                    'pedido' => $recojo_pedido,
+                    'condicion_envio_code' => Pedido::ENTREGADO_RECOJO_INT,
+                    'notificado' => 0,
+                    'json_envio'=>json_encode(array(
+                        "recojo"=>true,
+                        "recojo_cliente"=> $recojo_cliente,
+                        "recojo_pedido"=>$recojo_pedido,
+                        "recojo_grupo"=>$pedido->direccion_grupo,
+                        "recojo_fecha"=>$recojo_fecha,
+                        "recojo_distrito"=>$recojo_distrito,
+                        "recojo_pedido_quienrecibe_nombre"=>$recojo_pedido_quienrecibe_nombre,
+                        "recojo_pedido_quienrecibe_celular"=>$recojo_pedido_quienrecibe_celular,
+                        "recojo_pedido_direccion"=>$recojo_pedido_direccion,
+                        "recojo_pedido_referencia"=>$recojo_pedido_referencia,
+                        "recojo_pedido_observacion"=>$recojo_pedido_observacion,
+                    ))
+                ]);
+                $pedido->update([
+                    'direccion_grupo' => null,
+                    'destino'=>'LIMA',
+                    'env_destino' => 'LIMA',
+                    'env_distrito' => $recojo_distrito,
+                    'env_zona'=>null,
+                    'env_zona_asignada' => null,
+                    'env_nombre_cliente_recibe' => $recojo_pedido_quienrecibe_nombre,
+                    'env_celular_cliente_recibe' => $recojo_pedido_quienrecibe_celular,
+                    'env_cantidad'=>0,
+                    'env_direccion' => $recojo_pedido_direccion,
+                    'env_tracking' => '',
+                    'env_referencia' => $recojo_pedido_referencia,
+                    'env_numregistro' => '',
+                    'env_rotulo' => '',
+                    'env_observacion' => $recojo_pedido_observacion,
+                    'env_gmlink'=>'',
+                    'env_importe' => 0.00,
+                    'estado_ruta'=>0,
+                    'fecha_salida' => null,
                 ]);
 
                 GrupoPedido::createGroupByPedido($pedido, true, true);

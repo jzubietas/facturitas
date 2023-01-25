@@ -1924,6 +1924,7 @@
                 let recojo_cliente = $("#recojo_cliente").val();
                 let recojo_pedido = $("#recojo_pedido").val();
                 let recojo_fecha = $("#recojo_fecha").val();
+                let recojo_distrito = $("#distrito_recoger").val();
                 let recojo_pedido_quienrecibe_nombre = $("#recojo_pedido_quienrecibe_nombre").val();
                 let recojo_pedido_quienrecibe_celular = $("#recojo_pedido_quienrecibe_celular").val();
                 let recojo_pedido_direccion = $("#recojo_pedido_direccion").val();
@@ -1934,6 +1935,7 @@
                 fd_courier.append('recojo_cliente', recojo_cliente);
                 fd_courier.append('recojo_pedido', recojo_pedido);
                 fd_courier.append('recojo_fecha', recojo_fecha);
+                fd_courier.append('recojo_distrito', recojo_distrito);
                 fd_courier.append('recojo_pedido_quienrecibe_nombre', recojo_pedido_quienrecibe_nombre);
                 fd_courier.append('recojo_pedido_quienrecibe_celular', recojo_pedido_quienrecibe_celular);
                 fd_courier.append('recojo_pedido_direccion', recojo_pedido_direccion);
@@ -1946,7 +1948,8 @@
                     type: 'POST',
                     url: "{{ route('registrar_recojer_pedido') }}",
                     success: function (data) {
-
+                        $("#modal-recoger-sobre").modal("hide");
+                        //$('#tablaRecepcionados').DataTable().ajax.reload(null, false);
                     }
                 });
             });
@@ -1958,7 +1961,6 @@
             });
 
             $('#modal-recoger-sobre').on('show.bs.modal', function (event) {
-
                 $(".card_clientes").show()
                 $(".card_pedidos").hide()
                 $(".card_form").hide()

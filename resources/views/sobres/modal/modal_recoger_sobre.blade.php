@@ -36,8 +36,10 @@
                                 <div class="row">
                                     <div class="col">
                                         <button type="button" class="btn-cancel-recojo btn btn-default">Atras</button>
+                                        <br><br>
                                     </div>
                                 </div>
+
 
                                 <div class="table-responsives">
                                     <table id="datatable-pedidos-lista-recojer" class="table table-striped" style="text-align: center;width:100%;">

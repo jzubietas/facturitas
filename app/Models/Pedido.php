@@ -61,6 +61,7 @@ class Pedido extends Model
     const ENTREGADO_PROVINCIA = 'ENTREGADO - PROVINCIA'; // 21
 
     const ENTREGADO_SIN_ENVIO_CLIENTE = 'ENTREGADO SIN ENVIO - CLIENTE'; // 25
+    const ENTREGADO_RECOJO = 'ENTREGADO - RECOJO';//26
 
 
     /**************
@@ -90,6 +91,7 @@ class Pedido extends Model
     const EN_TIENDA_AGENTE_OLVA_INT = 23;
     const NO_ENTREGADO_OLVA_INT = 24;
     const ENTREGADO_SIN_ENVIO_CLIENTE_INT = 25;
+    const ENTREGADO_RECOJO_INT = 26;
 
     const ESTADO_MOTORIZADO_OBSERVADO = 1;
     const ESTADO_MOTORIZADO_NO_CONTESTO = 2;
