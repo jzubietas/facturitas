@@ -35,7 +35,7 @@
                             <div clas="col-md-12">
                                 <div class="row">
                                     <div class="col">
-                                        <button type="button" class="btn-cancel-recojo btn btn-default">Atras</button>
+                                        <button type="button" class="btn-cancel-recojo btn btn-warning">Atras</button>
                                         <br><br>
                                     </div>
                                 </div>
@@ -117,6 +117,10 @@
                                                             value="{{$distrito->distrito}}">{{($distrito->distrito) }}</option>
                                                 @endforeach
                                             </select>
+                                        </div>
+
+                                        <div class="form-group col-md-6 mt-4">
+                                            <button type="button" class="btn-charge-history btn btn-info">Cargar de Historial</button>
                                         </div>
 
                                     </div>
