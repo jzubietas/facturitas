@@ -24,7 +24,8 @@ class CourierRegistrosController extends Controller
         $courier = CourierRegistro::where('id','<>', '0')
             ->select([
                 'courier_registros.*',
-                DB::raw("(select a.direccion from direccion_grupos a where a.direccion is not null and a.direccion<>'' and  courier_registros.courier_registro=a.direccion and a.courier_failed_sync_at is null) as permitir")
+                DB::raw("(select a.direccion from direccion_grupos a where a.direccion is not null and a.direccion<>'' and  courier_registros.courier_registro=a.direccion and a.courier_failed_sync_at is null) as permitir"),
+                DB::raw("(select a.correlativo from direccion_grupos a where a.direccion is not null and a.direccion<>'' and  courier_registros.courier_registro=a.direccion and a.courier_failed_sync_at is null) as direcciongrupo_correlativo")
         ])
         /*->where('relacionado','0')*/;
         return Datatables::of(DB::table($courier))
@@ -32,7 +33,7 @@ class CourierRegistrosController extends Controller
             ->editColumn('relacionado', function($courier){
                 if($courier->relacionado=='1')
                 {
-                    return '<span class="bagde bagde-success">Relacionado</span>';
+                    return '<span class="bagde bagde-success">Relacionado ('.$courier->direcciongrupo_correlativo.')</span>';
                 }
                 return 'Sin relacionar';
             })
