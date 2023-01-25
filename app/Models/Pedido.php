@@ -141,6 +141,8 @@ class Pedido extends Model
         'fecha_anulacion_denegada',
         'cambio_direccion_at',
         'fecha_recepcion_courier',
+        'courier_sync_at',
+        'courier_failed_sync_at',
     ];
     protected $appends = [
         'condicion_envio_color'
@@ -150,6 +152,11 @@ class Pedido extends Model
     {
         return $this->belongsTo('App\Models\User');
     } */
+
+    protected $casts=[
+        'courier_estado' => 'boolean',
+        'courier_data' => 'json',
+    ];
 
     public function user()
     {

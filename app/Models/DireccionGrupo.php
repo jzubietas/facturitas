@@ -49,6 +49,7 @@ class DireccionGrupo extends Model implements HasMedia
         'reprogramacion_solicitud_at',
         'reprogramacion_accept_at',
         'courier_sync_at',
+        'courier_failed_sync_at',
     ];
 
     protected $appends = [
