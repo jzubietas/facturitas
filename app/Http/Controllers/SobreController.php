@@ -582,12 +582,13 @@ class SobreController extends Controller
                         "recojo_pedido_observacion"=>$recojo_pedido_observacion,
                     ))
                 ]);
+                $env_zona=Distrito::where('distrito',$recojo_distrito)->whereIn('provincia',['LIMA','CALLAO'])->first()->zona;
                 $pedido->update([
                     'direccion_grupo' => null,
                     'destino'=>'LIMA',
                     'env_destino' => 'LIMA',
                     'env_distrito' => $recojo_distrito,
-                    'env_zona'=>null,
+                    'env_zona'=>$env_zona,
                     'env_zona_asignada' => null,
                     'env_nombre_cliente_recibe' => $recojo_pedido_quienrecibe_nombre,
                     'env_celular_cliente_recibe' => $recojo_pedido_quienrecibe_celular,
@@ -602,8 +603,10 @@ class SobreController extends Controller
                     'env_importe' => 0.00,
                     'estado_ruta'=>0,
                     'fecha_salida' => null,
+                    'condicion_envio' => Pedido::ENTREGADO_RECOJO,
+                    'condicion_envio_code' => Pedido::ENTREGADO_RECOJO_INT
                 ]);
-
+                DireccionGrupo::restructurarCodigos($dg);
                 GrupoPedido::createGroupByPedido($pedido, true, true);
                 return response()->json(['html' => 1]);
             }else{
