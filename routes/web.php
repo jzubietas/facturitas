@@ -7,6 +7,7 @@ use App\Http\Controllers\Envios\DireccionGrupoController;
 use App\Http\Controllers\Envios\DistribucionController;
 use App\Http\Controllers\Envios\MotorizadoController;
 use App\Http\Controllers\ExcelController;
+use App\Http\Controllers\OlvaController;
 use App\Http\Controllers\PagoController;
 use App\Http\Controllers\PdfController;
 use App\Http\Controllers\Pedidos\PedidoStatusController;
@@ -43,7 +44,6 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
 
     Route::post('escaneo/envio.escaneoqr/{id}', [EscaneoController::class, 'EscaneoQR'])->name('escaneo/envio.escaneoqr');
     Route::post('escaneo.estado_pedidos', [EscaneoController::class, 'EstadoSobresScan'])->name('escaneo.estado_pedidos');
-
 
 
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
@@ -90,7 +90,6 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     Route::post('cliente.edit.celularduplicado', [ClienteController::class, 'celularduplicado'])->name('cliente.edit.celularduplicado');
 
 
-
     Route::middleware('authorize.pedido.anulled')
         ->post('clientedeleteRequest', [ClienteController::class, 'destroyid'])
         ->name('clientedeleteRequest.post');
@@ -135,11 +134,9 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     Route::get('clientes.editbf/{cliente}/edit2', [BasefriaController::class, 'editbf'])->name('clientes.editbf');
 
 
-
     Route::middleware('authorize.pedido.anulled')
         ->post('basefriadeleteRequest', [BasefriaController::class, 'destroyid'])
         ->name('basefriadeleteRequest.post');
-
 
 
     Route::post('basefriacliente/{cliente}', [BasefriaController::class, 'updatebf'])->name('updatebf');
@@ -224,7 +221,6 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
         ->name('pedidodeleteRequest.post');
 
 
-
 //Route::get('pedidos.destroyid', [PedidoController::class, 'destroyid'])->name('pedidos.destroyid');
 
     Route::post('pedidorestaurarRequest', [PedidoController::class, 'Restaurarid'])->name('pedidorestaurarRequest.post');
@@ -302,13 +298,15 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     Route::get('envios.enrepartotabla', [EnvioController::class, 'Enviosenrepartotabla'])->name('envios.enrepartotabla');
 
 
-
     Route::get('envios.matchrotulos', [EnvioController::class, 'MatchRotulos'])->name('envios.matchrotulos');
     Route::get('envios.matchRotulostabla', [EnvioController::class, 'MatchRotulostabla'])->name('envios.matchRotulostabla');
 
     Route::get('envios.seguimientoprovincia', [EnvioController::class, 'Seguimientoprovincia'])->name('envios.seguimientoprovincia');
     Route::get('envios.seguimientoprovinciatabla', [EnvioController::class, 'Seguimientoprovinciatabla'])->name('envios.seguimientoprovinciatabla');
     Route::post('envios.seguimientoprovincia.update', [EnvioController::class, 'SeguimientoprovinciaUpdate'])->name('envios.seguimientoprovincia.update');
+
+    Route::get('envios/olva', [OlvaController::class, 'index'])->name('envios.olva.index');
+    Route::get('envios/olva/datatable', [OlvaController::class, 'table'])->name('envios.olva.table');
 
     Route::get('envios.entregados', [EnvioController::class, 'Entregados'])->name('envios.entregados');
     Route::get('envios.entregadostabla', [EnvioController::class, 'Entregadostabla'])->name('envios.enviadostabla');
@@ -370,7 +368,6 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     Route::post('operaciones.revertirasindireccion', [OperacionController::class, 'Revertirasindireccion'])->name('operaciones.revertirasindireccion');
 
     Route::post('operaciones.revertiraenviocourier', [PedidoController::class, 'Revertiraenviocourier'])->name('operaciones.revertiraenviocourier');
-
 
 
     Route::post('operaciones.sinenvioid', [EnvioController::class, 'SinEnviarid'])->name('operaciones.sinenvioid');
@@ -471,7 +468,6 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     Route::post('envios.verificarzona', [EnvioController::class, 'VerificarZona'])->name('envios.verificarzona');
 
 
-
     /*Controller Envio*/
 
     //Route::get('pagos/create/{cliente}', [PagoController::class, 'create'])->name('pagos.create');
@@ -505,7 +501,6 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
 
     Route::get('movimientos.actualiza', [MovimientoController::class, 'actualiza'])->name('movimientos.actualiza');
     Route::get('movimientostabla', [MovimientoController::class, 'indextabla'])->name('movimientostabla');//actualizado para serverside
-
 
 
     Route::get('movimientostablaconciliar', [MovimientoController::class, 'indextablaconciliar'])->name('movimientostablaconciliar');//actualizado para serverside
@@ -662,7 +657,7 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     Route::post('operaciones.confirmarmotorizadoconfirmdismiss', [EnvioController::class, 'confirmarEstadoConfirmConfirmDismiss'])->name('operaciones.confirmarmotorizadoconfirmdismiss');
     Route::post('operaciones.confirmarcliente', [EnvioController::class, 'confirmarEstadoConfirmValidada'])->name('operaciones.confirmarcliente');
 
-    Route::get('direcciongrupo/{grupo}/no_contesto/get_sustentos_adjuntos',[DireccionGrupoController::class,'get_sustentos_adjuntos'])->name('direcciongrupo.no-contesto.get-sustentos-adjuntos');
+    Route::get('direcciongrupo/{grupo}/no_contesto/get_sustentos_adjuntos', [DireccionGrupoController::class, 'get_sustentos_adjuntos'])->name('direcciongrupo.no-contesto.get-sustentos-adjuntos');
 
 
     /* Route::group(['middleware' => ['permission:pedidos.index']], function () {

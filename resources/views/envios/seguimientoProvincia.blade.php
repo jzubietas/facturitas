@@ -94,72 +94,6 @@
                     if (data.courier_failed_sync_at != null) {
                         $('td', row).css('background', 'red')
                     }
-                    $('[data-jqconfirm="edit_tracking"]', row).click(function () {
-                        const action = $(this).data('action');
-                        $.confirm({
-                            title: 'Editar Tracking',
-                            type: 'red',
-                            content: `<div class="p-2">
-<div class="form-group">
-<label>Número de registro</label>
-<input class="form-control" type="text" placeholder="000000000000" name="numregistro" value="${data.referencia}">
-</div>
-<div class="form-group">
-<label>Ingresar Tracking</label>
-<input class="form-control" type="text" placeholder="00000000-{{now()->format('y')}}" name="tracking" value="${data.direccion}" data-inputmask-regex="\\d+-\\d{2}">
-</div>
-</div>`,
-                            buttons: {
-                                actualizar: {
-                                    btnClass: 'btn-success',
-                                    action: function () {
-                                        const self = this
-
-                                        const data = {
-                                            tracking: self.$content.find('input[name=tracking]').val(),
-                                            numregistro: self.$content.find('input[name=numregistro]').val(),
-                                        }
-                                        if (data.tracking.includes('__')) {
-                                            $.alert(`El tracking ingresado no tiene el formato correcto`);
-                                            return false;
-                                        }
-                                        if (!data.numregistro) {
-                                            $.alert(`El numero de registro ingresado no tiene el formato correcto`);
-                                            return false;
-                                        }
-                                        self.showLoading(true)
-                                        $.post(action, data).done(function (data) {
-                                            if (data.success) {
-                                                self.close()
-                                            } else {
-                                                if (data.existencias) {
-                                                    $.alert(`El codigo que intentas actualizar ya se encuentra registrado en otro pedido con codigo (<b>${data.codigos.join(', ')}</b>)`);
-                                                } else {
-                                                    $.alert(`Ocurrio un error al actualizar, revise si ha ingresado correctamente los datos`);
-                                                }
-                                            }
-                                        }).always(function () {
-                                            self.hideLoading(true)
-                                            $('#tablaPrincipal').DataTable().draw(false)
-                                        })
-                                        return false
-                                    }
-                                },
-                                cancelar: {}
-                            },
-                            onContentReady: function () {
-                                const self = this
-                                self.$content.find('input[name=tracking]').inputmask();
-                                const value = data.direccion
-                                const year = parseInt(value.substring(value.length - 2, value.length))
-                                const currentyear = parseInt((new Date()).getFullYear().toString().substring(2, 4))
-                                if (!isNaN(year) && year > 19 && year <= currentyear) {
-                                    self.$content.find('input[name=tracking]').val(value.substring(value.length - 2, 0) + '-' + year)
-                                }
-                            }
-
-                        })
-                    })
                 },
                 columns: [
                     {
@@ -502,6 +436,73 @@ ${data.condicion_envio_code == '{{\App\Models\Pedido::EN_TIENDA_AGENTE_OLVA_INT}
                     onDestroy: function () {
                         window.document.onpaste = null
                     },
+                })
+            })
+
+            $('[data-jqconfirm="edit_tracking"]', row).click(function () {
+                const action = $(this).data('action');
+                $.confirm({
+                    title: 'Editar Tracking',
+                    type: 'red',
+                    content: `<div class="p-2">
+<div class="form-group">
+<label>Número de registro</label>
+<input class="form-control" type="text" placeholder="000000000000" name="numregistro" value="${data.referencia}">
+</div>
+<div class="form-group">
+<label>Ingresar Tracking</label>
+<input class="form-control" type="text" placeholder="00000000-{{now()->format('y')}}" name="tracking" value="${data.direccion}" data-inputmask-regex="\\d+-\\d{2}">
+</div>
+</div>`,
+                    buttons: {
+                        actualizar: {
+                            btnClass: 'btn-success',
+                            action: function () {
+                                const self = this
+
+                                const data = {
+                                    tracking: self.$content.find('input[name=tracking]').val(),
+                                    numregistro: self.$content.find('input[name=numregistro]').val(),
+                                }
+                                if (data.tracking.includes('__')) {
+                                    $.alert(`El tracking ingresado no tiene el formato correcto`);
+                                    return false;
+                                }
+                                if (!data.numregistro) {
+                                    $.alert(`El numero de registro ingresado no tiene el formato correcto`);
+                                    return false;
+                                }
+                                self.showLoading(true)
+                                $.post(action, data).done(function (data) {
+                                    if (data.success) {
+                                        self.close()
+                                    } else {
+                                        if (data.existencias) {
+                                            $.alert(`El codigo que intentas actualizar ya se encuentra registrado en otro pedido con codigo (<b>${data.codigos.join(', ')}</b>)`);
+                                        } else {
+                                            $.alert(`Ocurrio un error al actualizar, revise si ha ingresado correctamente los datos`);
+                                        }
+                                    }
+                                }).always(function () {
+                                    self.hideLoading(true)
+                                    $('#tablaPrincipal').DataTable().draw(false)
+                                })
+                                return false
+                            }
+                        },
+                        cancelar: {}
+                    },
+                    onContentReady: function () {
+                        const self = this
+                        self.$content.find('input[name=tracking]').inputmask();
+                        const value = data.direccion
+                        const year = parseInt(value.substring(value.length - 2, value.length))
+                        const currentyear = parseInt((new Date()).getFullYear().toString().substring(2, 4))
+                        if (!isNaN(year) && year > 19 && year <= currentyear) {
+                            self.$content.find('input[name=tracking]').val(value.substring(value.length - 2, 0) + '-' + year)
+                        }
+                    }
+
                 })
             })
         }
