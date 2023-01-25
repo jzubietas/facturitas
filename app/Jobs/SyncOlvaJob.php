@@ -61,12 +61,14 @@ class SyncOlvaJob implements ShouldQueue
                         'courier_data' => $result,
                         'courier_failed_sync_at' => null,
                     ]);
-                    $direccionGrupo->pedidos()->update([
-                        'courier_sync_at' => now(),
-                        'courier_estado' => $estado,
-                        'courier_data' => $result,
-                        'courier_failed_sync_at' => null,
-                    ]);
+                    foreach ($direccionGrupo->pedidos as $pedido) {
+                        $pedido->update([
+                            'courier_sync_at' => now(),
+                            'courier_estado' => $estado,
+                            'courier_data' => $result,
+                            'courier_failed_sync_at' => null,
+                        ]);
+                    }
                     switch ($estado) {
                         case 'ENTREGADO':
                             DireccionGrupo::cambiarCondicionEnvio($direccionGrupo, Pedido::ENTREGADO_PROVINCIA_INT, [
