@@ -59,6 +59,8 @@ class CourierRegistrosController extends Controller
                                 <i class="fas fa-envelope text-success"></i> Relacionar</a></li>
                             </a>
                         </li>';
+                    }else{
+                        $btn .='<li><span class="badge badge-danger">Corregir manual</span></li>';
                     }
 
                 }
