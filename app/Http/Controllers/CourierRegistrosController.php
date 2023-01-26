@@ -49,7 +49,7 @@ class CourierRegistrosController extends Controller
                 $btn .= '<ul class="list-unstyled pl-0">';
                 if($courier->relacionado=="0")
                 {
-                    if($courier->permitir==null)
+                    if($courier->permitir!=null)
                     {
                         $btn .= '<li>
                             <a href="" class="btn-sm text-warning" data-target="#modal-relacionar-registro_courier"
