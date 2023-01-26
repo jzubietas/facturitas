@@ -471,7 +471,7 @@ class PedidoStatusController extends Controller
 
                 $pedidos = $pedidos->WhereIn('u.identificador', $usersasesores);
             } else if (Auth::user()->rol == User::ROL_ASESOR_ADMINISTRATIVO) {
-                $pedidos = $pedidos->where('u.identificador', 'B');
+                $pedidos = $pedidos->where('u.identificador', Auth::user()->identificador);
             }
 
 
