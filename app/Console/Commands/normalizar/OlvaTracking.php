@@ -42,6 +42,11 @@ class OlvaTracking extends Command
         foreach ($grupos as $grupo) {
             $code = $grupo->direccion;
             if(\Str::contains($code,'-')){
+                if($grupo->courier_failed_sync_at!=null){
+                    $grupo->update([
+                        'courier_failed_sync_at' => null
+                    ]);
+                }
                 continue;
             }
             $numreg = $grupo->referencia;
@@ -73,7 +78,7 @@ class OlvaTracking extends Command
                 ]);
             }else{
                 $grupo->update([
-                    'courier_failed_sync_at' => now()
+                    'courier_failed_sync_at' => null
                 ]);
             }
         }

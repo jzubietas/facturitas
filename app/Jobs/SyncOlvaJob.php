@@ -41,14 +41,23 @@ class SyncOlvaJob implements ShouldQueue
             if ($direccionGrupo->created_at != null) {
                 if (\Str::contains($tracking, '-')) {
                     $tracking = explode('-', $tracking);
-                    if (count($tracking) == 2) {
-                        $result = get_olva_tracking(trim($tracking[0]), trim($tracking[1]));
-                    } else {
-                        $result = get_olva_tracking($tracking, $direccionGrupo->created_at->format('y'));
+                    if (count($tracking) != 2) {
+                        if ($direccionGrupo->fecha_salida != null) {
+                            $fecha = $direccionGrupo->fecha_salida->format('y');
+                        } else {
+                            $fecha = $direccionGrupo->created_at->format('y');
+                        }
+                        $tracking[1] = $fecha;
                     }
                 } else {
-                    $result = get_olva_tracking($tracking, $direccionGrupo->created_at->format('y'));
+                    $tracking = [$tracking];
+                    if ($direccionGrupo->fecha_salida != null) {
+                        $tracking[1] = $direccionGrupo->fecha_salida->format('y');
+                    } else {
+                        $tracking[1] = $direccionGrupo->created_at->format('y');
+                    }
                 }
+                $result = get_olva_tracking(trim($tracking[0]), trim($tracking[1]));
 
                 $success = data_get($result, 'success');
                 $code = data_get($result, 'code');
@@ -56,6 +65,7 @@ class SyncOlvaJob implements ShouldQueue
                     $result = $this->procesarInformacion($result);
                     $estado = data_get($result, 'general.nombre_estado_tracking');
                     $direccionGrupo->update([
+                        'direccion' => $tracking[0] . '-' . $tracking[1],
                         'courier_sync_at' => now(),
                         'courier_estado' => $estado,
                         'courier_data' => $result,
@@ -64,6 +74,7 @@ class SyncOlvaJob implements ShouldQueue
                     ]);
                     foreach ($direccionGrupo->pedidos as $pedido) {
                         $pedido->update([
+                            'env_tracking' => $tracking[0] . '-' . $tracking[1],
                             'courier_sync_at' => now(),
                             'courier_estado' => $estado,
                             'courier_data' => $result,
@@ -80,8 +91,10 @@ class SyncOlvaJob implements ShouldQueue
                             DireccionGrupo::cambiarCondicionEnvio($direccionGrupo, Pedido::EN_CAMINO_OLVA_INT);
                             break;
                     }
+                    $tracking=join('-',\Arr::wrap($tracking));
                     \Log::info("Success ($direccionGrupo->id)($tracking)($estado)");
                 } else {
+                    $tracking=join('-',\Arr::wrap($tracking));
                     \Log::error("Failed ($direccionGrupo->id)($tracking)($code)");
                     $direccionGrupo->update([
                         'courier_failed_sync_at' => now(),
@@ -91,6 +104,7 @@ class SyncOlvaJob implements ShouldQueue
                     ]);
                 }
             } else {
+                $tracking=join('-',\Arr::wrap($tracking));
                 \Log::error("Fecha no encontrada ($direccionGrupo->id)($tracking)(00)");
             }
         }
