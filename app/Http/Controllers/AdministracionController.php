@@ -48,11 +48,13 @@ class AdministracionController extends Controller
         } else {
             $dateMin = Carbon::createFromFormat('d/m/Y', $request->q1)->format('d/m/Y');
         }
-        if (!$request->q2) {
+
+        $dateMax = Carbon::now()->format('d/m/Y');
+        /*if (!$request->q2) {
             $dateMax = Carbon::now()->format('d/m/Y');
         } else {
             $dateMax = Carbon::createFromFormat('d/m/Y', $request->q2)->format('d/m/Y');
-        }
+        }*/
 
         $superasesor = User::where('rol', 'Super asesor')->count();
 
