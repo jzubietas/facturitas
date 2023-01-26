@@ -262,6 +262,7 @@
                         data: function (d) {
                             console.log(d);
                             d.length=5;
+                            d.courier_reg=button.data('courierreg');
                         },
                     },
                     columns: [

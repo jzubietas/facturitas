@@ -3764,6 +3764,7 @@ class EnvioController extends Controller
 
     public function registrosasesor(Request $request)
     {
+        $reg=$request->courier_reg;
         $data = DireccionGrupo::
         join('users as u', 'direccion_grupos.user_id', 'u.id')
             //direccion,referencia,observacion
@@ -3775,7 +3776,8 @@ class EnvioController extends Controller
             ->where('direccion_grupos.distribucion', 'OLVA')
             ->whereIn('direccion_grupos.destino', ['LIMA', 'PROVINCIA'])
             ->where('direccion_grupos.direccion', '<>', 'SIN TRACKING')
-            ->where('relacionado', '0');
+            ->where('direccion_grupos.relacionado', '0')
+            ->where('direccion_grupos.referencia',$reg);
 
         return datatables()->query(DB::table($data))//Datatables::of($data)
         ->addIndexColumn()
