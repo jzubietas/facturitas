@@ -493,7 +493,7 @@
                 evento.preventDefault();
             })
 
-            $('#tablaPrincipal').DataTable({
+            $('#tablaPrincipal_norelacionado').DataTable({
                 processing: true,
                 stateSave: true,
                 serverSide: true,
@@ -502,7 +502,7 @@
                 ajax: {
                     url: "{{ route('courierregistrotabla') }}",
                     data: function (d) {
-                        d.relacionado='SI'
+                        d.relacionado='0'
                     },
                 },
                 rowCallback: function (row, data, index) {
@@ -514,19 +514,56 @@
                     {data: 'courier_registro', name: 'courier_registro'},
                     {data: 'created_at',name: 'created_at',},
                     {data: 'updated_at',name: 'updated_at',},
-                    {data: 'relacionado',name: 'relacionado',
+                    {data: 'relacionado',name: 'relacionado',},
+                    {data: 'status',name: 'status',},
+                    {data: 'action',name: 'action',orderable: false,searchable: false,sWidth: '20%',},
+                ],
+                language: {
+                    "decimal": "",
+                    "emptyTable": "No hay información",
+                    "info": "Mostrando del _START_ al _END_ de _TOTAL_ Entradas",
+                    "infoEmpty": "Mostrando 0 to 0 of 0 Entradas",
+                    "infoFiltered": "(Filtrado de _MAX_ total entradas)",
+                    "infoPostFix": "",
+                    "thousands": ",",
+                    "lengthMenu": "Mostrar _MENU_ Entradas",
+                    "loadingRecords": "Cargando...",
+                    "processing": "Procesando...",
+                    "search": "Buscar:",
+                    "zeroRecords": "Sin resultados encontrados",
+                    "paginate": {
+                        "first": "Primero",
+                        "last": "Ultimo",
+                        "next": "Siguiente",
+                        "previous": "Anterior"
+                    }
+                },
+            });
+
+            $('#tablaPrincipal_relacionado').DataTable({
+                processing: true,
+                stateSave: true,
+                serverSide: true,
+                searching: true,
+                "order": [[0, "desc"]],
+                ajax: {
+                    url: "{{ route('courierregistrotabla') }}",
+                    data: function (d) {
+                        d.relacionado='1'
                     },
-                    {
-                        data: 'status',
-                        name: 'status',
-                    },
-                    {
-                        data: 'action',
-                        name: 'action',
-                        orderable: false,
-                        searchable: false,
-                        sWidth: '20%',
-                    },
+                },
+                rowCallback: function (row, data, index) {
+                },
+                initComplete: function (settings, json) {
+                },
+                columns: [
+                    {data: 'id',name: 'id',},
+                    {data: 'courier_registro', name: 'courier_registro'},
+                    {data: 'created_at',name: 'created_at',},
+                    {data: 'updated_at',name: 'updated_at',},
+                    {data: 'relacionado',name: 'relacionado',},
+                    {data: 'status',name: 'status',},
+                    {data: 'action',name: 'action',orderable: false,searchable: false,sWidth: '20%',},
                 ],
                 language: {
                     "decimal": "",

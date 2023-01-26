@@ -21,13 +21,14 @@ class CourierRegistrosController extends Controller
     }
     public function indextabla(Request $request)
     {
+        $relacionado=$request->relacionado;
         $courier = CourierRegistro::where('id','<>', '0')
             ->select([
                 'courier_registros.*',
                 DB::raw("(select a.referencia from direccion_grupos a where a.estado=1 and a.referencia is not null and a.referencia<>'' and  courier_registros.courier_registro=a.referencia and a.courier_failed_sync_at is null limit 1) as permitir"),
                 DB::raw("(select a.correlativo from direccion_grupos a where a.estado=1 and a.referencia is not null and a.referencia<>'' and  courier_registros.courier_registro=a.referencia and a.courier_failed_sync_at is null limit 1) as direcciongrupo_correlativo")
         ])
-        /*->where('relacionado','0')*/;
+        ->where('relacionado',$relacionado);
         return Datatables::of(DB::table($courier))
             ->addIndexColumn()
             ->editColumn('relacionado', function($courier){
