@@ -330,7 +330,7 @@ return [
                     'active' => ['pedidos pagados'],
                 ],
                 [
-                    'text' => 'Encargado Tienda/Agente',
+                    'text' => 'Olva Tienda/Agente',
                     'route' => 'envios.olva.index',
                     'can' => 'envios.encargado.tienda_agente',
                     'icon' => 'fas fa-check-circle dot_encargado_tienda_agente_count',

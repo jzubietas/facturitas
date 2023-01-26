@@ -507,19 +507,19 @@ ${data.condicion_envio_code == '{{\App\Models\Pedido::EN_TIENDA_AGENTE_OLVA_INT}
             })
         }
 
-        /*
+            /*
 
-        document.onpaste = function(event){
-      var items = (event.clipboardData || event.originalEvent.clipboardData).items;console.log(items);
-      for (index in items) {
-        var item = items[index];
-        if (item.kind === 'file') {
-          // adds the file to your dropzone instance
-          console.log(item.getAsFile())
+            document.onpaste = function(event){
+          var items = (event.clipboardData || event.originalEvent.clipboardData).items;console.log(items);
+          for (index in items) {
+            var item = items[index];
+            if (item.kind === 'file') {
+              // adds the file to your dropzone instance
+              console.log(item.getAsFile())
+            }
+          }
         }
-      }
-    }
-         */
+             */
     </script>
 
     @if (session('info') == 'registrado' || session('info') == 'actualizado' || session('info') == 'eliminado')

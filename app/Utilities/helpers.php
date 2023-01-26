@@ -196,3 +196,23 @@ if (!function_exists("get_olva_tracking")) {
         return $response->json();
     }
 }
+
+
+if (!function_exists("user")) {
+    function user()
+    {
+
+        return \auth()->user();
+    }
+}
+
+if (!function_exists("user_rol")) {
+    function user_rol($rol = null)
+    {
+        $userrol = user()->rol;
+        if ($rol) {
+            return $userrol == $rol;
+        }
+        return $userrol;
+    }
+}

@@ -302,13 +302,18 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     Route::get('envios.matchrotulos', [EnvioController::class, 'MatchRotulos'])->name('envios.matchrotulos');
     Route::get('envios.matchRotulostabla', [EnvioController::class, 'MatchRotulostabla'])->name('envios.matchRotulostabla');
 
-    Route::get('envios.seguimientoprovincia', [EnvioController::class, 'Seguimientoprovincia'])->name('envios.seguimientoprovincia');
-    Route::get('envios.seguimientoprovinciatabla', [EnvioController::class, 'Seguimientoprovinciatabla'])->name('envios.seguimientoprovinciatabla');
-    Route::post('envios.seguimientoprovincia.update', [EnvioController::class, 'SeguimientoprovinciaUpdate'])->name('envios.seguimientoprovincia.update');
 
     Route::get('envios/olva', [OlvaController::class, 'index'])->name('envios.olva.index');
     Route::post('envios/olva/{grupo}', [OlvaController::class, 'store'])->name('envios.olva.store');
     Route::get('envios/olva/datatable', [OlvaController::class, 'table'])->name('envios.olva.table');
+
+
+    Route::get('envios.seguimientoprovincia', [OlvaController::class, 'Seguimientoprovincia'])->name('envios.seguimientoprovincia');
+    Route::get('envios.seguimientoprovinciatabla', [OlvaController::class, 'Seguimientoprovinciatabla'])->name('envios.seguimientoprovinciatabla');
+    Route::post('envios.seguimientoprovincia.update', [OlvaController::class, 'SeguimientoprovinciaUpdate'])->name('envios.seguimientoprovincia.update');
+    Route::get('envios.seguimientoprovincia/{grupo}/history_encargado', [OlvaController::class, 'SeguimientoprovinciaHistoryEncargado'])
+        ->name('envios.seguimientoprovincia.history_encargado');
+
 
     Route::get('envios.entregados', [EnvioController::class, 'Entregados'])->name('envios.entregados');
     Route::get('envios.entregadostabla', [EnvioController::class, 'Entregadostabla'])->name('envios.enviadostabla');

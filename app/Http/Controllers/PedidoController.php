@@ -1070,12 +1070,22 @@ class PedidoController extends Controller
                 $now = now();
                 $temporal_update = $cliente_deuda->temporal_update;
                 if ($temporal_update < $now) {
+                    $cliente_deuda->update([
+                        'crea_temporal' => '0',
+                        'activado_pedido' => '0',
+                        'activado_tiempo' => '0',
+                    ]);
                     return response()->json([
                         'html' => "|tmp_time",
                     ]);
                 }
                 $limitepedidos = $cliente_deuda->activado_pedido;
                 if ($limitepedidos <= 0) {
+                    $cliente_deuda->update([
+                        'crea_temporal' => '0',
+                        'activado_pedido' => '0',
+                        'activado_tiempo' => '0',
+                    ]);
                     return response()->json([
                         'html' => "|tmp_count",
                     ]);
@@ -1255,15 +1265,17 @@ class PedidoController extends Controller
      * @return \Illuminate\Http\Response
      */
     public
-    function show(Pedido $pedido)
+    function show($pedido)
     {
         //ver pedido anulado y activo
-        $pedidos = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')
+        $pedido = Pedido::with('cliente')->join('clientes as c', 'pedidos.cliente_id', 'c.id')
             ->join('users as u', 'pedidos.user_id', 'u.id')
             ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
             ->select(
-                'pedidos.id',
-                'pedidos.motivo',
+                'pedidos.*',
+                'pedidos.condicion as condiciones',
+                'pedidos.created_at as fecha',
+
                 'c.nombre as nombres',
                 'c.celular as celulares',
                 'u.name as users',
@@ -1286,81 +1298,23 @@ class PedidoController extends Controller
                 'dp.cant_compro',
                 'dp.fecha_envio_doc_fis',
                 'dp.fecha_recepcion',
-                'pedidos.condicion as condiciones',
-                'pedidos.created_at as fecha',
-                'pedidos.path_adjunto_anular',
-                'pedidos.path_adjunto_anular_disk',
-                'pedidos.pendiente_anulacion',
-                'pedidos.user_anulacion_id',
-                'pedidos.fecha_anulacion',
-                'pedidos.fecha_anulacion_confirm',
-                'pedidos.responsable',
-                'pedidos.condicion_code',
-            )
-            //->where('pedidos.estado', '1')
-            ->where('pedidos.id', $pedido->id)
-            //->where('dp.estado', '1')
-            /*->groupBy(
-                'pedidos.id',
-                'c.nombre',
-                'c.celular',
-                'u.name',
-                'dp.codigo',
-                'dp.nombre_empresa',
-                'dp.mes',
-                'dp.anio',
-                'dp.ruc',
-                'dp.cantidad',
-                'dp.tipo_banca',
-                'dp.porcentaje',
-                'dp.courier',
-                'dp.ft',
-                'dp.descripcion',
-                'dp.nota',
-                'dp.adjunto',
-                'dp.total',
-                'dp.envio_doc',
-                'dp.fecha_envio_doc',
-                'dp.cant_compro',
-                'dp.fecha_envio_doc_fis',
-                'dp.fecha_recepcion',
-                'pedidos.condicion',
-                'pedidos.created_at',
-                'pedidos.path_adjunto_anular',
-                'pedidos.path_adjunto_anular_disk',
-                'pedidos.pendiente_anulacion',
-                'pedidos.user_anulacion_id',
-                'pedidos.fecha_anulacion',
-                'pedidos.fecha_anulacion_confirm',
-                'pedidos.responsable',
-            )
-            */
-            ->orderBy('pedidos.created_at', 'DESC')
-            ->get();
-
-        $cotizacion = Pedido::query()->with(['cliente'])
-            ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
-            ->select(
-                'pedidos.id',
-                'dp.nombre_empresa',
-                'dp.cantidad',
-                'dp.porcentaje',
-                'dp.ft',
-                'dp.courier',
-                'dp.total',
                 'dp.saldo as diferencia',
             )
-            ->where('pedidos.id', $pedido->id)
-            ->first();
+            ->activo()
+            ->where('pedidos.id', $pedido)
+            ->orderBy('pedidos.created_at', 'DESC')
+            ->firstOrFail();
 
-        $deudaTotal = DetallePedido::query()->whereIn('pedido_id', $pedido->cliente->pedidos()->where('estado', '1')->pluck("id"))->sum("saldo");
-        $adelanto = PagoPedido::query()->where('pedido_id', $pedido->id)->whereEstado(1)->sum('abono');
+        $deudaTotal = DetallePedido::query()->activo()->whereIn('pedido_id', $pedido->cliente->pedidos()->activo()->pluck("id"))->sum("saldo");
+        $adelanto = PagoPedido::query()->activo()->where('pedido_id', $pedido->id)->sum('abono');
 
         $imagenes = ImagenPedido::where('imagen_pedidos.pedido_id', $pedido->id)->where('estado', '1')->get();
 
-        $imagenesatencion = ImagenAtencion::where('pedido_id', $pedido->id)->where('estado', '=', '1')->orderByDesc('estado')->get();
+        $imagenesatencion = ImagenAtencion::where('pedido_id', $pedido->id)->where('estado', '=', '1')
+            ->orderByDesc('estado')
+            ->get();
 
-        return view('pedidos.show', compact('pedidos', 'imagenes', 'imagenesatencion', 'cotizacion', 'adelanto', 'deudaTotal'));
+        return view('pedidos.show', compact('pedido', 'imagenes', 'imagenesatencion', 'adelanto', 'deudaTotal'));
     }
 
     /**

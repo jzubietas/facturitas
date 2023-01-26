@@ -470,13 +470,14 @@ class NotificationsController extends Controller
             ->whereNull('direccion_grupos.courier_failed_sync_at')
             ->where('direccion_grupos.distribucion', 'OLVA')
             ->where('direccion_grupos.motorizado_status', '0')
-            ->whereNull('direccion_grupos.add_screenshot_at')
             ->select([
                 'direccion_grupos.*',
                 "clientes.celular as cliente_celular",
                 "clientes.nombre as cliente_nombre",
             ]);
-
+        if (user_rol(User::ROL_ASESOR) || user_rol(User::ROL_ASESOR_ADMINISTRATIVO)) {
+            $pedidos_provincia->whereNull('direccion_grupos.add_screenshot_at');
+        }
         add_query_filtros_por_roles_pedidos($pedidos_provincia, 'users.identificador');
         $contador_encargado_tienda_agente =$pedidos_provincia->count();
 

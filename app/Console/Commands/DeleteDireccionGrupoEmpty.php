@@ -1,20 +1,18 @@
 <?php
 
-namespace App\Console\Commands\automatic;
+namespace App\Console\Commands;
 
-use App\Jobs\SyncOlvaJob;
 use App\Models\DireccionGrupo;
-use App\Models\Pedido;
 use Illuminate\Console\Command;
 
-class OlvaSync extends Command
+class DeleteDireccionGrupoEmpty extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'olva:sync';
+    protected $signature = 'grupos:drop-empty';
 
     /**
      * The console command description.
@@ -40,11 +38,10 @@ class OlvaSync extends Command
      */
     public function handle()
     {
-        $grupos = DireccionGrupo::query()->inOlvaPending()/*->whereNull('courier_failed_sync_at')*/->get();
-        foreach ($grupos as $grupo) {
-            SyncOlvaJob::dispatch($grupo->id)->onQueue('olva');
-        }
-
+        $grupos=DireccionGrupo::query()
+            ->whereRaw('(select count(*) from pedidos where pedidos.direccion_grupo=direccion_grupos.id)=0')
+            ->delete();
+        $this->info("Cantidad: ".$grupos);
         return 0;
     }
 }

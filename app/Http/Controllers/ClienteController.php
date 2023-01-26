@@ -1807,11 +1807,12 @@ class ClienteController extends Controller
         $mensajesRandom = [];
         $mensajesRandom[] = '*Amigo buenos dias, por favor neceisto que me cancele el pago, le mando el resumen*';
         $mensajesRandom[] = '*Amigo buenos días el saldito pendiente que tenemos por favor no se olvide, le envio el detalle.';
-        $mensajesRandom[] = '*Buenas tardes estimado, le envio el total de la deuda para que me deposite por favor, le mando el resumen para que me cancele. ';
+        $mensajesRandom[] = '*Buenas tardes amigo, le envio el total de la deuda para que me deposite por favor, le mando el resumen para que me cancele. ';
 
         $messajeKey = array_rand($mensajesRandom);
         $messaje = $mensajesRandom[$messajeKey];
         $pedidos = Pedido::query()->with(['cliente', 'pagoPedidos', 'detallePedido'])
+            ->activo()
             ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
             ->select([
                 'pedidos.id',
@@ -1830,8 +1831,8 @@ class ClienteController extends Controller
             ->where('pedidos.condicion_code', '<>', Pedido::ANULADO_INT)
             ->get()
             ->map(function (Pedido $pedido) {
-                $pedido->adelanto = $pedido->pagoPedidos()->whereEstado(1)->sum('abono');
-                $pedido->deuda_total = $pedido->detallePedidos()->sum("saldo");
+                $pedido->adelanto = $pedido->pagoPedidos()->activo()->sum('abono');
+                $pedido->deuda_total = $pedido->detallePedidos()->activo()->sum("saldo");
                 return $pedido;
             })->filter(fn(Pedido $pedido) => $pedido->adelanto<=($pedido->deuda_total-3));
         $totalDeuda = $pedidos->sum('diferencia');
