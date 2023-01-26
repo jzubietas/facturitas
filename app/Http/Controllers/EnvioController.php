@@ -1749,27 +1749,42 @@ class EnvioController extends Controller
                 return $html;
             })
             ->addColumn('action', function ($pedido) {
+                $btnAdd = [];
                 switch ($pedido->condicion_envio_code) {
                     case Pedido::RECEPCIONADO_OLVA_INT:
-                        $btn = '<button data-target="" data-toggle="jqconfirm" class="btn btn-primary btn-sm"><i class="fas fa-car"></i> ACTUALIZAR ESTADO</button>';
+                        $btnType = [
+                            'icon' => 'fas fa-car',
+                            'btnClass' => 'btn-primary',
+                        ];
                         break;
                     case Pedido::EN_CAMINO_OLVA_INT:
-                        $btn = '<button data-target="" data-toggle="jqconfirm" class="btn btn-dark btn-sm"><i class="fas fa-home"></i>ACTUALIZAR ESTADO</button>';
+                        $btnType = [
+                            'icon' => 'fas fa-home',
+                            'btnClass' => 'btn-dark',
+                        ];
                         break;
                     case Pedido::EN_TIENDA_AGENTE_OLVA_INT:
-                        $btn = '<button data-target="" data-toggle="jqconfirm" class="btn btn-warning btn-sm"><i class="fas fa-envelope"></i>ACTUALIZAR ESTADO</button>';
+                        $btnType = [
+                            'icon' => 'fas fa-envelope',
+                            'btnClass' => 'btn-warning',
+                        ];
                         break;
                     case Pedido::ENTREGADO_PROVINCIA_INT:
                     case Pedido::NO_ENTREGADO_OLVA_INT:
-                        $btn = '';
+                        $btnType = [];
                         break;
                     default:
-                        $btn = '<button data-target="" data-toggle="jqconfirm" class="btn btn-info btn-sm"><i class="fa fa-hand-holding"></i> ACTUALIZAR ESTADO</button>';
+                        $btnType = [];
+                }
+                $btn='';
+                if (!empty($btnType)) {
+                    $btn = '<button style="font-size:9px" data-target="" data-toggle="jqconfirm" class="btn ' . $btnType['btnClass'] . ' btn-sm"><i class="' . $btnType['icon'] . '"></i> <b>ACTUALIZAR ESTADO</b></button>';
                 }
                 if (!in_array(\auth()->user()->rol, [User::ROL_JEFE_COURIER, User::ROL_ADMIN])) {
                     $btn = '';
                 }
-                return $btn;
+                $btnAdd[]='<button style="font-size:9px" data-target="" data-toggle="jqconfirmencargado" class="btn btn-info btn-sm"><i class="fa fa-history"></i> <b>Ver Historial</b></button>';
+                return '<div class="d-flex" style="flex-direction: column; gap:0.5rem">'.$btn . join('', $btnAdd).'</div>';
             })
             ->rawColumns(['action', 'referencia_format', 'condicion_envio_format', 'direccion_format'])
             ->make(true);
@@ -3038,7 +3053,7 @@ class EnvioController extends Controller
                 $codigos = [];
             }
         }
-        if(count($codigos)==0){
+        if (count($codigos) == 0) {
             return response()->json(['html' => $respuesta, 'class' => "text-warning", 'error' => 1, 'Pedidos procesados' => $codigos_procesados, 'Pedidos no procesados' => $codigos_procesados]);
         }
 
