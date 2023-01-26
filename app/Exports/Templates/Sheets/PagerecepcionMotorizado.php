@@ -4,6 +4,7 @@ namespace App\Exports\Templates\Sheets;
 
 use App\Abstracts\Export;
 use App\Models\DireccionGrupo;
+use App\Models\Pedido;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Concerns\WithColumnFormatting;
@@ -28,7 +29,7 @@ Sheet::macro('styleCells', function (Sheet $sheet, string $cellRange, array $sty
     $sheet->getDelegate()->getStyle($cellRange)->applyFromArray($style);
 });
 
-class PagerecepcionMotorizado extends Export implements WithStyles,WithColumnFormatting, FromCollection, WithHeadings, ShouldAutoSize, WithEvents,WithColumnWidths
+class PagerecepcionMotorizado extends Export implements WithStyles, WithColumnFormatting, FromCollection, WithHeadings, ShouldAutoSize, WithEvents, WithColumnWidths
 {
     //use RemembersRowNumber;
 
@@ -36,7 +37,7 @@ class PagerecepcionMotorizado extends Export implements WithStyles,WithColumnFor
     public string $fecha_envio_h = '';
     public int $condicion_envio_h = 0;
 
-    public function __construct($user_motorizado_p, $fecha_envio_p,$condicion_envio_p)
+    public function __construct($user_motorizado_p, $fecha_envio_p, $condicion_envio_p)
     {
         parent::__construct();
         $this->motorizado_id = $user_motorizado_p;
@@ -47,42 +48,74 @@ class PagerecepcionMotorizado extends Export implements WithStyles,WithColumnFor
     public function collection()
     {
         DB::statement(DB::raw('set @rownum=0'));
+
         $direccion = DireccionGrupo::where('direccion_grupos.estado', '1')
             ->join('users as u', 'direccion_grupos.user_id', 'u.id')
             ->join('clientes as c', 'direccion_grupos.cliente_id', 'c.id')
             ->select([
                 DB::raw('@rownum  := @rownum  + 1 AS rownum'),
-                DB::raw('concat(direccion_grupos.celular) as celular_recibe'),
+                DB::raw('direccion_grupos.celular as celular_recibe'),
+                DB::raw('direccion_grupos.nombre as nombre_recibe'),
                 'direccion_grupos.correlativo',
                 'direccion_grupos.codigos',
-                DB::raw("(CASE when direccion_grupos.destino='LIMA' then  direccion_grupos.nombre
-                                    when direccion_grupos.destino='PROVINCIA' then  direccion_grupos.direccion
-                                    else '' end
-                                ) as contacto_recibe_tracking"),
                 'direccion_grupos.producto',
-                'direccion_grupos.cantidad as QTY',
+                'direccion_grupos.cantidad as qty',
                 'direccion_grupos.nombre_cliente',
+
+                'direccion_grupos.destino',
+                'direccion_grupos.distribucion',
+                'direccion_grupos.nombre',
                 'direccion_grupos.direccion',
                 'direccion_grupos.referencia',
                 'direccion_grupos.distrito',
             ])
-        ->where('direccion_grupos.estado','=','1');
+            ->where('direccion_grupos.estado', '=', '1');
         //->orderBy('concat(direccion_grupos.celular)','desc');
-        if ($this->motorizado_id!=0) {
+        if ($this->motorizado_id != 0) {
             $direccion = $direccion->where('direccion_grupos.motorizado_id', $this->motorizado_id);
         }
-        if ($this->fecha_envio_h!='') {
+        if ($this->fecha_envio_h != '') {
             $direccion = $direccion->whereDate('direccion_grupos.fecha_salida', $this->fecha_envio_h);
         }
-        if ($this->condicion_envio_h!='') {
+        if ($this->condicion_envio_h != '') {
             $direccion = $direccion->where('direccion_grupos.condicion_envio_code', $this->condicion_envio_h);
         }
 
         /*->when($fecha_consulta != null, function ($query) use ($fecha_consulta) {
             $query->whereDate('direccion_grupos.fecha_salida', $fecha_consulta);
         })*/
+        $datos = $direccion->get();
 
-        return $direccion->get();
+        $items = [];
+
+        foreach ($datos as $item) {
+            if ($item->distribucion == 'OLVA') {
+                $key = $item->destino . '_' . $item->distribucion . '_' . $item->direccion;
+            } else {
+                $key = $item->destino . '_' . $item->distribucion . '_' . $item->direccion . '_' . $item->distrito . '_' . $item->nombre_recibe;
+            }
+            if (!isset($items[$key])) {
+                $items[$key] = $item;
+                $items[$key]->producto = explode(',', $item->producto);
+                $items[$key]->codigos = explode(',', $item->codigos);
+            } else {
+                $p = $items[$key]->producto;
+                $c = $items[$key]->codigos;
+                $productos = explode(',', $item->producto);
+                $codigos = explode(',', $item->codigos);
+                foreach ($productos as $producto) {
+                    $p[] = $producto;
+                }
+                foreach ($codigos as $codigo) {
+                    $c[] = $codigo;
+                }
+                $items[$key]->producto = $p;
+                $items[$key]->codigos = $c;
+            }
+
+        }
+
+        return array_values($items);
     }
 
     public function title(): string
@@ -110,19 +143,15 @@ class PagerecepcionMotorizado extends Export implements WithStyles,WithColumnFor
 
     public function map($model): array
     {
-        //$model->Periodo=strval(str_pad($model->Periodo,2,"0"));
-        $model->codigos=implode("\n",explode(',',$model->codigos));
-        $aci=0;
-        $model->producto=collect(explode(',',$model->producto))->map(function ($codigo,$index){
-            return ($index+1).') '.$codigo;
-
-        })->join("\n");
-        /*$ae=[];
-        for($i=1;$i<count($model->producto);$i++)
-        {
-            array_push($ae,$i.") ".$model->producto[$i]);
+        if ($model->distribucion == 'OLVA') {
+            $model->contacto_recibe_tracking = $model->direccion;
+        } else {
+            $model->contacto_recibe_tracking = $model->nombre_recibe;
         }
-        $model->producto=implode('\n',$ae);*/
+
+        $model->codigos = collect($model->codigos)->join("\n");
+
+        $model->producto = collect($model->producto)->map(fn($producto, $index) => ($index + 1) . ') ' . $producto)->join("\n");
 
         return parent::map($model);
     }
@@ -202,12 +231,12 @@ class PagerecepcionMotorizado extends Export implements WithStyles,WithColumnFor
                 'startColor' => array('argb' => $color_V)
             )
         );
-                /*$styledefault = array(
-            'fill' => array(
-                'fillType' => Fill::FILL_SOLID,
-                'startColor' => array('argb' => $color_default)
-            )
-        );*/
+        /*$styledefault = array(
+    'fill' => array(
+        'fillType' => Fill::FILL_SOLID,
+        'startColor' => array('argb' => $color_default)
+    )
+);*/
 
         $row_cell_ = 14;
         $letter_cell = 'J';
@@ -223,7 +252,7 @@ class PagerecepcionMotorizado extends Export implements WithStyles,WithColumnFor
                 ],
                 'fill' => [
                     'fillType' => Fill::FILL_SOLID,
-                    'color' => ['argb' =>$color_R]
+                    'color' => ['argb' => $color_R]
                 ]
             ]
         );
@@ -235,7 +264,7 @@ class PagerecepcionMotorizado extends Export implements WithStyles,WithColumnFor
                 ],
                 'fill' => [
                     'fillType' => Fill::FILL_SOLID,
-                    'color' => ['argb' =>$color__]
+                    'color' => ['argb' => $color__]
                 ]
             ]
         );
@@ -247,7 +276,7 @@ class PagerecepcionMotorizado extends Export implements WithStyles,WithColumnFor
                 ],
                 'fill' => [
                     'fillType' => Fill::FILL_SOLID,
-                    'color' => ['argb' =>$color_A]
+                    'color' => ['argb' => $color_A]
                 ]
             ]
         );
@@ -259,7 +288,7 @@ class PagerecepcionMotorizado extends Export implements WithStyles,WithColumnFor
                 ],
                 'fill' => [
                     'fillType' => Fill::FILL_SOLID,
-                    'color' => ['argb' =>$color_N]
+                    'color' => ['argb' => $color_N]
                 ]
             ]
         );
@@ -271,7 +300,7 @@ class PagerecepcionMotorizado extends Export implements WithStyles,WithColumnFor
                 ],
                 'fill' => [
                     'fillType' => Fill::FILL_SOLID,
-                    'color' => ['argb' =>$color_A]
+                    'color' => ['argb' => $color_A]
                 ]
             ]
         );
@@ -283,7 +312,7 @@ class PagerecepcionMotorizado extends Export implements WithStyles,WithColumnFor
                 ],
                 'fill' => [
                     'fillType' => Fill::FILL_SOLID,
-                    'color' => ['argb' =>$color_C]
+                    'color' => ['argb' => $color_C]
                 ]
             ]
         );
@@ -295,17 +324,16 @@ class PagerecepcionMotorizado extends Export implements WithStyles,WithColumnFor
                 ],
                 'fill' => [
                     'fillType' => Fill::FILL_SOLID,
-                    'color' => ['argb' =>$color_A]
+                    'color' => ['argb' => $color_A]
                 ]
             ]
         );
 
-        foreach ($event->sheet->getRowIterator() as $row)
-        {
+        foreach ($event->sheet->getRowIterator() as $row) {
             if ($row->getRowIndex() == 1) continue;
             /*if($event->sheet->getCellByColumnAndRow($row_cell_,$row->getRowIndex())->getValue()=='RECURRENTE')
             {*/
-                $event->sheet->getStyle($letter_cell.$row->getRowIndex())->applyFromArray($style_V);
+            $event->sheet->getStyle($letter_cell . $row->getRowIndex())->applyFromArray($style_V);
             //}
         }
 
