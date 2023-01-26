@@ -1807,7 +1807,7 @@ class ClienteController extends Controller
         $mensajesRandom = [];
         $mensajesRandom[] = '*Amigo buenos dias, por favor neceisto que me cancele el pago, le mando el resumen*';
         $mensajesRandom[] = '*Amigo buenos días el saldito pendiente que tenemos por favor no se olvide, le envio el detalle.';
-        $mensajesRandom[] = '*Buenas tardes estimado, le envio el total de la deuda para que me deposite por favor, le mando el resumen para que me cancele. ';
+        $mensajesRandom[] = '*Buenas tardes amigo, le envio el total de la deuda para que me deposite por favor, le mando el resumen para que me cancele. ';
 
         $messajeKey = array_rand($mensajesRandom);
         $messaje = $mensajesRandom[$messajeKey];
