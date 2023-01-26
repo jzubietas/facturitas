@@ -11,6 +11,19 @@
             <div class="modal-body">
                 <div class="row">
                     <div class="col-md-12 card_clientes ">
+
+                        <div class="cmb_asesores row">
+                            <div class="col-2 mx-auto">
+                                <select id="user_id" name="user_id" class="border form-control  border-secondary selectpicker" id="user_id" data-live-search="true"
+                                        data-live-search-placeholder="">
+                                    <option value="0" class="ob" data-type="select" data-msj="Seleccione un Asesor">---- SELECCIONE ASESOR ----</option>
+                                    @foreach($user_id as $asesor)
+                                        <option data-subtext="{{$asesor->exidentificador}}"
+                                                value="{{$asesor->id}}">{{($asesor->identificador) }} {{ $asesor->letra  }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
                         <div class="table-responsive">
                                     <table id="datatable-clientes-lista-recojer"
                                            class="table table-striped table-bordered nowrap"
