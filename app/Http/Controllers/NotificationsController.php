@@ -28,7 +28,7 @@ class NotificationsController extends Controller
 
     public function getNotificationsPedidosAtender(Request $request)
     {
-        $contador_pedidos_atender = Pedido::where('condicion_code',1)->count();
+        $contador_pedidos_atender = Pedido::where('condicion_code', 1)->count();
 
         return [
             'icon' => 'fas fa-envelope',
@@ -38,6 +38,7 @@ class NotificationsController extends Controller
             'dropdown' => '',
         ];
     }
+
     public function getNotificationsData(Request $request)
     {
         // For the sake of simplicity, assume we have a variable called
@@ -128,9 +129,9 @@ class NotificationsController extends Controller
             ->whereIn('pedidos.condicion_envio_code', [Pedido::POR_ATENDER_OPE_INT, Pedido::EN_ATENCION_OPE_INT])
             ->poratenderestatus();
 
-            if(Auth::user()->rol == User::ROL_ASESOR_ADMINISTRATIVO){
+        if (Auth::user()->rol == User::ROL_ASESOR_ADMINISTRATIVO) {
 
-                $asesores = User::whereIn('users.rol', [User::ROL_ASESOR_ADMINISTRATIVO])
+            $asesores = User::whereIn('users.rol', [User::ROL_ASESOR_ADMINISTRATIVO])
                 ->where('users.estado', '1')
                 ->where('users.identificador', Auth::user()->identificador)
                 ->select(
@@ -138,12 +139,12 @@ class NotificationsController extends Controller
                 )
                 ->pluck('users.identificador');
 
-                $contador_pedidos_atender = $contador_pedidos_atender->WhereIn('u.identificador', $asesores);
+            $contador_pedidos_atender = $contador_pedidos_atender->WhereIn('u.identificador', $asesores);
 
-            }
-            if(Auth::user()->rol == User::ROL_ASESOR){
+        }
+        if (Auth::user()->rol == User::ROL_ASESOR) {
 
-                $asesores = User::whereIn('users.rol', [User::ROL_ASESOR])
+            $asesores = User::whereIn('users.rol', [User::ROL_ASESOR])
                 ->where('users.estado', '1')
                 ->where('users.identificador', Auth::user()->identificador)
                 ->select(
@@ -151,57 +152,57 @@ class NotificationsController extends Controller
                 )
                 ->pluck('users.identificador');
 
-                $contador_pedidos_atender = $contador_pedidos_atender->WhereIn('u.identificador', $asesores);
+            $contador_pedidos_atender = $contador_pedidos_atender->WhereIn('u.identificador', $asesores);
 
-            }else if(Auth::user()->rol == User::ROL_OPERARIO){
+        } else if (Auth::user()->rol == User::ROL_OPERARIO) {
 
-                $asesores = User::whereIn('users.rol', [User::ROL_ASESOR, User::ROL_ADMIN, User::ROL_ASESOR_ADMINISTRATIVO])
-                    ->where('users.estado', '1')
-                    ->Where('users.operario', Auth::user()->id)
-                    ->select(
-                        DB::raw("users.identificador as identificador")
-                    )
-                    ->pluck('users.identificador');
+            $asesores = User::whereIn('users.rol', [User::ROL_ASESOR, User::ROL_ADMIN, User::ROL_ASESOR_ADMINISTRATIVO])
+                ->where('users.estado', '1')
+                ->Where('users.operario', Auth::user()->id)
+                ->select(
+                    DB::raw("users.identificador as identificador")
+                )
+                ->pluck('users.identificador');
 
-                $contador_pedidos_atender = $contador_pedidos_atender->WhereIn('u.identificador', $asesores);
-
-
-            }else if(Auth::user()->rol == User::ROL_LLAMADAS){
-
-                $asesores = User::whereIn('users.rol', [User::ROL_ASESOR, User::ROL_ADMIN, User::ROL_ASESOR_ADMINISTRATIVO])
-                    ->where('users.estado', '1')
-                    ->Where('users.llamada', Auth::user()->id)
-                    ->select(
-                        DB::raw("users.identificador as identificador")
-                    )
-                    ->pluck('users.identificador');
-
-                $contador_pedidos_atender = $contador_pedidos_atender->WhereIn('u.identificador', $asesores);
+            $contador_pedidos_atender = $contador_pedidos_atender->WhereIn('u.identificador', $asesores);
 
 
-            } else if (Auth::user()->rol == User::ROL_JEFE_OPERARIO) {
-                $operarios = User::where('users.rol', User::ROL_OPERARIO)
-                    ->where('users.estado', '1')
-                    ->where('users.jefe', Auth::user()->id)
-                    ->select(
-                        DB::raw("users.id as id")
-                    )
-                    ->pluck('users.id');
+        } else if (Auth::user()->rol == User::ROL_LLAMADAS) {
 
-                $asesores = User::whereIN('users.rol', [User::ROL_ASESOR, User::ROL_ADMIN, User::ROL_ASESOR_ADMINISTRATIVO])
-                    ->where('users.estado', '1')
-                    ->WhereIn('users.operario', $operarios)
-                    ->select(
-                        DB::raw("users.identificador as identificador")
-                    )
-                    ->pluck('users.identificador');
+            $asesores = User::whereIn('users.rol', [User::ROL_ASESOR, User::ROL_ADMIN, User::ROL_ASESOR_ADMINISTRATIVO])
+                ->where('users.estado', '1')
+                ->Where('users.llamada', Auth::user()->id)
+                ->select(
+                    DB::raw("users.identificador as identificador")
+                )
+                ->pluck('users.identificador');
 
-                $contador_pedidos_atender = $contador_pedidos_atender->WhereIn('u.identificador', $asesores);
+            $contador_pedidos_atender = $contador_pedidos_atender->WhereIn('u.identificador', $asesores);
 
 
-            }
+        } else if (Auth::user()->rol == User::ROL_JEFE_OPERARIO) {
+            $operarios = User::where('users.rol', User::ROL_OPERARIO)
+                ->where('users.estado', '1')
+                ->where('users.jefe', Auth::user()->id)
+                ->select(
+                    DB::raw("users.id as id")
+                )
+                ->pluck('users.id');
 
-            $contador_pedidos_atender = $contador_pedidos_atender->count();
+            $asesores = User::whereIN('users.rol', [User::ROL_ASESOR, User::ROL_ADMIN, User::ROL_ASESOR_ADMINISTRATIVO])
+                ->where('users.estado', '1')
+                ->WhereIn('users.operario', $operarios)
+                ->select(
+                    DB::raw("users.identificador as identificador")
+                )
+                ->pluck('users.identificador');
+
+            $contador_pedidos_atender = $contador_pedidos_atender->WhereIn('u.identificador', $asesores);
+
+
+        }
+
+        $contador_pedidos_atender = $contador_pedidos_atender->count();
 
         /*********
          * PEDIDOS ATENDIDOS
@@ -217,9 +218,9 @@ class NotificationsController extends Controller
             ->where('da_confirmar_descarga', '0')
             ->whereNotIn('pedidos.condicion_envio_code', [Pedido::POR_ATENDER_OPE_INT, Pedido::EN_ATENCION_OPE_INT]);
 
-        if(Auth::user()->rol == User::ROL_ASESOR){
+        if (Auth::user()->rol == User::ROL_ASESOR) {
 
-                $asesores = User::whereIn('users.rol', [User::ROL_ASESOR])
+            $asesores = User::whereIn('users.rol', [User::ROL_ASESOR])
                 ->where('users.estado', '1')
                 ->where('users.identificador', Auth::user()->identificador)
                 ->select(
@@ -227,9 +228,9 @@ class NotificationsController extends Controller
                 )
                 ->pluck('users.identificador');
 
-                $contador_pedidos_atendidos = $contador_pedidos_atendidos->WhereIn('u.identificador', $asesores);
+            $contador_pedidos_atendidos = $contador_pedidos_atendidos->WhereIn('u.identificador', $asesores);
 
-        }else if(Auth::user()->rol == User::ROL_OPERARIO){
+        } else if (Auth::user()->rol == User::ROL_OPERARIO) {
 
             $asesores = User::whereIN('users.rol', [User::ROL_ASESOR, User::ROL_ADMIN, User::ROL_ASESOR_ADMINISTRATIVO])
                 ->where('users.estado', '1')
@@ -242,7 +243,7 @@ class NotificationsController extends Controller
             $contador_pedidos_atendidos = $contador_pedidos_atendidos->WhereIn('u.identificador', $asesores);
 
 
-        }else if(Auth::user()->rol == User::ROL_LLAMADAS){
+        } else if (Auth::user()->rol == User::ROL_LLAMADAS) {
 
             $asesores = User::whereIn('users.rol', [User::ROL_ASESOR, User::ROL_ADMIN, User::ROL_ASESOR_ADMINISTRATIVO])
                 ->where('users.estado', '1')
@@ -325,7 +326,7 @@ class NotificationsController extends Controller
                 )
                 ->pluck('users.identificador');
 
-             $contador_pedidos_atendidos_operacion->WhereIn('u.identificador', $asesores);
+            $contador_pedidos_atendidos_operacion->WhereIn('u.identificador', $asesores);
 
 
         } else if (Auth::user()->rol == "Jefe de operaciones") {
@@ -364,45 +365,45 @@ class NotificationsController extends Controller
 
         $contador_pedidos_pen_anulacion = Pedido::join('users as u', 'pedidos.user_id', 'u.id')
             ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
-            ->where('pendiente_anulacion',1)
-            ->where('pedidos.estado',1);
+            ->where('pendiente_anulacion', 1)
+            ->where('pedidos.estado', 1);
 
-            if (Auth::user()->rol == "Operario") {
+        if (Auth::user()->rol == "Operario") {
 
-                $asesores = User::whereIN('users.rol', ['Asesor', 'Administrador', 'ASESOR ADMINISTRATIVO'])
-                    ->where('users.estado', '1')
-                    ->Where('users.operario', Auth::user()->id)
-                    ->select(
-                        DB::raw("users.identificador as identificador")
-                    )
-                    ->pluck('users.identificador');
+            $asesores = User::whereIN('users.rol', ['Asesor', 'Administrador', 'ASESOR ADMINISTRATIVO'])
+                ->where('users.estado', '1')
+                ->Where('users.operario', Auth::user()->id)
+                ->select(
+                    DB::raw("users.identificador as identificador")
+                )
+                ->pluck('users.identificador');
 
-                $contador_pedidos_pen_anulacion = $contador_pedidos_pen_anulacion->WhereIn('u.identificador', $asesores);
-
-
-            } else if (Auth::user()->rol == "Jefe de operaciones") {
-                $operarios = User::where('users.rol', 'Operario')
-                    ->where('users.estado', '1')
-                    ->where('users.jefe', Auth::user()->id)
-                    ->select(
-                        DB::raw("users.id as id")
-                    )
-                    ->pluck('users.id');
-
-                $asesores = User::whereIN('users.rol', ['Asesor', 'Administrador', 'ASESOR ADMINISTRATIVO'])
-                    ->where('users.estado', '1')
-                    ->WhereIn('users.operario', $operarios)
-                    ->select(
-                        DB::raw("users.identificador as identificador")
-                    )
-                    ->pluck('users.identificador');
-
-                $contador_pedidos_pen_anulacion = $contador_pedidos_pen_anulacion->WhereIn('u.identificador', $asesores);
+            $contador_pedidos_pen_anulacion = $contador_pedidos_pen_anulacion->WhereIn('u.identificador', $asesores);
 
 
-            }
+        } else if (Auth::user()->rol == "Jefe de operaciones") {
+            $operarios = User::where('users.rol', 'Operario')
+                ->where('users.estado', '1')
+                ->where('users.jefe', Auth::user()->id)
+                ->select(
+                    DB::raw("users.id as id")
+                )
+                ->pluck('users.id');
 
-            $contador_pedidos_pen_anulacion = $contador_pedidos_pen_anulacion->count();
+            $asesores = User::whereIN('users.rol', ['Asesor', 'Administrador', 'ASESOR ADMINISTRATIVO'])
+                ->where('users.estado', '1')
+                ->WhereIn('users.operario', $operarios)
+                ->select(
+                    DB::raw("users.identificador as identificador")
+                )
+                ->pluck('users.identificador');
+
+            $contador_pedidos_pen_anulacion = $contador_pedidos_pen_anulacion->WhereIn('u.identificador', $asesores);
+
+
+        }
+
+        $contador_pedidos_pen_anulacion = $contador_pedidos_pen_anulacion->count();
 
         $contador_jefe_op = Pedido::join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
             ->where('pedidos.estado', '1')
@@ -411,17 +412,17 @@ class NotificationsController extends Controller
             ->whereIn('pedidos.condicion_envio_code', [Pedido::ENVIADO_OPE_INT, Pedido::ENTREGADO_SIN_SOBRE_OPE_INT])
             ->count();
 
-        $contador_sobres_entregados = Pedido::where('estado',1)
+        $contador_sobres_entregados = Pedido::where('estado', 1)
             ->where('condicion_envio_code', Pedido::ENTREGADO_CLIENTE_INT)
             ->count();
 
         $contador_sobres_confirmar_recepcion_motorizado = DireccionGrupo::join('clientes as c', 'c.id', 'direccion_grupos.cliente_id')
             ->join('users as u', 'u.id', 'c.user_id')
-            ->where('direccion_grupos.condicion_envio_code',Pedido::ENVIO_MOTORIZADO_COURIER_INT)
+            ->where('direccion_grupos.condicion_envio_code', Pedido::ENVIO_MOTORIZADO_COURIER_INT)
             ->activo()
             ->count();
 
-        $contador_sobres_confirmar_recepcion=Pedido::where('estado',1)
+        $contador_sobres_confirmar_recepcion = Pedido::where('estado', 1)
             //->join('users as u', 'u.id', 'c.user_id')
             ->where('condicion_envio_code', Pedido::ENVIO_COURIER_JEFE_OPE_INT)
             ->count();
@@ -440,7 +441,7 @@ class NotificationsController extends Controller
             ->where('direccion_grupos.condicion_envio_code', Pedido::CONFIRM_MOTORIZADO_INT)
             ->where('direccion_grupos.estado', '1');
 
-        $sobres_devueltos= Pedido::join('direccion_grupos', 'pedidos.direccion_grupo', 'direccion_grupos.id')
+        $sobres_devueltos = Pedido::join('direccion_grupos', 'pedidos.direccion_grupo', 'direccion_grupos.id')
             ->select([
                 'pedidos.*',
                 'direccion_grupos.fecha_salida as grupo_fecha_salida',
@@ -453,13 +454,31 @@ class NotificationsController extends Controller
             //->activo()
             ->whereNotNull('direccion_grupos.fecha_salida')
             ->count();
-        if($sobres_devueltos > 0){
+        if ($sobres_devueltos > 0) {
             $icono_sobres_devueltos = "fa fa-exclamation-triangle text-warning warning";
-        }else{
+        } else {
             $icono_sobres_devueltos = "";
         }
 
 
+        $pedidos_provincia = DireccionGrupo::join('clientes', 'clientes.id', 'direccion_grupos.cliente_id')
+            ->join('users', 'users.id', 'clientes.user_id')
+            ->activo()
+            ->whereIn('direccion_grupos.condicion_envio_code', [
+                Pedido::EN_TIENDA_AGENTE_OLVA_INT,
+            ])
+            ->whereNull('direccion_grupos.courier_failed_sync_at')
+            ->where('direccion_grupos.distribucion', 'OLVA')
+            ->where('direccion_grupos.motorizado_status', '0')
+            ->whereNull('direccion_grupos.add_screenshot_at')
+            ->select([
+                'direccion_grupos.*',
+                "clientes.celular as cliente_celular",
+                "clientes.nombre as cliente_nombre",
+            ]);
+
+        add_query_filtros_por_roles_pedidos($pedidos_provincia, 'users.identificador');
+        $contador_encargado_tienda_agente =$pedidos_provincia->count();
 
         return [
             'icon' => 'fas fa-envelope',
@@ -468,7 +487,7 @@ class NotificationsController extends Controller
             'icon_color' => 'white',
             'dropdown' => $dropdownHtml,
             'contador_pedidos_atender' => $contador_pedidos_atender,
-            'contador_pedidos_atendidos'=>$contador_pedidos_atendidos,
+            'contador_pedidos_atendidos' => $contador_pedidos_atendidos,
             'contador_pedidos_atendidos_operacion' => $contador_pedidos_atendidos_operacion,
             'contador_pedidos_pen_anulacion' => $contador_pedidos_pen_anulacion,
             'contador_sobres_entregados' => $contador_sobres_entregados,
@@ -478,14 +497,15 @@ class NotificationsController extends Controller
             'contador_en_motorizados_count' => $en_motorizados_count->count(),
             'contador_en_motorizados_confirmar_count' => $en_motorizados_confirmar_count->count(),
             'contador_sobres_devueltos' => $icono_sobres_devueltos,
-            'authorization_courier'=>\Blade::renderComponent(new AutorizarRutaMotorizado())
+            'contador_encargado_tienda_agente' => $contador_encargado_tienda_agente,
+            'authorization_courier' => \Blade::renderComponent(new AutorizarRutaMotorizado())
         ];
     }
 
     public function index()
     {
         $postNotifications = auth()->user()->unreadNotifications;
-        $devoluciones=[];
+        $devoluciones = [];
         if (\Auth::check()) {
             if (\Auth::user()->rol == \App\Models\User::ROL_ADMIN) {
                 $devoluciones = Devolucion::query()->with(['cliente', 'pago', 'asesor'])->noAtendidos()->get();

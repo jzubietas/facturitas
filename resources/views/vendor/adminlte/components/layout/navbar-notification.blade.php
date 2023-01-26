@@ -95,7 +95,9 @@
                             insertDotMenu("i.dot_contador_en_motorizados_count",'.dot-notify.noti-side',data.contador_en_motorizados_count)
                             insertDotMenu("i.dot_contador_en_motorizados_confirmar_count",'.dot-notify.noti-side',data.contador_en_motorizados_confirmar_count)
                             insertIconMenu("i.dot_contador_sobres_devueltos",'.dot-notify.noti-side',data.contador_sobres_devueltos)
-                            console.log(data.contador_sobres_devueltos);
+
+                            insertDotMenu("i.dot_encargado_tienda_agente_count",'.dot-notify.noti-side',data.contador_encargado_tienda_agente)
+
                             nLink.update(data);
                             $("#alert-authorization").html(data.authorization_courier)
 
