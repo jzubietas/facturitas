@@ -231,7 +231,6 @@ class PedidoStatusController extends Controller
                 ->where('pedidos.estado', '1')
                 ->where('dp.estado', '1');
 
-
             if (Auth::user()->rol == "Operario") {
 
                 $asesores = User::whereIN('users.rol', ['Asesor', 'Administrador', 'ASESOR ADMINISTRATIVO'])
@@ -283,6 +282,8 @@ class PedidoStatusController extends Controller
                     ->pluck('users.identificador');
 
                 $pedidos = $pedidos->WhereIn('u.identificador', $usersasesores);
+            } else if (Auth::user()->rol == User::ROL_ASESOR_ADMINISTRATIVO) {
+                $pedidos = $pedidos->WhereIn('u.identificador', \auth()->user()->identificador);
             }
 
 
