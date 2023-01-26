@@ -681,7 +681,16 @@ class PedidoController extends Controller
 
         $mirol = Auth::user()->rol;
 
-        return view('pedidos.create', compact('users', 'dateM', 'dateY', 'meses', 'anios', 'fecha', 'numped', 'mirol', 'mes_selected', 'anno_selected'));
+        $distritos_recojo = Distrito::whereIn('provincia', ['LIMA', 'CALLAO'])
+            ->where('estado', '1')
+            ->WhereNotIn('distrito', ['CHACLACAYO', 'CIENEGUILLA', 'LURIN', 'PACHACAMAC', 'PUCUSANA', 'PUNTA HERMOSA', 'PUNTA NEGRA', 'SAN BARTOLO', 'SANTA MARIA DEL MAR'])
+            ->select([
+                'distrito',
+                DB::raw("concat(distrito,' - ',zona) as distritonam"),
+                'zona'
+            ])->orderBy('distrito')->get();
+
+        return view('pedidos.create', compact('users', 'dateM', 'dateY', 'meses', 'anios', 'fecha', 'numped', 'mirol', 'mes_selected', 'anno_selected','distritos_recojo'));
     }
 
     /**
