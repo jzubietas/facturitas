@@ -38,7 +38,7 @@ class OlvaTracking extends Command
      */
     public function handle()
     {
-        $grupos = DireccionGrupo::query()->inOlva()->whereNotNull('courier_failed_sync_at')->get();
+        $grupos = DireccionGrupo::query()->inOlva()->get();
         foreach ($grupos as $grupo) {
             $code = $grupo->direccion;
             if(\Str::contains($code,'-')){
@@ -53,6 +53,10 @@ class OlvaTracking extends Command
                        'referencia' => $numreg,
                         'direccion' => $code
                     ]);
+                    $grupo->pedidos()->update([
+                        'env_tracking' => $code,
+                        'env_numregistro' => $numreg,
+                    ]);
                 }
             }
             $year = (int)substr($code, strlen($code) - 2, 2);
@@ -63,6 +67,13 @@ class OlvaTracking extends Command
                 $grupo->update([
                     'direccion' => $code . '-' . $year,
                     'courier_failed_sync_at' => null
+                ]);
+                $grupo->pedidos()->update([
+                    'env_tracking' => $grupo->direccion,
+                ]);
+            }else{
+                $grupo->update([
+                    'courier_failed_sync_at' => now()
                 ]);
             }
         }
