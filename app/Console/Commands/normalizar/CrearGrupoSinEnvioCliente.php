@@ -55,22 +55,27 @@ class CrearGrupoSinEnvioCliente extends Command
         $this->error("Cantidad: " . $pedidos->count());
         foreach ($pedidos as $pedido) {
             $code = array_flip(Pedido::$estadosCondicionEnvioCode)[$pedido->condicion_envio];
-            $pedido->update([
-                'condicion_envio' => $pedido->condicion_envio,
-                'condicion_envio_code' => $code,
-                'condicion_envio_at' => $pedido->condicion_envio_at,
-            ]);
+            if($code!=$pedido->condicion_envio_code){
+                $this->error("Pedido estado diferente: " . $pedido->codigo);
+                $pedido->update([
+                    'condicion_envio' => $pedido->condicion_envio,
+                    'condicion_envio_code' => $code,
+                    'condicion_envio_at' => $pedido->condicion_envio_at,
+                ]);
+            }
             if ($pedido->direcciongrupo == null) {
-                $this->warn($pedido->codigo);
+                $this->warn($pedido->codigo.' - '.$pedido->condicion_envio);
                 DireccionGrupo::createByPedido($pedido);
             } else {
                 if($pedido->condicion_envio_code!=Pedido::ENTREGADO_CLIENTE_INT) {
                     $this->info($pedido->codigo);
-                    $pedido->direcciongrupo->update([
-                        'condicion_envio' => $pedido->condicion_envio,
-                        'condicion_envio_code' => $code,
-                        'condicion_envio_at' => $pedido->condicion_envio_at,
-                    ]);
+                    if($code!=$pedido->direcciongrupo->condicion_envio_code) {
+                        $pedido->direcciongrupo->update([
+                            'condicion_envio' => $pedido->condicion_envio,
+                            'condicion_envio_code' => $code,
+                            'condicion_envio_at' => $pedido->condicion_envio_at,
+                        ]);
+                    }
                 }
             }
         }
