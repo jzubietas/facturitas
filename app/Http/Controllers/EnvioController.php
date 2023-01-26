@@ -1656,12 +1656,12 @@ class EnvioController extends Controller
             }
             $grupo->update([
                 'direccion' => trim($request->tracking),
-                'referencia' =>  trim($request->numregistro),
-                'courier_failed_sync_at'=>null
+                'referencia' => trim($request->numregistro),
+                'courier_failed_sync_at' => null
             ]);
             $grupo->pedidos()->update([
                 'env_tracking' => trim($request->tracking),
-                'env_numregistro' =>  trim($request->numregistro)
+                'env_numregistro' => trim($request->numregistro)
             ]);
             return response()->json([
                 'success' => true,
@@ -3035,6 +3035,17 @@ class EnvioController extends Controller
         $codigos_no_procesados = array();
         $respuesta = "";
 
+        if (!is_array($codigos)) {
+            if ($codigos) {
+                $codigos = [$codigos];
+            } else {
+                $codigos = [];
+            }
+        }
+        if(count($codigos)==0){
+            return response()->json(['html' => $respuesta, 'class' => "text-warning", 'error' => 1, 'Pedidos procesados' => $codigos_procesados, 'Pedidos no procesados' => $codigos_procesados]);
+        }
+
         /*************
          * IDENTIFICAMOS LOS DATOS GLOBALES
          */
@@ -3099,7 +3110,6 @@ class EnvioController extends Controller
         /************
          * SETEAMOS VALORES POR DEFECTO
          */
-
 
         foreach ($codigos as $codigo) {
 
@@ -3451,6 +3461,7 @@ class EnvioController extends Controller
         }
 
         return response()->json(['html' => $respuesta, 'class' => "text-success", 'error' => 0, 'Pedidos procesados' => $codigos_procesados, 'Pedidos no procesados' => $codigos_procesados]);
+
     }
 
 
@@ -3959,7 +3970,7 @@ class EnvioController extends Controller
     public function registrosasesor(Request $request)
     {
         $data = DireccionGrupo::
-            join('users as u', 'direccion_grupos.user_id', 'u.id')
+        join('users as u', 'direccion_grupos.user_id', 'u.id')
             //direccion,referencia,observacion
             ->select([
                 'direccion_grupos.*',
@@ -3967,9 +3978,9 @@ class EnvioController extends Controller
             ])
             ->where('direccion_grupos.estado', '1')
             ->where('direccion_grupos.distribucion', 'OLVA')
-            ->whereIn('direccion_grupos.destino',['LIMA','PROVINCIA'])
-            ->where('direccion_grupos.direccion','<>','SIN TRACKING')
-            ->where('relacionado','0');
+            ->whereIn('direccion_grupos.destino', ['LIMA', 'PROVINCIA'])
+            ->where('direccion_grupos.direccion', '<>', 'SIN TRACKING')
+            ->where('relacionado', '0');
 
         return datatables()->query(DB::table($data))//Datatables::of($data)
         ->addIndexColumn()
@@ -3979,7 +3990,7 @@ class EnvioController extends Controller
             ->addColumn('action', function ($row) {
                 return '<button class="btn btn-success elegir">Elegir</button>';
             })
-            ->rawColumns(['action','estado'])
+            ->rawColumns(['action', 'estado'])
             ->toJson();
 
     }
