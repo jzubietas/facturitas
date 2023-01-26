@@ -92,7 +92,7 @@
                 rowCallback: function (row, data, index) {
                     renderEventButtonAction(row, data, index)
                     if (data.courier_failed_sync_at != null) {
-                        $('td', row).css('background', 'red')
+                        $('td', row).css('background', 'var(--red,red)')
                     }
                 },
                 columns: [

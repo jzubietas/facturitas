@@ -45,10 +45,11 @@ class CrearGrupoSinEnvioCliente extends Command
                     $query->where('condicion_envio', Pedido::ENTREGADO_SIN_ENVIO_CLIENTE)
                         ->orWhere('condicion_envio_code', Pedido::ENTREGADO_SIN_ENVIO_CLIENTE_INT);
                 });
-                $query->where(function ($query) {
+                $query->orWhere(function ($query) {
                     $query->where('condicion_envio', Pedido::ENTREGADO_SIN_SOBRE_CLIENTE)
                         ->orWhere('condicion_envio_code', Pedido::ENTREGADO_SIN_SOBRE_CLIENTE_INT);
                 });
+                $query->orWhere('condicion_envio_code', Pedido::ENTREGADO_CLIENTE_INT);
             })
             ->get();
         $this->error("Cantidad: " . $pedidos->count());
@@ -63,13 +64,14 @@ class CrearGrupoSinEnvioCliente extends Command
                 $this->warn($pedido->codigo);
                 DireccionGrupo::createByPedido($pedido);
             } else {
-
-                $this->info($pedido->codigo);
-                $pedido->direcciongrupo->update([
-                    'condicion_envio' => $pedido->condicion_envio,
-                    'condicion_envio_code' => $code,
-                    'condicion_envio_at' => $pedido->condicion_envio_at,
-                ]);
+                if($pedido->condicion_envio_code!=Pedido::ENTREGADO_CLIENTE_INT) {
+                    $this->info($pedido->codigo);
+                    $pedido->direcciongrupo->update([
+                        'condicion_envio' => $pedido->condicion_envio,
+                        'condicion_envio_code' => $code,
+                        'condicion_envio_at' => $pedido->condicion_envio_at,
+                    ]);
+                }
             }
         }
         return 0;

@@ -39,12 +39,21 @@ class FinaliceOlvaNoTracking extends Command
      */
     public function handle()
     {
-        $grupos = DireccionGrupo::query()->inOlva()->activo()
+        $grupos = DireccionGrupo::query()->inOlvaAll()->activo()
             ->where('direccion', 'NOT REGEXP', '^[0-9]+$')
             ->get();
         foreach ($grupos as $grupo) {
-            DireccionGrupo::cambiarCondicionEnvio($grupo, Pedido::ENTREGADO_PROVINCIA_INT);
+            DireccionGrupo::cambiarCondicionEnvio($grupo, Pedido::ENTREGADO_PROVINCIA_INT,[
+                'courier_failed_sync_at'=>null
+            ]);
         }
+
+       DireccionGrupo::query()->inOlvaAll()->activo()
+            ->inOlvaFinalizado()
+            ->update([
+                'courier_failed_sync_at'=>null
+            ]);
+
         return 0;
     }
 }
