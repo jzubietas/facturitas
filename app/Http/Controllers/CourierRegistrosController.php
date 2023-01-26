@@ -55,7 +55,7 @@ class CourierRegistrosController extends Controller
                             <a href="" class="btn-sm text-warning" data-target="#modal-relacionar-registro_courier"
                                 data-toggle="modal" data-ide="' . $courier->id . '"
                                 data-status="' . $courier->status . '" data-relacionado="' . $courier->relacionado . '"
-                                data-courierreg="'.$courier->id.'">
+                                data-courierreg="'.$courier->id.'" data-courierreg-registro="'.$courier->courier_registro.'">
                                 <i class="fas fa-envelope text-success"></i> Relacionar</a></li>
                             </a>
                         </li>';

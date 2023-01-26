@@ -243,7 +243,7 @@
 
             $('#modal-relacionar-registro_courier').on('show.bs.modal', function (event) {
                 var button = $(event.relatedTarget)
-                $("#courierreg").val(button.data('courierreg'));
+                $("#courierreg").val(button.data('courierreg-registro'));
 
                 $('#datatable-registros-asesor').DataTable().clear().destroy();
 
