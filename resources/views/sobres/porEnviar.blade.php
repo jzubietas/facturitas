@@ -1573,7 +1573,7 @@
                 $("span.nombre_cliente_recojo").html(data.nombre)
                 $("#recojo_pedido").val(data.id)
                 $("#recojo_pedido_codigo").val(data.codigo)
-                if(data.direccion_grupo==null)
+
                 $("#recojo_pedido_grupo").val ( ((data.direccion_grupo==null)? 'SIN GRUPO':data.direccion_grupo) )
                 $("span.destino_recojo").html(data.env_destino);
                 $("span.distrito_recojo").html(data.env_distrito);
@@ -1652,11 +1652,30 @@
                 let recojo_pedido = $("#recojo_pedido").val();
                 let recojo_fecha = $("#recojo_fecha").val();
                 let recojo_distrito = $("#distrito_recoger").val();
-                let recojo_pedido_quienrecibe_nombre = $("#recojo_pedido_quienrecibe_nombre").val();
-                let recojo_pedido_quienrecibe_celular = $("#recojo_pedido_quienrecibe_celular").val();
-                let recojo_pedido_direccion = $("#recojo_pedido_direccion").val();
-                let recojo_pedido_referencia = $("#recojo_pedido_referencia").val();
-                let recojo_pedido_observacion = $("#recojo_pedido_observacion").val();
+                let recojo_pedido_quienrecibe_nombre = $.trim($("#recojo_pedido_quienrecibe_nombre").val());
+                let recojo_pedido_quienrecibe_celular = $.trim($("#recojo_pedido_quienrecibe_celular").val());
+                console.log(recojo_pedido_quienrecibe_celular)
+                let recojo_pedido_direccion = $.trim($("#recojo_pedido_direccion").val());
+                let recojo_pedido_referencia = $.trim($("#recojo_pedido_referencia").val());
+                let recojo_pedido_observacion = $.trim($("#recojo_pedido_observacion").val());
+
+                //validaciones
+                //pedido
+                if(recojo_pedido==""){
+                    Swal.fire('Debe elegir un pedido','','warning');return false;
+                    return false;
+                }else if(recojo_distrito==""){
+                    Swal.fire('Debe elegir un distrito','','warning');return false;
+                }//datos de envio
+                else if(recojo_pedido_quienrecibe_nombre==""){
+                    Swal.fire('Debe ingresar quien recibe','','warning');return false;
+                }else if(recojo_pedido_quienrecibe_celular==""){
+                    Swal.fire('Debe ingresar celular de quien recibe','','warning');return false;
+                }else if(recojo_pedido_direccion==""){
+                    Swal.fire('Debe ingresar direccion','','warning');return false;
+                }else if(recojo_pedido_referencia==""){
+                    Swal.fire('Debe ingresar referencia','','warning');return false;
+                }
 
                 var fd_courier = new FormData();
                 fd_courier.append('recojo_cliente', recojo_cliente);
@@ -1676,7 +1695,6 @@
                     url: "{{ route('registrar_recojer_pedido') }}",
                     success: function (data) {
                         $("#modal-recoger-sobre").modal("hide");
-                        //$('#tablaRecepcionados').DataTable().ajax.reload(null, false);
                     }
                 });
             });

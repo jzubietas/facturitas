@@ -92,7 +92,7 @@ class SobreController extends Controller
 
         $superasesor = User::where('rol', 'Super asesor')->count();
 
-        $user_id = User::where('estado', '1')->where("rol", "Asesor");
+        $user_id = User::where('estado', '1')->whereIn("rol", [User::ROL_ASESOR,User::ROL_ASESOR_ADMINISTRATIVO]);
         if (auth()->user()->rol == 'Llamadas') {
             $user_id = $user_id->where('llamada', Auth::user()->id);
         } else if (auth()->user()->rol == 'Jefe de llamadas') {
