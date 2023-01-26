@@ -992,6 +992,7 @@ class PedidoController extends Controller
 
     public function pedidosstore(Request $request)
     {
+        return $request;
         $mirol = Auth::user()->rol;//
         if ($mirol == 'Llamadas') {
             $identi_asesor = User::where("identificador", $request->user_id)->where("unificado", "NO")->first();
@@ -3077,4 +3078,44 @@ class PedidoController extends Controller
         }
         return response()->json(['html' => $request->aenviocourierrevertir]);
     }
+
+
+    public function jsonDistritos(Request $request)
+    {
+        $distritos_recojo=null;
+        if($request->destino=='LIMA')
+        {
+            $distritos_recojo = Distrito::whereIn('provincia', ['LIMA', 'CALLAO'])
+                ->where('estado', '1')
+                //->WhereNotIn('distrito', ['CHACLACAYO', 'CIENEGUILLA', 'LURIN', 'PACHACAMAC', 'PUCUSANA', 'PUNTA HERMOSA', 'PUNTA NEGRA', 'SAN BARTOLO', 'SANTA MARIA DEL MAR'])
+                ->select([
+                    'distrito',
+                    DB::raw("concat(distrito,' - ',zona) as distritonam"),
+                    'zona'
+                ])
+                ->where('zona','!=','OLVA')
+                ->orderBy('distrito')->get();
+        }else if($request->destino=='OLVA')
+        {
+            $distritos_recojo = Distrito::whereIn('provincia', ['LIMA', 'CALLAO'])
+                ->where('estado', '1')
+                //->WhereNotIn('distrito', ['CHACLACAYO', 'CIENEGUILLA', 'LURIN', 'PACHACAMAC', 'PUCUSANA', 'PUNTA HERMOSA', 'PUNTA NEGRA', 'SAN BARTOLO', 'SANTA MARIA DEL MAR'])
+                ->select([
+                    'distrito',
+                    DB::raw("concat(distrito,' - ',zona) as distritonam"),
+                    'zona'
+                ])
+                ->where('zona','=','OLVA')
+                ->orderBy('distrito')->get();
+        }
+        if($distritos_recojo)
+        {
+            return $distritos_recojo;
+        }else{
+            return '';
+        }
+
+    }
+
+
 }

@@ -287,6 +287,8 @@
                 $("#total").html("S/. " + total.toLocaleString("en-US"));
                 evaluar();
                 $('#detalles').append(fila);
+                //otro boton direccion
+                $("#bt_add_dir").removeClass("d-none")
             } else {
                 alert("error al ingresar el detalle del pedido, revise los datos");
             }
@@ -380,6 +382,172 @@
 
     <script>
         $(document).ready(function () {
+
+            $(document).on("click",".eliminar_dir",function(){
+                let row_tr=$(this).closest('tr').remove();
+                console.log(row_tr)
+                $("#bt_add_dir").removeClass("d-none");
+            })
+
+            $('#env_pedido_quienrecibe_nombre').on('input', function () {
+                this.value = this.value.replace(/[^a-zA-Z >]/g, '');
+            });
+
+            $('#env_pedido_quienrecibe_celular').on('input', function () {
+                this.value = this.value.replace(/[^0-9]/g, '');
+            });
+
+            $('#env_pedido_direccion,#env_pedido_referencia,#env_pedido_observacion').on('input', function () {
+                this.value = this.value.replace(/[^0-9 a-zA-Z]/g, '');
+            });
+
+            window.agregar_direccion = function ()
+            {
+                console.log("agregar direccion event")
+                let observacion=null
+                if($("#recojo_destino").val()=="LIMA")
+                {
+                    observacion=$("#env_pedido_observacion").val();
+                }else{
+                    observacion='@csrf<input type="file" name="observacion_env" />'
+                }
+
+                var fila = '<tr class="selected"'+
+                    '><td><button type="button" class="btn btn-warning eliminar_dir">X</button></td>' +
+                    '<td><input type="hidden" id="destino_env" name="destino_env">' + $("#recojo_destino").val() +'</td>' +
+                    '<td><input type="hidden" id="distrito_env" name="distrito_env" >' + $("#distrito_recoger").val() + '</td>'+
+                    '<td><input type="hidden" id="zona_env" name="zona_env" >' + 'ZONA' + '</td>'+
+                    '<td><input type="hidden" id="contacto_nom_env" name="contacto_nom_env" >' + $("#env_pedido_quienrecibe_nombre").val() + '</td>'+
+                    '<td><input type="hidden" id="contacto_cel_env" name="contacto_cel_env" >' + $("#env_pedido_quienrecibe_celular").val() + '</td>'+
+                    '<td><input type="hidden" id="direccion_env" name="direccion_env" >' + $("#env_pedido_direccion").val() + '</td>'+
+                    '<td><input type="hidden" id="referencia_env" name="referencia_env" >' + $("#env_pedido_referencia").val() + '</td>'+
+                    '<td><input type="hidden" id="observacion_env" name="observacion_env" >' + observacion + '</td>'+
+                    '<td><input type="hidden" id="maps_env" name="maps_env" >' + $("#env_pedido_map").val() + '</td>'+
+                    '</tr>';
+                $('#table_direccion').append(fila);
+                $("#modal-direccion_crearpedido").modal("hide");
+                $("#bt_add_dir").addClass("d-none");
+
+            }
+            function agregar() {
+                datosTipoBanca = document.getElementById('ptipo_banca').value.split('_');
+                datosCodigo = document.getElementById('pcodigo').value.split('-');
+
+                var strEx = $("#pcantidad").val(); //1,000.00
+                //primer paso: fuera coma
+                strEx = strEx.replace(",", ""); //1000.00
+                var numFinal = parseFloat(strEx);
+                cantidad = numFinal * 1;
+
+                var strEx = $("#pcourier").val(); //1,000.00
+                //primer paso: fuera coma
+                strEx = strEx.replace(",", ""); //1000.00
+                var numFinal = parseFloat(strEx);
+                courier = numFinal * 1;
+
+                //codigo = $("#pcodigo").val();
+                numped = datosCodigo[1];
+                nombre_empresa = $("#pempresa").val();
+                mes = $("#pmes").val();
+                anio = $("#panio").val();
+                ruc = $("#pruc").val();
+                /* cantidad = $("#pcantidad").val(); */
+                tipo_banca = datosTipoBanca[0];
+                porcentaje = $("#pporcentaje").val();
+                /* courier = $("#pcourier").val(); */
+                descripcion = $("#pdescripcion").val();
+                nota = $("#pnota").val();
+
+                if (nombre_empresa != "" && mes != "") {
+                    subtotal[cont] = (cantidad * porcentaje) / 100;
+                    total = Number(courier) + subtotal[cont];
+
+                    var fila = '<tr class="selected" id="fila' + cont +
+                        '"><td><button type="button" class="btn btn-warning" onclick="eliminar(' + cont +
+                        ');">X</button></td>' +
+                        //'<td><input type="hidden" name="codigo[]" value="' + codigo + '">' + codigo + '</td>' +
+                        '<td><textarea class="d-none" name="nombre_empresa[]">' + nombre_empresa + '</textarea>' + nombre_empresa +
+                        '</td>' +
+                        '<td><input type="hidden" name="mes[]" value="' + mes + '">' + mes + '</td>' +
+                        '<td><input type="hidden" name="anio[]" value="' + anio + '">' + anio + '</td>' +
+                        '<td><input type="hidden" name="ruc[]" value="' + ruc + '">' + ruc + '</td>' +
+                        '<td><input type="hidden" name="cantidad[]" value="' + cantidad + '">' + cantidad.toLocaleString(
+                            "en-US") + '</td>' +
+                        '<td><input type="hidden" name="tipo_banca[]" value="' + tipo_banca + '">' + tipo_banca + '</td>' +
+                        '<td><input type="hidden" name="porcentaje[]" value="' + porcentaje + '">' + porcentaje + '</td>' +
+                        '<td><input type="hidden" name="courier[]" value="' + courier + '">' + courier + '</td>' +
+                        '<td><textarea class="d-none" name="descripcion[]">' + descripcion + '</textarea>'+ descripcion +'</td>' +
+                        '<td><textarea class="d-none" name="nota[]" >' + nota + '</textarea>'+ nota +'</td>' +
+                        '<td>@csrf<input type="file" id="adjunto" name="adjunto[]" multiple /></td>' +
+                        '<td>' + subtotal[cont].toLocaleString("en-US") + '</td></tr>';
+                    cont++; //accept= ".zip, .rar"
+                    limpiar();
+                    $("#total").html("S/. " + total.toLocaleString("en-US"));
+                    evaluar();
+                    $('#detalles').append(fila);
+                } else {
+                    alert("error al ingresar el detalle del pedido, revise los datos");
+                }
+            }
+
+            $("#modal-direccion_crearpedido").on('show.bs.modal',function () {
+                $("#recojo_destino").selectpicker("refresh").trigger("change");
+                $("#env_pedido_quienrecibe_nombre")
+                $("#env_pedido_quienrecibe_celular")
+                $("#env_pedido_direccion").val("")
+                $("#env_pedido_referencia").val("")
+                $("#env_pedido_observacion").val("")
+
+            })
+
+
+            $(document).on("change", "#recojo_destino", function () {
+                ///solo distritos de la ubicacion
+
+                $.ajax({
+                    data: {
+                        destino: $("#recojo_destino").val()
+                    },
+                    type: 'POST',
+                    url: "{{ route('pedidos.cargardistritos') }}",
+                    success: function (data) {
+                        //relleno cmb
+                        console.log(data)
+                        let opcion=null;
+                        $('#distrito_recoger').html("")
+                        $.each(data, function(i, item) {
+                            opcion=$('<option>').attr('data-subtext',data[i].zona).attr('value',data[i].distrito).text(data[i].distrito)
+                            $('#distrito_recoger').append(opcion);
+                        });
+                        $('#distrito_recoger').selectpicker("refresh")
+
+                        if($("#recojo_destino").val()=='OLVA')
+                        {
+                            $(".s_observacion").hide();
+                            $("#recojo_pedido_direccion").html("Tracking")
+                            $("#recojo_pedido_referencia").html("Num Registro")
+                            $("#env_pedido_quienrecibe_nombre").val("OLVA");
+                            $("#env_pedido_quienrecibe_celular").val("OLVA");
+                            //direccio n tracking
+                            //referencia numr
+                        }else{
+                            $(".s_observacion").show();
+                            $("#lbl_recojo_pedido_direccion").text("Direccion")
+                            $("#lbl_recojo_pedido_referencia").text("Referencia")
+                            $("#env_pedido_quienrecibe_nombre").val("");
+                            $("#env_pedido_quienrecibe_celular").val("");
+                        }
+
+
+                    }
+                });
+
+                $("#distrito").val("").selectpicker("refresh")
+            });
+
+            /*$(document).on("change", "#recojo_destino", function () {
+                $("#distrito").val("").selectpicker("refresh")
+            });*/
 
             //$(document).on("change", "#recojo_destino", function () {
             $("#distrito_recoger").val("").selectpicker("refresh")
@@ -551,6 +719,8 @@ __________________________________
                 var fd = new FormData();
                 //var data = new FormData(document.getElementById("formulario"));
 
+
+
                 $('[name="nombre_empresa[]"]').each(function () {
                     fd.append("nombre_empresa[]", this.value);
                 });
@@ -707,6 +877,34 @@ __________________________________
                 $('#user_id option').attr("disabled", true);
                 $("#user_id").val( "{{ Auth::user()->id }}" ).trigger("change");
                 $("#user_id").selectpicker("refresh");*/
+
+
+            $(document).on("submit", "#formrecojo", function (evento) {
+                evento.preventDefault();
+                let recojo_distrito=$("#distrito_recoger").val()
+                let recojo_pedido_quienrecibe_nombre=$("#env_pedido_quienrecibe_nombre").val()
+                let recojo_pedido_quienrecibe_celular=$("#env_pedido_quienrecibe_celular").val()
+                let recojo_pedido_direccion=$("#env_pedido_direccion").val()
+                let recojo_pedido_referencia=$("#env_pedido_referencia").val()
+                let recojo_pedido_observacion=$("#env_pedido_observacion").val()
+                let recojo_pedido_rotulo=$("#env_pedido_rotulo").val()
+                let recojo_pedido_map=$("#env_pedido_map").val()
+
+                if(recojo_distrito==""){
+                    Swal.fire('Debe elegir un distrito','','warning');return false;
+                }//datos de envio
+                else if(recojo_pedido_quienrecibe_nombre==""){
+                    Swal.fire('Debe ingresar quien recibe','','warning');return false;
+                }else if(recojo_pedido_quienrecibe_celular==""){
+                    Swal.fire('Debe ingresar celular de quien recibe','','warning');return false;
+                }else if(recojo_pedido_direccion==""){
+                    Swal.fire('Debe ingresar direccion','','warning');return false;
+                }else if(recojo_pedido_referencia==""){
+                    Swal.fire('Debe ingresar referencia','','warning');return false;
+                }
+                //cantidad = !isNaN($('#pcantidad').val()) ? parseInt($('#pcantidad').val(), 10) : 0;   para el importe
+                agregar_direccion();
+            });
 
             $(document).on("click", "#bt_add", function () {
 

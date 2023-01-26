@@ -468,6 +468,7 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     Route::post('envios.estadosobresexcel', [ExcelController::class, 'estadosobresExcel'])->name('estadosobresexcel');
 
     Route::post('envios.verificarzona', [EnvioController::class, 'VerificarZona'])->name('envios.verificarzona');
+    Route::post('pedidos.cargardistritos', [PedidoController::class, 'jsonDistritos'])->name('pedidos.cargardistritos');
 
 
     /*Controller Envio*/

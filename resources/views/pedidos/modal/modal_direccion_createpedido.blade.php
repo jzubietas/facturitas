@@ -23,6 +23,10 @@
                                             <label for="recojo_cliente_name">Cliente</label>
                                             <input type="text" class="form-control" id="recojo_cliente_name" placeholder="Cliente" readonly>
                                         </div>
+                                        <div class="form-group col-md-6">
+                                            <button type="button" class="btn-charge-history btn btn-info mt-4">Cargar de Historial</button>
+                                        </div>
+
                                     </div>
 
 
@@ -30,7 +34,11 @@
                                     <div class="form-row ">
                                         <div class="form-group col-md-6">
                                             <label for="recojo_destino">Destino</label>
-                                            <select class="form-control" id="recojo_destino">
+
+                                            <select name="recojo_destino" id="recojo_destino"
+                                                    data-show-subtext="false" data-live-search="true"
+                                                    data-live-search-placeholder="Seleccione Destino"
+                                                    class="form-control">
                                                 <option value="LIMA">LIMA</option>
                                                 <option value="OLVA">OLVA</option>
                                             </select>
@@ -41,15 +49,7 @@
                                             <select name="distrito_recoger" id="distrito_recoger" class="distrito_recoger form-control"
                                                     data-show-subtext="true" data-live-search="true"
                                                     data-live-search-placeholder="Seleccione distrito" title="Seleccione distrito">
-                                                @foreach($distritos_recojo as $distrito)
-                                                    <option data-subtext="{{$distrito->zona}}"
-                                                            value="{{$distrito->distrito}}">{{($distrito->distrito) }}</option>
-                                                @endforeach
                                             </select>
-                                        </div>
-
-                                        <div class="form-group col-md-6 mt-4">
-                                            <button type="button" class="btn-charge-history btn btn-info">Cargar de Historial</button>
                                         </div>
 
                                     </div>
@@ -68,18 +68,24 @@
                                     <div class="form-row datos_direccion">
 
                                         <div class="form-group col-md-12">
-                                            <label for="recojo_pedido_direccion">Direccion</label>
+                                            <label for="recojo_pedido_direccion" id="lbl_recojo_pedido_direccion">Direccion/Tracking</label>
                                             <textarea required class="form-control" id="env_pedido_direccion" name="env_pedido_direccion" rows="3"></textarea>
                                         </div>
 
                                         <div class="form-group col-md-6">
-                                            <label for="recojo_pedido_referencia">Referencia</label>
+                                            <label for="recojo_pedido_referencia" id="lbl_recojo_pedido_referencia">Referencia/(Num Registro)</label>
                                             <input type="text" class="form-control" id="env_pedido_referencia" name="env_pedido_referencia" placeholder="Referencia" autocomplete="off">
                                         </div>
 
-                                        <div class="form-group col-md-6">
-                                            <label for="recojo_pedido_observacion">Observacion</label>
+                                        <div class="form-group col-md-6 s_observacion">
+                                            <label for="recojo_pedido_observacion" id="lbl_recojo_pedido_observacion">Observacion</label>
                                             <input type="text" class="form-control" id="env_pedido_observacion" name="env_pedido_observacion" placeholder="Observacion" autocomplete="off">
+                                        </div>
+
+
+                                        <div class="form-group col-md-12">
+                                            <label for="recojo_pedido_map" id="lbl_recojo_pedido_maps">Maps</label>
+                                            <input type="text" class="form-control" id="env_pedido_map" name="env_pedido_map" placeholder="Map" autocomplete="off">
                                         </div>
                                     </div>
                                     <div class="form-group">

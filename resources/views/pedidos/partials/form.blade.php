@@ -205,16 +205,17 @@
           </div>
         </div>
 
-        <div class="row d-none">
+        <div class="row">
             <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12" style="text-align: center">
-                <button data-toggle="modal" data-target="#modal-direccion_crearpedido"  type="button" id="bt_add_dir" class="float-right btn btn-primary btn-lg"><i class="fas fa-plus-circle"></i> Agregar</button>
+                <button data-backdrop="static" data-keyboard="false" data-toggle="modal"
+                        data-target="#modal-direccion_crearpedido"  type="button"
+                        id="bt_add_dir" class="float-right btn btn-primary btn-lg d-none"><i class="fas fa-plus-circle"></i> Agregar</button>
             </div>
               <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12" style="text-align: center">
                   <div class="table-responsive">
                       <table id="table_direccion" class="table table-striped table-bordered table-condensed table-hover">
                           <thead style="background-color: #A9D0F5">
                           <th>Opciones</th>
-                          <th>Recordar</th>
                           <th>Destino</th>
                           <th>Distrito</th>
                           <th>Zona</th>
@@ -225,19 +226,6 @@
                           <th>Observacion/rotulo</th>
                           <th>Google Maps</th>
                           </thead>
-                          <tfoot>
-                          <th>Drop</th>
-                          <th>Check</th>
-                          <th>LIMA/PROVINCIA</th>
-                          <th>Distrito</th>
-                          <th>Zona</th>
-                          <th>CONTACTO/OLVA</th>
-                          <th>TEL CONTACTO/OLVA</th>
-                          <th>Direccion/tracking</th>
-                          <th>Referencia/numregistro</th>
-                          <th>Observacion/rotulo</th>
-                          <th>Link</th>
-                          </tfoot>
                       </table>
                   </div>
               </div>
