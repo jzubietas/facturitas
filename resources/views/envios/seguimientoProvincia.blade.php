@@ -543,7 +543,8 @@ ${data.condicion_envio_code == '{{\App\Models\Pedido::EN_TIENDA_AGENTE_OLVA_INT}
                             </div>
                         </div>
                     </div>`
-                            })}
+                            }).join('')}
+ ${response.data.length===0?`<h4>No hay registro</h4>`:''}
                 </div>
             </div>
         </div>
