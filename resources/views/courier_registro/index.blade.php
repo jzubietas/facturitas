@@ -60,6 +60,19 @@
 
 @section('content')
 
+    <ul class="nav nav-pills nav-justified nav-tabs mb-24 mt-24" id="myTab" role="tablist">
+        <li class="nav-item text-center">
+            <a class="nav-link active font-weight-bold"
+               id="norelacionado-tab"
+               data-toggle="tab"></a>
+        </li>
+        <li class="nav-item text-center">
+            <a class="nav-link font-weight-bold"
+               id="relacionado-tab"
+               data-toggle="tab"></a>
+        </li>
+    </ul>
+
     <div class="card">
         <div class="card-body">
             <table id="tablaPrincipal" style="width:100%;" class="table table-striped">
