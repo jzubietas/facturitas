@@ -22,13 +22,14 @@ class CourierRegistrosController extends Controller
     public function indextabla(Request $request)
     {
         $relacionado=$request->relacionado;
-        $courier = CourierRegistro::where('id','<>', '0')
+        $courier = CourierRegistro::where('courier_registros.id','<>', '0')
+            ->rightJoin('direccion_grupos as a','a.referencia','courier_registros.courier_registro')
             ->select([
                 'courier_registros.*',
-                DB::raw("(select a.referencia from direccion_grupos a where a.estado=1 and a.referencia is not null and a.referencia<>'' and  courier_registros.courier_registro=a.referencia and a.courier_failed_sync_at is null limit 1) as permitir"),
-                DB::raw("(select a.correlativo from direccion_grupos a where a.estado=1 and a.referencia is not null and a.referencia<>'' and  courier_registros.courier_registro=a.referencia and a.courier_failed_sync_at is null limit 1) as direcciongrupo_correlativo")
+                'a.referencia as permitir','a.correlativo as direcciongrupo_correlativo',
         ])
-        ->where('relacionado',$relacionado);
+            ->where("a.estado","1")->whereNotNull("a.referencia")->whereNull("a.courier_failed_sync_at")
+        ->where('courier_registros.relacionado',$relacionado);
         return Datatables::of(DB::table($courier))
             ->addIndexColumn()
             ->editColumn('relacionado', function($courier){
@@ -107,14 +108,14 @@ class CourierRegistrosController extends Controller
         $courierregistro = $request->courierregistro;
         $env = $request->direcciongrupo;
         if ($request->direcciongrupo && $request->courierregistro) {
-            $row_courierregistro = CourierRegistro::findOrFail($courierregistro);
+            $row_courierregistro = CourierRegistro::where("courier_registro",$courierregistro);
             $row_env=DireccionGrupo::findOrFail($env);
             DB::beginTransaction();
             $row_courierregistro->update([
                 "user_updated" => auth()->user()->id,
                 "relacionado" => "1",
                 "rel_direcciongrupo" => $row_env->id,
-                "rel_fechdp"=>$row_env->fecha,
+                "rel_fechadp"=>$row_env->fecha,
                 "rel_importe"=>$row_env->importe,
                 "rel_tracking"=>$row_env->direccion,
                 "rel_userid"=>$row_env->user_id,
