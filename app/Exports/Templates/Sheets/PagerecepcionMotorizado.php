@@ -115,7 +115,7 @@ class PagerecepcionMotorizado extends Export implements WithStyles, WithColumnFo
 
         }
 
-        return array_values($items);
+        return collect(array_values($items));
     }
 
     public function title(): string
