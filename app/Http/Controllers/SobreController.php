@@ -92,7 +92,22 @@ class SobreController extends Controller
 
         $superasesor = User::where('rol', 'Super asesor')->count();
 
-        return view('sobres.porEnviar', compact('superasesor', 'ver_botones_accion', 'distritos','distritos_recojo', 'departamento'));
+        $user_id = User::where('estado', '1')->where("rol", "Asesor");
+        if (auth()->user()->rol == 'Llamadas') {
+            $user_id = $user_id->where('llamada', Auth::user()->id);
+        } else if (auth()->user()->rol == 'Jefe de llamadas') {
+        } else if (auth()->user()->rol == 'Asesor') {
+            $user_id = $user_id->where('identificador', Auth::user()->identificador);
+        }
+        $user_id = $user_id->select([
+            'id','identificador','letra','exidentificador'
+        ])->orderBy('exidentificador')->get();
+
+        //->pluck('identificador', 'id');
+
+
+
+        return view('sobres.porEnviar', compact('superasesor', 'ver_botones_accion', 'distritos','distritos_recojo', 'departamento','user_id'));
     }
 
     public function Sobresporenviartabla(Request $request)

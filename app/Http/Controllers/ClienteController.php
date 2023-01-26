@@ -56,15 +56,16 @@ class ClienteController extends Controller
 
     public function clienteslistarecoger(Request $request)
     {
+        $asesor=$request->user_id;
         $data = Cliente::
             join('users as u', 'clientes.user_id', 'u.id')
-            //->leftjoin('pedidos as p', 'clientes.id', 'p.cliente_id')
             ->select([
                 'clientes.*'
             ])
             ->where('clientes.estado', '1')
             ->whereNotNull('clientes.situacion')
             ->whereNotIn('clientes.situacion',['BASE FRIA','ABANDONO','ABANDONO RECIENTE','BLOQUEADO'])
+            ->where("clientes.user_id",$asesor)
             ->where('clientes.tipo', '1');
 
 
