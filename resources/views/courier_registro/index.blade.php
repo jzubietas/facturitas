@@ -66,7 +66,7 @@
                id="norelacionado-tab"
                data-toggle="tab">
                 <i class="fa fa-inbox" aria-hidden="true"></i> No relacionado
-                <sup><span class="badge badge-light count_courierregistro_norelacionado">0</span></sup>
+                <sup><span class="badge badge-light count_courierregistro_norelacionado d-none">0</span></sup>
             </a>
         </li>
         <li class="nav-item text-center">
@@ -74,7 +74,7 @@
                id="relacionado-tab"
                data-toggle="tab">
                 <i class="fa fa-inbox" aria-hidden="true"></i> Relacionado
-                <sup><span class="badge badge-light count_courierregistro_relacionado">0</span></sup>
+                <sup><span class="badge badge-light count_courierregistro_relacionado d-none">0</span></sup>
             </a>
         </li>
     </ul>
@@ -363,6 +363,8 @@
                                     console.log(data);
                                     $("#modal-relacionar-registro_courier").modal("hide");
                                     $("#datatable-registros-asesor").DataTable().ajax.reload();
+                                    $("#tablaPrincipal_norelacionado").DataTable().ajax.reload();
+                                    $("#tablaPrincipal_relacionado").DataTable().ajax.reload();
                                 }
                             });
 
