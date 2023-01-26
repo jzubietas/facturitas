@@ -49,12 +49,12 @@ class MoveSinDireccion extends Command
                         'direccion_grupo' => null
                     ]);
                     DireccionGrupo::restructurarCodigos($pedido->direcciongrupo);
-                    $pedido->update([
-                        'condicion_envio' => Pedido::RECEPCION_COURIER,
-                        'condicion_envio_code' => Pedido::RECEPCION_COURIER_INT,
-                        'condicion_envio_at' => now()
-                    ]);
                 }
+                $pedido->update([
+                    'condicion_envio' => Pedido::RECEPCION_COURIER,
+                    'condicion_envio_code' => Pedido::RECEPCION_COURIER_INT,
+                    'condicion_envio_at' => now()
+                ]);
             }
         }
         return 0;
