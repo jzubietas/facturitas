@@ -398,7 +398,7 @@ class OlvaController extends Controller
     {
         return response()->json([
             'grupo' => $grupo,
-            'data' => $grupo->getMedia('tienda_olva_notificado')->toArray(),
+            'data' => $grupo->getMedia('tienda_olva_notificado')->sortByDesc('created_at_format')->toArray(),
         ]);
     }
 
