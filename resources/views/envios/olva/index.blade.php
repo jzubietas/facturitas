@@ -58,6 +58,7 @@
 @push('css')
     <link rel="stylesheet" href="{{asset('/css/admin_custom.css')}}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
+    @include('partials.css.time_line_css')
 @endpush
 
 @section('js')
@@ -186,6 +187,61 @@
                             onDestroy: function () {
                                 window.document.onpaste = null
                             },
+                        })
+                    })
+
+                    $('[data-toggle=jqconfirmencargado]', row).click(function () {
+                        const target=$(this).data('target')
+                        $.confirm({
+                            title: 'Historial de adjuntos de llamadas',
+                            type: 'info',
+                            columnClass: 'xlarge',
+                            content: function () {
+                                const self = this
+                                return $.get(target).done(function (response) {
+                                    self.setContent(`
+                               <section class="timeline_area section_padding_130">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <!-- Timeline Area-->
+                <div class="apland-timeline-area">
+                    ${response.data.map(function (h) {
+                                        return `
+                    <!-- Single Timeline Content-->
+                    <div class="single-timeline-area">
+                        <div class="timeline-date wow fadeInLeft" data-wow-delay="0.1s" style="visibility: visible; animation-delay: 0.1s; animation-name: fadeInLeft;">
+                            <p>${h.created_at_format}</p>
+                        </div>
+                        <div class="row">
+                            <div class="col-12 col-md-9 col-lg-6">
+                                <div class="single-timeline-content wow fadeInLeft position-relative" data-wow-delay="0.3s" style="visibility: visible; animation-delay: 0.3s; animation-name: fadeInLeft;">
+                                    <div class="timeline-icon position-absolute" style="top: -12px;left: -9px;">
+                                        <i class="fa fa-paperclip" aria-hidden="true"></i>
+                                    </div>
+                                    <div class="timeline-text w-100">
+                                        <a target="_blank" href="${h.media_link}"><img src="${h.media_link}" class="w-100"></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>`
+                                    }).join('')}
+ ${response.data.length===0?`<h4>No hay registro</h4>`:''}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+                                `)
+                                }).fail(function () {
+                                    self.setContent('Failed')
+                                    self.hideLoading(true)
+                                });
+                            },
+                            buttons:{
+                                cerrar:{}
+                            }
                         })
                     })
                 },

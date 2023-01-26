@@ -88,12 +88,14 @@ class OlvaController extends Controller
             ->whereNull('direccion_grupos.courier_failed_sync_at')
             ->where('direccion_grupos.distribucion', 'OLVA')
             ->where('direccion_grupos.motorizado_status', '0')
-            ->whereNull('direccion_grupos.add_screenshot_at')
             ->select([
                 'direccion_grupos.*',
                 "clientes.celular as cliente_celular",
                 "clientes.nombre as cliente_nombre",
             ]);
+        if (user_rol(User::ROL_ASESOR) || user_rol(User::ROL_ASESOR_ADMINISTRATIVO)) {
+            $pedidos_provincia->whereNull('direccion_grupos.add_screenshot_at');
+        }
 
         add_query_filtros_por_roles_pedidos($pedidos_provincia, 'users.identificador');
 
@@ -135,6 +137,9 @@ class OlvaController extends Controller
                 return $html;
             })
             ->addColumn('action', function ($pedido) {
+                if (user_rol(User::ROL_ADMIN) || user_rol(User::ROL_ENCARGADO)) {
+                    return '<button data-target="' . route('envios.seguimientoprovincia.history_encargado', $pedido->id) . '" data-toggle="jqconfirmencargado" class="btn btn-info btn-sm"><i class="fa fa-history"></i> <b>Ver Historial</b></button>';
+                }
                 return '<button data-action="' . route('envios.olva.store', $pedido->id) . '" data-jqconfirm="notificado" class="btn btn-warning">Notificado</button>';
             })
             ->rawColumns(['action', 'referencia_format', 'condicion_envio_format', 'direccion_format'])
@@ -382,9 +387,6 @@ class OlvaController extends Controller
                 if (!in_array(\auth()->user()->rol, [User::ROL_JEFE_COURIER, User::ROL_ADMIN])) {
                     $btn = '';
                 }
-                if (user_rol(User::ROL_ADMIN)) {
-                    $btnAdd[] = '<button style="font-size:9px" data-target="' . route('envios.seguimientoprovincia.history_encargado', $pedido->id) . '" data-toggle="jqconfirmencargado" class="btn btn-info btn-sm"><i class="fa fa-history"></i> <b>Ver Historial</b></button>';
-                }
                 return '<div class="d-flex" style="flex-direction: column; gap:0.5rem">' . $btn . join('', $btnAdd) . '</div>';
             })
             ->rawColumns(['action', 'referencia_format', 'condicion_envio_format', 'direccion_format'])
@@ -395,8 +397,8 @@ class OlvaController extends Controller
     public function SeguimientoprovinciaHistoryEncargado(DireccionGrupo $grupo)
     {
         return response()->json([
-            'grupo'=>$grupo,
-            'data'=>$grupo->getMedia('tienda_olva_notificado')->toArray(),
+            'grupo' => $grupo,
+            'data' => $grupo->getMedia('tienda_olva_notificado')->toArray(),
         ]);
     }
 
