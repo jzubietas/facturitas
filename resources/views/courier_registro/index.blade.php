@@ -64,18 +64,24 @@
         <li class="nav-item text-center">
             <a class="nav-link active font-weight-bold"
                id="norelacionado-tab"
-               data-toggle="tab"></a>
+               data-toggle="tab">
+                <i class="fa fa-inbox" aria-hidden="true"></i> No relacionado
+                <sup><span class="badge badge-light count_courierregistro_norelacionado">0</span></sup>
+            </a>
         </li>
         <li class="nav-item text-center">
             <a class="nav-link font-weight-bold"
                id="relacionado-tab"
-               data-toggle="tab"></a>
+               data-toggle="tab">
+                <i class="fa fa-inbox" aria-hidden="true"></i> Relacionado
+                <sup><span class="badge badge-light count_courierregistro_relacionado">0</span></sup>
+            </a>
         </li>
     </ul>
 
-    <div class="card">
-        <div class="card-body">
-            <table id="tablaPrincipal" style="width:100%;" class="table table-striped">
+    <div class="tab-content" id="myTabContent">
+        <div class="tab-pane fade show active" id="norelacionado" role="tabpanel" aria-labelledby="norelacionado-tab">
+            <table id="tablaPrincipal_norelacionado" style="width:100%;" class="table table-striped">
                 <thead>
                 <tr>
                     <th scope="col">Item</th>
@@ -90,6 +96,30 @@
                 <tbody>
                 </tbody>
             </table>
+        </div>
+
+        <div class="tab-pane fade" id="relacionado" role="tabpanel" aria-labelledby="relacionado-tab">
+            <table id="tablaPrincipal_norelacionado" style="width:100%;" class="table table-striped">
+                <thead>
+                <tr>
+                    <th scope="col">Item</th>
+                    <th scope="col">Registro</th>
+                    <th scope="col">Registrado</th>
+                    <th scope="col">Actualizado</th>
+                    <th scope="col">Relacionado</th>
+                    <th scope="col">Estado</th>
+                    <th scope="col">Acciones</th>
+                </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+
             {{--@include('movimientos.modals.modalDeleteId')--}}
         </div>
     </div>
@@ -472,9 +502,7 @@
                 ajax: {
                     url: "{{ route('courierregistrotabla') }}",
                     data: function (d) {
-                        //d.banco = $("#banco_movimientos").val();
-                        //d.tipo = $("#tipo_movimientos").val();
-                        //d.titular = $("#titular_movimientos").val();
+                        d.relacionado='SI'
                     },
                 },
                 rowCallback: function (row, data, index) {
@@ -482,25 +510,11 @@
                 initComplete: function (settings, json) {
                 },
                 columns: [
-                    {
-                        data: 'id',
-                        name: 'id',
-                    },
-                    {
-                        data: 'courier_registro', name: 'courier_registro'
-                    },
-                    {
-                        data: 'created_at',
-                        name: 'created_at',
-                        //render: $.fn.dataTable.render.moment('DD/MM/YYYY')
-                    },
-                    {
-                        data: 'updated_at',
-                        name: 'updated_at',
-                    },
-                    {
-                        data: 'relacionado',
-                        name: 'relacionado',
+                    {data: 'id',name: 'id',},
+                    {data: 'courier_registro', name: 'courier_registro'},
+                    {data: 'created_at',name: 'created_at',},
+                    {data: 'updated_at',name: 'updated_at',},
+                    {data: 'relacionado',name: 'relacionado',
                     },
                     {
                         data: 'status',

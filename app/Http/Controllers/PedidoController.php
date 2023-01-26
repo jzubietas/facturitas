@@ -992,7 +992,7 @@ class PedidoController extends Controller
 
     public function pedidosstore(Request $request)
     {
-        return $request;
+        //return $request;
         $mirol = Auth::user()->rol;//
         if ($mirol == 'Llamadas') {
             $identi_asesor = User::where("identificador", $request->user_id)->where("unificado", "NO")->first();
