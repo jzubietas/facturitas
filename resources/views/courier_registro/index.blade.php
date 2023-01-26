@@ -246,6 +246,9 @@
                 $("#courierreg").val(button.data('courierreg-registro'));
                 //console.log()
 
+                //button.data('courierreg-registro')
+                $(".text-muted").html(button.data('courierreg-registro'))
+
                 $('#datatable-registros-asesor').DataTable().clear().destroy();
 
                 tablaregistrosasesorLista=$('#datatable-registros-asesor').DataTable({
