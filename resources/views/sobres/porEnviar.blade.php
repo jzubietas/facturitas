@@ -1715,7 +1715,7 @@
                 //limpiar datos de direcion
                 $("#distrito_recoger").val("").selectpicker("refresh")
                 $("#recojo_pedido_quienrecibe_nombre").val("")
-                $("#recojo_pedido_quienrecibe_celular")..val("")
+                $("#recojo_pedido_quienrecibe_celular").val("")
                 $("#recojo_pedido_direccion").val("")
                 $("#recojo_pedido_referencia").val("")
                 $("#recojo_pedido_observacion").val("")
