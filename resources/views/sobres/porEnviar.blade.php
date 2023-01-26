@@ -1712,6 +1712,13 @@
                 $(".card_pedidos").hide();
                 $(".card_form").hide();
                 $(".card_clientes").show();
+                //limpiar datos de direcion
+                $("#distrito_recoger").val("").selectpicker("refresh")
+                $("#recojo_pedido_quienrecibe_nombre").val("")
+                $("#recojo_pedido_quienrecibe_celular")..val("")
+                $("#recojo_pedido_direccion").val("")
+                $("#recojo_pedido_referencia").val("")
+                $("#recojo_pedido_observacion").val("")
             });
 
             $('#modal-recoger-sobre').on('show.bs.modal', function (event) {
