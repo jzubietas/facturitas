@@ -32,6 +32,7 @@ class SyncOlvaJob implements ShouldQueue
      * Execute the job.
      *
      * @return void
+     * @throws \Exception
      */
     public function handle()
     {
@@ -103,6 +104,8 @@ class SyncOlvaJob implements ShouldQueue
                         $direccionGrupo->pedidos()->update([
                             'courier_failed_sync_at' => now(),
                         ]);
+                    }else{
+                        throw new \Exception("Error api: ".$code);
                     }
                 }
             } else {
