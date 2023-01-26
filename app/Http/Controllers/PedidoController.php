@@ -1069,12 +1069,22 @@ class PedidoController extends Controller
                 $now = now();
                 $temporal_update = $cliente_deuda->temporal_update;
                 if ($temporal_update < $now) {
+                    $cliente_deuda->update([
+                        'crea_temporal' => '0',
+                        'activado_pedido' => '0',
+                        'activado_tiempo' => '0',
+                    ]);
                     return response()->json([
                         'html' => "|tmp_time",
                     ]);
                 }
                 $limitepedidos = $cliente_deuda->activado_pedido;
                 if ($limitepedidos <= 0) {
+                    $cliente_deuda->update([
+                        'crea_temporal' => '0',
+                        'activado_pedido' => '0',
+                        'activado_tiempo' => '0',
+                    ]);
                     return response()->json([
                         'html' => "|tmp_count",
                     ]);
