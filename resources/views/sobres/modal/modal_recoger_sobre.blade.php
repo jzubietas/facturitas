@@ -123,7 +123,7 @@
                                         <div class="form-group col-md-6">
                                             {!! Form::label('distrito', 'Distrito') !!}<br>
                                             <select name="distrito_recoger" id="distrito_recoger" class="distrito_recoger form-control"
-                                                    data-show-subtext="true" data-live-search="true"
+                                                    data-show-subtext="true" data-live-search="true" title="Elegir distrito"
                                                     data-live-search-placeholder="Seleccione distrito">
                                                 @foreach($distritos_recojo as $distrito)
                                                     <option data-subtext="{{$distrito->zona}}"
