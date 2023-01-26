@@ -165,6 +165,13 @@
         {
 
         }
+
+        @if(auth()->user()->rol !='Administrador')
+            .visible_button_recoger
+            {
+                opacity:0;
+            }
+        @endif
     </style>
 
 @stop
@@ -515,6 +522,13 @@
             $(document).on("change", "#recojo_destino", function () {
                 $("#distrito").val("").selectpicker("refresh")
             });
+
+            $(document).on("change", "#user_id", function () {
+                $("#datatable-clientes-lista-recojer").DataTable().ajax.reload();
+                //refresh tabla//$("#distrito").val("").selectpicker("refresh")
+            });
+
+
 
             $(document).on("change", "#limaprovincia", function () {
                 $("#distrito").val("").selectpicker("refresh")
@@ -1545,12 +1559,9 @@
                 buttons: [
                     {
                         text: 'RECOGER',
-                        className: 'btn btn-danger',
+                        className: 'btn btn-danger visible_button_recoger',
                         action: function (e, dt, node, config) {
-
                             $('#modal-recoger-sobre').modal("show");
-                            //alert( 'RECOGER' );
-                            //data-jqconfirm=
                         }
                     }
                 ],
@@ -1713,6 +1724,7 @@
                         url: "{{ route('pedidos.recoger.clientes') }}",
                         data: function (d) {
                             //d.length=5;
+                            d.user_id=$("#user_id").val();
                         },
                     },
                     columns: [

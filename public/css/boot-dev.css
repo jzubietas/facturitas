@@ -174,6 +174,10 @@ transition: all 0.2s;
 #modal-recoger-sobre .dropdown-menu li a span {width: 100%; text-align: left;}
 #modal-recoger-sobre .dropdown-menu li .active span small{ color: white !important;}
 
+#modal-direccion_crearpedido .dropdown-menu li a span small{float:right;}
+#modal-direccion_crearpedido .dropdown-menu li a span {width: 100%; text-align: left;}
+#modal-direccion_crearpedido .dropdown-menu li .active span small{ color: white !important;}
+
 .form-control input:hover{
 cursor: pointer !important;
 }

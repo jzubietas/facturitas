@@ -29,6 +29,7 @@
     @include('pedidos.modal.copiarinfo')
     @include('pedidos.modal.historial')
     @include('pedidos.modal.historial2')
+    @include('pedidos.modal.modal_direccion_createpedido')
 
 
 
@@ -379,6 +380,10 @@
 
     <script>
         $(document).ready(function () {
+
+            //$(document).on("change", "#recojo_destino", function () {
+            $("#distrito_recoger").val("").selectpicker("refresh")
+            //});
 
             //$('#pmes').selectpicker('refresh');
             //$('#panio').selectpicker('refresh');
