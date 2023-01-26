@@ -44,6 +44,9 @@ class MoveSinDireccion extends Command
             $codes = explode(",", $codes);
             $pedidos = Pedido::query()->with('direcciongrupo')->whereIn('codigo', $codes)->get();
             foreach ($pedidos as $pedido) {
+                if($pedido->estado_sobre==1){
+                    continue;
+                }
                 if ($pedido->direcciongrupo != null) {
                     $pedido->update([
                         'direccion_grupo' => null
