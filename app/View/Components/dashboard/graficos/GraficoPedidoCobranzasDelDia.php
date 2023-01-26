@@ -33,14 +33,16 @@ class GraficoPedidoCobranzasDelDia extends Widgets
         }
 
         do {
-            $days[] = $currentDate->clone();
+            if (!in_array(\Str::lower($currentDate->locale('es_PE')->translatedFormat('l')), ['sunday', 'domingo'])) {
+                $days[] = $currentDate->clone();
+            }
             $currentDate->addDay();
         } while ($currentDate <= $endDay);
 
         $series = [];
         foreach ($days as $day) {
-            $series['p'][] = Pedido::query()->activo()->whereDate('created_at',$day)->count();
-            $series['c'][] = Pedido::query()->activo()->pagados()->whereDate('created_at',$day)->count();
+            $series['p'][] = Pedido::query()->activo()->whereDate('created_at', $day)->count();
+            $series['c'][] = Pedido::query()->activo()->pagados()->whereDate('created_at', $day)->count();
         }
 
 
@@ -69,7 +71,7 @@ class GraficoPedidoCobranzasDelDia extends Widgets
                 "curve" => "straight"
             ],
             "title" => [
-                "text" => \Str::upper("Cantidad de pedidos y cobranzas de ". $this->getDateTitle()),
+                "text" => \Str::upper("Cantidad de pedidos y cobranzas de " . $this->getDateTitle()),
                 "align" => "left"
             ],
             "grid" => [

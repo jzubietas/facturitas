@@ -329,6 +329,13 @@ return [
                     'icon' => 'fas fa-check-circle',
                     'active' => ['pedidos pagados'],
                 ],
+                [
+                    'text' => 'Encargado Tienda/Agente',
+                    'route' => 'envios.olva.index',
+                    'can' => 'envios.encargado.tienda_agente',
+                    'icon' => 'fas fa-check-circle',
+                    'active' => ['enviados'],
+                ],
             ],
         ],
 
@@ -485,13 +492,6 @@ return [
                     'text' => 'Seguimiento provincia',
                     'route' => 'envios.seguimientoprovincia',
                     'can' => 'envios.seguimientoprovincia',
-                    'icon' => 'fas fa-check-circle',
-                    'active' => ['enviados'],
-                ],
-                [
-                    'text' => 'Encargado Tienda/Agente',
-                    'route' => 'envios.olva.index',
-                    'can' => 'envios.encargado.tienda_agente',
                     'icon' => 'fas fa-check-circle',
                     'active' => ['enviados'],
                 ],
