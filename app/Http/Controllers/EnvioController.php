@@ -1700,11 +1700,7 @@ class EnvioController extends Controller
         $pedidos_provincia = DireccionGrupo::join('clientes', 'clientes.id', 'direccion_grupos.cliente_id')
             ->join('users', 'users.id', 'clientes.user_id')
             ->activo()
-            ->whereIn('direccion_grupos.condicion_envio_code', [
-                Pedido::RECEPCIONADO_OLVA_INT,
-                Pedido::EN_CAMINO_OLVA_INT,
-                Pedido::EN_TIENDA_AGENTE_OLVA_INT,
-            ])
+            ->inOlva()
             ->where('direccion_grupos.distribucion', 'OLVA')
             ->where('direccion_grupos.motorizado_status', '0')
             ->select([

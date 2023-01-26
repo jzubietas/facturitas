@@ -72,6 +72,14 @@ class DireccionGrupo extends Model implements HasMedia
         });
     }
 
+    public function scopeInOlvaPending($query)
+    {
+        return $query->whereIn($this->qualifyColumn('condicion_envio_code'), [
+            Pedido::RECEPCIONADO_OLVA_INT,
+            Pedido::EN_CAMINO_OLVA_INT,
+            Pedido::EN_TIENDA_AGENTE_OLVA_INT,
+        ]);
+    }
     public function scopeInOlva($query)
     {
         return $query->whereIn($this->qualifyColumn('condicion_envio_code'), [
@@ -80,6 +88,16 @@ class DireccionGrupo extends Model implements HasMedia
             Pedido::EN_TIENDA_AGENTE_OLVA_INT,
             Pedido::NO_ENTREGADO_OLVA_INT,
             //Pedido::ENTREGADO_PROVINCIA_INT,
+        ]);
+    }
+    public function scopeInOlvaAll($query)
+    {
+        return $query->whereIn($this->qualifyColumn('condicion_envio_code'), [
+            Pedido::RECEPCIONADO_OLVA_INT,
+            Pedido::EN_CAMINO_OLVA_INT,
+            Pedido::EN_TIENDA_AGENTE_OLVA_INT,
+            Pedido::ENTREGADO_PROVINCIA_INT,
+            Pedido::NO_ENTREGADO_OLVA_INT,
         ]);
     }
     public function scopeInOlvaFinalizado($query)
