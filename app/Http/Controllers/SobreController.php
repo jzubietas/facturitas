@@ -576,7 +576,7 @@ class SobreController extends Controller
         if($pedido)
         {
             //mandar a sobre con direccion
-            $dg=DireccionGrupo::where('id',$pedido->direccion_grupo)->where("estado","1")->get();
+            $dg=$pedido->direcciongrupo;
             if($dg)
             {
                 PedidoMovimientoEstado::create([

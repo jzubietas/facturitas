@@ -1650,7 +1650,9 @@
                 event.preventDefault();
                 let recojo_cliente = $("#recojo_cliente").val();
                 let recojo_pedido = $("#recojo_pedido").val();
+                let recojo_grupo = $("#recojo_pedido_grupo").val();
                 let recojo_fecha = $("#recojo_fecha").val();
+                console.log("fecha "+recojo_fecha)
                 let recojo_distrito = $("#distrito_recoger").val();
                 let recojo_pedido_quienrecibe_nombre = $.trim($("#recojo_pedido_quienrecibe_nombre").val());
                 let recojo_pedido_quienrecibe_celular = $.trim($("#recojo_pedido_quienrecibe_celular").val());
@@ -1663,6 +1665,12 @@
                 //pedido
                 if(recojo_pedido==""){
                     Swal.fire('Debe elegir un pedido','','warning');return false;
+                    return false;
+                }else if(recojo_grupo=""){
+                    Swal.fire('El pedido no se ubica dentro de un paquete, consulte a sistemas','','warning');return false;
+                    return false;
+                }else if(recojo_fecha==""){
+                    Swal.fire('Debe elegir una fecha correspondiente','','warning');return false;
                     return false;
                 }else if(recojo_distrito==""){
                     Swal.fire('Debe elegir un distrito','','warning');return false;
@@ -1680,6 +1688,7 @@
                 var fd_courier = new FormData();
                 fd_courier.append('recojo_cliente', recojo_cliente);
                 fd_courier.append('recojo_pedido', recojo_pedido);
+                fd_courier.append('recojo_grupo', recojo_grupo);
                 fd_courier.append('recojo_fecha', recojo_fecha);
                 fd_courier.append('recojo_distrito', recojo_distrito);
                 fd_courier.append('recojo_pedido_quienrecibe_nombre', recojo_pedido_quienrecibe_nombre);
