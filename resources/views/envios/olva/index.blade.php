@@ -193,7 +193,7 @@
                     $('[data-toggle=jqconfirmencargado]', row).click(function () {
                         const target=$(this).data('target')
                         $.confirm({
-                            title: 'Historial de adjuntos de llamadas',
+                            title: `Historial de adjuntos de llamadas del pedido <b>${data.codigos}</b>`,
                             type: 'info',
                             columnClass: 'xlarge',
                             content: function () {
