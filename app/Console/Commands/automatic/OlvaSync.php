@@ -40,7 +40,7 @@ class OlvaSync extends Command
      */
     public function handle()
     {
-        $grupos = DireccionGrupo::query()->inOlvaPending()->whereNull('courier_failed_sync_at')->get();
+        $grupos = DireccionGrupo::query()->inOlvaPending()/*->whereNull('courier_failed_sync_at')*/->get();
         foreach ($grupos as $grupo) {
             SyncOlvaJob::dispatch($grupo->id)->onQueue('olva');
         }

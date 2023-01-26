@@ -96,12 +96,14 @@ class SyncOlvaJob implements ShouldQueue
                 } else {
                     $tracking=join('-',\Arr::wrap($tracking));
                     \Log::error("Failed ($direccionGrupo->id)($tracking)($code)");
-                    $direccionGrupo->update([
-                        'courier_failed_sync_at' => now(),
-                    ]);
-                    $direccionGrupo->pedidos()->update([
-                        'courier_failed_sync_at' => now(),
-                    ]);
+                    if($code==404) {
+                        $direccionGrupo->update([
+                            'courier_failed_sync_at' => now(),
+                        ]);
+                        $direccionGrupo->pedidos()->update([
+                            'courier_failed_sync_at' => now(),
+                        ]);
+                    }
                 }
             } else {
                 $tracking=join('-',\Arr::wrap($tracking));
