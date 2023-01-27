@@ -480,15 +480,21 @@ __________________________________
 
                 var fila = '<tr class="selected"' +
                     '><td><button type="button" class="btn btn-warning eliminar_dir">X</button></td>' +
-                    '<td><input type="hidden" id="destino_env" name="destino_env">' + $("#recojo_destino").val() + '</td>' +
-                    '<td><input type="hidden" id="distrito_env" name="distrito_env" >' + $("#distrito_recoger").val() + '</td>' +
-                    '<td><input type="hidden" id="zona_env" name="zona_env" >' + 'ZONA' + '</td>' +
-                    '<td><input type="hidden" id="contacto_nom_env" name="contacto_nom_env" >' + $("#env_pedido_quienrecibe_nombre").val() + '</td>' +
-                    '<td><input type="hidden" id="contacto_cel_env" name="contacto_cel_env" >' + $("#env_pedido_quienrecibe_celular").val() + '</td>' +
-                    '<td><input type="hidden" id="direccion_env" name="direccion_env" >' + $("#env_pedido_direccion").val() + '</td>' +
-                    '<td><input type="hidden" id="referencia_env" name="referencia_env" >' + $("#env_pedido_referencia").val() + '</td>' +
-                    '<td><input type="hidden" id="observacion_env" name="observacion_env" >' + observacion + '</td>' +
-                    '<td><input type="hidden" id="maps_env" name="maps_env" >' + $("#env_pedido_map").val() + '</td>' +
+                    '<td><input type="hidden" id="destino_env" name="destino_env" value="'+$("#recojo_destino").val()+'">' + $("#recojo_destino").val() +'</td>' +
+                    '<td><input type="hidden" id="distrito_env" name="distrito_env" value='+$("#distrito_recoger").val()+'>' + $("#distrito_recoger").val() + '</td>'+
+                    '<td><input type="hidden" id="zona_env" name="zona_env" >' + 'ZONA' + '</td>'+
+                    '<td><input type="hidden" id="contacto_nom_env" name="contacto_nom_env" value="'+$("#env_pedido_quienrecibe_nombre").val()+'">' + $("#env_pedido_quienrecibe_nombre").val() + '</td>'+
+                    '<td><input type="hidden" id="contacto_cel_env" name="contacto_cel_env" value="'+$("#env_pedido_quienrecibe_celular").val()+'">' + $("#env_pedido_quienrecibe_celular").val() + '</td>'+
+                    '<td><input type="hidden" id="direccion_env" name="direccion_env" value="'+$("#env_pedido_direccion").val()+'">' + $("#env_pedido_direccion").val() + '</td>'+
+                    '<td><input type="hidden" id="referencia_env" name="referencia_env" value="'+$("#env_pedido_referencia").val()+'">' + $("#env_pedido_referencia").val() + '</td>';
+
+                if($("#recojo_destino").val()=="LIMA"){
+                    fila=fila+'<td><input type="hidden" id="observacion_env" name="observacion_env" >' + observacion + '</td>';
+                }
+                else{
+                    fila=fila+'<td>'+observacion+'</td>';
+                }
+                    fila=fila+'<td><input type="hidden" id="maps_env" name="maps_env" value="'+$("#env_pedido_map").val()+'">' + $("#env_pedido_map").val() + '</td>'+
                     '</tr>';
                 $('#table_direccion').append(fila);
                 $("#modal-direccion_crearpedido").modal("hide");
@@ -811,6 +817,25 @@ __________________________________
                 $("#btnImprimir").prop("disabled", true);
                 fd.append('user_id', $("#user_id").val());
                 fd.append('cliente_id', $("#cliente_id").val());
+
+                fd.append('destino_env',$("#destino_env").val())
+                fd.append('distrito_env',$("#distrito_env").val())
+                fd.append('zona_env',$("#zona_env").val())
+                fd.append('contacto_nom_env',$("#contacto_nom_env").val())
+                fd.append('contacto_cel_env',$("#contacto_cel_env").val())
+                fd.append('direccion_env',$("#direccion_env").val())
+                fd.append('referencia_env',$("#referencia_env").val())
+                if($("#destino_env").val()=="LIMA")
+                {
+                    fd.append('observacion_env',$("#observacion_env").val())
+                }
+                else if($("#destino_env").val()=="OLVA")
+                {
+                    var file_data = $('input[type=file][name="observacion_env"]')[0].files[0]
+                    fd2.append('observacion_env', file_data, file_data.name);
+                }
+                fd.append('maps_env',$("#maps_env").val())
+                fd.append('importe_env',$("#importe_env").val())
 
                 $.ajax({
                     data: fd,

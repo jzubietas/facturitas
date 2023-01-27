@@ -222,7 +222,7 @@
                         <button data-backdrop="static" data-keyboard="false" data-toggle="modal"
                                 data-target="#modal-direccion_crearpedido" type="button"
                                 id="bt_add_dir" class="float-right btn btn-primary btn-lg d-none"><i
-                                class="fas fa-plus-circle"></i> Agregar
+                                class="fas fa-plus-circle"></i> Agregar Direccion
                         </button>
                     </div>
                     <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12" style="text-align: center">
