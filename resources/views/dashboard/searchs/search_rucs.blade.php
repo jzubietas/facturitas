@@ -21,7 +21,7 @@
                                 <li class="list-group-item bg-success">Tiene Deuda: <b
                                         class="{{$ruc->cliente->deuda_total>3?'bg-danger p-2 text-white':''}}"> {{$ruc->cliente->deuda_total>3?'SI':'NO'}}</b>
                                 </li>
-                                <li class="list-group-item bg-success">Deuda Total: <b
+                                <li class="list-group-item bg-success">Deuda Cliente: <b
                                         class="{{$ruc->cliente->deuda_total>3?'bg-danger p-2 text-white':''}}">{{money_f($ruc->cliente->deuda_total)}}</b>
                                 </li>
                                 @if($ruc->user!=null)
