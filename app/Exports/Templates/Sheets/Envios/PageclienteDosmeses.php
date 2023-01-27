@@ -7,7 +7,9 @@ use App\Exports\Templates\Sheets\AfterSheet;
 use App\Exports\Templates\Sheets\Fill;
 use App\Models\Cliente;
 use App\Models\ListadoResultado;
+use App\Models\User;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Concerns\WithColumnFormatting;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
@@ -53,7 +55,7 @@ class PageclienteDosmeses extends Export implements WithColumnFormatting,WithCol
             }
         }
 
-        $clientes=Cliente::
+        $data=Cliente::
         join('users as u','u.id','clientes.user_id')
             ->whereIn("clientes.id",$lista)
             ->select([
@@ -69,9 +71,53 @@ class PageclienteDosmeses extends Export implements WithColumnFormatting,WithCol
                                         where dp2.estado=1 and a.cliente_id=clientes.id order by dp2.created_at desc limit 1) as importeultimopedido"),
                 DB::raw("(select DATE_FORMAT(dp3.created_at,'%m') from pedidos a inner join detalle_pedidos dp3 on a.id=dp3.pedido_id
                                         where dp3.estado=1 and a.cliente_id=clientes.id order by dp3.created_at desc limit 1) as mesultimopedido"),
-            ])->get();
+            ]);
 
-        return $clientes;
+        if (Auth::user()->rol == "Llamadas") {
+
+            $usersasesores = User::where('users.rol', 'Asesor')
+                ->where('users.estado', '1')
+                ->where('users.llamada', Auth::user()->id)
+                ->select(
+                    DB::raw("users.identificador as identificador")
+                )
+                ->pluck('users.identificador');
+            $data = $data->WhereIn("u.identificador", $usersasesores);
+
+        }elseif (Auth::user()->rol == "Asesor") {
+            $usersasesores = User::where('users.rol', 'Asesor')
+                ->where('users.estado', '1')
+                ->where('users.identificador', Auth::user()->identificador)
+                ->select(
+                    DB::raw("users.identificador as identificador")
+                )
+                ->pluck('users.identificador');
+            $data = $data->WhereIn("u.identificador", $usersasesores);
+        }else if (Auth::user()->rol == "Encargado") {
+            $usersasesores = User::where('users.rol', 'Asesor')
+                ->where('users.estado', '1')
+                ->where('users.supervisor', Auth::user()->id)
+                ->select(
+                    DB::raw("users.identificador as identificador")
+                )
+                ->pluck('users.identificador');
+
+            $data = $data->WhereIn("u.identificador", $usersasesores);
+        }elseif (Auth::user()->rol == User::ROL_ASESOR_ADMINISTRATIVO) {
+            $data = $data->Where("u.identificador", '=', 'B');
+        }elseif (Auth::user()->rol == "Operario") {
+        $asesores = User::whereIN('users.rol', ['Asesor', 'Administrador', 'ASESOR ADMINISTRATIVO'])
+            ->where('users.estado', '1')
+            ->Where('users.operario', Auth::user()->id)
+            ->select(
+                DB::raw("users.identificador as identificador")
+            )
+            ->pluck('users.identificador');
+        $pedidos = $data->WhereIn('u.identificador', $asesores);
+
+        }
+
+        return $data->get();
     }
     public function fields(): array
     {
