@@ -1130,7 +1130,7 @@ class PedidoController extends Controller
             ]);
             $zona="";
             $zona_distrito=null;
-            if($request->distrito_env!=undefined)
+            if($request->distrito_env!='')
             {
                 $zona_distrito = Distrito::whereIn('provincia', ['LIMA', 'CALLAO'])
                     ->where('distrito',$request->distrito_env)->first();
