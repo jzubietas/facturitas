@@ -39,7 +39,7 @@ class PageclienteDosmeses extends Export implements WithColumnFormatting,WithCol
         foreach ($ultimos_pedidos as $procesada){
             if($procesada->fechaultimopedido!=null)
             {
-                $fecha_analizar=Carbon::parse($procesada->fechaultimopedido)->format('Y-m')
+                $fecha_analizar=Carbon::parse($procesada->fechaultimopedido)->format('Y-m');
                 if($fecha_analizar==$dosmeses)
                 {
                     if(in_array($procesada->fechaultimopedido_pago,["0","1"]))
