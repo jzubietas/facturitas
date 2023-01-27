@@ -197,6 +197,8 @@ class SobreController extends Controller
         } else if (Auth::user()->rol == "Super asesor") {
             $pedidos = $pedidos->Where('u.identificador', Auth::user()->identificador);
 
+        } else if (Auth::user()->rol == User::ROL_ASESOR_ADMINISTRATIVO) {
+            $pedidos = $pedidos->Where('u.identificador', Auth::user()->identificador);
         } else if (Auth::user()->rol == "Encargado") {
 
             $usersasesores = User::where('users.rol', 'Asesor')
