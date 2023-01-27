@@ -40,7 +40,7 @@
                                                     data-live-search-placeholder="Seleccione Destino"
                                                     class="form-control">
                                                 <option value="LIMA">LIMA</option>
-                                                <option value="OLVA">OLVA</option>
+                                                {{--<option value="OLVA">OLVA</option>--}}
                                             </select>
                                         </div>
 
@@ -97,8 +97,16 @@
                                             <input type="text" class="form-control" id="env_pedido_map" name="env_pedido_map" placeholder="Map" autocomplete="off">
                                         </div>
                                     </div>
+
                                     <div class="form-group">
-                                        <button type="submit" class="btn btn-primary">Registrar direccion</button>
+                                        <div class="col-md-12">
+                                            <div class="alert alert-warning" role="alert">
+                                                Aqui se ingresan los campos para envios destino
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <button type="submit" class="btn btn-success">Registrar direccion</button>
                                     </div>
                                 </form>
 

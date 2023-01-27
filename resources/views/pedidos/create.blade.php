@@ -569,6 +569,7 @@ __________________________________
             }
 
             $("#modal-direccion_crearpedido").on('show.bs.modal', function () {
+
                 $("#recojo_destino").selectpicker("refresh").trigger("change");
                 $("#env_pedido_quienrecibe_nombre")
                 $("#env_pedido_quienrecibe_celular")
