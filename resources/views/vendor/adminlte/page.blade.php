@@ -5,15 +5,15 @@
 @section('adminlte_css')
     <style>
         @foreach(get_color_role() as $rol=>$color)
-            .bg-{{Str::slug($rol)}}  {
+            .bg-{{Str::slug($rol)}}    {
             @if(is_array($color))
-             background: {{$color[0]}} !important;;
-            color: {{$color[1]}} !important;;
+               background: {{$color[0]}}   !important;;
+            color: {{$color[1]}}   !important;;
             @else
-             background: {{$color}};
+               background: {{$color}};
             color: #000 !important;
             @endif
-             font-weight: bold !important;;
+               font-weight: bold !important;;
         }
         @endforeach
     </style>
@@ -75,9 +75,9 @@
     @yield('js')
     <script>
         $(document).ready(function () {
-            if(document.location.href!='{{route('envios.distribuirsobres')}}'){
-                for (var key in localStorage){
-                    if(key.includes('.envios.distribuirsobres')){
+            if (document.location.href != '{{route('envios.distribuirsobres')}}') {
+                for (var key in localStorage) {
+                    if (key.includes('.envios.distribuirsobres')) {
                         localStorage.removeItem(key)
                     }
                 }
@@ -99,23 +99,23 @@
                         type: 'POST',
                         url: "{{ route('escaneo.estado_pedidos') }}",
                         data: {
-                            'codigo' : codigo_mejorado,
+                            'codigo': codigo_mejorado,
                         },
                         success: function (data) {
                             console.log(data);
-                            if(data.codigo == 0){
+                            if (data.codigo == 0) {
                                 $('#info-pedido').html('<div class="text-danger text-center"><i class="fa fa-exclamation-triangle font-44" aria-hidden="true"></i><br><h4 class="font-weight-bold">Este pedido no se encuentra en el sistema</h4></div>');
-                            }else if(data.codigo == 1){
+                            } else if (data.codigo == 1) {
                                 $('#input-info-pedido').val("");
 
                                 var InfoString = '<h4 class="font-16 font-weight-bold">Información del pedido:</h4> <table class="table w-100">';
-                                InfoString += '<tr><td class="font-weight-bold p-8 pt-0 pb-0">Codigo</td><td>' + data.pedido.codigo + '</td><td class="font-weight-bold p-8">Estado</td><td style="width: 250px;"><span class="bagde p-8 br-12 font-weight-bold" style="font-size:12px; background-color: '+ data.pedido.condicion_envio_color +'">' +data.pedido.condicion_envio + '<s/pan></td></tr>';
+                                InfoString += '<tr><td class="font-weight-bold p-8 pt-0 pb-0">Codigo</td><td>' + data.pedido.codigo + '</td><td class="font-weight-bold p-8">Estado</td><td style="width: 250px;"><span class="bagde p-8 br-12 font-weight-bold" style="font-size:12px; background-color: ' + data.pedido.condicion_envio_color + '">' + data.pedido.condicion_envio + '<s/pan></td></tr>';
                                 InfoString += '<tr><td class="font-weight-bold p-8 pt-0 pb-0"></td><td></td><td class="font-weight-bold p-8"></td><td></td></tr>';
                                 // SI TIENE DIRECCION
-                                if(data.pedido.estado_sobre == 0){
+                                if (data.pedido.estado_sobre == 0) {
 
                                     InfoString += '<tr><td class="font-weight-bold p-8">Tiene Direccion</td><td colspan="3"> NO TIENE DIRECCION</td></tr>';
-                                }else {
+                                } else {
 
                                     InfoString += '<tr><td colspan="4" class="font-weight-bold p-8" style="background-color:#ededed;"><i class="fa fa-map-marker text-success mr-12" aria-hidden="true"></i> DIRECCION</td></tr>';
                                     InfoString += '<tr><td class="font-weight-bold">Dirección</td><td>' + data.pedido.env_direccion + '</td>';
@@ -129,31 +129,31 @@
 
                                 }
                                 // SI ESTA ASIGNADO A UN MOTORIZADO
-                                if(data.pedido.direccion_grupo == null) {
+                                if (data.pedido.direccion_grupo == null) {
                                     InfoString += '<tr><td class="font-weight-bold p-8">Esta asignado a una zona?</td><td colspan="3"> NO</td></tr>';
-                                }else{
+                                } else {
                                     //SI TIENE MOTORIZADO
-                                    if(data.pedido.direcciongrupo.motorizado == null){
+                                    if (data.pedido.direcciongrupo.motorizado == null) {
                                         InfoString += '<tr><td class="font-weight-bold p-8">Se encuentra en Reparto?</td><td colspan="3"> NO</td></tr>';
-                                    }else{
-                                        if(data.pedido.direcciongrupo.fecha_salida == null){
+                                    } else {
+                                        if (data.pedido.direcciongrupo.fecha_salida == null) {
                                             var env_fecha_salida = "Fecha no asignada";
-                                        }else{
+                                        } else {
                                             var env_fecha_salida = data.pedido.direcciongrupo.fecha_salida;
                                         }
                                         InfoString += '<tr><td colspan="4" class="font-weight-bold p8 pt-8 pb-8" style="background-color:#ededed;"><i class="fa fa-motorcycle text-primary mr-12" aria-hidden="true"></i> COURIER</td></tr>';
-                                        InfoString += '<tr><td class="font-weight-bold p-8 pt-0 pb-0">Nombre Motorizado</td><td>'+ data.pedido.direcciongrupo.motorizado.name +'</td><td class="font-weight-bold p-8">Zona motorizado</td><td>'+ data.pedido.direcciongrupo.motorizado.zona +'</td></tr>';
-                                        InfoString += '<tr><td class="font-weight-bold p-8 pt-0 pb-0">Zona</td><td>'+ data.pedido.direcciongrupo.distribucion +'</td><td class="font-weight-bold p-8">Fecha de salida</td><td>'+ data.pedido.direcciongrupo.fecha_salida_format  +'</td></tr>';
-                                        InfoString += '<tr><td class="font-weight-bold p-8 pt-0 pb-0">ID Grupo</td><td>'+ data.pedido.direcciongrupo.id +'</td><td class="font-weight-bold p-8">Estado Grupo</td><td><span class="bagde p-8 br-12 font-weight-bold font-11" style="background-color: #f97100; padding: 4px 16px !important; background-color: '+ data.pedido.condicion_envio_color +'">'+ data.pedido.direcciongrupo.condicion_envio  +'</span></td></tr>';
+                                        InfoString += '<tr><td class="font-weight-bold p-8 pt-0 pb-0">Nombre Motorizado</td><td>' + data.pedido.direcciongrupo.motorizado.name + '</td><td class="font-weight-bold p-8">Zona motorizado</td><td>' + data.pedido.direcciongrupo.motorizado.zona + '</td></tr>';
+                                        InfoString += '<tr><td class="font-weight-bold p-8 pt-0 pb-0">Zona</td><td>' + data.pedido.direcciongrupo.distribucion + '</td><td class="font-weight-bold p-8">Fecha de salida</td><td>' + data.pedido.direcciongrupo.fecha_salida_format + '</td></tr>';
+                                        InfoString += '<tr><td class="font-weight-bold p-8 pt-0 pb-0">ID Grupo</td><td>' + data.pedido.direcciongrupo.id + '</td><td class="font-weight-bold p-8">Estado Grupo</td><td><span class="bagde p-8 br-12 font-weight-bold font-11" style="background-color: #f97100; padding: 4px 16px !important; background-color: ' + data.pedido.condicion_envio_color + '">' + data.pedido.direcciongrupo.condicion_envio + '</span></td></tr>';
 
                                         //SI TIENE MOTORIZADO
-                                        if(data.pedido.condicion_envio_code == 10){
+                                        if (data.pedido.condicion_envio_code == 10) {
                                             InfoString += '<tr><td colspan="4" class="font-weight-bold p8 pt-8 pb-8" style="background-color:#ededed;"><i class="fa fa-paperclip text-danger mr-12" aria-hidden="true"></i> ADJUNTOS</td></tr>';
-                                            InfoString += '<tr><td><img style="width:150px; height: 150px; object-fit:cover;" src="/storage/'+ data.pedido.direcciongrupo.foto1 +'"></td>' +
-                                                '<td><img style="width:150px; height: 150px; object-fit:cover;" src="/storage/'+ data.pedido.direcciongrupo.foto2 +'"></td>' +
-                                                '<td class="font-weight-bold p-8"><img style="width:150px; height: 150px; object-fit:cover;" src="/storage/'+ data.pedido.direcciongrupo.foto3 +'"></td>' +
+                                            InfoString += '<tr><td><img style="width:150px; height: 150px; object-fit:cover;" src="/storage/' + data.pedido.direcciongrupo.foto1 + '"></td>' +
+                                                '<td><img style="width:150px; height: 150px; object-fit:cover;" src="/storage/' + data.pedido.direcciongrupo.foto2 + '"></td>' +
+                                                '<td class="font-weight-bold p-8"><img style="width:150px; height: 150px; object-fit:cover;" src="/storage/' + data.pedido.direcciongrupo.foto3 + '"></td>' +
                                                 '<td></td></tr>';
-                                        }else{
+                                        } else {
                                             InfoString += '<tr><td class="font-weight-bold p-8">Tiene adjuntos?</td><td colspan="3"> NO</td></tr>';
                                         }
                                     }
@@ -162,7 +162,7 @@
                             $('#info-pedido').html(InfoString);
 
                         }
-                    }).always(function(){
+                    }).always(function () {
                         $('#codigo_confirmar').focus();
                     });
 
@@ -170,5 +170,23 @@
                 });
             });
         })
+    </script>
+    <script>
+        /*$(document).ready(function () {
+            $(document).on("paste", "input[type=text],input[type=search]", function (e) {
+                // access the clipboard using the api
+                var pastedData = e.originalEvent.clipboardData.getData('text');
+                const valuetrim = (pastedData || '').trim()
+                setTimeout(function () {
+                    if ($(e.target).parent('.bs-searchbox').length > 0) {
+                        setTimeout(function () {
+                            $(e.target).val(valuetrim);
+                        }, 1);
+                    } else {
+                        e.target.value = valuetrim
+                    }
+                }, 1);
+            });
+        });*/
     </script>
 @stop
