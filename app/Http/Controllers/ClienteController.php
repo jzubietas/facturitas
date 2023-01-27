@@ -1813,8 +1813,8 @@ class ClienteController extends Controller
         $messaje = $mensajesRandom[$messajeKey];
         $pedidos = Pedido::query()->with(['cliente', 'pagoPedidos', 'detallePedido'])
             ->activo()
-            ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
             ->activoJoin('dp')
+            ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
             ->where('pedidos.pendiente_anulacion','0')
             ->select([
                 'pedidos.id',
