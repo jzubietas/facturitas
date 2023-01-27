@@ -19,8 +19,7 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        if(auth()->user()->rol=='MOTORIZADO')
-        {
+        if (auth()->user()->rol == 'MOTORIZADO') {
             return redirect()->route('envios.motorizados.index');//->with('info', 'registrado');
         }
         $mytime = Carbon::now('America/Lima');
@@ -28,74 +27,82 @@ class DashboardController extends Controller
         $mfecha = $mytime->month;
         $dfecha = $mytime->day;
 
-        $_pedidos = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')
+        $_pedidos = Pedido::activo()->join('clientes as c', 'pedidos.cliente_id', 'c.id')
             ->join('users as u', 'pedidos.user_id', 'u.id')
             ->select(
                 DB::raw("COUNT(u.identificador) AS total, u.identificador ")
             )
-            ->where('pedidos.estado', '1')
-            //->whereIn('pedidos.condicion_envio_code', [Pedido::POR_ATENDER_INT])
-            ->where(DB::raw('CAST(pedidos.created_at as date)'), '=', Carbon::now()->format('Y-m-d'))
-            //->whereIn('u.identificador', ['01','02','03'])
+            ->whereDate('pedidos.created_at', '=', now())
             ->groupBy('u.identificador');
 
         $_pedidos = $_pedidos->get();
+        $data_pedidos = [];
+        foreach ($_pedidos as $pedido) {
+            $data_pedidos[$pedido->identificador] = $pedido->total;
+        }
+        $_pedidos = $data_pedidos;
+        $asesores = User::activo()->rolAsesor()->pluck('identificador');
+        foreach ($asesores as $identificador) {
+            if (!isset($_pedidos[$identificador])) {
+                $_pedidos[$identificador] = 0;
+            }
+        }
 
-        $_pedidos_totalpedidosdia = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')
+
+        $_pedidos_totalpedidosdia = Pedido::activo()->join('clientes as c', 'pedidos.cliente_id', 'c.id')
             ->join('users as u', 'pedidos.user_id', 'u.id')
-            ->where('pedidos.estado', '1')
-            ->where(DB::raw('CAST(pedidos.created_at as date)'), '=', Carbon::now()->format('Y-m-d'))
+            ->whereDate('pedidos.created_at', '=', now())
             ->count();
 
 
         /**
          * $_pedidos_mes_op = null;
-
-
-        if (Auth::user()->rol == "Jefe de operaciones") {
-
-
-        $_pedidos_mes_operario = Pedido::join('users as u', 'pedidos.user_id', 'u.id')
-        ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
-        ->select([
-        'u.name',
-        DB::raw("COUNT(u.identificador) AS total"),
-        DB::raw(" (SELECT count(dp.tipo_banca) FROM detalle_pedidos dp
-        JOIN pedidos p ON (dp.pedido_id=p.id)
-        JOIN users us ON (p.user_id=us.id)
-        WHERE us.identificador=u.identificador AND dp.estado=1  AND dp.tipo_banca LIKE  'electronica%'
-        ) as electronico"),
-
-        DB::raw(" (SELECT count(dp.tipo_banca) FROM detalle_pedidos dp
-        JOIN pedidos p ON (dp.pedido_id=p.id)
-        JOIN users us ON (p.user_id=us.id)
-        WHERE us.identificador=u.identificador AND dp.estado=1  AND dp.tipo_banca LIKE  'fisico%'
-        ) as fisico")
-        ])
-        ->where('pedidos.estado', '1');
-
-
-        $operarios = User::where('users.rol', 'Operario')
-        ->where('users.estado', '1')
-        ->where('users.jefe', Auth::user()->id)
-        ->select(
-        DB::raw("users.id as id")
-        )
-        ->pluck('users.id');
-
-        $asesores = User::whereIN('users.rol', ['Asesor'])
-        ->where('users.estado', '1')
-        ->WhereIn('users.operario', $operarios)
-        ->select(
-        DB::raw("users.identificador as identificador")
-        )
-        ->pluck('users.identificador');
-
-
-        $_pedidos_mes_operario->WhereIn('u.identificador', $asesores)->groupBy('u.identificador', 'u.name');
-
-        $_pedidos_mes_op = $_pedidos_mes_operario->get();
-        }
+         *
+         *
+         * if (Auth::user()->rol == "Jefe de operaciones") {
+         *
+         *
+         * $_pedidos_mes_operario = Pedido::join('users as u', 'pedidos.user_id', 'u.id')
+         * ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
+         * ->select([
+         * 'u.name',
+         * DB::raw("COUNT(u.identificador) AS total"),
+         * DB::raw(" (SELECT count(dp.tipo_banca) FROM detalle_pedidos dp
+         * JOIN pedidos p ON (dp.pedido_id=p.id)
+         * JOIN users us ON (p.user_id=us.id)
+         * WHERE us.identificador=u.identificador AND dp.estado=1  AND dp.tipo_banca LIKE  'electronica%'
+         * ) as electronico"),
+         *
+         * DB::raw(" (SELECT count(dp.tipo_banca) FROM detalle_pedidos dp
+         * JOIN pedidos p ON (dp.pedido_id=p.id)
+         * JOIN users us ON (p.user_id=us.id)
+         * WHERE us.identificador=u.identificador AND dp.estado=1  AND dp.tipo_banca LIKE  'fisico%'
+         * ) as fisico")
+         * ])
+         * ->where('pedidos.estado', '1');
+         *
+         *
+         * $operarios = User::where('users.rol', 'Operario')
+         * ->where('users.estado', '1')
+         * ->where('users.jefe', Auth::user()->id)
+         * ->select(
+         * DB::raw("users.id as id")
+         * )
+         * ->pluck('users.id');
+         *
+         * $asesores = User::whereIN('users.rol', ['Asesor'])
+         * ->where('users.estado', '1')
+         * ->WhereIn('users.operario', $operarios)
+         * ->select(
+         * DB::raw("users.identificador as identificador")
+         * )
+         * ->pluck('users.identificador');
+         *
+         *
+         * $_pedidos_mes_operario->WhereIn('u.identificador', $asesores)->groupBy('u.identificador', 'u.name');
+         *
+         * $_pedidos_mes_op = $_pedidos_mes_operario->get();
+         * }
          */
 
 

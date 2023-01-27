@@ -75,6 +75,11 @@
 </div>
 <div class="container-fluid mt-4">
     <div class="row">
+        <div class="col-12">
+            @include('dashboard.widgets.pedidos_creados')
+        </div>
+        @include('dashboard.widgets.buscar_cliente')
+
         <div class="col-md-12">
             <div class="card">
                 <div class="d-flex justify-content-end align-items-center">
@@ -82,10 +87,9 @@
                         @php
                             try {
                                  $currentDate=\Carbon\Carbon::createFromFormat('m-Y',request('selected_date',now()->format('m-Y')));
-     }catch (Exception $ex){
+                            } catch (Exception $ex){
                                  $currentDate=\Carbon\Carbon::createFromFormat('m-Y',now()->format('m-Y'));
-     }
-
+                            }
                         @endphp
                         <div class="input-group">
                             <div class="input-group-prepend">
@@ -139,7 +143,7 @@
             </div>
         </div>
         <div class="col-lg-12">
-                <x-grafico-metas-mes></x-grafico-metas-mes>
+            <x-grafico-metas-mes></x-grafico-metas-mes>
         </div>
         <div class="col-md-12">
             <div class="row" id="widget-container">
