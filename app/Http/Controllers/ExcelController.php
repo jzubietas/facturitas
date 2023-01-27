@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Exports\Clientes\ClientesSinPedido2MesesAtras;
+use App\Exports\Templates\PlantillaExportClientesdosmesesMultiple;
 use App\Exports\Templates\PlantillaMotorizadoConfirmarMultiple;
 use App\Exports\BaseFriaPorAsesorExport;
 use App\Exports\BasesFriasExport;
