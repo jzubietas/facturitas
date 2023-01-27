@@ -1814,6 +1814,8 @@ class ClienteController extends Controller
         $pedidos = Pedido::query()->with(['cliente', 'pagoPedidos', 'detallePedido'])
             ->activo()
             ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
+            ->activoJoin('dp')
+            ->where('pedidos.pendiente_anulacion','0')
             ->select([
                 'pedidos.id',
                 'pedidos.codigo',
@@ -1826,9 +1828,9 @@ class ClienteController extends Controller
                 'dp.total',
                 'dp.saldo as diferencia',
             ])
-            ->where('pedidos.created_at', '<=', now()->subDays(7)->format('Y-m-d H:i:s'))
+            //->where('pedidos.created_at', '<=', now()->subDays(7)->format('Y-m-d H:i:s'))
             ->where('pedidos.cliente_id', $cliente->id)
-            ->where('pedidos.condicion_code', '<>', Pedido::ANULADO_INT)
+            //->where('pedidos.condicion_code', '<>', Pedido::ANULADO_INT)
             ->get()
             ->map(function (Pedido $pedido) {
                 $pedido->adelanto = $pedido->pagoPedidos()->activo()->sum('abono');
