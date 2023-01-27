@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\Clientes\ClientesSinPedido2MesesAtras;
 use App\Exports\Templates\PlantillaMotorizadoConfirmarMultiple;
 use App\Exports\BaseFriaPorAsesorExport;
 use App\Exports\BasesFriasExport;
@@ -179,6 +180,14 @@ class ExcelController extends Controller
         return (new PlantillaExportMultiple($request->anio))
             ->download('Lista de Clientes_pedidos_' . $request->anio . '.xlsx');
     }
+
+
+    public function clientesTwoMonthAgoExcel(Request $request)
+    {
+        return (new ClientesSinPedido2MesesAtras($request->anio))
+            ->download('Lista de Clientes_pedidos_' . $request->anio . '.xlsx');
+    }
+
 
     // public function basefriaExcel()
     // {
