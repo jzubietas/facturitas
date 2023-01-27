@@ -19,11 +19,11 @@
 
                                     <div class="form-row">
 
-                                        <div class="form-group col-md-6">
+                                        <div class="form-group col-md-6 d-none">
                                             <label for="recojo_cliente_name">Cliente</label>
                                             <input type="text" class="form-control" id="recojo_cliente_name" placeholder="Cliente" readonly>
                                         </div>
-                                        <div class="form-group col-md-6">
+                                        <div class="form-group col-md-6 d-none">
                                             <button type="button" class="btn-charge-history btn btn-info mt-4">Cargar de Historial</button>
                                         </div>
 

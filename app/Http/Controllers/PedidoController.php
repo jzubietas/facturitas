@@ -1128,7 +1128,8 @@ class PedidoController extends Controller
             $pedido->update([
                 "correlativo" => $pedido->id_code
             ]);
-            $zona_distrito = Distrito::where('distrito', $request->distrito)->whereIn('provincia', ['LIMA', 'CALLAO'])->where('distrito',$request->distrito_env)->first();
+            $zona_distrito = Distrito::whereIn('provincia', ['LIMA', 'CALLAO'])
+                ->where('distrito',$request->distrito_env)->first();
 
             $file_name=null;
             if($request->destino_env=="OLVA")

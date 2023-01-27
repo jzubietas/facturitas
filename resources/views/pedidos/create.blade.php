@@ -494,8 +494,13 @@ __________________________________
                 else{
                     fila=fila+'<td>'+observacion+'</td>';
                 }
-                    fila=fila+'<td><input type="hidden" id="maps_env" name="maps_env" value="'+$("#env_pedido_map").val()+'">' + $("#env_pedido_map").val() + '</td>'+
-                    '</tr>';
+                str_importe= parseFloat($("#env_pedido_importe").val().replace(",", ""))*1;
+                    fila=fila+'<td><input type="hidden" id="maps_env" name="maps_env" value="'+$("#env_pedido_map").val()+'">' + $("#env_pedido_map").val() + '</td>'
+                    fila=fila+'<td><input type="hidden" id="importe_env" name="importe_env" value="'+str_importe+'">' + str_importe + '</td>'
+                    fila=fila+'</tr>';
+
+
+
                 $('#table_direccion').append(fila);
                 $("#modal-direccion_crearpedido").modal("hide");
                 $("#bt_add_dir").addClass("d-none");
