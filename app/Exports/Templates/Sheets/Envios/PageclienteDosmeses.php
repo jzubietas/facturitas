@@ -20,7 +20,7 @@ class PageclienteDosmeses extends Export implements WithColumnFormatting,WithCol
 
     public function collection()
     {
-        $ultimos_pedidos=Clientes::activo()
+        $ultimos_pedidos=Cliente::activo()
             ->select([
                 'clientes.id',
                 'clientes.tipo',
@@ -39,24 +39,24 @@ class PageclienteDosmeses extends Export implements WithColumnFormatting,WithCol
             }
         }
 
-        $clientes=Clientes::
+        $clientes=Cliente::
         join('users as u','u.id','clientes.user_id')
-            ->whereIn("id",$lista)
+            ->whereIn("clientes.id",$lista)
             ->select([
                 'clientes.id as item',
                 'u.identificador as asesor_identificador',
                 'clientes.celular',
                 DB::raw("(select group_concat(r.num_ruc) from rucs r where r.cliente_id=clientes.id) as rucs"),
-                DB::raw("(select case when dp.pago=0 then 'DEUDA'
-                                        when dp.pago=1 then 'DEUDA'
-                                        else 'NO DUDA' from pedidos dp1
+                DB::raw("(select case when dp1.pago=0 then 'DEUDA'
+                                        when dp1.pago=1 then 'DEUDA'
+                                        else 'NO DUDA' end from pedidos dp1
                                         where dp1.estado=1 and dp1.cliente_id=clientes.id order by dp1.created_at desc limit 1) as deuda"),
-                DB::raw("(select dp1.total from pedidos dp1
-                                        where dp1.estado=1 and dp1.cliente_id=clientes.id order by dp1.created_at desc limit 1) as importeultimopedido")
+                DB::raw("(select dp2.total from pedidos a inner join detalle_pedidos dp2 on a.id=dp2.pedido_id
+                                        where dp2.estado=1 and a.cliente_id=clientes.id order by dp2.created_at desc limit 1) as importeultimopedido")
 
             ])->get();
 
-        return $clientes->get();
+        return $clientes;
     }
     public function fields(): array
     {

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Exports\Clientes\ClientesSinPedido2MesesAtras;
+use App\Exports\Templates\PlantillaExportClientesdosmesesMultiple;
 use App\Exports\Templates\PlantillaMotorizadoConfirmarMultiple;
 use App\Exports\BaseFriaPorAsesorExport;
 use App\Exports\BasesFriasExport;
@@ -184,7 +185,7 @@ class ExcelController extends Controller
 
     public function clientesTwoMonthAgoExcel(Request $request)
     {
-        return (new ClientesSinPedido2MesesAtras())
+        return (new PlantillaExportClientesdosmesesMultiple())
             ->download('Lista de Clientes_pedidos_.xlsx');
     }
 
