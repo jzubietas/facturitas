@@ -231,7 +231,7 @@
                         <button data-backdrop="static" data-keyboard="false" data-toggle="modal"
                                 data-target="#modal-direccion_crearpedido" type="button"
                                 id="bt_add_dir" class="float-right btn btn-success btn-lg d-none"><i
-                                class="fa  fa-map-marker-alt text-success mr-8"></i> Agregar Direccion
+                                class="fa  fa-map-marker-alt text-success mr-8 text-danger"></i> Agregar Direccion
                         </button>
                     </div>
                     <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12" style="text-align: center">
