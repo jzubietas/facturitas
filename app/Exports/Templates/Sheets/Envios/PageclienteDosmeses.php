@@ -105,7 +105,9 @@ class PageclienteDosmeses extends Export implements WithColumnFormatting,WithCol
              'D' => NumberFormat::FORMAT_DATE_YYYYMMDD,
              'E' => NumberFormat::FORMAT_DATE_YYYYMMDD,
             */
-            'B' => NumberFormat::FORMAT_TEXT
+            'B' => NumberFormat::FORMAT_TEXT,
+            'C' => NumberFormat::FORMAT_TEXT,
+            'D' => NumberFormat::FORMAT_TEXT,
 
         ];
     }
