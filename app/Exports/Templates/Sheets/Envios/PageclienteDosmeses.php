@@ -7,6 +7,7 @@ use App\Exports\Templates\Sheets\AfterSheet;
 use App\Exports\Templates\Sheets\Fill;
 use App\Models\Cliente;
 use App\Models\ListadoResultado;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Concerns\WithColumnFormatting;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
@@ -32,15 +33,21 @@ class PageclienteDosmeses extends Export implements WithColumnFormatting,WithCol
             ])->get();
 
         //$ultimos=$ultimos_pedidos->whereNotNull('fechaultimopedido')->get();
+
+        $dosmeses=now()->startOfMonth()->subMonths(2)->format('Y-m');//01 11
         $lista=[];
-        foreach ($ultimos_pedidos as $procesada) {
+        foreach ($ultimos_pedidos as $procesada){
             if($procesada->fechaultimopedido!=null)
             {
-                if(in_array($procesada->fechaultimopedido_pago,["0","1"]))
+                $fecha_analizar=Carbon::parse($procesada->fechaultimopedido)->format('Y-m')
+                if($fecha_analizar==$dosmeses)
                 {
-                    if(in_array($procesada->fechaultimopedido_pagado,["0","1"]))
+                    if(in_array($procesada->fechaultimopedido_pago,["0","1"]))
                     {
-                        $lista[]=$procesada->id;
+                        if(in_array($procesada->fechaultimopedido_pagado,["0","1"]))
+                        {
+                            $lista[]=$procesada->id;
+                        }
                     }
                 }
             }
