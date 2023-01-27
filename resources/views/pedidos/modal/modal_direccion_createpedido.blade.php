@@ -98,7 +98,7 @@
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <button type="submit" class="btn btn-primary">Registrar direccion</button>
+                                        <button type="submit" class="btn btn-success">Registrar direccion</button>
                                     </div>
                                 </form>
 
