@@ -823,24 +823,27 @@ __________________________________
                 fd.append('user_id', $("#user_id").val());
                 fd.append('cliente_id', $("#cliente_id").val());
 
-                fd.append('destino_env',( ($("#destino_env").val().length>0)? $("#destino_env").val():'' ) )
-                fd.append('distrito_env',( ($("#distrito_env").val().length>0)? $("#distrito_env").val():'' ) )
-                fd.append('zona_env',( ($("#zona_env").val().length>0)? $("#zona_env").val():'' ) )
-                fd.append('contacto_nom_env',( ($("#contacto_nom_env").val().length>0)? $("#contacto_nom_env").val():'' ) )
-                fd.append('contacto_cel_env',( ($("#contacto_cel_env").val().length>0)? $("#contacto_cel_env").val():'' ) )
-                fd.append('direccion_env',( ($("#direccion_env").val().length>0)? $("#direccion_env").val():'' ) )
-                fd.append('referencia_env',( ($("#referencia_env").val().length>0)? $("#referencia_env").val():'' ) )
+                fd.append('destino_env',( ($("#destino_env").val())? $("#destino_env").val():'' ) )
+                fd.append('distrito_env',( ($("#distrito_env").val())? $("#distrito_env").val():'' ) )
+                fd.append('zona_env',( ($("#zona_env").val())? $("#zona_env").val():'' ) )
+                fd.append('contacto_nom_env',( ($("#contacto_nom_env").val())? $("#contacto_nom_env").val():'' ) )
+                fd.append('contacto_cel_env',( ($("#contacto_cel_env").val())? $("#contacto_cel_env").val():'' ) )
+                fd.append('direccion_env',( ($("#direccion_env").val())? $("#direccion_env").val():'' ) )
+                fd.append('referencia_env',( ($("#referencia_env").val())? $("#referencia_env").val():'' ) )
                 if($("#destino_env").val()=="LIMA")
                 {
-                    fd.append('observacion_env',$("#observacion_env").val())
+                    fd.append('observacion_env',( ($("#observacion_env").val())? $("#observacion_env").val():'' ) )
                 }
                 else if($("#destino_env").val()=="OLVA")
                 {
-                    var file_data = $('input[type=file][name="observacion_env"]')[0].files[0]
-                    fd2.append('observacion_env', file_data, file_data.name);
+                    if($("#observacion_env").val())
+                    {
+                        var file_data = $('input[type=file][name="observacion_env"]')[0].files[0]
+                        fd2.append('observacion_env', file_data, file_data.name);
+                    }
                 }
-                fd.append('maps_env',$("#maps_env").val())
-                fd.append('importe_env',$("#importe_env").val())
+                fd.append('maps_env',( ($("#maps_env").val())? $("#maps_env").val():'' ) )
+                fd.append('importe_env',( ($("#importe_env").val())? $("#importe_env").val():'' ) )
 
                 $.ajax({
                     data: fd,
