@@ -43,35 +43,10 @@ DB::raw("(select DATE_FORMAT(dp1.created_at,'%Y') from pedidos dp1 where dp1.est
                                         when dp.pago=1 then 'DEUDA'
                                         else 'NO DUDA' from pedidos dp1
                                         where dp1.estado=1 and dp1.cliente_id=clientes.id order by dp1.created_at desc limit 1) as fechaultimopedido"),
-            DB::raw(" select * from pedidos inner join detalle_pedidos ")
+            DB::raw("(select dp1.total from pedidos dp1
+                                        where dp1.estado=1 and dp1.cliente_id=clientes.id order by dp1.created_at desc limit 1) as importeultimopedido")
 
-        ])
-        ;
+        ])->get();
 
-
-
-
-        //$listado=implode(',')
-
-
-
-        Cliente::query()
-            ->select([
-                'clientes.id',
-                'users.letra',
-                'users.identificador',
-                'clientes.celular',
-                'clientes.created_at',
-                \DB::raw('concat_group(detalle_pedidos.ruc)'),
-            ])
-            ->activo()
-            ->join('pedidos', 'pedidos.cliente_id', '=', 'clientes.id')
-            ->join('detalle_pedidos', 'detalle_pedidos.pedido_id', '=', 'pedidos.id')
-            ->join('users', 'users.id', '=', 'clientes.user_id')
-            ->whereDate('pedidos.created_at', '>=', now()->startOfMonth()->subMonths(2))
-            ->whereNotBetween('pedidos.created_at', [now()->startOfMonth()->subMonths(2), now()])
-            ->activoJoin('pedidos')
-            ->activoJoin('detalle_pedidos')
-            ->get();
     }
 }
