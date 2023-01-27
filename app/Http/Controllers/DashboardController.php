@@ -40,14 +40,11 @@ class DashboardController extends Controller
         foreach ($_pedidos as $pedido) {
             $data_pedidos[$pedido->identificador] = $pedido->total;
         }
-        $_pedidos = $data_pedidos;
-        $asesores = User::activo()->rolAsesor()->pluck('identificador');
+        $_pedidos = [];
+        $asesores = User::activo()->rolAsesor()->orderBy('identificador')->pluck('identificador');
         foreach ($asesores as $identificador) {
-            if (!isset($_pedidos[$identificador])) {
-                $_pedidos[$identificador] = 0;
-            }
+            $_pedidos[$identificador] = $data_pedidos[$identificador]??0;
         }
-
 
         $_pedidos_totalpedidosdia = Pedido::activo()->join('clientes as c', 'pedidos.cliente_id', 'c.id')
             ->join('users as u', 'pedidos.user_id', 'u.id')
