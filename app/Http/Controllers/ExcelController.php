@@ -184,7 +184,7 @@ class ExcelController extends Controller
 
     public function clientesTwoMonthAgoExcel(Request $request)
     {
-        return (new ClientesSinPedido2MesesAtras())
+        return (new PlantillaExportClientesdosmesesMultiple())
             ->download('Lista de Clientes_pedidos_.xlsx');
     }
 

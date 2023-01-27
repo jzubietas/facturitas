@@ -31,7 +31,7 @@ DB::raw("(select DATE_FORMAT(dp1.created_at,'%Y') from pedidos dp1 where dp1.est
             }
         }
 
-        $clientes=Clientes::
+        $clientes=Cliente::
             join('users as u','u.id','clientes.user_id')
         ->whereIn("id",$lista)
         ->select([
