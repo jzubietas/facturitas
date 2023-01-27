@@ -221,15 +221,15 @@
                     <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12" style="text-align: center">
                         <button data-backdrop="static" data-keyboard="false" data-toggle="modal"
                                 data-target="#modal-direccion_crearpedido" type="button"
-                                id="bt_add_dir" class="float-right btn btn-info btn-lg d-none"><i
-                                class="fas fa-plus-circle"></i> Agregar Direccion
+                                id="bt_add_dir" class="float-right btn btn-success btn-lg d-none"><i
+                                class="fa  fa-map-marker-alt text-success mr-8"></i> Agregar Direccion
                         </button>
                     </div>
                     <div class="col-lg-12 col-sm-12 col-md-12 col-xs-12" style="text-align: center">
                         <div class="table-responsive">
                             <table id="table_direccion"
                                    class="table table-striped table-bordered table-condensed table-hover">
-                                <thead style="background-color: #A9D0F5">
+                                <thead style="background-color: #63ab46 ">
                                 <th>Opciones</th>
                                 <th>Destino</th>
                                 <th>Distrito</th>
