@@ -120,8 +120,8 @@ class SobreController extends Controller
             ->select([
                 'pedidos.id',
                 'pedidos.cliente_id',
-                 'c.nombre as nombres',
-                 'c.celular as celulares',
+                'c.nombre as nombres',
+                'c.celular as celulares',
                 'u.identificador as users',
                 'u.id as user_id',
                 'dp.codigo as codigos',
@@ -157,7 +157,7 @@ class SobreController extends Controller
                 Pedido::POR_ATENDER_OPE_INT,Pedido::ATENDIDO_OPE_INT,Pedido::ENVIO_COURIER_JEFE_OPE_INT,
                 Pedido::RECIBIDO_JEFE_OPE_INT,
                 Pedido::RECEPCION_COURIER_INT,
-                ])
+            ])
             ->sinDireccionEnvio();
 
         if (Auth::user()->rol == "Operario") {
