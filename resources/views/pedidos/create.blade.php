@@ -132,6 +132,9 @@ __________________________________
                                 .done(function () {
                                     self.setContent(tpl)
                                 })
+                                .fail(function () {
+                                    self.setContent(tpl + `<div class="mt-4 alert alert-danger">No se guardo en historial por un error</div>`)
+                                })
                         } else {
                             return tpl
                         }

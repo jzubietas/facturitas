@@ -691,28 +691,6 @@ class PedidoController extends Controller
         return view('pedidos.create', compact('users', 'dateM', 'dateY', 'meses', 'anios', 'fecha', 'numped', 'mirol', 'mes_selected', 'anno_selected', 'distritos_recojo'));
     }
 
-    public function StoreHistory(Request $request)
-    {
-        $this->validate($request, [
-            'identificador' => 'required',
-            'cliente_id' => 'required',
-            'ruc' => 'required',
-            'empresa' => 'required',
-            'year' => 'required',
-            'cantidad' => 'required',
-            'tipo_banca' => 'required',
-            'descripcion' => 'required',
-            'nota' => 'required',
-            'courier_price' => 'required',
-        ]);
-        $data = $request->all();
-        foreach ($data as $key => $value) {
-            $data[$key] = trim($value);
-        }
-        $data['user_id'] = \auth()->id();
-        return PedidoHistory::query()->updateOrCreate($data);
-    }
-
     /**
      * Store a newly created resource in storage.
      *
