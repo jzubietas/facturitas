@@ -1130,13 +1130,12 @@ class PedidoController extends Controller
             ]);
             $zona="";
             $zona_distrito=null;
-            if($request->distrito_env)
+            if($request->distrito_env!=undefined)
             {
                 $zona_distrito = Distrito::whereIn('provincia', ['LIMA', 'CALLAO'])
                     ->where('distrito',$request->distrito_env)->first();
                 $zona=$zona_distrito->zona;
             }
-
 
             $file_name=null;
             if($request->destino_env=="OLVA")
