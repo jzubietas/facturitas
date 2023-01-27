@@ -12,7 +12,7 @@ class ClientesSinPedido2MesesAtras extends Export
     public function collection()
     {
         //item|asesor-identificador|celular|mes|rucs,|estado_pago (deuda o no deuda)|importe total de la deuda
-        $ultimos_pedidos=Clientes::activo()
+        $ultimos_pedidos=Cliente::activo()
             ->select([
                 'clientes.id',
                 'clientes.tipo',
