@@ -11,5 +11,8 @@
         <div class="col-12">
             @include('dashboard.widgets.pedidos_creados')
         </div>
+        <div class="col-12">
+            @include('dashboard.widgets.buscar_cliente')
+        </div>
     </div>
 </div>
