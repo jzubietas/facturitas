@@ -52,7 +52,7 @@ class EnMotorizadoSendObservadoOldDate extends Command
             ->whereDate('fecha_salida', '<', now())
             ->update([
                 'motorizado_status' => Pedido::ESTADO_MOTORIZADO_OBSERVADO,
-                'motorizado_sustento_text' => 'No entregado por el motorizado'
+                'motorizado_sustento_text' => 'No entregado por el motorizado (hecho por el sistema)'
             ]);
 
         return 0;

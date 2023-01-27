@@ -567,14 +567,15 @@ class MotorizadoController extends Controller
                                 data-toggle="jqconfirm"  class="' . ($pedido->reprogramacion_at != null ? 'border border-primary' : '') . ' btn btn-warning btn-sm"><i class="fas fa-check-circle"></i> Recibido</button>
                             </li>';
 
-                $btn .= '<li>
+                if ($pedido->motorizado_status == Pedido::ESTADO_MOTORIZADO_OBSERVADO && (in_array($pedido->motorizado_sustento_text,['No entregado por el motorizado','No entregado por el motorizado (hecho por el sistema)']))) {
+                    $btn .= '<li>
                                 <button type="button"
                                 data-target="' . route('envios.devueltos.recibir', ['pedido' => $pedido->id, 'action' => 'send_motorizado']) . '"
                                 data-toggle="jqconfirmmotorizado"  class="' . ($pedido->reprogramacion_at != null ? 'border border-primary' : '') . ' w-100 btn btn-info mt-2 btn-sm">
                                 <i class="fa fa-motorcycle "></i>
 </button>
                             </li>';
-
+                }
                 $btn .= '</ul>';
                 //endif;
 
