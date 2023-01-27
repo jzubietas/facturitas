@@ -122,8 +122,7 @@ if (!function_exists("add_query_filtros_por_roles_pedidos")) {
                 ->activo()
                 ->Where('operario', Auth::user()->id)
                 ->pluck('identificador');
-
-            $query = $query->WhereIn($column, $asesores);
+            $query = $query->whereIn($column, $asesores);
         } else if (Auth::user()->rol == "Jefe de operaciones") {
             $operarios = User::where('rol', 'Operario')
                 ->activo()
@@ -135,18 +134,18 @@ if (!function_exists("add_query_filtros_por_roles_pedidos")) {
                 ->WhereIn('operario', $operarios)
                 ->pluck('identificador');
 
-            $query = $query->WhereIn($column, $asesores);
+            $query = $query->whereIn($column, $asesores);
         } else if (Auth::user()->rol == "Asesor") {
-            $query = $query->Where($column, Auth::user()->identificador);
+            $query = $query->where($column, Auth::user()->identificador);
         } else if (Auth::user()->rol == "Super asesor") {
-            $query = $query->Where($column, Auth::user()->identificador);
+            $query = $query->where($column, Auth::user()->identificador);
         } else if (Auth::user()->rol == "Encargado") {
             $usersasesores = User::rolAsesor()
                 ->activo()
                 ->where('supervisor', Auth::user()->id)
                 ->pluck('identificador');
 
-            $query = $query->WhereIn($column, $usersasesores);
+            $query = $query->whereIn($column, $usersasesores);
         }
         return $query;
     }

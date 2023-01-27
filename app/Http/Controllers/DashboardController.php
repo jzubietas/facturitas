@@ -34,16 +34,18 @@ class DashboardController extends Controller
             )
             ->whereDate('pedidos.created_at', '=', now())
             ->groupBy('u.identificador');
-
+        add_query_filtros_por_roles_pedidos($_pedidos,'u.identificador');
         $_pedidos = $_pedidos->get();
         $data_pedidos = [];
         foreach ($_pedidos as $pedido) {
             $data_pedidos[$pedido->identificador] = $pedido->total;
         }
         $_pedidos = [];
-        $asesores = User::activo()->rolAsesor()->orderBy('identificador')->pluck('identificador');
+        $asesores = User::activo()->rolAsesor()->orderBy('identificador');
+        add_query_filtros_por_roles_pedidos($asesores,'identificador');
+        $asesores = $asesores->pluck('identificador');
         foreach ($asesores as $identificador) {
-            $_pedidos[$identificador] = $data_pedidos[$identificador]??0;
+            $_pedidos[$identificador] = $data_pedidos[$identificador] ?? 0;
         }
 
         $_pedidos_totalpedidosdia = Pedido::activo()->join('clientes as c', 'pedidos.cliente_id', 'c.id')
