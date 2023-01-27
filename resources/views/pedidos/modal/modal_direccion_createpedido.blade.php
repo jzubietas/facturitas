@@ -99,13 +99,6 @@
                                     </div>
 
                                     <div class="form-group">
-                                        <div class="col-md-12">
-                                            <div class="alert alert-warning" role="alert">
-                                                Aqui se ingresan los campos para envios destino
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
                                         <button type="submit" class="btn btn-success">Registrar direccion</button>
                                     </div>
                                 </form>
