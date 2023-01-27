@@ -152,6 +152,7 @@ class SobreController extends Controller
                 'pedidos.estado',
             ])
             ->where('pedidos.estado', '1')
+            ->where('pedidos.pendiente_anulacion', '0')
             ->whereIn('pedidos.condicion_envio_code', [
                 Pedido::EN_ATENCION_OPE_INT,
                 Pedido::POR_ATENDER_OPE_INT,Pedido::ATENDIDO_OPE_INT,Pedido::ENVIO_COURIER_JEFE_OPE_INT,
