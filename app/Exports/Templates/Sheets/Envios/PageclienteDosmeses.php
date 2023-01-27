@@ -27,15 +27,22 @@ class PageclienteDosmeses extends Export implements WithColumnFormatting,WithCol
                 DB::raw("(select DATE_FORMAT(dp1.created_at,'%Y-%m-%d') from pedidos dp1 where dp1.estado=1 and dp1.cliente_id=clientes.id order by dp1.created_at desc limit 1) as fechaultimopedido"),
                 DB::raw("(select DATE_FORMAT(dp1.created_at,'%m') from pedidos dp1 where dp1.estado=1 and dp1.cliente_id=clientes.id order by dp1.created_at desc limit 1) as fechaultimopedido_mes"),
                 DB::raw("(select DATE_FORMAT(dp1.created_at,'%Y') from pedidos dp1 where dp1.estado=1 and dp1.cliente_id=clientes.id order by dp1.created_at desc limit 1) as fechaultimopedido_anio"),
+                DB::raw("(select dp1.pago from pedidos dp1 where dp1.estado=1 and dp1.cliente_id=clientes.id order by dp1.created_at desc limit 1) as fechaultimopedido_pago"),
+                DB::raw("(select dp1.pagado from pedidos dp1 where dp1.estado=1 and dp1.cliente_id=clientes.id order by dp1.created_at desc limit 1) as fechaultimopedido_pagado"),
             ])->get();
 
         //$ultimos=$ultimos_pedidos->whereNotNull('fechaultimopedido')->get();
         $lista=[];
         foreach ($ultimos_pedidos as $procesada) {
-
             if($procesada->fechaultimopedido!=null)
             {
-                $lista[]=$procesada->id;
+                if(in_array($procesada->fechaultimopedido_pago,["0","1"]))
+                {
+                    if(in_array($procesada->fechaultimopedido_pagado,["0","1"]))
+                    {
+                        $lista[]=$procesada->id;
+                    }
+                }
             }
         }
 
@@ -52,8 +59,9 @@ class PageclienteDosmeses extends Export implements WithColumnFormatting,WithCol
                                         else 'NO DUDA' end from pedidos dp1
                                         where dp1.estado=1 and dp1.cliente_id=clientes.id order by dp1.created_at desc limit 1) as deuda"),
                 DB::raw("(select dp2.total from pedidos a inner join detalle_pedidos dp2 on a.id=dp2.pedido_id
-                                        where dp2.estado=1 and a.cliente_id=clientes.id order by dp2.created_at desc limit 1) as importeultimopedido")
-
+                                        where dp2.estado=1 and a.cliente_id=clientes.id order by dp2.created_at desc limit 1) as importeultimopedido"),
+                DB::raw("(select DATE_FORMAT(dp3.created_at,'%m') from pedidos a inner join detalle_pedidos dp3 on a.id=dp3.pedido_id
+                                        where dp3.estado=1 and a.cliente_id=clientes.id order by dp3.created_at desc limit 1) as mesultimopedido"),
             ])->get();
 
         return $clientes;
@@ -67,6 +75,7 @@ class PageclienteDosmeses extends Export implements WithColumnFormatting,WithCol
             ,"rucs"=>"Rucs"
             ,"deuda"=>"Deuda"
             ,"importeultimopedido"=>"Importe"
+            ,"mesultimopedido"=>"Mes",
         ];
     }
     public function columnWidths(): array
@@ -78,6 +87,7 @@ class PageclienteDosmeses extends Export implements WithColumnFormatting,WithCol
             ,'D' => 8//rucs
             ,'E' => 8//deuda
             ,'F' => 8//importe
+            ,'G' => 8//mes
         ];
     }
     public function columnFormats(): array
@@ -113,7 +123,7 @@ class PageclienteDosmeses extends Export implements WithColumnFormatting,WithCol
         $color_cabeceras='a9def9';
 
 
-        $style_cabeceras = array(
+        /*$style_recurrente = array(
             'fill' => array(
                 'fillType' => Fill::FILL_SOLID,
                 'startColor' => array('argb' => $color_cabeceras)
@@ -131,7 +141,7 @@ class PageclienteDosmeses extends Export implements WithColumnFormatting,WithCol
             }
 
 
-        }
+        }*/
 
         /*echo 'ROW: ', $cell->getRow(), PHP_EOL;
                    echo 'COLUMN: ', $cell->getColumn(), PHP_EOL;
@@ -152,5 +162,5 @@ class PageclienteDosmeses extends Export implements WithColumnFormatting,WithCol
                         ]
                     ]
                 ); */
-            }
+    }
 }
