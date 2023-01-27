@@ -240,6 +240,7 @@
                                 <th>Referencia/numregistro</th>
                                 <th>Observacion/rotulo</th>
                                 <th>Google Maps</th>
+                                <th>Importe</th>
                                 </thead>
                             </table>
                         </div>
