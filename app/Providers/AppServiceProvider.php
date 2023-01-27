@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\View\Components\common\ActivarClientePorTiempo;
 use App\View\Components\common\BsProgressbar;
 use App\View\Components\common\courier\AutorizarRutaMotorizado;
 use App\View\Components\common\QRScanner;
@@ -67,6 +68,8 @@ class AppServiceProvider extends ServiceProvider
 
         \Blade::component('common-autorizar-ruta-motorizado', AutorizarRutaMotorizado::class);
         \Blade::component('common-button-qr-scanner', QRScanner::class);
+
+        \Blade::component('common-activar-cliente-por-tiempo', ActivarClientePorTiempo::class);
 
         Carbon::setUTF8(true);
         Carbon::setLocale(config('app.locale'));

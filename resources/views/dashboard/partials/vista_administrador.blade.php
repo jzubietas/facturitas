@@ -99,6 +99,9 @@
 <div class="row">
     @include('dashboard.widgets.buscar_cliente')
     <div class="col-lg-12">
+        <x-common-activar-cliente-por-tiempo></x-common-activar-cliente-por-tiempo>
+    </div>
+    <div class="col-lg-12">
         <x-grafico-pedidos-elect-fisico></x-grafico-pedidos-elect-fisico>
     </div>
     <div class="col-lg-12">

@@ -13,6 +13,12 @@
         @endcan
         @can('clientes.exportar')
             <div class="float-right btn-group dropleft">
+
+                <button type="button" class="btn btn-dark mr-4">
+                    <i class="fa fa-download"></i>
+                    <i class="fa fa-file-excel"></i>
+                    Exportar
+                </button>
                 <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown"
                         aria-haspopup="true" aria-expanded="false">
                     Exportar
@@ -59,7 +65,7 @@
                     <th scope="col">mes pedido</th>
                     <th scope="col">Deuda</th>--}}
                     <th scope="col">Cod Ult. Pedido</th>
-                    
+
                     <th scope="col">Acciones</th>
                 </tr>
                 </thead>
@@ -507,7 +513,7 @@
 
 
                     {data: 'ultimo_pedido', name: 'ultimo_pedido'},
-                    
+
                     //{data: 'cantidad', name: 'cantidad'},
                     //{data: 'dateY', name: 'dateY'},
                     //{data: 'dateM', name: 'dateM'},
@@ -586,7 +592,7 @@
                 //solo completo datos
                 //hiddenId
                 //
-                
+
                 console.log(idcodigo)
                 $(".textcode").html(idcodigo);
                 $("#motivo").val('');
@@ -597,7 +603,7 @@
             $(document).on("submit", "#formdelete", function (evento) {
                 evento.preventDefault();
                 console.log("action delete action")
-                
+
                 var formData = new FormData();
                 formData.append("hiddenID", $("#hiddenIDdelete").val())
 
