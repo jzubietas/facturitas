@@ -245,6 +245,7 @@
                     $('[data-toggle=jqconfirm]', row).click(function () {
                         const action = $(this).data('target')
                         $.confirm({
+                            theme:'material',
                             type: 'orange',
                             title: 'Confirmar recepción',
                             content: `Esta seguro de confirmar la recepción del Pedido <b>${data.codigo}</b>`,
@@ -270,6 +271,7 @@
                     $('[data-toggle=jqconfirmfoto]', row).click(function () {
                         const action = $(this).data('target')
                         $.confirm({
+                            theme:'material',
                             type: 'orange',
                             title: 'Foto de NO CONTESTO',
                             columnClass: 'large',
@@ -283,6 +285,7 @@
                         const action = $(this).data('target')
                         console.log($(this), action)
                         $.confirm({
+                            theme:'material',
                             columnClass: 'large',
                             type: 'orange',
                             title: 'Sustento de OBSERVADO',
@@ -296,6 +299,7 @@
                         $('[data-toggle=jqconfirmmotorizado]', row).click(function () {
                             const target=$(this).data('target')
                             $.confirm({
+                                theme:'material',
                                 title: '¿Estas seguro de enviar a motorizado?',
                                 columnClass: 'large',
                                 content: `<div class="alert alert-warning">

@@ -86,6 +86,7 @@
                     }
                     $('[data-jqconfirm]', row).click(function () {
                         $.confirm({
+                            theme:'material',
                             type: 'red',
                             title: '¡Revertir Envio!',
                             content: 'Confirme si desea revertir el envio <b>' + data.codigos + '</b>',
@@ -122,6 +123,7 @@
                         const imagen2 = $(this).data('imagen2')
                         const imagen3 = $(this).data('imagen3')
                         $.confirm({
+                            theme:'material',
                             title: 'Entregas de motorizado Confirmaciones',
                             type: 'green',
                             columnClass: 'xlarge',

@@ -31,22 +31,6 @@
     @include('pedidos.modal.historial2')
     @include('pedidos.modal.modal_direccion_createpedido')
 
-
-
-    <x-simple-modal id="previsualizar_modal_pedido" title="Previsualizar Pedido" size="lg">
-        <x-slot name="body">
-            <div class="">
-                <button type="button" onclick="copyElement('#pedido_visualizar_content')" class="btn btn-outline-dark">
-                    <i class="fa fa-copy"></i> Copiar
-                </button>
-                <textarea class="form-control w-100" cols="20" rows="15" id="pedido_visualizar_content"></textarea>
-            </div>
-        </x-slot>
-
-        <x-slot name="footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-        </x-slot>
-    </x-simple-modal>
 @endsection
 
 @section('css')
@@ -64,11 +48,12 @@
         }
     </style>
     <script>
-        window.copyElement=function (el) {
+        window.copyElement = function (el) {
             $(el).select();
             window.document.execCommand("copy");
         }
     </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
 @stop
 
 @section('js')
@@ -77,6 +62,86 @@
 
     <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $(document).on('click', '[data-toggle=jqconfirm][data-type=previsualizar]', function () {
+                let pruc = $('#pruc').val();
+                let pempresa = $('#pempresa').val();
+                let pmes = $('#pmes').val();
+                let panio = $('#panio').val();
+                let pcantidad = $('#pcantidad').val();
+                let ptipo_banca = $('#ptipo_banca').val();
+                let pdescripcion = $('#pdescripcion').val();
+                let pnota = $('#pnota').val();
+                let pcourier = $('#pcourier').val();
+                let user_id = $('#user_id').val();
+                let cliente_id = $('#cliente_id').val();
+
+                var insertData = `
+PEDIDO
+__________________________________
+*CANTIDAD* ${pcantidad}
+*RUC* ${pruc}
+*RAZON SOCIAL* ${pempresa}
+*MES* ${pmes}
+*AÑO* ${panio}
+*FISICO O ELECTRONICO* ${ptipo_banca}
+*DESCRIPCIÓN*
+    ${pdescripcion}
+*NOTA*
+    ${pnota}
+__________________________________
+`;
+
+                const tpl = `<div class="">
+                <button type="button" onclick="copyElement('#pedido_visualizar_content')" class="btn btn-outline-dark">
+                    <i class="fa fa-copy"></i> Copiar
+                </button>
+                <textarea class="form-control w-100" cols="20" rows="15" id="pedido_visualizar_content">${insertData}</textarea>
+            </div>`;
+                const target = $(this).data('target')
+                $.confirm({
+                    theme: 'material',
+                    type: 'dark',
+                    icon: 'fa fa-copy',
+                    backgroundDismiss: true,
+                    title: 'Previsualizar Pedido',
+                    columnClass: 'large',
+                    buttons: {
+                        cerrar: {
+                            btnClass: 'btn-secondary'
+                        }
+                    },
+                    content: function () {
+                        const self = this
+                        if (user_id && cliente_id && pruc && pempresa && pmes && panio && pcantidad && ptipo_banca && pdescripcion && pnota && pcourier) {
+                            return $.post(target, {
+                                identificador: user_id,
+                                cliente_id: cliente_id,
+                                ruc: pruc,
+                                empresa: pempresa,
+                                year: panio,
+                                cantidad: pcantidad,
+                                tipo_banca: ptipo_banca,
+                                descripcion: pdescripcion,
+                                nota: pnota,
+                                courier_price: pcourier,
+                            })
+                                .done(function () {
+                                    self.setContent(tpl)
+                                })
+                        } else {
+                            return tpl
+                        }
+                    }
+                })
+
+            })
+        })
+    </script>
+
     <script>
         var tabladeudores = null;
         var tablahistorial = null;
@@ -201,7 +266,7 @@
                         Swal.fire({
                             icon: 'warning',
                             title: 'Advertencia',
-                            html: 'Este pedido ya se encuentra regitrado con el codigo <b>'+data.codigos+'</b>',
+                            html: 'Este pedido ya se encuentra regitrado con el codigo <b>' + data.codigos + '</b>',
                             showDenyButton: true,
                             confirmButtonText: 'Estoy de acuerdo',
                             denyButtonText: 'Cancelar',
@@ -278,8 +343,8 @@
                     '<td><input type="hidden" name="tipo_banca[]" value="' + tipo_banca + '">' + tipo_banca + '</td>' +
                     '<td><input type="hidden" name="porcentaje[]" value="' + porcentaje + '">' + porcentaje + '</td>' +
                     '<td><input type="hidden" name="courier[]" value="' + courier + '">' + courier + '</td>' +
-                    '<td><textarea class="d-none" name="descripcion[]">' + descripcion + '</textarea>'+ descripcion +'</td>' +
-                    '<td><textarea class="d-none" name="nota[]" >' + nota + '</textarea>'+ nota +'</td>' +
+                    '<td><textarea class="d-none" name="descripcion[]">' + descripcion + '</textarea>' + descripcion + '</td>' +
+                    '<td><textarea class="d-none" name="nota[]" >' + nota + '</textarea>' + nota + '</td>' +
                     '<td>@csrf<input type="file" id="adjunto" name="adjunto[]" multiple /></td>' +
                     '<td>' + subtotal[cont].toLocaleString("en-US") + '</td></tr>';
                 cont++; //accept= ".zip, .rar"
@@ -383,8 +448,8 @@
     <script>
         $(document).ready(function () {
 
-            $(document).on("click",".eliminar_dir",function(){
-                let row_tr=$(this).closest('tr').remove();
+            $(document).on("click", ".eliminar_dir", function () {
+                let row_tr = $(this).closest('tr').remove();
                 console.log(row_tr)
                 $("#bt_add_dir").removeClass("d-none");
             })
@@ -401,34 +466,33 @@
                 this.value = this.value.replace(/[^0-9 a-zA-Z]/g, '');
             });
 
-            window.agregar_direccion = function ()
-            {
+            window.agregar_direccion = function () {
                 console.log("agregar direccion event")
-                let observacion=null
-                if($("#recojo_destino").val()=="LIMA")
-                {
-                    observacion=$("#env_pedido_observacion").val();
-                }else{
-                    observacion='@csrf<input type="file" name="observacion_env" />'
+                let observacion = null
+                if ($("#recojo_destino").val() == "LIMA") {
+                    observacion = $("#env_pedido_observacion").val();
+                } else {
+                    observacion = '@csrf<input type="file" name="observacion_env" />'
                 }
 
-                var fila = '<tr class="selected"'+
+                var fila = '<tr class="selected"' +
                     '><td><button type="button" class="btn btn-warning eliminar_dir">X</button></td>' +
-                    '<td><input type="hidden" id="destino_env" name="destino_env">' + $("#recojo_destino").val() +'</td>' +
-                    '<td><input type="hidden" id="distrito_env" name="distrito_env" >' + $("#distrito_recoger").val() + '</td>'+
-                    '<td><input type="hidden" id="zona_env" name="zona_env" >' + 'ZONA' + '</td>'+
-                    '<td><input type="hidden" id="contacto_nom_env" name="contacto_nom_env" >' + $("#env_pedido_quienrecibe_nombre").val() + '</td>'+
-                    '<td><input type="hidden" id="contacto_cel_env" name="contacto_cel_env" >' + $("#env_pedido_quienrecibe_celular").val() + '</td>'+
-                    '<td><input type="hidden" id="direccion_env" name="direccion_env" >' + $("#env_pedido_direccion").val() + '</td>'+
-                    '<td><input type="hidden" id="referencia_env" name="referencia_env" >' + $("#env_pedido_referencia").val() + '</td>'+
-                    '<td><input type="hidden" id="observacion_env" name="observacion_env" >' + observacion + '</td>'+
-                    '<td><input type="hidden" id="maps_env" name="maps_env" >' + $("#env_pedido_map").val() + '</td>'+
+                    '<td><input type="hidden" id="destino_env" name="destino_env">' + $("#recojo_destino").val() + '</td>' +
+                    '<td><input type="hidden" id="distrito_env" name="distrito_env" >' + $("#distrito_recoger").val() + '</td>' +
+                    '<td><input type="hidden" id="zona_env" name="zona_env" >' + 'ZONA' + '</td>' +
+                    '<td><input type="hidden" id="contacto_nom_env" name="contacto_nom_env" >' + $("#env_pedido_quienrecibe_nombre").val() + '</td>' +
+                    '<td><input type="hidden" id="contacto_cel_env" name="contacto_cel_env" >' + $("#env_pedido_quienrecibe_celular").val() + '</td>' +
+                    '<td><input type="hidden" id="direccion_env" name="direccion_env" >' + $("#env_pedido_direccion").val() + '</td>' +
+                    '<td><input type="hidden" id="referencia_env" name="referencia_env" >' + $("#env_pedido_referencia").val() + '</td>' +
+                    '<td><input type="hidden" id="observacion_env" name="observacion_env" >' + observacion + '</td>' +
+                    '<td><input type="hidden" id="maps_env" name="maps_env" >' + $("#env_pedido_map").val() + '</td>' +
                     '</tr>';
                 $('#table_direccion').append(fila);
                 $("#modal-direccion_crearpedido").modal("hide");
                 $("#bt_add_dir").addClass("d-none");
 
             }
+
             function agregar() {
                 datosTipoBanca = document.getElementById('ptipo_banca').value.split('_');
                 datosCodigo = document.getElementById('pcodigo').value.split('-');
@@ -476,8 +540,8 @@
                         '<td><input type="hidden" name="tipo_banca[]" value="' + tipo_banca + '">' + tipo_banca + '</td>' +
                         '<td><input type="hidden" name="porcentaje[]" value="' + porcentaje + '">' + porcentaje + '</td>' +
                         '<td><input type="hidden" name="courier[]" value="' + courier + '">' + courier + '</td>' +
-                        '<td><textarea class="d-none" name="descripcion[]">' + descripcion + '</textarea>'+ descripcion +'</td>' +
-                        '<td><textarea class="d-none" name="nota[]" >' + nota + '</textarea>'+ nota +'</td>' +
+                        '<td><textarea class="d-none" name="descripcion[]">' + descripcion + '</textarea>' + descripcion + '</td>' +
+                        '<td><textarea class="d-none" name="nota[]" >' + nota + '</textarea>' + nota + '</td>' +
                         '<td>@csrf<input type="file" id="adjunto" name="adjunto[]" multiple /></td>' +
                         '<td>' + subtotal[cont].toLocaleString("en-US") + '</td></tr>';
                     cont++; //accept= ".zip, .rar"
@@ -490,7 +554,7 @@
                 }
             }
 
-            $("#modal-direccion_crearpedido").on('show.bs.modal',function () {
+            $("#modal-direccion_crearpedido").on('show.bs.modal', function () {
                 $("#recojo_destino").selectpicker("refresh").trigger("change");
                 $("#env_pedido_quienrecibe_nombre")
                 $("#env_pedido_quienrecibe_celular")
@@ -513,16 +577,15 @@
                     success: function (data) {
                         //relleno cmb
                         console.log(data)
-                        let opcion=null;
+                        let opcion = null;
                         $('#distrito_recoger').html("")
-                        $.each(data, function(i, item) {
-                            opcion=$('<option>').attr('data-subtext',data[i].zona).attr('value',data[i].distrito).text(data[i].distrito)
+                        $.each(data, function (i, item) {
+                            opcion = $('<option>').attr('data-subtext', data[i].zona).attr('value', data[i].distrito).text(data[i].distrito)
                             $('#distrito_recoger').append(opcion);
                         });
                         $('#distrito_recoger').selectpicker("refresh")
 
-                        if($("#recojo_destino").val()=='OLVA')
-                        {
+                        if ($("#recojo_destino").val() == 'OLVA') {
                             $(".s_observacion").hide();
                             $("#recojo_pedido_direccion").html("Tracking")
                             $("#recojo_pedido_referencia").html("Num Registro")
@@ -530,7 +593,7 @@
                             $("#env_pedido_quienrecibe_celular").val("OLVA");
                             //direccio n tracking
                             //referencia numr
-                        }else{
+                        } else {
                             $(".s_observacion").show();
                             $("#lbl_recojo_pedido_direccion").text("Direccion")
                             $("#lbl_recojo_pedido_referencia").text("Referencia")
@@ -562,27 +625,23 @@
                 console.log(ptipo_banca);
             })*/
 
-            $(document).on("change","#panio",function(){
+            $(document).on("change", "#panio", function () {
                 //obtengo banca
-                let ptipo_banca=$.trim($("#ptipo_banca").val().split('-')[0]);
+                let ptipo_banca = $.trim($("#ptipo_banca").val().split('-')[0]);
                 //obtengo anio
-                console.log("banca "+ptipo_banca)
-                let anno_filter=parseInt($(this).val());
+                console.log("banca " + ptipo_banca)
+                let anno_filter = parseInt($(this).val());
                 console.log(anno_filter)
 
-                if (ptipo_banca==''){
-                }else{
-                    if(ptipo_banca=='FISICO')
-                    {
-                        if(isNaN(anno_filter))
-                        {
+                if (ptipo_banca == '') {
+                } else {
+                    if (ptipo_banca == 'FISICO') {
+                        if (isNaN(anno_filter)) {
                             console.log("anno is nan")
-                        }else{
-                            if(anno_filter!='')
-                            {
-                                if(  anno_filter=={{$anno_selected}}   ||  anno_filter==({{$anno_selected}}-1) )
-                                {
-                                }else{
+                        } else {
+                            if (anno_filter != '') {
+                                if (anno_filter == {{$anno_selected}} || anno_filter == ({{$anno_selected}} - 1)) {
+                                } else {
                                     Swal.fire(
                                         'Error',
                                         'No puede seleccionar este año para banca fisica, elija otra opcion por favor',
@@ -594,19 +653,14 @@
                         }
 
 
-
-                    }else if(ptipo_banca=='ELECTRONICA')
-                    {
-                        if(isNaN(anno_filter))
-                        {
+                    } else if (ptipo_banca == 'ELECTRONICA') {
+                        if (isNaN(anno_filter)) {
                             console.log("anno is nan")
-                        }else{
-                            if(anno_filter!='')
-                            {
-                                if(anno_filter=={{$anno_selected}})
-                                {
+                        } else {
+                            if (anno_filter != '') {
+                                if (anno_filter == {{$anno_selected}}) {
 
-                                }else{
+                                } else {
                                     //2023= 2023
                                     Swal.fire(
                                         'Error',
@@ -623,27 +677,23 @@
 
             })
 
-            $(document).on("change","#ptipo_banca",function(){
+            $(document).on("change", "#ptipo_banca", function () {
                 //obtengo banca
-                let ptipo_banca=$.trim($(this).val().split('-')[0]);
+                let ptipo_banca = $.trim($(this).val().split('-')[0]);
                 //obtengo anio
-                console.log("banca "+ptipo_banca)
-                let anno_filter=parseInt($("#panio").val());
+                console.log("banca " + ptipo_banca)
+                let anno_filter = parseInt($("#panio").val());
                 console.log(anno_filter)
 
-                if (ptipo_banca==''){
-                }else{
-                    if(ptipo_banca=='FISICO')
-                    {
-                        if(isNaN(anno_filter))
-                        {
+                if (ptipo_banca == '') {
+                } else {
+                    if (ptipo_banca == 'FISICO') {
+                        if (isNaN(anno_filter)) {
                             console.log("anno is nan")
-                        }else{
-                            if(anno_filter!='')
-                            {
-                                if(  anno_filter=={{$anno_selected}}   ||  anno_filter==({{$anno_selected}}-1) )
-                                {
-                                }else{
+                        } else {
+                            if (anno_filter != '') {
+                                if (anno_filter == {{$anno_selected}} || anno_filter == ({{$anno_selected}} - 1)) {
+                                } else {
                                     Swal.fire(
                                         'Error',
                                         'No puede seleccionar este año para banca fisica, elija otra opcion por favor',
@@ -655,19 +705,15 @@
                             }
                         }
 
-                    }else if(ptipo_banca=='ELECTRONICA')
-                    {
-                        if(isNaN(anno_filter))
-                        {
+                    } else if (ptipo_banca == 'ELECTRONICA') {
+                        if (isNaN(anno_filter)) {
                             console.log("anno is nan")
-                        }else{
-                            if(anno_filter!='')
-                            {
-                                if(anno_filter=={{$anno_selected}})
-                                {
+                        } else {
+                            if (anno_filter != '') {
+                                if (anno_filter == {{$anno_selected}}) {
 
-                                }else{
-                                    if(anno_filter)
+                                } else {
+                                    if (anno_filter)
                                         //2023= 2023
                                         Swal.fire(
                                             'Error',
@@ -683,42 +729,12 @@
                     }
                 }
             })
-
-            $("#previsualizar_modal_pedido").on('show.bs.modal',function () {
-                let pruc = $('#pruc').val();
-                let pempresa = $('#pempresa').val();
-                let pmes = $('#pmes').val();
-                let panio = $('#panio').val();
-                let pcantidad = $('#pcantidad').val();
-                let ptipo_banca = $('#ptipo_banca').val();
-                let pdescripcion = $('#pdescripcion').val();
-                let pnota = $('#pnota').val();
-
-                var insertData=`
-PEDIDO
-__________________________________
-*CANTIDAD* ${pcantidad}
-*RUC* ${pruc}
-*RAZON SOCIAL* ${pempresa}
-*MES* ${pmes}
-*AÑO* ${panio}
-*FISICO O ELECTRONICO* ${ptipo_banca}
-*DESCRIPCIÓN*
-    ${pdescripcion}
-*NOTA*
-    ${pnota}
-__________________________________
-`;
-              $("#pedido_visualizar_content").val(insertData)
-            })
-
             $(document).on("submit", "#formulario", function (event) {
                 event.preventDefault();
                 //console.log("abrir")
 
                 var fd = new FormData();
                 //var data = new FormData(document.getElementById("formulario"));
-
 
 
                 $('[name="nombre_empresa[]"]').each(function () {
@@ -780,7 +796,7 @@ __________________________________
 
                 if (files[0].files.length > 0) {
                     for (let i in files[0].files) {
-                        fd.append('adjunto[]',  files[0].files[i]);
+                        fd.append('adjunto[]', files[0].files[i]);
                     }
                 }
                 /*for (let i = 0; i < files.length; i++) {
@@ -881,26 +897,31 @@ __________________________________
 
             $(document).on("submit", "#formrecojo", function (evento) {
                 evento.preventDefault();
-                let recojo_distrito=$("#distrito_recoger").val()
-                let recojo_pedido_quienrecibe_nombre=$("#env_pedido_quienrecibe_nombre").val()
-                let recojo_pedido_quienrecibe_celular=$("#env_pedido_quienrecibe_celular").val()
-                let recojo_pedido_direccion=$("#env_pedido_direccion").val()
-                let recojo_pedido_referencia=$("#env_pedido_referencia").val()
-                let recojo_pedido_observacion=$("#env_pedido_observacion").val()
-                let recojo_pedido_rotulo=$("#env_pedido_rotulo").val()
-                let recojo_pedido_map=$("#env_pedido_map").val()
+                let recojo_distrito = $("#distrito_recoger").val()
+                let recojo_pedido_quienrecibe_nombre = $("#env_pedido_quienrecibe_nombre").val()
+                let recojo_pedido_quienrecibe_celular = $("#env_pedido_quienrecibe_celular").val()
+                let recojo_pedido_direccion = $("#env_pedido_direccion").val()
+                let recojo_pedido_referencia = $("#env_pedido_referencia").val()
+                let recojo_pedido_observacion = $("#env_pedido_observacion").val()
+                let recojo_pedido_rotulo = $("#env_pedido_rotulo").val()
+                let recojo_pedido_map = $("#env_pedido_map").val()
 
-                if(recojo_distrito==""){
-                    Swal.fire('Debe elegir un distrito','','warning');return false;
+                if (recojo_distrito == "") {
+                    Swal.fire('Debe elegir un distrito', '', 'warning');
+                    return false;
                 }//datos de envio
-                else if(recojo_pedido_quienrecibe_nombre==""){
-                    Swal.fire('Debe ingresar quien recibe','','warning');return false;
-                }else if(recojo_pedido_quienrecibe_celular==""){
-                    Swal.fire('Debe ingresar celular de quien recibe','','warning');return false;
-                }else if(recojo_pedido_direccion==""){
-                    Swal.fire('Debe ingresar direccion','','warning');return false;
-                }else if(recojo_pedido_referencia==""){
-                    Swal.fire('Debe ingresar referencia','','warning');return false;
+                else if (recojo_pedido_quienrecibe_nombre == "") {
+                    Swal.fire('Debe ingresar quien recibe', '', 'warning');
+                    return false;
+                } else if (recojo_pedido_quienrecibe_celular == "") {
+                    Swal.fire('Debe ingresar celular de quien recibe', '', 'warning');
+                    return false;
+                } else if (recojo_pedido_direccion == "") {
+                    Swal.fire('Debe ingresar direccion', '', 'warning');
+                    return false;
+                } else if (recojo_pedido_referencia == "") {
+                    Swal.fire('Debe ingresar referencia', '', 'warning');
+                    return false;
                 }
                 //cantidad = !isNaN($('#pcantidad').val()) ? parseInt($('#pcantidad').val(), 10) : 0;   para el importe
                 agregar_direccion();
@@ -1322,7 +1343,6 @@ __________________________________
             });
 
 
-
             $("#formulario2").submit(function (event) {
                 event.preventDefault();
                 //console.log("fdormulario 2")
@@ -1427,27 +1447,6 @@ __________________________________
                 $("#user_id").html(data.html);
                 $("#user_id").selectpicker("refresh").trigger("change");
             });
-            /************************************
-             * PREVISUALIZAR PEDIDO
-             * *********************************/
-
-            $(document).on("click", "#prev", function (e) {
-                console.log("Test");
-                e.preventDefault()
-
-                let pruc = $('#pruc').val();
-                let pempresa = $('#pempresa').val();
-                let pmes = $('#pmes').val();
-                let panio = $('#panio').val();
-                let pcantidad = $('#pcantidad').val();
-                let ptipo_banca = $('#ptipo_banca').val();
-                let pdescripcion = $('#pdescripcion').val();
-                let pnota = $('#pnota').val();
-
-                window.open("/pedidosPDFpreview2?pruc=" + pruc + "&pempresa=" + pempresa + "&pmes=" + pmes +
-                    "&panio=" + panio + "&pcantidad=" + pcantidad + "&ptipo_banca=" + ptipo_banca +
-                    "&pdescripcion=" + pdescripcion + "&pnota=" + pnota + "&fff=1");
-            })
         });
     </script>
 @stop

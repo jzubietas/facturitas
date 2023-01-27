@@ -316,6 +316,7 @@
 
                     $('[data-jqconfirm]', row).click(function () {
                         $.confirm({
+                            theme:'material',
                             type: 'red',
                             title: '¡Revertir Envio!',
                             content: 'Confirme si desea revertir el envio <b>'+data.codigos+'</b>',

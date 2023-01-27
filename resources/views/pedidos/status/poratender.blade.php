@@ -99,6 +99,7 @@
 
             function openConfirmDownloadDocuments(action, idc, codigo) {
                 $.confirm({
+                    theme:'material',
                     title: 'Detalle de atencion de <b>' + idc + '</b>',
                     buttons: {
                         confirm: {

@@ -298,6 +298,7 @@
                 $('[data-jqconfirmcancel]', row).click(function () {
 
                     $.confirm({
+                        theme:'material',
                         type: 'red',
                         title: '¡Revertir Envio!',
                         content: 'Confirme si desea revertir el envio <b>' + data.codigos + '</b>',
@@ -471,6 +472,7 @@
                                 }*/
                                 if (e.target.adjunto1.files.length === 0) {
                                     $.confirm({
+                                        theme:'material',
                                         title: '¡Advertencia!',
                                         content: '<b>Adjunta la Foto de los sobres</b>',
                                         type: 'orange'
@@ -479,6 +481,7 @@
                                 }
                                 if (e.target.adjunto2.files.length === 0) {
                                     $.confirm({
+                                        theme:'material',
                                         title: '¡Advertencia!',
                                         content: '<b>Adjunta la Foto del domicilio</b>',
                                         type: 'orange'
@@ -487,6 +490,7 @@
                                 }
                                 if (e.target.adjunto3.files.length === 0) {
                                     $.confirm({
+                                        theme:'material',
                                         title: '¡Advertencia!',
                                         content: '<b>Adjunta la Foto de quien recibe</b>',
                                         type: 'orange'
@@ -548,6 +552,7 @@ Enviar</button>
                                 e.preventDefault()
                                 if (!e.target.sustento_text.value) {
                                     $.confirm({
+                                        theme:'material',
                                         title: '¡Advertencia!',
                                         content: '<b>Ingresa el sustento para continuar</b>',
                                         type: 'orange'
@@ -623,6 +628,7 @@ Enviar</button>
                                 e.preventDefault()
                                 if (e.target.sustento_foto.files.length === 0) {
                                     $.confirm({
+                                        theme:'material',
                                         title: '¡Advertencia!',
                                         content: '<b>Adjunta la foto de llamadas realizadas</b>',
                                         type: 'orange'
@@ -651,8 +657,9 @@ Enviar</button>
                 $('[data-motorizado-history]', row).click(function () {
                     const action = $(this).data('jqconfirm-action')
                     $.confirm({
+                        theme:'material',
                         title: 'Historial de adjuntos de llamadas',
-                        type: 'info',
+                        type: 'dark',
                         columnClass: 'xlarge',
                         content: function () {
                             const self = this
@@ -707,6 +714,7 @@ Enviar</button>
                 $('[data-jqconfirm=revertir]', row).click(function () {
                     const action = $(this).data('jqconfirm-action')
                     $.confirm({
+                        theme:'material',
                         type: 'red',
                         title: `Confirmación`,
                         content: `¿Estas seguro de revertir el paquete <b>ENV${data.id}</b><br> a <b>RECEPCION - MOTORIZADO</b>?`,
@@ -734,6 +742,7 @@ Enviar</button>
                 $('[data-jqconfirm="reprogramar"]', row).click(function () {
                     const action = $(this).data('jqconfirm-action')
                     $.confirm({
+                        theme:'material',
                         title: 'Reprogramar fecha de envio',
                         type: 'orange',
                         columnClass: 'large',

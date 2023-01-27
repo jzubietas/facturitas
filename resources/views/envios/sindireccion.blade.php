@@ -393,6 +393,7 @@
                                     e.preventDefault()
                                     if (!dataForm.file) {
                                         $.confirm({
+                                            theme:'material',
                                             title: '¡Advertencia!',
                                             content: '<b>Adjunta la foto de la captura</b>',
                                             type: 'orange'

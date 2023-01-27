@@ -229,6 +229,7 @@
                     $('[data-toggle=jqconfirm]', row).click(function () {
                         const action = $(this).data('target')
                         $.confirm({
+                            theme:'material',
                             type: 'orange',
                             title: 'Confirmar recepción',
                             content: `Esta seguro de confirmar la recepción del Pedido <b>${data.codigo}</b>`,

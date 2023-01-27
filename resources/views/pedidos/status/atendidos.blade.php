@@ -93,6 +93,7 @@
 
             function openConfirmDownloadDocuments(action, idc, codigo) {
                 $.confirm({
+                    theme:'material',
                     title: `
 <h5>Detalle de atencion de pedido <b class="allow-copy">${codigo}</b></h5>
 `,
@@ -119,6 +120,7 @@
                                     })
                                 } else {
                                     $.confirm({
+                                        theme:'material',
                                         type: 'orange',
                                         title: '<h5 class="font-weight-bold">Es necesario confirmar si terminó de descargar todos los archivos</h5>',
                                         content: ''

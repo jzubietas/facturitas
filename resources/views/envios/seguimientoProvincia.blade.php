@@ -381,6 +381,7 @@ ${data.condicion_envio_code == '{{\App\Models\Pedido::EN_TIENDA_AGENTE_OLVA_INT}
 
                             if (dataForm.condicion_envio_code == '{{\App\Models\Pedido::NO_ENTREGADO_OLVA_INT}}') {
                                 $.confirm({
+                                    theme:'material',
                                     title: '¡Confirmación!',
                                     content: `ESTAS SEGURO QUE EL SOBRE <b>${data.codigos}</b> NO A SIDO RECIVIDO POR EL CLIENTE`,
                                     buttons: {
@@ -388,6 +389,7 @@ ${data.condicion_envio_code == '{{\App\Models\Pedido::EN_TIENDA_AGENTE_OLVA_INT}
                                             btnClass: 'btn-success',
                                             action: function () {
                                                 $.confirm({
+                                                    theme:'material',
                                                     title: '¡Confirmación!',
                                                     content: `YA REVISASTE SI VERDADERAMENTE EL SOBRE <b>${data.codigos}</b> NO A SIDO RECIBIDO`,
                                                     buttons: {
@@ -412,6 +414,7 @@ ${data.condicion_envio_code == '{{\App\Models\Pedido::EN_TIENDA_AGENTE_OLVA_INT}
                                 });
                             } else if (dataForm.condicion_envio_code == '{{\App\Models\Pedido::ENTREGADO_PROVINCIA_INT}}') {
                                 $.confirm({
+                                    theme:'material',
                                     title: '¡Confirmación!',
                                     content: `ESTAS SEGURO QUE EL SOBRE <b>${data.codigos}</b> A SIDO RECIVIDO POR EL CLIENTE`,
                                     buttons: {
@@ -442,6 +445,7 @@ ${data.condicion_envio_code == '{{\App\Models\Pedido::EN_TIENDA_AGENTE_OLVA_INT}
             $('[data-jqconfirm="edit_tracking"]', row).click(function () {
                 const action = $(this).data('action');
                 $.confirm({
+                    theme:'material',
                     title: 'Editar Tracking',
                     type: 'red',
                     content: `<div class="p-2">

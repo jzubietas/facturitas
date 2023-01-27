@@ -198,7 +198,8 @@
                     $('[data-motorizado-history]', row).click(function () {
                         $.confirm({
                             title: 'Historial de adjuntos de llamadas',
-                            type: 'info',
+                            theme:'material',
+                            type: 'dark',
                             columnClass: 'xlarge',
                             content: function () {
                                 return `
@@ -349,7 +350,7 @@
                             title: '¡Detalle del grupo!',
                             columnClass: 'xlarge',
                             content: getHtmlPrevisualizarDesagrupar(data),
-                            type: 'orange',
+                            theme:'material',
                             typeAnimated: true,
                             buttons: {
                                 cancelar: function () {
@@ -563,6 +564,7 @@ ${success ? `Paquete: <strong>${row.correlativo || ''}</strong>` : `Cliente: <st
                                 self.setContent(getHtmlPrevisualizarAgruparData(response))
                             })
                     },
+                    theme:'material',
                     type: 'orange',
                     typeAnimated: true,
                     buttons: {

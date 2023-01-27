@@ -585,6 +585,7 @@
                             $("[data-toggle=jqconfirm]", row).click(function (e) {
                                 e.preventDefault()
                                 $.confirm({
+                                    theme:'material',
                                     type: 'green',
                                     title: 'Enviar sobre a Motorizado',
                                     columnClass: 'large',
@@ -824,6 +825,7 @@
                             $("[data-toggle=jqconfirm]", row).click(function (e) {
                                 e.preventDefault()
                                 $.confirm({
+                                    theme:'material',
                                     type: 'green',
                                     title: 'Enviar sobre a Motorizado',
                                     columnClass: 'large',
@@ -1063,6 +1065,7 @@
                             $("[data-toggle=jqconfirm]", row).click(function (e) {
                                 e.preventDefault()
                                 $.confirm({
+                                    theme:'material',
                                     type: 'green',
                                     title: 'Enviar sobre a Motorizado',
                                     columnClass: 'large',

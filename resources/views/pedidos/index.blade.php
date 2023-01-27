@@ -269,6 +269,7 @@
 
             function openConfirmDownloadDocuments(action, idc, codigo) {
                 $.confirm({
+                    theme:'material',
                     title: `
 <h5>Detalle de atencion de pedido <b class="allow-copy">${codigo}</b></h5>
 `,
@@ -369,6 +370,7 @@
 
                     $('[data-jqconfirm]', row).click(function () {
                         $.confirm({
+                            theme:'material',
                             columnClass: 'large',
                             title: 'Editar direccion de envio',
                             content: function () {

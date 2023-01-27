@@ -743,6 +743,7 @@
                                     const btntext = $(this).data('btntext')
                                     const isrecibido = $(this).data('recibido') == '1'
                                     $.confirm({
+                                        theme:'material',
                                         title: 'Confirmar ' + btntext + ' a PARA REPARTO',
                                         type: btncolor || 'blue',
                                         columnClass: 'xlarge',

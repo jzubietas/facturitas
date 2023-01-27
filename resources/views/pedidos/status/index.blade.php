@@ -107,6 +107,7 @@
 
             function openConfirmDownloadDocuments(action, idc, codigo) {
                 $.confirm({
+                    theme:'material',
                     title: '<h5>Archivos del pedido</h5> <h4 class="text-success"><b>' + codigo + '</b></h4>',
                     buttons: {
                         confirm: {

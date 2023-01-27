@@ -78,6 +78,7 @@
                         const action = $(this).data('target')
                         const method = $(this).data('method')
                         $.confirm({
+                            theme:'material',
                             type: 'red',
                             title: 'Rechazar anulación',
                             content:`¿Estas seguro de rechazar la solicitud de anulación?`,

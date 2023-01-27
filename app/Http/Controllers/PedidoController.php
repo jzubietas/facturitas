@@ -21,6 +21,7 @@ use App\Models\ImagenAtencion;
 use App\Models\ImagenPedido;
 use App\Models\Pago;
 use App\Models\PagoPedido;
+use App\Models\PedidoHistory;
 use App\Models\User;
 use App\Models\Pedido;
 use App\Models\Porcentaje;
@@ -559,8 +560,7 @@ class PedidoController extends Controller
         return response()->json($clientes1);
     }
 
-    public
-    function clientesenruconcreate(Request $request)
+    public function clientesenruconcreate(Request $request)
     {
         $clientes_ruc = Cliente::
         where('clientes.estado', '1')
@@ -581,8 +581,7 @@ class PedidoController extends Controller
         return response()->json($clientes_ruc);
     }
 
-    public
-    function asesortiempo(Request $request)//clientes
+    public function asesortiempo(Request $request)//clientes
     {
         $mirol = Auth::user()->rol;
         $html = '<option value="">' . trans('---- SELECCIONE ASESOR ----') . '</option>';
@@ -615,8 +614,7 @@ class PedidoController extends Controller
         return response()->json(['html' => $html]);
     }
 
-    public
-    function create()
+    public function create()
     {
         //setlocale(LC_ALL,"es_ES");
         //\Carbon\Carbon::setLocale('es');
@@ -690,7 +688,29 @@ class PedidoController extends Controller
                 'zona'
             ])->orderBy('distrito')->get();
 
-        return view('pedidos.create', compact('users', 'dateM', 'dateY', 'meses', 'anios', 'fecha', 'numped', 'mirol', 'mes_selected', 'anno_selected','distritos_recojo'));
+        return view('pedidos.create', compact('users', 'dateM', 'dateY', 'meses', 'anios', 'fecha', 'numped', 'mirol', 'mes_selected', 'anno_selected', 'distritos_recojo'));
+    }
+
+    public function StoreHistory(Request $request)
+    {
+        $this->validate($request, [
+            'identificador' => 'required',
+            'cliente_id' => 'required',
+            'ruc' => 'required',
+            'empresa' => 'required',
+            'year' => 'required',
+            'cantidad' => 'required',
+            'tipo_banca' => 'required',
+            'descripcion' => 'required',
+            'nota' => 'required',
+            'courier_price' => 'required',
+        ]);
+        $data = $request->all();
+        foreach ($data as $key => $value) {
+            $data[$key] = trim($value);
+        }
+        $data['user_id'] = \auth()->id();
+        return PedidoHistory::query()->updateOrCreate($data);
     }
 
     /**
@@ -700,8 +720,7 @@ class PedidoController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    public
-    function validarrelacionruc(Request $request)
+    public function validarrelacionruc(Request $request)
     {
         $ruc_registrar = $request->agregarruc;
         $cliente_registrar = $request->cliente_id_ruc;
@@ -740,8 +759,7 @@ class PedidoController extends Controller
 
     }
 
-    public
-    function pedidoobteneradjuntoRequest(Request $request)
+    public function pedidoobteneradjuntoRequest(Request $request)
     {
         $buscar_pedido = $request->pedido;
 
@@ -767,8 +785,7 @@ class PedidoController extends Controller
         return response()->json(['html' => $html, 'cantidad' => count($array_html)]);
     }
 
-    public
-    function pedidoobteneradjuntoOPRequest(Request $request)
+    public function pedidoobteneradjuntoOPRequest(Request $request)
     {
         $buscar_pedido = $request->pedido;
 
@@ -792,8 +809,7 @@ class PedidoController extends Controller
         return response()->json(['html' => $html, 'cantidad' => count($array_html)]);
     }
 
-    public
-    function ruc(Request $request)//rucs
+    public function ruc(Request $request)//rucs
     {
         if (!$request->cliente_id || $request->cliente_id == '') {
             $html = '<option value="">' . trans('---- SELECCIONE ----') . '</option>';
@@ -810,8 +826,7 @@ class PedidoController extends Controller
         return response()->json(['html' => $html]);
     }
 
-    public
-    function rucnombreempresa(Request $request)//rucs
+    public function rucnombreempresa(Request $request)//rucs
     {
         if (!$request->ruc || $request->ruc == '') {
             $html = '<option value="">' . trans('---- SELECCIONE ----') . '</option>';
@@ -825,8 +840,7 @@ class PedidoController extends Controller
         return response()->json(['html' => $html]);
     }
 
-    public
-    function infopdf(Request $request)//rucs
+    public function infopdf(Request $request)//rucs
     {
         if (!$request->infocopiar) {
             $html = '<option value="">' . trans('---- SELECCIONE ----') . '</option>';
@@ -866,8 +880,7 @@ class PedidoController extends Controller
         return response()->json(['html' => $html]);
     } */
 
-    public
-    function cliente()//clientes
+    public function cliente()//clientes
     {
         $html = '<option value="">' . trans('---- SELECCIONE CLIENTE ----') . '</option>';
         $clientes = Cliente::where('clientes.user_id', Auth::user()->id)
@@ -880,8 +893,7 @@ class PedidoController extends Controller
     }
 
 
-    public
-    function clientedeudaparaactivar(Request $request)//clientes
+    public function clientedeudaparaactivar(Request $request)//clientes
     {
         if (!$request->user_id || $request->user_id == '') {
             $html = '<option value="">' . trans('---- SELECCIONE CLIENTE ----') . '</option>';
@@ -911,8 +923,7 @@ class PedidoController extends Controller
         return response()->json(['html' => $html]);
     }
 
-    public
-    function clientedeasesordeuda(Request $request)//clientes
+    public function clientedeasesordeuda(Request $request)//clientes
     {
         if (!$request->user_id || $request->user_id == '') {
             $html = '<option value="">' . trans('---- SELECCIONE CLIENTE ----') . '</option>';
@@ -932,8 +943,7 @@ class PedidoController extends Controller
         return response()->json(['html' => $html]);
     }
 
-    public
-    function tipobanca(Request $request)//pedidoscliente
+    public function tipobanca(Request $request)//pedidoscliente
     {
         if (!$request->cliente_id || $request->cliente_id == '') {
             $html = '<option value="">' . trans('---- SELECCIONE ----') . '</option>';
@@ -947,8 +957,7 @@ class PedidoController extends Controller
         return response()->json(['html' => $html]);
     }
 
-    public
-    function AgregarRuc(Request $request)
+    public function AgregarRuc(Request $request)
     {
         $ruc = Ruc::where('num_ruc', $request->agregarruc)->first();
 
@@ -1264,8 +1273,7 @@ class PedidoController extends Controller
      * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public
-    function show($pedido)
+    public function show($pedido)
     {
         //ver pedido anulado y activo
         $pedido = Pedido::with('cliente')->join('clientes as c', 'pedidos.cliente_id', 'c.id')
@@ -1323,8 +1331,7 @@ class PedidoController extends Controller
      * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public
-    function edit(Pedido $pedido)
+    public function edit(Pedido $pedido)
     {
         $mirol = Auth::user()->rol;
         $meses = [
@@ -1446,8 +1453,7 @@ class PedidoController extends Controller
      * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public
-    function update(Request $request, Pedido $pedido)
+    public function update(Request $request, Pedido $pedido)
     {/*return $request->all();*/
         $detallepedido = DetallePedido::where('pedido_id', $pedido->id)->first();
         try {
@@ -1541,8 +1547,7 @@ class PedidoController extends Controller
      * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public
-    function destroy(Request $request, Pedido $pedido)
+    public function destroy(Request $request, Pedido $pedido)
     {
         $detalle_pedidos = DetallePedido::find($pedido->id);
         $pedido->update([
@@ -1572,8 +1577,7 @@ class PedidoController extends Controller
         return redirect()->route('pedidos.index')->with('info', 'eliminado');
     }
 
-    public
-    function destroyid(Request $request)
+    public function destroyid(Request $request)
     {
         if (!$request->hiddenID) {
             $html = '';
@@ -1648,8 +1652,7 @@ class PedidoController extends Controller
         return response()->json(['html' => $html]);
     }
 
-    public
-    function destroyidpedidoadjuntooperaciones(Request $request)
+    public function destroyidpedidoadjuntooperaciones(Request $request)
     {
         if (!$request->hiddenID) {
             $html = '';
@@ -1723,14 +1726,12 @@ class PedidoController extends Controller
         return response()->json(['html' => $html]);
     }
 
-    public
-    function viewVentas()
+    public function viewVentas()
     {
         return view('ventas.reportes.index');
     }
 
-    public
-    function MisPedidos()
+    public function MisPedidos()
     {
         $dateMin = Carbon::now()->subDays(4)->format('d/m/Y');
         $dateMax = Carbon::now()->format('d/m/Y');
@@ -1747,8 +1748,7 @@ class PedidoController extends Controller
         return view('pedidos.misPedidos', compact('destinos', 'superasesor', 'dateMin', 'dateMax', 'mirol'));
     }
 
-    public
-    function mispedidostabla(Request $request)
+    public function mispedidostabla(Request $request)
     {
         $pedidos = null;
 
@@ -1853,8 +1853,7 @@ class PedidoController extends Controller
             ->make(true);
     }
 
-    public
-    function Pagados()//PEDIDOS PAGADOS
+    public function Pagados()//PEDIDOS PAGADOS
     {
         $dateMin = Carbon::now()->subDays(4)->format('d/m/Y');
         $dateMax = Carbon::now()->format('d/m/Y');
@@ -1911,8 +1910,7 @@ class PedidoController extends Controller
         return view('pedidos.pagados', compact('pedidos', 'superasesor', 'dateMin', 'dateMax', 'miidentificador'));
     }
 
-    public
-    function Pagadostabla()
+    public function Pagadostabla()
     {
         $dateMin = Carbon::now()->subDays(4)->format('d/m/Y');
         $dateMax = Carbon::now()->format('d/m/Y');
@@ -1973,8 +1971,7 @@ class PedidoController extends Controller
 
     }
 
-    public
-    function SinPagos()//PEDIDOS POR COBRAR
+    public function SinPagos()//PEDIDOS POR COBRAR
     {
 
         $miidentificador = User::where("id", Auth::user()->id)->first()->identificador;
@@ -1984,8 +1981,7 @@ class PedidoController extends Controller
         return view('pedidos.sinPagos', compact('superasesor', 'miidentificador'));
     }
 
-    public
-    function SinPagostabla()
+    public function SinPagostabla()
     {
         $pedidos = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')
             ->join('users as u', 'pedidos.user_id', 'u.id')
@@ -2105,8 +2101,7 @@ class PedidoController extends Controller
     }
 
 
-    public
-    function EnAtenciontabla(Request $request)
+    public function EnAtenciontabla(Request $request)
     {
         if (Auth::user()->rol == "Operario") {
 
@@ -2457,8 +2452,7 @@ class PedidoController extends Controller
     }
 
 
-    public
-    function cargarAtendidos(Request $request)//pedidoscliente
+    public function cargarAtendidos(Request $request)//pedidoscliente
     {
         if (Auth::user()->rol == "Operario") {
             $pedidos = Pedido::join('users as u', 'pedidos.user_id', 'u.id')
@@ -3036,9 +3030,8 @@ class PedidoController extends Controller
 
     public function jsonDistritos(Request $request)
     {
-        $distritos_recojo=null;
-        if($request->destino=='LIMA')
-        {
+        $distritos_recojo = null;
+        if ($request->destino == 'LIMA') {
             $distritos_recojo = Distrito::whereIn('provincia', ['LIMA', 'CALLAO'])
                 ->where('estado', '1')
                 //->WhereNotIn('distrito', ['CHACLACAYO', 'CIENEGUILLA', 'LURIN', 'PACHACAMAC', 'PUCUSANA', 'PUNTA HERMOSA', 'PUNTA NEGRA', 'SAN BARTOLO', 'SANTA MARIA DEL MAR'])
@@ -3047,10 +3040,9 @@ class PedidoController extends Controller
                     DB::raw("concat(distrito,' - ',zona) as distritonam"),
                     'zona'
                 ])
-                ->where('zona','!=','OLVA')
+                ->where('zona', '!=', 'OLVA')
                 ->orderBy('distrito')->get();
-        }else if($request->destino=='OLVA')
-        {
+        } else if ($request->destino == 'OLVA') {
             $distritos_recojo = Distrito::whereIn('provincia', ['LIMA', 'CALLAO'])
                 ->where('estado', '1')
                 //->WhereNotIn('distrito', ['CHACLACAYO', 'CIENEGUILLA', 'LURIN', 'PACHACAMAC', 'PUCUSANA', 'PUNTA HERMOSA', 'PUNTA NEGRA', 'SAN BARTOLO', 'SANTA MARIA DEL MAR'])
@@ -3059,13 +3051,12 @@ class PedidoController extends Controller
                     DB::raw("concat(distrito,' - ',zona) as distritonam"),
                     'zona'
                 ])
-                ->where('zona','=','OLVA')
+                ->where('zona', '=', 'OLVA')
                 ->orderBy('distrito')->get();
         }
-        if($distritos_recojo)
-        {
+        if ($distritos_recojo) {
             return $distritos_recojo;
-        }else{
+        } else {
             return '';
         }
 
