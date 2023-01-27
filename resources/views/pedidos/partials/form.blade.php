@@ -223,7 +223,7 @@
                     <div class="col-lg-9 col-sm-9 col-md-9 col-xs-9" style="text-align: center">
 
                         <div class="alert alert-warning" role="alert">
-                            Aqui se ingresan los campos para envios destino
+                            <b>PUEDES AGREGAR LA DIRECCIÓN DE MANERA OPCIONAL SOLO PARA LOS CLIENTES DE LIMA</b>
                         </div>
 
                     </div>
