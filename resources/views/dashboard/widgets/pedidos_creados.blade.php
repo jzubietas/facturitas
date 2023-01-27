@@ -10,7 +10,7 @@
         @foreach ($_pedidos as $identificador=>$total)
             <div class="col-md-2 col-6">
                 <div class="p-4 border-top border-bottom">
-                    <h5 class="text-center">ASESOR {{ $identificador }}</h5>
+                    <h5 class="text-center {{$total==0?'text-danger':''}}">ASESOR {{ $identificador }}</h5>
                     <h5 class="text-center {{$total==0?'text-danger':''}}"><b>{{ $total }}</b></h5>
                 </div>
             </div>
