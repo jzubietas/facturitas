@@ -481,7 +481,7 @@ __________________________________
                 var fila = '<tr class="selected"' +
                     '><td><button type="button" class="btn btn-warning eliminar_dir">X</button></td>' +
                     '<td><input type="hidden" id="destino_env" name="destino_env" value="'+$("#recojo_destino").val()+'">' + $("#recojo_destino").val() +'</td>' +
-                    '<td><input type="hidden" id="distrito_env" name="distrito_env" value='+$("#distrito_recoger").val()+'>' + $("#distrito_recoger").val() + '</td>'+
+                    '<td><input type="hidden" id="distrito_env" name="distrito_env" value='+ $("#distrito_recoger").val()+'>' + $("#distrito_recoger").val() + '</td>'+
                     '<td><input type="hidden" id="zona_env" name="zona_env" >' + 'ZONA' + '</td>'+
                     '<td><input type="hidden" id="contacto_nom_env" name="contacto_nom_env" value="'+$("#env_pedido_quienrecibe_nombre").val()+'">' + $("#env_pedido_quienrecibe_nombre").val() + '</td>'+
                     '<td><input type="hidden" id="contacto_cel_env" name="contacto_cel_env" value="'+$("#env_pedido_quienrecibe_celular").val()+'">' + $("#env_pedido_quienrecibe_celular").val() + '</td>'+
@@ -823,13 +823,13 @@ __________________________________
                 fd.append('user_id', $("#user_id").val());
                 fd.append('cliente_id', $("#cliente_id").val());
 
-                fd.append('destino_env',$("#destino_env").val())
-                fd.append('distrito_env',$("#distrito_env").val())
-                fd.append('zona_env',$("#zona_env").val())
-                fd.append('contacto_nom_env',$("#contacto_nom_env").val())
-                fd.append('contacto_cel_env',$("#contacto_cel_env").val())
-                fd.append('direccion_env',$("#direccion_env").val())
-                fd.append('referencia_env',$("#referencia_env").val())
+                fd.append('destino_env',( ($("#destino_env").val().length>0)? $("#destino_env").val():'' ) )
+                fd.append('distrito_env',( ($("#distrito_env").val().length>0)? $("#distrito_env").val():'' ) )
+                fd.append('zona_env',( ($("#zona_env").val().length>0)? $("#zona_env").val():'' ) )
+                fd.append('contacto_nom_env',( ($("#contacto_nom_env").val().length>0)? $("#contacto_nom_env").val():'' ) )
+                fd.append('contacto_cel_env',( ($("#contacto_cel_env").val().length>0)? $("#contacto_cel_env").val():'' ) )
+                fd.append('direccion_env',( ($("#direccion_env").val().length>0)? $("#direccion_env").val():'' ) )
+                fd.append('referencia_env',( ($("#referencia_env").val().length>0)? $("#referencia_env").val():'' ) )
                 if($("#destino_env").val()=="LIMA")
                 {
                     fd.append('observacion_env',$("#observacion_env").val())
