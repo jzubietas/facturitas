@@ -137,6 +137,8 @@ if (!function_exists("add_query_filtros_por_roles_pedidos")) {
             $query = $query->whereIn($column, $asesores);
         } else if (Auth::user()->rol == "Asesor") {
             $query = $query->where($column, Auth::user()->identificador);
+        } else if (Auth::user()->rol == User::ROL_ASESOR_ADMINISTRATIVO) {
+            $query = $query->where($column, Auth::user()->identificador);
         } else if (Auth::user()->rol == "Super asesor") {
             $query = $query->where($column, Auth::user()->identificador);
         } else if (Auth::user()->rol == "Encargado") {
