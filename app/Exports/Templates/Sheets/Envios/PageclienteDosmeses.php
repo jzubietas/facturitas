@@ -36,9 +36,9 @@ class PageclienteDosmeses extends Export implements WithColumnFormatting,WithCol
         foreach ($ultimos_pedidos as $procesada) {
             if($procesada->fechaultimopedido!=null)
             {
-                if(in_array($procesada->pago,["0","1"]))
+                if(in_array($procesada->fechaultimopedido_pago,["0","1"]))
                 {
-                    if(in_array($procesada->pagado,["0","1"]))
+                    if(in_array($procesada->fechaultimopedido_pagado,["0","1"]))
                     {
                         $lista[]=$procesada->id;
                     }
