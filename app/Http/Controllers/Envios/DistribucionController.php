@@ -367,7 +367,7 @@ class DistribucionController extends Controller
 
         DB::beginTransaction();
         $detach = $grupo->pedidos()->detach([$pedido->id]);
-
+        $grupoPedido=null;
         if ($pedido->estado != 0) {
 
             if ($grupo->pedidos()->count() == 0) {
