@@ -82,6 +82,15 @@
                                             <input type="text" class="form-control" id="env_pedido_observacion" name="env_pedido_observacion" placeholder="Observacion" autocomplete="off">
                                         </div>
 
+                                        <div class="form-group col-md-6">
+                                            <label for="recojo_pedido_importe" id="lbl_recojo_pedido_importe">Importe</label>
+                                            <input
+                                                oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                                                type="text" maxlength="5" placeholder="S/"
+                                                class="form-control number ob" step="0.01" min="0"
+                                                id="env_pedido_importe" name="env_pedido_importe" autocomplete="off" data-type="text" data-msj="Ingrese una cantidad">
+                                        </div>
+
 
                                         <div class="form-group col-md-12">
                                             <label for="recojo_pedido_map" id="lbl_recojo_pedido_maps">Maps</label>

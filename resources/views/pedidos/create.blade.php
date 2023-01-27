@@ -806,11 +806,17 @@ __________________________________
                 fd.append('contacto_cel_env',$("#contacto_cel_env").val())
                 fd.append('direccion_env',$("#direccion_env").val())
                 fd.append('referencia_env',$("#referencia_env").val())
-                fd.append('observacion_env',$("#observacion_env").val())
+                if($("#destino_env").val()=="LIMA")
+                {
+                    fd.append('observacion_env',$("#observacion_env").val())
+                }
+                else if($("#destino_env").val()=="OLVA")
+                {
+                    var file_data = $('input[type=file][name="observacion_env"]')[0].files[0]
+                    fd2.append('observacion_env', file_data, file_data.name);
+                }
                 fd.append('maps_env',$("#maps_env").val())
-
-
-
+                fd.append('importe_env',$("#importe_env").val())
 
                 $.ajax({
                     data: fd,
