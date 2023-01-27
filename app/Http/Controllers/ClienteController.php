@@ -1804,6 +1804,7 @@ class ClienteController extends Controller
 
         $messajeKey = array_rand($mensajesRandom);
         $messaje = $mensajesRandom[$messajeKey];
+
         $pedidos = Pedido::query()->with(['cliente', 'pagoPedidos', 'detallePedido'])
             ->activo()
             ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
@@ -1829,7 +1830,9 @@ class ClienteController extends Controller
                 $pedido->adelanto = $pedido->pagoPedidos()->activo()->sum('abono');
                 $pedido->deuda_total = $pedido->detallePedidos()->activo()->sum("saldo");
                 return $pedido;
-            })->filter(fn(Pedido $pedido) => $pedido->adelanto <= ($pedido->deuda_total - 3));
+            })
+            ->filter(fn(Pedido $pedido) => $pedido->deuda_total>3);
+            //->filter(fn(Pedido $pedido) => $pedido->adelanto <= ($pedido->deuda_total - 3));
         $totalDeuda = $pedidos->sum('diferencia');
 
         $identificador = (float)$cliente->user->identificador;
