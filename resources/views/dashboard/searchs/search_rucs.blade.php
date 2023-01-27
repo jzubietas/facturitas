@@ -8,7 +8,7 @@
                             <ul class="list-group">
                                 <li class="list-group-item  bg-dark">Empresa: <b>{{$ruc->empresa}}</b></li>
                                 <li class="list-group-item  bg-dark">RUC: <b>{{$ruc->num_ruc}}</b></li>
-                                <li class="list-group-item  bg-dark">Deuda Total: <b
+                                <li class="list-group-item  bg-dark">Deuda Ruc: <b
                                         class="{{$ruc->cliente->deuda_total_ruc>3?'bg-danger p-2 text-white':''}}">{{money_f($ruc->cliente->deuda_total_ruc)}}</b>
                                 </li>
 
