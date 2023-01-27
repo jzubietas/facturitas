@@ -1141,6 +1141,28 @@ class PedidoController extends Controller
             $pedido->update([
                 "correlativo" => $pedido->id_code
             ]);
+            $zona_distrito = Distrito::where('distrito', $request->distrito)->whereIn('provincia', ['LIMA', 'CALLAO'])->first();
+            $__direccion_env= (($request->destino_env=="LIMA")? $request->direccion_env:'');
+            $pedido->update([
+                'estado_sobre' => '1',
+                'destino' => $request->destino_env,
+                'direccion' => $request->direccion,
+                'env_destino' => $request->destino_env,
+                'env_distrito' => $request->distrito_env,
+                'env_zona' => $request->zona_env,
+                'env_nombre_cliente_recibe' => $request->contacto_nom_env,
+                'env_celular_cliente_recibe' => $request->contacto_cel_env,
+                'env_cantidad' => "0",
+                'env_direccion' => (($request->destino_env=="LIMA")? $request->direccion_env:''),
+                'env_tracking' => (($request->destino_env=="LIMA")? '':$request->direccion_env),
+                'env_referencia' => (($request->destino_env=="LIMA")? $request->referencia_env:''),
+                'env_numregistro' => (($request->destino_env=="LIMA")? '':$request->referencia_env),
+                'env_rotulo' => '',
+                'env_observacion' => $request->observacion_env,
+                'env_gmlink' => $request->maps_env,
+                'env_importe' => '0.00',
+
+            ]);
             if ($cliente_deuda->crea_temporal == 1) {
                 $limitepedidos = $cliente_deuda->activado_pedido;
                 $limitepedidos--;
