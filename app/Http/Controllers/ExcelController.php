@@ -184,8 +184,8 @@ class ExcelController extends Controller
 
     public function clientesTwoMonthAgoExcel(Request $request)
     {
-        return (new ClientesSinPedido2MesesAtras($request->anio))
-            ->download('Lista de Clientes_pedidos_' . $request->anio . '.xlsx');
+        return (new ClientesSinPedido2MesesAtras())
+            ->download('Lista de Clientes_pedidos_.xlsx');
     }
 
 

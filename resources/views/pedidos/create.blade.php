@@ -481,7 +481,7 @@ __________________________________
                 var fila = '<tr class="selected"' +
                     '><td><button type="button" class="btn btn-warning eliminar_dir">X</button></td>' +
                     '<td><input type="hidden" id="destino_env" name="destino_env" value="'+$("#recojo_destino").val()+'">' + $("#recojo_destino").val() +'</td>' +
-                    '<td><input type="hidden" id="distrito_env" name="distrito_env" value='+ $("#distrito_recoger").val()+'>' + $("#distrito_recoger").val() + '</td>'+
+                    '<td><input type="hidden" id="distrito_env" name="distrito_env" value="'+ $("#distrito_recoger").val()+'">' + $("#distrito_recoger").val() + '</td>'+
                     '<td><input type="hidden" id="zona_env" name="zona_env" >' + 'ZONA' + '</td>'+
                     '<td><input type="hidden" id="contacto_nom_env" name="contacto_nom_env" value="'+$("#env_pedido_quienrecibe_nombre").val()+'">' + $("#env_pedido_quienrecibe_nombre").val() + '</td>'+
                     '<td><input type="hidden" id="contacto_cel_env" name="contacto_cel_env" value="'+$("#env_pedido_quienrecibe_celular").val()+'">' + $("#env_pedido_quienrecibe_celular").val() + '</td>'+
