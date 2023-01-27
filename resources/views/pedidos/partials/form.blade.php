@@ -140,6 +140,13 @@
                                 <i class="fa fa-copy"></i>
                                 Previsualizar
                             </button>
+                            <button type="button" class="btn btn-warning btn-lg"
+                                    data-toggle="jqconfirm"
+                                    data-type="previsualizar"
+                                    data-target="{{route('pedidos.store.save-history')}}">
+                                <i class="fa fa-copy"></i>
+                                Cargar Pedido
+                            </button>
                         </div>
 
                     </div>

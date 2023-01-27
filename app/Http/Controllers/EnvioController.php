@@ -1638,17 +1638,7 @@ class EnvioController extends Controller
         ]);
 
         if ($pedido->estado_sobre) {
-            $detalle = $pedido->detallePedido;
-            $grupoPedido = GrupoPedido::createGroupByPedido($pedido);
-
-            if (!$grupoPedido->pedidos()->where('pedidos.id', '=', $pedido->id)->exists()) {
-                $grupoPedido->pedidos()->syncWithoutDetaching([
-                    $pedido->id => [
-                        'razon_social' => $detalle->nombre_empresa,
-                        'codigo' => $pedido->codigo,
-                    ]
-                ]);
-            }
+            GrupoPedido::createGroupByPedido($pedido,false,true);
         }
 
         PedidoMovimientoEstado::create([
@@ -3046,7 +3036,7 @@ class EnvioController extends Controller
                             'condicion_envio_at' => now(),
                         ]);
 
-                        if ($pedido->estado_sobre) {
+                        if ($pedido->estado_sobre==1) {
                             $detalle = $pedido->detallePedido;
                             $grupoPedido = GrupoPedido::createGroupByPedido($pedido);
 
@@ -3142,7 +3132,7 @@ class EnvioController extends Controller
                         /**************
                          * CREAMOS EL GRUPO TEMPORAL
                          */
-                        $pgroup = GrupoPedido::createGroupByPedido($pedido, false, true);
+                        GrupoPedido::createGroupByPedido($pedido, false, true);
 
                         if ($grupo != null) {
                             if ($grupo->pedidos()->activo()->count() <= 1) {

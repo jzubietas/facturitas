@@ -23,36 +23,48 @@ class GrupoPedido extends Model
 
     public static function createGroupByPedido(Pedido $pedido, $createAnother = false, $attach = false)
     {
-        $grupo = self::createGroupByArray([
-            "zona" => $pedido->env_zona,
-            "provincia" => $pedido->env_destino,
-            'distrito' => $pedido->env_distrito,
-            //'direccion' => $pedido->env_direccion,
-            //'referencia' => $pedido->env_referencia,
-            'direccion' => (($pedido->destino == 'PROVINCIA') ? 'OLVA' : $pedido->direccion),
-            'referencia' => (($pedido->destino == 'PROVINCIA') ? $pedido->tracking : $pedido->referencia),
-            'cliente_recibe' => $pedido->env_nombre_cliente_recibe,
-            'telefono' => $pedido->env_celular_cliente_recibe,
-        ], $createAnother);
-        if ($attach) {
-            $detalle = $pedido->detallePedidos()->orderBy('detalle_pedidos.created_at')->first();
-            \DB::table('grupo_pedido_items')->where('pedido_id',$pedido->id)->delete();
-            $grupo->pedidos()->syncWithoutDetaching([
-                $pedido->id => [
-                    "codigo" => $pedido->codigo,
-                    "razon_social" => $detalle->nombre_empresa,
-                ]
-            ]);
+        if ($pedido->estado_sobre = 1) {
+            $grupo = self::createGroupByArray([
+                "zona" => $pedido->env_zona,
+                "provincia" => $pedido->env_destino,
+                'distrito' => $pedido->env_distrito,
+                //'direccion' => $pedido->env_direccion,
+                //'referencia' => $pedido->env_referencia,
+                'direccion' => (($pedido->destino == 'PROVINCIA') ? 'OLVA' : $pedido->direccion),
+                'referencia' => (($pedido->destino == 'PROVINCIA') ? $pedido->tracking : $pedido->referencia),
+                'cliente_recibe' => $pedido->env_nombre_cliente_recibe,
+                'telefono' => $pedido->env_celular_cliente_recibe,
+            ], $createAnother);
+            if ($attach) {
+                $detalle = $pedido->detallePedidos()->activo()->orderBy('detalle_pedidos.created_at')->first();
+                \DB::table('grupo_pedido_items')->where('pedido_id', $pedido->id)->delete();
+                $grupo->pedidos()->syncWithoutDetaching([
+                    $pedido->id => [
+                        "codigo" => $pedido->codigo,
+                        "razon_social" => $detalle->nombre_empresa,
+                    ]
+                ]);
+                if ($pedido->condicion_envio_code != Pedido::RECEPCION_COURIER_INT) {
+                    $pedido->update([
+                        'condicion_envio_code' => Pedido::RECEPCION_COURIER_INT,
+                        'condicion_envio' => Pedido::RECEPCION_COURIER,
+                        'condicion_envio_at' => now(),
+                        //'estado_sobre' => 1,
+                    ]);
+                }
+            }
+            return $grupo;
+        }else{
             if ($pedido->condicion_envio_code != Pedido::RECEPCION_COURIER_INT) {
                 $pedido->update([
                     'condicion_envio_code' => Pedido::RECEPCION_COURIER_INT,
                     'condicion_envio' => Pedido::RECEPCION_COURIER,
-                    'condicion_envio_at'=>now(),
+                    'condicion_envio_at' => now(),
                     //'estado_sobre' => 1,
                 ]);
             }
         }
-        return $grupo;
+        return null;
     }
 
     public static function createGroupByArray($array, $createAnother = false)
