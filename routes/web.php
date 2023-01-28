@@ -8,6 +8,7 @@ use App\Http\Controllers\Envios\DireccionGrupoController;
 use App\Http\Controllers\Envios\DistribucionController;
 use App\Http\Controllers\Envios\MotorizadoController;
 use App\Http\Controllers\ExcelController;
+use App\Http\Controllers\ModalController;
 use App\Http\Controllers\OlvaController;
 use App\Http\Controllers\PagoController;
 use App\Http\Controllers\PdfController;
@@ -458,7 +459,7 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     Route::get('sobreenvioshistorial', [SobreController::class, 'sobreenvioshistorial'])->name('sobreenvioshistorial');
     /*Controller Sobres*/
 
-    Route::get('ajax_modal1_response', [SobreController::class, 'sobreenvioshistorial'])->name('ajax_modal1_response');
+    Route::get('ajax_modal1_response', [ModalController::class, 'ajax_modal1_response'])->name('ajax_modal1_response');
 
     //Route::post('envios.recibir/{pedido}', [PedidoController::class, 'Recibir'])->name('envios.recibir');
     //Route::post('envios.enviar/{pedido}', [PedidoController::class, 'EnviarPedido'])->name('envios.enviar');
