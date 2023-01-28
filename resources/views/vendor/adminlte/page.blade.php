@@ -228,6 +228,16 @@
                 //cliente_op1
                 //clientenuevo_op1
                 //captura_op1
+                $.ajax({
+                    data: fd_courier,
+                    processData: false,
+                    contentType: false,
+                    type: 'POST',
+                    url: "{{ route('ajax_modal1_response') }}",
+                    success: function (data) {
+
+                    }
+                })
 
 
 
