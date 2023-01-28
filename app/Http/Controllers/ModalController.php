@@ -58,24 +58,25 @@ class ModalController extends Controller
                     $cliente_op2=$request->cliente_op2;
                     $cantidadpedidos_op2=$request->cantidadpedidos_op2;
                     $captura_op2=$request->captura_op2;
-
-                    $alerta = Alerta::create([
-                        'user_id' => auth()->id(),
-                        'type'=>'error',
-                        'subject' => 'AUTORIZACION PARA SUBIR PEDIDO',
-                        'message' => 'Se solicitó',
-                        'date_at' => now(),
-                    ]);
-
-                    /*$cliente = Cliente::query()->where("id", '=', $cliente_op2)->update([
-                        'crea_temporal' => 1,
-                        'activado_pedido' => $cantidadpedidos_op2,
-                        'activado_tiempo' => 5,
-                        'temporal_update' => now()->addMinutes(5),
-                    ]);
-                    return response()->json(['html' => $cliente->id]);*/
-
-                    return response()->json(['html' => "0"]);
+                    $name="";
+                    if($cliente_op2)
+                    {
+                        $name=Cliente::where('id',$cliente_op2)->activo()->first();
+                    }
+                    try {
+                        DB::beginTransaction();
+                        $alerta = Alerta::create([
+                            'user_id' => auth()->id(),
+                            'type'=>'error',
+                            'subject' => 'AUTORIZACION PARA SUBIR PEDIDO',
+                            'message' => 'Se solicitó creación para pedido al cliente ',
+                            'date_at' => now(),
+                        ]);
+                        DB::commit();
+                        return response()->json(['html' => $alerta->id]);
+                    } catch (\Throwable $th) {
+                        return response()->json(['html' => "0"]);
+                    }
                     break;
                 case '3':
                     $asesor_op3=$request->asesor_op3;
