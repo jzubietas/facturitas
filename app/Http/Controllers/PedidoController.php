@@ -162,7 +162,7 @@ class PedidoController extends Controller
                     'direccion_grupos.motorizado_status'
                 ]
             );
-       
+
 
         if (Auth::user()->rol == "Llamadas") {
             $usersasesores = User::where('users.rol', 'Asesor')
