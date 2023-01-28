@@ -17,14 +17,14 @@
     {{-- Navbar right links --}}
     <ul class="navbar-nav ml-auto">
 
-
-
-        <li class="nav-item dropdown show p-1" id="my-btn-annuncements-1">
-            <button class="btn btn-success  font-11 font-weight-bold" id="btn_componente-1"
-                    data-toggle="modal" data-target="#modal-annuncient-1" type="button">
-                <i class="fa fa-accusoft" aria-hidden="true"></i> MODAL
-            </button>
-        </li>
+        @if(auth()->user()->rol==\App\Models\User::ROL_ADMIN)
+            <li class="nav-item dropdown show p-1" id="my-btn-annuncements-1">
+                <button class="btn btn-success  font-11 font-weight-bold" id="btn_componente-1"
+                        data-toggle="modal" data-target="#modal-annuncient-1" type="button">
+                    <i class="fa fa-accusoft" aria-hidden="true"></i> MODAL
+                </button>
+            </li>
+        @endif
 
 
         <li class="nav-item dropdown show p-1" id="my-btn-annuncements-2">

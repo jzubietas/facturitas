@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Cliente;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ModalController extends Controller
 {
@@ -20,7 +22,31 @@ class ModalController extends Controller
                     $cliente_op1=$request->cliente_op1;
                     $clientenuevo_op1=$request->clientenuevo_op1;
                     $captura_op1=$request->captura_op1;
+                    $letra=Cliente::where("id",$cliente_op1)->activo()->first()->icelular;
+                    $referencia=Cliente::where("id",$cliente_op1)->activo()->first()->celular;
+                    try {
+                        DB::beginTransaction();
 
+                        $cliente = Cliente::create([
+                            'nombre' => '',
+                            'celular' => $clientenuevo_op1,
+                            'icelular'=> $letra,
+                            'user_id' => $asesor_op1,
+                            'tipo' => '0',
+                            'provincia' => '',
+                            'distrito' => '',
+                            'direccion' => '',
+                            'referencia' => $referencia,
+                            'dni' => '',
+                            'deuda' => '0',
+                            'pidio' => '0',
+                            'estado' => '1'
+                        ]);
+                        DB::commit();
+                        return response()->json(['html' => $cliente->id]);
+                    } catch (\Throwable $th) {
+                        return response()->json(['html' => "0"]);
+                    }
                     break;
                 case '2':
                     //autorizacion para poner pedido
@@ -28,6 +54,7 @@ class ModalController extends Controller
                     $cliente_op2=$request->cliente_op2;
                     $cantidadpedidos_op2=$request->cantidadpedidos_op2;
                     $captura_op2=$request->captura_op2;
+
                     break;
                 case '3':
                     $asesor_op3=$request->asesor_op3;
