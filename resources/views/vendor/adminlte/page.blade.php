@@ -222,12 +222,8 @@
 
             $(document).on("submit","#form-op-1-row",function(event) {
                 event.preventDefault();
-                var form = $('#form-op-1-row')[0]; // You need to use standard javascript object here
+                var form = $('#form-op-1-row')[0];
                 var formData = new FormData(form);
-                //asesor_op1
-                //cliente_op1
-                //clientenuevo_op1
-                //captura_op1
                 $.ajax({
                     data: formData,
                     processData: false,
