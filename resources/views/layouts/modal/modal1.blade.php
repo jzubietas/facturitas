@@ -2,7 +2,9 @@
     <div class="modal-dialog" style="max-width: 800px!important;">
         <div class="modal-content">
             <div class="modal-header bg-success">
-                <h5 class="modal-title" id="exampleModalLabel">Modal</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Opciones Multiples</h5>
+
+                <button class="float-right btn btn-danger" data-dismiss="modal">Cerrar</button>
             </div>
             <div class="modal-body">
 
@@ -45,8 +47,9 @@
                                 {!! Form::label('captura_op1', 'Captura de pantalla') !!}
                                 <input type="file" name="captura_op1" id="captura_op1"  class="form-control" placeholder="">
                             </div>
-                            <div class="form-group col-lg-6">
-                                <button type="submit" class="btn btn-success">Enviar</button>
+                            <hr class="mt-2 mb-3"/>
+                            <div class="form-group col-lg-12">
+                                <button type="submit" class="float-right btn btn-success">Enviar</button>
                             </div>
 
                         </form>
@@ -58,7 +61,7 @@
                             <div class="form-group col-lg-6">
                                 {!! Form::label('asesor_op2', 'Asesor*') !!}
                                 <select name="asesor_op2" class="border form-control border-secondary" id="asesor_op2" data-live-search="true"
-                                        data-route="{{ route('cargar.clientedeudaparaactivar') }}">
+                                        data-ruta="{{route('cargar.clientedeudaparaactivar')}}">
                                     <option value="">---- SELECCIONE ASESOR ----</option>
                                 </select>
                             </div>
@@ -78,8 +81,9 @@
                                 {!! Form::label('captura_op2', 'Captura de pantalla') !!}
                                 <input type="file" name="captura_op2" id="captura_op2"  class="form-control" placeholder="">
                             </div>
-                            <div class="form-group col-lg-6">
-                                <button type="submit" class="btn btn-success">Enviar</button>
+                            <hr class="mt-2 mb-3"/>
+                            <div class="form-group col-lg-12">
+                                <button type="submit" class="float-right btn btn-success">Enviar</button>
                             </div>
                         </form>
 
@@ -92,7 +96,7 @@
                             <div class="form-group col-lg-6">
                                 {!! Form::label('asesor_op3', 'Asesor*') !!}
                                 <select name="asesor_op3" class="border form-control border-secondary" id="asesor_op3" data-live-search="true"
-                                        data-route="{{ route('cargar.clientedeudaparaactivar') }}">
+                                        data-ruta="{{route('cargar.clientedeudaparaactivar')}}">
                                     <option value="">---- SELECCIONE ASESOR ----</option>
                                 </select>
                             </div>
@@ -116,9 +120,10 @@
                                 {!! Form::label('captura_op3', 'Captura de pantalla') !!}
                                 <input type="file" name="captura_op3" id="captura_op3"  class="form-control" placeholder="">
                             </div>
+                            <hr class="mt-2 mb-3"/>
 
-                            <div class="form-group col-lg-6">
-                                <button type="submit" class="btn btn-success">Enviar</button>
+                            <div class="form-group col-lg-12">
+                                <button type="submit" class="float-right btn btn-success">Enviar</button>
                             </div>
                         </form>
                     </div>
@@ -129,8 +134,9 @@
 
                             <div class="form-group col-lg-6">
                                 {!! Form::label('asesor_op4', 'Asesor*') !!}
-                                <select name="asesor_op4" class="border form-control border-secondary" id="asesor_op4" data-live-search="true"
-                                        data-route="{{ route('cargar.clientedeudaparaactivar') }}">
+                                <select name="asesor_op4" class="border form-control border-secondary" id="asesor_op4"
+                                        data-live-search="true"
+                                        data-ruta="{{route('cargar.clientedeudaparaactivar')}}">
                                     <option value="">---- SELECCIONE ASESOR ----</option>
                                 </select>
                             </div>
@@ -144,17 +150,16 @@
                                 {!! Form::label('contacto_op4', 'Contacto') !!}
                                 <input type="text" name="contacto_op4" id="contacto_op4"  class="form-control" placeholder="Contacto">
                             </div>
+                            <div class="form-group col-lg-6"></div>
+                            <hr class="mt-2 mb-3"/>
 
-                            <div class="form-group col-lg-6">
-                                <button type="submit" class="btn btn-success">Enviar</button>
+                            <div class="form-group col-lg-12">
+                                <button type="submit" class="float-right btn btn-success">Enviar</button>
                             </div>
 
                         </form>
                     </div>
 
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-danger" data-dismiss="modal">Cerrar</button>
             </div>
 
         </div>

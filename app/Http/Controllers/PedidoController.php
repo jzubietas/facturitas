@@ -162,8 +162,7 @@ class PedidoController extends Controller
                     'direccion_grupos.motorizado_status'
                 ]
             );
-        //->where('pendiente_anulacion', '<>', 1)
-        //->whereIn('pedidos.condicion_code', [Pedido::POR_ATENDER_INT, Pedido::EN_PROCESO_ATENCION_INT, Pedido::ATENDIDO_INT, Pedido::ANULADO_INT]);
+
 
         if (Auth::user()->rol == "Llamadas") {
             $usersasesores = User::where('users.rol', 'Asesor')
@@ -208,8 +207,8 @@ class PedidoController extends Controller
 
             $pedidos = $pedidos->WhereIn('u.identificador', $usersasesores);
 
-        } else if (Auth::user()->rol == "ASESOR ADMINISTRATIVO") {
-            $usersasesores = User::where('users.rol', 'ASESOR ADMINISTRATIVO')
+        } else if (Auth::user()->rol == User::ROL_ASESOR_ADMINISTRATIVO) {
+            $usersasesores = User::where('users.rol', User::ROL_ASESOR_ADMINISTRATIVO)
                 ->where('users.estado', '1')
                 ->where('users.identificador', Auth::user()->identificador)
                 ->select(
@@ -230,10 +229,7 @@ class PedidoController extends Controller
                 ->pluck('users.identificador');
 
             $pedidos = $pedidos->WhereIn('u.identificador', $usersasesores);
-        }/* else {
-            $pedidos = $pedidos;
-        }*/
-        //$pedidos=$pedidos->get();
+        }
 
         $miidentificador = Auth::user()->name;
         return Datatables::of(DB::table($pedidos))

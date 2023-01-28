@@ -104,7 +104,7 @@
                     .append($('<option/>').attr({'value': 'op-1-row'}).text('Base fria y referido'))
                     .append($('<option/>').attr({'value': 'op-2-row'}).text('Autorizacion para subir pedido'))
                     .append($('<option/>').attr({'value': 'op-3-row'}).text('Eliminar Pago'))
-                    .append($('<option/>').attr({'value': 'op-4-row'}).text('Contacto'))
+                    .append($('<option/>').attr({'value': 'op-4-row'}).text('Agrega Contacto'))
                     .selectpicker("refresh")
             })
 
