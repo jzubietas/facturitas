@@ -230,7 +230,7 @@
                 var form = $('#form-op-1-row')[0];
                 var formData = new FormData(form);
                 $.ajax({
-                    data: formData,processData: false,contentType: false,type: 'POST',url: "{{ route('ajax_modal1_response') }}",
+                    data: formData+'&opcion=1',processData: false,contentType: false,type: 'POST',url: "{{ route('ajax_modal1_response') }}",
                     success: function (data) {
                         if(data.html=="1")
                         {
@@ -248,7 +248,7 @@
                 var form = $('#form-op-2-row')[0];
                 var formData = new FormData(form);
                 $.ajax({
-                    data: formData,processData: false,contentType: false,type: 'POST',url: "{{ route('ajax_modal1_response') }}",
+                    data: formData+'&opcion=2',processData: false,contentType: false,type: 'POST',url: "{{ route('ajax_modal1_response') }}",
                     success: function (data) {
                         if(data.html=="1")
                         {
@@ -266,7 +266,7 @@
                 var form = $('#form-op-3-row')[0];
                 var formData = new FormData(form);
                 $.ajax({
-                    data: formData,processData: false,contentType: false,type: 'POST',url: "{{ route('ajax_modal1_response') }}",
+                    data: formData+'&opcion=3',processData: false,contentType: false,type: 'POST',url: "{{ route('ajax_modal1_response') }}",
                     success: function (data) {
                         if(data.html=="1")
                         {
