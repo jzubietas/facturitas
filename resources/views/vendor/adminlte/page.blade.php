@@ -229,7 +229,7 @@
                 //clientenuevo_op1
                 //captura_op1
                 $.ajax({
-                    data: fd_courier,
+                    data: formData,
                     processData: false,
                     contentType: false,
                     type: 'POST',
