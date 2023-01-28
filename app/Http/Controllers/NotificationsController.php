@@ -9,6 +9,7 @@ use App\Models\Pedido;
 use App\Models\PedidoMovimientoEstado;
 use App\Models\User;
 use App\View\Components\common\courier\AutorizarRutaMotorizado;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Notifications\InvoicePaid;
 use Illuminate\Support\Facades\Auth;
@@ -482,7 +483,9 @@ class NotificationsController extends Controller
         add_query_filtros_por_roles_pedidos($pedidos_provincia, 'users.identificador');
         $contador_encargado_tienda_agente =$pedidos_provincia->count();
 
-        $alertas=Alerta::noFinalize()->noReadTime(now()->subMinutes(30))->withCurrentUser()->get();
+        $alertas=Alerta::noFinalize()
+            ->noReadTime(now()->subMinutes(10))
+            ->withCurrentUser()->get()->filter(fn(Alerta $alerta) => ($alerta->date_at == null || Carbon::parse($alerta->date_at)->subHour() <= now()))->values();
         return [
             'icon' => 'fas fa-envelope',
             'label' => count(auth()->user()->unreadNotifications) + count($devoluciones),

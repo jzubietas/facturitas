@@ -363,6 +363,10 @@
 <input type="text" class="form-control" name="title">
 </div>
 <div class="form-group">
+<label>Fecha (opcional)</label>
+<input type="datetime-local" class="form-control" name="fecha">
+</div>
+<div class="form-group">
 <label>Nota</label>
 <textarea type="text" class="form-control" rows="5" name="nota"></textarea>
 </div>

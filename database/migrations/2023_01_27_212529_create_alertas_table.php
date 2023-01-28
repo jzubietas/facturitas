@@ -19,6 +19,7 @@ class CreateAlertasTable extends Migration
             $table->string('subject');
             $table->text('message');
             $table->json('metadata')->nullable();
+            $table->timestamp('date_at')->nullable();
             $table->timestamp('read_at')->nullable();
             $table->timestamp('finalized_at')->nullable();
             $table->timestamps();

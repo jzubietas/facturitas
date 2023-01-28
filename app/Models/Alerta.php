@@ -12,6 +12,21 @@ class Alerta extends Model
 
     protected $guarded = ['id'];
 
+    protected $dates = [
+        'date_at',
+        'read_at',
+        'finalized_at',
+    ];
+
+    protected $casts = [
+        'metadata' => 'json'
+    ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
     public function scopeNoFinalize($query)
     {
         return $query->whereNull($this->qualifyColumn('finalized_at'));

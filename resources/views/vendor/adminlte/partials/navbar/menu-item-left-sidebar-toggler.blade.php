@@ -15,9 +15,11 @@
 </li>
 @if(user_rol(\App\Models\User::ROL_ASESOR)||user_rol(\App\Models\User::ROL_ADMIN))
     <li class="nav-item">
-        <a class="nav-link" href="#" data-toggle="addalert">
-            <i class="fas fa-bell"></i>
-            Agregar Alerta
+        <a class="nav-link btn btn-warning btn-sm" href="#" data-toggle="addalert">
+            <b class="text-black font-weight-bold">
+                <i class="fas fa-bell"></i>
+                Agregar Alerta
+            </b>
         </a>
     </li>
 @endif

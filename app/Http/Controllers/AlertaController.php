@@ -38,6 +38,7 @@ class AlertaController extends Controller
             'user_id' => auth()->id(),
             'subject' => $request->title,
             'message' => $request->nota,
+            'date_at' => $request->fecha,
         ]);
         return $alerta;
     }
