@@ -5,15 +5,15 @@
 @section('adminlte_css')
     <style>
         @foreach(get_color_role() as $rol=>$color)
-            .bg-{{Str::slug($rol)}}    {
+            .bg-{{Str::slug($rol)}}     {
             @if(is_array($color))
-               background: {{$color[0]}}   !important;;
-            color: {{$color[1]}}   !important;;
+                background: {{$color[0]}}    !important;;
+            color: {{$color[1]}}    !important;;
             @else
-               background: {{$color}};
+                background: {{$color}};
             color: #000 !important;
             @endif
-               font-weight: bold !important;;
+                font-weight: bold !important;;
         }
         @endforeach
     </style>
@@ -175,6 +175,46 @@
         })
     </script>
     <script>
+        $(document).ready(function () {
+            PNotify.defaultModules.set(PNotifyMobile, {});
+            PNotify.defaultModules.set(PNotifyBootstrap4, {});
+            PNotify.defaultModules.set(PNotifyFontAwesome4, {});
+            //https://sciactive.com/pnotify/demo/styling.html
+            $('[data-toggle=addalert]').click(function () {
+                $.confirm({
+                    theme:'material',
+                    type:'orange',
+                    title:'Agregar Nota',
+                    content:`-- muy pronto --`,
+                    buttons:{
+                        aceptar:function () {
+                            PNotify.info({
+                                title: 'En construcion ... ',
+                                text: '¿Espere al lanzamiento?',
+                                hide: false,
+                                closer: false,
+                                sticker: false,
+                                modules: new Map([
+                                    ...PNotify.defaultModules,
+                                    [PNotifyConfirm, {confirm: true}]
+                                ])
+                            });
+                            PNotify.notice({
+                                title: 'En construcion ... ',
+                                text: '¿Espere al lanzamiento?',
+                                hide: false,
+                                closer: false,
+                                sticker: false,
+                                modules: new Map([
+                                    ...PNotify.defaultModules,
+                                    [PNotifyConfirm, {confirm: true}]
+                                ])
+                            });
+                        }
+                    }
+                })
+            })
+        })
         /*$(document).ready(function () {
             $(document).on("paste", "input[type=text],input[type=search]", function (e) {
                 // access the clipboard using the api

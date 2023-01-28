@@ -93,7 +93,6 @@
 @stop
 
 @push('css')
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
     <link rel="stylesheet" href="{{asset('vendor/fontawesome-free/css/v4-shims.min.css')}}">
     <link rel="stylesheet" href="{{asset('vendor/fontawesome-free/css/solid.min.css')}}">
     <style>
@@ -123,7 +122,6 @@
 @endpush
 
 @push('js')
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
 
     <script src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>

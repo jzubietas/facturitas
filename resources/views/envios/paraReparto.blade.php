@@ -242,7 +242,6 @@
                     color: green !important;
                 }
             </style>
-            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
         @stop
 
         @section('js')
@@ -256,7 +255,6 @@
             <script src="https://cdn.datatables.net/plug-ins/1.11.4/dataRender/datetime.js"></script>
             <script
                 src="https://gyrocode.github.io/jquery-datatables-checkboxes/1.2.12/js/dataTables.checkboxes.min.js"></script>
-            <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
             <script>
                 let tabla_pedidos_principal_norte=null;
                 let tabla_pedidos_principal_centro=null;
