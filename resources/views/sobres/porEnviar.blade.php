@@ -973,11 +973,12 @@
                     "pageLength": 5,
                     "order": [[0, "asc"]],
                     ajax: {
-                        url: "{{ route('sobreenvioshistorial') }}",
+                        url: "{{route('sobreenvioshistorial')}}",
                         data: function (d) {
                             d.provincialima=provincialima;
                             d.cliente_id=clienteidprovincia;
                         },
+                        type:'get',
                     },
                     rowCallback: function (row, data, index) {
                         $('.button_provincia', row).click(function (e) {
