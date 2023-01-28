@@ -72,6 +72,11 @@ class ModalController extends Controller
                     $asesor_op4=$request->asesor_op4;
                     $cliente_op4=$request->cliente_op4;
                     $contacto_op4=$request->contacto_op4;
+
+                    $cliente=Cliente::query()->where("id",$cliente_op4)->update([
+                        'agenda'=>$contacto_op4,
+                    ]);
+                    return response()->json(['html' => $cliente->id]);
                     break;
             }
         }
