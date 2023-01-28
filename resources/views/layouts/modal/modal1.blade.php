@@ -17,11 +17,13 @@
                         </div>
                     </div>
 
-                    <div class="form-row op-1-row"><!---->
+                    <div id="op-1-row" class="form-row op-1-row"><!---->
 
                         <div class="form-group col-lg-6">
                             {!! Form::label('asesor_op1', 'Asesor*') !!}
-                            <select name="asesor_op1" class="border form-control border-secondary" id="asesor_op1" data-live-search="true" >
+
+                            <select name="asesor_op1" class="border form-control border-secondary" id="asesor_op1"
+                                data-ruta="{{route('cargar.clientedeudaparaactivar')}}">
                                 <option value="">---- SELECCIONE ASESOR ----</option>
                             </select>
                         </div>
@@ -46,10 +48,11 @@
 
                     </div>
 
-                    <div class="form-row op-2-row"><!---->
+                    <div id="op-2-row" class="form-row op-2-row"><!---->
                         <div class="form-group col-lg-6">
                             {!! Form::label('asesor_op2', 'Asesor*') !!}
-                            <select name="asesor_op2" class="border form-control border-secondary" id="asesor_op2" data-live-search="true" >
+                            <select name="asesor_op2" class="border form-control border-secondary" id="asesor_op2" data-live-search="true"
+                                    data-route="{{ route('cargar.clientedeudaparaactivar') }}">
                                 <option value="">---- SELECCIONE ASESOR ----</option>
                             </select>
                         </div>
@@ -75,10 +78,11 @@
 
                     </div>
 
-                    <div class="form-row op-3-row"><!---->
+                    <div id="op-3-row" class="form-row op-3-row"><!---->
                         <div class="form-group col-lg-6">
                             {!! Form::label('asesor_op3', 'Asesor*') !!}
-                            <select name="asesor_op3" class="border form-control border-secondary" id="asesor_op3" data-live-search="true" >
+                            <select name="asesor_op3" class="border form-control border-secondary" id="asesor_op3" data-live-search="true"
+                                    data-route="{{ route('cargar.clientedeudaparaactivar') }}">
                                 <option value="">---- SELECCIONE ASESOR ----</option>
                             </select>
                         </div>
@@ -106,10 +110,11 @@
 
                     </div>
 
-                    <div class="form-row op-4-row">
+                    <div id="op-4-row" class="form-row op-4-row">
                         <div class="form-group col-lg-6">
                             {!! Form::label('asesor_op4', 'Asesor*') !!}
-                            <select name="asesor_op4" class="border form-control border-secondary" id="asesor_op4" data-live-search="true" >
+                            <select name="asesor_op4" class="border form-control border-secondary" id="asesor_op4" data-live-search="true"
+                                    data-route="{{ route('cargar.clientedeudaparaactivar') }}">
                                 <option value="">---- SELECCIONE ASESOR ----</option>
                             </select>
                         </div>

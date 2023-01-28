@@ -75,7 +75,156 @@
 @section('adminlte_js')
     @stack('js')
     @yield('js')
-    <script src="{{ asset("js/modal_jose.js")  }}"></script>
+    <script>
+        $(document).ready(function () {
+
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+
+            window.ocultar_div_modal1=function(){
+                console.log("ocultar div")
+                $("#op-1-row").hide();
+                $("#op-2-row").hide();
+                $("#op-3-row").hide();
+                $("#op-4-row").hide();
+            }
+
+            //btn_componente-1
+            $('#modal-annuncient-1').on('show.bs.modal', function (event) {
+                console.log("aaa")
+
+                ocultar_div_modal1();
+                //
+                $("#opciones_modal1")
+                    .html("")
+                    .append( $('<option/>').attr({ 'value': 'op-1-row' }).text('Base fria y referido') )
+                    .append( $('<option/>').attr({ 'value': 'op-2-row' }).text('Autorizacion para subir pedido') )
+                    .append( $('<option/>').attr({ 'value': 'op-3-row' }).text('Eliminar Pago') )
+                    .append( $('<option/>').attr({ 'value': 'op-4-row' }).text('Contacto') )
+                    .selectpicker("refresh")
+            })
+
+            $(document).on("change","#opciones_modal1",function(){
+                let value=$(this).val();
+                ocultar_div_modal1();
+                switch(value)
+                {
+                    case 'op-1-row':
+                        $("#op-1-row").show()
+                        break;
+                    case 'op-2-row':
+                        $("#op-2-row").show();
+                        break;
+                    case 'op-3-row':
+                        $("#op-3-row").show()
+                        break;
+                    case 'op-4-row':
+                        $("#op-4-row").show()
+                        break;
+                }
+                cargar_asesor_modal1();
+            })
+
+            window.cargar_asesor_modal1=function(){
+                let value=$("#opciones_modal1").val();
+                switch(value)
+                {
+                    case 'op-1-row':
+                        $.ajax({
+                            url: "{{ route('asesorcombo') }}",
+                            method: 'POST',
+                            success: function (data) {
+                                $('#asesor_op1').html(data.html);
+                                $("#asesor_op1").selectpicker("refresh").trigger("change");
+                            }
+                        });
+                        break;
+                    case 'op-2-row':
+                        $.ajax({
+                            url: "{{ route('asesorcombo') }}",
+                            method: 'POST',
+                            success: function (data) {
+                                $('#asesor_op2').html(data.html);
+                                $("#asesor_op2").selectpicker("refresh").trigger("change");
+                            }
+                        });
+                        break;
+                    case 'op-3-row':
+                        $.ajax({
+                            url: "{{ route('asesorcombo') }}",
+                            method: 'POST',
+                            success: function (data) {
+                                $('#asesor_op3').html(data.html);
+                                $("#asesor_op3").selectpicker("refresh").trigger("change");
+                            }
+                        });
+                        break;
+                    case 'op-4-row':
+                        $.ajax({
+                            url: "{{ route('asesorcombo') }}",
+                            method: 'POST',
+                            success: function (data) {
+                                $('#asesor_op4').html(data.html);
+                                $("#asesor_op4").selectpicker("refresh").trigger("change");
+                            }
+                        });
+                        break;
+                }
+
+            }
+
+            $(document).on("change", "#asesor_op1", function () {
+                console.log($(this).data("ruta"))
+                $.ajax({
+                    url: $(this).data("route"),
+                    method: 'GET',
+                    data:{"user_id":$(this).val()},
+                    success: function (data) {
+                        $('#cliente_op1').html(data.html);
+                        $("#cliente_op1").selectpicker("refresh");
+                    }
+                });
+            });
+            $(document).on("change", "#asesor_op2", function () {
+                $.ajax({
+                    url: $(this).data("route"),
+                    method: 'GET',
+                    data:{"user_id":$(this).val()},
+                    success: function (data) {
+                        $('#cliente_op2').html(data.html);
+                        $("#cliente_op2").selectpicker("refresh");
+                    }
+                });
+            });
+            $(document).on("change", "#asesor_op3", function () {
+                $.ajax({
+                    url: $(this).data("route"),
+                    method: 'GET',
+                    data:{"user_id":$(this).val()},
+                    success: function (data) {
+                        $('#cliente_op3').html(data.html);
+                        $("#cliente_op3").selectpicker("refresh");
+                    }
+                });
+            });
+            $(document).on("change", "#asesor_op4", function () {
+
+                $.ajax({
+                    url: $(this).data("route"),
+                    method: 'GET',
+                    data:{"user_id":$(this).val()},
+                    success: function (data) {
+                        $('#cliente_op4').html(data.html);
+                        $("#cliente_op4").selectpicker("refresh");
+                    }
+                });
+            });
+
+        });
+    </script>
     <script>
         $(document).ready(function () {
             if (document.location.href != '{{route('envios.distribuirsobres')}}') {
