@@ -597,6 +597,7 @@
                     )
                     return false;
                 } else {
+                    $("#registrar_pagos").attr('disabled', 'disabled')
                     this.submit();
                     //ValidarDatosPedido();
                     //$("#formulario").trigger("submit");
@@ -947,9 +948,11 @@
             //$("#user_id").trigger("change");
 
             function restartTotalDiferencia() {
-                var api=$('#tabla_pedidos').DataTable()
-                var pageSaldo=Array.from(api.column(3, {page: 'current'}).nodes().to$().find('input[data-total]'))
-                    .map(function(e){return parseFloat(e.value);})
+                var api = $('#tabla_pedidos').DataTable()
+                var pageSaldo = Array.from(api.column(3, {page: 'current'}).nodes().to$().find('input[data-total]'))
+                    .map(function (e) {
+                        return parseFloat(e.value);
+                    })
                     .reduce(function (a, b) {
                         return Number(a) + Number(b);
                     }, 0);
@@ -960,10 +963,10 @@
             $(document).on("click", ".radiototal", function (event) {
                 //todo:remover luego
                 setTimeout(function () {
-                    if($('.radiototal').filter(':checked').length>0) {
+                    if ($('.radiototal').filter(':checked').length > 0) {
                         $("#consideradevolucion").removeClass('d-none')
                     }
-                },100)
+                }, 100)
                 event.preventDefault();
             });
 
