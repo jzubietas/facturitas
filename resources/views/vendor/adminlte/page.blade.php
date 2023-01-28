@@ -229,13 +229,14 @@
                 //clientenuevo_op1
                 //captura_op1
                 $.ajax({
-                    data: fd_courier,
+                    data: formData,
                     processData: false,
                     contentType: false,
                     type: 'POST',
                     url: "{{ route('ajax_modal1_response') }}",
                     success: function (data) {
 
+                        console.log("response")
                     }
                 })
 
