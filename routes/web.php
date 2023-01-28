@@ -164,6 +164,7 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
 
     Route::post('reset/{user}', [UserController::class, 'reset'])->name('user.reset');
     Route::post('asesorcombo', [UserController::class, 'Asesorcombo'])->name('asesorcombo');
+    Route::post('asesorcombo', [UserController::class, 'Asesorcombo'])->name('asesorcombo');
     Route::post('asesorcombopago', [UserController::class, 'Asesorcombopago'])->name('asesorcombopago');
     Route::get('users.asesores', [UserController::class, 'Asesores'])->name('users.asesores');
     Route::get('users.asesorestabla', [UserController::class, 'Asesorestabla'])->name('users.asesorestabla');////asesores

@@ -229,12 +229,16 @@
                 event.preventDefault();
                 var form = $('#form-op-1-row')[0];
                 var formData = new FormData(form);
+                formData.append('opcion',"1");
                 $.ajax({
-                    data: formData+'&opcion=1',processData: false,contentType: false,type: 'POST',url: "{{ route('ajax_modal1_response') }}",
+                    data: formData,processData: false,contentType: false,type: 'POST',url: "{{ route('ajax_modal1_response') }}",
                     success: function (data) {
-                        if(data.html=="1")
+                        if(data.html!="0")
                         {
-                            $.notify("Hello World");
+                            PNotify.notice({
+                                text: 'Notice 1.',
+                            });
+                            $("#modal-annuncient-1").modal("hide");
                             console.log("response 1")
                         }else{
                             console.log("response 0")
@@ -247,12 +251,16 @@
                 event.preventDefault();
                 var form = $('#form-op-2-row')[0];
                 var formData = new FormData(form);
+                formData.append('opcion',"2");
                 $.ajax({
-                    data: formData+'&opcion=2',processData: false,contentType: false,type: 'POST',url: "{{ route('ajax_modal1_response') }}",
+                    data: formData,processData: false,contentType: false,type: 'POST',url: "{{ route('ajax_modal1_response') }}",
                     success: function (data) {
-                        if(data.html=="1")
+                        if(data.html!="0")
                         {
-                            $.notify("Hello World");
+                            PNotify.notice({
+                                text: 'Notice 2.',
+                            });
+                            $("#modal-annuncient-2").modal("hide");
                             console.log("response 1")
                         }else{
                             console.log("response 0")
@@ -265,12 +273,16 @@
                 event.preventDefault();
                 var form = $('#form-op-3-row')[0];
                 var formData = new FormData(form);
+                formData.append('opcion',"3");
                 $.ajax({
-                    data: formData+'&opcion=3',processData: false,contentType: false,type: 'POST',url: "{{ route('ajax_modal1_response') }}",
+                    data: formData,processData: false,contentType: false,type: 'POST',url: "{{ route('ajax_modal1_response') }}",
                     success: function (data) {
-                        if(data.html=="1")
+                        if(data.html!="0")
                         {
-                            $.notify("Hello World");
+                            PNotify.notice({
+                                text: 'Notice 3.',
+                            });
+                            $("#modal-annuncient-3").modal("hide");
                             console.log("response 1")
                         }else{
                             console.log("response 0")
@@ -284,7 +296,7 @@
                 var form = $('#form-op-4-row')[0];
                 var formData = new FormData(form);
                 $.ajax({
-                    data: formData,processData: false,contentType: false,type: 'POST',url: "{{ route('ajax_modal1_response') }}",
+                    data: formData,processData: false,contentType: false,type: 'GET',url: "{{ route('ajax_modal1_response') }}",
                     success: function (data) {
                         if(data.html=="1")
                         {
