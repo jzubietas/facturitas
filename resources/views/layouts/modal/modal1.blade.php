@@ -107,13 +107,9 @@
                                 </select>
                             </div>
 
-                            <div class="table-responsive form-group col-lg-12">
-                                <table class="table">
-                                    <thead>
-                                        <th>Agregar codigos</th>
-                                    </thead>
-                                    <tbody></tbody>
-                                </table>
+                            <div class="form-group col-lg-6">
+                                {!! Form::label('pedido_op3', 'Pedido') !!}
+                                <input type="text" name="pedido_op3" id="pedido_op3"  class="form-control" placeholder="Pedido">
                             </div>
 
                             <div class="form-group col-lg-12">
@@ -128,7 +124,7 @@
                         </form>
                     </div>
 
-                    <div id="op-4-row" class="op-4-row">
+                    <div id="op-4-row" class="op-4-row d-none">
                         <form id="form-op-4-row" name="form-op-4-row" class="form-row ">
                             <input type="hidden" id="opcion4" name="opcion" value="4">
 
