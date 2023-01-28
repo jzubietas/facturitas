@@ -41,7 +41,7 @@ class ModalController extends Controller
                         {
                             $alerta = Alerta::create([
                                 'user_id' => $userr->id,
-                                'type'=>'error',
+                                'tipo'=>'error',
                                 'subject' => 'BASE FRIA Y REFERIDO',
                                 'message' => 'Se solicitó la creación de referido al cliente '.$name.', con el numero '.$clientenuevo_op1.'. Se necesita atención.',
                                 'date_at' => now(),
@@ -96,7 +96,7 @@ class ModalController extends Controller
                         {
                             $alerta = Alerta::create([
                                 'user_id' => $users->id,
-                                'type'=>'error',
+                                'tipo'=>'error',
                                 'subject' => 'AUTORIZACION PARA SUBIR PEDIDO',
                                 'message' => 'Se solicitó la creación de '.$cantidadpedidos_op2.' pedido(s) al cliente '.$name.'. Se necesita atención.',
                                 'date_at' => now(),
@@ -120,7 +120,7 @@ class ModalController extends Controller
                         {
                             $alerta = Alerta::create([
                                 'user_id' => $users->id,
-                                'type'=>'error',
+                                'tipo'=>'error',
                                 'subject' => 'ELIMINACION DE PAGO',
                                 'message' => 'Se solicitó la eliminacion de pago al pedido '.$pedido_op3.'. Se necesita atención.',
                                 'date_at' => now(),
