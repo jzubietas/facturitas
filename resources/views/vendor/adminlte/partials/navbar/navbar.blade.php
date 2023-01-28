@@ -68,8 +68,45 @@
     {{-- Navbar right links --}}
     <ul class="navbar-nav ml-auto">
 
-        <button class="btn btn-sm btn-option br-8 font-11 font-weight-bold" id="btn_buscar_scan" data-toggle="modal" data-target="#modal-escanear-estado-sobre" type="button"><i class="fa fa-barcode" aria-hidden="true"></i> Buscar</button>
+
+
+        <li class="nav-item dropdown show p-1" id="my-btn-annuncements-1">
+            <button class="btn btn-success  font-11 font-weight-bold" id="btn_componente-1"
+                    data-toggle="modal" data-target="#modal-annuncient-1" type="button">
+                <i class="fa fa-accusoft" aria-hidden="true"></i> MODAL
+            </button>
+        </li>
+
+
+        <li class="nav-item dropdown show p-1" id="my-btn-annuncements-2">
+            <button class="btn btn-secondary font-11 font-weight-bold" id="btn_buscar_scan"
+                    data-toggle="modal" data-target="#modal-escanear-estado-sobre" type="button">
+                <i class="fa fa-barcode" aria-hidden="true"></i> Buscar
+            </button>
+        </li>
+
+        <li class="nav-item dropdown show" id="my-annuncements-1">
+            <a href="" class="nav-link" data-toggle="dropdown" aria-expanded="true">
+                <i class="fas fa-envelope text-white"></i>
+                <span class="d-none badge navbar-badge text-bold text-xs badge-danger badge-pill">3</span>
+            </a>
+        </li>
+        <li class="nav-item dropdown show" id="my-annuncements-2">
+            <a href="" class="nav-link" data-toggle="dropdown" aria-expanded="true">
+                <i class="fas fa-envelope text-white"></i>
+                <span class="d-none badge navbar-badge text-bold text-xs badge-danger badge-pill">3</span>
+            </a>
+        </li>
+        <li class="nav-item dropdown show" id="my-annuncements-3">
+            <a href="" class="nav-link" data-toggle="dropdown" aria-expanded="true">
+                <i class="fas fa-envelope text-white"></i>
+                <span class="d-none badge navbar-badge text-bold text-xs badge-danger badge-pill">3</span>
+            </a>
+        </li>
         {{-- Custom right links --}}
+
+
+
         @yield('content_top_nav_right')
 
         {{-- Configured right links --}}
