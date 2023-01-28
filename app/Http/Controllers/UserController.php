@@ -310,6 +310,55 @@ class UserController extends Controller
         //return response()->json($users);
     }
 
+    public function AsesorcomboModal(Request $request)
+    {
+        $mirol = Auth::user()->rol;
+        $users = null;
+        $users = User::where('estado', '1')->where("rol", "Asesor");
+
+        if ($mirol == 'Llamadas') {
+            $users = $users->where('llamada', Auth::user()->id)->where("rol", "Asesor");
+        } else if ($mirol == 'Jefe de llamadas') {
+            $users = $users->where('llamada', Auth::user()->id)->where("rol", "Asesor");
+        } else if ($mirol == User::ROL_APOYO_ADMINISTRATIVO) {
+            $users = $users->where('identificador', '<>', 'B');
+        } else if ($mirol == 'Asesor') {
+            $users = $users->where('id', Auth::user()->id)->where("rol", "Asesor");
+        } else if ($mirol == 'ASESOR ADMINISTRATIVO') {
+            $users = User::where("rol", "ASESOR ADMINISTRATIVO");
+        } else {
+            $usersB = User::whereIn("rol", ["ASESOR ADMINISTRATIVO"]);
+            $users = $usersB->union($users);
+        }
+
+        $users = $users->orderBy('exidentificador', 'ASC')->get();
+        $html = "";
+
+        foreach ($users as $user) {
+
+            if ($user->rol == User::ROL_ASESOR_ADMINISTRATIVO) {
+                $html .= '<option style="color:black" value="' . $user->identificador . '">' . $user->identificador . '</option>';
+            } elseif ($user->rol == User::ROL_ADMIN) {
+                $html .= '<option style="color:black" value="' . $user->identificador . '">' . $user->identificador . '</option>';
+            } else {
+                if ($user->exidentificador == '01' || $user->exidentificador == '02' || $user->exidentificador == '22' || $user->exidentificador == '21' || $user->exidentificador == '23') {
+                    $html .= '<option style="color:black" value="' . $user->identificador . '">' . $user->identificador . (($user->exidentificador != null) ? '  (' . $user->exidentificador . ')' : '') . '</option>';
+                }
+                else {
+                    if (intval($user->exidentificador) % 2 == 0) {
+                        $html .= '<option disabled style="color:red" value="' . $user->identificador . '">' . $user->identificador . (($user->exidentificador != null) ? '  (' . $user->exidentificador . ')' : '') . '</option>';
+                    } else {
+                        $html .= '<option style="color:black" value="' . $user->identificador . '">' . $user->identificador . (($user->exidentificador != null) ? '  (' . $user->exidentificador . ')' : '') . '</option>';
+                    }
+                }
+            }
+        }
+
+        return response()->json(['html' => $html]);
+
+        //return response()->json($users);
+    }
+
     public function Asesorcombopago(Request $request)
     {
         $mirol = Auth::user()->rol;

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cliente;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -18,20 +19,20 @@ class ModalController extends Controller
             {
                 case '1':
                     //base fria y referido
-                    $asesor_op1=$request->asesor_op1;
+                    $asesor_op1=$request->asesor_op1;//identificador
                     $cliente_op1=$request->cliente_op1;
                     $clientenuevo_op1=$request->clientenuevo_op1;
                     $captura_op1=$request->captura_op1;
                     $letra=Cliente::where("id",$cliente_op1)->activo()->first()->icelular;
                     $referencia=Cliente::where("id",$cliente_op1)->activo()->first()->celular;
-                    try {
-                        DB::beginTransaction();
+                    /*try {
+                        DB::beginTransaction();*/
 
-                        $cliente = Cliente::create([
+                    $cliente = Cliente::create([
                             'nombre' => '',
                             'celular' => $clientenuevo_op1,
                             'icelular'=> $letra,
-                            'user_id' => $asesor_op1,
+                            'user_id' =>  User::where("identificador",$asesor_op1)->activo()->first()->id,
                             'tipo' => '0',
                             'provincia' => '',
                             'distrito' => '',
@@ -42,11 +43,13 @@ class ModalController extends Controller
                             'pidio' => '0',
                             'estado' => '1'
                         ]);
-                        DB::commit();
+                        /*DB::commit();
                         return response()->json(['html' => $cliente->id]);
                     } catch (\Throwable $th) {
                         return response()->json(['html' => "0"]);
-                    }
+                    }*/
+                    return response()->json(['html' => $cliente->id]);
+
                     break;
                 case '2':
                     //autorizacion para poner pedido
