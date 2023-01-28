@@ -37,7 +37,7 @@
 
                             <div class="form-group col-lg-6">
                                 {!! Form::label('clientenuevo_op1', 'Numero de cliente nuevo') !!}
-                                <input type="text" name="clientenuevo_op1" id="clientenuevo_op1"  class="form-control" placeholder="Cliente nuevo">
+                                <input type="text" name="clientenuevo_op1" id="clientenuevo_op1"  class="form-control" placeholder="Cliente nuevo" maxlength="9">
 
                             </div>
 
