@@ -96,6 +96,17 @@ class PedidoHistoryController extends Controller
      * @param \App\Models\PedidoHistory $pedidoHistory
      * @return \Illuminate\Http\Response
      */
+    public function delete(Request $request)
+    {
+        return PedidoHistory::query()->where('id', $request->history_id)->delete();
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param \App\Models\PedidoHistory $pedidoHistory
+     * @return \Illuminate\Http\Response
+     */
     public function destroy(PedidoHistory $pedidoHistory)
     {
         //

@@ -28,7 +28,7 @@
 
 
         <div class="modal-footer">
-            <a href="{{route('pedidos.mispedidos')}}" class="btn btn-primary">Mis pedidos</a>
+            <a href="{{route('pedidos.index')}}" class="btn btn-primary">Mis pedidos</a>
           <button type="button" id="cerrar-modal-copiar" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
           {{--<button type="button" id="btncopiar" class="btn btn-info">Copiar</button>--}}
         </div>

@@ -27,13 +27,6 @@
                             <button class="btn btn-danger btn-sm">Deudores</button>
                         </a>
 
-                        <div class="pr-2 btn border-0 rounded text-right">
-                            <small class="rounded mb-2 bg-danger text-white" style="font-size: 16px">Desactivado</small>
-                            <small class="rounded mb-2 bg-info text-white" style="font-size: 16px">Permitido</small>
-                            <small class="rounded mb-2 bg-dark text-white" style="font-size: 16px">Normal</small>
-                        </div>
-
-
                         <select name="cliente_id" class="border form-control  border-secondary selectpicker"
                                 id="cliente_id" data-live-search="true">{{-- selectpicker lang="es" --}}
                             <option>---- SELECCIONE CLIENTE ----</option>
@@ -50,7 +43,7 @@
             <div class="card-body">
 
                 <div class="form-row">
-                    <div class="form-group col-lg-2">
+                    <div class="form-group col-lg-3  mb-1 py-2">
                         {!! Form::label('pruc', 'RUC *') !!} &nbsp; &nbsp; &nbsp;
 
                         <a href="" data-target="#modal-add-ruc" id="btn_agregar_ruc" data-toggle="modal"
@@ -66,22 +59,22 @@
                     <small class="text-danger" style="font-size: 16px">{{ $message }}</small>
                     @enderror
 
-                    <div class="form-group col-lg-3">
+                    <div class="form-group col-lg-3  mb-1 py-2">
                         {!! Form::label('pempresa', 'Nombre de empresa') !!}
                         <input type="text" name="pempresa" id="pempresa" class="form-control"
                                placeholder="Nombre de empresa..." disabled>
                     </div>
 
-                    <div class="form-group col-lg-3">
+                    <div class="form-group col-lg-3  mb-1 py-2">
                         {!! Form::label('ptipo_banca', 'Tipo de comprobante y banca') !!}
                         <select name="ptipo_banca" id="ptipo_banca" class="border form-control border-secondary">
                             <option value="">---- SELECCIONE ----</option>
                         </select>
                     </div>
 
-                    <div class="form-group col-lg-3 d-flex justify-content-center align-items-center">
+                    <div class="form-group col-lg-3 d-flex justify-content-end align-items-center  mb-1 py-2">
                         <a href="" data-target="#modal-historial-2" data-toggle="modal">
-                            <button class="btn btn-danger btn-lg ">Historial</button>
+                            <button class="btn btn-danger btn-lg ">Historial de detalle</button>
                         </a><!--align-items-stretch-->
                     </div>
 
@@ -100,38 +93,38 @@
                 </div>
                 <div class="form-row">
 
-                    <div class="form-group col-lg-2">
+                    <div class="form-group col-lg-2 mb-1 py-2">
                         {!! Form::label('pcantidad', 'Cantidad') !!}
                         <input type="text" name="pcantidad" id="pcantidad" step="0.01" min="0"
                                class="form-control number ob" data-type="text" data-msj="Ingrese una cantidad"
                                placeholder="Cantidad...">
                     </div>
 
-                    <div class="form-group col-lg-2">
+                    <div class="form-group col-lg-2 mb-1 py-2">
 
                         {!! Form::label('pmes', 'Mes') !!}
                         {!! Form::select('pmes', $meses , $mes_selected, ['class' => 'form-control border selectpicker border-secondary', 'data-live-search' => 'true', 'placeholder' => '---- SELECCIONE ----']) !!}
                     </div>
 
-                    <div class="form-group col-lg-2">
+                    <div class="form-group col-lg-2 mb-1 py-2">
 
                         {!! Form::label('panio', 'Año') !!}
                         {!! Form::select('panio', $anios , $anno_selected, ['class' => 'form-control border selectpicker border-secondary', 'data-live-search' => 'true', 'placeholder' => '---- SELECCIONE ----']) !!}
                     </div>
 
 
-                    <div class="form-group col-lg-1">
+                    <div class="form-group col-lg-2 mb-1 py-2">
                         {!! Form::label('pporcentaje', 'Porcentaje(%)') !!}
                         <input type="number" name="pporcentaje" id="pporcentaje" step="0.1" min="0" class="form-control"
                                placeholder="Porcentaje..." disabled>
                     </div>
-                    <div class="form-group col-lg-1">
+                    <div class="form-group col-lg-1 mb-1 py-2">
                         {!! Form::label('pcourier', 'Courier(S/)') !!}
                         {{-- <input type="number" name="pcourier" id="pcourier" step="0.01" min="0" class="form-control" placeholder="Courier..."> --}}
                         <input type="text" name="pcourier" id="pcourier" step="0.01" min="0" class="form-control number"
                                value="0" placeholder="Courier...">
                     </div>
-                    <div class="form-group col-lg-3 d-flex justify-content-center align-items-center">
+                    <div class="form-group col-lg-3 d-flex justify-content-end align-items-center  mb-1 py-2">
                         <div class="btn-group-vertical" role="group" aria-label="Basic example">
                             <button type="button" class="btn btn-info btn-lg"
                                     data-toggle="jqconfirm"
@@ -140,17 +133,7 @@
                                 <i class="fa fa-copy"></i>
                                 Previsualizar
                             </button>
-                            <button type="button" class="btn btn-warning btn-lg"
-                                    data-toggle="jqconfirm"
-                                    data-type="history"
-                                    data-target="{{route('pedidos.histories.index')}}">
-                                <i class="fa fa-copy"></i>
-                                Cargar Pedido del Historial
-                            </button>
                         </div>
-
-                    </div>
-                    <div class="form-group col-lg-2">
 
                     </div>
                 </div>
@@ -165,16 +148,21 @@
                         <input type="text" name="pnota" id="pnota" class="form-control" placeholder="Nota...">
                     </div>
 
-                    <div class="form-group col-lg-3 d-flex justify-content-center align-items-center">
+                    <div class="form-group col-lg-3 d-flex justify-content-end align-items-center">
 
                         <button type="button" id="bt_add" class="btn btn-primary btn-lg"><i
                                 class="fas fa-plus-circle"></i> Agregar
                         </button>
 
                     </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-lg-12">
+                        {!! Form::label('adjunto', 'Adjuntar archivos') !!}
+                        <input type="file" id="adjunto" name="adjunto[]" multiple class="form-control">
+                    </div>
 
                 </div>
-
                 <div class="row">
 
 

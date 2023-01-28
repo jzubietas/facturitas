@@ -2,8 +2,17 @@
 @section('title', 'Agregar pedidos')
 @section('content_header')
 
-    <h1>Agregar pedidos</h1>
+    <div class="d-flex justify-content-between align-items-center">
+        <h1>Agregar pedidos</h1>
 
+        <button type="button" class="btn btn-warning btn-lg"
+                data-toggle="jqconfirm"
+                data-type="history"
+                data-target="{{route('pedidos.histories.index')}}">
+            <i class="fa fa-history"></i>
+            Cargar Historial
+        </button>
+    </div>
     {{-- @error('num_ruc')
 <small class="text-danger" style="font-size: 16px">{{ $message }}</small>
 @enderror --}}
@@ -167,7 +176,7 @@ __________________________________
                             btnClass: 'btn-secondary'
                         }
                     },
-                    content: function () {
+                    loadContent: function () {
                         const self = this
                         return $.get(target)
                             .done(function (data) {
@@ -202,7 +211,8 @@ ${data.map(function (data, index) {
 <td>${data.descripcion}</td>
 <td>${data.nota}</td>
 <td>
-<button data-add class="btn btn-dark btn-sm" data-index="${index}"><i class="fa fa-arrow-down"></i>Agregar</button>
+<button data-add class="btn btn-dark btn-sm btn-block" data-index="${index}"><i class="fa fa-arrow-down"></i>Agregar</button>
+<button data-delete class="btn btn-danger btn-sm btn-block" data-id="${data.id}" data-index="${index}"><i class="fa fa-window-close"></i></button>
 </td>
 </tr>`
                                     }).join('')}
@@ -217,6 +227,9 @@ ${data.map(function (data, index) {
                             .fail(function () {
                                 self.setContent(`<div class="mt-4 alert alert-danger">No hay items</div>`)
                             })
+                    },
+                    content: function () {
+                        return this.loadContent()
                     },
                     onContentReady: function () {
                         const self = this
@@ -261,6 +274,38 @@ ${data.map(function (data, index) {
                                     },
                                     cancelar: {
                                         btnClass: 'btn-secundary'
+                                    }
+                                }
+                            })
+                        })
+                        self.$content.find('[data-delete]').click(function () {
+                            const index = $(this).data('index')
+                            const data = self.getItemByIndex(index)
+                            $.confirm({
+                                title: 'Advertencia',
+                                type: 'red',
+                                icon: 'fa fa-exclamation-triangle text-danger',
+                                content: 'Se eliminara el registro',
+                                buttons: {
+                                    confirmar: {
+                                        btnClass: 'btn-danger',
+                                        action: function () {
+                                            const self2 = this
+                                            self2.showLoading(true)
+                                            $.post('{{route('pedidos.store.delete-history')}}', {
+                                                history_id: data.id
+                                            }).done(function () {
+                                                self2.close();
+                                                //recarga la tabla del metodo definido anteriormente
+                                                self.loadContent();
+                                            }).always(function () {
+                                                self2.hideLoading(true)
+                                            })
+                                            return false
+                                        }
+                                    },
+                                    cancelar: {
+                                        btnClass: 'btn-secondary'
                                     }
                                 }
                             })
@@ -456,35 +501,52 @@ ${data.map(function (data, index) {
             /* courier = $("#pcourier").val(); */
             descripcion = $("#pdescripcion").val();
             nota = $("#pnota").val();
+            var files = Array.from($("#adjunto")[0].files)
+                .map(function (file) {
+                    return {
+                        name: file.name.toLowerCase(),
+                        url: URL.createObjectURL(file)
+                    }
+                })
+            if (files.length == 0) {
+                alert("Adjunte archivos primero para continuar");
+                return
+            }
 
             if (nombre_empresa != "" && mes != "") {
                 subtotal[cont] = (cantidad * porcentaje) / 100;
                 total = Number(courier) + subtotal[cont];
 
-                var fila = '<tr class="selected" id="fila' + cont +
-                    '"><td><button type="button" class="btn btn-warning" onclick="eliminar(' + cont +
-                    ');">X</button></td>' +
-                    //'<td><input type="hidden" name="codigo[]" value="' + codigo + '">' + codigo + '</td>' +
-                    '<td><textarea class="d-none" name="nombre_empresa[]">' + nombre_empresa + '</textarea>' + nombre_empresa +
-                    '</td>' +
-                    '<td><input type="hidden" name="mes[]" value="' + mes + '">' + mes + '</td>' +
-                    '<td><input type="hidden" name="anio[]" value="' + anio + '">' + anio + '</td>' +
-                    '<td><input type="hidden" name="ruc[]" value="' + ruc + '">' + ruc + '</td>' +
-                    '<td><input type="hidden" name="cantidad[]" value="' + cantidad + '">' + cantidad.toLocaleString(
-                        "en-US") + '</td>' +
-                    '<td><input type="hidden" name="tipo_banca[]" value="' + tipo_banca + '">' + tipo_banca + '</td>' +
-                    '<td><input type="hidden" name="porcentaje[]" value="' + porcentaje + '">' + porcentaje + '</td>' +
-                    '<td><input type="hidden" name="courier[]" value="' + courier + '">' + courier + '</td>' +
-                    '<td><textarea class="d-none" name="descripcion[]">' + descripcion + '</textarea>' + descripcion + '</td>' +
-                    '<td><textarea class="d-none" name="nota[]" >' + nota + '</textarea>' + nota + '</td>' +
-                    '<td>@csrf<input type="file" id="adjunto" name="adjunto[]" multiple /></td>' +
-                    '<td>' + subtotal[cont].toLocaleString("en-US") + '</td></tr>';
-                cont++; //accept= ".zip, .rar"
+
+                var fila = `<tr class="selected" id="fila${cont}"><td><button type="button" class="btn btn-warning" onclick="eliminar(${cont});">X</button></td>
+<td><textarea class="d-none" name="nombre_empresa[]">${nombre_empresa}</textarea>${nombre_empresa}</td>
+<td><input type="hidden" name="mes[]" value="${mes}">${mes}</td>
+<td><input type="hidden" name="anio[]" value="${anio}">${anio}</td>
+<td><input type="hidden" name="ruc[]" value="${ruc}">${ruc}</td>
+<td><input type="hidden" name="cantidad[]" value="${cantidad}">${cantidad.toLocaleString("en-US")}</td>
+<td><input type="hidden" name="tipo_banca[]" value="${tipo_banca}">${tipo_banca}</td>
+<td><input type="hidden" name="porcentaje[]" value="${porcentaje}">${porcentaje}</td>
+<td><input type="hidden" name="courier[]" value="${courier}">${courier}</td>
+<td><textarea class="d-none" name="descripcion[]">${descripcion}</textarea>${descripcion}</td>
+<td><textarea class="d-none" name="nota[]" >${nota}</textarea>${nota}</td>
+<td>
+<div class="list-group">
+${files.map(function (file) {
+                    if (/(.jpg|.jpeg|.png|.webp)/i.test(file.name)) {
+                        return `<a class="list-group-item" href="${file.url}" target="_blank"><img src="${file.url}" class="w-100"></a>`
+                    } else {
+                        return `<a class="list-group-item" style="background: rgb(108 117 125 / 11%)" href="${file.url}" target="_blank"><i class="fa fa-file"></i> ${file.name}</a>`
+                    }
+                }).join('')}
+</div>
+</td>
+<td>${subtotal[cont].toLocaleString("en-US")}</td></tr>
+`
+                cont++;
                 limpiar();
                 $("#total").html("S/. " + total.toLocaleString("en-US"));
                 evaluar();
                 $('#detalles').append(fila);
-                //otro boton direccion
                 $("#bt_add_dir").removeClass("d-none")
             } else {
                 alert("error al ingresar el detalle del pedido, revise los datos");
@@ -521,6 +583,7 @@ ${data.map(function (data, index) {
         }
 
         function eliminar(index) {
+            $("#adjunto").val(null);
             $("#total").html("S/. 0.00");
             $("#fila" + index).remove();
             cont--;
@@ -910,43 +973,12 @@ ${data.map(function (data, index) {
                     fd.append("nota[]", this.value);
                 });
                 let files = $('[name="adjunto[]');
-                /*if(files.length == 0)
-                {
-                  Swal.fire(
-                      'Error',
-                      'Debe ingresar el  adjunto del pedido',
-                      'warning'
-                    )
-                    return false;
-                }*/
-                /*else{
-
-                         var totalfilescarga = $('input[name="adjunto[]"]').get(0).files.length;
-                         console.log("totalfilescarga "+totalfilescarga);
-
-
-                         if(files.length!=totalfilescarga)
-                         {
-                           Swal.fire(
-                             'Error',
-                             'Debe ingresar los adjuntos del pedido',
-                             'warning'
-                           )
-                           return false;
-                         }else{
-                          */
-
                 if (files[0].files.length > 0) {
                     for (let i in files[0].files) {
                         fd.append('adjunto[]', files[0].files[i]);
                     }
                 }
-                /*for (let i = 0; i < files.length; i++) {
-                  fd.append('adjunto['+i+']', files[i]);
-                }*/
-                /*}
 
-                   }*/
                 $("#btnImprimir").prop("disabled", true);
                 fd.append('user_id', $("#user_id").val());
                 fd.append('cliente_id', $("#cliente_id").val());
