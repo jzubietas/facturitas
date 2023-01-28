@@ -1143,9 +1143,9 @@ class PedidoController extends Controller
                 $file_name = $request->file('observacion_env')->store('entregas', 'pstorage');
             }
             $pedido->update([
-                'estado_sobre' => ( ($request->destino_env=='')? '0':'1' ),
+                'estado_sobre' => ( ($request->distrito_env=='')? '0':'1' ),
             ]);
-            if($request->destino_env!='')
+            if($request->distrito_env!='')
             {
                 $pedido->update([
                     'destino' => $request->destino_env,
