@@ -200,6 +200,9 @@ if (!function_exists("get_olva_tracking")) {
 
 
 if (!function_exists("user")) {
+    /**
+     * @return User|null
+     */
     function user()
     {
 

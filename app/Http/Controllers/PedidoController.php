@@ -868,28 +868,30 @@ class PedidoController extends Controller
 
     public function clientemodal1(Request $request)
     {
-        if (!$request->user_id || $request->user_id == '') {
-            $html = '<option value="">' . trans('---- SELECCIONE CLIENTE ----') . '</option>';
-        } else {
-            $html = '<option value="">' . trans('---- SELECCIONE CLIENTE ----') . '</option>';
-            $clientes = Cliente::join('users as u', 'clientes.user_id', 'u.id')->where('clientes.tipo', '1')//->where('clientes.celular','925549426')
-            ->where('u.identificador', $request->user_id)
-                ->where('clientes.estado', '1')
-                ->get([
-                    'clientes.id',
-                    'clientes.celular',
-                    'clientes.icelular',
-                    'clientes.nombre',
-                    'clientes.crea_temporal',
-                    'clientes.activado_tiempo',
-                    'clientes.activado_pedido',
-                    'clientes.temporal_update',
-                    DB::raw(" (select count(ped.id) from pedidos ped where ped.cliente_id=clientes.id and ped.pago in (0,1) and ped.pagado in (0,1) and ped.created_at >='" . now()->startOfMonth()->format("Y-m-d H:i:s") . "' and ped.estado=1) as pedidos_mes_deuda "),
-                    DB::raw(" (select count(ped2.id) from pedidos ped2 where ped2.cliente_id=clientes.id and ped2.pago in (0,1) and ped2.pagado in (0,1) and ped2.created_at <='" . now()->startOfMonth()->subMonth()->endOfMonth()->endOfDay()->format("Y-m-d H:i:s") . "'  and ped2.estado=1) as pedidos_mes_deuda_antes ")
-                ]);
+        $html = '<option value="">' . trans('---- SELECCIONE CLIENTE ----') . '</option>';
+        if (!empty($request->user_id)) {
+            $clientes = Cliente::join('users as u', 'clientes.user_id', 'u.id')
+                ->where('clientes.tipo', '1')
+                ->where('clientes.estado', '1');
+            if($request->rol!=User::ROL_ADMIN){
+                $clientes->where('u.identificador', $request->user_id);
+            }
+
+            $clientes = $clientes->get([
+                'clientes.id',
+                'clientes.celular',
+                'clientes.icelular',
+                'clientes.nombre',
+                'clientes.crea_temporal',
+                'clientes.activado_tiempo',
+                'clientes.activado_pedido',
+                'clientes.temporal_update',
+                DB::raw(" (select count(ped.id) from pedidos ped where ped.cliente_id=clientes.id and ped.pago in (0,1) and ped.pagado in (0,1) and ped.created_at >='" . now()->startOfMonth()->format("Y-m-d H:i:s") . "' and ped.estado=1) as pedidos_mes_deuda "),
+                DB::raw(" (select count(ped2.id) from pedidos ped2 where ped2.cliente_id=clientes.id and ped2.pago in (0,1) and ped2.pagado in (0,1) and ped2.created_at <='" . now()->startOfMonth()->subMonth()->endOfMonth()->endOfDay()->format("Y-m-d H:i:s") . "'  and ped2.estado=1) as pedidos_mes_deuda_antes ")
+            ]);
             foreach ($clientes as $cliente) {
                 //if ($cliente->pedidos_mes_deuda > 0 || $cliente->pedidos_mes_deuda_antes > 0) {
-                    $html .= '<option style="color:black" value="' . $cliente->id . '">' . $cliente->celular . (($cliente->icelular != null) ? '-' . $cliente->icelular : '') . '  -  ' . $cliente->nombre . '</option>';
+                $html .= '<option style="color:black" value="' . $cliente->id . '">' . $cliente->celular . (($cliente->icelular != null) ? '-' . $cliente->icelular : '') . '  -  ' . $cliente->nombre . '</option>';
                 //}
             }
         }
@@ -1154,25 +1156,22 @@ class PedidoController extends Controller
             $pedido->update([
                 "correlativo" => $pedido->id_code
             ]);
-            $zona="";
-            $zona_distrito=null;
-            if($request->distrito_env!='')
-            {
+            $zona = "";
+            $zona_distrito = null;
+            if ($request->distrito_env != '') {
                 $zona_distrito = Distrito::whereIn('provincia', ['LIMA', 'CALLAO'])
-                    ->where('distrito',$request->distrito_env)->first();
-                $zona=$zona_distrito->zona;
+                    ->where('distrito', $request->distrito_env)->first();
+                $zona = $zona_distrito->zona;
             }
 
-            $file_name=null;
-            if($request->destino_env=="OLVA")
-            {
+            $file_name = null;
+            if ($request->destino_env == "OLVA") {
                 $file_name = $request->file('observacion_env')->store('entregas', 'pstorage');
             }
             $pedido->update([
-                'estado_sobre' => ( ($request->distrito_env=='')? '0':'1' ),
+                'estado_sobre' => (($request->distrito_env == '') ? '0' : '1'),
             ]);
-            if($request->distrito_env!='')
-            {
+            if ($request->distrito_env != '') {
                 $pedido->update([
                     'destino' => $request->destino_env,
                     'direccion' => $request->direccion,
@@ -1182,14 +1181,14 @@ class PedidoController extends Controller
                     'env_nombre_cliente_recibe' => $request->contacto_nom_env,
                     'env_celular_cliente_recibe' => $request->contacto_cel_env,
                     'env_cantidad' => "0",
-                    'env_direccion' => (($request->destino_env=="LIMA")? $request->direccion_env:''),
-                    'env_tracking' => (($request->destino_env=="LIMA")? '':$request->direccion_env),
-                    'env_referencia' => (($request->destino_env=="LIMA")? $request->referencia_env:''),
-                    'env_numregistro' => (($request->destino_env=="LIMA")? '':$request->referencia_env),
-                    'env_rotulo' => (($request->destino_env=="LIMA")? $file_name:''),
-                    'env_observacion' => (($request->destino_env=="LIMA")? $request->observacion_env:''),
+                    'env_direccion' => (($request->destino_env == "LIMA") ? $request->direccion_env : ''),
+                    'env_tracking' => (($request->destino_env == "LIMA") ? '' : $request->direccion_env),
+                    'env_referencia' => (($request->destino_env == "LIMA") ? $request->referencia_env : ''),
+                    'env_numregistro' => (($request->destino_env == "LIMA") ? '' : $request->referencia_env),
+                    'env_rotulo' => (($request->destino_env == "LIMA") ? $file_name : ''),
+                    'env_observacion' => (($request->destino_env == "LIMA") ? $request->observacion_env : ''),
                     'env_gmlink' => $request->maps_env,
-                    'env_importe' => (($request->destino_env=="LIMA")? '':$request->importe_env),
+                    'env_importe' => (($request->destino_env == "LIMA") ? '' : $request->importe_env),
                 ]);
             }
             if ($cliente_deuda->crea_temporal == 1) {

@@ -5,15 +5,15 @@
 @section('adminlte_css')
     <style>
         @foreach(get_color_role() as $rol=>$color)
-            .bg-{{Str::slug($rol)}}            {
+            .bg-{{Str::slug($rol)}}              {
             @if(is_array($color))
-                       background: {{$color[0]}}           !important;;
-            color: {{$color[1]}}           !important;;
+                         background: {{$color[0]}}             !important;;
+            color: {{$color[1]}}             !important;;
             @else
-                       background: {{$color}};
+                         background: {{$color}};
             color: #000 !important;
             @endif
-                       font-weight: bold !important;;
+                         font-weight: bold !important;;
         }
         @endforeach
     </style>
@@ -225,66 +225,75 @@
                 this.value = this.value.replace(/[^0-9]/g, '');
             });
 
-            $(document).on("submit","#form-op-1-row",function(event) {
+            $(document).on("submit", "#form-op-1-row", function (event) {
                 event.preventDefault();
                 var form = $('#form-op-1-row')[0];
                 var formData = new FormData(form);
-                formData.append('opcion',"1");
+                formData.append('opcion', "1");
                 $.ajax({
-                    data: formData,processData: false,contentType: false,type: 'POST',url: "{{ route('ajax_modal1_response') }}",
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    type: 'POST',
+                    url: "{{ route('ajax_modal1_response') }}",
                     success: function (data) {
-                        if(data.html!="0")
-                        {
+                        if (data.html != "0") {
                             PNotify.notice({
                                 text: 'Notice 1.',
                             });
                             $("#modal-annuncient-1").modal("hide");
                             console.log("response 1")
-                        }else{
+                        } else {
                             console.log("response 0")
                         }
                     }
                 })
             })
 
-            $(document).on("submit","#form-op-2-row",function(event) {
+            $(document).on("submit", "#form-op-2-row", function (event) {
                 event.preventDefault();
                 var form = $('#form-op-2-row')[0];
                 var formData = new FormData(form);
-                formData.append('opcion',"2");
+                formData.append('opcion', "2");
                 $.ajax({
-                    data: formData,processData: false,contentType: false,type: 'POST',url: "{{ route('ajax_modal1_response') }}",
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    type: 'POST',
+                    url: "{{ route('ajax_modal1_response') }}",
                     success: function (data) {
-                        if(data.html!="0")
-                        {
+                        if (data.html != "0") {
                             PNotify.notice({
                                 text: 'Notice 2.',
                             });
                             $("#modal-annuncient-2").modal("hide");
                             console.log("response 1")
-                        }else{
+                        } else {
                             console.log("response 0")
                         }
                     }
                 })
             })
 
-            $(document).on("submit","#form-op-3-row",function(event) {
+            $(document).on("submit", "#form-op-3-row", function (event) {
                 event.preventDefault();
                 var form = $('#form-op-3-row')[0];
                 var formData = new FormData(form);
-                formData.append('opcion',"3");
+                formData.append('opcion', "3");
                 $.ajax({
-                    data: formData,processData: false,contentType: false,type: 'POST',url: "{{ route('ajax_modal1_response') }}",
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    type: 'POST',
+                    url: "{{ route('ajax_modal1_response') }}",
                     success: function (data) {
-                        if(data.html!="0")
-                        {
+                        if (data.html != "0") {
                             PNotify.notice({
                                 text: 'Notice 3.',
                             });
                             $("#modal-annuncient-3").modal("hide");
                             console.log("response 1")
-                        }else{
+                        } else {
                             console.log("response 0")
                         }
                     }
@@ -473,14 +482,26 @@
             })
             $('[data-toggle=contactoalert]').click(function () {
                 $.confirm({
-                    theme: 'material',
+                   theme: 'material',
+                    draggable: true,
                     type: 'dark',
                     icon: 'fa fa-plus',
                     title: 'Agregar Contacto',
+                    columnClass:'large',
                     content: function () {
-                        const self=this
-                        return $.get('').done(function (data) {
-
+                        const self = this
+                        return $.get('{!! route('cargar.clientemodal1',['user_id'=>user()->identificador,'rol'=>user_rol()]) !!}').done(function (data) {
+                            self.setContent(`<form class="p-2" style="height: 35vh">
+<div class="row">
+<div class="form-group col-10">
+<label>Cliente</label>
+<select type="text" class="form-control" name="client_id">${data.html}</select>
+</div>
+<div class="form-group col-12">
+<label>Nombre q quiere q tenga su contacto</label>
+<input type="text" class="form-control"  name="contact_name">
+</div>
+</div></form>`)
                         })
                     },
                     buttons: {
@@ -492,28 +513,59 @@
                             action: function () {
                                 const self = this
                                 const form = self.$content.find('form')
-                                if (!form[0].title.value) {
+                                if (!form[0].client_id.value) {
                                     $.confirm({
                                         type: 'red',
                                         title: 'Advertencia',
-                                        content: `Es necesario ingresar un titulo`
+                                        content: `Es necesario seleccionar un cliente`
                                     })
                                     return false
                                 }
-                                if (!form[0].nota.value) {
+                                if (!form[0].contact_name.value) {
                                     $.confirm({
                                         type: 'red',
                                         title: 'Advertencia',
-                                        content: `Es necesario ingresar una nota`
+                                        content: `Es necesario ingresar el nombre q quiere q tenga su contacto`
                                     })
                                     return false
                                 }
                                 self.showLoading(true)
-                                $.post('{{route('alertas.store')}}', form.serialize()).always(function () {
+                                const cliente= self.$content.find( "select option:selected" ).text();
+                                $.post('{{route('alertas.store')}}', {
+                                    tipo:'info',
+                                    title:'Agregar Contacto',
+                                    nota:`El asesor "{{user()->identificador}}" solicita agregar un contacto del cliente "${cliente}" con el nombre "${form[0].contact_name.value}" `,
+                                    user_add_role:['{{\App\Models\User::ROL_LLAMADAS}}',/**Agregar mas roles aca**/],
+                                }).always(function () {
                                     self.hideLoading(true)
                                 })
                             }
                         },
+                    },
+                    onContentReady:function () {
+                        this.$content.find('select').select2({
+                            dropdownParent:this.$content,
+                            matcher: function matchCustom(params, data) {
+                                // If there are no search terms, return all of the data
+                                if ($.trim(params.term) === '') {
+                                    return data;
+                                }
+
+                                // Do not display the item if there is no 'text' property
+                                if (typeof data.text === 'undefined') {
+                                    return null;
+                                }
+
+                                // `params.term` should be the term that is used for searching
+                                // `data.text` is the text that is displayed for the data object
+                                if (data.text.includes((params.term||'').trim())) {
+                                    return $.extend({}, data, true);
+                                }
+
+                                // Return `null` if the term should not be displayed
+                                return null;
+                            }
+                        })
                     }
                 })
             })

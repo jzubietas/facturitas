@@ -91,7 +91,7 @@
                                    });*/
                         data.alertas.forEach(function (alerta) {
                             if (!mapAlertShows.has(alerta.id)) {
-                                var type='notice';
+                                let type = 'notice';
                                 if(alerta.tipo=='info'||alerta.tipo=='success'||alerta.tipo=='error'){//notice|info|success|error
                                     type=alerta.tipo
                                 }
