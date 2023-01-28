@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Alerta;
 use App\Models\Cliente;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -25,8 +26,8 @@ class ModalController extends Controller
                     $captura_op1=$request->captura_op1;
                     $letra=Cliente::where("id",$cliente_op1)->activo()->first()->icelular;
                     $referencia=Cliente::where("id",$cliente_op1)->activo()->first()->celular;
-                    /*try {
-                        DB::beginTransaction();*/
+                    try {
+                        DB::beginTransaction();
 
                     $cliente = Cliente::create([
                             'nombre' => '',
@@ -43,12 +44,12 @@ class ModalController extends Controller
                             'pidio' => '0',
                             'estado' => '1'
                         ]);
-                        /*DB::commit();
+                        DB::commit();
                         return response()->json(['html' => $cliente->id]);
                     } catch (\Throwable $th) {
                         return response()->json(['html' => "0"]);
-                    }*/
-                    return response()->json(['html' => $cliente->id]);
+                    }
+                    //return response()->json(['html' => $cliente->id]);
 
                     break;
                 case '2':
@@ -57,6 +58,14 @@ class ModalController extends Controller
                     $cliente_op2=$request->cliente_op2;
                     $cantidadpedidos_op2=$request->cantidadpedidos_op2;
                     $captura_op2=$request->captura_op2;
+
+                    $alerta = Alerta::create([
+                        'user_id' => auth()->id(),
+                        'type'=>'error',
+                        'subject' => 'AUTORIZACION PARA SUBIR PEDIDO',
+                        'message' => 'Se solicitó',
+                        'date_at' => now(),
+                    ]);
 
                     /*$cliente = Cliente::query()->where("id", '=', $cliente_op2)->update([
                         'crea_temporal' => 1,
@@ -74,28 +83,20 @@ class ModalController extends Controller
                     $pedido_op3=$request->pedido_op3;
                     if($pedido_op3)
                     {
-                        /*$pago=Pago::query()->where('correlativo',$pago_op3)->activo()->first();
+                        //$pago=Pago::query()->where('correlativo',$pago_op3)->activo()->first();
                         $pedido=Pedido::query()->where('codigo',$pedido_op3)->activo()->first();
-                        if($pago && $pedido)
+                        if($pedido)
                         {
                             $pedido->update([
                                 'pago'=>"0",
                                 'pagado'=>"0",
                             ]);
+                            $detalle_pedido=DetallePedido::where('pedido_id',$pedido->id)->update(["saldo"=>($pedido->total*1)]);
                             $pago_pedido=PagoPedido::where("pedido_id",$pedido->id)->activo();
                             $pago_pedido->update(["estado"=>"0"]);
-                            if($pago_pedido)
-                            {
-                                $count_pago_pedido=PagoPedido::where("pago_id",$pago->id)->activo()->count();
-                                if($count_pago_pedido==0)
-                                {
-                                    $pago_pedido->update(["estado"=>"0"]);
-                                }
-                            }
-
-                        }*/
-
-                        return response()->json(['html' => "1"]);
+                            return response()->json(['html' => "1"]);
+                        }
+                        return response()->json(['html' => "0"]);
                     }else{
                         return response()->json(['html' => "0"]);
                     }
