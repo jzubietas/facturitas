@@ -177,9 +177,8 @@
             }
 
             $(document).on("change", "#asesor_op1", function () {
-                console.log($(this).data("ruta"))
                 $.ajax({
-                    url: $(this).data("route"),
+                    url: $(this).data("ruta"),
                     method: 'GET',
                     data:{"user_id":$(this).val()},
                     success: function (data) {
@@ -190,7 +189,7 @@
             });
             $(document).on("change", "#asesor_op2", function () {
                 $.ajax({
-                    url: $(this).data("route"),
+                    url: $(this).data("ruta"),
                     method: 'GET',
                     data:{"user_id":$(this).val()},
                     success: function (data) {
@@ -201,7 +200,7 @@
             });
             $(document).on("change", "#asesor_op3", function () {
                 $.ajax({
-                    url: $(this).data("route"),
+                    url: $(this).data("ruta"),
                     method: 'GET',
                     data:{"user_id":$(this).val()},
                     success: function (data) {
@@ -213,7 +212,7 @@
             $(document).on("change", "#asesor_op4", function () {
 
                 $.ajax({
-                    url: $(this).data("route"),
+                    url: $(this).data("ruta"),
                     method: 'GET',
                     data:{"user_id":$(this).val()},
                     success: function (data) {
