@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AlertaController;
 use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\CourierRegistrosController;
 use App\Http\Controllers\DashboardController;
@@ -42,6 +43,9 @@ Route::middleware(['guest'])->get('/', function () {
 });
 
 Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->group(function () {
+
+    Route::post('alertas/confirmar', [AlertaController::class,'confirmar'])->name('alertas.confirmar');
+    Route::resource('alertas', AlertaController::class);
 
     Route::post('escaneo/envio.escaneoqr/{id}', [EscaneoController::class, 'EscaneoQR'])->name('escaneo/envio.escaneoqr');
     Route::post('escaneo.estado_pedidos', [EscaneoController::class, 'EstadoSobresScan'])->name('escaneo.estado_pedidos');

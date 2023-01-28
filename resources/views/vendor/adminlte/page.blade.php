@@ -5,15 +5,15 @@
 @section('adminlte_css')
     <style>
         @foreach(get_color_role() as $rol=>$color)
-            .bg-{{Str::slug($rol)}}     {
+            .bg-{{Str::slug($rol)}}            {
             @if(is_array($color))
-                background: {{$color[0]}}    !important;;
-            color: {{$color[1]}}    !important;;
+                       background: {{$color[0]}}           !important;;
+            color: {{$color[1]}}           !important;;
             @else
-                background: {{$color}};
+                       background: {{$color}};
             color: #000 !important;
             @endif
-                font-weight: bold !important;;
+                       font-weight: bold !important;;
         }
         @endforeach
     </style>
@@ -84,7 +84,7 @@
                 }
             });
 
-            window.ocultar_div_modal1=function(){
+            window.ocultar_div_modal1 = function () {
                 console.log("ocultar div")
                 $("#op-1-row").hide();
                 $("#op-2-row").hide();
@@ -100,18 +100,17 @@
                 //
                 $("#opciones_modal1")
                     .html("")
-                    .append( $('<option/>').attr({ 'value': 'op-1-row' }).text('Base fria y referido') )
-                    .append( $('<option/>').attr({ 'value': 'op-2-row' }).text('Autorizacion para subir pedido') )
-                    .append( $('<option/>').attr({ 'value': 'op-3-row' }).text('Eliminar Pago') )
-                    .append( $('<option/>').attr({ 'value': 'op-4-row' }).text('Contacto') )
+                    .append($('<option/>').attr({'value': 'op-1-row'}).text('Base fria y referido'))
+                    .append($('<option/>').attr({'value': 'op-2-row'}).text('Autorizacion para subir pedido'))
+                    .append($('<option/>').attr({'value': 'op-3-row'}).text('Eliminar Pago'))
+                    .append($('<option/>').attr({'value': 'op-4-row'}).text('Contacto'))
                     .selectpicker("refresh")
             })
 
-            $(document).on("change","#opciones_modal1",function(){
-                let value=$(this).val();
+            $(document).on("change", "#opciones_modal1", function () {
+                let value = $(this).val();
                 ocultar_div_modal1();
-                switch(value)
-                {
+                switch (value) {
                     case 'op-1-row':
                         $("#op-1-row").show()
                         break;
@@ -128,10 +127,9 @@
                 cargar_asesor_modal1();
             })
 
-            window.cargar_asesor_modal1=function(){
-                let value=$("#opciones_modal1").val();
-                switch(value)
-                {
+            window.cargar_asesor_modal1 = function () {
+                let value = $("#opciones_modal1").val();
+                switch (value) {
                     case 'op-1-row':
                         $.ajax({
                             url: "{{ route('asesorcombo') }}",
@@ -181,7 +179,7 @@
                 $.ajax({
                     url: $(this).data("route"),
                     method: 'GET',
-                    data:{"user_id":$(this).val()},
+                    data: {"user_id": $(this).val()},
                     success: function (data) {
                         $('#cliente_op1').html(data.html);
                         $("#cliente_op1").selectpicker("refresh");
@@ -192,7 +190,7 @@
                 $.ajax({
                     url: $(this).data("route"),
                     method: 'GET',
-                    data:{"user_id":$(this).val()},
+                    data: {"user_id": $(this).val()},
                     success: function (data) {
                         $('#cliente_op2').html(data.html);
                         $("#cliente_op2").selectpicker("refresh");
@@ -203,7 +201,7 @@
                 $.ajax({
                     url: $(this).data("route"),
                     method: 'GET',
-                    data:{"user_id":$(this).val()},
+                    data: {"user_id": $(this).val()},
                     success: function (data) {
                         $('#cliente_op3').html(data.html);
                         $("#cliente_op3").selectpicker("refresh");
@@ -215,7 +213,7 @@
                 $.ajax({
                     url: $(this).data("route"),
                     method: 'GET',
-                    data:{"user_id":$(this).val()},
+                    data: {"user_id": $(this).val()},
                     success: function (data) {
                         $('#cliente_op4').html(data.html);
                         $("#cliente_op4").selectpicker("refresh");
@@ -331,35 +329,52 @@
             //https://sciactive.com/pnotify/demo/styling.html
             $('[data-toggle=addalert]').click(function () {
                 $.confirm({
-                    theme:'material',
-                    type:'orange',
-                    title:'Agregar Nota',
-                    content:`-- muy pronto --`,
-                    buttons:{
-                        aceptar:function () {
-                            PNotify.info({
-                                title: 'En construcion ... ',
-                                text: '¿Espere al lanzamiento?',
-                                hide: false,
-                                closer: false,
-                                sticker: false,
-                                modules: new Map([
-                                    ...PNotify.defaultModules,
-                                    [PNotifyConfirm, {confirm: true}]
-                                ])
-                            });
-                            PNotify.notice({
-                                title: 'En construcion ... ',
-                                text: '¿Espere al lanzamiento?',
-                                hide: false,
-                                closer: false,
-                                sticker: false,
-                                modules: new Map([
-                                    ...PNotify.defaultModules,
-                                    [PNotifyConfirm, {confirm: true}]
-                                ])
-                            });
-                        }
+                    theme: 'material',
+                    type: 'dark',
+                    icon: 'fa fa-plus',
+                    title: 'Agregar Nota',
+                    content: `<form>
+<div class="p-2">
+<div class="form-group">
+<label>Titulo</label>
+<input type="text" class="form-control" name="title">
+</div>
+<div class="form-group">
+<label>Nota</label>
+<textarea type="text" class="form-control" rows="5" name="nota"></textarea>
+</div>
+</div></form>`,
+                    buttons: {
+                        cancelar: {
+                            btnClass: 'btn-ligth'
+                        },
+                        agregar: {
+                            btnClass: 'btn-dark',
+                            action: function () {
+                                const self = this
+                                const form = self.$content.find('form')
+                                if (!form[0].title.value) {
+                                    $.confirm({
+                                        type: 'red',
+                                        title: 'Advertencia',
+                                        content: `Es necesario ingresar un titulo`
+                                    })
+                                    return false
+                                }
+                                if (!form[0].nota.value) {
+                                    $.confirm({
+                                        type: 'red',
+                                        title: 'Advertencia',
+                                        content: `Es necesario ingresar una nota`
+                                    })
+                                    return false
+                                }
+                                self.showLoading(true)
+                                $.post('{{route('alertas.store')}}', form.serialize()).always(function () {
+                                    self.hideLoading(true)
+                                })
+                            }
+                        },
                     }
                 })
             })

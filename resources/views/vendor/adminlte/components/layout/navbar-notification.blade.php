@@ -49,29 +49,99 @@
 
                 // Method to get new notification data from the configured url.
 
-                function insertDotMenu(child,dotClass,value) {
-                    var parent= $(child).parent();
+                function insertDotMenu(child, dotClass, value) {
+                    var parent = $(child).parent();
                     var epa = parent.find(dotClass);
-                    if(epa.length>0){
+                    if (epa.length > 0) {
                         epa.html(value);
-                    }else{
-                        parent.append('<i class="'+dotClass.split('.').join(' ').trim()+'">'+value+'</i>');
+                    } else {
+                        parent.append('<i class="' + dotClass.split('.').join(' ').trim() + '">' + value + '</i>');
                     }
                 }
 
-                function insertIconMenu(child,dotClass,value) {
-                    var parent= $(child).parent();
+                function insertIconMenu(child, dotClass, value) {
+                    var parent = $(child).parent();
                     var epa = parent.find(dotClass);
 
                     $('.warning').remove();
 
-                    if(epa.length>0){
+                    if (epa.length > 0) {
                         epa.html(value);
-                    }else{
-                        parent.append('<i class="'+value+'"></i>');
+                    } else {
+                        parent.append('<i class="' + value + '"></i>');
                     }
 
 
+                }
+
+                const mapAlertShows = new Map
+
+                function showAlerts(data) {
+                    if (data.alertas) {
+                        /*PNotify.info({
+                                       title: 'En construcion ... ',
+                                       text: '¿Espere al lanzamiento?',
+                                       hide: false,
+                                       closer: false,
+                                       sticker: false,
+                                       modules: new Map([
+                                           ...PNotify.defaultModules,
+                                           [PNotifyConfirm, {confirm: true}]
+                                       ])
+                                   });*/
+                        data.alertas.forEach(function (alerta) {
+                            if (!mapAlertShows.has(alerta.id)) {
+                                const notice = PNotify.notice({
+                                    title: alerta.subject,
+                                    text: alerta.message,
+                                    hide: false,
+                                    closer: false,
+                                    sticker: false,
+                                    modules: new Map([
+                                        ...PNotify.defaultModules,
+                                        [PNotifyConfirm, {
+                                            confirm: true,
+                                            buttons: [
+                                                {
+                                                    text: 'Terminado',
+                                                    primary: true,
+                                                    promptTrigger: true,
+                                                    click: function (notice, value) {
+                                                        $.post('{{route('alertas.confirmar',['action'=>'aceptar'])}}',{
+                                                            alerta_id:alerta.id
+                                                        })
+                                                            .always(function () {
+                                                                notice.close();
+                                                                notice.fire('pnotify:confirm', {notice, value});
+                                                            })
+                                                    },
+                                                },
+                                                {
+                                                    text: 'Aceptar',
+                                                    click: function (notice) {
+                                                        $.post('{{route('alertas.confirmar',['action'=>'cancelar'])}}',{
+                                                            alerta_id:alerta.id
+                                                        })
+                                                            .always(function () {
+                                                                notice.close();
+                                                                notice.fire('pnotify:cancel', {notice});
+                                                            })
+                                                    },
+                                                },
+                                            ]
+                                        }]
+                                    ]),
+                                });
+                                notice.on('pnotify:confirm', () => {
+                                    mapAlertShows.delete(alerta.id)
+                                });
+                                notice.on('pnotify:cancel', () => {
+                                    mapAlertShows.delete(alerta.id)
+                                });
+                                mapAlertShows.set(alerta.id, notice)
+                            }
+                        })
+                    }
                 }
 
                 let updateNotification = (nLink) => {
@@ -84,23 +154,24 @@
                     })
 
                         .done((data) => {
-                            insertDotMenu("i.dot_pedidos_atender_count",'.noti-pedidos-atender.noti-side',data.contador_pedidos_atender)
-                            insertDotMenu("i.dot_pedidos_atendidos_count",'.noti-pedidos-atendidos.noti-side',data.contador_pedidos_atendidos)
-                            insertDotMenu("i.dot_pedidos_atendidos_operacion_count",'.noti-pedidos-atendidos.noti-side',data.contador_pedidos_atendidos_operacion)
-                            insertDotMenu("i.dot_pedidos_pen_anulacion_count",'.noti-pedidos-pen-anulacion.noti-side',data.contador_pedidos_pen_anulacion)
-                            insertDotMenu("i.dot_sobres_entregados_count",'.noti-sobres-entregados.noti-side',data.contador_sobres_entregados)
-
-                            insertDotMenu("i.dot_sobres_confirmar_recepcion_count",'.dot-notify.noti-side',data.contador_sobres_confirmar_recepcion)
-
-                            insertDotMenu("i.dot_contador_en_motorizados_count",'.dot-notify.noti-side',data.contador_en_motorizados_count)
-                            insertDotMenu("i.dot_contador_en_motorizados_confirmar_count",'.dot-notify.noti-side',data.contador_en_motorizados_confirmar_count)
-                            insertIconMenu("i.dot_contador_sobres_devueltos",'.dot-notify.noti-side',data.contador_sobres_devueltos)
-
-                            insertDotMenu("i.dot_encargado_tienda_agente_count",'.dot-notify.noti-side',data.contador_encargado_tienda_agente)
-
                             nLink.update(data);
+                            insertDotMenu("i.dot_pedidos_atender_count", '.noti-pedidos-atender.noti-side', data.contador_pedidos_atender)
+                            insertDotMenu("i.dot_pedidos_atendidos_count", '.noti-pedidos-atendidos.noti-side', data.contador_pedidos_atendidos)
+                            insertDotMenu("i.dot_pedidos_atendidos_operacion_count", '.noti-pedidos-atendidos.noti-side', data.contador_pedidos_atendidos_operacion)
+                            insertDotMenu("i.dot_pedidos_pen_anulacion_count", '.noti-pedidos-pen-anulacion.noti-side', data.contador_pedidos_pen_anulacion)
+                            insertDotMenu("i.dot_sobres_entregados_count", '.noti-sobres-entregados.noti-side', data.contador_sobres_entregados)
+
+                            insertDotMenu("i.dot_sobres_confirmar_recepcion_count", '.dot-notify.noti-side', data.contador_sobres_confirmar_recepcion)
+
+                            insertDotMenu("i.dot_contador_en_motorizados_count", '.dot-notify.noti-side', data.contador_en_motorizados_count)
+                            insertDotMenu("i.dot_contador_en_motorizados_confirmar_count", '.dot-notify.noti-side', data.contador_en_motorizados_confirmar_count)
+                            insertIconMenu("i.dot_contador_sobres_devueltos", '.dot-notify.noti-side', data.contador_sobres_devueltos)
+
+                            insertDotMenu("i.dot_encargado_tienda_agente_count", '.dot-notify.noti-side', data.contador_encargado_tienda_agente)
+
                             $("#alert-authorization").html(data.authorization_courier)
 
+                            showAlerts(data)
                         })
 
 
