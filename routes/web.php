@@ -458,6 +458,7 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     Route::get('sobreenvioshistorial', [SobreController::class, 'sobreenvioshistorial'])->name('sobreenvioshistorial');
     /*Controller Sobres*/
 
+    Route::get('ajax_modal1_response', [SobreController::class, 'sobreenvioshistorial'])->name('ajax_modal1_response');
 
     //Route::post('envios.recibir/{pedido}', [PedidoController::class, 'Recibir'])->name('envios.recibir');
     //Route::post('envios.enviar/{pedido}', [PedidoController::class, 'EnviarPedido'])->name('envios.enviar');

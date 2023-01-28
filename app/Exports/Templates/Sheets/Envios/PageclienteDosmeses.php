@@ -72,7 +72,7 @@ class PageclienteDosmeses extends Export implements WithColumnFormatting,WithCol
                                         where dp3.estado=1 and a.cliente_id=clientes.id order by dp3.created_at desc limit 1) as mesultimopedido"),
             ]);
 
-        if (Auth::user()->rol == "Llamadas") {
+        if (Auth::user()->rol == User::ROL_LLAMADAS) {
 
             $usersasesores = User::where('users.rol', 'Asesor')
                 ->where('users.estado', '1')
@@ -83,7 +83,7 @@ class PageclienteDosmeses extends Export implements WithColumnFormatting,WithCol
                 ->pluck('users.identificador');
             $data = $data->WhereIn("u.identificador", $usersasesores);
 
-        }elseif (Auth::user()->rol == "Asesor") {
+        }elseif (Auth::user()->rol == User::ROL_ASESOR) {
             $usersasesores = User::where('users.rol', 'Asesor')
                 ->where('users.estado', '1')
                 ->where('users.identificador', Auth::user()->identificador)
@@ -92,7 +92,7 @@ class PageclienteDosmeses extends Export implements WithColumnFormatting,WithCol
                 )
                 ->pluck('users.identificador');
             $data = $data->WhereIn("u.identificador", $usersasesores);
-        }else if (Auth::user()->rol == "Encargado") {
+        }else if (Auth::user()->rol == User::ROL_ENCARGADO) {
             $usersasesores = User::where('users.rol', 'Asesor')
                 ->where('users.estado', '1')
                 ->where('users.supervisor', Auth::user()->id)
