@@ -87,13 +87,13 @@
             window.ocultar_div_modal1 = function () {
                 console.log("ocultar div")
                 $("#op-1-row").hide();
-                //$("#form-op-1-row").reset();
+                $("#form-op-1-row input").val("");
                 $("#op-2-row").hide();
-                //$("#form-op-2-row").reset();
+                $("#form-op-2-row input").val("");
                 $("#op-3-row").hide();
-                //$("#form-op-3-row").reset();
+                $("#form-op-3-row input").val("");
                 $("#op-4-row").hide();
-                //$("#form-op-4-row").reset();
+                $("#form-op-4-row input").val("");
             }
 
             //btn_componente-1
