@@ -104,7 +104,7 @@
                     .append($('<option/>').attr({'value': 'op-1-row'}).text('Base fria y referido'))
                     .append($('<option/>').attr({'value': 'op-2-row'}).text('Autorizacion para subir pedido'))
                     .append($('<option/>').attr({'value': 'op-3-row'}).text('Eliminar Pago'))
-                    .append($('<option/>').attr({'value': 'op-4-row'}).text('Agrega Contacto'))
+                    //.append($('<option/>').attr({'value': 'op-4-row'}).text('Agrega Contacto'))
                     .selectpicker("refresh")
             })
 
@@ -230,20 +230,72 @@
                 var form = $('#form-op-1-row')[0];
                 var formData = new FormData(form);
                 $.ajax({
-                    data: formData,
-                    processData: false,
-                    contentType: false,
-                    type: 'POST',
-                    url: "{{ route('ajax_modal1_response') }}",
+                    data: formData,processData: false,contentType: false,type: 'POST',url: "{{ route('ajax_modal1_response') }}",
                     success: function (data) {
-
-                        console.log("response")
+                        if(data.html=="1")
+                        {
+                            $.notify("Hello World");
+                            console.log("response 1")
+                        }else{
+                            console.log("response 0")
+                        }
                     }
                 })
-
-
-
             })
+
+            $(document).on("submit","#form-op-2-row",function(event) {
+                event.preventDefault();
+                var form = $('#form-op-2-row')[0];
+                var formData = new FormData(form);
+                $.ajax({
+                    data: formData,processData: false,contentType: false,type: 'POST',url: "{{ route('ajax_modal1_response') }}",
+                    success: function (data) {
+                        if(data.html=="1")
+                        {
+                            $.notify("Hello World");
+                            console.log("response 1")
+                        }else{
+                            console.log("response 0")
+                        }
+                    }
+                })
+            })
+
+            $(document).on("submit","#form-op-3-row",function(event) {
+                event.preventDefault();
+                var form = $('#form-op-3-row')[0];
+                var formData = new FormData(form);
+                $.ajax({
+                    data: formData,processData: false,contentType: false,type: 'POST',url: "{{ route('ajax_modal1_response') }}",
+                    success: function (data) {
+                        if(data.html=="1")
+                        {
+                            $.notify("Hello World");
+                            console.log("response 1")
+                        }else{
+                            console.log("response 0")
+                        }
+                    }
+                })
+            })
+
+            /*$(document).on("submit","#form-op-4-row",function(event) {
+                event.preventDefault();
+                var form = $('#form-op-4-row')[0];
+                var formData = new FormData(form);
+                $.ajax({
+                    data: formData,processData: false,contentType: false,type: 'POST',url: "{{ route('ajax_modal1_response') }}",
+                    success: function (data) {
+                        if(data.html=="1")
+                        {
+                            $.notify("Hello World");
+                            console.log("response 1")
+                        }else{
+                            console.log("response 0")
+                        }
+                    }
+                })
+            })*/
 
 
         });
