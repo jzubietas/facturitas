@@ -482,7 +482,7 @@ class NotificationsController extends Controller
         add_query_filtros_por_roles_pedidos($pedidos_provincia, 'users.identificador');
         $contador_encargado_tienda_agente =$pedidos_provincia->count();
 
-        $alertas=Alerta::noFinalize()->noReadTwoHours()->withCurrentUser()->get();
+        $alertas=Alerta::noFinalize()->noReadTime(now()->subMinutes(30))->withCurrentUser()->get();
         return [
             'icon' => 'fas fa-envelope',
             'label' => count(auth()->user()->unreadNotifications) + count($devoluciones),

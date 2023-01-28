@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\CarbonInterface;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -18,9 +19,14 @@ class Alerta extends Model
 
     public function scopeNoReadTwoHours($query)
     {
-        return $query->where(function ($query) {
+        return $this->scopeNoReadTime($query, now()->subHours(2));
+    }
+
+    public function scopeNoReadTime($query, CarbonInterface $date)
+    {
+        return $query->where(function ($query) use ($date) {
             $query->whereNull($this->qualifyColumn('read_at'))
-                ->orWhere($this->qualifyColumn('read_at'), '<', now()->subHours(2));
+                ->orWhere($this->qualifyColumn('read_at'), '<', $date);
         });
     }
 
