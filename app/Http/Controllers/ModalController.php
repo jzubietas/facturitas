@@ -22,11 +22,37 @@ class ModalController extends Controller
                     //base fria y referido
                     $asesor_op1=$request->asesor_op1;//identificador
                     $cliente_op1=$request->cliente_op1;
-                    $clientenuevo_op1=$request->clientenuevo_op1;
+                    $clientenuevo_op1=(($request->clientenuevo_op1)? $request->clientenuevo_op1:0);
                     $captura_op1=$request->captura_op1;
                     $letra=Cliente::where("id",$cliente_op1)->activo()->first()->icelular;
                     $referencia=Cliente::where("id",$cliente_op1)->activo()->first()->celular;
+
+                    $name="";
+                    if($cliente_op1)
+                    {
+                        $name=Cliente::where('id',$cliente_op1)->activo()->first()->nombre;
+                    }
+
                     try {
+                        DB::beginTransaction();
+
+                        $users=User::where("rol",User::ROL_ADMIN)->activo()->get();
+                        foreach ($users as $userr)
+                        {
+                            $alerta = Alerta::create([
+                                'user_id' => $userr->id,
+                                'type'=>'error',
+                                'subject' => 'BASE FRIA Y REFERIDO',
+                                'message' => 'Se solicitó la creación de referido al cliente '.$name.', con el numero '.$clientenuevo_op1.'. Se necesita atención.',
+                                'date_at' => now(),
+                            ]);
+                        }
+                        DB::commit();
+                        return response()->json(['html' => $alerta->id]);
+                    } catch (\Throwable $th) {
+                        return response()->json(['html' => "0"]);
+                    }
+                    /*try {
                         DB::beginTransaction();
 
                     $cliente = Cliente::create([
@@ -48,7 +74,7 @@ class ModalController extends Controller
                         return response()->json(['html' => $cliente->id]);
                     } catch (\Throwable $th) {
                         return response()->json(['html' => "0"]);
-                    }
+                    }*/
                     //return response()->json(['html' => $cliente->id]);
 
                     break;
@@ -56,22 +82,26 @@ class ModalController extends Controller
                     //autorizacion para poner pedido
                     $asesor_op2=$request->asesor_op2;
                     $cliente_op2=$request->cliente_op2;
-                    $cantidadpedidos_op2=$request->cantidadpedidos_op2;
+                    $cantidadpedidos_op2=( ($request->cantidadpedidos_op2)? $request->cantidadpedidos_op2:"0" );
                     $captura_op2=$request->captura_op2;
                     $name="";
                     if($cliente_op2)
                     {
-                        $name=Cliente::where('id',$cliente_op2)->activo()->first();
+                        $name=Cliente::where('id',$cliente_op2)->activo()->first()->nombre;
                     }
                     try {
                         DB::beginTransaction();
-                        $alerta = Alerta::create([
-                            'user_id' => auth()->id(),
-                            'type'=>'error',
-                            'subject' => 'AUTORIZACION PARA SUBIR PEDIDO',
-                            'message' => 'Se solicitó creación para pedido al cliente ',
-                            'date_at' => now(),
-                        ]);
+                        $users=User::where("rol",User::ROL_ADMIN)->activo()->get();
+                        foreach ($users as $userr)
+                        {
+                            $alerta = Alerta::create([
+                                'user_id' => $users->id,
+                                'type'=>'error',
+                                'subject' => 'AUTORIZACION PARA SUBIR PEDIDO',
+                                'message' => 'Se solicitó la creación de '.$cantidadpedidos_op2.' pedido(s) al cliente '.$name.'. Se necesita atención.',
+                                'date_at' => now(),
+                            ]);
+                        }
                         DB::commit();
                         return response()->json(['html' => $alerta->id]);
                     } catch (\Throwable $th) {
@@ -82,7 +112,28 @@ class ModalController extends Controller
                     $asesor_op3=$request->asesor_op3;
                     $cliente_op3=$request->cliente_op3;
                     $pedido_op3=$request->pedido_op3;
-                    if($pedido_op3)
+
+                    try {
+                        DB::beginTransaction();
+                        $users=User::where("rol",User::ROL_ADMIN)->activo()->get();
+                        foreach ($users as $userr)
+                        {
+                            $alerta = Alerta::create([
+                                'user_id' => $users->id,
+                                'type'=>'error',
+                                'subject' => 'ELIMINACION DE PAGO',
+                                'message' => 'Se solicitó la eliminacion de pago al pedido '.$pedido_op3.'. Se necesita atención.',
+                                'date_at' => now(),
+                            ]);
+                        }
+                        DB::commit();
+                        return response()->json(['html' => $alerta->id]);
+                    } catch (\Throwable $th) {
+                        return response()->json(['html' => "0"]);
+                    }
+
+
+                    /*if($pedido_op3)
                     {
                         //$pago=Pago::query()->where('correlativo',$pago_op3)->activo()->first();
                         $pedido=Pedido::query()->where('codigo',$pedido_op3)->activo()->first();
@@ -100,7 +151,7 @@ class ModalController extends Controller
                         return response()->json(['html' => "0"]);
                     }else{
                         return response()->json(['html' => "0"]);
-                    }
+                    }*/
                     break;
                 case '4':
                     $asesor_op4=$request->asesor_op4;

@@ -17,7 +17,7 @@
     {{-- Navbar right links --}}
     <ul class="navbar-nav ml-auto">
 
-        @if(auth()->user()->rol==\App\Models\User::ROL_ADMIN)
+        @if(in_array(auth()->user()->rol,[\App\Models\User::ROL_ADMIN,\App\Models\User::ROL_ENCARGADO]))
             <li class="nav-item dropdown show p-1" id="my-btn-annuncements-1">
                 <button class="nav-link btn btn-success btn-sm  font-11 font-weight-bold" id="btn_componente-1"
                         data-toggle="modal" data-target="#modal-annuncient-1" type="button">

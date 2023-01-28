@@ -235,9 +235,9 @@
                     success: function (data) {
                         if(data.html!="0")
                         {
-                            PNotify.notice({
+                            /*PNotify.notice({
                                 text: 'Notice 1.',
-                            });
+                            });*/
                             $("#modal-annuncient-1").modal("hide");
                             console.log("response 1")
                         }else{
@@ -257,9 +257,9 @@
                     success: function (data) {
                         if(data.html!="0")
                         {
-                            PNotify.notice({
+                            /*PNotify.notice({
                                 text: 'Notice 2.',
-                            });
+                            });*/
                             $("#modal-annuncient-2").modal("hide");
                             console.log("response 1")
                         }else{
@@ -279,10 +279,10 @@
                     success: function (data) {
                         if(data.html!="0")
                         {
-                            PNotify.notice({
+                            /*PNotify.notice({
                                 text: 'Notice 3.',
                             });
-                            $("#modal-annuncient-3").modal("hide");
+                            $("#modal-annuncient-3").modal("hide");*/
                             console.log("response 1")
                         }else{
                             console.log("response 0")
