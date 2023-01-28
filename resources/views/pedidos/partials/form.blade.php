@@ -213,14 +213,11 @@
                 </div>
 
 
-
-                <div class="row">
+                <div class="row" id="section_content_address" style="display: none">
                     <div class="col-lg-9 col-sm-9 col-md-9 col-xs-9" style="text-align: center">
-
                         <div class="alert alert-warning" role="alert">
                             <b>PUEDES AGREGAR LA DIRECCIÓN DE MANERA OPCIONAL SOLO PARA LOS CLIENTES DE LIMA</b>
                         </div>
-
                     </div>
                     <div class="col-lg-3 col-sm-3 col-md-3 col-xs-3" style="text-align: center">
                         <button data-backdrop="static" data-keyboard="false" data-toggle="modal"
@@ -246,6 +243,7 @@
                                 <th>Google Maps</th>
                                 <th>Importe</th>
                                 </thead>
+                                <tbody id="table_direccion_body"></tbody>
                             </table>
                         </div>
                     </div>
