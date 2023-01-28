@@ -59,8 +59,8 @@ class PageclienteDosmeses extends Export implements WithColumnFormatting,WithCol
             ->whereIn("clientes.id",$lista)
             ->select([
                 'clientes.id as item',
-                'u.identificador as asesor_identificador',
-                'clientes.celular',
+                DB::raw("concat(u.identificador,' ',ifnull(u.letra,'') ) as asesor_identificador"),
+                DB::raw("concat(clientes.celular,'-',clientes.icelular)  as celular"),
                 DB::raw("(select group_concat(r.num_ruc) from rucs r where r.cliente_id=clientes.id) as rucs"),
                 DB::raw("(select case when dp1.pagado=0 then 'DEUDA'
                                         when dp1.pagado=1 then 'DEUDA'
