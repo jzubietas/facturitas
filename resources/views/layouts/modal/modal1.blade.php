@@ -19,14 +19,106 @@
 
                     <div class="form-row op-1-row"><!---->
 
+                        <div class="form-group col-lg-6">
+                            {!! Form::label('asesor_op1', 'Asesor*') !!}
+                            <select name="asesor_op1" class="border form-control border-secondary" id="asesor_op1" data-live-search="true" >
+                                <option value="">---- SELECCIONE ASESOR ----</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-lg-6">
+                            {!! Form::label('cliente_op1', 'Cliente*') !!}
+                            <select name="cliente_op1" class="border form-control border-secondary" id="cliente_op1" data-live-search="true" >
+                                <option value="">---- SELECCIONE CLIENTE ----</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group col-lg-6">
+                            {!! Form::label('clientenuevo_op1', 'Numero de cliente nuevo') !!}
+                            <input type="text" name="clientenuevo_op1" id="clientenuevo_op1"  class="form-control" placeholder="Cliente nuevo">
+
+                        </div>
+
+                        <div class="form-group col-lg-12">
+                            {!! Form::label('captura_op1', 'Captura de pantalla') !!}
+                            <input type="file" name="captura_op1" id="captura_op1"  class="form-control" placeholder="">
+
+                        </div>
+
                     </div>
 
                     <div class="form-row op-2-row"><!---->
+                        <div class="form-group col-lg-6">
+                            {!! Form::label('asesor_op2', 'Asesor*') !!}
+                            <select name="asesor_op2" class="border form-control border-secondary" id="asesor_op2" data-live-search="true" >
+                                <option value="">---- SELECCIONE ASESOR ----</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-lg-6">
+                            {!! Form::label('cliente_op2', 'Cliente*') !!}
+                            <select name="cliente_op2" class="border form-control border-secondary" id="cliente_op2" data-live-search="true" >
+                                <option value="">---- SELECCIONE CLIENTE ----</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group col-lg-6">
+                            {!! Form::label('cantidadpedidos_op2', 'Cantidad de pedidos') !!}
+                            <input type="text" name="cantidadpedidos_op2" id="cantidadpedidos_op2"  class="form-control" placeholder="Cliente nuevo">
+
+                        </div>
+
+                        <div class="form-group col-lg-12">
+                            {!! Form::label('captura_op2', 'Captura de pantalla') !!}
+                            <input type="file" name="captura_op2" id="captura_op2"  class="form-control" placeholder="">
+
+                        </div>
+
 
                     </div>
 
                     <div class="form-row op-3-row"><!---->
+                        <div class="form-group col-lg-6">
+                            {!! Form::label('asesor_op3', 'Asesor*') !!}
+                            <select name="asesor_op3" class="border form-control border-secondary" id="asesor_op3" data-live-search="true" >
+                                <option value="">---- SELECCIONE ASESOR ----</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-lg-6">
+                            {!! Form::label('cliente_op3', 'Cliente*') !!}
+                            <select name="cliente_op3" class="border form-control border-secondary" id="cliente_op3" data-live-search="true" >
+                                <option value="">---- SELECCIONE CLIENTE ----</option>
+                            </select>
+                        </div>
 
+                        <div class="table-responsive form-group col-lg-12">
+                            <table class="table">
+                                <thead>
+                                    <th>Agregar codigos</th>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+
+                        <div class="form-group col-lg-12">
+                            {!! Form::label('captura_op3', 'Captura de pantalla') !!}
+                            <input type="file" name="captura_op3" id="captura_op3"  class="form-control" placeholder="">
+
+                        </div>
+
+                    </div>
+
+                    <div class="form-row op-4-row">
+                        <div class="form-group col-lg-6">
+                            {!! Form::label('asesor_op4', 'Asesor*') !!}
+                            <select name="asesor_op4" class="border form-control border-secondary" id="asesor_op4" data-live-search="true" >
+                                <option value="">---- SELECCIONE ASESOR ----</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-lg-6">
+                            {!! Form::label('cliente_op4', 'Cliente*') !!}
+                            <select name="cliente_op4" class="border form-control border-secondary" id="cliente_op4" data-live-search="true" >
+                                <option value="">---- SELECCIONE CLIENTE ----</option>
+                            </select>
+                        </div>
                     </div>
 
 
