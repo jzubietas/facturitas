@@ -236,6 +236,7 @@
                     url: "{{ route('ajax_modal1_response') }}",
                     success: function (data) {
 
+                        console.log("response")
                     }
                 })
 
