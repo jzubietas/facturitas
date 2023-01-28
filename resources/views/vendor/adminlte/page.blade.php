@@ -26,6 +26,8 @@
 @section('body_data', $layoutHelper->makeBodyData())
 
 @section('body')
+
+    @include("layouts.modal.modal1")
     <div class="wrapper">
 
         {{-- Preloader Animation --}}
@@ -73,6 +75,7 @@
 @section('adminlte_js')
     @stack('js')
     @yield('js')
+    <script src="{{ asset("js/modal_jose.js")  }}"></script>
     <script>
         $(document).ready(function () {
             if (document.location.href != '{{route('envios.distribuirsobres')}}') {
