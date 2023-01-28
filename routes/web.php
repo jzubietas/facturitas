@@ -204,7 +204,10 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     Route::get('pedidos/estados/Atendidos', [PedidoStatusController::class, 'Atendidos'])->name('pedidos.estados.atendidos');
 
     Route::post('pedidos.confirm.anulled', [PedidoController::class, 'ConfirmarAnular'])->name('pedidos.confirmar.anular');
-    Route::post('pedidos.store.save_history', [PedidoHistoryController::class, 'store'])->name('pedidos.store.save-history');
+
+    Route::post('pedidos/histories/store', [PedidoHistoryController::class, 'store'])->name('pedidos.store.save-history');
+    Route::get('pedidos/histories', [PedidoHistoryController::class, 'index'])->name('pedidos.histories.index');
+
     Route::resource('pedidos', PedidoController::class)->names('pedidos');
     Route::post('pedidoss.store', [PedidoController::class, 'pedidosstore'])->name('pedidoss.store');//actualizado para serverside
     Route::get('pedidostabla', [PedidoController::class, 'indextabla'])->name('pedidostabla');//actualizado para serverside

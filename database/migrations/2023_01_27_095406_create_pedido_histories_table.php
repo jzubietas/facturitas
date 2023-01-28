@@ -21,6 +21,7 @@ class CreatePedidoHistoriesTable extends Migration
             $table->string('cliente_id',50);
             $table->string('ruc',12);
             $table->string('empresa');
+            $table->string('mes',4);
             $table->string('year',4);
             $table->string('cantidad');
             $table->string('tipo_banca');

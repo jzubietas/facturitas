@@ -6,6 +6,7 @@ use App\Models\Departamento;
 use App\Models\DireccionEnvio;
 use App\Models\DireccionGrupo;
 use App\Models\Distrito;
+use App\Models\Media;
 use App\Models\Pedido;
 use App\Models\User;
 use Carbon\Carbon;
@@ -94,14 +95,21 @@ class OlvaController extends Controller
                 "clientes.nombre as cliente_nombre",
             ]);
         if (user_rol(User::ROL_ASESOR) || user_rol(User::ROL_ASESOR_ADMINISTRATIVO)) {
-            $pedidos_provincia->whereNull('direccion_grupos.add_screenshot_at');
+            $pedidos_provincia->where(function ($query){
+                $query->whereNull('direccion_grupos.add_screenshot_at');
+                $query->orWhereDate('direccion_grupos.add_screenshot_at','<',now());
+            });
         }
 
         add_query_filtros_por_roles_pedidos($pedidos_provincia, 'users.identificador');
 
-        return datatables()->query(DB::table($pedidos_provincia)
-            ->orderByDesc('courier_failed_sync_at')
-            ->orderByDesc('id'))
+        $query = DB::table($pedidos_provincia);
+        if (!user_rol(User::ROL_ASESOR) && !user_rol(User::ROL_ASESOR_ADMINISTRATIVO)) {
+            $query->orderBy('add_screenshot_at');
+        }
+        $query->orderByDesc('id');
+
+        return datatables()->query($query)
             ->addIndexColumn()
             ->editColumn('created_at_format', function ($pedido) {
                 if ($pedido->created_at != null) {
@@ -138,7 +146,13 @@ class OlvaController extends Controller
             })
             ->addColumn('action', function ($pedido) {
                 if (user_rol(User::ROL_ADMIN) || user_rol(User::ROL_ENCARGADO)) {
-                    return '<button data-target="' . route('envios.seguimientoprovincia.history_encargado', $pedido->id) . '" data-toggle="jqconfirmencargado" class="btn btn-info btn-sm"><i class="fa fa-history"></i> <b>Ver Historial</b></button>';
+                    $pintar = false;
+                    if ($pedido->add_screenshot_at == null) {
+                        $pintar = true;
+                    } elseif (Carbon::parse($pedido->add_screenshot_at) < now()->startOfDay()) {
+                        $pintar = true;
+                    }
+                    return '<button data-target="' . route('envios.seguimientoprovincia.history_encargado', $pedido->id) . '" data-toggle="jqconfirmencargado" class="btn btn-' . ($pintar ? 'danger' : 'info') . ' btn-sm"><i class="fa fa-history"></i> <b>Ver Historial</b></button>';
                 }
                 return '<button data-action="' . route('envios.olva.store', $pedido->id) . '" data-jqconfirm="notificado" class="btn btn-warning">Notificado</button>';
             })
@@ -157,10 +171,15 @@ class OlvaController extends Controller
         $this->validate($request, [
             'file' => 'required|file'
         ]);
-        if ($grupo->add_screenshot_at == null) {
+        if ($grupo->add_screenshot_at == null || $grupo->add_screenshot_at <= now()->startOfDay()) {
             $file = $request->file('file');
+            $filename = now()->format('d-m-Y') . '.' . $file->getClientOriginalExtension();
+            $exists = $grupo->getMedia('tienda_olva_notificado')->filter(fn(Media $media) => $media->file_name == $filename);
+            foreach ($exists as $media) {
+                $media->delete();
+            }
             $grupo->addMedia($file)
-                ->usingFileName(\Str::random(5) . '_' . $file->getClientOriginalName())
+                ->usingFileName($filename)
                 ->toMediaCollection('tienda_olva_notificado');
 
             $grupo->update([

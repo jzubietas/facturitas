@@ -123,6 +123,7 @@ __________________________________
                                 ruc: pruc,
                                 empresa: pempresa,
                                 year: panio,
+                                mes: pmes,
                                 cantidad: pcantidad,
                                 tipo_banca: ptipo_banca,
                                 descripcion: pdescripcion,
@@ -137,7 +138,7 @@ __________________________________
                                 })
                         }
                     })
-                }else{
+                } else {
                     $.confirm({
                         theme: 'material',
                         type: 'dark',
@@ -145,7 +146,7 @@ __________________________________
                         backgroundDismiss: true,
                         title: 'Advertencia',
                         columnClass: 'large',
-                        content:`Rellene todos los campos para mostrar la información`,
+                        content: `Rellene todos los campos para mostrar la información`,
                         buttons: {
                             cerrar: {
                                 btnClass: 'btn-secondary'
@@ -153,6 +154,124 @@ __________________________________
                         },
                     })
                 }
+            })
+            $(document).on('click', '[data-toggle=jqconfirm][data-type=history]', function () {
+                const target = $(this).data('target')
+                $.confirm({
+                    theme: 'material',
+                    type: 'dark',
+                    icon: 'fa fa-save',
+                    backgroundDismiss: true,
+                    title: 'Pedido Guardados',
+                    columnClass: 'xlarge',
+                    buttons: {
+                        cerrar: {
+                            btnClass: 'btn-secondary'
+                        }
+                    },
+                    content: function () {
+                        const self = this
+                        return $.get(target)
+                            .done(function (data) {
+                                self.$ajaxdata = data;
+                                if (data.length > 0) {
+                                    self.setContent(`<div class="">
+<table class="table table-striped">
+<thead>
+<tr>
+<th>ASESOR</th>
+<th>CLIENTE</th>
+<th>RUC - EMPRESA</th>
+<th>MES/AÑO</th>
+<th>CANTIDAD</th>
+<th>TIPO BANCA</th>
+<th>COURIER</th>
+<th>DESCRIPCIÓN</th>
+<th>NOTA</th>
+<th>ACCIONES</th>
+</tr>
+</thead>
+<tbody>
+${data.map(function (data, index) {
+                                        return `<tr>
+<td>${data.identificador}</td>
+<td>${data.cliente_id}</td>
+<td>${data.ruc} - ${data.empresa}</td>
+<td>${data.mes}/${data.year}</td>
+<td>${data.cantidad}</td>
+<td>${data.tipo_banca}</td>
+<td>${data.courier_price}</td>
+<td>${data.descripcion}</td>
+<td>${data.nota}</td>
+<td>
+<button data-add class="btn btn-dark btn-sm" data-index="${index}"><i class="fa fa-arrow-down"></i>Agregar</button>
+</td>
+</tr>`
+                                    }).join('')}
+
+</tbody>
+</table>
+            </div>`)
+                                } else {
+                                    self.setContent(`<div class="mt-4 alert alert-danger">No tienes pedidos guardados</div>`)
+                                }
+                            })
+                            .fail(function () {
+                                self.setContent(`<div class="mt-4 alert alert-danger">No hay items</div>`)
+                            })
+                    },
+                    onContentReady: function () {
+                        const self = this
+                        self.$content.find('[data-add]').click(function () {
+                            const index = $(this).data('index')
+                            const data = self.getItemByIndex(index)
+                            $.confirm({
+                                title: 'Advertencia',
+                                icon: 'fa fa-exclamation-triangle text-warning',
+                                content: 'Se remplazara todos los campos del formulario',
+                                buttons: {
+                                    confirmar: {
+                                        btnClass: 'btn-success',
+                                        action: function () {
+                                            console.log(data)
+                                            const self2 = this
+                                            $('#user_id').val(data.identificador).selectpicker('refresh').trigger('change');
+                                            self.showLoading(true)
+                                            $('#pempresa').val(data.empresa);
+                                            setTimeout(function () {
+                                                $('#cliente_id').val(data.cliente_id).selectpicker('refresh').trigger('change');
+                                                setTimeout(function () {
+                                                    $('#pruc').val(data.ruc).selectpicker('refresh').trigger('change');
+                                                    setTimeout(function () {
+                                                        $('#ptipo_banca').val(data.tipo_banca).selectpicker('refresh').trigger('change');
+
+                                                        $('#pmes').val(data.mes).selectpicker('refresh').trigger('change');
+
+                                                        $('#panio').val(data.year).selectpicker('refresh').trigger('change');
+
+                                                        $('#pcantidad').val(data.cantidad);
+
+                                                        $('#pdescripcion').val(data.descripcion);
+                                                        $('#pnota').val(data.nota);
+                                                        $('#pcourier').val(data.courier_price);
+                                                        self.close()
+                                                    }, 1000)
+                                                }, 1000)
+                                            }, 2000)
+                                            return true
+                                        }
+                                    },
+                                    cancelar: {
+                                        btnClass: 'btn-secundary'
+                                    }
+                                }
+                            })
+                        })
+                    },
+                    getItemByIndex: function (index) {
+                        return this.$ajaxdata[index]
+                    }
+                })
             })
         })
     </script>

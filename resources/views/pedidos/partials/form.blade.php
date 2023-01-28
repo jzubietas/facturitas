@@ -142,10 +142,10 @@
                             </button>
                             <button type="button" class="btn btn-warning btn-lg"
                                     data-toggle="jqconfirm"
-                                    data-type="previsualizar"
-                                    data-target="{{route('pedidos.store.save-history')}}">
+                                    data-type="history"
+                                    data-target="{{route('pedidos.histories.index')}}">
                                 <i class="fa fa-copy"></i>
-                                Cargar Pedido
+                                Cargar Pedido del Historial
                             </button>
                         </div>
 
@@ -157,7 +157,7 @@
                 <div class="form-row">
                     <div class="form-group col-lg-5">
                         {!! Form::label('pdescripcion', 'Descripción') !!}
-                        <input type="text" name="pdescripcion OB" type="text" data-msj="ingrese 9 digitos"
+                        <input type="text" name="pdescripcion OB" data-msj="ingrese 9 digitos"
                                id="pdescripcion" class="form-control" placeholder="Descripción...">
                     </div>
                     <div class="form-group col-lg-4">
