@@ -91,7 +91,11 @@
                                    });*/
                         data.alertas.forEach(function (alerta) {
                             if (!mapAlertShows.has(alerta.id)) {
-                                const notice = PNotify.notice({
+                                var type='notice';
+                                if(alerta.tipo=='info'||alerta.tipo=='success'||alerta.tipo=='error'){//notice|info|success|error
+                                    type=alerta.tipo
+                                }
+                                const notice = PNotify[type]({
                                     title: alerta.subject,
                                     text: alerta.message,
                                     hide: false,
