@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Alerta;
 use App\Models\Devolucion;
 use App\Models\DireccionGrupo;
 use App\Models\Pedido;
@@ -481,6 +482,7 @@ class NotificationsController extends Controller
         add_query_filtros_por_roles_pedidos($pedidos_provincia, 'users.identificador');
         $contador_encargado_tienda_agente =$pedidos_provincia->count();
 
+        $alertas=Alerta::noFinalize()->noReadTwoHours()->withCurrentUser()->get();
         return [
             'icon' => 'fas fa-envelope',
             'label' => count(auth()->user()->unreadNotifications) + count($devoluciones),
@@ -499,7 +501,8 @@ class NotificationsController extends Controller
             'contador_en_motorizados_confirmar_count' => $en_motorizados_confirmar_count->count(),
             'contador_sobres_devueltos' => $icono_sobres_devueltos,
             'contador_encargado_tienda_agente' => $contador_encargado_tienda_agente,
-            'authorization_courier' => \Blade::renderComponent(new AutorizarRutaMotorizado())
+            'authorization_courier' => \Blade::renderComponent(new AutorizarRutaMotorizado()),
+            'alertas' => $alertas,
         ];
     }
 
