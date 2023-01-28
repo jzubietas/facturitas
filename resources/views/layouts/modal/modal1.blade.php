@@ -21,12 +21,11 @@
 
                     <div id="op-1-row" class="op-1-row"><!---->
                         <form id="form-op-1-row" name="form-op-1-row" class="form-row ">
-                            <input type="hidden" id="opcion1" name="opcion" value="1">
                             <div class="form-group col-lg-6">
                                 {!! Form::label('asesor_op1', 'Asesor*') !!}
 
                                 <select name="asesor_op1" class="border form-control border-secondary" id="asesor_op1"
-                                    data-ruta="{{route('cargar.clientedeudaparaactivar')}}">
+                                    data-ruta="{{route('cargar.clientemodal1')}}">
                                     <option value="">---- SELECCIONE ASESOR ----</option>
                                 </select>
                             </div>
@@ -40,7 +39,7 @@
                             <div class="form-group col-lg-6">
                                 {!! Form::label('clientenuevo_op1', 'Numero de cliente nuevo') !!}
                                 {{--<input type="text" name="clientenuevo_op1" id="clientenuevo_op1"  class="form-control" placeholder="Cliente nuevo" maxlength="9">--}}
-                                {!! Form::number('clientenuevo_op1', null, ['class' => 'form-control', 'id' => 'clientenuevo_op1', 'min' =>'0', 'max' => '999999999', 'maxlength' => '9','placeholder' => '9 digitos']) !!}
+                                {!! Form::text('clientenuevo_op1', null, ['class' => 'form-control', 'id' => 'clientenuevo_op1', 'min' =>'0', 'max' => '999999999', 'maxlength' => '9','placeholder' => '9 digitos']) !!}
                             </div>
 
                             <div class="form-group col-lg-12">
@@ -57,11 +56,10 @@
 
                     <div id="op-2-row" class="op-2-row"><!---->
                         <form id="form-op-2-row" name="form-op-2-row" class="form-row ">
-                            <input type="hidden" id="opcion2" name="opcion" value="2">
                             <div class="form-group col-lg-6">
                                 {!! Form::label('asesor_op2', 'Asesor*') !!}
                                 <select name="asesor_op2" class="border form-control border-secondary" id="asesor_op2" data-live-search="true"
-                                        data-ruta="{{route('cargar.clientedeudaparaactivar')}}">
+                                        data-ruta="{{route('cargar.clientemodal1')}}">
                                     <option value="">---- SELECCIONE ASESOR ----</option>
                                 </select>
                             </div>
@@ -91,12 +89,10 @@
 
                     <div id="op-3-row" class="op-3-row"><!---->
                         <form id="form-op-3-row" name="form-op-3-row" class="form-row ">
-                            <input type="hidden" id="opcion3" name="opcion" value="3">
-
                             <div class="form-group col-lg-6">
                                 {!! Form::label('asesor_op3', 'Asesor*') !!}
                                 <select name="asesor_op3" class="border form-control border-secondary" id="asesor_op3" data-live-search="true"
-                                        data-ruta="{{route('cargar.clientedeudaparaactivar')}}">
+                                        data-ruta="{{route('cargar.clientemodal1')}}">
                                     <option value="">---- SELECCIONE ASESOR ----</option>
                                 </select>
                             </div>
@@ -132,7 +128,7 @@
                                 {!! Form::label('asesor_op4', 'Asesor*') !!}
                                 <select name="asesor_op4" class="border form-control border-secondary" id="asesor_op4"
                                         data-live-search="true"
-                                        data-ruta="{{route('cargar.clientedeudaparaactivar')}}">
+                                        data-ruta="{{route('cargar.clientemodal1')}}">
                                     <option value="">---- SELECCIONE ASESOR ----</option>
                                 </select>
                             </div>
