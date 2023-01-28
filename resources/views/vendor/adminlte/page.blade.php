@@ -175,9 +175,8 @@
             }
 
             $(document).on("change", "#asesor_op1", function () {
-                console.log($(this).data("ruta"))
                 $.ajax({
-                    url: $(this).data("route"),
+                    url: $(this).data("ruta"),
                     method: 'GET',
                     data: {"user_id": $(this).val()},
                     success: function (data) {
@@ -188,7 +187,7 @@
             });
             $(document).on("change", "#asesor_op2", function () {
                 $.ajax({
-                    url: $(this).data("route"),
+                    url: $(this).data("ruta"),
                     method: 'GET',
                     data: {"user_id": $(this).val()},
                     success: function (data) {
@@ -199,7 +198,7 @@
             });
             $(document).on("change", "#asesor_op3", function () {
                 $.ajax({
-                    url: $(this).data("route"),
+                    url: $(this).data("ruta"),
                     method: 'GET',
                     data: {"user_id": $(this).val()},
                     success: function (data) {
@@ -211,7 +210,7 @@
             $(document).on("change", "#asesor_op4", function () {
 
                 $.ajax({
-                    url: $(this).data("route"),
+                    url: $(this).data("ruta"),
                     method: 'GET',
                     data: {"user_id": $(this).val()},
                     success: function (data) {
@@ -220,6 +219,20 @@
                     }
                 });
             });
+
+            $(document).on("submit","#form-op-1-row",function(event) {
+                event.preventDefault();
+                var form = $('#form-op-1-row')[0]; // You need to use standard javascript object here
+                var formData = new FormData(form);
+                //asesor_op1
+                //cliente_op1
+                //clientenuevo_op1
+                //captura_op1
+
+
+
+            })
+
 
         });
     </script>

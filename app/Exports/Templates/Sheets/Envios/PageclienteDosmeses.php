@@ -19,8 +19,6 @@ use Illuminate\Http\Request;
 
 class PageclienteDosmeses extends Export implements WithColumnFormatting,WithColumnWidths
 {
-
-
     public function collection()
     {
         $ultimos_pedidos=Cliente::activo()
@@ -36,17 +34,18 @@ class PageclienteDosmeses extends Export implements WithColumnFormatting,WithCol
 
         //$ultimos=$ultimos_pedidos->whereNotNull('fechaultimopedido')->get();
 
-        $dosmeses=now()->startOfMonth()->subMonths(2)->format('Y-m');//01 11
+        $dosmeses_ini=now()->startOfMonth()->subMonths(2)->format('Y-m');//01 11
+        $dosmeses_fin=now()->endOfMonth()->subMonths(1)->format('Y-m');
         $lista=[];
         foreach ($ultimos_pedidos as $procesada){
             if($procesada->fechaultimopedido!=null)
             {
                 $fecha_analizar=Carbon::parse($procesada->fechaultimopedido)->format('Y-m');
-                if($fecha_analizar==$dosmeses)
+                if($fecha_analizar==$dosmeses_ini || $fecha_analizar==$dosmeses_fin)
                 {
-                    if(in_array($procesada->fechaultimopedido_pago,["0","1"]))
+                    //if(in_array($procesada->fechaultimopedido_pago,["0","1"]))
                     {
-                        if(in_array($procesada->fechaultimopedido_pagado,["0","1"]))
+                        //if(in_array($procesada->fechaultimopedido_pagado,["0","1"]))
                         {
                             $lista[]=$procesada->id;
                         }
@@ -63,9 +62,9 @@ class PageclienteDosmeses extends Export implements WithColumnFormatting,WithCol
                 'u.identificador as asesor_identificador',
                 'clientes.celular',
                 DB::raw("(select group_concat(r.num_ruc) from rucs r where r.cliente_id=clientes.id) as rucs"),
-                DB::raw("(select case when dp1.pago=0 then 'DEUDA'
-                                        when dp1.pago=1 then 'DEUDA'
-                                        else 'NO DUDA' end from pedidos dp1
+                DB::raw("(select case when dp1.pagado=0 then 'DEUDA'
+                                        when dp1.pagado=1 then 'DEUDA'
+                                        else 'NO DEUDA' end from pedidos dp1
                                         where dp1.estado=1 and dp1.cliente_id=clientes.id order by dp1.created_at desc limit 1) as deuda"),
                 DB::raw("(select dp2.saldo from pedidos a inner join detalle_pedidos dp2 on a.id=dp2.pedido_id
                                         where dp2.estado=1 and a.cliente_id=clientes.id order by dp2.created_at desc limit 1) as importeultimopedido"),
