@@ -43,10 +43,19 @@ class ResetSendScreenEncargadoOlvaSync extends Command
         $grupos = DireccionGrupo::query()
             ->activo()
             ->where('condicion_envio_code', Pedido::EN_TIENDA_AGENTE_OLVA_INT)
-            ->whereNotNull('add_screenshot_at')
-            ->update([
-                'add_screenshot_at' => null
-            ]);
+            ->whereNull('add_screenshot_at')
+            ->get();
+        foreach ($grupos as $grupo) {
+            $g = $grupo->getMedia('tienda_olva_notificado')
+                ->sortByDesc(fn($media) => $media->created_at->format('d-m-Y'))
+                ->first();
+            if ($g != null) {
+                $this->info("M ".$g->file_name);
+                $grupo->update([
+                    'add_screenshot_at' => $g->created_at
+                ]);
+            }
+        }
 
         return 0;
     }

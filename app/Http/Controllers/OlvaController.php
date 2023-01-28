@@ -146,13 +146,15 @@ class OlvaController extends Controller
             })
             ->addColumn('action', function ($pedido) {
                 if (user_rol(User::ROL_ADMIN) || user_rol(User::ROL_ENCARGADO)) {
-                    $pintar = false;
+                    $pintar = 'info';
                     if ($pedido->add_screenshot_at == null) {
-                        $pintar = true;
+                        $pintar = 'danger';
                     } elseif (Carbon::parse($pedido->add_screenshot_at) < now()->startOfDay()) {
-                        $pintar = true;
+                        $pintar = 'danger';
+                    }elseif(Carbon::parse($pedido->add_screenshot_at)->isToday()){
+                        $pintar = 'success';
                     }
-                    return '<button data-target="' . route('envios.seguimientoprovincia.history_encargado', $pedido->id) . '" data-toggle="jqconfirmencargado" class="btn btn-' . ($pintar ? 'danger' : 'info') . ' btn-sm"><i class="fa fa-history"></i> <b>Ver Historial</b></button>';
+                    return '<button data-target="' . route('envios.seguimientoprovincia.history_encargado', $pedido->id) . '" data-toggle="jqconfirmencargado" class="btn btn-' . $pintar . ' btn-sm "><i class="fa fa-history"></i> <b class="'.($pedido->add_screenshot_at == null?'text-dark':'').'">Ver Historial</b></button>';
                 }
                 return '<button data-action="' . route('envios.olva.store', $pedido->id) . '" data-jqconfirm="notificado" class="btn btn-warning">Notificado</button>';
             })
