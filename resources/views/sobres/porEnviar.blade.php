@@ -160,22 +160,21 @@
         .modal-lg {
             max-width: 80%;
         }
-        .dataTables_filter
-        {
+
+        .dataTables_filter {
 
         }
 
         @if(auth()->user()->rol !='Administrador')
-            .visible_button_recoger
-            {
-                opacity:0;
-            }
+            .visible_button_recoger {
+            opacity: 0;
+        }
         @endif
     </style>
 
 @stop
 
-@section('js')
+@push('js')
 
     <script src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.1/js/dataTables.bootstrap4.min.js"></script>
@@ -233,8 +232,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
-    <script src="{{ asset("js/sobres.porenviar.js") }}"></script>
-
+    @include('partials.historial_direccion.historial_direccion_javascript')
     <script>
         $(document).ready(function () {
 
@@ -309,8 +307,7 @@
 
         $(document).ready(function () {
 
-            window.limpiar_campos_historico_recojo = function ()
-            {
+            window.limpiar_campos_historico_recojo = function () {
                 $("#recojo_pedido_quienrecibe_nombre").val("");
                 $("#recojo_pedido_quienrecibe_celular").val("");
                 $("#recojo_pedido_direccion").val("");
@@ -525,7 +522,6 @@
                 $("#datatable-clientes-lista-recojer").DataTable().ajax.reload();
                 //refresh tabla//$("#distrito").val("").selectpicker("refresh")
             });
-
 
 
             $(document).on("change", "#limaprovincia", function () {
@@ -771,6 +767,7 @@
 
                 $pedidos = pedidos.join(',');
                 fd2.append('pedidos', $pedidos);
+
                 function sendAjax() {
                     if (val_direccion_id) {
                         if (combo_limaprovincia == "L") {
@@ -973,12 +970,12 @@
                     "pageLength": 5,
                     "order": [[0, "asc"]],
                     ajax: {
-                        url: "{{route('sobreenvioshistorial')}}",
+                        url: "{{ route('sobreenvioshistorial') }}",
                         data: function (d) {
-                            d.provincialima=provincialima;
-                            d.cliente_id=clienteidprovincia;
+                            d.provincialima = provincialima;
+                            d.cliente_id = clienteidprovincia;
                         },
-                        type:'get',
+                        type: 'get',
                     },
                     rowCallback: function (row, data, index) {
                         $('.button_provincia', row).click(function (e) {
@@ -1114,10 +1111,7 @@
             })
 
 
-
-
-
-            $(document).on('click','.button_load_history_recojo',function (e) {
+            $(document).on('click', '.button_load_history_recojo', function (e) {
                 const json = $(this).data('json');
                 const selectedData = ((json && typeof json != 'string') ? json : JSON.parse($(this).data('json')))
                 console.log(selectedData)
@@ -1145,7 +1139,6 @@
                 $("#saveHistoricoLima").parent().hide()
                 $("#saveHistoricoLimaEditar").parent().show()*/
             })
-
 
 
             $("#distrito").on('change', function () {
@@ -1428,7 +1421,7 @@
                 "bFilter": false,
                 "bInfo": false,
                 columns: [
-                    {data: 'id', name: 'id',"visible":false},
+                    {data: 'id', name: 'id', "visible": false},
                     {data: 'user_id', name: 'user_id',},
                     {data: 'celular', name: 'celular',},
                     {data: 'action', name: 'action',},
@@ -1442,14 +1435,14 @@
                 "bInfo": false,
                 columns:
                     [
-                        {data: 'id', name: 'id',"visible":false},
+                        {data: 'id', name: 'id', "visible": false},
                         {data: 'codigo', name: 'codigo',},
                         {data: 'condicion_envio', name: 'condicion_envio',},
                         {data: 'action', name: 'action',},
                     ],
             });
 
-            tablaPrincipal=$('#tablaPrincipal').DataTable({
+            tablaPrincipal = $('#tablaPrincipal').DataTable({
                 dom: 'Bfritp',
                 processing: true,
                 stateSave: true,
@@ -1568,23 +1561,23 @@
                 ],
             });
 
-            $('#datatable-pedidos-lista-recojer tbody').on( 'click', 'button.elegir', function () {
-                var data = tablaPedidosLista.row( $(this).parents('tr') ).data();
+            $('#datatable-pedidos-lista-recojer tbody').on('click', 'button.elegir', function () {
+                var data = tablaPedidosLista.row($(this).parents('tr')).data();
                 console.log(data);
                 $("span.nombre_cliente_recojo").html(data.nombre)
                 $("#recojo_pedido").val(data.id)
                 $("#recojo_pedido_codigo").val(data.codigo)
 
-                $("#recojo_pedido_grupo").val ( ((data.direccion_grupo==null)? 'SIN GRUPO':data.direccion_grupo) )
+                $("#recojo_pedido_grupo").val(((data.direccion_grupo == null) ? 'SIN GRUPO' : data.direccion_grupo))
                 $("span.destino_recojo").html(data.env_destino);
                 $("span.distrito_recojo").html(data.env_distrito);
                 $("span.direccion_recojo").html(data.env_direccion);
             })
 
-            $(document).on("click",".btn-charge-history",function(){
+            $(document).on("click", ".btn-charge-history", function () {
                 console.log($("#recojo_cliente").val())
-                let clienteid=$("#recojo_cliente").val();
-                if(clienteid!=''){
+                let clienteid = $("#recojo_cliente").val();
+                if (clienteid != '') {
                     //cargar modal
                     //
                     $("#modal-historico-recojo").modal("show");
@@ -1596,10 +1589,10 @@
             })*/
 
 
-            $('#datatable-clientes-lista-recojer tbody').on( 'click', 'button.elegir', function () {
-                var data = tablaClienteLista.row( $(this).parents('tr') ).data();
+            $('#datatable-clientes-lista-recojer tbody').on('click', 'button.elegir', function () {
+                var data = tablaClienteLista.row($(this).parents('tr')).data();
                 console.log(data);
-                console.log( "The ID is: "+ data.id +" user id : "+ data.user_id +" celular:"+ data.celular+" action" +  data.action );
+                console.log("The ID is: " + data.id + " user id : " + data.user_id + " celular:" + data.celular + " action" + data.action);
                 //disparar la otra tabla
                 //pinto la clase span
 
@@ -1613,7 +1606,7 @@
 
                 $("#recojo_pedido").val("")
                 $("#recojo_pedido_codigo").val("")
-                $("#recojo_pedido_grupo").val ("")
+                $("#recojo_pedido_grupo").val("")
 
                 $("span.destino_recojo").html("");
                 $("span.distrito_recojo").html("");
@@ -1628,32 +1621,33 @@
                     serverSide: true,
                     searching: true,
                     "order": [[0, "desc"]],
-                    createdRow: function (row, data, dataIndex) {},
+                    createdRow: function (row, data, dataIndex) {
+                    },
                     ajax: {
                         url: "{{ route('pedidos.recoger.clientes.pedidos') }}",
                         data: function (d) {
-                            d.length=5;
-                            d.cliente_id=data.id;
+                            d.length = 5;
+                            d.cliente_id = data.id;
                         },
                     },
                     columns:
                         [
-                            {data: 'id', name: 'id',"visible":false},
+                            {data: 'id', name: 'id', "visible": false},
                             {data: 'codigo', name: 'codigo',},
                             {data: 'condicion_envio', name: 'condicion_envio',},
                             {data: 'action', name: 'action',},
                         ],
                 });
                 $("#distrito_recoger").val("").selectpicker("refresh")
-            } );
+            });
 
-            $(document).on("submit","#formrecojo",function(event) {
+            $(document).on("submit", "#formrecojo", function (event) {
                 event.preventDefault();
                 let recojo_cliente = $("#recojo_cliente").val();
                 let recojo_pedido = $("#recojo_pedido").val();
                 let recojo_grupo = $("#recojo_pedido_grupo").val();
                 let recojo_fecha = $("#recojo_fecha").val();
-                console.log("fecha "+recojo_fecha)
+                console.log("fecha " + recojo_fecha)
                 let recojo_distrito = $("#distrito_recoger").val();
                 let recojo_pedido_quienrecibe_nombre = $.trim($("#recojo_pedido_quienrecibe_nombre").val());
                 let recojo_pedido_quienrecibe_celular = $.trim($("#recojo_pedido_quienrecibe_celular").val());
@@ -1664,26 +1658,34 @@
 
                 //validaciones
                 //pedido
-                if(recojo_pedido==""){
-                    Swal.fire('Debe elegir un pedido','','warning');return false;
+                if (recojo_pedido == "") {
+                    Swal.fire('Debe elegir un pedido', '', 'warning');
                     return false;
-                }else if(recojo_grupo=""){
-                    Swal.fire('El pedido no se ubica dentro de un paquete, consulte a sistemas','','warning');return false;
                     return false;
-                }else if(recojo_fecha==""){
-                    Swal.fire('Debe elegir una fecha correspondiente','','warning');return false;
+                } else if (recojo_grupo = "") {
+                    Swal.fire('El pedido no se ubica dentro de un paquete, consulte a sistemas', '', 'warning');
                     return false;
-                }else if(recojo_distrito==""){
-                    Swal.fire('Debe elegir un distrito','','warning');return false;
+                    return false;
+                } else if (recojo_fecha == "") {
+                    Swal.fire('Debe elegir una fecha correspondiente', '', 'warning');
+                    return false;
+                    return false;
+                } else if (recojo_distrito == "") {
+                    Swal.fire('Debe elegir un distrito', '', 'warning');
+                    return false;
                 }//datos de envio
-                else if(recojo_pedido_quienrecibe_nombre==""){
-                    Swal.fire('Debe ingresar quien recibe','','warning');return false;
-                }else if(recojo_pedido_quienrecibe_celular==""){
-                    Swal.fire('Debe ingresar celular de quien recibe','','warning');return false;
-                }else if(recojo_pedido_direccion==""){
-                    Swal.fire('Debe ingresar direccion','','warning');return false;
-                }else if(recojo_pedido_referencia==""){
-                    Swal.fire('Debe ingresar referencia','','warning');return false;
+                else if (recojo_pedido_quienrecibe_nombre == "") {
+                    Swal.fire('Debe ingresar quien recibe', '', 'warning');
+                    return false;
+                } else if (recojo_pedido_quienrecibe_celular == "") {
+                    Swal.fire('Debe ingresar celular de quien recibe', '', 'warning');
+                    return false;
+                } else if (recojo_pedido_direccion == "") {
+                    Swal.fire('Debe ingresar direccion', '', 'warning');
+                    return false;
+                } else if (recojo_pedido_referencia == "") {
+                    Swal.fire('Debe ingresar referencia', '', 'warning');
+                    return false;
                 }
 
                 var fd_courier = new FormData();
@@ -1709,7 +1711,7 @@
                 });
             });
 
-            $(document).on("click",".btn-cancel-recojo",function(){
+            $(document).on("click", ".btn-cancel-recojo", function () {
                 $(".card_pedidos").hide();
                 $(".card_form").hide();
                 $(".card_clientes").show();
@@ -1743,7 +1745,7 @@
 
                 $('#datatable-clientes-lista-recojer').DataTable().clear().destroy();
 
-                tablaClienteLista=$('#datatable-clientes-lista-recojer').DataTable({
+                tablaClienteLista = $('#datatable-clientes-lista-recojer').DataTable({
                     ...configDataTableLanguages,
                     processing: true,
                     stateSave: false,
@@ -1754,16 +1756,17 @@
                         [5, 'All'],
                     ],
                     "order": [[0, "desc"]],
-                    createdRow: function (row, data, dataIndex) {},
+                    createdRow: function (row, data, dataIndex) {
+                    },
                     ajax: {
                         url: "{{ route('pedidos.recoger.clientes') }}",
                         data: function (d) {
                             //d.length=5;
-                            d.user_id=$("#user_id").val();
+                            d.user_id = $("#user_id").val();
                         },
                     },
                     columns: [
-                        {data: 'id', name: 'id',"visible":false},
+                        {data: 'id', name: 'id', "visible": false},
                         {data: 'nombre', name: 'nombre',},
                         {data: 'celular', name: 'celular',},
                         {data: 'action', name: 'action',},
@@ -1781,7 +1784,7 @@
                 /*$('[data-jqconfirm]', row).click(function () {
 
                 });*/
-            } );
+            });
 
 
         });
@@ -1820,4 +1823,4 @@
         });
     </script>
 
-@stop
+@endpush
