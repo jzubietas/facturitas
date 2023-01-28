@@ -62,9 +62,9 @@ class PageclienteDosmeses extends Export implements WithColumnFormatting,WithCol
                 'u.identificador as asesor_identificador',
                 'clientes.celular',
                 DB::raw("(select group_concat(r.num_ruc) from rucs r where r.cliente_id=clientes.id) as rucs"),
-                DB::raw("(select case when dp1.pago=0 then 'DEUDA'
-                                        when dp1.pago=1 then 'DEUDA'
-                                        else 'NO DEUDA' end from pedidos dp1
+                DB::raw("(select case when dp4.pagado=0 then 'DEUDA'
+                                        when dp4.pagado=1 then 'DEUDA'
+                                        else 'NO DEUDA' end from pedidos dp0 inner join detalle_pedidos dp4 on dp0.id=dp4.pedido_id
                                         where dp1.estado=1 and dp1.cliente_id=clientes.id order by dp1.created_at desc limit 1) as deuda"),
                 DB::raw("(select dp2.saldo from pedidos a inner join detalle_pedidos dp2 on a.id=dp2.pedido_id
                                         where dp2.estado=1 and a.cliente_id=clientes.id order by dp2.created_at desc limit 1) as importeultimopedido"),
