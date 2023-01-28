@@ -508,7 +508,7 @@ ${data.map(function (data, index) {
                         url: URL.createObjectURL(file)
                     }
                 })
-          
+
 
             if (nombre_empresa != "" && mes != "") {
                 subtotal[cont] = (cantidad * porcentaje) / 100;
@@ -545,6 +545,7 @@ ${files.map(function (file) {
                 evaluar();
                 $('#detalles').append(fila);
                 $("#bt_add_dir").removeClass("d-none")
+                $("#section_content_address").show()
             } else {
                 alert("error al ingresar el detalle del pedido, revise los datos");
             }
@@ -586,6 +587,8 @@ ${files.map(function (file) {
             cont--;
             evaluar();
             $("#pcodigo").val("{{ Auth::user()->identificador }}-{{ $fecha }}-{{ $numped }}");
+            $("#section_content_address").hide()
+            $("#table_direccion_body").html('')
         }
     </script>
 
