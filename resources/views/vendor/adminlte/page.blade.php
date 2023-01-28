@@ -471,6 +471,52 @@
                     }
                 })
             })
+            $('[data-toggle=contactoalert]').click(function () {
+                $.confirm({
+                    theme: 'material',
+                    type: 'dark',
+                    icon: 'fa fa-plus',
+                    title: 'Agregar Contacto',
+                    content: function () {
+                        const self=this
+                        return $.get('').done(function (data) {
+
+                        })
+                    },
+                    buttons: {
+                        cancelar: {
+                            btnClass: 'btn-ligth'
+                        },
+                        agregar: {
+                            btnClass: 'btn-dark',
+                            action: function () {
+                                const self = this
+                                const form = self.$content.find('form')
+                                if (!form[0].title.value) {
+                                    $.confirm({
+                                        type: 'red',
+                                        title: 'Advertencia',
+                                        content: `Es necesario ingresar un titulo`
+                                    })
+                                    return false
+                                }
+                                if (!form[0].nota.value) {
+                                    $.confirm({
+                                        type: 'red',
+                                        title: 'Advertencia',
+                                        content: `Es necesario ingresar una nota`
+                                    })
+                                    return false
+                                }
+                                self.showLoading(true)
+                                $.post('{{route('alertas.store')}}', form.serialize()).always(function () {
+                                    self.hideLoading(true)
+                                })
+                            }
+                        },
+                    }
+                })
+            })
         })
         /*$(document).ready(function () {
             $(document).on("paste", "input[type=text],input[type=search]", function (e) {
