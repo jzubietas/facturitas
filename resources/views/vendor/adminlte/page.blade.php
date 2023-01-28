@@ -87,17 +87,18 @@
             window.ocultar_div_modal1 = function () {
                 console.log("ocultar div")
                 $("#op-1-row").hide();
+                $("#form-op-1-row input").val("");
                 $("#op-2-row").hide();
+                $("#form-op-2-row input").val("");
                 $("#op-3-row").hide();
+                $("#form-op-3-row input").val("");
                 $("#op-4-row").hide();
+                $("#form-op-4-row input").val("");
             }
 
             //btn_componente-1
             $('#modal-annuncient-1').on('show.bs.modal', function (event) {
-                console.log("aaa")
-
                 ocultar_div_modal1();
-                //
                 $("#opciones_modal1")
                     .html("")
                     .append($('<option/>').attr({'value': 'op-1-row'}).text('Base fria y referido'))
@@ -115,7 +116,7 @@
                         $("#op-1-row").show()
                         break;
                     case 'op-2-row':
-                        $("#op-2-row").show();
+                        $("#op-2-row").show()
                         break;
                     case 'op-3-row':
                         $("#op-3-row").show()
@@ -220,14 +221,14 @@
                 });
             });
 
+            $('#clientenuevo_op1').on('input', function () {
+                this.value = this.value.replace(/[^0-9]/g, '');
+            });
+
             $(document).on("submit","#form-op-1-row",function(event) {
                 event.preventDefault();
-                var form = $('#form-op-1-row')[0]; // You need to use standard javascript object here
+                var form = $('#form-op-1-row')[0];
                 var formData = new FormData(form);
-                //asesor_op1
-                //cliente_op1
-                //clientenuevo_op1
-                //captura_op1
                 $.ajax({
                     data: formData,
                     processData: false,

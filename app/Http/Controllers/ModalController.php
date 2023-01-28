@@ -55,10 +55,18 @@ class ModalController extends Controller
                     $cantidadpedidos_op2=$request->cantidadpedidos_op2;
                     $captura_op2=$request->captura_op2;
 
+                    $cliente = Cliente::query()->where("id", '=', $cliente_op2)->update([
+                        'crea_temporal' => 1,
+                        'activado_pedido' => $cantidadpedidos_op2,
+                        'activado_tiempo' => 5,
+                        'temporal_update' => now()->addMinutes(5),
+                    ]);
+                    return response()->json(['html' => $cliente->id]);
                     break;
                 case '3':
                     $asesor_op3=$request->asesor_op3;
                     $cliente_op3=$request->cliente_op3;
+
                     break;
                 case '4':
                     $asesor_op4=$request->asesor_op4;

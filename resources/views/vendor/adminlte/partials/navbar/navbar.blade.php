@@ -19,7 +19,7 @@
 
         @if(auth()->user()->rol==\App\Models\User::ROL_ADMIN)
             <li class="nav-item dropdown show p-1" id="my-btn-annuncements-1">
-                <button class="btn btn-success btn-sm  font-11 font-weight-bold" id="btn_componente-1"
+                <button class="nav-link btn btn-success btn-sm  font-11 font-weight-bold" id="btn_componente-1"
                         data-toggle="modal" data-target="#modal-annuncient-1" type="button">
                     <i class="fas fa-bell" aria-hidden="true"></i> PERMISOS
                 </button>
@@ -28,7 +28,7 @@
 
 
         <li class="nav-item dropdown show p-1" id="my-btn-annuncements-2">
-            <button class="btn btn-secondary btn-sm font-11 font-weight-bold" id="btn_buscar_scan"
+            <button class="nav-link btn btn-secondary btn-sm font-11 font-weight-bold" id="btn_buscar_scan"
                     data-toggle="modal" data-target="#modal-escanear-estado-sobre" type="button">
                 <i class="fa fa-barcode" aria-hidden="true"></i> Buscar
             </button>

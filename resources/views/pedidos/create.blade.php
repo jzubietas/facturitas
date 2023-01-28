@@ -697,7 +697,7 @@ ${data.map(function (data, index) {
 
             $("#modal-direccion_crearpedido").on('show.bs.modal', function () {
 
-                $("#recojo_destino").selectpicker("refresh").trigger("change");
+                $("#recojo_destino").val("").selectpicker("refresh").trigger("change");
                 $("#env_pedido_quienrecibe_nombre")
                 $("#env_pedido_quienrecibe_celular")
                 $("#env_pedido_direccion").val("")

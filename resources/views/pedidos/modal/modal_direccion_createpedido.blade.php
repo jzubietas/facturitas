@@ -37,8 +37,8 @@
 
                                             <select name="recojo_destino" id="recojo_destino"
                                                     data-show-subtext="false" data-live-search="true"
-                                                    data-live-search-placeholder="Seleccione Destino"
                                                     class="form-control">
+                                                <option value="">---- SELECCIONE Destino ----</option>
                                                 <option value="LIMA">LIMA</option>
                                                 {{--<option value="OLVA">OLVA</option>--}}
                                             </select>

@@ -19,6 +19,7 @@
 
                     <div id="op-1-row" class="op-1-row"><!---->
                         <form id="form-op-1-row" name="form-op-1-row" class="form-row ">
+                            <input type="hidden" id="opcion1" name="opcion" value="1">
                             <div class="form-group col-lg-6">
                                 {!! Form::label('asesor_op1', 'Asesor*') !!}
 
@@ -36,8 +37,8 @@
 
                             <div class="form-group col-lg-6">
                                 {!! Form::label('clientenuevo_op1', 'Numero de cliente nuevo') !!}
-                                <input type="text" name="clientenuevo_op1" id="clientenuevo_op1"  class="form-control" placeholder="Cliente nuevo">
-
+                                {{--<input type="text" name="clientenuevo_op1" id="clientenuevo_op1"  class="form-control" placeholder="Cliente nuevo" maxlength="9">--}}
+                                {!! Form::number('clientenuevo_op1', null, ['class' => 'form-control', 'id' => 'clientenuevo_op1', 'min' =>'0', 'max' => '999999999', 'maxlength' => '9','placeholder' => '9 digitos']) !!}
                             </div>
 
                             <div class="form-group col-lg-12">
@@ -53,6 +54,7 @@
 
                     <div id="op-2-row" class="op-2-row"><!---->
                         <form id="form-op-2-row" name="form-op-2-row" class="form-row ">
+                            <input type="hidden" id="opcion2" name="opcion" value="2">
                             <div class="form-group col-lg-6">
                                 {!! Form::label('asesor_op2', 'Asesor*') !!}
                                 <select name="asesor_op2" class="border form-control border-secondary" id="asesor_op2" data-live-search="true"
@@ -69,7 +71,7 @@
 
                             <div class="form-group col-lg-6">
                                 {!! Form::label('cantidadpedidos_op2', 'Cantidad de pedidos') !!}
-                                <input type="text" name="cantidadpedidos_op2" id="cantidadpedidos_op2"  class="form-control" placeholder="Cliente nuevo">
+                                <input type="text" name="cantidadpedidos_op2" id="cantidadpedidos_op2"  class="form-control" placeholder="Cliente nuevo" maxlength="1">
                             </div>
 
                             <div class="form-group col-lg-12">
@@ -84,7 +86,8 @@
                     </div>
 
                     <div id="op-3-row" class="op-3-row"><!---->
-                        <form id="form-op-2-row" name="form-op-2-row" class="form-row ">
+                        <form id="form-op-3-row" name="form-op-3-row" class="form-row ">
+                            <input type="hidden" id="opcion3" name="opcion" value="3">
 
                             <div class="form-group col-lg-6">
                                 {!! Form::label('asesor_op3', 'Asesor*') !!}
@@ -121,7 +124,8 @@
                     </div>
 
                     <div id="op-4-row" class="op-4-row">
-                        <form id="form-op-2-row" name="form-op-2-row" class="form-row ">
+                        <form id="form-op-4-row" name="form-op-4-row" class="form-row ">
+                            <input type="hidden" id="opcion4" name="opcion" value="4">
 
                             <div class="form-group col-lg-6">
                                 {!! Form::label('asesor_op4', 'Asesor*') !!}
