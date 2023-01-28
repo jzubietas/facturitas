@@ -133,7 +133,7 @@
                 switch (value) {
                     case 'op-1-row':
                         $.ajax({
-                            url: "{{ route('asesorcombo') }}",
+                            url: "{{ route('asesorcombomodal') }}",
                             method: 'POST',
                             success: function (data) {
                                 $('#asesor_op1').html(data.html);
@@ -143,7 +143,7 @@
                         break;
                     case 'op-2-row':
                         $.ajax({
-                            url: "{{ route('asesorcombo') }}",
+                            url: "{{ route('asesorcombomodal') }}",
                             method: 'POST',
                             success: function (data) {
                                 $('#asesor_op2').html(data.html);
@@ -153,7 +153,7 @@
                         break;
                     case 'op-3-row':
                         $.ajax({
-                            url: "{{ route('asesorcombo') }}",
+                            url: "{{ route('asesorcombomodal') }}",
                             method: 'POST',
                             success: function (data) {
                                 $('#asesor_op3').html(data.html);
@@ -163,7 +163,7 @@
                         break;
                     case 'op-4-row':
                         $.ajax({
-                            url: "{{ route('asesorcombo') }}",
+                            url: "{{ route('asesorcombomodal') }}",
                             method: 'POST',
                             success: function (data) {
                                 $('#asesor_op4').html(data.html);
