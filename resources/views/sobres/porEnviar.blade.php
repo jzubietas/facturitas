@@ -972,10 +972,12 @@
                     "bAutoWidth": false,
                     "pageLength": 5,
                     "order": [[0, "asc"]],
-                    'ajax': {
+                    ajax: {
                         url: "{{ route('sobreenvioshistorial') }}",
-                        'data': {"provincialima": provincialima, "cliente_id": clienteidprovincia},
-                        "type": "get",
+                        data: function (d) {
+                            d.provincialima=provincialima;
+                            d.cliente_id=clienteidprovincia;
+                        },
                     },
                     rowCallback: function (row, data, index) {
                         $('.button_provincia', row).click(function (e) {
