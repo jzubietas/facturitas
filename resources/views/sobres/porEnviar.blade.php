@@ -1443,7 +1443,7 @@
             });
 
             tablaPrincipal = $('#tablaPrincipal').DataTable({
-                dom: 'Bfritp',
+                dom: 'Blfrtip',
                 processing: true,
                 stateSave: true,
                 serverSide: true,
@@ -1553,7 +1553,7 @@
                 buttons: [
                     {
                         text: 'RECOGER',
-                        className: 'btn btn-danger visible_button_recoger',
+                        className: 'btn btn-danger visible_button_recoger mb-4',
                         action: function (e, dt, node, config) {
                             $('#modal-recoger-sobre').modal("show");
                         }
