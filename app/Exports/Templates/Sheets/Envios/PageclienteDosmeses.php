@@ -7,6 +7,9 @@ use App\Exports\Templates\Sheets\AfterSheet;
 use App\Exports\Templates\Sheets\Fill;
 use App\Models\Cliente;
 use App\Models\ListadoResultado;
+use App\Models\User;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Concerns\WithColumnFormatting;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
@@ -32,21 +35,27 @@ class PageclienteDosmeses extends Export implements WithColumnFormatting,WithCol
             ])->get();
 
         //$ultimos=$ultimos_pedidos->whereNotNull('fechaultimopedido')->get();
+
+        $dosmeses=now()->startOfMonth()->subMonths(2)->format('Y-m');//01 11
         $lista=[];
-        foreach ($ultimos_pedidos as $procesada) {
+        foreach ($ultimos_pedidos as $procesada){
             if($procesada->fechaultimopedido!=null)
             {
-                if(in_array($procesada->fechaultimopedido_pago,["0","1"]))
+                $fecha_analizar=Carbon::parse($procesada->fechaultimopedido)->format('Y-m');
+                if($fecha_analizar==$dosmeses)
                 {
-                    if(in_array($procesada->fechaultimopedido_pagado,["0","1"]))
+                    if(in_array($procesada->fechaultimopedido_pago,["0","1"]))
                     {
-                        $lista[]=$procesada->id;
+                        if(in_array($procesada->fechaultimopedido_pagado,["0","1"]))
+                        {
+                            $lista[]=$procesada->id;
+                        }
                     }
                 }
             }
         }
 
-        $clientes=Cliente::
+        $data=Cliente::
         join('users as u','u.id','clientes.user_id')
             ->whereIn("clientes.id",$lista)
             ->select([
@@ -58,13 +67,57 @@ class PageclienteDosmeses extends Export implements WithColumnFormatting,WithCol
                                         when dp1.pago=1 then 'DEUDA'
                                         else 'NO DUDA' end from pedidos dp1
                                         where dp1.estado=1 and dp1.cliente_id=clientes.id order by dp1.created_at desc limit 1) as deuda"),
-                DB::raw("(select dp2.total from pedidos a inner join detalle_pedidos dp2 on a.id=dp2.pedido_id
+                DB::raw("(select dp2.saldo from pedidos a inner join detalle_pedidos dp2 on a.id=dp2.pedido_id
                                         where dp2.estado=1 and a.cliente_id=clientes.id order by dp2.created_at desc limit 1) as importeultimopedido"),
                 DB::raw("(select DATE_FORMAT(dp3.created_at,'%m') from pedidos a inner join detalle_pedidos dp3 on a.id=dp3.pedido_id
                                         where dp3.estado=1 and a.cliente_id=clientes.id order by dp3.created_at desc limit 1) as mesultimopedido"),
-            ])->get();
+            ]);
 
-        return $clientes;
+        if (Auth::user()->rol == "Llamadas") {
+
+            $usersasesores = User::where('users.rol', 'Asesor')
+                ->where('users.estado', '1')
+                ->where('users.llamada', Auth::user()->id)
+                ->select(
+                    DB::raw("users.identificador as identificador")
+                )
+                ->pluck('users.identificador');
+            $data = $data->WhereIn("u.identificador", $usersasesores);
+
+        }elseif (Auth::user()->rol == "Asesor") {
+            $usersasesores = User::where('users.rol', 'Asesor')
+                ->where('users.estado', '1')
+                ->where('users.identificador', Auth::user()->identificador)
+                ->select(
+                    DB::raw("users.identificador as identificador")
+                )
+                ->pluck('users.identificador');
+            $data = $data->WhereIn("u.identificador", $usersasesores);
+        }else if (Auth::user()->rol == "Encargado") {
+            $usersasesores = User::where('users.rol', 'Asesor')
+                ->where('users.estado', '1')
+                ->where('users.supervisor', Auth::user()->id)
+                ->select(
+                    DB::raw("users.identificador as identificador")
+                )
+                ->pluck('users.identificador');
+
+            $data = $data->WhereIn("u.identificador", $usersasesores);
+        }elseif (Auth::user()->rol == User::ROL_ASESOR_ADMINISTRATIVO) {
+            $data = $data->Where("u.identificador", '=', 'B');
+        }elseif (Auth::user()->rol == "Operario") {
+        $asesores = User::whereIN('users.rol', ['Asesor', 'Administrador', 'ASESOR ADMINISTRATIVO'])
+            ->where('users.estado', '1')
+            ->Where('users.operario', Auth::user()->id)
+            ->select(
+                DB::raw("users.identificador as identificador")
+            )
+            ->pluck('users.identificador');
+        $pedidos = $data->WhereIn('u.identificador', $asesores);
+
+        }
+
+        return $data->get();
     }
     public function fields(): array
     {
@@ -74,8 +127,8 @@ class PageclienteDosmeses extends Export implements WithColumnFormatting,WithCol
             ,"celular"=>"Celular"
             ,"rucs"=>"Rucs"
             ,"deuda"=>"Deuda"
-            ,"importeultimopedido"=>"Importe"
-            ,"mesultimopedido"=>"Mes",
+            ,"importeultimopedido"=>"Importe ultimo pedido"
+            ,"mesultimopedido"=>"Mes ultimo pedido",
         ];
     }
     public function columnWidths(): array
@@ -98,7 +151,9 @@ class PageclienteDosmeses extends Export implements WithColumnFormatting,WithCol
              'D' => NumberFormat::FORMAT_DATE_YYYYMMDD,
              'E' => NumberFormat::FORMAT_DATE_YYYYMMDD,
             */
-            'B' => NumberFormat::FORMAT_TEXT
+            'B' => NumberFormat::FORMAT_TEXT,
+            'C' => NumberFormat::FORMAT_TEXT,
+            'D' => NumberFormat::FORMAT_TEXT,
 
         ];
     }
