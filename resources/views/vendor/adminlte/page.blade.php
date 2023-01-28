@@ -5,15 +5,15 @@
 @section('adminlte_css')
     <style>
         @foreach(get_color_role() as $rol=>$color)
-            .bg-{{Str::slug($rol)}}              {
+            .bg-{{Str::slug($rol)}}             {
             @if(is_array($color))
-                         background: {{$color[0]}}             !important;;
-            color: {{$color[1]}}             !important;;
+                        background: {{$color[0]}}            !important;;
+            color: {{$color[1]}}            !important;;
             @else
-                         background: {{$color}};
+                        background: {{$color}};
             color: #000 !important;
             @endif
-                         font-weight: bold !important;;
+                        font-weight: bold !important;;
         }
         @endforeach
     </style>
@@ -237,10 +237,11 @@
                     type: 'POST',
                     url: "{{ route('ajax_modal1_response') }}",
                     success: function (data) {
-                        if (data.html != "0") {
-                            PNotify.notice({
+                        if(data.html!="0")
+                        {
+                            /*PNotify.notice({
                                 text: 'Notice 1.',
-                            });
+                            });*/
                             $("#modal-annuncient-1").modal("hide");
                             console.log("response 1")
                         } else {
@@ -262,10 +263,11 @@
                     type: 'POST',
                     url: "{{ route('ajax_modal1_response') }}",
                     success: function (data) {
-                        if (data.html != "0") {
-                            PNotify.notice({
+                        if(data.html!="0")
+                        {
+                            /*PNotify.notice({
                                 text: 'Notice 2.',
-                            });
+                            });*/
                             $("#modal-annuncient-2").modal("hide");
                             console.log("response 1")
                         } else {
@@ -287,11 +289,12 @@
                     type: 'POST',
                     url: "{{ route('ajax_modal1_response') }}",
                     success: function (data) {
-                        if (data.html != "0") {
-                            PNotify.notice({
+                        if(data.html!="0")
+                        {
+                            /*PNotify.notice({
                                 text: 'Notice 3.',
                             });
-                            $("#modal-annuncient-3").modal("hide");
+                            $("#modal-annuncient-3").modal("hide");*/
                             console.log("response 1")
                         } else {
                             console.log("response 0")
