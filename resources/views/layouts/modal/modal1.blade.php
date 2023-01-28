@@ -38,7 +38,7 @@
                             <div class="form-group col-lg-6">
                                 {!! Form::label('clientenuevo_op1', 'Numero de cliente nuevo') !!}
                                 {{--<input type="text" name="clientenuevo_op1" id="clientenuevo_op1"  class="form-control" placeholder="Cliente nuevo" maxlength="9">--}}
-                                {!! Form::number('clientenuevo_op1', null, ['class' => 'form-control', 'id' => 'clientenuevo_op1', 'min' =>'0', 'max' => '999999999', 'maxlength' => '9', 'oninput' => 'maxLengthCheck(this)','placeholder' => '9 digitos']) !!}
+                                {!! Form::number('clientenuevo_op1', null, ['class' => 'form-control', 'id' => 'clientenuevo_op1', 'min' =>'0', 'max' => '999999999', 'maxlength' => '9','placeholder' => '9 digitos']) !!}
                             </div>
 
                             <div class="form-group col-lg-12">
