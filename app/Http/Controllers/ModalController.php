@@ -15,16 +15,20 @@ class ModalController extends Controller
             switch ($opcion)
             {
                 case '1':
+                    //base fria y referido
                     $asesor_op1=$request->asesor_op1;
                     $cliente_op1=$request->cliente_op1;
                     $clientenuevo_op1=$request->clientenuevo_op1;
                     $captura_op1=$request->captura_op1;
+
                     break;
-                case '2':break;
+                case '2':
+                    //autorizacion para poner pedido
                     $asesor_op2=$request->asesor_op2;
                     $cliente_op2=$request->cliente_op2;
                     $cantidadpedidos_op2=$request->cantidadpedidos_op2;
                     $captura_op2=$request->captura_op2;
+                    break;
                 case '3':
                     $asesor_op3=$request->asesor_op3;
                     $cliente_op3=$request->cliente_op3;
