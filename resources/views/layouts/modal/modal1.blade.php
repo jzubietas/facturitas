@@ -71,7 +71,7 @@
 
                             <div class="form-group col-lg-6">
                                 {!! Form::label('cantidadpedidos_op2', 'Cantidad de pedidos') !!}
-                                <input type="text" name="cantidadpedidos_op2" id="cantidadpedidos_op2"  class="form-control" placeholder="Cliente nuevo">
+                                <input type="text" name="cantidadpedidos_op2" id="cantidadpedidos_op2"  class="form-control" placeholder="Cliente nuevo" maxlength="1">
                             </div>
 
                             <div class="form-group col-lg-12">
