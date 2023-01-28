@@ -35,22 +35,19 @@
         </li>
 
         <li class="nav-item dropdown show" id="my-annuncements-1">
-            <a href="" class="nav-link" data-toggle="dropdown" aria-expanded="true">
-                <i class="fas fa-envelope text-white"></i>
-                <span class="d-none badge navbar-badge text-bold text-xs badge-danger badge-pill">3</span>
-            </a>
+            <span class="nav-link p-1 m-0" aria-expanded="true">
+                <img src="{{asset('images/header/icon-a.png')}}" style=" width: 67%; ">
+            </span>
         </li>
         <li class="nav-item dropdown show" id="my-annuncements-2">
-            <a href="" class="nav-link" data-toggle="dropdown" aria-expanded="true">
-                <i class="fas fa-envelope text-white"></i>
-                <span class="d-none badge navbar-badge text-bold text-xs badge-danger badge-pill">3</span>
-            </a>
+            <span class="nav-link p-1 m-0" aria-expanded="true">
+                <img src="{{asset('images/header/icon-b.png')}}" style=" width: 67%; ">
+            </span>
         </li>
         <li class="nav-item dropdown show" id="my-annuncements-3">
-            <a href="" class="nav-link" data-toggle="dropdown" aria-expanded="true">
-                <i class="fas fa-envelope text-white"></i>
-                <span class="d-none badge navbar-badge text-bold text-xs badge-danger badge-pill">3</span>
-            </a>
+            <span class="nav-link p-1 m-0" aria-expanded="true">
+                <img src="{{asset('images/header/icon-c.png')}}" style=" width: 67%; ">
+            </span>
         </li>
         {{-- Custom right links --}}
 
