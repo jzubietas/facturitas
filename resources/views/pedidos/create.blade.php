@@ -508,10 +508,7 @@ ${data.map(function (data, index) {
                         url: URL.createObjectURL(file)
                     }
                 })
-            if (files.length == 0) {
-                alert("Adjunte archivos primero para continuar");
-                return
-            }
+          
 
             if (nombre_empresa != "" && mes != "") {
                 subtotal[cont] = (cantidad * porcentaje) / 100;
