@@ -1142,26 +1142,30 @@ class PedidoController extends Controller
             {
                 $file_name = $request->file('observacion_env')->store('entregas', 'pstorage');
             }
-
             $pedido->update([
-                'estado_sobre' => '1',
-                'destino' => $request->destino_env,
-                'direccion' => $request->direccion,
-                'env_destino' => $request->destino_env,
-                'env_distrito' => $request->distrito_env,
-                'env_zona' => $zona,
-                'env_nombre_cliente_recibe' => $request->contacto_nom_env,
-                'env_celular_cliente_recibe' => $request->contacto_cel_env,
-                'env_cantidad' => "0",
-                'env_direccion' => (($request->destino_env=="LIMA")? $request->direccion_env:''),
-                'env_tracking' => (($request->destino_env=="LIMA")? '':$request->direccion_env),
-                'env_referencia' => (($request->destino_env=="LIMA")? $request->referencia_env:''),
-                'env_numregistro' => (($request->destino_env=="LIMA")? '':$request->referencia_env),
-                'env_rotulo' => (($request->destino_env=="LIMA")? $file_name:''),
-                'env_observacion' => (($request->destino_env=="LIMA")? $request->observacion_env:''),
-                'env_gmlink' => $request->maps_env,
-                'env_importe' => (($request->destino_env=="LIMA")? '':$request->importe_env),
+                'estado_sobre' => ( ($request->destino_env=='')? '0':'1' ),
             ]);
+            if($request->destino_env!='')
+            {
+                $pedido->update([
+                    'destino' => $request->destino_env,
+                    'direccion' => $request->direccion,
+                    'env_destino' => $request->destino_env,
+                    'env_distrito' => $request->distrito_env,
+                    'env_zona' => $zona,
+                    'env_nombre_cliente_recibe' => $request->contacto_nom_env,
+                    'env_celular_cliente_recibe' => $request->contacto_cel_env,
+                    'env_cantidad' => "0",
+                    'env_direccion' => (($request->destino_env=="LIMA")? $request->direccion_env:''),
+                    'env_tracking' => (($request->destino_env=="LIMA")? '':$request->direccion_env),
+                    'env_referencia' => (($request->destino_env=="LIMA")? $request->referencia_env:''),
+                    'env_numregistro' => (($request->destino_env=="LIMA")? '':$request->referencia_env),
+                    'env_rotulo' => (($request->destino_env=="LIMA")? $file_name:''),
+                    'env_observacion' => (($request->destino_env=="LIMA")? $request->observacion_env:''),
+                    'env_gmlink' => $request->maps_env,
+                    'env_importe' => (($request->destino_env=="LIMA")? '':$request->importe_env),
+                ]);
+            }
             if ($cliente_deuda->crea_temporal == 1) {
                 $limitepedidos = $cliente_deuda->activado_pedido;
                 $limitepedidos--;
