@@ -906,7 +906,6 @@ class OperacionController extends Controller
             "cant_compro" => $request->cant_compro
         ]);
 
-
         PedidoMovimientoEstado::create([
             'pedido' => $request->hiddenAtender,
             'condicion_envio_code' => $request->condicion,
@@ -1013,35 +1012,33 @@ class OperacionController extends Controller
             abort(402);
         }
 
-        $pedido->update([
-            'condicion' => Pedido::$estadosCondicionEnvioCode[$request->condicion],
-            'condicion_code' => $request->condicion,
-            'condicion_envio' => Pedido::$estadosCondicionEnvioCode[$request->condicion],
-            'condicion_envio_code' => $request->condicion,
-            'condicion_envio_at'=>now(),
-            'sustento_adjunto' => $request->sustento,
-            'modificador' => 'USER' . Auth::user()->id,
-            'da_confirmar_descarga' => 0,
+        $post = Pedido::find($pedido->id);
+        $resourcorrelativo = $post->replicate();
+        $correla=$post->codigo;
+        $conta_correcion=Pedido::where('codigo','like',$correla.'-C%')->count();
+        $resourcorrelativo->codigo = $pedido->codigo.'-C'.($conta_correcion+1);
+        $resourcorrelativo->created_at = Carbon::now();
+        $resourcorrelativo->save();
+
+        Pedido::where("id",$resourcorrelativo->id)->update([
+           'correlativo' =>  'PED'.$resourcorrelativo->id
         ]);
 
-        $pedido->detallePedidos()->activo()->update([
+        $post_det = DetallePedido::where("pedido_id",$pedido->id);
+        $resourcorrelativo_det = $post_det->replicate();
+        $resourcorrelativo_det->pedido_id = $resourcorrelativo->id;
+        $resourcorrelativo_det->codigo = $resourcorrelativo->codigo;
+
+
+        /*$pedido->detallePedidos()->activo()->update([
             "cant_compro" => $request->cant_compro
-        ]);
+        ]);*/
 
         PedidoMovimientoEstado::create([
             'pedido' => $request->correccion,
             'condicion_envio_code' => $request->condicion,
             'notificado' => 0
         ]);
-
-        /*if ($request->condicion == "3") {
-            $pedido->update([
-                'notificacion' => 'Pedido atendido'
-            ]);
-
-            event(new PedidoAtendidoEvent($pedido));
-        }*/
-
 
         $destinationPath = base_path('public/storage/adjuntos/');
 

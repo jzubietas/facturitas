@@ -342,7 +342,7 @@
                 }
 
                 function submitForm() {
-                    var data =   new FormData( $("#formulariocorreccionatender"));
+                    var data =   new FormData( $("#formulariocorreccionatender")[0]);
                     data.delete('adjunto')
                     data.delete('adjunto[]')
                     $.ajax({
@@ -350,7 +350,7 @@
                         processData: false,
                         contentType: false,
                         type: 'POST',
-                        url: "{{ route('operaciones.atenderid') }}",
+                        url: "{{ route('operaciones.correccionajax') }}",
                         success: function (data) {
                             console.log(data);
                             $("#modal-correccion-op .textcode").text('');
