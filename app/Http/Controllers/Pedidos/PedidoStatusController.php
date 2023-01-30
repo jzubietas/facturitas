@@ -627,7 +627,7 @@ $banca"
 
             } else if (Auth::user()->rol == "Jefe de operaciones") {
 
-                $operarios = User::where('users.rol', 'Operario')
+                /*$operarios = User::where('users.rol', 'Operario')
                     ->where('users.estado', '1')
                     ->where('users.jefe', Auth::user()->id)
                     ->select(
@@ -643,7 +643,7 @@ $banca"
                     )
                     ->pluck('users.identificador');
 
-                $pedidos = $pedidos->WhereIn('u.identificador', $asesores);
+                $pedidos = $pedidos->WhereIn('u.identificador', $asesores);*/
             }
 
             return datatables()->query(DB::table($pedidos))
