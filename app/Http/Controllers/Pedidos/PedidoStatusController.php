@@ -484,7 +484,7 @@ class PedidoStatusController extends Controller
                 ->editColumn('condicion_envio', function ($pedido) {
                     $badge_estado = '';
                     if ($pedido->pendiente_anulacion == '1') {
-                        $badge_estado .= '<span class="badge badge-success">' + '{{\App\Models\Pedido::PENDIENTE_ANULACION }}';
+                        $badge_estado .= '<span class="badge badge-success">' . '{{\App\Models\Pedido::PENDIENTE_ANULACION }}'.'</span>';
                         return $badge_estado;
                     }
                     if ($pedido->estado_sobre == '1') {
