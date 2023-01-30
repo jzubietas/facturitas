@@ -713,6 +713,7 @@ class OperacionController extends Controller
 
                 if(in_array($pedido->condicion_envio_code,[
                     Pedido::RECIBIDO_JEFE_OPE_INT
+                    //,Pedido::ATENDIDO_OPE_INT
                     ,Pedido::ENVIADO_OPE_INT
                     ,Pedido::ENVIO_COURIER_JEFE_OPE_INT
                     ,Pedido::RECEPCION_COURIER_INT
