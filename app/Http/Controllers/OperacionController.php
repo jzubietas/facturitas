@@ -906,6 +906,7 @@ class OperacionController extends Controller
             "cant_compro" => $request->cant_compro
         ]);
 
+
         PedidoMovimientoEstado::create([
             'pedido' => $request->hiddenAtender,
             'condicion_envio_code' => $request->condicion,
@@ -1024,10 +1025,31 @@ class OperacionController extends Controller
            'correlativo' =>  'PED'.$resourcorrelativo->id
         ]);
 
-        $post_det = DetallePedido::where("pedido_id",$pedido->id);
+        $post_det = DetallePedido::where("pedido_id",$pedido->id)->first();
         $resourcorrelativo_det = $post_det->replicate();
         $resourcorrelativo_det->pedido_id = $resourcorrelativo->id;
         $resourcorrelativo_det->codigo = $resourcorrelativo->codigo;
+        $resourcorrelativo_det->save();
+
+        $destinationPath = base_path('public/storage/adjuntos/');
+        $files = $request->file('adjunto');
+        if ($request->hasFile('adjunto'))
+        {
+            foreach ($files as $file)
+            {
+                $file_name = Carbon::now()->second . $file->getClientOriginalName();
+                $file->move($destinationPath, $file_name);
+
+                ImagenAtencion::create([
+                    'pedido_id' => $resourcorrelativo->id,
+                    'adjunto' => $file_name,
+                    'estado' => '1',
+                    'confirm' => '1'
+                ]);
+
+                $cont++;
+            }
+        }
 
 
         /*$pedido->detallePedidos()->activo()->update([
