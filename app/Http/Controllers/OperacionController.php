@@ -708,7 +708,18 @@ class OperacionController extends Controller
                     //$btn[] = '<button data-toggle="tooltip" data-placement="top" title="El sobre ya ah sido recivido en currier,  solo el currier tiene permiso de revertir" disabled class="btn btn-disabled btn-success btn-sm" data-target="#modal-revertir" data-revertir="' . $pedido->id . '" data-codigo="' . $pedido->codigo . '" data-toggle="modal" >Revertir</button>';
                 }
 
-                if(in_array($pedido->condicion_envio_code,[Pedido::RECIBIDO_JEFE_OPE_INT,Pedido::ENVIADO_OPE_INT]))
+                if(in_array($pedido->condicion_envio_code,[
+                    Pedido::RECIBIDO_JEFE_OPE_INT
+                    ,Pedido::ENVIADO_OPE_INT
+                    ,Pedido::ENVIO_COURIER_JEFE_OPE_INT
+                    ,Pedido::RECEPCION_COURIER_INT
+                    ,Pedido::REPARTO_COURIER_INT
+                    ,Pedido::MOTORIZADO_INT
+                    ,Pedido::CONFIRM_MOTORIZADO_INT
+                    ,Pedido::CONFIRM_VALIDADA_CLIENTE_INT
+                    ,Pedido::RECEPCION_MOTORIZADO_INT
+                    ,Pedido::ENVIO_MOTORIZADO_COURIER_INT
+                ]))
                 {
                     $btn[] = '<a href="#" data-backdrop="static" data-keyboard="false" class="btn-sm dropdown-item" data-target="#modal-correccion-op" data-adjuntos="' . $pedido->adjuntos . '" data-correccion=' . $pedido->id . ' data-codigo=' . $pedido->codigos . ' data-toggle="modal" ><i class="fa fa-deaf"></i> Correccion</a>';
                 }
