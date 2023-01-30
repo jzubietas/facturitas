@@ -208,6 +208,7 @@ class PedidoStatusController extends Controller
                 ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
                 ->select([
                     'pedidos.*',
+                    'dp.mes',
                     'pedidos.correlativo as id2',
                     'c.nombre as nombres',
                     'c.celular as celulares',
