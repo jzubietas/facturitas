@@ -1,6 +1,8 @@
 <?php
 namespace App\Exports\Templates;
 use App\Exports\Templates\Sheets\Envios\PageclienteCuatromeses;
+use App\Exports\Templates\Sheets\Envios\PageclienteCuatromesesDeben;
+use App\Exports\Templates\Sheets\Envios\PageclienteCuatromesesNodeben;
 use Maatwebsite\Excel\Concerns\Exportable;
 
 class PlantillaExportClientescuatromesesMultiple implements \Maatwebsite\Excel\Concerns\WithMultipleSheets
@@ -17,7 +19,8 @@ class PlantillaExportClientescuatromesesMultiple implements \Maatwebsite\Excel\C
     public function sheets(): array
     {
         return [
-            new PageclienteCuatromeses(),
+            new PageclienteCuatromesesDeben(),
+            new PageclienteCuatromesesNodeben(),
         ];
     }
 }
