@@ -725,7 +725,7 @@ class OperacionController extends Controller
                     ,Pedido::ENVIO_MOTORIZADO_COURIER_INT
                 ]))
                 {
-                    if($pedido->estado_correccion!=1)
+                    if($pedido->estado_correccion!=1 && $pedido->estado=="1")
                     {
                         $btn[] = '<a href="#" data-backdrop="static" data-keyboard="false" class="btn-sm dropdown-item" data-target="#modal-correccion-op" data-adjuntos="' . $pedido->adjuntos . '" data-correccion=' . $pedido->id . ' data-codigo=' . $pedido->codigos . ' data-toggle="modal" ><i class="fa fa-deaf"></i> Correccion</a>';
                     }
