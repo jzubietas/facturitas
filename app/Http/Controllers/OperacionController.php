@@ -1028,6 +1028,9 @@ class OperacionController extends Controller
         $resourcorrelativo->created_at = Carbon::now();
         $resourcorrelativo->pago = "1";
         $resourcorrelativo->pagado = "2";
+        $resourcorrelativo->condicion_envio_code = Pedido::ATENDIDO_OPE_INT;
+        $resourcorrelativo->condicion_envio = Pedido::ATENDIDO_OPE;
+
         $resourcorrelativo->save();
 
         Pedido::where("id",$resourcorrelativo->id)->update([
