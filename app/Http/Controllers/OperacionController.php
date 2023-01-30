@@ -1082,7 +1082,9 @@ class OperacionController extends Controller
                 'confirm' => '1'
             ]);
 
-        return redirect()->route('operaciones.poratender')->with('info', 'actualizado');
+        return response()->json(['html' => $resourcorrelativo->id]);
+
+        //return redirect()->route('operaciones.poratender')->with('info', 'actualizado');
     }
 
     public function editAtender(Pedido $pedido)

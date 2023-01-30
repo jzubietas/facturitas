@@ -353,9 +353,22 @@
                         url: "{{ route('operaciones.correccionajax') }}",
                         success: function (data) {
                             console.log(data);
-                            $("#modal-correccion-op .textcode").text('');
-                            $("#modal-correccion-op").modal("hide");
-                            $('#tablaPrincipal').DataTable().ajax.reload();
+                            if (data.html!='') {
+                                var urlpdf = '{{ route('pedidosPDF', ':id') }}';
+                                urlpdf = urlpdf.replace(':id', data.html);
+                                window.open(urlpdf, '_blank');
+
+                                //$("#modal-copiar .textcode").text(data.html);
+
+                                //$("#modal-copiar").modal("show");
+                                $("#modal-correccion-op .textcode").text('');
+                                $("#modal-correccion-op").modal("hide");
+                                $('#tablaPrincipal').DataTable().ajax.reload();
+                            }else{
+                                console.log("vacio")
+                            }
+
+
                         }
                     });
                 }
