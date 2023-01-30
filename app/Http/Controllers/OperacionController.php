@@ -1159,6 +1159,10 @@ class OperacionController extends Controller
 
     public function editAtencion(Pedido $pedido)
     {
+        /*if($pedido->correccion==1)
+        {
+
+        }*/
 
         //dd('editando pedido: ' . $pedido);
         $pedidos = Pedido::join('clientes as c', 'pedidos.cliente_id', 'c.id')
