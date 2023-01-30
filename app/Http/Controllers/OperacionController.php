@@ -710,7 +710,7 @@ class OperacionController extends Controller
 
                 if(in_array($pedido->condicion_envio_code,[Pedido::RECIBIDO_JEFE_OPE_INT,Pedido::ENVIADO_OPE_INT]))
                 {
-                    //$btn[] = '<a href="#" data-backdrop="static" data-keyboard="false" class="btn-sm dropdown-item" data-target="#modal-correccion-op" data-adjuntos="' . $pedido->adjuntos . '" data-correccion=' . $pedido->id . ' data-codigo=' . $pedido->codigos . ' data-toggle="modal" ><i class="fa fa-deaf"></i> Correccion</a>';
+                    $btn[] = '<a href="#" data-backdrop="static" data-keyboard="false" class="btn-sm dropdown-item" data-target="#modal-correccion-op" data-adjuntos="' . $pedido->adjuntos . '" data-correccion=' . $pedido->id . ' data-codigo=' . $pedido->codigos . ' data-toggle="modal" ><i class="fa fa-deaf"></i> Correccion</a>';
                 }
 
                 /*if(\auth()->user()->can('operacion.enviar')){
