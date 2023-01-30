@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Exports\Clientes\ClientesSinPedido2MesesAtras;
+use App\Exports\Templates\PlantillaExportClientescuatromesesMultiple;
 use App\Exports\Templates\PlantillaExportClientesdosmesesMultiple;
 use App\Exports\Templates\PlantillaMotorizadoConfirmarMultiple;
 use App\Exports\BaseFriaPorAsesorExport;
@@ -164,36 +165,29 @@ class ExcelController extends Controller
 
     public function clientessituacionExcel(Request $request)
     {
-
-        // dd($request->all());
         ini_set('memory_limit', '-1');
         set_time_limit(3000000);
-
         return (new ClientesAbandonosExport)
             ->clientes($request)
             ->anioa($request)
             ->aniop($request)
             ->download('Lista de Clientes_Situacion_' . $request->anio . '.xlsx');
     }
-
     public function clientespedidosExcel(Request $request)
     {
         return (new PlantillaExportMultiple($request->anio))
             ->download('Lista de Clientes_pedidos_' . $request->anio . '.xlsx');
     }
-
-
     public function clientesTwoMonthAgoExcel(Request $request)
     {
         return (new PlantillaExportClientesdosmesesMultiple())
-            ->download('Lista de Clientes_pedidos_.xlsx');
+            ->download('Lista de Clientes_pedidos_2_meses.xlsx');
     }
-
-
-    // public function basefriaExcel()
-    // {
-    //     return Excel::download(new BasesFriasExport, 'Lista Base Fria.xlsx');
-    // }
+    public function clientesFourMonthAgoExcel(Request $request)
+    {
+        return (new PlantillaExportClientescuatromesesMultiple())
+            ->download('Lista de Clientes_pedidos_4_meses.xlsx');
+    }
     public function basefriaExcel(Request $request)
     {
         return (new BasesFriasExport)

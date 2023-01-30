@@ -33,6 +33,12 @@
         @endcan --}}
         <div class="float-right btn-group dropleft">
 
+            <a href="{{route('excel.clientes-four-month-ago-excel')}}" target="_blank" class="btn btn-dark mr-4">
+                <i class="fa fa-download"></i>
+                <i class="fa fa-file-excel"></i>
+                DEJARON DE PEDIR (4) meses
+            </a>
+
             <a href="{{route('excel.clientes-two-month-ago-excel')}}" target="_blank" class="btn btn-dark mr-4">
                 <i class="fa fa-download"></i>
                 <i class="fa fa-file-excel"></i>
