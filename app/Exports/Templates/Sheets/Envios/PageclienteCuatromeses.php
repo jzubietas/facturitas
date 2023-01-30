@@ -34,7 +34,7 @@ class PageclienteCuatromeses extends Export implements WithColumnFormatting,With
 
         //$ultimos=$ultimos_pedidos->whereNotNull('fechaultimopedido')->get();
 
-        $dosmeses_ini=now()->startOfMonth()->subMonths(2)->format('Y-m');//01 11
+        $dosmeses_ini=now()->startOfMonth()->subMonths(4)->format('Y-m');//01 11
         $dosmeses_fin=now()->endOfMonth()->subMonths(1)->format('Y-m');
         $lista=[];
         foreach ($ultimos_pedidos as $procesada){
