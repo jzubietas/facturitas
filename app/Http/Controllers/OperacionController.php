@@ -1026,6 +1026,8 @@ class OperacionController extends Controller
         $conta_correcion=Pedido::where('codigo','like',$correla.'-C%')->count();
         $resourcorrelativo->codigo = $pedido->codigo.'-C'.($conta_correcion+1);
         $resourcorrelativo->created_at = Carbon::now();
+        $resourcorrelativo->pago = "1";
+        $resourcorrelativo->pagado = "2";
         $resourcorrelativo->save();
 
         Pedido::where("id",$resourcorrelativo->id)->update([
@@ -1036,6 +1038,7 @@ class OperacionController extends Controller
         $resourcorrelativo_det = $post_det->replicate();
         $resourcorrelativo_det->pedido_id = $resourcorrelativo->id;
         $resourcorrelativo_det->codigo = $resourcorrelativo->codigo;
+        $resourcorrelativo_det->saldo = 0;
         $resourcorrelativo_det->save();
 
         $destinationPath = base_path('public/storage/adjuntos/');
