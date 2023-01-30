@@ -49,7 +49,7 @@ class PageclienteCuatromesesDeben extends Export implements WithColumnFormatting
                 {
                     //$dp1=DetallePedido::where('codigo',$procesada->codigoultimopedido)->first();
                     //if(in_array($procesada->fechaultimopedido_pago,["0","1"]))
-                    if( in_array($procesada->pago,[0,1]) )
+                    if( in_array($procesada->pagadoultimopedido,[0,1]) )
                     {
                         //if(in_array($procesada->fechaultimopedido_pagado,["0","1"]))
                         {

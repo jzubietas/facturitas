@@ -47,7 +47,7 @@ class PageclienteCuatromesesNodeben extends Export implements WithColumnFormatti
                 $fecha_analizar=Carbon::parse($procesada->fechaultimopedido)->format('Y-m');
                 if($fecha_analizar==$dosmeses_ini || $fecha_analizar==$dosmeses_fin)
                 {
-                    if( in_array($procesada->pago,[2]) )
+                    if( in_array($procesada->pagadoultimopedido,[2]) )
                     {
                         {
                             $lista[]=$procesada->id;
