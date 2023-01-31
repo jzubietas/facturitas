@@ -44,24 +44,17 @@ class RestructurarDireccionGrupo extends Command
      */
     public function handle()
     {
-        $query = DireccionGrupo::query()
-            ->where(function ($query) {
-                $query->where('estado', '=', '1');
-                $query->orWhere(function ($query) {
-                    $query->where('estado', '=', '0');
-                    $query->where('motorizado_status', '<>', '0');
-                });
-            })
-            ->orderBy('created_at');
+        $clientes=Cliente::query()->activo()
+            ->orderBy('id');
 
-        $this->progress = $this->output->createProgressBar($query->count());
-        $query->chunk(1000, function ($direcciongrupos) {
-            foreach ($direcciongrupos as $grupo) {
-                DireccionGrupo::restructurarCodigos($grupo);
-                if ($grupo->estado = 1) {
-                    $grupo->pedidos()->activo()->update([
-                        'condicion_envio' => $grupo->condicion_envio,
-                        'condicion_envio_code' => $grupo->condicion_envio_code,
+        $this->progress = $this->output->createProgressBar($clientes->count());
+        $clientes->chunk(1000, function ($_clientes) {
+            foreach ($_clientes as $cliente) {
+                DireccionGrupo::restructurarCodigos('2021','11',$cliente);
+                if ($cliente->estado = 1) {
+                    $cliente->pedidos()->activo()->update([
+                        'condicion_envio' => $cliente->condicion_envio,
+                        'condicion_envio_code' => $cliente->condicion_envio_code,
                     ]);
                 }
                 $this->progress->advance();
