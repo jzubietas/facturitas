@@ -64,7 +64,7 @@ class PageclienteCuatromesesDeben extends Export implements WithColumnFormatting
             }
         }
 
-        $data_prev=Cliente::
+        $data=Cliente::
         join('users as u','u.id','clientes.user_id')
             ->whereIn("clientes.id",$lista)
             ->select([
@@ -80,16 +80,8 @@ class PageclienteCuatromesesDeben extends Export implements WithColumnFormatting
                                         where dp2.estado=1 and a.cliente_id=clientes.id order by dp2.created_at desc limit 1) as importeultimopedido"),
                 DB::raw("(select DATE_FORMAT(dp3.created_at,'%m') from pedidos a inner join detalle_pedidos dp3 on a.id=dp3.pedido_id
                                         where dp3.estado=1 and a.cliente_id=clientes.id order by dp3.created_at desc limit 1) as mesultimopedido"),
-            ])->get();
-        $data=[];
-        foreach($data_prev as $filas)
-        {
-            if($filas->deuda=='DEUDA')
-            {
-                $data[]=$filas;
-            }
-        }
-        //$data=$data->where("deuda","DEUDA");
+            ]);
+
 
         if (Auth::user()->rol == User::ROL_LLAMADAS) {
 
@@ -135,7 +127,19 @@ class PageclienteCuatromesesDeben extends Export implements WithColumnFormatting
 
         }
 
-        return $data;
+        $resultado=$data->get();
+        $final=[];
+        foreach($resultado as $filas)
+        {
+            if($filas->deuda=='DEUDA')
+            {
+                $final[]=$filas;
+            }
+        }
+
+        //$data=$data->where("deuda","DEUDA");
+
+        return $final;
     }
     public function fields(): array
     {
