@@ -195,7 +195,7 @@ class PageclienteCuatromesesDeben extends Export implements WithColumnFormatting
 
     public static function afterSheet(AfterSheet $event){
 
-        $color_A1='a9def9';
+        $color_A1='e18b16';
 
         $event->sheet->getStyle('C')->getAlignment()->setWrapText(true);
         $event->sheet->getStyle('E')->getAlignment()->setWrapText(true);
