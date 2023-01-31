@@ -42,20 +42,33 @@ class PageclienteCuatromesesNodeben extends Export implements WithColumnFormatti
                 DB::raw("(select dp1.pagado from pedidos dp1 where dp1.estado=1 and dp1.cliente_id=clientes.id order by dp1.created_at desc limit 1) as fechaultimopedido_pagado"),
             ])->get();
 
-        $dosmeses_ini=[];
-        for($i=5;$i>0;$i--)
+        //$ultimos_pedidos
+        foreach ($ultimos_pedidos as $procesada)
         {
+
+        }
+
+        $dosmeses_ini=[];
+        for($i=4;$i>0;$i--)
+        {
+           /* 4 setiembnre 09
+            3 octube 10
+            2 noviembre 11
+            1  diciembre 12*/
             $dosmeses_ini[]=  now()->startOfMonth()->subMonths($i)->format('Y-m');
         }
+        /*
+         * 2022-09,2022-10,2022-11,2022-12*/
 
         $lista=[];
         foreach ($ultimos_pedidos as $procesada){
             if($procesada->fechaultimopedido!=null)
             {
-                $fecha_analizar=Carbon::parse($procesada->fechaultimopedido)->format('Y-m');
+                //2022-09-02
+                $fecha_analizar=Carbon::parse($procesada->fechaultimopedido)->format('Y-m');//2022-09
                 if(in_array($fecha_analizar,$dosmeses_ini))
                 {
-                    if( in_array($procesada->pagadoultimopedido,[2]) )
+                    if( in_array($procesada->pagadoultimopedido,["2"]) )
                     {
                         {
                             $lista[]=$procesada->id;
