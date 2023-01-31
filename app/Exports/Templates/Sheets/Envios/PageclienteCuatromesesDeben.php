@@ -135,7 +135,7 @@ class PageclienteCuatromesesDeben extends Export implements WithColumnFormatting
 
         }
 
-        return $data->get();
+        return $data;
     }
     public function fields(): array
     {
