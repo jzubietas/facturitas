@@ -78,7 +78,10 @@ class PageclienteCuatromesesHaciaatras extends Export implements WithColumnForma
                                         where dp2.estado=1 and a.cliente_id=clientes.id order by dp2.created_at desc limit 1) as importeultimopedido"),
                 DB::raw("(select DATE_FORMAT(dp3.created_at,'%m') from pedidos a inner join detalle_pedidos dp3 on a.id=dp3.pedido_id
                                         where dp3.estado=1 and a.cliente_id=clientes.id order by dp3.created_at desc limit 1) as mesultimopedido"),
-                DB::raw("(select group_concat(r.porcentaje) from porcentajes r where r.cliente_id=clientes.id) as porcentajes"),
+                DB::raw("(select (r.porcentaje) from porcentajes r where r.cliente_id=clientes.id and r.nombre='FISICO - sin banca') as porcentajes_1"),
+                DB::raw("(select (r.porcentaje) from porcentajes r where r.cliente_id=clientes.id and r.nombre='FISICO - banca') as porcentajes_2"),
+                DB::raw("(select (r.porcentaje) from porcentajes r where r.cliente_id=clientes.id and r.nombre='ELECTRONICA - sin banca') as porcentajes_3"),
+                DB::raw("(select (r.porcentaje) from porcentajes r where r.cliente_id=clientes.id and r.nombre='ELECTRONICA - banca') as porcentajes_4"),
             ]);
 
 
@@ -149,7 +152,10 @@ class PageclienteCuatromesesHaciaatras extends Export implements WithColumnForma
             ,"deuda"=>"Deuda"
             ,"importeultimopedido"=>"Importe ultimo pedido"
             ,"mesultimopedido"=>"Mes ultimo pedido"
-            ,"porcentajes"=>"Porcentaje ultimo pedido",
+            ,"porcentajes_1"=>"Porcentaje FISICO - sin banca"
+            ,"porcentajes_2"=>"Porcentaje FISICO - banca"
+            ,"porcentajes_3"=>"Porcentaje ELECTRONICA - sin banca"
+            ,"porcentajes_4"=>"Porcentaje ELECTRONICA - banca"
         ];
     }
     public function columnWidths(): array
