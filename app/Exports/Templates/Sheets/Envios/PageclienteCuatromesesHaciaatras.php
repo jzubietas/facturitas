@@ -42,7 +42,7 @@ class PageclienteCuatromesesHaciaatras extends Export implements WithColumnForma
             ])->get();
 
         $dosmeses_ini=[];
-        for($i=20;$i>4;$i--)
+        for($i=20;$i>5;$i--)
         {
             $dosmeses_ini[]=  now()->startOfMonth()->subMonths($i)->format('Y-m');
         }
