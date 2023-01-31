@@ -13,11 +13,16 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Concerns\WithColumnFormatting;
+use Maatwebsite\Excel\Sheet;
+use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 use Maatwebsite\Excel\Concerns\WithColumnWidths;
 use PhpOffice\PhpSpreadsheet\Cell\DataType;
 use Illuminate\Http\Request;
 
+Sheet::macro('styleCells', function (Sheet $sheet, string $cellRange, array $style) {
+    $sheet->getDelegate()->getStyle($cellRange)->applyFromArray($style);
+});
 class PageclienteCuatromesesNodeben extends Export implements WithColumnFormatting,WithColumnWidths
 {
     public function collection()
@@ -187,7 +192,30 @@ class PageclienteCuatromesesNodeben extends Export implements WithColumnFormatti
 
     public static function afterSheet(AfterSheet $event){
 
-        $color_cabeceras='a9def9';
+        $color_A1='a9def9';
+        $color_B2='a9def9';
+        $style_recurrente = array(
+            'fill' => array(
+                'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                'startColor' => array('argb' => $color_A1)
+            )
+        );
+
+        $event->sheet->getStyle('C')->getAlignment()->setWrapText(true);
+        $event->sheet->getStyle('E')->getAlignment()->setWrapText(true);
+
+        $event->sheet->styleCells(
+            'A1:G1',
+            [
+                'alignment' => [
+                    'horizontal' => Alignment::HORIZONTAL_CENTER,
+                ],
+                'fill' => [
+                    'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                    'color' => ['argb' => $color_A1]
+                ]
+            ]
+        );
 
 
         /*$style_recurrente = array(
