@@ -52,8 +52,8 @@ class DashboardController extends Controller
             ->join('users as u', 'pedidos.user_id', 'u.id')
             ->whereDate('pedidos.created_at', '=', now());
 
-        add_query_filtros_por_roles_pedidos($_pedidos_totalpedidosdia, 'u.identificador');
-        $_pedidos_totalpedidosdia = $_pedidos_totalpedidosdia->count();
+        //add_query_filtros_por_roles_pedidos($_pedidos_totalpedidosdia, 'u.identificador');
+        //$_pedidos_totalpedidosdia = $_pedidos_totalpedidosdia->count();
 
 
         /**

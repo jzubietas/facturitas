@@ -29,6 +29,7 @@
                         <th scope="col">Código</th>
                         <th scope="col">Cliente</th>
                         <th scope="col">Razón social</th>
+                        <th scope="col">Mes</th>
                         <th scope="col">Asesor</th>
                         <th scope="col">Fecha de atención</th>{{--fecha hora--}}
                         <th scope="col">Tipo de Banca</th>
@@ -257,8 +258,10 @@
 
                         },
                         //searchable: true
+                        //data tabla de atendidos
                     },
                     {data: 'empresas', name: 'empresas',},
+                    {data: 'mes', name: 'mes',}, //se llama a mes
                     {data: 'users', name: 'users',},
                     {
                         data: 'fecha',
