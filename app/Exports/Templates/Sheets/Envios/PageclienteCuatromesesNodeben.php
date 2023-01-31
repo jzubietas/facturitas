@@ -81,6 +81,8 @@ class PageclienteCuatromesesNodeben extends Export implements WithColumnFormatti
                                         where dp3.estado=1 and a.cliente_id=clientes.id order by dp3.created_at desc limit 1) as mesultimopedido"),
                 DB::raw("(select dp2.porcentaje from pedidos a inner join detalle_pedidos dp2 on a.id=dp2.pedido_id
                                         where dp2.estado=1 and a.cliente_id=clientes.id order by dp2.created_at desc limit 1) as porcentajeultimopedido"),
+                DB::table('porcentajes')->selectRaw('GROUP_CONCAT(porcentajes.codigo) as porcentaje')->whereRaw('porcentajes.cliente_id=clientes.id'),
+                //'codigos' => DB::table('grupo_pedido_items')->selectRaw('GROUP_CONCAT(grupo_pedido_items.codigo)')->whereRaw('grupo_pedido_items.grupo_pedido_id=grupo_pedidos.id'),
             ]);
 
 
@@ -151,7 +153,7 @@ class PageclienteCuatromesesNodeben extends Export implements WithColumnFormatti
             ,"deuda"=>"Deuda"
             ,"importeultimopedido"=>"Importe ultimo pedido"
             ,"mesultimopedido"=>"Mes ultimo pedido"
-            ,"porcentajeultimopedido"=>"Porcentaje ultimo pedido",
+            ,"porcentajes"=>"Porcentaje ultimo pedido",
         ];
     }
     public function columnWidths(): array
