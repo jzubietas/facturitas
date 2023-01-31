@@ -133,13 +133,14 @@ class PageclienteCuatromesesDeben extends Export implements WithColumnFormatting
         {
             if($filas->deuda=='DEUDA')
             {
-                $final[]=$filas;
+                $final[]=($filas);
             }
         }
+        $final_r=collect($final);
 
         //$data=$data->where("deuda","DEUDA");
 
-        return $final;
+        return $final_r;
     }
     public function fields(): array
     {
