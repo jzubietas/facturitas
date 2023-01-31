@@ -23,7 +23,7 @@ use Illuminate\Http\Request;
 Sheet::macro('styleCells', function (Sheet $sheet, string $cellRange, array $style) {
     $sheet->getDelegate()->getStyle($cellRange)->applyFromArray($style);
 });
-class PageclienteCuatromesesDeben extends Export implements WithColumnFormatting,WithColumnWidths
+class PageclienteCuatromesesHaciaatras extends Export implements WithColumnFormatting,WithColumnWidths
 {
     public function collection()
     {
@@ -42,7 +42,7 @@ class PageclienteCuatromesesDeben extends Export implements WithColumnFormatting
             ])->get();
 
         $dosmeses_ini=[];
-        for($i=5;$i>1;$i--)
+        for($i=20;$i>1;$i--)
         {
             $dosmeses_ini[]=  now()->startOfMonth()->subMonths($i)->format('Y-m');
         }
@@ -52,7 +52,7 @@ class PageclienteCuatromesesDeben extends Export implements WithColumnFormatting
             if($procesada->fechaultimopedido!=null)
             {
                 $fecha_analizar=Carbon::parse($procesada->fechaultimopedido)->format('Y-m');
-                if(in_array($fecha_analizar,$dosmeses_ini))
+                if( in_array($fecha_analizar,$dosmeses_ini))
                 {
                     //$dp1=DetallePedido::where('codigo',$procesada->codigoultimopedido)->first();
                     //if(in_array($procesada->fechaultimopedido_pago,["0","1"]))

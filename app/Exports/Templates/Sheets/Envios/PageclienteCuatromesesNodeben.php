@@ -42,24 +42,18 @@ class PageclienteCuatromesesNodeben extends Export implements WithColumnFormatti
                 DB::raw("(select dp1.pagado from pedidos dp1 where dp1.estado=1 and dp1.cliente_id=clientes.id order by dp1.created_at desc limit 1) as fechaultimopedido_pagado"),
             ])->get();
 
-        //$ultimos=$ultimos_pedidos->whereNotNull('fechaultimopedido')->get();
+        $dosmeses_ini=[];
+        for($i=5;$i>1;$i--)
+        {
+            $dosmeses_ini[]=  now()->startOfMonth()->subMonths($i)->format('Y-m');
+        }
 
-        $dosmeses_ini1=now()->startOfMonth()->subMonths(5)->format('Y-m');//01 11
-        $dosmeses_ini2=now()->startOfMonth()->subMonths(4)->format('Y-m');
-        $dosmeses_ini3=now()->startOfMonth()->subMonths(3)->format('Y-m');
-        $dosmeses_ini4=now()->startOfMonth()->subMonths(2)->format('Y-m');
-        $dosmeses_ini5=now()->endOfMonth()->subMonths(1)->format('Y-m');
         $lista=[];
         foreach ($ultimos_pedidos as $procesada){
             if($procesada->fechaultimopedido!=null)
             {
                 $fecha_analizar=Carbon::parse($procesada->fechaultimopedido)->format('Y-m');
-                if($fecha_analizar==$dosmeses_ini1
-                    || $fecha_analizar==$dosmeses_ini2
-                    || $fecha_analizar==$dosmeses_ini3
-                    || $fecha_analizar==$dosmeses_ini4
-                    || $fecha_analizar==$dosmeses_ini5
-                )
+                if(in_array($fecha_analizar,$dosmeses_ini))
                 {
                     if( in_array($procesada->pagadoultimopedido,[2]) )
                     {
