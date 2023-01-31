@@ -38,14 +38,22 @@ class PageclienteCuatromesesDeben extends Export implements WithColumnFormatting
 
         //$ultimos=$ultimos_pedidos->whereNotNull('fechaultimopedido')->get();
 
-        $dosmeses_ini=now()->startOfMonth()->subMonths(4)->format('Y-m');//01 11
-        $dosmeses_fin=now()->endOfMonth()->subMonths(1)->format('Y-m');
+        $dosmeses_ini1=now()->startOfMonth()->subMonths(5)->format('Y-m');//01 11
+        $dosmeses_ini2=now()->startOfMonth()->subMonths(4)->format('Y-m');
+        $dosmeses_ini3=now()->startOfMonth()->subMonths(3)->format('Y-m');
+        $dosmeses_ini4=now()->startOfMonth()->subMonths(2)->format('Y-m');
+        $dosmeses_ini5=now()->endOfMonth()->subMonths(1)->format('Y-m');
         $lista=[];
         foreach ($ultimos_pedidos as $procesada){
             if($procesada->fechaultimopedido!=null)
             {
                 $fecha_analizar=Carbon::parse($procesada->fechaultimopedido)->format('Y-m');
-                if($fecha_analizar==$dosmeses_ini || $fecha_analizar==$dosmeses_fin)
+                if($fecha_analizar==$dosmeses_ini1
+                    || $fecha_analizar==$dosmeses_ini2
+                    || $fecha_analizar==$dosmeses_ini3
+                    || $fecha_analizar==$dosmeses_ini4
+                    || $fecha_analizar==$dosmeses_ini5
+                )
                 {
                     //$dp1=DetallePedido::where('codigo',$procesada->codigoultimopedido)->first();
                     //if(in_array($procesada->fechaultimopedido_pago,["0","1"]))

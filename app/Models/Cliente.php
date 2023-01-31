@@ -67,4 +67,21 @@ class Cliente extends Model
         return [];
     }
 
+
+    public static function restructurarCodigos(self $cliente)
+    {
+        $cliente->situacion;
+
+        /*2021*/
+        //11
+        $cont_2021_11=Pedidos::where("cliente_id",$cliente->id)->whereYear('created_at','2021')->whereMonth('created_at','11')->activo()->count();
+        if($cont_2021_11==0)
+        {
+
+        }else{
+
+        }
+
+    }
+
 }
