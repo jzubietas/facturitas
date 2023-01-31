@@ -54,7 +54,7 @@ class PageclienteCuatromesesHaciaatras extends Export implements WithColumnForma
                 $fecha_analizar=Carbon::parse($procesada->fechaultimopedido)->format('Y-m');//->tostring();
                 if(in_array($fecha_analizar,$dosmeses_ini))
                 {
-                    if( in_array($procesada->fechaultimopedido_pagado,["0","1"]) )
+                    if( in_array($procesada->fechaultimopedido_pagado,["0","1","2"]) )
                     {
                         $lista[]=$procesada->id;
                     }
@@ -78,6 +78,8 @@ class PageclienteCuatromesesHaciaatras extends Export implements WithColumnForma
                                         where dp2.estado=1 and a.cliente_id=clientes.id order by dp2.created_at desc limit 1) as importeultimopedido"),
                 DB::raw("(select DATE_FORMAT(dp3.created_at,'%m') from pedidos a inner join detalle_pedidos dp3 on a.id=dp3.pedido_id
                                         where dp3.estado=1 and a.cliente_id=clientes.id order by dp3.created_at desc limit 1) as mesultimopedido"),
+                DB::raw("(select dp2.porcentaje from pedidos a inner join detalle_pedidos dp2 on a.id=dp2.pedido_id
+                                        where dp2.estado=1 and a.cliente_id=clientes.id order by dp2.created_at desc limit 1) as porcentajeultimopedido"),
             ]);
 
 
@@ -147,7 +149,8 @@ class PageclienteCuatromesesHaciaatras extends Export implements WithColumnForma
             ,"rucs"=>"Rucs"
             ,"deuda"=>"Deuda"
             ,"importeultimopedido"=>"Importe ultimo pedido"
-            ,"mesultimopedido"=>"Mes ultimo pedido",
+            ,"mesultimopedido"=>"Mes ultimo pedido"
+            ,"porcentajeultimopedido"=>"Mes ultimo pedido",
         ];
     }
     public function columnWidths(): array
@@ -160,6 +163,7 @@ class PageclienteCuatromesesHaciaatras extends Export implements WithColumnForma
             ,'E' => 8//deuda
             ,'F' => 8//importe
             ,'G' => 8//mes
+            ,'H' => 8//porcentaje
         ];
     }
     public function columnFormats(): array
@@ -174,7 +178,7 @@ class PageclienteCuatromesesHaciaatras extends Export implements WithColumnForma
             'C' => NumberFormat::FORMAT_TEXT,
             'D' => NumberFormat::FORMAT_TEXT,
             'G' => NumberFormat::FORMAT_TEXT,
-
+            'H' => NumberFormat::FORMAT_TEXT,
         ];
     }
     public function title(): string
