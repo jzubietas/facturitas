@@ -67,8 +67,7 @@ class Cliente extends Model
         return [];
     }
 
-    //public static function cambiarDireccion(,self $cliente, Pedido $pedido, array $data)
-    public static function restructurarCodigos(self $cliente)
+    public static function restructurarCodigos($anio,$mes,self $cliente)
     {
         $cliente->situacion;
 
