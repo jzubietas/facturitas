@@ -163,6 +163,9 @@ class PageclienteCuatromesesDeben extends Export implements WithColumnFormatting
             ,'F' => 8//importe
             ,'G' => 8//mes
             ,'H' => 8//porcentaje
+            ,'I' => 8//porcentaje
+            ,'J' => 8//porcentaje
+            ,'K' => 8//porcentaje
         ];
     }
     public function columnFormats(): array
@@ -178,6 +181,9 @@ class PageclienteCuatromesesDeben extends Export implements WithColumnFormatting
             'D' => NumberFormat::FORMAT_TEXT,
             'G' => NumberFormat::FORMAT_TEXT,
             'H' => NumberFormat::FORMAT_TEXT,
+            'I' => NumberFormat::FORMAT_TEXT,
+            'J' => NumberFormat::FORMAT_TEXT,
+            'K' => NumberFormat::FORMAT_TEXT,
         ];
     }
     public function title(): string
