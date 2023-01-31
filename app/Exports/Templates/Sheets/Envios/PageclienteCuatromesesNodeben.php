@@ -23,6 +23,7 @@ use Illuminate\Http\Request;
 Sheet::macro('styleCells', function (Sheet $sheet, string $cellRange, array $style) {
     $sheet->getDelegate()->getStyle($cellRange)->applyFromArray($style);
 });
+
 class PageclienteCuatromesesNodeben extends Export implements WithColumnFormatting,WithColumnWidths
 {
     public function collection()
@@ -198,7 +199,7 @@ class PageclienteCuatromesesNodeben extends Export implements WithColumnFormatti
         $event->sheet->getStyle('E')->getAlignment()->setWrapText(true);
 
         $event->sheet->styleCells(
-            'A1:G1',
+            'A1',
             [
                 'alignment' => [
                     'horizontal' => Alignment::HORIZONTAL_CENTER,
@@ -209,46 +210,18 @@ class PageclienteCuatromesesNodeben extends Export implements WithColumnFormatti
                 ]
             ]
         );
-
-
-        /*$style_recurrente = array(
-            'fill' => array(
-                'fillType' => Fill::FILL_SOLID,
-                'startColor' => array('argb' => $color_cabeceras)
-            )
+        $event->sheet->styleCells(
+            'B1',
+            [
+                'alignment' => [
+                    'horizontal' => Alignment::HORIZONTAL_CENTER,
+                ],
+                'fill' => [
+                    'fillType' => Fill::FILL_SOLID,
+                    'color' => ['argb' => $color_A1]
+                ]
+            ]
         );
 
-        $row_cell_=14;
-        $letter_cell='N';
-        foreach ($event->sheet->getRowIterator() as $row)
-        {
-            if($row->getRowIndex()==1)continue;
-            if($event->sheet->getCellByColumnAndRow($row_cell_,$row->getRowIndex())->getValue()=='RECURRENTE')
-            {
-                $event->sheet->getStyle($letter_cell.$row->getRowIndex())->applyFromArray($style_recurrente);
-            }
-
-
-        }*/
-
-        /*echo 'ROW: ', $cell->getRow(), PHP_EOL;
-                   echo 'COLUMN: ', $cell->getColumn(), PHP_EOL;
-                   echo 'COORDINATE: ', $cell->getCoordinate(), PHP_EOL;
-                   echo 'RAW VALUE: ', $cell->getValue(), PHP_EOL;*/
-
-        //Range Columns
-                /*
-                $event->sheet->styleCells(
-                    'Q',
-                    [
-                        'alignment' => [
-                            'horizontal' => Alignment::HORIZONTAL_CENTER,
-                        ],
-                        'fill' => [
-                            'fillType' => Fill::FILL_SOLID,
-                            'color' => ['rgb' => '336655']
-                        ]
-                    ]
-                ); */
     }
 }

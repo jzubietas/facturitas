@@ -201,13 +201,25 @@ class PageclienteCuatromesesDeben extends Export implements WithColumnFormatting
         $event->sheet->getStyle('E')->getAlignment()->setWrapText(true);
 
         $event->sheet->styleCells(
-            'A1:G1',
+            'A1',
             [
                 'alignment' => [
                     'horizontal' => Alignment::HORIZONTAL_CENTER,
                 ],
                 'fill' => [
                     'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                    'color' => ['argb' => $color_A1]
+                ]
+            ]
+        );
+        $event->sheet->styleCells(
+            'B1',
+            [
+                'alignment' => [
+                    'horizontal' => Alignment::HORIZONTAL_CENTER,
+                ],
+                'fill' => [
+                    'fillType' => Fill::FILL_SOLID,
                     'color' => ['argb' => $color_A1]
                 ]
             ]
