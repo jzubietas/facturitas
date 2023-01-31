@@ -157,6 +157,7 @@ class PageclienteCuatromesesNodeben extends Export implements WithColumnFormatti
             'B' => NumberFormat::FORMAT_TEXT,
             'C' => NumberFormat::FORMAT_TEXT,
             'D' => NumberFormat::FORMAT_TEXT,
+            'G' => NumberFormat::FORMAT_TEXT,
 
         ];
     }
