@@ -10,7 +10,7 @@
     </style>
 @endpush
 @section('content_header')
-    <div><h1>Dashboard</h1>
+    <div><h1>Dashboarddddd</h1>
         <!-- Right navbar links -->
     </div>
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>

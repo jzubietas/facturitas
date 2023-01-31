@@ -222,8 +222,10 @@
 
                         },
                         //searchable: true
+                        //datos de tabla por atender
                     },
-                    {data: 'empresas', name: 'empresas',},{data: 'mes', name: 'mes',},
+                    {data: 'empresas', name: 'empresas',},
+                    {data: 'mes', name: 'mes',},
                     {data: 'users', name: 'users',},
                     {
                         data: 'fecha',

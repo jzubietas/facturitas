@@ -374,6 +374,7 @@ class PedidoStatusController extends Controller
                 ->join('detalle_pedidos as dp', 'pedidos.id', 'dp.pedido_id')
                 ->select([
                     'pedidos.id',
+                    'dp.mes', //se agrega campo mes
                     'pedidos.da_confirmar_descarga',
                     'pedidos.sustento_adjunto',
                     'pedidos.correlativo as id2',
