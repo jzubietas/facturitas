@@ -41,13 +41,30 @@ class PageclienteCuatromesesDeben extends Export implements WithColumnFormatting
                 DB::raw("(select dp1.pagado from pedidos dp1 where dp1.estado=1 and dp1.cliente_id=clientes.id order by dp1.created_at desc limit 1) as fechaultimopedido_pagado"),
             ])->get();
 
-        $lista=$ultimos_pedidos->whereIn("pagadoultimopedido",["0","1"])
-                            ->whereBetween(DB::raw("cast(fechaultimopedido as date)"),['2022-09-01','2022-12-31'])
-                    ->pluck('clientes.id');
+        /*$dosmeses_ini=[];
+        for($i=4;$i>0;$i--)
+        {
+            /*4 3 2 1*/
+            /*$dosmeses_ini[]=  now()->startOfMonth()->subMonths($i)->format('Y-m');
+        }*/
+        $dosmeses_ini=['2022-09','2022-10','2022-11','202212'];
 
+        $lista=[];
+        foreach ($ultimos_pedidos as $procesada){
+            if($procesada->fechaultimopedido)
+            {
+                $fecha_analizar=Carbon::parse($procesada->fechaultimopedido)->format('Y-m');//->tostring();
+                if(in_array($fecha_analizar,['2022-09','2022-10','2022-11','202212']))
+                {
+                    if( in_array($procesada->fechaultimopedido_pagado,["0","1"]) )
+                    {
+                        $lista[]=$procesada->id;
+                    }
+                }
+            }
+        }
 
-
-        $data=Cliente::
+        $data_prev=Cliente::
         join('users as u','u.id','clientes.user_id')
             ->whereIn("clientes.id",$lista)
             ->select([
@@ -63,8 +80,16 @@ class PageclienteCuatromesesDeben extends Export implements WithColumnFormatting
                                         where dp2.estado=1 and a.cliente_id=clientes.id order by dp2.created_at desc limit 1) as importeultimopedido"),
                 DB::raw("(select DATE_FORMAT(dp3.created_at,'%m') from pedidos a inner join detalle_pedidos dp3 on a.id=dp3.pedido_id
                                         where dp3.estado=1 and a.cliente_id=clientes.id order by dp3.created_at desc limit 1) as mesultimopedido"),
-            ]);
-        $data=$data->where("deuda","DEUDA");
+            ])->get();
+        $data=[];
+        foreach($data_prev as $filas)
+        {
+            if($filas->deuda=='DEUDA')
+            {
+                $data[]=$filas;
+            }
+        }
+        //$data=$data->where("deuda","DEUDA");
 
         if (Auth::user()->rol == User::ROL_LLAMADAS) {
 
