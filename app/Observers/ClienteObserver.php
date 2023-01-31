@@ -47,6 +47,10 @@ class ClienteObserver
             's_2022_12' => 'BASE FRIA',
             'a_2023_01' => 0,
             's_2023_01' => 'BASE FRIA',
+            'a_2023_02' => 0,
+            's_2023_02' => 'BASE FRIA',
+            'a_2023_03' => 0,
+            's_2023_03' => 'BASE FRIA',
         ]);
     }
 
