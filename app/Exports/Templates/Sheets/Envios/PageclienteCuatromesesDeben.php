@@ -41,26 +41,11 @@ class PageclienteCuatromesesDeben extends Export implements WithColumnFormatting
                 DB::raw("(select dp1.pagado from pedidos dp1 where dp1.estado=1 and dp1.cliente_id=clientes.id order by dp1.created_at desc limit 1) as fechaultimopedido_pagado"),
             ])->get();
 
-        $dosmeses_ini=[];
-        for($i=1;$i<5;$i++)
-        {
-            $dosmeses_ini[]=  now()->subMonths($i)->format('Y-m');
-        }
+        $lista=$ultimos_pedidos->whereIn("pagadoultimopedido",["0","1"])
+                            ->whereBetween(DB::raw("cast(fechaultimopedido as date)"),['2022-09-01','2022-12-31'])
+                    ->pluck('clientes.id');
 
-        $lista=[];
-        foreach ($ultimos_pedidos as $procesada){
-            if($procesada->fechaultimopedido!=null)
-            {
-                $fecha_analizar=Carbon::parse($procesada->fechaultimopedido)->format('Y-m');//2022-09
-                if(in_array($fecha_analizar,$dosmeses_ini))
-                {
-                    if( in_array($procesada->pagadoultimopedido,["0","1"]) )
-                    {
-                        $lista[]=$procesada->id;
-                    }
-                }
-            }
-        }
+
 
         $data=Cliente::
         join('users as u','u.id','clientes.user_id')
