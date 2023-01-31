@@ -42,10 +42,9 @@ class PageclienteCuatromesesDeben extends Export implements WithColumnFormatting
             ])->get();
 
         $dosmeses_ini=[];
-        for($i=4;$i>0;$i--)
+        for($i=1;$i<5;$i++)
         {
-            /*4 3 2 1*/
-            $dosmeses_ini[]=  now()->startOfMonth()->subMonths($i)->format('Y-m');
+            $dosmeses_ini[]=  now()->subMonths($i)->format('Y-m');
         }
 
         $lista=[];
@@ -53,7 +52,7 @@ class PageclienteCuatromesesDeben extends Export implements WithColumnFormatting
             if($procesada->fechaultimopedido!=null)
             {
                 $fecha_analizar=Carbon::parse($procesada->fechaultimopedido)->format('Y-m');//2022-09
-                if(in_array($fecha_analizar,['2022-09']))
+                if(in_array($fecha_analizar,$dosmeses_ini))
                 {
                     if( in_array($procesada->pagadoultimopedido,["0","1"]) )
                     {
