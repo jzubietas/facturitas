@@ -1030,6 +1030,7 @@ class OperacionController extends Controller
         $resourcorrelativo->pagado = "2";
         $resourcorrelativo->condicion_envio_code = Pedido::ATENDIDO_OPE_INT;
         $resourcorrelativo->condicion_envio = Pedido::ATENDIDO_OPE;
+        $resourcorrelativo->estado_correccion = '1';
 
         $resourcorrelativo->save();
 

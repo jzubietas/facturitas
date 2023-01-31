@@ -60,21 +60,16 @@ class PdfController extends Controller
         $dateM = Carbon::now()->format('m');
         $dateY = Carbon::now()->format('Y');
 
-        //
-
-        //$mes_month=Carbon::now()->startOfMonth()->subMonth()->format('Y_m');
-        //$mes_month=Carbon::now()->startOfMonth()->subMonth()->format('Y_m');
-        //$mes_month=Carbon::now()->startOfMonth()->subMonth()->format('Y_m');
         $mes_month=Carbon::now()->startOfMonth()->subMonth(1)->format('Y_m');
         $mes_anio=Carbon::now()->startOfMonth()->subMonth()->format('Y');
         $mes_mes=Carbon::now()->startOfMonth()->subMonth()->format('m');
 
-        $_pedidos_mes_pasado = User::select(
+        $_pedidos_mes_pasado = User::select([
             'users.id','users.name','users.email'
             ,DB::raw(" (select count( c.id) from clientes c inner join users a  on c.user_id=a.id where a.rol='Asesor' and a.llamada=users.id and c.situacion='RECUPERADO RECIENTE' ) recuperado_reciente")
             ,DB::raw(" (select count( c.id) from clientes c inner join users a  on c.user_id=a.id where a.rol='Asesor' and a.llamada=users.id and c.situacion='RECUPERADO ABANDONO' ) recuperado_abandono")
             ,DB::raw(" (select count( c.id) from clientes c inner join users a  on c.user_id=a.id where a.rol='Asesor' and a.llamada=users.id and c.situacion='NUEVO' ) nuevo")
-        )
+        ])
         ->whereIn('users.rol', ['Llamadas']);
 
 
