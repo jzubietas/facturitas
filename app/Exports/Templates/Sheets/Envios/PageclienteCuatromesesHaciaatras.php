@@ -42,26 +42,21 @@ class PageclienteCuatromesesHaciaatras extends Export implements WithColumnForma
             ])->get();
 
         $dosmeses_ini=[];
-        for($i=20;$i>5;$i--)
+        for($i=20;$i>4;$i--)
         {
             $dosmeses_ini[]=  now()->startOfMonth()->subMonths($i)->format('Y-m');
         }
 
         $lista=[];
         foreach ($ultimos_pedidos as $procesada){
-            if($procesada->fechaultimopedido!=null)
+            if($procesada->fechaultimopedido)
             {
-                $fecha_analizar=Carbon::parse($procesada->fechaultimopedido)->format('Y-m');
-                if( in_array($fecha_analizar,$dosmeses_ini))
+                $fecha_analizar=Carbon::parse($procesada->fechaultimopedido)->format('Y-m');//->tostring();
+                if(in_array($fecha_analizar,$dosmeses_ini))
                 {
-                    //$dp1=DetallePedido::where('codigo',$procesada->codigoultimopedido)->first();
-                    //if(in_array($procesada->fechaultimopedido_pago,["0","1"]))
-                    if( in_array($procesada->pagadoultimopedido,[0,1]) )
+                    if( in_array($procesada->fechaultimopedido_pagado,["0","1"]) )
                     {
-                        //if(in_array($procesada->fechaultimopedido_pagado,["0","1"]))
-                        {
-                            $lista[]=$procesada->id;
-                        }
+                        $lista[]=$procesada->id;
                     }
                 }
             }
@@ -84,7 +79,7 @@ class PageclienteCuatromesesHaciaatras extends Export implements WithColumnForma
                 DB::raw("(select DATE_FORMAT(dp3.created_at,'%m') from pedidos a inner join detalle_pedidos dp3 on a.id=dp3.pedido_id
                                         where dp3.estado=1 and a.cliente_id=clientes.id order by dp3.created_at desc limit 1) as mesultimopedido"),
             ]);
-        $data=$data->where("deuda","DEUDA");
+
 
         if (Auth::user()->rol == User::ROL_LLAMADAS) {
 
@@ -119,18 +114,29 @@ class PageclienteCuatromesesHaciaatras extends Export implements WithColumnForma
         }elseif (Auth::user()->rol == User::ROL_ASESOR_ADMINISTRATIVO) {
             $data = $data->Where("u.identificador", '=', 'B');
         }elseif (Auth::user()->rol == "Operario") {
-        $asesores = User::whereIN('users.rol', ['Asesor', 'Administrador', 'ASESOR ADMINISTRATIVO'])
-            ->where('users.estado', '1')
-            ->Where('users.operario', Auth::user()->id)
-            ->select(
-                DB::raw("users.identificador as identificador")
-            )
-            ->pluck('users.identificador');
-        $pedidos = $data->WhereIn('u.identificador', $asesores);
+            $asesores = User::whereIN('users.rol', ['Asesor', 'Administrador', 'ASESOR ADMINISTRATIVO'])
+                ->where('users.estado', '1')
+                ->Where('users.operario', Auth::user()->id)
+                ->select(
+                    DB::raw("users.identificador as identificador")
+                )
+                ->pluck('users.identificador');
+            $pedidos = $data->WhereIn('u.identificador', $asesores);
 
         }
 
-        return $data->get();
+        $resultado=$data->get();
+        $final=[];
+        foreach($resultado as $filas)
+        {
+            //if($filas->deuda=='NO DEUDA')
+            {
+                $final[]=($filas);
+            }
+        }
+        $final_r=collect($final);
+
+        return $final_r;
     }
     public function fields(): array
     {

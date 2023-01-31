@@ -42,37 +42,22 @@ class PageclienteCuatromesesNodeben extends Export implements WithColumnFormatti
                 DB::raw("(select dp1.pagado from pedidos dp1 where dp1.estado=1 and dp1.cliente_id=clientes.id order by dp1.created_at desc limit 1) as fechaultimopedido_pagado"),
             ])->get();
 
-        //$ultimos_pedidos
-        foreach ($ultimos_pedidos as $procesada)
-        {
-
-        }
-
         $dosmeses_ini=[];
         for($i=4;$i>0;$i--)
         {
-           /* 4 setiembnre 09
-            3 octube 10
-            2 noviembre 11
-            1  diciembre 12*/
             $dosmeses_ini[]=  now()->startOfMonth()->subMonths($i)->format('Y-m');
         }
-        /*
-         * 2022-09,2022-10,2022-11,2022-12*/
 
         $lista=[];
         foreach ($ultimos_pedidos as $procesada){
-            if($procesada->fechaultimopedido!=null)
+            if($procesada->fechaultimopedido)
             {
-                //2022-09-02
-                $fecha_analizar=Carbon::parse($procesada->fechaultimopedido)->format('Y-m');//2022-09
+                $fecha_analizar=Carbon::parse($procesada->fechaultimopedido)->format('Y-m');//->tostring();
                 if(in_array($fecha_analizar,$dosmeses_ini))
                 {
-                    if( in_array($procesada->pagadoultimopedido,["2"]) )
+                    if( in_array($procesada->fechaultimopedido_pagado,["0","1"]) )
                     {
-                        {
-                            $lista[]=$procesada->id;
-                        }
+                        $lista[]=$procesada->id;
                     }
                 }
             }
@@ -95,7 +80,7 @@ class PageclienteCuatromesesNodeben extends Export implements WithColumnFormatti
                 DB::raw("(select DATE_FORMAT(dp3.created_at,'%m') from pedidos a inner join detalle_pedidos dp3 on a.id=dp3.pedido_id
                                         where dp3.estado=1 and a.cliente_id=clientes.id order by dp3.created_at desc limit 1) as mesultimopedido"),
             ]);
-        $data=$data->where("deuda","NO DEUDA");
+
 
         if (Auth::user()->rol == User::ROL_LLAMADAS) {
 
@@ -130,18 +115,29 @@ class PageclienteCuatromesesNodeben extends Export implements WithColumnFormatti
         }elseif (Auth::user()->rol == User::ROL_ASESOR_ADMINISTRATIVO) {
             $data = $data->Where("u.identificador", '=', 'B');
         }elseif (Auth::user()->rol == "Operario") {
-        $asesores = User::whereIN('users.rol', ['Asesor', 'Administrador', 'ASESOR ADMINISTRATIVO'])
-            ->where('users.estado', '1')
-            ->Where('users.operario', Auth::user()->id)
-            ->select(
-                DB::raw("users.identificador as identificador")
-            )
-            ->pluck('users.identificador');
-        $pedidos = $data->WhereIn('u.identificador', $asesores);
+            $asesores = User::whereIN('users.rol', ['Asesor', 'Administrador', 'ASESOR ADMINISTRATIVO'])
+                ->where('users.estado', '1')
+                ->Where('users.operario', Auth::user()->id)
+                ->select(
+                    DB::raw("users.identificador as identificador")
+                )
+                ->pluck('users.identificador');
+            $pedidos = $data->WhereIn('u.identificador', $asesores);
 
         }
 
-        return $data->get();
+        $resultado=$data->get();
+        $final=[];
+        foreach($resultado as $filas)
+        {
+            if($filas->deuda=='NO DEUDA')
+            {
+                $final[]=($filas);
+            }
+        }
+        $final_r=collect($final);
+
+        return $final_r;
     }
     public function fields(): array
     {

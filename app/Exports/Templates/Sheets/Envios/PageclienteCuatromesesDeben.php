@@ -41,20 +41,18 @@ class PageclienteCuatromesesDeben extends Export implements WithColumnFormatting
                 DB::raw("(select dp1.pagado from pedidos dp1 where dp1.estado=1 and dp1.cliente_id=clientes.id order by dp1.created_at desc limit 1) as fechaultimopedido_pagado"),
             ])->get();
 
-        /*$dosmeses_ini=[];
+        $dosmeses_ini=[];
         for($i=4;$i>0;$i--)
         {
-            /*4 3 2 1*/
-            /*$dosmeses_ini[]=  now()->startOfMonth()->subMonths($i)->format('Y-m');
-        }*/
-        $dosmeses_ini=['2022-09','2022-10','2022-11','202212'];
+            $dosmeses_ini[]=  now()->startOfMonth()->subMonths($i)->format('Y-m');
+        }
 
         $lista=[];
         foreach ($ultimos_pedidos as $procesada){
             if($procesada->fechaultimopedido)
             {
                 $fecha_analizar=Carbon::parse($procesada->fechaultimopedido)->format('Y-m');//->tostring();
-                if(in_array($fecha_analizar,['2022-09','2022-10','2022-11','202212']))
+                if(in_array($fecha_analizar,$dosmeses_ini))
                 {
                     if( in_array($procesada->fechaultimopedido_pagado,["0","1"]) )
                     {
@@ -137,8 +135,6 @@ class PageclienteCuatromesesDeben extends Export implements WithColumnFormatting
             }
         }
         $final_r=collect($final);
-
-        //$data=$data->where("deuda","DEUDA");
 
         return $final_r;
     }
