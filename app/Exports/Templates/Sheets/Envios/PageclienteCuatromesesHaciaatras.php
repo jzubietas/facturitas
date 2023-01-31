@@ -78,8 +78,7 @@ class PageclienteCuatromesesHaciaatras extends Export implements WithColumnForma
                                         where dp2.estado=1 and a.cliente_id=clientes.id order by dp2.created_at desc limit 1) as importeultimopedido"),
                 DB::raw("(select DATE_FORMAT(dp3.created_at,'%m') from pedidos a inner join detalle_pedidos dp3 on a.id=dp3.pedido_id
                                         where dp3.estado=1 and a.cliente_id=clientes.id order by dp3.created_at desc limit 1) as mesultimopedido"),
-                DB::raw("(select dp2.porcentaje from pedidos a inner join detalle_pedidos dp2 on a.id=dp2.pedido_id
-                                        where dp2.estado=1 and a.cliente_id=clientes.id order by dp2.created_at desc limit 1) as porcentajeultimopedido"),
+                DB::raw("(select group_concat(r.porcentaje) from porcentajes r where r.cliente_id=clientes.id) as porcentajes"),
             ]);
 
 
@@ -150,7 +149,7 @@ class PageclienteCuatromesesHaciaatras extends Export implements WithColumnForma
             ,"deuda"=>"Deuda"
             ,"importeultimopedido"=>"Importe ultimo pedido"
             ,"mesultimopedido"=>"Mes ultimo pedido"
-            ,"porcentajeultimopedido"=>"Porcentaje ultimo pedido",
+            ,"porcentajes"=>"Porcentaje ultimo pedido",
         ];
     }
     public function columnWidths(): array

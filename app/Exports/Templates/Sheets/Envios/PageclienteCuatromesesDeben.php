@@ -3,11 +3,7 @@
 namespace App\Exports\Templates\Sheets\Envios;
 
 use App\Abstracts\Export;
-use App\Exports\Templates\Sheets\AfterSheet;
-use App\Exports\Templates\Sheets\Fill;
 use App\Models\Cliente;
-use App\Models\DetallePedido;
-use App\Models\ListadoResultado;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -17,8 +13,6 @@ use Maatwebsite\Excel\Sheet;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 use Maatwebsite\Excel\Concerns\WithColumnWidths;
-use PhpOffice\PhpSpreadsheet\Cell\DataType;
-use Illuminate\Http\Request;
 
 Sheet::macro('styleCells', function (Sheet $sheet, string $cellRange, array $style) {
     $sheet->getDelegate()->getStyle($cellRange)->applyFromArray($style);
@@ -78,8 +72,7 @@ class PageclienteCuatromesesDeben extends Export implements WithColumnFormatting
                                         where dp2.estado=1 and a.cliente_id=clientes.id order by dp2.created_at desc limit 1) as importeultimopedido"),
                 DB::raw("(select DATE_FORMAT(dp3.created_at,'%m') from pedidos a inner join detalle_pedidos dp3 on a.id=dp3.pedido_id
                                         where dp3.estado=1 and a.cliente_id=clientes.id order by dp3.created_at desc limit 1) as mesultimopedido"),
-                DB::raw("(select dp2.porcentaje from pedidos a inner join detalle_pedidos dp2 on a.id=dp2.pedido_id
-                                        where dp2.estado=1 and a.cliente_id=clientes.id order by dp2.created_at desc limit 1) as porcentajeultimopedido"),
+                DB::raw("(select group_concat(r.porcentaje) from porcentajes r where r.cliente_id=clientes.id) as porcentajes"),
             ]);
 
 
@@ -150,7 +143,7 @@ class PageclienteCuatromesesDeben extends Export implements WithColumnFormatting
             ,"deuda"=>"Deuda"
             ,"importeultimopedido"=>"Importe ultimo pedido"
             ,"mesultimopedido"=>"Mes ultimo pedido"
-            ,"porcentajeultimopedido"=>"Porcentaje ultimo pedido",
+            ,"porcentajes"=>"Porcentaje ultimo pedido",
         ];
     }
     public function columnWidths(): array
@@ -188,6 +181,7 @@ class PageclienteCuatromesesDeben extends Export implements WithColumnFormatting
     public function map($model): array
     {
         //$model->Periodo=strval(str_pad($model->Periodo,2,"0"));
+        $model->porcentajes = collect($model->porcentajes)->join("\n");
         return parent::map($model);
     }
     public function registerEvents(): array

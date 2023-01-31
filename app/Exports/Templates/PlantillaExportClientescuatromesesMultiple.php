@@ -1,22 +1,17 @@
 <?php
 namespace App\Exports\Templates;
-use App\Exports\Templates\Sheets\Envios\PageclienteCuatromeses;
 use App\Exports\Templates\Sheets\Envios\PageclienteCuatromesesDeben;
 use App\Exports\Templates\Sheets\Envios\PageclienteCuatromesesHaciaatras;
 use App\Exports\Templates\Sheets\Envios\PageclienteCuatromesesNodeben;
+use Maatwebsite\Excel\Concerns\WithMultipleSheets;
 use Maatwebsite\Excel\Concerns\Exportable;
 
-class PlantillaExportClientescuatromesesMultiple implements \Maatwebsite\Excel\Concerns\WithMultipleSheets
+class PlantillaExportClientescuatromesesMultiple implements WithMultipleSheets
 {
     use Exportable;
 
-    protected $anio;
+    public string $anio;
 
-    /*public function __construct($anio)
-    {
-    $this->anio=$anio;
-    }
-    */
     public function sheets(): array
     {
         return [
