@@ -187,35 +187,20 @@ class PageclienteCuatromesesNodeben extends Export implements WithColumnFormatti
 
     public static function afterSheet(AfterSheet $event){
 
-        $color_A1='e18b16';
-
-        $event->sheet->getStyle('C')->getAlignment()->setWrapText(true);
-        $event->sheet->getStyle('E')->getAlignment()->setWrapText(true);
+        $event->sheet->setOrientation(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::ORIENTATION_LANDSCAPE);
 
         $event->sheet->styleCells(
-            'A1',
+            'B1:G1',
             [
-                'alignment' => [
-                    'horizontal' => Alignment::HORIZONTAL_CENTER,
-                ],
-                'fill' => [
-                    'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
-                    'color' => ['argb' => $color_A1]
+                'borders' => [
+                    'outline' => [
+                        'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THICK,
+                        'color' => ['argb' => 'FFFF0000'],
+                    ],
                 ]
             ]
         );
-        $event->sheet->styleCells(
-            'B1',
-            [
-                'alignment' => [
-                    'horizontal' => Alignment::HORIZONTAL_CENTER,
-                ],
-                'fill' => [
-                    'fillType' => Fill::FILL_SOLID,
-                    'color' => ['argb' => $color_A1]
-                ]
-            ]
-        );
+
 
     }
 }
