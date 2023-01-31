@@ -150,7 +150,7 @@ class PageclienteCuatromesesDeben extends Export implements WithColumnFormatting
             ,"deuda"=>"Deuda"
             ,"importeultimopedido"=>"Importe ultimo pedido"
             ,"mesultimopedido"=>"Mes ultimo pedido"
-            ,"porcentajeultimopedido"=>"Mes ultimo pedido",
+            ,"porcentajeultimopedido"=>"Porcentaje ultimo pedido",
         ];
     }
     public function columnWidths(): array
