@@ -43,7 +43,7 @@ class PageclienteCuatromesesNodeben extends Export implements WithColumnFormatti
             ])->get();
 
         $dosmeses_ini=[];
-        for($i=4;$i>1;$i--)
+        for($i=4;$i>0;$i--)
         {
             $dosmeses_ini[]=  now()->startOfMonth()->subMonths($i)->format('Y-m');
         }
