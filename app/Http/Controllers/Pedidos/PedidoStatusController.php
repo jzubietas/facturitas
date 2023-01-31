@@ -380,6 +380,7 @@ class PedidoStatusController extends Controller
                     'c.nombre as nombres',
                     'c.celular as celulares',
                     'u.identificador as users',
+                    'dp.mes',
                     'dp.codigo as codigos',
                     'dp.nombre_empresa as empresas',
                     'dp.total as total',
