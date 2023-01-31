@@ -204,6 +204,7 @@
                 $('#conf_descarga').val(confirmo_descarga);
 
                 /*if (confirmo_descarga == 1) {*/
+                    $("#sustento_data").val("");
                     $('#sustento_adjunto').css({'display': 'block'});
                 /*} else {
                     $('#sustento_adjunto').css({'display': 'none'});
