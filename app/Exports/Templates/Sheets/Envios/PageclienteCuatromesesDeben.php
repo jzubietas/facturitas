@@ -173,7 +173,7 @@ class PageclienteCuatromesesDeben extends Export implements WithColumnFormatting
     }
     public function title(): string
     {
-        return 'Dos meses sin pedir - Deben';
+        return 'Cuatro meses sin pedir - Deben';
     }
     public function map($model): array
     {
