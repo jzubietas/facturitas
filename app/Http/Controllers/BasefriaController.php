@@ -57,7 +57,7 @@ class BasefriaController extends Controller
 
         $data = Cliente::
         join('users as u', 'clientes.user_id', 'u.id')
-            ->select('clientes.id',
+            ->select(['clientes.id',
                 'clientes.nombre',
                 'clientes.icelular',
                 'clientes.celular',
@@ -65,8 +65,7 @@ class BasefriaController extends Controller
                 'u.rol',
                 'clientes.estado',
                 'clientes.situacion'
-            )
-            //->where('clientes.estado', '1')
+            ])
             ->where('clientes.tipo', '0');
 
         if (Auth::user()->rol == 'Llamadas') {
@@ -79,27 +78,7 @@ class BasefriaController extends Controller
                 ->pluck('users.identificador');
             $data = $data->WhereIn("u.identificador", $usersasesores);
 
-        } /*
-        else if(Auth::user()->rol == 'Jefe de llamadas')
-
-        {
-
-
-            $usersasesores = User::where('users.rol', 'Asesor')
-                -> where('users.estado', '1')
-                -> where('users.llamada', Auth::user()->id)
-                ->select(
-                    DB::raw("users.identificador as identificador")
-                )
-                ->pluck('users.identificador');
-
-            $data=$data->WhereIn("u.identificador",$usersasesores);
-
-
-
         }
-        */
-
         else if (Auth::user()->rol == 'Asesor') {
             $usersasesores = User::where('users.rol', 'Asesor')
                 ->where('users.estado', '1')
@@ -135,7 +114,7 @@ class BasefriaController extends Controller
             ->addIndexColumn()
             ->editColumn('action', function ($row) {
                 $btn = "";
-                
+
                 $btn = $btn . '<a href="" data-target="#modal-convertir" data-toggle="modal" data-opcion="' . $row->id . '"><button class="btn btn-info btn-sm"><i class="fas fa-person"></i> Convertir a cliente</button></a>';
 
                 if (auth()->user()->can('base_fria.edit')):
@@ -374,9 +353,9 @@ class BasefriaController extends Controller
                 'path_adjunto_anular_disk' => 'pstorage',
                 'situacion'=>'BLOQUEADO',
             ]);
-            
+
             $html = $cliente;
-            
+
         }
         return response()->json(['html' => $html]);
     }
