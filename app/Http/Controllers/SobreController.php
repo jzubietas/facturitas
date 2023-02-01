@@ -283,7 +283,7 @@ class SobreController extends Controller
                         return $btn;
                     })
                     ->editColumn('foto', function ($pedido) {
-                        $html = collect(explode(',', $pedido->tracking))->trim()->map(fn($f) => '<b>' . $f . '</b>')->join('<br>') . '<br>';
+                        $html = collect(explode(',', $pedido->tracking))->trim()->map(fn($f) => '<b>( '.Carbon::parse($pedido->created_at)->format('d-m-Y').' )' . $f . '</b>')->join('<br>') . '<br>';
 
 
                         $html .= collect(explode(',', $pedido->foto))->trim()->map(fn($f) => '<a target="_blank" href="' .
