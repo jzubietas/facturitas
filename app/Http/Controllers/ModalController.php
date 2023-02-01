@@ -100,7 +100,7 @@ class ModalController extends Controller
                     }
                     /*try {
                         DB::beginTransaction();*/
-                        $users=User::where("rol",User::ROL_ADMIN)->activo()->get();
+                        $users=User::where("rol",User::ROL_ADMIN)->activo()->first();
                         foreach ($users as $userr)
                         {
                             $alerta = Alerta::create([
