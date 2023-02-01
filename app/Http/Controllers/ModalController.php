@@ -44,7 +44,7 @@ class ModalController extends Controller
                         {
                             $msj='Se solicitó la creación de referido al cliente '.$name.', con el numero '.$clientenuevo_op1.'. Se necesita atención.';
                         }else{
-                            $msj='Se solicitó la creación de referido al cliente '.$name.', con el numero '.$clientenuevo_op1.' y nombre '.$clientenuevocontacto_op1.'. Se necesita atención.';
+                            $msj='Se solicitó la creación de referido al cliente '.$name.', con el numero <b>'.$clientenuevo_op1.'</b> y nombre de contacto <b>'.$clientenuevocontacto_op1.'</b>. Se necesita atención.';
                         }
                         foreach ($users as $userr)
                         {
