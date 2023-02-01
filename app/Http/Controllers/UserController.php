@@ -290,7 +290,13 @@ class UserController extends Controller
             } elseif ($user->rol == 'Administrador') {
                 $html .= '<option style="color:black" value="' . $user->identificador . '">' . $user->identificador . '</option>';
             } else {
-                if ($user->exidentificador == '01' || $user->exidentificador == '02' || $user->exidentificador == '22' || $user->exidentificador == '21' || $user->exidentificador == '23') {
+                if (
+                    $user->exidentificador == '01'
+                    || $user->exidentificador == '02'
+                    || $user->exidentificador == '22'
+                    || $user->exidentificador == '21'
+                    || $user->exidentificador == '23'
+                    || $user->exidentificador == '24') {
                     $html .= '<option style="color:black" value="' . $user->identificador . '">' . $user->identificador . (($user->exidentificador != null) ? '  (' . $user->exidentificador . ')' : '') . '</option>';
                 }
                 else {
