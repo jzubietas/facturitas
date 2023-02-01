@@ -62,14 +62,14 @@ class PostCreatePedido
                 ->where('s_2022_12', '=', 'BASE FRIA')
                 ->where('a_2023_01', '=', 0)
                 ->update([
-                    's_2023_02' => 'BASE FRIA'
+                    's_2023_02' => 'NUEVO'
                 ]);
             ListadoResultado::query()
                 ->where('id', $this->cliente_id)
                 ->where('s_2022_12', '=', 'BASE FRIA')
                 ->where('a_2023_01', '>', 0)
                 ->update([
-                    's_2023_02' => 'NUEVO'
+                    's_2023_02' => 'RECURRENTE'
                 ]);
             ListadoResultado::query()
                 ->where('id', $this->cliente_id)
@@ -86,7 +86,7 @@ class PostCreatePedido
                 ->where('s_2023_01', 'ABANDONO RECIENTE')
                 ->where('a_2023_02', '>', 0)
                 ->update([
-                    's_2023_02' => 'RECUPERADO RECIENTE'
+                    's_2023_02' => 'RECUPERADO ABANDONO'
                 ]);
             ListadoResultado::query()
                 ->where('id', $this->cliente_id)
@@ -113,7 +113,10 @@ class PostCreatePedido
                 ]);
             ListadoResultado::query()
                 ->where('id', $this->cliente_id)
-                ->where('s_2023_01', 'RECUPERADO')
+                ->where(function ($query) {
+                    $query->where('s_2023_01', 'RECUPERADO RECIENTE')
+                        ->orWhere('s_2023_01', 'RECUPERADO ABANDONO');
+                })
                 ->where('a_2023_02', '>=', 0)
                 ->update([
                     's_2023_02' => 'RECURRENTE'
