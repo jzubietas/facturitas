@@ -1021,6 +1021,7 @@
                                     return '<span class="banco">' + data + '</span>';
                                 }
                             },
+                            {data: 'foto',name: 'foto',},
                             {
                                 data: 'action',
                                 name: 'action',

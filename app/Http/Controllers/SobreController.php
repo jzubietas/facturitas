@@ -31,6 +31,7 @@ use Facade\FlareClient\Http\Client;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use PDF;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Validator;
@@ -281,7 +282,17 @@ class SobreController extends Controller
                         $btn = '';
                         return $btn;
                     })
-                    ->rawColumns(['action'])
+                    ->editColumn('foto', function ($pedido) {
+                        $html = collect(explode(',', $pedido->tracking))->trim()->map(fn($f) => '<b>' . $f . '</b>')->join('<br>') . '<br>';
+
+
+                        $html .= collect(explode(',', $pedido->foto))->trim()->map(fn($f) => '<a target="_blank" href="' .
+                            Storage::disk('pstorage')->url($f) . '"><i class="fa fa-file-pdf"></i>Ver Rótulo</a>')->join('<br>');
+
+                        $html .= '<p>';
+                        return $html;
+                    })
+                    ->rawColumns(['action','foto'])
                     ->make(true);
 
             } else if ($request->provincialima == "LIMA") {
