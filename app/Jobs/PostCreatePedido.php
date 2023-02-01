@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Models\Cliente;
 use App\Models\ListadoResultado;
 use App\Models\Pedido;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -200,6 +201,14 @@ update listado_resultados set s_2022_12='RECURRENTE' where s_2022_11='RECUPERADO
             ->where('a_2023_02', '>=', 0)
             ->update([
                 's_2023_02' => 'RECURRENTE'
+            ]);
+
+        $situacion=ListadoResultado::where('id', $this->cliente_id)->get()->s_2023_02;
+
+        Cliente::query()
+            ->where('id', $this->cliente_id)
+            ->update([
+                's_2023_02' => $situacion
             ]);
 
     }
