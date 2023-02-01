@@ -3,6 +3,7 @@
 namespace App\Exports\Templates;
 
 use App\Exports\Templates\Sheets\PageclienteInfo;
+use App\Exports\Templates\Sheets\PageclienteinfoFebrero2023;
 use App\Exports\Templates\Sheets\PageclienteSituacion;
 //use App\Exports\Templates\Sheets\PageclienteOctubre;
 //use App\Exports\Templates\Sheets\PageclienteinfoSetiembre;
@@ -32,17 +33,10 @@ class PlantillaExportMultiple implements WithMultipleSheets
     {
         return [
             new PageclienteSituacion(),
-            //new PageclienteInfo($this->anio),
-            //new PageclienteinfoJulio(),
-            //new PageclienteinfoAgosto(),
-            //new PageclienteinfoSetiembre(),
-            //new PageclienteOctubre(),
-            //new PageclienteinfoOctubre(),
-            //new PageclienteNoviembre(),
            new PageclienteinfoNoviembre(),
-            //new PageclienteDiciembre(),
             new PageclienteinfoDiciembre(),
             new PageclienteinfoEnero2023(),
+            new PageclienteinfoFebrero2023()
         ];
     }
 }
