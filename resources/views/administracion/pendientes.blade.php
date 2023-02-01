@@ -269,12 +269,12 @@
               "visible": false
           },
           {
-              data: 'id',
-              name: 'id',
+              data: 'id2',
+              name: 'id2',
           },
           {
-          data: 'id2'
-          , name: 'id2' ,"visible":false
+          data: 'id'
+          , name: 'id' ,"visible":false
         },
           {data: 'celular', name: 'celular'},
           {
