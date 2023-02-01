@@ -23,6 +23,7 @@ class ModalController extends Controller
                     $asesor_op1=$request->asesor_op1;//identificador
                     $cliente_op1=$request->cliente_op1;
                     $clientenuevo_op1=(($request->clientenuevo_op1)? $request->clientenuevo_op1:0);
+                    $clientenuevocontacto_op1=(($request->clientenuevocontacto_op1)? $request->clientenuevocontacto_op1:'');
                     $captura_op1=$request->captura_op1;
                     $letra=Cliente::where("id",$cliente_op1)->activo()->first()->icelular;
                     $referencia=Cliente::where("id",$cliente_op1)->activo()->first()->celular;
@@ -37,13 +38,21 @@ class ModalController extends Controller
                         DB::beginTransaction();
 
                         $users=User::where("rol",User::ROL_ADMIN)->activo()->get();
+
+                        $msj='';
+                        if($clientenuevocontacto_op1=='')
+                        {
+                            $msj='Se solicitó la creación de referido al cliente '.$name.', con el numero '.$clientenuevo_op1.'. Se necesita atención.';
+                        }else{
+                            $msj='Se solicitó la creación de referido al cliente '.$name.', con el numero '.$clientenuevo_op1.' y nombre '.$clientenuevocontacto_op1.'. Se necesita atención.';
+                        }
                         foreach ($users as $userr)
                         {
                             $alerta = Alerta::create([
                                 'user_id' => $userr->id,
                                 'tipo'=>'error',
                                 'subject' => 'BASE FRIA Y REFERIDO',
-                                'message' => 'Se solicitó la creación de referido al cliente '.$name.', con el numero '.$clientenuevo_op1.'. Se necesita atención.',
+                                'message' => $msj,
                                 'date_at' => now(),
                             ]);
                         }
