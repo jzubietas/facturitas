@@ -100,11 +100,11 @@ class ModalController extends Controller
                     }
                     /*try {
                         DB::beginTransaction();*/
-                        $users=User::where("rol",User::ROL_ADMIN)->activo()->first();
+                        $users=User::where("rol",User::ROL_ADMIN)->activo()->get();
                         foreach ($users as $userr)
                         {
                             $alerta = Alerta::create([
-                                'user_id' => $users->id,
+                                'user_id' => $userr->id,
                                 'tipo'=>'error',
                                 'subject' => 'AUTORIZACION PARA SUBIR PEDIDO',
                                 'message' => 'Se solicitó la creación de '.$cantidadpedidos_op2.' pedido(s) al cliente '.$name.'. Se necesita atención.',
