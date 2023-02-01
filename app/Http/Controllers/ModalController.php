@@ -89,8 +89,8 @@ class ModalController extends Controller
                     {
                         $name=Cliente::where('id',$cliente_op2)->activo()->first()->nombre;
                     }
-                    try {
-                        DB::beginTransaction();
+                    /*try {
+                        DB::beginTransaction();*/
                         $users=User::where("rol",User::ROL_ADMIN)->activo()->get();
                         foreach ($users as $userr)
                         {
@@ -102,11 +102,11 @@ class ModalController extends Controller
                                 'date_at' => now(),
                             ]);
                         }
-                        DB::commit();
+                        //DB::commit();
                         return response()->json(['html' => $alerta->id]);
-                    } catch (\Throwable $th) {
+                    /*} catch (\Throwable $th) {
                         return response()->json(['html' => "0"]);
-                    }
+                    }*/
                     break;
                 case '3':
                     $asesor_op3=$request->asesor_op3;
