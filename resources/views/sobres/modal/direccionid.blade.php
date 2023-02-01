@@ -30,6 +30,7 @@
                                         <th scope="col">Item</th>
                                         <th scope="col">Pedidos recepcionados por Jefa OP</th>
                                         <th scope="col">Producto</th>
+                                        <th scope="col">Condicion</th>
                                     </tr>
                                     </thead>
                                     <tbody>

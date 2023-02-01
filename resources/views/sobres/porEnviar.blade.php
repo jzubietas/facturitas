@@ -1267,15 +1267,18 @@
                             },
                             defaultContent: '',
                             orderable: false,
+                            sWidth: '5%',
                         },
-                        {data: 'codigo', name: 'codigo',},
+                        {data: 'codigo', name: 'codigo',sWidth: '40%',},
                         {
                             "data": 'nombre_empresa',
                             "name": 'nombre_empresa',
                             "render": function (data, type, row, meta) {
                                 return data;
-                            }
+                            },
+                            sWidth: '40%',
                         },
+                        {data: 'condicion_envio', name: 'condicion_envio',sWidth: '15%',},
                     ],
                     'select': {
                         'style': 'multi',

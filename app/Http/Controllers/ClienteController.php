@@ -864,6 +864,7 @@ class ClienteController extends Controller
                         'dp.codigo',
                         'dp.nombre_empresa',
                         'pedidos.da_confirmar_descarga',
+                        'pedidos.condicion_envio',
                         //DB::raw(" (select dd.nombre_empresa from detalle_pedidos de where de.pedido_id=direcion_grupos.id) as clientes "),
                     ]
                 )
@@ -881,6 +882,14 @@ class ClienteController extends Controller
 
             return Datatables::query(DB::table($pedidos))
                 ->addIndexColumn()
+                ->editColumn('condicion_envio', function ($pedido) {
+                    $badge_estado='';
+
+                    $color = Pedido::getColorByCondicionEnvio($pedido->condicion_envio);
+                    $badge_estado.= '<span class="badge badge-success" style="background-color: ' . $color . '!important;">' . $pedido->condicion_envio . '</span>';
+                    return $badge_estado;
+                })
+                ->rawColumns(['condicion_envio'])
                 ->make(true);
         }
     }
