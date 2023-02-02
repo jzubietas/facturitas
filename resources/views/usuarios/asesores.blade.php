@@ -28,6 +28,7 @@
                     <th scope="col">CODIGO</th>
                     <th scope="col">NOMBRES Y APELLIDOS</th>
                     <th scope="col">CORREO</th>
+                    <th scope="col">IDENTIFICADOR</th>
                     <th scope="col">ENCARGADO</th>
                     <th scope="col">OPERARIO</th>
                     <th scope="col">LLAMADA</th>
@@ -254,7 +255,7 @@
                 processing: true,
                 serverSide: true,
                 searching: true,
-                "order": [[0, "desc"]],
+                "order": [[3, "asc"]],
                 ajax: "{{ route('users.asesorestabla') }}",
                 createdRow: function (el, data, dataIndex) {
 
@@ -290,6 +291,7 @@
                     },
                     {data: 'name', name: 'name',},
                     {data: 'email', name: 'email',},
+                    {data: 'identificador', name: 'identificador',},
                     {
                         data: 'encargado',
                         name: 'encargado',

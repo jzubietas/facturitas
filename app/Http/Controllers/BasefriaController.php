@@ -26,7 +26,6 @@ class BasefriaController extends Controller
     public function index()
     {
 
-
         $superasesor = User::where('rol', 'Super asesor')->count();
 
         if (Auth::user()->rol == "Llamadas" || Auth::user()->rol == "Llamadas") {
@@ -174,7 +173,7 @@ class BasefriaController extends Controller
             DB::raw("CONCAT(identificador,' (ex ',IFNULL(exidentificador,''),')') AS identificador"), 'id'
         )
             ->where('users.rol', 'Asesor')
-            ->where('users.estado', '1')
+            ->whereIn('users.estado', ['0','1'])
             ->pluck('identificador', 'id');
         foreach ($usersall as $key => $value) {
             $users->put($key, $value);
