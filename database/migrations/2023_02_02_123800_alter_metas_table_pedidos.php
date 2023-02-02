@@ -17,8 +17,8 @@ class AlterMetasTablePedidos extends Migration
         Schema::table('metas',function (Blueprint $table){
             if(!Schema::hasColumn('metas','meta_pedido'))
             {
-                $table->int('meta_pedido')->nullable()->comment('')->after('mes');
-                $table->int('meta_cobro')->nullable()->comment('')->after('meta_pedido');
+                $table->int('meta_pedido')->nullable()->comment('');//->after('mes');
+                $table->int('meta_cobro')->nullable()->comment('');//->after('meta_pedido');
             }
         });
     }
