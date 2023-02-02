@@ -44,7 +44,7 @@ class ResumidoNoBF extends Command
             ->having(DB::raw('anulados+activos'), '>', 0)*/
             ->skip(0)->take(1)
             ->get();
-        $row = $informacion->row();
+        $row = $informacion;
         foreach ($row as $key => $value){
             console.info($value->fecha_ultimo_pedido_con_anulados);
             //$viewData['vehiclemodeldata_'.$key]= $value;
