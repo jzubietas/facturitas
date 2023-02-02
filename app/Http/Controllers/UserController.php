@@ -780,6 +780,11 @@ class UserController extends Controller
             ->where('user_id',$user->id)->count();
         if($find)
         {
+            DB::table('metas')->where('anio',$yy)->where('mes',$mm)
+                ->where('user_id',$user->id)->update([
+                    'meta_pedido' => $request->meta_pedido,
+                    'meta_cobro' => $request->meta_cobro,
+                ]);
             //encontro registro
             $user->update([
                 'meta_pedido' => $request->meta_pedido,
@@ -792,8 +797,8 @@ class UserController extends Controller
                 'email'=>$user->email,
                 'anio'=>$yy,
                 'mes'=>$mm,
-                'meta_pedido'=>0,
-                'meta_cobro'=>0,
+                'meta_pedido' => $request->meta_pedido,
+                'meta_cobro' => $request->meta_cobro,
                 'status'=>1,
                 'created_at'=>now(),
             ]);
