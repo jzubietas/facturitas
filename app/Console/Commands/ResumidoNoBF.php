@@ -52,7 +52,7 @@ class ResumidoNoBF extends Command
                 && $value->situacion=='BASE FRIA'
             )
             {
-                $items=explode(',',$value->codigos)
+                $items=explode(',',$value->codigos);
                     foreach($items as $item)
                     {
                         $this->info($item);
