@@ -773,6 +773,7 @@ class UserController extends Controller
 
     public function AsignarMetaEncargado(Request $request, User $user)
     {
+        //return $request;
         $meta_pedido_1=(($request->meta_pedido_1)? $request->meta_pedido_1:0);
         $meta_pedido_2=(($request->meta_pedido_2)? $request->meta_pedido_2:0);
         $meta_cobro=(($request->meta_cobro)? $request->meta_cobro:0);
