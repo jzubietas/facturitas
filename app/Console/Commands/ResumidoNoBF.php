@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Models\ListadoResultado;
 use DB;
 use Illuminate\Console\Command;
 
@@ -56,6 +57,8 @@ class ResumidoNoBF extends Command
                     foreach($items as $item)
                     {
                         $this->info($item);
+                        ListadoResultado::where('id',$item)->update(['s_2023_02'=>'ABANDONO']);
+                        Cliente::where('id',$item)->update(['situacion'=>'ABANDONO']);
                     }
             }
 
