@@ -3,11 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+//use App\Models\Meta;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\HtmlString;
+use PhpOffice\PhpSpreadsheet\Writer\Ods\Meta;
 use Spatie\Permission\Models\Role;
 use DataTables;
 
@@ -771,11 +773,35 @@ class UserController extends Controller
 
     public function AsignarMetaEncargado(Request $request, User $user)
     {
-        $user->update([
-            'meta_pedido' => $request->meta_pedido,
-            'meta_cobro' => $request->meta_cobro,
-        ]);
-
+        $fecha_created=Carbon::now();
+        $yy=$fecha_created->format('Y');
+        $mm=$fecha_created->format('m');
+        $find=DB::table('metas')->where('anio',$yy)->where('mes',$mm)
+            ->where('user_id',$user->id)->count();
+        if($find)
+        {
+            //encontro registro
+            $user->update([
+                'meta_pedido' => $request->meta_pedido,
+                'meta_cobro' => $request->meta_cobro,
+            ]);
+        }else{
+            DB::table('metas')->insert([
+                'rol'=>$user->rol,
+                'user_id'=>$user->id,
+                'email'=>$user->email,
+                'anio'=>$yy,
+                'mes'=>$mm,
+                'meta_pedido'=>0,
+                'meta_cobro'=>0,
+                'status'=>1,
+                'created_at'=>now(),
+            ]);
+            $user->update([
+                'meta_pedido' => $request->meta_pedido,
+                'meta_cobro' => $request->meta_cobro,
+            ]);
+        }
         return redirect()->route('users.encargados')->with('info', 'asignado');
     }
 
