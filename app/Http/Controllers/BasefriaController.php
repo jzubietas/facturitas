@@ -26,18 +26,17 @@ class BasefriaController extends Controller
     public function index()
     {
 
-
         $superasesor = User::where('rol', 'Super asesor')->count();
 
         if (Auth::user()->rol == "Llamadas" || Auth::user()->rol == "Llamadas") {
             $users = User::
-            where('estado', '1')
+            whereIn('estado', ['0','1'])
                 ->whereIn('rol', ['Asesor', 'Super asesor'])
                 ->where('users.llamada', Auth::user()->id)
                 ->pluck('identificador', 'id');
         } else {
             $users = User::
-            where('estado', '1')
+            whereIn('estado', ['0','1'])
                 ->whereIn('rol', ['Asesor', 'Super asesor'])
                 //->where('users.llamada', Auth::user()->id)
                 ->pluck('identificador', 'id');
