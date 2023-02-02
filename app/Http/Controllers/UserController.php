@@ -475,7 +475,7 @@ class UserController extends Controller
             ])
             ->where('users.rol', 'Asesor')
             ->where('users.estado', '1')
-            ->groupBy(
+            /*->groupBy(
                 'users.id',
                 'users.name',
                 'users.excluir_meta',
@@ -485,7 +485,7 @@ class UserController extends Controller
                 'llamada.name',
                 'users.estado',
                 'users.created_at',
-            )
+            )*/
             //->orderBy('users.created_at', 'DESC')
             ->get();
 
