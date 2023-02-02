@@ -778,7 +778,7 @@ class UserController extends Controller
         $mm=$fecha_created->format('m');
         $find=DB::table('metas')->where('anio',$yy)->where('mes',$mm)
             ->where('user_id',$user->id)->count();
-        if($find)
+        if($find>0)
         {
             DB::table('metas')->where('anio',$yy)->where('mes',$mm)
                 ->where('user_id',$user->id)->update([
