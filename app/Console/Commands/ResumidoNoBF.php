@@ -46,7 +46,19 @@ class ResumidoNoBF extends Command
             ->get();
         $row = $informacion;
         foreach ($row as $key => $value){
-            $this->info(($value->fecha_ultimo_pedido_con_anulados));
+            if($value->anulados==1 && $value->activos==0
+                && $value->fecha_ultimo_pedido_anulado=='2022-06'
+                && $value->fecha_ultimo_pedido_con_anulados=='2022-06'
+                && $value->situacion=='BASE FRIA'
+            )
+            {
+                $items=explode(',',$value->codigos)
+                    foreach($items as $item)
+                    {
+                        $this->info($item);
+                    }
+            }
+
         }
         return 0;
     }
