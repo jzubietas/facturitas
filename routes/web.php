@@ -174,6 +174,7 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     Route::get('users.llamadastabla', [UserController::class, 'Llamadastabla'])->name('users.llamadastabla');////llamadas
 
     Route::post('users.asignarsupervisor/{user}', [UserController::class, 'AsignarSupervisor'])->name('users.asignarsupervisor');
+    Route::post('users.asignarasesorpost', [UserController::class, 'AsignarAsesorpost'])->name('users.asignarasesorpost');////
     Route::post('users.asignarencargadopost', [UserController::class, 'AsignarEncargadopost'])->name('users.asignarencargadopost');////
     Route::post('users.asignarjefellamadaspost', [UserController::class, 'AsignarJefellamadaspost'])->name('users.asignarjefellamadaspost');////
     Route::post('users.asignarllamadaspost', [UserController::class, 'AsignarLlamadaspost'])->name('users.asignarllamadaspost');
@@ -188,8 +189,13 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     Route::post('users.asignarjefe/{user}', [UserController::class, 'AsignarJefe'])->name('users.asignarjefe');
     Route::get('users.misasesores', [UserController::class, 'MisAsesores'])->name('users.misasesores');
     Route::post('users.asignarmetaasesor/{user}', [UserController::class, 'AsignarMetaAsesor'])->name('users.asignarmetaasesor');
+
+    Route::post('users.asignarmetaasesorPost', [UserController::class, 'AsignarMetaAsesor'])->name('users.asignarmetaasesorPost');
+
     Route::get('users.encargados', [UserController::class, 'Encargados'])->name('users.encargados');
     Route::post('users.asignarmetaencargado/{user}', [UserController::class, 'AsignarMetaEncargado'])->name('users.asignarmetaencargado');
+
+
     Route::get('users.operarios', [UserController::class, 'Operarios'])->name('users.operarios');
     Route::get('users.misoperarios', [UserController::class, 'MisOperarios'])->name('users.misoperarios');
     Route::get('users.jefes', [UserController::class, 'Jefes'])->name('users.jefes');

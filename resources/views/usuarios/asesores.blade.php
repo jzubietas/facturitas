@@ -42,6 +42,7 @@
             @include('usuarios.modal.asignarencargado')
             @include('usuarios.modal.asignaroperario')
             @include('usuarios.modal.asignarllamada')
+            @include('usuarios.modal.asignarmetaasesor')
         </div>
     </div>
 
@@ -99,10 +100,15 @@
 
     <script>
         $(document).ready(function () {
-            $('#modal-asignarencargado').on('show.bs.modal', function (event) {
+
+            $('#modal-asignarmetaasesor').on('show.bs.modal', function (event) {
                 var button = $(event.relatedTarget)
-                var idunico = button.data('encargado')
-                $("#hiddenIdencargado").val(idunico);
+                var idunico = button.data('asesor')
+                $("#meta_pedido_1").val(0);
+                $("#meta_pedido_2").val(0);
+                $("#meta_cobro").val(0);
+
+                $("#asesor").val(idunico);
                 if (idunico < 10) {
                     idunico = 'USER000' + idunico;
                 } else if (idunico < 100) {
@@ -165,22 +171,20 @@
 
             });
 
-            $(document).on("submit", "#formencargado", function (evento) {
+            $(document).on("submit", "#formasignarmetaasesor", function (evento) {
                 evento.preventDefault();
-                var formData = $("#formencargado").serialize();
+                var formData = $("#formasignarmetaasesor").serialize();
                 $.ajax({
                     type: 'POST',
-                    url: "{{ route('users.asignarencargadopost') }}",
+                    url: "{{ route('users.asignarmetaasesorPost') }}",
                     data: formData
                 }).done(function (data) {
-                    $("#modal-asignarencargado").modal("hide");
+                    $("#modal-asignarmetaasesor").modal("hide");
                     Swal.fire(
-                        'Usuario asignado correctamente',
+                        'Meta asignado correctamente',
                         '',
                         'success'
                     )
-
-
                     $('#tablaPrincipal').DataTable().ajax.reload();
                 });
             });

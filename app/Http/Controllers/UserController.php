@@ -502,6 +502,10 @@ class UserController extends Controller
                 $btn = $btn . '<a href="" data-target="#modal-asignarencargado" data-toggle="modal" data-encargado="' . $user->id . '"><button class="btn btn-info btn-sm"><i class="fas fa-check"></i> Asignar Encargado</button></a>';
                 $btn = $btn . '<a href="" data-target="#modal-asignaroperario" data-toggle="modal" data-operario="' . $user->id . '"><button class="btn btn-warning btn-sm"><i class="fas fa-check"></i> Asignar Operario</button></a>';
                 $btn = $btn . '<a href="" data-target="#modal-asignarllamadas" data-toggle="modal" data-llamadas="' . $user->id . '"><button class="btn btn-success btn-sm"><i class="fas fa-check"></i> Asignar Llamadas</button></a>';
+
+                $btn = $btn . '<a href="" data-target="#modal-asignarmetaasesor" data-toggle="modal" data-asesor="' . $user->id . '">'.
+                                '<button class="btn btn-info btn-sm"> Asignar metas del mes</button>'.
+                                '</a>';
                 return $btn;
             })
             ->rawColumns(['action'])
@@ -649,7 +653,7 @@ class UserController extends Controller
 
     public function AsignarAsesorpost(Request $request)
     {
-        if (!$request->hiddenIdasesor) {
+        if (!$request->asesor) {
             $html = "";
 
         } else {
@@ -713,14 +717,53 @@ class UserController extends Controller
         return view('usuarios.misasesores', compact('users', 'superasesor'));
     }
 
-    public function AsignarMetaAsesor(Request $request, User $user)
+    public function AsignarMetaAsesor(Request $request)
     {
-        $user->update([
-            'meta_pedido' => $request->meta_pedido,
-            'meta_cobro' => $request->meta_cobro,
-        ]);
-
-        return redirect()->route('users.misasesores')->with('info', 'asignado');
+        //return $request;
+        $meta_pedido_1=(($request->meta_pedido_1)? $request->meta_pedido_1:0);
+        $meta_pedido_2=(($request->meta_pedido_2)? $request->meta_pedido_2:0);
+        $meta_cobro=(($request->meta_cobro)? $request->meta_cobro:0);
+        $fecha_created=Carbon::now();
+        $yy=$fecha_created->format('Y');
+        $mm=$fecha_created->format('m');
+        $find=DB::table('metas')->where('anio',$yy)->where('mes',$mm)
+            ->where('user_id',$request->asesor)->count();
+        if($find>0)
+        {
+            DB::table('metas')->where('anio',$yy)->where('mes',$mm)
+                ->where('user_id',$request->asesor)->update([
+                    'meta_pedido' => $meta_pedido_1,
+                    'meta_pedido_2' => $meta_pedido_2,
+                    'meta_cobro' => $meta_cobro,
+                ]);
+            $user=User::where('id',$request->asesor)->first();
+            //encontro registro
+            $user->update([
+                'meta_pedido' => $meta_pedido_1,
+                'meta_pedido_2' => $meta_pedido_2,
+                'meta_cobro' => $meta_cobro,
+            ]);
+        }else{
+            $user=User::where('id',$request->asesor)->first();
+            DB::table('metas')->insert([
+                'rol'=>$user->rol,
+                'user_id'=>$request->asesor,
+                'email'=>$user->email,
+                'anio'=>$yy,
+                'mes'=>$mm,
+                'meta_pedido' => $meta_pedido_1,
+                'meta_pedido_2' => $meta_pedido_2,
+                'meta_cobro' => $meta_cobro,
+                'status'=>1,
+                'created_at'=>now(),
+            ]);
+            $user->update([
+                'meta_pedido' => $meta_pedido_1,
+                'meta_pedido_2' => $meta_pedido_2,
+                'meta_cobro' => $meta_cobro,
+            ]);
+        }
+        return redirect()->route('users.asesores')->with('info', 'asignado');
     }
 
 
