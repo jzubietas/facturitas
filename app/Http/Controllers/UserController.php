@@ -773,8 +773,8 @@ class UserController extends Controller
 
     public function AsignarMetaEncargado(Request $request, User $user)
     {
-        $meta_pedido=(($request->meta_pedido)? $request->meta_pedido:'');
-        $meta_cobro=(($request->meta_cobro)? $request->meta_cobro:'');
+        $meta_pedido=(($request->meta_pedido)? $request->meta_pedido:0);
+        $meta_cobro=(($request->meta_cobro)? $request->meta_cobro:0);
         $fecha_created=Carbon::now();
         $yy=$fecha_created->format('Y');
         $mm=$fecha_created->format('m');

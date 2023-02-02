@@ -505,7 +505,12 @@
                     },
                     //{data: 'direccion', name: 'direccion'},
                     {data: 'identificador', name: 'identificador'},
-                    {data: 'situacion', name: 'situacion'},
+                    {
+                        data: 'situacion', name: 'situacion',
+                        render: function (data, type, row, meta) {
+
+                            return row.direccion + ' - ' + row.provincia + ' (' + row.distrito + ')';
+                        }},
 
 
                     {data: 'ultimo_pedido', name: 'ultimo_pedido'},
