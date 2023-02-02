@@ -58,7 +58,17 @@ class ResumidoNoBF extends Command
                     foreach($items as $item)
                     {
                         $this->info($item);
-                        ListadoResultado::where('id',$item)->update(['s_2023_02'=>'ABANDONO']);
+                        ListadoResultado::where('id',$item)
+                            ->update([
+                                's_2022-07'=>'RECURRENTE',
+                                's_2022_08'=>'ABANDONO RECIENTE',
+                                's_2022_09'=>'ABANDONO',
+                                's_2022_10'=>'ABANDONO',
+                                's_2022_11'=>'ABANDONO',
+                                's_2022_12'=>'ABANDONO',
+                                's_2023_01'=>'ABANDONO',
+                                's_2023_02'=>'ABANDONO'
+                            ]);
                         Cliente::where('id',$item)->update(['situacion'=>'ABANDONO']);
                     }
             }
