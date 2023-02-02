@@ -255,7 +255,7 @@
                 processing: true,
                 serverSide: true,
                 searching: true,
-                "order": [[0, "desc"]],
+                "order": [[3, "desc"]],
                 ajax: "{{ route('users.asesorestabla') }}",
                 createdRow: function (el, data, dataIndex) {
 
