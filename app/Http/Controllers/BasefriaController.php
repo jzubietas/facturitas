@@ -30,13 +30,13 @@ class BasefriaController extends Controller
 
         if (Auth::user()->rol == "Llamadas" || Auth::user()->rol == "Llamadas") {
             $users = User::
-            whereIn('estado', ['0','1'])
+            where('estado', '1')
                 ->whereIn('rol', ['Asesor', 'Super asesor'])
                 ->where('users.llamada', Auth::user()->id)
                 ->pluck('identificador', 'id');
         } else {
             $users = User::
-            whereIn('estado', ['0','1'])
+            where('estado', '1')
                 ->whereIn('rol', ['Asesor', 'Super asesor'])
                 //->where('users.llamada', Auth::user()->id)
                 ->pluck('identificador', 'id');
@@ -163,7 +163,7 @@ class BasefriaController extends Controller
      */
     public function create()
     {
-        $usersB = User::where('users.estado', '1')
+        $usersB = User::whereIn('users.estado', '1')
             ->whereIn('rol', [User::ROL_ASESOR_ADMINISTRATIVO])
             ->first();
 
@@ -173,7 +173,7 @@ class BasefriaController extends Controller
             DB::raw("CONCAT(identificador,' (ex ',IFNULL(exidentificador,''),')') AS identificador"), 'id'
         )
             ->where('users.rol', 'Asesor')
-            ->where('users.estado', '1')
+            ->whereIn('users.estado', ['0','1'])
             ->pluck('identificador', 'id');
         foreach ($usersall as $key => $value) {
             $users->put($key, $value);
