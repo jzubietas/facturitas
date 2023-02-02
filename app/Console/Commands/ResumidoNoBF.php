@@ -44,13 +44,13 @@ class ResumidoNoBF extends Command
             /*->where('s_2023_02', 'BASE FRIA')
             ->where('a_2023_02', 0)
             ->having(DB::raw('anulados+activos'), '>', 0)*/
-            ->skip(0)->take(1)
+            ->skip(1)->take(1)
             ->get();
         $row = $informacion;
         foreach ($row as $key => $value){
             if($value->anulados==1 && $value->activos==0
-                && $value->fecha_ultimo_pedido_anulado=='2022-06'
-                && $value->fecha_ultimo_pedido_con_anulados=='2022-06'
+                && $value->fecha_ultimo_pedido_anulado=='2022-07'
+                && $value->fecha_ultimo_pedido_con_anulados=='2022-07'
                 && $value->situacion=='BASE FRIA'
             )
             {
@@ -60,11 +60,10 @@ class ResumidoNoBF extends Command
                         $this->info($item);
                         ListadoResultado::where('id',$item)
                             ->update([
-                                'a_2022_06'=>$value->anulados,
-                                's_2022_06'=>'NUEVO',
-                                's_2022_07'=>'RECURRENTE',
-                                's_2022_08'=>'ABANDONO RECIENTE',
-                                's_2022_09'=>'ABANDONO',
+                                'a_2022_07'=>$value->anulados,
+                                's_2022_07'=>'NUEVO',
+                                's_2022_08'=>'RECURRENTE',
+                                's_2022_09'=>'ABANDONO RECIENTE',
                                 's_2022_10'=>'ABANDONO',
                                 's_2022_11'=>'ABANDONO',
                                 's_2022_12'=>'ABANDONO',
