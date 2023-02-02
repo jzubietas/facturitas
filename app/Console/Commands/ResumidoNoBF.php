@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Models\Cliente;
 use App\Models\ListadoResultado;
 use DB;
 use Illuminate\Console\Command;
