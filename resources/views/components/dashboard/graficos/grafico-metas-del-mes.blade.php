@@ -20,14 +20,23 @@
                                     <div class="row">
                                         <div class="col-4">GENERAL</div>
                                         <div class="col-4">
-                                            <x-bs-progressbar :progress="$data_noviembre->progress">
-                                                <span> <b>  {{$data_noviembre->progress}}%</b> - {{$data_noviembre->current}}/{{$data_noviembre->total}}</span>
+                                            <x-bs-progressbar :progress="$data_noviembre->progress" :progress_2="$data_noviembre->progress_2">
+                                                @if ($data_noviembre->progress>='100')
+                                                    <span> <b>  {{$data_noviembre->progress_2}}%</b> - {{$data_noviembre->current}}/{{$data_noviembre->total_2}}</span>
+                                                    @else
+                                                    <span> <b>  {{$data_noviembre->progress_2}}%</b> - {{$data_noviembre->current}}/{{$data_noviembre->total_2}}</span>
+                                                    @endif
+
                                             </x-bs-progressbar>
                                             <sub>% -  Pagados/ Asignados</sub>
                                         </div>
                                         <div class="col-4">
-                                            <x-bs-progressbar :progress="$data_diciembre->progress">
-                                                <span> <b>{{$data_diciembre->progress}}%</b> - {{$data_diciembre->total}}/{{$data_diciembre->meta}}</span>
+                                            <x-bs-progressbar :progress="$data_diciembre->progress" :progress_2="$data_diciembre[$key]['progress_2']">
+                                                @if ($dicResult[$key]['progress']>='100')
+                                                    <span> <b>{{$data_diciembre->progress_2}}%</b> - {{$data_diciembre->total}}/{{$data_diciembre->meta_2}}</span>
+                                                @else
+                                                    <span> <b>{{$data_diciembre->progress}}%</b> - {{$data_diciembre->total}}/{{$data_diciembre->meta}}</span>
+                                                @endif
                                             </x-bs-progressbar>
                                             <sub>% -  Pagados/ Meta</sub>
                                         </div>
@@ -46,8 +55,12 @@
                                                 <sub>% -  Pagados/ Asignados</sub>
                                             </div>
                                             <div class="col-4">
-                                                <x-bs-progressbar :progress="$dicResult[$key]['progress']">
-                                                    <span><b>{{$dicResult[$key]['progress']}}%</b> - {{$dicResult[$key]['total']}}/{{$dicResult[$key]['meta']}}</span>
+                                                <x-bs-progressbar :progress="$dicResult[$key]['progress']" :progress_2="$dicResult[$key]['progress_2']">
+                                                    @if ($dicResult[$key]['progress']>='100')
+                                                        <span><b>{{$dicResult[$key]['progress_2']}}%</b> - {{$dicResult[$key]['total']}}/{{$dicResult[$key]['meta_2']}}</span>
+                                                    @else
+                                                        <span><b>{{$dicResult[$key]['progress']}}%</b> - {{$dicResult[$key]['total']}}/{{$dicResult[$key]['meta']}}</span>
+                                                    @endif
                                                 </x-bs-progressbar>
                                                 <sub>% - Asignados / Meta</sub>
                                             </div>
