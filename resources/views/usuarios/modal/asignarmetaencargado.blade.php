@@ -1,5 +1,5 @@
   <!-- Modal -->
-  <div class="modal fade" id="modal-asignarmetaasesor-{{ $user->id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal fade" id="modal-asignarmetaencargado-{{ $user->id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header bg-info">
@@ -11,11 +11,16 @@
         {{ Form::Open(['route' => ['users.asignarmetaencargado', $user]]) }}
         <div class="modal-body">
           <div class="form-row">
-            <div class="form-group col-lg-6">
-              {!! Form::label('meta_pedido', 'META DE PEDIDOS') !!}
-              {!! Form::number('meta_pedido', null, ['class' => 'form-control', 'min' => 0, 'placeholder' => 'Ingrese meta del mes']) !!}
+            <div class="form-group col-lg-3">
+              {!! Form::label('meta_pedido_1', 'META DE PEDIDOS 1') !!}
+              {!! Form::number('meta_pedido_1', null, ['class' => 'form-control', 'min' => 0, 'placeholder' => 'Ingrese meta 1 del mes']) !!}
               {{-- <input type="text" name="meta_pedido" id="meta_pedido" class="form-control number" placeholder="Ingrese meta del mes..."> --}}
             </div>
+              <div class="form-group col-lg-3">
+                  {!! Form::label('meta_pedido_2', 'META DE PEDIDOS 2') !!}
+                  {!! Form::number('meta_pedido_2', null, ['class' => 'form-control', 'min' => 0, 'placeholder' => 'Ingrese meta 2 del mes']) !!}
+                  {{-- <input type="text" name="meta_pedido" id="meta_pedido" class="form-control number" placeholder="Ingrese meta del mes..."> --}}
+              </div>
             <div class="form-group col-lg-6">
               {!! Form::label('meta_cobro', 'META DE PAGOS') !!}
               {{-- {!! Form::number('meta_cobro', null, ['class' => 'form-control', 'min' => 0, 'placeholder' => 'Ingrese meta del mes']) !!} --}}

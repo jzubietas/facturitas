@@ -53,7 +53,9 @@
               </td>
               <td>
                 {{-- @can('users.asignarsupervisor') --}}
-                  <a href="" data-target="#modal-asignarmetaasesor-{{ $user->id }}" data-toggle="modal"><button class="btn btn-info btn-sm">Asignar metas del mes</button></a>
+                  <a href="" data-target="#modal-asignarmetaencargado-{{ $user->id }}" data-toggle="modal">
+                      <button class="btn btn-info btn-sm">Asignar metas del mes</button>
+                  </a>
                 {{-- @endcan --}}
               </td>
             </tr>
@@ -125,7 +127,7 @@
 
   <script>
     //VALIDAR CAMPOS NUMERICO DE MONTO EN PAGOS
-    
+
     $('input.number').keyup(function(event) {
 
     if(event.which >= 37 && event.which <= 40){
@@ -135,7 +137,7 @@
     $(this).val(function(index, value) {
       return value
         .replace(/\D/g, "")
-        .replace(/([0-9])([0-9]{2})$/, '$1.$2')  
+        .replace(/([0-9])([0-9]{2})$/, '$1.$2')
         .replace(/\B(?=(\d{3})+(?!\d)\.?)/g, ",")
       ;
     });

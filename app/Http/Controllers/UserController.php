@@ -773,7 +773,8 @@ class UserController extends Controller
 
     public function AsignarMetaEncargado(Request $request, User $user)
     {
-        $meta_pedido=(($request->meta_pedido)? $request->meta_pedido:0);
+        $meta_pedido_1=(($request->meta_pedido_1)? $request->meta_pedido_1:0);
+        $meta_pedido_2=(($request->meta_pedido_2)? $request->meta_pedido_2:0);
         $meta_cobro=(($request->meta_cobro)? $request->meta_cobro:0);
         $fecha_created=Carbon::now();
         $yy=$fecha_created->format('Y');
@@ -784,12 +785,14 @@ class UserController extends Controller
         {
             DB::table('metas')->where('anio',$yy)->where('mes',$mm)
                 ->where('user_id',$user->id)->update([
-                    'meta_pedido' => $meta_pedido,
+                    'meta_pedido' => $meta_pedido_1,
+                    'meta_pedido_2' => $meta_pedido_2,
                     'meta_cobro' => $meta_cobro,
                 ]);
             //encontro registro
             $user->update([
-                'meta_pedido' => $meta_pedido,
+                'meta_pedido' => $meta_pedido_1,
+                'meta_pedido_2' => $meta_pedido_2,
                 'meta_cobro' => $meta_cobro,
             ]);
         }else{
@@ -799,13 +802,15 @@ class UserController extends Controller
                 'email'=>$user->email,
                 'anio'=>$yy,
                 'mes'=>$mm,
-                'meta_pedido' => $meta_pedido,
+                'meta_pedido' => $meta_pedido_1,
+                'meta_pedido_2' => $meta_pedido_2,
                 'meta_cobro' => $meta_cobro,
                 'status'=>1,
                 'created_at'=>now(),
             ]);
             $user->update([
-                'meta_pedido' => $meta_pedido,
+                'meta_pedido' => $meta_pedido_1,
+                'meta_pedido_2' => $meta_pedido_2,
                 'meta_cobro' => $meta_cobro,
             ]);
         }
