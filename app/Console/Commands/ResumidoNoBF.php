@@ -38,10 +38,10 @@ class ResumidoNoBF extends Command
      */
     public function handle()
     {
-        $informacion = DB::table('resumido_situacion')
-            ->where('s_2023_02', 'BASE FRIA')
+        $informacion = DB::table('nobf')
+            /*->where('s_2023_02', 'BASE FRIA')
             ->where('a_2023_02', 0)
-            ->having(DB::raw('anulados+activos'), '>', 0)
+            ->having(DB::raw('anulados+activos'), '>', 0)*/
             ->skip(0)->take(1)
             ->get();
         $row = $informacion->row();
