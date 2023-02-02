@@ -461,9 +461,10 @@ class UserController extends Controller
         $users = User::leftjoin('users as encargado', 'users.supervisor', 'encargado.id')
             ->leftjoin('users as operario', 'users.operario', 'operario.id')
             ->leftjoin('users as llamada', 'users.llamada', 'llamada.id')
-            ->select(
+            ->select([
                 'users.id',
                 'users.name',
+                'users.identificador',
                 'users.excluir_meta',
                 'users.email',
                 'encargado.name as encargado',
@@ -471,7 +472,7 @@ class UserController extends Controller
                 'llamada.name as llamada',
                 'users.estado',
             //DB::raw('DATE_FORMAT(users.created_at, "%d/%m/%Y") as fecha'),
-            )
+            ])
             ->where('users.rol', 'Asesor')
             ->where('users.estado', '1')
             ->groupBy(
