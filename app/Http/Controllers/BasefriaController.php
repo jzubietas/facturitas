@@ -163,7 +163,7 @@ class BasefriaController extends Controller
      */
     public function create()
     {
-        $usersB = User::whereIn('users.estado', '1')
+        $usersB = User::where('users.estado', '1')
             ->whereIn('rol', [User::ROL_ASESOR_ADMINISTRATIVO])
             ->first();
 
