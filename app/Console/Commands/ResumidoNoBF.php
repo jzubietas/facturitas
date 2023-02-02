@@ -41,7 +41,7 @@ class ResumidoNoBF extends Command
         $informacion = DB::table('resumido_situacion')
             ->where('s_2023_02', 'BASE FRIA')
             ->where('a_2023_02', 0)
-            ->having('SUM(resumido_situacon.anulados) + SUM(resumido_situacon.activos)', '>', 0)
+            ->having(DB::raw('resumido_situacon.anulados+resumido_situacon.activos'), '>', 0)
             ->skip(0)->take(1)
             ->get();
         $row = $informacion->row();
