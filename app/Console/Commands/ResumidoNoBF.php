@@ -46,8 +46,7 @@ class ResumidoNoBF extends Command
             ->get();
         $row = $informacion;
         foreach ($row as $key => $value){
-            echo ($value->fecha_ultimo_pedido_con_anulados)."<br>";
-            //$viewData['vehiclemodeldata_'.$key]= $value;
+            $this->info(($value->fecha_ultimo_pedido_con_anulados));
         }
         return 0;
     }
