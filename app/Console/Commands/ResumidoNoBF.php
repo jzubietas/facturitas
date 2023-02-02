@@ -60,6 +60,8 @@ class ResumidoNoBF extends Command
                         $this->info($item);
                         ListadoResultado::where('id',$item)
                             ->update([
+                                'a_2022_06'=>$value->anulados,
+                                's_2022_06'=>'NUEVO',
                                 's_2022_07'=>'RECURRENTE',
                                 's_2022_08'=>'ABANDONO RECIENTE',
                                 's_2022_09'=>'ABANDONO',
