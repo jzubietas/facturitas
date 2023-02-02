@@ -44,7 +44,7 @@ class ResumidoNoBF extends Command
             /*->where('s_2023_02', 'BASE FRIA')
             ->where('a_2023_02', 0)
             ->having(DB::raw('anulados+activos'), '>', 0)*/
-            ->skip(8)->take(1)
+            ->skip(0)->take(1)
             ->get();
         $row = $informacion;
         foreach ($row as $key => $value){
