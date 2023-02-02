@@ -773,6 +773,8 @@ class UserController extends Controller
 
     public function AsignarMetaEncargado(Request $request, User $user)
     {
+        $meta_pedido=(($request->meta_pedido)? $request->meta_pedido:'');
+        $meta_cobro=(($request->meta_cobro)? $request->meta_cobro:'');
         $fecha_created=Carbon::now();
         $yy=$fecha_created->format('Y');
         $mm=$fecha_created->format('m');
@@ -782,13 +784,13 @@ class UserController extends Controller
         {
             DB::table('metas')->where('anio',$yy)->where('mes',$mm)
                 ->where('user_id',$user->id)->update([
-                    'meta_pedido' => $request->meta_pedido,
-                    'meta_cobro' => $request->meta_cobro,
+                    'meta_pedido' => $meta_pedido,
+                    'meta_cobro' => $meta_cobro,
                 ]);
             //encontro registro
             $user->update([
-                'meta_pedido' => $request->meta_pedido,
-                'meta_cobro' => $request->meta_cobro,
+                'meta_pedido' => $meta_pedido,
+                'meta_cobro' => $meta_cobro,
             ]);
         }else{
             DB::table('metas')->insert([
@@ -797,14 +799,14 @@ class UserController extends Controller
                 'email'=>$user->email,
                 'anio'=>$yy,
                 'mes'=>$mm,
-                'meta_pedido' => $request->meta_pedido,
-                'meta_cobro' => $request->meta_cobro,
+                'meta_pedido' => $meta_pedido,
+                'meta_cobro' => $meta_cobro,
                 'status'=>1,
                 'created_at'=>now(),
             ]);
             $user->update([
-                'meta_pedido' => $request->meta_pedido,
-                'meta_cobro' => $request->meta_cobro,
+                'meta_pedido' => $meta_pedido,
+                'meta_cobro' => $meta_cobro,
             ]);
         }
         return redirect()->route('users.encargados')->with('info', 'asignado');
