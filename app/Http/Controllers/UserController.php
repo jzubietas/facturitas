@@ -271,7 +271,7 @@ class UserController extends Controller
 
         } else {
 
-            $usersB = User::whereIn("rol", ["Administrador","ASESOR ADMINISTRATIVO"]);
+            $usersB = User::whereIn("rol", [User::ROL_ASESOR_ADMINISTRATIVO]);
             $users = $usersB->union($users);
 
         }
