@@ -1349,7 +1349,7 @@ class PedidoController extends Controller
                 'dp.fecha_recepcion',
                 'dp.saldo as diferencia',
             )
-            ->activo()
+            //->activo()
             ->where('pedidos.id', $pedido)
             ->orderBy('pedidos.created_at', 'DESC')
             ->firstOrFail();
