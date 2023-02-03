@@ -243,8 +243,9 @@
                 $("#form-correccionpedido-b input").val("");
             }
 
-            $(document).on('click','button',function(e){
-                //console.log(e.target.id)
+            /*$(document).on('click',
+                "button#btn_correccion_pc,button#btn_correccion_f,button#btn_correccion_g,button#btn_correccion_b",
+                function(e){
                 ocultar_div_modal_correccion_pedidos();
                 switch (e.target.id)
                 {
@@ -262,9 +263,9 @@
                         break;
                 }
 
-            })
+            })*/
 
-            $(document).on("submit", "form", function (e) {
+            $(document).on("submit", "form.mod", function (e) {
                 e.preventDefault();
                 var form=null;
                 var formData=null;
