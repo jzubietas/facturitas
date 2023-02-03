@@ -259,6 +259,101 @@
 
             })
 
+            $(document).on("submit", "form", function (e) {
+                e.preventDefault();
+                var form=null;
+                var formData=null;
+                if(e.target.id=='form-correccionpedido-pc')
+                {
+                    let cant_sustento_pc=$("textarea[name='sustento-pc']").val().length;
+                    let cant_detalle_pc=$("textarea[name='detalle-pc']").val().length;
+                    let cant_captura_pc=$('input[name="correcion_pc_captura"]').length;
+                    if(cant_sustento_pc==0)
+                    {
+                        Swal.fire('Error','No se puede ingresar un sustento vacio','warning');return false;
+                    }else if(cant_detalle_pc==0)
+                    {
+                        Swal.fire('Error','No se puede ingresar un detalle vacio','warning');return false;
+                    }else if(cant_captura_pc==0)
+                    {
+                        Swal.fire('Error','No se puede ingresar una captura vacio','warning');return false;
+                    }
+                }
+                else if(e.target.id=='form-correccionpedido-f')
+                {
+
+                }
+                else if(e.target.id=='form-correccionpedido-g')
+                {
+
+                }
+                else if(e.target.id=='form-correccionpedido-b')
+                {
+
+                }
+                switch (e.target.id)
+                {
+                    case 'form-correccionpedido-pc':
+                        form = $('#form-correccionpedido-pc')[0];
+                        formData = new FormData(form);
+                        formData.append('opcion', "1");
+                        break;
+                    case 'form-correccionpedido-f':
+                        form = $('#form-correccionpedido-f')[0];
+                        formData = new FormData(form);
+                        formData.append('opcion', "2");
+                        break;
+                    case 'form-correccionpedido-g':
+                        form = $('#form-correccionpedido-g')[0];
+                        formData = new FormData(form);
+                        formData.append('opcion', "3");
+                        break;
+                    case 'form-correccionpedido-b':
+                        form = $('#form-correccionpedido-b')[0];
+                        formData = new FormData(form);
+                        formData.append('opcion', "4");
+                        break;
+                }
+                $.ajax({
+                    data: formData,processData: false,contentType: false,type: 'POST',url: "{{ route('ajax_modal_correccionpedidos') }}",
+                    beforeSend: function() {
+                        // setting a timeout
+                        $(placeholder).addClass('loading');
+                        i++;
+                    },
+                    success: function (data) {
+                        if(data.html!="0")
+                        {
+                            $("#modal-correccion-pedidos").modal("hide");
+                            console.log("response 1")
+                        } else {
+                            console.log("response 0")
+                        }
+                    },
+                    error: function(xhr) {
+                        console.log("Error occured.please try again");
+                        //$(placeholder).append(xhr.statusText + xhr.responseText);
+                        //$(placeholder).removeClass('loading');
+                    },
+                })
+            });
+            $(document).on("click","#attachmentfiles",function(){
+
+            })
+            this.$content.find('#attachmentfiles').click(function () {
+                var file = document.createElement('input');
+                file.type = 'file';
+                file.click()
+                file.addEventListener('change', function (e) {
+                    if (file.files.length > 0) {
+                        self.$content.find('.result_picture').css('display', 'block')
+                        console.log(URL.createObjectURL(file.files[0]))
+                        dataForm.file = file.files[0]
+                        self.$content.find('.result_picture>img').attr('src', URL.createObjectURL(file.files[0]))
+                    }
+                })
+            });
+
             if (localStorage.getItem("search_tabla") === null) {
                 //...
 

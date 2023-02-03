@@ -11,6 +11,45 @@ use Illuminate\Support\Facades\DB;
 class ModalController extends Controller
 {
     //
+
+
+    public function ajax_modal_correccionpedidos(Request $request)
+    {
+        if($request->opcion)
+        {
+            $opcion=$request->opcion;
+
+            switch ($opcion)
+            {
+                case '1':
+                    $hiden=$request->correccion_pc;
+                    $sustento=$request->sustento-pc;
+                    $detalle=$request->detalle-pc;
+                    $captura=$request->correcion_pc_captura;
+
+                    break;
+                case '2':
+                    $hiden=$request->correccion_f;
+                    $sustento=$request->sustento-f;
+                    $facturas=$request->correcion_f_facturas;
+                    $detalle=$request->detalle-f;
+                    break;
+                case '3':
+                    $hiden=$request->correccion_g;
+                    $sustento=$request->sustento-g;
+                    $adjuntos=$request->correcion_g_adjuntos;
+                    $detalle=$request->detalle-g;
+                    break;
+                case '4':
+                    $hiden=$request->correccion_b;
+                    $sustento=$request->sustento-b;
+                    $adjuntos=$request->correcion_b_adjuntos;
+                    break;
+            }
+        }
+
+    }
+
     public function ajax_modal1_response(Request $request)
     {
         if($request->opcion)

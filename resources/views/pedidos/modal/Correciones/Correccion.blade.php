@@ -14,10 +14,10 @@
                     <div class="form-group col-lg-6">
 
                         <div class="btn-group" role="group" aria-label="Basic example">
-                            <button id="btn_correccion_pc" type="button" class="btn btn-info">Pedido Completo</button>
-                            <button id="btn_correccion_f" type="button" class="btn btn-secondary">Factura</button>
-                            <button id="btn_correccion_g" type="button" class="btn btn-warning">Guias</button>
-                            <button id="btn_correccion_b" type="button" class="btn btn-danger">Bancarizaciones</button>
+                            <button id="btn_correccion_pc" type="button" class="btn rounded btn-info ml-2">Pedido Completo</button>
+                            <button id="btn_correccion_f" type="button" class="btn rounded btn-secondary  ml-2">Factura</button>
+                            <button id="btn_correccion_g" type="button" class="btn rounded btn-warning  ml-2">Guias</button>
+                            <button id="btn_correccion_b" type="button" class="btn rounded btn-danger  ml-2">Bancarizaciones</button>
                         </div>
 
                     </div>

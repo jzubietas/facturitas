@@ -754,13 +754,12 @@ class ClienteController extends Controller
         //ahora con el identificador de  Usuarios
         $mirol = Auth::user()->rol;
         $clientes = null;
-        $clientes = Cliente::whereIn('user_id',
-            User::query()->select('users.id')
-                ->whereIn('users.rol', ['Asesor', User::ROL_ADMIN, User::ROL_ASESOR_ADMINISTRATIVO])
-                ->where('users.estado', '1')
-                ->where('users.identificador', $request->user_id)
-        )
-            ->where('clientes.estado', '1')
+        //$user_id=User::where('identificador',$request->user_id)->pluck('id');
+        $clientes = Cliente::where('clientes.estado', '1')
+            ->when($request->user_id, function ($query) use ($request) {
+                return $query->whereIn('clientes.user_id', User::query()->select('users.id')->whereIdentificador($request->user_id));
+            })
+            //->where('clientes.estado', '1')
             ->where("clientes.tipo", "1");
         $html = "";
 

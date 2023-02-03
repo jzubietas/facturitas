@@ -1,14 +1,13 @@
-<form id="form-correccionpedido-f" name="form-correccionpedido-pc" >
-    <input type="hidden" id="correccion_pc" name="correccion_pc">
+<form id="form-correccionpedido-f" name="form-correccionpedido-f" >
+    <input type="hidden" id="correccion_f" name="correccion_f">
+    <input type="hidden" name="opcion" value="2">
     <ul class="list-group">
         <li class="list-group-item text-wrap">
             <h6 class="alert alert-warning text-center font-weight-bold">
-                <b>Sustento por Pedido Completo <span class="text-danger">(*):</span></b>
+                <b>Sustento por Pedido Completo <span class="text-danger">(Obligatorio):</span></b>
             </h6>
-            <textarea readonly class="form-control w-100"
-                      rows="3" style=" color: red; font-weight: bold; background: white; " required>
-                response.sustento
-            </textarea>
+            <textarea name="sustento-f" class="form-control w-100"
+                      rows="3" style=" color: red; font-weight: bold; background: white; " required>response.sustento</textarea>
         </li>
 
         <li class="list-group-item text-wrap">
@@ -18,12 +17,10 @@
 
         <li class="list-group-item text-wrap">
             <h6 class="alert alert-warning text-center font-weight-bold">
-                <b>Detalle <span class="text-danger">(*):</span></b>
+                <b>Detalle <span class="text-danger">(Obligatorio):</span></b>
             </h6>
-            <textarea readonly class="form-control w-100"
-                      rows="3" style=" color: red; font-weight: bold; background: white; " required>
-                response.detalle
-            </textarea>
+            <textarea name="detalle-f" class="form-control w-100"
+                      rows="3" style=" color: red; font-weight: bold; background: white; " required>response.detalle</textarea>
         </li>
 
         <li class="list-group-item text-wrap">

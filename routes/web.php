@@ -469,6 +469,7 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     /*Controller Sobres*/
 
     Route::any('ajax_modal1_response', [ModalController::class, 'ajax_modal1_response'])->name('ajax_modal1_response');
+    Route::any('ajax_modal_correccionpedidos', [ModalController::class, 'ajax_modal_correccionpedidos'])->name('ajax_modal_correccionpedidos');
 
     //Route::post('envios.recibir/{pedido}', [PedidoController::class, 'Recibir'])->name('envios.recibir');
     //Route::post('envios.enviar/{pedido}', [PedidoController::class, 'EnviarPedido'])->name('envios.enviar');
