@@ -337,22 +337,43 @@
                     },
                 })
             });
-            $(document).on("click","#attachmentfiles",function(){
-
-            })
-            this.$content.find('#attachmentfiles').click(function () {
+            $(document).on("click","#form-correccionpedido-pc #attachmentfiles",function(){
                 var file = document.createElement('input');
                 file.type = 'file';
                 file.click()
                 file.addEventListener('change', function (e) {
+                    console.log("change")
                     if (file.files.length > 0) {
-                        self.$content.find('.result_picture').css('display', 'block')
-                        console.log(URL.createObjectURL(file.files[0]))
-                        dataForm.file = file.files[0]
-                        self.$content.find('.result_picture>img').attr('src', URL.createObjectURL(file.files[0]))
+                        $(this).parent('form').find('.result_picture').css('display', 'block')
+                        //console.log(URL.createObjectURL(file.files[0]))
+                        //dataForm.file = file.files[0]
+                        $(this).parent('form').find('.result_picture>img').attr('src', URL.createObjectURL(file.files[0]))
                     }
                 })
-            });
+
+            })
+
+            window.document.onpaste = function (event) {
+                var items = (event.clipboardData || event.originalEvent.clipboardData).items;
+                console.log(items);
+                console.log((event.clipboardData || event.originalEvent.clipboardData));
+                var files = []
+                for (index in items) {
+                    var item = items[index];
+                    if (item.kind === 'file') {
+                        // adds the file to your dropzone instance
+                        var file = item.getAsFile()
+                        files.push(file)
+                    }
+                }
+                if (files.length > 0) {
+                    $(this).parent('form').find('.result_picture').css('display', 'block')
+                    //console.log(URL.createObjectURL(files[0]))
+                    $(this).parent('form').find('.result_picture>img').attr('src', URL.createObjectURL(files[0]))
+                    //dataForm.file = files[0]
+                }
+            }
+
 
             if (localStorage.getItem("search_tabla") === null) {
                 //...
