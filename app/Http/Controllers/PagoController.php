@@ -548,7 +548,7 @@ class PagoController extends Controller
                     'subcondicion' => 'DEUDA PERDONADA'
                 ]);
 
-                event(new PagoEvent($pago));
+                //event(new PagoEvent($pago));
 
                 $pedido_id = $request->pedido_id;
                 $monto_actual = $request->numbersaldo;
@@ -810,7 +810,7 @@ class PagoController extends Controller
                     }
                 }
 
-                event(new PagoEvent($pago));
+                //event(new PagoEvent($pago));
 
                 $pedido_id = $request->pedido_id;
                 $monto_actual = $request->numbersaldo;
@@ -1299,7 +1299,7 @@ class PagoController extends Controller
                     'deuda' => '0',
                 ]);
 
-                event(new PagoEvent($pago));
+                //event(new PagoEvent($pago));
             } else {
                 $pago->update([
                     'condicion' => Pago::ADELANTO,//PENDIENTE DE PAGO
