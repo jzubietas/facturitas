@@ -369,6 +369,7 @@ class PagoController extends Controller
                 ->where('pedidos.cliente_id', $idrequest)
                 ->where('pedidos.pagado', '<>', '2')
                 ->where('pedidos.estado', '1')
+                ->where('pedidos.pendiente_anulacion', '0')
                 ->where('dp.estado', '1')
                 ->where('dp.total', '>', '0')
                 ->where('dp.saldo', '>', '0');
