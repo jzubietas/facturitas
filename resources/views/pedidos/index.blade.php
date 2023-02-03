@@ -114,6 +114,7 @@
             </table>
             @include('pedidos.modalid')
             @include('pedidos.modal.restaurarid')
+            @include('pedidos.modal.Correciones.Correccion')
 
         </div>
     </div>
@@ -216,6 +217,47 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             });
+
+            $('#modal-correccion-pedidos').on('show.bs.modal', function (event) {
+                console.log("show modal correccion pedidos");
+                ocultar_div_modal_correccion_pedidos();
+                //aqui cargar primer boton del modal
+
+
+            })
+
+            window.ocultar_div_modal_correccion_pedidos = function () {
+                console.log("ocultar div")
+                $("#modal-correccionpedido-pc-container").hide();
+                $("#form-correccionpedido-pc input").val("");
+                $("#modal-correccionpedido-f-container").hide();
+                $("#form-correccionpedido-f input").val("");
+                $("#modal-correccionpedido-g-container").hide();
+                $("#form-correccionpedido-g input").val("");
+                $("#modal-correccionpedido-b-container").hide();
+                $("#form-correccionpedido-b input").val("");
+            }
+
+            $(document).on('click','button',function(e){
+                //console.log(e.target.id)
+                ocultar_div_modal_correccion_pedidos();
+                switch (e.target.id)
+                {
+                    case 'btn_correccion_pc':
+                        $("#modal-correccionpedido-pc-container").show();
+                        break;
+                    case 'btn_correccion_f':
+                        $("#modal-correccionpedido-f-container").show();
+                        break;
+                    case 'btn_correccion_g':
+                        $("#modal-correccionpedido-g-container").show();
+                        break;
+                    case 'btn_correccion_b':
+                        $("#modal-correccionpedido-b-container").show();
+                        break;
+                }
+
+            })
 
             if (localStorage.getItem("search_tabla") === null) {
                 //...

@@ -1,0 +1,30 @@
+<form id="form-correccionpedido-pc" name="form-correccionpedido-pc" >
+    <input type="hidden" id="correccion_pc" name="correccion_pc">
+    <ul class="list-group">
+        <li class="list-group-item text-wrap">
+            <h6 class="alert alert-warning text-center font-weight-bold">
+                <b>Sustento por Pedido Completo <span class="text-danger">(*):</span></b>
+            </h6>
+            <textarea readonly class="form-control w-100"
+                      rows="3" style=" color: red; font-weight: bold; background: white; " required>response.sustento</textarea>
+        </li>
+
+        <li class="list-group-item text-wrap">
+            <h6 class="alert alert-warning text-center font-weight-bold">
+                <b>Detalle <span class="text-danger">(*):</span></b>
+            </h6>
+            <textarea readonly class="form-control w-100"
+                      rows="3" style=" color: red; font-weight: bold; background: white; " required>response.detalle</textarea>
+        </li>
+
+        <li class="list-group-item text-wrap">
+            <h6 class="alert alert-warning text-center font-weight-bold">Captura</h6>
+            <input type="file" name="correcion_pc_captura" id="correcion_pc_captura"  class="form-control" placeholder="">
+        </li>
+    </ul>
+    <hr class="mt-2 mb-3"/>
+    <div class="form-group col-lg-12">
+        <button type="submit" class="float-right btn btn-success">Enviar</button>
+    </div>
+
+</form>
