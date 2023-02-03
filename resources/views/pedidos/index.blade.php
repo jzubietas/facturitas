@@ -206,7 +206,12 @@
         }
     </script>
     <script>
+        import objects from "lodash/_SetCache";
 
+        let dataForm_pc={};
+        let dataForm_f={};
+        let dataForm_g={};
+        let dataForm_b={};
         $(document).ready(function () {
             //moment.updateLocale(moment.locale(), { invalidDate: "Invalid Date Example" });
             //$.fn.dataTable.moment('DD-MMM-Y HH:mm:ss');
@@ -267,53 +272,100 @@
                 {
                     let cant_sustento_pc=$("textarea[name='sustento-pc']").val().length;
                     let cant_detalle_pc=$("textarea[name='detalle-pc']").val().length;
-                    let cant_captura_pc=$('input[name="correcion_pc_captura"]').length;
+                    //let cant_captura_pc=$('input[name="correcion_pc_captura"]').length;
                     if(cant_sustento_pc==0)
                     {
                         Swal.fire('Error','No se puede ingresar un sustento vacio','warning');return false;
                     }else if(cant_detalle_pc==0)
                     {
                         Swal.fire('Error','No se puede ingresar un detalle vacio','warning');return false;
-                    }else if(cant_captura_pc==0)
+                    }/*else if(cant_captura_pc==0)
                     {
                         Swal.fire('Error','No se puede ingresar una captura vacio','warning');return false;
-                    }
+                    }*/
                 }
                 else if(e.target.id=='form-correccionpedido-f')
                 {
-
+                    let cant_sustento_f=$("textarea[name='sustento-f']").val().length;
+                    let cant_detalle_f=$("textarea[name='detalle-f']").val().length;
+                    let cant_facturas_f=$('input[name="correcion_f_facturas"]').length;
+                    let cant_adjuntos_f=$('input[name="correcion_f_adjuntos"]').length;
+                    if(cant_sustento_f==0)
+                    {
+                        Swal.fire('Error','No se puede ingresar un sustento vacio','warning');return false;
+                    }else if(cant_detalle_f==0)
+                    {
+                        Swal.fire('Error','No se puede ingresar un detalle vacio','warning');return false;
+                    }else if(cant_facturas_f==0)
+                    {
+                        Swal.fire('Error','No se puede ingresar facturas vacias','warning');return false;
+                    }else if(cant_adjuntos_f==0)
+                    {
+                        Swal.fire('Error','No se puede ingresar una adjuntos vacios','warning');return false;
+                    }
                 }
                 else if(e.target.id=='form-correccionpedido-g')
                 {
-
+                    let cant_sustento_g=$("textarea[name='sustento-g']").val().length;
+                    let cant_adjuntos_g=$('input[name="correcion_g_adjuntos"]').length;
+                    let cant_detalle_g=$("textarea[name='detalle-g']").val().length;
+                    if(cant_sustento_g==0)
+                    {
+                        Swal.fire('Error','No se puede ingresar un sustento vacio','warning');return false;
+                    }else if(cant_adjuntos_g==0)
+                    {
+                        Swal.fire('Error','No se puede ingresar una adjuntos vacios','warning');return false;
+                    }else if(cant_detalle_g==0)
+                    {
+                        Swal.fire('Error','No se puede ingresar un detalle vacio','warning');return false;
+                    }
                 }
                 else if(e.target.id=='form-correccionpedido-b')
                 {
-
+                    let cant_sustento_b=$("textarea[name='sustento-b']").val().length;
+                    let cant_adjuntos_b=$('input[name="correcion_b_adjuntos"]').length;
+                    if(cant_sustento_b==0)
+                    {
+                        Swal.fire('Error','No se puede ingresar un sustento vacio','warning');return false;
+                    }else if(cant_adjuntos_b==0)
+                    {
+                        Swal.fire('Error','No se puede ingresar una adjuntos vacios','warning');return false;
+                    }
                 }
                 switch (e.target.id)
                 {
                     case 'form-correccionpedido-pc':
-                        form = $('#form-correccionpedido-pc')[0];
-                        formData = new FormData(form);
-                        formData.append('opcion', "1");
+                        /*$.each($('#form-correccionpedido-pc').serializeArray(), function(_, field) {
+                            //dataForm_pc[(field.name).toString()]=field.value;
+                            objects.push({
+                                //field.name:{'category':field.value}
+                                field.name:field.value,
+                            });
+                        });*/
+
+
+                        /*dataForm_pc.opcion = 1
+                        let array1=$('#form-correccionpedido-pc').serialize();
+                        console.log(array1)
+                        console.log(dataForm_pc);
+                        dataForm_pc.push(array1);
+
+                        formData=dataForm_pc*/
                         break;
                     case 'form-correccionpedido-f':
-                        form = $('#form-correccionpedido-f')[0];
-                        formData = new FormData(form);
-                        formData.append('opcion', "2");
+                        dataForm_f.opcion = 2
+                        formData=dataForm_f
                         break;
                     case 'form-correccionpedido-g':
-                        form = $('#form-correccionpedido-g')[0];
-                        formData = new FormData(form);
-                        formData.append('opcion', "3");
+                        dataForm_g.opcion = 3
+                        formData=dataForm_g
                         break;
                     case 'form-correccionpedido-b':
-                        form = $('#form-correccionpedido-b')[0];
-                        formData = new FormData(form);
-                        formData.append('opcion', "4");
+                        dataForm_b.opcion = 4
+                        formData=dataForm_b
                         break;
                 }
+                return false;
                 $.ajax({
                     data: formData,processData: false,contentType: false,type: 'POST',url: "{{ route('ajax_modal_correccionpedidos') }}",
                     beforeSend: function() {
@@ -337,20 +389,21 @@
                     },
                 })
             });
+
             $(document).on("click","#form-correccionpedido-pc #attachmentfiles",function(){
+                console.log("creando input virtual")
                 var file = document.createElement('input');
                 file.type = 'file';
                 file.click()
                 file.addEventListener('change', function (e) {
                     console.log("change")
                     if (file.files.length > 0) {
-                        $(this).parent('form').find('.result_picture').css('display', 'block')
-                        //console.log(URL.createObjectURL(file.files[0]))
-                        //dataForm.file = file.files[0]
-                        $(this).parent('form').find('.result_picture>img').attr('src', URL.createObjectURL(file.files[0]))
+                        $('#form-correccionpedido-pc').find('.result_picture').css('display', 'block');
+                        console.log(URL.createObjectURL(file.files[0]))
+                        dataForm_pc.correcion_pc_captura = file.files[0]
+                        $('#form-correccionpedido-pc').find('.result_picture>img').attr('src', URL.createObjectURL(file.files[0]))
                     }
                 })
-
             })
 
             window.document.onpaste = function (event) {
@@ -367,10 +420,10 @@
                     }
                 }
                 if (files.length > 0) {
-                    $(this).parent('form').find('.result_picture').css('display', 'block')
-                    //console.log(URL.createObjectURL(files[0]))
-                    $(this).parent('form').find('.result_picture>img').attr('src', URL.createObjectURL(files[0]))
-                    //dataForm.file = files[0]
+                    $('#form-correccionpedido-pc').find('.result_picture').css('display', 'block')
+                    console.log(URL.createObjectURL(files[0]))
+                    $('#form-correccionpedido-pc').find('.result_picture>img').attr('src', URL.createObjectURL(files[0]))
+                    dataForm_pc.correcion_pc_captura = files[0]
                 }
             }
 

@@ -24,17 +24,12 @@
                      style="height: 400px">
                     <i class="fa fa-upload"></i>
                     <div class="result_picture position-absolute" style="display: block;top: 0;left: 0;bottom: 0;right: 0;text-align: center;">
-                        <img src="" class="h-100">
+                        <img src="" class="h-100 img-fluid" alt="">
                     </div>
                 </div>
                 <div class="alert alert-warning">Puede copiar y pegar la imagen o hacer click en el recuadro para seleccionar un archivo</div>
 
-
-
-
-
-
-            <input type="file" name="correcion_pc_captura" id="correcion_pc_captura"  class="form-control" placeholder="">
+            <input type="file" name="correcion_pc_captura" id="correcion_pc_captura"  class="d-none form-control" placeholder="">
         </li>
     </ul>
     <hr class="mt-2 mb-3"/>
