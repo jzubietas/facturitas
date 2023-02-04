@@ -10,15 +10,11 @@ use Illuminate\Support\Facades\DB;
 
 class ModalController extends Controller
 {
-    //
-
-
     public function ajax_modal_correccionpedidos(Request $request)
     {
         if($request->opcion)
         {
             $opcion=$request->opcion;
-
             switch ($opcion)
             {
                 case '1':
