@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Alerta;
+use App\Models\AttachCorrection;
 use App\Models\Cliente;
 use App\Models\Correction;
 use App\Models\User;
@@ -22,21 +23,38 @@ class ModalController extends Controller
                     $hiden=$request->correccion_pc;
                     $sustento=$request->sustento-pc;
                     $detalle=$request->detalle-pc;
-                    $captura=$request->correcion_pc_captura;
+                    //$captura=$request->correcion_pc_captura;
+                    $codigo=$request->modalcorreccionpedido;
+                    $pedido=Pedido::where('codigo',$codigo)->first();
+                    $detallepedido=DetallePedido::where('codigo',$codigo)->first();
                     $correction=Correction::create([
                         'type' => 'PEDIDO COMPLETO',
-                        'code'=>'',
-                        'ruc'=>'',
-                        'razon_social'=>'',
-                        'asesor_id'=>0,
-                        'asesor_identify'=>'1.5',
+                        'code'=>$codigo,
+                        'ruc'=>$detallepedido->ruc,
+                        'razon_social'=>$detallepedido->nombre_empresa,
+                        'asesor_id'=>$pedido->user_id,
+                        'asesor_identify'=>$pedido->identificador,
                         'fecha_correccion'=>now(),
                         'motivo'=>$sustento,
                         'aduntos'=>0,
                         'detalle'=>$detalle,
                         'estado'=>1
                     ]);
-                    Correction::find($correction->id)->update(['estado'=>1]);
+                    $captura = '';
+                    if ($request->hasFile('correcion_pc_captura')) {
+                        Correction::find($correction->id)->update(['estado'=>1]);
+                        $captura = $request->file('correcion_pc_captura')->store('pedidos/correcciones', 'pstorage');
+                        AttachCorrection::create([
+                            'correction_id'=>$correction->id,
+                            'type'=>'captura',
+                            'name'=>$captura,
+                            'file_name'=>$captura,
+                            'mime_type'=>$request->file('correcion_pc_captura')->getMimeType(),
+                            'disk'=>'pedidos/correcciones',
+                            'estado'=>1,
+
+                        ]);
+                    }
 
                     break;
                 case '2':
@@ -44,17 +62,129 @@ class ModalController extends Controller
                     $sustento=$request->sustento-f;
                     $facturas=$request->correcion_f_facturas;
                     $detalle=$request->detalle-f;
+                    $codigo=$request->modalcorreccionpedido;
+                    $pedido=Pedido::where('codigo',$codigo)->first();
+                    $detallepedido=DetallePedido::where('codigo',$codigo)->first();
+
+                    $correction=Correction::create([
+                        'type' => 'FACTURA',
+                        'code'=>$codigo,
+                        'ruc'=>$detallepedido->ruc,
+                        'razon_social'=>$detallepedido->nombre_empresa,
+                        'asesor_id'=>$pedido->user_id,
+                        'asesor_identify'=>$pedido->identificador,
+                        'fecha_correccion'=>now(),
+                        'motivo'=>$sustento,
+                        'aduntos'=>0,
+                        'detalle'=>$detalle,
+                        'estado'=>1
+                    ]);
+                    if ($request->hasFile('correcion_f_facturas')) {
+                        Correction::find($correction->id)->update(['estado'=>1]);
+                        $captura = $request->file('correcion_f_facturas')->store('pedidos/correcciones', 'pstorage');
+                        AttachCorrection::create([
+                            'correction_id'=>$correction->id,
+                            'type'=>'factura',
+                            'name'=>$captura,
+                            'file_name'=>$captura,
+                            'mime_type'=>$request->file('correcion_f_facturas')->getMimeType(),
+                            'disk'=>'pedidos/correcciones',
+                            'estado'=>1,
+
+                        ]);
+                    }
+                    if ($request->hasFile('correcion_f_adjuntos')) {
+                        Correction::find($correction->id)->update(['estado'=>1]);
+                        $captura = $request->file('correcion_f_adjuntos')->store('pedidos/correcciones', 'pstorage');
+                        AttachCorrection::create([
+                            'correction_id'=>$correction->id,
+                            'type'=>'adjunto',
+                            'name'=>$captura,
+                            'file_name'=>$captura,
+                            'mime_type'=>$request->file('correcion_f_adjuntos')->getMimeType(),
+                            'disk'=>'pedidos/correcciones',
+                            'estado'=>1,
+
+                        ]);
+                    }
+
                     break;
                 case '3':
                     $hiden=$request->correccion_g;
                     $sustento=$request->sustento-g;
                     $adjuntos=$request->correcion_g_adjuntos;
                     $detalle=$request->detalle-g;
+
+                    $codigo=$request->modalcorreccionpedido;
+                    $pedido=Pedido::where('codigo',$codigo)->first();
+                    $detallepedido=DetallePedido::where('codigo',$codigo)->first();
+
+                    $correction=Correction::create([
+                        'type' => 'GUIAS',
+                        'code'=>$codigo,
+                        'ruc'=>$detallepedido->ruc,
+                        'razon_social'=>$detallepedido->nombre_empresa,
+                        'asesor_id'=>$pedido->user_id,
+                        'asesor_identify'=>$pedido->identificador,
+                        'fecha_correccion'=>now(),
+                        'motivo'=>$sustento,
+                        'aduntos'=>0,
+                        'detalle'=>$detalle,
+                        'estado'=>1
+                    ]);
+                    if ($request->hasFile('correcion_g_adjuntos')) {
+                        Correction::find($correction->id)->update(['estado'=>1]);
+                        $captura = $request->file('correcion_g_adjuntos')->store('pedidos/correcciones', 'pstorage');
+                        AttachCorrection::create([
+                            'correction_id'=>$correction->id,
+                            'type'=>'adjunto',
+                            'name'=>$captura,
+                            'file_name'=>$captura,
+                            'mime_type'=>$request->file('correcion_g_adjuntos')->getMimeType(),
+                            'disk'=>'pedidos/correcciones',
+                            'estado'=>1,
+
+                        ]);
+                    }
+
+
                     break;
                 case '4':
                     $hiden=$request->correccion_b;
                     $sustento=$request->sustento-b;
                     $adjuntos=$request->correcion_b_adjuntos;
+
+                    $codigo=$request->modalcorreccionpedido;
+                    $pedido=Pedido::where('codigo',$codigo)->first();
+                    $detallepedido=DetallePedido::where('codigo',$codigo)->first();
+
+                    $correction=Correction::create([
+                        'type' => 'BANCARIZACIONES',
+                        'code'=>$codigo,
+                        'ruc'=>$detallepedido->ruc,
+                        'razon_social'=>$detallepedido->nombre_empresa,
+                        'asesor_id'=>$pedido->user_id,
+                        'asesor_identify'=>$pedido->identificador,
+                        'fecha_correccion'=>now(),
+                        'motivo'=>$sustento,
+                        'aduntos'=>0,
+                        'detalle'=>'SIN DETALLE',
+                        'estado'=>1
+                    ]);
+                    if ($request->hasFile('correcion_b_adjuntos')) {
+                        Correction::find($correction->id)->update(['estado'=>1]);
+                        $captura = $request->file('correcion_b_adjuntos')->store('pedidos/correcciones', 'pstorage');
+                        AttachCorrection::create([
+                            'correction_id'=>$correction->id,
+                            'type'=>'adjunto',
+                            'name'=>$captura,
+                            'file_name'=>$captura,
+                            'mime_type'=>$request->file('correcion_b_adjuntos')->getMimeType(),
+                            'disk'=>'pedidos/correcciones',
+                            'estado'=>1,
+
+                        ]);
+                    }
                     break;
             }
         }
