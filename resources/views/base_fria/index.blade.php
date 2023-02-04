@@ -22,14 +22,15 @@
             </a>
 
 
-      <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        Exportar
-      </button>
-      <div class="dropdown-menu">
-        {{-- <a href="{{ route('basefriaExcel') }}" class="dropdown-item" target="blank_"><img src="{{ asset('imagenes/icon-excel.png') }}"> Base fría - Total</a> --}}
-        {{--<a href="" data-target="#modal-exportar" data-toggle="modal" class="dropdown-item" target="blank_"><img src="{{ asset('imagenes/icon-excel.png') }}"> Clientes</a>--}}
-        <a href="" data-target="#modal-exportar2" data-toggle="modal" class="dropdown-item" target="blank_"><img src="{{ asset('imagenes/icon-excel.png') }}"> Base fría por asesor</a>
-      </div>
+        @if(Auth::user()->rol == 'Administrador')
+            <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Exportar
+            </button>
+            <div class="dropdown-menu">
+                <a href="" data-target="#modal-exportar2" data-toggle="modal" class="dropdown-item" target="blank_"><img src="{{ asset('imagenes/icon-excel.png') }}"> Base fría por asesor</a>
+            </div>
+        @endif
+
     </div>
     {{-- @include('base_fria.modal.exportar') --}}
     @include('base_fria.modal.exportar2')
