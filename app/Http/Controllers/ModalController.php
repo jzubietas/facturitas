@@ -23,6 +23,8 @@ class ModalController extends Controller
                     $detalle=$request->detalle-pc;
                     $captura=$request->correcion_pc_captura;
 
+                    //corrections_tables
+
                     break;
                 case '2':
                     $hiden=$request->correccion_f;
