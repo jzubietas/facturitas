@@ -243,7 +243,7 @@
                 $("#form-correccionpedido-b input").val("");
             }
 
-            /*$(document).on('click',
+            $(document).on('click',
                 "button#btn_correccion_pc,button#btn_correccion_f,button#btn_correccion_g,button#btn_correccion_b",
                 function(e){
                 ocultar_div_modal_correccion_pedidos();
@@ -263,12 +263,13 @@
                         break;
                 }
 
-            })*/
+            })
 
-            $(document).on("submit", "form.mod", function (e) {
+            $(document).on("submit", "form.correccion", function (e) {
                 e.preventDefault();
                 var form=null;
                 var formData=null;
+                console.log(e.target.id)
                 if(e.target.id=='form-correccionpedido-pc')
                 {
                     let cant_sustento_pc=$("textarea[name='sustento-pc']").val().length;

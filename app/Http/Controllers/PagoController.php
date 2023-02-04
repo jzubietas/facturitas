@@ -109,7 +109,7 @@ class PagoController extends Controller
                 DB::raw(" (select sum(ped2.abono) from pago_pedidos ped2 where ped2.pago_id =pagos.id and ped2.estado=1 and ped2.pagado in (1,2) ) as total_pago "),
                 'pagos.created_at',
             ])
-            ->whereIn('pagos.condicion', [Pago::PAGO, Pago::ADELANTO, Pago::ABONADO])
+            ->whereIn('pagos.condicion', [Pago::PAGO, Pago::ADELANTO, Pago::ABONADO,Pago::PENDIENTE,Pago::OBSERVADO])
             ->where('pagos.estado', '1');
 
         if (Auth::user()->rol == 'Llamadas') {

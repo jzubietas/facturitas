@@ -1,4 +1,4 @@
-<form id="form-correccionpedido-pc" name="form-correccionpedido-pc" >
+<form id="form-correccionpedido-pc" name="form-correccionpedido-pc" class="correccion">
     <input type="hidden" id="correccion_pc" name="correccion_pc">
     <input type="hidden" name="opcion" value="1">
     <ul class="list-group">
