@@ -183,6 +183,7 @@
 
                                     <th scope="col">IMAGEN</th>
                                     <th scope="col">ACCION</th>
+                                    <th scope="col">NOTA/OBSERVACION</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -261,6 +262,9 @@
                                                     <button class="btn btn-warning btn-md">Editar</button>
                                                 </a>
                                             </p>
+                                        </td>
+                                        <td>
+                                            {{$detallePago->nota}} {{$detallePago->observacion}}
                                         </td>
 
                                     </tr>

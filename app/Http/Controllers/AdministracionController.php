@@ -210,7 +210,7 @@ class AdministracionController extends Controller
             ->get();
 
         $detallePagos = DetallePago::
-        select('id',
+        select(['id',
             'monto',
             'banco',
             'imagen',
@@ -219,7 +219,9 @@ class AdministracionController extends Controller
             'cuenta',
             DB::raw('DATE_FORMAT(fecha_deposito, "%d/%m/%Y") as fecha_deposito'),
             DB::raw('DATE_FORMAT(fecha_deposito, "%Y-%m-%d") as fecha_deposito_change'),
-            'observacion')
+            'observacion',
+            'nota'
+        ])
             ->where('estado', '1')
             ->where('pago_id', $pago->id)
             ->get();
