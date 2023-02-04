@@ -174,6 +174,7 @@
 
                     <th scope="col">IMAGEN</th>
                     <th scope="col">ACCION</th>
+                      <th scope="col">NOTA/OBSERVACION</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -228,6 +229,9 @@
                           <a href="" data-target="#modal-editar-get" data-toggle="modal" data-pbanco="{{ $detallePago->banco }}" data-titulares="{{ $detallePago->titular }}" data-fecha="{{ $detallePago->fecha_deposito_change }}" data-conciliar="{{ $detallePago->id }}" data-item="{{ $contPa + 1 }}"><button class="btn btn-warning btn-md">Editar</button></a>
                         </p>
                       </td>
+                        <td>
+                            {{$detallePago->nota}} {{$detallePago->observacion}}
+                        </td>
 
                     </tr>
                     @php
