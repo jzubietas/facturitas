@@ -224,7 +224,10 @@
             });
 
             $('#modal-correccion-pedidos').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget)
+                $('#modalcorreccionpedido').val(button.data('codigo'))
                 $('button:submit').prop("disabled",false)
+
                 ocultar_div_modal_correccion_pedidos();
 
 
@@ -354,19 +357,23 @@
                 switch (e.target.id)
                 {
                     case 'form-correccionpedido-pc':
-                        dataForm_f.opcion = 2
-                        formData=dataForm_f
+                        dataForm_pc.opcion = 1
+                        dataForm_pc.modalcorreccionpedido=$('#modalcorreccionpedido').val();
+                        formData=dataForm_pc
                         break;
                     case 'form-correccionpedido-f':
                         dataForm_f.opcion = 2
+                        dataForm_f.modalcorreccionpedido=$('#modalcorreccionpedido').val();
                         formData=dataForm_f
                         break;
                     case 'form-correccionpedido-g':
                         dataForm_g.opcion = 3
+                        dataForm_g.modalcorreccionpedido=$('#modalcorreccionpedido').val();
                         formData=dataForm_g
                         break;
                     case 'form-correccionpedido-b':
                         dataForm_b.opcion = 4
+                        dataForm_b.modalcorreccionpedido=$('#modalcorreccionpedido').val();
                         formData=dataForm_b
                         break;
                 }

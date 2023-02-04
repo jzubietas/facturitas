@@ -22,7 +22,7 @@
             </a>
         @endif
 
-        @if(Auth::user()->rol == 'Administrador' || uth::user()->rol == 'Llamadas' || uth::user()->rol == 'Jefe de llamadas')
+        @if(Auth::user()->rol == 'Administrador' || Auth::user()->rol == 'Llamadas' || Auth::user()->rol == 'Jefe de llamadas')
             <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 Exportar
             </button>
