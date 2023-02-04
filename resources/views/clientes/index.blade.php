@@ -511,7 +511,7 @@
 
                             return row.direccion + ' - ' + row.provincia + ' (' + row.distrito + ')';
                         }},*/
-                    }
+                    },
 
                     {data: 'ultimo_pedido', name: 'ultimo_pedido'},
 
