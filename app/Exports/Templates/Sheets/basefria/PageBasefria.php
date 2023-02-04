@@ -28,7 +28,8 @@ class PageBasefria extends Export implements WithColumnFormatting,WithColumnWidt
             ->activo()->where('tipo','0')->select([
                 DB::raw('@rownum  := @rownum  + 1 AS rownum'),
                 'clientes.*','u.identificador as identificador',
-                DB::raw("concat(clientes.celular,'-',clientes.icelular) as celular_")
+                DB::raw("concat(clientes.celular,'-',clientes.icelular) as celular_"),
+                'clientes.id as ide'
             ]);
 
         /*if (Auth::user()->rol == User::ROL_LLAMADAS) {
@@ -77,7 +78,7 @@ class PageBasefria extends Export implements WithColumnFormatting,WithColumnWidt
     {
         return [
             "rownum" => "ITEM"
-            ,"id"=>"ID"
+            ,"ide"=>"ID"
             ,"nombre"=>"NOMBRE"
             ,"celular_"=>"CELULAR"
             ,"identificador"=>"ASESOR ASIGNADO"
@@ -107,7 +108,7 @@ class PageBasefria extends Export implements WithColumnFormatting,WithColumnWidt
     }
     public function map($model): array
     {
-        $model->id='BF'.$model->id;
+        $model->ide='BF'.strval(str_pad($model->ide,6,"0",STR_PAD_LEFT));
         return parent::map($model);
     }
     public function registerEvents(): array
