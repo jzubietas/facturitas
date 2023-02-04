@@ -6,6 +6,7 @@ use App\Events\PedidoAtendidoEvent;
 use App\Events\PedidoEntregadoEvent;
 use App\Events\PedidoEvent;
 use App\Models\Cliente;
+use App\Models\Correction;
 use App\Models\Departamento;
 use App\Models\DetallePago;
 use App\Models\DetallePedido;
@@ -518,6 +519,79 @@ class OperacionController extends Controller
                 return "<ul class='d-flex'>" . join('', $btn) . "</ul>";
             })
             ->rawColumns(['action','condicion_envio'])
+            ->make(true);
+    }
+
+    public function Correcciones()
+    {
+        $dateMin = Carbon::now()->subDays(4)->format('d/m/Y');
+        $dateMax = Carbon::now()->format('d/m/Y');
+
+        $condiciones = [
+            "POR ATENDER" => Pedido::POR_ATENDER,
+            "EN PROCESO ATENCION" => Pedido::EN_PROCESO_ATENCION,
+            "ATENDIDO" => Pedido::ATENDIDO
+        ];
+
+        $imagenes = ImagenAtencion::where('estado', '1')->get();
+        $superasesor = User::where('rol', 'Super asesor')->count();
+
+        return view('operaciones.correcciones', compact('dateMin', 'dateMax', 'condiciones', 'superasesor'));//, 'imagenes'
+    }
+
+    public function Correccionestabla(Request $request)
+    {
+        $min = Carbon::createFromFormat('d/m/Y', $request->min)->format('Y-m-d');
+        $max = Carbon::createFromFormat('d/m/Y', $request->max)->format('Y-m-d');
+        $pedidos = null;
+
+        $data=Correction::join('users as u','u.id','corrections.asesor_id')
+            ->select([
+                'corrections.*',
+            ]);
+
+
+        if (Auth::user()->rol == "Operario") {
+            $asesores = User::whereIN('users.rol', ['Asesor', 'Administrador', 'ASESOR ADMINISTRATIVO'])
+                ->where('users.estado', '1')
+                ->Where('users.operario', Auth::user()->id)
+                ->select(
+                    DB::raw("users.identificador as identificador")
+                )
+                ->pluck('users.identificador');
+            $data->WhereIn('u.identificador', $asesores);
+        } else if (Auth::user()->rol == "Jefe de operaciones") {
+            $operarios = User::where('users.rol', 'Operario')
+                ->where('users.estado', '1')
+                ->where('users.jefe', Auth::user()->id)
+                ->select(
+                    DB::raw("users.id as id")
+                )
+                ->pluck('users.id');
+            $asesores = User::whereIN('users.rol', ['Asesor', 'Administrador', 'ASESOR ADMINISTRATIVO'])
+                ->where('users.estado', '1')
+                ->WhereIn('users.operario', $operarios)
+                ->select(
+                    DB::raw("users.identificador as identificador")
+                )
+                ->pluck('users.identificador');
+            $data->WhereIn('u.identificador', $asesores);
+        }
+        return Datatables::of(DB::table($data))
+            ->addIndexColumn()
+            ->editColumn('adjuntos', function ($pedido) {
+                return 'adjuntos';
+            })
+            ->addColumn('action', function ($pedido) {
+                $btn = [];
+
+                $btn[] = '<div><ul class="m-0 p-1" aria-labelledby="dropdownMenuButton">';
+
+                $btn[] = '</ul></div>';
+
+                return join('', $btn);
+            })
+            ->rawColumns(['action'])
             ->make(true);
     }
 

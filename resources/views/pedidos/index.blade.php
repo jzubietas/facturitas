@@ -279,9 +279,9 @@
                 if(e.target.id=='form-correccionpedido-pc')
                 {
                     let cant_sustento_pc=$("textarea[name='sustento-pc']").val().length;
-                    dataForm_pc.cant_sustento_pc = $("textarea[name='sustento-pc']").val()
+                    dataForm_pc.sustento_pc = $("textarea[name='sustento-pc']").val()
                     let cant_detalle_pc=$("textarea[name='detalle-pc']").val().length;
-                    dataForm_pc.cant_detalle_pc=$("textarea[name='detalle-pc']").val();
+                    dataForm_pc.detalle_pc=$("textarea[name='detalle-pc']").val();
                     if(cant_sustento_pc==0)
                     {
                         Swal.fire('Error','No se puede ingresar un sustento vacio','warning').then(function(){
@@ -299,13 +299,13 @@
                 else if(e.target.id=='form-correccionpedido-f')
                 {
                     let cant_sustento_f=$("textarea[name='sustento-f']").val().length;
-                    dataForm_f.cant_sustento_f = $("textarea[name='sustento-f']").val()
+                    dataForm_f.sustento_f = $("textarea[name='sustento-f']").val()
                     let cant_facturas_f=$('input[name="correcion_f_facturas"]')[0].files.length
-                    dataForm_f.cant_facturas_f=$('input[name="correcion_f_facturas"]')[0].files;
+                    dataForm_f.correcion_f_facturas=$('input[name="correcion_f_facturas"]')[0].files;
                     let cant_detalle_f=$("textarea[name='detalle-f']").val().length;
-                    dataForm_f.cant_detalle_f = $("textarea[name='detalle-f']").val()
+                    dataForm_f.detalle_f = $("textarea[name='detalle-f']").val()
                     let cant_adjuntos_f=$('input[name="correcion_f_adjuntos"]')[0].files.length
-                    dataForm_f.cant_adjuntos_f=$('input[name="correcion_f_adjuntos"]')[0].files;
+                    dataForm_f.correcion_f_adjuntos=$('input[name="correcion_f_adjuntos"]')[0].files;
                     if(cant_sustento_f==0)
                     {
                         Swal.fire('Error','No se puede ingresar un sustento vacio','warning');return false;
@@ -323,11 +323,11 @@
                 else if(e.target.id=='form-correccionpedido-g')
                 {
                     let cant_sustento_g=$("textarea[name='sustento-g']").val().length
-                    dataForm_g.cant_sustento_g = $("textarea[name='sustento-g']").val()
+                    dataForm_g.sustento_g = $("textarea[name='sustento-g']").val()
                     let cant_adjuntos_g=$('input[name="correcion_g_adjuntos"]')[0].files.length
-                    dataForm_g.cant_adjuntos_g=$('input[name="correcion_g_adjuntos"]')[0].files;
+                    dataForm_g.correcion_g_adjuntos=$('input[name="correcion_g_adjuntos"]')[0].files;
                     let cant_detalle_g=$("textarea[name='detalle-g']").val().length;
-                    dataForm_g.cant_detalle_g = $("textarea[name='detalle-g']").val()
+                    dataForm_g.detalle_g = $("textarea[name='detalle-g']").val()
                     if(cant_sustento_g==0)
                     {
                         Swal.fire('Error','No se puede ingresar un sustento vacio','warning');return false;
@@ -342,9 +342,9 @@
                 else if(e.target.id=='form-correccionpedido-b')
                 {
                     let cant_sustento_b=$("textarea[name='sustento-b']").val().length;
-                    dataForm_b.cant_sustento_b = $("textarea[name='sustento-b']").val()
+                    dataForm_b.sustento_b = $("textarea[name='sustento-b']").val()
                     let cant_adjuntos_b=$('input[name="correcion_b_adjuntos"]').length;
-                    dataForm_b.cant_adjuntos_b=$('input[name="correcion_b_adjuntos"]')[0].files;
+                    dataForm_b.correcion_b_adjuntos=$('input[name="correcion_b_adjuntos"]')[0].files;
                     if(cant_sustento_b==0)
                     {
                         Swal.fire('Error','No se puede ingresar un sustento vacio','warning');return false;
@@ -364,6 +364,10 @@
                     case 'form-correccionpedido-f':
                         dataForm_f.opcion = 2
                         dataForm_f.modalcorreccionpedido=$('#modalcorreccionpedido').val();
+                        attachments.each(function(i, v) {
+                            post_data.append('my_file[]', v.files[0]);
+                            console.log(v.files[0]);
+                        });
                         formData=dataForm_f
                         break;
                     case 'form-correccionpedido-g':
@@ -378,8 +382,17 @@
                         break;
                 }
                 //return false;
+                var fd = new FormData();
+                Object.keys(formData).forEach(function (key) {
+                    if (key == 'file' && formData[key]) {
+                        fd.append(key, formData[key], formData[key].name);
+                    } else {
+                        fd.append(key, formData[key]);
+                    }
+                })
+                console.log(fd);
                 $.ajax({
-                    data: formData,processData: false,contentType: false,type: 'POST',url: "{{ route('ajax_modal_correccionpedidos') }}",
+                    data: fd,processData: false,contentType: false,type: 'POST',url: "{{ route('ajax_modal_correccionpedidos') }}",
                     beforeSend: function() {
                         $('button:submit').prop("disabled",true)
                     },

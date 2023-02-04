@@ -368,6 +368,9 @@ Route::middleware(['auth:sanctum', 'verified', 'auth.redirect.is_disabled'])->gr
     Route::post('operaciones.atenderid', [OperacionController::class, 'Atenderid'])->name('operaciones.atenderid');
     Route::post('operaciones.correccionajax', [OperacionController::class, 'CorreccionAccion'])->name('operaciones.correccionajax');
 
+    Route::get('operaciones.correcciones', [OperacionController::class, 'Correcciones'])->name('operaciones.correcciones');
+    Route::get('operaciones.correccionestabla', [OperacionController::class, 'Correccionestabla'])->name('operaciones.correccionestabla');
+
     Route::post('envios.recepcionmotorizado.iniciar_ruta_masiva', [EnvioController::class, 'IniciarRutaMasiva'])->name('envios.recepcionmotorizado.iniciar_ruta_masiva');
 
 

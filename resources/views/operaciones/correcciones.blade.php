@@ -1,19 +1,10 @@
 @extends('adminlte::page')
 
-@section('title', 'Operaciones | Sobres terminados')
+@section('title', 'Operaciones | Correcciones')
 
 @section('content_header')
-    <h1>Lista de pedidos TERMINADOS
-        {{-- @can('pedidos.exportar')
-        <div class="float-right btn-group dropleft">
-          <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            Exportar
-          </button>
-          <div class="dropdown-menu">
-            <a href="{{ route('pedidosatendidosExcel') }}" class="dropdown-item"><img src="{{ asset('imagenes/icon-excel.png') }}"> EXCEL</a>
-          </div>
-        </div>
-        @endcan --}}
+    <h1>Lista de CORRECCIONES
+
         <div class="float-right btn-group dropleft">
             <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true"
                     aria-expanded="false">
@@ -56,14 +47,15 @@
                 <thead>
                 <tr>
                     <th scope="col">Item</th>
-                    <th scope="col">Código</th>
-                    <th scope="col">Razón social</th>
+                    <th scope="col">Tipo</th>
+                    <th scope="col">Codigo</th>
+                    <th scope="col">Ruc</th>
+                    <th scope="col">Empresa</th>
                     <th scope="col">Asesor</th>
-                    <th scope="col">Fecha de registro</th>
-                    <th scope="col">Destino</th>
-                    <th scope="col">Estado</th>
-                    <th scope="col">Atendido por</th>
-                    <th scope="col">Jefe</th>
+                    <th scope="col">Fecha de correccion</th>
+                    <th scope="col">Motivo</th>
+                    <th scope="col">Adjuntos</th>
+                    <th scope="col">Detalle</th>
                     <th scope="col">Accion</th>
                 </tr>
                 </thead>
@@ -71,17 +63,12 @@
                 </tbody>
             </table>
 
-            @include('pedidos.modal.revertirid')
-            @include('operaciones.modal.revertirajefeop')
-            @include('operaciones.modal.revertirasindireccion')
-            @include('operaciones.modal.CorreccionAtencion')
-            @include('operaciones.modal.VerAdjuntosAtencion')
         </div>
     </div>
 @stop
 
 @section('css')
-    {{-- <link rel="stylesheet" href="../css/admin_custom.css"> --}}
+
     <link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
 
     <style>
@@ -129,7 +116,6 @@
 @stop
 
 @section('js')
-    {{--<script src="{{ asset('js/datatables.js') }}"></script>--}}
     <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
 
@@ -144,258 +130,6 @@
                 }
             });
 
-            $('#modal-veradjuntos-atencion').on('show.bs.modal', function (event) {
-                var button = $(event.relatedTarget)
-                var idunico = button.data('veradjuntos')
-                var confirmo_descarga = button.data('adj')
-
-                $(".textcode").html("PED" + idunico);
-                $("#veradjuntos").val(idunico);
-                $('#conf_descarga').val(confirmo_descarga);
-
-                $.ajax({
-                    type: 'POST',
-                    url: "{{ route('operaciones.datossubidaadj',':id') }}".replace(':id', idunico),
-                    data: idunico,
-                    success: function (data) {
-                        console.log(data);
-                        console.log(data.pedidos[0]['cant_compro']);
-
-                        $('#cant_compro').val(data.pedidos[0]['cant_compro']);
-                        $('#fecha_envio_doc').val(data.pedidos[0]['fecha_envio_doc']);
-
-                    }
-                }).done(function (data) {
-                });
-
-                //recupera imagenes adjuntas
-                $.ajax({
-                    url: "{{ route('operaciones.veratencion',':id') }}".replace(':id', idunico),
-                    data: idunico,
-                    method: 'POST',
-                    success: function (data) {
-                        console.log(data)
-                        console.log("obtuve las imagenes atencion del pedido " + idunico)
-                        $('#listado_adjuntos_ver').html("");
-                        $('#listado_adjuntos_antes_ver').html(data);
-                        console.log(data);
-                    }
-                });
-
-            });
-
-            $('#modal-envio-op').on('show.bs.modal', function (event) {
-                //cuando abre el form de anular pedido
-                var button = $(event.relatedTarget)
-                var idunico = button.data('envio')
-                $(".textcode").html("PED" + idunico);
-                $("#hiddenEnvio").val(idunico);
-
-            });
-
-            $('#modal-correccion-op').on('show.bs.modal', function (event) {
-                //cuando abre el form de anular pedido
-                var button = $(event.relatedTarget)
-                var idunico = button.data('correccion')
-                var confirmo_descarga = button.data('adj')
-
-                $(".textcode").html("PED" + idunico);
-                $("#correccion").val(idunico);
-                $('#conf_descarga').val(confirmo_descarga);
-
-                /*if (confirmo_descarga == 1) {*/
-                    $("#sustento_data").val("");
-                    $('#sustento_adjunto').css({'display': 'block'});
-                /*} else {
-                    $('#sustento_adjunto').css({'display': 'none'});
-                }*/
-                $.ajax({
-                    type: 'POST',
-                    url: "{{ route('operaciones.datossubidaadj',':id') }}".replace(':id', idunico),
-                    data: idunico,
-                    success: function (data) {
-                        //console.log(data);
-                        console.log(data.pedidos[0]['cant_compro']+" traje como cantidad  hacia el input");
-
-                        $('#cant_compro').val(data.pedidos[0]['cant_compro']);
-                        $('#fecha_envio_doc').val(data.pedidos[0]['fecha_envio_doc']);
-
-                    }
-                }).done(function (data) {
-                });
-                $.ajax({
-                    url: "{{ route('operaciones.editatencion',':id') }}".replace(':id', idunico),
-                    data: idunico,
-                    method: 'POST',
-                    success: function (data) {
-                        //console.log(data)
-                        console.log("obtuve las imagenes atencion del pedido " + idunico)
-                        $('#listado_adjuntos').html("");
-                        $('#listado_adjuntos_antes').html(data);
-                        //console.log(data);
-                    }
-                });
-
-            });
-
-            $(document).on("click", "#cargar_adjunto", function (evento) {
-                let idunico = $("#correccion").val();
-                console.log(idunico);
-                $('#cargar_adjunto').attr("disabled", true);
-                $('#cargar_adjunto').html('Subiendo archivos...');
-                //e.preventDefault();
-                let cant_compro = $("#cant_compro").val();
-                if (cant_compro == '') $("#cant_compro").val(0);
-                var data = new FormData(document.getElementById("formulariocorreccionatender"));
-                $("#loading_upload_attachment_file").show()
-                $("#adjunto").hide()
-                $.ajax({
-                    type: 'POST',
-                    url: "{{ route('operaciones.updateatendersinconfirmar',':id') }}".replace(':id', idunico),
-                    data: data,
-                    processData: false,
-                    contentType: false,
-                    success: function (data) {
-                        $('#cargar_adjunto').prop("disabled", false);
-                        $('#cargar_adjunto').text('Subir Informacion');
-                        //console.log(data)
-                        console.log("obtuve las imagenes atencion del pedido " + idunico)
-                        $('#listado_adjuntos').html(data);
-                    }
-                })
-                    .done(function (data) {
-                        $("#adjunto").val(null)
-                    })
-                    .always(function () {
-                        $("#adjunto").show()
-                        $("#loading_upload_attachment_file").hide()
-                    });
-                return false;
-
-
-            });
-
-            $(document).on("change", "#adjunto", function (evento) {
-                $("#cargar_adjunto").trigger("click");
-            });
-
-            $(document).on("submit", "#formulariocorreccionatender", function (evento) {
-                evento.preventDefault();
-                console.log("correccion atender")
-
-                let cnf_adjunto = $("#conf_descarga").val();
-
-                var cant_compro = document.getElementById('cant_compro').value;
-                var cant_compro_attachment = document.getElementById('adjunto_total_attachment');//adjuntos en el servidor
-
-                if (!cant_compro_attachment) {
-                    cant_compro_attachment = 0
-                } else {
-                    cant_compro_attachment = parseInt(cant_compro_attachment.value);
-                    if (isNaN(cant_compro_attachment)) {
-                        cant_compro_attachment = 0;
-                    }
-                }
-                if (cant_compro_attachment == 0) {
-                    Swal.fire(
-                        'Error',
-                        'No hay archivos adjuntados',
-                        'warning'
-                    )
-                    return false;
-                }
-
-                if (!cant_compro) {
-                    cant_compro = 0;
-                }
-                cant_compro = parseInt(cant_compro);
-
-                if (isNaN(cant_compro)) {
-                    cant_compro = 0;
-                }
-                if (cant_compro == 0) {
-                    Swal.fire(
-                        'Error',
-                        'Debe colocar la cantidad de archivos',
-                        'warning'
-                    )
-                    return false;
-                }
-
-                if (cnf_adjunto == 1) {
-                    var sustento = $('#sustento_data').val();
-
-                    if (!sustento) {
-                        Swal.fire(
-                            'Error',
-                            'Ingrese un sustento para continuar',
-                            'warning'
-                        )
-                        return false;
-                    } else if (sustento.length < 50) {
-                        Swal.fire(
-                            'Error',
-                            'Debe ingresar al menos 50 caracteres ('+sustento.length+'/50)',
-                            'warning'
-                        )
-                        return false;
-                    }
-                }
-
-                function submitForm() {
-                    var data =   new FormData( $("#formulariocorreccionatender")[0]);
-                    data.delete('adjunto')
-                    data.delete('adjunto[]')
-                    $.ajax({
-                        data: data,
-                        processData: false,
-                        contentType: false,
-                        type: 'POST',
-                        url: "{{ route('operaciones.correccionajax') }}",
-                        success: function (data) {
-                            console.log(data);
-                            if (data.html!='') {
-                                var urlpdf = '{{ route('pedidosPDF', ':id') }}';
-                                urlpdf = urlpdf.replace(':id', data.html);
-                                window.open(urlpdf, '_blank');
-
-                                //$("#modal-copiar .textcode").text(data.html);
-
-                                //$("#modal-copiar").modal("show");
-                                $("#modal-correccion-op .textcode").text('');
-                                $("#modal-correccion-op").modal("hide");
-                                $('#tablaPrincipal').DataTable().ajax.reload();
-                            }else{
-                                console.log("vacio")
-                            }
-
-
-                        }
-                    });
-                }
-                console.log("cant_compro_attachment "+cant_compro_attachment)
-                console.log("cant_compro "+cant_compro)
-                let c_conf=cant_compro_attachment+cant_compro;
-
-                if (cant_compro != cant_compro_attachment) {
-                    Swal.fire({
-                        icon: 'warning',
-                        title: 'Aviso',
-                        html: `La cantidad de archivos es (${c_conf}) y es diferente a la cantidad de facturas (${cant_compro})<br><b>¿Desea continuar?</b>`,
-                        confirmButtonText: 'Aceptar y continuar',
-                        showCancelButton: true,
-                        confirmButtonColor: '#3085d6',
-                        cancelButtonColor: '#d33',
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            submitForm()
-                        } else if (result.isDenied) {
-                        }
-                    })
-                } else {
-                    submitForm()
-                }
-            });
 
             /*$('#modal-delete-adjunto').on('show.bs.modal', function (event) {
                 //cuando abre el form de anular pedido
@@ -597,24 +331,21 @@
                 searching: true,
                 "order": [[0, "desc"]],
                 ajax: {
-                    url: "{{ route('operaciones.terminadostabla') }}",
+                    url: "{{ route('operaciones.correccionestabla') }}",
                     data: function (d) {
-                        //d.asesores = $("#asesores_pago").val();
                         d.min = $("#min").val();
                         d.max = $("#max").val();
-
                     },
                 },
                 createdRow: function (row, data, dataIndex) {
                     //console.log(row);
                     if (data["estado"] == "1") {
-                        if (data.pendiente_anulacion == 1) {
-                            $('td', row).css('background', 'red').css('font-weight', 'bold');
-                        }
+
+                        //    $('td', row).css('background', 'red').css('font-weight', 'bold');
+
                     } else if (data["estado"] == "0"){
                         $(row).addClass('textred');
                     }
-
                 },
                 rowCallback: function (row, data, index) {
                     $(function () {
@@ -628,34 +359,21 @@
                     {
                         data: 'id',
                         name: 'id',
-                        render: function (data, type, row, meta) {
-                            if (row.id < 10) {
-                                return 'PED000' + row.id;
-                            } else if (row.id < 100) {
-                                return 'PED00' + row.id;
-                            } else if (row.id < 1000) {
-                                return 'PED0' + row.id;
-                            } else {
-                                return 'PED' + row.id;
-                            }
-                        }
                     },
-                    {data: 'codigos', name: 'codigos',},
-                    {data: 'empresas', name: 'empresas',},
-                    {data: 'users', name: 'users',},
+                    {data: 'type', name: 'type',},
+                    {data: 'code', name: 'code',},
+                    {data: 'ruc', name: 'ruc',},
+                    {data: 'razon_social', name: 'razon_social',},
+                    {data: 'asesor_identify', name: 'asesor_identify',},
                     {
-                        data: 'fecha',
-                        name: 'fecha',
+                        data: 'fecha_correccion',
+                        name: 'fecha_correccion',
                         render: $.fn.dataTable.render.moment('YYYY-MM-DD HH:mm:ss', 'DD/MM/YYYY HH:mm:ss'),
                         "visible": true,
                     },
-                    {data: 'destino', name: 'destino', "visible": false},
-                    {
-                        data: 'condicion_envio',
-                        name: 'condicion_envio',
-                    },
-                    {data: 'atendido_por', name: 'atendido_por',},
-                    {data: 'jefe', name: 'jefe',},
+                    {data: 'motivo', name: 'motivo', "visible": true},
+                    {data: 'adjuntos',name: 'adjuntos',},
+                    {data: 'detalle', name: 'detalle',},
                     {
                         data: 'action',
                         name: 'action',
