@@ -45,7 +45,7 @@ class PageBasefria extends Export implements WithColumnFormatting,WithColumnWidt
 
         }else*/
         if (Auth::user()->rol == User::ROL_ASESOR) {
-            $data = $data->WhereIn("u.identificador.user_id", Auth::user()->identificador);
+            $data = $data->WhereIn("u.identificador", Auth::user()->identificador);
         }
         /*else if (Auth::user()->rol == User::ROL_ENCARGADO) {
             $usersasesores = User::where('users.rol', 'Asesor')
